@@ -1,117 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Mar 2017 22:33:59 +0100
-Subject: [Buildroot] [PATCHv2] package/dbus-cpp: fix cross-compilation
-Message-ID: <1490132039-29054-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Mar 2017 22:48:15 +0100
+Subject: [Buildroot] [PATCH] ghostscript: drop the ijs subfolder to fix build
+Message-ID: <1490132895-7625-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dbus-cpp has an ugly hack to not cross-build the tools when it detects
-cross-compilation.
+The ijs/ subfolder contains a bogus ltmain.sh file, which is actually a
+broken symbolic link. Due to this, our logic to patch ltmain.sh files
+fail with some patch versions:
 
-However, we already have a host variant that builds those tools (and we
-anyway don't seem to need them to begin with).
+  >>> ghostscript 9.21 Patching libtool
+  File /home/buildroot/build/instance-0/output/build/ghostscript-9.21/ijs/ltmain.sh is not a regular file -- refusing to patch
 
-Drop our patch that propagates the CXXFLAGS/LDFLAGS_FOR_BUILD. Replace
-with a patch to cross-compile the tools.
+Since we are anyway not using the ijs support (--without-ijs is passed),
+do like we do for all other sub-components of ghostscript: get rid of
+the ijs/ subfolder completely.
 
 Fixes:
-    http://autobuild.buildroot.org/results/110/1100539caae6ef62c61a3b96bc54f7c0a215cc62/
-    and many, many more.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  http://autobuild.buildroot.net/results/ca683d69b7fb564788c8877c3bb6466390e976a8/
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-  - add missing commit log to patch  (Thomas)
----
- package/dbus-cpp/0002-cross-compile-tools.patch    | 34 ++++++++++++++++++++++
- .../dbus-cpp/0002-cxxflags-ldflags-for-build.patch | 32 --------------------
- 2 files changed, 34 insertions(+), 32 deletions(-)
- create mode 100644 package/dbus-cpp/0002-cross-compile-tools.patch
- delete mode 100644 package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
+ package/ghostscript/ghostscript.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dbus-cpp/0002-cross-compile-tools.patch b/package/dbus-cpp/0002-cross-compile-tools.patch
-new file mode 100644
-index 0000000..39eff31
---- /dev/null
-+++ b/package/dbus-cpp/0002-cross-compile-tools.patch
-@@ -0,0 +1,34 @@
-+tools: just do proper cross-compile
-+
-+Those tools are not used during the build; besides, they are installed.
-+
-+So they don't need to not be cross-compiled.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Upstream status: not submitted, upstream is dead.
-+
-+diff -durN dbus-cpp-0.9.0.orig/tools/Makefile.am dbus-cpp-0.9.0/tools/Makefile.am
-+--- dbus-cpp-0.9.0.orig/tools/Makefile.am	2017-03-21 21:48:57.013409423 +0100
-++++ dbus-cpp-0.9.0/tools/Makefile.am	2017-03-21 21:49:35.329979798 +0100
-+@@ -1,7 +1,3 @@
-+-# hacky, but ...
-+-
-+-CXX = $(CXX_FOR_BUILD)
-+-
-+ AM_CPPFLAGS = \
-+ 	$(dbus_CFLAGS) \
-+ 	$(xml_CFLAGS) \
-+@@ -9,11 +3,7 @@
-+ 	-I$(top_builddir)/include \
-+ 	-Wall
-+ 
-+-if CROSS_COMPILING
-+-libdbus_cxx_la = $(BUILD_LIBDBUS_CXX_DIR)/src/libdbus-c++-1.la
-+-else
-+ libdbus_cxx_la = $(top_builddir)/src/libdbus-c++-1.la
-+-endif
-+ 
-+ bin_PROGRAMS = dbusxx-xml2cpp dbusxx-introspect
-+ 
-diff --git a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch b/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
-deleted file mode 100644
-index fefb969..0000000
---- a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Use CXXFLAGS_FOR_BUILD and LDFLAGS_FOR_BUILD for the tools since expat
--may not be living in the default include & library path.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura libdbus-c++-0.9.0.orig/configure.ac libdbus-c++-0.9.0/configure.ac
----- libdbus-c++-0.9.0.orig/configure.ac	2014-01-05 15:28:03.653886567 -0300
--+++ libdbus-c++-0.9.0/configure.ac	2014-01-05 15:44:32.571172225 -0300
--@@ -65,7 +65,11 @@
-- AC_PROG_CXX
-- 
-- CXX_FOR_BUILD=${CXX_FOR_BUILD-${CXX}}
--+CXXFLAGS_FOR_BUILD=${CXXFLAGS_FOR_BUILD-${CXXFLAGS}}
--+LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-${LDFLAGS}}
-- AC_SUBST(CXX_FOR_BUILD)
--+AC_SUBST(CXXFLAGS_FOR_BUILD)
--+AC_SUBST(LDFLAGS_FOR_BUILD)
-- 
-- AM_PROG_LIBTOOL
-- 
--diff -Nura libdbus-c++-0.9.0.orig/tools/Makefile.am libdbus-c++-0.9.0/tools/Makefile.am
----- libdbus-c++-0.9.0.orig/tools/Makefile.am	2014-01-05 15:28:03.652886535 -0300
--+++ libdbus-c++-0.9.0/tools/Makefile.am	2014-01-05 15:44:42.071482390 -0300
--@@ -1,6 +1,8 @@
-- # hacky, but ...
-- 
-- CXX = $(CXX_FOR_BUILD)
--+CXXFLAGS = $(CXXFLAGS_FOR_BUILD)
--+LDFLAGS = $(LDFLAGS_FOR_BUILD)
-- 
-- AM_CPPFLAGS = \
-- 	$(dbus_CFLAGS) \
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index d563e77..e568b20 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -26,7 +26,7 @@ GHOSTSCRIPT_DEPENDENCIES = \
+ # Inspired by linuxfromscratch:
+ # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
+ define GHOSTSCRIPT_REMOVE_LIBS
+-	rm -rf $(@D)/freetype $(@D)/jpeg $(@D)/lcms2 $(@D)/libpng $(@D)/tiff $(@D)/zlib
++	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 $(@D)/libpng $(@D)/tiff $(@D)/zlib
+ endef
+ GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
+ 
 -- 
 2.7.4
