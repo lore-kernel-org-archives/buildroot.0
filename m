@@ -1,64 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Mar 2017 10:08:34 +0100
-Subject: [Buildroot] [PATCH 3/3] xenomai: enable SMP in configuration
- options
-In-Reply-To: <20170320233349.14057-3-sikor6@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Mar 2017 10:19:01 +0100
+Subject: [Buildroot] [PATCH 1/3] xenomai: bump version to 3.0.3
+In-Reply-To: <7f8f513c-d847-5b70-c084-6538c3a6af43@mind.be>
 References: <20170320233349.14057-1-sikor6@gmail.com>
- <20170320233349.14057-3-sikor6@gmail.com>
-Message-ID: <228d4c07-8def-1653-8de5-26ac4b139fb6@mind.be>
+ <20170320234014.6ad3182f@free-electrons.com>
+ <7f8f513c-d847-5b70-c084-6538c3a6af43@mind.be>
+Message-ID: <20170321101901.1bfbc40e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Tue, 21 Mar 2017 09:57:35 +0100, Arnout Vandecappelle wrote:
 
-On 21-03-17 00:33, sikor6 at gmail.com wrote:
-> From: Pawel Sikora <sikor6@gmail.com>
+> > My understanding was that Xenomai 3.x was significantly different from
+> > Xenomai 2.x. Should we support both versions? Is Xenomai 3.x now old
+> > enough that Xenomai 2.x is considered legacy? What problems will people
+> > currently using Xenomai 2.x face if we ask them to move to Xenomai 3.x?  
 > 
-> Add --enable-smp to XENOMAI_CONF_OPTS, so kernel and xenomai
-> userpace libs both support it.
+>  There are some API differences, but (at least in dual-kernel mode), it is
+> pretty easy to port over. I think we have lots of packages where version bumps
+> introduce slight behavioural changes so I think this is OK.
 
- This is not good, because xenomai is still used a lot on uniprocessors as well.
-Ideally, we'd check linux .config if SMP is enabled or not - but unfortunately
-that's not an option since Xenomai userspace can be built without building a kernel.
+OK, thanks. As long as it doesn't require people having Xenomai
+applications to do a full rewrite, then I'm fine with a bump to 3.X as
+opposed to supporting both 2.x and 3.x. Minor adaptations are OK, just
+like is often needed when upgrading libraries, as you said.
 
- I think the only option here is to add a Config.in symbol to allow the user to
-select SMP.
+Best regards,
 
- Unless you can verify that enabling SMP unconditionally is not a problem, i.e.
-that it doesn't give overhead (extra latency) on a uniprocessor. But then I
-wonder why it would be an option in Xenomai...
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> ---
->  package/xenomai/xenomai.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> index 28875b944..37ec68526 100644
-> --- a/package/xenomai/xenomai.mk
-> +++ b/package/xenomai/xenomai.mk
-> @@ -21,7 +21,7 @@ XENOMAI_INSTALL_STAGING = YES
->  XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
->  XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
->  
-> -XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
-> +XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install --enable-smp
->  
->  define XENOMAI_REMOVE_DEVFILES
->  	for i in xeno-config xeno-info wrap-link.sh ; do \
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
