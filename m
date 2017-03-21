@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:17:04 +0100
-Subject: [Buildroot] [git commit] ubus: add hash
-Message-ID: <20170321221730.5C4967FDDF@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 23:17:00 +0100
+Subject: [Buildroot] [git commit] aer-inject: remove redundant _SITE_METHOD
+Message-ID: <20170321221729.997838032C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fb8d9f2e603a3f57800ce7f79b8a752ab3a6f76
+commit: https://git.buildroot.net/buildroot/commit/?id=c29e5ba2143272958dd9ef31aa1eedceb6145920
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ubus had a hash file, but is says "none" because it is a git download.
-Since our git downloads are not reproducible, we can actually add a
-hash.
+The _SITE has a git:// URL, so _SITE_METHOD is not needed.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ubus/ubus.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/aer-inject/aer-inject.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ubus/ubus.hash b/package/ubus/ubus.hash
-index af9b652..4e6a755 100644
---- a/package/ubus/ubus.hash
-+++ b/package/ubus/ubus.hash
-@@ -1,2 +1,2 @@
--# No hash for this git snapshot
--none  xxx  ubus-259450f414d8c9ee41896e8e6d6bc57ec00e2b63.tar.gz
-+# Locally calculated
-+sha256  0dbf75c2103f3f567b9bf1bb719ea9776d18401bbf2dfd8bed2c2ebbdd1021da  ubus-259450f414d8c9ee41896e8e6d6bc57ec00e2b63.tar.gz
+diff --git a/package/aer-inject/aer-inject.mk b/package/aer-inject/aer-inject.mk
+index 69189b1..e00570e 100644
+--- a/package/aer-inject/aer-inject.mk
++++ b/package/aer-inject/aer-inject.mk
+@@ -6,7 +6,6 @@
+ 
+ AER_INJECT_VERSION = 9bd5e2c7886fca72f139cd8402488a2235957d41
+ AER_INJECT_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
+-AER_INJECT_SITE_METHOD = git
+ AER_INJECT_LICENSE = GPLv2
+ AER_INJECT_LICENSE_FILES = README
+ AER_INJECT_DEPENDENCIES = host-flex host-bison
