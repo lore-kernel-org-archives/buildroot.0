@@ -1,53 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 21 Mar 2017 10:17:01 -0500
-Subject: [Buildroot] [PATCH 03/16] fmc: correct hash file
-In-Reply-To: <20170321000712.26500-4-arnout@mind.be>
-References: <20170321000712.26500-1-arnout@mind.be>
- <20170321000712.26500-4-arnout@mind.be>
-Message-ID: <CANQCQpbLtcJr517RQZamhQQtr3yVRqk23AFFgNFB0OAg-oeizw@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 21 Mar 2017 15:17:18 +0000
+Subject: [Buildroot] [PATCH] libgtk3: bump version to 3.22.11
+Message-ID: <20170321151718.40309-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Mar 20, 2017 at 7:06 PM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> It had sha256sum instead of sha256. This wasn't noticed before since
-> hashes for git downloads are not checked.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-> ---
->  package/fmc/fmc.hash | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
-> index 2402831855..13d9d77ee5 100644
-> --- a/package/fmc/fmc.hash
-> +++ b/package/fmc/fmc.hash
-> @@ -1,2 +1,2 @@
-> -# Locally Computed
-> -sha256sum      a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4        fmc-fsl-sdk-v2.0.tar.gz
-> +# Locally calculated
-> +sha256 a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4        fmc-fsl-sdk-v2.0.tar.gz
-> --
-> 2.11.0
->
-
-
-
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 2407307..5ea0405 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.10.sha256sum
+-sha256 352a90b3d09256d597cb2768ee5d685285ccc284ff22adf19df16753a829c554  gtk+-3.22.10.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.11.sha256sum
++sha256 db440670cb6f3c098b076df3735fbc4e69359bd605385e87c90ee48344a804ca  gtk+-3.22.11.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index abd4c64..ca88e30 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).10
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).11
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.10.2
