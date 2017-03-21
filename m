@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:18:21 +0100
-Subject: [Buildroot] [PATCH 00/16] Enable hash checking for git downloads
-In-Reply-To: <20170321000712.26500-1-arnout@mind.be>
-References: <20170321000712.26500-1-arnout@mind.be>
-Message-ID: <20170321231821.75afecd6@free-electrons.com>
+Date: Tue, 21 Mar 2017 23:18:56 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain-external: improve musl
+ external check
+In-Reply-To: <1489989370-22377-1-git-send-email-ilya.kuzmich@gmail.com>
+References: <1489989370-22377-1-git-send-email-ilya.kuzmich@gmail.com>
+Message-ID: <20170321231856.014bc6a7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 21 Mar 2017 01:06:56 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-
-> Patch 1 fixes the case when tar is compiled to generated Posix format
-> tarballs.
-
-So I've applied this one.
-
-> Patch 2 is just a cleanup. This patch is optional.
+On Mon, 20 Mar 2017 08:56:10 +0300, Ilya Kuzmich wrote:
+> Test whether musl used or not: compile minimal C program and check if
+> interpreter contains /lib/ld-musl.
 > 
-> Patch 3-5 fix incorrect hash files, which weren't noticed before
-> because hashes weren't checked.
-> 
-> Patch 6-8 adds a hash for packages that actually have a hash file but
-> set the hash type to 'none'. These patches are optional.
+> Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
 
-And all those ones.
+This doesn't look bad, but what is the motivation behind the change? Is
+the current check not working for you?
 
-> Patches 9-15 add exclusions for the different packages with CUSTOM_GIT
-> configuration.
-
-Still needs to review those one carefully.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
