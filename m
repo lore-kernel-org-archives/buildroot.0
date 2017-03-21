@@ -1,25 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 17:39:38 +0100
-Subject: [Buildroot] [PATCH] btrfs-progs: bump version to 4.10.1
-In-Reply-To: <20170321141728.49935-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Tue, 21 Mar 2017 14:17:28 +0000")
-References: <20170321141728.49935-1-Vincent.Riera@imgtec.com>
-Message-ID: <878tnylh2t.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Mar 2017 17:26:45 +0100
+Subject: [Buildroot] [git commit] openssh: security bump to version 7.5
+Message-ID: <20170321164015.B0A7D7F87B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2204f4deb1c6c6ff4accd84b5aa2d42f5930b730
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop 0003-btrfs-progs-add-missing-limits-headers.patch since it's
- > already included in this release:
- >   https://github.com/kdave/btrfs-progs/commit/153d4e6c01b53855d01b5d0c99886ba31b48bad1
+From the release notes (https://www.openssh.com/txt/release-7.5):
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Security
+--------
 
-Committed, thanks.
+ * ssh(1), sshd(8): Fix weakness in CBC padding oracle countermeasures
+   that allowed a variant of the attack fixed in OpenSSH 7.3 to proceed.
+   Note that the OpenSSH client disables CBC ciphers by default, sshd
+   offers them as lowest-preference options and will remove them by
+   default entriely in the next release. Reported by Jean Paul
+   Degabriele, Kenny Paterson, Martin Albrecht and Torben Hansen of
+   Royal Holloway, University of London.
 
--- 
-Bye, Peter Korsgaard
+ * sftp-client(1): [portable OpenSSH only] On Cygwin, a client making
+   a recursive file transfer could be maniuplated by a hostile server to
+   perform a path-traversal attack. creating or modifying files outside
+   of the intended target directory. Reported by Jann Horn of Google
+   Project Zero.
+
+[Peter: mention security fixes]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openssh/openssh.hash | 5 ++---
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 09010d3..3685bc0 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,3 +1,2 @@
+-# Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-7.4
+-sha256 1b1fc4a14e2024293181924ed24872e6f2e06293f3e8926a376b8aec481f19d1  openssh-7.4p1.tar.gz
++# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
++sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index ce37ee7..ba48770 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 7.4p1
++OPENSSH_VERSION = 7.5p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c, BSD-2c, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
