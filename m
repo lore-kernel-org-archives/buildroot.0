@@ -1,31 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:18:56 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain-external: improve musl
- external check
-In-Reply-To: <1489989370-22377-1-git-send-email-ilya.kuzmich@gmail.com>
-References: <1489989370-22377-1-git-send-email-ilya.kuzmich@gmail.com>
-Message-ID: <20170321231856.014bc6a7@free-electrons.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Tue, 21 Mar 2017 19:25:29 -0300
+Subject: [Buildroot] [PATCH] irssi: add patch to fix static linking
+In-Reply-To: <22310065-0e30-32bc-e1a3-9957ac59d791@mind.be>
+References: <20170321034553.5357-1-rprebello@gmail.com>
+ <22310065-0e30-32bc-e1a3-9957ac59d791@mind.be>
+Message-ID: <CABLs7GVuZk7AFTFZA6z=o7w=N7Zvwz1QFSDaG9k8NoCw9AWcTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout,
 
-On Mon, 20 Mar 2017 08:56:10 +0300, Ilya Kuzmich wrote:
-> Test whether musl used or not: compile minimal C program and check if
-> interpreter contains /lib/ld-musl.
-> 
-> Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+2017-03-21 5:41 GMT-03:00 Arnout Vandecappelle <arnout@mind.be>:
+>
+>  Is it useful to fall back to the non-pkg-config case? Due to glib2, pkg-config
+> is a hard requirement now, so this would only be to support pre-pkg-config
+> openssl versions, and I believe those are so ancient that they likely would
+> break API. I didn't actually check that, however.
+>
 
-This doesn't look bad, but what is the motivation behind the change? Is
-the current check not working for you?
+I had originally considered discarding the non-pkg-config method
+entirely, but since the upstream commit that touched that part of the
+configure script and caused the regression explicitly preserved the
+test involving AC_CHECK_LIB, I thought that maybe the author had a
+good reason for that, like supporting old OpenSSL versions, as you
+said, which still work with the current version of Irssi.
 
-Thanks!
+Anyway, let's see if the Irssi devs will mention anything in that
+regard when they review the PR I've submitted.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Thanks for reviewing this, by the way!
+
+Regards,
+Rodrigo
