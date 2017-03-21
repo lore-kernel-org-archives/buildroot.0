@@ -1,40 +1,47 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 21 Mar 2017 17:05:17 +0000
-Subject: [Buildroot] [PATCH] vala: bump version to 0.34.7
-Message-ID: <20170321170517.19150-1-Vincent.Riera@imgtec.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Tue, 21 Mar 2017 19:06:15 +0200
+Subject: [Buildroot] [PATCH v2] package/bluez5_utils: Allow user to
+ enable disabled plugins
+In-Reply-To: <874lymlg2y.fsf@dell.be.48ers.dk>
+References: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
+ <874lymlg2y.fsf@dell.be.48ers.dk>
+Message-ID: <1490115975.19767.148.camel@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, 2017-03-21 at 18:01 +0100, Peter Korsgaard wrote:
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 390eb44..48212b2 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.34/vala-0.34.6.sha256sum
--sha256 d1e32d6c55c2d66964d30b7410b78f5f313f1231fc3502da9980c3c80a797bb1  vala-0.34.6.tar.xz
-+# From https://download.gnome.org/sources/vala/0.34/vala-0.34.7.sha256sum
-+sha256 1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index c59ba25..70dc4b9 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- VALA_VERSION_MAJOR = 0.34
--VALA_VERSION = $(VALA_VERSION_MAJOR).6
-+VALA_VERSION = $(VALA_VERSION_MAJOR).7
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+> ?> +config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
+> ?> +	bool "build deprecated tools"
+> ?> +	help
+> ?> +	??Build BlueZ 5.x deprecated tools (hciattach, gatttool,
+> ...).
+> ?> +
+> ?>??config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+> ?>??	bool "install GATT tool"
+> ?>??	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+> 
+> Then _UTILS_GATTTOOL should depend on _UTILS_DEPRECATED.
+
+There is a patch flying around (from Bernd) to fix build and add --
+enable-deprecated to GATTTOOL in bluez5_utils.mk.
+
+>  Or perhaps it
+> doesn't make sense to have a dedicated option for this and it should
+> just be automatically installed when deprecated is enabled.
+
+Note, gatttool is left in noinst list, meaning the option should be
+still here.
+
+> It would also be good to add the autobuilder failures:
+> 
+> http://autobuild.buildroot.net/?reason=bluez5_utils-5.44
+
+Makes sense.
+
 -- 
-2.10.2
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Intel Finland Oy
