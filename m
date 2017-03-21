@@ -1,62 +1,62 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 21 Mar 2017 01:07:05 +0100
-Subject: [Buildroot] [PATCH 09/16] linux: exclude from hash check except for
-	latest version
+Date: Tue, 21 Mar 2017 01:07:08 +0100
+Subject: [Buildroot] [PATCH 12/16] barebox: exclude from hash check except
+	for latest version
 In-Reply-To: <20170321000712.26500-1-arnout@mind.be>
 References: <20170321000712.26500-1-arnout@mind.be>
-Message-ID: <20170321000712.26500-10-arnout@mind.be>
+Message-ID: <20170321000712.26500-13-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't have a hash for any linux version. We currently also don't
-have a hash for the latest version, but if we ever add a hash, it
-will only be for the latest version.
+Instead of excluding the hash specifically for the custom tarball and
+custom version cases, exclude it always except in the one case where
+we do have a hash: the latest version.
 
 This simplifies the code a little because soon we will add hash checks
-for git as well, so we also need an exclusion in that case. It's much
-easier to always exclude except in the single case where we do have a
-hash.
+for git as well, so we also need an exclusion in that case.
+
+It is not needed to exclude it twice for barebox and barebox-aux,
+because they use the same source tarball and barebox-aux can only be
+enabled if barebox is enabled. So simplify even further by pulling
+the exclusion logic out of inner-barebox-package.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- linux/linux.mk | 8 ++++----
+ boot/barebox/barebox.mk | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7f4432e7b1..a52083f00a 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -20,7 +20,6 @@ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
- LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
- LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
--BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = git
-@@ -32,9 +31,6 @@ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = svn
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
--ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
--BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 7a110d2145..dc19224c76 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -22,7 +22,6 @@ ifeq ($$($(1)_VERSION),custom)
+ $(1)_TARBALL = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
+ $(1)_SITE = $$(patsubst %/,%,$$(dir $$($(1)_TARBALL)))
+ $(1)_SOURCE = $$(notdir $$($(1)_TARBALL))
+-BR_NO_CHECK_HASH_FOR += $$($(1)_SOURCE)
+ else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
+ $(1)_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
+ $(1)_SITE_METHOD = git
+@@ -30,9 +29,6 @@ else
+ # Handle stable official Barebox versions
+ $(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
+ $(1)_SITE = http://www.barebox.org/download
+-ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
+-BR_NO_CHECK_HASH_FOR += $$($(1)_SOURCE)
 -endif
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
- # to use the $(word) function. We support versions such as 4.0, 3.1,
- # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-@@ -51,6 +47,10 @@ LINUX_SITE := $(LINUX_SITE)/testing
- endif # -rc
  endif
  
-+ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
-+endif
-+
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ $(1)_DEPENDENCIES = host-lzop
+@@ -155,3 +151,7 @@ barebox-package=$(call inner-barebox-package,$(call UPPERCASE,$(pkgname)))
  
- # We rely on the generic package infrastructure to download and apply
+ include boot/barebox/barebox/barebox.mk
+ include boot/barebox/barebox-aux/barebox-aux.mk
++
++ifeq ($(BR2_TARGET_BAREBOX)$(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
++BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
++endif
 -- 
 2.11.0
