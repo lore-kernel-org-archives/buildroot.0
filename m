@@ -1,38 +1,117 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 22:24:49 +0100
-Subject: [Buildroot] [PATCH] autofs: use libtirpc instead of internal C
- implementation
-In-Reply-To: <20170321193213.GA18747@waldemar-brodkorb.de>
-References: <20170321193213.GA18747@waldemar-brodkorb.de>
-Message-ID: <20170321222449.5ceb21f4@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Mar 2017 22:33:59 +0100
+Subject: [Buildroot] [PATCHv2] package/dbus-cpp: fix cross-compilation
+Message-ID: <1490132039-29054-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+dbus-cpp has an ugly hack to not cross-build the tools when it detects
+cross-compilation.
 
-On Tue, 21 Mar 2017 20:32:13 +0100, Waldemar Brodkorb wrote:
+However, we already have a host variant that builds those tools (and we
+anyway don't seem to need them to begin with).
 
-> @@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
->  	bool "autofs"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_USE_MMU
-> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	depends on !BR2_STATIC_LIBS # dlfcn
-> +	select BR2_PACKAGE_LIBTIRPC
+Drop our patch that propagates the CXXFLAGS/LDFLAGS_FOR_BUILD. Replace
+with a patch to cross-compile the tools.
 
-Why should we force people to use libtirpc ? What about instead:
+Fixes:
+    http://autobuild.buildroot.org/results/110/1100539caae6ef62c61a3b96bc54f7c0a215cc62/
+    and many, many more.
 
-	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-and adjust the .mk file accordingly.
+---
+Changes v1 -> v2:
+  - add missing commit log to patch  (Thomas)
+---
+ package/dbus-cpp/0002-cross-compile-tools.patch    | 34 ++++++++++++++++++++++
+ .../dbus-cpp/0002-cxxflags-ldflags-for-build.patch | 32 --------------------
+ 2 files changed, 34 insertions(+), 32 deletions(-)
+ create mode 100644 package/dbus-cpp/0002-cross-compile-tools.patch
+ delete mode 100644 package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
 
-Thanks!
-
-Thomas
+diff --git a/package/dbus-cpp/0002-cross-compile-tools.patch b/package/dbus-cpp/0002-cross-compile-tools.patch
+new file mode 100644
+index 0000000..39eff31
+--- /dev/null
++++ b/package/dbus-cpp/0002-cross-compile-tools.patch
+@@ -0,0 +1,34 @@
++tools: just do proper cross-compile
++
++Those tools are not used during the build; besides, they are installed.
++
++So they don't need to not be cross-compiled.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status: not submitted, upstream is dead.
++
++diff -durN dbus-cpp-0.9.0.orig/tools/Makefile.am dbus-cpp-0.9.0/tools/Makefile.am
++--- dbus-cpp-0.9.0.orig/tools/Makefile.am	2017-03-21 21:48:57.013409423 +0100
+++++ dbus-cpp-0.9.0/tools/Makefile.am	2017-03-21 21:49:35.329979798 +0100
++@@ -1,7 +1,3 @@
++-# hacky, but ...
++-
++-CXX = $(CXX_FOR_BUILD)
++-
++ AM_CPPFLAGS = \
++ 	$(dbus_CFLAGS) \
++ 	$(xml_CFLAGS) \
++@@ -9,11 +3,7 @@
++ 	-I$(top_builddir)/include \
++ 	-Wall
++ 
++-if CROSS_COMPILING
++-libdbus_cxx_la = $(BUILD_LIBDBUS_CXX_DIR)/src/libdbus-c++-1.la
++-else
++ libdbus_cxx_la = $(top_builddir)/src/libdbus-c++-1.la
++-endif
++ 
++ bin_PROGRAMS = dbusxx-xml2cpp dbusxx-introspect
++ 
+diff --git a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch b/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
+deleted file mode 100644
+index fefb969..0000000
+--- a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Use CXXFLAGS_FOR_BUILD and LDFLAGS_FOR_BUILD for the tools since expat
+-may not be living in the default include & library path.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libdbus-c++-0.9.0.orig/configure.ac libdbus-c++-0.9.0/configure.ac
+---- libdbus-c++-0.9.0.orig/configure.ac	2014-01-05 15:28:03.653886567 -0300
+-+++ libdbus-c++-0.9.0/configure.ac	2014-01-05 15:44:32.571172225 -0300
+-@@ -65,7 +65,11 @@
+- AC_PROG_CXX
+- 
+- CXX_FOR_BUILD=${CXX_FOR_BUILD-${CXX}}
+-+CXXFLAGS_FOR_BUILD=${CXXFLAGS_FOR_BUILD-${CXXFLAGS}}
+-+LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-${LDFLAGS}}
+- AC_SUBST(CXX_FOR_BUILD)
+-+AC_SUBST(CXXFLAGS_FOR_BUILD)
+-+AC_SUBST(LDFLAGS_FOR_BUILD)
+- 
+- AM_PROG_LIBTOOL
+- 
+-diff -Nura libdbus-c++-0.9.0.orig/tools/Makefile.am libdbus-c++-0.9.0/tools/Makefile.am
+---- libdbus-c++-0.9.0.orig/tools/Makefile.am	2014-01-05 15:28:03.652886535 -0300
+-+++ libdbus-c++-0.9.0/tools/Makefile.am	2014-01-05 15:44:42.071482390 -0300
+-@@ -1,6 +1,8 @@
+- # hacky, but ...
+- 
+- CXX = $(CXX_FOR_BUILD)
+-+CXXFLAGS = $(CXXFLAGS_FOR_BUILD)
+-+LDFLAGS = $(LDFLAGS_FOR_BUILD)
+- 
+- AM_CPPFLAGS = \
+- 	$(dbus_CFLAGS) \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
