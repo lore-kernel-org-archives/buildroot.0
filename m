@@ -1,125 +1,39 @@
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Tue, 21 Mar 2017 18:02:35 +0200
-Subject: [Buildroot] [PATCH v2] package/bluez5_utils: Allow user to enable
-	disabled plugins
-Message-ID: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
+Date: Tue, 21 Mar 2017 18:02:36 +0200
+Subject: [Buildroot] [PATCH v2] package/uclibc: Enable wordexp functionality
+In-Reply-To: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
+References: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disregard to increase just minor version BlueZ 5.44 is drastically different in
-a way what tools and plugins are enabled and installed by default.
+The commit d7c54cb0c0cf ("bluez5_utils: not available with uClibc")
+disables bluez5_utils (most of them) to be built with uClibc. Looking to
+the development of BlueZ user space support that commit basically makes
+the bluez5_utils package somewhat piece of junk. Since bluez5_utils 5.44
+deprecates all previously used tools and focuses on btmgmt and
+bluetoothctl we need to restore status quo.
 
-Extend Buildroot package to cover these changes.
-
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- package/bluez5_utils/Config.in       | 28 +++++++++++++++++++++++++++-
- package/bluez5_utils/bluez5_utils.mk | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+), 1 deletion(-)
+ package/uclibc/uClibc-ng.config | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index a7c0ee4ba..e99f0f69f 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -48,6 +48,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- comment "bluez5-utils client needs a glibc or musl toolchain"
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC
- 
-+config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
-+	bool "build deprecated tools"
-+	help
-+	  Build BlueZ 5.x deprecated tools (hciattach, gatttool, ...).
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- 	bool "install GATT tool"
- 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
-@@ -62,7 +67,28 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
- 	bool "build experimental plugins"
- 	help
--	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
-+	  Build BlueZ 5.x experimental plugins (PCSuite, ...).
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH
-+	bool "build health plugin"
-+	help
-+	  Build BlueZ 5.x health plugin
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI
-+	bool "build midi plugin"
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  Build BlueZ 5.x midi plugin
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_NFC
-+	bool "build nfc plugin"
-+	help
-+	  Build BlueZ 5.x nfc plugin
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_SAP
-+	bool "build sap plugin"
-+	help
-+	  Build BlueZ 5.x sap plugin
- 
- config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
- 	bool "build sixaxis plugin"
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 4d31a187b..4eae3d01d 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -38,6 +38,35 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
- endif
- 
-+# enable health plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-health
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-health
-+endif
-+
-+# enable midi plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-midi
-+BLUEZ5_UTILS_DEPENDENCIES += alsa-lib
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-midi
-+endif
-+
-+# enable nfc plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_NFC),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-nfc
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-nfc
-+endif
-+
-+# enable sap plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SAP),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-sap
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-sap
-+endif
-+
- # enable sixaxis plugin
- ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
-@@ -45,6 +74,13 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
- endif
- 
-+# build deprecated tools
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-deprecated
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-deprecated
-+endif
-+
- # install gatttool (For some reason upstream choose not to do it by default)
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
- define BLUEZ5_UTILS_INSTALL_GATTTOOL
+diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+index 528bce965..91082975e 100644
+--- a/package/uclibc/uClibc-ng.config
++++ b/package/uclibc/uClibc-ng.config
+@@ -32,6 +32,7 @@ UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+ UCLIBC_HAS_PRINTF_M_SPEC=y
+ # UCLIBC_HAS_REGEX_OLD is not set
+ # UCLIBC_HAS_FNMATCH_OLD is not set
++UCLIBC_HAS_WORDEXP=y
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
+ UCLIBC_HAS_GNU_GLOB=y
 -- 
 2.11.0
