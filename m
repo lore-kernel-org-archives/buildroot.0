@@ -1,56 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 21 Mar 2017 07:41:28 +0200
-Subject: [Buildroot] [PATCH] rpi-bt-firmware: new package
-In-Reply-To: <20170320224206.33fa1dbb@free-electrons.com>
-References: <094f74654295373c7cadd47044cbcfb9a80d8c87.1489093234.git.baruch@tkos.co.il>
- <20170319220043.6f819196@free-electrons.com>
- <20170320213039.wlpa2tdplbon6f2n@tarshish>
- <20170320224206.33fa1dbb@free-electrons.com>
-Message-ID: <20170321054128.6xifaqzintwbkgab@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 21 Mar 2017 08:09:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gnupg2: fix libusb detection
+Message-ID: <20170321070926.14178-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+gnupg2 does not use pkgconf to detect the include dir of libusb.
 
-On Mon, Mar 20, 2017 at 10:42:06PM +0100, Thomas Petazzoni wrote:
-> On Mon, 20 Mar 2017 23:30:39 +0200, Baruch Siach wrote:
-> > Do you have any indication that this is indeed the same file that RPi 
-> > uses? My impression was that this firmware is tailored specifically for 
-> > the RPi board, but I don't know for sure. That fact that Broadcom licenses 
-> > the file may indicate that this is the same one. But ...
-> > 
-> > > So perhaps the package should be bcrm-43430-firmware or something along
-> > > those lines.
-> > >   
-> > > > +RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
-> > > > +RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git  
-> > > 
-> > > Is there a better upstream than this? I found
-> > > https://github.com/varigit/bcm_4343w_fw but I'm not sure it really
-> > > qualifies as "better".  
-> > 
-> > ... this is not the same file:
-> > 
-> > ls -l bcm43430a1.hcd pi-bluetooth/BCM43430A1.hcd 
-> > -rw-r--r-- 1 baruch baruch 14265 Mar 20 23:22 bcm43430a1.hcd
-> > -rw-r--r-- 1 baruch baruch 35976 Jan 17 12:25 pi-bluetooth/BCM43430A1.hcd
-> 
-> Gaah, what a mess. Why don't they just post it for integration in the
-> linux-firmware project? Why is it that RPi people always have to do
-> things the weird way?
+Fixes
+http://autobuild.buildroot.net/results/70c/70c9f5f8ae77fbda2b5eba3aacf831430dc59a1c/
 
-I agree that the general attitude of the RPi community to the larger Open 
-Source community resembles an island attitude to mainland. But in this case 
-I'm not sure it is their fault. If indeed the firmware is board specific, 
-putting it in linux-firmware under a "generic" name won't do much good I 
-guess.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/gnupg2/gnupg2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-baruch
-
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 5815e7003..3932c3a0f 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -43,6 +43,7 @@ GNUPG2_CONF_OPTS += --disable-gnutls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
++GNUPG2_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/libusb-1.0"
+ GNUPG2_CONF_OPTS += --enable-ccid-driver
+ GNUPG2_DEPENDENCIES += libusb-compat
+ else
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
