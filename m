@@ -1,55 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 18:01:09 +0100
-Subject: [Buildroot] [PATCH v2] package/bluez5_utils: Allow user to
-	enable disabled plugins
-In-Reply-To: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com> (Andy
- Shevchenko's message of "Tue, 21 Mar 2017 18:02:35 +0200")
-References: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <874lymlg2y.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 21 Mar 2017 17:05:17 +0000
+Subject: [Buildroot] [PATCH] vala: bump version to 0.34.7
+Message-ID: <20170321170517.19150-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andy" == Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Disregard to increase just minor version BlueZ 5.44 is drastically different in
- > a way what tools and plugins are enabled and installed by default.
-
- > Extend Buildroot package to cover these changes.
-
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- > ---
- >  package/bluez5_utils/Config.in       | 28 +++++++++++++++++++++++++++-
- >  package/bluez5_utils/bluez5_utils.mk | 36 ++++++++++++++++++++++++++++++++++++
- >  2 files changed, 63 insertions(+), 1 deletion(-)
-
- > diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
- > index a7c0ee4ba..e99f0f69f 100644
- > --- a/package/bluez5_utils/Config.in
- > +++ b/package/bluez5_utils/Config.in
- > @@ -48,6 +48,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- >  comment "bluez5-utils client needs a glibc or musl toolchain"
- >  	depends on BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 390eb44..48212b2 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,2 +1,2 @@
+-# From https://download.gnome.org/sources/vala/0.34/vala-0.34.6.sha256sum
+-sha256 d1e32d6c55c2d66964d30b7410b78f5f313f1231fc3502da9980c3c80a797bb1  vala-0.34.6.tar.xz
++# From https://download.gnome.org/sources/vala/0.34/vala-0.34.7.sha256sum
++sha256 1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index c59ba25..70dc4b9 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- > +config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
- > +	bool "build deprecated tools"
- > +	help
- > +	  Build BlueZ 5.x deprecated tools (hciattach, gatttool, ...).
- > +
- >  config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- >  	bool "install GATT tool"
- >  	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
-
-Then _UTILS_GATTTOOL should depend on _UTILS_DEPRECATED. Or perhaps it
-doesn't make sense to have a dedicated option for this and it should
-just be automatically installed when deprecated is enabled.
-
-It would also be good to add the autobuilder failures:
-
-http://autobuild.buildroot.net/?reason=bluez5_utils-5.44
-
+ VALA_VERSION_MAJOR = 0.34
+-VALA_VERSION = $(VALA_VERSION_MAJOR).6
++VALA_VERSION = $(VALA_VERSION_MAJOR).7
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
 -- 
-Bye, Peter Korsgaard
+2.10.2
