@@ -1,27 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 09:46:44 +0100
-Subject: [Buildroot] [PATCH v3] boot/uboot: fix build for sunxi targets
-In-Reply-To: <1490081785.14952.1.camel@embedded.rocks>
-References: <20170309115247.16981-1-joerg.krause@embedded.rocks>
- <20170320223252.791ca511@free-electrons.com>
- <1490081785.14952.1.camel@embedded.rocks>
-Message-ID: <20170321094644.2adbacf9@free-electrons.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Tue, 21 Mar 2017 14:30:24 +0530
+Subject: [Buildroot] [PATCH 1/3] gst1-vaapi: bump version to 1.10.4
+In-Reply-To: <20170320215442.3d50c314@free-electrons.com>
+References: <1490022679-28301-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20170320215442.3d50c314@free-electrons.com>
+Message-ID: <eb5d82e4-ba3d-c336-2ab5-683d5ca0daf0@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-On Tue, 21 Mar 2017 08:36:25 +0100, J?rg Krause wrote:
+On Tuesday 21 March 2017 02:24 AM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Mon, 20 Mar 2017 20:41:17 +0530, Rahul Bedarkar wrote:
+>> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+>> ---
+>>  package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
+>>  package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
+>>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> I've applied all three patches. I wanted to take this opportunity to
+> thank you for all the legal-info reviews and fixes that you are doing.
+> This is very very valuable and useful, so many thanks for that!
 
-> I'm fine with dumping this patch. I'll mark it as superseded.
+You are welcome.
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Thanks
+Rahul
