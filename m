@@ -1,31 +1,35 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 21 Mar 2017 20:53:26 +0100
-Subject: [Buildroot] [PATCH v2] package/uclibc: Enable wordexp
-	functionality
-In-Reply-To: <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
-References: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
- <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
-Message-ID: <20170321195326.GE28589@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Mar 2017 21:12:38 +0100
+Subject: [Buildroot] [PATCH] poppler: bump version to 0.53.0
+In-Reply-To: <20170321172243.asedlzsa4ypg3ix3@tarshish> (Baruch Siach's
+ message of "Tue, 21 Mar 2017 19:22:43 +0200")
+References: <20170321154109.1311-1-Vincent.Riera@imgtec.com>
+ <87h92mlh8f.fsf@dell.be.48ers.dk>
+ <20170321172243.asedlzsa4ypg3ix3@tarshish>
+Message-ID: <87zigejsnd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Andy Shevchenko wrote,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-> The commit d7c54cb0c0cf ("bluez5_utils: not available with uClibc")
-> disables bluez5_utils (most of them) to be built with uClibc. Looking to
-> the development of BlueZ user space support that commit basically makes
-> the bluez5_utils package somewhat piece of junk. Since bluez5_utils 5.44
-> deprecates all previously used tools and focuses on btmgmt and
-> bluetoothctl we need to restore status quo.
+ > Hi Peter,
+ > On Tue, Mar 21, 2017 at 05:36:16PM +0100, Peter Korsgaard wrote:
+ >> >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+ >> 
+ >> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ >> 
+ >> Committed, thanks.
+ >> 
+ >> I see from the release notes that it now uses C++11 mode, so we might
+ >> need to add a dependency on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, but lets see
+ >> what the autobuilders say.
 
-You can add my Acked-By. It will allow to use more applications and
-I think it is just a minor size increase.
+ > This is not in master as of 1106771a414ede1.
 
-Looking forward to your size comparison requested by Thomas,
+Ups, indeed - It is now.
 
-Thanks
- Waldemar
+-- 
+Bye, Peter Korsgaard
