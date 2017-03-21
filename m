@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 17:30:44 +0100
-Subject: [Buildroot] [PATCH] json-glib: bump version to 1.2.8
-In-Reply-To: <20170321144119.63571-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Tue, 21 Mar 2017 14:41:19 +0000")
-References: <20170321144119.63571-1-Vincent.Riera@imgtec.com>
-Message-ID: <87tw6mlhhn.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Mar 2017 17:30:56 +0100
+Subject: [Buildroot] [PATCH] libgtk3: bump version to 3.22.11
+In-Reply-To: <20170321151718.40309-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Tue, 21 Mar 2017 15:17:18 +0000")
+References: <20170321151718.40309-1-Vincent.Riera@imgtec.com>
+Message-ID: <87pohalhhb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
