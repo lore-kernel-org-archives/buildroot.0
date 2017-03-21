@@ -1,42 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 22:16:07 +0100
-Subject: [Buildroot] [git commit] vala: bump version to 0.34.7
-Message-ID: <20170321211619.AC7E382630@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 22:14:17 +0100
+Subject: [Buildroot] [git commit] support/check-bin-arch: fix for filenames
+	with spaces
+Message-ID: <20170321211619.93F678262E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a2a87af107bce07a4dde9428920e4c62b6492b5
+commit: https://git.buildroot.net/buildroot/commit/?id=2f6c5e513cf6688f9343a25ac90138e9ad751eb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Filenames with spaces will break the current for loop.
+
+Fix that by using a while-read loop, fed with the list of files on
+stdin, using process substitution.
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/check-bin-arch | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 390eb44..48212b2 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.34/vala-0.34.6.sha256sum
--sha256 d1e32d6c55c2d66964d30b7410b78f5f313f1231fc3502da9980c3c80a797bb1  vala-0.34.6.tar.xz
-+# From https://download.gnome.org/sources/vala/0.34/vala-0.34.7.sha256sum
-+sha256 1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index c59ba25..70dc4b9 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+index 2c619ad..b3e2024 100755
+--- a/support/scripts/check-bin-arch
++++ b/support/scripts/check-bin-arch
+@@ -18,9 +18,11 @@ fi
  
- VALA_VERSION_MAJOR = 0.34
--VALA_VERSION = $(VALA_VERSION_MAJOR).6
-+VALA_VERSION = $(VALA_VERSION_MAJOR).7
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+ exitcode=0
+ 
+-pkg_files=$(sed -r -e "/^${package},(.+)$/!d; s//\1/;" ${pkg_list})
++# Only split on new lines, for filenames-with-spaces
++IFS="
++"
+ 
+-for f in ${pkg_files} ; do
++while read f; do
+ 	# Skip firmware files, they could be ELF files for other
+ 	# architectures
+ 	if [[ "${f}" =~ ^\./(usr/)?lib/firmware/.* ]]; then
+@@ -43,10 +45,10 @@ for f in ${pkg_files} ; do
+ 		continue
+ 	fi
+ 
+-	printf 'ERROR: architecture for %s is %s, should be %s\n' \
++	printf 'ERROR: architecture for "%s" is "%s", should be "%s"\n' \
+ 	       "${f}" "${arch}" "${arch_name}"
+ 
+ 	exitcode=1
+-done
++done < <( sed -r -e "/^${package},\.(.+)$/!d; s//\1/;" ${pkg_list} )
+ 
+ exit ${exitcode}
