@@ -1,62 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 23:15:33 +0100
-Subject: [Buildroot] [git commit] kmscube: Bump to latest version to fix
-	mips64el errors
-Message-ID: <20170322221536.CFF1B82644@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Mar 2017 23:32:12 +0100
+Subject: [Buildroot] [PATCH 4/6] python-mwscrape: use documented license
+ abbreviation
+In-Reply-To: <20170322213900.3ace3cc4@free-electrons.com>
+References: <1490204935-13172-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1490204935-13172-4-git-send-email-rahul.bedarkar@imgtec.com>
+ <20170322213900.3ace3cc4@free-electrons.com>
+Message-ID: <20170322223212.GA3591@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a602f3c2ee7acc95bea082e2fdcddb926b032e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Building kmscube for mips64el leads to the following build error:
+On 2017-03-22 21:39 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 22 Mar 2017 23:18:53 +0530, Rahul Bedarkar wrote:
+> 
+> >  PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
+> >  PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
+> > -PYTHON_MWSCRAPE_LICENSE = MPL-2.0
+> > +PYTHON_MWSCRAPE_LICENSE = MPLv2.0
+> 
+> Well, our idea was to use the SPDX license codes as much as possible,
+> and MPL-2.0 is the correct SPDX license code for this license. However,
+> it is true we haven't used SPDX from the beginning, so we're using
+> GPLv2 everywhere, while SPDX uses GPL-2.0.
+> 
+> See:
+> 
+>   https://spdx.org/licenses/
+> 
+> I think our idea was to keep using GPLv2/LGPLv2.1/GPLv3, but for all
+> other licenses, use the SPDX code as much as possible.
+> 
+> Maybe we should bite the bullet, and migrate all packages to use SPDX
+> license codes?
 
-cube-tex.c: In function 'get_fd_rgba':
-cube-tex.c:230:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (int i = 0; i < texh; i++) {
-  ^
-cube-tex.c:230:2: note: use option -std=c99 or -std=gnu99 to compile your code
-cube-tex.c: In function 'get_fd_y':
-cube-tex.c:261:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (int i = 0; i < texh; i++) {
-  ^
-cube-tex.c: In function 'get_fd_uv':
-cube-tex.c:292:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (int i = 0; i < texh/2; i++) {
+That would have my approval, yes.
 
-I have sent a fix to mainline kmscube to address such issue, so bump to
-the latest version.
+Regards,
+Yann E. MORIN.
 
-Fixes: http://autobuild.buildroot.net/results/1f2/1f2ad0536254834582cf7fbce6a38dbb46a5e249/build-end.log
+> Arnout, Yann, Peter?
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kmscube/kmscube.hash | 2 +-
- package/kmscube/kmscube.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
-index e88bff9..e306d00 100644
---- a/package/kmscube/kmscube.hash
-+++ b/package/kmscube/kmscube.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 dbd3eedd7fa518e3fc8bbcd424e408846a67c2c57661db30b3f5adb25f7e1513  kmscube-db8c6fc0f625e3a3d36731363276c459661d4149.tar.gz
-+sha256 254d34209740731a557469030c960bbfd2299485a2ad0cbed2f7040b56a292a7  kmscube-6cbd03ab94066dddbba7bedfde87c7c4319c18d5.tar.gz
-diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
-index f04b882..37983b1 100644
---- a/package/kmscube/kmscube.mk
-+++ b/package/kmscube/kmscube.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KMSCUBE_VERSION = db8c6fc0f625e3a3d36731363276c459661d4149
-+KMSCUBE_VERSION = 6cbd03ab94066dddbba7bedfde87c7c4319c18d5
- KMSCUBE_SITE = https://cgit.freedesktop.org/mesa/kmscube/snapshot
- KMSCUBE_LICENSE = MIT
- KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
