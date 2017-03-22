@@ -1,8 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 22 Mar 2017 13:19:27 +0000
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{2, 12}.x and 4.{1, 4,
-	9, 10}.x series
-Message-ID: <20170322131928.5150-1-Vincent.Riera@imgtec.com>
+Date: Wed, 22 Mar 2017 13:19:28 +0000
+Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.10.5
+In-Reply-To: <20170322131928.5150-1-Vincent.Riera@imgtec.com>
+References: <20170322131928.5150-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170322131928.5150-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,31 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/linux-headers/Config.in.host | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c506aab..4f17f26 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -213,12 +213,12 @@ endchoice
+diff --git a/linux/Config.in b/linux/Config.in
+index 3e2e6d5..5e395a4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
- config BR2_DEFAULT_KERNEL_HEADERS
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.10.4)"
++	bool "Latest version (4.10.5)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
  	string
--	default "3.2.86"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.87"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.71"	if BR2_KERNEL_HEADERS_3_12
--	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.55"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.16"	if BR2_KERNEL_HEADERS_4_9
--	default "4.10.4"	if BR2_KERNEL_HEADERS_4_10
-+	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
-+	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.56"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.17"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.10.5"	if BR2_KERNEL_HEADERS_4_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-	default "4.10.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.10.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 2.10.2
