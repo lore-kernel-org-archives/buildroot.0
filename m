@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 23:09:28 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 12}.x and 4.{1, 4,
-	9, 10}.x series
-Message-ID: <20170322221051.8A37182245@busybox.osuosl.org>
+Date: Wed, 22 Mar 2017 23:09:45 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump version to 7.0.5-3
+Message-ID: <20170322221051.A467382245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d70d1dbf054f4a0609ba1076bc7e097305013d2
+commit: https://git.buildroot.net/buildroot/commit/?id=84bc1fb5320568a9475aaca03d24196ecad48ec0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c506aab..4f17f26 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -213,12 +213,12 @@ endchoice
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 5a281cf..3f9f84e 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 a7c55f0fd5203cbff12bf4a8d9158c002fab8d4290859a8087c3d329013b1af8  ImageMagick-7.0.5-2.tar.xz
++sha256 dbc0a1cc0e4e3d4e3c772724fcbfe24a00ff4434c8b12c513c447a5fb422ffa6  ImageMagick-7.0.5-3.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index ac10cd6..d6923f5 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.86"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.87"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.71"	if BR2_KERNEL_HEADERS_3_12
--	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.55"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.16"	if BR2_KERNEL_HEADERS_4_9
--	default "4.10.4"	if BR2_KERNEL_HEADERS_4_10
-+	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
-+	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.56"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.17"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.10.5"	if BR2_KERNEL_HEADERS_4_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-IMAGEMAGICK_VERSION = 7.0.5-2
++IMAGEMAGICK_VERSION = 7.0.5-3
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
