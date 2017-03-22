@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:44:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ntp: security bump to 4.2.8p10
-In-Reply-To: <20170322210313.10299-1-bernd.kuhls@t-online.de>
-References: <20170322210313.10299-1-bernd.kuhls@t-online.de>
-Message-ID: <20170322224449.5092d4c4@free-electrons.com>
+Date: Wed, 22 Mar 2017 22:45:50 +0100
+Subject: [Buildroot] [PATCH 1/2] leptonica: make package description
+ more accurate
+In-Reply-To: <1490164887-2707-1-git-send-email-gilles.talis@gmail.com>
+References: <1490164887-2707-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20170322224550.24be1023@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Mar 2017 22:03:13 +0100, Bernd Kuhls wrote:
-> Changed NTP_SITE to https to circumvent "URL transformed to HTTPS due
-> to an HSTS policy" during download.
-> 
-> For details about the bugs fixed see:
-> http://support.ntp.org/bin/view/Main/SecurityNotice#Recent_Vulnerabilities
-> http://www.kb.cert.org/vuls/id/633847
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Wed, 22 Mar 2017 07:41:26 +0100, Gilles Talis wrote:
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 > ---
->  package/ntp/ntp.hash | 6 +++---
->  package/ntp/ntp.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/leptonica/Config.in | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-Applied to master, thanks. Peter: we want this in the LTS branch.
+Both patches applied, thanks!
 
-Thanks!
+Note that we have a number of build failures on the leptonica package:
+
+  http://autobuild.buildroot.net/?reason=leptonica-1.74.1
+
+These occur in static linking scenarios, because leptonica configure
+script is not using pkg-config to find the TIFF library, so it doesn't
+know about the transitive dependencies of the TIFF library. Switching
+to PKG_CHECK_MODULES() to discover the TIFF library would solve this I
+believe.
+
+Best regards,
 
 Thomas
 -- 
