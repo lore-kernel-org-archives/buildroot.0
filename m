@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 23:11:46 +0100
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.5-3
-In-Reply-To: <20170322133652.52232-1-Vincent.Riera@imgtec.com>
-References: <20170322133652.52232-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170322231146.24994a49@free-electrons.com>
+Date: Wed, 22 Mar 2017 23:11:59 +0100
+Subject: [Buildroot] [PATCH 1/1] janus-gateway: bump to v0.2.2
+In-Reply-To: <20170322141303.28029-1-aduskett@codeblue.com>
+References: <20170322141303.28029-1-aduskett@codeblue.com>
+Message-ID: <20170322231159.293a3102@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Mar 2017 13:36:52 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Wed, 22 Mar 2017 10:13:03 -0400, Adam Duskett wrote:
+> In addition, a new option sample-event-handler has been added.
+> It has been disabled by default in the .mk file, as it requires
+> libcurl or else it will throw a error during compilation.  If anybody
+> wants the sameple-event-handler, they will need to update the Config.in
+> file to check for libcurl first.
+> 
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 > ---
->  package/imagemagick/imagemagick.hash | 2 +-
->  package/imagemagick/imagemagick.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/janus-gateway/janus-gateway.hash | 2 +-
+>  package/janus-gateway/janus-gateway.mk   | 7 ++++---
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-Applied to master, thanks. I'm wondering how many times per day they
-make a new release of this thing...
+Applied to master after tweaking the commit log. Thanks!
 
 Thomas
 -- 
