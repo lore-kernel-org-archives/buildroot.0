@@ -1,92 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 23:13:32 +0100
-Subject: [Buildroot] [git commit] tcpreplay: Bump version to v4.2.0
-Message-ID: <20170322221340.1D46D81EBC@busybox.osuosl.org>
+Date: Wed, 22 Mar 2017 23:15:33 +0100
+Subject: [Buildroot] [git commit] kmscube: Bump to latest version to fix
+	mips64el errors
+Message-ID: <20170322221536.CFF1B82644@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34fab3c049098a053d9fc08f57200c6d5a436fd5
+commit: https://git.buildroot.net/buildroot/commit/?id=1a602f3c2ee7acc95bea082e2fdcddb926b032e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Building kmscube for mips64el leads to the following build error:
+
+cube-tex.c: In function 'get_fd_rgba':
+cube-tex.c:230:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (int i = 0; i < texh; i++) {
+  ^
+cube-tex.c:230:2: note: use option -std=c99 or -std=gnu99 to compile your code
+cube-tex.c: In function 'get_fd_y':
+cube-tex.c:261:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (int i = 0; i < texh; i++) {
+  ^
+cube-tex.c: In function 'get_fd_uv':
+cube-tex.c:292:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (int i = 0; i < texh/2; i++) {
+
+I have sent a fix to mainline kmscube to address such issue, so bump to
+the latest version.
+
+Fixes: http://autobuild.buildroot.net/results/1f2/1f2ad0536254834582cf7fbce6a38dbb46a5e249/build-end.log
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-capture-has-a-packet-that-is-too-large-2.patch | 44 ----------------------
- package/tcpreplay/tcpreplay.hash                   |  2 +-
- package/tcpreplay/tcpreplay.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 46 deletions(-)
+ package/kmscube/kmscube.hash | 2 +-
+ package/kmscube/kmscube.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-deleted file mode 100644
-index 233b6d9..0000000
---- a/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From d689d14dbcd768c028eab2fb378d849e543dcfe9 Mon Sep 17 00:00:00 2001
--From: Fred Klassen <fklassen@appneta.com>
--Date: Sun, 26 Feb 2017 20:45:59 -0800
--Subject: [PATCH] #278 fail if capture has a packet that is too large (#286)
--
--* #278 fail if capture has a packet that is too large
--
--[baruch: remove the CHANGELOG update]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: upstream commit d689d14db
--
--diff --git a/src/tcpcapinfo.c b/src/tcpcapinfo.c
--index 775f1625b00f..96928820fe94 100644
----- a/src/tcpcapinfo.c
--+++ b/src/tcpcapinfo.c
--@@ -281,6 +281,15 @@ main(int argc, char *argv[])
--                 caplen = pcap_ph.caplen;
--             }
-- 
--+            if (caplentoobig) {
--+                printf("\n\nCapture file appears to be damaged or corrupt.\n"
--+                        "Contains packet of size %u, bigger than snap length %u\n",
--+                        caplen, pcap_fh.snaplen);
--+
--+                close(fd);
--+                break;
--+            }
--+
--             /* check to make sure timestamps don't go backwards */
--             if (last_sec > 0 && last_usec > 0) {
--                 if ((pcap_ph.ts.tv_sec == last_sec) ? 
--@@ -306,7 +315,7 @@ main(int argc, char *argv[])
--                 }
-- 
--                 close(fd);
---                continue;
--+                break;
--             }
-- 
--             /* print the frame checksum */
---- 
--2.11.0
--
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index e7ba440..bc75d88 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
+diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
+index e88bff9..e306d00 100644
+--- a/package/kmscube/kmscube.hash
++++ b/package/kmscube/kmscube.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	da483347e83a9b5df0e0dbb0f822a2d37236e79dda35f4bc4e6684fa827f25ea	tcpreplay-4.1.2.tar.gz
-+sha256	924f80cd1958a4c4447f0a6a54e8d3af7aebd3674aa4ef9973f69b43b1675221	tcpreplay-4.2.0.tar.gz
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index a8bcf1c..21784c1 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
+ # Locally computed
+-sha256 dbd3eedd7fa518e3fc8bbcd424e408846a67c2c57661db30b3f5adb25f7e1513  kmscube-db8c6fc0f625e3a3d36731363276c459661d4149.tar.gz
++sha256 254d34209740731a557469030c960bbfd2299485a2ad0cbed2f7040b56a292a7  kmscube-6cbd03ab94066dddbba7bedfde87c7c4319c18d5.tar.gz
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+index f04b882..37983b1 100644
+--- a/package/kmscube/kmscube.mk
++++ b/package/kmscube/kmscube.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPREPLAY_VERSION = 4.1.2
-+TCPREPLAY_VERSION = 4.2.0
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPLv3
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+-KMSCUBE_VERSION = db8c6fc0f625e3a3d36731363276c459661d4149
++KMSCUBE_VERSION = 6cbd03ab94066dddbba7bedfde87c7c4319c18d5
+ KMSCUBE_SITE = https://cgit.freedesktop.org/mesa/kmscube/snapshot
+ KMSCUBE_LICENSE = MIT
+ KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
