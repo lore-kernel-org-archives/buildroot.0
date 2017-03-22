@@ -1,38 +1,41 @@
-From: Karoly Pados <kp@tec4data.at>
-Date: Wed, 22 Mar 2017 13:36:41 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: Add missing firmware for
-	the carl9170 driver.
-Message-ID: <20170322123641.19482-1-kp@tec4data.at>
+From: =?utf-8?B?RmF0aWggQcWfxLFjxLE=?= <fatih.asici@gmail.com>
+Date: Wed, 22 Mar 2017 15:53:17 +0300
+Subject: [Buildroot] ninja/python-meson packages
+In-Reply-To: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+Message-ID: <d309c350-d2df-4eb0-8114-bea29d3a05dd@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For a long time now Atheros USB AR9170 devices have been using the
-carl9170 driver which relies on the carl9170-1.fw firmware file.
-This firmware is built by current buildroot, but its output
-is not copied to the resulting rootfs. This patch fixes that.
+On Wednesday, November 9, 2016 6:26:38 PM +03, C?dric Marie wrote:
+> Hi,
+>
+> Regarding python-meson package that was proposed here:
+> http://lists.busybox.net/pipermail/buildroot/2016-June/163437.html
+>
+>>> However, I could provide a real package infrastructure named 
+>>> "meson-package",
+>>> but as stated in the discussion about adding support for Cargo (the Rust
+>>> package manager), to provide such infrastructure, at least 
+>>> one package using
+>>> it should also be provided (it is sensible to have a working example of
+>>> the infrastructure).
+>
+>> I would not say one, but at least 4-5 packages, with a pretty good
+>> confidence that more packages would be added later on.
+>
+> Gstreamer has added Meson as an alternative build system (to 
+> Autotools) since August 2016:
+>
+> https://cgit.freedesktop.org/gstreamer/gstreamer/commit/meson.build?id=b2f9808722a0254acba17ef98a612a2792184e12
 
-Please backport to 2017.02.x branch.
+libepoxy is also another project that uses Meson build system. Since 1.4.0,
+the "Building" section in README.md has commands to build with Meson:
 
-Signed-off-by: Karoly Pados <kp@tec4data.at>
----
- package/linux-firmware/linux-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  https://github.com/anholt/libepoxy/tree/1.4.1#building
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index bfcd2ef09..55a4aac09 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -104,7 +104,7 @@ endif
- 
- # ar9170
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170),y)
--LINUX_FIRMWARE_FILES += ar9170-1.fw ar9170-2.fw
-+LINUX_FIRMWARE_FILES += ar9170-1.fw ar9170-2.fw carl9170-1.fw
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
- endif
- 
--- 
-2.12.0
+Regards,
+Fatih
