@@ -1,91 +1,83 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 22 Mar 2017 08:45:18 +0100
-Subject: [Buildroot] How to organize build into multiple target
-	filesystems?
-In-Reply-To: <CAAXf6LXGOfQQT49B+KDdNUkbLOZzCkVtcpE7SZoN05Z65w269g@mail.gmail.com>
-References: <CABKRrCWcWO3MNBnFK9fAoaYoGQBNn2eN=ZvZYovHvV1jwYQbSw@mail.gmail.com>
- <fa8d21ca-56d4-9561-bc25-333c238abfb5@mind.be>
- <CAAXf6LXGOfQQT49B+KDdNUkbLOZzCkVtcpE7SZoN05Z65w269g@mail.gmail.com>
-Message-ID: <CAAXf6LXv5BOyHSGeBscxN7Ej-TfJuKcybYRVkUVbNpnK1hQuuQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Mar 2017 08:56:44 +0100
+Subject: [Buildroot] [PATCH v2 2/2] python3: Bump version to 3.6.0
+In-Reply-To: <CAHQ1cqFB2UnahiSC_hL7Enu1L2jtNV7ZGQt7AKMLzCU9tyKwgw@mail.gmail.com>
+References: <20170314234228.3744-1-andrew.smirnov@gmail.com>
+ <20170314234228.3744-2-andrew.smirnov@gmail.com>
+ <20170319155314.3ca86764@free-electrons.com>
+ <CAHQ1cqFB2UnahiSC_hL7Enu1L2jtNV7ZGQt7AKMLzCU9tyKwgw@mail.gmail.com>
+Message-ID: <20170322085644.516eecfc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 21, 2017 at 9:34 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Dave,
->
-> On Mon, Mar 6, 2017 at 12:52 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Hi Dave,
->>
->>  A bit late to answer this, but perhaps still relevant.
->>
->> On 21-02-17 20:08, David Wuertele wrote:
->>> I would like my target to have a small initramfs, and a large-ish /usr
->>> filesystem mounted at runtime.  The initramfs will be populated with some of my
->>> packages, the usr fs will be populated with the rest.  I don't want the
->>> initramfs to contain anything under usr except for the /usr mountpoint
->>> directory.
->>>
->>> In general, I'm looking for a way to divert my package outputs into an
->>> arbitrary number of filesystems, which I then package in various ways,
->>> including but not limited to bundling into a kernel initramfs.
->>>
->>> Is there a way to specify such an organization in buildroot?
->>
->>  Not directly. The Buildroot Way is to keep things simple, preferably without
->> blocking real use cases. For your use case, you need specific treatment in a
->> fakeroot script.
->>
->>  Buildroot will still build a monolithic filesystem, and your fakeroot script
->> can extract parts that need special treatment. For example, you can make a
->> tarball of $TARGET_DIR/usr, then remove the /usr tree, or remove the part that
->> you don't need. You can also use $BUILD_DIR/packages-file-list.txt to find out
->> which file comes from which package, to do this on a per-package basis.
->>
->>  You will also need to add the necessary scripts (or systemd units) in a rootfs
->> overlay to stitch things back together.
->>
->>  I'm adding Thomas DS in Cc, he described a somewhat similar setup in the last
->> BR developer meeting.
->
-> Sorry for the late reply.
-> We are creating some opkg packages and thus extracting these files
-> from the rootfs.
-> The script I created for this is below. I guess it can be split in
-> two: the core part and the opkg creation, as some people may just want
-> tar files or something else. Feedback welcome.
->
-> diff --git a/support/scripts/create-pkgs b/support/scripts/create-pkgs
-> new file mode 100755
-> index 0000000..8e512b2
-> --- /dev/null
-> +++ b/support/scripts/create-pkgs
-> @@ -0,0 +1,212 @@
-> +#!/usr/bin/env python
-> +
-> +# Copyright (C) 2016 Thomas De Schampheleire
-> <thomas.de_schampheleire@nokia.com>
-> +
-> +import argparse
-> +import collections
-> +import csv
-> +import os
-> +import shutil
-> +import subprocess
-> +import sys
-> +import tempfile
-> +import pkgutil
+Hello,
 
-On latest master this needs to become 'import brpkgutil' and
-references below to pkgutil need to be changed too.
+On Tue, 21 Mar 2017 17:49:06 -0700, Andrey Smirnov wrote:
 
-I also forgot to mention that this change depends on the following
-queued patches:
+> > To be honest, I find it really annoying that we have to do this to find
+> > the name of the sysconfigdata package. I've thought about the following:
+> >
+> >  - Have the Python build system output somewhere the name of the
+> >    sysconfigdata module that has been generated.
+> >  
+> 
+> Sure, you can do that, but that would mean another custom patch
+> against CPython's build system which is very likely to break and
+> require manual intervention next time there's at least a major version
+> update. After going through all of BR's patches in the process of
+> rebasing on 3.6 and having to manually fix at least half of them I
+> didn't want to make the problem worse, so that's why I didn't go that
+> route.
 
-http://patchwork.ozlabs.org/patch/724235/
-http://patchwork.ozlabs.org/patch/724236/
+OK, makes sense. It's always a matter of tradeoff anyway.
 
-/Thomas
+> I don't think this would work. CPython's build system does not use
+> -dumpmachine output directly to come up with that suffix and instead
+> relies on specially crafted dummy .c file and CPP:
+> 
+> https://github.com/python/cpython/blob/master/configure.ac#L762
+> 
+> So for example on my target -dumpmachine would result in
+> "powerpc-e500v2-linux-gnuspe", where as suffix of sysconfigdata would
+> be "powerpc-linux-gnuspe".
+
+OK, in this case indeed your approach is the best option I'd say.
+
+> > Why are all patches you have changed now re-assigned with your From?
+> > You should preserve the authorship of the original author.
+> >  
+> 
+> Because I manually applied those patches and committed them in my
+> local CPython repo and didn't go out of my way to prevent "From" from
+> being set to committer when I git format-patch'ed them, since the
+> authorship/copyright information is preserved in "Signed-off-by"
+> lines. Will change in v3.
+
+Since all patches are Git formatted, you can (and should) apply them
+with "git am" which will preserve all this information automatically.
+
+> >>  # Provided to other packages
+> >> -PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
+> >> +PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/  
+> >
+> > Why do we now need
+> > $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/ ?  
+> 
+> Because that's where _sysconfigdata_m_linux_*.pyc file is located.
+
+OK. I thought "but isn't this in the default Python search path", but
+in fact it's going to be in the default search path on the target, but
+not when cross-compiling. So: OK.
+
+Thanks for all those explanations!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
