@@ -1,53 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Mar 2017 09:24:56 +0100
-Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
-	/usr/share
-In-Reply-To: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 21 Mar 2017 21:35:16 +0100")
-References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87inn1k9bb.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Mar 2017 09:25:31 +0100
+Subject: [Buildroot] [PATCH v3 2/5] support/testing: add core tests
+In-Reply-To: <CAAXf6LV-OfyZsEoX0Ja8KndLoA5MM=OyuwMTAvi9ptUP1SvzXQ@mail.gmail.com>
+References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1490042214-6762-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LV-OfyZsEoX0Ja8KndLoA5MM=OyuwMTAvi9ptUP1SvzXQ@mail.gmail.com>
+Message-ID: <20170322092531.2b299231@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > /usr/share normally should not contain binaries executable for the
- > target platform. However, it might contain ELF binaries for other
- > platforms, such as firmware files installed by Qemu or
- > pru-software-support.
+On Wed, 22 Mar 2017 09:17:59 +0100, Thomas De Schampheleire wrote:
 
- > Instead of special-casing each package, let's simply ignore /usr/share.
+> Two minor comments:
+> 
+> I think it would be cleaner to move support files for tests, like the
+> post-build.sh and post-image.sh and rootfs-overlays, to a subdirectory
+> instead of in the same location as the tests.
 
- > Fixes:
+Can you suggest a name for this subdirectory ? :-)
 
- >   http://autobuild.buildroot.net/results/6f3fea9f6adaef1573fbb0dd6903b5d99e470610/
- >   (pru-software-support)
+> Also, I would argue that the rootfs-overlays do not need to be real
+> files in git but can be generated on the fly during the test.
 
- >   http://autobuild.buildroot.net/results/fe8892bc22a03299fc41e30bfea5e42166838f88/
- >   (qemu)
+I tried to do that, but:
 
-Hmm, this doesn't seem to work?
+ 1. It complicates quite a bit the test scenario.
 
-http://autobuild.buildroot.net/results/4e2/4e27559827f3ed75a12f13bd595998bf661b2aaf/build-end.log
-http://autobuild.buildroot.net/results/99e/99e4ed21116c721faf9f1d0349f312b357d333ee/build-end.log
+ 2. There are plenty of other test cases where we will really need some
+    data that cannot be generated: a set of patches to test if patches
+    on packages are properly applied, a set of dummy BR2_EXTERNAL
+    trees, etc. So we will anyway have some "supporting" artifacts in
+    the tree, and therefore I thought it wasn't worth the effort making
+    this test more complicated.
 
-I wonder if we shouldn't turn the tests around, E.G. instead of
-searching for elf files with a machine different from target, search for
-a files with machine == host.
+Yann did the exact same comment while reviewing the previous version,
+so I tried generating the files automatically, and went through this
+reasoning before giving up and keeping things as they are.
 
-If we do this then we need to disable the test when host == target (but
-the current tests aren't really helpful either for such setups).
+Best regards,
 
-This can naturally still fail if somebody adds a package (E.G. in
-br2-external) that installs a i386/x86-64 binary. Presumably this could
-happen if you want to include a PC application to inside the firmware
-(E.G. downloadable through the web interface and used for controlling
-the firmware or similar), but it doesn't get caught up in all these
-build issues about various other firmware files or slightly different
-machine strings (sparc / sparcv9, arcompat / arcv2)..
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
