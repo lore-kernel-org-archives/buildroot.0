@@ -1,52 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 22 Mar 2017 09:17:59 +0100
-Subject: [Buildroot] [PATCH v3 2/5] support/testing: add core tests
-In-Reply-To: <1490042214-6762-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490042214-6762-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LV-OfyZsEoX0Ja8KndLoA5MM=OyuwMTAvi9ptUP1SvzXQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 22 Mar 2017 09:24:56 +0100
+Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
+	/usr/share
+In-Reply-To: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 21 Mar 2017 21:35:16 +0100")
+References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87inn1k9bb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 20, 2017 at 9:36 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> This commit adds a few Buildroot "core" tests, testing functionalities
-> such as:
->
->  - post-build and post-image scripts
->  - root filesystem overlays
->  - timezone support
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/testing/tests/core/__init__.py             |  0
->  support/testing/tests/core/post-build.sh           | 12 ++++
->  support/testing/tests/core/post-image.sh           | 12 ++++
->  .../testing/tests/core/rootfs-overlay1/test-file1  |  1 +
->  .../tests/core/rootfs-overlay2/etc/test-file2      |  1 +
->  support/testing/tests/core/test_post_scripts.py    | 40 +++++++++++++
->  support/testing/tests/core/test_rootfs_overlay.py  | 27 +++++++++
->  support/testing/tests/core/test_timezone.py        | 66 ++++++++++++++++++++++
->  8 files changed, 159 insertions(+)
->  create mode 100644 support/testing/tests/core/__init__.py
->  create mode 100755 support/testing/tests/core/post-build.sh
->  create mode 100755 support/testing/tests/core/post-image.sh
->  create mode 100644 support/testing/tests/core/rootfs-overlay1/test-file1
->  create mode 100644 support/testing/tests/core/rootfs-overlay2/etc/test-file2
->  create mode 100644 support/testing/tests/core/test_post_scripts.py
->  create mode 100644 support/testing/tests/core/test_rootfs_overlay.py
->  create mode 100644 support/testing/tests/core/test_timezone.py
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Two minor comments:
+ > /usr/share normally should not contain binaries executable for the
+ > target platform. However, it might contain ELF binaries for other
+ > platforms, such as firmware files installed by Qemu or
+ > pru-software-support.
 
-I think it would be cleaner to move support files for tests, like the
-post-build.sh and post-image.sh and rootfs-overlays, to a subdirectory
-instead of in the same location as the tests.
+ > Instead of special-casing each package, let's simply ignore /usr/share.
 
-Also, I would argue that the rootfs-overlays do not need to be real
-files in git but can be generated on the fly during the test.
+ > Fixes:
 
-/Thomas
+ >   http://autobuild.buildroot.net/results/6f3fea9f6adaef1573fbb0dd6903b5d99e470610/
+ >   (pru-software-support)
+
+ >   http://autobuild.buildroot.net/results/fe8892bc22a03299fc41e30bfea5e42166838f88/
+ >   (qemu)
+
+Hmm, this doesn't seem to work?
+
+http://autobuild.buildroot.net/results/4e2/4e27559827f3ed75a12f13bd595998bf661b2aaf/build-end.log
+http://autobuild.buildroot.net/results/99e/99e4ed21116c721faf9f1d0349f312b357d333ee/build-end.log
+
+I wonder if we shouldn't turn the tests around, E.G. instead of
+searching for elf files with a machine different from target, search for
+a files with machine == host.
+
+If we do this then we need to disable the test when host == target (but
+the current tests aren't really helpful either for such setups).
+
+This can naturally still fail if somebody adds a package (E.G. in
+br2-external) that installs a i386/x86-64 binary. Presumably this could
+happen if you want to include a PC application to inside the firmware
+(E.G. downloadable through the web interface and used for controlling
+the firmware or similar), but it doesn't get caught up in all these
+build issues about various other firmware files or slightly different
+machine strings (sparc / sparcv9, arcompat / arcv2)..
+
+-- 
+Bye, Peter Korsgaard
