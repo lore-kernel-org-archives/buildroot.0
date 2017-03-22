@@ -1,79 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Mar 2017 00:05:12 +0100
-Subject: [Buildroot] [PATCH v2] libepoxy: OpenGL EGL and OpenGL ES
- dependencies are mandatory
-In-Reply-To: <20170322225648.5a32abeb@free-electrons.com>
-References: <20170322115643.48653-1-Vincent.Riera@imgtec.com>
- <20170322225648.5a32abeb@free-electrons.com>
-Message-ID: <cb669e65-1eca-0f7b-c9e7-2b56921032d6@mind.be>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Wed, 22 Mar 2017 16:12:03 -0700
+Subject: [Buildroot] [PATCH] uboot-tools: pass empty CFLAGS on
+ invocation of libfdt/setup.py
+In-Reply-To: <20170322220119.24fc6301@free-electrons.com>
+References: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
+ <20170320225742.054be334@free-electrons.com>
+ <CAMo8BfLZzoRF0Q4zMRPcmwT0UErD7pGH_boMKrWQ07h09fiykw@mail.gmail.com>
+ <20170322220119.24fc6301@free-electrons.com>
+Message-ID: <CAMo8Bf+xMaeYqPHZa9RdBwA4qpz8VRTK8eZcBrdTOLkmBMcUYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
+On Wed, Mar 22, 2017 at 2:01 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Mon, 20 Mar 2017 16:30:53 -0700, Max Filippov wrote:
+>
+>> I can't reproduce it.
+>> The python script makes the compilation super quiet, can we apply something
+>> like the attached patch to see what happens?
+>
+> Build log is below. The issue is that the library being produced is
+> named _libfdt.cpython-35m-x86_64-linux-gnu.so, but U-Boot build system
+> assumes it's named _libfdt.so.
+>
+> However, let's take a step back: why the heck do we have this Python
+> related stuff being built?
 
-On 22-03-17 22:56, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 22 Mar 2017 11:56:43 +0000, Vicente Olivert Riera wrote:
->> The --disable-egl configure option doesn't exist:
->>
->> configure: WARNING: unrecognized options: [snip] --disable-egl
->>
->> If you don't have EGL support the configure script will fail like this:
->>
->> checking for EGL... no
->> configure: error: Package requirements (egl) were not met:
->>
->> Also, libepoxy use dlsym to load a GLES2 library when EGL support is
->> enabled, see src/dispatch_common.c:
->>
->> So, OpenGL ES dependency is also mandatory.
->>
->> Fixes:
->>   http://autobuild.buildroot.net/results/3eca5ba26a521f6cc5a611309ba066472af7769c
->>   http://autobuild.buildroot.net/results/cf9ec7da196d70548ae1413e4a3730314f6434d6
->>   http://autobuild.buildroot.net/results/069b80101afc4719db6d6d41cf5fc923be21ddc0
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> Reviewed-by: Romain Naour <romain.naour@gmail.com>
->> Tested-by: Romain Naour <romain.naour@gmail.com>
-> 
-> I would really like to hear about this patch from Gustavo. Gustavo,
-> could you review/comment?
-> 
-> 
->> +	# OpenGL EGL is mandatory and libepoxy uses dlsym to load a
->> +	# GLES2 library when EGL support is enabled. Details in
->> +	# src/dispatch/dispatch_common.c
->> +	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
+we probably don't.
 
- Also, this should be two separate lines:
+> uboot-tools is only meant to install the
+> basic U-Boot tools like fw_printenv and fw_setenv to the target. Why do
+> we bother about this Python libfdt thing? We're not even installing
+> this stuff to the target:
+>
+> define UBOOT_TOOLS_INSTALL_TARGET_CMDS
+>         $(UBOOT_TOOLS_INSTALL_MKIMAGE)
+>         $(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
+>         $(UBOOT_TOOLS_INSTALL_FWPRINTENV)
+>         $(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
+> endef
+>
+> Looking at tools/Makefile, it indeed automatically builds this Python
+> stuff is swig is available, with no way to disable this stuff. Should
+> we patch this out? Alternatively, changing:
+>
+>         mv _libfdt.so $@
+>
+> to:
+>
+>         mv _libfdt.*so $@
+>
+> does the trick.
 
-	depends on BR2_PACKAGE_HAS_LIBEGL
-	depends on BR2_PACKAGE_HAS_LIBGLES
-
- Regards,
- Arnout
-
-> 
-> New dependency -> don't forget to check the reverse dependencies of
-> libepoxy:
-> 
-> package/libgtk3/Config.in:      select BR2_PACKAGE_LIBEPOXY
-> package/x11r7/xdriver_xf86-video-amdgpu/Config.in:      select BR2_PACKAGE_LIBEPOXY
-> 
-> Best regards,
-> 
-> Thomas
-> 
+That looks like a nice small fix.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thanks.
+-- Max
