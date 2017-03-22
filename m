@@ -1,44 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:42:31 +0100
-Subject: [Buildroot] [git commit] tesseract-ocr: needs wchar support
-Message-ID: <20170322214236.C2DC082240@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 22 Mar 2017 22:43:48 +0100
+Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
+	/usr/share
+In-Reply-To: <20170322140639.5c8c5149@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 22 Mar 2017 14:06:39 +0100")
+References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87inn1k9bb.fsf@dell.be.48ers.dk>
+ <20170322140639.5c8c5149@free-electrons.com>
+Message-ID: <87efxpj8bv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51c5e50589d4c663efb65325d5bfe9bc767cfa28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/66e44564aac79c1c47755f6d158663317a5ffe09
+ > Hello,
+ > On Wed, 22 Mar 2017 09:24:56 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tesseract-ocr/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ >> http://autobuild.buildroot.net/results/4e2/4e27559827f3ed75a12f13bd595998bf661b2aaf/build-end.log
+ >> http://autobuild.buildroot.net/results/99e/99e4ed21116c721faf9f1d0349f312b357d333ee/build-end.log
+ >> 
+ >> I wonder if we shouldn't turn the tests around, E.G. instead of
+ >> searching for elf files with a machine different from target, search for
+ >> a files with machine == host.
 
-diff --git a/package/tesseract-ocr/Config.in b/package/tesseract-ocr/Config.in
-index d4c23fb..3afaca7 100644
---- a/package/tesseract-ocr/Config.in
-+++ b/package/tesseract-ocr/Config.in
-@@ -1,7 +1,7 @@
--comment "tesseract-ocr needs a toolchain w/ threads, C++, gcc >= 4.8, dynamic library"
-+comment "tesseract-ocr needs a toolchain w/ threads, C++, gcc >= 4.8, dynamic library, wchar"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- menuconfig BR2_PACKAGE_TESSERACT_OCR
- 	bool "tesseract-ocr"
-@@ -10,6 +10,7 @@ menuconfig BR2_PACKAGE_TESSERACT_OCR
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LEPTONICA
- 	help
- 	  Tesseract is an OCR (Optical Character Recognition) engine,
+ > Indeed, that's an option. We would need to have only the readelf
+ > machine string for the most common build architectures (x86, x86-64),
+ > and if Buildroot is used on a different architecture, we simply don't
+ > do the check.
+
+Exactly, or alternatively we run readelf on a host utility (E.G. HOSTCC)
+to detect the machine string.
+
+
+ >> This can naturally still fail if somebody adds a package (E.G. in
+ >> br2-external) that installs a i386/x86-64 binary. Presumably this could
+ >> happen if you want to include a PC application to inside the firmware
+ >> (E.G. downloadable through the web interface and used for controlling
+ >> the firmware or similar), but it doesn't get caught up in all these
+ >> build issues about various other firmware files or slightly different
+ >> machine strings (sparc / sparcv9, arcompat / arcv2)..
+
+ > I must say I still like the fact that we detect sparc vs. sparcv9,
+ > arcompat vs arcv2. I.e why do we have some binaries that have a
+ > different machine number than most of the binaries being produced?
+
+Sorry, I don't know enough details about Sparc and Arc. It indeed seems
+strange.
+
+
+ > But I agree it's of limited usefulness, so if you want me to change the
+ > mechanism by inverting the logic, I can cook some patches.
+
+Well, just like for all other BR features I want to ensure that the
+complexity/gain relation is OK. If we need to add more and more
+exceptions and perhaps more complicated/fuzzy matching to handle these
+machine string variantions then I think it would make sense to invert
+the test to simplify - But lets see how it goes.
+
+-- 
+Bye, Peter Korsgaard
