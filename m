@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:57:57 +0100
-Subject: [Buildroot] [git commit] vboot-utils: correct hash
-Message-ID: <20170322215801.BAE2D8264E@busybox.osuosl.org>
+Date: Wed, 22 Mar 2017 23:04:26 +0100
+Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
+	/usr/share
+In-Reply-To: <87efxpj8bv.fsf@dell.be.48ers.dk>
+References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87inn1k9bb.fsf@dell.be.48ers.dk>
+ <20170322140639.5c8c5149@free-electrons.com>
+ <87efxpj8bv.fsf@dell.be.48ers.dk>
+Message-ID: <20170322230426.076a8048@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b33552f5739923ea4fedaaaaaf89fe68ff4ce613
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-I created the hash based on an old tarball in my dl dir which was
-generated without the sorting introduced in commit 4f87aa7db5ee. This
-time it is based on a properly created tarball.
+On Wed, 22 Mar 2017 22:43:48 +0100, Peter Korsgaard wrote:
 
-Reported-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vboot-utils/vboot-utils.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Exactly, or alternatively we run readelf on a host utility (E.G. HOSTCC)
+> to detect the machine string.
 
-diff --git a/package/vboot-utils/vboot-utils.hash b/package/vboot-utils/vboot-utils.hash
-index 9a5b334..4ff6c39 100644
---- a/package/vboot-utils/vboot-utils.hash
-+++ b/package/vboot-utils/vboot-utils.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  e119782a374655117e3d9a4e667b0056c76961c4593ba907f860d1310f6fbc2a  vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
-+sha256  d95b64b1f1de4a3ffa5c2e446d7c8e92aa197aee10de24206b2ea2deb5a8b947  vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
+Indeed.
+
+>  > I must say I still like the fact that we detect sparc vs. sparcv9,
+>  > arcompat vs arcv2. I.e why do we have some binaries that have a
+>  > different machine number than most of the binaries being produced?  
+> 
+> Sorry, I don't know enough details about Sparc and Arc. It indeed seems
+> strange.
+
+The ARC is resolved. I'll look into the SPARC one.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
