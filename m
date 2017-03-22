@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 23:11:25 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{2, 12}.x and 4.{1,
- 4, 9, 10}.x series
-In-Reply-To: <20170322131928.5150-1-Vincent.Riera@imgtec.com>
-References: <20170322131928.5150-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170322231125.6a87d0fd@free-electrons.com>
+Date: Wed, 22 Mar 2017 23:11:46 +0100
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.5-3
+In-Reply-To: <20170322133652.52232-1-Vincent.Riera@imgtec.com>
+References: <20170322133652.52232-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170322231146.24994a49@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Mar 2017 13:19:27 +0000, Vicente Olivert Riera wrote:
+On Wed, 22 Mar 2017 13:36:52 +0000, Vicente Olivert Riera wrote:
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/linux-headers/Config.in.host | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>  package/imagemagick/imagemagick.hash | 2 +-
+>  package/imagemagick/imagemagick.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks!
+Applied to master, thanks. I'm wondering how many times per day they
+make a new release of this thing...
 
 Thomas
 -- 
