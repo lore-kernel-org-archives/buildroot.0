@@ -1,41 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 23:04:26 +0100
-Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
-	/usr/share
-In-Reply-To: <87efxpj8bv.fsf@dell.be.48ers.dk>
-References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87inn1k9bb.fsf@dell.be.48ers.dk>
- <20170322140639.5c8c5149@free-electrons.com>
- <87efxpj8bv.fsf@dell.be.48ers.dk>
-Message-ID: <20170322230426.076a8048@free-electrons.com>
+Date: Wed, 22 Mar 2017 22:58:14 +0100
+Subject: [Buildroot] [git commit] systemd: bump version to 233
+Message-ID: <20170322220916.30E8E825E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=815f7137739ff28805d750edb888aa996c3fecc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Mar 2017 22:43:48 +0100, Peter Korsgaard wrote:
+--disable-kdbus no longer exists, so remove everything related to it.
 
-> Exactly, or alternatively we run readelf on a host utility (E.G. HOSTCC)
-> to detect the machine string.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in.legacy             | 7 +++++++
+ package/systemd/Config.in    | 5 -----
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 8 +-------
+ 4 files changed, 9 insertions(+), 13 deletions(-)
 
-Indeed.
-
->  > I must say I still like the fact that we detect sparc vs. sparcv9,
->  > arcompat vs arcv2. I.e why do we have some binaries that have a
->  > different machine number than most of the binaries being produced?  
-> 
-> Sorry, I don't know enough details about Sparc and Arc. It indeed seems
-> strange.
-
-The ARC is resolved. I'll look into the SPARC one.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a45c4b3..4e14a98 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
+ 
++config BR2_PACKAGE_SYSTEMD_KDBUS
++	bool "systemd-kdbus has been removed"
++	select BR2_LEGACY
++	help
++	  --enable/disable-kdbus configure option has been removed since
++	  systemd-231.
++
+ config BR2_PACKAGE_POLARSSL
+ 	bool "polarssl has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index aaed7dc..0f54686 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -155,11 +155,6 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+ 
+ 	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
+ 
+-config BR2_PACKAGE_SYSTEMD_KDBUS
+-	bool "enable kdbus support"
+-	help
+-	  Enable kdbus support for Systemd.
+-
+ config BR2_PACKAGE_SYSTEMD_LOCALED
+ 	bool "enable locale daemon"
+ 	help
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 0acaa3c..17f4c0f 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 1172c7c7d5d72fbded53186e7599d5272231f04cc8b72f9a0fb2c5c20dfc4880  systemd-232.tar.gz
++sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0d2f416..cfd885d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 232
++SYSTEMD_VERSION = 233
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+@@ -87,12 +87,6 @@ else
+ SYSTEMD_CONF_OPTS += --disable-xkbcommon
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD_KDBUS),y)
+-SYSTEMD_CONF_OPTS += --enable-kdbus
+-else
+-SYSTEMD_CONF_OPTS += --disable-kdbus
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ SYSTEMD_DEPENDENCIES += bzip2
+ SYSTEMD_CONF_OPTS += --enable-bzip2
