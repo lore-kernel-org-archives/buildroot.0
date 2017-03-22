@@ -1,64 +1,80 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed, 22 Mar 2017 16:12:03 -0700
-Subject: [Buildroot] [PATCH] uboot-tools: pass empty CFLAGS on
- invocation of libfdt/setup.py
-In-Reply-To: <20170322220119.24fc6301@free-electrons.com>
-References: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
- <20170320225742.054be334@free-electrons.com>
- <CAMo8BfLZzoRF0Q4zMRPcmwT0UErD7pGH_boMKrWQ07h09fiykw@mail.gmail.com>
- <20170322220119.24fc6301@free-electrons.com>
-Message-ID: <CAMo8Bf+xMaeYqPHZa9RdBwA4qpz8VRTK8eZcBrdTOLkmBMcUYQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 23 Mar 2017 00:46:57 +0100
+Subject: [Buildroot] [PATCHv3] package: add qt5virtualkeyboard
+In-Reply-To: <20170322211621.5u6tlemnihszb53s@gportay>
+References: <20170322205412.24993-1-gael.portay@savoirfairelinux.com>
+ <20170322220723.1a673199@gmx.net>
+ <20170322211621.5u6tlemnihszb53s@gportay>
+Message-ID: <20170323004657.30266283@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Ga?l,
 
-On Wed, Mar 22, 2017 at 2:01 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Mon, 20 Mar 2017 16:30:53 -0700, Max Filippov wrote:
->
->> I can't reproduce it.
->> The python script makes the compilation super quiet, can we apply something
->> like the attached patch to see what happens?
->
-> Build log is below. The issue is that the library being produced is
-> named _libfdt.cpython-35m-x86_64-linux-gnu.so, but U-Boot build system
-> assumes it's named _libfdt.so.
->
-> However, let's take a step back: why the heck do we have this Python
-> related stuff being built?
+On Wed, 22 Mar 2017 17:16:21 -0400, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
 
-we probably don't.
+[...]
+> > > +
+> > > +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
+> > > +	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
+> > > +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
+> > > +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
+> > > +	cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr
+> > 
+> > 
+> > Still no $(STAGING_DIR)/usr/qtvirtualkeyboard file to copy:
+> > 
+> > cp: cannot stat ?.../host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/qtvirtualkeyboard?: No such file or directory
+> 
+> Okay, it is certainly because you did not configure it for Japanese/Chinese
+> layouts; and I did not clean properly the target directory when I tested it.
+> 
 
-> uboot-tools is only meant to install the
-> basic U-Boot tools like fw_printenv and fw_setenv to the target. Why do
-> we bother about this Python libfdt thing? We're not even installing
-> this stuff to the target:
->
-> define UBOOT_TOOLS_INSTALL_TARGET_CMDS
->         $(UBOOT_TOOLS_INSTALL_MKIMAGE)
->         $(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
->         $(UBOOT_TOOLS_INSTALL_FWPRINTENV)
->         $(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
-> endef
->
-> Looking at tools/Makefile, it indeed automatically builds this Python
-> stuff is swig is available, with no way to disable this stuff. Should
-> we patch this out? Alternatively, changing:
->
->         mv _libfdt.so $@
->
-> to:
->
->         mv _libfdt.*so $@
->
-> does the trick.
+Yes, enabling this adds some content to  $(STAGING_DIR)/usr/qtvirtualkeyboard:
 
-That looks like a nice small fix.
+	$ find staging/usr/qtvirtualkeyboard/
+  staging/usr/qtvirtualkeyboard/
+  staging/usr/qtvirtualkeyboard/pinyin
+  staging/usr/qtvirtualkeyboard/pinyin/dict_pinyin.dat
 
--- 
-Thanks.
--- Max
+
+And adds additional compile/object files to:
+
+  - qt5virtualkeyboard-5.8.0/src/virtualkeyboard/3rdparty/pinyin
+  - qt5virtualkeyboard-5.8.0/src/virtualkeyboard/3rdparty/openwnn
+
+Both with own license files:
+
+  - qt5virtualkeyboard-5.8.0/src/virtualkeyboard/3rdparty/pinyin/NOTICE (Apache License v2.0)
+  - qt5virtualkeyboard-5.8.0/src/virtualkeyboard/3rdparty/openwnn/NOTICE (Apache License v2.0)
+
+> Will you agree for this if statement?
+> 
+> 	if [ -d "$(STAGING_DIR)/usr/qtvirtualkeyboard" ]; then \
+> 		cp -dpfr $(STAGING_DIR)/usr/qtvirtualkeyboard $(TARGET_DIR)/usr; \
+> 	fi
+
+Possible (working) solution, but a more deterministic way would be good, see
+additional/optional license problem above (and more 3rdparty modules: hunspell,
+lipi-toolkit, t9write, tcime)...
+
+Regards,
+Peter
+
+> 
+> > 
+> > Regards,
+> > Peter
+> > 
+> > 
+> > > +	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES)
+> > > +endef
+> > > +
+> > > +$(eval $(generic-package))
+> > 
+> 
+> Regards,
+> Gael
