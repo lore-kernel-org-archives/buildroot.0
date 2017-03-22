@@ -1,34 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 23:11:59 +0100
-Subject: [Buildroot] [PATCH 1/1] janus-gateway: bump to v0.2.2
-In-Reply-To: <20170322141303.28029-1-aduskett@codeblue.com>
-References: <20170322141303.28029-1-aduskett@codeblue.com>
-Message-ID: <20170322231159.293a3102@free-electrons.com>
+Date: Wed, 22 Mar 2017 23:12:35 +0100
+Subject: [Buildroot] [git commit] nginx-naxsi: bump to 0.55.3
+Message-ID: <20170322221245.E67527F91F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=113fc1042ca988c3d247eb5ace3c3d7459054f4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Mar 2017 10:13:03 -0400, Adam Duskett wrote:
-> In addition, a new option sample-event-handler has been added.
-> It has been disabled by default in the .mk file, as it requires
-> libcurl or else it will throw a error during compilation.  If anybody
-> wants the sameple-event-handler, they will need to update the Config.in
-> file to check for libcurl first.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
->  package/janus-gateway/janus-gateway.hash | 2 +-
->  package/janus-gateway/janus-gateway.mk   | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nginx-naxsi/nginx-naxsi.hash | 2 +-
+ package/nginx-naxsi/nginx-naxsi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master after tweaking the commit log. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
+index 967f788..55fc4f1 100644
+--- a/package/nginx-naxsi/nginx-naxsi.hash
++++ b/package/nginx-naxsi/nginx-naxsi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	256378564e36b8f222adb8fbe746529e73413c6cbe2b0e5574f41dfd62d92577	nginx-naxsi-0.55.2.tar.gz
++sha256	0b3c95d250772dc89ad8b49e47c1e024c5ae2c76c0cffa445e9fe05c4dd13495	nginx-naxsi-0.55.3.tar.gz
+diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
+index fb5e00a..33f1b60 100644
+--- a/package/nginx-naxsi/nginx-naxsi.mk
++++ b/package/nginx-naxsi/nginx-naxsi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_NAXSI_VERSION = 0.55.2
++NGINX_NAXSI_VERSION = 0.55.3
+ NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_VERSION))
+ NGINX_NAXSI_LICENSE = GPLv2+ with OpenSSL exception
+ NGINX_NAXSI_LICENSE_FILES = naxsi_src/naxsi_json.c
