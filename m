@@ -1,40 +1,90 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 22 Mar 2017 11:21:27 +0100
-Subject: [Buildroot] [PATCH v5 12/19] infra-libtool: no longer prepend
-	STAGING_DIR to libdir
-In-Reply-To: <6be103f5-9589-53a9-eab9-2c3edd52cd38@mind.be>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-13-git-send-email-jezz@sysmic.org>
- <6be103f5-9589-53a9-eab9-2c3edd52cd38@mind.be>
-Message-ID: <2604949.Y0oF46Lp5o@sagittae>
+From: =?iso-8859-1?Q?Julien_B=E9raud?= <julien.beraud@spectracom.orolia.com>
+Date: Wed, 22 Mar 2017 10:51:53 +0000
+Subject: [Buildroot] [PATCH 1/1] apr: fix size of pid_t
+In-Reply-To: <20170321230453.6165e76d@free-electrons.com>
+References: <20170321132356.16093-1-julien.beraud@spectracom.orolia.com>
+ <20170321230453.6165e76d@free-electrons.com>
+Message-ID: <DB5PR06MB1352CB001DB18176BAB30DFBB43C0@DB5PR06MB1352.eurprd06.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Anrout,
+Thanks Thomas,
 
-On Saturday 18 March 2017 16:37:31 CET Arnout Vandecappelle wrote:
->  Hi Jerome,
-> 
-> On 20-12-16 14:46, J?r?me Pouiller wrote:
-> > Since `$lt_sysroot' is now correctly filled, it is no more necessary to patch
-> > `.la' files. Indeed, if $libdir point to `/usr/lib', libtool will also search
-> > in `$(lt_sysroot)/usr/lib'
-> 
->  Unfortunately, not all packages that use libtool also use automake.
-
-You mean autoconf? Do you have an example of this?
-
->  So some packages may die because of this.
+>Hello,
 >
->  That said, we should probably just fix these individual packages.
+>On Tue, 21 Mar 2017 14:23:56 +0100, Julien Beraud wrote:
+>> pid_t is a signed 32bits integer on both 32bits and 64bits 
+>> architectures.
+>> This fixes an issue with apache server which causes bad pid to be 
+>> written in PidFile
+>> 
+>> Signed-off-by: Julien Beraud <julien.beraud@spectracom.orolia.com>
+>> ---
+>>  package/apr/apr.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>
+>I've applied to our master branch, thanks! Peter, I believe this is a good candidate for the LTS branch.
+>
+>However, a few comments:
+>
+> * It is strange that their configure script does:
+>
+>   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], pid_t, 8)
+>
+>   which means "assume size is 8 bytes" if cross-compiling when pid_t
+>   is always 4 bytes.
+>
+> * There are other sizeof that are probably bogus:
+>
+>   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], ssize_t, 8)
+>   APR_CHECK_SIZEOF_EXTENDED([#include <stddef.h>], size_t, 8)
+>   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], off_t, 8)
+>
+>   Indeed on 32 bit systems, ssize_t, size_t are 4 bytes. off_t is an
+>   even more complicated beast: it's 8 bytes on 64 bits platform, but
+>   on 32 bits platform, it depends if large file support is enabled or
+>   not.
+>
+>See (executed on x86-64) :
+>
+>$ cat toto.c
+>#include <unistd.h>
+>#include <sys/types.h>
+>#include <stdio.h>
+>
+>int main(void)
+>{
+>	printf("pid_t = %ld\n", sizeof(pid_t));
+>	printf("size_t = %ld\n", sizeof(size_t));
+>	printf("ssize_t = %ld\n", sizeof(ssize_t));
+>	printf("off_t = %ld\n", sizeof(off_t));
+>	return 0;
+>}
+>$ gcc -o toto toto.c
+>$ ./toto
+>pid_t = 4
+>size_t = 8
+>ssize_t = 8
+>off_t = 8
+>$ gcc -m32 -o toto toto.c
+>$ ./toto
+>pid_t = 4
+>size_t = 4
+>ssize_t = 4
+>off_t = 4
+>$ gcc -m32 -D_FILE_OFFSET_BITS=64 -o toto toto.c $ ./toto pid_t = 4 size_t = 4 ssize_t = 4 off_t = 8
+>
+>I really wonder why they are not using the regular AC_CHECK_SIZEOF() for those types.
+>
+>So I believe there's more stuff to fix in there.
 
-yes, I think it very unusual.
+The pid_t type was causing a very easy to notice issue, but the other types sizes being wrong could as
+well be causing some issues.
+I will take a look at the other types sizes and add them in order to avoid any possible issue. I will also
+take a look at proposing patches to apr for those.
 
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Regards,
+Julien
