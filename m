@@ -1,76 +1,113 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Mar 2017 00:57:39 +0100
-Subject: [Buildroot] [PATCH v5 11/19] infra-libtool: pass sysroot
- information to libtool
-In-Reply-To: <20170320225250.0a5bd659@free-electrons.com>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-12-git-send-email-jezz@sysmic.org>
- <20170320225250.0a5bd659@free-electrons.com>
-Message-ID: <8e7692b2-4ebc-d533-8eda-d4a92fd2a7f8@mind.be>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Tue, 21 Mar 2017 17:49:06 -0700
+Subject: [Buildroot] [PATCH v2 2/2] python3: Bump version to 3.6.0
+In-Reply-To: <20170319155314.3ca86764@free-electrons.com>
+References: <20170314234228.3744-1-andrew.smirnov@gmail.com>
+ <20170314234228.3744-2-andrew.smirnov@gmail.com>
+ <20170319155314.3ca86764@free-electrons.com>
+Message-ID: <CAHQ1cqFB2UnahiSC_hL7Enu1L2jtNV7ZGQt7AKMLzCU9tyKwgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 20-03-17 22:52, Thomas Petazzoni wrote:
+On Sun, Mar 19, 2017 at 7:53 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> On Tue, 20 Dec 2016 14:46:28 +0100, J?r?me Pouiller wrote:
-> 
->> libtool include support for cross-compilation since v1.5.
-> 
-> Are you sure this is true?
-> 
-> In the release notes of libtool v2.4
-> (https://savannah.gnu.org/forum/forum.php?forum_id=6525), I see:
-> 
-> """
-> 
-> 
-> New in 2.4 2010-09-22:
-> 
->     New features:
-> 
-> - Sysroot support. This allows you to build cross-compiled packages
-> with the same prefix that will be used on the destination machine,
-> and still find dependent libraries under the compiler's "sysroot".
-> Without sysroot support, paths internal to the build system may leak
-> into the product of the build.
-> 
-> Sysroot support is disabled unless the --with-sysroot configure
-> option is passed to configure, because .la files generated with
-> sysroot support will not be usable in general with older Libtools. 
-> 
-> """
-> 
-> So are you sure that this feature didn't appear in libtool 2.4 ?
+>
+> On Tue, 14 Mar 2017 16:42:28 -0700, Andrey Smirnov wrote:
+>> python3: Bump version to 3.6.0
+>
+> Thanks for this new version, with updated explanations. It's almost
+> ready, but I still have a few comments.
+>
+>
+>> +define PKG_PYTHON_SYSCONFIGDATA_NAME
+>> +$(shell basename $(shell find $(TARGET_DIR)/ -name "_sysconfigdata_m_linux_*.pyc" | head -n 1) .pyc)
+>> +endef
+>
+> Could you replace this with:
+>
+> +PKG_PYTHON_SYSCONFIGDATA_NAME = \
+> +       $(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_*.py)))
+>
+> It does the same, but using make code.
 
- Yeah, looks like it. E.g. speex has libtool 1.5, and it doesn't have any
-sysroot support (not in configure, not in ltmain.sh).
+Good idea. Will do.
 
- Obviously, *this* patch is not affected by it - it certainly doesn't hurt to
-pass the --with-sysroot configure option. It's only patches 12+13 that we
-wouldn't be able to remove.
+>
+> To be honest, I find it really annoying that we have to do this to find
+> the name of the sysconfigdata package. I've thought about the following:
+>
+>  - Have the Python build system output somewhere the name of the
+>    sysconfigdata module that has been generated.
+>
 
- However, considering:
+Sure, you can do that, but that would mean another custom patch
+against CPython's build system which is very likely to break and
+require manual intervention next time there's at least a major version
+update. After going through all of BR's patches in the process of
+rebasing on 3.6 and having to manually fix at least half of them I
+didn't want to make the problem worse, so that's why I didn't go that
+route.
 
-- most packages install things in /usr/lib, which is already searched by default;
+>  - Compute the name of the sysconfigdata module: it's always going to be:
+>
+>     sysconfigdata_m_linux_<output of gcc -dumpmachine>
+>
 
-- most packages use libtool 2.4 or later,
+I don't think this would work. CPython's build system does not use
+-dumpmachine output directly to come up with that suffix and instead
+relies on specially crafted dummy .c file and CPP:
 
-I think we can take the risk. The autobuilders will discover any issues, which
-we can fix per package (e.g. with AUTORECONF = YES).
+https://github.com/python/cpython/blob/master/configure.ac#L762
 
- Regards,
- Arnout
+So for example on my target -dumpmachine would result in
+"powerpc-e500v2-linux-gnuspe", where as suffix of sysconfigdata would
+be "powerpc-linux-gnuspe".
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+> But well, your solution is as simple, so let's go for it.
+>
+>> -Subject: [PATCH] setup.py: do not add invalid header locations
+>> +Subject: [PATCH 01/31] setup.py: do not add invalid header locations
+>
+> Please generate patches with "git format-patch -N" to get rid of the
+> numbering, i.e to have [PATCH] instead of [PATCH 01/31].
+>
+
+OK, will do.
+
+>
+>> --- a/package/python3/0003-Make-the-build-of-pyc-files-conditional.patch
+>> +++ b/package/python3/0002-Make-the-build-of-pyc-files-conditional.patch
+>> @@ -1,22 +1,24 @@
+>> -From 5df8e9556e8026dd19cf932fa8f2b726f56182d1 Mon Sep 17 00:00:00 2001
+>> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> -Date: Wed, 23 Dec 2015 11:29:35 +0100
+>> -Subject: [PATCH] Make the build of pyc files conditional
+>> +From a3aedafc04a81c5a6406c60e82d072377fee0cd1 Mon Sep 17 00:00:00 2001
+>> +From: Andrey Smirnov <andrew.smirnov@gmail.com>
+>
+> Why are all patches you have changed now re-assigned with your From?
+> You should preserve the authorship of the original author.
+>
+
+Because I manually applied those patches and committed them in my
+local CPython repo and didn't go out of my way to prevent "From" from
+being set to committer when I git format-patch'ed them, since the
+authorship/copyright information is preserved in "Signed-off-by"
+lines. Will change in v3.
+
+>>  # Provided to other packages
+>> -PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
+>> +PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
+>
+> Why do we now need
+> $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/ ?
+
+Because that's where _sysconfigdata_m_linux_*.pyc file is located.
+
+Thanks,
+Andrey Smirnov
