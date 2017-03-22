@@ -1,25 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Mar 2017 20:35:04 +0000
-Subject: [Buildroot] [Bug 9771] toolchain-external misses lib directory when
- copying sysroot
-In-Reply-To: <bug-9771-163@https.bugs.busybox.net/>
-References: <bug-9771-163@https.bugs.busybox.net/>
-Message-ID: <bug-9771-163-lccAryhJrQ@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Mar 2017 21:39:00 +0100
+Subject: [Buildroot] [PATCH 4/6] python-mwscrape: use documented license
+ abbreviation
+In-Reply-To: <1490204935-13172-4-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1490204935-13172-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1490204935-13172-4-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20170322213900.3ace3cc4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9771
+Hello,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Your patch shouldn't be necessary because $${ARCH_LIB_DIR} in the loop should
-be responsible for copying the contents of lib/.
+On Wed, 22 Mar 2017 23:18:53 +0530, Rahul Bedarkar wrote:
 
-Can you share a tarball of the toolchain you have built with Crosstool-NG, so
-we can see why it doesn't work as expected?
+>  PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
+>  PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
+> -PYTHON_MWSCRAPE_LICENSE = MPL-2.0
+> +PYTHON_MWSCRAPE_LICENSE = MPLv2.0
 
+Well, our idea was to use the SPDX license codes as much as possible,
+and MPL-2.0 is the correct SPDX license code for this license. However,
+it is true we haven't used SPDX from the beginning, so we're using
+GPLv2 everywhere, while SPDX uses GPL-2.0.
+
+See:
+
+  https://spdx.org/licenses/
+
+I think our idea was to keep using GPLv2/LGPLv2.1/GPLv3, but for all
+other licenses, use the SPDX code as much as possible.
+
+Maybe we should bite the bullet, and migrate all packages to use SPDX
+license codes?
+
+Arnout, Yann, Peter?
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
