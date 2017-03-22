@@ -1,85 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:01:19 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: pass empty CFLAGS on
- invocation of libfdt/setup.py
-In-Reply-To: <CAMo8BfLZzoRF0Q4zMRPcmwT0UErD7pGH_boMKrWQ07h09fiykw@mail.gmail.com>
-References: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
- <20170320225742.054be334@free-electrons.com>
- <CAMo8BfLZzoRF0Q4zMRPcmwT0UErD7pGH_boMKrWQ07h09fiykw@mail.gmail.com>
-Message-ID: <20170322220119.24fc6301@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 22 Mar 2017 22:03:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ntp: security bump to 4.2.8p10
+Message-ID: <20170322210313.10299-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Changed NTP_SITE to https to circumvent "URL transformed to HTTPS due
+to an HSTS policy" during download.
 
-On Mon, 20 Mar 2017 16:30:53 -0700, Max Filippov wrote:
+For details about the bugs fixed see:
+http://support.ntp.org/bin/view/Main/SecurityNotice#Recent_Vulnerabilities
+http://www.kb.cert.org/vuls/id/633847
 
-> I can't reproduce it.
-> The python script makes the compilation super quiet, can we apply something
-> like the attached patch to see what happens?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ntp/ntp.hash | 6 +++---
+ package/ntp/ntp.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Build log is below. The issue is that the library being produced is
-named _libfdt.cpython-35m-x86_64-linux-gnu.so, but U-Boot build system
-assumes it's named _libfdt.so.
-
-However, let's take a step back: why the heck do we have this Python
-related stuff being built? uboot-tools is only meant to install the
-basic U-Boot tools like fw_printenv and fw_setenv to the target. Why do
-we bother about this Python libfdt thing? We're not even installing
-this stuff to the target:
-
-define UBOOT_TOOLS_INSTALL_TARGET_CMDS
-        $(UBOOT_TOOLS_INSTALL_MKIMAGE)
-        $(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
-        $(UBOOT_TOOLS_INSTALL_FWPRINTENV)
-        $(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
-endef
-
-Looking at tools/Makefile, it indeed automatically builds this Python
-stuff is swig is available, with no way to disable this stuff. Should
-we patch this out? Alternatively, changing:
-
-	mv _libfdt.so $@
-
-to:
-
-	mv _libfdt.*so $@
-
-does the trick.
-
-Build log of the Python extension:
-
-building '_libfdt' extension
-creating build
-creating build/temp.linux-x86_64-3.5
-creating build/temp.linux-x86_64-3.5/lib
-creating build/temp.linux-x86_64-3.5/lib/libfdt
-creating build/temp.linux-x86_64-3.5/tools
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c lib/libfdt/fdt.c -o build/temp.linux-x86_64-3.5/lib/libfdt/fdt.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-  HOSTLD  tools/fdtgrep
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c lib/libfdt/fdt_ro.c -o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_ro.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-  HOSTLD  tools/dumpimage
-  HOSTLD  tools/mkimage
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c lib/libfdt/fdt_rw.c -o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_rw.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c lib/libfdt/fdt_strerror.c -o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_strerror.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c lib/libfdt/fdt_wip.c -o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_wip.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c lib/libfdt/fdt_region.c -o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_region.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c lib/libfdt/fdt_sw.c -o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_sw.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-/usr/bin/gcc -pthread -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/include/python3.5m -c tools/libfdt_wrap.c -o build/temp.linux-x86_64-3.5/tools/libfdt_wrap.o -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -include ./include/libfdt_env.h -idirafterinclude -idirafter./arch//include -I./lib/libfdt -I./tools -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
-/usr/bin/gcc -pthread -shared -L/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/lib -L/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/lib -Wl,-rpath,/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/lib -Wl,--enable-new-dtags build/temp.linux-x86_64-3.5/lib/libfdt/fdt.o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_ro.o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_rw.o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_strerror.o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_wip.o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_region.o build/temp.linux-x86_64-3.5/lib/libfdt/fdt_sw.o build/temp.linux-x86_64-3.5/tools/libfdt_wrap.o -L/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/host/usr/lib -lpython3.5m -o /home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/build/uboot-tools-2017.03/_libfdt.cpython-35m-x86_64-linux-gnu.so
-mv _libfdt.so tools/_libfdt.so
-mv: cannot stat `_libfdt.so': No such file or directory
-make[3]: *** [tools/_libfdt.so] Error 1
-make[2]: *** [tools-only] Error 2
-make[1]: *** [/home/test/outputs/995a1773efe982ed8443b2c5f9ea40a1ed106472/output/build/uboot-tools-2017.03/.stamp_built] Error 2
-make: *** [_all] Error 2
-
-
-
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index c6838d812..d8b7083c4 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,4 +1,4 @@
+-# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p9.tar.gz.md5
+-md5	857452b05f5f2e033786f77ade1974ed	ntp-4.2.8p9.tar.gz
++# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p10.tar.gz.md5
++md5 745384ed0dedb3f66b33fe84d66466f9  ntp-4.2.8p10.tar.gz
+ # Calculated based on the hash above
+-sha256	b724287778e1bac625b447327c9851eedef020517a3545625e9f652a90f30b72	ntp-4.2.8p9.tar.gz
++sha256 ddd2366e64219b9efa0f7438e06800d0db394ac5c88e13c17b70d0dcdf99b99f  ntp-4.2.8p10.tar.gz
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index edbf1c86b..b6eb1b186 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p9
+-NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p10
++NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent openssl $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
