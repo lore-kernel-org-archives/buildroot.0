@@ -1,70 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Mar 2017 00:04:56 +0100
-Subject: [Buildroot] [PATCH] gst-ffmpeg: work-around bogus configure logic
-	on SPARC
-Message-ID: <1490223896-6063-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 23 Mar 2017 00:05:12 +0100
+Subject: [Buildroot] [PATCH v2] libepoxy: OpenGL EGL and OpenGL ES
+ dependencies are mandatory
+In-Reply-To: <20170322225648.5a32abeb@free-electrons.com>
+References: <20170322115643.48653-1-Vincent.Riera@imgtec.com>
+ <20170322225648.5a32abeb@free-electrons.com>
+Message-ID: <cb669e65-1eca-0f7b-c9e7-2b56921032d6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libav version built into the gst-ffmpeg code produces a bogus
-binary on SPARC, which causes the following error of the
-check-bin-arch script:
 
-  ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstffmpeg.so is Sparc v8+, should be Sparc
-  ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstpostproc.so is Sparc v8+, should be Sparc
-  ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstffmpegscale.so is Sparc v8+, should be Sparc
 
-The problem is the following bit of code in
-gst-lib/ext/libav/configure:
+On 22-03-17 22:56, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 22 Mar 2017 11:56:43 +0000, Vicente Olivert Riera wrote:
+>> The --disable-egl configure option doesn't exist:
+>>
+>> configure: WARNING: unrecognized options: [snip] --disable-egl
+>>
+>> If you don't have EGL support the configure script will fail like this:
+>>
+>> checking for EGL... no
+>> configure: error: Package requirements (egl) were not met:
+>>
+>> Also, libepoxy use dlsym to load a GLES2 library when EGL support is
+>> enabled, see src/dispatch_common.c:
+>>
+>> So, OpenGL ES dependency is also mandatory.
+>>
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/3eca5ba26a521f6cc5a611309ba066472af7769c
+>>   http://autobuild.buildroot.net/results/cf9ec7da196d70548ae1413e4a3730314f6434d6
+>>   http://autobuild.buildroot.net/results/069b80101afc4719db6d6d41cf5fc923be21ddc0
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+>> Tested-by: Romain Naour <romain.naour@gmail.com>
+> 
+> I would really like to hear about this patch from Gustavo. Gustavo,
+> could you review/comment?
+> 
+> 
+>> +	# OpenGL EGL is mandatory and libepoxy uses dlsym to load a
+>> +	# GLES2 library when EGL support is enabled. Details in
+>> +	# src/dispatch/dispatch_common.c
+>> +	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
 
-elif enabled sparc; then
+ Also, this should be two separate lines:
 
-    enabled vis && check_asm vis '"pdist %f0, %f0, %f0"' -mcpu=ultrasparc &&
-        add_cflags -mcpu=ultrasparc -mtune=ultrasparc
+	depends on BR2_PACKAGE_HAS_LIBEGL
+	depends on BR2_PACKAGE_HAS_LIBGLES
 
-I.e, it checks if the architecture supports the pdist
-instruction... but forces -mcpu to ultrasparc while doing so. So it's
-like "let's see if this Ultrasparc instruction exists when I force the
-compiler to think I'm using Ultrasparc", which is non-sensical. This
-has been fixed later on in libav upstream:
+ Regards,
+ Arnout
 
-  https://git.libav.org/?p=libav.git;a=commit;h=6aa93689abe8c095cec9fa828c2dee3131008995
+> 
+> New dependency -> don't forget to check the reverse dependencies of
+> libepoxy:
+> 
+> package/libgtk3/Config.in:      select BR2_PACKAGE_LIBEPOXY
+> package/x11r7/xdriver_xf86-video-amdgpu/Config.in:      select BR2_PACKAGE_LIBEPOXY
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
-However, this commit cannot be backported as-is since the shell
-function check_inline_asm did not exist in the old libav version
-bundled in gst-ffmpeg.
-
-Therefore, we take the simpler route of disabling the VIS
-optimizations on SPARCv8 and Leon3.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/e82d179c3d4f92ad7423693a4b1d42379a3f5411/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-index b1d8f8b..3992fdf 100644
---- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-@@ -80,6 +80,12 @@ else
- GST_FFMPEG_CONF_EXTRA_OPTS += --disable-altivec
- endif
- 
-+# libav configure script misdetects the VIS optimizations as being
-+# available, so forcefully disable them.
-+ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
-+GST_FFMPEG_CONF_EXTRA_OPTS += --disable-vis
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),)
- GST_FFMPEG_CONF_EXTRA_OPTS += --enable-pic
- endif
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
