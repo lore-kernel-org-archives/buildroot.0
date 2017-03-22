@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:54:21 +0100
-Subject: [Buildroot] [RFC 2/3] rpi-userland: fix opengl library symlinks
-In-Reply-To: <20170322181331.23500-3-gael.portay@savoirfairelinux.com>
-References: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
- <20170322181331.23500-3-gael.portay@savoirfairelinux.com>
-Message-ID: <20170322225421.5ce139f6@free-electrons.com>
+Date: Wed, 22 Mar 2017 22:56:48 +0100
+Subject: [Buildroot] [PATCH v2] libepoxy: OpenGL EGL and OpenGL ES
+ dependencies are mandatory
+In-Reply-To: <20170322115643.48653-1-Vincent.Riera@imgtec.com>
+References: <20170322115643.48653-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170322225648.5a32abeb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Mar 2017 14:13:30 -0400, Ga?l PORTAY wrote:
-> Qt WebEngine module is linked against libEGL.so.1 and libGLESv2.so.2.
+On Wed, 22 Mar 2017 11:56:43 +0000, Vicente Olivert Riera wrote:
+> The --disable-egl configure option doesn't exist:
+> 
+> configure: WARNING: unrecognized options: [snip] --disable-egl
+> 
+> If you don't have EGL support the configure script will fail like this:
+> 
+> checking for EGL... no
+> configure: error: Package requirements (egl) were not met:
+> 
+> Also, libepoxy use dlsym to load a GLES2 library when EGL support is
+> enabled, see src/dispatch_common.c:
+> 
+> So, OpenGL ES dependency is also mandatory.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/3eca5ba26a521f6cc5a611309ba066472af7769c
+>   http://autobuild.buildroot.net/results/cf9ec7da196d70548ae1413e4a3730314f6434d6
+>   http://autobuild.buildroot.net/results/069b80101afc4719db6d6d41cf5fc923be21ddc0
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> Tested-by: Romain Naour <romain.naour@gmail.com>
 
-I don't understand this. Does WebEngine contains pre-built binaries? If
-so, then most likely they are only available for a few architectures,
-and Qt WebEngine should only be available for those few architectures.
+I would really like to hear about this patch from Gustavo. Gustavo,
+could you review/comment?
 
-If everything is source code, then presumably the build system uses
--lEGL -lGLESv2, which tells gcc to look for libEGL.so and libGLESv2.so,
-so those .1 and .2 suffixes should not matter.
 
-Can you give some more details here?
+> +	# OpenGL EGL is mandatory and libepoxy uses dlsym to load a
+> +	# GLES2 library when EGL support is enabled. Details in
+> +	# src/dispatch/dispatch_common.c
+> +	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
 
-Also: if this is needed for the qtwebengine build to be successful, it
-should appear *before* the qtwebengine patch in the series.
+New dependency -> don't forget to check the reverse dependencies of
+libepoxy:
 
-Thanks!
+package/libgtk3/Config.in:      select BR2_PACKAGE_LIBEPOXY
+package/x11r7/xdriver_xf86-video-amdgpu/Config.in:      select BR2_PACKAGE_LIBEPOXY
+
+Best regards,
 
 Thomas
 -- 
