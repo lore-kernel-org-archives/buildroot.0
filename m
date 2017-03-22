@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:45:50 +0100
-Subject: [Buildroot] [PATCH 1/2] leptonica: make package description
- more accurate
-In-Reply-To: <1490164887-2707-1-git-send-email-gilles.talis@gmail.com>
-References: <1490164887-2707-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <20170322224550.24be1023@free-electrons.com>
+Date: Wed, 22 Mar 2017 22:54:21 +0100
+Subject: [Buildroot] [RFC 2/3] rpi-userland: fix opengl library symlinks
+In-Reply-To: <20170322181331.23500-3-gael.portay@savoirfairelinux.com>
+References: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
+ <20170322181331.23500-3-gael.portay@savoirfairelinux.com>
+Message-ID: <20170322225421.5ce139f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Mar 2017 07:41:26 +0100, Gilles Talis wrote:
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-> ---
->  package/leptonica/Config.in | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+On Wed, 22 Mar 2017 14:13:30 -0400, Ga?l PORTAY wrote:
+> Qt WebEngine module is linked against libEGL.so.1 and libGLESv2.so.2.
 
-Both patches applied, thanks!
+I don't understand this. Does WebEngine contains pre-built binaries? If
+so, then most likely they are only available for a few architectures,
+and Qt WebEngine should only be available for those few architectures.
 
-Note that we have a number of build failures on the leptonica package:
+If everything is source code, then presumably the build system uses
+-lEGL -lGLESv2, which tells gcc to look for libEGL.so and libGLESv2.so,
+so those .1 and .2 suffixes should not matter.
 
-  http://autobuild.buildroot.net/?reason=leptonica-1.74.1
+Can you give some more details here?
 
-These occur in static linking scenarios, because leptonica configure
-script is not using pkg-config to find the TIFF library, so it doesn't
-know about the transitive dependencies of the TIFF library. Switching
-to PKG_CHECK_MODULES() to discover the TIFF library would solve this I
-believe.
+Also: if this is needed for the qtwebengine build to be successful, it
+should appear *before* the qtwebengine patch in the series.
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
