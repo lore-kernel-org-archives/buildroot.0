@@ -1,10 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 22 Mar 2017 09:26:01 +0100
-Subject: [Buildroot] [PATCH v3 4/5] support/testing: add package tests
-In-Reply-To: <1490042214-6762-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Mar 2017 09:30:24 +0100
+Subject: [Buildroot] [PATCH v3 0/5] Runtime testing infrastructure
+In-Reply-To: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490042214-6762-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LWnfh2s1yiXGmkte4q-KYbEdzXimn69d1spqrZM7eJ8WQ@mail.gmail.com>
+Message-ID: <CAAXf6LVB3jjNsg-vj-pUjnnaFJC3xs2w_CqYUfHJaOj2Wg8y7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +12,30 @@ To: buildroot@busybox.net
 
 On Mon, Mar 20, 2017 at 9:36 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> This commit adds some basic tests for two Buildroot packages: python and
-> dropbear. These tests are by no mean meant to be exhaustive, but mainly
-> to serve as initial examples for other tests.
+> Hello,
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/testing/tests/package/__init__.py      |  0
->  support/testing/tests/package/test_dropbear.py | 28 +++++++++++++++++++++
->  support/testing/tests/package/test_python.py   | 35 ++++++++++++++++++++++++++
->  3 files changed, 63 insertions(+)
->  create mode 100644 support/testing/tests/package/__init__.py
->  create mode 100644 support/testing/tests/package/test_dropbear.py
->  create mode 100644 support/testing/tests/package/test_python.py
+> Here is a third version of a small runtime testing infrastructure for
+> Buildroot.
 >
-> diff --git a/support/testing/tests/package/__init__.py b/support/testing/tests/package/__init__.py
-> new file mode 100644
-> index 0000000..e69de29
-> diff --git a/support/testing/tests/package/test_dropbear.py b/support/testing/tests/package/test_dropbear.py
-> new file mode 100644
-> index 0000000..a64b782
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_dropbear.py
-> @@ -0,0 +1,28 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +class TestDropbear(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +"""
-> +BR2_TARGET_GENERIC_ROOT_PASSWD="testpwd"
-> +BR2_SYSTEM_DHCP="eth0"
-> +BR2_PACKAGE_DROPBEAR=y
-> +BR2_TARGET_ROOTFS_CPIO=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +"""
-> +
-> +    def test_run(self):
-> +        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-> +        self.emulator.boot(arch="armv5",
-> +                           kernel="builtin",
-> +                           options=["-initrd", img,
-> +                                    "-net", "nic",
-> +                                    "-net", "user,hostfwd=tcp::2222-:22"])
-> +        self.emulator.login("testpwd")
-> +        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
-> +        _, exit_code = self.emulator.run(cmd)
-> +        self.assertEqual(exit_code, 0)
-> +        # Would be useful to try to login through SSH here, through
-> +        # localhost:2222, though it is not easy to pass the ssh
-> +        # password on the command line.
+> I have not tried to take into account all suggestions from the review,
+> only the ones that really must be fixed before it gets applied. I'd
+> like this stuff to be applied so that more people can start working on
+> the testing infrastructure and submit patches.
+>
+> The first patch introduces the infrastructure itself, the other 4
+> patches just add a small number of test cases.
+>
+> By far and large the most featureful set of tests are the filesystem
+> tests, testing a lot of features of our filesystem image support.
+>
+> There are definitely lots of possible improvements to the
+> infrastructure, and lots of possible tests to add, but we need to get
+> started at some point, and that's an initial proposal.
+>
 
-This can be done using the paramiko python module, basically:
+I gave some minor comments/suggestions, but nothing blocking. I fully
+agree to not hold on to this much longer...
 
-            import paramiko
-            client = paramiko.SSHClient()
-            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            client.connect(host, username=user, password=pass)
-
-If you insist on shell commands, you can use the tool 'sshpass' for it.
+Well done!
 
 /Thomas
