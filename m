@@ -1,39 +1,63 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 22 Mar 2017 13:36:52 +0000
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.5-3
-Message-ID: <20170322133652.52232-1-Vincent.Riera@imgtec.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 22 Mar 2017 10:13:03 -0400
+Subject: [Buildroot] [PATCH 1/1] janus-gateway: bump to v0.2.2
+Message-ID: <20170322141303.28029-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+In addition, a new option sample-event-handler has been added.
+It has been disabled by default in the .mk file, as it requires
+libcurl or else it will throw a error during compilation.  If anybody
+wants the sameple-event-handler, they will need to update the Config.in
+file to check for libcurl first.
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 5a281cf..3f9f84e 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+---
+ package/janus-gateway/janus-gateway.hash | 2 +-
+ package/janus-gateway/janus-gateway.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 68b9c31..546aff9 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 a7c55f0fd5203cbff12bf4a8d9158c002fab8d4290859a8087c3d329013b1af8  ImageMagick-7.0.5-2.tar.xz
-+sha256 dbc0a1cc0e4e3d4e3c772724fcbfe24a00ff4434c8b12c513c447a5fb422ffa6  ImageMagick-7.0.5-3.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index ac10cd6..d6923f5 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256 5d071592faca2a1574b996b4ca07b6c9e02cd42a719b0dbb4bfb5dfde8d55ff3 janus-gateway-v0.2.1.tar.gz
++sha256 f5b1909fd9b8546f8be518f7c682b80916a8204c95f23a95c720524df62cca34 janus-gateway-v0.2.2.tar.gz
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 212fa47..f58db81 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.5-2
-+IMAGEMAGICK_VERSION = 7.0.5-3
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-JANUS_GATEWAY_VERSION = v0.2.1
++JANUS_GATEWAY_VERSION = v0.2.2
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPLv3
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
+ 
+ # ding-libs provides the ini_config library
+ JANUS_GATEWAY_DEPENDENCIES = host-pkgconf jansson libnice \
+-	libsrtp host-gengetopt libglib2 openssl 
++	libsrtp host-gengetopt libglib2 openssl
+ 
+ # Straight out of the repository, no ./configure, and we also patch
+ # configure.ac.
+@@ -24,7 +24,8 @@ JANUS_GATEWAY_POST_PATCH_HOOKS += JANUS_GATEWAY_M4
+ 
+ JANUS_GATEWAY_CONF_OPTS = \
+ 	--disable-data-channels \
+-	--disable-rabbitmq
++	--disable-rabbitmq \
++	--disable-sample-event-handler
+ 
+ ifeq ($(BR2_PACKAGE_JANUS_AUDIO_BRIDGE),y)
+ JANUS_GATEWAY_DEPENDENCIES += opus
 -- 
-2.10.2
+2.9.3
