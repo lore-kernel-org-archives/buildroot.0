@@ -1,51 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Mar 2017 23:32:12 +0100
-Subject: [Buildroot] [PATCH 4/6] python-mwscrape: use documented license
- abbreviation
-In-Reply-To: <20170322213900.3ace3cc4@free-electrons.com>
-References: <1490204935-13172-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1490204935-13172-4-git-send-email-rahul.bedarkar@imgtec.com>
- <20170322213900.3ace3cc4@free-electrons.com>
-Message-ID: <20170322223212.GA3591@free.fr>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Wed, 22 Mar 2017 18:38:51 -0400
+Subject: [Buildroot] [RFC 2/3] rpi-userland: fix opengl library symlinks
+In-Reply-To: <20170322225421.5ce139f6@free-electrons.com>
+References: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
+ <20170322181331.23500-3-gael.portay@savoirfairelinux.com>
+ <20170322225421.5ce139f6@free-electrons.com>
+Message-ID: <20170322223851.vlc46h63xsksr3f5@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
 
-On 2017-03-22 21:39 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 22 Mar 2017 23:18:53 +0530, Rahul Bedarkar wrote:
+On Wed, Mar 22, 2017 at 10:54:21PM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> >  PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
-> >  PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
-> > -PYTHON_MWSCRAPE_LICENSE = MPL-2.0
-> > +PYTHON_MWSCRAPE_LICENSE = MPLv2.0
+> On Wed, 22 Mar 2017 14:13:30 -0400, Ga?l PORTAY wrote:
+> > Qt WebEngine module is linked against libEGL.so.1 and libGLESv2.so.2.
 > 
-> Well, our idea was to use the SPDX license codes as much as possible,
-> and MPL-2.0 is the correct SPDX license code for this license. However,
-> it is true we haven't used SPDX from the beginning, so we're using
-> GPLv2 everywhere, while SPDX uses GPL-2.0.
-> 
-> See:
-> 
->   https://spdx.org/licenses/
-> 
-> I think our idea was to keep using GPLv2/LGPLv2.1/GPLv3, but for all
-> other licenses, use the SPDX code as much as possible.
-> 
-> Maybe we should bite the bullet, and migrate all packages to use SPDX
-> license codes?
 
-That would have my approval, yes.
+I write this patch a month ago, I don't remember when it crashes (maybe at
+runtime...).
 
-Regards,
-Yann E. MORIN.
-
-> Arnout, Yann, Peter?
+> I don't understand this. Does WebEngine contains pre-built binaries? If
+> so, then most likely they are only available for a few architectures,
+> and Qt WebEngine should only be available for those few architectures.
 > 
-> Best regards,
+> If everything is source code, then presumably the build system uses
+> -lEGL -lGLESv2, which tells gcc to look for libEGL.so and libGLESv2.so,
+> so those .1 and .2 suffixes should not matter.
+> 
+
+Indeed.
+
+I just did a quick look up into the sources [1], and my message is totally
+wrong! My excuses...
+
+WebEngine is not linked against those libraries: libraries are dynamically
+loaded.
+
+> Can you give some more details here?
+> 
+
+Do you want I reproduce the crash? To make sure this quick investigation is
+correct?
+
+> Also: if this is needed for the qtwebengine build to be successful, it
+> should appear *before* the qtwebengine patch in the series.
+> 
+
+Indeed (again)...
+
+> Thanks!
 > 
 > Thomas
 > -- 
@@ -53,10 +61,7 @@ Yann E. MORIN.
 > Embedded Linux and Kernel engineering
 > http://free-electrons.com
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards,
+Gael
+
+[1] https://github.com/qt/qtwebengine/blob/dev/src/core/surface_factory_qt.cpp#L76-L86
