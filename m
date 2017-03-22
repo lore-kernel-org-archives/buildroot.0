@@ -1,92 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:58:14 +0100
-Subject: [Buildroot] [git commit] systemd: bump version to 233
-Message-ID: <20170322220916.30E8E825E0@busybox.osuosl.org>
+Date: Wed, 22 Mar 2017 23:09:28 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 12}.x and 4.{1, 4,
+	9, 10}.x series
+Message-ID: <20170322221051.8A37182245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=815f7137739ff28805d750edb888aa996c3fecc5
+commit: https://git.buildroot.net/buildroot/commit/?id=0d70d1dbf054f4a0609ba1076bc7e097305013d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
---disable-kdbus no longer exists, so remove everything related to it.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy             | 7 +++++++
- package/systemd/Config.in    | 5 -----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 8 +-------
- 4 files changed, 9 insertions(+), 13 deletions(-)
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a45c4b3..4e14a98 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.05"
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c506aab..4f17f26 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -213,12 +213,12 @@ endchoice
  
-+config BR2_PACKAGE_SYSTEMD_KDBUS
-+	bool "systemd-kdbus has been removed"
-+	select BR2_LEGACY
-+	help
-+	  --enable/disable-kdbus configure option has been removed since
-+	  systemd-231.
-+
- config BR2_PACKAGE_POLARSSL
- 	bool "polarssl has been removed"
- 	select BR2_LEGACY
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index aaed7dc..0f54686 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -155,11 +155,6 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
- 
- 	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
- 
--config BR2_PACKAGE_SYSTEMD_KDBUS
--	bool "enable kdbus support"
--	help
--	  Enable kdbus support for Systemd.
--
- config BR2_PACKAGE_SYSTEMD_LOCALED
- 	bool "enable locale daemon"
- 	help
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 0acaa3c..17f4c0f 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 1172c7c7d5d72fbded53186e7599d5272231f04cc8b72f9a0fb2c5c20dfc4880  systemd-232.tar.gz
-+sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 0d2f416..cfd885d 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 232
-+SYSTEMD_VERSION = 233
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-@@ -87,12 +87,6 @@ else
- SYSTEMD_CONF_OPTS += --disable-xkbcommon
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD_KDBUS),y)
--SYSTEMD_CONF_OPTS += --enable-kdbus
--else
--SYSTEMD_CONF_OPTS += --disable-kdbus
--endif
--
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- SYSTEMD_DEPENDENCIES += bzip2
- SYSTEMD_CONF_OPTS += --enable-bzip2
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.86"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.87"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.71"	if BR2_KERNEL_HEADERS_3_12
+-	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.55"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.16"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.10.4"	if BR2_KERNEL_HEADERS_4_10
++	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
++	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
++	default "4.4.56"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.17"	if BR2_KERNEL_HEADERS_4_9
++	default "4.10.5"	if BR2_KERNEL_HEADERS_4_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
