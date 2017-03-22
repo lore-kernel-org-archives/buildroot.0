@@ -1,59 +1,93 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Mar 2017 12:19:03 +0100
-Subject: [Buildroot] [PATCH v5 12/19] infra-libtool: no longer prepend
- STAGING_DIR to libdir
-In-Reply-To: <2604949.Y0oF46Lp5o@sagittae>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-13-git-send-email-jezz@sysmic.org>
- <6be103f5-9589-53a9-eab9-2c3edd52cd38@mind.be> <2604949.Y0oF46Lp5o@sagittae>
-Message-ID: <7b6b58ac-05ba-1848-8ea0-a23f8300940e@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 22 Mar 2017 11:36:02 +0000
+Subject: [Buildroot] [PATCH v2] systemd: bump version to 233
+Message-ID: <20170322113602.40237-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+--disable-kdbus no longer exists, so remove everything related to it.
 
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Add a Config.in.legacy entry. (Thanks Arnout)
+---
+ Config.in.legacy             | 7 +++++++
+ package/systemd/Config.in    | 5 -----
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 8 +-------
+ 4 files changed, 9 insertions(+), 13 deletions(-)
 
-On 22-03-17 11:21, J?r?me Pouiller wrote:
-> Hello Anrout,
-> 
-> On Saturday 18 March 2017 16:37:31 CET Arnout Vandecappelle wrote:
->>  Hi Jerome,
->>
->> On 20-12-16 14:46, J?r?me Pouiller wrote:
->>> Since `$lt_sysroot' is now correctly filled, it is no more necessary to patch
->>> `.la' files. Indeed, if $libdir point to `/usr/lib', libtool will also search
->>> in `$(lt_sysroot)/usr/lib'
->>
->>  Unfortunately, not all packages that use libtool also use automake.
-> 
-> You mean autoconf? Do you have an example of this?
-
- No, I mean automake. If it's not using autoconf that it shouldn't even be an
-autotools-package, and we don't apply the libtool patches.
-
- IIUC, the --with-sysroot option is going to be substituted in the Makefiles
-with an extra option to libtool. However, if a package is not using automake, it
-is possible that that extra option doesn't get propagated. I think.
-
-
- Regards,
- Arnout
-
-> 
->>  So some packages may die because of this.
->>
->>  That said, we should probably just fix these individual packages.
-> 
-> yes, I think it very unusual.
-> 
-> 
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a45c4b3..7d03b6c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
+ 
++config BR2_PACKAGE_SYSTEMD_KDBUS
++	bool "enable kdbus support"
++	select BR2_LEGACY
++	help
++	  --enable/disable-kdbus configure option has been removed since
++	  systemd-231.
++
+ config BR2_PACKAGE_POLARSSL
+ 	bool "polarssl has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index aaed7dc..0f54686 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -155,11 +155,6 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+ 
+ 	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
+ 
+-config BR2_PACKAGE_SYSTEMD_KDBUS
+-	bool "enable kdbus support"
+-	help
+-	  Enable kdbus support for Systemd.
+-
+ config BR2_PACKAGE_SYSTEMD_LOCALED
+ 	bool "enable locale daemon"
+ 	help
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 0acaa3c..17f4c0f 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 1172c7c7d5d72fbded53186e7599d5272231f04cc8b72f9a0fb2c5c20dfc4880  systemd-232.tar.gz
++sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0d2f416..cfd885d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 232
++SYSTEMD_VERSION = 233
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+@@ -87,12 +87,6 @@ else
+ SYSTEMD_CONF_OPTS += --disable-xkbcommon
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD_KDBUS),y)
+-SYSTEMD_CONF_OPTS += --enable-kdbus
+-else
+-SYSTEMD_CONF_OPTS += --disable-kdbus
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ SYSTEMD_DEPENDENCIES += bzip2
+ SYSTEMD_CONF_OPTS += --enable-bzip2
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.10.2
