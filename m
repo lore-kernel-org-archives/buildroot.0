@@ -1,47 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Mar 2017 22:18:23 +0100
-Subject: [Buildroot] [PATCH] poppler: bump version to 0.53.0 causing
- build issues
-In-Reply-To: <20170321154109.1311-1-Vincent.Riera@imgtec.com>
-References: <20170321154109.1311-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170322221823.2accea08@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 22 Mar 2017 22:21:08 +0100
+Subject: [Buildroot] [RFC 0/3] Qt WebEngine support
+In-Reply-To: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
+References: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20170322222108.397d2af6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Ga?l,
 
-On Tue, 21 Mar 2017 15:41:09 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/poppler/poppler.hash | 2 +-
->  package/poppler/poppler.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 22 Mar 2017 14:13:28 -0400, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
 
-Breaks the build on nios2:
+[...]
+> 
+> Note: I do not know yet how to add an input backend (mouse, keyboard). For now,
+> quicknanobrowser will just display the qt website.
+> 
+[...]'
 
-/home/dawncrow/buildroot-test/scripts/instance-0/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/include/nspr/prcpucfg.h:1117:2: error: #error "Unknown CPU architecture"
- #error "Unknown CPU architecture"
+Change System configuration --> /dev management to 'devtmpfs + eudev' (untested),
+or use 'Init System (systemd)' (tested), both enable udev support needed by the
+qt5 default input system...
 
-Weird because our libnspr precisely has a patch to support the nios2
-architecture.
-
-There are also other errors in the build log.
-
-See:
-
-  http://autobuild.buildroot.net/?reason=poppler-0.53.0
-
-The previous version was building fine:
-
-  http://autobuild.buildroot.net/?reason=poppler-0.52.0
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards,
+Peter
