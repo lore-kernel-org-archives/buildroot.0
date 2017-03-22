@@ -1,29 +1,34 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 22 Mar 2017 22:21:08 +0100
-Subject: [Buildroot] [RFC 0/3] Qt WebEngine support
-In-Reply-To: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
-References: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20170322222108.397d2af6@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Mar 2017 22:26:59 +0100
+Subject: [Buildroot] [git commit] leptonica: make package description more
+	accurate
+Message-ID: <20170322212704.9449982647@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+commit: https://git.buildroot.net/buildroot/commit/?id=6b2025e4daa61725c30a6e765763ed7135b900ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Mar 2017 14:13:28 -0400, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/leptonica/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-[...]
-> 
-> Note: I do not know yet how to add an input backend (mouse, keyboard). For now,
-> quicknanobrowser will just display the qt website.
-> 
-[...]'
-
-Change System configuration --> /dev management to 'devtmpfs + eudev' (untested),
-or use 'Init System (systemd)' (tested), both enable udev support needed by the
-qt5 default input system...
-
-Regards,
-Peter
+diff --git a/package/leptonica/Config.in b/package/leptonica/Config.in
+index a4053a3..ec4920c 100644
+--- a/package/leptonica/Config.in
++++ b/package/leptonica/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_LEPTONICA
+ 	bool "leptonica"
+ 	help
+-	  Leptonica is a pedagogically-oriented open source site containing
+-	  software that is broadly useful for image processing and image
+-	  analysis applications.
++	  Leptonica is an image processing and image analysis library.
+ 
+ 	  http://www.leptonica.org/
