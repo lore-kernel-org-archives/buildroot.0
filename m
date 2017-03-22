@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 22 Mar 2017 11:36:02 +0000
-Subject: [Buildroot] [PATCH v2] systemd: bump version to 233
-Message-ID: <20170322113602.40237-1-Vincent.Riera@imgtec.com>
+Date: Wed, 22 Mar 2017 11:39:13 +0000
+Subject: [Buildroot] [PATCH v3] systemd: bump version to 233
+Message-ID: <20170322113913.41846-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,6 +12,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+Changes v2 -> v3:
+ - Fix Config.in.legacy message.
+
 Changes v1 -> v2:
  - Add a Config.in.legacy entry. (Thanks Arnout)
 ---
@@ -22,7 +25,7 @@ Changes v1 -> v2:
  4 files changed, 9 insertions(+), 13 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index a45c4b3..7d03b6c 100644
+index a45c4b3..4e14a98 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,13 @@ endif
@@ -30,7 +33,7 @@ index a45c4b3..7d03b6c 100644
  comment "Legacy options removed in 2017.05"
  
 +config BR2_PACKAGE_SYSTEMD_KDBUS
-+	bool "enable kdbus support"
++	bool "systemd-kdbus has been removed"
 +	select BR2_LEGACY
 +	help
 +	  --enable/disable-kdbus configure option has been removed since
