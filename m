@@ -1,96 +1,91 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 22 Mar 2017 11:39:13 +0000
-Subject: [Buildroot] [PATCH v3] systemd: bump version to 233
-Message-ID: <20170322113913.41846-1-Vincent.Riera@imgtec.com>
+Date: Wed, 22 Mar 2017 11:56:43 +0000
+Subject: [Buildroot] [PATCH v2] libepoxy: OpenGL EGL and OpenGL ES
+	dependencies are mandatory
+Message-ID: <20170322115643.48653-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---disable-kdbus no longer exists, so remove everything related to it.
+The --disable-egl configure option doesn't exist:
+
+configure: WARNING: unrecognized options: [snip] --disable-egl
+
+If you don't have EGL support the configure script will fail like this:
+
+checking for EGL... no
+configure: error: Package requirements (egl) were not met:
+
+Also, libepoxy use dlsym to load a GLES2 library when EGL support is
+enabled, see src/dispatch_common.c:
+
+So, OpenGL ES dependency is also mandatory.
+
+Fixes:
+  http://autobuild.buildroot.net/results/3eca5ba26a521f6cc5a611309ba066472af7769c
+  http://autobuild.buildroot.net/results/cf9ec7da196d70548ae1413e4a3730314f6434d6
+  http://autobuild.buildroot.net/results/069b80101afc4719db6d6d41cf5fc923be21ddc0
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 ---
-Changes v2 -> v3:
- - Fix Config.in.legacy message.
-
 Changes v1 -> v2:
- - Add a Config.in.legacy entry. (Thanks Arnout)
+ - Add OpenGL ES dependency and modify commit log accordingly.
+   (Thanks Romain)
 ---
- Config.in.legacy             | 7 +++++++
- package/systemd/Config.in    | 5 -----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 8 +-------
- 4 files changed, 9 insertions(+), 13 deletions(-)
+ package/libepoxy/Config.in   | 10 +++++++---
+ package/libepoxy/libepoxy.mk |  9 +--------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a45c4b3..4e14a98 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.05"
- 
-+config BR2_PACKAGE_SYSTEMD_KDBUS
-+	bool "systemd-kdbus has been removed"
-+	select BR2_LEGACY
-+	help
-+	  --enable/disable-kdbus configure option has been removed since
-+	  systemd-231.
-+
- config BR2_PACKAGE_POLARSSL
- 	bool "polarssl has been removed"
- 	select BR2_LEGACY
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index aaed7dc..0f54686 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -155,11 +155,6 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
- 
- 	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
- 
--config BR2_PACKAGE_SYSTEMD_KDBUS
--	bool "enable kdbus support"
--	help
--	  Enable kdbus support for Systemd.
--
- config BR2_PACKAGE_SYSTEMD_LOCALED
- 	bool "enable locale daemon"
+diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
+index c87366a..301e3ed 100644
+--- a/package/libepoxy/Config.in
++++ b/package/libepoxy/Config.in
+@@ -1,12 +1,16 @@
+ config BR2_PACKAGE_LIBEPOXY
+ 	bool "libepoxy"
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+-	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
++	# OpenGL EGL is mandatory and libepoxy uses dlsym to load a
++	# GLES2 library when EGL support is enabled. Details in
++	# src/dispatch/dispatch_common.c
++	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
  	help
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 0acaa3c..17f4c0f 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 1172c7c7d5d72fbded53186e7599d5272231f04cc8b72f9a0fb2c5c20dfc4880  systemd-232.tar.gz
-+sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 0d2f416..cfd885d 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  Epoxy is a library for handling OpenGL function pointer
+ 	  management for you.
  
--SYSTEMD_VERSION = 232
-+SYSTEMD_VERSION = 233
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-@@ -87,12 +87,6 @@ else
- SYSTEMD_CONF_OPTS += --disable-xkbcommon
- endif
+ 	  https://github.com/anholt/libepoxy
  
--ifeq ($(BR2_PACKAGE_SYSTEMD_KDBUS),y)
--SYSTEMD_CONF_OPTS += --enable-kdbus
+-comment "libepoxy needs an OpenGL and/or OpenGL EGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_HAS_LIBGL
++comment "libepoxy needs OpenGL EGL and OpenGL ES backends"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
++	depends on !BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index be8c55e..4dbdefc 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -9,17 +9,10 @@ LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).1
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
+-LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
++LIBEPOXY_DEPENDENCIES = host-pkgconf libegl libgles xutil_util-macros
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
+ 
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
+-LIBEPOXY_CONF_OPTS += --enable-egl
+-LIBEPOXY_DEPENDENCIES += libegl
 -else
--SYSTEMD_CONF_OPTS += --disable-kdbus
+-LIBEPOXY_CONF_OPTS += --disable-egl
 -endif
 -
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- SYSTEMD_DEPENDENCIES += bzip2
- SYSTEMD_CONF_OPTS += --enable-bzip2
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_XLIB_LIBX11),yy)
+ LIBEPOXY_CONF_OPTS += --enable-glx
+ LIBEPOXY_DEPENDENCIES += libgl xlib_libX11
 -- 
 2.10.2
