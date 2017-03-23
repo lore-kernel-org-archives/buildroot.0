@@ -1,126 +1,169 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 23 Mar 2017 00:02:30 -0300
-Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
-	infrastructure
-References: <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <58d33ac6e1494_71523fd706b87604408fc@ultri3.mail>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 23 Mar 2017 04:16:09 +0100
+Subject: [Buildroot] [PATCH v2] autofs: allow to use libtirpc instead of
+ internal C implementation
+Message-ID: <20170323031609.GA23599@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+uClibc-ng plans to remove internal RPC implementation as it
+is ipv4 only and can not be used for most important RPC software
+rpcbind and nfs-utils.
+musl does not implement RPC and GNU C library deprecated the
+internal implementation a while ago.
+It is still possible to use the C library implementation.
 
-There are still 2 things that I think can be solved together.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1 -> v2:
+  - Thomas Petazzoni wants to keep legacy C library provided RPC support
+---
+ package/autofs/0004-libtirpc-via-pkgconfig.patch | 83 ++++++++++++++++++++++++
+ package/autofs/Config.in                         |  7 +-
+ package/autofs/autofs.mk                         |  7 ++
+ 3 files changed, 93 insertions(+), 4 deletions(-)
+ create mode 100644 package/autofs/0004-libtirpc-via-pkgconfig.patch
 
-On Mon, Mar 20, 2017 at 05:36 PM, Thomas Petazzoni wrote:
-
-[snip]
-> +++ b/support/testing/conf/unittest.cfg
-> @@ -0,0 +1,6 @@
-> +[unittest]
-> +plugins = nose2.plugins.mp
-> +
-> +[multiprocess]
-> +processes = 1
-
-1) If I increase the value of processes in unittest.cfg to unleash the power of
-nose2, emulator fails sporadically because telnet port is fixed.
-
-[snip]
-> +++ b/support/testing/infra/emulator.py
-[snip]
-> +        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-> +                    "-serial", "telnet::1234,server",
-> +                    "-display", "none"]
-
-2) If I do this (not restricted to these testcases) ...
-
-for i in $(seq 100); do \
-support/testing/run-tests -d dl1 -o output -k tests.package || break ; done
-
-... while performing other resource-consuming tasks on my PC, such as starting
-an unrelated build that uses all the cores, I eventually get this:
-
-ERROR: test_run (tests.package.test_dropbear.TestDropbear)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/tmp/testing-v3/support/testing/tests/package/test_dropbear.py", line 22, in test_run
-    self.emulator.login("testpwd")
-  File "/tmp/testing-v3/support/testing/infra/emulator.py", line 101, in login
-    self.__read_until("buildroot login:", 10)
-  File "/tmp/testing-v3/support/testing/infra/emulator.py", line 89, in __read_until
-    data = self.__tn.read_until(waitstr, timeout)
-  File "/usr/lib/python2.7/telnetlib.py", line 294, in read_until
-    return self._read_until_with_poll(match, timeout)
-  File "/usr/lib/python2.7/telnetlib.py", line 329, in _read_until_with_poll
-    self.fill_rawq()
-  File "/usr/lib/python2.7/telnetlib.py", line 576, in fill_rawq
-    buf = self.sock.recv(50)
-error: [Errno 104] Connection reset by peer
-
-Something like this patch could fix those:
-
-+++ b/support/testing/infra/emulator.py
-@@ -1,3 +1,3 @@
-+import pexpect
- import socket
--import subprocess
- import telnetlib
-@@ -7,2 +7,5 @@ import infra.basetest
- 
-+TELNET_PORT_INITIAL = 1234
-+TELNET_PORT_LAST = TELNET_PORT_INITIAL + 20
+diff --git a/package/autofs/0004-libtirpc-via-pkgconfig.patch b/package/autofs/0004-libtirpc-via-pkgconfig.patch
+new file mode 100644
+index 0000000..784b4c6
+--- /dev/null
++++ b/package/autofs/0004-libtirpc-via-pkgconfig.patch
+@@ -0,0 +1,83 @@
++Use pkg-config to find libtirpc headers
 +
- # TODO: Most of the telnet stuff need to be replaced by stdio/pexpect to discuss
-@@ -13,2 +16,3 @@ class Emulator(object):
-         self.qemu = None
-+        self.port = None
-         self.__tn = None
-@@ -43,3 +47,2 @@ class Emulator(object):
-         qemu_cmd = ["qemu-system-{}".format(qemu_arch),
--                    "-serial", "telnet::1234,server",
-                     "-display", "none"]
-@@ -75,4 +78,15 @@ class Emulator(object):
-         with infra.smart_open(self.log_file) as lfh:
--            lfh.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
--            self.qemu = subprocess.Popen(qemu_cmd, stdout=lfh, stderr=lfh)
-+            for port in range(TELNET_PORT_INITIAL, TELNET_PORT_LAST):
-+                telnet_arg = ["-serial", "telnet::{},server".format(port)]
-+                cmd = qemu_cmd + telnet_arg
-+                lfh.write("> starting qemu with '{}'\n".format(" ".join(cmd)))
-+                self.qemu = pexpect.spawn(cmd[0], cmd[1:], logfile=lfh)
-+                ret = self.qemu.expect(["waiting for connection",
-+                                        "Address already in use"])
-+                if ret == 0:
-+                    self.port = port
-+                    break
-+                self.qemu.read()
-+        if not self.port:
-+            raise SystemError("Could not find a free port to run emulator")
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur autofs-5.1.2.orig/aclocal.m4 autofs-5.1.2/aclocal.m4
++--- autofs-5.1.2.orig/aclocal.m4	2016-06-15 04:40:44.000000000 +0200
+++++ autofs-5.1.2/aclocal.m4	2017-03-21 20:10:06.441615642 +0100
++@@ -411,11 +411,18 @@
++ dnl --------------------------------------------------------------------------
++ AC_DEFUN([AF_CHECK_LIBTIRPC],
++ [
+++
+++AC_PATH_PROGS(PKG_CONFIG, pkg-config, no)
+++
++ # save current flags
++ af_check_libtirpc_save_cflags="$CFLAGS"
++ af_check_libtirpc_save_ldflags="$LDFLAGS"
++-CFLAGS="$CFLAGS -I/usr/include/tirpc"
++-LDFLAGS="$LDFLAGS -ltirpc"
+++
+++TIRPC_LIBS=`$PKG_CONFIG --libs libtirpc`
+++TIRPC_FLAGS=`$PKG_CONFIG --cflags libtirpc`
+++
+++CFLAGS="$CFLAGS $TIRPC_FLAGS"
+++LIBS="$LIBS $TIRPC_LIBS"
++ 
++ AC_TRY_LINK(
++     [ #include <rpc/rpc.h> ],
++@@ -431,7 +438,8 @@
++ if test "$af_have_libtirpc" = "yes"; then
++     AC_DEFINE(WITH_LIBTIRPC,1, [Define to 1 if you have the libtirpc library installed])
++     AC_DEFINE(TIRPC_WORKAROUND,1, [Define to 1 to use the libtirpc tsd usage workaround])
++-    TIRPCLIB="-ltirpc"
+++    TIRPCINCLUDE=$TIRPC_FLAGS
+++    TIRPCLIB=$TIRPC_LIBS
++ fi
++ 
++ AC_CHECK_FUNCS([getrpcbyname getservbyname])
++@@ -439,6 +447,7 @@
++ # restore flags
++ CFLAGS="$af_check_libtirpc_save_cflags"
++ LDFLAGS="$af_check_libtirpc_save_ldflags"
+++
++ ])
++ 
++ AC_DEFUN([AF_WITH_LIBTIRPC],
++diff -Nur autofs-5.1.2.orig/configure.in autofs-5.1.2/configure.in
++--- autofs-5.1.2.orig/configure.in	2016-06-15 04:40:44.000000000 +0200
+++++ autofs-5.1.2/configure.in	2017-03-20 22:01:57.191254563 +0100
++@@ -126,6 +126,7 @@
++ #
++ AF_WITH_LIBTIRPC()
++ AC_SUBST(TIRPCLIB)
+++AC_SUBST(TIRPCINCLUDE)
++ 
++ #
++ # Optional include dmalloc
++diff -Nur autofs-5.1.2.orig/Makefile.conf.in autofs-5.1.2/Makefile.conf.in
++--- autofs-5.1.2.orig/Makefile.conf.in	2016-06-15 04:40:44.000000000 +0200
+++++ autofs-5.1.2/Makefile.conf.in	2017-03-20 21:59:38.341881802 +0100
++@@ -62,6 +62,7 @@
++ 
++ # Use libtirpc if requested and available
++ TIRPCLIB = @TIRPCLIB@
+++TIRPCINCLUDE = @TIRPCINCLUDE@
++ 
++ # Use dmalloc for memory debuging
++ DMALLOCLIB = @DMALLOCLIB@
++diff -Nur autofs-5.1.2.orig/Makefile.rules autofs-5.1.2/Makefile.rules
++--- autofs-5.1.2.orig/Makefile.rules	2016-06-15 04:40:44.000000000 +0200
+++++ autofs-5.1.2/Makefile.rules	2017-03-20 22:03:25.590675167 +0100
++@@ -45,10 +45,8 @@
++ CFLAGS += -D_REENTRANT -D_FILE_OFFSET_BITS=64
++ LIBS += -lpthread
++ 
++-ifdef TIRPCLIB
++-CFLAGS += -I/usr/include/tirpc
+++CFLAGS += $(TIRPCINCLUDE)
++ LIBS += $(TIRPCLIB)
++-endif
++ 
++ ifdef DMALLOCLIB
++ LIBS += $(DMALLOCLIB)
+diff --git a/package/autofs/Config.in b/package/autofs/Config.in
+index 8e08357..efb0ec2 100644
+--- a/package/autofs/Config.in
++++ b/package/autofs/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
+ 	bool "autofs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on !BR2_STATIC_LIBS # dlfcn
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Autofs controls the operation of the automount daemons. The
+ 	  automount daemons automatically mount filesystems when they
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_AUTOFS
  
-@@ -81,3 +95,3 @@ class Emulator(object):
-             try:
--                self.__tn = telnetlib.Telnet("localhost", 1234)
-+                self.__tn = telnetlib.Telnet("localhost", self.port)
-                 if self.__tn:
-@@ -100,6 +114,8 @@ class Emulator(object):
-     def login(self, password=None):
--        self.__read_until("buildroot login:", 10)
-+        # The login prompt can take some time to appear when running multiple
-+        # instances in parallel, so set the timeout to a large value
-+        self.__read_until("buildroot login:", 30)
-         if "buildroot login:" not in self.log:
-             with infra.smart_open(self.log_file) as lfh:
--                lfh.write("==> System does not boot")
-+                lfh.write("==> System does not boot\n")
-             raise SystemError("System does not boot")
-@@ -133,3 +149,2 @@ class Emulator(object):
-             return
--        self.qemu.terminate()
--        self.qemu.kill()
-+        self.qemu.terminate(force=True)
-
-Regards,
-Ricardo
+ 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
+ 
+-comment "autofs needs a toolchain w/ NPTL, RPC, dynamic library"
++comment "autofs needs a toolchain w/ NPTL and dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 23e6836..f2f153c 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -10,6 +10,9 @@ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPLv2+
+ AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
+ AUTOFS_DEPENDENCIES = host-flex host-bison
++ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
++AUTOFS_DEPENDENCIES += libtirpc host-pkgconf
++endif
+ # For 0002-autofs-configure-check-for-clock_gettime-in-librt.patch and
+ # 0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch.
+ AUTOFS_AUTORECONF = YES
+@@ -32,6 +35,10 @@ AUTOFS_CONF_OPTS = \
+ 	--with-path="$(BR_PATH)" \
+ 	--with-hesiod=no
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
++AUTOFS_CONF_OPTS += --with-libtirpc
++endif
++
+ AUTOFS_MAKE_ENV = DONTSTRIP=1
+ 
+ $(eval $(autotools-package))
+-- 
+2.1.4
