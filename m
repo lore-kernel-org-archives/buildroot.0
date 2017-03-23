@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:38 +0100
-Subject: [Buildroot] [PATCH v4 17/39] package/kodi: add optional support for
-	bluez5
+Date: Thu, 23 Mar 2017 18:28:27 +0100
+Subject: [Buildroot] [PATCH v4 06/39] package/libcec: bump version to 4.0.2
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-18-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 8 ++++++++
- package/kodi/kodi.mk   | 7 +++++++
- 2 files changed, 15 insertions(+)
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d9dccba57..2d3faf562 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -123,6 +123,14 @@ config BR2_PACKAGE_KODI_AVAHI
- 	  Enable Avahi support.
- 	  Select this if you want Kodi to support Bonjour protocol.
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 377f343a2..5416c20fe 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
++sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index c9a05a5fb..f00e10f5d 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_KODI_BLUEZ
-+	bool "bluetooth"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
-+	depends on !BR2_PACKAGE_BLUEZ_UTILS # bluez5_utils
-+	select BR2_PACKAGE_BLUEZ5_UTILS
-+	help
-+	    Enable bluetooth support
-+
- config BR2_PACKAGE_KODI_DBUS
- 	bool "dbus"
- 	select BR2_PACKAGE_DBUS
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 16a4a3444..b903dd979 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -171,6 +171,13 @@ else
- KODI_CONF_OPTS += -DENABLE_CAP=OFF
- endif
+-LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
+-LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
++LIBCEC_VERSION = 4.0.2
++LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_PACKAGE_KODI_BLUEZ),y)
-+KODI_CONF_OPTS += -DENABLE_BLUETOOTH=ON
-+KODI_DEPENDENCIES += bluez5_utils
-+else
-+KODI_CONF_OPTS += -DENABLE_BLUETOOTH=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_DBUS),y)
- KODI_DEPENDENCIES += dbus
- KODI_CONF_OPTS += -DENABLE_DBUS=ON
 -- 
 2.11.0
