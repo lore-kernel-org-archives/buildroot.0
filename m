@@ -1,162 +1,71 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 23 Mar 2017 08:10:58 +0100
-Subject: [Buildroot] [PATCH v3] autofs: allow to use libtirpc instead of
- internal C implementation
-Message-ID: <20170323071058.GA29887@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Mar 2017 08:28:35 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-03-22
+Message-ID: <20170323072835.30CE220F42@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc-ng plans to remove internal RPC implementation as it
-is ipv4 only and can not be used for most important RPC software
-rpcbind and nfs-utils.
-musl does not implement RPC and GNU C library deprecated the
-internal implementation a while ago.
-It is still possible to use the C library implementation.
+Hello,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----                                                                                                                                                                       
-v1 -> v2:                                                                                                                                                                 
-  - Thomas Petazzoni wants to keep legacy C library provided RPC support  
-v2 -> v3:
-  - combine with BR2_PACKAGE_LIBTIRPC conditionally, suggested by Baruch Siach
----
- package/autofs/0004-libtirpc-via-pkgconfig.patch | 83 ++++++++++++++++++++++++
- package/autofs/Config.in                         |  7 +-
- package/autofs/autofs.mk                         |  5 ++
- 3 files changed, 91 insertions(+), 4 deletions(-)
- create mode 100644 package/autofs/0004-libtirpc-via-pkgconfig.patch
+Build statistics for 2017-03-22
+================================
 
-diff --git a/package/autofs/0004-libtirpc-via-pkgconfig.patch b/package/autofs/0004-libtirpc-via-pkgconfig.patch
-new file mode 100644
-index 0000000..784b4c6
---- /dev/null
-+++ b/package/autofs/0004-libtirpc-via-pkgconfig.patch
-@@ -0,0 +1,83 @@
-+Use pkg-config to find libtirpc headers
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur autofs-5.1.2.orig/aclocal.m4 autofs-5.1.2/aclocal.m4
-+--- autofs-5.1.2.orig/aclocal.m4	2016-06-15 04:40:44.000000000 +0200
-++++ autofs-5.1.2/aclocal.m4	2017-03-21 20:10:06.441615642 +0100
-+@@ -411,11 +411,18 @@
-+ dnl --------------------------------------------------------------------------
-+ AC_DEFUN([AF_CHECK_LIBTIRPC],
-+ [
-++
-++AC_PATH_PROGS(PKG_CONFIG, pkg-config, no)
-++
-+ # save current flags
-+ af_check_libtirpc_save_cflags="$CFLAGS"
-+ af_check_libtirpc_save_ldflags="$LDFLAGS"
-+-CFLAGS="$CFLAGS -I/usr/include/tirpc"
-+-LDFLAGS="$LDFLAGS -ltirpc"
-++
-++TIRPC_LIBS=`$PKG_CONFIG --libs libtirpc`
-++TIRPC_FLAGS=`$PKG_CONFIG --cflags libtirpc`
-++
-++CFLAGS="$CFLAGS $TIRPC_FLAGS"
-++LIBS="$LIBS $TIRPC_LIBS"
-+ 
-+ AC_TRY_LINK(
-+     [ #include <rpc/rpc.h> ],
-+@@ -431,7 +438,8 @@
-+ if test "$af_have_libtirpc" = "yes"; then
-+     AC_DEFINE(WITH_LIBTIRPC,1, [Define to 1 if you have the libtirpc library installed])
-+     AC_DEFINE(TIRPC_WORKAROUND,1, [Define to 1 to use the libtirpc tsd usage workaround])
-+-    TIRPCLIB="-ltirpc"
-++    TIRPCINCLUDE=$TIRPC_FLAGS
-++    TIRPCLIB=$TIRPC_LIBS
-+ fi
-+ 
-+ AC_CHECK_FUNCS([getrpcbyname getservbyname])
-+@@ -439,6 +447,7 @@
-+ # restore flags
-+ CFLAGS="$af_check_libtirpc_save_cflags"
-+ LDFLAGS="$af_check_libtirpc_save_ldflags"
-++
-+ ])
-+ 
-+ AC_DEFUN([AF_WITH_LIBTIRPC],
-+diff -Nur autofs-5.1.2.orig/configure.in autofs-5.1.2/configure.in
-+--- autofs-5.1.2.orig/configure.in	2016-06-15 04:40:44.000000000 +0200
-++++ autofs-5.1.2/configure.in	2017-03-20 22:01:57.191254563 +0100
-+@@ -126,6 +126,7 @@
-+ #
-+ AF_WITH_LIBTIRPC()
-+ AC_SUBST(TIRPCLIB)
-++AC_SUBST(TIRPCINCLUDE)
-+ 
-+ #
-+ # Optional include dmalloc
-+diff -Nur autofs-5.1.2.orig/Makefile.conf.in autofs-5.1.2/Makefile.conf.in
-+--- autofs-5.1.2.orig/Makefile.conf.in	2016-06-15 04:40:44.000000000 +0200
-++++ autofs-5.1.2/Makefile.conf.in	2017-03-20 21:59:38.341881802 +0100
-+@@ -62,6 +62,7 @@
-+ 
-+ # Use libtirpc if requested and available
-+ TIRPCLIB = @TIRPCLIB@
-++TIRPCINCLUDE = @TIRPCINCLUDE@
-+ 
-+ # Use dmalloc for memory debuging
-+ DMALLOCLIB = @DMALLOCLIB@
-+diff -Nur autofs-5.1.2.orig/Makefile.rules autofs-5.1.2/Makefile.rules
-+--- autofs-5.1.2.orig/Makefile.rules	2016-06-15 04:40:44.000000000 +0200
-++++ autofs-5.1.2/Makefile.rules	2017-03-20 22:03:25.590675167 +0100
-+@@ -45,10 +45,8 @@
-+ CFLAGS += -D_REENTRANT -D_FILE_OFFSET_BITS=64
-+ LIBS += -lpthread
-+ 
-+-ifdef TIRPCLIB
-+-CFLAGS += -I/usr/include/tirpc
-++CFLAGS += $(TIRPCINCLUDE)
-+ LIBS += $(TIRPCLIB)
-+-endif
-+ 
-+ ifdef DMALLOCLIB
-+ LIBS += $(DMALLOCLIB)
-diff --git a/package/autofs/Config.in b/package/autofs/Config.in
-index 8e08357..efb0ec2 100644
---- a/package/autofs/Config.in
-+++ b/package/autofs/Config.in
-@@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
- 	bool "autofs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on !BR2_STATIC_LIBS # dlfcn
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Autofs controls the operation of the automount daemons. The
- 	  automount daemons automatically mount filesystems when they
-@@ -15,7 +15,6 @@ config BR2_PACKAGE_AUTOFS
- 
- 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
- 
--comment "autofs needs a toolchain w/ NPTL, RPC, dynamic library"
-+comment "autofs needs a toolchain w/ NPTL and dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 23e6836..580b04a 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -32,6 +32,11 @@ AUTOFS_CONF_OPTS = \
- 	--with-path="$(BR_PATH)" \
- 	--with-hesiod=no
- 
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+AUTOFS_DEPENDENCIES += libtirpc host-pkgconf
-+AUTOFS_CONF_OPTS += --with-libtirpc
-+endif
-+
- AUTOFS_MAKE_ENV = DONTSTRIP=1
- 
- $(eval $(autotools-package))
+      successes : 119
+       failures : 29 
+       timeouts : 0  
+          TOTAL : 148
+
+Classification of failures by reason
+====================================
+
+                    qemu-2.8.0 | 7 
+   pru-software-support-v5.1.0 | 6 
+                 uclibc-1.0.22 | 5 
+              leptonica-1.74.1 | 2 
+                poppler-0.53.0 | 2 
+           uboot-tools-2017.03 | 2 
+                    git-2.12.1 | 1 
+             lttng-tools-2.9.4 | 1 
+                 mplayer-1.3.0 | 1 
+                     php-7.1.3 | 1 
+               wireshark-2.2.5 | 1 
+
+
+Detail of failures
+===================
+
+         arm |                     git-2.12.1 | NOK | http://autobuild.buildroot.net/results/82d154d197080fb4f79950b2d1eb5c5842e0b1d5 |     
+        m68k |               leptonica-1.74.1 | NOK | http://autobuild.buildroot.net/results/8dd2bcc41e861bdd324dd081e39925964d1ac428 |     
+         arm |               leptonica-1.74.1 | NOK | http://autobuild.buildroot.net/results/ec7366d69b00625b652915fa58e3143f1bdcaf62 |     
+         arm |              lttng-tools-2.9.4 | NOK | http://autobuild.buildroot.net/results/f07c030cf5b3ba1d4e4a8f48a32630fa0f38d47d |     
+        i586 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/3a31d61baa83c7882cccdbc1294c863578eb478e |     
+         arm |                      php-7.1.3 | NOK | http://autobuild.buildroot.net/results/616eacf5cd5a570ea2b8bba60dc42b109eaf8ed9 | ORPH
+       nios2 |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/51204c125e3e14df7958d4eb4178c372a90d158a |     
+       nios2 |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/e24a4227661019802a24d17acc49f7c3f8ae3d97 |     
+         arm |    pru-software-support-v5.1.0 | NOK | http://autobuild.buildroot.net/results/76a1475f4cdedb80426fb022ef2e644aa5625660 |     
+         arm |    pru-software-support-v5.1.0 | NOK | http://autobuild.buildroot.net/results/a45cb07a3afee83eddad234ead057a45f11275f8 |     
+         arm |    pru-software-support-v5.1.0 | NOK | http://autobuild.buildroot.net/results/99e4ed21116c721faf9f1d0349f312b357d333ee |     
+         arm |    pru-software-support-v5.1.0 | NOK | http://autobuild.buildroot.net/results/fbbd8d069db1eec6c28fb13e8e95ca5309853ef9 |     
+         arm |    pru-software-support-v5.1.0 | NOK | http://autobuild.buildroot.net/results/bdb357f2eb30bdbe4767eafcadd0425608cb6f34 |     
+         arm |    pru-software-support-v5.1.0 | NOK | http://autobuild.buildroot.net/results/b2412c57045521bd188f719a703a5ce58b1c9f7b |     
+         arm |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/93a708ca13d11986cdfdbb46ab1caa3d5ad6d336 |     
+        i586 |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/19a718f1d507ecb7f61bfe2c7fa2fc1ba3e91ab2 |     
+         arm |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/aa79c8ab93edfb1b20b627aa09686f488f1da16d |     
+         arm |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/e927ca76cdcbc316e102c4b2e74421422cef9825 |     
+         arm |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/5f36ba8974adb98e6a8e524199b77bea73c7c2f4 |     
+         arm |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/4e27559827f3ed75a12f13bd595998bf661b2aaf |     
+         arm |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/c8afd7daec81ffe7cd44a53d0179c1090082f9fd |     
+        mips |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/d2b9a0948fa62863ee4bd11bd197e5faeeb72d3d | ORPH
+    mips64el |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/a99d8c04934808461073f8699d88a0b26a91f3bc | ORPH
+         arc |                  uclibc-1.0.22 | NOK | http://autobuild.buildroot.net/results/6d6f4c41404f7ea590fa8fd8c9a694c81b7bd0a4 |     
+         arc |                  uclibc-1.0.22 | NOK | http://autobuild.buildroot.net/results/c7025c333d3ab73738f50e948c75441e85c7c9f9 |     
+         arc |                  uclibc-1.0.22 | NOK | http://autobuild.buildroot.net/results/0a1957056e07cedc4839439c0ea8ebd1f646b904 |     
+         arc |                  uclibc-1.0.22 | NOK | http://autobuild.buildroot.net/results/47fd5b350cf286b7d5d7b3837fde40816568bc27 |     
+         arc |                  uclibc-1.0.22 | NOK | http://autobuild.buildroot.net/results/7f931485f2df0e4f54fd28c567fa4a31f5561fb5 |     
+         arm |                wireshark-2.2.5 | NOK | http://autobuild.buildroot.net/results/8b8cdb727d770bbea5d1b7c74a85c7574331a5f5 |     
+
 -- 
-2.1.4
+http://autobuild.buildroot.net
