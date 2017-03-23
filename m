@@ -1,54 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:35 +0100
-Subject: [Buildroot] [PATCH v4 14/39] package/kodi: add aarch64 support
+Date: Thu, 23 Mar 2017 18:28:26 +0100
+Subject: [Buildroot] [PATCH v4 05/39] package/kodi-platform: bump version
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-15-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Configure support was added by this commit:
-https://github.com/xbmc/xbmc/commit/62c160c23ed4c074d106f30a43638fac66568ac6
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/kodi-platform/kodi-platform.hash | 2 +-
+ package/kodi-platform/kodi-platform.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 372d0af43..6bbe9ceb3 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
- 	depends on BR2_USE_MMU # libcdio, and others
--	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
-+	default y if (BR2_aarch64 || BR2_arm || \
-+		(BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || \
-+		BR2_i386 || BR2_x86_64) \
- 		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
- 		&& BR2_TOOLCHAIN_HAS_SYNC_8
+diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
+index a2484484e..a8a58f4ef 100644
+--- a/package/kodi-platform/kodi-platform.hash
++++ b/package/kodi-platform/kodi-platform.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  88741358d5d54a0031553ac28aa63bc56c44d994a76f8651bac94a1e244a6595  kodi-platform-45d6ad1984fdb1dc855076ff18484dbec33939d1.tar.gz
++sha256 951bd9d74ff34aca18f96bb5eae15533c3ec489eb8ec946cd4a8b4073d49f56d  kodi-platform-c8188d82678fec6b784597db69a68e74ff4986b5.tar.gz
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+index 4b642f9cf..606ca1a9f 100644
+--- a/package/kodi-platform/kodi-platform.mk
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -27,14 +29,14 @@ config BR2_PACKAGE_KODI_GL_EGL
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGL
--	depends on !BR2_arm # kodi needs egl/gles on arm
-+	depends on !BR2_aarch64 && !BR2_arm # kodi needs egl/gles on arm
- 
- comment "kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_PACKAGE_KODI_GL_EGL && !BR2_PACKAGE_KODI_EGL_GLES
- 
- comment "kodi requires an OpenGL ES and EGL backend"
--	depends on BR2_arm
-+	depends on BR2_aarch64 || BR2_arm
- 	depends on !BR2_PACKAGE_KODI_EGL_GLES
- 
- menuconfig BR2_PACKAGE_KODI
+-KODI_PLATFORM_VERSION = 45d6ad1984fdb1dc855076ff18484dbec33939d1
++KODI_PLATFORM_VERSION = c8188d82678fec6b784597db69a68e74ff4986b5
+ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
+ KODI_PLATFORM_LICENSE = GPLv2+
+ KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
 -- 
 2.11.0
