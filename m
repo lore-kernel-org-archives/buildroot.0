@@ -1,82 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Mar 2017 09:12:47 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: pass empty CFLAGS on
- invocation of libfdt/setup.py
-In-Reply-To: <CAMo8Bf+xMaeYqPHZa9RdBwA4qpz8VRTK8eZcBrdTOLkmBMcUYQ@mail.gmail.com>
-References: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
- <20170320225742.054be334@free-electrons.com>
- <CAMo8BfLZzoRF0Q4zMRPcmwT0UErD7pGH_boMKrWQ07h09fiykw@mail.gmail.com>
- <20170322220119.24fc6301@free-electrons.com>
- <CAMo8Bf+xMaeYqPHZa9RdBwA4qpz8VRTK8eZcBrdTOLkmBMcUYQ@mail.gmail.com>
-Message-ID: <ec85d960-3840-edd2-8e9c-d385c8ffeda8@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Mar 2017 09:16:23 +0100
+Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
+ /usr/share
+In-Reply-To: <2219b1bf-ae08-5c54-5f18-6a91e9f975ba@mind.be>
+References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87inn1k9bb.fsf@dell.be.48ers.dk>
+ <20170322140639.5c8c5149@free-electrons.com>
+ <87efxpj8bv.fsf@dell.be.48ers.dk>
+ <2219b1bf-ae08-5c54-5f18-6a91e9f975ba@mind.be>
+Message-ID: <20170323091623.6fcd2bb2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Thu, 23 Mar 2017 00:03:57 +0100, Arnout Vandecappelle wrote:
 
-On 23-03-17 00:12, Max Filippov wrote:
-> Hi Thomas,
+> >  >> I wonder if we shouldn't turn the tests around, E.G. instead of
+> >  >> searching for elf files with a machine different from target, search for
+> >  >> a files with machine == host.  
 > 
-> On Wed, Mar 22, 2017 at 2:01 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> On Mon, 20 Mar 2017 16:30:53 -0700, Max Filippov wrote:
->>
->>> I can't reproduce it.
->>> The python script makes the compilation super quiet, can we apply something
->>> like the attached patch to see what happens?
->>
->> Build log is below. The issue is that the library being produced is
->> named _libfdt.cpython-35m-x86_64-linux-gnu.so, but U-Boot build system
->> assumes it's named _libfdt.so.
->>
->> However, let's take a step back: why the heck do we have this Python
->> related stuff being built?
-> 
-> we probably don't.
-> 
->> uboot-tools is only meant to install the
->> basic U-Boot tools like fw_printenv and fw_setenv to the target. Why do
->> we bother about this Python libfdt thing? We're not even installing
->> this stuff to the target:
->>
->> define UBOOT_TOOLS_INSTALL_TARGET_CMDS
->>         $(UBOOT_TOOLS_INSTALL_MKIMAGE)
->>         $(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
->>         $(UBOOT_TOOLS_INSTALL_FWPRINTENV)
->>         $(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
->> endef
->>
->> Looking at tools/Makefile, it indeed automatically builds this Python
->> stuff is swig is available, with no way to disable this stuff. Should
->> we patch this out? 
+>  I don't agree. We don't only want to detect host-target confusion, we also want
+> to detect wrong compilation, e.g. missing -EB.
 
- I would very much prefer an upstreamable patch that makes it possible to
-disable this.
+This was exactly the case of the gst-ffmpeg package, for which I've
+sent a fix. Everything was built for Sparc, but two libraries were
+built for a slightly different version of Sparc, which was actually
+incorrect.
 
- Regards,
- Arnout
+Since for now, autobuilders issue caused by this seems to have all been
+handled, I don't think there's much need to find a different solution.
+Let's give it some more time and see if we need to change our mind.
 
+Best regards,
 
->> Alternatively, changing:
->>
->>         mv _libfdt.so $@
->>
->> to:
->>
->>         mv _libfdt.*so $@
->>
->> does the trick.
-> 
-> That looks like a nice small fix.
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
