@@ -1,30 +1,117 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Mar 2017 18:26:12 +0100
-Subject: [Buildroot] [PATCH 1/1] configs: add post-images.sh in
- csky_gx6605s
-In-Reply-To: <1490262324-17597-1-git-send-email-ren_guo@c-sky.com>
-References: <1490262324-17597-1-git-send-email-ren_guo@c-sky.com>
-Message-ID: <20170323182612.7cfd54ed@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 23 Mar 2017 18:28:22 +0100
+Subject: [Buildroot] [PATCH v4 01/39] package/libdvdcss: add Kodi-specific
+	patches
+In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
+References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...css-better-handle-partial-read-in-libc_re.patch | 49 ++++++++++++++++++++++
+ ...opy-value-psz_cache-to-dvdcss-psz_cachefi.patch | 33 +++++++++++++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch
+ create mode 100644 package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch
 
-On Thu, 23 Mar 2017 17:45:24 +0800, Guo Ren wrote:
-> gdbinit will load gx6605s.dtb to a memory address, so we need put
-> them together in the ouput/images.
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-
-Not applied, as I've applied your latest version.
-
-Thanks,
-
-Thomas
+diff --git a/package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch b/package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch
+new file mode 100644
+index 000000000..4d9820642
+--- /dev/null
++++ b/package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch
+@@ -0,0 +1,49 @@
++From d113ac14b45961f958f4aa927c66b3c367f4637c Mon Sep 17 00:00:00 2001
++From: Voyager1 <voyager@xbmc.org>
++Date: Sat, 13 Feb 2016 20:44:21 +0100
++Subject: [PATCH 1/2] [xbmc] [libdvdcss] better handle partial read in
++ libc_read
++
++Downloaded from
++https://github.com/xbmc/libdvdcss/commit/d113ac14b45961f958f4aa927c66b3c367f4637c
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/device.c | 20 ++++++++++++++------
++ 1 file changed, 14 insertions(+), 6 deletions(-)
++
++diff --git a/src/device.c b/src/device.c
++index af735e0..1936b44 100644
++--- a/src/device.c
+++++ b/src/device.c
++@@ -608,13 +608,21 @@ static int libc_read ( dvdcss_t dvdcss, void *p_buffer, int i_blocks )
++     off_t i_size, i_ret, i_ret_blocks;
++ 
++     i_size = (off_t)i_blocks * (off_t)DVDCSS_BLOCK_SIZE;
++-    i_ret = read( dvdcss->i_fd, p_buffer, i_size );
++-
++-    if( i_ret < 0 )
++-    {
++-        print_error( dvdcss, "read error" );
+++    i_ret = 0;
+++    while (i_ret < i_size)
+++    {
+++      off_t i_r;
+++      i_r = read(dvdcss->i_fd, ((char*)p_buffer) + i_ret, i_size - i_ret);
+++      if (i_r < 0)
+++      {
+++        print_error(dvdcss, "read error");
++         dvdcss->i_pos = -1;
++-        return i_ret;
+++        return i_r;
+++      }
+++      if (i_r == 0)
+++        break;
+++
+++      i_ret += i_r;
++     }
++ 
++     i_ret_blocks = i_ret / DVDCSS_BLOCK_SIZE;
++-- 
++2.8.1
++
+diff --git a/package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch b/package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch
+new file mode 100644
+index 000000000..4251eaf46
+--- /dev/null
++++ b/package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch
+@@ -0,0 +1,33 @@
++From 2f12236bc1c92f73c21e973363f79eb300de603f Mon Sep 17 00:00:00 2001
++From: Anton Fedchin <anightik@gmail.com>
++Date: Mon, 15 Feb 2016 16:09:35 +0300
++Subject: [PATCH 2/2] [libdvdcss] Copy value psz_cache to dvdcss->psz_cachefile
++ if it exists.
++
++Downloaded from
++https://github.com/xbmc/libdvdcss/commit/2f12236bc1c92f73c21e973363f79eb300de603f
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/libdvdcss.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/libdvdcss.c b/src/libdvdcss.c
++index 2f78b78..d09d2b3 100644
++--- a/src/libdvdcss.c
+++++ b/src/libdvdcss.c
++@@ -274,6 +274,11 @@ static int set_cache_directory( dvdcss_t dvdcss )
++         }
++ #endif /* ! defined( _WIN32 ) */
++     }
+++    else
+++    {
+++      snprintf( dvdcss->psz_cachefile, PATH_MAX, "%s", psz_cache );
+++      dvdcss->psz_cachefile[PATH_MAX - 1] = '\0';
+++    }
++ 
++     /* Check that there is enough space for the cache directory path and the
++      * block filename. The +1s are path separators. */
++-- 
++2.8.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
