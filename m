@@ -1,79 +1,57 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:34 +0100
-Subject: [Buildroot] [PATCH v4 13/39] package/kodi: move rtmp support to new
-	addon kodi-inputstream-rtmp
+Date: Thu, 23 Mar 2017 18:28:41 +0100
+Subject: [Buildroot] [PATCH v4 20/39] package/kodi: add optional support for
+	event clients
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-14-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-21-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rtmp support was moved from Kodi to an addon:
-https://github.com/xbmc/xbmc/commit/d04f43a4eb6f920cc42a28627b580f17e2be1bb5
+For details read
+https://github.com/xbmc/xbmc/blob/master/tools/EventClients/README.txt
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy       | 7 +++++++
- package/kodi/Config.in | 7 -------
- package/kodi/kodi.mk   | 7 -------
- 3 files changed, 7 insertions(+), 14 deletions(-)
+ package/kodi/Config.in | 5 +++++
+ package/kodi/kodi.mk   | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4e14a9809..cabef5c08 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.05"
- 
-+config BR2_PACKAGE_KODI_RTMPDUMP
-+	bool "kodi rtmp"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
-+	help
-+	  Internal rtmp support was moved to addon kodi-inputstream-rtmp
-+
- config BR2_PACKAGE_SYSTEMD_KDBUS
- 	bool "systemd-kdbus has been removed"
- 	select BR2_LEGACY
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 692d0192b..372d0af43 100644
+index 835af932c..6c76773bb 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -178,13 +178,6 @@ config BR2_PACKAGE_KODI_NONFREE
- 	  Enable components with non-free licenses. This option
- 	  currently only controls support for RAR archives.
+@@ -135,6 +135,11 @@ config BR2_PACKAGE_KODI_DBUS
+ 	help
+ 	  Enable D-Bus support
  
--config BR2_PACKAGE_KODI_RTMPDUMP
--	bool "rtmp"
--	select BR2_PACKAGE_RTMPDUMP
--	help
--	  Enable RTMP input support.
--	  Select this if you want to play back rtmp stream.
--
- config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
- 	select BR2_PACKAGE_LIBSHAIRPLAY
++config BR2_PACKAGE_KODI_EVENTCLIENTS
++	bool "eventclients"
++	help
++	  Enable event clients support
++
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 92f534ed8..16a4a3444 100644
+index 3fba83aa9..2dd1f7be2 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -233,13 +233,6 @@ else
- KODI_CONF_OPTS += -DENABLE_NFS=OFF
+@@ -190,6 +190,12 @@ else
+ KODI_CONF_OPTS += -DENABLE_DBUS=OFF
  endif
  
--ifeq ($(BR2_PACKAGE_KODI_RTMPDUMP),y)
--KODI_DEPENDENCIES += rtmpdump
--KODI_CONF_OPTS += --enable-rtmp
--else
--KODI_CONF_OPTS += --disable-rtmp
--endif
--
- ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
- KODI_DEPENDENCIES += libbluray
- KODI_CONF_OPTS += -DENABLE_BLURAY=ON
++ifeq ($(BR2_PACKAGE_KODI_EVENTCLIENTS),y)
++KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=ON
++else
++KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_ALSA_LIB),y)
+ KODI_CONF_OPTS += -DENABLE_ALSA=ON
+ KODI_DEPENDENCIES += alsa-lib
 -- 
 2.11.0
