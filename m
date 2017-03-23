@@ -1,78 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:29 +0100
-Subject: [Buildroot] [PATCH v4 08/39] package/kodi-jsonschemabuilder: new
-	host package
+Date: Thu, 23 Mar 2017 18:28:35 +0100
+Subject: [Buildroot] [PATCH v4 14/39] package/kodi: add aarch64 support
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-9-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for upcoming kodi version bump to 17.1-Krypton which will also
-switch the kodi build system to CMake.
+Configure support was added by this commit:
+https://github.com/xbmc/xbmc/commit/62c160c23ed4c074d106f30a43638fac66568ac6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-jsonschemabuilder.hash                    |  1 +
- .../kodi-jsonschemabuilder.mk                      | 23 ++++++++++++++++++++++
- .../0001-texturepacker.patch}                      |  0
- package/kodi/kodi.hash                             |  1 +
- 4 files changed, 25 insertions(+)
- create mode 120000 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
- create mode 100644 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
- rename package/{kodi/0002-texturepacker.patch => kodi-texturepacker/0001-texturepacker.patch} (100%)
+ package/kodi/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
-new file mode 120000
-index 000000000..92a75949b
---- /dev/null
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
-@@ -0,0 +1 @@
-+/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/package/kodi/kodi.hash
-\ No newline at end of file
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-new file mode 100644
-index 000000000..97ba44426
---- /dev/null
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# kodi-jsonschemabuilder
-+#
-+################################################################################
-+
-+# Not possible to directly refer to kodi variables, because of
-+# first/second expansion trickery...
-+HOST_KODI_JSONSCHEMABUILDER_VERSION = 17.1-Krypton
-+HOST_KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(HOST_KODI_JSONSCHEMABUILDER_VERSION))
-+HOST_KODI_JSONSCHEMABUILDER_LICENSE = GPLv2
-+HOST_KODI_JSONSCHEMABUILDER_LICENSE_FILES = LICENSE.GPL
-+HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder
-+
-+HOST_KODI_JSONSCHEMABUILDER_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(@D)/project/cmake/modules
-+
-+HOST_KODI_JSONSCHEMABUILDER_INSTALL_CMDS = \
-+	$(INSTALL) -m 755 -D \
-+		$(@D)/tools/depends/native/JsonSchemaBuilder/JsonSchemaBuilder \
-+		$(HOST_DIR)/usr/bin/JsonSchemaBuilder
-+
-+$(eval $(host-cmake-package))
-diff --git a/package/kodi/0002-texturepacker.patch b/package/kodi-texturepacker/0001-texturepacker.patch
-similarity index 100%
-rename from package/kodi/0002-texturepacker.patch
-rename to package/kodi-texturepacker/0001-texturepacker.patch
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 5aa580ec7..b910af2d8 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256	7d82c8aff2715c83deecdf10c566e26105bec0473af530a1356d4c747ebdfd10	kodi-16.1-Jarvis.tar.gz
-+sha256 303f3903cbb57ccc2961f09cf3746505542bcb129a464f0687d7ca8601cebbee  kodi-jsonschemabuilder-17.1-Krypton.tar.gz
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 372d0af43..6bbe9ceb3 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,7 +1,9 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	depends on BR2_USE_MMU # libcdio, and others
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
++	default y if (BR2_aarch64 || BR2_arm || \
++		(BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || \
++		BR2_i386 || BR2_x86_64) \
+ 		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+ 		&& BR2_TOOLCHAIN_HAS_SYNC_8
+ 
+@@ -27,14 +29,14 @@ config BR2_PACKAGE_KODI_GL_EGL
+ 	default y
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+-	depends on !BR2_arm # kodi needs egl/gles on arm
++	depends on !BR2_aarch64 && !BR2_arm # kodi needs egl/gles on arm
+ 
+ comment "kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_PACKAGE_KODI_GL_EGL && !BR2_PACKAGE_KODI_EGL_GLES
+ 
+ comment "kodi requires an OpenGL ES and EGL backend"
+-	depends on BR2_arm
++	depends on BR2_aarch64 || BR2_arm
+ 	depends on !BR2_PACKAGE_KODI_EGL_GLES
+ 
+ menuconfig BR2_PACKAGE_KODI
 -- 
 2.11.0
