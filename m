@@ -1,9 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Mar 2017 21:38:48 +0100
-Subject: [Buildroot] Howto change group of /dev/snd when using devtmpfs
-In-Reply-To: <1490289749.16805.1.camel@embedded.rocks>
-References: <1490289749.16805.1.camel@embedded.rocks>
-Message-ID: <8bf1cfe0-1811-d0b9-69f6-f26877a95f06@mind.be>
+Date: Thu, 23 Mar 2017 22:53:53 +0100
+Subject: [Buildroot] [PATCH] autofs: use libtirpc instead of internal C
+ implementation
+In-Reply-To: <20170322085959.587a9f22@free-electrons.com>
+References: <20170321193213.GA18747@waldemar-brodkorb.de>
+ <20170321222449.5ceb21f4@free-electrons.com>
+ <20170322020946.GF28589@waldemar-brodkorb.de>
+ <20170322085959.587a9f22@free-electrons.com>
+Message-ID: <74507ead-a58c-7c03-3356-64669f7f5acf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +16,45 @@ To: buildroot@busybox.net
 
 
 
-On 23-03-17 18:22, J?rg Krause wrote:
-> Hi,
+On 22-03-17 08:59, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I need some help to get the group changed for "/dev/snd" when using
-> devtmpfs. By default, "/dev/snd" and subnodes have the following
-> settings:
+> On Wed, 22 Mar 2017 03:09:46 +0100, Waldemar Brodkorb wrote:
 > 
-> """
-> # ls -l /dev/snd/
-> total 0
-> crw-------    1 root     root      116,   0 Jan  1  1970 controlC0
-> crw-------    1 root     root      116,  16 Jan  1  1970 pcmC0D0p
-> crw-------    1 root     root      116,  25 Jan  1  1970 pcmC0D1c
-> crw-------    1 root     root      116,  33 Jan  1  1970 timer
-> """
+>>> On Tue, 21 Mar 2017 20:32:13 +0100, Waldemar Brodkorb wrote:
+>>>   
+>>>> @@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
+>>>>  	bool "autofs"
+>>>>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>>>>  	depends on BR2_USE_MMU
+>>>> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>>>>  	depends on !BR2_STATIC_LIBS # dlfcn
+>>>> +	select BR2_PACKAGE_LIBTIRPC  
+>>>
+>>> Why should we force people to use libtirpc ?   
+>>
+>> Because the internal RPC implementation is mostly useless and
+>> getting removed?
 > 
-> I'd like to change the group to audio.
+> I don't quite agree. The one in glibc has been used for years
+> successfully, and is still useful. So even if uClibc decides to remove
+> its internal RPC implementation, I'd like to give people the option to
+> use the internal RPC implementation of glibc.
+> 
+> I agree RPC support in glibc will most likely disappear at some point
+> in the future, but we're not there yet. So for now, I'd prefer if we
+> just took the step of dropping RPC support in uClibc, and doing the
+> necessary changes in packages so that they all build/work fine with
+> libtirpc. That's anyway a very good preparation step to get rid of
+> internal RPC support entirely at some point in the future.
 
- That's exactly what mdev and (e)udev are meant for. devtmpfs creates device
-nodes automatically but only with defaults (default names, default user/group,
-default permissions). If you want to change anything, you need a helper.
+ Well, if glibc is the only one that is still going to provide native RPC, I
+really don't think it's worth keeping support for it. It's not as if the 125KB
+extra from libtirpc are really going to hurt someone who is using glibc, right?
+And keeping the option of native RPC or libtirpc is probably going to make the
+code more complicated.
 
- Of course, you can also write a script as /sbin/hotplug. But then I wonder why
-not use mdev - it hardly increases the busybox size.
+ So I tend to agree with Waldemar's approach.
 
  Regards,
  Arnout
