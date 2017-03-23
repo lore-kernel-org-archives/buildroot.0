@@ -1,43 +1,58 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:27 +0100
-Subject: [Buildroot] [PATCH v4 06/39] package/libcec: bump version to 4.0.2
+Date: Thu, 23 Mar 2017 18:28:42 +0100
+Subject: [Buildroot] [PATCH v4 21/39] package/kodi: add optional support for
+	lcms2
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-7-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-22-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Support was added by https://github.com/xbmc/xbmc/pull/11846
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index 377f343a2..5416c20fe 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
-+sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index c9a05a5fb..f00e10f5d 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 6c76773bb..b7b284058 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -158,6 +158,12 @@ config BR2_PACKAGE_KODI_LIBCEC
+ comment "hdmi cec support needs udev /dev management"
+ 	depends on !BR2_PACKAGE_HAS_UDEV
  
--LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
--LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
-+LIBCEC_VERSION = 4.0.2
-+LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPLv2+
- LIBCEC_LICENSE_FILES = COPYING
++config BR2_PACKAGE_KODI_LCMS2
++	bool "lcms2"
++	select BR2_PACKAGE_LCMS2
++	help
++	  Enable color management support.
++
+ config BR2_PACKAGE_KODI_LIRC
+ 	bool "lirc"
+ 	help
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 2dd1f7be2..7c4695668 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -286,6 +286,13 @@ else
+ KODI_CONF_OPTS += -DENABLE_CEC=OFF
+ endif
  
++ifeq ($(BR2_PACKAGE_KODI_LCMS2),y)
++KODI_DEPENDENCIES += lcms2
++KODI_CONF_OPTS += -DENABLE_LCMS2=ON
++else
++KODI_CONF_OPTS += -DENABLE_LCMS2=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
+ KODI_CONF_OPTS += -DENABLE_LIRC=ON
+ else
 -- 
 2.11.0
