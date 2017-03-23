@@ -1,44 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Mar 2017 18:23:21 +0100
-Subject: [Buildroot] Strange message
-In-Reply-To: <1f799db0-e1ae-56f7-7361-8d3a1dd5d750@grandegger.com>
-References: <1f799db0-e1ae-56f7-7361-8d3a1dd5d750@grandegger.com>
-Message-ID: <20170323182321.646a87dd@free-electrons.com>
+Date: Thu, 23 Mar 2017 18:25:06 +0100
+Subject: [Buildroot] [git commit] board/csky: fixup gdb instructions in
+	readme.txt
+Message-ID: <20170323172524.1B393820FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=54242226f034c1245d379df5f98cefcc13553437
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Mar 2017 16:03:27 +0100, Wolfgang Grandegger wrote:
+The gdbinit file assumes the .dtb file is in the current directory, so
+let's start gdb from output/images.
 
-> what does the message below mean:
-> 
-> >>> qt5xmlpatterns 5.6.2 Fixing libtool files  
-> qt5xmlpatterns: installs files in /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot//opt/bdo/dcu_host
-> make[1]: *** [/opt/bdo/dcu_host/build/qt5xmlpatterns-5.6.2/.stamp_staging_installed] Fehler 1
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+[Thomas: improved commit description.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/csky/readme.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The thing that it checks is if you're installing files in
-$(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O) which is exactly what's going
-on.
-
-Your O is /opt/bdo/dcu_host/, or your staging dir
-is /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot/ and
-therefore $(STAGING_DIR)/$(O)
-is /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot//opt/bdo/dcu_host.
-This generally indicates a bogus build system, because there's no
-reason for a directory identical to $(O) to creep in into the
-target/staging directories.
-
-See package/pkg-generic.mk for the implementation of
-step_check_build_dir.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/board/csky/readme.txt b/board/csky/readme.txt
+index a820e3b..daf7185 100644
+--- a/board/csky/readme.txt
++++ b/board/csky/readme.txt
+@@ -83,5 +83,6 @@ Run
+ 
+   Setup the Console with the rate 115200/8-N-1.
+ 
+-  $ ./output/host/usr/bin/csky-linux-gdb -x board/csky/gx6605s/gdbinit output/images/vmlinux
++  $ cd output/images
++  $ ../host/usr/bin/csky-linux-gdb -x ../../board/csky/gx6605s/gdbinit vmlinux
+ 
