@@ -1,92 +1,295 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:32 +0100
-Subject: [Buildroot] [PATCH v4 11/39] package/kodi: add patch to disable
-	online check
-In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-12-bernd.kuhls@t-online.de>
+Date: Thu, 23 Mar 2017 18:28:21 +0100
+Subject: [Buildroot] [PATCH v4 00/39] kodi: bump to version 17.1-Krypton
+Message-ID: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi/0004-disable-online-check.patch | 65 ++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/kodi/0004-disable-online-check.patch
+this series bumps Kodi to 17.1-Krypton, released 2017/03/21:
+https://kodi.tv/kodi-v17-1-krypton/
 
-diff --git a/package/kodi/0004-disable-online-check.patch b/package/kodi/0004-disable-online-check.patch
-new file mode 100644
-index 000000000..9c21064bf
---- /dev/null
-+++ b/package/kodi/0004-disable-online-check.patch
-@@ -0,0 +1,65 @@
-+From 468f917d3c1ee6f84b1a075d327d7c7626f1e223 Mon Sep 17 00:00:00 2001
-+From: Stefan Saraev <stefan@saraev.ca>
-+Date: Sat, 18 Apr 2015 15:03:31 +0300
-+Subject: [PATCH 03/13] disable online check
-+
-+Ported from LibreELEC
-+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.03-disable-online-check.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ xbmc/GUIInfoManager.cpp              | 1 -
-+ xbmc/utils/SystemInfo.cpp            | 5 +----
-+ xbmc/windows/GUIWindowSystemInfo.cpp | 1 -
-+ 3 files changed, 1 insertion(+), 6 deletions(-)
-+
-+diff --git a/xbmc/GUIInfoManager.cpp b/xbmc/GUIInfoManager.cpp
-+index cb09e75..a218e1d 100644
-+--- a/xbmc/GUIInfoManager.cpp
-++++ b/xbmc/GUIInfoManager.cpp
-+@@ -278,7 +278,6 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
-+                                   { "currentwindow",    SYSTEM_CURRENT_WINDOW },
-+                                   { "currentcontrol",   SYSTEM_CURRENT_CONTROL },
-+                                   { "dvdlabel",         SYSTEM_DVD_LABEL },
-+-                                  { "internetstate",    SYSTEM_INTERNET_STATE },
-+                                   { "osversioninfo",    SYSTEM_OS_VERSION_INFO },
-+                                   { "kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
-+                                   { "uptime",           SYSTEM_UPTIME },
-+diff --git a/xbmc/utils/SystemInfo.cpp b/xbmc/utils/SystemInfo.cpp
-+index f423cfe..d8483d0 100644
-+--- a/xbmc/utils/SystemInfo.cpp
-++++ b/xbmc/utils/SystemInfo.cpp
-+@@ -247,7 +247,6 @@ bool CSysInfoJob::DoWork()
-+ {
-+   m_info.systemUptime      = GetSystemUpTime(false);
-+   m_info.systemTotalUptime = GetSystemUpTime(true);
-+-  m_info.internetState     = GetInternetState();
-+   m_info.videoEncoder      = GetVideoEncoder();
-+   m_info.cpuFrequency      = GetCPUFreqInfo();
-+   m_info.osVersionInfo     = CSysInfo::GetOsPrettyNameWithVersion() + " (kernel: " + CSysInfo::GetKernelName() + " " + CSysInfo::GetKernelVersionFull() + ")";
-+@@ -1023,9 +1022,7 @@ int CSysInfo::GetXbmcBitness(void)
-+ 
-+ bool CSysInfo::HasInternet()
-+ {
-+-  if (m_info.internetState != CSysData::UNKNOWN)
-+-    return m_info.internetState == CSysData::CONNECTED;
-+-  return (m_info.internetState = CSysInfoJob::GetInternetState()) == CSysData::CONNECTED;
-++  return m_info.internetState == CSysData::UNKNOWN;
-+ }
-+ 
-+ std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
-+diff --git a/xbmc/windows/GUIWindowSystemInfo.cpp b/xbmc/windows/GUIWindowSystemInfo.cpp
-+index 6ff2391..ee73c88 100644
-+--- a/xbmc/windows/GUIWindowSystemInfo.cpp
-++++ b/xbmc/windows/GUIWindowSystemInfo.cpp
-+@@ -125,7 +125,6 @@ void CGUIWindowSystemInfo::FrameMove()
-+     SetControlLabel(i++, "%s: %s", 13160, NETWORK_GATEWAY_ADDRESS);
-+     SetControlLabel(i++, "%s: %s", 13161, NETWORK_DNS1_ADDRESS);
-+     SetControlLabel(i++, "%s: %s", 20307, NETWORK_DNS2_ADDRESS);
-+-    SetControlLabel(i++, "%s %s", 13295, SYSTEM_INTERNET_STATE);
-+   }
-+ 
-+   else if (m_section == CONTROL_BT_VIDEO)
-+-- 
-+2.5.0
-+
+Patches 0001-0036 must be committed together to avoid having
+incompatible package versions in buildroot.
+
+Regards, Bernd
+
+v4: package/kodi: switched up CMake, bumped to 17.1
+    package/libdvd*: static build is not needed anymore
+    various addon bumps and new optional packages for Kodi
+v3: fixed legal-info for libplatform & kodi-skin-confluence
+v2: added commit log to "package/kodi: add Kconfig option to make
+    TexturePacker optional" (Thomas)
+
+Bernd Kuhls (39):
+  package/libdvdcss: add Kodi-specific patches
+  package/libdvdread: add Kodi-specific patches
+  package/libdvdnav: add Kodi-specific patches
+  package/libplatform: bump version to 2.1.0
+  package/kodi-platform: bump version
+  package/libcec: bump version to 4.0.2
+  package/xmlstarlet: add host variant
+  package/kodi-jsonschemabuilder: new host package
+  package/kodi-texturepacker: new host package
+  package/kodi: bump to version 17.1-Krypton
+  package/kodi: add patch to disable online check
+  package/kodi-inputstream-rtmp: new package
+  package/kodi: move rtmp support to new addon kodi-inputstream-rtmp
+  package/kodi: add aarch64 support
+  package/kodi: add powerpc64 support
+  package/kodi: add mips64el support
+  package/kodi: add optional support for bluez5
+  package/kodi: libxslt is an optional package
+  package/kodi: add optional support for pulseaudio
+  package/kodi: add optional support for event clients
+  package/kodi: add optional support for lcms2
+  package/libsquish: remove deprecated package
+  package/kodi-pvr-*: mass version bump
+  package/kodi-pvr-mythtv: bump version to 4.15.0
+  package/kodi-pvr-nextpvr: bump version to 2.4.11
+  package/kodi-pvr-mediaportal-tvserver: needs locale support
+  package/kodi-adsp-basic: bump version
+  package/kodi-adsp-freesurround: bump version
+  package/kodi-audioencoder-*: mass version bump
+  package/kodi-audiodecoder-*: mass version bump
+  package/kodi-audiodecoder-timidity: bump version
+  package/kodi-screensaver-*: mass version bump
+  package/kodi-screensaver-rsxs: bump version
+  package/kodi-visualisation-*: mass version bump
+  package/kodi-visualisation-waveforhue: bump version
+  package/kodi-visualisation-shadertoy: bump version
+  package/kodi-inputstream-adaptive: new package
+  package/kodi-skin-confluence: new package
+  package/kodi: add Kconfig options to remove default skins
+
+ Config.in.legacy                                   |   15 +
+ DEVELOPERS                                         |    1 -
+ package/Config.in                                  |    1 -
+ package/kodi-adsp-basic/kodi-adsp-basic.hash       |    2 +-
+ package/kodi-adsp-basic/kodi-adsp-basic.mk         |    4 +-
+ .../kodi-adsp-freesurround.hash                    |    2 +-
+ .../kodi-adsp-freesurround.mk                      |    4 +-
+ .../kodi-audiodecoder-modplug.hash                 |    2 +-
+ .../kodi-audiodecoder-modplug.mk                   |    2 +-
+ .../kodi-audiodecoder-nosefart.hash                |    2 +-
+ .../kodi-audiodecoder-nosefart.mk                  |    2 +-
+ .../kodi-audiodecoder-opus.hash                    |    2 +-
+ .../kodi-audiodecoder-opus.mk                      |    2 +-
+ .../kodi-audiodecoder-sidplay.hash                 |    2 +-
+ .../kodi-audiodecoder-sidplay.mk                   |    2 +-
+ .../kodi-audiodecoder-snesapu.hash                 |    2 +-
+ .../kodi-audiodecoder-snesapu.mk                   |    2 +-
+ .../kodi-audiodecoder-stsound.hash                 |    2 +-
+ .../kodi-audiodecoder-stsound.mk                   |    2 +-
+ package/kodi-audiodecoder-timidity/Config.in       |    1 -
+ .../kodi-audiodecoder-timidity.hash                |    2 +-
+ .../kodi-audiodecoder-timidity.mk                  |    4 +-
+ .../kodi-audiodecoder-vgmstream.hash               |    2 +-
+ .../kodi-audiodecoder-vgmstream.mk                 |    2 +-
+ .../kodi-audioencoder-flac.hash                    |    2 +-
+ .../kodi-audioencoder-flac.mk                      |    2 +-
+ .../kodi-audioencoder-lame.hash                    |    2 +-
+ .../kodi-audioencoder-lame.mk                      |    2 +-
+ .../kodi-audioencoder-vorbis.hash                  |    2 +-
+ .../kodi-audioencoder-vorbis.mk                    |    2 +-
+ .../kodi-audioencoder-wav.hash                     |    2 +-
+ .../kodi-audioencoder-wav/kodi-audioencoder-wav.mk |    2 +-
+ package/kodi-inputstream-adaptive/Config.in        |    8 +
+ .../kodi-inputstream-adaptive.hash                 |    2 +
+ .../kodi-inputstream-adaptive.mk                   |   13 +
+ package/kodi-inputstream-rtmp/Config.in            |    7 +
+ .../kodi-inputstream-rtmp.hash                     |    2 +
+ .../kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk |   13 +
+ .../kodi-jsonschemabuilder.hash                    |    1 +
+ .../kodi-jsonschemabuilder.mk                      |   23 +
+ package/kodi-platform/kodi-platform.hash           |    2 +-
+ package/kodi-platform/kodi-platform.mk             |    2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.hash     |    2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.mk       |    4 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash     |    2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk       |    4 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash |    2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   |    4 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.hash       |    2 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.mk         |    4 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash |    2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   |    4 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash             |    2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk               |    4 +-
+ .../kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash   |    2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk |    4 +-
+ package/kodi-pvr-mediaportal-tvserver/Config.in    |    4 +
+ .../kodi-pvr-mediaportal-tvserver.hash             |    2 +-
+ .../kodi-pvr-mediaportal-tvserver.mk               |    4 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash       |    2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk         |    6 +-
+ ...epresentation-of-char_class_e-in-struct-t.patch |   48 -
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash     |    2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk       |    4 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.hash           |    2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.mk             |    4 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.hash           |    2 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk             |    4 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash     |    2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk       |    4 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.hash           |    2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.mk             |    4 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash   |    2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk     |    4 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash       |    2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk         |    4 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.hash             |    2 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.mk               |    4 +-
+ .../kodi-screensaver-asteroids.hash                |    2 +-
+ .../kodi-screensaver-asteroids.mk                  |    2 +-
+ .../kodi-screensaver-asterwave.hash                |    2 +-
+ .../kodi-screensaver-asterwave.mk                  |    2 +-
+ .../kodi-screensaver-biogenesis.hash               |    2 +-
+ .../kodi-screensaver-biogenesis.mk                 |    2 +-
+ .../kodi-screensaver-cpblobs.hash                  |    2 +-
+ .../kodi-screensaver-cpblobs.mk                    |    2 +-
+ .../kodi-screensaver-crystalmorph.hash             |    2 +-
+ .../kodi-screensaver-crystalmorph.mk               |    2 +-
+ .../kodi-screensaver-greynetic.hash                |    2 +-
+ .../kodi-screensaver-greynetic.mk                  |    2 +-
+ .../kodi-screensaver-matrixtrails.hash             |    2 +-
+ .../kodi-screensaver-matrixtrails.mk               |    2 +-
+ .../kodi-screensaver-pingpong.hash                 |    2 +-
+ .../kodi-screensaver-pingpong.mk                   |    2 +-
+ .../kodi-screensaver-planestate.hash               |    2 +-
+ .../kodi-screensaver-planestate.mk                 |    2 +-
+ .../kodi-screensaver-pyro.hash                     |    2 +-
+ .../kodi-screensaver-pyro/kodi-screensaver-pyro.mk |    2 +-
+ .../kodi-screensaver-rsxs/0001-cross-compile.patch |    2 +-
+ .../0002-fix-default-include-dir.patch             |   28 +
+ package/kodi-screensaver-rsxs/Config.in            |    1 +
+ .../kodi-screensaver-rsxs.hash                     |    2 +-
+ .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk |    5 +-
+ .../kodi-screensaver-stars.hash                    |    2 +-
+ .../kodi-screensaver-stars.mk                      |    2 +-
+ package/kodi-skin-confluence/Config.in             |    7 +
+ .../kodi-skin-confluence/kodi-skin-confluence.hash |    2 +
+ .../kodi-skin-confluence/kodi-skin-confluence.mk   |   25 +
+ .../0001-texturepacker.patch}                      |    0
+ package/kodi-texturepacker/kodi-texturepacker.hash |    1 +
+ package/kodi-texturepacker/kodi-texturepacker.mk   |   34 +
+ .../kodi-visualisation-fishbmc.hash                |    2 +-
+ .../kodi-visualisation-fishbmc.mk                  |    2 +-
+ .../kodi-visualisation-fountain.hash               |    2 +-
+ .../kodi-visualisation-fountain.mk                 |    2 +-
+ .../kodi-visualisation-goom.hash                   |    2 +-
+ .../kodi-visualisation-goom.mk                     |    2 +-
+ ...GLES2-also-search-for-egl-with-pkg-config.patch |    4 +-
+ package/kodi-visualisation-shadertoy/Config.in     |    1 -
+ .../kodi-visualisation-shadertoy.hash              |    2 +-
+ .../kodi-visualisation-shadertoy.mk                |    6 +-
+ .../kodi-visualisation-spectrum.hash               |    2 +-
+ .../kodi-visualisation-spectrum.mk                 |    2 +-
+ .../kodi-visualisation-waveforhue.hash             |    2 +-
+ .../kodi-visualisation-waveforhue.mk               |    4 +-
+ .../kodi-visualisation-waveform.hash               |    2 +-
+ .../kodi-visualisation-waveform.mk                 |    2 +-
+ package/kodi/0001-Fixup-include-path.patch         |   33 -
+ ....cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch |   42 +
+ package/kodi/0002-cmake-add-FindIconv.cmake.patch  |  171 +++
+ ...0003-ALSA-fix-device-change-event-support.patch |   67 -
+ ...e-dependency-on-gmp-and-libintl-from-Find.patch |   34 +
+ package/kodi/0004-disable-online-check.patch       |   65 +
+ ....cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch |   41 -
+ ...exturePacker-fix-compilation-with-gcc-4.6.patch |   53 -
+ package/kodi/0006-ffmpeg30.patch                   |  646 ---------
+ ...r-out-of-memory-errors-with-large-numbers.patch |   45 -
+ ...ding-issue-when-reading-certain-id3v1-tag.patch |   82 --
+ ...lib-cximage-6.0-fix-compilation-with-gcc6.patch | 1438 --------------------
+ ...10-curl-support-version-7.5.0-and-upwards.patch |   34 -
+ ...bmc_pvr_types.h-Fix-compilation-with-gcc6.patch |   30 -
+ package/kodi/0012-Fix_includes_in_amcodec.patch    |   38 -
+ package/kodi/Config.in                             |  120 +-
+ package/kodi/kodi.hash                             |    4 +-
+ package/kodi/kodi.mk                               |  359 +++--
+ package/libcec/libcec.hash                         |    2 +-
+ package/libcec/libcec.mk                           |    4 +-
+ ...css-better-handle-partial-read-in-libc_re.patch |   49 +
+ ...opy-value-psz_cache-to-dvdcss-psz_cachefi.patch |   33 +
+ .../0001-xbmc-dvdnav-allow-get-set-vm-state.patch  |  174 +++
+ ...-expose-dvdnav_get_vm-dvdnav_get_button_i.patch |   91 ++
+ .../0003-xbmc-dvdnav-detection-of-dvd-name.patch   |   34 +
+ ...-xbmc-dvdnav-skip-cell-when-unrecoverable.patch |   42 +
+ ...-added-reading-of-VTS_TMAPT-and-TITLE_C_A.patch |   37 +
+ .../0006-xbmc-dvdnav-various-safeguards.patch      |   46 +
+ ...-disallow-time-search-when-navigation-pro.patch |   34 +
+ .../0008-xbmc-dvdnav-additional-debug-log.patch    |   28 +
+ ...09-xbmc-dvdnav-add-timemap-to-time-search.patch |  131 ++
+ ...dnav-expose-dvdnav_jump_to_sector_by_time.patch |   35 +
+ package/libdvdnav/libdvdnav.mk                     |    5 +
+ ...01-xbmc-libdvdread-added-defines-includes.patch |   49 +
+ ...dread-don-t-do-symlink-resolution-on-kodi.patch |   31 +
+ ...read-kodi-VFS-doesn-t-support-opendir-use.patch |   46 +
+ package/libdvdread/libdvdread.mk                   |    5 +
+ .../0001-p8-platform-config-fix-lookup-paths.patch |   38 +
+ ...nfig.cmake-fix-paths-for-cross-compilatio.patch |   40 -
+ package/libplatform/libplatform.hash               |    2 +-
+ package/libplatform/libplatform.mk                 |    8 +-
+ package/libsquish/0001-kodi.patch                  |  327 -----
+ package/libsquish/Config.in                        |   13 -
+ package/libsquish/libsquish.hash                   |    2 -
+ package/libsquish/libsquish.mk                     |   37 -
+ package/xmlstarlet/xmlstarlet.mk                   |    3 +
+ 173 files changed, 1873 insertions(+), 3274 deletions(-)
+ create mode 100644 package/kodi-inputstream-adaptive/Config.in
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+ create mode 100644 package/kodi-inputstream-rtmp/Config.in
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+ create mode 120000 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
+ create mode 100644 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+ delete mode 100644 package/kodi-pvr-nextpvr/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
+ create mode 100644 package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
+ create mode 100644 package/kodi-skin-confluence/Config.in
+ create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.hash
+ create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.mk
+ rename package/{kodi/0002-texturepacker.patch => kodi-texturepacker/0001-texturepacker.patch} (100%)
+ create mode 120000 package/kodi-texturepacker/kodi-texturepacker.hash
+ create mode 100644 package/kodi-texturepacker/kodi-texturepacker.mk
+ delete mode 100644 package/kodi/0001-Fixup-include-path.patch
+ create mode 100644 package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+ create mode 100644 package/kodi/0002-cmake-add-FindIconv.cmake.patch
+ delete mode 100644 package/kodi/0003-ALSA-fix-device-change-event-support.patch
+ create mode 100644 package/kodi/0003-CMake-Remove-dependency-on-gmp-and-libintl-from-Find.patch
+ create mode 100644 package/kodi/0004-disable-online-check.patch
+ delete mode 100644 package/kodi/0004-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+ delete mode 100644 package/kodi/0005-native-TexturePacker-fix-compilation-with-gcc-4.6.patch
+ delete mode 100644 package/kodi/0006-ffmpeg30.patch
+ delete mode 100644 package/kodi/0007-exif-Fix-for-out-of-memory-errors-with-large-numbers.patch
+ delete mode 100644 package/kodi/0008-Fix-nullpadding-issue-when-reading-certain-id3v1-tag.patch
+ delete mode 100644 package/kodi/0009-lib-cximage-6.0-fix-compilation-with-gcc6.patch
+ delete mode 100644 package/kodi/0010-curl-support-version-7.5.0-and-upwards.patch
+ delete mode 100644 package/kodi/0011-xbmc_pvr_types.h-Fix-compilation-with-gcc6.patch
+ delete mode 100644 package/kodi/0012-Fix_includes_in_amcodec.patch
+ create mode 100644 package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch
+ create mode 100644 package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch
+ create mode 100644 package/libdvdnav/0001-xbmc-dvdnav-allow-get-set-vm-state.patch
+ create mode 100644 package/libdvdnav/0002-xbmc-dvdnav-expose-dvdnav_get_vm-dvdnav_get_button_i.patch
+ create mode 100644 package/libdvdnav/0003-xbmc-dvdnav-detection-of-dvd-name.patch
+ create mode 100644 package/libdvdnav/0004-xbmc-dvdnav-skip-cell-when-unrecoverable.patch
+ create mode 100644 package/libdvdnav/0005-xbmc-dvdnav-added-reading-of-VTS_TMAPT-and-TITLE_C_A.patch
+ create mode 100644 package/libdvdnav/0006-xbmc-dvdnav-various-safeguards.patch
+ create mode 100644 package/libdvdnav/0007-xbmc-dvdnav-disallow-time-search-when-navigation-pro.patch
+ create mode 100644 package/libdvdnav/0008-xbmc-dvdnav-additional-debug-log.patch
+ create mode 100644 package/libdvdnav/0009-xbmc-dvdnav-add-timemap-to-time-search.patch
+ create mode 100644 package/libdvdnav/0010-xbmc-dvdnav-expose-dvdnav_jump_to_sector_by_time.patch
+ create mode 100644 package/libdvdread/0001-xbmc-libdvdread-added-defines-includes.patch
+ create mode 100644 package/libdvdread/0002-xbmc-libdvdread-don-t-do-symlink-resolution-on-kodi.patch
+ create mode 100644 package/libdvdread/0003-xbmc-libdvdread-kodi-VFS-doesn-t-support-opendir-use.patch
+ create mode 100644 package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
+ delete mode 100644 package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+ delete mode 100644 package/libsquish/0001-kodi.patch
+ delete mode 100644 package/libsquish/Config.in
+ delete mode 100644 package/libsquish/libsquish.hash
+ delete mode 100644 package/libsquish/libsquish.mk
+
 -- 
 2.11.0
