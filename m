@@ -1,117 +1,84 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:22 +0100
-Subject: [Buildroot] [PATCH v4 01/39] package/libdvdcss: add Kodi-specific
-	patches
+Date: Thu, 23 Mar 2017 18:28:30 +0100
+Subject: [Buildroot] [PATCH v4 09/39] package/kodi-texturepacker: new host
+	package
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-2-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed for upcoming kodi version bump to 17.1-Krypton which will also
+switch the kodi build system to CMake.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...css-better-handle-partial-read-in-libc_re.patch | 49 ++++++++++++++++++++++
- ...opy-value-psz_cache-to-dvdcss-psz_cachefi.patch | 33 +++++++++++++++
- 2 files changed, 82 insertions(+)
- create mode 100644 package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch
- create mode 100644 package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch
+ package/kodi-texturepacker/kodi-texturepacker.hash |  1 +
+ package/kodi-texturepacker/kodi-texturepacker.mk   | 34 ++++++++++++++++++++++
+ package/kodi/kodi.hash                             |  1 +
+ 3 files changed, 36 insertions(+)
+ create mode 120000 package/kodi-texturepacker/kodi-texturepacker.hash
+ create mode 100644 package/kodi-texturepacker/kodi-texturepacker.mk
 
-diff --git a/package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch b/package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch
-new file mode 100644
-index 000000000..4d9820642
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.hash b/package/kodi-texturepacker/kodi-texturepacker.hash
+new file mode 120000
+index 000000000..92a75949b
 --- /dev/null
-+++ b/package/libdvdcss/0001-xbmc-libdvdcss-better-handle-partial-read-in-libc_re.patch
-@@ -0,0 +1,49 @@
-+From d113ac14b45961f958f4aa927c66b3c367f4637c Mon Sep 17 00:00:00 2001
-+From: Voyager1 <voyager@xbmc.org>
-+Date: Sat, 13 Feb 2016 20:44:21 +0100
-+Subject: [PATCH 1/2] [xbmc] [libdvdcss] better handle partial read in
-+ libc_read
-+
-+Downloaded from
-+https://github.com/xbmc/libdvdcss/commit/d113ac14b45961f958f4aa927c66b3c367f4637c
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/device.c | 20 ++++++++++++++------
-+ 1 file changed, 14 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/device.c b/src/device.c
-+index af735e0..1936b44 100644
-+--- a/src/device.c
-++++ b/src/device.c
-+@@ -608,13 +608,21 @@ static int libc_read ( dvdcss_t dvdcss, void *p_buffer, int i_blocks )
-+     off_t i_size, i_ret, i_ret_blocks;
-+ 
-+     i_size = (off_t)i_blocks * (off_t)DVDCSS_BLOCK_SIZE;
-+-    i_ret = read( dvdcss->i_fd, p_buffer, i_size );
-+-
-+-    if( i_ret < 0 )
-+-    {
-+-        print_error( dvdcss, "read error" );
-++    i_ret = 0;
-++    while (i_ret < i_size)
-++    {
-++      off_t i_r;
-++      i_r = read(dvdcss->i_fd, ((char*)p_buffer) + i_ret, i_size - i_ret);
-++      if (i_r < 0)
-++      {
-++        print_error(dvdcss, "read error");
-+         dvdcss->i_pos = -1;
-+-        return i_ret;
-++        return i_r;
-++      }
-++      if (i_r == 0)
-++        break;
-++
-++      i_ret += i_r;
-+     }
-+ 
-+     i_ret_blocks = i_ret / DVDCSS_BLOCK_SIZE;
-+-- 
-+2.8.1
-+
-diff --git a/package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch b/package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch
++++ b/package/kodi-texturepacker/kodi-texturepacker.hash
+@@ -0,0 +1 @@
++/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/package/kodi/kodi.hash
+\ No newline at end of file
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
 new file mode 100644
-index 000000000..4251eaf46
+index 000000000..bce73f7f0
 --- /dev/null
-+++ b/package/libdvdcss/0002-libdvdcss-Copy-value-psz_cache-to-dvdcss-psz_cachefi.patch
-@@ -0,0 +1,33 @@
-+From 2f12236bc1c92f73c21e973363f79eb300de603f Mon Sep 17 00:00:00 2001
-+From: Anton Fedchin <anightik@gmail.com>
-+Date: Mon, 15 Feb 2016 16:09:35 +0300
-+Subject: [PATCH 2/2] [libdvdcss] Copy value psz_cache to dvdcss->psz_cachefile
-+ if it exists.
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# kodi-texturepacker
++#
++################################################################################
 +
-+Downloaded from
-+https://github.com/xbmc/libdvdcss/commit/2f12236bc1c92f73c21e973363f79eb300de603f
++# Not possible to directly refer to kodi variables, because of
++# first/second expansion trickery...
++HOST_KODI_TEXTUREPACKER_VERSION = 17.1-Krypton
++HOST_KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(HOST_KODI_TEXTUREPACKER_VERSION))
++HOST_KODI_TEXTUREPACKER_LICENSE = GPLv2
++HOST_KODI_TEXTUREPACKER_LICENSE_FILES = LICENSE.GPL
++HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker
++HOST_KODI_TEXTUREPACKER_DEPENDENCIES += \
++	host-giflib \
++	host-libjpeg \
++	host-libpng \
++	host-lzo
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/libdvdcss.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
++HOST_KODI_TEXTUREPACKER_HOST_CXXFLAGS = "$(HOST_CXXFLAGS) -std=c++0x \
++	-DTARGET_POSIX -DTARGET_LINUX -D_LINUX -I$(@D)/xbmc/linux"
 +
-+diff --git a/src/libdvdcss.c b/src/libdvdcss.c
-+index 2f78b78..d09d2b3 100644
-+--- a/src/libdvdcss.c
-++++ b/src/libdvdcss.c
-+@@ -274,6 +274,11 @@ static int set_cache_directory( dvdcss_t dvdcss )
-+         }
-+ #endif /* ! defined( _WIN32 ) */
-+     }
-++    else
-++    {
-++      snprintf( dvdcss->psz_cachefile, PATH_MAX, "%s", psz_cache );
-++      dvdcss->psz_cachefile[PATH_MAX - 1] = '\0';
-++    }
-+ 
-+     /* Check that there is enough space for the cache directory path and the
-+      * block filename. The +1s are path separators. */
-+-- 
-+2.8.1
++HOST_KODI_TEXTUREPACKER_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS=$(HOST_KODI_TEXTUREPACKER_HOST_CXXFLAGS) \
++	-DCMAKE_MODULE_PATH=$(@D)/project/cmake/modules \
++	-DCORE_SOURCE_DIR=$(@D) \
++	-Wno-dev
 +
++HOST_KODI_TEXTUREPACKER_INSTALL_CMDS = \
++	$(INSTALL) -m 755 -D \
++		$(@D)/tools/depends/native/TexturePacker/TexturePacker \
++		$(HOST_DIR)/usr/bin/TexturePacker
++
++$(eval $(host-cmake-package))
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index b910af2d8..ae47c70c9 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,3 +1,4 @@
+ # Locally computed
+ sha256	7d82c8aff2715c83deecdf10c566e26105bec0473af530a1356d4c747ebdfd10	kodi-16.1-Jarvis.tar.gz
+ sha256 303f3903cbb57ccc2961f09cf3746505542bcb129a464f0687d7ca8601cebbee  kodi-jsonschemabuilder-17.1-Krypton.tar.gz
++sha256 303f3903cbb57ccc2961f09cf3746505542bcb129a464f0687d7ca8601cebbee  kodi-texturepacker-17.1-Krypton.tar.gz
 -- 
 2.11.0
