@@ -1,47 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 20:37:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ntp: fix build for toolchains
-	without ssp
-Message-ID: <20170323193700.30404-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 23 Mar 2017 21:38:48 +0100
+Subject: [Buildroot] Howto change group of /dev/snd when using devtmpfs
+In-Reply-To: <1490289749.16805.1.camel@embedded.rocks>
+References: <1490289749.16805.1.camel@embedded.rocks>
+Message-ID: <8bf1cfe0-1811-d0b9-69f6-f26877a95f06@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ntp defaults to use ssp support
-http://bk1.ntp.org/ntp-stable/sntp/harden/README
 
-by using these flags
-http://bk1.ntp.org/ntp-stable/sntp/harden/linux
 
-If the toolchain lacks SSP support this patch forces ntp to use an
-empty set of flags: http://bk1.ntp.org/ntp-stable/sntp/harden/default
+On 23-03-17 18:22, J?rg Krause wrote:
+> Hi,
+> 
+> I need some help to get the group changed for "/dev/snd" when using
+> devtmpfs. By default, "/dev/snd" and subnodes have the following
+> settings:
+> 
+> """
+> # ls -l /dev/snd/
+> total 0
+> crw-------    1 root     root      116,   0 Jan  1  1970 controlC0
+> crw-------    1 root     root      116,  16 Jan  1  1970 pcmC0D0p
+> crw-------    1 root     root      116,  25 Jan  1  1970 pcmC0D1c
+> crw-------    1 root     root      116,  33 Jan  1  1970 timer
+> """
+> 
+> I'd like to change the group to audio.
 
-Fixes
-http://autobuild.buildroot.net/results/1d5/1d58bd8745b22c8eb71fea4c7255d3ace69f6f7a/
+ That's exactly what mdev and (e)udev are meant for. devtmpfs creates device
+nodes automatically but only with defaults (default names, default user/group,
+default permissions). If you want to change anything, you need a helper.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ntp/ntp.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Of course, you can also write a script as /sbin/hotplug. But then I wonder why
+not use mdev - it hardly increases the busybox size.
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index b6eb1b186..e3e53a803 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -23,6 +23,12 @@ NTP_CONF_OPTS = \
- # 0002-ntp-syscalls-fallback.patch
- NTP_AUTORECONF = YES
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
-+NTP_CONF_OPTS += --with-locfile=linux
-+else
-+NTP_CONF_OPTS += --with-locfile=default
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- NTP_CONF_OPTS += --enable-linuxcaps
- NTP_DEPENDENCIES += libcap
+ Regards,
+ Arnout
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
