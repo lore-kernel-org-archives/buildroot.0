@@ -1,46 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 23 Mar 2017 10:00:59 -0300
-Subject: [Buildroot] [PATCH v2] libepoxy: OpenGL EGL and OpenGL ES
- dependencies are mandatory
-In-Reply-To: <20170322225648.5a32abeb@free-electrons.com>
-References: <20170322115643.48653-1-Vincent.Riera@imgtec.com>
- <20170322225648.5a32abeb@free-electrons.com>
-Message-ID: <ea393b5769dccf6047c895588cab7298@zacarias.com.ar>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Thu, 23 Mar 2017 14:11:52 +0100
+Subject: [Buildroot] [PATCH 1/2] leptonica: make package description
+	more accurate
+In-Reply-To: <20170322224550.24be1023@free-electrons.com>
+References: <1490164887-2707-1-git-send-email-gilles.talis@gmail.com>
+ <20170322224550.24be1023@free-electrons.com>
+Message-ID: <CAKcgs2yH-YOcSxZQ5Jms7b2bMkvJzdyHFxrVpdWzd=j-n_OOKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-03-22 18:56, Thomas Petazzoni wrote:
+Hi,
 
->> Also, libepoxy use dlsym to load a GLES2 library when EGL support is
->> enabled, see src/dispatch_common.c:
->> 
->> So, OpenGL ES dependency is also mandatory.
->> 
->> Fixes:
->>   
->> http://autobuild.buildroot.net/results/3eca5ba26a521f6cc5a611309ba066472af7769c
->>   
->> http://autobuild.buildroot.net/results/cf9ec7da196d70548ae1413e4a3730314f6434d6
->>   
->> http://autobuild.buildroot.net/results/069b80101afc4719db6d6d41cf5fc923be21ddc0
->> 
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> Reviewed-by: Romain Naour <romain.naour@gmail.com>
->> Tested-by: Romain Naour <romain.naour@gmail.com>
-> 
-> I would really like to hear about this patch from Gustavo. Gustavo,
-> could you review/comment?
+2017-03-22 22:45 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Wed, 22 Mar 2017 07:41:26 +0100, Gilles Talis wrote:
+>> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+>> ---
+>>  package/leptonica/Config.in | 4 +---
+>>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> Both patches applied, thanks!
+>
+> Note that we have a number of build failures on the leptonica package:
+>
+>   http://autobuild.buildroot.net/?reason=leptonica-1.74.1
+>
+> These occur in static linking scenarios, because leptonica configure
+> script is not using pkg-config to find the TIFF library, so it doesn't
+> know about the transitive dependencies of the TIFF library. Switching
+> to PKG_CHECK_MODULES() to discover the TIFF library would solve this I
+> believe.
+Will check this. Thanks for the tip!
 
-Hi all.
-According to my tests this isn't a hard requirement - libepoxy builds 
-and works fine with just EGL, in fact a PoC is pretty easy, just clone 
-http://repo.or.cz/buildroot-gz.git/shortlog/refs/heads/desktop, make 
-pc_x86_64_bios_wayland_defconfig, make menuconfig, disable GLES, build 
-and the resulting image which is wayland-weston-midori (hence gtk3, plus 
-some other gtk3 apps) works just fine.
-And by looking at the source i don't see where in dispatch_common.c the 
-lack of GLES errors out hard.
-Regards.
+Best regards,
+Gilles
