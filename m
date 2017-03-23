@@ -1,147 +1,187 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:25 +0100
-Subject: [Buildroot] [PATCH v4 04/39] package/libplatform: bump version to
-	2.1.0
+Date: Thu, 23 Mar 2017 18:28:23 +0100
+Subject: [Buildroot] [PATCH v4 02/39] package/libdvdread: add Kodi-specific
+	patches
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-5-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased patch 0001.
-
-Updated license info after
-https://github.com/Pulse-Eight/platform/commit/a1e5905874d5cdbce110344558d21a2810dead9c
+Downloaded from
+https://github.com/xbmc/libdvdread/commits/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-p8-platform-config-fix-lookup-paths.patch | 38 ++++++++++++++++++++
- ...nfig.cmake-fix-paths-for-cross-compilatio.patch | 40 ----------------------
- package/libplatform/libplatform.hash               |  2 +-
- package/libplatform/libplatform.mk                 |  8 ++---
- 4 files changed, 43 insertions(+), 45 deletions(-)
- create mode 100644 package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
- delete mode 100644 package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+ ...01-xbmc-libdvdread-added-defines-includes.patch | 49 ++++++++++++++++++++++
+ ...dread-don-t-do-symlink-resolution-on-kodi.patch | 31 ++++++++++++++
+ ...read-kodi-VFS-doesn-t-support-opendir-use.patch | 46 ++++++++++++++++++++
+ package/libdvdread/libdvdread.mk                   |  5 +++
+ 4 files changed, 131 insertions(+)
+ create mode 100644 package/libdvdread/0001-xbmc-libdvdread-added-defines-includes.patch
+ create mode 100644 package/libdvdread/0002-xbmc-libdvdread-don-t-do-symlink-resolution-on-kodi.patch
+ create mode 100644 package/libdvdread/0003-xbmc-libdvdread-kodi-VFS-doesn-t-support-opendir-use.patch
 
-diff --git a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch b/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
+diff --git a/package/libdvdread/0001-xbmc-libdvdread-added-defines-includes.patch b/package/libdvdread/0001-xbmc-libdvdread-added-defines-includes.patch
 new file mode 100644
-index 000000000..d487fd942
+index 000000000..c4abadd01
 --- /dev/null
-+++ b/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
-@@ -0,0 +1,38 @@
-+From 01b5478638c705af29f09ad4ed70289f70a21dcf Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 6 Feb 2017 14:04:47 +0100
-+Subject: [PATCH] p8-platform-config: fix lookup paths
++++ b/package/libdvdread/0001-xbmc-libdvdread-added-defines-includes.patch
+@@ -0,0 +1,49 @@
++From 9c1e962d20759a9b108ede7c08eb93687e54815c Mon Sep 17 00:00:00 2001
++From: Voyager1 <voyager@xbmc.org>
++Date: Sat, 20 Feb 2016 21:00:00 +0100
++Subject: [PATCH 1/3] [xbmc][libdvdread] added defines/includes
 +
-+Use the proper methods to find the headers and the library.
++Downloaded from
++https://github.com/xbmc/libdvdread/commit/9d47e8e4249187deda8c179c496c956bc475576f
 +
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ p8-platform-config.cmake.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ src/dvd_input.h  | 7 +++++++
++ src/dvd_reader.c | 3 +++
++ 2 files changed, 10 insertions(+)
 +
-+diff --git a/p8-platform-config.cmake.in b/p8-platform-config.cmake.in
-+index 47f30f1..f59418d 100644
-+--- a/p8-platform-config.cmake.in
-++++ b/p8-platform-config.cmake.in
-+@@ -10,7 +10,7 @@
-+ #
-+ # propagate these properties from one build system to the other
-+ set (p8-platform_VERSION "@p8-platform_VERSION_MAJOR at .@p8-platform_VERSION_MINOR@")
-+-set (p8-platform_INCLUDE_DIRS @p8-platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
-++find_path (p8-platform_INCLUDE_DIRS p8-platform/os.h)
-+ set (p8-platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
-+ set (p8-platform_LINKER_FLAGS "@p8-platform_LINKER_FLAGS@")
-+ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
-+@@ -19,7 +19,7 @@ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
-+ if(WIN32)
-+   set (p8-platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/p8-platform.lib")
-+ else(WIN32)
-+-  set (p8-platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lp8-platform")
-++  find_library (p8-platform_LIBRARY p8-platform)
-+ endif(WIN32)
-+ set (p8-platform_LIBRARIES ${p8-platform_LIBRARY} "@p8-platform_LIBRARIES@")
-+ mark_as_advanced (p8-platform_LIBRARY)
++diff --git a/src/dvd_input.h b/src/dvd_input.h
++index f981d45..3d33eb1 100644
++--- a/src/dvd_input.h
+++++ b/src/dvd_input.h
++@@ -34,6 +34,13 @@ typedef struct dvd_input_s *dvd_input_t;
++ #if defined( __MINGW32__ )
++ #   undef  lseek
++ #   define lseek  _lseeki64
+++#   undef  fseeko
+++#   define fseeko fseeko64
+++#   undef  ftello
+++#   define ftello ftello64
+++#   define flockfile(...)
+++#   define funlockfile(...)
+++#   define getc_unlocked getc
++ #   undef  off_t
++ #   define off_t off64_t
++ #   undef  stat
++diff --git a/src/dvd_reader.c b/src/dvd_reader.c
++index 4e112d3..5cc06d6 100644
++--- a/src/dvd_reader.c
+++++ b/src/dvd_reader.c
++@@ -33,6 +33,9 @@
++ #include <limits.h>         /* PATH_MAX */
++ #include <dirent.h>         /* opendir, readdir */
++ #include <ctype.h>          /* isalpha */
+++#ifndef WIN32
+++#include <paths.h>
+++#endif
++ 
++ /* misc win32 helpers */
++ #ifdef WIN32
 +-- 
-+2.7.4
++2.8.1
 +
-diff --git a/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch b/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
-deleted file mode 100644
-index 89f35bdb3..000000000
---- a/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 65ba437ed5514dd5762a796d349ed5db49e40fe7 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 29 Jul 2015 21:26:16 +0200
--Subject: [PATCH] platform-config.cmake: fix paths for cross-compilation
--
--Headers and library paths in platform-config.cmake must take into
--account ${CMAKE_FIND_ROOT_PATH} to work in cross-compilation.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- platform-config.cmake.in | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/platform-config.cmake.in b/platform-config.cmake.in
--index 7fe35fe..78b5085 100644
----- a/platform-config.cmake.in
--+++ b/platform-config.cmake.in
--@@ -10,16 +10,16 @@
-- #
-- # propagate these properties from one build system to the other
-- set (platform_VERSION "@platform_VERSION_MAJOR at .@platform_VERSION_MINOR@")
---set (platform_INCLUDE_DIRS @platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
--+set (platform_INCLUDE_DIRS ${CMAKE_FIND_ROOT_PATH}/@platform_INCLUDE_DIRS@ ${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/include)
-- set (platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
-- set (platform_LINKER_FLAGS "@platform_LINKER_FLAGS@")
-- set (platform_CONFIG_VARS "@platform_CONFIG_VARS@")
-- 
-- # libraries come from the build tree where this file was generated
-- if(WIN32)
---  set (platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/platform.lib")
--+  set (platform_LIBRARY "${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/platform.lib")
-- else(WIN32)
---  set (platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lplatform")
--+  set (platform_LIBRARY "-L${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lplatform")
-- endif(WIN32)
-- set (platform_LIBRARIES ${platform_LIBRARY} "@platform_LIBRARIES@")
-- mark_as_advanced (platform_LIBRARY)
---- 
--2.5.0
--
-diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
-index 8975dfd8a..e3d5ed5a9 100644
---- a/package/libplatform/libplatform.hash
-+++ b/package/libplatform/libplatform.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  3603ead8b16a48cb35b1e6dea330a693f10552b1a6ea036c5db9ec248cd8baf5  libplatform-feafe68e3e0b02c3261aefb3d711863ef6fadd38.tar.gz
-+sha256 88711f1b949285867538a0b2e4189532778e1515325dfa1851eae9d18b6affd9  libplatform-2.1.0.tar.gz
-diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
-index 6d549151d..d9cd582f7 100644
---- a/package/libplatform/libplatform.mk
-+++ b/package/libplatform/libplatform.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/libdvdread/0002-xbmc-libdvdread-don-t-do-symlink-resolution-on-kodi.patch b/package/libdvdread/0002-xbmc-libdvdread-don-t-do-symlink-resolution-on-kodi.patch
+new file mode 100644
+index 000000000..6b54d4a1d
+--- /dev/null
++++ b/package/libdvdread/0002-xbmc-libdvdread-don-t-do-symlink-resolution-on-kodi.patch
+@@ -0,0 +1,31 @@
++From 1d0163563ad49eccfb855e0307a23f2ce936518d Mon Sep 17 00:00:00 2001
++From: Voyager1 <voyager@xbmc.org>
++Date: Sat, 20 Feb 2016 21:01:36 +0100
++Subject: [PATCH 2/3] [xbmc][libdvdread] don't do symlink resolution on kodi
++
++Downloaded from
++https://github.com/xbmc/libdvdread/commit/6b8858102577a06646635ed80ee03d93c6b380be
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/dvd_reader.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/dvd_reader.c b/src/dvd_reader.c
++index 5cc06d6..3c31a1c 100644
++--- a/src/dvd_reader.c
+++++ b/src/dvd_reader.c
++@@ -432,8 +432,9 @@ static dvd_reader_t *DVDOpenCommon( const char *ppath,
++     if( !(path_copy = strdup( path ) ) )
++       goto DVDOpen_error;
++ 
++-#ifndef WIN32 /* don't have fchdir, and getcwd( NULL, ... ) is strange */
+++#if !defined(WIN32) && !defined(_XBMC) /* don't have fchdir, and getcwd( NULL, ... ) is strange */
++               /* Also WIN32 does not have symlinks, so we don't need this bit of code. */
+++              /* XBMC also doesn't need symlink resolution */
++ 
++     /* Resolve any symlinks and get the absolute dir name. */
++     {
++-- 
++2.8.1
++
+diff --git a/package/libdvdread/0003-xbmc-libdvdread-kodi-VFS-doesn-t-support-opendir-use.patch b/package/libdvdread/0003-xbmc-libdvdread-kodi-VFS-doesn-t-support-opendir-use.patch
+new file mode 100644
+index 000000000..1264e8ac4
+--- /dev/null
++++ b/package/libdvdread/0003-xbmc-libdvdread-kodi-VFS-doesn-t-support-opendir-use.patch
+@@ -0,0 +1,46 @@
++From ef03bba862a026078c91675af1841ec7a25d762f Mon Sep 17 00:00:00 2001
++From: Voyager1 <voyager@xbmc.org>
++Date: Sat, 20 Feb 2016 21:02:53 +0100
++Subject: [PATCH 3/3] [xbmc][libdvdread] kodi VFS doesn't support opendir, use
++ stat instead
++
++Downloaded from
++https://github.com/xbmc/libdvdread/commit/17d99db97e7b8f23077b342369d3c22a6250affd
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/dvd_reader.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/src/dvd_reader.c b/src/dvd_reader.c
++index 3c31a1c..3c5ec90 100644
++--- a/src/dvd_reader.c
+++++ b/src/dvd_reader.c
++@@ -692,6 +692,16 @@ static dvd_file_t *DVDOpenFileUDF( dvd_reader_t *dvd, const char *filename,
++  */
++ static int findDirFile( const char *path, const char *file, char *filename )
++ {
+++#if defined(_XBMC)
+++  struct stat fileinfo;
+++
+++	// no emulated opendir function in xbmc, so we'll
+++	// check if the file exists by stat'ing it ...
+++  sprintf(filename, "%s%s%s", path, ((path[strlen(path) - 1] == '/') ? "" : "/"), file);
+++
+++  if (stat(filename, &fileinfo) == 0) return 0;
+++
+++#else
++   DIR *dir;
++   struct dirent *ent;
++ 
++@@ -708,6 +718,7 @@ static int findDirFile( const char *path, const char *file, char *filename )
++     }
++   }
++   closedir(dir);
+++#endif // _XBMC
++   return -1;
++ }
++ 
++-- 
++2.8.1
++
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index adf79d852..c82f71e8d 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -13,4 +13,9 @@ LIBDVDREAD_LICENSE_FILES = COPYING
+ LIBDVDREAD_CONF_OPTS = --with-libdvdcss
+ LIBDVDREAD_DEPENDENCIES = libdvdcss host-pkgconf
  
--LIBPLATFORM_VERSION = feafe68e3e0b02c3261aefb3d711863ef6fadd38
--LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
--LIBPLATFORM_LICENSE = GPLv2+, PHP license v3.01
--LIBPLATFORM_LICENSE_FILES = src/os.h src/util/fstrcmp.c
-+LIBPLATFORM_VERSION = 2.1.0
-+LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,p8-platform-$(LIBPLATFORM_VERSION))
-+LIBPLATFORM_LICENSE = GPLv2+
-+LIBPLATFORM_LICENSE_FILES = src/os.h
- LIBPLATFORM_INSTALL_STAGING = YES
- 
- $(eval $(cmake-package))
++# enable Kodi-specific code
++ifeq ($(BR2_PACKAGE_KODI),y)
++LIBDVDREAD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -D_XBMC"
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.11.0
