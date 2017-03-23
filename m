@@ -1,138 +1,99 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 23 Mar 2017 08:54:46 +0100
-Subject: [Buildroot] [RFC PATCH v3 03/10] support/scripts: add fix-rpath
-	script to sanitize the rpath
-In-Reply-To: <1490255693-9134-1-git-send-email-wg@grandegger.com>
-References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
-Message-ID: <1490255693-9134-4-git-send-email-wg@grandegger.com>
+Date: Thu, 23 Mar 2017 08:54:43 +0100
+Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
+Message-ID: <1490255693-9134-1-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+Hello,
 
-This commit introduces the script "fix-rpath" able to scan a tree,
-detect ELF files, check their RPATH and fix it in a proper way.
-The RPATH fixup is done by the patchelf utility using the option
-"--make-rpath-relative <root-directory>".
+this is v3 of my RFC patch series to make the buildroot SDK (HOST_DIR)
+relocatable. It sanitizes the RPATH of all ELF files in the "target"
+and "host" tree using "patchelf --make-rpath-relative". I have started
+the mainlining process implementing "--make-rpath-relative" using
+GitHub pull request [1]... till now, no answer!
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
----
- support/scripts/fix-rpath | 103 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
+Furthermore this patch creates the script "relocate-sdk.sh" in the top
+directory of the "host" tree allowing to relocate the SDK after it has
+been moved to a new location. It replaces the old path with the new
+one in all text files identified by "file --mime-type". The location
+is stored in "usr/share/buildroot/sdk-location".
+
+Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
+libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
+
+Other Questions:
+
+- Why do we want relative RPATHs starting with "$ORIGIN" also for ELF
+  files in the target tree. "/lib" and "/usr/lib" have been removed
+  already. 
+
+Things not yet addressed:
+
+- "make toolchain" creates a toolchain tree which still has references
+  to the build system (in ELF and text files).  
+
+Changes since v2:
+
+- provide "qt.conf" to make "qmake" relocatable
+- sed now uses the separator "\" to substitute the directory path.
+  It's one of the few characters not allowed in file names. To
+  avoid interpreting it as escape character, the "read -r" is used.
+- The paranoia substituion check is done before doing the real
+  substituion.
+
+Changes since v1:
+
+- The name SDK has been chosen for the relocatabed "HOST_DIR" (instead
+  of toolchanin).
+- The patchelf version bump and patching are now done by 2 patches
+- No more helper functions are used in the Makefile to call "fix-rpath"
+  but added directly.
+- The staging tree is not touched any more... until we have a good
+  reason to do so. 
+- The sanitation is now performed by an optimized "fix-rpath" script.
+- The relocate-sdk script is now copied for support/misc to the
+  top directory of the host tree.
+
+[1] https://github.com/NixOS/patchelf/pull/118
+
+Samuel Martin (1):
+  support/scripts: add fix-rpath script to sanitize the rpath
+
+Wolfgang Grandegger (9):
+  package/patchelf: use most recent version as a base for rpath
+    sanitation
+  package/patchelf: add patch for rpath sanitation under a root
+    directory
+  core: sanitize RPATH in host tree at the very end of the build
+  core: sanitize RPATH in target tree at the end of the target
+    finalization
+  support/scripts: add reloacte-sdk.sh script for SDK relocation
+  core: install relocation script and location at the end of the build
+  external-toolchain: check if a buildroot SDK has already been
+    relocated
+  support/scripts: check-host-rpath now handles $ORIGIN as well
+  package/qt5base: provide "qt.conf" to make "qmake" relocatable
+
+ Makefile                                           |  10 +
+ ...to-make-the-rpath-relative-under-a-specif.patch | 315 +++++++++++++++++++++
+ package/patchelf/patchelf.hash                     |   2 +-
+ package/patchelf/patchelf.mk                       |   6 +-
+ package/qt5/qt5base/qt.conf.in                     |   6 +
+ package/qt5/qt5base/qt5base.mk                     |   8 +
+ support/misc/relocate-sdk.sh                       |  47 +++
+ support/scripts/check-host-rpath                   |   2 +-
+ support/scripts/fix-rpath                          | 103 +++++++
+ toolchain/helpers.mk                               |  15 +
+ .../toolchain-external/pkg-toolchain-external.mk   |   1 +
+ 11 files changed, 510 insertions(+), 5 deletions(-)
+ create mode 100644 package/patchelf/0001-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+ create mode 100644 package/qt5/qt5base/qt.conf.in
+ create mode 100755 support/misc/relocate-sdk.sh
  create mode 100755 support/scripts/fix-rpath
 
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-new file mode 100755
-index 0000000..5702b9a
---- /dev/null
-+++ b/support/scripts/fix-rpath
-@@ -0,0 +1,103 @@
-+#!/usr/bin/env bash
-+
-+# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+
-+usage() {
-+  cat <<EOF >&2
-+Usage:	${0} TREE_KIND
-+
-+Description:
-+
-+    This script scans a tree and sanitize ELF files' RPATH found in there.
-+
-+    Sanitization behaves the same whatever the kind of the processed tree,
-+    but the resulting RPATH differs. The rpath sanitization is done using
-+    "patchelf --make-rpath-relazive".
-+
-+Arguments:
-+
-+    TREE_KIND	Kind of tree to be processed.
-+		Allowed values: host, target
-+
-+Environment:
-+
-+    PATCHELF	patchelf program to use
-+		(default: HOST_DIR/usr/bin/patchelf)
-+EOF
-+}
-+
-+: ${PATCHELF:=${HOST_DIR}/usr/bin/patchelf}
-+
-+main() {
-+    local rootdir
-+    local tree="${1}"
-+    local find_args=( )
-+    local sanitize_extra_args=( )
-+
-+    case "${tree}" in
-+	host)
-+	    rootdir="${HOST_DIR}"
-+
-+	    # do not process the sysroot (only contains target binaries)
-+	    find_args+=( "-path" "${STAGING_DIR}" "-prune" "-o" )
-+
-+	    # do not process the external toolchain installation directory to
-+	    # avoid breaking it.
-+	    test "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" != "" && \
-+		find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
-+
-+	    # ELF files should not be in these sub-directories
-+	    find_args+=( "-path" "${STAGING_DIR}/usr/share/terminfo" "-prune" "-o" )
-+
-+	    # do not process the patchelf binary but a copy to work-around "file in use"
-+	    find_args+=( "-path" "${PATCHELF}" "-prune" "-o" )
-+	    cp "${PATCHELF}" "${PATCHELF}.__to_be_patched"
-+	    ;;
-+
-+	target)
-+	    rootdir="${TARGET_DIR}"
-+	    sanitize_extra_args+=( "--no-standard-lib-dirs" )
-+	    ;;
-+
-+	*)
-+	    usage
-+	    exit 1
-+	    ;;
-+    esac
-+
-+    find_args+=( "-type" "f" "-print" )
-+
-+    while read file ; do
-+	# check if it's an ELF file
-+	if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
-+	    # make files writable if necessary
-+	    changed=$(chmod -c u+w "${file}")
-+	    # call patchelf to sanitize the rpath
-+	    ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
-+	    # restore the original permission
-+	    test "${changed}" != "" && chmod u-w "${file}"
-+	fi
-+    done < <(find "${rootdir}" ${find_args[@]})
-+
-+    # Restore patched patchelf utility
-+    test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
-+
-+    # ignore errors
-+    return 0
-+}
-+
-+main ${@}
 -- 
 1.9.1
