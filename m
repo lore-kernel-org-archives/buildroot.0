@@ -1,51 +1,46 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 23 Mar 2017 17:37:50 +0000
-Subject: [Buildroot] [PATCH] openvpn: bump version to 2.4.1
-Message-ID: <20170323173750.24070-1-Vincent.Riera@imgtec.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Thu, 23 Mar 2017 18:55:23 +0100
+Subject: [Buildroot] Strange message
+In-Reply-To: <20170323182321.646a87dd@free-electrons.com>
+References: <1f799db0-e1ae-56f7-7361-8d3a1dd5d750@grandegger.com>
+ <20170323182321.646a87dd@free-electrons.com>
+Message-ID: <a193ef41-71e9-4640-2136-c903eedc48ce@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---disable-eurephia configure option doesn't exist, so remove it.
+Hallo,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Am 23.03.2017 um 18:23 schrieb Thomas Petazzoni:
+> Hello,
+>
+> On Thu, 23 Mar 2017 16:03:27 +0100, Wolfgang Grandegger wrote:
+>
+>> what does the message below mean:
+>>
+>>>>> qt5xmlpatterns 5.6.2 Fixing libtool files
+>> qt5xmlpatterns: installs files in /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot//opt/bdo/dcu_host
+>> make[1]: *** [/opt/bdo/dcu_host/build/qt5xmlpatterns-5.6.2/.stamp_staging_installed] Fehler 1
+>
+> The thing that it checks is if you're installing files in
+> $(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O) which is exactly what's going
+> on.
+>
+> Your O is /opt/bdo/dcu_host/, or your staging dir
+> is /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot/ and
+> therefore $(STAGING_DIR)/$(O)
+> is /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot//opt/bdo/dcu_host.
+> This generally indicates a bogus build system, because there's no
+> reason for a directory identical to $(O) to creep in into the
+> target/staging directories.
+>
+> See package/pkg-generic.mk for the implementation of
+> step_check_build_dir.
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 600c250..a03345e 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 6f23ba49a1dbeb658f49c7ae17d9ea979de6d92c7357de3d55cd4525e1b2f87e  openvpn-2.4.0.tar.xz
-+sha256 fde9e22c6df7a335d2d58c6a4d5967be76df173c766a5c51ece57fd044c76ee5  openvpn-2.4.1.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 5e3df59..a2e21f9 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.4.0
-+OPENVPN_VERSION = 2.4.1
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
-@@ -22,8 +22,7 @@ OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
- ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
- OPENVPN_CONF_OPTS += \
- 	--enable-small \
--	--disable-plugins \
--	--disable-eurephia
-+	--disable-plugins
- endif
- 
- # BusyBox 1.21+ places the ip applet in the "correct" place
--- 
-2.10.2
+OK, I see! Then it was my qt.conf which did break the build.
+
+Thanks,
+
+Wolfgang.
