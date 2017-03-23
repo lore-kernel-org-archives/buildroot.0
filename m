@@ -1,79 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:58 +0100
-Subject: [Buildroot] [PATCH v4 37/39] package/kodi-inputstream-adaptive: new
-	package
-In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-38-bernd.kuhls@t-online.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 23 Mar 2017 17:37:50 +0000
+Subject: [Buildroot] [PATCH] openvpn: bump version to 2.4.1
+Message-ID: <20170323173750.24070-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-inputstream-adaptive/Config.in                 |  8 ++++++++
- .../kodi-inputstream-adaptive.hash                          |  2 ++
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 13 +++++++++++++
- package/kodi/Config.in                                      |  1 +
- 4 files changed, 24 insertions(+)
- create mode 100644 package/kodi-inputstream-adaptive/Config.in
- create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
- create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+--disable-eurephia configure option doesn't exist, so remove it.
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-new file mode 100644
-index 000000000..d5fe5e61c
---- /dev/null
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
-+	bool "kodi-inputstream-adaptive"
-+	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  Kodi inputstream addon for several manifest types
-+
-+	  https://github.com/peak3d/inputstream.adaptive
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-new file mode 100644
-index 000000000..d3600eb19
---- /dev/null
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 7e3fbb9bac11777b2f553fce0f36f2dd463adbb956a957e6c000c7013202b9ad  kodi-inputstream-adaptive-v1.0.6.tar.gz
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-new file mode 100644
-index 000000000..bd3c34c0c
---- /dev/null
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-inputstream-adaptive
-+#
-+################################################################################
-+
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = v1.0.6
-+KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
-+KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPLv2+
-+KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index b7b284058..bf5d94f13 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -289,6 +289,7 @@ menu "Audio encoder addons"
- endmenu
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 600c250..a03345e 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 6f23ba49a1dbeb658f49c7ae17d9ea979de6d92c7357de3d55cd4525e1b2f87e  openvpn-2.4.0.tar.xz
++sha256 fde9e22c6df7a335d2d58c6a4d5967be76df173c766a5c51ece57fd044c76ee5  openvpn-2.4.1.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 5e3df59..a2e21f9 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- menu "Inputstream addons"
-+	source "package/kodi-inputstream-adaptive/Config.in"
- 	source "package/kodi-inputstream-rtmp/Config.in"
- endmenu
+-OPENVPN_VERSION = 2.4.0
++OPENVPN_VERSION = 2.4.1
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
+@@ -22,8 +22,7 @@ OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
+ ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
+ OPENVPN_CONF_OPTS += \
+ 	--enable-small \
+-	--disable-plugins \
+-	--disable-eurephia
++	--disable-plugins
+ endif
  
+ # BusyBox 1.21+ places the ip applet in the "correct" place
 -- 
-2.11.0
+2.10.2
