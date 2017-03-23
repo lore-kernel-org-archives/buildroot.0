@@ -1,46 +1,42 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 23 Mar 2017 18:55:23 +0100
-Subject: [Buildroot] Strange message
-In-Reply-To: <20170323182321.646a87dd@free-electrons.com>
-References: <1f799db0-e1ae-56f7-7361-8d3a1dd5d750@grandegger.com>
- <20170323182321.646a87dd@free-electrons.com>
-Message-ID: <a193ef41-71e9-4640-2136-c903eedc48ce@grandegger.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Thu, 23 Mar 2017 18:01:53 +0000
+Subject: [Buildroot] [PATCH 4/6] python-mwscrape: use documented license
+ abbreviation
+In-Reply-To: <20170323100041.45149296@free-electrons.com>
+References: <1490204935-13172-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1490204935-13172-4-git-send-email-rahul.bedarkar@imgtec.com>
+ <20170322213900.3ace3cc4@free-electrons.com>	<20170322223212.GA3591@free.fr>
+ <3e6647c5-8b47-d1c1-a0fa-3cbf120759ec@mind.be>,
+ <20170323100041.45149296@free-electrons.com>
+Message-ID: <90B0A5D74F9D1542B45328A4E51B57F0DB380B0A@PUMAIL01.pu.imgtec.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hallo,
+Hello,
 
-Am 23.03.2017 um 18:23 schrieb Thomas Petazzoni:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+
 > Hello,
->
-> On Thu, 23 Mar 2017 16:03:27 +0100, Wolfgang Grandegger wrote:
->
->> what does the message below mean:
->>
->>>>> qt5xmlpatterns 5.6.2 Fixing libtool files
->> qt5xmlpatterns: installs files in /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot//opt/bdo/dcu_host
->> make[1]: *** [/opt/bdo/dcu_host/build/qt5xmlpatterns-5.6.2/.stamp_staging_installed] Fehler 1
->
-> The thing that it checks is if you're installing files in
-> $(STAGING_DIR)/$(O) or $(TARGET_DIR)/$(O) which is exactly what's going
-> on.
->
-> Your O is /opt/bdo/dcu_host/, or your staging dir
-> is /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot/ and
-> therefore $(STAGING_DIR)/$(O)
-> is /opt/bdo/dcu_host/host/usr/x86_64-buildroot-linux-gnu/sysroot//opt/bdo/dcu_host.
-> This generally indicates a bogus build system, because there's no
-> reason for a directory identical to $(O) to creep in into the
-> target/staging directories.
->
-> See package/pkg-generic.mk for the implementation of
-> step_check_build_dir.
+> 
+> On Thu, 23 Mar 2017 09:25:11 +0100, Arnout Vandecappelle wrote:
+> 
+> > >> I think our idea was to keep using GPLv2/LGPLv2.1/GPLv3, but for all
+> > >> other licenses, use the SPDX code as much as possible.
+> > >>
+> > >> Maybe we should bite the bullet, and migrate all packages to use SPDX
+> > >> license codes?
+> > >
+> > > That would have my approval, yes.
+> >
+> >  Indeed, I've been thinking about doing this.
+> 
+> OK, so let's just do it :)
 
-OK, I see! Then it was my qt.conf which did break the build.
+I can have a look. But I think I won't be able to post initial version until end of next
+week because of my travel.
 
 Thanks,
-
-Wolfgang.
+Rahul
