@@ -1,61 +1,138 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 23 Mar 2017 08:54:51 +0100
-Subject: [Buildroot] [RFC PATCH v3 08/10] external-toolchain: check if a
-	buildroot SDK has already been relocated
+Date: Thu, 23 Mar 2017 08:54:46 +0100
+Subject: [Buildroot] [RFC PATCH v3 03/10] support/scripts: add fix-rpath
+	script to sanitize the rpath
 In-Reply-To: <1490255693-9134-1-git-send-email-wg@grandegger.com>
 References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
-Message-ID: <1490255693-9134-9-git-send-email-wg@grandegger.com>
+Message-ID: <1490255693-9134-4-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The location of the buildroot SDK is stored in the file "sdk-location"
-in "usr/share/buildroot". If it's content does not match the current
-SDK location, ask the user to run the script "relocate-sdk.sh" in the
-top directory once.
+From: Samuel Martin <s.martin49@gmail.com>
 
+This commit introduces the script "fix-rpath" able to scan a tree,
+detect ELF files, check their RPATH and fix it in a proper way.
+The RPATH fixup is done by the patchelf utility using the option
+"--make-rpath-relative <root-directory>".
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 ---
- toolchain/helpers.mk                                   | 15 +++++++++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk |  1 +
- 2 files changed, 16 insertions(+)
+ support/scripts/fix-rpath | 103 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
+ create mode 100755 support/scripts/fix-rpath
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 2f73ebb..5f6e3e0 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -394,3 +394,18 @@ check_toolchain_ssp = \
- gen_gdbinit_file = \
- 	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
- 	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+new file mode 100755
+index 0000000..5702b9a
+--- /dev/null
++++ b/support/scripts/fix-rpath
+@@ -0,0 +1,103 @@
++#!/usr/bin/env bash
 +
++# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
 +#
-+# Check if it's a buildroot toolchain and if it's already relocatable by
-+# reading and testing the toolchain location file
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
 +#
-+# $1: toolchain installation directory
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++# General Public License for more details.
 +#
-+check_buildroot_sdk_relocated = \
-+	if [ -r $(1)/share/buildroot/sdk-location ]; then \
-+		sdkroot=`dirname "$(1)"`; \
-+		if [ "`cat $(1)/share/buildroot/sdk-location`" != "$${sdkroot}" ]; then \
-+			echo "Please relocate the buildroot SDK by executing \"$${sdkroot}/relocate-sdk.sh\" once!" ; \
-+			exit 1 ; \
-+		fi \
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++
++usage() {
++  cat <<EOF >&2
++Usage:	${0} TREE_KIND
++
++Description:
++
++    This script scans a tree and sanitize ELF files' RPATH found in there.
++
++    Sanitization behaves the same whatever the kind of the processed tree,
++    but the resulting RPATH differs. The rpath sanitization is done using
++    "patchelf --make-rpath-relazive".
++
++Arguments:
++
++    TREE_KIND	Kind of tree to be processed.
++		Allowed values: host, target
++
++Environment:
++
++    PATCHELF	patchelf program to use
++		(default: HOST_DIR/usr/bin/patchelf)
++EOF
++}
++
++: ${PATCHELF:=${HOST_DIR}/usr/bin/patchelf}
++
++main() {
++    local rootdir
++    local tree="${1}"
++    local find_args=( )
++    local sanitize_extra_args=( )
++
++    case "${tree}" in
++	host)
++	    rootdir="${HOST_DIR}"
++
++	    # do not process the sysroot (only contains target binaries)
++	    find_args+=( "-path" "${STAGING_DIR}" "-prune" "-o" )
++
++	    # do not process the external toolchain installation directory to
++	    # avoid breaking it.
++	    test "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" != "" && \
++		find_args+=( "-path" "${TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR}" "-prune" "-o" )
++
++	    # ELF files should not be in these sub-directories
++	    find_args+=( "-path" "${STAGING_DIR}/usr/share/terminfo" "-prune" "-o" )
++
++	    # do not process the patchelf binary but a copy to work-around "file in use"
++	    find_args+=( "-path" "${PATCHELF}" "-prune" "-o" )
++	    cp "${PATCHELF}" "${PATCHELF}.__to_be_patched"
++	    ;;
++
++	target)
++	    rootdir="${TARGET_DIR}"
++	    sanitize_extra_args+=( "--no-standard-lib-dirs" )
++	    ;;
++
++	*)
++	    usage
++	    exit 1
++	    ;;
++    esac
++
++    find_args+=( "-type" "f" "-print" )
++
++    while read file ; do
++	# check if it's an ELF file
++	if ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1; then
++	    # make files writable if necessary
++	    changed=$(chmod -c u+w "${file}")
++	    # call patchelf to sanitize the rpath
++	    ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
++	    # restore the original permission
++	    test "${changed}" != "" && chmod u-w "${file}"
 +	fi
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 11a1bf5..b9ffa80 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -543,6 +543,7 @@ endif
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # kernel headers version, type of C library and all C library features.
- define $(2)_CONFIGURE_CMDS
-+	$$(Q)$$(call check_buildroot_sdk_relocated,$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
- 	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
++    done < <(find "${rootdir}" ${find_args[@]})
++
++    # Restore patched patchelf utility
++    test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
++
++    # ignore errors
++    return 0
++}
++
++main ${@}
 -- 
 1.9.1
