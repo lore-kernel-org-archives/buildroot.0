@@ -1,111 +1,162 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 23 Mar 2017 18:28:50 +0100
-Subject: [Buildroot] [PATCH v4 29/39] package/kodi-audioencoder-*: mass
-	version bump
+Date: Thu, 23 Mar 2017 18:29:00 +0100
+Subject: [Buildroot] [PATCH v4 39/39] package/kodi: add Kconfig options to
+	remove default skins
 In-Reply-To: <20170323172900.25458-1-bernd.kuhls@t-online.de>
 References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
-Message-ID: <20170323172900.25458-30-bernd.kuhls@t-online.de>
+Message-ID: <20170323172900.25458-40-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The skins estuary and estouchy are new in Kodi 17-Krypton and replace
+the skin confluence, used until Kodi 16-Jarvis.
+
+This patch allows to disable one or both of the new skins, it also takes
+care that at least one skin needs to be enabled. With this patch Kodi
+can be used only with skin confluence.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash     | 2 +-
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk       | 2 +-
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash     | 2 +-
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk       | 2 +-
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash | 2 +-
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk   | 2 +-
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash       | 2 +-
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk         | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+ package/kodi-skin-confluence/Config.in |  1 +
+ package/kodi/Config.in                 | 35 ++++++++++++++++++++
+ package/kodi/kodi.mk                   | 58 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 94 insertions(+)
 
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
-index f563f56b2..41ddeb4ee 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 4317a01414577885ef4a0ac4f8d95714b021ad15fc668cbf36eae2fdf400bb33 kodi-audioencoder-flac-v1.0.0.tar.gz
-+sha256 811dac5766dc9ef1a3447c55637edde55c5ddca1d583124e9312328152015ae5  kodi-audioencoder-flac-v1.1.0.tar.gz
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-index ca4882629..4835b0c10 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-skin-confluence/Config.in b/package/kodi-skin-confluence/Config.in
+index 08b656808..a623b03da 100644
+--- a/package/kodi-skin-confluence/Config.in
++++ b/package/kodi-skin-confluence/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_SKIN_CONFLUENCE
+ 	bool "kodi-skin-confluence"
++	select BR2_PACKAGE_KODI_SKIN_ENABLED
+ 	help
+ 	  Kodi confluence skin
  
--KODI_AUDIOENCODER_FLAC_VERSION = v1.0.0
-+KODI_AUDIOENCODER_FLAC_VERSION = v1.1.0
- KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
- KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
- KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
-index ffd38ba80..b93ae02e2 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 7fbdc6c9111431f49498157204d19dfa94bbf9e5f807b631e84129c6c491225e kodi-audioencoder-lame-v1.0.0.tar.gz
-+sha256 5118a2925bb0f7eca36b2d0f4d6822b45a8967c9fb91054bfaa8f83d21209c95  kodi-audioencoder-lame-v1.2.0.tar.gz
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-index 3e1836fc6..8b1b7cffd 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index b93d42bb1..351e625eb 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -64,6 +64,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GMP
++	select BR2_PACKAGE_KODI_SKIN_ESTUARY if !BR2_PACKAGE_KODI_SKIN_ENABLED
+ 	select BR2_PACKAGE_LIBASS
+ 	select BR2_PACKAGE_LIBCDIO
+ 	select BR2_PACKAGE_LIBCROSSGUID
+@@ -329,6 +330,40 @@ menu "Screensavers"
+ endmenu
  
--KODI_AUDIOENCODER_LAME_VERSION = v1.0.0
-+KODI_AUDIOENCODER_LAME_VERSION = v1.2.0
- KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
- KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
- KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-index 47f428c78..094b2fabc 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 65169e785d82f9081088df2693721f4a7e4b2d24f7e8b1e86b5f443206935303 kodi-audioencoder-vorbis-v1.0.0.tar.gz
-+sha256 f00c74f010b465d43e8206bcbe155785e1f34660ca010acff3b890595ea2352c  kodi-audioencoder-vorbis-v1.1.0.tar.gz
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-index 749ea8e17..5bb4e5ef1 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ menu "Skins"
++
++config BR2_PACKAGE_KODI_SKIN_ENABLED
++	bool
++
++choice
++	prompt "Default skin"
++
++config BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTUARY
++	bool "kodi-skin-estuary"
++	depends on BR2_PACKAGE_KODI_SKIN_ESTUARY
++
++config BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTOUCHY
++	bool "kodi-skin-estouchy"
++	depends on BR2_PACKAGE_KODI_SKIN_ESTOUCHY
++
++config BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE
++	bool "kodi-skin-confluence"
++	depends on BR2_PACKAGE_KODI_SKIN_CONFLUENCE
++
++endchoice
++
++config BR2_PACKAGE_KODI_SKIN_ESTUARY
++	bool "kodi-skin-estuary"
++	default y
++	help
++	  Default skin Estuary
++
++config BR2_PACKAGE_KODI_SKIN_ESTOUCHY
++	bool "kodi-skin-estouchy"
++	default y
++	select BR2_PACKAGE_KODI_SKIN_ENABLED
++	help
++	  Default skin Estouchy
++
+ 	source "package/kodi-skin-confluence/Config.in"
+ endmenu
  
--KODI_AUDIOENCODER_VORBIS_VERSION = v1.0.0
-+KODI_AUDIOENCODER_VORBIS_VERSION = v1.1.0
- KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
- KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
- KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-index 86eb13cc5..c6bbe79e1 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 d4e6de5786b9e2bd3fa5e09314c9a60a8daac32cf96e8aa84ab42cacf60f7094 kodi-audioencoder-wav-v1.0.0.tar.gz
-+sha256 f9b0f79c8364fb7ef584137031fceb8d2ab1af28e110cfe2a31932631cb8d36e  kodi-audioencoder-wav-v1.1.0.tar.gz
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-index 661ab44bd..1e5635833 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 7c4695668..1b90ba15e 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -348,6 +348,64 @@ define KODI_CLEAN_UNUSED_ADDONS
+ endef
+ KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_UNUSED_ADDONS
  
--KODI_AUDIOENCODER_WAV_VERSION = v1.0.0
-+KODI_AUDIOENCODER_WAV_VERSION = v1.1.0
- KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
- KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
- KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
++# Skins estuary and estouchy are installed by default and need to be
++# removed if they are disabled in buildroot
++ifeq ($(BR2_PACKAGE_KODI_SKIN_ESTUARY),y)
++define KODI_CLEAN_SKIN_ESTUARY
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.gif -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.jpg -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.png -delete
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_SKIN_ESTUARY
++else
++define KODI_REMOVE_SKIN_ESTUARY
++	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary
++	$(HOST_DIR)/usr/bin/xml ed -L \
++		-d "/addons/addon[text()='skin.estuary']" \
++		$(KODI_ADDON_MANIFEST)
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_REMOVE_SKIN_ESTUARY
++endif
++
++ifeq ($(BR2_PACKAGE_KODI_SKIN_ESTOUCHY),y)
++define KODI_CLEAN_SKIN_ESTOUCHY
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.gif -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.jpg -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.png -delete
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_SKIN_ESTOUCHY
++else
++define KODI_REMOVE_SKIN_ESTOUCHY
++	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy
++	$(HOST_DIR)/usr/bin/xml ed -L \
++		-d "/addons/addon[text()='skin.estouchy']" \
++		$(KODI_ADDON_MANIFEST)
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_REMOVE_SKIN_ESTOUCHY
++endif
++
++# The default value 'skin.estuary' is stored in
++# xbmc/system/settings/settings.xml.
++# If skin estuary is disabled this value needs to be changed to avoid
++# https://github.com/xbmc/xbmc/blob/32a6916059a0b14ab5fc65cedb17b2615c039918/xbmc/Application.cpp#L1124
++
++define KODI_SET_DEFAULT_SKIN_ESTOUCHY
++	$(SED) 's/skin.estuary/skin.estouchy/#g' $(TARGET_DIR)/usr/share/kodi/system/settings/settings.xml
++endef
++
++define KODI_SET_DEFAULT_SKIN_CONFLUENCE
++	$(SED) 's/skin.estuary/skin.confluence/#g' $(TARGET_DIR)/usr/share/kodi/system/settings/settings.xml
++	$(HOST_DIR)/usr/bin/xml ed -L -O --subnode "/addons" \
++		-t elem -n "addon" -v "skin.confluence" \
++		$(KODI_ADDON_MANIFEST)
++endef
++
++ifeq ($(BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTOUCHY),y)
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_SET_DEFAULT_SKIN_ESTOUCHY
++else ifeq ($(BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE),y)
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_SET_DEFAULT_SKIN_CONFLUENCE
++endif
++
+ define KODI_INSTALL_BR_WRAPPER
+ 	$(INSTALL) -D -m 0755 package/kodi/br-kodi \
+ 		$(TARGET_DIR)/usr/bin/br-kodi
 -- 
 2.11.0
