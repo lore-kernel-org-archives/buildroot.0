@@ -1,10 +1,9 @@
-From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Date: Fri, 24 Mar 2017 02:02:59 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-03-22
-In-Reply-To: <20170323072835.30CE220F42@mail.free-electrons.com>
-References: <20170323072835.30CE220F42@mail.free-electrons.com>
-Message-ID: <d1327c7c-2434-1635-357a-627bb9f08a71@cartelsol.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 23 Mar 2017 23:19:27 -0300
+Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
+	infrastructure
+References: <20170323090751.68c281d2@free-electrons.com>
+Message-ID: <58d4822f200b_4df43fece49a741c33146@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +12,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On 03/23/2017 08:28 AM, Thomas Petazzoni wrote:
->          arm |                      php-7.1.3 | NOK | http://autobuild.buildroot.net/results/616eacf5cd5a570ea2b8bba60dc42b109eaf8ed9 | ORPH
+On Thu, Mar 23, 2017 at 05:07 AM, Thomas Petazzoni wrote:
 
-I looked at this one. When checking for SQLBindCol in -lodbc it fails
-because ltdl is apparently not linked.
+>> error: [Errno 104] Connection reset by peer
+> 
+> Hum, do you know why this one happens? I definitely understand that
+> will a qemu is running, another qemu cannot bind its telnet server on
+> the same TCP port, but I don't see why it would cause a "Connection
+> reset by peer".
 
-This happens when we have BR2_STATIC_LIBS=y *and* we build with libtool.
-Enabling libtool switches off the internal libtld of unixodbc.
+It is not clear to me why this one happens.
 
-So with the internal version of libtld the build works. But this is a
-helper library for loading dynamic libraries, so umm, can this ever work?
+> Or is the logic of the test bogus, and if it doesn't manage to start
+> qemu, the test still continues, and it in fact connects to an already
+> running qemu instance from a different test, which then gets killed in
+> the middle ?
 
-The build failure ss reproduceable with the following defconfig:
+I redirected the output from Popen to stdout and stderr and when the error
+occurs only the messages from the first qemu appear before the Traceback:
 
-BR2_STATIC_LIBS=y
-BR2_PACKAGE_LIBTOOL=y
-BR2_PACKAGE_PHP=y
-BR2_PACKAGE_PHP_EXT_PDO=y
-BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC=y
+[output/TestPythonBase/2017-03-23 20:52:29] Starting
+QEMU waiting for connection on: disconnected:telnet::1234,server
+pulseaudio: set_sink_input_volume() failed
+pulseaudio: Reason: Invalid argument
+pulseaudio: set_sink_input_mute() failed
+pulseaudio: Reason: Invalid argument
+[output/TestPythonBase/2017-03-23 20:52:37] Cleaning up
+.[output/TestDropbear/2017-03-23 20:52:37] Starting
+[output/TestDropbear/2017-03-23 20:52:37] Cleaning up
+E
 
-Best wishes,
-Marcus
+So I suppose it could be a bogus logic.
+
+Anyway I think waiting for "waiting for connection" before connecting should be
+more reliable to know the qemu started than just trying to connect using
+telnet.
+
+Regards,
+Ricardo
