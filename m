@@ -1,33 +1,39 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 24 Mar 2017 09:47:43 +0100
-Subject: [Buildroot] [PATCH] upmpdcli: add user to the audio group
-Message-ID: <20170324084743.1233-1-joerg.krause@embedded.rocks>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 24 Mar 2017 11:29:32 +0000
+Subject: [Buildroot] [PATCH] cjson: bump version to v1.4.4
+Message-ID: <20170324112932.30041-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-upmpdcli runs as user and group upmpdcli. In order to allow it to access
-the ALSA devices add it to the audio group.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/upmpdcli/upmpdcli.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 83efa0530..a9b057d82 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -12,7 +12,7 @@ UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 39ca2cb..d6e5af7 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	3b362a6af73e10b0361119bc9fa9569578f9daa486cb487cad79322a34cd6965	cjson-v1.4.3.tar.gz
++sha256 59d77f80fc5bc401263ced056fa6da118bf12e2f9f1f35cc7bcaf749ac1f2bd8  cjson-v1.4.4.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 6872b10..d0f5b6a 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Upmpdcli only runs if user upmpdcli exists
- define UPMPDCLI_USERS
--	upmpdcli -1 upmpdcli -1 * - - - Upmpdcli MPD UPnP Renderer Front-End
-+	upmpdcli -1 upmpdcli -1 * - - audio Upmpdcli MPD UPnP Renderer Front-End
- endef
- 
- define UPMPDCLI_INSTALL_INIT_SYSV
+-CJSON_VERSION = v1.4.3
++CJSON_VERSION = v1.4.4
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
-2.12.1
+2.10.2
