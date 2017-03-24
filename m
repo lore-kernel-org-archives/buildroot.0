@@ -1,56 +1,60 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 24 Mar 2017 08:52:19 +0100
-Subject: [Buildroot] Howto change group of /dev/snd when using devtmpfs
-In-Reply-To: <8bf1cfe0-1811-d0b9-69f6-f26877a95f06@mind.be>
-References: <1490289749.16805.1.camel@embedded.rocks>
- <8bf1cfe0-1811-d0b9-69f6-f26877a95f06@mind.be>
-Message-ID: <1490341939.3829.1.camel@embedded.rocks>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 24 Mar 2017 08:53:21 +0100
+Subject: [Buildroot] [PATCH] busybox: fix mdev.conf
+Message-ID: <20170324075321.12384-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+mdev does not set "/dev/snd" and "/dev/input" group and permission
+propery, because with commit c3cf1e30a3022453311a7e9fe11d94c7a381640e
+(May 2013!) the behavior of mdev has changed.
 
-On Thu, 2017-03-23 at 21:38 +0100, Arnout Vandecappelle wrote:
-> 
-> On 23-03-17 18:22, J?rg Krause wrote:
-> > Hi,
-> > 
-> > I need some help to get the group changed for "/dev/snd" when using
-> > devtmpfs. By default, "/dev/snd" and subnodes have the following
-> > settings:
-> > 
-> > """
-> > # ls -l /dev/snd/
-> > total 0
-> > crw-------????1 root?????root??????116,???0 Jan??1??1970 controlC0
-> > crw-------????1 root?????root??????116,??16 Jan??1??1970 pcmC0D0p
-> > crw-------????1 root?????root??????116,??25 Jan??1??1970 pcmC0D1c
-> > crw-------????1 root?????root??????116,??33 Jan??1??1970 timer
-> > """
-> > 
-> > I'd like to change the group to audio.
-> 
-> ?That's exactly what mdev and (e)udev are meant for. devtmpfs creates
-> device
-> nodes automatically but only with defaults (default names, default
-> user/group,
-> default permissions). If you want to change anything, you need a
-> helper.
-> 
-> ?Of course, you can also write a script as /sbin/hotplug. But then I
-> wonder why
-> not use mdev - it hardly increases the busybox size.
+The device name is now taken directly from the uevent file and does no
+longer match the old rule.
 
-Thanks! I tried mdev before, but it didn't work. After some digging I
-found that the mdev.conf in Buildroot is outdated, because the syntax
-changed?[1] in Busybox 1.23.
+Fix the rules for "/dev/snd" and "/dev/input" according to the example
+given in [1].
 
-Strange, that nobody noticed this for two years...
+[1] http://lists.busybox.net/pipermail/busybox/2015-February/082297.html
 
-[1] http://lists.busybox.net/pipermail/busybox/2015-February/082297.htm
-l
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/busybox/mdev.conf | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-J?rg
+diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
+index 241c1c27d..eaece1b73 100644
+--- a/package/busybox/mdev.conf
++++ b/package/busybox/mdev.conf
+@@ -23,17 +23,17 @@ ttyS[0-9]*	root:root 660
+ ttyUSB[0-9]*	root:root 660
+ 
+ # alsa sound devices
+-pcm.*		root:audio 660 =snd/
+-control.*	root:audio 660 =snd/
+-midi.*		root:audio 660 =snd/
+-seq		root:audio 660 =snd/
+-timer		root:audio 660 =snd/
++snd/pcm.*	root:audio 660
++snd/control.*	root:audio 660
++snd/midi.*	root:audio 660
++snd/seq		root:audio 660
++snd/timer	root:audio 660
+ 
+ # input stuff
+-event[0-9]+	root:root 640 =input/
+-mice		root:root 640 =input/
+-mouse[0-9]	root:root 640 =input/
+-ts[0-9]		root:root 600 =input/
++input/event[0-9]+	root:root 640
++input/mice		root:root 640
++input/mouse[0-9]	root:root 640
++input/ts[0-9]		root:root 600
+ 
+ # load modules
+ $MODALIAS=.*	root:root 660 @modprobe "$MODALIAS"
+-- 
+2.12.1
