@@ -1,180 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Mar 2017 22:58:11 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Mar 2017 23:04:51 +0100
 Subject: [Buildroot] [PATCH 2/4] package/mke2img: use mkfs to generate
 	rootfs image
-In-Reply-To: <1490372432-879-2-git-send-email-sebastien.szymanski@armadeus.com>
+In-Reply-To: <ec6c517a-18a2-e6c3-a35e-4c794dad7aaa@mind.be>
 References: <1490372432-879-1-git-send-email-sebastien.szymanski@armadeus.com>
  <1490372432-879-2-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <ec6c517a-18a2-e6c3-a35e-4c794dad7aaa@mind.be>
+ <ec6c517a-18a2-e6c3-a35e-4c794dad7aaa@mind.be>
+Message-ID: <20170324230451.722ab8c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Fri, 24 Mar 2017 22:58:11 +0100, Arnout Vandecappelle wrote:
 
-On 24-03-17 17:20, S?bastien Szymanski wrote:
-> mkfs is now capable of generating rootfs images. Use mkfs intead of
-> genext2fs. Use the default mkfs' options but disable 64bit flag as it's
-> incompatible with older version of U-Boot.
+> > -    # Remove count- and time-based checks, they are not welcome
+> > -    # on embedded devices, where they can cause serious boot-time
+> > -    # issues by tremendously slowing down the boot.
+> > -    tune2fs -c 0 -i 0 "${image}"
+> > +    # Generate the filesystem
+> > +    mkfs_opts+=( -d "${root_dir}" -N ${nb_inodes} -T small -F )  
 > 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
-[snip]
-> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-> index b773aa9..01f04fc 100755
-> --- a/package/mke2img/mke2img
-> +++ b/package/mke2img/mke2img
-> @@ -10,9 +10,8 @@ set -e
->  main() {
->      local OPT OPTARG
->      local nb_blocks nb_inodes nb_res_blocks root_dir image gen rev label uuid
-> -    local -a genext2fs_opts
-> -    local -a tune2fs_opts
-> -    local tune2fs_O_opts
-> +    local -a mkfs_opts
-> +    local mkfs_O_opts
->  
->      # Default values
->      gen=2
-> @@ -62,80 +61,33 @@ main() {
->      fi
->      nb_inodes=$((nb_inodes+nb_extra_inodes))
->  
-> -    # Upgrade to rev1 if needed
-> -    if [ ${rev} -ge 1 ]; then
-> -        tune2fs_O_opts+=",filetype,sparse_super"
-> -    fi
-> -
-> -    # Add a journal for ext3 and above
-> -    if [ ${gen} -ge 3 ]; then
-> -        tune2fs_opts+=( -j -J size=1 )
-> -    fi
-> -
-> -    # Add ext4 specific features
-> -    if [ ${gen} -ge 4 ]; then
-> -        tune2fs_O_opts+=",extents,uninit_bg,dir_index"
-> -    fi
-> +    # Disable 64bit flag as it's incompatible with older U-Boot versions
-> +    mkfs_O_opts+=",^64bit"
+>  I have a small preference to specify the options explicitly instead of -T small
+> (i.e. -b 1024 -I 128).
 
- This is a bit unfortunate. Actually, reading the man page, it shouldn't even be
-needed: if the filesystem is less than 4TB, then mke2fs will not use 64bit. And
-if it's larger than 4TB, you just can't create it without the 64bit option...
+What do we force a block size of 1 KB ? 1 KB is really a terrible
+choice for most filesystem sizes in nowadays storage devices, and 4 KB
+is often much more appropriate.
 
->  
->      # Add our -O options (there will be at most one leading comma, remove it)
-> -    if [ -n "${tune2fs_O_opts}" ]; then
-> -        tune2fs_opts+=( -O "${tune2fs_O_opts#,}" )
-> +    if [ -n "${mkfs_O_opts}" ]; then
-> +        mkfs_opts+=( -O "${mkfs_O_opts#,}" )
+mkfs.ext234 is capable of selecting a good block size automatically, so
+why should we force a block size here?
 
- Since now the ^64bit is the only -O option, and it's always there, you can just
-use an unconditional
+See:
 
-    mkfs_opts+=( -O ^64bit )
+      -b block-size
+              Specify  the  size  of blocks in bytes.  Valid block-size values
+              are 1024, 2048 and 4096 bytes per block.  If omitted, block-size
+              is  heuristically  determined  by  the  filesystem  size and the
+              expected usage of the filesystem (see the -T option).
 
->      fi
->  
->      # Add the label if specified
->      if [ -n "${label}" ]; then
-> -        tune2fs_opts+=( -L "${label}" )
-> +        mkfs_opts+=( -L "${label}" )
->      fi
->  
-> -    # Generate the filesystem
-> -    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
-> -    if [ -n "${nb_res_blocks}" ]; then
-> -        genext2fs_opts+=( -m ${nb_res_blocks} )
-> -    fi
-> -    genext2fs "${genext2fs_opts[@]}" "${image}"
-> -
-> -    # genext2fs does not generate a UUID, but fsck will whine if one
-> -    # is missing, so we need to add a UUID.
-> -    # Of course, this has to happen _before_ we run fsck.
-> -    # Also, some ext4 metadata are based on the UUID, so we must
-> -    # set it before we can convert the filesystem to ext4.
-> -    # If the user did not specify a UUID, we generate a random one.
-> +    # If the user did not specify a UUID, mkfs will generate a random one.
->      # Although a random UUID may seem bad for reproducibility, there
->      # already are so many things that are not reproducible in a
->      # filesystem: file dates, file ordering, content of the files...
+So I would not set -T small, and I would not pass any -b or -I option.
 
- Hm, this becomes less and less true... With BR2_REPRODUCIBLE, the file dates
-and content should be fixed. So if only we can also fix the ordering, then the
-ext2 could also be reproducible... But that's not for this patch of course.
+Best regards,
 
-> -    tune2fs -U "${uuid:-random}" "${image}"
-> -
-> -    # Upgrade the filesystem
-> -    if [ ${#tune2fs_opts[@]} -ne 0 ]; then
-> -        tune2fs "${tune2fs_opts[@]}" "${image}"
-> +    if [ -n "${UUID}" ]; then
-> +        mkfs_opts+=( -U "${UUID}" )
->      fi
->  
-> -    # After changing filesystem options, running fsck is required
-> -    # (see: man tune2fs). Running e2fsck in other cases will ensure
-> -    # coherency of the filesystem, although it is not required.
-> -    # 'e2fsck -pDf' means:
-> -    #  - automatically repair
-> -    #  - optimise and check for duplicate entries
-> -    #  - force checking
-> -    # Sending output to oblivion, as e2fsck can be *very* verbose,
-> -    # especially with filesystems generated by genext2fs.
-> -    # Exit codes 1 & 2 are OK, it means fs errors were successfully
-> -    # corrected, hence our little trick with $ret.
-> -    ret=0
-> -    e2fsck -pDf "${image}" >/dev/null || ret=$?
-> -    case ${ret} in
-> -       0|1|2) ;;
-> -       *)   errorN ${ret} "failed to run e2fsck on '%s' (ext%d)\n" \
-> -                   "${image}" ${gen}
-> -    esac
-> -    printf "\n"
-> -    trace "e2fsck was successfully run on '%s' (ext%d)\n" "${image}" ${gen}
-> -    printf "\n"
-> -
-> -    # Remove count- and time-based checks, they are not welcome
-> -    # on embedded devices, where they can cause serious boot-time
-> -    # issues by tremendously slowing down the boot.
-> -    tune2fs -c 0 -i 0 "${image}"
-> +    # Generate the filesystem
-> +    mkfs_opts+=( -d "${root_dir}" -N ${nb_inodes} -T small -F )
-
- I have a small preference to specify the options explicitly instead of -T small
-(i.e. -b 1024 -I 128).
-
- Regards,
- Arnout
-
-> +    if [ -n "${nb_res_blocks}" ]; then
-> +        mkfs_opts+=( -m ${nb_res_blocks} )
-> +    fi
-> +    mkfs.ext${gen} "${mkfs_opts[@]}" "${image}" "${nb_blocks}"
->  }
->  
->  help() {
-> diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
-> index 9de387a..ead9d70 100644
-> --- a/package/mke2img/mke2img.mk
-> +++ b/package/mke2img/mke2img.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
-> +HOST_MKE2IMG_DEPENDENCIES = host-e2fsprogs
->  
->  define HOST_MKE2IMG_INSTALL_CMDS
->  	$(INSTALL) -D -m 0755 package/mke2img/mke2img $(HOST_DIR)/usr/bin/mke2img
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
