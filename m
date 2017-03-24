@@ -1,148 +1,266 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Mar 2017 21:38:50 +0100
-Subject: [Buildroot] [PATCH v2,1/2] libmediaart: new package
-Message-ID: <1490387931-113759-1-git-send-email-fontaine.fabrice@gmail.com>
+Date: Fri, 24 Mar 2017 21:38:51 +0100
+Subject: [Buildroot] [PATCH v2,2/2] rygel: new package
+In-Reply-To: <1490387931-113759-1-git-send-email-fontaine.fabrice@gmail.com>
+References: <1490387931-113759-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <1490387931-113759-2-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Library tasked with managing, extracting and handling media art caches
+Rygel is a home media solution (UPnP AV MediaServer) that allows you to
+easily share audio, video and pictures to other devices.
 
-https://github.com/GNOME/libmediaart
+Additionally, media player software may use Rygel to become a
+MediaRenderer that may be controlled remotely by a UPnP or DLNA
+Controller.
+
+Rygel achieves interoperability with other devices in the market by
+trying to conform to the very strict requirements of DLNA and by
+converting media on-the-fly to formats that client devices can handle.
+
+Most Rygel functionality is implemented through a plug-in mechanism.
+
+https://wiki.gnome.org/Projects/Rygel
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
 Changes v1 -> v2 (after review of Rahul Bedarkar):
- - Update version from 1.9.0 to 1.9.1
- - Update license from LGPLv2+ to LGPLv2.1+
- - Add a link to libmediaart github repository
+ - Use tab to indent help in Config.in
+ - Add a link to rygel website
+ - Update version from 0.33 to 0.34
+ - Update license from LGPLv2+ to "LGPLv2.1+, CC-BY-SA 3.0 (logo)"
+ - Add a comment on missing COPYING.logo in archive
 
- package/Config.in                    |  1 +
- package/libmediaart/Config.in        | 44 ++++++++++++++++++++++++++++++++++++
- package/libmediaart/libmediaart.hash |  2 ++
- package/libmediaart/libmediaart.mk   | 40 ++++++++++++++++++++++++++++++++
- 4 files changed, 87 insertions(+)
- create mode 100644 package/libmediaart/Config.in
- create mode 100644 package/libmediaart/libmediaart.hash
- create mode 100644 package/libmediaart/libmediaart.mk
+ package/Config.in           |  1 +
+ package/rygel/Config.in     | 51 +++++++++++++++++++++++++++++++
+ package/rygel/S99rygel      | 37 +++++++++++++++++++++++
+ package/rygel/rygel.hash    |  2 ++
+ package/rygel/rygel.mk      | 73 +++++++++++++++++++++++++++++++++++++++++++++
+ package/rygel/rygel.service | 10 +++++++
+ 6 files changed, 174 insertions(+)
+ create mode 100644 package/rygel/Config.in
+ create mode 100644 package/rygel/S99rygel
+ create mode 100644 package/rygel/rygel.hash
+ create mode 100644 package/rygel/rygel.mk
+ create mode 100644 package/rygel/rygel.service
 
 diff --git a/package/Config.in b/package/Config.in
-index 41fe676..612270f 100644
+index 612270f..05e35c6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1020,6 +1020,7 @@ menu "Graphics"
- 	source "package/libglu/Config.in"
- 	source "package/libgtk2/Config.in"
- 	source "package/libgtk3/Config.in"
-+	source "package/libmediaart/Config.in"
- 	source "package/libmng/Config.in"
- 	source "package/libpng/Config.in"
- 	source "package/libqrencode/Config.in"
-diff --git a/package/libmediaart/Config.in b/package/libmediaart/Config.in
+@@ -1639,6 +1639,7 @@ endif
+ 	source "package/rsync/Config.in"
+ 	source "package/rtorrent/Config.in"
+ 	source "package/rtptools/Config.in"
++	source "package/rygel/Config.in"
+ 	source "package/samba4/Config.in"
+ 	source "package/sconeserver/Config.in"
+ 	source "package/ser2net/Config.in"
+diff --git a/package/rygel/Config.in b/package/rygel/Config.in
 new file mode 100644
-index 0000000..5b6b6a7
+index 0000000..b3a37ea
 --- /dev/null
-+++ b/package/libmediaart/Config.in
-@@ -0,0 +1,44 @@
-+config BR2_PACKAGE_LIBMEDIAART
-+	bool "libmediaart"
-+	depends on BR2_USE_MMU # glib2
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	select BR2_PACKAGE_LIBGLIB2
++++ b/package/rygel/Config.in
+@@ -0,0 +1,51 @@
++config BR2_PACKAGE_RYGEL
++	bool "rygel"
++	depends on BR2_USE_WCHAR # gupnp-av
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gupnp-av
++	depends on BR2_USE_MMU # gupnp-av
++	select BR2_PACKAGE_GUPNP_AV
++	select BR2_PACKAGE_LIBGEE
++	select BR2_PACKAGE_LIBMEDIAART
++	select BR2_PACKAGE_SQLITE
 +	help
-+	  Library tasked with managing, extracting and handling media
-+	  art caches
++	  Rygel is a home media solution (UPnP AV MediaServer) that
++	  allows you to easily share audio, video and pictures to other
++	  devices.
 +
-+	  https://github.com/GNOME/libmediaart
++	  Additionally, media player software may use Rygel to become a
++	  MediaRenderer that may be controlled remotely by a UPnP or
++	  DLNA Controller.
 +
-+comment "libmediaart needs a toolchain w/ wchar, threads"
++	  Rygel achieves interoperability with other devices in the
++	  market by trying to conform to the very strict requirements of
++	  DLNA and by converting media on-the-fly to formats that client
++	  devices can handle.
++
++	  Most Rygel functionality is implemented through a plug-in
++	  mechanism.
++
++	  https://wiki.gnome.org/Projects/Rygel
++
++comment "rygel needs a toolchain w/ wchar, threads"
 +	depends on BR2_USE_MMU
 +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+if BR2_PACKAGE_LIBMEDIAART
++if BR2_PACKAGE_RYGEL
 +
 +choice
-+	prompt "media art backend"
-+	default BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
++	prompt "media engine"
++	default BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
 +
-+config BR2_PACKAGE_MEDIAART_BACKEND_NONE
-+	bool "none"
-+	help
-+	  With no backend, libmediaart will not be able to process MP3
-+	  album art.
++config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE
++	bool "simple"
 +
-+config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
-+	bool "gdk-pixbuf"
++config BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1
++	bool "gstreamer1"
 +	select BR2_PACKAGE_GDK_PIXBUF
-+
-+config BR2_PACKAGE_MEDIAART_BACKEND_QT
-+	bool "Qt"
-+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
-+
-+comment "Qt backend depends on Qt or Qt5"
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
++	select BR2_PACKAGE_GUPNP_DLNA
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
 +
 +endchoice
 +
-+endif # BR2_PACKAGE_MEDIAART
-diff --git a/package/libmediaart/libmediaart.hash b/package/libmediaart/libmediaart.hash
++endif # BR2_PACKAGE_RYGEL
+diff --git a/package/rygel/S99rygel b/package/rygel/S99rygel
 new file mode 100644
-index 0000000..46e4035
+index 0000000..ee832e9
 --- /dev/null
-+++ b/package/libmediaart/libmediaart.hash
++++ b/package/rygel/S99rygel
+@@ -0,0 +1,37 @@
++#!/bin/sh
++
++NAME=rygel
++PIDFILE=/var/run/$NAME.pid
++DAEMON=/usr/bin/$NAME
++
++start() {
++	printf "Starting $NAME: "
++	start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping $NAME: "
++	start-stop-daemon -K -q -p $PIDFILE
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart|reload}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
+new file mode 100644
+index 0000000..40a17d4
+--- /dev/null
++++ b/package/rygel/rygel.hash
 @@ -0,0 +1,2 @@
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/libmediaart/1.9/libmediaart-1.9.1.sha256sum:
-+sha256	5b14aa4e0cc84eaec57b6cb28f39092d503fdaecf36d5d165fac37583b7fe949	libmediaart-1.9.1.tar.xz
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.34/rygel-0.34.0.sha256sum:
++sha256	fbb2d46cbe4e750df6610b4c66b2278f06d1f71a257c7903e676ccb394dad418	rygel-0.34.0.tar.xz
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
 new file mode 100644
-index 0000000..a566a4b
+index 0000000..4b58488
 --- /dev/null
-+++ b/package/libmediaart/libmediaart.mk
-@@ -0,0 +1,40 @@
++++ b/package/rygel/rygel.mk
+@@ -0,0 +1,73 @@
 +################################################################################
 +#
-+# libmediaart
++# rygel
 +#
 +################################################################################
 +
-+LIBMEDIAART_VERSION_MAJOR = 1.9
-+LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).1
-+LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
-+LIBMEDIAART_SITE = \
-+	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
-+LIBMEDIAART_LICENSE = LGPLv2.1+
-+LIBMEDIAART_LICENSE_FILES = COPYING
-+LIBMEDIAART_INSTALL_STAGING = YES
-+LIBMEDIAART_DEPENDENCIES = libglib2
-+LIBMEDIAART_CONF_OPTS = --disable-unit-tests
++RYGEL_VERSION_MAJOR = 0.34
++RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).0
++RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
++RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
++# COPYING.logo is in the git repository but not in the archive
++RYGEL_LICENSE = LGPLv2.1+, CC-BY-SA 3.0 (logo)
++RYGEL_LICENSE_FILES = COPYING
++RYGEL_DEPENDENCIES = \
++	gupnp-av \
++	libgee \
++	libmediaart \
++	sqlite
++RYGEL_INSTALL_STAGING = YES
 +
-+ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF),y)
-+LIBMEDIAART_DEPENDENCIES += gdk-pixbuf
-+LIBMEDIAART_CONF_OPTS += \
-+	--enable-gdkpixbuf \
-+	--disable-qt
-+else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_QT),y)
-+# qt5 needs c++11 (since qt-5.7)
-+ifeq ($(BR2_QT5_VERSION_LATEST),y)
-+LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++RYGEL_CONF_OPTS += \
++	--disable-apidocs \
++	--disable-coverage \
++	--disable-example-plugins \
++	--enable-external-plugin \
++	--enable-lms-plugin \
++	--enable-mpris-plugin \
++	--enable-ruih-plugin \
++	--disable-tracker-plugin
++
++ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
++RYGEL_DEPENDENCIES += gdk-pixbuf
 +endif
-+LIBMEDIAART_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_QT),qt) \
-+	$(if $(BR2_PACKAGE_QT5),qt5base)
-+LIBMEDIAART_CONF_OPTS += \
-+	--disable-gdkpixbuf \
-+	--enable-qt
-+else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_NONE),y)
-+LIBMEDIAART_CONF_OPTS += \
-+	--disable-gdkpixbuf \
-+	--disable-qt
++
++ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_GSTREAMER1),y)
++RYGEL_CONF_OPTS += \
++	--with-media-engine=gstreamer \
++	--enable-playbin-plugin \
++	--enable-media_export-plugin \
++	--enable-gst-launch-plugin
++RYGEL_DEPENDENCIES += \
++	gupnp-dlna \
++	gst1-plugins-base \
++	gstreamer1
++else ifeq ($(BR2_PACKAGE_RYGEL_MEDIA_ENGINE_SIMPLE),y)
++RYGEL_CONF_OPTS += \
++	--with-media-engine=simple \
++	--disable-playbin-plugin \
++	--disable-media_export-plugin \
++	--disable-gst-launch-plugin
 +endif
++
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++RYGEL_CONF_OPTS += --with-ui
++RYGEL_DEPENDENCIES += libgtk3
++else
++RYGEL_CONF_OPTS += --without-ui
++endif
++
++define RYGEL_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/rygel/S99rygel \
++		$(TARGET_DIR)/etc/init.d/S99rygel
++endef
++
++define RYGEL_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/rygel/rygel.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/rygel.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/rygel.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rygel.service
++endef
 +
 +$(eval $(autotools-package))
+diff --git a/package/rygel/rygel.service b/package/rygel/rygel.service
+new file mode 100644
+index 0000000..6ae8ee7
+--- /dev/null
++++ b/package/rygel/rygel.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Rygel DLNA server
++After=network.target
++
++[Service]
++ExecStart=/usr/bin/rygel
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
 -- 
 2.5.0
