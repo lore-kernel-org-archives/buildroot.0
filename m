@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Mar 2017 22:35:31 +0100
-Subject: [Buildroot] [PATCH 1/4] fs/ext2: Remove support for
- auto-calculation of rootfs size
-In-Reply-To: <1490372432-879-1-git-send-email-sebastien.szymanski@armadeus.com>
+Date: Fri, 24 Mar 2017 22:58:11 +0100
+Subject: [Buildroot] [PATCH 2/4] package/mke2img: use mkfs to generate
+	rootfs image
+In-Reply-To: <1490372432-879-2-git-send-email-sebastien.szymanski@armadeus.com>
 References: <1490372432-879-1-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <556f2471-1875-0497-61b9-c47dad22dee7@mind.be>
+ <1490372432-879-2-git-send-email-sebastien.szymanski@armadeus.com>
+Message-ID: <ec6c517a-18a2-e6c3-a35e-4c794dad7aaa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,150 +15,160 @@ To: buildroot@busybox.net
 
 
 On 24-03-17 17:20, S?bastien Szymanski wrote:
-> Auto-calculation of the rootfs size cannot be done in a reliable way as
-> it depends on the host filesystem and is broken on non ext4 host. [1] [2]
-> So let the user specify the size he wants for his rootfs.
-> 
-> [1] https://bugs.busybox.net/show_bug.cgi?id=8831
-> [2] https://bugs.busybox.net/show_bug.cgi?id=9496
+> mkfs is now capable of generating rootfs images. Use mkfs intead of
+> genext2fs. Use the default mkfs' options but disable 64bit flag as it's
+> incompatible with older version of U-Boot.
 > 
 > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-
- Small comments below, but
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 > ---
->  Config.in.legacy        | 14 ++++++++++++++
->  fs/ext2/Config.in       | 12 ++----------
->  fs/ext2/ext2.mk         |  1 -
->  package/mke2img/mke2img | 20 +-------------------
->  4 files changed, 17 insertions(+), 30 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 4e14a98..dfd4d67 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,20 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2017.05"
+[snip]
+> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+> index b773aa9..01f04fc 100755
+> --- a/package/mke2img/mke2img
+> +++ b/package/mke2img/mke2img
+> @@ -10,9 +10,8 @@ set -e
+>  main() {
+>      local OPT OPTARG
+>      local nb_blocks nb_inodes nb_res_blocks root_dir image gen rev label uuid
+> -    local -a genext2fs_opts
+> -    local -a tune2fs_opts
+> -    local tune2fs_O_opts
+> +    local -a mkfs_opts
+> +    local mkfs_O_opts
 >  
-> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
-> +	int "extra size in blocks has been removed"
-> +	default 0
-> +	help
-> +	  Since the support for auto calculation of the filesystem size has been
-
- Line too long, wrap at 72 columns (where tab counts for 8).
-
-> +	  removed, this option is now useless and must be 0.
-> +	  You may want to check that BR2_TARGET_ROOTFS_EXT2_BLOCKS matchs
-                                                                   matches
-
-> +	  your needs.
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS_WRAP
-> +	bool
-> +	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS != 0
-> +	select BR2_LEGACY
-
- Great solution!
-
-> +
->  config BR2_PACKAGE_SYSTEMD_KDBUS
->  	bool "systemd-kdbus has been removed"
->  	select BR2_LEGACY
-> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-> index b8eeed2..2f22762 100644
-> --- a/fs/ext2/Config.in
-> +++ b/fs/ext2/Config.in
-> @@ -45,21 +45,13 @@ config BR2_TARGET_ROOTFS_EXT2_LABEL
->  	string "filesystem label"
+>      # Default values
+>      gen=2
+> @@ -62,80 +61,33 @@ main() {
+>      fi
+>      nb_inodes=$((nb_inodes+nb_extra_inodes))
 >  
->  config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> -	int "exact size in blocks (leave at 0 for auto calculation)"
-> -	default 0
-> +	int "exact size in blocks"
-> +	default 65536
+> -    # Upgrade to rev1 if needed
+> -    if [ ${rev} -ge 1 ]; then
+> -        tune2fs_O_opts+=",filetype,sparse_super"
+> -    fi
+> -
+> -    # Add a journal for ext3 and above
+> -    if [ ${gen} -ge 3 ]; then
+> -        tune2fs_opts+=( -j -J size=1 )
+> -    fi
+> -
+> -    # Add ext4 specific features
+> -    if [ ${gen} -ge 4 ]; then
+> -        tune2fs_O_opts+=",extents,uninit_bg,dir_index"
+> -    fi
+> +    # Disable 64bit flag as it's incompatible with older U-Boot versions
+> +    mkfs_O_opts+=",^64bit"
 
- I think this default is quite useless: it is too large for a 64M card, and
-wastes a lot of space on a 128M card. So setting it to 60M or 120M would be more
-appropriate.
+ This is a bit unfortunate. Actually, reading the man page, it shouldn't even be
+needed: if the filesystem is less than 4TB, then mke2fs will not use 64bit. And
+if it's larger than 4TB, you just can't create it without the 64bit option...
+
+>  
+>      # Add our -O options (there will be at most one leading comma, remove it)
+> -    if [ -n "${tune2fs_O_opts}" ]; then
+> -        tune2fs_opts+=( -O "${tune2fs_O_opts#,}" )
+> +    if [ -n "${mkfs_O_opts}" ]; then
+> +        mkfs_opts+=( -O "${mkfs_O_opts#,}" )
+
+ Since now the ^64bit is the only -O option, and it's always there, you can just
+use an unconditional
+
+    mkfs_opts+=( -O ^64bit )
+
+>      fi
+>  
+>      # Add the label if specified
+>      if [ -n "${label}" ]; then
+> -        tune2fs_opts+=( -L "${label}" )
+> +        mkfs_opts+=( -L "${label}" )
+>      fi
+>  
+> -    # Generate the filesystem
+> -    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
+> -    if [ -n "${nb_res_blocks}" ]; then
+> -        genext2fs_opts+=( -m ${nb_res_blocks} )
+> -    fi
+> -    genext2fs "${genext2fs_opts[@]}" "${image}"
+> -
+> -    # genext2fs does not generate a UUID, but fsck will whine if one
+> -    # is missing, so we need to add a UUID.
+> -    # Of course, this has to happen _before_ we run fsck.
+> -    # Also, some ext4 metadata are based on the UUID, so we must
+> -    # set it before we can convert the filesystem to ext4.
+> -    # If the user did not specify a UUID, we generate a random one.
+> +    # If the user did not specify a UUID, mkfs will generate a random one.
+>      # Although a random UUID may seem bad for reproducibility, there
+>      # already are so many things that are not reproducible in a
+>      # filesystem: file dates, file ordering, content of the files...
+
+ Hm, this becomes less and less true... With BR2_REPRODUCIBLE, the file dates
+and content should be fixed. So if only we can also fix the ordering, then the
+ext2 could also be reproducible... But that's not for this patch of course.
+
+> -    tune2fs -U "${uuid:-random}" "${image}"
+> -
+> -    # Upgrade the filesystem
+> -    if [ ${#tune2fs_opts[@]} -ne 0 ]; then
+> -        tune2fs "${tune2fs_opts[@]}" "${image}"
+> +    if [ -n "${UUID}" ]; then
+> +        mkfs_opts+=( -U "${UUID}" )
+>      fi
+>  
+> -    # After changing filesystem options, running fsck is required
+> -    # (see: man tune2fs). Running e2fsck in other cases will ensure
+> -    # coherency of the filesystem, although it is not required.
+> -    # 'e2fsck -pDf' means:
+> -    #  - automatically repair
+> -    #  - optimise and check for duplicate entries
+> -    #  - force checking
+> -    # Sending output to oblivion, as e2fsck can be *very* verbose,
+> -    # especially with filesystems generated by genext2fs.
+> -    # Exit codes 1 & 2 are OK, it means fs errors were successfully
+> -    # corrected, hence our little trick with $ret.
+> -    ret=0
+> -    e2fsck -pDf "${image}" >/dev/null || ret=$?
+> -    case ${ret} in
+> -       0|1|2) ;;
+> -       *)   errorN ${ret} "failed to run e2fsck on '%s' (ext%d)\n" \
+> -                   "${image}" ${gen}
+> -    esac
+> -    printf "\n"
+> -    trace "e2fsck was successfully run on '%s' (ext%d)\n" "${image}" ${gen}
+> -    printf "\n"
+> -
+> -    # Remove count- and time-based checks, they are not welcome
+> -    # on embedded devices, where they can cause serious boot-time
+> -    # issues by tremendously slowing down the boot.
+> -    tune2fs -c 0 -i 0 "${image}"
+> +    # Generate the filesystem
+> +    mkfs_opts+=( -d "${root_dir}" -N ${nb_inodes} -T small -F )
+
+ I have a small preference to specify the options explicitly instead of -T small
+(i.e. -b 1024 -I 128).
 
  Regards,
  Arnout
 
+> +    if [ -n "${nb_res_blocks}" ]; then
+> +        mkfs_opts+=( -m ${nb_res_blocks} )
+> +    fi
+> +    mkfs.ext${gen} "${mkfs_opts[@]}" "${image}" "${nb_blocks}"
+>  }
 >  
->  config BR2_TARGET_ROOTFS_EXT2_INODES
->  	int "exact number of inodes (leave at 0 for auto calculation)"
->  	default 0
+>  help() {
+> diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
+> index 9de387a..ead9d70 100644
+> --- a/package/mke2img/mke2img.mk
+> +++ b/package/mke2img/mke2img.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> -config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
-> -	int "extra size in blocks" if BR2_TARGET_ROOTFS_EXT2_BLOCKS = 0
-> -	default 0
-> -	help
-> -	  Enter here the number of extra blocks of free space you
-> -	  want on your filesystem. By default, Buildroot will not
-> -	  leave much space free.
-> -
->  config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
->  	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
->  	default 0
-> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index cfb34c4..30f1d17 100644
-> --- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -9,7 +9,6 @@ EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
->  ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
->  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
->  endif
-> -EXT2_OPTS += -B $(BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS)
+> -HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
+> +HOST_MKE2IMG_DEPENDENCIES = host-e2fsprogs
 >  
->  ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
->  EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
-> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-> index c2e0d02..b773aa9 100755
-> --- a/package/mke2img/mke2img
-> +++ b/package/mke2img/mke2img
-> @@ -17,14 +17,12 @@ main() {
->      # Default values
->      gen=2
->      rev=1
-> -    nb_extra_blocks=0
->      nb_extra_inodes=0
->  
-> -    while getopts :hb:B:i:I:r:d:o:G:R:l:u: OPT; do
-> +    while getopts :hb:i:I:r:d:o:G:R:l:u: OPT; do
->          case "${OPT}" in
->          h)  help; exit 0;;
->          b)  nb_blocks=${OPTARG};;
-> -        B)  nb_extra_blocks=${OPTARG};;
->          i)  nb_inodes=${OPTARG};;
->          I)  nb_extra_inodes=${OPTARG};;
->          r)  nb_res_blocks=${OPTARG};;
-> @@ -64,22 +62,6 @@ main() {
->      fi
->      nb_inodes=$((nb_inodes+nb_extra_inodes))
->  
-> -    # calculate needed blocks
-> -    if [ -z "${nb_blocks}" ]; then
-> -        # size ~= superblock, block+inode bitmaps, inodes (8 per block),
-> -        # blocks; we scale inodes / blocks with 10% to compensate for
-> -        # bitmaps size + slack
-> -        nb_blocks=$(du -s -k "${root_dir}" |sed -r -e 's/[[:space:]]+.*$//')
-> -        nb_blocks=$((500+(nb_blocks+nb_inodes/8)*11/10))
-> -        if [ ${gen} -ge 3 ]; then
-> -            # we add 1300 blocks (a bit more than 1 MiB, assuming 1KiB blocks)
-> -            # for the journal
-> -            # Note: I came to 1300 blocks after trial-and-error checks. YMMV.
-> -            nb_blocks=$((nb_blocks+1300))
-> -        fi
-> -    fi
-> -    nb_blocks=$((nb_blocks+nb_extra_blocks))
-> -
->      # Upgrade to rev1 if needed
->      if [ ${rev} -ge 1 ]; then
->          tune2fs_O_opts+=",filetype,sparse_super"
+>  define HOST_MKE2IMG_INSTALL_CMDS
+>  	$(INSTALL) -D -m 0755 package/mke2img/mke2img $(HOST_DIR)/usr/bin/mke2img
 > 
 
 -- 
