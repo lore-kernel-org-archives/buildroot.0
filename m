@@ -1,72 +1,63 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri, 24 Mar 2017 00:51:38 -0400
-Subject: [Buildroot] [PATCH v4] qt: add enable for truetype font installation
-Message-ID: <1490331098-3269-1-git-send-email-danomimanchego123@gmail.com>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Fri, 24 Mar 2017 06:08:32 +0100
+Subject: [Buildroot] [PATCH] openvpn: bump version to 2.4.1
+In-Reply-To: <20170323173750.24070-1-Vincent.Riera@imgtec.com>
+References: <20170323173750.24070-1-Vincent.Riera@imgtec.com>
+Message-ID: <CANCHnQqqceRgA9B9L=5J4rdwC6a_TMig-JORnByM0hBOwwRHOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, qt.mk installs DejaVu/Vera TrueType fonts when Qt is configured for
-freetype support. However, some users may prefer to limit the installed fonts
-to only Qt's prerendered fonts (micro, fixed, helvetica, etc.). Or, there may
-be a preference to use seperately installed TrueType fonts. This commit adds
-a switch to explicitly control the installation of the TrueType fonts, similar
-to the existing prerendered font enables.
+2.4.1 adds --enable-lz4 with a matching dependency on package/lz4 /
+BR2_PACKAGE_LZ4.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
----
-
-Changes V3->V4:
-  - Fix spelling of "PACKAGE".
-  - Add Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Changes V2->V3:
-  - Add back some detail to commit log. (Thomas Petazzoni)
-
-Changes V1->V2:
-  - Drop detailed explanation from commit log. (Peter Seiderer)
-  - Rename option from ..DEJAVU to ..TRUETYPE. (Peter Seiderer)
-  - Replace depends-on test with equivalent but more verbose expression. (Peter Seiderer)
----
- package/qt/Config.in | 8 ++++++++
- package/qt/qt.mk     | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index fa5235d..a761759 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -185,6 +185,14 @@ endmenu
- 
- menu "Fonts"
- 
-+config BR2_PACKAGE_QT_FONT_TRUETYPE
-+	bool "dejavu/vera"
-+	depends on BR2_PACKAGE_QT_QTFREETYPE || BR2_PACKAGE_QT_SYSTEMFREETYPE
-+	default y
-+
-+comment "dejavu/vera fonts need freetype support"
-+	depends on !BR2_PACKAGE_QT_QTFREETYPE && !BR2_PACKAGE_QT_SYSTEMFREETYPE
-+
- config BR2_PACKAGE_QT_FONT_MICRO
- 	bool "micro"
- 	default y
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e82bdfe8..1faab74 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -689,7 +689,7 @@ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
- endif
- endif # QT_FONTS
- 
--ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
-+ifeq ($(BR2_PACKAGE_QT_FONT_TRUETYPE),y)
- define QT_INSTALL_TARGET_FONTS_TTF
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
- 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
--- 
-2.7.4
+On 23 March 2017 at 18:37, Vicente Olivert Riera
+<Vincent.Riera@imgtec.com> wrote:
+> --disable-eurephia configure option doesn't exist, so remove it.
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/openvpn/openvpn.hash | 2 +-
+>  package/openvpn/openvpn.mk   | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+> index 600c250..a03345e 100644
+> --- a/package/openvpn/openvpn.hash
+> +++ b/package/openvpn/openvpn.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 6f23ba49a1dbeb658f49c7ae17d9ea979de6d92c7357de3d55cd4525e1b2f87e  openvpn-2.4.0.tar.xz
+> +sha256 fde9e22c6df7a335d2d58c6a4d5967be76df173c766a5c51ece57fd044c76ee5  openvpn-2.4.1.tar.xz
+> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+> index 5e3df59..a2e21f9 100644
+> --- a/package/openvpn/openvpn.mk
+> +++ b/package/openvpn/openvpn.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -OPENVPN_VERSION = 2.4.0
+> +OPENVPN_VERSION = 2.4.1
+>  OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+>  OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+>  OPENVPN_DEPENDENCIES = host-pkgconf openssl
+> @@ -22,8 +22,7 @@ OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
+>  ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
+>  OPENVPN_CONF_OPTS += \
+>         --enable-small \
+> -       --disable-plugins \
+> -       --disable-eurephia
+> +       --disable-plugins
+>  endif
+>
+>  # BusyBox 1.21+ places the ip applet in the "correct" place
+> --
+> 2.10.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
