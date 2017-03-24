@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 24 Mar 2017 11:34:44 +0000
-Subject: [Buildroot] [PATCH] libinput: bump version to 1.7.0
-Message-ID: <20170324113444.46058-1-Vincent.Riera@imgtec.com>
+Date: Fri, 24 Mar 2017 11:42:19 +0000
+Subject: [Buildroot] [PATCH] lft: bump version to 3.78
+Message-ID: <20170324114219.15563-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lft/lft.hash | 6 ++++--
+ package/lft/lft.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 64caf33..3663b51 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-March/033377.html
--sha256 74da2798728e79c3aedfffa268d8fe811c3766ca3708309c0dc45502be137da1  libinput-1.6.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-March/033531.html
-+sha256 12a670f63d01e9e9c98ad0b31aef22160aac52187b4ee8f068a6902181c1a8a8  libinput-1.7.0.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 2761336..801a813 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+diff --git a/package/lft/lft.hash b/package/lft/lft.hash
+index b045e7c..28654f5 100644
+--- a/package/lft/lft.hash
++++ b/package/lft/lft.hash
+@@ -1,2 +1,4 @@
+-# Locally calculated, matches download from fossies.org and pwhois.org
+-sha256	d182d6774e64dcdeb19ed1a598fa588e57ddb6cbb6847d9277c405d3a4597d89	lft-3.77.tar.gz
++# From http://pwhois.org/lft/
++md5 7d20fd5323137b208abf1b4e1355c153  lft-3.78.tar.gz
++# Locally calculated
++sha256 000575891b4094319a56d395c0ec576651fe76b251596ab19d3eb2e5f8d4bf78  lft-3.78.tar.gz
+diff --git a/package/lft/lft.mk b/package/lft/lft.mk
+index 72f43fa..cac3774 100644
+--- a/package/lft/lft.mk
++++ b/package/lft/lft.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.6.3
-+LIBINPUT_VERSION = 1.7.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-LFT_VERSION = 3.77
++LFT_VERSION = 3.78
+ LFT_SITE = http://pwhois.org/get
+ LFT_DEPENDENCIES = libpcap
+ LFT_LICENSE = VOSTROM Public License for Open Source
 -- 
 2.10.2
