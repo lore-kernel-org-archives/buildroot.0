@@ -1,48 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Mar 2017 13:49:34 +0100
-Subject: [Buildroot] [PATCH 2/2] board: Add support for Engicam i.CoreM6
- Quad
-In-Reply-To: <CAMty3ZA275KNiBcuM_YvZVmYcQQXp-Zq2R0o7_y2w7p6xxfZ-Q@mail.gmail.com>
-References: <1489489266-23161-1-git-send-email-jagan@openedev.com>
- <1489489266-23161-2-git-send-email-jagan@openedev.com>
- <20170319152039.6d0770f4@free-electrons.com>
- <CAMty3ZA275KNiBcuM_YvZVmYcQQXp-Zq2R0o7_y2w7p6xxfZ-Q@mail.gmail.com>
-Message-ID: <20170324134934.4b89a5bc@free-electrons.com>
+From: Rahul Jain <Rahul.Jain@imgtec.com>
+Date: Fri, 24 Mar 2017 18:19:51 +0530
+Subject: [Buildroot] [PATCH 2/6] ubus: bump version
+In-Reply-To: <1490359795-18362-1-git-send-email-Rahul.Jain@imgtec.com>
+References: <1490359795-18362-1-git-send-email-Rahul.Jain@imgtec.com>
+Message-ID: <1490359795-18362-2-git-send-email-Rahul.Jain@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+rebase 0001-Install-server-and-client-examples patch
+on latest version.
 
-On Fri, 24 Mar 2017 16:08:22 +0530, Jagan Teki wrote:
+Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+---
+ .../ubus/0001-Install-server-and-client-examples.patch    | 15 ++++++++++-----
+ package/ubus/ubus.hash                                    |  2 +-
+ package/ubus/ubus.mk                                      |  2 +-
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-> > Also, your defconfig should be named engicam_imx6q_icore_defconfig.  
-> 
-> Just for my understanding, why we add prefix engicam_ here because
-> these boards always use Mainline code instead of freescale or some
-> other source. I guess the reason behind
-> freescale_imx6qsabresd_defconfig and imx6q-sabresd_defconfig based on
-> the source where it cloned is that correct?
-
-No, the main reason is just inconsistency I'd say. Ideally, all
-defconfigs should follow this <vendor>_<product>_defconfig format I
-believe.
-
-> > Please use a fixed version of U-Boot.  
-> 
-> I'm planning to sync with Latest sources instead of some specific
-> version, so-that I don't need to change my config again for next
-> available/suitable version of source.
-
-That's not how our defconfigs work. We want to build a fixed version of
-the kernel and U-Boot, which has been tested by the person submitting
-the defconfig. So please adopt the convention used in other defconfigs,
-thanks!
-
-Thomas
+diff --git a/package/ubus/0001-Install-server-and-client-examples.patch b/package/ubus/0001-Install-server-and-client-examples.patch
+index 0ee4d3e..5c985d8 100644
+--- a/package/ubus/0001-Install-server-and-client-examples.patch
++++ b/package/ubus/0001-Install-server-and-client-examples.patch
+@@ -1,23 +1,28 @@
+-Install server and client examples
++From aa4aea68a9d2a38fabb5ae8e5a0d05dfd7bcf907 Mon Sep 17 00:00:00 2001
++From: Rahul Jain <Rahul.Jain@imgtec.com>
++Date: Fri, 24 Mar 2017 18:03:24 +0530
++Subject: [PATCH] Install server and client examples
+ 
+ Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
++Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
++[Rahul Jain: rebase the patch on latest version]
+ ---
+  examples/CMakeLists.txt | 4 ++++
+  1 file changed, 4 insertions(+)
+ 
+ diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+-index 0279f6e66b50..2f8f4e026e20 100644
++index 81f9997..38f153f 100644
+ --- a/examples/CMakeLists.txt
+ +++ b/examples/CMakeLists.txt
+ @@ -9,4 +9,8 @@ IF (BUILD_EXAMPLES)
+  
+  	ADD_EXECUTABLE(client client.c count.c)
+- 	TARGET_LINK_LIBRARIES(client ubus ubox)
++ 	TARGET_LINK_LIBRARIES(client ubus ${ubox_library})
+ +
+ +	INSTALL(TARGETS server client
+-+	        RUNTIME DESTINATION sbin
+++		RUNTIME DESTINATION sbin
+ +	)
+  ENDIF()
+ -- 
+-1.9.1
++2.6.2
+ 
+diff --git a/package/ubus/ubus.hash b/package/ubus/ubus.hash
+index 4e6a755..0829734 100644
+--- a/package/ubus/ubus.hash
++++ b/package/ubus/ubus.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  0dbf75c2103f3f567b9bf1bb719ea9776d18401bbf2dfd8bed2c2ebbdd1021da  ubus-259450f414d8c9ee41896e8e6d6bc57ec00e2b63.tar.gz
++sha256  93ef2612853641ca8d16d07527115c72ed03f8eaa1c727a01b069a4e814247c0  ubus-34c6e818e431cc53478a0f7c7c1eca07d194d692.tar.gz
+diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
+index cd66b86..08c9ce2 100644
+--- a/package/ubus/ubus.mk
++++ b/package/ubus/ubus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UBUS_VERSION = 259450f414d8c9ee41896e8e6d6bc57ec00e2b63
++UBUS_VERSION = 34c6e818e431cc53478a0f7c7c1eca07d194d692
+ UBUS_SITE = git://git.openwrt.org/project/ubus.git
+ 
+ UBUS_LICENSE = LGPLv2.1
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.6.2
