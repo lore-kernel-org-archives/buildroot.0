@@ -1,41 +1,18 @@
 From: Jeroen Roovers <jer@airfi.aero>
-Date: Fri, 24 Mar 2017 07:29:52 +0100
-Subject: [Buildroot] [PATCH] lz4: version v1.7.5
-Message-ID: <20170324062952.21759-1-jer@airfi.aero>
+Date: Fri, 24 Mar 2017 08:05:19 +0100
+Subject: [Buildroot] [PATCH] openvpn: bump version to 2.4.1
+In-Reply-To: <CANCHnQqqceRgA9B9L=5J4rdwC6a_TMig-JORnByM0hBOwwRHOQ@mail.gmail.com>
+References: <20170323173750.24070-1-Vincent.Riera@imgtec.com>
+ <CANCHnQqqceRgA9B9L=5J4rdwC6a_TMig-JORnByM0hBOwwRHOQ@mail.gmail.com>
+Message-ID: <CANCHnQr27x4WqCDPDs+QxtopttWvQuUGUb9ZhQdy4hEqv01sCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jeroen Roovers <jer@airfi.aero>
----
- package/lz4/lz4.hash | 2 +-
- package/lz4/lz4.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 24 March 2017 at 06:08, Jeroen Roovers <jer@airfi.aero> wrote:
+> 2.4.1 adds --enable-lz4 with a matching dependency on package/lz4 /
+> BR2_PACKAGE_LZ4.
 
-diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
-index 128128469..5048503f8 100644
---- a/package/lz4/lz4.hash
-+++ b/package/lz4/lz4.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
-+sha256 0190cacd63022ccb86f44fa5041dc6c3804407ad61550ca21c382827319e7e7e  lz4-v1.7.5.tar.gz
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index 9d7f56bbf..be891dd1a 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LZ4_VERSION = r131
--LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
-+LZ4_VERSION = v1.7.5
-+LZ4_SITE = $(call github,lz4,lz4,$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2c (library), GPLv2+ (programs)
- LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
--- 
-2.12.1
+Actually, 2.4.0 introduced that.
