@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 24 Mar 2017 11:29:32 +0000
-Subject: [Buildroot] [PATCH] cjson: bump version to v1.4.4
-Message-ID: <20170324112932.30041-1-Vincent.Riera@imgtec.com>
+Date: Fri, 24 Mar 2017 11:34:44 +0000
+Subject: [Buildroot] [PATCH] libinput: bump version to 1.7.0
+Message-ID: <20170324113444.46058-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 39ca2cb..d6e5af7 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 64caf33..3663b51 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	3b362a6af73e10b0361119bc9fa9569578f9daa486cb487cad79322a34cd6965	cjson-v1.4.3.tar.gz
-+sha256 59d77f80fc5bc401263ced056fa6da118bf12e2f9f1f35cc7bcaf749ac1f2bd8  cjson-v1.4.4.tar.gz
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 6872b10..d0f5b6a 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-March/033377.html
+-sha256 74da2798728e79c3aedfffa268d8fe811c3766ca3708309c0dc45502be137da1  libinput-1.6.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-March/033531.html
++sha256 12a670f63d01e9e9c98ad0b31aef22160aac52187b4ee8f068a6902181c1a8a8  libinput-1.7.0.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 2761336..801a813 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CJSON_VERSION = v1.4.3
-+CJSON_VERSION = v1.4.4
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+-LIBINPUT_VERSION = 1.6.3
++LIBINPUT_VERSION = 1.7.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
 2.10.2
