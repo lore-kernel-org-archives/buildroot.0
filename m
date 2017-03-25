@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 14:57:21 +0100
-Subject: [Buildroot] [PATCH] openvpn: Add explicit support for external
- lz4
-In-Reply-To: <20170324071203.32449-1-jer@airfi.aero>
-References: <20170324071203.32449-1-jer@airfi.aero>
-Message-ID: <20170325145721.059a7941@free-electrons.com>
+Date: Sat, 25 Mar 2017 15:11:36 +0100
+Subject: [Buildroot] [git commit] libuci: bump version
+Message-ID: <20170325141449.8A27082189@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8ca80b3cf2cefb30f0d9a7c8fdd3f3d34086440a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Mar 2017 08:12:03 +0100, Jeroen Roovers wrote:
-> 2.4.0 added lz4 support. Make that choice explicit or the bundled compat-lz4
-> "stub" will be used.
-> 
-> Signed-off-by: Jeroen Roovers <jer@airfi.aero>
-> ---
->  package/openvpn/Config.in  | 7 +++++++
->  package/openvpn/openvpn.mk | 6 ++++++
->  2 files changed, 13 insertions(+)
+Change upstream location
 
-Applied to master, thanks.
+Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libuci/libuci.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index 6647045..9161be9 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBUCI_VERSION = e339407372ffc70b1451e4eda218c01aa95a6a7f
+-LIBUCI_SITE = git://nbd.name/uci.git
++LIBUCI_VERSION = 49ec6efbdac4819033d34f08927d795f83a3932d
++LIBUCI_SITE = git://git.openwrt.org/project/uci.git
+ LIBUCI_LICENSE = LGPLv2.1, GPLv2 (tools)
+ LIBUCI_INSTALL_STAGING = YES
+ LIBUCI_DEPENDENCIES = libubox
