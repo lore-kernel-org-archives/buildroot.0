@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 14:52:34 +0100
-Subject: [Buildroot] [PATCH] cjson: bump version to v1.4.4
-In-Reply-To: <20170324112932.30041-1-Vincent.Riera@imgtec.com>
-References: <20170324112932.30041-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170325145234.31e03e7b@free-electrons.com>
+Date: Sat, 25 Mar 2017 14:53:03 +0100
+Subject: [Buildroot] [git commit] upmpdcli: add user to the audio group
+Message-ID: <20170325135307.494738226E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ab9842e360ae08954b07504a20cd053fe146f383
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Mar 2017 11:29:32 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/cjson/cjson.hash | 2 +-
->  package/cjson/cjson.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+upmpdcli runs as user and group upmpdcli. In order to allow it to access
+the ALSA devices add it to the audio group.
 
-Sorry, I missed your patch, and applied the one sent by Fabrice
-Fontaine a few hours later doing the same thing.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/upmpdcli/upmpdcli.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 83efa05..a9b057d 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -12,7 +12,7 @@ UPMPDCLI_DEPENDENCIES = host-pkgconf libmpdclient libupnpp libmicrohttpd jsoncpp
+ 
+ # Upmpdcli only runs if user upmpdcli exists
+ define UPMPDCLI_USERS
+-	upmpdcli -1 upmpdcli -1 * - - - Upmpdcli MPD UPnP Renderer Front-End
++	upmpdcli -1 upmpdcli -1 * - - audio Upmpdcli MPD UPnP Renderer Front-End
+ endef
+ 
+ define UPMPDCLI_INSTALL_INIT_SYSV
