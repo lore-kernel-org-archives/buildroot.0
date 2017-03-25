@@ -1,31 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 15:15:36 +0100
-Subject: [Buildroot] [PATCH 1/6] libubox: bump version
-In-Reply-To: <1490359795-18362-1-git-send-email-Rahul.Jain@imgtec.com>
-References: <1490359795-18362-1-git-send-email-Rahul.Jain@imgtec.com>
-Message-ID: <20170325151536.57dedfa6@free-electrons.com>
+Date: Sat, 25 Mar 2017 15:17:08 +0100
+Subject: [Buildroot] [git commit] vnstat: bump to version 1.17
+Message-ID: <20170325141730.E24DC8231C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=197e473ce0acbefd5f05762febf817361123a268
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Mar 2017 18:19:50 +0530, Rahul Jain wrote:
-> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
-> ---
->  package/libubox/libubox.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Also remove patch that has been merged upstream, disable AUTORECONF
+since we're no longer patching configure.ac and get rid of hack
+involving the install target as the 'install-data-hook' in Makefile.am
+now avoids running 'vnstat --showconfig' on the host in case of
+cross-compilation.
 
-Patches 1 to 5 applied, thanks!
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ure.ac-add-option-to-disable-image-output.patch | 51 ----------------------
+ package/vnstat/vnstat.hash                         |  2 +-
+ package/vnstat/vnstat.mk                           | 10 +----
+ 3 files changed, 2 insertions(+), 61 deletions(-)
 
-I've marked patch 6 as "Changes Requested" in our patch tracking
-system, since you got some comments from Arnout that need to be
-addressed. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/vnstat/0001-configure.ac-add-option-to-disable-image-output.patch b/package/vnstat/0001-configure.ac-add-option-to-disable-image-output.patch
+deleted file mode 100644
+index e46ef07..0000000
+--- a/package/vnstat/0001-configure.ac-add-option-to-disable-image-output.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 8a4a9b82d4f8fd39db8417fd06d969505fde9d0a Mon Sep 17 00:00:00 2001
+-From: Rodrigo Rebello <rprebello@gmail.com>
+-Date: Tue, 22 Dec 2015 18:02:22 -0200
+-Subject: [PATCH 1/1] configure.ac: add option to disable image output
+-
+-Even when the gd library is present, it may be desirable to not build
+-'vnstati' as image output is an optional feature.
+-
+-Also, when testing for the gd library, use gdImagePng() instead of
+-gdImageLine() since it's possible that the installed gd library doesn't
+-have PNG support. In such cases, the test in the configure script passed
+-(because gdImageLine() is always present), but the build failed with:
+-
+-  src/vnstati.o: In function `writeoutput':
+-  vnstati.c:(.text+0x3fc): undefined reference to `gdImagePng'
+-  collect2: error: ld returned 1 exit status
+-
+-Upstream status: accepted, not yet released.
+-https://github.com/vergoh/vnstat/pull/35
+-
+-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+----
+- configure.ac | 10 ++++++++--
+- 1 file changed, 8 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index be3d449..89f71ef 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -13,10 +13,16 @@ AM_PROG_CC_C_O
+- AC_PROG_MAKE_SET
+- AC_PROG_MKDIR_P
+- 
+-+AC_ARG_ENABLE([image-output], [
+-+AS_HELP_STRING([--disable-image-output], [disable PNG image output])])
+-+
+- # Checks for libraries.
+- AC_CHECK_LIB([m], [pow])
+--AC_CHECK_LIB([gd], [gdImageLine], [IMAGELIBS=-lgd])
+--AC_SUBST([IMAGELIBS])
+-+
+-+AS_IF([test "x$enable_image_output" != "xno"], [
+-+AC_CHECK_LIB([gd], [gdImagePng], [IMAGELIBS=-lgd])
+-+AC_SUBST([IMAGELIBS])])
+-+
+- AM_CONDITIONAL([HAVE_LIBGD], [test "$IMAGELIBS" = "-lgd"])
+- PKG_CHECK_MODULES([CHECK], [check >= 0.9.6], [], [AC_MSG_NOTICE([testcases can not be execute without check installed])])
+- AM_CONDITIONAL([HAVE_CHECK], [test "$CHECK_LIBS"])
+--- 
+-2.1.4
+-
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index 82ee8c0..1f51529 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	c3814b5baa8b627198a8debfe1dce4b4346a342523818cc8668a5497971dbc39	vnstat-1.15.tar.gz
++sha256	18e4c53576ca9e1ef2f0e063a6d83b0c44e3b1cf008560d658745df5c9aa7971	vnstat-1.17.tar.gz
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index 576f240..f3e74a7 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
+ 
+-VNSTAT_VERSION = 1.15
++VNSTAT_VERSION = 1.17
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPLv2
+ VNSTAT_LICENSE_FILES = COPYING
+ VNSTAT_DEPENDENCIES = host-pkgconf
+-# We're patching configure.ac, so we need to autoreconf
+-VNSTAT_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
+ VNSTAT_DEPENDENCIES += gd
+@@ -19,10 +17,4 @@ else
+ VNSTAT_CONF_OPTS = --disable-image-output
+ endif
+ 
+-# vnStat declares an 'install-data-hook' rule that tries to run
+-# 'vnstat --showconfig' on the host to generate a default config file.
+-# That obviously doesn't work when cross-compiling, so avoid it
+-# entirely.
+-VNSTAT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
+-
+ $(eval $(autotools-package))
