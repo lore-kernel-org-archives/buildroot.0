@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 14:55:24 +0100
-Subject: [Buildroot] [git commit] package/ntp: fix build for toolchains
-	without ssp
-Message-ID: <20170325135531.ABFE682243@busybox.osuosl.org>
+Date: Sat, 25 Mar 2017 14:56:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ntp: fix build for toolchains
+ without ssp
+In-Reply-To: <20170323193700.30404-1-bernd.kuhls@t-online.de>
+References: <20170323193700.30404-1-bernd.kuhls@t-online.de>
+Message-ID: <20170325145619.1b8a9780@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00968bcac0674250956e99b6fafbf9b373446488
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-ntp defaults to use ssp support
-http://bk1.ntp.org/ntp-stable/sntp/harden/README
+On Thu, 23 Mar 2017 20:37:00 +0100, Bernd Kuhls wrote:
+> ntp defaults to use ssp support
+> http://bk1.ntp.org/ntp-stable/sntp/harden/README
+> 
+> by using these flags
+> http://bk1.ntp.org/ntp-stable/sntp/harden/linux
+> 
+> If the toolchain lacks SSP support this patch forces ntp to use an
+> empty set of flags: http://bk1.ntp.org/ntp-stable/sntp/harden/default
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/1d5/1d58bd8745b22c8eb71fea4c7255d3ace69f6f7a/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/ntp/ntp.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-by using these flags
-http://bk1.ntp.org/ntp-stable/sntp/harden/linux
+I've applied to fix the immediate build issues. However, I'm wondering
+if we shouldn't use --with-locfile=default unconditionally, and let
+Buildroot decide what CFLAGS are appropriate.
 
-If the toolchain lacks SSP support this patch forces ntp to use an
-empty set of flags: http://bk1.ntp.org/ntp-stable/sntp/harden/default
+What do you think?
 
-Fixes
-http://autobuild.buildroot.net/results/1d5/1d58bd8745b22c8eb71fea4c7255d3ace69f6f7a/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ntp/ntp.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index b6eb1b1..e3e53a8 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -23,6 +23,12 @@ NTP_CONF_OPTS = \
- # 0002-ntp-syscalls-fallback.patch
- NTP_AUTORECONF = YES
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
-+NTP_CONF_OPTS += --with-locfile=linux
-+else
-+NTP_CONF_OPTS += --with-locfile=default
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- NTP_CONF_OPTS += --enable-linuxcaps
- NTP_DEPENDENCIES += libcap
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
