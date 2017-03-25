@@ -1,42 +1,39 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 25 Mar 2017 15:34:56 +0100
-Subject: [Buildroot] Problem when $(PKG)_SOURCE does not contain
-	$(PKG)_VERSION
-Message-ID: <20170325143456.GA2470@itchy>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Mar 2017 15:36:16 +0100
+Subject: [Buildroot] [PATCH 1/1] linux-firmware: Add missing firmware
+ for the carl9170 driver.
+In-Reply-To: <20170322123641.19482-1-kp@tec4data.at>
+References: <20170322123641.19482-1-kp@tec4data.at>
+Message-ID: <20170325153616.6fc536f9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all!
+Hello,
 
-I will soon post a new patch series to add support for the Rust programming
-language (version 1.16.0).
+On Wed, 22 Mar 2017 13:36:41 +0100, Karoly Pados wrote:
+> For a long time now Atheros USB AR9170 devices have been using the
+> carl9170 driver which relies on the carl9170-1.fw firmware file.
+> This firmware is built by current buildroot, but its output
+> is not copied to the resulting rootfs. This patch fixes that.
 
-One of the patches adds a package named host-cargo-bootstrap, which
-fetches a binary version of Cargo, the build tool for Rust.
+Firmware files are not "built by Buildroot", since they are only
+provided as binary-only files. Buildroot merely installs them, so I've
+fixed up the commit log before applying.
 
-The package Makefile looks like this:
+> Please backport to 2017.02.x branch.
 
-```
-CARGO_BOOTSTRAP_VERSION = 6e0c18cccc8b0c06fba8a8d76486f81a792fb420
-CARGO_BOOTSTRAP_SITE = https://s3.amazonaws.com/rust-lang-ci/cargo-builds/$(CARGO_BOOTSTRAP_VERSION)
-CARGO_BOOTSTRAP_SOURCE = cargo-nightly-$(HOSTARCH)-unknown-linux-gnu.tar.gz
-```
+So you're using the LTS branch for some projects?
 
-As you can see, $(CARGO_BOOTSTRAP_SOURCE) does not refer to
-$(CARGO_BOOTSTRAP_VERSION), only $(CARGO_BOOTSTRAP_SITE) does.
+Peter: as requested by Karoly, I think we can backport this patch into
+the LTS branch.
 
-In my build environment, I already had a previous version of
-cargo-nightly-$(HOSTARCH)-unknown-linux-gnu.tar.gz in my dl directory,
-so when I bumped the version, Buildroot did not download the new
-version.
+Thanks!
 
-Is there a way to fix this problem, by renaming the tarball in a
-post-download hook or using a hash verification trick?
-
-Best regards,
-
---
-ELB
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
