@@ -1,40 +1,88 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 25 Mar 2017 10:54:22 +0100
-Subject: [Buildroot] [PATCH] package/enlightenment: bump to version 0.21.7
-Message-ID: <20170325095422.9385-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 25 Mar 2017 11:10:31 +0100
+Subject: [Buildroot] [PATCH v2,1/2] libmediaart: new package
+In-Reply-To: <20170324215727.3d17fc1b@free-electrons.com>
+References: <1490387931-113759-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170324215727.3d17fc1b@free-electrons.com>
+Message-ID: <CAPi7W83QtcZM=wEFtZ6TMmSRRK-7ewBTUs36+Bpi1=Me37gx6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Dear Thomas,
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index 777ee2d..e69c7ff 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e-0.21.6-release
--sha256	ed0714b54d692cbcec412bdb169e5360355347ce775d27d6ae0cee25111b563d 	enlightenment-0.21.6.tar.xz
-+# From https://www.enlightenment.org/news/e-0.21.7-release
-+sha256	7643f7fd4aadaca44c886f21063987624c50d4c50266e87600e902a59b7c76f7 	enlightenment-0.21.7.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 6529287..0899890 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.21.6
-+ENLIGHTENMENT_VERSION = 0.21.7
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
--- 
-2.9.3
+2017-03-24 21:57 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Hello,
+>
+> On Fri, 24 Mar 2017 21:38:50 +0100, Fabrice Fontaine wrote:
+>
+> > +else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_QT),y)
+> > +# qt5 needs c++11 (since qt-5.7)
+> > +ifeq ($(BR2_QT5_VERSION_LATEST),y)
+>
+> Should be:
+>
+>  BR2_PACKAGE_QT5_VERSION_LATEST
+>
+> It has been changed in commit
+> https://git.buildroot.org/buildroot/commit/package/qt5/Config.in?id=
+> 49a33d3a229571e22ab783cbb1e5cace06ad7b99.
+>
+> OK, I will update it.
+
+> > +LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+> > +endif
+> > +LIBMEDIAART_DEPENDENCIES += \
+> > +     $(if $(BR2_PACKAGE_QT),qt) \
+> > +     $(if $(BR2_PACKAGE_QT5),qt5base)
+> > +LIBMEDIAART_CONF_OPTS += \
+> > +     --disable-gdkpixbuf \
+> > +     --enable-qt
+> > +else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_NONE),y)
+> > +LIBMEDIAART_CONF_OPTS += \
+> > +     --disable-gdkpixbuf \
+> > +     --disable-qt
+> > +endif
+>
+> Are the backends really mutually exclusive?
+>
+> Yes, they're mutually exclusive. If both are enabled, configure will fail
+because of the followig lines in configure.ac:
+if test "x$enable_qt" == "xyes" && test "x$enable_gdkpixbuf" == "xyes";
+then
+AC_MSG_ERROR([Can not enable both Qt and GdkPixbuf backends, please pick
+one])
+fi
+
+> Why don't we simply do:
+>
+> ifeq ($(BR2_PACKAGE_QT)$(BR2_PACKAGE_QT5),y)
+> ... enable QT backend ...
+> else
+> ... disable QT backend
+> endif
+>
+> ifeq ($(BR2_PACKAGE_GDK_PIXBUF),y)
+> ... enable GDK pixbuf backend ...
+> else
+> ... disable GDK pixbuf backend ...
+> endif
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170325/442b4914/attachment.html>
