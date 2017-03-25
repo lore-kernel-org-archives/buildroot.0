@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 15:18:08 +0100
-Subject: [Buildroot] [PATCH] vnstat: bump to version 1.17
-In-Reply-To: <20170324022342.31541-1-rprebello@gmail.com>
-References: <20170324022342.31541-1-rprebello@gmail.com>
-Message-ID: <20170325151808.43691922@free-electrons.com>
+Date: Sat, 25 Mar 2017 15:18:14 +0100
+Subject: [Buildroot] [PATCH v4] qt: add enable for truetype font
+ installation
+In-Reply-To: <1490331098-3269-1-git-send-email-danomimanchego123@gmail.com>
+References: <1490331098-3269-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20170325151814.303fc61d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 23 Mar 2017 23:23:42 -0300, Rodrigo Rebello wrote:
-> Also remove patch that has been merged upstream, disable AUTORECONF
-> since we're no longer patching configure.ac and get rid of hack
-> involving the install target as the 'install-data-hook' in Makefile.am
-> now avoids running 'vnstat --showconfig' on the host in case of
-> cross-compilation.
+On Fri, 24 Mar 2017 00:51:38 -0400, Danomi Manchego wrote:
+> Currently, qt.mk installs DejaVu/Vera TrueType fonts when Qt is configured for
+> freetype support. However, some users may prefer to limit the installed fonts
+> to only Qt's prerendered fonts (micro, fixed, helvetica, etc.). Or, there may
+> be a preference to use seperately installed TrueType fonts. This commit adds
+> a switch to explicitly control the installation of the TrueType fonts, similar
+> to the existing prerendered font enables.
 > 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> 
 > ---
->  ...ure.ac-add-option-to-disable-image-output.patch | 51 ----------------------
->  package/vnstat/vnstat.hash                         |  2 +-
->  package/vnstat/vnstat.mk                           | 10 +----
->  3 files changed, 2 insertions(+), 61 deletions(-)
->  delete mode 100644 package/vnstat/0001-configure.ac-add-option-to-disable-image-output.patch
 
 Applied to master, thanks.
 
