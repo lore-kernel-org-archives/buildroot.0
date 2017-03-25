@@ -1,38 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 15:28:02 +0100
-Subject: [Buildroot] [git commit] linux-firmware: Add missing firmware for
-	the carl9170 driver
-Message-ID: <20170325143433.EE3FC818D2@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sat, 25 Mar 2017 15:34:56 +0100
+Subject: [Buildroot] Problem when $(PKG)_SOURCE does not contain
+	$(PKG)_VERSION
+Message-ID: <20170325143456.GA2470@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=397db2fd5d67f57d39ef58744958bef6f1e6cb35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all!
 
-For a long time now Atheros USB AR9170 devices have been using the
-carl9170 driver which relies on the carl9170-1.fw firmware file.  This
-firmware is available in linux-firmware but it wasn't currently
-installed by Buildroot.
+I will soon post a new patch series to add support for the Rust programming
+language (version 1.16.0).
 
-Signed-off-by: Karoly Pados <kp@tec4data.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-firmware/linux-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+One of the patches adds a package named host-cargo-bootstrap, which
+fetches a binary version of Cargo, the build tool for Rust.
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index bfcd2ef..55a4aac 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -104,7 +104,7 @@ endif
- 
- # ar9170
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170),y)
--LINUX_FIRMWARE_FILES += ar9170-1.fw ar9170-2.fw
-+LINUX_FIRMWARE_FILES += ar9170-1.fw ar9170-2.fw carl9170-1.fw
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
- endif
- 
+The package Makefile looks like this:
+
+```
+CARGO_BOOTSTRAP_VERSION = 6e0c18cccc8b0c06fba8a8d76486f81a792fb420
+CARGO_BOOTSTRAP_SITE = https://s3.amazonaws.com/rust-lang-ci/cargo-builds/$(CARGO_BOOTSTRAP_VERSION)
+CARGO_BOOTSTRAP_SOURCE = cargo-nightly-$(HOSTARCH)-unknown-linux-gnu.tar.gz
+```
+
+As you can see, $(CARGO_BOOTSTRAP_SOURCE) does not refer to
+$(CARGO_BOOTSTRAP_VERSION), only $(CARGO_BOOTSTRAP_SITE) does.
+
+In my build environment, I already had a previous version of
+cargo-nightly-$(HOSTARCH)-unknown-linux-gnu.tar.gz in my dl directory,
+so when I bumped the version, Buildroot did not download the new
+version.
+
+Is there a way to fix this problem, by renaming the tarball in a
+post-download hook or using a hash verification trick?
+
+Best regards,
+
+--
+ELB
