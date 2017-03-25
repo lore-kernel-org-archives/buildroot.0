@@ -1,55 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 15:27:42 +0100
-Subject: [Buildroot] [PATCH v3] python3: Bump version to 3.6.1
-In-Reply-To: <20170323152112.25631-1-andrew.smirnov@gmail.com>
-References: <20170323152112.25631-1-andrew.smirnov@gmail.com>
-Message-ID: <20170325152742.70d6c184@free-electrons.com>
+Date: Sat, 25 Mar 2017 15:28:02 +0100
+Subject: [Buildroot] [git commit] linux-firmware: Add missing firmware for
+	the carl9170 driver
+Message-ID: <20170325143433.EE3FC818D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=397db2fd5d67f57d39ef58744958bef6f1e6cb35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Mar 2017 08:21:12 -0700, Andrey Smirnov wrote:
-> Update all appropriate version numbers as well as SHAs and MD5s as well
-> as repbasing BR's patches on top of 3.6.1 codebase (new github repo
-> tree, v3.6.1 tag was used). Note that patch:
-> 
->    [PATCH] Change the install location of _sysconfigdata.py
-> 
-> was dropped due to the fact taht build system now adds platform
-> specific suffix to sysconfigdata's name, so each platform's file
-> should have a unique name and distutils now allows to specify which
-> sysconfigdata is used via _PYTHON_SYSCONFIGDATA_NAME
-> 
-> see:
-> 
->     https://github.com/python/cpython/commit/c4b53afce491142b80b228a21a05de5dcfd8d36f
->     https://github.com/python/cpython/commit/92dec548ff1494b86f08bd3753ca91a9330b4ea9
-> 
-> and patches:
-> 
->     [PATCH] distutils/sysconfig: use sysconfigdata
->     [PATCH] setup.py: do not add invalid header locations
->     [PATCH] Do not harcode invalid path to ncursesw headers
-> 
-> was dropped since it looks like it made it's way upstream, see:
-> 
->     https://github.com/python/cpython/commit/409482251b06fe75c4ee56e85ffbb4b23d934159
->     https://github.com/python/cpython/commit/1351c31aa9651b278d7ef8ec79af3b646a520235
->     https://github.com/python/cpython/commit/e13c3201fb66c4c211b4ebb7604d1435bedc1015
-> 
-> respectively.
-> 
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
+For a long time now Atheros USB AR9170 devices have been using the
+carl9170 driver which relies on the carl9170-1.fw firmware file.  This
+firmware is available in linux-firmware but it wasn't currently
+installed by Buildroot.
 
-Applied to master, thanks.
+Signed-off-by: Karoly Pados <kp@tec4data.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/linux-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index bfcd2ef..55a4aac 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -104,7 +104,7 @@ endif
+ 
+ # ar9170
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170),y)
+-LINUX_FIRMWARE_FILES += ar9170-1.fw ar9170-2.fw
++LINUX_FIRMWARE_FILES += ar9170-1.fw ar9170-2.fw carl9170-1.fw
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
+ endif
+ 
