@@ -1,63 +1,47 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 25 Mar 2017 22:59:00 +0100
-Subject: [Buildroot] [PATCH v5 3/4] package/supertux: fix bug when compiling
-	with PPC altivec vectorization
+Date: Sat, 25 Mar 2017 22:59:01 +0100
+Subject: [Buildroot] [PATCH v5 4/4] Revert "package/sdl2: disable altivec
+	built-in function for PowerPC"
 In-Reply-To: <20170325215901.15044-1-romain.naour@gmail.com>
 References: <20170325215901.15044-1-romain.naour@gmail.com>
-Message-ID: <20170325215901.15044-3-romain.naour@gmail.com>
+Message-ID: <20170325215901.15044-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]:
-Acording to a bug report in GCC [2]:
-"You need to use -std=g++11 or undefine bool after the include of altivec.h
-as context sensitive keywords is not part of the C++11 standard".
+The bug discover while packaging supertux is now fixed by the previous
+patch but the issue can still be present in other C++11 package if
+-std=c++11 is used on PPC with Altivec vectorization.
 
-So use gnu++11 instead of c++11 only for altivec system.
-
-This allow to revert [3] and keep Altivec vectorization.
-
-[1] 0024465d8a7b51f7fc7c9e8581072695d869adca
-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58241#c3
-[3] d2903aaf1314b50a8a10ce937d2b33c5c42e463e
+This reverts commit d2903aaf1314b50a8a10ce937d2b33c5c42e463e.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/supertux/supertux.mk | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ package/sdl2/sdl2.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
-index 6a409e3..af1ab00 100644
---- a/package/supertux/supertux.mk
-+++ b/package/supertux/supertux.mk
-@@ -46,4 +46,25 @@ endef
- SUPERTUX_POST_PATCH_HOOKS += SUPERTUX_REMOVE_PEDANTIC
- endif
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 628d906..d2ee50d 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -23,16 +23,6 @@ SDL2_CONF_OPTS += \
+ # We must enable static build to get compilation successful.
+ SDL2_CONF_OPTS += --enable-static
  
-+# From https://bugs.debian.org/cgi-bin/bugreport.cgi/?bug=770670
-+# "The problem lies within SDL_cpuinfo.h.  It includes altivec.h, which by
-+# definition provides an unconditional vector, pixel and bool define in
-+# standard-c++ mode.  In GNU-c++ mode this names are only defined
-+# context-sensitive by cpp.  SDL_cpuinfo.h is included by SDL.h.
-+# Including altivec.h makes arbitrary code break."
-+#
-+# Acording to a bug report in GCC [1]:
-+# "You need to use -std=g++11 or undefine bool after the include of altivec.h
-+# as context sensitive keywords is not part of the C++11 standard".
-+# So use gnu++11 instead of c++11 only for altivec system.
-+# [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58241#c3
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
-+define SUPERTUX_FIX_ALTIVEC_ISSUE
-+	$(SED) 's%std=c++0x%std=gnu++0x%' $(@D)/CMakeLists.txt
-+	$(SED) 's%std=c++11%std=gnu++11%' $(@D)/CMakeLists.txt
-+	$(SED) 's%std=c++0x%std=gnu++0x%' $(@D)/external/tinygettext/CMakeLists.txt
-+endef
-+SUPERTUX_POST_PATCH_HOOKS += SUPERTUX_FIX_ALTIVEC_ISSUE
-+endif
-+
- $(eval $(cmake-package))
+-# From https://bugs.debian.org/cgi-bin/bugreport.cgi/?bug=770670
+-# "The problem lies within SDL_cpuinfo.h.  It includes altivec.h, which by
+-# definition provides an unconditional vector, pixel and bool define in
+-# standard-c++ mode.  In GNU-c++ mode this names are only defined
+-# context-sensitive by cpp.  SDL_cpuinfo.h is included by SDL.h.
+-# Including altivec.h makes arbitrary code break."
+-ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+-SDL2_CONF_OPTS += --disable-altivec
+-endif
+-
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ SDL2_DEPENDENCIES += udev
+ SDL2_CONF_OPTS += --enable-libudev
 -- 
 2.9.3
