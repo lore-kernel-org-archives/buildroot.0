@@ -1,29 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 14:35:47 +0100
-Subject: [Buildroot] [PATCH] package/enlightenment: bump to version
- 0.21.7
-In-Reply-To: <20170325095422.9385-1-romain.naour@gmail.com>
-References: <20170325095422.9385-1-romain.naour@gmail.com>
-Message-ID: <20170325143547.1fdb6c27@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 25 Mar 2017 13:36:49 +0000
+Subject: [Buildroot] [Bug 9776] libubox build failed
+In-Reply-To: <bug-9776-163@https.bugs.busybox.net/>
+References: <bug-9776-163@https.bugs.busybox.net/>
+Message-ID: <bug-9776-163-Y0W3rXGfkK@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9776
 
-On Sat, 25 Mar 2017 10:54:22 +0100, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/enlightenment/enlightenment.hash | 4 ++--
->  package/enlightenment/enlightenment.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Please post at least the last ~100 lines of the build output, what you posted
+doesn't contain enough useful information.
 
-Applied to master, thanks.
+Also, please indicate the Buildroot version being used, and the Buildroot
+configuration file that triggers the issue.
 
-Thomas
+Finally, make sure you can reproduce your issue after a "make clean all" cycle.
+
+Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
