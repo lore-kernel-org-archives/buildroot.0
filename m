@@ -1,28 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Mar 2017 14:54:58 +0100
-Subject: [Buildroot] [PATCH] lz4: version v1.7.5
-In-Reply-To: <20170324062952.21759-1-jer@airfi.aero>
-References: <20170324062952.21759-1-jer@airfi.aero>
-Message-ID: <20170325145458.2027e547@free-electrons.com>
+Date: Sat, 25 Mar 2017 14:55:24 +0100
+Subject: [Buildroot] [git commit] package/ntp: fix build for toolchains
+	without ssp
+Message-ID: <20170325135531.ABFE682243@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=00968bcac0674250956e99b6fafbf9b373446488
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Mar 2017 07:29:52 +0100, Jeroen Roovers wrote:
-> Signed-off-by: Jeroen Roovers <jer@airfi.aero>
-> ---
->  package/lz4/lz4.hash | 2 +-
->  package/lz4/lz4.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+ntp defaults to use ssp support
+http://bk1.ntp.org/ntp-stable/sntp/harden/README
 
-Applied to master, thanks.
+by using these flags
+http://bk1.ntp.org/ntp-stable/sntp/harden/linux
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+If the toolchain lacks SSP support this patch forces ntp to use an
+empty set of flags: http://bk1.ntp.org/ntp-stable/sntp/harden/default
+
+Fixes
+http://autobuild.buildroot.net/results/1d5/1d58bd8745b22c8eb71fea4c7255d3ace69f6f7a/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ntp/ntp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index b6eb1b1..e3e53a8 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -23,6 +23,12 @@ NTP_CONF_OPTS = \
+ # 0002-ntp-syscalls-fallback.patch
+ NTP_AUTORECONF = YES
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
++NTP_CONF_OPTS += --with-locfile=linux
++else
++NTP_CONF_OPTS += --with-locfile=default
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ NTP_CONF_OPTS += --enable-linuxcaps
+ NTP_DEPENDENCIES += libcap
