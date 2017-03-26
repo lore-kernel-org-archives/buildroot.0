@@ -1,48 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 23:42:12 +0200
-Subject: [Buildroot] [PATCH] core: enhance printvars
-In-Reply-To: <1485641971-25278-1-git-send-email-yann.morin.1998@free.fr>
-References: <1485641971-25278-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170326234212.141c1e1b@free-electrons.com>
+Date: Sun, 26 Mar 2017 23:43:40 +0200
+Subject: [Buildroot] [PATCH 1/4] system: do not overwrite /bin/sh Busybox
+	symlink
+In-Reply-To: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The BR2_SYSTEM_BIN_SH hidden option defines to what binary the /bin/sh
+symlinks should point to. If busybox is chosen, then /bin/sh is created
+to point to /bin/busybox.
 
-On Sat, 28 Jan 2017 23:19:31 +0100, Yann E. MORIN wrote:
-> Currently, the output of printvars copntains the name of the variable,
-> its expanded value and its un-expanded value.
-> 
-> However, most of the time, we need the actual, expanded value, so it can
-> be re-used from a (non-Buildroot) infrastructure script, like a
-> post-build script, or a build-farm driver (e.g. a Jenkins job...)
-> 
-> Add two options that a user may set to change the output of printvars:
->   - RAW_VARS, if set, will drop the unexpanded value
->   - QUOTED_VARS, if set, will quote the expanded value
-> 
-> So that it can be used as such:
-> 
->     $ make -s printvars VARS=BUSYBOX_VERSION RAW_VARS=1 QUOTED_VARS=1
->     BUSYBOX_VERSION='1.26.2'
-> 
-> And it is even possible to directly evaluate it in a shell script:
-> 
->     eval $(make -s printvars VARS=BUSYBOX_VERSION RAW_VARS=1 QUOTED_VARS=1)
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This works fine with the default installation mode of Busybox, but it
+fails with the upcoming "individual binaries" mode, in which each applet
+is installed as its own binary, and /bin/busybox doesn't exist: we get
+/bin/sh as a broken symlink to /bin/busybox.
 
-Seeing the feedback from Thomas DS and Arnout, I've marked the patch as
-"Changes Requested". Thanks!
+Since Busybox already installs its own /bin/sh symlink, properly
+pointing to /bin/ash or /bin/hush depending on the selected shell, it
+doesn't make sense for the BR2_SYSTEM_BIN_SH logic to override
+this. Just let Busybox install its own /bin/sh by making
+BR2_SYSTEM_BIN_SH empty when Busybox shell is selected as /bin/sh.
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+This is proposed as an alternative to
+https://patchwork.ozlabs.org/patch/686673/. If people believe
+https://patchwork.ozlabs.org/patch/686673/ is a better solution, I'm
+fine as well.
+---
+ package/skeleton/skeleton.mk | 2 ++
+ system/Config.in             | 1 -
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 1000161..9940944 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -203,10 +203,12 @@ define SKELETON_BIN_SH
+ 	rm -f $(TARGET_DIR)/bin/sh
+ endef
+ else
++ifneq ($(SKELETON_TARGET_GENERIC_BIN_SH),)
+ define SKELETON_BIN_SH
+ 	ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
+ endef
+ endif
++endif
+ TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
+ 
+ ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+diff --git a/system/Config.in b/system/Config.in
+index 3ddf843..b47ae43 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -298,7 +298,6 @@ endchoice # /bin/sh
+ 
+ config BR2_SYSTEM_BIN_SH
+ 	string
+-	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
+ 	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
+ 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
+ 	default "mksh"    if BR2_SYSTEM_BIN_SH_MKSH
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
