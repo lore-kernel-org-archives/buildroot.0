@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 12:32:49 +0200
-Subject: [Buildroot] [PATCH 1/2] slang: use correct ncurses config
- script name
-In-Reply-To: <20170326063654.10068-1-rprebello@gmail.com>
-References: <20170326063654.10068-1-rprebello@gmail.com>
-Message-ID: <20170326123249.72c4f006@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 26 Mar 2017 12:34:44 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-03-24
+In-Reply-To: <20170325072834.09F51207FA@mail.free-electrons.com>
+References: <20170325072834.09F51207FA@mail.free-electrons.com>
+Message-ID: <fbee7b83-68ff-9081-28ef-4f75b1c7cc48@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sun, 26 Mar 2017 03:36:53 -0300, Rodrigo Rebello wrote:
-> The ncurses config script can have different names depending on the
-> configuration (e.g. wchar support enabled/disabled). So, use
-> $(NCURSES_CONFIG_SCRIPTS) from the ncurses package as it contains the
-> proper name.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/c97554c05e121c76407be53ba37924cfcb658e9d/
->   http://autobuild.buildroot.net/results/b0a31a3491a30ee0d6e6e7dbba68a86f0e00943d/
->   http://autobuild.buildroot.net/results/a77241141cf8710fa945523ef62327798e3c4824/
->   [...]
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
->  package/slang/slang.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks!
+On 25-03-17 08:28, Thomas Petazzoni wrote:
+>         or1k |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/fa37b4cee01301dc01394fb279e7a16f10e3a6b5 | ORPH
 
-Thomas
+ This looks to me like a compiler bug. It seems that with -fPIC, static class
+members are generated with a 16-bit GOT entry. That means that they can only be
+used in binaries smaller than 64K...
+
+ Looks like Waldemar asked about this at some point on #openrisc but got no
+response.
+
+ What to do with this?
+
+ Regards,
+ Arnout
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
