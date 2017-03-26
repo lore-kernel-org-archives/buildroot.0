@@ -1,70 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 23:43:40 +0200
-Subject: [Buildroot] [PATCH 1/4] system: do not overwrite /bin/sh Busybox
-	symlink
+Date: Sun, 26 Mar 2017 23:43:42 +0200
+Subject: [Buildroot] [PATCH 3/4] docs/manual: document FOO_PERMISSIONS_FILE
 In-Reply-To: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1490564623-26806-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_SYSTEM_BIN_SH hidden option defines to what binary the /bin/sh
-symlinks should point to. If busybox is chosen, then /bin/sh is created
-to point to /bin/busybox.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This works fine with the default installation mode of Busybox, but it
-fails with the upcoming "individual binaries" mode, in which each applet
-is installed as its own binary, and /bin/busybox doesn't exist: we get
-/bin/sh as a broken symlink to /bin/busybox.
-
-Since Busybox already installs its own /bin/sh symlink, properly
-pointing to /bin/ash or /bin/hush depending on the selected shell, it
-doesn't make sense for the BR2_SYSTEM_BIN_SH logic to override
-this. Just let Busybox install its own /bin/sh by making
-BR2_SYSTEM_BIN_SH empty when Busybox shell is selected as /bin/sh.
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-This is proposed as an alternative to
-https://patchwork.ozlabs.org/patch/686673/. If people believe
-https://patchwork.ozlabs.org/patch/686673/ is a better solution, I'm
-fine as well.
----
- package/skeleton/skeleton.mk | 2 ++
- system/Config.in             | 1 -
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-generic.txt | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 1000161..9940944 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -203,10 +203,12 @@ define SKELETON_BIN_SH
- 	rm -f $(TARGET_DIR)/bin/sh
- endef
- else
-+ifneq ($(SKELETON_TARGET_GENERIC_BIN_SH),)
- define SKELETON_BIN_SH
- 	ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
- endef
- endif
-+endif
- TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index a08283c..23b07fa 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -386,7 +386,13 @@ information is (assuming the package name is +libfoo+) :
+ * +LIBFOO_PERMISSIONS+ lists the changes of permissions to be done at
+   the end of the build process. The syntax is once again the makedevs one.
+   You can find some documentation for this syntax in the xref:makedev-syntax[].
+-  This variable is optional.
++  This variable is optional; its value must be known when the .mk file
++  is parsed.
++
++* +LIBFOO_PERMISSIONS_FILE+, like +LIBFOO_PERMISSIONS+ but points to a
++  file that contains the list of permissions. Unlike +LIBFOO_PERMISSIONS+,
++  its content need not be known when the .mk file is parsed, so it can be
++  generated. This variable is optional, and you should seldom need it.
  
- ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-diff --git a/system/Config.in b/system/Config.in
-index 3ddf843..b47ae43 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -298,7 +298,6 @@ endchoice # /bin/sh
- 
- config BR2_SYSTEM_BIN_SH
- 	string
--	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
- 	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
- 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
- 	default "mksh"    if BR2_SYSTEM_BIN_SH_MKSH
+ * +LIBFOO_USERS+ lists the users to create for this package, if it installs
+   a program you want to run as a specific user (e.g. as a daemon, or as a
 -- 
 2.7.4
