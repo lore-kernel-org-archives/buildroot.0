@@ -1,42 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 23:44:15 +0200
-Subject: [Buildroot] [PATCH] core/br2-external: properly report
- unexpected errors
-In-Reply-To: <1485600092-963-1-git-send-email-yann.morin.1998@free.fr>
-References: <1485600092-963-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170326234415.2192a445@free-electrons.com>
+From: Pawel Sikora <sikor6@gmail.com>
+Date: Mon, 27 Mar 2017 00:44:14 +0200
+Subject: [Buildroot] [PATCH 1/1] syslog-ng: Bump version header in conf file
+	to 3.9
+Message-ID: <20170326224414.2163-1-sikor6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Package version of syslog-ng is 3.9.1.
+Bumping version number in syslog-ng.conf to 3.9
 
-On Sat, 28 Jan 2017 11:41:32 +0100, Yann E. MORIN wrote:
-> Unextected error in the br2-external script are properly caught, but
-> they are not reported properly, and we end up in either of two
-> situations:
-> 
->   - the .br2-external.mk file is not generated, in which case make will
->     try to find a rule to generate it (because the 'include' directive
->     tries to generate missing files);
-> 
->   - the .br-external.mk file is generated but does not contain the error
->     variable, and thus the build might not get interrupted.
-> 
-> We fix that by using a trap on the pseudo ERR signal, to emit the error
-> variable on unexpected errors.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  support/scripts/br2-external | 3 +++
->  1 file changed, 3 insertions(+)
+Fixing warning message about configuration file being too old.
 
-Applied to master, thanks.
+Signed-off-by: Pawel Sikora <sikor6@gmail.com>
+---
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index 0b4a860cf..a3384eebc 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+- at version: 3.7
++ at version: 3.9
+ 
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.12.0
