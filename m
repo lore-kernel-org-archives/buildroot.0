@@ -1,64 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 21:44:44 +0200
-Subject: [Buildroot] [PATCH 12/23] arch/xtensa: add macros to generate
- hooks
-In-Reply-To: <1489516252-3803-13-git-send-email-jcmvbkbc@gmail.com>
-References: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
- <1489516252-3803-13-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20170326214444.1a893177@free-electrons.com>
+Date: Sun, 26 Mar 2017 21:52:39 +0200
+Subject: [Buildroot] [git commit] lz4: pass {TARGET,
+	HOST}_CONFIGURE_OPTS in the environment
+Message-ID: <20170326195405.04933816A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f4dc73568b08bd96aa659c5ef29226349dee05de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Mar 2017 11:30:41 -0700, Max Filippov wrote:
+{TARGET,HOST}_CONFIGURE_OPTS are currently passed as $(MAKE) argument,
+which causes some CPPFLAGS/CFLAGS defined by the package build system to
+be overridden, leading to build failures. This commit changes the lz4
+package to pass {TARGET,HOST}_CONFIGURE_OPTS through the environment to
+avoid this issue.
 
-> +################################################################################
-> +# arch-xtensa-overlay-inner -- generates the make targets needed to extract
-> +# the xtensa overlay
-> +#
-> +# argument 1 is the uppercase package name, including a HOST_ prefix
-> +#            for host packages
-> +#
-> +# Packages that call that macro shall define FOO_ARCH_XTENSA_OVERLAY_COMPONENT
-> +# and set it to one of the component to extract, one of: binutils, gcc, gdb.
-> +#
-> +################################################################################
-> +define arch-xtensa-overlay-inner
-> +
-> +ifneq ($$(ARCH_XTENSA_CORE_NAME),)
-> +
-> +define $(1)_XTENSA_OVERLAY_EXTRACT
-> +	$$(call arch-xtensa-overlay-extract,$$(@D),$$($(1)_ARCH_XTENSA_OVERLAY_COMPONENT))
-> +endef
-> +$(1)_POST_EXTRACT_HOOKS += $(1)_XTENSA_OVERLAY_EXTRACT
-> +
-> +endif # ARCH_XTENSA_CORE_NAME != ""
-> +
-> +endef # arch-xtensa-overlay-inner
-> +
-> +################################################################################
-> +# arch-xtensa-overlay -- the target generator macro for the Xtensa overlay
-> +################################################################################
-> +arch-xtensa-overlay = $(call arch-xtensa-overlay-inner,$(call UPPERCASE,$(pkgname)))
-> +host-arch-xtensa-overlay = $(call arch-xtensa-overlay-inner,HOST_$(call UPPERCASE,$(pkgname)))
+Fixes:
 
-I must say I am not entirely convinced by this macro. It really makes
-thing less obvious to read, and doesn't really remove a lot of code
-duplication.
+  http://autobuild.buildroot.net/results/2a578a9c462463fde802c999156723494fe1b14d/
 
-So I'm still hesitating on this one. It's not a big no, but an
-hesitation. However, I'm clearly interested by the following stuff that
-allows to download the overlay tarball instead of having it in
-Buildroot itself.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lz4/lz4.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index be891dd..c2c8919 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -18,25 +18,25 @@ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ endif
+ 
+ define HOST_LZ4_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ define HOST_LZ4_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX=$(HOST_DIR)/usr \
+ 		install -C $(@D)
+ endef
+ 
+ define LZ4_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/lib
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(STAGING_DIR) \
+ 		PREFIX=/usr install -C $(@D)
+ endef
+ 
+ define LZ4_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
+ 		PREFIX=/usr install -C $(@D)/lib
+ endef
+ 
