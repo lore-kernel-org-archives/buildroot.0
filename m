@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 15:50:06 +0200
-Subject: [Buildroot] [git commit] package/binutils: use macro to extract
-	Xtensa overlay
-Message-ID: <20170326135524.960F982489@busybox.osuosl.org>
+Date: Sun, 26 Mar 2017 15:48:58 +0200
+Subject: [Buildroot] [git commit] core: include arch-specific definitions
+Message-ID: <20170326135524.35A9882489@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96f57fa5e43ee35478a7f0a5788624fc487db798
+commit: https://git.buildroot.net/buildroot/commit/?id=8efa2d8de920228130235ad6c0a2aeb19a6ae4be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Allow architectures to define variables and helper macros.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 914393e..5ab346c 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -123,7 +123,7 @@ endif
+diff --git a/Makefile b/Makefile
+index fb2c235..cceae92 100644
+--- a/Makefile
++++ b/Makefile
+@@ -479,6 +479,9 @@ all: world
+ include Makefile.legacy
  
- ifneq ($(ARCH_XTENSA_CORE_NAME),)
- define BINUTILS_XTENSA_PRE_PATCH
--	tar xf $(ARCH_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 binutils
-+	$(call arch-xtensa-overlay-extract,$(@D),binutils)
- endef
- BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
- HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
+ include package/Makefile.in
++# arch/arch.mk.* must be after package/Makefile.in because it may need to
++# complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
++-include $(wildcard arch/arch.mk.*)
+ include support/dependencies/dependencies.mk
+ 
+ include toolchain/*.mk
