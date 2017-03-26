@@ -1,9 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 23:49:21 +0200
-Subject: [Buildroot] [PATCH 1/2] package/git: Fix build without libiconv
-In-Reply-To: <20170116212417.30415-1-bernd.kuhls@t-online.de>
-References: <20170116212417.30415-1-bernd.kuhls@t-online.de>
-Message-ID: <20170326234921.34b89017@free-electrons.com>
+Date: Sun, 26 Mar 2017 23:53:20 +0200
+Subject: [Buildroot] Patchwork cleanup, 10 patches to look at
+Message-ID: <20170326235320.448e802a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +10,78 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 Jan 2017 22:24:16 +0100, Bernd Kuhls wrote:
+I'd like to again restart the patchwork cleanup effort. There are
+numerous patches in patchwork that I'm not sure what we want to do
+with.
 
-> +++ b/package/git/0001-configure.ac-fix-old-iconv-check.patch
-> @@ -0,0 +1,42 @@
-> +From 3c170355aeba39bb310d8b9192c9623b380d5eae Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Mon, 16 Jan 2017 20:14:10 +0100
-> +Subject: [PATCH 1/2] configure.ac: fix old iconv check
-> +
-> +According to
-> +https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Running-the-Compiler.html
-> +the parameter syntax of AC_COMPILE_IFELSE is
-> +
-> +(input, [action-if-true], [action-if-false])
-> +
-> +Displaying "no" when the test was positive and enabling support for old
-> +iconv implementations by OLD_ICONV=UnfortunatelyYes when the test fails
-> +it obviously wrong. This patch switches the actions to fix the problem.
-> +
-> +Patch sent upstream:
-> +https://public-inbox.org/git/20170116195638.3713-1-bernd.kuhls at writeme.com/T/#t
+Here is a list of 10 patches that we need to take a decision on. If no
+decision is taken in the next 2 weeks, I'll mark them as Rejected.
 
-Seems like the feedback from upstream about this patch was that it
-wasn't correct. Have you had the chance to look into this?
+ * avahi: link with libintl if libglib2 is enabled
+   https://patchwork.ozlabs.org/patch/683732/
 
-Thanks,
+   My plan is to enable the stub libintl in uClibc-ng and stop having
+   all those linking issues with libintl from gettext. The only
+   drawback would be that there would no longer be "translation"
+   support with uClibc: the libintl implementation in uClibc-ng is
+   really just a stub.
+
+   Thoughts ?
+
+ * qemu: allow to build statically
+   https://patchwork.ozlabs.org/patch/692667/
+
+   We normally don't want to have special options for each package to
+   build them statically. Should we make an exception for Qemu?
+
+ * infra: fix 'packages-file-list.txt' with TLP
+   https://patchwork.ozlabs.org/patch/694519/
+
+   Adds a lock around the installation step of packages, to make
+   top-level parallel build still generate a correct list of files per
+   package.
+
+   Gustavo, what is your plan regarding this?
+
+   Others: should we merge this?
+
+ * e2fsprogs: keep util-linux's fsck if chosen
+   https://patchwork.ozlabs.org/patch/696634/
+
+   This fixes a real bug, but even Maxime who submitted the patch is
+   not too happy with the proposal. Could someone look into this?
+
+ * linux-headers: Account for LINUX_OVERRIDE_SRCDIR
+   https://patchwork.ozlabs.org/patch/713927/
+
+   I think I am against this patch, because if the user sets
+   LINUX_OVERRIDE_SRCDIR, then suddenly he will see his kernel headers
+   being rebuilt as well.
+
+   Arnout ?
+
+ * python-lxml: allow build as host package
+   https://patchwork.ozlabs.org/patch/722644/
+
+   Host package not used anywhere. Discussed at length during the
+   previous BR meeting. What do we do?
+
+ * fakedate: simplify logic
+   https://patchwork.ozlabs.org/patch/725396/
+
+ * linux-tools/perf: fix build for MIPS by using the right emulation on
+   LD
+   https://patchwork.ozlabs.org/patch/729154/
+
+ * package/pkg-download.mk: add gitlab helper
+   https://patchwork.ozlabs.org/patch/736382/
+
+ * linux: Add CIP SLTS easy selection option
+   https://patchwork.ozlabs.org/patch/736383/
+
+Please help taking decisions about those patches.
+
+Thanks!
 
 Thomas
 -- 
