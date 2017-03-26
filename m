@@ -1,64 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 21:52:39 +0200
-Subject: [Buildroot] [git commit] lz4: pass {TARGET,
-	HOST}_CONFIGURE_OPTS in the environment
-Message-ID: <20170326195405.04933816A3@busybox.osuosl.org>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Sun, 26 Mar 2017 16:57:07 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-03-25
+In-Reply-To: <r0ckqdx1de.ln2@ID-313208.user.individual.net>
+References: <20170326062832.244E4207F8@mail.free-electrons.com>
+ <r0ckqdx1de.ln2@ID-313208.user.individual.net>
+Message-ID: <CABLs7GXLg+83YOqiTw=aBNv6s0jUw-n_rp1Skq6_LQmru8JOQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4dc73568b08bd96aa659c5ef29226349dee05de
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi, Bernd
 
-{TARGET,HOST}_CONFIGURE_OPTS are currently passed as $(MAKE) argument,
-which causes some CPPFLAGS/CFLAGS defined by the package build system to
-be overridden, leading to build failures. This commit changes the lz4
-package to pass {TARGET,HOST}_CONFIGURE_OPTS through the environment to
-avoid this issue.
+2017-03-26 5:51 GMT-03:00 Bernd Kuhls <bernd.kuhls@t-online.de>:
 
-Fixes:
+> I can not reproduce these build errors. Apparently they only occur on the
+> autobuilder of Richard Braun. Could this be a local problem?
 
-  http://autobuild.buildroot.net/results/2a578a9c462463fde802c999156723494fe1b14d/
+I've managed to reproduce this failure by making sure no zlib dev
+files were present on my host (removed zlib1g-dev package on my Debian
+distribution). The ghostscript configure script checks for zlib on the
+host while configuring the buld of some auxiliary programs and fails
+if it's not found.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lz4/lz4.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I'm submitting a patch that fixes the issue by adding 'host-zlib' as a
+dependency in 'package/ghostscript/ghostscript.mk'.
 
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index be891dd..c2c8919 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -18,25 +18,25 @@ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
- endif
- 
- define HOST_LZ4_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define HOST_LZ4_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX=$(HOST_DIR)/usr \
- 		install -C $(@D)
- endef
- 
- define LZ4_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/lib
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib
- endef
- 
- define LZ4_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(STAGING_DIR) \
- 		PREFIX=/usr install -C $(@D)
- endef
- 
- define LZ4_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
- 		PREFIX=/usr install -C $(@D)/lib
- endef
- 
+Regards,
+Rodrigo
