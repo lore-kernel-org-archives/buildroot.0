@@ -1,53 +1,58 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 26 Mar 2017 23:54:01 +0200
-Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
-	infrastructure
-In-Reply-To: <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <9ae44859-b8aa-2676-1eea-c36778858960@lucaceresoli.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 27 Mar 2017 00:40:32 +0200
+Subject: [Buildroot] [PATCH 2/2] gdb: pass gdb_cv_prfpregset_t_broken=no
+In-Reply-To: <20170326224032.10708-1-arnout@mind.be>
+References: <20170326224032.10708-1-arnout@mind.be>
+Message-ID: <20170326224032.10708-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Starting with glibc 2.25, the proc_service.h header has been copied
+from gdb to glibc so other tools can use it. However, that makes it
+necessary to make sure that declaration of prfpregset_t declaration
+is consistent between gdb and glibc. In gdb, however, there is a
+workaround for a broken prfpregset_t declaration in glibc 2.3 which
+uses AC_TRY_RUN to detect if it's needed, which doesn't work in
+cross-compilation. So pass the cache option to configure.
+It needs to be passed to GDB_CONF_ENV to build gdbserver only but
+also to GDB_MAKE_ENV, because otherwise it does not get passed to the
+configure script of nested packages while building gdbserver with full
+debugger.
 
-only a minor nit that I noticed while reviewing patch 5.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gdb/gdb.mk | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-On 20/03/2017 21:36, Thomas Petazzoni wrote:
-[...]
-> diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
-> new file mode 100644
-> index 0000000..c3f645c
-> --- /dev/null
-> +++ b/support/testing/infra/__init__.py
-[...]
-> +def get_elf_prog_interpreter(builddir, prefix, fpath):
-> +    cmd = ["host/usr/bin/{}-readelf".format(prefix),
-> +           "-l", os.path.join("target", fpath)]
-> +    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
-> +    regexp = re.compile("^ *\[Requesting program interpreter: (.*)\]$")
-> +    for line in out.splitlines():
-> +        m = regexp.match(line)
-> +        if not m:
-> +            continue
-> +        return m.group(1)
-> +    return None
-
-This should be documented, just like get_elf_arch_tag() above. Proposal
-(unchecked):
-
-"""
-Runs the cross readelf on 'fpath' to extract the program interpreter
-name and returns it.
-Example:
->>> get_elf_prog_interpreter('output', 'arm-none-linux-gnueabi-',
-                     'bin/busybox')
-/lib/ld-uClibc.so.0
->>>
-"""
-
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 1cb1776649..1218f115a3 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -87,7 +87,21 @@ GDB_CONF_ENV = \
+ # not get passed to the configure script of nested packages while
+ # building gdbserver with full debugger.
+ GDB_CONF_ENV += gl_cv_func_gettimeofday_clobber=no
+-GDB_MAKE_ENV = gl_cv_func_gettimeofday_clobber=no
++GDB_MAKE_ENV += gl_cv_func_gettimeofday_clobber=no
++
++# Starting with glibc 2.25, the proc_service.h header has been copied
++# from gdb to glibc so other tools can use it. However, that makes it
++# necessary to make sure that declaration of prfpregset_t declaration
++# is consistent between gdb and glibc. In gdb, however, there is a
++# workaround for a broken prfpregset_t declaration in glibc 2.3 which
++# uses AC_TRY_RUN to detect if it's needed, which doesn't work in
++# cross-compilation. So pass the cache option to configure.
++# It needs to be passed to GDB_CONF_ENV to build gdbserver only but
++# also to GDB_MAKE_ENV, because otherwise it does not get passed to the
++# configure script of nested packages while building gdbserver with full
++# debugger.
++GDB_CONF_ENV += gdb_cv_prfpregset_t_broken=no
++GDB_MAKE_ENV += gdb_cv_prfpregset_t_broken=no
+ 
+ # The shared only build is not supported by gdb, so enable static build for
+ # build-in libraries with --enable-static.
 -- 
-Luca
+2.11.0
