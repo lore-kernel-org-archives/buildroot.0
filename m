@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 22:36:45 +0200
-Subject: [Buildroot] [PATCH] ghostscript: needs host-zlib
-In-Reply-To: <20170326200017.16602-1-rprebello@gmail.com>
-References: <20170326200017.16602-1-rprebello@gmail.com>
-Message-ID: <20170326223645.018186b4@free-electrons.com>
+Date: Sun, 26 Mar 2017 22:36:47 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: remove sha1 external
+ dependency
+In-Reply-To: <20170326201744.12202-1-romain.naour@gmail.com>
+References: <20170326201744.12202-1-romain.naour@gmail.com>
+Message-ID: <20170326223647.7e9f219d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Mar 2017 17:00:17 -0300, Rodrigo Rebello wrote:
-> The ghostscript configure script checks for zlib on the host when
-> configuring the build of auxiliary programs used in the compilation
-> process and fails if such library is not found.
+On Sun, 26 Mar 2017 22:17:44 +0200, Romain Naour wrote:
+> --with-sha1 option was removed since mesa 1.17.0 by commit [1].
 > 
-> Add 'host-zlib' as a dependency and, while at it, also enclose $(HOSTCC)
-> in double quotes, otherwise configure fails when that variable expands
-> to a command containing spaces (e.g. when ccache is enabled).
+> [1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=d1efa09d342bff3e5def2978a0bef748d74f9c82
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/61af9caa7fe6fce6b11f78f66b9d3590f37e92e7/
->   http://autobuild.buildroot.net/results/904f06e14247c22f740d8fd8902618017e0518f6/
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/ghostscript/ghostscript.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/mesa3d/mesa3d.mk | 11 -----------
+>  1 file changed, 11 deletions(-)
 
 Applied to master, thanks.
 
