@@ -1,77 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 15:49:45 +0200
-Subject: [Buildroot] [git commit] package/gcc: use the Xtensa variables
-Message-ID: <20170326135524.7C8C6819C0@busybox.osuosl.org>
+Date: Sun, 26 Mar 2017 15:49:12 +0200
+Subject: [Buildroot] [git commit] arch/xtensa: add definitions for the
+	Xtensa overlay
+Message-ID: <20170326135524.41125825E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=725f05967d61cc42cbb8d11401b43c479c5d7c2a
+commit: https://git.buildroot.net/buildroot/commit/?id=bcecbed654c517cf9349c7e108d014a0831d3aed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... instead of re-computing them over-and-over-again.
+Currently, we have four packages that need to use the Xtensa overlay:
+binutils, gcc-initial, gcc-final and gdb. However, they all use three
+different ways to check for, and use the overlay. Furthermore, two of
+them define the same variable: XTENSA_CORE_NAME is defined both by
+binutils and gdb
+
+In order to sanitise that, have the Xtensa architecture export the
+appropriate variables: the name of the core and the path to the overlay
+tarball. Packages can then check and use those variables.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc-final/gcc-final.mk     | 2 +-
- package/gcc/gcc-initial/gcc-initial.mk | 2 +-
- package/gcc/gcc.mk                     | 7 ++-----
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ arch/arch.mk.xtensa | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index c9ee476..a15d837 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -15,7 +15,7 @@ HOST_GCC_FINAL_DEPENDENCIES = \
- HOST_GCC_FINAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
- HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
- 
--ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
-+ifneq ($(ARCH_XTENSA_CORE_NAME),)
- HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
- 
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index a51e29c..e1a2241 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -13,7 +13,7 @@ HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
- HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
- 
--ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
-+ifneq ($(ARCH_XTENSA_CORE_NAME),)
- HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
- 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 241f357..e50e1e0 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -24,11 +24,8 @@ endif
- #
- # Xtensa special hook
- #
--
--HOST_GCC_XTENSA_OVERLAY_TAR = $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,$(BR2_XTENSA_CORE_NAME)).tar
--
- define HOST_GCC_XTENSA_OVERLAY_EXTRACT
--	tar xf $(HOST_GCC_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 gcc
-+	tar xf $(ARCH_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 gcc
- endef
- 
- #
-@@ -307,7 +304,7 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += \
- 		$(addsuffix /gcc/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
- 		$(addsuffix /gcc/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))))
- ifeq ($(BR2_xtensa),y)
--HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
-+HOST_GCC_COMMON_CCACHE_HASH_FILES += $(ARCH_XTENSA_OVERLAY_TAR)
- endif
- ifeq ($(ARCH),powerpc)
- ifneq ($(BR2_SOFT_FLOAT),)
+diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+new file mode 100644
+index 0000000..7c8beb1
+--- /dev/null
++++ b/arch/arch.mk.xtensa
+@@ -0,0 +1,15 @@
++################################################################################
++# Those two variables can be used by packages that need to extract the overlay.
++#
++# ARCH_XTENSA_CORE_NAME   is the name of the Xtensa core; empty if none or the
++#                         standard 'fsf' core.
++# ARCH_XTENSA_OVERLAY_TAR is the path to the overlay tarball; only valid when
++#                         ARCH_XTENSA_CORE_NAME is not empty.
++#
++# Example:
++#   ifneq ($(ARCH_XTENSA_CORE_NAME),)
++#       tar xf $(ARCH_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 gcc
++#   endif
++################################################################################
++ARCH_XTENSA_CORE_NAME = $(call qstrip,$(BR2_XTENSA_CORE_NAME))
++ARCH_XTENSA_OVERLAY_TAR = $(call qstrip,$(BR2_XTENSA_OVERLAY_DIR))/xtensa_$(ARCH_XTENSA_CORE_NAME).tar
