@@ -1,16 +1,21 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Sun, 26 Mar 2017 14:47:18 +1300
+Date: Sun, 26 Mar 2017 14:53:23 +1300
 Subject: [Buildroot] [Bug 9776] New: libubox build failed
-In-Reply-To: <CAFOYHZBZ0Fo8202HtObbrkv4bAMV2vu1mZvewf8G+Vgg7EJ9cg@mail.gmail.com>
+In-Reply-To: <CAFOYHZBDzK3tqrzBByt2Dn9p_NreRwhG_jz-DUAOZ_2ZjK+9Ag@mail.gmail.com>
 References: <bug-9776-163@https.bugs.busybox.net/>
  <CAFOYHZA+Q-J3+591sPK21CY+i0PV+2d3LYTwD0EMhCtoLk_7+A@mail.gmail.com>
  <CAFOYHZBZ0Fo8202HtObbrkv4bAMV2vu1mZvewf8G+Vgg7EJ9cg@mail.gmail.com>
-Message-ID: <CAFOYHZBDzK3tqrzBByt2Dn9p_NreRwhG_jz-DUAOZ_2ZjK+9Ag@mail.gmail.com>
+ <CAFOYHZBDzK3tqrzBByt2Dn9p_NreRwhG_jz-DUAOZ_2ZjK+9Ag@mail.gmail.com>
+Message-ID: <CAFOYHZAvqvLUnkEr1y_aVspVeo2wPWSmvi2iYPX5TEtwFsVoRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+On 26/03/2017 2:47 PM, "Chris Packham" <judge.packham@gmail.com> wrote:
+
+
 
 On 25/03/2017 9:54 PM, <bugzilla@busybox.net> wrote:
 
@@ -32,11 +37,11 @@ https://bugs.busybox.net/show_bug.cgi?id=9776
   Target Milestone: ---
 
 libubox: installs files in
-/home/lhk/workspace/smdk2440/host/usr/arm-buildroot-linux-
-gnueabi/sysroot//home/lhk/workspace/smdk2440
+/home/lhk/workspace/smdk2440/host/usr/arm-buildroot-linux-gn
+ueabi/sysroot//home/lhk/workspace/smdk2440
 package/pkg-generic.mk:255: recipe for target
-'/home/lhk/workspace/smdk2440/build/libubox-290c64ef5b5c3e75be851594f269d6
-a9568e64e5/.stamp_staging_installed'
+'/home/lhk/workspace/smdk2440/build/libubox-290c64ef5b5c3e75
+be851594f269d6a9568e64e5/.stamp_staging_installed'
 failed
 
 above is the logs from linux console
@@ -49,6 +54,10 @@ twice in the error message.
 I think I saw an explanation of that on another thread (sorry on mobile so
 I can't find a link easily, but it was in the last few days). Perhaps
 something has gone into a config file that shouldn't.
+
+
+Found the link
+http://lists.busybox.net/pipermail/buildroot/2017-March/187720.html
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170326/c38886e0/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170326/f327c456/attachment.html>
