@@ -1,43 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 15:50:22 +0200
-Subject: [Buildroot] [git commit] package/binutils: extract Xtensa overlay
-	as post-extract hook
-Message-ID: <20170326135524.BC50E803EC@busybox.osuosl.org>
+Date: Sun, 26 Mar 2017 15:59:38 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 10}.x series
+Message-ID: <20170326135943.4DA0B816A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1aeddf25b461f549c8fb8315a82dc647696965b
+commit: https://git.buildroot.net/buildroot/commit/?id=b718c776ca1a5d204f2ae9a765331a32e87e9560
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... like it is done for gcc.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 5ab346c..7dfe4db 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -122,11 +122,11 @@ endef
- endif
- 
- ifneq ($(ARCH_XTENSA_CORE_NAME),)
--define BINUTILS_XTENSA_PRE_PATCH
-+define BINUTILS_XTENSA_OVERLAY_EXTRACT
- 	$(call arch-xtensa-overlay-extract,$(@D),binutils)
- endef
--BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
--HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
-+BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
-+HOST_BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
- endif
- 
- ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4f17f26..4557e7c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -218,7 +218,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.56"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.17"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.10.5"	if BR2_KERNEL_HEADERS_4_10
++	default "4.4.57"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.18"	if BR2_KERNEL_HEADERS_4_9
++	default "4.10.6"	if BR2_KERNEL_HEADERS_4_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
