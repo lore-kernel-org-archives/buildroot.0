@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 21:41:04 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain-external: improve musl
- external check
-In-Reply-To: <1489989370-22377-1-git-send-email-ilya.kuzmich@gmail.com>
-References: <1489989370-22377-1-git-send-email-ilya.kuzmich@gmail.com>
-Message-ID: <20170326214104.68285bca@free-electrons.com>
+Date: Sun, 26 Mar 2017 21:41:39 +0200
+Subject: [Buildroot] [PATCH 00/23] xtensa overlay application rework
+In-Reply-To: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20170326214139.57f3091c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Mar 2017 08:56:10 +0300, Ilya Kuzmich wrote:
-> Test whether musl used or not: compile minimal C program and check if
-> interpreter contains /lib/ld-musl.
-> 
-> Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
-> ---
->  toolchain/helpers.mk                                   | 13 +++++++++----
->  toolchain/toolchain-external/pkg-toolchain-external.mk |  4 +++-
->  2 files changed, 12 insertions(+), 5 deletions(-)
+On Tue, 14 Mar 2017 11:30:29 -0700, Max Filippov wrote:
 
-Applied to master, thanks. However, I had to make a preliminary fix
-because TOOLCHAIN_EXTERNAL_READELF had a wrong value when Buildroot
-external toolchains were used.
+>   core: include arch-specific definitions
+>   arch/xtensa: add definitions for the Xtensa overlay
+>   package/binutils: use the Xtensa variables
+>   package/gdb: use the Xtensa variables
+>   package/gcc: use the Xtensa variables
+>   arch/xtensa: add macro to extract the overlay
+>   package/binutils: use macro to extract Xtensa overlay
+>   package/gdb: use macro to extract Xtensa overlay
+>   package/gcc: use macro to extract Xtensa overlay
+>   package/binutils: extract Xtensa overlay as post-extract hook
+>   package/gdb: extract Xtensa overlay as post-extract hook
+
+I've applied the first 11 patches of this series. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
