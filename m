@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 23:48:35 +0200
-Subject: [Buildroot] [PATCH] package/opengl: ensure consistency between
- the various providers
-In-Reply-To: <1487106796-15403-1-git-send-email-yann.morin.1998@free.fr>
-References: <1487106796-15403-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170326234835.4c7c6a7f@free-electrons.com>
+Date: Sun, 26 Mar 2017 23:49:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/git: Fix build without libiconv
+In-Reply-To: <20170116212417.30415-1-bernd.kuhls@t-online.de>
+References: <20170116212417.30415-1-bernd.kuhls@t-online.de>
+Message-ID: <20170326234921.34b89017@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Feb 2017 22:13:16 +0100, Yann E. MORIN wrote:
-> Some GL providers will provide libegl and libgles, but not libgl, while
-> other will provide libgl but not libegl not libgles. This can be the
-> case with:
->   - mesa3d       -> libgl
->   - rpi-userland -> libegl and libgles
-> 
-> Since we can not protect against this situation in the Config.in files
-> (especially because providers may be out-of-tree), we can only check for
-> the validity after the fact.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/6f1/6f197c643972e92f0b27b3afac7da7b4b1115f7e/
->     http://autobuild.buildroot.org/results/6c6/6c6e0a236bde7b892a69119a49422119f3efaa97/
->     http://autobuild.buildroot.org/results/5a2/5a2a1503b7d19c0ca5b0e9093aa24ed9c020e812/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/opengl/opengl.mk | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
+On Mon, 16 Jan 2017 22:24:16 +0100, Bernd Kuhls wrote:
 
-This patch has received numerous comments, so I'll mark it as Changes
-Requested in patchwork.
+> +++ b/package/git/0001-configure.ac-fix-old-iconv-check.patch
+> @@ -0,0 +1,42 @@
+> +From 3c170355aeba39bb310d8b9192c9623b380d5eae Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Mon, 16 Jan 2017 20:14:10 +0100
+> +Subject: [PATCH 1/2] configure.ac: fix old iconv check
+> +
+> +According to
+> +https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Running-the-Compiler.html
+> +the parameter syntax of AC_COMPILE_IFELSE is
+> +
+> +(input, [action-if-true], [action-if-false])
+> +
+> +Displaying "no" when the test was positive and enabling support for old
+> +iconv implementations by OLD_ICONV=UnfortunatelyYes when the test fails
+> +it obviously wrong. This patch switches the actions to fix the problem.
+> +
+> +Patch sent upstream:
+> +https://public-inbox.org/git/20170116195638.3713-1-bernd.kuhls at writeme.com/T/#t
 
-Thanks!
+Seems like the feedback from upstream about this patch was that it
+wasn't correct. Have you had the chance to look into this?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
