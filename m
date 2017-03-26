@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 22:49:31 +0200
-Subject: [Buildroot] [git commit] dbus-triggerd: add license file
-Message-ID: <20170326205041.E3847818A0@busybox.osuosl.org>
+Date: Sun, 26 Mar 2017 22:51:35 +0200
+Subject: [Buildroot] [PATCH 1/6] dbus-glib: fix legal info
+In-Reply-To: <1490204935-13172-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1490204935-13172-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20170326225135.5fe7a6dd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50284570fbefa37c8874b47cd5998bd890e54632
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-In absence of license file, use source file as a license file since it
-has license header in comments.
+On Wed, 22 Mar 2017 23:18:50 +0530, Rahul Bedarkar wrote:
+> dbus glib bindings are dual licensed under AFLv2.1 or GPLv2+.
+> Separate licenses using 'or' keyword.
+> 
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  package/dbus-glib/dbus-glib.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dbus-triggerd/dbus-triggerd.mk | 1 +
- 1 file changed, 1 insertion(+)
+Patches 1 to 3 applied. On PATCH 3, I've changed MPLv1.1 to MPL-1.1, to
+match the SPDX license code.
 
-diff --git a/package/dbus-triggerd/dbus-triggerd.mk b/package/dbus-triggerd/dbus-triggerd.mk
-index 48d5fb2..0d693b4 100644
---- a/package/dbus-triggerd/dbus-triggerd.mk
-+++ b/package/dbus-triggerd/dbus-triggerd.mk
-@@ -7,6 +7,7 @@
- DBUS_TRIGGERD_VERSION = ba3dbec805cb707c94c54de21666bf18b79bcc09
- DBUS_TRIGGERD_SITE = git://rg42.org/dbustriggerd.git
- DBUS_TRIGGERD_LICENSE = GPLv2+
-+DBUS_TRIGGERD_LICENSE_FILES = dbus-triggerd.c
- DBUS_TRIGGERD_DEPENDENCIES = host-pkgconf dbus
- 
- define DBUS_TRIGGERD_BUILD_CMDS
+As discussed previously, I've dropped patches 4 to 6, since we really
+want to use the SPDX license codes.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
