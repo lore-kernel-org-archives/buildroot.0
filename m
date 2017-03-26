@@ -1,119 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 Mar 2017 23:40:12 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: add autobuild configs
-In-Reply-To: <20170326220300.17bb84f9@free-electrons.com>
-References: <20170326194315.17791-1-arnout@mind.be>
- <20170326194315.17791-2-arnout@mind.be>
- <20170326220300.17bb84f9@free-electrons.com>
-Message-ID: <8d7e1593-672a-82c5-3031-3b0bf9212711@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Mar 2017 23:42:12 +0200
+Subject: [Buildroot] [PATCH] core: enhance printvars
+In-Reply-To: <1485641971-25278-1-git-send-email-yann.morin.1998@free.fr>
+References: <1485641971-25278-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170326234212.141c1e1b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 26-03-17 22:03, Thomas Petazzoni wrote:
-> Hello,
+On Sat, 28 Jan 2017 23:19:31 +0100, Yann E. MORIN wrote:
+> Currently, the output of printvars copntains the name of the variable,
+> its expanded value and its un-expanded value.
 > 
-> On Sun, 26 Mar 2017 21:43:15 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> We currently have a list of toolchain configurations that are used by
->> the autobuilders at [1]. However, this makes it a little more difficult
->> for people to use these configurations, and also to have a different
->> list of configurations for different branches. For example if a new
->> architecture is introduced, the 2017.02.x branch doesn't have support
->> for this architecture yet so it shouldn't try to run those configs.
->>
->> Therefore, include the autobuild defconfigs directly in Buildroot, so
->> they can be branched together with the rest. To avoid polluting the
->> configs/ directory too much, the autobuild defconfigs are kept in an
->> "autobuild" subdirectory.
->>
->> The toolchain-configs.csv file also contained additional information:
->> the hostarch required by the toolchain binary, and the libc used. The
->> latter can be found in the defconfig itself,
+> However, most of the time, we need the actual, expanded value, so it can
+> be re-used from a (non-Buildroot) infrastructure script, like a
+> post-build script, or a build-farm driver (e.g. a Jenkins job...)
 > 
-> How is the latter found in the defconfig? For example, with:
+> Add two options that a user may set to change the output of printvars:
+>   - RAW_VARS, if set, will drop the unexpanded value
+>   - QUOTED_VARS, if set, will quote the expanded value
 > 
-> +BR2_HOSTARCH="x86"
-> +BR2_x86_pentium4=y
-> +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86=y
+> So that it can be used as such:
 > 
-> How will the autobuilder script know that it is a glibc toolchain?
-
- I didn't think of that :-)
-
- But actually, as far as I can see, the only thing this is used for in the
-autobuild-run script is to decide whether or not to add BR2_STATIC_LIBS=y. But
-we can do that unconditionally - it will get removed by 'make oldconfig'.
-
-
->> but the hostarch isn't in
->> there. To avoid still having to maintain a separate file, we just add a
->> BR2_HOSTARCH string to the defconfig file. When the defconfig is used
->> this string is completely ignored, but it can be used by the
->> autobuild-run script.
+>     $ make -s printvars VARS=BUSYBOX_VERSION RAW_VARS=1 QUOTED_VARS=1
+>     BUSYBOX_VERSION='1.26.2'
 > 
-> So this BR2_HOSTARCH option needs to be added manually to the
-> defconfig: the defconfig are not directly the result of "make
-> savedefconfig", correct?
-
- Indeed.
-
- I'm open to suggestions of a different approach, of course :-)
-
- One option would be to add further subdirectories for x86 and x86_64, but I
-don't really like that.
-
-
->> Instead of this approach, I also considered adding the
->> buildroot-generated toolchains as external toolchains to the menus.
->> However, then there would still be a need for config files that specify
->> the subarch used, as well as e.g. STATIC. While with this approach the
->> entire toolchains/configs directory can be removed from
->> autobuild.buildroot.net.
+> And it is even possible to directly evaluate it in a shell script:
 > 
-> I also think this approach doesn't make much sense, because several of
-> the autobuild toolchains really don't make sense to have exposed in
-> Buildroot external toolchain menu. Some toolchain configurations only
-> exist just for the sake of testing interesting combinations.
+>     eval $(make -s printvars VARS=BUSYBOX_VERSION RAW_VARS=1 QUOTED_VARS=1)
 > 
-> Examples: the ARM no-thread toolchain, the basic PowerPC toolchain with
-> just C++ support, the ARM/glibc toolchain that intentionally always
-> uses the latest available version of gcc/binutils/glibc, etc.
-> 
-> Other than the issues raised above, I'm generally fine with the idea, I
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
- "issues" -> do you mean just the libc issue, or do you consider the
-savedefconfig issue sufficiently severe that it needs a solution before committing?
+Seeing the feedback from Thomas DS and Arnout, I've marked the patch as
+"Changes Requested". Thanks!
 
- Regards,
- Arnout
-
-> think it makes sense. If we are going to change the architecture of the
-> autobuild-run there are lots of different things that could be done:
-> 
->  - Testing different branches, like you are suggesting.
-> 
->  - Change how "exceptions" are handled. Currently, people have to
->    update their autobuild-run script to have the updated list of
->    exceptions. It would be nice if this was not necessary, either by
->    having the configuration generated by the autobuild server, or by
->    having this list of exceptions in Buildroot itself so that it gets
->    naturally updated when pulling the latest version of the source code.
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
