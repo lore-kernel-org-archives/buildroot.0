@@ -1,41 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 10:05:47 +0200
-Subject: [Buildroot] [PATCH 1/2] xenomai: bump version to 3.0.3
-In-Reply-To: <20170321165137.23527-2-sikor6@gmail.com>
-References: <187459> <20170321165137.23527-1-sikor6@gmail.com>
- <20170321165137.23527-2-sikor6@gmail.com>
-Message-ID: <20170326100547.2ce52b7d@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 26 Mar 2017 10:51:07 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-03-25
+References: <20170326062832.244E4207F8@mail.free-electrons.com>
+Message-ID: <r0ckqdx1de.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
+  
+>          arm |               ghostscript-9.21 | NOK | http://
+autobuild.buildroot.net/results/61af9caa7fe6fce6b11f78f66b9d3590f37e92e7 
+|     
+>     mips64el |               ghostscript-9.21 | NOK | http://
+autobuild.buildroot.net/results/904f06e14247c22f740d8fd8902618017e0518f6 
+|     
 
-On Tue, 21 Mar 2017 17:51:37 +0100, Pawel Sikora wrote:
-> Bump Xenomai version to 3.0.3,
-> Remove patch 0001-bfin-remove-inline-keyword.patch for version 2.6.4,
-> as it is already included in upstream
-> 
-> Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> ---
->  .../xenomai/0001-bfin-remove-inline-keyword.patch  | 62 ----------------------
->  package/xenomai/xenomai.hash                       |  2 +-
->  package/xenomai/xenomai.mk                         |  2 +-
->  3 files changed, 2 insertions(+), 64 deletions(-)
->  delete mode 100644 package/xenomai/0001-bfin-remove-inline-keyword.patch
+I can not reproduce these build errors. Apparently they only occur on the 
+autobuilder of Richard Braun. Could this be a local problem?
 
-This wasn't building properly with gcc 6.x, so I've added a patch to
-fix this, and then applied.
-
-At some point, it would be nice to support the "Mercury" variant of
-Xenomai 3, but that can be done through additional patches.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
