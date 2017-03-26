@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Mar 2017 15:49:22 +0200
-Subject: [Buildroot] [git commit] package/binutils: use the Xtensa variables
-Message-ID: <20170326135524.68B45803EC@busybox.osuosl.org>
+Date: Sun, 26 Mar 2017 15:50:27 +0200
+Subject: [Buildroot] [git commit] package/gdb: extract Xtensa overlay as
+	post-extract hook
+Message-ID: <20170326135524.CA4E3803EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12d97d01db7e054447241d1a6af0bb0c258e439e
+commit: https://git.buildroot.net/buildroot/commit/?id=8ac4d34e510b4d653be1680b811a3963f1f8d7c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... instead of re-computing them over-and-over-again.
+... like it is done for gcc.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/gdb/gdb.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 6d29f24..914393e 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -121,11 +121,9 @@ define BINUTILS_INSTALL_TARGET_CMDS
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 13b1ab2..1cb1776 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -45,11 +45,11 @@ HOST_GDB_INSTALL_OPTS += MAKEINFO=true install
+ 
+ # Apply the Xtensa specific patches
+ ifneq ($(ARCH_XTENSA_CORE_NAME),)
+-define GDB_XTENSA_PRE_PATCH
++define GDB_XTENSA_OVERLAY_EXTRACT
+ 	$(call arch-xtensa-overlay-extract,$(@D),gdb)
  endef
+-GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+-HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
++GDB_POST_EXTRACT_HOOKS += GDB_XTENSA_OVERLAY_EXTRACT
++HOST_GDB_POST_EXTRACT_HOOKS += GDB_XTENSA_OVERLAY_EXTRACT
  endif
  
--XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
--ifneq ($(XTENSA_CORE_NAME),)
-+ifneq ($(ARCH_XTENSA_CORE_NAME),)
- define BINUTILS_XTENSA_PRE_PATCH
--	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(XTENSA_CORE_NAME).tar \
--		-C $(@D) --strip-components=1 binutils
-+	tar xf $(ARCH_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 binutils
- endef
- BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
- HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
+ ifeq ($(GDB_FROM_GIT),y)
