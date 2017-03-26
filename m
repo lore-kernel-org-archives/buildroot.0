@@ -1,51 +1,88 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Sun, 26 Mar 2017 17:00:17 -0300
-Subject: [Buildroot] [PATCH] ghostscript: needs host-zlib
-Message-ID: <20170326200017.16602-1-rprebello@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Mar 2017 22:03:00 +0200
+Subject: [Buildroot] [PATCH 2/2] configs: add autobuild configs
+In-Reply-To: <20170326194315.17791-2-arnout@mind.be>
+References: <20170326194315.17791-1-arnout@mind.be>
+ <20170326194315.17791-2-arnout@mind.be>
+Message-ID: <20170326220300.17bb84f9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ghostscript configure script checks for zlib on the host when
-configuring the build of auxiliary programs used in the compilation
-process and fails if such library is not found.
+Hello,
 
-Add 'host-zlib' as a dependency and, while at it, also enclose $(HOSTCC)
-in double quotes, otherwise configure fails when that variable expands
-to a command containing spaces (e.g. when ccache is enabled).
+On Sun, 26 Mar 2017 21:43:15 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> We currently have a list of toolchain configurations that are used by
+> the autobuilders at [1]. However, this makes it a little more difficult
+> for people to use these configurations, and also to have a different
+> list of configurations for different branches. For example if a new
+> architecture is introduced, the 2017.02.x branch doesn't have support
+> for this architecture yet so it shouldn't try to run those configs.
+> 
+> Therefore, include the autobuild defconfigs directly in Buildroot, so
+> they can be branched together with the rest. To avoid polluting the
+> configs/ directory too much, the autobuild defconfigs are kept in an
+> "autobuild" subdirectory.
+> 
+> The toolchain-configs.csv file also contained additional information:
+> the hostarch required by the toolchain binary, and the libc used. The
+> latter can be found in the defconfig itself,
 
-Fixes:
+How is the latter found in the defconfig? For example, with:
 
-  http://autobuild.buildroot.net/results/61af9caa7fe6fce6b11f78f66b9d3590f37e92e7/
-  http://autobuild.buildroot.net/results/904f06e14247c22f740d8fd8902618017e0518f6/
++BR2_HOSTARCH="x86"
++BR2_x86_pentium4=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86=y
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- package/ghostscript/ghostscript.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+How will the autobuilder script know that it is a glibc toolchain?
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index e568b2047..265503e47 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -15,6 +15,7 @@ GHOSTSCRIPT_DEPENDENCIES = \
- 	host-lcms2 \
- 	host-libjpeg \
- 	host-pkgconf \
-+	host-zlib \
- 	fontconfig \
- 	ghostscript-fonts \
- 	jpeg \
-@@ -31,7 +32,7 @@ endef
- GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
- 
- GHOSTSCRIPT_CONF_ENV = \
--	CCAUX=$(HOSTCC) \
-+	CCAUX="$(HOSTCC)" \
- 	CFLAGSAUX="$(HOST_CFLAGS) $(HOST_LDFLAGS)"
- 
- GHOSTSCRIPT_CONF_OPTS = \
+> but the hostarch isn't in
+> there. To avoid still having to maintain a separate file, we just add a
+> BR2_HOSTARCH string to the defconfig file. When the defconfig is used
+> this string is completely ignored, but it can be used by the
+> autobuild-run script.
+
+So this BR2_HOSTARCH option needs to be added manually to the
+defconfig: the defconfig are not directly the result of "make
+savedefconfig", correct?
+
+> Instead of this approach, I also considered adding the
+> buildroot-generated toolchains as external toolchains to the menus.
+> However, then there would still be a need for config files that specify
+> the subarch used, as well as e.g. STATIC. While with this approach the
+> entire toolchains/configs directory can be removed from
+> autobuild.buildroot.net.
+
+I also think this approach doesn't make much sense, because several of
+the autobuild toolchains really don't make sense to have exposed in
+Buildroot external toolchain menu. Some toolchain configurations only
+exist just for the sake of testing interesting combinations.
+
+Examples: the ARM no-thread toolchain, the basic PowerPC toolchain with
+just C++ support, the ARM/glibc toolchain that intentionally always
+uses the latest available version of gcc/binutils/glibc, etc.
+
+Other than the issues raised above, I'm generally fine with the idea, I
+think it makes sense. If we are going to change the architecture of the
+autobuild-run there are lots of different things that could be done:
+
+ - Testing different branches, like you are suggesting.
+
+ - Change how "exceptions" are handled. Currently, people have to
+   update their autobuild-run script to have the updated list of
+   exceptions. It would be nice if this was not necessary, either by
+   having the configuration generated by the autobuild server, or by
+   having this list of exceptions in Buildroot itself so that it gets
+   naturally updated when pulling the latest version of the source code.
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
