@@ -1,10 +1,11 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 26 Mar 2017 23:53:19 +0200
-Subject: [Buildroot] [PATCH v3 5/5] support/testing: add toolchain tests
-In-Reply-To: <1490042214-6762-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Mar 2017 23:54:01 +0200
+Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
+	infrastructure
+In-Reply-To: <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490042214-6762-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <616b063e-057b-c68e-9036-ea44b9bef9fe@lucaceresoli.net>
+ <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <9ae44859-b8aa-2676-1eea-c36778858960@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +14,40 @@ To: buildroot@busybox.net
 
 Hi,
 
+only a minor nit that I noticed while reviewing patch 5.
+
 On 20/03/2017 21:36, Thomas Petazzoni wrote:
-> This commit adds an initial toolchain test case, testing the ARM
-> CodeSourcery toolchain, just checking that the proper sysroot is used,
-> and that a minimal Linux system boots fine under Qemu.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/testing/tests/toolchain/__init__.py      |   0
->  support/testing/tests/toolchain/test_external.py | 156 +++++++++++++++++++++++
->  2 files changed, 156 insertions(+)
->  create mode 100644 support/testing/tests/toolchain/__init__.py
->  create mode 100644 support/testing/tests/toolchain/test_external.py
-> 
-> diff --git a/support/testing/tests/toolchain/__init__.py b/support/testing/tests/toolchain/__init__.py
+[...]
+> diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
 > new file mode 100644
-> index 0000000..e69de29
-> diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-> new file mode 100644
-> index 0000000..1fbf81f
+> index 0000000..c3f645c
 > --- /dev/null
-> +++ b/support/testing/tests/toolchain/test_external.py
-> @@ -0,0 +1,156 @@
-> +import os
-> +import infra
-> +
-> +BASIC_CONFIG = \
-> +"""
-> +BR2_TARGET_ROOTFS_CPIO=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +"""
-> +
-> +def check_broken_links(path):
-> +    for root, dirs, files in os.walk(path):
-> +        for f in files:
-> +            fpath = os.path.join(root, f)
-> +            if not os.path.exists(fpath):
-> +                return True
-> +    return False
+> +++ b/support/testing/infra/__init__.py
+[...]
+> +def get_elf_prog_interpreter(builddir, prefix, fpath):
+> +    cmd = ["host/usr/bin/{}-readelf".format(prefix),
+> +           "-l", os.path.join("target", fpath)]
+> +    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
+> +    regexp = re.compile("^ *\[Requesting program interpreter: (.*)\]$")
+> +    for line in out.splitlines():
+> +        m = regexp.match(line)
+> +        if not m:
+> +            continue
+> +        return m.group(1)
+> +    return None
 
-For predicate functions I find it a lot more understandable when the
-name contains a predicate verb. IOW I suggest renaming to
-has_broken_links(). This would make it immediately understandable to me,
-while with the current name I had to go through the Python docs to
-understand what it does.
+This should be documented, just like get_elf_arch_tag() above. Proposal
+(unchecked):
 
-The rest looks OK, but I haven't checked it in depth enough to give any
-formal tag, sorry.
+"""
+Runs the cross readelf on 'fpath' to extract the program interpreter
+name and returns it.
+Example:
+>>> get_elf_prog_interpreter('output', 'arm-none-linux-gnueabi-',
+                     'bin/busybox')
+/lib/ld-uClibc.so.0
+>>>
+"""
 
 -- 
 Luca
