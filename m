@@ -1,45 +1,41 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 27 Mar 2017 20:07:37 +1300
-Subject: [Buildroot] [PATCH 1/1] syslog-ng: Bump version header in conf
-	file to 3.9
-In-Reply-To: <20170326224414.2163-1-sikor6@gmail.com>
-References: <20170326224414.2163-1-sikor6@gmail.com>
-Message-ID: <CAFOYHZC3W8YactoB4JpyNM8yUipwy0JwzkkZZ5ttW65RmXZ_fw@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 27 Mar 2017 10:05:05 +0200
+Subject: [Buildroot] Issue performing switch_root to a UBIFS partition
+Message-ID: <CAGm1_kuAPosDi1Wc89_oKYr3J=t5py3nFL9F4bO3dZM+N54Ncw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/03/2017 10:44 AM, "Pawel Sikora" <sikor6@gmail.com> wrote:
+I'm trying to boot from initramfs and then switch_root to UBIFS
+partition. Both rootfs were created with the same toolchain. And when
+I mount UBIFS from initramfs I can execute its busybox etc. So at
+least the architecture it the same.
 
-Package version of syslog-ng is 3.9.1.
-Bumping version number in syslog-ng.conf to 3.9
+I'm performing the same actions as described here [1]
 
-Fixing warning message about configuration file being too old.
+mkdir /newroot
+mount -t ubifs ubi0:rootfs /newroot
 
-Signed-off-by: Pawel Sikora <sikor6@gmail.com>
----
- package/syslog-ng/syslog-ng.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+mount --move /sys /newroot/sys
+mount --move /proc /newroot/proc
+mount --move /dev /newroot/dev
 
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.
-conf
-index 0b4a860cf..a3384eebc 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
-- at version: 3.7
-+ at version: 3.9
+exec switch_root /newroot /sbin/init
 
- source s_sys {
-        file("/proc/kmsg" program_override("kernel"));
---
+As soon as I execute switch_root, the system complains, that it cannot
+find /dev/ttyO0.
 
+can't open /dev/ttyO0: No such file or directory
 
-Looks good to me
+If I omit moving /sys, /proc and /dev, the /sbin/init from initramfs
+rootfs will be executed. I.e. in both cases it seems like /sbin/init
+from initramfs rootfs will be executed and switch_root produces no
+error/warnig messages.
 
-Acked-by: Chris Packham <judge.packham@gmail.com>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170327/b5f980b8/attachment.html>
+What am I missing?
+
+[1] https://landley.net/writing/rootfs-programming.html
+
+Yegor
