@@ -1,10 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Mar 2017 23:46:43 +0200
-Subject: [Buildroot] [PATCH] fakedate: simplify logic
-In-Reply-To: <3055501.XEoAAfpss1@sagittea>
-References: <20170207220817.5781-1-peter@korsgaard.com>
- <3055501.XEoAAfpss1@sagittea>
-Message-ID: <93650cbe-f408-0bb7-f926-642d413d60a4@mind.be>
+Date: Tue, 28 Mar 2017 00:03:46 +0200
+Subject: [Buildroot] [PATCH 1/2] support/scripts: add generic genimage
+ script
+In-Reply-To: <1486967858.369675.1490648815951.JavaMail.zimbra@savoirfairelinux.com>
+References: <20170327164730.16271-1-etienne.phelip@savoirfairelinux.com>
+ <20170327164730.16271-2-etienne.phelip@savoirfairelinux.com>
+ <2b9a89f7-a56a-1b20-4b84-7952978203b5@mind.be>
+ <1486967858.369675.1490648815951.JavaMail.zimbra@savoirfairelinux.com>
+Message-ID: <33fe47eb-33cd-22a5-2e46-9677a0093540@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,133 +16,62 @@ To: buildroot@busybox.net
 
 
 
-On 08-02-17 15:50, J?r?me Pouiller wrote:
-> Hello Peter,
+On 27-03-17 23:06, ?tienne Ph?lip wrote:
+> Hello Arnout!
 > 
-> On Tuesday 07 February 2017 23:08:17 Peter Korsgaard wrote:
-> [...]
->> diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
->> index 4a9b9b5e6..abe6b38f9 100755
->> --- a/package/fakedate/fakedate
->> +++ b/package/fakedate/fakedate
->> @@ -1,4 +1,4 @@
->> -#!/bin/sh
->> +#!/bin/bash
->>  # vim: set sw=4 expandtab:
->>  #
->>  # This program is free software; you can redistribute it and/or 
-> modify
->> @@ -18,18 +18,12 @@
->>  # Copyright (C) 2016 J?r?me Pouiller <jezz@sysmic.org>
->>  #
->>  
->> -# Sanity check
->> -if ! readlink -f "$0" | grep -q fakedate; then
->> -    echo "fakedate: Please name this script \`fakedate'"
->> -    exit 1
->> -fi
->> -
->>  DATE_BIN=false
->>  # Do not call `date' directly since it will produce an infinite 
-> recursion.
->>  # Instead, find path of true `date' binary.
->> -for P in `echo $PATH | tr ':' ' '`; do
->> +IFS=':'; for P in $PATH; do
+> ----- Le 27 Mar 17, ? 16:40, Arnout Vandecappelle arnout at mind.be a ?crit :
 > 
-> I think you have to reset $IFS to its previous value after used
-> it.
-
- That's on principle, though in this script there is no more word splitting
-after the loop.
-
+>> Hi Phelip,
+>>
+>> Nice to see yet another contribution from Savoir-faire!
+>>
+>> On 27-03-17 18:47, Phelip Etienne wrote:
+>>> This script is a wrapper for the genimage tool used by most boards.
+>>> The board postimage script can now call this script instead of invoking
+>>> genimage command themselves.
+>>
+>> Looks good except for some small comments below. It would have been nice,
+>> however, if you had included a patch in this series that completely removes one
+>> of the post-image scripts. Almost all of them can be removed completely,
+>> raspberrypi is one of the exceptions...
 > 
-> Globally, I dislike use of $IFS. I think it may produce unattended side 
-> effects.
+> Good, since you seem to agree with the proposed changes, I will respin
+> a new patch series addressing your comments, as well as applying the
+> change to all other boards using genimage.
 
- Yeah, I find it particularly confusing when you need a different word splitting
-inside the loop...
-
- So indeed, I'd drop the IFS part from this patch. I don't think it makes things
-simpler.
-
-> 
-> 
->>      if [ -x "$P/date" ]; then
->> -        if readlink -f "$P/date" | grep -qv fakedate; then
->> +        if ! [ "$P/date" -ef "$0" ]; then
-> 
-> Nice! I didn't know '-ef'.
-
- If you want to avoid the dependency on bash, you can also use
-
-if [ "$(readlink -f "$P/date")" != "$(readlink -f "$0")" ]; then
-
-but it's not exactly more readable :-)
-
-> 
->>              DATE_BIN="$P/date"
->>              break;
->>          fi
->> @@ -50,8 +44,8 @@ if [ -n "$SOURCE_DATE_EPOCH" ]; then
->>      done
->>      if [ $FORCE_EPOCH -eq 1 ]; then
->>          echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of 
-> true time" >&2
->> -        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
->> +	ARGS="-d @$SOURCE_DATE_EPOCH"
-> 
-> Indentation seems incorrect: s/\t/        /
-
- Very true.
-
-> 
->>      fi
->>  fi
->>  
->> -exec $DATE_BIN "$@"
->> +exec $DATE_BIN $ARGS "$@"
-> 
-> It's matter of taste.
-
- I'm fine either way.
-
-> 
-> 
->> diff --git a/package/fakedate/fakedate.mk 
-> b/package/fakedate/fakedate.mk
->> index 61d4bd702..e81ce5dac 100644
->> --- a/package/fakedate/fakedate.mk
->> +++ b/package/fakedate/fakedate.mk
->> @@ -8,8 +8,7 @@
->>  HOST_FAKEDATE_LICENSE = GPLv2+
->>  
->>  define HOST_FAKEDATE_INSTALL_CMDS
->> -	$(INSTALL) -D -m 755 package/fakedate/fakedate 
-> $(HOST_DIR)/usr/bin/fakedate
->> -	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
->> +	$(INSTALL) -D -m 755 package/fakedate/fakedate 
-> $(HOST_DIR)/usr/bin/date
-> 
-> Hmm... In order to not confuse user, I prefer to keep fakedate as 
-> original name and adding a symlink beside.
-
- I don't, I think it's clearer as a script than as a symlink.
+ I had one more idea for the script: perhaps it's better to use an explicit
+option for the config argument, e.g. --genimage-cfg=... . Remember that the same
+argument list is used for the post-build, post-fakeroot and post-image scripts.
+So relying on the order of arguments is difficult if several scripts are used.
+Look at the a20_olinuxino scripts for examples.
 
 
- I don't mind much about the IFS part (it really should have been a separate
-patch, though), and the tab-space mixup can be fixed up while committing, so
+> In the meantime, I plan to add a Kconfig entry to specify a list of
+> space separated genimage config files and make Buildroot call the
+> wrapper automatically (after the post-image script), for each config
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Hm, before or after the post-image script? It's possible that the post-image
+script generates something used by genimage (e.g. some postprocessing of the
+kernel or bootloader image; cfr. firefly-rk3288), but it's also possible that
+the post-image script does something with the result of genimage (e.g. writing
+the bootloader to the start of the image, cfr. odroidc2, or writing the image to
+an SD card).
 
+> file. Do you think I should add this Kconfig/Makefile addition
+> in a future series, or directly in this one?
+
+ Well, if you first convert all defconfigs to the generic genimage script, and
+then convert them again to use the new Kconfig option, that generates a lot of
+useless churn. So if you have the patience, I think it's better to now post an
+RFC series that also introduces the new Kconfig option and then converts one or
+two defconfigs to show how it goes.
 
  Regards,
  Arnout
 
 > 
->>  endef
->>  
->>  $(eval $(host-generic-package))
->>
+> Thanks,
+> --Etienne
 > 
 
 -- 
