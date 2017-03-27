@@ -1,53 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Mar 2017 13:24:32 +0200
-Subject: [Buildroot] Getting buildroot to put Grub2 in target filesystem
-In-Reply-To: <CAHe2UA9foZDDTQe0FHyQdNeCRs3Q6Pw6OzyegkSqMgG_vBuySQ@mail.gmail.com>
-References: <CAHe2UA9foZDDTQe0FHyQdNeCRs3Q6Pw6OzyegkSqMgG_vBuySQ@mail.gmail.com>
-Message-ID: <20170327132432.56e3f317@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 27 Mar 2017 14:03:37 +0200
+Subject: [Buildroot] Issue performing switch_root to a UBIFS partition
+In-Reply-To: <CAGm1_kuAPosDi1Wc89_oKYr3J=t5py3nFL9F4bO3dZM+N54Ncw@mail.gmail.com>
+References: <CAGm1_kuAPosDi1Wc89_oKYr3J=t5py3nFL9F4bO3dZM+N54Ncw@mail.gmail.com>
+Message-ID: <efffdb66-2095-29cc-05ee-db25625c8371@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon, 27 Mar 2017 10:22:02 +0100, Andy Aspell-Clark wrote:
-> I am making two x86 buildroot projects. one is used to build a
-> bootable CD/USB/VM image (installer). the other build an image to be
-> installed from the CD (host rootfs).
-> 
-> both projects build correctly.
-> 
-> the boot flow is (tested in qemu):
-> 
->   1. CD boots
->   2. initramfs starts
->   3. find hard disk
->   4. partition and format hard disk
->   5. install rootfs image onto hard disk
->   6. install grub onto hard disk
-> 
-> I have steps 1-5 working.
-> 
-> for step 6, I have tried to hack the grub2.mk file to install the grub
-> files into the target filesystem, but have not been successful.
-> 
-> has anyone else managed to create an installer disk image from
-> buildroot that can install onto a target system using grub2?
 
-If you want grub2 itself on the target filesystem to be able to install
-grub2 on the target, then you should have a look at the patch:
+On 27-03-17 10:05, Yegor Yefremov wrote:
+> I'm trying to boot from initramfs and then switch_root to UBIFS
+> partition. Both rootfs were created with the same toolchain. And when
+> I mount UBIFS from initramfs I can execute its busybox etc. So at
+> least the architecture it the same.
+> 
+> I'm performing the same actions as described here [1]
+> 
+> mkdir /newroot
+> mount -t ubifs ubi0:rootfs /newroot
+> 
+> mount --move /sys /newroot/sys
+> mount --move /proc /newroot/proc
+> mount --move /dev /newroot/dev
 
-  [PATCH 5/5] grub2: allow full install (for installer images)
+ Can you add some error logging here to check that the mount commands actually
+succeed?
 
-which was sent a long time ago. I believe it does what you need. See
-http://lists.busybox.net/pipermail/buildroot/2016-June/163897.html.
+> 
+> exec switch_root /newroot /sbin/init
 
-Best regards,
+ I've done this once with pivot_root, not switch_root. That was a bit more
+intricate. I did mount --rbind instead of mount --move, and I had to unmount
+stuff after the pivot.
 
-Thomas
+
+> As soon as I execute switch_root, the system complains, that it cannot
+> find /dev/ttyO0.
+
+ Have you tried the -c option of switch_root? Any idea who it is that complains?
+
+> 
+> can't open /dev/ttyO0: No such file or directory
+> 
+> If I omit moving /sys, /proc and /dev, the /sbin/init from initramfs
+> rootfs will be executed.
+
+ How do you know which one is executed?
+
+> I.e. in both cases it seems like /sbin/init
+> from initramfs rootfs will be executed and switch_root produces no
+> error/warnig messages.
+
+ You can add strace to your initramfs and execute switch_root under strace -f to
+see what is happening. Well, looking at busybox source, basically it does
+
+cd /newroot
+mount --move . /
+chroot .
+exec /sbin/init
+
+so somehow it seems that the mount --move didn't do the expected thing...
+
+ Regards,
+ Arnout
+
+> 
+> What am I missing?
+> 
+> [1] https://landley.net/writing/rootfs-programming.html
+> 
+> Yegor
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
