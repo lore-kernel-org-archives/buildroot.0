@@ -1,15 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Mar 2017 23:31:58 +0200
-Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if
- chosen
-In-Reply-To: <72350614-2d6d-69ff-a2f7-03b97c41d9c9@mind.be>
-References: <20161118152427.16515-1-maxime.hadjinlian@gmail.com>
- <20161118152427.16515-2-maxime.hadjinlian@gmail.com>
- <1043203342.6813512.1479733854854.JavaMail.zimbra@datacom.ind.br>
- <CAGduivxBL8=fZafQG3odT_2_UUDruUgB1ioozn9tJvX6OPe_Zw@mail.gmail.com>
- <621304273.6901494.1479740590995.JavaMail.zimbra@datacom.ind.br>
- <72350614-2d6d-69ff-a2f7-03b97c41d9c9@mind.be>
-Message-ID: <93fca9f2-1575-119e-b84a-e162471dcd44@mind.be>
+Date: Mon, 27 Mar 2017 23:46:43 +0200
+Subject: [Buildroot] [PATCH] fakedate: simplify logic
+In-Reply-To: <3055501.XEoAAfpss1@sagittea>
+References: <20170207220817.5781-1-peter@korsgaard.com>
+ <3055501.XEoAAfpss1@sagittea>
+Message-ID: <93650cbe-f408-0bb7-f926-642d413d60a4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,107 +13,132 @@ To: buildroot@busybox.net
 
 
 
-On 27-03-17 23:29, Arnout Vandecappelle wrote:
->  Coming back to this old issue (trigger by the patchwork cleanup initiated by
-> Thomas)
+On 08-02-17 15:50, J?r?me Pouiller wrote:
+> Hello Peter,
 > 
-> On 21-11-16 16:03, Carlos Santos wrote:
->>> From: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
->>> To: "Carlos Santos" <casantos@datacom.ind.br>
->>> Cc: "buildroot" <buildroot@buildroot.org>
->>> Sent: Monday, November 21, 2016 12:24:07 PM
->>> Subject: Re: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if chosen
->>
->>> Hi there,
->>>
->>> On Mon, Nov 21, 2016 at 2:10 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
->>>>> From: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
->>>>> To: buildroot at buildroot.org
->>>>> Sent: Friday, November 18, 2016 1:24:27 PM
->>>>> Subject: [Buildroot] [PATCH 2/2] e2fsprogs: keep util-linux's fsck if chosen
->>>>
->>>>> Since e2fsprogs depends on util-linux, it's build after it. It means
->>>>> that if you want the fsck wrapper from util-linux (which is better
->>>>> maintained and you are sure that it's compatible with systemd) and you
->>>>> want e2fsck, it won't work.
->>>>>
->>>>> Because of the merge of /usr/bin and /bin, we end up deleting the fsck
->>>>> from util-linux.
+> On Tuesday 07 February 2017 23:08:17 Peter Korsgaard wrote:
+> [...]
+>> diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
+>> index 4a9b9b5e6..abe6b38f9 100755
+>> --- a/package/fakedate/fakedate
+>> +++ b/package/fakedate/fakedate
+>> @@ -1,4 +1,4 @@
+>> -#!/bin/sh
+>> +#!/bin/bash
+>>  # vim: set sw=4 expandtab:
+>>  #
+>>  # This program is free software; you can redistribute it and/or 
+> modify
+>> @@ -18,18 +18,12 @@
+>>  # Copyright (C) 2016 J?r?me Pouiller <jezz@sysmic.org>
+>>  #
+>>  
+>> -# Sanity check
+>> -if ! readlink -f "$0" | grep -q fakedate; then
+>> -    echo "fakedate: Please name this script \`fakedate'"
+>> -    exit 1
+>> -fi
+>> -
+>>  DATE_BIN=false
+>>  # Do not call `date' directly since it will produce an infinite 
+> recursion.
+>>  # Instead, find path of true `date' binary.
+>> -for P in `echo $PATH | tr ':' ' '`; do
+>> +IFS=':'; for P in $PATH; do
 > 
->  First of all, I think we should change set --prefix=/ for e2fsprogs. That way,
-> they are installed in the same location as where busybox and util-linux put
-> them. That removes the need for the E2FSPROGS_REMOVE_BUSYBOX_APPLETS hack.
-> 
->  But then we have the problem that e2fsprogs.mk currently removes all the
-> programs that it doesn't install. A simple solution would be to remove all the
-> options from Config.in so that the removals are not needed anymore.
+> I think you have to reset $IFS to its previous value after used
+> it.
 
- Note that this would also fix bug 9436.
+ That's on principle, though in this script there is no more word splitting
+after the loop.
 
 > 
->  Of course, that will do exactly the opposite of what you want to achieve here,
-> since e2fsprogs will override everything from util-linux... But for that, there
-> happens to be a simple solution: --disable-fsck doesn't build and install fsck
-> (without affecting e2fsck). (Of course, I didn't actually test this, just looked
-> at configure.ac and Makefile.in.)
-> 
->>>>>
->>>>> This makes an attempt at fixing the issues.
->>>>>
->>>>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->>>>> ---
->>>>> I am cleary not satisfied by the way I handled that, I am not even sure
->>>>> it works in all cases. I can't spend much more time on this right now,
->>>>> so I need advice/help from the community to fix that in a proper/generic
->>>>> manner.
->>>> What about using something like this, instead?
->>> It's indeed better, but you have to keep the bit about the busybox
->>> applet due to the merge of /sbin and /usr/sbin
->>
->> Right. Looks like combining the changes in Config.in and e2fsprogs.mk is the best approach.
->>
->>>>
->>>> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
->>>> index 4db11e1..c0b48e1 100644
->>>> --- a/package/e2fsprogs/Config.in
->>>> +++ b/package/e2fsprogs/Config.in
->>>> @@ -60,8 +60,12 @@ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
->>>>
->>>>  config BR2_PACKAGE_E2FSPROGS_FSCK
->>>>         bool "fsck"
->>>> +       depends on !BR2_PACKAGE_UTIL_LINUX_FSCK
-> 
->  This looks like a good idea.
+> Globally, I dislike use of $IFS. I think it may produce unattended side 
+> effects.
 
- Since we agree that the Config.in change is needed as well, I've marked this
-patch as Changes Requested.
+ Yeah, I find it particularly confusing when you need a different word splitting
+inside the loop...
+
+ So indeed, I'd drop the IFS part from this patch. I don't think it makes things
+simpler.
+
+> 
+> 
+>>      if [ -x "$P/date" ]; then
+>> -        if readlink -f "$P/date" | grep -qv fakedate; then
+>> +        if ! [ "$P/date" -ef "$0" ]; then
+> 
+> Nice! I didn't know '-ef'.
+
+ If you want to avoid the dependency on bash, you can also use
+
+if [ "$(readlink -f "$P/date")" != "$(readlink -f "$0")" ]; then
+
+but it's not exactly more readable :-)
+
+> 
+>>              DATE_BIN="$P/date"
+>>              break;
+>>          fi
+>> @@ -50,8 +44,8 @@ if [ -n "$SOURCE_DATE_EPOCH" ]; then
+>>      done
+>>      if [ $FORCE_EPOCH -eq 1 ]; then
+>>          echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of 
+> true time" >&2
+>> -        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
+>> +	ARGS="-d @$SOURCE_DATE_EPOCH"
+> 
+> Indentation seems incorrect: s/\t/        /
+
+ Very true.
+
+> 
+>>      fi
+>>  fi
+>>  
+>> -exec $DATE_BIN "$@"
+>> +exec $DATE_BIN $ARGS "$@"
+> 
+> It's matter of taste.
+
+ I'm fine either way.
+
+> 
+> 
+>> diff --git a/package/fakedate/fakedate.mk 
+> b/package/fakedate/fakedate.mk
+>> index 61d4bd702..e81ce5dac 100644
+>> --- a/package/fakedate/fakedate.mk
+>> +++ b/package/fakedate/fakedate.mk
+>> @@ -8,8 +8,7 @@
+>>  HOST_FAKEDATE_LICENSE = GPLv2+
+>>  
+>>  define HOST_FAKEDATE_INSTALL_CMDS
+>> -	$(INSTALL) -D -m 755 package/fakedate/fakedate 
+> $(HOST_DIR)/usr/bin/fakedate
+>> -	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
+>> +	$(INSTALL) -D -m 755 package/fakedate/fakedate 
+> $(HOST_DIR)/usr/bin/date
+> 
+> Hmm... In order to not confuse user, I prefer to keep fakedate as 
+> original name and adding a symlink beside.
+
+ I don't, I think it's clearer as a script than as a symlink.
+
+
+ I don't mind much about the IFS part (it really should have been a separate
+patch, though), and the tab-space mixup can be fixed up while committing, so
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
  Regards,
  Arnout
 
 > 
->>>>         default y
->>>>
->>>> +comment "the fsck from util-linux has preference over this one"
->>>> +       depends on BR2_PACKAGE_UTIL_LINUX_FSCK
->>>> +
-> 
->  I don't think the comment is needed.
-> 
->  Regards,
->  Arnout
-> 
->>>>  config BR2_PACKAGE_E2FSPROGS_FUSE2FS
->>>>         bool "fuse2fs"
->>>>         depends on !BR2_STATIC_LIBS # libfuse
->>>>
->>>>
->>>> Carlos Santos (Casantos)
->>>> DATACOM, P&D
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+>>  endef
+>>  
+>>  $(eval $(host-generic-package))
 >>
 > 
 
