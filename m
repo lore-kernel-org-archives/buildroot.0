@@ -1,73 +1,83 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 27 Mar 2017 11:43:03 -0500
-Subject: [Buildroot] [PATCH 1/4] system: do not overwrite /bin/sh
-	Busybox symlink
-In-Reply-To: <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Mar 2017 11:44:14 -0500
+Subject: [Buildroot] [PATCH 2/4] core: allow packages to declare a
+ permission file
+In-Reply-To: <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CANQCQpYzuFN5_P5VSg4NMaOXBAqY8VHAf3KJKFGRb23jBsarYw@mail.gmail.com>
+ <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CANQCQpaC7DPHyPWdWoGFwC55FC5Q4tJP0cdaRh2EhrvHy=pSKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+All,
 
 On Sun, Mar 26, 2017 at 4:43 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> The BR2_SYSTEM_BIN_SH hidden option defines to what binary the /bin/sh
-> symlinks should point to. If busybox is chosen, then /bin/sh is created
-> to point to /bin/busybox.
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> This works fine with the default installation mode of Busybox, but it
-> fails with the upcoming "individual binaries" mode, in which each applet
-> is installed as its own binary, and /bin/busybox doesn't exist: we get
-> /bin/sh as a broken symlink to /bin/busybox.
+> Currently, packages can define a variable that holds all the permissions
+> to set on the files it installs. This can be used to set various
+> permissions, like ownership, mode, suid/sgid/sticky bits to individual
+> files.
 >
-> Since Busybox already installs its own /bin/sh symlink, properly
-> pointing to /bin/ash or /bin/hush depending on the selected shell, it
-> doesn't make sense for the BR2_SYSTEM_BIN_SH logic to override
-> this. Just let Busybox install its own /bin/sh by making
-> BR2_SYSTEM_BIN_SH empty when Busybox shell is selected as /bin/sh.
+> However, this variable has to contain entries that are known the moment
+> we scan the .mk file; it is not possible to conditionally add permisions
+> for files which presence depend on post-parse conditions.
 >
+> This is the case for example for Busybox, for which we don't know whether
+> a specific applet will be enabled or not until after the configure
+> command has run.
+>
+> Introduce a new variable that packages can set to point to a file that
+> contains a permission table. That filewill only be used when a filesystem
+> image is asembled, so the file can be generated, either at configure or
+> build time, with no problem.
+>
+> Since this variable can be empty (when no package provides such a
+> permissions file), we must ensure not to cat anything (or that would
+> stale, cat-ing stdin). But since this variable is not fully known by the
+> time we parse the fs infra (e.g. packages from a br2-external tree are
+> not yet parsed), we can not test it with make syntas (ifneq...endif).
+> Teting it with shell syntac is not trivial either, becaue the variable
+> would not be mpty (it would be only spaces). sO, we just iterate over
+> the the files and cat them one by one with a shell-level for-loop, which
+> is happy with nothing to iterate over.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-> This is proposed as an alternative to
-> https://patchwork.ozlabs.org/patch/686673/. If people believe
-> https://patchwork.ozlabs.org/patch/686673/ is a better solution, I'm
-> fine as well.
-> ---
->  package/skeleton/skeleton.mk | 2 ++
->  system/Config.in             | 1 -
->  2 files changed, 2 insertions(+), 1 deletion(-)
+>  fs/common.mk           | 3 +++
+>  package/pkg-generic.mk | 1 +
+>  2 files changed, 4 insertions(+)
 >
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index 1000161..9940944 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -203,10 +203,12 @@ define SKELETON_BIN_SH
->         rm -f $(TARGET_DIR)/bin/sh
->  endef
->  else
-> +ifneq ($(SKELETON_TARGET_GENERIC_BIN_SH),)
->  define SKELETON_BIN_SH
->         ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
->  endef
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 396b1c2..0bbcca4 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -91,6 +91,9 @@ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
 >  endif
-> +endif
->  TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
->
->  ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-> diff --git a/system/Config.in b/system/Config.in
-> index 3ddf843..b47ae43 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -298,7 +298,6 @@ endchoice # /bin/sh
->
->  config BR2_SYSTEM_BIN_SH
->         string
-> -       default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
+>  endif
+>         $$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
+> +       for f in $$(PACKAGES_PERMISSIONS_FILES); do \
+> +               cat $$$${f} >> $$(FULL_DEVICE_TABLE) || exit 1; \
+> +       done
+>         echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>         $$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>                 echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index dd8a1e2..343d1ad 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -915,6 +915,7 @@ PACKAGES += $(1)
+>  ifneq ($$($(2)_PERMISSIONS),)
+>  PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+>  endif
+> +PACKAGES_PERMISSIONS_FILES += $$($(2)_PERMISSIONS_FILE)
 
 
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
