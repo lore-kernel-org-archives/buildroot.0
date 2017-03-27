@@ -1,70 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Mar 2017 22:44:19 +0200
-Subject: [Buildroot] [PATCH 2/2] board/raspberrypi: use generic genimage
+From: =?utf-8?Q?=C3=89tienne_Ph=C3=A9lip?= <etienne.phelip@savoirfairelinux.com>
+Date: Mon, 27 Mar 2017 17:06:55 -0400 (EDT)
+Subject: [Buildroot] [PATCH 1/2] support/scripts: add generic genimage
  script
-In-Reply-To: <20170327164730.16271-3-etienne.phelip@savoirfairelinux.com>
+In-Reply-To: <2b9a89f7-a56a-1b20-4b84-7952978203b5@mind.be>
 References: <20170327164730.16271-1-etienne.phelip@savoirfairelinux.com>
- <20170327164730.16271-3-etienne.phelip@savoirfairelinux.com>
-Message-ID: <61474146-55fb-2d69-18b5-c319b5151f98@mind.be>
+ <20170327164730.16271-2-etienne.phelip@savoirfairelinux.com>
+ <2b9a89f7-a56a-1b20-4b84-7952978203b5@mind.be>
+Message-ID: <1486967858.369675.1490648815951.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Arnout!
 
+----- Le 27 Mar 17, ? 16:40, Arnout Vandecappelle arnout at mind.be a ?crit :
 
-On 27-03-17 18:47, Phelip Etienne wrote:
-> This use the generic genimage wrapper for the raspberrypi instead of
-> calling genimage ourselves.
+> Hi Phelip,
 > 
-> Signed-off-by: Phelip Etienne <etienne.phelip@savoirfairelinux.com>
-> ---
->  board/raspberrypi/post-image.sh | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
+> Nice to see yet another contribution from Savoir-faire!
 > 
-> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-> index b2bb070..a58fa11 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -3,7 +3,6 @@
->  BOARD_DIR="$(dirname $0)"
->  BOARD_NAME="$(basename ${BOARD_DIR})"
->  GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
-> -GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->  
->  case "${2}" in
->  	--add-pi3-miniuart-bt-overlay)
-
- Since this part is in fact only used by raspberrypi3_defconfig, you can
-actually change all other raspberrypi?_defconfigs to call genimage.sh directly,
-and use this script only for raspberry3. Then the argument is no longer needed
-either.
-
- Regards,
- Arnout
-
-> @@ -18,13 +17,6 @@ __EOF__
->  	;;
->  esac
->  
-> -rm -rf "${GENIMAGE_TMP}"
-> -
-> -genimage                           \
-> -	--rootpath "${TARGET_DIR}"     \
-> -	--tmppath "${GENIMAGE_TMP}"    \
-> -	--inputpath "${BINARIES_DIR}"  \
-> -	--outputpath "${BINARIES_DIR}" \
-> -	--config "${GENIMAGE_CFG}"
-> +sh ./support/scripts/genimage.sh ${GENIMAGE_CFG}
->  
->  exit $?
+> On 27-03-17 18:47, Phelip Etienne wrote:
+>> This script is a wrapper for the genimage tool used by most boards.
+>> The board postimage script can now call this script instead of invoking
+>> genimage command themselves.
 > 
+> Looks good except for some small comments below. It would have been nice,
+> however, if you had included a patch in this series that completely removes one
+> of the post-image scripts. Almost all of them can be removed completely,
+> raspberrypi is one of the exceptions...
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Good, since you seem to agree with the proposed changes, I will respin
+a new patch series addressing your comments, as well as applying the
+change to all other boards using genimage.
+
+In the meantime, I plan to add a Kconfig entry to specify a list of
+space separated genimage config files and make Buildroot call the
+wrapper automatically (after the post-image script), for each config
+file. Do you think I should add this Kconfig/Makefile addition
+in a future series, or directly in this one?
+
+Thanks,
+--Etienne
