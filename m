@@ -1,11 +1,12 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 27 Mar 2017 14:13:41 -0500
-Subject: [Buildroot] [PATCH 2/4] checkpolicy: allow compiling for target
-In-Reply-To: <CANQCQpbWU=mO7bGjKaNP=MCpfbMo5wvEFoA8FeKWxCY6Rv8v5A@mail.gmail.com>
+Date: Mon, 27 Mar 2017 14:19:03 -0500
+Subject: [Buildroot] [PATCH 3/4] libselinux: allow compiling python
+ wrapper module for target
+In-Reply-To: <CANQCQpb+u_oMbkXj9-M6S77CK-EMs6XuUDtw0LTg-swtn1d-gw@mail.gmail.com>
 References: <20170202224505.22882-1-Adamduskett@outlook.com>
- <20170202224505.22882-2-Adamduskett@outlook.com>
- <CANQCQpbWU=mO7bGjKaNP=MCpfbMo5wvEFoA8FeKWxCY6Rv8v5A@mail.gmail.com>
-Message-ID: <CANQCQpZQtwN-LUmWrYKh_fZchMKUa+k3pVuctyAwJM5iE0Fv1w@mail.gmail.com>
+ <20170202224505.22882-3-Adamduskett@outlook.com>
+ <CANQCQpb+u_oMbkXj9-M6S77CK-EMs6XuUDtw0LTg-swtn1d-gw@mail.gmail.com>
+Message-ID: <CANQCQpZhwL5T3=1BPNnibEyj_Vh+TXRg2mW1GkNNB=C0sjq8Ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,68 +15,84 @@ To: buildroot@busybox.net
 
 Adam,
 
-On Mon, Mar 27, 2017 at 12:04 PM, Matthew Weber
+On Mon, Mar 27, 2017 at 12:21 PM, Matthew Weber
 <matthew.weber@rockwellcollins.com> wrote:
 > Adam,
 >
 > On Thu, Feb 2, 2017 at 4:45 PM, Adam Duskett <aduskett@gmail.com> wrote:
->> checkpolicy is currently a host-only package, however it is a dependency
->> of audit2allow.  This patch allows for checkpolicy to be compiled for the
->> target.
+>> libselinux currently does not compile it's python wrapper module
+>> for the target.  This is needed for audit2allow to function properly.
+>>
+>> This patch allows for the python wrapper to be built.  The current
+>> makefile will try to install the python wrapper to the host directory
+>> unless the PYSITEDIR variable is set.  I wrapped the build of the
+>> python wrapper in a check for AUDIT2ALLOW because of the extra python
+>> dependency, as I am sure many users don't want to have to install
+>> python if they don't have to.
 >>
 >> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 >> ---
->>  package/Config.in                  |  1 +
->>  package/checkpolicy/Config.in      | 11 +++++++++++
->>  package/checkpolicy/checkpolicy.mk | 23 +++++++++++++++++++++++
->>  3 files changed, 35 insertions(+)
->>  create mode 100644 package/checkpolicy/Config.in
+>>  package/libselinux/libselinux.mk | 32 ++++++++++++++++++++++++++++++++
+>>  1 file changed, 32 insertions(+)
 >>
->> diff --git a/package/Config.in b/package/Config.in
->> index 9fedc23..90d9273 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1706,6 +1706,7 @@ menu "Real-Time"
->>  endmenu
->>
->>  menu "Security"
->> +       source "package/checkpolicy/Config.in"
->>         source "package/policycoreutils/Config.in"
->>         source "package/sepolgen/Config.in"
->>         source "package/setools/Config.in"
->> diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
->> new file mode 100644
->> index 0000000..894ce39
->> --- /dev/null
->> +++ b/package/checkpolicy/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_CHECKPOLICY
->> +       bool "checkpolicy"
->> +       select BR2_PACKAGE_FLEX
->> +       help
->> +         checkpolicy is the SELinux policy compiler. It uses libsepol
->> +         to generate the binary policy. checkpolicy uses the static
->> +         libsepol since it deals with low level details of the policy
->> +         that have not been encapsulated/abstracted by a proper
->> +         shared library interface.
+>> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+>> index 44120c4..fba5d41 100644
+>> --- a/package/libselinux/libselinux.mk
+>> +++ b/package/libselinux/libselinux.mk
+>> @@ -30,6 +30,7 @@ endef
+>>  define LIBSELINUX_INSTALL_STAGING_CMDS
+>>         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+>>                 $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
 >> +
->> +         http://selinuxproject.org/page/Main_Page
->> diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
->> index 8328b39..7af5edf 100644
->> --- a/package/checkpolicy/checkpolicy.mk
->> +++ b/package/checkpolicy/checkpolicy.mk
->> @@ -8,6 +8,28 @@ CHECKPOLICY_VERSION = 2.6
->>  CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
->>  CHECKPOLICY_LICENSE = GPLv2
->>  CHECKPOLICY_LICENSE_FILES = COPYING
->> +LIBSELINUX_INSTALL_STAGING = YES
 >
-> I'd suggest moving the staging install to the libselinux package and
-> have it selectively set if Checkpolicy's target package is enabled.
+> <snip>
+>
+>>         if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
+>>                 echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
+>> +
+>
+> Any reason for the two newlines above?
+>
+>>  endef
+>>
+>> +ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW),y)
+>> +LIBSELINUX_DEPENDENCIES += host-swig
+>> +
+>> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>> +LIBSELINUX_DEPENDENCIES += python3
+>> +LIBSELINUX_PYTHONLIBDIR = -L$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
+>> +LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m
+>> +LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
+>> +else
+>> +LIBSELINUX_DEPENDENCIES += python
+>> +LIBSELINUX_PYTHONLIBDIR = -L$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+>> +LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+>> +LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+>> +endif
+>> +
+>> +LIBSELINUX_MAKE_OPTS += \
+>> +       PYINC="$(LIBSELINUX_PYINC)" \
+>> +       PYTHONLIBDIR="$(LIBSELINUX_PYTHONLIBDIR)" \
+>> +       PYLIBVER="$(LIBSELINUX_PYLIBVER)" \
+>> +       PYSITEDIR=$(TARGET_DIR)/usr/lib/$(LIBSELINUX_PYLIBVER)/site-packages \
+>> +       SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
+>> +
+>> +LIBSELINUX_BUILD_CMDS += $(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+>> +       $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) swigify pywrap
+>> +
+>> +LIBSELINUX_INSTALL_TARGET_CMDS += $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+>> +       $(LIBSELINUX_MAKE_OPTS) install-pywrap
+>> +
+>> +endif
+>> +
+>
+> I need to build and test this.  This was in the original libselinux
+> patchset and I believe we had issues in swig.
 >
 
 I did a build test but didn't have hardware available to execute.  I
-did however verify the checkpolicy app's arch and location in the
-target folder were correct.
+did verify the libselinux installed correctly to staging and that the
+swig related (selinux.py) item built/installed correctly
+(target/usr/lib/python3.5/site-packages/selinux/).
 
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
