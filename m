@@ -1,148 +1,164 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Mar 2017 14:35:46 +0200
-Subject: [Buildroot] Patchwork cleanup, 10 patches to look at
-In-Reply-To: <20170326235320.448e802a@free-electrons.com>
-References: <20170326235320.448e802a@free-electrons.com>
-Message-ID: <db756f2e-3dda-2fcc-6035-3287b88acf29@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 27 Mar 2017 14:59:45 +0200
+Subject: [Buildroot] Issue performing switch_root to a UBIFS partition
+In-Reply-To: <efffdb66-2095-29cc-05ee-db25625c8371@mind.be>
+References: <CAGm1_kuAPosDi1Wc89_oKYr3J=t5py3nFL9F4bO3dZM+N54Ncw@mail.gmail.com>
+ <efffdb66-2095-29cc-05ee-db25625c8371@mind.be>
+Message-ID: <CAGm1_ksp-PGMVE69feTDgSMdZDsyzMuYCPkwc75UWy-PhWasvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Mar 27, 2017 at 2:03 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 27-03-17 10:05, Yegor Yefremov wrote:
+>> I'm trying to boot from initramfs and then switch_root to UBIFS
+>> partition. Both rootfs were created with the same toolchain. And when
+>> I mount UBIFS from initramfs I can execute its busybox etc. So at
+>> least the architecture it the same.
+>>
+>> I'm performing the same actions as described here [1]
+>>
+>> mkdir /newroot
+>> mount -t ubifs ubi0:rootfs /newroot
+>>
+>> mount --move /sys /newroot/sys
+>> mount --move /proc /newroot/proc
+>> mount --move /dev /newroot/dev
+>
+>  Can you add some error logging here to check that the mount commands actually
+> succeed?
 
+I can at least see, that /newroot/dev has devices copied from /dev/.
 
-On 26-03-17 23:53, Thomas Petazzoni wrote:
-> Hello,
-> 
-> I'd like to again restart the patchwork cleanup effort. There are
-> numerous patches in patchwork that I'm not sure what we want to do
-> with.
+>> exec switch_root /newroot /sbin/init
+>
+>  I've done this once with pivot_root, not switch_root. That was a bit more
+> intricate. I did mount --rbind instead of mount --move, and I had to unmount
+> stuff after the pivot.
+>
+>
+>> As soon as I execute switch_root, the system complains, that it cannot
+>> find /dev/ttyO0.
+>
+>  Have you tried the -c option of switch_root? Any idea who it is that complains?
 
- Great initiative!
+I've also tried -c option.
 
-> 
-> Here is a list of 10 patches that we need to take a decision on. If no
-> decision is taken in the next 2 weeks, I'll mark them as Rejected.
-> 
->  * avahi: link with libintl if libglib2 is enabled
->    https://patchwork.ozlabs.org/patch/683732/
-> 
->    My plan is to enable the stub libintl in uClibc-ng and stop having
->    all those linking issues with libintl from gettext. The only
->    drawback would be that there would no longer be "translation"
->    support with uClibc: the libintl implementation in uClibc-ng is
->    really just a stub.
-> 
->    Thoughts ?
+>>
+>> can't open /dev/ttyO0: No such file or directory
+>>
+>> If I omit moving /sys, /proc and /dev, the /sbin/init from initramfs
+>> rootfs will be executed.
+>
+>  How do you know which one is executed?
 
- I think having internationalization support can still be useful in a
-Buildroot/uClibc based system, e.g. to support translation of a custom CLI UI.
-So using the stub implementation unconditionally sounds like a bad idea.
+This is just my suspicion. Because new root has al needed devices, but
+after mount --move the old root doesn't have these devices anymore.
 
- How about instead making gettext/intl support depend on !static? That's also a
-catch-all solution, but a lot less aggressive.
+>> I.e. in both cases it seems like /sbin/init
+>> from initramfs rootfs will be executed and switch_root produces no
+>> error/warnig messages.
+>
+>  You can add strace to your initramfs and execute switch_root under strace -f to
+> see what is happening. Well, looking at busybox source, basically it does
+>
+> cd /newroot
+> mount --move . /
+> chroot .
+> exec /sbin/init
+>
+> so somehow it seems that the mount --move didn't do the expected thing...
 
+I've also tried the switch_root from util-linux, but with the same result.
 
->  * qemu: allow to build statically
->    https://patchwork.ozlabs.org/patch/692667/
-> 
->    We normally don't want to have special options for each package to
->    build them statically. Should we make an exception for Qemu?
+The strace output:
 
- I see something like this like having package options that do little more than
-selecting other packages, like BR2_PACKAGE_PHP_EXT_BZIP2. It's something we want
-to avoid, but sometimes there are good reasons to do it.
-
- So for Qemu and also for Docker I do think it makes sense to have static as a
-per-package option.
-
-
->  * infra: fix 'packages-file-list.txt' with TLP
->    https://patchwork.ozlabs.org/patch/694519/
-> 
->    Adds a lock around the installation step of packages, to make
->    top-level parallel build still generate a correct list of files per
->    package.
-> 
->    Gustavo, what is your plan regarding this?
-> 
->    Others: should we merge this?
-
- I don't think this is the proper approach. The proper approach is map/reduce,
-i.e. generate the pieces in per-package files and collect them together in a
-final gathering stage. Obviously, this requires a per-package target first, but
-that's anyway the way we want to go.
-
- I thought someone already made that comment but I can't find it in that thread...
-
->  * e2fsprogs: keep util-linux's fsck if chosen
->    https://patchwork.ozlabs.org/patch/696634/
-> 
->    This fixes a real bug, but even Maxime who submitted the patch is
->    not too happy with the proposal. Could someone look into this?
-> 
->  * linux-headers: Account for LINUX_OVERRIDE_SRCDIR
->    https://patchwork.ozlabs.org/patch/713927/
-> 
->    I think I am against this patch, because if the user sets
->    LINUX_OVERRIDE_SRCDIR, then suddenly he will see his kernel headers
->    being rebuilt as well.
-> 
->    Arnout ?
-
- Well, as you can see in the discussion thread, I argued against it, asked for a
-stronger argument for it, but none was forthcoming.
-
- However, my conclusion was that we should either apply this, or fix the
-documentation so that it explains that HEADERS_SAME_AS_KERNEL doesn't apply if
-LINUX_OVERRIDE_SRCDIR (or LINUX_SITE_METHOD = local) is set.
-
-
->  * python-lxml: allow build as host package
->    https://patchwork.ozlabs.org/patch/722644/
-> 
->    Host package not used anywhere. Discussed at length during the
->    previous BR meeting. What do we do?
-
- The conclusion at BR meeting was unfortunately not clear, but we definitely
-said that we would be more lenient towards this kind of addition. So I'd say we
-accept it (with a Config.in.host entry, though).
-
-
->  * fakedate: simplify logic
->    https://patchwork.ozlabs.org/patch/725396/
-> 
->  * linux-tools/perf: fix build for MIPS by using the right emulation on
->    LD
->    https://patchwork.ozlabs.org/patch/729154/
-> 
->  * package/pkg-download.mk: add gitlab helper
->    https://patchwork.ozlabs.org/patch/736382/
-
- I'm not a fan of adding helpers (in fact, I think the github helper should
-die). For gitlab, however, the URL construction is indeed a bit peculiar and it
-differs a lot from the URL a user normally sees (adding that &filename= thing),
-so it does make sense to have it. Since I couldn't decide, I didn't reply :-)
-
-
- Regards,
- Arnout
-
->  * linux: Add CIP SLTS easy selection option
->    https://patchwork.ozlabs.org/patch/736383/
-> 
-> Please help taking decisions about those patches.
-> 
-> Thanks!
-> 
-> Thomas
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+# exec strace -f switch_root /newroot /sbin/init
+execve("/sbin/switch_root", ["switch_root", "/newroot", "/sbin/init"],
+[/* 11 vars */]) = 0
+brk(NULL)                               = 0xb9000
+uname({sysname="Linux", nodename="buildroot", ...}) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
+0) = 0xb6f77000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file
+or directory)
+open("/lib/tls/v7l/neon/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1
+ENOENT (No such file or directory)
+stat64("/lib/tls/v7l/neon/vfp", 0xbefbf758) = -1 ENOENT (No such file
+or directory)
+open("/lib/tls/v7l/neon/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT
+(No such file or directory)
+stat64("/lib/tls/v7l/neon", 0xbefbf758) = -1 ENOENT (No such file or directory)
+open("/lib/tls/v7l/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No
+such file or directory)
+stat64("/lib/tls/v7l/vfp", 0xbefbf758)  = -1 ENOENT (No such file or directory)
+open("/lib/tls/v7l/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No
+such file or directory)
+stat64("/lib/tls/v7l", 0xbefbf758)      = -1 ENOENT (No such file or directory)
+open("/lib/tls/neon/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT
+(No such file or directory)
+stat64("/lib/tls/neon/vfp", 0xbefbf758) = -1 ENOENT (No such file or directory)
+open("/lib/tls/neon/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No
+such file or directory)
+stat64("/lib/tls/neon", 0xbefbf758)     = -1 ENOENT (No such file or directory)
+open("/lib/tls/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No
+such file or directory)
+stat64("/lib/tls/vfp", 0xbefbf758)      = -1 ENOENT (No such file or directory)
+open("/lib/tls/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such
+file or directory)
+stat64("/lib/tls", 0xbefbf758)          = -1 ENOENT (No such file or directory)
+open("/lib/v7l/neon/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT
+(No such file or directory)
+stat64("/lib/v7l/neon/vfp", 0xbefbf758) = -1 ENOENT (No such file or directory)
+open("/lib/v7l/neon/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No
+such file or directory)
+stat64("/lib/v7l/neon", 0xbefbf758)     = -1 ENOENT (No such file or directory)
+open("/lib/v7l/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No
+such file or directory)
+stat64("/lib/v7l/vfp", 0xbefbf758)      = -1 ENOENT (No such file or directory)
+open("/lib/v7l/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such
+file or directory)
+stat64("/lib/v7l", 0xbefbf758)          = -1 ENOENT (No such file or directory)
+open("/lib/neon/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No
+such file or directory)
+stat64("/lib/neon/vfp", 0xbefbf758)     = -1 ENOENT (No such file or directory)
+open("/lib/neon/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such
+file or directory)
+stat64("/lib/neon", 0xbefbf758)         = -1 ENOENT (No such file or directory)
+open("/lib/vfp/libc.so.6", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such
+file or directory)
+stat64("/lib/vfp", 0xbefbf758)          = -1 ENOENT (No such file or directory)
+open("/lib/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\1\1\1\3\0\0\0\0\0\0\0\0\3\0(\0\1\0\0\0\231i\1\0004\0\0\0"...,
+512) = 512
+fstat64(3, {st_mode=S_IFREG|0755, st_size=894568, ...}) = 0
+mmap2(NULL, 963912, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3,
+0) = 0xb6e65000
+mprotect(0xb6f3c000, 61440, PROT_NONE)  = 0
+mmap2(0xb6f4b000, 12288, PROT_READ|PROT_WRITE,
+MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xd6000)       f4b000
+mmap2(0xb6f4e000, 9544, PROT_READ|PROT_WRITE,
+MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb
+close(3)                                = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
+0) = 0xb6f76000
+set_tls(0xb6f764c0, 0xb6f76b98, 0xb6f79050, 0xb6f764c0, 0xb6f79050) = 0
+mprotect(0xb6f4b000, 8192, PROT_READ)   = 0
+mprotect(0xb6f78000, 4096, PROT_READ)   = 0
+getuid32()                              = 0
+chdir("/newroot")                       = 0
+stat64("/", {st_mode=S_IFDIR|0755, st_size=0, ...}) = 0
+stat64(".", {st_mode=S_IFDIR|0755, st_size=1384, ...}) = 0
+getpid()                                = 915
+write(2, "BusyBox v1.26.2 (2017-03-24 16:3"..., 41BusyBox v1.26.2
+(2017-03-24 16:39:44 CET)) =
+write(2, " multi-call binary.\n", 20 multi-call binary.
+)   = 20
+write(2, "\nUsage: ", 8
+Usage: )                = 8
+can't open /dev/ttyO0: No such file or directory
