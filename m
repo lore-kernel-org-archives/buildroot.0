@@ -1,11 +1,9 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 27 Mar 2017 12:22:22 -0500
-Subject: [Buildroot] [PATCH 4/4] policycoreutils: add option to build
-	audit2allow
-In-Reply-To: <20170202224505.22882-4-Adamduskett@outlook.com>
+Date: Mon, 27 Mar 2017 14:11:50 -0500
+Subject: [Buildroot] [PATCH 1/4] sepolgen: allow compiling for target
+In-Reply-To: <20170202224505.22882-1-Adamduskett@outlook.com>
 References: <20170202224505.22882-1-Adamduskett@outlook.com>
- <20170202224505.22882-4-Adamduskett@outlook.com>
-Message-ID: <CANQCQpYdCyNwBMkRVDAgyjMPZ3Omwvr+Y5oLJKrPFPyVcY1NAA@mail.gmail.com>
+Message-ID: <CANQCQpbTi-_j2A3XU9pfrn7_fWbLQYCx5H5+woeReZDcTC-38g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,72 +13,85 @@ To: buildroot@busybox.net
 Adam,
 
 On Thu, Feb 2, 2017 at 4:45 PM, Adam Duskett <aduskett@gmail.com> wrote:
-> This python utility scans the logs for messages logged when the system
-> denied permission for operations, and  generates  a snippet of policy
-> rules which, if loaded into policy, might have allowed  those operations
-> to succeed.  However, this utility only generates Type Enforcement (TE)
-> allow rules.
+> Sepolgen is currently a host-only package, however it is a dependency
+> of audit2allow.  This patch allows for sepolgen to be compiled for the
+> target.
 >
 > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 > ---
->  package/policycoreutils/Config.in          |  8 ++++++++
->  package/policycoreutils/policycoreutils.mk | 14 ++++++++++++++
->  2 files changed, 22 insertions(+)
+>  package/Config.in            |  1 +
+>  package/sepolgen/Config.in   |  9 +++++++++
+>  package/sepolgen/sepolgen.mk | 19 +++++++++++++++++++
+>  3 files changed, 29 insertions(+)
+>  create mode 100644 package/sepolgen/Config.in
 >
-> diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
-> index 53238b4..f8c3dcf 100644
-> --- a/package/policycoreutils/Config.in
-> +++ b/package/policycoreutils/Config.in
-> @@ -45,6 +45,14 @@ config BR2_PACKAGE_POLICYCOREUTILS
+> diff --git a/package/Config.in b/package/Config.in
+> index d1c517a..9fedc23 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1707,6 +1707,7 @@ endmenu
 >
->  if BR2_PACKAGE_POLICYCOREUTILS
+>  menu "Security"
+>         source "package/policycoreutils/Config.in"
+> +       source "package/sepolgen/Config.in"
+>         source "package/setools/Config.in"
+>  endmenu
 >
-> +config BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW
-> +       bool "audit2allow utility"
-> +       select BR2_PACKAGE_SEPOLGEN
-> +       select BR2_PACKAGE_CHECKPOLICY
-> +       select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+> diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
+> new file mode 100644
+> index 0000000..87621b6
+> --- /dev/null
+> +++ b/package/sepolgen/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_SEPOLGEN
+> +       bool "sepolgen"
+> +    select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
 > +       help
-> +         Enable audit2allow to be built
-> +
->  config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
->         bool "restorecond"
->         select BR2_PACKAGE_LIBGLIB2
-> diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-> index 6076bb9..2e30fd4 100644
-> --- a/package/policycoreutils/policycoreutils.mk
-> +++ b/package/policycoreutils/policycoreutils.mk
-> @@ -50,6 +50,20 @@ ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
->  POLICYCOREUTILS_MAKE_DIRS += restorecond
->  POLICYCOREUTILS_DEPENDENCIES += libglib2
->  endif
-> +
-> +ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW),y)
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +POLICYCOREUTILS_DEPENDENCIES += python3
-> +POLICYCOREUTILS_MAKE_OPTS += PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
-> +else
-> +POLICYCOREUTILS_DEPENDENCIES += python
-> +POLICYCOREUTILS_MAKE_OPTS += PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
-> +endif
-> +
-> +POLICYCOREUTILS_DEPENDENCIES += sepolgen checkpolicy
-> +POLICYCOREUTILS_MAKE_DIRS += audit2allow
-> +endif
-> +
->  # We need to pass DESTDIR at build time because it's used by
->  # policycoreutils build system to find headers and libraries.
->  define POLICYCOREUTILS_BUILD_CMDS
-> --
-> 2.9.3
+> +         This package contains a Python module that forms the core of the
+> +         modern audit2allow (which is a part of the package policycoreutils).
+> +         It contains infrastructure for parsing SELinux related messages as
+> +         produced by the audit system.
+
+Remove extra space from the 4 lines above this.
+
+> +         It has facilities for generating policy based on required access.
+> diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
+> index 137eaed..ce3f683 100644
+> --- a/package/sepolgen/sepolgen.mk
+> +++ b/package/sepolgen/sepolgen.mk
+> @@ -10,6 +10,24 @@ SEPOLGEN_LICENSE = GPLv2
+>  SEPOLGEN_LICENSE_FILES = COPYING
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +SEPOLGEN_DEPENDENCIES = python3
+> +SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
+> +       PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+> +else
+> +SEPOLGEN_DEPENDENCIES = python
+> +SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
+> +       PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+> +endif
+> +
+> +define SEPOLGEN_BUILD_CMDS
+> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
+> +endef
+> +
+> +define SEPOLGEN_INSTALL_TARGET_CMDS
+> +       $(MAKE_ENV) $(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR) install
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>  HOST_SEPOLGEN_DEPENDENCIES = host-python3
+>  HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+>         PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+> @@ -27,4 +45,5 @@ define HOST_SEPOLGEN_INSTALL_CMDS
+>         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR) install
+>  endef
+>
+> +$(eval $(generic-package))
 
-Running some test builds on this and will respond once complete.
-Otherwise looks ok.
+I did a build test but didn't have hardware available to execute the
+scripts which use this lib.  I did however verify the lib's arch and
+location were correct in the target install.
 
-Thanks,
-Matt
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
