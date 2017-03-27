@@ -1,9 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 27 Mar 2017 14:11:50 -0500
-Subject: [Buildroot] [PATCH 1/4] sepolgen: allow compiling for target
-In-Reply-To: <20170202224505.22882-1-Adamduskett@outlook.com>
+Date: Mon, 27 Mar 2017 14:13:41 -0500
+Subject: [Buildroot] [PATCH 2/4] checkpolicy: allow compiling for target
+In-Reply-To: <CANQCQpbWU=mO7bGjKaNP=MCpfbMo5wvEFoA8FeKWxCY6Rv8v5A@mail.gmail.com>
 References: <20170202224505.22882-1-Adamduskett@outlook.com>
-Message-ID: <CANQCQpbTi-_j2A3XU9pfrn7_fWbLQYCx5H5+woeReZDcTC-38g@mail.gmail.com>
+ <20170202224505.22882-2-Adamduskett@outlook.com>
+ <CANQCQpbWU=mO7bGjKaNP=MCpfbMo5wvEFoA8FeKWxCY6Rv8v5A@mail.gmail.com>
+Message-ID: <CANQCQpZQtwN-LUmWrYKh_fZchMKUa+k3pVuctyAwJM5iE0Fv1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,86 +14,68 @@ To: buildroot@busybox.net
 
 Adam,
 
-On Thu, Feb 2, 2017 at 4:45 PM, Adam Duskett <aduskett@gmail.com> wrote:
-> Sepolgen is currently a host-only package, however it is a dependency
-> of audit2allow.  This patch allows for sepolgen to be compiled for the
-> target.
+On Mon, Mar 27, 2017 at 12:04 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Adam,
 >
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  package/Config.in            |  1 +
->  package/sepolgen/Config.in   |  9 +++++++++
->  package/sepolgen/sepolgen.mk | 19 +++++++++++++++++++
->  3 files changed, 29 insertions(+)
->  create mode 100644 package/sepolgen/Config.in
+> On Thu, Feb 2, 2017 at 4:45 PM, Adam Duskett <aduskett@gmail.com> wrote:
+>> checkpolicy is currently a host-only package, however it is a dependency
+>> of audit2allow.  This patch allows for checkpolicy to be compiled for the
+>> target.
+>>
+>> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+>> ---
+>>  package/Config.in                  |  1 +
+>>  package/checkpolicy/Config.in      | 11 +++++++++++
+>>  package/checkpolicy/checkpolicy.mk | 23 +++++++++++++++++++++++
+>>  3 files changed, 35 insertions(+)
+>>  create mode 100644 package/checkpolicy/Config.in
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 9fedc23..90d9273 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1706,6 +1706,7 @@ menu "Real-Time"
+>>  endmenu
+>>
+>>  menu "Security"
+>> +       source "package/checkpolicy/Config.in"
+>>         source "package/policycoreutils/Config.in"
+>>         source "package/sepolgen/Config.in"
+>>         source "package/setools/Config.in"
+>> diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
+>> new file mode 100644
+>> index 0000000..894ce39
+>> --- /dev/null
+>> +++ b/package/checkpolicy/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_CHECKPOLICY
+>> +       bool "checkpolicy"
+>> +       select BR2_PACKAGE_FLEX
+>> +       help
+>> +         checkpolicy is the SELinux policy compiler. It uses libsepol
+>> +         to generate the binary policy. checkpolicy uses the static
+>> +         libsepol since it deals with low level details of the policy
+>> +         that have not been encapsulated/abstracted by a proper
+>> +         shared library interface.
+>> +
+>> +         http://selinuxproject.org/page/Main_Page
+>> diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+>> index 8328b39..7af5edf 100644
+>> --- a/package/checkpolicy/checkpolicy.mk
+>> +++ b/package/checkpolicy/checkpolicy.mk
+>> @@ -8,6 +8,28 @@ CHECKPOLICY_VERSION = 2.6
+>>  CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
+>>  CHECKPOLICY_LICENSE = GPLv2
+>>  CHECKPOLICY_LICENSE_FILES = COPYING
+>> +LIBSELINUX_INSTALL_STAGING = YES
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index d1c517a..9fedc23 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1707,6 +1707,7 @@ endmenu
+> I'd suggest moving the staging install to the libselinux package and
+> have it selectively set if Checkpolicy's target package is enabled.
 >
->  menu "Security"
->         source "package/policycoreutils/Config.in"
-> +       source "package/sepolgen/Config.in"
->         source "package/setools/Config.in"
->  endmenu
->
-> diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
-> new file mode 100644
-> index 0000000..87621b6
-> --- /dev/null
-> +++ b/package/sepolgen/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_SEPOLGEN
-> +       bool "sepolgen"
-> +    select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-> +       help
-> +         This package contains a Python module that forms the core of the
-> +         modern audit2allow (which is a part of the package policycoreutils).
-> +         It contains infrastructure for parsing SELinux related messages as
-> +         produced by the audit system.
 
-Remove extra space from the 4 lines above this.
-
-> +         It has facilities for generating policy based on required access.
-> diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
-> index 137eaed..ce3f683 100644
-> --- a/package/sepolgen/sepolgen.mk
-> +++ b/package/sepolgen/sepolgen.mk
-> @@ -10,6 +10,24 @@ SEPOLGEN_LICENSE = GPLv2
->  SEPOLGEN_LICENSE_FILES = COPYING
->
->  ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +SEPOLGEN_DEPENDENCIES = python3
-> +SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
-> +       PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-> +else
-> +SEPOLGEN_DEPENDENCIES = python
-> +SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
-> +       PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-> +endif
-> +
-> +define SEPOLGEN_BUILD_CMDS
-> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
-> +endef
-> +
-> +define SEPOLGEN_INSTALL_TARGET_CMDS
-> +       $(MAKE_ENV) $(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR) install
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->  HOST_SEPOLGEN_DEPENDENCIES = host-python3
->  HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
->         PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-> @@ -27,4 +45,5 @@ define HOST_SEPOLGEN_INSTALL_CMDS
->         $(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR) install
->  endef
->
-> +$(eval $(generic-package))
-
-I did a build test but didn't have hardware available to execute the
-scripts which use this lib.  I did however verify the lib's arch and
-location were correct in the target install.
+I did a build test but didn't have hardware available to execute.  I
+did however verify the checkpolicy app's arch and location in the
+target folder were correct.
 
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
