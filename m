@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Mar 2017 14:03:37 +0200
-Subject: [Buildroot] Issue performing switch_root to a UBIFS partition
-In-Reply-To: <CAGm1_kuAPosDi1Wc89_oKYr3J=t5py3nFL9F4bO3dZM+N54Ncw@mail.gmail.com>
-References: <CAGm1_kuAPosDi1Wc89_oKYr3J=t5py3nFL9F4bO3dZM+N54Ncw@mail.gmail.com>
-Message-ID: <efffdb66-2095-29cc-05ee-db25625c8371@mind.be>
+Date: Mon, 27 Mar 2017 14:12:05 +0200
+Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
+In-Reply-To: <1490595146-5638-1-git-send-email-james@balean.com.au>
+References: <1490595146-5638-1-git-send-email-james@balean.com.au>
+Message-ID: <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,68 @@ To: buildroot@busybox.net
 
 
 
-On 27-03-17 10:05, Yegor Yefremov wrote:
-> I'm trying to boot from initramfs and then switch_root to UBIFS
-> partition. Both rootfs were created with the same toolchain. And when
-> I mount UBIFS from initramfs I can execute its busybox etc. So at
-> least the architecture it the same.
+On 27-03-17 08:12, James Balean wrote:
+> Similaly to Linux, this patch adds the ability to copy in and build
+> out-of-source device tree sources during a U-Boot build.
 > 
-> I'm performing the same actions as described here [1]
+> Signed-off-by: James Balean <james@balean.com.au>
+> ---
+>  boot/uboot/Config.in | 7 +++++++
+>  boot/uboot/uboot.mk  | 3 +++
+>  2 files changed, 10 insertions(+)
 > 
-> mkdir /newroot
-> mount -t ubifs ubi0:rootfs /newroot
-> 
-> mount --move /sys /newroot/sys
-> mount --move /proc /newroot/proc
-> mount --move /dev /newroot/dev
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index c33861b..b60541e 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -407,4 +407,11 @@ config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
+>  
+>  endif # BR2_TARGET_UBOOT_ENVIMAGE
+>  
+> +config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+> +	string "Device Tree Source file paths"
 
- Can you add some error logging here to check that the mount commands actually
-succeed?
+ Would it make sense to add
+	default BR2_LINUX_KERNEL_CUSTOM_DTS_PATH if BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+?
 
-> 
-> exec switch_root /newroot /sbin/init
+ Perhaps also
+	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+(AFAIK it's not possible to link in a DTB in the legacy build system.)
 
- I've done this once with pivot_root, not switch_root. That was a bit more
-intricate. I did mount --rbind instead of mount --move, and I had to unmount
-stuff after the pivot.
+> +	help
+> +		Path to the device tree source files. You can
+> +		provide a list of dts paths to copy,
+> +		separated by spaces.
 
+ Indentation should be 1 tab + 2 spaces, and wrap at 72 columns (where tab
+counts as 8, so 62 significant characters).
 
-> As soon as I execute switch_root, the system complains, that it cannot
-> find /dev/ttyO0.
+ Perhaps you can add
 
- Have you tried the -c option of switch_root? Any idea who it is that complains?
+	  To use this device tree source file, the U-Boot configuration
+	  file must refer to it.
 
-> 
-> can't open /dev/ttyO0: No such file or directory
-> 
-> If I omit moving /sys, /proc and /dev, the /sbin/init from initramfs
-> rootfs will be executed.
-
- How do you know which one is executed?
-
-> I.e. in both cases it seems like /sbin/init
-> from initramfs rootfs will be executed and switch_root produces no
-> error/warnig messages.
-
- You can add strace to your initramfs and execute switch_root under strace -f to
-see what is happening. Well, looking at busybox source, basically it does
-
-cd /newroot
-mount --move . /
-chroot .
-exec /sbin/init
-
-so somehow it seems that the mount --move didn't do the expected thing...
 
  Regards,
  Arnout
 
-> 
-> What am I missing?
-> 
-> [1] https://landley.net/writing/rootfs-programming.html
-> 
-> Yegor
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +
+>  endif # BR2_TARGET_UBOOT
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 1e22eaa..6104b7d 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -195,6 +195,9 @@ endef
+>  endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+>  
+>  define UBOOT_BUILD_CMDS
+> +	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
+> +		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
+> +	)
+>  	$(TARGET_CONFIGURE_OPTS) 	\
+>  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+>  		$(UBOOT_MAKE_TARGET)
 > 
 
 -- 
