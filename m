@@ -1,12 +1,12 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 27 Mar 2017 14:19:03 -0500
-Subject: [Buildroot] [PATCH 3/4] libselinux: allow compiling python
- wrapper module for target
-In-Reply-To: <CANQCQpb+u_oMbkXj9-M6S77CK-EMs6XuUDtw0LTg-swtn1d-gw@mail.gmail.com>
+Date: Mon, 27 Mar 2017 14:20:05 -0500
+Subject: [Buildroot] [PATCH 4/4] policycoreutils: add option to build
+	audit2allow
+In-Reply-To: <CANQCQpYdCyNwBMkRVDAgyjMPZ3Omwvr+Y5oLJKrPFPyVcY1NAA@mail.gmail.com>
 References: <20170202224505.22882-1-Adamduskett@outlook.com>
- <20170202224505.22882-3-Adamduskett@outlook.com>
- <CANQCQpb+u_oMbkXj9-M6S77CK-EMs6XuUDtw0LTg-swtn1d-gw@mail.gmail.com>
-Message-ID: <CANQCQpZhwL5T3=1BPNnibEyj_Vh+TXRg2mW1GkNNB=C0sjq8Ew@mail.gmail.com>
+ <20170202224505.22882-4-Adamduskett@outlook.com>
+ <CANQCQpYdCyNwBMkRVDAgyjMPZ3Omwvr+Y5oLJKrPFPyVcY1NAA@mail.gmail.com>
+Message-ID: <CANQCQpZEtJ1is-8tYmq1=ALFhvGbJr8QaKRzr5A-n7+JNV7AtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,84 +15,81 @@ To: buildroot@busybox.net
 
 Adam,
 
-On Mon, Mar 27, 2017 at 12:21 PM, Matthew Weber
+On Mon, Mar 27, 2017 at 12:22 PM, Matthew Weber
 <matthew.weber@rockwellcollins.com> wrote:
 > Adam,
 >
 > On Thu, Feb 2, 2017 at 4:45 PM, Adam Duskett <aduskett@gmail.com> wrote:
->> libselinux currently does not compile it's python wrapper module
->> for the target.  This is needed for audit2allow to function properly.
->>
->> This patch allows for the python wrapper to be built.  The current
->> makefile will try to install the python wrapper to the host directory
->> unless the PYSITEDIR variable is set.  I wrapped the build of the
->> python wrapper in a check for AUDIT2ALLOW because of the extra python
->> dependency, as I am sure many users don't want to have to install
->> python if they don't have to.
+>> This python utility scans the logs for messages logged when the system
+>> denied permission for operations, and  generates  a snippet of policy
+>> rules which, if loaded into policy, might have allowed  those operations
+>> to succeed.  However, this utility only generates Type Enforcement (TE)
+>> allow rules.
 >>
 >> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 >> ---
->>  package/libselinux/libselinux.mk | 32 ++++++++++++++++++++++++++++++++
->>  1 file changed, 32 insertions(+)
+>>  package/policycoreutils/Config.in          |  8 ++++++++
+>>  package/policycoreutils/policycoreutils.mk | 14 ++++++++++++++
+>>  2 files changed, 22 insertions(+)
 >>
->> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
->> index 44120c4..fba5d41 100644
->> --- a/package/libselinux/libselinux.mk
->> +++ b/package/libselinux/libselinux.mk
->> @@ -30,6 +30,7 @@ endef
->>  define LIBSELINUX_INSTALL_STAGING_CMDS
->>         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->>                 $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
->> +
->
-> <snip>
->
->>         if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
->>                 echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
->> +
->
-> Any reason for the two newlines above?
->
->>  endef
+>> diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+>> index 53238b4..f8c3dcf 100644
+>> --- a/package/policycoreutils/Config.in
+>> +++ b/package/policycoreutils/Config.in
+>> @@ -45,6 +45,14 @@ config BR2_PACKAGE_POLICYCOREUTILS
 >>
+>>  if BR2_PACKAGE_POLICYCOREUTILS
+>>
+>> +config BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW
+>> +       bool "audit2allow utility"
+>> +       select BR2_PACKAGE_SEPOLGEN
+>> +       select BR2_PACKAGE_CHECKPOLICY
+>> +       select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+>> +       help
+>> +         Enable audit2allow to be built
+>> +
+>>  config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
+>>         bool "restorecond"
+>>         select BR2_PACKAGE_LIBGLIB2
+>> diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+>> index 6076bb9..2e30fd4 100644
+>> --- a/package/policycoreutils/policycoreutils.mk
+>> +++ b/package/policycoreutils/policycoreutils.mk
+>> @@ -50,6 +50,20 @@ ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
+>>  POLICYCOREUTILS_MAKE_DIRS += restorecond
+>>  POLICYCOREUTILS_DEPENDENCIES += libglib2
+>>  endif
+>> +
 >> +ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW),y)
->> +LIBSELINUX_DEPENDENCIES += host-swig
->> +
 >> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->> +LIBSELINUX_DEPENDENCIES += python3
->> +LIBSELINUX_PYTHONLIBDIR = -L$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
->> +LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m
->> +LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
+>> +POLICYCOREUTILS_DEPENDENCIES += python3
+>> +POLICYCOREUTILS_MAKE_OPTS += PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
 >> +else
->> +LIBSELINUX_DEPENDENCIES += python
->> +LIBSELINUX_PYTHONLIBDIR = -L$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
->> +LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
->> +LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+>> +POLICYCOREUTILS_DEPENDENCIES += python
+>> +POLICYCOREUTILS_MAKE_OPTS += PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
 >> +endif
 >> +
->> +LIBSELINUX_MAKE_OPTS += \
->> +       PYINC="$(LIBSELINUX_PYINC)" \
->> +       PYTHONLIBDIR="$(LIBSELINUX_PYTHONLIBDIR)" \
->> +       PYLIBVER="$(LIBSELINUX_PYLIBVER)" \
->> +       PYSITEDIR=$(TARGET_DIR)/usr/lib/$(LIBSELINUX_PYLIBVER)/site-packages \
->> +       SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
->> +
->> +LIBSELINUX_BUILD_CMDS += $(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
->> +       $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) swigify pywrap
->> +
->> +LIBSELINUX_INSTALL_TARGET_CMDS += $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->> +       $(LIBSELINUX_MAKE_OPTS) install-pywrap
->> +
+>> +POLICYCOREUTILS_DEPENDENCIES += sepolgen checkpolicy
+>> +POLICYCOREUTILS_MAKE_DIRS += audit2allow
 >> +endif
 >> +
+>>  # We need to pass DESTDIR at build time because it's used by
+>>  # policycoreutils build system to find headers and libraries.
+>>  define POLICYCOREUTILS_BUILD_CMDS
+>> --
+>> 2.9.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> I need to build and test this.  This was in the original libselinux
-> patchset and I believe we had issues in swig.
+> Running some test builds on this and will respond once complete.
+> Otherwise looks ok.
 >
 
 I did a build test but didn't have hardware available to execute.  I
-did verify the libselinux installed correctly to staging and that the
-swig related (selinux.py) item built/installed correctly
-(target/usr/lib/python3.5/site-packages/selinux/).
+did verify the audit2allow installed correctly to target and that the
+python include path in that script didn't include the build path.
 
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
