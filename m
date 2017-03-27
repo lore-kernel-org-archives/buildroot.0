@@ -1,83 +1,49 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 27 Mar 2017 11:44:14 -0500
-Subject: [Buildroot] [PATCH 2/4] core: allow packages to declare a
- permission file
-In-Reply-To: <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Mar 2017 11:44:55 -0500
+Subject: [Buildroot] [PATCH 3/4] docs/manual: document
+	FOO_PERMISSIONS_FILE
+In-Reply-To: <1490564623-26806-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CANQCQpaC7DPHyPWdWoGFwC55FC5Q4tJP0cdaRh2EhrvHy=pSKQ@mail.gmail.com>
+ <1490564623-26806-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CANQCQpZOqCffwqd7jW5JJJ0u8eUALH70h4HeCTXmESiZUQOEuw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Thomas,
 
 On Sun, Mar 26, 2017 at 4:43 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Currently, packages can define a variable that holds all the permissions
-> to set on the files it installs. This can be used to set various
-> permissions, like ownership, mode, suid/sgid/sticky bits to individual
-> files.
->
-> However, this variable has to contain entries that are known the moment
-> we scan the .mk file; it is not possible to conditionally add permisions
-> for files which presence depend on post-parse conditions.
->
-> This is the case for example for Busybox, for which we don't know whether
-> a specific applet will be enabled or not until after the configure
-> command has run.
->
-> Introduce a new variable that packages can set to point to a file that
-> contains a permission table. That filewill only be used when a filesystem
-> image is asembled, so the file can be generated, either at configure or
-> build time, with no problem.
->
-> Since this variable can be empty (when no package provides such a
-> permissions file), we must ensure not to cat anything (or that would
-> stale, cat-ing stdin). But since this variable is not fully known by the
-> time we parse the fs infra (e.g. packages from a br2-external tree are
-> not yet parsed), we can not test it with make syntas (ifneq...endif).
-> Teting it with shell syntac is not trivial either, becaue the variable
-> would not be mpty (it would be only spaces). sO, we just iterate over
-> the the files and cat them one by one with a shell-level for-loop, which
-> is happy with nothing to iterate over.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Peter Korsgaard <peter@korsgaard.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  fs/common.mk           | 3 +++
->  package/pkg-generic.mk | 1 +
->  2 files changed, 4 insertions(+)
+>  docs/manual/adding-packages-generic.txt | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 >
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 396b1c2..0bbcca4 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -91,6 +91,9 @@ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
->  endif
->  endif
->         $$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
-> +       for f in $$(PACKAGES_PERMISSIONS_FILES); do \
-> +               cat $$$${f} >> $$(FULL_DEVICE_TABLE) || exit 1; \
-> +       done
->         echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
->         $$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
->                 echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index dd8a1e2..343d1ad 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -915,6 +915,7 @@ PACKAGES += $(1)
->  ifneq ($$($(2)_PERMISSIONS),)
->  PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
->  endif
-> +PACKAGES_PERMISSIONS_FILES += $$($(2)_PERMISSIONS_FILE)
-
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index a08283c..23b07fa 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -386,7 +386,13 @@ information is (assuming the package name is +libfoo+) :
+>  * +LIBFOO_PERMISSIONS+ lists the changes of permissions to be done at
+>    the end of the build process. The syntax is once again the makedevs one.
+>    You can find some documentation for this syntax in the xref:makedev-syntax[].
+> -  This variable is optional.
+> +  This variable is optional; its value must be known when the .mk file
+> +  is parsed.
+> +
+> +* +LIBFOO_PERMISSIONS_FILE+, like +LIBFOO_PERMISSIONS+ but points to a
+> +  file that contains the list of permissions. Unlike +LIBFOO_PERMISSIONS+,
+> +  its content need not be known when the .mk file is parsed, so it can be
+> +  generated. This variable is optional, and you should seldom need it.
+>
+>  * +LIBFOO_USERS+ lists the users to create for this package, if it installs
+>    a program you want to run as a specific user (e.g. as a daemon, or as a
 
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
