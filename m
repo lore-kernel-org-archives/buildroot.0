@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Mar 2017 14:12:05 +0200
-Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
-In-Reply-To: <1490595146-5638-1-git-send-email-james@balean.com.au>
-References: <1490595146-5638-1-git-send-email-james@balean.com.au>
-Message-ID: <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
+Date: Mon, 27 Mar 2017 14:35:46 +0200
+Subject: [Buildroot] Patchwork cleanup, 10 patches to look at
+In-Reply-To: <20170326235320.448e802a@free-electrons.com>
+References: <20170326235320.448e802a@free-electrons.com>
+Message-ID: <db756f2e-3dda-2fcc-6035-3287b88acf29@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,131 @@ To: buildroot@busybox.net
 
 
 
-On 27-03-17 08:12, James Balean wrote:
-> Similaly to Linux, this patch adds the ability to copy in and build
-> out-of-source device tree sources during a U-Boot build.
+On 26-03-17 23:53, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: James Balean <james@balean.com.au>
-> ---
->  boot/uboot/Config.in | 7 +++++++
->  boot/uboot/uboot.mk  | 3 +++
->  2 files changed, 10 insertions(+)
+> I'd like to again restart the patchwork cleanup effort. There are
+> numerous patches in patchwork that I'm not sure what we want to do
+> with.
+
+ Great initiative!
+
 > 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index c33861b..b60541e 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -407,4 +407,11 @@ config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
->  
->  endif # BR2_TARGET_UBOOT_ENVIMAGE
->  
-> +config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-> +	string "Device Tree Source file paths"
+> Here is a list of 10 patches that we need to take a decision on. If no
+> decision is taken in the next 2 weeks, I'll mark them as Rejected.
+> 
+>  * avahi: link with libintl if libglib2 is enabled
+>    https://patchwork.ozlabs.org/patch/683732/
+> 
+>    My plan is to enable the stub libintl in uClibc-ng and stop having
+>    all those linking issues with libintl from gettext. The only
+>    drawback would be that there would no longer be "translation"
+>    support with uClibc: the libintl implementation in uClibc-ng is
+>    really just a stub.
+> 
+>    Thoughts ?
 
- Would it make sense to add
-	default BR2_LINUX_KERNEL_CUSTOM_DTS_PATH if BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-?
+ I think having internationalization support can still be useful in a
+Buildroot/uClibc based system, e.g. to support translation of a custom CLI UI.
+So using the stub implementation unconditionally sounds like a bad idea.
 
- Perhaps also
-	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-(AFAIK it's not possible to link in a DTB in the legacy build system.)
+ How about instead making gettext/intl support depend on !static? That's also a
+catch-all solution, but a lot less aggressive.
 
-> +	help
-> +		Path to the device tree source files. You can
-> +		provide a list of dts paths to copy,
-> +		separated by spaces.
 
- Indentation should be 1 tab + 2 spaces, and wrap at 72 columns (where tab
-counts as 8, so 62 significant characters).
+>  * qemu: allow to build statically
+>    https://patchwork.ozlabs.org/patch/692667/
+> 
+>    We normally don't want to have special options for each package to
+>    build them statically. Should we make an exception for Qemu?
 
- Perhaps you can add
+ I see something like this like having package options that do little more than
+selecting other packages, like BR2_PACKAGE_PHP_EXT_BZIP2. It's something we want
+to avoid, but sometimes there are good reasons to do it.
 
-	  To use this device tree source file, the U-Boot configuration
-	  file must refer to it.
+ So for Qemu and also for Docker I do think it makes sense to have static as a
+per-package option.
+
+
+>  * infra: fix 'packages-file-list.txt' with TLP
+>    https://patchwork.ozlabs.org/patch/694519/
+> 
+>    Adds a lock around the installation step of packages, to make
+>    top-level parallel build still generate a correct list of files per
+>    package.
+> 
+>    Gustavo, what is your plan regarding this?
+> 
+>    Others: should we merge this?
+
+ I don't think this is the proper approach. The proper approach is map/reduce,
+i.e. generate the pieces in per-package files and collect them together in a
+final gathering stage. Obviously, this requires a per-package target first, but
+that's anyway the way we want to go.
+
+ I thought someone already made that comment but I can't find it in that thread...
+
+>  * e2fsprogs: keep util-linux's fsck if chosen
+>    https://patchwork.ozlabs.org/patch/696634/
+> 
+>    This fixes a real bug, but even Maxime who submitted the patch is
+>    not too happy with the proposal. Could someone look into this?
+> 
+>  * linux-headers: Account for LINUX_OVERRIDE_SRCDIR
+>    https://patchwork.ozlabs.org/patch/713927/
+> 
+>    I think I am against this patch, because if the user sets
+>    LINUX_OVERRIDE_SRCDIR, then suddenly he will see his kernel headers
+>    being rebuilt as well.
+> 
+>    Arnout ?
+
+ Well, as you can see in the discussion thread, I argued against it, asked for a
+stronger argument for it, but none was forthcoming.
+
+ However, my conclusion was that we should either apply this, or fix the
+documentation so that it explains that HEADERS_SAME_AS_KERNEL doesn't apply if
+LINUX_OVERRIDE_SRCDIR (or LINUX_SITE_METHOD = local) is set.
+
+
+>  * python-lxml: allow build as host package
+>    https://patchwork.ozlabs.org/patch/722644/
+> 
+>    Host package not used anywhere. Discussed at length during the
+>    previous BR meeting. What do we do?
+
+ The conclusion at BR meeting was unfortunately not clear, but we definitely
+said that we would be more lenient towards this kind of addition. So I'd say we
+accept it (with a Config.in.host entry, though).
+
+
+>  * fakedate: simplify logic
+>    https://patchwork.ozlabs.org/patch/725396/
+> 
+>  * linux-tools/perf: fix build for MIPS by using the right emulation on
+>    LD
+>    https://patchwork.ozlabs.org/patch/729154/
+> 
+>  * package/pkg-download.mk: add gitlab helper
+>    https://patchwork.ozlabs.org/patch/736382/
+
+ I'm not a fan of adding helpers (in fact, I think the github helper should
+die). For gitlab, however, the URL construction is indeed a bit peculiar and it
+differs a lot from the URL a user normally sees (adding that &filename= thing),
+so it does make sense to have it. Since I couldn't decide, I didn't reply :-)
 
 
  Regards,
  Arnout
 
-> +
->  endif # BR2_TARGET_UBOOT
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 1e22eaa..6104b7d 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -195,6 +195,9 @@ endef
->  endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
->  
->  define UBOOT_BUILD_CMDS
-> +	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
-> +		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
-> +	)
->  	$(TARGET_CONFIGURE_OPTS) 	\
->  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
->  		$(UBOOT_MAKE_TARGET)
+>  * linux: Add CIP SLTS easy selection option
+>    https://patchwork.ozlabs.org/patch/736383/
+> 
+> Please help taking decisions about those patches.
+> 
+> Thanks!
+> 
+> Thomas
 > 
 
 -- 
