@@ -1,35 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 22:06:08 +0200
-Subject: [Buildroot] [git commit] syslog-ng: Bump version header in conf
-	file to 3.9
-Message-ID: <20170328200613.E401982644@busybox.osuosl.org>
+Date: Tue, 28 Mar 2017 22:07:21 +0200
+Subject: [Buildroot] [git commit] gdb: pass gdb_cv_prfpregset_t_broken=no
+Message-ID: <20170328200739.B67E581E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dad25466d2931eeecde23867bed79b1d7213887
+commit: https://git.buildroot.net/buildroot/commit/?id=a76367d63941ec3f8c170d971161bfbfb9d31b34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package version of syslog-ng is 3.9.1.
-Bumping version number in syslog-ng.conf to 3.9
+Starting with glibc 2.25, the proc_service.h header has been copied
+from gdb to glibc so other tools can use it. However, that makes it
+necessary to make sure that declaration of prfpregset_t declaration
+is consistent between gdb and glibc. In gdb, however, there is a
+workaround for a broken prfpregset_t declaration in glibc 2.3 which
+uses AC_TRY_RUN to detect if it's needed, which doesn't work in
+cross-compilation. So pass the cache option to configure.
+It needs to be passed to GDB_CONF_ENV to build gdbserver only but
+also to GDB_MAKE_ENV, because otherwise it does not get passed to the
+configure script of nested packages while building gdbserver with full
+debugger.
 
-Fixing warning message about configuration file being too old.
-
-Signed-off-by: Pawel Sikora <sikor6@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/syslog-ng/syslog-ng.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gdb/gdb.mk | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-index 0b4a860..a3384ee 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
-- at version: 3.7
-+ at version: 3.9
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 1cb1776..1218f11 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -87,7 +87,21 @@ GDB_CONF_ENV = \
+ # not get passed to the configure script of nested packages while
+ # building gdbserver with full debugger.
+ GDB_CONF_ENV += gl_cv_func_gettimeofday_clobber=no
+-GDB_MAKE_ENV = gl_cv_func_gettimeofday_clobber=no
++GDB_MAKE_ENV += gl_cv_func_gettimeofday_clobber=no
++
++# Starting with glibc 2.25, the proc_service.h header has been copied
++# from gdb to glibc so other tools can use it. However, that makes it
++# necessary to make sure that declaration of prfpregset_t declaration
++# is consistent between gdb and glibc. In gdb, however, there is a
++# workaround for a broken prfpregset_t declaration in glibc 2.3 which
++# uses AC_TRY_RUN to detect if it's needed, which doesn't work in
++# cross-compilation. So pass the cache option to configure.
++# It needs to be passed to GDB_CONF_ENV to build gdbserver only but
++# also to GDB_MAKE_ENV, because otherwise it does not get passed to the
++# configure script of nested packages while building gdbserver with full
++# debugger.
++GDB_CONF_ENV += gdb_cv_prfpregset_t_broken=no
++GDB_MAKE_ENV += gdb_cv_prfpregset_t_broken=no
  
- source s_sys {
- 	file("/proc/kmsg" program_override("kernel"));
+ # The shared only build is not supported by gdb, so enable static build for
+ # build-in libraries with --enable-static.
