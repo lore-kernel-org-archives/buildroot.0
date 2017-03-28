@@ -1,116 +1,48 @@
-From: Andrey Skvortsov <andrej.skvortzov@gmail.com>
-Date: Tue, 28 Mar 2017 13:04:30 +0300
-Subject: [Buildroot] Issue performing switch_root to a UBIFS partition
-In-Reply-To: <CAGm1_kvXUcjvwravXbkSHDrZLnw3tbaa-4YtL2OA6ficnO0bvQ@mail.gmail.com>
-References: <CCAGm1_kuF8Dqo7ctHRF7Og3smXcsgKby1vwH0yM9HM8a1Mw1nww@mail.gmail.com>
- <20170328093941.yui6vunw5waaqtqr@skv.local>
- <CAGm1_kvXUcjvwravXbkSHDrZLnw3tbaa-4YtL2OA6ficnO0bvQ@mail.gmail.com>
-Message-ID: <20170328100430.dulbzjgydxs7kc4h@skv.local>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Mar 2017 13:06:38 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-03-27
+In-Reply-To: <871sth6fcj.fsf@dell.be.48ers.dk>
+References: <20170328062859.9F1EC207EA@mail.free-electrons.com>
+ <871sth6fcj.fsf@dell.be.48ers.dk>
+Message-ID: <20170328130638.62750436@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-03-28 11:48, Yegor Yefremov wrote:
-> On Tue, Mar 28, 2017 at 11:39 AM, Andrey Skvortsov
-> <andrej.skvortzov@gmail.com> wrote:
-> >>On Mon, Mar 27, 2017 at 5:16 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>>
-> >>> On 27-03-17 14:59, Yegor Yefremov wrote:
-> >>>> getpid()                                = 915
-> >>>
-> >>>  PID must be 1.
-> >
-> > Yegor, are you sure, that exec switch_root is executed from script,
-> > that has PID 1?
-> > Because it has to be 1. Otherwise you'll get busybox usage message.
-> > See https://git.busybox.net/busybox/tree/util-linux/switch_root.c?h=1_26_stable#n111
-> >
-> > Please check this by running 'echo $$' before you make 'mount --move' calls'
-> >
-> >
-> >>Forgot to mention that in the script representation
-> >>>  :-) Of
-> >>> course, here it's due to the strace... To avoid, you could use
-> >>>  "strace -fp 1 &"
-> >>> but I'm not sure how that would behave across the exec.
-> >>
-> >>This doesn't work.
-> >>
-> >>>> write(2, "BusyBox v1.26.2 (2017-03-24 16:3"..., 41BusyBox v1.26.2
-> >>>> (2017-03-24 16:39:44 CET)) =
-> >>>> write(2, " multi-call binary.\n", 20 multi-call binary.
-> >>>> )   = 20
-> >>>> write(2, "\nUsage: ", 8
-> >>>> Usage: )                = 8
-> >>>
-> >>>  Did this Usage: part also come out when running without strace?
-> >>>  It's very weird
-> >>> that the rest of the usage output is not appearing. Or perhaps
-> >>>  that's because
-> >>> you get a kernel panic immediately afterwards because PID 1 exits?
-> >>
-> >>This is what I get, if I invoke switch_root without moving /dev, /sys
-> >>and /proc and without strace:
-> >>
-> >># exec /sbin/switch_root /newroot/ /sbin/init
-> >>BusyBox v1.26.2 (2017-03-24 16:39:44 CET) multi-call bina
-> >>Welcome to Buildroot
-> >>
-> >>The whole stuff is very strange. Have you tried it yourself with
-> >>recent BR and kernel?
-> >
-> >
-> >>>> can't open /dev/ttyO0: No such file or directory
-> >>>
-> >>>  Still no explanation where this comes from...
-> >
-> > The reason for that is /dev is mounted already on /newroot/dev, but
-> > switch_root failed and Busybox prints its usage message to standard output, but
-> > /dev/console (/dev/ttyO0) doesn't exist anymore at the old location.
-> > So there is corresponding message about non-existed /dev/ttyO0.
-> >
-> > As you see there is no such message, if /dev is not mounted to the new location.
+Hello,
+
+On Tue, 28 Mar 2017 09:16:28 +0200, Peter Korsgaard wrote:
+
+>  > Hello,
+>  > Build statistics for 2017-03-27
+>  > ================================  
 > 
-> Thanks for the hint. I managed to switch_root via placing all the
-> steps into the /init script:
-
-Before you probably executed your additional script in a subshell (new child
-process of init) and not in the context of the init shell.
-Use dot (.) to execute your script from init.
-
-. your_script
-
-> #!/bin/sh
-> # devtmpfs does not get automounted for initramfs
-> export PATH=/bin:/sbin:/usr/bin:/usr/sbin
-> /bin/mount -t devtmpfs devtmpfs /dev
-> mount -t proc none /proc
-> mount -t sysfs none /sys
-> exec 0</dev/console
-> exec 1>/dev/console
-> exec 2>/dev/console
-> ubiattach -p /dev/mtd5
-> mount -t ubifs ubi0:rootfs /mnt
-> cd /mnt
-> mount --move /sys /mnt/sys
-> mount --move /proc /mnt/proc
-> mount --move /dev /mnt/dev
-> exec switch_root -c /dev/console /mnt sbin/init
+>  >       successes : 119
+>  >        failures : 29 
+>  >        timeouts : 0  
+>  >           TOTAL : 148  
 > 
-> Is this because one performs "exec switch_root", that I didn't got any
-> error message?
+> FYI, it seems like gcc10 is not getting fixed, so I've instead started
+> an autobuilder on gcc16 and the number of daily builds should again
+> increase.
 
-I think now all should be ok.
+Great, thanks!
 
--- 
+On my side, the Free Electrons build server has moved to systemd, and
+due to this, the autobuild-run script is no longer being restarted
+automatically when the build server is restarted after security
+updates. Therefore, there are times where this build server is no
+longer contributing build results.
+
+I'll try to fix that soon.
+
 Best regards,
-Andrey Skvortsov
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170328/b9f53f6a/attachment.asc>
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
