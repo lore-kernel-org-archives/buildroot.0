@@ -1,86 +1,78 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 28 Mar 2017 19:49:07 +0200
-Subject: [Buildroot] [PATCH 1/5] package/mesa3d: allow to enable
- OpenGL	texture float support
-References: <20170326162853.3022-1-romain.naour@gmail.com>
-Message-ID: <j9kqqdxr2m.ln2@ID-313208.user.individual.net>
+From: Pawel Sikora <sikor6@gmail.com>
+Date: Tue, 28 Mar 2017 19:56:42 +0200
+Subject: [Buildroot] [git commit] xenomai: bump version to 3.0.3
+In-Reply-To: <20170326230252.GM22954@waldemar-brodkorb.de>
+References: <20170325181551.035B88226E@busybox.osuosl.org>
+ <20170326123433.GL22954@waldemar-brodkorb.de>
+ <20170326213845.279e722b@free-electrons.com>
+ <20170326230252.GM22954@waldemar-brodkorb.de>
+Message-ID: <CAKfV1CaGiFXJupriJLgS=NdeMOwmSEbt9ZQ2a+zWDk+U6OrbOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 26 Mar 2017 18:28:49 +0200 schrieb Romain Naour:
-
-> OpenGL version string: 2.1 Mesa 17.0.2
-> It turn out that texture float support was missing...
-> OpenGL version string: 3.0 Mesa 17.0.2
-[...]
-> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT),y)
-> +MESA3D_CONF_OPTS += --enable-texture-float
-> +MESA3D_LICENSE_FILES += docs/patents.txt
-> +else
-> +MESA3D_CONF_OPTS += --disable-texture-float
-> +endif
-
 Hi,
 
-wondering why Kodi already prints
 
-NOTICE: GL_VERSION = 3.0 Mesa 17.0.2
+Hi,
+> Thomas Petazzoni wrote,
+>
+> > Hello,
+> >
+> > On Sun, 26 Mar 2017 14:34:33 +0200, Waldemar Brodkorb wrote:
+> >
+> > > is this well tested?
+> > > Simple uClibc-ng for ARM breaks with:
+> > > obstack.c:103:24: fatal error: exitfail.h: No such file or directory
+> >
+> > I did do a build test (since I added a patch to make things build
+> > properly), but I don't remember if it was a glibc or uClibc build.
+> > Apparently, it was a glibc build.
+> >
+> > > I am not an Xenomai expert, just started experimenting with it, but
+> > > I see no option to switch between "cobalt" and "mercury" mode.
+> >
+> > $ ./configure --help
+> > [...]
+> >   --with-core=<cobalt | mercury>
+> >                           build for dual kernel or single image
+> >
+>
+> I mean a switch inside buildroot. But I have seen your comment now,
+> that it might be added later.
+>
+>
 
-during startup on my system without your patch and 
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y I investigated its changes and 
-compiled this defconfig (snipped non-mesa3d options):
+I am thinking right now about some good solution about configs regarding
+choosing
+Xenomai core. I will present a patch when it is ready and invite you for
+the discussion ;-)
 
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
-BR2_PACKAGE_MESA3D_OSMESA=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
+Regarding failing build with uClibc-ng on ARM I am not completely sure how
+big will
+be the effort to make it working... (it seems to be a case of _LIBC
+definition inside
+Xenomai package in lib/boilerplate/obstack.c:)
 
-with
-BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT=y
+...
+ # include <stdlib.h>
+ # ifdef _LIBC
+ int obstack_exit_failure = EXIT_FAILURE;
+ # else
+ #  include "exitfail.h"
+ #  define obstack_exit_failure exit_failure
+ # endif
+...
 
-and without your patch.
+but I will try to find if there is something more )
 
-The directory output/target/usr/lib/dri/ contains these files, I added a 
-note when the filesize changed due to --enable-texture-float:
+ I will try to look at it. Just don't know when - because of the studies,
+but I will ;-)
 
-i915_dri.so
-i965_dri.so
-kms_swrast_dri.so	(changed)
-nouveau_dri.so		(changed, same as kms_swrast_dri.so)
-nouveau_vieux_dri.so
-r600_dri.so		(changed, same as kms_swrast_dri.so)
-radeon_dri.so
-swrast_dri.so		(changed, same as kms_swrast_dri.so)
-virtio_gpu_dri.so	(changed, same as kms_swrast_dri.so)
-vmwgfx_dri.so		(changed, same as kms_swrast_dri.so)
-
-libGL.so/libEGL.so/libGLES*.so stayed unchanged.
-
-Afaics the reason why the Intel drivers are unaffected could be this line 
-of code where texture float support is always enabled:
-
-https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/i965/
-intel_extensions.c?h=17.0#n83
-
-Other parts of the mesa3d contain #ifdef, like this:
-https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/main/extensions.c?
-h=17.0#n134
-
-I am not familiar with the internal structures of mesa3d beyond my 
-observations, maybe you should add a note to Config.in that your 
-configure option does not affect all drivers.
-
-Regards, Bernd
+Kind Regards,
+Pawel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170328/177a29a5/attachment.html>
