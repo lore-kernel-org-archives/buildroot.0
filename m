@@ -1,38 +1,55 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Mar 2017 10:23:15 +0300
-Subject: [Buildroot] [PATCH v2] package/synergy: bump to version 1.8.5
-In-Reply-To: <1490685439-5913-1-git-send-email-pieterjan.camerlynck@gmail.com>
-References: <1490685439-5913-1-git-send-email-pieterjan.camerlynck@gmail.com>
-Message-ID: <20170328072315.bcf7ny5wb5vgntuk@sapphire.tkos.co.il>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 28 Mar 2017 09:34:46 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: remove sha1 external
+	dependency
+In-Reply-To: <8760it6fof.fsf@dell.be.48ers.dk>
+References: <20170326201744.12202-1-romain.naour@gmail.com>
+ <8760it6fof.fsf@dell.be.48ers.dk>
+Message-ID: <CANLo3Jh+o-QJoDBrMv_C8NzGUaQTZXY7Hg51RrMC+R7P09BYxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pieterjan Camerlynck,
+Hi Peter,
 
-On Tue, Mar 28, 2017 at 09:17:19AM +0200, Pieterjan Camerlynck wrote:
-> Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-> ---
-> Changes v1 -> v2
->  - drop gtest dependency
->  - use full path in install
 
-This patch is doing much more than a simple version bump. Please spare a few 
-words in the commit log about:
+Le 28 mars 2017 09:09, "Peter Korsgaard" <peter@korsgaard.com> a ?crit :
 
-  * The build system change from autotools to cmake
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-  * The move from sourceforge to github
+ > --with-sha1 option was removed since mesa 1.17.0 by commit [1].
+ > [1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=d1efa09d34
+2bff3e5def2978a0bef748d74f9c82
 
-  * The patches you remove (why?)
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/mesa3d/mesa3d.mk | 11 -----------
 
-  * The patch you add (why?)
+What about the comment and logic in Config.in?
 
-baruch
+       # We need a SHA1 implementation. If either openssl or
+        # libgcrypt are already part of the build, we'll use one of
+        # them, otherwise, use the small libsha1 library.
+        select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL &&
+!BR2_PACKAGE_LIBGCRYPT)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+
+I missed it...
+It must be removed as well.
+
+Can you fix this ?
+Otherwise I will send a patch this evening.
+
+Best regards,
+Romain
+
+
+
+--
+Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170328/2c05fb94/attachment.html>
