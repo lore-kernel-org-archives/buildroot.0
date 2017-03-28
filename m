@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 21:44:17 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump version to 7.0.5-4
-Message-ID: <20170328194518.94D4182617@busybox.osuosl.org>
+Date: Tue, 28 Mar 2017 21:45:13 +0200
+Subject: [Buildroot] [git commit] package/pcsc-lite: enable systemd socket
+	activation
+Message-ID: <20170328194518.CAB2582617@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49a3ed0feee3ce58563fdec94b3d64112f41696b
+commit: https://git.buildroot.net/buildroot/commit/?id=4f9848d6a108925a0bb446c38ec34a8aa497dec4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+pcsc-lite installs systemd service files, but they are not used.
+Enable pcscd.socket so that systemd starts the daemon when the
+first client connects.
+
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pcsc-lite/pcsc-lite.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 3f9f84e..ff7b24a 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 dbc0a1cc0e4e3d4e3c772724fcbfe24a00ff4434c8b12c513c447a5fb422ffa6  ImageMagick-7.0.5-3.tar.xz
-+sha256 4a1dde5bdfec0fc549955a051be25b7ff96dfb192060997699e43c7ce0f06ab2  ImageMagick-7.0.5-4.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index d6923f5..9bef6f7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index e53c004..3349b6c 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -37,4 +37,10 @@ ifeq ($(PACKAGE_PCSC_LITE_EMBEDDED),y)
+ PCSC_LITE_CONF_OPTS += --enable-embedded
+ endif
  
--IMAGEMAGICK_VERSION = 7.0.5-3
-+IMAGEMAGICK_VERSION = 7.0.5-4
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
++define PCSC_LITE_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/pcscd.socket \
++		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/pcscd.socket
++endef
++
+ $(eval $(autotools-package))
