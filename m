@@ -1,32 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 21:49:24 +0200
-Subject: [Buildroot] [PATCH] powerpc-utils: Bump to v1.3.3
-In-Reply-To: <20170328053702.27113-1-sam@mendozajonas.com>
-References: <20170328053702.27113-1-sam@mendozajonas.com>
-Message-ID: <20170328214924.15164d0f@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 28 Mar 2017 21:49:40 +0200
+Subject: [Buildroot] [PATCH] mesa3d: drop unneeded libsha1 logic from
+ Config.in
+In-Reply-To: <20170328214404.1003ccbb@free-electrons.com>
+References: <20170328123021.18091-1-peter@korsgaard.com>
+ <20170328214404.1003ccbb@free-electrons.com>
+Message-ID: <46864719-9b77-2140-d5bb-937cebdbb0ff@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter, All,
 
-On Tue, 28 Mar 2017 16:37:02 +1100, Samuel Mendoza-Jonas wrote:
-> In particular this includes commit d63e12a "nvram:read list of partion
-> names dynamically" which fixes an issue preventing the nvram tool from
-> writing to certain partitions.
+Le 28/03/2017 ? 21:44, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-> ---
->  package/powerpc-utils/powerpc-utils.hash | 2 +-
->  package/powerpc-utils/powerpc-utils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> On Tue, 28 Mar 2017 14:30:21 +0200, Peter Korsgaard wrote:
+>> Commit 7f4e9490b647 (package/mesa3d: remove sha1 external dependency)
+>> removed the --with-sha1 logic from mesa3d.mk, but didn't remove the
+>> corresponding logic / comment from Config.in.
+>>
+>> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>> ---
+>>  package/mesa3d/Config.in | 4 ----
+>>  1 file changed, 4 deletions(-)
+> 
+> Applied to master, thanks. Good catch!
 
-Applied to master, thanks.
+Back on line too late to ack this patch :p
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks!
+
+Romain
+
+> 
+> Thomas
+> 
