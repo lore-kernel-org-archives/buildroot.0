@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 21:43:49 +0200
-Subject: [Buildroot] [PATCH] samba4: security bump to version 4.5.7
-In-Reply-To: <20170328151808.11281-1-peter@korsgaard.com>
-References: <20170328151808.11281-1-peter@korsgaard.com>
-Message-ID: <20170328214349.5d6e58ae@free-electrons.com>
+Date: Tue, 28 Mar 2017 21:43:56 +0200
+Subject: [Buildroot] [git commit] mesa3d: drop unneeded libsha1 logic from
+	Config.in
+Message-ID: <20170328194400.0E82C82123@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5a0b868ecff69fec8c7abbe5a7689fdfb7643aee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Mar 2017 17:18:08 +0200, Peter Korsgaard wrote:
-> Fixes CVE-2017-2619:
-> 
->    All versions of Samba prior to 4.6.1, 4.5.7, 4.4.11 are vulnerable to
->    a malicious client using a symlink race to allow access to areas of
->    the server file system not exported under the share definition.
-> 
->    Samba uses the realpath() system call to ensure when a client requests
->    access to a pathname that it is under the exported share path on the
->    server file system.
-> 
->    Clients that have write access to the exported part of the file system
->    via SMB1 unix extensions or NFS to create symlinks can race the server
->    by renaming a realpath() checked path and then creating a symlink. If
->    the client wins the race it can cause the server to access the new
->    symlink target after the exported share path check has been done. This
->    new symlink target can point to anywhere on the server file system.
-> 
->    This is a difficult race to win, but theoretically possible. Note that
->    the proof of concept code supplied wins the race reliably only when
->    the server is slowed down using the strace utility running on the
->    server. Exploitation of this bug has not been seen in the wild.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/samba4/samba4.hash | 2 +-
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Commit 7f4e9490b647 (package/mesa3d: remove sha1 external dependency)
+removed the --with-sha1 logic from mesa3d.mk, but didn't remove the
+corresponding logic / comment from Config.in.
 
-Applied to master, thanks. Obviously for the LTS branch! :)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 2b085ab..57e88ec 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -153,10 +153,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+ 	depends on BR2_PACKAGE_XORG7 # xproto_dri3proto
+-	# We need a SHA1 implementation. If either openssl or
+-	# libgcrypt are already part of the build, we'll use one of
+-	# them, otherwise, use the small libsha1 library.
+-	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	select BR2_PACKAGE_XPROTO_DRI3PROTO
