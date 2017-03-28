@@ -1,145 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Mar 2017 19:40:52 +0200
-Subject: [Buildroot] [PATCHv2] core: enhance printvars
-Message-ID: <20170328174052.7927-1-yann.morin.1998@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 28 Mar 2017 19:47:32 +0200
+Subject: [Buildroot] [PATCH] autofs: use libtirpc instead of internal C
+ implementation
+In-Reply-To: <20170326092224.GA3019@free.fr>
+References: <20170321193213.GA18747@waldemar-brodkorb.de>
+ <20170321222449.5ceb21f4@free-electrons.com>
+ <20170322020946.GF28589@waldemar-brodkorb.de>
+ <20170322085959.587a9f22@free-electrons.com>
+ <74507ead-a58c-7c03-3356-64669f7f5acf@mind.be>
+ <20170326092224.GA3019@free.fr>
+Message-ID: <20170328174732.GR22954@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the output of printvars copntains the name of the variable,
-its expanded value and its un-expanded value.
+Hi,
+Yann E. MORIN wrote,
 
-However, most of the time, we need the actual, expanded value, so it can
-be re-used from a (non-Buildroot) infrastructure script, like a
-post-build script, or a build-farm driver (e.g. a Jenkins job...)
+> All,
+> 
+> On 2017-03-23 22:53 +0100, Arnout Vandecappelle spake thusly:
+> > On 22-03-17 08:59, Thomas Petazzoni wrote:
+> > > Hello,
+> > > 
+> > > On Wed, 22 Mar 2017 03:09:46 +0100, Waldemar Brodkorb wrote:
+> > > 
+> > >>> On Tue, 21 Mar 2017 20:32:13 +0100, Waldemar Brodkorb wrote:
+> > >>>   
+> > >>>> @@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
+> > >>>>  	bool "autofs"
+> > >>>>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> > >>>>  	depends on BR2_USE_MMU
+> > >>>> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> > >>>>  	depends on !BR2_STATIC_LIBS # dlfcn
+> > >>>> +	select BR2_PACKAGE_LIBTIRPC  
+> > >>>
+> > >>> Why should we force people to use libtirpc ?   
+> > >>
+> > >> Because the internal RPC implementation is mostly useless and
+> > >> getting removed?
+> > > 
+> > > I don't quite agree. The one in glibc has been used for years
+> > > successfully, and is still useful. So even if uClibc decides to remove
+> > > its internal RPC implementation, I'd like to give people the option to
+> > > use the internal RPC implementation of glibc.
+> > > 
+> > > I agree RPC support in glibc will most likely disappear at some point
+> > > in the future, but we're not there yet. So for now, I'd prefer if we
+> > > just took the step of dropping RPC support in uClibc, and doing the
+> > > necessary changes in packages so that they all build/work fine with
+> > > libtirpc. That's anyway a very good preparation step to get rid of
+> > > internal RPC support entirely at some point in the future.
+> > 
+> >  Well, if glibc is the only one that is still going to provide native RPC, I
+> > really don't think it's worth keeping support for it. It's not as if the 125KB
+> > extra from libtirpc are really going to hurt someone who is using glibc, right?
+> > And keeping the option of native RPC or libtirpc is probably going to make the
+> > code more complicated.
+> > 
+> >  So I tend to agree with Waldemar's approach.
+> 
+> I would say that I agree with Waldemar and Arnout.
+> 
+> Especially since the internal RPC implementation in glibc is not even
+> complete (not IPv6-clean for example) so it really makes sense to switch
+> to libtirpc which is nowadays pretty much stable.
 
-Add two options that a user may set to change the output of printvars:
-  - QUOTED_VARS, if set, will quote the value
-  - RAW_VARS, if set, will print the unexpanded value
+Peter, any opinion?
 
-The new output by default only prints the expanded value now.
-
-So that it can be used as such:
-
-    $ make -s printvars VARS=BUSYBOX_VERSION
-    BUSYBOX_VERSION=1.26.2
-
-    $ make -s printvars VARS=BUSYBOX_RDEPENDENCIES QUOTED_VARS=YES
-    BUSYBOX_RDEPENDENCIES='ncurses util-linux'
-
-    $ make -s printvars VARS=BUSYBOX_FINAL_PATCH_DEPENDENCIES RAW_VARS=YES
-    BUSYBOX_FINAL_PATCH_DEPENDENCIES=$(sort $(BUSYBOX_PATCH_DEPENDENCIES))
-
-And it is even possible to directly evaluate it in a shell script:
-
-    eval $(make -s printvars VARS=BUSYBOX_VERSION QUOTED_VARS=YES)
-
-Backward compatibility of the output is not maintained. It is believed
-that scripts that depended on the previous output were very fragile to
-begin with, because they had to filter the non-formatted output
-(splitting on spaces or braces was not really possible, because values
-could contain either).
-
-Document printvars and its options in the output of 'make help' and in
-the manual.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-
----
-Changes v1 -> v2:
-  - add the documentation  (Thomas, Arnout)
-  - change the meaning of conmfig variables  (Thomas, Arnout)
-  - don't maintain backward compatibility  (Thomas, Arnout)
----
- Makefile                  |  3 ++-
- docs/manual/make-tips.txt | 53 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index cceae92..d3530ad 100644
---- a/Makefile
-+++ b/Makefile
-@@ -940,7 +940,7 @@ printvars:
- 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
- 		$(if $(filter-out environment% default automatic, \
- 				$(origin $V)), \
--		$(info $V=$($V) ($(value $V)))))
-+		$(info $V=$(if $(QUOTED_VARS),')$(if $(RAW_VARS),$(value $V),$($V))$(if $(QUOTED_VARS),'))))
- 
- clean:
- 	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
-@@ -1018,6 +1018,7 @@ help:
- 	@echo '  source-check           - check selected packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo '  legal-info             - generate info about license compliance'
-+	@echo '  printvars              - dump all the variables known to make'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
-diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-index 97a3302..691e25f 100644
---- a/docs/manual/make-tips.txt
-+++ b/docs/manual/make-tips.txt
-@@ -77,3 +77,56 @@ To delete all build products as well as the configuration:
- If +ccache+ is enabled, running +make clean+ or +distclean+ does
- not empty the compiler cache used by Buildroot. To delete it, refer
- to xref:ccache[].
-+
-+.Dumping the internal make variables:
-+
-+One can dump all the variables known to make, along with their values:
-+
-+----
-+ $ make -s printvars
-+ VARIABLE=value_of_variable
-+ ...
-+----
-+
-+It is possible to tweak the output using some variables:
-+
-+- +VARS+ will limit the listing to variables which names match the
-+  specified make-pattern
-+- +QUOTED_VARS+, if set to +YES+, will single-quote the value
-+- +RAW_VARS+, if set to +YES+, will print the unexpanded value
-+
-+For example:
-+
-+----
-+ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES
-+ BUSYBOX_DEPENDENCIES=skeleton toolchain
-+ BUSYBOX_FINAL_ALL_DEPENDENCIES=skeleton toolchain
-+ BUSYBOX_FINAL_DEPENDENCIES=skeleton toolchain
-+ BUSYBOX_FINAL_PATCH_DEPENDENCIES=
-+ BUSYBOX_RDEPENDENCIES=ncurses util-linux
-+----
-+
-+----
-+ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
-+ BUSYBOX_DEPENDENCIES='skeleton toolchain'
-+ BUSYBOX_FINAL_ALL_DEPENDENCIES='skeleton toolchain'
-+ BUSYBOX_FINAL_DEPENDENCIES='skeleton toolchain'
-+ BUSYBOX_FINAL_PATCH_DEPENDENCIES=''
-+ BUSYBOX_RDEPENDENCIES='ncurses util-linux'
-+----
-+
-+----
-+ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES RAW_VARS=YES
-+ BUSYBOX_DEPENDENCIES=skeleton toolchain
-+ BUSYBOX_FINAL_ALL_DEPENDENCIES=$(sort $(BUSYBOX_FINAL_DEPENDENCIES) $(BUSYBOX_FINAL_PATCH_DEPENDENCIES))
-+ BUSYBOX_FINAL_DEPENDENCIES=$(sort $(BUSYBOX_DEPENDENCIES))
-+ BUSYBOX_FINAL_PATCH_DEPENDENCIES=$(sort $(BUSYBOX_PATCH_DEPENDENCIES))
-+ BUSYBOX_RDEPENDENCIES=ncurses util-linux
-+----
-+
-+The output of quoited raw variables can be reused in shell scripts,
-+for example:
-+
-+----
-+ eval $(make -s printvars VARS=BUSYBOX_VERSION RAW_VARS=YES QUOTED_VARS=YES)
-+----
--- 
-2.9.3
+best regards
+ Waldemar
