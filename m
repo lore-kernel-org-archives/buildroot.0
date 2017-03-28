@@ -1,61 +1,148 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Mar 2017 22:19:02 +0200
-Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
-In-Reply-To: <20170328215334.405952d9@free-electrons.com>
-References: <1490595146-5638-1-git-send-email-james@balean.com.au>
- <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
- <1490681640-14995-1-git-send-email-james@balean.com.au>
- <54cae0a0-a7a5-9ef0-08c8-a14e871cf8bb@mind.be>
- <20170328215334.405952d9@free-electrons.com>
-Message-ID: <1d453613-dc32-9ab1-229b-2deed767a12f@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Mar 2017 22:25:25 +0200
+Subject: [Buildroot] Patchwork cleanup, 10 patches to look at
+In-Reply-To: <db756f2e-3dda-2fcc-6035-3287b88acf29@mind.be>
+References: <20170326235320.448e802a@free-electrons.com>
+ <db756f2e-3dda-2fcc-6035-3287b88acf29@mind.be>
+Message-ID: <20170328222525.005b27bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Mon, 27 Mar 2017 14:35:46 +0200, Arnout Vandecappelle wrote:
 
-On 28-03-17 21:53, Thomas Petazzoni wrote:
-> Hello,
+> >  * avahi: link with libintl if libglib2 is enabled
+> >    https://patchwork.ozlabs.org/patch/683732/
+> > 
+> >    My plan is to enable the stub libintl in uClibc-ng and stop having
+> >    all those linking issues with libintl from gettext. The only
+> >    drawback would be that there would no longer be "translation"
+> >    support with uClibc: the libintl implementation in uClibc-ng is
+> >    really just a stub.
+> > 
+> >    Thoughts ?  
 > 
-> On Tue, 28 Mar 2017 11:01:46 +0200, Arnout Vandecappelle wrote:
+>  I think having internationalization support can still be useful in a
+> Buildroot/uClibc based system, e.g. to support translation of a custom CLI UI.
+> So using the stub implementation unconditionally sounds like a bad idea.
 > 
->>> Have reconsidered this suggestion. I think that perhaps it would be best
->>> not to make the U-boot option dependent on the Linux option. As Linux
->>> and U-Boot use two different device tree sources, there may be occasions
->>> when custom DTS configuration must be made to one or the other rather
->>> than both. This is the case with my boards, which have device tree
->>> support in Linux, but not in U-Boot.  
->>
->>  Certainly, but I only suggested to *default* to the same DTS. It is also
->> possible that the kernel isn't built at all by Buildroot, or that it uses an
->> in-tree DTS, or that it is built without DTS because the DTB is provided by
->> U-Boot. All of these cases are covered by the "if
->> BR2_LINUX_KERNEL_USE_CUSTOM_DTS" part. And even if the both kernel and U-Boot
->> use a DTS, it is possible to change the default.
+>  How about instead making gettext/intl support depend on !static? That's also a
+> catch-all solution, but a lot less aggressive.
+
+Indeed, that's a solution. This solves the static linking issues, but
+by getting rid of libintl from gettext entirely, I was hoping to remove
+all the BR2_NEEDS_GETTEXT/BR2_NEEDS_GETTEXT_IF_LOCALE stuff.
+
+But yes, I can understand that i18n support can be useful in a uClibc
+based system.
+
+However, the !static dependency then needs to be propagated to all
+places where libintl is used, but only if uClibc is used. It's a bit of
+a nightmare :-/
+
+> >  * qemu: allow to build statically
+> >    https://patchwork.ozlabs.org/patch/692667/
+> > 
+> >    We normally don't want to have special options for each package to
+> >    build them statically. Should we make an exception for Qemu?  
 > 
-> I am not entirely convinced that this:
+>  I see something like this like having package options that do little more than
+> selecting other packages, like BR2_PACKAGE_PHP_EXT_BZIP2. It's something we want
+> to avoid, but sometimes there are good reasons to do it.
 > 
->   default BR2_LINUX_KERNEL_CUSTOM_DTS_PATH if BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+>  So for Qemu and also for Docker I do think it makes sense to have static as a
+> per-package option.
+
+ACK, so I'll apply the patch from J?r?me.
+
+> >  * infra: fix 'packages-file-list.txt' with TLP
+> >    https://patchwork.ozlabs.org/patch/694519/
+> > 
+> >    Adds a lock around the installation step of packages, to make
+> >    top-level parallel build still generate a correct list of files per
+> >    package.
+> > 
+> >    Gustavo, what is your plan regarding this?
+> > 
+> >    Others: should we merge this?  
 > 
-> is really a good idea. IMO, it tries to be too "clever". I'd really
-> prefer to keep the U-Boot and Linux configurations independent from
-> each other.
+>  I don't think this is the proper approach. The proper approach is map/reduce,
+> i.e. generate the pieces in per-package files and collect them together in a
+> final gathering stage. Obviously, this requires a per-package target first, but
+> that's anyway the way we want to go.
+> 
+>  I thought someone already made that comment but I can't find it in that thread...
 
- Yeah, thinking a bit more about it: if you use the same DT in U-Boot as in the
-kernel, then you probably let U-Boot pass it to the kernel so you don't need it
-at kernel build time...
+OK, so I'll mark the patch as Rejected.
 
- So forget I suggested this :-)
+> >  * linux-headers: Account for LINUX_OVERRIDE_SRCDIR
+> >    https://patchwork.ozlabs.org/patch/713927/
+> > 
+> >    I think I am against this patch, because if the user sets
+> >    LINUX_OVERRIDE_SRCDIR, then suddenly he will see his kernel headers
+> >    being rebuilt as well.
+> > 
+> >    Arnout ?  
+> 
+>  Well, as you can see in the discussion thread, I argued against it, asked for a
+> stronger argument for it, but none was forthcoming.
+> 
+>  However, my conclusion was that we should either apply this, or fix the
+> documentation so that it explains that HEADERS_SAME_AS_KERNEL doesn't apply if
+> LINUX_OVERRIDE_SRCDIR (or LINUX_SITE_METHOD = local) is set.
 
- Regards,
- Arnout
+I'm also not a big fan of this patch. I prefer if LINUX_OVERRIDE_SRCDIR
+really only affects the linux package, to me it's just applying the
+principle of least surprise.
 
+> >  * python-lxml: allow build as host package
+> >    https://patchwork.ozlabs.org/patch/722644/
+> > 
+> >    Host package not used anywhere. Discussed at length during the
+> >    previous BR meeting. What do we do?  
+> 
+>  The conclusion at BR meeting was unfortunately not clear, but we definitely
+> said that we would be more lenient towards this kind of addition. So I'd say we
+> accept it (with a Config.in.host entry, though).
+
+ACK.
+
+> >  * package/pkg-download.mk: add gitlab helper
+> >    https://patchwork.ozlabs.org/patch/736382/  
+> 
+>  I'm not a fan of adding helpers (in fact, I think the github helper should
+> die). For gitlab, however, the URL construction is indeed a bit peculiar and it
+> differs a lot from the URL a user normally sees (adding that &filename= thing),
+> so it does make sense to have it. Since I couldn't decide, I didn't reply :-)
+
+Nothing in Buildroot currently fetches its source code from Gitlab.
+This change was proposed for the CIP long-term kernel version, but
+according to
+https://wiki.linuxfoundation.org/civilinfrastructureplatform/start:
+
+"""Check the 4.4 CIP kernel repository, mirrored in Gitlab"""
+
+So in fact their primary kernel repository is
+https://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git/, not
+the one on gitlab. And additionally, their gitlab mirror is apparently
+not working as expected:
+https://lists.cip-project.org/pipermail/cip-dev/2017-March/000167.html.
+So I guess we should use the git.kernel.org repository instead.
+
+And I still think the BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH option
+is not good, as it uses the "latest" version available, which makes the
+build non-reproducible. I argued about this with Angelo, but I was a
+bit alone against Angelo on the matter. Could some other folks give
+their opinion so that we can resolve the debate?
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
