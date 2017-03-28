@@ -1,44 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Mar 2017 13:50:54 +0200
-Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
-	/usr/share
-In-Reply-To: <20170323091623.6fcd2bb2@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 23 Mar 2017 09:16:23 +0100")
-References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87inn1k9bb.fsf@dell.be.48ers.dk>
- <20170322140639.5c8c5149@free-electrons.com>
- <87efxpj8bv.fsf@dell.be.48ers.dk>
- <2219b1bf-ae08-5c54-5f18-6a91e9f975ba@mind.be>
- <20170323091623.6fcd2bb2@free-electrons.com>
-Message-ID: <87r31h4o2p.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 28 Mar 2017 12:55:59 +0100
+Subject: [Buildroot] [PATCH] git: bump version to 2.12.2
+Message-ID: <20170328115559.39315-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Hello,
- > On Thu, 23 Mar 2017 00:03:57 +0100, Arnout Vandecappelle wrote:
-
- >> >  >> I wonder if we shouldn't turn the tests around, E.G. instead of
- >> >  >> searching for elf files with a machine different from target, search for
- >> >  >> a files with machine == host.  
- >> 
- >> I don't agree. We don't only want to detect host-target confusion, we also want
- >> to detect wrong compilation, e.g. missing -EB.
-
- > This was exactly the case of the gst-ffmpeg package, for which I've
- > sent a fix. Everything was built for Sparc, but two libraries were
- > built for a slightly different version of Sparc, which was actually
- > incorrect.
-
- > Since for now, autobuilders issue caused by this seems to have all been
- > handled, I don't think there's much need to find a different solution.
- > Let's give it some more time and see if we need to change our mind.
-
-Ok, sounds good to me. Thanks!
-
+diff --git a/package/git/git.hash b/package/git/git.hash
+index e79e8b1..9af360e 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 db11674364b764e101966d829a2e271c9b9d2a8bd4d8ecb4221a1dcdc9a3ada2  git-2.12.1.tar.xz
++sha256 d21a9e23506e618d561fb25a8a7bd6134f927b86147930103487117a7a678c4a  git-2.12.2.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index e7ea98d..b49ddd5 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.12.1
++GIT_VERSION = 2.12.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2, LGPLv2.1+
 -- 
-Bye, Peter Korsgaard
+2.10.2
