@@ -1,38 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 22:29:29 +0200
-Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
-In-Reply-To: <1d453613-dc32-9ab1-229b-2deed767a12f@mind.be>
-References: <1490595146-5638-1-git-send-email-james@balean.com.au>
- <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
- <1490681640-14995-1-git-send-email-james@balean.com.au>
- <54cae0a0-a7a5-9ef0-08c8-a14e871cf8bb@mind.be>
- <20170328215334.405952d9@free-electrons.com>
- <1d453613-dc32-9ab1-229b-2deed767a12f@mind.be>
-Message-ID: <20170328222929.036d1152@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 28 Mar 2017 22:29:49 +0200
+Subject: [Buildroot] [PATCH v1] uhtppd: fix TCP_FASTOPEN related compile
+	error
+Message-ID: <20170328202949.1762-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes [1]:
 
-On Tue, 28 Mar 2017 22:19:02 +0200, Arnout Vandecappelle wrote:
+  .../uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82/listen.c: In function 'uh_setup_listeners':
+  .../uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82/listen.c:120:30: error: 'TCP_FASTOPEN' undeclared (first use in this function)
 
->  Yeah, thinking a bit more about it: if you use the same DT in U-Boot as in the
-> kernel, then you probably let U-Boot pass it to the kernel so you don't need it
-> at kernel build time...
+[1] http://autobuild.buildroot.net/results/56e/56e0727ccd1255b05e03d1b79dc238bd88701230
 
-Not necessarily. The DT can be used by U-Boot itself to know which
-peripherals are available, and how they should be configured. I am not
-sure there is a U-Boot option to bundle the DT within U-Boot just for
-the purpose of passing it to the kernel. But I might be wrong, I
-haven't looked in details at how U-Boot uses the DT.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...02-Fix-TCP_FASTOPEN-related-compile-error.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch
 
-Best regards,
-
-Thomas
+diff --git a/package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch b/package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch
+new file mode 100644
+index 000000000..887e7d846
+--- /dev/null
++++ b/package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch
+@@ -0,0 +1,44 @@
++From e6c53cca170388e97e2d25c4429e0fd16739778b Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 28 Mar 2017 22:22:02 +0200
++Subject: [PATCH] Fix TCP_FASTOPEN related compile error.
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ listen.c | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/listen.c b/listen.c
++index 2a54888..727bff8 100644
++--- a/listen.c
+++++ b/listen.c
++@@ -107,18 +107,24 @@ void uh_setup_listeners(void)
++ 		/* TCP keep-alive */
++ 		if (conf.tcp_keepalive > 0) {
++ #ifdef linux
++-			int tcp_ka_idl, tcp_ka_int, tcp_ka_cnt, tcp_fstopn;
+++			int tcp_ka_idl, tcp_ka_int, tcp_ka_cnt;
+++#ifdef TCP_FASTOPEN
+++			int tcp_fstopn;
+++#endif
++ 
++ 			tcp_ka_idl = 1;
++ 			tcp_ka_cnt = 3;
++ 			tcp_ka_int = conf.tcp_keepalive;
+++#ifdef TCP_FASTOPEN
++ 			tcp_fstopn = 5;
++-
+++#endif
++ 			setsockopt(sock, SOL_TCP, TCP_KEEPIDLE,  &tcp_ka_idl, sizeof(tcp_ka_idl));
++ 			setsockopt(sock, SOL_TCP, TCP_KEEPINTVL, &tcp_ka_int, sizeof(tcp_ka_int));
++ 			setsockopt(sock, SOL_TCP, TCP_KEEPCNT,   &tcp_ka_cnt, sizeof(tcp_ka_cnt));
+++#ifdef TCP_FASTOPEN
++ 			setsockopt(sock, SOL_TCP, TCP_FASTOPEN,  &tcp_fstopn, sizeof(tcp_fstopn));
++ #endif
+++#endif
++ 
++ 			setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(yes));
++ 		}
++-- 
++2.11.0
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
