@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 21:44:04 +0200
-Subject: [Buildroot] [PATCH] mesa3d: drop unneeded libsha1 logic from
- Config.in
-In-Reply-To: <20170328123021.18091-1-peter@korsgaard.com>
-References: <20170328123021.18091-1-peter@korsgaard.com>
-Message-ID: <20170328214404.1003ccbb@free-electrons.com>
+Date: Tue, 28 Mar 2017 21:44:31 +0200
+Subject: [Buildroot] [PATCH] git: bump version to 2.12.2
+In-Reply-To: <20170328115559.39315-1-Vincent.Riera@imgtec.com>
+References: <20170328115559.39315-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170328214431.08f2b2d7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Mar 2017 14:30:21 +0200, Peter Korsgaard wrote:
-> Commit 7f4e9490b647 (package/mesa3d: remove sha1 external dependency)
-> removed the --with-sha1 logic from mesa3d.mk, but didn't remove the
-> corresponding logic / comment from Config.in.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Tue, 28 Mar 2017 12:55:59 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/mesa3d/Config.in | 4 ----
->  1 file changed, 4 deletions(-)
+>  package/git/git.hash | 2 +-
+>  package/git/git.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks. Good catch!
+Applied to master, thanks.
 
 Thomas
 -- 
