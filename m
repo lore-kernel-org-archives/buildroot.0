@@ -1,48 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Mar 2017 11:01:46 +0200
-Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
-In-Reply-To: <1490681640-14995-1-git-send-email-james@balean.com.au>
-References: <1490595146-5638-1-git-send-email-james@balean.com.au>
- <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
- <1490681640-14995-1-git-send-email-james@balean.com.au>
-Message-ID: <54cae0a0-a7a5-9ef0-08c8-a14e871cf8bb@mind.be>
+From: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+Date: Tue, 28 Mar 2017 12:39:41 +0300
+Subject: [Buildroot]  Issue performing switch_root to a UBIFS partition
+In-Reply-To: <CCAGm1_kuF8Dqo7ctHRF7Og3smXcsgKby1vwH0yM9HM8a1Mw1nww@mail.gmail.com>
+Message-ID: <20170328093941.yui6vunw5waaqtqr@skv.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>On Mon, Mar 27, 2017 at 5:16 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>> On 27-03-17 14:59, Yegor Yefremov wrote:
+>>> getpid()                                = 915
+>>
+>>  PID must be 1.
+
+Yegor, are you sure, that exec switch_root is executed from script,
+that has PID 1?
+Because it has to be 1. Otherwise you'll get busybox usage message.
+See https://git.busybox.net/busybox/tree/util-linux/switch_root.c?h=1_26_stable#n111
+
+Please check this by running 'echo $$' before you make 'mount --move' calls'
 
 
-On 28-03-17 08:14, James Balean wrote:
-> Hi Arnout,
-> 
-> On 27 March 2017 at 23:12, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Would it make sense to add
->>         default BR2_LINUX_KERNEL_CUSTOM_DTS_PATH if BR2_LINUX_KERNEL_USE_CUSTOM_DTS
->> ?
-> 
-> Have reconsidered this suggestion. I think that perhaps it would be best
-> not to make the U-boot option dependent on the Linux option. As Linux
-> and U-Boot use two different device tree sources, there may be occasions
-> when custom DTS configuration must be made to one or the other rather
-> than both. This is the case with my boards, which have device tree
-> support in Linux, but not in U-Boot.
+>Forgot to mention that in the script representation
+>>  :-) Of
+>> course, here it's due to the strace... To avoid, you could use
+>>  "strace -fp 1 &"
+>> but I'm not sure how that would behave across the exec.
+>
+>This doesn't work.
+>
+>>> write(2, "BusyBox v1.26.2 (2017-03-24 16:3"..., 41BusyBox v1.26.2
+>>> (2017-03-24 16:39:44 CET)) =
+>>> write(2, " multi-call binary.\n", 20 multi-call binary.
+>>> )   = 20
+>>> write(2, "\nUsage: ", 8
+>>> Usage: )                = 8
+>>
+>>  Did this Usage: part also come out when running without strace?
+>>  It's very weird
+>> that the rest of the usage output is not appearing. Or perhaps
+>>  that's because
+>> you get a kernel panic immediately afterwards because PID 1 exits?
+>
+>This is what I get, if I invoke switch_root without moving /dev, /sys
+>and /proc and without strace:
+>
+># exec /sbin/switch_root /newroot/ /sbin/init
+>BusyBox v1.26.2 (2017-03-24 16:39:44 CET) multi-call bina
+>Welcome to Buildroot
+>
+>The whole stuff is very strange. Have you tried it yourself with
+>recent BR and kernel?
 
- Certainly, but I only suggested to *default* to the same DTS. It is also
-possible that the kernel isn't built at all by Buildroot, or that it uses an
-in-tree DTS, or that it is built without DTS because the DTB is provided by
-U-Boot. All of these cases are covered by the "if
-BR2_LINUX_KERNEL_USE_CUSTOM_DTS" part. And even if the both kernel and U-Boot
-use a DTS, it is possible to change the default.
 
- Regards,
- Arnout
+>>> can't open /dev/ttyO0: No such file or directory
+>>
+>>  Still no explanation where this comes from...
+
+The reason for that is /dev is mounted already on /newroot/dev, but
+switch_root failed and Busybox prints its usage message to standard output, but
+/dev/console (/dev/ttyO0) doesn't exist anymore at the old location.
+So there is corresponding message about non-existed /dev/ttyO0.
+
+As you see there is no such message, if /dev is not mounted to the new location.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards,
+Andrey Skvortsov
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170328/2b0b5c4d/attachment.asc>
