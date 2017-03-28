@@ -1,60 +1,56 @@
-From: Pawel Sikora <sikor6@gmail.com>
-Date: Tue, 28 Mar 2017 20:01:51 +0200
-Subject: [Buildroot] [PATCH 1/2] xenomai: bump version to 3.0.3
-In-Reply-To: <20170326100547.2ce52b7d@free-electrons.com>
-References: <20170321165137.23527-1-sikor6@gmail.com>
- <20170321165137.23527-2-sikor6@gmail.com>
- <20170326100547.2ce52b7d@free-electrons.com>
-Message-ID: <CAKfV1CbiC0oF5L3nUvmLohg1Q+APMETbQJKQemjBnF7bRy1smA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Mar 2017 21:37:51 +0200
+Subject: [Buildroot] [Bug 9781] New: ti-sgk-km build on kernel >4.1
+In-Reply-To: <bug-9781-163@https.bugs.busybox.net/>
+References: <bug-9781-163@https.bugs.busybox.net/>
+Message-ID: <20170328213751.5098434e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Lothar,
+
+Since you initially submitted the ti-sgx-km package, could you have a
+look at the below bug report, and see if you could provide a patch?
+
+Thanks a lot!
+
+Thomas
+
+On Mon, 27 Mar 2017 13:31:28 +0000, bugzilla at busybox.net wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=9781
+> 
+>             Bug ID: 9781
+>            Summary: ti-sgk-km build on kernel >4.1
+>            Product: buildroot
+>            Version: unspecified
+>           Hardware: Other
+>                 OS: Linux
+>             Status: NEW
+>           Severity: normal
+>           Priority: P5
+>          Component: Other
+>           Assignee: unassigned at buildroot.uclibc.org
+>           Reporter: sbenoit at brioconcept.com
+>                 CC: buildroot at uclibc.org
+>   Target Milestone: ---
+> 
+> The ti-gfx-km will not find the dmac function when building.
+> Since the prototype has changed file/folder since version higher than 4.1. We
+> need to patch the ocfunc.c file and add
+> 
+> 
+> 54a55,57
+> > #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0))
+> > #include <../mm/dma.h>
+> > #endif  
+> 
 
 
-> On Tue, 21 Mar 2017 17:51:37 +0100, Pawel Sikora wrote:
-> > Bump Xenomai version to 3.0.3,
-> > Remove patch 0001-bfin-remove-inline-keyword.patch for version 2.6.4,
-> > as it is already included in upstream
-> >
-> > Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> > ---
-> >  .../xenomai/0001-bfin-remove-inline-keyword.patch  | 62
-> ----------------------
-> >  package/xenomai/xenomai.hash                       |  2 +-
-> >  package/xenomai/xenomai.mk                         |  2 +-
-> >  3 files changed, 2 insertions(+), 64 deletions(-)
-> >  delete mode 100644 package/xenomai/0001-bfin-
-> remove-inline-keyword.patch
->
-> This wasn't building properly with gcc 6.x, so I've added a patch to
-> fix this, and then applied.
->
-> At some point, it would be nice to support the "Mercury" variant of
-> Xenomai 3, but that can be done through additional patches.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
 
-
-Ok, thanks ;-)
-
-I am thinking right now about some good solution about configs regarding
-choosing
-Xenomai core. I will present a patch when it is ready and invite you for
-the discussion ;-)
-
-Kind Regards,
-Pawel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170328/69de4548/attachment.html>
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
