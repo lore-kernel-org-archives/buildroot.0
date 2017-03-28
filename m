@@ -1,39 +1,37 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 28 Mar 2017 12:56:58 +0100
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.5-4
-Message-ID: <20170328115658.39795-1-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Mar 2017 14:30:21 +0200
+Subject: [Buildroot] [PATCH] mesa3d: drop unneeded libsha1 logic from
+	Config.in
+Message-ID: <20170328123021.18091-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Commit 7f4e9490b647 (package/mesa3d: remove sha1 external dependency)
+removed the --with-sha1 logic from mesa3d.mk, but didn't remove the
+corresponding logic / comment from Config.in.
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 3f9f84e..ff7b24a 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 dbc0a1cc0e4e3d4e3c772724fcbfe24a00ff4434c8b12c513c447a5fb422ffa6  ImageMagick-7.0.5-3.tar.xz
-+sha256 4a1dde5bdfec0fc549955a051be25b7ff96dfb192060997699e43c7ce0f06ab2  ImageMagick-7.0.5-4.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index d6923f5..9bef6f7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.5-3
-+IMAGEMAGICK_VERSION = 7.0.5-4
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mesa3d/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 2b085ab59..57e88ec66 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -153,10 +153,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+ 	depends on BR2_PACKAGE_XORG7 # xproto_dri3proto
+-	# We need a SHA1 implementation. If either openssl or
+-	# libgcrypt are already part of the build, we'll use one of
+-	# them, otherwise, use the small libsha1 library.
+-	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	select BR2_PACKAGE_XPROTO_DRI3PROTO
 -- 
-2.10.2
+2.11.0
