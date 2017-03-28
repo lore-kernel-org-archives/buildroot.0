@@ -1,43 +1,31 @@
-From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Date: Tue, 28 Mar 2017 16:37:02 +1100
-Subject: [Buildroot] [PATCH] powerpc-utils: Bump to v1.3.3
-Message-ID: <20170328053702.27113-1-sam@mendozajonas.com>
+From: James Balean <james@balean.com.au>
+Date: Tue, 28 Mar 2017 01:14:00 -0500
+Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
+In-Reply-To: <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
+References: <1490595146-5638-1-git-send-email-james@balean.com.au>
+ <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
+Message-ID: <1490681640-14995-1-git-send-email-james@balean.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In particular this includes commit d63e12a "nvram:read list of partion
-names dynamically" which fixes an issue preventing the nvram tool from
-writing to certain partitions.
+Hi Arnout,
 
-Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
----
- package/powerpc-utils/powerpc-utils.hash | 2 +-
- package/powerpc-utils/powerpc-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 27 March 2017 at 23:12, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  Would it make sense to add
+>         default BR2_LINUX_KERNEL_CUSTOM_DTS_PATH if BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> ?
 
-diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-index 9e299da38..fe5cc6a24 100644
---- a/package/powerpc-utils/powerpc-utils.hash
-+++ b/package/powerpc-utils/powerpc-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 657790a4aea7f3e4649a454b4c384e255145bff9b9c5e40402170603980a6736 powerpc-utils-v1.3.1.tar.gz
-+sha256 2a3f4e7ef219d4de642c7da100d7d6511e93556778c0814b2ebc1170256fc844 powerpc-utils-v1.3.3.tar.gz
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index 036be52dc..f6e02778d 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POWERPC_UTILS_VERSION = v1.3.1
-+POWERPC_UTILS_VERSION = v1.3.3
- POWERPC_UTILS_SITE = $(call github,nfont,powerpc-utils,$(POWERPC_UTILS_VERSION))
- POWERPC_UTILS_DEPENDENCIES = zlib
- POWERPC_UTILS_AUTORECONF = YES
+Have reconsidered this suggestion. I think that perhaps it would be best
+not to make the U-boot option dependent on the Linux option. As Linux
+and U-Boot use two different device tree sources, there may be occasions
+when custom DTS configuration must be made to one or the other rather
+than both. This is the case with my boards, which have device tree
+support in Linux, but not in U-Boot.
+
+Kind regards,
+James
 -- 
-2.12.0
+2.7.4
