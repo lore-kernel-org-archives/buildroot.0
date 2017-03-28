@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 21:45:13 +0200
-Subject: [Buildroot] [git commit] package/pcsc-lite: enable systemd socket
-	activation
-Message-ID: <20170328194518.CAB2582617@busybox.osuosl.org>
+Date: Tue, 28 Mar 2017 21:46:36 +0200
+Subject: [Buildroot] [PATCH] leptonica: fix static build issue
+In-Reply-To: <1490646278-27878-1-git-send-email-gilles.talis@gmail.com>
+References: <1490646278-27878-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20170328214636.63fd053a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f9848d6a108925a0bb446c38ec34a8aa497dec4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-pcsc-lite installs systemd service files, but they are not used.
-Enable pcscd.socket so that systemd starts the daemon when the
-first client connects.
+On Mon, 27 Mar 2017 22:24:38 +0200, Gilles Talis wrote:
+> leptonica configure script does not use pkg-config to find the TIFF library,
+> so it doesn't know about the transitive dependencies of the TIFF library.
+> Switching to PKG_CHECK_MODULES() to discover the library solves the issue.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/8dd2bcc41e861bdd324dd081e39925964d1ac428
+> http://autobuild.buildroot.net/results/ec7366d69b00625b652915fa58e3143f1bdcaf62
+> http://autobuild.buildroot.net/results/0cd74312a39e3bc59d15789a4c0a891f0f417b8c
+> http://autobuild.buildroot.net/results/35f9a0f2db30dd62733142f0fcfa72699452583f
+> http://autobuild.buildroot.net/results/f7ea889b2fb96ff7de492e282820c800187573cb
+> 
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+> ---
+>  ...ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch | 42 ++++++++++++++++++++++
+>  package/leptonica/leptonica.mk                     |  6 ++++
+>  2 files changed, 48 insertions(+)
+>  create mode 100644 package/leptonica/0001-configure.ac-Use-PKG_CHECK_MODULES-to-check-libtiff.patch
 
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pcsc-lite/pcsc-lite.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Applied to master, thanks. Please submit the patch upstream. Thanks!
 
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index e53c004..3349b6c 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
-@@ -37,4 +37,10 @@ ifeq ($(PACKAGE_PCSC_LITE_EMBEDDED),y)
- PCSC_LITE_CONF_OPTS += --enable-embedded
- endif
- 
-+define PCSC_LITE_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/pcscd.socket \
-+		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/pcscd.socket
-+endef
-+
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
