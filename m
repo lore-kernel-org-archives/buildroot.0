@@ -1,25 +1,120 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Mar 2017 20:35:41 +0000
-Subject: [Buildroot] [Bug 9771] toolchain-external misses lib directory when
- copying sysroot
-In-Reply-To: <bug-9771-163@https.bugs.busybox.net/>
-References: <bug-9771-163@https.bugs.busybox.net/>
-Message-ID: <bug-9771-163-tIKXhD35Ov@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 28 Mar 2017 22:38:48 +0200
+Subject: [Buildroot] [PATCH 1/5] package/mesa3d: allow to enable OpenGL
+ texture float support
+In-Reply-To: <j9kqqdxr2m.ln2@ID-313208.user.individual.net>
+References: <20170326162853.3022-1-romain.naour@gmail.com>
+ <j9kqqdxr2m.ln2@ID-313208.user.individual.net>
+Message-ID: <1b44affd-5f26-caf3-3f2b-272870ab3a49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9771
+Hi Bernd, All
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-(In reply to Arnout Vandecappelle from comment #3)
-Arnout, what makes you think those patches will fix the issue? From a quick
-look at the toolchain, I don't see anything being in <sysroot>/lib/<variant>,
-all libraries are in <sysroot>/lib64, which is the standard organization that
-we should just support fine today.
+Le 28/03/2017 ? 19:49, Bernd Kuhls a ?crit :
+> Am Sun, 26 Mar 2017 18:28:49 +0200 schrieb Romain Naour:
+> 
+>> OpenGL version string: 2.1 Mesa 17.0.2
+>> It turn out that texture float support was missing...
+>> OpenGL version string: 3.0 Mesa 17.0.2
+> [...]
+>> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT),y)
+>> +MESA3D_CONF_OPTS += --enable-texture-float
+>> +MESA3D_LICENSE_FILES += docs/patents.txt
+>> +else
+>> +MESA3D_CONF_OPTS += --disable-texture-float
+>> +endif
+> 
+> Hi,
+> 
+> wondering why Kodi already prints
+> 
+> NOTICE: GL_VERSION = 3.0 Mesa 17.0.2
+> 
+> during startup on my system without your patch and 
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y I investigated its changes and 
+> compiled this defconfig (snipped non-mesa3d options):
+> 
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
+> BR2_PACKAGE_MESA3D_OSMESA=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> BR2_PACKAGE_XORG7=y
+> 
+> with
+> BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT=y
+> 
+> and without your patch.
+> 
+> The directory output/target/usr/lib/dri/ contains these files, I added a 
+> note when the filesize changed due to --enable-texture-float:
+> 
+> i915_dri.so
+> i965_dri.so
+> kms_swrast_dri.so	(changed)
+> nouveau_dri.so		(changed, same as kms_swrast_dri.so)
+> nouveau_vieux_dri.so
+> r600_dri.so		(changed, same as kms_swrast_dri.so)
+> radeon_dri.so
+> swrast_dri.so		(changed, same as kms_swrast_dri.so)
+> virtio_gpu_dri.so	(changed, same as kms_swrast_dri.so)
+> vmwgfx_dri.so		(changed, same as kms_swrast_dri.so)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Good catch :)
+
+> 
+> libGL.so/libEGL.so/libGLES*.so stayed unchanged.
+> 
+> Afaics the reason why the Intel drivers are unaffected could be this line 
+> of code where texture float support is always enabled:
+> 
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/i965/
+> intel_extensions.c?h=17.0#n83
+> 
+> Other parts of the mesa3d contain #ifdef, like this:
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/main/extensions.c?
+> h=17.0#n134
+
+Indeed, I saw the ifdef TEXTURE_FLOAT_ENABLED in mesa/main/extensions.c while
+checking what --enable-texture-float was doing, but I didn't noticed that it was
+always enabled for Intel devices...
+
+It's seems a bug in mesa/drivers/dri/i965/intel_extensions.c which is not
+affected by this option...
+
+> 
+> I am not familiar with the internal structures of mesa3d beyond my 
+> observations, maybe you should add a note to Config.in that your 
+> configure option does not affect all drivers.
+
+Me too, I spent several hours searching why OpenGL was in compat mode with the
+system produced by Buildroot... I tested the same target with Fedora and noticed
+that OpenGL 3.3 was enabled.
+
+Ok, I'll add a note about this.
+
+Do you have any comment on the following patches of this series ?
+
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
