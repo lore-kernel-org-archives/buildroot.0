@@ -1,23 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Mar 2017 20:04:03 +0000
-Subject: [Buildroot] [Bug 9771] toolchain-external misses lib directory when
- copying sysroot
-In-Reply-To: <bug-9771-163@https.bugs.busybox.net/>
-References: <bug-9771-163@https.bugs.busybox.net/>
-Message-ID: <bug-9771-163-TuKygeS9Q1@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Mar 2017 22:06:08 +0200
+Subject: [Buildroot] [git commit] syslog-ng: Bump version header in conf
+	file to 3.9
+Message-ID: <20170328200613.E401982644@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9771
+commit: https://git.buildroot.net/buildroot/commit/?id=3dad25466d2931eeecde23867bed79b1d7213887
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #3 from Arnout Vandecappelle <arnout@mind.be> ---
-Can you try if http://patchwork.ozlabs.org/patch/725387/ fixes this? You'll
-have to apply the preceding 3 patches as well, and there may be a few merge
-issues.
+Package version of syslog-ng is 3.9.1.
+Bumping version number in syslog-ng.conf to 3.9
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Fixing warning message about configuration file being too old.
+
+Signed-off-by: Pawel Sikora <sikor6@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index 0b4a860..a3384ee 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+- at version: 3.7
++ at version: 3.9
+ 
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
