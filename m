@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Mar 2017 23:30:36 +0200
-Subject: [Buildroot] [PATCH 1/4] system: do not overwrite /bin/sh
- Busybox symlink
-In-Reply-To: <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Mar 2017 00:12:56 +0200
+Subject: [Buildroot] [PATCH 2/4] core: allow packages to declare a
+ permission file
+In-Reply-To: <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <e4c57a87-237c-bc5b-43d2-3eea29d35430@mind.be>
+ <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56824752-a1bd-730a-b9f6-465eec832da7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,75 +15,108 @@ To: buildroot@busybox.net
 
 
 On 26-03-17 23:43, Thomas Petazzoni wrote:
-> The BR2_SYSTEM_BIN_SH hidden option defines to what binary the /bin/sh
-> symlinks should point to. If busybox is chosen, then /bin/sh is created
-> to point to /bin/busybox.
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> This works fine with the default installation mode of Busybox, but it
-> fails with the upcoming "individual binaries" mode, in which each applet
-> is installed as its own binary, and /bin/busybox doesn't exist: we get
-> /bin/sh as a broken symlink to /bin/busybox.
+> Currently, packages can define a variable that holds all the permissions
+> to set on the files it installs. This can be used to set various
+> permissions, like ownership, mode, suid/sgid/sticky bits to individual
+> files.
 > 
-> Since Busybox already installs its own /bin/sh symlink, properly
-> pointing to /bin/ash or /bin/hush depending on the selected shell, it
-> doesn't make sense for the BR2_SYSTEM_BIN_SH logic to override
-> this. Just let Busybox install its own /bin/sh by making
-> BR2_SYSTEM_BIN_SH empty when Busybox shell is selected as /bin/sh.
+> However, this variable has to contain entries that are known the moment
+> we scan the .mk file; it is not possible to conditionally add permisions
+                                                                     ^
+> for files which presence depend on post-parse conditions.
 > 
+> This is the case for example for Busybox, for which we don't know whether
+> a specific applet will be enabled or not until after the configure
+> command has run.
+> 
+> Introduce a new variable that packages can set to point to a file that
+> contains a permission table. That filewill only be used when a filesystem
+                                        ^
+> image is asembled, so the file can be generated, either at configure or
+            ^
+> build time, with no problem.
+> 
+> Since this variable can be empty (when no package provides such a
+> permissions file), we must ensure not to cat anything (or that would
+> stale, cat-ing stdin). But since this variable is not fully known by the
+> time we parse the fs infra (e.g. packages from a br2-external tree are
+> not yet parsed), we can not test it with make syntas (ifneq...endif).
+                                                     ^
+> Teting it with shell syntac is not trivial either, becaue the variable
+    ^                       ^                             ^
+> would not be mpty (it would be only spaces). sO, we just iterate over
+               ^                                ^
+> the the files and cat them one by one with a shell-level for-loop, which
+> is happy with nothing to iterate over.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
- I was worried that the other shells might overwrite the symlink created by
-busybox in their install commands, but apparently none of them do. I tried bash,
-dash, mksh and zsh. So
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 > ---
-> This is proposed as an alternative to
-> https://patchwork.ozlabs.org/patch/686673/. If people believe
-> https://patchwork.ozlabs.org/patch/686673/ is a better solution, I'm
-> fine as well.
+>  fs/common.mk           | 3 +++
+>  package/pkg-generic.mk | 1 +
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 396b1c2..0bbcca4 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -91,6 +91,9 @@ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+>  endif
+>  endif
+>  	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
+> +	for f in $$(PACKAGES_PERMISSIONS_FILES); do \
+> +		cat $$$${f} >> $$(FULL_DEVICE_TABLE) || exit 1; \
+> +	done
 
- No, that solution is wrong I think if /bin/sh is not busybox, because then the
-symlink will not be created at all.
+ Actually I think it's simpler to do
+
+	$$(if $$(strip $$(PACKAGES_PERMISSIONS_FILES)),\
+		cat $$(PACKAGES_PERMISSIONS_FILES) >> $$(FULL_DEVICE_TABLE))
+
+>  	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index dd8a1e2..343d1ad 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -915,6 +915,7 @@ PACKAGES += $(1)
+>  ifneq ($$($(2)_PERMISSIONS),)
+>  PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+>  endif
+> +PACKAGES_PERMISSIONS_FILES += $$($(2)_PERMISSIONS_FILE)
+
+ I really don't like having two ways to do the same thing. So I looked at
+alternatives, and found this:
+
+define BUSYBOX_PERMISSIONS
+	$(foreach app,$(shell \
+		for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE"
+$(BUSYBOX_DIR)/include/applets.h \
+			| sed -e 's/,.*//' -e 's/.*(//'`; \
+		do \
+			grep -w $${app} $(BUSYBOX_DIR)/busybox.links; \
+		done #) ),$(app) f 4755 0  0 - - - - -$(sep))
+endef
+
+ For that to work, the condition around PACKAGES_PERMISSIONS_TABLES += must be
+removed, but that's fine IMO (just adds a lot of empty lines to the device
+table, but that doesn't hurt). The #) is a bit ugly but I'm sure a better
+solution can be found.
+
+ With that solution, patches 2 and 3 wouldn't be needed.
 
  Regards,
  Arnout
 
-> ---
->  package/skeleton/skeleton.mk | 2 ++
->  system/Config.in             | 1 -
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index 1000161..9940944 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -203,10 +203,12 @@ define SKELETON_BIN_SH
->  	rm -f $(TARGET_DIR)/bin/sh
->  endef
->  else
-> +ifneq ($(SKELETON_TARGET_GENERIC_BIN_SH),)
->  define SKELETON_BIN_SH
->  	ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
->  endef
+
+>  ifneq ($$($(2)_DEVICES),)
+>  PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
 >  endif
-> +endif
->  TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
->  
->  ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-> diff --git a/system/Config.in b/system/Config.in
-> index 3ddf843..b47ae43 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -298,7 +298,6 @@ endchoice # /bin/sh
->  
->  config BR2_SYSTEM_BIN_SH
->  	string
-> -	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
->  	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
->  	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
->  	default "mksh"    if BR2_SYSTEM_BIN_SH_MKSH
 > 
 
 -- 
