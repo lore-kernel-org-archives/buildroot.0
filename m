@@ -1,40 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 22:05:09 +0200
-Subject: [Buildroot] [git commit] xenomai: fix license files variable
-Message-ID: <20170329201911.E01398229C@busybox.osuosl.org>
+Date: Wed, 29 Mar 2017 22:19:29 +0200
+Subject: [Buildroot] [PATCHv3] core: enhance printvars
+In-Reply-To: <20170329094305.18098-1-yann.morin.1998@free.fr>
+References: <20170329094305.18098-1-yann.morin.1998@free.fr>
+Message-ID: <20170329221929.760ef16b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ebafdbde253500205b185dcb5a718e6398fc24e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-In commit 472b07ea8ff1cd341c5f97508e5c29266146fa51 ("xenomai: bump
-version to 3.0.3"), the XENOMAI_LICENSE_FILES variable was not
-updated, causing a number of build failures. This commit fixes that to
-point to existing files.
+On Wed, 29 Mar 2017 11:43:05 +0200, Yann E. MORIN wrote:
+> Currently, the output of printvars copntains the name of the variable,
+> its expanded value and its un-expanded value.
+> 
+> However, most of the time, we need the actual, expanded value, so it can
+> be re-used from a (non-Buildroot) infrastructure script, like a
+> post-build script, or a build-farm driver (e.g. a Jenkins job...)
+> 
+> Add two options that a user may set to change the output of printvars:
+>   - QUOTED_VARS, if set, will quote the value
+>   - RAW_VARS, if set, will print the unexpanded value
+> 
+> The new output by default only prints the expanded value now.
+> 
+> So that it can be used as such:
+> 
+>     $ make -s printvars VARS=BUSYBOX_VERSION
+>     BUSYBOX_VERSION=1.26.2
+> 
+>     $ make -s printvars VARS=BUSYBOX_RDEPENDENCIES QUOTED_VARS=YES
+>     BUSYBOX_RDEPENDENCIES='ncurses util-linux'
+> 
+>     $ make -s printvars VARS=BUSYBOX_FINAL_PATCH_DEPENDENCIES RAW_VARS=YES
+>     BUSYBOX_FINAL_PATCH_DEPENDENCIES=$(sort $(BUSYBOX_PATCH_DEPENDENCIES))
+> 
+> And it is even possible to directly evaluate it in a shell script:
+> 
+>     eval $(make -s printvars VARS=BUSYBOX_VERSION QUOTED_VARS=YES)
+> 
+> Backward compatibility of the output is not maintained. It is believed
+> that scripts that depended on the previous output were very fragile to
+> begin with, because they had to filter the non-formatted output
+> (splitting on spaces or braces was not really possible, because values
+> could contain either).
+> 
+> Document printvars and its options in the manual; list it in the output
+> of 'make help'.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+> ---
+> Changes v2 -> v3:
+>   - properly quote values with quotes in them  (Arnout)
+>   - typo in manual  (Arnout)
+>   - fix shell-eval example
+>   - reword output of 'make help'
 
-Fixes:
+Applied to master, thanks.
 
-  http://autobuild.buildroot.net/results/f2cd7cd1f8bcf67c66fb713ef6b03f1f01a74dc5/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xenomai/xenomai.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 28875b9..fc240f9 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -15,7 +15,7 @@ XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stable
- XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
- XENOMAI_LICENSE = GPLv2+ with exception (headers), LGPLv2.1+ (libraries), GPLv2+ (kernel), GFDLv1.2+ (docs), GPLv2 (ipipe patch, can driver)
- # GFDL is not included but refers to gnu.org
--XENOMAI_LICENSE_FILES = debian/copyright include/COPYING src/skins/native/COPYING ksrc/nucleus/COPYING
-+XENOMAI_LICENSE_FILES = debian/copyright include/COPYING lib/trank/COPYING kernel/cobalt/COPYING
- 
- XENOMAI_INSTALL_STAGING = YES
- XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
