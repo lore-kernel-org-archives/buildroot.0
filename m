@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 21:50:50 +0200
-Subject: [Buildroot] [PATCH 1/9] package/lensfun: new package
-In-Reply-To: <20170305151004.2815-1-romain.naour@gmail.com>
-References: <20170305151004.2815-1-romain.naour@gmail.com>
-Message-ID: <20170329215050.3454613f@free-electrons.com>
+Date: Wed, 29 Mar 2017 21:51:13 +0200
+Subject: [Buildroot] [PATCH] lvm2: add homepage link
+In-Reply-To: <84cbc9226f42683c5d2b427c2008648e36cc2826.1490800774.git.baruch@tkos.co.il>
+References: <84cbc9226f42683c5d2b427c2008648e36cc2826.1490800774.git.baruch@tkos.co.il>
+Message-ID: <20170329215113.0f76d928@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  5 Mar 2017 16:09:56 +0100, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Jeremy Rosen <jeremy.rosen@enst-bretagne.fr>
+On Wed, 29 Mar 2017 18:19:34 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/lensfun/Config.in    | 28 ++++++++++++++++++++++++++++
->  package/lensfun/lensfun.hash |  5 +++++
->  package/lensfun/lensfun.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 76 insertions(+)
->  create mode 100644 package/lensfun/Config.in
->  create mode 100644 package/lensfun/lensfun.hash
->  create mode 100644 package/lensfun/lensfun.mk
+>  package/lvm2/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied to master, after fixing the missing select noticed by Baruch.
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
