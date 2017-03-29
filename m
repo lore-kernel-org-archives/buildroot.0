@@ -1,82 +1,54 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 29 Mar 2017 12:01:28 -0400
-Subject: [Buildroot] [PATCHv4] package: add qt5virtualkeyboard
-In-Reply-To: <20170327171929.389034de@gmx.net>
-References: <20170324195255.13756-1-gael.portay@savoirfairelinux.com>
- <20170327171929.389034de@gmx.net>
-Message-ID: <20170329160128.wriyqt6hsb6kow2a@gportay>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Mar 2017 18:03:11 +0200
+Subject: [Buildroot] [v5] package: add qt5virtualkeyboard
+In-Reply-To: <20170329155822.32245-1-gael.portay@savoirfairelinux.com>
+References: <20170329155822.32245-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20170329180311.533db852@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello,
 
-On Mon, Mar 27, 2017 at 05:19:29PM +0200, Peter Seiderer wrote:
-> Hello Ga?l,
-> 
-> n Fri, 24 Mar 2017 15:52:55 -0400, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
-> 
-> > This patch adds the Qt virtualkeyboard package.
-> > 
-> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> > 
-> [...]
-> > 
-> > +
-> > +LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
-> > +ALL = $(findstring all,$(LANGUAGE_LAYOUTS))
-> > +ifneq ($(strip $(LANGUAGE_LAYOUTS)),)
-> > +QMAKEFLAGS += CONFIG+="$(foreach lang,$(LANGUAGE_LAYOUTS),lang-$(lang))"
-> 
-> All variables must start with the same package prefix, here QT5VIRTUALKEYBOARD_ (see [1], I think
-> this is to avoid name clashes between the different package makefiles which are loaded for
-> all (enabled) packages)...
-> 
+On Wed, 29 Mar 2017 11:58:22 -0400, Ga?l PORTAY wrote:
+> +QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+> +QT5VIRTUALKEYBOARD_ALL_LAYOUTS = $(findstring all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+> +ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+> +QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
+> +
+> +QT5VIRTUALKEYBOARD_OPENWNN = $(findstring ja_JP,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+> +ifneq ($(strip $(QT5VIRTUALKEYBOARD_OPENWNN)$(QT5VIRTUALKEYBOARD_ALL_LAYOUTS)),)
+> +QT5VIRTUALKEYBOARD_LICENSE += Apache-2.0
 
-Fixed.
+This way of concatenating the licenses doesn't work, because the final
+string will be:
 
-I guess you are right, it is about naming collision.
+"GPLv3 Apache-2.0"
 
-> > +
-> > +OPENWNN = $(findstring ja_JP,$(LANGUAGE_LAYOUTS))
-> > +ifneq ($(strip $(OPENWNN)$(ALL)),)
-> > +QT5VIRTUALKEYBOARD_LICENSE += Apache-2.0
-> > +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/openwnn/NOTICE
-> > +endif
-> > +
-> > +PINYIN = $(findstring zh_CN,$(LANGUAGE_LAYOUTS))
-> > +ifneq ($(strip $(PINYIN)$(ALL)),)
-> > +THIRD_PARTS += pinyin
-> 
-> Nitpick: 
-> 
-> QT5VIRTUALKEYBOARD_3RDPARTY_PARTS ?
-> 
+while we want "GPLv3, Apache-2.0". Look at other Qt5 packages how they
+are handling this:
 
-Fixed.
+QT5BASE_LICENSE := $(QT5BASE_LICENSE), BSD-3c (examples)
 
-> > +QT5VIRTUALKEYBOARD_LICENSE += Apache-2.0
-> > +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/pinyin/NOTICE
-> > +endif
-> > +
-> > 
-> [...]
-> > 
-> > +
-> > +$(eval $(generic-package))
-> 
-> Otherwise looks good, with the above fixed you can add my
-> 
-> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> Regards,
-> Peter
-> 
-> [1] http://nightly.buildroot.org/manual.html#_infrastructure_for_packages_with_specific_build_systems
+Note that next to the license, we also want an information on which
+part of the package it applies.
 
-Thanks you very much for your review.
+> +QT5VIRTUALKEYBOARD_PINYIN = $(findstring zh_CN,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+> +ifneq ($(strip $(QT5VIRTUALKEYBOARD_PINYIN)$(QT5VIRTUALKEYBOARD_ALL_LAYOUTS)),)
+> +QT5VIRTUALKEYBOARD_3RDPARTY_PARTS += pinyin
 
-Regards,
-Gael
+Do you really need the name here? You don't use it anywhere. What about:
+
+QT5VIRTUALKEYBOARD_INSTALL_3RDPARTY = YES
+
+instead.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
