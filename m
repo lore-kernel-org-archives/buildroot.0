@@ -1,60 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 21:05:52 +0200
-Subject: [Buildroot] [v5] package: add qt5virtualkeyboard
-In-Reply-To: <20170329172902.wzhphoda4n4fu2wb@gportay>
-References: <20170329155822.32245-1-gael.portay@savoirfairelinux.com>
- <20170329180311.533db852@free-electrons.com>
- <20170329172902.wzhphoda4n4fu2wb@gportay>
-Message-ID: <20170329210552.59d207d3@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 29 Mar 2017 22:09:31 +0300
+Subject: [Buildroot] [PATCH] shairport-sync: requires C++
+Message-ID: <208617074343a6ecf1be15a96c82bdb148d5b675.1490814571.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/122/122d6cedf0205e8db27d498d6a2a839e11e7b6f2/
+http://autobuild.buildroot.net/results/bef/bef5fb328e6688107496cb213d8aeeca527abf03/
 
-On Wed, 29 Mar 2017 13:29:02 -0400, Ga?l PORTAY wrote:
+Cc: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/shairport-sync/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> I modified the Makefile so the LICENSE variable is set to (all layouts +
-> handwriting):
-> 
-> "GPLv3, Apache-2.0 (openwnn), Apache-2.0 (pinyin), Apache-2.0 BSD-3c (tcime), MIT (lipi-toolkit)"
-> 
-> Is it correct?
-
-It looks good. Note that I'm saying it looks good from a formatting
-point of view: I haven't checked the actual licenses.
-
-> I can also be more explicit:
-> 
-> "GPLv3, Apache-2.0 (openwnn/ja_JP), Apache-2.0 (pinyin/zh_TW), Apache-2.0 BSD-3c (tcime/zh_TW), MIT (lipi-toolkit/handwriting)"
-
-This is probably a bit too verbose, what you proposed above as the
-first solution looks sufficient to me.
-
-> Thank you for your review. I did not understand why some packages have a comma
-> in LICENSE while others have 'and/or' or are simply white-space separated.
-
-The Buildroot manual normally explains what the formatting should be,
-but it is very possible that some packages do not comply 100% with the
-rules described in the manual (simply because those packages were added
-before the rules were clarified in the manual).
-
-Basically, the idea is that: a comma separates multiple licenses that
-cover different parts of the package, with parenthesis to indicate what
-component is covered by that license. The "or" statement is used when
-the package is available under a choice of licenses (i.e you can chose
-to use say the GPLv2 terms *OR* the MIT terms for the whole package,
-for example).
-
-> If you agree with those modifications, I will send a v6 of this patch
-> (including missing prefix for QMAKEFLAGS).
-
-The modifications look good to me. Thanks a lot!
-
-Thomas
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+index d70121b9fd78..c2a5565402d6 100644
+--- a/package/shairport-sync/Config.in
++++ b/package/shairport-sync/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
+ 	bool "shairport-sync"
+ 	depends on BR2_USE_MMU # libdaemon
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 	select BR2_PACKAGE_LIBCONFIG
+@@ -34,6 +35,6 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
+ 
+ endif
+ 
+-comment "shairport-sync needs a toolchain w/ NPTL"
++comment "shairport-sync needs a toolchain w/ C++, NPTL"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
