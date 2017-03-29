@@ -1,54 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 23:35:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Remove whitespaces
-In-Reply-To: <20170326150543.6387-1-bernd.kuhls@t-online.de>
-References: <20170326150543.6387-1-bernd.kuhls@t-online.de>
-Message-ID: <20170329233550.2e874414@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 Mar 2017 23:46:02 +0200
+Subject: [Buildroot] [PATCH 1/5] package/mesa3d: allow to enable OpenGL
+ texture float support
+In-Reply-To: <sgqrqdxivc.ln2@ID-313208.user.individual.net>
+References: <20170326162853.3022-1-romain.naour@gmail.com>
+ <j9kqqdxr2m.ln2@ID-313208.user.individual.net>
+ <1b44affd-5f26-caf3-3f2b-272870ab3a49@gmail.com>
+ <sgqrqdxivc.ln2@ID-313208.user.individual.net>
+Message-ID: <532405f2-1437-2793-920d-2e288f7c6fbd@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Bernd, All,
 
-On Sun, 26 Mar 2017 17:05:43 +0200, Bernd Kuhls wrote:
-> To search for them I used this regex:
+Le 29/03/2017 ? 06:41, Bernd Kuhls a ?crit :
+> Am Tue, 28 Mar 2017 22:38:48 +0200 schrieb Romain Naour:
 > 
-> [ ]{1,}\t
+>> Do you have any comment on the following patches of this series ?
 > 
-> and manually removed them in most of the cases.
+> Hi,
 > 
-> For xserver_xorg-server.mk I decided to remove the tabs instead.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  arch/Config.in.arc                                 |  2 +-
->  arch/Config.in.arm                                 | 16 ++---
->  arch/Config.in.mips                                |  2 +-
->  linux/linux-ext-rtai.mk                            |  4 +-
->  linux/linux.mk                                     |  6 +-
->  package/bluez5_utils/bluez5_utils.mk               |  6 +-
->  package/lesstif/lesstif.mk                         |  8 +--
->  package/linux-firmware/linux-firmware.mk           |  2 +-
->  package/netsnmp/netsnmp.mk                         |  2 +-
->  package/pkg-generic.mk                             |  2 +-
->  package/pkg-kernel-module.mk                       |  2 +-
->  package/pkg-waf.mk                                 |  6 +-
->  package/python/python.mk                           |  6 +-
->  package/python3/python3.mk                         |  6 +-
->  package/rt-tests/rt-tests.mk                       |  6 +-
->  package/rtai/rtai.mk                               |  4 +-
->  package/udisks/udisks.mk                           |  2 +-
->  package/usbmount/usbmount.mk                       |  4 +-
->  .../xserver_xorg-server/xserver_xorg-server.mk     | 82 +++++++++++-----------
->  19 files changed, 84 insertions(+), 84 deletions(-)
+> no, because I am neither using a gallium driver nor libvdpau I can not 
+> run-time test the changes.
 
-Applied to master, thanks. However, next time, please avoid using the
-first person ("I") in your commit log. Thanks!
+Since you're the mesa3d developer in Buildroot, I believe a review from you
+would be enough to help maintainers to merge these patches.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I'm not asking you to do a runtime test ;-)
+
+> 
+> For the asm patch I sent another comment.
+
+Thanks!
+
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
