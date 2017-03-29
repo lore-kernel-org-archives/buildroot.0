@@ -1,54 +1,73 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Mar 2017 00:17:06 +0200
-Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
-In-Reply-To: <20170328222929.036d1152@free-electrons.com>
-References: <1490595146-5638-1-git-send-email-james@balean.com.au>
- <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
- <1490681640-14995-1-git-send-email-james@balean.com.au>
- <54cae0a0-a7a5-9ef0-08c8-a14e871cf8bb@mind.be>
- <20170328215334.405952d9@free-electrons.com>
- <1d453613-dc32-9ab1-229b-2deed767a12f@mind.be>
- <20170328222929.036d1152@free-electrons.com>
-Message-ID: <92078ad6-2fcc-69e4-86b9-0d296ef350c0@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 29 Mar 2017 06:37:32 +0300
+Subject: [Buildroot] [PATCH v1] uhtppd: fix TCP_FASTOPEN related compile
+ error
+In-Reply-To: <20170328202949.1762-1-ps.report@gmx.net>
+References: <20170328202949.1762-1-ps.report@gmx.net>
+Message-ID: <20170329033732.v3tqayzoucwx5ies@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
 
-
-On 28-03-17 22:29, Thomas Petazzoni wrote:
-> Hello,
+On Tue, Mar 28, 2017 at 10:29:49PM +0200, Peter Seiderer wrote:
+> Fixes [1]:
 > 
-> On Tue, 28 Mar 2017 22:19:02 +0200, Arnout Vandecappelle wrote:
+>   .../uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82/listen.c: In function 'uh_setup_listeners':
+>   .../uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82/listen.c:120:30: error: 'TCP_FASTOPEN' undeclared (first use in this function)
 > 
->>  Yeah, thinking a bit more about it: if you use the same DT in U-Boot as in the
->> kernel, then you probably let U-Boot pass it to the kernel so you don't need it
->> at kernel build time...
+> [1] http://autobuild.buildroot.net/results/56e/56e0727ccd1255b05e03d1b79dc238bd88701230
 > 
-> Not necessarily. The DT can be used by U-Boot itself to know which
-> peripherals are available, and how they should be configured.
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
 
- But U-Boot can always pass the device tree it uses internally to the kernel, no?
+[...]
 
+> +diff --git a/listen.c b/listen.c
+> +index 2a54888..727bff8 100644
+> +--- a/listen.c
+> ++++ b/listen.c
+> +@@ -107,18 +107,24 @@ void uh_setup_listeners(void)
+> + 		/* TCP keep-alive */
+> + 		if (conf.tcp_keepalive > 0) {
+> + #ifdef linux
+> +-			int tcp_ka_idl, tcp_ka_int, tcp_ka_cnt, tcp_fstopn;
+> ++			int tcp_ka_idl, tcp_ka_int, tcp_ka_cnt;
+> ++#ifdef TCP_FASTOPEN
+> ++			int tcp_fstopn;
+> ++#endif
 
-> I am not
-> sure there is a U-Boot option to bundle the DT within U-Boot just for
-> the purpose of passing it to the kernel.
+I might be cleaner to do instead:
 
- I never heard of such an option either.
+#ifndef TCP_FASTOPEN
+#define TCP_FASTOPEN 23
+#endif
 
- Regards,
- Arnout
+baruch
 
-> But I might be wrong, I
-> haven't looked in details at how U-Boot uses the DT.
+> + 
+> + 			tcp_ka_idl = 1;
+> + 			tcp_ka_cnt = 3;
+> + 			tcp_ka_int = conf.tcp_keepalive;
+> ++#ifdef TCP_FASTOPEN
+> + 			tcp_fstopn = 5;
+> +-
+> ++#endif
+> + 			setsockopt(sock, SOL_TCP, TCP_KEEPIDLE,  &tcp_ka_idl, sizeof(tcp_ka_idl));
+> + 			setsockopt(sock, SOL_TCP, TCP_KEEPINTVL, &tcp_ka_int, sizeof(tcp_ka_int));
+> + 			setsockopt(sock, SOL_TCP, TCP_KEEPCNT,   &tcp_ka_cnt, sizeof(tcp_ka_cnt));
+> ++#ifdef TCP_FASTOPEN
+> + 			setsockopt(sock, SOL_TCP, TCP_FASTOPEN,  &tcp_fstopn, sizeof(tcp_fstopn));
+> + #endif
+> ++#endif
+> + 
+> + 			setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &yes, sizeof(yes));
+> + 		}
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
