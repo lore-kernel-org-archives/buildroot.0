@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 21:52:18 +0200
-Subject: [Buildroot] [PATCH] ntfs-3g: bump version to 2017.3.23
-In-Reply-To: <20170329135136.8459-1-Vincent.Riera@imgtec.com>
-References: <20170329135136.8459-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170329215218.56fe05ff@free-electrons.com>
+Date: Wed, 29 Mar 2017 21:53:16 +0200
+Subject: [Buildroot] [git commit] shairport-sync: requires C++
+Message-ID: <20170329195320.53AF3821FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=11c595c8eae56326ed5ef0d8e2dac7551cff98fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 29 Mar 2017 14:51:36 +0100, Vicente Olivert Riera wrote:
-> And remove patches already included in this release.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  ...-libfuse-util-include-paths.h-when-needed.patch | 43 ----------------------
->  package/ntfs-3g/ntfs-3g.hash                       |  3 +-
->  package/ntfs-3g/ntfs-3g.mk                         |  3 +-
->  3 files changed, 2 insertions(+), 47 deletions(-)
->  delete mode 100644 package/ntfs-3g/0001-libfuse-util-include-paths.h-when-needed.patch
+Fixes:
+http://autobuild.buildroot.net/results/122/122d6cedf0205e8db27d498d6a2a839e11e7b6f2/
+http://autobuild.buildroot.net/results/bef/bef5fb328e6688107496cb213d8aeeca527abf03/
 
-Applied to master, thanks.
+Cc: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+index d70121b..c2a5565 100644
+--- a/package/shairport-sync/Config.in
++++ b/package/shairport-sync/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
+ 	bool "shairport-sync"
+ 	depends on BR2_USE_MMU # libdaemon
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 	select BR2_PACKAGE_LIBCONFIG
+@@ -34,6 +35,6 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR
+ 
+ endif
+ 
+-comment "shairport-sync needs a toolchain w/ NPTL"
++comment "shairport-sync needs a toolchain w/ C++, NPTL"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
