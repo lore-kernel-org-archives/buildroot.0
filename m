@@ -1,46 +1,80 @@
 From: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
-Date: Wed, 29 Mar 2017 10:51:16 -0400
-Subject: [Buildroot] [RFC 0/4] add genimage Kconfig entry
-Message-ID: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
+Date: Wed, 29 Mar 2017 10:51:18 -0400
+Subject: [Buildroot] [RFC 2/4] system: add option to pass genimage config
+	files
+In-Reply-To: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
+References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
+Message-ID: <20170329145120.11863-3-etienne.phelip@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many boards specific postimage scripts are almost use only to execute
-the genimage host tool.
+Add a new Kconfig entry to allow users to provide a list of genimage
+config files.
 
-The purpose of this RFC is to provide a generic wrapper for the
-genimage tool, in order to reduce boilerplate.
+A new target is added to the Makefile in order to execute the
+support/scripts/genimage.sh script for each provided config files.
 
-The first two patches add the generic genimage plumbing.
-The next two patches are examples of post-image scripts simplification.
+The new target-genimage target depends on target-post-image, thus
+update the world target dependency.
 
-The new target-genimage targer is called after the target-post-image
-target since that is most of the board use cases. odroidc2 is an
-exception, we can still execute genimage in its post-image script.
+Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
+---
+ Makefile         |  9 +++++++--
+ system/Config.in | 11 +++++++++++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-If there is no objection to the first two patches, I will submit a new
-patch series introducing this change to all boards using genimage.
-
-Etienne Phelip (4):
-  support/scripts: add generic genimage script
-  system: add option to pass genimage config files
-  configs/raspberrypi3_defconfig: set BR2_GENIMAGE_CFG_FILES
-  board/acmesystems/aria-g25: set BR2_GENIMAGE_CFG_FILES
-
- Makefile                                     |  9 +++++++--
- board/acmesystems/aria-g25/post-image.sh     | 14 --------------
- board/raspberrypi/post-image.sh              | 16 ----------------
- configs/acmesystems_aria_g25_128mb_defconfig |  2 +-
- configs/acmesystems_aria_g25_256mb_defconfig |  2 +-
- configs/raspberrypi3_defconfig               |  1 +
- support/scripts/genimage.sh                  | 27 +++++++++++++++++++++++++++
- system/Config.in                             | 11 +++++++++++
- 8 files changed, 48 insertions(+), 34 deletions(-)
- delete mode 100755 board/acmesystems/aria-g25/post-image.sh
- create mode 100755 support/scripts/genimage.sh
-
+diff --git a/Makefile b/Makefile
+index cceae92..71c750c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -546,11 +546,11 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+-world: target-post-image
++world: target-genimage
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars help \
+-	list-defconfigs target-finalize target-post-image source-check
++	list-defconfigs target-finalize target-post-image target-genimage source-check
+ 
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+@@ -719,6 +719,11 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
++target-genimage: target-post-image
++	@$(foreach c, $(call qstrip,$(BR2_GENIMAGE_CFG_FILES)), \
++		$(call MESSAGE,"Executing genimage with config $(c)"); \
++		$(EXTRA_ENV) ./support/scripts/genimage.sh -c $(c)$(sep))
++
+ source: $(foreach p,$(PACKAGES),$(p)-all-source)
+ 
+ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+diff --git a/system/Config.in b/system/Config.in
+index 3ddf843..d95ba43 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -564,4 +564,15 @@ config BR2_ROOTFS_POST_SCRIPT_ARGS
+ 	  directory / images directory. The arguments in this option will be
+ 	  passed *after* those.
+ 
++config BR2_GENIMAGE_CFG_FILES
++	string "genimage config files passed to genimage"
++	depends on BR2_PACKAGE_HOST_GENIMAGE
++	default ""
++	help
++	  Specify a space-separated list of genimage config files to used by
++	  genimage after the post-image script has been executed.
++
++	  This can be used to generate multiple binary image for one or more
++	  mediums (e.g. SD card and flash).
++
+ endmenu
 -- 
 2.9.3
