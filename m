@@ -1,103 +1,49 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 29 Mar 2017 13:29:02 -0400
-Subject: [Buildroot] [v5] package: add qt5virtualkeyboard
-In-Reply-To: <20170329180311.533db852@free-electrons.com>
-References: <20170329155822.32245-1-gael.portay@savoirfairelinux.com>
- <20170329180311.533db852@free-electrons.com>
-Message-ID: <20170329172902.wzhphoda4n4fu2wb@gportay>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 29 Mar 2017 19:58:18 +0200
+Subject: [Buildroot] Which order: $(MAKE) $(TARGET_CONFIGURE_OPTS) or
+ $(TARGET_CONFIGURE_OPTS) $(MAKE)
+Message-ID: <CAAXf6LUHH5Lo=LSSfjGRQ=onT4Bm_WfLAFc0RDjfcT_ZmADmbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-On Wed, Mar 29, 2017 at 06:03:11PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 29 Mar 2017 11:58:22 -0400, Ga?l PORTAY wrote:
->
-> [...]
-> 
-> This way of concatenating the licenses doesn't work, because the final
-> string will be:
-> 
-> "GPLv3 Apache-2.0"
-> 
-> while we want "GPLv3, Apache-2.0". Look at other Qt5 packages how they
-> are handling this:
-> 
-> QT5BASE_LICENSE := $(QT5BASE_LICENSE), BSD-3c (examples)
-> 
-> Note that next to the license, we also want an information on which
-> part of the package it applies.
-> 
+In package makefiles, you can find both uses:
 
-I modified the Makefile so the LICENSE variable is set to (all layouts +
-handwriting):
+    $(MAKE) $(TARGET_CONFIGURE_OPTS)
+versus
+    $(TARGET_CONFIGURE_OPTS) $(MAKE)
 
-"GPLv3, Apache-2.0 (openwnn), Apache-2.0 (pinyin), Apache-2.0 BSD-3c (tcime), MIT (lipi-toolkit)"
+and likewise for host packages:
 
-Is it correct?
+    $(MAKE) $(HOST_CONFIGURE_OPTS)
+versus
+    $(HOST_CONFIGURE_OPTS) $(MAKE)
 
-I can also be more explicit:
 
-"GPLv3, Apache-2.0 (openwnn/ja_JP), Apache-2.0 (pinyin/zh_TW), Apache-2.0 BSD-3c (tcime/zh_TW), MIT (lipi-toolkit/handwriting)"
+The order matters because it has impact on the precedence rules of make.
+In the case where $(MAKE) is present first, the variables are passed
+as make variables, which have precedence over variables explicitly
+defined in the makefiles.
+However, if $(MAKE) is _after_ the variable list, then the variables
+are treated as environment variables. In make, environment variables
+are directly readable as make variables, but an explicit assignment to
+such variable overwrites the value passed via the environment, unless
+the assignment is done conditionally, e.g. with ?= instead of = / :=.
 
-Thank you for your review. I did not understand why some packages have a comma
-in LICENSE while others have 'and/or' or are simply white-space separated.
+Given this, if you want to make sure that the value you give is taken
+into account, the forms:
 
-BTW, here are the modifications:
+    $(MAKE) $(TARGET_CONFIGURE_OPTS)
+    $(MAKE) $(HOST_CONFIGURE_OPTS)
 
--QT5VIRTUALKEYBOARD_LICENSE += Apache-2.0
-+QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (openwnn)
+should be used.
 
--QT5VIRTUALKEYBOARD_LICENSE += Apache-2.0
-+QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (pinyin)
+Do you agree with this analysis?
+If so, there is a cleanup opportunity for motivated developers :-)
 
--QT5VIRTUALKEYBOARD_LICENSE += Apache-2.0 BSD-3c
-+QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 BSD-3c (tcime)
-
--QT5VIRTUALKEYBOARD_LICENSE += MIT
-+QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), MIT (lipi-toolkit)
-
-> > +QT5VIRTUALKEYBOARD_PINYIN = $(findstring zh_CN,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
-> > +ifneq ($(strip $(QT5VIRTUALKEYBOARD_PINYIN)$(QT5VIRTUALKEYBOARD_ALL_LAYOUTS)),)
-> > +QT5VIRTUALKEYBOARD_3RDPARTY_PARTS += pinyin
-> 
-> Do you really need the name here? You don't use it anywhere. What about:
-> 
-> QT5VIRTUALKEYBOARD_INSTALL_3RDPARTY = YES
-> 
-> instead.
-
-Indeed I did not need them.
-
-I used the white-space separated values for debugging purpose.
-
-The YES value make the Makefile more simple.
-
--QT5VIRTUALKEYBOARD_3RDPARTY_PARTS += pinyin
-+QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
-
--QT5VIRTUALKEYBOARD_3RDPARTY_PARTS += tcime
-+QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
-
--QT5VIRTUALKEYBOARD_3RDPARTY_PARTS += lipi_toolkit
-+QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
-
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-If you agree with those modifications, I will send a v6 of this patch (including
-missing prefix for QMAKEFLAGS).
-
-Regards,
-Gael
+Thanks,
+Thomas
