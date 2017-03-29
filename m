@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 21:51:25 +0200
-Subject: [Buildroot] [git commit] cjson: bump version to v1.4.5
-Message-ID: <20170329195155.51B8482644@busybox.osuosl.org>
+Date: Wed, 29 Mar 2017 21:51:30 +0200
+Subject: [Buildroot] [git commit] cups: bump version to 2.2.3
+Message-ID: <20170329195155.5C9717FCD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e5085f9ba8993d74a38ca608148cf357076eb45
+commit: https://git.buildroot.net/buildroot/commit/?id=ead8c71eb4caf25bf75029ba1007982ee4c2a20e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 056a3ad..2e38a8b 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 08c8c3c..0eb415e 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	59d77f80fc5bc401263ced056fa6da118bf12e2f9f1f35cc7bcaf749ac1f2bd8	cjson-v1.4.4.tar.gz
-+sha256 3d0a61f2023749a6b813cadc713234a2ea393cf5482d910cf91584f13a82af13  cjson-v1.4.5.tar.gz
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index d0f5b6a..55417d1 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
+ # Locally calculated:
+-sha256 f589bb7d5d1dc3aa0915d7cf2b808571ef2e1530cd1a6ebe76ae8f9f4994e4f6  cups-2.2.2-source.tar.gz
++sha256 66701fe15838f2c892052c913bde1ba106bbee2e0a953c955a62ecacce76885f  cups-2.2.3-source.tar.gz
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index ae3b9ca..d58c78d 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CJSON_VERSION = v1.4.4
-+CJSON_VERSION = v1.4.5
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+-CUPS_VERSION = 2.2.2
++CUPS_VERSION = 2.2.3
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = GPLv2, LGPLv2
