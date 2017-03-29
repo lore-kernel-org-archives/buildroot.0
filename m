@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 29 Mar 2017 14:15:38 +0100
-Subject: [Buildroot] [PATCH] cups: bump version to 2.2.3
-Message-ID: <20170329131538.28777-1-Vincent.Riera@imgtec.com>
+Date: Wed, 29 Mar 2017 14:28:44 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.169
+Message-ID: <20170329132844.16718-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/cups/cups.hash | 2 +-
- package/cups/cups.mk   | 2 +-
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index 08c8c3c..0eb415e 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 3619af8..a66b0c5 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
- # Locally calculated:
--sha256 f589bb7d5d1dc3aa0915d7cf2b808571ef2e1530cd1a6ebe76ae8f9f4994e4f6  cups-2.2.2-source.tar.gz
-+sha256 66701fe15838f2c892052c913bde1ba106bbee2e0a953c955a62ecacce76885f  cups-2.2.3-source.tar.gz
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index ae3b9ca..d58c78d 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 ebff909e1c81919967373c55c7a95ba13ef4e0536b8ef1c28ed7e1c1eb9b9fd406a649d93b141822b24675ebece5a722247737c4e869fb7fb5eeb881a7f9102d  LVM2.2.02.168.tgz
++sha512 0ff2418c54686f1a99d6196bab5fbc8188152d17ae826760aabd91b49e5f20d19ed1280e3670a769184aac9fd598a20b31312b56add831ed3863473e031b5327  LVM2.2.02.169.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index a2d484b..6af3137 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_VERSION = 2.2.2
-+CUPS_VERSION = 2.2.3
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = GPLv2, LGPLv2
+-LVM2_VERSION = 2.02.168
++LVM2_VERSION = 2.02.169
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
 2.10.2
