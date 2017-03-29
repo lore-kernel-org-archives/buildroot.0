@@ -1,142 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Mar 2017 22:47:38 +0200
-Subject: [Buildroot] [git commit] package/lensfun: new package
-Message-ID: <20170329195015.725128261A@busybox.osuosl.org>
+Date: Wed, 29 Mar 2017 21:49:59 +0200
+Subject: [Buildroot] Which order: $(MAKE) $(TARGET_CONFIGURE_OPTS) or
+ $(TARGET_CONFIGURE_OPTS) $(MAKE)
+In-Reply-To: <CAAXf6LVwhzcCnEXKaBku5WfwKeR7GHX0v4VFu4kvdxMobW=g9w@mail.gmail.com>
+References: <CAAXf6LUHH5Lo=LSSfjGRQ=onT4Bm_WfLAFc0RDjfcT_ZmADmbA@mail.gmail.com>
+ <20170329213552.6455f568@free-electrons.com>
+ <CAAXf6LVwhzcCnEXKaBku5WfwKeR7GHX0v4VFu4kvdxMobW=g9w@mail.gmail.com>
+Message-ID: <20170329214959.54454e17@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ae53f9c6130f6e43091ec430b32a65a12303358
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Jeremy Rosen <jeremy.rosen@enst-bretagne.fr>
-[Thomas: add missing select BR2_PACKAGE_LIBGLIB2, noticed by Baruch.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/lensfun/Config.in    | 29 +++++++++++++++++++++++++++++
- package/lensfun/lensfun.hash |  5 +++++
- package/lensfun/lensfun.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 77 insertions(+)
+On Wed, 29 Mar 2017 21:43:18 +0200, Thomas De Schampheleire wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 215a3b4..9c6dae8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1319,6 +1319,7 @@ F:	package/enlightenment/
- F:	package/expedite/
- F:	package/iqvlinux/
- F:	package/liblinear/
-+F:	package/lensfun/
- F:	package/linux-syscall-support/
- F:	package/lugaru/
- F:	package/mcelog/
-diff --git a/package/Config.in b/package/Config.in
-index 9a78e0a..24c8a08 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1015,6 +1015,7 @@ menu "Graphics"
- 	source "package/jpeg/Config.in"
- 	source "package/kmsxx/Config.in"
- 	source "package/lcms2/Config.in"
-+	source "package/lensfun/Config.in"
- 	source "package/leptonica/Config.in"
- 	source "package/lesstif/Config.in"
- 	source "package/libart/Config.in"
-diff --git a/package/lensfun/Config.in b/package/lensfun/Config.in
-new file mode 100644
-index 0000000..7ec4902
---- /dev/null
-+++ b/package/lensfun/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_LENSFUN
-+	bool "lensfun"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  Lensfun itself is only a library for correcting several
-+	  artefacts and a database for storing lens profiles. To
-+	  actually use Lensfun to process your images you need an
-+	  image editing application with Lensfun support.
-+
-+	  http://lensfun.sourceforge.net
-+
-+if BR2_PACKAGE_LENSFUN
-+
-+config BR2_PACKAGE_LENSFUN_TOOLS
-+	bool "lensfun tools"
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  Build 'lenstool'.
-+
-+endif
-+
-+comment "lensfun needs a toolchain w/ C++, threads, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_USE_WCHAR
-diff --git a/package/lensfun/lensfun.hash b/package/lensfun/lensfun.hash
-new file mode 100644
-index 0000000..a60f8f4
---- /dev/null
-+++ b/package/lensfun/lensfun.hash
-@@ -0,0 +1,5 @@
-+# From https://sourceforge.net/projects/lensfun/files/0.3.2
-+sha1 1d978b15aa7304d66a4931fa37ca9f8f89396c16 lensfun-0.3.2.tar.gz
-+md5 247e59a0812ec451f6cd0d20b3379cb5 lensfun-0.3.2.tar.gz
-+# Locally calculated
-+sha256 ae8bcad46614ca47f5bda65b00af4a257a9564a61725df9c74cb260da544d331 lensfun-0.3.2.tar.gz
-diff --git a/package/lensfun/lensfun.mk b/package/lensfun/lensfun.mk
-new file mode 100644
-index 0000000..8e92e59
---- /dev/null
-+++ b/package/lensfun/lensfun.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# lensfun
-+#
-+################################################################################
-+
-+LENSFUN_VERSION = 0.3.2
-+LENSFUN_SITE = https://sourceforge.net/projects/lensfun/files/$(LENSFUN_VERSION)
-+LENSFUN_LICENSE = LGPLv3+ (libraries), GPLv3+ (programs)
-+LENSFUN_LICENSE_FILES = docs/gpl-3.0.txt docs/lgpl-3.0.txt
-+LENSFUN_INSTALL_STAGING = YES
-+LENSFUN_DEPENDENCIES = libglib2
-+
-+# lensfun doesn't support in source build, it fail to build lensfun tools.
-+LENSFUN_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-+LENSFUN_CONF_OPTS += -DBUILD_FOR_SSE=ON
-+else
-+LENSFUN_CONF_OPTS += -DBUILD_FOR_SSE=OFF
-+endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+LENSFUN_CONF_OPTS += -DBUILD_FOR_SSE2=ON
-+else
-+LENSFUN_CONF_OPTS += -DBUILD_FOR_SSE2=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LENSFUN_TOOLS),y)
-+LENSFUN_DEPENDENCIES += libpng
-+LENSFUN_CONF_OPTS += -DBUILD_LENSTOOL=ON
-+# broken
-+else
-+LENSFUN_CONF_OPTS += -DBUILD_LENSTOOL=OFF
-+endif
-+
-+# Don't install helper scripts (which require python3 and gksudo).
-+# Don't run setup.py on the host.
-+LENSFUN_CONF_OPTS += -DINSTALL_HELPER_SCRIPTS=OFF -DPYTHON=OFF
-+
-+$(eval $(cmake-package))
+> But, on the other hand, if a package would do:
+> 
+> CFLAGS = -I../include
+> 
+> then we cannot use either approach because one approach will ignore
+> the -I../include, and the other will ignore our own settings. In that
+> case, a patch of the package is required, right?
+
+Correct. But I guess in many cases we don't realize when the package
+"ignores" our CFLAGS, because there is nothing in our CFLAGS that is
+really mandatory for the thing to build.
+
+Of course, the fact that our CFLAGS may be ignored means that the
+package may not have the correct optimization level, debugging level,
+stack smashing protection flags, etc. I remember at some Buildroot
+meeting, we discussed the idea of injecting a fake CFLAGS, and then
+checking in the toolchain wrapper that we have this fake flag. But I'm
+sure this would cause lots and lots of false positives.
+
+> Is there a recommendation for the case that the package allows either way?
+
+I don't really have a good suggestion. We tend to fix those issues on a
+case by case basis, with no well defined "best practice".
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
