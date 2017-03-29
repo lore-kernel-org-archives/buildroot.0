@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 22:19:29 +0200
-Subject: [Buildroot] [PATCHv3] core: enhance printvars
-In-Reply-To: <20170329094305.18098-1-yann.morin.1998@free.fr>
-References: <20170329094305.18098-1-yann.morin.1998@free.fr>
-Message-ID: <20170329221929.760ef16b@free-electrons.com>
+Date: Wed, 29 Mar 2017 22:57:59 +0200
+Subject: [Buildroot] [PATCH v2] libubox: enable static build
+In-Reply-To: <1490784660-15897-1-git-send-email-Rahul.Jain@imgtec.com>
+References: <1490784660-15897-1-git-send-email-Rahul.Jain@imgtec.com>
+Message-ID: <20170329225759.10c37897@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +12,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 29 Mar 2017 11:43:05 +0200, Yann E. MORIN wrote:
-> Currently, the output of printvars copntains the name of the variable,
-> its expanded value and its un-expanded value.
+On Wed, 29 Mar 2017 16:21:00 +0530, Rahul Jain wrote:
+> upstream has added the support to build the static libraries.
+> update comment for BR2_STATIC_LIBS for other packages having
+> dependency on libubox.
 > 
-> However, most of the time, we need the actual, expanded value, so it can
-> be re-used from a (non-Buildroot) infrastructure script, like a
-> post-build script, or a build-farm driver (e.g. a Jenkins job...)
-> 
-> Add two options that a user may set to change the output of printvars:
->   - QUOTED_VARS, if set, will quote the value
->   - RAW_VARS, if set, will print the unexpanded value
-> 
-> The new output by default only prints the expanded value now.
-> 
-> So that it can be used as such:
-> 
->     $ make -s printvars VARS=BUSYBOX_VERSION
->     BUSYBOX_VERSION=1.26.2
-> 
->     $ make -s printvars VARS=BUSYBOX_RDEPENDENCIES QUOTED_VARS=YES
->     BUSYBOX_RDEPENDENCIES='ncurses util-linux'
-> 
->     $ make -s printvars VARS=BUSYBOX_FINAL_PATCH_DEPENDENCIES RAW_VARS=YES
->     BUSYBOX_FINAL_PATCH_DEPENDENCIES=$(sort $(BUSYBOX_PATCH_DEPENDENCIES))
-> 
-> And it is even possible to directly evaluate it in a shell script:
-> 
->     eval $(make -s printvars VARS=BUSYBOX_VERSION QUOTED_VARS=YES)
-> 
-> Backward compatibility of the output is not maintained. It is believed
-> that scripts that depended on the previous output were very fragile to
-> begin with, because they had to filter the non-formatted output
-> (splitting on spaces or braces was not really possible, because values
-> could contain either).
-> 
-> Document printvars and its options in the manual; list it in the output
-> of 'make help'.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> ---
-> Changes v2 -> v3:
->   - properly quote values with quotes in them  (Arnout)
->   - typo in manual  (Arnout)
->   - fix shell-eval example
->   - reword output of 'make help'
+> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
 
-Applied to master, thanks.
+Did you test this? libubox tries to unconditionally build a shared
+library, so it breaks the build with a static only configuration. Try
+this configuration with your patch applied:
+
+BR2_arm=y
+BR2_STATIC_LIBS=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2017.02-rc1-70-g7612a7d.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_LIBUBOX=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+BR2_STATIC_LIBS is not about being able to build a static library, it's
+about using static libraries *only*.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
