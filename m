@@ -1,63 +1,57 @@
 From: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
-Date: Wed, 29 Mar 2017 10:51:19 -0400
-Subject: [Buildroot] [RFC 3/4] configs/raspberrypi3_defconfig: set
-	BR2_GENIMAGE_CFG_FILES
+Date: Wed, 29 Mar 2017 10:51:17 -0400
+Subject: [Buildroot] [RFC 1/4] support/scripts: add generic genimage script
 In-Reply-To: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
 References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
-Message-ID: <20170329145120.11863-4-etienne.phelip@savoirfairelinux.com>
+Message-ID: <20170329145120.11863-2-etienne.phelip@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the new BR2_GENIMAGE_CFG_FILES Kconfig symbol to reduce
-boilerplate and use the generic genimage wrapper.
+This script is a wrapper for the genimage tool used by most boards.
+The board postimage script can now call this script instead of invoking
+genimage command themselves.
 
 Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
 ---
- board/raspberrypi/post-image.sh | 16 ----------------
- configs/raspberrypi3_defconfig  |  1 +
- 2 files changed, 1 insertion(+), 16 deletions(-)
+ support/scripts/genimage.sh | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100755 support/scripts/genimage.sh
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index b2bb070..6d8e62c 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -1,10 +1,5 @@
- #!/bin/sh
- 
--BOARD_DIR="$(dirname $0)"
--BOARD_NAME="$(basename ${BOARD_DIR})"
--GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
- case "${2}" in
- 	--add-pi3-miniuart-bt-overlay)
- 	if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-@@ -17,14 +12,3 @@ __EOF__
- 	fi
- 	;;
- esac
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                           \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index de0c42d..a6deff4 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -35,3 +35,4 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-+BR2_GENIMAGE_CFG_FILES="board/raspberrypi3/genimage-raspberrypi3.cfg"
+diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+new file mode 100755
+index 0000000..0ed0e8b
+--- /dev/null
++++ b/support/scripts/genimage.sh
+@@ -0,0 +1,27 @@
++#!/bin/bash
++
++die() {
++  echo "Error: $@" >&2
++  exit 1
++}
++
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++while getopts c: OPT ; do
++	case "${OPT}" in
++	c) GENIMAGE_CFG="${OPTARG}";;
++	:) die "option '${OPTARG}' expects a mandatory argument\n";;
++	\?) die "unknown option '${OPTARG}'\n";;
++	esac
++done
++
++[ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
 -- 
 2.9.3
