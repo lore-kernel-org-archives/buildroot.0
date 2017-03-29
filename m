@@ -1,67 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 23:28:58 +0200
-Subject: [Buildroot] [git commit] system: do not overwrite /bin/sh Busybox
-	symlink
-Message-ID: <20170329212901.DE1518265E@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 Mar 2017 23:28:56 +0200
+Subject: [Buildroot] [PATCH 4/5] package/mesa3d: explicitely disable asm
+In-Reply-To: <hgqrqdxivc.ln2@ID-313208.user.individual.net>
+References: <20170326162853.3022-1-romain.naour@gmail.com>
+ <20170326162853.3022-4-romain.naour@gmail.com>
+ <hgqrqdxivc.ln2@ID-313208.user.individual.net>
+Message-ID: <49fce2a1-49a7-317c-486f-b3b6c37604a9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc91501e6b32ef1b015ac9b0fbf6d64aa1ce0162
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernd, All,
 
-The BR2_SYSTEM_BIN_SH hidden option defines to what binary the /bin/sh
-symlinks should point to. If busybox is chosen, then /bin/sh is created
-to point to /bin/busybox.
+Le 29/03/2017 ? 06:41, Bernd Kuhls a ?crit :
+> Am Sun, 26 Mar 2017 18:28:52 +0200 schrieb Romain Naour:
+> 
+>> assembly are enabled by default on supported plaforms even while
+>> crosscompiling if host == target:
+>>
+>> checking whether to enable assembly... yes, x86_64
+>>
+>> It was also disabled in the mesa package in Fedora since 7.6 [1].
+>>
+>> [1] http://pkgs.fedoraproject.org/cgit/rpms/mesa.git/commit/?id=629c8726
+> 
+> Hi,
+> 
+> I am unsure about this patch, why shouldn't we use asm code when 
+> crosscompiling for host == target CPU?
 
-This works fine with the default installation mode of Busybox, but it
-fails with the upcoming "individual binaries" mode, in which each applet
-is installed as its own binary, and /bin/busybox doesn't exist: we get
-/bin/sh as a broken symlink to /bin/busybox.
+To be honest I don't really have an issue with assembly being enabled for my use
+case. But there is an issue when you want a reproducible build with the same
+defconfig build on a x86 and x86_64 host.
 
-Since Busybox already installs its own /bin/sh symlink, properly
-pointing to /bin/ash or /bin/hush depending on the selected shell, it
-doesn't make sense for the BR2_SYSTEM_BIN_SH logic to override
-this. Just let Busybox install its own /bin/sh by making
-BR2_SYSTEM_BIN_SH empty when Busybox shell is selected as /bin/sh.
+Let see what other think.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/skeleton/skeleton.mk | 2 ++
- system/Config.in             | 1 -
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Best regards,
+Romain
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 1000161..9940944 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -203,10 +203,12 @@ define SKELETON_BIN_SH
- 	rm -f $(TARGET_DIR)/bin/sh
- endef
- else
-+ifneq ($(SKELETON_TARGET_GENERIC_BIN_SH),)
- define SKELETON_BIN_SH
- 	ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
- endef
- endif
-+endif
- TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
- 
- ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-diff --git a/system/Config.in b/system/Config.in
-index 3ddf843..b47ae43 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -298,7 +298,6 @@ endchoice # /bin/sh
- 
- config BR2_SYSTEM_BIN_SH
- 	string
--	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
- 	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
- 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
- 	default "mksh"    if BR2_SYSTEM_BIN_SH_MKSH
+> Fedora disabled it due to problems with selinux, Gentoo did something 
+> similar: https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/mesa/
+> mesa-17.0.2.ebuild#n302.
+> Debian disabled asm only for x32: https://anonscm.debian.org/git/pkg-xorg/
+> lib/mesa.git/tree/debian/rules?h=debian-experimental#n111
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
