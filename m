@@ -1,55 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 29 Mar 2017 23:28:56 +0200
-Subject: [Buildroot] [PATCH 4/5] package/mesa3d: explicitely disable asm
-In-Reply-To: <hgqrqdxivc.ln2@ID-313208.user.individual.net>
-References: <20170326162853.3022-1-romain.naour@gmail.com>
- <20170326162853.3022-4-romain.naour@gmail.com>
- <hgqrqdxivc.ln2@ID-313208.user.individual.net>
-Message-ID: <49fce2a1-49a7-317c-486f-b3b6c37604a9@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Mar 2017 23:29:05 +0200
+Subject: [Buildroot] [PATCH 1/4] system: do not overwrite /bin/sh
+ Busybox symlink
+In-Reply-To: <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1490564623-26806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170329232905.46689199@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd, All,
+Hello,
 
-Le 29/03/2017 ? 06:41, Bernd Kuhls a ?crit :
-> Am Sun, 26 Mar 2017 18:28:52 +0200 schrieb Romain Naour:
+On Sun, 26 Mar 2017 23:43:40 +0200, Thomas Petazzoni wrote:
+> The BR2_SYSTEM_BIN_SH hidden option defines to what binary the /bin/sh
+> symlinks should point to. If busybox is chosen, then /bin/sh is created
+> to point to /bin/busybox.
 > 
->> assembly are enabled by default on supported plaforms even while
->> crosscompiling if host == target:
->>
->> checking whether to enable assembly... yes, x86_64
->>
->> It was also disabled in the mesa package in Fedora since 7.6 [1].
->>
->> [1] http://pkgs.fedoraproject.org/cgit/rpms/mesa.git/commit/?id=629c8726
+> This works fine with the default installation mode of Busybox, but it
+> fails with the upcoming "individual binaries" mode, in which each applet
+> is installed as its own binary, and /bin/busybox doesn't exist: we get
+> /bin/sh as a broken symlink to /bin/busybox.
 > 
-> Hi,
+> Since Busybox already installs its own /bin/sh symlink, properly
+> pointing to /bin/ash or /bin/hush depending on the selected shell, it
+> doesn't make sense for the BR2_SYSTEM_BIN_SH logic to override
+> this. Just let Busybox install its own /bin/sh by making
+> BR2_SYSTEM_BIN_SH empty when Busybox shell is selected as /bin/sh.
 > 
-> I am unsure about this patch, why shouldn't we use asm code when 
-> crosscompiling for host == target CPU?
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> This is proposed as an alternative to
+> https://patchwork.ozlabs.org/patch/686673/. If people believe
+> https://patchwork.ozlabs.org/patch/686673/ is a better solution, I'm
+> fine as well.
+> ---
+>  package/skeleton/skeleton.mk | 2 ++
+>  system/Config.in             | 1 -
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-To be honest I don't really have an issue with assembly being enabled for my use
-case. But there is an issue when you want a reproducible build with the same
-defconfig build on a x86 and x86_64 host.
+Applied to master, thanks.
 
-Let see what other think.
-
-Best regards,
-Romain
-
-> Fedora disabled it due to problems with selinux, Gentoo did something 
-> similar: https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/mesa/
-> mesa-17.0.2.ebuild#n302.
-> Debian disabled asm only for x32: https://anonscm.debian.org/git/pkg-xorg/
-> lib/mesa.git/tree/debian/rules?h=debian-experimental#n111
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
