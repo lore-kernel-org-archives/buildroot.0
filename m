@@ -1,77 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Mar 2017 23:51:40 +0200
-Subject: [Buildroot] [PATCH v2,1/2] libmediaart: new package
-In-Reply-To: <1490387931-113759-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1490387931-113759-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <20170329235140.61c718d3@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 Mar 2017 23:55:12 +0200
+Subject: [Buildroot] [PATCH 4/5] package/mesa3d: explicitely disable asm
+In-Reply-To: <20170329233528.1eb13394@free-electrons.com>
+References: <20170326162853.3022-1-romain.naour@gmail.com>
+ <20170326162853.3022-4-romain.naour@gmail.com>
+ <hgqrqdxivc.ln2@ID-313208.user.individual.net>
+ <49fce2a1-49a7-317c-486f-b3b6c37604a9@gmail.com>
+ <20170329233528.1eb13394@free-electrons.com>
+Message-ID: <4e776b18-226c-091c-1b4b-31a4c7e72c35@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas, Bernd, All,
 
-On Fri, 24 Mar 2017 21:38:50 +0100, Fabrice Fontaine wrote:
-> Library tasked with managing, extracting and handling media art caches
+Le 29/03/2017 ? 23:35, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> https://github.com/GNOME/libmediaart
+> On Wed, 29 Mar 2017 23:28:56 +0200, Romain Naour wrote:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> Le 29/03/2017 ? 06:41, Bernd Kuhls a ?crit :
+>>> Am Sun, 26 Mar 2017 18:28:52 +0200 schrieb Romain Naour:
+>>>   
+>>>> assembly are enabled by default on supported plaforms even while
+>>>> crosscompiling if host == target:
+>>>>
+>>>> checking whether to enable assembly... yes, x86_64
+>>>>
+>>>> It was also disabled in the mesa package in Fedora since 7.6 [1].
+>>>>
+>>>> [1] http://pkgs.fedoraproject.org/cgit/rpms/mesa.git/commit/?id=629c8726  
+>>>
+>>> Hi,
+>>>
+>>> I am unsure about this patch, why shouldn't we use asm code when 
+>>> crosscompiling for host == target CPU?  
+>>
+>> To be honest I don't really have an issue with assembly being enabled for my use
+>> case. But there is an issue when you want a reproducible build with the same
+>> defconfig build on a x86 and x86_64 host.
+> 
+> For which architectures is the assembly code available? We should
+> forcefully enable it for those architectures.
 
-I've applied the patch, but after doing a few changes.
+Assembly code is available for x86, x86_64/amd64 and sparc (see configure.ac).
 
-First of all, you forgot to add yourself to the DEVELOPERS file for
-this package, so I've added that. It's really important to do it, as it
-ensures that you will be notified when there is a build failure for
-this package.
+The issue while cross-compiling is when assembly are enabled, the build system
+build and run a small tool called gen_matypes on the host.
 
-> diff --git a/package/libmediaart/Config.in b/package/libmediaart/Config.in
-> new file mode 100644
-> index 0000000..5b6b6a7
-> --- /dev/null
-> +++ b/package/libmediaart/Config.in
-> @@ -0,0 +1,44 @@
-> +config BR2_PACKAGE_LIBMEDIAART
-> +	bool "libmediaart"
-> +	depends on BR2_USE_MMU # glib2
-> +	depends on BR2_USE_WCHAR # glib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	help
-> +	  Library tasked with managing, extracting and handling media
-> +	  art caches
-> +
-> +	  https://github.com/GNOME/libmediaart
-> +
-> +comment "libmediaart needs a toolchain w/ wchar, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+"disable if cross compiling on x86/x86_64 since we must run gen_matypes"
 
-Having the comment here (between the definition of the main option and
-the sub-options) breaks the indentation of the sub-options. So it
-should either go at the top of the Config.in file, or at the very end.
-I've opted for the former.
+So it allow to enable assembly code while cross-compiling only when the host =
+target.
 
-> +LIBMEDIAART_VERSION_MAJOR = 1.9
-> +LIBMEDIAART_VERSION = $(LIBMEDIAART_VERSION_MAJOR).1
-> +LIBMEDIAART_SOURCE = libmediaart-$(LIBMEDIAART_VERSION).tar.xz
-> +LIBMEDIAART_SITE = \
-> +	http://ftp.gnome.org/pub/gnome/sources/libmediaart/$(LIBMEDIAART_VERSION_MAJOR)
-> +LIBMEDIAART_LICENSE = LGPLv2.1+
-> +LIBMEDIAART_LICENSE_FILES = COPYING
+> 
+> I agree with Romain that we shouldn't depend on something that looks at
+> the architecture of the host machine to decide if a feature for the
+> target should be enabled or not.
 
-This was not correct: COPYING is the text of GPLv2, not LGPLv2.1. I've
-changed it to COPYING.LESSER, which really contains the text of
-LGPLv2.1.
+I believe we don't have the choice... we need to disable it.
 
-The only thing under GPLv2 seems to be the tests, which you disable, so
-I've left this outside of the license information in the package.
+Best regards,
+Romain
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> 
+> Thomas
+> 
