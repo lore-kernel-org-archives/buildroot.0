@@ -1,51 +1,155 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Mar 2017 08:43:32 +0200
-Subject: [Buildroot] [PATCH 2/4] core: allow packages to declare a
- permission file
-In-Reply-To: <56824752-a1bd-730a-b9f6-465eec832da7@mind.be>
-References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <56824752-a1bd-730a-b9f6-465eec832da7@mind.be>
-Message-ID: <0ae8c865-9540-2c3c-d2b4-e6a195179b59@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 29 Mar 2017 11:43:05 +0200
+Subject: [Buildroot] [PATCHv3] core: enhance printvars
+Message-ID: <20170329094305.18098-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Currently, the output of printvars copntains the name of the variable,
+its expanded value and its un-expanded value.
 
+However, most of the time, we need the actual, expanded value, so it can
+be re-used from a (non-Buildroot) infrastructure script, like a
+post-build script, or a build-farm driver (e.g. a Jenkins job...)
 
-On 29-03-17 00:12, Arnout Vandecappelle wrote:
-[snip]
-> define BUSYBOX_PERMISSIONS
-> 	$(foreach app,$(shell \
-> 		for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE"
-> $(BUSYBOX_DIR)/include/applets.h \
-> 			| sed -e 's/,.*//' -e 's/.*(//'`; \
-> 		do \
-> 			grep -w $${app} $(BUSYBOX_DIR)/busybox.links; \
-> 		done #) ),$(app) f 4755 0  0 - - - - -$(sep))
-> endef
-> 
->  For that to work, the condition around PACKAGES_PERMISSIONS_TABLES += must be
-> removed, but that's fine IMO (just adds a lot of empty lines to the device
-> table, but that doesn't hurt). The #) is a bit ugly but I'm sure a better
-> solution can be found.
-> 
->  With that solution, patches 2 and 3 wouldn't be needed.
+Add two options that a user may set to change the output of printvars:
+  - QUOTED_VARS, if set, will quote the value
+  - RAW_VARS, if set, will print the unexpanded value
 
- And an even simpler approach would be to always run the installation commands
-under fakeroot (with the -i -s options of course) That would simplify a lot of
-things. But there are probably problems with that approach as well - e.g.
-nothing should install/remove anything in target outside of the install-target step.
+The new output by default only prints the expanded value now.
 
- Regards,
- Arnout
+So that it can be used as such:
 
+    $ make -s printvars VARS=BUSYBOX_VERSION
+    BUSYBOX_VERSION=1.26.2
+
+    $ make -s printvars VARS=BUSYBOX_RDEPENDENCIES QUOTED_VARS=YES
+    BUSYBOX_RDEPENDENCIES='ncurses util-linux'
+
+    $ make -s printvars VARS=BUSYBOX_FINAL_PATCH_DEPENDENCIES RAW_VARS=YES
+    BUSYBOX_FINAL_PATCH_DEPENDENCIES=$(sort $(BUSYBOX_PATCH_DEPENDENCIES))
+
+And it is even possible to directly evaluate it in a shell script:
+
+    eval $(make -s printvars VARS=BUSYBOX_VERSION QUOTED_VARS=YES)
+
+Backward compatibility of the output is not maintained. It is believed
+that scripts that depended on the previous output were very fragile to
+begin with, because they had to filter the non-formatted output
+(splitting on spaces or braces was not really possible, because values
+could contain either).
+
+Document printvars and its options in the manual; list it in the output
+of 'make help'.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+
+---
+Changes v2 -> v3:
+  - properly quote values with quotes in them  (Arnout)
+  - typo in manual  (Arnout)
+  - fix shell-eval example
+  - reword output of 'make help'
+
+Changes v1 -> v2:
+  - add the documentation  (Thomas, Arnout)
+  - change the meaning of conmfig variables  (Thomas, Arnout)
+  - don't maintain backward compatibility  (Thomas, Arnout)
+---
+ Makefile                  |  6 +++++-
+ docs/manual/make-tips.txt | 54 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index cceae92..886bd96 100644
+--- a/Makefile
++++ b/Makefile
+@@ -940,7 +940,10 @@ printvars:
+ 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+-		$(info $V=$($V) ($(value $V)))))
++		$(if $(QUOTED_VARS),\
++			$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
++			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
++# ' Syntax colouring...
+ 
+ clean:
+ 	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+@@ -1018,6 +1021,7 @@ help:
+ 	@echo '  source-check           - check selected packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
++	@echo '  printvars              - dump all the internal variables'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 97a3302..ea1d825 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -77,3 +77,57 @@ To delete all build products as well as the configuration:
+ If +ccache+ is enabled, running +make clean+ or +distclean+ does
+ not empty the compiler cache used by Buildroot. To delete it, refer
+ to xref:ccache[].
++
++.Dumping the internal make variables:
++
++One can dump all the variables known to make, along with their values:
++
++----
++ $ make -s printvars
++ VARIABLE=value_of_variable
++ ...
++----
++
++It is possible to tweak the output using some variables:
++
++- +VARS+ will limit the listing to variables which names match the
++  specified make-pattern
++- +QUOTED_VARS+, if set to +YES+, will single-quote the value
++- +RAW_VARS+, if set to +YES+, will print the unexpanded value
++
++For example:
++
++----
++ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES
++ BUSYBOX_DEPENDENCIES=skeleton toolchain
++ BUSYBOX_FINAL_ALL_DEPENDENCIES=skeleton toolchain
++ BUSYBOX_FINAL_DEPENDENCIES=skeleton toolchain
++ BUSYBOX_FINAL_PATCH_DEPENDENCIES=
++ BUSYBOX_RDEPENDENCIES=ncurses util-linux
++----
++
++----
++ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
++ BUSYBOX_DEPENDENCIES='skeleton toolchain'
++ BUSYBOX_FINAL_ALL_DEPENDENCIES='skeleton toolchain'
++ BUSYBOX_FINAL_DEPENDENCIES='skeleton toolchain'
++ BUSYBOX_FINAL_PATCH_DEPENDENCIES=''
++ BUSYBOX_RDEPENDENCIES='ncurses util-linux'
++----
++
++----
++ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES RAW_VARS=YES
++ BUSYBOX_DEPENDENCIES=skeleton toolchain
++ BUSYBOX_FINAL_ALL_DEPENDENCIES=$(sort $(BUSYBOX_FINAL_DEPENDENCIES) $(BUSYBOX_FINAL_PATCH_DEPENDENCIES))
++ BUSYBOX_FINAL_DEPENDENCIES=$(sort $(BUSYBOX_DEPENDENCIES))
++ BUSYBOX_FINAL_PATCH_DEPENDENCIES=$(sort $(BUSYBOX_PATCH_DEPENDENCIES))
++ BUSYBOX_RDEPENDENCIES=ncurses util-linux
++----
++
++The output of quoted variables can be reused in shell scripts, for example:
++
++----
++ $ eval $(make -s printvars VARS=BUSYBOX_DEPENDENCIES QUOTED_VARS=YES)
++ $ echo $BUSYBOX_DEPENDENCIES
++ skeleton toolchain
++----
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
