@@ -1,80 +1,46 @@
 From: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
-Date: Wed, 29 Mar 2017 10:51:20 -0400
-Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
-	BR2_GENIMAGE_CFG_FILES
-In-Reply-To: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
-References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
-Message-ID: <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
+Date: Wed, 29 Mar 2017 10:51:16 -0400
+Subject: [Buildroot] [RFC 0/4] add genimage Kconfig entry
+Message-ID: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the new BR2_GENIMAGE_CFG_FILES Kconfig symbol to reduce
-boilerplate and use the generic genimage wrapper.
+Many boards specific postimage scripts are almost use only to execute
+the genimage host tool.
 
-Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
----
+The purpose of this RFC is to provide a generic wrapper for the
+genimage tool, in order to reduce boilerplate.
+
+The first two patches add the generic genimage plumbing.
+The next two patches are examples of post-image scripts simplification.
+
+The new target-genimage targer is called after the target-post-image
+target since that is most of the board use cases. odroidc2 is an
+exception, we can still execute genimage in its post-image script.
+
+If there is no objection to the first two patches, I will submit a new
+patch series introducing this change to all boards using genimage.
+
+Etienne Phelip (4):
+  support/scripts: add generic genimage script
+  system: add option to pass genimage config files
+  configs/raspberrypi3_defconfig: set BR2_GENIMAGE_CFG_FILES
+  board/acmesystems/aria-g25: set BR2_GENIMAGE_CFG_FILES
+
+ Makefile                                     |  9 +++++++--
  board/acmesystems/aria-g25/post-image.sh     | 14 --------------
+ board/raspberrypi/post-image.sh              | 16 ----------------
  configs/acmesystems_aria_g25_128mb_defconfig |  2 +-
  configs/acmesystems_aria_g25_256mb_defconfig |  2 +-
- 3 files changed, 2 insertions(+), 16 deletions(-)
+ configs/raspberrypi3_defconfig               |  1 +
+ support/scripts/genimage.sh                  | 27 +++++++++++++++++++++++++++
+ system/Config.in                             | 11 +++++++++++
+ 8 files changed, 48 insertions(+), 34 deletions(-)
  delete mode 100755 board/acmesystems/aria-g25/post-image.sh
+ create mode 100755 support/scripts/genimage.sh
 
-diff --git a/board/acmesystems/aria-g25/post-image.sh b/board/acmesystems/aria-g25/post-image.sh
-deleted file mode 100755
-index 2846f56..0000000
---- a/board/acmesystems/aria-g25/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage  \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
-diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
-index 0ec210f..23bb8b9 100644
---- a/configs/acmesystems_aria_g25_128mb_defconfig
-+++ b/configs/acmesystems_aria_g25_128mb_defconfig
-@@ -8,7 +8,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/aria-g25/post-image.sh"
- 
- # Kernel configuration
- BR2_LINUX_KERNEL=y
-@@ -34,3 +33,4 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_GENIMAGE_CFG_FILES="board/acmesystems/aria-g25/genimage.cfg"
-diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
-index a480287..9b44bbe 100644
---- a/configs/acmesystems_aria_g25_256mb_defconfig
-+++ b/configs/acmesystems_aria_g25_256mb_defconfig
-@@ -8,7 +8,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/aria-g25/post-image.sh"
- 
- # Kernel configuration
- BR2_LINUX_KERNEL=y
-@@ -34,3 +33,4 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_GENIMAGE_CFG_FILES="board/acmesystems/aria-g25/genimage.cfg"
 -- 
 2.9.3
