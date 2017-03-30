@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 Mar 2017 22:47:31 +0200
-Subject: [Buildroot] [PATCH 4/4] fs/ext2: Make filesystem size a string
-In-Reply-To: <1490372432-879-4-git-send-email-sebastien.szymanski@armadeus.com>
-References: <1490372432-879-1-git-send-email-sebastien.szymanski@armadeus.com>
- <1490372432-879-4-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <350aea1b-8e76-2241-0381-16e803fecfc8@mind.be>
+Date: Thu, 30 Mar 2017 22:47:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sdl_sound: fix build with physfs
+In-Reply-To: <20170330043123.GA25980@tungsten.ozlabs.ibm.com>
+References: <20170330043123.GA25980@tungsten.ozlabs.ibm.com>
+Message-ID: <7ed49806-e3bc-e5db-63bf-87bbdaa8a491@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,106 +12,90 @@ To: buildroot@busybox.net
 
 
 
-On 24-03-17 17:20, S?bastien Szymanski wrote:
-> It allows the user to enter a size with 'k', 'm', 'g', or 't' suffix.
-> Also drop BR2_TARGET_ROOTFS_EXT2_BLOCKS and use
-> BR2_TARGET_ROOTFS_EXT2_SIZE instead.
+On 30-03-17 06:31, Sam Bobroff wrote:
+> A buildroot package for physfs has recently been added, and if it is
+> detected by sdl_sound's configure it enables code in the simple
+> player which fails to build (if the player is enabled).
 > 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->  Config.in.legacy  | 13 +++++++++++++
->  fs/ext2/Config.in | 11 ++++++++---
->  fs/ext2/ext2.mk   |  2 +-
->  3 files changed, 22 insertions(+), 4 deletions(-)
+> (The build problem is due to physfs renaming a macro which has not been
+> reflected in sdl_sound.)
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index b5a68aa..04fd247 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,19 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2017.05"
->  
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> +	int "exact size in KB has been removed"
-> +	default 65536
+> So, add the physfs dependency to the package information and correct
+> the build problem with a patch taken from Arch Linux, where they seem
+> to have already found and fixed this issue.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/ae5839b978244c434dd86d49b672c437a7b19a66
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 
- This should be "default 0" (and 0 everywhere else as well). The legacy handling
-always compares to the previous Buildroot release, and in 2017.02 the default was 0.
-
- If this doesn't make it into 2017.05, that's something else entirely. But I'm
-sure we'll get it for 2017.05...
-
-> +	help
-> +	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
-> +	  Set this option to 65536 and set BR2_TARGET_ROOTFS_EXT2_SIZE to your
-> +	  needs.
-
- See below, BR2_TARGET_ROOTFS_EXT2_SIZE can be set automatically.
-
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
-> +	bool
-> +	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 65536
-> +	select BR2_LEGACY
-> +
->  config BR2_PACKAGE_HOST_MKE2IMG
->  	bool "host mke2img has been removed"
->  	select BR2_LEGACY
-> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-> index dfc3b0a..8486a1e 100644
-> --- a/fs/ext2/Config.in
-> +++ b/fs/ext2/Config.in
-> @@ -44,9 +44,14 @@ config BR2_TARGET_ROOTFS_EXT2_REV
->  config BR2_TARGET_ROOTFS_EXT2_LABEL
->  	string "filesystem label"
->  
-> -config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> -	int "exact size in KB"
-> -	default 65536
-> +config BR2_TARGET_ROOTFS_EXT2_SIZE
-> +	string "exact size"
-> +	default "64M"
-
- Default should be 60M, of course.
-
- We can do a little bit better for legacy handling, because we can actually use
-the old int value as the string default:
-
- 	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 #
-legacy 2017.05
-
-
-
-> +	help
-> +	  The size of the filesystem image. If it does not have a suffix, it is
-> +	  interpreted as power-of-two kilobytes. If it is suffixed by 'k', 'm',
-> +	  'g', 't' (either upper-case or lower-case), then it is interpreted in
-> +	  power-of-two kilobytes, megabytes, gigabytes, terabytes, etc.
->  
->  config BR2_TARGET_ROOTFS_EXT2_INODES
->  	int "exact number of inodes (leave at 0 for auto calculation)"
-> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index 3872e52..7b64c42 100644
-> --- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -30,7 +30,7 @@ endif
->  ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
->  
->  define ROOTFS_EXT2_CMD
-> -	PATH=$(BR_PATH) mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
-> +	PATH=$(BR_PATH) mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ $(strip $(BR2_TARGET_ROOTFS_EXT2_SIZE))
-
- This should be qstrip, not strip. Strip is useless, there are no quotes around it.
-
- Oh, forgot to mention in my previous mail: this line is too long.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
->  endef
+> ---
+>  package/sdl_sound/0003-renamed-physfs-export.patch | 32 ++++++++++++++++++++++
+>  package/sdl_sound/sdl_sound.mk                     |  7 +++++
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 package/sdl_sound/0003-renamed-physfs-export.patch
+> 
+> diff --git a/package/sdl_sound/0003-renamed-physfs-export.patch b/package/sdl_sound/0003-renamed-physfs-export.patch
+> new file mode 100644
+> index 000000000..3aeded329
+> --- /dev/null
+> +++ b/package/sdl_sound/0003-renamed-physfs-export.patch
+> @@ -0,0 +1,32 @@
+> +This patch is taken from the Arch Linux User Repository, see:
+> +https://aur.archlinux.org/packages/sdl_sound-patched-hg/
+> +
+> +Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> +
+> +diff -ru SDL_sound.orig/playsound/physfsrwops.h SDL_sound/playsound/physfsrwops.h
+> +--- SDL_sound.orig/playsound/physfsrwops.h	2014-01-11 06:28:35.494936000 +0100
+> ++++ SDL_sound/playsound/physfsrwops.h	2014-01-11 06:31:38.315675483 +0100
+> +@@ -29,6 +29,11 @@
+> + extern "C" {
+> + #endif
+> + 
+> ++/* renamed in physfs dev, add alias */
+> ++#ifdef PHYSFS_DECL
+> ++#define __EXPORT__ PHYSFS_DECL
+> ++#endif
+> ++
+> + /**
+> +  * Open a platform-independent filename for reading, and make it accessible
+> +  *  via an SDL_RWops structure. The file will be closed in PhysicsFS when the
+> +@@ -77,6 +82,11 @@
+> +  */
+> + __EXPORT__ SDL_RWops *PHYSFSRWOPS_makeRWops(PHYSFS_file *handle);
+> + 
+> ++/* renamed in physfs dev, remove alias */
+> ++#ifdef PHYSFS_DECL
+> ++#undef __EXPORT__
+> ++#endif
+> ++
+> + #ifdef __cplusplus
+> + }
+> + #endif
+> diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+> index 4fa7d9be0..42448043b 100644
+> --- a/package/sdl_sound/sdl_sound.mk
+> +++ b/package/sdl_sound/sdl_sound.mk
+> @@ -45,6 +45,13 @@ else
+>  SDL_SOUND_CONF_OPTS += --disable-speex
+>  endif
 >  
->  rootfs-ext2-symlink:
+> +ifeq ($(BR2_PACKAGE_PHYSFS),y)
+> +SDL_SOUND_CONF_OPTS += --enable-physfs
+> +SDL_SOUND_DEPENDENCIES += physfs
+> +else
+> +SDL_SOUND_CONF_OPTS += --disable-physfs
+> +endif
+> +
+>  SDL_SOUND_CONF_OPTS = \
+>  	--with-sdl-prefix=$(STAGING_DIR)/usr \
+>  	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
 > 
 
 -- 
