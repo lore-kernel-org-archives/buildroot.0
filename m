@@ -1,50 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 09:09:46 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] core/br2-external:
-	properly report unexpected errors
-Message-ID: <20170331071607.4CFA3826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 00:16:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] skalibs: fix endianness
+	detection on x86
+Message-ID: <20170331071605.B05C5826C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e29fa95b8368f9b85a1bfb2cef9741c6218c59b3
+commit: https://git.buildroot.net/buildroot/commit/?id=eb021f3547a721d77de73789bd23a44c6e3ea8f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Unextected error in the br2-external script are properly caught, but
-they are not reported properly, and we end up in either of two
-situations:
+Update the patch for compile time endianness detection so it works on
+x86 platforms using GCC <= 4.4.
 
-  - the .br2-external.mk file is not generated, in which case make will
-    try to find a rule to generate it (because the 'include' directive
-    tries to generate missing files);
+Fixes:
 
-  - the .br-external.mk file is generated but does not contain the error
-    variable, and thus the build might not get interrupted.
+  http://autobuild.buildroot.net/results/c2e8e1180571976b412cbba729c45a3698aea0b2
+  http://autobuild.buildroot.net/results/2ee47107d8a67470f7bc3e10cf763202d5455d17
 
-We fix that by using a trap on the pseudo ERR signal, to emit the error
-variable on unexpected errors.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c5fa9308ea4e3810a7f7d9d0df75cbf090c414c4)
+(cherry picked from commit 8eecaf2d122f7da6f59964f5eb00139a32373d06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/br2-external | 3 +++
- 1 file changed, 3 insertions(+)
+ .../skalibs/0001-No-runtime-tests-for-endianness.patch  | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index 26bcac8..7e81608 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -40,6 +40,9 @@ main() {
+diff --git a/package/skalibs/0001-No-runtime-tests-for-endianness.patch b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
+index 4390d44..5f763c4 100644
+--- a/package/skalibs/0001-No-runtime-tests-for-endianness.patch
++++ b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
+@@ -1,6 +1,6 @@
+-From 1e6f0b094c6ce6454be572704b866d2ce0962e59 Mon Sep 17 00:00:00 2001
++From 6754b208e7ec3bd1d4265db18fa4c0e7961a77bf Mon Sep 17 00:00:00 2001
+ From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Sun, 4 Dec 2016 19:10:40 +0100
++Date: Mon, 20 Mar 2017 20:05:00 +0100
+ Subject: [PATCH] No runtime tests for endianness
  
-     exec >"${ofile}"
+ Replace build and execution of runtime test programs for determining
+@@ -12,8 +12,8 @@ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ ---
+  configure                     | 15 +++++++++++----
+  src/sysdeps/trybigendian.c    | 16 ++++++++++++++++
+- src/sysdeps/trylittleendian.c | 16 ++++++++++++++++
+- 3 files changed, 43 insertions(+), 4 deletions(-)
++ src/sysdeps/trylittleendian.c | 19 +++++++++++++++++++
++ 3 files changed, 46 insertions(+), 4 deletions(-)
+  create mode 100644 src/sysdeps/trybigendian.c
+  create mode 100644 src/sysdeps/trylittleendian.c
  
-+    # Trap any unexpected error to generate a meaningful error message
-+    trap "error 'unexpected error while generating ${ofile}\n'" ERR
-+
-     do_validate ${@//:/ }
+@@ -70,16 +70,19 @@ index 0000000..d857572
+ +}
+ diff --git a/src/sysdeps/trylittleendian.c b/src/sysdeps/trylittleendian.c
+ new file mode 100644
+-index 0000000..eba065a
++index 0000000..68b93c1
+ --- /dev/null
+ +++ b/src/sysdeps/trylittleendian.c
+-@@ -0,0 +1,16 @@
++@@ -0,0 +1,19 @@
+ +#if defined(__BYTE_ORDER) && (__BYTE_ORDER == __LITTLE_ENDIAN) ||	\
+ +	defined(__BYTE_ORDER__) && (__BYTE_ORDER__  == __ORDER_LITTLE_ENDIAN__) || \
+ +	defined(__LITTLE_ENDIAN) ||					\
+ +	defined(__ARMEL__) ||						\
+ +	defined(__THUMBEL__) ||					\
+ +	defined(__AARCH64EL__) ||					\
+++	defined(__i386) || defined(__i386__) ||			\
+++	defined(__amd64) || defined(__amd64__) ||			\
+++	defined(__x86_64) || defined(__x86_64__) ||			\
+ +	defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
+ +#define YEAH
+ +#else
+@@ -91,5 +94,5 @@ index 0000000..eba065a
+ +	return 0;
+ +}
+ -- 
+-2.5.5
++2.1.4
  
-     do_${ofmt}
