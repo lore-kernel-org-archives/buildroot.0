@@ -1,72 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:14:06 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] wget: add upstream
-	security fix
-Message-ID: <20170331071605.A2C96826C6@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 00:29:55 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] memcached: bump version
+	to 1.4.36
+Message-ID: <20170331071606.2124C826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05bc9b0c339d3ed0830cff3e702cdccefcf2b068
+commit: https://git.buildroot.net/buildroot/commit/?id=22dd05433e0e0309628489b983569d2d47c57341
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-6508: CRLF injection in the url_parse function in url.c
+From the release notes
+(https://github.com/memcached/memcached/wiki/ReleaseNotes1436):
 
-http://lists.gnu.org/archive/html/bug-wget/2017-03/msg00018.html
+Important bug fix that could lead to a hung slab mover.  Also improves
+memory efficiency of chunked items.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Peter: add release notes link / mention important bug fix]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7132fc9c11573a460243895c85e66b514b71c041)
+
+(cherry picked from commit adfe049d85b09a2ce780ce49f8e53d9cfaf90e2d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-Fix-CRLF-injection-in-Wget-host-part.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
-new file mode 100644
-index 0000000..380b075
---- /dev/null
-+++ b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
-@@ -0,0 +1,40 @@
-+From 4d729e322fae359a1aefaafec1144764a54e8ad4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
-+Date: Mon, 6 Mar 2017 10:04:22 +0100
-+Subject: [PATCH] Fix CRLF injection in Wget host part
-+
-+* src/url.c (url_parse): Reject control characters in host part of URL
-+
-+Reported-by: Orange Tsai
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 4d729e322fae35
-+
-+ src/url.c | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/src/url.c b/src/url.c
-+index 8f8ff0b881af..7d36b27d7b92 100644
-+--- a/src/url.c
-++++ b/src/url.c
-+@@ -925,6 +925,17 @@ url_parse (const char *url, int *error, struct iri *iri, bool percent_encode)
-+       url_unescape (u->host);
-+       host_modified = true;
-+ 
-++      /* check for invalid control characters in host name */
-++      for (p = u->host; *p; p++)
-++        {
-++          if (c_iscntrl(*p))
-++            {
-++              url_free(u);
-++              error_code = PE_INVALID_HOST_NAME;
-++              goto error;
-++            }
-++        }
-++
-+       /* Apply IDNA regardless of iri->utf8_encode status */
-+       if (opt.enable_iri && iri)
-+         {
-+-- 
-+2.11.0
-+
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 3876a08..f9f68d5 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,4 @@
+-# From http://www.memcached.org/files/memcached-1.4.35.tar.gz.sha1
+-sha1 787991c0df75defbb91518c9796f8244852a018a  memcached-1.4.35.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.36.tar.gz.sha1
++sha1 519b417515206b0b95ff9bf14106a891f6a2252e  memcached-1.4.36.tar.gz
+ # Calculated based on the hash above
+-sha256 f4815ac95aa06c0f360052a0a12010533b2b78c3bfe475b171606c1b61469476  memcached-1.4.35.tar.gz
++sha256 773b6bb20bf80223ca6a15d75f570fbab346ad11ec98595e5af5e33f54bd82d8  memcached-1.4.36.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 83d4d59..4de1bf6 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMCACHED_VERSION = 1.4.35
++MEMCACHED_VERSION = 1.4.36
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
