@@ -1,71 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Mar 2017 23:03:32 +0200
-Subject: [Buildroot] [PATCH 2/5] audiofile: add security patch for
-	CVE-2017-6829
-In-Reply-To: <20170330210335.16858-1-peter@korsgaard.com>
-References: <20170330210335.16858-1-peter@korsgaard.com>
-Message-ID: <20170330210335.16858-2-peter@korsgaard.com>
+Date: Thu, 30 Mar 2017 23:03:31 +0200
+Subject: [Buildroot] [PATCH 1/5] audiofile: add security patch for
+	CVE-2017-6827 / CVE-2017-6828 / CVE-2017-6832 / CVE-2017-6833
+	/ CVE-2017-6835 / CVE-2017-6837
+Message-ID: <20170330210335.16858-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The decodeSample function in IMA.cpp in Audio File Library (aka audiofile)
-0.3.6 allows remote attackers to cause a denial of service (crash) via a
-crafted file.
+CVE-2017-6827: A heap-based buffer overflow in the
+MSADPCM::initializeCoefficients function in MSADPCM.cpp in audiofile (aka
+libaudiofile and Audio File Library) 0.3.6 allows remote attackers to have
+unspecified impact via a crafted audio file.
 
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp
-https://github.com/mpruett/audiofile/issues/33
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-msadpcminitializecoefficients-msadpcm-cpp
+https://github.com/mpruett/audiofile/issues/32
+
+CVE-2017-6828: A Heap-based buffer overflow in the readValue function in
+FileHandle.cpp in audiofile (aka libaudiofile and Audio File Library) 0.3.6
+allows remote attackers to have unspecified impact via a crafted WAV file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-readvalue-filehandle-cpp
+https://github.com/mpruett/audiofile/issues/31
+
+CVE-2017-6832: A Heap-based buffer overflow in the decodeBlock in
+MSADPCM.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
+attackers to cause a denial of service (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-msadpcmdecodeblock-msadpcm-cpp
+https://github.com/mpruett/audiofile/issues/36
+
+CVE-2017-6833: The runPull function in libaudiofile/modules/BlockCodec.cpp
+in Audio File Library (aka audiofile) 0.3.6 allows remote attackers to cause
+a denial of service (divide-by-zero error and crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-divide-by-zero-in-blockcodecrunpull-blockcodec-cpp
+https://github.com/mpruett/audiofile/issues/37
+
+CVE-2017-6835: The reset1 function in libaudiofile/modules/BlockCodec.cpp in
+Audio File Library (aka audiofile) 0.3.6 allows remote attackers to cause a
+denial of service (divide-by-zero error and crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-divide-by-zero-in-blockcodecreset1-blockcodec-cpp
+https://github.com/mpruett/audiofile/issues/39
+
+CVE-2017-6837: WAVE.cpp in Audio File Library (aka audiofile) 0.3.6 allows
+remote attackers to cause a denial of service (crash) via vectors related to
+a large number of coefficients.
+
+http://blogs.gentoo.org/ago/2017/02/20/audiofile-multiple-ubsan-crashes/
+https://github.com/mpruett/audiofile/issues/41
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-values-to-fix-index-overflow-in-IMA.cpp.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+ ...3-Always-check-the-number-of-coefficients.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/audiofile/0003-Always-check-the-number-of-coefficients.patch
 
-diff --git a/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+diff --git a/package/audiofile/0003-Always-check-the-number-of-coefficients.patch b/package/audiofile/0003-Always-check-the-number-of-coefficients.patch
 new file mode 100644
-index 000000000..21f899a46
+index 000000000..5c99c3cd7
 --- /dev/null
-+++ b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
-@@ -0,0 +1,39 @@
-+From 25eb00ce913452c2e614548d7df93070bf0d066f Mon Sep 17 00:00:00 2001
++++ b/package/audiofile/0003-Always-check-the-number-of-coefficients.patch
+@@ -0,0 +1,36 @@
++From c48e4c6503f7dabd41f11d4c9c7b7f8960e7f2c0 Mon Sep 17 00:00:00 2001
 +From: Antonio Larrosa <larrosa@kde.org>
-+Date: Mon, 6 Mar 2017 18:02:31 +0100
-+Subject: [PATCH] clamp index values to fix index overflow in IMA.cpp
++Date: Mon, 6 Mar 2017 12:51:22 +0100
++Subject: [PATCH] Always check the number of coefficients
 +
-+This fixes #33
-+(also reported at https://bugzilla.opensuse.org/show_bug.cgi?id=1026981
-+and https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp/)
++When building the library with NDEBUG, asserts are eliminated
++so it's better to always check that the number of coefficients
++is inside the array range.
++
++This fixes the 00191-audiofile-indexoob issue in #41
 +
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ libaudiofile/modules/IMA.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ libaudiofile/WAVE.cpp | 6 ++++++
++ 1 file changed, 6 insertions(+)
 +
-+diff --git a/libaudiofile/modules/IMA.cpp b/libaudiofile/modules/IMA.cpp
-+index 7476d44..df4aad6 100644
-+--- a/libaudiofile/modules/IMA.cpp
-++++ b/libaudiofile/modules/IMA.cpp
-+@@ -169,7 +169,7 @@ int IMA::decodeBlockWAVE(const uint8_t *encoded, int16_t *decoded)
-+ 		if (encoded[1] & 0x80)
-+ 			m_adpcmState[c].previousValue -= 0x10000;
++diff --git a/libaudiofile/WAVE.cpp b/libaudiofile/WAVE.cpp
++index 0e81cf7..61f9541 100644
++--- a/libaudiofile/WAVE.cpp
+++++ b/libaudiofile/WAVE.cpp
++@@ -281,6 +281,12 @@ status WAVEFile::parseFormat(const Tag &id, uint32_t size)
 + 
-+-		m_adpcmState[c].index = encoded[2];
-++		m_adpcmState[c].index = clamp(encoded[2], 0, 88);
++ 			/* numCoefficients should be at least 7. */
++ 			assert(numCoefficients >= 7 && numCoefficients <= 255);
+++			if (numCoefficients < 7 || numCoefficients > 255)
+++			{
+++				_af_error(AF_BAD_HEADER,
+++						"Bad number of coefficients");
+++				return AF_FAIL;
+++			}
 + 
-+ 		*decoded++ = m_adpcmState[c].previousValue;
++ 			m_msadpcmNumCoefficients = numCoefficients;
 + 
-+@@ -210,7 +210,7 @@ int IMA::decodeBlockQT(const uint8_t *encoded, int16_t *decoded)
-+ 			predictor -= 0x10000;
-+ 
-+ 		state.previousValue = clamp(predictor, MIN_INT16, MAX_INT16);
-+-		state.index = encoded[1] & 0x7f;
-++		state.index = clamp(encoded[1] & 0x7f, 0, 88);
-+ 		encoded += 2;
-+ 
-+ 		for (int n=0; n<m_framesPerPacket; n+=2)
 +-- 
 +2.11.0
 +
