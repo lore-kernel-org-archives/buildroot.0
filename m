@@ -1,40 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 Mar 2017 23:56:47 +0200
-Subject: [Buildroot] [PATCH 04/21] boot,
- package: use SPDX short identifier for GPLv3/GPLv3+
-In-Reply-To: <1490881430-10434-5-git-send-email-rahulbedarkar89@gmail.com>
-References: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
- <1490881430-10434-5-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <9036f4ae-2d0a-4ea7-741d-7bfb32d41627@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 Mar 2017 00:08:11 +0200
+Subject: [Buildroot] [git commit] acl: make sure build picks up
+	TARGET_CFLAGS
+In-Reply-To: <20170318131148.A0068806B5@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 18 Mar 2017 14:09:32 +0100")
+References: <20170318131148.A0068806B5@busybox.osuosl.org>
+Message-ID: <87wpb62zas.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > commit: https://git.buildroot.net/buildroot/commit/?id=99c9b0affde4fcc3270425319b98a0e5e32f5964
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 30-03-17 15:43, Rahul Bedarkar wrote:
-> We want to use SPDX identifier for license string as much as possible.
-> SPDX short identifier for GPLv3/GPLv3+ is GPL-3.0/GPL-3.0+.
-> 
-> This change is done using following command.
-> find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/\<GPLv3\>/GPL-3.0/g'
-> 
-> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+ > The acl build system doesn't use automake, therefore it is broken. It
+ > doesn't use the CFLAGS passed by configure. Work around this by passing
+ > CFLAGS in the environment. The makefiles append to CFLAGS, so this
+ > works.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > This issue hasn't led to build failures, but it is visible e.g. when
+ > stack protector is enabled: the stack protector options are not applied
+ > to acl. Also debug and optimisation options aren't applied.
 
-Fully reviewed manually again, as well as with the reverse sed.
-But now I have a headache :-)
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Regards,
- Arnout
+Committed to 2017.02.x, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
