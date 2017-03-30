@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 31 Mar 2017 00:51:08 +0200
-Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
-	BR2_GENIMAGE_CFG_FILES
-In-Reply-To: <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
+Date: Fri, 31 Mar 2017 00:51:30 +0200
+Subject: [Buildroot] [RFC 1/4] support/scripts: add generic genimage
+	script
+In-Reply-To: <20170329145120.11863-2-etienne.phelip@savoirfairelinux.com>
 References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
- <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
-Message-ID: <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
+ <20170329145120.11863-2-etienne.phelip@savoirfairelinux.com>
+Message-ID: <4a4ed2c9-51e5-c14e-22bc-0e768cc4ecc9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +15,56 @@ To: buildroot@busybox.net
 
 
 On 29-03-17 16:51, Etienne Phelip wrote:
-> diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
-> index 0ec210f..23bb8b9 100644
-> --- a/configs/acmesystems_aria_g25_128mb_defconfig
-> +++ b/configs/acmesystems_aria_g25_128mb_defconfig
-> @@ -8,7 +8,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
->  BR2_TARGET_GENERIC_ISSUE="Welcome to Aria-G25 Buildroot"
->  BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
->  BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/aria-g25/post-image.sh"
->  
->  # Kernel configuration
->  BR2_LINUX_KERNEL=y
-> @@ -34,3 +33,4 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_GENIMAGE_CFG_FILES="board/acmesystems/aria-g25/genimage.cfg"
+> This script is a wrapper for the genimage tool used by most boards.
+> The board postimage script can now call this script instead of invoking
+> genimage command themselves.
+> 
+> Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
 
- I'm still not entirely sure if this new option is worthwhile. Without it, you
-would instead need
-
-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="board/acmesystems/aria-g25/genimage.cfg"
-
-Not really complicated either... The only real advantage I see is that it
-motivates people more to use genimage (which is otherwise a bit hidden). But for
-that, a paragraph or two in docs/manual/customize-post-image.txt would also
-work. By the way, even for this series an explanation of the option would be
-required in that file.
-
- What do the others think?
-
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
+> ---
+>  support/scripts/genimage.sh | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100755 support/scripts/genimage.sh
+> 
+> diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+> new file mode 100755
+> index 0000000..0ed0e8b
+> --- /dev/null
+> +++ b/support/scripts/genimage.sh
+> @@ -0,0 +1,27 @@
+> +#!/bin/bash
+> +
+> +die() {
+> +  echo "Error: $@" >&2
+> +  exit 1
+> +}
+> +
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +
+> +while getopts c: OPT ; do
+> +	case "${OPT}" in
+> +	c) GENIMAGE_CFG="${OPTARG}";;
+> +	:) die "option '${OPTARG}' expects a mandatory argument\n";;
+> +	\?) die "unknown option '${OPTARG}'\n";;
+> +	esac
+> +done
+> +
+> +[ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
+> +
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +genimage \
+> +	--rootpath "${TARGET_DIR}"     \
+> +	--tmppath "${GENIMAGE_TMP}"    \
+> +	--inputpath "${BINARIES_DIR}"  \
+> +	--outputpath "${BINARIES_DIR}" \
+> +	--config "${GENIMAGE_CFG}"
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
