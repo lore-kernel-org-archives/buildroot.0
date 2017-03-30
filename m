@@ -1,10 +1,10 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Thu, 30 Mar 2017 19:13:49 +0530
-Subject: [Buildroot] [PATCH 20/21] scripts/scancpan: use SPDX short
+Date: Thu, 30 Mar 2017 19:13:50 +0530
+Subject: [Buildroot] [PATCH 21/21] scripts/scanpypi: use SPDX short
 	identifier for license
 In-Reply-To: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
 References: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1490881430-10434-21-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <1490881430-10434-22-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- support/scripts/scancpan | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/scanpypi | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index b6123de..8d44ed9 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -688,7 +688,7 @@ while (my ($distname, $dist) = each %dist) {
-         $license =~ s|artistic_2|Artistic-2.0|;
-         $license =~ s|mit|MIT|;
-         $license =~ s|openssl|OpenSSL|;
--        $license =~ s|perl_5|Artistic or GPLv1+|;
-+        $license =~ s|perl_5|Artistic or GPL-1.0+|;
-         my $license_files = join q{ }, @{$license_files{$distname}};
-         say qq{write ${mkname}} unless $quiet;
-         open my $fh, q{>}, $mkname;
+diff --git a/support/scripts/scanpypi b/support/scripts/scanpypi
+index e150ae5..e174ac6 100755
+--- a/support/scripts/scanpypi
++++ b/support/scripts/scanpypi
+@@ -380,18 +380,18 @@ class BuildrootPackage():
+         license_dict = {
+             'Apache Software License': 'Apache-2.0',
+             'BSD License': 'BSD',
+-            'European Union Public Licence 1.0': 'EUPLv1.0',
+-            'European Union Public Licence 1.1': 'EUPLv1.1',
++            'European Union Public Licence 1.0': 'EUPL-1.0',
++            'European Union Public Licence 1.1': 'EUPL-1.1',
+             "GNU General Public License": "GPL",
+-            "GNU General Public License v2": "GPLv2",
+-            "GNU General Public License v2 or later": "GPLv2+",
+-            "GNU General Public License v3": "GPLv3",
+-            "GNU General Public License v3 or later": "GPLv3+",
+-            "GNU Lesser General Public License v2": "LGPLv2.1",
+-            "GNU Lesser General Public License v2 or later": "LGPLv2.1+",
+-            "GNU Lesser General Public License v3": "LGPLv3",
+-            "GNU Lesser General Public License v3 or later": "LGPLv3+",
+-            "GNU Library or Lesser General Public License": "LGPLv2",
++            "GNU General Public License v2": "GPL-2.0",
++            "GNU General Public License v2 or later": "GPL-2.0+",
++            "GNU General Public License v3": "GPL-3.0",
++            "GNU General Public License v3 or later": "GPL-3.0+",
++            "GNU Lesser General Public License v2": "LGPL-2.1",
++            "GNU Lesser General Public License v2 or later": "LGPL-2.1+",
++            "GNU Lesser General Public License v3": "LGPL-3.0",
++            "GNU Lesser General Public License v3 or later": "LGPL-3.0+",
++            "GNU Library or Lesser General Public License": "LGPL-2.0",
+             "ISC License": "ISC",
+             "MIT License": "MIT",
+             "Mozilla Public License 1.0": "MPL-1.0",
 -- 
 2.6.2
