@@ -1,32 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 Mar 2017 20:34:37 +0200
-Subject: [Buildroot] [PATCH 1/1] libmediaart: fix qt5 build
-Message-ID: <1490898877-4000-1-git-send-email-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 30 Mar 2017 21:39:50 +0200
+Subject: [Buildroot] [PATCH] shairport-sync: requires C++
+In-Reply-To: <20170329215422.702b1840@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 29 Mar 2017 21:54:22 +0200")
+References: <208617074343a6ecf1be15a96c82bdb148d5b675.1490814571.git.baruch@tkos.co.il>
+ <20170329215422.702b1840@free-electrons.com>
+Message-ID: <8760iq4kqh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use BR2_PACKAGE_QT5_VERSION_LATEST instead of BR2_QT5_VERSION_LATEST
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmediaart/libmediaart.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Hello,
+ > On Wed, 29 Mar 2017 22:09:31 +0300, Baruch Siach wrote:
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/122/122d6cedf0205e8db27d498d6a2a839e11e7b6f2/
+ >> http://autobuild.buildroot.net/results/bef/bef5fb328e6688107496cb213d8aeeca527abf03/
+ >> 
+ >> Cc: J?rg Krause <joerg.krause@embedded.rocks>
+ >> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ >> ---
+ >> package/shairport-sync/Config.in | 5 +++--
+ >> 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 31f5675..0f1a0f3 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -22,7 +22,7 @@ LIBMEDIAART_CONF_OPTS += \
- 	--disable-qt
- else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_QT),y)
- # qt5 needs c++11 (since qt-5.7)
--ifeq ($(BR2_QT5_VERSION_LATEST),y)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- endif
- LIBMEDIAART_DEPENDENCIES += \
+ > Applied to master, thanks. In practice, most of the code in
+ > shairport-sync is in C, except one file in C++, which is only compiled
+ > conditionally (and we don't build it). However it seems like automake
+ > uses CXX even if the C++ file is not part of the build.
+
+That is afaik because of the unconditional AC_PROG_CXX. For other
+packages (E.G. package/ifplugd/0003-no-cxx.patch) we patch it out, but
+something upstreamable would naturally be nicer.
+
 -- 
-2.5.0
+Bye, Peter Korsgaard
