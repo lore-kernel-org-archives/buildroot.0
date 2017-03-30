@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 Mar 2017 22:47:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sdl_sound: fix build with physfs
-In-Reply-To: <20170330043123.GA25980@tungsten.ozlabs.ibm.com>
-References: <20170330043123.GA25980@tungsten.ozlabs.ibm.com>
-Message-ID: <7ed49806-e3bc-e5db-63bf-87bbdaa8a491@mind.be>
+Date: Thu, 30 Mar 2017 22:54:11 +0200
+Subject: [Buildroot] [PATCH 01/21] docs/manual: refer to SPDX License
+	List
+In-Reply-To: <1490881430-10434-2-git-send-email-rahulbedarkar89@gmail.com>
+References: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
+ <1490881430-10434-2-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <f50ef04f-f1ef-12b3-47cd-249d56dfafea@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,91 +14,55 @@ To: buildroot@busybox.net
 
 
 
-On 30-03-17 06:31, Sam Bobroff wrote:
-> A buildroot package for physfs has recently been added, and if it is
-> detected by sdl_sound's configure it enables code in the simple
-> player which fails to build (if the player is enabled).
+On 30-03-17 15:43, Rahul Bedarkar wrote:
+> We want to use SPDX short identifier for license string as much as
+> possible. So refer to SPDX license list and use SPDX short identifier
+> for license strings in documentation.
 > 
-> (The build problem is due to physfs renaming a macro which has not been
-> reflected in sdl_sound.)
+> Also remove License abbreviations that we have.
 > 
-> So, add the physfs dependency to the package information and correct
-> the build problem with a patch taken from Arch Linux, where they seem
-> to have already found and fixed this issue.
+> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+> ---
+>  docs/manual/adding-packages-generic.txt       | 12 ++---
+>  docs/manual/adding-packages-kernel-module.txt |  4 +-
+>  docs/manual/adding-packages-perl.txt          |  2 +-
+>  docs/manual/adding-packages-python.txt        |  2 +-
+>  docs/manual/legal-notice.txt                  | 75 ---------------------------
+>  5 files changed, 10 insertions(+), 85 deletions(-)
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/ae5839b978244c434dd86d49b672c437a7b19a66
-> 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index a08283c..2c47be1 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -22,7 +22,7 @@ system is based on hand-written Makefiles or shell scripts.
+>  07: LIBFOO_VERSION = 1.0
+>  08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
+>  09: LIBFOO_SITE = http://www.foosoftware.org/download
+> -10: LIBFOO_LICENSE = GPLv3+
+> +10: LIBFOO_LICENSE = GPL-3.0+
+>  11: LIBFOO_LICENSE_FILES = COPYING
+>  12: LIBFOO_INSTALL_STAGING = YES
+>  13: LIBFOO_CONFIG_SCRIPTS = libfoo-config
+> @@ -396,8 +396,8 @@ information is (assuming the package name is +libfoo+) :
+>  * +LIBFOO_LICENSE+ defines the license (or licenses) under which the package
+>    is released.
+>    This name will appear in the manifest file produced by +make legal-info+.
+> -  If the license appears in xref:legal-info-list-licenses[the following list],
+> -  use the same string to make the manifest file uniform.
+> +  If the license appears in https://spdx.org/licenses/[SPDX License List],
+                                                          ^the
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ With this minor thing fixed:
+ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> ---
->  package/sdl_sound/0003-renamed-physfs-export.patch | 32 ++++++++++++++++++++++
->  package/sdl_sound/sdl_sound.mk                     |  7 +++++
->  2 files changed, 39 insertions(+)
->  create mode 100644 package/sdl_sound/0003-renamed-physfs-export.patch
-> 
-> diff --git a/package/sdl_sound/0003-renamed-physfs-export.patch b/package/sdl_sound/0003-renamed-physfs-export.patch
-> new file mode 100644
-> index 000000000..3aeded329
-> --- /dev/null
-> +++ b/package/sdl_sound/0003-renamed-physfs-export.patch
-> @@ -0,0 +1,32 @@
-> +This patch is taken from the Arch Linux User Repository, see:
-> +https://aur.archlinux.org/packages/sdl_sound-patched-hg/
-> +
-> +Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> +
-> +diff -ru SDL_sound.orig/playsound/physfsrwops.h SDL_sound/playsound/physfsrwops.h
-> +--- SDL_sound.orig/playsound/physfsrwops.h	2014-01-11 06:28:35.494936000 +0100
-> ++++ SDL_sound/playsound/physfsrwops.h	2014-01-11 06:31:38.315675483 +0100
-> +@@ -29,6 +29,11 @@
-> + extern "C" {
-> + #endif
-> + 
-> ++/* renamed in physfs dev, add alias */
-> ++#ifdef PHYSFS_DECL
-> ++#define __EXPORT__ PHYSFS_DECL
-> ++#endif
-> ++
-> + /**
-> +  * Open a platform-independent filename for reading, and make it accessible
-> +  *  via an SDL_RWops structure. The file will be closed in PhysicsFS when the
-> +@@ -77,6 +82,11 @@
-> +  */
-> + __EXPORT__ SDL_RWops *PHYSFSRWOPS_makeRWops(PHYSFS_file *handle);
-> + 
-> ++/* renamed in physfs dev, remove alias */
-> ++#ifdef PHYSFS_DECL
-> ++#undef __EXPORT__
-> ++#endif
-> ++
-> + #ifdef __cplusplus
-> + }
-> + #endif
-> diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-> index 4fa7d9be0..42448043b 100644
-> --- a/package/sdl_sound/sdl_sound.mk
-> +++ b/package/sdl_sound/sdl_sound.mk
-> @@ -45,6 +45,13 @@ else
->  SDL_SOUND_CONF_OPTS += --disable-speex
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_PHYSFS),y)
-> +SDL_SOUND_CONF_OPTS += --enable-physfs
-> +SDL_SOUND_DEPENDENCIES += physfs
-> +else
-> +SDL_SOUND_CONF_OPTS += --disable-physfs
-> +endif
-> +
->  SDL_SOUND_CONF_OPTS = \
->  	--with-sdl-prefix=$(STAGING_DIR)/usr \
->  	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
-> 
+> +  use the SPDX short identifier to make the manifest file uniform.
+>    Otherwise, describe the license in a precise and concise way, avoiding
+>    ambiguous names such as +BSD+ which actually name a family of licenses.
+>    This variable is optional. If it is not defined, +unknown+ will appear in
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
