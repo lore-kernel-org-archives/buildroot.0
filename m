@@ -1,41 +1,25 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Thu, 30 Mar 2017 11:24:44 -0300
-Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.10.7
-Message-ID: <1490883885-3215-1-git-send-email-fabio.estevam@nxp.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 30 Mar 2017 12:32:02 -0300 (BRT)
+Subject: [Buildroot] How to run stysctl at system startup?
+Message-ID: <1018995825.16946984.1490887922628.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <festevam@gmail.com>
+Hello,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The procps-ng package does not install a script at /etc/init.d to run
 
-diff --git a/linux/Config.in b/linux/Config.in
-index cace905..3187a52 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.10.6)"
-+	bool "Latest version (4.10.7)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.10.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.10.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+    sysctl --system
+
+Is this purposeful? I can circumvent the problem by means of an init scrip
+in my $(BR2_ROOTFS_OVERLAY)/etc/init.d/ but it would be nice to have that
+script provided by default.
+
 -- 
-2.7.4
+Carlos Santos (Casantos) - DATACOM, P&D
+Rua Am?rica, 1000 - Eldorado do Sul, RS, Brasil - 92990-000
+casantos at datacom.ind.br          +55 51 3933.3000 ext. 3627
+http://www.datacom.ind.br
