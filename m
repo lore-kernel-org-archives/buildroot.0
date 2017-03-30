@@ -1,28 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:30:04 +0200
-Subject: [Buildroot] [PATCH] memcached: bump version to 1.4.36
-In-Reply-To: <87lgrylhbk.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 21 Mar 2017 17:34:23 +0100")
-References: <20170321154008.813-1-Vincent.Riera@imgtec.com>
- <87lgrylhbk.fsf@dell.be.48ers.dk>
-Message-ID: <87bmsi1jpv.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Mar 2017 00:32:14 +0200
+Subject: [Buildroot] [PATCH 1/1] apr: fix size of pid_t
+In-Reply-To: <20170321230453.6165e76d@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 21 Mar 2017 23:04:53 +0100")
+References: <20170321132356.16093-1-julien.beraud@spectracom.orolia.com>
+ <20170321230453.6165e76d@free-electrons.com>
+Message-ID: <877f361jm9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
- >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Hello,
+ > On Tue, 21 Mar 2017 14:23:56 +0100, Julien Beraud wrote:
+ >> pid_t is a signed 32bits integer on both 32bits and 64bits
+ >> architectures.
+ >> This fixes an issue with apache server which causes bad pid
+ >> to be written in PidFile
+ >> 
+ >> Signed-off-by: Julien Beraud <julien.beraud@spectracom.orolia.com>
+ >> ---
+ >> package/apr/apr.mk | 1 +
+ >> 1 file changed, 1 insertion(+)
 
- > Committed after updating the commit message with a link to the release
- > notes and mentioning that this release fixes an important issue (making
- > it a candidate for 2017.02.x backport), thanks.
-
- > Important bug fix that could lead to a hung slab mover. Also improves
- > memory efficiency of chunked items.
+ > I've applied to our master branch, thanks! Peter, I believe this is a
+ > good candidate for the LTS branch.
 
 Committed to 2017.02.x, thanks.
 
