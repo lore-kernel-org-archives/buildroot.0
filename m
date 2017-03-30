@@ -1,51 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:04:17 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] acl: make sure build
-	picks up TARGET_CFLAGS
-Message-ID: <20170331071605.4E13A826C6@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 00:25:56 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gst1-plugins-bad:
+	waylandsink needs wayland-protocols
+Message-ID: <20170331071605.EDE11826C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7c5c7e5f6837bd47fb95d2df96726aeacbaf28f
+commit: https://git.buildroot.net/buildroot/commit/?id=dc9ecb90c58908ffa0d896d4da5b1d4b917253c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The acl build system doesn't use automake, therefore it is broken. It
-doesn't use the CFLAGS passed by configure. Work around this by passing
-CFLAGS in the environment. The makefiles append to CFLAGS, so this
-works.
-
-This issue hasn't led to build failures, but it is visible e.g. when
-stack protector is enabled: the stack protector options are not applied
-to acl. Also debug and optimisation options aren't applied.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+Changes v1 -> v2:
+  - use select instead of depends for BR2_PACKAGE_WAYLAND_PROTOCOLS
+   (suggested by Thomas Petazzoni)
+  - add select BR2_PACKAGE_WAYLAND_PROTOCOLS to missing second
+    place (BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND)
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 99c9b0affde4fcc3270425319b98a0e5e32f5964)
+
+(cherry picked from commit 5a2d37ca125c1742864af0e9324234f8f3ecc071)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acl/acl.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 2 ++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-index cbe5e93..9fd5de1 100644
---- a/package/acl/acl.mk
-+++ b/package/acl/acl.mk
-@@ -15,7 +15,13 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 6bec362..1db5187 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -112,6 +112,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+ 	default y
+ 	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
+ 	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
  
- # While the configuration system uses autoconf, the Makefiles are
- # hand-written and do not use automake. Therefore, we have to hack
--# around their deficiencies by passing installation paths.
-+# around their deficiencies by:
-+# - explicitly passing CFLAGS (LDFLAGS are passed on from configure,
-+#   CFLAGS are not).
-+# - explicitly passing the installation prefix, not using DESTDIR.
-+
-+ACL_MAKE_ENV = CFLAGS="$(TARGET_CFLAGS)"
-+
- ACL_INSTALL_STAGING_OPTS = \
- 	prefix=$(STAGING_DIR)/usr \
- 	exec_prefix=$(STAGING_DIR)/usr \
+ comment "wayland needs the egl platform and the wayland package"
+@@ -686,6 +687,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
+ 	bool "wayland"
+ 	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	default y
+ 	help
+ 	  Wayland Video Sink
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 00add02..c6a151a 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -121,7 +121,7 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-wayland
+-GST1_PLUGINS_BAD_DEPENDENCIES += wayland
++GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-wayland
+ endif
