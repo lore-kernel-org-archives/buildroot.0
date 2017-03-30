@@ -1,10 +1,10 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Thu, 30 Mar 2017 19:13:42 +0530
-Subject: [Buildroot] [PATCH 13/21] package: use SPDX short identifier for
-	MPL family licenses
+Date: Thu, 30 Mar 2017 19:13:43 +0530
+Subject: [Buildroot] [PATCH 14/21] package: use SPDX short identifier for
+	GFDL family licenses
 In-Reply-To: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
 References: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1490881430-10434-14-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <1490881430-10434-15-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,267 +12,379 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 We want to use SPDX identifier for license string as much as possible.
-SPDX short identifier for MPLv1.0/MPLv1.1/MPLv2.0 is MPL-1.0/MPL-1.1/
-MPL-2.0.
+SPDX short identifier for GFDLv1.1/GFDLv1.2/GFDLv1.3 is GFDL-1.1/
+GFDL-1.2/GFDL-1.3.
 
 This change is done using following command.
-find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/MPLv([1-2]\.[0-1])/MPL-\1/g'
+find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/GFDL(v)?([1]\.[1-3])(\+)?/GFDL-\2\3/g'
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- package/armadillo/armadillo.mk             | 2 +-
- package/bind/bind.mk                       | 2 +-
- package/ca-certificates/ca-certificates.mk | 2 +-
- package/cairo/cairo.mk                     | 2 +-
- package/czmq/czmq.mk                       | 2 +-
- package/filemq/filemq.mk                   | 2 +-
- package/freeswitch/freeswitch.mk           | 2 +-
- package/heirloom-mailx/heirloom-mailx.mk   | 2 +-
- package/kmsxx/kmsxx.mk                     | 2 +-
- package/libical/libical.mk                 | 2 +-
- package/libnice/libnice.mk                 | 2 +-
- package/libnspr/libnspr.mk                 | 2 +-
- package/libnss/libnss.mk                   | 2 +-
- package/mp4v2/mp4v2.mk                     | 2 +-
- package/rabbitmq-server/rabbitmq-server.mk | 2 +-
- package/tstools/tstools.mk                 | 2 +-
- package/zmqpp/zmqpp.mk                     | 2 +-
- package/zyre/zyre.mk                       | 2 +-
- 18 files changed, 18 insertions(+), 18 deletions(-)
+ package/libcgicc/libcgicc.mk                           | 2 +-
+ package/qt5/qt5base/qt5base.mk                         | 4 ++--
+ package/qt5/qt5connectivity/qt5connectivity.mk         | 4 ++--
+ package/qt5/qt5declarative/qt5declarative.mk           | 4 ++--
+ package/qt5/qt5enginio/qt5enginio.mk                   | 2 +-
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk | 4 ++--
+ package/qt5/qt5imageformats/qt5imageformats.mk         | 4 ++--
+ package/qt5/qt5location/qt5location.mk                 | 4 ++--
+ package/qt5/qt5multimedia/qt5multimedia.mk             | 4 ++--
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk       | 2 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk     | 2 +-
+ package/qt5/qt5script/qt5script.mk                     | 2 +-
+ package/qt5/qt5sensors/qt5sensors.mk                   | 4 ++--
+ package/qt5/qt5serialbus/qt5serialbus.mk               | 2 +-
+ package/qt5/qt5serialport/qt5serialport.mk             | 4 ++--
+ package/qt5/qt5svg/qt5svg.mk                           | 4 ++--
+ package/qt5/qt5tools/qt5tools.mk                       | 4 ++--
+ package/qt5/qt5webchannel/qt5webchannel.mk             | 4 ++--
+ package/qt5/qt5x11extras/qt5x11extras.mk               | 4 ++--
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk           | 4 ++--
+ package/valgrind/valgrind.mk                           | 2 +-
+ package/xenomai/xenomai.mk                             | 2 +-
+ 22 files changed, 36 insertions(+), 36 deletions(-)
 
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 813a41b..714c1b2 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -8,7 +8,7 @@ ARMADILLO_VERSION = 6.500.4
- ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
- ARMADILLO_DEPENDENCIES = clapack
- ARMADILLO_INSTALL_STAGING = YES
--ARMADILLO_LICENSE = MPLv2.0
-+ARMADILLO_LICENSE = MPL-2.0
- ARMADILLO_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(cmake-package))
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 860ee9d..37ba17c 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -10,7 +10,7 @@ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_MAKE = $(MAKE1)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
--BIND_LICENSE = MPLv2.0
-+BIND_LICENSE = MPL-2.0
- BIND_LICENSE_FILES = COPYRIGHT
- BIND_TARGET_SERVER_SBIN = arpaname ddns-confgen dnssec-checkds dnssec-coverage
- BIND_TARGET_SERVER_SBIN += dnssec-importkey dnssec-keygen dnssec-revoke
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index fafc434..199c6b6 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -12,7 +12,7 @@ CA_CERTIFICATES_DEPENDENCIES = host-openssl
- # but it must be at least python 2.7
- CA_CERTIFICATES_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
--CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPLv2.0 (data)
-+CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
- 
- define CA_CERTIFICATES_BUILD_CMDS
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 8660b5a..0d62dc3 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -6,7 +6,7 @@
- 
- CAIRO_VERSION = 1.14.8
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
--CAIRO_LICENSE = LGPL-2.1 or MPLv1.1 (library)
-+CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
- CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 8c4de71..5305789 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -11,7 +11,7 @@ CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
- CZMQ_AUTORECONF = YES
- CZMQ_INSTALL_STAGING = YES
- CZMQ_DEPENDENCIES = zeromq host-pkgconf
--CZMQ_LICENSE = MPLv2.0
-+CZMQ_LICENSE = MPL-2.0
- CZMQ_LICENSE_FILES = LICENSE
- 
- # asciidoc is a python script that imports unicodedata, which is not in
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 2eadc5d..581e8a8 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -11,7 +11,7 @@ FILEMQ_AUTORECONF = YES
- FILEMQ_CONF_ENV = filemq_have_asciidoc=no
- FILEMQ_INSTALL_STAGING = YES
- FILEMQ_DEPENDENCIES = czmq openssl zeromq
--FILEMQ_LICENSE = MPLv2.0
-+FILEMQ_LICENSE = MPL-2.0
- FILEMQ_LICENSE_FILES = LICENSE
- 
- define FILEMQ_CREATE_CONFIG_DIR
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 4e81854..32439b8 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index 9657f87..09df3a1 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
 @@ -7,7 +7,7 @@
- FREESWITCH_VERSION = 1.6.15
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
--FREESWITCH_LICENSE = MPLv1.1, \
-+FREESWITCH_LICENSE = MPL-1.1, \
- 	GPLv3+ with font exception (fonts), \
- 	Apache-2.0 (apr, apr-util), \
- 	LGPLv2+ (sofia-sip), \
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index f92203e..2f7e635 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
+ LIBCGICC_VERSION = 3.2.16
+ LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.bz2
+-LIBCGICC_LICENSE = LGPL-3.0+ (library), GFDL1.2+ (docs)
++LIBCGICC_LICENSE = LGPL-3.0+ (library), GFDL-1.2+ (docs)
+ LIBCGICC_LICENSE_FILES = COPYING.LIB COPYING.DOC
+ LIBCGICC_INSTALL_STAGING = YES
+ LIBCGICC_AUTORECONF = YES
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index d00d8e7..a91c138 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -50,10 +50,10 @@ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5BASE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5BASE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5BASE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
+index 1cdc9e5..a9518cb 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.mk
++++ b/package/qt5/qt5connectivity/qt5connectivity.mk
+@@ -12,10 +12,10 @@ QT5CONNECTIVITY_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5CONNECTIVITY_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5CONNECTIVITY_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5CONNECTIVITY_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5CONNECTIVITY_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5CONNECTIVITY_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5CONNECTIVITY_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index faf18ac..c4b3f07 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
+@@ -12,10 +12,10 @@ QT5DECLARATIVE_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5DECLARATIVE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5DECLARATIVE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5DECLARATIVE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5DECLARATIVE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5DECLARATIVE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5DECLARATIVE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
+index 46d30de..e550fcc 100644
+--- a/package/qt5/qt5enginio/qt5enginio.mk
++++ b/package/qt5/qt5enginio/qt5enginio.mk
+@@ -13,7 +13,7 @@ QT5ENGINIO_DEPENDENCIES = openssl qt5base
+ QT5ENGINIO_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5ENGINIO_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5ENGINIO_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5ENGINIO_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ QT5ENGINIO_LICENSE := $(QT5ENGINIO_LICENSE), BSD-3-Clause (examples)
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+index 83e6c15..9354a4d 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+@@ -12,10 +12,10 @@ QT5GRAPHICALEFFECTS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
+index 06797be..5d31e14 100644
+--- a/package/qt5/qt5imageformats/qt5imageformats.mk
++++ b/package/qt5/qt5imageformats/qt5imageformats.mk
+@@ -12,10 +12,10 @@ QT5IMAGEFORMATS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5IMAGEFORMATS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5IMAGEFORMATS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5IMAGEFORMATS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5IMAGEFORMATS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
+index 16927ae..24b26b2 100644
+--- a/package/qt5/qt5location/qt5location.mk
++++ b/package/qt5/qt5location/qt5location.mk
+@@ -12,10 +12,10 @@ QT5LOCATION_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5LOCATION_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5LOCATION_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5LOCATION_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5LOCATION_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5LOCATION_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5LOCATION_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index e83aae2..e66ce40 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -12,10 +12,10 @@ QT5MULTIMEDIA_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5MULTIMEDIA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5MULTIMEDIA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5MULTIMEDIA_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5MULTIMEDIA_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index bf566fc..0f11b79 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -11,7 +11,7 @@ QT5QUICKCONTROLS_DEPENDENCIES = qt5base qt5declarative
+ QT5QUICKCONTROLS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5QUICKCONTROLS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDLv1.3 (docs)
++QT5QUICKCONTROLS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
+ QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+ else
+ QT5QUICKCONTROLS_LICENSE = Commercial license
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+index a19a05e..d6c3ee3 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+@@ -11,7 +11,7 @@ QT5QUICKCONTROLS2_DEPENDENCIES = qt5base qt5declarative
+ QT5QUICKCONTROLS2_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5QUICKCONTROLS2_LICENSE = GPL-3.0 or LGPL-3.0, GFDLv1.3 (docs)
++QT5QUICKCONTROLS2_LICENSE = GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
+ QT5QUICKCONTROLS2_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+ else
+ QT5QUICKCONTROLS2_LICENSE = Commercial license
+diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
+index 7e25eb1..c24ef33 100644
+--- a/package/qt5/qt5script/qt5script.mk
++++ b/package/qt5/qt5script/qt5script.mk
+@@ -11,7 +11,7 @@ QT5SCRIPT_DEPENDENCIES = qt5base
+ QT5SCRIPT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5SCRIPT_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5SCRIPT_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5SCRIPT_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ else
+ QT5SCRIPT_LICENSE = Commercial license
+diff --git a/package/qt5/qt5sensors/qt5sensors.mk b/package/qt5/qt5sensors/qt5sensors.mk
+index ee8aeba..f73ae5b 100644
+--- a/package/qt5/qt5sensors/qt5sensors.mk
++++ b/package/qt5/qt5sensors/qt5sensors.mk
+@@ -12,10 +12,10 @@ QT5SENSORS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5SENSORS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5SENSORS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5SENSORS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5SENSORS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5SENSORS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5SENSORS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5serialbus/qt5serialbus.mk b/package/qt5/qt5serialbus/qt5serialbus.mk
+index eb9bf65..05ca181 100644
+--- a/package/qt5/qt5serialbus/qt5serialbus.mk
++++ b/package/qt5/qt5serialbus/qt5serialbus.mk
+@@ -11,7 +11,7 @@ QT5SERIALBUS_DEPENDENCIES = qt5base qt5serialport
+ QT5SERIALBUS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5SERIALBUS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDLv1.3 (docs)
++QT5SERIALBUS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
+ QT5SERIALBUS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+ else
+ QT5SERIALBUS_LICENSE = Commercial license
+diff --git a/package/qt5/qt5serialport/qt5serialport.mk b/package/qt5/qt5serialport/qt5serialport.mk
+index 49b7271..1a137fd 100644
+--- a/package/qt5/qt5serialport/qt5serialport.mk
++++ b/package/qt5/qt5serialport/qt5serialport.mk
+@@ -12,10 +12,10 @@ QT5SERIALPORT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5SERIALPORT_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5SERIALPORT_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5SERIALPORT_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5SERIALPORT_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5SERIALPORT_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5SERIALPORT_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+index 74bc142..8986332 100644
+--- a/package/qt5/qt5svg/qt5svg.mk
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -12,10 +12,10 @@ QT5SVG_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5SVG_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5SVG_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5SVG_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5SVG_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5SVG_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5SVG_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+index d02806b..c7d2e8f 100644
+--- a/package/qt5/qt5tools/qt5tools.mk
++++ b/package/qt5/qt5tools/qt5tools.mk
+@@ -21,10 +21,10 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5TOOLS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5TOOLS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5TOOLS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5TOOLS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5TOOLS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5TOOLS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+index bbd8786..e12e945 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.mk
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -12,10 +12,10 @@ QT5WEBCHANNEL_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5WEBCHANNEL_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5WEBCHANNEL_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5WEBCHANNEL_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5WEBCHANNEL_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5WEBCHANNEL_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5WEBCHANNEL_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
+index b3090cf..7dc371c 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.mk
++++ b/package/qt5/qt5x11extras/qt5x11extras.mk
+@@ -12,10 +12,10 @@ QT5X11EXTRAS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5X11EXTRAS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5X11EXTRAS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5X11EXTRAS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5X11EXTRAS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ else
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index 065bf61..123e1ab 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -12,10 +12,10 @@ QT5XMLPATTERNS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-QT5XMLPATTERNS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDLv1.3 (docs)
++QT5XMLPATTERNS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+-QT5XMLPATTERNS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDLv1.3 (docs)
++QT5XMLPATTERNS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 61f7466..32aeb97 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
 @@ -7,7 +7,7 @@
- HEIRLOOM_MAILX_VERSION = 12.5
- HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
- HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
--HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPLv1.1 (nss)
-+HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPL-1.1 (nss)
- HEIRLOOM_MAILX_LICENSE_FILES = COPYING
+ VALGRIND_VERSION = 3.12.0
+ VALGRIND_SITE = http://valgrind.org/downloads
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+-VALGRIND_LICENSE = GPL-2.0, GFDLv1.2
++VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
+ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
+ VALGRIND_CONF_OPTS = \
+ 	--disable-ubsan \
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 1b0b16c..c9e810e 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -13,7 +13,7 @@ endif
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index c06d20b..fd7b1a0 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -6,7 +6,7 @@
+ XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stable
+ XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+-XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDLv1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
++XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
+ # GFDL is not included but refers to gnu.org
+ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING lib/trank/COPYING kernel/cobalt/COPYING
  
- KMSXX_VERSION = bd5f6471e619a6ba2987bc7f66ef78a531f94d6c
- KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
--KMSXX_LICENSE = MPLv2.0
-+KMSXX_LICENSE = MPL-2.0
- KMSXX_LICENSE_FILES = LICENSE
- KMSXX_INSTALL_STAGING = YES
- KMSXX_DEPENDENCIES = libdrm host-pkgconf
-diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-index 3793429..7125aa8 100644
---- a/package/libical/libical.mk
-+++ b/package/libical/libical.mk
-@@ -7,7 +7,7 @@
- LIBICAL_VERSION = 1.0.1
- LIBICAL_SITE = https://github.com/libical/libical/releases/download/v$(LIBICAL_VERSION)
- LIBICAL_INSTALL_STAGING = YES
--LIBICAL_LICENSE = MPLv1.0 or LGPL-2.1
-+LIBICAL_LICENSE = MPL-1.0 or LGPL-2.1
- LIBICAL_LICENSE_FILES = LICENSE
- 
- # building without this option is broken, it is used by
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-index 61cfb24..5ec2b61 100644
---- a/package/libnice/libnice.mk
-+++ b/package/libnice/libnice.mk
-@@ -6,7 +6,7 @@
- 
- LIBNICE_VERSION = 0.1.13
- LIBNICE_SITE = http://nice.freedesktop.org/releases
--LIBNICE_LICENSE = MPLv1.1 or LGPL-2.1
-+LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
- LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
- LIBNICE_DEPENDENCIES = libglib2 host-pkgconf
- LIBNICE_INSTALL_STAGING = YES
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index d95f970..1fc82be 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -10,7 +10,7 @@ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_
- LIBNSPR_SUBDIR = nspr
- LIBNSPR_INSTALL_STAGING = YES
- LIBNSPR_CONFIG_SCRIPTS = nspr-config
--LIBNSPR_LICENSE = MPLv2.0
-+LIBNSPR_LICENSE = MPL-2.0
- LIBNSPR_LICENSE_FILES = nspr/LICENSE
- 
- # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 76532e8..d624cde 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -10,7 +10,7 @@ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_
- LIBNSS_DISTDIR = dist
- LIBNSS_INSTALL_STAGING = YES
- LIBNSS_DEPENDENCIES = libnspr sqlite zlib
--LIBNSS_LICENSE = MPLv2.0
-+LIBNSS_LICENSE = MPL-2.0
- LIBNSS_LICENSE_FILES = nss/COPYING
- 
- # --gc-sections triggers binutils ld segfault
-diff --git a/package/mp4v2/mp4v2.mk b/package/mp4v2/mp4v2.mk
-index 2acbb4e..b6b7d9a 100644
---- a/package/mp4v2/mp4v2.mk
-+++ b/package/mp4v2/mp4v2.mk
-@@ -8,7 +8,7 @@ MP4V2_VERSION = 2.0.0
- MP4V2_SOURCE = mp4v2-$(MP4V2_VERSION).tar.bz2
- MP4V2_SITE = https://mp4v2.googlecode.com/files
- MP4V2_INSTALL_STAGING = YES
--MP4V2_LICENSE = MPLv1.1
-+MP4V2_LICENSE = MPL-1.1
- MP4V2_LICENSE_FILES = COPYING
- 
- # help2man expects to be able to run utilities on the build machine to
-diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
-index ac76939..f4671ae 100644
---- a/package/rabbitmq-server/rabbitmq-server.mk
-+++ b/package/rabbitmq-server/rabbitmq-server.mk
-@@ -7,7 +7,7 @@
- RABBITMQ_SERVER_VERSION = 3.6.6
- RABBITMQ_SERVER_SITE = http://www.rabbitmq.com/releases/rabbitmq-server/v$(RABBITMQ_SERVER_VERSION)
- RABBITMQ_SERVER_SOURCE = rabbitmq-server-$(RABBITMQ_SERVER_VERSION).tar.xz
--RABBITMQ_SERVER_LICENSE = MPLv1.1, Apache-2.0, BSD-2-Clause, EPL, MIT, MPLv2.0
-+RABBITMQ_SERVER_LICENSE = MPL-1.1, Apache-2.0, BSD-2-Clause, EPL, MIT, MPL-2.0
- RABBITMQ_SERVER_LICENSE_FILES = LICENSE-MPL-RabbitMQ \
- 				LICENSE LICENSE-APACHE2-ExplorerCanvas \
- 				LICENSE-APL2-Rebar LICENSE-APL2-Stomp-Websocket \
-diff --git a/package/tstools/tstools.mk b/package/tstools/tstools.mk
-index 3355db8..99f7ca9 100644
---- a/package/tstools/tstools.mk
-+++ b/package/tstools/tstools.mk
-@@ -9,7 +9,7 @@ TSTOOLS_VERSION = 08f6be304040e7b84760ac3920bcff4a563b6cd2
- TSTOOLS_SITE = $(call github,kynesim,tstools,$(TSTOOLS_VERSION))
- # tstools upstream doesn't contain any license file so far. See:
- # https://github.com/kynesim/tstools/issues/32
--TSTOOLS_LICENSE = MPLv1.1
-+TSTOOLS_LICENSE = MPL-1.1
- TSTOOLS_LICENSE_FILES =
- 
- define TSTOOLS_BUILD_CMDS
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index 3e35fd7..d651c32 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -8,7 +8,7 @@ ZMQPP_VERSION = 4.1.2
- ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
- ZMQPP_INSTALL_STAGING = YES
- ZMQPP_DEPENDENCIES = zeromq
--ZMQPP_LICENSE = MPLv2.0
-+ZMQPP_LICENSE = MPL-2.0
- ZMQPP_LICENSE_FILES = LICENSE
- ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
- ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
-diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-index e47da97..baaa57f 100644
---- a/package/zyre/zyre.mk
-+++ b/package/zyre/zyre.mk
-@@ -6,7 +6,7 @@
- 
- ZYRE_VERSION = 1d949e4bf79b694ea883c325f5813e87ddc2a687
- ZYRE_SITE = $(call github,zeromq,zyre,$(ZYRE_VERSION))
--ZYRE_LICENSE = MPLv2.0
-+ZYRE_LICENSE = MPL-2.0
- ZYRE_LICENSE_FILES = LICENSE
- ZYRE_INSTALL_STAGING = YES
- ZYRE_DEPENDENCIES = czmq zeromq host-pkgconf
 -- 
 2.6.2
