@@ -1,73 +1,73 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 Mar 2017 22:54:11 +0200
-Subject: [Buildroot] [PATCH 01/21] docs/manual: refer to SPDX License
-	List
-In-Reply-To: <1490881430-10434-2-git-send-email-rahulbedarkar89@gmail.com>
-References: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
- <1490881430-10434-2-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <f50ef04f-f1ef-12b3-47cd-249d56dfafea@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 30 Mar 2017 23:03:32 +0200
+Subject: [Buildroot] [PATCH 2/5] audiofile: add security patch for
+	CVE-2017-6829
+In-Reply-To: <20170330210335.16858-1-peter@korsgaard.com>
+References: <20170330210335.16858-1-peter@korsgaard.com>
+Message-ID: <20170330210335.16858-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The decodeSample function in IMA.cpp in Audio File Library (aka audiofile)
+0.3.6 allows remote attackers to cause a denial of service (crash) via a
+crafted file.
 
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp
+https://github.com/mpruett/audiofile/issues/33
 
-On 30-03-17 15:43, Rahul Bedarkar wrote:
-> We want to use SPDX short identifier for license string as much as
-> possible. So refer to SPDX license list and use SPDX short identifier
-> for license strings in documentation.
-> 
-> Also remove License abbreviations that we have.
-> 
-> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-> ---
->  docs/manual/adding-packages-generic.txt       | 12 ++---
->  docs/manual/adding-packages-kernel-module.txt |  4 +-
->  docs/manual/adding-packages-perl.txt          |  2 +-
->  docs/manual/adding-packages-python.txt        |  2 +-
->  docs/manual/legal-notice.txt                  | 75 ---------------------------
->  5 files changed, 10 insertions(+), 85 deletions(-)
-> 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index a08283c..2c47be1 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -22,7 +22,7 @@ system is based on hand-written Makefiles or shell scripts.
->  07: LIBFOO_VERSION = 1.0
->  08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
->  09: LIBFOO_SITE = http://www.foosoftware.org/download
-> -10: LIBFOO_LICENSE = GPLv3+
-> +10: LIBFOO_LICENSE = GPL-3.0+
->  11: LIBFOO_LICENSE_FILES = COPYING
->  12: LIBFOO_INSTALL_STAGING = YES
->  13: LIBFOO_CONFIG_SCRIPTS = libfoo-config
-> @@ -396,8 +396,8 @@ information is (assuming the package name is +libfoo+) :
->  * +LIBFOO_LICENSE+ defines the license (or licenses) under which the package
->    is released.
->    This name will appear in the manifest file produced by +make legal-info+.
-> -  If the license appears in xref:legal-info-list-licenses[the following list],
-> -  use the same string to make the manifest file uniform.
-> +  If the license appears in https://spdx.org/licenses/[SPDX License List],
-                                                          ^the
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...x-values-to-fix-index-overflow-in-IMA.cpp.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
 
- With this minor thing fixed:
- Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-> +  use the SPDX short identifier to make the manifest file uniform.
->    Otherwise, describe the license in a precise and concise way, avoiding
->    ambiguous names such as +BSD+ which actually name a family of licenses.
->    This variable is optional. If it is not defined, +unknown+ will appear in
-[snip]
-
+diff --git a/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+new file mode 100644
+index 000000000..21f899a46
+--- /dev/null
++++ b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+@@ -0,0 +1,39 @@
++From 25eb00ce913452c2e614548d7df93070bf0d066f Mon Sep 17 00:00:00 2001
++From: Antonio Larrosa <larrosa@kde.org>
++Date: Mon, 6 Mar 2017 18:02:31 +0100
++Subject: [PATCH] clamp index values to fix index overflow in IMA.cpp
++
++This fixes #33
++(also reported at https://bugzilla.opensuse.org/show_bug.cgi?id=1026981
++and https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp/)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libaudiofile/modules/IMA.cpp | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libaudiofile/modules/IMA.cpp b/libaudiofile/modules/IMA.cpp
++index 7476d44..df4aad6 100644
++--- a/libaudiofile/modules/IMA.cpp
+++++ b/libaudiofile/modules/IMA.cpp
++@@ -169,7 +169,7 @@ int IMA::decodeBlockWAVE(const uint8_t *encoded, int16_t *decoded)
++ 		if (encoded[1] & 0x80)
++ 			m_adpcmState[c].previousValue -= 0x10000;
++ 
++-		m_adpcmState[c].index = encoded[2];
+++		m_adpcmState[c].index = clamp(encoded[2], 0, 88);
++ 
++ 		*decoded++ = m_adpcmState[c].previousValue;
++ 
++@@ -210,7 +210,7 @@ int IMA::decodeBlockQT(const uint8_t *encoded, int16_t *decoded)
++ 			predictor -= 0x10000;
++ 
++ 		state.previousValue = clamp(predictor, MIN_INT16, MAX_INT16);
++-		state.index = encoded[1] & 0x7f;
+++		state.index = clamp(encoded[1] & 0x7f, 0, 88);
++ 		encoded += 2;
++ 
++ 		for (int n=0; n<m_framesPerPacket; n+=2)
++-- 
++2.11.0
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
