@@ -1,33 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:32:14 +0200
-Subject: [Buildroot] [PATCH 1/1] apr: fix size of pid_t
-In-Reply-To: <20170321230453.6165e76d@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 21 Mar 2017 23:04:53 +0100")
-References: <20170321132356.16093-1-julien.beraud@spectracom.orolia.com>
- <20170321230453.6165e76d@free-electrons.com>
-Message-ID: <877f361jm9.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Mar 2017 00:33:19 +0200
+Subject: [Buildroot] [PATCHv2] package/dbus-cpp: fix cross-compilation
+In-Reply-To: <1490132039-29054-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 21 Mar 2017 22:33:59 +0100")
+References: <1490132039-29054-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87zig2z974.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Hello,
- > On Tue, 21 Mar 2017 14:23:56 +0100, Julien Beraud wrote:
- >> pid_t is a signed 32bits integer on both 32bits and 64bits
- >> architectures.
- >> This fixes an issue with apache server which causes bad pid
- >> to be written in PidFile
- >> 
- >> Signed-off-by: Julien Beraud <julien.beraud@spectracom.orolia.com>
- >> ---
- >> package/apr/apr.mk | 1 +
- >> 1 file changed, 1 insertion(+)
+ > dbus-cpp has an ugly hack to not cross-build the tools when it detects
+ > cross-compilation.
 
- > I've applied to our master branch, thanks! Peter, I believe this is a
- > good candidate for the LTS branch.
+ > However, we already have a host variant that builds those tools (and we
+ > anyway don't seem to need them to begin with).
+
+ > Drop our patch that propagates the CXXFLAGS/LDFLAGS_FOR_BUILD. Replace
+ > with a patch to cross-compile the tools.
+
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/110/1100539caae6ef62c61a3b96bc54f7c0a215cc62/
+ >     and many, many more.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - add missing commit log to patch  (Thomas)
 
 Committed to 2017.02.x, thanks.
 
