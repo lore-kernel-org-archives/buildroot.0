@@ -1,116 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:32:41 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/dbus-cpp: fix
-	cross-compilation
-Message-ID: <20170331071606.3A265826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 00:33:56 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] ltp-testsuite: disable
+	Open POSIX testsuite
+Message-ID: <20170331071606.49869826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55a23407aff9ab0b3e3c72b7c5fd6c8873a910d2
+commit: https://git.buildroot.net/buildroot/commit/?id=eaadfab8e8c77d9b66b0b9b1215a6ebd0ca6307c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-dbus-cpp has an ugly hack to not cross-build the tools when it detects
-cross-compilation.
+The Open POSIX testsuite builds and installs to the target directory a
+program called 't0' that isn't cross-compiled, which is bad.
 
-However, we already have a host variant that builds those tools (and we
-anyway don't seem to need them to begin with).
+Since the LTP build system is autoconf but not automake based, and the
+Open POSIX testsuite is a sort of sub-project inside it, fixing the
+issue is not trivial.
 
-Drop our patch that propagates the CXXFLAGS/LDFLAGS_FOR_BUILD. Replace
-with a patch to cross-compile the tools.
+Therefore, we simply disable the Open POSIX testsuite entirely. Oddly
+enough, --without-open-posix-testsuite doesn't work due to another bug,
+so we simply have to remove --with-open-posix-testsuite.
+
+Open POSIX testsuite cross-compilation issue reported at
+https://github.com/linux-test-project/ltp/issues/144.
+
+Configure script bug reported at
+https://github.com/linux-test-project/ltp/issues/143.
 
 Fixes:
-    http://autobuild.buildroot.org/results/110/1100539caae6ef62c61a3b96bc54f7c0a215cc62/
-    and many, many more.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  http://autobuild.buildroot.net/results/8326ba9eb257dfc92c1ad282ba6d3565e8250def/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit f5dbd0dea159393e779f6a1f5fa53b9fa07ff34a)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit b57e1355a72da407c19315cb4187767d28e4d064)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus-cpp/0002-cross-compile-tools.patch    | 34 ++++++++++++++++++++++
- .../dbus-cpp/0002-cxxflags-ldflags-for-build.patch | 32 --------------------
- 2 files changed, 34 insertions(+), 32 deletions(-)
+ package/ltp-testsuite/ltp-testsuite.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/dbus-cpp/0002-cross-compile-tools.patch b/package/dbus-cpp/0002-cross-compile-tools.patch
-new file mode 100644
-index 0000000..39eff31
---- /dev/null
-+++ b/package/dbus-cpp/0002-cross-compile-tools.patch
-@@ -0,0 +1,34 @@
-+tools: just do proper cross-compile
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 9d82087..29f374b 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -9,8 +9,16 @@ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
+ LTP_TESTSUITE_LICENSE_FILES = COPYING
 +
-+Those tools are not used during the build; besides, they are installed.
-+
-+So they don't need to not be cross-compiled.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Upstream status: not submitted, upstream is dead.
-+
-+diff -durN dbus-cpp-0.9.0.orig/tools/Makefile.am dbus-cpp-0.9.0/tools/Makefile.am
-+--- dbus-cpp-0.9.0.orig/tools/Makefile.am	2017-03-21 21:48:57.013409423 +0100
-++++ dbus-cpp-0.9.0/tools/Makefile.am	2017-03-21 21:49:35.329979798 +0100
-+@@ -1,7 +1,3 @@
-+-# hacky, but ...
-+-
-+-CXX = $(CXX_FOR_BUILD)
-+-
-+ AM_CPPFLAGS = \
-+ 	$(dbus_CFLAGS) \
-+ 	$(xml_CFLAGS) \
-+@@ -9,11 +3,7 @@
-+ 	-I$(top_builddir)/include \
-+ 	-Wall
-+ 
-+-if CROSS_COMPILING
-+-libdbus_cxx_la = $(BUILD_LIBDBUS_CXX_DIR)/src/libdbus-c++-1.la
-+-else
-+ libdbus_cxx_la = $(top_builddir)/src/libdbus-c++-1.la
-+-endif
-+ 
-+ bin_PROGRAMS = dbusxx-xml2cpp dbusxx-introspect
-+ 
-diff --git a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch b/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
-deleted file mode 100644
-index fefb969..0000000
---- a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Use CXXFLAGS_FOR_BUILD and LDFLAGS_FOR_BUILD for the tools since expat
--may not be living in the default include & library path.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura libdbus-c++-0.9.0.orig/configure.ac libdbus-c++-0.9.0/configure.ac
----- libdbus-c++-0.9.0.orig/configure.ac	2014-01-05 15:28:03.653886567 -0300
--+++ libdbus-c++-0.9.0/configure.ac	2014-01-05 15:44:32.571172225 -0300
--@@ -65,7 +65,11 @@
-- AC_PROG_CXX
-- 
-- CXX_FOR_BUILD=${CXX_FOR_BUILD-${CXX}}
--+CXXFLAGS_FOR_BUILD=${CXXFLAGS_FOR_BUILD-${CXXFLAGS}}
--+LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-${LDFLAGS}}
-- AC_SUBST(CXX_FOR_BUILD)
--+AC_SUBST(CXXFLAGS_FOR_BUILD)
--+AC_SUBST(LDFLAGS_FOR_BUILD)
-- 
-- AM_PROG_LIBTOOL
-- 
--diff -Nura libdbus-c++-0.9.0.orig/tools/Makefile.am libdbus-c++-0.9.0/tools/Makefile.am
----- libdbus-c++-0.9.0.orig/tools/Makefile.am	2014-01-05 15:28:03.652886535 -0300
--+++ libdbus-c++-0.9.0/tools/Makefile.am	2014-01-05 15:44:42.071482390 -0300
--@@ -1,6 +1,8 @@
-- # hacky, but ...
-- 
-- CXX = $(CXX_FOR_BUILD)
--+CXXFLAGS = $(CXXFLAGS_FOR_BUILD)
--+LDFLAGS = $(LDFLAGS_FOR_BUILD)
-- 
-- AM_CPPFLAGS = \
-- 	$(dbus_CFLAGS) \
++# Do not enable Open POSIX testsuite as it doesn't cross-compile
++# properly: t0 program is built for the host machine. Notice that due
++# to a bug, --without-open-posix-testsuite actually enables the test
++# suite.
++# See https://github.com/linux-test-project/ltp/issues/143 (invalid
++# autoconf test) and
++# https://github.com/linux-test-project/ltp/issues/144 (Open POSIX
++# testsuite not cross-compiling).
+ LTP_TESTSUITE_CONF_OPTS += \
+-	--with-open-posix-testsuite \
+ 	--with-realtime-testsuite
+ 
+ ifeq ($(BR2_LINUX_KERNEL),y)
