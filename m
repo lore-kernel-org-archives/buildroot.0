@@ -1,22 +1,34 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 30 Mar 2017 16:42:53 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-03-29
-In-Reply-To: <20170330062829.DA74920811@mail.free-electrons.com>
-References: <20170330062829.DA74920811@mail.free-electrons.com>
-Message-ID: <CAOMZO5CsrWa-DifQNpBaP+AP9_McRC1FCH9En_fy58wr8FZAsQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Mar 2017 22:06:47 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 10}.x series
+Message-ID: <20170330200700.9BEEF7FF75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 30, 2017 at 3:28 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c720701c4d3b23e35908319e6ade082c9e5a1433
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->      powerpc |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/fb1cd422a999e277946cff40792dca06112ffb03 | ORPH
->         i686 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/c6436611103bb073ee0201d4b2dfe4c4c26861b2 | ORPH
->       x86_64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/3a4547c3259b94ed04835b9273f37a1ce5b4cf67 | ORPH
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Probably this one is fixed with this patch:
-https://patchwork.ozlabs.org/patch/744927/
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4557e7c..b2f63ae 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -218,7 +218,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.57"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.18"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.10.6"	if BR2_KERNEL_HEADERS_4_10
++	default "4.4.58"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.19"	if BR2_KERNEL_HEADERS_4_9
++	default "4.10.7"	if BR2_KERNEL_HEADERS_4_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
