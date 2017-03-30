@@ -1,37 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 09:11:09 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] syslog-ng: Bump version
-	header in conf file to 3.9
-Message-ID: <20170331071607.64645826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 00:28:28 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openssh: security bump to
+	version 7.5
+Message-ID: <20170331071606.086E1826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d09c7e4d45261ef03277c9f46a07c81686f5e5bb
+commit: https://git.buildroot.net/buildroot/commit/?id=df0c78d61e142781b6da3d0cf789b8b7b1ae3055
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Package version of syslog-ng is 3.9.1.
-Bumping version number in syslog-ng.conf to 3.9
+From the release notes (https://www.openssh.com/txt/release-7.5):
 
-Fixing warning message about configuration file being too old.
+Security
+--------
 
-Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3dad25466d2931eeecde23867bed79b1d7213887)
+ * ssh(1), sshd(8): Fix weakness in CBC padding oracle countermeasures
+   that allowed a variant of the attack fixed in OpenSSH 7.3 to proceed.
+   Note that the OpenSSH client disables CBC ciphers by default, sshd
+   offers them as lowest-preference options and will remove them by
+   default entriely in the next release. Reported by Jean Paul
+   Degabriele, Kenny Paterson, Martin Albrecht and Torben Hansen of
+   Royal Holloway, University of London.
+
+ * sftp-client(1): [portable OpenSSH only] On Cygwin, a client making
+   a recursive file transfer could be maniuplated by a hostile server to
+   perform a path-traversal attack. creating or modifying files outside
+   of the intended target directory. Reported by Jann Horn of Google
+   Project Zero.
+
+[Peter: mention security fixes]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+(cherry picked from commit 2204f4deb1c6c6ff4accd84b5aa2d42f5930b730)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/syslog-ng/syslog-ng.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openssh/openssh.hash | 5 ++---
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-index 0b4a860..a3384ee 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
-- at version: 3.7
-+ at version: 3.9
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 09010d3..3685bc0 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,3 +1,2 @@
+-# Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-7.4
+-sha256 1b1fc4a14e2024293181924ed24872e6f2e06293f3e8926a376b8aec481f19d1  openssh-7.4p1.tar.gz
++# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
++sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index ce37ee7..ba48770 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- source s_sys {
- 	file("/proc/kmsg" program_override("kernel"));
+-OPENSSH_VERSION = 7.4p1
++OPENSSH_VERSION = 7.5p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c, BSD-2c, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
