@@ -1,25 +1,194 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Mar 2017 09:30:56 +0000
-Subject: [Buildroot] [Bug 9771] toolchain-external misses lib directory when
- copying sysroot
-In-Reply-To: <bug-9771-163@https.bugs.busybox.net/>
-References: <bug-9771-163@https.bugs.busybox.net/>
-Message-ID: <bug-9771-163-C6Gmk24zB5@https.bugs.busybox.net/>
+From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Thu, 30 Mar 2017 09:54:53 +0200
+Subject: [Buildroot] [PATCH 2/4] package/mke2img: use mkfs to generate
+	rootfs image
+In-Reply-To: <ec6c517a-18a2-e6c3-a35e-4c794dad7aaa@mind.be>
+References: <1490372432-879-1-git-send-email-sebastien.szymanski@armadeus.com>
+ <1490372432-879-2-git-send-email-sebastien.szymanski@armadeus.com>
+ <ec6c517a-18a2-e6c3-a35e-4c794dad7aaa@mind.be>
+Message-ID: <cc40741b-4d68-9c3d-0b72-aa70a7b01e8e@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9771
+Hello,
 
---- Comment #7 from Thomas De Schampheleire <patrickdepinguin@gmail.com> ---
-In the mentioned ct-ng issue I see they are 'working on' a buildroot patch.
-However, my toolchain patches already make a fair amount of changes to the
-logic, and it makes no sense that other toolchain patches would now be
-developed unless based on top of my changes. Would it be possible to apply my
-patches first, then see what are the remaining issues for some toolchains?
+On 03/24/2017 10:58 PM, Arnout Vandecappelle wrote:
+> 
+> 
+> On 24-03-17 17:20, S?bastien Szymanski wrote:
+>>
+>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>> ---
+> [snip]
+>> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+>> index b773aa9..01f04fc 100755
+>> --- a/package/mke2img/mke2img
+>> +++ b/package/mke2img/mke2img
+>> @@ -10,9 +10,8 @@ set -e
+>>  main() {
+>>      local OPT OPTARG
+>>      local nb_blocks nb_inodes nb_res_blocks root_dir image gen rev label uuid
+>> -    local -a genext2fs_opts
+>> -    local -a tune2fs_opts
+>> -    local tune2fs_O_opts
+>> +    local -a mkfs_opts
+>> +    local mkfs_O_opts
+>>  
+>>      # Default values
+>>      gen=2
+>> @@ -62,80 +61,33 @@ main() {
+>>      fi
+>>      nb_inodes=$((nb_inodes+nb_extra_inodes))
+>>  
+>> -    # Upgrade to rev1 if needed
+>> -    if [ ${rev} -ge 1 ]; then
+>> -        tune2fs_O_opts+=",filetype,sparse_super"
+>> -    fi
+>> -
+>> -    # Add a journal for ext3 and above
+>> -    if [ ${gen} -ge 3 ]; then
+>> -        tune2fs_opts+=( -j -J size=1 )
+>> -    fi
+>> -
+>> -    # Add ext4 specific features
+>> -    if [ ${gen} -ge 4 ]; then
+>> -        tune2fs_O_opts+=",extents,uninit_bg,dir_index"
+>> -    fi
+>> +    # Disable 64bit flag as it's incompatible with older U-Boot versions
+>> +    mkfs_O_opts+=",^64bit"
+> 
+>  This is a bit unfortunate. Actually, reading the man page, it shouldn't even be
+> needed: if the filesystem is less than 4TB, then mke2fs will not use 64bit. And
+> if it's larger than 4TB, you just can't create it without the 64bit option...
+
+Yes, but the 64bit flag is enabled by default since e2fsprogs 1.43 for
+ext4 filesystem. However, as I use -T small, the flag is not set. Also,
+I agree with Thomas about not using -T small option.
+
+I think the user should be able to select the flags he wants. Should I
+add a string symbol (i.e, BR2_TARGET_ROOTFS_EXT2_OPTIONS) that is passed
+directly to mkfs or a bool symbol just for the 64bit flag (i.e,
+BR2_TARGET_ROOTFS_EXT2_O_64BIT) ?
+
+Regards,
+
+> 
+>>  
+>>      # Add our -O options (there will be at most one leading comma, remove it)
+>> -    if [ -n "${tune2fs_O_opts}" ]; then
+>> -        tune2fs_opts+=( -O "${tune2fs_O_opts#,}" )
+>> +    if [ -n "${mkfs_O_opts}" ]; then
+>> +        mkfs_opts+=( -O "${mkfs_O_opts#,}" )
+> 
+>  Since now the ^64bit is the only -O option, and it's always there, you can just
+> use an unconditional
+> 
+>     mkfs_opts+=( -O ^64bit )
+> 
+>>      fi
+>>  
+>>      # Add the label if specified
+>>      if [ -n "${label}" ]; then
+>> -        tune2fs_opts+=( -L "${label}" )
+>> +        mkfs_opts+=( -L "${label}" )
+>>      fi
+>>  
+>> -    # Generate the filesystem
+>> -    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
+>> -    if [ -n "${nb_res_blocks}" ]; then
+>> -        genext2fs_opts+=( -m ${nb_res_blocks} )
+>> -    fi
+>> -    genext2fs "${genext2fs_opts[@]}" "${image}"
+>> -
+>> -    # genext2fs does not generate a UUID, but fsck will whine if one
+>> -    # is missing, so we need to add a UUID.
+>> -    # Of course, this has to happen _before_ we run fsck.
+>> -    # Also, some ext4 metadata are based on the UUID, so we must
+>> -    # set it before we can convert the filesystem to ext4.
+>> -    # If the user did not specify a UUID, we generate a random one.
+>> +    # If the user did not specify a UUID, mkfs will generate a random one.
+>>      # Although a random UUID may seem bad for reproducibility, there
+>>      # already are so many things that are not reproducible in a
+>>      # filesystem: file dates, file ordering, content of the files...
+> 
+>  Hm, this becomes less and less true... With BR2_REPRODUCIBLE, the file dates
+> and content should be fixed. So if only we can also fix the ordering, then the
+> ext2 could also be reproducible... But that's not for this patch of course.
+> 
+>> -    tune2fs -U "${uuid:-random}" "${image}"
+>> -
+>> -    # Upgrade the filesystem
+>> -    if [ ${#tune2fs_opts[@]} -ne 0 ]; then
+>> -        tune2fs "${tune2fs_opts[@]}" "${image}"
+>> +    if [ -n "${UUID}" ]; then
+>> +        mkfs_opts+=( -U "${UUID}" )
+>>      fi
+>>  
+>> -    # After changing filesystem options, running fsck is required
+>> -    # (see: man tune2fs). Running e2fsck in other cases will ensure
+>> -    # coherency of the filesystem, although it is not required.
+>> -    # 'e2fsck -pDf' means:
+>> -    #  - automatically repair
+>> -    #  - optimise and check for duplicate entries
+>> -    #  - force checking
+>> -    # Sending output to oblivion, as e2fsck can be *very* verbose,
+>> -    # especially with filesystems generated by genext2fs.
+>> -    # Exit codes 1 & 2 are OK, it means fs errors were successfully
+>> -    # corrected, hence our little trick with $ret.
+>> -    ret=0
+>> -    e2fsck -pDf "${image}" >/dev/null || ret=$?
+>> -    case ${ret} in
+>> -       0|1|2) ;;
+>> -       *)   errorN ${ret} "failed to run e2fsck on '%s' (ext%d)\n" \
+>> -                   "${image}" ${gen}
+>> -    esac
+>> -    printf "\n"
+>> -    trace "e2fsck was successfully run on '%s' (ext%d)\n" "${image}" ${gen}
+>> -    printf "\n"
+>> -
+>> -    # Remove count- and time-based checks, they are not welcome
+>> -    # on embedded devices, where they can cause serious boot-time
+>> -    # issues by tremendously slowing down the boot.
+>> -    tune2fs -c 0 -i 0 "${image}"
+>> +    # Generate the filesystem
+>> +    mkfs_opts+=( -d "${root_dir}" -N ${nb_inodes} -T small -F )
+> 
+>  I have a small preference to specify the options explicitly instead of -T small
+> (i.e. -b 1024 -I 128).
+> 
+>  Regards,
+>  Arnout
+> 
+>> +    if [ -n "${nb_res_blocks}" ]; then
+>> +        mkfs_opts+=( -m ${nb_res_blocks} )
+>> +    fi
+>> +    mkfs.ext${gen} "${mkfs_opts[@]}" "${image}" "${nb_blocks}"
+>>  }
+>>  
+>>  help() {
+>> diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
+>> index 9de387a..ead9d70 100644
+>> --- a/package/mke2img/mke2img.mk
+>> +++ b/package/mke2img/mke2img.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
+>> +HOST_MKE2IMG_DEPENDENCIES = host-e2fsprogs
+>>  
+>>  define HOST_MKE2IMG_INSTALL_CMDS
+>>  	$(INSTALL) -D -m 0755 package/mke2img/mke2img $(HOST_DIR)/usr/bin/mke2img
+>>
+> 
+
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+S?bastien Szymanski
+Software Engineer, Armadeus Systems
+sebastien.szymanski at armadeus.com
+Tel: +33 (0)9 72 29 41 44
+Fax: +33 (0)9 72 28 79 26
