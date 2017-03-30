@@ -1,70 +1,89 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 29 Mar 2017 23:55:12 +0200
-Subject: [Buildroot] [PATCH 4/5] package/mesa3d: explicitely disable asm
-In-Reply-To: <20170329233528.1eb13394@free-electrons.com>
-References: <20170326162853.3022-1-romain.naour@gmail.com>
- <20170326162853.3022-4-romain.naour@gmail.com>
- <hgqrqdxivc.ln2@ID-313208.user.individual.net>
- <49fce2a1-49a7-317c-486f-b3b6c37604a9@gmail.com>
- <20170329233528.1eb13394@free-electrons.com>
-Message-ID: <4e776b18-226c-091c-1b4b-31a4c7e72c35@gmail.com>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Thu, 30 Mar 2017 15:31:23 +1100
+Subject: [Buildroot] [PATCH 1/1] package/sdl_sound: fix build with physfs
+Message-ID: <20170330043123.GA25980@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Bernd, All,
+A buildroot package for physfs has recently been added, and if it is
+detected by sdl_sound's configure it enables code in the simple
+player which fails to build (if the player is enabled).
 
-Le 29/03/2017 ? 23:35, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Wed, 29 Mar 2017 23:28:56 +0200, Romain Naour wrote:
-> 
->> Le 29/03/2017 ? 06:41, Bernd Kuhls a ?crit :
->>> Am Sun, 26 Mar 2017 18:28:52 +0200 schrieb Romain Naour:
->>>   
->>>> assembly are enabled by default on supported plaforms even while
->>>> crosscompiling if host == target:
->>>>
->>>> checking whether to enable assembly... yes, x86_64
->>>>
->>>> It was also disabled in the mesa package in Fedora since 7.6 [1].
->>>>
->>>> [1] http://pkgs.fedoraproject.org/cgit/rpms/mesa.git/commit/?id=629c8726  
->>>
->>> Hi,
->>>
->>> I am unsure about this patch, why shouldn't we use asm code when 
->>> crosscompiling for host == target CPU?  
->>
->> To be honest I don't really have an issue with assembly being enabled for my use
->> case. But there is an issue when you want a reproducible build with the same
->> defconfig build on a x86 and x86_64 host.
-> 
-> For which architectures is the assembly code available? We should
-> forcefully enable it for those architectures.
+(The build problem is due to physfs renaming a macro which has not been
+reflected in sdl_sound.)
 
-Assembly code is available for x86, x86_64/amd64 and sparc (see configure.ac).
+So, add the physfs dependency to the package information and correct
+the build problem with a patch taken from Arch Linux, where they seem
+to have already found and fixed this issue.
 
-The issue while cross-compiling is when assembly are enabled, the build system
-build and run a small tool called gen_matypes on the host.
+Fixes:
+http://autobuild.buildroot.net/results/ae5839b978244c434dd86d49b672c437a7b19a66
 
-"disable if cross compiling on x86/x86_64 since we must run gen_matypes"
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+---
+ package/sdl_sound/0003-renamed-physfs-export.patch | 32 ++++++++++++++++++++++
+ package/sdl_sound/sdl_sound.mk                     |  7 +++++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 package/sdl_sound/0003-renamed-physfs-export.patch
 
-So it allow to enable assembly code while cross-compiling only when the host =
-target.
-
-> 
-> I agree with Romain that we shouldn't depend on something that looks at
-> the architecture of the host machine to decide if a feature for the
-> target should be enabled or not.
-
-I believe we don't have the choice... we need to disable it.
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+diff --git a/package/sdl_sound/0003-renamed-physfs-export.patch b/package/sdl_sound/0003-renamed-physfs-export.patch
+new file mode 100644
+index 000000000..3aeded329
+--- /dev/null
++++ b/package/sdl_sound/0003-renamed-physfs-export.patch
+@@ -0,0 +1,32 @@
++This patch is taken from the Arch Linux User Repository, see:
++https://aur.archlinux.org/packages/sdl_sound-patched-hg/
++
++Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
++
++diff -ru SDL_sound.orig/playsound/physfsrwops.h SDL_sound/playsound/physfsrwops.h
++--- SDL_sound.orig/playsound/physfsrwops.h	2014-01-11 06:28:35.494936000 +0100
+++++ SDL_sound/playsound/physfsrwops.h	2014-01-11 06:31:38.315675483 +0100
++@@ -29,6 +29,11 @@
++ extern "C" {
++ #endif
++ 
+++/* renamed in physfs dev, add alias */
+++#ifdef PHYSFS_DECL
+++#define __EXPORT__ PHYSFS_DECL
+++#endif
+++
++ /**
++  * Open a platform-independent filename for reading, and make it accessible
++  *  via an SDL_RWops structure. The file will be closed in PhysicsFS when the
++@@ -77,6 +82,11 @@
++  */
++ __EXPORT__ SDL_RWops *PHYSFSRWOPS_makeRWops(PHYSFS_file *handle);
++ 
+++/* renamed in physfs dev, remove alias */
+++#ifdef PHYSFS_DECL
+++#undef __EXPORT__
+++#endif
+++
++ #ifdef __cplusplus
++ }
++ #endif
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 4fa7d9be0..42448043b 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -45,6 +45,13 @@ else
+ SDL_SOUND_CONF_OPTS += --disable-speex
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PHYSFS),y)
++SDL_SOUND_CONF_OPTS += --enable-physfs
++SDL_SOUND_DEPENDENCIES += physfs
++else
++SDL_SOUND_CONF_OPTS += --disable-physfs
++endif
++
+ SDL_SOUND_CONF_OPTS = \
+ 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ 	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+-- 
+2.12.1.382.gc0f9c7058
