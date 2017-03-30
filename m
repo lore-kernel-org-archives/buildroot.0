@@ -1,42 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 Mar 2017 23:08:04 +0200
-Subject: [Buildroot] [PATCH 02/21] package: use SPDX short identifier
-	for GPLv1/GPLv1+
-In-Reply-To: <1490881430-10434-3-git-send-email-rahulbedarkar89@gmail.com>
-References: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
- <1490881430-10434-3-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <d927e651-8499-bd65-9181-0806c7fafda5@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 30 Mar 2017 23:11:43 +0200
+Subject: [Buildroot] [PATCH] package/coreutils: remove legacy comment
+Message-ID: <20170330211143.6645-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This comment was added in 2007 (e4c6340a: cleanup and fixes), back when
+removing a package was (seemingly) supported.
 
+This ability was lost when coreutils was converted to autotarget in 2010
+(386183f: coreutils: convert to autotarget), but the comment stuck.
 
-On 30-03-17 15:43, Rahul Bedarkar wrote:
-> We want to use SPDX identifier for licenses as much as possible. SPDX
-> short identifier for GPLv1/GPLv1+ is GPL-1.0/GPL-1.0+.
-> 
-> This change is done using following command.
-> find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/GPLv1(\+)?/GPL-1.0\1/g'
-                                                                  ^^^^
-                                                              This bit is not
-really needed, and in subsequent patches you indeed dropped it. Anyway it
-doesn't affect the result.
+Get rid of it: it nowadays does not make sense and is a bit confusing.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(yes, I looked at the entire patch!)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/coreutils/coreutils.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
- Regards,
- Arnout
-> 
-> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 409089c..3f3f8c4 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -123,7 +123,4 @@ endef
+ 
+ COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP
+ 
+-# If both coreutils and busybox are selected, the corresponding applets
+-# may need to be reinstated by the clean targets.
+-
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
