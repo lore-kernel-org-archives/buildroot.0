@@ -1,27 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:16:24 +0200
-Subject: [Buildroot] [PATCH] skalibs: fix endianness detection on x86
-In-Reply-To: <20170320201122.26539-1-eric.le.bihan.dev@free.fr> (Eric Le
- Bihan's message of "Mon, 20 Mar 2017 21:11:22 +0100")
-References: <20170320201122.26539-1-eric.le.bihan.dev@free.fr>
-Message-ID: <877f362yx3.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Mar 2017 00:17:49 +0200
+Subject: [Buildroot] [git commit] filemq: correct license
+In-Reply-To: <20170320205452.AE7DE8018D@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 20 Mar 2017 21:53:54 +0100")
+References: <20170320205452.AE7DE8018D@busybox.osuosl.org>
+Message-ID: <87wpb61kaa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Update the patch for compile time endianness detection so it works on
- > x86 platforms using GCC <= 4.4.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=205a0289d4a0aefc76b0c937c2f725517114c658
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
+ > All source files, except src/filemq_client.c and src/filemq_server.c,
+ > has MPL Version 2.0 license text in file header.
 
- >   http://autobuild.buildroot.net/results/c2e8e1180571976b412cbba729c45a3698aea0b2
- >   http://autobuild.buildroot.net/results/2ee47107d8a67470f7bc3e10cf763202d5455d17
+ > As confirmed with upstream [1] (L)GPLv3 license texts COPYING and
+ > COPYING.LESSER are leftover from previous implementation.
 
- > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ > [1] - https://github.com/zeromq/filemq/issues/74
+
+ > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
