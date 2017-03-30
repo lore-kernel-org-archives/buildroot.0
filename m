@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Mar 2017 22:06:42 +0200
-Subject: [Buildroot] [git commit] linux: bump default version to 4.10.7
-Message-ID: <20170330200700.8B6557FF75@busybox.osuosl.org>
+Date: Thu, 30 Mar 2017 22:07:16 +0200
+Subject: [Buildroot] [git commit] libmediaart: fix qt5 build
+Message-ID: <20170330200720.34DE882668@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e594c9b09f88fbe99af718c8763f7bafa0e0ce9
+commit: https://git.buildroot.net/buildroot/commit/?id=7298d02ccc240d1dfd853ab4be3badb5e490fe97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Use BR2_PACKAGE_QT5_VERSION_LATEST instead of BR2_QT5_VERSION_LATEST
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libmediaart/libmediaart.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index cace905..3187a52 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.10.6)"
-+	bool "Latest version (4.10.7)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.10.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.10.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
+index 31f5675..0f1a0f3 100644
+--- a/package/libmediaart/libmediaart.mk
++++ b/package/libmediaart/libmediaart.mk
+@@ -22,7 +22,7 @@ LIBMEDIAART_CONF_OPTS += \
+ 	--disable-qt
+ else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_QT),y)
+ # qt5 needs c++11 (since qt-5.7)
+-ifeq ($(BR2_QT5_VERSION_LATEST),y)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+ endif
+ LIBMEDIAART_DEPENDENCIES += \
