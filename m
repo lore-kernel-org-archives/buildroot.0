@@ -1,74 +1,126 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Mar 2017 23:03:34 +0200
-Subject: [Buildroot] [PATCH 4/5] audiofile: add security patch for
-	CVE-2017-6831
+Date: Thu, 30 Mar 2017 23:03:33 +0200
+Subject: [Buildroot] [PATCH 3/5] audiofile: add security patch for
+	CVE-2017-6830 / CVE-2017-6834 / CVE-2017-6836 / CVE-2017-6838
 In-Reply-To: <20170330210335.16858-1-peter@korsgaard.com>
 References: <20170330210335.16858-1-peter@korsgaard.com>
-Message-ID: <20170330210335.16858-4-peter@korsgaard.com>
+Message-ID: <20170330210335.16858-3-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heap-based buffer overflow in the decodeBlockWAVE function in IMA.cpp in
-Audio File Library (aka audiofile) 0.3.6 allows remote attackers to cause a
-denial of service (crash) via a crafted file.
+CVE-2017-6830: A heap-based buffer overflow in the alaw2linear_buf function
+in G711.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
+attackers to cause a denial of service (crash) via a crafted file.
 
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-imadecodeblockwave-ima-cpp
-https://github.com/mpruett/audiofile/issues/35
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-alaw2linear_buf-g711-cpp
+https://github.com/mpruett/audiofile/issues/34
+
+CVE-2017-6834: A heap-based buffer overflow in the ulaw2linear_buf function
+in G711.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
+attackers to cause a denial of service (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-ulaw2linear_buf-g711-cpp
+https://github.com/mpruett/audiofile/issues/38
+
+CVE-2017-6836: A heap-based buffer overflow in the Expand3To4Module::run
+function in libaudiofile/modules/SimpleModule.h in Audio File Library (aka
+audiofile) 0.3.6 allows remote attackers to cause a denial of service
+(crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-expand3to4modulerun-simplemodule-h
+https://github.com/mpruett/audiofile/issues/40
+
+CVE-2017-6838: Integer overflow in sfcommands/sfconvert.c in Audio File
+Library (aka audiofile) 0.3.6 allows remote attackers to cause a denial of
+service (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-multiple-ubsan-crashes/
+https://github.com/mpruett/audiofile/issues/41
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...lly-fail-when-error-occurs-in-parseFormat.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/audiofile/0006-Actually-fail-when-error-occurs-in-parseFormat.patch
+ ...-for-multiplication-overflow-in-sfconvert.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch
 
-diff --git a/package/audiofile/0006-Actually-fail-when-error-occurs-in-parseFormat.patch b/package/audiofile/0006-Actually-fail-when-error-occurs-in-parseFormat.patch
+diff --git a/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch b/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch
 new file mode 100644
-index 000000000..0c6be2a2c
+index 000000000..c72619030
 --- /dev/null
-+++ b/package/audiofile/0006-Actually-fail-when-error-occurs-in-parseFormat.patch
-@@ -0,0 +1,42 @@
-+From a2e9eab8ea87c4ffc494d839ebb4ea145eb9f2e6 Mon Sep 17 00:00:00 2001
++++ b/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch
+@@ -0,0 +1,72 @@
++From 7d65f89defb092b63bcbc5d98349fb222ca73b3c Mon Sep 17 00:00:00 2001
 +From: Antonio Larrosa <larrosa@kde.org>
-+Date: Mon, 6 Mar 2017 18:59:26 +0100
-+Subject: [PATCH] Actually fail when error occurs in parseFormat
++Date: Mon, 6 Mar 2017 13:54:52 +0100
++Subject: [PATCH] Check for multiplication overflow in sfconvert
 +
-+When there's an unsupported number of bits per sample or an invalid
-+number of samples per block, don't only print an error message using
-+the error handler, but actually stop parsing the file.
++Checks that a multiplication doesn't overflow when
++calculating the buffer size, and if it overflows,
++reduce the buffer size instead of failing.
 +
-+This fixes #35 (also reported at
-+https://bugzilla.opensuse.org/show_bug.cgi?id=1026983 and
-+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-imadecodeblockwave-ima-cpp/
-+)
++This fixes the 00192-audiofile-signintoverflow-sfconvert case
++in #41
 +
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ libaudiofile/WAVE.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
++ sfcommands/sfconvert.c | 34 ++++++++++++++++++++++++++++++++--
++ 1 file changed, 32 insertions(+), 2 deletions(-)
 +
-+diff --git a/libaudiofile/WAVE.cpp b/libaudiofile/WAVE.cpp
-+index 0e81cf7..d762249 100644
-+--- a/libaudiofile/WAVE.cpp
-++++ b/libaudiofile/WAVE.cpp
-+@@ -326,6 +326,7 @@ status WAVEFile::parseFormat(const Tag &id, uint32_t size)
-+ 			{
-+ 				_af_error(AF_BAD_NOT_IMPLEMENTED,
-+ 					"IMA ADPCM compression supports only 4 bits per sample");
-++				return AF_FAIL;
-+ 			}
++diff --git a/sfcommands/sfconvert.c b/sfcommands/sfconvert.c
++index 80a1bc4..970a3e4 100644
++--- a/sfcommands/sfconvert.c
+++++ b/sfcommands/sfconvert.c
++@@ -45,6 +45,33 @@ void printusage (void);
++ void usageerror (void);
++ bool copyaudiodata (AFfilehandle infile, AFfilehandle outfile, int trackid);
 + 
-+ 			int bytesPerBlock = (samplesPerBlock + 14) / 8 * 4 * channelCount;
-+@@ -333,6 +334,7 @@ status WAVEFile::parseFormat(const Tag &id, uint32_t size)
-+ 			{
-+ 				_af_error(AF_BAD_CODEC_CONFIG,
-+ 					"Invalid samples per block for IMA ADPCM compression");
-++				return AF_FAIL;
-+ 			}
+++int firstBitSet(int x)
+++{
+++        int position=0;
+++        while (x!=0)
+++        {
+++                x>>=1;
+++                ++position;
+++        }
+++        return position;
+++}
+++
+++#ifndef __has_builtin
+++#define __has_builtin(x) 0
+++#endif
+++
+++int multiplyCheckOverflow(int a, int b, int *result)
+++{
+++#if (defined __GNUC__ && __GNUC__ >= 5) || ( __clang__ && __has_builtin(__builtin_mul_overflow))
+++	return __builtin_mul_overflow(a, b, result);
+++#else
+++	if (firstBitSet(a)+firstBitSet(b)>31) // int is signed, so we can't use 32 bits
+++		return true;
+++	*result = a * b;
+++	return false;
+++#endif
+++}
+++
++ int main (int argc, char **argv)
++ {
++ 	if (argc == 2)
++@@ -323,8 +350,11 @@ bool copyaudiodata (AFfilehandle infile, AFfilehandle outfile, int trackid)
++ {
++ 	int frameSize = afGetVirtualFrameSize(infile, trackid, 1);
 + 
-+ 			track->f.sampleWidth = 16;
++-	const int kBufferFrameCount = 65536;
++-	void *buffer = malloc(kBufferFrameCount * frameSize);
+++	int kBufferFrameCount = 65536;
+++	int bufferSize;
+++	while (multiplyCheckOverflow(kBufferFrameCount, frameSize, &bufferSize))
+++		kBufferFrameCount /= 2;
+++	void *buffer = malloc(bufferSize);
++ 
++ 	AFframecount totalFrames = afGetFrameCount(infile, AF_DEFAULT_TRACK);
++ 	AFframecount totalFramesWritten = 0;
 +-- 
 +2.11.0
 +
