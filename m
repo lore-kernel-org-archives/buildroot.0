@@ -1,38 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:31:42 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] apr: fix size of pid_t
-Message-ID: <20170331071606.2D93D826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 00:14:06 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] wget: add upstream
+	security fix
+Message-ID: <20170331071605.A2C96826C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b9349e3cb8804bf3f1d2de3823f58371e735ab9
+commit: https://git.buildroot.net/buildroot/commit/?id=05bc9b0c339d3ed0830cff3e702cdccefcf2b068
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-pid_t is a signed 32bits integer on both 32bits and 64bits
-architectures.
-This fixes an issue with apache server which causes bad pid
-to be written in PidFile
+Fixes CVE-2017-6508: CRLF injection in the url_parse function in url.c
 
-Signed-off-by: Julien Beraud <julien.beraud@spectracom.orolia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit ee8cbc5fca779ff054a50ed8e6271952367147c7)
+http://lists.gnu.org/archive/html/bug-wget/2017-03/msg00018.html
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7132fc9c11573a460243895c85e66b514b71c041)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apr/apr.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...0001-Fix-CRLF-injection-in-Wget-host-part.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index 361a79f..f09f943 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -22,6 +22,7 @@ APR_CONF_ENV = \
- 	apr_cv_mutex_robust_shared=no \
- 	apr_cv_tcp_nodelay_with_cork=yes \
- 	ac_cv_sizeof_struct_iovec=8 \
-+	ac_cv_sizeof_pid_t=4 \
- 	ac_cv_struct_rlimit=yes \
- 	ac_cv_o_nonblock_inherited=no \
- 	apr_cv_mutex_recursive=yes
+diff --git a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
+new file mode 100644
+index 0000000..380b075
+--- /dev/null
++++ b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
+@@ -0,0 +1,40 @@
++From 4d729e322fae359a1aefaafec1144764a54e8ad4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
++Date: Mon, 6 Mar 2017 10:04:22 +0100
++Subject: [PATCH] Fix CRLF injection in Wget host part
++
++* src/url.c (url_parse): Reject control characters in host part of URL
++
++Reported-by: Orange Tsai
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 4d729e322fae35
++
++ src/url.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/src/url.c b/src/url.c
++index 8f8ff0b881af..7d36b27d7b92 100644
++--- a/src/url.c
+++++ b/src/url.c
++@@ -925,6 +925,17 @@ url_parse (const char *url, int *error, struct iri *iri, bool percent_encode)
++       url_unescape (u->host);
++       host_modified = true;
++ 
+++      /* check for invalid control characters in host name */
+++      for (p = u->host; *p; p++)
+++        {
+++          if (c_iscntrl(*p))
+++            {
+++              url_free(u);
+++              error_code = PE_INVALID_HOST_NAME;
+++              goto error;
+++            }
+++        }
+++
++       /* Apply IDNA regardless of iri->utf8_encode status */
++       if (opt.enable_iri && iri)
++         {
++-- 
++2.11.0
++
