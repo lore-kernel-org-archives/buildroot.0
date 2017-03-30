@@ -1,39 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Mar 2017 21:39:50 +0200
-Subject: [Buildroot] [PATCH] shairport-sync: requires C++
-In-Reply-To: <20170329215422.702b1840@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 29 Mar 2017 21:54:22 +0200")
-References: <208617074343a6ecf1be15a96c82bdb148d5b675.1490814571.git.baruch@tkos.co.il>
- <20170329215422.702b1840@free-electrons.com>
-Message-ID: <8760iq4kqh.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 30 Mar 2017 16:42:53 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-03-29
+In-Reply-To: <20170330062829.DA74920811@mail.free-electrons.com>
+References: <20170330062829.DA74920811@mail.free-electrons.com>
+Message-ID: <CAOMZO5CsrWa-DifQNpBaP+AP9_McRC1FCH9En_fy58wr8FZAsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Thu, Mar 30, 2017 at 3:28 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 
- > Hello,
- > On Wed, 29 Mar 2017 22:09:31 +0300, Baruch Siach wrote:
- >> Fixes:
- >> http://autobuild.buildroot.net/results/122/122d6cedf0205e8db27d498d6a2a839e11e7b6f2/
- >> http://autobuild.buildroot.net/results/bef/bef5fb328e6688107496cb213d8aeeca527abf03/
- >> 
- >> Cc: J?rg Krause <joerg.krause@embedded.rocks>
- >> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- >> ---
- >> package/shairport-sync/Config.in | 5 +++--
- >> 1 file changed, 3 insertions(+), 2 deletions(-)
+>      powerpc |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/fb1cd422a999e277946cff40792dca06112ffb03 | ORPH
+>         i686 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/c6436611103bb073ee0201d4b2dfe4c4c26861b2 | ORPH
+>       x86_64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/3a4547c3259b94ed04835b9273f37a1ce5b4cf67 | ORPH
 
- > Applied to master, thanks. In practice, most of the code in
- > shairport-sync is in C, except one file in C++, which is only compiled
- > conditionally (and we don't build it). However it seems like automake
- > uses CXX even if the C++ file is not part of the build.
-
-That is afaik because of the unconditional AC_PROG_CXX. For other
-packages (E.G. package/ifplugd/0003-no-cxx.patch) we patch it out, but
-something upstreamable would naturally be nicer.
-
--- 
-Bye, Peter Korsgaard
+Probably this one is fixed with this patch:
+https://patchwork.ozlabs.org/patch/744927/
