@@ -1,29 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 13:20:19 +0200
-Subject: [Buildroot] [PATCH] package/coreutils: remove legacy comment
-In-Reply-To: <20170330211143.6645-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Thu, 30 Mar 2017 23:11:43 +0200")
-References: <20170330211143.6645-1-yann.morin.1998@free.fr>
-Message-ID: <87vaqpvgjw.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Mar 2017 13:36:00 +0200
+Subject: [Buildroot] [PATCH] pcre: add upstream security fixes
+In-Reply-To: <fccce84215ce3160b0ab6d38e5f58a4188af174e.1490958576.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 31 Mar 2017 14:09:36 +0300")
+References: <fccce84215ce3160b0ab6d38e5f58a4188af174e.1490958576.git.baruch@tkos.co.il>
+Message-ID: <87r31dvftr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This comment was added in 2007 (e4c6340a: cleanup and fixes), back when
- > removing a package was (seemingly) supported.
+ > Take Debian adapted patches of upstream.
+ > Fixes:
 
- > This ability was lost when coreutils was converted to autotarget in 2010
- > (386183f: coreutils: convert to autotarget), but the comment stuck.
+ > CVE-2017-6004: crafted regular expression may cause denial of service
 
- > Get rid of it: it nowadays does not make sense and is a bit confusing.
+ > CVE-2017-7186: invalid Unicode property lookup may cause denial of service
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
+
+There are other pending security issues, E.G. CVE-2017-7244:
+
+https://blogs.gentoo.org/ago/2017/03/20/libpcre-invalid-memory-read-in-_pcre32_xclass-pcre_xclass-c/
+
+But I can take care of that.
 
 -- 
 Bye, Peter Korsgaard
