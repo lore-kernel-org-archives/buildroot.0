@@ -1,63 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:25:56 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gst1-plugins-bad:
-	waylandsink needs wayland-protocols
-Message-ID: <20170331071605.EDE11826C6@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 08:43:35 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] download/git: create GNU
+	format tar files
+Message-ID: <20170331071606.63E62826C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc9ecb90c58908ffa0d896d4da5b1d4b917253c7
+commit: https://git.buildroot.net/buildroot/commit/?id=e6b2152cd15bd8a9ed8a72c2ef2c07959839d46d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-Changes v1 -> v2:
-  - use select instead of depends for BR2_PACKAGE_WAYLAND_PROTOCOLS
-   (suggested by Thomas Petazzoni)
-  - add select BR2_PACKAGE_WAYLAND_PROTOCOLS to missing second
-    place (BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND)
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On most distros, the tar format defaults to GNU. However, at build time
+the default format may be changed to posix. Also, future versions of
+tar will default to posix.
 
-(cherry picked from commit 5a2d37ca125c1742864af0e9324234f8f3ecc071)
+Since we want the tarballs created by the git download method to be
+reproducible (so their hash can be checked), we should explicitly
+specify the format. Since existing tarballs on sources.buildroot.org
+use the GNU format, and also the existing hashes in the *.hash files
+are based on GNU format tarballs, we use the GNU format.
+
+In addition, the Posix format encodes atime and ctime as well as mtime,
+but tar offers no option like --mtime to override them. In the GNU
+format, atime and ctime are only encoded if the --incremental option is
+given.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 0f369a9231b2c67748f4f0c2dbb33ebdc2890478)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 2 ++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ support/download/git | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 6bec362..1db5187 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -112,6 +112,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
- 	default y
- 	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
- 	depends on BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
- 
- comment "wayland needs the egl platform and the wayland package"
-@@ -686,6 +687,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
- 	bool "wayland"
- 	depends on BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	default y
- 	help
- 	  Wayland Video Sink
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 00add02..c6a151a 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -121,7 +121,7 @@ endif
- 
- ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-wayland
--GST1_PLUGINS_BAD_DEPENDENCIES += wayland
-+GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-wayland
- endif
+diff --git a/support/download/git b/support/download/git
+index 7921411..056057c 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -94,6 +94,8 @@ popd >/dev/null
+ # Generate the archive, sort with the C locale so that it is reproducible
+ find "${basename}" -not -type d >"${basename}.list"
+ LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
+-tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
++# Create GNU-format tarballs, since that's the format of the tarballs on
++# sources.buildroot.org and used in the *.hash files
++tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${basename}.list.sorted" >"${output}.tar"
+ gzip -n <"${output}.tar" >"${output}"
