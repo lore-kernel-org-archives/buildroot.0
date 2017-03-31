@@ -1,56 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 09:02:28 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] slang: use correct
-	ncurses config script name
-Message-ID: <20170331071606.ECEFD826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 09:01:26 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/ntp: fix build
+	for toolchains without ssp
+Message-ID: <20170331071606.DDF90826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d70c89b8029cef33a3abfa2ab98f1f68656c947
+commit: https://git.buildroot.net/buildroot/commit/?id=ccf0e0767d6c73dd23852fad5de2900c6f88fd56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The ncurses config script can have different names depending on the
-configuration (e.g. wchar support enabled/disabled). So, use
-$(NCURSES_CONFIG_SCRIPTS) from the ncurses package as it contains the
-proper name.
+ntp defaults to use ssp support
+http://bk1.ntp.org/ntp-stable/sntp/harden/README
 
-Fixes:
+by using these flags
+http://bk1.ntp.org/ntp-stable/sntp/harden/linux
 
-  http://autobuild.buildroot.net/results/c97554c05e121c76407be53ba37924cfcb658e9d/
-  http://autobuild.buildroot.net/results/b0a31a3491a30ee0d6e6e7dbba68a86f0e00943d/
-  http://autobuild.buildroot.net/results/a77241141cf8710fa945523ef62327798e3c4824/
-  [...]
+If the toolchain lacks SSP support this patch forces ntp to use an
+empty set of flags: http://bk1.ntp.org/ntp-stable/sntp/harden/default
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Fixes
+http://autobuild.buildroot.net/results/1d5/1d58bd8745b22c8eb71fea4c7255d3ace69f6f7a/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit b3e4ed92380080334d3d09bb4a53dc6102edd8aa)
+(cherry picked from commit 00968bcac0674250956e99b6fafbf9b373446488)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/slang/slang.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/ntp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 9078bf2..e6abdee 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -40,7 +40,7 @@ endif
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index b6eb1b1..e3e53a8 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -23,6 +23,12 @@ NTP_CONF_OPTS = \
+ # 0002-ntp-syscalls-fallback.patch
+ NTP_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- SLANG_DEPENDENCIES += ncurses
--SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
-+SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
- else
- SLANG_CONF_OPTS += ac_cv_path_nc5config=no
- endif
-@@ -49,7 +49,7 @@ ifeq ($(BR2_PACKAGE_READLINE),y)
- SLANG_CONF_OPTS += --with-readline=gnu
- SLANG_DEPENDENCIES += readline
- ifeq ($(BR2_STATIC_LIBS),y)
--SLANG_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/ncurses5-config --libs`"
-+SLANG_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS) --libs`"
- endif
- endif
- 
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
++NTP_CONF_OPTS += --with-locfile=linux
++else
++NTP_CONF_OPTS += --with-locfile=default
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ NTP_CONF_OPTS += --enable-linuxcaps
+ NTP_DEPENDENCIES += libcap
