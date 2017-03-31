@@ -1,31 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 13:18:33 +0200
-Subject: [Buildroot] [git commit] dc3dd: upcase the autoreconf value
-Message-ID: <20170331113733.098DD82207@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 13:36:20 +0200
+Subject: [Buildroot] [git commit] audiofile: add security patch for
+	CVE-2017-6829
+Message-ID: <20170331113733.37D6982207@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11982199f6fd889b37dce325f57c962657db9620
+commit: https://git.buildroot.net/buildroot/commit/?id=434890df2a7c131b40fec1c49e6239972ab299d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Beno??t Allard <benoit.allard@greenbone.net>
+The decodeSample function in IMA.cpp in Audio File Library (aka audiofile)
+0.3.6 allows remote attackers to cause a denial of service (crash) via a
+crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp
+https://github.com/mpruett/audiofile/issues/33
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dc3dd/dc3dd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...x-values-to-fix-index-overflow-in-IMA.cpp.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/dc3dd/dc3dd.mk b/package/dc3dd/dc3dd.mk
-index fef9093..2830bb2 100644
---- a/package/dc3dd/dc3dd.mk
-+++ b/package/dc3dd/dc3dd.mk
-@@ -11,6 +11,6 @@ DC3DD_SITE = https://downloads.sourceforge.net/project/dc3dd/dc3dd/$(DC3DD_VERSI
- DC3DD_LICENSE = GPLv3+
- DC3DD_LICENSE_FILES = COPYING
- # We are patching the Makefile.am
--DC3DD_AUTORECONF = yes
-+DC3DD_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+diff --git a/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+new file mode 100644
+index 0000000..21f899a
+--- /dev/null
++++ b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+@@ -0,0 +1,39 @@
++From 25eb00ce913452c2e614548d7df93070bf0d066f Mon Sep 17 00:00:00 2001
++From: Antonio Larrosa <larrosa@kde.org>
++Date: Mon, 6 Mar 2017 18:02:31 +0100
++Subject: [PATCH] clamp index values to fix index overflow in IMA.cpp
++
++This fixes #33
++(also reported at https://bugzilla.opensuse.org/show_bug.cgi?id=1026981
++and https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp/)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libaudiofile/modules/IMA.cpp | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libaudiofile/modules/IMA.cpp b/libaudiofile/modules/IMA.cpp
++index 7476d44..df4aad6 100644
++--- a/libaudiofile/modules/IMA.cpp
+++++ b/libaudiofile/modules/IMA.cpp
++@@ -169,7 +169,7 @@ int IMA::decodeBlockWAVE(const uint8_t *encoded, int16_t *decoded)
++ 		if (encoded[1] & 0x80)
++ 			m_adpcmState[c].previousValue -= 0x10000;
++ 
++-		m_adpcmState[c].index = encoded[2];
+++		m_adpcmState[c].index = clamp(encoded[2], 0, 88);
++ 
++ 		*decoded++ = m_adpcmState[c].previousValue;
++ 
++@@ -210,7 +210,7 @@ int IMA::decodeBlockQT(const uint8_t *encoded, int16_t *decoded)
++ 			predictor -= 0x10000;
++ 
++ 		state.previousValue = clamp(predictor, MIN_INT16, MAX_INT16);
++-		state.index = encoded[1] & 0x7f;
+++		state.index = clamp(encoded[1] & 0x7f, 0, 88);
++ 		encoded += 2;
++ 
++ 		for (int n=0; n<m_framesPerPacket; n+=2)
++-- 
++2.11.0
++
