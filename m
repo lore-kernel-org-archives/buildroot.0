@@ -1,44 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:17:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] filemq: correct license
-Message-ID: <20170331071605.BDE76826C6@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 08:43:48 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] fmc: correct hash file
+Message-ID: <20170331071606.7192B826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b277a7f0db52b02f79a29a7816169abfefd51f91
+commit: https://git.buildroot.net/buildroot/commit/?id=2f426dadad24fa46909ed6504d19eb7ccbd55657
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-All source files, except src/filemq_client.c and src/filemq_server.c,
-has MPL Version 2.0 license text in file header.
+It had sha256sum instead of sha256. This wasn't noticed before since
+hashes for git downloads are not checked.
 
-As confirmed with upstream [1] (L)GPLv3 license texts COPYING and
-COPYING.LESSER are leftover from previous implementation.
-
-[1] - https://github.com/zeromq/filemq/issues/74
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 205a0289d4a0aefc76b0c937c2f725517114c658)
+(cherry picked from commit ba717fde72c862a283a035b3b44377bb48d08284)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/filemq/filemq.mk | 4 ++--
+ package/fmc/fmc.hash | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index d57208e..62ddfaf 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -11,8 +11,8 @@ FILEMQ_AUTORECONF = YES
- FILEMQ_CONF_ENV = filemq_have_asciidoc=no
- FILEMQ_INSTALL_STAGING = YES
- FILEMQ_DEPENDENCIES = czmq openssl zeromq
--FILEMQ_LICENSE = LGPLv3+ with exceptions
--FILEMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+FILEMQ_LICENSE = MPLv2.0
-+FILEMQ_LICENSE_FILES = LICENSE
- 
- define FILEMQ_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
+diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
+index 2402831..13d9d77 100644
+--- a/package/fmc/fmc.hash
++++ b/package/fmc/fmc.hash
+@@ -1,2 +1,2 @@
+-# Locally Computed
+-sha256sum	a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4	fmc-fsl-sdk-v2.0.tar.gz
++# Locally calculated
++sha256	a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4	fmc-fsl-sdk-v2.0.tar.gz
