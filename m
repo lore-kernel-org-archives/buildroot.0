@@ -1,81 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 31 Mar 2017 18:34:38 +0200
-Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
- BR2_GENIMAGE_CFG_FILES
-In-Reply-To: <f2428cf7-660e-f22d-0e5e-4b22e1abf870@andin.de>
-References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
- <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
- <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
- <f2428cf7-660e-f22d-0e5e-4b22e1abf870@andin.de>
-Message-ID: <4d773ae6-949d-800e-938b-f9780b25c2e9@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 31 Mar 2017 22:26:03 +0200
+Subject: [Buildroot] [PATCH 1/2] package/xenomai: enable armv5tej support
+Message-ID: <20170331202604.18153-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Apply a patch from Xenomai 2.6 [1].
 
+Fixes:
+http://autobuild.buildroot.net/results/762/7623410a81b1587b33b4f4b9cf1572c872b8a6e9/build-end.log
 
-On 31-03-17 09:46, Andreas Naumann wrote:
-> Hi Phelip,
-> 
-> Am 31.03.2017 um 00:51 schrieb Arnout Vandecappelle:
->>
->>  I'm still not entirely sure if this new option is worthwhile. Without it, you
->> would instead need
->>
->> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->> BR2_ROOTFS_POST_SCRIPT_ARGS="board/acmesystems/aria-g25/genimage.cfg"
->>
->> Not really complicated either... The only real advantage I see is that it
->> motivates people more to use genimage (which is otherwise a bit hidden). But for
->> that, a paragraph or two in docs/manual/customize-post-image.txt would also
->> work. By the way, even for this series an explanation of the option would be
->> required in that file.
->>
->>  What do the others think?
-> 
-> I have a slightly different use case than most genimage configs in buildroot
-> right now. This is, I use genimage's ability to split my customized rootfs into
-> multiple filesystems in order to give them them ro/writeable and other
-> capabilities as appropriate.
-> Thus to preserve ownership and such I need to run genimage under fakeroot.
+[1] https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
 
- It would indeed make sense to run genimage under fakeroot, but then it'd need
-to have some option to extract the tarball first. Actually, that's something
-that could be added to the genimage.sh script at some point...
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ .../xenomai/0002-arm-enable-armv5tej-support.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/xenomai/0002-arm-enable-armv5tej-support.patch
 
-> Currently I do this explicitely in a post image script. An improvement I think
-> about is switching to using the post fakeroot integration which buildroot
-> provides since a while.
-> 
-> So unless this becomes some kind of option, your proposed change probably
-> wouldnt work for me.
-
- It is certainly optional, you can always call genimage directly from you
-post-image script. You can also call the genimage.sh script but I don't know if
-that's useful in your case.
-
-> What I was thinking about in the past would be a deeper integration of genimage
-> in buildroots filesystem configuration, actually generating the genimage config.
-> But so far it was not worth the effort for me.
-
- We have considered that in the past. The problem is that genimage doesn't
-support some of the options that we do. Otherwise, however, it would be really
-nice to remove all our messy filesystem handling code and just generate a
-genimage.cfg file...
-
- OTOH we also considered that a full image typically needs more than just a
-single filesystem, so generating a genimage.cfg for part of the image seems a
-bit pointless.
-
- Regards,
- Arnout
-
+diff --git a/package/xenomai/0002-arm-enable-armv5tej-support.patch b/package/xenomai/0002-arm-enable-armv5tej-support.patch
+new file mode 100644
+index 0000000..5feaa59
+--- /dev/null
++++ b/package/xenomai/0002-arm-enable-armv5tej-support.patch
+@@ -0,0 +1,32 @@
++From fcd06f42fef4d52bb0d9772fa71015988c828b1b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 31 Mar 2017 21:10:23 +0200
++Subject: [PATCH] arm: enable armv5tej support
++
++armv5tej are not detected in lib/cobalt/arch/arm/include/asm/xenomai/features.h
++
++Apply the same patch from xenomai-2.6:
++https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ lib/cobalt/arch/arm/include/asm/xenomai/features.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/lib/cobalt/arch/arm/include/asm/xenomai/features.h b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
++index 10bd0c7..e84b809 100644
++--- a/lib/cobalt/arch/arm/include/asm/xenomai/features.h
+++++ b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
++@@ -34,7 +34,8 @@
++ #endif /* armv4 */
++ 
++ #if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) \
++-	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__)
+++	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__) \
+++	|| defined(__ARM_ARCH_5TEJ__)
++ #define __LINUX_ARM_ARCH__ 5
++ #endif /* armv5 */
++ 
++-- 
++2.9.3
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
