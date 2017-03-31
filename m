@@ -1,69 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 09:12:23 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] system: do not overwrite
-	/bin/sh Busybox symlink
-Message-ID: <20170331071607.706F0826C6@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 09:02:28 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] slang: use correct
+	ncurses config script name
+Message-ID: <20170331071606.ECEFD826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1244b189543a11f1d712caf12efb7ee8703eba97
+commit: https://git.buildroot.net/buildroot/commit/?id=9d70c89b8029cef33a3abfa2ab98f1f68656c947
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The BR2_SYSTEM_BIN_SH hidden option defines to what binary the /bin/sh
-symlinks should point to. If busybox is chosen, then /bin/sh is created
-to point to /bin/busybox.
+The ncurses config script can have different names depending on the
+configuration (e.g. wchar support enabled/disabled). So, use
+$(NCURSES_CONFIG_SCRIPTS) from the ncurses package as it contains the
+proper name.
 
-This works fine with the default installation mode of Busybox, but it
-fails with the upcoming "individual binaries" mode, in which each applet
-is installed as its own binary, and /bin/busybox doesn't exist: we get
-/bin/sh as a broken symlink to /bin/busybox.
+Fixes:
 
-Since Busybox already installs its own /bin/sh symlink, properly
-pointing to /bin/ash or /bin/hush depending on the selected shell, it
-doesn't make sense for the BR2_SYSTEM_BIN_SH logic to override
-this. Just let Busybox install its own /bin/sh by making
-BR2_SYSTEM_BIN_SH empty when Busybox shell is selected as /bin/sh.
+  http://autobuild.buildroot.net/results/c97554c05e121c76407be53ba37924cfcb658e9d/
+  http://autobuild.buildroot.net/results/b0a31a3491a30ee0d6e6e7dbba68a86f0e00943d/
+  http://autobuild.buildroot.net/results/a77241141cf8710fa945523ef62327798e3c4824/
+  [...]
 
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit fc91501e6b32ef1b015ac9b0fbf6d64aa1ce0162)
+(cherry picked from commit b3e4ed92380080334d3d09bb4a53dc6102edd8aa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/skeleton/skeleton.mk | 2 ++
- system/Config.in             | 1 -
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/slang/slang.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 1000161..9940944 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -203,10 +203,12 @@ define SKELETON_BIN_SH
- 	rm -f $(TARGET_DIR)/bin/sh
- endef
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 9078bf2..e6abdee 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -40,7 +40,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ SLANG_DEPENDENCIES += ncurses
+-SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
++SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
  else
-+ifneq ($(SKELETON_TARGET_GENERIC_BIN_SH),)
- define SKELETON_BIN_SH
- 	ln -sf $(SKELETON_TARGET_GENERIC_BIN_SH) $(TARGET_DIR)/bin/sh
- endef
+ SLANG_CONF_OPTS += ac_cv_path_nc5config=no
  endif
-+endif
- TARGET_FINALIZE_HOOKS += SKELETON_BIN_SH
+@@ -49,7 +49,7 @@ ifeq ($(BR2_PACKAGE_READLINE),y)
+ SLANG_CONF_OPTS += --with-readline=gnu
+ SLANG_DEPENDENCIES += readline
+ ifeq ($(BR2_STATIC_LIBS),y)
+-SLANG_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/ncurses5-config --libs`"
++SLANG_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS) --libs`"
+ endif
+ endif
  
- ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-diff --git a/system/Config.in b/system/Config.in
-index 3ddf843..b47ae43 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -298,7 +298,6 @@ endchoice # /bin/sh
- 
- config BR2_SYSTEM_BIN_SH
- 	string
--	default "busybox" if BR2_SYSTEM_BIN_SH_BUSYBOX
- 	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
- 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
- 	default "mksh"    if BR2_SYSTEM_BIN_SH_MKSH
