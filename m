@@ -1,63 +1,45 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 31 Mar 2017 22:26:03 +0200
-Subject: [Buildroot] [PATCH 1/2] package/xenomai: enable armv5tej support
-Message-ID: <20170331202604.18153-1-romain.naour@gmail.com>
+Date: Fri, 31 Mar 2017 22:26:04 +0200
+Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable obstack support
+In-Reply-To: <20170331202604.18153-1-romain.naour@gmail.com>
+References: <20170331202604.18153-1-romain.naour@gmail.com>
+Message-ID: <20170331202604.18153-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply a patch from Xenomai 2.6 [1].
+Obstack support in Xenomai is broken when the libc doesn't support
+obstack support itself. Make sure we disable obstack support for all
+libc since it was removed in uClibc-ng since 1.0.21 release and it's
+always disabled with Glibc.
 
 Fixes:
-http://autobuild.buildroot.net/results/762/7623410a81b1587b33b4f4b9cf1572c872b8a6e9/build-end.log
-
-[1] https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
+http://autobuild.buildroot.net/results/555/555d9cb9cb59fad6353516bed206e1117974e8cd/build-end.log
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Pawel Sikora <sikor6@gmail.com>
 ---
- .../xenomai/0002-arm-enable-armv5tej-support.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/xenomai/0002-arm-enable-armv5tej-support.patch
+ package/xenomai/xenomai.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/xenomai/0002-arm-enable-armv5tej-support.patch b/package/xenomai/0002-arm-enable-armv5tej-support.patch
-new file mode 100644
-index 0000000..5feaa59
---- /dev/null
-+++ b/package/xenomai/0002-arm-enable-armv5tej-support.patch
-@@ -0,0 +1,32 @@
-+From fcd06f42fef4d52bb0d9772fa71015988c828b1b Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 31 Mar 2017 21:10:23 +0200
-+Subject: [PATCH] arm: enable armv5tej support
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index fc240f9..77889f0 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+ 
+ XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
+ 
++# Obstack support in Xenomai is broken when the libc doesn't support
++# obstack support itself. Make sure we disable obstack support for all
++# libc since it was removed in uClibc-ng since 1.0.21 release and it's
++# always disabled with Glibc.
++XENOMAI_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DELIDE_CODE"
 +
-+armv5tej are not detected in lib/cobalt/arch/arm/include/asm/xenomai/features.h
-+
-+Apply the same patch from xenomai-2.6:
-+https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ lib/cobalt/arch/arm/include/asm/xenomai/features.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/cobalt/arch/arm/include/asm/xenomai/features.h b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
-+index 10bd0c7..e84b809 100644
-+--- a/lib/cobalt/arch/arm/include/asm/xenomai/features.h
-++++ b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
-+@@ -34,7 +34,8 @@
-+ #endif /* armv4 */
-+ 
-+ #if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) \
-+-	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__)
-++	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__) \
-++	|| defined(__ARM_ARCH_5TEJ__)
-+ #define __LINUX_ARM_ARCH__ 5
-+ #endif /* armv5 */
-+ 
-+-- 
-+2.9.3
-+
+ define XENOMAI_REMOVE_DEVFILES
+ 	for i in xeno-config xeno-info wrap-link.sh ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
 -- 
 2.9.3
