@@ -1,83 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:16:09 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] skalibs: fix endianness
-	detection on x86
-Message-ID: <20170331071605.B05C5826C6@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 08:57:20 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.{2,
+	12}.x and 4.{1, 4, 9, 10}.x series
+Message-ID: <20170331071606.AF12A826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb021f3547a721d77de73789bd23a44c6e3ea8f7
+commit: https://git.buildroot.net/buildroot/commit/?id=5bc876f43b1954e0494b5f360c8e0f9ddc5624e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Update the patch for compile time endianness detection so it works on
-x86 platforms using GCC <= 4.4.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/c2e8e1180571976b412cbba729c45a3698aea0b2
-  http://autobuild.buildroot.net/results/2ee47107d8a67470f7bc3e10cf763202d5455d17
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[Peter: drop 4.10.x update]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8eecaf2d122f7da6f59964f5eb00139a32373d06)
+(cherry picked from commit 0d70d1dbf054f4a0609ba1076bc7e097305013d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../skalibs/0001-No-runtime-tests-for-endianness.patch  | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/skalibs/0001-No-runtime-tests-for-endianness.patch b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
-index 4390d44..5f763c4 100644
---- a/package/skalibs/0001-No-runtime-tests-for-endianness.patch
-+++ b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
-@@ -1,6 +1,6 @@
--From 1e6f0b094c6ce6454be572704b866d2ce0962e59 Mon Sep 17 00:00:00 2001
-+From 6754b208e7ec3bd1d4265db18fa4c0e7961a77bf Mon Sep 17 00:00:00 2001
- From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
--Date: Sun, 4 Dec 2016 19:10:40 +0100
-+Date: Mon, 20 Mar 2017 20:05:00 +0100
- Subject: [PATCH] No runtime tests for endianness
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 81ddc9d..de55b04 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,15 +214,15 @@ endchoice
  
- Replace build and execution of runtime test programs for determining
-@@ -12,8 +12,8 @@ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
- ---
-  configure                     | 15 +++++++++++----
-  src/sysdeps/trybigendian.c    | 16 ++++++++++++++++
-- src/sysdeps/trylittleendian.c | 16 ++++++++++++++++
-- 3 files changed, 43 insertions(+), 4 deletions(-)
-+ src/sysdeps/trylittleendian.c | 19 +++++++++++++++++++
-+ 3 files changed, 46 insertions(+), 4 deletions(-)
-  create mode 100644 src/sysdeps/trybigendian.c
-  create mode 100644 src/sysdeps/trylittleendian.c
- 
-@@ -70,16 +70,19 @@ index 0000000..d857572
- +}
- diff --git a/src/sysdeps/trylittleendian.c b/src/sysdeps/trylittleendian.c
- new file mode 100644
--index 0000000..eba065a
-+index 0000000..68b93c1
- --- /dev/null
- +++ b/src/sysdeps/trylittleendian.c
--@@ -0,0 +1,16 @@
-+@@ -0,0 +1,19 @@
- +#if defined(__BYTE_ORDER) && (__BYTE_ORDER == __LITTLE_ENDIAN) ||	\
- +	defined(__BYTE_ORDER__) && (__BYTE_ORDER__  == __ORDER_LITTLE_ENDIAN__) || \
- +	defined(__LITTLE_ENDIAN) ||					\
- +	defined(__ARMEL__) ||						\
- +	defined(__THUMBEL__) ||					\
- +	defined(__AARCH64EL__) ||					\
-++	defined(__i386) || defined(__i386__) ||			\
-++	defined(__amd64) || defined(__amd64__) ||			\
-++	defined(__x86_64) || defined(__x86_64__) ||			\
- +	defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
- +#define YEAH
- +#else
-@@ -91,5 +94,5 @@ index 0000000..eba065a
- +	return 0;
- +}
- -- 
--2.5.5
-+2.1.4
- 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.85"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.87"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.71"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.18.48"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.55"	if BR2_KERNEL_HEADERS_4_4
++	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
++	default "4.4.56"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.16"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.17"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
