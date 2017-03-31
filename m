@@ -1,40 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 09:03:11 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] htop: use correct ncurses
-	config script name
-Message-ID: <20170331071607.06E60826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 09:08:39 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] taglib: fix legal info
+Message-ID: <20170331071607.3D5D9826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3400806b9d555cf2f30154feeecd19221b8b52a0
+commit: https://git.buildroot.net/buildroot/commit/?id=74ed2a833da74b33e0ad8c4fd77e789885b3a9fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The ncurses config script can have different names depending on the
-configuration (e.g. wchar support enabled/disabled). So, use
-$(NCURSES_CONFIG_SCRIPTS) from the ncurses package as it contains the
-proper name.
+taglib is dual licensed under LGPLv2.1 or MPLv1.1. Almost all source
+files have license text mentioning LGPLv2.1 or alternatively MPLv1.1.
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+[Thomas: use MPL-1.1 instead of MPLv1.1, since MPL-1.1 is the SPDX
+license code for this license.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8cd1554ee162f6344dab078233f4f6c0d93e7c24)
+
+(cherry picked from commit f30a3940c8dc5fc9bbe3a0ace457201808142183)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/htop/htop.mk | 2 +-
+ package/taglib/taglib.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 9451d15..dd3bed4 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -8,7 +8,7 @@ HTOP_VERSION = 2.0.2
- HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
- HTOP_DEPENDENCIES = ncurses
- # Prevent htop build system from searching the host paths
--HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-config
-+HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
- HTOP_LICENSE = GPLv2
- HTOP_LICENSE_FILES = COPYING
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index f47c4ba..58bb889 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -7,7 +7,7 @@
+ TAGLIB_VERSION = 1.11.1
+ TAGLIB_SITE = http://taglib.github.io/releases
+ TAGLIB_INSTALL_STAGING = YES
+-TAGLIB_LICENSE = LGPLv2.1, MPL
++TAGLIB_LICENSE = LGPLv2.1 or MPL-1.1
+ TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
  
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
