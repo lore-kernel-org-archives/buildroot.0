@@ -1,67 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 00:28:28 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] openssh: security bump to
-	version 7.5
-Message-ID: <20170331071606.086E1826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 09:10:24 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] samba4: security bump to
+	version 4.5.7
+Message-ID: <20170331071607.58B97826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df0c78d61e142781b6da3d0cf789b8b7b1ae3055
+commit: https://git.buildroot.net/buildroot/commit/?id=119e94b830a14a2c82d11bf5dfc16b46ece06702
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-From the release notes (https://www.openssh.com/txt/release-7.5):
+Fixes CVE-2017-2619:
 
-Security
---------
+   All versions of Samba prior to 4.6.1, 4.5.7, 4.4.11 are vulnerable to
+   a malicious client using a symlink race to allow access to areas of
+   the server file system not exported under the share definition.
 
- * ssh(1), sshd(8): Fix weakness in CBC padding oracle countermeasures
-   that allowed a variant of the attack fixed in OpenSSH 7.3 to proceed.
-   Note that the OpenSSH client disables CBC ciphers by default, sshd
-   offers them as lowest-preference options and will remove them by
-   default entriely in the next release. Reported by Jean Paul
-   Degabriele, Kenny Paterson, Martin Albrecht and Torben Hansen of
-   Royal Holloway, University of London.
+   Samba uses the realpath() system call to ensure when a client requests
+   access to a pathname that it is under the exported share path on the
+   server file system.
 
- * sftp-client(1): [portable OpenSSH only] On Cygwin, a client making
-   a recursive file transfer could be maniuplated by a hostile server to
-   perform a path-traversal attack. creating or modifying files outside
-   of the intended target directory. Reported by Jann Horn of Google
-   Project Zero.
+   Clients that have write access to the exported part of the file system
+   via SMB1 unix extensions or NFS to create symlinks can race the server
+   by renaming a realpath() checked path and then creating a symlink. If
+   the client wins the race it can cause the server to access the new
+   symlink target after the exported share path check has been done. This
+   new symlink target can point to anywhere on the server file system.
 
-[Peter: mention security fixes]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+   This is a difficult race to win, but theoretically possible. Note that
+   the proof of concept code supplied wins the race reliably only when
+   the server is slowed down using the strace utility running on the
+   server. Exploitation of this bug has not been seen in the wild.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 2204f4deb1c6c6ff4accd84b5aa2d42f5930b730)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 493cedf3af061b90a899826e0c184c2f484414f6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 5 ++---
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 09010d3..3685bc0 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,2 @@
--# Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-7.4
--sha256 1b1fc4a14e2024293181924ed24872e6f2e06293f3e8926a376b8aec481f19d1  openssh-7.4p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
-+sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index ce37ee7..ba48770 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 4fec55d..71d24f7 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	bff02762b3e4ee030f02266c6e24a0b888248b387246219b7fbe3e1758ef2184	samba-4.5.5.tar.gz
++sha256	ac70f09af80639d8189e1b9bc0a554841ee44df2b1ef58e7e682ad5400fd9400	samba-4.5.7.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index f64b684..aa7cb57 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 7.4p1
-+OPENSSH_VERSION = 7.5p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c, BSD-2c, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-SAMBA4_VERSION = 4.5.5
++SAMBA4_VERSION = 4.5.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
