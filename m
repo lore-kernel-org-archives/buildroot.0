@@ -1,75 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 31 Mar 2017 00:51:30 +0200
-Subject: [Buildroot] [RFC 1/4] support/scripts: add generic genimage
-	script
-In-Reply-To: <20170329145120.11863-2-etienne.phelip@savoirfairelinux.com>
-References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
- <20170329145120.11863-2-etienne.phelip@savoirfairelinux.com>
-Message-ID: <4a4ed2c9-51e5-c14e-22bc-0e768cc4ecc9@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 Mar 2017 08:44:03 +0200
+Subject: [Buildroot] [PATCH 01/16] download/git: create GNU format tar
+	files
+In-Reply-To: <20170321000712.26500-2-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 21 Mar 2017 01:06:57 +0100")
+References: <20170321000712.26500-1-arnout@mind.be>
+ <20170321000712.26500-2-arnout@mind.be>
+Message-ID: <87mvc2ymh8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
+ > On most distros, the tar format defaults to GNU. However, at build time
+ > the default format may be changed to posix. Also, future versions of
+ > tar will default to posix.
 
-On 29-03-17 16:51, Etienne Phelip wrote:
-> This script is a wrapper for the genimage tool used by most boards.
-> The board postimage script can now call this script instead of invoking
-> genimage command themselves.
-> 
-> Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
+ > Since we want the tarballs created by the git download method to be
+ > reproducible (so their hash can be checked), we should explicitly
+ > specify the format. Since existing tarballs on sources.buildroot.org
+ > use the GNU format, and also the existing hashes in the *.hash files
+ > are based on GNU format tarballs, we use the GNU format.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > In addition, the Posix format encodes atime and ctime as well as mtime,
+ > but tar offers no option like --mtime to override them. In the GNU
+ > format, atime and ctime are only encoded if the --incremental option is
+ > given.
 
- Regards,
- Arnout
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Peter, can you test if this solves the issue for you?
 
-> ---
->  support/scripts/genimage.sh | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100755 support/scripts/genimage.sh
-> 
-> diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-> new file mode 100755
-> index 0000000..0ed0e8b
-> --- /dev/null
-> +++ b/support/scripts/genimage.sh
-> @@ -0,0 +1,27 @@
-> +#!/bin/bash
-> +
-> +die() {
-> +  echo "Error: $@" >&2
-> +  exit 1
-> +}
-> +
-> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> +
-> +while getopts c: OPT ; do
-> +	case "${OPT}" in
-> +	c) GENIMAGE_CFG="${OPTARG}";;
-> +	:) die "option '${OPTARG}' expects a mandatory argument\n";;
-> +	\?) die "unknown option '${OPTARG}'\n";;
-> +	esac
-> +done
-> +
-> +[ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
-> +
-> +rm -rf "${GENIMAGE_TMP}"
-> +
-> +genimage \
-> +	--rootpath "${TARGET_DIR}"     \
-> +	--tmppath "${GENIMAGE_TMP}"    \
-> +	--inputpath "${BINARIES_DIR}"  \
-> +	--outputpath "${BINARIES_DIR}" \
-> +	--config "${GENIMAGE_CFG}"
-> 
+Committed to 2017.02.x, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
