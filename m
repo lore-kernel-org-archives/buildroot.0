@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 09:00:59 +0200
-Subject: [Buildroot] [PATCH] busybox: fix mdev.conf
-In-Reply-To: <20170324075321.12384-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Fri, 24 Mar 2017 08:53:21 +0100")
-References: <20170324075321.12384-1-joerg.krause@embedded.rocks>
-Message-ID: <87shlux74k.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Mar 2017 09:01:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ntp: fix build for toolchains
+	without ssp
+In-Reply-To: <20170323193700.30404-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 23 Mar 2017 20:37:00 +0100")
+References: <20170323193700.30404-1-bernd.kuhls@t-online.de>
+Message-ID: <87o9wix73i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > mdev does not set "/dev/snd" and "/dev/input" group and permission
- > propery, because with commit c3cf1e30a3022453311a7e9fe11d94c7a381640e
- > (May 2013!) the behavior of mdev has changed.
+ > ntp defaults to use ssp support
+ > http://bk1.ntp.org/ntp-stable/sntp/harden/README
 
- > The device name is now taken directly from the uevent file and does no
- > longer match the old rule.
+ > by using these flags
+ > http://bk1.ntp.org/ntp-stable/sntp/harden/linux
 
- > Fix the rules for "/dev/snd" and "/dev/input" according to the example
- > given in [1].
+ > If the toolchain lacks SSP support this patch forces ntp to use an
+ > empty set of flags: http://bk1.ntp.org/ntp-stable/sntp/harden/default
 
- > [1] http://lists.busybox.net/pipermail/busybox/2015-February/082297.html
+ > Fixes
+ > http://autobuild.buildroot.net/results/1d5/1d58bd8745b22c8eb71fea4c7255d3ace69f6f7a/
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x, thanks.
 
