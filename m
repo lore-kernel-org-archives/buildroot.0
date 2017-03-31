@@ -1,71 +1,126 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 13:36:20 +0200
+Date: Fri, 31 Mar 2017 13:36:23 +0200
 Subject: [Buildroot] [git commit] audiofile: add security patch for
-	CVE-2017-6829
-Message-ID: <20170331113733.37D6982207@busybox.osuosl.org>
+	CVE-2017-6830 / CVE-2017-6834 / CVE-2017-6836 / CVE-2017-6838
+Message-ID: <20170331113733.43BC682207@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=434890df2a7c131b40fec1c49e6239972ab299d2
+commit: https://git.buildroot.net/buildroot/commit/?id=4a1a8277bba490d227f413e218138e39f1fe1203
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The decodeSample function in IMA.cpp in Audio File Library (aka audiofile)
-0.3.6 allows remote attackers to cause a denial of service (crash) via a
-crafted file.
+CVE-2017-6830: A heap-based buffer overflow in the alaw2linear_buf function
+in G711.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
+attackers to cause a denial of service (crash) via a crafted file.
 
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp
-https://github.com/mpruett/audiofile/issues/33
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-alaw2linear_buf-g711-cpp
+https://github.com/mpruett/audiofile/issues/34
+
+CVE-2017-6834: A heap-based buffer overflow in the ulaw2linear_buf function
+in G711.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
+attackers to cause a denial of service (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-ulaw2linear_buf-g711-cpp
+https://github.com/mpruett/audiofile/issues/38
+
+CVE-2017-6836: A heap-based buffer overflow in the Expand3To4Module::run
+function in libaudiofile/modules/SimpleModule.h in Audio File Library (aka
+audiofile) 0.3.6 allows remote attackers to cause a denial of service
+(crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-expand3to4modulerun-simplemodule-h
+https://github.com/mpruett/audiofile/issues/40
+
+CVE-2017-6838: Integer overflow in sfcommands/sfconvert.c in Audio File
+Library (aka audiofile) 0.3.6 allows remote attackers to cause a denial of
+service (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-multiple-ubsan-crashes/
+https://github.com/mpruett/audiofile/issues/41
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-values-to-fix-index-overflow-in-IMA.cpp.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ ...-for-multiplication-overflow-in-sfconvert.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+diff --git a/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch b/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch
 new file mode 100644
-index 0000000..21f899a
+index 0000000..c726190
 --- /dev/null
-+++ b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
-@@ -0,0 +1,39 @@
-+From 25eb00ce913452c2e614548d7df93070bf0d066f Mon Sep 17 00:00:00 2001
++++ b/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch
+@@ -0,0 +1,72 @@
++From 7d65f89defb092b63bcbc5d98349fb222ca73b3c Mon Sep 17 00:00:00 2001
 +From: Antonio Larrosa <larrosa@kde.org>
-+Date: Mon, 6 Mar 2017 18:02:31 +0100
-+Subject: [PATCH] clamp index values to fix index overflow in IMA.cpp
++Date: Mon, 6 Mar 2017 13:54:52 +0100
++Subject: [PATCH] Check for multiplication overflow in sfconvert
 +
-+This fixes #33
-+(also reported at https://bugzilla.opensuse.org/show_bug.cgi?id=1026981
-+and https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp/)
++Checks that a multiplication doesn't overflow when
++calculating the buffer size, and if it overflows,
++reduce the buffer size instead of failing.
++
++This fixes the 00192-audiofile-signintoverflow-sfconvert case
++in #41
 +
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ libaudiofile/modules/IMA.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ sfcommands/sfconvert.c | 34 ++++++++++++++++++++++++++++++++--
++ 1 file changed, 32 insertions(+), 2 deletions(-)
 +
-+diff --git a/libaudiofile/modules/IMA.cpp b/libaudiofile/modules/IMA.cpp
-+index 7476d44..df4aad6 100644
-+--- a/libaudiofile/modules/IMA.cpp
-++++ b/libaudiofile/modules/IMA.cpp
-+@@ -169,7 +169,7 @@ int IMA::decodeBlockWAVE(const uint8_t *encoded, int16_t *decoded)
-+ 		if (encoded[1] & 0x80)
-+ 			m_adpcmState[c].previousValue -= 0x10000;
++diff --git a/sfcommands/sfconvert.c b/sfcommands/sfconvert.c
++index 80a1bc4..970a3e4 100644
++--- a/sfcommands/sfconvert.c
+++++ b/sfcommands/sfconvert.c
++@@ -45,6 +45,33 @@ void printusage (void);
++ void usageerror (void);
++ bool copyaudiodata (AFfilehandle infile, AFfilehandle outfile, int trackid);
 + 
-+-		m_adpcmState[c].index = encoded[2];
-++		m_adpcmState[c].index = clamp(encoded[2], 0, 88);
+++int firstBitSet(int x)
+++{
+++        int position=0;
+++        while (x!=0)
+++        {
+++                x>>=1;
+++                ++position;
+++        }
+++        return position;
+++}
+++
+++#ifndef __has_builtin
+++#define __has_builtin(x) 0
+++#endif
+++
+++int multiplyCheckOverflow(int a, int b, int *result)
+++{
+++#if (defined __GNUC__ && __GNUC__ >= 5) || ( __clang__ && __has_builtin(__builtin_mul_overflow))
+++	return __builtin_mul_overflow(a, b, result);
+++#else
+++	if (firstBitSet(a)+firstBitSet(b)>31) // int is signed, so we can't use 32 bits
+++		return true;
+++	*result = a * b;
+++	return false;
+++#endif
+++}
+++
++ int main (int argc, char **argv)
++ {
++ 	if (argc == 2)
++@@ -323,8 +350,11 @@ bool copyaudiodata (AFfilehandle infile, AFfilehandle outfile, int trackid)
++ {
++ 	int frameSize = afGetVirtualFrameSize(infile, trackid, 1);
 + 
-+ 		*decoded++ = m_adpcmState[c].previousValue;
++-	const int kBufferFrameCount = 65536;
++-	void *buffer = malloc(kBufferFrameCount * frameSize);
+++	int kBufferFrameCount = 65536;
+++	int bufferSize;
+++	while (multiplyCheckOverflow(kBufferFrameCount, frameSize, &bufferSize))
+++		kBufferFrameCount /= 2;
+++	void *buffer = malloc(bufferSize);
 + 
-+@@ -210,7 +210,7 @@ int IMA::decodeBlockQT(const uint8_t *encoded, int16_t *decoded)
-+ 			predictor -= 0x10000;
-+ 
-+ 		state.previousValue = clamp(predictor, MIN_INT16, MAX_INT16);
-+-		state.index = encoded[1] & 0x7f;
-++		state.index = clamp(encoded[1] & 0x7f, 0, 88);
-+ 		encoded += 2;
-+ 
-+ 		for (int n=0; n<m_framesPerPacket; n+=2)
++ 	AFframecount totalFrames = afGetFrameCount(infile, AF_DEFAULT_TRACK);
++ 	AFframecount totalFramesWritten = 0;
 +-- 
 +2.11.0
 +
