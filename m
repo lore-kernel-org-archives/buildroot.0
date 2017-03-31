@@ -1,48 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 08:57:20 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.{2,
-	12}.x and 4.{1, 4, 9, 10}.x series
-Message-ID: <20170331071606.AF12A826C1@busybox.osuosl.org>
+Date: Fri, 31 Mar 2017 08:54:10 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/ntp: security
+	bump to 4.2.8p10
+Message-ID: <20170331071606.9E9C1826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bc876f43b1954e0494b5f360c8e0f9ddc5624e4
+commit: https://git.buildroot.net/buildroot/commit/?id=13eec966adfdc6c7659bff0cb7fd27056c248127
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.10.x update]
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Changed NTP_SITE to https to circumvent "URL transformed to HTTPS due
+to an HSTS policy" during download.
+
+For details about the bugs fixed see:
+http://support.ntp.org/bin/view/Main/SecurityNotice#Recent_Vulnerabilities
+http://www.kb.cert.org/vuls/id/633847
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0d70d1dbf054f4a0609ba1076bc7e097305013d2)
+(cherry picked from commit b47aec79d2e19ef7e3f04d2758c3a2930d47cebe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/ntp/ntp.hash | 6 +++---
+ package/ntp/ntp.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 81ddc9d..de55b04 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,15 +214,15 @@ endchoice
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index c6838d8..d8b7083 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,4 +1,4 @@
+-# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p9.tar.gz.md5
+-md5	857452b05f5f2e033786f77ade1974ed	ntp-4.2.8p9.tar.gz
++# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p10.tar.gz.md5
++md5 745384ed0dedb3f66b33fe84d66466f9  ntp-4.2.8p10.tar.gz
+ # Calculated based on the hash above
+-sha256	b724287778e1bac625b447327c9851eedef020517a3545625e9f652a90f30b72	ntp-4.2.8p9.tar.gz
++sha256 ddd2366e64219b9efa0f7438e06800d0db394ac5c88e13c17b70d0dcdf99b99f  ntp-4.2.8p10.tar.gz
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index edbf1c8..b6eb1b1 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.85"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.87"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.71"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.18.48"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.55"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.56"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.16"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.17"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p9
+-NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p10
++NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent openssl $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
