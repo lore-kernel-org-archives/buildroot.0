@@ -1,45 +1,35 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 31 Mar 2017 22:26:04 +0200
-Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable obstack support
-In-Reply-To: <20170331202604.18153-1-romain.naour@gmail.com>
-References: <20170331202604.18153-1-romain.naour@gmail.com>
-Message-ID: <20170331202604.18153-2-romain.naour@gmail.com>
+Date: Fri, 31 Mar 2017 22:39:11 +0200
+Subject: [Buildroot] [PATCH] package/xenomai: remove sh4 support
+Message-ID: <20170331203911.21186-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Obstack support in Xenomai is broken when the libc doesn't support
-obstack support itself. Make sure we disable obstack support for all
-libc since it was removed in uClibc-ng since 1.0.21 release and it's
-always disabled with Glibc.
+sh4 target support has been removed since Xenomai 3.x.
 
 Fixes:
-http://autobuild.buildroot.net/results/555/555d9cb9cb59fad6353516bed206e1117974e8cd/build-end.log
+http://autobuild.buildroot.net/results/a81/a8125847367de5fd27156e5cba9ec7315c2ccd5d/build-end.log
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Pawel Sikora <sikor6@gmail.com>
 ---
- package/xenomai/xenomai.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/xenomai/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index fc240f9..77889f0 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 32c5124..b548ee8 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
+-		BR2_bfin || BR2_powerpc || BR2_sh4
++		BR2_bfin || BR2_powerpc
  
- XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
- 
-+# Obstack support in Xenomai is broken when the libc doesn't support
-+# obstack support itself. Make sure we disable obstack support for all
-+# libc since it was removed in uClibc-ng since 1.0.21 release and it's
-+# always disabled with Glibc.
-+XENOMAI_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DELIDE_CODE"
-+
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ comment "xenomai needs an glibc or uClibc toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
 -- 
 2.9.3
