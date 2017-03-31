@@ -1,105 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Mar 2017 13:36:17 +0200
-Subject: [Buildroot] [git commit] audiofile: add security patch for
-	CVE-2017-6827 / CVE-2017-6828 / CVE-2017-6832 / CVE-2017-6833
-	/ CVE-2017-6835 / CVE-2017-6837
-Message-ID: <20170331113733.2D32982207@busybox.osuosl.org>
+From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
+Date: Fri, 31 Mar 2017 14:16:23 +0200
+Subject: [Buildroot] [PATCH] xorriso: Bump version to 1.4.6,
+	drop patch applied upstream
+Message-ID: <1490962583-32555-1-git-send-email-benoit.allard@greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc00bde57fc20d11f8fa4e8ec5f193c091714c55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-CVE-2017-6827: A heap-based buffer overflow in the
-MSADPCM::initializeCoefficients function in MSADPCM.cpp in audiofile (aka
-libaudiofile and Audio File Library) 0.3.6 allows remote attackers to have
-unspecified impact via a crafted audio file.
-
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-msadpcminitializecoefficients-msadpcm-cpp
-https://github.com/mpruett/audiofile/issues/32
-
-CVE-2017-6828: A Heap-based buffer overflow in the readValue function in
-FileHandle.cpp in audiofile (aka libaudiofile and Audio File Library) 0.3.6
-allows remote attackers to have unspecified impact via a crafted WAV file.
-
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-readvalue-filehandle-cpp
-https://github.com/mpruett/audiofile/issues/31
-
-CVE-2017-6832: A Heap-based buffer overflow in the decodeBlock in
-MSADPCM.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
-attackers to cause a denial of service (crash) via a crafted file.
-
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-msadpcmdecodeblock-msadpcm-cpp
-https://github.com/mpruett/audiofile/issues/36
-
-CVE-2017-6833: The runPull function in libaudiofile/modules/BlockCodec.cpp
-in Audio File Library (aka audiofile) 0.3.6 allows remote attackers to cause
-a denial of service (divide-by-zero error and crash) via a crafted file.
-
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-divide-by-zero-in-blockcodecrunpull-blockcodec-cpp
-https://github.com/mpruett/audiofile/issues/37
-
-CVE-2017-6835: The reset1 function in libaudiofile/modules/BlockCodec.cpp in
-Audio File Library (aka audiofile) 0.3.6 allows remote attackers to cause a
-denial of service (divide-by-zero error and crash) via a crafted file.
-
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-divide-by-zero-in-blockcodecreset1-blockcodec-cpp
-https://github.com/mpruett/audiofile/issues/39
-
-CVE-2017-6837: WAVE.cpp in Audio File Library (aka audiofile) 0.3.6 allows
-remote attackers to cause a denial of service (crash) via vectors related to
-a large number of coefficients.
-
-http://blogs.gentoo.org/ago/2017/02/20/audiofile-multiple-ubsan-crashes/
-https://github.com/mpruett/audiofile/issues/41
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
 ---
- ...3-Always-check-the-number-of-coefficients.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/xorriso/0001-fix-musl-build.patch | 20 --------------------
+ package/xorriso/xorriso.hash              |  2 +-
+ package/xorriso/xorriso.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 22 deletions(-)
+ delete mode 100644 package/xorriso/0001-fix-musl-build.patch
 
-diff --git a/package/audiofile/0003-Always-check-the-number-of-coefficients.patch b/package/audiofile/0003-Always-check-the-number-of-coefficients.patch
-new file mode 100644
-index 0000000..5c99c3c
---- /dev/null
-+++ b/package/audiofile/0003-Always-check-the-number-of-coefficients.patch
-@@ -0,0 +1,36 @@
-+From c48e4c6503f7dabd41f11d4c9c7b7f8960e7f2c0 Mon Sep 17 00:00:00 2001
-+From: Antonio Larrosa <larrosa@kde.org>
-+Date: Mon, 6 Mar 2017 12:51:22 +0100
-+Subject: [PATCH] Always check the number of coefficients
-+
-+When building the library with NDEBUG, asserts are eliminated
-+so it's better to always check that the number of coefficients
-+is inside the array range.
-+
-+This fixes the 00191-audiofile-indexoob issue in #41
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ libaudiofile/WAVE.cpp | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/libaudiofile/WAVE.cpp b/libaudiofile/WAVE.cpp
-+index 0e81cf7..61f9541 100644
-+--- a/libaudiofile/WAVE.cpp
-++++ b/libaudiofile/WAVE.cpp
-+@@ -281,6 +281,12 @@ status WAVEFile::parseFormat(const Tag &id, uint32_t size)
-+ 
-+ 			/* numCoefficients should be at least 7. */
-+ 			assert(numCoefficients >= 7 && numCoefficients <= 255);
-++			if (numCoefficients < 7 || numCoefficients > 255)
-++			{
-++				_af_error(AF_BAD_HEADER,
-++						"Bad number of coefficients");
-++				return AF_FAIL;
-++			}
-+ 
-+ 			m_msadpcmNumCoefficients = numCoefficients;
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/package/xorriso/0001-fix-musl-build.patch b/package/xorriso/0001-fix-musl-build.patch
+deleted file mode 100644
+index 86d251d..0000000
+--- a/package/xorriso/0001-fix-musl-build.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Fix musl build
+-
+-Add missing header needed for ssize_t.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: posted upstream
+-(http://lists.gnu.org/archive/html/bug-xorriso/2016-05/msg00000.html)
+-
+-diff -Nuar xorriso-1.4.2-orig/libisofs/aaip_0_2.h xorriso-1.4.2/libisofs/aaip_0_2.h
+---- xorriso-1.4.2-orig/libisofs/aaip_0_2.h	2015-11-28 16:41:33.000000000 +0200
+-+++ xorriso-1.4.2/libisofs/aaip_0_2.h	2016-05-24 11:40:43.874191174 +0300
+-@@ -16,6 +16,7 @@
+- #ifndef Aaip_h_is_includeD
+- #define Aaip_h_is_includeD yes
+- 
+-+#include <unistd.h>
+- 
+- /* --------------------------------- Encoder ---------------------------- */
+- 
+diff --git a/package/xorriso/xorriso.hash b/package/xorriso/xorriso.hash
+index 3c2a726..f1ee9d6 100644
+--- a/package/xorriso/xorriso.hash
++++ b/package/xorriso/xorriso.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 2843beded1aa4c678706e96fdf9cc5e4b34430b559bdf5bc35df5202125004b3 xorriso-1.4.2.tar.gz
++sha256 526f728c7eee6f8c4b69fbf391789e6c80806197c2861cf5922cf7cfe1035784 xorriso-1.4.6.tar.gz
+diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
+index be19322..cc4c627 100644
+--- a/package/xorriso/xorriso.mk
++++ b/package/xorriso/xorriso.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XORRISO_VERSION = 1.4.2
++XORRISO_VERSION = 1.4.6
+ XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
+ XORRISO_LICENSE = GPLv3+
+ XORRISO_LICENSE_FILES = COPYING COPYRIGHT
+-- 
+2.1.4
