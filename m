@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 16:47:15 +0200
-Subject: [Buildroot] [PATCH v3] ncurses: bump to 6.0
-In-Reply-To: <20170321005337.2687-1-Adamduskett@outlook.com>
-References: <20170321005337.2687-1-Adamduskett@outlook.com>
-Message-ID: <20170401164715.4c427f90@free-electrons.com>
+Date: Sat, 1 Apr 2017 16:50:59 +0200
+Subject: [Buildroot] [PATCH v5 08/19] reproducible: try to detect most
+ common errors
+In-Reply-To: <1482241596-31688-9-git-send-email-jezz@sysmic.org>
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-9-git-send-email-jezz@sysmic.org>
+Message-ID: <20170401165059.1f3f9ad5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +14,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Mar 2017 20:53:37 -0400, Adam Duskett wrote:
-> ncurses 6.0 has been out for a while now (August 8th 2015!)  This
-> patch brings us up to the latest version.  Not too many changes had
-> to occure to get this working well.
+On Tue, 20 Dec 2016 14:46:25 +0100, J?r?me Pouiller wrote:
+> Some package includes some information from build environment in their results.
+> This practice is incompatible with reproducible builds.
 > 
-> - The first patch is no longer needed as it was fixed in the new release.
-> - The other two packages are still applicable, however I did have to change
->   the line numbers.  Because that is the only thing I had to change, I didn't
->   put my signature on them.  If this is needed I will gladly do so.
-> - A new option: --with-pkg-config-libdir has been added. Without it
->   pkg files wouldn't install to the correct location.
-> - NCURSES_ABI_VERSION is no longer needed, as there is only 6.
+> This patch scans final target to research most common patterns.
 > 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
-> v2 -> v3:
->   - Now compatible with the master branch.
->   
-> v1 -> v2:
->   - Updated to work with Thomas Petazzoni's changes.
->   
->  .../ncurses/0001-fixup-pkg-config-handling.patch   | 89 ----------------------
->  ...Klib_gen.patch => 0001-gcc-5.x-MKlib_gen.patch} |  6 +-
->  package/ncurses/0002-recognise-uclinux.patch       | 28 +++++++
->  package/ncurses/0003-recognise-uclinux.patch       | 30 --------
->  package/ncurses/ncurses.hash                       |  2 +-
->  package/ncurses/ncurses.mk                         | 11 ++-
->  6 files changed, 37 insertions(+), 129 deletions(-)
->  delete mode 100644 package/ncurses/0001-fixup-pkg-config-handling.patch
->  rename package/ncurses/{0002-gcc-5.x-MKlib_gen.patch => 0001-gcc-5.x-MKlib_gen.patch} (87%)
->  create mode 100644 package/ncurses/0002-recognise-uclinux.patch
->  delete mode 100644 package/ncurses/0003-recognise-uclinux.patch
+> Since we only search fixed strings (grep is called with -F), this search is
+> fast (on my station, 60ms for a target of 40MB).
+> 
+> Note, it could be a good idea to also match current user name. However, build
+> path often contains username and, until now, we do not try to avoid build path
+> in result.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Applied to master, thanks. I've only slightly tweaked the commit log to
-avoid using the first person.
+I am not entirely convinced it makes sense to grep more or less
+randomly in all files specifically for those strings.
 
-Thanks,
+Or perhaps, we should have a separate shell scripts that checks for
+several classes of obviously non-reproducible behaviors?
+
+Arnout, Peter, Yann, what do you think?
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
