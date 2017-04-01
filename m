@@ -1,62 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 17:56:28 +0200
-Subject: [Buildroot] [git commit] dc3dd: add patch to fix autoreconf
-Message-ID: <20170401155638.3A62E825FA@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 18:31:19 +0200
+Subject: [Buildroot] [git commit] python3: remove full path from .pyc
+Message-ID: <20170401163704.8E596805E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8607ae919dc70bacfd7041db7aa613e14b2e7463
+commit: https://git.buildroot.net/buildroot/commit/?id=95ba0bb7e8d9d18b70e0216b931f64878bf41a2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a patch to dc3dd that fixes autoreconfiguration.
+.pyc files include path to source .py file. This patch changes the way
+`pycompile.py' is launched in order to only keep the part relative to
+$TARGET_DIR.
 
-Fixes:
+This work was sponsored by `BA Robotic Systems'.
 
-  http://autobuild.buildroot.net/results/5b73b0d735691c5f63ed9bc3122bc84ea21faae7/
-
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dc3dd/0002-fix-autoreconf.patch | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/python3/python3.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/dc3dd/0002-fix-autoreconf.patch b/package/dc3dd/0002-fix-autoreconf.patch
-new file mode 100644
-index 0000000..85e0a36
---- /dev/null
-+++ b/package/dc3dd/0002-fix-autoreconf.patch
-@@ -0,0 +1,32 @@
-+Remove use of AM_C_PROTOTYPES to fix autoreconf
-+
-+The AM_C_PROTOTYPES macro no longer exists since automake 1.12. It
-+existed to support de-ANSI-fication of code using ansi2knr. It was
-+simply removed from coreutils m4/jm-macros.m4 in commit
-+88873501cff9ed937edf969cedd693517ab0a293, but this change was not
-+propagated to dc3dd, causing an autoreconf failure:
-+
-+configure.ac:45: error: automatic de-ANSI-fication support has been removed
-+/home/peko/autobuild/instance-0/output/host/usr/share/aclocal-1.15/obsolete.m4:26: AM_C_PROTOTYPES is expanded from...
-+m4/jm-macros.m4:124: gl_CHECK_ALL_TYPES is expanded from...
-+m4/jm-macros.m4:22: coreutils_MACROS is expanded from...
-+configure.ac:45: the top level
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/m4/jm-macros.m4
-+===================================================================
-+--- a/m4/jm-macros.m4
-++++ b/m4/jm-macros.m4
-+@@ -128,11 +128,6 @@
-+   dnl whether functions and headers are available, whether they work, etc.
-+   AC_REQUIRE([AC_SYS_LARGEFILE])
-+ 
-+-  dnl This test must precede tests of compiler characteristics like
-+-  dnl that for the inline keyword, since it may change the degree to
-+-  dnl which the compiler supports such features.
-+-  AC_REQUIRE([AM_C_PROTOTYPES])
-+-
-+   dnl Checks for typedefs, structures, and compiler characteristics.
-+   AC_REQUIRE([AC_C_BIGENDIAN])
-+   AC_REQUIRE([AC_C_VOLATILE])
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 6189aa8..74f8116 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -247,9 +247,10 @@ endif
+ define PYTHON3_CREATE_PYC_FILES
+ 	$(PYTHON3_FIX_TIME)
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+-	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
+-		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+-		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
++	cd $(TARGET_DIR) && $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
++		$(TOPDIR)/support/scripts/pycompile.py \
++		$(if $(BR2_REPRODUCIBLE),--force) \
++		usr/lib/python$(PYTHON3_VERSION_MAJOR)
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
