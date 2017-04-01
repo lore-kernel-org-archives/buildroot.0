@@ -1,41 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 13:56:32 +0200
-Subject: [Buildroot] [git commit] package/lensfun: fix static only build
-Message-ID: <20170401115641.A24D082563@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 13:57:36 +0200
+Subject: [Buildroot] [PATCH] package/lensfun: fix static only build
+In-Reply-To: <20170331213249.7920-1-romain.naour@gmail.com>
+References: <20170331213249.7920-1-romain.naour@gmail.com>
+Message-ID: <20170401135736.372ee9f0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1efe5a151a9dbaf784ed805f0e3973c903195b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Build lensfun.a for static only build.
+On Fri, 31 Mar 2017 23:32:49 +0200, Romain Naour wrote:
+> Build lensfun.a for static only build.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/63e/63e7700a242c7c28ede0fe0b6a63db288e73e974/build-end.log
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/lensfun/lensfun.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Fixes:
-http://autobuild.buildroot.net/results/63e/63e7700a242c7c28ede0fe0b6a63db288e73e974/build-end.log
+I was a little bit confused at first, because we normally want the
+static library either in the BR2_STATIC_LIBS or BR2_SHARED_STATIC_LIBS
+case. But lensfun build system only allows to build either the shared
+library *OR* the static library, not both, so what you did is I believe
+the best solution.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lensfun/lensfun.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Therefore: applied, thanks!
 
-diff --git a/package/lensfun/lensfun.mk b/package/lensfun/lensfun.mk
-index 8e92e59..fa002c7 100644
---- a/package/lensfun/lensfun.mk
-+++ b/package/lensfun/lensfun.mk
-@@ -34,6 +34,12 @@ else
- LENSFUN_CONF_OPTS += -DBUILD_LENSTOOL=OFF
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LENSFUN_CONF_OPTS += -DBUILD_STATIC=ON
-+else
-+LENSFUN_CONF_OPTS += -DBUILD_STATIC=OFF
-+endif
-+
- # Don't install helper scripts (which require python3 and gksudo).
- # Don't run setup.py on the host.
- LENSFUN_CONF_OPTS += -DINSTALL_HELPER_SCRIPTS=OFF -DPYTHON=OFF
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
