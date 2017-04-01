@@ -1,43 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  1 Apr 2017 15:50:47 +0200
-Subject: [Buildroot] [PATCH 3/3] docker-engine: bump to version 17.03.1-ce
-In-Reply-To: <1491054647-4812-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1491054647-4812-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <1491054647-4812-3-git-send-email-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Apr 2017 15:51:16 +0200
+Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
+ BR2_GENIMAGE_CFG_FILES
+In-Reply-To: <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
+References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
+ <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
+ <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
+Message-ID: <20170401155116.66464885@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 127d2b9..dfa3248 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	d8e91af5b2799cafac113a400d4db9c6abe01ae823f378d2f4d3d3e55e48eaf6	docker-engine-v17.03.0-ce.tar.gz
-+sha256	a8f1eefadf3966885ad0579facfc2017cca7dd3a0b20d086dfd798168716cb83	docker-engine-v17.03.1-ce.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index bf6f6a4..5ff595e 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = v17.03.0-ce
--DOCKER_ENGINE_COMMIT = 60ccb2265b0574d6c1c1090876a1d1ab32bed60e
-+DOCKER_ENGINE_VERSION = v17.03.1-ce
-+DOCKER_ENGINE_COMMIT = c6d412e329c85f32a4b2269b49aaa0794affcf88
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+On Fri, 31 Mar 2017 00:51:08 +0200, Arnout Vandecappelle wrote:
+
+>  I'm still not entirely sure if this new option is worthwhile. Without it, you
+> would instead need
+> 
+> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> BR2_ROOTFS_POST_SCRIPT_ARGS="board/acmesystems/aria-g25/genimage.cfg"
+> 
+> Not really complicated either... The only real advantage I see is that it
+> motivates people more to use genimage (which is otherwise a bit hidden). But for
+> that, a paragraph or two in docs/manual/customize-post-image.txt would also
+> work. By the way, even for this series an explanation of the option would be
+> required in that file.
+> 
+>  What do the others think?
+
+I agree that the new option doesn't seem really useful.
+
+Best regards,
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
