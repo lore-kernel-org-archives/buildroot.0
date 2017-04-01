@@ -1,8 +1,10 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sun,  2 Apr 2017 00:36:23 +0530
-Subject: [Buildroot] [PATCH 1/9] package: use SPDX short identifier for OFL
-	license
-Message-ID: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
+Date: Sun,  2 Apr 2017 00:36:24 +0530
+Subject: [Buildroot] [PATCH 2/9] package: use SPDX short identifier for
+	libpng license
+In-Reply-To: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
+References: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <1491073591-21477-2-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,84 +12,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 We want to use SPDX identifier for license string as much as possible.
-SPDX short identifier for OFLv1.0/OFLv1.1 is OFL-1.0/OFL-1.1.
-
-This change is done using following command.
-find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/OFLv([1]\.[0-1])/OFL-\1/g'
+SPDX short identifier for libpng license is Libpng.
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- package/cantarell/cantarell.mk                     | 2 +-
- package/font-awesome/font-awesome.mk               | 2 +-
- package/googlefontdirectory/googlefontdirectory.mk | 2 +-
- package/inconsolata/inconsolata.mk                 | 2 +-
- package/liberation/liberation.mk                   | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ package/libpng/libpng.mk             | 2 +-
+ package/python-pysmb/python-pysmb.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
-index 3cdf600..2769b35 100644
---- a/package/cantarell/cantarell.mk
-+++ b/package/cantarell/cantarell.mk
-@@ -9,7 +9,7 @@ CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).25
- CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
- CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
- CANTARELL_DEPENDENCIES = host-pkgconf
--CANTARELL_LICENSE = OFLv1.1
-+CANTARELL_LICENSE = OFL-1.1
- CANTARELL_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
-diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
-index 3d2ccca..8933783 100644
---- a/package/font-awesome/font-awesome.mk
-+++ b/package/font-awesome/font-awesome.mk
-@@ -6,7 +6,7 @@
- 
- FONT_AWESOME_VERSION = v4.5.0
- FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
--FONT_AWESOME_LICENSE = OFLv1.1 (font), MIT (CSS, LESS and Sass files)
-+FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
- FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
- 
- define FONT_AWESOME_INSTALL_TARGET_CMDS
-diff --git a/package/googlefontdirectory/googlefontdirectory.mk b/package/googlefontdirectory/googlefontdirectory.mk
-index 0e60892..c34de3b 100644
---- a/package/googlefontdirectory/googlefontdirectory.mk
-+++ b/package/googlefontdirectory/googlefontdirectory.mk
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index c562965..2491157 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -8,7 +8,7 @@ LIBPNG_VERSION = 1.6.28
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+-LIBPNG_LICENSE = libpng license
++LIBPNG_LICENSE = Libpng
+ LIBPNG_LICENSE_FILES = LICENSE
+ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkgconf zlib
+diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
+index 49d7c30..1b4c187 100644
+--- a/package/python-pysmb/python-pysmb.mk
++++ b/package/python-pysmb/python-pysmb.mk
 @@ -7,7 +7,7 @@
- GOOGLEFONTDIRECTORY_SITE = \
- 	https://s3.amazonaws.com/joemaller_google_webfonts
- GOOGLEFONTDIRECTORY_SOURCE = googlewebfonts.tgz
--GOOGLEFONTDIRECTORY_LICENSE = OFLv1.1
-+GOOGLEFONTDIRECTORY_LICENSE = OFL-1.1
+ PYTHON_PYSMB_VERSION = 1.1.19
+ PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
+ PYTHON_PYSMB_SITE = https://pypi.python.org/packages/f9/e7/1fd7faaa946cc6b43ce85bb7a177b75a4718d9c5e291201fec00112b497c
+-PYTHON_PYSMB_LICENSE = libpng license
++PYTHON_PYSMB_LICENSE = Libpng
+ PYTHON_PYSMB_LICENSE_FILES = LICENSE
+ PYTHON_PYSMB_SETUP_TYPE = setuptools
  
- GOOGLEFONTDIRECTORY_FONTS = \
- 	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
-diff --git a/package/inconsolata/inconsolata.mk b/package/inconsolata/inconsolata.mk
-index 2f53b98..3fe3895 100644
---- a/package/inconsolata/inconsolata.mk
-+++ b/package/inconsolata/inconsolata.mk
-@@ -8,7 +8,7 @@ INCONSOLATA_VERSION = 001.010
- INCONSOLATA_SITE = http://snapshot.debian.org/archive/debian/20090524T155154Z/pool/main/t/ttf-inconsolata
- INCONSOLATA_SOURCE = ttf-inconsolata_$(INCONSOLATA_VERSION).orig.tar.gz
- INCONSOLATA_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/inconsolata
--INCONSOLATA_LICENSE = OFLv1.0
-+INCONSOLATA_LICENSE = OFL-1.0
- INCONSOLATA_LICENSE_FILES = OFL.txt
- 
- define INCONSOLATA_INSTALL_TARGET_CMDS
-diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
-index a77c014..cabee17 100644
---- a/package/liberation/liberation.mk
-+++ b/package/liberation/liberation.mk
-@@ -8,7 +8,7 @@ LIBERATION_VERSION = 2.00.1
- LIBERATION_SITE = https://releases.pagure.org/liberation-fonts
- LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
- LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
--LIBERATION_LICENSE = OFLv1.1
-+LIBERATION_LICENSE = OFL-1.1
- LIBERATION_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_PACKAGE_LIBERATION_MONO),y)
 -- 
 2.7.4
