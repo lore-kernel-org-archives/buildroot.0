@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 18:39:01 +0200
-Subject: [Buildroot] [PATCH v5 11/19] infra-libtool: pass sysroot
- information to libtool
-In-Reply-To: <20170320225250.0a5bd659@free-electrons.com>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-12-git-send-email-jezz@sysmic.org>
- <20170320225250.0a5bd659@free-electrons.com>
-Message-ID: <20170401183901.3655ba77@free-electrons.com>
+Date: Sat, 1 Apr 2017 18:40:51 +0200
+Subject: [Buildroot] [PATCH] lpppd: new package
+In-Reply-To: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
+References: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
+Message-ID: <20170401184051.7f6c1252@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Stefan,
 
-On Mon, 20 Mar 2017 22:52:50 +0100, Thomas Petazzoni wrote:
-
-> On Tue, 20 Dec 2016 14:46:28 +0100, J?r?me Pouiller wrote:
+On Mon,  2 Jan 2017 23:38:24 +0100, stefan.nickl at gmail.com wrote:
+> From: Stefan Nickl <Stefan.Nickl@gmail.com>
 > 
-> > libtool include support for cross-compilation since v1.5.  
+> After the official github repository for PPP has not seen
+> any activity for a long time, I've created a fork that
+> tries to do some modernization and shed some legacy.
+> For more info, please see https://github.com/snickl/lpppd
 > 
-> Are you sure this is true?
+> It is inteded as a drop-in replacement for the original PPP,
+> therefore I've marked it as conflicting with the existing pppd
+> package.
 > 
-> In the release notes of libtool v2.4
-> (https://savannah.gnu.org/forum/forum.php?forum_id=6525), I see:
+> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
 
-So, because of this issue, I've marked patches 11 to 19 from your
-series as "Changes Requested". Things are indeed not as simple as "use
-sysroot support from libtool".
-
-Of course, it would definitely be nice to continue working on this
-topic, and benefit from libtool sysroot support when available.
+I do appreciate your interest in making the pppd development active
+again. However, at this point, I don't see what is the benefit of using
+lpppd over pppd, and having two separate packages is a bit annoying.
+Therefore, I would prefer to wait for lpppd to gain some traction
+before packaging it in Buildroot.
 
 Best regards,
 
