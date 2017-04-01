@@ -1,37 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 14:37:28 +0200
-Subject: [Buildroot] [PATCH] package/synergy: fix install when building
- in debug
-In-Reply-To: <1490984484-18637-1-git-send-email-pieterjan.camerlynck@gmail.com>
-References: <1490984484-18637-1-git-send-email-pieterjan.camerlynck@gmail.com>
-Message-ID: <20170401143728.3335eaa5@free-electrons.com>
+Date: Sat, 1 Apr 2017 14:39:58 +0200
+Subject: [Buildroot] [git commit] package/xenomai: enable armv5tej support
+Message-ID: <20170401124323.765AB821EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b2737a2f2163f466d26cafc50eca31b5301a7d61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Mar 2017 20:21:24 +0200, Pieterjan Camerlynck wrote:
-> Synergy places it's executables in another location when building in
-> debug. Patch CMakeLists.txt to disable the behavior.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/22d4d9a5d4363b1c9f3074f287b1383a366e0ce9
-> 
-> Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-> ---
->  ...change-output-path-when-building-in-debug.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/synergy/0002-do-not-change-output-path-when-building-in-debug.patch
+Apply a patch from Xenomai 2.6 [1].
 
-Applied to master, thanks. Could you submit this patch upstream?
+Fixes:
+http://autobuild.buildroot.net/results/762/7623410a81b1587b33b4f4b9cf1572c872b8a6e9/build-end.log
 
-Thanks,
+[1] https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xenomai/0002-arm-enable-armv5tej-support.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/package/xenomai/0002-arm-enable-armv5tej-support.patch b/package/xenomai/0002-arm-enable-armv5tej-support.patch
+new file mode 100644
+index 0000000..5feaa59
+--- /dev/null
++++ b/package/xenomai/0002-arm-enable-armv5tej-support.patch
+@@ -0,0 +1,32 @@
++From fcd06f42fef4d52bb0d9772fa71015988c828b1b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 31 Mar 2017 21:10:23 +0200
++Subject: [PATCH] arm: enable armv5tej support
++
++armv5tej are not detected in lib/cobalt/arch/arm/include/asm/xenomai/features.h
++
++Apply the same patch from xenomai-2.6:
++https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ lib/cobalt/arch/arm/include/asm/xenomai/features.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/lib/cobalt/arch/arm/include/asm/xenomai/features.h b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
++index 10bd0c7..e84b809 100644
++--- a/lib/cobalt/arch/arm/include/asm/xenomai/features.h
+++++ b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
++@@ -34,7 +34,8 @@
++ #endif /* armv4 */
++ 
++ #if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) \
++-	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__)
+++	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__) \
+++	|| defined(__ARM_ARCH_5TEJ__)
++ #define __LINUX_ARM_ARCH__ 5
++ #endif /* armv5 */
++ 
++-- 
++2.9.3
++
