@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 18:40:51 +0200
-Subject: [Buildroot] [PATCH] lpppd: new package
-In-Reply-To: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
-References: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
-Message-ID: <20170401184051.7f6c1252@free-electrons.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Sat,  1 Apr 2017 13:43:09 -0300
+Subject: [Buildroot] [PATCH] ncurses: drop unneeded trailing backslashes
+Message-ID: <20170401164309.23048-1-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stefan,
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ package/ncurses/ncurses.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-On Mon,  2 Jan 2017 23:38:24 +0100, stefan.nickl at gmail.com wrote:
-> From: Stefan Nickl <Stefan.Nickl@gmail.com>
-> 
-> After the official github repository for PPP has not seen
-> any activity for a long time, I've created a fork that
-> tries to do some modernization and shed some legacy.
-> For more info, please see https://github.com/snickl/lpppd
-> 
-> It is inteded as a drop-in replacement for the original PPP,
-> therefore I've marked it as conflicting with the existing pppd
-> package.
-> 
-> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-
-I do appreciate your interest in making the pppd development active
-again. However, at this point, I don't see what is the benefit of using
-lpppd over pppd, and having two separate packages is a bit annoying.
-Therefore, I would prefer to wait for lpppd to gain some traction
-before packaging it in Buildroot.
-
-Best regards,
-
-Thomas
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 955236409..68c77ac61 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -27,8 +27,7 @@ NCURSES_CONF_OPTS = \
+ 	--enable-pc-files \
+ 	--with-pkg-config-libdir="/usr/lib/pkgconfig" \
+ 	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
+-	--without-manpages \
+-
++	--without-manpages
+ 
+ # Install after busybox for the full-blown versions
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+@@ -64,7 +63,7 @@ NCURSES_TERMINFO_FILES = \
+ 	v/vt220 \
+ 	x/xterm \
+ 	x/xterm-color \
+-	x/xterm-xfree86 \
++	x/xterm-xfree86
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ NCURSES_CONF_OPTS += --enable-widec
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
