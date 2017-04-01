@@ -1,40 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 13:57:36 +0200
-Subject: [Buildroot] [PATCH] package/lensfun: fix static only build
-In-Reply-To: <20170331213249.7920-1-romain.naour@gmail.com>
-References: <20170331213249.7920-1-romain.naour@gmail.com>
-Message-ID: <20170401135736.372ee9f0@free-electrons.com>
+Date: Sat, 1 Apr 2017 13:57:54 +0200
+Subject: [Buildroot] [git commit] package/xenomai: remove sh4 support
+Message-ID: <20170401115809.296EE8211F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a001d00dc352d6f0759f2850c8b1079cabe24838
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Mar 2017 23:32:49 +0200, Romain Naour wrote:
-> Build lensfun.a for static only build.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/63e/63e7700a242c7c28ede0fe0b6a63db288e73e974/build-end.log
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/lensfun/lensfun.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+sh4 target support has been removed since Xenomai 3.x.
 
-I was a little bit confused at first, because we normally want the
-static library either in the BR2_STATIC_LIBS or BR2_SHARED_STATIC_LIBS
-case. But lensfun build system only allows to build either the shared
-library *OR* the static library, not both, so what you did is I believe
-the best solution.
+Fixes:
+http://autobuild.buildroot.net/results/a81/a8125847367de5fd27156e5cba9ec7315c2ccd5d/build-end.log
 
-Therefore: applied, thanks!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xenomai/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 32c5124..b548ee8 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
+-		BR2_bfin || BR2_powerpc || BR2_sh4
++		BR2_bfin || BR2_powerpc
+ 
+ comment "xenomai needs an glibc or uClibc toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
