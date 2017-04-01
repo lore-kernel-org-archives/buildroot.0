@@ -1,179 +1,249 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 15:27:17 +0200
-Subject: [Buildroot] [git commit] package: use SPDX short identifier for
-	BSD-4c
-Message-ID: <20170401134425.98B3D7FF41@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 15:35:02 +0200
+Subject: [Buildroot] [git commit] packages: use SPDX short identifier for
+	zlib license
+Message-ID: <20170401134426.437C482617@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceeef317679f4e70f0836103e88c23d9deb71eae
+commit: https://git.buildroot.net/buildroot/commit/?id=2093053106e3c3c791ed3f9f954c7435fc940f2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 We want to use SPDX identifier for license string as much as possible.
-SPDX short identifier for BSD-4c is BSD-4-Clause.
+SPDX short identifier for zlib license is Zlib.
 
 This change is done using following command.
-find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/BSD-4c/BSD-4-Clause/g'
+find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/zlib( )?(license)?/Zlib/g'
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/file/file.mk                     | 2 +-
- package/flite/flite.mk                   | 2 +-
- package/heirloom-mailx/heirloom-mailx.mk | 2 +-
- package/iputils/iputils.mk               | 2 +-
- package/ngrep/ngrep.mk                   | 2 +-
- package/portmap/portmap.mk               | 2 +-
- package/pppd/pppd.mk                     | 2 +-
- package/python-xlwt/python-xlwt.mk       | 2 +-
- package/radvd/radvd.mk                   | 2 +-
- package/slirp/slirp.mk                   | 2 +-
- package/util-linux/util-linux.mk         | 2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
+ package/bullet/bullet.mk         | 2 +-
+ package/libglfw/libglfw.mk       | 2 +-
+ package/minizip/minizip.mk       | 2 +-
+ package/physfs/physfs.mk         | 2 +-
+ package/sdl2/sdl2.mk             | 2 +-
+ package/sdl2_gfx/sdl2_gfx.mk     | 2 +-
+ package/sdl2_image/sdl2_image.mk | 2 +-
+ package/sdl2_ttf/sdl2_ttf.mk     | 2 +-
+ package/sdl_gfx/sdl_gfx.mk       | 2 +-
+ package/sdl_image/sdl_image.mk   | 2 +-
+ package/sdl_mixer/sdl_mixer.mk   | 2 +-
+ package/sdl_net/sdl_net.mk       | 2 +-
+ package/sdl_ttf/sdl_ttf.mk       | 2 +-
+ package/tinyxml/tinyxml.mk       | 2 +-
+ package/tinyxml2/tinyxml2.mk     | 2 +-
+ package/zlib/zlib.mk             | 2 +-
+ 16 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 00fdcce..1cd09c5 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -10,7 +10,7 @@ FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
- FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- FILE_INSTALL_STAGING = YES
--FILE_LICENSE = BSD-2-Clause, BSD-4c (one file), BSD-3-Clause (one file)
-+FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
- FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
+index 99ff423..920ea87 100644
+--- a/package/bullet/bullet.mk
++++ b/package/bullet/bullet.mk
+@@ -7,7 +7,7 @@
+ BULLET_VERSION = 2.85.1
+ BULLET_SITE = $(call github,bulletphysics,bullet3,$(BULLET_VERSION))
+ BULLET_INSTALL_STAGING = YES
+-BULLET_LICENSE = zlib license
++BULLET_LICENSE = Zlib
+ BULLET_LICENSE_FILES = LICENSE.txt
+ 
+ # Disable demos apps and unit tests.
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+index 0b1730d..1e42404 100644
+--- a/package/libglfw/libglfw.mk
++++ b/package/libglfw/libglfw.mk
+@@ -9,7 +9,7 @@ LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
+ LIBGLFW_INSTALL_STAGING = YES
+ LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
+ 	xlib_libXinerama xlib_libXrandr
+-LIBGLFW_LICENSE = zlib
++LIBGLFW_LICENSE = Zlib
+ LIBGLFW_LICENSE_FILES = COPYING.txt
+ 
+ LIBGLFW_CONF_OPTS += \
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 3d61288..835dfb9 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -10,7 +10,7 @@ MINIZIP_DEPENDENCIES = zlib
+ MINIZIP_AUTORECONF = YES
+ MINIZIP_INSTALL_STAGING = YES
+ MINIZIP_CONF_OPTS = $(if $(BR2_PACKAGE_MINIZIP_DEMOS),--enable-demos)
+-MINIZIP_LICENSE = zlib license
++MINIZIP_LICENSE = Zlib
+ MINIZIP_LICENSE_FILES = LICENSE
  
  $(eval $(autotools-package))
-diff --git a/package/flite/flite.mk b/package/flite/flite.mk
-index 611e334..72376e5 100644
---- a/package/flite/flite.mk
-+++ b/package/flite/flite.mk
-@@ -24,7 +24,7 @@ FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
- # build in flite-1.4-release/
- FLITE_STRIP_COMPONENTS = 0
- FLITE_SUBDIR = flite-$(FLITE_VERSION)-release
--FLITE_LICENSE = BSD-4c
-+FLITE_LICENSE = BSD-4-Clause
- FLITE_LICENSE_FILES = $(FLITE_SUBDIR)/COPYING
+diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
+index c88d7cf..9193ad5 100644
+--- a/package/physfs/physfs.mk
++++ b/package/physfs/physfs.mk
+@@ -8,7 +8,7 @@ PHYSFS_VERSION = be27dfd07d97336145e7f49d3fd200a6e902f85e
+ PHYSFS_SITE = https://hg.icculus.org/icculus/physfs
+ PHYSFS_SITE_METHOD = hg
  
- FLITE_INSTALL_STAGING = YES
-diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index 044cd8c..f92203e 100644
---- a/package/heirloom-mailx/heirloom-mailx.mk
-+++ b/package/heirloom-mailx/heirloom-mailx.mk
+-PHYSFS_LICENSE = zlib license (physfs), LGPL with exceptions (lzma)
++PHYSFS_LICENSE = Zlib (physfs), LGPL with exceptions (lzma)
+ PHYSFS_LICENSE_FILES = LICENSE.txt src/lzma/LGPL.txt
+ 
+ PHYSFS_INSTALL_STAGING = YES
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 628d906..1db4e76 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
 @@ -7,7 +7,7 @@
- HEIRLOOM_MAILX_VERSION = 12.5
- HEIRLOOM_MAILX_SOURCE = heirloom-mailx_$(HEIRLOOM_MAILX_VERSION).orig.tar.gz
- HEIRLOOM_MAILX_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/h/heirloom-mailx
--HEIRLOOM_MAILX_LICENSE = BSD-4c, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPLv1.1 (nss)
-+HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssapi), RSA Data Security (md5), Network Working Group (hmac), MPLv1.1 (nss)
- HEIRLOOM_MAILX_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index b5f0f26..a3ab836 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -13,7 +13,7 @@
- 
- IPUTILS_VERSION = 55828d1fef3fed7f07abcbf7be9282a9662e78c7
- IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
--IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause, BSD-4c
-+IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause, BSD-4-Clause
- # Only includes a license file for BSD
- IPUTILS_LICENSE_FILES = ninfod/COPYING
- 
-diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
-index 8daaf2d..f6238e6 100644
---- a/package/ngrep/ngrep.mk
-+++ b/package/ngrep/ngrep.mk
+ SDL2_VERSION = 2.0.5
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+-SDL2_LICENSE = zlib
++SDL2_LICENSE = Zlib
+ SDL2_LICENSE_FILES = COPYING.txt
+ SDL2_INSTALL_STAGING = YES
+ SDL2_CONFIG_SCRIPTS = sdl2-config
+diff --git a/package/sdl2_gfx/sdl2_gfx.mk b/package/sdl2_gfx/sdl2_gfx.mk
+index 975bca7..1ec1387 100644
+--- a/package/sdl2_gfx/sdl2_gfx.mk
++++ b/package/sdl2_gfx/sdl2_gfx.mk
 @@ -7,7 +7,7 @@
- NGREP_VERSION = 1.45
- NGREP_SOURCE = ngrep-$(NGREP_VERSION).tar.bz2
- NGREP_SITE = http://downloads.sourceforge.net/project/ngrep/ngrep/$(NGREP_VERSION)
--NGREP_LICENSE = BSD-4c-like
-+NGREP_LICENSE = BSD-4-Clause-like
- NGREP_LICENSE_FILES = LICENSE.txt
- NGREP_INSTALL_STAGING = YES
+ SDL2_GFX_VERSION = 1.0.1
+ SDL2_GFX_SOURCE = SDL2_gfx-$(SDL2_GFX_VERSION).tar.gz
+ SDL2_GFX_SITE = http://www.ferzkopp.net/Software/SDL2_gfx
+-SDL2_GFX_LICENSE = zlib
++SDL2_GFX_LICENSE = Zlib
+ SDL2_GFX_LICENSE_FILES = COPYING SDL2_framerate.h
+ SDL2_GFX_INSTALL_STAGING = YES
+ SDL2_GFX_DEPENDENCIES = sdl2 host-pkgconf
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index cf3b738..71a9634 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
+@@ -8,7 +8,7 @@ SDL2_IMAGE_VERSION = 2.0.1
+ SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL2_IMAGE_INSTALL_STAGING = YES
+-SDL2_IMAGE_LICENSE = zlib
++SDL2_IMAGE_LICENSE = Zlib
+ SDL2_IMAGE_LICENSE_FILES = COPYING.txt
  
-diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
-index 5caf54c..c3e319b 100644
---- a/package/portmap/portmap.mk
-+++ b/package/portmap/portmap.mk
+ # Unconditionally enable support for image formats that don't require
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index 86916c3..dbe30dd 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
 @@ -7,7 +7,7 @@
- PORTMAP_VERSION = 6.0
- PORTMAP_SOURCE = portmap-$(PORTMAP_VERSION).tgz
- PORTMAP_SITE = http://neil.brown.name/portmap
--PORTMAP_LICENSE = BSD-4c (portmap.c) SunRPC License (portmap.c from_local.c)
-+PORTMAP_LICENSE = BSD-4-Clause (portmap.c) SunRPC License (portmap.c from_local.c)
- PORTMAP_LICENSE_FILES = portmap.c from_local.c
- PORTMAP_SBINS = portmap pmap_dump pmap_set
+ SDL2_TTF_VERSION = 2.0.14
+ SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
+ SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+-SDL2_TTF_LICENSE = zlib
++SDL2_TTF_LICENSE = Zlib
+ SDL2_TTF_LICENSE_FILES = COPYING.txt
+ SDL2_TTF_INSTALL_STAGING = YES
+ SDL2_TTF_DEPENDENCIES = sdl2 freetype host-pkgconf
+diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
+index 7f3a2ff..e7420de 100644
+--- a/package/sdl_gfx/sdl_gfx.mk
++++ b/package/sdl_gfx/sdl_gfx.mk
+@@ -8,7 +8,7 @@ SDL_GFX_VERSION_MAJOR = 2.0
+ SDL_GFX_VERSION = $(SDL_GFX_VERSION_MAJOR).23
+ SDL_GFX_SOURCE = SDL_gfx-$(SDL_GFX_VERSION).tar.gz
+ SDL_GFX_SITE = http://www.ferzkopp.net/Software/SDL_gfx-$(SDL_GFX_VERSION_MAJOR)
+-SDL_GFX_LICENSE = zlib
++SDL_GFX_LICENSE = Zlib
+ SDL_GFX_LICENSE_FILES = COPYING LICENSE
+ SDL_GFX_INSTALL_STAGING = YES
+ SDL_GFX_DEPENDENCIES = sdl
+diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
+index f88aa0e..6ea657b 100644
+--- a/package/sdl_image/sdl_image.mk
++++ b/package/sdl_image/sdl_image.mk
+@@ -8,7 +8,7 @@ SDL_IMAGE_VERSION = 1.2.12
+ SDL_IMAGE_SOURCE = SDL_image-$(SDL_IMAGE_VERSION).tar.gz
+ SDL_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL_IMAGE_INSTALL_STAGING = YES
+-SDL_IMAGE_LICENSE = zlib
++SDL_IMAGE_LICENSE = Zlib
+ SDL_IMAGE_LICENSE_FILES = COPYING
  
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index f5fb663..6139c5b 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
+ SDL_IMAGE_CONF_OPTS = \
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index 897b308..1c6912a 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
 @@ -7,7 +7,7 @@
- PPPD_VERSION = 2.4.7
- PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
- PPPD_SITE = https://download.samba.org/pub/ppp
--PPPD_LICENSE = LGPL-2.0+, LGPL, BSD-4c, BSD-3-Clause, GPL-2.0+
-+PPPD_LICENSE = LGPL-2.0+, LGPL, BSD-4-Clause, BSD-3-Clause, GPL-2.0+
- PPPD_LICENSE_FILES = \
- 	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
- 	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
-diff --git a/package/python-xlwt/python-xlwt.mk b/package/python-xlwt/python-xlwt.mk
-index 0438fc8..f8a298a 100644
---- a/package/python-xlwt/python-xlwt.mk
-+++ b/package/python-xlwt/python-xlwt.mk
-@@ -8,7 +8,7 @@ PYTHON_XLWT_VERSION = 1.2.0
- PYTHON_XLWT_SOURCE = xlwt-$(PYTHON_XLWT_VERSION).tar.gz
- PYTHON_XLWT_SITE = https://pypi.python.org/packages/5b/8d/22b9ec552a1d7865de39f54bd15f9db09c72a6bf8ab77b11dcce4ae336bb
- PYTHON_XLWT_SETUP_TYPE = setuptools
--PYTHON_XLWT_LICENSE = BSD-3-Clause, BSD-4c
-+PYTHON_XLWT_LICENSE = BSD-3-Clause, BSD-4-Clause
- PYTHON_XLWT_LICENSE_FILES = docs/licenses.rst
+ SDL_MIXER_VERSION = 1.2.12
+ SDL_MIXER_SOURCE = SDL_mixer-$(SDL_MIXER_VERSION).tar.gz
+ SDL_MIXER_SITE = http://www.libsdl.org/projects/SDL_mixer/release
+-SDL_MIXER_LICENSE = zlib
++SDL_MIXER_LICENSE = Zlib
+ SDL_MIXER_LICENSE_FILES = COPYING
  
- $(eval $(python-package))
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 8b6e5b2..64f755d 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -11,7 +11,7 @@ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
- RADVD_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- # For 0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
- RADVD_AUTORECONF = YES
--RADVD_LICENSE = BSD-4c-like
-+RADVD_LICENSE = BSD-4-Clause-like
- RADVD_LICENSE_FILES = COPYRIGHT
+ SDL_MIXER_INSTALL_STAGING = YES
+diff --git a/package/sdl_net/sdl_net.mk b/package/sdl_net/sdl_net.mk
+index 4534dee..c7e409a 100644
+--- a/package/sdl_net/sdl_net.mk
++++ b/package/sdl_net/sdl_net.mk
+@@ -7,7 +7,7 @@
+ SDL_NET_VERSION = 1.2.8
+ SDL_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
+ SDL_NET_SOURCE = SDL_net-$(SDL_NET_VERSION).tar.gz
+-SDL_NET_LICENSE = zlib
++SDL_NET_LICENSE = Zlib
+ SDL_NET_LICENSE_FILES = COPYING
  
- define RADVD_INSTALL_INIT_SYSV
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index dce21ff..7cfead6 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -9,7 +9,7 @@
- # of today)
- SLIRP_VERSION = 8c2da74c1385242f20799fec8c04f8378edc6550
- SLIRP_SITE = git://anongit.freedesktop.org/spice/slirp
--SLIRP_LICENSE = BSD-4c, BSD-2-Clause
-+SLIRP_LICENSE = BSD-4-Clause, BSD-2-Clause
- # Note: The license file 'COPYRIGHT' is missing from the sources,
- # although some files refer to it.
- SLIRP_INSTALL_STAGING = YES
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index b9c4bb0..70f88a1 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -14,7 +14,7 @@ UTIL_LINUX_AUTORECONF = YES
+ SDL_NET_CONF_OPTS = \
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index 3e494b4..1d94c6c 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -7,7 +7,7 @@
+ SDL_TTF_VERSION = 2.0.11
+ SDL_TTF_SOURCE = SDL_ttf-$(SDL_TTF_VERSION).tar.gz
+ SDL_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
+-SDL_TTF_LICENSE = zlib
++SDL_TTF_LICENSE = Zlib
+ SDL_TTF_LICENSE_FILES = COPYING
  
- # README.licensing claims that some files are GPLv2-only, but this is not true.
- # Some files are GPLv3+ but only in tests.
--UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4c, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
-+UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
- UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = host-pkgconf
+ SDL_TTF_INSTALL_STAGING = YES
+diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
+index df7b29f..1528051 100644
+--- a/package/tinyxml/tinyxml.mk
++++ b/package/tinyxml/tinyxml.mk
+@@ -10,7 +10,7 @@ TINYXML_SITE = http://mirrors.xbmc.org/build-deps/sources
+ # configure.ac which is not present in mainline.
+ TINYXML_AUTORECONF = YES
+ TINYXML_INSTALL_STAGING = YES
+-TINYXML_LICENSE = zlib
++TINYXML_LICENSE = Zlib
+ TINYXML_LICENSE_FILES = README
+ 
+ $(eval $(autotools-package))
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index 053e46e..461c36c 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -6,7 +6,7 @@
+ 
+ TINYXML2_VERSION = 3.0.0
+ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+-TINYXML2_LICENSE = zlib
++TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = readme.md
+ TINYXML2_INSTALL_STAGING = YES
+ 
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index deea5a5..23c6e95 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -7,7 +7,7 @@
+ ZLIB_VERSION = 1.2.11
+ ZLIB_SOURCE = zlib-$(ZLIB_VERSION).tar.xz
+ ZLIB_SITE = http://www.zlib.net
+-ZLIB_LICENSE = zlib license
++ZLIB_LICENSE = Zlib
+ ZLIB_LICENSE_FILES = README
+ ZLIB_INSTALL_STAGING = YES
+ 
