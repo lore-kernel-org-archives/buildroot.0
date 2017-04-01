@@ -1,42 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Apr 2017 21:08:22 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libdrm: bump version to 2.4.76
-In-Reply-To: <20170401190823.11566-1-bernd.kuhls@t-online.de>
-References: <20170401190823.11566-1-bernd.kuhls@t-online.de>
-Message-ID: <20170401190823.11566-2-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  1 Apr 2017 21:09:09 +0200
+Subject: [Buildroot] [PATCH] pacakge/dieharder: fix autoreconf
+Message-ID: <20170401190909.27403-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 4 ++--
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+When dieharder was committed, Thomas reoved the hook to cleanup the m4
+files, on the reason that autoreconf would rereate the broken symlinks
+(and because the hook was too complex).
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index dc10b295f..f9d82174c 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2017-January/131209.html
--sha256 2d5a500eef412cc287d12268eed79d571e262d4957a2ec9258073f305985054f  libdrm-2.4.75.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2017-March/137337.html
-+sha256 7cdfb83ea77def453299dd95332aa9257c9f3534ff5844f5c0ce87265c275f3a  libdrm-2.4.76.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index ae7b75bad..8ece196d2 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
+It turns out the hook was needed: autoreconf does not recreate the files
+(at least not in some autobuilders nor on my machine).
+
+Reinstate a simpler hook.
+
+Fixes:
+    http://autobuild.buildroot.org/results/a92/a92e9a74b0966f8f0bc4080f918d5ddf4c1ec0ce/
+    http://autobuild.buildroot.org/results/a4f/a4f6647f69ad89ff1ffe5f1331281fb7a57ade4e/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Julien Viard de Galbert <julien@vdg.name>
+---
+ package/dieharder/dieharder.mk | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
+index 05ca253..c3eee64 100644
+--- a/package/dieharder/dieharder.mk
++++ b/package/dieharder/dieharder.mk
+@@ -15,13 +15,17 @@ DIEHARDER_DEPENDENCIES = gsl
+ # The original configure does not use variables provided in the
+ # environment so _CONF_ENV does not work. (_CONF_OPTS does).
  #
- ################################################################################
+-# In addition, the m4/*.m4 files are symlinks to /usr/share, which
+-# clearly doesn't work, so doing an autoreconf replaces them.
+-#
+ # Finally, we patch configure.ac and some Makefile.am so we need to
+ # autoreconf anyway
+ DIEHARDER_AUTORECONF = YES
  
--LIBDRM_VERSION = 2.4.75
-+LIBDRM_VERSION = 2.4.76
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
++# The m4/*.m4 files are symlinks to /usr/share, which clearly doesn't
++# work, and doing an autoreconf does not replace them.
++define DIEHARDER_M4_CLEAN
++	rm -f $(@D)/m4/*.m4
++endef
++DIEHARDER_POST_PATCH_HOOKS += DIEHARDER_M4_CLEAN
++
+ # fix endianness detection
+ ifeq ($(BR2_ENDIAN),"BIG")
+ DIEHARDER_CONF_ENV = ac_cv_c_endian=big
 -- 
-2.11.0
+2.9.3
