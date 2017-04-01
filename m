@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 18:48:56 +0200
-Subject: [Buildroot] [PATCH v2 2/2] linux: Add CIP SLTS easy selection
- option
-In-Reply-To: <1488925428-12805-3-git-send-email-angelo.compagnucci@gmail.com>
-References: <1488925428-12805-1-git-send-email-angelo.compagnucci@gmail.com>
- <1488925428-12805-3-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20170401184856.33d00f4f@free-electrons.com>
+Date: Sat, 1 Apr 2017 18:52:04 +0200
+Subject: [Buildroot] Patchwork cleanup, 10 patches to look at
+In-Reply-To: <20170326235320.448e802a@free-electrons.com>
+References: <20170326235320.448e802a@free-electrons.com>
+Message-ID: <20170401185204.60a79acc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +12,99 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  7 Mar 2017 23:23:48 +0100, Angelo Compagnucci wrote:
-> This patch adds an easy way to select the CIP project SLTS
-> kernel within the kernel menu.
+Quick update on where we stand.
+
+On Sun, 26 Mar 2017 23:53:20 +0200, Thomas Petazzoni wrote:
+
+>  * avahi: link with libintl if libglib2 is enabled
+>    https://patchwork.ozlabs.org/patch/683732/
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>    My plan is to enable the stub libintl in uClibc-ng and stop having
+>    all those linking issues with libintl from gettext. The only
+>    drawback would be that there would no longer be "translation"
+>    support with uClibc: the libintl implementation in uClibc-ng is
+>    really just a stub.
+> 
+>    Thoughts ?
 
-> +	config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_TAG
-> +		bool "Latest tagged version (v4.4.48-cip2)"
-> +		help
-> +		  Use the latest tagged version
-> +
-> +	config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH
-> +		bool "Latest released version"
-> +		help
-> +		  Always use the latest released version at the time of compiling
+No real solution provided. A discussion started with Arnout, but no
+conclusion at this point.
 
-I still won't take a patch that adds an option like this. It makes the
-build non reproducible, which is plain and simply unacceptable in
-Buildroot. So until you remove this, this patch cannot be accepted.
+>  * qemu: allow to build statically
+>    https://patchwork.ozlabs.org/patch/692667/
+> 
+>    We normally don't want to have special options for each package to
+>    build them statically. Should we make an exception for Qemu?
 
-> +else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-> +LINUX_SITE = $(call gitlab,cip-project,cip-kernel-4.4,$(LINUX_VERSION))
-> +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
+Following Arnout's suggestion, this patch was accepted and merged.
 
-According to
-https://wiki.linuxfoundation.org/civilinfrastructureplatform/start,
-gitlab is only a mirror, and the official Git repository is
-https://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git/.
+>  * infra: fix 'packages-file-list.txt' with TLP
+>    https://patchwork.ozlabs.org/patch/694519/
+>
+>    Adds a lock around the installation step of packages, to make
+>    top-level parallel build still generate a correct list of files per
+>    package.
+> 
+>    Gustavo, what is your plan regarding this?
+> 
+>    Others: should we merge this?
 
-And in fact, according to
-https://lists.cip-project.org/pipermail/cip-dev/2017-March/000167.html,
-they even say that the gitlab mirror is no longer updated that
-regularly due to technical issues.
+Following discussion with Arnout, this patch was rejected.
 
-So could you rework your patch using git.kernel.org instead of gitlab
-(and therefore dropping the gitlab helper), and also dropping the
-BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH option ?
+>  * e2fsprogs: keep util-linux's fsck if chosen
+>    https://patchwork.ozlabs.org/patch/696634/
+> 
+>    This fixes a real bug, but even Maxime who submitted the patch is
+>    not too happy with the proposal. Could someone look into this?
+
+No progress.
+
+>  * linux-headers: Account for LINUX_OVERRIDE_SRCDIR
+>    https://patchwork.ozlabs.org/patch/713927/
+> 
+>    I think I am against this patch, because if the user sets
+>    LINUX_OVERRIDE_SRCDIR, then suddenly he will see his kernel headers
+>    being rebuilt as well.
+> 
+>    Arnout ?
+
+Following discussion with Arnout, this patch was rejected.
+
+>  * python-lxml: allow build as host package
+>    https://patchwork.ozlabs.org/patch/722644/
+> 
+>    Host package not used anywhere. Discussed at length during the
+>    previous BR meeting. What do we do?
+
+Following discussion with Arnout, this patch was accepted after adding
+a Config.in.host file.
+
+>  * fakedate: simplify logic
+>    https://patchwork.ozlabs.org/patch/725396/
+
+No progress.
+
+>  * linux-tools/perf: fix build for MIPS by using the right emulation on
+>    LD
+>    https://patchwork.ozlabs.org/patch/729154/
+
+No progress.
+
+>  * package/pkg-download.mk: add gitlab helper
+>    https://patchwork.ozlabs.org/patch/736382/
+> 
+>  * linux: Add CIP SLTS easy selection option
+>    https://patchwork.ozlabs.org/patch/736383/
+
+Patches marked as Changes Requested, with feedback given to the
+submitter.
+
+Temporary results:
+
+ - 6 patches on which a decision was taken, and therefore the patches
+   are no longer in patchwork
+
+ - 4 patches still pending a decision
 
 Thanks,
 
