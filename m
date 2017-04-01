@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 18:37:45 +0200
-Subject: [Buildroot] [PATCH v5 10/19] python3: remove full path from .pyc
-In-Reply-To: <1482241596-31688-11-git-send-email-jezz@sysmic.org>
+Date: Sat, 1 Apr 2017 18:39:01 +0200
+Subject: [Buildroot] [PATCH v5 11/19] infra-libtool: pass sysroot
+ information to libtool
+In-Reply-To: <20170320225250.0a5bd659@free-electrons.com>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-11-git-send-email-jezz@sysmic.org>
-Message-ID: <20170401183745.76060423@free-electrons.com>
+ <1482241596-31688-12-git-send-email-jezz@sysmic.org>
+ <20170320225250.0a5bd659@free-electrons.com>
+Message-ID: <20170401183901.3655ba77@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +15,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 20 Dec 2016 14:46:27 +0100, J?r?me Pouiller wrote:
-> .pyc files include path to source .py file. This patch changes the way
-> `pycompile.py' is launched in order to only keep the part relative to
-> $TARGET_DIR.
-> 
-> This work was sponsored by `BA Robotic Systems'.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
+On Mon, 20 Mar 2017 22:52:50 +0100, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> On Tue, 20 Dec 2016 14:46:28 +0100, J?r?me Pouiller wrote:
+> 
+> > libtool include support for cross-compilation since v1.5.  
+> 
+> Are you sure this is true?
+> 
+> In the release notes of libtool v2.4
+> (https://savannah.gnu.org/forum/forum.php?forum_id=6525), I see:
+
+So, because of this issue, I've marked patches 11 to 19 from your
+series as "Changes Requested". Things are indeed not as simple as "use
+sysroot support from libtool".
+
+Of course, it would definitely be nice to continue working on this
+topic, and benefit from libtool sysroot support when available.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
