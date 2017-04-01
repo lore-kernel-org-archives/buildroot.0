@@ -1,60 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 22:03:58 +0200
-Subject: [Buildroot] [git commit] pacakge/dieharder: fix autoreconf
-Message-ID: <20170401200521.C0CE981E95@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 22:06:22 +0200
+Subject: [Buildroot] [PATCH] pacakge/dieharder: fix autoreconf
+In-Reply-To: <20170401190909.27403-1-yann.morin.1998@free.fr>
+References: <20170401190909.27403-1-yann.morin.1998@free.fr>
+Message-ID: <20170401220622.02152a5c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7f647a8320b02398a6a51d34b4cc74f56a5914d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When dieharder was committed, Thomas removed the hook to cleanup the m4
-files, on the reason that autoreconf would recreate the broken symlinks
-(and because the hook was too complex).
+On Sat,  1 Apr 2017 21:09:09 +0200, Yann E. MORIN wrote:
+> When dieharder was committed, Thomas reoved the hook to cleanup the m4
+> files, on the reason that autoreconf would rereate the broken symlinks
+> (and because the hook was too complex).
+> 
+> It turns out the hook was needed: autoreconf does not recreate the files
+> (at least not in some autobuilders nor on my machine).
+> 
+> Reinstate a simpler hook.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/a92/a92e9a74b0966f8f0bc4080f918d5ddf4c1ec0ce/
+>     http://autobuild.buildroot.org/results/a4f/a4f6647f69ad89ff1ffe5f1331281fb7a57ade4e/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Julien Viard de Galbert <julien@vdg.name>
+> ---
+>  package/dieharder/dieharder.mk | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 
-It turns out the hook was needed: if the symbolic links are
-broken (libtool not installed on the host machine), autoreconf fails to
-do its job.
+Applied to master after fixing a few typoes, and adjusting the commit
+log/comments with the fact that it was indeed working for me because I
+had libtool installed. So the problem is not just the fact that the
+symlinks are not overwritten by autoreconf, but that they are not
+overwritten if they are broken symbolic links in the first place.
 
-Reinstate a simpler hook.
+Thanks!
 
-Fixes:
-    http://autobuild.buildroot.org/results/a92/a92e9a74b0966f8f0bc4080f918d5ddf4c1ec0ce/
-    http://autobuild.buildroot.org/results/a4f/a4f6647f69ad89ff1ffe5f1331281fb7a57ade4e/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Julien Viard de Galbert <julien@vdg.name>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dieharder/dieharder.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
-index 05ca253..c3eee64 100644
---- a/package/dieharder/dieharder.mk
-+++ b/package/dieharder/dieharder.mk
-@@ -15,13 +15,17 @@ DIEHARDER_DEPENDENCIES = gsl
- # The original configure does not use variables provided in the
- # environment so _CONF_ENV does not work. (_CONF_OPTS does).
- #
--# In addition, the m4/*.m4 files are symlinks to /usr/share, which
--# clearly doesn't work, so doing an autoreconf replaces them.
--#
- # Finally, we patch configure.ac and some Makefile.am so we need to
- # autoreconf anyway
- DIEHARDER_AUTORECONF = YES
- 
-+# The m4/*.m4 files are symlinks to /usr/share, which clearly doesn't
-+# work, and doing an autoreconf does not replace them.
-+define DIEHARDER_M4_CLEAN
-+	rm -f $(@D)/m4/*.m4
-+endef
-+DIEHARDER_POST_PATCH_HOOKS += DIEHARDER_M4_CLEAN
-+
- # fix endianness detection
- ifeq ($(BR2_ENDIAN),"BIG")
- DIEHARDER_CONF_ENV = ac_cv_c_endian=big
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
