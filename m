@@ -1,55 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Apr 2017 23:05:05 +0200
-Subject: [Buildroot] [PATCH] lpppd: new package
-In-Reply-To: <20170401184051.7f6c1252@free-electrons.com>
-References: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
- <20170401184051.7f6c1252@free-electrons.com>
-Message-ID: <20170401210505.GA3663@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 Apr 2017 23:05:51 +0200
+Subject: [Buildroot] [v6] package: add qt5virtualkeyboard
+In-Reply-To: <20170401150938.644ed92b@free-electrons.com>
+References: <20170330171842.29179-1-gael.portay@savoirfairelinux.com>
+ <20170401150938.644ed92b@free-electrons.com>
+Message-ID: <ac078dac-035a-9ab2-7fe9-69641e8ab89d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
 
-On 2017-04-01 18:40 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  2 Jan 2017 23:38:24 +0100, stefan.nickl at gmail.com wrote:
-> > From: Stefan Nickl <Stefan.Nickl@gmail.com>
-> > 
-> > After the official github repository for PPP has not seen
-> > any activity for a long time, I've created a fork that
-> > tries to do some modernization and shed some legacy.
-> > For more info, please see https://github.com/snickl/lpppd
-> > 
-> > It is inteded as a drop-in replacement for the original PPP,
-> > therefore I've marked it as conflicting with the existing pppd
-> > package.
-> > 
-> > Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+
+On 01-04-17 15:09, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I do appreciate your interest in making the pppd development active
-> again. However, at this point, I don't see what is the benefit of using
-> lpppd over pppd, and having two separate packages is a bit annoying.
-> Therefore, I would prefer to wait for lpppd to gain some traction
-> before packaging it in Buildroot.
+[snip]
+> Perhaps we could do:
+> 
+> ifneq ($(findstring zh_CN,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
 
-I kind of agree with Thomas here.
+ Or just the pattern we use everywhere else:
 
-lpppd is a new fork of a well-established project, so it will have to
-offer enough of an edge before it can displace pppd.
+ifneq ($(filter zh_CN all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
 
-However, I agree with you that there is no activity in upstream pppd.
-Maybe you could talk with upstream to adopt the package instead of
-forking?
 
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
+
+> QT5VIRTUALKEYBOARD_INSTALL_PINYIN = YES
+> endif
+> 
+> ifneq ($(findstring ja_JP,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+> QT5VIRTUALKEYBOARD_INSTALL_OPENWNN = YES
+> endif
+> 
+> ...
+> 
+> ifneq ($(findstring all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+> QT5VIRTUALKEYBOARD_INSTALL_PINYIN = YES
+> QT5VIRTUALKEYBOARD_INSTALL_OPENWNN = YES
+> ...
+> endif
+> 
+> And then use the QT5VIRTUALKEYBOARD_INSTALL_<foo> variables to know
+> what should be installed.
+> 
+>> +ifneq ($(strip $(QT5VIRTUALKEYBOARD_3RDPARTY_PARTS)),)
+> 
+> strip really needed?
+> 
+> Thanks,
+> 
+> Thomas
+> 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
