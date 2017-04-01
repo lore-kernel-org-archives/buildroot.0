@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 16:43:59 +0200
-Subject: [Buildroot] [PATCH 3/6] infra: fix 'packages-file-list.txt'
- with TLP
-In-Reply-To: <20161114132238.6569-4-jezz@sysmic.org>
-References: <20161114132238.6569-1-jezz@sysmic.org>
- <20161114132238.6569-4-jezz@sysmic.org>
-Message-ID: <20170401164359.0fb15e51@free-electrons.com>
+Date: Sat, 1 Apr 2017 16:44:53 +0200
+Subject: [Buildroot] [PATCH] linux-headers: Account for
+ LINUX_OVERRIDE_SRCDIR
+In-Reply-To: <20170111195611.837-1-andrew.smirnov@gmail.com>
+References: <20170111195611.837-1-andrew.smirnov@gmail.com>
+Message-ID: <20170401164453.6c4d91d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 14 Nov 2016 14:22:35 +0100, J?r?me Pouiller wrote:
-> Until now, `$(BUILD_DIR)/packages-file-list.txt' was not filled properly when
-> top level parallelization is enabled. Therefore, all scripts that rely on
-> packages-file-list.txt did not work.
+On Wed, 11 Jan 2017 11:56:11 -0800, Andrey Smirnov wrote:
+> Use the value of LINUX_OVERRIDE_SRCDIR as override directory when
+> BR2_KERNEL_HEADERS_AS_KERNEL is specified.
 > 
-> In order to fix it,this patch place target installation task in a critical
-> section.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  package/linux-headers/linux-headers.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Arnout said:
+As per the discussion with Arnout, I've marked this patch as "Rejected"
+in patchwork.
 
-"""
- I don't think this is the proper approach. The proper approach is
-map/reduce, i.e. generate the pieces in per-package files and collect
-them together in a final gathering stage. Obviously, this requires a
-per-package target first, but that's anyway the way we want to go.
-
- I thought someone already made that comment but I can't find it in
- that thread...
-"""
-
-So I've marked this patch as Changes Requested in patchwork.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
