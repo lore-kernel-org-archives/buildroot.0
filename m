@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 18:37:41 +0200
-Subject: [Buildroot] [PATCH v5 09/19] python2: remove full path from .pyc
-In-Reply-To: <1482241596-31688-10-git-send-email-jezz@sysmic.org>
+Date: Sat, 1 Apr 2017 18:37:45 +0200
+Subject: [Buildroot] [PATCH v5 10/19] python3: remove full path from .pyc
+In-Reply-To: <1482241596-31688-11-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-10-git-send-email-jezz@sysmic.org>
-Message-ID: <20170401183741.79c137ef@free-electrons.com>
+ <1482241596-31688-11-git-send-email-jezz@sysmic.org>
+Message-ID: <20170401183745.76060423@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 20 Dec 2016 14:46:26 +0100, J?r?me Pouiller wrote:
+On Tue, 20 Dec 2016 14:46:27 +0100, J?r?me Pouiller wrote:
 > .pyc files include path to source .py file. This patch changes the way
 > `pycompile.py' is launched in order to only keep the part relative to
 > $TARGET_DIR.
