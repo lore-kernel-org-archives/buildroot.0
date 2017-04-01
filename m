@@ -1,44 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 16:50:59 +0200
-Subject: [Buildroot] [PATCH v5 08/19] reproducible: try to detect most
- common errors
-In-Reply-To: <1482241596-31688-9-git-send-email-jezz@sysmic.org>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-9-git-send-email-jezz@sysmic.org>
-Message-ID: <20170401165059.1f3f9ad5@free-electrons.com>
+Date: Sat, 1 Apr 2017 17:56:28 +0200
+Subject: [Buildroot] [git commit] dc3dd: add patch to fix autoreconf
+Message-ID: <20170401155638.3A62E825FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8607ae919dc70bacfd7041db7aa613e14b2e7463
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Dec 2016 14:46:25 +0100, J?r?me Pouiller wrote:
-> Some package includes some information from build environment in their results.
-> This practice is incompatible with reproducible builds.
-> 
-> This patch scans final target to research most common patterns.
-> 
-> Since we only search fixed strings (grep is called with -F), this search is
-> fast (on my station, 60ms for a target of 40MB).
-> 
-> Note, it could be a good idea to also match current user name. However, build
-> path often contains username and, until now, we do not try to avoid build path
-> in result.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+This commit adds a patch to dc3dd that fixes autoreconfiguration.
 
-I am not entirely convinced it makes sense to grep more or less
-randomly in all files specifically for those strings.
+Fixes:
 
-Or perhaps, we should have a separate shell scripts that checks for
-several classes of obviously non-reproducible behaviors?
+  http://autobuild.buildroot.net/results/5b73b0d735691c5f63ed9bc3122bc84ea21faae7/
 
-Arnout, Peter, Yann, what do you think?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dc3dd/0002-fix-autoreconf.patch | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/dc3dd/0002-fix-autoreconf.patch b/package/dc3dd/0002-fix-autoreconf.patch
+new file mode 100644
+index 0000000..85e0a36
+--- /dev/null
++++ b/package/dc3dd/0002-fix-autoreconf.patch
+@@ -0,0 +1,32 @@
++Remove use of AM_C_PROTOTYPES to fix autoreconf
++
++The AM_C_PROTOTYPES macro no longer exists since automake 1.12. It
++existed to support de-ANSI-fication of code using ansi2knr. It was
++simply removed from coreutils m4/jm-macros.m4 in commit
++88873501cff9ed937edf969cedd693517ab0a293, but this change was not
++propagated to dc3dd, causing an autoreconf failure:
++
++configure.ac:45: error: automatic de-ANSI-fication support has been removed
++/home/peko/autobuild/instance-0/output/host/usr/share/aclocal-1.15/obsolete.m4:26: AM_C_PROTOTYPES is expanded from...
++m4/jm-macros.m4:124: gl_CHECK_ALL_TYPES is expanded from...
++m4/jm-macros.m4:22: coreutils_MACROS is expanded from...
++configure.ac:45: the top level
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/m4/jm-macros.m4
++===================================================================
++--- a/m4/jm-macros.m4
+++++ b/m4/jm-macros.m4
++@@ -128,11 +128,6 @@
++   dnl whether functions and headers are available, whether they work, etc.
++   AC_REQUIRE([AC_SYS_LARGEFILE])
++ 
++-  dnl This test must precede tests of compiler characteristics like
++-  dnl that for the inline keyword, since it may change the degree to
++-  dnl which the compiler supports such features.
++-  AC_REQUIRE([AM_C_PROTOTYPES])
++-
++   dnl Checks for typedefs, structures, and compiler characteristics.
++   AC_REQUIRE([AC_C_BIGENDIAN])
++   AC_REQUIRE([AC_C_VOLATILE])
