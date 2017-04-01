@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 13:54:24 +0200
-Subject: [Buildroot] [PATCH] package/systemd: fix build on not-recent
- distros
-In-Reply-To: <20170331213354.14786-1-yann.morin.1998@free.fr>
-References: <20170331213354.14786-1-yann.morin.1998@free.fr>
-Message-ID: <20170401135424.15573d09@free-electrons.com>
+Date: Sat, 1 Apr 2017 13:56:32 +0200
+Subject: [Buildroot] [git commit] package/lensfun: fix static only build
+Message-ID: <20170401115641.A24D082563@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a1efe5a151a9dbaf784ed805f0e3973c903195b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Mar 2017 23:33:54 +0200, Yann E. MORIN wrote:
-> systemd is at it again, using ln --relative once more, which is not
-> available but on the most recent distros.
-> 
-> Patch it out with a bit of sed magic.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/48e/48ecf31eca9b22339a770abd3f9abdf1ae41cfd3/
->     http://autobuild.buildroot.org/results/c62/c6297c61d8c2d3ab9be77b9d398598adacdb33b3/
->     http://autobuild.buildroot.org/results/22f/22ff106a4626c84422d9a3e69aa9c8fe7c76938c/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> 
-> ---
-> Note-1: that patch could be generalised to the other ln --relative
-> patch we carry, but this should be done in an upstreamable solution,
-> which I doubt is possible, but I'll try.
+Build lensfun.a for static only build.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/63e/63e7700a242c7c28ede0fe0b6a63db288e73e974/build-end.log
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lensfun/lensfun.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/lensfun/lensfun.mk b/package/lensfun/lensfun.mk
+index 8e92e59..fa002c7 100644
+--- a/package/lensfun/lensfun.mk
++++ b/package/lensfun/lensfun.mk
+@@ -34,6 +34,12 @@ else
+ LENSFUN_CONF_OPTS += -DBUILD_LENSTOOL=OFF
+ endif
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++LENSFUN_CONF_OPTS += -DBUILD_STATIC=ON
++else
++LENSFUN_CONF_OPTS += -DBUILD_STATIC=OFF
++endif
++
+ # Don't install helper scripts (which require python3 and gksudo).
+ # Don't run setup.py on the host.
+ LENSFUN_CONF_OPTS += -DINSTALL_HELPER_SCRIPTS=OFF -DPYTHON=OFF
