@@ -1,47 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 22:38:58 +0200
-Subject: [Buildroot] [git commit] package: use SPDX short identifier for EPL
-	license
-Message-ID: <20170401203935.C3C68816A2@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 22:38:17 +0200
+Subject: [Buildroot] [git commit] wpan-tools: correct license name
+Message-ID: <20170401203935.A173A80125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39f8da7fa3b68efe2ee75e17c662a3b8e26985cf
+commit: https://git.buildroot.net/buildroot/commit/?id=6b954e2f98f8a02ab587e5a8aa57c13966a99813
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+iw license is ISC.
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mosquitto/mosquitto.mk               | 2 +-
- package/python-paho-mqtt/python-paho-mqtt.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wpan-tools/wpan-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 96607f3..ddac153 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -6,7 +6,7 @@
- 
- MOSQUITTO_VERSION = 1.4.10
- MOSQUITTO_SITE = http://mosquitto.org/files/source
--MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
-+MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
- MOSQUITTO_INSTALL_STAGING = YES
- 
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-index d783a9c..f0c2729 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.mk
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+diff --git a/package/wpan-tools/wpan-tools.mk b/package/wpan-tools/wpan-tools.mk
+index d223800..012b946 100644
+--- a/package/wpan-tools/wpan-tools.mk
++++ b/package/wpan-tools/wpan-tools.mk
 @@ -7,7 +7,7 @@
- PYTHON_PAHO_MQTT_VERSION = 1.2
- PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
- PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/82/d9/7064d3a0a1d62756a1a809c85b99f864c641b66de84c15458f72193b7708
--PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
-+PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
- PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
- PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
+ WPAN_TOOLS_VERSION = 0.5
+ WPAN_TOOLS_SITE = http://wpan.cakelab.org/releases
+ WPAN_TOOLS_DEPENDENCIES = host-pkgconf libnl
+-WPAN_TOOLS_LICENSE = iw license
++WPAN_TOOLS_LICENSE = ISC
+ WPAN_TOOLS_LICENSE_FILES = COPYING
  
+ $(eval $(autotools-package))
