@@ -1,127 +1,178 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 23:21:00 +0200
-Subject: [Buildroot] [PATCH 3/4] libpwquality: New package
-In-Reply-To: <20170209134558.3723-3-stefan.sorensen@spectralink.com>
-References: <20170209134558.3723-1-stefan.sorensen@spectralink.com>
- <20170209134558.3723-3-stefan.sorensen@spectralink.com>
-Message-ID: <20170401232100.29b43d79@free-electrons.com>
+Date: Sat, 1 Apr 2017 23:28:18 +0200
+Subject: [Buildroot] [git commit] libmaxminddb: new package
+Message-ID: <20170401212830.D757482602@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stefan,
+commit: https://git.buildroot.net/buildroot/commit/?id=69cdc6a362321125073cb809db27b95e4beb8f5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  9 Feb 2017 14:45:57 +0100, Stefan S?rensen wrote:
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+C library for the MaxMind DB file format
 
-Thanks for this patch. A few comments below.
+The libmaxminddb library provides a C library for reading
+MaxMind DB files, including the GeoIP2 databases from MaxMind.
+This is a custom binary format designed to facilitate fast
+lookups of IP addresses while allowing for great flexibility
+in the type of data associated with an address.
 
->  package/Config.in                                  |  1 +
->  ...ith-disable-nls-on-platforms-without-libi.patch | 42 ++++++++++++++++++++++
->  ...leak-in-settings-when-using-bad-word-list.patch | 23 ++++++++++++
->  package/libpwquality/Config.in                     | 18 ++++++++++
->  package/libpwquality/libpwquality.hash             |  2 ++
->  package/libpwquality/libpwquality.mk               | 24 +++++++++++++
+The MaxMind DB format is an open format. The spec is available
+at http://maxmind.github.io/MaxMind-DB/. This spec is licensed
+under the Creative Commons Attribution-ShareAlike 3.0 Unported
+License.
 
-As said on the cracklib review, we now want the update to the
-DEVELOPERS file to be done as part of the patch adding the package. I
-normally fix this up when applying, but I have other comments below.
+http://maxmind.github.io/libmaxminddb
 
-> diff --git a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch b/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-> new file mode 100644
-> index 0000000..2ce79b9
-> --- /dev/null
-> +++ b/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-> @@ -0,0 +1,42 @@
-> +Status: Upstream
-> +
-> +Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: add entry in DEVELOPERS file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-Add-disable-tests-to-configure.patch      | 53 ++++++++++++++++++++++
+ package/libmaxminddb/Config.in                     | 18 ++++++++
+ package/libmaxminddb/libmaxminddb.hash             |  2 +
+ package/libmaxminddb/libmaxminddb.mk               | 17 +++++++
+ 6 files changed, 92 insertions(+)
 
-Such information should go at the end of the patch description, ...
-
-> +
-> +# HG changeset patch
-> +# User Stefan S?rensen <stefan.sorensen@spectralink.com>
-> +# Date 1486030609 -3600
-> +#      Thu Feb 02 11:16:49 2017 +0100
-> +# Node ID 3a716ca2bbf90cde4d86ef3c4597884d6a416525
-> +# Parent  79ca3b91513faf3bd03464808d107b71ba5d6c3b
-> +Fix build with --disable-nls on platforms without libintl included in libc.
-
-... here.
-
-Also, both of your patches have been submitted upstream. Has upstream
-released a new version with your fixes?
-
-
-
-> diff --git a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch b/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-> new file mode 100644
-> index 0000000..fe7b9e8
-> --- /dev/null
-> +++ b/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-> @@ -0,0 +1,23 @@
-> +Status: Upstream
-> +
-> +Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-
-Ditto formatting of the patch.
-
-> diff --git a/package/libpwquality/Config.in b/package/libpwquality/Config.in
-> new file mode 100644
-> index 0000000..da295f0
-> --- /dev/null
-> +++ b/package/libpwquality/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_LIBPWQUALITY
-> +	bool "libpwquality"
-> +	help
-> +	  This is a library for password quality checks and generation
-> +	  of random passwords that pass the checks.  This library uses
-> +	  the cracklib and cracklib dictionaries to perform some of
-> +	  the checks.
-> +
-> +	  https://fedorahosted.org/libpwquality/
-
-fedorahosted.org is dead, so it is no longer possible to use this as an
-upstream/download location. Has the project moved elsewhere?
-
-> +if BR2_PACKAGE_LIBPWQUALITY
-> +
-> +config BR2_PACKAGE_LIBPWQUALITY_TOOLS
-> +	bool "install tools"
-> +	help
-> +	  Install libpwquality command line tools generating/checking passwords.
-
-Line too long.
-
-> +LIBPWQUALITY_VERSION = 1.3.0
-> +LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
-> +LIBPWQUALITY_SITE = https://fedorahosted.org/releases/l/i/libpwquality
-
-As said above, this site is dead.
-
-> +LIBPWQUALITY_LICENSE = BSD or LGPLv2+
-
-BSD is not precise enough. Which BSD variant?
-
-LGPLv2+ should now be LGPL-2.0+ or LGPL-2.1+, as we use SPDX license
-codes.
-
-No LIBPWQUALITY_LICENSE_FILES ?
-
-> +LIBPWQUALITY_INSTALL_STAGING = YES
-> +LIBPWQUALITY_DEPENDENCIES = cracklib
-> +LIBPWQUALITY_AUTORECONF = YES
-
-Why is an autoreconf needed?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0d1423a..c89468b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -509,6 +509,7 @@ F:	package/netsurf-buildsystem/
+ N:	Fabrice Fontaine <fabrice.fontaine@orange.com>
+ F:	package/domoticz/
+ F:	package/libmediaart/
++F:	package/libmaxminddb/
+ F:	package/openzwave/
+ 
+ N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index 63d0561..d6d134d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1259,6 +1259,7 @@ menu "Networking"
+ 	source "package/libidn/Config.in"
+ 	source "package/libiscsi/Config.in"
+ 	source "package/libldns/Config.in"
++	source "package/libmaxminddb/Config.in"
+ 	source "package/libmbus/Config.in"
+ 	source "package/libmemcached/Config.in"
+ 	source "package/libmicrohttpd/Config.in"
+diff --git a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+new file mode 100644
+index 0000000..1ae5acc
+--- /dev/null
++++ b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+@@ -0,0 +1,53 @@
++From b12ca226c111730e2ef5d8a3d929dbd943fbe763 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 9 Feb 2017 21:40:43 +0100
++Subject: [PATCH] Add --disable-tests to configure
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am  |  6 +++++-
++ configure.ac | 10 ++++++++++
++ 2 files changed, 15 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 1804945..cebcd31 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -5,8 +5,12 @@ nodist_include_HEADERS = include/maxminddb_config.h
++ 
++ SUBDIRS = \
++   src     \
++-  bin     \
+++  bin
+++
+++if TESTS
+++SUBDIRS += \
++   t
+++endif
++ 
++ EXTRA_DIST = doc t Changes.md LICENSE NOTICE README.md projects/VS12 projects/VS12-tests
++ dist-hook:
++diff --git a/configure.ac b/configure.ac
++index 7916212..fc53ffd 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -119,6 +119,16 @@ AC_ARG_ENABLE(
++         esac],[debug=false])
++ AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
++ 
+++AC_ARG_ENABLE(
+++        [tests],
+++        [  --enable-tests    Compilation of tests code],
+++        [case "${enableval}" in
+++          yes) tests=true ;;
+++          no)  tests=false ;;
+++          *) AC_MSG_ERROR([bad value ${enableval} for --enable-tests]) ;;
+++        esac],[tests=false])
+++AM_CONDITIONAL([TESTS], [test x$tests = xtrue])
+++
++ AC_CONFIG_FILES([Makefile
++                  src/Makefile
++                  bin/Makefile
++-- 
++2.5.0
++
+diff --git a/package/libmaxminddb/Config.in b/package/libmaxminddb/Config.in
+new file mode 100644
+index 0000000..1b8061b
+--- /dev/null
++++ b/package/libmaxminddb/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBMAXMINDDB
++	bool "libmaxminddb"
++	help
++	  C library for the MaxMind DB file format
++
++	  The libmaxminddb library provides a C library for reading
++	  MaxMind DB files, including the GeoIP2 databases from
++	  MaxMind.  This is a custom binary format designed to
++	  facilitate fast lookups of IP addresses while allowing for
++	  great flexibility in the type of data associated with an
++	  address.
++
++	  The MaxMind DB format is an open format. The spec is
++	  available at http://maxmind.github.io/MaxMind-DB/. This spec
++	  is licensed under the Creative Commons
++	  Attribution-ShareAlike 3.0 Unported License.
++
++	  http://maxmind.github.io/libmaxminddb
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+new file mode 100644
+index 0000000..3d5b4ca
+--- /dev/null
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	4147241d4e3103bd843167ae5a0d5cf176632b6898cb1cca6223d2d58cc53ef5	libmaxminddb-1.2.0.tar.gz
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+new file mode 100644
+index 0000000..c6e70c5
+--- /dev/null
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# libmaxminddb
++#
++################################################################################
++
++LIBMAXMINDDB_VERSION = 1.2.0
++LIBMAXMINDDB_SITE = $(call github,maxmind,libmaxminddb,$(LIBMAXMINDDB_VERSION))
++LIBMAXMINDDB_INSTALL_STAGING = YES
++LIBMAXMINDDB_LICENSE = Apache-2.0
++LIBMAXMINDDB_LICENSE_FILES = LICENSE
++# Fetched from Github, with no configure script, and we're patching
++# configure.ac
++LIBMAXMINDDB_AUTORECONF = YES
++LIBMAXMINDDB_CONF_OPTS = --disable-tests
++
++$(eval $(autotools-package))
