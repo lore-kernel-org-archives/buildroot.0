@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 14:43:35 +0200
-Subject: [Buildroot] [PATCH 1/2] package/xenomai: enable armv5tej support
-In-Reply-To: <20170331202604.18153-1-romain.naour@gmail.com>
+Date: Sat, 1 Apr 2017 14:44:17 +0200
+Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable obstack support
+In-Reply-To: <20170331202604.18153-2-romain.naour@gmail.com>
 References: <20170331202604.18153-1-romain.naour@gmail.com>
-Message-ID: <20170401144335.5a6e2240@free-electrons.com>
+ <20170331202604.18153-2-romain.naour@gmail.com>
+Message-ID: <20170401144417.08a84fd7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 31 Mar 2017 22:26:03 +0200, Romain Naour wrote:
-> Apply a patch from Xenomai 2.6 [1].
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/762/7623410a81b1587b33b4f4b9cf1572c872b8a6e9/build-end.log
-> 
-> [1] https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../xenomai/0002-arm-enable-armv5tej-support.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/xenomai/0002-arm-enable-armv5tej-support.patch
+On Fri, 31 Mar 2017 22:26:04 +0200, Romain Naour wrote:
+> Obstack support in Xenomai is broken when the libc doesn't support
+> obstack support itself. Make sure we disable obstack support for all
+> libc since it was removed in uClibc-ng since 1.0.21 release and it's
+> always disabled with Glibc.
 
-Applied to master, thanks. Please submit the patch upstream, thanks!
+What makes you say it's always disabled in glibc?
+
+What's the status with musl?
+
+Also, Xenomai seems to have some replacement code when obstack support
+is not available from the C library. How does that interfact with
+ELIDE_CODE ?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
