@@ -1,294 +1,544 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 15:18:10 +0200
-Subject: [Buildroot] [git commit] boot,
-	package: use SPDX short identifier for LGPLv2.1/LGPLv2.1+
-Message-ID: <20170401134425.268047FF41@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 15:14:07 +0200
+Subject: [Buildroot] [git commit] package: use SPDX short identifier for
+	GPLv1/GPLv1+
+Message-ID: <20170401134424.9A9427FF41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30a3e8d108d46bbd2622b8139c996d52e48a4e10
+commit: https://git.buildroot.net/buildroot/commit/?id=cded7ae71ac746a454b0aa184f60d3cb243033c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We want to use SPDX identifier for license string as much as possible.
-SPDX short identifier for LGPLv2.1/LGPLv2.1+ is LGPL-2.1/LGPL-2.1+.
+We want to use SPDX identifier for licenses as much as possible. SPDX
+short identifier for GPLv1/GPLv1+ is GPL-1.0/GPL-1.0+.
 
 This change is done using following command.
-find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/LGPLv2.1(\+)?/LGPL-2.1\1/g'
+find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/GPLv1(\+)?/GPL-1.0\1/g'
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/gummiboot/gummiboot.mk                                           | 2 +-
- package/acl/acl.mk                                                    | 2 +-
- package/acsccid/acsccid.mk                                            | 2 +-
- package/alsa-lib/alsa-lib.mk                                          | 2 +-
- package/atkmm/atkmm.mk                                                | 2 +-
- package/attr/attr.mk                                                  | 2 +-
- package/audiofile/audiofile.mk                                        | 2 +-
- package/augeas/augeas.mk                                              | 2 +-
- package/avahi/avahi.mk                                                | 2 +-
- package/bc/bc.mk                                                      | 2 +-
- package/beecrypt/beecrypt.mk                                          | 2 +-
- package/bellagio/bellagio.mk                                          | 2 +-
- package/binutils/binutils.mk                                          | 2 +-
- package/bluez5_utils/bluez5_utils.mk                                  | 2 +-
- package/bluez_utils/bluez_utils.mk                                    | 2 +-
- package/bustle/bustle.mk                                              | 2 +-
- package/c-icap/c-icap.mk                                              | 2 +-
- package/cairo/cairo.mk                                                | 2 +-
- package/canfestival/canfestival.mk                                    | 2 +-
- package/ccid/ccid.mk                                                  | 2 +-
- package/check/check.mk                                                | 2 +-
- package/cloog/cloog.mk                                                | 2 +-
- package/collectd/collectd.mk                                          | 2 +-
- package/cppunit/cppunit.mk                                            | 2 +-
- package/cryptsetup/cryptsetup.mk                                      | 2 +-
- package/dbus-cpp/dbus-cpp.mk                                          | 2 +-
- package/dialog/dialog.mk                                              | 2 +-
- package/directfb/directfb.mk                                          | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk                      | 2 +-
- package/dovecot/dovecot.mk                                            | 2 +-
- package/dsp-tools/dsp-tools.mk                                        | 2 +-
- package/dtv-scan-tables/dtv-scan-tables.mk                            | 2 +-
- package/duma/duma.mk                                                  | 2 +-
- package/dvb-apps/dvb-apps.mk                                          | 2 +-
- package/efivar/efivar.mk                                              | 2 +-
- package/efl/efl.mk                                                    | 2 +-
- package/eigen/eigen.mk                                                | 2 +-
- package/enchant/enchant.mk                                            | 2 +-
- package/eudev/eudev.mk                                                | 2 +-
- package/ffmpeg/ffmpeg.mk                                              | 2 +-
- package/flac/flac.mk                                                  | 2 +-
- package/flickcurl/flickcurl.mk                                        | 2 +-
- package/freescale-imx/imx-lib/imx-lib.mk                              | 2 +-
- package/fwts/fwts.mk                                                  | 2 +-
- package/gcr/gcr.mk                                                    | 2 +-
- package/geoip/geoip.mk                                                | 2 +-
- package/getent/getent.mk                                              | 2 +-
- package/gettext/gettext.mk                                            | 2 +-
- package/git/git.mk                                                    | 2 +-
- package/glibc/glibc.mk                                                | 2 +-
- package/glibmm/glibmm.mk                                              | 2 +-
- package/gnutls/gnutls.mk                                              | 2 +-
- package/grantlee/grantlee.mk                                          | 2 +-
- package/graphite2/graphite2.mk                                        | 2 +-
- package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk        | 2 +-
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk                            | 2 +-
- package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk                  | 2 +-
- package/gstreamer/gst-plugins-bad/gst-plugins-bad.mk                  | 2 +-
- package/gstreamer/gst-plugins-good/gst-plugins-good.mk                | 2 +-
- package/gstreamer/gstreamer/gstreamer.mk                              | 2 +-
- package/gstreamer1/gst-omx/gst-omx.mk                                 | 2 +-
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk               | 2 +-
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk             | 2 +-
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk             | 2 +-
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk             | 2 +-
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk                           | 2 +-
- package/gstreamer1/gst1-validate/gst1-validate.mk                     | 2 +-
- package/gstreamer1/gstreamer1/gstreamer1.mk                           | 2 +-
- package/gtk2-engines/gtk2-engines.mk                                  | 2 +-
- package/gtkmm3/gtkmm3.mk                                              | 2 +-
- package/gtksourceview/gtksourceview.mk                                | 2 +-
- package/igh-ethercat/igh-ethercat.mk                                  | 2 +-
- package/imx-usb-loader/imx-usb-loader.mk                              | 2 +-
- package/jack2/jack2.mk                                                | 2 +-
- package/json-glib/json-glib.mk                                        | 2 +-
- package/keyutils/keyutils.mk                                          | 2 +-
- package/kmod/kmod.mk                                                  | 2 +-
- package/lcdapi/lcdapi.mk                                              | 2 +-
- package/leafnode2/leafnode2.mk                                        | 2 +-
- package/libaacs/libaacs.mk                                            | 2 +-
- package/libaio/libaio.mk                                              | 2 +-
- package/libassuan/libassuan.mk                                        | 2 +-
- package/libatasmart/libatasmart.mk                                    | 2 +-
- package/libbdplus/libbdplus.mk                                        | 2 +-
- package/libbluray/libbluray.mk                                        | 2 +-
- package/libbroadvoice/libbroadvoice.mk                                | 2 +-
- package/libcap-ng/libcap-ng.mk                                        | 2 +-
- package/libcgi/libcgi.mk                                              | 2 +-
- package/libcgroup/libcgroup.mk                                        | 2 +-
- package/libcli/libcli.mk                                              | 2 +-
- package/libcodec2/libcodec2.mk                                        | 2 +-
- package/libcofi/libcofi.mk                                            | 2 +-
- package/libconfig/libconfig.mk                                        | 2 +-
- package/libcroco/libcroco.mk                                          | 2 +-
- package/libdaemon/libdaemon.mk                                        | 2 +-
- package/libdcadec/libdcadec.mk                                        | 2 +-
- package/libdvbpsi/libdvbpsi.mk                                        | 2 +-
- package/libdvbsi/libdvbsi.mk                                          | 2 +-
- package/libebml/libebml.mk                                            | 2 +-
- package/libee/libee.mk                                                | 2 +-
- package/libesmtp/libesmtp.mk                                          | 2 +-
- package/libestr/libestr.mk                                            | 2 +-
- package/libexif/libexif.mk                                            | 2 +-
- package/libfm-extra/libfm-extra.mk                                    | 2 +-
- package/libfm/libfm.mk                                                | 2 +-
- package/libfribidi/libfribidi.mk                                      | 2 +-
- package/libfuse/libfuse.mk                                            | 2 +-
- package/libgcrypt/libgcrypt.mk                                        | 2 +-
- package/libgee/libgee.mk                                              | 2 +-
- package/libgpg-error/libgpg-error.mk                                  | 2 +-
- package/libgpgme/libgpgme.mk                                          | 2 +-
- package/libgsasl/libgsasl.mk                                          | 2 +-
- package/libgudev/libgudev.mk                                          | 2 +-
- package/libhdhomerun/libhdhomerun.mk                                  | 2 +-
- package/libical/libical.mk                                            | 2 +-
- package/libiio/libiio.mk                                              | 2 +-
- package/libimxvpuapi/libimxvpuapi.mk                                  | 2 +-
- package/libiqrf/libiqrf.mk                                            | 2 +-
- package/libiscsi/libiscsi.mk                                          | 2 +-
- package/liblo/liblo.mk                                                | 2 +-
- package/liblog4c-localtime/liblog4c-localtime.mk                      | 2 +-
- package/libmatroska/libmatroska.mk                                    | 2 +-
- package/libmcrypt/libmcrypt.mk                                        | 2 +-
- package/libmediaart/libmediaart.mk                                    | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk                                | 4 ++--
- package/libmms/libmms.mk                                              | 2 +-
- package/libmnl/libmnl.mk                                              | 2 +-
- package/libmodbus/libmodbus.mk                                        | 2 +-
- package/libndp/libndp.mk                                              | 2 +-
- package/libnetfilter_acct/libnetfilter_acct.mk                        | 2 +-
- package/libnfs/libnfs.mk                                              | 2 +-
- package/libnice/libnice.mk                                            | 2 +-
- package/libnl/libnl.mk                                                | 2 +-
- package/liboping/liboping.mk                                          | 2 +-
- package/libosip2/libosip2.mk                                          | 2 +-
- package/libplayer/libplayer.mk                                        | 2 +-
- package/libplist/libplist.mk                                          | 2 +-
- package/libpthsem/libpthsem.mk                                        | 2 +-
- package/libqrencode/libqrencode.mk                                    | 2 +-
- package/libraw/libraw.mk                                              | 2 +-
- package/libraw1394/libraw1394.mk                                      | 2 +-
- package/libreplaygain/libreplaygain.mk                                | 2 +-
- package/libroxml/libroxml.mk                                          | 2 +-
- package/librsync/librsync.mk                                          | 2 +-
- package/libseccomp/libseccomp.mk                                      | 2 +-
- package/libsecret/libsecret.mk                                        | 2 +-
- package/libsemanage/libsemanage.mk                                    | 2 +-
- package/libsepol/libsepol.mk                                          | 2 +-
- package/libsexy/libsexy.mk                                            | 2 +-
- package/libshairplay/libshairplay.mk                                  | 2 +-
- package/libsigc/libsigc.mk                                            | 2 +-
- package/libsndfile/libsndfile.mk                                      | 2 +-
- package/libsoc/libsoc.mk                                              | 2 +-
- package/libsocketcan/libsocketcan.mk                                  | 2 +-
- package/libsoundtouch/libsoundtouch.mk                                | 2 +-
- package/libsoxr/libsoxr.mk                                            | 2 +-
- package/libssh/libssh.mk                                              | 2 +-
- package/libsvg-cairo/libsvg-cairo.mk                                  | 2 +-
- package/libsysfs/libsysfs.mk                                          | 2 +-
- package/libtasn1/libtasn1.mk                                          | 2 +-
- package/libuci/libuci.mk                                              | 2 +-
- package/libuio/libuio.mk                                              | 2 +-
- package/liburcu/liburcu.mk                                            | 2 +-
- package/libusb-compat/libusb-compat.mk                                | 2 +-
- package/libusb/libusb.mk                                              | 2 +-
- package/libusbgx/libusbgx.mk                                          | 2 +-
- package/libv4l/libv4l.mk                                              | 2 +-
- package/libvips/libvips.mk                                            | 2 +-
- package/libwebsockets/libwebsockets.mk                                | 2 +-
- package/libxmlpp/libxmlpp.mk                                          | 2 +-
- package/lite/lite.mk                                                  | 2 +-
- package/live555/live555.mk                                            | 2 +-
- package/lksctp-tools/lksctp-tools.mk                                  | 2 +-
- package/lm-sensors/lm-sensors.mk                                      | 2 +-
- package/lockdev/lockdev.mk                                            | 2 +-
- package/log4cpp/log4cpp.mk                                            | 2 +-
- package/lttng-babeltrace/lttng-babeltrace.mk                          | 2 +-
- package/lttng-libust/lttng-libust.mk                                  | 2 +-
- package/lttng-modules/lttng-modules.mk                                | 2 +-
- package/lttng-tools/lttng-tools.mk                                    | 2 +-
- package/lvm2/lvm2.mk                                                  | 2 +-
- package/lxc/lxc.mk                                                    | 2 +-
- package/matchbox-lib/matchbox-lib.mk                                  | 2 +-
- package/menu-cache/menu-cache.mk                                      | 2 +-
- package/midori/midori.mk                                              | 2 +-
- package/miraclecast/miraclecast.mk                                    | 2 +-
- package/mpg123/mpg123.mk                                              | 2 +-
- package/musepack/musepack.mk                                          | 2 +-
- package/nss-mdns/nss-mdns.mk                                          | 2 +-
- package/nss-pam-ldapd/nss-pam-ldapd.mk                                | 2 +-
- package/numactl/numactl.mk                                            | 2 +-
- .../nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk | 2 +-
- package/ola/ola.mk                                                    | 2 +-
- package/olsr/olsr.mk                                                  | 2 +-
- package/omniorb/omniorb.mk                                            | 2 +-
- package/openobex/openobex.mk                                          | 2 +-
- package/openpgm/openpgm.mk                                            | 2 +-
- package/openvmtools/openvmtools.mk                                    | 2 +-
- package/ortp/ortp.mk                                                  | 2 +-
- package/p7zip/p7zip.mk                                                | 2 +-
- package/pangomm/pangomm.mk                                            | 2 +-
- package/pseudo/pseudo.mk                                              | 2 +-
- package/pulseaudio/pulseaudio.mk                                      | 2 +-
- package/python-chardet/python-chardet.mk                              | 2 +-
- package/python-dialog/python-dialog.mk                                | 2 +-
- package/python-dialog3/python-dialog3.mk                              | 2 +-
- package/python-gobject/python-gobject.mk                              | 2 +-
- package/python-pam/python-pam.mk                                      | 2 +-
- package/python-paramiko/python-paramiko.mk                            | 2 +-
- package/python-pygame/python-pygame.mk                                | 2 +-
- package/python-pyudev/python-pyudev.mk                                | 2 +-
- package/python-urwid/python-urwid.mk                                  | 2 +-
- package/qemu/qemu.mk                                                  | 2 +-
- package/qjson/qjson.mk                                                | 2 +-
- package/qt/qt.mk                                                      | 2 +-
- package/qt5/qt5base/qt5base.mk                                        | 2 +-
- package/qt5/qt5connectivity/qt5connectivity.mk                        | 2 +-
- package/qt5/qt5declarative/qt5declarative.mk                          | 2 +-
- package/qt5/qt5enginio/qt5enginio.mk                                  | 2 +-
- package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk                | 2 +-
- package/qt5/qt5imageformats/qt5imageformats.mk                        | 2 +-
- package/qt5/qt5location/qt5location.mk                                | 2 +-
- package/qt5/qt5multimedia/qt5multimedia.mk                            | 2 +-
- package/qt5/qt5script/qt5script.mk                                    | 2 +-
- package/qt5/qt5sensors/qt5sensors.mk                                  | 2 +-
- package/qt5/qt5serialport/qt5serialport.mk                            | 2 +-
- package/qt5/qt5svg/qt5svg.mk                                          | 2 +-
- package/qt5/qt5tools/qt5tools.mk                                      | 2 +-
- package/qt5/qt5webchannel/qt5webchannel.mk                            | 2 +-
- package/qt5/qt5webkit/qt5webkit.mk                                    | 4 ++--
- package/qt5/qt5websockets/qt5websockets.mk                            | 2 +-
- package/qt5/qt5x11extras/qt5x11extras.mk                              | 2 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk                          | 2 +-
- package/quazip/quazip.mk                                              | 2 +-
- package/qwt/qwt.mk                                                    | 2 +-
- package/raptor/raptor.mk                                              | 2 +-
- package/rtmpdump/rtmpdump.mk                                          | 2 +-
- package/sbc/sbc.mk                                                    | 2 +-
- package/sdl/sdl.mk                                                    | 2 +-
- package/sdl_sound/sdl_sound.mk                                        | 2 +-
- package/setools/setools.mk                                            | 2 +-
- package/smack/smack.mk                                                | 2 +-
- package/sofia-sip/sofia-sip.mk                                        | 2 +-
- package/sox/sox.mk                                                    | 2 +-
- package/spice/spice.mk                                                | 2 +-
- package/sylpheed/sylpheed.mk                                          | 2 +-
- package/syslog-ng/syslog-ng.mk                                        | 2 +-
- package/systemd-bootchart/systemd-bootchart.mk                        | 2 +-
- package/systemd/systemd.mk                                            | 2 +-
- package/taglib/taglib.mk                                              | 2 +-
- package/tn5250/tn5250.mk                                              | 2 +-
- package/trace-cmd/trace-cmd.mk                                        | 2 +-
- package/twolame/twolame.mk                                            | 2 +-
- package/ubus/ubus.mk                                                  | 2 +-
- package/uclibc-ng-test/uclibc-ng-test.mk                              | 2 +-
- package/uclibc/uclibc.mk                                              | 2 +-
- package/unixodbc/unixodbc.mk                                          | 2 +-
- package/usbredir/usbredir.mk                                          | 2 +-
- package/util-linux/util-linux.mk                                      | 2 +-
- package/vala/vala.mk                                                  | 2 +-
- package/vde2/vde2.mk                                                  | 2 +-
- package/vlc/vlc.mk                                                    | 2 +-
- package/webkitgtk/webkitgtk.mk                                        | 2 +-
- package/wine/wine.mk                                                  | 2 +-
- package/xenomai/xenomai.mk                                            | 2 +-
- package/xz/xz.mk                                                      | 2 +-
- package/zbar/zbar.mk                                                  | 2 +-
- package/zlog/zlog.mk                                                  | 2 +-
- 268 files changed, 270 insertions(+), 270 deletions(-)
+ package/joe/joe.mk                                             | 2 +-
+ package/libxml-parser-perl/libxml-parser-perl.mk               | 2 +-
+ package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk | 2 +-
+ package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk       | 2 +-
+ package/perl-datetime-tiny/perl-datetime-tiny.mk               | 2 +-
+ package/perl-digest-hmac/perl-digest-hmac.mk                   | 2 +-
+ package/perl-digest-sha1/perl-digest-sha1.mk                   | 2 +-
+ package/perl-encode-locale/perl-encode-locale.mk               | 2 +-
+ package/perl-file-listing/perl-file-listing.mk                 | 2 +-
+ package/perl-file-util/perl-file-util.mk                       | 2 +-
+ package/perl-gd/perl-gd.mk                                     | 2 +-
+ package/perl-gdgraph/perl-gdgraph.mk                           | 2 +-
+ package/perl-html-parser/perl-html-parser.mk                   | 2 +-
+ package/perl-html-tagset/perl-html-tagset.mk                   | 2 +-
+ package/perl-http-cookies/perl-http-cookies.mk                 | 2 +-
+ package/perl-http-daemon/perl-http-daemon.mk                   | 2 +-
+ package/perl-http-date/perl-http-date.mk                       | 2 +-
+ package/perl-http-message/perl-http-message.mk                 | 2 +-
+ package/perl-http-negotiate/perl-http-negotiate.mk             | 2 +-
+ package/perl-io-html/perl-io-html.mk                           | 2 +-
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk               | 2 +-
+ package/perl-libwww-perl/perl-libwww-perl.mk                   | 2 +-
+ package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk             | 2 +-
+ package/perl-mailtools/perl-mailtools.mk                       | 2 +-
+ package/perl-mime-base64/perl-mime-base64.mk                   | 2 +-
+ package/perl-module-build/perl-module-build.mk                 | 2 +-
+ package/perl-net-http/perl-net-http.mk                         | 2 +-
+ package/perl-netaddr-ip/perl-netaddr-ip.mk                     | 2 +-
+ package/perl-time-hires/perl-time-hires.mk                     | 2 +-
+ package/perl-timedate/perl-timedate.mk                         | 2 +-
+ package/perl-uri/perl-uri.mk                                   | 2 +-
+ package/perl-www-robotrules/perl-www-robotrules.mk             | 2 +-
+ package/perl-xml-libxml/perl-xml-libxml.mk                     | 2 +-
+ package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk | 2 +-
+ package/perl-xml-sax-base/perl-xml-sax-base.mk                 | 2 +-
+ package/perl-xml-sax/perl-xml-sax.mk                           | 2 +-
+ package/perl/perl.mk                                           | 2 +-
+ 37 files changed, 37 insertions(+), 37 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/joe/joe.mk b/package/joe/joe.mk
+index e86007e..e19cae1 100644
+--- a/package/joe/joe.mk
++++ b/package/joe/joe.mk
+@@ -6,7 +6,7 @@
+ 
+ JOE_VERSION = 3.7
+ JOE_SITE = http://downloads.sourceforge.net/project/joe-editor/JOE%20sources/joe-$(JOE_VERSION)
+-JOE_LICENSE = GPLv1+
++JOE_LICENSE = GPL-1.0+
+ JOE_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index e512815..401470d 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -8,7 +8,7 @@ LIBXML_PARSER_PERL_VERSION = 2.44
+ LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+ LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
+-LIBXML_PARSER_PERL_LICENSE = Artistic or GPLv1+
++LIBXML_PARSER_PERL_LICENSE = Artistic or GPL-1.0+
+ LIBXML_PARSER_PERL_RUN_PERL = `which perl`
+ 
+ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
+index 6152821..de029e9 100644
+--- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
+@@ -8,7 +8,7 @@ PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.11
+ PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
+ PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl
+-PERL_CRYPT_OPENSSL_RANDOM_LICENSE = Artistic or GPLv1+
++PERL_CRYPT_OPENSSL_RANDOM_LICENSE = Artistic or GPL-1.0+
+ PERL_CRYPT_OPENSSL_RANDOM_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
+index 7a4e31e..b853d99 100644
+--- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
++++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
+@@ -8,7 +8,7 @@ PERL_CRYPT_OPENSSL_RSA_VERSION = 0.28
+ PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSION).tar.gz
+ PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERLER
+ PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = perl-crypt-openssl-random
+-PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPLv1+
++PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPL-1.0+
+ PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-datetime-tiny/perl-datetime-tiny.mk b/package/perl-datetime-tiny/perl-datetime-tiny.mk
+index 5758973..6b54967 100644
+--- a/package/perl-datetime-tiny/perl-datetime-tiny.mk
++++ b/package/perl-datetime-tiny/perl-datetime-tiny.mk
+@@ -7,7 +7,7 @@
+ PERL_DATETIME_TINY_VERSION = 1.06
+ PERL_DATETIME_TINY_SOURCE = DateTime-Tiny-$(PERL_DATETIME_TINY_VERSION).tar.gz
+ PERL_DATETIME_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
+-PERL_DATETIME_TINY_LICENSE = Artistic or GPLv1+
++PERL_DATETIME_TINY_LICENSE = Artistic or GPL-1.0+
+ PERL_DATETIME_TINY_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-digest-hmac/perl-digest-hmac.mk b/package/perl-digest-hmac/perl-digest-hmac.mk
+index bee32f4..a926a1e 100644
+--- a/package/perl-digest-hmac/perl-digest-hmac.mk
++++ b/package/perl-digest-hmac/perl-digest-hmac.mk
+@@ -7,7 +7,7 @@
+ PERL_DIGEST_HMAC_VERSION = 1.03
+ PERL_DIGEST_HMAC_SOURCE = Digest-HMAC-$(PERL_DIGEST_HMAC_VERSION).tar.gz
+ PERL_DIGEST_HMAC_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_DIGEST_HMAC_LICENSE = Artistic or GPLv1+
++PERL_DIGEST_HMAC_LICENSE = Artistic or GPL-1.0+
+ PERL_DIGEST_HMAC_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-digest-sha1/perl-digest-sha1.mk b/package/perl-digest-sha1/perl-digest-sha1.mk
+index 52b9ec3..d93159b 100644
+--- a/package/perl-digest-sha1/perl-digest-sha1.mk
++++ b/package/perl-digest-sha1/perl-digest-sha1.mk
+@@ -7,7 +7,7 @@
+ PERL_DIGEST_SHA1_VERSION = 2.13
+ PERL_DIGEST_SHA1_SOURCE = Digest-SHA1-$(PERL_DIGEST_SHA1_VERSION).tar.gz
+ PERL_DIGEST_SHA1_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_DIGEST_SHA1_LICENSE = Artistic or GPLv1+
++PERL_DIGEST_SHA1_LICENSE = Artistic or GPL-1.0+
+ PERL_DIGEST_SHA1_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-encode-locale/perl-encode-locale.mk b/package/perl-encode-locale/perl-encode-locale.mk
+index 2544b16..80d9c3b 100644
+--- a/package/perl-encode-locale/perl-encode-locale.mk
++++ b/package/perl-encode-locale/perl-encode-locale.mk
+@@ -7,7 +7,7 @@
+ PERL_ENCODE_LOCALE_VERSION = 1.05
+ PERL_ENCODE_LOCALE_SOURCE = Encode-Locale-$(PERL_ENCODE_LOCALE_VERSION).tar.gz
+ PERL_ENCODE_LOCALE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_ENCODE_LOCALE_LICENSE = Artistic or GPLv1+
++PERL_ENCODE_LOCALE_LICENSE = Artistic or GPL-1.0+
+ PERL_ENCODE_LOCALE_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-file-listing/perl-file-listing.mk b/package/perl-file-listing/perl-file-listing.mk
+index a9d8ced..e150de7 100644
+--- a/package/perl-file-listing/perl-file-listing.mk
++++ b/package/perl-file-listing/perl-file-listing.mk
+@@ -8,7 +8,7 @@ PERL_FILE_LISTING_VERSION = 6.04
+ PERL_FILE_LISTING_SOURCE = File-Listing-$(PERL_FILE_LISTING_VERSION).tar.gz
+ PERL_FILE_LISTING_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+ PERL_FILE_LISTING_DEPENDENCIES = perl-http-date
+-PERL_FILE_LISTING_LICENSE = Artistic or GPLv1+
++PERL_FILE_LISTING_LICENSE = Artistic or GPL-1.0+
+ PERL_FILE_LISTING_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-file-util/perl-file-util.mk b/package/perl-file-util/perl-file-util.mk
+index 7026515..723cc7a 100644
+--- a/package/perl-file-util/perl-file-util.mk
++++ b/package/perl-file-util/perl-file-util.mk
+@@ -8,7 +8,7 @@ PERL_FILE_UTIL_VERSION = 4.132140
+ PERL_FILE_UTIL_SOURCE = File-Util-$(PERL_FILE_UTIL_VERSION).tar.gz
+ PERL_FILE_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOMMY
+ PERL_FILE_UTIL_DEPENDENCIES = host-perl-module-build
+-PERL_FILE_UTIL_LICENSE = Artistic or GPLv1+
++PERL_FILE_UTIL_LICENSE = Artistic or GPL-1.0+
+ PERL_FILE_UTIL_LICENSE_FILES = COPYING LICENSE
+ HOST_PERL_FILE_UTIL_DEPENDENCIES = host-perl-module-build
+ 
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index 2ad966c..89a21cf 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
+@@ -8,7 +8,7 @@ PERL_GD_VERSION = 2.56
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+ PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
+ PERL_GD_DEPENDENCIES = zlib libpng freetype gd
+-PERL_GD_LICENSE = Artistic or GPLv1+
++PERL_GD_LICENSE = Artistic or GPL-1.0+
+ PERL_GD_LICENSE_FILES = LICENSE
+ PERL_GD_PREFER_INSTALLER = EUMM
+ 
+diff --git a/package/perl-gdgraph/perl-gdgraph.mk b/package/perl-gdgraph/perl-gdgraph.mk
+index dc7ffd9..c431707 100644
+--- a/package/perl-gdgraph/perl-gdgraph.mk
++++ b/package/perl-gdgraph/perl-gdgraph.mk
+@@ -8,7 +8,7 @@ PERL_GDGRAPH_VERSION = 1.54
+ PERL_GDGRAPH_SOURCE = GDGraph-$(PERL_GDGRAPH_VERSION).tar.gz
+ PERL_GDGRAPH_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RUZ
+ PERL_GDGRAPH_DEPENDENCIES = perl-gd perl-gdtextutil
+-PERL_GDGRAPH_LICENSE = Artistic or GPLv1+
++PERL_GDGRAPH_LICENSE = Artistic or GPL-1.0+
+ PERL_GDGRAPH_LICENSE_FILES = Dustismo.LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
+index 14a2826..66016eb 100644
+--- a/package/perl-html-parser/perl-html-parser.mk
++++ b/package/perl-html-parser/perl-html-parser.mk
+@@ -8,7 +8,7 @@ PERL_HTML_PARSER_VERSION = 3.72
+ PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
+ PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+ PERL_HTML_PARSER_DEPENDENCIES = perl-html-tagset
+-PERL_HTML_PARSER_LICENSE = Artistic or GPLv1+
++PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
+ PERL_HTML_PARSER_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-html-tagset/perl-html-tagset.mk b/package/perl-html-tagset/perl-html-tagset.mk
+index d18d6a6..ff371fa 100644
+--- a/package/perl-html-tagset/perl-html-tagset.mk
++++ b/package/perl-html-tagset/perl-html-tagset.mk
+@@ -7,7 +7,7 @@
+ PERL_HTML_TAGSET_VERSION = 3.20
+ PERL_HTML_TAGSET_SOURCE = HTML-Tagset-$(PERL_HTML_TAGSET_VERSION).tar.gz
+ PERL_HTML_TAGSET_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PETDANCE
+-PERL_HTML_TAGSET_LICENSE = Artistic or GPLv1+
++PERL_HTML_TAGSET_LICENSE = Artistic or GPL-1.0+
+ PERL_HTML_TAGSET_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
+index 52ee74a..a4ef552 100644
+--- a/package/perl-http-cookies/perl-http-cookies.mk
++++ b/package/perl-http-cookies/perl-http-cookies.mk
+@@ -8,7 +8,7 @@ PERL_HTTP_COOKIES_VERSION = 6.01
+ PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
+ PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+ PERL_HTTP_COOKIES_DEPENDENCIES = perl-http-date perl-http-message
+-PERL_HTTP_COOKIES_LICENSE = Artistic or GPLv1+
++PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
+ PERL_HTTP_COOKIES_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
+index 56dbd78..65cdaf8 100644
+--- a/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-http-daemon/perl-http-daemon.mk
+@@ -8,7 +8,7 @@ PERL_HTTP_DAEMON_VERSION = 6.01
+ PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
+ PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+ PERL_HTTP_DAEMON_DEPENDENCIES = perl-http-date perl-http-message perl-lwp-mediatypes
+-PERL_HTTP_DAEMON_LICENSE = Artistic or GPLv1+
++PERL_HTTP_DAEMON_LICENSE = Artistic or GPL-1.0+
+ PERL_HTTP_DAEMON_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
+index bb5f4dc..feccf25 100644
+--- a/package/perl-http-date/perl-http-date.mk
++++ b/package/perl-http-date/perl-http-date.mk
+@@ -7,7 +7,7 @@
+ PERL_HTTP_DATE_VERSION = 6.02
+ PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
+ PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_HTTP_DATE_LICENSE = Artistic or GPLv1+
++PERL_HTTP_DATE_LICENSE = Artistic or GPL-1.0+
+ PERL_HTTP_DATE_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 77213fa..a66353a 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -8,7 +8,7 @@ PERL_HTTP_MESSAGE_VERSION = 6.11
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_HTTP_MESSAGE_DEPENDENCIES = perl-encode-locale perl-http-date perl-io-html perl-lwp-mediatypes perl-uri
+-PERL_HTTP_MESSAGE_LICENSE = Artistic or GPLv1+
++PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
+ PERL_HTTP_MESSAGE_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-http-negotiate/perl-http-negotiate.mk b/package/perl-http-negotiate/perl-http-negotiate.mk
+index 569ed2b..86ca554 100644
+--- a/package/perl-http-negotiate/perl-http-negotiate.mk
++++ b/package/perl-http-negotiate/perl-http-negotiate.mk
+@@ -8,7 +8,7 @@ PERL_HTTP_NEGOTIATE_VERSION = 6.01
+ PERL_HTTP_NEGOTIATE_SOURCE = HTTP-Negotiate-$(PERL_HTTP_NEGOTIATE_VERSION).tar.gz
+ PERL_HTTP_NEGOTIATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+ PERL_HTTP_NEGOTIATE_DEPENDENCIES = perl-http-message
+-PERL_HTTP_NEGOTIATE_LICENSE = Artistic or GPLv1+
++PERL_HTTP_NEGOTIATE_LICENSE = Artistic or GPL-1.0+
+ PERL_HTTP_NEGOTIATE_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-io-html/perl-io-html.mk b/package/perl-io-html/perl-io-html.mk
+index 4bdcc8d..bb79f45 100644
+--- a/package/perl-io-html/perl-io-html.mk
++++ b/package/perl-io-html/perl-io-html.mk
+@@ -7,7 +7,7 @@
+ PERL_IO_HTML_VERSION = 1.001
+ PERL_IO_HTML_SOURCE = IO-HTML-$(PERL_IO_HTML_VERSION).tar.gz
+ PERL_IO_HTML_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CJ/CJM
+-PERL_IO_HTML_LICENSE = Artistic or GPLv1+
++PERL_IO_HTML_LICENSE = Artistic or GPL-1.0+
+ PERL_IO_HTML_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index 5bbd0c6..be7db72 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+@@ -8,7 +8,7 @@ PERL_IO_SOCKET_SSL_VERSION = 2.022
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_DEPENDENCIES = perl-net-ssleay
+-PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPLv1+
++PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
+ PERL_IO_SOCKET_SSL_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index 8d4d00e..fe5bd98 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+@@ -20,7 +20,7 @@ PERL_LIBWWW_PERL_DEPENDENCIES = \
+ 	perl-net-http \
+ 	perl-uri \
+ 	perl-www-robotrules
+-PERL_LIBWWW_PERL_LICENSE = Artistic or GPLv1+
++PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LIBWWW_PERL_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
+index cd7c75a..bcf4e5f 100644
+--- a/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
++++ b/package/perl-lwp-mediatypes/perl-lwp-mediatypes.mk
+@@ -7,7 +7,7 @@
+ PERL_LWP_MEDIATYPES_VERSION = 6.02
+ PERL_LWP_MEDIATYPES_SOURCE = LWP-MediaTypes-$(PERL_LWP_MEDIATYPES_VERSION).tar.gz
+ PERL_LWP_MEDIATYPES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_LWP_MEDIATYPES_LICENSE = Artistic or GPLv1+
++PERL_LWP_MEDIATYPES_LICENSE = Artistic or GPL-1.0+
+ PERL_LWP_MEDIATYPES_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
+index 1c41831..bddaf9f 100644
+--- a/package/perl-mailtools/perl-mailtools.mk
++++ b/package/perl-mailtools/perl-mailtools.mk
+@@ -8,7 +8,7 @@ PERL_MAILTOOLS_VERSION = 2.18
+ PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
+ PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
+ PERL_MAILTOOLS_DEPENDENCIES = perl-timedate
+-PERL_MAILTOOLS_LICENSE = Artistic or GPLv1+
++PERL_MAILTOOLS_LICENSE = Artistic or GPL-1.0+
+ PERL_MAILTOOLS_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-mime-base64/perl-mime-base64.mk b/package/perl-mime-base64/perl-mime-base64.mk
+index d064337..e7febe1 100644
+--- a/package/perl-mime-base64/perl-mime-base64.mk
++++ b/package/perl-mime-base64/perl-mime-base64.mk
+@@ -7,7 +7,7 @@
+ PERL_MIME_BASE64_VERSION = 3.15
+ PERL_MIME_BASE64_SOURCE = MIME-Base64-$(PERL_MIME_BASE64_VERSION).tar.gz
+ PERL_MIME_BASE64_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_MIME_BASE64_LICENSE = Artistic or GPLv1+
++PERL_MIME_BASE64_LICENSE = Artistic or GPL-1.0+
+ PERL_MIME_BASE64_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+index 3c27002..080e817 100644
+--- a/package/perl-module-build/perl-module-build.mk
++++ b/package/perl-module-build/perl-module-build.mk
+@@ -7,7 +7,7 @@
+ PERL_MODULE_BUILD_VERSION = 0.4220
+ PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
+-PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
++PERL_MODULE_BUILD_LICENSE = Artistic or GPL-1.0+
+ PERL_MODULE_BUILD_LICENSE_FILES = LICENSE
+ 
+ $(eval $(host-perl-package))
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
+index ec74a3f..8dfe278 100644
+--- a/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-net-http/perl-net-http.mk
+@@ -8,7 +8,7 @@ PERL_NET_HTTP_VERSION = 6.12
+ PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
+ PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_NET_HTTP_DEPENDENCIES = perl-uri
+-PERL_NET_HTTP_LICENSE = Artistic or GPLv1+
++PERL_NET_HTTP_LICENSE = Artistic or GPL-1.0+
+ PERL_NET_HTTP_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-netaddr-ip/perl-netaddr-ip.mk b/package/perl-netaddr-ip/perl-netaddr-ip.mk
+index b5ee9a1..a1f02c6 100644
+--- a/package/perl-netaddr-ip/perl-netaddr-ip.mk
++++ b/package/perl-netaddr-ip/perl-netaddr-ip.mk
+@@ -7,7 +7,7 @@
+ PERL_NETADDR_IP_VERSION = 4.079
+ PERL_NETADDR_IP_SOURCE = NetAddr-IP-$(PERL_NETADDR_IP_VERSION).tar.gz
+ PERL_NETADDR_IP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKER
+-PERL_NETADDR_IP_LICENSE = Artistic or GPLv1+
++PERL_NETADDR_IP_LICENSE = Artistic or GPL-1.0+
+ PERL_NETADDR_IP_LICENSE_FILES = Artistic Copying
+ 
+ # we always build the Pure Perl version.
+diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
+index 7436d96..e1c32a2 100644
+--- a/package/perl-time-hires/perl-time-hires.mk
++++ b/package/perl-time-hires/perl-time-hires.mk
+@@ -7,7 +7,7 @@
+ PERL_TIME_HIRES_VERSION = 1.9726
+ PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
+ PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/Z/ZE/ZEFRAM
+-PERL_TIME_HIRES_LICENSE = Artistic or GPLv1+
++PERL_TIME_HIRES_LICENSE = Artistic or GPL-1.0+
+ PERL_TIME_HIRES_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-timedate/perl-timedate.mk b/package/perl-timedate/perl-timedate.mk
+index 4c594fb..cdc2c07 100644
+--- a/package/perl-timedate/perl-timedate.mk
++++ b/package/perl-timedate/perl-timedate.mk
+@@ -7,7 +7,7 @@
+ PERL_TIMEDATE_VERSION = 2.30
+ PERL_TIMEDATE_SOURCE = TimeDate-$(PERL_TIMEDATE_VERSION).tar.gz
+ PERL_TIMEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GB/GBARR
+-PERL_TIMEDATE_LICENSE = Artistic or GPLv1+
++PERL_TIMEDATE_LICENSE = Artistic or GPL-1.0+
+ PERL_TIMEDATE_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index e7118fc..effeb16 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
+@@ -7,7 +7,7 @@
+ PERL_URI_VERSION = 1.71
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+-PERL_URI_LICENSE = Artistic or GPLv1+
++PERL_URI_LICENSE = Artistic or GPL-1.0+
+ PERL_URI_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-www-robotrules/perl-www-robotrules.mk b/package/perl-www-robotrules/perl-www-robotrules.mk
+index 0c68b98..5e8bab9 100644
+--- a/package/perl-www-robotrules/perl-www-robotrules.mk
++++ b/package/perl-www-robotrules/perl-www-robotrules.mk
+@@ -8,7 +8,7 @@ PERL_WWW_ROBOTRULES_VERSION = 6.02
+ PERL_WWW_ROBOTRULES_SOURCE = WWW-RobotRules-$(PERL_WWW_ROBOTRULES_VERSION).tar.gz
+ PERL_WWW_ROBOTRULES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+ PERL_WWW_ROBOTRULES_DEPENDENCIES = perl-uri
+-PERL_WWW_ROBOTRULES_LICENSE = Artistic or GPLv1+
++PERL_WWW_ROBOTRULES_LICENSE = Artistic or GPL-1.0+
+ PERL_WWW_ROBOTRULES_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
+index 8d8f590..69cf57c 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.mk
++++ b/package/perl-xml-libxml/perl-xml-libxml.mk
+@@ -8,7 +8,7 @@ PERL_XML_LIBXML_VERSION = 2.0128
+ PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
+ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
+ PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2 perl-xml-namespacesupport perl-xml-sax perl-xml-sax-base
+-PERL_XML_LIBXML_LICENSE = Artistic or GPLv1+
++PERL_XML_LIBXML_LICENSE = Artistic or GPL-1.0+
+ PERL_XML_LIBXML_LICENSE_FILES = LICENSE
+ 
+ PERL_XML_LIBXML_CONF_OPTS = \
+diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
+index 31b71c1..d7bcdd4 100644
+--- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
++++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.mk
+@@ -7,7 +7,7 @@
+ PERL_XML_NAMESPACESUPPORT_VERSION = 1.11
+ PERL_XML_NAMESPACESUPPORT_SOURCE = XML-NamespaceSupport-$(PERL_XML_NAMESPACESUPPORT_VERSION).tar.gz
+ PERL_XML_NAMESPACESUPPORT_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERIGRIN
+-PERL_XML_NAMESPACESUPPORT_LICENSE = Artistic or GPLv1+
++PERL_XML_NAMESPACESUPPORT_LICENSE = Artistic or GPL-1.0+
+ PERL_XML_NAMESPACESUPPORT_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.mk b/package/perl-xml-sax-base/perl-xml-sax-base.mk
+index 60dec31..bb197ae 100644
+--- a/package/perl-xml-sax-base/perl-xml-sax-base.mk
++++ b/package/perl-xml-sax-base/perl-xml-sax-base.mk
+@@ -7,7 +7,7 @@
+ PERL_XML_SAX_BASE_VERSION = 1.08
+ PERL_XML_SAX_BASE_SOURCE = XML-SAX-Base-$(PERL_XML_SAX_BASE_VERSION).tar.gz
+ PERL_XML_SAX_BASE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GR/GRANTM
+-PERL_XML_SAX_BASE_LICENSE = Artistic or GPLv1+
++PERL_XML_SAX_BASE_LICENSE = Artistic or GPL-1.0+
+ PERL_XML_SAX_BASE_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl-xml-sax/perl-xml-sax.mk b/package/perl-xml-sax/perl-xml-sax.mk
+index f6d0372..90b2cd6 100644
+--- a/package/perl-xml-sax/perl-xml-sax.mk
++++ b/package/perl-xml-sax/perl-xml-sax.mk
+@@ -8,7 +8,7 @@ PERL_XML_SAX_VERSION = 0.99
+ PERL_XML_SAX_SOURCE = XML-SAX-$(PERL_XML_SAX_VERSION).tar.gz
+ PERL_XML_SAX_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GR/GRANTM
+ PERL_XML_SAX_DEPENDENCIES = perl-xml-namespacesupport perl-xml-sax-base
+-PERL_XML_SAX_LICENSE = Artistic or GPLv1+
++PERL_XML_SAX_LICENSE = Artistic or GPL-1.0+
+ PERL_XML_SAX_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index b407e05..130441f 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -9,7 +9,7 @@ PERL_VERSION_MAJOR = 24
+ PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+-PERL_LICENSE = Artistic or GPLv1+
++PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
