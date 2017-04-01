@@ -1,19 +1,23 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Apr 2017 21:09:09 +0200
-Subject: [Buildroot] [PATCH] pacakge/dieharder: fix autoreconf
-Message-ID: <20170401190909.27403-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Apr 2017 22:03:58 +0200
+Subject: [Buildroot] [git commit] pacakge/dieharder: fix autoreconf
+Message-ID: <20170401200521.C0CE981E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When dieharder was committed, Thomas reoved the hook to cleanup the m4
-files, on the reason that autoreconf would rereate the broken symlinks
+commit: https://git.buildroot.net/buildroot/commit/?id=f7f647a8320b02398a6a51d34b4cc74f56a5914d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When dieharder was committed, Thomas removed the hook to cleanup the m4
+files, on the reason that autoreconf would recreate the broken symlinks
 (and because the hook was too complex).
 
-It turns out the hook was needed: autoreconf does not recreate the files
-(at least not in some autobuilders nor on my machine).
+It turns out the hook was needed: if the symbolic links are
+broken (libtool not installed on the host machine), autoreconf fails to
+do its job.
 
 Reinstate a simpler hook.
 
@@ -24,6 +28,7 @@ Fixes:
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Julien Viard de Galbert <julien@vdg.name>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/dieharder/dieharder.mk | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
@@ -53,5 +58,3 @@ index 05ca253..c3eee64 100644
  # fix endianness detection
  ifeq ($(BR2_ENDIAN),"BIG")
  DIEHARDER_CONF_ENV = ac_cv_c_endian=big
--- 
-2.9.3
