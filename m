@@ -1,44 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  1 Apr 2017 15:50:46 +0200
-Subject: [Buildroot] [PATCH 2/3] docker-containerd: bump to version
-	4ab9917febca54791c5f071a9d1f404867857fcc
+Date: Sat,  1 Apr 2017 15:50:47 +0200
+Subject: [Buildroot] [PATCH 3/3] docker-engine: bump to version 17.03.1-ce
 In-Reply-To: <1491054647-4812-1-git-send-email-fontaine.fabrice@gmail.com>
 References: <1491054647-4812-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <1491054647-4812-2-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <1491054647-4812-3-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a runtime dependency of docker-engine in version 17.03.1-ce
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index 7db2957..c63aca5 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 127d2b9..dfa3248 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,2 +1,2 @@
- # Computed locally
--sha256	82b103681e707a8905d0409300671ac1b221f58732d15b150160c25cf048cf26	docker-containerd-977c511eda0925a723debdc94d09459af49d082a.tar.gz
-+sha256	c6a1fbc6fd6cae3b9c99bae9c349b9ccd7be8850012328ac1ebf1fe5e4b62f78	docker-containerd-4ab9917febca54791c5f071a9d1f404867857fcc.tar.gz
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 21b0999..c83f105 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256	d8e91af5b2799cafac113a400d4db9c6abe01ae823f378d2f4d3d3e55e48eaf6	docker-engine-v17.03.0-ce.tar.gz
++sha256	a8f1eefadf3966885ad0579facfc2017cca7dd3a0b20d086dfd798168716cb83	docker-engine-v17.03.1-ce.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index bf6f6a4..5ff595e 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--DOCKER_CONTAINERD_VERSION = 977c511eda0925a723debdc94d09459af49d082a
-+DOCKER_CONTAINERD_VERSION = 4ab9917febca54791c5f071a9d1f404867857fcc
- DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+-DOCKER_ENGINE_VERSION = v17.03.0-ce
+-DOCKER_ENGINE_COMMIT = 60ccb2265b0574d6c1c1090876a1d1ab32bed60e
++DOCKER_ENGINE_VERSION = v17.03.1-ce
++DOCKER_ENGINE_COMMIT = c6d412e329c85f32a4b2269b49aaa0794affcf88
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
 2.5.0
