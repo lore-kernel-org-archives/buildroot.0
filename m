@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 22:38:17 +0200
-Subject: [Buildroot] [git commit] wpan-tools: correct license name
-Message-ID: <20170401203935.A173A80125@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 22:40:15 +0200
+Subject: [Buildroot] [PATCH 1/9] package: use SPDX short identifier for
+ OFL license
+In-Reply-To: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
+References: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <20170401224015.036e7e89@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b954e2f98f8a02ab587e5a8aa57c13966a99813
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-iw license is ISC.
+On Sun,  2 Apr 2017 00:36:23 +0530, Rahul Bedarkar wrote:
+> We want to use SPDX identifier for license string as much as possible.
+> SPDX short identifier for OFLv1.0/OFLv1.1 is OFL-1.0/OFL-1.1.
+> 
+> This change is done using following command.
+> find . -name "*.mk" | xargs sed -ri '/LICENSE( )?[\+:]?=/s/OFLv([1]\.[0-1])/OFL-\1/g'
+> 
+> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+> ---
+>  package/cantarell/cantarell.mk                     | 2 +-
+>  package/font-awesome/font-awesome.mk               | 2 +-
+>  package/googlefontdirectory/googlefontdirectory.mk | 2 +-
+>  package/inconsolata/inconsolata.mk                 | 2 +-
+>  package/liberation/liberation.mk                   | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/wpan-tools/wpan-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, all 9 patches applied!
 
-diff --git a/package/wpan-tools/wpan-tools.mk b/package/wpan-tools/wpan-tools.mk
-index d223800..012b946 100644
---- a/package/wpan-tools/wpan-tools.mk
-+++ b/package/wpan-tools/wpan-tools.mk
-@@ -7,7 +7,7 @@
- WPAN_TOOLS_VERSION = 0.5
- WPAN_TOOLS_SITE = http://wpan.cakelab.org/releases
- WPAN_TOOLS_DEPENDENCIES = host-pkgconf libnl
--WPAN_TOOLS_LICENSE = iw license
-+WPAN_TOOLS_LICENSE = ISC
- WPAN_TOOLS_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
