@@ -1,54 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 15:43:36 +0200
-Subject: [Buildroot] [git commit] scripts/scanpypi: use SPDX short
-	identifier for license
-Message-ID: <20170401134426.44CA682620@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 15:34:46 +0200
+Subject: [Buildroot] [git commit] package: use SPDX short identifier for
+	Boost Software License 1.0
+Message-ID: <20170401134426.3F7A0825F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8ff7ab0be1cd3aa846829dc234d8c67b1bda0dc
+commit: https://git.buildroot.net/buildroot/commit/?id=26a7f806645eece7cd5eac4865446455bb2b3318
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We want to use SPDX identifier for license string as much as possible.
+SPDX short identifier for Boost Software License 1.0 is BSL-1.0.
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/scanpypi | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ package/boost/boost.mk       | 2 +-
+ package/cppdb/cppdb.mk       | 2 +-
+ package/cryptopp/cryptopp.mk | 2 +-
+ package/poco/poco.mk         | 2 +-
+ package/rapidxml/rapidxml.mk | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/support/scripts/scanpypi b/support/scripts/scanpypi
-index e150ae5..e174ac6 100755
---- a/support/scripts/scanpypi
-+++ b/support/scripts/scanpypi
-@@ -380,18 +380,18 @@ class BuildrootPackage():
-         license_dict = {
-             'Apache Software License': 'Apache-2.0',
-             'BSD License': 'BSD',
--            'European Union Public Licence 1.0': 'EUPLv1.0',
--            'European Union Public Licence 1.1': 'EUPLv1.1',
-+            'European Union Public Licence 1.0': 'EUPL-1.0',
-+            'European Union Public Licence 1.1': 'EUPL-1.1',
-             "GNU General Public License": "GPL",
--            "GNU General Public License v2": "GPLv2",
--            "GNU General Public License v2 or later": "GPLv2+",
--            "GNU General Public License v3": "GPLv3",
--            "GNU General Public License v3 or later": "GPLv3+",
--            "GNU Lesser General Public License v2": "LGPLv2.1",
--            "GNU Lesser General Public License v2 or later": "LGPLv2.1+",
--            "GNU Lesser General Public License v3": "LGPLv3",
--            "GNU Lesser General Public License v3 or later": "LGPLv3+",
--            "GNU Library or Lesser General Public License": "LGPLv2",
-+            "GNU General Public License v2": "GPL-2.0",
-+            "GNU General Public License v2 or later": "GPL-2.0+",
-+            "GNU General Public License v3": "GPL-3.0",
-+            "GNU General Public License v3 or later": "GPL-3.0+",
-+            "GNU Lesser General Public License v2": "LGPL-2.1",
-+            "GNU Lesser General Public License v2 or later": "LGPL-2.1+",
-+            "GNU Lesser General Public License v3": "LGPL-3.0",
-+            "GNU Lesser General Public License v3 or later": "LGPL-3.0+",
-+            "GNU Library or Lesser General Public License": "LGPL-2.0",
-             "ISC License": "ISC",
-             "MIT License": "MIT",
-             "Mozilla Public License 1.0": "MPL-1.0",
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index dbe0f09..874c03f 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -8,7 +8,7 @@ BOOST_VERSION = 1.63.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+ BOOST_INSTALL_STAGING = YES
+-BOOST_LICENSE = Boost Software License 1.0
++BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ 
+ # keep host variant as minimal as possible
+diff --git a/package/cppdb/cppdb.mk b/package/cppdb/cppdb.mk
+index 2c26c90..e73f04e 100644
+--- a/package/cppdb/cppdb.mk
++++ b/package/cppdb/cppdb.mk
+@@ -9,7 +9,7 @@ CPPDB_SOURCE = cppdb-$(CPPDB_VERSION).tar.bz2
+ CPPDB_SITE = http://downloads.sourceforge.net/project/cppcms/cppdb/$(CPPDB_VERSION)
+ CPPDB_INSTALL_STAGING = YES
+ CPPDB_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite)
+-CPPDB_LICENSE = Boost-v1.0 or MIT
++CPPDB_LICENSE = BSL-1.0 or MIT
+ CPPDB_LICENSE_FILES = LICENSE_1_0.txt MIT.txt
+ 
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 456876c..5c5def5 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -7,7 +7,7 @@
+ CRYPTOPP_VERSION = 5.6.5
+ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
+ CRYPTOPP_SITE = http://cryptopp.com/
+-CRYPTOPP_LICENSE = Boost-v1.0
++CRYPTOPP_LICENSE = BSL-1.0
+ CRYPTOPP_LICENSE_FILES = License.txt
+ CRYPTOPP_INSTALL_STAGING = YES
+ 
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 90dfb34..efb78be 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -6,7 +6,7 @@
+ 
+ POCO_VERSION = poco-1.7.2-release
+ POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION))
+-POCO_LICENSE = Boost-v1.0
++POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
+ POCO_INSTALL_STAGING = YES
+ POCO_PATCH = https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
+diff --git a/package/rapidxml/rapidxml.mk b/package/rapidxml/rapidxml.mk
+index a76a21b..2bec8fe 100644
+--- a/package/rapidxml/rapidxml.mk
++++ b/package/rapidxml/rapidxml.mk
+@@ -7,7 +7,7 @@
+ RAPIDXML_VERSION = 1.13
+ RAPIDXML_SOURCE = rapidxml-$(RAPIDXML_VERSION).zip
+ RAPIDXML_SITE = http://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%20$(RAPIDXML_VERSION)
+-RAPIDXML_LICENSE = Boost Software License 1.0 or MIT
++RAPIDXML_LICENSE = BSL-1.0 or MIT
+ RAPIDXML_LICENSE_FILES = license.txt
+ 
+ # C++ headers only
