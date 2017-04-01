@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 15:35:14 +0200
-Subject: [Buildroot] [git commit] scripts/scancpan: use SPDX short
-	identifier for license
-Message-ID: <20170401134426.40A8C8261E@busybox.osuosl.org>
+Date: Sat, 1 Apr 2017 15:35:08 +0200
+Subject: [Buildroot] [git commit] Makefile: use SPDX short identifier for
+	Buildroot license
+Message-ID: <20170401134426.45E5182628@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e261d807f3fb20fac23f87ae338df1717688fa9b
+commit: https://git.buildroot.net/buildroot/commit/?id=d116b43b390388bd29f16db4bdfcc9663983fd50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/scancpan | 2 +-
+ Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index b6123de..8d44ed9 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -688,7 +688,7 @@ while (my ($distname, $dist) = each %dist) {
-         $license =~ s|artistic_2|Artistic-2.0|;
-         $license =~ s|mit|MIT|;
-         $license =~ s|openssl|OpenSSL|;
--        $license =~ s|perl_5|Artistic or GPLv1+|;
-+        $license =~ s|perl_5|Artistic or GPL-1.0+|;
-         my $license_files = join q{ }, @{$license_files{$distname}};
-         say qq{write ${mkname}} unless $quiet;
-         open my $fh, q{>}, $mkname;
+diff --git a/Makefile b/Makefile
+index 886bd96..941bf78 100644
+--- a/Makefile
++++ b/Makefile
+@@ -736,7 +736,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
+ 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
+ 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+-	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,not saved,HOST)
++	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
