@@ -1,185 +1,71 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Sat, 1 Apr 2017 17:37:16 -0400
-Subject: [Buildroot] [v6] package: add qt5virtualkeyboard
-In-Reply-To: <20170401150938.644ed92b@free-electrons.com>
-References: <20170330171842.29179-1-gael.portay@savoirfairelinux.com>
- <20170401150938.644ed92b@free-electrons.com>
-Message-ID: <20170401213716.hyde6vvpyoeubzp7@gportay>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 1 Apr 2017 23:44:33 +0200
+Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable obstack support
+In-Reply-To: <20170401144417.08a84fd7@free-electrons.com>
+References: <20170331202604.18153-1-romain.naour@gmail.com>
+ <20170331202604.18153-2-romain.naour@gmail.com>
+ <20170401144417.08a84fd7@free-electrons.com>
+Message-ID: <c9b79a55-badc-2638-09e3-de5d8471efe1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi Thomas, All,
 
-On Sat, Apr 01, 2017 at 03:09:38PM +0200, Thomas Petazzoni wrote:
+Le 01/04/2017 ? 14:44, Thomas Petazzoni a ?crit :
 > Hello,
 > 
-> On Thu, 30 Mar 2017 13:18:42 -0400, Ga?l PORTAY wrote:
-> > This patch adds the Qt virtualkeyboard package.
-> > 
-> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> On Fri, 31 Mar 2017 22:26:04 +0200, Romain Naour wrote:
+>> Obstack support in Xenomai is broken when the libc doesn't support
+>> obstack support itself. Make sure we disable obstack support for all
+>> libc since it was removed in uClibc-ng since 1.0.21 release and it's
+>> always disabled with Glibc.
 > 
-> I was about to apply this, but there's still one thing unclear to me.
-> I'll be making some minor suggestions along the way (but those I would
-> have fixed myself when applying if I didn't had the doubt I'm referring
-> to). See below.
-> 
-> > +config BR2_PACKAGE_QT5VIRTUALKEYBOARD
-> > +	bool "qt5virtualkeyboard"
-> > +	depends on BR2_PACKAGE_QT5_VERSION_LATEST
-> > +	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> > +	select BR2_PACKAGE_QT5SVG
-> > +	help
-> > +	  Qt Virtual Keyboard is a virtual keyboard framework that consists of a
-> > +	  C++ backend supporting custom input methods as well as a UI frontend
-> > +	  implemented in QML.
-> > +
-> > +	  This module is licensed under GPLv3.
-> 
-> You can remove this part, it is incorrect (can be a commercial
-> license), and already documented in the package itself.
+> What makes you say it's always disabled in glibc?
 
-Done.
+From lib/boilerplate/obstack.c in Xenomai code:
+
+#if !defined _LIBC && defined __GNU_LIBRARY__ && __GNU_LIBRARY__ > 1
+# include <gnu-versions.h>
+# if _GNU_OBSTACK_INTERFACE_VERSION == OBSTACK_INTERFACE_VERSION
+#  define ELIDE_CODE
+# endif
+#endif
+
+While glibc is used, _GNU_OBSTACK_INTERFACE_VERSION is equal to
+OBSTACK_INTERFACE_VERSION so ELIDE_CODE is defined and the Xenomai Obstack
+support (the replacement code) is disabled.
+
+While uClibc-ng >= 1.0.21 is used, _GNU_OBSTACK_INTERFACE_VERSION is not defined
+so the Xenomai Obstack support is used but break the build.
 
 > 
-> > +if BR2_PACKAGE_QT5VIRTUALKEYBOARD
-> 
-> One empty line should be added here.
-> 
+> What's the status with musl?
 
-Done.
-
-> > +config BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS
-> > +	string "language layouts"
-> > +	default "en_GB"
-> > +	help
-> > +	  The Virtual Keyboard supports the following languages:
-> > +	  - Arabic (ar_AR)
-> > +	  - Danish (da_DK)
-> > +	  - English (en_GB)
-> > +	  - Finnish (fi_FI)
-> > +	  - French (fr_FR)
-> > +	  - German (de_DE)
-> > +	  - Hindi (hi_IN)
-> > +	  - Italian (it_IT)
-> > +	  - Japanese (ja_JP)
-> > +	  - Korean (ko_KR)
-> > +	  - Norwegian (nb_NO)
-> > +	  - Persian/Farsi (fa_FA)
-> > +	  - Polish (pl_PL)
-> > +	  - Portugese (pt_PT)
-> > +	  - Romanian (ro_RO)
-> > +	  - Russian (ru_RU)
-> > +	  - Simplified Chinese (zh_CN)
-> > +	  - Traditional Chinese (zh_TW)
-> > +	  - Spanish (es_ES)
-> > +	  - Swedish (sv_SE)
-> > +
-> > +	  Note: all is a flag for activating all languages.
-> 
-> I believe something like this would be clearer:
-> 
-> 	Note: the special value "all" can be used to install support
-> 	for all supported languages.
-> 
-
-Done.
-
-> > +
-> > +config BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING
-> > +	bool "handwriting"
-> > +	help
-> > +	  Handwriting support, with gestures for fullscreen input.
-> > +
-> > +	  Lipi Toolkit (LipiTk) is an open source toolkit for online Handwriting
-> > +	  Recognition.
-> 
-> One empty line should be added here.
-> 
-
-Done.
+Xenomai is disabled with musl toolchains
 
 > 
-> > +QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
-> > +QT5VIRTUALKEYBOARD_ALL_LAYOUTS = $(findstring all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
-> > +ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
-> > +QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
-> 
-> I don't understand how this will behave when the "all" flag is used.
-> You will have:
-> 
-> 	CONFIG+=lang-all
-> 
-> is this actually working?
-> 
+> Also, Xenomai seems to have some replacement code when obstack support
+> is not available from the C library. How does that interfact with
+> ELIDE_CODE ?
 
-Yes.
+This is precisely the replacement code that is broken...
+It try to use "exitfail.h" and define obstack_exit_failure with exit_failure
+which is not defined.
 
-The Makefile will call qmake with CONFIG+=lang-all.
+The proposed fix define ELIDE_CODE to disable the Xenomai Obstack support
+completely.
 
-I tested it and it works fine. CONFIG+=lang-all acts as an alias for all
-languages. You can have a look to [1] & [2].
+Otherwise, we have to add a dependency on glibc toolchain only since Obstack
+support is missing in uClibc-ng... (maybe it's safer to do that?).
 
-> > +QT5VIRTUALKEYBOARD_OPENWNN = $(findstring ja_JP,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
-> > +ifneq ($(strip $(QT5VIRTUALKEYBOARD_OPENWNN)$(QT5VIRTUALKEYBOARD_ALL_LAYOUTS)),)
-> 
-> Is the strip really needed in this condition (and the similar ones
-> below) ?
-> 
-> Perhaps we could do:
-> 
-> ifneq ($(findstring zh_CN,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
-> QT5VIRTUALKEYBOARD_INSTALL_PINYIN = YES
-> endif
-> 
-> ifneq ($(findstring ja_JP,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
-> QT5VIRTUALKEYBOARD_INSTALL_OPENWNN = YES
-> endif
-> 
-> ...
-> 
-> ifneq ($(findstring all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
-> QT5VIRTUALKEYBOARD_INSTALL_PINYIN = YES
-> QT5VIRTUALKEYBOARD_INSTALL_OPENWNN = YES
-> ...
-> endif
-> 
-> And then use the QT5VIRTUALKEYBOARD_INSTALL_<foo> variables to know
-> what should be installed.
-
-It is another solution; which is much more nice.
-
-Done.
-
-> 
-> > +ifneq ($(strip $(QT5VIRTUALKEYBOARD_3RDPARTY_PARTS)),)
-> 
-> strip really needed?
-
-Indeed, the strip here is definelty not needed.
+Best regards,
+Romain
 
 > 
 > Thanks,
 > 
 > Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Thanks!
-
-I will resend a new version.
-
-Regards,
-Gael
-
-[1] https://github.com/qt/qtvirtualkeyboard/blob/5.8/src/config.pri#L23-L44
-[2] https://doc.qt.io/qt-5/qtvirtualkeyboard-build.html
+> 
