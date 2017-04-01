@@ -1,34 +1,33 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sun,  2 Apr 2017 00:36:27 +0530
-Subject: [Buildroot] [PATCH 5/9] wpan-tools: correct license name
+Date: Sun,  2 Apr 2017 00:36:28 +0530
+Subject: [Buildroot] [PATCH 6/9] ntp: use SPDX short identifier for ntp
+	license
 In-Reply-To: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
 References: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1491073591-21477-5-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <1491073591-21477-6-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iw license is ISC.
-
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- package/wpan-tools/wpan-tools.mk | 2 +-
+ package/ntp/ntp.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wpan-tools/wpan-tools.mk b/package/wpan-tools/wpan-tools.mk
-index d223800..012b946 100644
---- a/package/wpan-tools/wpan-tools.mk
-+++ b/package/wpan-tools/wpan-tools.mk
-@@ -7,7 +7,7 @@
- WPAN_TOOLS_VERSION = 0.5
- WPAN_TOOLS_SITE = http://wpan.cakelab.org/releases
- WPAN_TOOLS_DEPENDENCIES = host-pkgconf libnl
--WPAN_TOOLS_LICENSE = iw license
-+WPAN_TOOLS_LICENSE = ISC
- WPAN_TOOLS_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index e3e53a8..cd6cb16 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -8,7 +8,7 @@ NTP_VERSION_MAJOR = 4.2
+ NTP_VERSION = $(NTP_VERSION_MAJOR).8p10
+ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent openssl $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+-NTP_LICENSE = ntp license
++NTP_LICENSE = NTP
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+ NTP_CONF_OPTS = \
 -- 
 2.7.4
