@@ -1,43 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 15:50:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sdl_sound: fix build with physfs
-In-Reply-To: <20170330043123.GA25980@tungsten.ozlabs.ibm.com>
-References: <20170330043123.GA25980@tungsten.ozlabs.ibm.com>
-Message-ID: <20170401155000.4ba77e63@free-electrons.com>
+Date: Sat, 1 Apr 2017 15:50:22 +0200
+Subject: [Buildroot] [git commit] support/scripts: add generic genimage
+	script
+Message-ID: <20170401135040.03E38803EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c9062dcdf6079b89cfb2a737eddabd6878141fb6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Mar 2017 15:31:23 +1100, Sam Bobroff wrote:
-> A buildroot package for physfs has recently been added, and if it is
-> detected by sdl_sound's configure it enables code in the simple
-> player which fails to build (if the player is enabled).
-> 
-> (The build problem is due to physfs renaming a macro which has not been
-> reflected in sdl_sound.)
-> 
-> So, add the physfs dependency to the package information and correct
-> the build problem with a patch taken from Arch Linux, where they seem
-> to have already found and fixed this issue.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ae5839b978244c434dd86d49b672c437a7b19a66
-> 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
->  package/sdl_sound/0003-renamed-physfs-export.patch | 32 ++++++++++++++++++++++
->  package/sdl_sound/sdl_sound.mk                     |  7 +++++
->  2 files changed, 39 insertions(+)
->  create mode 100644 package/sdl_sound/0003-renamed-physfs-export.patch
+This script is a wrapper for the genimage tool used by most boards.
+The board postimage script can now call this script instead of invoking
+genimage command themselves.
 
-Applied to master, thanks.
+Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/genimage.sh | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+new file mode 100755
+index 0000000..0ed0e8b
+--- /dev/null
++++ b/support/scripts/genimage.sh
+@@ -0,0 +1,27 @@
++#!/bin/bash
++
++die() {
++  echo "Error: $@" >&2
++  exit 1
++}
++
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++while getopts c: OPT ; do
++	case "${OPT}" in
++	c) GENIMAGE_CFG="${OPTARG}";;
++	:) die "option '${OPTARG}' expects a mandatory argument\n";;
++	\?) die "unknown option '${OPTARG}'\n";;
++	esac
++done
++
++[ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
