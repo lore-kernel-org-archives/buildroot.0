@@ -1,83 +1,185 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 23:32:31 +0200
-Subject: [Buildroot] [PATCH 1/1] libmaxminddb: new package
-In-Reply-To: <1486931216-34024-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1486931216-34024-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <20170401233231.28cfbe9f@free-electrons.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sat, 1 Apr 2017 17:37:16 -0400
+Subject: [Buildroot] [v6] package: add qt5virtualkeyboard
+In-Reply-To: <20170401150938.644ed92b@free-electrons.com>
+References: <20170330171842.29179-1-gael.portay@savoirfairelinux.com>
+ <20170401150938.644ed92b@free-electrons.com>
+Message-ID: <20170401213716.hyde6vvpyoeubzp7@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-On Sun, 12 Feb 2017 21:26:56 +0100, Fabrice Fontaine wrote:
-> From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+On Sat, Apr 01, 2017 at 03:09:38PM +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> C library for the MaxMind DB file format
+> On Thu, 30 Mar 2017 13:18:42 -0400, Ga?l PORTAY wrote:
+> > This patch adds the Qt virtualkeyboard package.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 > 
-> The libmaxminddb library provides a C library for reading
-> MaxMind DB files, including the GeoIP2 databases from MaxMind.
-> This is a custom binary format designed to facilitate fast
-> lookups of IP addresses while allowing for great flexibility
-> in the type of data associated with an address.
+> I was about to apply this, but there's still one thing unclear to me.
+> I'll be making some minor suggestions along the way (but those I would
+> have fixed myself when applying if I didn't had the doubt I'm referring
+> to). See below.
 > 
-> The MaxMind DB format is an open format. The spec is available
-> at http://maxmind.github.io/MaxMind-DB/. This spec is licensed
-> under the Creative Commons Attribution-ShareAlike 3.0 Unported
-> License.
+> > +config BR2_PACKAGE_QT5VIRTUALKEYBOARD
+> > +	bool "qt5virtualkeyboard"
+> > +	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+> > +	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> > +	select BR2_PACKAGE_QT5SVG
+> > +	help
+> > +	  Qt Virtual Keyboard is a virtual keyboard framework that consists of a
+> > +	  C++ backend supporting custom input methods as well as a UI frontend
+> > +	  implemented in QML.
+> > +
+> > +	  This module is licensed under GPLv3.
 > 
-> http://maxmind.github.io/libmaxminddb
+> You can remove this part, it is incorrect (can be a commercial
+> license), and already documented in the package itself.
+
+Done.
+
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +if BR2_PACKAGE_QT5VIRTUALKEYBOARD
+> 
+> One empty line should be added here.
+> 
 
-Thanks, I've applied your patch, after adding an entry to the
-DEVELOPERS file. However, I have some suggestions on your configure.ac
-patch:
+Done.
 
-> +diff --git a/configure.ac b/configure.ac
-> +index 7916212..fc53ffd 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -119,6 +119,16 @@ AC_ARG_ENABLE(
-> +         esac],[debug=false])
-> + AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
-> + 
-> ++AC_ARG_ENABLE(
-> ++        [tests],
-> ++        [  --enable-tests    Compilation of tests code],
+> > +config BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS
+> > +	string "language layouts"
+> > +	default "en_GB"
+> > +	help
+> > +	  The Virtual Keyboard supports the following languages:
+> > +	  - Arabic (ar_AR)
+> > +	  - Danish (da_DK)
+> > +	  - English (en_GB)
+> > +	  - Finnish (fi_FI)
+> > +	  - French (fr_FR)
+> > +	  - German (de_DE)
+> > +	  - Hindi (hi_IN)
+> > +	  - Italian (it_IT)
+> > +	  - Japanese (ja_JP)
+> > +	  - Korean (ko_KR)
+> > +	  - Norwegian (nb_NO)
+> > +	  - Persian/Farsi (fa_FA)
+> > +	  - Polish (pl_PL)
+> > +	  - Portugese (pt_PT)
+> > +	  - Romanian (ro_RO)
+> > +	  - Russian (ru_RU)
+> > +	  - Simplified Chinese (zh_CN)
+> > +	  - Traditional Chinese (zh_TW)
+> > +	  - Spanish (es_ES)
+> > +	  - Swedish (sv_SE)
+> > +
+> > +	  Note: all is a flag for activating all languages.
+> 
+> I believe something like this would be clearer:
+> 
+> 	Note: the special value "all" can be used to install support
+> 	for all supported languages.
+> 
 
-This should use AS_HELP_STRING(), see
-https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/html_node/Pretty-Help-Strings.html.
+Done.
 
-> ++        [case "${enableval}" in
-> ++          yes) tests=true ;;
-> ++          no)  tests=false ;;
-> ++          *) AC_MSG_ERROR([bad value ${enableval} for --enable-tests]) ;;
-> ++        esac],[tests=false])
+> > +
+> > +config BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING
+> > +	bool "handwriting"
+> > +	help
+> > +	  Handwriting support, with gestures for fullscreen input.
+> > +
+> > +	  Lipi Toolkit (LipiTk) is an open source toolkit for online Handwriting
+> > +	  Recognition.
+> 
+> One empty line should be added here.
+> 
 
-This is very convoluted, and in addition, you default to not building
-the tests, which causes a change in behavior compared to when the
-option did not exist. I would suggest:
+Done.
 
-AC_ARG_ENABLE([tests],
-	AS_HELP_STRING([--enable-tests], [Compilation of tests code],
-	[enable_tests=${enableval}],
-	[enable_tests=yes])
+> 
+> > +QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+> > +QT5VIRTUALKEYBOARD_ALL_LAYOUTS = $(findstring all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+> > +ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+> > +QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS),lang-$(lang))"
+> 
+> I don't understand how this will behave when the "all" flag is used.
+> You will have:
+> 
+> 	CONFIG+=lang-all
+> 
+> is this actually working?
+> 
 
-AM_CONDITIONAL([TESTS], [test "${enable_tests}" = "yes"])
+Yes.
 
-This is much more "classical" autoconf code I believe.
+The Makefile will call qmake with CONFIG+=lang-all.
 
-I've anyway applied your patch because for the purpose of Buildroot it
-works, but you might want to submit upstream an improved version. Of
-course, we can also take an improved version in Buildroot.
+I tested it and it works fine. CONFIG+=lang-all acts as an alias for all
+languages. You can have a look to [1] & [2].
+
+> > +QT5VIRTUALKEYBOARD_OPENWNN = $(findstring ja_JP,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+> > +ifneq ($(strip $(QT5VIRTUALKEYBOARD_OPENWNN)$(QT5VIRTUALKEYBOARD_ALL_LAYOUTS)),)
+> 
+> Is the strip really needed in this condition (and the similar ones
+> below) ?
+> 
+> Perhaps we could do:
+> 
+> ifneq ($(findstring zh_CN,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+> QT5VIRTUALKEYBOARD_INSTALL_PINYIN = YES
+> endif
+> 
+> ifneq ($(findstring ja_JP,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+> QT5VIRTUALKEYBOARD_INSTALL_OPENWNN = YES
+> endif
+> 
+> ...
+> 
+> ifneq ($(findstring all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+> QT5VIRTUALKEYBOARD_INSTALL_PINYIN = YES
+> QT5VIRTUALKEYBOARD_INSTALL_OPENWNN = YES
+> ...
+> endif
+> 
+> And then use the QT5VIRTUALKEYBOARD_INSTALL_<foo> variables to know
+> what should be installed.
+
+It is another solution; which is much more nice.
+
+Done.
+
+> 
+> > +ifneq ($(strip $(QT5VIRTUALKEYBOARD_3RDPARTY_PARTS)),)
+> 
+> strip really needed?
+
+Indeed, the strip here is definelty not needed.
+
+> 
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+I will resend a new version.
+
+Regards,
+Gael
+
+[1] https://github.com/qt/qtvirtualkeyboard/blob/5.8/src/config.pri#L23-L44
+[2] https://doc.qt.io/qt-5/qtvirtualkeyboard-build.html
