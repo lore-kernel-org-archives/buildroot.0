@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 14:44:17 +0200
-Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable obstack support
-In-Reply-To: <20170331202604.18153-2-romain.naour@gmail.com>
-References: <20170331202604.18153-1-romain.naour@gmail.com>
- <20170331202604.18153-2-romain.naour@gmail.com>
-Message-ID: <20170401144417.08a84fd7@free-electrons.com>
+Date: Sat, 1 Apr 2017 14:44:34 +0200
+Subject: [Buildroot] [git commit] libiio: don't force specific backends when
+	enabling tests
+Message-ID: <20170401124445.1780F825CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=305a384d3e4c3736e1bab3dae305ef3586dc6332
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Mar 2017 22:26:04 +0200, Romain Naour wrote:
-> Obstack support in Xenomai is broken when the libc doesn't support
-> obstack support itself. Make sure we disable obstack support for all
-> libc since it was removed in uClibc-ng since 1.0.21 release and it's
-> always disabled with Glibc.
+The test programs will compile just fine even when none of the
+backends are enabled.
 
-What makes you say it's always disabled in glibc?
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libiio/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-What's the status with musl?
-
-Also, Xenomai seems to have some replacement code when obstack support
-is not available from the C library. How does that interfact with
-ELIDE_CODE ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+index 6f6af16..8cde0e9 100644
+--- a/package/libiio/Config.in
++++ b/package/libiio/Config.in
+@@ -81,9 +81,6 @@ comment "IIO Daemon is not yet available on Blackfin"
+ 
+ config BR2_PACKAGE_LIBIIO_TESTS
+ 	bool "Install test programs"
+-	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+-	select BR2_PACKAGE_LIBIIO_XML_BACKEND
+-	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Install the test programs (iio_info, iio_genxml, iio_readdev).
