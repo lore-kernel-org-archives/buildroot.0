@@ -1,71 +1,67 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 1 Apr 2017 23:44:33 +0200
-Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable obstack support
-In-Reply-To: <20170401144417.08a84fd7@free-electrons.com>
-References: <20170331202604.18153-1-romain.naour@gmail.com>
- <20170331202604.18153-2-romain.naour@gmail.com>
- <20170401144417.08a84fd7@free-electrons.com>
-Message-ID: <c9b79a55-badc-2638-09e3-de5d8471efe1@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 Apr 2017 23:48:10 +0200
+Subject: [Buildroot] [PATCH v5 08/19] reproducible: try to detect most
+ common errors
+In-Reply-To: <20170401211306.GB3663@scaer>
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-9-git-send-email-jezz@sysmic.org>
+ <20170401165059.1f3f9ad5@free-electrons.com> <20170401211306.GB3663@scaer>
+Message-ID: <735d5317-56f1-7367-3fe9-b0e87536eba5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
 
-Le 01/04/2017 ? 14:44, Thomas Petazzoni a ?crit :
-> Hello,
+
+On 01-04-17 23:13, Yann E. MORIN wrote:
+> Thomas, J?r?me, All,
 > 
-> On Fri, 31 Mar 2017 22:26:04 +0200, Romain Naour wrote:
->> Obstack support in Xenomai is broken when the libc doesn't support
->> obstack support itself. Make sure we disable obstack support for all
->> libc since it was removed in uClibc-ng since 1.0.21 release and it's
->> always disabled with Glibc.
+> On 2017-04-01 16:50 +0200, Thomas Petazzoni spake thusly:
+>> On Tue, 20 Dec 2016 14:46:25 +0100, J?r?me Pouiller wrote:
+>>> Some package includes some information from build environment in their results.
+>>> This practice is incompatible with reproducible builds.
+>>>
+>>> This patch scans final target to research most common patterns.
+>>>
+>>> Since we only search fixed strings (grep is called with -F), this search is
+>>> fast (on my station, 60ms for a target of 40MB).
+>>>
+>>> Note, it could be a good idea to also match current user name. However, build
+>>> path often contains username and, until now, we do not try to avoid build path
+>>> in result.
+>>>
+>>> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+>>
+>> I am not entirely convinced it makes sense to grep more or less
+>> randomly in all files specifically for those strings.
 > 
-> What makes you say it's always disabled in glibc?
+> Indeed. My hostnames usually cary some computer-related keywords, which
+> can very well occur in binary files (e.g. 'segfault').
 
-From lib/boilerplate/obstack.c in Xenomai code:
-
-#if !defined _LIBC && defined __GNU_LIBRARY__ && __GNU_LIBRARY__ > 1
-# include <gnu-versions.h>
-# if _GNU_OBSTACK_INTERFACE_VERSION == OBSTACK_INTERFACE_VERSION
-#  define ELIDE_CODE
-# endif
-#endif
-
-While glibc is used, _GNU_OBSTACK_INTERFACE_VERSION is equal to
-OBSTACK_INTERFACE_VERSION so ELIDE_CODE is defined and the Xenomai Obstack
-support (the replacement code) is disabled.
-
-While uClibc-ng >= 1.0.21 is used, _GNU_OBSTACK_INTERFACE_VERSION is not defined
-so the Xenomai Obstack support is used but break the build.
-
-> 
-> What's the status with musl?
-
-Xenomai is disabled with musl toolchains
+ Even more so for uname -r, which could be something like 4.10...
 
 > 
-> Also, Xenomai seems to have some replacement code when obstack support
-> is not available from the C library. How does that interfact with
-> ELIDE_CODE ?
-
-This is precisely the replacement code that is broken...
-It try to use "exitfail.h" and define obstack_exit_failure with exit_failure
-which is not defined.
-
-The proposed fix define ELIDE_CODE to disable the Xenomai Obstack support
-completely.
-
-Otherwise, we have to add a dependency on glibc toolchain only since Obstack
-support is missing in uClibc-ng... (maybe it's safer to do that?).
-
-Best regards,
-Romain
-
+>> Or perhaps, we should have a separate shell scripts that checks for
+>> several classes of obviously non-reproducible behaviors?
 > 
-> Thanks,
+> Indeed, but such a script can only be a helper that a user would
+> voluntarily run on their own.
 > 
-> Thomas
-> 
+> We can't have such a script automatically run, because those strings can
+> be too common.
+
+ Well, as proposed by Jerome, it would just print a warning at the end of the
+build, which is probably acceptable.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
