@@ -1,49 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 22:50:30 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/bluez-tools: new package
-In-Reply-To: <20170209213019.a3tweamrwr27dnk3@tarshish>
-References: <20170209212616.32550-1-bernd.kuhls@t-online.de>
- <20170209213019.a3tweamrwr27dnk3@tarshish>
-Message-ID: <20170401225030.18243af4@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 1 Apr 2017 23:05:05 +0200
+Subject: [Buildroot] [PATCH] lpppd: new package
+In-Reply-To: <20170401184051.7f6c1252@free-electrons.com>
+References: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
+ <20170401184051.7f6c1252@free-electrons.com>
+Message-ID: <20170401210505.GA3663@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Stefan, All,
 
-On Thu, 9 Feb 2017 23:30:19 +0200, Baruch Siach wrote:
-
-> On Thu, Feb 09, 2017 at 10:26:16PM +0100, Bernd Kuhls wrote:
-> > +ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
-> > +BLUEZ_TOOLS_DEPENDENCIES += bluez_utils
-> > +# readline is an optional dependency when used with bluez_utils
-> > +# obex support depends on readline so enable it optionally
-> > +ifeq ($(BR2_PACKAGE_READLINE),y)
-> > +BLUEZ_TOOLS_CONF_OPTS += --enable-obex
-> > +BLUEZ_TOOLS_DEPENDENCIES += readline
-> > +else
-> > +BLUEZ_TOOLS_CONF_OPTS += --disable-obex
-> > +endif
-> > +else
-> > +# readline is a hard dependency when used with bluez5_utils
-> > +BLUEZ_TOOLS_DEPENDENCIES += bluez5_utils readline
-> > +endif  
+On 2017-04-01 18:40 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  2 Jan 2017 23:38:24 +0100, stefan.nickl at gmail.com wrote:
+> > From: Stefan Nickl <Stefan.Nickl@gmail.com>
+> > 
+> > After the official github repository for PPP has not seen
+> > any activity for a long time, I've created a fork that
+> > tries to do some modernization and shed some legacy.
+> > For more info, please see https://github.com/snickl/lpppd
+> > 
+> > It is inteded as a drop-in replacement for the original PPP,
+> > therefore I've marked it as conflicting with the existing pppd
+> > package.
+> > 
+> > Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
 > 
-> Looks overly complex to me. Why not treat readline as a usual optional 
-> dependency, independent from the bluez version?
+> I do appreciate your interest in making the pppd development active
+> again. However, at this point, I don't see what is the benefit of using
+> lpppd over pppd, and having two separate packages is a bit annoying.
+> Therefore, I would prefer to wait for lpppd to gain some traction
+> before packaging it in Buildroot.
 
-I hesitated a bit as well on this one, but in the end, I found the
-solution from Bernd to have the advantage of making very clear/explicit
-what's going with readline: when it is optional/mandatory, what
-autoconf options can be enabled when it is optional, etc. So I decided
-to keep it as Bernd proposed.
+I kind of agree with Thomas here.
 
-Thanks!
+lpppd is a new fork of a well-established project, so it will have to
+offer enough of an edge before it can displace pppd.
 
-Thomas
+However, I agree with you that there is no activity in upstream pppd.
+Maybe you could talk with upstream to adopt the package instead of
+forking?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
