@@ -1,47 +1,34 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sun,  2 Apr 2017 00:36:30 +0530
-Subject: [Buildroot] [PATCH 8/9] package: use SPDX short identifier for EPL
-	license
+Date: Sun,  2 Apr 2017 00:36:31 +0530
+Subject: [Buildroot] [PATCH 9/9] php: add version to license string
 In-Reply-To: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
 References: <1491073591-21477-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1491073591-21477-8-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <1491073591-21477-9-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As per LICENSE file, php uses PHP license version 3.01.
+
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- package/mosquitto/mosquitto.mk               | 2 +-
- package/python-paho-mqtt/python-paho-mqtt.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 96607f3..ddac153 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -6,7 +6,7 @@
- 
- MOSQUITTO_VERSION = 1.4.10
- MOSQUITTO_SITE = http://mosquitto.org/files/source
--MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
-+MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
- MOSQUITTO_INSTALL_STAGING = YES
- 
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-index d783a9c..f0c2729 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.mk
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
-@@ -7,7 +7,7 @@
- PYTHON_PAHO_MQTT_VERSION = 1.2
- PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
- PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/82/d9/7064d3a0a1d62756a1a809c85b99f864c641b66de84c15458f72193b7708
--PYTHON_PAHO_MQTT_LICENSE = EPLv1.0 or EDLv1.0
-+PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
- PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
- PYTHON_PAHO_MQTT_SETUP_TYPE = distutils
- 
+diff --git a/package/php/php.mk b/package/php/php.mk
+index f59a4e8..22eeddd 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -11,7 +11,7 @@ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+ PHP_DEPENDENCIES = host-pkgconf
+-PHP_LICENSE = PHP
++PHP_LICENSE = PHP-3.01
+ PHP_LICENSE_FILES = LICENSE
+ PHP_CONF_OPTS = \
+ 	--mandir=/usr/share/man \
 -- 
 2.7.4
