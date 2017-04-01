@@ -1,44 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Apr 2017 15:46:50 +0200
-Subject: [Buildroot] [PATCH 15/21] freeswitch: use SPDX short identifier
- for license strings
-In-Reply-To: <859ce539-de85-64e6-6b04-d1e3ffb04d29@mind.be>
-References: <1490881430-10434-1-git-send-email-rahulbedarkar89@gmail.com>
- <1490881430-10434-16-git-send-email-rahulbedarkar89@gmail.com>
- <859ce539-de85-64e6-6b04-d1e3ffb04d29@mind.be>
-Message-ID: <20170401154650.587b5b51@free-electrons.com>
+Date: Sat, 1 Apr 2017 15:48:05 +0200
+Subject: [Buildroot] [git commit] package/sdl_sound: fix build with physfs
+Message-ID: <20170401134814.4C60C825F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5d05319c1b6931e81c4aa07ffe2f2f11699227fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Mar 2017 00:19:18 +0200, Arnout Vandecappelle wrote:
+A buildroot package for physfs has recently been added, and if it is
+detected by sdl_sound's configure it enables code in the simple
+player which fails to build (if the player is enabled).
 
->  First of all, I think it's a very good idea to have first the fully automatic
-> patches, and then do remaining fixups like this one.
-> 
->  However, I think there is still a lot more to be fixed up. There are also
-> plenty of places where we refer to (L)GPLv[23] in e.g. comments. So instead of
-> this patch, I would add a series of patches that uses the same (or maybe
-> slightly more generic) sed expressions but now doesn't limit to _LICENSE or to
-> .mk files. I did a quick check, there are about 25 instances of GPLv left, but
-> you need to filter out patches and _LICENSE_FILES, so perhaps an automatic sed
-> expression is going to be difficult.
-> 
->  Anyway, my message is: those 25 remaining instances should be replaced as well.
+(The build problem is due to physfs renaming a macro which has not been
+reflected in sdl_sound.)
 
-I've merged Rahul series as-is, and expect to get additional patches
-fixing the remaining exceptions here and there. I didn't want to hold
-off too long on Rahul series, as it's the stuff that quickly gets out
-of date, and gets a lot of conflict when applied.
+So, add the physfs dependency to the package information and correct
+the build problem with a patch taken from Arch Linux, where they seem
+to have already found and fixed this issue.
 
-Best regards,
+Fixes:
+http://autobuild.buildroot.net/results/ae5839b978244c434dd86d49b672c437a7b19a66
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sdl_sound/0003-renamed-physfs-export.patch | 32 ++++++++++++++++++++++
+ package/sdl_sound/sdl_sound.mk                     |  7 +++++
+ 2 files changed, 39 insertions(+)
+
+diff --git a/package/sdl_sound/0003-renamed-physfs-export.patch b/package/sdl_sound/0003-renamed-physfs-export.patch
+new file mode 100644
+index 0000000..3aeded3
+--- /dev/null
++++ b/package/sdl_sound/0003-renamed-physfs-export.patch
+@@ -0,0 +1,32 @@
++This patch is taken from the Arch Linux User Repository, see:
++https://aur.archlinux.org/packages/sdl_sound-patched-hg/
++
++Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
++
++diff -ru SDL_sound.orig/playsound/physfsrwops.h SDL_sound/playsound/physfsrwops.h
++--- SDL_sound.orig/playsound/physfsrwops.h	2014-01-11 06:28:35.494936000 +0100
+++++ SDL_sound/playsound/physfsrwops.h	2014-01-11 06:31:38.315675483 +0100
++@@ -29,6 +29,11 @@
++ extern "C" {
++ #endif
++ 
+++/* renamed in physfs dev, add alias */
+++#ifdef PHYSFS_DECL
+++#define __EXPORT__ PHYSFS_DECL
+++#endif
+++
++ /**
++  * Open a platform-independent filename for reading, and make it accessible
++  *  via an SDL_RWops structure. The file will be closed in PhysicsFS when the
++@@ -77,6 +82,11 @@
++  */
++ __EXPORT__ SDL_RWops *PHYSFSRWOPS_makeRWops(PHYSFS_file *handle);
++ 
+++/* renamed in physfs dev, remove alias */
+++#ifdef PHYSFS_DECL
+++#undef __EXPORT__
+++#endif
+++
++ #ifdef __cplusplus
++ }
++ #endif
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 6c4f959..2544b59 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -45,6 +45,13 @@ else
+ SDL_SOUND_CONF_OPTS += --disable-speex
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PHYSFS),y)
++SDL_SOUND_CONF_OPTS += --enable-physfs
++SDL_SOUND_DEPENDENCIES += physfs
++else
++SDL_SOUND_CONF_OPTS += --disable-physfs
++endif
++
+ SDL_SOUND_CONF_OPTS = \
+ 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ 	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
