@@ -1,39 +1,34 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Mon,  3 Apr 2017 00:13:05 +0530
-Subject: [Buildroot] [PATCH 4/7] php-memcached: fix legal info
+Date: Mon,  3 Apr 2017 00:13:06 +0530
+Subject: [Buildroot] [PATCH 5/7] php-ssh2: add version to license string
 In-Reply-To: <1491158588-6698-1-git-send-email-rahulbedarkar89@gmail.com>
 References: <1491158588-6698-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1491158588-6698-4-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <1491158588-6698-5-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LICENSE file refer to PHP license version 3.01. License header in all
-source files refer to PHP license version 3.01 except source files for
-fastlz library which is provided under MIT license and g_fmt.{c,h}
-which has ISC-like license header.
+LICENSE file refers to PHP license version 3.01
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- package/php-memcached/php-memcached.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/php-ssh2/php-ssh2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
-index ea241b2..c4b7636 100644
---- a/package/php-memcached/php-memcached.mk
-+++ b/package/php-memcached/php-memcached.mk
-@@ -12,8 +12,8 @@ PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
- 	--with-zlib-dir=$(STAGING_DIR)/usr
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+index 2b61632..931cde9 100644
+--- a/package/php-ssh2/php-ssh2.mk
++++ b/package/php-ssh2/php-ssh2.mk
+@@ -10,7 +10,7 @@ PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ 	--with-ssh2=$(STAGING_DIR)/usr
  # phpize does the autoconf magic
- PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
--PHP_MEMCACHED_LICENSE = MIT
--PHP_MEMCACHED_LICENSE_FILES = LICENSE
-+PHP_MEMCACHED_LICENSE = PHP-3.01, MIT (fastlz), ISC-like (g_fmt.c, g_fmt.h)
-+PHP_MEMCACHED_LICENSE_FILES = LICENSE fastlz/LICENSE g_fmt.h
+ PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
+-PHP_SSH2_LICENSE = PHP
++PHP_SSH2_LICENSE = PHP-3.01
+ PHP_SSH2_LICENSE_FILES = LICENSE
  
- define PHP_MEMCACHED_PHPIZE
- 	(cd $(@D); \
+ define PHP_SSH2_PHPIZE
 -- 
 2.7.4
