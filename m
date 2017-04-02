@@ -1,62 +1,83 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  2 Apr 2017 12:27:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix linking of
-	etnaviv_cmd_stream_test
-Message-ID: <20170402102730.14159-1-bernd.kuhls@t-online.de>
+Date: Sun, 02 Apr 2017 12:38:24 +0200
+Subject: [Buildroot] [PATCH v4 1/2] arch: add BR2_READELF_ARCH_NAME
+ hidden config option
+References: <1489928872-3965-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170320222656.38163a70@free-electrons.com>
+Message-ID: <0u07rdxu5j.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/
-http://autobuild.buildroot.net/results/c33/c3330ef9a8cadb46bbd31c5b14ece34f192133e3/
-http://autobuild.buildroot.net/results/d18/d181bd044246646732a14815aae08337b0b5eecf/
-http://autobuild.buildroot.net/results/4f5/4f5872211812c7e191cffcf41cab998fc20c0d20/
+Am Mon, 20 Mar 2017 22:26:56 +0100 schrieb Thomas Petazzoni:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../0003-tests-etnaviv-link-against-libdrm.patch   | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
+> Hello,
+> 
+> On Sun, 19 Mar 2017 14:07:51 +0100, Thomas Petazzoni wrote:
+>> This config option corresponds to the string returned by readelf for
+>> the "Machine" field of the ELF header. It will be used to check if the
+>> architecture of binaries built by Buildroot match the target
+>> architecture.
+>> 
+>> Signed-off-by: Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com>
+>> ---
+>> Changes since v3:
+>>  - None
+> 
+> I've applied both patches to master. Let's see if the autobuilders blow
+> up now :)
+> 
+> Best regards,
+> 
+> Thomas
 
-diff --git a/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch b/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
-new file mode 100644
-index 000000000..54e138524
---- /dev/null
-+++ b/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
-@@ -0,0 +1,31 @@
-+From b1e904cd1d5989a13c0a184525e8153bac22e1d7 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 2 Apr 2017 12:17:41 +0200
-+Subject: [PATCH 1/1] tests/etnaviv: link against libdrm
-+
-+Fixes link errors detected by buildroot autobuilders:
-+
-+http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/build-end.log
-+
-+Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=100530
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ tests/etnaviv/Makefile.am | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tests/etnaviv/Makefile.am b/tests/etnaviv/Makefile.am
-+index 06318643..226baee2 100644
-+--- a/tests/etnaviv/Makefile.am
-++++ b/tests/etnaviv/Makefile.am
-+@@ -28,6 +28,7 @@ etnaviv_2d_test_SOURCES = \
-+ 	write_bmp.h
-+ 
-+ etnaviv_cmd_stream_test_LDADD = \
-++	$(top_builddir)/libdrm.la \
-+ 	$(top_builddir)/etnaviv/libdrm_etnaviv.la
-+ 
-+ etnaviv_cmd_stream_test_SOURCES = \
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Hi Thomas,
+
+Sparc v8 sees some build errors:
+
+http://autobuild.buildroot.net/results/de7/
+de7079b89fda1dd47e52619a644f23c4f4986b2c//
+
+ERROR: architecture for "/usr/lib/libmpeg2convert.so.0.0.0" is "Sparc v8
++", should be "Sparc"
+ERROR: architecture for "/usr/lib/libmpeg2.so.0.1.0" is "Sparc v8+", 
+should be "Sparc"
+
+http://autobuild.buildroot.net/results/f96/
+f96c30c5c398db1ba561740ae64e922cd4f8a524//
+
+ERROR: architecture for "/usr/lib/libopenblas_sparcp-r0.2.19.dev.so" is 
+"Sparc v8+", should be "Sparc"
+
+Patching arch/Config.in.sparc like this
+
+@@ -30,5 +30,6 @@ config BR2_GCC_TARGET_CPU
+        default "ultrasparc"    if BR2_sparc_v9
+ 
+ config BR2_READELF_ARCH_NAME
++       default "Sparc v8+"     if BR2_sparc_v8
+        default "Sparc"         if BR2_sparc
+        default "Sparc v9"      if BR2_sparc64
+
+does not fix the problem however:
+
+>>> toolchain-external-custom  Copying external toolchain libraries to 
+target...
+ERROR: architecture for "/lib/libgcc_s.so.1" is "Sparc", should be "Sparc 
+v8+"
+ERROR: architecture for "/lib/libuClibc-1.0.22.so" is "Sparc", should be 
+"Sparc v8+"
+ERROR: architecture for "/lib/ld-uClibc-1.0.22.so" is "Sparc", should be 
+"Sparc v8+"
+ERROR: architecture for "/usr/lib/libstdc++.so.6.0.21" is "Sparc", should 
+be "Sparc v8+"
+ERROR: architecture for "/lib/libatomic.so.1.1.0" is "Sparc", should be 
+"Sparc v8+"
+
+Tested with http://autobuild.buildroot.net/results/de7/
+de7079b89fda1dd47e52619a644f23c4f4986b2c/defconfig
+
+Regards, Bernd
