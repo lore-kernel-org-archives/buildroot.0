@@ -1,34 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Apr 2017 23:46:52 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 10}.x series
-Message-ID: <20170402214825.BB86E82573@busybox.osuosl.org>
+Date: Sun, 2 Apr 2017 23:47:34 +0200
+Subject: [Buildroot] [git commit] libmaxminddb: improve --disable-tests patch
+Message-ID: <20170402214825.D116D7F9E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69356afc81cee7a1b1c749274b26db507133b8d6
+commit: https://git.buildroot.net/buildroot/commit/?id=302b5936ebcc195b25b3dcebe474082a2a71a427
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Following review of libmaxminddb patch by Thomas Petazzoni, here is an
+enhanced version of the --disable-tests patch which has been sent
+upstream.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../0001-Add-disable-tests-to-configure.patch      | 26 +++++++++-------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b2f63ae..32dadcd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -218,7 +218,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.58"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.19"	if BR2_KERNEL_HEADERS_4_9
--	default "4.10.7"	if BR2_KERNEL_HEADERS_4_10
-+	default "4.4.59"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.20"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.10.8"	if BR2_KERNEL_HEADERS_4_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+index 1ae5acc..8ff64e9 100644
+--- a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
++++ b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+@@ -1,13 +1,13 @@
+-From b12ca226c111730e2ef5d8a3d929dbd943fbe763 Mon Sep 17 00:00:00 2001
++From 8287848f747bd37298a2d32b8fd06cc59eb28028 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Thu, 9 Feb 2017 21:40:43 +0100
+ Subject: [PATCH] Add --disable-tests to configure
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+- Makefile.am  |  6 +++++-
+- configure.ac | 10 ++++++++++
+- 2 files changed, 15 insertions(+), 1 deletion(-)
++ Makefile.am  | 6 +++++-
++ configure.ac | 6 ++++++
++ 2 files changed, 11 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.am b/Makefile.am
+ index 1804945..cebcd31 100644
+@@ -28,22 +28,18 @@ index 1804945..cebcd31 100644
+  EXTRA_DIST = doc t Changes.md LICENSE NOTICE README.md projects/VS12 projects/VS12-tests
+  dist-hook:
+ diff --git a/configure.ac b/configure.ac
+-index 7916212..fc53ffd 100644
++index 7916212..2a22fab 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -119,6 +119,16 @@ AC_ARG_ENABLE(
++@@ -119,6 +119,12 @@ AC_ARG_ENABLE(
+          esac],[debug=false])
+  AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
+  
+-+AC_ARG_ENABLE(
+-+        [tests],
+-+        [  --enable-tests    Compilation of tests code],
+-+        [case "${enableval}" in
+-+          yes) tests=true ;;
+-+          no)  tests=false ;;
+-+          *) AC_MSG_ERROR([bad value ${enableval} for --enable-tests]) ;;
+-+        esac],[tests=false])
+-+AM_CONDITIONAL([TESTS], [test x$tests = xtrue])
+++AC_ARG_ENABLE([tests],
+++        AS_HELP_STRING([--enable-tests], [Compilation of tests code]),
+++        [enable_tests=${enableval}],
+++        [enable_tests=yes])
+++AM_CONDITIONAL([TESTS], [test "${enable_tests}" = "yes"])
+ +
+  AC_CONFIG_FILES([Makefile
+                   src/Makefile
