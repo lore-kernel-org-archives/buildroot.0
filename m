@@ -1,41 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Apr 2017 14:50:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix linking of
- etnaviv_cmd_stream_test
-In-Reply-To: <20170402102730.14159-1-bernd.kuhls@t-online.de>
-References: <20170402102730.14159-1-bernd.kuhls@t-online.de>
-Message-ID: <20170402145029.2af44b86@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  2 Apr 2017 15:03:38 +0200
+Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
+Message-ID: <20170402130338.12542-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When debugging hidden dependencies, the build order is very important.
+Most notably, it is interesting to identify potential culprits.
 
-On Sun,  2 Apr 2017 12:27:30 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/
-> http://autobuild.buildroot.net/results/c33/c3330ef9a8cadb46bbd31c5b14ece34f192133e3/
-> http://autobuild.buildroot.net/results/d18/d181bd044246646732a14815aae08337b0b5eecf/
-> http://autobuild.buildroot.net/results/4f5/4f5872211812c7e191cffcf41cab998fc20c0d20/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add a new top-level rule, show-biuld-order, that dumps all the packages
+in the order they would get built.
 
-I've applied, after fixing two things:
+Note that there are a few differences with show-targets:
 
- - You forgot to add AUTORECONF = YES, which is needed since you're
-   patching Makefile.am
+  - more packages are reported, becasue show-targets does not report
+    host packages that have no prompt;
 
- - You forgot to use the -N option when using git format-patch, so we
-   had this still 1/1 in [PATCH 1/1], which doesn't make any sense in
-   the context of Buildroot, since this patch was actually the third
-   patch out of three patches for this package.
+  - the output is line-based, because we're using $(info $(1)); getting
+    a single output line like show-targets would require we use an
+    actual command, like printf '%s ' $(1); but that takes a lot of
+    time, while $(info $(1)) is almost instantaneous (the time to parse
+    the Makefiles);
 
-Thanks!
+  - rootfs targets are not reported.
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile               | 2 ++
+ package/pkg-generic.mk | 3 +++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 941bf78..919d589 100644
+--- a/Makefile
++++ b/Makefile
+@@ -757,6 +757,8 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+ show-targets:
+ 	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+ 
++show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
++
+ graph-build: $(O)/build/build-time.log
+ 	@install -d $(GRAPHS_DIR)
+ 	$(foreach o,name build duration,./support/scripts/graph-build-time \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 31dbc54..3b26e6b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -737,6 +737,9 @@ $(1)-show-depends:
+ $(1)-show-rdepends:
+ 			@echo $$($(2)_RDEPENDENCIES)
+ 
++$(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
++	$$(info $(1))
++
+ $(1)-graph-depends: graph-depends-requirements
+ 	$(call pkg-graph-depends,$(1),--direct)
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
