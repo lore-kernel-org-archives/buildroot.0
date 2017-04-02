@@ -1,75 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Apr 2017 14:47:16 +0200
-Subject: [Buildroot] [git commit] package/synergy: bump to version 1.8.8 to
-	fix build errors
-Message-ID: <20170402124722.E886480332@busybox.osuosl.org>
+Date: Sun, 2 Apr 2017 14:49:00 +0200
+Subject: [Buildroot] [git commit] package/libdrm: fix linking of
+	etnaviv_cmd_stream_test
+Message-ID: <20170402124912.754C38263F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caa16c13e0fef18ae1142f502ee39d2af8f5172e
+commit: https://git.buildroot.net/buildroot/commit/?id=658bf79aeb6e00f8d8ded65395d4dfb1566c564e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building synergy on sparc, nios2, mipsel and mips64el would fail with
-the following errors:
-  src/lib/ipc/IpcClientProxy.cpp: In member function 'void IpcClientProxy::send(const IpcMessage&)':
-  src/lib/ipc/IpcClientProxy.cpp:150:59: error: ISO C++ says that these are ambiguous, even though the worst conversion for the first is better than the worst conversion for the second: [-Werror]
-     ProtocolUtil::writef(&m_stream, kIpcMsgLogLine, &logLine);
-                                                             ^
-  In file included from src/lib/ipc/IpcClientProxy.cpp:23:0:
-  src/lib/ipc/../synergy/ProtocolUtil.h:82:16: note: candidate 1: static void ProtocolUtil::writef(void*, const char*, va_list)
-    static void   writef(void*, const char* fmt, va_list);
-                  ^
-  src/lib/ipc/../synergy/ProtocolUtil.h:53:16: note: candidate 2: static void ProtocolUtil::writef(synergy::IStream*, const char*, ...)
-    static void   writef(synergy::IStream*,
-                  ^
-  src/lib/ipc/../synergy/ProtocolUtil.h:82:16: error: 'static void ProtocolUtil::writef(void*, const char*, va_list)' is private
-    static void   writef(void*, const char* fmt, va_list);
-                  ^
-  src/lib/ipc/IpcClientProxy.cpp:150:59: error: within this context
-     ProtocolUtil::writef(&m_stream, kIpcMsgLogLine, &logLine);
-                                                             ^
-  At global scope:
-  cc1plus: error: unrecognized command line option '-Wno-unused-local-typedef' [-Werror]
-  cc1plus: all warnings being treated as errors
+Fixes
+http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/
+http://autobuild.buildroot.net/results/c33/c3330ef9a8cadb46bbd31c5b14ece34f192133e3/
+http://autobuild.buildroot.net/results/d18/d181bd044246646732a14815aae08337b0b5eecf/
+http://autobuild.buildroot.net/results/4f5/4f5872211812c7e191cffcf41cab998fc20c0d20/
 
-Fixed by upstream commits:
-  https://github.com/symless/synergy/commit/c31f908fb283dadc1a34856796e2d7a9df7bbb77
-  https://github.com/symless/synergy/commit/2643cea67bed960a3ae57ba881cd06f52843fa62
-
-Fixes:
-  http://autobuild.buildroot.net/results/dc40671874aac9ad491bd4c7aa57eb1c53484492
-  http://autobuild.buildroot.net/results/a37905b0c93aa0dc891a85be1701e51cf2988cbe
-  http://autobuild.buildroot.net/results/611895e29faba0b35b2b27005a5142192ed63fd8
-  http://autobuild.buildroot.net/results/7bdd4428c1335593b04a18ce8e9705b0bc932484
-
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: add missing autoreconf=yes.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/synergy/synergy.hash | 2 +-
- package/synergy/synergy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0003-tests-etnaviv-link-against-libdrm.patch   | 31 ++++++++++++++++++++++
+ package/libdrm/libdrm.mk                           |  2 ++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/synergy/synergy.hash b/package/synergy/synergy.hash
-index bbf196f..52f9d74 100644
---- a/package/synergy/synergy.hash
-+++ b/package/synergy/synergy.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  d913005e911bb6e5aa459f88fe91b40d59c37ea7207399814e4d450fd8634ec1  synergy-v1.8.5-stable.tar.gz
-+sha256  85c388f93881d741981ce3c675e840a52a76883cb2cea1da306c0c453c5d7d9b  synergy-v1.8.8-stable.tar.gz
-diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-index a4053e3..76a4004 100644
---- a/package/synergy/synergy.mk
-+++ b/package/synergy/synergy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch b/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
+new file mode 100644
+index 0000000..62da60e
+--- /dev/null
++++ b/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
+@@ -0,0 +1,31 @@
++From b1e904cd1d5989a13c0a184525e8153bac22e1d7 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 2 Apr 2017 12:17:41 +0200
++Subject: [PATCH] tests/etnaviv: link against libdrm
++
++Fixes link errors detected by buildroot autobuilders:
++
++http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/build-end.log
++
++Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=100530
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ tests/etnaviv/Makefile.am | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tests/etnaviv/Makefile.am b/tests/etnaviv/Makefile.am
++index 06318643..226baee2 100644
++--- a/tests/etnaviv/Makefile.am
+++++ b/tests/etnaviv/Makefile.am
++@@ -28,6 +28,7 @@ etnaviv_2d_test_SOURCES = \
++ 	write_bmp.h
++ 
++ etnaviv_cmd_stream_test_LDADD = \
+++	$(top_builddir)/libdrm.la \
++ 	$(top_builddir)/etnaviv/libdrm_etnaviv.la
++ 
++ etnaviv_cmd_stream_test_SOURCES = \
++-- 
++2.11.0
++
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 8ece196..875d3cc 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -8,6 +8,8 @@ LIBDRM_VERSION = 2.4.76
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
++# 0003-tests-etnaviv-link-against-libdrm.patch
++LIBDRM_AUTORECONF = YES
  
--SYNERGY_VERSION = v1.8.5-stable
-+SYNERGY_VERSION = v1.8.8-stable
- SYNERGY_SITE = $(call github,symless,synergy,$(SYNERGY_VERSION))
- SYNERGY_LICENSE = GPL-2.0
- SYNERGY_LICENSE_FILES = LICENSE
+ LIBDRM_INSTALL_STAGING = YES
+ 
