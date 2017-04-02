@@ -1,123 +1,62 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 2 Apr 2017 12:13:18 +0200
-Subject: [Buildroot] [PATCH v2] e2fsprogs: keep util-linux's fsck if
-	chosen
-In-Reply-To: <1491100601-7867-1-git-send-email-casantos@datacom.ind.br>
-References: <1491100601-7867-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <CAGduivzA9WoMy4xGiad0VXXQ3W0ekXF9U37wwfwXsXapt3J7LQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  2 Apr 2017 12:27:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: fix linking of
+	etnaviv_cmd_stream_test
+Message-ID: <20170402102730.14159-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes
+http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/
+http://autobuild.buildroot.net/results/c33/c3330ef9a8cadb46bbd31c5b14ece34f192133e3/
+http://autobuild.buildroot.net/results/d18/d181bd044246646732a14815aae08337b0b5eecf/
+http://autobuild.buildroot.net/results/4f5/4f5872211812c7e191cffcf41cab998fc20c0d20/
 
-On Sun, Apr 2, 2017 at 4:36 AM, Carlos Santos <casantos@datacom.ind.br> wrote:
-> Since e2fsprogs depends on util-linux, it's built after it. So you can't
-> have e2fsck from e2fsprogs along with the fsck wrapper from util-linux
-> (which is better maintained and compatible with systemd) because we end
-> up deleting the fsck from util-linux.
->
-> Fix this issue by disabling e2fsprogs' fsck if the one from util-linux
-> is selected.
->
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
-> Changes v1->v2
->   - Add depenndece on !BR2_PACKAGE_UTIL_LINUX_FSCK to
->     BR2_PACKAGE_E2FSPROGS_FSCK
->   - Add comment telling that the fsck from util-linux has preference.
->   - Pass "--enable-fsck" conditionally to configure
->   - Remove the guard around the removal of /usr/sbin/fsck, since the
->     fsck from busybox and util-linux are installed at /sbin
->   - Improve comments and commit message
->
-> In the long run the e2fsprogs recipe deserves an extreme overhauling
-> like we did for util-linux but right now these changes are enough to
-> fix the specific problem of fsck.
-> ---
-It's almost working, but there's a trick for systemd (*tadaaa*)
-To have fsck work at boot time, you *MUST* have the fsck (the wrapper)
-from util-linux, because systemd passes arguments that do not exists
-in the e2fsprogs wrapper. But you should use the e2fsck program and
-its link.
-So for this to truly work, if systemd is selected, you should select
-util-linux's fsck, disable e2fsprogs fsck wrapper and enable e2fsck.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0003-tests-etnaviv-link-against-libdrm.patch   | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
 
-Note that in case of failure, systemd will try to run emergency.target
-and all kinds of things may happen if you haven't created some
-post-build or other scripts.
-
->  package/e2fsprogs/Config.in    |  4 ++++
->  package/e2fsprogs/e2fsprogs.mk | 12 +++++++++---
->  2 files changed, 13 insertions(+), 3 deletions(-)
->
-> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-> index d1914a9..418f877 100644
-> --- a/package/e2fsprogs/Config.in
-> +++ b/package/e2fsprogs/Config.in
-> @@ -59,8 +59,12 @@ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
->
->  config BR2_PACKAGE_E2FSPROGS_FSCK
->         bool "fsck"
-> +       depends on !BR2_PACKAGE_UTIL_LINUX_FSCK
->         default y
->
-> +comment "the fsck from util-linux has preference over this one"
-> +       depends on BR2_PACKAGE_UTIL_LINUX_FSCK
-> +
->  config BR2_PACKAGE_E2FSPROGS_FUSE2FS
->         bool "fuse2fs"
->         depends on !BR2_STATIC_LIBS # libfuse
-> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-> index 3f235c5..b4b96c3 100644
-> --- a/package/e2fsprogs/e2fsprogs.mk
-> +++ b/package/e2fsprogs/e2fsprogs.mk
-> @@ -11,7 +11,7 @@ E2FSPROGS_LICENSE = GPL-2.0, BSD-3-Clause (libuuid), MIT-like with advertising c
->  E2FSPROGS_LICENSE_FILES = NOTICE lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
->  E2FSPROGS_INSTALL_STAGING = YES
->  E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
-> -# we don't have a host-util-linux
-> +# We don't need host-util-linux, since we disable libblkid, libuuid.
->  HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf
->
->  # e4defrag doesn't build on older systems like RHEL5.x, and we don't
-> @@ -24,11 +24,11 @@ E2FSPROGS_CONF_OPTS = \
->         $(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
->         $(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
->         $(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
-> +       $(if $(BR2_PACKAGE_E2FSPROGS_FSCK),--enable-fsck,) \
->         $(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
->         --disable-uuidd \
->         --disable-libblkid \
->         --disable-libuuid \
-> -       --enable-fsck \
->         --disable-e2initrd-helper \
->         --disable-testio-debug \
->         --disable-rpath
-> @@ -146,10 +146,16 @@ E2FSPROGS_DEPENDENCIES += busybox
->  define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
->         $(RM) -f $(TARGET_DIR)/bin/chattr
->         $(RM) -f $(TARGET_DIR)/bin/lsattr
-> -       $(RM) -f $(TARGET_DIR)/sbin/fsck
->         $(RM) -f $(TARGET_DIR)/sbin/tune2fs
->         $(RM) -f $(TARGET_DIR)/sbin/e2label
->  endef
-> +
-> +ifeq ($(BR2_PACKAGE_E2FSPROGS_FSCK),y)
-> +# We only build fsck if it's not selected in util-linux, so at this
-> +# point /sbin/fsck must have come from busybox.
-> +E2FSPROGS_REMOVE_BUSYBOX_APPLETS += $(RM) -f $(TARGET_DIR)/sbin/fsck
-> +endif
-This part doesn't work with systemd as you will remove the fsck
-wrapper from util-linux which is the only one that can be used. And
-since e2fsprogs depends on util-linux, you are screwed :/.
-> +
->  E2FSPROGS_PRE_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
->  endif
->
-> --
-> 2.7.4
->
+diff --git a/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch b/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
+new file mode 100644
+index 000000000..54e138524
+--- /dev/null
++++ b/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
+@@ -0,0 +1,31 @@
++From b1e904cd1d5989a13c0a184525e8153bac22e1d7 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 2 Apr 2017 12:17:41 +0200
++Subject: [PATCH 1/1] tests/etnaviv: link against libdrm
++
++Fixes link errors detected by buildroot autobuilders:
++
++http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/build-end.log
++
++Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=100530
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ tests/etnaviv/Makefile.am | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tests/etnaviv/Makefile.am b/tests/etnaviv/Makefile.am
++index 06318643..226baee2 100644
++--- a/tests/etnaviv/Makefile.am
+++++ b/tests/etnaviv/Makefile.am
++@@ -28,6 +28,7 @@ etnaviv_2d_test_SOURCES = \
++ 	write_bmp.h
++ 
++ etnaviv_cmd_stream_test_LDADD = \
+++	$(top_builddir)/libdrm.la \
++ 	$(top_builddir)/etnaviv/libdrm_etnaviv.la
++ 
++ etnaviv_cmd_stream_test_SOURCES = \
++-- 
++2.11.0
++
+-- 
+2.11.0
