@@ -1,45 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Apr 2017 19:50:29 +0200
-Subject: [Buildroot] [PATCH] package/libdrm: fix autoreconf
-Message-ID: <20170402175029.25526-1-yann.morin.1998@free.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun,  2 Apr 2017 14:52:53 -0300
+Subject: [Buildroot] [PATCH] atest: new package
+Message-ID: <1491155573-25765-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To properly autoreconf, the xorg macros, from host-xutil_util-macros,
-are needed.
+Add support for atest application, which is useful for testing
+alsa kernel drivers and detecting if playback/capture are correct
+without artifacts, such as channel swap. 
 
-Fixes:
-    http://autobuild.buildroot.org/results/2e8/2e887c25b22bd36eab36ff361645306c8ddb79aa/
-    http://autobuild.buildroot.org/results/7c0/7c0050d63a1d34eecb6d16e2654369cea561707a/
-    http://autobuild.buildroot.org/results/2ef/2ef3d6d74c56632c012b85e05af6eaf0259b72c9/
-    [...]
-
-(Thanks Romain for confirming the fix on IRC! ;-) )
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/libdrm/libdrm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/atest/Config.in  |  9 +++++++++
+ package/atest/atest.hash |  2 ++
+ package/atest/atest.mk   | 19 +++++++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/atest/Config.in
+ create mode 100644 package/atest/atest.hash
+ create mode 100644 package/atest/atest.mk
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 875d3cc..8223262 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -15,7 +15,8 @@ LIBDRM_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ffd233e..7e189c3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -500,6 +500,7 @@ F:	configs/mx6sx_udoo_neo_defconfig
+ F:	configs/mx6udoo_defconfig
+ F:	configs/wandboard_defconfig
+ F:	configs/warp7_defconfig
++F:	package/atest/
+ F:	package/kmscube/
  
- LIBDRM_DEPENDENCIES = \
- 	libpthread-stubs \
--	host-pkgconf
-+	host-pkgconf \
-+	host-xutil_util-macros
+ N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index 12fb1a0..92d02cb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -5,6 +5,7 @@ menu "Target packages"
  
- LIBDRM_CONF_OPTS = \
- 	--disable-cairo-tests \
+ menu "Audio and video applications"
+ 	source "package/alsa-utils/Config.in"
++	source "package/atest/Config.in"
+ 	source "package/aumix/Config.in"
+ 	source "package/bellagio/Config.in"
+ 	source "package/dvblast/Config.in"
+diff --git a/package/atest/Config.in b/package/atest/Config.in
+new file mode 100644
+index 0000000..64c9e7c
+--- /dev/null
++++ b/package/atest/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_ATEST
++	bool "atest"
++	depends on BR2_PACKAGE_ALSA_LIB
++	depends on BR2_PACKAGE_LIBEV
++	help
++	  atest is a test software for checking ALSA Asoc drivers
++	  concerning the proper frame generation and capture.
++
++	  https://github.com/amouiche/atest
+diff --git a/package/atest/atest.hash b/package/atest/atest.hash
+new file mode 100644
+index 0000000..16b05c9
+--- /dev/null
++++ b/package/atest/atest.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 6572b42170d3ad00dfc6362501f0e41fda7e2e7d79ff1757a2050415ad3f6ee4  atest-2e2299e9949b713f3c89cf84692dc6db6ab3a2e9.tar.gz
+diff --git a/package/atest/atest.mk b/package/atest/atest.mk
+new file mode 100644
+index 0000000..eb47d25
+--- /dev/null
++++ b/package/atest/atest.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# atest
++#
++################################################################################
++
++ATEST_VERSION = 2e2299e9949b713f3c89cf84692dc6db6ab3a2e9
++ATEST_SITE = $(call github,amouiche,atest,$(ATEST_VERSION))
++ATEST_LICENSE = MIT
++ATEST_DEPENDENCIES = host-pkgconf libev alsa-lib
++ATEST_AUTORECONF = YES
++
++# Autoreconf requires an existing m4 directory
++define ATEST_PATCH_M4
++	mkdir -p $(@D)/m4
++endef
++ATEST_POST_PATCH_HOOKS += ATEST_PATCH_M4
++
++$(eval $(autotools-package))
 -- 
-2.9.3
+2.7.4
