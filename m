@@ -1,74 +1,68 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun,  2 Apr 2017 21:46:48 +0200
-Subject: [Buildroot] [Patch v4 0/3] Add support for the Rust programming
-	language
-Message-ID: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+Date: Sun,  2 Apr 2017 21:46:50 +0200
+Subject: [Buildroot] [Patch v4 2/3] cargo-bootstrap: new package
+In-Reply-To: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20170402194651.28684-3-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds support for the Rust programming language by providing a
-package for the host variant of the Rust compiler, able to cross-compile code
-for ARM, MIPS, PowerPC and x86_64 architectures.
+This new package fetches a binary snapshot of Cargo, suitable for the
+host, in order to bootstrap the Rust compiler and Cargo, the package
+manager.
 
-As the Rust compiler is written in Rust and uses Cargo, the Rust package
-manager, as build system, two additional packages are provided: rust-bootstrap
-and cargo-bootstrap.
-
-v3 -> v4:
-
- - bump rust to 1.16.0
- - bump rust-bootstrap to 1.15.1
- - add cargo-bootstrap
- - use built-in target specifications
- - drop external Python script to generate target specifications
- - enable support for PowerPC
- - expose host variant in menuconfig
-
-v2 -> v3:
-
- - bump rust to 1.10.0
- - rework and bump rust-bootstrap to 1.9.0
- - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
- - rust requires a glibc-based cross-compiler
- - rust requires GCC 5.x or above for Aarch64
-
-v1 -> v2:
-
- - bump rust to version 1.9.0.
- - drop patch for bzip2 support in host-python.
- - add package for jemalloc.
- - add dependency on host being a x86 machine.
- - add dependency on toolchain.
- - use dedicated package to provide bootstrapping binary: rust-bootstrap.
- - let ./configure find out host/build on its own.
- - remove entry from configuration menu.
- - clarify some comments.
-
-Eric Le Bihan (3):
-  rust-bootstrap: new package
-  cargo-bootstrap: new package
-  rust: new package
-
- DEVELOPERS                                   |  3 +
- package/Config.in.host                       |  1 +
- package/cargo-bootstrap/cargo-bootstrap.hash |  3 +
- package/cargo-bootstrap/cargo-bootstrap.mk   | 14 +++++
- package/rust-bootstrap/rust-bootstrap.hash   |  5 ++
- package/rust-bootstrap/rust-bootstrap.mk     | 37 ++++++++++++
- package/rust/Config.in.host                  | 33 +++++++++++
- package/rust/rust.hash                       |  2 +
- package/rust/rust.mk                         | 85 ++++++++++++++++++++++++++++
- 9 files changed, 183 insertions(+)
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ DEVELOPERS                                   |  1 +
+ package/cargo-bootstrap/cargo-bootstrap.hash |  3 +++
+ package/cargo-bootstrap/cargo-bootstrap.mk   | 14 ++++++++++++++
+ 3 files changed, 18 insertions(+)
  create mode 100644 package/cargo-bootstrap/cargo-bootstrap.hash
  create mode 100644 package/cargo-bootstrap/cargo-bootstrap.mk
- create mode 100644 package/rust-bootstrap/rust-bootstrap.hash
- create mode 100644 package/rust-bootstrap/rust-bootstrap.mk
- create mode 100644 package/rust/Config.in.host
- create mode 100644 package/rust/rust.hash
- create mode 100644 package/rust/rust.mk
 
---
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 863d5aa..1fed408 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -442,6 +442,7 @@ F:	package/xxhash/
+ 
+ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ F:	package/adwaita-icon-theme/
++F:	package/cargo-bootstrap
+ F:	package/darkhttpd/
+ F:	package/eudev/
+ F:	package/execline/
+diff --git a/package/cargo-bootstrap/cargo-bootstrap.hash b/package/cargo-bootstrap/cargo-bootstrap.hash
+new file mode 100644
+index 0000000..b193c6f
+--- /dev/null
++++ b/package/cargo-bootstrap/cargo-bootstrap.hash
+@@ -0,0 +1,3 @@
++# Locally generated
++sha256 0655713cacab054e8e5a33e742081eebec8531a8c77d28a4294e6496123e8ab1  cargo-nightly-x86_64-unknown-linux-gnu.tar.gz
++sha256 f20adfdcd6fb61c1252034e998998ec349c8a6b05c0320e47a539b0f6d1c76fa  cargo-nightly-i686-unknown-linux-gnu.tar.gz
+diff --git a/package/cargo-bootstrap/cargo-bootstrap.mk b/package/cargo-bootstrap/cargo-bootstrap.mk
+new file mode 100644
+index 0000000..8a11e6e
+--- /dev/null
++++ b/package/cargo-bootstrap/cargo-bootstrap.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# cargo-bootstrap
++#
++################################################################################
++
++CARGO_BOOTSTRAP_VERSION = 6e0c18cccc8b0c06fba8a8d76486f81a792fb420
++CARGO_BOOTSTRAP_SITE = https://s3.amazonaws.com/rust-lang-ci/cargo-builds/$(CARGO_BOOTSTRAP_VERSION)
++CARGO_BOOTSTRAP_SOURCE = cargo-nightly-$(HOSTARCH)-unknown-linux-gnu.tar.gz
++CARGO_BOOTSTRAP_LICENSE = Apache-2.0 or MIT
++CARGO_BOOTSTRAP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++CARGO_BOOTSTRAP_STRIP_COMPONENTS = 1
++
++$(eval $(host-generic-package))
+-- 
 2.9.3
