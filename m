@@ -1,35 +1,45 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun,  2 Apr 2017 14:28:32 -0300
-Subject: [Buildroot] [PATCH v3 0/2] Fix fsck issues regarding merged /sbin
-	and /usr/sbin
-Message-ID: <1491154114-14797-1-git-send-email-casantos@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  2 Apr 2017 19:50:29 +0200
+Subject: [Buildroot] [PATCH] package/libdrm: fix autoreconf
+Message-ID: <20170402175029.25526-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since e2fsprogs depends on util-linux, it's build after it. It means
-that if you want the fsck wrapper from util-linux (which is better
-maintained and you are sure that it's compatible with systemd) and you
-want e2fsck, it won't work. Because of the merge of /usr/bin and /bin,
-we end up deleting the fsck from util-linux.
+To properly autoreconf, the xorg macros, from host-xutil_util-macros,
+are needed.
 
-In order to solve the problem we need to make two changes:
+Fixes:
+    http://autobuild.buildroot.org/results/2e8/2e887c25b22bd36eab36ff361645306c8ddb79aa/
+    http://autobuild.buildroot.org/results/7c0/7c0050d63a1d34eecb6d16e2654369cea561707a/
+    http://autobuild.buildroot.org/results/2ef/2ef3d6d74c56632c012b85e05af6eaf0259b72c9/
+    [...]
 
-- Fix e2fsprogs to prevent removing/overriding the fsck from util-linux.
-- Make systemd select util-linux/fsck and e2fsprogs/e2fsck to prevent
-  ending up with the fsck from busybox, which is not compatible with
-  systemd.
+(Thanks Romain for confirming the fix on IRC! ;-) )
 
-Carlos Santos (2):
-  e2fsprogs: keep util-linux's fsck if chosen
-  systemd: select util-linux/fsck and e2fsprogs/e2fsck
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdrm/libdrm.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/e2fsprogs/Config.in    |  4 ++++
- package/e2fsprogs/e2fsprogs.mk | 17 ++++++++++++-----
- package/systemd/Config.in      |  3 +++
- 3 files changed, 19 insertions(+), 5 deletions(-)
-
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 875d3cc..8223262 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -15,7 +15,8 @@ LIBDRM_INSTALL_STAGING = YES
+ 
+ LIBDRM_DEPENDENCIES = \
+ 	libpthread-stubs \
+-	host-pkgconf
++	host-pkgconf \
++	host-xutil_util-macros
+ 
+ LIBDRM_CONF_OPTS = \
+ 	--disable-cairo-tests \
 -- 
-2.7.4
+2.9.3
