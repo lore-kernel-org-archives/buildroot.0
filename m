@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Apr 2017 23:43:14 +0200
-Subject: [Buildroot] [git commit] mc: bump version to 4.8.19
-Message-ID: <20170402214318.DD55E82640@busybox.osuosl.org>
+Date: Sun, 2 Apr 2017 23:43:24 +0200
+Subject: [Buildroot] [PATCH] mc: bump version to 4.8.19
+In-Reply-To: <20170402032510.29559-1-rprebello@gmail.com>
+References: <20170402032510.29559-1-rprebello@gmail.com>
+Message-ID: <20170402234324.129ea0ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=830bc746362a5593c5065cc1695bdb238cc9e1da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sun,  2 Apr 2017 00:25:10 -0300, Rodrigo Rebello wrote:
+> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+> ---
+>  package/mc/mc.hash | 4 ++--
+>  package/mc/mc.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index a8116d0..cb48f2e 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,2 +1,2 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.18.sha256:
--sha256 f7636815c987c1719c4f5de2dcd156a0e7d097b1d10e4466d2bdead343d5bece  mc-4.8.18.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.19.sha256:
-+sha256 eb9e56bbb5b2893601d100d0e0293983049b302c5ab61bfb544ad0ee2cc1f2df  mc-4.8.19.tar.xz
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 8139648..a032c2f 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.18
-+MC_VERSION = 4.8.19
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
