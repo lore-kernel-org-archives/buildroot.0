@@ -1,61 +1,123 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Apr 2017 11:04:02 +0200
-Subject: [Buildroot] [PATCH] package/dc3dd: fix build with NLS enabled
-Message-ID: <20170402090402.32233-1-yann.morin.1998@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 2 Apr 2017 12:13:18 +0200
+Subject: [Buildroot] [PATCH v2] e2fsprogs: keep util-linux's fsck if
+	chosen
+In-Reply-To: <1491100601-7867-1-git-send-email-casantos@datacom.ind.br>
+References: <1491100601-7867-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <CAGduivzA9WoMy4xGiad0VXXQ3W0ekXF9U37wwfwXsXapt3J7LQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/56e/56eda8289118782de7b8b33f956bfb33b159b86a/
-    http://autobuild.buildroot.org/results/b8b/b8b59ab00790ff1b29fb72852e05ef8b402f41ec/
-    http://autobuild.buildroot.org/results/ef5/ef581cc3cae46a6ed08c321b575b71e6a384cced/
-    [...and a lot more...]
+Hi all,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Beno?t Allard <benoit.allard@greenbone.net>
+On Sun, Apr 2, 2017 at 4:36 AM, Carlos Santos <casantos@datacom.ind.br> wrote:
+> Since e2fsprogs depends on util-linux, it's built after it. So you can't
+> have e2fsck from e2fsprogs along with the fsck wrapper from util-linux
+> (which is better maintained and compatible with systemd) because we end
+> up deleting the fsck from util-linux.
+>
+> Fix this issue by disabling e2fsprogs' fsck if the one from util-linux
+> is selected.
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+> Changes v1->v2
+>   - Add depenndece on !BR2_PACKAGE_UTIL_LINUX_FSCK to
+>     BR2_PACKAGE_E2FSPROGS_FSCK
+>   - Add comment telling that the fsck from util-linux has preference.
+>   - Pass "--enable-fsck" conditionally to configure
+>   - Remove the guard around the removal of /usr/sbin/fsck, since the
+>     fsck from busybox and util-linux are installed at /sbin
+>   - Improve comments and commit message
+>
+> In the long run the e2fsprogs recipe deserves an extreme overhauling
+> like we did for util-linux but right now these changes are enough to
+> fix the specific problem of fsck.
+> ---
+It's almost working, but there's a trick for systemd (*tadaaa*)
+To have fsck work at boot time, you *MUST* have the fsck (the wrapper)
+from util-linux, because systemd passes arguments that do not exists
+in the e2fsprogs wrapper. But you should use the e2fsck program and
+its link.
+So for this to truly work, if systemd is selected, you should select
+util-linux's fsck, disable e2fsprogs fsck wrapper and enable e2fsck.
 
----
-This one was hard to reproduce, because it would not happen when simply
-calling "make dc3dd" alone. A plain "make" was required, to trigger a
-hidden dependency, which I am now hunting down...
----
- .../dc3dd/0003-po-fix-build-with-NLS-enabled.patch | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch
+Note that in case of failure, systemd will try to run emergency.target
+and all kinds of things may happen if you haven't created some
+post-build or other scripts.
 
-diff --git a/package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch b/package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch
-new file mode 100644
-index 0000000..3026044
---- /dev/null
-+++ b/package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch
-@@ -0,0 +1,25 @@
-+From 67d8ff286ebd0ea4c8ef5a02a819bbb6b6273ccd Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 2 Apr 2017 10:58:42 +0200
-+Subject: [PATCH] po: fix build with NLS enabled
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ po/Makefile.in.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/po/Makefile.in.in b/po/Makefile.in.in
-+index 6a39807..2793c7e 100755
-+--- a/po/Makefile.in.in
-++++ b/po/Makefile.in.in
-+@@ -34,6 +34,7 @@ gettextsrcdir = $(datadir)/gettext/po
-+ INSTALL = @INSTALL@
-+ INSTALL_DATA = @INSTALL_DATA@
-+ mkinstalldirs = $(SHELL) @install_sh@ -d
-++MKDIR_P = @MKDIR_P@
-+ mkdir_p = @mkdir_p@
-+ 
-+ GMSGFMT_ = @GMSGFMT@
-+-- 
-+2.9.3
-+
--- 
-2.9.3
+>  package/e2fsprogs/Config.in    |  4 ++++
+>  package/e2fsprogs/e2fsprogs.mk | 12 +++++++++---
+>  2 files changed, 13 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+> index d1914a9..418f877 100644
+> --- a/package/e2fsprogs/Config.in
+> +++ b/package/e2fsprogs/Config.in
+> @@ -59,8 +59,12 @@ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+>
+>  config BR2_PACKAGE_E2FSPROGS_FSCK
+>         bool "fsck"
+> +       depends on !BR2_PACKAGE_UTIL_LINUX_FSCK
+>         default y
+>
+> +comment "the fsck from util-linux has preference over this one"
+> +       depends on BR2_PACKAGE_UTIL_LINUX_FSCK
+> +
+>  config BR2_PACKAGE_E2FSPROGS_FUSE2FS
+>         bool "fuse2fs"
+>         depends on !BR2_STATIC_LIBS # libfuse
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> index 3f235c5..b4b96c3 100644
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -11,7 +11,7 @@ E2FSPROGS_LICENSE = GPL-2.0, BSD-3-Clause (libuuid), MIT-like with advertising c
+>  E2FSPROGS_LICENSE_FILES = NOTICE lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
+>  E2FSPROGS_INSTALL_STAGING = YES
+>  E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
+> -# we don't have a host-util-linux
+> +# We don't need host-util-linux, since we disable libblkid, libuuid.
+>  HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf
+>
+>  # e4defrag doesn't build on older systems like RHEL5.x, and we don't
+> @@ -24,11 +24,11 @@ E2FSPROGS_CONF_OPTS = \
+>         $(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
+>         $(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
+>         $(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
+> +       $(if $(BR2_PACKAGE_E2FSPROGS_FSCK),--enable-fsck,) \
+>         $(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
+>         --disable-uuidd \
+>         --disable-libblkid \
+>         --disable-libuuid \
+> -       --enable-fsck \
+>         --disable-e2initrd-helper \
+>         --disable-testio-debug \
+>         --disable-rpath
+> @@ -146,10 +146,16 @@ E2FSPROGS_DEPENDENCIES += busybox
+>  define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
+>         $(RM) -f $(TARGET_DIR)/bin/chattr
+>         $(RM) -f $(TARGET_DIR)/bin/lsattr
+> -       $(RM) -f $(TARGET_DIR)/sbin/fsck
+>         $(RM) -f $(TARGET_DIR)/sbin/tune2fs
+>         $(RM) -f $(TARGET_DIR)/sbin/e2label
+>  endef
+> +
+> +ifeq ($(BR2_PACKAGE_E2FSPROGS_FSCK),y)
+> +# We only build fsck if it's not selected in util-linux, so at this
+> +# point /sbin/fsck must have come from busybox.
+> +E2FSPROGS_REMOVE_BUSYBOX_APPLETS += $(RM) -f $(TARGET_DIR)/sbin/fsck
+> +endif
+This part doesn't work with systemd as you will remove the fsck
+wrapper from util-linux which is the only one that can be used. And
+since e2fsprogs depends on util-linux, you are screwed :/.
+> +
+>  E2FSPROGS_PRE_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
+>  endif
+>
+> --
+> 2.7.4
+>
