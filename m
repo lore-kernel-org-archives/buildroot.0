@@ -1,49 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  2 Apr 2017 13:25:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: disable inline asm on i386
-Message-ID: <20170402112507.14419-1-bernd.kuhls@t-online.de>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 2 Apr 2017 09:03:02 -0300 (BRT)
+Subject: [Buildroot] [PATCH v2] e2fsprogs: keep util-linux's fsck if
+	chosen
+In-Reply-To: <CAGduivzA9WoMy4xGiad0VXXQ3W0ekXF9U37wwfwXsXapt3J7LQ@mail.gmail.com>
+References: <1491100601-7867-1-git-send-email-casantos@datacom.ind.br>
+ <CAGduivzA9WoMy4xGiad0VXXQ3W0ekXF9U37wwfwXsXapt3J7LQ@mail.gmail.com>
+Message-ID: <263644142.17286378.1491134582819.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A similar fix was committed to ffmpeg:
-https://git.buildroot.net/buildroot/commit/package/ffmpeg?id=bfb8df2ad9b164b421d25294c6882c8b61dc59a5
+> From: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Sunday, April 2, 2017 7:13:18 AM
+> Subject: Re: [PATCH v2] e2fsprogs: keep util-linux's fsck if chosen
 
-Special cflags, added by
-https://git.buildroot.net/buildroot/commit/package/multimedia/mplayer?id=fd38100e1189d19cad87a64c52df2c773eb47e40
-are no longer needed now so remove them as well.
+> Hi all,
+> 
+> On Sun, Apr 2, 2017 at 4:36 AM, Carlos Santos <casantos@datacom.ind.br> wrote:
+>> Since e2fsprogs depends on util-linux, it's built after it. So you can't
+>> have e2fsck from e2fsprogs along with the fsck wrapper from util-linux
+>> (which is better maintained and compatible with systemd) because we end
+>> up deleting the fsck from util-linux.
+>>
+>> Fix this issue by disabling e2fsprogs' fsck if the one from util-linux
+>> is selected.
+>>
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>> ---
+>> Changes v1->v2
+>>   - Add depenndece on !BR2_PACKAGE_UTIL_LINUX_FSCK to
+>>     BR2_PACKAGE_E2FSPROGS_FSCK
+>>   - Add comment telling that the fsck from util-linux has preference.
+>>   - Pass "--enable-fsck" conditionally to configure
+>>   - Remove the guard around the removal of /usr/sbin/fsck, since the
+>>     fsck from busybox and util-linux are installed at /sbin
+>>   - Improve comments and commit message
+>>
+>> In the long run the e2fsprogs recipe deserves an extreme overhauling
+>> like we did for util-linux but right now these changes are enough to
+>> fix the specific problem of fsck.
+>> ---
+> It's almost working, but there's a trick for systemd (*tadaaa*)
+> To have fsck work at boot time, you *MUST* have the fsck (the wrapper)
+> from util-linux, because systemd passes arguments that do not exists
+> in the e2fsprogs wrapper. But you should use the e2fsck program and
+> its link.
+> So for this to truly work, if systemd is selected, you should select
+> util-linux's fsck, disable e2fsprogs fsck wrapper and enable e2fsck.
 
-Fixes
-http://autobuild.buildroot.net/results/030/03066dd8937ef4c75d62f237fd195df92b247ee2//
-and many others.
+Do you mean something like this in package/systemd/Config.in?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mplayer/mplayer.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+        select BR2_PACKAGE_UTIL_LINUX_FSCK
+        select BR2_PACKAGE_E2FSPROGS
+        select BR2_PACKAGE_E2FSPROGS_E2FSCK
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 6b3009abc..14ab8acee 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -285,10 +285,13 @@ MPLAYER_CFLAGS += -mfpu=neon
- endif
- endif
- 
-+define MPLAYER_DISABLE_INLINE_ASM
-+	$(SED) 's,#define HAVE_INLINE_ASM 1,#define HAVE_INLINE_ASM 0,g' \
-+		$(@D)/config.h
-+endef
-+
- ifeq ($(BR2_i386),y)
--# inline asm breaks with "can't find a register in class 'GENERAL_REGS'"
--# inless we free up ebp
--MPLAYER_CFLAGS += -fomit-frame-pointer
-+MPLAYER_POST_CONFIGURE_HOOKS += MPLAYER_DISABLE_INLINE_ASM
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+I agree, but that must be done in a subsequent commit.
+
+> Note that in case of failure, systemd will try to run emergency.target
+> and all kinds of things may happen if you haven't created some
+> post-build or other scripts.
+
+I'm not well versed on systemd (not even poorly versed, in fact). Feel
+free to educate me. :-)
+
 -- 
-2.11.0
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
