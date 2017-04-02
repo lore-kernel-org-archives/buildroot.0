@@ -1,83 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 02 Apr 2017 12:38:24 +0200
-Subject: [Buildroot] [PATCH v4 1/2] arch: add BR2_READELF_ARCH_NAME
- hidden config option
-References: <1489928872-3965-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170320222656.38163a70@free-electrons.com>
-Message-ID: <0u07rdxu5j.ln2@ID-313208.user.individual.net>
+Date: Sun,  2 Apr 2017 13:25:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: disable inline asm on i386
+Message-ID: <20170402112507.14419-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 20 Mar 2017 22:26:56 +0100 schrieb Thomas Petazzoni:
+A similar fix was committed to ffmpeg:
+https://git.buildroot.net/buildroot/commit/package/ffmpeg?id=bfb8df2ad9b164b421d25294c6882c8b61dc59a5
 
-> Hello,
-> 
-> On Sun, 19 Mar 2017 14:07:51 +0100, Thomas Petazzoni wrote:
->> This config option corresponds to the string returned by readelf for
->> the "Machine" field of the ELF header. It will be used to check if the
->> architecture of binaries built by Buildroot match the target
->> architecture.
->> 
->> Signed-off-by: Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com>
->> ---
->> Changes since v3:
->>  - None
-> 
-> I've applied both patches to master. Let's see if the autobuilders blow
-> up now :)
-> 
-> Best regards,
-> 
-> Thomas
+Special cflags, added by
+https://git.buildroot.net/buildroot/commit/package/multimedia/mplayer?id=fd38100e1189d19cad87a64c52df2c773eb47e40
+are no longer needed now so remove them as well.
 
-Hi Thomas,
+Fixes
+http://autobuild.buildroot.net/results/030/03066dd8937ef4c75d62f237fd195df92b247ee2//
+and many others.
 
-Sparc v8 sees some build errors:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mplayer/mplayer.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-http://autobuild.buildroot.net/results/de7/
-de7079b89fda1dd47e52619a644f23c4f4986b2c//
-
-ERROR: architecture for "/usr/lib/libmpeg2convert.so.0.0.0" is "Sparc v8
-+", should be "Sparc"
-ERROR: architecture for "/usr/lib/libmpeg2.so.0.1.0" is "Sparc v8+", 
-should be "Sparc"
-
-http://autobuild.buildroot.net/results/f96/
-f96c30c5c398db1ba561740ae64e922cd4f8a524//
-
-ERROR: architecture for "/usr/lib/libopenblas_sparcp-r0.2.19.dev.so" is 
-"Sparc v8+", should be "Sparc"
-
-Patching arch/Config.in.sparc like this
-
-@@ -30,5 +30,6 @@ config BR2_GCC_TARGET_CPU
-        default "ultrasparc"    if BR2_sparc_v9
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index 6b3009abc..14ab8acee 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -285,10 +285,13 @@ MPLAYER_CFLAGS += -mfpu=neon
+ endif
+ endif
  
- config BR2_READELF_ARCH_NAME
-+       default "Sparc v8+"     if BR2_sparc_v8
-        default "Sparc"         if BR2_sparc
-        default "Sparc v9"      if BR2_sparc64
-
-does not fix the problem however:
-
->>> toolchain-external-custom  Copying external toolchain libraries to 
-target...
-ERROR: architecture for "/lib/libgcc_s.so.1" is "Sparc", should be "Sparc 
-v8+"
-ERROR: architecture for "/lib/libuClibc-1.0.22.so" is "Sparc", should be 
-"Sparc v8+"
-ERROR: architecture for "/lib/ld-uClibc-1.0.22.so" is "Sparc", should be 
-"Sparc v8+"
-ERROR: architecture for "/usr/lib/libstdc++.so.6.0.21" is "Sparc", should 
-be "Sparc v8+"
-ERROR: architecture for "/lib/libatomic.so.1.1.0" is "Sparc", should be 
-"Sparc v8+"
-
-Tested with http://autobuild.buildroot.net/results/de7/
-de7079b89fda1dd47e52619a644f23c4f4986b2c/defconfig
-
-Regards, Bernd
++define MPLAYER_DISABLE_INLINE_ASM
++	$(SED) 's,#define HAVE_INLINE_ASM 1,#define HAVE_INLINE_ASM 0,g' \
++		$(@D)/config.h
++endef
++
+ ifeq ($(BR2_i386),y)
+-# inline asm breaks with "can't find a register in class 'GENERAL_REGS'"
+-# inless we free up ebp
+-MPLAYER_CFLAGS += -fomit-frame-pointer
++MPLAYER_POST_CONFIGURE_HOOKS += MPLAYER_DISABLE_INLINE_ASM
+ endif
+ 
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+-- 
+2.11.0
