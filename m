@@ -1,73 +1,61 @@
-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-Date: Sun,  2 Apr 2017 10:36:16 +0200
-Subject: [Buildroot] [PATCH] package/synergy: bump to version 1.8.8 to fix
-	build errors
-Message-ID: <1491122176-24004-1-git-send-email-pieterjan.camerlynck@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  2 Apr 2017 11:04:02 +0200
+Subject: [Buildroot] [PATCH] package/dc3dd: fix build with NLS enabled
+Message-ID: <20170402090402.32233-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building synergy on sparc, nios2, mipsel and mips64el would fail with
-the following errors:
-  src/lib/ipc/IpcClientProxy.cpp: In member function 'void IpcClientProxy::send(const IpcMessage&)':
-  src/lib/ipc/IpcClientProxy.cpp:150:59: error: ISO C++ says that these are ambiguous, even though the worst conversion for the first is better than the worst conversion for the second: [-Werror]
-     ProtocolUtil::writef(&m_stream, kIpcMsgLogLine, &logLine);
-                                                             ^
-  In file included from src/lib/ipc/IpcClientProxy.cpp:23:0:
-  src/lib/ipc/../synergy/ProtocolUtil.h:82:16: note: candidate 1: static void ProtocolUtil::writef(void*, const char*, va_list)
-    static void   writef(void*, const char* fmt, va_list);
-                  ^
-  src/lib/ipc/../synergy/ProtocolUtil.h:53:16: note: candidate 2: static void ProtocolUtil::writef(synergy::IStream*, const char*, ...)
-    static void   writef(synergy::IStream*,
-                  ^
-  src/lib/ipc/../synergy/ProtocolUtil.h:82:16: error: 'static void ProtocolUtil::writef(void*, const char*, va_list)' is private
-    static void   writef(void*, const char* fmt, va_list);
-                  ^
-  src/lib/ipc/IpcClientProxy.cpp:150:59: error: within this context
-     ProtocolUtil::writef(&m_stream, kIpcMsgLogLine, &logLine);
-                                                             ^
-  At global scope:
-  cc1plus: error: unrecognized command line option '-Wno-unused-local-typedef' [-Werror]
-  cc1plus: all warnings being treated as errors
-
-Fixed by upstream commits:
-  https://github.com/symless/synergy/commit/c31f908fb283dadc1a34856796e2d7a9df7bbb77
-  https://github.com/symless/synergy/commit/2643cea67bed960a3ae57ba881cd06f52843fa62
-
 Fixes:
-  http://autobuild.buildroot.net/results/dc40671874aac9ad491bd4c7aa57eb1c53484492
-  http://autobuild.buildroot.net/results/a37905b0c93aa0dc891a85be1701e51cf2988cbe
-  http://autobuild.buildroot.net/results/611895e29faba0b35b2b27005a5142192ed63fd8
-  http://autobuild.buildroot.net/results/7bdd4428c1335593b04a18ce8e9705b0bc932484
+    http://autobuild.buildroot.org/results/56e/56eda8289118782de7b8b33f956bfb33b159b86a/
+    http://autobuild.buildroot.org/results/b8b/b8b59ab00790ff1b29fb72852e05ef8b402f41ec/
+    http://autobuild.buildroot.org/results/ef5/ef581cc3cae46a6ed08c321b575b71e6a384cced/
+    [...and a lot more...]
 
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Beno?t Allard <benoit.allard@greenbone.net>
+
 ---
- package/synergy/synergy.hash | 2 +-
- package/synergy/synergy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This one was hard to reproduce, because it would not happen when simply
+calling "make dc3dd" alone. A plain "make" was required, to trigger a
+hidden dependency, which I am now hunting down...
+---
+ .../dc3dd/0003-po-fix-build-with-NLS-enabled.patch | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch
 
-diff --git a/package/synergy/synergy.hash b/package/synergy/synergy.hash
-index bbf196f..52f9d74 100644
---- a/package/synergy/synergy.hash
-+++ b/package/synergy/synergy.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  d913005e911bb6e5aa459f88fe91b40d59c37ea7207399814e4d450fd8634ec1  synergy-v1.8.5-stable.tar.gz
-+sha256  85c388f93881d741981ce3c675e840a52a76883cb2cea1da306c0c453c5d7d9b  synergy-v1.8.8-stable.tar.gz
-diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-index a4053e3..76a4004 100644
---- a/package/synergy/synergy.mk
-+++ b/package/synergy/synergy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYNERGY_VERSION = v1.8.5-stable
-+SYNERGY_VERSION = v1.8.8-stable
- SYNERGY_SITE = $(call github,symless,synergy,$(SYNERGY_VERSION))
- SYNERGY_LICENSE = GPL-2.0
- SYNERGY_LICENSE_FILES = LICENSE
+diff --git a/package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch b/package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch
+new file mode 100644
+index 0000000..3026044
+--- /dev/null
++++ b/package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch
+@@ -0,0 +1,25 @@
++From 67d8ff286ebd0ea4c8ef5a02a819bbb6b6273ccd Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 2 Apr 2017 10:58:42 +0200
++Subject: [PATCH] po: fix build with NLS enabled
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ po/Makefile.in.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/po/Makefile.in.in b/po/Makefile.in.in
++index 6a39807..2793c7e 100755
++--- a/po/Makefile.in.in
+++++ b/po/Makefile.in.in
++@@ -34,6 +34,7 @@ gettextsrcdir = $(datadir)/gettext/po
++ INSTALL = @INSTALL@
++ INSTALL_DATA = @INSTALL_DATA@
++ mkinstalldirs = $(SHELL) @install_sh@ -d
+++MKDIR_P = @MKDIR_P@
++ mkdir_p = @mkdir_p@
++ 
++ GMSGFMT_ = @GMSGFMT@
++-- 
++2.9.3
++
 -- 
-2.7.4
+2.9.3
