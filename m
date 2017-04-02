@@ -1,55 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Apr 2017 23:44:00 +0200
-Subject: [Buildroot] [git commit] package/libva-intel-driver: bump version
-	to 1.8.0
-Message-ID: <20170402214406.99A8E82670@busybox.osuosl.org>
+Date: Sun, 2 Apr 2017 23:43:51 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 1.8.0
+Message-ID: <20170402214406.8DEEE82670@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa944024c12da7e3516a5e8df36d1cd7be508398
+commit: https://git.buildroot.net/buildroot/commit/?id=039ad7c38de26669faf1fdd46328f6ec1719a51e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Autoreconf is not necessary anymore after a fix was commit upstream:
-https://github.com/01org/intel-vaapi-driver/commit/fe6280841dfaaee94e8664517420f351cd334c86
+Removed patch because libva-utils are no longer part of the libva
+package:
+https://lists.01.org/pipermail/intel-vaapi-media/2017-March/000015.html
+
+*   Move all utilities and tests to libva-utils
+
+Package libva-utils will be added later.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva-intel-driver/libva-intel-driver.hash | 4 +++-
- package/libva-intel-driver/libva-intel-driver.mk   | 7 +++----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libva/0001-no_test_decode.patch | 17 -----------------
+ package/libva/libva.hash                |  4 +++-
+ package/libva/libva.mk                  | 12 +++---------
+ 3 files changed, 6 insertions(+), 27 deletions(-)
 
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index a968876..ea885bc 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
+diff --git a/package/libva/0001-no_test_decode.patch b/package/libva/0001-no_test_decode.patch
+deleted file mode 100644
+index 0f0d786..0000000
+--- a/package/libva/0001-no_test_decode.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-mpeg2vldemo is the only file requiring cxx support. It is not needed for
+-buildroot, so disable its compilation to avoid depending on cxx.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr libva-1.3.0.org/test/Makefile.am libva-1.3.0/test/Makefile.am
+---- libva-1.3.0.org/test/Makefile.am	2014-03-24 05:49:46.000000000 +0100
+-+++ libva-1.3.0/test/Makefile.am	2014-04-26 18:12:25.644390292 +0200
+-@@ -20,7 +20,7 @@
+- # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+- # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- 
+--SUBDIRS = common decode encode vainfo
+-+SUBDIRS = common encode vainfo
+- 
+- if USE_X11
+- SUBDIRS += basic putsurface
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 1f248f8..086a010 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,2 +1,4 @@
-+# From https://lists.01.org/pipermail/intel-vaapi-media/2017-March/000016.html
-+sha1 9982122c8ef36aad01aa09c083974532afa8f8ca intel-vaapi-driver-1.8.0.tar.bz2
++# From https://lists.01.org/pipermail/intel-vaapi-media/2017-March/000015.html
++sha1 d9468956c301784b6b12c39cafd30ac52e24290b libva-1.8.0.tar.bz2
  # Locally computed
--sha256 c1f02cbdf0398f096ddc91096fac6ee62267a54955f6d235d73a8ff2ea888118  libva-intel-driver-1.7.3.tar.gz
-+sha256 4fcbb282957cf4f33b6c43a0f476d8df21f7721e586a8546c71242551986b3a6  intel-vaapi-driver-1.8.0.tar.bz2
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index e2f855b..ef14ca1 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,13 +4,12 @@
+-sha256 f0f816a725007fbf3c7ed816ff71ba420696bec63ff49045e9b23d9b34ac73c8  libva-1.7.3.tar.gz
++sha256 eb92f3dcbe3981df3575348377263b31361113c77b2c3745f23174d1f562d658  libva-1.8.0.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index bce6907..f16be90 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--LIBVA_INTEL_DRIVER_VERSION = 1.7.3
-+LIBVA_INTEL_DRIVER_VERSION = 1.8.0
-+LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = \
--	$(call github,01org,intel-vaapi-driver,$(LIBVA_INTEL_DRIVER_VERSION))
-+	https://github.com/01org/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
- LIBVA_INTEL_DRIVER_LICENSE = MIT
- LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
--# needed to work around https://bugs.freedesktop.org/show_bug.cgi?id=79478
--LIBVA_INTEL_DRIVER_AUTORECONF = YES
- LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
+-LIBVA_VERSION = 1.7.3
+-LIBVA_SITE = $(call github,01org,libva,libva-$(LIBVA_VERSION))
++LIBVA_VERSION = 1.8.0
++LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
++LIBVA_SITE = https://github.com/01org/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
+-LIBVA_AUTORECONF = YES
+ LIBVA_INSTALL_STAGING = YES
+ LIBVA_DEPENDENCIES = host-pkgconf libdrm
  
- ifeq ($(BR2_PACKAGE_XORG7),y)
+@@ -46,10 +46,4 @@ else
+ LIBVA_CONF_OPTS += --disable-egl
+ endif
+ 
+-# Autoreconf requires an m4 directory to exist
+-define LIBVA_PATCH_M4
+-	mkdir -p $(@D)/m4
+-endef
+-LIBVA_POST_PATCH_HOOKS += LIBVA_PATCH_M4
+-
+ $(eval $(autotools-package))
