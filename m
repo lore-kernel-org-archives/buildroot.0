@@ -1,67 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Apr 2017 15:03:38 +0200
-Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
-Message-ID: <20170402130338.12542-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  2 Apr 2017 16:20:57 +0200
+Subject: [Buildroot] [PATCH 1/1] libmaxminddb: improve --disable-tests patch
+Message-ID: <1491142857-28485-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When debugging hidden dependencies, the build order is very important.
-Most notably, it is interesting to identify potential culprits.
+Following review of libmaxminddb patch by Thomas Petazzoni, here is an
+enhanced version of the --disable-tests patch which has been sent
+upstream.
 
-Add a new top-level rule, show-biuld-order, that dumps all the packages
-in the order they would get built.
-
-Note that there are a few differences with show-targets:
-
-  - more packages are reported, becasue show-targets does not report
-    host packages that have no prompt;
-
-  - the output is line-based, because we're using $(info $(1)); getting
-    a single output line like show-targets would require we use an
-    actual command, like printf '%s ' $(1); but that takes a lot of
-    time, while $(info $(1)) is almost instantaneous (the time to parse
-    the Makefiles);
-
-  - rootfs targets are not reported.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Makefile               | 2 ++
- package/pkg-generic.mk | 3 +++
- 2 files changed, 5 insertions(+)
+ .../0001-Add-disable-tests-to-configure.patch      | 26 +++++++++-------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 941bf78..919d589 100644
---- a/Makefile
-+++ b/Makefile
-@@ -757,6 +757,8 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
- show-targets:
- 	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+diff --git a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+index 1ae5acc..8ff64e9 100644
+--- a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
++++ b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+@@ -1,13 +1,13 @@
+-From b12ca226c111730e2ef5d8a3d929dbd943fbe763 Mon Sep 17 00:00:00 2001
++From 8287848f747bd37298a2d32b8fd06cc59eb28028 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Thu, 9 Feb 2017 21:40:43 +0100
+ Subject: [PATCH] Add --disable-tests to configure
  
-+show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
-+
- graph-build: $(O)/build/build-time.log
- 	@install -d $(GRAPHS_DIR)
- 	$(foreach o,name build duration,./support/scripts/graph-build-time \
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 31dbc54..3b26e6b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -737,6 +737,9 @@ $(1)-show-depends:
- $(1)-show-rdepends:
- 			@echo $$($(2)_RDEPENDENCIES)
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+- Makefile.am  |  6 +++++-
+- configure.ac | 10 ++++++++++
+- 2 files changed, 15 insertions(+), 1 deletion(-)
++ Makefile.am  | 6 +++++-
++ configure.ac | 6 ++++++
++ 2 files changed, 11 insertions(+), 1 deletion(-)
  
-+$(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
-+	$$(info $(1))
-+
- $(1)-graph-depends: graph-depends-requirements
- 	$(call pkg-graph-depends,$(1),--direct)
- 
+ diff --git a/Makefile.am b/Makefile.am
+ index 1804945..cebcd31 100644
+@@ -28,22 +28,18 @@ index 1804945..cebcd31 100644
+  EXTRA_DIST = doc t Changes.md LICENSE NOTICE README.md projects/VS12 projects/VS12-tests
+  dist-hook:
+ diff --git a/configure.ac b/configure.ac
+-index 7916212..fc53ffd 100644
++index 7916212..2a22fab 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -119,6 +119,16 @@ AC_ARG_ENABLE(
++@@ -119,6 +119,12 @@ AC_ARG_ENABLE(
+          esac],[debug=false])
+  AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
+  
+-+AC_ARG_ENABLE(
+-+        [tests],
+-+        [  --enable-tests    Compilation of tests code],
+-+        [case "${enableval}" in
+-+          yes) tests=true ;;
+-+          no)  tests=false ;;
+-+          *) AC_MSG_ERROR([bad value ${enableval} for --enable-tests]) ;;
+-+        esac],[tests=false])
+-+AM_CONDITIONAL([TESTS], [test x$tests = xtrue])
+++AC_ARG_ENABLE([tests],
+++        AS_HELP_STRING([--enable-tests], [Compilation of tests code]),
+++        [enable_tests=${enableval}],
+++        [enable_tests=yes])
+++AM_CONDITIONAL([TESTS], [test "${enable_tests}" = "yes"])
+ +
+  AC_CONFIG_FILES([Makefile
+                   src/Makefile
 -- 
-2.9.3
+2.5.0
