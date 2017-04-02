@@ -1,41 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Apr 2017 14:44:20 +0200
-Subject: [Buildroot] [PATCH] package/dc3dd: fix build with NLS enabled
-In-Reply-To: <20170402090402.32233-1-yann.morin.1998@free.fr>
-References: <20170402090402.32233-1-yann.morin.1998@free.fr>
-Message-ID: <20170402144420.55a9c0d7@free-electrons.com>
+Date: Sun, 2 Apr 2017 14:47:16 +0200
+Subject: [Buildroot] [git commit] package/synergy: bump to version 1.8.8 to
+	fix build errors
+Message-ID: <20170402124722.E886480332@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=caa16c13e0fef18ae1142f502ee39d2af8f5172e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Apr 2017 11:04:02 +0200, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/56e/56eda8289118782de7b8b33f956bfb33b159b86a/
->     http://autobuild.buildroot.org/results/b8b/b8b59ab00790ff1b29fb72852e05ef8b402f41ec/
->     http://autobuild.buildroot.org/results/ef5/ef581cc3cae46a6ed08c321b575b71e6a384cced/
->     [...and a lot more...]
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Beno?t Allard <benoit.allard@greenbone.net>
-> 
-> ---
-> This one was hard to reproduce, because it would not happen when simply
-> calling "make dc3dd" alone. A plain "make" was required, to trigger a
-> hidden dependency, which I am now hunting down...
-> ---
->  .../dc3dd/0003-po-fix-build-with-NLS-enabled.patch | 25 ++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/dc3dd/0003-po-fix-build-with-NLS-enabled.patch
+Building synergy on sparc, nios2, mipsel and mips64el would fail with
+the following errors:
+  src/lib/ipc/IpcClientProxy.cpp: In member function 'void IpcClientProxy::send(const IpcMessage&)':
+  src/lib/ipc/IpcClientProxy.cpp:150:59: error: ISO C++ says that these are ambiguous, even though the worst conversion for the first is better than the worst conversion for the second: [-Werror]
+     ProtocolUtil::writef(&m_stream, kIpcMsgLogLine, &logLine);
+                                                             ^
+  In file included from src/lib/ipc/IpcClientProxy.cpp:23:0:
+  src/lib/ipc/../synergy/ProtocolUtil.h:82:16: note: candidate 1: static void ProtocolUtil::writef(void*, const char*, va_list)
+    static void   writef(void*, const char* fmt, va_list);
+                  ^
+  src/lib/ipc/../synergy/ProtocolUtil.h:53:16: note: candidate 2: static void ProtocolUtil::writef(synergy::IStream*, const char*, ...)
+    static void   writef(synergy::IStream*,
+                  ^
+  src/lib/ipc/../synergy/ProtocolUtil.h:82:16: error: 'static void ProtocolUtil::writef(void*, const char*, va_list)' is private
+    static void   writef(void*, const char* fmt, va_list);
+                  ^
+  src/lib/ipc/IpcClientProxy.cpp:150:59: error: within this context
+     ProtocolUtil::writef(&m_stream, kIpcMsgLogLine, &logLine);
+                                                             ^
+  At global scope:
+  cc1plus: error: unrecognized command line option '-Wno-unused-local-typedef' [-Werror]
+  cc1plus: all warnings being treated as errors
 
-Applied to master, thanks. I have to say I hate this package and how
-many build failures it has caused :-/
+Fixed by upstream commits:
+  https://github.com/symless/synergy/commit/c31f908fb283dadc1a34856796e2d7a9df7bbb77
+  https://github.com/symless/synergy/commit/2643cea67bed960a3ae57ba881cd06f52843fa62
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+  http://autobuild.buildroot.net/results/dc40671874aac9ad491bd4c7aa57eb1c53484492
+  http://autobuild.buildroot.net/results/a37905b0c93aa0dc891a85be1701e51cf2988cbe
+  http://autobuild.buildroot.net/results/611895e29faba0b35b2b27005a5142192ed63fd8
+  http://autobuild.buildroot.net/results/7bdd4428c1335593b04a18ce8e9705b0bc932484
+
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/synergy/synergy.hash | 2 +-
+ package/synergy/synergy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/synergy/synergy.hash b/package/synergy/synergy.hash
+index bbf196f..52f9d74 100644
+--- a/package/synergy/synergy.hash
++++ b/package/synergy/synergy.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  d913005e911bb6e5aa459f88fe91b40d59c37ea7207399814e4d450fd8634ec1  synergy-v1.8.5-stable.tar.gz
++sha256  85c388f93881d741981ce3c675e840a52a76883cb2cea1da306c0c453c5d7d9b  synergy-v1.8.8-stable.tar.gz
+diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
+index a4053e3..76a4004 100644
+--- a/package/synergy/synergy.mk
++++ b/package/synergy/synergy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYNERGY_VERSION = v1.8.5-stable
++SYNERGY_VERSION = v1.8.8-stable
+ SYNERGY_SITE = $(call github,symless,synergy,$(SYNERGY_VERSION))
+ SYNERGY_LICENSE = GPL-2.0
+ SYNERGY_LICENSE_FILES = LICENSE
