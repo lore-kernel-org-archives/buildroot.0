@@ -1,47 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Apr 2017 23:06:24 +0200
-Subject: [Buildroot] [git commit] package/libdrm: fix autoreconf
-Message-ID: <20170402210634.8DDB48262C@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Apr 2017 23:14:29 +0200
+Subject: [Buildroot] [PATCH] qemu: allow to build statically
+In-Reply-To: <20170402143717.40a43f24@free-electrons.com>
+References: <20161109100305.6261-1-jezz@sysmic.org>
+ <20170402143717.40a43f24@free-electrons.com>
+Message-ID: <20170402211429.GB21845@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3284e1e2b4984ac487e04d0d826a49351dc0fc38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+J?r?me, All,
 
-To properly autoreconf, the xorg macros, from host-xutil_util-macros,
-are needed.
+On 2017-04-02 14:37 +0200, Thomas Petazzoni spake thusly:
+> On Wed,  9 Nov 2016 11:03:05 +0100, J?r?me Pouiller wrote:
+> > Compiling Qemu statically allows to use it to chroot into target/. It is a
+> > nice feature, so add an option for it.
+> > 
+> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> > ---
+> >  package/qemu/Config.in.host | 26 ++++++++++++++++++++++++++
+> >  package/qemu/qemu.mk        |  4 ++++
+> >  2 files changed, 30 insertions(+)
+> 
+> Now that this patch is committed, we are seeing some build failures on
+> host-qemu when linked statically:
+> 
+>   http://autobuild.buildroot.net/results/6bc/6bcfabc020fede51adcfafc9a570df5884d95696/build-end.log
+>   http://autobuild.buildroot.net/results/4d0/4d0182da77cf386e57acf0565a18fc4628abbdc8/build-end.log
+> 
+> Could you have a look?
 
-Fixes:
-    http://autobuild.buildroot.org/results/2e8/2e887c25b22bd36eab36ff361645306c8ddb79aa/
-    http://autobuild.buildroot.org/results/7c0/7c0050d63a1d34eecb6d16e2654369cea561707a/
-    http://autobuild.buildroot.org/results/2ef/2ef3d6d74c56632c012b85e05af6eaf0259b72c9/
-    [...]
+Feel free to grab patches from my okd series (which I lost intetrest in
+sometime ago):
 
-(Thanks Romain for confirming the fix on IRC! ;-) )
+    https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/target-qemu
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libdrm/libdrm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+At the time, I had full and complete static-link support with a lot of
+additional dependencies...
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 875d3cc..8223262 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -15,7 +15,8 @@ LIBDRM_INSTALL_STAGING = YES
- 
- LIBDRM_DEPENDENCIES = \
- 	libpthread-stubs \
--	host-pkgconf
-+	host-pkgconf \
-+	host-xutil_util-macros
- 
- LIBDRM_CONF_OPTS = \
- 	--disable-cairo-tests \
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
