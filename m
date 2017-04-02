@@ -1,79 +1,74 @@
-From: Stefan Nickl <stefan.nickl@gmail.com>
-Date: Sun, 2 Apr 2017 21:07:27 +0200
-Subject: [Buildroot] [PATCH] lpppd: new package
-In-Reply-To: <20170401210505.GA3663@scaer>
-References: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
- <20170401184051.7f6c1252@free-electrons.com> <20170401210505.GA3663@scaer>
-Message-ID: <CAFOMc=Qz_2CCgiMrsYSBMRUfzeMUNZ3J1mWMVP0N6C8bPFORcw@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun,  2 Apr 2017 21:46:48 +0200
+Subject: [Buildroot] [Patch v4 0/3] Add support for the Rust programming
+	language
+Message-ID: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Yann,
+This series adds support for the Rust programming language by providing a
+package for the host variant of the Rust compiler, able to cross-compile code
+for ARM, MIPS, PowerPC and x86_64 architectures.
 
-On Sat, Apr 1, 2017 at 11:05 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Stefan, All,
->
-> On 2017-04-01 18:40 +0200, Thomas Petazzoni spake thusly:
->> On Mon,  2 Jan 2017 23:38:24 +0100, stefan.nickl at gmail.com wrote:
->> > From: Stefan Nickl <Stefan.Nickl@gmail.com>
->> >
->> > After the official github repository for PPP has not seen
->> > any activity for a long time, I've created a fork that
->> > tries to do some modernization and shed some legacy.
->> > For more info, please see https://github.com/snickl/lpppd
->> >
->> > It is inteded as a drop-in replacement for the original PPP,
->> > therefore I've marked it as conflicting with the existing pppd
->> > package.
->> >
->> > Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
->>
->> I do appreciate your interest in making the pppd development active
->> again. However, at this point, I don't see what is the benefit of using
->> lpppd over pppd, and having two separate packages is a bit annoying.
->> Therefore, I would prefer to wait for lpppd to gain some traction
->> before packaging it in Buildroot.
->
-> I kind of agree with Thomas here.
->
-> lpppd is a new fork of a well-established project, so it will have to
-> offer enough of an edge before it can displace pppd.
->
-> However, I agree with you that there is no activity in upstream pppd.
-> Maybe you could talk with upstream to adopt the package instead of
-> forking?
+As the Rust compiler is written in Rust and uses Cargo, the Rust package
+manager, as build system, two additional packages are provided: rust-bootstrap
+and cargo-bootstrap.
 
-The trouble with ppp (as in "Paul's PPP package") is that it carries a
-lot of baggage through its wide range of support for different systems
-and legacy protocols.
+v3 -> v4:
 
-Now I'm one guy interested only in the embedded Linux use case, and
-the approach with lpppd is to focus on that, shedding stuff like
-Solaris and IPX support in the hope that what remains will be
-maintainable and testable.
+ - bump rust to 1.16.0
+ - bump rust-bootstrap to 1.15.1
+ - add cargo-bootstrap
+ - use built-in target specifications
+ - drop external Python script to generate target specifications
+ - enable support for PowerPC
+ - expose host variant in menuconfig
 
-Interestingly enough, Paul Mackerras showed up on the github project
-half a month ago and accepted some pull requests, but has not followed
-up on any of the comments I made there since, so I guess the upstream
-project will continue to remain in this sort of limbo state.
+v2 -> v3:
 
-I'm also pretty sure there are other people out there that still
-depend on much of this legacy support, so a fork with much narrower
-goals seems like the only way for moving forward the embedded Linux
-case, and getting e.g. support for musl-libc in.
+ - bump rust to 1.10.0
+ - rework and bump rust-bootstrap to 1.9.0
+ - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
+ - rust requires a glibc-based cross-compiler
+ - rust requires GCC 5.x or above for Aarch64
 
-I can fully understand that you'd rather see the fork getting traction
-outside of Buildroot first, but I'm submitting lpppd in an attempt to
-overcome that chicken-and-egg dilemma from the other side, by getting
-the fork some visibility towards a like-minded audience and see if it
-sticks.
+v1 -> v2:
 
-So the decision is up to you guys; I'd rather you not accept it for
-now than setting expectations towards myself that I might not be able
-to keep.
+ - bump rust to version 1.9.0.
+ - drop patch for bzip2 support in host-python.
+ - add package for jemalloc.
+ - add dependency on host being a x86 machine.
+ - add dependency on toolchain.
+ - use dedicated package to provide bootstrapping binary: rust-bootstrap.
+ - let ./configure find out host/build on its own.
+ - remove entry from configuration menu.
+ - clarify some comments.
 
--- 
-Stefan
+Eric Le Bihan (3):
+  rust-bootstrap: new package
+  cargo-bootstrap: new package
+  rust: new package
+
+ DEVELOPERS                                   |  3 +
+ package/Config.in.host                       |  1 +
+ package/cargo-bootstrap/cargo-bootstrap.hash |  3 +
+ package/cargo-bootstrap/cargo-bootstrap.mk   | 14 +++++
+ package/rust-bootstrap/rust-bootstrap.hash   |  5 ++
+ package/rust-bootstrap/rust-bootstrap.mk     | 37 ++++++++++++
+ package/rust/Config.in.host                  | 33 +++++++++++
+ package/rust/rust.hash                       |  2 +
+ package/rust/rust.mk                         | 85 ++++++++++++++++++++++++++++
+ 9 files changed, 183 insertions(+)
+ create mode 100644 package/cargo-bootstrap/cargo-bootstrap.hash
+ create mode 100644 package/cargo-bootstrap/cargo-bootstrap.mk
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.hash
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.mk
+ create mode 100644 package/rust/Config.in.host
+ create mode 100644 package/rust/rust.hash
+ create mode 100644 package/rust/rust.mk
+
+--
+2.9.3
