@@ -1,77 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Apr 2017 10:32:05 +0200
+Date: Mon, 3 Apr 2017 10:31:48 +0200
 Subject: [Buildroot] [git commit branch/2017.02.x] audiofile: add security
-	patch for CVE-2017-6839
-Message-ID: <20170403090113.CF0A980291@busybox.osuosl.org>
+	patch for CVE-2017-6830 / CVE-2017-6834 / CVE-2017-6836 /
+	CVE-2017-6838
+Message-ID: <20170403090113.B0A0181D2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6338df7dea0dcca5c1ff2689008dd058bce677e8
+commit: https://git.buildroot.net/buildroot/commit/?id=16daa3c10dbba15bc1e2bec590c1489c967a59e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Integer overflow in modules/MSADPCM.cpp in Audio File Library (aka
+CVE-2017-6830: A heap-based buffer overflow in the alaw2linear_buf function
+in G711.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
+attackers to cause a denial of service (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-alaw2linear_buf-g711-cpp
+https://github.com/mpruett/audiofile/issues/34
+
+CVE-2017-6834: A heap-based buffer overflow in the ulaw2linear_buf function
+in G711.cpp in Audio File Library (aka audiofile) 0.3.6 allows remote
+attackers to cause a denial of service (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-ulaw2linear_buf-g711-cpp
+https://github.com/mpruett/audiofile/issues/38
+
+CVE-2017-6836: A heap-based buffer overflow in the Expand3To4Module::run
+function in libaudiofile/modules/SimpleModule.h in Audio File Library (aka
 audiofile) 0.3.6 allows remote attackers to cause a denial of service
 (crash) via a crafted file.
+
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-heap-based-buffer-overflow-in-expand3to4modulerun-simplemodule-h
+https://github.com/mpruett/audiofile/issues/40
+
+CVE-2017-6838: Integer overflow in sfcommands/sfconvert.c in Audio File
+Library (aka audiofile) 0.3.6 allows remote attackers to cause a denial of
+service (crash) via a crafted file.
 
 https://blogs.gentoo.org/ago/2017/02/20/audiofile-multiple-ubsan-crashes/
 https://github.com/mpruett/audiofile/issues/41
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 844a7c6281eb442881330a5d36d5a0719f2870bf)
+(cherry picked from commit 4a1a8277bba490d227f413e218138e39f1fe1203)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ultiplication-overflow-in-MSADPCM-decodeS.patch | 122 +++++++++++++++++++++
- 1 file changed, 122 insertions(+)
+ ...-for-multiplication-overflow-in-sfconvert.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/package/audiofile/0007-Check-for-multiplication-overflow-in-MSADPCM-decodeS.patch b/package/audiofile/0007-Check-for-multiplication-overflow-in-MSADPCM-decodeS.patch
+diff --git a/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch b/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch
 new file mode 100644
-index 0000000..5411f13
+index 0000000..c726190
 --- /dev/null
-+++ b/package/audiofile/0007-Check-for-multiplication-overflow-in-MSADPCM-decodeS.patch
-@@ -0,0 +1,122 @@
-+From beacc44eb8cdf6d58717ec1a5103c5141f1b37f9 Mon Sep 17 00:00:00 2001
++++ b/package/audiofile/0005-Check-for-multiplication-overflow-in-sfconvert.patch
+@@ -0,0 +1,72 @@
++From 7d65f89defb092b63bcbc5d98349fb222ca73b3c Mon Sep 17 00:00:00 2001
 +From: Antonio Larrosa <larrosa@kde.org>
-+Date: Mon, 6 Mar 2017 13:43:53 +0100
-+Subject: [PATCH] Check for multiplication overflow in MSADPCM decodeSample
++Date: Mon, 6 Mar 2017 13:54:52 +0100
++Subject: [PATCH] Check for multiplication overflow in sfconvert
 +
-+Check for multiplication overflow (using __builtin_mul_overflow
-+if available) in MSADPCM.cpp decodeSample and return an empty
-+decoded block if an error occurs.
++Checks that a multiplication doesn't overflow when
++calculating the buffer size, and if it overflows,
++reduce the buffer size instead of failing.
 +
-+This fixes the 00193-audiofile-signintoverflow-MSADPCM case of #41
++This fixes the 00192-audiofile-signintoverflow-sfconvert case
++in #41
 +
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ libaudiofile/modules/BlockCodec.cpp |  5 ++--
-+ libaudiofile/modules/MSADPCM.cpp    | 47 +++++++++++++++++++++++++++++++++----
-+ 2 files changed, 46 insertions(+), 6 deletions(-)
++ sfcommands/sfconvert.c | 34 ++++++++++++++++++++++++++++++++--
++ 1 file changed, 32 insertions(+), 2 deletions(-)
 +
-+diff --git a/libaudiofile/modules/BlockCodec.cpp b/libaudiofile/modules/BlockCodec.cpp
-+index 45925e8..4731be1 100644
-+--- a/libaudiofile/modules/BlockCodec.cpp
-++++ b/libaudiofile/modules/BlockCodec.cpp
-+@@ -52,8 +52,9 @@ void BlockCodec::runPull()
-+ 	// Decompress into m_outChunk.
-+ 	for (int i=0; i<blocksRead; i++)
-+ 	{
-+-		decodeBlock(static_cast<const uint8_t *>(m_inChunk->buffer) + i * m_bytesPerPacket,
-+-			static_cast<int16_t *>(m_outChunk->buffer) + i * m_framesPerPacket * m_track->f.channelCount);
-++		if (decodeBlock(static_cast<const uint8_t *>(m_inChunk->buffer) + i * m_bytesPerPacket,
-++			static_cast<int16_t *>(m_outChunk->buffer) + i * m_framesPerPacket * m_track->f.channelCount)==0)
-++			break;
-+ 
-+ 		framesRead += m_framesPerPacket;
-+ 	}
-+diff --git a/libaudiofile/modules/MSADPCM.cpp b/libaudiofile/modules/MSADPCM.cpp
-+index 8ea3c85..ef9c38c 100644
-+--- a/libaudiofile/modules/MSADPCM.cpp
-++++ b/libaudiofile/modules/MSADPCM.cpp
-+@@ -101,24 +101,60 @@ static const int16_t adaptationTable[] =
-+ 	768, 614, 512, 409, 307, 230, 230, 230
-+ };
++diff --git a/sfcommands/sfconvert.c b/sfcommands/sfconvert.c
++index 80a1bc4..970a3e4 100644
++--- a/sfcommands/sfconvert.c
+++++ b/sfcommands/sfconvert.c
++@@ -45,6 +45,33 @@ void printusage (void);
++ void usageerror (void);
++ bool copyaudiodata (AFfilehandle infile, AFfilehandle outfile, int trackid);
 + 
 ++int firstBitSet(int x)
 ++{
@@ -100,57 +107,23 @@ index 0000000..5411f13
 ++#endif
 ++}
 ++
-++
-+ // Compute a linear PCM value from the given differential coded value.
-+ static int16_t decodeSample(ms_adpcm_state &state,
-+-	uint8_t code, const int16_t *coefficient)
-++	uint8_t code, const int16_t *coefficient, bool *ok=NULL)
++ int main (int argc, char **argv)
 + {
-+ 	int linearSample = (state.sample1 * coefficient[0] +
-+ 		state.sample2 * coefficient[1]) >> 8;
-++	int delta;
++ 	if (argc == 2)
++@@ -323,8 +350,11 @@ bool copyaudiodata (AFfilehandle infile, AFfilehandle outfile, int trackid)
++ {
++ 	int frameSize = afGetVirtualFrameSize(infile, trackid, 1);
 + 
-+ 	linearSample += ((code & 0x08) ? (code - 0x10) : code) * state.delta;
++-	const int kBufferFrameCount = 65536;
++-	void *buffer = malloc(kBufferFrameCount * frameSize);
+++	int kBufferFrameCount = 65536;
+++	int bufferSize;
+++	while (multiplyCheckOverflow(kBufferFrameCount, frameSize, &bufferSize))
+++		kBufferFrameCount /= 2;
+++	void *buffer = malloc(bufferSize);
 + 
-+ 	linearSample = clamp(linearSample, MIN_INT16, MAX_INT16);
-+ 
-+-	int delta = (state.delta * adaptationTable[code]) >> 8;
-++	if (multiplyCheckOverflow(state.delta, adaptationTable[code], &delta))
-++	{
-++                if (ok) *ok=false;
-++		_af_error(AF_BAD_COMPRESSION, "Error decoding sample");
-++		return 0;
-++	}
-++	delta >>= 8;
-+ 	if (delta < 16)
-+ 		delta = 16;
-+ 
-+ 	state.delta = delta;
-+ 	state.sample2 = state.sample1;
-+ 	state.sample1 = linearSample;
-++	if (ok) *ok=true;
-+ 
-+ 	return static_cast<int16_t>(linearSample);
-+ }
-+@@ -212,13 +248,16 @@ int MSADPCM::decodeBlock(const uint8_t *encoded, int16_t *decoded)
-+ 	{
-+ 		uint8_t code;
-+ 		int16_t newSample;
-++		bool ok;
-+ 
-+ 		code = *encoded >> 4;
-+-		newSample = decodeSample(*state[0], code, coefficient[0]);
-++		newSample = decodeSample(*state[0], code, coefficient[0], &ok);
-++		if (!ok) return 0;
-+ 		*decoded++ = newSample;
-+ 
-+ 		code = *encoded & 0x0f;
-+-		newSample = decodeSample(*state[1], code, coefficient[1]);
-++		newSample = decodeSample(*state[1], code, coefficient[1], &ok);
-++		if (!ok) return 0;
-+ 		*decoded++ = newSample;
-+ 
-+ 		encoded++;
++ 	AFframecount totalFrames = afGetFrameCount(infile, AF_DEFAULT_TRACK);
++ 	AFframecount totalFramesWritten = 0;
 +-- 
 +2.11.0
 +
