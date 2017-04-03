@@ -1,95 +1,70 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 3 Apr 2017 15:01:01 +0200
-Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
- BR2_GENIMAGE_CFG_FILES
-In-Reply-To: <4d773ae6-949d-800e-938b-f9780b25c2e9@mind.be>
-References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
- <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
- <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
- <f2428cf7-660e-f22d-0e5e-4b22e1abf870@andin.de>
- <4d773ae6-949d-800e-938b-f9780b25c2e9@mind.be>
-Message-ID: <6948dd58-dd05-8b72-6249-7c230035c62c@andin.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Apr 2017 15:02:17 +0200
+Subject: [Buildroot] libintl static linking issues - yet another spin
+In-Reply-To: <c5d92f69-e151-293b-3b77-3b2b061d0e50@mind.be>
+References: <20170326235320.448e802a@free-electrons.com>
+ <db756f2e-3dda-2fcc-6035-3287b88acf29@mind.be>
+ <20170328222525.005b27bb@free-electrons.com>
+ <66e02263-8faf-0601-e3ba-18501de7c6ef@mind.be>
+ <20170403130149.6ccffe4e@free-electrons.com>
+ <b2eb7b3c-1205-a1c1-fdd2-bfb1bafcfa66@mind.be>
+ <20170403141147.0376b102@free-electrons.com>
+ <c5d92f69-e151-293b-3b77-3b2b061d0e50@mind.be>
+Message-ID: <20170403150217.788f6130@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Am 31.03.2017 um 18:34 schrieb Arnout Vandecappelle:
->
->
-> On 31-03-17 09:46, Andreas Naumann wrote:
->> Hi Phelip,
->>
->> Am 31.03.2017 um 00:51 schrieb Arnout Vandecappelle:
->>>
->>>  I'm still not entirely sure if this new option is worthwhile. Without it, you
->>> would instead need
->>>
->>> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->>> BR2_ROOTFS_POST_SCRIPT_ARGS="board/acmesystems/aria-g25/genimage.cfg"
->>>
->>> Not really complicated either... The only real advantage I see is that it
->>> motivates people more to use genimage (which is otherwise a bit hidden). But for
->>> that, a paragraph or two in docs/manual/customize-post-image.txt would also
->>> work. By the way, even for this series an explanation of the option would be
->>> required in that file.
->>>
->>>  What do the others think?
->>
->> I have a slightly different use case than most genimage configs in buildroot
->> right now. This is, I use genimage's ability to split my customized rootfs into
->> multiple filesystems in order to give them them ro/writeable and other
->> capabilities as appropriate.
->> Thus to preserve ownership and such I need to run genimage under fakeroot.
->
->  It would indeed make sense to run genimage under fakeroot, but then it'd need
-> to have some option to extract the tarball first. Actually, that's something
-> that could be added to the genimage.sh script at some point...
->
->> Currently I do this explicitely in a post image script. An improvement I think
->> about is switching to using the post fakeroot integration which buildroot
->> provides since a while.
->>
->> So unless this becomes some kind of option, your proposed change probably
->> wouldnt work for me.
->
->  It is certainly optional, you can always call genimage directly from you
-> post-image script. You can also call the genimage.sh script but I don't know if
-> that's useful in your case.
+On Mon, 3 Apr 2017 14:45:12 +0200, Arnout Vandecappelle wrote:
 
-True, Phelip's option [RFC 2/4] doesnt take away other options.
+>  And I guess musl also has it in a single libc? Yeah, I don't see a libintl
+> there so I guess it's bundled.
+> 
+>  If we do enable the stubs in uClibc, and a packages links with -lintl, then in
+> fact the full gettext will be used and the stubs are not even linked in
+> (statically or dynamically), correct? In that case, we could indeed enable the
+> stubs in uClibc. As a result, in static linking, any package that links with
+> gettext but forgets an explicit -lintl will use the stubs instead of the full
+> implementation. So the package still works, but without translations.
 
->
->> What I was thinking about in the past would be a deeper integration of genimage
->> in buildroots filesystem configuration, actually generating the genimage config.
->> But so far it was not worth the effort for me.
->
->  We have considered that in the past. The problem is that genimage doesn't
-> support some of the options that we do. Otherwise, however, it would be really
+Does this actually work? Won't the linker complain about conflicting
+symbols between libintl and libc? Are weak symbols in libc also working
+in static linking scenarios?
 
-Are you refering to filesystem-specific options or missing ones like 
-axfs, cloop, cramfs?
+>  As a side note, pretty much independent of this issue: I wonder if our
+> BR2_NEEDS_GETTEXT_IF_LOCALE approach really is the right thing to do. It
+> basically says: if a package is able to use translations, we force translations
+> (by enabling gettext). Wouldn't it be much more appropriate to remove all those
+> selects from Config.in, and instead just add to _DEPENDENCIES:
+> $(if $(BR2_PACKAGE_GETTEXT),gettext) ? That allows the user to choose whether or
+> not they want translations.
 
+No, that's not what BR2_NEEDS_GETTEXT_IF_LOCALE says. What
+BR2_NEEDS_GETTEXT_IF_LOCALE is really what it means: the package really
+absolutely NEEDS gettext to be available if locale support is available
+in the toolchain. I.e, with locale support enabled, the package would
+*NOT* build if gettext is not available.
 
-> nice to remove all our messy filesystem handling code and just generate a
-> genimage.cfg file...
->
->  OTOH we also considered that a full image typically needs more than just a
-> single filesystem, so generating a genimage.cfg for part of the image seems a
-> bit pointless.
+Of course, there might be incorrect uses of BR2_NEEDS_GETTEXT_IF_LOCALE
+that don't follow this rule, and they should be fixed as you suggest,
+but BR2_NEEDS_GETTEXT_IF_LOCALE remains needed for the case I explained
+above. See the documentation:
 
-I dont quite understand. Do you mean combining e.g. a standard and a 
-rescue system?
+"""
+Packages that need gettext only when locale support is enabled should:
 
+    use select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE in
+    the Config.in file; 
+"""
 
-regards,
-Andreas
+Best regards,
 
-
->
->  Regards,
->  Arnout
->
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
