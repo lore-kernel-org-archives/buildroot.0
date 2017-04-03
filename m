@@ -1,39 +1,41 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 3 Apr 2017 14:30:44 +0200
-Subject: [Buildroot] libintl static linking issues - yet another spin
-In-Reply-To: <20170403141147.0376b102@free-electrons.com>
-References: <20170326235320.448e802a@free-electrons.com>
- <db756f2e-3dda-2fcc-6035-3287b88acf29@mind.be>
- <20170328222525.005b27bb@free-electrons.com>
- <66e02263-8faf-0601-e3ba-18501de7c6ef@mind.be>
- <20170403130149.6ccffe4e@free-electrons.com>
- <b2eb7b3c-1205-a1c1-fdd2-bfb1bafcfa66@mind.be>
- <20170403141147.0376b102@free-electrons.com>
-Message-ID: <20170403123044.GI5361@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Apr 2017 14:31:23 +0200
+Subject: [Buildroot] [git commit] btrfs-progs: bump version to 4.10.2
+Message-ID: <20170403123128.D02AD7FB10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
+commit: https://git.buildroot.net/buildroot/commit/?id=872ec6ed1c0afbd7a1f7dda989a57b14ef4eff7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> 
-> On Mon, 3 Apr 2017 13:25:11 +0200, Arnout Vandecappelle wrote:
-> 
-> >  Would the libintl from uClibc make it easier to do static linking, i.e. is it
-> > in libc or in a separate libintl library?
-> 
-> It is in libc I believe, since uClibc now has everything in libc. So it
-> does make things a *lot* easier for static linking.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Yes, it is included in libc when activated.
-It was added to allow packages which use libintl to at least
-be usable in a limited way (as stub.)
-
-It might help in some cases, but surely not in all cases.
-
-gru?
- Waldemar
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index be34aa5..17dedba 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 6c16b642f085d203fdcb3873f002a67a6cb839528b2a5ad7f2bd04c525101a1a  btrfs-progs-v4.10.1.tar.xz
++sha256 ed09df670338562a52d9e7d76a362cc932737e2a67adca4c09395374be1de60a  btrfs-progs-v4.10.2.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 1504303..6594e51 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BTRFS_PROGS_VERSION = 4.10.1
++BTRFS_PROGS_VERSION = 4.10.2
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
