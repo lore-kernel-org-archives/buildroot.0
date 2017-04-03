@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 3 Apr 2017 11:13:57 +0100
-Subject: [Buildroot] [PATCH] sqlite: bump version to 3180000 (3.18.0)
-Message-ID: <20170403101357.2649-1-Vincent.Riera@imgtec.com>
+Date: Mon, 3 Apr 2017 11:14:49 +0100
+Subject: [Buildroot] [PATCH] btrfs-progs: bump version to 4.10.2
+Message-ID: <20170403101449.3122-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 2 +-
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 5c5b8ec..78748b0 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 7bcff1c158ed9e2c0e159c1b4b6c36d4d65dff8c  sqlite-autoconf-3170000.tar.gz
-+sha1 74559194e1dd9b9d577cac001c0e9d370856671b  sqlite-autoconf-3180000.tar.gz
- # Calculated based on the hash above
- sha256 a4e485ad3a16e054765baf6371826b5000beed07e626510896069c0bf013874c  sqlite-autoconf-3170000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 76babd3..af4c571 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index be34aa5..17dedba 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 6c16b642f085d203fdcb3873f002a67a6cb839528b2a5ad7f2bd04c525101a1a  btrfs-progs-v4.10.1.tar.xz
++sha256 ed09df670338562a52d9e7d76a362cc932737e2a67adca4c09395374be1de60a  btrfs-progs-v4.10.2.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 1504303..6594e51 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3170000
-+SQLITE_VERSION = 3180000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
+-BTRFS_PROGS_VERSION = 4.10.1
++BTRFS_PROGS_VERSION = 4.10.2
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
 -- 
 2.10.2
