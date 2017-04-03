@@ -1,124 +1,156 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Apr 2017 10:30:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] pcre: add upstream
-	security fixes
-Message-ID: <20170403090113.5C7E380291@busybox.osuosl.org>
+Date: Mon, 3 Apr 2017 10:32:05 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] audiofile: add security
+	patch for CVE-2017-6839
+Message-ID: <20170403090113.CF0A980291@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eb481bbfea238ee6c0b9258ef039a9a20a3dac4
+commit: https://git.buildroot.net/buildroot/commit/?id=6338df7dea0dcca5c1ff2689008dd058bce677e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Take Debian adapted patches of upstream.
+Integer overflow in modules/MSADPCM.cpp in Audio File Library (aka
+audiofile) 0.3.6 allows remote attackers to cause a denial of service
+(crash) via a crafted file.
 
-Fixes:
+https://blogs.gentoo.org/ago/2017/02/20/audiofile-multiple-ubsan-crashes/
+https://github.com/mpruett/audiofile/issues/41
 
-CVE-2017-6004: crafted regular expression may cause denial of service
-
-CVE-2017-7186: invalid Unicode property lookup may cause denial of service
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3143910eec12a5b23e853b3177bf316ac186b87a)
+(cherry picked from commit 844a7c6281eb442881330a5d36d5a0719f2870bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/0003-CVE-2017-6004.patch | 21 ++++++++++++
- package/pcre/0004-CVE-2017-7186.patch | 60 +++++++++++++++++++++++++++++++++++
- 2 files changed, 81 insertions(+)
+ ...ultiplication-overflow-in-MSADPCM-decodeS.patch | 122 +++++++++++++++++++++
+ 1 file changed, 122 insertions(+)
 
-diff --git a/package/pcre/0003-CVE-2017-6004.patch b/package/pcre/0003-CVE-2017-6004.patch
+diff --git a/package/audiofile/0007-Check-for-multiplication-overflow-in-MSADPCM-decodeS.patch b/package/audiofile/0007-Check-for-multiplication-overflow-in-MSADPCM-decodeS.patch
 new file mode 100644
-index 0000000..d0b6d51
+index 0000000..5411f13
 --- /dev/null
-+++ b/package/pcre/0003-CVE-2017-6004.patch
-@@ -0,0 +1,21 @@
-+Description: CVE-2017-6004: crafted regular expression may cause denial of service
-+Origin: upstream, https://vcs.pcre.org/pcre/code/trunk/pcre_jit_compile.c?r1=1676&r2=1680&view=patch
-+Bug: https://bugs.exim.org/show_bug.cgi?id=2035
-+Bug-Debian: https://bugs.debian.org/855405
-+Forwarded: not-needed
-+Author: Salvatore Bonaccorso <carnil@debian.org>
-+Last-Update: 2017-02-17
++++ b/package/audiofile/0007-Check-for-multiplication-overflow-in-MSADPCM-decodeS.patch
+@@ -0,0 +1,122 @@
++From beacc44eb8cdf6d58717ec1a5103c5141f1b37f9 Mon Sep 17 00:00:00 2001
++From: Antonio Larrosa <larrosa@kde.org>
++Date: Mon, 6 Mar 2017 13:43:53 +0100
++Subject: [PATCH] Check for multiplication overflow in MSADPCM decodeSample
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Check for multiplication overflow (using __builtin_mul_overflow
++if available) in MSADPCM.cpp decodeSample and return an empty
++decoded block if an error occurs.
 +
-+--- a/pcre_jit_compile.c
-++++ b/pcre_jit_compile.c
-+@@ -8111,7 +8111,7 @@ if (opcode == OP_COND || opcode == OP_SC
-+ 
-+     if (*matchingpath == OP_FAIL)
-+       stacksize = 0;
-+-    if (*matchingpath == OP_RREF)
-++    else if (*matchingpath == OP_RREF)
-+       {
-+       stacksize = GET2(matchingpath, 1);
-+       if (common->currententry == NULL)
-diff --git a/package/pcre/0004-CVE-2017-7186.patch b/package/pcre/0004-CVE-2017-7186.patch
-new file mode 100644
-index 0000000..980923a
---- /dev/null
-+++ b/package/pcre/0004-CVE-2017-7186.patch
-@@ -0,0 +1,60 @@
-+Description: Upstream fix for CVE-2017-7186 (Upstream rev 1688)
-+ Fix Unicode property crash for 32-bit characters greater than 0x10ffff.
-+Author: Matthew Vernon <matthew@debian.org>
-+X-Dgit-Generated: 2:8.39-3 c4c2c7c4f74d53b263af2471d8e11db88096bd13
++This fixes the 00193-audiofile-signintoverflow-MSADPCM case of #41
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
++ libaudiofile/modules/BlockCodec.cpp |  5 ++--
++ libaudiofile/modules/MSADPCM.cpp    | 47 +++++++++++++++++++++++++++++++++----
++ 2 files changed, 46 insertions(+), 6 deletions(-)
 +
-+--- pcre3-8.39.orig/pcre_internal.h
-++++ pcre3-8.39/pcre_internal.h
-+@@ -2772,6 +2772,9 @@ extern const pcre_uint8  PRIV(ucd_stage1
-+ extern const pcre_uint16 PRIV(ucd_stage2)[];
-+ extern const pcre_uint32 PRIV(ucp_gentype)[];
-+ extern const pcre_uint32 PRIV(ucp_gbtable)[];
-++#ifdef COMPILE_PCRE32
-++extern const ucd_record  PRIV(dummy_ucd_record)[];
-++#endif
-+ #ifdef SUPPORT_JIT
-+ extern const int         PRIV(ucp_typerange)[];
-+ #endif
-+@@ -2780,9 +2783,15 @@ extern const int         PRIV(ucp_typera
-+ /* UCD access macros */
++diff --git a/libaudiofile/modules/BlockCodec.cpp b/libaudiofile/modules/BlockCodec.cpp
++index 45925e8..4731be1 100644
++--- a/libaudiofile/modules/BlockCodec.cpp
+++++ b/libaudiofile/modules/BlockCodec.cpp
++@@ -52,8 +52,9 @@ void BlockCodec::runPull()
++ 	// Decompress into m_outChunk.
++ 	for (int i=0; i<blocksRead; i++)
++ 	{
++-		decodeBlock(static_cast<const uint8_t *>(m_inChunk->buffer) + i * m_bytesPerPacket,
++-			static_cast<int16_t *>(m_outChunk->buffer) + i * m_framesPerPacket * m_track->f.channelCount);
+++		if (decodeBlock(static_cast<const uint8_t *>(m_inChunk->buffer) + i * m_bytesPerPacket,
+++			static_cast<int16_t *>(m_outChunk->buffer) + i * m_framesPerPacket * m_track->f.channelCount)==0)
+++			break;
 + 
-+ #define UCD_BLOCK_SIZE 128
-+-#define GET_UCD(ch) (PRIV(ucd_records) + \
-++#define REAL_GET_UCD(ch) (PRIV(ucd_records) + \
-+         PRIV(ucd_stage2)[PRIV(ucd_stage1)[(int)(ch) / UCD_BLOCK_SIZE] * \
-+         UCD_BLOCK_SIZE + (int)(ch) % UCD_BLOCK_SIZE])
-++        
-++#ifdef COMPILE_PCRE32
-++#define GET_UCD(ch) ((ch > 0x10ffff)? PRIV(dummy_ucd_record) : REAL_GET_UCD(ch))
++ 		framesRead += m_framesPerPacket;
++ 	}
++diff --git a/libaudiofile/modules/MSADPCM.cpp b/libaudiofile/modules/MSADPCM.cpp
++index 8ea3c85..ef9c38c 100644
++--- a/libaudiofile/modules/MSADPCM.cpp
+++++ b/libaudiofile/modules/MSADPCM.cpp
++@@ -101,24 +101,60 @@ static const int16_t adaptationTable[] =
++ 	768, 614, 512, 409, 307, 230, 230, 230
++ };
++ 
+++int firstBitSet(int x)
+++{
+++        int position=0;
+++        while (x!=0)
+++        {
+++                x>>=1;
+++                ++position;
+++        }
+++        return position;
+++}
+++
+++#ifndef __has_builtin
+++#define __has_builtin(x) 0
+++#endif
+++
+++int multiplyCheckOverflow(int a, int b, int *result)
+++{
+++#if (defined __GNUC__ && __GNUC__ >= 5) || ( __clang__ && __has_builtin(__builtin_mul_overflow))
+++	return __builtin_mul_overflow(a, b, result);
 ++#else
-++#define GET_UCD(ch) REAL_GET_UCD(ch)
-++#endif 
-+ 
-+ #define UCD_CHARTYPE(ch)    GET_UCD(ch)->chartype
-+ #define UCD_SCRIPT(ch)      GET_UCD(ch)->script
-+--- pcre3-8.39.orig/pcre_ucd.c
-++++ pcre3-8.39/pcre_ucd.c
-+@@ -38,6 +38,20 @@ const pcre_uint16 PRIV(ucd_stage2)[] = {
-+ const pcre_uint32 PRIV(ucd_caseless_sets)[] = {0};
-+ #else
-+ 
-++/* If the 32-bit library is run in non-32-bit mode, character values
-++greater than 0x10ffff may be encountered. For these we set up a
-++special record. */
-++
-++#ifdef COMPILE_PCRE32
-++const ucd_record PRIV(dummy_ucd_record)[] = {{
-++  ucp_Common,    /* script */
-++  ucp_Cn,        /* type unassigned */
-++  ucp_gbOther,   /* grapheme break property */
-++  0,             /* case set */
-++  0,             /* other case */
-++  }};
+++	if (firstBitSet(a)+firstBitSet(b)>31) // int is signed, so we can't use 32 bits
+++		return true;
+++	*result = a * b;
+++	return false;
 ++#endif
+++}
 ++
-+ /* When recompiling tables with a new Unicode version, please check the
-+ types in this structure definition from pcre_internal.h (the actual
-+ field names will be different):
+++
++ // Compute a linear PCM value from the given differential coded value.
++ static int16_t decodeSample(ms_adpcm_state &state,
++-	uint8_t code, const int16_t *coefficient)
+++	uint8_t code, const int16_t *coefficient, bool *ok=NULL)
++ {
++ 	int linearSample = (state.sample1 * coefficient[0] +
++ 		state.sample2 * coefficient[1]) >> 8;
+++	int delta;
++ 
++ 	linearSample += ((code & 0x08) ? (code - 0x10) : code) * state.delta;
++ 
++ 	linearSample = clamp(linearSample, MIN_INT16, MAX_INT16);
++ 
++-	int delta = (state.delta * adaptationTable[code]) >> 8;
+++	if (multiplyCheckOverflow(state.delta, adaptationTable[code], &delta))
+++	{
+++                if (ok) *ok=false;
+++		_af_error(AF_BAD_COMPRESSION, "Error decoding sample");
+++		return 0;
+++	}
+++	delta >>= 8;
++ 	if (delta < 16)
++ 		delta = 16;
++ 
++ 	state.delta = delta;
++ 	state.sample2 = state.sample1;
++ 	state.sample1 = linearSample;
+++	if (ok) *ok=true;
++ 
++ 	return static_cast<int16_t>(linearSample);
++ }
++@@ -212,13 +248,16 @@ int MSADPCM::decodeBlock(const uint8_t *encoded, int16_t *decoded)
++ 	{
++ 		uint8_t code;
++ 		int16_t newSample;
+++		bool ok;
++ 
++ 		code = *encoded >> 4;
++-		newSample = decodeSample(*state[0], code, coefficient[0]);
+++		newSample = decodeSample(*state[0], code, coefficient[0], &ok);
+++		if (!ok) return 0;
++ 		*decoded++ = newSample;
++ 
++ 		code = *encoded & 0x0f;
++-		newSample = decodeSample(*state[1], code, coefficient[1]);
+++		newSample = decodeSample(*state[1], code, coefficient[1], &ok);
+++		if (!ok) return 0;
++ 		*decoded++ = newSample;
++ 
++ 		encoded++;
++-- 
++2.11.0
++
