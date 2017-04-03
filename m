@@ -1,62 +1,85 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 3 Apr 2017 10:41:28 -0300 (BRT)
-Subject: [Buildroot] [PATCH v3 2/2] systemd: select util-linux/fsck and
- e2fsprogs/e2fsck
-In-Reply-To: <3f5305c2-c524-3766-6569-af36901311b7@mind.be>
-References: <1491154114-14797-1-git-send-email-casantos@datacom.ind.br>
- <1491154114-14797-3-git-send-email-casantos@datacom.ind.br>
- <3f5305c2-c524-3766-6569-af36901311b7@mind.be>
-Message-ID: <902712529.17369661.1491226888495.JavaMail.zimbra@datacom.ind.br>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Apr 2017 15:54:46 +0200
+Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
+ BR2_GENIMAGE_CFG_FILES
+In-Reply-To: <6948dd58-dd05-8b72-6249-7c230035c62c@andin.de>
+References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
+ <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
+ <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
+ <f2428cf7-660e-f22d-0e5e-4b22e1abf870@andin.de>
+ <4d773ae6-949d-800e-938b-f9780b25c2e9@mind.be>
+ <6948dd58-dd05-8b72-6249-7c230035c62c@andin.de>
+Message-ID: <b10839b0-389e-f445-ab41-269480c387e3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
-> Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
-> Sent: Monday, April 3, 2017 10:26:26 AM
-> Subject: Re: [Buildroot] [PATCH v3 2/2] systemd: select util-linux/fsck and e2fsprogs/e2fsck
 
-> On 02-04-17 19:28, Carlos Santos wrote:
->> e2fsprogs does not override/remove the fsck from util-linux anymore when
->> /sbin and /usr/sbin are merged. So we can select the fsck tools required
->> by systemd provided by those packages. This also prevents ending up with
->> the fsck from busybox, which is incompatible with systemd.
->> 
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
->> ---
->>  package/systemd/Config.in | 3 +++
->>  1 file changed, 3 insertions(+)
->> 
->> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
->> index 0f54686..f5eb9d0 100644
->> --- a/package/systemd/Config.in
->> +++ b/package/systemd/Config.in
->> @@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
->>  	select BR2_PACKAGE_UTIL_LINUX_BINARIES
->>  	select BR2_PACKAGE_UTIL_LINUX_MOUNT
->>  	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
->> +	select BR2_PACKAGE_UTIL_LINUX_FSCK
-> 
-> I agree with this bit. If I understand correctly, as soon as you have *some*
-> filesystem configured (or hotplugged), systemd will call fsck with an option not
-> known to busybox/e2fsprogs fsck and will barf.
-> 
->> +	select BR2_PACKAGE_E2FSPROGS
->> +	select BR2_PACKAGE_E2FSPROGS_E2FSCK
-> 
-> I don't agree with this bit: it should only be necessary when there is an ext2
-> filesystem somewhere. And even so, with a 'nofail' in fstab, it's not an error
-> if the fsck.ext2 is missing. Therefore, it's up to the user to select it IMO. At
-> most, add something to the help text about it.
 
-Good point. I will submit a new patch set removing the selection of
-e2fsprogs.
+On 03-04-17 15:01, Andreas Naumann wrote:
+>>> What I was thinking about in the past would be a deeper integration of genimage
+>>> in buildroots filesystem configuration, actually generating the genimage config.
+>>> But so far it was not worth the effort for me.
+>>
+>>  We have considered that in the past. The problem is that genimage doesn't
+>> support some of the options that we do. Otherwise, however, it would be really
+> 
+> Are you refering to filesystem-specific options or missing ones like axfs,
+> cloop, cramfs?
+
+ I'm refering to filesystem-specific options. E.g. AFAIK genimage doesn't allow
+configuration of ext2 #inodes or reserved blocks, or UBIFS max LEB count or
+compression.
+
+
+>> nice to remove all our messy filesystem handling code and just generate a
+>> genimage.cfg file...
+
+ And my point here is: we could just extend genimage with all those options.
+Then we can use genimage instead of our rootfs handling. For the most part, the
+rootfs infra could be reduced to a single genimage.cfg file.
+
+ But as usual: all that would be nice in a way, but doesn't give us any direct
+advantage over what we have now, and what we have now works.
+
+
+>>
+>>  OTOH we also considered that a full image typically needs more than just a
+>> single filesystem, so generating a genimage.cfg for part of the image seems a
+>> bit pointless.
+> 
+> I dont quite understand. Do you mean combining e.g. a standard and a rescue system?
+
+ In practice, you rarely use the .ext2 or .ubifs image produced by Buildroot
+directly; instead, you'll embed it into a larger image that is a lot more
+complicated than e.g. the .ubi image offered by Buildroot (because you'd want a
+writeable data volume in addition to the ubifs rootfs).
+
+ So if we would use genimage for generating the .ext2 rootfs itself, then in
+practice you'll often end up running genimage twice: once for the .ext2 rootfs,
+and a second time to integrate it in a larger image.
+
+
+ Coming back to the BR2_GENIMAGE_CFG_FILES option: actually it would make a
+whole lot more sense if the genimage were executed under fakeroot, because then
+we no longer need to generate the .ext2 subimage.
+
+ Still, there is hardly any advantage over having this as an explicit option
+rather than configuring
+
+BR2_ROOTFS_POST_FAKEROOT_SCRIPT="support/scripts/genimage.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="-c path/to/my/genimage.cfg"
+
+ Regards,
+ Arnout
+
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
