@@ -1,32 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Apr 2017 14:11:47 +0200
-Subject: [Buildroot] libintl static linking issues - yet another spin
-In-Reply-To: <b2eb7b3c-1205-a1c1-fdd2-bfb1bafcfa66@mind.be>
-References: <20170326235320.448e802a@free-electrons.com>
- <db756f2e-3dda-2fcc-6035-3287b88acf29@mind.be>
- <20170328222525.005b27bb@free-electrons.com>
- <66e02263-8faf-0601-e3ba-18501de7c6ef@mind.be>
- <20170403130149.6ccffe4e@free-electrons.com>
- <b2eb7b3c-1205-a1c1-fdd2-bfb1bafcfa66@mind.be>
-Message-ID: <20170403141147.0376b102@free-electrons.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Mon,  3 Apr 2017 14:25:43 +0200
+Subject: [Buildroot] [PATCH] package/tyrian: fixes compilation with static
+	libs.
+Message-ID: <1491222343-29223-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-On Mon, 3 Apr 2017 13:25:11 +0200, Arnout Vandecappelle wrote:
+Has been tested with: "./support/scripts/test-pkg -c tyrian.cfg -p opentyrian"
+Fixes: http://autobuild.buildroot.net/results/0e2345db82b33f591958fc0f72ad914adafe0522
+and some similar previous build failure.
 
->  Would the libintl from uClibc make it easier to do static linking, i.e. is it
-> in libc or in a separate libintl library?
+Thanks Thomas for the tip ;-).
 
-It is in libc I believe, since uClibc now has everything in libc. So it
-does make things a *lot* easier for static linking.
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+---
+ package/opentyrian/opentyrian.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
+index 4417512..12e41ad 100644
+--- a/package/opentyrian/opentyrian.mk
++++ b/package/opentyrian/opentyrian.mk
+@@ -24,7 +24,7 @@ define OPENTYRIAN_BUILD_CMDS
+ 		CC="$(TARGET_CC)" \
+ 		STRIP="/bin/true" \
+ 		SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config" \
+-		LDFLAGS="-lm" \
++		LDFLAGS="$(TARGET_LDFLAGS) -lm" \
+ 		WITH_NETWORK="$(OPENTYRIAN_NETWORK)" \
+ 		-C $(@D) release
+ endef
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
