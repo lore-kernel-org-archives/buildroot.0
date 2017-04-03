@@ -1,39 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Apr 2017 14:49:15 +0200
-Subject: [Buildroot] [git commit] php-memcached: fix legal info
-Message-ID: <20170403124919.6CAC5826B0@busybox.osuosl.org>
+Date: Mon, 3 Apr 2017 14:56:12 +0200
+Subject: [Buildroot] [git commit] libplatform: use SPDX short identifier for
+	PHP license
+Message-ID: <20170403125752.659C882675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59ee35a5fbaaa993475279da116bd16a31576fbd
+commit: https://git.buildroot.net/buildroot/commit/?id=414591fcc5f74d678fc241adb0c5f6842a8423e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-LICENSE file refer to PHP license version 3.01. License header in all
-source files refer to PHP license version 3.01 except source files for
-fastlz library which is provided under MIT license and g_fmt.{c,h}
-which has ISC-like license header.
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-memcached/php-memcached.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libplatform/libplatform.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
-index ea241b2..c4b7636 100644
---- a/package/php-memcached/php-memcached.mk
-+++ b/package/php-memcached/php-memcached.mk
-@@ -12,8 +12,8 @@ PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
- 	--with-zlib-dir=$(STAGING_DIR)/usr
- # phpize does the autoconf magic
- PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
--PHP_MEMCACHED_LICENSE = MIT
--PHP_MEMCACHED_LICENSE_FILES = LICENSE
-+PHP_MEMCACHED_LICENSE = PHP-3.01, MIT (fastlz), ISC-like (g_fmt.c, g_fmt.h)
-+PHP_MEMCACHED_LICENSE_FILES = LICENSE fastlz/LICENSE g_fmt.h
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+index b253028..d013799 100644
+--- a/package/libplatform/libplatform.mk
++++ b/package/libplatform/libplatform.mk
+@@ -6,7 +6,7 @@
  
- define PHP_MEMCACHED_PHPIZE
- 	(cd $(@D); \
+ LIBPLATFORM_VERSION = feafe68e3e0b02c3261aefb3d711863ef6fadd38
+ LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
+-LIBPLATFORM_LICENSE = GPL-2.0+, PHP license v3.01
++LIBPLATFORM_LICENSE = GPL-2.0+, PHP-3.01
+ LIBPLATFORM_LICENSE_FILES = src/os.h src/util/fstrcmp.c
+ LIBPLATFORM_INSTALL_STAGING = YES
+ 
