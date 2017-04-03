@@ -1,73 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Apr 2017 10:31:40 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] audiofile: add security
-	patch for CVE-2017-6829
-Message-ID: <20170403090113.8862C80291@busybox.osuosl.org>
+Date: Mon, 3 Apr 2017 10:30:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] pcre: add upstream
+	security fixes
+Message-ID: <20170403090113.5C7E380291@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e24ed52e4513ed49810455a91c70f496efbc9cc
+commit: https://git.buildroot.net/buildroot/commit/?id=9eb481bbfea238ee6c0b9258ef039a9a20a3dac4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The decodeSample function in IMA.cpp in Audio File Library (aka audiofile)
-0.3.6 allows remote attackers to cause a denial of service (crash) via a
-crafted file.
+Take Debian adapted patches of upstream.
 
-https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp
-https://github.com/mpruett/audiofile/issues/33
+Fixes:
 
+CVE-2017-6004: crafted regular expression may cause denial of service
+
+CVE-2017-7186: invalid Unicode property lookup may cause denial of service
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 434890df2a7c131b40fec1c49e6239972ab299d2)
+(cherry picked from commit 3143910eec12a5b23e853b3177bf316ac186b87a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-values-to-fix-index-overflow-in-IMA.cpp.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/pcre/0003-CVE-2017-6004.patch | 21 ++++++++++++
+ package/pcre/0004-CVE-2017-7186.patch | 60 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 81 insertions(+)
 
-diff --git a/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
+diff --git a/package/pcre/0003-CVE-2017-6004.patch b/package/pcre/0003-CVE-2017-6004.patch
 new file mode 100644
-index 0000000..21f899a
+index 0000000..d0b6d51
 --- /dev/null
-+++ b/package/audiofile/0004-clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch
-@@ -0,0 +1,39 @@
-+From 25eb00ce913452c2e614548d7df93070bf0d066f Mon Sep 17 00:00:00 2001
-+From: Antonio Larrosa <larrosa@kde.org>
-+Date: Mon, 6 Mar 2017 18:02:31 +0100
-+Subject: [PATCH] clamp index values to fix index overflow in IMA.cpp
++++ b/package/pcre/0003-CVE-2017-6004.patch
+@@ -0,0 +1,21 @@
++Description: CVE-2017-6004: crafted regular expression may cause denial of service
++Origin: upstream, https://vcs.pcre.org/pcre/code/trunk/pcre_jit_compile.c?r1=1676&r2=1680&view=patch
++Bug: https://bugs.exim.org/show_bug.cgi?id=2035
++Bug-Debian: https://bugs.debian.org/855405
++Forwarded: not-needed
++Author: Salvatore Bonaccorso <carnil@debian.org>
++Last-Update: 2017-02-17
 +
-+This fixes #33
-+(also reported at https://bugzilla.opensuse.org/show_bug.cgi?id=1026981
-+and https://blogs.gentoo.org/ago/2017/02/20/audiofile-global-buffer-overflow-in-decodesample-ima-cpp/)
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++--- a/pcre_jit_compile.c
+++++ b/pcre_jit_compile.c
++@@ -8111,7 +8111,7 @@ if (opcode == OP_COND || opcode == OP_SC
++ 
++     if (*matchingpath == OP_FAIL)
++       stacksize = 0;
++-    if (*matchingpath == OP_RREF)
+++    else if (*matchingpath == OP_RREF)
++       {
++       stacksize = GET2(matchingpath, 1);
++       if (common->currententry == NULL)
+diff --git a/package/pcre/0004-CVE-2017-7186.patch b/package/pcre/0004-CVE-2017-7186.patch
+new file mode 100644
+index 0000000..980923a
+--- /dev/null
++++ b/package/pcre/0004-CVE-2017-7186.patch
+@@ -0,0 +1,60 @@
++Description: Upstream fix for CVE-2017-7186 (Upstream rev 1688)
++ Fix Unicode property crash for 32-bit characters greater than 0x10ffff.
++Author: Matthew Vernon <matthew@debian.org>
++X-Dgit-Generated: 2:8.39-3 c4c2c7c4f74d53b263af2471d8e11db88096bd13
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ libaudiofile/modules/IMA.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/libaudiofile/modules/IMA.cpp b/libaudiofile/modules/IMA.cpp
-+index 7476d44..df4aad6 100644
-+--- a/libaudiofile/modules/IMA.cpp
-++++ b/libaudiofile/modules/IMA.cpp
-+@@ -169,7 +169,7 @@ int IMA::decodeBlockWAVE(const uint8_t *encoded, int16_t *decoded)
-+ 		if (encoded[1] & 0x80)
-+ 			m_adpcmState[c].previousValue -= 0x10000;
++--- pcre3-8.39.orig/pcre_internal.h
+++++ pcre3-8.39/pcre_internal.h
++@@ -2772,6 +2772,9 @@ extern const pcre_uint8  PRIV(ucd_stage1
++ extern const pcre_uint16 PRIV(ucd_stage2)[];
++ extern const pcre_uint32 PRIV(ucp_gentype)[];
++ extern const pcre_uint32 PRIV(ucp_gbtable)[];
+++#ifdef COMPILE_PCRE32
+++extern const ucd_record  PRIV(dummy_ucd_record)[];
+++#endif
++ #ifdef SUPPORT_JIT
++ extern const int         PRIV(ucp_typerange)[];
++ #endif
++@@ -2780,9 +2783,15 @@ extern const int         PRIV(ucp_typera
++ /* UCD access macros */
 + 
-+-		m_adpcmState[c].index = encoded[2];
-++		m_adpcmState[c].index = clamp(encoded[2], 0, 88);
++ #define UCD_BLOCK_SIZE 128
++-#define GET_UCD(ch) (PRIV(ucd_records) + \
+++#define REAL_GET_UCD(ch) (PRIV(ucd_records) + \
++         PRIV(ucd_stage2)[PRIV(ucd_stage1)[(int)(ch) / UCD_BLOCK_SIZE] * \
++         UCD_BLOCK_SIZE + (int)(ch) % UCD_BLOCK_SIZE])
+++        
+++#ifdef COMPILE_PCRE32
+++#define GET_UCD(ch) ((ch > 0x10ffff)? PRIV(dummy_ucd_record) : REAL_GET_UCD(ch))
+++#else
+++#define GET_UCD(ch) REAL_GET_UCD(ch)
+++#endif 
 + 
-+ 		*decoded++ = m_adpcmState[c].previousValue;
++ #define UCD_CHARTYPE(ch)    GET_UCD(ch)->chartype
++ #define UCD_SCRIPT(ch)      GET_UCD(ch)->script
++--- pcre3-8.39.orig/pcre_ucd.c
+++++ pcre3-8.39/pcre_ucd.c
++@@ -38,6 +38,20 @@ const pcre_uint16 PRIV(ucd_stage2)[] = {
++ const pcre_uint32 PRIV(ucd_caseless_sets)[] = {0};
++ #else
 + 
-+@@ -210,7 +210,7 @@ int IMA::decodeBlockQT(const uint8_t *encoded, int16_t *decoded)
-+ 			predictor -= 0x10000;
-+ 
-+ 		state.previousValue = clamp(predictor, MIN_INT16, MAX_INT16);
-+-		state.index = encoded[1] & 0x7f;
-++		state.index = clamp(encoded[1] & 0x7f, 0, 88);
-+ 		encoded += 2;
-+ 
-+ 		for (int n=0; n<m_framesPerPacket; n+=2)
-+-- 
-+2.11.0
-+
+++/* If the 32-bit library is run in non-32-bit mode, character values
+++greater than 0x10ffff may be encountered. For these we set up a
+++special record. */
+++
+++#ifdef COMPILE_PCRE32
+++const ucd_record PRIV(dummy_ucd_record)[] = {{
+++  ucp_Common,    /* script */
+++  ucp_Cn,        /* type unassigned */
+++  ucp_gbOther,   /* grapheme break property */
+++  0,             /* case set */
+++  0,             /* other case */
+++  }};
+++#endif
+++
++ /* When recompiling tables with a new Unicode version, please check the
++ types in this structure definition from pcre_internal.h (the actual
++ field names will be different):
