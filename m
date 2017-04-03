@@ -1,102 +1,62 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 3 Apr 2017 08:38:58 -0500
-Subject: [Buildroot] [PATCH 2/4] checkpolicy: allow compiling for target
-In-Reply-To: <CAFSsvmpc-DC0wwXgE26GxTxhs0teYn-3zOsA-DCUHTykyQ5JmQ@mail.gmail.com>
-References: <20170202224505.22882-1-Adamduskett@outlook.com>
- <20170202224505.22882-2-Adamduskett@outlook.com>
- <CANQCQpbWU=mO7bGjKaNP=MCpfbMo5wvEFoA8FeKWxCY6Rv8v5A@mail.gmail.com>
- <CANQCQpZQtwN-LUmWrYKh_fZchMKUa+k3pVuctyAwJM5iE0Fv1w@mail.gmail.com>
- <CAFSsvmpc-DC0wwXgE26GxTxhs0teYn-3zOsA-DCUHTykyQ5JmQ@mail.gmail.com>
-Message-ID: <CANQCQpYMJP3ueFrqF0LV=D7Wb-ZkYJvLDgz2-1v5w-CHVQ7y=w@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 3 Apr 2017 10:41:28 -0300 (BRT)
+Subject: [Buildroot] [PATCH v3 2/2] systemd: select util-linux/fsck and
+ e2fsprogs/e2fsck
+In-Reply-To: <3f5305c2-c524-3766-6569-af36901311b7@mind.be>
+References: <1491154114-14797-1-git-send-email-casantos@datacom.ind.br>
+ <1491154114-14797-3-git-send-email-casantos@datacom.ind.br>
+ <3f5305c2-c524-3766-6569-af36901311b7@mind.be>
+Message-ID: <902712529.17369661.1491226888495.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+> From: "Arnout Vandecappelle" <arnout@mind.be>
+> To: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
+> Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+> Sent: Monday, April 3, 2017 10:26:26 AM
+> Subject: Re: [Buildroot] [PATCH v3 2/2] systemd: select util-linux/fsck and e2fsprogs/e2fsck
 
-On Mon, Apr 3, 2017 at 8:14 AM, Adam Duskett <aduskett@gmail.com> wrote:
-> Matthew;
->
-> On Mon, Mar 27, 2017 at 3:13 PM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->> Adam,
->>
->> On Mon, Mar 27, 2017 at 12:04 PM, Matthew Weber
->> <matthew.weber@rockwellcollins.com> wrote:
->>> Adam,
->>>
->>> On Thu, Feb 2, 2017 at 4:45 PM, Adam Duskett <aduskett@gmail.com> wrote:
->>>> checkpolicy is currently a host-only package, however it is a dependency
->>>> of audit2allow.  This patch allows for checkpolicy to be compiled for the
->>>> target.
->>>>
->>>> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
->>>> ---
->>>>  package/Config.in                  |  1 +
->>>>  package/checkpolicy/Config.in      | 11 +++++++++++
->>>>  package/checkpolicy/checkpolicy.mk | 23 +++++++++++++++++++++++
->>>>  3 files changed, 35 insertions(+)
->>>>  create mode 100644 package/checkpolicy/Config.in
->>>>
->>>> diff --git a/package/Config.in b/package/Config.in
->>>> index 9fedc23..90d9273 100644
->>>> --- a/package/Config.in
->>>> +++ b/package/Config.in
->>>> @@ -1706,6 +1706,7 @@ menu "Real-Time"
->>>>  endmenu
->>>>
->>>>  menu "Security"
->>>> +       source "package/checkpolicy/Config.in"
->>>>         source "package/policycoreutils/Config.in"
->>>>         source "package/sepolgen/Config.in"
->>>>         source "package/setools/Config.in"
->>>> diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
->>>> new file mode 100644
->>>> index 0000000..894ce39
->>>> --- /dev/null
->>>> +++ b/package/checkpolicy/Config.in
->>>> @@ -0,0 +1,11 @@
->>>> +config BR2_PACKAGE_CHECKPOLICY
->>>> +       bool "checkpolicy"
->>>> +       select BR2_PACKAGE_FLEX
->>>> +       help
->>>> +         checkpolicy is the SELinux policy compiler. It uses libsepol
->>>> +         to generate the binary policy. checkpolicy uses the static
->>>> +         libsepol since it deals with low level details of the policy
->>>> +         that have not been encapsulated/abstracted by a proper
->>>> +         shared library interface.
->>>> +
->>>> +         http://selinuxproject.org/page/Main_Page
->>>> diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
->>>> index 8328b39..7af5edf 100644
->>>> --- a/package/checkpolicy/checkpolicy.mk
->>>> +++ b/package/checkpolicy/checkpolicy.mk
->>>> @@ -8,6 +8,28 @@ CHECKPOLICY_VERSION = 2.6
->>>>  CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
->>>>  CHECKPOLICY_LICENSE = GPLv2
->>>>  CHECKPOLICY_LICENSE_FILES = COPYING
->>>> +LIBSELINUX_INSTALL_STAGING = YES
->>>
->>> I'd suggest moving the staging install to the libselinux package and
->>> have it selectively set if Checkpolicy's target package is enabled.
->>>
-> Gladly!  Just to make sure I got this right:
-> In the libselinux package, check to see if audit2allow is selected
-> and if so, build checkpolicy.
->
-> This would keep checkpolicy out of the menuconfig which is what would
-> be desired yes?
+> On 02-04-17 19:28, Carlos Santos wrote:
+>> e2fsprogs does not override/remove the fsck from util-linux anymore when
+>> /sbin and /usr/sbin are merged. So we can select the fsck tools required
+>> by systemd provided by those packages. This also prevents ending up with
+>> the fsck from busybox, which is incompatible with systemd.
+>> 
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>> ---
+>>  package/systemd/Config.in | 3 +++
+>>  1 file changed, 3 insertions(+)
+>> 
+>> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+>> index 0f54686..f5eb9d0 100644
+>> --- a/package/systemd/Config.in
+>> +++ b/package/systemd/Config.in
+>> @@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>>  	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+>>  	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+>>  	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+>> +	select BR2_PACKAGE_UTIL_LINUX_FSCK
+> 
+> I agree with this bit. If I understand correctly, as soon as you have *some*
+> filesystem configured (or hotplugged), systemd will call fsck with an option not
+> known to busybox/e2fsprogs fsck and will barf.
+> 
+>> +	select BR2_PACKAGE_E2FSPROGS
+>> +	select BR2_PACKAGE_E2FSPROGS_E2FSCK
+> 
+> I don't agree with this bit: it should only be necessary when there is an ext2
+> filesystem somewhere. And even so, with a 'nofail' in fstab, it's not an error
+> if the fsck.ext2 is missing. Therefore, it's up to the user to select it IMO. At
+> most, add something to the help text about it.
 
-Related to the staging install, in libselinux.mk where you have the
-conditional for BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW, set the
-LIBSELINUX_INSTALL_STAGING = YES.
+Good point. I will submit a new patch set removing the selection of
+e2fsprogs.
 
-For having the sepolgen/checkpolicy appear in the menu vs not, I'd
-leave them as is and have the autobuilders workout any weird
-dependencies.  The other option would be putting conditions around
-them and adding comments for when disabled mentioning the audit2allow
-dependency.
-
--Matt
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
