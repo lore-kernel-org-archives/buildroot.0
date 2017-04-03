@@ -1,46 +1,66 @@
-From: Ilya Kuzmich <ilya.kuzmich@gmail.com>
-Date: Mon,  3 Apr 2017 20:01:39 +0300
-Subject: [Buildroot] [RFC 1/1] toolchain-external: fix musl dynamic loader
-	link
-Message-ID: <1491238899-24985-1-git-send-email-ilya.kuzmich@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  3 Apr 2017 19:29:08 +0200
+Subject: [Buildroot] [PATCH v2] uhttpd: fix TCP_FASTOPEN related compile
+	error
+Message-ID: <20170403172908.10642-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Test whenever musl libc.so located at /lib or /usr/lib and create dynamic
-library loader symlink accordingly.
+Fixes [1]:
 
-TOOLCHAIN_EXTERNAL_MUSL_LD_LINK @ pkg-toolchain-external.mk assumes that
-there is a /lib/libc.so. This is not a case for ct-ng musl toolchain.
-Ct-ng does this: sysroot/lib/ld-musl-armhf.so.1 -> ../usr/lib/libc.so
+  .../uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82/listen.c: In function 'uh_setup_listeners':
+  .../uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82/listen.c:120:30: error: 'TCP_FASTOPEN' undeclared (first use in this function)
 
-It's likely that attached patch is not the right way to fix it.
-I'm open to discussion.
+[1] http://autobuild.buildroot.net/results/56e/56e0727ccd1255b05e03d1b79dc238bd88701230
 
-Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
+  - use conditional define for TCP_FASTOPEN (Baruch Siach, Thomas Petazzoni)
+  - fix subject typo (Thomas Petazzoni)
+---
+ ...02-Fix-TCP_FASTOPEN-related-compile-error.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 1777368..9ad1947 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -488,7 +488,12 @@ else
- MUSL_ARCH = $(ARCH)
- endif
- define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
--	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
-+	if test -e $(STAGING_DIR)/usr/lib/libc.so; then \
-+		LD_LINK_TARGET=../usr/lib/libc.so ;\
-+	else \
-+	    LD_LINK_TARGET=libc.so ;\
-+	fi ;\
-+	ln -sf "$${LD_LINK_TARGET}" $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1 ;
- endef
- endif
- 
+diff --git a/package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch b/package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch
+new file mode 100644
+index 000000000..fb3ff54ae
+--- /dev/null
++++ b/package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch
+@@ -0,0 +1,30 @@
++From adbab70d3602d77736781be344cfdc5508cb0600 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 3 Apr 2017 19:22:30 +0200
++Subject: [PATCH] Fix TCP_FASTOPEN related compile error.
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ listen.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/listen.c b/listen.c
++index 2a54888..4dabe34 100644
++--- a/listen.c
+++++ b/listen.c
++@@ -96,6 +96,12 @@ static void listener_cb(struct uloop_fd *fd, unsigned int events)
++ 		uh_block_listener(l);
++ }
++ 
+++#ifdef linux
+++#ifndef TCP_FASTOPEN
+++#define TCP_FASTOPEN 23
+++#endif
+++#endif
+++
++ void uh_setup_listeners(void)
++ {
++ 	struct listener *l;
++-- 
++2.11.0
++
 -- 
-2.7.4
+2.11.0
