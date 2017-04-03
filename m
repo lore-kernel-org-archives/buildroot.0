@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Apr 2017 15:17:54 +0200
-Subject: [Buildroot] [PATCH v3 1/2] e2fsprogs: keep util-linux's fsck if
- chosen
-In-Reply-To: <1491154114-14797-2-git-send-email-casantos@datacom.ind.br>
+Date: Mon, 3 Apr 2017 15:26:26 +0200
+Subject: [Buildroot] [PATCH v3 2/2] systemd: select util-linux/fsck and
+ e2fsprogs/e2fsck
+In-Reply-To: <1491154114-14797-3-git-send-email-casantos@datacom.ind.br>
 References: <1491154114-14797-1-git-send-email-casantos@datacom.ind.br>
- <1491154114-14797-2-git-send-email-casantos@datacom.ind.br>
-Message-ID: <437eef66-f26d-9f08-46c1-cf157c366194@mind.be>
+ <1491154114-14797-3-git-send-email-casantos@datacom.ind.br>
+Message-ID: <3f5305c2-c524-3766-6569-af36901311b7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,66 +15,49 @@ To: buildroot@busybox.net
 
 
 On 02-04-17 19:28, Carlos Santos wrote:
-> Since e2fsprogs depends on util-linux, it's built after it. So you can't
-> have e2fsck from e2fsprogs along with the fsck wrapper from util-linux
-> (which is better maintained and compatible with systemd) because we end
-> up deleting the fsck from util-linux.
+> e2fsprogs does not override/remove the fsck from util-linux anymore when
+> /sbin and /usr/sbin are merged. So we can select the fsck tools required
+> by systemd provided by those packages. This also prevents ending up with
+> the fsck from busybox, which is incompatible with systemd.
 > 
-> Fix this issue by disabling e2fsprogs' fsck if the one from util-linux
-> is selected.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-
- Darn, I replied to v2 before seeing this.
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
 > ---
-> Changes v1->v2
->   - Add depenndece on !BR2_PACKAGE_UTIL_LINUX_FSCK to
->     BR2_PACKAGE_E2FSPROGS_FSCK
->   - Add comment telling that the fsck from util-linux has preference.
->   - Pass "--enable-fsck" conditionally to configure
->   - Remove the guard around the removal of /usr/sbin/fsck, since the
->     fsck from busybox and util-linux are installed at /sbin
->   - Improve comments and commit message
-> Changes v2->v3
->   - Pass "--disable-fsck" conditionaly to configure too, since enable
->     is the default.
->   - Do not attempt to remove $(TARGET_DIR)/usr/sbin/fsck, just the
->     $(TARGET_DIR)/sbin/fsck from busybox.
-> In the long run the e2fsprogs recipe deserves an extreme overhauling
-> like we did for util-linux but right now these changes are enough to
-> fix the specific problem of fsck.
+>  package/systemd/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 0f54686..f5eb9d0 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+>  	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+>  	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+> +	select BR2_PACKAGE_UTIL_LINUX_FSCK
 
+ I agree with this bit. If I understand correctly, as soon as you have *some*
+filesystem configured (or hotplugged), systemd will call fsck with an option not
+known to busybox/e2fsprogs fsck and will barf.
 
-[snip]
-> @@ -24,11 +24,11 @@ E2FSPROGS_CONF_OPTS = \
->  	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
->  	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
->  	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
-> +	$(if $(BR2_PACKAGE_E2FSPROGS_FSCK),--enable-fsck,--disable-fsck) \
+> +	select BR2_PACKAGE_E2FSPROGS
+> +	select BR2_PACKAGE_E2FSPROGS_E2FSCK
 
- That's indeed what I meant :-)
+ I don't agree with this bit: it should only be necessary when there is an ext2
+filesystem somewhere. And even so, with a 'nofail' in fstab, it's not an error
+if the fsck.ext2 is missing. Therefore, it's up to the user to select it IMO. At
+most, add something to the help text about it.
+
+ Note that e2fsprogs is AFAIK the only provider of e2fsck (busybox has an fsck
+wrapper but not an fsck.ext2).
+
 
  Regards,
  Arnout
 
->  	$(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
->  	--disable-uuidd \
->  	--disable-libblkid \
->  	--disable-libuuid \
-> -	--enable-fsck \
->  	--disable-e2initrd-helper \
->  	--disable-testio-debug \
->  	--disable-rpath
-
-[snip]
+>  	select BR2_PACKAGE_KMOD
+>  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+>  	select BR2_PACKAGE_KMOD_TOOLS
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
