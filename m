@@ -1,66 +1,44 @@
-From: Paul Cercueil <paul.cercueil@analog.com>
-Date: Tue, 4 Apr 2017 11:43:26 +0200
-Subject: [Buildroot] [PATCH] libiio: Fix tools not linked with pthreads
-Message-ID: <20170404094326.28344-1-paul.cercueil@analog.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 4 Apr 2017 11:17:56 +0100
+Subject: [Buildroot] [PATCH] nano: bump version to 2.8.0
+Message-ID: <20170404101756.35610-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch cherry-picked from the upstream libiio project.
-
-Fixes:
-http://autobuild.buildroot.net/results/595/595dfd7a17e2bba71844536c9071f7608879e319
-http://autobuild.buildroot.net/results/693/69390ba1f7b1460c3217ef88125faeeeda445f20
-http://autobuild.buildroot.net/results/71e/71ecc80e891a36305b3dacbd12bf8130fe4fd31f
-http://autobuild.buildroot.net/results/4d1/4d1d798ac740403e814b843083b14c9a890dfd54
-http://autobuild.buildroot.net/results/00f/00ffdfce0e7780a0f5a5dfadf6bfd63e51c7bbb8
-http://autobuild.buildroot.net/results/863/863fa72f443c45793df4837992c5c8dc65590c48
-
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- .../0002-CMake-Test-tools-require-threads.patch    | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/libiio/0002-CMake-Test-tools-require-threads.patch
+A previous version bump to 2.7.5 was reverted due to build failures with
+musl. I have successfully built this new 2.8.0 version with musl.
+---
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libiio/0002-CMake-Test-tools-require-threads.patch b/package/libiio/0002-CMake-Test-tools-require-threads.patch
-new file mode 100644
-index 0000000000..32c20236db
---- /dev/null
-+++ b/package/libiio/0002-CMake-Test-tools-require-threads.patch
-@@ -0,0 +1,32 @@
-+From 6e5a40566ee44694b186d4c2cbcf5f8690d8bba4 Mon Sep 17 00:00:00 2001
-+From: Paul Cercueil <paul.cercueil@analog.com>
-+Date: Tue, 4 Apr 2017 11:25:37 +0200
-+Subject: [PATCH] CMake: Test tools require threads
-+
-+If libiio was compiled without any backend enabled the build of the
-+tools would fail with undefined references to libpthread, at least on
-+Buildroot (strangely not on my Debian PC).
-+
-+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
-+---
-+ CMakeLists.txt | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9c17273..cf92de3 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -36,6 +36,10 @@ endif()
-+ option(WITH_NETWORK_BACKEND "Enable the network backend" ON)
-+ option(WITH_TESTS "Build the test programs" ON)
-+ 
-++if (WITH_TESTS)
-++	set(NEED_THREADS 1)
-++endif()
-++
-+ if (MSVC)
-+ 	# Avoid annoying warnings from Visual Studio
-+ 	add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
-+-- 
-+2.11.0
-+
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index aa3e27b..b39d77e 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 752170643039e2c95a433de357f0c70a8c4c4c561a90a7e7259a63e225b659b9  nano-2.7.4.tar.xz
++sha256 15c1bcf4d8888d3b56f68a0b75871cc349b81a9094f8a42d73010ffc26c85dc2  nano-2.8.0.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index c20e231..38eed0d 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).4
++NANO_VERSION_MAJOR = 2.8
++NANO_VERSION = $(NANO_VERSION_MAJOR).0
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
-2.11.0
+2.10.2
