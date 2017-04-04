@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 22:02:58 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Revert "odroid-mali: mark package as
- BROKEN"
-In-Reply-To: <20170325123918.19055-2-daggs@gmx.com>
-References: <20170325123918.19055-1-daggs@gmx.com>
- <20170325123918.19055-2-daggs@gmx.com>
-Message-ID: <20170404220258.4cb25467@free-electrons.com>
+Date: Tue, 4 Apr 2017 22:03:11 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: update the e-mail address of
+	Bartosz Golaszewski
+Message-ID: <20170404200315.D2E8D821FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3b1477efcb0f39e864433e17190725eeba86b107
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 25 Mar 2017 15:39:18 +0300, Dagg Stompler wrote:
-> This reverts commit e2ac546c1951ba8a3e88965d3023eb38a9493f28.
-> ---
->  package/odroid-mali/Config.in | 10 ----------
->  1 file changed, 10 deletions(-)
+I'm no longer with BayLibre. Change my address to an active one.
 
-Applied to master, thanks.
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c89468b..37c610e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -127,7 +127,7 @@ F:	package/luasec/
+ F:	package/lua-ev/
+ F:	package/orbit/
+ 
+-N:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
++N:	Bartosz Golaszewski <brgl@bgdev.pl>
+ F:	package/autoconf-archive/
+ F:	package/doxygen/
+ F:	package/libgpiod/
