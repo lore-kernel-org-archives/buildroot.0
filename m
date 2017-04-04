@@ -1,69 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 21:28:11 +0200
-Subject: [Buildroot] [git commit] uclibc: add patch fixing build failures
-	related to time structures
-Message-ID: <20170404192930.A7905826EB@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  4 Apr 2017 21:37:29 +0200
+Subject: [Buildroot] [PATCH 1/2] mosquitto: bump to version 1.4.11
+Message-ID: <1491334650-15708-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75915e5f74f34d106a4355de8fc5bdaba5430918
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ - This version requires a patch (sent upstream) to remove -lanl from
+all Linux builds as this library is only needed for adns support
+ - sha512 must be computed locally as eclipse.org does not give it for
+this version
 
-The latest bump of uClibc-ng 1.0.23 contains a commit touching <fcntl.h>
-that causes a large number of build failures related to time
-structures. For the moment, let's revert this patch to avoid the build
-failures.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/fcd024f6658890861fd7165e15edc65f77a9d8e7/
-  http://autobuild.buildroot.net/results/431135d9f985f3b3f935cc29fe16728b2412dd3a/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...l.h-fix-a-missing-struct-timespec-definit.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../0001-Remove-lanl-when-WITH_ADNS-is-unset.patch | 32 ++++++++++++++++++++++
+ package/mosquitto/mosquitto.hash                   |  4 +--
+ package/mosquitto/mosquitto.mk                     |  2 +-
+ 3 files changed, 35 insertions(+), 3 deletions(-)
+ create mode 100644 package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch
 
-diff --git a/package/uclibc/0001-Revert-fcntl.h-fix-a-missing-struct-timespec-definit.patch b/package/uclibc/0001-Revert-fcntl.h-fix-a-missing-struct-timespec-definit.patch
+diff --git a/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch b/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch
 new file mode 100644
-index 0000000..f481b8f
+index 0000000..f9b1b27
 --- /dev/null
-+++ b/package/uclibc/0001-Revert-fcntl.h-fix-a-missing-struct-timespec-definit.patch
-@@ -0,0 +1,34 @@
-+From 6d7cc87cb64dc8df20b0d1c7b3e3566f9ec5a3dc Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 4 Apr 2017 21:26:41 +0200
-+Subject: [PATCH] Revert "fcntl.h: fix a missing `struct timespec` definition"
++++ b/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch
+@@ -0,0 +1,32 @@
++From 0de640dd834b6c01c4904e11d51f3a1406c89469 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 3 Apr 2017 20:34:07 +0200
++Subject: [PATCH] Remove -lanl when WITH_ADNS is unset
 +
-+This reverts commit 657c4a9d6c2e649d86307f46ce9d5e44192f6e7a, it breaks
-+many packages in Buildroot:
++Do not add -lanl to BROKER_LIBS for all Linux builds.
++Indeed, -lanl is only needed for getaddrinfo_a which is only used in
++_mosquitto_try_connect_step1 when WITH_ADNS is set
 +
-+  http://autobuild.buildroot.net/results/fcd024f6658890861fd7165e15edc65f77a9d8e7/
-+  http://autobuild.buildroot.net/results/431135d9f985f3b3f935cc29fe16728b2412dd3a/
-+  etc.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ include/fcntl.h | 3 ---
-+ 1 file changed, 3 deletions(-)
++ config.mk | 4 ----
++ 1 file changed, 4 deletions(-)
 +
-+diff --git a/include/fcntl.h b/include/fcntl.h
-+index 5a73a98..adcd7ef 100644
-+--- a/include/fcntl.h
-++++ b/include/fcntl.h
-+@@ -34,9 +34,6 @@ __BEGIN_DECLS
++diff --git a/config.mk b/config.mk
++index 6e369c2..44639d2 100644
++--- a/config.mk
+++++ b/config.mk
++@@ -159,10 +159,6 @@ ifeq ($(UNAME),QNX)
++ 	LIB_LIBS:=$(LIB_LIBS) -lsocket
++ endif
 + 
-+ /* For XPG all symbols from <sys/stat.h> should also be available.  */
-+ #ifdef __USE_XOPEN
-+-# ifdef __USE_XOPEN2K8
-+-#  define __need_timespec
-+-# endif
-+ # include <sys/stat.h>
-+ #endif
-+ 
++-ifeq ($(UNAME),Linux)
++-	BROKER_LIBS:=$(BROKER_LIBS) -lanl
++-endif
++-
++ ifeq ($(WITH_WRAP),yes)
++ 	BROKER_LIBS:=$(BROKER_LIBS) -lwrap
++ 	BROKER_CFLAGS:=$(BROKER_CFLAGS) -DWITH_WRAP
 +-- 
-+2.7.4
++2.5.0
 +
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index b0b860f..5514c21 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,2 +1,2 @@
+-# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.10.tar.gz
+-sha512  fe5d6d7196a137a496ba6881c77d852396baefb4f0b83ccd9a22175fc05b09e48a09ea249e30ec7db966e11de134ebcc4e2e9b1fd40b31dc59fb0fa2f60b75a1  mosquitto-1.4.10.tar.gz
++# Locally computed:
++sha512  c05ca8679b9a6f540868f4ccf701257fcabc114d5450ac0bbbe80b91bb7cd4fc52668773e945506760c7a5bd8a494e0a56100714112e5d2713d57bfab8951587  mosquitto-1.4.11.tar.gz
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index ddac153..c273c98 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.4.10
++MOSQUITTO_VERSION = 1.4.11
+ MOSQUITTO_SITE = http://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+-- 
+2.5.0
