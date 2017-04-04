@@ -1,63 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 22:17:50 +0200
-Subject: [Buildroot] [PATCH v3] board: Add support for Engicam i.CoreM6
- Quad/Dual boards
-In-Reply-To: <1491329412-5660-1-git-send-email-jagan@openedev.com>
-References: <1491329412-5660-1-git-send-email-jagan@openedev.com>
-Message-ID: <20170404221750.41125e2e@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  4 Apr 2017 22:25:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.6.1
+Message-ID: <20170404202552.22894-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Rebased patch 0001.
 
-On Tue,  4 Apr 2017 23:40:12 +0530, Jagan Teki wrote:
-> From: Jagan Teki <jagan@amarulasolutions.com>
-> 
-> Add initial support for Engicam i.CoreM6 Quad/Dual board
-> with below features:
-> - U-Boot 2017.01
-> - Linux 4.10
-> - Default packages from buildroot
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Matteo Lisi <matteo.lisi@engicam.com>
-> Cc: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch | 2 +-
+ package/libvpx/libvpx.hash                                              | 2 +-
+ package/libvpx/libvpx.mk                                                | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks, looking better.
-
-> diff --git a/board/engicam/common/post-image.sh b/board/engicam/common/post-image.sh
-
-Why do we have this 'common' folder, and this very flexible script? Do
-you intend to submit the support for other boards?
-
-This script is exactly the same as the one in
-board/freescale/common/imx/post-image.sh, I definitely would like to
-avoid duplication.
-
-For now, if you're trying to submit the support for a single board, I
-would suggest that you:
-
- 1. Use a "fixed" genimage.cfg, i.e without %FILES% or %DTBS%
-
- 2. Use support/scripts/genimage.sh
-
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
-
-Since you're using a 4.10 kernel, you also need to set:
-
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
-
-Best regards,
-
-Thomas
+diff --git a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+index 20f08c905..e17ff7171 100644
+--- a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
++++ b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+@@ -20,7 +20,7 @@ index c14f288..82df745 100644
+  
+  #include "vpx_config.h"
+ -#if defined(__uClinux__)
+--# include <lddk.h>
++-#include <lddk.h>
+ -#endif
+  
+  #include <stdlib.h>
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index f0240d69e..95ff3a808 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  d0afbb5eb1ecae68f8d578abace160a97e2e8a230e3028cf4db115d59a695aad  libvpx-1.6.0.tar.bz2
++sha256 1c2c0c2a97fba9474943be34ee39337dee756780fc12870ba1dc68372586a819  libvpx-1.6.1.tar.bz2
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index c4f102b91..24c39032e 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVPX_VERSION = 1.6.0
++LIBVPX_VERSION = 1.6.1
+ LIBVPX_SOURCE = libvpx-$(LIBVPX_VERSION).tar.bz2
+ LIBVPX_SITE = http://storage.googleapis.com/downloads.webmproject.org/releases/webm
+ LIBVPX_LICENSE = BSD-3-Clause
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
