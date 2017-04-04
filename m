@@ -1,55 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  4 Apr 2017 22:25:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.6.1
-Message-ID: <20170404202552.22894-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 4 Apr 2017 22:29:33 +0200
+Subject: [Buildroot] [PATCH 1/2] mosquitto: bump to version 1.4.11
+In-Reply-To: <20170404220136.53846968@free-electrons.com>
+References: <1491334650-15708-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170404220136.53846968@free-electrons.com>
+Message-ID: <CAPi7W82izo61-GAHts23q4x+ZHQoPgZTC9=XRbrQpVha21Zvyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased patch 0001.
+Dear Thomas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch | 2 +-
- package/libvpx/libvpx.hash                                              | 2 +-
- package/libvpx/libvpx.mk                                                | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+2017-04-04 22:01 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-diff --git a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
-index 20f08c905..e17ff7171 100644
---- a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
-+++ b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
-@@ -20,7 +20,7 @@ index c14f288..82df745 100644
-  
-  #include "vpx_config.h"
- -#if defined(__uClinux__)
---# include <lddk.h>
-+-#include <lddk.h>
- -#endif
-  
-  #include <stdlib.h>
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index f0240d69e..95ff3a808 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  d0afbb5eb1ecae68f8d578abace160a97e2e8a230e3028cf4db115d59a695aad  libvpx-1.6.0.tar.bz2
-+sha256 1c2c0c2a97fba9474943be34ee39337dee756780fc12870ba1dc68372586a819  libvpx-1.6.1.tar.bz2
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index c4f102b91..24c39032e 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVPX_VERSION = 1.6.0
-+LIBVPX_VERSION = 1.6.1
- LIBVPX_SOURCE = libvpx-$(LIBVPX_VERSION).tar.bz2
- LIBVPX_SITE = http://storage.googleapis.com/downloads.webmproject.org/releases/webm
- LIBVPX_LICENSE = BSD-3-Clause
--- 
-2.11.0
+> Hello,
+>
+> On Tue,  4 Apr 2017 21:37:29 +0200, Fabrice Fontaine wrote:
+> >  - This version requires a patch (sent upstream) to remove -lanl from
+> > all Linux builds as this library is only needed for adns support
+>
+> And so how does it work when adns support is enabled, by your PATCH
+> 2/2 ?
+>
+When WITH_ADNS is set, the following lines of config.mk will add -lanl
+ifeq ($(WITH_ADNS),yes)
+    BROKER_LIBS:=$(BROKER_LIBS) -lanl
+    BROKER_CFLAGS:=$(BROKER_CFLAGS) -DWITH_ADNS
+endif
+
+The issue in the current config.mk was the following lines (removed by my
+patch):
+ifeq ($(UNAME),Linux)
+    BROKER_LIBS:=$(BROKER_LIBS) -lanl
+endif
+
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170404/12478c83/attachment.html>
