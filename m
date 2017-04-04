@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 22:01:36 +0200
-Subject: [Buildroot] [PATCH 1/2] mosquitto: bump to version 1.4.11
-In-Reply-To: <1491334650-15708-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1491334650-15708-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <20170404220136.53846968@free-electrons.com>
+Date: Tue, 4 Apr 2017 22:02:54 +0200
+Subject: [Buildroot] [PATCH v2 1/2] odroid-mali: fix broken headers.
+In-Reply-To: <20170325123918.19055-1-daggs@gmx.com>
+References: <20170325123918.19055-1-daggs@gmx.com>
+Message-ID: <20170404220254.0ae579a7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  4 Apr 2017 21:37:29 +0200, Fabrice Fontaine wrote:
->  - This version requires a patch (sent upstream) to remove -lanl from
-> all Linux builds as this library is only needed for adns support
+On Sat, 25 Mar 2017 15:39:17 +0300, Dagg Stompler wrote:
 
-And so how does it work when adns support is enabled, by your PATCH
-2/2 ?
+> -ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
+> +ODROID_MALI_VERSION = 4f8a541693fee5fdcaa162a7fd8922861a4ba0a9
+>  ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
+>  ODROID_MALI_LICENSE = Hardkernel EULA
+>  ODROID_MALI_LICENSE_FILES = README.md
+> @@ -44,4 +44,11 @@ define ODROID_MALI_INSTALL_TARGET_CMDS
+>  	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR))
+>  endef
+>  
+> +ifneq ($(BR2_PACKAGE_XLIB_LIBX11),y)
 
-Thanks,
+Rather than this condition, I've used the existing
+BR2_PACKAGE_ODROID_MALI_X11 condition in odroid-mali.mk.
+
+> +define ODROID_MALI_FIX_EGL_PC
+> +	$(SED) "s/: -I/: -DMESA_EGL_NO_X11_HEADERS -I/" $(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+> +endef
+> +ODROID_MALI_POST_INSTALL_TARGET_HOOKS += ODROID_MALI_FIX_EGL_PC
+
+Using a post-install *target* hook to tweak things in the staging
+directory is not very clean. Instead, I've changed your patch to call
+ODROID_MALI_FIX_EGL_PC from ODROID_MALI_INSTALL_STAGING_CMDS.
+
+Applied with those fixes. Thanks!
 
 Thomas
 -- 
