@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue,  4 Apr 2017 19:50:10 -0300
-Subject: [Buildroot] [PATCH 02/11] package: remove empty line at end of file
+Date: Tue,  4 Apr 2017 19:50:11 -0300
+Subject: [Buildroot] [PATCH 03/11] package: remove consecutive empty lines
 In-Reply-To: <20170404225019.27916-1-ricardo.martincoski@gmail.com>
 References: <20170404225019.27916-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170404225019.27916-2-ricardo.martincoski@gmail.com>
+Message-ID: <20170404225019.27916-3-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,203 +11,320 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Occurrences were searched using [1]:
-check-package --include-only EmptyLastLine $(find * -type f)
+check-package --include-only ConsecutiveEmptyLines $(find * -type f)
 and manually removed.
 
 [1] http://patchwork.ozlabs.org/patch/729666/
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- package/acpica/acpica.hash                                             | 1 -
- package/cbootimage/cbootimage.mk                                       | 1 -
- package/freescale-imx/imx-kobs/Config.in                               | 1 -
- package/freescale-imx/imx-lib/Config.in                                | 1 -
- package/guile/Config.in                                                | 1 -
- package/libcli/Config.in                                               | 1 -
- package/libfreeimage/libfreeimage.mk                                   | 1 -
- package/ljsyscall/Config.in                                            | 1 -
- package/lua-csnappy/Config.in                                          | 1 -
- package/luasql-sqlite3/Config.in                                       | 1 -
- package/netsnmp/netsnmp.hash                                           | 1 -
- package/perl-netaddr-ip/Config.in                                      | 1 -
- package/ptpd2/Config.in                                                | 1 -
- package/python-cbor/Config.in                                          | 1 -
- package/python-iniparse/python-iniparse.hash                           | 1 -
- package/python-lxml/Config.in.host                                     | 1 -
- package/python3/python3.hash                                           | 1 -
- package/ts4900-fpga/Config.in                                          | 1 -
- package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk | 1 -
- 19 files changed, 19 deletions(-)
+ package/amd-catalyst/amd-catalyst.mk                      | 2 --
+ package/bcusdk/bcusdk.mk                                  | 1 -
+ package/dhcp/Config.in                                    | 1 -
+ package/docker-engine/docker-engine.mk                    | 1 -
+ package/efl/Config.in                                     | 1 -
+ package/ffmpeg/ffmpeg.mk                                  | 1 -
+ package/gcc/gcc-final/gcc-final.mk                        | 1 -
+ package/glibc/glibc.mk                                    | 1 -
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 1 -
+ package/linux-zigbee/Config.in                            | 1 -
+ package/ltp-testsuite/ltp-testsuite.mk                    | 1 -
+ package/ne10/ne10.mk                                      | 1 -
+ package/network-manager/network-manager.mk                | 1 -
+ package/opencv3/Config.in                                 | 1 -
+ package/openocd/openocd.mk                                | 1 -
+ package/oracle-mysql/oracle-mysql.mk                      | 1 -
+ package/qt/qt.mk                                          | 2 --
+ package/qt5/qt5location/qt5location.mk                    | 1 -
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk          | 1 -
+ package/rpcbind/rpcbind.mk                                | 1 -
+ package/rrdtool/rrdtool.mk                                | 1 -
+ package/rt-tests/Config.in                                | 1 -
+ package/x11vnc/x11vnc.mk                                  | 1 -
+ 23 files changed, 25 deletions(-)
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 8f1c08a67..71c110ba8 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,2 @@
- # locally computed hash
- sha256 dfb33db5599bd48134dbd6e50c8804099be0cf1c35d98975a6cb84dabca78b67 acpica-unix2-20161117.tar.gz
--
-diff --git a/package/cbootimage/cbootimage.mk b/package/cbootimage/cbootimage.mk
-index 22a6e5331..40a248aed 100644
---- a/package/cbootimage/cbootimage.mk
-+++ b/package/cbootimage/cbootimage.mk
-@@ -12,4 +12,3 @@ CBOOTIMAGE_AUTORECONF = YES
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+index 5636f81c9..d4f5d1cc3 100644
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ b/package/amd-catalyst/amd-catalyst.mk
+@@ -16,7 +16,6 @@ AMD_CATALYST_SUFFIX = $(if $(BR2_x86_64),_64)
+ AMD_CATALYST_ARCH_DIR = $(@D)/arch/x86$(AMD_CATALYST_SUFFIX)
+ AMD_CATALYST_LIB_SUFFIX = $(if $(BR2_x86_64),64)
  
+-
+ define AMD_CATALYST_EXTRACT_CMDS
+ 	unzip -q $(DL_DIR)/$(AMD_CATALYST_SOURCE) -d $(@D)
+ 	$(SHELL) $(@D)/AMD-Catalyst-$(AMD_CATALYST_VERSION)-Linux-installer-$(AMD_CATALYST_VERBOSE_VER)-x86.x86_64.run --extract $(@D)
+@@ -102,7 +101,6 @@ define AMD_CATALYST_INSTALL_XORG
+ 	$(INSTALL) -D -m 0644 package/amd-catalyst/20-fglrx.conf \
+ 		$(TARGET_DIR)/etc/X11/xorg.conf.d/20-fglrx.conf
+ 
+-
+ 	# Common files: containing binary profiles about GPUs,
+ 	# required by the fglrx_drv xorg driver
+ 	$(INSTALL) -d $(TARGET_DIR)/etc/ati
+diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
+index 12f41eac8..f99dd70cb 100644
+--- a/package/bcusdk/bcusdk.mk
++++ b/package/bcusdk/bcusdk.mk
+@@ -24,7 +24,6 @@ BCUSDK_DEPENDENCIES = \
+ 	libpthsem \
+ 	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
+ 
+-
+ define BCUSDK_REMOVE_EXAMPLES
+ 	$(RM) -rf $(TARGET_DIR)/usr/share/bcusdk
+ endef
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+index 4a3049584..d09256aad 100644
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -26,7 +26,6 @@ config BR2_PACKAGE_DHCP_RELAY
+ 	help
+ 	  DHCP relay agent from the ISC DHCP distribution.
+ 
+-
+ config BR2_PACKAGE_DHCP_CLIENT
+ 	bool "dhcp client"
+ 	help
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 5ff595e64..db2653a3d 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -34,7 +34,6 @@ DOCKER_ENGINE_GLDFLAGS_DOCKER += -extldflags '-static'
+ endif
+ endif
+ 
+-
+ DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
+ DOCKER_ENGINE_BUILD_TARGETS = docker
+ 
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 960f2752c..b9c4334c2 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -135,7 +135,6 @@ config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+ 		BR2_PACKAGE_EFL_PULSEAUDIO && \
+ 		BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+ 
+-
+ comment "Warning: one of the recommended option for EFL is not enabled"
+ 	depends on !BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+ 
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f1a1e0df8..348bc8212 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -473,7 +473,6 @@ else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+ FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
+ endif
+ 
+-
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index a15d837a8..e8d2e18fe 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -50,7 +50,6 @@ define  HOST_GCC_FINAL_CONFIGURE_CMDS
+ 	)
+ endef
+ 
+-
+ # Languages supported by the cross-compiler
+ GCC_FINAL_CROSS_LANGUAGES-y = c
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 58cb3d46c..58ffa6cb8 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -94,7 +94,6 @@ define GLIBC_CONFIGURE_CMDS
+ 	$(GLIBC_ADD_MISSING_STUB_H)
+ endef
+ 
+-
+ #
+ # We also override the install to target commands since we only want
+ # to install the libraries, and nothing more.
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 69bb7163f..6bf159d2e 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -24,7 +24,6 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+ 	--disable-esd \
+ 	--disable-esdtest
+ 
+-
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_GOOD_CONF_OPTS += \
+ 	--disable-jack \
+diff --git a/package/linux-zigbee/Config.in b/package/linux-zigbee/Config.in
+index fc21faa44..ff2b0f7c9 100644
+--- a/package/linux-zigbee/Config.in
++++ b/package/linux-zigbee/Config.in
+@@ -40,7 +40,6 @@ config BR2_PACKAGE_LINUX_ZIGBEE_TESTS
+ 	  Enable this option to install the Linux-ZigBee test programs
+ 	  to the target.
+ 
+-
+ config BR2_PACKAGE_LINUX_ZIGBEE_OLD_KERNEL_COMPAT
+ 	bool "compatibility with older kernels"
+ 	help
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index cd9a34528..7f26bd2a5 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -68,5 +68,4 @@ endef
+ LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
+ endif
+ 
+-
+ $(eval $(autotools-package))
+diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+index 63a79e75f..cb303bd7b 100644
+--- a/package/ne10/ne10.mk
++++ b/package/ne10/ne10.mk
+@@ -32,7 +32,6 @@ define NE10_INSTALL_STAGING_CMDS
+ 	$(NE10_INSTALL_STAGING_SHARED_LIB)
+ endef
+ 
+-
+ define NE10_INSTALL_TARGET_CMDS
+ 	cp -dpf $(@D)/modules/libNE10*.so* $(TARGET_DIR)/usr/lib/
+ endef
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 0815bdd6a..6adc9b1ab 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -22,7 +22,6 @@ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_file__etc_redhat_release=no \
+ 	ac_cv_file__etc_SuSE_release=no
+ 
+-
+ NETWORK_MANAGER_CONF_OPTS = \
+ 	--disable-tests \
+ 	--disable-qt \
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 4c00bf1b9..ee589f950 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -130,7 +130,6 @@ comment "opengl support needs an OpenGL provider"
+ 
+ endif # BR2_PACKAGE_OPENCV3_LIB_HIGHGUI
+ 
+-
+ config BR2_PACKAGE_OPENCV3_LIB_IMGCODECS
+ 	bool "imgcodecs"
+ 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 8407bbcbd..911d31168 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -113,6 +113,5 @@ endef
+ OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
+ HOST_OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
+ 
+-
  $(eval $(autotools-package))
  $(eval $(host-autotools-package))
--
-diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
-index fc2344ed0..61be9f26d 100644
---- a/package/freescale-imx/imx-kobs/Config.in
-+++ b/package/freescale-imx/imx-kobs/Config.in
-@@ -7,4 +7,3 @@ config BR2_PACKAGE_IMX_KOBS
+diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
+index 45a71fac6..4307008d4 100644
+--- a/package/oracle-mysql/oracle-mysql.mk
++++ b/package/oracle-mysql/oracle-mysql.mk
+@@ -125,7 +125,6 @@ ORACLE_MYSQL_CONF_OPTS += \
+ 	--without-server
+ endif
  
- 	  This library is provided by Freescale as-is and doesn't have
- 	  an upstream.
 -
-diff --git a/package/freescale-imx/imx-lib/Config.in b/package/freescale-imx/imx-lib/Config.in
-index 3b0f7a921..368770504 100644
---- a/package/freescale-imx/imx-lib/Config.in
-+++ b/package/freescale-imx/imx-lib/Config.in
-@@ -13,4 +13,3 @@ config BR2_PACKAGE_IMX_LIB
+ define ORACLE_MYSQL_REMOVE_TEST_PROGS
+ 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
+ endef
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 1fdb1bf70..2580ee7c0 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -79,7 +79,6 @@ else
+ QT_CONFIGURE_OPTS += -no-glib
+ endif
  
- 	  This library is provided by Freescale as-is and doesn't have
- 	  an upstream.
 -
-diff --git a/package/guile/Config.in b/package/guile/Config.in
-index e0f657127..c26c296e4 100644
---- a/package/guile/Config.in
-+++ b/package/guile/Config.in
-@@ -19,4 +19,3 @@ config BR2_PACKAGE_GUILE
- comment "guile needs a uClibc or glibc toolchain w/ threads, wchar, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
--
-diff --git a/package/libcli/Config.in b/package/libcli/Config.in
-index e20afb0e0..3b625c364 100644
---- a/package/libcli/Config.in
-+++ b/package/libcli/Config.in
-@@ -8,4 +8,3 @@ config BR2_PACKAGE_LIBCLI
- 	  tree.
- 
- 	  http://sites.dparrish.com/libcli
--
-diff --git a/package/libfreeimage/libfreeimage.mk b/package/libfreeimage/libfreeimage.mk
-index cd73f5a8e..0ca23933a 100644
---- a/package/libfreeimage/libfreeimage.mk
-+++ b/package/libfreeimage/libfreeimage.mk
-@@ -30,4 +30,3 @@ define LIBFREEIMAGE_INSTALL_TARGET_CMDS
+ ### Pixel depths
+ QT_PIXEL_DEPTHS = # empty
+ ifeq ($(BR2_PACKAGE_QT_PIXEL_DEPTH_1),y)
+@@ -547,7 +546,6 @@ define QT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
  endef
  
- $(eval $(generic-package))
 -
-diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
-index 149e71d3f..d78591ec9 100644
---- a/package/ljsyscall/Config.in
-+++ b/package/ljsyscall/Config.in
-@@ -9,4 +9,3 @@ config BR2_PACKAGE_LJSYSCALL
+ # Build the list of libraries and plugins to install to the target
  
- comment "ljsyscall needs LuaJIT"
- 	depends on !BR2_PACKAGE_LUAJIT
--
-diff --git a/package/lua-csnappy/Config.in b/package/lua-csnappy/Config.in
-index 0562277a0..54d68a2e1 100644
---- a/package/lua-csnappy/Config.in
-+++ b/package/lua-csnappy/Config.in
-@@ -5,4 +5,3 @@ config BR2_PACKAGE_LUA_CSNAPPY
- 	  which implements the Google's Snappy (de)compressor.
- 
- 	  http://fperrad.github.io/lua-csnappy/
--
-diff --git a/package/luasql-sqlite3/Config.in b/package/luasql-sqlite3/Config.in
-index 3bd73f3ba..483d6a0f3 100644
---- a/package/luasql-sqlite3/Config.in
-+++ b/package/luasql-sqlite3/Config.in
-@@ -6,4 +6,3 @@ config BR2_PACKAGE_LUASQL_SQLITE3
- 	  LuaSQL is a simple interface from Lua to a DBMS.
- 
- 	  http://www.keplerproject.org/luasql
--
-diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-index 2c18441fe..fc7792602 100644
---- a/package/netsnmp/netsnmp.hash
-+++ b/package/netsnmp/netsnmp.hash
-@@ -1,4 +1,3 @@
- # From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.7.3/
- md5	d4a3459e1577d0efa8d96ca70a885e53	net-snmp-5.7.3.tar.gz
- sha1	97dc25077257680815de44e34128d365c76bd839	net-snmp-5.7.3.tar.gz
--
-diff --git a/package/perl-netaddr-ip/Config.in b/package/perl-netaddr-ip/Config.in
-index 152583008..d4061e1df 100644
---- a/package/perl-netaddr-ip/Config.in
-+++ b/package/perl-netaddr-ip/Config.in
-@@ -4,4 +4,3 @@ config BR2_PACKAGE_PERL_NETADDR_IP
- 	  Manages IPv4 and IPv6 addresses and subnets
- 
- 	  https://metacpan.org/release/NetAddr-IP
--
-diff --git a/package/ptpd2/Config.in b/package/ptpd2/Config.in
-index e88a9bb1a..406276af3 100644
---- a/package/ptpd2/Config.in
-+++ b/package/ptpd2/Config.in
-@@ -6,4 +6,3 @@ config BR2_PACKAGE_PTPD2
- 	  (PTP) as defined by the IEEE-1588-2008.
- 
- 	  https://github.com/ptpd/ptpd
--
-diff --git a/package/python-cbor/Config.in b/package/python-cbor/Config.in
-index 2d0962d59..403fab3f0 100644
---- a/package/python-cbor/Config.in
-+++ b/package/python-cbor/Config.in
-@@ -4,4 +4,3 @@ config BR2_PACKAGE_PYTHON_CBOR
- 	  RFC 7049 - Concise Binary Object Representation.
- 
- 	  https://pypi.python.org/pypi/cbor
--
-diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
-index d7d8e9336..f1f803823 100644
---- a/package/python-iniparse/python-iniparse.hash
-+++ b/package/python-iniparse/python-iniparse.hash
-@@ -1,4 +1,3 @@
- # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e573e9e9733d97623881ce9bbe5eca6, sha256 locally computed
- md5 5e573e9e9733d97623881ce9bbe5eca6 iniparse-0.4.tar.gz
- sha256 abc1ee12d2cfb2506109072d6c21e40b6c75a3fe90a9c924327d80bc0d99c054  iniparse-0.4.tar.gz
--
-diff --git a/package/python-lxml/Config.in.host b/package/python-lxml/Config.in.host
-index 580e440e1..7bf1e4859 100644
---- a/package/python-lxml/Config.in.host
-+++ b/package/python-lxml/Config.in.host
-@@ -5,4 +5,3 @@ config BR2_PACKAGE_HOST_PYTHON_LXML
- 	  libxml2 and libxslt.
- 
- 	  http://lxml.de/
--
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 694b09be1..26d08dee4 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -2,4 +2,3 @@
- md5 692b4fc3a2ba0d54d1495d4ead5b0b5c Python-3.6.1.tar.xz
- # Locally computed
- sha256 a01810ddfcec216bcdb357a84bfaafdfaa0ca42bbdaa4cb7ff74f5a9961e4041 Python-3.6.1.tar.xz
--
-diff --git a/package/ts4900-fpga/Config.in b/package/ts4900-fpga/Config.in
-index 7910631bc..77a73b5ae 100644
---- a/package/ts4900-fpga/Config.in
-+++ b/package/ts4900-fpga/Config.in
-@@ -9,4 +9,3 @@ config BR2_PACKAGE_TS4900_FPGA
- 	  script expects to find it in the /boot folder.
- 
- 	  http://wiki.embeddedarm.com/wiki/TS-4900#FPGA_Changelog
--
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index 2a3e99745..b31d98fbf 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -33,4 +33,3 @@ define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_TARGET_CMDS
+ QT_INSTALL_LIBS += QtCore
+diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
+index 24b26b2db..96263e89b 100644
+--- a/package/qt5/qt5location/qt5location.mk
++++ b/package/qt5/qt5location/qt5location.mk
+@@ -62,5 +62,4 @@ define QT5LOCATION_INSTALL_TARGET_CMDS
+ 	$(QT5LOCATION_INSTALL_TARGET_QMLS)
  endef
  
- $(eval $(generic-package))
 -
+ $(eval $(generic-package))
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index 0f11b79ca..d28993244 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -30,7 +30,6 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5BASE_WIDGETS),yy)
+ define QT5QUICKCONTROLS_INSTALL_TARGET_PRIVATEWIDGETS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 28deb50ef..cf2e81dbb 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -36,5 +36,4 @@ define RPCBIND_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S30rpcbind
+ endef
+ 
+-
+ $(eval $(autotools-package))
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 84c7bb7ac..028b7cbbb 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
+@@ -25,7 +25,6 @@ RRDTOOL_CONF_OPTS = \
+ 	--disable-ruby \
+ 	--disable-tcl
+ 
+-
+ ifeq ($(BR2_NEEDS_GETTEXT),y)
+ RRDTOOL_DEPENDENCIES += gettext
+ endif
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index b39856d34..23e911b9f 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -23,7 +23,6 @@ config BR2_PACKAGE_RT_TESTS
+ 
+ 	  http://rt.wiki.kernel.org
+ 
+-
+ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
+ 	depends on BR2_PACKAGE_RT_TESTS
+ 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
+index 561d7bf13..9f4af1258 100644
+--- a/package/x11vnc/x11vnc.mk
++++ b/package/x11vnc/x11vnc.mk
+@@ -61,5 +61,4 @@ else
+ X11VNC_CONF_OPTS += --without-zlib
+ endif
+ 
+-
+ $(eval $(autotools-package))
 -- 
 2.11.0
