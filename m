@@ -1,52 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Apr 2017 23:34:46 +0200
-Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
-	BR2_GENIMAGE_CFG_FILES
-In-Reply-To: <2ce8812c-d95e-bd4a-9cde-f02ab8e3ca60@mind.be> (Arnout
- Vandecappelle's message of "Mon, 3 Apr 2017 11:35:24 +0200")
-References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
- <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
- <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
- <20170401155116.66464885@free-electrons.com>
- <8760ilvozx.fsf@dell.be.48ers.dk>
- <2ce8812c-d95e-bd4a-9cde-f02ab8e3ca60@mind.be>
-Message-ID: <87wpazuaa1.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Apr 2017 23:44:39 +0200
+Subject: [Buildroot] [PATCH] libsoc: add host-pkgconf dependency
+In-Reply-To: <1491207281-29813-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Mon, 3 Apr 2017 10:14:41
+ +0200")
+References: <1491207281-29813-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87shlnu9tk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Hi,
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Without pkg-config PKG_CHECK_MODULES won't be expanded
+ > and ./configure script produces following error message:
 
- >> >> What do the others think?
- >> 
- >> > I agree that the new option doesn't seem really useful.
- >> 
- >> I'm not sure. One of the problems with genimage is that it calls a
- >> number of external utilities depending on the content of
- >> genimage.cfg, and it isn't directly clear what host packages you need to
- >> enable to ensure it works. If we add explicit BR2_GENIMAGE_FAT / CPIO /
- >> EXT2 / ISO / JFFS2 / UBI / .. options selecting the needed host packages
- >> then that would solve that issue.
+ > ./configure: line 12237: syntax error near unexpected token `PYTHON,'
+ > ./configure: line 12237: `	PKG_CHECK_MODULES(PYTHON, python-"$PYTHON_VERSION")'
 
- >  So, how would you do that? To know which host packages to select, we need to
- > parse the genimage.cfg file. This is not possible from Kconfig....
+ > Fixes:
 
-I would simply leave it to the user to select the correct sub
-options. The point is just that explicit sub options are clearer than
-having to reverse engineer genimage to figure out what programs it
-executes (and then figure out what host packages provide them).
+ > http://autobuild.buildroot.net/results/86e/86e04bd2b10527130306451e56a7693ed4b4befd
 
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
- >  A long time ago (back in the days we still had ct-ng support), someone posted a
- > huge hack to Kconfig to allow it to call an external program while constructing
- > the Kconfig model. Something like that might work, but it's really a huge change
- > to Kconfig semantics.
-
-Argh, lets not go there!
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
