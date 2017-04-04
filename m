@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 13:01:33 +0200
-Subject: [Buildroot] [git commit] squid: bump version to 3.5.25
-Message-ID: <20170404110157.B4429826EC@busybox.osuosl.org>
+Date: Tue, 4 Apr 2017 13:01:39 +0200
+Subject: [Buildroot] [git commit] gnupg2: bump version to 2.1.20
+Message-ID: <20170404110157.C6CC3826EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=330ad683c6b0c486473bb497d7639a71d5da67c4
+commit: https://git.buildroot.net/buildroot/commit/?id=32e8a130bf2c087825bb3805b86be280fe2bc828
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
+ package/gnupg2/gnupg2.hash | 6 +++---
+ package/gnupg2/gnupg2.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index d9b7924..95762bc 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.24.tar.xz.asc
--md5 3fae511e16b6379b61c011914673973d  squid-3.5.24.tar.xz
--sha1 f203637783301a4b86e554b6dd226de721762ae5  squid-3.5.24.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.25.tar.xz.asc
-+md5 6b7dd7b42b1adacf08f3155640ea2782  squid-3.5.25.tar.xz
-+sha1 63ea00cb918e3106fd91b286ec907f1681e0f0e8  squid-3.5.25.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 263ce16..d71f724 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index c589f6a..7eb8e59 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q1/000402.html
+-sha1 10a088a6716789ac5c5cce2776952d8f4a5c57fc  gnupg-2.1.19.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000404.html
++sha1 500ddae8e4225ae2e300934090f9b9a427b8def1  gnupg-2.1.20.tar.bz2
+ # Calculated based on the hash above
+-sha256 46cced1f5641ce29cc28250f52fadf6e417e649b3bfdec49a5a0d0b22a639bf0  gnupg-2.1.19.tar.bz2
++sha256 24cf9a69369be64a9f6f8cc11a1be33ab7780ad77a6a1b93719438f49f69960d  gnupg-2.1.20.tar.bz2
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index c310f93..db7f4cb 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).24
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).25
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPL-2.0+
+-GNUPG2_VERSION = 2.1.19
++GNUPG2_VERSION = 2.1.20
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
