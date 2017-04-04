@@ -1,39 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 4 Apr 2017 11:39:49 +0100
-Subject: [Buildroot] [PATCH] less: bump version to 487
-Message-ID: <20170404103949.2775-1-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Apr 2017 13:00:22 +0200
+Subject: [Buildroot] [git commit] libiio: Fix tools not linked with pthreads
+Message-ID: <20170404110026.B5761821DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/less/less.hash | 2 +-
- package/less/less.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=9f2ff5a28ca6a010a4f077cc4a412d107e41d303
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/less/less.hash b/package/less/less.hash
-index eea201d..3a6c799 100644
---- a/package/less/less.hash
-+++ b/package/less/less.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	3fa38f2cf5e9e040bb44fffaa6c76a84506e379e47f5a04686ab78102090dda5	less-481.tar.gz
-+sha256 f3dc8455cb0b2b66e0c6b816c00197a71bf6d1787078adeee0bcf2aea4b12706  less-487.tar.gz
-diff --git a/package/less/less.mk b/package/less/less.mk
-index 2102d3c..bccc08b 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LESS_VERSION = 481
-+LESS_VERSION = 487
- LESS_SITE = $(BR2_GNU_MIRROR)/less
- LESS_LICENSE = GPL-3.0+
- LESS_LICENSE_FILES = COPYING
--- 
-2.10.2
+Add a patch cherry-picked from the upstream libiio project.
+
+Fixes:
+http://autobuild.buildroot.net/results/595/595dfd7a17e2bba71844536c9071f7608879e319
+http://autobuild.buildroot.net/results/693/69390ba1f7b1460c3217ef88125faeeeda445f20
+http://autobuild.buildroot.net/results/71e/71ecc80e891a36305b3dacbd12bf8130fe4fd31f
+http://autobuild.buildroot.net/results/4d1/4d1d798ac740403e814b843083b14c9a890dfd54
+http://autobuild.buildroot.net/results/00f/00ffdfce0e7780a0f5a5dfadf6bfd63e51c7bbb8
+http://autobuild.buildroot.net/results/863/863fa72f443c45793df4837992c5c8dc65590c48
+
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-CMake-Test-tools-require-threads.patch    | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/package/libiio/0002-CMake-Test-tools-require-threads.patch b/package/libiio/0002-CMake-Test-tools-require-threads.patch
+new file mode 100644
+index 0000000..32c2023
+--- /dev/null
++++ b/package/libiio/0002-CMake-Test-tools-require-threads.patch
+@@ -0,0 +1,32 @@
++From 6e5a40566ee44694b186d4c2cbcf5f8690d8bba4 Mon Sep 17 00:00:00 2001
++From: Paul Cercueil <paul.cercueil@analog.com>
++Date: Tue, 4 Apr 2017 11:25:37 +0200
++Subject: [PATCH] CMake: Test tools require threads
++
++If libiio was compiled without any backend enabled the build of the
++tools would fail with undefined references to libpthread, at least on
++Buildroot (strangely not on my Debian PC).
++
++Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
++---
++ CMakeLists.txt | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 9c17273..cf92de3 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -36,6 +36,10 @@ endif()
++ option(WITH_NETWORK_BACKEND "Enable the network backend" ON)
++ option(WITH_TESTS "Build the test programs" ON)
++ 
+++if (WITH_TESTS)
+++	set(NEED_THREADS 1)
+++endif()
+++
++ if (MSVC)
++ 	# Avoid annoying warnings from Visual Studio
++ 	add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
++-- 
++2.11.0
++
