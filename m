@@ -1,10 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 13:03:11 +0200
-Subject: [Buildroot] [PATCH 1/1] libselinux: query for python
- site-packages dir directly
-In-Reply-To: <1491271571-21770-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1491271571-21770-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170404130311.554fe7de@free-electrons.com>
+Date: Tue, 4 Apr 2017 13:15:13 +0200
+Subject: [Buildroot] Pre-built toolchain updates
+Message-ID: <20170404131513.6c48f30e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +10,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  3 Apr 2017 21:06:11 -0500, Matt Weber wrote:
-> With the bump to version 2.6, the following commit needs
-> to be taken into consideration for overloading paths.
-> https://github.com/SELinuxProject/selinux/commit/8162f10e670da963eb65ccf1e7de69ea85aba30d
-> 
-> The PYLIBVER is no longer used and the PYTHONLIBDIR is
-> renamed to PYSITEDIR with slightly different pathing.
-> 
-> More details can be found in the issue ticket which was
-> marked as a non-issue after analysis that a Buildroot fix
-> was the resolution.
-> https://github.com/SELinuxProject/selinux/issues/51
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/libselinux/libselinux.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+I've updated all the Buildroot pre-built toolchains. The main changes
+are:
 
-Applied to master, thanks.
+ - uClibc is now 1.0.23, which means it no longer provides RPC support.
+   Also, we now have the fix for sys/timex.h issue, which was affecting
+   Qemu builds.
+
+ - Binutils is now at version 2.27 for all toolchains, except the
+   br-arm-glibc-cortex-a9 toolchain, which is a bleeding edge
+   toolchain, and therefore uses binutils 2.28 (as well as gcc 6, etc.)
+
+ - The kernel headers version has changed for a few toolchains. Two
+   toolchains were using 3.18 kernel headers, which are no longer
+   supported. So I've changed one toolchain to use 3.10 kernel headers,
+   and the other to use 4.1 kernel headers. All other toolchains that
+   use the "default" kernel header version now use 4.10 instead of 4.9.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
