@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 13:01:28 +0200
-Subject: [Buildroot] [git commit] freeswitch: bump version to 1.6.16
-Message-ID: <20170404110157.A33B0826EC@busybox.osuosl.org>
+Date: Tue, 4 Apr 2017 13:01:33 +0200
+Subject: [Buildroot] [git commit] squid: bump version to 3.5.25
+Message-ID: <20170404110157.B4429826EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b17ac40b30df390ae6a8ab62622be840a89f753
+commit: https://git.buildroot.net/buildroot/commit/?id=330ad683c6b0c486473bb497d7639a71d5da67c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 4396e1e..1e79a4f 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.14.tar.xz.sha256
--sha256 95b38c07de200a43cd6963d21e0882ab8a7087473ea82ece68d76b9fa78ca27c  freeswitch-1.6.15.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.16.tar.xz.sha256
-+sha256 4caecd8d246265db4e4d37df0901e396accd84de060525dda8212935cd2ee285  freeswitch-1.6.16.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 0ce67f0..b75cdab 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index d9b7924..95762bc 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.24.tar.xz.asc
+-md5 3fae511e16b6379b61c011914673973d  squid-3.5.24.tar.xz
+-sha1 f203637783301a4b86e554b6dd226de721762ae5  squid-3.5.24.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.25.tar.xz.asc
++md5 6b7dd7b42b1adacf08f3155640ea2782  squid-3.5.25.tar.xz
++sha1 63ea00cb918e3106fd91b286ec907f1681e0f0e8  squid-3.5.25.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 263ce16..d71f724 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--FREESWITCH_VERSION = 1.6.15
-+FREESWITCH_VERSION = 1.6.16
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPL-1.1, \
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).24
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).25
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPL-2.0+
