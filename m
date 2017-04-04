@@ -1,31 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Apr 2017 23:44:39 +0200
-Subject: [Buildroot] [PATCH] libsoc: add host-pkgconf dependency
-In-Reply-To: <1491207281-29813-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 3 Apr 2017 10:14:41
- +0200")
-References: <1491207281-29813-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87shlnu9tk.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Apr 2017 23:45:06 +0200
+Subject: [Buildroot] [PATCH] package/tyrian: fixes compilation with
+	static libs.
+In-Reply-To: <1491222343-29223-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Mon, 3 Apr 2017 14:25:43 +0200")
+References: <1491222343-29223-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87o9wbu9st.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Without pkg-config PKG_CHECK_MODULES won't be expanded
- > and ./configure script produces following error message:
+ > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+ > Has been tested with: "./support/scripts/test-pkg -c tyrian.cfg -p opentyrian"
+ > Fixes: http://autobuild.buildroot.net/results/0e2345db82b33f591958fc0f72ad914adafe0522
+ > and some similar previous build failure.
 
- > ./configure: line 12237: syntax error near unexpected token `PYTHON,'
- > ./configure: line 12237: `	PKG_CHECK_MODULES(PYTHON, python-"$PYTHON_VERSION")'
+ > Thanks Thomas for the tip ;-).
 
- > Fixes:
-
- > http://autobuild.buildroot.net/results/86e/86e04bd2b10527130306451e56a7693ed4b4befd
-
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
 Committed to 2017.02.x, thanks.
 
