@@ -1,63 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Apr 2017 11:46:16 +0200
-Subject: [Buildroot] [PATCH] gst-ffmpeg: work-around bogus configure
- logic on SPARC
-In-Reply-To: <1490223896-6063-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1490223896-6063-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170404114616.4f763f91@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 4 Apr 2017 10:52:46 +0100
+Subject: [Buildroot] [PATCH] gnupg2: bump version to 2.1.20
+Message-ID: <20170404095246.61406-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/gnupg2/gnupg2.hash | 6 +++---
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Thu, 23 Mar 2017 00:04:56 +0100, Thomas Petazzoni wrote:
-> The libav version built into the gst-ffmpeg code produces a bogus
-> binary on SPARC, which causes the following error of the
-> check-bin-arch script:
-> 
->   ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstffmpeg.so is Sparc v8+, should be Sparc
->   ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstpostproc.so is Sparc v8+, should be Sparc
->   ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstffmpegscale.so is Sparc v8+, should be Sparc
-> 
-> The problem is the following bit of code in
-> gst-lib/ext/libav/configure:
-> 
-> elif enabled sparc; then
-> 
->     enabled vis && check_asm vis '"pdist %f0, %f0, %f0"' -mcpu=ultrasparc &&
->         add_cflags -mcpu=ultrasparc -mtune=ultrasparc
-> 
-> I.e, it checks if the architecture supports the pdist
-> instruction... but forces -mcpu to ultrasparc while doing so. So it's
-> like "let's see if this Ultrasparc instruction exists when I force the
-> compiler to think I'm using Ultrasparc", which is non-sensical. This
-> has been fixed later on in libav upstream:
-> 
->   https://git.libav.org/?p=libav.git;a=commit;h=6aa93689abe8c095cec9fa828c2dee3131008995
-> 
-> However, this commit cannot be backported as-is since the shell
-> function check_inline_asm did not exist in the old libav version
-> bundled in gst-ffmpeg.
-> 
-> Therefore, we take the simpler route of disabling the VIS
-> optimizations on SPARCv8 and Leon3.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/e82d179c3d4f92ad7423693a4b1d42379a3f5411/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index c589f6a..7eb8e59 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q1/000402.html
+-sha1 10a088a6716789ac5c5cce2776952d8f4a5c57fc  gnupg-2.1.19.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000404.html
++sha1 500ddae8e4225ae2e300934090f9b9a427b8def1  gnupg-2.1.20.tar.bz2
+ # Calculated based on the hash above
+-sha256 46cced1f5641ce29cc28250f52fadf6e417e649b3bfdec49a5a0d0b22a639bf0  gnupg-2.1.19.tar.bz2
++sha256 24cf9a69369be64a9f6f8cc11a1be33ab7780ad77a6a1b93719438f49f69960d  gnupg-2.1.20.tar.bz2
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index c310f93..db7f4cb 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.1.19
++GNUPG2_VERSION = 2.1.20
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.2
