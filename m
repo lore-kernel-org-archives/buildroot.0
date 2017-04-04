@@ -1,300 +1,155 @@
-From: Jagan Teki <jagan@openedev.com>
-Date: Tue,  4 Apr 2017 23:40:12 +0530
-Subject: [Buildroot] [PATCH v3] board: Add support for Engicam i.CoreM6
-	Quad/Dual boards
-Message-ID: <1491329412-5660-1-git-send-email-jagan@openedev.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 4 Apr 2017 20:59:28 +0200
+Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
+In-Reply-To: <39bc6b12-1dfd-8ada-f1bc-8597c6872a1c@mind.be>
+References: <20170402130338.12542-1-yann.morin.1998@free.fr>
+ <39bc6b12-1dfd-8ada-f1bc-8597c6872a1c@mind.be>
+Message-ID: <20170404185928.GA3828@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jagan Teki <jagan@amarulasolutions.com>
+Arnout, All,
 
-Add initial support for Engicam i.CoreM6 Quad/Dual board
-with below features:
-- U-Boot 2017.01
-- Linux 4.10
-- Default packages from buildroot
+On 2017-04-03 12:10 +0200, Arnout Vandecappelle spake thusly:
+> On 02-04-17 15:03, Yann E. MORIN wrote:
+> > When debugging hidden dependencies, the build order is very important.
+> > Most notably, it is interesting to identify potential culprits.
+> > 
+> > Add a new top-level rule, show-biuld-order, that dumps all the packages
+> > in the order they would get built.
+> > 
+> > Note that there are a few differences with show-targets:
+> > 
+> >   - more packages are reported, becasue show-targets does not report
+> >     host packages that have no prompt;
+> > 
+> >   - the output is line-based, because we're using $(info $(1)); getting
+> >     a single output line like show-targets would require we use an
+> >     actual command, like printf '%s ' $(1); but that takes a lot of
+> >     time, while $(info $(1)) is almost instantaneous (the time to parse
+> >     the Makefiles);
+> > 
+> >   - rootfs targets are not reported.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: Peter Korsgaard <peter@korsgaard.com>
+> > ---
+> >  Makefile               | 2 ++
+> >  package/pkg-generic.mk | 3 +++
+> >  2 files changed, 5 insertions(+)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index 941bf78..919d589 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -757,6 +757,8 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+> >  show-targets:
+> >  	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+> >  
+> > +show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
+> > +
+> >  graph-build: $(O)/build/build-time.log
+> >  	@install -d $(GRAPHS_DIR)
+> >  	$(foreach o,name build duration,./support/scripts/graph-build-time \
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 31dbc54..3b26e6b 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -737,6 +737,9 @@ $(1)-show-depends:
+> >  $(1)-show-rdepends:
+> >  			@echo $$($(2)_RDEPENDENCIES)
+> >  
+> > +$(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
+> > +	$$(info $(1))
+> > +
+> 
+>  I don't like this...
+> 
+>  IMO we already have way too many of these informational targets messing up
+> pkg-generic.mk. This is bad for two reasons:
+> 
+> - it makes the code more complicated, more difficult to understand what's going
+> on int pkg-generic.mk;
+> 
+> - it's bad for performance. This adds 2000 rules to the make rules database,
+> which makes the dependency resolution slower (even if this rule is not used).
+> Just this one extra rule doesn't make much of a difference, but it's all these
+> extra rules that we've added over the years combined that make it slower. That
+> said, there is probably some refactoring that could be done to make it less bad,
+> so it's not too big of a factor.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Matteo Lisi <matteo.lisi@engicam.com>
-Cc: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
----
-Changes for v3:
-- Rename icore with common, since creating a folder with the name of
-  SOM is not make sense, becuase the defconfig is the only change.
-- Update readme.txt, post-images.sh, engicam_imx6q_icore_defconfig as per
-  above change.
-- rebased on master
-Changes for v2:
-- Created icorem6 family board on engicam
-- Added Quad/Dual SOM boards support
-- Created well defined readme.tx with referance to board/freescale/imx6q-sabresd/
-- s/imx6q_icore_defconfig/engicam_/imx6q_icore_defconfig
-- Updated DEVELOPERS file
-- Created genimage.cfg with added SPL and u-boot-dtb.img partitions
-- Removed Latest source configs and updated with fixed version source for U-Boot, Linux
-- Add board link on readme.txt
-- Removed BR2_TARGET_ROOTFS_TAR_XZ=y
-- Created post-image.sh with referance to board/freescale/imx6q-sabresd/
+Timing the run before/after this change does not yield a noticeable
+difference, tested with:
 
- DEVELOPERS                            |  4 +++
- board/engicam/common/genimage.cfg     | 46 ++++++++++++++++++++++++
- board/engicam/common/post-image.sh    | 54 ++++++++++++++++++++++++++++
- board/engicam/common/readme.txt       | 66 +++++++++++++++++++++++++++++++++++
- configs/engicam_imx6q_icore_defconfig | 40 +++++++++++++++++++++
- 5 files changed, 210 insertions(+)
- create mode 100644 board/engicam/common/genimage.cfg
- create mode 100755 board/engicam/common/post-image.sh
- create mode 100644 board/engicam/common/readme.txt
- create mode 100644 configs/engicam_imx6q_icore_defconfig
+    $ for((i=0;i<50;i++)); do
+        /usr/bin/time make CMD 2>&1 >/dev/null |head -n 1
+    done
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c89468b..a86860d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -802,6 +802,10 @@ F:	package/angularjs/
- N:	Ilias Apalodimas <apalos@gmail.com>
- F:	package/keepalived/
- 
-+N:	Jagan Teki <jagan@amarulasolutions.com>
-+F:	board/engicam/
-+F:	configs/engicam_imx6q_icore_defconfig
-+
- N:	James Knight <james.knight@rockwellcollins.com>
- F:	package/atkmm/
- F:	package/cairomm/
-diff --git a/board/engicam/common/genimage.cfg b/board/engicam/common/genimage.cfg
-new file mode 100644
-index 0000000..29adefe
---- /dev/null
-+++ b/board/engicam/common/genimage.cfg
-@@ -0,0 +1,46 @@
-+# Minimal SD card image for the Freescale boards Template
-+#
-+# We mimic the .sdcard Freescale's image format:
-+# * the SD card must have 1 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 8 MB is containing zImage/uImage and DTB files
-+# * a single root filesystem partition is required (ext2, ext3 or ext4)
-+#
-+
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      %FILES%
-+    }
-+  }
-+  size = 16M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition SPL {
-+    in-partition-table = "no"
-+    image = "SPL"
-+    offset = 1024
-+  }
-+
-+  partition u-boot-dtb {
-+    in-partition-table = "no"
-+    image = "u-boot-dtb.img"
-+    offset = 69K
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+    offset = 8M
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/engicam/common/post-image.sh b/board/engicam/common/post-image.sh
-new file mode 100755
-index 0000000..b4d982c
---- /dev/null
-+++ b/board/engicam/common/post-image.sh
-@@ -0,0 +1,54 @@
-+#!/usr/bin/env bash
-+
-+#
-+# dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
-+# in ${BR_CONFIG}, then prints the corresponding list of file names for the
-+# genimage configuration file
-+#
-+dtb_list()
-+{
-+	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
-+
-+	for dt in $DTB_LIST; do
-+		echo -n "\"$dt.dtb\", "
-+	done
-+}
-+
-+#
-+# linux_image extracts the Linux image format from BR2_LINUX_KERNEL_UIMAGE in
-+# ${BR_CONFIG}, then prints the corresponding file name for the genimage
-+# configuration file
-+#
-+linux_image()
-+{
-+	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
-+		echo "\"uImage\""
-+	else
-+		echo "\"zImage\""
-+	fi
-+}
-+
-+main()
-+{
-+	local FILES="$(dtb_list) $(linux_image)"
-+	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
-+	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+	sed -e "s/%FILES%/${FILES}/" \
-+		 board/engicam/common/genimage.cfg > ${GENIMAGE_CFG}
-+
-+	rm -rf "${GENIMAGE_TMP}"
-+
-+	genimage \
-+		--rootpath "${TARGET_DIR}" \
-+		--tmppath "${GENIMAGE_TMP}" \
-+		--inputpath "${BINARIES_DIR}" \
-+		--outputpath "${BINARIES_DIR}" \
-+		--config "${GENIMAGE_CFG}"
-+
-+	rm -f ${GENIMAGE_CFG}
-+
-+	exit $?
-+}
-+
-+main $@
-diff --git a/board/engicam/common/readme.txt b/board/engicam/common/readme.txt
-new file mode 100644
-index 0000000..bafdda1
---- /dev/null
-+++ b/board/engicam/common/readme.txt
-@@ -0,0 +1,66 @@
-+*****************************************
-+Buildroot for Engicam i.MX6 SOM platforms:
-+*****************************************
-+
-+This file documents the Buildroot support for all Engicam i.MX6 SOM
-+platform boards.
-+
-+i.CoreM6 Quad/Dual SOM Starter kits:
-+http://www.engicam.com/en/products/embedded/som/sodimm/i-core-m6s-dl-d-q
-+
-+This configuration uses U-Boot mainline and kernel mainline.
-+
-+Build
-+=====
-+
-+First, configure Buildroot for the Engicam i.MX SOM's:
-+
-+- for i.CoreM6 Quad/Dual:
-+
-+  make engicam_imx6q_icore_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find the following files in output/images/:
-+- for i.CoreM6 Quad/Dual:
-+  - imx6q-icore.dtb
-+  - rootfs.ext4
-+  - rootfs.tar
-+  - sdcard.img
-+  - SPL
-+  - u-boot-dtb.img
-+  - uImage
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a SD card. Launch the following
-+command as root:
-+
-+  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/common/imx/genimage.cfg.template.
-+
-+Boot the i.CoreM6 boards with SD boot:
-+=====================================
-+
-+To boot your newly created system:
-+- insert the SD card in the SD slot of the board;
-+- connect 3-wire RS232 serial port J28 on board, and connect with other
-+  serial end or USB cable(if serial-to-usb converter used) using
-+  a terminal emulator at 115200 bps, 8n1;
-+- close JM3 for sd boot.
-+- power on the board.
-+
-+Enjoy!
-diff --git a/configs/engicam_imx6q_icore_defconfig b/configs/engicam_imx6q_icore_defconfig
-new file mode 100644
-index 0000000..4278eeb
---- /dev/null
-+++ b/configs/engicam_imx6q_icore_defconfig
-@@ -0,0 +1,40 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_FPU_VFPV3=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-+
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Filesystem
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/engicam/common/post-image.sh"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6q_icore_mmc"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-icore imx6dl-icore"
+with CMD = help, before and after the patch, and then with
+CMD = show-build-order (obviously, after the patch), and using the
+'user' part of the timings:
+
+
+                    Help, before    Help, after     Build order
+Mean                2.9612          2.9934          2.9716
+Standard Error      0.00393456685   0.00505972492   0.00338496073
+Mode                2.96            2.98            2.96
+Median              2.96            2.98            2.97
+First Quartile      2.94            2.97            2.96
+Third Quartile      2.97            3.01            2.98
+Variance            0.00077404081   0.00128004081   0.00057289795
+Standard Deviation  0.02782158903   0.03577765806   0.02393528690
+Kurtosis            0.84170374930   2.10366593785   1.32436717983
+Skewness            0.95495029123   1.20563022139   0.44501404736
+Range               0.12            0.19            0.13
+Minimum             2.92            2.93            2.91
+Maximum             3.04            3.12            3.04
+Sum                 148.06          149.67          148.58
+Count               50              50              50
+
+Hmm... ;-)
+
+[ BTW, thanks libreoffice! ;-) ]
+
+>  But I wonder why you need this feature anyway. If you just build, you see the
+> build order as well, right?
+
+Oh yeah, and I pay the price of a three-hour build, jsut to see the
+build order...
+
+> And if you don't want to see the actual build, you
+> can do 'make -nk'.
+
+I hope you were kidding? For a config with 227 packages, this yields:
+
+    $ make -nk 2>&1 |wc -l
+    8459
+
+And I'm not doing the statistical analysis I did above, but a few runs
+give a runtime of ~5s. So it is a 66% overhead just for this, while the
+new rules add just about 1% overhead (30ms for 3s).
+
+Plus, it requires non-trivial post-processing... :-(
+
+> OK, it looks a lot nicer with this show-build-order target,
+> but I wouldn't say it's very valuable.
+
+Well, I've been tracking build-order issues for a while last WE, and
+believe me, I was very happy to be able to see the build order before
+I attempted a build, yes.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
