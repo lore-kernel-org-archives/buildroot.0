@@ -1,58 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Apr 2017 23:47:30 +0200
-Subject: [Buildroot] [PATCH] gst-ffmpeg: work-around bogus configure
-	logic on SPARC
-In-Reply-To: <1490223896-6063-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 23 Mar 2017 00:04:56 +0100")
-References: <1490223896-6063-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k26zu9ot.fsf@dell.be.48ers.dk>
+Date: Tue, 04 Apr 2017 23:48:51 +0200
+Subject: [Buildroot] [PATCH 1/1] libselinux: query for python
+	site-packages dir directly
+In-Reply-To: <1491271571-21770-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Mon, 3 Apr 2017 21:06:11 -0500")
+References: <1491271571-21770-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87fuhnu9mk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > The libav version built into the gst-ffmpeg code produces a bogus
- > binary on SPARC, which causes the following error of the
- > check-bin-arch script:
+ > With the bump to version 2.6, the following commit needs
+ > to be taken into consideration for overloading paths.
+ > https://github.com/SELinuxProject/selinux/commit/8162f10e670da963eb65ccf1e7de69ea85aba30d
 
- >   ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstffmpeg.so is Sparc v8+, should be Sparc
- >   ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstpostproc.so is Sparc v8+, should be Sparc
- >   ERROR: architecture for ./usr/lib/gstreamer-0.10/libgstffmpegscale.so is Sparc v8+, should be Sparc
+ > The PYLIBVER is no longer used and the PYTHONLIBDIR is
+ > renamed to PYSITEDIR with slightly different pathing.
 
- > The problem is the following bit of code in
- > gst-lib/ext/libav/configure:
+ > More details can be found in the issue ticket which was
+ > marked as a non-issue after analysis that a Buildroot fix
+ > was the resolution.
+ > https://github.com/SELinuxProject/selinux/issues/51
 
- > elif enabled sparc; then
-
- >     enabled vis && check_asm vis '"pdist %f0, %f0, %f0"' -mcpu=ultrasparc &&
- >         add_cflags -mcpu=ultrasparc -mtune=ultrasparc
-
- > I.e, it checks if the architecture supports the pdist
- > instruction... but forces -mcpu to ultrasparc while doing so. So it's
- > like "let's see if this Ultrasparc instruction exists when I force the
- > compiler to think I'm using Ultrasparc", which is non-sensical. This
- > has been fixed later on in libav upstream:
-
- >   https://git.libav.org/?p=libav.git;a=commit;h=6aa93689abe8c095cec9fa828c2dee3131008995
-
- > However, this commit cannot be backported as-is since the shell
- > function check_inline_asm did not exist in the old libav version
- > bundled in gst-ffmpeg.
-
- > Therefore, we take the simpler route of disabling the VIS
- > optimizations on SPARCv8 and Leon3.
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/e82d179c3d4f92ad7423693a4b1d42379a3f5411/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-I take these VIS instructions cause runtime errors with the older sparc
-cores?
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 Committed to 2017.02.x, thanks.
 
