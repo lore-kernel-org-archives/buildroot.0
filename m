@@ -1,50 +1,81 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 4 Apr 2017 00:23:05 -0300
-Subject: [Buildroot] [PATCH v2] libepoxy: OpenGL EGL and OpenGL ES
- dependencies are mandatory
-In-Reply-To: <20170403224659.29408234@free-electrons.com>
-References: <20170322115643.48653-1-Vincent.Riera@imgtec.com>
- <20170322225648.5a32abeb@free-electrons.com>
- <ea393b5769dccf6047c895588cab7298@zacarias.com.ar>
- <20170323142827.2dc1af5e@free-electrons.com>
- <a18b94fc97da118b9e5232569b5e09ae@zacarias.com.ar>
- <20170403224659.29408234@free-electrons.com>
-Message-ID: <9942388d-e45f-88d2-ec16-1c9f077a6d23@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Apr 2017 07:04:05 +0200
+Subject: [Buildroot] [PATCH v3] package/xen: Update to version 4.8.0
+In-Reply-To: <CAKmqyKOAZFuJ2oEa-VZC0bUf9nV8-PKxz4z=4gHEok++a=Sh9A@mail.gmail.com>
+References: <20170331181114.968-1-alistair.francis@xilinx.com>
+ <20170401145657.5ed91b47@free-electrons.com>
+ <CAKmqyKOAZFuJ2oEa-VZC0bUf9nV8-PKxz4z=4gHEok++a=Sh9A@mail.gmail.com>
+Message-ID: <20170404070405.14db1e0f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/04/17 17:46, Thomas Petazzoni wrote:
+Hello,
 
-> Hello,
->
-> On Thu, 23 Mar 2017 10:31:58 -0300, Gustavo Zacarias wrote:
->
->> Hi Thomas.
->> The patch is mixing two different "issues":
->> 1) It "fixes" that EGL support, without GLX, requires GLES, which isn't
->> true.
->> 2) It fixes the autobuilder failures that GLX requires EGL - which
->> wasn't the case before (1.3.x versions). I need to consult upstream
->> about this, my guess is that it's probably wrong since EGL isn't a hard
->> requirement for GLX - GLX existed long before EGL did.
->
-> Has upstream spoken about this?
->
-> The build issue has been there for a long time, so I would really like
-> to see it fixed.
->
-> Thanks,
->
-> Thomas
+On Mon, 3 Apr 2017 14:59:53 -0700, Alistair Francis wrote:
+> On Sat, Apr 1, 2017 at 5:56 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Hello,
+> >
+> > On Fri, 31 Mar 2017 11:11:14 -0700, Alistair Francis wrote:
+> >  
+> >> +-    $(MAKE) -f $(BASEDIR)/tools/kconfig/Makefile.kconfig ARCH=$(ARCH) SRCARCH=$(SRCARCH) HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" $@
+> >> ++    $(MAKE) -f $(BASEDIR)/tools/kconfig/Makefile.kconfig ARCH=$(ARCH) SRCARCH=$(SRCARCH) HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" HOST_EXTRACFLAGS="$(APPEND_CFLAGS)" $@
+> >> +
+> >> + include/config/%.conf: include/config/auto.conf.cmd $(KCONFIG_CONFIG)
+> >> +-    $(MAKE) -f $(BASEDIR)/tools/kconfig/Makefile.kconfig ARCH=$(ARCH) SRCARCH=$(SRCARCH) HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" silentoldconfig
+> >> ++    $(MAKE) -f $(BASEDIR)/tools/kconfig/Makefile.kconfig ARCH=$(ARCH) SRCARCH=$(SRCARCH) HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" HOST_EXTRACFLAGS="$(APPEND_CFLAGS)" silentoldconfig
+> >> +
+> >> + # Allow people to just run `make` as before and not force them to configure
+> >> + $(KCONFIG_CONFIG):
+> >> +-    $(MAKE) -f $(BASEDIR)/tools/kconfig/Makefile.kconfig ARCH=$(ARCH) SRCARCH=$(SRCARCH) HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" defconfig
+> >> ++    $(MAKE) -f $(BASEDIR)/tools/kconfig/Makefile.kconfig ARCH=$(ARCH) SRCARCH=$(SRCARCH) HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" HOST_EXTRACFLAGS="$(APPEND_CFLAGS)" defconfig  
+> >
+> > I'm sorry, but this looks completely wrong. HOSTCC and HOST_EXTRACFLAGS
+> > refer to the host compiler and host compiler flags, and you're passing
+> > flags for the target into them...  
+> 
+> I'm not changing anything related to HOSTCC flags, I'm leaving that as
+> they always have been in Xen.
 
-Hi Thomas.
-I haven't heard back from upstream on both pending points for libepoxy 
-(clean solution for epoxy with mesa without x11) nor forcing EGL.
-IMO EGL isn't a hard requirement for X11 (GLX), i can rework the old 
-patch for the new libepoxy and send another pull request to see what's 
-up, though i was hoping upstream to clarify before being too annoying 
-with pulls.
-Regards.
+Of course you are changing things. You are changing:
+
+HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" defconfig
+
+to:
+
+HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)" HOST_EXTRACFLAGS="$(APPEND_CFLAGS)" defconfig  
+
+So indeed, you're not changing HOSTCC or HOSTCXX, but you are passing
+HOST_EXTRACFLAGS to the value APPEND_CFLAGS.
+
+And HOST_EXTRACFLAGS as the name suggests seems to be flags for
+building *host* programs (i.e built for the build machine). And you're
+using that to pass through APPEND_CFLAGS *target* flags.
+
+> All I'm doing is ensuring that the APPEND_CFLAGS argument is passed
+> into all instances of make.
+
+Yes, and that is wrong because APPEND_CFLAGS contains target flags.
+
+> >> +# We need to change CFLAGS to APPEND_CFLAGS for the Xen build system to work
+> >> +XEN_TARGET_CONFIGURE_OPTS := $(subst CFLAGS=",APPEND_CFLAGS="-Wno-error ,$(TARGET_CONFIGURE_OPTS))  
+
+See here: you're changing TARGET_CONFIGURE_OPTS from:
+
+	CFLAGS="$(TARGET_CFLAGS)"
+
+to
+
+	APPEND_CFLAGS="$(TARGET_CFLAGS)"
+
+So APPEND_CFLAGS really contains target flags, and Xen will use them
+when building host programs. This is not good.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
