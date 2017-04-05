@@ -1,7 +1,7 @@
 From: James Balean <james@balean.com.au>
-Date: Tue,  4 Apr 2017 22:29:50 -0500
-Subject: [Buildroot] [PATCH] Add out-of-source U-Boot device tree support
-In-Reply-To: <20170329090909.4c74c734@free-electrons.com>
+Date: Tue,  4 Apr 2017 22:45:51 -0500
+Subject: [Buildroot] [PATCH v2] Add out-of-source U-Boot device tree support
+In-Reply-To: <1491362990-3697-1-git-send-email-james@balean.com.au>
 References: <1490595146-5638-1-git-send-email-james@balean.com.au>
  <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
  <1490681640-14995-1-git-send-email-james@balean.com.au>
@@ -11,33 +11,65 @@ References: <1490595146-5638-1-git-send-email-james@balean.com.au>
  <20170328222929.036d1152@free-electrons.com>
  <92078ad6-2fcc-69e4-86b9-0d296ef350c0@mind.be>
  <20170329090909.4c74c734@free-electrons.com>
-Message-ID: <1491362990-3697-1-git-send-email-james@balean.com.au>
+ <1491362990-3697-1-git-send-email-james@balean.com.au>
+Message-ID: <1491363951-3971-1-git-send-email-james@balean.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Similaly to Linux, this patch adds the ability to copy in and build
+out-of-source device tree sources during a U-Boot build.
 
-Thank you for your responses. I will submit a new version of the patch
-with your suggestions following this.
+Signed-off-by: James Balean <james@balean.com.au>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes for v2:
+  - Added dependency on U-Boot Kconfig build system.
+  - Code style cleanup
 
-On 29 March 2017 at 18:09, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> > > Not necessarily. The DT can be used by U-Boot itself to know which
-> > > peripherals are available, and how they should be configured.  
-> > 
-> >  But U-Boot can always pass the device tree it uses internally to
-> >  the kernel, no?
-> 
-> I don't know. Would have to check.
+ boot/uboot/Config.in | 14 ++++++++++++++
+ boot/uboot/uboot.mk  |  3 +++
+ 2 files changed, 17 insertions(+)
 
-I believe it is possible to use U-Boot's device tree blob when booting
-Linux. U-Boot's DTB is simply concatenated on the end of itself, so the
-address at which the blob starts could be determined and supplied to the
-'bootm' command when booting Linux. I have not tested this though, so
-will report back if I get around to it.
-
-Thanks again,
-James
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index c33861b..ca94749 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -407,4 +407,18 @@ config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
+ 
+ endif # BR2_TARGET_UBOOT_ENVIMAGE
+ 
++if BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
++
++config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
++	string "Device Tree Source file paths"
++	help
++	  Path to the device tree source files. You can provide a list
++	  of dts paths to copy, separated by spaces.
++
++	  To use this device tree source file, the U-Boot configuration
++	  file must refer to it.
++
++endif
++
+ endif # BR2_TARGET_UBOOT
++
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index aac692c..1d464d9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -195,6 +195,9 @@ endef
+ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ 
+ define UBOOT_BUILD_CMDS
++	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
++		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
++	)
+ 	$(TARGET_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+ 		$(UBOOT_MAKE_TARGET)
+-- 
+2.7.4
