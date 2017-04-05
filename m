@@ -1,57 +1,49 @@
-From: Matthias Fritzsche <txt.file@txtfile.eu>
-Date: Wed,  5 Apr 2017 22:11:59 +0200
-Subject: [Buildroot] [PATCH] beaglebone: add DT for BeagleBone Green
-Message-ID: <1491423119-19593-1-git-send-email-txt.file@txtfile.eu>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 5 Apr 2017 22:15:40 +0200
+Subject: [Buildroot] [PATCHv3 00/12] toolchain: improvements to
+ copy_toolchain_sysroot and copy_toolchain_lib_root
+In-Reply-To: <20170405215445.2b734880@free-electrons.com>
+References: <20170207215649.364-1-patrickdepinguin@gmail.com>
+ <20170405215445.2b734880@free-electrons.com>
+Message-ID: <CAAXf6LWeKRpa8ngWCxiAKckCrBV27RW8fZdN5BTkdOE1iQYk9g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthias Fritzsche <txt.file@txtfile.eu>
----
- board/beaglebone/genimage.cfg    | 1 +
- configs/beaglebone_defconfig     | 2 +-
- configs/beaglebone_qt5_defconfig | 2 +-
- 3 files changed, 3 insertions(+), 2 deletions(-)
+On Apr 5, 2017 21:54, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
-index ba60297..cfc1039 100644
---- a/board/beaglebone/genimage.cfg
-+++ b/board/beaglebone/genimage.cfg
-@@ -9,6 +9,7 @@ image boot.vfat {
- 			"am335x-evmsk.dtb",
- 			"am335x-bone.dtb",
- 			"am335x-boneblack.dtb",
-+			"am335x-bonegreen.dtb",
- 		}
- 	}
- 	size = 16M
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 6fe3a5e..b74ffbc 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -10,7 +10,7 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-l
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="adde2ca9f86797071f6e7b2b9e779fa5e4a8f3cd"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index a9ab5a2..78dc109 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -14,7 +14,7 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52c4aa7cdb93d61f8008f380135beaf7b8fa6593"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-4.1-sgx.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
- BR2_PACKAGE_FBV=y
- BR2_PACKAGE_QT5=y
- BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
--- 
-2.1.4
+Hello,
+
+On Tue,  7 Feb 2017 22:56:37 +0100, Thomas De Schampheleire wrote:
+
+> Thomas De Schampheleire (12):
+>   toolchain-external: reduce nesting in copy_toolchain_sysroot
+>   toolchain-external: fix broken handling of 'usr/lib/locale'
+>   toolchain-external: clarify rsync excludes in copy_toolchain_sysroot
+>   toolchain-external: handle ld.so fixups centrally
+>   toolchain helpers: introduce function relpath_prefix
+>   toolchain-external: cover multilib toolchains with lib/<variant>
+>     layout
+>   toolchain helpers: introduce simplify_symlink
+>   toolchain-external: simplify previously-broken symbolic links
+>   toolchain: copy_toolchain_lib_root: remove unused variable LIBDIR
+>   toolchain: copy_toolchain_lib_root: clarify logic
+>   toolchain: copy_toolchain_lib_root: clarify input parameter
+>   toolchain: copy_toolchain_lib_root: copy symlinks instead of
+>     recreating them
+
+I've now applied the remainder of the series, patches 3 to 12. I still
+find this quite complicated overall, but I couldn't find any other
+solution and nobody else did, and the problem scope is complicated
+anyway.
+
+Let's see the feedback we get from users :)
+
+
+Thanks!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170405/c5f5ae17/attachment.html>
