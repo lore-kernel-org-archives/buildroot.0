@@ -1,86 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  5 Apr 2017 08:28:34 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-04-04
-Message-ID: <20170405062834.F1B4C20821@mail.free-electrons.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 5 Apr 2017 08:38:03 +0200
+Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
+ BR2_GENIMAGE_CFG_FILES
+In-Reply-To: <b10839b0-389e-f445-ab41-269480c387e3@mind.be>
+References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
+ <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
+ <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
+ <f2428cf7-660e-f22d-0e5e-4b22e1abf870@andin.de>
+ <4d773ae6-949d-800e-938b-f9780b25c2e9@mind.be>
+ <6948dd58-dd05-8b72-6249-7c230035c62c@andin.de>
+ <b10839b0-389e-f445-ab41-269480c387e3@mind.be>
+Message-ID: <59b34755-2637-5330-84ab-9d47e177bd0a@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-Build statistics for 2017-04-04
-================================
+Am 03.04.2017 um 15:54 schrieb Arnout Vandecappelle:
+>
+>
+> On 03-04-17 15:01, Andreas Naumann wrote:
+>>>> What I was thinking about in the past would be a deeper integration of genimage
+>>>> in buildroots filesystem configuration, actually generating the genimage config.
+>>>> But so far it was not worth the effort for me.
+>>>
+>>>  We have considered that in the past. The problem is that genimage doesn't
+>>> support some of the options that we do. Otherwise, however, it would be really
+>>
+>> Are you refering to filesystem-specific options or missing ones like axfs,
+>> cloop, cramfs?
+>
+>  I'm refering to filesystem-specific options. E.g. AFAIK genimage doesn't allow
+> configuration of ext2 #inodes or reserved blocks, or UBIFS max LEB count or
+> compression.
 
-      successes : 136
-       failures : 36 
-       timeouts : 0  
-          TOTAL : 172
+There is the option to supply extraargs to the mkfs tools of most of the 
+filesystems. However some sizes and LEBs may remain 
+hardcoded/calculated. Dont know if that would suffice.
+>
+>
+>>> nice to remove all our messy filesystem handling code and just generate a
+>>> genimage.cfg file...
+>
+>  And my point here is: we could just extend genimage with all those options.
+> Then we can use genimage instead of our rootfs handling. For the most part, the
+> rootfs infra could be reduced to a single genimage.cfg file.
+>
+>  But as usual: all that would be nice in a way, but doesn't give us any direct
+> advantage over what we have now, and what we have now works.
+>
 
-Classification of failures by reason
-====================================
+ditto
 
-           uboot-tools-2017.03 | 4 
-                 xenomai-3.0.3 | 4 
-            gesftpserver-0.2.1 | 3 
-             ipsec-tools-0.8.2 | 3 
-             ntfs-3g-2017.3.23 | 3 
-                openobex-1.5.0 | 3 
-                    ruby-2.4.1 | 3 
-                 libv4l-1.12.2 | 2 
-                aiccu-20070115 | 1 
-                 binutils-2.27 | 1 
-             bluez5_utils-5.44 | 1 
-                 efibootmgr-14 | 1 
-            gst-ffmpeg-0.10.13 | 1 
-                libepoxy-1.4.1 | 1 
-                 mplayer-1.3.0 | 1 
-                    mpv-0.23.0 | 1 
-                poppler-0.53.0 | 1 
-                  samba4-4.5.7 | 1 
-                 sudo-1.8.19p2 | 1 
+>
+>>>
+>>>  OTOH we also considered that a full image typically needs more than just a
+>>> single filesystem, so generating a genimage.cfg for part of the image seems a
+>>> bit pointless.
+>>
+>> I dont quite understand. Do you mean combining e.g. a standard and a rescue system?
+>
+>  In practice, you rarely use the .ext2 or .ubifs image produced by Buildroot
+> directly; instead, you'll embed it into a larger image that is a lot more
+> complicated than e.g. the .ubi image offered by Buildroot (because you'd want a
+> writeable data volume in addition to the ubifs rootfs).
+>
+>  So if we would use genimage for generating the .ext2 rootfs itself, then in
+> practice you'll often end up running genimage twice: once for the .ext2 rootfs,
+> and a second time to integrate it in a larger image.
+
+I guess a good integration could avoid that, but I assume it would be 
+difficult to predict the many ways people might want to customize this.
+
+In addition I also think the practical problems of somehow having to 
+convert Kconfig options to a genimage config are not worth it (even 
+though augeas, which with I played lately, seems like it might provide 
+an elegant way to do this.)
+
+>
+>
+>  Coming back to the BR2_GENIMAGE_CFG_FILES option: actually it would make a
+> whole lot more sense if the genimage were executed under fakeroot, because then
+> we no longer need to generate the .ext2 subimage.
+>
+>  Still, there is hardly any advantage over having this as an explicit option
+> rather than configuring
+>
+> BR2_ROOTFS_POST_FAKEROOT_SCRIPT="support/scripts/genimage.sh"
+> BR2_ROOTFS_POST_SCRIPT_ARGS="-c path/to/my/genimage.cfg"
+
+In fact, this is almost what i do right now. Just a rootfs.tar is 
+created and subsequently processed by genimage (I have a small patch 
+that allows genimage to be fed with a tar in additin to the input dir).
 
 
-Detail of failures
-===================
+regards,
+Andreas
 
-         arm |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/e9d96643de285fb8870e8061c042f9dc75ebca9d |     
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/b3c609fef93507c1ade81557dfa1427959b15c1b | ORPH
-         arm |              bluez5_utils-5.44 | NOK | http://autobuild.buildroot.net/results/006a999d47ede771b35718ea7833bf7cacfe3cf2 |     
-         arm |                  efibootmgr-14 | NOK | http://autobuild.buildroot.net/results/5928d9d9a647a864b940db37371a75a57bd3d77d |     
-         arm |             gesftpserver-0.2.1 | NOK | http://autobuild.buildroot.net/results/454b22554025242d539120f79d8f64c24a38d108 | ORPH
-        m68k |             gesftpserver-0.2.1 | NOK | http://autobuild.buildroot.net/results/3789e11d953804a05f7c3475980ccca97dd66361 | ORPH
-    mips64el |             gesftpserver-0.2.1 | NOK | http://autobuild.buildroot.net/results/162ff98c2372c55dc5fcf9c33b4d10d727d4011f | ORPH
-       sparc |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/53a38bfd8692be6a613ad78a1e8a73f3e1f47cd6 | ORPH
-      x86_64 |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/9f8a9292d8276493ed78b51eac969c28129b1b08 | ORPH
-         arm |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/b2843b1e6d2e96f5670a9396964bc4e4a55a354b | ORPH
-     powerpc |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/431135d9f985f3b3f935cc29fe16728b2412dd3a | ORPH
-      xtensa |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/c6da4c0b46d103427a2ba59fa36beb4a22c77987 |     
-       sparc |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/384d67652010bf7ff444c4d00ee3d6a956f768c9 | ORPH
-         arm |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/f4e29c1cab7d71385428ada80918dc85e95c22c9 | ORPH
-        i586 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/665dc3004c2329220d3366da672bf4eb4f624a70 |     
-         arm |                     mpv-0.23.0 | NOK | http://autobuild.buildroot.net/results/b6216d7298986b236e79233f5402d9aa55dd10b8 |     
-         arm |              ntfs-3g-2017.3.23 | NOK | http://autobuild.buildroot.net/results/9f78c9716361470c09b266979d3bfc79f9b9f7c3 | ORPH
-      xtensa |              ntfs-3g-2017.3.23 | NOK | http://autobuild.buildroot.net/results/929b66eda6835b687081277252335ca4330c49e1 | ORPH
-        m68k |              ntfs-3g-2017.3.23 | NOK | http://autobuild.buildroot.net/results/fc6aa8912b4bd63c0fb5729d2e3aca32f14e2aa5 | ORPH
-microblazeel |                 openobex-1.5.0 | NOK | http://autobuild.buildroot.net/results/a2bd7d3cb809d3fcda49f86b915ba48868108c71 |     
-     powerpc |                 openobex-1.5.0 | NOK | http://autobuild.buildroot.net/results/72fef48e33cd5b299afb43578c853bd055630800 |     
-        or1k |                 openobex-1.5.0 | NOK | http://autobuild.buildroot.net/results/8a5f674db24ef1117ea9ffc6eb55b3bb9a82ec4c |     
-       sparc |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/35b1bdde43987f3ddb660d633864873c03cc6bb8 |     
-      xtensa |                     ruby-2.4.1 | NOK | http://autobuild.buildroot.net/results/87595c20adbcb8ecb3105f48d455e5b327201c47 | ORPH
-    mips64el |                     ruby-2.4.1 | NOK | http://autobuild.buildroot.net/results/fcd024f6658890861fd7165e15edc65f77a9d8e7 | ORPH
-      x86_64 |                     ruby-2.4.1 | NOK | http://autobuild.buildroot.net/results/a38f28f2af379ae34dbebe63e25b8d6875036421 | ORPH
-         arc |                   samba4-4.5.7 | NOK | http://autobuild.buildroot.net/results/c28883b70e792cd15b8a80b29fe0ac0f94a3e158 |     
-         arm |                  sudo-1.8.19p2 | NOK | http://autobuild.buildroot.net/results/5b42e8505856156389d480d0da19f6982cf120d8 | ORPH
-      x86_64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/2733af3eccd4f969f84970a96899b3c68c8a4a0c | ORPH
-         arm |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/b361f8e1dde87b460a20ee6e246c9c085572a415 | ORPH
-    mips64el |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/93556a5eb60596f67b8f9069e7c3464d0fb4ff6c | ORPH
-     sparc64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/3d0eea80a084f0f798a2a2071f0d95b47325673e | ORPH
-         arm |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/aca92f2c3cc5125333e201ece650ff763e4f46cd |     
-        i686 |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/c3ec13a817909765d7856f80a9de794cc22164af |     
-        i686 |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/72e0da7fd174ec13f099753d72ede5bc742bbadc |     
-        bfin |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/4945484affc834fc6dc1dde0efbb0ee75f62caca |     
-
--- 
-http://autobuild.buildroot.net
+>
+>  Regards,
+>  Arnout
+>
+>
