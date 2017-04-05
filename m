@@ -1,82 +1,155 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Apr 2017 21:33:29 +0200
-Subject: [Buildroot] [git commit] toolchain: copy_toolchain_lib_root:
-	clarify input parameter
-Message-ID: <20170405195202.838B9804EF@busybox.osuosl.org>
+Date: Wed, 5 Apr 2017 21:32:06 +0200
+Subject: [Buildroot] [git commit] toolchain-external: cover multilib
+	toolchains with lib/<variant> layout
+Message-ID: <20170405195202.41FF5826FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e4fb2019b116da3f606eeae976752d1a64d5fc5
+commit: https://git.buildroot.net/buildroot/commit/?id=a06edf201b4954e441065b565fe7fd677f8e41ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The input to copy_toolchain_lib_root is not one library, not a list of
-libraries, but a library name pattern with glob wildcards.
-This pattern is then passed to 'find' to get the actual list of libraries
-matching the pattern. Reflect this using an appropriate variable name.
+The toolchain from the Cavium Octeon SDK has a sysroot layout as follows:
 
-Note: if the root of the buildroot tree contains a file matching one of
-these library patterns, the copying of libraries from staging to target will
-not be correct. It is not impossible to fix that, e.g. using 'set -f', but
-maybe it's not worth it.
+./lib32
+./lib32/octeon2
+./lib32-fp
+./lib64
+./lib64/octeon2
+./lib64-fp
+./usr
+./usr/lib
+./usr/lib32
+./usr/lib32/octeon2
+./usr/lib32-fp
+./usr/lib64
+./usr/lib64/octeon2
+./usr/lib64-fp
+./usr/bin
+./usr/bin32
+./usr/bin32-fp
+./usr/bin64-fp
+./usr/libexec
+./usr/libexec32
+./usr/libexec32-fp
+./usr/libexec64-fp
+./usr/sbin
+./usr/sbin32
+./usr/sbin32-fp
+./usr/sbin64-fp
+./usr/include
+./usr/share
+./sbin
+./sbin32
+./sbin32-fp
+./sbin64-fp
+./etc
+./var
+
+with the following selections:
+- lib64          : default
+- lib64/octeon2  : -march=octeon2
+- lib64-fp       : -march=octeon3
+- lib32          : -mabi=n32
+- lib32/octeon2  : -mabi=n32 -march=octeon2
+- lib32-fp       : -mabi=n32 -march=octeon3
+
+In case of '-mabi=n32 -march=octeon2' (but same is true for n64+octeon2)the
+original Buildroot toolchain logic would copy both the libraries in
+lib32 as the subdirectory lib32/octeon2, which means that every library is
+installed twice (but only one of each is really needed).
+
+While ARCH_LIB_DIR is determined by the location of libc.a, which in this
+case is effectively:
+    <sysroot>/usr/lib32/octeon2/libc.a
+the variable only retains 'lib32' and not 'lib32/octeon2' as expected.
+
+To make Buildroot cope with this style of toolchain layout, we need to adapt
+the calculation of ARCH_LIB_DIR to also include the second part.
+This, in turn, means that ARCH_LIB_DIR is no longer guaranteed to be a
+singular path component, resulting in some additional changes.
+
+Certain older Linaro toolchains actually had the same layout. Libraries were
+located in lib/<tuple> rather than lib directly. Previously, this was
+handled by adding a toolchain-specific fixup that creates a symlink
+lib/<tuple> -> lib, but with this patch this would no longer be needed.
+Note that one difference with the Octeon case is that these Linaro
+toolchains are not actually multilib, i.e. there is just one location with
+the libraries and thus there is no problem with duplicated libraries.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glibc/glibc.mk                                 | 4 ++--
- toolchain/helpers.mk                                   | 6 +++---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ toolchain/helpers.mk                                | 21 +++++++++++++++++++--
+ .../toolchain-external/pkg-toolchain-external.mk    |  7 ++++---
+ 2 files changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 58cb3d4..ccaa4c2 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -110,8 +110,8 @@ GLIBC_LIBS_LIB += libthread_db.so.*
- endif
- 
- define GLIBC_INSTALL_TARGET_CMDS
--	for libs in $(GLIBC_LIBS_LIB); do \
--		$(call copy_toolchain_lib_root,$$libs) ; \
-+	for libpattern in $(GLIBC_LIBS_LIB); do \
-+		$(call copy_toolchain_lib_root,$$libpattern) ; \
- 	done
- endef
- 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 0ec9da4..e83bf27 100644
+index 21db9d7..1686485 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -6,12 +6,12 @@
- # toolchain logic, and the glibc package, so care must be taken when
- # changing this function.
+@@ -55,10 +55,19 @@ copy_toolchain_lib_root = \
+ # corresponding architecture variants), and we don't want to import
+ # them.
  #
--# $1: library name
-+# $1: library name pattern (can include glob wildcards)
++# If ARCH_LIB_DIR is not a singular directory component, e.g.
++# 'lib32/octeon2', then symbolic links in ARCH_LIB_DIR and
++# usr/ARCH_LIB_DIR may be broken because Buildroot will flatten the
++# directory structure (e.g. lib32/octeon2/foo is actually stored in
++# lib/foo). This is only relevant for links that contain one or more ../
++# components, as links to the current directory are always fine.
++# We need to fix the broken links by removing the right amount of ../
++# dots from the link destination.
++#
+ # It is possible that ARCH_LIB_DIR does not contain the dynamic loader
+ # (ld*.so or similar) because it (or the main symlink to it) normally
+-# resides in /lib while ARCH_LIB_DIR may be something else (e.g. lib64).
+-# Therefore, copy the dynamic loader separately.
++# resides in /lib while ARCH_LIB_DIR may be something else (e.g. lib64,
++# lib/<tuple>, ...). Therefore, copy the dynamic loader separately.
  #
- copy_toolchain_lib_root = \
--	LIB="$(strip $1)"; \
-+	LIBPATTERN="$(strip $1)"; \
- \
--	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIB}" 2>/dev/null` ; \
-+	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIBPATTERN}" 2>/dev/null` ; \
- 	for LIBPATH in $${LIBPATHS} ; do \
- 		DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
- 		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ # Then, if the selected architecture variant is not the default one
+ # (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
+@@ -111,6 +120,14 @@ copy_toolchain_sysroot = \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
++	relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
++	if [ "$${relpath}" != "" ]; then \
++		for i in $$(find -H $(STAGING_DIR)/$${ARCH_LIB_DIR} $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} -type l -xtype l); do \
++			LINKTARGET=`readlink $$i` ; \
++			NEWLINKTARGET=$${LINKTARGET\#$$relpath} ; \
++			ln -sf $${NEWLINKTARGET} $$i ; \
++		done ; \
++	fi ; \
+ 	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
+ 		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
+ 	fi ; \
 diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index a4d010a..9670350 100644
+index 1777368..a4d010a 100644
 --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -387,8 +387,8 @@ endef
- ifeq ($(BR2_STATIC_LIBS),)
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
- 	$(Q)$(call MESSAGE,"Copying external toolchain libraries to target...")
--	$(Q)for libs in $(TOOLCHAIN_EXTERNAL_LIBS); do \
--		$(call copy_toolchain_lib_root,$$libs); \
-+	$(Q)for libpattern in $(TOOLCHAIN_EXTERNAL_LIBS); do \
-+		$(call copy_toolchain_lib_root,$$libpattern); \
- 	done
+@@ -332,7 +332,7 @@ endef
+ # Returns the lib subdirectory for the given compiler + flags (i.e
+ # typically lib32 or lib64 for some toolchains)
+ define toolchain_find_libdir
+-$$(printf $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?([^/]*)?)/([^/]*/)?libc.a:\2:')
++$$(printf $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?([^/]*)?(/[^/]*)?)/libc.a:\2:')
  endef
- endif
+ 
+ # Returns the location of the libc.a file for the given compiler + flags
+@@ -448,8 +448,9 @@ create_lib_symlinks = \
+ 	$(Q)DESTDIR="$(strip $1)" ; \
+ 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+ 	if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
+-		ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
+-		ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
++		relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
++		ln -snf $${relpath}lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
++		ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+ 	fi
+ 
+ define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
