@@ -1,83 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Apr 2017 18:32:14 +0200
-Subject: [Buildroot] [PATCH v3] board: Add support for Engicam i.CoreM6
- Quad/Dual boards
-In-Reply-To: <CAD6G_RQ-ouaXSUkK-On+WkbmY2kVBz_EPXDfyZJTk6DGpB-Aew@mail.gmail.com>
-References: <1491329412-5660-1-git-send-email-jagan@openedev.com>
- <20170404221750.41125e2e@free-electrons.com>
- <CAD6G_RQ-ouaXSUkK-On+WkbmY2kVBz_EPXDfyZJTk6DGpB-Aew@mail.gmail.com>
-Message-ID: <4c896d5e-923a-ab19-a016-5dc978cbcf3d@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Apr 2017 18:34:45 +0200
+Subject: [Buildroot] [PATCH v2] arp-scan: new package
+In-Reply-To: <20170405101410.27980-1-arnout@mind.be>
+References: <20170405101410.27980-1-arnout@mind.be>
+Message-ID: <20170405183445.6cde0af8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 05-04-17 17:56, Jagan Teki wrote:
-> On Wed, Apr 5, 2017 at 1:47 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Tue,  4 Apr 2017 23:40:12 +0530, Jagan Teki wrote:
->>> From: Jagan Teki <jagan@amarulasolutions.com>
->>>
->>> Add initial support for Engicam i.CoreM6 Quad/Dual board
->>> with below features:
->>> - U-Boot 2017.01
->>> - Linux 4.10
->>> - Default packages from buildroot
->>>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> Cc: Matteo Lisi <matteo.lisi@engicam.com>
->>> Cc: Michael Trimarchi <michael@amarulasolutions.com>
->>> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
->>
->> Thanks, looking better.
->>
->>> diff --git a/board/engicam/common/post-image.sh b/board/engicam/common/post-image.sh
->>
->> Why do we have this 'common' folder, and this very flexible script? Do
->> you intend to submit the support for other boards?
+On Wed, 5 Apr 2017 12:14:10 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> On the br-arm-cortex-m4-full toolchain, the build fails with a
+> segmentation fault in elf2flt, so add an exception for ARM FLAT
+> toolchains. Other FLAT toolchains (e.g. br-m68k-5208-full) work fine.
 > 
-> I would like to add more boards in couple of days, the main intention
-> of adding common is to place file for common if any specific board
-> have any specific changes I will create board name file.
-> 
->>
->> This script is exactly the same as the one in
->> board/freescale/common/imx/post-image.sh, I definitely would like to
->> avoid duplication.
-> 
-> Same, but calling genimage.cfg is different in engicam vs freescale common.
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> I tried to debug the elf2flt segfault but elf2flt isn't exactly the
+> most low-entry-bar source code...
 
- Then it's better to add the path to genimage.cfg.template as an argument to the
-genimage script (with a default of the current template, so you don't need to
-update all the existing defconfigs).
+I think we have a regression here, which I would point to the bump of
+binutils from 2.26 to 2.27. Indeed, several packages are now causing
+segfaults in elf2flt on ARM:
 
- Better yet, factor this feature into support/scripts/genimage.sh, by adding
-extra flag arguments for the dtb-list and linux-image features. That's a bit
-more complicated, of course. If you do this, it would be nice to also update the
-existing freescale defconfigs, but not strictly necessary.
+Busybox:
 
- I'm adding Etienne in Cc, he's also working on defconfig refactoring for genimage.
+  http://autobuild.buildroot.net/results/475/4758354f0e2f7f127c1a99ef7846eb62f5ce41b5/build-end.log
 
- BTW, a better way to get the values is to use printvars (which works now). In
-the script, you can do e.g.:
+pcre:
 
-eval $(make -s O="${BASE_DIR}" printvars VARS="LINUX_IMAGE_NAME KERNEL_DTBS")
+  http://autobuild.buildroot.net/results/68c/68cf951594b0e67b45f8711745c17b93e2fbc03e/build-end.log
 
-and you get the LINUX_IMAGE_NAME and KERNEL_DTBS variables in your environment.
+and I'm sure the list will grow. So I believe that binutils 2.27
+produces binaries that are a bit different, and confuse elf2flt.
 
+Looking at https://github.com/uclinux-dev/elf2flt/commits/master, I
+don't see anything that particular stands out.
 
- Regards,
- Arnout
+Best regards,
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
