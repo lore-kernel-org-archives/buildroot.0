@@ -1,100 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 05 Apr 2017 17:26:24 +0200
-Subject: [Buildroot] Buildroot 2017.02.1 released
-Message-ID: <8760iiub8f.fsf@dell.be.48ers.dk>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Wed, 5 Apr 2017 21:26:16 +0530
+Subject: [Buildroot] [PATCH v3] board: Add support for Engicam i.CoreM6
+ Quad/Dual boards
+In-Reply-To: <20170404221750.41125e2e@free-electrons.com>
+References: <1491329412-5660-1-git-send-email-jagan@openedev.com>
+ <20170404221750.41125e2e@free-electrons.com>
+Message-ID: <CAD6G_RQ-ouaXSUkK-On+WkbmY2kVBz_EPXDfyZJTk6DGpB-Aew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wed, Apr 5, 2017 at 1:47 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue,  4 Apr 2017 23:40:12 +0530, Jagan Teki wrote:
+>> From: Jagan Teki <jagan@amarulasolutions.com>
+>>
+>> Add initial support for Engicam i.CoreM6 Quad/Dual board
+>> with below features:
+>> - U-Boot 2017.01
+>> - Linux 4.10
+>> - Default packages from buildroot
+>>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: Matteo Lisi <matteo.lisi@engicam.com>
+>> Cc: Michael Trimarchi <michael@amarulasolutions.com>
+>> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+>
+> Thanks, looking better.
+>
+>> diff --git a/board/engicam/common/post-image.sh b/board/engicam/common/post-image.sh
+>
+> Why do we have this 'common' folder, and this very flexible script? Do
+> you intend to submit the support for other boards?
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.net).
+I would like to add more boards in couple of days, the main intention
+of adding common is to place file for common if any specific board
+have any specific changes I will create board name file.
 
-Buildroot 2017.02.1 is released - Go download it at:
+>
+> This script is exactly the same as the one in
+> board/freescale/common/imx/post-image.sh, I definitely would like to
+> avoid duplication.
 
-http://buildroot.net/downloads/buildroot-2017.02.1.tar.gz
+Same, but calling genimage.cfg is different in engicam vs freescale common.
 
-or
+>
+> For now, if you're trying to submit the support for a single board, I
+> would suggest that you:
+>
+>  1. Use a "fixed" genimage.cfg, i.e without %FILES% or %DTBS%
+>
+>  2. Use support/scripts/genimage.sh
 
-http://buildroot.net/downloads/buildroot-2017.02.1.tar.bz2
+I will submit remaining boards soon, so I will keep the genimage.cfg as it is.
 
-Or get it from Git:
+>
+>> +# Kernel
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
+>
+> Since you're using a 4.10 kernel, you also need to set:
+>
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
 
-git://git.buildroot.net/buildroot
+Will add.
 
-Buildroot 2017.02.1 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2017.02 release.
-
-- Security fixes for audiofile, gnutls, harfbuzz, imagemagick, jasper,
-  mariadb, mbedtls, ntp, openssh, pcre, rpm, samba4, tcpreplay, tor,
-  wget, wireshark
-
-- Fixes for compilation/runtime issues in acl, apr, busybox, dbus-cpp,
-  domoticsz, elfutils, fakeroot, gdb, git, gst-ffmpeg, gst1-plugins-bad,
-  htop, libcec, libiio, libplatform, librsvg, libselinux, libsidplay2,
-  libsoc, libwebsockets, libxkbcommon, ltp-testsuite, lttng-libust,
-  memcached, mesa3d, mpd, mplayer, nbd, ncftp, opentyrian, perl-gd,
-  python, qt5base, rpi-userland, skalibs, slang, sngrep, syslog-ng,
-  upmpdcli, xdriver_xf86-video-vmware,
-
-- License information fixes for dbus-glib, dbus-triggerd, cairo, filemq,
-  taglib, xlib_libXv, zmqpp,
-
-- Fix a variable clashing issue in the mkusers script with internal bash
-  variables
-
-- Improve external toolchain version detection
-
-- Correct permissions for /dev/pts/ptmx when systemd is used with recent
-  glibc versions
-
-- Fix python module name clash for graph-depends
-
-- Fakeroot now links against libacl to fix issues on distributions using
-  acls
-
-- Ensure that the git download infrastructure creates GNU format
-  tar files
-
-- br2-external: Improve error reporting
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2017.02..
-    12  Peter Korsgaard
-    10  Bernd Kuhls
-     8  Arnout Vandecappelle
-     8  Thomas Petazzoni
-     7  Vicente Olivert Riera
-     6  Rahul Bedarkar
-     5  Fabio Estevam
-     5  Yann E. MORIN
-     4  Baruch Siach
-     4  Gustavo Zacarias
-     4  Peter Seiderer
-     4  Romain Naour
-     3  Julien BOIBESSOT
-     2  J?rg Krause
-     2  Kurt Van Dijck
-     2  Rodrigo Rebello
-     2  Yegor Yefremov
-     1  Eric Le Bihan
-     1  Fabrice Fontaine
-     1  Francois Perrad
-     1  Jan Kundr?t
-     1  Julien Beraud
-     1  Krzysztof Konopko
-     1  Matt Weber
-     1  Matthew Fornero
-     1  Oleg Kitain
-     1  Pawel Sikora
-     1  Zakharov Vlad
-
+thanks!
 -- 
-Bye, Peter Korsgaard
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
