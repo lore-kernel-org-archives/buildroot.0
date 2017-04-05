@@ -1,69 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 5 Apr 2017 17:02:36 +0200
-Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
-	BR2_GENIMAGE_CFG_FILES
-In-Reply-To: <87wpazuaa1.fsf@dell.be.48ers.dk>
-References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
- <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
- <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
- <20170401155116.66464885@free-electrons.com>
- <8760ilvozx.fsf@dell.be.48ers.dk>
- <2ce8812c-d95e-bd4a-9cde-f02ab8e3ca60@mind.be>
- <87wpazuaa1.fsf@dell.be.48ers.dk>
-Message-ID: <02a1a330-c947-2a64-29bb-88f6ac7d9c9f@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 5 Apr 2017 17:18:54 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] Update for 2017.02.1
+Message-ID: <20170405152214.2F14682256@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=476067a78d4fd1ddb141a8cccc63cf3e75cbe7a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 39 +++++++++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 41 insertions(+), 2 deletions(-)
 
-On 04-04-17 23:34, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> Hi,
-> 
->  >> >> What do the others think?
->  >> 
->  >> > I agree that the new option doesn't seem really useful.
->  >> 
->  >> I'm not sure. One of the problems with genimage is that it calls a
->  >> number of external utilities depending on the content of
->  >> genimage.cfg, and it isn't directly clear what host packages you need to
->  >> enable to ensure it works. If we add explicit BR2_GENIMAGE_FAT / CPIO /
->  >> EXT2 / ISO / JFFS2 / UBI / .. options selecting the needed host packages
->  >> then that would solve that issue.
-> 
->  >  So, how would you do that? To know which host packages to select, we need to
->  > parse the genimage.cfg file. This is not possible from Kconfig....
-> 
-> I would simply leave it to the user to select the correct sub
-> options. The point is just that explicit sub options are clearer than
-> having to reverse engineer genimage to figure out what programs it
-> executes (and then figure out what host packages provide them).
-
- OK, makes sense.
-
- Combined with the other discussion in this thread, long-term I see us evolving
-towards:
-
-- deprecate some of the finer-grain fs tuning options we have now;
-- always using genimage to generate the target filesystems;
-- position our fs targets more as a 'quick fix' solution than for production;
-- make host-e2fsprogs etc. blind options again.
-
- With that in mind, I'd tend to move the BR2_GENIMAGE_CFG_FILES option to top of
-the filesystem menu rather than the Build menu. Although perhaps even better
-would be to disable the filesystem menu entirely if BR2_GENIMAGE_CFG_FILES is
-not empty (though that would only be if everything can be built with genimage).
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/CHANGES b/CHANGES
+index 5fedca1..75163c3 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,42 @@
++2017.02.1, Released April 4th, 2017
++
++	Important / security related fixes.
++
++	Fix a variable clashing issue in the mkusers script with
++	internal bash variables.
++
++	Improve external toolchain version detection.
++
++	Correct permissions for /dev/pts/ptmx when systemd is used
++	with recent glibc versions.
++
++	Fix python module name clash for graph-depends.
++
++	Fakeroot now links against libacl to fix issues on
++	distributions using acls.
++
++	Ensure that the git download infrastructure creates GNU format
++	tar files.
++
++	br2-external: Improve error reporting.
++
++	Updated/fixed packages: acl, apr, audiofile, busybox, cairo,
++	dbus-cpp, dbus-glib, dbus-triggerd, domoticz, elfutils,
++	fakeroot, filemq, fmc, gdb, git, gnutls, gst-ffmpeg,
++	gst1-plygins-bad, harfbuzz, htop, imagemagick, jasper, libcec,
++	libiio, libplatform, librsvg, libselinux, libsidplay2, libsoc,
++	libwebsockets, libxkbcommon, linux-firmware, logrotate,
++	lpt-testsuite, lttng-libust, mariadb, mbedtls, memcached,
++	mesa3d, mpd, mplayer, nbd, ncftp, ntp, openssh, opentyrian,
++	pcre, perl-gd, python, qt5base, rpi-userland, rpm, samba4,
++	skalibs, slang, sngrep, squashfs, syslog-ng, taglib,
++	tcpreplay, tor, upmpdcli, wget, wireshark,
++	xdriver_xf86-video-vmware, xlib_libXv, zmqpp
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9456: mkusers script bash errors
++
+ 2017.02, Released February 28th, 2017
+ 
+ 	Minor fixes, mainly fixing autobuilder issues.
+diff --git a/Makefile b/Makefile
+index 0308f9b..30e76fa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -86,9 +86,9 @@ else # umask / $(CURDIR) / $(O)
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2017.02
++export BR2_VERSION := 2017.02.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1488315000
++BR2_VERSION_EPOCH = 1491392000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
