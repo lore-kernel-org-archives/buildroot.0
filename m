@@ -1,79 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Apr 2017 22:25:03 +0200
-Subject: [Buildroot] [PATCH v2 1/2] syslinux: Builds with the target
- toolchain
-In-Reply-To: <1491398930-6130-1-git-send-email-benoit.allard@greenbone.net>
-References: <1491386987-6695-1-git-send-email-benoit.allard@greenbone.net>
- <1491398930-6130-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <20170405222503.79f8e645@free-electrons.com>
+Date: Wed, 5 Apr 2017 22:25:40 +0200
+Subject: [Buildroot] [git commit] beaglebone: add DT for BeagleBone Green
+Message-ID: <20170405202554.E945382705@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b2440b7dcc68369548c0f2be6984fe645fc6bb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Apr 2017 15:28:49 +0200, Beno?t Allard wrote:
-> Until now, the host toolchain was used to build syslinux. syslinux does requires gnu-efi, and this is built using the target toolchain. Mixing different toolchains doesn't work well, so let's use the target toolchain for syslinux as well.
-> 
-> Well, almost, as syslinux also contains some utilities that have to run on the host. Those ones need to be built with the host toolchain.
-> 
-> This was tested using a buildroot's built x86_64 toolchain, and checked that some output binaries are 32-bits. It was tested as well if they actually boot on Hardware.
-> 
-> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+Signed-off-by: Matthias Fritzsche <txt.file@txtfile.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/beaglebone/genimage.cfg    | 1 +
+ configs/beaglebone_defconfig     | 2 +-
+ configs/beaglebone_qt5_defconfig | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-Unfortunately, this doesn't build for me: the prepcore tool is built
-for the target, but executed on the host. I've intentionally tested
-with a x86-64 musl toolchain, so that the C library of the target is
-not the one of my host machine, which guarantees a target executable
-will not run on my host machine. It fails with:
-
-perl /home/thomas/projets/buildroot/output/build/syslinux-6.03/core/lstadjust.pl ldlinux.lsr ldlinux.sec ldlinux.lst
-objcopy -O binary -S ldlinux.elf ldlinux.raw
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/bios/core/../lzo/prepcore ldlinux.raw ldlinux.bin
-make[5]: /home/thomas/projets/buildroot/output/build/syslinux-6.03/bios/core/../lzo/prepcore: Command not found
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/core/Makefile:153: recipe for target 'ldlinux.bin' failed
-make[5]: *** [ldlinux.bin] Error 127
-rm ldlinux.o ldlinux.raw
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/Makefile:285: recipe for target 'core' failed
-make[4]: *** [core] Error 2
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/Makefile:254: recipe for target 'bios' failed
-make[3]: *** [bios] Error 2
-Makefile:103: recipe for target 'bios' failed
-make[2]: *** [bios] Error 2
-
-To reproduce this issue, build the following configuration:
-
-BR2_x86_64=y
-BR2_x86_atom=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2017.02-744-g40962a0.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_SYSLINUX=y
-BR2_TARGET_SYSLINUX_ISOLINUX=y
-BR2_TARGET_SYSLINUX_PXELINUX=y
-BR2_TARGET_SYSLINUX_MBR=y
-
-Also, I've done a number of improvements to your patch, so if you could
-restart from the version I was about to commit before seeing the issue,
-it would be nice. I pushed it at:
-
-  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=syslinux-fix
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
+index ba60297..cfc1039 100644
+--- a/board/beaglebone/genimage.cfg
++++ b/board/beaglebone/genimage.cfg
+@@ -9,6 +9,7 @@ image boot.vfat {
+ 			"am335x-evmsk.dtb",
+ 			"am335x-bone.dtb",
+ 			"am335x-boneblack.dtb",
++			"am335x-bonegreen.dtb",
+ 		}
+ 	}
+ 	size = 16M
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 6fe3a5e..b74ffbc 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -10,7 +10,7 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-l
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="adde2ca9f86797071f6e7b2b9e779fa5e4a8f3cd"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index a9ab5a2..78dc109 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -14,7 +14,7 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52c4aa7cdb93d61f8008f380135beaf7b8fa6593"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-4.1-sgx.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
+ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
+ BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
