@@ -1,74 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Apr 2017 23:20:59 +0200
-Subject: [Buildroot] [PATCH 3/3 v2] core/pkg-generic: store file->package
-	list for staging and host too
-In-Reply-To: <cover.1491427248.git.yann.morin.1998@free.fr>
-References: <cover.1491427248.git.yann.morin.1998@free.fr>
-Message-ID: <44910f2975b83c91148d08f3df11ea048eea0609.1491427248.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 5 Apr 2017 23:22:18 +0200
+Subject: [Buildroot] [git commit] Update for 2017.02.1
+Message-ID: <20170405212236.AEE83825FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we store the list of files installed in target/ and associate
-each of them to the package that installed it.
+commit: https://git.buildroot.net/buildroot/commit/?id=a165809533b372a1920873463174bbf7ac201457
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, we sometime may need to know what package installed which file
-in staging/, for example to debug header collision, or in host/, to
-debug what package installed what host tool.
-
-Enhance the step instrumentation to also generate the list for staging/
-and host/.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 476067a78d4fd1ddb141a8cccc63cf3e75cbe7a3)
 ---
- package/pkg-generic.mk | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ CHANGES | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 166efd6..725a543 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -62,7 +62,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- # files currently installed in the target. Note that the MD5 is also
- # stored, in order to identify if the files are overwritten.
- define step_pkg_size_start
--	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
-+	(cd $(2) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
- 		$($(PKG)_DIR)/.br_filelist_before
- endef
+diff --git a/CHANGES b/CHANGES
+index 64179a2..974f4e2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,42 @@
++2017.02.1, Released April 4th, 2017
++
++	Important / security related fixes.
++
++	Fix a variable clashing issue in the mkusers script with
++	internal bash variables.
++
++	Improve external toolchain version detection.
++
++	Correct permissions for /dev/pts/ptmx when systemd is used
++	with recent glibc versions.
++
++	Fix python module name clash for graph-depends.
++
++	Fakeroot now links against libacl to fix issues on
++	distributions using acls.
++
++	Ensure that the git download infrastructure creates GNU format
++	tar files.
++
++	br2-external: Improve error reporting.
++
++	Updated/fixed packages: acl, apr, audiofile, busybox, cairo,
++	dbus-cpp, dbus-glib, dbus-triggerd, domoticz, elfutils,
++	fakeroot, filemq, fmc, gdb, git, gnutls, gst-ffmpeg,
++	gst1-plygins-bad, harfbuzz, htop, imagemagick, jasper, libcec,
++	libiio, libplatform, librsvg, libselinux, libsidplay2, libsoc,
++	libwebsockets, libxkbcommon, linux-firmware, logrotate,
++	lpt-testsuite, lttng-libust, mariadb, mbedtls, memcached,
++	mesa3d, mpd, mplayer, nbd, ncftp, ntp, openssh, opentyrian,
++	pcre, perl-gd, python, qt5base, rpi-userland, rpm, samba4,
++	skalibs, slang, sngrep, squashfs, syslog-ng, taglib,
++	tcpreplay, tor, upmpdcli, wget, wireshark,
++	xdriver_xf86-video-vmware, xlib_libXv, zmqpp
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9456: mkusers script bash errors
++
+ 2017.02, Released February 28th, 2017
  
-@@ -72,19 +72,25 @@ endef
- # a diff with the .br_filelist_before to compute the list of files
- # installed by this package.
- define step_pkg_size_end
--	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
-+	(cd $(2); find . -type f -print0 | xargs -0 md5sum) | sort > \
- 		$($(PKG)_DIR)/.br_filelist_after
- 	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
- 		while read hash file ; do \
- 			echo "$(1),$${file}" ; \
--		done >> $(BUILD_DIR)/packages-file-list.txt
-+		done >> $(BUILD_DIR)/packages-file-list$(3).txt
- 	rm -f $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after
- endef
- 
- define step_pkg_size
- 	$(if $(filter install-target,$(2)),\
--		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
--		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
-+		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3),$(TARGET_DIR))) \
-+		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3),$(TARGET_DIR))))
-+	$(if $(filter install-staging,$(2)),\
-+		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3),$(STAGING_DIR),-staging)) \
-+		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3),$(STAGING_DIR),-staging)))
-+	$(if $(filter install-host,$(2)),\
-+		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3),$(HOST_DIR),-host)) \
-+		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3),$(HOST_DIR),-host)))
- endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
- 
--- 
-2.9.3
+ 	Minor fixes, mainly fixing autobuilder issues.
