@@ -1,172 +1,68 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 5 Apr 2017 10:31:16 -0400
-Subject: [Buildroot] [PATCH v2 1/2] cracklib: New package
-In-Reply-To: <20170405124234.7035-1-stefan.sorensen@spectralink.com>
-References: <20170405124234.7035-1-stefan.sorensen@spectralink.com>
-Message-ID: <CANxTyt6DGP+uHo6_hWFH087HYPrXnyqYFjewnQ+oHabDLZmULA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 5 Apr 2017 16:37:23 +0200
+Subject: [Buildroot] [PATCH 0/7 v4] support/test-pkg: fixes and
+ enhancements
+In-Reply-To: <cover.1487195062.git.yann.morin.1998@free.fr>
+References: <cover.1487195062.git.yann.morin.1998@free.fr>
+Message-ID: <b39f073b-f6fb-d0e4-9977-31dc8c4d51e1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan,
+On 15-02-17 22:44, Yann E. MORIN wrote:
+> Hello All!
+> 
+> This series brings a few fixes and improvements to the test-pkg script.
 
-On Wed, Apr 5, 2017 at 8:42 AM, Stefan S?rensen
-<stefan.sorensen@spectralink.com> wrote:
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> ---
->
-> Changes since v1:
->
->  * Update DEVELOPERS file
->  * Use SPDX license codes
->  * Use the tools from host-cracklib for generating dictionary files
->
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/cracklib/Config.in     | 28 ++++++++++++++++++++++++++++
->  package/cracklib/cracklib.hash |  3 +++
->  package/cracklib/cracklib.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 74 insertions(+)
->  create mode 100644 package/cracklib/Config.in
->  create mode 100644 package/cracklib/cracklib.hash
->  create mode 100644 package/cracklib/cracklib.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 37c610e..c31b410 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1467,6 +1467,7 @@ F:        package/proxychains-ng/
->  F:     package/yasm/
->
->  N:     Stefan S?rensen <stefan.sorensen@spectralink.com>
-> +F:     package/cracklib/
->  F:     package/libscrypt/
->
->  N:     Stephan Hoffmann <sho@relinux.de>
-> diff --git a/package/Config.in b/package/Config.in
-> index 71bd44a..66e9201 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1338,6 +1338,7 @@ menu "Other"
->         source "package/clapack/Config.in"
->         source "package/classpath/Config.in"
->         source "package/cppcms/Config.in"
-> +       source "package/cracklib/Config.in"
->         source "package/dawgdic/Config.in"
->         source "package/ding-libs/Config.in"
->         source "package/eigen/Config.in"
-> diff --git a/package/cracklib/Config.in b/package/cracklib/Config.in
-> new file mode 100644
-> index 0000000..cf428fd
-> --- /dev/null
-> +++ b/package/cracklib/Config.in
-> @@ -0,0 +1,28 @@
-> +config BR2_PACKAGE_CRACKLIB
-> +       bool "cracklib"
-> +       help
-> +         CrackLib tests passwords to determine whether they match
-> +         certain security-oriented characteristics, with the purpose
-> +         of stopping users from choosing passwords that are easy to
-> +         guess. CrackLib performs several tests on passwords: it
-> +         tries to generate words from a username and gecos entry and
-> +         checks those words against the password; it checks for
-> +         simplistic patterns in passwords; and it checks for the
-> +         password in a dictionary.
-> +
-> +         https://github.com/cracklib/cracklib
-> +
-> +if BR2_PACKAGE_CRACKLIB
-> +
-> +config BR2_PACKAGE_CRACKLIB_TOOLS
-> +       bool "install tools"
-> +       help
-> +         Install cracklib command line tools for creating dicts.
-> +
-> +config BR2_PACKAGE_CRACKLIB_FULL_DICT
-> +       bool "full dict"
-> +       help
-> +         Install the full cracklib dict (requires about 8Mb extra target
-> +         space).
-> +
-> +endif
-> diff --git a/package/cracklib/cracklib.hash b/package/cracklib/cracklib.hash
-> new file mode 100644
-> index 0000000..3038a47
-> --- /dev/null
-> +++ b/package/cracklib/cracklib.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 17cf76943de272fd579ed831a1fd85339b393f8d00bf9e0d17c91e972f583343        cracklib-2.9.6.tar.gz
-> +sha256 27973245225eeb9d0090e97f3dea4197dec99b64d9d3a791a60298f3b021824c        cracklib-words-2.9.6.gz
-> diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
-> new file mode 100644
-> index 0000000..4e816a8
-> --- /dev/null
-> +++ b/package/cracklib/cracklib.mk
-> @@ -0,0 +1,41 @@
-> +################################################################################
-> +#
-> +# cracklib
-> +#
-> +################################################################################
-> +
-> +CRACKLIB_VERSION = 2.9.6
-> +CRACKLIB_SITE = https://github.com/cracklib/cracklib/releases/download/cracklib-$(CRACKLIB_VERSION)
-> +CRACKLIB_LICENSE = LGPL-2.1
-> +CRACKLIB_LICENSE_FILES = COPYING.LIB
-> +CRACKLIB_INSTALL_STAGING = YES
-> +CRACKLIB_DEPENDENCIES = host-cracklib
-> +ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
-> +CRACKLIB_EXTRA_DOWNLOADS = cracklib-words-$(CRACKLIB_VERSION).gz
-> +endif
+ I was going to modify test-pkg to use the toolchains from configs/toolchains,
+but then I noticed this series was still not committed. It obviously conflicts
+heavily with what I'm going to do, so I'm taking this over, OK?
 
-You could move the CRACKLIB_EXTRA_DOWNLOADS assignment down to the
-if-BR2_PACKAGE_CRACKLIB_FULL_DICT below, where cracklib-words is
-actually used, and eliminate an if.
+[snip]
 
-> +
-> +ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
-> +define CRACKLIB_REMOVE_TOOLS
-> +       rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
-> +endef
-> +
-> +CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_REMOVE_TOOLS
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
-> +CRACKLIB_DICT_SOURCE = $(DL_DIR)/cracklib-words-$(CRACKLIB_VERSION).gz
-> +else
-> +CRACKLIB_DICT_SOURCE = $(@D)/dicts/cracklib-small
-> +endif
-> +
-> +define CRACKLIB_BUILD_DICT
-> +       $(HOST_DIR)/usr/sbin/cracklib-format $(CRACKLIB_DICT_SOURCE) | \
-> +               $(HOST_DIR)/usr/sbin/cracklib-packer \
-> +               $(TARGET_DIR)/usr/share/cracklib/pw_dict
+> ----------------------------------------------------------------
+> Yann E. MORIN (7):
+>       docs/manual: document the test-pkg script
 
-Maybe it would be wise to preface this line with a $(HOST_MAKE_ENV)
-just in case cracklib-format or cracklib-packer make use of any other
-cracklib tools?
+ I'll include Thomas's feedback, plus some more fixes from me.
 
-No need to mkdir -p $(TARGET_DIR)/usr/share/cracklib first?
+>       support/test-pkg: add option to use an alternate list of toolchains
 
-Regards,
-Danomi -
+ I'll drop this, since we're not going to get toolchains from a URL anymore. IMO
+the same feature can easily be achieved by having a directory with toolchain
+configs inside the tree (or inside an external tree).
+
+>       support/test-pkg: print number of toolchain and progress
+>       support/test-pkg: the list of toolchains really contains URLs
+
+ With the toolchain URLs gone, this is not true anymore.
+
+>       support/test-pkg: cannonicalize paths early
+
+ With the toolchain URLs gone, this is not relevant anymore.
+
+>       support/test-pkg: create build dir from caller
+
+ Took me a while to figure out what this patch was doing, so I'll reword the
+commit message.
 
 
-> +       rm $(TARGET_DIR)/usr/share/cracklib/cracklib-small
-> +endef
-> +
-> +CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_BUILD_DICT
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> --
-> 2.9.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ Regards,
+ Arnout
+
+>       support/test-pkg: run legal-info
+> 
+>  docs/manual/adding-packages-tips.txt |  91 +++++++++++++++++++++++++++++++
+>  support/scripts/test-pkg             | 101 +++++++++++++++++++++++------------
+>  2 files changed, 159 insertions(+), 33 deletions(-)
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
