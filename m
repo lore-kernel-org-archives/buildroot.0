@@ -1,75 +1,95 @@
-From: James Balean <james@balean.com.au>
-Date: Tue,  4 Apr 2017 22:45:51 -0500
-Subject: [Buildroot] [PATCH v2] Add out-of-source U-Boot device tree support
-In-Reply-To: <1491362990-3697-1-git-send-email-james@balean.com.au>
-References: <1490595146-5638-1-git-send-email-james@balean.com.au>
- <07d14184-7b9c-dd29-569c-db46aa765118@mind.be>
- <1490681640-14995-1-git-send-email-james@balean.com.au>
- <54cae0a0-a7a5-9ef0-08c8-a14e871cf8bb@mind.be>
- <20170328215334.405952d9@free-electrons.com>
- <1d453613-dc32-9ab1-229b-2deed767a12f@mind.be>
- <20170328222929.036d1152@free-electrons.com>
- <92078ad6-2fcc-69e4-86b9-0d296ef350c0@mind.be>
- <20170329090909.4c74c734@free-electrons.com>
- <1491362990-3697-1-git-send-email-james@balean.com.au>
-Message-ID: <1491363951-3971-1-git-send-email-james@balean.com.au>
+From: abhimanyu.v at gmail.com <abhimanyu.v@gmail.com>
+Date: Wed, 5 Apr 2017 11:17:20 +0530
+Subject: [Buildroot] [PATCH v6] Add defconfig for MIPS Creator ci40
+In-Reply-To: <20170404221332.342b1fd7@free-electrons.com>
+References: <1491306498-18165-1-git-send-email-abhimanyu.v@gmail.com>
+ <20170404221332.342b1fd7@free-electrons.com>
+Message-ID: <CA+V_ovs55OYv9CEF6EpeiG8eaRG6r4u3XE+Q3QrxpgEa5+7H-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Similaly to Linux, this patch adds the ability to copy in and build
-out-of-source device tree sources during a U-Boot build.
+Thankyou Thomas, for review!
+I will prepare new patch and sent it over.
 
-Signed-off-by: James Balean <james@balean.com.au>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes for v2:
-  - Added dependency on U-Boot Kconfig build system.
-  - Code style cleanup
+On Wed, Apr 5, 2017 at 1:43 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
- boot/uboot/Config.in | 14 ++++++++++++++
- boot/uboot/uboot.mk  |  3 +++
- 2 files changed, 17 insertions(+)
+> Hello,
+>
+> On Tue,  4 Apr 2017 17:18:18 +0530, Abhimanyu Vishwakarma wrote:
+> > From: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+> >
+> > Add post-image script to generate sdcard.img for
+> > preparing sdcard/usb device.
+> >
+> > Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+>
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index c33861b..ca94749 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -407,4 +407,18 @@ config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
- 
- endif # BR2_TARGET_UBOOT_ENVIMAGE
- 
-+if BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-+
-+config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-+	string "Device Tree Source file paths"
-+	help
-+	  Path to the device tree source files. You can provide a list
-+	  of dts paths to copy, separated by spaces.
-+
-+	  To use this device tree source file, the U-Boot configuration
-+	  file must refer to it.
-+
-+endif
-+
- endif # BR2_TARGET_UBOOT
-+
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index aac692c..1d464d9 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -195,6 +195,9 @@ endef
- endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 
- define UBOOT_BUILD_CMDS
-+	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
-+		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
-+	)
- 	$(TARGET_CONFIGURE_OPTS) 	\
- 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
- 		$(UBOOT_MAKE_TARGET)
--- 
-2.7.4
+<snip>
+
+
+> > +genimage \
+> > +  --rootpath "${TARGET_DIR}" \
+> > +  --tmppath "${GENIMAGE_TMP}" \
+> > +  --inputpath "${BINARIES_DIR}" \
+> > +  --outputpath "${BINARIES_DIR}" \
+> > +  --config "${GENIMAGE_CFG}"
+>
+> Please use support/scripts/genimage.sh.
+>
+> I have seen the patch but must have missed that it is already merged. i
+will now use it.
+
+<snip>
+
+
+> > +Flash new bootloader
+> > +--------------------
+> > +After booting with above method. Copy file u-boot-pistachio_marduk-2015.
+> 10-v1.0.4.img
+> > +to /tmp.
+>
+> Where is the u-boot-pistachio_marduk-2015.10-v1.0.4.img file? Why do
+> you need to copy it specifically to /tmp?
+>
+> It is just a step to copy to some temporary place to be able to flash the
+new bootloader. I also need to update
+bootloader version number here.
+
+
+> > Use following command to flash new bootloader:
+> > +
+> > +# flashcp -v /tmp/u-boot-pistachio_marduk-2015.10-v1.0.4.img /dev/mtd0
+> > +
+> > +Online docs
+> > +-----------
+> > +Mostly for OpenWRT but it is applicable to Buildroot
+> > +https://docs.creatordev.io/ci40/guides/openwrt-platform/#overview
+> > +
+> > +Prebuilt uboot
+> > +--------------
+> > +http://downloads.creatordev.io/?q=u-boot/
+>
+> Why would we document how to get a pre-built U-Boot if Buildroot is
+> already building a working U-Boot ?
+>
+The rest looks good to me. Could you rework those last small details,
+> and send an updated version?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+
+Regards
+Abhimanyu
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170405/d57cdfd6/attachment.html>
