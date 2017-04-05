@@ -1,78 +1,45 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Wed, 5 Apr 2017 21:26:16 +0530
-Subject: [Buildroot] [PATCH v3] board: Add support for Engicam i.CoreM6
- Quad/Dual boards
-In-Reply-To: <20170404221750.41125e2e@free-electrons.com>
-References: <1491329412-5660-1-git-send-email-jagan@openedev.com>
- <20170404221750.41125e2e@free-electrons.com>
-Message-ID: <CAD6G_RQ-ouaXSUkK-On+WkbmY2kVBz_EPXDfyZJTk6DGpB-Aew@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Apr 2017 18:14:24 +0200
+Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
+ BR2_GENIMAGE_CFG_FILES
+In-Reply-To: <02a1a330-c947-2a64-29bb-88f6ac7d9c9f@mind.be>
+References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
+ <20170329145120.11863-5-etienne.phelip@savoirfairelinux.com>
+ <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
+ <20170401155116.66464885@free-electrons.com>
+ <8760ilvozx.fsf@dell.be.48ers.dk>
+ <2ce8812c-d95e-bd4a-9cde-f02ab8e3ca60@mind.be>
+ <87wpazuaa1.fsf@dell.be.48ers.dk>
+ <02a1a330-c947-2a64-29bb-88f6ac7d9c9f@mind.be>
+Message-ID: <20170405181424.1d69fee5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 5, 2017 at 1:47 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue,  4 Apr 2017 23:40:12 +0530, Jagan Teki wrote:
->> From: Jagan Teki <jagan@amarulasolutions.com>
->>
->> Add initial support for Engicam i.CoreM6 Quad/Dual board
->> with below features:
->> - U-Boot 2017.01
->> - Linux 4.10
->> - Default packages from buildroot
->>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Cc: Matteo Lisi <matteo.lisi@engicam.com>
->> Cc: Michael Trimarchi <michael@amarulasolutions.com>
->> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
->
-> Thanks, looking better.
->
->> diff --git a/board/engicam/common/post-image.sh b/board/engicam/common/post-image.sh
->
-> Why do we have this 'common' folder, and this very flexible script? Do
-> you intend to submit the support for other boards?
+Hello,
 
-I would like to add more boards in couple of days, the main intention
-of adding common is to place file for common if any specific board
-have any specific changes I will create board name file.
+On Wed, 5 Apr 2017 17:02:36 +0200, Arnout Vandecappelle wrote:
 
->
-> This script is exactly the same as the one in
-> board/freescale/common/imx/post-image.sh, I definitely would like to
-> avoid duplication.
+>  Combined with the other discussion in this thread, long-term I see us evolving
+> towards:
+> 
+> - deprecate some of the finer-grain fs tuning options we have now;
+> - always using genimage to generate the target filesystems;
+> - position our fs targets more as a 'quick fix' solution than for production;
+> - make host-e2fsprogs etc. blind options again.
 
-Same, but calling genimage.cfg is different in engicam vs freescale common.
+To be honest, I am not sure I share this long-term view. I like the way
+things are done today, very modular: we can generate just a filesystem
+image, optionally use genimage afterwards, etc. So the "always using
+genimage to generate the target filesystem" is not something that I see
+as an improvement, for example.
 
->
-> For now, if you're trying to submit the support for a single board, I
-> would suggest that you:
->
->  1. Use a "fixed" genimage.cfg, i.e without %FILES% or %DTBS%
->
->  2. Use support/scripts/genimage.sh
+Best regards,
 
-I will submit remaining boards soon, so I will keep the genimage.cfg as it is.
-
->
->> +# Kernel
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
->
-> Since you're using a 4.10 kernel, you also need to set:
->
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
-
-Will add.
-
-thanks!
+Thomas
 -- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
