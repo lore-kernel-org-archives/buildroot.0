@@ -1,57 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Apr 2017 23:20:56 +0200
-Subject: [Buildroot] [PATCH 0/3 v2] core/pkg-generic: store package<->files
-	for staging and host
-Message-ID: <cover.1491427248.git.yann.morin.1998@free.fr>
+Date: Wed,  5 Apr 2017 23:20:57 +0200
+Subject: [Buildroot] [PATCH 1/3 v2] core/pkg-generic: rmove intermediate
+	file-list files
+In-Reply-To: <cover.1491427248.git.yann.morin.1998@free.fr>
+References: <cover.1491427248.git.yann.morin.1998@free.fr>
+Message-ID: <dedc397770e0af15eac2c7cbac771dbd9260c716.1491427248.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+To compute the list of files added by a package, we first store the list
+of files before the install, do the install, list the files after the
+install, and finally compare the two lists. The two lists are stored in
+dot-files, hidden in the package's build dir.
 
-This small series does for staging and host as we do for target:
-store the list of installed files and relate them to the package
-that installed each.
+We currently keep those two files, and only list the files installed in
+target/
 
+In followup patches, we'll also list files installed in staging/ as well
+as files installed in host/.
+
+Rather than add even more internal, hidden files in the package build
+dir, we'll just re-use the same two temporary files to store the bfore
+and after lists.
+
+So, remove them after the comparison is done.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-  - split in three patches
-  - in addition to staging, also store for host
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 4f50f4928ca3855d9d1b1b9699d2cb37e4ca65da
-
-  Add out-of-source U-Boot device tree support (2017-04-05 22:29:23 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 44910f2975b83c91148d08f3df11ea048eea0609
-
-  core/pkg-generic: store file->package list for staging and host too (2017-04-05 23:15:27 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      core/pkg-generic: rmove intermediate file-list files
-      core/pk-generic: redirect only wsa when listing package's isntalled files
-      core/pkg-generic: store file->package list for staging and host too
-
- package/pkg-generic.mk | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 31dbc54..6b3c69c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -78,6 +78,7 @@ define step_pkg_size_end
+ 		while read hash file ; do \
+ 			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+ 		done
++	rm -f $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after
+ endef
+ 
+ define step_pkg_size
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
