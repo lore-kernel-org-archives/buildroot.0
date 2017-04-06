@@ -1,73 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 6 Apr 2017 20:18:53 +0200
-Subject: [Buildroot] [PATCH v5 13/13] [RFC] list-defconfigs: support
-	defconfigs in subdirectories
-In-Reply-To: <cover.1491502445.git.arnout@mind.be>
-References: <cover.1491502445.git.arnout@mind.be>
-Message-ID: <20170406181854.5242-13-arnout@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  6 Apr 2017 20:20:19 +0200
+Subject: [Buildroot] [PATCH 1/3] runc: bump to version
+	9c2d8d184e5da67c95d601382adf14862e4f2228
+Message-ID: <1491502821-17697-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now defconfigs in subdirectories are supported, list-defconfigs should
-also report them.
+This is a runtime dependency of docker-engine in version 17.04.0-ce
 
-The obvious way to do this would be to use
-
-	find $(1)/configs -name \*_defconfig
-
-However, it is difficult to keep its output sorted properly: we don't
-want defconfigs in subdirectories to appear intermingled with the rest.
-
-The output tends to become a little bit messy, because defconfigs in
-subdirectories will typically need more than 35 characters. If we can
-find a solution for that, it can be done in a later patch.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-With the ugly output, and the uglification of the code, I'm not entirely
-sure that we really want this patch.
----
- Makefile | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index b68e464da6..186e8b6d88 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1013,18 +1013,20 @@ help:
- # $(2): br2-external name, empty for bundled
- define list-defconfigs
- 	@first=true; \
--	for defconfig in $(1)/configs/*_defconfig; do \
--		[ -f "$${defconfig}" ] || continue; \
--		if $${first}; then \
--			if [ "$(2)" ]; then \
--				printf 'External configs in "$(call qstrip,$(2))":\n'; \
--			else \
--				printf "Built-in configs:\n"; \
-+	for dir in `find $(1)/configs/ -type d`; do \
-+		for defconfig in $${dir}/*_defconfig; do \
-+			[ -f "$${defconfig}" ] || continue; \
-+			if $${first}; then \
-+				if [ "$(2)" ]; then \
-+					printf 'External configs in "$(call qstrip,$(2))":\n'; \
-+				else \
-+					printf "Built-in configs:\n"; \
-+				fi; \
-+				first=false; \
- 			fi; \
--			first=false; \
--		fi; \
--		defconfig="$${defconfig##*/}"; \
--		printf "  %-35s - Build for %s\n" "$${defconfig}" "$${defconfig%_defconfig}"; \
-+			defconfig="$${defconfig##$(1)/configs/}"; \
-+			printf "  %-35s - Build for %s\n" "$${defconfig}" "$${defconfig%_defconfig}"; \
-+		done; \
- 	done; \
- 	$${first} || printf "\n"
- endef
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 916f164..3e188c5 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	bdd0fc0b5db42bb1fc439d5a5d6347d97b285e676559afb620ffd9f62fc1de26	runc-54296cf40ad8143b62dbcaa1d90e520a2136ddfe.tar.gz
++sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 4282f4e..88bc03f 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = 54296cf40ad8143b62dbcaa1d90e520a2136ddfe
++RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
 -- 
-2.11.0
+2.5.0
