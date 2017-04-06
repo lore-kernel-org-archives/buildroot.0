@@ -1,44 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 16:03:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: disable inline asm on
- i386
-In-Reply-To: <20170402112507.14419-1-bernd.kuhls@t-online.de>
-References: <20170402112507.14419-1-bernd.kuhls@t-online.de>
-Message-ID: <20170406160336.630ba15d@free-electrons.com>
+Date: Thu, 6 Apr 2017 16:13:52 +0200
+Subject: [Buildroot] [git commit] libnspr: fix Microblaze patch
+Message-ID: <20170406141359.754828271B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7039c4d456259ca2c2708be16ebea98a82adee3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Apr 2017 13:25:07 +0200, Bernd Kuhls wrote:
-> A similar fix was committed to ffmpeg:
-> https://git.buildroot.net/buildroot/commit/package/ffmpeg?id=bfb8df2ad9b164b421d25294c6882c8b61dc59a5
+Due to a mistake, the Microblaze patch was adding another #elif
+defined(nios2), which doesn't make any sense. This commit gets rid of
+it.
 
-It is not similar: ffmpeg only disables it for i586, while for mplayer
-you disable it for the x86 architecture completely.
+The rest of the noise in the change is due to the use of quilt to
+generate the patches.
 
-> Fixes
-> http://autobuild.buildroot.net/results/030/03066dd8937ef4c75d62f237fd195df92b247ee2//
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libnspr/0002-microblaze.patch | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-And this configuration is i686, so if the ffmpeg fix of disabling
-inline ASM is used, it will not solve this build failure.
-
->  ifeq ($(BR2_i386),y)
-> -# inline asm breaks with "can't find a register in class 'GENERAL_REGS'"
-> -# inless we free up ebp
-> -MPLAYER_CFLAGS += -fomit-frame-pointer
-> +MPLAYER_POST_CONFIGURE_HOOKS += MPLAYER_DISABLE_INLINE_ASM
->  endif
-
-Do we really want to disable this for all x86 platforms?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
+index f1416e7..7fd650c 100644
+--- a/package/libnspr/0002-microblaze.patch
++++ b/package/libnspr/0002-microblaze.patch
+@@ -3,9 +3,10 @@ Add Microblaze support
+ [Gustavo: update for nspr 4.10.9]
+ Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ 
+-diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/include/md/_linux.cfg
+---- nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg	2015-10-03 08:13:11.845414714 -0300
+-+++ nspr-4.10.9/nspr/pr/include/md/_linux.cfg	2015-10-03 08:13:20.435708195 -0300
++Index: b/nspr/pr/include/md/_linux.cfg
++===================================================================
++--- a/nspr/pr/include/md/_linux.cfg
+++++ b/nspr/pr/include/md/_linux.cfg
+ @@ -1062,6 +1062,56 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+@@ -63,10 +64,11 @@ diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/in
+  #else
+  
+  #error "Unknown CPU architecture"
+-diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.h nspr-4.10.9/nspr/pr/include/md/_linux.h
+---- nspr-4.10.9.orig/nspr/pr/include/md/_linux.h	2015-10-03 08:13:11.845414714 -0300
+-+++ nspr-4.10.9/nspr/pr/include/md/_linux.h	2015-10-03 08:14:53.351882603 -0300
+-@@ -57,8 +57,11 @@
++Index: b/nspr/pr/include/md/_linux.h
++===================================================================
++--- a/nspr/pr/include/md/_linux.h
+++++ b/nspr/pr/include/md/_linux.h
++@@ -57,6 +57,8 @@
+  #define _PR_SI_ARCHITECTURE "m32r"
+  #elif defined(__or1k__)
+  #define _PR_SI_ARCHITECTURE "or1k"
+@@ -74,7 +76,4 @@ diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.h nspr-4.10.9/nspr/pr/incl
+ +#define _PR_SI_ARCHITECTURE "microblaze"
+  #elif defined(nios2)
+  #define _PR_SI_ARCHITECTURE "nios2"
+-+#elif defined(nios2)
+  #else
+- #error "Unknown CPU architecture"
+- #endif
