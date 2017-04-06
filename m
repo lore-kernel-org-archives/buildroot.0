@@ -1,50 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 21:55:46 +0200
-Subject: [Buildroot] [PATCH v5 06/13] configs: add autobuild toolchain
- defconfigs
-In-Reply-To: <20170406181854.5242-6-arnout@mind.be>
-References: <cover.1491502445.git.arnout@mind.be>
- <20170406181854.5242-6-arnout@mind.be>
-Message-ID: <20170406215546.6e0b393d@free-electrons.com>
+Date: Thu, 6 Apr 2017 21:56:51 +0200
+Subject: [Buildroot] [git commit] configs: bump linux kernel to 4.10.8 in
+	snps_archs38_vdk_defconfig
+Message-ID: <20170406195659.C804782671@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b2fa3dd459cd2a08613ac873363fbe9ab75569f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 6 Apr 2017 20:18:46 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+With this commit we update snps_archs38_vdk_defconfig with the
+following:
+  - bump linux kernel version to 4.10.8
+  - set up host linux headers to 4.10
 
-> Note: I choose to name them xxx_defconfig and put them under to configs
-> directory so they can be used directly as a quick way to set up a build
-> with an external toolchain. However, neither test-pkg nor autobuild-run
-> will use them as _defconfig, so we could just as well call them *.config
-> and put them under e.g. support/autobuild-toolchains. Let me know what
-> you think.
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/snps_archs38_vdk_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-It's not a fully clear-cut opinion, but I believe I have a preference
-for having those in support/<something>/ rather than as official
-defconfigs.
-
-I don't think it makes much sense to advertise them as defconfigs.
-Those base configurations are very specialized, some of them use
-completely stupid toolchain configurations (ARM no thread, really?)
-that only exist for the sake of testing various combinations of
-toolchain features. So making those visible to random users along with
-real defconfigs for boards doesn't seem like a good idea.
-
-Plus it avoids the need to support defconfigs in subfolders (even
-though I guess you went through great lengths to workaround make
-stupidity about how patterns without slashes are handled), and the big
-question of your last RFC patch on how to display them in
-"list-defconfigs".
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
+index 7cbd68c..2cca0b8 100644
+--- a/configs/snps_archs38_vdk_defconfig
++++ b/configs/snps_archs38_vdk_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.8"
+ BR2_LINUX_KERNEL_PATCH="board/synopsys/vdk/patches/linux"
+ BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
