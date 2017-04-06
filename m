@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 6 Apr 2017 10:42:38 +0200
-Subject: [Buildroot] [PATCH v2] arp-scan: new package
-In-Reply-To: <20170406103300.04ef2b35@free-electrons.com>
-References: <20170405101410.27980-1-arnout@mind.be>
- <20170405183445.6cde0af8@free-electrons.com>
- <857569ae-aa99-8ae8-17c6-14d0f98afbc5@mind.be>
- <20170406103300.04ef2b35@free-electrons.com>
-Message-ID: <41bc6852-4d23-5911-2722-3ed256004fb0@mind.be>
+Date: Thu, 6 Apr 2017 10:48:59 +0200
+Subject: [Buildroot] [PATCH 0/7 v4] support/test-pkg: fixes and
+ enhancements
+In-Reply-To: <20170405191610.GA3609@scaer>
+References: <cover.1487195062.git.yann.morin.1998@free.fr>
+ <b39f073b-f6fb-d0e4-9977-31dc8c4d51e1@mind.be> <20170405191610.GA3609@scaer>
+Message-ID: <573ed965-5286-80a8-b4b6-291998013137@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +14,121 @@ To: buildroot@busybox.net
 
 
 
-On 06-04-17 10:33, Thomas Petazzoni wrote:
-> Hello,
+On 05-04-17 21:16, Yann E. MORIN wrote:
+> Arnout,
 > 
-> On Thu, 6 Apr 2017 10:26:58 +0200, Arnout Vandecappelle wrote:
+> On 2017-04-05 16:37 +0200, Arnout Vandecappelle spake thusly:
+>> On 15-02-17 22:44, Yann E. MORIN wrote:
+>>> Hello All!
+>>>
+>>> This series brings a few fixes and improvements to the test-pkg script.
+>>
+>>  I was going to modify test-pkg to use the toolchains from configs/toolchains,
+>> but then I noticed this series was still not committed. It obviously conflicts
+>> heavily with what I'm going to do, so I'm taking this over, OK?
 > 
->>  Since it was caused by the bump of binutils, you should probably look at the
->> binutils repo, not the elf2flt repo...
+> As you wish.
 > 
-> That was not my reasoning. My reasoning was that the new binutils
-> version does not have a bug, but generates a binary that is slightly
-> different than previous binutils version, and elf2flt does not handle
-> that correctly.
+> The latest version (which I did not yet post, did I?) is available, as
+> usual, on my git tree:
 > 
-> Of course, that's complete guess, but binutils is IMO a much better
-> maintained set of tools than elf2flt, so I would first and foremost
-> suspect a bug in elf2flt.
+>     git://git.busybox.net/~ymorin/git/buildroot   yem/test-pkg
 
- Of course, but it would be a bug that is triggered by a change in binutils.
-Looking at the commits in elf2flt is not going to help. And reading elf2flt.c is
-a challenge, I would say...
+ Argh, I should have checked for that before starting my work... Your commits
+don't have a version log, do you have any idea if anything changed except for
+the first patch?
+
+> 
+>>> ----------------------------------------------------------------
+>>> Yann E. MORIN (7):
+>>>       docs/manual: document the test-pkg script
+>>
+>>  I'll include Thomas's feedback, plus some more fixes from me.
+> 
+> I think I already addresses Thomas' comments in the latest version.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>>       support/test-pkg: add option to use an alternate list of toolchains
+>>
+>>  I'll drop this, since we're not going to get toolchains from a URL anymore. IMO
+>> the same feature can easily be achieved by having a directory with toolchain
+>> configs inside the tree (or inside an external tree).
+> 
+> Well, as long as I can specify a list of toolchains, that is not the
+> default, that's fine. If I just have to do a wget to have a local file,
+> I'm OK with that.
+> 
+> But I *want* to be able to use a custom list of toolchains.
+
+ You don't need to get it from a URL, do you? I think having the list of
+toolchains passed as a BR2_EXTERNAL is much more appropriate. Basically, I now have
+
+TOOLCHAINS_PATH=configs/toolchains
+
+which points to a directory containing toolchain configs. I can add an option
+that allows you to override that directory. I don't see much point in getting
+this from a URL, is there?
+
+> 
+>>>       support/test-pkg: print number of toolchain and progress
+>>>       support/test-pkg: the list of toolchains really contains URLs
+>>
+>>  With the toolchain URLs gone, this is not true anymore.
+> 
+> Well, I am not sure what you meant: we can't have a list of remote
+> config files to use anymore? That is sad... :-(
+
+ Can you explain your use case for a list of *remote* config files?
+
+> 
+>>>       support/test-pkg: cannonicalize paths early
+>>
+>>  With the toolchain URLs gone, this is not relevant anymore.
+>>
+>>>       support/test-pkg: create build dir from caller
+>>
+>>  Took me a while to figure out what this patch was doing, so I'll reword the
+>> commit message.
+> 
+> Ah yes, sorry, the commit log is a bit terse... :-/
+> 
+> Please note that there is another patch on the series now:
+> 
+>     support/test-pkg: run legal-info
+
+ It was already there (see below).
+
 
  Regards,
  Arnout
+
+> 
+>     https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/test-pkg&id=8a9fec1b939caad8ad282a94e6049c748eff5336
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>>       support/test-pkg: run legal-info
+>>>
+>>>  docs/manual/adding-packages-tips.txt |  91 +++++++++++++++++++++++++++++++
+>>>  support/scripts/test-pkg             | 101 +++++++++++++++++++++++------------
+>>>  2 files changed, 159 insertions(+), 33 deletions(-)
+>>>
+>>
+>> -- 
+>> Arnout Vandecappelle                          arnout at mind be
+>> Senior Embedded Software Architect            +32-16-286500
+>> Essensium/Mind                                http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
