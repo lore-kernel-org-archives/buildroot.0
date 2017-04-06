@@ -1,68 +1,65 @@
-From: Pawel Sikora <sikor6@gmail.com>
-Date: Fri,  7 Apr 2017 01:46:57 +0200
-Subject: [Buildroot] [PATCH 1/1] xenomai: Add config for enabling SMP for 3.x
-Message-ID: <20170406234657.31813-1-sikor6@gmail.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Fri, 7 Apr 2017 09:18:45 +1000
+Subject: [Buildroot] [aarch64] can't handle reloc type error
+In-Reply-To: <20170406121119.7750e4d7@free-electrons.com>
+References: <ceee635f-4c82-2e20-9c23-15b163bc5331@flatmax.org>
+ <20170406121119.7750e4d7@free-electrons.com>
+Message-ID: <10752b04-514d-4012-9112-2c46c636d176@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a config option for enabling SMP in Xenomai
-userspace, only for versions >= 3.x
 
-In 2.x versions this option was enabled by
-default, so for now behaviour for it will
-not change, while as buildroot supports
-now Xenomai 3.0.3 it's good to let users
-have this option.
+On 06/04/17 20:11, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 6 Apr 2017 18:12:39 +1000, Matt Flax wrote:
+>
+>> I am building buildroot for aarch64. I am using the s5p6818 system.
+>> The system builds and boots well.
+>>
+>> The problem I am having is that any packages which are in my external
+>> directory $BR2_EXTERNAL_CUSTOM_PATH doesn't produce executable executables.
+>>
+>> If I try to run something which was sourced from the buildroot package
+>> directory, it works well.
+>>
+>> If I try to run an executable from my custom external package path, it
+>> doesn't. I get the following error :
+>>
+>> /usr/bin/testit symbol '_ZSt15__once_callable': can't handle reloc type
+>> 0x407
+>>
+>> Anyone got any ideas on what to do ?
+> Could you share an example piece of code + package .mk file that
+> exhibits the problem ?
+Please find the example piece of code and mk file attached.
 
-Add a comment about this config's behaviour
-above this option in the menuconfig.
+> Also, could you pastebin the build log of the package that produces a
+> non-working binary ?
+>
+>
+Please find the paste of the audioMasker executable build log here :
+https://pastebin.com/nm7gZ2gx
 
-Signed-off-by: Pawel Sikora <sikor6@gmail.com>
----
- package/xenomai/Config.in  | 12 ++++++++++++
- package/xenomai/xenomai.mk |  4 ++++
- 2 files changed, 16 insertions(+)
+Please find the paste bin of the gtkiostream package build log here...
+https://pastebin.com/LnEh6PPp
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index b548ee810..cd323545c 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -51,6 +51,18 @@ config BR2_PACKAGE_XENOMAI_VERSION
- 	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
- 	  Kernel -> Linux Kernel Extensions menu.
- 
-+comment "-------------------------------------------------------"
-+comment "Please note:                                           "
-+comment "Option for enabling SMP in Xenomai userspace is meant  "
-+comment "only for Xenomai 3.x                                   "
-+comment "If you use Xenomai 2.x you have SMP enabled by default."
-+comment "-------------------------------------------------------"
-+
-+config BR2_PACKAGE_XENOMAI_ENABLE_SMP
-+	bool "Enable SMP"
-+	help
-+	  This option allows to enable SMP in Xenomai userspace.
-+
- config BR2_PACKAGE_XENOMAI_TESTSUITE
- 	bool "Install testsuite"
- 	help
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index c9e810e05..7af4e0cf5 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -23,6 +23,10 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
- 
- XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
- 
-+ifeq ($(BR2_PACKAGE_XENOMAI_ENABLE_SMP),y)
-+XENOMAI_CONF_OPTS += --enable-smp
-+endif
-+
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
--- 
-2.12.1
+thanks
+Matt
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gtkiostream.mk
+Type: text/x-makefile
+Size: 629 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170407/b8636837/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: audioMasker.C
+Type: text/x-c++src
+Size: 6699 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170407/b8636837/attachment.c>
