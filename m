@@ -1,63 +1,38 @@
-From: Jack Breese <jack@kumunetworks.com>
-Date: Wed,  5 Apr 2017 18:09:08 -0700
-Subject: [Buildroot] [PATCH 1/1] gnupg: Add options for SHA-256 and SHA-512
-	hashes
-Message-ID: <20170406010908.95234-1-jack@kumunetworks.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 6 Apr 2017 06:45:41 +0300
+Subject: [Buildroot] [git commit] syslinux: use Git formatted patches
+In-Reply-To: <20170405200646.B7843826F9@busybox.osuosl.org>
+References: <20170405200646.B7843826F9@busybox.osuosl.org>
+Message-ID: <20170406034541.j2zpz6fh44caxzdk@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jack Breese <jack@kumunetworks.com>
----
- package/gnupg/Config.in | 10 ++++++++++
- package/gnupg/gnupg.mk  | 12 ++++++++++++
- 2 files changed, 22 insertions(+)
+Hi Thomas,
 
-diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
-index 30f215fed..87b3afe76 100644
---- a/package/gnupg/Config.in
-+++ b/package/gnupg/Config.in
-@@ -26,6 +26,16 @@ config BR2_PACKAGE_GNUPG_RSA
- 	help
- 	  Support for RSA public key algorithm
- 
-+config BR2_PACKAGE_GNUPG_SHA256
-+	bool "SHA256 support"
-+	help
-+	  Support for SHA256 hash algorithm
-+
-+config BR2_PACKAGE_GNUPG_SHA512
-+	bool "SHA512 support"
-+	help
-+	  Support for SHA512 hash algorithm
-+
- config BR2_PACKAGE_GNUPG_GPGV
- 	bool "gpgv"
- 	help
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index caa9d2c46..be3e00282 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -48,6 +48,18 @@ else
- GNUPG_CONF_OPTS += --disable-rsa
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNUPG_SHA256),y)
-+GNUPG_CONF_OPTS += --enable-sha256
-+else
-+GNUPG_CONF_OPTS += --disable-sha256
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUPG_SHA512),y)
-+GNUPG_CONF_OPTS += --enable-sha512
-+else
-+GNUPG_CONF_OPTS += --disable-sha512
-+endif
-+
- ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
- define GNUPG_REMOVE_GPGV
- 	rm -f $(TARGET_DIR)/usr/bin/gpgv
+On Wed, Apr 05, 2017 at 10:06:06PM +0200, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=34da6a65adae8463149a28c560926f3349142c2a
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> In preparation for the addition of more patches to the syslinux
+> package, reformat the two existing patches as proper Git formatted
+> patches.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...001-bios-Fix-alignment-change-with-gcc-5.patch} | 30 +++++++++++++---------
+>  .../0002-Disable-PIE-to-avoid-FTBFS-on-amd64.patch | 30 ++++++++++++++++++++++
+>  boot/syslinux/0002-disable-pie.patch               | 22 ----------------
+>  3 files changed, 48 insertions(+), 34 deletions(-)
+
+There are actually three patches here, the last of which is removed. Is that 
+intentional?
+
+baruch
+
 -- 
-2.11.0 (Apple Git-81)
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
