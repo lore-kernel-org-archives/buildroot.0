@@ -1,104 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Apr 2017 22:51:16 +0200
-Subject: [Buildroot] [PATCH v5 03/13] support/test-pkg: calculate
- toolchain name only once
-In-Reply-To: <20170406181854.5242-3-arnout@mind.be>
-References: <cover.1491502445.git.arnout@mind.be>
- <20170406181854.5242-3-arnout@mind.be>
-Message-ID: <20170406205116.GD3538@scaer>
+From: txt.file <txt.file@txtfile.eu>
+Date: Thu, 06 Apr 2017 21:27:00 +0000
+Subject: [Buildroot] Qt5 build failure (beaglebone_qt5_defconfig)
+In-Reply-To: <20170406183218.66cab07e@free-electrons.com>
+References: <87f293c7-8aef-14e9-23e4-195a16b564e3@mind.be>
+ <trinity-0603182d-d77d-4e0a-bdd1-589503badbe3-1491479231018@3capp-gmx-bs68>
+ <CAOf5uwkL9FX3Fq2Dou1jnixat2CWxtWSbXG+Q=RQ=y3pSyjRzA@mail.gmail.com>
+ <20170406183218.66cab07e@free-electrons.com>
+Message-ID: <9442fc41-4b43-b70a-6691-b77402e34fef@txtfile.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+I did *not* test the beaglebone_qt5_defconfig as I expected it to be the
+same as beaglebone_defconfig.
 
-On 2017-04-06 20:18 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I prefer to update the linux version. But I can not fully runtime test
+beaglebone_qt5_defconfig cause the BeagleBone Green does not have
+display output onboard and I have no proper cape nor BeagleBone Black.
+
+I already created a patch and my (pretty slow) build computer is
+building an image. Tomorrow I can runtime test it.
+
+kind regards
+txt.file
+--
+This message is signed.
+
+Thomas Petazzoni:
+> Hello,
 > 
-> The toolchain name was calculated in main() for reporting to the user,
-> and again in build_one() for creating the build directory. Calculate
-> it only once, in main(), and pass the build directory as an argument
-> to build_one().
+> On Thu, 6 Apr 2017 18:12:15 +0200, Michael Nazzareno Trimarchi wrote:
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> I'm not sure why the mkdir is also moved up to main() - IMO, it fits
-> better in build_one(). Yann, the original commit message was just
-> "create build dir from caller", any reason _why_ you did that?
-
-Because when I initially did the legal-info step, it was in a spearate
-function, not in build_one, so it looked more logicial to create the
-directory in main().
-
-But now it is not really meaningful anymore, indeed...
-
-Regards,
-Yann E. MORIN.
-
-> Changes v4 -> v5 by Arnout:
->   - Reword commit message
->   - Reorder patch series
-> ---
->  support/scripts/test-pkg | 20 ++++++++------------
->  1 file changed, 8 insertions(+), 12 deletions(-)
+>> '/home/michael/work/amarula/bticino/buildroot/output/build/linux-52c4aa7cdb93d61f8008f380135beaf7b8fa6593'
+>>   DTC     arch/arm/boot/dts/am335x-bone.dtb
+>>   DTC     arch/arm/boot/dts/am335x-evm.dtb
+>> make[2]: *** No rule to make target
+>> 'arch/arm/boot/dts/am335x-bonegreen.dtb'.  Stop.
+>> arch/arm/Makefile:314: recipe for target 'am335x-bonegreen.dtb' failed
 > 
-> diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-> index f9f994402d..27601168b1 100755
-> --- a/support/scripts/test-pkg
-> +++ b/support/scripts/test-pkg
-> @@ -6,7 +6,7 @@ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-conf
->  main() {
->      local o O opts
->      local cfg dir pkg random toolchain
-> -    local ret nb nb_skip nb_fail nb_tc
-> +    local ret nb nb_skip nb_fail nb_tc build_dir
->      local -a toolchains
->  
->      o='hc:d:p:r:'
-> @@ -68,11 +68,14 @@ main() {
->      nb=0
->      nb_skip=0
->      nb_fail=0
-> -    for toolchain in "${toolchains[@]}"; do
-> +    for toolchainconfig in "${toolchains[@]}"; do
->          : $((nb++))
-> -        printf "%40s [%*d/%d]: " "$(basename "${toolchain}" .config)" \
-> -                                 ${#nb_tc} ${nb} ${nb_tc}
-> -        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
-> +        # Using basename(1) on a URL works nicely
-> +        toolchain="$(basename "${toolchainconfig}" .config)"
-> +        build_dir="${dir}/${toolchain}"
-> +        mkdir -p "${build_dir}"
-> +        printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
-> +        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
->          case ${ret} in
->          (0) printf "OK\n";;
->          (1) : $((nb_skip++)); printf "SKIPPED\n";;
-> @@ -88,13 +91,6 @@ build_one() {
->      local url="${2}"
->      local cfg="${3}"
->      local pkg="${4}"
-> -    local toolchain
-> -
-> -    # Using basename(1) on a URL works nicely
-> -    toolchain="$(basename "${url}" .config)"
-> -
-> -    dir="${dir}/${toolchain}"
-> -    mkdir -p "${dir}"
->  
->      if ! curl -s "${url}" >"${dir}/.config"; then
->          return 2
-> -- 
-> 2.11.0
+> This is caused by the recent commit
+> https://git.buildroot.org/buildroot/commit/configs?id=4b2440b7dcc68369548c0f2be6984fe645fc6bb0
+> from Matthias Fritzsche. Matthias, are you sure you tested the
+> beaglebone_qt5_defconfig ?
+> 
+> Indeed, beaglebone_defconfig and beaglebone_qt5_defconfig don't use the
+> same kernel version, and the one used in beaglebone_qt5_defconfig
+> doesn't have the Beagle Bone Green Device Tree.
+> 
+> So either we should revert Matthias patch on beaglebone_qt5_defconfig,
+> or someone tests upgrading beaglebone_qt5_defconfig to the same kernel
+> version as the one used in beaglebone_defconfig.
+> 
+>> chmod a+x /home/michael/work/amarula/bticino/buildroot/output/build/_fakeroot.fs
+>> PATH="/home/michael/work/amarula/bticino/buildroot/output/host/bin:/home/michael/work/amarula/bticino/buildroot/output/host/sbin:/home/michael/work/amarula/bticino/buildroot/output/host/usr/bin:/home/michael/work/amarula/bticino/buildroot/output/host/usr/sbin:/opt/OpenPrinting-Gutenprint/sbin:/opt/OpenPrinting-Gutenprint/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin"
+>> /home/michael/work/amarula/bticino/buildroot/output/host/usr/bin/fakeroot
+>> -- /home/michael/work/amarula/bticino/buildroot/output/build/_fakeroot.fs
+>> rootdir=/home/michael/work/amarula/bticino/buildroot/output/target
+>> table='/home/michael/work/amarula/bticino/buildroot/output/build/_device_table.txt'
+>> genext2fs: couldn't allocate a block (no free space)
+>> fs/ext2/ext2.mk:44: recipe for target
+> 
+> This is due to the fact that we removed auto-calculation of the ext4
+> filesystem size in
+> https://git.buildroot.org/buildroot/commit/?id=c6bca8cef0310bc649240b451989457ce94a8358,
+> and we default to 60 MB for the filesystem size, which is not enough
+> for this demo. Fixing this is simple: send a patch that adds:
+> 
+> BR2_TARGET_ROOTFS_EXT2_BLOCKS="126976"
+> 
+> to beaglebone_qt5_defconfig (of course after testing that this size is
+> sufficient).
+> 
+> Thanks!
+> 
+> Thomas
 > 
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 801 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/7833b3ff/attachment.asc>
