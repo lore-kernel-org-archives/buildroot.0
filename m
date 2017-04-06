@@ -1,65 +1,81 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu,  6 Apr 2017 22:25:05 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain-external: fix handling of ld.so
-Message-ID: <20170406202505.17605-1-patrickdepinguin@gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 6 Apr 2017 16:29:26 -0400
+Subject: [Buildroot] [PATCH v2 1/2] cracklib: New package
+In-Reply-To: <20170406171949.5a13b942@free-electrons.com>
+References: <20170405124234.7035-1-stefan.sorensen@spectralink.com>
+ <20170406171949.5a13b942@free-electrons.com>
+Message-ID: <CANxTyt5p8xdOUeAnW=8QQdkx7CaR-NWWTiFBsrJXzzkG1=d8xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On Thu, Apr 6, 2017 at 11:19 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello Stefan,
+>
+> On Wed,  5 Apr 2017 14:42:33 +0200, Stefan S?rensen wrote:
+>> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+>> ---
+>
+> I still see the same behavior:
+>
+> /home/thomas/projets/buildroot/output/host/usr/sbin/cracklib-format /home/thomas/dl/cracklib-words-2.9.6.gz | /home/thomas/projets/buildroot/output/host/usr/sbin/cracklib-packer /home/thomas/projets/buildroot/output/target/usr/share/cracklib/pw_dict
+> skipping line: 1
+> 4 3
+> rm /home/thomas/projets/buildroot/output/target/usr/share/cracklib/cracklib-small
+>
+> And then in the target:
+>
+> $ ls -l output/target/usr/share/cracklib/*
+> -rw-r--r-- 1 thomas thomas  360 avril  6 17:17 output/target/usr/share/cracklib/cracklib.magic
+> -rw-r--r-- 1 thomas thomas 1024 avril  6 17:17 output/target/usr/share/cracklib/pw_dict.hwm
+> -rw-r--r-- 1 thomas thomas   50 avril  6 17:17 output/target/usr/share/cracklib/pw_dict.pwd
+> -rw-r--r-- 1 thomas thomas   16 avril  6 17:17 output/target/usr/share/cracklib/pw_dict.pwi
+>
+> i.e, the dictionary is empty (size is ridiculously small).
 
-Commit ba6bac138331cea449592f877e558f84176a70bf made a change in copying of
-the dynamic loader, with the goal of reducing toolchain-specific fixups.
-Any ld*.so file found in the toolchain's lib directory would be copied to
-the staging/lib directory.
+FWIW - it looks to me like the grep call in cracklib-format is
+concluding that cracklib-words is a binary file:
 
-For the toolchains that previously needed fixup, this new behavior is fine.
-The reason they needed fixup was that the normal copy action did not include
-any dynamic loader.
+    buildroot/output/host/usr/sbin/cracklib-format cracklib-words-2.9.6.gz
 
-However, for certain other toolchains this new behavior actually breaks
-things: regardless of ARCH_LIB_DIR, which may be lib64 instead of lib, the
-dynamic loader from lib is copied _over_ any previously correct dynamic
-loader.
+    ]
+    ]]
+    binaryfilestandardinputmatches
 
-This has been witnessed with the CodeSourcery x86_64 and
-CodeSourcery MIPS64 toolchains. In both cases, a 32-bit dynamic loader was
-copied to staging/lib, while a 64-bit version was expected.
+If the grep is patched to have a -a to force the file to be treated as
+text, then you get big numbers:
 
-Fix the problem by only performing this explicit dynamic loader copy if no
-dynamic loader is found in staging/lib.
+    skipping line: 1
+    warning: input out of order: 'ghabcdefghabcdefghabcdefghabcd'
+should not follow 'habcdefghabcdefghabcdefghabcde' (line 55362)
+    warning: input out of order: 'fghabcdefghabcdefghabcdefghabc'
+should not follow 'ghabcdefghabcdefghabcdefghabcd' (line 55363)
+    warning: input out of order: 'efghabcdefghabcdefghabcdefghab'
+should not follow 'fghabcdefghabcdefghabcdefghabc' (line 55364)
+    warning: input out of order: 'fghabcdefghabcdefghabcdefghabc'
+should not follow 'ghabcdefghabcdefghabcdefghabcd' (line 55366)
+    warning: input out of order: 'abcdefghi' should not follow
+'fghabcdefghabcdefghabcdefghabc' (line 55367)
+    1911513 1911512
 
-Fixes http://autobuild.buildroot.net/results/8bf/8bffe54032aad9cc710a22411ef3bff4a2c93e55/
+Or, if you use an older cracklib-words, like
+http://downloads.sourceforge.net/cracklib/cracklib-words-20080507.gz,
+then this problem is also avoided.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- toolchain/helpers.mk | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Danomi -
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 5af38c6..90834f4 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -127,11 +127,13 @@ copy_toolchain_sysroot = \
- 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
- 		done ; \
- 	fi ; \
--	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
--		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
--	fi ; \
--	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
--		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-+	if [ ! -e $(STAGING_DIR)/lib/ld*.so ] && [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
-+		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
-+			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
-+		fi ; \
-+		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
-+			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-+		fi ; \
- 	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
--- 
-2.10.2
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
