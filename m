@@ -1,99 +1,55 @@
-From: Semyon Kolganov <semenak94@mail.ru>
-Date: Thu,  6 Apr 2017 17:27:02 +0300
-Subject: [Buildroot] [PATCHv4] fmt: new package
-In-Reply-To: <fmt: new package>
-References: <fmt: new package>
-Message-ID: <1491488822-17750-1-git-send-email-semenak94@mail.ru>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Apr 2017 17:13:23 +0200
+Subject: [Buildroot] [PATCH v4 1/1] syslinux: build with the target
+ toolchain
+In-Reply-To: <1491473086-16647-1-git-send-email-benoit.allard@greenbone.net>
+References: <1491398930-6130-1-git-send-email-benoit.allard@greenbone.net>
+ <1491473086-16647-1-git-send-email-benoit.allard@greenbone.net>
+Message-ID: <20170406171323.13d11cc6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+Hello,
 
-Changes between v3 and v4:
- - fix misprint
+On Thu,  6 Apr 2017 12:04:46 +0200, Beno?t Allard wrote:
+> Until now, the host toolchain was used to build syslinux, as it was
+> not possible to build a 32-bit syslinux with a x86-64 toolchain.
+> 
+> However, syslinux requires gnu-efi, and gnu-efi is built using the
+> target toolchain. Mixing different toolchains doesn't work well, so
+> this commit changes the syslinux package to use the target toolchain
+> for syslinux as well. This is made possible by patches
+> 0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch and
+> 0004-memdisk-Force-ld-output-format-to-32-bits.patch.
+> 
+> Since syslinux also contains some utilities that have to run on the
+> host, those have to continue being built with the host toolchain,
+> which requires patch 0005-utils-Use-the-host-toolchain-to-build.patch.
+> 
+> This was tested using a Buildroot's built x86_64 toolchain, and
+> checked that the output binaries are 32-bits. It was tested as well if
+> they actually boot on hardware.
+> 
+> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
 
-Changes between v2 and v3:
- - removed Staging section in fmt.mk file
- - formatting fixes
- - added dependency from w/ C++
+Thanks, this now builds fine. However, in output/host/usr/bin, I still
+have a program built with the target toolchain:
 
-Changes between v1 and v2:
- - formatting fixes
- - added right license
- - using Github helper to download
----
- package/Config.in     |  1 +
- package/fmt/Config.in |  9 +++++++++
- package/fmt/fmt.hash  |  4 ++++
- package/fmt/fmt.mk    | 18 ++++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/fmt/Config.in
- create mode 100755 package/fmt/fmt.hash
- create mode 100755 package/fmt/fmt.mk
+$ file output/host/usr/bin/syslinux
+output/host/usr/bin/syslinux: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-x86_64.so.1, not stripped
 
-diff --git a/package/Config.in b/package/Config.in
-index 71bd44a..2bd55ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1433,6 +1433,7 @@ endmenu
- menu "Text and terminal handling"
- 	source "package/augeas/Config.in"
- 	source "package/enchant/Config.in"
-+	source "package/fmt/Config.in"
- 	source "package/icu/Config.in"
- 	source "package/libcli/Config.in"
- 	source "package/libedit/Config.in"
-diff --git a/package/fmt/Config.in b/package/fmt/Config.in
-new file mode 100644
-index 0000000..112d116
---- /dev/null
-+++ b/package/fmt/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_FMT
-+	bool "fmt"
-+	help
-+	  fmt is an open-source formatting library for C++. It can be used
-+	  as a safe alternative to printf or as a fast alternative to
-+	  IOStreams.
-+
-+comment "fmt needs a toolchain w/ C++"
-+	depends on BR2_INSTALL_LIBSTDCPP
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-new file mode 100755
-index 0000000..31d4eaa
---- /dev/null
-+++ b/package/fmt/fmt.hash
-@@ -0,0 +1,4 @@
-+# Calculated on http://onlinemd5.com/
-+sha1	c7026a04f05331004888bf0ab8ef2ef3c002933c fmt-3.0.1.tar.gz
-+# Calculated on http://onlinemd5.com/
-+sha256	dce62ab75a161dd4353a98364feb166d35e7eea382169d59d9ce842c49c55bad fmt-3.0.1.tar.gz
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-new file mode 100755
-index 0000000..b7e3db0
---- /dev/null
-+++ b/package/fmt/fmt.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# fmt
-+#
-+################################################################################
-+
-+FMT_VERSION = 3.0.1
-+FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
-+FMT_LICENSE = BSD-2-Clause
-+FMT_LICENSE_FILES = LICENSE.rst
-+FMT_INSTALL_STAGING = YES
-+
-+FMT_CONF_OPTS = \
-+	-DHAVE_OPEN=ON \
-+	-DFMT_INSTALL=ON \
-+	-DFMT_TEST=OFF
-+
-+$(eval $(cmake-package))
+See the /lib/ld-musl-x86_64 interpreter? This means it has been built
+against the musl C library, and therefore with the target toolchain.
+
+What is this program useful for?
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
