@@ -1,250 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:41:45 +0200
-Subject: [Buildroot] [git commit] package: remove trailing backslash
-Message-ID: <20170406204348.495037FD16@busybox.osuosl.org>
+Date: Thu, 6 Apr 2017 22:43:40 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-base: remove legacy freetype
+	handling
+Message-ID: <20170406204348.7CAA97FCED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ef04c476c79c7efe05b8befc35eb20997fcaaa4
+commit: https://git.buildroot.net/buildroot/commit/?id=80e2a5465880965b93d3647ca96f4af5f55252c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Occurrences were searched using [1]:
-check-package --include-only TrailingBackslash $(find * -type f)
+In 2010 commit 32d319e6f "gst-plugins-base: ensure <stdint.h> is used"
+introduced a typo (missing backslash) that made the code ineffective.
+
+In 2013 commit f8e7fdcd3 "gst1-plugins-base: add gstreamer1 base
+plugins" copied the code.
+
+It can be confirmed by looking at the output of:
+$ make printvars | grep '^GST1_PLUGINS_BASE_CONF_ENV\|^FT2_CONFIG'
+FT2_CONFIG=/bin/false ac_cv_header_stdint_t="stdint.h"
+GST1_PLUGINS_BASE_CONF_ENV=
+
+Direct use of freetype was dropped in version 1.7.2 by upstream [1], so
+remove the code instead of fixing it.
+
+Found using [2]:
+check-package --include-only Indent $(find * -type f)
 and manually removed.
 
-[1] http://patchwork.ozlabs.org/patch/729669/
+[1] https://cgit.freedesktop.org/gstreamer/gst-plugins-base/commit/?id=183610c035dd6955c9b3540b940aec50474af031
+[2] http://patchwork.ozlabs.org/patch/729669/
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cegui06/cegui06.mk             |  4 ++--
- package/celt051/celt051.mk             |  2 +-
- package/flannel/flannel.mk             |  2 +-
- package/hostapd/hostapd.mk             |  2 +-
- package/jimtcl/jimtcl.mk               |  2 +-
- package/libnice/libnice.mk             |  2 +-
- package/nvidia-driver/nvidia-driver.mk | 10 +++++-----
- package/parted/parted.mk               |  2 +-
- package/redis/redis.mk                 |  2 +-
- package/spice/spice.mk                 |  4 ++--
- package/tiff/tiff.mk                   |  2 +-
- package/uclibc/uclibc.mk               |  2 +-
- package/vlc/vlc.mk                     |  2 +-
- 13 files changed, 19 insertions(+), 19 deletions(-)
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/cegui06/cegui06.mk b/package/cegui06/cegui06.mk
-index 43d3b09..8b2c886 100644
---- a/package/cegui06/cegui06.mk
-+++ b/package/cegui06/cegui06.mk
-@@ -16,7 +16,7 @@ CEGUI06_INSTALL_STAGING = YES
- CEGUI06_DEPENDENCIES =              \
- 	expat                       \
- 	freetype                    \
--	pcre                        \
-+	pcre
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 8da1f42..08f53f7 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -11,13 +11,6 @@ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+ GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
+ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
  
- CEGUI06_CONF_OPTS =                 \
- 	--enable-expat              \
-@@ -31,6 +31,6 @@ CEGUI06_CONF_OPTS =                 \
- 	--disable-samples           \
- 	--disable-lua-module        \
- 	--disable-toluacegui        \
--	--disable-external-toluapp  \
-+	--disable-external-toluapp
- 
- $(eval $(autotools-package))
-diff --git a/package/celt051/celt051.mk b/package/celt051/celt051.mk
-index 6074c49..a5b6f47 100644
---- a/package/celt051/celt051.mk
-+++ b/package/celt051/celt051.mk
-@@ -25,6 +25,6 @@ CELT051_CONF_OPTS =                       \
- 	--disable-static-modes            \
- 	--disable-assertions              \
- 	--disable-oggtest                 \
--	--with-ogg=$(STAGING_DIR)/usr     \
-+	--with-ogg=$(STAGING_DIR)/usr
- 
- $(eval $(autotools-package))
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index 18c0af1..8393c59 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -20,7 +20,7 @@ FLANNEL_MAKE_ENV = \
- 	CGO_ENABLED=1
- 
- FLANNEL_GLDFLAGS = \
--	-X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION) \
-+	-X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- FLANNEL_GLDFLAGS += -extldflags '-static'
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index cf651f8..dc28d13 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -51,7 +51,7 @@ endif
- ifeq ($(BR2_PACKAGE_HOSTAPD_EAP),y)
- HOSTAPD_CONFIG_ENABLE += \
- 	CONFIG_EAP \
--	CONFIG_RADIUS_SERVER \
-+	CONFIG_RADIUS_SERVER
- 
- # Enable both TLS v1.1 (CONFIG_TLSV11) and v1.2 (CONFIG_TLSV12)
- HOSTAPD_CONFIG_ENABLE += CONFIG_TLSV1
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index 78517c4..cdbf8ae 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -17,7 +17,7 @@ JIMTCL_HEADERS_TO_INSTALL = \
- 	jim-signal.h \
- 	jim-subcmd.h \
- 	jim-win32compat.h \
--	jim-config.h \
-+	jim-config.h
- 
- ifeq ($(BR2_PACKAGE_TCL),)
- define JIMTCL_LINK_TCLSH
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-index 5ec2b61..6afcb76 100644
---- a/package/libnice/libnice.mk
-+++ b/package/libnice/libnice.mk
-@@ -14,6 +14,6 @@ LIBNICE_INSTALL_STAGING = YES
- LIBNICE_AUTORECONF = YES
- LIBNICE_CONF_OPTS = \
- 	--without-gstreamer \
--	--without-gstreamer-0.10 \
-+	--without-gstreamer-0.10
- 
- $(eval $(autotools-package))
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index cb9b7fa..0d03110 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -43,18 +43,18 @@ NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
- NVIDIA_DRIVER_LIBS_GL = \
- 	libGLX.so.0 \
- 	libGL.so.$(NVIDIA_DRIVER_VERSION) \
--	libGLX_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
-+	libGLX_nvidia.so.$(NVIDIA_DRIVER_VERSION)
- 
- NVIDIA_DRIVER_LIBS_EGL = \
- 	libEGL.so.1 \
- 	libGLdispatch.so.0 \
--	libEGL_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
-+	libEGL_nvidia.so.$(NVIDIA_DRIVER_VERSION)
- 
- NVIDIA_DRIVER_LIBS_GLES = \
- 	libGLESv1_CM.so.1 \
- 	libGLESv2.so.2 \
- 	libGLESv1_CM_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
--	libGLESv2_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
-+	libGLESv2_nvidia.so.$(NVIDIA_DRIVER_VERSION)
- 
- NVIDIA_DRIVER_LIBS_MISC = \
- 	libnvidia-eglcore.so.$(NVIDIA_DRIVER_VERSION) \
-@@ -63,13 +63,13 @@ NVIDIA_DRIVER_LIBS_MISC = \
- 	libnvidia-glsi.so.$(NVIDIA_DRIVER_VERSION) \
- 	tls/libnvidia-tls.so.$(NVIDIA_DRIVER_VERSION) \
- 	libvdpau_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
--	libnvidia-ml.so.$(NVIDIA_DRIVER_VERSION) \
-+	libnvidia-ml.so.$(NVIDIA_DRIVER_VERSION)
- 
- NVIDIA_DRIVER_LIBS = \
- 	$(NVIDIA_DRIVER_LIBS_GL) \
- 	$(NVIDIA_DRIVER_LIBS_EGL) \
- 	$(NVIDIA_DRIVER_LIBS_GLES) \
--	$(NVIDIA_DRIVER_LIBS_MISC) \
-+	$(NVIDIA_DRIVER_LIBS_MISC)
- 
- # Install the gl.pc file
- define NVIDIA_DRIVER_INSTALL_GL_DEV
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index f88143b..fb4987f 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
-@@ -36,7 +36,7 @@ endif
- HOST_PARTED_DEPENDENCIES = host-pkgconf host-util-linux
- HOST_PARTED_CONF_OPTS += \
- 	--without-readline \
--	--disable-device-mapper \
-+	--disable-device-mapper
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 6798620..3f4956c 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -23,7 +23,7 @@ endif
- # instead.
- REDIS_BUILDOPTS = $(TARGET_CONFIGURE_OPTS) \
- 	LDFLAGS="$(TARGET_LDFLAGS) $(REDIS_LIBATOMIC)" \
--	PREFIX=$(TARGET_DIR)/usr MALLOC=libc \
-+	PREFIX=$(TARGET_DIR)/usr MALLOC=libc
- 
- define REDIS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D)
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 0474538..086f5d6 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -18,7 +18,7 @@ SPICE_DEPENDENCIES =        \
- 	openssl             \
- 	pixman              \
- 	python-pyparsing    \
--	spice-protocol      \
-+	spice-protocol
- 
- # We disable everything for now, because the dependency tree can become
- # quite deep if we try to enable some features, and I have not tested that.
-@@ -26,7 +26,7 @@ SPICE_CONF_OPTS =                 \
- 	--disable-opengl          \
- 	--disable-smartcard       \
- 	--disable-automated-tests \
--	--without-sasl            \
-+	--without-sasl
- 
- SPICE_DEPENDENCIES += host-pkgconf
- 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index ffb1a42..e5b01db 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -11,7 +11,7 @@ TIFF_LICENSE_FILES = COPYRIGHT
- TIFF_INSTALL_STAGING = YES
- TIFF_CONF_OPTS = \
- 	--disable-cxx \
--	--without-x \
-+	--without-x
- 
- TIFF_DEPENDENCIES = host-pkgconf
- 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index b1e6112..44c23a7 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -35,7 +35,7 @@ UCLIBC_KCONFIG_OPTS = \
- 	$(UCLIBC_MAKE_FLAGS) \
- 	PREFIX=$(STAGING_DIR) \
- 	DEVEL_PREFIX=/usr/ \
--	RUNTIME_PREFIX=$(STAGING_DIR)/ \
-+	RUNTIME_PREFIX=$(STAGING_DIR)/
- 
- UCLIBC_TARGET_ARCH = $(call qstrip,$(BR2_UCLIBC_TARGET_ARCH))
- 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 6fc7734..36b5fd3 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -61,7 +61,7 @@ VLC_CONF_OPTS += \
- 	--disable-mfx \
- 	--disable-vdpau \
- 	--disable-addonmanagermodules \
--	--enable-run-as-root \
-+	--enable-run-as-root
- 
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-# freetype is only used by examples, but if it is not found
+-# and the host has a freetype-config script, then the host
+-# include dirs are added to the search path causing trouble
+-GST1_PLUGINS_BASE_CONF_ENV =
+-	FT2_CONFIG=/bin/false \
+-	ac_cv_header_stdint_t="stdint.h"
+-
+ # gio_unix_2_0 is only used for tests
+ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
