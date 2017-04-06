@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:45:40 +0200
-Subject: [Buildroot] [PATCH 01/11] package: remove trailing whitespace
-In-Reply-To: <20170404225019.27916-1-ricardo.martincoski@gmail.com>
+Date: Thu, 6 Apr 2017 22:46:19 +0200
+Subject: [Buildroot] [PATCH 11/11] gst-plugins-base: fix handling of
+ freetype
+In-Reply-To: <20170404225019.27916-11-ricardo.martincoski@gmail.com>
 References: <20170404225019.27916-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170406224540.33d0f056@free-electrons.com>
+ <20170404225019.27916-11-ricardo.martincoski@gmail.com>
+Message-ID: <20170406224619.65661d4e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +14,51 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  4 Apr 2017 19:50:09 -0300, Ricardo Martincoski wrote:
-> Occurrences were searched using [1]:
-> check-package --include-only TrailingSpace $(find * -type f)
-> and manually removed.
+On Tue,  4 Apr 2017 19:50:19 -0300, Ricardo Martincoski wrote:
+> In 2010 commit 32d319e6f "gst-plugins-base: ensure <stdint.h> is used"
+> introduced a typo (missing backslash) that made the code ineffective.
 > 
-> [1] http://patchwork.ozlabs.org/patch/729666/
+> It can be confirmed by looking at the output of:
+> $ make printvars | grep '^GST_PLUGINS_BASE_CONF_ENV\|^FT2_CONFIG'
+> FT2_CONFIG=/bin/false ac_cv_header_stdint_t="stdint.h"
+> GST_PLUGINS_BASE_CONF_ENV=
 > 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> build-tested with:
-> $ echo BR2_GOOGLE_BREAKPAD_ENABLE=y > host-google-breakpad.config
-> $ support/scripts/test-pkg -c host-google-breakpad.config \
->   -d /home/builds/test-pkg -p host-google-breakpad
-> 49 builds, 29 skipped, 0 failed
-> ---
->  package/google-breakpad/google-breakpad.mk | 2 +-
->  package/leafnode2/leafnode2.mk             | 2 +-
->  package/mbedtls/Config.in                  | 2 +-
->  package/protobuf/Config.in                 | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+> Add the missing backslash to fix the code.
+> While at it, fix the indentation to use one tab instead of two.
+> 
+> The (end of the) diff of config.log confirms the code is still needed
+> when the host has freetype-config installed:
+>  1704c1702
+>  < configure:22348: result: make use of stdint.h in _stdint.h (assuming C99 compatible system)
+>  ---
+>  > configure:22348: result: make use of stdint.h in _stdint.h  
+>  2499,2500c2497
+>  < configure:31316: found /usr/bin/freetype-config
+>  < configure:31329: result: /usr/bin/freetype-config
+>  ---
+>  > configure:31329: result: /bin/false  
+>  2820c2817
+>  < ac_cv_path_FT2_CONFIG='/usr/bin/freetype-config'
+>  ---
+>  > ac_cv_path_FT2_CONFIG='/bin/false'  
+>  2849d2845
+>  < ac_cv_stdint_result='(assuming C99 compatible system)'
+>  2996,2998c2992,2994
+>  < FT2_CFLAGS='-I/usr/include/freetype2'
+>  < FT2_CONFIG='/usr/bin/freetype-config'
+>  < FT2_LIBS='-lfreetype'
+>  ---
+>  > FT2_CFLAGS=''
+>  > FT2_CONFIG='/bin/false'
+>  > FT2_LIBS=''  
 
-I've applied patches 1 to 10, but left patch 11 unapplied for now. I'll
-reply to patch 11 to explain why.
+The patch looks good, but this diff format is really unreadable. Could
+you regenerate it with "diff -u" so that it becomes readable?
 
-Thanks a lot for doing this great cleanup series, much appreciated!
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
