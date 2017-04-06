@@ -1,19 +1,19 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 6 Apr 2017 19:05:01 +0200
+Date: Thu, 6 Apr 2017 19:08:35 +0200
 Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
 	install
 In-Reply-To: <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
 References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
  <20170318153923.56903d45@free-electrons.com>
  <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
-Message-ID: <CA+TH9VmXMV_VybwEg=R8botkECZeSpX8Upi6o54KtOcXSCRNrw@mail.gmail.com>
+Message-ID: <CA+TH9VnNgxSvsUiSTPUstqpa3uuEbKbMxR+OfK1xMEdDqq3Z0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dusty, Thomas,
+Dusty,
 
 2017-03-19 17:17 GMT+01:00 Dusty <dustin.r.johnson@gmail.com>:
 
@@ -32,7 +32,9 @@ Dusty, Thomas,
 > Thanks!
 >
 
-I'm looking at this but honestly I don't remember too much of it!
+Could you send me a minimal example that exibits the problem?!
+
+Thanks!
 
 
 >
@@ -147,4 +149,4 @@ I'm looking at this but honestly I don't remember too much of it!
 Profile: http://it.linkedin.com/in/compagnucciangelo
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/35c60a32/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/39ef81c2/attachment.html>
