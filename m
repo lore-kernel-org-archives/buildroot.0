@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 21:57:03 +0200
-Subject: [Buildroot] [PATCH] config: bump linux kernel to 4.10.8 in vdk
- defconfig
-In-Reply-To: <1491495579-26960-1-git-send-email-vzakhar@synopsys.com>
-References: <1491495579-26960-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20170406215703.716052ae@free-electrons.com>
+Date: Thu, 6 Apr 2017 22:14:59 +0200
+Subject: [Buildroot] [PATCHv5] fmt: new package
+In-Reply-To: <1491493277-19334-1-git-send-email-semenak94@mail.ru>
+References: <fmt: new package>
+ <1491493277-19334-1-git-send-email-semenak94@mail.ru>
+Message-ID: <20170406221459.281f17ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Apr 2017 19:19:39 +0300, Vlad Zakharov wrote:
-> With this commit we update snps_archs38_vdk_defconfig with the
-> following:
->   - bump linux kernel version to 4.10.8
->   - set up host linux headers to 4.10
+On Thu,  6 Apr 2017 18:41:17 +0300, Semyon Kolganov wrote:
+> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
 > 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> Changes between v4 and v5:
+>  - added dependcy from LIBSTDCPP to fmt
+> 
+> Changes between v3 and v4:
+>  - fixed misprint
+> 
+> Changes between v2 and v3:
+>  - removed Staging section in fmt.mk file
+>  - formatting fixes
+>  - added dependency from w/ C++
+> 
+> Changes between v1 and v2:
+>  - formatting fixes
+>  - added right license
+>  - using Github helper to download
 > ---
->  configs/snps_archs38_vdk_defconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/Config.in     |  1 +
+>  package/fmt/Config.in | 10 ++++++++++
+>  package/fmt/fmt.hash  |  4 ++++
+>  package/fmt/fmt.mk    | 18 ++++++++++++++++++
+>  4 files changed, 33 insertions(+)
+>  create mode 100644 package/fmt/Config.in
+>  create mode 100755 package/fmt/fmt.hash
+>  create mode 100755 package/fmt/fmt.mk
 
-Applied to master, thanks.
+Applied to master with the following changes:
+
+    [Thomas:
+     - add entry to DEVELOPERS file
+     - add missing wchar dependency
+     - minor tweaks.]
+
+Thanks!
 
 Thomas
 -- 
