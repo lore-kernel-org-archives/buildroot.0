@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:34:22 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain-external: fix handling of
- ld.so
-In-Reply-To: <20170406202505.17605-1-patrickdepinguin@gmail.com>
-References: <20170406202505.17605-1-patrickdepinguin@gmail.com>
-Message-ID: <20170406223422.388475a5@free-electrons.com>
+Date: Thu, 6 Apr 2017 22:36:44 +0200
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
+In-Reply-To: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
+References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
+Message-ID: <20170406223644.473ebd65@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +12,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Apr 2017 22:25:05 +0200, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On Thu, 6 Apr 2017 10:33:12 +0200, Kevin JOLY wrote:
+> Add support for libgphoto2 core library designed to allow access to digital camera.
 > 
-> Commit ba6bac138331cea449592f877e558f84176a70bf made a change in copying of
-> the dynamic loader, with the goal of reducing toolchain-specific fixups.
-> Any ld*.so file found in the toolchain's lib directory would be copied to
-> the staging/lib directory.
-> 
-> For the toolchains that previously needed fixup, this new behavior is fine.
-> The reason they needed fixup was that the normal copy action did not include
-> any dynamic loader.
-> 
-> However, for certain other toolchains this new behavior actually breaks
-> things: regardless of ARCH_LIB_DIR, which may be lib64 instead of lib, the
-> dynamic loader from lib is copied _over_ any previously correct dynamic
-> loader.
-> 
-> This has been witnessed with the CodeSourcery x86_64 and
-> CodeSourcery MIPS64 toolchains. In both cases, a 32-bit dynamic loader was
-> copied to staging/lib, while a 64-bit version was expected.
-> 
-> Fix the problem by only performing this explicit dynamic loader copy if no
-> dynamic loader is found in staging/lib.
-> 
-> Fixes http://autobuild.buildroot.net/results/8bf/8bffe54032aad9cc710a22411ef3bff4a2c93e55/
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
 > ---
->  toolchain/helpers.mk | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
+>  DEVELOPERS                         |  3 +++
+>  package/Config.in                  |  1 +
+>  package/libgphoto2/Config.in       | 11 +++++++++++
+>  package/libgphoto2/libgphoto2.hash |  6 ++++++
+>  package/libgphoto2/libgphoto2.mk   | 29 +++++++++++++++++++++++++++++
+>  5 files changed, 50 insertions(+)
+>  create mode 100644 package/libgphoto2/Config.in
+>  create mode 100644 package/libgphoto2/libgphoto2.hash
+>  create mode 100644 package/libgphoto2/libgphoto2.mk
 
-Applied to master, thanks. It's adding more complexity to the existing
-complexity, but oh well :/ Thanks for fixing it so quickly!
+Thanks for this patch. However:
+
+ - You already posted a patch for the same package on March, 13th, but
+   you don't explain how this version is different. This patch is not
+   even identified as a new iteration. What changed?
+
+ - Romain Naour submitted on March 5 a patch adding libgphoto2, so your
+   proposal seems a bit redundant with Romain's patch. Have you taken
+   over Romain's patch? I'm adding Romain in Cc here.
+
+Thanks!
 
 Thomas
 -- 
