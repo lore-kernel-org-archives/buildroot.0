@@ -1,38 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:33:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.77
-In-Reply-To: <20170404212302.9793-1-bernd.kuhls@t-online.de>
-References: <20170404212302.9793-1-bernd.kuhls@t-online.de>
-Message-ID: <20170406223304.7e2ecb6f@free-electrons.com>
+Date: Thu, 6 Apr 2017 22:33:59 +0200
+Subject: [Buildroot] [git commit] toolchain-external: fix handling of ld.so
+Message-ID: <20170406203406.595D98197C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a7fda62eec298542cfb72e032a8fe890cb632781
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  4 Apr 2017 23:23:02 +0200, Bernd Kuhls wrote:
-> Added md5, sha1 & sha512 hashes.
+Commit ba6bac138331cea449592f877e558f84176a70bf made a change in copying of
+the dynamic loader, with the goal of reducing toolchain-specific fixups.
+Any ld*.so file found in the toolchain's lib directory would be copied to
+the staging/lib directory.
 
-Why? Having four hashes is not very useful. So I've kept only the
-sha512 hash.
+For the toolchains that previously needed fixup, this new behavior is fine.
+The reason they needed fixup was that the normal copy action did not include
+any dynamic loader.
 
-> Removed patch 0003, applied upstream:
-> https://cgit.freedesktop.org/mesa/drm/commit/?id=6796859fcce7b9d7157f066a8b0dac3ede6438dd
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0003-tests-etnaviv-link-against-libdrm.patch   | 31 ----------------------
->  package/libdrm/libdrm.hash                         |  7 +++--
->  package/libdrm/libdrm.mk                           |  2 +-
->  3 files changed, 6 insertions(+), 34 deletions(-)
->  delete mode 100644 package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
+However, for certain other toolchains this new behavior actually breaks
+things: regardless of ARCH_LIB_DIR, which may be lib64 instead of lib, the
+dynamic loader from lib is copied _over_ any previously correct dynamic
+loader.
 
-Applied to master, thanks.
+This has been witnessed with the CodeSourcery x86_64 and
+CodeSourcery MIPS64 toolchains. In both cases, a 32-bit dynamic loader was
+copied to staging/lib, while a 64-bit version was expected.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fix the problem by only performing this explicit dynamic loader copy if no
+dynamic loader is found in staging/lib.
+
+Fixes http://autobuild.buildroot.net/results/8bf/8bffe54032aad9cc710a22411ef3bff4a2c93e55/
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 5af38c6..90834f4 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -127,11 +127,13 @@ copy_toolchain_sysroot = \
+ 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
+ 		done ; \
+ 	fi ; \
+-	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
+-		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
+-	fi ; \
+-	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
+-		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
++	if [ ! -e $(STAGING_DIR)/lib/ld*.so ] && [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
++		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
++			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
++		fi ; \
++		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
++			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
++		fi ; \
+ 	fi ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
