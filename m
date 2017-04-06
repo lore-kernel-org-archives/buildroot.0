@@ -1,31 +1,33 @@
-From: Matt Flax <flatmax@flatmax.org>
-Date: Thu, 6 Apr 2017 18:12:39 +1000
-Subject: [Buildroot] [aarch64] can't handle reloc type error
-Message-ID: <ceee635f-4c82-2e20-9c23-15b163bc5331@flatmax.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Apr 2017 11:55:27 +0200
+Subject: [Buildroot] [PATCH v2] arp-scan: new package
+In-Reply-To: <41bc6852-4d23-5911-2722-3ed256004fb0@mind.be>
+References: <20170405101410.27980-1-arnout@mind.be>
+ <20170405183445.6cde0af8@free-electrons.com>
+ <857569ae-aa99-8ae8-17c6-14d0f98afbc5@mind.be>
+ <20170406103300.04ef2b35@free-electrons.com>
+ <41bc6852-4d23-5911-2722-3ed256004fb0@mind.be>
+Message-ID: <20170406115527.08cbb463@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi there,
+Hello,
 
-I am building buildroot for aarch64. I am using the s5p6818 system.
-The system builds and boots well.
+On Thu, 6 Apr 2017 10:42:38 +0200, Arnout Vandecappelle wrote:
 
-The problem I am having is that any packages which are in my external 
-directory $BR2_EXTERNAL_CUSTOM_PATH doesn't produce executable executables.
+>  Of course, but it would be a bug that is triggered by a change in binutils.
+> Looking at the commits in elf2flt is not going to help.
 
-If I try to run something which was sourced from the buildroot package 
-directory, it works well.
+Except if someone has already noticed and fixed the binutils 2.27
+compatibility bug.
 
-If I try to run an executable from my custom external package path, it 
-doesn't. I get the following error :
+Best regards,
 
-/usr/bin/testit symbol '_ZSt15__once_callable': can't handle reloc type 
-0x407
-
-Anyone got any ideas on what to do ?
-
-thanks
-Matt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
