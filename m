@@ -1,43 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  6 Apr 2017 20:20:21 +0200
-Subject: [Buildroot] [PATCH 3/3] docker-engine: bump to version 17.04.0-ce
-In-Reply-To: <1491502821-17697-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1491502821-17697-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <1491502821-17697-3-git-send-email-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Apr 2017 21:37:35 +0200
+Subject: [Buildroot] [PATCH v5 08/13] support/test-pkg: get configs from
+ buildroot defconfigs
+In-Reply-To: <20170406181854.5242-8-arnout@mind.be>
+References: <cover.1491502445.git.arnout@mind.be>
+ <20170406181854.5242-8-arnout@mind.be>
+Message-ID: <20170406213735.003749a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index dfa3248..aa7c3ac 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	a8f1eefadf3966885ad0579facfc2017cca7dd3a0b20d086dfd798168716cb83	docker-engine-v17.03.1-ce.tar.gz
-+sha256	b6ee0aa93ecea44e956d3627907e10557b3ec37d13ddfb40e436656e5037c640	docker-engine-v17.04.0-ce.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 5ff595e..db65e2d 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = v17.03.1-ce
--DOCKER_ENGINE_COMMIT = c6d412e329c85f32a4b2269b49aaa0794affcf88
-+DOCKER_ENGINE_VERSION = v17.04.0-ce
-+DOCKER_ENGINE_COMMIT = 4845c567eb35d68f35b0b1713a09b0c8d47fe67e
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+On Thu, 6 Apr 2017 20:18:48 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Now we have the toolchain configs in the buildroot directory itself, it
+> is no longer necessary to fetch it from the toolchain URL.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+
+On the principle, I am OK with this direction, but it is needs to be
+coordinated with a change to autobuild-run to also use the base
+autobuild defconfigs from the Buildroot tree. Otherwise, we will have
+two copies: one used by people running test-pkg, one used by the actual
+autobuilders. It is not difficult to see those two copies quickly
+getting out of sync.
+
+Best regards,
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
