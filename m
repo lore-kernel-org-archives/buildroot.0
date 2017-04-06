@@ -1,85 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:32:28 +0200
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.77
-Message-ID: <20170406203248.12F8E82670@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 6 Apr 2017 22:32:15 +0200
+Subject: [Buildroot] [PATCH v3] linux: Add CIP SLTS easy selection option
+In-Reply-To: <20170406222929.7a395880@free-electrons.com>
+References: <1491497905-18810-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170406222929.7a395880@free-electrons.com>
+Message-ID: <CA+TH9V==J1Uepa_vzOrWYg978zbJrczQETYKj-tUF7BoNWAqOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=137407a7f9a29daf6312a261bd50cf1d6d9622da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas Petazzoni,
 
-Replace sha256 hash by sha512.
+2017-04-06 22:29 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Removed patch 0003, applied upstream:
-https://cgit.freedesktop.org/mesa/drm/commit/?id=6796859fcce7b9d7157f066a8b0dac3ede6438dd
+> Hello,
+>
+> On Thu,  6 Apr 2017 18:58:25 +0200, Angelo Compagnucci wrote:
+> > This patch adds an easy way to select the CIP project SLTS
+> > kernel within the kernel menu.
+> >
+> > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>
+> I've applied after doing a few tweaks, see below.
+>
+> > +config BR2_CIP_KERNEL_REPO_URL
+> > +     string "CIP SLTS (SuperLong Term Support) kernel url"
+> > +     default "git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-
+> cip.git"
+>
+> I've completely dropped this option. Indeed, it is already possible
+> without your patch to select a custom Git repository to download the
+> kernel. So having yet another option to do that is useless. If you want
+> to use a custom CIP repository, just use the existing
+> BR2_LINUX_KERNEL_CUSTOM_GIT option.
+>
+>
+>
+> > +     help
+> > +       CIP launched in the spring of 2016 to address the needs of
+> > +       organizations in industries such as power generation and
+> > +       distribution, water, oil and gas, transportation, building
+> > +       automation and more for reliable and secure Linux-based
+> > +       embedded systems that can be sustained over a period of
+> > +       10 to as many as 60 years.
+> > +       The project's goal is to provide an open source base layer
+> > +       of industrial-grade software that permits the use and
+> > +       implementation of software building blocks that meet
+> > +       these requirements.
+> > +
+> > +       The CIP community plans to maintain 4.4 for security and
+> > +       bug fixes for more than 10 years.
+>
+> Since this help text was useful, I've moved it under the
+> BR2_LINUX_KERNEL_LATEST_CIP_VERSION option.
+>
+> > +config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+> > +     bool "Latest CIP SLTS (Super Long Term Support) version
+> (v4.4.55-cip3)"
+>
+> This prompt was too long and didn't fit in the menuconfig window. So
+> I've removed the "(Super Long Term Support)" part of it, which is
+> anyway explained in the help text.
+>
+> Applied with those two changes. Thanks!
+>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0003-tests-etnaviv-link-against-libdrm.patch   | 31 ----------------------
- package/libdrm/libdrm.hash                         |  4 +--
- package/libdrm/libdrm.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 34 deletions(-)
+I'm super happy! Thank you so much, really appreciated!
 
-diff --git a/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch b/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
-deleted file mode 100644
-index 62da60e..0000000
---- a/package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From b1e904cd1d5989a13c0a184525e8153bac22e1d7 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 2 Apr 2017 12:17:41 +0200
--Subject: [PATCH] tests/etnaviv: link against libdrm
--
--Fixes link errors detected by buildroot autobuilders:
--
--http://autobuild.buildroot.net/results/68a/68af62f4ab6944d326468818562c05fd5cc55b03/build-end.log
--
--Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=100530
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- tests/etnaviv/Makefile.am | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/tests/etnaviv/Makefile.am b/tests/etnaviv/Makefile.am
--index 06318643..226baee2 100644
----- a/tests/etnaviv/Makefile.am
--+++ b/tests/etnaviv/Makefile.am
--@@ -28,6 +28,7 @@ etnaviv_2d_test_SOURCES = \
-- 	write_bmp.h
-- 
-- etnaviv_cmd_stream_test_LDADD = \
--+	$(top_builddir)/libdrm.la \
-- 	$(top_builddir)/etnaviv/libdrm_etnaviv.la
-- 
-- etnaviv_cmd_stream_test_SOURCES = \
---- 
--2.11.0
--
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index f9d8217..eb826ed 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2017-March/137337.html
--sha256 7cdfb83ea77def453299dd95332aa9257c9f3534ff5844f5c0ce87265c275f3a  libdrm-2.4.76.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2017-April/137998.html
-+sha512 df313bdd9186efdb0e60acdd55e0d5dba402b19011bc3899d56efb4d065f67b6e8c44108fbd8fd258120d4b5c1cc53090beaab732c763bf52f8b352d3c30d101  libdrm-2.4.77.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 8223262..9a78f20 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.76
-+LIBDRM_VERSION = 2.4.77
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/4d02e95b/attachment.html>
