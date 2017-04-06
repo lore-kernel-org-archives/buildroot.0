@@ -1,89 +1,89 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu,  6 Apr 2017 18:58:25 +0200
-Subject: [Buildroot] [PATCH v3] linux: Add CIP SLTS easy selection option
-Message-ID: <1491497905-18810-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Thu, 6 Apr 2017 19:00:31 +0200
+Subject: [Buildroot] [PATCH v2 2/2] linux: Add CIP SLTS easy selection
+	option
+In-Reply-To: <20170401184856.33d00f4f@free-electrons.com>
+References: <1488925428-12805-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1488925428-12805-3-git-send-email-angelo.compagnucci@gmail.com>
+ <20170401184856.33d00f4f@free-electrons.com>
+Message-ID: <CA+TH9VnaYqiY_eQpvCGja1csq8tjLTKCY0UTjiumeNfrtGpPXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds an easy way to select the CIP project SLTS
-kernel within the kernel menu.
+Dear Thomas Petazzoni,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- Config.in       | 20 ++++++++++++++++++++
- linux/Config.in |  4 ++++
- linux/linux.mk  |  3 +++
- 3 files changed, 27 insertions(+)
+2017-04-01 18:48 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-diff --git a/Config.in b/Config.in
-index bd8f0d1..b089ed8 100644
---- a/Config.in
-+++ b/Config.in
-@@ -261,6 +261,26 @@ config BR2_KERNEL_MIRROR
- 	     http://www.XX.kernel.org/pub (XX = country code)
- 	     http://mirror.aarnet.edu.au/pub/ftp.kernel.org
- 
-+config BR2_CIP_KERNEL_REPO_URL
-+	string "CIP SLTS (SuperLong Term Support) kernel url"
-+	default "git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git"
-+	help
-+	  CIP launched in the spring of 2016 to address the needs of
-+	  organizations in industries such as power generation and
-+	  distribution, water, oil and gas, transportation, building
-+	  automation and more for reliable and secure Linux-based
-+	  embedded systems that can be sustained over a period of
-+	  10 to as many as 60 years.
-+	  The project's goal is to provide an open source base layer
-+	  of industrial-grade software that permits the use and
-+	  implementation of software building blocks that meet
-+	  these requirements.
-+
-+	  The CIP community plans to maintain 4.4 for security and
-+	  bug fixes for more than 10 years.
-+
-+	  https://www.cip-project.org
-+
- config BR2_GNU_MIRROR
- 	string "GNU Software mirror"
- 	default "http://ftpmirror.gnu.org"
-diff --git a/linux/Config.in b/linux/Config.in
-index c5565e5..f12d511 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,6 +28,9 @@ choice
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.10.8)"
- 
-+config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	bool "Latest CIP SLTS (Super Long Term Support) version (v4.4.55-cip3)"
-+
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
- 	help
-@@ -98,6 +101,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.10.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.mk b/linux/linux.mk
-index f68a3ff..3fa6c15 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -30,6 +30,9 @@ LINUX_SITE_METHOD = hg
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = svn
-+else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-+LINUX_SITE = $(call qstrip,$(BR2_CIP_KERNEL_REPO_URL))
-+LINUX_SITE_METHOD = git
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+> Hello,
+>
+> On Tue,  7 Mar 2017 23:23:48 +0100, Angelo Compagnucci wrote:
+> > This patch adds an easy way to select the CIP project SLTS
+> > kernel within the kernel menu.
+> >
+> > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>
+> > +     config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_TAG
+> > +             bool "Latest tagged version (v4.4.48-cip2)"
+> > +             help
+> > +               Use the latest tagged version
+> > +
+> > +     config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH
+> > +             bool "Latest released version"
+> > +             help
+> > +               Always use the latest released version at the time of
+> compiling
+>
+> I still won't take a patch that adds an option like this. It makes the
+> build non reproducible, which is plain and simply unacceptable in
+> Buildroot. So until you remove this, this patch cannot be accepted.
+>
+> > +else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
+> > +LINUX_SITE = $(call gitlab,cip-project,cip-kernel-4.4,$(LINUX_VERSION))
+> > +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
+>
+> According to
+> https://wiki.linuxfoundation.org/civilinfrastructureplatform/start,
+> gitlab is only a mirror, and the official Git repository is
+> https://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git/.
+>
+> And in fact, according to
+> https://lists.cip-project.org/pipermail/cip-dev/2017-March/000167.html,
+> they even say that the gitlab mirror is no longer updated that
+> regularly due to technical issues.
+>
+> So could you rework your patch using git.kernel.org instead of gitlab
+> (and therefore dropping the gitlab helper), and also dropping the
+> BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH option ?
+>
+
+Done!
+
+Hope this time it will be accepted!
+
+
+>
+> Thanks,
+>
+
+Thank you so much for the patience!
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+
+
+
 -- 
-2.7.4
+Profile: http://it.linkedin.com/in/compagnucciangelo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/ddc78e4f/attachment.html>
