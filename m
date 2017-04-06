@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 21:51:35 +0200
-Subject: [Buildroot] [PATCH v5 01/13] docs/manual: document the test-pkg
- script
-In-Reply-To: <20170406181854.5242-1-arnout@mind.be>
+Date: Thu, 6 Apr 2017 21:51:39 +0200
+Subject: [Buildroot] [PATCH v5 02/13] support/test-pkg: print number of
+ toolchains and progress
+In-Reply-To: <20170406181854.5242-2-arnout@mind.be>
 References: <cover.1491502445.git.arnout@mind.be>
- <20170406181854.5242-1-arnout@mind.be>
-Message-ID: <20170406215135.5c8cdbf8@free-electrons.com>
+ <20170406181854.5242-2-arnout@mind.be>
+Message-ID: <20170406215139.2bdad581@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 6 Apr 2017 20:18:41 +0200, Arnout Vandecappelle
+On Thu, 6 Apr 2017 20:18:42 +0200, Arnout Vandecappelle
 (Essensium/Mind) wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
-> Changes v4 -> v5:
->   Yann:
->   - enhance the description for SKIPPED  (Thomas)
->   - typoes  (Thomas)
->   Arnout:
->   - additional fixes of typing and wording
+> Changes v4 -> v5 by Arnout:
+>   - toolchain -> toolchains in commit message
+>   - rebase
 > ---
->  docs/manual/adding-packages-tips.txt | 93 ++++++++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt      |  3 ++
->  2 files changed, 96 insertions(+)
+>  docs/manual/adding-packages-tips.txt | 22 +++++++++++-----------
+>  support/scripts/test-pkg             | 24 +++++++++---------------
+>  2 files changed, 20 insertions(+), 26 deletions(-)
 
 Applied to master, thanks.
 
