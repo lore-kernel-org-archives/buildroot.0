@@ -1,88 +1,38 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 6 Apr 2017 22:32:15 +0200
-Subject: [Buildroot] [PATCH v3] linux: Add CIP SLTS easy selection option
-In-Reply-To: <20170406222929.7a395880@free-electrons.com>
-References: <1491497905-18810-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170406222929.7a395880@free-electrons.com>
-Message-ID: <CA+TH9V==J1Uepa_vzOrWYg978zbJrczQETYKj-tUF7BoNWAqOQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Apr 2017 22:33:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.77
+In-Reply-To: <20170404212302.9793-1-bernd.kuhls@t-online.de>
+References: <20170404212302.9793-1-bernd.kuhls@t-online.de>
+Message-ID: <20170406223304.7e2ecb6f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hello,
 
-2017-04-06 22:29 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+On Tue,  4 Apr 2017 23:23:02 +0200, Bernd Kuhls wrote:
+> Added md5, sha1 & sha512 hashes.
 
-> Hello,
->
-> On Thu,  6 Apr 2017 18:58:25 +0200, Angelo Compagnucci wrote:
-> > This patch adds an easy way to select the CIP project SLTS
-> > kernel within the kernel menu.
-> >
-> > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->
-> I've applied after doing a few tweaks, see below.
->
-> > +config BR2_CIP_KERNEL_REPO_URL
-> > +     string "CIP SLTS (SuperLong Term Support) kernel url"
-> > +     default "git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-
-> cip.git"
->
-> I've completely dropped this option. Indeed, it is already possible
-> without your patch to select a custom Git repository to download the
-> kernel. So having yet another option to do that is useless. If you want
-> to use a custom CIP repository, just use the existing
-> BR2_LINUX_KERNEL_CUSTOM_GIT option.
->
->
->
-> > +     help
-> > +       CIP launched in the spring of 2016 to address the needs of
-> > +       organizations in industries such as power generation and
-> > +       distribution, water, oil and gas, transportation, building
-> > +       automation and more for reliable and secure Linux-based
-> > +       embedded systems that can be sustained over a period of
-> > +       10 to as many as 60 years.
-> > +       The project's goal is to provide an open source base layer
-> > +       of industrial-grade software that permits the use and
-> > +       implementation of software building blocks that meet
-> > +       these requirements.
-> > +
-> > +       The CIP community plans to maintain 4.4 for security and
-> > +       bug fixes for more than 10 years.
->
-> Since this help text was useful, I've moved it under the
-> BR2_LINUX_KERNEL_LATEST_CIP_VERSION option.
->
-> > +config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> > +     bool "Latest CIP SLTS (Super Long Term Support) version
-> (v4.4.55-cip3)"
->
-> This prompt was too long and didn't fit in the menuconfig window. So
-> I've removed the "(Super Long Term Support)" part of it, which is
-> anyway explained in the help text.
->
-> Applied with those two changes. Thanks!
->
+Why? Having four hashes is not very useful. So I've kept only the
+sha512 hash.
 
-I'm super happy! Thank you so much, really appreciated!
+> Removed patch 0003, applied upstream:
+> https://cgit.freedesktop.org/mesa/drm/commit/?id=6796859fcce7b9d7157f066a8b0dac3ede6438dd
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../0003-tests-etnaviv-link-against-libdrm.patch   | 31 ----------------------
+>  package/libdrm/libdrm.hash                         |  7 +++--
+>  package/libdrm/libdrm.mk                           |  2 +-
+>  3 files changed, 6 insertions(+), 34 deletions(-)
+>  delete mode 100644 package/libdrm/0003-tests-etnaviv-link-against-libdrm.patch
 
+Applied to master, thanks.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
-
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/4d02e95b/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
