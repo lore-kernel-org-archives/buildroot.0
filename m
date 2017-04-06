@@ -1,81 +1,66 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 6 Apr 2017 16:29:26 -0400
-Subject: [Buildroot] [PATCH v2 1/2] cracklib: New package
-In-Reply-To: <20170406171949.5a13b942@free-electrons.com>
-References: <20170405124234.7035-1-stefan.sorensen@spectralink.com>
- <20170406171949.5a13b942@free-electrons.com>
-Message-ID: <CANxTyt5p8xdOUeAnW=8QQdkx7CaR-NWWTiFBsrJXzzkG1=d8xQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Apr 2017 22:29:29 +0200
+Subject: [Buildroot] [PATCH v3] linux: Add CIP SLTS easy selection option
+In-Reply-To: <1491497905-18810-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1491497905-18810-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20170406222929.7a395880@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 6, 2017 at 11:19 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello Stefan,
->
-> On Wed,  5 Apr 2017 14:42:33 +0200, Stefan S?rensen wrote:
->> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
->> ---
->
-> I still see the same behavior:
->
-> /home/thomas/projets/buildroot/output/host/usr/sbin/cracklib-format /home/thomas/dl/cracklib-words-2.9.6.gz | /home/thomas/projets/buildroot/output/host/usr/sbin/cracklib-packer /home/thomas/projets/buildroot/output/target/usr/share/cracklib/pw_dict
-> skipping line: 1
-> 4 3
-> rm /home/thomas/projets/buildroot/output/target/usr/share/cracklib/cracklib-small
->
-> And then in the target:
->
-> $ ls -l output/target/usr/share/cracklib/*
-> -rw-r--r-- 1 thomas thomas  360 avril  6 17:17 output/target/usr/share/cracklib/cracklib.magic
-> -rw-r--r-- 1 thomas thomas 1024 avril  6 17:17 output/target/usr/share/cracklib/pw_dict.hwm
-> -rw-r--r-- 1 thomas thomas   50 avril  6 17:17 output/target/usr/share/cracklib/pw_dict.pwd
-> -rw-r--r-- 1 thomas thomas   16 avril  6 17:17 output/target/usr/share/cracklib/pw_dict.pwi
->
-> i.e, the dictionary is empty (size is ridiculously small).
+Hello,
 
-FWIW - it looks to me like the grep call in cracklib-format is
-concluding that cracklib-words is a binary file:
+On Thu,  6 Apr 2017 18:58:25 +0200, Angelo Compagnucci wrote:
+> This patch adds an easy way to select the CIP project SLTS
+> kernel within the kernel menu.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-    buildroot/output/host/usr/sbin/cracklib-format cracklib-words-2.9.6.gz
+I've applied after doing a few tweaks, see below.
 
-    ]
-    ]]
-    binaryfilestandardinputmatches
+> +config BR2_CIP_KERNEL_REPO_URL
+> +	string "CIP SLTS (SuperLong Term Support) kernel url"
+> +	default "git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git"
 
-If the grep is patched to have a -a to force the file to be treated as
-text, then you get big numbers:
-
-    skipping line: 1
-    warning: input out of order: 'ghabcdefghabcdefghabcdefghabcd'
-should not follow 'habcdefghabcdefghabcdefghabcde' (line 55362)
-    warning: input out of order: 'fghabcdefghabcdefghabcdefghabc'
-should not follow 'ghabcdefghabcdefghabcdefghabcd' (line 55363)
-    warning: input out of order: 'efghabcdefghabcdefghabcdefghab'
-should not follow 'fghabcdefghabcdefghabcdefghabc' (line 55364)
-    warning: input out of order: 'fghabcdefghabcdefghabcdefghabc'
-should not follow 'ghabcdefghabcdefghabcdefghabcd' (line 55366)
-    warning: input out of order: 'abcdefghi' should not follow
-'fghabcdefghabcdefghabcdefghabc' (line 55367)
-    1911513 1911512
-
-Or, if you use an older cracklib-words, like
-http://downloads.sourceforge.net/cracklib/cracklib-words-20080507.gz,
-then this problem is also avoided.
-
-Danomi -
+I've completely dropped this option. Indeed, it is already possible
+without your patch to select a custom Git repository to download the
+kernel. So having yet another option to do that is useless. If you want
+to use a custom CIP repository, just use the existing
+BR2_LINUX_KERNEL_CUSTOM_GIT option.
 
 
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +	help
+> +	  CIP launched in the spring of 2016 to address the needs of
+> +	  organizations in industries such as power generation and
+> +	  distribution, water, oil and gas, transportation, building
+> +	  automation and more for reliable and secure Linux-based
+> +	  embedded systems that can be sustained over a period of
+> +	  10 to as many as 60 years.
+> +	  The project's goal is to provide an open source base layer
+> +	  of industrial-grade software that permits the use and
+> +	  implementation of software building blocks that meet
+> +	  these requirements.
+> +
+> +	  The CIP community plans to maintain 4.4 for security and
+> +	  bug fixes for more than 10 years.
+
+Since this help text was useful, I've moved it under the
+BR2_LINUX_KERNEL_LATEST_CIP_VERSION option.
+
+> +config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+> +	bool "Latest CIP SLTS (Super Long Term Support) version (v4.4.55-cip3)"
+
+This prompt was too long and didn't fit in the menuconfig window. So
+I've removed the "(Super Long Term Support)" part of it, which is
+anyway explained in the help text.
+
+Applied with those two changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
