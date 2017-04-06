@@ -1,54 +1,73 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 6 Apr 2017 20:18:51 +0200
-Subject: [Buildroot] [PATCH v5 11/13] Makefile: add alldefconfig target
+Date: Thu, 6 Apr 2017 20:18:53 +0200
+Subject: [Buildroot] [PATCH v5 13/13] [RFC] list-defconfigs: support
+	defconfigs in subdirectories
 In-Reply-To: <cover.1491502445.git.arnout@mind.be>
 References: <cover.1491502445.git.arnout@mind.be>
-Message-ID: <20170406181854.5242-11-arnout@mind.be>
+Message-ID: <20170406181854.5242-13-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is used by Kconfig's merge_config.sh.
+Now defconfigs in subdirectories are supported, list-defconfigs should
+also report them.
 
-No alldefpackageconfig is added, since it's rather pointless: it would
-only enable busybox.
+The obvious way to do this would be to use
+
+	find $(1)/configs -name \*_defconfig
+
+However, it is difficult to keep its output sorted properly: we don't
+want defconfigs in subdirectories to appear intermingled with the rest.
+
+The output tends to become a little bit messy, because defconfigs in
+subdirectories will typically need more than 35 characters. If we can
+find a solution for that, it can be done in a later patch.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+With the ugly output, and the uglification of the code, I'm not entirely
+sure that we really want this patch.
+---
+ Makefile | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 89eb748df6..b68e464da6 100644
+index b68e464da6..186e8b6d88 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -126,7 +126,7 @@ DATE := $(shell date +%Y%m%d)
- export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
- 
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
--	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
-+	defconfig %_defconfig allyesconfig allnoconfig alldefconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	print-version olddefconfig distclean manual manual-html manual-split-html \
- 	manual-pdf manual-text manual-epub
-@@ -846,7 +846,7 @@ config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- # no values are set for the legacy options so a subsequent oldconfig
- # will query them. Therefore, run an additional olddefconfig.
- 
--randconfig allyesconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
-+randconfig allyesconfig alldefconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --$@ $(CONFIG_CONFIG_IN)
- 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
- 
-@@ -957,6 +957,7 @@ help:
- 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
-+	@echo '  alldefconfig           - New config where all options are set to default'
- 	@echo '  randpackageconfig      - New config with random answer to package options'
- 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
- 	@echo '  allnopackageconfig     - New config where package options are answered with no'
+@@ -1013,18 +1013,20 @@ help:
+ # $(2): br2-external name, empty for bundled
+ define list-defconfigs
+ 	@first=true; \
+-	for defconfig in $(1)/configs/*_defconfig; do \
+-		[ -f "$${defconfig}" ] || continue; \
+-		if $${first}; then \
+-			if [ "$(2)" ]; then \
+-				printf 'External configs in "$(call qstrip,$(2))":\n'; \
+-			else \
+-				printf "Built-in configs:\n"; \
++	for dir in `find $(1)/configs/ -type d`; do \
++		for defconfig in $${dir}/*_defconfig; do \
++			[ -f "$${defconfig}" ] || continue; \
++			if $${first}; then \
++				if [ "$(2)" ]; then \
++					printf 'External configs in "$(call qstrip,$(2))":\n'; \
++				else \
++					printf "Built-in configs:\n"; \
++				fi; \
++				first=false; \
+ 			fi; \
+-			first=false; \
+-		fi; \
+-		defconfig="$${defconfig##*/}"; \
+-		printf "  %-35s - Build for %s\n" "$${defconfig}" "$${defconfig%_defconfig}"; \
++			defconfig="$${defconfig##$(1)/configs/}"; \
++			printf "  %-35s - Build for %s\n" "$${defconfig}" "$${defconfig%_defconfig}"; \
++		done; \
+ 	done; \
+ 	$${first} || printf "\n"
+ endef
 -- 
 2.11.0
