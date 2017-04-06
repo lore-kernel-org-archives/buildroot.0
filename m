@@ -1,41 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 6 Apr 2017 12:50:52 +0200
-Subject: [Buildroot] [PATCH 3/5] telit_evk_pro3_defconfig: remove broken
-	defconfig
-In-Reply-To: <CAHkwnC_M3=cTtes4_Qc3Jig2+Q7=eJ=A4WoNsRFomLWuwJ_kKw@mail.gmail.com>
-References: <20170301083046.13226-1-arnout@mind.be>
- <20170301083046.13226-3-arnout@mind.be>
- <CAHkwnC_M3=cTtes4_Qc3Jig2+Q7=eJ=A4WoNsRFomLWuwJ_kKw@mail.gmail.com>
-Message-ID: <f6a4dcf2-1bc2-537d-9ba9-bd12ad0f4fca@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Apr 2017 12:53:12 +0200
+Subject: [Buildroot] [PATCH] fmt: new package
+In-Reply-To: <1491474619-11636-1-git-send-email-semenak94@mail.ru>
+References: <fmt: new package>
+ <1491474619-11636-1-git-send-email-semenak94@mail.ru>
+Message-ID: <20170406125312.3675b60a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Fabio,
+Hello,
 
-On 01-03-17 17:28, Fabio Porcedda wrote:
-> 2017-03-01 9:30 GMT+01:00 Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be>:
->> This defconfig has been broken due to gcc5 for more than half a year,
->> and nobody stepped up to fix it. Remove it, as well as it board
->> directory.
-> 
-> Hi Arnout,
-> sorry for the late response, today I've sent a patch to fix the build
-> failure for barebox, tomorrow i will send a patch to update the linux
-> kernel.
+Thanks for this new version. For new versions, it is better if the
+subject prefix is change, and you include a changelog.
 
- Any update on that kernel patch? The telit defconfig is still broken...
+To change the subject prefix:
 
- Regards,
- Arnout
+	git format-patch -v2 HEAD^
 
+will change [PATCH] into [PATCHv2]
+
+On Thu,  6 Apr 2017 13:30:19 +0300, Semyon Kolganov wrote:
+> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+> ---
+
+And the changelog can be written here, detailing what changed between
+v1 and v2.
+
+> diff --git a/package/fmt/Config.in b/package/fmt/Config.in
+> new file mode 100644
+> index 0000000..9ce2874
+> --- /dev/null
+> +++ b/package/fmt/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_FMT
+> +	bool "fmt"
+
+Missed this on the first review: since this is a C++ package, you need
+to do:
+
+	depends on BR2_INSTALL_LIBSTDCPP
+
+> +	help
+> +	  fmt is an open-source formatting library for C++. It can be used
+> +	  as a safe alternative to printf or as a fast alternative to
+> +	  IOStreams.
+> \ No newline at end of file
+
+Still a missing new line here.
+
+And since there's now a C++ dependency, you must add:
+
+comment "fmt needs a toolchain w/ C++"
+	depends on !BR2_INSTALL_LIBSTDCPP
+
+> +FMT_CONF_OPTS = \
+> +	-DHAVE_OPEN=ON \
+> +	-DFMT_INSTALL=ON \
+> +	-DFMT_TEST=OFF
+> +
+> +define FMT_INSTALL_STAGING_CMDS
+> +	mkdir -p $(STAGING_DIR)/usr/include/fmt
+> +	cp -dpfr $(@D)/fmt/*.h $(STAGING_DIR)/usr/include/fmt
+> +endef
+
+I still don't get this. For the target installation, you're using the
+"make install" from the CMake packaging, but for the staging
+installation, you're overriding the logic to only install the header
+files. Why?
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
