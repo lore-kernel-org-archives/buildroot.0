@@ -1,90 +1,149 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 6 Apr 2017 19:51:30 +0200
-Subject: [Buildroot] [PATCHv3 00/12] toolchain: improvements to
- copy_toolchain_sysroot and copy_toolchain_lib_root
-In-Reply-To: <20170406190921.004196b2@free-electrons.com>
-References: <20170207215649.364-1-patrickdepinguin@gmail.com>
- <20170405215445.2b734880@free-electrons.com>
- <CAAXf6LWeKRpa8ngWCxiAKckCrBV27RW8fZdN5BTkdOE1iQYk9g@mail.gmail.com>
- <20170406190921.004196b2@free-electrons.com>
-Message-ID: <CAAXf6LVuTTQQJfhapxgu3keGTZatHA4hxnkEb4CJe2R=XOATPQ@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 6 Apr 2017 20:18:41 +0200
+Subject: [Buildroot] [PATCH v5 01/13] docs/manual: document the test-pkg
+	script
+In-Reply-To: <cover.1491502445.git.arnout@mind.be>
+References: <cover.1491502445.git.arnout@mind.be>
+Message-ID: <20170406181854.5242-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Apr 6, 2017 7:09 PM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Changes v4 -> v5:
+  Yann:
+  - enhance the description for SKIPPED  (Thomas)
+  - typoes  (Thomas)
+  Arnout:
+  - additional fixes of typing and wording
+---
+ docs/manual/adding-packages-tips.txt | 93 ++++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt      |  3 ++
+ 2 files changed, 96 insertions(+)
 
-On Wed, 5 Apr 2017 22:15:40 +0200, Thomas De Schampheleire wrote:
-
-> > Thomas De Schampheleire (12):
-> >   toolchain-external: reduce nesting in copy_toolchain_sysroot
-> >   toolchain-external: fix broken handling of 'usr/lib/locale'
-> >   toolchain-external: clarify rsync excludes in copy_toolchain_sysroot
-> >   toolchain-external: handle ld.so fixups centrally
-> >   toolchain helpers: introduce function relpath_prefix
-> >   toolchain-external: cover multilib toolchains with lib/<variant>
-> >     layout
-> >   toolchain helpers: introduce simplify_symlink
-> >   toolchain-external: simplify previously-broken symbolic links
-> >   toolchain: copy_toolchain_lib_root: remove unused variable LIBDIR
-> >   toolchain: copy_toolchain_lib_root: clarify logic
-> >   toolchain: copy_toolchain_lib_root: clarify input parameter
-> >   toolchain: copy_toolchain_lib_root: copy symlinks instead of
-> >     recreating them
->
-> I've now applied the remainder of the series, patches 3 to 12. I still
-> find this quite complicated overall, but I couldn't find any other
-> solution and nobody else did, and the problem scope is complicated
-> anyway.
->
-> Let's see the feedback we get from users :)
-
-Unfortunately, this breaks the build with at least one toolchain: the
-CodeSourcery MIPS toolchain. Try the following defconfig:
-
-BR2_mips64el=y
-BR2_mips_64r2=y
-BR2_MIPS_NABI64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_ALLJOYN_TCL=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-At commit a4c4cecd87851bdb3cbd4803a94df7602b102c42 (right before your
-patch series), it builds fine.
-
-At commit 38b51739da7fa7b950bbc46c059fbbab465ba4cb (right after your
-patch series), it no longer builds, with the following error:
-
-/home/thomas/projets/buildroot/output/host/usr/mips64el-buildroot-linux-gnu/
-sysroot/soft-float/el/lib64/ld.so.1: error adding symbols: File in wrong
-format
-collect2: error: ld returned 1 exit status
-
-So it smells like the copying of libraries to staging no longer works
-as it used to work for this toolchain.
-
-This causes some build failures in the autobuilders:
-
-  http://autobuild.buildroot.net/results/8bf/8bffe54032aad9cc710a22411ef3bf
-f4a2c93e55/build-end.log
-
-Could you have a look ?
-
-
-I noticed a problem today with the first patch in the series, related to
-ld.so copying and have a fix ready, will test your use case to see if it's
-the same.
-
-Thanks,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/113cdfb5/attachment.html>
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 896be00b36..09cf9d437f 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -32,6 +32,99 @@ using the following rules:
+   with `.` and `-` characters substituted with `_` (e.g.:
+   +FOO_BAR_BOO_VERSION+).
+ 
++[[testing-package]]
++==== How to test your package
++
++Once you have added your new package, it is important that you test it
++under various conditions: does it build for all architectures? Does it
++build with the different C libraries? Does it need threads, NPTL? And
++so on...
++
++Buildroot runs http://autobuild.buildroot.org/[autobuilders] which
++continuously test random configurations. However, these only build the
++`master` branch of the git tree, and your new fancy package is not yet
++there.
++
++Buildroot provides a script in +support/scripts/test-pkg+ that uses the
++same base configurations as used by the autobuilders so you can test
++your package in the same conditions.
++
++First, create a config snippet that contains all the necessary options
++needed to enable your package, but without any architecture or toolchain
++option. For example, let's create a config snippet that just enables
+++libcurl+, without any TLS backend:
++
++----
++$ cat libcurl.config
++BR2_PACKAGE_LIBCURL=y
++----
++
++If your package needs more configuration options, you can add them to the
++config snippet. For example, here's how you would test +libcurl+ with
+++openssl+ as a TLS backend and the +curl+ program:
++
++----
++$ cat libcurl.config
++BR2_PACKAGE_LIBCURL=y
++BR2_PACKAGE_CURL=y
++BR2_PACKAGE_OPENSSL=y
++----
++
++Then run the +test-pkg+ script, by telling it what config snippet to use
++and what package to test:
++
++----
++$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++----
++
++This will try to build your package against all the toolchains used
++by the autobuilders (except for the internal toolchains, because it takes
++too long to do so). The output lists all toolchains and the corresponding
++result (excerpt, results are fake):
++
++----
++$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++                armv5-ctng-linux-gnueabi: OK
++              armv7-ctng-linux-gnueabihf: OK
++                        br-aarch64-glibc: SKIPPED
++                           br-arcle-hs38: SKIPPED
++                            br-arm-basic: FAILED
++                  br-arm-cortex-a9-glibc: OK
++                   br-arm-cortex-a9-musl: FAILED
++                   br-arm-cortex-m4-full: OK
++                             br-arm-full: OK
++                    br-arm-full-nothread: OK
++                      br-arm-full-static: OK
++11 builds, 2 skipped, 2 failed
++----
++
++The results mean:
++
++* `OK`: the build was successful.
++* `SKIPPED`: one or more configuration options listed in the config
++  snippet were not present in the final configuration. This is due to
++  options having dependencies not satisfied by the toolchain, such as
++  for example a package that +depends on BR2_USE_MMU+ with a noMMU
++  toolchain. The missing options are reported in +config.missing+ in
++  the output build directory (+~/br-test-pkg/TOOLCHAIN_NAME/+ by
++  default).
++* `FAILED`: the build failed. Inspect the +logfile+ file in the output
++  build  directory to see what went wrong:
++** the actual build failed,
++** one of the preliminary steps (downloading the config file, applying
++   the configuration, running `dirclean` for the package) failed.
++
++When there are failures, you can just re-run the script with the same
++options (after you fixed your package); the script will attempt to
++re-build the package specified with +-p+ for all toolchains, without
++the need to re-build all the dependencies of that package.
++
++The +test-pkg+ script accepts a few options, for which you can get some
++help by running:
++
++----
++$ ./support/scripts/test-pkg -h
++----
+ 
+ [[github-download-url]]
+ ==== How to add a package from GitHub
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 4595991f0d..d577ff030e 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -9,6 +9,9 @@ applications) can be integrated into Buildroot. It also shows how
+ existing packages are integrated, which is needed for fixing issues or
+ tuning their configuration.
+ 
++When you add a new package, be sure to test it in various conditions;
++see xref:testing-package[]
++
+ include::adding-packages-directory.txt[]
+ 
+ include::adding-packages-generic.txt[]
+-- 
+2.11.0
