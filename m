@@ -1,97 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 16:13:52 +0200
-Subject: [Buildroot] [git commit] libnspr: use __nios2__ instead of nios2
-Message-ID: <20170406141359.88F768271B@busybox.osuosl.org>
+From: Semyon Kolganov <semenak94@mail.ru>
+Date: Thu,  6 Apr 2017 17:17:38 +0300
+Subject: [Buildroot] [PATCHv3] fmt: new package PACKAGEv3
+In-Reply-To: <fmt: new package>
+References: <fmt: new package>
+Message-ID: <1491488258-16197-1-git-send-email-semenak94@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a521546ed553d2be23740bbf1a7aa05bce9eb09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
 
-Our patch adding nios2 support to libnspr uses the built-in compiler
-define "nios2". However, this doesn't work with C++11, where only the
-__nios2__ define is available. Since __nios2__ is always available,
-use that instead:
+Changes between v2 and v3:
+ - removed Staging section in fmt.mk file
+ - formatting fixes
+ - added dependency from w/ C++
 
-$ ./output/host/usr/bin/nios2-linux-gcc -dM -E - < /dev/null | grep -E "( nios2 | __nios2__ )"
-
-$ ./output/host/usr/bin/nios2-linux-gcc -std=c++11 -x c++ -dM -E - < /dev/null | grep -E "( nios2 | __nios2__ )"
-
-Patch 0001-nios2.patch is therefore changed to use __nios2__ (the rest
-of the change noise is due to using quilt to format the patch). Patch
-0002-microblaze.patch is simply updated to apply correctly on top of
-the modified 0001-nios2.patch.
-
-This fixes the build of the poppler library on nios2. It is built with
--std=c++11, and includes nspr headers (through nss), causing a build
-issue.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/9fee58076157d814616fa0da51afde8da21a8973/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Changes between v1 and v2:
+ - formatting fixes
+ - added right license
+ - using Github helper to download
 ---
- package/libnspr/0001-nios2.patch      | 18 ++++++++++--------
- package/libnspr/0002-microblaze.patch |  2 +-
- 2 files changed, 11 insertions(+), 9 deletions(-)
+ package/Config.in     |  1 +
+ package/fmt/Config.in |  9 +++++++++
+ package/fmt/fmt.hash  |  4 ++++
+ package/fmt/fmt.mk    | 18 ++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/fmt/Config.in
+ create mode 100755 package/fmt/fmt.hash
+ create mode 100755 package/fmt/fmt.mk
 
-diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
-index 22cacd7..e10e7e9 100644
---- a/package/libnspr/0001-nios2.patch
-+++ b/package/libnspr/0001-nios2.patch
-@@ -3,14 +3,15 @@ Add Nios-II support
- [Gustavo: update for nspr 4.10.9]
- Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
- 
--diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/include/md/_linux.cfg
----- nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg	2015-10-03 08:11:43.229387215 -0300
--+++ nspr-4.10.9/nspr/pr/include/md/_linux.cfg	2015-10-03 08:11:55.277798841 -0300
-+Index: b/nspr/pr/include/md/_linux.cfg
-+===================================================================
-+--- a/nspr/pr/include/md/_linux.cfg
-++++ b/nspr/pr/include/md/_linux.cfg
- @@ -1017,6 +1017,51 @@
-  #define PR_BYTES_PER_WORD_LOG2   2
-  #define PR_BYTES_PER_DWORD_LOG2  3
-  
--+#elif defined(nios2)
-++#elif defined(__nios2__)
- +
- +#define IS_LITTLE_ENDIAN 1
- +#undef  IS_BIG_ENDIAN
-@@ -58,14 +59,15 @@ diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/in
-  #else
-  
-  #error "Unknown CPU architecture"
--diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.h nspr-4.10.9/nspr/pr/include/md/_linux.h
----- nspr-4.10.9.orig/nspr/pr/include/md/_linux.h	2015-10-03 08:11:43.229387215 -0300
--+++ nspr-4.10.9/nspr/pr/include/md/_linux.h	2015-10-03 08:12:22.474728003 -0300
-+Index: b/nspr/pr/include/md/_linux.h
-+===================================================================
-+--- a/nspr/pr/include/md/_linux.h
-++++ b/nspr/pr/include/md/_linux.h
- @@ -57,6 +57,8 @@
-  #define _PR_SI_ARCHITECTURE "m32r"
-  #elif defined(__or1k__)
-  #define _PR_SI_ARCHITECTURE "or1k"
--+#elif defined(nios2)
-++#elif defined(__nios2__)
- +#define _PR_SI_ARCHITECTURE "nios2"
-  #else
-  #error "Unknown CPU architecture"
-diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
-index 7fd650c..7cf1f0d 100644
---- a/package/libnspr/0002-microblaze.patch
-+++ b/package/libnspr/0002-microblaze.patch
-@@ -74,6 +74,6 @@ Index: b/nspr/pr/include/md/_linux.h
-  #define _PR_SI_ARCHITECTURE "or1k"
- +#elif defined(__microblaze__)
- +#define _PR_SI_ARCHITECTURE "microblaze"
-- #elif defined(nios2)
-+ #elif defined(__nios2__)
-  #define _PR_SI_ARCHITECTURE "nios2"
-  #else
+diff --git a/package/Config.in b/package/Config.in
+index 71bd44a..2bd55ec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1433,6 +1433,7 @@ endmenu
+ menu "Text and terminal handling"
+ 	source "package/augeas/Config.in"
+ 	source "package/enchant/Config.in"
++	source "package/fmt/Config.in"
+ 	source "package/icu/Config.in"
+ 	source "package/libcli/Config.in"
+ 	source "package/libedit/Config.in"
+diff --git a/package/fmt/Config.in b/package/fmt/Config.in
+new file mode 100644
+index 0000000..e829f1f
+--- /dev/null
++++ b/package/fmt/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FMT
++	bool "fmt"
++	help
++	  fmt is an open-source formatting library for C++. It can be used
++	  as a safe alternative to printf or as a fast alternative to
++	  IOStreams.
++
++comment "fmt needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+new file mode 100755
+index 0000000..31d4eaa
+--- /dev/null
++++ b/package/fmt/fmt.hash
+@@ -0,0 +1,4 @@
++# Calculated on http://onlinemd5.com/
++sha1	c7026a04f05331004888bf0ab8ef2ef3c002933c fmt-3.0.1.tar.gz
++# Calculated on http://onlinemd5.com/
++sha256	dce62ab75a161dd4353a98364feb166d35e7eea382169d59d9ce842c49c55bad fmt-3.0.1.tar.gz
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+new file mode 100755
+index 0000000..b7e3db0
+--- /dev/null
++++ b/package/fmt/fmt.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# fmt
++#
++################################################################################
++
++FMT_VERSION = 3.0.1
++FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
++FMT_LICENSE = BSD-2-Clause
++FMT_LICENSE_FILES = LICENSE.rst
++FMT_INSTALL_STAGING = YES
++
++FMT_CONF_OPTS = \
++	-DHAVE_OPEN=ON \
++	-DFMT_INSTALL=ON \
++	-DFMT_TEST=OFF
++
++$(eval $(cmake-package))
+-- 
+2.7.4
