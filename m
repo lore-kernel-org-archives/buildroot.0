@@ -1,9 +1,9 @@
 From: Semyon Kolganov <semenak94@mail.ru>
-Date: Thu,  6 Apr 2017 17:17:38 +0300
-Subject: [Buildroot] [PATCHv3] fmt: new package PACKAGEv3
+Date: Thu,  6 Apr 2017 17:27:02 +0300
+Subject: [Buildroot] [PATCHv4] fmt: new package
 In-Reply-To: <fmt: new package>
 References: <fmt: new package>
-Message-ID: <1491488258-16197-1-git-send-email-semenak94@mail.ru>
+Message-ID: <1491488822-17750-1-git-send-email-semenak94@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,6 +11,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+
+Changes between v3 and v4:
+ - fix misprint
 
 Changes between v2 and v3:
  - removed Staging section in fmt.mk file
@@ -45,7 +48,7 @@ index 71bd44a..2bd55ec 100644
  	source "package/libedit/Config.in"
 diff --git a/package/fmt/Config.in b/package/fmt/Config.in
 new file mode 100644
-index 0000000..e829f1f
+index 0000000..112d116
 --- /dev/null
 +++ b/package/fmt/Config.in
 @@ -0,0 +1,9 @@
@@ -57,7 +60,7 @@ index 0000000..e829f1f
 +	  IOStreams.
 +
 +comment "fmt needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_INSTALL_LIBSTDCPP
 diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
 new file mode 100755
 index 0000000..31d4eaa
