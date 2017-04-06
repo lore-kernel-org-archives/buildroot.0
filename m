@@ -1,66 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:29:29 +0200
-Subject: [Buildroot] [PATCH v3] linux: Add CIP SLTS easy selection option
-In-Reply-To: <1491497905-18810-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1491497905-18810-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20170406222929.7a395880@free-electrons.com>
+Date: Thu, 6 Apr 2017 22:29:53 +0200
+Subject: [Buildroot] [git commit] package/libvpx: bump version to 1.6.1
+Message-ID: <20170406203139.E803782670@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4fab48e133b4083cdc7efe208a045b361ad28101
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  6 Apr 2017 18:58:25 +0200, Angelo Compagnucci wrote:
-> This patch adds an easy way to select the CIP project SLTS
-> kernel within the kernel menu.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Rebased patch 0001.
 
-I've applied after doing a few tweaks, see below.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch | 2 +-
+ package/libvpx/libvpx.hash                                              | 2 +-
+ package/libvpx/libvpx.mk                                                | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-> +config BR2_CIP_KERNEL_REPO_URL
-> +	string "CIP SLTS (SuperLong Term Support) kernel url"
-> +	default "git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git"
-
-I've completely dropped this option. Indeed, it is already possible
-without your patch to select a custom Git repository to download the
-kernel. So having yet another option to do that is useless. If you want
-to use a custom CIP repository, just use the existing
-BR2_LINUX_KERNEL_CUSTOM_GIT option.
-
-
-
-> +	help
-> +	  CIP launched in the spring of 2016 to address the needs of
-> +	  organizations in industries such as power generation and
-> +	  distribution, water, oil and gas, transportation, building
-> +	  automation and more for reliable and secure Linux-based
-> +	  embedded systems that can be sustained over a period of
-> +	  10 to as many as 60 years.
-> +	  The project's goal is to provide an open source base layer
-> +	  of industrial-grade software that permits the use and
-> +	  implementation of software building blocks that meet
-> +	  these requirements.
-> +
-> +	  The CIP community plans to maintain 4.4 for security and
-> +	  bug fixes for more than 10 years.
-
-Since this help text was useful, I've moved it under the
-BR2_LINUX_KERNEL_LATEST_CIP_VERSION option.
-
-> +config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-> +	bool "Latest CIP SLTS (Super Long Term Support) version (v4.4.55-cip3)"
-
-This prompt was too long and didn't fit in the menuconfig window. So
-I've removed the "(Super Long Term Support)" part of it, which is
-anyway explained in the help text.
-
-Applied with those two changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+index 20f08c9..e17ff71 100644
+--- a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
++++ b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+@@ -20,7 +20,7 @@ index c14f288..82df745 100644
+  
+  #include "vpx_config.h"
+ -#if defined(__uClinux__)
+--# include <lddk.h>
++-#include <lddk.h>
+ -#endif
+  
+  #include <stdlib.h>
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index f0240d6..95ff3a8 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  d0afbb5eb1ecae68f8d578abace160a97e2e8a230e3028cf4db115d59a695aad  libvpx-1.6.0.tar.bz2
++sha256 1c2c0c2a97fba9474943be34ee39337dee756780fc12870ba1dc68372586a819  libvpx-1.6.1.tar.bz2
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index c4f102b..24c3903 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVPX_VERSION = 1.6.0
++LIBVPX_VERSION = 1.6.1
+ LIBVPX_SOURCE = libvpx-$(LIBVPX_VERSION).tar.bz2
+ LIBVPX_SITE = http://storage.googleapis.com/downloads.webmproject.org/releases/webm
+ LIBVPX_LICENSE = BSD-3-Clause
