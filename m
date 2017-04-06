@@ -1,152 +1,80 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 6 Apr 2017 19:08:35 +0200
-Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
-	install
-In-Reply-To: <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
-References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
- <20170318153923.56903d45@free-electrons.com>
- <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
-Message-ID: <CA+TH9VnNgxSvsUiSTPUstqpa3uuEbKbMxR+OfK1xMEdDqq3Z0w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Apr 2017 19:09:21 +0200
+Subject: [Buildroot] [PATCHv3 00/12] toolchain: improvements to
+ copy_toolchain_sysroot and copy_toolchain_lib_root
+In-Reply-To: <CAAXf6LWeKRpa8ngWCxiAKckCrBV27RW8fZdN5BTkdOE1iQYk9g@mail.gmail.com>
+References: <20170207215649.364-1-patrickdepinguin@gmail.com>
+ <20170405215445.2b734880@free-electrons.com>
+ <CAAXf6LWeKRpa8ngWCxiAKckCrBV27RW8fZdN5BTkdOE1iQYk9g@mail.gmail.com>
+Message-ID: <20170406190921.004196b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dusty,
+Hello,
 
-2017-03-19 17:17 GMT+01:00 Dusty <dustin.r.johnson@gmail.com>:
+On Wed, 5 Apr 2017 22:15:40 +0200, Thomas De Schampheleire wrote:
 
-> Angelo,
->
-> Below is the diff between staging and host. I am using a Ubuntu VM to
-> compile for an ARM target with uCLibc.
-> The appropriate .so files (libc.so.0) are referenced in the config file in
-> the staging directory but not in the host.
-> The patch I referenced in my commit is:
->   * package/mono/0002-Adjust-libc.so-path-depending-on-C-
-> library-being-use.patch
-> This patch addresses the proper generation of the /etc/mono/config file in
-> the staging directory, I believe.
->
-> Thanks!
->
+> > Thomas De Schampheleire (12):
+> >   toolchain-external: reduce nesting in copy_toolchain_sysroot
+> >   toolchain-external: fix broken handling of 'usr/lib/locale'
+> >   toolchain-external: clarify rsync excludes in copy_toolchain_sysroot
+> >   toolchain-external: handle ld.so fixups centrally
+> >   toolchain helpers: introduce function relpath_prefix
+> >   toolchain-external: cover multilib toolchains with lib/<variant>
+> >     layout
+> >   toolchain helpers: introduce simplify_symlink
+> >   toolchain-external: simplify previously-broken symbolic links
+> >   toolchain: copy_toolchain_lib_root: remove unused variable LIBDIR
+> >   toolchain: copy_toolchain_lib_root: clarify logic
+> >   toolchain: copy_toolchain_lib_root: clarify input parameter
+> >   toolchain: copy_toolchain_lib_root: copy symlinks instead of
+> >     recreating them  
+> 
+> I've now applied the remainder of the series, patches 3 to 12. I still
+> find this quite complicated overall, but I couldn't find any other
+> solution and nobody else did, and the problem scope is complicated
+> anyway.
+> 
+> Let's see the feedback we get from users :)
 
-Could you send me a minimal example that exibits the problem?!
+Unfortunately, this breaks the build with at least one toolchain: the
+CodeSourcery MIPS toolchain. Try the following defconfig:
+
+BR2_mips64el=y
+BR2_mips_64r2=y
+BR2_MIPS_NABI64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_ALLJOYN_TCL=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+At commit a4c4cecd87851bdb3cbd4803a94df7602b102c42 (right before your
+patch series), it builds fine.
+
+At commit 38b51739da7fa7b950bbc46c059fbbab465ba4cb (right after your
+patch series), it no longer builds, with the following error:
+
+/home/thomas/projets/buildroot/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/lib64/ld.so.1: error adding symbols: File in wrong format
+collect2: error: ld returned 1 exit status
+
+So it smells like the copying of libraries to staging no longer works
+as it used to work for this toolchain.
+
+This causes some build failures in the autobuilders:
+
+  http://autobuild.buildroot.net/results/8bf/8bffe54032aad9cc710a22411ef3bff4a2c93e55/build-end.log
+
+Could you have a look ?
 
 Thanks!
 
-
->
-> Dusty
->
->
-> diff -u output/host/etc/mono/ output/staging/etc/mono/
-> Common subdirectories: output/host/etc/mono/2.0 and
-> output/staging/etc/mono/2.0
-> Common subdirectories: output/host/etc/mono/4.0 and
-> output/staging/etc/mono/4.0
-> Common subdirectories: output/host/etc/mono/4.5 and
-> output/staging/etc/mono/4.5
-> diff -u output/host/etc/mono/config output/staging/etc/mono/config
-> --- output/host/etc/mono/config 2017-03-12 22:53:07.450555843 +0000
-> +++ output/staging/etc/mono/config      2017-03-15 02:31:40.272008856 +0000
-> @@ -1,9 +1,9 @@
->  <configuration>
-> -       <dllmap dll="i:cygwin1.dll" target="libc.so.6" os="!windows" />
-> -       <dllmap dll="libc" target="libc.so.6" os="!windows"/>
-> +       <dllmap dll="i:cygwin1.dll" target="libc.so.0" os="!windows" />
-> +       <dllmap dll="libc" target="libc.so.0" os="!windows"/>
->         <dllmap dll="intl" target="libc.so.6" os="!windows"/>
-> -       <dllmap dll="intl" name="bind_textdomain_codeset"
-> target="libc.so.6" os="solaris"/>
-> -       <dllmap dll="libintl" name="bind_textdomain_codeset"
-> target="libc.so.6" os="solaris"/>
-> +       <dllmap dll="intl" name="bind_textdomain_codeset"
-> target="libc.so.0" os="solaris"/>
-> +       <dllmap dll="libintl" name="bind_textdomain_codeset"
-> target="libc.so.0" os="solaris"/>
->         <dllmap dll="libintl" target="libc.so.6" os="!windows"/>
->         <dllmap dll="i:libxslt.dll" target="libxslt.so" os="!windows"/>
->         <dllmap dll="i:odbc32.dll" target="libodbc.so" os="!windows"/>
-> @@ -11,11 +11,11 @@
->         <dllmap dll="oci" target="libclntsh.so" os="!windows"/>
->         <dllmap dll="db2cli" target="libdb2_36.so" os="!windows"/>
->         <dllmap dll="MonoPosixHelper" target="$mono_libdir/libMonoPosixHelper.so"
-> os="!windows" />
-> -       <dllmap dll="i:msvcrt" target="libc.so.6" os="!windows"/>
-> -       <dllmap dll="i:msvcrt.dll" target="libc.so.6" os="!windows"/>
-> +       <dllmap dll="i:msvcrt" target="libc.so.0" os="!windows"/>
-> +       <dllmap dll="i:msvcrt.dll" target="libc.so.0" os="!windows"/>
->         <dllmap dll="sqlite" target="libsqlite.so.0" os="!windows"/>
->         <dllmap dll="sqlite3" target="libsqlite3.so.0" os="!windows"/>
-> -       <dllmap dll="libX11" target="libX11.so.6" os="!windows" />
-> +       <dllmap dll="libX11" target="libX11.so" os="!windows" />
->         <dllmap dll="libgdk-x11-2.0" target="libgdk-x11-2.0.so.0"
-> os="!windows"/>
->         <dllmap dll="libgtk-x11-2.0" target="libgtk-x11-2.0.so.0"
-> os="!windows"/>
->         <dllmap dll="libXinerama" target="libXinerama.so.1" os="!windows"
-> />
-> Only in output/host/etc/mono/: mconfig
->
->
-> On Sat, Mar 18, 2017 at 10:39 AM, Thomas Petazzoni <thomas.petazzoni@free-
-> electrons.com> wrote:
->
->> Hello,
->>
->> Angelo, could you comment on this patch touching the Mono package?
->>
->> Copying $(HOST_DIR)/etc/mono to $(TARGET_DIR)/etc has been there since
->> you contributed the package, but apparently causes some issues. It
->> would be nice if you could have a look at the patch proposed by Dustin.
->>
->> Thanks a lot!
->>
->> Thomas
->>
->> On Tue, 14 Mar 2017 22:24:58 -0400, Dustin Johnson wrote:
->> > When the mono package is installed, the autotools installer installs
->> > the /etc/mono files to the target. A post_install hook then copies
->> > over the mono libraries to the target as well as the host /etc/mono
->> > files which overrides the target files. The target specific mono
->> > configuration file (/etc/mono/config) is overridden with the host
->> > settings. This causes mono on the target to be unable to locate target
->> > specific .so files as it overrides the changes enacted by the patches
->> > for the package.
->> >
->> > Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
->> > ---
->> >  package/mono/mono.mk | 1 -
->> >  1 file changed, 1 deletion(-)
->> >
->> > diff --git a/package/mono/mono.mk b/package/mono/mono.mk
->> > index 20b920568..4996b7c60 100644
->> > --- a/package/mono/mono.mk
->> > +++ b/package/mono/mono.mk
->> > @@ -31,7 +31,6 @@ MONO_CONF_OPTS = --disable-gtk-doc \
->> >  define MONO_INSTALL_LIBS
->> >       rsync -av --exclude=*.so --exclude=*.mdb \
->> >               $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
->> > -     rsync -av $(HOST_DIR)/etc/mono $(TARGET_DIR)/etc
->> >  endef
->> >
->> >  MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
->>
->>
->>
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux and Kernel engineering
->> http://free-electrons.com
->>
->
->
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/39ef81c2/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
