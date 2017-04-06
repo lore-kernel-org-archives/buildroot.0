@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:36:44 +0200
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
-In-Reply-To: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
-References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
-Message-ID: <20170406223644.473ebd65@free-electrons.com>
+Date: Thu, 6 Apr 2017 22:38:31 +0200
+Subject: [Buildroot] [PATCH v4 02/39] package/libdvdread: add
+ Kodi-specific patches
+In-Reply-To: <20170323172900.25458-3-bernd.kuhls@t-online.de>
+References: <20170323172900.25458-1-bernd.kuhls@t-online.de>
+ <20170323172900.25458-3-bernd.kuhls@t-online.de>
+Message-ID: <20170406223831.648c10df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +14,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 6 Apr 2017 10:33:12 +0200, Kevin JOLY wrote:
-> Add support for libgphoto2 core library designed to allow access to digital camera.
-> 
-> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
-> ---
->  DEVELOPERS                         |  3 +++
->  package/Config.in                  |  1 +
->  package/libgphoto2/Config.in       | 11 +++++++++++
->  package/libgphoto2/libgphoto2.hash |  6 ++++++
->  package/libgphoto2/libgphoto2.mk   | 29 +++++++++++++++++++++++++++++
->  5 files changed, 50 insertions(+)
->  create mode 100644 package/libgphoto2/Config.in
->  create mode 100644 package/libgphoto2/libgphoto2.hash
->  create mode 100644 package/libgphoto2/libgphoto2.mk
+On Thu, 23 Mar 2017 18:28:23 +0100, Bernd Kuhls wrote:
 
-Thanks for this patch. However:
+> +# enable Kodi-specific code
+> +ifeq ($(BR2_PACKAGE_KODI),y)
+> +LIBDVDREAD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -D_XBMC"
+> +endif
 
- - You already posted a patch for the same package on March, 13th, but
-   you don't explain how this version is different. This patch is not
-   even identified as a new iteration. What changed?
+This really feels clunky (ditto in patch 03/39). Why does the Kodi
+related code needs to be conditional?
 
- - Romain Naour submitted on March 5 a patch adding libgphoto2, so your
-   proposal seems a bit redundant with Romain's patch. Have you taken
-   over Romain's patch? I'm adding Romain in Cc here.
-
-Thanks!
+What if libdvdread is used in the same system for Kodi and for
+something else?
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
