@@ -1,52 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:41:07 +0200
-Subject: [Buildroot] [git commit] package: add missing empty line after
-	header
-Message-ID: <20170406204113.421C18274D@busybox.osuosl.org>
+Date: Thu, 6 Apr 2017 22:41:53 +0200
+Subject: [Buildroot] [git commit] python-pylibftdi: check hash
+Message-ID: <20170406204348.55F2D8274E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=250f27ac422ee67c40189666b6fd4c50dd41dd74
+commit: https://git.buildroot.net/buildroot/commit/?id=35e95bb745f9be48bf60c8c6eb021ce7f8dffd0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Occurrences were searched using [1]:
-check-package --include-only PackageHeader $(find * -type f)
-and manually fixed to comply to [2].
+Currently the hash is not checked, returning this message:
+WARNING: no hash file for pylibftdi-0.15.0.tar.gz
 
-[1] http://patchwork.ozlabs.org/patch/729669/
-[2] http://nightly.buildroot.org/#writing-rules-mk
+Rename the .hash file to use the package name.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/grantlee/grantlee.mk | 1 +
- package/lesstif/lesstif.mk   | 1 +
- 2 files changed, 2 insertions(+)
+ package/python-pylibftdi/{python-libftdi.hash => python-pylibftdi.hash} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
-index 812603b..575b63f 100644
---- a/package/grantlee/grantlee.mk
-+++ b/package/grantlee/grantlee.mk
-@@ -3,6 +3,7 @@
- # grantlee
- #
- ################################################################################
-+
- GRANTLEE_VERSION = 5.1.0
- GRANTLEE_SITE = http://downloads.grantlee.org
- GRANTLEE_INSTALL_STAGING = YES
-diff --git a/package/lesstif/lesstif.mk b/package/lesstif/lesstif.mk
-index 3d381ff..933dd13 100644
---- a/package/lesstif/lesstif.mk
-+++ b/package/lesstif/lesstif.mk
-@@ -3,6 +3,7 @@
- # lesstif
- #
- ################################################################################
-+
- LESSTIF_VERSION = 0.95.2
- LESSTIF_SOURCE = lesstif-$(LESSTIF_VERSION).tar.bz2
- LESSTIF_SITE = http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
+diff --git a/package/python-pylibftdi/python-libftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
+similarity index 100%
+rename from package/python-pylibftdi/python-libftdi.hash
+rename to package/python-pylibftdi/python-pylibftdi.hash
