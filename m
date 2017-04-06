@@ -1,89 +1,150 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 6 Apr 2017 19:00:31 +0200
-Subject: [Buildroot] [PATCH v2 2/2] linux: Add CIP SLTS easy selection
-	option
-In-Reply-To: <20170401184856.33d00f4f@free-electrons.com>
-References: <1488925428-12805-1-git-send-email-angelo.compagnucci@gmail.com>
- <1488925428-12805-3-git-send-email-angelo.compagnucci@gmail.com>
- <20170401184856.33d00f4f@free-electrons.com>
-Message-ID: <CA+TH9VnaYqiY_eQpvCGja1csq8tjLTKCY0UTjiumeNfrtGpPXw@mail.gmail.com>
+Date: Thu, 6 Apr 2017 19:05:01 +0200
+Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
+	install
+In-Reply-To: <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
+References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
+ <20170318153923.56903d45@free-electrons.com>
+ <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
+Message-ID: <CA+TH9VmXMV_VybwEg=R8botkECZeSpX8Upi6o54KtOcXSCRNrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dusty, Thomas,
 
-2017-04-01 18:48 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+2017-03-19 17:17 GMT+01:00 Dusty <dustin.r.johnson@gmail.com>:
 
-> Hello,
+> Angelo,
 >
-> On Tue,  7 Mar 2017 23:23:48 +0100, Angelo Compagnucci wrote:
-> > This patch adds an easy way to select the CIP project SLTS
-> > kernel within the kernel menu.
-> >
-> > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> Below is the diff between staging and host. I am using a Ubuntu VM to
+> compile for an ARM target with uCLibc.
+> The appropriate .so files (libc.so.0) are referenced in the config file in
+> the staging directory but not in the host.
+> The patch I referenced in my commit is:
+>   * package/mono/0002-Adjust-libc.so-path-depending-on-C-
+> library-being-use.patch
+> This patch addresses the proper generation of the /etc/mono/config file in
+> the staging directory, I believe.
 >
-> > +     config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_TAG
-> > +             bool "Latest tagged version (v4.4.48-cip2)"
-> > +             help
-> > +               Use the latest tagged version
-> > +
-> > +     config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH
-> > +             bool "Latest released version"
-> > +             help
-> > +               Always use the latest released version at the time of
-> compiling
->
-> I still won't take a patch that adds an option like this. It makes the
-> build non reproducible, which is plain and simply unacceptable in
-> Buildroot. So until you remove this, this patch cannot be accepted.
->
-> > +else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-> > +LINUX_SITE = $(call gitlab,cip-project,cip-kernel-4.4,$(LINUX_VERSION))
-> > +LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
->
-> According to
-> https://wiki.linuxfoundation.org/civilinfrastructureplatform/start,
-> gitlab is only a mirror, and the official Git repository is
-> https://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git/.
->
-> And in fact, according to
-> https://lists.cip-project.org/pipermail/cip-dev/2017-March/000167.html,
-> they even say that the gitlab mirror is no longer updated that
-> regularly due to technical issues.
->
-> So could you rework your patch using git.kernel.org instead of gitlab
-> (and therefore dropping the gitlab helper), and also dropping the
-> BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH option ?
+> Thanks!
 >
 
-Done!
-
-Hope this time it will be accepted!
+I'm looking at this but honestly I don't remember too much of it!
 
 
 >
-> Thanks,
+> Dusty
 >
-
-Thank you so much for the patience!
-
-
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> diff -u output/host/etc/mono/ output/staging/etc/mono/
+> Common subdirectories: output/host/etc/mono/2.0 and
+> output/staging/etc/mono/2.0
+> Common subdirectories: output/host/etc/mono/4.0 and
+> output/staging/etc/mono/4.0
+> Common subdirectories: output/host/etc/mono/4.5 and
+> output/staging/etc/mono/4.5
+> diff -u output/host/etc/mono/config output/staging/etc/mono/config
+> --- output/host/etc/mono/config 2017-03-12 22:53:07.450555843 +0000
+> +++ output/staging/etc/mono/config      2017-03-15 02:31:40.272008856 +0000
+> @@ -1,9 +1,9 @@
+>  <configuration>
+> -       <dllmap dll="i:cygwin1.dll" target="libc.so.6" os="!windows" />
+> -       <dllmap dll="libc" target="libc.so.6" os="!windows"/>
+> +       <dllmap dll="i:cygwin1.dll" target="libc.so.0" os="!windows" />
+> +       <dllmap dll="libc" target="libc.so.0" os="!windows"/>
+>         <dllmap dll="intl" target="libc.so.6" os="!windows"/>
+> -       <dllmap dll="intl" name="bind_textdomain_codeset"
+> target="libc.so.6" os="solaris"/>
+> -       <dllmap dll="libintl" name="bind_textdomain_codeset"
+> target="libc.so.6" os="solaris"/>
+> +       <dllmap dll="intl" name="bind_textdomain_codeset"
+> target="libc.so.0" os="solaris"/>
+> +       <dllmap dll="libintl" name="bind_textdomain_codeset"
+> target="libc.so.0" os="solaris"/>
+>         <dllmap dll="libintl" target="libc.so.6" os="!windows"/>
+>         <dllmap dll="i:libxslt.dll" target="libxslt.so" os="!windows"/>
+>         <dllmap dll="i:odbc32.dll" target="libodbc.so" os="!windows"/>
+> @@ -11,11 +11,11 @@
+>         <dllmap dll="oci" target="libclntsh.so" os="!windows"/>
+>         <dllmap dll="db2cli" target="libdb2_36.so" os="!windows"/>
+>         <dllmap dll="MonoPosixHelper" target="$mono_libdir/libMonoPosixHelper.so"
+> os="!windows" />
+> -       <dllmap dll="i:msvcrt" target="libc.so.6" os="!windows"/>
+> -       <dllmap dll="i:msvcrt.dll" target="libc.so.6" os="!windows"/>
+> +       <dllmap dll="i:msvcrt" target="libc.so.0" os="!windows"/>
+> +       <dllmap dll="i:msvcrt.dll" target="libc.so.0" os="!windows"/>
+>         <dllmap dll="sqlite" target="libsqlite.so.0" os="!windows"/>
+>         <dllmap dll="sqlite3" target="libsqlite3.so.0" os="!windows"/>
+> -       <dllmap dll="libX11" target="libX11.so.6" os="!windows" />
+> +       <dllmap dll="libX11" target="libX11.so" os="!windows" />
+>         <dllmap dll="libgdk-x11-2.0" target="libgdk-x11-2.0.so.0"
+> os="!windows"/>
+>         <dllmap dll="libgtk-x11-2.0" target="libgtk-x11-2.0.so.0"
+> os="!windows"/>
+>         <dllmap dll="libXinerama" target="libXinerama.so.1" os="!windows"
+> />
+> Only in output/host/etc/mono/: mconfig
 >
-
+>
+> On Sat, Mar 18, 2017 at 10:39 AM, Thomas Petazzoni <thomas.petazzoni@free-
+> electrons.com> wrote:
+>
+>> Hello,
+>>
+>> Angelo, could you comment on this patch touching the Mono package?
+>>
+>> Copying $(HOST_DIR)/etc/mono to $(TARGET_DIR)/etc has been there since
+>> you contributed the package, but apparently causes some issues. It
+>> would be nice if you could have a look at the patch proposed by Dustin.
+>>
+>> Thanks a lot!
+>>
+>> Thomas
+>>
+>> On Tue, 14 Mar 2017 22:24:58 -0400, Dustin Johnson wrote:
+>> > When the mono package is installed, the autotools installer installs
+>> > the /etc/mono files to the target. A post_install hook then copies
+>> > over the mono libraries to the target as well as the host /etc/mono
+>> > files which overrides the target files. The target specific mono
+>> > configuration file (/etc/mono/config) is overridden with the host
+>> > settings. This causes mono on the target to be unable to locate target
+>> > specific .so files as it overrides the changes enacted by the patches
+>> > for the package.
+>> >
+>> > Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
+>> > ---
+>> >  package/mono/mono.mk | 1 -
+>> >  1 file changed, 1 deletion(-)
+>> >
+>> > diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+>> > index 20b920568..4996b7c60 100644
+>> > --- a/package/mono/mono.mk
+>> > +++ b/package/mono/mono.mk
+>> > @@ -31,7 +31,6 @@ MONO_CONF_OPTS = --disable-gtk-doc \
+>> >  define MONO_INSTALL_LIBS
+>> >       rsync -av --exclude=*.so --exclude=*.mdb \
+>> >               $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
+>> > -     rsync -av $(HOST_DIR)/etc/mono $(TARGET_DIR)/etc
+>> >  endef
+>> >
+>> >  MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
+>>
+>>
+>>
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+>>
+>
+>
 
 
 -- 
 Profile: http://it.linkedin.com/in/compagnucciangelo
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/ddc78e4f/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/35c60a32/attachment.html>
