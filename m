@@ -1,46 +1,63 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  6 Apr 2017 10:09:17 +0200
-Subject: [Buildroot] [PATCH] python-pudb: bump to version 2017.1.2
-Message-ID: <1491466157-27249-1-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 6 Apr 2017 10:26:58 +0200
+Subject: [Buildroot] [PATCH v2] arp-scan: new package
+In-Reply-To: <20170405183445.6cde0af8@free-electrons.com>
+References: <20170405101410.27980-1-arnout@mind.be>
+ <20170405183445.6cde0af8@free-electrons.com>
+Message-ID: <857569ae-aa99-8ae8-17c6-14d0f98afbc5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-pudb/python-pudb.hash | 4 ++--
- package/python-pudb/python-pudb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
-index 4313af0..febf38f 100644
---- a/package/python-pudb/python-pudb.hash
-+++ b/package/python-pudb/python-pudb.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pudb/json, sha256 locally computed
--md5 4ec3302ef90f22b13c60db16b3557c56 pudb-2017.1.1.tar.gz
--sha256 87117640902c5f602c8517d0167eb5c953a5bdede97975ba29ff17e3d570442c pudb-2017.1.1.tar.gz
-+md5 97597d9fec79494a83ec8d55987a8a82 pudb-2017.1.2.tar.gz
-+sha256 29d82ed05030146e5f2f9431926cc24f6c6c284cb451a4a850625fc0303e46e7 pudb-2017.1.2.tar.gz
-diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
-index e192877..b6b3d53 100644
---- a/package/python-pudb/python-pudb.mk
-+++ b/package/python-pudb/python-pudb.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PUDB_VERSION = 2017.1.1
-+PYTHON_PUDB_VERSION = 2017.1.2
- PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
--PYTHON_PUDB_SITE = https://pypi.python.org/packages/3f/ab/a8e103f329460696bb74e3c5cef4060313be3fe0f6fceae866900cb2033c
-+PYTHON_PUDB_SITE = https://pypi.python.org/packages/d3/8a/e0fa18cf6f939a63364117546c9bd933add800642004ad40fd5f5bdba0c6
- PYTHON_PUDB_SETUP_TYPE = setuptools
- PYTHON_PUDB_LICENSE = MIT
- PYTHON_PUDB_LICENSE_FILES = LICENSE
+On 05-04-17 18:34, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 5 Apr 2017 12:14:10 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> On the br-arm-cortex-m4-full toolchain, the build fails with a
+>> segmentation fault in elf2flt, so add an exception for ARM FLAT
+>> toolchains. Other FLAT toolchains (e.g. br-m68k-5208-full) work fine.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>> I tried to debug the elf2flt segfault but elf2flt isn't exactly the
+>> most low-entry-bar source code...
+> 
+> I think we have a regression here, which I would point to the bump of
+> binutils from 2.26 to 2.27. Indeed, several packages are now causing
+> segfaults in elf2flt on ARM:
+> 
+> Busybox:
+> 
+>   http://autobuild.buildroot.net/results/475/4758354f0e2f7f127c1a99ef7846eb62f5ce41b5/build-end.log
+> 
+> pcre:
+> 
+>   http://autobuild.buildroot.net/results/68c/68cf951594b0e67b45f8711745c17b93e2fbc03e/build-end.log
+> 
+> and I'm sure the list will grow. So I believe that binutils 2.27
+> produces binaries that are a bit different, and confuse elf2flt.
+> 
+> Looking at https://github.com/uclinux-dev/elf2flt/commits/master, I
+> don't see anything that particular stands out.
+
+ Since it was caused by the bump of binutils, you should probably look at the
+binutils repo, not the elf2flt repo...
+
+ Probably needs bisecting to find the culprit. Or we could try bumping to
+current 2_27_branch head and see if it solves the issue.
+
+ Regards,
+ Arnout
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
