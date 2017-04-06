@@ -1,89 +1,41 @@
-From: Semyon Kolganov <semenak94@mail.ru>
-Date: Thu,  6 Apr 2017 13:30:19 +0300
-Subject: [Buildroot] [PATCH] fmt: new package
-In-Reply-To: <fmt: new package>
-References: <fmt: new package>
-Message-ID: <1491474619-11636-1-git-send-email-semenak94@mail.ru>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 6 Apr 2017 12:50:52 +0200
+Subject: [Buildroot] [PATCH 3/5] telit_evk_pro3_defconfig: remove broken
+	defconfig
+In-Reply-To: <CAHkwnC_M3=cTtes4_Qc3Jig2+Q7=eJ=A4WoNsRFomLWuwJ_kKw@mail.gmail.com>
+References: <20170301083046.13226-1-arnout@mind.be>
+ <20170301083046.13226-3-arnout@mind.be>
+ <CAHkwnC_M3=cTtes4_Qc3Jig2+Q7=eJ=A4WoNsRFomLWuwJ_kKw@mail.gmail.com>
+Message-ID: <f6a4dcf2-1bc2-537d-9ba9-bd12ad0f4fca@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
----
- package/Config.in     |  1 +
- package/fmt/Config.in |  6 ++++++
- package/fmt/fmt.hash  |  4 ++++
- package/fmt/fmt.mk    | 23 +++++++++++++++++++++++
- 4 files changed, 34 insertions(+)
- create mode 100644 package/fmt/Config.in
- create mode 100755 package/fmt/fmt.hash
- create mode 100755 package/fmt/fmt.mk
+ Hi Fabio,
 
-diff --git a/package/Config.in b/package/Config.in
-index 71bd44a..6f3399f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1434,6 +1434,7 @@ menu "Text and terminal handling"
- 	source "package/augeas/Config.in"
- 	source "package/enchant/Config.in"
- 	source "package/icu/Config.in"
-+	source "package/fmt/Config.in"
- 	source "package/libcli/Config.in"
- 	source "package/libedit/Config.in"
- 	source "package/libenca/Config.in"
-diff --git a/package/fmt/Config.in b/package/fmt/Config.in
-new file mode 100644
-index 0000000..9ce2874
---- /dev/null
-+++ b/package/fmt/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_FMT
-+	bool "fmt"
-+	help
-+	  fmt is an open-source formatting library for C++. It can be used
-+	  as a safe alternative to printf or as a fast alternative to
-+	  IOStreams.
-\ No newline at end of file
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-new file mode 100755
-index 0000000..31d4eaa
---- /dev/null
-+++ b/package/fmt/fmt.hash
-@@ -0,0 +1,4 @@
-+# Calculated on http://onlinemd5.com/
-+sha1	c7026a04f05331004888bf0ab8ef2ef3c002933c fmt-3.0.1.tar.gz
-+# Calculated on http://onlinemd5.com/
-+sha256	dce62ab75a161dd4353a98364feb166d35e7eea382169d59d9ce842c49c55bad fmt-3.0.1.tar.gz
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-new file mode 100755
-index 0000000..47a332d
---- /dev/null
-+++ b/package/fmt/fmt.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# fmt
-+#
-+################################################################################
-+
-+FMT_VERSION = 3.0.1
-+FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
-+FMT_LICENSE = BSD-2-Clause
-+FMT_LICENSE_FILES = LICENSE.rst
-+FMT_INSTALL_STAGING = YES
-+
-+FMT_CONF_OPTS = \
-+	-DHAVE_OPEN=ON \
-+	-DFMT_INSTALL=ON \
-+	-DFMT_TEST=OFF
-+
-+define FMT_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/include/fmt
-+	cp -dpfr $(@D)/fmt/*.h $(STAGING_DIR)/usr/include/fmt
-+endef
-+
-+$(eval $(cmake-package))
+On 01-03-17 17:28, Fabio Porcedda wrote:
+> 2017-03-01 9:30 GMT+01:00 Arnout Vandecappelle (Essensium/Mind)
+> <arnout@mind.be>:
+>> This defconfig has been broken due to gcc5 for more than half a year,
+>> and nobody stepped up to fix it. Remove it, as well as it board
+>> directory.
+> 
+> Hi Arnout,
+> sorry for the late response, today I've sent a patch to fix the build
+> failure for barebox, tomorrow i will send a patch to update the linux
+> kernel.
+
+ Any update on that kernel patch? The telit defconfig is still broken...
+
+ Regards,
+ Arnout
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
