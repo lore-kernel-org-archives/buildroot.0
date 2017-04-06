@@ -1,102 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:14:48 +0200
-Subject: [Buildroot] [git commit] fmt: new package
-Message-ID: <20170406201507.7198381DF3@busybox.osuosl.org>
+Date: Thu, 6 Apr 2017 22:15:48 +0200
+Subject: [Buildroot] [git commit] python-pudb: bump to version 2017.1.2
+Message-ID: <20170406201552.B44E9822F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81fe75c855f9a598695f83b7384713820383efe4
+commit: https://git.buildroot.net/buildroot/commit/?id=b0448016ba97aea7f3047e8776909c4a8052e385
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
-[Thomas:
- - add entry to DEVELOPERS file
- - add missing wchar dependency
- - minor tweaks.]
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS            |  3 +++
- package/Config.in     |  1 +
- package/fmt/Config.in | 11 +++++++++++
- package/fmt/fmt.hash  |  2 ++
- package/fmt/fmt.mk    | 18 ++++++++++++++++++
- 5 files changed, 35 insertions(+)
+ package/python-pudb/python-pudb.hash | 4 ++--
+ package/python-pudb/python-pudb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e1713cf..629ea4b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1411,6 +1411,9 @@ F:	package/kyua/
- F:	package/lutok/
- F:	package/yaml-cpp/
+diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
+index 4313af0..febf38f 100644
+--- a/package/python-pudb/python-pudb.hash
++++ b/package/python-pudb/python-pudb.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/pudb/json, sha256 locally computed
+-md5 4ec3302ef90f22b13c60db16b3557c56 pudb-2017.1.1.tar.gz
+-sha256 87117640902c5f602c8517d0167eb5c953a5bdede97975ba29ff17e3d570442c pudb-2017.1.1.tar.gz
++md5 97597d9fec79494a83ec8d55987a8a82 pudb-2017.1.2.tar.gz
++sha256 29d82ed05030146e5f2f9431926cc24f6c6c284cb451a4a850625fc0303e46e7 pudb-2017.1.2.tar.gz
+diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
+index e192877..b6b3d53 100644
+--- a/package/python-pudb/python-pudb.mk
++++ b/package/python-pudb/python-pudb.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+N:	Semyon Kolganov <semenak94@mail.ru>
-+F:	package/fmt/
-+
- N:	Sergio Prado <sergio.prado@e-labworks.com>
- F:	package/libgdiplus/
- F:	package/mongodb/
-diff --git a/package/Config.in b/package/Config.in
-index fe4c0ae..a4855a9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1433,6 +1433,7 @@ endmenu
- menu "Text and terminal handling"
- 	source "package/augeas/Config.in"
- 	source "package/enchant/Config.in"
-+	source "package/fmt/Config.in"
- 	source "package/icu/Config.in"
- 	source "package/libcli/Config.in"
- 	source "package/libedit/Config.in"
-diff --git a/package/fmt/Config.in b/package/fmt/Config.in
-new file mode 100644
-index 0000000..979d940
---- /dev/null
-+++ b/package/fmt/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_FMT
-+	bool "fmt"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	help
-+	  fmt is an open-source formatting library for C++. It can be used
-+	  as a safe alternative to printf or as a fast alternative to
-+	  IOStreams.
-+
-+comment "fmt needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-new file mode 100755
-index 0000000..beb120b
---- /dev/null
-+++ b/package/fmt/fmt.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	dce62ab75a161dd4353a98364feb166d35e7eea382169d59d9ce842c49c55bad fmt-3.0.1.tar.gz
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-new file mode 100755
-index 0000000..b7e3db0
---- /dev/null
-+++ b/package/fmt/fmt.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# fmt
-+#
-+################################################################################
-+
-+FMT_VERSION = 3.0.1
-+FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
-+FMT_LICENSE = BSD-2-Clause
-+FMT_LICENSE_FILES = LICENSE.rst
-+FMT_INSTALL_STAGING = YES
-+
-+FMT_CONF_OPTS = \
-+	-DHAVE_OPEN=ON \
-+	-DFMT_INSTALL=ON \
-+	-DFMT_TEST=OFF
-+
-+$(eval $(cmake-package))
+-PYTHON_PUDB_VERSION = 2017.1.1
++PYTHON_PUDB_VERSION = 2017.1.2
+ PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
+-PYTHON_PUDB_SITE = https://pypi.python.org/packages/3f/ab/a8e103f329460696bb74e3c5cef4060313be3fe0f6fceae866900cb2033c
++PYTHON_PUDB_SITE = https://pypi.python.org/packages/d3/8a/e0fa18cf6f939a63364117546c9bd933add800642004ad40fd5f5bdba0c6
+ PYTHON_PUDB_SETUP_TYPE = setuptools
+ PYTHON_PUDB_LICENSE = MIT
+ PYTHON_PUDB_LICENSE_FILES = LICENSE
