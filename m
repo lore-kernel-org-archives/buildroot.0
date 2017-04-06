@@ -1,75 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Apr 2017 22:24:18 +0200
-Subject: [Buildroot] [git commit] linux: Add CIP SLTS selection option
-Message-ID: <20170406202429.EF62782309@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu,  6 Apr 2017 22:25:05 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchain-external: fix handling of ld.so
+Message-ID: <20170406202505.17605-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31d4fa76f0fcadb82512361eb762f96cefdfc669
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-This patch adds an easy way to select the CIP project SLTS
-kernel within the kernel menu.
+Commit ba6bac138331cea449592f877e558f84176a70bf made a change in copying of
+the dynamic loader, with the goal of reducing toolchain-specific fixups.
+Any ld*.so file found in the toolchain's lib directory would be copied to
+the staging/lib directory.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[Thomas: remove BR2_CIP_KERNEL_REPO_URL option.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+For the toolchains that previously needed fixup, this new behavior is fine.
+The reason they needed fixup was that the normal copy action did not include
+any dynamic loader.
+
+However, for certain other toolchains this new behavior actually breaks
+things: regardless of ARCH_LIB_DIR, which may be lib64 instead of lib, the
+dynamic loader from lib is copied _over_ any previously correct dynamic
+loader.
+
+This has been witnessed with the CodeSourcery x86_64 and
+CodeSourcery MIPS64 toolchains. In both cases, a 32-bit dynamic loader was
+copied to staging/lib, while a 64-bit version was expected.
+
+Fix the problem by only performing this explicit dynamic loader copy if no
+dynamic loader is found in staging/lib.
+
+Fixes http://autobuild.buildroot.net/results/8bf/8bffe54032aad9cc710a22411ef3bff4a2c93e55/
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- linux/Config.in | 20 ++++++++++++++++++++
- linux/linux.mk  |  2 ++
- 2 files changed, 22 insertions(+)
+ toolchain/helpers.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c5565e5..10bb250 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,6 +28,25 @@ choice
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.10.8)"
- 
-+config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-+	help
-+	  CIP launched in the spring of 2016 to address the needs of
-+	  organizations in industries such as power generation and
-+	  distribution, water, oil and gas, transportation, building
-+	  automation and more for reliable and secure Linux-based
-+	  embedded systems that can be sustained over a period of
-+	  10 to as many as 60 years.
-+	  The project's goal is to provide an open source base layer
-+	  of industrial-grade software that permits the use and
-+	  implementation of software building blocks that meet
-+	  these requirements.
-+
-+	  The CIP community plans to maintain 4.4 for security and
-+	  bug fixes for more than 10 years.
-+
-+	  https://www.cip-project.org
-+
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
- 	help
-@@ -98,6 +117,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.10.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.mk b/linux/linux.mk
-index f68a3ff..7973677 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -30,6 +30,8 @@ LINUX_SITE_METHOD = hg
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = svn
-+else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-+LINUX_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 5af38c6..90834f4 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -127,11 +127,13 @@ copy_toolchain_sysroot = \
+ 			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
+ 		done ; \
+ 	fi ; \
+-	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
+-		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
+-	fi ; \
+-	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
+-		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
++	if [ ! -e $(STAGING_DIR)/lib/ld*.so ] && [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
++		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
++			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
++		fi ; \
++		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
++			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
++		fi ; \
+ 	fi ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+-- 
+2.10.2
