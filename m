@@ -1,100 +1,69 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 6 Apr 2017 20:18:44 +0200
-Subject: [Buildroot] [PATCH v5 04/13] support/test-pkg: run legal-info
+Date: Thu, 6 Apr 2017 20:18:45 +0200
+Subject: [Buildroot] [PATCH v5 05/13] Makefile: support defconfigs in
+	subdirectories
 In-Reply-To: <cover.1491502445.git.arnout@mind.be>
 References: <cover.1491502445.git.arnout@mind.be>
-Message-ID: <20170406181854.5242-4-arnout@mind.be>
+Message-ID: <20170406181854.5242-5-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The pattern rule %_defconfig doesn't support a pattern that includes a
+/ because of the following weird make behavior. From the GNU make info
+page:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  When the target pattern does not contain a slash (and it usually does
+  not), directory names in the file names are removed from the file name
+  before it is compared with the target prefix and suffix. After the
+  comparison of the file name to the target pattern, the directory names,
+  along with the slash that ends them, are added on to the prerequisite
+  file names generated from the pattern rule's prerequisite patterns and
+  the file name.
+
+In other words, foo/bar_defconfig would depend on
+foo/configs/bar_defconfig instead of configs/foo/bar_defconfig.
+
+As a workaround, introduce an intermediate target that does contain a /
+and where the pattern is at the beginning: %/.../defconfig. Since this
+target does contain a /, the weird splitting of the pattern doesn't
+occur and we can make that target depend on .../configs/%_defconfig.
+
+It gets slightly more complicated still because chains of pattern rules
+only work if they all have commands. So we need to add a dummy command
+for the %_defconfig rule.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v4 -> v5 by Arnout:
-  - Reorder patch series
----
- docs/manual/adding-packages-tips.txt |  5 +++--
- support/scripts/test-pkg             | 15 +++++++++++++--
- 2 files changed, 16 insertions(+), 4 deletions(-)
+ Makefile | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index e1f6986724..d1eab2b440 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -93,9 +93,9 @@ $ ./support/scripts/test-pkg -c libcurl.config -p libcurl
-                    br-arm-cortex-a9-musl [ 7/11]: FAILED
-                    br-arm-cortex-m4-full [ 8/11]: OK
-                              br-arm-full [ 9/11]: OK
--                    br-arm-full-nothread [10/11]: OK
-+                    br-arm-full-nothread [10/11]: FAILED
-                       br-arm-full-static [11/11]: OK
--11 builds, 2 skipped, 2 failed
-+11 builds, 2 skipped, 2 build failed, 1 legal-info failed
- ----
+diff --git a/Makefile b/Makefile
+index 941bf789c8..1d377099b2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -895,10 +895,17 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
  
- The results mean:
-@@ -111,6 +111,7 @@ The results mean:
- * `FAILED`: the build failed. Inspect the +logfile+ file in the output
-   build  directory to see what went wrong:
- ** the actual build failed,
-+** the legal-info failed,
- ** one of the preliminary steps (downloading the config file, applying
-    the configuration, running `dirclean` for the package) failed.
+ define percent_defconfig
++# Introduce a phony intermediate target to handle / in the pattern.
++# make puts anything up to the / in the beginning if the target pattern doesn't
++# contain a /. Without the intermediate, foo/bar_defconfig would depend on
++# foo/$(1)/configs/bar_defconfig instead of $(1)/configs/foo/bar_defconfig.
++.PHONY: %$(1)/defconfig
++%_defconfig: %$(1)/defconfig
++	@: dummy command to make chain of phony targets work
+ # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig prepare-kconfig
+-	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
+-		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
++%$(1)/defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig prepare-kconfig
++	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$*_defconfig \
++		$$< --defconfig=$(1)/configs/$$*_defconfig $$(CONFIG_CONFIG_IN)
+ endef
+ $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
  
-diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-index 27601168b1..0d093e8c2f 100755
---- a/support/scripts/test-pkg
-+++ b/support/scripts/test-pkg
-@@ -6,7 +6,7 @@ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-conf
- main() {
-     local o O opts
-     local cfg dir pkg random toolchain
--    local ret nb nb_skip nb_fail nb_tc build_dir
-+    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
-     local -a toolchains
- 
-     o='hc:d:p:r:'
-@@ -68,6 +68,7 @@ main() {
-     nb=0
-     nb_skip=0
-     nb_fail=0
-+    nb_legal=0
-     for toolchainconfig in "${toolchains[@]}"; do
-         : $((nb++))
-         # Using basename(1) on a URL works nicely
-@@ -80,10 +81,12 @@ main() {
-         (0) printf "OK\n";;
-         (1) : $((nb_skip++)); printf "SKIPPED\n";;
-         (2) : $((nb_fail++)); printf "FAILED\n";;
-+        (3) : $((nb_legal++)); printf "FAILED\n";;
-         esac
-     done
- 
--    printf "%d builds, %d skipped, %d failed\n" ${nb} ${nb_skip} ${nb_fail}
-+    printf "%d builds, %d skipped, %d build failed, %d legal-info failed\n" \
-+        ${nb} ${nb_skip} ${nb_fail} ${nb_legal}
- }
- 
- build_one() {
-@@ -130,6 +133,14 @@ build_one() {
-     if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
-         return 2
-     fi
-+
-+    # legal-info done systematically, because some packages have different
-+    # sources depending on the configuration (e.g. lua-5.2 vs. lua-5.3)
-+    if [ -n "${pkg}" ]; then
-+        if ! make O="${dir}" "${pkg}-legal-info" >> "${dir}/logfile" 2>&1; then
-+            return 3
-+        fi
-+    fi
- }
- 
- help() {
 -- 
 2.11.0
