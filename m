@@ -1,88 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 6 Apr 2017 19:19:51 +0200
-Subject: [Buildroot] [PATCH 0/7 v4] support/test-pkg: fixes and
- enhancements
-In-Reply-To: <20170406155554.GB3538@scaer>
-References: <cover.1487195062.git.yann.morin.1998@free.fr>
- <b39f073b-f6fb-d0e4-9977-31dc8c4d51e1@mind.be> <20170405191610.GA3609@scaer>
- <573ed965-5286-80a8-b4b6-291998013137@mind.be> <20170406155554.GB3538@scaer>
-Message-ID: <7e01e41f-285a-3440-7610-545d37062df2@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 6 Apr 2017 19:51:30 +0200
+Subject: [Buildroot] [PATCHv3 00/12] toolchain: improvements to
+ copy_toolchain_sysroot and copy_toolchain_lib_root
+In-Reply-To: <20170406190921.004196b2@free-electrons.com>
+References: <20170207215649.364-1-patrickdepinguin@gmail.com>
+ <20170405215445.2b734880@free-electrons.com>
+ <CAAXf6LWeKRpa8ngWCxiAKckCrBV27RW8fZdN5BTkdOE1iQYk9g@mail.gmail.com>
+ <20170406190921.004196b2@free-electrons.com>
+Message-ID: <CAAXf6LVuTTQQJfhapxgu3keGTZatHA4hxnkEb4CJe2R=XOATPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Apr 6, 2017 7:09 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+
+Hello,
+
+On Wed, 5 Apr 2017 22:15:40 +0200, Thomas De Schampheleire wrote:
+
+> > Thomas De Schampheleire (12):
+> >   toolchain-external: reduce nesting in copy_toolchain_sysroot
+> >   toolchain-external: fix broken handling of 'usr/lib/locale'
+> >   toolchain-external: clarify rsync excludes in copy_toolchain_sysroot
+> >   toolchain-external: handle ld.so fixups centrally
+> >   toolchain helpers: introduce function relpath_prefix
+> >   toolchain-external: cover multilib toolchains with lib/<variant>
+> >     layout
+> >   toolchain helpers: introduce simplify_symlink
+> >   toolchain-external: simplify previously-broken symbolic links
+> >   toolchain: copy_toolchain_lib_root: remove unused variable LIBDIR
+> >   toolchain: copy_toolchain_lib_root: clarify logic
+> >   toolchain: copy_toolchain_lib_root: clarify input parameter
+> >   toolchain: copy_toolchain_lib_root: copy symlinks instead of
+> >     recreating them
+>
+> I've now applied the remainder of the series, patches 3 to 12. I still
+> find this quite complicated overall, but I couldn't find any other
+> solution and nobody else did, and the problem scope is complicated
+> anyway.
+>
+> Let's see the feedback we get from users :)
+
+Unfortunately, this breaks the build with at least one toolchain: the
+CodeSourcery MIPS toolchain. Try the following defconfig:
+
+BR2_mips64el=y
+BR2_mips_64r2=y
+BR2_MIPS_NABI64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_ALLJOYN_TCL=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+At commit a4c4cecd87851bdb3cbd4803a94df7602b102c42 (right before your
+patch series), it builds fine.
+
+At commit 38b51739da7fa7b950bbc46c059fbbab465ba4cb (right after your
+patch series), it no longer builds, with the following error:
+
+/home/thomas/projets/buildroot/output/host/usr/mips64el-buildroot-linux-gnu/
+sysroot/soft-float/el/lib64/ld.so.1: error adding symbols: File in wrong
+format
+collect2: error: ld returned 1 exit status
+
+So it smells like the copying of libraries to staging no longer works
+as it used to work for this toolchain.
+
+This causes some build failures in the autobuilders:
+
+  http://autobuild.buildroot.net/results/8bf/8bffe54032aad9cc710a22411ef3bf
+f4a2c93e55/build-end.log
+
+Could you have a look ?
 
 
-On 06-04-17 17:55, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2017-04-06 10:48 +0200, Arnout Vandecappelle spake thusly:
->> On 05-04-17 21:16, Yann E. MORIN wrote:
-[snip]
->>> Well, as long as I can specify a list of toolchains, that is not the
->>> default, that's fine. If I just have to do a wget to have a local file,
->>> I'm OK with that.
->>>
->>> But I *want* to be able to use a custom list of toolchains.
->>
->>  You don't need to get it from a URL, do you? I think having the list of
->> toolchains passed as a BR2_EXTERNAL is much more appropriate. Basically, I now have
->>
->> TOOLCHAINS_PATH=configs/toolchains
-> 
-> Please, make that an option to the script, not an environment variable!
+I noticed a problem today with the first patch in the series, related to
+ld.so copying and have a fix ready, will test your use case to see if it's
+the same.
 
- That's what I wanted to do, of course.
-
-> 
->     --toolchains-dir=/path/to/configs/toolchains
-
- Thanks for the naming tip, I would have chosen something much more stupid.
-
-> 
->> which points to a directory containing toolchain configs. I can add an option
->> that allows you to override that directory. I don't see much point in getting
->> this from a URL, is there?
-> 
-> Well, if I can use a custom list of toolchians, I'm fine. Now, that I
-> need to pre-populate that directory by myself is acceptable. If I need
-> to store the toolchain configs remotely, it now behooves to me to
-> download them fiurst and feed local files to the script. That's OK.
-
- Yeah, and you can also make a link farm if needed.
-
-> 
->>>>>       support/test-pkg: print number of toolchain and progress
->>>>>       support/test-pkg: the list of toolchains really contains URLs
->>>>  With the toolchain URLs gone, this is not true anymore.
->>> Well, I am not sure what you meant: we can't have a list of remote
->>> config files to use anymore? That is sad... :-(
->>  Can you explain your use case for a list of *remote* config files?
-> 
-> It's just that my "tool_s_" are stored in their own repositor_ies_...
-
- But do those repositories contain toolchain.config files? They would typically
-contain the config file for building the toolchain, not for using it as an
-external toolchain, right?
-
- Some extra extensions that would be nice:
-
-- specifying a shell glob pattern to match the toolchain;
-
-- once we have a tool that can calculate the custom external toolchain
-arguments: specify a list of toolchain tarball URLs and download derive the
-toolchain_defconfig from there.
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thanks,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170406/113cdfb5/attachment.html>
