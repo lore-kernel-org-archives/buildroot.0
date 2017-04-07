@@ -1,46 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Apr 2017 20:05:31 +0200
-Subject: [Buildroot] [git commit] python-pillow: bump version to 4.1.0
-Message-ID: <20170407180537.2014D8035D@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  7 Apr 2017 20:05:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.78
+Message-ID: <20170407180529.22106-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83ba0c6b6c264c4b859185eba6c92baa89a133ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add additional md5, sha1 & sha256 hashes according to buildroot docs:
+http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-hash
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> If upstream provides more than one type of hash (e.g. sha1 and sha512),
+> then it is best to add all those hashes in the .hash file.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libdrm/libdrm.hash | 7 +++++--
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 182e82f..322e0a9 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
--md5	d5af224b0fa2c66dacc9814785fef9e7  Pillow-4.0.0.tar.gz
--sha256	ee26d2d7e7e300f76ba7b796014c04011394d0c4a5ed9a288264a3e443abca50  Pillow-4.0.0.tar.gz
-+md5 d040e1155b4d9d8b011aab67ee0ea86b  Pillow-4.1.0.tar.gz
-+sha256 a0fd487fed4a35717401b7566e51a1520b34e7c0f7f2a315a6509f82bc86299f  Pillow-4.1.0.tar.gz
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index faa0e16..e1167c8 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index eb826ed03..82bcc05b6 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,2 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-April/137998.html
+-sha512 df313bdd9186efdb0e60acdd55e0d5dba402b19011bc3899d56efb4d065f67b6e8c44108fbd8fd258120d4b5c1cc53090beaab732c763bf52f8b352d3c30d101  libdrm-2.4.77.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2017-April/138416.html
++md5 049ee80ce816cbef7669e7807b2ee816  libdrm-2.4.78.tar.bz2
++sha1 fdf0e8f2951e75d8d230a7960d32f4f3ca6ceb90  libdrm-2.4.78.tar.bz2
++sha256 3dbe2ed3e2ee6ebe8a848195286ef362f66675a7102958e42906d734aa6925d8  libdrm-2.4.78.tar.bz2
++sha512 f5010583322a4742bbbb55d5d7083f11366be0f11ae51a6830a9ce14c1cb7e2a8163f92db15d2c90a464a5cfce9d3bfa4e6f9739bcb382fe7007eae1b288ee85  libdrm-2.4.78.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 9a78f20c9..2b294fe56 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 4.0.0
-+PYTHON_PILLOW_VERSION = 4.1.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://pypi.python.org/packages/8d/80/eca7a2d1a3c2dafb960f32f844d570de988e609f5fd17de92e1cf6a01b0a
-+PYTHON_PILLOW_SITE = https://pypi.python.org/packages/80/38/5cb561c68155834c596018c47caa44da88ed34b09579b921c0e493fb06c7
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+-LIBDRM_VERSION = 2.4.77
++LIBDRM_VERSION = 2.4.78
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+-- 
+2.11.0
