@@ -1,62 +1,51 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  7 Apr 2017 20:39:54 +0200
-Subject: [Buildroot] [PATCH v1] qt5declarative: fix examples compile without
-	qt widgets module
-Message-ID: <20170407183954.23928-1-ps.report@gmx.net>
+Date: Fri, 7 Apr 2017 20:47:38 +0200
+Subject: [Buildroot] Qt5 build failure (beaglebone_qt5_defconfig)
+In-Reply-To: <20170406183316.44d8db5a@free-electrons.com>
+References: <87f293c7-8aef-14e9-23e4-195a16b564e3@mind.be>
+ <trinity-0603182d-d77d-4e0a-bdd1-589503badbe3-1491479231018@3capp-gmx-bs68>
+ <20170406183316.44d8db5a@free-electrons.com>
+Message-ID: <20170407204738.3f114ab4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Hello Thomas,
 
-  .../qt5declarative-5.8.0/examples/quick/demos/photoviewer/photoviewer.pro
-  Project ERROR: Unknown module(s) in QT: widgets
+On Thu, 6 Apr 2017 18:33:16 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...xamples-photoviewer-needs-widgets-support.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch
+> Hello,
+> 
+> On Thu, 6 Apr 2017 13:47:11 +0200, Peter Seiderer wrote:
+> 
+> > Untested but maybe the following works:
+> > 
+> > diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+> > index 853322c..5e0fbe2 100644
+> > --- a/package/qt5/qt5declarative/Config.in
+> > +++ b/package/qt5/qt5declarative/Config.in
+> > @@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
+> >         select BR2_PACKAGE_QT5XMLPATTERNS
+> >         select BR2_PACKAGE_QT5BASE
+> >         select BR2_PACKAGE_QT5BASE_GUI
+> > +       select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5BASE_EXAMPLES
+> >         depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> >         help
+> >           Qt is a cross-platform application and UI framework for
+> 
+> Thanks, can you submit as a proper patch?
+> 
 
-diff --git a/package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch b/package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch
-new file mode 100644
-index 000000000..aeaaa9177
---- /dev/null
-+++ b/package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch
-@@ -0,0 +1,32 @@
-+From b616a7e2a7e03e2eb189dca3dc428c0e19e1652b Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 6 Apr 2017 21:53:40 +0200
-+Subject: [PATCH] examples: photoviewer needs widgets support
-+
-+Fixes:
-+
-+  .../qt5declarative-5.8.0/examples/quick/demos/photoviewer/photoviewer.pro
-+  Project ERROR: Unknown module(s) in QT: widgets
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/quick/demos/demos.pro | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/examples/quick/demos/demos.pro b/examples/quick/demos/demos.pro
-+index 0644b81a2..5a6fd52ba 100644
-+--- a/examples/quick/demos/demos.pro
-++++ b/examples/quick/demos/demos.pro
-+@@ -7,5 +7,7 @@ SUBDIRS = samegame \
-+             photosurface \
-+             stocqt
-+ 
-+-qtHaveModule(xmlpatterns): SUBDIRS += rssnews photoviewer
-+-
-++qtHaveModule(xmlpatterns) {
-++    SUBDIRS += rssnews
-++    qtHaveModule(widgets): SUBDIRS += photoviewer
-++}
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Preferred the upstreamable solution to disable examples/quick/demos/photoviewer
+in case the qt5 widgets module is not available and submitted as a proper
+patch, see [1]...
+
+Regards,
+Peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-April/188935.html
+
+
+> Thomas
