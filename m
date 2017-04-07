@@ -1,36 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Apr 2017 12:44:25 +0200
-Subject: [Buildroot] [PATCH v5 08/13] support/test-pkg: get configs from
- buildroot defconfigs
-In-Reply-To: <fe449879-0ba1-6b3c-bc94-0f5ae9670f2c@mind.be>
-References: <cover.1491502445.git.arnout@mind.be>
- <20170406181854.5242-8-arnout@mind.be>
- <20170406213735.003749a9@free-electrons.com>
- <20170406204804.GC3538@scaer>
- <20170406225034.342c907e@free-electrons.com>
- <fe449879-0ba1-6b3c-bc94-0f5ae9670f2c@mind.be>
-Message-ID: <20170407124425.27d9d45e@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 7 Apr 2017 13:11:30 +0200
+Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
+In-Reply-To: <20170407124314.660c3edc@free-electrons.com>
+References: <20170402130338.12542-1-yann.morin.1998@free.fr>
+ <39bc6b12-1dfd-8ada-f1bc-8597c6872a1c@mind.be> <20170404185928.GA3828@scaer>
+ <fd9c07fd-2e86-ed73-2fd1-bfcf27522664@mind.be>
+ <20170407124314.660c3edc@free-electrons.com>
+Message-ID: <7a42ae1e-bfcf-7e31-04f0-a66fea3c6016@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 7 Apr 2017 12:35:09 +0200, Arnout Vandecappelle wrote:
 
->  I'm working on updating autobuild-run. Unfortunately it's a bit difficult to
-> test changes in that script, e.g. removing the condition on BR2_STATIC_LIBS. I
-> basically have to wait until the script hits a glibc toolchain to see if it
-> works correctly. Can you think of any way to speed that up?
+On 07-04-17 12:43, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 7 Apr 2017 12:30:46 +0200, Arnout Vandecappelle wrote:
+> 
+>>> Well, I've been tracking build-order issues for a while last WE, and
+>>> believe me, I was very happy to be able to see the build order before
+>>> I attempted a build, yes.  
+>>
+>>  That's my biggest problem with this feature: I have no idea how to use it.
+>> Could you add some explanation somewhere?
+> 
+> Yann was tracking down the dc3dd failure. With some configurations it
+> was building, with others not. So he was trying to figure which package
+> that gets built before dc3dd causes the problem. For this, it was
+> really nice to be able to load a configuration, and immediately see in
+> which order packages would be built, and therefore which packages would
+> be built before dc3dd, without having to do the build itself.
+> 
+> Does that explain better the use case for this?
 
-For this sort of situation, I was editing the CSV file to keep only the
-one toolchain I'm interested in. Or alternatively, hacking the function
-that chooses the toolchain to always pick up the one I'm interested in.
+ Ack. Could you add that to the commit message while applying?
 
-Thomas
+ Regards,
+ Arnout
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
