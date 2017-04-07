@@ -1,71 +1,33 @@
-From: Kevin JOLY <kevin.joly@sensefly.com>
-Date: Fri, 7 Apr 2017 07:14:14 +0200
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
-In-Reply-To: <20170406223644.473ebd65@free-electrons.com>
-References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
- <20170406223644.473ebd65@free-electrons.com>
-Message-ID: <cd88fd7c-dceb-cef1-59de-e086c6b3df00@sensefly.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 07 Apr 2017 07:35:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.77
+References: <20170404212302.9793-1-bernd.kuhls@t-online.de>
+ <20170406223304.7e2ecb6f@free-electrons.com>
+Message-ID: <f1ljrdxu37.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Am Thu, 06 Apr 2017 22:33:04 +0200 schrieb Thomas Petazzoni:
 
-I was talking with Romain on this mailing list and he had concern about 
-license and dependencies of libgphoto2. I contacted the developpers of 
-libgphoto2 to ensure that the license type was correct. I also turned 
-the libexif, jpeg and gd dependencies as optional.
-
-Anyway, if the patch is in the pipe, everything is fine. I re-submitted 
-it because I didn't saw it was already on patchwork but I didn't wanted 
-to be redundant with it.
-
-Thank you
-
-Kevin JOLY
-
-Le 06. 04. 17 ? 22:36, Thomas Petazzoni a ?crit :
 > Hello,
->
-> On Thu, 6 Apr 2017 10:33:12 +0200, Kevin JOLY wrote:
->> Add support for libgphoto2 core library designed to allow access to digital camera.
->>
->> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
->> ---
->>   DEVELOPERS                         |  3 +++
->>   package/Config.in                  |  1 +
->>   package/libgphoto2/Config.in       | 11 +++++++++++
->>   package/libgphoto2/libgphoto2.hash |  6 ++++++
->>   package/libgphoto2/libgphoto2.mk   | 29 +++++++++++++++++++++++++++++
->>   5 files changed, 50 insertions(+)
->>   create mode 100644 package/libgphoto2/Config.in
->>   create mode 100644 package/libgphoto2/libgphoto2.hash
->>   create mode 100644 package/libgphoto2/libgphoto2.mk
-> Thanks for this patch. However:
->
->   - You already posted a patch for the same package on March, 13th, but
->     you don't explain how this version is different. This patch is not
->     even identified as a new iteration. What changed?
->
->   - Romain Naour submitted on March 5 a patch adding libgphoto2, so your
->     proposal seems a bit redundant with Romain's patch. Have you taken
->     over Romain's patch? I'm adding Romain in Cc here.
->
-> Thanks!
->
-> Thomas
+> 
+> On Tue,  4 Apr 2017 23:23:02 +0200, Bernd Kuhls wrote:
+>> Added md5, sha1 & sha512 hashes.
+> 
+> Why? Having four hashes is not very useful. So I've kept only the sha512
+> hash.
 
--- 
+Hi Thomas,
 
-*Kevin JOLY*
-Embedded systems engineer
+because the docs say so:
 
-SenseFly <http://www.sensefly.com/>
-38, rte de Gen?ve
-1033 Cheseaux-Lausanne, Switzerland
+http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-
+hash
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170407/14948f39/attachment.html>
+> If upstream provides more than one type of hash (e.g. sha1 and sha512),
+> then it is best to add all those hashes in the .hash file.
+
+Regards, Bernd
