@@ -1,58 +1,84 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 07 Apr 2017 11:22:01 +0200
-Subject: [Buildroot] [Patch v4 1/3] rust-bootstrap: new package
-In-Reply-To: <20170407110356.108f4c78@free-electrons.com>
-References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
- <20170402194651.28684-2-eric.le.bihan.dev@free.fr>
- <1491548614.26127.3.camel@embedded.rocks>
- <20170407102613.7a8c96b3@free-electrons.com>
- <1491555244.1058.1.camel@embedded.rocks>
- <20170407110356.108f4c78@free-electrons.com>
-Message-ID: <1491556921.1058.3.camel@embedded.rocks>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 07 Apr 2017 09:37:18 +0000
+Subject: [Buildroot] [Bug 9796] New: source-check broken for Github downloads
+Message-ID: <bug-9796-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2017-04-07 at 11:03 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 07 Apr 2017 10:54:04 +0200, J?rg Krause wrote:
-> 
-> > > > Is there any necessity to limit the bootstrap compiler to those host
-> > > > archs only?  
-> > > 
-> > > The bootstrap compiler is provided as a binary only thing,
-> > > pre-compiled. So it works only on the architectures it was compiled
-> > > for. At least, that's why I remember from previous series on this topic.  
-> > 
-> > But, if I am running Buildroot on a PowerPC it should be able to fetch
-> > and run the binary for PowerPC, right?
-> 
-> If there's no prebuilt Rust compiler for PowerPC, then no, it will
-> simply not be possible.
+https://bugs.busybox.net/show_bug.cgi?id=9796
 
-Fetching and extracting the PowerPC release tarball [1]:
+            Bug ID: 9796
+           Summary: source-check broken for Github downloads
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-[joerg at nzxt rust-1.16.0-powerpc64-unknown-linux-gnu]$ file
-rustc/bin/rustc?
-rustc/bin/rustc: ELF 64-bit MSB shared object, 64-bit PowerPC or cisco
-7500, version 1 (SYSV), dynamically linked, interpreter
-/lib64/ld64.so.1, for GNU/Linux 3.2.0,
-BuildID[sha1]=39357ec02406358be73f28d80dabfdd9e9816de9, not stripped,
-with debug_info
+source-check doesn't work for Github downloads it seems, see for example the
+Linux kernel download for the raspberrypi_defconfig:
 
-> We have already lots of things in Buildroot that depend on x86 or
-> x86-64. Check all packages/options that use BR2_HOSTARCH.
-> 
-> So, it's fine for Rust to also require a x86/x86-64 machine, as long as
-> the proper BR2_HOSTARCH dependency is present in the Config.in.
+$ make raspberrypi_defconfig
+$ make source-check
+[...]
+Spider mode enabled. Check if remote file exists.
+--2017-04-07 08:00:27-- 
+https://github.com/raspberrypi/linux.git/linux-935c7ce84c982a26f567a03a58a1537424569938.tar.gz
+Resolving github.com (github.com)... 192.30.253.112, 192.30.253.113
+Connecting to github.com (github.com)|192.30.253.112|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+Remote file does not exist -- broken link!!!
 
-As I am running x64 it is fine for me, too. Just wondered why to limit
-the hosts archs if there are binaries available.
+Spider mode enabled. Check if remote file exists.
+--2017-04-07 08:00:27-- 
+http://sources.buildroot.net/linux-935c7ce84c982a26f567a03a58a1537424569938.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
+Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+Remote file does not exist -- broken link!!!
 
-[1] https://static.rust-lang.org/dist/rust-1.16.0-powerpc64-unknown-lin
-ux-gnu.tar.gz
+Some source-check fails because the kernel is not available. But in practice,
+if you do a build, it can download the kernel perfectly fine:
 
-J?rg
+$ make linux-extract
+>>> linux 935c7ce84c982a26f567a03a58a1537424569938 Downloading
+Doing full clone
+Cloning into 'linux-935c7ce84c982a26f567a03a58a1537424569938'...
+remote: Counting objects: 5514757, done.
+remote: Compressing objects: 100% (4789/4789), done.
+remote: Total 5514757 (delta 3516), reused 11 (delta 11), pack-reused 5509948
+Receiving objects: 100% (5514757/5514757), 1.55 GiB | 12.32 MiB/s, done.
+Resolving deltas: 100% (4579570/4579570), done.
+Checking connectivity... done.
+Checking out files: 100% (56709/56709), done.
+warning: refname '935c7ce84c982a26f567a03a58a1537424569938' is ambiguous.
+Git normally never creates a ref that ends with 40 hex characters
+because it will be ignored when you just specify 40-hex. These refs
+may be created by mistake. For example,
+
+  git checkout -b $br $(git rev-parse ...)
+
+where "$br" is somehow empty and a 40-hex ref is created. Please
+examine these refs and maybe delete them. Turn this message off by
+running "git config advice.objectNameWarning false"
+>>> linux 935c7ce84c982a26f567a03a58a1537424569938 Extracting
+gzip -d -c
+/home/thomas/buildroot/dl/linux-935c7ce84c982a26f567a03a58a1537424569938.tar.gz
+| tar --strip-components=1 -C
+/home/thomas/buildroot/buildroot/output/build/linux-935c7ce84c982a26f567a03a58a1537424569938
+  -xf -
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
