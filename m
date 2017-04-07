@@ -1,50 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Apr 2017 13:26:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.77
-In-Reply-To: <f1ljrdxu37.ln2@ID-313208.user.individual.net>
-References: <20170404212302.9793-1-bernd.kuhls@t-online.de>
- <20170406223304.7e2ecb6f@free-electrons.com>
- <f1ljrdxu37.ln2@ID-313208.user.individual.net>
-Message-ID: <8f23212c-2da8-3069-998b-99d35757d0b3@mind.be>
+From: Semyon Kolganov <semenak94@mail.ru>
+Date: Fri,  7 Apr 2017 14:42:14 +0300
+Subject: [Buildroot] [PATCH] libbson: new package
+In-Reply-To: <libbson: new package>
+References: <libbson: new package>
+Message-ID: <1491565334-23914-1-git-send-email-semenak94@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+---
+ package/Config.in            |  1 +
+ package/libbson/Config.in    |  5 +++++
+ package/libbson/libbson.hash |  2 ++
+ package/libbson/libbson.mk   | 16 ++++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/libbson/Config.in
+ create mode 100644 package/libbson/libbson.hash
+ create mode 100644 package/libbson/libbson.mk
 
-
-On 07-04-17 07:35, Bernd Kuhls wrote:
-> Am Thu, 06 Apr 2017 22:33:04 +0200 schrieb Thomas Petazzoni:
-> 
->> Hello,
->>
->> On Tue,  4 Apr 2017 23:23:02 +0200, Bernd Kuhls wrote:
->>> Added md5, sha1 & sha512 hashes.
->>
->> Why? Having four hashes is not very useful. So I've kept only the sha512
->> hash.
-> 
-> Hi Thomas,
-> 
-> because the docs say so:
-> 
-> http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-
-> hash
-> 
->> If upstream provides more than one type of hash (e.g. sha1 and sha512),
->> then it is best to add all those hashes in the .hash file.
-
- Yep, I agree with the docs here. For sure, if upstream offers sha512, we should
-at least also have sha512.
-
- Regards,
- Arnout
-
+diff --git a/package/Config.in b/package/Config.in
+index 71bd44a..f312e42 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1434,6 +1434,7 @@ menu "Text and terminal handling"
+ 	source "package/augeas/Config.in"
+ 	source "package/enchant/Config.in"
+ 	source "package/icu/Config.in"
++	source "package/libbson/Config.in"
+ 	source "package/libcli/Config.in"
+ 	source "package/libedit/Config.in"
+ 	source "package/libenca/Config.in"
+diff --git a/package/libbson/Config.in b/package/libbson/Config.in
+new file mode 100644
+index 0000000..5e361ea
+--- /dev/null
++++ b/package/libbson/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_LIBBSON
++	bool "libbson"
++	help
++	  libbson is a library providing useful routines related to 
++	  building, parsing, and iterating BSON documents.
+diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
+new file mode 100644
+index 0000000..a0abdb6
+--- /dev/null
++++ b/package/libbson/libbson.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	d9a1b2229a4aac2edb1564b909f0770a972af9bf94994acce2b21b2905913aed libbson-1.6.2.tar.gz
+diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
+new file mode 100644
+index 0000000..9941a2f
+--- /dev/null
++++ b/package/libbson/libbson.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libbson
++#
++################################################################################
++
++LIBBSON_VERSION = 1.6.2
++LIBBSON_SITE = $(call github,mongodb,libbson,$(LIBBSON_VERSION))
++LIBBSON_LICENSE = GPL-2.0
++LIBBSON_LICENSE_FILES = COPYING
++LIBBSON_INSTALL_STAGING = YES
++
++LIBBSON_CONF_OPTS = \
++	-DENABLE_TESTS=OFF
++
++$(eval $(cmake-package))
+\ No newline at end of file
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
