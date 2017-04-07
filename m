@@ -1,7 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 7 Apr 2017 17:27:41 +0100
-Subject: [Buildroot] [PATCH 1/2] lft: bump version to 3.79
-Message-ID: <20170407162742.52416-1-Vincent.Riera@imgtec.com>
+Date: Fri, 7 Apr 2017 17:27:42 +0100
+Subject: [Buildroot] [PATCH 2/2] python-pillow: bump version to 4.1.0
+In-Reply-To: <20170407162742.52416-1-Vincent.Riera@imgtec.com>
+References: <20170407162742.52416-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170407162742.52416-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lft/lft.hash | 4 ++--
- package/lft/lft.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pillow/python-pillow.hash | 4 ++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lft/lft.hash b/package/lft/lft.hash
-index 28654f5..1b0454c 100644
---- a/package/lft/lft.hash
-+++ b/package/lft/lft.hash
-@@ -1,4 +1,4 @@
- # From http://pwhois.org/lft/
--md5 7d20fd5323137b208abf1b4e1355c153  lft-3.78.tar.gz
-+md5 746dc08f2e20d0e0240f28873b3bb244  lft-3.79.tar.gz
- # Locally calculated
--sha256 000575891b4094319a56d395c0ec576651fe76b251596ab19d3eb2e5f8d4bf78  lft-3.78.tar.gz
-+sha256 08e5c7973551b529c850bffbc7152c4e5f0bcb1f07ebbb39151a7dc9a3bf9de0  lft-3.79.tar.gz
-diff --git a/package/lft/lft.mk b/package/lft/lft.mk
-index cac3774..0555ab9 100644
---- a/package/lft/lft.mk
-+++ b/package/lft/lft.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 182e82f..322e0a9 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
+-md5	d5af224b0fa2c66dacc9814785fef9e7  Pillow-4.0.0.tar.gz
+-sha256	ee26d2d7e7e300f76ba7b796014c04011394d0c4a5ed9a288264a3e443abca50  Pillow-4.0.0.tar.gz
++md5 d040e1155b4d9d8b011aab67ee0ea86b  Pillow-4.1.0.tar.gz
++sha256 a0fd487fed4a35717401b7566e51a1520b34e7c0f7f2a315a6509f82bc86299f  Pillow-4.1.0.tar.gz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index faa0e16..e1167c8 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LFT_VERSION = 3.78
-+LFT_VERSION = 3.79
- LFT_SITE = http://pwhois.org/get
- LFT_DEPENDENCIES = libpcap
- LFT_LICENSE = VOSTROM Public License for Open Source
+-PYTHON_PILLOW_VERSION = 4.0.0
++PYTHON_PILLOW_VERSION = 4.1.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://pypi.python.org/packages/8d/80/eca7a2d1a3c2dafb960f32f844d570de988e609f5fd17de92e1cf6a01b0a
++PYTHON_PILLOW_SITE = https://pypi.python.org/packages/80/38/5cb561c68155834c596018c47caa44da88ed34b09579b921c0e493fb06c7
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
 -- 
 2.10.2
