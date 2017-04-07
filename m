@@ -1,41 +1,71 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  7 Apr 2017 06:40:46 +0300
-Subject: [Buildroot] [PATCH 2/2] ethtool: bump to version 4.10
-In-Reply-To: <b8a0c47ad82f584df2871486c6754dda036456a5.1491536446.git.baruch@tkos.co.il>
-References: <b8a0c47ad82f584df2871486c6754dda036456a5.1491536446.git.baruch@tkos.co.il>
-Message-ID: <854b612fdd7d635fd171ca17524a8c5e11a176d6.1491536446.git.baruch@tkos.co.il>
+From: Kevin JOLY <kevin.joly@sensefly.com>
+Date: Fri, 7 Apr 2017 07:14:14 +0200
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
+In-Reply-To: <20170406223644.473ebd65@free-electrons.com>
+References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
+ <20170406223644.473ebd65@free-electrons.com>
+Message-ID: <cd88fd7c-dceb-cef1-59de-e086c6b3df00@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Thomas,
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 7deb92adaeac..4071fb062159 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	403dfe288e2d8031eab0be3f5d0ca9128e120d61c52c3dc434474fa026eb4a43	ethtool-4.8.tar.xz
-+sha256	f0009726ecf34128b9a8238b71a652847dbc06bd1b877656699b0592b95c74ba	ethtool-4.10.tar.xz
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 53cdabae8bca..ac67eeadded8 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 4.8
-+ETHTOOL_VERSION = 4.10
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+I was talking with Romain on this mailing list and he had concern about 
+license and dependencies of libgphoto2. I contacted the developpers of 
+libgphoto2 to ensure that the license type was correct. I also turned 
+the libexif, jpeg and gd dependencies as optional.
+
+Anyway, if the patch is in the pipe, everything is fine. I re-submitted 
+it because I didn't saw it was already on patchwork but I didn't wanted 
+to be redundant with it.
+
+Thank you
+
+Kevin JOLY
+
+Le 06. 04. 17 ? 22:36, Thomas Petazzoni a ?crit :
+> Hello,
+>
+> On Thu, 6 Apr 2017 10:33:12 +0200, Kevin JOLY wrote:
+>> Add support for libgphoto2 core library designed to allow access to digital camera.
+>>
+>> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
+>> ---
+>>   DEVELOPERS                         |  3 +++
+>>   package/Config.in                  |  1 +
+>>   package/libgphoto2/Config.in       | 11 +++++++++++
+>>   package/libgphoto2/libgphoto2.hash |  6 ++++++
+>>   package/libgphoto2/libgphoto2.mk   | 29 +++++++++++++++++++++++++++++
+>>   5 files changed, 50 insertions(+)
+>>   create mode 100644 package/libgphoto2/Config.in
+>>   create mode 100644 package/libgphoto2/libgphoto2.hash
+>>   create mode 100644 package/libgphoto2/libgphoto2.mk
+> Thanks for this patch. However:
+>
+>   - You already posted a patch for the same package on March, 13th, but
+>     you don't explain how this version is different. This patch is not
+>     even identified as a new iteration. What changed?
+>
+>   - Romain Naour submitted on March 5 a patch adding libgphoto2, so your
+>     proposal seems a bit redundant with Romain's patch. Have you taken
+>     over Romain's patch? I'm adding Romain in Cc here.
+>
+> Thanks!
+>
+> Thomas
+
 -- 
-2.11.0
+
+*Kevin JOLY*
+Embedded systems engineer
+
+SenseFly <http://www.sensefly.com/>
+38, rte de Gen?ve
+1033 Cheseaux-Lausanne, Switzerland
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170407/14948f39/attachment.html>
