@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Apr 2017 20:00:21 +0200
-Subject: [Buildroot] [PATCH] jemalloc: bump version to 4.5.0
-In-Reply-To: <20170402175418.19941-1-eric.le.bihan.dev@free.fr>
-References: <20170402175418.19941-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170407200021.6aa2f4b4@free-electrons.com>
+Date: Fri, 7 Apr 2017 20:05:00 +0200
+Subject: [Buildroot] [git commit] icu: legal-info: refer to the real license
+	file
+Message-ID: <20170407180520.1072E826E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d2ea2479e5061c9d48b7ee544271828563e83da8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Apr 2017 19:54:18 +0200, Eric Le Bihan wrote:
+License.html now just contains the string:
 
-> +# configure is missing but gpm seems not compatible with our autoreconf
-> +# mechanism so we have to do it manually instead of using
-> +# JEMALLOC_AUTORECONF = YES
-> +define JEMALLOC_RUN_AUTOGEN
-> +        cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> +endef
-> +
-> +JEMALLOC_PRE_CONFIGURE_HOOKS += JEMALLOC_RUN_AUTOGEN
+The ICU license is now in plain text format, see <a href="./LICENSE">LICENSE</a>.
+Update links and software appropriately.
 
-All this is not needed if you use the release tarball published by the
-project at
-https://github.com/jemalloc/jemalloc/releases/download/4.5.0/jemalloc-4.5.0.tar.bz2.
-It has the configure already generated.
+So refer directly to that file instead.
 
-So I've removed all the autoreconf related code you added, and used
-this tarball instead.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/icu/icu.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I've applied after changing this.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index b9e42de..a435e47 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -8,7 +8,7 @@ ICU_VERSION = 58.2
+ ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
+ ICU_LICENSE = ICU License
+-ICU_LICENSE_FILES = license.html
++ICU_LICENSE_FILES = LICENSE
+ 
+ ICU_DEPENDENCIES = host-icu
+ ICU_INSTALL_STAGING = YES
