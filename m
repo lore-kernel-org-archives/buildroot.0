@@ -1,51 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 7 Apr 2017 20:47:38 +0200
-Subject: [Buildroot] Qt5 build failure (beaglebone_qt5_defconfig)
-In-Reply-To: <20170406183316.44d8db5a@free-electrons.com>
-References: <87f293c7-8aef-14e9-23e4-195a16b564e3@mind.be>
- <trinity-0603182d-d77d-4e0a-bdd1-589503badbe3-1491479231018@3capp-gmx-bs68>
- <20170406183316.44d8db5a@free-electrons.com>
-Message-ID: <20170407204738.3f114ab4@gmx.net>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 7 Apr 2017 20:47:55 +0200
+Subject: [Buildroot] [PATCH 3/5] telit_evk_pro3_defconfig: remove broken
+	defconfig
+In-Reply-To: <f6a4dcf2-1bc2-537d-9ba9-bd12ad0f4fca@mind.be>
+References: <20170301083046.13226-1-arnout@mind.be>
+ <20170301083046.13226-3-arnout@mind.be>
+ <CAHkwnC_M3=cTtes4_Qc3Jig2+Q7=eJ=A4WoNsRFomLWuwJ_kKw@mail.gmail.com>
+ <f6a4dcf2-1bc2-537d-9ba9-bd12ad0f4fca@mind.be>
+Message-ID: <CAHkwnC_eF0eCKAN=MaMGYS5hVB_NNdMt6DbigPD9Jh1Gqkt-Xg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+2017-04-06 12:50 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>  Hi Fabio,
+>
+> On 01-03-17 17:28, Fabio Porcedda wrote:
+>> 2017-03-01 9:30 GMT+01:00 Arnout Vandecappelle (Essensium/Mind)
+>> <arnout@mind.be>:
+>>> This defconfig has been broken due to gcc5 for more than half a year,
+>>> and nobody stepped up to fix it. Remove it, as well as it board
+>>> directory.
+>>
+>> Hi Arnout,
+>> sorry for the late response, today I've sent a patch to fix the build
+>> failure for barebox, tomorrow i will send a patch to update the linux
+>> kernel.
+>
+>  Any update on that kernel patch? The telit defconfig is still broken...
 
-On Thu, 6 Apr 2017 18:33:16 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Hi Arnout,
+I'm sorry for the delay, the next week I will send a patch for the kernel too.
 
-> Hello,
-> 
-> On Thu, 6 Apr 2017 13:47:11 +0200, Peter Seiderer wrote:
-> 
-> > Untested but maybe the following works:
-> > 
-> > diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-> > index 853322c..5e0fbe2 100644
-> > --- a/package/qt5/qt5declarative/Config.in
-> > +++ b/package/qt5/qt5declarative/Config.in
-> > @@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
-> >         select BR2_PACKAGE_QT5XMLPATTERNS
-> >         select BR2_PACKAGE_QT5BASE
-> >         select BR2_PACKAGE_QT5BASE_GUI
-> > +       select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5BASE_EXAMPLES
-> >         depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> >         help
-> >           Qt is a cross-platform application and UI framework for
-> 
-> Thanks, can you submit as a proper patch?
-> 
-
-Preferred the upstreamable solution to disable examples/quick/demos/photoviewer
-in case the qt5 widgets module is not available and submitted as a proper
-patch, see [1]...
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-April/188935.html
-
-
-> Thomas
+Best regards
+--
+Fabio Porcedda
