@@ -1,54 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 7 Apr 2017 21:46:50 +0200
-Subject: [Buildroot] [PATCH 1/2] uboot: qstrip
- BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-In-Reply-To: <20170407100323.6871-1-michael@amarulasolutions.com>
-References: <20170407100323.6871-1-michael@amarulasolutions.com>
-Message-ID: <20170407214650.73cdc0dc@gmx.net>
+From: Robert Smigielski <ptdropper@gmail.com>
+Date: Fri, 7 Apr 2017 16:02:36 -0400
+Subject: [Buildroot] issue with Linux ARM start_kernel
+In-Reply-To: <CABWt4esN__Xx53vrRbJZVcQ7Nvc1hAC5ta3LjeAkfz_jBDDY5A@mail.gmail.com>
+References: <CABWt4evkoeQ6deMoLCWSuaZaxKzuR4=_BLEp8g4MKh1KELzjrQ@mail.gmail.com>
+ <87inmgrpal.fsf@dell.be.48ers.dk>
+ <CABWt4esN__Xx53vrRbJZVcQ7Nvc1hAC5ta3LjeAkfz_jBDDY5A@mail.gmail.com>
+Message-ID: <CABWt4esMULpB32qecospE+Uk4whCpYRSnjJddcDHJ8um8Bd5Kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+Thank you sir! I did some experiments and found that altering the load
+address to 0x1800000 corrects the problem and the board boots to a user
+prompt!
+A million thanks!
 
-On Fri,  7 Apr 2017 12:03:22 +0200, Michael Trimarchi <michael@amarulasolutions.com> wrote:
+On Fri, Apr 7, 2017 at 3:42 PM, Robert Smigielski <ptdropper@gmail.com>
+wrote:
 
-> We need to avoid failing of copy of custom dts using
-> cp -f <> command. Just strip in the beginning as done
-> for other configuration variable
-> 
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
->  boot/uboot/uboot.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 1d464d967..f0f39f3bd 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -6,6 +6,7 @@
->  
->  UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
->  UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
-> +UBOOT_CUSTOM_DTS_PATH=$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
->  
->  UBOOT_LICENSE = GPL-2.0+
->  UBOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
-> @@ -195,8 +196,8 @@ endef
->  endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
->  
->  define UBOOT_BUILD_CMDS
-> -	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
-> -		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
-> +	$(if $(UBOOT_CUSTOM_DTS_PATH),
-> +		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
->  	)
->  	$(TARGET_CONFIGURE_OPTS) 	\
->  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+>
+> On Fri, Apr 7, 2017 at 3:27 PM, Peter Korsgaard <peter@korsgaard.com>
+> wrote:
+>
+>> >>>>> "Robert" == Robert Smigielski <ptdropper@gmail.com> writes:
+>>
+>>  > Hi everyone,
+>>  > I am a long time Linux device driver writer (about 16 years) and now
+>> for 3
+>>  > years creating BSP's using Buildroot.
+>>
+>>  > When I build using "make clean" then "make" - without NetworkManager
+>> in the
+>>  > .config the board boots and runs for days. Great.
+>>  > When I build using "make clean", reconfigure Buildroot to enable my
+>> custom
+>>  > added NetworkManager=y, the build succeeds, the image is loaded on the
+>>  > board, and I get the problem:
+>>
+>>  > "Uncompressing Linux... done, booting the kernel."
+>>
+>> From this and the description about loading uImage with a bdi, I take it
+>> that your filesystem is an initramfs embedded in the uImage?
+>>
+>> Yes the file system is embedded in the uImage.
+>
+>
+>> It would be interesting to check if your problem relates to the uImage
+>> growing to a specific size (E.G. add some data files to the working
+>> build instead).
+>>
+>> What address are you loading the uImage to? It sounds like the
+>> decompressor perhaps ends up overwriting itself.
+>>
+>
+> I load the uImage to address 0x2000000 and uboot reports loading it from
+> 0x2000040.
+> The working uImage is approximately 14.7 MB and the non working uImage is
+> 15.4 MB
+> The address 0x2000000 is a legacy value that has just been used in the
+> past.
+>
+> Since I am not familiar with the details of this part of the process can I
+> change the address to a larger value or to a smaller value? Which one makes
+> sense?
+>
+>>
+>> --
+>> Bye, Peter Korsgaard
+>>
+>
+>
+>
+> --
+> Robert Smigielski
+>
 
-Tested-by: Peter Seiderer <ps.report@gmx.net>
 
-Regards,
-Peter
+
+-- 
+Robert Smigielski
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170407/43bb0273/attachment.html>
