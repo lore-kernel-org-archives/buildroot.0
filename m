@@ -1,13 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Apr 2017 12:35:09 +0200
-Subject: [Buildroot] [PATCH v5 08/13] support/test-pkg: get configs from
- buildroot defconfigs
-In-Reply-To: <20170406225034.342c907e@free-electrons.com>
+Date: Fri, 7 Apr 2017 12:35:52 +0200
+Subject: [Buildroot] [PATCH v5 03/13] support/test-pkg: calculate
+ toolchain name only once
+In-Reply-To: <20170406205116.GD3538@scaer>
 References: <cover.1491502445.git.arnout@mind.be>
- <20170406181854.5242-8-arnout@mind.be>
- <20170406213735.003749a9@free-electrons.com> <20170406204804.GC3538@scaer>
- <20170406225034.342c907e@free-electrons.com>
-Message-ID: <fe449879-0ba1-6b3c-bc94-0f5ae9670f2c@mind.be>
+ <20170406181854.5242-3-arnout@mind.be> <20170406205116.GD3538@scaer>
+Message-ID: <e1296005-3c0a-b12e-8032-6f7549e12609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,34 +14,31 @@ To: buildroot@busybox.net
 
 
 
-On 06-04-17 22:50, Thomas Petazzoni wrote:
-> Hello,
+On 06-04-17 22:51, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> On Thu, 6 Apr 2017 22:48:04 +0200, Yann E. MORIN wrote:
-> 
->>> On the principle, I am OK with this direction, but it is needs to be
->>> coordinated with a change to autobuild-run to also use the base
->>> autobuild defconfigs from the Buildroot tree. Otherwise, we will have
->>> two copies: one used by people running test-pkg, one used by the actual
->>> autobuilders. It is not difficult to see those two copies quickly
->>> getting out of sync.  
+> On 2017-04-06 20:18 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >>
->> I think the idea is not to sync, but to get rid of the toolchain configs
->> in autobuild-run altogether, and only use those in the Buildroot tree.
+>> The toolchain name was calculated in main() for reporting to the user,
+>> and again in build_one() for creating the build directory. Calculate
+>> it only once, in main(), and pass the build directory as an argument
+>> to build_one().
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>> I'm not sure why the mkdir is also moved up to main() - IMO, it fits
+>> better in build_one(). Yann, the original commit message was just
+>> "create build dir from caller", any reason _why_ you did that?
 > 
-> Huh, you must have misunderstood what I wrote, or it wasn't clear.
+> Because when I initially did the legal-info step, it was in a spearate
+> function, not in build_one, so it looked more logicial to create the
+> directory in main().
 > 
-> My point was precisely that we want to avoid sync'ing them. But to
-> achieve that the autobuild-run script needs to be changed to use base
-> toolchain configs from the Buildroot tree rather than through the
-> CSV file downloaded from autobuild.b.o. And I'm exactly saying that we
-> need to change the autobuild-run script at the same time as we move
-> base toolchain configs in the tree, otherwise we have duplication.
+> But now it is not really meaningful anymore, indeed...
 
- I'm working on updating autobuild-run. Unfortunately it's a bit difficult to
-test changes in that script, e.g. removing the condition on BR2_STATIC_LIBS. I
-basically have to wait until the script hits a glibc toolchain to see if it
-works correctly. Can you think of any way to speed that up?
+ OK, in v6 it will move back down into build_one.
 
  Regards,
  Arnout
