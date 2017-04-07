@@ -1,16 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Apr 2017 10:19:10 +0200
-Subject: [Buildroot] Qt5 build failure (beaglebone_qt5_defconfig)
-In-Reply-To: <20170407080909.GB12962@panicking>
-References: <87f293c7-8aef-14e9-23e4-195a16b564e3@mind.be>
- <trinity-0603182d-d77d-4e0a-bdd1-589503badbe3-1491479231018@3capp-gmx-bs68>
- <CAOf5uwkL9FX3Fq2Dou1jnixat2CWxtWSbXG+Q=RQ=y3pSyjRzA@mail.gmail.com>
- <20170406183218.66cab07e@free-electrons.com>
- <20170406185739.3caf46f6@free-electrons.com>
- <20170407075444.GA12962@panicking>
- <20170407100654.32f1da84@free-electrons.com>
- <20170407080909.GB12962@panicking>
-Message-ID: <20170407101910.57e2a19d@free-electrons.com>
+Date: Fri, 7 Apr 2017 10:26:13 +0200
+Subject: [Buildroot] [Patch v4 1/3] rust-bootstrap: new package
+In-Reply-To: <1491548614.26127.3.camel@embedded.rocks>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+ <20170402194651.28684-2-eric.le.bihan.dev@free.fr>
+ <1491548614.26127.3.camel@embedded.rocks>
+Message-ID: <20170407102613.7a8c96b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,31 +14,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 7 Apr 2017 10:09:11 +0200, Michael Trimarchi wrote:
+On Fri, 07 Apr 2017 09:03:34 +0200, J?rg Krause wrote:
+> On Sun, 2017-04-02 at 21:46 +0200, Eric Le Bihan wrote:
+> > This new package fetches a binary snapshot of the Rust compiler,
+> > suitable for the host, in order to bootstrap the Rust compiler.
+> > 
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > ---
+> > ?DEVELOPERS?????????????????????????????????|??1 +
+> > ?package/rust-bootstrap/rust-bootstrap.hash |??5 ++++
+> > ?package/rust-bootstrap/rust-bootstrap.mk???| 37
+> > ++++++++++++++++++++++++++++++
+> > ?3 files changed, 43 insertions(+)
 
-> > > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > > index 1d464d967..edfc27fa7 100644
-> > > --- a/boot/uboot/uboot.mk
-> > > +++ b/boot/uboot/uboot.mk
-> > > @@ -195,8 +195,9 @@ endef
-> > >  endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
-> > >  
-> > >  define UBOOT_BUILD_CMDS
-> > > -	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
-> > > -		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
-> > > +	UBOOT_CUSTOM_DTS_PATH=$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
-> > > +	$(if $(UBOOT_CUSTOM_DTS_PATH),
-> > > +		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
-> > >  	)  
+It would be nice if you could fix your e-mail client to not rewrap the
+text you are replying to :)
+
+> > +ifeq ($(HOSTARCH),x86_64)
+> > +RUST_BOOTSTRAP_ARCH = x86_64
+> > +else ifeq ($(HOSTARCH),x86)
+> > +RUST_BOOTSTRAP_ARCH = i686
+> > +endif  
 > 
-> My error was cp -f with just one parameter. Test pass and cp -f fail
+> Is there any necessity to limit the bootstrap compiler to those host
+> archs only?
 
-Ah, yes, obviously. Though it would be nicer to define
-UBOOT_CUSTOM_DTS_PATH outside of UBOOT_BUILD_CMDS.
+The bootstrap compiler is provided as a binary only thing,
+pre-compiled. So it works only on the architectures it was compiled
+for. At least, that's why I remember from previous series on this topic.
 
-Could you send a separate patch, fixing just that?
+> > +RUST_BOOTSTRAP_SOURCE = rustc-$(RUST_BOOTSTRAP_LABEL).tar.gz
+> > +RUST_BOOTSTRAP_LICENSE = Apache-2.0 or MIT
+> > +RUST_BOOTSTRAP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> > +RUST_BOOTSTRAP_LIBSTD_SOURCE= rust-std-
+> > $(RUST_BOOTSTRAP_LABEL).tar.gz
+> > +RUST_BOOTSTRAP_LIBSTD_ROOT = rust-std-$(RUST_BOOTSTRAP_LABEL)/rust-
+> > std-$(RUST_BOOTSTRAP_TRIPLE)  
+> 
+> Why not make a seperate package?
 
-Thanks!
+It apparently needs to be extracted within the bootstrap compiler tree,
+i.e in $(@D)/rustc, I guess that's why. But Eric can give more details
+here.
 
 Thomas
 -- 
