@@ -1,271 +1,81 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 07 Apr 2017 09:18:42 +0200
-Subject: [Buildroot] [Patch v4 3/3] rust: new package
-In-Reply-To: <20170402194651.28684-4-eric.le.bihan.dev@free.fr>
-References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
- <20170402194651.28684-4-eric.le.bihan.dev@free.fr>
-Message-ID: <1491549522.26127.8.camel@embedded.rocks>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Fri, 7 Apr 2017 09:28:27 +0200
+Subject: [Buildroot] Qt5 build failure (beaglebone_qt5_defconfig)
+In-Reply-To: <20170406183218.66cab07e@free-electrons.com>
+References: <87f293c7-8aef-14e9-23e4-195a16b564e3@mind.be>
+ <trinity-0603182d-d77d-4e0a-bdd1-589503badbe3-1491479231018@3capp-gmx-bs68>
+ <CAOf5uwkL9FX3Fq2Dou1jnixat2CWxtWSbXG+Q=RQ=y3pSyjRzA@mail.gmail.com>
+ <20170406183218.66cab07e@free-electrons.com>
+Message-ID: <CAOf5uwmQTomB0pgpUL4k0CVU3zEcNtGSLZU4TwQF7nOjXR_f2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+Hi Thomas
 
-On Sun, 2017-04-02 at 21:46 +0200, Eric Le Bihan wrote:
-> This new package provides the compiler for the Rust programming
-> language.
-> 
-> Currently, only the host variant is built.
-> 
-> The Rust compiler uses LLVM as its backend: a copy of LLVM source
-> code
-> is provided and CMake is used to build it. It is possible to use a
-> pre-built external copy. When LLVM/clang will be available in
-> Buildroot,
-> it would be possible to benefit from this feature and thus decrease
-> build time.
-> 
-> LLVM is configured to generate code for x86, ARM, PowerPC and MIPS
-> architectures.
-> 
-> The Rust compiler uses Cargo as its build system and is written in
-> Rust.
-> Therefore this package depends on cargo-bootstrap and rust-bootstrap.
-> 
-> The internal build process is as follows:
-> 
-> ?1. rustc-stage0, provided by rust-bootstrap, is used to build
-> ????rustc-stage1.
-> ?2. rust-stage1 builds the final Rust compiler (rust-stage2)
-> ????and the standard library for the host architecture.
-> ?3. the standard library for the target architecture is built.
+On Thu, Apr 6, 2017 at 6:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 6 Apr 2017 18:12:15 +0200, Michael Nazzareno Trimarchi wrote:
+>
+>> '/home/michael/work/amarula/bticino/buildroot/output/build/linux-52c4aa7cdb93d61f8008f380135beaf7b8fa6593'
+>>   DTC     arch/arm/boot/dts/am335x-bone.dtb
+>>   DTC     arch/arm/boot/dts/am335x-evm.dtb
+>> make[2]: *** No rule to make target
+>> 'arch/arm/boot/dts/am335x-bonegreen.dtb'.  Stop.
+>> arch/arm/Makefile:314: recipe for target 'am335x-bonegreen.dtb' failed
+>
+> This is caused by the recent commit
+> https://git.buildroot.org/buildroot/commit/configs?id=4b2440b7dcc68369548c0f2be6984fe645fc6bb0
+> from Matthias Fritzsche. Matthias, are you sure you tested the
+> beaglebone_qt5_defconfig ?
+>
+> Indeed, beaglebone_defconfig and beaglebone_qt5_defconfig don't use the
+> same kernel version, and the one used in beaglebone_qt5_defconfig
+> doesn't have the Beagle Bone Green Device Tree.
+>
+> So either we should revert Matthias patch on beaglebone_qt5_defconfig,
+> or someone tests upgrading beaglebone_qt5_defconfig to the same kernel
+> version as the one used in beaglebone_defconfig.
+>
+>> chmod a+x /home/michael/work/amarula/bticino/buildroot/output/build/_fakeroot.fs
+>> PATH="/home/michael/work/amarula/bticino/buildroot/output/host/bin:/home/michael/work/amarula/bticino/buildroot/output/host/sbin:/home/michael/work/amarula/bticino/buildroot/output/host/usr/bin:/home/michael/work/amarula/bticino/buildroot/output/host/usr/sbin:/opt/OpenPrinting-Gutenprint/sbin:/opt/OpenPrinting-Gutenprint/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-7-oracle/bin:/usr/lib/jvm/java-7-oracle/db/bin:/usr/lib/jvm/java-7-oracle/jre/bin"
+>> /home/michael/work/amarula/bticino/buildroot/output/host/usr/bin/fakeroot
+>> -- /home/michael/work/amarula/bticino/buildroot/output/build/_fakeroot.fs
+>> rootdir=/home/michael/work/amarula/bticino/buildroot/output/target
+>> table='/home/michael/work/amarula/bticino/buildroot/output/build/_device_table.txt'
+>> genext2fs: couldn't allocate a block (no free space)
+>> fs/ext2/ext2.mk:44: recipe for target
+>
+> This is due to the fact that we removed auto-calculation of the ext4
+> filesystem size in
+> https://git.buildroot.org/buildroot/commit/?id=c6bca8cef0310bc649240b451989457ce94a8358,
+> and we default to 60 MB for the filesystem size, which is not enough
+> for this demo. Fixing this is simple: send a patch that adds:
+>
+> BR2_TARGET_ROOTFS_EXT2_BLOCKS="126976"
+>
+> to beaglebone_qt5_defconfig (of course after testing that this size is
+> sufficient).
+>
 
-So, we are doing the following: fetch the predecessor rust version
-1.15.1 as binary to use it as stage0 compiler for building the latest
-rust stable version 1.16.0. Why not just fetch the latest stable
-version and install it into the host dir? The same goes with libstd and
-cargo. I mean, we have to fetch some binaries anyway, so why do the
-time-consuming build steps anyway? Shouldn't there be at least the
-option just to fetch the latest stable version?
+Ok I will do
 
-> The target architecture to support is given by the GNU/LLVM target
-> triple. Rust supports some predefined targets [1]. As the build
-> system
-> expects the triple to be in the form of <arch>-unknown-<system> and
-> Buildroot toolchain wrapper uses <arch>-buildroot-<system>, the
-> package
-> Makefile defines the $(RUST_TARGET_NAME) and uses it instead of
-> $(GNU_TARGET_NAME).
-> 
-> When compiling Rust code with this compiler, the generated program
-> only
-> depends on the target C library, as it is statically linked to the
-> Rust
-> standard library and any other code from Rust packages (a.k.a.
-> "crates").
-> 
-> If the jemalloc package is selected, support for this memory
-> allocator
-> will be enabled in the target standard library.
-> 
-> [1] https://forge.rust-lang.org/platform-support.html
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
-> ?DEVELOPERS??????????????????|??1 +
-> ?package/Config.in.host??????|??1 +
-> ?package/rust/Config.in.host | 33 ++++++++++++++++++
-> ?package/rust/rust.hash??????|??2 ++
-> ?package/rust/rust.mk????????| 85
-> +++++++++++++++++++++++++++++++++++++++++++++
-> ?5 files changed, 122 insertions(+)
-> ?create mode 100644 package/rust/Config.in.host
-> ?create mode 100644 package/rust/rust.hash
-> ?create mode 100644 package/rust/rust.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1fed408..c0e7833 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -450,6 +450,7 @@ F:	package/hicolor-icon-theme/
-> ?F:	package/jemalloc/
-> ?F:	package/ninja/
-> ?F:	package/rust-bootstrap
-> +F:	package/rust
-> ?F:	package/s6/
-> ?F:	package/s6-dns/
-> ?F:	package/s6-linux-init/
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 38f919a..ef5f23f 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -39,6 +39,7 @@ menu "Host utilities"
-> ?	source "package/python-lxml/Config.in.host"
-> ?	source "package/qemu/Config.in.host"
-> ?	source "package/raspberrypi-usbboot/Config.in.host"
-> +	source "package/rust/Config.in.host"
-> ?	source "package/s6-rc/Config.in.host"
-> ?	source "package/sam-ba/Config.in.host"
-> ?	source "package/squashfs/Config.in.host"
-> diff --git a/package/rust/Config.in.host
-> b/package/rust/Config.in.host
-> new file mode 100644
-> index 0000000..384a071
-> --- /dev/null
-> +++ b/package/rust/Config.in.host
-> @@ -0,0 +1,33 @@
-> +config BR2_PACKAGE_HOST_RUST_ARCH_SUPPORTS
-> +	bool
-> +	default y
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	depends on??BR2_i386 || BR2_x86_64 \
-> +		|| BR2_arm??|| BR2_aarch64 \
-> +		|| BR2_powerpc??|| BR2_powerpc64 \
-> +		|| BR2_mips || BR2_mipsel || BR2_mips64 ||
-> BR2_mips64el
-> +	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
-> +	depends on !BR2_MIPS_NABI32
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_7 # required by LLVM
-> +	# triggers ICE on trunc_int_for_mode, at explow.c:56
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_aarch64
-> +
-> +comment "host-rust needs a toolchain w/ gcc >= 5"
-> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5 && BR2_aarch64
-> +
-> +config BR2_PACKAGE_HOST_RUST
-> +	bool "host rust"
-> +	depends on BR2_PACKAGE_HOST_RUST_ARCH_SUPPORTS
-> +	help
-> +	??Compiler for the Rust programming language.
-> +
-> +	??This package will build the compiler for the host as well
-> as
-> +	??a cross-compiled version of the Rust standard library for
-> the
-> +	??target.
-> +
-> +	??Note that the target standard library does not need to be
-> +	??present on the target root filesystem, as it is statically
-> +	??linked to the program.
-> +
-> +	??http://www.rust-lang.org
-> diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-> new file mode 100644
-> index 0000000..3b04dfd
-> --- /dev/null
-> +++ b/package/rust/rust.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256
-> f966b31eb1cd9bd2df817c391a338eeb5b9253ae0a19bf8a11960c560f96e8b4??rus
-> tc-1.16.0-src.tar.gz
-> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-> new file mode 100644
-> index 0000000..12f4428
-> --- /dev/null
-> +++ b/package/rust/rust.mk
-> @@ -0,0 +1,85 @@
-> +####################################################################
-> ############
-> +#
-> +# rust
-> +#
-> +####################################################################
-> ############
-> +
-> +RUST_VERSION = 1.16.0
-> +RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.gz
-> +RUST_SITE = https://static.rust-lang.org/dist
-> +RUST_LICENSE = Apache-2.0 or MIT
-> +RUST_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> +
-> +HOST_RUST_DEPENDENCIES = \
-> +	toolchain \
-> +	host-rust-bootstrap \
-> +	host-cargo-bootstrap \
-> +	host-python \
-> +	host-cmake
-> +
-> +ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-> +HOST_RUST_DEPENDENCIES += jemalloc
-> +HOST_RUST_JEMALLOC_ENABLED = true
-> +HOST_RUST_JEMALLOC_CONF = 'jemalloc =
-> "$(STAGING_DIR)/usr/lib/libjemalloc_pic.a"'
-> +else
-> +HOST_RUST_JEMALLOC_ENABLED = false
-> +endif
-> +
-> +HOST_RUST_BUILD_OPTS = $(if $(VERBOSE),--verbose)
-> +
-> +RUST_TARGET_NAME := $(subst buildroot,unknown,$(GNU_TARGET_NAME))
-> +
-> +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-> +RUST_TARGET_NAME := $(subst arm-,armv7-,$(RUST_TARGET_NAME))
-> +endif
-> +
-> +ifeq ($(BR2_MIPS_NABI64),y)
-> +RUST_TARGET_NAME := $(subst -gnu,-gnuabi64,$(RUST_TARGET_NAME))
-> +endif
-> +
-> +define HOST_RUST_CONFIGURE_CMDS
-> +	(cd $(@D); \
-> +		echo '[build]' > config.toml; \
-> +		echo 'target = ["$(RUST_TARGET_NAME)"]' >>
-> config.toml; \
-> +		echo 'cargo =
-> "$(HOST_CARGO_BOOTSTRAP_DIR)/cargo/bin/cargo"' >> config.toml; \
-> +		echo 'rustc =
-> "$(HOST_RUST_BOOTSTRAP_DIR)/rustc/bin/rustc"' >> config.toml; \
-> +		echo 'python = "$(HOST_DIR)/usr/bin/python2"' >>
-> config.toml; \
-> +		echo 'submodules = false' >> config.toml; \
-> +		echo 'vendor = true' >> config.toml; \
-> +		echo 'compiler-docs = false' >> config.toml; \
-> +		echo 'docs = false' >> config.toml; \
-> +		echo '[install]' >> config.toml; \
-> +		echo 'prefix = "$(HOST_DIR)/usr"' >> config.toml; \
-> +		echo '[rust]' >> config.toml; \
-> +		echo 'use-jemalloc = $(HOST_RUST_JEMALLOC_ENABLED)'
-> >> config.toml; \
-> +		echo '[target.$(RUST_TARGET_NAME)]' >> config.toml;
-> \
-> +		echo 'cc = "$(TARGET_CROSS)gcc"' >> config.toml; \
-> +		echo 'cxx = "$(TARGET_CROSS)g++"' >> config.toml; \
-> +		echo $(HOST_RUST_JEMALLOC_CONF) >> config.toml; \
-> +	)
-> +endef
-> +
-> +define HOST_RUST_BUILD_CMDS
-> +	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_RUST_MAKE_ENV) python2
-> x.py \
-> +		build $(HOST_RUST_BUILD_OPTS))
-> +endef
-> +
-> +define HOST_RUST_INSTALL_LIBSTD_TARGET
-> +	(cd $(@D)/build/tmp/dist/rust-std-$(RUST_VERSION)-dev-
-> $(RUST_TARGET_NAME); \
-> +		./install.sh \
-> +			--prefix=$(HOST_DIR)/usr \
-> +			--docdir=$(HOST_DIR)/usr/share/doc/rust \
-> +			--libdir=$(HOST_DIR)/usr/lib \
-> +			--mandir=$(HOST_DIR)/usr/share/man \
-> +			--disable-ldconfig)
-> +endef
-> +
-> +define HOST_RUST_INSTALL_CMDS
-> +	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_RUST_MAKE_ENV) python2
-> x.py \
-> +		dist $(HOST_RUST_BUILD_OPTS))
-> +	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_RUST_MAKE_ENV) python2
-> x.py \
-> +		dist --install $(HOST_RUST_BUILD_OPTS))
-> +	$(HOST_RUST_INSTALL_LIBSTD_TARGET)
-> +endef
-> +
-> +$(eval $(host-generic-package))
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
-Best regards,
-J?rg Krause
+
+
+-- 
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
