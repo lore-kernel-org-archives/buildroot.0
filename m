@@ -1,52 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Apr 2017 12:35:52 +0200
-Subject: [Buildroot] [PATCH v5 03/13] support/test-pkg: calculate
- toolchain name only once
-In-Reply-To: <20170406205116.GD3538@scaer>
-References: <cover.1491502445.git.arnout@mind.be>
- <20170406181854.5242-3-arnout@mind.be> <20170406205116.GD3538@scaer>
-Message-ID: <e1296005-3c0a-b12e-8032-6f7549e12609@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Apr 2017 12:43:14 +0200
+Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
+In-Reply-To: <fd9c07fd-2e86-ed73-2fd1-bfcf27522664@mind.be>
+References: <20170402130338.12542-1-yann.morin.1998@free.fr>
+ <39bc6b12-1dfd-8ada-f1bc-8597c6872a1c@mind.be>
+ <20170404185928.GA3828@scaer>
+ <fd9c07fd-2e86-ed73-2fd1-bfcf27522664@mind.be>
+Message-ID: <20170407124314.660c3edc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Fri, 7 Apr 2017 12:30:46 +0200, Arnout Vandecappelle wrote:
 
-On 06-04-17 22:51, Yann E. MORIN wrote:
-> Arnout, All,
+> > Well, I've been tracking build-order issues for a while last WE, and
+> > believe me, I was very happy to be able to see the build order before
+> > I attempted a build, yes.  
 > 
-> On 2017-04-06 20:18 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>
->> The toolchain name was calculated in main() for reporting to the user,
->> and again in build_one() for creating the build directory. Calculate
->> it only once, in main(), and pass the build directory as an argument
->> to build_one().
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->> I'm not sure why the mkdir is also moved up to main() - IMO, it fits
->> better in build_one(). Yann, the original commit message was just
->> "create build dir from caller", any reason _why_ you did that?
-> 
-> Because when I initially did the legal-info step, it was in a spearate
-> function, not in build_one, so it looked more logicial to create the
-> directory in main().
-> 
-> But now it is not really meaningful anymore, indeed...
+>  That's my biggest problem with this feature: I have no idea how to use it.
+> Could you add some explanation somewhere?
 
- OK, in v6 it will move back down into build_one.
+Yann was tracking down the dc3dd failure. With some configurations it
+was building, with others not. So he was trying to figure which package
+that gets built before dc3dd causes the problem. For this, it was
+really nice to be able to load a configuration, and immediately see in
+which order packages would be built, and therefore which packages would
+be built before dc3dd, without having to do the build itself.
 
- Regards,
- Arnout
+Does that explain better the use case for this?
 
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
