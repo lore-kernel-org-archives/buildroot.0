@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Apr 2017 10:27:59 +0200
-Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
- core
-In-Reply-To: <CAAXf6LWHf2vkyHZuq95mOCsApOte4cKc03aGYM27L_rfJA7fQQ@mail.gmail.com>
-References: <20170406234139.31532-1-sikor6@gmail.com>
- <20170406234139.31532-2-sikor6@gmail.com>
- <CAAXf6LWHf2vkyHZuq95mOCsApOte4cKc03aGYM27L_rfJA7fQQ@mail.gmail.com>
-Message-ID: <20170407102759.7130ab13@free-electrons.com>
+Date: Fri, 7 Apr 2017 10:31:38 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchain-external: fix handling of
+ ld.so
+In-Reply-To: <CAAXf6LXp_Y4A+sNygeLMwqv3CiOwbeEAFxcRa0vwY-8a=_REVQ@mail.gmail.com>
+References: <20170406202505.17605-1-patrickdepinguin@gmail.com>
+ <20170406223422.388475a5@free-electrons.com>
+ <CAAXf6LW2Oo8VPoiKJ5LfCRgj37_uTjqu6jbN+_c+Ts3Fp9k8cA@mail.gmail.com>
+ <CAAXf6LXp_Y4A+sNygeLMwqv3CiOwbeEAFxcRa0vwY-8a=_REVQ@mail.gmail.com>
+Message-ID: <20170407103138.6b980c45@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +16,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 7 Apr 2017 07:58:12 +0200, Thomas De Schampheleire wrote:
+On Fri, 7 Apr 2017 10:16:31 +0200, Thomas De Schampheleire wrote:
 
-> Wouldn't it be clear to have an else here that explicitly sets core=cobalt
-> ? Then we don't rely on the default of xenomai.
+> Btw, in the x86_64 case, the problem was detected very early by
+> check-bin-arch, but in the mips case apparently not. I have not been able
+> to look into the code and won't be able to the coming days, but am I right
+> that this is the type of thing that check-bin-arch should find?
 
-Could you fix your e-mail client to properly quote the text you are
-replying to? Right now, your e-mail looks exactly like the original
-mail from Pawel, just with your answer at the bottom. Hard to see what
-comes from the original e-mail, what comes from you.
+It depends if the ELF machine type was different or not between the two
+sysroots. If they are different, then yes, it should have been detected.
 
-It was the same when you replied to me about the external toolchain
-patches.
-
-Thanks!
+(Again, please fix your e-mail client.)
 
 Thomas
 -- 
