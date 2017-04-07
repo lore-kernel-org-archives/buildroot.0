@@ -1,45 +1,39 @@
 From: Michael Trimarchi <michael@amarulasolutions.com>
-Date: Fri,  7 Apr 2017 12:03:22 +0200
-Subject: [Buildroot] [PATCH 1/2] uboot: qstrip
-	BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-Message-ID: <20170407100323.6871-1-michael@amarulasolutions.com>
+Date: Fri,  7 Apr 2017 12:03:23 +0200
+Subject: [Buildroot] [PATCH 2/2] beaglebone: increase size of ext4 more then
+	60MB
+In-Reply-To: <20170407100323.6871-1-michael@amarulasolutions.com>
+References: <20170407100323.6871-1-michael@amarulasolutions.com>
+Message-ID: <20170407100323.6871-2-michael@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to avoid failing of copy of custom dts using
-cp -f <> command. Just strip in the beginning as done
-for other configuration variable
+This is due to the fact that we removed auto-calculation of the ext4
+filesystem size in
+https://git.buildroot.org/buildroot/commit/?id=c6bca8cef0310bc649240b451989457ce94a8358,
+and we default to 60 MB for the filesystem size, which is not enough
+for this demo
 
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
 ---
- boot/uboot/uboot.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ configs/beaglebone_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 1d464d967..f0f39f3bd 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -6,6 +6,7 @@
- 
- UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
- UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
-+UBOOT_CUSTOM_DTS_PATH=$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
- 
- UBOOT_LICENSE = GPL-2.0+
- UBOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
-@@ -195,8 +196,8 @@ endef
- endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 
- define UBOOT_BUILD_CMDS
--	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
--		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
-+	$(if $(UBOOT_CUSTOM_DTS_PATH),
-+		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
- 	$(TARGET_CONFIGURE_OPTS) 	\
- 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 78dc10973..cdf8b96c1 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -26,6 +26,7 @@ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=126976
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -- 
 2.11.0
