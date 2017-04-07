@@ -1,77 +1,32 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 7 Apr 2017 12:17:26 +0200
-Subject: [Buildroot] [PATCH] pkg-python: ignore user site-packages
-	directory
-In-Reply-To: <20170406184608.22111-1-yegorslists@googlemail.com>
-References: <20170406184608.22111-1-yegorslists@googlemail.com>
-Message-ID: <CAGm1_kvcgAXsGvWDq1X=op7DZkhALfJvujH3j=XWYSG1UHTnxw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Apr 2017 12:26:12 +0200
+Subject: [Buildroot] [Patch v4 1/3] rust-bootstrap: new package
+In-Reply-To: <1491556921.1058.3.camel@embedded.rocks>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+ <20170402194651.28684-2-eric.le.bihan.dev@free.fr>
+ <1491548614.26127.3.camel@embedded.rocks>
+ <20170407102613.7a8c96b3@free-electrons.com>
+ <1491555244.1058.1.camel@embedded.rocks>
+ <20170407110356.108f4c78@free-electrons.com>
+ <1491556921.1058.3.camel@embedded.rocks>
+Message-ID: <20170407122612.6223824f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 6, 2017 at 8:46 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> According to PEP 370 Python will also search for the packages in the
-> user site-packages directory. This can affect build reproducibility.
->
-> The solution is to use PYTHONNOUSERSITE=1 for all Python packages,
-> i.e. both host and target variants.
+Hello,
 
-I've built a rather basic BR configuration with Python 2.7 and
-experienced no problems.
+On Fri, 07 Apr 2017 11:22:01 +0200, J?rg Krause wrote:
 
-@Anton: could you test the patch and let us know, whether it fixes your issue?
+> As I am running x64 it is fine for me, too. Just wondered why to limit
+> the hosts archs if there are binaries available.
 
-Yegor
+I guess simply because Eric could only test those host architectures.
 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/pkg-python.mk | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> index fb124e1dd..2418f5dfa 100644
-> --- a/package/pkg-python.mk
-> +++ b/package/pkg-python.mk
-> @@ -32,6 +32,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
->         LDFLAGS="$(TARGET_LDFLAGS)" \
->         LDSHARED="$(TARGET_CROSS)gcc -shared" \
->         PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
-> +       PYTHONNOUSERSITE=1 \
->         _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
->         _python_sysroot=$(STAGING_DIR) \
->         _python_prefix=/usr \
-> @@ -48,7 +49,8 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
->
->  # Host distutils-based packages
->  HOST_PKG_PYTHON_DISTUTILS_ENV = \
-> -       PATH=$(BR_PATH)
-> +       PATH=$(BR_PATH) \
-> +       PYTHONNOUSERSITE=1
->
->  HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
->         --prefix=$(HOST_DIR)/usr
-> @@ -58,6 +60,7 @@ PKG_PYTHON_SETUPTOOLS_ENV = \
->         _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
->         PATH=$(BR_PATH) \
->         PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
-> +       PYTHONNOUSERSITE=1 \
->         _python_sysroot=$(STAGING_DIR) \
->         _python_prefix=/usr \
->         _python_exec_prefix=/usr
-> @@ -76,7 +79,8 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
->
->  # Host setuptools-based packages
->  HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
-> -       PATH=$(BR_PATH)
-> +       PATH=$(BR_PATH) \
-> +       PYTHONNOUSERSITE=1
->
->  HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
->         --prefix=$(HOST_DIR)/usr
-> --
-> 2.11.0
->
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
