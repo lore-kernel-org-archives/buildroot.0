@@ -1,145 +1,132 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Apr 2017 19:23:01 +0200
-Subject: [Buildroot] [PATCHv2] libbson: new package
-In-Reply-To: <1491567498-24437-1-git-send-email-semenak94@mail.ru>
-References: <libbson: new package>
- <1491567498-24437-1-git-send-email-semenak94@mail.ru>
-Message-ID: <1783c11b-00c2-8fe3-7c2b-ec6f23149771@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Apr 2017 19:44:21 +0200
+Subject: [Buildroot] [git commit] jemalloc: bump version to 4.5.0
+Message-ID: <20170407174449.5D8AF81F4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I'm sorry, license is still not OK... And I looked at it in more details and
-other things are not OK either.
+commit: https://git.buildroot.net/buildroot/commit/?id=2e06eaa8db5e12cc5f8362da4aef8309ea6e682f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 07-04-17 14:18, Semyon Kolganov wrote:
-> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
-> 
-> Changes between v1 and v2:
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[Thomas: use release tarball, which avoids the need for autoreconf.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jemalloc/0001-Disable-documentation.patch  | 29 +++++++++++++++++++++
+ ...001-Fix-LG_QUANTUM-definition-for-sparc64.patch | 30 ----------------------
+ package/jemalloc/Config.in                         |  2 +-
+ package/jemalloc/jemalloc.hash                     |  2 +-
+ package/jemalloc/jemalloc.mk                       |  4 +--
+ 5 files changed, 33 insertions(+), 34 deletions(-)
 
- You should put a --- line before this changelog. That way, the changelog itself
-will not be stored once the patch is accepted ('git am' removes the --- line and
-everything below it from the commit message).
-
->  - changed license to right one
->  - formatting fix
-> ---
->  package/Config.in            |  1 +
->  package/libbson/Config.in    |  5 +++++
->  package/libbson/libbson.hash |  2 ++
->  package/libbson/libbson.mk   | 16 ++++++++++++++++
->  4 files changed, 24 insertions(+)
->  create mode 100644 package/libbson/Config.in
->  create mode 100644 package/libbson/libbson.hash
->  create mode 100644 package/libbson/libbson.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 71bd44a..f312e42 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1434,6 +1434,7 @@ menu "Text and terminal handling"
-
- Since BSON is Binary JSON, it fits better in the JSON/XML menu I think.
-
- Also, could you base your patch on the latest master?
-
->  	source "package/augeas/Config.in"
->  	source "package/enchant/Config.in"
->  	source "package/icu/Config.in"
-> +	source "package/libbson/Config.in"
->  	source "package/libcli/Config.in"
->  	source "package/libedit/Config.in"
->  	source "package/libenca/Config.in"
-> diff --git a/package/libbson/Config.in b/package/libbson/Config.in
-> new file mode 100644
-> index 0000000..5e361ea
-> --- /dev/null
-> +++ b/package/libbson/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_LIBBSON
-> +	bool "libbson"
-
- It looks like libbson uses pthreads (it includes pthreads.h), so you should add
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-
- It looks like it insists on building both a static and a shared library instead
-of relying on the CMake configuration option, and it gives the static library a
-different name so it will probably not work in practice. Probably the easiest is
-to just add
-	depends on !BR2_STATIC_LIBS # CMakeLists forces dynamic library
-
- Alternatively, the package also offers automake as a build system. I'm not sure
-whether they want to keep this up long term, but it seems to be regularly
-updated still. The automake system doesn't seem to have this messy library
-problem. I haven't tried it, though.
-
- To detect these problems early, use the script support/scripts/test-pkg.
-
-> +	help
-> +	  libbson is a library providing useful routines related to 
-> +	  building, parsing, and iterating BSON documents.
-> diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
-> new file mode 100644
-> index 0000000..a0abdb6
-> --- /dev/null
-> +++ b/package/libbson/libbson.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256	d9a1b2229a4aac2edb1564b909f0770a972af9bf94994acce2b21b2905913aed libbson-1.6.2.tar.gz
-> diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
-> new file mode 100644
-> index 0000000..ce26cdc
-> --- /dev/null
-> +++ b/package/libbson/libbson.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# libbson
-> +#
-> +################################################################################
-> +
-> +LIBBSON_VERSION = 1.6.2
-> +LIBBSON_SITE = $(call github,mongodb,libbson,$(LIBBSON_VERSION))
-
- There is also an uploaded tarball at
-https://github.com/mongodb/libbson/releases/download/1.6.2/libbson-1.6.2.tar.gz
-
- We generally prefer the uploaded tarball over the autogenerated one. This
-tarball has the configure script generated already, so if you convert to an
-autotools package and use this tarball, you don't need to set AUTORECONF = YES.
-
-> +LIBBSON_LICENSE = Apache-2.0
-> +LIBBSON_LICENSE_FILES = COPYING
-
- As I said, jsonl is MIT licensed. And it turns out that there's a b64_ntop.h
-which is ISC licensed, and bson-md5 which is Zlib licensed. So:
-
-LIBBSON_LICENSE = Apache-2.0, MIT (jsonl), ISC (b64), Zlib (md5)
-LIBBSON_LICENSE_FILES = COPYING THIRD_PARTY_NOTICES
-
-> +LIBBSON_INSTALL_STAGING = YES
-> +
-> +LIBBSON_CONF_OPTS = \
-> +	-DENABLE_TESTS=OFF
-
- For autoconf, you have --disable-tests and you'll also have to pass
---disable-examples. You may also need --disable-man-pages and
---disable-html-docs. There are also --en/disable-debug and
---en/disable-optimizations that may need to be set.
-
- Regards,
- Arnout
-
-> +
-> +$(eval $(cmake-package))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/jemalloc/0001-Disable-documentation.patch b/package/jemalloc/0001-Disable-documentation.patch
+new file mode 100644
+index 0000000..a5f252c
+--- /dev/null
++++ b/package/jemalloc/0001-Disable-documentation.patch
+@@ -0,0 +1,29 @@
++From b9113f8dc939dab775dbc64bae03b927f0679467 Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Sun, 2 Apr 2017 19:26:04 +0200
++Subject: [PATCH] Disable documentation
++
++As there is no option to disable documentation, update Makefile.in to
++skip it.
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index e49a871..74a7541 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -383,7 +383,7 @@ done
++ 
++ install_doc: install_doc_html install_doc_man
++ 
++-install: install_bin install_include install_lib install_doc
+++install: install_bin install_include install_lib
++ 
++ tests_unit: $(TESTS_UNIT:$(srcroot)%.c=$(objroot)%$(EXE))
++ tests_integration: $(TESTS_INTEGRATION:$(srcroot)%.c=$(objroot)%$(EXE))
++-- 
++2.9.3
++
+diff --git a/package/jemalloc/0001-Fix-LG_QUANTUM-definition-for-sparc64.patch b/package/jemalloc/0001-Fix-LG_QUANTUM-definition-for-sparc64.patch
+deleted file mode 100644
+index ef5b857..0000000
+--- a/package/jemalloc/0001-Fix-LG_QUANTUM-definition-for-sparc64.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From b3211bd6363ee6884c8db64008dc325a9c711bfb Mon Sep 17 00:00:00 2001
+-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Thu, 14 Jul 2016 22:44:01 +0200
+-Subject: [PATCH] Fix LG_QUANTUM definition for sparc64
+-
+-GCC 4.9.3 cross-compiled for sparc64 defines __sparc_v9__, not
+-__sparc64__ nor __sparcv9. This prevents LG_QUANTUM from being defined
+-properly. Adding this new value to the check solves the issue.
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- include/jemalloc/internal/jemalloc_internal.h.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/jemalloc/internal/jemalloc_internal.h.in b/include/jemalloc/internal/jemalloc_internal.h.in
+-index 51bf897..ece15b2 100644
+---- a/include/jemalloc/internal/jemalloc_internal.h.in
+-+++ b/include/jemalloc/internal/jemalloc_internal.h.in
+-@@ -234,7 +234,7 @@ typedef unsigned szind_t;
+- #  ifdef __alpha__
+- #    define LG_QUANTUM		4
+- #  endif
+--#  if (defined(__sparc64__) || defined(__sparcv9))
+-+#  if (defined(__sparc64__) || defined(__sparcv9) || defined(__sparc_v9__))
+- #    define LG_QUANTUM		4
+- #  endif
+- #  if (defined(__amd64__) || defined(__x86_64__) || defined(_M_X64))
+--- 
+-2.4.11
+-
+diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
+index b1b92bb..8586140 100644
+--- a/package/jemalloc/Config.in
++++ b/package/jemalloc/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_JEMALLOC
+ 	  This library providing a malloc(3) implementation that emphasizes
+ 	  fragmentation avoidance and scalable concurrency support.
+ 
+-	  http://www.canonware.com/jemalloc/
++	  http://jemalloc.net/
+ 
+ comment "jemalloc needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
+diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
+index b6c860b..65dbecc 100644
+--- a/package/jemalloc/jemalloc.hash
++++ b/package/jemalloc/jemalloc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 5630650d5c1caab95d2f0898de4fe5ab8519dc680b04963b38bb425ef6a42d57 jemalloc-4.2.1.tar.bz2
++sha256 9409d85664b4f135b77518b0b118c549009dc10f6cba14557d170476611f6780  jemalloc-4.5.0.tar.bz2
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index 975d319..17a3c9a 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-JEMALLOC_VERSION = 4.2.1
++JEMALLOC_VERSION = 4.5.0
+ JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
+-JEMALLOC_SITE = http://www.canonware.com/download/jemalloc
++JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLOC_VERSION)
+ JEMALLOC_LICENSE = BSD-2-Clause
+ JEMALLOC_LICENSE_FILES = COPYING
+ JEMALLOC_INSTALL_STAGING = YES
