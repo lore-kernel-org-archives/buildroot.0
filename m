@@ -1,93 +1,43 @@
-From: Michael Trimarchi <michael@amarulasolutions.com>
-Date: Fri, 7 Apr 2017 10:09:11 +0200
-Subject: [Buildroot] Qt5 build failure (beaglebone_qt5_defconfig)
-In-Reply-To: <20170407100654.32f1da84@free-electrons.com>
-References: <87f293c7-8aef-14e9-23e4-195a16b564e3@mind.be>
- <trinity-0603182d-d77d-4e0a-bdd1-589503badbe3-1491479231018@3capp-gmx-bs68>
- <CAOf5uwkL9FX3Fq2Dou1jnixat2CWxtWSbXG+Q=RQ=y3pSyjRzA@mail.gmail.com>
- <20170406183218.66cab07e@free-electrons.com>
- <20170406185739.3caf46f6@free-electrons.com>
- <20170407075444.GA12962@panicking>
- <20170407100654.32f1da84@free-electrons.com>
-Message-ID: <20170407080909.GB12962@panicking>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Apr 2017 10:16:18 +0200
+Subject: [Buildroot] [PATCH v4 1/1] syslinux: build with the target
+ toolchain
+In-Reply-To: <20170407100630.1861b8cc@armant.office.greenbone.net>
+References: <1491398930-6130-1-git-send-email-benoit.allard@greenbone.net>
+ <1491473086-16647-1-git-send-email-benoit.allard@greenbone.net>
+ <20170406171323.13d11cc6@free-electrons.com>
+ <20170407100630.1861b8cc@armant.office.greenbone.net>
+Message-ID: <20170407101618.4b32f70a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hello,
 
-On Fri, Apr 07, 2017 at 10:06:54AM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 7 Apr 2017 09:54:46 +0200, Michael Trimarchi wrote:
-> 
-> > diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
-> > index cfc1039ec..ba60297dd 100644
-> > --- a/board/beaglebone/genimage.cfg
-> > +++ b/board/beaglebone/genimage.cfg
-> > @@ -9,7 +9,6 @@ image boot.vfat {
-> >  			"am335x-evmsk.dtb",
-> >  			"am335x-bone.dtb",
-> >  			"am335x-boneblack.dtb",
-> > -			"am335x-bonegreen.dtb",
-> 
-> No, we want to keep this one. Instead, we want to upgrade the kernel
-> version used in beaglebone_qt5_defconfig.
-> 
-> Can you try replacing:
-> 
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52c4aa7cdb93d61f8008f380135beaf7b8fa6593"
-> 
-> by:
-> 
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="adde2ca9f86797071f6e7b2b9e779fa5e4a8f3cd"
->
+On Fri, 7 Apr 2017 10:06:30 +0200, Beno?t Allard wrote:
 
-Yes ok
- 
-> in beaglebone_qt5_defconfig.
+> > See the /lib/ld-musl-x86_64 interpreter? This means it has been built
+> > against the musl C library, and therefore with the target toolchain.
+> > 
+> > What is this program useful for?  
 > 
-> I'm adding Lothar in Cc as well, since he did the
-> beaglebone_qt5_defconfig, and he will know if the SGX stuff works fine
-> with the 4.4 TI kernel.
-> 
-> 
-> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > index 1d464d967..edfc27fa7 100644
-> > --- a/boot/uboot/uboot.mk
-> > +++ b/boot/uboot/uboot.mk
-> > @@ -195,8 +195,9 @@ endef
-> >  endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
-> >  
-> >  define UBOOT_BUILD_CMDS
-> > -	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
-> > -		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
-> > +	UBOOT_CUSTOM_DTS_PATH=$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
-> > +	$(if $(UBOOT_CUSTOM_DTS_PATH),
-> > +		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
-> >  	)
+> As I understand it, this is an "installer" you should run on the target
+> machine in order to install the syslinux bootloader. There should be (?)
+> another one "extlinux" next to it that is suitable for installing the
+> bootloader on an ext2 (4?) filesystem (that is the binary that has
+> dependency on libuuid).
 
-My error was cp -f with just one parameter. Test pass and cp -f fail
+If this program is not useful on the host (and therefore it is expected
+to have it built with the target toolchain), then we should not install
+it in HOST_DIR. On my side, I am fine with a post-install hook that
+simply deletes it, provided it comes with a comment that explains why.
 
-Michael
+Thanks!
 
-> 
-> Why is this needed?
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
+Thomas
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
