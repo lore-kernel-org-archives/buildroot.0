@@ -1,46 +1,145 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 7 Apr 2017 17:27:42 +0100
-Subject: [Buildroot] [PATCH 2/2] python-pillow: bump version to 4.1.0
-In-Reply-To: <20170407162742.52416-1-Vincent.Riera@imgtec.com>
-References: <20170407162742.52416-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170407162742.52416-2-Vincent.Riera@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 7 Apr 2017 19:23:01 +0200
+Subject: [Buildroot] [PATCHv2] libbson: new package
+In-Reply-To: <1491567498-24437-1-git-send-email-semenak94@mail.ru>
+References: <libbson: new package>
+ <1491567498-24437-1-git-send-email-semenak94@mail.ru>
+Message-ID: <1783c11b-00c2-8fe3-7c2b-ec6f23149771@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ I'm sorry, license is still not OK... And I looked at it in more details and
+other things are not OK either.
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 182e82f..322e0a9 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
--md5	d5af224b0fa2c66dacc9814785fef9e7  Pillow-4.0.0.tar.gz
--sha256	ee26d2d7e7e300f76ba7b796014c04011394d0c4a5ed9a288264a3e443abca50  Pillow-4.0.0.tar.gz
-+md5 d040e1155b4d9d8b011aab67ee0ea86b  Pillow-4.1.0.tar.gz
-+sha256 a0fd487fed4a35717401b7566e51a1520b34e7c0f7f2a315a6509f82bc86299f  Pillow-4.1.0.tar.gz
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index faa0e16..e1167c8 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 4.0.0
-+PYTHON_PILLOW_VERSION = 4.1.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://pypi.python.org/packages/8d/80/eca7a2d1a3c2dafb960f32f844d570de988e609f5fd17de92e1cf6a01b0a
-+PYTHON_PILLOW_SITE = https://pypi.python.org/packages/80/38/5cb561c68155834c596018c47caa44da88ed34b09579b921c0e493fb06c7
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+On 07-04-17 14:18, Semyon Kolganov wrote:
+> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+> 
+> Changes between v1 and v2:
+
+ You should put a --- line before this changelog. That way, the changelog itself
+will not be stored once the patch is accepted ('git am' removes the --- line and
+everything below it from the commit message).
+
+>  - changed license to right one
+>  - formatting fix
+> ---
+>  package/Config.in            |  1 +
+>  package/libbson/Config.in    |  5 +++++
+>  package/libbson/libbson.hash |  2 ++
+>  package/libbson/libbson.mk   | 16 ++++++++++++++++
+>  4 files changed, 24 insertions(+)
+>  create mode 100644 package/libbson/Config.in
+>  create mode 100644 package/libbson/libbson.hash
+>  create mode 100644 package/libbson/libbson.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 71bd44a..f312e42 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1434,6 +1434,7 @@ menu "Text and terminal handling"
+
+ Since BSON is Binary JSON, it fits better in the JSON/XML menu I think.
+
+ Also, could you base your patch on the latest master?
+
+>  	source "package/augeas/Config.in"
+>  	source "package/enchant/Config.in"
+>  	source "package/icu/Config.in"
+> +	source "package/libbson/Config.in"
+>  	source "package/libcli/Config.in"
+>  	source "package/libedit/Config.in"
+>  	source "package/libenca/Config.in"
+> diff --git a/package/libbson/Config.in b/package/libbson/Config.in
+> new file mode 100644
+> index 0000000..5e361ea
+> --- /dev/null
+> +++ b/package/libbson/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_LIBBSON
+> +	bool "libbson"
+
+ It looks like libbson uses pthreads (it includes pthreads.h), so you should add
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+ It looks like it insists on building both a static and a shared library instead
+of relying on the CMake configuration option, and it gives the static library a
+different name so it will probably not work in practice. Probably the easiest is
+to just add
+	depends on !BR2_STATIC_LIBS # CMakeLists forces dynamic library
+
+ Alternatively, the package also offers automake as a build system. I'm not sure
+whether they want to keep this up long term, but it seems to be regularly
+updated still. The automake system doesn't seem to have this messy library
+problem. I haven't tried it, though.
+
+ To detect these problems early, use the script support/scripts/test-pkg.
+
+> +	help
+> +	  libbson is a library providing useful routines related to 
+> +	  building, parsing, and iterating BSON documents.
+> diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
+> new file mode 100644
+> index 0000000..a0abdb6
+> --- /dev/null
+> +++ b/package/libbson/libbson.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256	d9a1b2229a4aac2edb1564b909f0770a972af9bf94994acce2b21b2905913aed libbson-1.6.2.tar.gz
+> diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
+> new file mode 100644
+> index 0000000..ce26cdc
+> --- /dev/null
+> +++ b/package/libbson/libbson.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# libbson
+> +#
+> +################################################################################
+> +
+> +LIBBSON_VERSION = 1.6.2
+> +LIBBSON_SITE = $(call github,mongodb,libbson,$(LIBBSON_VERSION))
+
+ There is also an uploaded tarball at
+https://github.com/mongodb/libbson/releases/download/1.6.2/libbson-1.6.2.tar.gz
+
+ We generally prefer the uploaded tarball over the autogenerated one. This
+tarball has the configure script generated already, so if you convert to an
+autotools package and use this tarball, you don't need to set AUTORECONF = YES.
+
+> +LIBBSON_LICENSE = Apache-2.0
+> +LIBBSON_LICENSE_FILES = COPYING
+
+ As I said, jsonl is MIT licensed. And it turns out that there's a b64_ntop.h
+which is ISC licensed, and bson-md5 which is Zlib licensed. So:
+
+LIBBSON_LICENSE = Apache-2.0, MIT (jsonl), ISC (b64), Zlib (md5)
+LIBBSON_LICENSE_FILES = COPYING THIRD_PARTY_NOTICES
+
+> +LIBBSON_INSTALL_STAGING = YES
+> +
+> +LIBBSON_CONF_OPTS = \
+> +	-DENABLE_TESTS=OFF
+
+ For autoconf, you have --disable-tests and you'll also have to pass
+--disable-examples. You may also need --disable-man-pages and
+--disable-html-docs. There are also --en/disable-debug and
+--en/disable-optimizations that may need to be set.
+
+ Regards,
+ Arnout
+
+> +
+> +$(eval $(cmake-package))
+> 
+
 -- 
-2.10.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
