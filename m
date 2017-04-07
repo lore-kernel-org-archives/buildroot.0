@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Apr 2017 12:30:46 +0200
+Date: Fri, 7 Apr 2017 12:31:50 +0200
 Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
-In-Reply-To: <20170404185928.GA3828@scaer>
+In-Reply-To: <20170402130338.12542-1-yann.morin.1998@free.fr>
 References: <20170402130338.12542-1-yann.morin.1998@free.fr>
- <39bc6b12-1dfd-8ada-f1bc-8597c6872a1c@mind.be> <20170404185928.GA3828@scaer>
-Message-ID: <fd9c07fd-2e86-ed73-2fd1-bfcf27522664@mind.be>
+Message-ID: <60a71a19-b86a-e9cd-5e0d-ab51388a18de@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,123 +12,71 @@ To: buildroot@busybox.net
 
 
 
-On 04-04-17 20:59, Yann E. MORIN wrote:
-> Arnout, All,
+On 02-04-17 15:03, Yann E. MORIN wrote:
+> When debugging hidden dependencies, the build order is very important.
+> Most notably, it is interesting to identify potential culprits.
 > 
-> On 2017-04-03 12:10 +0200, Arnout Vandecappelle spake thusly:
->> On 02-04-17 15:03, Yann E. MORIN wrote:
-[snip]
->>> +$(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
->>> +	$$(info $(1))
->>> +
->>
->>  I don't like this...
->>
->>  IMO we already have way too many of these informational targets messing up
->> pkg-generic.mk. This is bad for two reasons:
->>
->> - it makes the code more complicated, more difficult to understand what's going
->> on int pkg-generic.mk;
->>
->> - it's bad for performance. This adds 2000 rules to the make rules database,
->> which makes the dependency resolution slower (even if this rule is not used).
->> Just this one extra rule doesn't make much of a difference, but it's all these
->> extra rules that we've added over the years combined that make it slower. That
->> said, there is probably some refactoring that could be done to make it less bad,
->> so it's not too big of a factor.
+> Add a new top-level rule, show-biuld-order, that dumps all the packages
+                                 build
+> in the order they would get built.
 > 
-> Timing the run before/after this change does not yield a noticeable
-> difference
-
- As I wrote: "Just this one extra rule doesn't make much of a difference".
-However, we have about a dozen rules like this, and added together they *do*
-make a noticable difference (I did a much less thorough benchmark; after
-removing all these one-shot rules that are not used in a normal build, a 'make
--qp >/dev/null' became about 15% faster).
-
-
-
-> , tested with:
+> Note that there are a few differences with show-targets:
 > 
->     $ for((i=0;i<50;i++)); do
->         /usr/bin/time make CMD 2>&1 >/dev/null |head -n 1
-
- What I'm interested in is the overhead of running make. We unfortunately don't
-have a good target for that. 'make -q' after finishing a build is a nice
-approximation because it doesn't actually run the target-finalize step (as
-opposed to just 'make'). I usually use 'make -qp' because that's what's used by
-bash-completion and that is one of my big annoyances: accidentally typing
-TAB-TAB freezes the shell for almost 10 seconds.
-
- 'make help' isn't a bad approximation either. It doesn't evaluate the .stamp_*
-files so it will be a bit faster than the real overhead.
-
-
- Now, I repeat: adding this single thing is not a big deal. I just say we have
-to be careful about adding things all the time that slow things down. We are
-very quickly approaching the speed of bitbake, and that is one of the main
-reasons I spit out OE the first time I used it...
-
->     done
+>   - more packages are reported, becasue show-targets does not report
+                                  because
+>     host packages that have no prompt;
 > 
-> with CMD = help, before and after the patch, and then with
-> CMD = show-build-order (obviously, after the patch), and using the
-> 'user' part of the timings:
+>   - the output is line-based, because we're using $(info $(1)); getting
+>     a single output line like show-targets would require we use an
+>     actual command, like printf '%s ' $(1); but that takes a lot of
+>     time, while $(info $(1)) is almost instantaneous (the time to parse
+>     the Makefiles);
 > 
+>   - rootfs targets are not reported.
 > 
->                     Help, before    Help, after     Build order
-> Mean                2.9612          2.9934          2.9716
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- So, 1% slower. That's actually worse than I expected, but consistent with the
-15% I measured after removing 15 similar targets.
-
-[snip]
->>  But I wonder why you need this feature anyway. If you just build, you see the
->> build order as well, right?
-> 
-> Oh yeah, and I pay the price of a three-hour build, jsut to see the
-> build order...
-> 
->> And if you don't want to see the actual build, you
->> can do 'make -nk'.
-> 
-> I hope you were kidding? For a config with 227 packages, this yields:
-> 
->     $ make -nk 2>&1 |wc -l
->     8459
-> 
-> And I'm not doing the statistical analysis I did above, but a few runs
-> give a runtime of ~5s. So it is a 66% overhead just for this, while the
-> new rules add just about 1% overhead (30ms for 3s).
-> 
-> Plus, it requires non-trivial post-processing... :-(
-
-TERM=dumb make -nk 2>/dev/null | grep 'Configuring"' | cut -d ' ' -f 3-4
-
- True, it's not trivial. But it's shorter than your patch :-) And indeed it's 4
-times slower than 'make build-order'. But that's just 12 seconds for an
-allyesconfig. Is that really too much?
-
- However, it turns out not to work :-( Any rule which contains $(MAKE) is still
-going to be executed, and that will inevitably lead to errors, so any package
-that depends on a package that errors out will also not be executed.
-
- So, I can think of no viable alternative, so there is no way to stop this patch :-)
-
-
->> OK, it looks a lot nicer with this show-build-order target,
->> but I wouldn't say it's very valuable.
-> 
-> Well, I've been tracking build-order issues for a while last WE, and
-> believe me, I was very happy to be able to see the build order before
-> I attempted a build, yes.
-
- That's my biggest problem with this feature: I have no idea how to use it.
-Could you add some explanation somewhere?
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Makefile               | 2 ++
+>  package/pkg-generic.mk | 3 +++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 941bf78..919d589 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -757,6 +757,8 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+>  show-targets:
+>  	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+>  
+> +show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
+> +
+>  graph-build: $(O)/build/build-time.log
+>  	@install -d $(GRAPHS_DIR)
+>  	$(foreach o,name build duration,./support/scripts/graph-build-time \
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 31dbc54..3b26e6b 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -737,6 +737,9 @@ $(1)-show-depends:
+>  $(1)-show-rdepends:
+>  			@echo $$($(2)_RDEPENDENCIES)
+>  
+> +$(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
+> +	$$(info $(1))
+> +
+>  $(1)-graph-depends: graph-depends-requirements
+>  	$(call pkg-graph-depends,$(1),--direct)
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
