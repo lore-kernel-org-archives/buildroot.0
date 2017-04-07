@@ -1,82 +1,48 @@
-From: Semyon Kolganov <semenak94@mail.ru>
-Date: Fri,  7 Apr 2017 15:18:18 +0300
-Subject: [Buildroot] [PATCHv2] libbson: new package
-In-Reply-To: <libbson: new package>
-References: <libbson: new package>
-Message-ID: <1491567498-24437-1-git-send-email-semenak94@mail.ru>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri,  7 Apr 2017 14:33:37 +0200
+Subject: [Buildroot] [PATCH 1/1] automake: add patch fixing GNU bug #25299
+Message-ID: <1491568417-5355-1-git-send-email-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+A bug in automake makes it impossible to build in an output directory
+that contains an '@' character. But this is needed if you want to build
+with jenkins' pipeline plugin.
 
-Changes between v1 and v2:
- - changed license to right one
- - formatting fix
+This patch was proposed by Michael Brantley but is currently not applied
+in the upstream automake repository.
+
+Refer to: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25299
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/Config.in            |  1 +
- package/libbson/Config.in    |  5 +++++
- package/libbson/libbson.hash |  2 ++
- package/libbson/libbson.mk   | 16 ++++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/libbson/Config.in
- create mode 100644 package/libbson/libbson.hash
- create mode 100644 package/libbson/libbson.mk
+ ...character-in-installation-prefix-breaks-automake.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 71bd44a..f312e42 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1434,6 +1434,7 @@ menu "Text and terminal handling"
- 	source "package/augeas/Config.in"
- 	source "package/enchant/Config.in"
- 	source "package/icu/Config.in"
-+	source "package/libbson/Config.in"
- 	source "package/libcli/Config.in"
- 	source "package/libedit/Config.in"
- 	source "package/libenca/Config.in"
-diff --git a/package/libbson/Config.in b/package/libbson/Config.in
+diff --git a/package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch b/package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch
 new file mode 100644
-index 0000000..5e361ea
+index 0000000..3a5a571
 --- /dev/null
-+++ b/package/libbson/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_LIBBSON
-+	bool "libbson"
-+	help
-+	  libbson is a library providing useful routines related to 
-+	  building, parsing, and iterating BSON documents.
-diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
-new file mode 100644
-index 0000000..a0abdb6
---- /dev/null
-+++ b/package/libbson/libbson.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	d9a1b2229a4aac2edb1564b909f0770a972af9bf94994acce2b21b2905913aed libbson-1.6.2.tar.gz
-diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
-new file mode 100644
-index 0000000..ce26cdc
---- /dev/null
-+++ b/package/libbson/libbson.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libbson
-+#
-+################################################################################
++++ b/package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch
+@@ -0,0 +1,15 @@
++See bug report #25299 (https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25299)
 +
-+LIBBSON_VERSION = 1.6.2
-+LIBBSON_SITE = $(call github,mongodb,libbson,$(LIBBSON_VERSION))
-+LIBBSON_LICENSE = Apache-2.0
-+LIBBSON_LICENSE_FILES = COPYING
-+LIBBSON_INSTALL_STAGING = YES
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 +
-+LIBBSON_CONF_OPTS = \
-+	-DENABLE_TESTS=OFF
-+
-+$(eval $(cmake-package))
++--- a/bin/aclocal.in
+++++ b/bin/aclocal.in
++@@ -69,7 +69,7 @@
++ # ACLOCAL_PATH environment variable, and reset with the '--system-acdir'
++ # option.
++ my @user_includes = ();
++-my @automake_includes = ("@datadir@/aclocal-$APIVERSION");
+++my @automake_includes = ('@datadir@/aclocal-' . $APIVERSION);
++ my @system_includes = ('@datadir@/aclocal');
++ 
++ # Whether we should copy M4 file in $user_includes[0].
 -- 
-2.7.4
+2.1.4
