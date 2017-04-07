@@ -1,41 +1,26 @@
-From: Matthias Fritzsche <txt.file@txtfile.eu>
-Date: Sat,  8 Apr 2017 00:04:02 +0200
-Subject: [Buildroot] [PATCH] batman-adv: bump version to 2017.0.1
-Message-ID: <1491602642-8609-1-git-send-email-txt.file@txtfile.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Apr 2017 00:52:01 +0200
+Subject: [Buildroot] [PATCH 1/2] mosquitto: bump to version 1.4.11
+In-Reply-To: <1491334650-15708-1-git-send-email-fontaine.fabrice@gmail.com>
+ (Fabrice Fontaine's message of "Tue, 4 Apr 2017 21:37:29 +0200")
+References: <1491334650-15708-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <87shljrfu6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthias Fritzsche <txt.file@txtfile.eu>
----
- package/batman-adv/batman-adv.hash | 5 +++--
- package/batman-adv/batman-adv.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-index 6c0e5ca..0599b91 100644
---- a/package/batman-adv/batman-adv.hash
-+++ b/package/batman-adv/batman-adv.hash
-@@ -1,2 +1,3 @@
--# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2016.1.tar.gz.sha1
--sha1 c9ca52c913fbf81aca266695a77359ecdbcc8bd8 batman-adv-2016.1.tar.gz
-+# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2017.0.1.tar.gz.{md5,sha1}
-+md5  ce14f7f1bbc037691bbbc611e16f0360         batman-adv-2017.0.1.tar.gz
-+sha1 593cecc015b876caa5b21fbb4d0f6186742a1abb batman-adv-2017.0.1.tar.gz
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index ead2cca..5179918 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BATMAN_ADV_VERSION = 2016.1
-+BATMAN_ADV_VERSION = 2017.0.1
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
- BATMAN_ADV_LICENSE = GPL-2.0
- 
+ >  - This version requires a patch (sent upstream) to remove -lanl from
+ > all Linux builds as this library is only needed for adns support
+ >  - sha512 must be computed locally as eclipse.org does not give it for
+ > this version
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
