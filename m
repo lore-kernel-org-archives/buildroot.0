@@ -1,93 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  7 Apr 2017 08:28:45 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-04-06
-Message-ID: <20170407062845.03A9D20832@mail.free-electrons.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 07 Apr 2017 09:03:34 +0200
+Subject: [Buildroot] [Patch v4 1/3] rust-bootstrap: new package
+In-Reply-To: <20170402194651.28684-2-eric.le.bihan.dev@free.fr>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+ <20170402194651.28684-2-eric.le.bihan.dev@free.fr>
+Message-ID: <1491548614.26127.3.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 2017-04-02 at 21:46 +0200, Eric Le Bihan wrote:
+> This new package fetches a binary snapshot of the Rust compiler,
+> suitable for the host, in order to bootstrap the Rust compiler.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+> ?DEVELOPERS?????????????????????????????????|??1 +
+> ?package/rust-bootstrap/rust-bootstrap.hash |??5 ++++
+> ?package/rust-bootstrap/rust-bootstrap.mk???| 37
+> ++++++++++++++++++++++++++++++
+> ?3 files changed, 43 insertions(+)
+> ?create mode 100644 package/rust-bootstrap/rust-bootstrap.hash
+> ?create mode 100644 package/rust-bootstrap/rust-bootstrap.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c89468b..863d5aa 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -448,6 +448,7 @@ F:	package/execline/
+> ?F:	package/hicolor-icon-theme/
+> ?F:	package/jemalloc/
+> ?F:	package/ninja/
+> +F:	package/rust-bootstrap
+> ?F:	package/s6/
+> ?F:	package/s6-dns/
+> ?F:	package/s6-linux-init/
+> diff --git a/package/rust-bootstrap/rust-bootstrap.hash
+> b/package/rust-bootstrap/rust-bootstrap.hash
+> new file mode 100644
+> index 0000000..b418ea0
+> --- /dev/null
+> +++ b/package/rust-bootstrap/rust-bootstrap.hash
+> @@ -0,0 +1,5 @@
+> +# Locally calculated
+> +sha256
+> a833304f99071600c72ecd868c1c7bd5ce49d1102332637a8eb7adb942f349ab??rus
+> tc-1.15.1-i686-unknown-linux-gnu.tar.gz
+> +sha256
+> 33ff44672b731fc71145974ce84194a1a9bafe6da3a74fd1e7543f12467f8894??rus
+> tc-1.15.1-x86_64-unknown-linux-gnu.tar.gz
+> +sha256
+> eff452a54b208a83b35432f226cb7de046d27b5e43edfc31d71ff340af686db0??rus
+> t-std-1.15.1-i686-unknown-linux-gnu.tar.gz
+> +sha256
+> 69b251b478e284dfcaefc1153183f26f41d504ae213a81224f2101d8dbd52bb0??rus
+> t-std-1.15.1-x86_64-unknown-linux-gnu.tar.gz
+> diff --git a/package/rust-bootstrap/rust-bootstrap.mk b/package/rust-
+> bootstrap/rust-bootstrap.mk
+> new file mode 100644
+> index 0000000..1098423
+> --- /dev/null
+> +++ b/package/rust-bootstrap/rust-bootstrap.mk
+> @@ -0,0 +1,37 @@
+> +####################################################################
+> ############
+> +#
+> +# rust-bootstrap
+> +#
+> +####################################################################
+> ############
+> +
+> +RUST_BOOTSTRAP_VERSION = 1.15.1
+> +RUST_BOOTSTRAP_DATE = 2017-02-09
+> +RUST_BOOTSTRAP_TRIPLE = $(RUST_BOOTSTRAP_ARCH)-unknown-linux-gnu
+> +RUST_BOOTSTRAP_LABEL = $(RUST_BOOTSTRAP_VERSION)-
+> $(RUST_BOOTSTRAP_TRIPLE)
+> +
+> +ifeq ($(HOSTARCH),x86_64)
+> +RUST_BOOTSTRAP_ARCH = x86_64
+> +else ifeq ($(HOSTARCH),x86)
+> +RUST_BOOTSTRAP_ARCH = i686
+> +endif
 
-Build statistics for 2017-04-06
-================================
+Is there any necessity to limit the bootstrap compiler to those host
+archs only?
 
-      successes : 217
-       failures : 38 
-       timeouts : 0  
-          TOTAL : 255
+> +RUST_BOOTSTRAP_SITE = https://static.rust-
+> lang.org/dist/$(RUST_BOOTSTRAP_DATE)
 
-Classification of failures by reason
-====================================
+Why use a date and not https://static.rust-lang.org/dist solely. Since
+I can fetch https://static.rust-lang.org/dist/rust-1.15.1-x86_64-unknow
+n-linux-gnu.tar.gz.
 
-                 xenomai-3.0.3 | 6 
-           uboot-tools-2017.03 | 4 
-                poppler-0.53.0 | 3 
-             rabbitmq-c-v0.8.0 | 3 
-         alljoyn-tcl-16.04.00a | 2 
-                busybox-1.26.2 | 2 
-                  aespipe-2.4d | 1 
-                  arp-scan-1.9 | 1 
-                benejson-0.9.7 | 1 
-                 binutils-2.27 | 1 
-                libepoxy-1.4.1 | 1 
-                libmpeg2-0.5.1 | 1 
-                libtirpc-1.0.1 | 1 
-                 libv4l-1.12.2 | 1 
-                 libxml2-2.9.4 | 1 
-                 mplayer-1.3.0 | 1 
-                  ntp-4.2.8p10 | 1 
-                      qt-4.8.7 | 1 
-                    ruby-2.4.1 | 1 
-                  samba4-4.5.7 | 1 
-                    sdl2-2.0.5 | 1 
-      trace-cmd-trace-cmd-v2.6 | 1 
-uclibc-ng-test-c9b9876cefc1... | 1 
-             xlib_libXft-2.3.2 | 1 
+> +RUST_BOOTSTRAP_SOURCE = rustc-$(RUST_BOOTSTRAP_LABEL).tar.gz
+> +RUST_BOOTSTRAP_LICENSE = Apache-2.0 or MIT
+> +RUST_BOOTSTRAP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> +RUST_BOOTSTRAP_LIBSTD_SOURCE= rust-std-
+> $(RUST_BOOTSTRAP_LABEL).tar.gz
+> +RUST_BOOTSTRAP_LIBSTD_ROOT = rust-std-$(RUST_BOOTSTRAP_LABEL)/rust-
+> std-$(RUST_BOOTSTRAP_TRIPLE)
 
+Why not make a seperate package?
 
-Detail of failures
-===================
+> +RUST_BOOTSTRAP_EXTRA_DOWNLOADS =
+> $(RUST_BOOTSTRAP_SITE)/$(RUST_BOOTSTRAP_LIBSTD_SOURCE)
+> +
+> +define RUST_BOOTSTRAP_LIBSTD_EXTRACT
+> +	$(call suitable-extractor,$(RUST_BOOTSTRAP_LIBSTD_SOURCE)) \
+> +		$(DL_DIR)/$(RUST_BOOTSTRAP_LIBSTD_SOURCE) | \
+> +		$(TAR) --strip-components=2 -C $(@D)/rustc
+> $(TAR_OPTIONS) - \
+> +			$(RUST_BOOTSTRAP_LIBSTD_ROOT)/lib
+> +endef
+> +
+> +HOST_RUST_BOOTSTRAP_EXTRA_DOWNLOADS =
+> $(RUST_BOOTSTRAP_EXTRA_DOWNLOADS)
+> +HOST_RUST_BOOTSTRAP_POST_EXTRACT_HOOKS +=
+> RUST_BOOTSTRAP_LIBSTD_EXTRACT
+> +
+> +$(eval $(host-generic-package))
 
-    mips64el |                   aespipe-2.4d | NOK | http://autobuild.buildroot.net/results/38634c51ca0524881bf48d1b822a816f25390e30 |     
-    mips64el |          alljoyn-tcl-16.04.00a | NOK | http://autobuild.buildroot.net/results/8bffe54032aad9cc710a22411ef3bff4a2c93e55 |     
-    mips64el |          alljoyn-tcl-16.04.00a | NOK | http://autobuild.buildroot.net/results/432287777806273031e586d3bbd6f9fa9339026a |     
-         arm |                   arp-scan-1.9 | NOK | http://autobuild.buildroot.net/results/71fb70d1b155306712a603708552bf9714563a53 |     
-    mips64el |                 benejson-0.9.7 | NOK | http://autobuild.buildroot.net/results/06d28d2958768d7ed24acc0b313153cde166b41a |     
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/9ff288e8c5f782093bffc5beb6eefac6eb0c9fa3 | ORPH
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/3255517494875db526185dcf975efe9fb57a884f | ORPH
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/14d8ffdf207be32bfe9801d4bb930b5b51b8ad83 | ORPH
-    mips64el |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/8c2fb8b7f2aa903fdda02627c4b24ff394d1da05 |     
-       sparc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/1a27a3a6ac6a8f7047d6402683539883e8613514 | ORPH
-    mips64el |                 libtirpc-1.0.1 | NOK | http://autobuild.buildroot.net/results/e10bdb2a24c3cb7cee755d9a28b060945a9520fd |     
-        i686 |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/5eb4c490321aa61b7efc84c8a5f1aa0b70c6d5ef | ORPH
-         arm |                  libxml2-2.9.4 | NOK | http://autobuild.buildroot.net/results/c42a4e992be8495ac015915c6316a212b78c38fe | ORPH
-        i586 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/db9f4abd7e5768095cc8e053cca8a3379388ff20 |     
-     aarch64 |                   ntp-4.2.8p10 | NOK | http://autobuild.buildroot.net/results/af7a2a9eb501edf8d8efcb9fc5b771c7bd23ab8a | ORPH
-     powerpc |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/2ddba50a3aef16c2ab26a5f5f44cd1d4338d667f |     
-    mips64el |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/33f28042893ccd0219ef82a74fc29a781dc20b68 |     
-       nios2 |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/8bd9f1ac7227904d96416dd2c608f5eb32308a40 |     
-        or1k |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/59a7005d801e7505815d741b45c69766a58db9ea | ORPH
-         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/59d67354fcb6aab365ddcec45474e62012f6ebe4 |     
-         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/2c119dbec01671003cd2a0156668bece05bf1dde |     
-         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/71b6631a63eb6c056f4549e6e0fcba39a0f1cca4 |     
-        or1k |                     ruby-2.4.1 | NOK | http://autobuild.buildroot.net/results/b9692329c292ed2d9a1419678107fc36968abd94 | ORPH
-         arc |                   samba4-4.5.7 | NOK | http://autobuild.buildroot.net/results/f1f69557f359c7abac6d94678651c71c2faad04d |     
-         arm |                     sdl2-2.0.5 | NOK | http://autobuild.buildroot.net/results/31e4933f8551638018a2b00f3525f6f51d5dafd6 |     
-       sparc |       trace-cmd-trace-cmd-v2.6 | NOK | http://autobuild.buildroot.net/results/086763ab35998358248ce86b61a5142f23d5fc85 |     
-     powerpc |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/6d2ce8d13d52245347bcca0df3c2ec68b9bd970a | ORPH
-         arm |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/12d110d1e38dac764576b371e04caf4840b59fc5 | ORPH
-       nios2 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/9ff24f38bab1b28f2712b464c624f58061ec4e90 | ORPH
-         arm |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/7873366349b126082894a0fe87b7865e0844db65 | ORPH
-         arm | uclibc-ng-test-c9b9876cefc1... | NOK | http://autobuild.buildroot.net/results/8c943163f61680ac53f2ffa787058bf5be2f9ead |     
-     powerpc |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/797abe7fcef102329fc7848b87d258c0b5a4f238 |     
-         arm |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/8e59e0bbe51c9ada0bf2c4f2cc50968ef2120d72 |     
-         arm |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/fc65464ba3ae71e43bff44644063c5a6ade0538f |     
-         arm |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/b6220a963d0b0a5d77179509b1151d576f5551a0 |     
-         arm |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/fce9044a31a70f1fc8da10d5a91f8b3cb0e9d9b2 |     
-        bfin |                  xenomai-3.0.3 | NOK | http://autobuild.buildroot.net/results/19474bc1fd6b42fa0b2d102cfd2eb6043dd74ef1 |     
-      xtensa |              xlib_libXft-2.3.2 | NOK | http://autobuild.buildroot.net/results/656f1ababfcabca21c7655b6cfb6913d08001e7c |     
-
--- 
-http://autobuild.buildroot.net
+J?rg
