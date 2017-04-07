@@ -1,21 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 Apr 2017 22:16:15 +0200
-Subject: [Buildroot] [PATCH 1/2] ethtool: update homepage link
-In-Reply-To: <b8a0c47ad82f584df2871486c6754dda036456a5.1491536446.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 7 Apr 2017 06:40:45 +0300")
-References: <b8a0c47ad82f584df2871486c6754dda036456a5.1491536446.git.baruch@tkos.co.il>
-Message-ID: <87efx4rn1s.fsf@dell.be.48ers.dk>
+Date: Fri, 07 Apr 2017 22:17:01 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: update email address of Rahul
+	Bedarkar
+In-Reply-To: <1491592802-3172-1-git-send-email-rahulbedarkar89@gmail.com>
+ (Rahul Bedarkar's message of "Sat, 8 Apr 2017 00:50:02 +0530")
+References: <1491592802-3172-1-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <87a87srn0i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Rahul" == Rahul Bedarkar <rahulbedarkar89@gmail.com> writes:
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > I'm no longer with Imagination Technologies. Update email address to an
+ > active one.
 
-Committed both, thanks.
+ > Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
