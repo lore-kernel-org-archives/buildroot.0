@@ -1,88 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 16:15:36 +0200
-Subject: [Buildroot] [git commit] docs/manual: size of tab in package
-	description
-Message-ID: <20170408141752.960B47FBBB@busybox.osuosl.org>
+Date: Sat, 8 Apr 2017 16:21:14 +0200
+Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies
+ a package coding style
+In-Reply-To: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
+References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
+ <20170219221724.27298-1-ricardo.martincoski@gmail.com>
+Message-ID: <20170408162114.6e6c8899@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad35a3a43d62f1588d3cd3c1e51d8626d39f0b54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Explicitly state that one tab counts for 8 columns in package
-description, leaving 62 characters to the text itself.
-Update the text and the example in the two places where the Config.in
-format is described.
-Also mention a newline is expected between the help text itself and the
-upstream URL.
+On Sun, 19 Feb 2017 19:17:15 -0300, Ricardo Martincoski wrote:
 
-This blob can help developers to understand the expected formatting.
-Also, it can be referenced by reviewers.
+> Ricardo Martincoski (9):
+>   support/scripts/check-package: example
+>   support/scripts/check-package: new script
+>   check-package: check whitespace and empty lines
+>   check-package: check *.hash files
+>   check-package: check *.patch files
+>   check-package: check *.mk files
+>   docs/manual: size of tab in package description
+>   check-package: check Config.* files
+>   check-package: check *.mk for typo in variable
 
-http://patchwork.ozlabs.org/patch/611289/
-http://patchwork.ozlabs.org/patch/606866/
-http://patchwork.ozlabs.org/patch/459960/
+Since there was no feedback to your patch series since 1.5 months, I've
+applied all of it, except PATCH 1/9. I'm not sure we want to have the
+bad examples/test cases inside the Buildroot tree.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-directory.txt | 8 +++++---
- docs/manual/writing-rules.txt             | 6 ++++--
- 2 files changed, 9 insertions(+), 5 deletions(-)
+However, there are two things that bothered me a little bit:
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 5dba962..08f5d42 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -28,7 +28,8 @@ contain:
- config BR2_PACKAGE_LIBFOO
- 	bool "libfoo"
- 	help
--	  This is a comment that explains what libfoo is.
-+	  This is a comment that explains what libfoo is. The help text
-+	  should be wrapped.
- 
- 	  http://foosoftware.org/libfoo/
- ---------------------------
-@@ -36,8 +37,9 @@ config BR2_PACKAGE_LIBFOO
- The +bool+ line, +help+ line and other metadata information about the
- configuration option must be indented with one tab. The help text
- itself should be indented with one tab and two spaces, lines should
--not be longer than 72 columns, and it must mention the upstream URL
--of the project.
-+be wrapped to fit 72 columns, where tab counts for 8, so 62 characters
-+in the text itself. The help text must mention the upstream URL of the
-+project after an empty line.
- 
- As a convention specific to Buildroot, the ordering of the attributes
- is as follows:
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index ec1ddb1..e2ad41e 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -29,7 +29,8 @@ config BR2_PACKAGE_LIBFOO
- 	depends on BR2_PACKAGE_LIBBAZ
- 	select BR2_PACKAGE_LIBBAR
- 	help
--	  This is a comment that explains what libfoo is.
-+	  This is a comment that explains what libfoo is. The help text
-+	  should be wrapped.
- 
- 	  http://foosoftware.org/libfoo/
- ---------------------
-@@ -40,7 +41,8 @@ config BR2_PACKAGE_LIBFOO
- * The help text itself should be indented with one tab and two
-   spaces.
- 
--* The help text should be wrapped to fit 72 columns.
-+* The help text should be wrapped to fit 72 columns, where tab counts
-+  for 8, so 62 characters in the text itself.
- 
- The +Config.in+ files are the input for the configuration tool
- used in Buildroot, which is the regular _Kconfig_. For further
+ - The number of files added in support/scripts/. Should we have
+   support/scripts/check-package as a script, and the rest in a
+   subdirectory?
+
+ - Between every function/method/class, you put two empty lines. The
+   Buildroot coding style is generally to have only one empty line.
+
+I haven't reviewed the details of the Python script for this version, I
+briefly looked at it on the v1. There are possibly some improvements to
+be made, but they can be done as followup patches. The tool is already
+very useful as it is today, so I don't want to keep it longer out of
+the tree.
+
+Thanks a lot for this very useful contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
