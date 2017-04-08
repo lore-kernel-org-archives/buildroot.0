@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:21:25 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/linux-headers: bump bump
- 3.2.x and 4.{4, 9, 10}.x series
-In-Reply-To: <20170408113755.nxszwx4r56b2jlhw@latitude>
-References: <20170408090104.32757-1-bernd.kuhls@t-online.de>
- <20170408090104.32757-2-bernd.kuhls@t-online.de>
- <20170408113755.nxszwx4r56b2jlhw@latitude>
-Message-ID: <20170408152125.69460319@free-electrons.com>
+Date: Sat, 8 Apr 2017 15:22:00 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.10.9
+In-Reply-To: <1491656920-14465-1-git-send-email-festevam@gmail.com>
+References: <1491656920-14465-1-git-send-email-festevam@gmail.com>
+Message-ID: <20170408152200.690d6724@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 8 Apr 2017 13:37:55 +0200, Jonathan Neusch?fer wrote:
-> > [PATCH v2 2/2] package/linux-headers: bump bump 3.2.x and 4.{4, 9, 10}.x series  
-> 
-> "bump bump" looks like a copy-paste error.
+On Sat,  8 Apr 2017 10:08:39 -0300, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  linux/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for noticing, I fixed this when applying Bernd's patch.
+Thanks, but there was already similar patches sent by Bernd 4 hours
+earlier, and Bernd's patches also updated the 3.2.x series, so I
+applied the patches from Bernd.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
