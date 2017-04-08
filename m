@@ -1,10 +1,11 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 8 Apr 2017 20:03:50 +0200
-Subject: [Buildroot] [PATCH v2] arp-scan: new package
-In-Reply-To: <20170405183445.6cde0af8@free-electrons.com>
-References: <20170405101410.27980-1-arnout@mind.be>
- <20170405183445.6cde0af8@free-electrons.com>
-Message-ID: <20170408180349.GR5361@waldemar-brodkorb.de>
+Date: Sat, 8 Apr 2017 21:03:46 +0200
+Subject: [Buildroot] [PATCH v3] autofs: allow to use libtirpc instead of
+ internal C implementation
+In-Reply-To: <20170408160552.131d42a4@free-electrons.com>
+References: <20170323071058.GA29887@waldemar-brodkorb.de>
+ <20170408160552.131d42a4@free-electrons.com>
+Message-ID: <20170408190346.GS5361@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,38 +17,52 @@ Thomas Petazzoni wrote,
 
 > Hello,
 > 
-> On Wed, 5 Apr 2017 12:14:10 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
-> > On the br-arm-cortex-m4-full toolchain, the build fails with a
-> > segmentation fault in elf2flt, so add an exception for ARM FLAT
-> > toolchains. Other FLAT toolchains (e.g. br-m68k-5208-full) work fine.
+> On Thu, 23 Mar 2017 08:10:58 +0100, Waldemar Brodkorb wrote:
+> > uClibc-ng plans to remove internal RPC implementation as it
+> > is ipv4 only and can not be used for most important RPC software
+> > rpcbind and nfs-utils.
+> > musl does not implement RPC and GNU C library deprecated the
+> > internal implementation a while ago.
+> > It is still possible to use the C library implementation.
 > > 
-> > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > ---
-> > I tried to debug the elf2flt segfault but elf2flt isn't exactly the
-> > most low-entry-bar source code...
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > 
-> I think we have a regression here, which I would point to the bump of
-> binutils from 2.26 to 2.27. Indeed, several packages are now causing
-> segfaults in elf2flt on ARM:
+> This is almost good, but there are still a few issues. I had fixed most
+> of them locally, but one needs a bit more work.
 > 
-> Busybox:
+> > diff --git a/package/autofs/0004-libtirpc-via-pkgconfig.patch b/package/autofs/0004-libtirpc-via-pkgconfig.patch
+> > new file mode 100644
+> > index 0000000..784b4c6
+> > --- /dev/null
+> > +++ b/package/autofs/0004-libtirpc-via-pkgconfig.patch
+> > @@ -0,0 +1,83 @@
+> > +Use pkg-config to find libtirpc headers
+> > +
+> > +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > 
->   http://autobuild.buildroot.net/results/475/4758354f0e2f7f127c1a99ef7846eb62f5ce41b5/build-end.log
-> 
-> pcre:
-> 
->   http://autobuild.buildroot.net/results/68c/68cf951594b0e67b45f8711745c17b93e2fbc03e/build-end.log
-> 
-> and I'm sure the list will grow. So I believe that binutils 2.27
-> produces binaries that are a bit different, and confuse elf2flt.
-> 
-> Looking at https://github.com/uclinux-dev/elf2flt/commits/master, I
-> don't see anything that particular stands out.
+> Please format your patch with Git. The Git repo is available at
+> https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/, create
+> a branch based on the release_5_1_2 tag, and import the three existing
+> patches.
 
-It seems this is somehow fixed with binutils 2.28. But I have no
-idea in which commit(s). Should we blacklist binutils 2.27 for ARM
-noMMU?
+Okay, I understand this.
+ 
+> > ++AC_PATH_PROGS(PKG_CONFIG, pkg-config, no)
+> > ++
+> > + # save current flags
+> > + af_check_libtirpc_save_cflags="$CFLAGS"
+> > + af_check_libtirpc_save_ldflags="$LDFLAGS"
+> > +-CFLAGS="$CFLAGS -I/usr/include/tirpc"
+> > +-LDFLAGS="$LDFLAGS -ltirpc"
+> > ++
+> > ++TIRPC_LIBS=`$PKG_CONFIG --libs libtirpc`
+> > ++TIRPC_FLAGS=`$PKG_CONFIG --cflags libtirpc`
+> 
+> Please PKG_CHECK_MODULES() instead.
+
+I tried, but failed. Do you have some examples how
+PKG_CHECK_MODULES() should be used? I am not a autotool expert, so I
+am unsure how to create a patch which will be accepted by upstream.
 
 best regards
  Waldemar
