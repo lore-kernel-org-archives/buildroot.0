@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:27:45 +0200
-Subject: [Buildroot] [PATCH v1] qt5declarative: fix examples compile
- without qt widgets module
-In-Reply-To: <20170407183954.23928-1-ps.report@gmx.net>
-References: <20170407183954.23928-1-ps.report@gmx.net>
-Message-ID: <20170408152745.46a6f928@free-electrons.com>
+Date: Sat, 8 Apr 2017 15:29:01 +0200
+Subject: [Buildroot] [git commit] uboot: qstrip
+	BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+Message-ID: <20170408132941.7CDD58043F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=61038e36b65696c2f29107d5dbc031c66526ea0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  7 Apr 2017 20:39:54 +0200, Peter Seiderer wrote:
-> Fixes:
-> 
->   .../qt5declarative-5.8.0/examples/quick/demos/photoviewer/photoviewer.pro
->   Project ERROR: Unknown module(s) in QT: widgets
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...xamples-photoviewer-needs-widgets-support.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/qt5/qt5declarative/0001-examples-photoviewer-needs-widgets-support.patch
+We need to avoid failing of copy of custom dts using cp -f <>
+command. So, just qstrip the variable as is done for other
+configuration options.
 
-Applied to master, thanks.
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/uboot.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 1d464d9..91f8ec4 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -194,9 +194,11 @@ define UBOOT_HELP_CMDS
+ endef
+ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ 
++UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
++
+ define UBOOT_BUILD_CMDS
+-	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
+-		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
++	$(if $(UBOOT_CUSTOM_DTS_PATH),
++		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+ 	)
+ 	$(TARGET_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
