@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 21:38:53 +0200
-Subject: [Buildroot] [PATCH v3] autofs: allow to use libtirpc instead of
- internal C implementation
-In-Reply-To: <20170408190346.GS5361@waldemar-brodkorb.de>
-References: <20170323071058.GA29887@waldemar-brodkorb.de>
- <20170408160552.131d42a4@free-electrons.com>
- <20170408190346.GS5361@waldemar-brodkorb.de>
-Message-ID: <20170408213853.369b3890@free-electrons.com>
+Date: Sat, 8 Apr 2017 21:43:02 +0200
+Subject: [Buildroot] [git commit] arp-scan: fix static link when libnl is
+	selected
+Message-ID: <20170408194317.C37B3825DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=df578c86eddfb5d115195d3650d5ecba5431e8fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 8 Apr 2017 21:03:46 +0200, Waldemar Brodkorb wrote:
-> > Please PKG_CHECK_MODULES() instead.  
-> 
-> I tried, but failed. Do you have some examples how
-> PKG_CHECK_MODULES() should be used? I am not a autotool expert, so I
-> am unsure how to create a patch which will be accepted by upstream.
+When libnl is selected, libpcap links with it. Since libpcap doesn't
+provide a .pc file and arp-scan doesn't use its libpcap-config script,
+we must provide the additional options explicilty.
 
-See https://autotools.io/pkgconfig/pkg_check_modules.html, it's a good
-and simple tutorial on how to use PKG_CHECK_MODULES().
+Fixes
+http://autobuild.buildroot.net/results/c605c8cc36348f199a36e2652851b8d02ee222c0
 
-Best regards,
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/arp-scan/arp-scan.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
+index fc3740b..b46e941 100644
+--- a/package/arp-scan/arp-scan.mk
++++ b/package/arp-scan/arp-scan.mk
+@@ -13,6 +13,10 @@ ARP_SCAN_DEPENDENCIES = libpcap
+ # 0001-configure-try-linking-to-detect-stack-protector-supp.patch touches acinclude.m4
+ ARP_SCAN_AUTORECONF = YES
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++ARP_SCAN_CONF_OPTS = LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
++endif
++
+ ARP_SCAN_CONF_ENV = pgac_cv_snprintf_long_long_int_format='%lld'
+ 
+ $(eval $(autotools-package))
