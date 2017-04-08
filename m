@@ -1,41 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:54:49 +0200
-Subject: [Buildroot] [git commit] autofs: fix Git formatting of patch
-Message-ID: <20170408135543.4615E8267F@busybox.osuosl.org>
+Date: Sat, 8 Apr 2017 16:05:52 +0200
+Subject: [Buildroot] [PATCH v3] autofs: allow to use libtirpc instead of
+ internal C implementation
+In-Reply-To: <20170323071058.GA29887@waldemar-brodkorb.de>
+References: <20170323071058.GA29887@waldemar-brodkorb.de>
+Message-ID: <20170408160552.131d42a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6510f55d42f7f75007c00ce5de83a8e1be852c88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The patch 0001-include-linux-nfs.h-directly-in-rpc_sub.patch was Git
-formatted, except that a Upstream status statement was added above the
-patch, which makes it unapplicable by "git am". So fix this by putting
-the Upstream status statement where it should be.
+On Thu, 23 Mar 2017 08:10:58 +0100, Waldemar Brodkorb wrote:
+> uClibc-ng plans to remove internal RPC implementation as it
+> is ipv4 only and can not be used for most important RPC software
+> rpcbind and nfs-utils.
+> musl does not implement RPC and GNU C library deprecated the
+> internal implementation a while ago.
+> It is still possible to use the C library implementation.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+This is almost good, but there are still a few issues. I had fixed most
+of them locally, but one needs a bit more work.
 
-diff --git a/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch b/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
-index 26e86c3..26f2265 100644
---- a/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
-+++ b/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
-@@ -1,5 +1,3 @@
--Upstream-Status: Pending
--
- From 44bdce8c6ed9b30c1643e5981172a4f9025f013c Mon Sep 17 00:00:00 2001
- From: Andreas Oberritter <obi@opendreambox.org>
- Date: Wed, 13 Mar 2013 16:17:08 +0100
-@@ -11,6 +9,7 @@ other linux/nfs*.h files directly.
- 
- Signed-off-by: Andreas Oberritter <obi@opendreambox.org>
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream-Status: Pending
- ---
-  include/rpc_subs.h |    2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/package/autofs/0004-libtirpc-via-pkgconfig.patch b/package/autofs/0004-libtirpc-via-pkgconfig.patch
+> new file mode 100644
+> index 0000000..784b4c6
+> --- /dev/null
+> +++ b/package/autofs/0004-libtirpc-via-pkgconfig.patch
+> @@ -0,0 +1,83 @@
+> +Use pkg-config to find libtirpc headers
+> +
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+Please format your patch with Git. The Git repo is available at
+https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/, create
+a branch based on the release_5_1_2 tag, and import the three existing
+patches.
+
+> ++AC_PATH_PROGS(PKG_CONFIG, pkg-config, no)
+> ++
+> + # save current flags
+> + af_check_libtirpc_save_cflags="$CFLAGS"
+> + af_check_libtirpc_save_ldflags="$LDFLAGS"
+> +-CFLAGS="$CFLAGS -I/usr/include/tirpc"
+> +-LDFLAGS="$LDFLAGS -ltirpc"
+> ++
+> ++TIRPC_LIBS=`$PKG_CONFIG --libs libtirpc`
+> ++TIRPC_FLAGS=`$PKG_CONFIG --cflags libtirpc`
+
+Please PKG_CHECK_MODULES() instead.
+
+> diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+> index 23e6836..580b04a 100644
+> --- a/package/autofs/autofs.mk
+> +++ b/package/autofs/autofs.mk
+> @@ -32,6 +32,11 @@ AUTOFS_CONF_OPTS = \
+>  	--with-path="$(BR_PATH)" \
+>  	--with-hesiod=no
+>  
+> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+> +AUTOFS_DEPENDENCIES += libtirpc host-pkgconf
+
+Once PKG_CHECK_MODULES is used, host-pkgconf should be an unconditional
+dependency, because it will be needed for autoreconf to work.
+
+Please also add this new patch to the list of patches that justify the
+AUTORECONF = YES.
+
+> +AUTOFS_CONF_OPTS += --with-libtirpc
+
+Please add:
+
+else
+AUTOFS_CONF_OPTS += --without-libtirpc
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
