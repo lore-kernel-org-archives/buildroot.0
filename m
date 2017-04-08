@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:22:00 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.10.9
-In-Reply-To: <1491656920-14465-1-git-send-email-festevam@gmail.com>
-References: <1491656920-14465-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170408152200.690d6724@free-electrons.com>
+Date: Sat, 8 Apr 2017 15:22:58 +0200
+Subject: [Buildroot] [PATCH] batman-adv: bump version to 2017.0.1
+In-Reply-To: <1491602642-8609-1-git-send-email-txt.file@txtfile.eu>
+References: <1491602642-8609-1-git-send-email-txt.file@txtfile.eu>
+Message-ID: <20170408152258.5b8aeb72@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  8 Apr 2017 10:08:39 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+On Sat,  8 Apr 2017 00:04:02 +0200, Matthias Fritzsche wrote:
+> Signed-off-by: Matthias Fritzsche <txt.file@txtfile.eu>
 > ---
->  linux/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/batman-adv/batman-adv.hash | 5 +++--
+>  package/batman-adv/batman-adv.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 
-Thanks, but there was already similar patches sent by Bernd 4 hours
-earlier, and Bernd's patches also updated the 3.2.x series, so I
-applied the patches from Bernd.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
