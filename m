@@ -1,36 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 17:00:17 +0200
-Subject: [Buildroot] [PATCH] pkg-python: ignore user site-packages
- directory
-In-Reply-To: <20170406184608.22111-1-yegorslists@googlemail.com>
-References: <20170406184608.22111-1-yegorslists@googlemail.com>
-Message-ID: <20170408170017.609794d0@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 08 Apr 2017 15:15:17 +0000
+Subject: [Buildroot] [Bug 9791] Python searches for packages in the user
+	site directory
+In-Reply-To: <bug-9791-163@https.bugs.busybox.net/>
+References: <bug-9791-163@https.bugs.busybox.net/>
+Message-ID: <bug-9791-163-ftJTvYmcMj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9791
 
-On Thu,  6 Apr 2017 20:46:08 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> According to PEP 370 Python will also search for the packages in the
-> user site-packages directory. This can affect build reproducibility.
-> 
-> The solution is to use PYTHONNOUSERSITE=1 for all Python packages,
-> i.e. both host and target variants.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/pkg-python.mk | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+Anton Leontiev <scileont@gmail.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |VERIFIED
 
-Thomas
+--- Comment #2 from Anton Leontiev <scileont@gmail.com> ---
+I've tested the patch on my setup. The issue is fixed.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
