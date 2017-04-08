@@ -1,30 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:38:04 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-04-07
-In-Reply-To: <6309c1c4-169b-6c7b-53fe-631ddd7b7c73@mind.be>
-References: <20170408062822.DB87E20847@mail.free-electrons.com>
- <6309c1c4-169b-6c7b-53fe-631ddd7b7c73@mind.be>
-Message-ID: <20170408153804.45e749a3@free-electrons.com>
+From: Michael Trimarchi <michael@amarulasolutions.com>
+Date: Sat,  8 Apr 2017 15:37:03 +0200
+Subject: [Buildroot] [PATCH V2] beaglebone: increase size of ext4 more then
+	60MB
+Message-ID: <20170408133703.18563-1-michael@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This is due to the fact that we removed auto-calculation of the ext4
+filesystem size in
+https://git.buildroot.org/buildroot/commit/?id=c6bca8cef0310bc649240b451989457ce94a8358,
+and we default to 60 MB for the filesystem size, which is not enough
+for this demo
 
-On Sat, 8 Apr 2017 15:35:03 +0200, Arnout Vandecappelle wrote:
-> On 08-04-17 08:28, Thomas Petazzoni wrote:
-> >         m68k |                   arp-scan-1.9 | NOK | http://autobuild.buildroot.net/results/c605c8cc36348f199a36e2652851b8d02ee222c0 |       
-> 
->  Hm, looks like the elf2flt issue is not just for ARM, but also for m68k. Weird
-> that I didn't catch this when running test-pkg on arp-scan...
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/beaglebone_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-How do you know it's the elf2flt issue here?
-
-Thomas
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 78dc10973..cdf8b96c1 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -26,6 +26,7 @@ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=126976
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
