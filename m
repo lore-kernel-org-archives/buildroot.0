@@ -1,43 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:29:01 +0200
-Subject: [Buildroot] [git commit] uboot: qstrip
-	BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-Message-ID: <20170408132941.7CDD58043F@busybox.osuosl.org>
+Date: Sat, 8 Apr 2017 15:30:14 +0200
+Subject: [Buildroot] [PATCH 1/2] uboot: qstrip
+ BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+In-Reply-To: <20170407100323.6871-1-michael@amarulasolutions.com>
+References: <20170407100323.6871-1-michael@amarulasolutions.com>
+Message-ID: <20170408153014.63ad6f59@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61038e36b65696c2f29107d5dbc031c66526ea0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-We need to avoid failing of copy of custom dts using cp -f <>
-command. So, just qstrip the variable as is done for other
-configuration options.
+On Fri,  7 Apr 2017 12:03:22 +0200, Michael Trimarchi wrote:
 
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/uboot/uboot.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+>  UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
+>  UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+> +UBOOT_CUSTOM_DTS_PATH=$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 1d464d9..91f8ec4 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -194,9 +194,11 @@ define UBOOT_HELP_CMDS
- endef
- endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 
-+UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
-+
- define UBOOT_BUILD_CMDS
--	$(if $(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH),
--		cp -f $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH)) $(@D)/arch/$(UBOOT_ARCH)/dts/
-+	$(if $(UBOOT_CUSTOM_DTS_PATH),
-+		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
- 	$(TARGET_CONFIGURE_OPTS) 	\
- 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+Space around = signs to match our coding style. Also, I've moved this
+assignment closer to where it's used.
+
+Applied with those two issues fixed. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
