@@ -1,39 +1,88 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 8 Apr 2017 16:17:36 +0200
-Subject: [Buildroot] [PATCH] arp-scan: fix static link when libnl is selected
-Message-ID: <20170408141736.18554-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Apr 2017 16:15:36 +0200
+Subject: [Buildroot] [git commit] docs/manual: size of tab in package
+	description
+Message-ID: <20170408141752.960B47FBBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libnl is selected, libpcap links with it. Since libpcap doesn't
-provide a .pc file and arp-scan doesn't use its libpcap-config script,
-we must provide the additional options explicilty.
+commit: https://git.buildroot.net/buildroot/commit/?id=ad35a3a43d62f1588d3cd3c1e51d8626d39f0b54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/c605c8cc36348f199a36e2652851b8d02ee222c0
+Explicitly state that one tab counts for 8 columns in package
+description, leaving 62 characters to the text itself.
+Update the text and the example in the two places where the Config.in
+format is described.
+Also mention a newline is expected between the help text itself and the
+upstream URL.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This blob can help developers to understand the expected formatting.
+Also, it can be referenced by reviewers.
+
+http://patchwork.ozlabs.org/patch/611289/
+http://patchwork.ozlabs.org/patch/606866/
+http://patchwork.ozlabs.org/patch/459960/
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/arp-scan/arp-scan.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ docs/manual/adding-packages-directory.txt | 8 +++++---
+ docs/manual/writing-rules.txt             | 6 ++++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
-index fc3740bf57..b46e941d10 100644
---- a/package/arp-scan/arp-scan.mk
-+++ b/package/arp-scan/arp-scan.mk
-@@ -13,6 +13,10 @@ ARP_SCAN_DEPENDENCIES = libpcap
- # 0001-configure-try-linking-to-detect-stack-protector-supp.patch touches acinclude.m4
- ARP_SCAN_AUTORECONF = YES
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 5dba962..08f5d42 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -28,7 +28,8 @@ contain:
+ config BR2_PACKAGE_LIBFOO
+ 	bool "libfoo"
+ 	help
+-	  This is a comment that explains what libfoo is.
++	  This is a comment that explains what libfoo is. The help text
++	  should be wrapped.
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+ARP_SCAN_CONF_OPTS = LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
-+endif
-+
- ARP_SCAN_CONF_ENV = pgac_cv_snprintf_long_long_int_format='%lld'
+ 	  http://foosoftware.org/libfoo/
+ ---------------------------
+@@ -36,8 +37,9 @@ config BR2_PACKAGE_LIBFOO
+ The +bool+ line, +help+ line and other metadata information about the
+ configuration option must be indented with one tab. The help text
+ itself should be indented with one tab and two spaces, lines should
+-not be longer than 72 columns, and it must mention the upstream URL
+-of the project.
++be wrapped to fit 72 columns, where tab counts for 8, so 62 characters
++in the text itself. The help text must mention the upstream URL of the
++project after an empty line.
  
- $(eval $(autotools-package))
--- 
-2.11.0
+ As a convention specific to Buildroot, the ordering of the attributes
+ is as follows:
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index ec1ddb1..e2ad41e 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -29,7 +29,8 @@ config BR2_PACKAGE_LIBFOO
+ 	depends on BR2_PACKAGE_LIBBAZ
+ 	select BR2_PACKAGE_LIBBAR
+ 	help
+-	  This is a comment that explains what libfoo is.
++	  This is a comment that explains what libfoo is. The help text
++	  should be wrapped.
+ 
+ 	  http://foosoftware.org/libfoo/
+ ---------------------
+@@ -40,7 +41,8 @@ config BR2_PACKAGE_LIBFOO
+ * The help text itself should be indented with one tab and two
+   spaces.
+ 
+-* The help text should be wrapped to fit 72 columns.
++* The help text should be wrapped to fit 72 columns, where tab counts
++  for 8, so 62 characters in the text itself.
+ 
+ The +Config.in+ files are the input for the configuration tool
+ used in Buildroot, which is the regular _Kconfig_. For further
