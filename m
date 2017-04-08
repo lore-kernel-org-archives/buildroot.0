@@ -1,68 +1,49 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 8 Apr 2017 21:03:46 +0200
-Subject: [Buildroot] [PATCH v3] autofs: allow to use libtirpc instead of
- internal C implementation
-In-Reply-To: <20170408160552.131d42a4@free-electrons.com>
-References: <20170323071058.GA29887@waldemar-brodkorb.de>
- <20170408160552.131d42a4@free-electrons.com>
-Message-ID: <20170408190346.GS5361@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Apr 2017 21:35:33 +0200
+Subject: [Buildroot] [git commit] pkg-stats: add new column with
+	check-package warnings
+Message-ID: <20170408193641.3B8948267C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+commit: https://git.buildroot.net/buildroot/commit/?id=b1e102d1ab0b9179e882c8517a6d1843dd3b954f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> 
-> On Thu, 23 Mar 2017 08:10:58 +0100, Waldemar Brodkorb wrote:
-> > uClibc-ng plans to remove internal RPC implementation as it
-> > is ipv4 only and can not be used for most important RPC software
-> > rpcbind and nfs-utils.
-> > musl does not implement RPC and GNU C library deprecated the
-> > internal implementation a while ago.
-> > It is still possible to use the C library implementation.
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> This is almost good, but there are still a few issues. I had fixed most
-> of them locally, but one needs a bit more work.
-> 
-> > diff --git a/package/autofs/0004-libtirpc-via-pkgconfig.patch b/package/autofs/0004-libtirpc-via-pkgconfig.patch
-> > new file mode 100644
-> > index 0000000..784b4c6
-> > --- /dev/null
-> > +++ b/package/autofs/0004-libtirpc-via-pkgconfig.patch
-> > @@ -0,0 +1,83 @@
-> > +Use pkg-config to find libtirpc headers
-> > +
-> > +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> Please format your patch with Git. The Git repo is available at
-> https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/, create
-> a branch based on the release_5_1_2 tag, and import the three existing
-> patches.
+This allows the page at http://autobuild.buildroot.net/stats/ to show
+how many warnings returned by check-package affect each package.
 
-Okay, I understand this.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/pkg-stats | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 421fa5c..2870662 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -68,6 +68,7 @@ td.lotsofpatches {
+ <td class=\"centered\">License</td>
+ <td class=\"centered\">License files</td>
+ <td class=\"centered\">Hash file</td>
++<td class=\"centered\">Warnings</td>
+ </tr>
+ "
  
-> > ++AC_PATH_PROGS(PKG_CONFIG, pkg-config, no)
-> > ++
-> > + # save current flags
-> > + af_check_libtirpc_save_cflags="$CFLAGS"
-> > + af_check_libtirpc_save_ldflags="$LDFLAGS"
-> > +-CFLAGS="$CFLAGS -I/usr/include/tirpc"
-> > +-LDFLAGS="$LDFLAGS -ltirpc"
-> > ++
-> > ++TIRPC_LIBS=`$PKG_CONFIG --libs libtirpc`
-> > ++TIRPC_FLAGS=`$PKG_CONFIG --cflags libtirpc`
-> 
-> Please PKG_CHECK_MODULES() instead.
-
-I tried, but failed. Do you have some examples how
-PKG_CHECK_MODULES() should be used? I am not a autotool expert, so I
-am unsure how to create a patch which will be accepted by upstream.
-
-best regards
- Waldemar
+@@ -323,6 +324,14 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 	echo "<td class=\"centered correct\">Yes</td>"
+     fi
+ 
++    file_list=$(find ${package_dir} -name '*.mk' -o -name '*.in*' -o -name '*.hash')
++    nwarnings=$(./support/scripts/check-package ${file_list} 2>&1 | sed '/\([0-9]*\) warnings generated/!d; s//\1/')
++    if [ ${nwarnings} -eq 0 ] ; then
++	echo "<td class=\"centered correct\">${nwarnings}</td>"
++    else
++	echo "<td class=\"centered wrong\">${nwarnings}</td>"
++    fi
++
+     echo "</tr>"
+ 
+ done
