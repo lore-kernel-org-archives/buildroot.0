@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:10:23 +0200
-Subject: [Buildroot] [git commit] linux: bump default version to 4.10.9
-Message-ID: <20170408131043.464058222C@busybox.osuosl.org>
+Date: Sat, 8 Apr 2017 15:20:20 +0200
+Subject: [Buildroot] [Patch v4 2/3] cargo-bootstrap: new package
+In-Reply-To: <20170408093406.GB32154@itchy>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+ <20170402194651.28684-3-eric.le.bihan.dev@free.fr>
+ <1491548799.26127.5.camel@embedded.rocks>
+ <20170408093406.GB32154@itchy>
+Message-ID: <20170408152020.12a89c69@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0534c121ed0ee509691d54a4596d5cbf80b72ca2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat, 8 Apr 2017 11:34:06 +0200, Eric Le Bihan wrote:
+> Hi!
+> 
+> On 17-04-07 09:06:39, J?rg Krause wrote:
+> > Hi Eric,
+> >
+> > On Sun, 2017-04-02 at 21:46 +0200, Eric Le Bihan wrote:  
+> > > This new package fetches a binary snapshot of Cargo, suitable for the
+> > > host, in order to bootstrap the Rust compiler and Cargo, the package
+> > > manager.  
+> >
+> > Why not build it from source?  
+> 
+> Cargo uses Cargo as its build system, so you need to have a working
+> version of Cargo on the host system to build a new version from the
+> source code.
+> 
+> To build the Rust compiler a binary snapshot is enough.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 10bb250..2fbf689 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.10.8)"
-+	bool "Latest version (4.10.9)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.10.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.10.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Can you update the commit log to make it clearer? I guess whenever
+there's a question on a patch, it often indicates that the commit log
+was not detailed enough.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
