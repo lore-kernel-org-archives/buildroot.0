@@ -1,55 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 16:21:14 +0200
-Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies
- a package coding style
-In-Reply-To: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
-References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
- <20170219221724.27298-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170408162114.6e6c8899@free-electrons.com>
+Date: Sat, 8 Apr 2017 16:21:41 +0200
+Subject: [Buildroot] [git commit] uclibc: use tabs instead of spaces for
+	indentation
+Message-ID: <20170408142159.9347B82548@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=be458128dff83ce0930ed10fe40334cb5fe14690
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Feb 2017 19:17:15 -0300, Ricardo Martincoski wrote:
+Detected by check-package.
 
-> Ricardo Martincoski (9):
->   support/scripts/check-package: example
->   support/scripts/check-package: new script
->   check-package: check whitespace and empty lines
->   check-package: check *.hash files
->   check-package: check *.patch files
->   check-package: check *.mk files
->   docs/manual: size of tab in package description
->   check-package: check Config.* files
->   check-package: check *.mk for typo in variable
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/uclibc.mk | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-Since there was no feedback to your patch series since 1.5 months, I've
-applied all of it, except PATCH 1/9. I'm not sure we want to have the
-bad examples/test cases inside the Buildroot tree.
-
-However, there are two things that bothered me a little bit:
-
- - The number of files added in support/scripts/. Should we have
-   support/scripts/check-package as a script, and the rest in a
-   subdirectory?
-
- - Between every function/method/class, you put two empty lines. The
-   Buildroot coding style is generally to have only one empty line.
-
-I haven't reviewed the details of the Python script for this version, I
-briefly looked at it on the v1. There are possibly some improvements to
-be made, but they can be done as followup patches. The tool is already
-very useful as it is today, so I don't want to keep it longer out of
-the tree.
-
-Thanks a lot for this very useful contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 44c23a7..45bb6de 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -54,34 +54,34 @@ endif
+ # noMMU binary formats
+ ifeq ($(BR2_BINFMT_FDPIC),y)
+ define UCLIBC_BINFMT_CONFIG
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+ endef
+ endif
+ ifeq ($(BR2_BINFMT_FLAT_ONE),y)
+ define UCLIBC_BINFMT_CONFIG
+-       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+ endef
+ endif
+ ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
+ define UCLIBC_BINFMT_CONFIG
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+ endef
+ endif
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+ define UCLIBC_BINFMT_CONFIG
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+ endef
+ endif
+ 
