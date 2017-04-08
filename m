@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:32:44 +0200
-Subject: [Buildroot] [PATCH v2] gnupg: Add options for SHA-256 and
- SHA-512 hashes
-In-Reply-To: <20170407010943.80192-1-jack@kumunetworks.com>
-References: <20170406010908.95234-1-jack@kumunetworks.com>
- <20170407010943.80192-1-jack@kumunetworks.com>
-Message-ID: <20170408153244.0ba4805e@free-electrons.com>
+Date: Sat, 8 Apr 2017 15:34:52 +0200
+Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
+ core
+In-Reply-To: <20170406234139.31532-2-sikor6@gmail.com>
+References: <20170406234139.31532-1-sikor6@gmail.com>
+ <20170406234139.31532-2-sikor6@gmail.com>
+Message-ID: <20170408153452.54837e4c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,52 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Apr 2017 18:09:43 -0700, Jack Breese wrote:
-> Signed-off-by: Jack Breese <jack@kumunetworks.com>
-> 
-> ---
-> Changes v1 -> v2:
->  - Enable SHA-256 and SHA-512 unconditionally because
->    size difference is small. (~6k on armv7l) (Suggested by Baruch)
+On Fri,  7 Apr 2017 01:41:39 +0200, Pawel Sikora wrote:
 
-I've applied, but after fixing the commit title: you're no longer
-adding options for SHA256 and SHA512, but enabling those
-unconditionally.
+> +choice
+> +	prompt "Xenomai core"
+> +	default BR2_PACKAGE_XENOMAI_MERCURY
+> +	help
+> +	  Manually select the Xenomai core. Default option depends if
+> +	  you selected BR2_LINUX_KERNEL_EXT_XENOMAI.
+> +	  If yes, then default option will be Cobalt.
+> +	  Otherwise you can use just the Mercury core with the
+> +	  native Linux kernel.
+> +
+> +config BR2_PACKAGE_XENOMAI_MERCURY
+> +	bool "Mercury"
+> +	depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
+> +	help
+> +	  Select Mercury core for the Xenomai userspace.
+> +	  If you want Cobalt core, you need to enable
+> +	  BR2_LINUX_KERNEL_EXT_XENOMAI in the Linux Kernel ->
+> +	  Linux Kernel Extensions menu.
+> +
+> +config BR2_PACKAGE_XENOMAI_COBALT
+> +	bool "Cobalt"
+> +	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
+> +	help
+> +	  Select Cobalt core for the Xenomai userspace.
+> +	  If you want Mercury core, you need to disable
+> +	  BR2_LINUX_KERNEL_EXT_XENOMAI in the Linux Kernel ->
+> +	  Linux Kernel Extensions menu.
 
-Thanks!
+Does it really make sense to have a "choice" when in fact it's
+impossible to have both options of the choice visible at the same time?
+One option depends on !BR2_LINUX_KERNEL_EXT_XENOMAI and the other
+option depends on BR2_LINUX_KERNEL_EXT_XENOMAI.
+
+I'm not sure how to handle this. Do we automatically switch between
+Cobalt and Mercury depending on whether the Xenomai kernel extension is
+enabled?
+
+Do we use Mercury by default, and offer a sub-option to explicitly
+enable Cobalt when the Linux kernel extension is available?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
