@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 15:31:19 +0200
-Subject: [Buildroot] [PATCH 2/2] beaglebone: increase size of ext4 more
- then 60MB
-In-Reply-To: <20170407100323.6871-2-michael@amarulasolutions.com>
-References: <20170407100323.6871-1-michael@amarulasolutions.com>
- <20170407100323.6871-2-michael@amarulasolutions.com>
-Message-ID: <20170408153119.6747dc5b@free-electrons.com>
+Date: Sat, 8 Apr 2017 15:32:08 +0200
+Subject: [Buildroot] [git commit] gnupg: enable support for SHA-256 and
+	SHA-512 hashes
+Message-ID: <20170408133220.9285F82306@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2be9ba9f58280ebe0094ef715ab14c31a22c9204
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  7 Apr 2017 12:03:23 +0200, Michael Trimarchi wrote:
-> This is due to the fact that we removed auto-calculation of the ext4
-> filesystem size in
-> https://git.buildroot.org/buildroot/commit/?id=c6bca8cef0310bc649240b451989457ce94a8358,
-> and we default to 60 MB for the filesystem size, which is not enough
-> for this demo
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Jack Breese <jack@kumunetworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnupg/gnupg.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-This shouldn't have my Signed-off-by, but yours, it's your patch, and
-you're submitting it. If you really want to credit me, you can always do
-something like:
-
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Could you resubmit after using your Signed-off-by? Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index caa9d2c..b3578b8 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -11,7 +11,12 @@ GNUPG_LICENSE = GPL-3.0+
+ GNUPG_LICENSE_FILES = COPYING
+ GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+-GNUPG_CONF_OPTS = --disable-rpath --enable-minimal --disable-regex
++GNUPG_CONF_OPTS = \
++	--disable-rpath \
++	--enable-minimal \
++	--disable-regex \
++	--enable-sha256 \
++	--enable-sha512
+ 
+ # gnupg doesn't support assembly for coldfire
+ ifeq ($(BR2_m68k_cf),y)
