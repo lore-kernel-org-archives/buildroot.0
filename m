@@ -1,30 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 08 Apr 2017 13:46:31 +0000
-Subject: [Buildroot] [Bug 9791] Python searches for packages in the user
-	site directory
-In-Reply-To: <bug-9791-163@https.bugs.busybox.net/>
-References: <bug-9791-163@https.bugs.busybox.net/>
-Message-ID: <bug-9791-163-E1CUrg2iLh@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Apr 2017 15:54:49 +0200
+Subject: [Buildroot] [git commit] autofs: fix Git formatting of patch
+Message-ID: <20170408135543.4615E8267F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9791
+commit: https://git.buildroot.net/buildroot/commit/?id=6510f55d42f7f75007c00ce5de83a8e1be852c88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+The patch 0001-include-linux-nfs.h-directly-in-rpc_sub.patch was Git
+formatted, except that a Upstream status statement was added above the
+patch, which makes it unapplicable by "git am". So fix this by putting
+the Upstream status statement where it should be.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=f5da1951ad1e81cc8641f2c90e96fe36d08ec6f9.
-Thanks!
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch b/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
+index 26e86c3..26f2265 100644
+--- a/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
++++ b/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
+@@ -1,5 +1,3 @@
+-Upstream-Status: Pending
+-
+ From 44bdce8c6ed9b30c1643e5981172a4f9025f013c Mon Sep 17 00:00:00 2001
+ From: Andreas Oberritter <obi@opendreambox.org>
+ Date: Wed, 13 Mar 2013 16:17:08 +0100
+@@ -11,6 +9,7 @@ other linux/nfs*.h files directly.
+ 
+ Signed-off-by: Andreas Oberritter <obi@opendreambox.org>
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Upstream-Status: Pending
+ ---
+  include/rpc_subs.h |    2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
