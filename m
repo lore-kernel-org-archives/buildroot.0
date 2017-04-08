@@ -1,12 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Apr 2017 16:22:28 +0200
+Date: Sat, 8 Apr 2017 16:25:56 +0200
 Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
  core
-In-Reply-To: <20170408153452.54837e4c@free-electrons.com>
+In-Reply-To: <20170407102759.7130ab13@free-electrons.com>
 References: <20170406234139.31532-1-sikor6@gmail.com>
  <20170406234139.31532-2-sikor6@gmail.com>
- <20170408153452.54837e4c@free-electrons.com>
-Message-ID: <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
+ <CAAXf6LWHf2vkyHZuq95mOCsApOte4cKc03aGYM27L_rfJA7fQQ@mail.gmail.com>
+ <20170407102759.7130ab13@free-electrons.com>
+Message-ID: <1244682b-2937-56b3-63f4-2ceedea6c1d6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,63 +16,20 @@ To: buildroot@busybox.net
 
 
 
-On 08-04-17 15:34, Thomas Petazzoni wrote:
+On 07-04-17 10:27, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Fri,  7 Apr 2017 01:41:39 +0200, Pawel Sikora wrote:
+> On Fri, 7 Apr 2017 07:58:12 +0200, Thomas De Schampheleire wrote:
 > 
->> +choice
->> +	prompt "Xenomai core"
->> +	default BR2_PACKAGE_XENOMAI_MERCURY
->> +	help
->> +	  Manually select the Xenomai core. Default option depends if
->> +	  you selected BR2_LINUX_KERNEL_EXT_XENOMAI.
->> +	  If yes, then default option will be Cobalt.
->> +	  Otherwise you can use just the Mercury core with the
->> +	  native Linux kernel.
->> +
->> +config BR2_PACKAGE_XENOMAI_MERCURY
->> +	bool "Mercury"
->> +	depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
->> +	help
->> +	  Select Mercury core for the Xenomai userspace.
->> +	  If you want Cobalt core, you need to enable
->> +	  BR2_LINUX_KERNEL_EXT_XENOMAI in the Linux Kernel ->
->> +	  Linux Kernel Extensions menu.
->> +
->> +config BR2_PACKAGE_XENOMAI_COBALT
->> +	bool "Cobalt"
->> +	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
->> +	help
->> +	  Select Cobalt core for the Xenomai userspace.
->> +	  If you want Mercury core, you need to disable
->> +	  BR2_LINUX_KERNEL_EXT_XENOMAI in the Linux Kernel ->
->> +	  Linux Kernel Extensions menu.
+>> Wouldn't it be clear to have an else here that explicitly sets core=cobalt
+>> ? Then we don't rely on the default of xenomai.
 > 
-> Does it really make sense to have a "choice" when in fact it's
-> impossible to have both options of the choice visible at the same time?
-> One option depends on !BR2_LINUX_KERNEL_EXT_XENOMAI and the other
-> option depends on BR2_LINUX_KERNEL_EXT_XENOMAI.
-> 
-> I'm not sure how to handle this. Do we automatically switch between
-> Cobalt and Mercury depending on whether the Xenomai kernel extension is
-> enabled?
-> 
-> Do we use Mercury by default, and offer a sub-option to explicitly
-> enable Cobalt when the Linux kernel extension is available?
+> Could you fix your e-mail client to properly quote the text you are
+> replying to? Right now, your e-mail looks exactly like the original
+> mail from Pawel, just with your answer at the bottom. Hard to see what
+> comes from the original e-mail, what comes from you.
 
- The mercury option certainly only makes sense when the Xenomai extension in the
-kernel is NOT selected, so that can be kept.
-
- However, the cobalt option still makes sense if the Xenomai extension is not
-selected. For starters, it's possible that the kernel is built outside of
-Buildroot. But also it's possible that we use a custom kernel that is already
-Xenomai-patched, in which case the Xenomai extension is not used.
-
- So just remove the dependency from cobalt.
-
- I think indeed it does make sense to use Mercury by default, except when the
-Xenomai extension is selected.
+ Based on the headers, I'm afraid that any fixing will have to be done by Google...
 
  Regards,
  Arnout
