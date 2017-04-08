@@ -1,76 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 16:21:41 +0200
-Subject: [Buildroot] [git commit] uclibc: use tabs instead of spaces for
-	indentation
-Message-ID: <20170408142159.9347B82548@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 8 Apr 2017 16:22:28 +0200
+Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
+ core
+In-Reply-To: <20170408153452.54837e4c@free-electrons.com>
+References: <20170406234139.31532-1-sikor6@gmail.com>
+ <20170406234139.31532-2-sikor6@gmail.com>
+ <20170408153452.54837e4c@free-electrons.com>
+Message-ID: <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be458128dff83ce0930ed10fe40334cb5fe14690
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Detected by check-package.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uclibc/uclibc.mk | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+On 08-04-17 15:34, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri,  7 Apr 2017 01:41:39 +0200, Pawel Sikora wrote:
+> 
+>> +choice
+>> +	prompt "Xenomai core"
+>> +	default BR2_PACKAGE_XENOMAI_MERCURY
+>> +	help
+>> +	  Manually select the Xenomai core. Default option depends if
+>> +	  you selected BR2_LINUX_KERNEL_EXT_XENOMAI.
+>> +	  If yes, then default option will be Cobalt.
+>> +	  Otherwise you can use just the Mercury core with the
+>> +	  native Linux kernel.
+>> +
+>> +config BR2_PACKAGE_XENOMAI_MERCURY
+>> +	bool "Mercury"
+>> +	depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
+>> +	help
+>> +	  Select Mercury core for the Xenomai userspace.
+>> +	  If you want Cobalt core, you need to enable
+>> +	  BR2_LINUX_KERNEL_EXT_XENOMAI in the Linux Kernel ->
+>> +	  Linux Kernel Extensions menu.
+>> +
+>> +config BR2_PACKAGE_XENOMAI_COBALT
+>> +	bool "Cobalt"
+>> +	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
+>> +	help
+>> +	  Select Cobalt core for the Xenomai userspace.
+>> +	  If you want Mercury core, you need to disable
+>> +	  BR2_LINUX_KERNEL_EXT_XENOMAI in the Linux Kernel ->
+>> +	  Linux Kernel Extensions menu.
+> 
+> Does it really make sense to have a "choice" when in fact it's
+> impossible to have both options of the choice visible at the same time?
+> One option depends on !BR2_LINUX_KERNEL_EXT_XENOMAI and the other
+> option depends on BR2_LINUX_KERNEL_EXT_XENOMAI.
+> 
+> I'm not sure how to handle this. Do we automatically switch between
+> Cobalt and Mercury depending on whether the Xenomai kernel extension is
+> enabled?
+> 
+> Do we use Mercury by default, and offer a sub-option to explicitly
+> enable Cobalt when the Linux kernel extension is available?
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 44c23a7..45bb6de 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -54,34 +54,34 @@ endif
- # noMMU binary formats
- ifeq ($(BR2_BINFMT_FDPIC),y)
- define UCLIBC_BINFMT_CONFIG
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
--       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
- endef
- endif
- ifeq ($(BR2_BINFMT_FLAT_ONE),y)
- define UCLIBC_BINFMT_CONFIG
--       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
- endef
- endif
- ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
- define UCLIBC_BINFMT_CONFIG
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
--       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
- endef
- endif
- ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
- define UCLIBC_BINFMT_CONFIG
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
--       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
--       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
- endef
- endif
- 
+ The mercury option certainly only makes sense when the Xenomai extension in the
+kernel is NOT selected, so that can be kept.
+
+ However, the cobalt option still makes sense if the Xenomai extension is not
+selected. For starters, it's possible that the kernel is built outside of
+Buildroot. But also it's possible that we use a custom kernel that is already
+Xenomai-patched, in which case the Xenomai extension is not used.
+
+ So just remove the dependency from cobalt.
+
+ I think indeed it does make sense to use Mercury by default, except when the
+Xenomai extension is selected.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
