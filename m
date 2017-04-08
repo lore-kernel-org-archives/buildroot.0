@@ -1,96 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Apr 2017 16:15:34 +0200
-Subject: [Buildroot] [git commit] check-package: check *.patch files
-Message-ID: <20170408141752.8170E82563@busybox.osuosl.org>
+Date: Sat, 8 Apr 2017 16:15:33 +0200
+Subject: [Buildroot] [git commit] check-package: check *.hash files
+Message-ID: <20170408141752.76BBA7FBBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23b0b4c02818be535086f5e2b1962bfa9d4a321c
+commit: https://git.buildroot.net/buildroot/commit/?id=6c931bbf5f168ed7c5c10060d0665b16e0b60e7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Warn when the name of the patch file does not start with number (apply
-order), see [1].
-Warn when the patch was generated using git format-patch without -N, see
-[2].
-Warn when the patch file has no SoB, see [3].
+Check each hash entry (see [1]) and warn when:
+- it does not have three fields;
+- its type is unknown;
+- its length does not match its type;
+- the name of the file contains a directory component.
 
-[1] http://nightly.buildroot.org/#_providing_patches
-[2] http://patchwork.ozlabs.org/patch/704753/
-[3] http://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches
+[1] http://nightly.buildroot.org/#adding-packages-hash
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/checkpackagelib_patch.py | 55 ++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ support/scripts/checkpackagelib_hash.py | 62 +++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/support/scripts/checkpackagelib_patch.py b/support/scripts/checkpackagelib_patch.py
-index 131e423..ee46efb 100644
---- a/support/scripts/checkpackagelib_patch.py
-+++ b/support/scripts/checkpackagelib_patch.py
-@@ -3,5 +3,60 @@
+diff --git a/support/scripts/checkpackagelib_hash.py b/support/scripts/checkpackagelib_hash.py
+index 1f26883..47fe187 100644
+--- a/support/scripts/checkpackagelib_hash.py
++++ b/support/scripts/checkpackagelib_hash.py
+@@ -3,8 +3,70 @@
  # functions don't need to check for things already checked by running
- # "make package-dirclean package-patch".
+ # "make package-dirclean package-source".
  
 +import re
 +
 +from checkpackagebase import _CheckFunction
  # Notice: ignore 'imported but unused' from pyflakes for check functions.
+ from checkpackagelib import ConsecutiveEmptyLines
+ from checkpackagelib import EmptyLastLine
  from checkpackagelib import NewlineAtEof
+ from checkpackagelib import TrailingSpace
 +
 +
-+class ApplyOrder(_CheckFunction):
-+    APPLY_ORDER = re.compile("/\d{1,4}-[^/]*$")
-+
-+    def before(self):
-+        if not self.APPLY_ORDER.search(self.filename):
-+            return ["{}:0: use name <number>-<description>.patch "
-+                    "({}#_providing_patches)"
-+                    .format(self.filename, self.url_to_manual)]
++def _empty_line_or_comment(text):
++    return text.strip() == "" or text.startswith("#")
 +
 +
-+class NumberedSubject(_CheckFunction):
-+    NUMBERED_PATCH = re.compile("Subject:\s*\[PATCH\s*\d+/\d+\]")
++class HashFilename(_CheckFunction):
++    def check_line(self, lineno, text):
++        if _empty_line_or_comment(text):
++            return
 +
-+    def before(self):
-+        self.git_patch = False
-+        self.lineno = 0
-+        self.text = None
++        fields = text.split()
++        if len(fields) < 3:
++            return
++
++        if '/' in fields[2]:
++            return ["{}:{}: use filename without directory component"
++                    " ({}#adding-packages-hash)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
++
++
++class HashNumberOfFields(_CheckFunction):
++    def check_line(self, lineno, text):
++        if _empty_line_or_comment(text):
++            return
++
++        fields = text.split()
++        if len(fields) != 3:
++            return ["{}:{}: expected three fields ({}#adding-packages-hash)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
++
++
++class HashType(_CheckFunction):
++    len_of_hash = {"md5": 32, "sha1": 40, "sha224": 56, "sha256": 64,
++                   "sha384": 96, "sha512": 128}
 +
 +    def check_line(self, lineno, text):
-+        if text.startswith("diff --git"):
-+            self.git_patch = True
++        if _empty_line_or_comment(text):
 +            return
-+        if self.NUMBERED_PATCH.search(text):
-+            self.lineno = lineno
-+            self.text = text
 +
-+    def after(self):
-+        if self.git_patch and self.text:
-+            return ["{}:{}: generate your patches with 'git format-patch -N'"
-+                    .format(self.filename, self.lineno),
-+                    self.text]
-+
-+
-+class Sob(_CheckFunction):
-+    SOB_ENTRY = re.compile("^Signed-off-by: .*$")
-+
-+    def before(self):
-+        self.found = False
-+
-+    def check_line(self, lineno, text):
-+        if self.found:
++        fields = text.split()
++        if len(fields) < 2:
 +            return
-+        if self.SOB_ENTRY.search(text):
-+            self.found = True
 +
-+    def after(self):
-+        if not self.found:
-+            return ["{}:0: missing Signed-off-by in the header "
-+                    "({}#_format_and_licensing_of_the_package_patches)"
-+                    .format(self.filename, self.url_to_manual)]
++        htype, hexa = fields[:2]
++        if htype == "none":
++            return
++        if htype not in self.len_of_hash.keys():
++            return ["{}:{}: unexpected type of hash ({}#adding-packages-hash)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
++        if not re.match("^[0-9A-Fa-f]{%s}$" % self.len_of_hash[htype], hexa):
++            return ["{}:{}: hash size does not match type "
++                    "({}#adding-packages-hash)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text,
++                    "expected {} hex digits".format(self.len_of_hash[htype])]
