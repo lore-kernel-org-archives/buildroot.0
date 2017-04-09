@@ -1,42 +1,45 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sun,  9 Apr 2017 19:31:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 7.8.0
-Message-ID: <1491762670-24016-1-git-send-email-martin@barkynet.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 9 Apr 2017 21:32:56 +0200
+Subject: [Buildroot] [PATCH v3 3/3] qt5base: make harfbuzz support
+ selectable
+In-Reply-To: <20170408160959.1e0ef627@free-electrons.com>
+References: <20170218113202.14213-1-ps.report@gmx.net>
+ <20170218113202.14213-3-ps.report@gmx.net>
+ <20170408160959.1e0ef627@free-electrons.com>
+Message-ID: <20170409213256.3a854474@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v7.8.0/
+Hello Thomas,
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sat, 8 Apr 2017 16:09:59 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index e4f3815..c5e7d14 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From upstream URL: http://nodejs.org/dist/v7.7.3/SHASUMS256.txt
--sha256  5441daf11f743b5508ddf31a16b4f268835fbceb59ef709b44e85b03fece0edf  node-v7.7.3.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v7.8.0/SHASUMS256.txt
-+sha256  6821aaee58bbc8bc8d08fec6989a42278b725a21382500dc20fd9d9f71398f02  node-v7.8.0.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index ad0b26d..24672ed 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 7.7.3
-+NODEJS_VERSION = 7.8.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
--- 
-2.7.4
+> Hello,
+> 
+> On Sat, 18 Feb 2017 12:32:02 +0100, Peter Seiderer wrote:
+> > If selected use:
+> > 
+> >  - system/buildroot harfbuzz in case __sync for 4 bytes is supported
+> >  - qt harfbuzz otherwise (using QAtomic instead)
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> 
+> We still have this patch pending. Could you summarize if it's still
+> needed. From a quick read of our past discussion, it seems like it is
+> still needed, but I prefer to ask before applying. Thanks!
+> 
+
+...considering your quote 'We generally don't like
+to use the builtin libraries.' ([1]) I would say yes ;-)
+
+Otherwise at least the harfbuzz license part is needed...
+
+Regards,
+Peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-February/183615.html
+
+> Thomas
