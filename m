@@ -1,45 +1,31 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 9 Apr 2017 21:32:56 +0200
-Subject: [Buildroot] [PATCH v3 3/3] qt5base: make harfbuzz support
- selectable
-In-Reply-To: <20170408160959.1e0ef627@free-electrons.com>
-References: <20170218113202.14213-1-ps.report@gmx.net>
- <20170218113202.14213-3-ps.report@gmx.net>
- <20170408160959.1e0ef627@free-electrons.com>
-Message-ID: <20170409213256.3a854474@gmx.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 9 Apr 2017 22:51:21 +0200
+Subject: [Buildroot] [PATCH/autobuild 1/8] autobuild-run: fix typo in help
+	text
+Message-ID: <20170409205128.11560-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ scripts/autobuild-run | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat, 8 Apr 2017 16:09:59 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
-> 
-> On Sat, 18 Feb 2017 12:32:02 +0100, Peter Seiderer wrote:
-> > If selected use:
-> > 
-> >  - system/buildroot harfbuzz in case __sync for 4 bytes is supported
-> >  - qt harfbuzz otherwise (using QAtomic instead)
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> We still have this patch pending. Could you summarize if it's still
-> needed. From a quick read of our past discussion, it seems like it is
-> still needed, but I prefer to ask before applying. Thanks!
-> 
-
-...considering your quote 'We generally don't like
-to use the builtin libraries.' ([1]) I would say yes ;-)
-
-Otherwise at least the harfbuzz license part is needed...
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-February/183615.html
-
-> Thomas
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 37c2b12..64da088 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -86,7 +86,7 @@ Options:
+   -s, --submitter SUBMITTER      name/machine of submitter
+                                  Defaults to %(--submitter)s.
+   --http-url URL                 URL of resource to submit your results.
+-                                 Defaults to $(--http-url)s.
++                                 Defaults to %(--http-url)s.
+   --http-login LOGIN             username to send results with
+                                  Not set by default.
+   --http-password PASSWORD       password to send results with (for security
+-- 
+2.11.0
