@@ -1,88 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Apr 2017 15:30:25 +0200
-Subject: [Buildroot] [git commit] libselinux: allow compiling python wrapper
-	module for target
-Message-ID: <20170409134130.34FE6826C9@busybox.osuosl.org>
+Date: Sun, 9 Apr 2017 15:33:54 +0200
+Subject: [Buildroot] [git commit] policycoreutils: add option to build
+	audit2allow
+Message-ID: <20170409134130.4088182306@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb77bd3dabe1fc2d0fa9ef0f8967e25eb550c9fb
+commit: https://git.buildroot.net/buildroot/commit/?id=005a5f33f25821af1edae15c7811c4ad305d3f0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libselinux currently does not compile its python wrapper module for
-the target. This is needed for audit2allow to function properly, and
-therefore this patch adjusts libselinux.mk to install the python
-wrapper module is python or python3 are enabled.
+This python utility scans the logs for messages logged when the system
+denied permission for operations, and  generates  a snippet of policy
+rules which, if loaded into policy, might have allowed  those operations
+to succeed.  However, this utility only generates Type Enforcement (TE)
+allow rules.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-[Thomas:
- - Remove useless empty lines, as noted by Matt Weber
- - Move code related to python bindings before builds/install
-   commands, since those commands will use variables defined by the
-   python bindings logic.
- - Instead of enabling the python bindings when
-   BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW is set, enable the python
-   bindings when python is available. We generally try to avoid
-   looking at options of other packages to decide what to install.
- - Introduce LIBSELINUX_MAKE_TARGETS and
-   LIBSELINUX_MAKE_INSTALL_TARGETS variable, in order to avoid
-   duplicate the make/make install commands.
- - As suggested by Matt Weber, remove LIBSELINUX_PYTHONLIBDIR
-   definitions, and don't pass PYLIBVER and PYTHONLIBDIR in MAKE_OPTS.]
+[Thomas: adjust Config.in to propagate the dependencies of sepolgen,
+checkpolicy and python3.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libselinux/libselinux.mk | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ package/policycoreutils/Config.in          | 20 ++++++++++++++++++++
+ package/policycoreutils/policycoreutils.mk | 14 ++++++++++++++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 6bf1b43..ca7836f 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -20,16 +20,41 @@ LIBSELINUX_MAKE_OPTS = \
- 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
- 	ARCH=$(KERNEL_ARCH)
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+index 53238b4..4b8a9dc 100644
+--- a/package/policycoreutils/Config.in
++++ b/package/policycoreutils/Config.in
+@@ -45,6 +45,26 @@ config BR2_PACKAGE_POLICYCOREUTILS
  
-+LIBSELINUX_MAKE_TARGETS = all
-+LIBSELINUX_MAKE_INSTALL_TARGETS = install
+ if BR2_PACKAGE_POLICYCOREUTILS
+ 
++config BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW
++	bool "audit2allow"
++	depends on BR2_USE_WCHAR # python3, sepolgen
++	depends on BR2_USE_MMU # python3, sepolgen
++	depends on BR2_TOOLCHAIN_HAS_THREADS # python3, sepolgen, checkpolicy
++	depends on !BR2_STATIC_LIBS # python3, sepolgen
++	depends on BR2_TOOLCHAIN_USES_GLIBC # checkpolicy
++	depends on !BR2_arc # checkpolicy
++	select BR2_PACKAGE_SEPOLGEN
++	select BR2_PACKAGE_CHECKPOLICY
++	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
++	help
++	  Enable audit2allow to be built
 +
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++comment "audit2allow needs a glibc toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_arc
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
+ 	bool "restorecond"
+ 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 911d40d..c9dca4c 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -50,6 +50,20 @@ ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
+ POLICYCOREUTILS_MAKE_DIRS += restorecond
+ POLICYCOREUTILS_DEPENDENCIES += libglib2
+ endif
++
++ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW),y)
 +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+LIBSELINUX_DEPENDENCIES += python3 host-swig
-+LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m
-+LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
-+else ifeq ($(BR2_PACKAGE_PYTHON),y)
-+LIBSELINUX_DEPENDENCIES += python host-swig
-+LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
-+LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
++POLICYCOREUTILS_DEPENDENCIES += python3
++POLICYCOREUTILS_MAKE_OPTS += PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
++else
++POLICYCOREUTILS_DEPENDENCIES += python
++POLICYCOREUTILS_MAKE_OPTS += PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
 +endif
 +
-+LIBSELINUX_MAKE_OPTS += \
-+	PYINC="$(LIBSELINUX_PYINC)" \
-+	PYSITEDIR=$(TARGET_DIR)/usr/lib/$(LIBSELINUX_PYLIBVER)/site-packages \
-+	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++POLICYCOREUTILS_DEPENDENCIES += sepolgen checkpolicy
++POLICYCOREUTILS_MAKE_DIRS += audit2allow
++endif
 +
-+LIBSELINUX_MAKE_TARGETS += swigify pywrap
-+LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
-+endif # python || python3
-+
- define LIBSELINUX_BUILD_CMDS
- 	# DESTDIR is needed during the compile to compute library and
- 	# header paths.
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
-+		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
-+		$(LIBSELINUX_MAKE_TARGETS)
- endef
- 
- define LIBSELINUX_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
-+		$(LIBSELINUX_MAKE_INSTALL_TARGETS)
- endef
- 
- define LIBSELINUX_INSTALL_TARGET_CMDS
+ # We need to pass DESTDIR at build time because it's used by
+ # policycoreutils build system to find headers and libraries.
+ define POLICYCOREUTILS_BUILD_CMDS
