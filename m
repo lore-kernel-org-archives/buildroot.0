@@ -1,57 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Apr 2017 09:57:44 +0200
-Subject: [Buildroot] [git commit] pkg-stats: also parse toolchain packages
-Message-ID: <20170409075804.C7869821DB@busybox.osuosl.org>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Sun,  9 Apr 2017 14:04:12 +0530
+Subject: [Buildroot] [PATCH 01/10] micropython-lib: use SPDX short
+	identifier for Python license
+Message-ID: <1491726861-8779-1-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0274ae8b56e95206a5c3e62686a8c809d08dd01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- support/scripts/pkg-stats | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ package/micropython-lib/micropython-lib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index aab49d1..4cf1f82 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -91,7 +91,7 @@ packages_without_hash_file=0
- total_patch_count=0
- cnt=0
+diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
+index 066572e..c9423fe 100644
+--- a/package/micropython-lib/micropython-lib.mk
++++ b/package/micropython-lib/micropython-lib.mk
+@@ -6,7 +6,7 @@
  
--for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
-+for i in $(find boot/ linux/ package/ toolchain/ -name '*.mk' | sort) ; do
+ MICROPYTHON_LIB_VERSION = v1.8.6
+ MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
+-MICROPYTHON_LIB_LICENSE = Python software foundation license v2 (some modules), MIT (everything else)
++MICROPYTHON_LIB_LICENSE = Python-2.0 (some modules), MIT (everything else)
+ MICROPYTHON_LIB_LICENSE_FILES = LICENSE
  
-     if test \
- 	$i = "boot/common.mk" -o \
-@@ -121,7 +121,12 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	$i = "package/pkg-generic.mk" -o \
- 	$i = "package/pkg-waf.mk" -o \
- 	$i = "package/pkg-kernel-module.mk" -o \
--	$i = "package/pkg-utils.mk" ; then
-+	$i = "package/pkg-utils.mk" -o \
-+	$i = "toolchain/toolchain-external/pkg-toolchain-external.mk" -o \
-+	$i = "toolchain/toolchain-external/toolchain-external.mk" -o \
-+	$i = "toolchain/toolchain.mk" -o \
-+	$i = "toolchain/helpers.mk" -o \
-+	$i = "toolchain/toolchain-wrapper.mk" ; then
- 	echo "skipping $i" 1>&2
- 	continue
-     fi
-@@ -218,6 +223,11 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	hastarget=1
-     fi
- 
-+    if grep -E "\(toolchain-external-package\)" $i > /dev/null ; then
-+	infratype="toolchain-external"
-+	hastarget=1
-+    fi
-+
-     pkg=$(basename $i)
-     dir=$(dirname $i)
-     pkg=${pkg%.mk}
+ define MICROPYTHON_LIB_INSTALL_TARGET_CMDS
+-- 
+2.7.4
