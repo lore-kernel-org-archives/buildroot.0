@@ -1,90 +1,88 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Apr 2017 15:00:03 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/mplayer: disable inline asm on
-	i386
-In-Reply-To: <20170409130003.28289-1-bernd.kuhls@t-online.de>
-References: <20170409130003.28289-1-bernd.kuhls@t-online.de>
-Message-ID: <20170409130003.28289-2-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Apr 2017 15:30:25 +0200
+Subject: [Buildroot] [git commit] libselinux: allow compiling python wrapper
+	module for target
+Message-ID: <20170409134130.34FE6826C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A similar fix was committed to ffmpeg in the past:
-https://git.buildroot.net/buildroot/commit/package/ffmpeg?id=bfb8df2ad9b164b421d25294c6882c8b61dc59a5
-which will be reverted with another patch.
+commit: https://git.buildroot.net/buildroot/commit/?id=eb77bd3dabe1fc2d0fa9ef0f8967e25eb550c9fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Mplayer contains ffmpeg 3.0, with current ffmpeg 3.2.4 the bug is gone,
-the difference between both revisions is too big in order to find a
-real fix for the problem.
+libselinux currently does not compile its python wrapper module for
+the target. This is needed for audit2allow to function properly, and
+therefore this patch adjusts libselinux.mk to install the python
+wrapper module is python or python3 are enabled.
 
-Special cflags, added by
-https://git.buildroot.net/buildroot/commit/package/multimedia/mplayer?id=fd38100e1189d19cad87a64c52df2c773eb47e40
-are no longer needed now so remove them as well.
-
-Testing these defconfigs did not produce compile errors with current
-ffmpeg but with mplayer:
-
-BR2_i386=y
-BR2_x86_i586=y
-BR2_GCC_VERSION_4_8_X=y
-
-BR2_i386=y
-BR2_x86_i586=y
-BR2_GCC_VERSION_5_X=y
-
-BR2_i386=y
-BR2_x86_i586=y
-BR2_GCC_VERSION_6_X=y
-
-BR2_i386=y
-BR2_x86_i486=y
-BR2_GCC_VERSION_5_X=y
-
-BR2_i386=y
-BR2_x86_i686=y
-BR2_GCC_VERSION_5_X=y
-
-BR2_i386=y
-BR2_x86_pentium_mmx=y
-BR2_GCC_VERSION_5_X=y
-
-BR2_i386=y
-BR2_x86_corei7=y
-BR2_GCC_VERSION_5_X=y
-
-Fixes
-http://autobuild.buildroot.net/results/030/03066dd8937ef4c75d62f237fd195df92b247ee2//
-and many others.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+[Thomas:
+ - Remove useless empty lines, as noted by Matt Weber
+ - Move code related to python bindings before builds/install
+   commands, since those commands will use variables defined by the
+   python bindings logic.
+ - Instead of enabling the python bindings when
+   BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW is set, enable the python
+   bindings when python is available. We generally try to avoid
+   looking at options of other packages to decide what to install.
+ - Introduce LIBSELINUX_MAKE_TARGETS and
+   LIBSELINUX_MAKE_INSTALL_TARGETS variable, in order to avoid
+   duplicate the make/make install commands.
+ - As suggested by Matt Weber, remove LIBSELINUX_PYTHONLIBDIR
+   definitions, and don't pass PYLIBVER and PYTHONLIBDIR in MAKE_OPTS.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: Clarified commit message (Thomas)
+ package/libselinux/libselinux.mk | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
 
- package/mplayer/mplayer.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 6b3009abc..14ab8acee 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -285,10 +285,13 @@ MPLAYER_CFLAGS += -mfpu=neon
- endif
- endif
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 6bf1b43..ca7836f 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -20,16 +20,41 @@ LIBSELINUX_MAKE_OPTS = \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
+ 	ARCH=$(KERNEL_ARCH)
  
-+define MPLAYER_DISABLE_INLINE_ASM
-+	$(SED) 's,#define HAVE_INLINE_ASM 1,#define HAVE_INLINE_ASM 0,g' \
-+		$(@D)/config.h
-+endef
++LIBSELINUX_MAKE_TARGETS = all
++LIBSELINUX_MAKE_INSTALL_TARGETS = install
 +
- ifeq ($(BR2_i386),y)
--# inline asm breaks with "can't find a register in class 'GENERAL_REGS'"
--# inless we free up ebp
--MPLAYER_CFLAGS += -fomit-frame-pointer
-+MPLAYER_POST_CONFIGURE_HOOKS += MPLAYER_DISABLE_INLINE_ASM
- endif
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++LIBSELINUX_DEPENDENCIES += python3 host-swig
++LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m
++LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
++else ifeq ($(BR2_PACKAGE_PYTHON),y)
++LIBSELINUX_DEPENDENCIES += python host-swig
++LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
++LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
++endif
++
++LIBSELINUX_MAKE_OPTS += \
++	PYINC="$(LIBSELINUX_PYINC)" \
++	PYSITEDIR=$(TARGET_DIR)/usr/lib/$(LIBSELINUX_PYLIBVER)/site-packages \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++
++LIBSELINUX_MAKE_TARGETS += swigify pywrap
++LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
++endif # python || python3
++
+ define LIBSELINUX_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
++		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
++		$(LIBSELINUX_MAKE_TARGETS)
+ endef
  
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
--- 
-2.11.0
+ define LIBSELINUX_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
++		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
++		$(LIBSELINUX_MAKE_INSTALL_TARGETS)
+ endef
+ 
+ define LIBSELINUX_INSTALL_TARGET_CMDS
