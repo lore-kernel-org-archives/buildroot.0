@@ -1,94 +1,127 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sun,  9 Apr 2017 14:04:21 +0530
-Subject: [Buildroot] [PATCH 10/10] wpan-tools: bump to version 0.7
-In-Reply-To: <1491726861-8779-1-git-send-email-rahulbedarkar89@gmail.com>
-References: <1491726861-8779-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1491726861-8779-10-git-send-email-rahulbedarkar89@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun, 9 Apr 2017 11:28:16 +0200
+Subject: [Buildroot] [PATCH v2] atest: new package
+In-Reply-To: <1491156583-9920-1-git-send-email-festevam@gmail.com>
+References: <1491156583-9920-1-git-send-email-festevam@gmail.com>
+Message-ID: <CAKcgs2w6ms9T2KcwnAkJku-JBsq2OB7mKsutciu7bTbxsK2BQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch.
+Hi Fabio, all,
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
----
- .../0001-fix-build-with-newer-libnl.patch          | 40 ----------------------
- package/wpan-tools/wpan-tools.hash                 |  4 +--
- package/wpan-tools/wpan-tools.mk                   |  2 +-
- 3 files changed, 3 insertions(+), 43 deletions(-)
- delete mode 100644 package/wpan-tools/0001-fix-build-with-newer-libnl.patch
+2017-04-02 20:09 GMT+02:00 Fabio Estevam <festevam@gmail.com>:
+> Add support for atest application, which is useful for testing
+> alsa kernel drivers and detecting if playback/capture are correct
+> without artifacts, such as channel swap.
+>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Changes since v1:
+> - Fix license type and add COPYING entry
+>
+>  DEVELOPERS               |  1 +
+>  package/Config.in        |  1 +
+>  package/atest/Config.in  |  9 +++++++++
+>  package/atest/atest.hash |  2 ++
+>  package/atest/atest.mk   | 20 ++++++++++++++++++++
+>  5 files changed, 33 insertions(+)
+>  create mode 100644 package/atest/Config.in
+>  create mode 100644 package/atest/atest.hash
+>  create mode 100644 package/atest/atest.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c89468b..bf64f98 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -501,6 +501,7 @@ F:  configs/mx6sx_udoo_neo_defconfig
+>  F:     configs/mx6udoo_defconfig
+>  F:     configs/wandboard_defconfig
+>  F:     configs/warp7_defconfig
+> +F:     package/atest/
+>  F:     package/kmscube/
+>
+>  N:     Fabio Porcedda <fabio.porcedda@gmail.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index d6d134d..226a6e1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -5,6 +5,7 @@ menu "Target packages"
+>
+>  menu "Audio and video applications"
+>         source "package/alsa-utils/Config.in"
+> +       source "package/atest/Config.in"
+>         source "package/aumix/Config.in"
+>         source "package/bellagio/Config.in"
+>         source "package/dvblast/Config.in"
+> diff --git a/package/atest/Config.in b/package/atest/Config.in
+> new file mode 100644
+> index 0000000..64c9e7c
+> --- /dev/null
+> +++ b/package/atest/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_ATEST
+> +       bool "atest"
+> +       depends on BR2_PACKAGE_ALSA_LIB
+> +       depends on BR2_PACKAGE_LIBEV
+I would actually use SELECT here. Just to increase the chances of the
+package to be visible
+then
+depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+depends on !BR2_bfin # libev
 
-diff --git a/package/wpan-tools/0001-fix-build-with-newer-libnl.patch b/package/wpan-tools/0001-fix-build-with-newer-libnl.patch
-deleted file mode 100644
-index 03e1a03..0000000
---- a/package/wpan-tools/0001-fix-build-with-newer-libnl.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 51ab69d76aa708c79aed971ee4083abb8cc07201 Mon Sep 17 00:00:00 2001
--From: Stefan Schmidt <stefan@osg.samsung.com>
--Date: Mon, 9 Nov 2015 19:06:25 +0100
--Subject: [PATCH] build: avoid redefinition errors with libnl >= 3.2.27
--
--From 3.2.17 onwards we have nla for s8, s16, etc defined directly in libnl.
--If we keep including this file anyway we run into redefinition errors. Better
--include use our own only for earlier versions.
--
--Happened to me on Fedora 22 after my last update.
--
--Signed-off-by: Stefan Schmidt <stefan@osg.samsung.com>
--Acked-by: Alexander Aring <alex.aring@gmail.com>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Patch status: upstream
--
-- src/nl_extras.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/nl_extras.h b/src/nl_extras.h
--index 9d841aa..c4d1d14 100644
----- a/src/nl_extras.h
--+++ b/src/nl_extras.h
--@@ -1,6 +1,8 @@
-- #ifndef __NL_EXTRAS_H
-- #define __NL_EXTRAS_H
-- 
--+#if LIBNL_VER_MIC <= 26
--+
-- #ifndef NLA_S8
-- 
-- #define NLA_S8	13
--@@ -43,4 +45,6 @@ static inline int32_t nla_get_s32(struct nlattr *nla)
-- 
-- #endif /* NLA_S64 */
-- 
--+#endif /* LIBNL_VER_MIC */
--+
-- #endif /* __NL_EXTRAS_H */
-diff --git a/package/wpan-tools/wpan-tools.hash b/package/wpan-tools/wpan-tools.hash
-index fbcf64c..6a3b6d1 100644
---- a/package/wpan-tools/wpan-tools.hash
-+++ b/package/wpan-tools/wpan-tools.hash
-@@ -1,4 +1,4 @@
- # From http://wpan.cakelab.org/releases/md5sum
--md5	c6356f7be4de2e9f2084283b9ed7e1ab	wpan-tools-0.5.tar.gz
-+md5	06608f69951088844196f79685318aa9	wpan-tools-0.7.tar.gz
- # Calculated based on the hash above
--sha256	f381f24eb1962aa9e21751004560371bb9ad8bd0b735bc493930f50e8c1f3d99	wpan-tools-0.5.tar.gz
-+sha256	8b690ff0e71e08bece5ec541223fda7abd2d5552d97d3d25b4967609b58fef00	wpan-tools-0.7.tar.gz
-diff --git a/package/wpan-tools/wpan-tools.mk b/package/wpan-tools/wpan-tools.mk
-index 012b946..a604dab 100644
---- a/package/wpan-tools/wpan-tools.mk
-+++ b/package/wpan-tools/wpan-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPAN_TOOLS_VERSION = 0.5
-+WPAN_TOOLS_VERSION = 0.7
- WPAN_TOOLS_SITE = http://wpan.cakelab.org/releases
- WPAN_TOOLS_DEPENDENCIES = host-pkgconf libnl
- WPAN_TOOLS_LICENSE = ISC
--- 
-2.7.4
+> +       help
+> +         atest is a test software for checking ALSA Asoc drivers
+> +         concerning the proper frame generation and capture.
+> +
+> +         https://github.com/amouiche/atest
+> diff --git a/package/atest/atest.hash b/package/atest/atest.hash
+> new file mode 100644
+> index 0000000..16b05c9
+> --- /dev/null
+> +++ b/package/atest/atest.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 6572b42170d3ad00dfc6362501f0e41fda7e2e7d79ff1757a2050415ad3f6ee4  atest-2e2299e9949b713f3c89cf84692dc6db6ab3a2e9.tar.gz
+> diff --git a/package/atest/atest.mk b/package/atest/atest.mk
+> new file mode 100644
+> index 0000000..af1760d
+> --- /dev/null
+> +++ b/package/atest/atest.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# atest
+> +#
+> +################################################################################
+> +
+> +ATEST_VERSION = 2e2299e9949b713f3c89cf84692dc6db6ab3a2e9
+There's a newer version (895b0183a89c15f5e2305a6795bb1667753cd3f0)
+
+> +ATEST_SITE = $(call github,amouiche,atest,$(ATEST_VERSION))
+> +ATEST_LICENSE = GPLv2+
+Please use SPDX short identifier (GPL-2.0+)
+
+> +ATEST_LICENSE_FILES = COPYING
+> +ATEST_DEPENDENCIES = host-pkgconf libev alsa-lib
+> +ATEST_AUTORECONF = YES
+You need to provide a comment such as "Fetched from Github, with no
+configure script"
+
+> +
+> +# Autoreconf requires an existing m4 directory
+> +define ATEST_PATCH_M4
+> +       mkdir -p $(@D)/m4
+> +endef
+> +ATEST_POST_PATCH_HOOKS += ATEST_PATCH_M4
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
