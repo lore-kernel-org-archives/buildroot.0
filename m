@@ -1,46 +1,82 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  8 Apr 2017 23:05:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.79
-Message-ID: <20170408210526.16139-1-bernd.kuhls@t-online.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 9 Apr 2017 06:32:15 +0200
+Subject: [Buildroot] [PATCH v2] package/uclibc: Enable wordexp
+	functionality
+In-Reply-To: <20170321170614.161e8eec@free-electrons.com>
+References: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
+ <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
+ <20170321170614.161e8eec@free-electrons.com>
+Message-ID: <20170409043215.GT5361@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Hi,
+Thomas Petazzoni wrote,
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 82bcc05b6..d823ac01f 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2017-April/138416.html
--md5 049ee80ce816cbef7669e7807b2ee816  libdrm-2.4.78.tar.bz2
--sha1 fdf0e8f2951e75d8d230a7960d32f4f3ca6ceb90  libdrm-2.4.78.tar.bz2
--sha256 3dbe2ed3e2ee6ebe8a848195286ef362f66675a7102958e42906d734aa6925d8  libdrm-2.4.78.tar.bz2
--sha512 f5010583322a4742bbbb55d5d7083f11366be0f11ae51a6830a9ce14c1cb7e2a8163f92db15d2c90a464a5cfce9d3bfa4e6f9739bcb382fe7007eae1b288ee85  libdrm-2.4.78.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2017-April/138561.html
-+md5 84ba6e8e6c97d2684938eb949e6dfdf8  libdrm-2.4.79.tar.bz2
-+sha1 0dd194538c90619146a83a65f2074564e1a14d55  libdrm-2.4.79.tar.bz2
-+sha256 c6aaf319293bce38023e9a637471b0f45c93c807d2a279060d741fc7a2e5b197  libdrm-2.4.79.tar.bz2
-+sha512 62d6dbdf5e4e73e948fcb128a3ee76c88843d0aabf0af5751526829e9b95cff151a121af88ba9625acc7f5bc4ecfa71f9a3762005d5da76cff1d91dfc8ea8ea7  libdrm-2.4.79.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 2b294fe56..ea7c7271e 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.78
-+LIBDRM_VERSION = 2.4.79
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
--- 
-2.11.0
+> Hello,
+> 
+> On Tue, 21 Mar 2017 18:02:36 +0200, Andy Shevchenko wrote:
+> 
+> > The commit d7c54cb0c0cf ("bluez5_utils: not available with uClibc")
+> > disables bluez5_utils (most of them) to be built with uClibc. Looking to
+> > the development of BlueZ user space support that commit basically makes
+> > the bluez5_utils package somewhat piece of junk.
+> 
+> Not sure I understand what you mean here.
+> 
+> > Since bluez5_utils 5.44
+> > deprecates all previously used tools and focuses on btmgmt and
+> > bluetoothctl we need to restore status quo.
+> 
+> Same here, I don't understand.
+> 
+> > diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+> > index 528bce965..91082975e 100644
+> > --- a/package/uclibc/uClibc-ng.config
+> > +++ b/package/uclibc/uClibc-ng.config
+> > @@ -32,6 +32,7 @@ UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+> >  UCLIBC_HAS_PRINTF_M_SPEC=y
+> >  # UCLIBC_HAS_REGEX_OLD is not set
+> >  # UCLIBC_HAS_FNMATCH_OLD is not set
+> > +UCLIBC_HAS_WORDEXP=y
+> >  UCLIBC_HAS_NFTW=y
+> >  UCLIBC_HAS_FTW=y
+> >  UCLIBC_HAS_GNU_GLOB=y
+> 
+> Could you comment on the size impact of enabling this option? I.e the
+> size of uClibc without/with this option enabled, for example on ARM?
+
+For mips64:
+diff --git a/package/uclibc/uClibc-ng.config
+b/package/uclibc/uClibc-ng.config
+index 528bce9..9108297 100644
+--- a/package/uclibc/uClibc-ng.config
++++ b/package/uclibc/uClibc-ng.config
+@@ -32,6 +32,7 @@ UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+ UCLIBC_HAS_PRINTF_M_SPEC=y
+ # UCLIBC_HAS_REGEX_OLD is not set
+ # UCLIBC_HAS_FNMATCH_OLD is not set
++UCLIBC_HAS_WORDEXP=y
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
+ UCLIBC_HAS_GNU_GLOB=y
+wbx at helium:~/buildroot$ ls -la t1/lib/libu*
+-rwxr-xr-x 1 wbx wbx 655320 Apr  8 22:00 t1/lib/libuClibc-1.0.23.so
+wbx at helium:~/buildroot$ ls -la t2/lib/libu*
+-rwxr-xr-x 1 wbx wbx 672280 Apr  8 23:08 t2/lib/libuClibc-1.0.23.so
+wbx at helium:~/buildroot$ bc
+bc 1.06.95
+Copyright 1991-1994, 1997, 1998, 2000, 2004, 2006 Free Software
+Foundation, Inc.
+This is free software with ABSOLUTELY NO WARRANTY.
+For details type `warranty'. 
+672280-655320
+16960
+
+16960 Bytes. Can we enable it by default?
+
+best regards
+ Waldemar
