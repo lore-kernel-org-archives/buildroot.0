@@ -1,63 +1,114 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 13:53:53 +0200
-Subject: [Buildroot] [PATCHv2] libbson: new package
-In-Reply-To: <1491587714.491322104@f30.my.com>
-References: <libbson:> <1491567498-24437-1-git-send-email-semenak94@mail.ru>
- <1783c11b-00c2-8fe3-7c2b-ec6f23149771@mind.be>
- <1491587714.491322104@f30.my.com>
-Message-ID: <1df728ce-3c14-a9d8-2f11-cbe837a90e38@mind.be>
+Date: Mon, 10 Apr 2017 13:56:25 +0200
+Subject: [Buildroot] [PATCH v2] xenomai: Add config for
+	enabling/disabling SMP
+In-Reply-To: <20170410001700.31490-1-sikor6@gmail.com>
+References: <20170406234657.31813-1-sikor6@gmail.com>
+ <20170410001700.31490-1-sikor6@gmail.com>
+Message-ID: <5d7c18eb-bfb5-c3f3-2268-5edf0f6c08ae@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Semyon,
-
- Please keep the list in Cc. Your questions and answers may be relevant to other
-people as well, and you may get faster answers from someone else.
 
 
-On 07-04-17 19:55, semenak94 at mail.ru wrote:
-> Thanks for such detailed answer and  your patience! I'm still a newcomer in
-> buildroot community and it's my first experience in open source.
+On 10-04-17 02:17, Pawel Sikora wrote:
+> Add a config option for enabling/disabling SMP
+> in Xenomai userspace in version 3.x
+> 
+> Enabled by default.
+> 
+> Signed-off-by: Pawel Sikora <sikor6@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - default y, moving comment to help, changed help, adding explicitly
+>    --disable-smp opt in the else statement (suggested by Arnout V.)
+>  
+>  package/xenomai/Config.in  | 24 ++++++++++++++++++++++++
+>  package/xenomai/xenomai.mk |  6 ++++++
+>  2 files changed, 30 insertions(+)
+> 
+> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+> index b548ee810..b2697e5af 100644
+> --- a/package/xenomai/Config.in
+> +++ b/package/xenomai/Config.in
+> @@ -51,6 +51,30 @@ config BR2_PACKAGE_XENOMAI_VERSION
+>  	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
+>  	  Kernel -> Linux Kernel Extensions menu.
+>  
+> +config BR2_PACKAGE_XENOMAI_ENABLE_SMP
+> +	bool "Enable SMP"
+> +	default y
+> +	help
+> +	  This option allows to enable SMP in Xenomai userspace.
+> +
+> +	  Please note:
+> +	  If you use Xenomai 2.x you have SMP enabled by default.
+> +
+> +	  Xenomai 3.x is being built by default with SMP disabled,
+> +	  but to have a behaviour similar to previous versions,
+> +	  option is enabled by default and you need to uncheck it
+> +	  if you don't need it.
+> +
+> +	  Second reason of setting it by default is that Xenomai
+> +	  userspace with SMP enabled and with Linux Kernel without
+> +	  SMP config are working fine together.
+> +	  But NOT the other way around.
+> +
+> +	  Please refer to this troubleshooting guide for more
+> +	  information in section "feature mismatch: missing=?smp/nosmp?:
+> +
+> +	  https://xenomai.org/troubleshooting-a-dual-kernel-configuration/
 
- We aim to please :-) (though sometimes we miss :-P )
+ The https address doesn't work for me, the http equivalent does...
+
+ As said in my previous mail, I think we don't need to spend too much effort on
+supporting Xenomai 2.x (which anyway doesn't work ATM). Also in general this
+explanation is a bit too extensive. Here's a shorter alternative.
+
+	  This option enables SMP support in Xenomai userspace.
+
+	  If this option is turned on while no SMP support is enabled
+	  in the kernel, things will still work. However, if SMP is
+	  enabled in the kernel but this option is not turned on,
+	  Xenomai applications will complain with 'feature mismatch:
+	  missing="smp/nosmp'.
+
+	  Please refer to this troubleshooting guide for more
+	  information:
+	
+http://xenomai.org/troubleshooting-a-dual-kernel-configuration/#feature_mismatch_missing8221smpnosmp8221
 
 
-> And I have some question : how correctly set all licenses of package, except
-> watching license file? I'm not experienced in it... 
-
- It's unfortunately not so easy. Many packages reuse source code from somewhere
-else, so you really have to look at every file to check the license. Fortunately
-there are tools that can help:
-
-- the 'licensecheck' script in Debian/Ubuntu;
-- fossology, which has an online version at https://fossology.ist.unomaha.edu/
-
- However, some files in the source code are not used at all (e.g.
-windows-specific sources), or don't end up in the target (e.g. the build
-scripts), and these shouldn't be included in the license statement.
-
- For packages that have a Debian equivalent, it's also a good idea to look at
-the copyright declaration in Debian, but sometimes their binary packages are
-split up differently which can make it tricky to get it right.
-
-> Does license in buildroot
-> have any more value,  than formal signature?
-
- Not sure what you mean here. The license specification helps people to
-understand which licenses they have to comply with when they use the result of
-the Buildroot build. If with "formal signature" you mean the Signed-off-by, that
-only says something about compliance with the license of Buildroot itself, it
-has nothing to do with packages.
 
  Regards,
  Arnout
 
+
+> +
+>  config BR2_PACKAGE_XENOMAI_TESTSUITE
+>  	bool "Install testsuite"
+>  	help
+> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+> index c9e810e05..04880e69a 100644
+> --- a/package/xenomai/xenomai.mk
+> +++ b/package/xenomai/xenomai.mk
+> @@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+>  
+>  XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
+>  
+> +ifeq ($(BR2_PACKAGE_XENOMAI_ENABLE_SMP),y)
+> +XENOMAI_CONF_OPTS += --enable-smp
+> +else
+> +XENOMAI_CONF_OPTS += --disable-smp
+> +endif
+> +
+>  define XENOMAI_REMOVE_DEVFILES
+>  	for i in xeno-config xeno-info wrap-link.sh ; do \
+>  		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
 > 
-> Thanks a lot and sorry for stupid questions.
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
