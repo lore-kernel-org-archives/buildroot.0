@@ -1,39 +1,50 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Apr 2017 12:01:30 +0100
-Subject: [Buildroot] [PATCH] cjson: bump version to v1.4.6
-Message-ID: <20170410110130.31383-1-Vincent.Riera@imgtec.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 10 Apr 2017 13:02:40 +0200
+Subject: [Buildroot] [PATCH v5 2/2] systemd: select util-linux/fsck and
+	e2fsprogs/e2fsck
+In-Reply-To: <1491794596-8454-3-git-send-email-casantos@datacom.ind.br>
+References: <1491794596-8454-1-git-send-email-casantos@datacom.ind.br>
+ <1491794596-8454-3-git-send-email-casantos@datacom.ind.br>
+Message-ID: <CAGduivxv5seLe6Oz7j+DBjA3kX=b5ksKfTPbStTYezhrKqo7Yg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi all, Carlos
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 2e38a8b..a8e855a 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 3d0a61f2023749a6b813cadc713234a2ea393cf5482d910cf91584f13a82af13  cjson-v1.4.5.tar.gz
-+sha256 7db3981015a4168a186c2f554842bd7abb8d1c969f081e8d4208e36fb260059a  cjson-v1.4.6.tar.gz
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 55417d1..f2f2925 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = v1.4.5
-+CJSON_VERSION = v1.4.6
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
--- 
-2.10.2
+Thanks for pushing with this, it's really neat :)
+
+On Mon, Apr 10, 2017 at 5:23 AM, Carlos Santos <casantos@datacom.ind.br> wrote:
+> e2fsprogs does not override/remove the fsck from util-linux anymore when
+> /sbin and /usr/sbin are merged. So we can select the fsck tools required
+> by systemd provided by those packages. This also prevents ending up with
+> the fsck from busybox, which is incompatible with systemd.
+>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/systemd/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 0f54686..f5eb9d0 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>         select BR2_PACKAGE_UTIL_LINUX_BINARIES
+>         select BR2_PACKAGE_UTIL_LINUX_MOUNT
+>         select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+> +       select BR2_PACKAGE_UTIL_LINUX_FSCK
+> +       select BR2_PACKAGE_E2FSPROGS
+> +       select BR2_PACKAGE_E2FSPROGS_E2FSCK
+>         select BR2_PACKAGE_KMOD
+>         select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+>         select BR2_PACKAGE_KMOD_TOOLS
+> --
+I haven't tested it but this looks good to me.
+
+Reviewed-by: "Maxime Hadjinlian <maxime.hadjinlian@gmail.com>"
+
+> 2.7.4
+>
