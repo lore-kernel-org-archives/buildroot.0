@@ -1,129 +1,78 @@
-From: Kevin JOLY <kevin.joly@sensefly.com>
-Date: Mon, 10 Apr 2017 09:38:47 +0200
-Subject: [Buildroot] [PATCH v2] libgphoto2: Add libgphoto2 package
-Message-ID: <1491809927-21141-1-git-send-email-kevin.joly@sensefly.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Apr 2017 10:06:33 +0200
+Subject: [Buildroot] [PATCH v2] arp-scan: new package
+In-Reply-To: <20170408180349.GR5361@waldemar-brodkorb.de>
+References: <20170405101410.27980-1-arnout@mind.be>
+ <20170405183445.6cde0af8@free-electrons.com>
+ <20170408180349.GR5361@waldemar-brodkorb.de>
+Message-ID: <7f6d8f28-48f6-c1e8-2fc2-9351d5fb1e73@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for libgphoto2 core library designed to allow access to digital camera.
 
-Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
----
-Changes v1 -> v2 (suggested by Romain Naour)
-- Handle optionnal dependencies on libexif, libjpeg, libgd and lockdev
-- Add license informations
-- Use tar.bz2 package
-- Change hash
-- Added myself as package maintainer in the DEVELOPPERS file
 
-Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
----
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/libgphoto2/Config.in       | 11 +++++++++++
- package/libgphoto2/libgphoto2.hash |  6 ++++++
- package/libgphoto2/libgphoto2.mk   | 33 +++++++++++++++++++++++++++++++++
- 5 files changed, 54 insertions(+)
- create mode 100644 package/libgphoto2/Config.in
- create mode 100644 package/libgphoto2/libgphoto2.hash
- create mode 100644 package/libgphoto2/libgphoto2.mk
+On 08-04-17 20:03, Waldemar Brodkorb wrote:
+> Hi Thomas,
+> Thomas Petazzoni wrote,
+> 
+>> Hello,
+>>
+>> On Wed, 5 Apr 2017 12:14:10 +0200, Arnout Vandecappelle
+>> (Essensium/Mind) wrote:
+>>> On the br-arm-cortex-m4-full toolchain, the build fails with a
+>>> segmentation fault in elf2flt, so add an exception for ARM FLAT
+>>> toolchains. Other FLAT toolchains (e.g. br-m68k-5208-full) work fine.
+>>>
+>>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>> ---
+>>> I tried to debug the elf2flt segfault but elf2flt isn't exactly the
+>>> most low-entry-bar source code...
+>>
+>> I think we have a regression here, which I would point to the bump of
+>> binutils from 2.26 to 2.27. Indeed, several packages are now causing
+>> segfaults in elf2flt on ARM:
+>>
+>> Busybox:
+>>
+>>   http://autobuild.buildroot.net/results/475/4758354f0e2f7f127c1a99ef7846eb62f5ce41b5/build-end.log
+>>
+>> pcre:
+>>
+>>   http://autobuild.buildroot.net/results/68c/68cf951594b0e67b45f8711745c17b93e2fbc03e/build-end.log
+>>
+>> and I'm sure the list will grow. So I believe that binutils 2.27
+>> produces binaries that are a bit different, and confuse elf2flt.
+>>
+>> Looking at https://github.com/uclinux-dev/elf2flt/commits/master, I
+>> don't see anything that particular stands out.
+> 
+> It seems this is somehow fixed with binutils 2.28. But I have no
+> idea in which commit(s).
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a298669..1f45012 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -957,6 +957,9 @@ F:	package/cpuload/
- F:	package/bwm-ng/
- F:	package/ramsmp/
- 
-+N:	Kevin Joly <kevin.joly@sensefly.com>
-+F:	package/libgphoto2/
-+
- N:	Laurent Cans <laurent.cans@gmail.com>
- F:	package/aircrack-ng/
- 
-diff --git a/package/Config.in b/package/Config.in
-index c12e5b5..f98a2b5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1086,6 +1086,7 @@ menu "Hardware handling"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libftdi1/Config.in"
-+	source "package/libgphoto2/Config.in"
- 	source "package/libgpiod/Config.in"
- 	source "package/libgudev/Config.in"
- 	source "package/libhid/Config.in"
-diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
-new file mode 100644
-index 0000000..1626667
---- /dev/null
-+++ b/package/libgphoto2/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBGPHOTO2
-+	select BR2_PACKAGE_LIBTOOL
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	select BR2_PACKAGE_LIBXML2
-+	bool "libgphoto2"
-+	help
-+	  libgphoto2 is the core library designed to allow access to
-+	  digital camera by external programs.
-+
-+	  http://gphoto.org/
-diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
-new file mode 100644
-index 0000000..2e659ab
---- /dev/null
-+++ b/package/libgphoto2/libgphoto2.hash
-@@ -0,0 +1,6 @@
-+# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
-+md5 a5999acc204c31515a6ec8e517d2cd91 libgphoto2-2.5.12.tar.bz2
-+sha1 4ded403b87d46ad49ba88b22b9410789ed3cef10 libgphoto2-2.5.12.tar.bz2
-+
-+# Locally calculated hash
-+sha256 b9bb28990fde45ac385e4851a07dbad2e1250404b535b0a3a3b898bb431e4e2e	libgphoto2-2.5.12.tar.bz2
-diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
-new file mode 100644
-index 0000000..5f4b628
---- /dev/null
-+++ b/package/libgphoto2/libgphoto2.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# libgphoto2
-+#
-+################################################################################
-+
-+LIBGPHOTO2_VERSION = 2.5.12
-+LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
-+LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
-+LIBGPHOTO2_INSTALL_STAGING = YES
-+
-+LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_LIBEXIF),y)
-+LIBGPHOTO2_DEPENDENCIES += libexif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBJPEG),y)
-+LIBGPHOTO2_DEPENDENCIES += libjpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GD),y)
-+LIBGPHOTO2_DEPENDENCIES += gd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LOCKDEV),y)
-+LIBGPHOTO2_DEPENDENCIES += lockdev
-+endif
-+
-+LIBGPHOTO2_LICENSE = LGPLv2.1+
-+LIBGPHOTO2_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ Thanks for the hint! I bisected it to commit 4ba2ef8fbe7. Its parent
+024425668d1 fails, but 4ba2ef8fbe7 doesn't.
+
+ Unfortunately, binutils is such a heap of [fill in something unsavoury] that I
+have a hard time understanding what that patch could do. I'll see if I can
+backport it.
+
+ Regards,
+ Arnout
+
+> Should we blacklist binutils 2.27 for ARM
+> noMMU?
+> 
+> best regards
+>  Waldemar
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
