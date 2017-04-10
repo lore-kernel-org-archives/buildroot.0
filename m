@@ -1,52 +1,39 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Mon, 10 Apr 2017 11:16:07 +1000
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: remove deprecated
-	tool gatttool
-In-Reply-To: <cover.1491786787.git.sam.bobroff@au1.ibm.com>
-References: <cover.1491786787.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20170410011607.GA3042@tungsten.ozlabs.ibm.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 10 Apr 2017 00:23:16 -0300
+Subject: [Buildroot] [PATCH v5 2/2] systemd: select util-linux/fsck and
+	e2fsprogs/e2fsck
+In-Reply-To: <1491794596-8454-1-git-send-email-casantos@datacom.ind.br>
+References: <1491794596-8454-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1491794596-8454-3-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gatttool is no longer built by default, as it has been deprecated.
-Because the package file contains an explicit hook to install this
-tool, the build fails.
+e2fsprogs does not override/remove the fsck from util-linux anymore when
+/sbin and /usr/sbin are merged. So we can select the fsck tools required
+by systemd provided by those packages. This also prevents ending up with
+the fsck from busybox, which is incompatible with systemd.
 
-Rather than enabling deprecated features, remove the explicit hook
-from the package file so the tool isn't installed at all.
-
-See
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b1eb2c4cd057624312e0412f6c4be000f7fc3617
-
-Fixes:
-http://autobuild.buildroot.net/results/ba3/ba30d20fc10a4d538a560d75e2a81e7121328dbc
-
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/bluez5_utils/bluez5_utils.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/systemd/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index d19afc39a..7d3b1edcb 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -45,14 +45,6 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
- endif
- 
--# install gatttool (For some reason upstream choose not to do it by default)
--ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
--define BLUEZ5_UTILS_INSTALL_GATTTOOL
--	$(INSTALL) -D -m 0755 $(@D)/attrib/gatttool $(TARGET_DIR)/usr/bin/gatttool
--endef
--BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_GATTTOOL
--endif
--
- # enable test
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_TEST),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-test
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 0f54686..f5eb9d0 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
++	select BR2_PACKAGE_UTIL_LINUX_FSCK
++	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_E2FSPROGS_E2FSCK
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
 -- 
-2.12.1.382.gc0f9c7058
+2.7.4
