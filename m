@@ -1,13 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 13:58:11 +0200
-Subject: [Buildroot] buildroot | Pipeline #7531221 has failed for master
-	| f78b2c13
-In-Reply-To: <20170410135245.6492e3ae@free-electrons.com>
-References: <58e9fbce8c9e8_17973fbd9c776b74668e1@worker-kiq07.fe.gitlab.com.mail>
- <20170409120255.0155c3fb@free-electrons.com>
- <aa7cc7f6-9b36-bfce-23f3-6131e7355bb6@mind.be>
- <20170410135245.6492e3ae@free-electrons.com>
-Message-ID: <f5261c19-90cd-32ab-8d66-ca18b5ab0d96@mind.be>
+Date: Mon, 10 Apr 2017 14:01:35 +0200
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
+In-Reply-To: <20170410134549.6da2679d@free-electrons.com>
+References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
+ <20170406223644.473ebd65@free-electrons.com>
+ <cd88fd7c-dceb-cef1-59de-e086c6b3df00@sensefly.com>
+ <d0b4e258-3c24-2691-3d93-03c4f1a936e8@gmail.com>
+ <33dd1db4-d5cb-3f49-931d-613dd6967b7d@sensefly.com>
+ <20170410134549.6da2679d@free-electrons.com>
+Message-ID: <0c54f2ff-0a60-01b1-4d3d-72356429c696@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,35 +17,33 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 13:52, Thomas Petazzoni wrote:
+On 10-04-17 13:45, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Sun, 9 Apr 2017 23:10:57 +0200, Arnout Vandecappelle wrote:
+> Thanks for your new iteration of the libgphoto2 patch!
 > 
->>  I configured the mirroring from git.buildroot.org to once per day. Apparently
->> the time when it syncs varies quite a bit. And apparently, it just didn't sync
->> today - the last sync is from Apr 8 2:18.
+> On Mon, 10 Apr 2017 11:24:32 +0200, Kevin JOLY wrote:
 > 
-> OK.
+>>> Also, can you check this new package with the new test-pkg script ? [3]
+>>> (17.20.2. How to test your package).  
+>> I ran the test. Everything was OK except br-arm-cortex-m4-full and 
+>> br-arm-full-nothread.
 > 
->>  I could configure the mirror to once per hour instead, but then the CI will run
->> a little too often. OTOH, I guess you rarely push more than twice a day, right,
-> 
-> I do push much more than twice a day. When I'm actively merging
-> patches, I'm almost pushing between every patch, so in a typical merge
-> session, I can be doing 10, 20 pushes or more.
-> 
->> so it's not going to make that much of a difference... But apparently, I can't
->> even change the synchronisation frequency, "Update every day" is the only option...
-> 
-> OK. Not ideal, but I guess we can live with this.
+> What errors did you had with those toolchains? Did you fix those issue
+> in your v2?
 
- There is actually an API to trigger a sync. So you could use that to trigger a
-sync e.g. half an hour before triggering the build. I'll have to look up the
-details.
+ I expect br-arm-cortex-m4-full runs into the elf2flt segfault, and
+br-arm-full-nothread fails because it depends on threads (as mentioned in my
+review).
 
  Regards,
  Arnout
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
