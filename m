@@ -1,102 +1,185 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 10 Apr 2017 14:22:36 +0200
-Subject: [Buildroot] [PATCH v5 2/2] systemd: select util-linux/fsck and
-	e2fsprogs/e2fsck
-In-Reply-To: <2133795248.18260521.1491826188846.JavaMail.zimbra@datacom.ind.br>
-References: <1491794596-8454-1-git-send-email-casantos@datacom.ind.br>
- <1491794596-8454-3-git-send-email-casantos@datacom.ind.br>
- <CAGduivxv5seLe6Oz7j+DBjA3kX=b5ksKfTPbStTYezhrKqo7Yg@mail.gmail.com>
- <f30c9756-7b98-ec8c-90dd-612d31d81491@mind.be>
- <CAGduivzjdtVRrKJbfD3TZpoNDX=rEUP_d42dErCid-eg1UQySw@mail.gmail.com>
- <3d2149da-e02b-974c-bc4c-904db7bf02ef@mind.be>
- <2133795248.18260521.1491826188846.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <CAGduivwfXJ48p+wLgGSO=aMZ9mZHFBP6d_o3-pyPwiuup_n-ug@mail.gmail.com>
+From: Kevin JOLY <kevin.joly@sensefly.com>
+Date: Mon, 10 Apr 2017 14:23:49 +0200
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
+In-Reply-To: <3577f824-ddbf-7332-018c-221704ebaa46@mind.be>
+References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
+ <3577f824-ddbf-7332-018c-221704ebaa46@mind.be>
+Message-ID: <9eb2fed8-ded9-0da9-6307-50fa534934f7@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 10, 2017 at 2:09 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
->> From: "Arnout Vandecappelle" <arnout@mind.be>
->> To: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
->> Cc: "Carlos Santos" <casantos@datacom.ind.br>, "buildroot" <buildroot@buildroot.org>, "Thomas Petazzoni"
->> <thomas.petazzoni@free-electrons.com>, "Joergen Pihlflyckt" <Jorgen.Pihlflyckt@ajeco.fi>
->> Sent: Monday, April 10, 2017 8:44:45 AM
->> Subject: Re: [PATCH v5 2/2] systemd: select util-linux/fsck and e2fsprogs/e2fsck
->
->> On 10-04-17 13:30, Maxime Hadjinlian wrote:
->>> Hi Arnout,
->>>
->>> On Mon, Apr 10, 2017 at 1:13 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>>  Hi Maxime,
->>>>
->>>> On 10-04-17 13:02, Maxime Hadjinlian wrote:
->>>>> Hi all, Carlos
->>>>>
-> ---8<---
->>>>> I haven't tested it but this looks good to me.
->>>>>
->>>>> Reviewed-by: "Maxime Hadjinlian <maxime.hadjinlian@gmail.com>"
->>>>
->>>>  Do you agree with me that selecting e2fsprogs shouldn't be necessary, because
->>>> you actually only need them when you mount an ext2 filesystem (which isn't
->>>> necessarily the case)?
->>>>
->>>>  I'm not sure what happens exactly when you have util-linux fsck but no e2fsck
->>>> and you try to mount an ext2 filesystem...
->>> It would error out I think.
->>
->> So, what does it do when you have a ubifs for which no fsck exists?
->>
->> Since I guess you and/or Carlos have a systemd-based Buildroot-built system
->> available, you could perhaps add a squashfs to your /etc/fstab and see what
->> happens? Or remove e2fsck and see what happens?
-If you remove e2fsck (which is how I found out about this issue), the
-fsck at .service will fail and an error message will be displayed in the
-boot process. That's all that's going to happen. But then, your FS is
-never checked which can be more problematic.
-I assume the same thing happens with other filesystems because fsck.FS
-won't exist.
+Hi Arnout,
 
-This won't forbid you to boot, just display an error message.
+
+Le 10. 04. 17 ? 12:20, Arnout Vandecappelle a ?crit :
+>   Hi Kevin,
 >
-> I don't have a real system using systemd but I can run some tests on
-> a vurtual machine using QEMU later today.
+>   Some more feedback on your patch...
 >
->>>
->>> You are absolutely right, I only saw my own usecase but this only
->>> works with an extX filesystem, if you want another fs, you need to
->>> select the right tool for the job.
->>> Then, how do we know what the user want ? There is the obivous ext
->>> filesystem option, but you can always select this, and another
->>> filesystem images and use them in different scenario or something.
->>> So, should that be a choice menu and we let the user decide ? Or do we
->>> just put a comment in the documentation or the help message of systemd
->>> and let the user do the correct choice ?
->>>
->>> I would go for the choice, with a default to extX as I think it's
->>> easier and is pretty safe to assume lot of people are using that
->>> theses filessytems now.
+>   A better summary line would be
+>
+> libgphoto2: new package
+>
+> On 06-04-17 10:33, Kevin JOLY wrote:
+>> Add support for libgphoto2 core library designed to allow access to digital camera.
+>   The commit message text should be wrapped at 72 columns.
+>
+>
+>> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
+>   Since Romain also worked on this package, it's nice to add
+>
+> Cc: Romain Naour <romain.naour@gmail.com>
+>
+> This makes sure that:
+> - Romain will be in Cc when you use git send-email;
+> - In the git history, it will be visible that Romain was involved.
+>
+> [snip]
+>> diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
+>> new file mode 100644
+>> index 0000000..1626667
+>> --- /dev/null
+>> +++ b/package/libgphoto2/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_LIBGPHOTO2
+>> +	select BR2_PACKAGE_LIBTOOL
+>> +	select BR2_PACKAGE_LIBUSB
+>> +	select BR2_PACKAGE_LIBUSB_COMPAT
+>   Is libusb-compat really needed? It seems to be only used if libusb1 isn't
+> found. Also, as far as I can see in the configure script, this is optional (you
+> just loose most of the ports).
+You're right, this one is also optional.
+>> +	select BR2_PACKAGE_LIBXML2
+>   In your reply to v1, you mentioned that br-arm-full-nothread failed. That seems
+> to indicate that it should depend on BR2_TOOLCHAIN_HAS_THREADS (with the
+> appropriate comment in case of !BR2_TOOLCHAIN_HAS_THREADS). But anyway, this
+> dependency is already needed for libusb. So if the package itself doesn't
+> require threads (just grep for "pthread", and check whether or not it's escaped
+> by some #ifdef), you should say:
+>
+> 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+pthread was not found in the source code of libgphoto2 itself so I guess 
+it is only for libusb. I added the depends on and the comment.
+>
+>> +	bool "libgphoto2"
+>> +	help
+>> +	  libgphoto2 is the core library designed to allow access to
+>> +	  digital camera by external programs.
+>> +
+>> +	  http://gphoto.org/
+>   For libgphoto2 itself:
+>
+> http://gphoto.org/proj/libgphoto2/
+>
+>> diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+>> new file mode 100644
+>> index 0000000..2e659ab
+>> --- /dev/null
+>> +++ b/package/libgphoto2/libgphoto2.hash
+>> @@ -0,0 +1,6 @@
+>> +# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
+>> +md5 a5999acc204c31515a6ec8e517d2cd91 libgphoto2-2.5.12.tar.bz2
+>> +sha1 4ded403b87d46ad49ba88b22b9410789ed3cef10 libgphoto2-2.5.12.tar.bz2
+>> +
+>> +# Locally calculated hash
+>> +sha256 b9bb28990fde45ac385e4851a07dbad2e1250404b535b0a3a3b898bb431e4e2e	libgphoto2-2.5.12.tar.bz2
+>> diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+>> new file mode 100644
+>> index 0000000..354c29a
+>> --- /dev/null
+>> +++ b/package/libgphoto2/libgphoto2.mk
+>> @@ -0,0 +1,29 @@
+>> +################################################################################
+>> +#
+>> +# libgphoto2
+>> +#
+>> +################################################################################
+>> +
+>> +LIBGPHOTO2_VERSION = 2.5.12
+>   There's a 2.5.13 out now.
+>
+>> +LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
+>> +LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
+>   The website itself points to github, and the repository is maintained on github
+> (no commits in sourceforge since 2015), so I'd tend to say that you should use
+> the github download. However, the github download is just the autogenerated one
+> which doesn't contain a configure script, so indeed it's better to use
+> sourceforge. Still, it's better to add a comment about that:
+>
+> # Project is maintained on github but github tarball doesn't have configure
+>
+>
+>> +LIBGPHOTO2_INSTALL_STAGING = YES
+>> +
+>> +LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
+>   It looks like there are some configure options you may want to pass explicitly,
+> like --disable-rpm. The package also installs a lot of stuff in non-standard
+> locations, it would be good to check if the defaults are appropriate. Also take
+> a look at README.packaging.
+Where did you find the --disable-rpm ? By non-standard location, do you 
+mean the udevscriptdir and the utilsdir?
+>
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBEXIF),y)
+>> +LIBGPHOTO2_DEPENDENCIES += libexif
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBJPEG),y)
+>> +LIBGPHOTO2_DEPENDENCIES += libjpeg
+>   Please add an explicit
+> LIBGPHOTO2_CONF_OPTS += --with-jpeg
+> else
+> LIBGPHOTO2_CONF_OPTS += --without-jpeg
+>
+>   Ideally also for exif and gd, but it seems there are no options for those.
+I found --with-gdlib=[auto|no] and --with-libexif=[auto|no]
+>
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_GD),y)
+>> +LIBGPHOTO2_DEPENDENCIES += gd
+>> +endif
+>> +
+>> +LIBGPHOTO2_LICENSE = LGPLv2.1+
+>   We switched completely to SPDX license strings, so LGPL-2.1+
+>
+>> +LIBGPHOTO2_LICENSE_FILES = COPYING
+>   We typically put the license info near the top, just above or below the initial
+> DEPENDENCIES.
+>
+>   It looks like some of the camlibs are actually GPL-2.0+ or LGPL-3+, and some
+> are LGPL-2.0 only. So the complete string should be:
+>
+> LIBGPHOTO2_LICENSE = LGPLv2.1+, GPL-2.0 (adc65), GPL-2.0+ (some camlibs), \
+> 	LGPL-2.0 (sipix), LGPL-3.0+ (pentax), BSD-3-Clause (ax203/tinyjpeg).
+>
+> I couldn't find any license files for all the other licenses, so add a comment
+>
+> # No license files for other licenses
+>
+>   It would be good to double-check all of the above...
+>
+>   Regards,
+>   Arnout
+>
+>> +
+>> +$(eval $(autotools-package))
 >>
->> I disagree, many people use ubifs, some use initramfs, squashfs, xfs, btrfs or
->> zfs. I have made Buildroot-based systems for all of these (none of them with
->> systemd of course, I've never used systemd with Buildroot, but all of them
->> *could* have used systemd).
-Sure, everything's possible. I don't really know what is the most
-common usecase of buildroot user in the end. It's not like we make
-statistics (which could be a good idea by the way)
->
-> I agree that selecting e2fsprogs does not make much sense. ext[234]
-> would be a natural choice for a desktop system with a hard disk but
-> Buildroot is mostly used on  embedded systems on which flash-friendly
-> filesystems like ubifs are preferable.
-I am mostly using eMMC where ext4 makes a lot of sense. But indeed,
-you don't want to use that on a NAND/NOR.
-Anyway, the default choice is just a detail, it's not that important.
->
-> --
-> Carlos Santos (Casantos) - DATACOM, P&D
-> ?The greatest triumph that modern PR can offer is the transcendent
-> success of having your words and actions judged by your reputation,
-> rather than the other way about.? ? Christopher Hitchens
+
+Best regards,
+
+-- 
+
+*Kevin JOLY*
+Embedded systems engineer
+
+SenseFly <http://www.sensefly.com/>
+38, rte de Gen?ve
+1033 Cheseaux-Lausanne, Switzerland
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170410/80c69737/attachment.html>
