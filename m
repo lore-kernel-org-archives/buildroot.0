@@ -1,36 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 10 Apr 2017 00:54:04 -0300
-Subject: [Buildroot] [PATCH v5 2/2] systemd: select fsck wrapper from
-	util-linux
-Message-ID: <1491796444-8672-1-git-send-email-casantos@datacom.ind.br>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 10 Apr 2017 07:33:59 +0200
+Subject: [Buildroot] [PATCH v3] autofs: allow to use libtirpc instead of
+ internal C implementation
+In-Reply-To: <20170408213853.369b3890@free-electrons.com>
+References: <20170323071058.GA29887@waldemar-brodkorb.de>
+ <20170408160552.131d42a4@free-electrons.com>
+ <20170408190346.GS5361@waldemar-brodkorb.de>
+ <20170408213853.369b3890@free-electrons.com>
+Message-ID: <20170410053359.GU5361@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select the fsck required by systemd provided by util-linux. This
-prevents ending up with fsck from busybox, which is incompatible
-with systemd.
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/systemd/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+> Hello,
+> 
+> On Sat, 8 Apr 2017 21:03:46 +0200, Waldemar Brodkorb wrote:
+> > > Please PKG_CHECK_MODULES() instead.  
+> > 
+> > I tried, but failed. Do you have some examples how
+> > PKG_CHECK_MODULES() should be used? I am not a autotool expert, so I
+> > am unsure how to create a patch which will be accepted by upstream.
+> 
+> See https://autotools.io/pkgconfig/pkg_check_modules.html, it's a good
+> and simple tutorial on how to use PKG_CHECK_MODULES().
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 0f54686..f5eb9d0 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
-+	select BR2_PACKAGE_UTIL_LINUX_FSCK
-+	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_E2FSPROGS_E2FSCK
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
- 	select BR2_PACKAGE_KMOD_TOOLS
--- 
-2.7.4
+I have seen the tutorial, I thought about a howto with more real
+life examples. I looked into nfs-utils and linux-pam and tried
+some stuff, but unfortunately I failed.
+
+I am given up for now.
+
+best regards
+ Waldemar
