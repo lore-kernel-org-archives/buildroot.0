@@ -1,94 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 15:52:12 +0200
-Subject: [Buildroot] [PATCHv3] libbson: new package
-In-Reply-To: <1491823008-28670-1-git-send-email-semenak94@mail.ru>
-References: <libbson: new package>
- <1491823008-28670-1-git-send-email-semenak94@mail.ru>
-Message-ID: <8b147fef-dc96-ad32-34ce-0f68af4bfe11@mind.be>
+Date: Mon, 10 Apr 2017 16:10:06 +0200
+Subject: [Buildroot] [PATCH 1/1] automake: add patch fixing GNU bug
+	#25299
+In-Reply-To: <CAEyMn7YddOxBVShv7WvEcMLCL-rJL_CdJp7d0R0NU0=ZYVwrKA@mail.gmail.com>
+References: <1491568417-5355-1-git-send-email-heiko.thiery@gmail.com>
+ <CAEyMn7YddOxBVShv7WvEcMLCL-rJL_CdJp7d0R0NU0=ZYVwrKA@mail.gmail.com>
+Message-ID: <fb021600-fec9-11e8-b7e3-03b660e975b8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Semyon,
 
- We're getting there :-)
 
-On 10-04-17 13:16, Semyon Kolganov wrote:
-> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+On 10-04-17 07:48, Heiko Thiery wrote:
+> 2017-04-07 14:33 GMT+02:00 Heiko Thiery <heiko.thiery@gmail.com
+> <mailto:heiko.thiery@gmail.com>>:
 > 
-> ---
+>     A bug in automake makes it impossible to build in an output directory
+>     that contains an '@' character. But this is needed if you want to build
+>     with jenkins' pipeline plugin.
+> 
+>     This patch was proposed by Michael Brantley but is currently not applied
+>     in the upstream automake repository.
+> 
+>     Refer to: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25299
+>     <https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25299>
+> 
+>     Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com
+>     <mailto:heiko.thiery@gmail.com>>
+>     ---
+>      ...character-in-installation-prefix-breaks-automake.patch | 15 +++++++++++++++
+>      1 file changed, 15 insertions(+)
+>      create mode 100644
+>     package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch
+> 
+>     diff --git
+>     a/package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch
+>     b/package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch
+>     new file mode 100644
+>     index 0000000..3a5a571
+>     --- /dev/null
+>     +++
+>     b/package/automake/0003-at-character-in-installation-prefix-breaks-automake.patch
+>     @@ -0,0 +1,15 @@
+>     +See bug report #25299 (https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25299
+>     <https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25299>)
+>     +
+>     +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com
+>     <mailto:heiko.thiery@gmail.com>>
+>     +
+>     +--- a/bin/aclocal.in <http://aclocal.in>
+>     ++++ b/bin/aclocal.in <http://aclocal.in>
+>     +@@ -69,7 +69,7 @@
+>     + # ACLOCAL_PATH environment variable, and reset with the '--system-acdir'
+>     + # option.
+>     + my @user_includes = ();
+>     +-my @automake_includes = ("@datadir@/aclocal-$APIVERSION");
+>     ++my @automake_includes = ('@datadir@/aclocal-' . $APIVERSION);
+>     + my @system_includes = ('@datadir@/aclocal');
+>     +
+>     + # Whether we should copy M4 file in $user_includes[0].
+>     --
+>     2.1.4
+> 
+>  
+> Can someone give me some feedback if this patch is ok and will be accepted?
 
-[snip]
-> diff --git a/package/libbson/Config.in b/package/libbson/Config.in
-> new file mode 100644
-> index 0000000..df28462
-> --- /dev/null
-> +++ b/package/libbson/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBBSON
-> +	bool "libbson"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS # CMakeLists forces dynamic library
+ You're a bit impatient, we have many patches pending review (cfr.
+http://patchwork.ozlabs.org/project/buildroot/list/ ). That said, chances are
+pretty low that anybody would look at this patch.
 
- Since you're no longer using cmake, this should be removed.
+ The problem is that it's a kind of feature patch (it doesn't solve a
+cross-compilation issue or regression), and it's not easy to understand if it
+does the right thing. So we would typically want upstream feedback on it.
+Unfortunately, there is no activity on the bug since 4 months (except for your +1).
 
-> +	help
-> +	  libbson is a library providing useful routines related to
-> +	  building, parsing, and iterating BSON documents.
-> diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
-> new file mode 100644
-> index 0000000..27abe90
-> --- /dev/null
-> +++ b/package/libbson/libbson.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256	aad410123e4bd8a9804c3c3d79e03344e2df104872594dc2cf19605d492944ba libbson-1.6.2.tar.gz
-> diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
-> new file mode 100644
-> index 0000000..b2faa4b
-> --- /dev/null
-> +++ b/package/libbson/libbson.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# libbson
-> +#
-> +################################################################################
-> +
-> +LIBBSON_VERSION = 1.6.2
-> +LIBBSON_SITE = https://github.com/mongodb/libbson/releases/download/$(LIBBSON_VERSION)
-> +LIBBSON_SOURCE = libbson-$(LIBBSON_VERSION).tar.gz
-> +LIBBSON_LICENSE = Apache-2.0, MIT(jsonl), ISC(b64), Zlib(md5)
+ One thing that would help is if your commit message would clarify that the bug
+only shows itself on packages that are autoreconf'ed, and a minimal defconfig
+that allows someone to reproduce. Something like:
 
- There should be a space between the license and the object, so MIT (jsonl) etc.
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_LZO=y
 
-> +LIBBSON_LICENSE_FILES = COPYING
-
-LIBBSON_LICENSE_FILES = COPYING THIRD_PARTY_NOTICES
-
- I said this in my previous review.
-
- I also mentioned:
-
-LIBBSON_CONF_OPTS = --disable-tests --disable-examples
-
-(otherwise it will fail on NOMMU)
-
- Please use support/scripts/test-pkg to validate that the package builds with
-all supported toolchains.
+make O=@output olddefconfig world
 
 
-> +LIBBSON_INSTALL_STAGING = YES
-> +
-
- For posterity, it could be useful to add:
-
-# Also has CMake supports, but that forces shared+static libs and static
-# lib has a different name.
-> +$(eval $(autotools-package))
-
+ And it would also help if you could give a list of autoreconf'ed packages that
+you have tested with this patch.
 
  Regards,
  Arnout
