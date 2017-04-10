@@ -1,56 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Apr 2017 03:44:19 +0000
-Subject: [Buildroot] [Bug 9436] e2fsprogs remove busybox applets even of
- unselected e2fsprogs components
-In-Reply-To: <bug-9436-163@https.bugs.busybox.net/>
-References: <bug-9436-163@https.bugs.busybox.net/>
-Message-ID: <bug-9436-163-dpgLfxg3AD@https.bugs.busybox.net/>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 10 Apr 2017 00:54:04 -0300
+Subject: [Buildroot] [PATCH v5 2/2] systemd: select fsck wrapper from
+	util-linux
+Message-ID: <1491796444-8672-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9436
+Select the fsck required by systemd provided by util-linux. This
+prevents ending up with fsck from busybox, which is incompatible
+with systemd.
 
-Carlos Santos <casantos@datacom.ind.br> changed:
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/systemd/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|ASSIGNED                    |RESOLVED
-
---- Comment #3 from Carlos Santos <casantos@datacom.ind.br> ---
-e2fsprogs does not provide an option to disable the build/instalation of chattr
-and lsattr, so it is not possible to have "chattr" and "lsattr" from busybox
-along with mkfs from e2fsprogs.
-
-So far we attempted to solve the conflicts between busybox and e2fsprogs by
-removing busybox programs from /bin and /sbin, leaving the e2fsprogs ones at
-/usr/bin and /usr/sbin. This fails with BR2_ROOTFS_MERGED_USR=y, leading to
-situations like the one described here. We could provide a better solution by
-means of a fine-grained selection of programs, like util-linux does, but this
-would require big changes in e2fsprogs.
-
-So instead of resorting to dirty tricks we adopt a pragmatic approach:
-
-1. Drop all configs to select/deselect utilities without corresponding
---enable/disable options to the configure script. In other words, we always
-install the basic set of utilities.
-2. Do not try to build UUID utilities, since they are disabled along with
-libuuid (the util-linux ones must be used instead).
-3. Install e2fsprogs utilities at /bin and /sbin, overriding the ones
-eventually installed by busybox.
-
-Notice that these changes do exactly the opposite of what is requested. On the
-other hand the policy for e2fsprogs becomes coherent with the one for
-util-linux: busybox never wins.
-
-Notice that a patch solving several issues related to BR2_ROOTFS_MERGED_USR=y
-was submitted for review:
-
-    http://patchwork.ozlabs.org/patch/748826/
-
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 0f54686..f5eb9d0 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
++	select BR2_PACKAGE_UTIL_LINUX_FSCK
++	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_E2FSPROGS_E2FSCK
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
