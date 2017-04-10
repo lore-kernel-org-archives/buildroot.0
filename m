@@ -1,11 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 15:28:13 +0200
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
-In-Reply-To: <9eb2fed8-ded9-0da9-6307-50fa534934f7@sensefly.com>
-References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
- <3577f824-ddbf-7332-018c-221704ebaa46@mind.be>
- <9eb2fed8-ded9-0da9-6307-50fa534934f7@sensefly.com>
-Message-ID: <1589b1f7-21ef-388c-3551-a2e892b4d970@mind.be>
+Date: Mon, 10 Apr 2017 15:33:07 +0200
+Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
+ core
+In-Reply-To: <20170410135105.6b246fa4@free-electrons.com>
+References: <20170406234139.31532-1-sikor6@gmail.com>
+ <20170406234139.31532-2-sikor6@gmail.com>
+ <20170408153452.54837e4c@free-electrons.com>
+ <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
+ <CAKfV1CaoGUPmL6W5xT61YECuVvN3_RthyD7sw8Cw54e_RMOYCQ@mail.gmail.com>
+ <99d84995-3497-3072-f56a-bea2960327c6@mind.be>
+ <20170410135105.6b246fa4@free-electrons.com>
+Message-ID: <398a808a-b385-73a5-128e-ad56a4b31d2b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +19,43 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 14:23, Kevin JOLY wrote:
-> Hi Arnout,
+On 10-04-17 13:51, Thomas Petazzoni wrote:
+> Hello,
 > 
+> On Mon, 10 Apr 2017 11:08:21 +0200, Arnout Vandecappelle wrote:
 > 
-> Le 10. 04. 17 ? 12:20, Arnout Vandecappelle a ?crit :
+>>  In fact, I would forego the 'custom Xenomai version' support entirely. I don't
+>> see why you would ever want an older version, and if you need a newer version
+>> than the one in Buildroot you can just bump the package. Does anyone see a
+>> reason to support multiple versions? [Adding ThomasDS in Cc to answer that.]
+> 
+> I think the main reason is that Xenomai includes kernel patches, but
+> only for specific kernel versions. So if you're using a specific kernel
+> version, you might need to use a specific Xenomai version, and not just
+> "the latest".
 
-[snip]
->>  It looks like there are some configure options you may want to pass explicitly,
->> like --disable-rpm. The package also installs a lot of stuff in non-standard
->> locations, it would be good to check if the defaults are appropriate. Also take
->> a look at README.packaging.
-> Where did you find the --disable-rpm ? 
+ As far as I remember, older versions weren't removed that often, though they
+did sometimes get updated to a later release of that branch. But I think in
+these cases you just want to point to a specific version of the ipipe patch, and
+don't want to use an older and potentially buggy xenomai version.
 
- I misread the configure.ac (gphoto-m4/gp-packaging.m4 actually). It's in fact
---without-rpmbuild.
-
-> By non-standard location, do you mean the
-> udevscriptdir and the utilsdir?
-
- Yes, udevscriptdir. utilsdir is OK.
-
+ While checking this, by the way, I discovered that the --default option to
+prepare-kernel.sh no longer works (i.e., it no longer autodiscovers the patch to
+apply). So linux-ext-xenomai.mk should be updated to disallow an empty ipipe
+patch. Pawel, could you look into this? It should either autodiscover the patch
+to apply similar to how rtai does it, or it should just $(error) in case
+XENOMAI_ADEOS_PATCH is empty, similar to the handling of LINUX_KCONFIG_FILE (but
+remember to check BR_BUILDING in that case...). I think autodiscovering is a bit
+fragile, though.
 
  Regards,
  Arnout
 
-[snip]
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
