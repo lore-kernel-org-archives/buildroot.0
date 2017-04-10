@@ -1,47 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 10 Apr 2017 20:18:16 +0200
-Subject: [Buildroot] [PATCH 2/4] package/x11r7/xdriver_xf86-video-amdgpu:
-	bump version to 1.3.0
+Date: Mon, 10 Apr 2017 20:18:18 +0200
+Subject: [Buildroot] [PATCH 4/4] package/x11r7/xdriver_xf86-video-intel:
+	bump version
 In-Reply-To: <20170410181818.3142-1-bernd.kuhls@t-online.de>
 References: <20170410181818.3142-1-bernd.kuhls@t-online.de>
-Message-ID: <20170410181818.3142-2-bernd.kuhls@t-online.de>
+Message-ID: <20170410181818.3142-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add all upstream hashes.
+Removed option --disable-glamor, it was removed in 2014:
+https://cgit.freedesktop.org/xorg/driver/xf86-video-intel/commit/configure.ac?id=0aa2edbd29c8dd26a5f3748e3875c445ea358a6d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash  | 6 ++++--
- .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk    | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index 32ff1646d1..13246b69de 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,2 +1,4 @@
--# From https://lists.x.org/archives/xorg-announce/2016-November/002741.html
--sha256 275b1aac5f127f55ba3d7480a1df89eace1d02650e24e46908067fc875e76c8f  xf86-video-amdgpu-1.2.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-March/002788.html
-+md5 e2ee9e16ffbd45ebda68a7ff638a04f2  xf86-video-amdgpu-1.3.0.tar.bz2
-+sha1 7b89fe6e22e6739257c0f03c9f034c9c579a8bce  xf86-video-amdgpu-1.3.0.tar.bz2
-+sha256 c1630f228938be949273f72b29ae70822dde064ad79c3ccb14d55f427e3f4e70  xf86-video-amdgpu-1.3.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index d858e14096..9bd75369a7 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 29228bbf77..6debdd0964 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.2.0
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.3.0
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 9ac7a3370ab265d4cbdbbf3dc588af88c37048e1
++XDRIVER_XF86_VIDEO_INTEL_VERSION = b57abe20e81f4b8e4dd203b6a9eda7ff441bc8ce
+ XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+@@ -19,7 +19,6 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
+ XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS = \
+ 	--disable-xvmc \
+ 	--enable-sna \
+-	--disable-glamor \
+ 	--disable-xaa \
+ 	--disable-dga \
+ 	--disable-async-swap
 -- 
 2.11.0
