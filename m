@@ -1,49 +1,221 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 10 Apr 2017 20:18:17 +0200
-Subject: [Buildroot] [PATCH 3/4] package/x11r7/xdriver_xf86-video-nouveau:
-	bump version to 1.0.14
-In-Reply-To: <20170410181818.3142-1-bernd.kuhls@t-online.de>
-References: <20170410181818.3142-1-bernd.kuhls@t-online.de>
-Message-ID: <20170410181818.3142-3-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 10 Apr 2017 20:51:09 +0200
+Subject: [Buildroot] [PATCH v3] libgphoto2: new package
+In-Reply-To: <be4a6cfa-8ca0-d013-837c-21b0f4367a41@mind.be>
+References: <1491827774-11245-1-git-send-email-kevin.joly@sensefly.com>
+ <be4a6cfa-8ca0-d013-837c-21b0f4367a41@mind.be>
+Message-ID: <e4105584-3a32-c946-bc9e-b396f75da39e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add all upstream hashes.
+Hi Kevin, Arnout,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash    | 8 ++++----
- .../xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk      | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Le 10/04/2017 ? 15:14, Arnout Vandecappelle a ?crit :
+> 
+> 
+> On 10-04-17 14:36, Kevin JOLY wrote:
+>> Add support for libgphoto2 core library designed to allow access to
+>> digital camera.
+>>
+>> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
+>> Cc: Romain Naour <romain.naour@gmail.com>
+> 
+>  Except for some minor issues and one style issue in Config.in (see below), it
+> all looks good. I've already ran test-pkg for a dozen toolchains and it looks
+> good. So
 
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-index cfba3a00ba..7a0c923312 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-@@ -1,4 +1,4 @@
--# Locally computed
--sha256 6d9242ba139c3df7afefffb455573b52f4427920b978161c00483c64a6da47cb  xf86-video-nouveau-1.0.13.tar.bz2
--# From http://www.linuxfromscratch.org/blfs/view/svn/x/x7driver.html#xorg-nouveau-driver
--md5 2d7b2917ef18c6e97a6f3817c3e9387b  xf86-video-nouveau-1.0.13.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-March/002783.html
-+md5 c57c89e1a3c9bc319d26f2e11c80e7fb  xf86-video-nouveau-1.0.14.tar.bz2
-+sha1 6c5c46d6e0d8595b71e2a1df6879ab5d650f2097  xf86-video-nouveau-1.0.14.tar.bz2
-+sha256 4ddff99b3cc49f16cdcf99f6e1c5856b6f06589ec98376cedb5754100afe31c1  xf86-video-nouveau-1.0.14.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-index 70a7d87991..3e2d787af3 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.13
-+XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.14
- XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_NOUVEAU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE = MIT
--- 
-2.11.0
+Thank Arnout for the review.
+With your last
+
+> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>> ---
+>> Changes v2 -> v3 (suggested by Arnout Vandecappelle)
+>>   - Change the commit description
+>>   - Turn libusb-compat as an optional dependency
+>>   - Add the BR2_TOOLCHAIN_HAS_THREADS dependency
+>>   - Update package website location
+>>   - Update version to 2.5.13
+>>   - Add comments
+>>   - Improve configure options
+>>   - Update license informations
+>>
+>> Changes v1 -> v2 (suggested by Romain Naour)
+>>   - Handle optionnal dependencies on libexif, libjpeg, libgd and lockdev
+>>   - Add license informations
+>>   - Use tar.bz2 package
+>>   - Change hash
+>>   - Added myself as package maintainer in the DEVELOPPERS file
+>> ---
+>>  DEVELOPERS                         |  3 +++
+>>  package/Config.in                  |  1 +
+>>  package/libgphoto2/Config.in       | 14 +++++++++++
+>>  package/libgphoto2/libgphoto2.hash |  6 +++++
+>>  package/libgphoto2/libgphoto2.mk   | 50 ++++++++++++++++++++++++++++++++++++++
+>>  5 files changed, 74 insertions(+)
+>>  create mode 100644 package/libgphoto2/Config.in
+>>  create mode 100644 package/libgphoto2/libgphoto2.hash
+>>  create mode 100644 package/libgphoto2/libgphoto2.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index a298669..1f45012 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -957,6 +957,9 @@ F:	package/cpuload/
+>>  F:	package/bwm-ng/
+>>  F:	package/ramsmp/
+>>  
+>> +N:	Kevin Joly <kevin.joly@sensefly.com>
+>> +F:	package/libgphoto2/
+>> +
+>>  N:	Laurent Cans <laurent.cans@gmail.com>
+>>  F:	package/aircrack-ng/
+>>  
+>> diff --git a/package/Config.in b/package/Config.in
+>> index c12e5b5..f98a2b5 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1086,6 +1086,7 @@ menu "Hardware handling"
+>>  	source "package/libfreefare/Config.in"
+>>  	source "package/libftdi/Config.in"
+>>  	source "package/libftdi1/Config.in"
+>> +	source "package/libgphoto2/Config.in"
+>>  	source "package/libgpiod/Config.in"
+>>  	source "package/libgudev/Config.in"
+>>  	source "package/libhid/Config.in"
+>> diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
+>> new file mode 100644
+>> index 0000000..fd53232
+>> --- /dev/null
+>> +++ b/package/libgphoto2/Config.in
+>> @@ -0,0 +1,14 @@
+>> +config BR2_PACKAGE_LIBGPHOTO2
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+>> +	select BR2_PACKAGE_LIBTOOL
+>> +	select BR2_PACKAGE_LIBUSB
+>> +	select BR2_PACKAGE_LIBXML2
+>> +	bool "libgphoto2"
+> 
+>  This should come right below the config line.
+> (you can now run './support/scripts/check-package package/libgphoto2/*' to
+> detect this kind of error).
+> 
+>> +	help
+>> +	  libgphoto2 is the core library designed to allow access to
+>> +	  digital camera by external programs.
+>> +
+>> +	  http://gphoto.org/proj/libgphoto2/
+>> +
+>> +comment "libgphoto needs a toolchain w threads"
+>                                         ^w/
+> 
+>> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+>> diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+>> new file mode 100644
+>> index 0000000..1afe275
+>> --- /dev/null
+>> +++ b/package/libgphoto2/libgphoto2.hash
+>> @@ -0,0 +1,6 @@
+>> +# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.13/
+>> +md5 73bf5b3d94c8c6f5fad9ea6b5e561843 libgphoto2-2.5.13.tar.bz2
+>> +sha1 cef2d2f1930f8ada16a63aca15683188231a626a libgphoto2-2.5.13.tar.bz2
+>> +
+>> +# Locally calculated hash
+>> +sha256 ceaacbdf187d1cd1aed5336991f46b0100f6960b6c8383f9aeab98f1f64780ef libgphoto2-2.5.13.tar.bz2
+>> diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+>> new file mode 100644
+>> index 0000000..24dac19
+>> --- /dev/null
+>> +++ b/package/libgphoto2/libgphoto2.mk
+>> @@ -0,0 +1,50 @@
+>> +################################################################################
+>> +#
+>> +# libgphoto2
+>> +#
+>> +################################################################################
+>> +
+>> +LIBGPHOTO2_VERSION = 2.5.13
+>> +LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
+>> +# Project is maintained on github but github tarball doesn't have configure
+>> +LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
+>> +LIBGPHOTO2_INSTALL_STAGING = YES
+>> +
+>> +LIBGPHOTO2_LICENSE = LGPL-2.1+, GPL-2.0 (adc65), GPL-2.0+ (some camlibs), \
+>> +	LGPL-2.0 (sipix), LGPL-3.0+ (pentax), BSD-3-Clause (ax203/tinyjpeg).
+>> +LIBGPHOTO2_LICENSE_FILES = COPYING
+>> +# No license files for other licenses
+>> +
+>> +LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libtool host-pkgconf
+>> +LIBGPHOTO2_CONF_OPTS += --disable-rpm
+> 
+>  It might be good to also add --disable-gp2ddb --disable-internal-docs but these
+> are anyway disabled by default so not so important.
+> 
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
+> 
+>  Maybe add
+> 
+> # libusb-compat is not actually used, but it is detected, so add it here to
+> # guarantee reproducible builds
+> 
+>> +LIBGPHOTO2_DEPENDENCIES += libusb-compat
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBEXIF),y)
+>> +LIBGPHOTO2_DEPENDENCIES += libexif
+>> +LIBGPHOTO2_CONF_OPTS += --with-libexif=auto
+>> +else
+>> +LIBGPHOTO2_CONF_OPTS += --with-libexif=no
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_LIBJPEG),y)
+>> +LIBGPHOTO2_DEPENDENCIES += libjpeg
+>> +LIBGPHOTO2_CONF_OPTS += --with-jpeg
+>> +else
+>> +LIBGPHOTO2_CONF_OPTS += --without-jpeg
+>> +endif
+
+libjpeg is a jpeg provider like jpeg-tubo
+
+Can you try with:
+
+ifeq ($(BR2_PACKAGE_JPEG),y)
+LIBGPHOTO2_DEPENDENCIES += jpeg
+LIBGPHOTO2_CONF_OPTS += --with-jpeg
+else
+LIBGPHOTO2_CONF_OPTS += --without-jpeg
+endif
+
+and jped-turbo enabled ?
+
+>> +
+>> +ifeq ($(BR2_PACKAGE_GD),y)
+>> +LIBGPHOTO2_DEPENDENCIES += gd
+>> +LIBGPHOTO2_CONF_OPTS += --with-gdlib=auto
+>> +else
+>> +LIBGPHOTO2_CONF_OPTS += --with-gdlib=no
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_LOCKDEV),y)
+>> +LIBGPHOTO2_DEPENDENCIES += lockdev
+> 
+>  Good catch!
+
+I had this one in my initial patch but not as optional dependency :p
+
+I think, the v4 will be the last :)
+
+Best regards,
+Romain
+
+> 
+>> +endif
+>> +
+>> +$(eval $(autotools-package))
+>>
+> 
