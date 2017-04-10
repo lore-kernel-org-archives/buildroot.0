@@ -1,61 +1,52 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 10 Apr 2017 23:59:58 +0200
-Subject: [Buildroot] [PATCH/autobuild v2 2/7] autobuild-run: add '-d,
-	--debug' option
+Date: Mon, 10 Apr 2017 23:59:59 +0200
+Subject: [Buildroot] [PATCH/autobuild v2 3/7] autobuild-run: use
+	'olddefconfig' instead of 'oldconfig'
 In-Reply-To: <20170410220003.30421-1-arnout@mind.be>
 References: <20170410220003.30421-1-arnout@mind.be>
-Message-ID: <20170410220003.30421-2-arnout@mind.be>
+Message-ID: <20170410220003.30421-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While changing and debugging the autobuild-run script, it is convenient
-to be able to see the log directly on stdout rather than opening the
-log file. So provide an option for this.
-
-The option is called '--debug' with the idea that other debugging
-features added later can reuse the same option.
+Back in the days that autobuild-run was created, we didn't have an
+olddefconfig target so we had to pipe yes into oldconfig instead.
+Nowadays, however, we can use the olddefconfig target.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- scripts/autobuild-run | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+v2: Also use 'olddefconfig' for the second call to 'oldconfig'
+---
+ scripts/autobuild-run | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 64da088..2f0463d 100755
+index 2f0463d..521b2c9 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -101,6 +101,7 @@ Options:
-                                  Defaults to %(--pid-file)s.
-   -c, --config CONFIG            path to configuration file
-                                  Not set by default.
-+  -d, --debug                    Send log output to stdout instead of log file
-   --toolchains-url URL           URL of toolchain configuration file
+@@ -558,8 +558,8 @@ def gen_config(**kwargs):
  
- Format of the configuration file:
-@@ -800,7 +801,10 @@ def run_instance(**kwargs):
-     if not os.path.exists(idir):
-         os.mkdir(idir)
+     devnull = open(os.devnull, "w")
  
--    kwargs['log'] = open(os.path.join(idir, "instance.log"), "a+")
-+    if kwargs['debug']:
-+        kwargs['log'] = sys.stdout
-+    else:
-+        kwargs['log'] = open(os.path.join(idir, "instance.log"), "a+")
-     log_write(kwargs['log'], "INFO: instance started")
+-    ret = subprocess.call(["yes '' 2>/dev/null| make O=%s -C %s oldconfig" % \
+-                           (outputdir, srcdir)], shell=True, stdout=devnull, stderr=devnull)
++    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "olddefconfig"],
++                          stdout=devnull, stderr=devnull)
+     if ret != 0:
+         log_write(log, "ERROR: cannot oldconfig")
+         return -1
+@@ -586,8 +586,8 @@ def gen_config(**kwargs):
+         if fixup_config(**kwargs):
+             break
  
-     while True:
-@@ -926,7 +930,8 @@ def main():
-                 nice = (args['--nice'] or 0),
-                 toolchains_url = args['--toolchains-url'],
-                 upload = upload,
--                buildpid = buildpid
-+                buildpid = buildpid,
-+                debug = args['--debug']
-             ))
-         p.start()
-         processes.append(p)
+-    ret = subprocess.call(["yes '' 2>/dev/null| make O=%s -C %s oldconfig" % \
+-                           (outputdir, srcdir)], shell=True, stdout=devnull, stderr=devnull)
++    ret = subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "olddefconfig"],
++                          stdout=devnull, stderr=devnull)
+     if ret != 0:
+         log_write(log, "ERROR: cannot oldconfig")
+         return -1
 -- 
 2.11.0
