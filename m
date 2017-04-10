@@ -1,43 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 10 Apr 2017 20:18:15 +0200
-Subject: [Buildroot] [PATCH 1/4] package/x11r7/xdriver_xf86-input-libinput:
-	bump version to 0.25.0
-Message-ID: <20170410181818.3142-1-bernd.kuhls@t-online.de>
+Date: Mon, 10 Apr 2017 20:18:16 +0200
+Subject: [Buildroot] [PATCH 2/4] package/x11r7/xdriver_xf86-video-amdgpu:
+	bump version to 1.3.0
+In-Reply-To: <20170410181818.3142-1-bernd.kuhls@t-online.de>
+References: <20170410181818.3142-1-bernd.kuhls@t-online.de>
+Message-ID: <20170410181818.3142-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add all upstream hashes.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash    | 6 ++++--
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk      | 2 +-
+ .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash  | 6 ++++--
+ .../x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk    | 2 +-
  2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index 0d35294937..36d16c21db 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+index 32ff1646d1..13246b69de 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
 @@ -1,2 +1,4 @@
--# From https://lists.x.org/archives/xorg-announce/2017-February/002776.html
--sha256 ddcb07350aed59b2996a92a1b4ff64d1c0b0c86a3f0ddca15b2b1c8c8bb13628  xf86-input-libinput-0.24.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-March/002782.html
-+md5 bd64be831914eda924f7166243c34968  xf86-input-libinput-0.25.0.tar.bz2
-+sha1 e43fd18bc32b892fb203f842186ad0d6c675b696  xf86-input-libinput-0.25.0.tar.bz2
-+sha256 bb7fd1658fa7e6c757fd55480aa8a07f8ccfb0a80ae42c29dbc67d57958c556f  xf86-input-libinput-0.25.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index e293b4e80b..16ab7ce17a 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-November/002741.html
+-sha256 275b1aac5f127f55ba3d7480a1df89eace1d02650e24e46908067fc875e76c8f  xf86-video-amdgpu-1.2.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-March/002788.html
++md5 e2ee9e16ffbd45ebda68a7ff638a04f2  xf86-video-amdgpu-1.3.0.tar.bz2
++sha1 7b89fe6e22e6739257c0f03c9f034c9c579a8bce  xf86-video-amdgpu-1.3.0.tar.bz2
++sha256 c1630f228938be949273f72b29ae70822dde064ad79c3ccb14d55f427e3f4e70  xf86-video-amdgpu-1.3.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+index d858e14096..9bd75369a7 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.24.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.25.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.2.0
++XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.3.0
+ XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
 -- 
 2.11.0
