@@ -1,11 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 13:56:25 +0200
-Subject: [Buildroot] [PATCH v2] xenomai: Add config for
-	enabling/disabling SMP
-In-Reply-To: <20170410001700.31490-1-sikor6@gmail.com>
-References: <20170406234657.31813-1-sikor6@gmail.com>
- <20170410001700.31490-1-sikor6@gmail.com>
-Message-ID: <5d7c18eb-bfb5-c3f3-2268-5edf0f6c08ae@mind.be>
+Date: Mon, 10 Apr 2017 13:58:11 +0200
+Subject: [Buildroot] buildroot | Pipeline #7531221 has failed for master
+	| f78b2c13
+In-Reply-To: <20170410135245.6492e3ae@free-electrons.com>
+References: <58e9fbce8c9e8_17973fbd9c776b74668e1@worker-kiq07.fe.gitlab.com.mail>
+ <20170409120255.0155c3fb@free-electrons.com>
+ <aa7cc7f6-9b36-bfce-23f3-6131e7355bb6@mind.be>
+ <20170410135245.6492e3ae@free-electrons.com>
+Message-ID: <f5261c19-90cd-32ab-8d66-ca18b5ab0d96@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,101 +16,35 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 02:17, Pawel Sikora wrote:
-> Add a config option for enabling/disabling SMP
-> in Xenomai userspace in version 3.x
+On 10-04-17 13:52, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Enabled by default.
+> On Sun, 9 Apr 2017 23:10:57 +0200, Arnout Vandecappelle wrote:
 > 
-> Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - default y, moving comment to help, changed help, adding explicitly
->    --disable-smp opt in the else statement (suggested by Arnout V.)
->  
->  package/xenomai/Config.in  | 24 ++++++++++++++++++++++++
->  package/xenomai/xenomai.mk |  6 ++++++
->  2 files changed, 30 insertions(+)
+>>  I configured the mirroring from git.buildroot.org to once per day. Apparently
+>> the time when it syncs varies quite a bit. And apparently, it just didn't sync
+>> today - the last sync is from Apr 8 2:18.
 > 
-> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-> index b548ee810..b2697e5af 100644
-> --- a/package/xenomai/Config.in
-> +++ b/package/xenomai/Config.in
-> @@ -51,6 +51,30 @@ config BR2_PACKAGE_XENOMAI_VERSION
->  	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
->  	  Kernel -> Linux Kernel Extensions menu.
->  
-> +config BR2_PACKAGE_XENOMAI_ENABLE_SMP
-> +	bool "Enable SMP"
-> +	default y
-> +	help
-> +	  This option allows to enable SMP in Xenomai userspace.
-> +
-> +	  Please note:
-> +	  If you use Xenomai 2.x you have SMP enabled by default.
-> +
-> +	  Xenomai 3.x is being built by default with SMP disabled,
-> +	  but to have a behaviour similar to previous versions,
-> +	  option is enabled by default and you need to uncheck it
-> +	  if you don't need it.
-> +
-> +	  Second reason of setting it by default is that Xenomai
-> +	  userspace with SMP enabled and with Linux Kernel without
-> +	  SMP config are working fine together.
-> +	  But NOT the other way around.
-> +
-> +	  Please refer to this troubleshooting guide for more
-> +	  information in section "feature mismatch: missing=?smp/nosmp?:
-> +
-> +	  https://xenomai.org/troubleshooting-a-dual-kernel-configuration/
+> OK.
+> 
+>>  I could configure the mirror to once per hour instead, but then the CI will run
+>> a little too often. OTOH, I guess you rarely push more than twice a day, right,
+> 
+> I do push much more than twice a day. When I'm actively merging
+> patches, I'm almost pushing between every patch, so in a typical merge
+> session, I can be doing 10, 20 pushes or more.
+> 
+>> so it's not going to make that much of a difference... But apparently, I can't
+>> even change the synchronisation frequency, "Update every day" is the only option...
+> 
+> OK. Not ideal, but I guess we can live with this.
 
- The https address doesn't work for me, the http equivalent does...
-
- As said in my previous mail, I think we don't need to spend too much effort on
-supporting Xenomai 2.x (which anyway doesn't work ATM). Also in general this
-explanation is a bit too extensive. Here's a shorter alternative.
-
-	  This option enables SMP support in Xenomai userspace.
-
-	  If this option is turned on while no SMP support is enabled
-	  in the kernel, things will still work. However, if SMP is
-	  enabled in the kernel but this option is not turned on,
-	  Xenomai applications will complain with 'feature mismatch:
-	  missing="smp/nosmp'.
-
-	  Please refer to this troubleshooting guide for more
-	  information:
-	
-http://xenomai.org/troubleshooting-a-dual-kernel-configuration/#feature_mismatch_missing8221smpnosmp8221
-
-
+ There is actually an API to trigger a sync. So you could use that to trigger a
+sync e.g. half an hour before triggering the build. I'll have to look up the
+details.
 
  Regards,
  Arnout
-
-
-> +
->  config BR2_PACKAGE_XENOMAI_TESTSUITE
->  	bool "Install testsuite"
->  	help
-> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> index c9e810e05..04880e69a 100644
-> --- a/package/xenomai/xenomai.mk
-> +++ b/package/xenomai/xenomai.mk
-> @@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
->  
->  XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
->  
-> +ifeq ($(BR2_PACKAGE_XENOMAI_ENABLE_SMP),y)
-> +XENOMAI_CONF_OPTS += --enable-smp
-> +else
-> +XENOMAI_CONF_OPTS += --disable-smp
-> +endif
-> +
->  define XENOMAI_REMOVE_DEVFILES
->  	for i in xeno-config xeno-info wrap-link.sh ; do \
->  		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
