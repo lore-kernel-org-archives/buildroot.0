@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 15:42:07 +0200
-Subject: [Buildroot] [PATCH v3] xenomai: Add config for
-	enabling/disabling SMP
-In-Reply-To: <20170410124412.4526-1-sikor6@gmail.com>
-References: <20170410001700.31490-1-sikor6@gmail.com>
- <20170410124412.4526-1-sikor6@gmail.com>
-Message-ID: <b5ddf492-ad58-cdf0-ac7b-5f26799fceb0@mind.be>
+Date: Mon, 10 Apr 2017 15:44:06 +0200
+Subject: [Buildroot] [PATCH v3] xenomai: Add choice for
+ enabling/disabling Cobalt/Mercury core
+In-Reply-To: <20170410123226.3719-1-sikor6@gmail.com>
+References: <20170409235434.31059-1-sikor6@gmail.com>
+ <20170410123226.3719-1-sikor6@gmail.com>
+Message-ID: <f2272603-b4ce-00ae-3407-70fe7fc772b0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,19 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 14:44, Pawel Sikora wrote:
-> Add a config option for enabling/disabling SMP
-> in Xenomai userspace in version 3.x
-> 
-> Enabled by default.
+On 10-04-17 14:32, Pawel Sikora wrote:
+> Add an option choice for Cobalt or Mercury core
+> depending on option BR2_LINUX_KERNEL_EXT_XENOMAI.
 > 
 > Signed-off-by: Pawel Sikora <sikor6@gmail.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- One small detail: your two patches are conflicting with each other, which makes
-life difficult for the maintainers. You should keep them together in a patch
-series where they are kept in the correct order.
+ As noticed, this will collide with the SMP patch.
 
+ Pawel, if you would resend a v4 where both patches are kept together in a patch
+series, make sure that you copy my Reviewed-by tag (put it below your
+Signed-off-by).
 
  Regards,
  Arnout
@@ -36,50 +35,60 @@ series where they are kept in the correct order.
 > Changes v2 -> v3:
 >  - Corrections in help (Arnout V.)
 > 
->  package/xenomai/Config.in  | 17 +++++++++++++++++
+>  package/xenomai/Config.in  | 27 +++++++++++++++++++++++++++
 >  package/xenomai/xenomai.mk |  6 ++++++
->  2 files changed, 23 insertions(+)
+>  2 files changed, 33 insertions(+)
 > 
 > diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-> index b548ee810..8bf9c4ae1 100644
+> index b548ee810..324f5025a 100644
 > --- a/package/xenomai/Config.in
 > +++ b/package/xenomai/Config.in
-> @@ -51,6 +51,23 @@ config BR2_PACKAGE_XENOMAI_VERSION
+> @@ -51,6 +51,33 @@ config BR2_PACKAGE_XENOMAI_VERSION
 >  	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
 >  	  Kernel -> Linux Kernel Extensions menu.
 >  
-> +config BR2_PACKAGE_XENOMAI_ENABLE_SMP
-> +	bool "Enable SMP"
-> +	default y
+> +choice
+> +	prompt "Xenomai core"
+> +	default BR2_PACKAGE_XENOMAI_MERCURY
 > +	help
-> +	  This option enables SMP support in Xenomai userspace.
+> +	  Select the Xenomai core: dual kernel (Cobalt)
+> +	  or native Linux Kernel (Mercury).
 > +
-> +	  If this option is turned on while no SMP support is enabled
-> +	  in the kernel, things will still work. However, if SMP is
-> +	  enabled in the kernel but this option is not turned on,
-> +	  Xenomai applications will complain with 'feature mismatch:
-> +	  missing="smp/nosmp'.
+> +config BR2_PACKAGE_XENOMAI_MERCURY
+> +	bool "Mercury"
+> +	depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
+> +	help
+> +	  Select Mercury core for the Xenomai userspace.
+> +	  You want to use it if you have the native Linux Kernel.
 > +
-> +	  Please refer to this troubleshooting guide for more
-> +	  information:
+> +config BR2_PACKAGE_XENOMAI_COBALT
+> +	bool "Cobalt"
+> +	help
+> +	  Select Cobalt core (dual kernel) for the Xenomai
+> +	  userspace. Use this if you use a Xenomai-patched
+> +	  Linux kernel.
 > +
-> +	  http://xenomai.org/troubleshooting-a-dual-kernel-configuration/#feature_mismatch_missing8221smpnosmp8221
+> +	  If you want to use Cobalt core, your kernel must have
+> +	  the Adeos and Xenomai patches applied to it. You can
+> +	  add these through the BR2_LINUX_KERNEL_EXT_XENOMAI option
+> +	  in the Linux Kernel Extensions menu.
+> +endchoice
 > +
 >  config BR2_PACKAGE_XENOMAI_TESTSUITE
 >  	bool "Install testsuite"
 >  	help
 > diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> index c9e810e05..04880e69a 100644
+> index c9e810e05..73d9617b1 100644
 > --- a/package/xenomai/xenomai.mk
 > +++ b/package/xenomai/xenomai.mk
 > @@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
 >  
 >  XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
 >  
-> +ifeq ($(BR2_PACKAGE_XENOMAI_ENABLE_SMP),y)
-> +XENOMAI_CONF_OPTS += --enable-smp
+> +ifeq ($(BR2_PACKAGE_XENOMAI_MERCURY),y)
+> +XENOMAI_CONF_OPTS += --with-core=mercury
 > +else
-> +XENOMAI_CONF_OPTS += --disable-smp
+> +XENOMAI_CONF_OPTS += --with-core=cobalt
 > +endif
 > +
 >  define XENOMAI_REMOVE_DEVFILES
