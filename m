@@ -1,37 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Apr 2017 13:45:49 +0200
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
-In-Reply-To: <33dd1db4-d5cb-3f49-931d-613dd6967b7d@sensefly.com>
-References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
- <20170406223644.473ebd65@free-electrons.com>
- <cd88fd7c-dceb-cef1-59de-e086c6b3df00@sensefly.com>
- <d0b4e258-3c24-2691-3d93-03c4f1a936e8@gmail.com>
- <33dd1db4-d5cb-3f49-931d-613dd6967b7d@sensefly.com>
-Message-ID: <20170410134549.6da2679d@free-electrons.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 10 Apr 2017 08:49:55 -0300
+Subject: [Buildroot] [PATCH v6 2/2] systemd: select fsck wrapper from
+	util-linux
+In-Reply-To: <1491824995-19670-1-git-send-email-casantos@datacom.ind.br>
+References: <3eeb7e24-fcc2-8d75-e0e8-141eeaceab70@mind.be>
+ <1491824995-19670-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1491824995-19670-2-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Select the fsck required by systemd provided by util-linux. This
+prevents ending up with fsck from busybox, which is incompatible
+with systemd.
 
-Thanks for your new iteration of the libgphoto2 patch!
+Change-Id: I61cfc9b8925169b2678ac911fcd5a4eb5d92c425
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+[there were no v1, v2]
+Changes v3
+  - Select e2fsprogs + e2fsck
+Changes v3->v4
+  - Remove selection of e2fsprogs + e2fsck
+  - Clean-up commit message
+Changes v4->v5
+  - Screwed-up everything, reverting the chances made in v4
+Changes v5->v6
+  - Restored changes made in v4.
+  - Restore the patch changelog.
+---
+ package/systemd/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-On Mon, 10 Apr 2017 11:24:32 +0200, Kevin JOLY wrote:
-
-> > Also, can you check this new package with the new test-pkg script ? [3]
-> > (17.20.2. How to test your package).  
-> I ran the test. Everything was OK except br-arm-cortex-m4-full and 
-> br-arm-full-nothread.
-
-What errors did you had with those toolchains? Did you fix those issue
-in your v2?
-
-Thanks!
-
-Thomas
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 0f54686..478cc10 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -22,6 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
++	select BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
+@@ -61,6 +62,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	  - libgcrypt package will add support for journal sealing and
+ 	    DNSSEC verification in resolved.
+ 
++	  Notice that systemd selects the fsck wrapper from util-linux
++	  but no particular fsck.<fstype> is selected. You must choose
++	  the apropriate ones (e.g. e2fsck, from the e2fsprogs package)
++	  according to the system configuration.
++
+ 	  http://freedesktop.org/wiki/Software/systemd
+ 
+ if BR2_PACKAGE_SYSTEMD
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
