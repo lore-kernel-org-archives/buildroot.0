@@ -1,12 +1,17 @@
 From: Pawel Sikora <sikor6@gmail.com>
-Date: Mon, 10 Apr 2017 22:01:24 +0200
-Subject: [Buildroot] [PATCH v3] xenomai: Add choice for
- enabling/disabling Cobalt/Mercury core
-In-Reply-To: <CAAXf6LUgz48VtAd9=aL9m8f5640GimYMNrXg1Hy3_mMgM-_S+w@mail.gmail.com>
-References: <20170409235434.31059-1-sikor6@gmail.com>
- <20170410123226.3719-1-sikor6@gmail.com>
- <CAAXf6LUgz48VtAd9=aL9m8f5640GimYMNrXg1Hy3_mMgM-_S+w@mail.gmail.com>
-Message-ID: <CAKfV1Cas+sKSXW304wKz9AwuxeDoN9BzBJ+s2n2pyBScirtbsg@mail.gmail.com>
+Date: Mon, 10 Apr 2017 22:21:01 +0200
+Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
+	core
+In-Reply-To: <398a808a-b385-73a5-128e-ad56a4b31d2b@mind.be>
+References: <20170406234139.31532-1-sikor6@gmail.com>
+ <20170406234139.31532-2-sikor6@gmail.com>
+ <20170408153452.54837e4c@free-electrons.com>
+ <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
+ <CAKfV1CaoGUPmL6W5xT61YECuVvN3_RthyD7sw8Cw54e_RMOYCQ@mail.gmail.com>
+ <99d84995-3497-3072-f56a-bea2960327c6@mind.be>
+ <20170410135105.6b246fa4@free-electrons.com>
+ <398a808a-b385-73a5-128e-ad56a4b31d2b@mind.be>
+Message-ID: <CAKfV1CY0wpiDDST8Zv6n9tXRyLbUrnR+maFnXbfvoQ4GEhhHXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,95 +20,82 @@ To: buildroot@busybox.net
 
 Hi,
 
-2017-04-10 21:31 GMT+02:00 Thomas De Schampheleire <
-patrickdepinguin@gmail.com>:
+2017-04-10 15:33 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
 
-> On Mon, Apr 10, 2017 at 2:32 PM, Pawel Sikora <sikor6@gmail.com> wrote:
-> > Add an option choice for Cobalt or Mercury core
-> > depending on option BR2_LINUX_KERNEL_EXT_XENOMAI.
+>
+>
+> On 10-04-17 13:51, Thomas Petazzoni wrote:
+> > Hello,
 > >
-> > Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> > ---
-> > Changes v2 -> v3:
-> >  - Corrections in help (Arnout V.)
+> > On Mon, 10 Apr 2017 11:08:21 +0200, Arnout Vandecappelle wrote:
 > >
-> >  package/xenomai/Config.in  | 27 +++++++++++++++++++++++++++
-> >  package/xenomai/xenomai.mk |  6 ++++++
-> >  2 files changed, 33 insertions(+)
+> >>  In fact, I would forego the 'custom Xenomai version' support entirely.
+> I don't
+> >> see why you would ever want an older version, and if you need a newer
+> version
+> >> than the one in Buildroot you can just bump the package. Does anyone
+> see a
+> >> reason to support multiple versions? [Adding ThomasDS in Cc to answer
+> that.]
 > >
-> > diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-> > index b548ee810..324f5025a 100644
-> > --- a/package/xenomai/Config.in
-> > +++ b/package/xenomai/Config.in
-> > @@ -51,6 +51,33 @@ config BR2_PACKAGE_XENOMAI_VERSION
-> >           BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
-> >           Kernel -> Linux Kernel Extensions menu.
-> >
-> > +choice
-> > +       prompt "Xenomai core"
-> > +       default BR2_PACKAGE_XENOMAI_MERCURY
-> > +       help
-> > +         Select the Xenomai core: dual kernel (Cobalt)
-> > +         or native Linux Kernel (Mercury).
-> > +
-> > +config BR2_PACKAGE_XENOMAI_MERCURY
-> > +       bool "Mercury"
-> > +       depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
-> > +       help
-> > +         Select Mercury core for the Xenomai userspace.
-> > +         You want to use it if you have the native Linux Kernel.
-> > +
-> > +config BR2_PACKAGE_XENOMAI_COBALT
-> > +       bool "Cobalt"
-> > +       help
-> > +         Select Cobalt core (dual kernel) for the Xenomai
-> > +         userspace. Use this if you use a Xenomai-patched
-> > +         Linux kernel.
-> > +
-> > +         If you want to use Cobalt core, your kernel must have
+> > I think the main reason is that Xenomai includes kernel patches, but
+> > only for specific kernel versions. So if you're using a specific kernel
+> > version, you might need to use a specific Xenomai version, and not just
+> > "the latest".
 >
-> the Cobalt core
+>  As far as I remember, older versions weren't removed that often, though
+> they
+> did sometimes get updated to a later release of that branch. But I think in
+> these cases you just want to point to a specific version of the ipipe
+> patch, and
+> don't want to use an older and potentially buggy xenomai version.
 >
-> > +         the Adeos and Xenomai patches applied to it. You can
-> > +         add these through the BR2_LINUX_KERNEL_EXT_XENOMAI option
-> > +         in the Linux Kernel Extensions menu.
->
-> With the latest updates, the term 'I-pipe' has disappeared here, I
-> think it is a relevant term that helps clarifying 'Adeos', no?
+>  While checking this, by the way, I discovered that the --default option to
+> prepare-kernel.sh no longer works (i.e., it no longer autodiscovers the
+> patch to
+> apply). So linux-ext-xenomai.mk should be updated to disallow an empty
+> ipipe
+> patch. Pawel, could you look into this? It should either autodiscover the
+> patch
+> to apply similar to how rtai does it, or it should just $(error) in case
+> XENOMAI_ADEOS_PATCH is empty, similar to the handling of
+> LINUX_KCONFIG_FILE (but
+> remember to check BR_BUILDING in that case...). I think autodiscovering is
+> a bit
+> fragile, though.
 >
 
-I think I don't get it, could you explain this in detail? Is it that name
-of the prompt for patch in Linux Kernel Extensions have just 'Adeos'
-in name and should have I-pipe or something else?
+Hmm ok, I will look at this, but most probably not until wednesday (quite a
+lot to do on university now)
 
-
->
-> More in general: I wonder which level of help we need to provide here.
-> I expect that people's choice of either Cobalt or Mercury cannot be
-> driven by the current help above. The choice has severe impact on your
-> application and system. We could try to extend the help, e.g.
-> clarifying that only the cobalt core can provide real real-time
-> guarantees, and that the mercury core's real-time strictness fully
-> depends on the linux kernel. But perhaps it may be better to
-> explicitly refer to the Xenomai documentation to make a proper
-> decision.
->
-
-Hmm... You're right. But I think that choice of Xenomai Core should be
-driven by knowledge from the documentation - Xenomai documentation.
-
-What about adding just information with clarification about what one can
-expect from Mercury/Cobalt as you described above and pointing to
-Xenomai documentation for further details?
+But... when there is no patch provided, you are prompted for it at a stage
+of kernel patching, isn't this better than error?
+Of course, it would be good to have a working autodiscovery (but not so
+urgent, right?)
 
 Regards,
 Pawel
 
 
+
 >
-> Best regards,
-> Thomas
+>  Regards,
+>  Arnout
+>
+> >
+> > Best regards,
+> >
+> > Thomas
+> >
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170410/a12cebd8/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170410/0b4fe759/attachment.html>
