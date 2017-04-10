@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 16:23:58 +0200
-Subject: [Buildroot] [PATCH 1/3 v2] core/pkg-generic: rmove intermediate
- file-list files
-In-Reply-To: <9a943961-9c5f-afad-c7e4-99d2e2d9baf5@mind.be>
+Date: Mon, 10 Apr 2017 16:24:08 +0200
+Subject: [Buildroot] [PATCH 2/3 v2] core/pk-generic: redirect only wsa
+ when listing package's isntalled files
+In-Reply-To: <1bfda8d4827de2ec26b79dbed992211a76f44da7.1491427248.git.yann.morin.1998@free.fr>
 References: <cover.1491427248.git.yann.morin.1998@free.fr>
- <dedc397770e0af15eac2c7cbac771dbd9260c716.1491427248.git.yann.morin.1998@free.fr>
- <9a943961-9c5f-afad-c7e4-99d2e2d9baf5@mind.be>
-Message-ID: <2441c094-ab3a-28b3-a73f-171f4d86616b@mind.be>
+ <1bfda8d4827de2ec26b79dbed992211a76f44da7.1491427248.git.yann.morin.1998@free.fr>
+Message-ID: <fba57160-af53-4697-f9fc-bc7521f134dd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +14,38 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 16:21, Arnout Vandecappelle wrote:
->  s/rmove/remove/
+On 05-04-17 23:20, Yann E. MORIN wrote:
+> There is no need to redirect again and again for each new file added to
+> the list; we can just redirect once and for all.
 > 
-> On 05-04-17 23:20, Yann E. MORIN wrote:
->> To compute the list of files added by a package, we first store the list
->> of files before the install, do the install, list the files after the
->> install, and finally compare the two lists. The two lists are stored in
->> dot-files, hidden in the package's build dir.
->>
->> We currently keep those two files, and only list the files installed in
->> target/
->>
->> In followup patches, we'll also list files installed in staging/ as well
->> as files installed in host/.
->>
->> Rather than add even more internal, hidden files in the package build
->> dir, we'll just re-use the same two temporary files to store the bfore
->                                                                     ^e
->> and after lists.
-> 
->  Actually, I like to have as much as possible build info lingering around, so
-> I'd tend not to do this removal and instead rename to something with 'target' in
-> it. For example, I think we have no other way at the moment to detect when two
-> packages write the same file. 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- D'oh, the file will of course simply appear twice in packages-file-list if two
-packages write it... Silly me.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-
-> IMO having internal hidden files in the package
-> build dir doesn't hurt anyone. I certainly do like the applied patches list!
+> ---
+>  package/pkg-generic.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  That said, I don't see any other reason to keep those files, and we probably
-> want explicit support for detecting collisions, so I'm OK with removing them
-> after all.
-[snip]
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6b3c69c..166efd6 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -76,8 +76,8 @@ define step_pkg_size_end
+>  		$($(PKG)_DIR)/.br_filelist_after
+>  	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
+>  		while read hash file ; do \
+> -			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+> -		done
+> +			echo "$(1),$${file}" ; \
+> +		done >> $(BUILD_DIR)/packages-file-list.txt
+>  	rm -f $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after
+>  endef
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
