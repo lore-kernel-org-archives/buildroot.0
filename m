@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 10:46:54 +0200
-Subject: [Buildroot] [PATCH/autobuild 4/8] autobuild-run: remove
- redundant 'make oldconfig'
-In-Reply-To: <20170410102550.224313e7@free-electrons.com>
+Date: Mon, 10 Apr 2017 10:48:15 +0200
+Subject: [Buildroot] [PATCH/autobuild 5/8] autobuild-run: check that
+ toolchain config lines are still present
+In-Reply-To: <20170410102802.4b804b67@free-electrons.com>
 References: <20170409205128.11560-1-arnout@mind.be>
- <20170409205128.11560-4-arnout@mind.be>
- <20170410102550.224313e7@free-electrons.com>
-Message-ID: <4d4d06b2-9b8f-b95a-40be-d9478787dd33@mind.be>
+ <20170409205128.11560-5-arnout@mind.be>
+ <20170410102802.4b804b67@free-electrons.com>
+Message-ID: <b17046c3-187f-88c3-bf34-8521bc3fde73@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,36 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 10:25, Thomas Petazzoni wrote:
+On 10-04-17 10:28, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Sun, 9 Apr 2017 22:51:24 +0200, Arnout Vandecappelle
+> On Sun, 9 Apr 2017 22:51:25 +0200, Arnout Vandecappelle
 > (Essensium/Mind) wrote:
->> After running 'make randpackageconfig', and additional 'make oldconfig'
->> is done. However, this is redundant, since randpackageconfig already
->> does an olddefconfig.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> Some lines from the toolchain config may be removed due to dependency
+>> issues. Currently this is covered by explicit conditions in the
+>> autobuild-run script, e.g. checking that libc is not glibc before
+>> enabling BR2_STATIC_LIBS. However, that binds this script pretty
+>> tightly to the logic in Buildroot itself.
 > 
-> Well, this oldconfig is not exactly right after randpackageconfig.
+> Seems like a good idea!
 > 
-> We do this:
+>> +    # Check that the toolchain configuration is still present
+>> +    # Report all the missing ones
+>> +    toolchaincomplete = True
+>> +    for toolchainline in kwargs['config']:
+>> +        if toolchainline not in configlines:
+>> +            log_write(log, "WARN: missing toolchain config line: %s" % toolchainline[:-1])
 > 
->  - randpackageconfig
->  - fixup_config()
->  - oldconfig
-> 
-> The fixup_config() function potentially does some changes to
-> the .config file, and that's why we re-run oldconfig afterwards. This
-> ensures that the build will not wait indefinitely while asking the user
-> the value of a config option.
+> We should remove this warning, it's not a warning at all. It is
+> a perfectly normal situation that a configuration gets rejected here,
+> for example when glibc+static is used. So having a warning everytime a
+> completely regular situation occurs doesn't seem like a good idea.
 
- D'oh, I missed that. Fortunately somebody reviews my crap! :-)
-
- So instead I'll replace it with olddefconfig and squash with the preceding
-patch, OK?
+ Yes of course. I needed that for debugging but it indeed shouldn't be there in
+production.
 
  Regards,
  Arnout
-
-> 
-> Therefore, I wouldn't qualify this oldconfig as "redundant".
-> 
-> Best regards,
-> 
-> Thomas
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
