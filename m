@@ -1,14 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 11:08:21 +0200
-Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
- core
-In-Reply-To: <CAKfV1CaoGUPmL6W5xT61YECuVvN3_RthyD7sw8Cw54e_RMOYCQ@mail.gmail.com>
-References: <20170406234139.31532-1-sikor6@gmail.com>
- <20170406234139.31532-2-sikor6@gmail.com>
- <20170408153452.54837e4c@free-electrons.com>
- <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
- <CAKfV1CaoGUPmL6W5xT61YECuVvN3_RthyD7sw8Cw54e_RMOYCQ@mail.gmail.com>
-Message-ID: <99d84995-3497-3072-f56a-bea2960327c6@mind.be>
+Date: Mon, 10 Apr 2017 11:10:57 +0200
+Subject: [Buildroot] [PATCH 1/1] xenomai: Add config for enabling SMP
+ for 3.x
+In-Reply-To: <CAKfV1Cb9E2Aw6jGPSrb14s6AXST0BYu2O9TrcRWO1Ni-63rtFQ@mail.gmail.com>
+References: <20170406234657.31813-1-sikor6@gmail.com>
+ <16e3dbf6-416b-6e7a-8e69-143fafad4bba@mind.be>
+ <CAKfV1Cb9E2Aw6jGPSrb14s6AXST0BYu2O9TrcRWO1Ni-63rtFQ@mail.gmail.com>
+Message-ID: <082176d6-afb1-a98b-aa97-9bdbee2d1c7f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,24 +15,40 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 00:51, Pawel Sikora wrote:
-> What about support for Xenomai 2.6? Should we split Xenomai into two packages
-> for both versions? As it needs different patches that are currently for 3.x version
-> and now if someone want to build 2.x will need to take these patches manually.
-> So doesn't it really mean now, that the option with prompt for Xenomai version
-> will work only for Xenomai >3.x?
+On 10-04-17 01:07, Pawel Sikora wrote:
+> Hi,
+> 
+> 2017-04-07 13:22 GMT+02:00 Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>>:
+> 
+> 
+> 
+>     On 07-04-17 01:46, Pawel Sikora wrote:
+[snip]
+>     > +ifeq ($(BR2_PACKAGE_XENOMAI_ENABLE_SMP),y)
+>     > +XENOMAI_CONF_OPTS += --enable-smp
+> 
+>      Can you add an explicit --disable-smp in the else branch? Or does that not
+>     work?
+> 
+> 
+> On Xenomai 3 default it is disabled, so it will not make any difference, but for
+> 2.x will.
 
- IIRC when Xenomai 3 support was introduced, we decided to simply drop support
-for Xenomai 2.6.
+ We want explicit options even if they are the default, because:
 
- In fact, I would forego the 'custom Xenomai version' support entirely. I don't
-see why you would ever want an older version, and if you need a newer version
-than the one in Buildroot you can just bump the package. Does anyone see a
-reason to support multiple versions? [Adding ThomasDS in Cc to answer that.]
+- it is possible that the default changes after a version bump, and that's hard
+to notice;
+
+- someone looking at the .mk file doesn't know what the default is, so it's good
+to make it explicit.
 
  Regards,
  Arnout
 
+
+> So ok, as it is a valid option I added it also.
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
