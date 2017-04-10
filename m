@@ -1,46 +1,50 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 10 Apr 2017 18:17:49 -0400
-Subject: [Buildroot] Building multi-part rootfs images
-In-Reply-To: <e31fa965-9f62-8dac-d7ae-e30eed26bc1a@mind.be>
-References: <CA+h8R2ofinZ+3yGzNOCtfM5KDSrxeizyEVAKTYv2v24DbEPzkw@mail.gmail.com>
- <c764d6cf-eaf1-154f-2ece-cd9bdff881fd@mind.be>
- <CA+h8R2q56gk6z_9phg_qyRccvGccQrCrF0-Sem-4+5SLqBj6dg@mail.gmail.com>
- <e31fa965-9f62-8dac-d7ae-e30eed26bc1a@mind.be>
-Message-ID: <CA+h8R2pOVRkRnqmqqURCRvEi+2LQTgxoVzkRxCOuU8TarjTvqQ@mail.gmail.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Tue, 11 Apr 2017 09:50:52 +1000
+Subject: [Buildroot] aarch64 : g++ is not working
+Message-ID: <f53a3152-a0ad-d86d-a9d1-26da5dceb526@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hi there,
 
-On Mon, Apr 10, 2017 at 6:09 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Loop mount indeed means -o loop, but that's used to mount a normal file where a
-> block device is expected. What you want is to mount a different partition (or
-> UBI volume, or NFS export) on /lib/modules. At least, that's what I think you mean.
+I have found that g++ is not working with aarch64. Not sure why it isn't 
+working. If others can verify this problem, it is a pretty big show stopper.
 
-No, I mean mounting a file from the boot partition - that way, we have
-three files that define the system: the kernel image, the initrootfs
-image, and the "extras" image in one partition. I do this because then
-OTAing the system is just replacing those files, and theoretically
-later on logic could be added to fall-back on older versions of the
-files if there are issues with an upgrade.
+I have checked the problem with rtorrent like so :
 
-That might have a significant performance impact on the "extras" IO
-speed, probably, since you're reading through two layers - the loop,
-and the fs volume. Since I only plan to store read-only code and not
-r/w data files in that image, the performance decrease should be
-pretty negligible.
+BR2_aarch64=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_RTORRENT=y
 
->  systemd already has that for anything specified in /etc/fstab. It's not
-> blocking, though.
+When I execute rtorrent :
 
-Cool, I'll use that at first. The primary motivation behind making it
-a boot step is that I can then make the systemd kernel-modules-load
-step depend on the "extras" being loaded in before running, although
-this is probably already the case with /etc/fstab. Furthermore, the
-more complex fallback mechanism could be implemented there as well.
+# rtorrent
 
-Best,
-Christian
+/usr/bin/rtorrent: symbol '_ZSt15__once_callable': can't handle reloc 
+type 0x407
+
+
+Any one got any ideas on how to get g++ working with aarch64 and buildroot ?
+
+
+I have tried to test on qemu like so :
+
+make qemu_aarch64_virt_defconfig
+make menuconfig # enable cxx and rtorrent
+
+However, when I try to run qemu (looking at the file 
+board/qemu/aarch64-virt/readme.txt) the kernel doesn't output during 
+boot  - any suggestions on how to make this work ? I use the following 
+command :
+
+qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -smp 1 -kernel 
+output/images/Image -append "console=ttyAMA0" -netdev user,id=eth0 
+-device virtio-net-device,netdev=eth0
+
+
+thanks
+
+Matt
