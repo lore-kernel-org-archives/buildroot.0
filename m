@@ -1,40 +1,74 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 10 Apr 2017 13:44:30 +0100
-Subject: [Buildroot] [PATCH] libgtk3: bump version to 3.22.12
-Message-ID: <20170410124430.12982-1-Vincent.Riera@imgtec.com>
+From: Pawel Sikora <sikor6@gmail.com>
+Date: Mon, 10 Apr 2017 14:44:12 +0200
+Subject: [Buildroot] [PATCH v3] xenomai: Add config for enabling/disabling
+	SMP
+In-Reply-To: <20170410001700.31490-1-sikor6@gmail.com>
+References: <20170410001700.31490-1-sikor6@gmail.com>
+Message-ID: <20170410124412.4526-1-sikor6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Add a config option for enabling/disabling SMP
+in Xenomai userspace in version 3.x
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 5ea0405..10dcb4d 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.11.sha256sum
--sha256 db440670cb6f3c098b076df3735fbc4e69359bd605385e87c90ee48344a804ca  gtk+-3.22.11.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.12.sha256sum
-+sha256 84fae0cefb6a11ee2b4e86b8ac42fe46a3d30b4ad16661d5fc51e8ae03e2a98c  gtk+-3.22.12.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index ed843fc..1759953 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Enabled by default.
+
+Signed-off-by: Pawel Sikora <sikor6@gmail.com>
+---
+Changes v2 -> v3:
+ - Corrections in help (Arnout V.)
+
+ package/xenomai/Config.in  | 17 +++++++++++++++++
+ package/xenomai/xenomai.mk |  6 ++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index b548ee810..8bf9c4ae1 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -51,6 +51,23 @@ config BR2_PACKAGE_XENOMAI_VERSION
+ 	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
+ 	  Kernel -> Linux Kernel Extensions menu.
  
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).11
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).12
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
++config BR2_PACKAGE_XENOMAI_ENABLE_SMP
++	bool "Enable SMP"
++	default y
++	help
++	  This option enables SMP support in Xenomai userspace.
++
++	  If this option is turned on while no SMP support is enabled
++	  in the kernel, things will still work. However, if SMP is
++	  enabled in the kernel but this option is not turned on,
++	  Xenomai applications will complain with 'feature mismatch:
++	  missing="smp/nosmp'.
++
++	  Please refer to this troubleshooting guide for more
++	  information:
++
++	  http://xenomai.org/troubleshooting-a-dual-kernel-configuration/#feature_mismatch_missing8221smpnosmp8221
++
+ config BR2_PACKAGE_XENOMAI_TESTSUITE
+ 	bool "Install testsuite"
+ 	help
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index c9e810e05..04880e69a 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+ 
+ XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
+ 
++ifeq ($(BR2_PACKAGE_XENOMAI_ENABLE_SMP),y)
++XENOMAI_CONF_OPTS += --enable-smp
++else
++XENOMAI_CONF_OPTS += --disable-smp
++endif
++
+ define XENOMAI_REMOVE_DEVFILES
+ 	for i in xeno-config xeno-info wrap-link.sh ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
 -- 
-2.10.2
+2.12.1
