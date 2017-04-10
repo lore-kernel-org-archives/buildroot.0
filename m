@@ -1,50 +1,39 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 10 Apr 2017 13:02:40 +0200
-Subject: [Buildroot] [PATCH v5 2/2] systemd: select util-linux/fsck and
-	e2fsprogs/e2fsck
-In-Reply-To: <1491794596-8454-3-git-send-email-casantos@datacom.ind.br>
-References: <1491794596-8454-1-git-send-email-casantos@datacom.ind.br>
- <1491794596-8454-3-git-send-email-casantos@datacom.ind.br>
-Message-ID: <CAGduivxv5seLe6Oz7j+DBjA3kX=b5ksKfTPbStTYezhrKqo7Yg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 10 Apr 2017 12:08:52 +0100
+Subject: [Buildroot] [PATCH] tcpreplay: bump version to 4.2.2
+Message-ID: <20170410110852.21172-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all, Carlos
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tcpreplay/tcpreplay.hash | 2 +-
+ package/tcpreplay/tcpreplay.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for pushing with this, it's really neat :)
-
-On Mon, Apr 10, 2017 at 5:23 AM, Carlos Santos <casantos@datacom.ind.br> wrote:
-> e2fsprogs does not override/remove the fsck from util-linux anymore when
-> /sbin and /usr/sbin are merged. So we can select the fsck tools required
-> by systemd provided by those packages. This also prevents ending up with
-> the fsck from busybox, which is incompatible with systemd.
->
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/systemd/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 0f54686..f5eb9d0 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
->         select BR2_PACKAGE_UTIL_LINUX_BINARIES
->         select BR2_PACKAGE_UTIL_LINUX_MOUNT
->         select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
-> +       select BR2_PACKAGE_UTIL_LINUX_FSCK
-> +       select BR2_PACKAGE_E2FSPROGS
-> +       select BR2_PACKAGE_E2FSPROGS_E2FSCK
->         select BR2_PACKAGE_KMOD
->         select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
->         select BR2_PACKAGE_KMOD_TOOLS
-> --
-I haven't tested it but this looks good to me.
-
-Reviewed-by: "Maxime Hadjinlian <maxime.hadjinlian@gmail.com>"
-
-> 2.7.4
->
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index 802d650..0b138a0 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 224b519e561d969b4bdb0e700c2283e036620e3cb5895d5aab2a7e4f27d21a79  tcpreplay-4.2.1.tar.gz
++sha256 e674166b54486db8f5417554ed88c06f44f368d70585c2897b0bc085009d8dd5  tcpreplay-4.2.2.tar.gz
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index df85fe1..7b03138 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TCPREPLAY_VERSION = 4.2.1
++TCPREPLAY_VERSION = 4.2.2
+ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
+ TCPREPLAY_LICENSE = GPL-3.0
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
+-- 
+2.10.2
