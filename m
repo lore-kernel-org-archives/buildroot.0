@@ -1,51 +1,102 @@
-From: =?utf-8?Q?=C3=89tienne_Ph=C3=A9lip?= <etienne.phelip@savoirfairelinux.com>
-Date: Mon, 10 Apr 2017 09:44:32 -0400 (EDT)
-Subject: [Buildroot] [RFC 4/4] board/acmesystems/aria-g25: set
- BR2_GENIMAGE_CFG_FILES
-In-Reply-To: <20170405181424.1d69fee5@free-electrons.com>
-References: <20170329145120.11863-1-etienne.phelip@savoirfairelinux.com>
- <ccc877c5-1ea5-e2d6-1739-c913f4d6d0a7@mind.be>
- <20170401155116.66464885@free-electrons.com>
- <8760ilvozx.fsf@dell.be.48ers.dk>
- <2ce8812c-d95e-bd4a-9cde-f02ab8e3ca60@mind.be>
- <87wpazuaa1.fsf@dell.be.48ers.dk>
- <02a1a330-c947-2a64-29bb-88f6ac7d9c9f@mind.be>
- <20170405181424.1d69fee5@free-electrons.com>
-Message-ID: <674007428.52191.1491831872252.JavaMail.zimbra@savoirfairelinux.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Apr 2017 15:52:12 +0200
+Subject: [Buildroot] [PATCHv3] libbson: new package
+In-Reply-To: <1491823008-28670-1-git-send-email-semenak94@mail.ru>
+References: <libbson: new package>
+ <1491823008-28670-1-git-send-email-semenak94@mail.ru>
+Message-ID: <8b147fef-dc96-ad32-34ce-0f68af4bfe11@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good morning everyone,
+ Hi Semyon,
 
------ Le 5 Avr 17, ? 12:14, Thomas Petazzoni thomas.petazzoni at free-electrons.com a ?crit :
+ We're getting there :-)
 
-> Hello,
+On 10-04-17 13:16, Semyon Kolganov wrote:
+> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
 > 
-> On Wed, 5 Apr 2017 17:02:36 +0200, Arnout Vandecappelle wrote:
-> 
->>  Combined with the other discussion in this thread, long-term I see us evolving
->> towards:
->> 
->> - deprecate some of the finer-grain fs tuning options we have now;
->> - always using genimage to generate the target filesystems;
->> - position our fs targets more as a 'quick fix' solution than for production;
->> - make host-e2fsprogs etc. blind options again.
-> 
-> To be honest, I am not sure I share this long-term view. I like the way
-> things are done today, very modular: we can generate just a filesystem
-> image, optionally use genimage afterwards, etc. So the "always using
-> genimage to generate the target filesystem" is not something that I see
-> as an improvement, for example.
+> ---
 
-To sum things up:
- - Should I add BR2_GENIMAGE_CFG_FILES or reuse the script in the
-postimage script
- - if BR2_GENIMAGE_CFG_FILES is choosen, should it 'depends on' or
-'select' BR2_PACKAGE_HOST_GENIMAGE?
- - should I convert all boards or just the one already in this RFC?
+[snip]
+> diff --git a/package/libbson/Config.in b/package/libbson/Config.in
+> new file mode 100644
+> index 0000000..df28462
+> --- /dev/null
+> +++ b/package/libbson/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_LIBBSON
+> +	bool "libbson"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_STATIC_LIBS # CMakeLists forces dynamic library
 
-Best regards
--Etienne
+ Since you're no longer using cmake, this should be removed.
+
+> +	help
+> +	  libbson is a library providing useful routines related to
+> +	  building, parsing, and iterating BSON documents.
+> diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
+> new file mode 100644
+> index 0000000..27abe90
+> --- /dev/null
+> +++ b/package/libbson/libbson.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256	aad410123e4bd8a9804c3c3d79e03344e2df104872594dc2cf19605d492944ba libbson-1.6.2.tar.gz
+> diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
+> new file mode 100644
+> index 0000000..b2faa4b
+> --- /dev/null
+> +++ b/package/libbson/libbson.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# libbson
+> +#
+> +################################################################################
+> +
+> +LIBBSON_VERSION = 1.6.2
+> +LIBBSON_SITE = https://github.com/mongodb/libbson/releases/download/$(LIBBSON_VERSION)
+> +LIBBSON_SOURCE = libbson-$(LIBBSON_VERSION).tar.gz
+> +LIBBSON_LICENSE = Apache-2.0, MIT(jsonl), ISC(b64), Zlib(md5)
+
+ There should be a space between the license and the object, so MIT (jsonl) etc.
+
+> +LIBBSON_LICENSE_FILES = COPYING
+
+LIBBSON_LICENSE_FILES = COPYING THIRD_PARTY_NOTICES
+
+ I said this in my previous review.
+
+ I also mentioned:
+
+LIBBSON_CONF_OPTS = --disable-tests --disable-examples
+
+(otherwise it will fail on NOMMU)
+
+ Please use support/scripts/test-pkg to validate that the package builds with
+all supported toolchains.
+
+
+> +LIBBSON_INSTALL_STAGING = YES
+> +
+
+ For posterity, it could be useful to add:
+
+# Also has CMake supports, but that forces shared+static libs and static
+# lib has a different name.
+> +$(eval $(autotools-package))
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
