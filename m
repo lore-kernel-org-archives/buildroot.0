@@ -1,35 +1,107 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 10 Apr 2017 22:41:21 +0200
-Subject: [Buildroot] [PATCH 4/5] package/mplayer: disable inline mmx
+Date: Mon, 10 Apr 2017 22:41:20 +0200
+Subject: [Buildroot] [PATCH 3/5] package/mplayer: fix compilation failure
+	with MMX in libmpcodecs/vf_fspp.c
 In-Reply-To: <20170410204122.13382-1-bernd.kuhls@t-online.de>
 References: <20170410204122.13382-1-bernd.kuhls@t-online.de>
-Message-ID: <20170410204122.13382-4-bernd.kuhls@t-online.de>
+Message-ID: <20170410204122.13382-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
+Compile error found while fixing
 http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mplayer/mplayer.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mplayer/0007-fixmmx.patch | 77 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 package/mplayer/0007-fixmmx.patch
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 21facccc4..166394cac 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -288,6 +288,8 @@ endif
- define MPLAYER_DISABLE_INLINE_ASM
- 	$(SED) 's,#define HAVE_INLINE_ASM 1,#define HAVE_INLINE_ASM 0,g' \
- 		$(@D)/config.h
-+	$(SED) 's,#define HAVE_MMX_INLINE 1,#define HAVE_MMX_INLINE 0,g' \
-+		$(@D)/config.h
- endef
- 
- ifeq ($(BR2_i386),y)
+diff --git a/package/mplayer/0007-fixmmx.patch b/package/mplayer/0007-fixmmx.patch
+new file mode 100644
+index 000000000..9634a3b66
+--- /dev/null
++++ b/package/mplayer/0007-fixmmx.patch
+@@ -0,0 +1,77 @@
++fix compilation failure with MMX
++
++Fixes
++libmpcodecs/vf_fspp.c: In function 'column_fidct_c':
++libmpcodecs/vf_fspp.c:750:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:751:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:752:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:753:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:789:18: error: 'FIX_0_707106781' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:789:18: note: each undeclared identifier is reported only once for each function it appears in
++libmpcodecs/vf_fspp.c:804:21: error: 'FIX_1_414213562_A' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:817:18: error: 'FIX_0_382683433' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:818:18: error: 'FIX_0_541196100' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:819:18: error: 'FIX_1_306562965' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:844:21: error: 'FIX_1_414213562' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:845:21: error: 'FIX_1_847759065' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:846:21: error: 'FIX_1_082392200' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:847:21: error: 'FIX_2_613125930' undeclared (first use in this function)
++
++found using this defconfig after fixing the original bug:
++http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
++
++Downloaded from upstream mailinglist:
++http://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2016-May/073488.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr MPlayer-1.3.0.org/libmpcodecs/vf_fspp.c MPlayer-1.3.0/libmpcodecs/vf_fspp.c
++--- MPlayer-1.3.0.org/libmpcodecs/vf_fspp.c	2015-10-17 21:44:31.000000000 +0200
+++++ MPlayer-1.3.0/libmpcodecs/vf_fspp.c	2017-04-10 21:26:57.771819064 +0200
++@@ -173,7 +173,6 @@
++ #define store_slice_s store_slice_c
++ #define store_slice2_s store_slice2_c
++ #define mul_thrmat_s mul_thrmat_c
++-#define column_fidct_s column_fidct_c
++ #define row_idct_s row_idct_c
++ #define row_fdct_s row_fdct_c
++ 
++@@ -393,7 +392,6 @@
++         );
++ }
++ 
++-static void column_fidct_mmx(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
++ static void row_idct_mmx(int16_t* workspace,
++                          int16_t* output_adr,  int output_stride,  int cnt);
++ static void row_fdct_mmx(int16_t *data,  const uint8_t *pixels,  int line_size,  int cnt);
++@@ -401,11 +399,18 @@
++ #define store_slice_s store_slice_mmx
++ #define store_slice2_s store_slice2_mmx
++ #define mul_thrmat_s mul_thrmat_mmx
++-#define column_fidct_s column_fidct_mmx
++ #define row_idct_s row_idct_mmx
++ #define row_fdct_s row_fdct_mmx
++ #endif // HAVE_MMX_INLINE
++ 
+++#if !HAVE_MMXEXT_INLINE
+++static void column_fidct_c(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
+++#define column_fidct_s column_fidct_c
+++#else
+++static void column_fidct_mmx(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
+++#define column_fidct_s column_fidct_mmx
+++#endif
+++
++ static void filter(struct vf_priv_s *p, uint8_t *dst, uint8_t *src,
++                    int dst_stride, int src_stride,
++                    int width, int height,
++@@ -728,7 +733,9 @@
++ DECLARE_ASM_CONST(8, uint64_t, MM_DESCALE_RND)=C64(4);
++ DECLARE_ASM_CONST(8, uint64_t, MM_2)=C64(2);
++ 
++-#else /* !HAVE_MMXEXT_INLINE */
+++#endif /* !HAVE_MMX_INLINE */
+++
+++#if !HAVE_MMX_INLINE || !HAVE_MMXEXT_INLINE
++ 
++ typedef int32_t int_simd16_t;
++ static const int16_t FIX_0_382683433=FIX(0.382683433, 14);
 -- 
 2.11.0
