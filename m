@@ -1,18 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 23:19:28 +0200
-Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
- core
-In-Reply-To: <CAKfV1CY0wpiDDST8Zv6n9tXRyLbUrnR+maFnXbfvoQ4GEhhHXg@mail.gmail.com>
-References: <20170406234139.31532-1-sikor6@gmail.com>
- <20170406234139.31532-2-sikor6@gmail.com>
- <20170408153452.54837e4c@free-electrons.com>
- <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
- <CAKfV1CaoGUPmL6W5xT61YECuVvN3_RthyD7sw8Cw54e_RMOYCQ@mail.gmail.com>
- <99d84995-3497-3072-f56a-bea2960327c6@mind.be>
- <20170410135105.6b246fa4@free-electrons.com>
- <398a808a-b385-73a5-128e-ad56a4b31d2b@mind.be>
- <CAKfV1CY0wpiDDST8Zv6n9tXRyLbUrnR+maFnXbfvoQ4GEhhHXg@mail.gmail.com>
-Message-ID: <c88035d6-555e-6e0e-8d43-2837e1e4b1b5@mind.be>
+Date: Mon, 10 Apr 2017 23:43:10 +0200
+Subject: [Buildroot] [Patch v4 3/3] rust: new package
+In-Reply-To: <1491850965.4279.1.camel@embedded.rocks>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+ <20170402194651.28684-4-eric.le.bihan.dev@free.fr>
+ <1491549522.26127.8.camel@embedded.rocks> <20170408100925.GC32154@itchy>
+ <1491850965.4279.1.camel@embedded.rocks>
+Message-ID: <174ded3e-cc52-0456-3cd2-7750c531e442@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,47 +15,79 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 22:21, Pawel Sikora wrote:
+On 10-04-17 21:02, J?rg Krause wrote:
 > Hi,
 > 
-> 2017-04-10 15:33 GMT+02:00 Arnout Vandecappelle <arnout@mind.be
-> <mailto:arnout@mind.be>>:
+> On Sat, 2017-04-08 at 12:09 +0200, Eric Le Bihan wrote:
 [snip]
->      While checking this, by the way, I discovered that the --default option to
->     prepare-kernel.sh no longer works (i.e., it no longer autodiscovers the patch to
->     apply). So linux-ext-xenomai.mk <http://linux-ext-xenomai.mk> should be
->     updated to disallow an empty ipipe
->     patch. Pawel, could you look into this? It should either autodiscover the patch
->     to apply similar to how rtai does it, or it should just $(error) in case
->     XENOMAI_ADEOS_PATCH is empty, similar to the handling of LINUX_KCONFIG_FILE (but
->     remember to check BR_BUILDING in that case...). I think autodiscovering is a bit
->     fragile, though.
+>> Currently Buildroot only offers downloading binary versions of the C/C++
+>> cross-compilers. It does not take into account alternative C/C++
+>> cross-compilers like LLVM/Clang or compilers for new languages like
+>> Rust, D, or Haskell (though I do not know if Haskell is useful on
+>> embedded systems).
+
+ There's a huge difference between alternative C/C++ compilers and compilers for
+other languages.
+
+ Compilers for other languages we already have: python, mono, erlang. These are
+just normal packages, and any package in that language depends on the host-xxx
+package to provide the compiler. Similar to how packages that use the cmake
+buildsystem depend on the host-cmake package.
+
+ Alternative C/C++ compilers are something else entirely, because they replace
+the special 'toolchain' target.
+
+ Only when you can build an entire system with only the Rust compiler and
+without C/C++ compiler you can consider them equivalent. That day is still far away.
+
+> For now, we could use the host rustc package to fetch the latest stable
+> binary for the host architecture. Additionally, we could add the option
+> to build the Rust compiler within Buildroot. In my opinion, this option
+> only makes sense if the compiler can be configured meaningfully.
+
+ I agree.
+
+
+>> So, would it help to have a "Programming Languages" section in
+>> menuconfig where you can select Rust (or any other language) and choose
+>> between a using a pre-built compiler or build it from source?
 > 
+> In my opinion it would make more sense to have a menu "Toolchains" with
+> the submenus "C/C++ Toolchain", "Rust Toolchain", ...
+
+ Given what I wrote above, I disagree. For the time being it's fine in the host
+packages menu. If that menu becomes too large, we could add something like an
+'Alternative programming languages' menu.
+
+
+
+>> And where shoud LLVM/clang be exposed?
 > 
-> Hmm ok, I will look at this, but most probably not until wednesday (quite a lot
-> to do on university now)
-> 
-> But... when there is no patch provided, you are prompted for it at a stage of
-> kernel patching, isn't this better than error?
+> I would put it into "C/C++ Toolchain" (if we had such a menu).
 
- No. Once you type 'make', the build should proceed non-interactively. The build
-can take a very long time, so people will start it and then go away to do
-something else. You don't want to return and see that it has stopped after five
-minutes with some stupid prompt. And anyway, at that point you probably can't
-make sense of this prompt.
+ That's slightly more complicated. LLVM is just a library so it's just in the
+host menu. clang is a compiler that can be a replacement for gcc, so it'd have
+to go into the toolchain menu.
 
- That's also the reason why we have an explicit error for e.g. a non-existing
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE.
-
-
-> Of course, it would be good to have a working autodiscovery (but not so urgent,
-> right?)
-
- Obviously not so urgent. Would be nice to have it fixed before the 2017.05 release.
+ Actually, Romain is working on LLVM/Clang. He's going to start adding it as a
+normal host package, so not as a replacement of gcc as the toolchain.
 
  Regards,
  Arnout
 
+> 
+>> Note: Building a cross-compiler for D can be done via a patch to GCC
+>> thanks to GDC [1], but IIRC cross-compiling libphobos, the standard
+>> library, is another matter.
+>>
+>> [1] https://github.com/D-Programming-GDC/GDC/releases
+> 
+> J?rg
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
