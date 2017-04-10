@@ -1,174 +1,177 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 11:28:57 +0200
-Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
-In-Reply-To: <20170407192458.GA3420@scaer>
-References: <20170402130338.12542-1-yann.morin.1998@free.fr>
- <39bc6b12-1dfd-8ada-f1bc-8597c6872a1c@mind.be> <20170404185928.GA3828@scaer>
- <fd9c07fd-2e86-ed73-2fd1-bfcf27522664@mind.be> <20170407192458.GA3420@scaer>
-Message-ID: <4fef5a6f-15d2-73f6-c759-2887255c987d@mind.be>
+Date: Mon, 10 Apr 2017 12:20:52 +0200
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
+In-Reply-To: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
+References: <1491467592-21504-1-git-send-email-kevin.joly@sensefly.com>
+Message-ID: <3577f824-ddbf-7332-018c-221704ebaa46@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Kevin,
+
+ Some more feedback on your patch...
+
+ A better summary line would be
+
+libgphoto2: new package
+
+On 06-04-17 10:33, Kevin JOLY wrote:
+> Add support for libgphoto2 core library designed to allow access to digital camera.
+
+ The commit message text should be wrapped at 72 columns.
 
 
-On 07-04-17 21:24, Yann E. MORIN wrote:
-> Arnout, All,
 > 
-> On 2017-04-07 12:30 +0200, Arnout Vandecappelle spake thusly:
->> On 04-04-17 20:59, Yann E. MORIN wrote:
->>>> - it's bad for performance. This adds 2000 rules to the make rules database,
->>>> which makes the dependency resolution slower (even if this rule is not used).
->>>> Just this one extra rule doesn't make much of a difference, but it's all these
->>>> extra rules that we've added over the years combined that make it slower. That
->>>> said, there is probably some refactoring that could be done to make it less bad,
->>>> so it's not too big of a factor.
->>>
->>> Timing the run before/after this change does not yield a noticeable
->>> difference
->>
->>  As I wrote: "Just this one extra rule doesn't make much of a difference".
->> However, we have about a dozen rules like this, and added together they *do*
->> make a noticable difference (I did a much less thorough benchmark; after
->> removing all these one-shot rules that are not used in a normal build, a 'make
->> -qp >/dev/null' became about 15% faster).
-> 
-> OK, adding features makes the stuff slower; that I do understand.
-> 
-> However, what I argue is that the overhead added by that one extra rule
-> is negligible, relatively to the existing startup time.
+> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
 
- Indeed, which is why I gave the patch my Reviewed-by.
+ Since Romain also worked on this package, it's nice to add
 
- My point is: we should be conservative about adding new per-package rules like
-this. A single addition has negligible effect, but added together they do have
-an impact and they're turning us into bitbake.
+Cc: Romain Naour <romain.naour@gmail.com>
+
+This makes sure that:
+- Romain will be in Cc when you use git send-email;
+- In the git history, it will be visible that Romain was involved.
+
 [snip]
->>  Now, I repeat: adding this single thing is not a big deal. I just say we have
->> to be careful about adding things all the time that slow things down. We are
->> very quickly approaching the speed of bitbake, and that is one of the main
->> reasons I spit out OE the first time I used it...
-> 
-> Eh... The startup tiem is annoying, but it is not awfull. Yet. Howeber,
-> in my (arguably limited) experience of OE, the build time was much
-> longer overall for a similar setup. So we still win AFAICS...
-> 
-> The only thing that would be a killer feature is TLPB (as long as it
-> yields a correct build, of course).
-
- In my experience, there are two big reasons why an OE build is much slower:
-
-1. A typical configuration is much bigger (more packages selected).
-
-2. They do per-package staging in order to enable TLPB.
-
- We still win on point 1, but since we're going towards PPS (and host and target
-too), we're going to loose our advantage on point 2. Well, not entirely, because
-IIUC they have a pretty inefficient way of building the PPS so we might do better.
-
-
-> 
->>>> And if you don't want to see the actual build, you
->>>> can do 'make -nk'.
-> [--SNIP--]
->>> Plus, it requires non-trivial post-processing... :-(
->> TERM=dumb make -nk 2>/dev/null | grep 'Configuring"' | cut -d ' ' -f 3-4
->>
->>  True, it's not trivial. But it's shorter than your patch :-) And indeed it's 4
->> times slower than 'make build-order'. But that's just 12 seconds for an
->> allyesconfig. Is that really too much?
->>
->>  However, it turns out not to work :-( Any rule which contains $(MAKE) is still
->> going to be executed, and that will inevitably lead to errors, so any package
->> that depends on a package that errors out will also not be executed.
->>
->>  So, I can think of no viable alternative, so there is no way to stop this patch :-)
-> 
-> What about the following (just proof-of-concept):
-[pasted correct version]
-> diff --git a/Makefile b/Makefile
-> index 919d589..a1540fc 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -759,6 +759,14 @@ show-targets:
-> 
->  show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
-> 
-> +define show-build-order-deps
-> +	$(foreach p,$($(call UPPERCASE,$(1))_FINAL_ALL_DEPENDENCIES),\
-> +		$(call show-build-order-deps-deps,$(p))) $(1)
-> +endef
-> +
-> +show-build-order-2:
-> +	@./toto $(foreach p,$(PACKAGES),$(call show-build-order-deps-deps,$(p)))
-> +
->  graph-build: $(O)/build/build-time.log
->  	@install -d $(GRAPHS_DIR)
->  	$(foreach o,name build duration,./support/scripts/graph-build-time \
-> diff --git a/toto b/toto
-> new file mode 100755
-> index 0000000..6962083
+> diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
+> new file mode 100644
+> index 0000000..1626667
 > --- /dev/null
-> +++ b/toto
-> @@ -0,0 +1,30 @@
-> +#!/bin/bash
-> +
-> +# input on stdin: list of packages, each rpreceded by its
-> +# direct dependencies; so, packages may be listed more than
-> +# once, but at least the build order is gurranteed for the
-> +# first occurence of each package.
-> +
-> +# We first output each item of the list on its own line.
-> +# Then we number those lines.
-> +# We sort by package name as first key, and on line number
-> +# as second key.
-> +# For each package, we keep only the first occurence, which
-> +# is the one with the lowest line number.
-> +# We re-sort on the line number.
-> +# And eventually, we remove the line number and only keep
-> +# the package name.
-> +
-> +# The output is thus the build order.
-> +
-> +printf "%s\n" "${@}"
-> +|cat -n \
-> +|sort -k 2,2 -k 1,1n \
-> +|while read n p; do
-> +    if [ "${p}" != "${prev}" ]; then
-> +        printf "%d %s\n" "${n}" "${p}"
-> +        prev="${p}"
-> +    fi
-> +done \
-> +|sort -n \
-> +|sed -r -e 's/^[[:digit:]]+ //'
+> +++ b/package/libgphoto2/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBGPHOTO2
+> +	select BR2_PACKAGE_LIBTOOL
+> +	select BR2_PACKAGE_LIBUSB
+> +	select BR2_PACKAGE_LIBUSB_COMPAT
 
- OK, my first and main reason to reject the patch was that it made the code more
-complicated. That bit is even worse (by an order of magnitude) in this proposal.
+ Is libusb-compat really needed? It seems to be only used if libusb1 isn't
+found. Also, as far as I can see in the configure script, this is optional (you
+just loose most of the ports).
 
-> 
-> This has the advantage that it adds a single rule, and the price of
-> expansion is paid only when the rule is actually called.
-> 
-> Plus, the runtime is not worse than my initial solution.
-> 
->>>> OK, it looks a lot nicer with this show-build-order target,
->>>> but I wouldn't say it's very valuable.
->>>
->>> Well, I've been tracking build-order issues for a while last WE, and
->>> believe me, I was very happy to be able to see the build order before
->>> I attempted a build, yes.
->>
->>  That's my biggest problem with this feature: I have no idea how to use it.
->> Could you add some explanation somewhere?
-> 
-> I hope the explanations from Thomas are enough? ;-)
+> +	select BR2_PACKAGE_LIBXML2
 
- Yep, as I replied to him: please add that to the commit message while applying.
+ In your reply to v1, you mentioned that br-arm-full-nothread failed. That seems
+to indicate that it should depend on BR2_TOOLCHAIN_HAS_THREADS (with the
+appropriate comment in case of !BR2_TOOLCHAIN_HAS_THREADS). But anyway, this
+dependency is already needed for libusb. So if the package itself doesn't
+require threads (just grep for "pthread", and check whether or not it's escaped
+by some #ifdef), you should say:
+
+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+
+
+> +	bool "libgphoto2"
+> +	help
+> +	  libgphoto2 is the core library designed to allow access to
+> +	  digital camera by external programs.
+> +
+> +	  http://gphoto.org/
+
+ For libgphoto2 itself:
+
+http://gphoto.org/proj/libgphoto2/
+
+> diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+> new file mode 100644
+> index 0000000..2e659ab
+> --- /dev/null
+> +++ b/package/libgphoto2/libgphoto2.hash
+> @@ -0,0 +1,6 @@
+> +# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
+> +md5 a5999acc204c31515a6ec8e517d2cd91 libgphoto2-2.5.12.tar.bz2
+> +sha1 4ded403b87d46ad49ba88b22b9410789ed3cef10 libgphoto2-2.5.12.tar.bz2
+> +
+> +# Locally calculated hash
+> +sha256 b9bb28990fde45ac385e4851a07dbad2e1250404b535b0a3a3b898bb431e4e2e	libgphoto2-2.5.12.tar.bz2
+> diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+> new file mode 100644
+> index 0000000..354c29a
+> --- /dev/null
+> +++ b/package/libgphoto2/libgphoto2.mk
+> @@ -0,0 +1,29 @@
+> +################################################################################
+> +#
+> +# libgphoto2
+> +#
+> +################################################################################
+> +
+> +LIBGPHOTO2_VERSION = 2.5.12
+
+ There's a 2.5.13 out now.
+
+> +LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
+> +LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
+
+ The website itself points to github, and the repository is maintained on github
+(no commits in sourceforge since 2015), so I'd tend to say that you should use
+the github download. However, the github download is just the autogenerated one
+which doesn't contain a configure script, so indeed it's better to use
+sourceforge. Still, it's better to add a comment about that:
+
+# Project is maintained on github but github tarball doesn't have configure
+
+
+> +LIBGPHOTO2_INSTALL_STAGING = YES
+> +
+> +LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
+
+ It looks like there are some configure options you may want to pass explicitly,
+like --disable-rpm. The package also installs a lot of stuff in non-standard
+locations, it would be good to check if the defaults are appropriate. Also take
+a look at README.packaging.
+
+> +
+> +ifeq ($(BR2_PACKAGE_LIBEXIF),y)
+> +LIBGPHOTO2_DEPENDENCIES += libexif
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBJPEG),y)
+> +LIBGPHOTO2_DEPENDENCIES += libjpeg
+
+ Please add an explicit
+LIBGPHOTO2_CONF_OPTS += --with-jpeg
+else
+LIBGPHOTO2_CONF_OPTS += --without-jpeg
+
+ Ideally also for exif and gd, but it seems there are no options for those.
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GD),y)
+> +LIBGPHOTO2_DEPENDENCIES += gd
+> +endif
+> +
+> +LIBGPHOTO2_LICENSE = LGPLv2.1+
+
+ We switched completely to SPDX license strings, so LGPL-2.1+
+
+> +LIBGPHOTO2_LICENSE_FILES = COPYING
+
+ We typically put the license info near the top, just above or below the initial
+DEPENDENCIES.
+
+ It looks like some of the camlibs are actually GPL-2.0+ or LGPL-3+, and some
+are LGPL-2.0 only. So the complete string should be:
+
+LIBGPHOTO2_LICENSE = LGPLv2.1+, GPL-2.0 (adc65), GPL-2.0+ (some camlibs), \
+	LGPL-2.0 (sipix), LGPL-3.0+ (pentax), BSD-3-Clause (ax203/tinyjpeg).
+
+I couldn't find any license files for all the other licenses, so add a comment
+
+# No license files for other licenses
+
+ It would be good to double-check all of the above...
 
  Regards,
  Arnout
+
+> +
+> +$(eval $(autotools-package))
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
