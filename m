@@ -1,50 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 10 Apr 2017 22:41:22 +0200
-Subject: [Buildroot] [PATCH 5/5] package/mplayer: disable external mmx
-In-Reply-To: <20170410204122.13382-1-bernd.kuhls@t-online.de>
-References: <20170410204122.13382-1-bernd.kuhls@t-online.de>
-Message-ID: <20170410204122.13382-5-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Apr 2017 23:00:23 +0200
+Subject: [Buildroot] [PATCH v7] Add defconfig for MIPS Creator ci40
+In-Reply-To: <CA+V_ovshFwELPeY71fHV5aiqD=X02GG682TMnD79UcCtAQYV-g@mail.gmail.com>
+References: <1491378735-6506-1-git-send-email-abhimanyu.v@gmail.com>
+ <d89680b5-ad66-0fcc-a0ae-47132b0ad8c4@mind.be>
+ <CA+V_ovshFwELPeY71fHV5aiqD=X02GG682TMnD79UcCtAQYV-g@mail.gmail.com>
+Message-ID: <5ad83116-cb48-c00b-1d74-609b9617d604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a follow-up error with this defconfig
-http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
-which occurs after disabling inline mmx with the previous patch:
+ [Grmbl, I hate it how GMail screws up quoting. Anybody got good contact with
+Google?]
 
-This is the error message:
+On 10-04-17 21:22, abhimanyu.v at gmail.com wrote:
+> Thankyou Arnout!
+> 
+> On Mon, Apr 10, 2017 at 8:58 PM, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
+> 
+> 
+> 
+>     On 05-04-17 09:52, Abhimanyu Vishwakarma wrote:
+[snip]
+>     > +support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+> 
+>      The idea is to remove this script entirely and instead set
+>     BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>     BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci40/genimage.cfg"
+> 
+> I remember i did try this (tried now too)  but it doesnt work, i end up with
+> following error:
+> BUILD_DIR=/home/abhi/code/buildroot/output/build support/scripts/genimage.sh
+> /home/abhi/code/buildroot/output/images -c board/ci40/genimage.cfg
+>>>>   Executing post-image script support/scripts/genimage.sh
+> Error: Missing argument
+> 
+> This is due to mix of positional and optional argument. Anything wrong with
+> config or it is issue with genimage.sh script. 
 
-fmpeg/libavcodec/libavcodec.a(apedec.o): In function `ape_decode_frame':
-apedec.c:(.text+0x1df5): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(asvdec.o): In function `decode_frame':
-asvdec.c:(.text+0x77c): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(bink.o): In function `decode_frame':
-bink.c:(.text+0x2809): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(dvdec.o): In function `dvvideo_decode_frame':
-dvdec.c:(.text+0x575): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(ffv1dec.o): In function `decode_slice':
-ffv1dec.c:(.text+0x3110): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(h264.o):h264.c:(.text+0xea8): more undefined references to `avpriv_emms_yasm' follow
+ It's the genimage.sh script that's not right. It doesn't support BINARIES_DIR
+as the first argument, which means it can't be used directly as a post-image script.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mplayer/mplayer.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ Etienne, any chance of fixing that?
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 166394cac..88f2fb4ef 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -290,6 +290,8 @@ define MPLAYER_DISABLE_INLINE_ASM
- 		$(@D)/config.h
- 	$(SED) 's,#define HAVE_MMX_INLINE 1,#define HAVE_MMX_INLINE 0,g' \
- 		$(@D)/config.h
-+	$(SED) 's,#define HAVE_MMX_EXTERNAL 1,#define HAVE_MMX_EXTERNAL 0,g' \
-+		$(@D)/config.h
- endef
- 
- ifeq ($(BR2_i386),y)
+ Regards,
+ Arnout
+
+[snip]
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
