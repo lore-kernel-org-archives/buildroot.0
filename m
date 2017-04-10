@@ -1,13 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 23:10:47 +0200
-Subject: [Buildroot] [PATCH v3] xenomai: Add choice for
- enabling/disabling Cobalt/Mercury core
-In-Reply-To: <CAKfV1Cas+sKSXW304wKz9AwuxeDoN9BzBJ+s2n2pyBScirtbsg@mail.gmail.com>
-References: <20170409235434.31059-1-sikor6@gmail.com>
- <20170410123226.3719-1-sikor6@gmail.com>
- <CAAXf6LUgz48VtAd9=aL9m8f5640GimYMNrXg1Hy3_mMgM-_S+w@mail.gmail.com>
- <CAKfV1Cas+sKSXW304wKz9AwuxeDoN9BzBJ+s2n2pyBScirtbsg@mail.gmail.com>
-Message-ID: <2691ea72-b437-df49-c8b9-7d159b703026@mind.be>
+Date: Mon, 10 Apr 2017 23:14:59 +0200
+Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
+ core
+In-Reply-To: <CAAXf6LXi32-nEe0TqvXdJX61j=ELmSu4Fi7QfWOOuF7_RYMRDQ@mail.gmail.com>
+References: <20170406234139.31532-1-sikor6@gmail.com>
+ <20170406234139.31532-2-sikor6@gmail.com>
+ <20170408153452.54837e4c@free-electrons.com>
+ <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
+ <CAKfV1CaoGUPmL6W5xT61YECuVvN3_RthyD7sw8Cw54e_RMOYCQ@mail.gmail.com>
+ <99d84995-3497-3072-f56a-bea2960327c6@mind.be>
+ <CAAXf6LXi32-nEe0TqvXdJX61j=ELmSu4Fi7QfWOOuF7_RYMRDQ@mail.gmail.com>
+Message-ID: <aadfb245-3fc6-b56a-6a39-07d135c9478b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,111 +19,44 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 22:01, Pawel Sikora wrote:
-> Hi,
+On 10-04-17 21:20, Thomas De Schampheleire wrote:
+> On Mon, Apr 10, 2017 at 11:08 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>> On 10-04-17 00:51, Pawel Sikora wrote:
+>>> What about support for Xenomai 2.6? Should we split Xenomai into two packages
+>>> for both versions? As it needs different patches that are currently for 3.x version
+>>> and now if someone want to build 2.x will need to take these patches manually.
+>>> So doesn't it really mean now, that the option with prompt for Xenomai version
+>>> will work only for Xenomai >3.x?
+>>
+>>  IIRC when Xenomai 3 support was introduced, we decided to simply drop support
+>> for Xenomai 2.6.
+>>
+>>  In fact, I would forego the 'custom Xenomai version' support entirely. I don't
+>> see why you would ever want an older version, and if you need a newer version
+>> than the one in Buildroot you can just bump the package. Does anyone see a
+>> reason to support multiple versions? [Adding ThomasDS in Cc to answer that.]
+>>
 > 
-> 2017-04-10 21:31 GMT+02:00 Thomas De Schampheleire <patrickdepinguin@gmail.com
-> <mailto:patrickdepinguin@gmail.com>>:
-> 
->     On Mon, Apr 10, 2017 at 2:32 PM, Pawel Sikora <sikor6@gmail.com
->     <mailto:sikor6@gmail.com>> wrote:
->     > Add an option choice for Cobalt or Mercury core
->     > depending on option BR2_LINUX_KERNEL_EXT_XENOMAI.
->     >
->     > Signed-off-by: Pawel Sikora <sikor6 at gmail.com <mailto:sikor6@gmail.com>>
->     > ---
->     > Changes v2 -> v3:
->     >  - Corrections in help (Arnout V.)
->     >
->     >  package/xenomai/Config.in  | 27 +++++++++++++++++++++++++++
->     >  package/xenomai/xenomai.mk <http://xenomai.mk> |  6 ++++++
->     >  2 files changed, 33 insertions(+)
->     >
->     > diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
->     > index b548ee810..324f5025a 100644
->     > --- a/package/xenomai/Config.in
->     > +++ b/package/xenomai/Config.in
->     > @@ -51,6 +51,33 @@ config BR2_PACKAGE_XENOMAI_VERSION
->     >           BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
->     >           Kernel -> Linux Kernel Extensions menu.
->     >
->     > +choice
->     > +       prompt "Xenomai core"
->     > +       default BR2_PACKAGE_XENOMAI_MERCURY
->     > +       help
->     > +         Select the Xenomai core: dual kernel (Cobalt)
->     > +         or native Linux Kernel (Mercury).
->     > +
->     > +config BR2_PACKAGE_XENOMAI_MERCURY
->     > +       bool "Mercury"
->     > +       depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
->     > +       help
->     > +         Select Mercury core for the Xenomai userspace.
->     > +         You want to use it if you have the native Linux Kernel.
->     > +
->     > +config BR2_PACKAGE_XENOMAI_COBALT
->     > +       bool "Cobalt"
->     > +       help
->     > +         Select Cobalt core (dual kernel) for the Xenomai
->     > +         userspace. Use this if you use a Xenomai-patched
->     > +         Linux kernel.
->     > +
->     > +         If you want to use Cobalt core, your kernel must have
-> 
->     the Cobalt core
-> 
->     > +         the Adeos and Xenomai patches applied to it. You can
->     > +         add these through the BR2_LINUX_KERNEL_EXT_XENOMAI option
->     > +         in the Linux Kernel Extensions menu.
-> 
->     With the latest updates, the term 'I-pipe' has disappeared here, I
->     think it is a relevant term that helps clarifying 'Adeos', no?
-> 
-> 
-> I think I don't get it, could you explain this in detail? Is it that name
-> of the prompt for patch in Linux Kernel Extensions have just 'Adeos'
-> in name and should have I-pipe or something else?
+> [sorry for the earlier mail problems, seems the Gmail Android app has
+> been 'improved' to mess up inline replies...]
 
- I think he just means to replace Adeos with Adeos I-Pipe.
+ So, what did you do to fix it? Maybe something needs to be added to the manual? :-)
 
->  
-> 
-> 
->     More in general: I wonder which level of help we need to provide here.
->     I expect that people's choice of either Cobalt or Mercury cannot be
->     driven by the current help above. The choice has severe impact on your
->     application and system. We could try to extend the help, e.g.
->     clarifying that only the cobalt core can provide real real-time
->     guarantees, and that the mercury core's real-time strictness fully
->     depends on the linux kernel. But perhaps it may be better to
->     explicitly refer to the Xenomai documentation to make a proper
->     decision.
-> 
-> 
-> Hmm... You're right. But I think that choice of Xenomai Core should be
-> driven by knowledge from the documentation - Xenomai documentation.
-> 
-> What about adding just information with clarification about what one can
-> expect from Mercury/Cobalt as you described above and pointing to
-> Xenomai documentation for further details?
 
- In my view, we indeed can't provide enough documentation in the help text to
-help the user make the choice between Cobalt and Mercury. So it doesn't make
-sense adding a very long text here. But the Xenomai documentation about this is
-quite clear and extensive, and I think we can assume that the user has read some
-of that before enabling Xenomai.
+> In the past, there have been several cases where updates were made to
+> the Mercury core of Xenomai that required changes in existing
+> applications. Possibly this depended on how exactly you link to it and
+> which startup options you give, but anyway this is a situation where
+> being able to select a non-latest xenomai version can be useful, at
+> least in a transition phase.
 
- What we do need in the help text is:
-
-- remind the user that Cobalt is the dual kernel and Mercury is the unikernel;
-
-- remind the user that for Cobalt, he has to make sure that the kernel is
-properly patched.
-
+ OK, makes sense. It's a bit risky with our patches, but I guess there's no
+other option.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
