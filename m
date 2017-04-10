@@ -1,81 +1,64 @@
-From: Pawel Sikora <sikor6@gmail.com>
-Date: Mon, 10 Apr 2017 19:26:02 +0200
-Subject: [Buildroot] [PATCH v4 1/2] xenomai: Add choice for
-	enabling/disabling Cobalt/Mercury core
-Message-ID: <20170410172603.6427-1-sikor6@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Apr 2017 19:27:03 +0200
+Subject: [Buildroot] [PATCH 2/2] libmpeg2: add check-bin-arch exclusion for
+	Sparc
+In-Reply-To: <20170410172703.26251-1-arnout@mind.be>
+References: <20170410172703.26251-1-arnout@mind.be>
+Message-ID: <20170410172703.26251-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option choice for Cobalt or Mercury core
-depending on option BR2_LINUX_KERNEL_EXT_XENOMAI.
+libmpeg2's configure forces -mcpu=ultrasparc -mvis, which generates
+Sparcv8+ code. At runtime, however, the library detects if the VIS
+instructions really are supported or not, so in fact this does work
+even on < v8 machines.
 
-Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Our check-bin-arch step will complain about the architecture mismatch
+with
+
+ERROR: architecture for "/usr/lib/libmpeg2convert.so.0.0.0" is "Sparc v8+", should be "Sparc"
+ERROR: architecture for "/usr/lib/libmpeg2.so.0.1.0" is "Sparc v8+", should be "Sparc"
+
+Therefore, explicitly disable the binary arch check for these two
+libraries when building for Sparc.
+
+Fixes:
+http://autobuild.buildroot.net/results/690/690b07b2de0b5f2d2d6e37bcfa7223ee7cc53fe2
+http://autobuild.buildroot.net/results/318/318dd1a396b10e7655e0e9b290721fa7bf7a7194
+etc.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v3 -> v4:
- - No changes, just merging in series with SMP patch.
+ package/libmpeg2/libmpeg2.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
- package/xenomai/Config.in  | 27 +++++++++++++++++++++++++++
- package/xenomai/xenomai.mk |  6 ++++++
- 2 files changed, 33 insertions(+)
-
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index b548ee810..324f5025a 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -51,6 +51,33 @@ config BR2_PACKAGE_XENOMAI_VERSION
- 	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
- 	  Kernel -> Linux Kernel Extensions menu.
+diff --git a/package/libmpeg2/libmpeg2.mk b/package/libmpeg2/libmpeg2.mk
+index db9b2f8bbb..d5ce980c99 100644
+--- a/package/libmpeg2/libmpeg2.mk
++++ b/package/libmpeg2/libmpeg2.mk
+@@ -20,6 +20,19 @@ else
+ LIBMPEG2_CONF_OPTS += --disable-sdl
+ endif
  
-+choice
-+	prompt "Xenomai core"
-+	default BR2_PACKAGE_XENOMAI_MERCURY
-+	help
-+	  Select the Xenomai core: dual kernel (Cobalt)
-+	  or native Linux Kernel (Mercury).
-+
-+config BR2_PACKAGE_XENOMAI_MERCURY
-+	bool "Mercury"
-+	depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
-+	help
-+	  Select Mercury core for the Xenomai userspace.
-+	  You want to use it if you have the native Linux Kernel.
-+
-+config BR2_PACKAGE_XENOMAI_COBALT
-+	bool "Cobalt"
-+	help
-+	  Select Cobalt core (dual kernel) for the Xenomai
-+	  userspace. Use this if you use a Xenomai-patched
-+	  Linux kernel.
-+
-+	  If you want to use Cobalt core, your kernel must have
-+	  the Adeos and Xenomai patches applied to it. You can
-+	  add these through the BR2_LINUX_KERNEL_EXT_XENOMAI option
-+	  in the Linux Kernel Extensions menu.
-+endchoice
-+
- config BR2_PACKAGE_XENOMAI_TESTSUITE
- 	bool "Install testsuite"
- 	help
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index c9e810e05..73d9617b1 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
- 
- XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
- 
-+ifeq ($(BR2_PACKAGE_XENOMAI_MERCURY),y)
-+XENOMAI_CONF_OPTS += --with-core=mercury
-+else
-+XENOMAI_CONF_OPTS += --with-core=cobalt
++ifeq ($(BR2_sparc),y)
++# configure forces -mcpu=ultrasparc -mvis, which generates Sparcv8+ code.
++# This conflicts with the Sparc code that we expect. At runtime, the
++# library detects if the VIS instructions really are supported or not, so
++# in fact this does work even on < v8 machines. Therefore, explicitly
++# disable the binary arch check in that case.
++# When bumping/changing this package, please double-check if it still works
++# correctly for Sparc.
++LIBMPEG2_CHECK_BIN_ARCH_EXCLUSIONS = \
++	/usr/lib/libmpeg2convert.so.0.0.0 \
++	/usr/lib/libmpeg2.so.0.1.0
 +endif
 +
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ ifneq ($(BR2_PACKAGE_LIBMPEG2_BINS),y)
+ define LIBMPEG2_REMOVE_BINS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,\
 -- 
-2.12.1
+2.11.0
