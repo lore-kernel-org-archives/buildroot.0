@@ -1,43 +1,84 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 10 Apr 2017 18:05:07 -0400
-Subject: [Buildroot] Building multi-part rootfs images
-In-Reply-To: <c764d6cf-eaf1-154f-2ece-cd9bdff881fd@mind.be>
-References: <CA+h8R2ofinZ+3yGzNOCtfM5KDSrxeizyEVAKTYv2v24DbEPzkw@mail.gmail.com>
- <c764d6cf-eaf1-154f-2ece-cd9bdff881fd@mind.be>
-Message-ID: <CA+h8R2q56gk6z_9phg_qyRccvGccQrCrF0-Sem-4+5SLqBj6dg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 11 Apr 2017 00:05:29 +0200
+Subject: [Buildroot] [PATCH v6 2/2] systemd: select fsck wrapper from
+	util-linux
+In-Reply-To: <1491824995-19670-2-git-send-email-casantos@datacom.ind.br>
+References: <3eeb7e24-fcc2-8d75-e0e8-141eeaceab70@mind.be>
+ <1491824995-19670-1-git-send-email-casantos@datacom.ind.br>
+ <1491824995-19670-2-git-send-email-casantos@datacom.ind.br>
+Message-ID: <b0de90ac-b30e-7bf1-5693-0afd73376834@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
-On Mon, Apr 10, 2017 at 5:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Loop-mount? It should be a normal mount, no?
 
-I said "loop mount" (forgive me if the terminology is wrong) because
-I'm still operating under a "binary blob" system where I'm not
-mounting anything r/w against the disk, so I would likely mount a loop
-filesystem (-o loop) to /lib/modules.
+On 10-04-17 13:49, Carlos Santos wrote:
+> Select the fsck required by systemd provided by util-linux. This
+> prevents ending up with fsck from busybox, which is incompatible
+> with systemd.
+> 
+> Change-Id: I61cfc9b8925169b2678ac911fcd5a4eb5d92c425
 
-> - mounting specific subdirs. Quite easy to implement:
+ The Change-Id shouldn't be there, since we don't use gerrit.
 
-This seems like the most straightforward approach, especially since
-the kernel shouldn't need any modules until way later in the boot
-anyway. I can add a systemd blocking early step that does the mount.
+ Otherwise:
 
->   - in post-build, move away the subdirs you want to mount from somewhere else
-> to a temporary directory. E.g., mv $TARGET_DIR/lib/modules $BINARIES_DIR/modules;
->   - add a genimage.cfg that makes some filesystem out of $BINARIES_DIR/modules;
-> the same genimage.cfg can also put the rootfs.cpio and zImage somewhere where
-> the bootloader can find it;
->   - call genimage.sh as a post-build script;
->   - in your rootfs overlay, add /etc/fstab that mounts the filesystem.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-This makes sense. I'll prototype this and report back with results.
 
-Source code is available at http://github.com/paralin/skiffos
+ Regards,
+ Arnout
 
-Thanks again!
-Christian
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+> [there were no v1, v2]
+> Changes v3
+>   - Select e2fsprogs + e2fsck
+> Changes v3->v4
+>   - Remove selection of e2fsprogs + e2fsck
+>   - Clean-up commit message
+> Changes v4->v5
+>   - Screwed-up everything, reverting the chances made in v4
+> Changes v5->v6
+>   - Restored changes made in v4.
+>   - Restore the patch changelog.
+> ---
+>  package/systemd/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 0f54686..478cc10 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -22,6 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+>  	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+>  	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+> +	select BR2_PACKAGE_UTIL_LINUX_FSCK
+>  	select BR2_PACKAGE_KMOD
+>  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+>  	select BR2_PACKAGE_KMOD_TOOLS
+> @@ -61,6 +62,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	  - libgcrypt package will add support for journal sealing and
+>  	    DNSSEC verification in resolved.
+>  
+> +	  Notice that systemd selects the fsck wrapper from util-linux
+> +	  but no particular fsck.<fstype> is selected. You must choose
+> +	  the apropriate ones (e.g. e2fsck, from the e2fsprogs package)
+> +	  according to the system configuration.
+> +
+>  	  http://freedesktop.org/wiki/Software/systemd
+>  
+>  if BR2_PACKAGE_SYSTEMD
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
