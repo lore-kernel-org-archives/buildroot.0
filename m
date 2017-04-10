@@ -1,129 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 13:11:13 +0200
-Subject: [Buildroot] [PATCH v2] xenomai: Add choice for
- enabling/disabling Cobalt/Mercury core
-In-Reply-To: <20170409235434.31059-1-sikor6@gmail.com>
-References: <20170406234139.31532-2-sikor6@gmail.com>
- <20170409235434.31059-1-sikor6@gmail.com>
-Message-ID: <a01e3d6d-a16a-630c-6dbf-3d0925ce9d43@mind.be>
+Date: Mon, 10 Apr 2017 13:13:26 +0200
+Subject: [Buildroot] [PATCH v5 2/2] systemd: select util-linux/fsck and
+ e2fsprogs/e2fsck
+In-Reply-To: <CAGduivxv5seLe6Oz7j+DBjA3kX=b5ksKfTPbStTYezhrKqo7Yg@mail.gmail.com>
+References: <1491794596-8454-1-git-send-email-casantos@datacom.ind.br>
+ <1491794596-8454-3-git-send-email-casantos@datacom.ind.br>
+ <CAGduivxv5seLe6Oz7j+DBjA3kX=b5ksKfTPbStTYezhrKqo7Yg@mail.gmail.com>
+Message-ID: <f30c9756-7b98-ec8c-90dd-612d31d81491@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Some small improvements to the help text, otherwise looks OK.
+ Hi Maxime,
 
-On 10-04-17 01:54, Pawel Sikora wrote:
-> Add an option choice for Cobalt or Mercury core
-> depending on option BR2_LINUX_KERNEL_EXT_XENOMAI.
+On 10-04-17 13:02, Maxime Hadjinlian wrote:
+> Hi all, Carlos
 > 
-> Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> ---
+> Thanks for pushing with this, it's really neat :)
 > 
-> Changes v1 -> v2:
->  - explicitly setting Cobalt core  (suggested by Thomas de Schampheleire)
->  - removing from Cobalt config dependency from Xenomai being set
->    in the Linux Kernel Extensions (Thomas P., Arnout V.)
+> On Mon, Apr 10, 2017 at 5:23 AM, Carlos Santos <casantos@datacom.ind.br> wrote:
+>> e2fsprogs does not override/remove the fsck from util-linux anymore when
+>> /sbin and /usr/sbin are merged. So we can select the fsck tools required
+>> by systemd provided by those packages. This also prevents ending up with
+>> the fsck from busybox, which is incompatible with systemd.
+>>
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>> ---
+>>  package/systemd/Config.in | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+>> index 0f54686..f5eb9d0 100644
+>> --- a/package/systemd/Config.in
+>> +++ b/package/systemd/Config.in
+>> @@ -22,6 +22,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>>         select BR2_PACKAGE_UTIL_LINUX_BINARIES
+>>         select BR2_PACKAGE_UTIL_LINUX_MOUNT
+>>         select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+>> +       select BR2_PACKAGE_UTIL_LINUX_FSCK
+>> +       select BR2_PACKAGE_E2FSPROGS
+>> +       select BR2_PACKAGE_E2FSPROGS_E2FSCK
+>>         select BR2_PACKAGE_KMOD
+>>         select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+>>         select BR2_PACKAGE_KMOD_TOOLS
+>> --
+> I haven't tested it but this looks good to me.
 > 
-> package/xenomai/Config.in  | 36 ++++++++++++++++++++++++++++++++++++
->  package/xenomai/xenomai.mk |  6 ++++++
->  2 files changed, 42 insertions(+)
-> 
-> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-> index b548ee810..3d6342c8f 100644
-> --- a/package/xenomai/Config.in
-> +++ b/package/xenomai/Config.in
-> @@ -51,6 +51,42 @@ config BR2_PACKAGE_XENOMAI_VERSION
->  	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
->  	  Kernel -> Linux Kernel Extensions menu.
->  
-> +choice
-> +	prompt "Xenomai core"
-> +	default BR2_PACKAGE_XENOMAI_MERCURY
-> +	help
-> +	  Manually select the Xenomai core. Depends if
-> +	  you selected BR2_LINUX_KERNEL_EXT_XENOMAI.
-> +	  If yes, then default option will be Cobalt.
-> +	  Otherwise you can choose between Mercury/Cobalt
-> +	  depending from your needs.
+> Reviewed-by: "Maxime Hadjinlian <maxime.hadjinlian@gmail.com>"
 
- All this reference to defaults and dependencies isn't very useful. Instead just:
+ Do you agree with me that selecting e2fsprogs shouldn't be necessary, because
+you actually only need them when you mount an ext2 filesystem (which isn't
+necessarily the case)?
 
-	  Select the Xenomai core: dual kernel (Cobalt) or
-	  native Linux kernel (Mercury).
-
-> +
-> +config BR2_PACKAGE_XENOMAI_MERCURY
-> +	bool "Mercury"
-> +	depends on !BR2_LINUX_KERNEL_EXT_XENOMAI
-> +	help
-> +	  Select Mercury core for the Xenomai userspace.
-> +	  You want to use it if you have the native Linux Kernel.
-
-	  Select Mercury core (single kernel) for the Xenomai
-	  userspace. Use this if you use the native Linux kernel
-	  without Xenomai extension.
-
-> +
-> +	  If you want Cobalt core, you need to either enable
-> +	  BR2_LINUX_KERNEL_EXT_XENOMAI in the Linux Kernel ->
-> +	  Linux Kernel Extensions menu or you can choose it
-> +	  anyway if you use external Linux Kernel with applied
-> +	  I-pipe patch.
-
- Remove this second paragraph entirely, since it's about the other choice.
-
-> +
-> +config BR2_PACKAGE_XENOMAI_COBALT
-> +	bool "Cobalt"
-> +	help
-> +	  Select Cobalt core for the Xenomai userspace.
-> +	  You should have the right I-pipe patch for your
-> +	  Linux Kernel version, you can add it via
-> +	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH in the Linux Kernel ->
-> +	  Linux Kernel Extensions menu or from the interactive prompt
-> +	  at compile time of Xenomai.
-> +	  You can also compile it without providing this information
-> +	  if have an external Linux Kernel that is already patched.
-
-	  Select Cobalt core (dual kernel) for the Xenomai
-	  userspace. Use this if you use a Xenomai-patched
-	  Linux kernel.
-
-	  If you want to use Cobalt core, your kernel must have
-	  the Adeos and Xenomai patches applied to it. You can
-	  add these through the BR2_LINUX_KERNEL_EXT_XENOMAI option
-	  in the Linux Kernel Extensions menu.
-
+ I'm not sure what happens exactly when you have util-linux fsck but no e2fsck
+and you try to mount an ext2 filesystem...
 
  Regards,
  Arnout
 
-
-> +endchoice
-> +
->  config BR2_PACKAGE_XENOMAI_TESTSUITE
->  	bool "Install testsuite"
->  	help
-> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> index c9e810e05..73d9617b1 100644
-> --- a/package/xenomai/xenomai.mk
-> +++ b/package/xenomai/xenomai.mk
-> @@ -23,6 +23,12 @@ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
->  
->  XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
->  
-> +ifeq ($(BR2_PACKAGE_XENOMAI_MERCURY),y)
-> +XENOMAI_CONF_OPTS += --with-core=mercury
-> +else
-> +XENOMAI_CONF_OPTS += --with-core=cobalt
-> +endif
-> +
->  define XENOMAI_REMOVE_DEVFILES
->  	for i in xeno-config xeno-info wrap-link.sh ; do \
->  		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
 > 
+>> 2.7.4
+>>
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
