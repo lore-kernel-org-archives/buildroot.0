@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Apr 2017 10:45:30 +0200
-Subject: [Buildroot] [PATCH/autobuild 2/8] autobuild-run: add '-d,
- --debug' option
-In-Reply-To: <20170410102229.05f6fe68@free-electrons.com>
+Date: Mon, 10 Apr 2017 10:46:54 +0200
+Subject: [Buildroot] [PATCH/autobuild 4/8] autobuild-run: remove
+ redundant 'make oldconfig'
+In-Reply-To: <20170410102550.224313e7@free-electrons.com>
 References: <20170409205128.11560-1-arnout@mind.be>
- <20170409205128.11560-2-arnout@mind.be>
- <20170410102229.05f6fe68@free-electrons.com>
-Message-ID: <3e09ffd4-2e9c-67cb-1aeb-9b8f007fd9bd@mind.be>
+ <20170409205128.11560-4-arnout@mind.be>
+ <20170410102550.224313e7@free-electrons.com>
+Message-ID: <4d4d06b2-9b8f-b95a-40be-d9478787dd33@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,45 @@ To: buildroot@busybox.net
 
 
 
-On 10-04-17 10:22, Thomas Petazzoni wrote:
+On 10-04-17 10:25, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Sun, 9 Apr 2017 22:51:22 +0200, Arnout Vandecappelle
+> On Sun, 9 Apr 2017 22:51:24 +0200, Arnout Vandecappelle
 > (Essensium/Mind) wrote:
+>> After running 'make randpackageconfig', and additional 'make oldconfig'
+>> is done. However, this is redundant, since randpackageconfig already
+>> does an olddefconfig.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
->> -    kwargs['log'] = open(os.path.join(idir, "instance.log"), "a+")
->> +    if kwargs['debug']:
->> +        kwargs['log'] = sys.stdout
->> +    else:
->> +        kwargs['log'] = open(os.path.join(idir, "instance.log"), "a+")
->>      log_write(kwargs['log'], "INFO: instance started")
+> Well, this oldconfig is not exactly right after randpackageconfig.
 > 
-> How does this works when you have several instances running in
-> parallel?
+> We do this:
 > 
-> Everything gets mixed up on stdout?
+>  - randpackageconfig
+>  - fixup_config()
+>  - oldconfig
+> 
+> The fixup_config() function potentially does some changes to
+> the .config file, and that's why we re-run oldconfig afterwards. This
+> ensures that the build will not wait indefinitely while asking the user
+> the value of a config option.
 
- Indeed. I assume if you're debugging, you're not going to run several instances
-in parallel.
+ D'oh, I missed that. Fortunately somebody reviews my crap! :-)
 
- Anyway, if you don't want this feature, just drop it. It's something I used
-while debugging the script and I thought could be useful for others as well.
+ So instead I'll replace it with olddefconfig and squash with the preceding
+patch, OK?
 
  Regards,
  Arnout
+
+> 
+> Therefore, I wouldn't qualify this oldconfig as "redundant".
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
