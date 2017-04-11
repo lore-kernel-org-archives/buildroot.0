@@ -1,38 +1,65 @@
-From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
-Date: Tue, 11 Apr 2017 09:45:51 +0200
-Subject: [Buildroot] [PATCH v5] syslinux: build with the target toolchain
-In-Reply-To: <20170408160825.1891b903@free-electrons.com>
-References: <1491473086-16647-1-git-send-email-benoit.allard@greenbone.net>
- <1491555913-7951-1-git-send-email-benoit.allard@greenbone.net>
- <20170408160825.1891b903@free-electrons.com>
-Message-ID: <20170411094551.404b3adb@armant.office.greenbone.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 11 Apr 2017 11:23:10 +0200
+Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
+In-Reply-To: <60a71a19-b86a-e9cd-5e0d-ab51388a18de@mind.be>
+References: <20170402130338.12542-1-yann.morin.1998@free.fr>
+ <60a71a19-b86a-e9cd-5e0d-ab51388a18de@mind.be>
+Message-ID: <f65e842e-6adf-1cf1-d91c-06cfa465c2fb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 8 Apr 2017 16:08:25 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-> Applied to master, thanks. Now, could you try to submit those patches
-> to the upstream project?
 
-I'm on it, unfortunately, the traction is not very high. I feel like I
-opened one of those can of worms that have been tackled over and over
-again without reaching a satisfactory solution (autoconf ?!). The first
-answer I got was 'stop assuming everyone has needs similars to yours',
-I'm now waiting on further one.
+On 07-04-17 12:31, Arnout Vandecappelle wrote:
+> 
+> 
+> On 02-04-17 15:03, Yann E. MORIN wrote:
+>> When debugging hidden dependencies, the build order is very important.
+>> Most notably, it is interesting to identify potential culprits.
+>>
+>> Add a new top-level rule, show-biuld-order, that dumps all the packages
+>                                  build
+>> in the order they would get built.
+>>
+>> Note that there are a few differences with show-targets:
+>>
+>>   - more packages are reported, becasue show-targets does not report
+>                                   because
+>>     host packages that have no prompt;
+>>
+>>   - the output is line-based, because we're using $(info $(1)); getting
+>>     a single output line like show-targets would require we use an
+>>     actual command, like printf '%s ' $(1); but that takes a lot of
+>>     time, while $(info $(1)) is almost instantaneous (the time to parse
+>>     the Makefiles);
+>>
+>>   - rootfs targets are not reported.
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-You can follow the show over there:
-http://www.syslinux.org/archives/2017-April/
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Regards,
-Ben
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170411/0badbbcc/attachment.asc>
+ I've now actually started using this patch and it has a real benefit over
+show-targets, because it shows all targets, not just the ones appearing in
+.config. Ideal if you need to find all host packages...
+
+ Perhaps now show-targets can be eliminated? It is not documented, it's only
+used in graph-depends, and AFAICS from there it can easily be converted into
+show-build-order. Well, for that -show-build-order should be added to
+fs/common.mk but that's not rocket science :-)
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
