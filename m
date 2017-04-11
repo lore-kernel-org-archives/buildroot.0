@@ -1,60 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 11 Apr 2017 16:23:21 +0200
-Subject: [Buildroot] [PATCH v4 2/2] xenomai: Add config for
- enabling/disabling SMP
-In-Reply-To: <20170410172603.6427-2-sikor6@gmail.com>
-References: <20170410172603.6427-1-sikor6@gmail.com>
- <20170410172603.6427-2-sikor6@gmail.com>
-Message-ID: <CAAXf6LV5JG6g6YgwF8AXbUe1zkK=VbbZx8d8TAtHJyDQ10xNcQ@mail.gmail.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Tue, 11 Apr 2017 17:42:52 +0300
+Subject: [Buildroot] [PATCH 0/2] update axs10x defconfigs
+Message-ID: <1491921774-14748-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 10, 2017 at 7:26 PM, Pawel Sikora <sikor6@gmail.com> wrote:
-> Add a config option for enabling/disabling SMP
-> in Xenomai userspace in version 3.x
->
-> Enabled by default.
->
-> Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Changes v3 -> v4:
->   - No changes, just merging in series with 'core Cobalt/Mercury' patch
->
->  package/xenomai/Config.in  | 17 +++++++++++++++++
->  package/xenomai/xenomai.mk |  6 ++++++
->  2 files changed, 23 insertions(+)
->
-> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-> index 324f5025a..efb504b35 100644
-> --- a/package/xenomai/Config.in
-> +++ b/package/xenomai/Config.in
-> @@ -78,6 +78,23 @@ config BR2_PACKAGE_XENOMAI_COBALT
->           in the Linux Kernel Extensions menu.
->  endchoice
->
-> +config BR2_PACKAGE_XENOMAI_ENABLE_SMP
-> +       bool "Enable SMP"
+With this patch series we bump Linux kernel to v4.10.8 and U-Boot
+to v2017.01.
 
-nit: I would make it "Enable SMP support"
+Also it contatins a couple of U-Boot patches for axs103 that introduce
+important updates for new axs103 hardware version. 
 
-> +       default y
-> +       help
-> +         This option enables SMP support in Xenomai userspace.
-> +
-> +         If this option is turned on while no SMP support is enabled
-> +         in the kernel, things will still work. However, if SMP is
-> +         enabled in the kernel but this option is not turned on,
-> +         Xenomai applications will complain with 'feature mismatch:
-> +         missing="smp/nosmp'.
+Vlad Zakharov (2):
+  config: update linux and u-boot in axs10x defconfigs
+  arc: u-boot: Support slave core kick-start on axs103 v1.1
 
-and here I would put the error message on a separate line to increase
-readability.
+ ...ake-sure-busy-bit-is-set-properly-on-SLC-.patch | 41 ++++++++++++
+ .../0001-axs103-Clean-up-smp_kick_all_cpus.patch   | 48 +++++++++++++++
+ ...ort-slave-core-kick-start-on-axs103-v1.1-.patch | 72 ++++++++++++++++++++++
+ ...s101_defconfig => snps_arc700_axs101_defconfig} |  9 +--
+ ...103_defconfig => snps_archs38_axs103_defconfig} | 10 +--
+ 5 files changed, 172 insertions(+), 8 deletions(-)
+ create mode 100644 board/synopsys/axs10x/patches/linux/0001-ARCv2-SLC-Make-sure-busy-bit-is-set-properly-on-SLC-.patch
+ create mode 100644 board/synopsys/axs10x/patches/u-boot/0001-axs103-Clean-up-smp_kick_all_cpus.patch
+ create mode 100644 board/synopsys/axs10x/patches/u-boot/0002-axs103-Support-slave-core-kick-start-on-axs103-v1.1-.patch
+ rename configs/{snps_axs101_defconfig => snps_arc700_axs101_defconfig} (68%)
+ rename configs/{snps_axs103_defconfig => snps_archs38_axs103_defconfig} (64%)
 
-Obviously both of these are real nits, that perhaps could be fixed up
-when applying.
-
-Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-- 
+2.7.4
