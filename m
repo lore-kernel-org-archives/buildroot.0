@@ -1,62 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Apr 2017 00:29:42 +0200
-Subject: [Buildroot] [PATCH] glibc: fix sh4 compile issue
-In-Reply-To: <20170411201457.GA23395@waldemar-brodkorb.de>
-References: <20170411201457.GA23395@waldemar-brodkorb.de>
-Message-ID: <eecb21c6-2c8b-c7dd-d000-19b7228c18ac@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 11 Apr 2017 20:03:06 -0300
+Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies
+ a package coding style
+References: <20170408162114.6e6c8899@free-electrons.com>
+Message-ID: <58ed60aaf1a9c_4e388d340c84161@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas,
 
+On Sat, Apr 08, 2017 at 11:21 AM, Thomas Petazzoni wrote:
 
-On 11-04-17 22:14, Waldemar Brodkorb wrote:
-> Fixes:
->   https://bugs.busybox.net/show_bug.cgi?id=9756
+> Since there was no feedback to your patch series since 1.5 months, I've
+> applied all of it, except PATCH 1/9. I'm not sure we want to have the
+
+Thanks.
+
+> bad examples/test cases inside the Buildroot tree.
+
+OK.
+
+> However, there are two things that bothered me a little bit:
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/glibc/2.24/0001-sh4-fix.patch | 17 +++++++++++++++++
+>  - The number of files added in support/scripts/. Should we have
+>    support/scripts/check-package as a script, and the rest in a
+>    subdirectory?
 
- Isn't the patch needed for 2.23 and 2.25 as well?
+Sure. I will send a followup patch.
 
- Regards,
- Arnout
+I am inclined to change to this:
+ support/scripts/
+ ...
+ |-- check-package
+ |-- checkpackage
+ |   |-- __init__.py
+ |   |-- base.py
+ |   |-- lib.py
+ |   |-- lib_config.py
+ |   |-- lib_hash.py
+ |   |-- lib_mk.py
+ |   |-- lib_patch.py
+ |   `-- readme.txt
+ ...
 
->  1 file changed, 17 insertions(+)
->  create mode 100644 package/glibc/2.24/0001-sh4-fix.patch
-> 
-> diff --git a/package/glibc/2.24/0001-sh4-fix.patch b/package/glibc/2.24/0001-sh4-fix.patch
-> new file mode 100644
-> index 0000000..3c22e01
-> --- /dev/null
-> +++ b/package/glibc/2.24/0001-sh4-fix.patch
-> @@ -0,0 +1,17 @@
-> +Backport of 
-> +https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> +
-> +diff -Nur glibc-2.24.orig/sysdeps/sh/dl-machine.h glibc-2.24/sysdeps/sh/dl-machine.h
-> +--- glibc-2.24.orig/sysdeps/sh/dl-machine.h	2016-08-02 04:01:36.000000000 +0200
-> ++++ glibc-2.24/sysdeps/sh/dl-machine.h	2017-04-10 21:53:51.413196297 +0200
-> +@@ -389,7 +389,7 @@
-> + 	  break;
-> + 	case R_SH_DIR32:
-> + 	  {
-> +-#ifndef RTLD_BOOTSTRAP
-> ++#if !defined RTLD_BOOTSTRAP && !defined RESOLVE_CONFLICT_FIND_MAP
-> + 	   /* This is defined in rtld.c, but nowhere in the static
-> + 	      libc.a; make the reference weak so static programs can
-> + 	      still link.  This declaration cannot be done when
-> 
+>  - Between every function/method/class, you put two empty lines. The
+>    Buildroot coding style is generally to have only one empty line.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Sorry, the series got contaminated by my habit of using pep8 with default
+options.
+
+I will fix that in another followup patch.
+
+Regards,
+Ricardo
