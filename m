@@ -1,42 +1,74 @@
 From: Kevin JOLY <kevin.joly@sensefly.com>
-Date: Tue, 11 Apr 2017 09:36:31 +0200
+Date: Tue, 11 Apr 2017 09:38:04 +0200
 Subject: [Buildroot] [PATCH v4] libgphoto2: new package
-In-Reply-To: <71951810-c9a3-4fac-4a45-5c94651c81b7@mind.be>
+In-Reply-To: <CANLo3JgawY_x8UjMVvkgx-a2wgo_4vPxtShTHX6+NU=L777+Hg@mail.gmail.com>
 References: <1491894008-29767-1-git-send-email-kevin.joly@sensefly.com>
  <71951810-c9a3-4fac-4a45-5c94651c81b7@mind.be>
-Message-ID: <d5d834cc-b512-3239-c94e-e4d473b5583f@sensefly.com>
+ <CANLo3JgawY_x8UjMVvkgx-a2wgo_4vPxtShTHX6+NU=L777+Hg@mail.gmail.com>
+Message-ID: <637f7835-8f38-eeee-5a51-8ff6acc92ed1@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Romain,
 
-Sorry about that. I take note : )
+Do I have to make a v5 with your ack?
 
 Best regards,
 
-Le 11. 04. 17 ? 09:23, Arnout Vandecappelle a ?crit :
->   Hi Kevin,
->
-> On 11-04-17 09:00, Kevin JOLY wrote:
->> Add support for libgphoto2 core library designed to allow access to
->> digital camera.
->>
->> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
->> Cc: Romain Naour <romain.naour@gmail.com>
->> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->   When you make any non-trivial change, like changing the libjpeg dependency into
-> jpeg, you really shouldn't keep the Ack.
->
->   However, I would have given it anyway, so all is good :-)
+
+Le 11. 04. 17 ? 09:35, Romain Naour a ?crit :
 >
 >
->   Regards,
->   Arnout
+> Le 11 avr. 2017 09:23, "Arnout Vandecappelle" <arnout@mind.be 
+> <mailto:arnout@mind.be>> a ?crit :
 >
-> [snip]
+>      Hi Kevin,
+>
+>     On 11-04-17 09:00, Kevin JOLY wrote:
+>     > Add support for libgphoto2 core library designed to allow access to
+>     > digital camera.
+>     >
+>     > Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com
+>     <mailto:kevin.joly@sensefly.com>>
+>     > Cc: Romain Naour <romain.naour@gmail.com
+>     <mailto:romain.naour@gmail.com>>
+>     > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be
+>     <mailto:arnout@mind.be>>
+>
+>      When you make any non-trivial change, like changing the libjpeg
+>     dependency into
+>     jpeg, you really shouldn't keep the Ack.
+>
+>      However, I would have given it anyway, so all is good :-)
+>
+>
+> Looks good to me.
+> Acked-by: Romain Naour <romain.naour@gmail.com 
+> <mailto:romain.naour@gmail.com>>
+>
+> Best regards,
+> Romain
+>
+>
+>
+>      Regards,
+>      Arnout
+>
+>     [snip]
+>     --
+>     Arnout Vandecappelle                          arnout at mind be
+>     Senior Embedded Software Architect +32-16-286500 <tel:%2B32-16-286500>
+>     Essensium/Mind http://www.mind.be
+>     G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR
+>     Leuven
+>     LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>     <http://www.linkedin.com/in/arnoutvandecappelle>
+>     GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+>
 
 -- 
 
@@ -49,4 +81,4 @@ SenseFly <http://www.sensefly.com/>
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170411/d96a7302/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170411/80719382/attachment.html>
