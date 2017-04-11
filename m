@@ -1,65 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Apr 2017 11:23:10 +0200
-Subject: [Buildroot] [PATCH] core: add rule to dump packages' build order
-In-Reply-To: <60a71a19-b86a-e9cd-5e0d-ab51388a18de@mind.be>
-References: <20170402130338.12542-1-yann.morin.1998@free.fr>
- <60a71a19-b86a-e9cd-5e0d-ab51388a18de@mind.be>
-Message-ID: <f65e842e-6adf-1cf1-d91c-06cfa465c2fb@mind.be>
+From: Pawel Sikora <sikor6@gmail.com>
+Date: Tue, 11 Apr 2017 11:42:29 +0200
+Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable obstack support
+In-Reply-To: <c9b79a55-badc-2638-09e3-de5d8471efe1@gmail.com>
+References: <20170331202604.18153-1-romain.naour@gmail.com>
+ <20170331202604.18153-2-romain.naour@gmail.com>
+ <20170401144417.08a84fd7@free-electrons.com>
+ <c9b79a55-badc-2638-09e3-de5d8471efe1@gmail.com>
+Message-ID: <CAKfV1CYhuGGqWO=OvvmRRhKA1AzycP8xopSapptZGrXD_qKVfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
 
-On 07-04-17 12:31, Arnout Vandecappelle wrote:
-> 
-> 
-> On 02-04-17 15:03, Yann E. MORIN wrote:
->> When debugging hidden dependencies, the build order is very important.
->> Most notably, it is interesting to identify potential culprits.
->>
->> Add a new top-level rule, show-biuld-order, that dumps all the packages
->                                  build
->> in the order they would get built.
->>
->> Note that there are a few differences with show-targets:
->>
->>   - more packages are reported, becasue show-targets does not report
->                                   because
->>     host packages that have no prompt;
->>
->>   - the output is line-based, because we're using $(info $(1)); getting
->>     a single output line like show-targets would require we use an
->>     actual command, like printf '%s ' $(1); but that takes a lot of
->>     time, while $(info $(1)) is almost instantaneous (the time to parse
->>     the Makefiles);
->>
->>   - rootfs targets are not reported.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+2017-04-01 23:44 GMT+02:00 Romain Naour <romain.naour@gmail.com>:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Hi Thomas, All,
+>
+> Le 01/04/2017 ? 14:44, Thomas Petazzoni a ?crit :
+> > Hello,
+> >
+> > On Fri, 31 Mar 2017 22:26:04 +0200, Romain Naour wrote:
+> >> Obstack support in Xenomai is broken when the libc doesn't support
+> >> obstack support itself. Make sure we disable obstack support for all
+> >> libc since it was removed in uClibc-ng since 1.0.21 release and it's
+> >> always disabled with Glibc.
+> >
+> > What makes you say it's always disabled in glibc?
+>
+> From lib/boilerplate/obstack.c in Xenomai code:
+>
+> #if !defined _LIBC && defined __GNU_LIBRARY__ && __GNU_LIBRARY__ > 1
+> # include <gnu-versions.h>
+> # if _GNU_OBSTACK_INTERFACE_VERSION == OBSTACK_INTERFACE_VERSION
+> #  define ELIDE_CODE
+> # endif
+> #endif
+>
+> While glibc is used, _GNU_OBSTACK_INTERFACE_VERSION is equal to
+> OBSTACK_INTERFACE_VERSION so ELIDE_CODE is defined and the Xenomai Obstack
+> support (the replacement code) is disabled.
+>
+> While uClibc-ng >= 1.0.21 is used, _GNU_OBSTACK_INTERFACE_VERSION is not
+> defined
+> so the Xenomai Obstack support is used but break the build.
+>
+> >
+> > What's the status with musl?
+>
+> Xenomai is disabled with musl toolchains
+>
+> >
+> > Also, Xenomai seems to have some replacement code when obstack support
+> > is not available from the C library. How does that interfact with
+> > ELIDE_CODE ?
+>
+> This is precisely the replacement code that is broken...
+> It try to use "exitfail.h" and define obstack_exit_failure with
+> exit_failure
+> which is not defined.
+>
+> The proposed fix define ELIDE_CODE to disable the Xenomai Obstack support
+> completely.
+>
+> Otherwise, we have to add a dependency on glibc toolchain only since
+> Obstack
+> support is missing in uClibc-ng... (maybe it's safer to do that?).
+>
 
- I've now actually started using this patch and it has a real benefit over
-show-targets, because it shows all targets, not just the ones appearing in
-.config. Ideal if you need to find all host packages...
+That's a good question, but I also think that we should add dependency from
+glibc,
+at least until someone could say (Romain?) what would be the impact on
+uClibc-ng without
+obstack support... and will test it, right?
 
- Perhaps now show-targets can be eliminated? It is not documented, it's only
-used in graph-depends, and AFAICS from there it can easily be converted into
-show-build-order. Well, for that -show-build-order should be added to
-fs/common.mk but that's not rocket science :-)
+..but until then, Thomas/All, what do you think?
 
- Regards,
- Arnout
+Regards,
+Pawel
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+>
+> Best regards,
+> Romain
+>
+> >
+> > Thanks,
+> >
+> > Thomas
+> >
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170411/0ead8b36/attachment.html>
