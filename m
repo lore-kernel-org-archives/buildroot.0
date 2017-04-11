@@ -1,83 +1,42 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Tue, 11 Apr 2017 12:30:21 -0400
-Subject: [Buildroot] [RFC 2/3] rpi-userland: fix opengl library symlinks
-In-Reply-To: <20170325152507.3a17a336@free-electrons.com>
-References: <20170322181331.23500-1-gael.portay@savoirfairelinux.com>
- <20170322181331.23500-3-gael.portay@savoirfairelinux.com>
- <20170322225421.5ce139f6@free-electrons.com>
- <20170322223851.vlc46h63xsksr3f5@gportay>
- <20170322234756.0a6deb80@free-electrons.com>
- <20170322225104.32xu2q6fhyoph4fg@gportay>
- <20170325152507.3a17a336@free-electrons.com>
-Message-ID: <20170411163021.xrgt2ucfddw6fqgm@gportay>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Tue, 11 Apr 2017 19:32:13 +0300
+Subject: [Buildroot] [PATCH] config: update linux version in zebu defconfig
+Message-ID: <1491928333-30537-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+With this commit we update snps_archs38_zebu_defconfig the following:
 
-On Sat, Mar 25, 2017 at 03:25:07PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 22 Mar 2017 18:51:04 -0400, Ga?l PORTAY wrote:
-> 
-> > > Ah, it uses dlopen() on specifically libEGL.so.1 and libOpenGLES.so.2,
-> > > OK. Then it makes sense. Maybe your patch should be submitted upstream
-> > > to rpi-userland?  
-> > 
-> > I am on it.
-> > 
-> > I made a PR on github.
-> 
-> As was said in https://github.com/raspberrypi/userland/pull/379, the PR
-> you have submitted changes the SONAME of the library, so any binary
-> already built against rpi-userland before your change will no longer
-> work after your change. Your suggestion to run ldconfig is irrelevant.
-> 
+  - bump linux kernel version to 4.10.9
+  - set up host linux headers to 4.10
 
-Okay.
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ configs/snps_archs38_zebu_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I wanted to make sure about the 'No such file or directory' message. I would
-expect a kind of 'Invalid' message instead.
-
-> When you link against a library, the SONAME of this library gets
-> encoded into a NEEDED entry of the thing (program or library) that
-> links against this library. Then at runtime, the dynamic loader goes
-> through those NEEDED entries to load the shared libraries that the
-> program needs. So if the NEEDED entry of a program no longer points to
-> an existing library, you broke binary compatibility.
-> 
-
-Thanks very much for this clarification about the SONAME and NEEDED entry.
-
-I thought it was based on filenames only, and I was wrong.
-
-> So maybe we simply need some symbolic links to be created:
-> 
->  libEGL.so.1 -> libEGL.so
->  libGLES.so.2 -> libGLES.so
-> 
-
-I submitted a new PR that creates symlinks.
-
-I was the initial solution :)
-
-> This way, qt5webengine will be able to find the EGL/OpenGLES
-> implementation, but the rpi-userland libraries SONAME remains the same.
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Regards,
-Ga?l
+diff --git a/configs/snps_archs38_zebu_defconfig b/configs/snps_archs38_zebu_defconfig
+index 96d941a..98beb2b 100644
+--- a/configs/snps_archs38_zebu_defconfig
++++ b/configs/snps_archs38_zebu_defconfig
+@@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="zebu_hs_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+-- 
+2.7.4
