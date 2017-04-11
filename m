@@ -1,89 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Apr 2017 20:56:12 +0300
-Subject: [Buildroot] [PATCH] libcurl: apply upstream security patch
-Message-ID: <1796640bb50f0f0d5f8f24ccd56081cc28a7598f.1491933372.git.baruch@tkos.co.il>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 11 Apr 2017 22:14:57 +0200
+Subject: [Buildroot] [PATCH] glibc: fix sh4 compile issue
+Message-ID: <20170411201457.GA23395@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2017-7407: --write-out out of buffer read
+Fixes:
+  https://bugs.busybox.net/show_bug.cgi?id=9756
 
-https://curl.haxx.se/docs/adv_20170403.html
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/libcurl/0001-CVE-2017-7407.patch | 61 ++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/libcurl/0001-CVE-2017-7407.patch
+ package/glibc/2.24/0001-sh4-fix.patch | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 package/glibc/2.24/0001-sh4-fix.patch
 
-diff --git a/package/libcurl/0001-CVE-2017-7407.patch b/package/libcurl/0001-CVE-2017-7407.patch
+diff --git a/package/glibc/2.24/0001-sh4-fix.patch b/package/glibc/2.24/0001-sh4-fix.patch
 new file mode 100644
-index 000000000000..3a9fa487a8e1
+index 0000000..3c22e01
 --- /dev/null
-+++ b/package/libcurl/0001-CVE-2017-7407.patch
-@@ -0,0 +1,61 @@
-+From 6019f1795b4e3b72507b84b0e02dc8c32024f562 Mon Sep 17 00:00:00 2001
-+From: Dan Fandrich <dan@coneharvesters.com>
-+Date: Sat, 11 Mar 2017 10:59:34 +0100
-+Subject: [PATCH] CVE-2017-7407: fixed
++++ b/package/glibc/2.24/0001-sh4-fix.patch
+@@ -0,0 +1,17 @@
++Backport of 
++https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01
 +
-+Bug: https://curl.haxx.se/docs/adv_20170403.html
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+Reported-by: Brian Carpenter
-+[baruch: remove tests]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: based on upstream suggested patch[1] that combines commits
-+1890d59905414ab and 8e65877870c1.
-+
-+[1] https://curl.haxx.se/CVE-2017-7407.patch
-+
-+diff --git a/src/tool_writeout.c b/src/tool_writeout.c
-+index 2fb77742a..5d92bd278 100644
-+--- a/src/tool_writeout.c
-++++ b/src/tool_writeout.c
-+@@ -3,11 +3,11 @@
-+  *  Project                     ___| | | |  _ \| |
-+  *                             / __| | | | |_) | |
-+  *                            | (__| |_| |  _ <| |___
-+  *                             \___|\___/|_| \_\_____|
-+  *
-+- * Copyright (C) 1998 - 2016, Daniel Stenberg, <daniel@haxx.se>, et al.
-++ * Copyright (C) 1998 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
-+  *
-+  * This software is licensed as described in the file COPYING, which
-+  * you should have received as part of this distribution. The terms
-+  * are also available at https://curl.haxx.se/docs/copyright.html.
-+  *
-+@@ -111,11 +111,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
-+   char *stringp = NULL;
-+   long longinfo;
-+   double doubleinfo;
-+ 
-+   while(ptr && *ptr) {
-+-    if('%' == *ptr) {
-++    if('%' == *ptr && ptr[1]) {
-+       if('%' == ptr[1]) {
-+         /* an escaped %-letter */
-+         fputc('%', stream);
-+         ptr += 2;
-+       }
-+@@ -339,11 +339,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
-+           fputc(ptr[1], stream);
-+           ptr += 2;
-+         }
-+       }
-+     }
-+-    else if('\\' == *ptr) {
-++    else if('\\' == *ptr && ptr[1]) {
-+       switch(ptr[1]) {
-+       case 'r':
-+         fputc('\r', stream);
-+         break;
-+       case 'n':
-+-- 2.11.0
-+
++diff -Nur glibc-2.24.orig/sysdeps/sh/dl-machine.h glibc-2.24/sysdeps/sh/dl-machine.h
++--- glibc-2.24.orig/sysdeps/sh/dl-machine.h	2016-08-02 04:01:36.000000000 +0200
+++++ glibc-2.24/sysdeps/sh/dl-machine.h	2017-04-10 21:53:51.413196297 +0200
++@@ -389,7 +389,7 @@
++ 	  break;
++ 	case R_SH_DIR32:
++ 	  {
++-#ifndef RTLD_BOOTSTRAP
+++#if !defined RTLD_BOOTSTRAP && !defined RESOLVE_CONFLICT_FIND_MAP
++ 	   /* This is defined in rtld.c, but nowhere in the static
++ 	      libc.a; make the reference weak so static programs can
++ 	      still link.  This declaration cannot be done when
 -- 
-2.11.0
+2.1.4
