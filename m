@@ -1,43 +1,52 @@
-From: Adam Baxter <voltagex@voltagex.org>
-Date: Tue, 11 Apr 2017 20:50:48 +1000
-Subject: [Buildroot] Problem with new external tree syntax?
-Message-ID: <CAChFQ9R0w3gpqXeTjfVfYvHdnhE4aFcE1nPYTcZgw0deRWRsoQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 11 Apr 2017 16:18:36 +0200
+Subject: [Buildroot] [PATCH 1/1] xenomai: Add choice for Cobalt/Mercury
+	core
+In-Reply-To: <aadfb245-3fc6-b56a-6a39-07d135c9478b@mind.be>
+References: <20170406234139.31532-1-sikor6@gmail.com>
+ <20170406234139.31532-2-sikor6@gmail.com>
+ <20170408153452.54837e4c@free-electrons.com>
+ <2fa9e5f3-79a9-090e-76ed-457be2e6e49a@mind.be>
+ <CAKfV1CaoGUPmL6W5xT61YECuVvN3_RthyD7sw8Cw54e_RMOYCQ@mail.gmail.com>
+ <99d84995-3497-3072-f56a-bea2960327c6@mind.be>
+ <CAAXf6LXi32-nEe0TqvXdJX61j=ELmSu4Fi7QfWOOuF7_RYMRDQ@mail.gmail.com>
+ <aadfb245-3fc6-b56a-6a39-07d135c9478b@mind.be>
+Message-ID: <CAAXf6LXeccMuoajs_=VDg2vGmmep=PTdTegMa3=Ju3EOniQfvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I'm having a problem with 2017.02 and the new BR2_EXTERNAL syntax.
+On Mon, Apr 10, 2017 at 11:14 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 10-04-17 21:20, Thomas De Schampheleire wrote:
+>> On Mon, Apr 10, 2017 at 11:08 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>
+>>>
+>>> On 10-04-17 00:51, Pawel Sikora wrote:
+>>>> What about support for Xenomai 2.6? Should we split Xenomai into two packages
+>>>> for both versions? As it needs different patches that are currently for 3.x version
+>>>> and now if someone want to build 2.x will need to take these patches manually.
+>>>> So doesn't it really mean now, that the option with prompt for Xenomai version
+>>>> will work only for Xenomai >3.x?
+>>>
+>>>  IIRC when Xenomai 3 support was introduced, we decided to simply drop support
+>>> for Xenomai 2.6.
+>>>
+>>>  In fact, I would forego the 'custom Xenomai version' support entirely. I don't
+>>> see why you would ever want an older version, and if you need a newer version
+>>> than the one in Buildroot you can just bump the package. Does anyone see a
+>>> reason to support multiple versions? [Adding ThomasDS in Cc to answer that.]
+>>>
+>>
+>> [sorry for the earlier mail problems, seems the Gmail Android app has
+>> been 'improved' to mess up inline replies...]
+>
+>  So, what did you do to fix it? Maybe something needs to be added to the manual? :-)
+>
 
-external.desc is set, but the variable doesn't seem to be getting passed
-through correctly.
-
-voltagex at devbox:~/src/buildroot-skeleton$ make busybox
-umask 0022 && make -C /home/voltagex/src/buildroot
-O=/home/voltagex/src/buildroot-skeleton/build
-BR2_EXTERNAL=/home/voltagex/src/buildroot-skeleton/external BR2_JLEVEL=12
-busybox
-for f in /configs/busybox.config ; do if [ ! -f "${f}" ]; then printf
-"Kconfig fragment '%s' for '%s' does not exist\n" "${f}" "busybox"; exit 1;
-fi; done
-Kconfig fragment '/configs/busybox.config' for 'busybox' does not exist
-package/busybox/busybox.mk:264: recipe for target '/configs/busybox.config'
-failed
-make[1]: *** [/configs/busybox.config] Error 1
-Makefile:18: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-The line that appears not to work in my defconfig is
-BR2_PACKAGE_BUSYBOX_CONFIG="$(SKELETON_X86_64)/configs/busybox.config", as
-you can see in the error message above.
-
-The files I'm using are at
-https://github.com/baxterworks-build/buildroot-skeleton/
-
-Regards,
-Adam
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170411/a6556008/attachment.html>
+I just stopped sending mail via the app :-)
+I should revisit this at some point, I'm counting on other people
+reporting the problem and then Gmail to fix it... :-o
