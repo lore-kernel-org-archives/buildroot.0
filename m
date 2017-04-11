@@ -1,9 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 12 Apr 2017 00:26:32 +0200
-Subject: [Buildroot] [PATCH 03/14] package/libspatialindex: new package
+Date: Wed, 12 Apr 2017 00:26:33 +0200
+Subject: [Buildroot] [PATCH 04/14] package/minetest: new package
 In-Reply-To: <20170411222643.9770-1-romain.naour@gmail.com>
 References: <20170411222643.9770-1-romain.naour@gmail.com>
-Message-ID: <20170411222643.9770-3-romain.naour@gmail.com>
+Message-ID: <20170411222643.9770-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,109 +12,151 @@ To: buildroot@busybox.net
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-test-pkg reported an internal compiler error on microblaze (br-microblazeel-full)
-Index.cc: In member function 'void SpatialIndex::RTree::Index::adjustTree(SpatialIndex::RTree::Node*, std::stack<long long int>&)':
-Index.cc:327:1: internal compiler error: in gen_reg_rtx, at emit-rtl.c:1027
----
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/libspatialindex/Config.in            | 30 ++++++++++++++++++++++++++++
- package/libspatialindex/libspatialindex.hash |  4 ++++
- package/libspatialindex/libspatialindex.mk   | 14 +++++++++++++
- 5 files changed, 50 insertions(+)
- create mode 100644 package/libspatialindex/Config.in
- create mode 100644 package/libspatialindex/libspatialindex.hash
- create mode 100644 package/libspatialindex/libspatialindex.mk
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/minetest/Config.in   | 58 ++++++++++++++++++++++++++++++++++++++++++++
+ package/minetest/minetest.mk | 44 +++++++++++++++++++++++++++++++++
+ 4 files changed, 104 insertions(+)
+ create mode 100644 package/minetest/Config.in
+ create mode 100644 package/minetest/minetest.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 354866e..64fe583 100644
+index 64fe583..2c25281 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1339,6 +1339,7 @@ F:	package/iqvlinux/
- F:	package/irrlicht/
- F:	package/liblinear/
- F:	package/lensfun/
-+F:	package/libspatialindex/
+@@ -1343,6 +1343,7 @@ F:	package/libspatialindex/
  F:	package/linux-syscall-support/
  F:	package/lugaru/
  F:	package/mcelog/
++F:	package/minetest/
+ F:	package/openpowerlink/
+ F:	package/physfs/
+ F:	package/stress-ng/
 diff --git a/package/Config.in b/package/Config.in
-index 19315f7..58b196b 100644
+index 58b196b..23d2c5e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1385,6 +1385,7 @@ menu "Other"
- 	source "package/libseccomp/Config.in"
- 	source "package/libsigc/Config.in"
- 	source "package/libsigsegv/Config.in"
-+	source "package/libspatialindex/Config.in"
- 	source "package/libtasn1/Config.in"
- 	source "package/libtommath/Config.in"
- 	source "package/libtpl/Config.in"
-diff --git a/package/libspatialindex/Config.in b/package/libspatialindex/Config.in
+@@ -225,6 +225,7 @@ menu "Games"
+ 	source "package/lbreakout2/Config.in"
+ 	source "package/ltris/Config.in"
+ 	source "package/lugaru/Config.in"
++	source "package/minetest/Config.in"
+ 	source "package/opentyrian/Config.in"
+ 	source "package/opentyrian-data/Config.in"
+ 	source "package/prboom/Config.in"
+diff --git a/package/minetest/Config.in b/package/minetest/Config.in
 new file mode 100644
-index 0000000..0d066f6
+index 0000000..ac6c954
 --- /dev/null
-+++ b/package/libspatialindex/Config.in
-@@ -0,0 +1,30 @@
-+config BR2_PACKAGE_LIBSPATIALINDEX
-+	bool "libspatialindex"
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/minetest/Config.in
+@@ -0,0 +1,58 @@
++config BR2_PACKAGE_MINETEST
++	bool "minetest"
++	depends on BR2_INSTALL_LIBSTDCPP # irrlicht
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_XORG7 # irrlicht
++	depends on BR2_PACKAGE_HAS_LIBGL # irrlicht
++	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LUAJIT
++	select BR2_PACKAGE_IRRLICHT
++	select BR2_PACKAGE_GMP
++	select BR2_PACKAGE_JSONCPP
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  The purpose of libspatialindex is to provide:
++	  Minetest is a near-infinite-world block sandbox game and a
++	  game engine, inspired by InfiniMiner, Minecraft, and the
++	  like.
 +
-+	  * An extensible framework that will support robust spatial
-+	    indexing methods.
++	  http://www.minetest.net
 +
-+	  * Support for sophisticated spatial queries. Range, point
-+	    location, nearest neighbor and k-nearest neighbor as well
-+	    as parametric queries (defined by spatial constraints)
-+	    should be easy to deploy and run.
++if BR2_PACKAGE_MINETEST
 +
-+	  * Easy to use interfaces for inserting, deleting and updating
-+	    information.
++config BR2_PACKAGE_MINETEST_CLIENT
++	bool
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_XLIB_LIBXXF86VM
 +
-+	  * Wide variety of customization capabilities. Basic index and
-+	    storage characteristics like the page size, node capacity,
-+	    minimum fan-out, splitting algorithm, etc. should be easy
-+	    to customize.
++config BR2_PACKAGE_MINETEST_SERVER
++	bool
 +
-+	  * Index persistence. Internal memory and external memory
-+	    structures should be supported. Clustered and non-clustered
-+	    indices should be easy to be persisted.
++choice
++	prompt "minetest build"
 +
-+	  https://libspatialindex.github.io
++config BR2_PACKAGE_MINETEST_CLIENT_ONLY
++	bool "client only"
++	select BR2_PACKAGE_MINETEST_CLIENT
++	help
++	  Build Minetest client only.
 +
-+comment "libspatialindex needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libspatialindex/libspatialindex.hash b/package/libspatialindex/libspatialindex.hash
++config BR2_PACKAGE_MINETEST_SERVER_ONLY
++	bool "server only"
++	select BR2_PACKAGE_MINETEST_SERVER
++	help
++	  Build Minetest server only.
++
++config BR2_PACKAGE_MINETEST_CLIENT_SERVER
++	bool "client and server"
++	select BR2_PACKAGE_MINETEST_CLIENT
++	select BR2_PACKAGE_MINETEST_SERVER
++	help
++	  Build Minetest client and server.
++
++endchoice
++
++endif
+diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
 new file mode 100644
-index 0000000..3aa636d
+index 0000000..f110f7c
 --- /dev/null
-+++ b/package/libspatialindex/libspatialindex.hash
-@@ -0,0 +1,4 @@
-+# From http://download.osgeo.org/libspatialindex/spatialindex-src-1.8.5.tar.bz2.md5
-+md5 3303c47fd85aa17e64ef52ebec212762 spatialindex-src-1.8.5.tar.bz2
-+# Locally computed
-+sha256 31ec0a9305c3bd6b4ad60a5261cba5402366dd7d1969a8846099717778e9a50a spatialindex-src-1.8.5.tar.bz2
-diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
-new file mode 100644
-index 0000000..d815364
---- /dev/null
-+++ b/package/libspatialindex/libspatialindex.mk
-@@ -0,0 +1,14 @@
++++ b/package/minetest/minetest.mk
+@@ -0,0 +1,44 @@
 +################################################################################
 +#
-+# libspatialindex
++# minetest
 +#
 +################################################################################
 +
-+LIBSPATIALINDEX_VERSION = 1.8.5
-+LIBSPATIALINDEX_SITE = http://download.osgeo.org/libspatialindex
-+LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
-+LIBSPATIALINDEX_INSTALL_STAGING = YES
-+LIBSPATIALINDEX_LICENSE = MIT
-+LIBSPATIALINDEX_LICENSE_FILES = COPYING
++MINETEST_VERSION = 0.4.15
++MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
++MINETEST_LICENSE = LGPL-2.1+, CC-BY-SA-3.0
++MINETEST_LICENSE_FILES = README.txt
 +
-+$(eval $(autotools-package))
++MINETEST_DEPENDENCIES = irrlicht gmp jpeg jsoncpp luajit sqlite zlib
++
++MINETEST_CONF_OPTS = \
++	-DDEFAULT_RUN_IN_PLACE=OFF \
++	-DENABLE_CURL=OFF \
++	-DENABLE_GETTEXT=OFF \
++	-DENABLE_SOUND=OFF \
++	-DENABLE_GLES=OFF \
++	-DENABLE_FREETYPE=OFF \
++	-DENABLE_LUAJIT=ON \
++	-DENABLE_CURSES=OFF \
++	-DENABLE_POSTGRESQL=OFF \
++	-DENABLE_LEVELDB=OFF \
++	-DENABLE_REDIS=OFF \
++	-DENABLE_SPATIAL=OFF \
++	-DAPPLY_LOCALE_BLACKLIST=OFF \
++	-DENABLE_SYSTEM_GMP=ON \
++	-DENABLE_SYSTEM_JSONCPP=ON
++
++ifeq ($(BR2_PACKAGE_MINETEST_CLIENT),y)
++MINETEST_DEPENDENCIES += bzip2 jpeg libgl libpng xlib_libXxf86vm
++MINETEST_CONF_OPTS += -DBUILD_CLIENT=ON
++else
++MINETEST_CONF_OPTS += -DBUILD_CLIENT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_MINETEST_SERVER),y)
++MINETEST_CONF_OPTS += -DBUILD_SERVER=ON
++else
++MINETEST_CONF_OPTS += -DBUILD_SERVER=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
 2.9.3
