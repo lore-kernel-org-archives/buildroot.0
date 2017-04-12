@@ -1,41 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:04:52 +0200
-Subject: [Buildroot] [git commit] nano: bump version to 2.8.1
-Message-ID: <20170412190505.DACDF7FA48@busybox.osuosl.org>
+Date: Wed, 12 Apr 2017 21:05:34 +0200
+Subject: [Buildroot] [git commit] gst-plugins-base: fix handling of freetype
+Message-ID: <20170412190538.1CB0F82245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e677914cd3c810f44944de20cba8d06a5dac0c2
+commit: https://git.buildroot.net/buildroot/commit/?id=c07a46b0ceef9e909b5274f08d00064a5d3410a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+In 2010 commit 32d319e6f "gst-plugins-base: ensure <stdint.h> is used"
+introduced a typo (missing backslash) that made the code ineffective.
+
+It can be confirmed by looking at the output of:
+$ make printvars | grep '^GST_PLUGINS_BASE_CONF_ENV\|^FT2_CONFIG'
+FT2_CONFIG=/bin/false ac_cv_header_stdint_t="stdint.h"
+GST_PLUGINS_BASE_CONF_ENV=
+
+Add the missing backslash to fix the code.
+While at it, fix the indentation to use one tab instead of two.
+
+The (end of the) diff of config.log confirms the code is still needed
+when the host has freetype-config installed:
+@@ -1674,10 +1674,8 @@
+ configure:21882: checking for emmintrin.h
+ configure:21882: result: no
+ configure:21894: checking for stdint types
+-configure:21917: /tmp/gst/output/host/usr/bin/i686-pc-linux-gnu-gcc -std=gnu99 -c   conftest.c >&5
+-configure:21917: $? = 0
+ configure:21961: result: stdint.h (shortcircuit)
+-configure:22348: result: make use of stdint.h in _stdint.h (assuming C99 compatible system)
++configure:22348: result: make use of stdint.h in _stdint.h
+ configure:22359: checking for localtime_r
+ configure:22359: /tmp/gst/output/host/usr/bin/i686-pc-linux-gnu-gcc -std=gnu99 -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c  >&5
+ configure:22359: $? = 0
+@@ -2468,8 +2466,7 @@
+ Package 'freetype2', required by 'world', not found
+ configure:31257: result: no
+ configure:31298: checking for freetype-config
+-configure:31316: found /usr/bin/freetype-config
+-configure:31329: result: /usr/bin/freetype-config
++configure:31329: result: /bin/false
+ configure:31339: checking for FreeType - version >= 2.0.9
+ configure:31427: result: yes
+ configure:32250: creating ./config.status
+@@ -2789,7 +2786,7 @@
+ ac_cv_objext='o'
+ ac_cv_path_EGREP='/bin/grep -E'
+ ac_cv_path_FGREP='/bin/grep -F'
+-ac_cv_path_FT2_CONFIG='/usr/bin/freetype-config'
++ac_cv_path_FT2_CONFIG='/bin/false'
+ ac_cv_path_GMSGFMT='/tmp/gst/output/host/usr/bin/msgfmt'
+ ac_cv_path_GREP='/bin/grep'
+ ac_cv_path_MSGFMT='/tmp/gst/output/host/usr/bin/msgfmt'
+@@ -2818,7 +2815,6 @@
+ ac_cv_prog_cxx_g='yes'
+ ac_cv_prog_make_make_set='yes'
+ ac_cv_stdint_message='using gnu compiler i686-pc-linux-gnu-gcc (Sourcery CodeBench Lite 2012.09-62) 4.7.2'
+-ac_cv_stdint_result='(assuming C99 compatible system)'
+ ac_cv_sys_file_offset_bits='no'
+ ac_cv_sys_largefile_CC='no'
+ ac_cv_sys_largefile_source='no'
+@@ -2965,9 +2961,9 @@
+ EXEEXT=''
+ FFLAGS=' -Os '
+ FGREP='/bin/grep -F'
+-FT2_CFLAGS='-I/usr/include/freetype2'
+-FT2_CONFIG='/usr/bin/freetype-config'
+-FT2_LIBS='-lfreetype'
++FT2_CFLAGS=''
++FT2_CONFIG='/bin/false'
++FT2_LIBS=''
+ GCOV=''
+ GCOV_CFLAGS=''
+ GCOV_LIBS=''
+
+Detected by check-package.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer/gst-plugins-base/gst-plugins-base.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index b39d77e..12baecf 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 15c1bcf4d8888d3b56f68a0b75871cc349b81a9094f8a42d73010ffc26c85dc2  nano-2.8.0.tar.xz
-+sha256 e935a8bb373345c833dff3a304c6d392775d206b94c802d9285ae80ac6b66d0b  nano-2.8.1.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 38eed0d..9e7fdc7 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+index fc3b203..7353143 100644
+--- a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
++++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+@@ -14,9 +14,9 @@ GST_PLUGINS_BASE_LICENSE_FILES = COPYING COPYING.LIB
+ # freetype is only used by examples, but if it is not found
+ # and the host has a freetype-config script, then the host
+ # include dirs are added to the search path causing trouble
+-GST_PLUGINS_BASE_CONF_ENV =
+-		FT2_CONFIG=/bin/false \
+-		ac_cv_header_stdint_t="stdint.h"
++GST_PLUGINS_BASE_CONF_ENV = \
++	FT2_CONFIG=/bin/false \
++	ac_cv_header_stdint_t="stdint.h"
  
- NANO_VERSION_MAJOR = 2.8
--NANO_VERSION = $(NANO_VERSION_MAJOR).0
-+NANO_VERSION = $(NANO_VERSION_MAJOR).1
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+ GST_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
