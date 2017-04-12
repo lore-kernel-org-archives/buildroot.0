@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 10:04:52 +0200
-Subject: [Buildroot] [PATCH] package/xen: Update to version 4.8.1
-In-Reply-To: <20170411214803.5948-1-alistair.francis@xilinx.com>
-References: <20170411214803.5948-1-alistair.francis@xilinx.com>
-Message-ID: <20170412100452.06a8eebb@free-electrons.com>
+Date: Wed, 12 Apr 2017 10:34:31 +0200
+Subject: [Buildroot] [PATCH v5] syslinux: build with the target toolchain
+In-Reply-To: <20170411094551.404b3adb@armant.office.greenbone.net>
+References: <1491473086-16647-1-git-send-email-benoit.allard@greenbone.net>
+ <1491555913-7951-1-git-send-email-benoit.allard@greenbone.net>
+ <20170408160825.1891b903@free-electrons.com>
+ <20170411094551.404b3adb@armant.office.greenbone.net>
+Message-ID: <20170412103431.33f1d053@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +15,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 11 Apr 2017 14:48:03 -0700, Alistair Francis wrote:
-> Update Xen to version 4.8.1 and update the patches to allow Xen
-> hypervisor and Xen tools to build.
-> 
-> The patches applied were re-aranged a little bit. Patches 2, 3 and 4
-> have been accepted by upstream Xen and won't be required in future
-> releases.
-> 
-> Patch 1 (previously patch 2) is still required and was moved to patch 1
-> to better reflect it's status.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-> ---
+On Tue, 11 Apr 2017 09:45:51 +0200, Beno?t Allard wrote:
 
-Thanks for this new patch. However, it's missing a version number and a
-changelog compared to the previous iteration, so I don't know what
-changed.
+> > Applied to master, thanks. Now, could you try to submit those patches
+> > to the upstream project?  
+> 
+> I'm on it, unfortunately, the traction is not very high. I feel like I
+> opened one of those can of worms that have been tackled over and over
+> again without reaching a satisfactory solution (autoconf ?!). The first
+> answer I got was 'stop assuming everyone has needs similars to yours',
+> I'm now waiting on further one.
+> 
+> You can follow the show over there:
+> http://www.syslinux.org/archives/2017-April/
 
-Thanks,
+Thanks for doing this work. I think your reply is good, and hopefully
+will make the syslinux developers change a bit their mind. If not, then
+fine, we can keep the patches in Buildroot. I at least would like
+people to try upstreaming the patches, and make reasonable efforts,
+which you did.
+
+Thanks a lot!
 
 Thomas
 -- 
