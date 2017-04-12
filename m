@@ -1,47 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:13:24 +0200
-Subject: [Buildroot] [PATCH v7 2/2] systemd: select fsck wrapper from
- util-linux
-In-Reply-To: <1491997369-21394-3-git-send-email-casantos@datacom.ind.br>
-References: <1491997369-21394-1-git-send-email-casantos@datacom.ind.br>
- <1491997369-21394-3-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170412211324.708186ef@free-electrons.com>
+Date: Wed, 12 Apr 2017 21:14:01 +0200
+Subject: [Buildroot] [git commit] libcurl: apply upstream security patch
+Message-ID: <20170412191405.7279C82302@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=08bf26bb34f87b6820e07b2858bb4fe49eef9048
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Apr 2017 08:42:49 -0300, Carlos Santos wrote:
-> Select the fsck required by systemd provided by util-linux. This
-> prevents ending up with fsck from busybox, which is incompatible
-> with systemd.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
-> [there were no v1, v2]
-> Changes v3
->   - Select e2fsprogs + e2fsck
-> Changes v3->v4
->   - Remove selection of e2fsprogs + e2fsck
->   - Clean-up commit message
-> Changes v4->v5
->   - Screwed-up everything, reverting the chances made in v4
-> Changes v5->v6
->   - Restored changes made in v4.
->   - Restore the patch changelog.
-> Changes v6->v7
->   - Removed spurious Change-Id from commit message.
-> ---
->  package/systemd/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
+CVE-2017-7407: --write-out out of buffer read
 
-Applied to master, thanks.
+https://curl.haxx.se/docs/adv_20170403.html
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libcurl/0001-CVE-2017-7407.patch | 61 ++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+
+diff --git a/package/libcurl/0001-CVE-2017-7407.patch b/package/libcurl/0001-CVE-2017-7407.patch
+new file mode 100644
+index 0000000..3a9fa48
+--- /dev/null
++++ b/package/libcurl/0001-CVE-2017-7407.patch
+@@ -0,0 +1,61 @@
++From 6019f1795b4e3b72507b84b0e02dc8c32024f562 Mon Sep 17 00:00:00 2001
++From: Dan Fandrich <dan@coneharvesters.com>
++Date: Sat, 11 Mar 2017 10:59:34 +0100
++Subject: [PATCH] CVE-2017-7407: fixed
++
++Bug: https://curl.haxx.se/docs/adv_20170403.html
++
++Reported-by: Brian Carpenter
++[baruch: remove tests]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: based on upstream suggested patch[1] that combines commits
++1890d59905414ab and 8e65877870c1.
++
++[1] https://curl.haxx.se/CVE-2017-7407.patch
++
++diff --git a/src/tool_writeout.c b/src/tool_writeout.c
++index 2fb77742a..5d92bd278 100644
++--- a/src/tool_writeout.c
+++++ b/src/tool_writeout.c
++@@ -3,11 +3,11 @@
++  *  Project                     ___| | | |  _ \| |
++  *                             / __| | | | |_) | |
++  *                            | (__| |_| |  _ <| |___
++  *                             \___|\___/|_| \_\_____|
++  *
++- * Copyright (C) 1998 - 2016, Daniel Stenberg, <daniel@haxx.se>, et al.
+++ * Copyright (C) 1998 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
++  *
++  * This software is licensed as described in the file COPYING, which
++  * you should have received as part of this distribution. The terms
++  * are also available at https://curl.haxx.se/docs/copyright.html.
++  *
++@@ -111,11 +111,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
++   char *stringp = NULL;
++   long longinfo;
++   double doubleinfo;
++ 
++   while(ptr && *ptr) {
++-    if('%' == *ptr) {
+++    if('%' == *ptr && ptr[1]) {
++       if('%' == ptr[1]) {
++         /* an escaped %-letter */
++         fputc('%', stream);
++         ptr += 2;
++       }
++@@ -339,11 +339,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
++           fputc(ptr[1], stream);
++           ptr += 2;
++         }
++       }
++     }
++-    else if('\\' == *ptr) {
+++    else if('\\' == *ptr && ptr[1]) {
++       switch(ptr[1]) {
++       case 'r':
++         fputc('\r', stream);
++         break;
++       case 'n':
++-- 2.11.0
++
