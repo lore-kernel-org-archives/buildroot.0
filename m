@@ -1,64 +1,67 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Apr 2017 09:30:05 +0200
-Subject: [Buildroot] [PATCH v6 1/2] e2fsprogs: refactor to fix conflicts
- with busybox and util-linux
-In-Reply-To: <11759472.18619266.1491952151697.JavaMail.zimbra@datacom.ind.br>
-References: <3eeb7e24-fcc2-8d75-e0e8-141eeaceab70@mind.be>
- <1491824995-19670-1-git-send-email-casantos@datacom.ind.br>
- <2282fd1a-5a83-0b42-4417-3aedf252d28b@mind.be>
- <1676973985.18543033.1491929963459.JavaMail.zimbra@datacom.ind.br>
- <d478a120-5823-895e-c211-fe7e5a4f3017@mind.be>
- <11759472.18619266.1491952151697.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <e030257d-1608-a30e-0123-865ad2ca554d@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Apr 2017 09:49:09 +0200
+Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies
+ a package coding style
+In-Reply-To: <58ed60aaf1a9c_4e388d340c84161@ultri3.mail>
+References: <20170408162114.6e6c8899@free-electrons.com>
+ <58ed60aaf1a9c_4e388d340c84161@ultri3.mail>
+Message-ID: <20170412094909.66ea1ada@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Tue, 11 Apr 2017 20:03:06 -0300, Ricardo Martincoski wrote:
 
-On 12-04-17 01:09, Carlos Santos wrote:
->> From: "Arnout Vandecappelle" <arnout@mind.be>
->> To: "Carlos Santos" <casantos@datacom.ind.br>
->> Cc: buildroot at buildroot.org, "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>, "Thomas Petazzoni"
->> <thomas.petazzoni@free-electrons.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
->> Sent: Tuesday, April 11, 2017 7:14:27 PM
->> Subject: Re: [PATCH v6 1/2] e2fsprogs: refactor to fix conflicts with busybox and util-linux
+> > However, there are two things that bothered me a little bit:
+> > 
+> >  - The number of files added in support/scripts/. Should we have
+> >    support/scripts/check-package as a script, and the rest in a
+> >    subdirectory?  
 > 
->> On 11-04-17 18:59, Carlos Santos wrote:
-> ---8<---
->>> I made a deep overhauling because the original recipe was so messy that
->>> small changes did not work. It is now reasonable to artificially split the
->>> change in seven patches now to end up with exactly the same result. It's
->>> harder to implement, test and review, considering all possible options I
->>> need to deal with:
->>
->> I agree that it's a little bit harder to implement, but not to test and review.
->> And it's pretty likely that you will not get the same result, because proper
->> review will be done, problems will be discovered, and you end up with a
->> different result :-)
->>
->> If you don't split this up, don't expect the patch to be applied for the next
->> year or so. The review burden is simply too high.
+> Sure. I will send a followup patch.
 > 
-> I see. That's really sad.
+> I am inclined to change to this:
+>  support/scripts/
+>  ...
+>  |-- check-package
+>  |-- checkpackage
+>  |   |-- __init__.py
+>  |   |-- base.py
+>  |   |-- lib.py
+>  |   |-- lib_config.py
+>  |   |-- lib_hash.py
+>  |   |-- lib_mk.py
+>  |   |-- lib_patch.py
+>  |   `-- readme.txt
+>  ...
 
- I agree. We simply don't have enough people doing review/maintenance, so
-complicated stuff like this tends to get dropped.
+Looks good to me. I'm wondering what is best between checkpackage and
+check-packagelib for the folder, but I don't have a strong opinion here.
 
- But if you don't have the time to split up the patch, I fully understand. Just
-send a v7 that changes what you still can, and mention below the --- that you're
-not going to split it up. Possibly someone else will take it over, or someone
-*will* spend the effort to review it in detail.
+> >  - Between every function/method/class, you put two empty lines. The
+> >    Buildroot coding style is generally to have only one empty line.  
+> 
+> Sorry, the series got contaminated by my habit of using pep8 with default
+> options.
 
- Regards,
- Arnout
+Ah, but then if PEP8 suggests this, perhaps we should follow it? It's
+just that we don't do this anywhere else in Buildroot. Anyway, that's
+really a minor detail.
 
+Thanks again for this work!
+
+Have you seen that http://autobuild.buildroot.net/stats/ has a new
+column "Warnings", which indicates for each package the number of
+check-package warnings reported?
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
