@@ -1,44 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 10:34:31 +0200
-Subject: [Buildroot] [PATCH v5] syslinux: build with the target toolchain
-In-Reply-To: <20170411094551.404b3adb@armant.office.greenbone.net>
-References: <1491473086-16647-1-git-send-email-benoit.allard@greenbone.net>
- <1491555913-7951-1-git-send-email-benoit.allard@greenbone.net>
- <20170408160825.1891b903@free-electrons.com>
- <20170411094551.404b3adb@armant.office.greenbone.net>
-Message-ID: <20170412103431.33f1d053@free-electrons.com>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Wed, 12 Apr 2017 19:17:00 +1000
+Subject: [Buildroot] aarch64 : g++ is not working
+In-Reply-To: <f53a3152-a0ad-d86d-a9d1-26da5dceb526@flatmax.org>
+References: <f53a3152-a0ad-d86d-a9d1-26da5dceb526@flatmax.org>
+Message-ID: <bbdce605-675e-d770-3981-cf37e658d8e6@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Turns out this bug is with ulibc.
 
-On Tue, 11 Apr 2017 09:45:51 +0200, Beno?t Allard wrote:
+ulibc and g++ don't play well together - by switching to glibc, the 
+problem is resolved.
 
-> > Applied to master, thanks. Now, could you try to submit those patches
-> > to the upstream project?  
-> 
-> I'm on it, unfortunately, the traction is not very high. I feel like I
-> opened one of those can of worms that have been tackled over and over
-> again without reaching a satisfactory solution (autoconf ?!). The first
-> answer I got was 'stop assuming everyone has needs similars to yours',
-> I'm now waiting on further one.
-> 
-> You can follow the show over there:
-> http://www.syslinux.org/archives/2017-April/
 
-Thanks for doing this work. I think your reply is good, and hopefully
-will make the syslinux developers change a bit their mind. If not, then
-fine, we can keep the patches in Buildroot. I at least would like
-people to try upstreaming the patches, and make reasonable efforts,
-which you did.
+Matt
 
-Thanks a lot!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+On 11/04/17 09:50, Matt Flax wrote:
+> Hi there,
+>
+> I have found that g++ is not working with aarch64. Not sure why it 
+> isn't working. If others can verify this problem, it is a pretty big 
+> show stopper.
+>
+> I have checked the problem with rtorrent like so :
+>
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_RTORRENT=y
+>
+> When I execute rtorrent :
+>
+> # rtorrent
+>
+> /usr/bin/rtorrent: symbol '_ZSt15__once_callable': can't handle reloc 
+> type 0x407
+>
+>
+> Any one got any ideas on how to get g++ working with aarch64 and 
+> buildroot ?
+>
+>
+> I have tried to test on qemu like so :
+>
+> make qemu_aarch64_virt_defconfig
+> make menuconfig # enable cxx and rtorrent
+>
+> However, when I try to run qemu (looking at the file 
+> board/qemu/aarch64-virt/readme.txt) the kernel doesn't output during 
+> boot  - any suggestions on how to make this work ? I use the following 
+> command :
+>
+> qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -smp 1 -kernel 
+> output/images/Image -append "console=ttyAMA0" -netdev user,id=eth0 
+> -device virtio-net-device,netdev=eth0
+>
+>
+> thanks
+>
+> Matt
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
