@@ -1,56 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Apr 2017 12:55:03 +0200
-Subject: [Buildroot] [PATCH 01/53] pkg-rebar: remove redundant / in
- front of $($(PKG)_ERLANG_LIBDIR)
-In-Reply-To: <20170412114632.3ea39fdb@free-electrons.com>
-References: <20170412093928.1006-1-arnout@mind.be>
- <20170412093928.1006-2-arnout@mind.be>
- <20170412114632.3ea39fdb@free-electrons.com>
-Message-ID: <fc690f48-a6c0-a203-b846-91f147ec17dd@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 12 Apr 2017 11:56:19 +0100
+Subject: [Buildroot] [PATCH] proftpd: add mod_redis support
+Message-ID: <20170412105619.42833-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The mod_redis module enables ProFTPD support for caching data in Redis
+servers, using the hiredis client library. This is available since
+proftpd-1.3.6rc5 and later.
 
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Note to maintainer: this patch depends on the proftpd-1.3.6 bump:
+http://patchwork.ozlabs.org/patch/748931/
+---
+ package/proftpd/Config.in  | 7 +++++++
+ package/proftpd/proftpd.mk | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
-On 12-04-17 11:46, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 12 Apr 2017 11:38:35 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
-> 
->>  define install-erlang-directories
->> -	$(INSTALL) -d $(1)/$($(PKG)_ERLANG_LIBDIR)
->> +	$(INSTALL) -d $(1)$($(PKG)_ERLANG_LIBDIR)
-> 
-> This looks a bit weird to me. Wouldn't it make more sense to have
-> ERLANG_LIBDIR not start with a / ?
-
- Well...
-
-1. it doesn't look weird to me;
-
-2. in one place, it was already like that;
-
-3. if we change it, we should also change all instances of _ERLANG_LIBDIR in all
-packages, including external trees.
-
- The last point isn't that important though since it still works even if the /
-is there. And we don't have any in-tree package that sets _ERLANG_LIBDIR.
-
- Anyway, the patch is independent of the rest of the series (I should have left
-it out, probably). So don't let it stop you :-)
-
-
- Regards,
- Arnout
-
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index dd87eb4..07a5d86 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -13,4 +13,11 @@ config BR2_PACKAGE_PROFTPD_MOD_REWRITE
+ 	help
+ 	  Compile ProFTPD with mod_rewrite support
+ 
++config BR2_PACKAGE_PROFTPD_MOD_REDIS
++	bool "mod_redis support"
++	select BR2_PACKAGE_HIREDIS
++	help
++	  The mod_redis module enables ProFTPD support for caching data in Redis
++	  servers, using the hiredis client library.
++
+ endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 5f42408..3e165c6 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -27,6 +27,13 @@ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+ PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REDIS),y)
++PROFTPD_CONF_OPTS += --enable-redis
++PROFTPD_DEPENDENCIES += hiredis
++else
++PROFTPD_CONF_OPTS += --disable-redis
++endif
++
+ # configure script doesn't handle detection of %llu format string
+ # support for printing the file size when cross compiling, breaking
+ # access for large files.
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.10.2
