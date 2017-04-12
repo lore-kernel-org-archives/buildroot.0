@@ -1,48 +1,38 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Wed, 12 Apr 2017 13:12:54 -0700
-Subject: [Buildroot] [PATCH V2] package/xen: Update to version 4.8.1
-In-Reply-To: <20170412211230.5661d2f3@free-electrons.com>
-References: <20170412145413.13731-1-alistair.francis@xilinx.com>
- <20170412211230.5661d2f3@free-electrons.com>
-Message-ID: <CAKmqyKMzYqsZx80dqd2fLG8Ms-23xNXqLi55hRFaUJRLnmGbcQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Apr 2017 22:14:28 +0200
+Subject: [Buildroot] [PATCH] proftpd: bump version to 1.3.6
+In-Reply-To: <20170410105506.60414-1-Vincent.Riera@imgtec.com>
+References: <20170410105506.60414-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170412221428.6719ba7a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 12, 2017 at 12:12 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 12 Apr 2017 07:54:13 -0700, Alistair Francis wrote:
->> Update Xen to version 4.8.1 and update the patches to allow Xen
->> hypervisor and Xen tools to build.
->>
->> The patches applied were re-aranged a little bit. Patches 2, 3 and 4
->> have been accepted by upstream Xen and won't be required in future
->> releases.
->>
->> Patch 1 (previously patch 2) is still required and was moved to patch 1
->> to better reflect it's status.
->>
->> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
->> ---
->> Changes from package/xen: Update to version 4.8.0 V3
->>  - Don't edit the HOST_EXTRACFLAGS inside the Xen build system
->>  - Don't change TARGET_CONFIGURE_OPTS
->>     - Instead of the above two we hardcode: HOST_EXTRACFLAGS="-Wno-error"
->>  - Update to Xen 4.8.1 instead of 4.8.0
->
-> Applied to master, thanks.
+Hello,
 
-Great! Thanks.
+On Mon, 10 Apr 2017 11:55:06 +0100, Vicente Olivert Riera wrote:
+> Patch 0002-__mempcpy.patch is not necessary since this commit:
+> 
+> https://github.com/proftpd/proftpd/commit/8dfaceb389d924920bb4f4dd47ddeb2c78fb5f2a
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Build tested with uClibc to confirm the patch 0002-__mempcpy.patch is
+> not necessary. That patch was there because when building for uClibc we
+> were seeing a link failure. I haven't seen such a failure with 1.3.6.
+> ---
+>  package/proftpd/0002-__mempcpy.patch | 54 ------------------------------------
+>  package/proftpd/proftpd.hash         |  6 ++--
+>  package/proftpd/proftpd.mk           |  2 +-
+>  3 files changed, 4 insertions(+), 58 deletions(-)
+>  delete mode 100644 package/proftpd/0002-__mempcpy.patch
 
-Alistair
+Applied to master, thanks.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
