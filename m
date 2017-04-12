@@ -1,48 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:38:49 +0200
-Subject: [Buildroot] [PATCH 15/53] pkg-python: use $(HOST_DIR) instead of
-	$(HOST_DIR)/usr as prefix
+Date: Wed, 12 Apr 2017 11:39:02 +0200
+Subject: [Buildroot] [PATCH 28/53] warpboard: remove $(HOST_DIR)/usr
+	reference from README
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-16-arnout@mind.be>
+Message-ID: <20170412093928.1006-29-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the redundant usr/ component of the HOST_DIR paths. Since a
-previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
-everything keeps on working.
-
-Build-tested with a bunch of python packages.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-python.mk | 4 ++--
+ board/freescale/warpboard/README | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 2418f5dfa4..6e411ab5c5 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -53,7 +53,7 @@ HOST_PKG_PYTHON_DISTUTILS_ENV = \
- 	PYTHONNOUSERSITE=1
+diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
+index 55d51f8733..67d4e044e9 100644
+--- a/board/freescale/warpboard/README
++++ b/board/freescale/warpboard/README
+@@ -23,7 +23,7 @@ Update uboot
  
- HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
--	--prefix=$(HOST_DIR)/usr
-+	--prefix=$(HOST_DIR)
+ - Load u-boot.imx in the WarpBoard by using the imx-usb-loader host utility:
  
- # Target setuptools-based packages
- PKG_PYTHON_SETUPTOOLS_ENV = \
-@@ -83,7 +83,7 @@ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PYTHONNOUSERSITE=1
+-  $ ./output/host/usr/bin/imx_usb -c output/host/etc/imx-loader.d/ output/images/u-boot.imx
++  $ ./output/host/bin/imx_usb -c output/host/etc/imx-loader.d/ output/images/u-boot.imx
  
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
--	--prefix=$(HOST_DIR)/usr
-+	--prefix=$(HOST_DIR)
+ - U-Boot will appear in minicom
  
- ################################################################################
- # inner-python-package -- defines how the configuration, compilation
+@@ -36,7 +36,7 @@ Update uboot
+ 
+ - Transfer U-Boot into flash by running this command in host side:
+ 
+- $ sudo ./output/host/usr/bin/dfu-util -D output/images/u-boot.imx -a boot
++ $ sudo ./output/host/bin/dfu-util -D output/images/u-boot.imx -a boot
+ 
+ - remove power and put the WarpBoard back into normal boot mode by
+   opening the j2 jumper.
 -- 
 2.11.0
