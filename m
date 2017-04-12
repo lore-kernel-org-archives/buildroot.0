@@ -1,52 +1,36 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 12 Apr 2017 07:53:51 -0500
-Subject: [Buildroot] [PATCH 3/4] libselinux: allow compiling python
- wrapper module for target
-In-Reply-To: <20170411144012.10215812@free-electrons.com>
-References: <20170202224505.22882-1-Adamduskett@outlook.com>
- <20170202224505.22882-3-Adamduskett@outlook.com>
- <20170411144012.10215812@free-electrons.com>
-Message-ID: <CANQCQpbF44HCb_RumriS6u846YAg2GezULwsc0mDFBmGg3mVew@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 12 Apr 2017 14:56:25 +0200
+Subject: [Buildroot] [PATCH 1/2] minnowboard_max-graphical: increase ext4
+	filesystem size
+Message-ID: <20170412125626.8108-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas
+Now we have changed the default ext2/3/4 filesystem size from automatic
+to 60MB, the minnowboard_max graphical demo config doesn't fit anymore.
+So increase it to double.
 
-On Tue, Apr 11, 2017 at 7:40 AM, Thomas Petazzoni <thomas.petazzoni@free-
-electrons.com> wrote:
+The exact number doesn't matter much, it has to be somewhat smaller
+than 128MiB, so let's take a round number of 120000K.
 
-> Hello,
->
-> On Thu,  2 Feb 2017 17:45:04 -0500, Adam Duskett wrote:
-> > libselinux currently does not compile it's python wrapper module
-> > for the target.  This is needed for audit2allow to function properly.
-> >
-> > This patch allows for the python wrapper to be built.  The current
-> > makefile will try to install the python wrapper to the host directory
-> > unless the PYSITEDIR variable is set.  I wrapped the build of the
-> > python wrapper in a check for AUDIT2ALLOW because of the extra python
-> > dependency, as I am sure many users don't want to have to install
-> > python if they don't have to.
-> >
-> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> > ---
-> >  package/libselinux/libselinux.mk | 32 ++++++++++++++++++++++++++++++++
-> >  1 file changed, 32 insertions(+)
->
-> This causes some build failures:
-> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc55
-> 76ccab8e04a3b9d74ca9a8c/build-end.log.
->
-> Could you have a look ?
-> <http://free-electrons.com>
->
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ configs/minnowboard_max-graphical_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yep, will take a look this morning.
-
--Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170412/a183cf54/attachment.html>
+diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
+index ac363361ed..e8eb133f13 100644
+--- a/configs/minnowboard_max-graphical_defconfig
++++ b/configs/minnowboard_max-graphical_defconfig
+@@ -69,5 +69,6 @@ BR2_PACKAGE_STARTUP_NOTIFICATION=y
+ # Filesystem image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-- 
+2.11.0
