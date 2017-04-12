@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 22:45:03 +0200
-Subject: [Buildroot] [git commit] package/mplayer: mmxext requires sse
-Message-ID: <20170412204705.8A731802B7@busybox.osuosl.org>
+Date: Wed, 12 Apr 2017 22:52:35 +0200
+Subject: [Buildroot] [PATCH 1/5] package/mplayer: fix musl build error
+In-Reply-To: <20170410204122.13382-1-bernd.kuhls@t-online.de>
+References: <20170410204122.13382-1-bernd.kuhls@t-online.de>
+Message-ID: <20170412225235.20962aaa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d202de1dd3c801a3b5486605bc7b927a13439ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-MPlayer contains mmxext code for which a SSE-enabled CPU is required,
-for details see https://bugs.funtoo.org/browse/FL-2202
+On Mon, 10 Apr 2017 22:41:18 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/08e/08ed316677f519c8005928366aea89570527a033/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mplayer/0006-musl-ldt.patch | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>  create mode 100644 package/mplayer/0006-musl-ldt.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mplayer/mplayer.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+All applied to master. Thanks!
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 14ab8ac..21faccc 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -306,9 +306,9 @@ MPLAYER_CONF_OPTS += \
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_SSE),y)
--MPLAYER_CONF_OPTS += --enable-sse
-+MPLAYER_CONF_OPTS += --enable-mmxext --enable-sse
- else
--MPLAYER_CONF_OPTS += --disable-sse
-+MPLAYER_CONF_OPTS += --disable-mmxext --disable-sse
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
