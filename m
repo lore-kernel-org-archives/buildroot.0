@@ -1,33 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:20:33 +0200
-Subject: [Buildroot] [PATCH 0/2] update axs10x defconfigs
-In-Reply-To: <1491921774-14748-1-git-send-email-vzakhar@synopsys.com>
-References: <1491921774-14748-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20170412212033.7c1576ec@free-electrons.com>
+Date: Wed, 12 Apr 2017 21:34:12 +0200
+Subject: [Buildroot] [git commit] package/hiredis: fix installation logic of
+	library
+Message-ID: <20170412193436.95F9C80270@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=96daacb720cffe1f83259462bef9d3da92925cd9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Apr 2017 17:42:52 +0300, Vlad Zakharov wrote:
+While testing minetest with libhiredis library, the game crached due to
+missing libhiredis.so.0.13 library.
 
->   config: update linux and u-boot in axs10x defconfigs
->   arc: u-boot: Support slave core kick-start on axs103 v1.1
+The hiredis.mk doesn't use "make install" because "make install" depends
+on building both the shared and static libraries, which fails in
+static-only scenarios.
 
-I've applied both patches, after tweaking the commit title and commit
-logs.
+However, the installation logic in hiredis.mk is bogus: it installs the
+library as libhiredis.so, while its SONAME is libhiredis.so.0.13. We fix
+this by using the same logic as the one done by the package "make
+install" process: install the library as libhiredis.so.0.13, and create
+libhiredis.so as a symbolic link to it.
 
-For the commit title, could you in the future use:
+While at it:
 
-  configs/<name of defconfig>: <what you're doing>
+ - Install the library 0755, this is more common.
 
-Thanks!
+ - Do not create $(TARGET_DIR)/usr/lib, since $(INSTALL) -D will create
+   the necessary directories for the destination path.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: rework to use the same installation logic as the one from
+hiredis "make install".]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/hiredis/hiredis.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index 53ad0b9..c2be936 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-HIREDIS_VERSION = v0.13.3
++HIREDIS_VERSION_MAJOR = 0.13
++HIREDIS_VERSION = v$(HIREDIS_VERSION_MAJOR).3
+ HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
+ HIREDIS_LICENSE = BSD-3-Clause
+ HIREDIS_LICENSE_FILES = COPYING
+@@ -37,12 +38,15 @@ define HIREDIS_INSTALL_STAGING_CMDS
+ 		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
+ 	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
+-	$(INSTALL) -m 0644 -t $(STAGING_DIR)/usr/lib $(@D)/libhiredis*
++	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
++		$(STAGING_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
++	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(STAGING_DIR)/usr/lib/libhiredis.so
+ endef
+ 
+ define HIREDIS_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/lib $(@D)/libhiredis*
++	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
++		$(TARGET_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
++	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libhiredis.so
+ endef
+ 
+ $(eval $(generic-package))
