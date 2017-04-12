@@ -1,36 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:14:24 +0200
-Subject: [Buildroot] [PATCH] libcurl: apply upstream security patch
-In-Reply-To: <1796640bb50f0f0d5f8f24ccd56081cc28a7598f.1491933372.git.baruch@tkos.co.il>
-References: <1796640bb50f0f0d5f8f24ccd56081cc28a7598f.1491933372.git.baruch@tkos.co.il>
-Message-ID: <20170412211424.0551c425@free-electrons.com>
+Date: Wed, 12 Apr 2017 21:14:44 +0200
+Subject: [Buildroot] [git commit] configs/snps_archs38_zebu_defconfig:
+	update linux version
+Message-ID: <20170412191502.292B38222C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2fd8f328fc23f73cfbace9814c0b69eb26937cd1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Apr 2017 20:56:12 +0300, Baruch Siach wrote:
-> CVE-2017-7407: --write-out out of buffer read
-> 
-> https://curl.haxx.se/docs/adv_20170403.html
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libcurl/0001-CVE-2017-7407.patch | 61 ++++++++++++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 package/libcurl/0001-CVE-2017-7407.patch
+With this commit we update snps_archs38_zebu_defconfig the following:
 
-Applied to master, thanks.
+  - bump linux kernel version to 4.10.9
+  - set up host linux headers to 4.10
 
-Peter: we want this one in the LTS branch I believe.
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/snps_archs38_zebu_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/snps_archs38_zebu_defconfig b/configs/snps_archs38_zebu_defconfig
+index 96d941a..98beb2b 100644
+--- a/configs/snps_archs38_zebu_defconfig
++++ b/configs/snps_archs38_zebu_defconfig
+@@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="zebu_hs_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
