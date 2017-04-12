@@ -1,286 +1,468 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:38:55 +0200
-Subject: [Buildroot] [PATCH 21/53] Globally replace $(HOST_DIR)/usr/include
-	with $(HOST_DIR)/include
+Date: Wed, 12 Apr 2017 11:38:51 +0200
+Subject: [Buildroot] [PATCH 17/53] generic packages: use $(HOST_DIR) instead
+	of $(HOST_DIR)/usr as prefix
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-22-arnout@mind.be>
+Message-ID: <20170412093928.1006-18-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since things are no longer installed in $(HOST_DIR)/usr, the callers
-should also not refer to it.
+Remove the redundant usr/ component of the HOST_DIR paths. Since a
+previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
+everything keeps on working.
 
 This is a mechanical change with
-git grep -l '$(HOST_DIR)/usr/include' | xargs sed -i 's%$(HOST_DIR)/usr/include%$(HOST_DIR)/include%g'
+git grep -l '\$(HOST_DIR)/usr' | xargs sed -i 's%\(prefix\|PREFIX\)=\("\?\)\$(HOST_DIR)/usr%\1=\2$(HOST_DIR)%g'
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in                                    | 2 +-
- package/cmake/cmake.mk                                 | 2 +-
- package/execline/execline.mk                           | 2 +-
- package/google-breakpad/google-breakpad.mk             | 2 +-
- package/gutenprint/gutenprint.mk                       | 4 ++--
- package/leafnode2/leafnode2.mk                         | 2 +-
- package/libselinux/libselinux.mk                       | 4 ++--
- package/libsemanage/libsemanage.mk                     | 4 ++--
- package/libxml-parser-perl/libxml-parser-perl.mk       | 2 +-
- package/linux-syscall-support/linux-syscall-support.mk | 2 +-
- package/mfgtools/mfgtools.mk                           | 2 +-
- package/openocd/openocd.mk                             | 4 ++--
- package/s6-rc/s6-rc.mk                                 | 2 +-
- package/s6/s6.mk                                       | 2 +-
- package/setools/setools.mk                             | 2 +-
- package/x11r7/xlib_libX11/xlib_libX11.mk               | 2 +-
- package/zic/zic.mk                                     | 2 +-
- 17 files changed, 21 insertions(+), 21 deletions(-)
+ package/acl/acl.mk                               | 4 ++--
+ package/attr/attr.mk                             | 4 ++--
+ package/boost/boost.mk                           | 4 ++--
+ package/bzip2/bzip2.mk                           | 4 ++--
+ package/cmake/cmake.mk                           | 2 +-
+ package/cryptopp/cryptopp.mk                     | 2 +-
+ package/doxygen/doxygen.mk                       | 2 +-
+ package/dtc/dtc.mk                               | 4 ++--
+ package/execline/execline.mk                     | 2 +-
+ package/faketime/faketime.mk                     | 4 ++--
+ package/gcc/gcc-final/gcc-final.mk               | 2 +-
+ package/libsepol/libsepol.mk                     | 2 +-
+ package/libxml-parser-perl/libxml-parser-perl.mk | 2 +-
+ package/luajit/luajit.mk                         | 4 ++--
+ package/luarocks/luarocks.mk                     | 4 ++--
+ package/lz4/lz4.mk                               | 2 +-
+ package/nodejs/nodejs.mk                         | 2 +-
+ package/openssl/openssl.mk                       | 2 +-
+ package/perl/perl.mk                             | 2 +-
+ package/pngquant/pngquant.mk                     | 2 +-
+ package/qemu/qemu.mk                             | 2 +-
+ package/s6-rc/s6-rc.mk                           | 2 +-
+ package/s6/s6.mk                                 | 2 +-
+ package/sdl_image/sdl_image.mk                   | 4 ++--
+ package/skalibs/skalibs.mk                       | 2 +-
+ package/sunxi-tools/sunxi-tools.mk               | 4 ++--
+ package/zip/zip.mk                               | 2 +-
+ package/zlib/zlib.mk                             | 2 +-
+ 28 files changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 75200a832e..3ec4a43e04 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -217,7 +217,7 @@ UNZIP := $(shell which unzip || type -p unzip) -q
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index edcf4fd8ed..9e57d09131 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -47,8 +47,8 @@ HOST_ACL_DEPENDENCIES = host-attr
+ HOST_ACL_CONF_OPTS = --enable-gettext=no
+ HOST_ACL_MAKE_ENV = CFLAGS="$(HOST_CFLAGS)"
+ HOST_ACL_INSTALL_OPTS = \
+-	prefix=$(HOST_DIR)/usr \
+-	exec_prefix=$(HOST_DIR)/usr \
++	prefix=$(HOST_DIR) \
++	exec_prefix=$(HOST_DIR) \
+ 	PKG_DEVLIB_DIR=$(HOST_DIR)/usr/lib \
+ 	install-dev install-lib
+ # For the host, libacl.la is correct, no fixup needed.
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index 0c85701e07..8d250608b7 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -28,8 +28,8 @@ ATTR_INSTALL_TARGET_OPTS = \
+ 	install install-lib
  
- APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+ HOST_ATTR_INSTALL_OPTS = \
+-	prefix=$(HOST_DIR)/usr \
+-	exec_prefix=$(HOST_DIR)/usr \
++	prefix=$(HOST_DIR) \
++	exec_prefix=$(HOST_DIR) \
+ 	install-dev install-lib
  
--HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
-+HOST_CPPFLAGS  = -I$(HOST_DIR)/include
- HOST_CFLAGS   ?= -O2
- HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
+ # The libdir variable in libattr.la is empty, so let's fix it. This is
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 874c03fcb6..3600cdea84 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -167,14 +167,14 @@ define HOST_BOOST_BUILD_CMDS
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
+ 	--ignore-site-config \
+-	--prefix=$(HOST_DIR)/usr )
++	--prefix=$(HOST_DIR) )
+ endef
+ 
+ define HOST_BOOST_INSTALL_CMDS
+ 	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(HOST_BOOST_OPTS) \
+-	--prefix=$(HOST_DIR)/usr \
++	--prefix=$(HOST_DIR) \
+ 	--ignore-site-config \
+ 	--layout=$(BOOST_LAYOUT) install )
+ endef
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index 0597ab97d6..62571ed5a3 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -60,9 +60,9 @@ endef
+ 
+ define HOST_BZIP2_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) \
+-		$(MAKE) PREFIX=$(HOST_DIR)/usr -C $(@D) install
++		$(MAKE) PREFIX=$(HOST_DIR) -C $(@D) install
+ 	$(HOST_MAKE_ENV) \
+-		$(MAKE) -f Makefile-libbz2_so PREFIX=$(HOST_DIR)/usr -C $(@D) install
++		$(MAKE) -f Makefile-libbz2_so PREFIX=$(HOST_DIR) -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
 diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 47b4a325db..7076668850 100644
+index d9eea32857..47b4a325db 100644
 --- a/package/cmake/cmake.mk
 +++ b/package/cmake/cmake.mk
-@@ -32,7 +32,7 @@ CMAKE_CONF_OPTS = \
- 	-DBUILD_CursesDialog=OFF
+@@ -41,7 +41,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CMAKE_CFLAGS)" \
+-		./bootstrap --prefix=$(HOST_DIR)/usr \
++		./bootstrap --prefix=$(HOST_DIR) \
+ 			--parallel=$(PARALLEL_JOBS) -- \
+ 			-DCMAKE_C_FLAGS="$(HOST_CMAKE_CFLAGS)" \
+ 			-DCMAKE_CXX_FLAGS="$(HOST_CMAKE_CXXFLAGS)" \
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 5c5def5bc5..4b121aef2d 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -24,7 +24,7 @@ define HOST_CRYPTOPP_BUILD_CMDS
+ endef
  
- # Get rid of -I* options from $(HOST_CPPFLAGS) to prevent that a
--# header available in $(HOST_DIR)/usr/include is used instead of a
-+# header available in $(HOST_DIR)/include is used instead of a
- # CMake internal header, e.g. lzma* headers of the xz package
- HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
- HOST_CMAKE_CXXFLAGS = $(shell echo $(HOST_CXXFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
+ define HOST_CRYPTOPP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
+ endef
+ 
+ $(eval $(host-generic-package))
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index 428747b117..89a4748400 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -12,7 +12,7 @@ DOXYGEN_LICENSE_FILES = LICENSE
+ HOST_DOXYGEN_DEPENDENCIES = host-flex host-bison
+ 
+ define HOST_DOXYGEN_CONFIGURE_CMDS
+-	(cd $(@D); $(HOST_MAKE_ENV) ./configure --shared --prefix=$(HOST_DIR)/usr)
++	(cd $(@D); $(HOST_MAKE_ENV) ./configure --shared --prefix=$(HOST_DIR))
+ endef
+ 
+ define HOST_DOXYGEN_BUILD_CMDS
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 5bb2ca26a3..262f8bf56a 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -47,11 +47,11 @@ endef
+ 
+ # host build
+ define HOST_DTC_BUILD_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)
+ endef
+ 
+ define HOST_DTC_INSTALL_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install-bin
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-bin
+ endef
+ 
+ $(eval $(generic-package))
 diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 7e1797e72d..2aeba2cc83 100644
+index ca7c73e775..6cd9dc1736 100644
 --- a/package/execline/execline.mk
 +++ b/package/execline/execline.mk
-@@ -48,7 +48,7 @@ HOST_EXECLINE_CONF_OPTS = \
- 	--prefix=$(HOST_DIR) \
+@@ -45,7 +45,7 @@ endef
+ HOST_EXECLINE_DEPENDENCIES = host-skalibs
+ 
+ HOST_EXECLINE_CONF_OPTS = \
+-	--prefix=$(HOST_DIR)/usr \
++	--prefix=$(HOST_DIR) \
  	--shebangdir=/usr/bin \
- 	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
--	--with-include=$(HOST_DIR)/usr/include \
-+	--with-include=$(HOST_DIR)/include \
- 	--with-dynlib=$(HOST_DIR)/lib \
- 	--disable-static \
- 	--enable-shared \
-diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-index 191ee5bec2..c09f9987b7 100644
---- a/package/google-breakpad/google-breakpad.mk
-+++ b/package/google-breakpad/google-breakpad.mk
-@@ -20,7 +20,7 @@ HOST_GOOGLE_BREAKPAD_DEPENDENCIES = host-linux-syscall-support
- # Avoid using depot-tools to download this file.
- define HOST_GOOGLE_BREAKPAD_LSS
- 	$(INSTALL) -D -m 0644 \
--		$(HOST_DIR)/usr/include/linux_syscall_support.h \
-+		$(HOST_DIR)/include/linux_syscall_support.h \
- 		$(@D)/src/third_party/lss/linux_syscall_support.h
- endef
- HOST_GOOGLE_BREAKPAD_POST_EXTRACT_HOOKS += HOST_GOOGLE_BREAKPAD_LSS
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 99d1f4324c..2e0ff3d906 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -43,7 +43,7 @@ GUTENPRINT_CONF_OPTS = \
- 	--disable-cups-ppds
+ 	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
+ 	--with-include=$(HOST_DIR)/usr/include \
+diff --git a/package/faketime/faketime.mk b/package/faketime/faketime.mk
+index 03879ea65c..6c88a71aa3 100644
+--- a/package/faketime/faketime.mk
++++ b/package/faketime/faketime.mk
+@@ -10,11 +10,11 @@ FAKETIME_LICENSE = GPL-2.0
+ FAKETIME_LICENSE_FILES = COPYING
  
- # USE_PREGEN_XMLI18N_TMP_H is added by our patch
--GUTENPRINT_MAKE_ENV = BR2_USE_PREGEN_XMLI18N_TMP_H=$(HOST_DIR)/usr/include/xmli18n-tmp.h
-+GUTENPRINT_MAKE_ENV = BR2_USE_PREGEN_XMLI18N_TMP_H=$(HOST_DIR)/include/xmli18n-tmp.h
- 
- HOST_GUTENPRINT_DEPENDENCIES = host-pkgconf
- # The host-gutenprint shall create the required header
-@@ -78,7 +78,7 @@ GUTENPRINT_POST_PATCH_HOOKS += GUTENPRINT_CREATE_M4_DIR
- HOST_GUTENPRINT_POST_PATCH_HOOKS += GUTENPRINT_CREATE_M4_DIR
- 
- define HOST_GUTENPRINT_POST_BUILD_INSTAL_TMP_HEADER
--	cp $(@D)/src/xml/xmli18n-tmp.h $(HOST_DIR)/usr/include
-+	cp $(@D)/src/xml/xmli18n-tmp.h $(HOST_DIR)/include
- endef
- HOST_GUTENPRINT_POST_BUILD_HOOKS += HOST_GUTENPRINT_POST_BUILD_INSTAL_TMP_HEADER
- 
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index 7efe9445ad..a02aad4302 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -30,7 +30,7 @@ define LEAFNODE2_BUILD_SORTNL_TOOL
- 	cd $(@D); \
- 	$(HOSTCC) $(HOST_CFLAGS) -o b_sortnl_host \
- 		arc4random.c mergesort.c b_sortnl.c critmem_malloc.c \
--		critmem_realloc.c -DHAVE_CONFIG_H -I$(HOST_DIR)/usr/include \
-+		critmem_realloc.c -DHAVE_CONFIG_H -I$(HOST_DIR)/include \
- 		-L $(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib -lpcre
+ define HOST_FAKETIME_BUILD_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)
  endef
  
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 9c76d1ed2c..81c2d225d1 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -71,11 +71,11 @@ HOST_LIBSELINUX_DEPENDENCIES = \
+ define HOST_FAKETIME_INSTALL_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
+ endef
  
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- HOST_LIBSELINUX_DEPENDENCIES += host-python3
--HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m/
-+HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)m/
- HOST_LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
- else
- HOST_LIBSELINUX_DEPENDENCIES += host-python
--HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/
-+HOST_LIBSELINUX_PYINC = -I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/
- HOST_LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
- endif
+ $(eval $(host-generic-package))
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 12f08c81a8..78466fa4da 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -43,7 +43,7 @@ define  HOST_GCC_FINAL_CONFIGURE_CMDS
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+ 		$(HOST_GCC_FINAL_CONF_ENV) \
+ 		./configure \
+-		--prefix="$(HOST_DIR)/usr" \
++		--prefix="$(HOST_DIR)" \
+ 		--sysconfdir="$(HOST_DIR)/etc" \
+ 		--enable-static \
+ 		$(QUIET) $(HOST_GCC_FINAL_CONF_OPTS) \
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index d360bfbcb1..233334eea2 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -36,7 +36,7 @@ endef
+ HOST_LIBSEPOL_MAKE_ENV = \
+ 	$(HOST_MAKE_ENV) \
+ 	DESTDIR=$(HOST_DIR)/usr \
+-	PREFIX=$(HOST_DIR)/usr
++	PREFIX=$(HOST_DIR)
  
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 15bc664bd3..efeb1fcd20 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -35,13 +35,13 @@ HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
- HOST_LIBSEMANAGE_MAKE_OPTS += \
--	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m/" \
-+	PYINC="-I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)m/" \
- 	PYTHONLIBDIR="-L$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/" \
- 	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
- else
- HOST_LIBSEMANAGE_DEPENDENCIES += host-python
- HOST_LIBSEMANAGE_MAKE_OPTS += \
--	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYINC="-I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/" \
- 	PYTHONLIBDIR="-L$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/" \
- 	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
- endif
+ define HOST_LIBSEPOL_BUILD_CMDS
+ 	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
 diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-index 08bc8bb59f..4a3b196448 100644
+index 401470d907..bca1c34a8f 100644
 --- a/package/libxml-parser-perl/libxml-parser-perl.mk
 +++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -16,7 +16,7 @@ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+@@ -14,7 +14,7 @@ LIBXML_PARSER_PERL_RUN_PERL = `which perl`
+ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+ 	(cd $(@D) ; \
  		$(HOST_CONFIGURE_OPTS) $(LIBXML_PARSER_PERL_RUN_PERL) Makefile.PL \
- 			PREFIX=$(HOST_DIR) \
- 			EXPATLIBPATH=$(HOST_DIR)/lib \
--			EXPATINCPATH=$(HOST_DIR)/usr/include \
-+			EXPATINCPATH=$(HOST_DIR)/include \
+-			PREFIX=$(HOST_DIR)/usr \
++			PREFIX=$(HOST_DIR) \
+ 			EXPATLIBPATH=$(HOST_DIR)/usr/lib \
+ 			EXPATINCPATH=$(HOST_DIR)/usr/include \
  			INSTALLDIRS=site \
- 			INSTALLSITELIB=$(HOST_DIR)/lib/perl \
- 			INSTALLSITEARCH=$(HOST_DIR)/lib/perl \
-diff --git a/package/linux-syscall-support/linux-syscall-support.mk b/package/linux-syscall-support/linux-syscall-support.mk
-index c02610d80d..b8145de496 100644
---- a/package/linux-syscall-support/linux-syscall-support.mk
-+++ b/package/linux-syscall-support/linux-syscall-support.mk
-@@ -22,7 +22,7 @@ endef
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index d3ef3b7599..f20ba51482 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -66,13 +66,13 @@ LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
  
- define HOST_LINUX_SYSCALL_SUPPORT_INSTALL_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/linux_syscall_support.h \
--		$(HOST_DIR)/usr/include/linux_syscall_support.h
-+		$(HOST_DIR)/include/linux_syscall_support.h
+ # host-efl package needs host-luajit to be linked dynamically.
+ define HOST_LUAJIT_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)/usr" BUILDMODE=dynamic \
++	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)" BUILDMODE=dynamic \
+ 		TARGET_LDFLAGS="$(HOST_LDFLAGS)" \
+ 		-C $(@D) amalg
  endef
  
- $(eval $(host-generic-package))
-diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
-index 1afd47b13f..00a011af85 100644
---- a/package/mfgtools/mfgtools.mk
-+++ b/package/mfgtools/mfgtools.mk
-@@ -14,7 +14,7 @@ HOST_MFGTOOLS_DEPENDENCIES = host-libusb
- HOST_MFGTOOLS_CFLAGS = \
- 	$(HOST_CFLAGS) $(HOST_LDFLAGS) -std=c++11 -lpthread \
- 	-L$(@D)/MfgToolLib -lMfgToolLib -I$(@D)/MfgToolLib \
--	-lusb-1.0 -I$(HOST_DIR)/usr/include/libusb-1.0 \
-+	-lusb-1.0 -I$(HOST_DIR)/include/libusb-1.0 \
- 	-fpermissive -Wno-write-strings
+ define HOST_LUAJIT_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)/usr" LDCONFIG=true -C $(@D) install
++	$(HOST_MAKE_ENV) $(MAKE) PREFIX="$(HOST_DIR)" LDCONFIG=true -C $(@D) install
+ endef
  
- define HOST_MFGTOOLS_CLI_BUILD
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 911d31168d..b435dc604f 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -89,8 +89,8 @@ HOST_OPENOCD_CONF_OPTS = \
- 	--enable-openjtag_ftdi \
- 	--enable-buspirate \
- 	--enable-sysfsgpio \
--	--oldincludedir=$(HOST_DIR)/usr/include \
--	--includedir=$(HOST_DIR)/usr/include \
-+	--oldincludedir=$(HOST_DIR)/include \
-+	--includedir=$(HOST_DIR)/include \
- 	--disable-doxygen-html \
- 	--with-jim-shared=no \
- 	--disable-shared \
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index c3f6aaab74..ce128b0106 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
-@@ -50,7 +50,7 @@ HOST_S6_RC_CONF_OPTS = \
- 	--prefix=$(HOST_DIR) \
- 	--libexecdir=/usr/libexec \
- 	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
--	--with-include=$(HOST_DIR)/usr/include \
-+	--with-include=$(HOST_DIR)/include \
- 	--with-dynlib=$(HOST_DIR)/lib \
- 	--disable-static \
- 	--enable-shared \
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-index 7ed9ef4e36..33e5c00f5e 100644
---- a/package/s6/s6.mk
-+++ b/package/s6/s6.mk
-@@ -48,7 +48,7 @@ HOST_S6_DEPENDENCIES = host-execline
- HOST_S6_CONF_OPTS = \
- 	--prefix=$(HOST_DIR) \
- 	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
--	--with-include=$(HOST_DIR)/usr/include \
-+	--with-include=$(HOST_DIR)/include \
- 	--with-dynlib=$(HOST_DIR)/lib \
- 	--disable-static \
- 	--enable-shared \
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index 960e5be921..5e101b1d86 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -49,7 +49,7 @@ HOST_SETOOLS_CONF_ENV += am_cv_python_version=$(PYTHON_VERSION)
+ $(eval $(generic-package))
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index d18056a527..646e43b668 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -19,7 +19,7 @@ LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
  endif
  
- HOST_SETOOLS_PYTHON_SITE_PACKAGES = $(HOST_DIR)/lib/python$(HOST_SETOOLS_PYTHON_VERSION)/site-packages
--HOST_SETOOLS_PYTHON_INCLUDES = $(HOST_DIR)/usr/include/python$(HOST_SETOOLS_PYTHON_VERSION)
-+HOST_SETOOLS_PYTHON_INCLUDES = $(HOST_DIR)/include/python$(HOST_SETOOLS_PYTHON_VERSION)
- HOST_SETOOLS_PYTHON_LIB = -lpython$(HOST_SETOOLS_PYTHON_VERSION)
+ HOST_LUAROCKS_CONF_OPTS = \
+-	--prefix=$(HOST_DIR)/usr \
++	--prefix=$(HOST_DIR) \
+ 	--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
+ 	--with-lua=$(HOST_DIR)/usr
  
- # Notes: Need "disable-selinux-check" so the configure does not check to see
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index fe1a7c3bc5..64344da737 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -48,7 +48,7 @@ HOST_XLIB_LIBX11_CONF_OPTS = \
- # src/util/makekeys is executed at build time to generate ks_tables.h, so
- # it should get compiled for the host. The libX11 makefile unfortunately
- # doesn't have X11_CFLAGS_FOR_BUILD so this doesn't work.  For buildroot,
--# we know the X11 includes are in $(HOST_DIR)/usr/include, which are already
-+# we know the X11 includes are in $(HOST_DIR)/include, which are already
- # in the CFLAGS_FOR_BUILD, so we can just remove the X11_CFLAGS
- define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
- 	$(SED) '/X11_CFLAGS/d' $(@D)/src/util/Makefile*
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index ad2acdff20..f179f9ce8f 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -16,7 +16,7 @@ endef
- 
- define HOST_ZIC_INSTALL_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/zic $(HOST_DIR)/sbin/zic
--	$(INSTALL) -D -m 644 $(@D)/tzfile.h $(HOST_DIR)/usr/include/tzfile.h
-+	$(INSTALL) -D -m 644 $(@D)/tzfile.h $(HOST_DIR)/include/tzfile.h
+@@ -34,7 +34,7 @@ endef
+ define HOST_LUAROCKS_INSTALL_CMDS
+ 	rm -f $(LUAROCKS_CONFIG_FILE)
+ 	$(MAKE1) -C $(@D) install \
+-		PREFIX=$(HOST_DIR)/usr
++		PREFIX=$(HOST_DIR)
+ 	echo "-- BR cross-compilation"                          >> $(LUAROCKS_CONFIG_FILE)
+ 	echo "variables = {"                                    >> $(LUAROCKS_CONFIG_FILE)
+ 	echo "   LUA_INCDIR = [[$(STAGING_DIR)/usr/include]],"  >> $(LUAROCKS_CONFIG_FILE)
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index d350d4c099..91ff43b052 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -22,7 +22,7 @@ define HOST_LZ4_BUILD_CMDS
  endef
  
- $(eval $(host-generic-package))
+ define HOST_LZ4_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX=$(HOST_DIR)/usr \
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) PREFIX=$(HOST_DIR) \
+ 		install -C $(@D)
+ endef
+ 
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index ad0b26df45..a9c96cad91 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -55,7 +55,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		PATH=$(@D)/bin:$(BR_PATH) \
+ 		PYTHON=$(HOST_DIR)/usr/bin/python2 \
+ 		$(HOST_DIR)/usr/bin/python2 ./configure \
+-		--prefix=$(HOST_DIR)/usr \
++		--prefix=$(HOST_DIR) \
+ 		--without-snapshot \
+ 		--without-dtrace \
+ 		--without-etw \
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 1536982f8b..ebced44ea4 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -61,7 +61,7 @@ define HOST_OPENSSL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		./config \
+-		--prefix=$(HOST_DIR)/usr \
++		--prefix=$(HOST_DIR) \
+ 		--openssldir=$(HOST_DIR)/etc/ssl \
+ 		--libdir=/lib \
+ 		shared \
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 130441f703..a4679ebe26 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -91,7 +91,7 @@ endef
+ 
+ HOST_PERL_CONF_OPTS = \
+ 	-des \
+-	-Dprefix="$(HOST_DIR)/usr" \
++	-Dprefix="$(HOST_DIR)" \
+ 	-Dcc="$(HOSTCC)"
+ 
+ define HOST_PERL_CONFIGURE_CMDS
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 4a6f32fdca..744d9f4090 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -36,7 +36,7 @@ endef
+ define HOST_PNGQUANT_CONFIGURE_CMDS
+ 	(cd $(@D) && \
+ 		$(HOST_CONFIGURE_OPTS) \
+-		./configure --prefix=$(HOST_DIR)/usr \
++		./configure --prefix=$(HOST_DIR) \
+ 		--without-lcms2 \
+ 	)
+ endef
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 2b6aafbae8..6df3b3db8b 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -126,7 +126,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
+ 		./configure \
+ 		--target-list="$(HOST_QEMU_TARGETS)" \
+-		--prefix="$(HOST_DIR)/usr" \
++		--prefix="$(HOST_DIR)" \
+ 		--interp-prefix=$(STAGING_DIR) \
+ 		--cc="$(HOSTCC)" \
+ 		--host-cc="$(HOSTCC)" \
+diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+index 1c28dcb88a..39c18852f1 100644
+--- a/package/s6-rc/s6-rc.mk
++++ b/package/s6-rc/s6-rc.mk
+@@ -47,7 +47,7 @@ endef
+ HOST_S6_RC_DEPENDENCIES = host-s6
+ 
+ HOST_S6_RC_CONF_OPTS = \
+-	--prefix=$(HOST_DIR)/usr \
++	--prefix=$(HOST_DIR) \
+ 	--libexecdir=/usr/libexec \
+ 	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
+ 	--with-include=$(HOST_DIR)/usr/include \
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index de08f67848..4632f5829c 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
+@@ -46,7 +46,7 @@ endef
+ HOST_S6_DEPENDENCIES = host-execline
+ 
+ HOST_S6_CONF_OPTS = \
+-	--prefix=$(HOST_DIR)/usr \
++	--prefix=$(HOST_DIR) \
+ 	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
+ 	--with-include=$(HOST_DIR)/usr/include \
+ 	--with-dynlib=$(HOST_DIR)/usr/lib \
+diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
+index 6ea657bcff..ee0712cc27 100644
+--- a/package/sdl_image/sdl_image.mk
++++ b/package/sdl_image/sdl_image.mk
+@@ -37,8 +37,8 @@ SDL_IMAGE_DEPENDENCIES = sdl \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
+ 
+ HOST_SDL_IMAGE_CONF_OPTS = \
+-	--with-sdl-prefix=$(HOST_DIR)/usr \
+-	--with-sdl-exec-prefix=$(HOST_DIR)/usr \
++	--with-sdl-prefix=$(HOST_DIR) \
++	--with-sdl-exec-prefix=$(HOST_DIR) \
+ 	--disable-sdltest \
+ 	--disable-static \
+ 	--disable-jpg-shared \
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+index 55b8a293a7..de2ead704a 100644
+--- a/package/skalibs/skalibs.mk
++++ b/package/skalibs/skalibs.mk
+@@ -33,7 +33,7 @@ define SKALIBS_INSTALL_STAGING_CMDS
+ endef
+ 
+ HOST_SKALIBS_CONF_OPTS = \
+-	--prefix=$(HOST_DIR)/usr \
++	--prefix=$(HOST_DIR) \
+ 	--disable-static \
+ 	--enable-shared \
+ 	--disable-allstatic
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index 9bb0b9eff9..c193769c10 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -12,13 +12,13 @@ HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
+ FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
+ 
+ define HOST_SUNXI_TOOLS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" PREFIX=$(HOST_DIR)/usr \
++	$(HOST_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" PREFIX=$(HOST_DIR) \
+ 		EXTRA_CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
+ 		-C $(@D) tools
+ endef
+ 
+ define HOST_SUNXI_TOOLS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) PREFIX=$(HOST_DIR)/usr \
++	$(HOST_MAKE_ENV) $(MAKE) PREFIX=$(HOST_DIR) \
+ 		-C $(@D) install-tools
+ endef
+ 
+diff --git a/package/zip/zip.mk b/package/zip/zip.mk
+index 66d94b3c68..0bd3d3c11f 100644
+--- a/package/zip/zip.mk
++++ b/package/zip/zip.mk
+@@ -47,7 +47,7 @@ endef
+ 
+ define HOST_ZIP_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install \
+-		prefix=$(HOST_DIR)/usr
++		prefix=$(HOST_DIR)
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index 23c6e95cfa..9b5f52e807 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -38,7 +38,7 @@ define HOST_ZLIB_CONFIGURE_CMDS
+ 		$(HOST_CONFIGURE_ARGS) \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		./configure \
+-		--prefix="$(HOST_DIR)/usr" \
++		--prefix="$(HOST_DIR)" \
+ 		--sysconfdir="$(HOST_DIR)/etc" \
+ 	)
+ endef
 -- 
 2.11.0
