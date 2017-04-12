@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:01:35 +0200
-Subject: [Buildroot] [PATCH] dovecot: bump version to 2.2.29.1 (security)
-In-Reply-To: <20170412155647.15077-1-Vincent.Riera@imgtec.com>
-References: <20170412155647.15077-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170412210135.14d03d36@free-electrons.com>
+Date: Wed, 12 Apr 2017 21:02:18 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
+ 10}.x series
+In-Reply-To: <20170412142022.37327-1-Vincent.Riera@imgtec.com>
+References: <20170412142022.37327-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170412210218.3a6eaa3c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Apr 2017 16:56:47 +0100, Vicente Olivert Riera wrote:
-> Security fix:
-> 
->   passdb/userdb dict: Don't double-expand %variables in keys. If dict
->   was used as the authentication passdb, using specially crafted
->   %variables in the username could be used to cause DoS (CVE-2017-2669)
-> 
-> Full ChangeLog 2.2.29 (including CVE fix):
->   https://www.dovecot.org/list/dovecot-news/2017-April/000341.html
-> 
-> Full ChangeLog 2.2.29.1 (some fixes forgotten in the 2.2.29 release):
-> 
->   https://www.dovecot.org/list/dovecot-news/2017-April/000344.html
-> 
+On Wed, 12 Apr 2017 15:20:21 +0100, Vicente Olivert Riera wrote:
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/dovecot/dovecot.hash | 2 +-
->  package/dovecot/dovecot.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/linux-headers/Config.in.host | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Peter: wanted for the LTS branch.
-
-Thanks!
+Both applied, thanks!
 
 Thomas
 -- 
