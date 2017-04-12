@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:03:44 +0200
-Subject: [Buildroot] [PATCH 1/2] minnowboard_max-graphical: increase
- ext4 filesystem size
-In-Reply-To: <20170412125626.8108-1-arnout@mind.be>
-References: <20170412125626.8108-1-arnout@mind.be>
-Message-ID: <20170412210344.28b1f840@free-electrons.com>
+Date: Wed, 12 Apr 2017 21:04:28 +0200
+Subject: [Buildroot] [PATCH 1/2] phytool: new package
+In-Reply-To: <20170412121634.8928-1-yegorslists@googlemail.com>
+References: <20170412121634.8928-1-yegorslists@googlemail.com>
+Message-ID: <20170412210428.28c10479@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Apr 2017 14:56:25 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Now we have changed the default ext2/3/4 filesystem size from automatic
-> to 60MB, the minnowboard_max graphical demo config doesn't fit anymore.
-> So increase it to double.
+On Wed, 12 Apr 2017 14:16:33 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> The exact number doesn't matter much, it has to be somewhat smaller
-> than 128MiB, so let's take a round number of 120000K.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  configs/minnowboard_max-graphical_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  package/Config.in            |  1 +
+>  package/phytool/Config.in    |  6 ++++++
+>  package/phytool/phytool.hash |  2 ++
+>  package/phytool/phytool.mk   | 22 ++++++++++++++++++++++
+>  4 files changed, 31 insertions(+)
+>  create mode 100644 package/phytool/Config.in
+>  create mode 100644 package/phytool/phytool.hash
+>  create mode 100644 package/phytool/phytool.mk
 
-Both applied, thanks!
+Following Arnout comments, I've marked your patch as Changes Requested
+in patchwork. Also, please merge PATCH 2/2 into PATCH 1/2, the change
+to the DEVELOPERS should now be done in the patch adding the package.
 
-Ezequiel, it would be nice if you could retest the defconfig on HW,
-since you submitted this defconfig originally.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
