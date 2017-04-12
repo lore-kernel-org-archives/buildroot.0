@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:13:06 +0200
-Subject: [Buildroot] [git commit] systemd: select fsck wrapper from
-	util-linux
-Message-ID: <20170412191320.BD4F8819C7@busybox.osuosl.org>
+Date: Wed, 12 Apr 2017 21:13:24 +0200
+Subject: [Buildroot] [PATCH v7 2/2] systemd: select fsck wrapper from
+ util-linux
+In-Reply-To: <1491997369-21394-3-git-send-email-casantos@datacom.ind.br>
+References: <1491997369-21394-1-git-send-email-casantos@datacom.ind.br>
+ <1491997369-21394-3-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20170412211324.708186ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fddb73ffd17f8a8f701f780e3c28a0f70f45da4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Select the fsck required by systemd provided by util-linux. This
-prevents ending up with fsck from busybox, which is incompatible
-with systemd.
+On Wed, 12 Apr 2017 08:42:49 -0300, Carlos Santos wrote:
+> Select the fsck required by systemd provided by util-linux. This
+> prevents ending up with fsck from busybox, which is incompatible
+> with systemd.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+> [there were no v1, v2]
+> Changes v3
+>   - Select e2fsprogs + e2fsck
+> Changes v3->v4
+>   - Remove selection of e2fsprogs + e2fsck
+>   - Clean-up commit message
+> Changes v4->v5
+>   - Screwed-up everything, reverting the chances made in v4
+> Changes v5->v6
+>   - Restored changes made in v4.
+>   - Restore the patch changelog.
+> Changes v6->v7
+>   - Removed spurious Change-Id from commit message.
+> ---
+>  package/systemd/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/systemd/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 0f54686..478cc10 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -22,6 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
-+	select BR2_PACKAGE_UTIL_LINUX_FSCK
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
- 	select BR2_PACKAGE_KMOD_TOOLS
-@@ -61,6 +62,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  - libgcrypt package will add support for journal sealing and
- 	    DNSSEC verification in resolved.
- 
-+	  Notice that systemd selects the fsck wrapper from util-linux
-+	  but no particular fsck.<fstype> is selected. You must choose
-+	  the apropriate ones (e.g. e2fsck, from the e2fsprogs package)
-+	  according to the system configuration.
-+
- 	  http://freedesktop.org/wiki/Software/systemd
- 
- if BR2_PACKAGE_SYSTEMD
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
