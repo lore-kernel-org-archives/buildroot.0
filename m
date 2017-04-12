@@ -1,64 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:39:24 +0200
-Subject: [Buildroot] [PATCH 50/53] libsemanage: rework host installation
+Date: Wed, 12 Apr 2017 11:39:14 +0200
+Subject: [Buildroot] [PATCH 40/53] genromfs: use $(HOST_DIR) instead of
+	$(HOST_DIR)/usr as prefix
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-51-arnout@mind.be>
+Message-ID: <20170412093928.1006-41-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsemanage has a pretty peculiar interpretation of DESTDIR and PREFIX.
-PREFIX is not consistently used: some installation paths are forced to
-$(DESTDIR)/usr/... . In other cases, PREFIX is indeed used. PREFIX
-defaults to $(DESTDIR)/usr
+genromfs is special because it uses "PREFIX" in the meaning of DESTDIR
+and "prefix" in the meaning of prefix. We were up to know using it
+incorrectly for host: PREFIX shouldn't be set and only prefix should
+be set.
 
-Try to be a little bit more correct by passing both DESTDIR and PREFIX,
-both set to $(HOST_DIR). This is not a complete fix: man pages are
-still installed in $(HOST_DIR)/usr - but we don't care about that.
+Add an explanatory comment for this unusual behaviour.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libsemanage/libsemanage.mk | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ package/genromfs/genromfs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 5ef2d57e35..2964c56f96 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -29,7 +29,12 @@ endef
- 
- HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
- 				host-ustr host-bzip2 host-swig
--HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
-+
-+# DESTDIR is needed during the compile to compute library and header paths.
-+HOST_LIBSEMANAGE_MAKE_OPTS += \
-+	$(HOST_CONFIGURE_OPTS) \
-+	DESTDIR=$(HOST_DIR) \
-+	PREFIX=$(HOST_DIR) \
- 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
-@@ -47,15 +52,13 @@ HOST_LIBSEMANAGE_MAKE_OPTS += \
- endif
- 
- define HOST_LIBSEMANAGE_BUILD_CMDS
--	# DESTDIR is needed during the compile to compute library and
--	# header paths.
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) all
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) swigify pywrap
+diff --git a/package/genromfs/genromfs.mk b/package/genromfs/genromfs.mk
+index 3025550637..fd696b45b2 100644
+--- a/package/genromfs/genromfs.mk
++++ b/package/genromfs/genromfs.mk
+@@ -16,6 +16,8 @@ define GENROMFS_BUILD_CMDS
+ 		LDFLAGS="$(TARGET_LDFLAGS)"
  endef
  
- define HOST_LIBSEMANAGE_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) install-pywrap
++# "PREFIX" is the equivalent of DESTDIR in autotools, "prefix" is the
++# traditional prefix. "prefix" defaults to /usr so no need to set it.
+ define GENROMFS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install
+ endef
+@@ -25,7 +27,7 @@ define HOST_GENROMFS_BUILD_CMDS
+ endef
+ 
+ define HOST_GENROMFS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
  endef
  
  $(eval $(generic-package))
