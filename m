@@ -1,62 +1,35 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 12 Apr 2017 15:45:06 -0500
-Subject: [Buildroot] [PATCH 3/4] libselinux: allow compiling python
- wrapper module for target
-In-Reply-To: <CANQCQpaqVNzP=2hwRexdP4pz0VU=P3x3gaUMch62RMsOi618uA@mail.gmail.com>
-References: <20170202224505.22882-1-Adamduskett@outlook.com>
- <20170202224505.22882-3-Adamduskett@outlook.com>
- <20170411144012.10215812@free-electrons.com>
- <CANQCQpbF44HCb_RumriS6u846YAg2GezULwsc0mDFBmGg3mVew@mail.gmail.com>
- <CANQCQpZVb3PEEDaBkn0u57Z-FU97YtyWUeMwpi1SHj1829hjhA@mail.gmail.com>
- <CANQCQpaqVNzP=2hwRexdP4pz0VU=P3x3gaUMch62RMsOi618uA@mail.gmail.com>
-Message-ID: <CANQCQpYcXdnuOqcAhMzrTyc3Tp_WRns-4QXA3Hk89RXYZxt3Fg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Apr 2017 22:45:22 +0200
+Subject: [Buildroot] [git commit] package/mplayer: disable inline mmx
+Message-ID: <20170412204705.ADF11802B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=58b6135e2f2e14f5e11c967b8a5e76662b3fbe3e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Apr 12, 2017 at 9:00 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Thomas
->
-> On Wed, Apr 12, 2017 at 8:54 AM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
-> > Thomas,
-> >
-> > On Wed, Apr 12, 2017 at 7:53 AM, Matthew Weber
-> > <matthew.weber@rockwellcollins.com> wrote:
-> >> Thomas
-> >>
-> >> On Tue, Apr 11, 2017 at 7:40 AM, Thomas Petazzoni
-> >> <thomas.petazzoni@free-electrons.com> wrote:
-> >>>
-> >>> Hello,
-> >>>
-> >>> On Thu,  2 Feb 2017 17:45:04 -0500, Adam Duskett wrote:
-> >>> > libselinux currently does not compile it's python wrapper module
-> >>> > for the target.  This is needed for audit2allow to function properly.
-> >>> >
-> >>> > This patch allows for the python wrapper to be built.  The current
-> >>> > makefile will try to install the python wrapper to the host directory
-> >>> > unless the PYSITEDIR variable is set.  I wrapped the build of the
-> >>> > python wrapper in a check for AUDIT2ALLOW because of the extra python
-> >>> > dependency, as I am sure many users don't want to have to install
-> >>> > python if they don't have to.
-> >>> >
-> >>> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> >>> > ---
-> >>> >  package/libselinux/libselinux.mk | 32 ++++++++++++++++++++++++++++++++
-> >>> >  1 file changed, 32 insertions(+)
-> >>>
-> >>> This causes some build failures:
-> >>>
-> >>> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/build-end.log.
-> >>>
->
+Fixes
+http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
 
-Proposing this fix.
-https://patchwork.ozlabs.org/patch/750170/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mplayer/mplayer.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index 21faccc..166394c 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -288,6 +288,8 @@ endif
+ define MPLAYER_DISABLE_INLINE_ASM
+ 	$(SED) 's,#define HAVE_INLINE_ASM 1,#define HAVE_INLINE_ASM 0,g' \
+ 		$(@D)/config.h
++	$(SED) 's,#define HAVE_MMX_INLINE 1,#define HAVE_MMX_INLINE 0,g' \
++		$(@D)/config.h
+ endef
+ 
+ ifeq ($(BR2_i386),y)
