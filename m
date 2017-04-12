@@ -1,44 +1,36 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:39:16 +0200
-Subject: [Buildroot] [PATCH 42/53] lzip: use $(HOST_DIR) as prefix instead
-	of DESTDIR
+Date: Wed, 12 Apr 2017 11:39:19 +0200
+Subject: [Buildroot] [PATCH 45/53] dos2unix: use prefix instead of DESTDIR
+	for host installation
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-43-arnout@mind.be>
+Message-ID: <20170412093928.1006-46-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... and remove the /usr prefix
+prefix defaults to /usr, so setting DESTDIR installs things in
+$(HOST_DIR)/usr.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lzip/lzip.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dos2unix/dos2unix.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
-index 04c83f1133..cb8803737e 100644
---- a/package/lzip/lzip.mk
-+++ b/package/lzip/lzip.mk
-@@ -15,7 +15,7 @@ define LZIP_CONFIGURE_CMDS
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 3540ec8562..ff4117307c 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -39,7 +39,7 @@ define HOST_DOS2UNIX_BUILD_CMDS
  endef
  
- define HOST_LZIP_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_MAKE_ENV) ./configure --prefix=/usr \
-+	(cd $(@D); $(HOST_MAKE_ENV) ./configure --prefix=$(HOST_DIR) \
- 		$(HOST_CONFIGURE_OPTS) )
+ define HOST_DOS2UNIX_INSTALL_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) ENABLE_NLS= \
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(HOST_DIR) ENABLE_NLS= \
+ 		install
  endef
  
-@@ -32,7 +32,7 @@ define LZIP_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_LZIP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
- # It's not autotools-based
 -- 
 2.11.0
