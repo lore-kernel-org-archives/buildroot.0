@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:39:02 +0200
-Subject: [Buildroot] [PATCH 28/53] warpboard: remove $(HOST_DIR)/usr
+Date: Wed, 12 Apr 2017 11:39:01 +0200
+Subject: [Buildroot] [PATCH 27/53] chromebook snow: remove $(HOST_DIR)/usr
 	reference from README
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-29-arnout@mind.be>
+Message-ID: <20170412093928.1006-28-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- board/freescale/warpboard/README | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ board/chromebook/snow/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
-index 55d51f8733..67d4e044e9 100644
---- a/board/freescale/warpboard/README
-+++ b/board/freescale/warpboard/README
-@@ -23,7 +23,7 @@ Update uboot
+diff --git a/board/chromebook/snow/readme.txt b/board/chromebook/snow/readme.txt
+index e012cb3f9f..1afd949829 100644
+--- a/board/chromebook/snow/readme.txt
++++ b/board/chromebook/snow/readme.txt
+@@ -88,7 +88,7 @@ you will probably want the rootfs to occupy the whole remaining space.
  
- - Load u-boot.imx in the WarpBoard by using the imx-usb-loader host utility:
+ cgpt may be used to check current layout:
  
--  $ ./output/host/usr/bin/imx_usb -c output/host/etc/imx-loader.d/ output/images/u-boot.imx
-+  $ ./output/host/bin/imx_usb -c output/host/etc/imx-loader.d/ output/images/u-boot.imx
+-	output/host/usr/bin/cgpt show $SD
++	output/host/bin/cgpt show $SD
  
- - U-Boot will appear in minicom
+ All sizes and all offsets are in 512-byte blocks.
  
-@@ -36,7 +36,7 @@ Update uboot
- 
- - Transfer U-Boot into flash by running this command in host side:
- 
-- $ sudo ./output/host/usr/bin/dfu-util -D output/images/u-boot.imx -a boot
-+ $ sudo ./output/host/bin/dfu-util -D output/images/u-boot.imx -a boot
- 
- - remove power and put the WarpBoard back into normal boot mode by
-   opening the j2 jumper.
 -- 
 2.11.0
