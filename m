@@ -1,50 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 22:45:56 +0200
-Subject: [Buildroot] [git commit] package/mplayer: disable external mmx
-Message-ID: <20170412204705.BE92F81EC0@busybox.osuosl.org>
+Date: Wed, 12 Apr 2017 22:44:58 +0200
+Subject: [Buildroot] [git commit] package/mplayer: fix musl build error
+Message-ID: <20170412204705.71B4F81EC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=786eacda2a13e13d854447a4e994790526aca27a
+commit: https://git.buildroot.net/buildroot/commit/?id=2184f48c4545d2629b1706112e7c9f380aac8d2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a follow-up error with this defconfig
-http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
-which occurs after disabling inline mmx with the previous patch:
-
-This is the error message:
-
-fmpeg/libavcodec/libavcodec.a(apedec.o): In function `ape_decode_frame':
-apedec.c:(.text+0x1df5): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(asvdec.o): In function `decode_frame':
-asvdec.c:(.text+0x77c): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(bink.o): In function `decode_frame':
-bink.c:(.text+0x2809): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(dvdec.o): In function `dvvideo_decode_frame':
-dvdec.c:(.text+0x575): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(ffv1dec.o): In function `decode_slice':
-ffv1dec.c:(.text+0x3110): undefined reference to `avpriv_emms_yasm'
-ffmpeg/libavcodec/libavcodec.a(h264.o):h264.c:(.text+0xea8): more undefined references to `avpriv_emms_yasm' follow
+Fixes
+http://autobuild.buildroot.net/results/08e/08ed316677f519c8005928366aea89570527a033/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mplayer/0006-musl-ldt.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 166394c..88f2fb4 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -290,6 +290,8 @@ define MPLAYER_DISABLE_INLINE_ASM
- 		$(@D)/config.h
- 	$(SED) 's,#define HAVE_MMX_INLINE 1,#define HAVE_MMX_INLINE 0,g' \
- 		$(@D)/config.h
-+	$(SED) 's,#define HAVE_MMX_EXTERNAL 1,#define HAVE_MMX_EXTERNAL 0,g' \
-+		$(@D)/config.h
- endef
- 
- ifeq ($(BR2_i386),y)
+diff --git a/package/mplayer/0006-musl-ldt.patch b/package/mplayer/0006-musl-ldt.patch
+new file mode 100644
+index 0000000..8165f6f
+--- /dev/null
++++ b/package/mplayer/0006-musl-ldt.patch
+@@ -0,0 +1,22 @@
++Fixes musl build error
++
++loader/ldt_keeper.o: In function `Setup_LDT_Keeper':
++ldt_keeper.c:(.text+0xab): undefined reference to `modify_ldt'
++
++Downloaded from
++https://github.com/dimkr/rlsd2/blob/master/rules/mplayer/musl.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -rup MPlayer-1.1.1-orig/loader/ldt_keeper.c MPlayer-1.1.1/loader/ldt_keeper.c
++--- MPlayer-1.1.1-orig/loader/ldt_keeper.c	2015-04-23 15:07:09.580805888 +0300
+++++ MPlayer-1.1.1/loader/ldt_keeper.c	2015-04-23 15:08:07.736807270 +0300
++@@ -47,7 +47,7 @@
++ #if defined(__GLIBC__) &&  (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ == 0))
++ _syscall3( int, modify_ldt, int, func, void *, ptr, unsigned long, bytecount );
++ #else
++-int modify_ldt(int func, void *ptr, unsigned long bytecount);
+++#define modify_ldt(func, ptr, bytecount) syscall(__NR_modify_ldt, func, ptr, bytecount)
++ #endif
++ #else
++ #if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
