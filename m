@@ -1,69 +1,66 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:38:36 +0200
-Subject: [Buildroot] [PATCH 02/53] libsepol: rework host installation
+Date: Wed, 12 Apr 2017 11:38:37 +0200
+Subject: [Buildroot] [PATCH 03/53] Move $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
+	one level up.
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-3-arnout@mind.be>
+Message-ID: <20170412093928.1006-4-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsepol has a pretty peculiar interpretation of DESTDIR and PREFIX.
-PREFIX is not consistently used: some installation paths are forced to
-$(DESTDIR)/usr/... . Also, the shared lib symlink is forced to ../../lib
-(i.e. assumes it's installed under /usr). For these reasons, the host
-build and install commands are a bit unusual: they use DESTDIR instead
-of PREFIX, DESTDIR points to $(HOST_DIR) without /usr, and some
-additional fixup is needed to correct the installation directory of
-libsepol.so.1 and the symlink to it.
+This is a step towards eliminating $(HOST_DIR)/usr. It allows us to
+convert all packages installing things into
+$(HOST_DIR)/usr/$(GNU_TARGET_NAME) (i.e., binutils and gcc) without
+affecting the rest.
 
-This can be simplified quite a lot by passing both DESTDIR and PREFIX,
-and including the /usr part in both. The symlink still has to be fixed,
-but that's much simpler.
+To allow compatibility with packages that still use $(HOST_DIR)/usr as
+the prefix, create a symlink from usr/$(GNU_TARGET_NAME) to
+../$(GNU_TARGET_NAME).
 
-Note that a side effect is that the man pages are now installed under
-$(HOST_DIR)/usr/usr/man. While not very nice, we don't really care
-about man pages. In addition, this will resolve itself when we later
-move $(HOST_DIR)/usr to $(HOST_DIR).
+Note that the symlink creation will break when $(HOST_DIR)/usr/lib
+already exists as a directory, i.e. when rebuilding in an existing
+output directory. This is necessary: if we don't break it now, the
+following commits (which remove the usr part from various variables)
+_will_ break it.
+
+Effectively, the usr/ part is removed from $(STAGING_SUBDIR) (and
+therefore from $(STAGING_DIR)), so update the definition of that
+variable right away.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-It's a bit counter-intuitive to have a patch that adds /usr in a series
-that is meant to remove it, but this is the simplest way to have a
-bisectable series...
----
- package/libsepol/libsepol.mk | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ Makefile            | 2 ++
+ package/Makefile.in | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 9bdac1e0da..d360bfbcb1 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -33,15 +33,18 @@ define LIBSEPOL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
- endef
+diff --git a/Makefile b/Makefile
+index 941bf789c8..f19e81f5c6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -556,6 +556,8 @@ world: target-post-image
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
+ 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
++	@mkdir -p $(HOST_DIR)/usr
++	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
  
-+HOST_LIBSEPOL_MAKE_ENV = \
-+	$(HOST_MAKE_ENV) \
-+	DESTDIR=$(HOST_DIR)/usr \
-+	PREFIX=$(HOST_DIR)/usr
-+
- define HOST_LIBSEPOL_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
-+	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
- endef
+ RSYNC_VCS_EXCLUSIONS = \
+ 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4a3eb26963..8a6934a429 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -107,7 +107,7 @@ ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
+ TARGET_ABI += -matomic
+ endif
  
- define HOST_LIBSEPOL_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
--	mv $(HOST_DIR)/lib/libsepol.so.1 $(HOST_DIR)/usr/lib
--	(cd $(HOST_DIR)/usr/lib; rm -f libsepol.so; ln -s libsepol.so.1 libsepol.so)
--	-rmdir $(HOST_DIR)/lib
-+	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS)
-+	ln -sf libsepol.so.1 $(HOST_DIR)/usr/lib/libsepol.so
- endef
+-STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
++STAGING_SUBDIR = $(GNU_TARGET_NAME)/sysroot
+ STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
  
- $(eval $(generic-package))
+ ifeq ($(BR2_OPTIMIZE_0),y)
 -- 
 2.11.0
