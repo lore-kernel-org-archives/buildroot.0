@@ -1,40 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:12:30 +0200
-Subject: [Buildroot] [PATCH V2] package/xen: Update to version 4.8.1
-In-Reply-To: <20170412145413.13731-1-alistair.francis@xilinx.com>
-References: <20170412145413.13731-1-alistair.francis@xilinx.com>
-Message-ID: <20170412211230.5661d2f3@free-electrons.com>
+Date: Wed, 12 Apr 2017 21:13:06 +0200
+Subject: [Buildroot] [git commit] systemd: select fsck wrapper from
+	util-linux
+Message-ID: <20170412191320.BD4F8819C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3fddb73ffd17f8a8f701f780e3c28a0f70f45da4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Apr 2017 07:54:13 -0700, Alistair Francis wrote:
-> Update Xen to version 4.8.1 and update the patches to allow Xen
-> hypervisor and Xen tools to build.
-> 
-> The patches applied were re-aranged a little bit. Patches 2, 3 and 4
-> have been accepted by upstream Xen and won't be required in future
-> releases.
-> 
-> Patch 1 (previously patch 2) is still required and was moved to patch 1
-> to better reflect it's status.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-> ---
-> Changes from package/xen: Update to version 4.8.0 V3
->  - Don't edit the HOST_EXTRACFLAGS inside the Xen build system
->  - Don't change TARGET_CONFIGURE_OPTS
->     - Instead of the above two we hardcode: HOST_EXTRACFLAGS="-Wno-error" 
->  - Update to Xen 4.8.1 instead of 4.8.0
+Select the fsck required by systemd provided by util-linux. This
+prevents ending up with fsck from busybox, which is incompatible
+with systemd.
 
-Applied to master, thanks.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 0f54686..478cc10 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -22,6 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
++	select BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
+@@ -61,6 +62,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	  - libgcrypt package will add support for journal sealing and
+ 	    DNSSEC verification in resolved.
+ 
++	  Notice that systemd selects the fsck wrapper from util-linux
++	  but no particular fsck.<fstype> is selected. You must choose
++	  the apropriate ones (e.g. e2fsck, from the e2fsprogs package)
++	  according to the system configuration.
++
+ 	  http://freedesktop.org/wiki/Software/systemd
+ 
+ if BR2_PACKAGE_SYSTEMD
