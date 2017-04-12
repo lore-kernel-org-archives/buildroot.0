@@ -1,72 +1,71 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 12 Apr 2017 09:00:05 -0500
-Subject: [Buildroot] [PATCH 3/4] libselinux: allow compiling python
- wrapper module for target
-In-Reply-To: <CANQCQpZVb3PEEDaBkn0u57Z-FU97YtyWUeMwpi1SHj1829hjhA@mail.gmail.com>
-References: <20170202224505.22882-1-Adamduskett@outlook.com>
- <20170202224505.22882-3-Adamduskett@outlook.com>
- <20170411144012.10215812@free-electrons.com>
- <CANQCQpbF44HCb_RumriS6u846YAg2GezULwsc0mDFBmGg3mVew@mail.gmail.com>
- <CANQCQpZVb3PEEDaBkn0u57Z-FU97YtyWUeMwpi1SHj1829hjhA@mail.gmail.com>
-Message-ID: <CANQCQpaqVNzP=2hwRexdP4pz0VU=P3x3gaUMch62RMsOi618uA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Apr 2017 15:59:59 +0200
+Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
+In-Reply-To: <1490255693-9134-1-git-send-email-wg@grandegger.com>
+References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
+Message-ID: <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas
 
-On Wed, Apr 12, 2017 at 8:54 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Thomas,
->
-> On Wed, Apr 12, 2017 at 7:53 AM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->> Thomas
->>
->> On Tue, Apr 11, 2017 at 7:40 AM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>>
->>> Hello,
->>>
->>> On Thu,  2 Feb 2017 17:45:04 -0500, Adam Duskett wrote:
->>> > libselinux currently does not compile it's python wrapper module
->>> > for the target.  This is needed for audit2allow to function properly.
->>> >
->>> > This patch allows for the python wrapper to be built.  The current
->>> > makefile will try to install the python wrapper to the host directory
->>> > unless the PYSITEDIR variable is set.  I wrapped the build of the
->>> > python wrapper in a check for AUDIT2ALLOW because of the extra python
->>> > dependency, as I am sure many users don't want to have to install
->>> > python if they don't have to.
->>> >
->>> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
->>> > ---
->>> >  package/libselinux/libselinux.mk | 32 ++++++++++++++++++++++++++++++++
->>> >  1 file changed, 32 insertions(+)
->>>
->>> This causes some build failures:
->>>
->>> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/build-end.log.
->>>
->
-> Oh fun, a new circular dependency.  Any ideas/examples for how this
-> has been handling in the past? ( I'm assuming other python/busybox
-> cases have come up.)
-> Recursion detected for  : busybox
-> which is a dependency of: ncurses
-> which is a dependency of: python
-> which is a dependency of: libselinux
-> which is a dependency of: busybox
-> make: *** [graph-depends] Error 1
 
-Maybe the ncurses ordering dependency can check for python and if set,
-use that as it's item to depend-on/install after?
-<from ncurses.mk>
-# Install after busybox for the full-blown versions
-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-NCURSES_DEPENDENCIES += busybox
-endif
+On 23-03-17 08:54, Wolfgang Grandegger wrote:
+> Hello,
+> 
+> this is v3 of my RFC patch series to make the buildroot SDK (HOST_DIR)
+> relocatable. It sanitizes the RPATH of all ELF files in the "target"
+> and "host" tree using "patchelf --make-rpath-relative". I have started
+> the mainlining process implementing "--make-rpath-relative" using
+> GitHub pull request [1]... till now, no answer!
+> 
+> Furthermore this patch creates the script "relocate-sdk.sh" in the top
+> directory of the "host" tree allowing to relocate the SDK after it has
+> been moved to a new location. It replaces the old path with the new
+> one in all text files identified by "file --mime-type". The location
+> is stored in "usr/share/buildroot/sdk-location".
+> 
+> Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
+> libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
+> 
+> Other Questions:
+> 
+> - Why do we want relative RPATHs starting with "$ORIGIN" also for ELF
+>   files in the target tree. "/lib" and "/usr/lib" have been removed
+>   already. 
 
--Matt
+ Good point, I don't think we want that... Neither for the ones in staging, I
+suppose. The RPATHs there should all be absolute paths which should be
+interpreted relative to $(TARGET_DIR) resp. $(STAGING_DIR).
+
+ I'm not entirely sure about staging, whether ld will use RPATH as an
+alternative to -L and in that case whether it is done relative to sysroot or not.
+
+> 
+> Things not yet addressed:
+> 
+> - "make toolchain" creates a toolchain tree which still has references
+>   to the build system (in ELF and text files).  
+
+ A solution to this (and other problems) is to use the same approach as
+check-bin-arch: do it as an instrumentation hook for each package, and only look
+at the files added by that package. That way, the overhead is spread out over
+the entire build process, and doing rebuilds doesn't run patchelf on all files
+anymore in the finalize step.
+
+
+
+ Regards,
+ Arnout
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
