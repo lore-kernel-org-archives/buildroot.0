@@ -1,63 +1,43 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:38:44 +0200
-Subject: [Buildroot] [PATCH 10/53] gcc-final: things are no longer installed
-	in $(HOST_DIR)/usr
+Date: Wed, 12 Apr 2017 11:39:23 +0200
+Subject: [Buildroot] [PATCH 49/53] sepolgen: strip /usr/ part from HOST_DIR
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-11-arnout@mind.be>
+Message-ID: <20170412093928.1006-50-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since things are no longer installed in $(HOST_DIR)/usr, the callers
-should also not refer to it.
+sepolgen is a bit weird: DESTDIR acts as a kind of prefix, PYTHONLIBDIR
+is relative to it (and a / is added between them).
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Adam Duskett <aduskett@codeblue.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/gcc/gcc-final/gcc-final.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/sepolgen/sepolgen.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index e8d2e18fe5..12f08c81a8 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -59,18 +59,18 @@ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGE
- HOST_GCC_FINAL_CONF_OPTS = \
- 	$(HOST_GCC_COMMON_CONF_OPTS) \
- 	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
--	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
-+	--with-build-time-tools=$(HOST_DIR)/$(GNU_TARGET_NAME)/bin
- 
--HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*
-+HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib*
- # The kernel wants to use the -m4-nofpu option to make sure that it
- # doesn't use floating point operations.
- ifeq ($(BR2_sh4)$(BR2_sh4eb),y)
- HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4,m4-nofpu"
--HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib/!m4*
-+HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
- endif
- ifeq ($(BR2_sh4a)$(BR2_sh4aeb),y)
- HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
--HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib/!m4*
-+HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
+diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
+index 033b468f02..ab7f18d857 100644
+--- a/package/sepolgen/sepolgen.mk
++++ b/package/sepolgen/sepolgen.mk
+@@ -30,11 +30,11 @@ endef
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ HOST_SEPOLGEN_DEPENDENCIES = host-python3
+ HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+-	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
++	PYTHONLIBDIR=lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+ else
+ HOST_SEPOLGEN_DEPENDENCIES = host-python
+ HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+-	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++	PYTHONLIBDIR=lib/python$(PYTHON_VERSION_MAJOR)/site-packages
  endif
  
- ifeq ($(BR2_bfin),y)
-@@ -103,9 +103,9 @@ HOST_GCC_FINAL_MAKE_OPTS += $(HOST_GCC_COMMON_MAKE_OPTS)
- 
- # Make sure we have 'cc'
- define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
--	if [ ! -e $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc ]; then \
--		ln -f $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc \
--			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
-+	if [ ! -e $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-cc ]; then \
-+		ln -f $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-gcc \
-+			$(HOST_DIR)/bin/$(GNU_TARGET_NAME)-cc; \
- 	fi
- endef
- 
+ define HOST_SEPOLGEN_BUILD_CMDS
 -- 
 2.11.0
