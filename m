@@ -1,146 +1,233 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 12 Apr 2017 11:38:53 +0200
-Subject: [Buildroot] [PATCH 19/53] Globally replace $(HOST_DIR)/usr/sbin
-	with $(HOST_DIR)/sbin
+Date: Wed, 12 Apr 2017 11:38:57 +0200
+Subject: [Buildroot] [PATCH 23/53] Globally replace $(HOST_DIR)/usr with
+	$(HOST_DIR)
 In-Reply-To: <20170412093928.1006-1-arnout@mind.be>
 References: <20170412093928.1006-1-arnout@mind.be>
-Message-ID: <20170412093928.1006-20-arnout@mind.be>
+Message-ID: <20170412093928.1006-24-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since things are no longer installed in $(HOST_DIR)/usr, the callers
-should also not refer to it.
+Since things are no longer installed in $(HOST_DIR), the callers should
+also not refer to it.
 
 This is a mechanical change with
-git grep -l '$(HOST_DIR)/usr/sbin' | xargs sed -i 's%$(HOST_DIR)/usr/sbin%$(HOST_DIR)/sbin%g'
+git grep -l '$(HOST_DIR)/usr\>\([^/]\|$\)' | xargs sed -i 's%\$(HOST_DIR)/usr\>\([^/]\|$\)%$(HOST_DIR)\1%g'
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- fs/ubifs/ubi.mk                          | 2 +-
- fs/ubifs/ubifs.mk                        | 2 +-
- package/freescale-imx/imx-uuc/imx-uuc.mk | 2 +-
- package/gptfdisk/gptfdisk.mk             | 2 +-
- package/libselinux/libselinux.mk         | 2 +-
- package/mtd/mtd.mk                       | 4 ++--
- package/tzdump/tzdump.mk                 | 4 ++--
- package/zic/zic.mk                       | 4 ++--
- 8 files changed, 11 insertions(+), 11 deletions(-)
+ package/erlang/erlang.mk           |  2 +-
+ package/gcc/gcc.mk                 | 10 +++++-----
+ package/kodi/kodi.mk               |  4 ++--
+ package/libsepol/libsepol.mk       |  2 +-
+ package/lua/lua.mk                 |  2 +-
+ package/luarocks/luarocks.mk       |  2 +-
+ package/omxplayer/omxplayer.mk     |  2 +-
+ package/pseudo/pseudo.mk           |  2 +-
+ package/qt/qt.mk                   |  4 ++--
+ package/qt5/qt5base/qt5base.mk     |  2 +-
+ package/setools/setools.mk         |  4 ++--
+ package/upx/upx.mk                 |  2 +-
+ package/vboot-utils/vboot-utils.mk |  2 +-
+ 13 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index e488cb5f8a..2baece5fb0 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -25,7 +25,7 @@ endif
- define ROOTFS_UBI_CMD
- 	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
- 		$(UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
--	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
-+	$(HOST_DIR)/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
- 	rm $(BUILD_DIR)/ubinize.cfg
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 364085c4dd..325a052e86 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -39,7 +39,7 @@ HOST_ERLANG_CONF_ENV += ERL_TOP=$(@D)
+ # erlang uses openssl for all things crypto. Since the host tools (such as
+ # rebar) uses crypto, we need to build host-erlang with support for openssl.
+ HOST_ERLANG_DEPENDENCIES = host-openssl
+-HOST_ERLANG_CONF_OPTS = --without-javac --with-ssl=$(HOST_DIR)/usr
++HOST_ERLANG_CONF_OPTS = --without-javac --with-ssl=$(HOST_DIR)
+ 
+ HOST_ERLANG_CONF_OPTS += --without-termcap
+ 
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index bdeb956972..ff69209f84 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -92,9 +92,9 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--disable-libssp \
+ 	--disable-multilib \
+-	--with-gmp=$(HOST_DIR)/usr \
+-	--with-mpc=$(HOST_DIR)/usr \
+-	--with-mpfr=$(HOST_DIR)/usr \
++	--with-gmp=$(HOST_DIR) \
++	--with-mpc=$(HOST_DIR) \
++	--with-mpfr=$(HOST_DIR) \
+ 	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
+ 	--with-bugurl="http://bugs.buildroot.net/"
+ 
+@@ -169,12 +169,12 @@ endif
+ 
+ ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
+ HOST_GCC_COMMON_DEPENDENCIES += host-isl
+-HOST_GCC_COMMON_CONF_OPTS += --with-isl=$(HOST_DIR)/usr
++HOST_GCC_COMMON_CONF_OPTS += --with-isl=$(HOST_DIR)
+ # gcc 5 doesn't need cloog any more, see
+ # https://gcc.gnu.org/gcc-5/changes.html
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
+ HOST_GCC_COMMON_DEPENDENCIES += host-cloog
+-HOST_GCC_COMMON_CONF_OPTS += --with-cloog=$(HOST_DIR)/usr
++HOST_GCC_COMMON_CONF_OPTS += --with-cloog=$(HOST_DIR)
+ endif
+ else
+ HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index ebce84dade..ed9ec78b11 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -66,8 +66,8 @@ KODI_CONF_ENV = \
+ 	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	PYTHON_NOVERSIONCHECK="no-check" \
+ 	use_texturepacker_native=yes \
+-	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+-	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
++	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)" \
++	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)"
+ 
+ KODI_CONF_OPTS +=  \
+ 	--with-ffmpeg=shared \
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 710ab25112..21ca419c74 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -35,7 +35,7 @@ endef
+ 
+ HOST_LIBSEPOL_MAKE_ENV = \
+ 	$(HOST_MAKE_ENV) \
+-	DESTDIR=$(HOST_DIR)/usr \
++	DESTDIR=$(HOST_DIR) \
+ 	PREFIX=$(HOST_DIR)
+ 
+ define HOST_LIBSEPOL_BUILD_CMDS
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 871d4f29ff..c5d6c088fd 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -94,7 +94,7 @@ define LUA_INSTALL_TARGET_CMDS
  endef
  
-diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
-index f1e4126e86..7b2b0fb2cc 100644
---- a/fs/ubifs/ubifs.mk
-+++ b/fs/ubifs/ubifs.mk
-@@ -21,7 +21,7 @@ UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
- ROOTFS_UBIFS_DEPENDENCIES = host-mtd
+ define HOST_LUA_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) INSTALL_TOP="$(HOST_DIR)/usr" -C $(@D) install
++	$(HOST_MAKE_ENV) $(MAKE) INSTALL_TOP="$(HOST_DIR)" -C $(@D) install
+ 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+ 		$(HOST_DIR)/lib/pkgconfig/lua.pc
+ endef
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index e965ab2288..2338a8b776 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -21,7 +21,7 @@ endif
+ HOST_LUAROCKS_CONF_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+ 	--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
+-	--with-lua=$(HOST_DIR)/usr
++	--with-lua=$(HOST_DIR)
  
- define ROOTFS_UBIFS_CMD
--	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
-+	$(HOST_DIR)/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
+ ifeq ($(BR2_PACKAGE_LUAJIT),y)
+ HOST_LUAROCKS_CONF_OPTS += --lua-suffix=jit
+diff --git a/package/omxplayer/omxplayer.mk b/package/omxplayer/omxplayer.mk
+index 7425014d0c..9bb58778c2 100644
+--- a/package/omxplayer/omxplayer.mk
++++ b/package/omxplayer/omxplayer.mk
+@@ -27,7 +27,7 @@ OMXPLAYER_MAKE_ENV = \
+ 	BUILDROOT=$(TOP_DIR) \
+ 	SDKSTAGE=$(STAGING_DIR) \
+ 	TARGETFS=$(TARGET_DIR) \
+-	TOOLCHAIN=$(HOST_DIR)/usr \
++	TOOLCHAIN=$(HOST_DIR) \
+ 	HOST=$(GNU_TARGET_NAME) \
+ 	SYSROOT=$(STAGING_DIR) \
+ 	JOBS=$(PARALLEL_JOBS) \
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+index d78fc7aa8a..446427109f 100644
+--- a/package/pseudo/pseudo.mk
++++ b/package/pseudo/pseudo.mk
+@@ -24,6 +24,6 @@ HOST_PSEUDO_CONF_OPTS = \
+ 	--with-rpath=$(HOST_DIR)/lib \
+ 	--bits=$(if $(filter %64,$(HOSTARCH)),64,32) \
+ 	--libdir=$(HOST_DIR)/lib \
+-	--with-sqlite=$(HOST_DIR)/usr
++	--with-sqlite=$(HOST_DIR)
+ 
+ $(eval $(host-autotools-package))
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index e941f89624..465e81a778 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -612,10 +612,10 @@ QT_CONF_FILE = $(HOST_DIR)/bin/qt.conf
+ define QT_INSTALL_QT_CONF
+ 	mkdir -p $(dir $(QT_CONF_FILE))
+ 	echo "[Paths]"                             > $(QT_CONF_FILE)
+-	echo "Prefix=$(HOST_DIR)/usr"             >> $(QT_CONF_FILE)
++	echo "Prefix=$(HOST_DIR)"             >> $(QT_CONF_FILE)
+ 	echo "Headers=$(STAGING_DIR)/usr/include" >> $(QT_CONF_FILE)
+ 	echo "Libraries=$(STAGING_DIR)/usr/lib"   >> $(QT_CONF_FILE)
+-	echo "Data=$(HOST_DIR)/usr"               >> $(QT_CONF_FILE)
++	echo "Data=$(HOST_DIR)"               >> $(QT_CONF_FILE)
+ 	echo "Binaries=$(HOST_DIR)/bin"       >> $(QT_CONF_FILE)
  endef
  
- $(eval $(call ROOTFS_TARGET,ubifs))
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index c05cee31db..f24216da26 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -21,7 +21,7 @@ define IMX_UUC_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/uuc $(TARGET_DIR)/usr/bin/uuc
- 	$(INSTALL) -D -m 755 $(@D)/sdimage $(TARGET_DIR)/usr/bin/sdimage
- 	dd if=/dev/zero of=$(TARGET_DIR)/fat bs=1M count=1
--	$(HOST_DIR)/usr/sbin/mkfs.vfat $(TARGET_DIR)/fat
-+	$(HOST_DIR)/sbin/mkfs.vfat $(TARGET_DIR)/fat
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index a91c138f68..fed213c53e 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -234,7 +234,7 @@ define QT5BASE_CONFIGURE_CMDS
+ 		./configure \
+ 		-v \
+ 		-prefix /usr \
+-		-hostprefix $(HOST_DIR)/usr \
++		-hostprefix $(HOST_DIR) \
+ 		-headerdir /usr/include/qt5 \
+ 		-sysroot $(STAGING_DIR) \
+ 		-plugindir /usr/lib/qt/plugins \
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 5e101b1d86..d2e9f05998 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -64,8 +64,8 @@ HOST_SETOOLS_CONF_OPTS = \
+ 	--disable-swig-java \
+ 	--disable-swig-python \
+ 	--disable-swig-tcl \
+-	--with-sepol-devel="$(HOST_DIR)/usr" \
+-	--with-selinux-devel="$(HOST_DIR)/usr" \
++	--with-sepol-devel="$(HOST_DIR)" \
++	--with-selinux-devel="$(HOST_DIR)" \
+ 	PYTHON_LDFLAGS="-L$(HOST_DIR)/lib/" \
+ 	PYTHON_CPPFLAGS="-I$(HOST_SETOOLS_PYTHON_INCLUDES)" \
+ 	PYTHON_SITE_PKG="$(HOST_SETOOLS_PYTHON_SITE_PACKAGES)" \
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index eec88c743a..1fe7162c21 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -16,7 +16,7 @@ HOST_UPX_DEPENDENCIES = host-ucl host-zlib
+ # stating to "please choose a target for 'make'"... :-(
+ define HOST_UPX_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) CPPFLAGS="$(HOST_CPPFLAGS)" \
+-		LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR)/usr \
++		LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR) \
+ 		CXXFLAGS_WERROR= \
+ 		-C $(@D) all
+ endef
+diff --git a/package/vboot-utils/vboot-utils.mk b/package/vboot-utils/vboot-utils.mk
+index 9879dbab75..a6a67ad317 100644
+--- a/package/vboot-utils/vboot-utils.mk
++++ b/package/vboot-utils/vboot-utils.mk
+@@ -31,7 +31,7 @@ define HOST_VBOOT_UTILS_BUILD_CMDS
  endef
  
- define IMX_UUC_INSTALL_INIT_SYSV
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index 56be76543c..2efa47cceb 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -53,7 +53,7 @@ define HOST_GPTFDISK_BUILD_CMDS
+ define HOST_VBOOT_UTILS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR)/usr \
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
+ 		futil_install cgpt_install devkeys_install
  endef
  
- define HOST_GPTFDISK_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/sgdisk $(HOST_DIR)/usr/sbin/sgdisk
-+	$(INSTALL) -D -m 0755 $(@D)/sgdisk $(HOST_DIR)/sbin/sgdisk
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index ca7836f162..75cf8e30e3 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -100,7 +100,7 @@ endef
- define HOST_LIBSELINUX_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
--		SHLIBDIR=$(HOST_DIR)/usr/lib SBINDIR=$(HOST_DIR)/usr/sbin install
-+		SHLIBDIR=$(HOST_DIR)/usr/lib SBINDIR=$(HOST_DIR)/sbin install
- 	(cd $(HOST_DIR)/usr/lib; $(HOSTLN) -sf libselinux.so.1 libselinux.so)
- 	# Install python interface wrapper
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index d6f0be2773..218265af9f 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -49,8 +49,8 @@ define HOST_MTD_INSTALL_CMDS
- 	$(MAKE1) BUILDDIR=$(@D) DESTDIR=$(HOST_DIR) -C $(@D) install
- endef
- 
--MKFS_JFFS2 = $(HOST_DIR)/usr/sbin/mkfs.jffs2
--SUMTOOL = $(HOST_DIR)/usr/sbin/sumtool
-+MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
-+SUMTOOL = $(HOST_DIR)/sbin/sumtool
- 
- MTD_STAGING_y = lib/libmtd.a ubi-utils/libubi.a
- MTD_TARGETS_$(BR2_PACKAGE_MTD_DOCFDISK)		+= docfdisk
-diff --git a/package/tzdump/tzdump.mk b/package/tzdump/tzdump.mk
-index 3f035a56cb..baad978c4f 100644
---- a/package/tzdump/tzdump.mk
-+++ b/package/tzdump/tzdump.mk
-@@ -13,9 +13,9 @@ define HOST_TZDUMP_BUILD_CMDS
- endef
- 
- define HOST_TZDUMP_INSTALL_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/tzdump $(HOST_DIR)/usr/sbin/tzdump
-+	$(INSTALL) -m 0755 -D $(@D)/tzdump $(HOST_DIR)/sbin/tzdump
- endef
- 
- $(eval $(host-generic-package))
- 
--TZDUMP = $(HOST_DIR)/usr/sbin/tzdump
-+TZDUMP = $(HOST_DIR)/sbin/tzdump
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 2419c0c20f..ad2acdff20 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -15,10 +15,10 @@ define HOST_ZIC_BUILD_CMDS
- endef
- 
- define HOST_ZIC_INSTALL_CMDS
--	$(INSTALL) -D -m 755 $(@D)/zic $(HOST_DIR)/usr/sbin/zic
-+	$(INSTALL) -D -m 755 $(@D)/zic $(HOST_DIR)/sbin/zic
- 	$(INSTALL) -D -m 644 $(@D)/tzfile.h $(HOST_DIR)/usr/include/tzfile.h
- endef
- 
- $(eval $(host-generic-package))
- 
--ZIC = $(HOST_DIR)/usr/sbin/zic
-+ZIC = $(HOST_DIR)/sbin/zic
 -- 
 2.11.0
