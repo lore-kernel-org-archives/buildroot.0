@@ -1,39 +1,56 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 12 Apr 2017 11:45:02 +0100
-Subject: [Buildroot] [PATCH] nano: bump version to 2.8.1
-Message-ID: <20170412104502.3057-1-Vincent.Riera@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Apr 2017 12:55:03 +0200
+Subject: [Buildroot] [PATCH 01/53] pkg-rebar: remove redundant / in
+ front of $($(PKG)_ERLANG_LIBDIR)
+In-Reply-To: <20170412114632.3ea39fdb@free-electrons.com>
+References: <20170412093928.1006-1-arnout@mind.be>
+ <20170412093928.1006-2-arnout@mind.be>
+ <20170412114632.3ea39fdb@free-electrons.com>
+Message-ID: <fc690f48-a6c0-a203-b846-91f147ec17dd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index b39d77e..12baecf 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 15c1bcf4d8888d3b56f68a0b75871cc349b81a9094f8a42d73010ffc26c85dc2  nano-2.8.0.tar.xz
-+sha256 e935a8bb373345c833dff3a304c6d392775d206b94c802d9285ae80ac6b66d0b  nano-2.8.1.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 38eed0d..9e7fdc7 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 2.8
--NANO_VERSION = $(NANO_VERSION_MAJOR).0
-+NANO_VERSION = $(NANO_VERSION_MAJOR).1
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+
+On 12-04-17 11:46, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 12 Apr 2017 11:38:35 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+> 
+>>  define install-erlang-directories
+>> -	$(INSTALL) -d $(1)/$($(PKG)_ERLANG_LIBDIR)
+>> +	$(INSTALL) -d $(1)$($(PKG)_ERLANG_LIBDIR)
+> 
+> This looks a bit weird to me. Wouldn't it make more sense to have
+> ERLANG_LIBDIR not start with a / ?
+
+ Well...
+
+1. it doesn't look weird to me;
+
+2. in one place, it was already like that;
+
+3. if we change it, we should also change all instances of _ERLANG_LIBDIR in all
+packages, including external trees.
+
+ The last point isn't that important though since it still works even if the /
+is there. And we don't have any in-tree package that sets _ERLANG_LIBDIR.
+
+ Anyway, the patch is independent of the rest of the series (I should have left
+it out, probably). So don't let it stop you :-)
+
+
+ Regards,
+ Arnout
+
 -- 
-2.10.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
