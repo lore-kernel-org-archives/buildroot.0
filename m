@@ -1,41 +1,41 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 12 Apr 2017 15:20:22 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.10.10
-In-Reply-To: <20170412142022.37327-1-Vincent.Riera@imgtec.com>
-References: <20170412142022.37327-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170412142022.37327-2-Vincent.Riera@imgtec.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Wed, 12 Apr 2017 11:23:55 -0300
+Subject: [Buildroot] [PATCH] irssi: fix attributes ordering in Config.in
+Message-ID: <20170412142355.4538-1-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+According to the Buildroot convention, 'depends on' attributes shall
+come before 'select' ones in Kconfig files.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 2fbf689..782b7da 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+Detected by check-package.
+
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ package/irssi/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/irssi/Config.in b/package/irssi/Config.in
+index 2cdd06c87..6361cff31 100644
+--- a/package/irssi/Config.in
++++ b/package/irssi/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_IRSSI
+ 	bool "irssi"
+-	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_OPENSSL
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Irssi is a terminal based IRC client for UNIX systems.
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.10.9)"
-+	bool "Latest version (4.10.10)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.10.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-2.10.2
+2.11.0
