@@ -1,28 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:53:22 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 1.8.1
-In-Reply-To: <20170410172432.10315-1-bernd.kuhls@t-online.de>
-References: <20170410172432.10315-1-bernd.kuhls@t-online.de>
-Message-ID: <20170412215322.4e58d80e@free-electrons.com>
+Date: Wed, 12 Apr 2017 21:59:35 +0200
+Subject: [Buildroot] [git commit] proftpd: add mod_redis support
+Message-ID: <20170412201132.D6C327FCA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=818c794dec03bbbd42d7e6514e8b556f9c33d8cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 10 Apr 2017 19:24:31 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libva/libva.hash | 6 +++---
->  package/libva/libva.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+The mod_redis module enables ProFTPD support for caching data in Redis
+servers, using the hiredis client library. This is available since
+proftpd-1.3.6rc5 and later.
 
-Both applied, thanks!
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/proftpd/Config.in  | 7 +++++++
+ package/proftpd/proftpd.mk | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index dd87eb4..07a5d86 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -13,4 +13,11 @@ config BR2_PACKAGE_PROFTPD_MOD_REWRITE
+ 	help
+ 	  Compile ProFTPD with mod_rewrite support
+ 
++config BR2_PACKAGE_PROFTPD_MOD_REDIS
++	bool "mod_redis support"
++	select BR2_PACKAGE_HIREDIS
++	help
++	  The mod_redis module enables ProFTPD support for caching data in Redis
++	  servers, using the hiredis client library.
++
+ endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 5f42408..3e165c6 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -27,6 +27,13 @@ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+ PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REDIS),y)
++PROFTPD_CONF_OPTS += --enable-redis
++PROFTPD_DEPENDENCIES += hiredis
++else
++PROFTPD_CONF_OPTS += --disable-redis
++endif
++
+ # configure script doesn't handle detection of %llu format string
+ # support for printing the file size when cross compiling, breaking
+ # access for large files.
