@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Apr 2017 21:01:54 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 10}.x series
-Message-ID: <20170412190236.1AC587FF24@busybox.osuosl.org>
+Date: Wed, 12 Apr 2017 21:02:30 +0200
+Subject: [Buildroot] [git commit] irssi: fix attributes ordering in Config.in
+Message-ID: <20170412190236.2F68E7FF24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d893df454517e7cb3d667cd872bb2e30ff04321
+commit: https://git.buildroot.net/buildroot/commit/?id=deafcccdd41094b92a5e20550ac187d9b691920f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+According to the Buildroot convention, 'depends on' attributes shall
+come before 'select' ones in Kconfig files.
+
+Detected by check-package.
+
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
+ package/irssi/Config.in | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f64d8d7..27b5a7e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -218,7 +218,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.60"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.21"	if BR2_KERNEL_HEADERS_4_9
--	default "4.10.9"	if BR2_KERNEL_HEADERS_4_10
-+	default "4.4.61"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.22"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.10.10"	if BR2_KERNEL_HEADERS_4_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/irssi/Config.in b/package/irssi/Config.in
+index 2cdd06c..6361cff 100644
+--- a/package/irssi/Config.in
++++ b/package/irssi/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_IRSSI
+ 	bool "irssi"
+-	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_OPENSSL
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Irssi is a terminal based IRC client for UNIX systems.
+ 
