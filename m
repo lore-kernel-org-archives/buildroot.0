@@ -1,114 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Apr 2017 15:19:49 +0200
-Subject: [Buildroot] [PATCH] system: add option to pass genimage config
-	files
-In-Reply-To: <20170410153439.11004-1-etienne.phelip@savoirfairelinux.com>
-References: <20170410153439.11004-1-etienne.phelip@savoirfairelinux.com>
-Message-ID: <9e948362-952b-ad2c-8d3e-93590a7f3772@mind.be>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 12 Apr 2017 08:54:51 -0500
+Subject: [Buildroot] [PATCH 3/4] libselinux: allow compiling python
+ wrapper module for target
+In-Reply-To: <CANQCQpbF44HCb_RumriS6u846YAg2GezULwsc0mDFBmGg3mVew@mail.gmail.com>
+References: <20170202224505.22882-1-Adamduskett@outlook.com>
+ <20170202224505.22882-3-Adamduskett@outlook.com>
+ <20170411144012.10215812@free-electrons.com>
+ <CANQCQpbF44HCb_RumriS6u846YAg2GezULwsc0mDFBmGg3mVew@mail.gmail.com>
+Message-ID: <CANQCQpZVb3PEEDaBkn0u57Z-FU97YtyWUeMwpi1SHj1829hjhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Etienne,
+Thomas,
 
-On 10-04-17 17:34, Etienne Phelip wrote:
-> Add a new Kconfig entry to allow users to provide a list of genimage
-> config files.
-> 
-> A new target is added to the Makefile in order to execute the
-> support/scripts/genimage.sh script for each provided config files.
-> 
-> The new target-genimage target depends on target-post-image, thus
-> update the world target dependency.
-> 
-> Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
-> ---
-> 
-> Changes since RFC:
->  - add BR2_GENIMAGE_CFG_FILES_SELECT blind helper option
-> 
-> Board configs will be changed incrementally.
-> 
->  Makefile         |  9 +++++++--
->  system/Config.in | 15 +++++++++++++++
->  2 files changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 941bf78..3bb1b1c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -546,11 +546,11 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  
->  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->  
-> -world: target-post-image
-> +world: target-genimage
->  
->  .PHONY: all world toolchain dirs clean distclean source outputmakefile \
->  	legal-info legal-info-prepare legal-info-clean printvars help \
-> -	list-defconfigs target-finalize target-post-image source-check
-> +	list-defconfigs target-finalize target-post-image target-genimage source-check
+On Wed, Apr 12, 2017 at 7:53 AM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Thomas
+>
+> On Tue, Apr 11, 2017 at 7:40 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>>
+>> Hello,
+>>
+>> On Thu,  2 Feb 2017 17:45:04 -0500, Adam Duskett wrote:
+>> > libselinux currently does not compile it's python wrapper module
+>> > for the target.  This is needed for audit2allow to function properly.
+>> >
+>> > This patch allows for the python wrapper to be built.  The current
+>> > makefile will try to install the python wrapper to the host directory
+>> > unless the PYSITEDIR variable is set.  I wrapped the build of the
+>> > python wrapper in a check for AUDIT2ALLOW because of the extra python
+>> > dependency, as I am sure many users don't want to have to install
+>> > python if they don't have to.
+>> >
+>> > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+>> > ---
+>> >  package/libselinux/libselinux.mk | 32 ++++++++++++++++++++++++++++++++
+>> >  1 file changed, 32 insertions(+)
+>>
+>> This causes some build failures:
+>>
+>> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/build-end.log.
+>>
 
- Line becomes too long, split it.
-
->  
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
-> @@ -719,6 +719,11 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
->  		$(call MESSAGE,"Executing post-image script $(s)"); \
->  		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->  
-> +target-genimage: target-post-image
-> +	@$(foreach c, $(call qstrip,$(BR2_GENIMAGE_CFG_FILES)), \
-> +		$(call MESSAGE,"Executing genimage with config $(c)"); \
-> +		$(EXTRA_ENV) ./support/scripts/genimage.sh -c $(c)$(sep))
-
- As I mentioned somewhere else: the genimage.sh script should expect
-BINARIES_DIR as its first argument, so it can be used directly as a post-image
-script. In that case, of course, this call should be updated as well.
-
-> +
->  source: $(foreach p,$(PACKAGES),$(p)-all-source)
->  
->  _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
-> diff --git a/system/Config.in b/system/Config.in
-> index b47ae43..77073a0 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -563,4 +563,19 @@ config BR2_ROOTFS_POST_SCRIPT_ARGS
->  	  directory / images directory. The arguments in this option will be
->  	  passed *after* those.
->  
-> +config BR2_GENIMAGE_CFG_FILES
-> +	string "genimage config files passed to genimage"
-> +	default ""
-> +	help
-> +	  Specify a space-separated list of genimage config files to used by
-> +	  genimage after the post-image script has been executed.
-> +
-> +	  This can be used to generate multiple binary image for one or more
-                                                            ^s
-
-
- Regards,
- Arnout
-
-> +	  mediums (e.g. SD card and flash).
-> +
-> +config BR2_GENIMAGE_CFG_FILES_SELECT
-> +        bool
-> +        default y if BR2_GENIMAGE_CFG_FILES != ""
-> +        select BR2_PACKAGE_HOST_GENIMAGE
-> +
->  endmenu
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Oh fun, a new circular dependency.  Any ideas/examples for how this
+has been handling in the past? ( I'm assuming other python/busybox
+cases have come up.)
+Recursion detected for  : busybox
+which is a dependency of: ncurses
+which is a dependency of: python
+which is a dependency of: libselinux
+which is a dependency of: busybox
+make: *** [graph-depends] Error 1
