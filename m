@@ -1,98 +1,152 @@
-From: Semyon Kolganov <semenak94@mail.ru>
-Date: Thu, 13 Apr 2017 23:32:01 +0300
-Subject: [Buildroot] [PATCHv2] mpir: new package
-In-Reply-To: <mpir: new package>
-References: <mpir: new package>
-Message-ID: <1492115521-3293-1-git-send-email-semenak94@mail.ru>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Apr 2017 22:34:17 +0200
+Subject: [Buildroot] [git commit] libgphoto2: new package
+Message-ID: <20170413203533.924ED826F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+commit: https://git.buildroot.net/buildroot/commit/?id=d4ffda0649b033c2e3f6af0df02b634c0269e07d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add support for libgphoto2 core library designed to allow access to
+digital camera.
+
+Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Romain Naour <romain.naour@gmail.com>
+[Thomas:
+ - Use downloads.sourceforge.net
+ - Remove final dot at end of <pkg>_LICENSE variable
+ - Minor tweaks in comments.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes between v1 and v2:
- - removed host variant
- - added package to DEVELOPERS
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/mpir/Config.in |  8 ++++++++
- package/mpir/mpir.hash |  2 ++
- package/mpir/mpir.mk   | 16 ++++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/mpir/Config.in
- create mode 100644 package/mpir/mpir.hash
- create mode 100644 package/mpir/mpir.mk
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/libgphoto2/Config.in       | 14 ++++++++++
+ package/libgphoto2/libgphoto2.hash |  6 +++++
+ package/libgphoto2/libgphoto2.mk   | 55 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 79 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a7e1849..1f42e6e 100644
+index 9550094..cdb24d0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1418,6 +1418,7 @@ F:	package/yaml-cpp/
- N:	Semyon Kolganov <semenak94@mail.ru>
- F:	package/fmt/
- F:	package/libbson/
-+F:	package/mpir/
+@@ -957,6 +957,9 @@ F:	package/cpuload/
+ F:	package/bwm-ng/
+ F:	package/ramsmp/
  
- N:	Sergio Prado <sergio.prado@e-labworks.com>
- F:	package/libgdiplus/
++N:	Kevin Joly <kevin.joly@sensefly.com>
++F:	package/libgphoto2/
++
+ N:	Laurent Cans <laurent.cans@gmail.com>
+ F:	package/aircrack-ng/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index 3683578..0866c13 100644
+index d0e7af1..6a0f6f6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1405,6 +1405,7 @@ endif
- 	source "package/mpc/Config.in"
- 	source "package/mpdecimal/Config.in"
- 	source "package/mpfr/Config.in"
-+	source "package/mpir/Config.in"
- 	source "package/msgpack/Config.in"
- 	source "package/mtdev2tuio/Config.in"
- 	source "package/musl-compat-headers/Config.in"
-diff --git a/package/mpir/Config.in b/package/mpir/Config.in
+@@ -1086,6 +1086,7 @@ menu "Hardware handling"
+ 	source "package/libfreefare/Config.in"
+ 	source "package/libftdi/Config.in"
+ 	source "package/libftdi1/Config.in"
++	source "package/libgphoto2/Config.in"
+ 	source "package/libgpiod/Config.in"
+ 	source "package/libgudev/Config.in"
+ 	source "package/libhid/Config.in"
+diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
 new file mode 100644
-index 0000000..acd448c
+index 0000000..fc60dd6
 --- /dev/null
-+++ b/package/mpir/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MPIR
-+	bool "mpir"
-+	select BR2_PACKAGE_GMP
++++ b/package/libgphoto2/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LIBGPHOTO2
++	bool "libgphoto2"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBTOOL
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBXML2
 +	help
-+	  MPIR is a highly optimised library for bignum arithmetic forked 
-+	  from the GMP bignum library.
++	  libgphoto2 is the core library designed to allow access to
++	  digital camera by external programs.
 +
-+	  http://www.mpir.org/
-diff --git a/package/mpir/mpir.hash b/package/mpir/mpir.hash
++	  http://gphoto.org/proj/libgphoto2/
++
++comment "libgphoto needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
 new file mode 100644
-index 0000000..8320337
+index 0000000..1afe275
 --- /dev/null
-+++ b/package/mpir/mpir.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	52f63459cf3f9478859de29e00357f004050ead70b45913f2c2269d9708675bb	mpir-3.0.0.tar.bz2
-diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
++++ b/package/libgphoto2/libgphoto2.hash
+@@ -0,0 +1,6 @@
++# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.13/
++md5 73bf5b3d94c8c6f5fad9ea6b5e561843 libgphoto2-2.5.13.tar.bz2
++sha1 cef2d2f1930f8ada16a63aca15683188231a626a libgphoto2-2.5.13.tar.bz2
++
++# Locally calculated hash
++sha256 ceaacbdf187d1cd1aed5336991f46b0100f6960b6c8383f9aeab98f1f64780ef libgphoto2-2.5.13.tar.bz2
+diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
 new file mode 100644
-index 0000000..9b15a0c
+index 0000000..f6dadf1
 --- /dev/null
-+++ b/package/mpir/mpir.mk
-@@ -0,0 +1,16 @@
++++ b/package/libgphoto2/libgphoto2.mk
+@@ -0,0 +1,55 @@
 +################################################################################
 +#
-+# mpir
++# libgphoto2
 +#
 +################################################################################
 +
-+MPIR_VERSION = 3.0.0
-+MPIR_SITE = http://www.mpir.org
-+MPIR_SOURCE = mpir-$(MPIR_VERSION).tar.bz2
-+MPIR_LICENSE = LGPL-3.0+
-+MPIR_LICENSE_FILES = COPYING.LIB
-+MPIR_INSTALL_STAGING = YES
-+MPIR_DEPENDENCIES = gmp
-+MPIR_MAKE_OPTS = RANLIB=$(TARGET_RANLIB)
++LIBGPHOTO2_VERSION = 2.5.13
++LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
++# Project is maintained on github but github tarball doesn't have
++# configure, so use tarballs from SourceForge
++LIBGPHOTO2_SITE = https://downloads.sourceforge.net/project/gphoto/libgphoto/$(LIBGPHOTO2_VERSION)
++LIBGPHOTO2_LICENSE = LGPL-2.1+, GPL-2.0 (adc65), GPL-2.0+ (some camlibs), \
++	LGPL-2.0 (sipix), LGPL-3.0+ (pentax), BSD-3-Clause (ax203/tinyjpeg)
++# There is a single license file for the LGPL-2.1, no license files
++# for other licenses
++LIBGPHOTO2_LICENSE_FILES = COPYING
++LIBGPHOTO2_INSTALL_STAGING = YES
++
++LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libtool host-pkgconf
++
++LIBGPHOTO2_CONF_ENV = udevscriptdir=/lib/udev
++LIBGPHOTO2_CONF_OPTS += --without-rpmbuild --disable-gp2ddb --disable-internal-docs
++
++ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
++# libusb-compat is not actually used, but it is detected, so add it
++# here to guarantee reproducible builds
++LIBGPHOTO2_DEPENDENCIES += libusb-compat
++endif
++
++ifeq ($(BR2_PACKAGE_LIBEXIF),y)
++LIBGPHOTO2_DEPENDENCIES += libexif
++LIBGPHOTO2_CONF_OPTS += --with-libexif=auto
++else
++LIBGPHOTO2_CONF_OPTS += --with-libexif=no
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++LIBGPHOTO2_DEPENDENCIES += jpeg
++LIBGPHOTO2_CONF_OPTS += --with-jpeg
++else
++LIBGPHOTO2_CONF_OPTS += --without-jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_GD),y)
++LIBGPHOTO2_DEPENDENCIES += gd
++LIBGPHOTO2_CONF_OPTS += --with-gdlib=auto
++else
++LIBGPHOTO2_CONF_OPTS += --with-gdlib=no
++endif
++
++ifeq ($(BR2_PACKAGE_LOCKDEV),y)
++LIBGPHOTO2_DEPENDENCIES += lockdev
++endif
 +
 +$(eval $(autotools-package))
--- 
-2.7.4
