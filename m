@@ -1,99 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Apr 2017 21:30:33 +0200
-Subject: [Buildroot] [git commit] phytool: new package
-Message-ID: <20170413193121.4582D82213@busybox.osuosl.org>
+Date: Thu, 13 Apr 2017 21:31:28 +0200
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.170
+Message-ID: <20170413193140.C5B5482795@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=139d47e1f915fbb9826ff3db75c84c5e19d830c4
+commit: https://git.buildroot.net/buildroot/commit/?id=8dad68d43eba684e8e0c2ef3a212294cb1dc2408
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/phytool/Config.in    |  6 ++++++
- package/phytool/phytool.hash |  4 ++++
- package/phytool/phytool.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 36 insertions(+)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a7e1849..9550094 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1740,6 +1740,7 @@ F:	package/linux-firmware/
- F:	package/modem-manager/
- F:	package/nuttcp/
- F:	package/parted/
-+F:	package/phytool/
- F:	package/python*
- F:	package/ser2net/
- F:	package/socketcand/
-diff --git a/package/Config.in b/package/Config.in
-index 3683578..d0e7af1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1640,6 +1640,7 @@ endif
- 	source "package/openvpn/Config.in"
- 	source "package/p910nd/Config.in"
- 	source "package/phidgetwebservice/Config.in"
-+	source "package/phytool/Config.in"
- 	source "package/pound/Config.in"
- 	source "package/pppd/Config.in"
- 	source "package/pptp-linux/Config.in"
-diff --git a/package/phytool/Config.in b/package/phytool/Config.in
-new file mode 100644
-index 0000000..7dca31d
---- /dev/null
-+++ b/package/phytool/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PHYTOOL
-+	bool "phytool"
-+	help
-+	  Linux MDIO register access utility.
-+
-+	  https://github.com/wkz/phytool
-diff --git a/package/phytool/phytool.hash b/package/phytool/phytool.hash
-new file mode 100644
-index 0000000..37d8f66
---- /dev/null
-+++ b/package/phytool/phytool.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://github.com/wkz/phytool/releases/download/v1.0.1/phytool-1.0.1.tar.xz.md5
-+# sha256 locally computed:
-+md5  08997ad8f01faf84f3da0638f3ad8b16  phytool-1.0.1.tar.xz
-+sha256  b08c538dc8024e542d54742b93cc7748c7062477f060d6e9331a67009aeadd88  phytool-1.0.1.tar.xz
-diff --git a/package/phytool/phytool.mk b/package/phytool/phytool.mk
-new file mode 100644
-index 0000000..2a47dfa
---- /dev/null
-+++ b/package/phytool/phytool.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# phytool
-+#
-+################################################################################
-+
-+PHYTOOL_VERSION = 1.0.1
-+PHYTOOL_SOURCE = phytool-$(PHYTOOL_VERSION).tar.xz
-+PHYTOOL_SITE = https://github.com/wkz/phytool/releases/download/v$(PHYTOOL_VERSION)
-+PHYTOOL_LICENSE = GPL-2.0+
-+PHYTOOL_LICENSE_FILES = LICENSE
-+
-+define PHYTOOL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		LDLIBS="$(TARGET_LDFLAGS)"
-+endef
-+
-+define PHYTOOL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR="$(TARGET_DIR)" \
-+		PREFIX="usr" install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index a66b0c5..566c487 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 0ff2418c54686f1a99d6196bab5fbc8188152d17ae826760aabd91b49e5f20d19ed1280e3670a769184aac9fd598a20b31312b56add831ed3863473e031b5327  LVM2.2.02.169.tgz
++sha512 971a40f93db2b18a4b5c04f2b34d48cbcce81e6e3999760a474ddc52e8653317ac4969f402b9c9e12e486772bc27da8d9ca448f0551338b2a62031082a113f7c  LVM2.2.02.170.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index ffc1043..11fd8a2 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.169
++LVM2_VERSION = 2.02.170
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
