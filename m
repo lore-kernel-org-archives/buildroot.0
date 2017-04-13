@@ -1,66 +1,99 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 12 Apr 2017 20:23:51 -0500
-Subject: [Buildroot] [PATCH 1/1] ncurses: fix python,
-	busybox circular dependency
-In-Reply-To: <1492029561-57916-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1492029561-57916-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpZzVr99vUXWnhSAox_1F10ypFSbwyzufLqdYAP98rZriA@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 13 Apr 2017 00:03:25 -0300
+Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies
+ a package coding style
+References: <20170412094909.66ea1ada@free-electrons.com>
+Message-ID: <58eeea7d15ad_5ae111447a8319e8@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Apr 12, 2017 3:39 PM, "Matt Weber" <matthew.weber@rockwellcollins.com>
-wrote:
+Thomas,
 
-This resolves a build failure where the following
-circular dependency is created.
+On Wed, Apr 12, 2017 at 04:49 AM, Thomas Petazzoni wrote:
 
-busybox which is a dependency of: ncurses
-which is a dependency of: python
-which is a dependency of: libselinux
-which is a dependency of: busybox
+> On Tue, 11 Apr 2017 20:03:06 -0300, Ricardo Martincoski wrote:
+> 
+>> I am inclined to change to this:
+>>  support/scripts/
+>>  ...
+>>  |-- check-package
+>>  |-- checkpackage
+>>  |   |-- __init__.py
+>>  |   |-- base.py
+>>  |   |-- lib.py
+>>  |   |-- lib_config.py
+>>  |   |-- lib_hash.py
+>>  |   |-- lib_mk.py
+>>  |   |-- lib_patch.py
+>>  |   `-- readme.txt
+>>  ...
+> 
+> Looks good to me. I'm wondering what is best between checkpackage and
+> check-packagelib for the folder, but I don't have a strong opinion here.
+
+Maybe checkpackagelib?
+
+The dash needs a bit more code:
+
+import importlib
+lib_config = importlib.import_module(".lib_config", "check-packagelib")
+
+instead of
+
+import checkpackagelib.lib_config
+
+Also PEP 8 [1] recommends "[a-z]*" for folders (packages) and "[a-z_]*" for
+files (modules).
+
+>> >  - Between every function/method/class, you put two empty lines. The
+>> >    Buildroot coding style is generally to have only one empty line.  
+>> 
+>> Sorry, the series got contaminated by my habit of using pep8 with default
+>> options.
+> 
+> Ah, but then if PEP8 suggests this, perhaps we should follow it? It's
+> just that we don't do this anywhere else in Buildroot. Anyway, that's
+> really a minor detail.
+
+Indeed a minor detail.
++1 on this, either the PEP 8 recommendation [2] or the pep8 tool [3].
+
+My *personal* reasoning for using both is:
+"Some people that wrote much more Python code than me already thought and
+discussed about this to came up with this recommendation"
+"I am lazy so I use the tool so I don't need to read the recommendation too
+often"
 
 
-This however creates a python ncurses circular dependency....
+In the long run, it would be good to have opinions from others.
+How do you prefer handling this?
+A) you guys discuss on IRC;
+B) new thread on the mailing list;
+C) add topic to next dev meeting;
 
+Maybe here is a good starting point (authors and reviewers for past year):
 
-Resolves:
-http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b
-9d74ca9a8c/
+find support/ -type f | xargs file | grep Python | sed -e 's,:.*,,g' \
+ | tee /tmp/python-files
+git shortlog -s 2016.05.. -- $(cat /tmp/python-files) \
+ | sed -e 's,^\s*[0-9]*\s*,,g' | sort -u | tee /tmp/python-authors
+git log 2016.05.. -- $(cat /tmp/python-files) \
+ | grep -Ei '(reviewed|acked)-by:' | sed 's,.*[bB]y: ,,' | sort -u \
+ | sed -e 's,\s[<(].*,,g' -e 's,",,g' | tee /tmp/python-reviewers
+grep -f /tmp/python-reviewers -f /tmp/python-authors DEVELOPERS
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/ncurses/ncurses.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> Have you seen that http://autobuild.buildroot.net/stats/ has a new
+> column "Warnings", which indicates for each package the number of
+> check-package warnings reported?
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 68c77ac..7b35015 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -30,9 +30,19 @@ NCURSES_CONF_OPTS = \
-        --without-manpages
+Nice! Thank you for this.
 
- # Install after busybox for the full-blown versions
-+# However if python is enabled, this causes a circular
-+# dependency, for that case, use python as the dependency.
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+NCURSES_DEPENDENCIES += python3
-+else
-+NCURSES_DEPENDENCIES += python
-+endif
-+else
- NCURSES_DEPENDENCIES += busybox
- endif
-+endif
+[1] https://www.python.org/dev/peps/pep-0008/#package-and-module-names
+[2] https://www.python.org/dev/peps/pep-0008
+[3] https://pypi.python.org/pypi/pep8
 
- ifeq ($(BR2_STATIC_LIBS),y)
- NCURSES_CONF_OPTS += --without-shared --with-normal
---
-1.9.1
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170412/94d15faa/attachment.html>
+Regards,
+Ricardo
