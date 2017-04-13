@@ -1,257 +1,190 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Apr 2017 22:06:18 +0200
-Subject: [Buildroot] [git commit] configs/telit_evk_pro3: bump linux kernel
-	to 3.9.11
-Message-ID: <20170413201352.ED4B17FC26@busybox.osuosl.org>
+Date: Thu, 13 Apr 2017 22:06:08 +0200
+Subject: [Buildroot] [git commit] configs/telit_evk_pro3: add support for
+	gcc 5
+Message-ID: <20170413201352.D532681E48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=710a47d3227f00461b63a2add08b2171f7b34369
+commit: https://git.buildroot.net/buildroot/commit/?id=417fcc0edbe539c871478d89cb81726be8748b9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also use "BR2_TARGET_LINUX_CONFIG_FRAGMENT_FILES" instead of
-"BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE".
+Use two official kernel patches to add support for gcc 5:
+
+commit 71458cfc782eafe4b27656e078d379a34e472adf
+kernel: add support for gcc 5
+
+commit aeea3592a13bf12861943e44fc48f1f270941f8d
+ARM: 8158/1: LLVMLinux: use static inline in ARM ftrace.h
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/telit/evk-pro3/linux-3.9.config | 201 ----------------------------------
- board/telit/evk-pro3/linux.fragment   |   3 +
- configs/telit_evk_pro3_defconfig      |   6 +-
- 3 files changed, 6 insertions(+), 204 deletions(-)
+ .../linux/0001-kernel-add-support-for-gcc-5.patch  | 97 ++++++++++++++++++++++
+ ...LLVMLinux-use-static-inline-in-ARM-ftrace.patch | 52 ++++++++++++
+ 2 files changed, 149 insertions(+)
 
-diff --git a/board/telit/evk-pro3/linux-3.9.config b/board/telit/evk-pro3/linux-3.9.config
-deleted file mode 100644
-index 99c2f2d..0000000
---- a/board/telit/evk-pro3/linux-3.9.config
-+++ /dev/null
-@@ -1,201 +0,0 @@
--CONFIG_EXPERIMENTAL=y
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_KERNEL_LZO=y
--# CONFIG_SWAP is not set
--CONFIG_SYSVIPC=y
--CONFIG_LOG_BUF_SHIFT=14
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_KALLSYMS_ALL=y
--CONFIG_EMBEDDED=y
--CONFIG_SLAB=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--# CONFIG_LBDAF is not set
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
--CONFIG_ARCH_AT91=y
--CONFIG_SOC_AT91SAM9260=y
--CONFIG_SOC_AT91SAM9263=y
--CONFIG_SOC_AT91SAM9G45=y
--CONFIG_SOC_AT91SAM9X5=y
--CONFIG_SOC_AT91SAM9N12=y
--CONFIG_MACH_AT91SAM_DT=y
--CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
--CONFIG_AT91_TIMER_HZ=128
--CONFIG_AEABI=y
--# CONFIG_OABI_COMPAT is not set
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
--CONFIG_UACCESS_WITH_MEMCPY=y
--CONFIG_ZBOOT_ROM_TEXT=0x0
--CONFIG_ZBOOT_ROM_BSS=0x0
--CONFIG_ARM_APPENDED_DTB=y
--CONFIG_ARM_ATAG_DTB_COMPAT=y
--CONFIG_CMDLINE="console=ttyS0,115200 initrd=0x21100000,25165824 root=/dev/ram0 rw"
--CONFIG_KEXEC=y
--CONFIG_AUTO_ZRELADDR=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_DIAG is not set
--CONFIG_IPV6=y
--# CONFIG_INET6_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET6_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET6_XFRM_MODE_BEET is not set
--CONFIG_IPV6_SIT_6RD=y
--# CONFIG_WIRELESS is not set
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_STANDALONE is not set
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_CHAR=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_NAND=y
--CONFIG_MTD_NAND_ATMEL=y
--CONFIG_MTD_UBI=y
--CONFIG_MTD_UBI_GLUEBI=y
--CONFIG_PROC_DEVICETREE=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_RAM_COUNT=4
--CONFIG_BLK_DEV_RAM_SIZE=8192
--CONFIG_ATMEL_PWM=y
--CONFIG_ATMEL_TCLIB=y
--CONFIG_EEPROM_93CX6=m
--CONFIG_SCSI=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_SCSI_MULTI_LUN=y
--# CONFIG_SCSI_LOWLEVEL is not set
--CONFIG_NETDEVICES=y
--CONFIG_MII=y
--CONFIG_MACB=y
--# CONFIG_NET_VENDOR_BROADCOM is not set
--# CONFIG_NET_VENDOR_CHELSIO is not set
--# CONFIG_NET_VENDOR_FARADAY is not set
--# CONFIG_NET_VENDOR_INTEL is not set
--# CONFIG_NET_VENDOR_MARVELL is not set
--# CONFIG_NET_VENDOR_MICREL is not set
--# CONFIG_NET_VENDOR_NATSEMI is not set
--# CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SMSC is not set
--# CONFIG_NET_VENDOR_STMICRO is not set
--CONFIG_DAVICOM_PHY=y
--CONFIG_MICREL_PHY=y
--# CONFIG_WLAN is not set
--CONFIG_INPUT_POLLDEV=y
--# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
--CONFIG_INPUT_MOUSEDEV_SCREEN_X=480
--CONFIG_INPUT_MOUSEDEV_SCREEN_Y=272
--CONFIG_INPUT_JOYDEV=y
--CONFIG_INPUT_EVDEV=y
--# CONFIG_KEYBOARD_ATKBD is not set
--CONFIG_KEYBOARD_GPIO=y
--# CONFIG_INPUT_MOUSE is not set
--CONFIG_INPUT_TOUCHSCREEN=y
--# CONFIG_SERIO is not set
--CONFIG_LEGACY_PTY_COUNT=4
--CONFIG_SERIAL_ATMEL=y
--CONFIG_SERIAL_ATMEL_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_I2C=y
--CONFIG_I2C_GPIO=y
--CONFIG_SPI=y
--CONFIG_SPI_ATMEL=y
--CONFIG_PINCTRL_AT91=y
--CONFIG_GPIO_SYSFS=y
--# CONFIG_HWMON is not set
--CONFIG_WATCHDOG=y
--CONFIG_AT91SAM9X_WATCHDOG=y
--CONFIG_SSB=m
--CONFIG_FB=y
--CONFIG_FB_MODE_HELPERS=y
--CONFIG_FB_ATMEL=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
--# CONFIG_LCD_CLASS_DEVICE is not set
--CONFIG_BACKLIGHT_CLASS_DEVICE=y
--CONFIG_BACKLIGHT_ATMEL_LCDC=y
--# CONFIG_BACKLIGHT_GENERIC is not set
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
--CONFIG_FONTS=y
--CONFIG_FONT_8x8=y
--CONFIG_FONT_ACORN_8x8=y
--CONFIG_FONT_MINI_4x6=y
--CONFIG_LOGO=y
--# CONFIG_HID_SUPPORT is not set
--CONFIG_USB=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_DEVICEFS=y
--# CONFIG_USB_DEVICE_CLASS is not set
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_ACM=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_SERIAL=y
--CONFIG_USB_SERIAL_GENERIC=y
--CONFIG_USB_SERIAL_FTDI_SIO=y
--CONFIG_USB_SERIAL_PL2303=y
--CONFIG_USB_GADGET=y
--CONFIG_USB_AT91=m
--CONFIG_USB_ATMEL_USBA=m
--CONFIG_USB_ETH=m
--CONFIG_USB_GADGETFS=m
--CONFIG_USB_CDC_COMPOSITE=m
--CONFIG_USB_G_ACM_MS=m
--CONFIG_USB_G_MULTI=m
--CONFIG_USB_G_MULTI_CDC=y
--CONFIG_MMC=y
--CONFIG_MMC_ATMELMCI=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_GPIO=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_AT91RM9200=y
--CONFIG_RTC_DRV_AT91SAM9=y
--CONFIG_DMADEVICES=y
--# CONFIG_IOMMU_SUPPORT is not set
--CONFIG_EXT2_FS=y
--CONFIG_FANOTIFY=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_UBIFS_FS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V3=y
--CONFIG_ROOT_NFS=y
--CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_CODEPAGE_850=y
--CONFIG_NLS_ISO8859_1=y
--CONFIG_STRIP_ASM_SYMS=y
--CONFIG_DEBUG_FS=y
--# CONFIG_SCHED_DEBUG is not set
--# CONFIG_DEBUG_BUGVERBOSE is not set
--# CONFIG_FTRACE is not set
--CONFIG_DEBUG_USER=y
--CONFIG_CRYPTO=y
--CONFIG_CRYPTO_ECB=y
--CONFIG_CRYPTO_AES=y
--CONFIG_CRYPTO_ARC4=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_USER_API_HASH=m
--CONFIG_CRYPTO_USER_API_SKCIPHER=m
--# CONFIG_CRYPTO_HW is not set
--CONFIG_CRC_CCITT=m
--CONFIG_CRC_ITU_T=m
--CONFIG_CRC7=m
--CONFIG_AVERAGE=y
-diff --git a/board/telit/evk-pro3/linux.fragment b/board/telit/evk-pro3/linux.fragment
+diff --git a/board/telit/evk-pro3/patches/linux/0001-kernel-add-support-for-gcc-5.patch b/board/telit/evk-pro3/patches/linux/0001-kernel-add-support-for-gcc-5.patch
 new file mode 100644
-index 0000000..d22fe8f
+index 0000000..3aba910
 --- /dev/null
-+++ b/board/telit/evk-pro3/linux.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_KERNEL_LZO=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_UBIFS_FS=y
-diff --git a/configs/telit_evk_pro3_defconfig b/configs/telit_evk_pro3_defconfig
-index d2fd7d5..12ce470 100644
---- a/configs/telit_evk_pro3_defconfig
-+++ b/configs/telit_evk_pro3_defconfig
-@@ -25,8 +25,8 @@ BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES="board/telit/evk-pro3/barebox.fragment"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/telit/evk-pro3/linux-3.9.config"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.11"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/telit/evk-pro3/linux.fragment"
- BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="evk-pro3"
++++ b/board/telit/evk-pro3/patches/linux/0001-kernel-add-support-for-gcc-5.patch
+@@ -0,0 +1,97 @@
++From 71458cfc782eafe4b27656e078d379a34e472adf Mon Sep 17 00:00:00 2001
++From: Sasha Levin <sasha.levin@oracle.com>
++Date: Mon, 13 Oct 2014 15:51:05 -0700
++Subject: [PATCH] kernel: add support for gcc 5
++
++We're missing include/linux/compiler-gcc5.h which is required now
++because gcc branched off to v5 in trunk.
++
++Just copy the relevant bits out of include/linux/compiler-gcc4.h,
++no new code is added as of now.
++
++This fixes a build error when using gcc 5.
++
++Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
++Cc: <stable@vger.kernel.org>
++Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
++Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
++---
++ include/linux/compiler-gcc5.h | 66 +++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 66 insertions(+)
++ create mode 100644 include/linux/compiler-gcc5.h
++
++diff --git a/include/linux/compiler-gcc5.h b/include/linux/compiler-gcc5.h
++new file mode 100644
++index 000000000000..cdd1cc202d51
++--- /dev/null
+++++ b/include/linux/compiler-gcc5.h
++@@ -0,0 +1,66 @@
+++#ifndef __LINUX_COMPILER_H
+++#error "Please don't include <linux/compiler-gcc5.h> directly, include <linux/compiler.h> instead."
+++#endif
+++
+++#define __used				__attribute__((__used__))
+++#define __must_check			__attribute__((warn_unused_result))
+++#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
+++
+++/* Mark functions as cold. gcc will assume any path leading to a call
+++   to them will be unlikely.  This means a lot of manual unlikely()s
+++   are unnecessary now for any paths leading to the usual suspects
+++   like BUG(), printk(), panic() etc. [but let's keep them for now for
+++   older compilers]
+++
+++   Early snapshots of gcc 4.3 don't support this and we can't detect this
+++   in the preprocessor, but we can live with this because they're unreleased.
+++   Maketime probing would be overkill here.
+++
+++   gcc also has a __attribute__((__hot__)) to move hot functions into
+++   a special section, but I don't see any sense in this right now in
+++   the kernel context */
+++#define __cold			__attribute__((__cold__))
+++
+++#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+++
+++#ifndef __CHECKER__
+++# define __compiletime_warning(message) __attribute__((warning(message)))
+++# define __compiletime_error(message) __attribute__((error(message)))
+++#endif /* __CHECKER__ */
+++
+++/*
+++ * Mark a position in code as unreachable.  This can be used to
+++ * suppress control flow warnings after asm blocks that transfer
+++ * control elsewhere.
+++ *
+++ * Early snapshots of gcc 4.5 don't support this and we can't detect
+++ * this in the preprocessor, but we can live with this because they're
+++ * unreleased.  Really, we need to have autoconf for the kernel.
+++ */
+++#define unreachable() __builtin_unreachable()
+++
+++/* Mark a function definition as prohibited from being cloned. */
+++#define __noclone	__attribute__((__noclone__))
+++
+++/*
+++ * Tell the optimizer that something else uses this function or variable.
+++ */
+++#define __visible __attribute__((externally_visible))
+++
+++/*
+++ * GCC 'asm goto' miscompiles certain code sequences:
+++ *
+++ *   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
+++ *
+++ * Work it around via a compiler barrier quirk suggested by Jakub Jelinek.
+++ * Fixed in GCC 4.8.2 and later versions.
+++ *
+++ * (asm goto is automatically volatile - the naming reflects this.)
+++ */
+++#define asm_volatile_goto(x...)	do { asm goto(x); asm (""); } while (0)
+++
+++#ifdef CONFIG_ARCH_USE_BUILTIN_BSWAP
+++#define __HAVE_BUILTIN_BSWAP32__
+++#define __HAVE_BUILTIN_BSWAP64__
+++#define __HAVE_BUILTIN_BSWAP16__
+++#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
++-- 
++2.12.2
++
+diff --git a/board/telit/evk-pro3/patches/linux/0002-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch b/board/telit/evk-pro3/patches/linux/0002-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
+new file mode 100644
+index 0000000..00de109
+--- /dev/null
++++ b/board/telit/evk-pro3/patches/linux/0002-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
+@@ -0,0 +1,52 @@
++From aeea3592a13bf12861943e44fc48f1f270941f8d Mon Sep 17 00:00:00 2001
++From: Behan Webster <behanw@converseincode.com>
++Date: Wed, 24 Sep 2014 01:06:46 +0100
++Subject: [PATCH] ARM: 8158/1: LLVMLinux: use static inline in ARM ftrace.h
++
++With compilers which follow the C99 standard (like modern versions of gcc and
++clang), "extern inline" does the wrong thing (emits code for an externally
++linkable version of the inline function). In this case using static inline
++and removing the NULL version of return_address in return_address.c does
++the right thing.
++
++Signed-off-by: Behan Webster <behanw@converseincode.com>
++Reviewed-by: Mark Charlebois <charlebm@gmail.com>
++Acked-by: Steven Rostedt <rostedt@goodmis.org>
++Signed-off-by: Russell King <rmk+kernel@arm.linux.org.uk>
++---
++ arch/arm/include/asm/ftrace.h    | 2 +-
++ arch/arm/kernel/return_address.c | 5 -----
++ 2 files changed, 1 insertion(+), 6 deletions(-)
++
++diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
++index 39eb16b0066f..bfe2a2f5a644 100644
++--- a/arch/arm/include/asm/ftrace.h
+++++ b/arch/arm/include/asm/ftrace.h
++@@ -45,7 +45,7 @@ void *return_address(unsigned int);
++ 
++ #else
++ 
++-extern inline void *return_address(unsigned int level)
+++static inline void *return_address(unsigned int level)
++ {
++ 	return NULL;
++ }
++diff --git a/arch/arm/kernel/return_address.c b/arch/arm/kernel/return_address.c
++index fafedd86885d..f6aa84d5b93c 100644
++--- a/arch/arm/kernel/return_address.c
+++++ b/arch/arm/kernel/return_address.c
++@@ -63,11 +63,6 @@ void *return_address(unsigned int level)
++ #warning "TODO: return_address should use unwind tables"
++ #endif
++ 
++-void *return_address(unsigned int level)
++-{
++-	return NULL;
++-}
++-
++ #endif /* if defined(CONFIG_FRAME_POINTER) && !defined(CONFIG_ARM_UNWIND) / else */
++ 
++ EXPORT_SYMBOL_GPL(return_address);
++-- 
++2.12.2
++
