@@ -1,99 +1,64 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 13 Apr 2017 00:03:25 -0300
-Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies
- a package coding style
-References: <20170412094909.66ea1ada@free-electrons.com>
-Message-ID: <58eeea7d15ad_5ae111447a8319e8@ultri3.mail>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 12 Apr 2017 23:16:12 -0500
+Subject: [Buildroot] [PATCH 1/3] libselinux: target python interface
+	generation
+Message-ID: <1492056974-1773-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Fixed a consistancy issue between toolchain revisions.
+Moves the swig and pywrap step seperate from the overall
+build "all".
 
-On Wed, Apr 12, 2017 at 04:49 AM, Thomas Petazzoni wrote:
+Resolves:
+http://autobuild.buildroot.net/results/967/967b74d0ae5b4b83ea2729217b005a3e1e4514d0/
 
-> On Tue, 11 Apr 2017 20:03:06 -0300, Ricardo Martincoski wrote:
-> 
->> I am inclined to change to this:
->>  support/scripts/
->>  ...
->>  |-- check-package
->>  |-- checkpackage
->>  |   |-- __init__.py
->>  |   |-- base.py
->>  |   |-- lib.py
->>  |   |-- lib_config.py
->>  |   |-- lib_hash.py
->>  |   |-- lib_mk.py
->>  |   |-- lib_patch.py
->>  |   `-- readme.txt
->>  ...
-> 
-> Looks good to me. I'm wondering what is best between checkpackage and
-> check-packagelib for the folder, but I don't have a strong opinion here.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/libselinux/libselinux.mk | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Maybe checkpackagelib?
-
-The dash needs a bit more code:
-
-import importlib
-lib_config = importlib.import_module(".lib_config", "check-packagelib")
-
-instead of
-
-import checkpackagelib.lib_config
-
-Also PEP 8 [1] recommends "[a-z]*" for folders (packages) and "[a-z_]*" for
-files (modules).
-
->> >  - Between every function/method/class, you put two empty lines. The
->> >    Buildroot coding style is generally to have only one empty line.  
->> 
->> Sorry, the series got contaminated by my habit of using pep8 with default
->> options.
-> 
-> Ah, but then if PEP8 suggests this, perhaps we should follow it? It's
-> just that we don't do this anywhere else in Buildroot. Anyway, that's
-> really a minor detail.
-
-Indeed a minor detail.
-+1 on this, either the PEP 8 recommendation [2] or the pep8 tool [3].
-
-My *personal* reasoning for using both is:
-"Some people that wrote much more Python code than me already thought and
-discussed about this to came up with this recommendation"
-"I am lazy so I use the tool so I don't need to read the recommendation too
-often"
-
-
-In the long run, it would be good to have opinions from others.
-How do you prefer handling this?
-A) you guys discuss on IRC;
-B) new thread on the mailing list;
-C) add topic to next dev meeting;
-
-Maybe here is a good starting point (authors and reviewers for past year):
-
-find support/ -type f | xargs file | grep Python | sed -e 's,:.*,,g' \
- | tee /tmp/python-files
-git shortlog -s 2016.05.. -- $(cat /tmp/python-files) \
- | sed -e 's,^\s*[0-9]*\s*,,g' | sort -u | tee /tmp/python-authors
-git log 2016.05.. -- $(cat /tmp/python-files) \
- | grep -Ei '(reviewed|acked)-by:' | sed 's,.*[bB]y: ,,' | sort -u \
- | sed -e 's,\s[<(].*,,g' -e 's,",,g' | tee /tmp/python-reviewers
-grep -f /tmp/python-reviewers -f /tmp/python-authors DEVELOPERS
-
-> Have you seen that http://autobuild.buildroot.net/stats/ has a new
-> column "Warnings", which indicates for each package the number of
-> check-package warnings reported?
-
-Nice! Thank you for this.
-
-[1] https://www.python.org/dev/peps/pep-0008/#package-and-module-names
-[2] https://www.python.org/dev/peps/pep-0008
-[3] https://pypi.python.org/pypi/pep8
-
-Regards,
-Ricardo
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index ca7836f..7e92de6 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -20,7 +20,6 @@ LIBSELINUX_MAKE_OPTS = \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
+ 	ARCH=$(KERNEL_ARCH)
+ 
+-LIBSELINUX_MAKE_TARGETS = all
+ LIBSELINUX_MAKE_INSTALL_TARGETS = install
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+@@ -39,16 +38,23 @@ LIBSELINUX_MAKE_OPTS += \
+ 	PYSITEDIR=$(TARGET_DIR)/usr/lib/$(LIBSELINUX_PYLIBVER)/site-packages \
+ 	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
+ 
+-LIBSELINUX_MAKE_TARGETS += swigify pywrap
+ LIBSELINUX_MAKE_INSTALL_TARGETS += install-pywrap
++
++# dependencies are broken and result in file
++# truncation errors at library link if the
++# make targets are added to the existing BUILD_CMD
++define LIBSELINUX_BUILD_PYTHON_INTERFACE_
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
++endef
+ endif # python || python3
+ 
+ define LIBSELINUX_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
+-		$(LIBSELINUX_MAKE_TARGETS)
++		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
++	$(LIBSELINUX_BUILD_PYTHON_INTERFACE)
+ endef
+ 
+ define LIBSELINUX_INSTALL_STAGING_CMDS
+-- 
+1.9.1
