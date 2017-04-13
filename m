@@ -1,41 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Apr 2017 23:05:57 +0200
-Subject: [Buildroot] [PATCHv2] mpir: new package
-In-Reply-To: <1492115521-3293-1-git-send-email-semenak94@mail.ru>
-References: <mpir: new package>
- <1492115521-3293-1-git-send-email-semenak94@mail.ru>
-Message-ID: <20170413230557.16ed46fb@free-electrons.com>
+Date: Thu, 13 Apr 2017 23:09:08 +0200
+Subject: [Buildroot] [git commit] core: add rule to dump packages' build
+	order
+Message-ID: <20170413210933.BC74B826ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=75fcebb7a300a4973592c7870f6f85fb8623335f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 13 Apr 2017 23:32:01 +0300, Semyon Kolganov wrote:
+When debugging hidden dependencies, the build order is very important.
+Most notably, it is interesting to identify potential culprits.
 
-> +	  MPIR is a highly optimised library for bignum arithmetic forked 
+Add a new top-level rule, show-biuld-order, that dumps all the packages
+in the order they would get built.
 
-This line had a trailing slash, and was too long, so I rewrapped the
-Config.in help text.
+Note that there are a few differences with show-targets:
 
-> +MPIR_DEPENDENCIES = gmp
+  - more packages are reported, becasue show-targets does not report
+    host packages that have no prompt;
 
-A dependency on host-yasm was missing, so I've added it here.
-Otherwise, the build fails if yasm is not installed on your system.
+  - the output is line-based, because we're using $(info $(1)); getting
+    a single output line like show-targets would require we use an
+    actual command, like printf '%s ' $(1); but that takes a lot of
+    time, while $(info $(1)) is almost instantaneous (the time to parse
+    the Makefiles);
 
-> +MPIR_MAKE_OPTS = RANLIB=$(TARGET_RANLIB)
+  - rootfs targets are not reported.
 
-Everything build successfully without this line for me, so I dropped
-it. Let me know which problem it solved for you.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile               | 2 ++
+ package/pkg-generic.mk | 3 +++
+ 2 files changed, 5 insertions(+)
 
-I've applied after fixing the above issues.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index 941bf78..919d589 100644
+--- a/Makefile
++++ b/Makefile
+@@ -757,6 +757,8 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+ show-targets:
+ 	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+ 
++show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
++
+ graph-build: $(O)/build/build-time.log
+ 	@install -d $(GRAPHS_DIR)
+ 	$(foreach o,name build duration,./support/scripts/graph-build-time \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 31dbc54..3b26e6b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -737,6 +737,9 @@ $(1)-show-depends:
+ $(1)-show-rdepends:
+ 			@echo $$($(2)_RDEPENDENCIES)
+ 
++$(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
++	$$(info $(1))
++
+ $(1)-graph-depends: graph-depends-requirements
+ 	$(call pkg-graph-depends,$(1),--direct)
+ 
