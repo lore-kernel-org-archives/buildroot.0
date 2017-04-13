@@ -1,47 +1,98 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Apr 2017 22:27:10 +0200
-Subject: [Buildroot] [PATCH 2/3] python3: ncurses condition for
- libselinux enabled
-In-Reply-To: <1492056974-1773-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1492056974-1773-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1492056974-1773-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170413222710.419f6cd1@free-electrons.com>
+From: Semyon Kolganov <semenak94@mail.ru>
+Date: Thu, 13 Apr 2017 23:32:01 +0300
+Subject: [Buildroot] [PATCHv2] mpir: new package
+In-Reply-To: <mpir: new package>
+References: <mpir: new package>
+Message-ID: <1492115521-3293-1-git-send-email-semenak94@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+---
+Changes between v1 and v2:
+ - removed host variant
+ - added package to DEVELOPERS
+---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/mpir/Config.in |  8 ++++++++
+ package/mpir/mpir.hash |  2 ++
+ package/mpir/mpir.mk   | 16 ++++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/mpir/Config.in
+ create mode 100644 package/mpir/mpir.hash
+ create mode 100644 package/mpir/mpir.mk
 
-On Wed, 12 Apr 2017 23:16:13 -0500, Matt Weber wrote:
-> When libselinux is enabled, a circular dependency is
-> created.  Disable ncurses python support when libselinux
-> is enabled so that the circular busybox, ncurses,
-> python, libselinux chain is broken.
-> 
-> Resolves
-> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-I am not sure this is the right approach to fix this issue. It feels
-really weird to no longer be able to use ncurses support in Python(3)
-when SELinux is enabled.
-
-I believe the real issue is that Busybox really doesn't care at all
-about the Python bindings for libselinux. So perhaps we should split
-the Python bindings build/installation from libselinux into a separate
-package. I think we had a similar split for another package.
-
-It would however require some investigation to figure out if it's
-possible to build just the Python bindings, using an already built and
-installed libselinux.
-
-Best regards,
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a7e1849..1f42e6e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1418,6 +1418,7 @@ F:	package/yaml-cpp/
+ N:	Semyon Kolganov <semenak94@mail.ru>
+ F:	package/fmt/
+ F:	package/libbson/
++F:	package/mpir/
+ 
+ N:	Sergio Prado <sergio.prado@e-labworks.com>
+ F:	package/libgdiplus/
+diff --git a/package/Config.in b/package/Config.in
+index 3683578..0866c13 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1405,6 +1405,7 @@ endif
+ 	source "package/mpc/Config.in"
+ 	source "package/mpdecimal/Config.in"
+ 	source "package/mpfr/Config.in"
++	source "package/mpir/Config.in"
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
+ 	source "package/musl-compat-headers/Config.in"
+diff --git a/package/mpir/Config.in b/package/mpir/Config.in
+new file mode 100644
+index 0000000..acd448c
+--- /dev/null
++++ b/package/mpir/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MPIR
++	bool "mpir"
++	select BR2_PACKAGE_GMP
++	help
++	  MPIR is a highly optimised library for bignum arithmetic forked 
++	  from the GMP bignum library.
++
++	  http://www.mpir.org/
+diff --git a/package/mpir/mpir.hash b/package/mpir/mpir.hash
+new file mode 100644
+index 0000000..8320337
+--- /dev/null
++++ b/package/mpir/mpir.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	52f63459cf3f9478859de29e00357f004050ead70b45913f2c2269d9708675bb	mpir-3.0.0.tar.bz2
+diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
+new file mode 100644
+index 0000000..9b15a0c
+--- /dev/null
++++ b/package/mpir/mpir.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# mpir
++#
++################################################################################
++
++MPIR_VERSION = 3.0.0
++MPIR_SITE = http://www.mpir.org
++MPIR_SOURCE = mpir-$(MPIR_VERSION).tar.bz2
++MPIR_LICENSE = LGPL-3.0+
++MPIR_LICENSE_FILES = COPYING.LIB
++MPIR_INSTALL_STAGING = YES
++MPIR_DEPENDENCIES = gmp
++MPIR_MAKE_OPTS = RANLIB=$(TARGET_RANLIB)
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
