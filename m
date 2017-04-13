@@ -1,102 +1,46 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 13 Apr 2017 07:07:32 +0200
-Subject: [Buildroot] [PATCH v2] glibc: fix sh4 compile issue
-Message-ID: <20170413050732.GA11817@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 13 Apr 2017 08:07:26 +0300
+Subject: [Buildroot] [PATCH] trinity: fix glibc/kernel headers conflict
+Message-ID: <0c3077fb3a4c82ea2570106a3357e9cae19cdd3d.1492060046.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add upstream patch that fixes conflicting definitions of ax25 related structs.
+
 Fixes:
-  https://bugs.busybox.net/show_bug.cgi?id=9756
+http://autobuild.buildroot.net/results/b40/b40d045f41dc4dbc66d5092ea5e9e045cd825e31/
+http://autobuild.buildroot.net/results/367/367199b6071c450159aa2ea74d6d1b4b7cb89a88/
+http://autobuild.buildroot.net/results/35e/35e97e51a6f7184d7b708c62a726ab91a0f546b2/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v1->v2:
- - add patches for 2.23/2.25, requested by Arnout
+ package/trinity/trinity.hash | 1 +
+ package/trinity/trinity.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-In the past I remember some discussions about removing version
-selection for all C libraries. Any idea why we still have more than
-one glibc version?
-
----
- package/glibc/2.23/0001-sh4-fix.patch | 17 +++++++++++++++++
- package/glibc/2.24/0001-sh4-fix.patch | 17 +++++++++++++++++
- package/glibc/2.25/0001-sh4-fix.patch | 17 +++++++++++++++++
- 3 files changed, 51 insertions(+)
- create mode 100644 package/glibc/2.23/0001-sh4-fix.patch
- create mode 100644 package/glibc/2.24/0001-sh4-fix.patch
- create mode 100644 package/glibc/2.25/0001-sh4-fix.patch
-
-diff --git a/package/glibc/2.23/0001-sh4-fix.patch b/package/glibc/2.23/0001-sh4-fix.patch
-new file mode 100644
-index 0000000..20bbfad
---- /dev/null
-+++ b/package/glibc/2.23/0001-sh4-fix.patch
-@@ -0,0 +1,17 @@
-+Backport of 
-+https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01
+diff --git a/package/trinity/trinity.hash b/package/trinity/trinity.hash
+index e290a40920af..5bf9992dca84 100644
+--- a/package/trinity/trinity.hash
++++ b/package/trinity/trinity.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 3ef7ae05dba14f8bb626121983a08bb09d1d51a19de38bd9a8e0f29b11d9e3c9  trinity-v1.6.tar.gz
++sha256 5601474b10973b99f6f4ecc67c8ac54000754d7110553cc81c7648bd7e73c810  b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index fa5a280b1e43..c9f09b1e019e 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
+@@ -9,6 +9,8 @@ TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
+ TRINITY_LICENSE = GPL-2.0
+ TRINITY_LICENSE_FILES = COPYING
+ 
++TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur glibc-2.23.orig/sysdeps/sh/dl-machine.h glibc-2.23/sysdeps/sh/dl-machine.h
-+--- glibc-2.23.orig/sysdeps/sh/dl-machine.h	2016-02-18 18:54:00.000000000 +0100
-++++ glibc-2.23/sysdeps/sh/dl-machine.h	2017-04-13 06:33:14.967668965 +0200
-+@@ -389,7 +389,7 @@
-+ 	  break;
-+ 	case R_SH_DIR32:
-+ 	  {
-+-#ifndef RTLD_BOOTSTRAP
-++#if !defined RTLD_BOOTSTRAP && !defined RESOLVE_CONFLICT_FIND_MAP
-+ 	   /* This is defined in rtld.c, but nowhere in the static
-+ 	      libc.a; make the reference weak so static programs can
-+ 	      still link.  This declaration cannot be done when
-diff --git a/package/glibc/2.24/0001-sh4-fix.patch b/package/glibc/2.24/0001-sh4-fix.patch
-new file mode 100644
-index 0000000..3c22e01
---- /dev/null
-+++ b/package/glibc/2.24/0001-sh4-fix.patch
-@@ -0,0 +1,17 @@
-+Backport of 
-+https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur glibc-2.24.orig/sysdeps/sh/dl-machine.h glibc-2.24/sysdeps/sh/dl-machine.h
-+--- glibc-2.24.orig/sysdeps/sh/dl-machine.h	2016-08-02 04:01:36.000000000 +0200
-++++ glibc-2.24/sysdeps/sh/dl-machine.h	2017-04-10 21:53:51.413196297 +0200
-+@@ -389,7 +389,7 @@
-+ 	  break;
-+ 	case R_SH_DIR32:
-+ 	  {
-+-#ifndef RTLD_BOOTSTRAP
-++#if !defined RTLD_BOOTSTRAP && !defined RESOLVE_CONFLICT_FIND_MAP
-+ 	   /* This is defined in rtld.c, but nowhere in the static
-+ 	      libc.a; make the reference weak so static programs can
-+ 	      still link.  This declaration cannot be done when
-diff --git a/package/glibc/2.25/0001-sh4-fix.patch b/package/glibc/2.25/0001-sh4-fix.patch
-new file mode 100644
-index 0000000..60d25c4
---- /dev/null
-+++ b/package/glibc/2.25/0001-sh4-fix.patch
-@@ -0,0 +1,17 @@
-+Backport of 
-+https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur glibc-2.25.orig/sysdeps/sh/dl-machine.h glibc-2.25/sysdeps/sh/dl-machine.h
-+--- glibc-2.25.orig/sysdeps/sh/dl-machine.h	2017-02-05 16:28:43.000000000 +0100
-++++ glibc-2.25/sysdeps/sh/dl-machine.h	2017-04-12 19:49:12.501756097 +0200
-+@@ -389,7 +389,7 @@
-+ 	  break;
-+ 	case R_SH_DIR32:
-+ 	  {
-+-#ifndef RTLD_BOOTSTRAP
-++#if !defined RTLD_BOOTSTRAP && !defined RESOLVE_CONFLICT_FIND_MAP
-+ 	   /* This is defined in rtld.c, but nowhere in the static
-+ 	      libc.a; make the reference weak so static programs can
-+ 	      still link.  This declaration cannot be done when
+ define TRINITY_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
+ endef
 -- 
-2.1.4
+2.11.0
