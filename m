@@ -1,118 +1,115 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 13 Apr 2017 08:29:19 +0300
-Subject: [Buildroot] [PATCH] trinity: bump to version 1.7
-Message-ID: <32b43dfd65d7e368bc70065321089bf84a7e9570.1492061359.git.baruch@tkos.co.il>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Thu, 13 Apr 2017 15:34:06 +1000
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2017-04-09
+In-Reply-To: <20170412095212.1A18EB2050@b01ledav03.gho.pok.ibm.com>
+References: <20170410062848.062C02803A@b01ledav001.gho.pok.ibm.com>
+ <20170411010019.GA2638@tungsten.ozlabs.ibm.com>
+ <20170411144331.699becca@free-electrons.com>
+ <20170412095212.1A18EB2050@b01ledav03.gho.pok.ibm.com>
+Message-ID: <20170413053406.GA4103@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use upstream provided tarball.
+On Wed, Apr 12, 2017 at 11:51:41AM +0200, Arnout Vandecappelle wrote:
+> 
+> 
+> On 11-04-17 14:43, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > Adding the Buildroot mailing in Cc, and therefore keeping the full
+> > context.
+> > 
+> > On Tue, 11 Apr 2017 11:00:19 +1000, Sam Bobroff wrote:
+> > 
+> >> I had a look at this, but I'm not having much luck. Do you have any
+> >> advice?
+> >>
+> >> The error itself is clear from the build log, both during configure and
+> >> later at the link failure:
+> >>
+> >> From http://autobuild.buildroot.net/results/005/0050aa0d5360d166d07d4b6ee4484f4746b224f5/readline-7.0/config.log
+> >>
+> >> configure:6025: checking for tgetent in -lncurses
+> >> configure:6050:
+> >> /home/buildroot/build/instance-0/output/host/usr/bin/powerpc64-linux-gcc
+> >> -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> >> -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> >> -D_FILE_OFFSET_BITS=64  conftest.c -lncurses   >&5
+> >> /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/5.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: cannot find -lncurses
+> >>
+> >> From http://autobuild.buildroot.net/results/005/0050aa0d5360d166d07d4b6ee4484f4746b224f5/build-end.log
+> >>
+> >> /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/5.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: cannot find -lncurses
+> >> collect2: error: ld returned 1 exit status
+> >>
+> >> (I do see why it's using ncurses even though it wasn't detected: the package
+> >> file forces -lncurses into LIBS.)
+> >>
+> >> There are no references to ncurses in the build-time.log file, so it
+> >> apparently wasn't built at all during this run.
+> 
+>  I suspect this is a circular dependency. Possibly
+> 
+> ncurses -> busybox -> libselinux -> python3 -> readline -> ncurses
+> 
+>  It would be nice to have the first 50 lines or so of the build log saved as
+> well, then we would see such a circular dependency.
 
-Drop upstream patch.
+Hmm, I wondered about this and I agree: the first 50 or so lines (maybe
+200? All of it? :-) How much is space an issue?) would be really useful.
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-This patch contextually depends on http://patchwork.ozlabs.org/patch/750275/.
+And, I think you're on to the right track...
 
-The CodeSourcery ARM toolchain fails on build with conflicting glibc/kernel
-in6_* definitions. This issue also affects the current 1.6 version with the
-following config:
+> >>
+> >> But the package file for readline has "READLINE_DEPENDENCIES = ncurses"
+> >> and "BR2_PACKAGE_NCURSES=y" *is* set in the Buildroot config.
+> >>
+> >> I can't replicate the failure locally, Buildroot always builds ncurses
+> >> as I expect from that configuration.
+> 
+>  Did you use the same .config?
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_TRINITY=y
+I tried, but unfortunately selinux failes to build (not sure when I'll
+have time to look at that one; some linker error to do with -fPIC).
 
-For some reason the autobuilder stopped showing this issue last August. The
-last such build failure is at
+However, I *do* see a "Circular dependency dropped" message, which is
+good confirmation for the theory above.
 
-  http://autobuild.buildroot.net/results/0e1/0e1707dda4474437160df5d8c290362ba7287be5/
----
- package/trinity/0001-mips-fix-prctl-s.patch | 39 -----------------------------
- package/trinity/trinity.hash                |  2 +-
- package/trinity/trinity.mk                  |  7 +++---
- 3 files changed, 5 insertions(+), 43 deletions(-)
- delete mode 100644 package/trinity/0001-mips-fix-prctl-s.patch
+> >> So the only explanation I can think of is that the autobuilder's target
+> >> directory is missing ncurses but the Buildroot stamp file must indicate
+> >> that it's already been installed.
+> >>
+> >> Am I missing something?
+> > 
+> > There is a -Wl,-rpath,/usr/lib in the link command link that isn't
+> > correct. This means that the compiler will try to link against the host
+> > ncurses if available, which is bad.
+> 
+>  I suspect that that is there just because ncurses wasn't detected. But I could
+> be wrong.
 
-diff --git a/package/trinity/0001-mips-fix-prctl-s.patch b/package/trinity/0001-mips-fix-prctl-s.patch
-deleted file mode 100644
-index aacd8d5bf658..000000000000
---- a/package/trinity/0001-mips-fix-prctl-s.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From d61dd102b95b9791e45d6bbf1e34814b8c6c1731 Mon Sep 17 00:00:00 2001
--From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Date: Mon, 14 Dec 2015 14:46:37 +0000
--Subject: [PATCH] mips: fix prctl's
--
--It looks like a typo in the syscalls/prctl.c file. It's lacking the PR_
--preffix, and due to that is causing build failures like this one:
--
--  CC	syscalls/prctl.o
--syscalls/prctl.c:37:2: error: 'GET_FP_MODE' undeclared here (not in a
--function)
--  GET_FP_MODE, SET_FP_MODE,
--  ^
--syscalls/prctl.c:37:15: error: 'SET_FP_MODE' undeclared here (not
--in a function)
--  GET_FP_MODE, SET_FP_MODE,
--               ^
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-----
-- syscalls/prctl.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/syscalls/prctl.c b/syscalls/prctl.c
--index 523f03e..5a64fb3 100644
----- a/syscalls/prctl.c
--+++ b/syscalls/prctl.c
--@@ -34,7 +34,7 @@ static int prctl_opts[] = {
-- 	PR_GET_NO_NEW_PRIVS, PR_GET_TID_ADDRESS, PR_SET_THP_DISABLE, PR_GET_THP_DISABLE,
-- 	PR_MPX_ENABLE_MANAGEMENT, PR_MPX_DISABLE_MANAGEMENT,
-- #ifdef __mips__
---	GET_FP_MODE, SET_FP_MODE,
--+	PR_GET_FP_MODE, PR_SET_FP_MODE,
-- #endif
-- 	PR_CAP_AMBIENT,
-- };
---- 
--2.4.10
--
-diff --git a/package/trinity/trinity.hash b/package/trinity/trinity.hash
-index 5bf9992dca84..8d88301497e6 100644
---- a/package/trinity/trinity.hash
-+++ b/package/trinity/trinity.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3ef7ae05dba14f8bb626121983a08bb09d1d51a19de38bd9a8e0f29b11d9e3c9  trinity-v1.6.tar.gz
-+sha256 4cb2bd4049ce523fdf47490c4c18b8eb713c720d4b3b13d6ec2ae246aac908ad  trinity-1.7.tar.xz
- sha256 5601474b10973b99f6f4ecc67c8ac54000754d7110553cc81c7648bd7e73c810  b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
-diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-index c9f09b1e019e..3880aec677ba 100644
---- a/package/trinity/trinity.mk
-+++ b/package/trinity/trinity.mk
-@@ -4,15 +4,16 @@
- #
- ################################################################################
- 
--TRINITY_VERSION = v1.6
--TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
-+TRINITY_VERSION = 1.7
-+TRINITY_SITE = http://codemonkey.org.uk/projects/trinity
-+TRINITY_SOURCE = trinity-$(TRINITY_VERSION).tar.xz
- TRINITY_LICENSE = GPL-2.0
- TRINITY_LICENSE_FILES = COPYING
- 
- TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
- 
- define TRINITY_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.sh)
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
- endef
- 
- define TRINITY_BUILD_CMDS
--- 
-2.11.0
+(I saw the bad rpath even on my successful builds -- I'll see if it's
+easy to fix, since I'm looking at it anyway.)
+
+So it seems fairly clear now: there is a circular dependency in that set
+of packages and GNU make's behaviour is to drop a dependency and
+continue building, so we end up building readline configured with
+ncurses, with no ncurses, so it fails.
+
+(IMHO this is very poor behaviour from GNU make: it seems to be
+knowingly producing a broken build but exiting with success, and the
+only indication is one fairly innocuous looking line of output. There is
+no option to convert that warning into a fatal error! I even checked the
+source :-( )
+
+So, what do we do? It seems like it would be nice to catch any circular
+dependency but is there any good way to do that? I don't like the idea
+of running make under grep looking for "errors", or trying to manualy
+detect circular dependencies either... Has this been explored already?
+
+Thanks!
+Sam.
