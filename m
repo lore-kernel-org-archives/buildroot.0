@@ -1,13 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Apr 2017 23:55:30 +0200
-Subject: [Buildroot] [PATCH 2/3] python3: ncurses condition for
- libselinux enabled
-In-Reply-To: <CANQCQpb4ySf=NtgNbWShus4YUrJDFqhqTgB0b_oc++Ov3xrmsw@mail.gmail.com>
-References: <1492056974-1773-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1492056974-1773-2-git-send-email-matthew.weber@rockwellcollins.com>
- <20170413222710.419f6cd1@free-electrons.com>
- <CANQCQpb4ySf=NtgNbWShus4YUrJDFqhqTgB0b_oc++Ov3xrmsw@mail.gmail.com>
-Message-ID: <36801d5f-fd50-c2ec-8f42-0ec15544cef4@mind.be>
+Date: Fri, 14 Apr 2017 00:14:08 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2017-04-09
+In-Reply-To: <20170413053406.GA4103@tungsten.ozlabs.ibm.com>
+References: <20170410062848.062C02803A@b01ledav001.gho.pok.ibm.com>
+ <20170411010019.GA2638@tungsten.ozlabs.ibm.com>
+ <20170411144331.699becca@free-electrons.com>
+ <20170412095212.1A18EB2050@b01ledav03.gho.pok.ibm.com>
+ <20170413053406.GA4103@tungsten.ozlabs.ibm.com>
+Message-ID: <54038d3c-376b-b5cb-d4d2-671d1119d722@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,47 +17,59 @@ To: buildroot@busybox.net
 
 
 
-On 13-04-17 23:20, Matthew Weber wrote:
-> Thomas,
+On 13-04-17 07:34, Sam Bobroff wrote:
+> On Wed, Apr 12, 2017 at 11:51:41AM +0200, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 11-04-17 14:43, Thomas Petazzoni wrote:
+[snip]
+>>> There is a -Wl,-rpath,/usr/lib in the link command link that isn't
+>>> correct. This means that the compiler will try to link against the host
+>>> ncurses if available, which is bad.
+>>
+>>  I suspect that that is there just because ncurses wasn't detected. But I could
+>> be wrong.
 > 
-> On Thu, Apr 13, 2017 at 3:27 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Wed, 12 Apr 2017 23:16:13 -0500, Matt Weber wrote:
->>> When libselinux is enabled, a circular dependency is
->>> created.  Disable ncurses python support when libselinux
->>> is enabled so that the circular busybox, ncurses,
->>> python, libselinux chain is broken.
->>>
->>> Resolves
->>> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
->>>
->>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->>
->> I am not sure this is the right approach to fix this issue. It feels
->> really weird to no longer be able to use ncurses support in Python(3)
->> when SELinux is enabled.
->>
->> I believe the real issue is that Busybox really doesn't care at all
->> about the Python bindings for libselinux. So perhaps we should split
->> the Python bindings build/installation from libselinux into a separate
->> package. I think we had a similar split for another package.
->>
->> It would however require some investigation to figure out if it's
->> possible to build just the Python bindings, using an already built and
->> installed libselinux.
-> 
-> I'll take a look.
+> (I saw the bad rpath even on my successful builds -- I'll see if it's
+> easy to fix, since I'm looking at it anyway.)
 
- Alternatively, we could cut the ncurses->busybox dependency. That only exists
-to make sure that ncurses tools overwrite busybox tools. IIRC busybox will not
-overwrite existing tools, so the reverse should work as well. Or else remove
-these things from the busybox config.
+ I don't think the rpath is wrong. For the target, it *is* indeed /usr/lib.
+AFAIU the RPATH is *not* used as an extra -L equivalent at link time, except
+when -rpath-link is given.
+
+
+> So it seems fairly clear now: there is a circular dependency in that set
+> of packages and GNU make's behaviour is to drop a dependency and
+> continue building, so we end up building readline configured with
+> ncurses, with no ncurses, so it fails.
+
+ Yes, Matt is looking at it.
+
+
+> (IMHO this is very poor behaviour from GNU make: it seems to be
+> knowingly producing a broken build but exiting with success, and the
+> only indication is one fairly innocuous looking line of output. There is
+> no option to convert that warning into a fatal error! I even checked the
+> source :-( )
+> 
+> So, what do we do? It seems like it would be nice to catch any circular
+> dependency but is there any good way to do that? I don't like the idea
+> of running make under grep looking for "errors", or trying to manualy
+> detect circular dependencies either... Has this been explored already?
+
+ Yes it would be nice to error out on circular dependencies. Also in Kconfig, by
+the way.
+
+ Our graph-depends detects circular dependencies in the Makefile, so we could
+add it to autobuild-run (prior to the build).
+
+ For Kconfig circular dependencies, I think we can only do string search. But
+these are usually detected manually pretty quickly. And are also better detected
+with a lot of 'make randconfig', that is going to show problems a lot sooner
+than the autobuilders.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
