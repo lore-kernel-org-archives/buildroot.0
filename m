@@ -1,54 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Apr 2017 09:20:11 +0200
-Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies
- a package coding style
-In-Reply-To: <58eeea7d15ad_5ae111447a8319e8@ultri3.mail>
-References: <20170412094909.66ea1ada@free-electrons.com>
- <58eeea7d15ad_5ae111447a8319e8@ultri3.mail>
-Message-ID: <20170413092011.7a22ace2@free-electrons.com>
+Date: Thu, 13 Apr 2017 09:32:47 +0200
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 7.8.0
+Message-ID: <20170413073258.816BF826E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=923d69731e7f0853b834171b79c8ef7897a11d35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 13 Apr 2017 00:03:25 -0300, Ricardo Martincoski wrote:
+See https://nodejs.org/en/blog/release/v7.8.0/
 
-> > Looks good to me. I'm wondering what is best between checkpackage and
-> > check-packagelib for the folder, but I don't have a strong opinion here.  
-> 
-> Maybe checkpackagelib?
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Looks good to me.
-
-> Indeed a minor detail.
-> +1 on this, either the PEP 8 recommendation [2] or the pep8 tool [3].
-> 
-> My *personal* reasoning for using both is:
-> "Some people that wrote much more Python code than me already thought and
-> discussed about this to came up with this recommendation"
-> "I am lazy so I use the tool so I don't need to read the recommendation too
-> often"
-> 
-> 
-> In the long run, it would be good to have opinions from others.
-> How do you prefer handling this?
-> A) you guys discuss on IRC;
-> B) new thread on the mailing list;
-> C) add topic to next dev meeting;
-
-A new thread on the mailing list would be fine.
-
-I think the most active Python-ist folks are Samuel Martin, Maxime
-Hadjinlian and Thomas De Schampheleire. Make sure to include them in
-the discussion.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index e4f3815..c5e7d14 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v7.7.3/SHASUMS256.txt
+-sha256  5441daf11f743b5508ddf31a16b4f268835fbceb59ef709b44e85b03fece0edf  node-v7.7.3.tar.xz
++# From upstream URL: http://nodejs.org/dist/v7.8.0/SHASUMS256.txt
++sha256  6821aaee58bbc8bc8d08fec6989a42278b725a21382500dc20fd9d9f71398f02  node-v7.8.0.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index ad0b26d..24672ed 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 7.7.3
++NODEJS_VERSION = 7.8.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
