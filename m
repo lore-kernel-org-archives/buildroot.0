@@ -1,259 +1,70 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 13 Apr 2017 17:07:37 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/telit_evk_pro3: bump linux kernel
-	to 3.9.11
-In-Reply-To: <20170413150737.18203-1-fabio.porcedda@gmail.com>
-References: <20170413150737.18203-1-fabio.porcedda@gmail.com>
-Message-ID: <20170413150737.18203-2-fabio.porcedda@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 13 Apr 2017 16:49:18 +0000
+Subject: [Buildroot] [Patch v4 3/3] rust: new package
+In-Reply-To: <1492063504.4490.1.camel@embedded.rocks>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+ <20170402194651.28684-4-eric.le.bihan.dev@free.fr>
+ <1491549522.26127.8.camel@embedded.rocks> <20170408100925.GC32154@itchy>
+ <1491850965.4279.1.camel@embedded.rocks>
+ <174ded3e-cc52-0456-3cd2-7750c531e442@mind.be>
+ <1492063504.4490.1.camel@embedded.rocks>
+Message-ID: <b2b48a0cb1c4d27ecbdd9d510e0bdb87@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also use "BR2_TARGET_LINUX_CONFIG_FRAGMENT_FILES" instead of
-"BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE".
+Le 2017-04-13 06:05, J?rg Krause a ?crit?:
+> Hi,
+> 
+> On Mon, 2017-04-10 at 23:43 +0200, Arnout Vandecappelle wrote:
+>> 
+>> On 10-04-17 21:02, J?rg Krause wrote:
+[snip]
+>> > For now, we could use the host rustc package to fetch the latest stable
+>> > binary for the host architecture. Additionally, we could add the option
+>> > to build the Rust compiler within Buildroot. In my opinion, this option
+>> > only makes sense if the compiler can be configured meaningfully.
+>> 
+>>  I agree.
+> 
+> Cool.
+> 
+> @Eric: Do you mind to do that? By default fetch the latest stable
+> release, and alternatively offer an option to build a "Custom Rust
+> package". I think it would also be helpful to have at least one Rust
+> package to add as a proof of concept.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- board/telit/evk-pro3/linux-3.9.config | 201 ----------------------------------
- board/telit/evk-pro3/linux.fragment   |   3 +
- configs/telit_evk_pro3_defconfig      |   6 +-
- 3 files changed, 6 insertions(+), 204 deletions(-)
- delete mode 100644 board/telit/evk-pro3/linux-3.9.config
- create mode 100644 board/telit/evk-pro3/linux.fragment
+Currently this patch series provides:
 
-diff --git a/board/telit/evk-pro3/linux-3.9.config b/board/telit/evk-pro3/linux-3.9.config
-deleted file mode 100644
-index 99c2f2d2b..000000000
---- a/board/telit/evk-pro3/linux-3.9.config
-+++ /dev/null
-@@ -1,201 +0,0 @@
--CONFIG_EXPERIMENTAL=y
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_KERNEL_LZO=y
--# CONFIG_SWAP is not set
--CONFIG_SYSVIPC=y
--CONFIG_LOG_BUF_SHIFT=14
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_KALLSYMS_ALL=y
--CONFIG_EMBEDDED=y
--CONFIG_SLAB=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--# CONFIG_LBDAF is not set
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
--CONFIG_ARCH_AT91=y
--CONFIG_SOC_AT91SAM9260=y
--CONFIG_SOC_AT91SAM9263=y
--CONFIG_SOC_AT91SAM9G45=y
--CONFIG_SOC_AT91SAM9X5=y
--CONFIG_SOC_AT91SAM9N12=y
--CONFIG_MACH_AT91SAM_DT=y
--CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
--CONFIG_AT91_TIMER_HZ=128
--CONFIG_AEABI=y
--# CONFIG_OABI_COMPAT is not set
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
--CONFIG_UACCESS_WITH_MEMCPY=y
--CONFIG_ZBOOT_ROM_TEXT=0x0
--CONFIG_ZBOOT_ROM_BSS=0x0
--CONFIG_ARM_APPENDED_DTB=y
--CONFIG_ARM_ATAG_DTB_COMPAT=y
--CONFIG_CMDLINE="console=ttyS0,115200 initrd=0x21100000,25165824 root=/dev/ram0 rw"
--CONFIG_KEXEC=y
--CONFIG_AUTO_ZRELADDR=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_DIAG is not set
--CONFIG_IPV6=y
--# CONFIG_INET6_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET6_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET6_XFRM_MODE_BEET is not set
--CONFIG_IPV6_SIT_6RD=y
--# CONFIG_WIRELESS is not set
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_STANDALONE is not set
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_CHAR=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_NAND=y
--CONFIG_MTD_NAND_ATMEL=y
--CONFIG_MTD_UBI=y
--CONFIG_MTD_UBI_GLUEBI=y
--CONFIG_PROC_DEVICETREE=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_RAM_COUNT=4
--CONFIG_BLK_DEV_RAM_SIZE=8192
--CONFIG_ATMEL_PWM=y
--CONFIG_ATMEL_TCLIB=y
--CONFIG_EEPROM_93CX6=m
--CONFIG_SCSI=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_SCSI_MULTI_LUN=y
--# CONFIG_SCSI_LOWLEVEL is not set
--CONFIG_NETDEVICES=y
--CONFIG_MII=y
--CONFIG_MACB=y
--# CONFIG_NET_VENDOR_BROADCOM is not set
--# CONFIG_NET_VENDOR_CHELSIO is not set
--# CONFIG_NET_VENDOR_FARADAY is not set
--# CONFIG_NET_VENDOR_INTEL is not set
--# CONFIG_NET_VENDOR_MARVELL is not set
--# CONFIG_NET_VENDOR_MICREL is not set
--# CONFIG_NET_VENDOR_NATSEMI is not set
--# CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SMSC is not set
--# CONFIG_NET_VENDOR_STMICRO is not set
--CONFIG_DAVICOM_PHY=y
--CONFIG_MICREL_PHY=y
--# CONFIG_WLAN is not set
--CONFIG_INPUT_POLLDEV=y
--# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
--CONFIG_INPUT_MOUSEDEV_SCREEN_X=480
--CONFIG_INPUT_MOUSEDEV_SCREEN_Y=272
--CONFIG_INPUT_JOYDEV=y
--CONFIG_INPUT_EVDEV=y
--# CONFIG_KEYBOARD_ATKBD is not set
--CONFIG_KEYBOARD_GPIO=y
--# CONFIG_INPUT_MOUSE is not set
--CONFIG_INPUT_TOUCHSCREEN=y
--# CONFIG_SERIO is not set
--CONFIG_LEGACY_PTY_COUNT=4
--CONFIG_SERIAL_ATMEL=y
--CONFIG_SERIAL_ATMEL_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_I2C=y
--CONFIG_I2C_GPIO=y
--CONFIG_SPI=y
--CONFIG_SPI_ATMEL=y
--CONFIG_PINCTRL_AT91=y
--CONFIG_GPIO_SYSFS=y
--# CONFIG_HWMON is not set
--CONFIG_WATCHDOG=y
--CONFIG_AT91SAM9X_WATCHDOG=y
--CONFIG_SSB=m
--CONFIG_FB=y
--CONFIG_FB_MODE_HELPERS=y
--CONFIG_FB_ATMEL=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
--# CONFIG_LCD_CLASS_DEVICE is not set
--CONFIG_BACKLIGHT_CLASS_DEVICE=y
--CONFIG_BACKLIGHT_ATMEL_LCDC=y
--# CONFIG_BACKLIGHT_GENERIC is not set
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
--CONFIG_FONTS=y
--CONFIG_FONT_8x8=y
--CONFIG_FONT_ACORN_8x8=y
--CONFIG_FONT_MINI_4x6=y
--CONFIG_LOGO=y
--# CONFIG_HID_SUPPORT is not set
--CONFIG_USB=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_DEVICEFS=y
--# CONFIG_USB_DEVICE_CLASS is not set
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_ACM=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_SERIAL=y
--CONFIG_USB_SERIAL_GENERIC=y
--CONFIG_USB_SERIAL_FTDI_SIO=y
--CONFIG_USB_SERIAL_PL2303=y
--CONFIG_USB_GADGET=y
--CONFIG_USB_AT91=m
--CONFIG_USB_ATMEL_USBA=m
--CONFIG_USB_ETH=m
--CONFIG_USB_GADGETFS=m
--CONFIG_USB_CDC_COMPOSITE=m
--CONFIG_USB_G_ACM_MS=m
--CONFIG_USB_G_MULTI=m
--CONFIG_USB_G_MULTI_CDC=y
--CONFIG_MMC=y
--CONFIG_MMC_ATMELMCI=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_GPIO=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_AT91RM9200=y
--CONFIG_RTC_DRV_AT91SAM9=y
--CONFIG_DMADEVICES=y
--# CONFIG_IOMMU_SUPPORT is not set
--CONFIG_EXT2_FS=y
--CONFIG_FANOTIFY=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_UBIFS_FS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V3=y
--CONFIG_ROOT_NFS=y
--CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_CODEPAGE_850=y
--CONFIG_NLS_ISO8859_1=y
--CONFIG_STRIP_ASM_SYMS=y
--CONFIG_DEBUG_FS=y
--# CONFIG_SCHED_DEBUG is not set
--# CONFIG_DEBUG_BUGVERBOSE is not set
--# CONFIG_FTRACE is not set
--CONFIG_DEBUG_USER=y
--CONFIG_CRYPTO=y
--CONFIG_CRYPTO_ECB=y
--CONFIG_CRYPTO_AES=y
--CONFIG_CRYPTO_ARC4=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_USER_API_HASH=m
--CONFIG_CRYPTO_USER_API_SKCIPHER=m
--# CONFIG_CRYPTO_HW is not set
--CONFIG_CRC_CCITT=m
--CONFIG_CRC_ITU_T=m
--CONFIG_CRC7=m
--CONFIG_AVERAGE=y
-diff --git a/board/telit/evk-pro3/linux.fragment b/board/telit/evk-pro3/linux.fragment
-new file mode 100644
-index 000000000..d22fe8f4e
---- /dev/null
-+++ b/board/telit/evk-pro3/linux.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_KERNEL_LZO=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_UBIFS_FS=y
-diff --git a/configs/telit_evk_pro3_defconfig b/configs/telit_evk_pro3_defconfig
-index d2fd7d5a8..12ce47029 100644
---- a/configs/telit_evk_pro3_defconfig
-+++ b/configs/telit_evk_pro3_defconfig
-@@ -25,8 +25,8 @@ BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES="board/telit/evk-pro3/barebox.fragment"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/telit/evk-pro3/linux-3.9.config"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.11"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/telit/evk-pro3/linux.fragment"
- BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="evk-pro3"
--- 
-2.12.2
+- rust-bootstrap, which fetches the binary version N-1 of rust.
+- cargo-bootstrap, which fetches a nightly binary version of cargo.
+- rust, which uses the two previous packages to build version N of rust.
+
+I also have another patch series which adds a new package for cargo, 
+which
+uses cargo-bootstrap and rust to build Cargo from source.
+
+IMHO, modifying the current version of the rust package to download the
+latest version and providing an option to build from source would make
+the Makefile of the package more complicated.
+
+Would it not be better to use host virtual packages? Something like:
+
+- rust-rustc: host virtual package, with two providers:
+   * rustc-bin: fetches binary version N of rustc and libstd (host and
+     target).
+   * rustc: builds version N of rustc and libstd (host and target).
+     Depends on rust-bootstrap (version N-1) and cargo-bootstrap.
+- rust-cargo: host virtual package with two providers:
+   * cargo-bin: fetches binary version N of Cargo.
+   * cargo: builds version N of Cargo using rust and cargo-bootstrap.
+
+And instead of littering the package directory with rust-* and cargo-*,
+how about putting all these packages in a parent directory named
+package/rust?
+
+The file package/Config.in.host should also be modified to include
+package/rust/Config.in.host, which would present the options to select
+the providers for rust-rustc and rust-cargo.
