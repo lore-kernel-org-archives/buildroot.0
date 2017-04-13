@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Apr 2017 22:19:02 +0200
-Subject: [Buildroot] [PATCH 1/3] libselinux: target python interface
- generation
-In-Reply-To: <1492056974-1773-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 13 Apr 2017 22:27:10 +0200
+Subject: [Buildroot] [PATCH 2/3] python3: ncurses condition for
+ libselinux enabled
+In-Reply-To: <1492056974-1773-2-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1492056974-1773-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170413221902.71ac06a0@free-electrons.com>
+ <1492056974-1773-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20170413222710.419f6cd1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +14,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Apr 2017 23:16:12 -0500, Matt Weber wrote:
-> Fixed a consistancy issue between toolchain revisions.
-
-This sentence didn't make much sense, so I've reworded the commit log.
-
-> Moves the swig and pywrap step seperate from the overall
-> build "all".
+On Wed, 12 Apr 2017 23:16:13 -0500, Matt Weber wrote:
+> When libselinux is enabled, a circular dependency is
+> created.  Disable ncurses python support when libselinux
+> is enabled so that the circular busybox, ncurses,
+> python, libselinux chain is broken.
 > 
-> Resolves:
-> http://autobuild.buildroot.net/results/967/967b74d0ae5b4b83ea2729217b005a3e1e4514d0/
+> Resolves
+> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
 > 
 > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/libselinux/libselinux.mk | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
 
-Applied to master after doing tweaks to the commit log, and a few minor
-things in the patch itself (comment and variable name).
+I am not sure this is the right approach to fix this issue. It feels
+really weird to no longer be able to use ncurses support in Python(3)
+when SELinux is enabled.
 
-Thanks!
+I believe the real issue is that Busybox really doesn't care at all
+about the Python bindings for libselinux. So perhaps we should split
+the Python bindings build/installation from libselinux into a separate
+package. I think we had a similar split for another package.
+
+It would however require some investigation to figure out if it's
+possible to build just the Python bindings, using an already built and
+installed libselinux.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
