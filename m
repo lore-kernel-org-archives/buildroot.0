@@ -1,67 +1,60 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 13 Apr 2017 14:37:20 +0100
-Subject: [Buildroot] [PATCH] wireshark: bump version to 2.2.6 (security)
-Message-ID: <20170413133720.38755-1-Vincent.Riera@imgtec.com>
+Date: Thu, 13 Apr 2017 14:44:41 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: bump version to 3.3
+Message-ID: <20170413134441.55184-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security fixes:
+And remove non-existent configure options from ffmpeg.mk:
 
-- wnpa-sec-2017-12
-  IMAP dissector crash (Bug 13466) CVE-2017-7703
-- wnpa-sec-2017-13
-  WBMXL dissector infinite loop (Bug 13477) CVE-2017-7702
-- wnpa-sec-2017-14
-  NetScaler file parser infinite loop (Bug 13478) CVE-2017-7700
-- wnpa-sec-2017-15
-  RPCoRDMA dissector infinite loop (Bug 13558) CVE-2017-7705
-- wnpa-sec-2017-16
-  BGP dissector infinite loop (Bug 13557) CVE-2017-7701
-- wnpa-sec-2017-17
-  DOF dissector infinite loop (Bug 13453) CVE-2017-7704
-- wnpa-sec-2017-18
-  PacketBB dissector crash (Bug 13559)
-- wnpa-sec-2017-19
-  SLSK dissector long loop (Bug 13576)
-- wnpa-sec-2017-20
-  SIGCOMP dissector infinite loop (Bug 13578)
-- wnpa-sec-2017-21
-  WSP dissector infinite loop (Bug 13581)
-
-Full release notes:
-
-  https://www.wireshark.org/docs/relnotes/wireshark-2.2.6.html
+  --disable-x11grab
+  --disable-memalign-hack
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 4 +---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 3d1f7af..09f6573 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 33942b9..e243acc 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
 @@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.5.txt
--sha256 75dd88d3d6336559e5b0b72077d8a772a988197d571f00029986225fef609ac8  wireshark-2.2.5.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.6.txt
-+sha256 f627d51eda85f5ae5f5c8c9fc1f6539ffc2a270dd7500dc7f67490a8534ca849  wireshark-2.2.6.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 14c2943..fee6a81 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+ # Locally calculated
+-sha256 6e38ff14f080c98b58cf5967573501b8cb586e3a173b591f3807d8f0660daf7a  ffmpeg-3.2.4.tar.xz
++sha256 599e7f7c017221c22011c4037b88bdcd1c47cd40c1e466838bc3c465f3e9569d  ffmpeg-3.3.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 223ed84..059f832 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 2.2.5
-+WIRESHARK_VERSION = 2.2.6
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-FFMPEG_VERSION = 3.2.4
++FFMPEG_VERSION = 3.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+@@ -26,7 +26,6 @@ FFMPEG_CONF_OPTS = \
+ 	--enable-avdevice \
+ 	--enable-avcodec \
+ 	--enable-avformat \
+-	--disable-x11grab \
+ 	--enable-network \
+ 	--disable-gray \
+ 	--enable-swscale-alpha \
+@@ -39,7 +38,6 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+ 	--disable-hardcoded-tables \
+-	--disable-memalign-hack \
+ 	--disable-mipsdsp \
+ 	--disable-mipsdspr2 \
+ 	--disable-msa \
 -- 
 2.10.2
