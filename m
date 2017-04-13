@@ -1,51 +1,39 @@
-From: =?UTF-8?Q?St=c3=a9phane_Jublin?= <stephane.jublin@gmail.com>
-Date: Thu, 13 Apr 2017 12:29:21 +0200
-Subject: [Buildroot] Journal size too big for filesystem
-Message-ID: <fa03666f-27d6-d01b-078a-7da8900e9eb6@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 13 Apr 2017 14:14:14 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.170
+Message-ID: <20170413131414.23158-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-thank's for Buildroot.
-I just beging to learn , understand and test it.
-I've got the last version of buildroot (git pull in my git directory)
-
-I just try to build an image.
-1) make pc_x86_64_bios_defconfig
-2) make
-
-at the end of the compilation I have this error
-
-
-*tune2fs 1.43.4 (31-Jan-2017)**
-**tune2fs 1.43.4 (31-Jan-2017)**
-****
-**Please run e2fsck on the filesystem.**
-****
-**Creating journal inode:**
-**Journal size too big for filesystem.**
-****
-**fs/ext2/ext2.mk:44 : Recipe for target 
-? /home/***/git/buildroot/output/images/rootfs.ext2 ? failed**
-**make[1]: *** [/home/***/git/buildroot/output/images/rootfs.ext2] 
-Erreur 1**
-**Makefile:79 : Recipe for target ? _all ? failed**
-**make: *** [_all] Erreur 2*
-
-
-I find this error on different web site, but no effect
-https://github.com/buildroot/buildroot/commit/c6bca8cef0310bc649240b451989457ce94a8358
-https://git.busybox.net/buildroot/commit/?id=0fab0a4afdff2f27fce49e7b38179e781e7b64ed
-https://patchwork.ozlabs.org/patch/225977/
-
-Could you help me ?
-
-Thank's
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170413/4b9418ac/attachment.html>
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index a66b0c5..566c487 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 0ff2418c54686f1a99d6196bab5fbc8188152d17ae826760aabd91b49e5f20d19ed1280e3670a769184aac9fd598a20b31312b56add831ed3863473e031b5327  LVM2.2.02.169.tgz
++sha512 971a40f93db2b18a4b5c04f2b34d48cbcce81e6e3999760a474ddc52e8653317ac4969f402b9c9e12e486772bc27da8d9ca448f0551338b2a62031082a113f7c  LVM2.2.02.170.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index ffc1043..11fd8a2 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.169
++LVM2_VERSION = 2.02.170
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
+-- 
+2.10.2
