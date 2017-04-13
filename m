@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Apr 2017 21:59:59 +0200
+Date: Thu, 13 Apr 2017 22:13:43 +0200
 Subject: [Buildroot] [PATCH] mpir: new package
-In-Reply-To: <1492091374-5028-1-git-send-email-semenak94@mail.ru>
-References: <mpir: new package>
- <1492091374-5028-1-git-send-email-semenak94@mail.ru>
-Message-ID: <20170413215959.6e221b3e@free-electrons.com>
+In-Reply-To: <1492114114.644630127@f341.i.mail.ru>
+References: <mpir:> <1492091374-5028-1-git-send-email-semenak94@mail.ru>
+ <20170413215959.6e221b3e@free-electrons.com>
+ <1492114114.644630127@f341.i.mail.ru>
+Message-ID: <20170413221343.3ee0a005@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 13 Apr 2017 16:49:34 +0300, Semyon Kolganov wrote:
-> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+Please keep the Buildroot mailing list in Cc, thanks!
 
-Thanks for this new contribution. It generally looks good, just a few
-comments, see below.
+On Thu, 13 Apr 2017 23:08:34 +0300, Semen Kolganov wrote:
 
->  package/Config.in      |  1 +
->  package/mpir/Config.in |  8 ++++++++
->  package/mpir/mpir.hash |  2 ++
->  package/mpir/mpir.mk   | 18 ++++++++++++++++++
+> I just forgot about DEVELOPER file.:-)?Should I resend you a new
+> patch?
+>
+> Well, about host, I thought, that it can be usefull to have this
+> library on host, when you don't need in your target, but only for
+> building.
 
-You forgot to change the DEVELOPERS file to add yourself as the
-developer for this package.
+We don't want to needlessly add host packages. So either the host
+package is needed as a build dependency of another package or directly
+useful for some specific use case, otherwise we simply don't want to
+have a host variant.
 
-> diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-> new file mode 100644
-> index 0000000..fbce887
-> --- /dev/null
-> +++ b/package/mpir/mpir.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# mpir
-> +#
-> +################################################################################
-> +
-> +MPIR_VERSION = 3.0.0
-> +MPIR_SITE = http://www.mpir.org
-> +MPIR_SOURCE = mpir-$(MPIR_VERSION).tar.bz2
-> +MPIR_LICENSE = LGPL-3.0+
-> +MPIR_LICENSE_FILES = COPYING.LIB
-> +MPIR_INSTALL_STAGING = YES
-> +MPIR_DEPENDENCIES = gmp
-> +HOST_MPIR_DEPENDENCIES = host-gmp
-> +MPIR_MAKE_OPTS = RANLIB=$(TARGET_RANLIB)
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+So we never add a host variant "just because".
 
-Why is a host variant of this package needed? It should at the very
-least be explained in the commit log.
+Could you resend after dropping the host variant and adding the change
+to the DEVELOPERS file?
 
-The rest looks good.
+Make sure to run support/scripts/check-package on your package.
 
 Thanks!
 
