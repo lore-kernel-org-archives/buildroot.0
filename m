@@ -1,60 +1,83 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 13 Apr 2017 14:44:41 +0100
-Subject: [Buildroot] [PATCH] ffmpeg: bump version to 3.3
-Message-ID: <20170413134441.55184-1-Vincent.Riera@imgtec.com>
+From: Semyon Kolganov <semenak94@mail.ru>
+Date: Thu, 13 Apr 2017 16:49:34 +0300
+Subject: [Buildroot] [PATCH] mpir: new package
+In-Reply-To: <mpir: new package>
+References: <mpir: new package>
+Message-ID: <1492091374-5028-1-git-send-email-semenak94@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And remove non-existent configure options from ffmpeg.mk:
-
-  --disable-x11grab
-  --disable-memalign-hack
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ package/Config.in      |  1 +
+ package/mpir/Config.in |  8 ++++++++
+ package/mpir/mpir.hash |  2 ++
+ package/mpir/mpir.mk   | 18 ++++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/mpir/Config.in
+ create mode 100644 package/mpir/mpir.hash
+ create mode 100644 package/mpir/mpir.mk
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 33942b9..e243acc 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 6e38ff14f080c98b58cf5967573501b8cb586e3a173b591f3807d8f0660daf7a  ffmpeg-3.2.4.tar.xz
-+sha256 599e7f7c017221c22011c4037b88bdcd1c47cd40c1e466838bc3c465f3e9569d  ffmpeg-3.3.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 223ed84..059f832 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.2.4
-+FFMPEG_VERSION = 3.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -26,7 +26,6 @@ FFMPEG_CONF_OPTS = \
- 	--enable-avdevice \
- 	--enable-avcodec \
- 	--enable-avformat \
--	--disable-x11grab \
- 	--enable-network \
- 	--disable-gray \
- 	--enable-swscale-alpha \
-@@ -39,7 +38,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-dxva2 \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
--	--disable-memalign-hack \
- 	--disable-mipsdsp \
- 	--disable-mipsdspr2 \
- 	--disable-msa \
+diff --git a/package/Config.in b/package/Config.in
+index 3683578..0866c13 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1405,6 +1405,7 @@ endif
+ 	source "package/mpc/Config.in"
+ 	source "package/mpdecimal/Config.in"
+ 	source "package/mpfr/Config.in"
++	source "package/mpir/Config.in"
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
+ 	source "package/musl-compat-headers/Config.in"
+diff --git a/package/mpir/Config.in b/package/mpir/Config.in
+new file mode 100644
+index 0000000..acd448c
+--- /dev/null
++++ b/package/mpir/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MPIR
++	bool "mpir"
++	select BR2_PACKAGE_GMP
++	help
++	  MPIR is a highly optimised library for bignum arithmetic forked 
++	  from the GMP bignum library.
++
++	  http://www.mpir.org/
+diff --git a/package/mpir/mpir.hash b/package/mpir/mpir.hash
+new file mode 100644
+index 0000000..8320337
+--- /dev/null
++++ b/package/mpir/mpir.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	52f63459cf3f9478859de29e00357f004050ead70b45913f2c2269d9708675bb	mpir-3.0.0.tar.bz2
+diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
+new file mode 100644
+index 0000000..fbce887
+--- /dev/null
++++ b/package/mpir/mpir.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# mpir
++#
++################################################################################
++
++MPIR_VERSION = 3.0.0
++MPIR_SITE = http://www.mpir.org
++MPIR_SOURCE = mpir-$(MPIR_VERSION).tar.bz2
++MPIR_LICENSE = LGPL-3.0+
++MPIR_LICENSE_FILES = COPYING.LIB
++MPIR_INSTALL_STAGING = YES
++MPIR_DEPENDENCIES = gmp
++HOST_MPIR_DEPENDENCIES = host-gmp
++MPIR_MAKE_OPTS = RANLIB=$(TARGET_RANLIB)
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.10.2
+2.7.4
