@@ -1,115 +1,92 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Thu, 13 Apr 2017 15:34:06 +1000
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2017-04-09
-In-Reply-To: <20170412095212.1A18EB2050@b01ledav03.gho.pok.ibm.com>
-References: <20170410062848.062C02803A@b01ledav001.gho.pok.ibm.com>
- <20170411010019.GA2638@tungsten.ozlabs.ibm.com>
- <20170411144331.699becca@free-electrons.com>
- <20170412095212.1A18EB2050@b01ledav03.gho.pok.ibm.com>
-Message-ID: <20170413053406.GA4103@tungsten.ozlabs.ibm.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 13 Apr 2017 08:05:04 +0200
+Subject: [Buildroot] [Patch v4 3/3] rust: new package
+In-Reply-To: <174ded3e-cc52-0456-3cd2-7750c531e442@mind.be>
+References: <20170402194651.28684-1-eric.le.bihan.dev@free.fr>
+ <20170402194651.28684-4-eric.le.bihan.dev@free.fr>
+ <1491549522.26127.8.camel@embedded.rocks> <20170408100925.GC32154@itchy>
+ <1491850965.4279.1.camel@embedded.rocks>
+ <174ded3e-cc52-0456-3cd2-7750c531e442@mind.be>
+Message-ID: <1492063504.4490.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 12, 2017 at 11:51:41AM +0200, Arnout Vandecappelle wrote:
+Hi,
+
+On Mon, 2017-04-10 at 23:43 +0200, Arnout Vandecappelle wrote:
 > 
-> 
-> On 11-04-17 14:43, Thomas Petazzoni wrote:
-> > Hello,
+> On 10-04-17 21:02, J?rg Krause wrote:
+> > Hi,
 > > 
-> > Adding the Buildroot mailing in Cc, and therefore keeping the full
-> > context.
+> > On Sat, 2017-04-08 at 12:09 +0200, Eric Le Bihan wrote:
+> 
+> [snip]
+> > > Currently Buildroot only offers downloading binary versions of the C/C++
+> > > cross-compilers. It does not take into account alternative C/C++
+> > > cross-compilers like LLVM/Clang or compilers for new languages like
+> > > Rust, D, or Haskell (though I do not know if Haskell is useful on
+> > > embedded systems).
+> 
+>  There's a huge difference between alternative C/C++ compilers and compilers for
+> other languages.
+> 
+>  Compilers for other languages we already have: python, mono, erlang. These are
+> just normal packages, and any package in that language depends on the host-xxx
+> package to provide the compiler. Similar to how packages that use the cmake
+> buildsystem depend on the host-cmake package.
+> 
+>  Alternative C/C++ compilers are something else entirely, because they replace
+> the special 'toolchain' target.
+> 
+>  Only when you can build an entire system with only the Rust compiler and
+> without C/C++ compiler you can consider them equivalent. That day is still far away.
+
+I see!
+
+> > For now, we could use the host rustc package to fetch the latest stable
+> > binary for the host architecture. Additionally, we could add the option
+> > to build the Rust compiler within Buildroot. In my opinion, this option
+> > only makes sense if the compiler can be configured meaningfully.
+> 
+>  I agree.
+
+Cool.
+
+@Eric: Do you mind to do that? By default fetch the latest stable
+release, and alternatively offer an option to build a "Custom Rust
+package". I think it would also be helpful to have at least one Rust
+package to add as a proof of concept.
+
+> 
+> > > So, would it help to have a "Programming Languages" section in
+> > > menuconfig where you can select Rust (or any other language) and choose
+> > > between a using a pre-built compiler or build it from source?
 > > 
-> > On Tue, 11 Apr 2017 11:00:19 +1000, Sam Bobroff wrote:
+> > In my opinion it would make more sense to have a menu "Toolchains" with
+> > the submenus "C/C++ Toolchain", "Rust Toolchain", ...
+> 
+>  Given what I wrote above, I disagree. For the time being it's fine in the host
+> packages menu. If that menu becomes too large, we could add something like an
+> 'Alternative programming languages' menu.
+> 
+
+Sounds reasonable.
+
+> 
+> > > And where shoud LLVM/clang be exposed?
 > > 
-> >> I had a look at this, but I'm not having much luck. Do you have any
-> >> advice?
-> >>
-> >> The error itself is clear from the build log, both during configure and
-> >> later at the link failure:
-> >>
-> >> From http://autobuild.buildroot.net/results/005/0050aa0d5360d166d07d4b6ee4484f4746b224f5/readline-7.0/config.log
-> >>
-> >> configure:6025: checking for tgetent in -lncurses
-> >> configure:6050:
-> >> /home/buildroot/build/instance-0/output/host/usr/bin/powerpc64-linux-gcc
-> >> -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> >> -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> >> -D_FILE_OFFSET_BITS=64  conftest.c -lncurses   >&5
-> >> /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/5.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: cannot find -lncurses
-> >>
-> >> From http://autobuild.buildroot.net/results/005/0050aa0d5360d166d07d4b6ee4484f4746b224f5/build-end.log
-> >>
-> >> /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/5.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: cannot find -lncurses
-> >> collect2: error: ld returned 1 exit status
-> >>
-> >> (I do see why it's using ncurses even though it wasn't detected: the package
-> >> file forces -lncurses into LIBS.)
-> >>
-> >> There are no references to ncurses in the build-time.log file, so it
-> >> apparently wasn't built at all during this run.
+> > I would put it into "C/C++ Toolchain" (if we had such a menu).
 > 
->  I suspect this is a circular dependency. Possibly
+>  That's slightly more complicated. LLVM is just a library so it's just in the
+> host menu. clang is a compiler that can be a replacement for gcc, so it'd have
+> to go into the toolchain menu.
 > 
-> ncurses -> busybox -> libselinux -> python3 -> readline -> ncurses
-> 
->  It would be nice to have the first 50 lines or so of the build log saved as
-> well, then we would see such a circular dependency.
+>  Actually, Romain is working on LLVM/Clang. He's going to start adding it as a
+> normal host package, so not as a replacement of gcc as the toolchain.
 
-Hmm, I wondered about this and I agree: the first 50 or so lines (maybe
-200? All of it? :-) How much is space an issue?) would be really useful.
+Nice!
 
-And, I think you're on to the right track...
-
-> >>
-> >> But the package file for readline has "READLINE_DEPENDENCIES = ncurses"
-> >> and "BR2_PACKAGE_NCURSES=y" *is* set in the Buildroot config.
-> >>
-> >> I can't replicate the failure locally, Buildroot always builds ncurses
-> >> as I expect from that configuration.
-> 
->  Did you use the same .config?
-
-I tried, but unfortunately selinux failes to build (not sure when I'll
-have time to look at that one; some linker error to do with -fPIC).
-
-However, I *do* see a "Circular dependency dropped" message, which is
-good confirmation for the theory above.
-
-> >> So the only explanation I can think of is that the autobuilder's target
-> >> directory is missing ncurses but the Buildroot stamp file must indicate
-> >> that it's already been installed.
-> >>
-> >> Am I missing something?
-> > 
-> > There is a -Wl,-rpath,/usr/lib in the link command link that isn't
-> > correct. This means that the compiler will try to link against the host
-> > ncurses if available, which is bad.
-> 
->  I suspect that that is there just because ncurses wasn't detected. But I could
-> be wrong.
-
-(I saw the bad rpath even on my successful builds -- I'll see if it's
-easy to fix, since I'm looking at it anyway.)
-
-So it seems fairly clear now: there is a circular dependency in that set
-of packages and GNU make's behaviour is to drop a dependency and
-continue building, so we end up building readline configured with
-ncurses, with no ncurses, so it fails.
-
-(IMHO this is very poor behaviour from GNU make: it seems to be
-knowingly producing a broken build but exiting with success, and the
-only indication is one fairly innocuous looking line of output. There is
-no option to convert that warning into a fatal error! I even checked the
-source :-( )
-
-So, what do we do? It seems like it would be nice to catch any circular
-dependency but is there any good way to do that? I don't like the idea
-of running make under grep looking for "errors", or trying to manualy
-detect circular dependencies either... Has this been explored already?
-
-Thanks!
-Sam.
+J?rg
