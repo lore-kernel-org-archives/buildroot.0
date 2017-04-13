@@ -1,39 +1,69 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 13 Apr 2017 14:14:14 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.170
-Message-ID: <20170413131414.23158-1-Vincent.Riera@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 13 Apr 2017 15:29:58 +0200
+Subject: [Buildroot] [PATCH 2/2] binutils: add patch for 2.27 that fixes
+ elf2flt segfaults
+In-Reply-To: <20170413093643.05ffb764@free-electrons.com>
+References: <20170410084238.13201-1-arnout@mind.be>
+ <20170410084238.13201-2-arnout@mind.be>
+ <20170413093643.05ffb764@free-electrons.com>
+Message-ID: <579cec15-214a-978c-85ca-1f471f104deb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index a66b0c5..566c487 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 0ff2418c54686f1a99d6196bab5fbc8188152d17ae826760aabd91b49e5f20d19ed1280e3670a769184aac9fd598a20b31312b56add831ed3863473e031b5327  LVM2.2.02.169.tgz
-+sha512 971a40f93db2b18a4b5c04f2b34d48cbcce81e6e3999760a474ddc52e8653317ac4969f402b9c9e12e486772bc27da8d9ca448f0551338b2a62031082a113f7c  LVM2.2.02.170.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index ffc1043..11fd8a2 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.169
-+LVM2_VERSION = 2.02.170
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+
+On 13-04-17 09:36, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 10 Apr 2017 10:42:38 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+> 
+>>  .../2.27/0011-arm-thumb-fix-elf2flt-segfault.patch | 927 +++++++++++++++++++++
+>>  1 file changed, 927 insertions(+)
+>>  create mode 100644 package/binutils/2.27/0011-arm-thumb-fix-elf2flt-segfault.patch
+> 
+> Thanks a lot for doing the bisection! However, this is really a big
+> patch. 
+
+ Yes...
+
+> Do we understand what it does? 
+
+ I've tried, but... no. The great thing about this patch is that its purpose is
+to add support for entering/exiting Secure Mode on ARMv8. So this really
+shouldn't impact a Cortex-M4...
+
+> Do we know if it is safe to
+> backport it on 2.27 without other patches?
+
+ Nope :-)
+
+> Isn't there a more minimal fix for binutils 2.27?
+
+ Possibly. Is someone here somewhat familiar with elf2flt? Waldemar?
+
+ Neither the binutils nor the elf2flt code are very accessible... That's why I
+started blindly bisecting.
+
+ I could instead try to bisect 2.26..2.27 to find where the problem was
+introduced, and perhaps find something that can be reverted.
+
+ Alternatively, I could try to break up this patch in smaller pieces to find
+which bit fixes it.
+
+ But really I've given up trying to understand what is going on.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.10.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
