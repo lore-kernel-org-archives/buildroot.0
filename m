@@ -1,47 +1,79 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 14 Apr 2017 07:20:02 +0300
-Subject: [Buildroot] [PATCH] trinity: fix build BPF support is missing
-Message-ID: <b37e7003cdb38da7844cb15345290c4d3a190d4b.1492143602.git.baruch@tkos.co.il>
+Date: Fri, 14 Apr 2017 08:27:37 +0300
+Subject: [Buildroot] [PATCH] trinity: fix ipv6 headers detection
+Message-ID: <b001e893520a68d07aab6c91c5ddbbab1bc5aed7.1492147657.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use upstream patch.
+The trinity configure script looks into a host header to check for libc/kernel
+headers conflict resolution. This is not compatible with cross compilation.
+Add a patch that does direct compilation test instead.
 
-Fixes:
-http://autobuild.buildroot.net/results/2ae/2ae76fb61d017d99653d57807cb62c4d8c91ff4d/
-http://autobuild.buildroot.net/results/a53/a5391fc272f99b80974582ea735d764db8dc8e9e/
+This issue was not caught by the autobuilder yet.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/trinity/trinity.hash | 1 +
- package/trinity/trinity.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ ...ix-cross-compile-detection-of-broken-ipv6.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/trinity/0001-configure-fix-cross-compile-detection-of-broken-ipv6.patch
 
-diff --git a/package/trinity/trinity.hash b/package/trinity/trinity.hash
-index 8d88301497e6..ca74264cb927 100644
---- a/package/trinity/trinity.hash
-+++ b/package/trinity/trinity.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
- sha256 4cb2bd4049ce523fdf47490c4c18b8eb713c720d4b3b13d6ec2ae246aac908ad  trinity-1.7.tar.xz
- sha256 5601474b10973b99f6f4ecc67c8ac54000754d7110553cc81c7648bd7e73c810  b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
-+sha256 1974e473113b4e79fb2ff820e2b03f475a538e43343c24ca077a04214b9e0418  f447db18b389050ecc5e66dbf549d5953633e23e.patch
-diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-index 3880aec677ba..f76345e69831 100644
---- a/package/trinity/trinity.mk
-+++ b/package/trinity/trinity.mk
-@@ -10,7 +10,8 @@ TRINITY_SOURCE = trinity-$(TRINITY_VERSION).tar.xz
- TRINITY_LICENSE = GPL-2.0
- TRINITY_LICENSE_FILES = COPYING
- 
--TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
-+TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch \
-+		https://github.com/kernelslacker/trinity/commit/f447db18b389050ecc5e66dbf549d5953633e23e.patch
- 
- define TRINITY_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
+diff --git a/package/trinity/0001-configure-fix-cross-compile-detection-of-broken-ipv6.patch b/package/trinity/0001-configure-fix-cross-compile-detection-of-broken-ipv6.patch
+new file mode 100644
+index 000000000000..5bc326010d64
+--- /dev/null
++++ b/package/trinity/0001-configure-fix-cross-compile-detection-of-broken-ipv6.patch
+@@ -0,0 +1,49 @@
++From ac38a49a18e337fb3bc7ac8e06097e28e1e3b3f7 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 14 Apr 2017 07:43:04 +0300
++Subject: [PATCH] configure: fix cross compile detection of broken ipv6 headers
++
++Checking the content of the host ipv6.h headers is incompatible with cross
++compilation. Target headers may not be the same as the host. Do direct build
++test instead using the ${CC} (cross) compiler to detect headers issues.
++
++Define _GNU_SOURCE to make sure glibc ipv6 definitions are exposed.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: submitted upstream
++
++ configure | 17 +++++++++++++++--
++ 1 file changed, 15 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index aa3f7f334971..8639a38eba96 100755
++--- a/configure
+++++ b/configure
++@@ -51,8 +51,21 @@ echo "[*] Checking system headers."
++ [ -z "$IPV6" ] && IPV6=yes
++ if [[ "$IPV6" == "yes" ]]; then
++ 	echo -n "[*] Checking ipv6 headers ... "
++-	RET=$(grep __UAPI_DEF_IN6_PKTINFO /usr/include/linux/ipv6.h)
++-	if [ -z "$RET" ]; then
+++	rm -f "$TMP" || exit 1
+++
+++	cat >"$TMP.c" << EOF
+++#include <netinet/in.h>
+++#include <netinet/ip6.h>
+++#include <linux/in6.h>
+++#include <linux/ipv6.h>
+++
+++int main()
+++{
+++	struct in6_addr test;
+++}
+++EOF
+++	${CC} ${CFLAGS} -D_GNU_SOURCE "$TMP.c" -o "$TMP" &>"$TMP.log"
+++	if [ ! -x "$TMP" ]; then
++ 		echo $RED "[BROKEN]" $COL_RESET "See https://patchwork.ozlabs.org/patch/425881/"
++ 	else
++ 		echo $GREEN "[OK]" $COL_RESET
++-- 
++2.11.0
++
 -- 
 2.11.0
