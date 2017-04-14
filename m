@@ -1,40 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 14 Apr 2017 23:26:05 +0200
-Subject: [Buildroot] [PATCH 2/3] firefly_rk3288_demo_defconfig: increase
-	ext2 filesystem size
-In-Reply-To: <20170414212606.13819-1-arnout@mind.be>
-References: <20170414212606.13819-1-arnout@mind.be>
-Message-ID: <20170414212606.13819-2-arnout@mind.be>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Fri, 14 Apr 2017 17:45:50 -0400
+Subject: [Buildroot] [PATCH 1/2] rpi-firmware: allow to build for aarch64
+	targets
+In-Reply-To: <20170414214551.17986-1-gael.portay@savoirfairelinux.com>
+References: <20170414214551.17986-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20170414214551.17986-2-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit c6bca8cef0 removed autocalculation of the ext2 filesystem
-size, the default size is now set to 60MB. However, this is too small
-for firefly_rk3288_demo_defconfig. Indeed, the ext2 filesystem contains
-the mali blobk (90MB) and Qt5 (14MB), totalling to 125MB.
+The RaspberryPi 3 is based on a AArch64 CPU and requires binaries from
+this package.
 
-This is a bit too small to fit comfortably on a 128M flash driver, so
-increase the size to 250000K (245MB).
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
- configs/firefly_rk3288_demo_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/rpi-firmware/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
-index 7dadc6bc9a..c2de701934 100644
---- a/configs/firefly_rk3288_demo_defconfig
-+++ b/configs/firefly_rk3288_demo_defconfig
-@@ -26,6 +26,7 @@ BR2_PACKAGE_QT5BASE_EGLFS=y
- BR2_PACKAGE_MALI_T76X=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_BLOCKS=250000
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index c2983aa84..7b37a3072 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_RPI_FIRMWARE
+ 	bool "rpi-firmware"
+-	depends on BR2_arm
++	depends on BR2_arm || BR2_aarch64
+ 	help
+ 	  RaspberryPi Firmware
+ 	  Pre-compiled binaries of the current bootloader and GPU firmware
 -- 
-2.11.0
+2.12.1
