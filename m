@@ -1,104 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Apr 2017 10:55:08 +0200
-Subject: [Buildroot] [git commit] atop: bump version to 2.3.0
-Message-ID: <20170414085514.BD35E800EC@busybox.osuosl.org>
+Date: Fri, 14 Apr 2017 10:54:20 +0200
+Subject: [Buildroot] [PATCH 1/1] ffmpeg: fix neon support for aarch64
+In-Reply-To: <20170414070848.8639-1-bernd.kuhls@t-online.de>
+References: <20170414070848.8639-1-bernd.kuhls@t-online.de>
+Message-ID: <20170414105420.656c631f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9b95f0cd02bd7f2dafc26d658c137554249bf75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Remove patch applied upstream [1].
+On Fri, 14 Apr 2017 09:08:48 +0200, Bernd Kuhls wrote:
+> ffmpeg ported arm 32-bit NEON code to aarch64 as hard dependency:
+> http://ffmpeg.org/pipermail/ffmpeg-devel/2016-November/202733.html
+> 
+> Buildroot option BR2_ARM_CPU_HAS_NEON handles only the 32bit case:
+> https://git.buildroot.net/buildroot/commit/?id=0976cd6cd64a128a2ac921e4f35f0e7cbe306692
+> 
+> For aarch64 we need to make sure to pass --enable-neon in order to
+> prevent a link error, fixes
+> 
+> http://autobuild.buildroot.net/results/fa4/fa46003249664b1f97f6c18253c84cd3d6fb9cdb/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/ffmpeg/ffmpeg.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index 059f8320e..c0c6705e1 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -432,9 +432,12 @@ FFMPEG_CONF_OPTS += --disable-vfp
+>  endif
+>  ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+>  FFMPEG_CONF_OPTS += --enable-neon
+> +ifeq ($(BR2_aarch64),y)
+> +FFMPEG_CONF_OPTS += --enable-neon
 
-[1] https://github.com/Atoptool/atop/commit/a2306c0e1c83f5a123ce521a34d9efaa2297c26d
+I don't understand this patch. How can it work? We're already in a
+BR2_ARM_CPU_HAS_NEON condition, and if it's true we're passing
+--enable-neon.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-remove-unused-include-of-termio.h.patch   | 52 ----------------------
- package/atop/atop.hash                             |  2 +-
- package/atop/atop.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 54 deletions(-)
+Are you sure you didn't want to use an "else ifeq" here ? Are you sure
+your patch fixes anything ?
 
-diff --git a/package/atop/0001-remove-unused-include-of-termio.h.patch b/package/atop/0001-remove-unused-include-of-termio.h.patch
-deleted file mode 100644
-index 3a04b05..0000000
---- a/package/atop/0001-remove-unused-include-of-termio.h.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--remove unused include of termio.h
--
--This header is not provided by musl, leading to build failures.
--
--Patch status: accepted upstream.
--
--Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-----
--diff -purN atop-2.2-3.orig/showgeneric.c atop-2.2-3/showgeneric.c
----- atop-2.2-3.orig/showgeneric.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showgeneric.c	2016-07-19 22:08:16.171453283 -0300
--@@ -268,7 +268,6 @@ static const char rcsid[] = "$Id: showge
-- #include <errno.h>
-- #include <fcntl.h>
-- #include <string.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
--diff -purN atop-2.2-3.orig/showlinux.c atop-2.2-3/showlinux.c
----- atop-2.2-3.orig/showlinux.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showlinux.c	2016-07-19 22:08:20.979472459 -0300
--@@ -274,7 +274,6 @@ static const char rcsid[] = "$Id: showli
-- #include <string.h>
-- #include <errno.h>
-- #include <fcntl.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
--diff -purN atop-2.2-3.orig/showprocs.c atop-2.2-3/showprocs.c
----- atop-2.2-3.orig/showprocs.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showprocs.c	2016-07-19 22:08:25.083488900 -0300
--@@ -94,7 +94,6 @@ static const char rcsid[] = "$Id: showpr
-- #include <string.h>
-- #include <errno.h>
-- #include <fcntl.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
--diff -purN atop-2.2-3.orig/showsys.c atop-2.2-3/showsys.c
----- atop-2.2-3.orig/showsys.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showsys.c	2016-07-19 22:08:29.099505047 -0300
--@@ -80,7 +80,6 @@ static const char rcsid[] = "XXXXXX";
-- #include <string.h>
-- #include <errno.h>
-- #include <fcntl.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
-diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-index bbf268d..7a7bffb 100644
---- a/package/atop/atop.hash
-+++ b/package/atop/atop.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  c785b8a2355be28b3de6b58a8ea4c4fcab8fadeaa57a99afeb03c66fac8e055d  atop-2.2-3.tar.gz
-+sha256  73e4725de0bafac8c63b032e8479e2305e3962afbe977ec1abd45f9e104eb264  atop-2.3.0.tar.gz
-diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-index f089382..2cc0da6 100644
---- a/package/atop/atop.mk
-+++ b/package/atop/atop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATOP_VERSION = 2.2-3
-+ATOP_VERSION = 2.3.0
- ATOP_SITE = http://www.atoptool.nl/download
- ATOP_LICENSE = GPL-2.0+
- ATOP_LICENSE_FILES = COPYING
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
