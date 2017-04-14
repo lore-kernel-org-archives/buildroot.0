@@ -1,35 +1,37 @@
 From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Fri, 14 Apr 2017 17:45:50 -0400
-Subject: [Buildroot] [PATCH 1/2] rpi-firmware: allow to build for aarch64
-	targets
-In-Reply-To: <20170414214551.17986-1-gael.portay@savoirfairelinux.com>
-References: <20170414214551.17986-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20170414214551.17986-2-gael.portay@savoirfairelinux.com>
+Date: Fri, 14 Apr 2017 17:45:49 -0400
+Subject: [Buildroot] [PATCH 0/2] Add support for rpi3 64bits target
+Message-ID: <20170414214551.17986-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RaspberryPi 3 is based on a AArch64 CPU and requires binaries from
-this package.
+Hi,
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- package/rpi-firmware/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Those two patches bring the support for a 64bits image of the RaspberryPi 3.
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index c2983aa84..7b37a3072 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_RPI_FIRMWARE
- 	bool "rpi-firmware"
--	depends on BR2_arm
-+	depends on BR2_arm || BR2_aarch64
- 	help
- 	  RaspberryPi Firmware
- 	  Pre-compiled binaries of the current bootloader and GPU firmware
+The first patch makes the rpi-firmware package to be available for aarch64
+targets (so it can be used by the second patch).
+
+The second patch adds a minimal defconfig to build a 64bits rpi3 image.
+
+	# uname -a
+	Linux buildroot 4.9.13-v8 #1 SMP PREEMPT Fri Apr 14 17:33:30 EDT 2017 aarch64 GNU/Linux
+
+Regards,
+Ga?l PORTAY (2):
+  rpi-firmware: allow to build for aarch64 targets
+  configs: add raspberrypi3 64bits defconfig
+
+ board/raspberrypi/genimage-raspberrypi3-64.cfg | 31 +++++++++++++++++++++
+ board/raspberrypi/post-image.sh                | 23 ++++++++++++++++
+ configs/raspberrypi3_64_defconfig              | 37 ++++++++++++++++++++++++++
+ package/rpi-firmware/Config.in                 |  2 +-
+ 4 files changed, 92 insertions(+), 1 deletion(-)
+ create mode 100644 board/raspberrypi/genimage-raspberrypi3-64.cfg
+ create mode 100644 configs/raspberrypi3_64_defconfig
+
 -- 
 2.12.1
