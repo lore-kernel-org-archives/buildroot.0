@@ -1,108 +1,91 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Apr 2017 19:00:32 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
-In-Reply-To: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
+Date: Fri, 14 Apr 2017 19:04:51 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2017-04-09
+In-Reply-To: <20170414094440.70fd14a9@free-electrons.com>
+References: <20170410062848.062C02803A@b01ledav001.gho.pok.ibm.com>
+ <20170411010019.GA2638@tungsten.ozlabs.ibm.com>
+ <20170411144331.699becca@free-electrons.com>
+ <20170412095212.1A18EB2050@b01ledav03.gho.pok.ibm.com>
+ <20170413053406.GA4103@tungsten.ozlabs.ibm.com>
+ <54038d3c-376b-b5cb-d4d2-671d1119d722@mind.be>
+ <20170414094440.70fd14a9@free-electrons.com>
+Message-ID: <9f5cf5ff-934a-c0bd-6ac2-39b8f1f7062b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- This is the correct approach I think. I think we could also do this for all the
-other cases where we have a -> busybox dependency just because they install the
-same apps.
 
-On 14-04-17 05:20, Matt Weber wrote:
-> The ncurses package installs a full version of clear and reset(tset)
-> tools.  Preserve these by disabling the options in the busybox config
-> file.  This removes the need for ncurses to depend on busybox for solely
-> ordering of target install.
+
+On 14-04-17 09:44, Thomas Petazzoni wrote:
+> Hello,
 > 
-> This commit resolves the following python circular dependency with python.
-
- "python circular dependency with python" is a bit circular :-) You can actually
-enter the circle from any of these packages. So just "This commit resolves the
-following circular dependency".
-
- It would be nice to add a defconfig fragment to show how to trigger the
-circular dependency.
-
-> busybox -> libselinux -> python3 -> ncurses -> busybox
+> On Fri, 14 Apr 2017 00:14:08 +0200, Arnout Vandecappelle wrote:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
+>>  I don't think the rpath is wrong. For the target, it *is* indeed /usr/lib.
+>> AFAIU the RPATH is *not* used as an extra -L equivalent at link time, except
+>> when -rpath-link is given.
 > 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Not really clear to me what happens here. The ld documentation says:
 
- Looks good to me, except for the variable naming...
+ I was also pondering over that section and couldn't get to a conclusion :-)
 
-> ---
->  package/busybox/busybox.mk | 12 ++++++++++++
->  package/ncurses/ncurses.mk |  5 -----
->  2 files changed, 12 insertions(+), 5 deletions(-)
+[snip]
+> I've did a few experiments, building a dummy shared library and a
+> program that links to it:
 > 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index f9dacc7..b159b44 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -148,6 +148,17 @@ define BUSYBOX_MUSL_TWEAKS
->  endef
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
-> +# Ncurses package overlaps:
-> +#     /usr/bin/clear
-> +#     /usr/bin/reset -> /usr/bin/tset (symlink)
-> +#
-
- I think the #-line is redundant.
-
-> +define BUSYBOX_NCURSE_PROGS_TWEAKS
-                        ^S
-
- But perhaps a better name is BUSYBOX_UNSET_NCURSES_PROGS
-
-> +	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
-> +	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
-> +endef
-> +endif
-> +
->  define BUSYBOX_INSTALL_UDHCPC_SCRIPT
->  	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
->  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-> @@ -229,6 +240,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
->  	$(BUSYBOX_SET_WATCHDOG)
->  	$(BUSYBOX_SET_SELINUX)
->  	$(BUSYBOX_MUSL_TWEAKS)
-> +	$(BUSYBOX_NCURSE_PROGS_TWEAKS)
-                        ^S
-
-
- Regards,
- Arnout
-
->  endef
->  
->  define BUSYBOX_CONFIGURE_CMDS
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index 68c77ac..2b99d3f 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -29,11 +29,6 @@ NCURSES_CONF_OPTS = \
->  	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
->  	--without-manpages
->  
-> -# Install after busybox for the full-blown versions
-> -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> -NCURSES_DEPENDENCIES += busybox
-> -endif
-> -
->  ifeq ($(BR2_STATIC_LIBS),y)
->  NCURSES_CONF_OPTS += --without-shared --with-normal
->  else ifeq ($(BR2_SHARED_LIBS),y)
+> thomas at skate:/tmp/toto$ ls
+> libtoto.so  libtoto.so.1  main.c  toto.c  toto.o
 > 
+> # -L allows the link to proceed
+> 
+> thomas at skate:/tmp/toto$ gcc -L/tmp/toto -o main main.c -ltoto
+> thomas at skate:/tmp/toto$ 
+> 
+> # Neither -rpath nor -rpath-link allows ld to find libtoto
+
+ Great.
+
+> 
+> thomas at skate:/tmp/toto$ gcc -Wl,-rpath,/tmp/toto -o main main.c -ltoto
+> /usr/bin/ld: cannot find -ltoto
+> collect2: error: ld returned 1 exit status
+> 
+> thomas at skate:/tmp/toto$ gcc -Wl,-rpath-link,/tmp/toto -o main main.c -ltoto
+> /usr/bin/ld: cannot find -ltoto
+> collect2: error: ld returned 1 exit status
+> 
+> # -L + -rpath, and you get the rpath encoded in the program
+
+ Of course.
+
+> 
+> thomas at skate:/tmp/toto$ gcc -L/tmp/toto -Wl,-rpath,/tmp/toto -o main main.c -ltoto
+> 
+> thomas at skate:/tmp/toto$ readelf -d main| grep rpath
+>  0x000000000000000f (RPATH)              Library rpath: [/tmp/toto]
+> 
+> # -L + -rpath-link, and you don't get the rpath encoded in the program
+
+ Doesn't matter, we don't use rpath-link :-)
+
+> 
+> thomas at skate:/tmp/toto$ gcc -L/tmp/toto -Wl,-rpath-link,/tmp/toto -o main main.c -ltoto
+> thomas at skate:/tmp/toto$ readelf -d main| grep rpath
+> thomas at skate:/tmp/toto$ 
+
+ You're missing one important case here: when toto.so is linked with -rpath to
+some /tmp/other directory which contains a library you link against, or that is
+NEEDED by toto.
+
+ And then there is also the question of the effect of --sysroot.
+
+ Not to forget the evil that can be done by libtool.
+
+ Sigh.
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
