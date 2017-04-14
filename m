@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Apr 2017 10:59:17 +0200
-Subject: [Buildroot] [PATCH] atop: bump version to 2.3.0
-In-Reply-To: <20170414002225.11351-1-ricardo.martincoski@gmail.com>
-References: <20170414002225.11351-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170414105917.2ff7ab78@free-electrons.com>
+Date: Fri, 14 Apr 2017 10:59:41 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
+In-Reply-To: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20170414105941.151a95d6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 13 Apr 2017 21:22:25 -0300, Ricardo Martincoski wrote:
-> Remove patch applied upstream [1].
-> 
-> [1] https://github.com/Atoptool/atop/commit/a2306c0e1c83f5a123ce521a34d9efaa2297c26d
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> 49 builds, 3 skipped, 0 failed
-> ---
->  .../0001-remove-unused-include-of-termio.h.patch   | 52 ----------------------
->  package/atop/atop.hash                             |  2 +-
->  package/atop/atop.mk                               |  2 +-
->  3 files changed, 2 insertions(+), 54 deletions(-)
->  delete mode 100644 package/atop/0001-remove-unused-include-of-termio.h.patch
+On Thu, 13 Apr 2017 22:20:47 -0500, Matt Weber wrote:
 
-Applied to master, thanks.
+> +define BUSYBOX_NCURSE_PROGS_TWEAKS
+
+I've changed the name of this variable to:
+
+	BUSYBOX_DISABLE_NCURSES_PROGS
+
+and applied. Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
