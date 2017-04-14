@@ -1,49 +1,77 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 15 Apr 2017 00:35:29 +0200
-Subject: [Buildroot] [PATCH] ncftp: fix host/target confusion
-In-Reply-To: <87lgsgbxo4.fsf@dell.be.48ers.dk>
-References: <1488322477-25447-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170301214800.1a6c3405@free-electrons.com>
- <877f47hccp.fsf@dell.be.48ers.dk>
- <CANxTyt6tGknGoHc2swaeqh-h6L740Ny79UwgH4AqQH2SfjQYnQ@mail.gmail.com>
- <20170302214346.1157dda6@free-electrons.com>
- <87innqf5kd.fsf@dell.be.48ers.dk> <87tw75av93.fsf@dell.be.48ers.dk>
- <20170307211002.26e35c3f@free-electrons.com>
- <87lgsgbxo4.fsf@dell.be.48ers.dk>
-Message-ID: <1ce8fc39-f994-0e53-4cbe-05a89a4c481f@mind.be>
+Date: Sat, 15 Apr 2017 00:48:48 +0200
+Subject: [Buildroot] [PATCH][autobuild] Use last 4 lines of log instead
+ of 3 when getting failure reason
+In-Reply-To: <1478880282.3874.5.camel@synopsys.com>
+References: <1477478717-19209-1-git-send-email-vzakhar@synopsys.com>
+ <20161026135259.425f0f0a@free-electrons.com>
+ <1477484955.30609.16.camel@synopsys.com>
+ <1478880282.3874.5.camel@synopsys.com>
+Message-ID: <08c71f7a-4b90-46de-897b-726e53603b64@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Coming back to this old issue...
 
+On 11-11-16 17:04, Vlad Zakharov wrote:
+> Hi Thomas, all.
+> 
+> I strongly believe that something should be done with the issue.
+> Of course the approach that I have suggested may not be the best but we can discuss the subject to find better solution.
+> It is not a good idea to leave everything as is because failure reason detection totally doesn't work if use up-to-date
+> "make" utility. 
+> 
+> Thank you. 
+> 
+> On Wed, 2016-10-26 at 12:29 +0000, Vlad Zakharov wrote:
+>> Hi Thomas.
+>>
+>> On Wed, 2016-10-26 at 13:52 +0200, Thomas Petazzoni wrote:
+>>>
+>>> Hello,
+>>>
+>>> On Wed, 26 Oct 2016 13:45:17 +0300, Vlad Zakharov wrote:
+>>>>
+>>>>
+>>>> Latest versions of make produce a bit different output than older
+>>>> versions do. They also print number of line in Makefile where the
+>>>> failure occurred.
+>>>>
+>>>> E.g. latest make produces the following output:
+>>>> ---------------------------------->8------------------------------------  
+>>>> GNUmakefile:277: recipe for target 'cgiedit.o' failed
+>>>> make[2]: *** [cgiedit.o] Error 1
+>>>> package/pkg-generic.mk:201: recipe for target '/home/buildroot/autobuild/run/instance-2/output/build/privoxy-
+>>>> 3.0.26/.stamp_built' failed
+>>>> make[1]: *** [/home/buildroot/autobuild/run/instance-2/output/build/privoxy-3.0.26/.stamp_built] Error 2
+>>>> Makefile:88: recipe for target '_all' failed
+>>>> make: *** [_all] Error 2
+>>>> make: Leaving directory '/home/buildroot/autobuild/run/instance-2/buildroot'
+>>>> ---------------------------------->8------------------------------------  
+>>>>
+>>>> When with old version we get something like:
+>>>> ---------------------------------->8------------------------------------  
+>>>> make[2]: *** [cgiedit.o] Error 1
+>>>> make[1]: *** [/home/buildroot/autobuild/run/instance-1/output/build/privoxy-3.0.26/.stamp_built] Error 2
+>>>> make: *** [_all] Error 2
+>>>> make: Leaving directory `/home/buildroot/autobuild/run/instance-1/buildroot'
+>>>> ---------------------------------->8------------------------------------  
+>>>>
+>>>> So latest make produce much more "noise" and we have to analyze
+>>>> at least 4 last lines of log to be sure that they contain a line
+>>>> with failure reason.
 
-On 07-03-17 22:10, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> 
->  >> > Is this update intentional? Why was the tarball regenerated?  
->  >> 
->  >> Yes.
->  >> 
->  >> Which wasn't exactly helpful :/ I'll send a patch to update our hash,
->  >> but I will NOT update the tarball on sources.buildroot.net yet.
-> 
->  > Isn't sources.buildroot.net going to automatically pick up the new
->  > tarball once you change the hash?
-> 
-> Hmm, I guess so. It just runs 'make -k source'. I guess we should wait
-> until we are ready to release 2017.02.1 then.
+ Instead of relying on make's "noise", why don't we just use the very last line
+of build-time.log?
 
- So this issue missed 2017.02.1 :-)
-
- However, we can do a workaround: in master, we can use the tar.gz file instead
-of the tar.xz. That way, there can be two separate tarballs on
-sources.buildroot.net for the two versions.
 
  Regards,
  Arnout
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
