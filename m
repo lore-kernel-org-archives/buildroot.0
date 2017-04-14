@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Apr 2017 13:13:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 7.9.0
-In-Reply-To: <1492167796-12951-1-git-send-email-martin@barkynet.com>
-References: <1492167796-12951-1-git-send-email-martin@barkynet.com>
-Message-ID: <20170414131339.136427ff@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 14 Apr 2017 14:13:41 +0200
+Subject: [Buildroot] [PATCH 1/5] package/efl: remove lefover disable-wayland
+	option
+Message-ID: <20170414121345.10026-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Wayland support was re-added by [1] but the --disable-wayland option
+was not removed from EFL_CONF_OPTS.
 
-On Fri, 14 Apr 2017 12:03:16 +0100, Martin Bark wrote:
-> See https://nodejs.org/en/blog/release/v7.9.0/
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/nodejs/nodejs.hash | 4 ++--
->  package/nodejs/nodejs.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+[1] f30eec41f95ed99909eb2c7590d83c12b9142df2
 
-Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/efl.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 3644000..8772871 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -44,7 +44,6 @@ EFL_CONF_OPTS = \
+ 	--disable-sdl \
+ 	--disable-spectre \
+ 	--disable-xinput22 \
+-	--disable-wayland \
+ 	--enable-liblz4 \
+ 	--with-doxygen=no
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.3
