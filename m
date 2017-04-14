@@ -1,33 +1,113 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Fri, 14 Apr 2017 16:32:26 +0100
-Subject: [Buildroot] [PATCH 3/6] configs/raspberrypi_defconfig: bump version
-	to 4.9.21
-In-Reply-To: <1492183949-8181-1-git-send-email-martin@barkynet.com>
-References: <1492183949-8181-1-git-send-email-martin@barkynet.com>
-Message-ID: <1492183949-8181-3-git-send-email-martin@barkynet.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Apr 2017 19:00:32 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
+In-Reply-To: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- configs/raspberrypi_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ This is the correct approach I think. I think we could also do this for all the
+other cases where we have a -> busybox dependency just because they install the
+same apps.
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 8c9635f..c54080d 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -12,7 +12,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="935c7ce84c982a26f567a03a58a1537424569938"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5e4ee836560d4c0371e109bf469e1ad808ae7a44"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+On 14-04-17 05:20, Matt Weber wrote:
+> The ncurses package installs a full version of clear and reset(tset)
+> tools.  Preserve these by disabling the options in the busybox config
+> file.  This removes the need for ncurses to depend on busybox for solely
+> ordering of target install.
+> 
+> This commit resolves the following python circular dependency with python.
+
+ "python circular dependency with python" is a bit circular :-) You can actually
+enter the circle from any of these packages. So just "This commit resolves the
+following circular dependency".
+
+ It would be nice to add a defconfig fragment to show how to trigger the
+circular dependency.
+
+> busybox -> libselinux -> python3 -> ncurses -> busybox
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+ Looks good to me, except for the variable naming...
+
+> ---
+>  package/busybox/busybox.mk | 12 ++++++++++++
+>  package/ncurses/ncurses.mk |  5 -----
+>  2 files changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index f9dacc7..b159b44 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -148,6 +148,17 @@ define BUSYBOX_MUSL_TWEAKS
+>  endef
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
+> +# Ncurses package overlaps:
+> +#     /usr/bin/clear
+> +#     /usr/bin/reset -> /usr/bin/tset (symlink)
+> +#
+
+ I think the #-line is redundant.
+
+> +define BUSYBOX_NCURSE_PROGS_TWEAKS
+                        ^S
+
+ But perhaps a better name is BUSYBOX_UNSET_NCURSES_PROGS
+
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
+> +endef
+> +endif
+> +
+>  define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+>  	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
+>  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+> @@ -229,6 +240,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+>  	$(BUSYBOX_SET_WATCHDOG)
+>  	$(BUSYBOX_SET_SELINUX)
+>  	$(BUSYBOX_MUSL_TWEAKS)
+> +	$(BUSYBOX_NCURSE_PROGS_TWEAKS)
+                        ^S
+
+
+ Regards,
+ Arnout
+
+>  endef
+>  
+>  define BUSYBOX_CONFIGURE_CMDS
+> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+> index 68c77ac..2b99d3f 100644
+> --- a/package/ncurses/ncurses.mk
+> +++ b/package/ncurses/ncurses.mk
+> @@ -29,11 +29,6 @@ NCURSES_CONF_OPTS = \
+>  	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
+>  	--without-manpages
+>  
+> -# Install after busybox for the full-blown versions
+> -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> -NCURSES_DEPENDENCIES += busybox
+> -endif
+> -
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  NCURSES_CONF_OPTS += --without-shared --with-normal
+>  else ifeq ($(BR2_SHARED_LIBS),y)
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
