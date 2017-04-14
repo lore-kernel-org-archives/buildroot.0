@@ -1,68 +1,44 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 14 Apr 2017 06:07:01 -0500
-Subject: [Buildroot] [PATCH 2/3] python3: ncurses condition for
-	libselinux enabled
-In-Reply-To: <CANQCQpbtX9ciJhtCSuA0k5Y9tFqtOuziZqpDYbjbz1viaPu6cg@mail.gmail.com>
-References: <1492056974-1773-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1492056974-1773-2-git-send-email-matthew.weber@rockwellcollins.com>
- <20170413222710.419f6cd1@free-electrons.com>
- <CANQCQpb4ySf=NtgNbWShus4YUrJDFqhqTgB0b_oc++Ov3xrmsw@mail.gmail.com>
- <36801d5f-fd50-c2ec-8f42-0ec15544cef4@mind.be>
- <CANQCQpZXUjETb4oT7UDF8kQ7OC3+RvEffiXNGfAL8mg4cy1bew@mail.gmail.com>
- <20170414092419.14a74161@free-electrons.com>
- <CANQCQpb+0UX5C8npsCXNVMOvR89mdF1jZ1jATLwTufK_633kWw@mail.gmail.com>
- <CANQCQpbtX9ciJhtCSuA0k5Y9tFqtOuziZqpDYbjbz1viaPu6cg@mail.gmail.com>
-Message-ID: <CANQCQpZKNp-GCWjtXYa-RuHtDhu=ZykG8kh-dHqmfiyYMELZJg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Apr 2017 13:13:27 +0200
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 7.9.0
+Message-ID: <20170414111331.AF4B782213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=aeb74a35616e1de22568c70e875d1e518497927f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Apr 14, 2017 2:24 AM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
+See https://nodejs.org/en/blog/release/v7.9.0/
 
-Hello,
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, 13 Apr 2017 21:29:09 -0500, Matthew Weber wrote:
-
-> >  Alternatively, we could cut the ncurses->busybox dependency. That only
-exists
-> > to make sure that ncurses tools overwrite busybox tools. IIRC busybox
-will not
-> > overwrite existing tools, so the reverse should work as well. Or else
-remove
-> > these things from the busybox config.
->
-> Good idea.  I checked busybox/ncurses and only the ncurse's
-> "clear"/reset tools overlap.  I'll pull something together removing
-> the dependency and doing a CONFIG_CLEAR/RESET disable as part of
-> busybox configuration tweaks.
-
-Isn't it a bit annoying to no longer have clear/reset compiled as part
-of Busybox?
-
-Perhaps we should enable the clear/reset applets in Busybox if ncurses
-is disabled, and disable the clear/reset applets in Busybox if ncurses
-is enabled. This way, we keep the existing functionality, but we can
-break the ncurses->busybox dependency.
-
-
-Currently the buildroot default busybox config has the two tools which
-would be missing if ncurses was disabled, enabled by default. So I think
-that's ok, (not the cleanest though).
-
-
-
-Thanks,
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170414/7908d1e9/attachment.html>
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index c5e7d14..e54b5e3 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v7.8.0/SHASUMS256.txt
+-sha256  6821aaee58bbc8bc8d08fec6989a42278b725a21382500dc20fd9d9f71398f02  node-v7.8.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v7.9.0/SHASUMS256.txt
++sha256  a569764b884929f31a0772600a5cf36048ad42aa8c54ba4cabea6c067ef96a29  node-v7.9.0.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 24672ed..1a19502 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 7.8.0
++NODEJS_VERSION = 7.9.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
