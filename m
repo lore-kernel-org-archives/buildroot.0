@@ -1,16 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Apr 2017 19:04:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2017-04-09
-In-Reply-To: <20170414094440.70fd14a9@free-electrons.com>
-References: <20170410062848.062C02803A@b01ledav001.gho.pok.ibm.com>
- <20170411010019.GA2638@tungsten.ozlabs.ibm.com>
- <20170411144331.699becca@free-electrons.com>
- <20170412095212.1A18EB2050@b01ledav03.gho.pok.ibm.com>
- <20170413053406.GA4103@tungsten.ozlabs.ibm.com>
- <54038d3c-376b-b5cb-d4d2-671d1119d722@mind.be>
- <20170414094440.70fd14a9@free-electrons.com>
-Message-ID: <9f5cf5ff-934a-c0bd-6ac2-39b8f1f7062b@mind.be>
+Date: Fri, 14 Apr 2017 19:14:19 +0200
+Subject: [Buildroot] [RFC] Adopt a coding style for Python scripts
+In-Reply-To: <58f00d5f9f9f2_1dd63f875a965624536da@ultri3.mail>
+References: <58f00d5f9f9f2_1dd63f875a965624536da@ultri3.mail>
+Message-ID: <ff7902df-d244-bbdd-507e-84bf6bc6f1f5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,73 +12,77 @@ To: buildroot@busybox.net
 
 
 
-On 14-04-17 09:44, Thomas Petazzoni wrote:
-> Hello,
+On 14-04-17 01:44, Ricardo Martincoski wrote:
+> Samuel, Maxime, Thomas, All,
 > 
-> On Fri, 14 Apr 2017 00:14:08 +0200, Arnout Vandecappelle wrote:
+> First of all, I don't want to start a flame war.
 > 
->>  I don't think the rpath is wrong. For the target, it *is* indeed /usr/lib.
->> AFAIU the RPATH is *not* used as an extra -L equivalent at link time, except
->> when -rpath-link is given.
+> I would like to know what you think about moving from A to D (or C or B) below.
 > 
-> Not really clear to me what happens here. The ld documentation says:
+> A) keep using the implicit coding style for Python that we use now in Buildroot;
 
- I was also pondering over that section and couldn't get to a conclusion :-)
+ Note about this coding style: it is absolutely not formal, and most likely not
+followed consistently. It's a combination of the coding style that the various
+contributors are used to, with some things inherited from non-Python Buildroot
+coding style. I think the single line between functions falls in the latter
+category.
 
-[snip]
-> I've did a few experiments, building a dummy shared library and a
-> program that links to it:
-> 
-> thomas at skate:/tmp/toto$ ls
-> libtoto.so  libtoto.so.1  main.c  toto.c  toto.o
-> 
-> # -L allows the link to proceed
-> 
-> thomas at skate:/tmp/toto$ gcc -L/tmp/toto -o main main.c -ltoto
-> thomas at skate:/tmp/toto$ 
-> 
-> # Neither -rpath nor -rpath-link allows ld to find libtoto
 
- Great.
+> B) adopt a pre-existing Python coding style;
+>    The advantages of using a pre-existing one are: documenting on the manual
+>    takes a single sentence; for some coding styles there are automatic checkers
+>    to help during development/review.
+>    Of course there are coding style guides others than PEP8. But I don't know
+>    much about them.
+>    Do some of you use another coding style for Python? What are its advantages?
+> 
+> C) adopt the recommendation PEP8 [1] as coding style;
+> 
+> D) adopt the recommendation PEP8 [1] as coding style and the tool pep8 [2] as
+>    automatic checker for coding style before submitting patches;
+>    It checks for a subset of the recommendation (e.g. file naming is not
+>    checked).
 
-> 
-> thomas at skate:/tmp/toto$ gcc -Wl,-rpath,/tmp/toto -o main main.c -ltoto
-> /usr/bin/ld: cannot find -ltoto
-> collect2: error: ld returned 1 exit status
-> 
-> thomas at skate:/tmp/toto$ gcc -Wl,-rpath-link,/tmp/toto -o main main.c -ltoto
-> /usr/bin/ld: cannot find -ltoto
-> collect2: error: ld returned 1 exit status
-> 
-> # -L + -rpath, and you get the rpath encoded in the program
+ For me, option D is great. It can also be added to the checkpackage script.
 
- Of course.
 
-> 
-> thomas at skate:/tmp/toto$ gcc -L/tmp/toto -Wl,-rpath,/tmp/toto -o main main.c -ltoto
-> 
-> thomas at skate:/tmp/toto$ readelf -d main| grep rpath
->  0x000000000000000f (RPATH)              Library rpath: [/tmp/toto]
-> 
-> # -L + -rpath-link, and you don't get the rpath encoded in the program
+> What I am *NOT* proposing:
+> - use Python for every script;
+> - adapt all current Python scripts as the first step;
+> - enforce, starting now, 0 warnings from pep8 [2] before merging a patch;
+> - use an automatic formatter, like autopep8 [3];
 
- Doesn't matter, we don't use rpath-link :-)
+ Nothing wrong with autopep8 - at least if it is used to generate patches, not
+as a pre-commit hook of course.
+
+
+ The first step is to add the one line to the manual, somewhere in the
+Contributing section.
+
+ Regards,
+ Arnout
 
 > 
-> thomas at skate:/tmp/toto$ gcc -L/tmp/toto -Wl,-rpath-link,/tmp/toto -o main main.c -ltoto
-> thomas at skate:/tmp/toto$ readelf -d main| grep rpath
-> thomas at skate:/tmp/toto$ 
-
- You're missing one important case here: when toto.so is linked with -rpath to
-some /tmp/other directory which contains a library you link against, or that is
-NEEDED by toto.
-
- And then there is also the question of the effect of --sysroot.
-
- Not to forget the evil that can be done by libtool.
-
- Sigh.
-[snip]
+> My *personal* reasoning for using PEP8 [1] and pep8 [2] (outside Buildroot) is:
+> "Some people that wrote much more Python code than me already thought and
+> discussed about this to came up with this recommendation"
+> "I am lazy so I use the tool so I don't need to read the recommendation too
+> often"
+> 
+> [1] https://www.python.org/dev/peps/pep-0008/
+> [2] https://pypi.python.org/pypi/pep8
+> [3] https://pypi.python.org/pypi/autopep8
+> 
+> Regards,
+> Ricardo
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
