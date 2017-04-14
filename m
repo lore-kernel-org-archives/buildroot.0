@@ -1,49 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Apr 2017 23:21:16 +0200
-Subject: [Buildroot] [PATCH 1/1] automake: add patch fixing GNU bug
-	#25299
-In-Reply-To: <20170414224341.19521688@free-electrons.com>
-References: <1491568417-5355-1-git-send-email-heiko.thiery@gmail.com>
- <CAEyMn7YddOxBVShv7WvEcMLCL-rJL_CdJp7d0R0NU0=ZYVwrKA@mail.gmail.com>
- <fb021600-fec9-11e8-b7e3-03b660e975b8@mind.be>
- <20170414224341.19521688@free-electrons.com>
-Message-ID: <4cc73d2b-05bf-fbbf-75bd-81cefb661e6e@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 14 Apr 2017 23:26:04 +0200
+Subject: [Buildroot] [PATCH 1/3] pc_x86_64_bios_defconfig: increase ext2
+	filesystem size
+Message-ID: <20170414212606.13819-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since commit c6bca8cef0 removed autocalculation of the ext2 filesystem
+size, the default size is now set to 60MB. However, this is too small
+for pc_x86_64_bios_defconfig. Indeed, the ext2 filesystem contains the
+kernel (4MB), the wireless modules (4MB), all firmware for wireless
+modules (40MB), and the wifi userspace (9MB) and the udev hwdb (5MB)
+which brings the total to 70MB.
 
+Increase the filesystem size to 120000K, which is a nice and round
+number and leaves enough space for overhead on a 128MB flash drive.
 
-On 14-04-17 22:43, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 10 Apr 2017 16:10:06 +0200, Arnout Vandecappelle wrote:
-> 
->>  And it would also help if you could give a list of autoreconf'ed packages that
->> you have tested with this patch.
-> 
-> I thought I had given feedback on this patch, but apparently no. One
-> think that isn't clear to me is what packages are affected:
-> 
->  * Are only packages autoreconf'ed by Buildroot affected by the @
->    issue ?
-> 
->  * Or are all autotools packages affected ? If that's the case, then
->    this patch is not sufficient: we would have to autoreconf all
->    autotools packages, but is not really doable.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ configs/pc_x86_64_bios_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- I've tried it, and apparently only autoreconf'ed packages are the problem.
-That's why I wrote that the commit message should clarify exactly this.
-
- Regards,
- Arnout
-
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index 23462ad563..65b0016031 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -17,6 +17,7 @@ BR2_TARGET_GRUB2=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
