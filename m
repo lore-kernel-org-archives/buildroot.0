@@ -1,75 +1,47 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 13 Apr 2017 22:20:47 -0500
-Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
-Message-ID: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 14 Apr 2017 07:20:02 +0300
+Subject: [Buildroot] [PATCH] trinity: fix build BPF support is missing
+Message-ID: <b37e7003cdb38da7844cb15345290c4d3a190d4b.1492143602.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ncurses package installs a full version of clear and reset(tset)
-tools.  Preserve these by disabling the options in the busybox config
-file.  This removes the need for ncurses to depend on busybox for solely
-ordering of target install.
-
-This commit resolves the following python circular dependency with python.
-busybox -> libselinux -> python3 -> ncurses -> busybox
+Use upstream patch.
 
 Fixes:
-http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
+http://autobuild.buildroot.net/results/2ae/2ae76fb61d017d99653d57807cb62c4d8c91ff4d/
+http://autobuild.buildroot.net/results/a53/a5391fc272f99b80974582ea735d764db8dc8e9e/
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/busybox/busybox.mk | 12 ++++++++++++
- package/ncurses/ncurses.mk |  5 -----
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ package/trinity/trinity.hash | 1 +
+ package/trinity/trinity.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f9dacc7..b159b44 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -148,6 +148,17 @@ define BUSYBOX_MUSL_TWEAKS
- endef
- endif
+diff --git a/package/trinity/trinity.hash b/package/trinity/trinity.hash
+index 8d88301497e6..ca74264cb927 100644
+--- a/package/trinity/trinity.hash
++++ b/package/trinity/trinity.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256 4cb2bd4049ce523fdf47490c4c18b8eb713c720d4b3b13d6ec2ae246aac908ad  trinity-1.7.tar.xz
+ sha256 5601474b10973b99f6f4ecc67c8ac54000754d7110553cc81c7648bd7e73c810  b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
++sha256 1974e473113b4e79fb2ff820e2b03f475a538e43343c24ca077a04214b9e0418  f447db18b389050ecc5e66dbf549d5953633e23e.patch
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index 3880aec677ba..f76345e69831 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
+@@ -10,7 +10,8 @@ TRINITY_SOURCE = trinity-$(TRINITY_VERSION).tar.xz
+ TRINITY_LICENSE = GPL-2.0
+ TRINITY_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
-+# Ncurses package overlaps:
-+#     /usr/bin/clear
-+#     /usr/bin/reset -> /usr/bin/tset (symlink)
-+#
-+define BUSYBOX_NCURSE_PROGS_TWEAKS
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+endif
-+
- define BUSYBOX_INSTALL_UDHCPC_SCRIPT
- 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-@@ -229,6 +240,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
- 	$(BUSYBOX_MUSL_TWEAKS)
-+	$(BUSYBOX_NCURSE_PROGS_TWEAKS)
- endef
+-TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
++TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch \
++		https://github.com/kernelslacker/trinity/commit/f447db18b389050ecc5e66dbf549d5953633e23e.patch
  
- define BUSYBOX_CONFIGURE_CMDS
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 68c77ac..2b99d3f 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -29,11 +29,6 @@ NCURSES_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
- 	--without-manpages
- 
--# Install after busybox for the full-blown versions
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--NCURSES_DEPENDENCIES += busybox
--endif
--
- ifeq ($(BR2_STATIC_LIBS),y)
- NCURSES_CONF_OPTS += --without-shared --with-normal
- else ifeq ($(BR2_SHARED_LIBS),y)
+ define TRINITY_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
 -- 
-1.9.1
+2.11.0
