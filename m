@@ -1,39 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Apr 2017 22:43:41 +0200
-Subject: [Buildroot] [PATCH 1/1] automake: add patch fixing GNU bug
- #25299
-In-Reply-To: <fb021600-fec9-11e8-b7e3-03b660e975b8@mind.be>
-References: <1491568417-5355-1-git-send-email-heiko.thiery@gmail.com>
- <CAEyMn7YddOxBVShv7WvEcMLCL-rJL_CdJp7d0R0NU0=ZYVwrKA@mail.gmail.com>
- <fb021600-fec9-11e8-b7e3-03b660e975b8@mind.be>
-Message-ID: <20170414224341.19521688@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 14 Apr 2017 23:14:23 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/expedite: bump version for efl
+	1.19 support
+In-Reply-To: <20170414211424.9283-1-romain.naour@gmail.com>
+References: <20170414211424.9283-1-romain.naour@gmail.com>
+Message-ID: <20170414211424.9283-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Required due to eo api changes.
 
-On Mon, 10 Apr 2017 16:10:06 +0200, Arnout Vandecappelle wrote:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v2: improve commit log
+---
+ package/expedite/expedite.hash | 2 +-
+ package/expedite/expedite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  And it would also help if you could give a list of autoreconf'ed packages that
-> you have tested with this patch.
-
-I thought I had given feedback on this patch, but apparently no. One
-think that isn't clear to me is what packages are affected:
-
- * Are only packages autoreconf'ed by Buildroot affected by the @
-   issue ?
-
- * Or are all autotools packages affected ? If that's the case, then
-   this patch is not sufficient: we would have to autoreconf all
-   autotools packages, but is not really doable.
-
-Best regards,
-
-Thomas
+diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
+index 85c4444..2d1db59 100644
+--- a/package/expedite/expedite.hash
++++ b/package/expedite/expedite.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256 a8690a714c16d6b67e7fd6d70973e9805c3569a9131900b1feaf183220496831  expedite-ffa005ea3de26b4219f32c285cb1665bb1366163.tar.gz
++sha256 007e382861555f1023b679e21ff44122b0622c514ce8ef9d7c390b9ac1511009 expedite-0529ce56b6fb01e9651e76461e9608e15a040fb3.tar.gz
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+index c18d32b..d49e87a 100644
+--- a/package/expedite/expedite.mk
++++ b/package/expedite/expedite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPEDITE_VERSION = ffa005ea3de26b4219f32c285cb1665bb1366163
++EXPEDITE_VERSION = 0529ce56b6fb01e9651e76461e9608e15a040fb3
+ EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
+ EXPEDITE_SITE_METHOD = git
+ EXPEDITE_LICENSE = BSD-2-Clause
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
