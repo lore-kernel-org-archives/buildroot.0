@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Apr 2017 22:30:09 +0200
-Subject: [Buildroot] [PATCH] package/hiredis: fix install step for
- static build only
-In-Reply-To: <20170414130225.16408-1-romain.naour@gmail.com>
-References: <20170414130225.16408-1-romain.naour@gmail.com>
-Message-ID: <20170414223009.78b495bc@free-electrons.com>
+Date: Fri, 14 Apr 2017 22:34:02 +0200
+Subject: [Buildroot] [git commit] package/efl: remove leftover
+	disable-wayland option
+Message-ID: <20170414203413.C70788271A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=577f5ba592e50349e35b9066d7b6ea572d008562
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 14 Apr 2017 15:02:25 +0200, Romain Naour wrote:
-> The previous patch [1] didn't take into acount the static build only
-> scenario. It try to install unconditionally a shared library.
-> 
-> Handle the install step like for bzip2 package.
-> 
-> Install the shared library only if BR2_SHARED_LIBS or
-> BR2_SHARED_STATIC_LIBS is set and install the static library only
-> if BR2_STATIC_LIBS or BR2_SHARED_STATIC_LIBS is set.
-> 
-> [1] 96daacb720cffe1f83259462bef9d3da92925cd9
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6be/6be8024dd664af83fcf49ede29c8ad59a37f73d1
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/hiredis/hiredis.mk | 29 +++++++++++++++++++++++------
->  1 file changed, 23 insertions(+), 6 deletions(-)
+Wayland support was re-added by [1] but the --disable-wayland option
+was not removed from EFL_CONF_OPTS.
 
-Applied to master, thanks.
+[1] f30eec41f95ed99909eb2c7590d83c12b9142df2
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efl/efl.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 3644000..8772871 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -44,7 +44,6 @@ EFL_CONF_OPTS = \
+ 	--disable-sdl \
+ 	--disable-spectre \
+ 	--disable-xinput22 \
+-	--disable-wayland \
+ 	--enable-liblz4 \
+ 	--with-doxygen=no
+ 
