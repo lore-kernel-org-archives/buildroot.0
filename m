@@ -1,105 +1,67 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 13 Apr 2017 21:22:25 -0300
-Subject: [Buildroot] [PATCH] atop: bump version to 2.3.0
-Message-ID: <20170414002225.11351-1-ricardo.martincoski@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 13 Apr 2017 21:29:09 -0500
+Subject: [Buildroot] [PATCH 2/3] python3: ncurses condition for
+	libselinux enabled
+In-Reply-To: <36801d5f-fd50-c2ec-8f42-0ec15544cef4@mind.be>
+References: <1492056974-1773-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1492056974-1773-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170413222710.419f6cd1@free-electrons.com>
+ <CANQCQpb4ySf=NtgNbWShus4YUrJDFqhqTgB0b_oc++Ov3xrmsw@mail.gmail.com>
+ <36801d5f-fd50-c2ec-8f42-0ec15544cef4@mind.be>
+Message-ID: <CANQCQpZXUjETb4oT7UDF8kQ7OC3+RvEffiXNGfAL8mg4cy1bew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch applied upstream [1].
+Arnout,
 
-[1] https://github.com/Atoptool/atop/commit/a2306c0e1c83f5a123ce521a34d9efaa2297c26d
+On Thu, Apr 13, 2017 at 4:55 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 13-04-17 23:20, Matthew Weber wrote:
+>> Thomas,
+>>
+>> On Thu, Apr 13, 2017 at 3:27 PM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> Hello,
+>>>
+>>> On Wed, 12 Apr 2017 23:16:13 -0500, Matt Weber wrote:
+>>>> When libselinux is enabled, a circular dependency is
+>>>> created.  Disable ncurses python support when libselinux
+>>>> is enabled so that the circular busybox, ncurses,
+>>>> python, libselinux chain is broken.
+>>>>
+>>>> Resolves
+>>>> http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
+>>>>
+>>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>>>
+>>> I am not sure this is the right approach to fix this issue. It feels
+>>> really weird to no longer be able to use ncurses support in Python(3)
+>>> when SELinux is enabled.
+>>>
+>>> I believe the real issue is that Busybox really doesn't care at all
+>>> about the Python bindings for libselinux. So perhaps we should split
+>>> the Python bindings build/installation from libselinux into a separate
+>>> package. I think we had a similar split for another package.
+>>>
+>>> It would however require some investigation to figure out if it's
+>>> possible to build just the Python bindings, using an already built and
+>>> installed libselinux.
+>>
+>> I'll take a look.
+>
+>  Alternatively, we could cut the ncurses->busybox dependency. That only exists
+> to make sure that ncurses tools overwrite busybox tools. IIRC busybox will not
+> overwrite existing tools, so the reverse should work as well. Or else remove
+> these things from the busybox config.
+>
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-49 builds, 3 skipped, 0 failed
----
- .../0001-remove-unused-include-of-termio.h.patch   | 52 ----------------------
- package/atop/atop.hash                             |  2 +-
- package/atop/atop.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 54 deletions(-)
- delete mode 100644 package/atop/0001-remove-unused-include-of-termio.h.patch
+Good idea.  I checked busybox/ncurses and only the ncurse's
+"clear"/reset tools overlap.  I'll pull something together removing
+the dependency and doing a CONFIG_CLEAR/RESET disable as part of
+busybox configuration tweaks.
 
-diff --git a/package/atop/0001-remove-unused-include-of-termio.h.patch b/package/atop/0001-remove-unused-include-of-termio.h.patch
-deleted file mode 100644
-index 3a04b05e6..000000000
---- a/package/atop/0001-remove-unused-include-of-termio.h.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--remove unused include of termio.h
--
--This header is not provided by musl, leading to build failures.
--
--Patch status: accepted upstream.
--
--Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-----
--diff -purN atop-2.2-3.orig/showgeneric.c atop-2.2-3/showgeneric.c
----- atop-2.2-3.orig/showgeneric.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showgeneric.c	2016-07-19 22:08:16.171453283 -0300
--@@ -268,7 +268,6 @@ static const char rcsid[] = "$Id: showge
-- #include <errno.h>
-- #include <fcntl.h>
-- #include <string.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
--diff -purN atop-2.2-3.orig/showlinux.c atop-2.2-3/showlinux.c
----- atop-2.2-3.orig/showlinux.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showlinux.c	2016-07-19 22:08:20.979472459 -0300
--@@ -274,7 +274,6 @@ static const char rcsid[] = "$Id: showli
-- #include <string.h>
-- #include <errno.h>
-- #include <fcntl.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
--diff -purN atop-2.2-3.orig/showprocs.c atop-2.2-3/showprocs.c
----- atop-2.2-3.orig/showprocs.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showprocs.c	2016-07-19 22:08:25.083488900 -0300
--@@ -94,7 +94,6 @@ static const char rcsid[] = "$Id: showpr
-- #include <string.h>
-- #include <errno.h>
-- #include <fcntl.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
--diff -purN atop-2.2-3.orig/showsys.c atop-2.2-3/showsys.c
----- atop-2.2-3.orig/showsys.c	2016-07-19 22:07:43.275324499 -0300
--+++ atop-2.2-3/showsys.c	2016-07-19 22:08:29.099505047 -0300
--@@ -80,7 +80,6 @@ static const char rcsid[] = "XXXXXX";
-- #include <string.h>
-- #include <errno.h>
-- #include <fcntl.h>
---#include <termio.h>
-- #include <unistd.h>
-- #include <stdarg.h>
-- #include <curses.h>
-diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-index bbf268d06..7a7bffbfa 100644
---- a/package/atop/atop.hash
-+++ b/package/atop/atop.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  c785b8a2355be28b3de6b58a8ea4c4fcab8fadeaa57a99afeb03c66fac8e055d  atop-2.2-3.tar.gz
-+sha256  73e4725de0bafac8c63b032e8479e2305e3962afbe977ec1abd45f9e104eb264  atop-2.3.0.tar.gz
-diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-index f0893821c..2cc0da6af 100644
---- a/package/atop/atop.mk
-+++ b/package/atop/atop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATOP_VERSION = 2.2-3
-+ATOP_VERSION = 2.3.0
- ATOP_SITE = http://www.atoptool.nl/download
- ATOP_LICENSE = GPL-2.0+
- ATOP_LICENSE_FILES = COPYING
--- 
-2.11.0
+-Matt
