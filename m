@@ -1,39 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Apr 2017 11:41:32 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ffmpeg: fix neon support for aarch64
-In-Reply-To: <20170414093026.32067-1-bernd.kuhls@t-online.de>
-References: <20170414093026.32067-1-bernd.kuhls@t-online.de>
-Message-ID: <20170414114132.4235ea1c@free-electrons.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Fri, 14 Apr 2017 12:03:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 7.9.0
+Message-ID: <1492167796-12951-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+See https://nodejs.org/en/blog/release/v7.9.0/
 
-On Fri, 14 Apr 2017 11:30:26 +0200, Bernd Kuhls wrote:
-> ffmpeg ported arm 32-bit NEON code to aarch64 as hard dependency:
-> http://ffmpeg.org/pipermail/ffmpeg-devel/2016-November/202733.html
-> 
-> Buildroot option BR2_ARM_CPU_HAS_NEON handles only the 32bit case:
-> https://git.buildroot.net/buildroot/commit/?id=0976cd6cd64a128a2ac921e4f35f0e7cbe306692
-> 
-> For aarch64 we need to make sure to pass --enable-neon in order to
-> prevent a link error, fixes
-> 
-> http://autobuild.buildroot.net/results/fa4/fa46003249664b1f97f6c18253c84cd3d6fb9cdb/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: fixed if-clause (Thomas)
->     v1 "fixed" the problem as well by omitting --disable-neon,
->     ffmpeg then autodetected neon support ;)
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index c5e7d14..e54b5e3 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v7.8.0/SHASUMS256.txt
+-sha256  6821aaee58bbc8bc8d08fec6989a42278b725a21382500dc20fd9d9f71398f02  node-v7.8.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v7.9.0/SHASUMS256.txt
++sha256  a569764b884929f31a0772600a5cf36048ad42aa8c54ba4cabea6c067ef96a29  node-v7.9.0.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 24672ed..1a19502 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 7.8.0
++NODEJS_VERSION = 7.9.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
