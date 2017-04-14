@@ -1,88 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Apr 2017 20:31:24 +0200
-Subject: [Buildroot] Journal size too big for filesystem
-In-Reply-To: <fa03666f-27d6-d01b-078a-7da8900e9eb6@gmail.com>
-References: <fa03666f-27d6-d01b-078a-7da8900e9eb6@gmail.com>
-Message-ID: <6e150539-1b8b-4b65-fa49-0b1ec4d10f60@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 Apr 2017 22:24:56 +0200
+Subject: [Buildroot] [git commit] package/rpi-firmware: bump version
+Message-ID: <20170414202605.CE5B6827DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=24f230e4919db8a5ec2e8eb93c990f8a6896cd13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 13-04-17 12:29, St?phane Jublin wrote:
-> Hi,
-> 
-> thank's for Buildroot.
-> I just beging to learn , understand and test it.
-> I've got the last version of buildroot (git pull in my git directory)
-> 
-> I just try to build an image.
-> 1) make pc_x86_64_bios_defconfig
-> 2) make
-> 
-> at the end of the compilation I have this error
-> 
-> 
-> *tune2fs 1.43.4 (31-Jan-2017)**
-> **tune2fs 1.43.4 (31-Jan-2017)**
-> ****
-> **Please run e2fsck on the filesystem.**
-> ****
-> **Creating journal inode:**
-> **Journal size too big for filesystem.**
-
- Correct, this is one of the defconfigs that need fixing after the change that
-you refer to below.
-
- The problem is that the filesystem size is too small. To fix in your local
-build without patching Buildroot, you can just do
-
-make menuconfig
-
-then go the the Filesystem images menu, select the 'exact size in blocks' option
-and change the 61440 into 120000.
-
-Exit menuconfig, then type
-
-make
-
-and the build should succeed.
-
- Regards,
- Arnout
-
-> ****
-> **fs/ext2/ext2.mk:44 : Recipe for target
-> ? /home/***/git/buildroot/output/images/rootfs.ext2 ? failed**
-> **make[1]: *** [/home/***/git/buildroot/output/images/rootfs.ext2] Erreur 1**
-> **Makefile:79 : Recipe for target ? _all ? failed**
-> **make: *** [_all] Erreur 2*
-> 
-> 
-> I find this error on different web site, but no effect
-> https://github.com/buildroot/buildroot/commit/c6bca8cef0310bc649240b451989457ce94a8358
-> https://git.busybox.net/buildroot/commit/?id=0fab0a4afdff2f27fce49e7b38179e781e7b64ed
-> https://patchwork.ozlabs.org/patch/225977/
-> 
-> Could you help me ?
-> 
-> Thank's
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index f6dd03a..11655ee 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0797a034b33a0218fd6fb3c5bb1473959e209a8fe676f3c215f954806601aa78 rpi-firmware-78c4983379de0537f49a97fb37ceaaf42632b28c.tar.gz
++sha256 84f44265c7e9bfe3e54a326b95ea7067870cfe08a9aae12f00aec8d47f6fc353 rpi-firmware-4b24a81a2ce94afd4458d1af4ea1e73d58e69848.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 5d5c9f0..134fceb 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 78c4983379de0537f49a97fb37ceaaf42632b28c
++RPI_FIRMWARE_VERSION = 4b24a81a2ce94afd4458d1af4ea1e73d58e69848
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
