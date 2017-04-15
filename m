@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Apr 2017 10:24:32 +0200
-Subject: [Buildroot] [PATCH] docs/manual: contribute: fix license string
- for Buildroot license
-In-Reply-To: <1492233280-5237-1-git-send-email-rahulbedarkar89@gmail.com>
-References: <1492233280-5237-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <20170415102432.0841ead6@free-electrons.com>
+Date: Sat, 15 Apr 2017 10:26:02 +0200
+Subject: [Buildroot] [PATCH 2/2] configs: add raspberrypi3 64bits
+ defconfig
+In-Reply-To: <7f20d3e0-f73b-de31-8d64-f36679d833d1@mind.be>
+References: <20170414214551.17986-1-gael.portay@savoirfairelinux.com>
+ <20170414214551.17986-3-gael.portay@savoirfairelinux.com>
+ <7f20d3e0-f73b-de31-8d64-f36679d833d1@mind.be>
+Message-ID: <20170415102602.2f085ffd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +15,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 15 Apr 2017 10:44:40 +0530, Rahul Bedarkar wrote:
-> As per section 12.2 "Complying with the Buildroot license", Buildroot
-> is released under GPL version 2 or (at your option) any later version.
-> But SPDX license string for Buildroot license in section 21.5
-> "Submitting patches" refers to only GPL version 2. Fix this
-> inconsistency by using correct SPDX identifier.
-> 
-> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-> ---
->  docs/manual/contribute.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 15 Apr 2017 00:22:12 +0200, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+>  BTW, does anyone know why the 32-bit version has cortex_a7?
+
+I think because back when the rpi3 defconfig was added, there was no
+selection of AArch64 cores.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
