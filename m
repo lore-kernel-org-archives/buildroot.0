@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Apr 2017 10:26:02 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: add raspberrypi3 64bits
- defconfig
-In-Reply-To: <7f20d3e0-f73b-de31-8d64-f36679d833d1@mind.be>
-References: <20170414214551.17986-1-gael.portay@savoirfairelinux.com>
- <20170414214551.17986-3-gael.portay@savoirfairelinux.com>
- <7f20d3e0-f73b-de31-8d64-f36679d833d1@mind.be>
-Message-ID: <20170415102602.2f085ffd@free-electrons.com>
+Date: Sat, 15 Apr 2017 10:26:52 +0200
+Subject: [Buildroot] [git commit] rpi-firmware: allow to build for aarch64
+	targets
+Message-ID: <20170415082719.B829F80824@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7eac5601849d42e396b34033e74fcfababa0f3aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Apr 2017 00:22:12 +0200, Arnout Vandecappelle wrote:
+The RaspberryPi 3 is based on a AArch64 CPU and requires binaries from
+this package.
 
->  BTW, does anyone know why the 32-bit version has cortex_a7?
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-firmware/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I think because back when the rpi3 defconfig was added, there was no
-selection of AArch64 cores.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index c2983aa..7b37a30 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_RPI_FIRMWARE
+ 	bool "rpi-firmware"
+-	depends on BR2_arm
++	depends on BR2_arm || BR2_aarch64
+ 	help
+ 	  RaspberryPi Firmware
+ 	  Pre-compiled binaries of the current bootloader and GPU firmware
