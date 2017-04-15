@@ -1,135 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Apr 2017 10:42:58 +0200
-Subject: [Buildroot] [git commit] package/efl: bump to version 1.19.0
-Message-ID: <20170415084523.C965B8215D@busybox.osuosl.org>
+Date: Sat, 15 Apr 2017 10:43:11 +0200
+Subject: [Buildroot] [git commit] package/expedite: bump version for efl
+	1.19 support
+Message-ID: <20170415084524.AD2BA7FF6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f6162e800901270e747005d4213d9af59a08504
+commit: https://git.buildroot.net/buildroot/commit/?id=7a7b184c6bf0a5134498960d1bf61f80b805ceb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new version of the EFL enables systemd support by default, so
-we have to disable it explicitely for host-efl by adding an
-additional --disable-systemd option to HOST_EFL_CONF_OPTS.
-
-Also handle newly introduced options vnc-server and net-control
-which brings additional dependencies. Disable them by default.
-
-Select wayland-protocol package which is now required to build
-the efl wayland support [1].
-
-See the release announcement [2].
-
-[1] https://git.enlightenment.org/core/efl.git/commit/?id=55750d41fad6055a549664ae92a34e636d7fb1f0
-[2] https://sourceforge.net/p/enlightenment/mailman/message/35785467
+Required due to eo api changes.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/Config.in |  1 +
- package/efl/efl.hash  |  4 ++--
- package/efl/efl.mk    | 14 ++++++++++++--
- 3 files changed, 15 insertions(+), 4 deletions(-)
+ package/expedite/expedite.hash | 2 +-
+ package/expedite/expedite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 0785ab8..371ed3f 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -179,6 +179,7 @@ config BR2_PACKAGE_EFL_WAYLAND
- 	depends on BR2_PACKAGE_EFL_EEZE # efl drm
- 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
- 	select BR2_PACKAGE_EFL_DRM
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 
- comment "Wayland support needs udev /dev management (eeze) and OpenGL ES w/ EGL, threads"
- 	depends on BR2_PACKAGE_WAYLAND
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 5d7a90d..39e0f93 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
+diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
+index 85c4444..2d1db59 100644
+--- a/package/expedite/expedite.hash
++++ b/package/expedite/expedite.hash
 @@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.4.tar.xz.sha256
--sha256	39ebc07e37437d6ecdeb0f645783484e28a882b38f7e619ad12c2bf9b5548025	efl-1.18.4.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.19.0.tar.xz.sha256
-+sha256	a4e0341081778007db414f8cd4e3b77b9d5398870292cab67e6b40cc1445eadf	efl-1.19.0.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 8772871..c71c084 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
+ # locally computed
+-sha256 a8690a714c16d6b67e7fd6d70973e9805c3569a9131900b1feaf183220496831  expedite-ffa005ea3de26b4219f32c285cb1665bb1366163.tar.gz
++sha256 007e382861555f1023b679e21ff44122b0622c514ce8ef9d7c390b9ac1511009 expedite-0529ce56b6fb01e9651e76461e9608e15a040fb3.tar.gz
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+index c18d32b..d49e87a 100644
+--- a/package/expedite/expedite.mk
++++ b/package/expedite/expedite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFL_VERSION = 1.18.4
-+EFL_VERSION = 1.19.0
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
-@@ -28,7 +28,9 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
- # --disable-sdl: disable sdl2 support.
- # --disable-spectre: disable spectre image loader.
- # --disable-xinput22: disable X11 XInput v2.2+ support.
-+# --disable-vnc-server: remove libvncserver dependency.
- # --enable-liblz4: use liblz4 from lz4 package.
-+# --with-net-control=none: disable connman networkmanager.
- # --with-doxygen: disable doxygen documentation
- EFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-@@ -39,11 +41,13 @@ EFL_CONF_OPTS = \
- 	--with-elua=$(HOST_DIR)/usr/bin/elua \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-image-loader-jp2k \
-+	--with-net-control=none \
- 	--disable-lua-old \
- 	--disable-poppler \
- 	--disable-sdl \
- 	--disable-spectre \
- 	--disable-xinput22 \
-+	--disable-vnc-server \
- 	--enable-liblz4 \
- 	--with-doxygen=no
- 
-@@ -212,7 +216,7 @@ endif
- # which depends on wayland-client to build.
- # So enable gl_drm only when wayland support is selected.
- ifeq ($(BR2_PACKAGE_EFL_WAYLAND),y)
--EFL_DEPENDENCIES += wayland
-+EFL_DEPENDENCIES += wayland wayland-protocols
- EFL_CONF_OPTS += --enable-wayland --enable-gl-drm
- else
- EFL_CONF_OPTS += --disable-wayland --disable-gl-drm
-@@ -323,10 +327,13 @@ HOST_EFL_DEPENDENCIES = \
- # --disable-physics: remove Bullet dependency.
- # --disable-poppler: disable poppler image loader.
- # --disable-spectre: disable spectre image loader.
-+# --disable-systemd: disable systemd dependency.
-+# --disable-vnc-server: remove libvncserver dependency.
- # --enable-image-loader-gif=no: disable Gif dependency.
- # --enable-image-loader-tiff=no: disable Tiff dependency.
- # --with-crypto=none: remove dependencies on openssl or gnutls.
- # --with-doxygen: disable doxygen documentation
-+# --with-net-control=none: disable connman networkmanager.
- # --with-x11=none: remove dependency on X.org.
- #   Yes I really know what I am doing.
- HOST_EFL_CONF_OPTS += \
-@@ -343,7 +350,9 @@ HOST_EFL_CONF_OPTS += \
- 	--disable-physics \
- 	--disable-poppler \
- 	--disable-spectre \
-+	--disable-systemd \
- 	--disable-xcf \
-+	--disable-vnc-server \
- 	--enable-image-loader-gif=no \
- 	--enable-image-loader-jpeg=yes \
- 	--enable-image-loader-png=yes \
-@@ -351,6 +360,7 @@ HOST_EFL_CONF_OPTS += \
- 	--with-crypto=none \
- 	--with-doxygen=no \
- 	--with-glib=yes \
-+	--with-net-control=none \
- 	--with-opengl=none \
- 	--with-x11=none \
- 	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-abb
+-EXPEDITE_VERSION = ffa005ea3de26b4219f32c285cb1665bb1366163
++EXPEDITE_VERSION = 0529ce56b6fb01e9651e76461e9608e15a040fb3
+ EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
+ EXPEDITE_SITE_METHOD = git
+ EXPEDITE_LICENSE = BSD-2-Clause
