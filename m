@@ -1,46 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Apr 2017 10:42:05 +0200
-Subject: [Buildroot] [PATCH 1/3] pc_x86_64_bios_defconfig: increase ext2
- filesystem size
-In-Reply-To: <20170414212606.13819-1-arnout@mind.be>
-References: <20170414212606.13819-1-arnout@mind.be>
-Message-ID: <20170415104205.6aef1b2e@free-electrons.com>
+Date: Sat, 15 Apr 2017 10:43:20 +0200
+Subject: [Buildroot] [git commit] package/efl: add poppler imageloader
+	optional dependency
+Message-ID: <20170415084524.B5BFC8215D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fcc8e762417ab80a7e837c7014a230bc40c1fbf9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 14 Apr 2017 23:26:04 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Since commit c6bca8cef0 removed autocalculation of the ext2 filesystem
-> size, the default size is now set to 60MB. However, this is too small
-> for pc_x86_64_bios_defconfig. Indeed, the ext2 filesystem contains the
-> kernel (4MB), the wireless modules (4MB), all firmware for wireless
-> modules (40MB), and the wifi userspace (9MB) and the udev hwdb (5MB)
-> which brings the total to 70MB.
-> 
-> Increase the filesystem size to 120000K, which is a nice and round
-> number and leaves enough space for overhead on a 128MB flash drive.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  configs/pc_x86_64_bios_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efl/efl.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-I've applied all three to master, thanks! For PATCH 2/3, it is somewhat
-surprising that the Mali blob takes as much as 90 MB, but that's a
-separate issue.
-
-If you could resync the Gitlab mirror so that tomorrow morning build of
-all defconfigs uses the latest updates, it would be nice.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index c71c084..4008d30 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -24,7 +24,6 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+ 
+ # Configure options:
+ # --disable-lua-old: build elua for the target.
+-# --disable-poppler: disable poppler image loader.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-spectre: disable spectre image loader.
+ # --disable-xinput22: disable X11 XInput v2.2+ support.
+@@ -43,7 +42,6 @@ EFL_CONF_OPTS = \
+ 	--disable-image-loader-jp2k \
+ 	--with-net-control=none \
+ 	--disable-lua-old \
+-	--disable-poppler \
+ 	--disable-sdl \
+ 	--disable-spectre \
+ 	--disable-xinput22 \
+@@ -262,6 +260,13 @@ else
+ EFL_CONF_OPTS += --disable-image-loader-webp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_POPPLER),y)
++EFL_DEPENDENCIES += poppler
++EFL_CONF_OPTS += --enable-poppler
++else
++EFL_CONF_OPTS += --disable-poppler
++endif
++
+ ifeq ($(BR2_PACKAGE_EFL_LIBRAW),y)
+ EFL_DEPENDENCIES += libraw
+ EFL_CONF_OPTS += --enable-libraw
