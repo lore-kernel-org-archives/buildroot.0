@@ -1,30 +1,36 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 16 Apr 2017 01:31:13 +0300
-Subject: [Buildroot] [PATCH 1/1] rtl8821au: bump to latest
-In-Reply-To: <20170415173320.14802-1-christian@paral.in>
-References: <20170415173320.14802-1-christian@paral.in>
-Message-ID: <20170415223113.oyb2er4kmth7bq5q@tarshish>
+Date: Sun, 16 Apr 2017 01:53:27 +0300
+Subject: [Buildroot] [PATCH] trinity: add optional dependency on btrfs-progs
+Message-ID: <baba62bac89ef2a49b0206dcfeec2b9b249a4d3a.1492296807.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+The context of this patch depends on
+http://patchwork.ozlabs.org/patch/751102/.
+---
+ package/trinity/trinity.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Sat, Apr 15, 2017 at 01:33:20PM -0400, Christian Stewart wrote:
-> Two CFLAGS are added: -Wno-unused-function and -Wno-unused-variable.
-> 
-> These warnings are disabled due to several unused functions and
-> variables in the codebase that cause build failures with the
-> -Wall -Werror flags enabled in rtl8821au.
-
-A better future proof approach might be disabling -Werror with -Wno-error 
-instead.
-
-baruch
-
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index 4d4078d1e2e0..ee695fb54d9f 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
+@@ -14,6 +14,10 @@ TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc21
+ 		https://github.com/kernelslacker/trinity/commit/f447db18b389050ecc5e66dbf549d5953633e23e.patch \
+ 		https://github.com/kernelslacker/trinity/commit/87427256640f806710dd97fc807a9a896147c617.patch
+ 
++ifeq ($(BR2_PACKAGE_BTRFS_PROGS),y)
++TRINITY_DEPENDENCIES += btrfs-progs
++endif
++
+ define TRINITY_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
+ endef
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
