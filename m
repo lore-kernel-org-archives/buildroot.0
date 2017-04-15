@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 15 Apr 2017 10:43:11 +0200
-Subject: [Buildroot] [git commit] package/expedite: bump version for efl
-	1.19 support
-Message-ID: <20170415084524.AD2BA7FF6A@busybox.osuosl.org>
+Date: Sat, 15 Apr 2017 10:45:40 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/efl: bump to version 1.19.0
+In-Reply-To: <20170414211424.9283-1-romain.naour@gmail.com>
+References: <20170414211424.9283-1-romain.naour@gmail.com>
+Message-ID: <20170415104540.0d991d4d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a7b184c6bf0a5134498960d1bf61f80b805ceb8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Required due to eo api changes.
+On Fri, 14 Apr 2017 23:14:22 +0200, Romain Naour wrote:
+> This new version of the EFL enables systemd support by default, so
+> we have to disable it explicitely for host-efl by adding an
+> additional --disable-systemd option to HOST_EFL_CONF_OPTS.
+> 
+> Also handle newly introduced options vnc-server and net-control
+> which brings additional dependencies. Disable them by default.
+> 
+> Select wayland-protocol package which is now required to build
+> the efl wayland support [1].
+> 
+> See the release announcement [2].
+> 
+> [1] https://git.enlightenment.org/core/efl.git/commit/?id=55750d41fad6055a549664ae92a34e636d7fb1f0
+> [2] https://sourceforge.net/p/enlightenment/mailman/message/35785467
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> v2: improve commit log (ThomasP)
+> ---
+>  package/efl/Config.in |  1 +
+>  package/efl/efl.hash  |  4 ++--
+>  package/efl/efl.mk    | 14 ++++++++++++--
+>  3 files changed, 15 insertions(+), 4 deletions(-)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/expedite/expedite.hash | 2 +-
- package/expedite/expedite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for this new iteration. All three patches applied. Thanks!
 
-diff --git a/package/expedite/expedite.hash b/package/expedite/expedite.hash
-index 85c4444..2d1db59 100644
---- a/package/expedite/expedite.hash
-+++ b/package/expedite/expedite.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256 a8690a714c16d6b67e7fd6d70973e9805c3569a9131900b1feaf183220496831  expedite-ffa005ea3de26b4219f32c285cb1665bb1366163.tar.gz
-+sha256 007e382861555f1023b679e21ff44122b0622c514ce8ef9d7c390b9ac1511009 expedite-0529ce56b6fb01e9651e76461e9608e15a040fb3.tar.gz
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index c18d32b..d49e87a 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPEDITE_VERSION = ffa005ea3de26b4219f32c285cb1665bb1366163
-+EXPEDITE_VERSION = 0529ce56b6fb01e9651e76461e9608e15a040fb3
- EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
- EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2-Clause
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
