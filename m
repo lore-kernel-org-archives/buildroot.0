@@ -1,31 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Apr 2017 17:05:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: depends on
- BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <20170416114135.5080-1-bernd.kuhls@t-online.de>
-References: <20170416114135.5080-1-bernd.kuhls@t-online.de>
-Message-ID: <20170416170537.5eee03e2@free-electrons.com>
+Date: Sun, 16 Apr 2017 17:10:14 +0200
+Subject: [Buildroot] [git commit] package/mpv: disable cuda support
+Message-ID: <20170416151109.311A482713@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=030bebd7f137ffc9c41d4911c7957f720ed971c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Apr 2017 13:41:35 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/5a2/5a2a7f24c8727f7f3aee2ca72b4472f261610c27/
+mpv wrongly detects cuda being available:
 
-In a patch sent yesterday, you made ffmpeg link against libatomic. It's
-a bit weird that it also uses the __sync built-ins. Does it use
-both __atomic and __sync built-ins? In all configurations? On all
-architectures?
+Checking for CUDA hwaccel : yes
 
-Thanks,
+leading to build errors.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Fixes
+http://autobuild.buildroot.net/results/e89/e892a537265ad7259024403a0bb3ca5da85ed096/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpv/mpv.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 2c5d829..a21ddeb 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -23,6 +23,7 @@ MPV_CONF_OPTS = \
+ 	--disable-cdda \
+ 	--disable-cocoa \
+ 	--disable-coreaudio \
++	--disable-cuda-hwaccel \
+ 	--disable-libv4l2 \
+ 	--disable-opensles \
+ 	--disable-rpi \
