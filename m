@@ -1,86 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 16 Apr 2017 14:21:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpv: bump version to 0.24.0
-Message-ID: <20170416122144.7459-1-bernd.kuhls@t-online.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 16 Apr 2017 16:29:04 +0200
+Subject: [Buildroot] [PATCH v2] package/uclibc: Enable wordexp
+	functionality
+In-Reply-To: <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
+References: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
+ <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
+Message-ID: <20170416142904.GB11446@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mpv/0003-fix-build-with-have-gl.patch | 39 +++++++++++++++++++++++++++
- package/mpv/mpv.hash                          |  2 +-
- package/mpv/mpv.mk                            |  2 +-
- 3 files changed, 41 insertions(+), 2 deletions(-)
- create mode 100644 package/mpv/0003-fix-build-with-have-gl.patch
+Hi,
+Andy Shevchenko wrote,
 
-diff --git a/package/mpv/0003-fix-build-with-have-gl.patch b/package/mpv/0003-fix-build-with-have-gl.patch
-new file mode 100644
-index 000000000..0934bc895
---- /dev/null
-+++ b/package/mpv/0003-fix-build-with-have-gl.patch
-@@ -0,0 +1,39 @@
-+From 212f6c8206bd4dcc7d8970c5f1632823ae4e783a Mon Sep 17 00:00:00 2001
-+From: Michael Forney <mforney@mforney.org>
-+Date: Sun, 12 Feb 2017 23:01:21 -0800
-+Subject: [PATCH] Fix build with HAVE_GL==0
-+
-+video/out/opengl/hwdec.h includes video/out/opengl/common.h, which tries
-+to include opengl headers.
-+
-+Downloaded from upstream commit:
-+https://github.com/mpv-player/mpv/commit/212f6c8206bd4dcc7d8970c5f1632823ae4e783a
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ options/options.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/options/options.c b/options/options.c
-+index b711156..0bb36ad 100644
-+--- a/options/options.c
-++++ b/options/options.c
-+@@ -40,7 +40,6 @@
-+ #include "stream/stream.h"
-+ #include "video/csputils.h"
-+ #include "video/hwdec.h"
-+-#include "video/out/opengl/hwdec.h"
-+ #include "video/image_writer.h"
-+ #include "sub/osd.h"
-+ #include "audio/filter/af.h"
-+@@ -53,6 +52,10 @@
-+ #include "video/out/drm_common.h"
-+ #endif
-+ 
-++#if HAVE_GL
-++#include "video/out/opengl/hwdec.h"
-++#endif
-++
-+ extern const char mp_help_text[];
-+ 
-+ static void print_version(struct mp_log *log)
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index 0e7aab707..e0644a3c5 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	8aeefe5970587dfc454d2b89726b603f156bd7a9ae427654eef0d60c68d94998	v0.23.0.tar.gz
-+sha256 a41854fa0ac35b9c309ad692aaee67c8d4495c3546f11cb4cdd0a124195d3f15  v0.24.0.tar.gz
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index a21ddeb1d..6191821e2 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPV_VERSION = 0.23.0
-+MPV_VERSION = 0.24.0
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
- MPV_DEPENDENCIES = \
--- 
-2.11.0
+> The commit d7c54cb0c0cf ("bluez5_utils: not available with uClibc")
+> disables bluez5_utils (most of them) to be built with uClibc. Looking to
+> the development of BlueZ user space support that commit basically makes
+> the bluez5_utils package somewhat piece of junk. Since bluez5_utils 5.44
+> deprecates all previously used tools and focuses on btmgmt and
+> bluetoothctl we need to restore status quo.
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  package/uclibc/uClibc-ng.config | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+> index 528bce965..91082975e 100644
+> --- a/package/uclibc/uClibc-ng.config
+> +++ b/package/uclibc/uClibc-ng.config
+> @@ -32,6 +32,7 @@ UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+>  UCLIBC_HAS_PRINTF_M_SPEC=y
+>  # UCLIBC_HAS_REGEX_OLD is not set
+>  # UCLIBC_HAS_FNMATCH_OLD is not set
+> +UCLIBC_HAS_WORDEXP=y
+>  UCLIBC_HAS_NFTW=y
+>  UCLIBC_HAS_FTW=y
+>  UCLIBC_HAS_GNU_GLOB=y
+
+Acked-by: Waldemar Brodkorb <wbx@openadk.org>
+
+I would like to see it included.
+
+best regards
+ Waldemar
