@@ -1,14 +1,14 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 16 Apr 2017 22:48:26 +0200
-Subject: [Buildroot] [PATCH] package/aubio: bump to version 0.4.5
-Message-ID: <20170416204826.26661-1-romain.naour@gmail.com>
+Date: Sun, 16 Apr 2017 22:51:06 +0200
+Subject: [Buildroot] [PATCH v2] package/aubio: bump to version 0.4.5
+Message-ID: <20170416205106.28392-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since aubio 4.4.4, the libsamplerate support require fftw
+Since aubio 0.4.4, the libsamplerate support require fftw
 single precision mode.
 
 Add a new option BR2_PACKAGE_AUBIO_LIBSAMPLERATE to enable
@@ -16,6 +16,8 @@ libsamplerate support only if BR2_PACKAGE_FFTW_PRECISION_SINGLE
 is set.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v2: fix aubio version in the commit log.
 ---
  package/aubio/Config.in  | 14 ++++++++++++++
  package/aubio/aubio.hash |  4 ++--
