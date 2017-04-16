@@ -1,30 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Apr 2017 17:11:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpv: bump version to 0.24.0
-In-Reply-To: <20170416122144.7459-1-bernd.kuhls@t-online.de>
-References: <20170416122144.7459-1-bernd.kuhls@t-online.de>
-Message-ID: <20170416171130.3823e714@free-electrons.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Sun, 16 Apr 2017 11:14:08 -0400
+Subject: [Buildroot] [RFC 1/2] configs: raspberrypi3: fix mismatch cpu arch
+In-Reply-To: <20170416151409.7665-1-gael.portay@savoirfairelinux.com>
+References: <20170416151409.7665-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20170416151409.7665-2-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The raspberrypi3 is powered by a Broadcom BCM2837 which is a Cortex-A53.
 
-On Sun, 16 Apr 2017 14:21:44 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mpv/0003-fix-build-with-have-gl.patch | 39 +++++++++++++++++++++++++++
->  package/mpv/mpv.hash                          |  2 +-
->  package/mpv/mpv.mk                            |  2 +-
->  3 files changed, 41 insertions(+), 2 deletions(-)
->  create mode 100644 package/mpv/0003-fix-build-with-have-gl.patch
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ configs/raspberrypi3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 1b2134e0b..3d8949765 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -1,5 +1,5 @@
+ BR2_arm=y
+-BR2_cortex_a7=y
++BR2_cortex_a53=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.12.1
