@@ -1,215 +1,61 @@
-From: Abhimanyu Vishwakarma <abhimanyu.v@gmail.com>
-Date: Sun, 16 Apr 2017 23:10:48 +0530
-Subject: [Buildroot] [PATCH v8 2/2] Add defconfig for MIPS Creator ci40
-In-Reply-To: <20170416174048.4737-1-abhimanyu.v@gmail.com>
-References: <20170416174048.4737-1-abhimanyu.v@gmail.com>
-Message-ID: <20170416174048.4737-2-abhimanyu.v@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 16 Apr 2017 20:10:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: depends on
+	BR2_TOOLCHAIN_HAS_SYNC_4
+References: <20170416114135.5080-1-bernd.kuhls@t-online.de>
+ <20170416170537.5eee03e2@free-electrons.com>
+Message-ID: <XnsA759CD402B91FID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+Thomas Petazzoni <thomas.petazzoni-
+wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
+news:20170416170537.5eee03e2 at free-electrons.com:
 
-Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
----
- Changes v1->v2
-  - No change
- Changes v2->v3 (Suggested by Arnout)
-  - Remove uImage and add fitImage generation
-  - Tidy readme.txt
-  - Tidy ci40_defconfig, remove custom toolchain and add wifi helper packages
-  Some changes are not done:
-  - Using git-helper:
-    - Custom kernel doesnt provide tar file, so it didnt work for me
- Changes v3->v4 (Suggested by Arnout)
-  - Use github helper for getting kernel/u-boot
-  - rename fitImage.its -> fitImage.its.in to reflect as template file,
-    remove hardcoded dtb filename
-  - Find dtb file in output/images directory and use first dtb in fitImage
-  - Remove image size from genimage.cfg
-  - Tidy readme.txt and add section to explain how to stop u-boot autoboot,
-    how to make it persistent, and other grammar
- Changes v4->v5 (Suggested by Thomas)
-  - Use fixed kernel entry addr
-  - Generate vmlinux.bin.gz from generate vmlinux.bin
-  - Remove generating uImage (not required for anything now)
- Changes v5->v6
-  - Use kernel generate fitimage
-  - bump up u-boot version
-  - Change emailid from imgtec.com -> personal id
- Changes v6->v7 (Suggested by Thomas)
-  - Use genimage.sh script
-  - Improve and fix grammer in readme.txt
- Changes v7->v8 (Suggested by Arnout)
-  - Use genimage.sh script from POST_IMAGE_SCRIPT
-  - Use uboot kconfig base config
-  - Remove dts config from defconfig
-  - Some other small cleanup
-  - rebase on master
+> Hello,
+> 
+> On Sun, 16 Apr 2017 13:41:35 +0200, Bernd Kuhls wrote:
+>> Fixes
+>> 
+http://autobuild.buildroot.net/results/5a2/5a2a7f24c8727f7f3aee2ca72b4472f2
+61610c27/
+> 
+> In a patch sent yesterday, you made ffmpeg link against libatomic. It's
+> a bit weird that it also uses the __sync built-ins. Does it use
+> both __atomic and __sync built-ins? In all configurations? On all
+> architectures?
 
- board/ci40/genimage.cfg  | 12 +++++++++
- board/ci40/post-build.sh |  4 +++
- board/ci40/readme.txt    | 64 ++++++++++++++++++++++++++++++++++++++++++++++++
- configs/ci40_defconfig   | 48 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 128 insertions(+)
- create mode 100644 board/ci40/genimage.cfg
- create mode 100755 board/ci40/post-build.sh
- create mode 100644 board/ci40/readme.txt
- create mode 100644 configs/ci40_defconfig
+Hi Thomas,
 
-diff --git a/board/ci40/genimage.cfg b/board/ci40/genimage.cfg
-new file mode 100644
-index 000000000..0ffc91ce8
---- /dev/null
-+++ b/board/ci40/genimage.cfg
-@@ -0,0 +1,12 @@
-+# Minimal SD card image
-+#
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/ci40/post-build.sh b/board/ci40/post-build.sh
-new file mode 100755
-index 000000000..978ced585
---- /dev/null
-+++ b/board/ci40/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/bash
-+
-+# Copy to target
-+cp ${BINARIES_DIR}/vmlinux.gz.itb ${TARGET_DIR}/fitImage
-diff --git a/board/ci40/readme.txt b/board/ci40/readme.txt
-new file mode 100644
-index 000000000..9d399c850
---- /dev/null
-+++ b/board/ci40/readme.txt
-@@ -0,0 +1,64 @@
-+*********************
-+* MIPS Creator CI40 *
-+*********************
-+
-+This document details how to build and run a Buildroot system on the
-+MIPS Creator CI40 platform. For more details about the CI40, see
-+https://creatordev.io/ci40-iot-hub.html.
-+
-+How to build
-+------------
-+
-+$ make ci40_defconfig
-+$ make
-+
-+Prepare USB/MMC for boot
-+------------------------
-+
-+On successful build, "sdcard.img" file will be created in 'output/images'
-+folder.
-+
-+Use following command to write image to bootable device
-+
-+# dd if=./output/images/sdcard.img of=/dev/<your-microsd-or-usb-device>
-+
-+Booting from USB/MMC
-+--------------------
-+
-+The boot loader is already present in NOR flash. To boot your newly generated
-+Linux and root filesystem, you need to interrupt U-Boot autoboot. Current
-+U-Boot is configured with 2 seconds of boot-delay, after expiry of this
-+boot-delay timeout U-Boot starts booting the default image. To interrupt
-+autoboot, press any key before the boot-delay time expires, U-Boot will
-+stop the autoboot process and give a U-Boot prompt. You can now boot to
-+your preferred boot method as describe below:
-+
-+From USB
-+  pistachio # run usbboot
-+
-+From SD-Card
-+  pistachio # run mmcboot
-+
-+Persistent boot command
-+-----------------------
-+
-+To boot automatically to your preferred boot method, use following command to
-+make it persistent, for example to automatically boot to usb:
-+
-+  pistachio # setenv bootcmd run usbboot
-+  pistachio # saveenv
-+
-+Flash new bootloader
-+--------------------
-+
-+Bootloader image will be available in 'output/images' folder.
-+Use following command to flash new bootloader:
-+
-+# flashcp -v u-boot-pistachio_marduk-<version>.img /dev/mtd0
-+
-+Online docs
-+-----------
-+
-+Mostly for OpenWRT but it is applicable to Buildroot
-+https://docs.creatordev.io/ci40/guides/openwrt-platform/#overview
-+
-diff --git a/configs/ci40_defconfig b/configs/ci40_defconfig
-new file mode 100644
-index 000000000..2ea3afe47
---- /dev/null
-+++ b/configs/ci40_defconfig
-@@ -0,0 +1,48 @@
-+# architecture
-+BR2_mipsel=y
-+BR2_mips_32r2=y
-+
-+# linux header same as custom kernel ie 4.4.x
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,CreatorDev,linux,openwrt-4.4.14)/linux-openwrt-4.4.14.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="pistachio"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+# vmlinux.gz.itb image includes img/pistachio_marduk device tree
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="vmlinux.gz.itb"
-+
-+# bootloader flash support
-+BR2_PACKAGE_MTD=y
-+
-+# wireless firmware
-+BR2_PACKAGE_UCCP420WLAN=y
-+
-+# wireless package
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pistachio_marduk"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,CreatorDev,u-boot,v1.0.5)/u-boot-CreatorDev-v1.0.5.tar.gz"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-pistachio_marduk-2015.10-v1.0.5.img"
-+
-+# fitimage / image generation
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/ci40/post-build.sh"
-+
-+# image generation
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci40/genimage.cfg"
--- 
-2.11.0
+afaics both __atomic and __sync functions are used at the same time, for 
+example:
+http://git.videolan.org/?
+p=ffmpeg.git;a=blob;f=libavcodec/mediacodecdec_common.c;h=2ec25c581d34f8f50
+09b84161a79589dbaf21683;hb=refs/heads/release/3.3#l145
+
+calls
+
+atomic_fetch_add(&s->refcount, 1);
+
+which translates to __sync_fetch_and_add:
+http://git.videolan.org/?
+p=ffmpeg.git;a=blob;f=compat/atomics/gcc/stdatomic.h;h=e13ed0e068b8fb50c7a6
+9ca19a2600dae31a5a21;hb=refs/heads/release/3.3#l132
+
+And http://git.videolan.org/?
+p=ffmpeg.git;a=blob;f=libavutil/buffer.c;h=8d1aa5fa841eb934b9b1846672d9c43d
+be23bca3;hb=refs/heads/release/3.3#l102
+
+calls
+
+atomic_fetch_add_explicit(&buf->buffer->refcount, 1, memory_order_relaxed);
+
+which translates to atomic_fetch_add:
+http://git.videolan.org/?
+p=ffmpeg.git;a=blob;f=compat/atomics/gcc/stdatomic.h;h=e13ed0e068b8fb50c7a6
+9ca19a2600dae31a5a21;hb=refs/heads/release/3.3#l135
+
+Regards, Bernd
