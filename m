@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Apr 2017 10:39:32 +0200
-Subject: [Buildroot] [git commit] Revert "package/xenomai: disable obstack
-	support"
-Message-ID: <20170416084136.9BF42804F1@busybox.osuosl.org>
+Date: Sun, 16 Apr 2017 10:39:33 +0200
+Subject: [Buildroot] [git commit] phytool: add kernel headers dependency
+Message-ID: <20170416084136.9356F8270A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe8e6a85a49f96e967f1b408fc79f719f66800a1
+commit: https://git.buildroot.net/buildroot/commit/?id=e6f077832fa8565f64cf8c28a6c96a6dea98fb9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit e87644cb2abb78c5bf3bd0c3c6955c202e798ef2.
+phytool includes linux/mdio.h, that is available since
+kernel 3.7. So add related dependency.
 
-The issue is now fixed in Xenomai, let use Xenomai obstack support
-if it's not already available from the libc.
+Fixes:
+http://autobuild.buildroot.net/results/e0e/e0eebcb9a694cd5d4c76c40e5dba971e3ac9d7c5/
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xenomai/xenomai.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/phytool/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index b7be842..f68ff90 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -38,12 +38,6 @@ else
- XENOMAI_CONF_OPTS += --disable-smp
- endif
+diff --git a/package/phytool/Config.in b/package/phytool/Config.in
+index 7dca31d..985468f 100644
+--- a/package/phytool/Config.in
++++ b/package/phytool/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_PHYTOOL
+ 	bool "phytool"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # linux/mdio.h
+ 	help
+ 	  Linux MDIO register access utility.
  
--# Obstack support in Xenomai is broken when the libc doesn't support
--# obstack support itself. Make sure we disable obstack support for all
--# libc since it was removed in uClibc-ng since 1.0.21 release and it's
--# always disabled with Glibc.
--XENOMAI_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DELIDE_CODE"
--
- define XENOMAI_REMOVE_DEVFILES
- 	for i in xeno-config xeno-info wrap-link.sh ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ 	  https://github.com/wkz/phytool
++
++comment "phytool needs a toolchain w/ headers >= 3.7"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
