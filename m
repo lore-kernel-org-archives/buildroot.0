@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Apr 2017 10:42:08 +0200
-Subject: [Buildroot] [PATCH 1/3] package/xenomai: bump to version 3.0.4
-In-Reply-To: <20170415174201.30459-1-romain.naour@gmail.com>
-References: <20170415174201.30459-1-romain.naour@gmail.com>
-Message-ID: <20170416104208.7c2fe25d@free-electrons.com>
+Date: Sun, 16 Apr 2017 10:42:15 +0200
+Subject: [Buildroot] [PATCH] .gitlab-ci.yml: refresh after rename of
+ Synopsys ARC defconfigs
+In-Reply-To: <20170415193940.30733-1-arnout@mind.be>
+References: <20170415193940.30733-1-arnout@mind.be>
+Message-ID: <20170416104215.7570cbf8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 15 Apr 2017 19:41:59 +0200, Romain Naour wrote:
-> Remove upstream patch 0001-testsuite-cyclictest.
-> 
-> Announce:
-> http://xenomai.org/pipermail/xenomai/2017-April/037254.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Pawel Sikora <sikor6@gmail.com>
+On Sat, 15 Apr 2017 21:39:40 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
-> Pawel, can you give a try to this new version?
-> Thanks!
-> ---
->  ...atch => 0001-arm-enable-armv5tej-support.patch} |  0
->  ...yclictest-silence-UMR-false-positive-with.patch | 56 ----------------------
->  package/xenomai/xenomai.hash                       |  2 +-
->  package/xenomai/xenomai.mk                         |  2 +-
->  4 files changed, 2 insertions(+), 58 deletions(-)
->  rename package/xenomai/{0002-arm-enable-armv5tej-support.patch => 0001-arm-enable-armv5tej-support.patch} (100%)
->  delete mode 100644 package/xenomai/0001-testsuite-cyclictest-silence-UMR-false-positive-with.patch
+>  .gitlab-ci.yml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Series applied. As discussed on IRC, I've added your SoB on the patch
-in PATCH 2/3.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
