@@ -1,83 +1,98 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 16 Apr 2017 22:51:06 +0200
-Subject: [Buildroot] [PATCH v2] package/aubio: bump to version 0.4.5
-Message-ID: <20170416205106.28392-1-romain.naour@gmail.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sun, 16 Apr 2017 17:38:39 -0400
+Subject: [Buildroot] [PATCH v8 1/2] genimage.sh: fix calling from
+ BR2_ROOTFS_POST_IMAGE_SCRIPT
+In-Reply-To: <20170416174048.4737-1-abhimanyu.v@gmail.com>
+References: <20170416174048.4737-1-abhimanyu.v@gmail.com>
+Message-ID: <20170416212937.64yzqpdbbivp3qep@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since aubio 0.4.4, the libsamplerate support require fftw
-single precision mode.
+Hello Abhimanyu,
 
-Add a new option BR2_PACKAGE_AUBIO_LIBSAMPLERATE to enable
-libsamplerate support only if BR2_PACKAGE_FFTW_PRECISION_SINGLE
-is set.
+On Sun, Apr 16, 2017 at 11:10:47PM +0530, Abhimanyu Vishwakarma wrote:
+> From: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+> 
+> When called from BR2_ROOTFS_POST_IMAGE_SCRIPT, this script
+> ends up with following error:
+> 
+> Error: Missing argument
+> 
+> This is because, extra positional argument is also passed
+> along with BR2_ROOTFS_POST_SCRIPT_ARGS. genimage.sh didnt
+> had support to parse positional and optional argument
+> together.
+> 
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v2: fix aubio version in the commit log.
----
- package/aubio/Config.in  | 14 ++++++++++++++
- package/aubio/aubio.hash |  4 ++--
- package/aubio/aubio.mk   |  4 ++--
- 3 files changed, 18 insertions(+), 4 deletions(-)
+Indeed, the problem comes from the first argument given to any post-image
+scripts [1] (which is the binary directory).
 
-diff --git a/package/aubio/Config.in b/package/aubio/Config.in
-index c4c60db..85f5d9a 100644
---- a/package/aubio/Config.in
-+++ b/package/aubio/Config.in
-@@ -17,5 +17,19 @@ config BR2_PACKAGE_AUBIO
- 
- 	  https://aubio.org
- 
-+if BR2_PACKAGE_AUBIO
-+
-+config BR2_PACKAGE_AUBIO_LIBSAMPLERATE
-+	bool "Enable libsamplerate support"
-+	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	help
-+	  Aubio require fftw single precision mode with libsamplerate
-+	  (libsamplerate only supports float).
-+
-+comment "aubio w/ libsamplerate needs fftw in single precision"
-+	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+
-+endif
-+
- comment "aubio needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/aubio/aubio.hash b/package/aubio/aubio.hash
-index e447847..b4233ae 100644
---- a/package/aubio/aubio.hash
-+++ b/package/aubio/aubio.hash
-@@ -1,2 +1,2 @@
--# From https://aubio.org/pub/aubio-0.4.3.tar.bz2.sha256
--sha256 b62cdb073c0c64ae301917fa162969d42cba45e478bdf1e74490bd87e9cceaab  aubio-0.4.3.tar.bz2
-+# From https://aubio.org/pub/aubio-0.4.5.tar.bz2.sha256
-+sha256 70c2804e6f4fbf0ebc0fb9ac8cc9d465ef4a4d438311c074c9a7364e98827af6  aubio-0.4.5.tar.bz2
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index f8be19f..e58efa3 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUBIO_VERSION = 0.4.3
-+AUBIO_VERSION = 0.4.5
- AUBIO_SITE = https://aubio.org/pub
- AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
- AUBIO_LICENSE = GPL-3.0+
-@@ -26,7 +26,7 @@ else
- AUBIO_CONF_OPTS += --disable-sndfile
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-+ifeq ($(BR2_PACKAGE_AUBIO_LIBSAMPLERATE),y)
- AUBIO_DEPENDENCIES += libsamplerate
- AUBIO_CONF_OPTS += --enable-samplerate
- else
--- 
-2.9.3
+A more simple fix consists in adding the shift instruction before right before
+the while getopts.
+
++ 	shift
+ 	while getopts c: OPT ; do
+ 		case "${OPT}" in
+ 		c) GENIMAGE_CFG="${OPTARG}";;
+ 		:) die "option '${OPTARG}' expects a mandatory argument\n";;
+ 		\?) die "unknown option '${OPTARG}'\n";;
+ 	esac
+ 	done
+
+> Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+> ---
+>  Changes v7->v8
+>    - New file
+> 
+>  support/scripts/genimage.sh | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+> index 0ed0e8bcc..2b5549fb0 100755
+> --- a/support/scripts/genimage.sh
+> +++ b/support/scripts/genimage.sh
+> @@ -5,13 +5,18 @@ die() {
+>    exit 1
+>  }
+>  
+> +# Parse arguments and put into argument list of the script
+> +eval set -- $(getopt -n genimage.sh -o c: -- "$@")
+> +
+>  GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+>  
+> -while getopts c: OPT ; do
+> -	case "${OPT}" in
+> -	c) GENIMAGE_CFG="${OPTARG}";;
+> -	:) die "option '${OPTARG}' expects a mandatory argument\n";;
+> -	\?) die "unknown option '${OPTARG}'\n";;
+> +while true ; do
+> +	case "$1" in
+> +	-c) [ ! -z "$2" ] || die "option '${1}' expects a mandatory argument\n";
+> +	    GENIMAGE_CFG="${2}";
+> +	    shift 2 ;;
+> +	--) shift 1; break ;;
+> +	*) die "unknown option '${1}'\n";;
+>  	esac
+>  done
+>  
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Furthermore, I see an error in traces. To display the traces properly, the
+optstring required to start with a colon (:), and the trailling \n is not
+required.
+
+	while getopts :c: OPT ; do
+
+[1] https://github.com/buildroot/buildroot/blob/2017.02.1/Makefile#L717
+
+Regards,
+Ga?l
