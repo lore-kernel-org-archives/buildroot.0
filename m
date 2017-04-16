@@ -1,54 +1,81 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 16 Apr 2017 21:49:06 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libunwind: disable for x86 with
-	uClibc toolchain
-In-Reply-To: <20170416194906.9842-1-romain.naour@gmail.com>
-References: <20170416194906.9842-1-romain.naour@gmail.com>
-Message-ID: <20170416194906.9842-2-romain.naour@gmail.com>
+Date: Sun, 16 Apr 2017 22:48:26 +0200
+Subject: [Buildroot] [PATCH] package/aubio: bump to version 0.4.5
+Message-ID: <20170416204826.26661-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libunwind use sigreturn() while building for x86 [1] but this function
-is not available with uClibc-ng.
+Since aubio 4.4.4, the libsamplerate support require fftw
+single precision mode.
 
-This throw a warning during libunwind build:
-In file included from x86/Los-linux.c:4:0:
-x86/Gos-linux.c: In function ?_ULx86_local_resume?:
-x86/Gos-linux.c:298:7: warning: implicit declaration of function ?sigreturn? [-Wimplicit-function-declaration]
-       sigreturn (sc);
-       ^
-
-But any program trying to link against libunwind-generic.so fail to build:
-[...]usr/lib/libunwind-generic.so: undefined reference to `sigreturn'
-collect2: error: ld returned 1 exit status
-
-Disable libunwind for x86 target when uClibc-ng is used.
-
-Fixes:
-http://autobuild.buildroot.net/results/54a/54afac8148cff5f3c17e83f80917fd9006948fe0//build-end.log
-
-[1] http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86/Gos-linux.c;h=17aebc2974af50eb0bf8292689b2ed22a4c97866;hb=HEAD#l299
+Add a new option BR2_PACKAGE_AUBIO_LIBSAMPLERATE to enable
+libsamplerate support only if BR2_PACKAGE_FFTW_PRECISION_SINGLE
+is set.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/libunwind/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/aubio/Config.in  | 14 ++++++++++++++
+ package/aubio/aubio.hash |  4 ++--
+ package/aubio/aubio.mk   |  4 ++--
+ 3 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index 5527a2b..9007ce5 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
- 		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		 BR2_i386 || BR2_mips || BR2_mipsel || \
-+		 BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_MUSL && \
- 		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+diff --git a/package/aubio/Config.in b/package/aubio/Config.in
+index c4c60db..85f5d9a 100644
+--- a/package/aubio/Config.in
++++ b/package/aubio/Config.in
+@@ -17,5 +17,19 @@ config BR2_PACKAGE_AUBIO
+ 
+ 	  https://aubio.org
+ 
++if BR2_PACKAGE_AUBIO
++
++config BR2_PACKAGE_AUBIO_LIBSAMPLERATE
++	bool "Enable libsamplerate support"
++	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE
++	help
++	  Aubio require fftw single precision mode with libsamplerate
++	  (libsamplerate only supports float).
++
++comment "aubio w/ libsamplerate needs fftw in single precision"
++	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
++
++endif
++
+ comment "aubio needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/aubio/aubio.hash b/package/aubio/aubio.hash
+index e447847..b4233ae 100644
+--- a/package/aubio/aubio.hash
++++ b/package/aubio/aubio.hash
+@@ -1,2 +1,2 @@
+-# From https://aubio.org/pub/aubio-0.4.3.tar.bz2.sha256
+-sha256 b62cdb073c0c64ae301917fa162969d42cba45e478bdf1e74490bd87e9cceaab  aubio-0.4.3.tar.bz2
++# From https://aubio.org/pub/aubio-0.4.5.tar.bz2.sha256
++sha256 70c2804e6f4fbf0ebc0fb9ac8cc9d465ef4a4d438311c074c9a7364e98827af6  aubio-0.4.5.tar.bz2
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index f8be19f..e58efa3 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUBIO_VERSION = 0.4.3
++AUBIO_VERSION = 0.4.5
+ AUBIO_SITE = https://aubio.org/pub
+ AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
+ AUBIO_LICENSE = GPL-3.0+
+@@ -26,7 +26,7 @@ else
+ AUBIO_CONF_OPTS += --disable-sndfile
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++ifeq ($(BR2_PACKAGE_AUBIO_LIBSAMPLERATE),y)
+ AUBIO_DEPENDENCIES += libsamplerate
+ AUBIO_CONF_OPTS += --enable-samplerate
+ else
 -- 
 2.9.3
