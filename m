@@ -1,33 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Apr 2017 10:19:54 +0200
-Subject: [Buildroot] Builroot - android ndk
-In-Reply-To: <CAJU5dMciTnGkiu4=op-ZLhmHk4VEaeO6Zi2oEyKajy9TAAYhBA@mail.gmail.com>
-References: <CAJU5dMciTnGkiu4=op-ZLhmHk4VEaeO6Zi2oEyKajy9TAAYhBA@mail.gmail.com>
-Message-ID: <20170416101954.5f581953@free-electrons.com>
+Date: Sun, 16 Apr 2017 10:35:11 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: use
+	BR2_TOOLCHAIN_HAS_LIBATOMIC
+Message-ID: <20170416084136.4CF1681898@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fc8798197b57488a852e2c14b4677b5eb0114a0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 15 Apr 2017 13:38:05 -0400, Alvaro Denis wrote:
+Fixes
+http://autobuild.buildroot.net/results/69d/69d33792f2e7ec62bfe593eb4bbc8fb2652d7011/
 
-> If I build the toolchain using make_standalone_toolchain.py
-> <https://developer.android.com/ndk/guides/standalone_toolchain.html>
-> it is a "pure toolchain"? it can be used in buildroot as preintstaled
-> toolchain?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-We have never tested Android toolchains, so I don't know. However, what
-is sure is that those toolchains use the bionic C library, which we
-don't support. And you most likely won't be able to build most of the
-Linux applications against bionic, at  least not without some effort.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index adc0f5d..10e4e74 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -452,6 +452,11 @@ else
+ FFMPEG_CONF_OPTS += --disable-altivec
+ endif
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++FFMPEG_CONF_OPTS += --extra-libs=-latomic
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),)
+ FFMPEG_CONF_OPTS += --enable-pic
+ else
