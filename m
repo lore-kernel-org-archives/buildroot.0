@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 Apr 2017 10:35:11 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: use
-	BR2_TOOLCHAIN_HAS_LIBATOMIC
-Message-ID: <20170416084136.4CF1681898@busybox.osuosl.org>
+Date: Sun, 16 Apr 2017 10:39:32 +0200
+Subject: [Buildroot] [git commit] Revert "package/xenomai: disable obstack
+	support"
+Message-ID: <20170416084136.9BF42804F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc8798197b57488a852e2c14b4677b5eb0114a0b
+commit: https://git.buildroot.net/buildroot/commit/?id=fe8e6a85a49f96e967f1b408fc79f719f66800a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/69d/69d33792f2e7ec62bfe593eb4bbc8fb2652d7011/
+This reverts commit e87644cb2abb78c5bf3bd0c3c6955c202e798ef2.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The issue is now fixed in Xenomai, let use Xenomai obstack support
+if it's not already available from the libc.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/xenomai/xenomai.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index adc0f5d..10e4e74 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -452,6 +452,11 @@ else
- FFMPEG_CONF_OPTS += --disable-altivec
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index b7be842..f68ff90 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -38,12 +38,6 @@ else
+ XENOMAI_CONF_OPTS += --disable-smp
  endif
  
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+FFMPEG_CONF_OPTS += --extra-libs=-latomic
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),)
- FFMPEG_CONF_OPTS += --enable-pic
- else
+-# Obstack support in Xenomai is broken when the libc doesn't support
+-# obstack support itself. Make sure we disable obstack support for all
+-# libc since it was removed in uClibc-ng since 1.0.21 release and it's
+-# always disabled with Glibc.
+-XENOMAI_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DELIDE_CODE"
+-
+ define XENOMAI_REMOVE_DEVFILES
+ 	for i in xeno-config xeno-info wrap-link.sh ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
