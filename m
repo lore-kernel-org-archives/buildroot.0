@@ -1,55 +1,46 @@
-From: Semyon Kolganov <semenak94@mail.ru>
-Date: Mon, 17 Apr 2017 16:59:48 +0300
-Subject: [Buildroot] [PATCH] mpir: fix build failure
-In-Reply-To: <mpir: fix build failure>
-References: <mpir: fix build failure>
-Message-ID: <1492437588-19728-1-git-send-email-semenak94@mail.ru>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 Apr 2017 16:06:41 +0200
+Subject: [Buildroot] [PATCH] package/kodi: re-install prompt for optical
+	drives
+Message-ID: <20170417140641.24527-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
----
- package/mpir/Config.in | 5 +++++
- package/mpir/mpir.mk   | 8 ++++++++
- 2 files changed, 13 insertions(+)
+In 81c438aa (package/kodi: Rework audio encoder support), the prompt for
+the optical drive support was dropped, on the assumption that such
+support was only needed when an audio encoder was enabled.
 
-diff --git a/package/mpir/Config.in b/package/mpir/Config.in
-index da4cc9f..4f7fa65 100644
---- a/package/mpir/Config.in
-+++ b/package/mpir/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_MPIR
- 	bool "mpir"
-+	# asm files in mpn/powerpc64/mode64/* are Abi version 1.
-+	depends on !BR2_powerpc64le
- 	select BR2_PACKAGE_GMP
- 	help
- 	  MPIR is a highly optimised library for bignum arithmetic
- 	  forked from the GMP bignum library.
+However, support for optical drives is also required when, surprisingly,
+one wants to read a DVD (and probably a BD as well, but this was not
+tested by lack of hardware).
+
+Re-instate the prompt, so one can enable optical drive support even when
+no audio encoder enabled.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/kodi/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index f2a3e2e032..b993ac94a5 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -253,7 +253,9 @@ config BR2_PACKAGE_KODI_UPNP
+ 	  Enable UPnP support
  
- 	  http://www.mpir.org/
-+
-+comment "mpir conflicts with powerpc64le"
-+	depends on BR2_powerpc64le
-diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-index 430d587..b835ca4 100644
---- a/package/mpir/mpir.mk
-+++ b/package/mpir/mpir.mk
-@@ -12,4 +12,12 @@ MPIR_LICENSE_FILES = COPYING.LIB
- MPIR_INSTALL_STAGING = YES
- MPIR_DEPENDENCIES = gmp host-yasm
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+-	bool
++	bool "optical drives"
++	help
++	  Add support for optical drives, to read e.g. DVDs...
  
-+ifeq ($(BR2_MIPS_NABI32),y)
-+MPIR_CONF_OPTS += ABI=n32
-+endif
-+
-+ifeq ($(BR2_MIPS_NABI64),y)
-+MPIR_CONF_OPTS += ABI=n64
-+endif
-+
- $(eval $(autotools-package))
+ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
 -- 
-2.7.4
+2.11.0
