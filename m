@@ -1,81 +1,114 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 21:54:09 +0200
-Subject: [Buildroot] [PATCH v5 10/34] package/kodi-inputstream-rtmp: new
-	package
+Date: Mon, 17 Apr 2017 21:54:27 +0200
+Subject: [Buildroot] [PATCH v5 28/34] package/kodi-screensaver-rsxs: bump
+	version
 In-Reply-To: <20170417195433.26672-1-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
-Message-ID: <20170417195433.26672-11-bernd.kuhls@t-online.de>
+Message-ID: <20170417195433.26672-29-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ac_cv_type__Bool=yes is needed to fix compilation with gcc >= 5.
+Added patch to fix X.org includes.
+Added dependency for libpng previously provided by Kodi.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-inputstream-rtmp/Config.in                  |  7 +++++++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash |  2 ++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 13 +++++++++++++
- package/kodi/Config.in                                   |  4 ++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/kodi-inputstream-rtmp/Config.in
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+ .../kodi-screensaver-rsxs/0001-cross-compile.patch |  2 +-
+ .../0002-fix-default-include-dir.patch             | 28 ++++++++++++++++++++++
+ package/kodi-screensaver-rsxs/Config.in            |  1 +
+ .../kodi-screensaver-rsxs.hash                     |  2 +-
+ .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk |  5 ++--
+ 5 files changed, 33 insertions(+), 5 deletions(-)
+ create mode 100644 package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
 
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
+diff --git a/package/kodi-screensaver-rsxs/0001-cross-compile.patch b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
+index 56c2f4e4b..a7b2053d7 100644
+--- a/package/kodi-screensaver-rsxs/0001-cross-compile.patch
++++ b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
+@@ -27,7 +27,7 @@ diff -uNr screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLi
+  endif()
+  externalproject_add(rsxs SOURCE_DIR ${PROJECT_SOURCE_DIR}/${rsxs_dir}
+ -                    CONFIGURE_COMMAND ${configure_start}
+-+                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no
+++                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no ac_cv_type__Bool=yes
+ +                                      ac_cv_func_malloc_0_nonnull=yes
+ +                                      ${configure_start}
+                                        --prefix=<INSTALL_DIR>
+diff --git a/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch b/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
 new file mode 100644
-index 000000000..c40bff2d7
+index 000000000..a7e7c74b0
 --- /dev/null
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
-+	bool "kodi-inputstream-rtmp"
-+	select BR2_PACKAGE_RTMPDUMP
-+	help
-+	  RTMP input stream add-on for Kodi
++++ b/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
+@@ -0,0 +1,28 @@
++Fix X include path to prevent error during configure
 +
-+	  https://github.com/notspiff/inputstream.rtmp
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-new file mode 100644
-index 000000000..f5a82d2aa
---- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-v1.0.4.tar.gz
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-new file mode 100644
-index 000000000..414c8dfc3
---- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-inputstream-rtmp
-+#
-+################################################################################
++Downloaded from
++https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi-binary-addons/screensavers.rsxs/patches/screensavers.rsxs-0002-fix-default-include-dir.patch
 +
-+KODI_INPUTSTREAM_RTMP_VERSION = v1.0.4
-+KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
-+KODI_INPUTSTREAM_RTMP_LICENSE = GPLv2+
-+KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
-+KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d603bfc83..85dba3489 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -275,6 +275,10 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
- endmenu
++diff -Naur screensavers.rsxs-3241d29.orig/CMakeLists.txt screensavers.rsxs-3241d29/CMakeLists.txt
++--- screensavers.rsxs-3241d29.orig/CMakeLists.txt	2015-10-22 23:59:38.187280475 -0700
+++++ screensavers.rsxs-3241d29/CMakeLists.txt	2015-10-23 00:00:27.228113829 -0700
++@@ -17,7 +17,7 @@
++ include_directories(${OpenGL_INCLUDE_DIR}
++                     ${PNG_INCLUDE_DIR}
++                     ${KODI_INCLUDE_DIR}
++-                    ${X_INCLUDE_DIRS}
+++                    ${X_INCLUDE_DIR}
++                     ${CMAKE_BINARY_DIR}/rsxs-prefix/src/rsxs-build
++                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src
++                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/lib
++@@ -67,7 +67,7 @@
++                                       --disable-skyrocket
++                                       --disable-solarwinds
++                                       --disable-sound
++-                                      --x-includes=${X_INCLUDE_DIRS}
+++                                      --x-includes=${X_INCLUDE_DIR}
++                                       --x-libraries=${X_LIBRARIES}
++                                       ${PNG_PATH}
++                                       ${EXTRA_FLAGS}
+diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
+index 11546ad1f..c523ce5a1 100644
+--- a/package/kodi-screensaver-rsxs/Config.in
++++ b/package/kodi-screensaver-rsxs/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
+ 	bool "kodi-screensaver-rsxs"
+ 	depends on BR2_PACKAGE_HAS_LIBGL # libglu
+ 	depends on BR2_PACKAGE_XORG7 # xlib_libXmu
++	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+ 	help
+ 	  RSXS screensaver add-ons for Kodi
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+index 568b44b37..66d79a06f 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0797ffb720056ea2e04ac8b7ee4fc2dca1e42611ef138b347e928d8d7f3c696f kodi-screensaver-rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.tar.gz
++sha256 8436c29d2f42bc65ff6f1abc2f1d05a613cc2ebb16d793e02b1f2bee296952a6  kodi-screensaver-rsxs-v1.3.0.tar.gz
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+index 2cd94da86..8445bf88d 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
-+menu "Inputstream addons"
-+	source "package/kodi-inputstream-rtmp/Config.in"
-+endmenu
-+
- menu "PVR addons"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
+-KODI_SCREENSAVER_RSXS_VERSION = 195e0ec3fbbcb2ee2012cd560e42d05167f0f259
++KODI_SCREENSAVER_RSXS_VERSION = v1.3.0
+ KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
+ KODI_SCREENSAVER_RSXS_LICENSE = GPL-3.0
+ KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
+-
+-KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi xlib_libXmu
++KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi libpng xlib_libXmu
+ 
+ $(eval $(cmake-package))
 -- 
 2.11.0
