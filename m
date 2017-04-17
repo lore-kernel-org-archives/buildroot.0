@@ -1,33 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Apr 2017 14:50:15 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-04-04
-In-Reply-To: <19D2C3F2-4C92-438A-A90C-662C225A5924@layer-7.net>
-References: <20170405062834.9228220820@mail.free-electrons.com>
- <19D2C3F2-4C92-438A-A90C-662C225A5924@layer-7.net>
-Message-ID: <20170417145015.6f72334a@free-electrons.com>
+Date: Mon, 17 Apr 2017 14:37:29 +0200
+Subject: [Buildroot] [git commit] package/xenomai: add host-pkgconf
+	dependency
+Message-ID: <20170417130407.DDBEF82724@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=77c2c46f17d7cee93a2d5dc11d159db570f6786f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Apr 2017 12:45:41 +0200, Michael Rommel wrote:
+Without pkg-config PKG_CHECK_MODULES won't be expanded
+and ./configure script produces following error message:
 
-> the organisation SIXXS will shut down their services mi 2017. It was the only use case for the aiccu package.
-> I suggest, to completely remove this package from the tree, as it will no longer be of use for anybody.
-> 
-> Unfortunately I could not find a section in the documentation (chapter 21) telling me, how to remove a package.
+./configure: line 13810: syntax error near unexpected token `FUSE,'
+./configure: line 13810: `	PKG_CHECK_MODULES(FUSE, fuse)'
 
-Just send a patch that removes the package, the entry in the DEVELOPERS
-file and adds an entry in Config.in.legacy for the removed option.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xenomai/xenomai.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index f68ff90..7c0ad34 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -17,6 +17,8 @@ XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-
+ # GFDL is not included but refers to gnu.org
+ XENOMAI_LICENSE_FILES = debian/copyright include/COPYING lib/trank/COPYING kernel/cobalt/COPYING
+ 
++XENOMAI_DEPENDENCIES = host-pkgconf
++
+ # 0002-boilerplate-build-obstack-support-conditionally.patch
+ XENOMAI_AUTORECONF = YES
+ 
