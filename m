@@ -1,95 +1,107 @@
-From: =?UTF-8?B?U2VtZW4gS29sZ2Fub3Y=?= <semenak94@mail.ru>
-Date: Mon, 17 Apr 2017 17:20:40 +0300
-Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_mpir=3A_fix_build_failure?=
-In-Reply-To: <20170417140823.GB3441@scaer>
-References: <1492437588-19728-1-git-send-email-semenak94@mail.ru>
- <20170417140823.GB3441@scaer>
-Message-ID: <1492438840.57438440@f210.i.mail.ru>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Mon, 17 Apr 2017 10:20:24 -0400
+Subject: [Buildroot] [PATCH v8 1/2] genimage.sh: fix calling from
+ BR2_ROOTFS_POST_IMAGE_SCRIPT
+In-Reply-To: <CA+V_ovuOD_kqkdvrLaKwkVVTCS9NN+8m7SOpRmT-8vg30O_eQQ@mail.gmail.com>
+References: <20170416174048.4737-1-abhimanyu.v@gmail.com>
+ <20170416212937.64yzqpdbbivp3qep@gportay>
+ <CA+V_ovuOD_kqkdvrLaKwkVVTCS9NN+8m7SOpRmT-8vg30O_eQQ@mail.gmail.com>
+Message-ID: <20170417142020.3gx4zqnvlv7cbmiv@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Abhimanyu,
 
-Well, good idea, I'll check it. Thanks for revision!
+On Mon, Apr 17, 2017 at 03:38:27PM +0530, abhimanyu.v at gmail.com wrote:
+> Thankyou Ga?l for review!
+> 
+> [...]
+> >
+> > Indeed, the problem comes from the first argument given to any post-image
+> > scripts [1] (which is the binary directory).
+> >
+> > A more simple fix consists in adding the shift instruction before right
+> > before
+> > the while getopts.
+> >
+> > +       shift
+> >         while getopts c: OPT ; do
+> >                 case "${OPT}" in
+> >                 c) GENIMAGE_CFG="${OPTARG}";;
+> >                 :) die "option '${OPTARG}' expects a mandatory
+> > argument\n";;
+> >                 \?) die "unknown option '${OPTARG}'\n";;
+> >         esac
+> >         done
+> >
+> >
+> Yes you are right, this is simple fix. What i had in mind was to make the
+> script independent of any positional argument. With proposed solution if in
+> future we add extra argument to POST_SCRIPTS then this script can cope with
+> it. Please let me know your thought. I will prepare patch accordingly.
+> 
+> <snip>
+> 
 
->???????????, 17 ?????? 2017, 17:08 +03:00 ?? "Yann E. MORIN" <yann.morin.1998@free.fr>:
->
->Semyon, All,
->
->On 2017-04-17 16:59 +0300, Semyon Kolganov spake thusly:
->> Signed-off-by: Semyon Kolganov < semenak94@mail.ru >
->> ---
->>  package/mpir/Config.in | 5 +++++
->>  package/mpir/mpir.mk   | 8 ++++++++
->>  2 files changed, 13 insertions(+)
->> 
->> diff --git a/package/mpir/Config.in b/package/mpir/Config.in
->> index da4cc9f..4f7fa65 100644
->> --- a/package/mpir/Config.in
->> +++ b/package/mpir/Config.in
->> @@ -1,8 +1,13 @@
->>  config BR2_PACKAGE_MPIR
->>  	bool "mpir"
->> +	# asm files in mpn/powerpc64/mode64/* are Abi version 1.
->> +	depends on !BR2_powerpc64le
->
->Is it otherwise possible to disable use of the asm code and use some
->generic one (if any) ?
->
->>  	select BR2_PACKAGE_GMP
->>  	help
->>  	  MPIR is a highly optimised library for bignum arithmetic
->>  	  forked from the GMP bignum library.
->> 
->>  	  http://www.mpir.org/
->> +
->> +comment "mpir conflicts with powerpc64le"
->> +	depends on BR2_powerpc64le
->
->We do not usually add a comment for architecture dependencies.
->
->Regards,
->Yann E. MORIN.
->
->> diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
->> index 430d587..b835ca4 100644
->> --- a/package/mpir/mpir.mk
->> +++ b/package/mpir/mpir.mk
->> @@ -12,4 +12,12 @@ MPIR_LICENSE_FILES = COPYING.LIB
->>  MPIR_INSTALL_STAGING = YES
->>  MPIR_DEPENDENCIES = gmp host-yasm
->> 
->> +ifeq ($(BR2_MIPS_NABI32),y)
->> +MPIR_CONF_OPTS += ABI=n32
->> +endif
->> +
->> +ifeq ($(BR2_MIPS_NABI64),y)
->> +MPIR_CONF_OPTS += ABI=n64
->> +endif
->> +
->>  $(eval $(autotools-package))
->> -- 
->> 2.7.4
->> 
->> _______________________________________________
->> buildroot mailing list
->>  buildroot at busybox.net
->>  http://lists.busybox.net/mailman/listinfo/buildroot
->
->-- 
->.-----------------.--------------------.------------------.--------------------.
->|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->|  +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->|  +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->|  http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->'------------------------------^-------^------------------^--------------------'
+Afterward, my suggestion about shift does not suit me.
 
+If genimage.sh is run inside a post-image script, this same script have to give
+a fake parameter as first argument.
 
-Semyon
----------------
-Semyon Kolganov
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170417/44b6d28b/attachment.html>
+	#!/bin/sh
+	#
+	# BR post-image script
+	#
+	# (...)
+
+	support/scripts/genimage.sh "$1" -c path/to/genimage.cfg
+
+Initially, genimage.sh script was NOT intend to be run either as or inside a
+post-image. It was a Makefile target [1]. [2] and [3] are use cases.
+
+Maybe, a cleaner solution consists in updating the Makefile to remove this first
+argument given to both post-build and post-image scripts. But it breaks the
+existing.
+
+Thomas, Arnout, do you have a better idea?
+
+I had a quick look to scripts in-tree; they do not seem to use this parameter.
+
+Instead, they access directly to $TARGET_DIR or $BINARIES_DIR values using the
+environment variables.
+
+For extra arguments, they use $2, $3; they need to be updated.
+
+> > Furthermore, I see an error in traces. To display the traces properly, the
+> > optstring required to start with a colon (:), and the trailling \n is not
+> > required.
+> >
+> >         while getopts :c: OPT ; do
+> >
+> >
+> Thanks, I will fix it.
+> 
+> 
+> > [1] https://github.com/buildroot/buildroot/blob/2017.02.1/Makefile#L717
+> >
+> > Regards,
+> > Ga?l
+> >
+> 
+> Regards
+> Abhimanyu V
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+Ga?l
+
+[1] http://patchwork.ozlabs.org/patch/744825/
+[2] http://patchwork.ozlabs.org/patch/744826/
+[3] http://patchwork.ozlabs.org/patch/744824/> 
