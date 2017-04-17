@@ -1,60 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 20:12:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 17.0.4
-Message-ID: <20170417181236.2799-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 Apr 2017 21:07:21 +0200
+Subject: [Buildroot] [PATCH] package/libunwind: disable for x86 with musl
+In-Reply-To: <20170417173722.20719-1-romain.naour@gmail.com>
+References: <20170417173722.20719-1-romain.naour@gmail.com>
+Message-ID: <20170417190721.GD3441@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream.
+Romain, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 7 +++++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 7 insertions(+), 4 deletions(-)
+On 2017-04-17 19:37 +0200, Romain Naour spake thusly:
+> libunwind use sigreturn() and setcontext() while building for x86 [1]
+> but this function is not available with musl [2].
+> 
+> This throw a warning during libunwind build:
+> In file included from x86/Los-linux.c:4:0:
+> x86/Gos-linux.c: In function ?_ULx86_local_resume?:
+> x86/Gos-linux.c:298:7: warning: implicit declaration of function ?sigreturn? [-Wimplicit-function-declaration]
+>       sigreturn (sc);
+>       ^
+> But any program trying to link against libunwind-generic.so or
+> libunwind.so fail to build:
+> [...]/usr/lib/libunwind-generic.so: undefined reference to `sigreturn'
+> [...]/usr/lib/libunwind-generic.so: undefined reference to `setcontext'
+> collect2: error: ld returned 1 exit status
+> 
+> Disable libunwind for x86 target when musl is used.
+> 
+> Reported upstream by Waldemar [3]
+> 
+> [1] http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86/Gos-linux.c;h=17aebc2974af50eb0bf8292689b2ed22a4c97866;hb=HEAD#l299
+> [2] http://openwall.com/lists/musl/2016/02/04/3
+> [3] http://lists.nongnu.org/archive/html/libunwind-devel/2017-04/msg00030.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 0dd262c2a..d247ffa27 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.0.3
-+MESA3D_HEADERS_VERSION = 17.0.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 1ac8d86ab..b7f7924ef 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2017-April/000315.html
--sha512 0bcf1609b54fdabb30ec0a500b78e039bd50060c2c7f5a2e57fca29e1a311fb785dadc3cd311018ebe8020d1cc6320181ece2d2aa39d2f215b0ebf2cb0a55165  mesa-17.0.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2017-April/000318.html
-+md5 4a16cfc1c6d034cc17314b866eada628  mesa-17.0.4.tar.xz
-+sha1 1b9081614b1ec9a6f60849ced8637917ad0e8593  mesa-17.0.4.tar.xz
-+sha256 1269dc8545a193932a0779b2db5bce9be4a5f6813b98c38b93b372be8362a346  mesa-17.0.4.tar.xz
-+sha512 0b465dc165b55e4b2ae61aca2d2c6694714522885a14fb61272f73e685aef734be4aac3d58b8d2ceb2643db0578c6187da35fe2cbe41b62a89564e60659b201d  mesa-17.0.4.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 2e6528876..5d144dc72 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.0.3
-+MESA3D_VERSION = 17.0.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Patch rebased after http://patchwork.ozlabs.org/patch/751402/
+> ---
+>  package/libunwind/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+> index 2003e96..1a25317 100644
+> --- a/package/libunwind/Config.in
+> +++ b/package/libunwind/Config.in
+> @@ -16,7 +16,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+>  		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
+>  		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
+>  	default y if BR2_TOOLCHAIN_USES_MUSL && \
+> -		(BR2_ARM_CPU_HAS_ARM || BR2_i386 || BR2_x86_64)
+> +		(BR2_ARM_CPU_HAS_ARM || BR2_x86_64)
+>  
+>  config BR2_PACKAGE_LIBUNWIND
+>  	bool "libunwind"
+> -- 
+> 2.9.3
+> 
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
