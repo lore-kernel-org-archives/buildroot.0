@@ -1,58 +1,57 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 17 Apr 2017 19:33:22 +0200
-Subject: [Buildroot] [PATCH v3] package/aubio: bump to version 0.4.5
-Message-ID: <20170417173322.19328-1-romain.naour@gmail.com>
+Date: Mon, 17 Apr 2017 19:37:22 +0200
+Subject: [Buildroot] [PATCH] package/libunwind: disable for x86 with musl
+Message-ID: <20170417173722.20719-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since aubio 0.4.4, the libsamplerate support require fftw
-single precision mode [1].
+libunwind use sigreturn() and setcontext() while building for x86 [1]
+but this function is not available with musl [2].
 
-[1] https://github.com/aubio/aubio/commit/8be88e77f5c275fdf4efc99ae182d14940948786
+This throw a warning during libunwind build:
+In file included from x86/Los-linux.c:4:0:
+x86/Gos-linux.c: In function ?_ULx86_local_resume?:
+x86/Gos-linux.c:298:7: warning: implicit declaration of function ?sigreturn? [-Wimplicit-function-declaration]
+      sigreturn (sc);
+      ^
+But any program trying to link against libunwind-generic.so or
+libunwind.so fail to build:
+[...]/usr/lib/libunwind-generic.so: undefined reference to `sigreturn'
+[...]/usr/lib/libunwind-generic.so: undefined reference to `setcontext'
+collect2: error: ld returned 1 exit status
+
+Disable libunwind for x86 target when musl is used.
+
+Reported upstream by Waldemar [3]
+
+[1] http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86/Gos-linux.c;h=17aebc2974af50eb0bf8292689b2ed22a4c97866;hb=HEAD#l299
+[2] http://openwall.com/lists/musl/2016/02/04/3
+[3] http://lists.nongnu.org/archive/html/libunwind-devel/2017-04/msg00030.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 ---
-v3: simply the libsamplerate dependency (ThomasP).
-v2: fix aubio version in the commit log.
+Patch rebased after http://patchwork.ozlabs.org/patch/751402/
 ---
- package/aubio/aubio.hash | 4 ++--
- package/aubio/aubio.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/libunwind/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/aubio/aubio.hash b/package/aubio/aubio.hash
-index e447847..b4233ae 100644
---- a/package/aubio/aubio.hash
-+++ b/package/aubio/aubio.hash
-@@ -1,2 +1,2 @@
--# From https://aubio.org/pub/aubio-0.4.3.tar.bz2.sha256
--sha256 b62cdb073c0c64ae301917fa162969d42cba45e478bdf1e74490bd87e9cceaab  aubio-0.4.3.tar.bz2
-+# From https://aubio.org/pub/aubio-0.4.5.tar.bz2.sha256
-+sha256 70c2804e6f4fbf0ebc0fb9ac8cc9d465ef4a4d438311c074c9a7364e98827af6  aubio-0.4.5.tar.bz2
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index f8be19f..2a09ebb 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+index 2003e96..1a25317 100644
+--- a/package/libunwind/Config.in
++++ b/package/libunwind/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+ 		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
+ 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_MUSL && \
+-		(BR2_ARM_CPU_HAS_ARM || BR2_i386 || BR2_x86_64)
++		(BR2_ARM_CPU_HAS_ARM || BR2_x86_64)
  
--AUBIO_VERSION = 0.4.3
-+AUBIO_VERSION = 0.4.5
- AUBIO_SITE = https://aubio.org/pub
- AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
- AUBIO_LICENSE = GPL-3.0+
-@@ -26,7 +26,8 @@ else
- AUBIO_CONF_OPTS += --disable-sndfile
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-+# Could not compile aubio in double precision mode with libsamplerate
-+ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
- AUBIO_DEPENDENCIES += libsamplerate
- AUBIO_CONF_OPTS += --enable-samplerate
- else
+ config BR2_PACKAGE_LIBUNWIND
+ 	bool "libunwind"
 -- 
 2.9.3
