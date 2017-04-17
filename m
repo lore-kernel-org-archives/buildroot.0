@@ -1,55 +1,60 @@
-From: abhimanyu.v at gmail.com <abhimanyu.v@gmail.com>
-Date: Mon, 17 Apr 2017 23:41:27 +0530
-Subject: [Buildroot] [PATCH v8 1/2] genimage.sh: fix calling from
-	BR2_ROOTFS_POST_IMAGE_SCRIPT
-In-Reply-To: <20170417142020.3gx4zqnvlv7cbmiv@gportay>
-References: <20170416174048.4737-1-abhimanyu.v@gmail.com>
- <20170416212937.64yzqpdbbivp3qep@gportay>
- <CA+V_ovuOD_kqkdvrLaKwkVVTCS9NN+8m7SOpRmT-8vg30O_eQQ@mail.gmail.com>
- <20170417142020.3gx4zqnvlv7cbmiv@gportay>
-Message-ID: <CA+V_ovsHj4hiXg2pUZ=ZrsqX9Q_NpkACWroS+L5kx=0LtbJzyQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 17 Apr 2017 20:12:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.0.4
+Message-ID: <20170417181236.2799-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+Added all hashes provided by upstream.
 
-On Mon, Apr 17, 2017 at 7:50 PM, Ga?l PORTAY <
-gael.portay@savoirfairelinux.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 7 +++++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-> Hello Abhimanyu,
->
-> On Mon, Apr 17, 2017 at 03:38:27PM +0530, abhimanyu.v at gmail.com wrote:
-> > Thankyou Ga?l for review!
-> >
->
-
-<snip>
-
-
-> Afterward, my suggestion about shift does not suit me.
->
-> If genimage.sh is run inside a post-image script, this same script have to
-> give
-> a fake parameter as first argument.
->
->         #!/bin/sh
->         #
->         # BR post-image script
->         #
->         # (...)
->
->         support/scripts/genimage.sh "$1" -c path/to/genimage.cfg
->
->
-The proposed changes to script doesn't have above issue.
-
-<snip>
-
-Regards
-Abhimanyu V
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170417/67dec21f/attachment.html>
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 0dd262c2a..d247ffa27 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.0.3
++MESA3D_HEADERS_VERSION = 17.0.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 1ac8d86ab..b7f7924ef 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-April/000315.html
+-sha512 0bcf1609b54fdabb30ec0a500b78e039bd50060c2c7f5a2e57fca29e1a311fb785dadc3cd311018ebe8020d1cc6320181ece2d2aa39d2f215b0ebf2cb0a55165  mesa-17.0.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-April/000318.html
++md5 4a16cfc1c6d034cc17314b866eada628  mesa-17.0.4.tar.xz
++sha1 1b9081614b1ec9a6f60849ced8637917ad0e8593  mesa-17.0.4.tar.xz
++sha256 1269dc8545a193932a0779b2db5bce9be4a5f6813b98c38b93b372be8362a346  mesa-17.0.4.tar.xz
++sha512 0b465dc165b55e4b2ae61aca2d2c6694714522885a14fb61272f73e685aef734be4aac3d58b8d2ceb2643db0578c6187da35fe2cbe41b62a89564e60659b201d  mesa-17.0.4.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 2e6528876..5d144dc72 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.0.3
++MESA3D_VERSION = 17.0.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.11.0
