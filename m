@@ -1,79 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 21:54:10 +0200
-Subject: [Buildroot] [PATCH v5 11/34] package/kodi: move rtmp support to new
-	addon kodi-inputstream-rtmp
+Date: Mon, 17 Apr 2017 21:54:18 +0200
+Subject: [Buildroot] [PATCH v5 19/34] package/kodi-pvr-mythtv: bump version
+	to 4.15.0
 In-Reply-To: <20170417195433.26672-1-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
-Message-ID: <20170417195433.26672-12-bernd.kuhls@t-online.de>
+Message-ID: <20170417195433.26672-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rtmp support was moved from Kodi to an addon:
-https://github.com/xbmc/xbmc/commit/d04f43a4eb6f920cc42a28627b580f17e2be1bb5
+Upstream repo was changed:
+https://github.com/xbmc/repo-binary-addons/commit/cf93c8be639a3122db3ecb11c0b42d76e2e1da98
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy       | 7 +++++++
- package/kodi/Config.in | 7 -------
- package/kodi/kodi.mk   | 7 -------
- 3 files changed, 7 insertions(+), 14 deletions(-)
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a13e4453b..5dddff6e3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.05"
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 0e9eba87e..57725a0ed 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f6d61b134a96a25820b616e60e43ac1ed33bd3f8b9f7612a6f6324356b78582d kodi-pvr-mythtv-84b0b6b122ca779588de5c895ef77b6bc454e859.tar.gz
++sha256 30b6a20f846f0f0cc14c2347efbf3b72162c876daed53a3731d3f975d370765e  kodi-pvr-mythtv-4.15.0.tar.gz
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index 2c5d07a64..515050b17 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_KODI_RTMPDUMP
-+	bool "kodi rtmp"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
-+	help
-+	  Internal rtmp support was moved to addon kodi-inputstream-rtmp
-+
- config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
- 	bool "kodi-visualisation-fountain has been removed"
- 	select BR2_LEGACY
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 85dba3489..95f9f65ea 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -179,13 +179,6 @@ config BR2_PACKAGE_KODI_NONFREE
- 	  Enable components with non-free licenses. This option
- 	  currently only controls support for RAR archives.
- 
--config BR2_PACKAGE_KODI_RTMPDUMP
--	bool "rtmp"
--	select BR2_PACKAGE_RTMPDUMP
--	help
--	  Enable RTMP input support.
--	  Select this if you want to play back rtmp stream.
--
- config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
- 	select BR2_PACKAGE_LIBSHAIRPLAY
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 357776779..dbe2fcd62 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -245,13 +245,6 @@ else
- KODI_CONF_OPTS += -DENABLE_NFS=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_KODI_RTMPDUMP),y)
--KODI_DEPENDENCIES += rtmpdump
--KODI_CONF_OPTS += --enable-rtmp
--else
--KODI_CONF_OPTS += --disable-rtmp
--endif
--
- ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
- KODI_DEPENDENCIES += libbluray
- KODI_CONF_OPTS += -DENABLE_BLURAY=ON
+-# This cset is on the branch 'Jarvis'
++# This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_MYTHTV_VERSION = 84b0b6b122ca779588de5c895ef77b6bc454e859
+-KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
++KODI_PVR_MYTHTV_VERSION = 4.15.0
++KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
+ KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
 -- 
 2.11.0
