@@ -1,92 +1,57 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 21:54:32 +0200
-Subject: [Buildroot] [PATCH v5 33/34] package/kodi-skin-confluence: new
-	package
+Date: Mon, 17 Apr 2017 21:54:14 +0200
+Subject: [Buildroot] [PATCH v5 15/34] package/kodi: add optional support for
+	event clients
 In-Reply-To: <20170417195433.26672-1-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
-Message-ID: <20170417195433.26672-34-bernd.kuhls@t-online.de>
+Message-ID: <20170417195433.26672-16-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For details read
+https://github.com/xbmc/xbmc/blob/master/tools/EventClients/README.txt
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-skin-confluence/Config.in             |  6 ++++++
- .../kodi-skin-confluence/kodi-skin-confluence.hash |  2 ++
- .../kodi-skin-confluence/kodi-skin-confluence.mk   | 25 ++++++++++++++++++++++
- package/kodi/Config.in                             |  4 ++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/kodi-skin-confluence/Config.in
- create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.hash
- create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.mk
+ package/kodi/Config.in | 5 +++++
+ package/kodi/kodi.mk   | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/kodi-skin-confluence/Config.in b/package/kodi-skin-confluence/Config.in
-new file mode 100644
-index 000000000..08b656808
---- /dev/null
-+++ b/package/kodi-skin-confluence/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SKIN_CONFLUENCE
-+	bool "kodi-skin-confluence"
-+	help
-+	  Kodi confluence skin
-+
-+	  https://github.com/xbmc/skin.confluence
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-new file mode 100644
-index 000000000..7579f694c
---- /dev/null
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 54f08dd036c9d2fc0b19768060beae5ac2042263375cbaf8a41d5ca0ac7fdc47  kodi-skin-confluence-a87bd1ddd13aff52ad58d9d3f5af91e4567e58c6.tar.gz
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-new file mode 100644
-index 000000000..3ab22ff4e
---- /dev/null
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# kodi-skin-confluence
-+#
-+################################################################################
-+
-+KODI_SKIN_CONFLUENCE_VERSION = a87bd1ddd13aff52ad58d9d3f5af91e4567e58c6
-+KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
-+KODI_SKIN_CONFLUENCE_LICENSE = GPLv2+
-+KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
-+KODI_SKIN_CONFLUENCE_DEPENDENCIES = kodi
-+KODI_SKIN_CONFLUENCE_CONF_OPTS = -DOVERRIDE_PATHS=1
-+
-+define KODI_SKIN_CONFLUENCE_BUILD_CMDS
-+	$(HOST_DIR)/usr/bin/TexturePacker -input $(@D)/media/ -output $(@D)/media/Textures.xbt -dupecheck -use_none
-+endef
-+
-+define KODI_SKIN_CONFLUENCE_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence
-+	cp -dpfr $(@D)/* $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.jpg -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.png -delete
-+endef
-+
-+$(eval $(generic-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f4095c9fe..90e432754 100644
+index c3f73e713..013d343a4 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -332,6 +332,10 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-stars/Config.in"
- endmenu
+@@ -132,6 +132,11 @@ config BR2_PACKAGE_KODI_DBUS
+ 	help
+ 	  Enable D-Bus support
  
-+menu "Skins"
-+	source "package/kodi-skin-confluence/Config.in"
-+endmenu
++config BR2_PACKAGE_KODI_EVENTCLIENTS
++	bool "eventclients"
++	help
++	  Enable event clients support
 +
- menu "Visualisations"
- 	source "package/kodi-visualisation-fishbmc/Config.in"
- 	source "package/kodi-visualisation-goom/Config.in"
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 6cc56718d..a0fc4d992 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -213,6 +213,12 @@ else
+ KODI_CONF_OPTS += -DENABLE_DBUS=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_EVENTCLIENTS),y)
++KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=ON
++else
++KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_ALSA_LIB),y)
+ KODI_CONF_OPTS += -DENABLE_ALSA=ON
+ KODI_DEPENDENCIES += alsa-lib
 -- 
 2.11.0
