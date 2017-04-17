@@ -1,66 +1,58 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 17 Apr 2017 19:25:44 +0200
-Subject: [Buildroot] [PATCH v2] package/aubio: bump to version 0.4.5
-In-Reply-To: <ddc8b801-77c5-c780-8f06-a5cd5c82c5ac@gmail.com>
-References: <20170416205106.28392-1-romain.naour@gmail.com>
- <20170417150736.663cc9c5@free-electrons.com>
- <ddc8b801-77c5-c780-8f06-a5cd5c82c5ac@gmail.com>
-Message-ID: <a9c53f17-2ea2-d0af-60d0-23d0d9d3be81@gmail.com>
+Date: Mon, 17 Apr 2017 19:33:22 +0200
+Subject: [Buildroot] [PATCH v3] package/aubio: bump to version 0.4.5
+Message-ID: <20170417173322.19328-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Since aubio 0.4.4, the libsamplerate support require fftw
+single precision mode [1].
 
-Le 17/04/2017 ? 15:50, Romain Naour a ?crit :
-> Hi Thomas,
-> 
-> Le 17/04/2017 ? 15:07, Thomas Petazzoni a ?crit :
->> Hello,
->>
->> On Sun, 16 Apr 2017 22:51:06 +0200, Romain Naour wrote:
->>
->>> -ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
->>> +ifeq ($(BR2_PACKAGE_AUBIO_LIBSAMPLERATE),y)
->>
->> Since none of the other optional dependencies have a sub-option in this
->> package, what about just:
->>
->> ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
-> 
-> Yes, I hesitated by doing so but I thought it was better to handle the
-> dependency from Config.in (for the help text and comment when not available).
-> I've not a strong opinion.
-> 
->>
->> Also, I don't quite understand your commit, because libsamplerate is
->> itself built with --disable-fftw.
+[1] https://github.com/aubio/aubio/commit/8be88e77f5c275fdf4efc99ae182d14940948786
 
-As reported by Paul Brossier [1], fftw is not used by libsamplerate library.
-Only tests programs use it.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v3: simply the libsamplerate dependency (ThomasP).
+v2: fix aubio version in the commit log.
+---
+ package/aubio/aubio.hash | 4 ++--
+ package/aubio/aubio.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-So we just have to make sure that fftw use single precision mode when
-libsamplerate is enabled [2].
-
-Best regards,
-Romain
-
-[1] https://github.com/aubio/aubio/issues/100
-[2] https://github.com/aubio/aubio/commit/8be88e77f5c275fdf4efc99ae182d14940948786
-
-> 
-> humm, I don't really know if libsamplerate without fftw support can really work
-> with aubio. The build systemd doesn't check if fftw is enabled in libsamplerate.
-> I'll ask upstream.
-> 
-> Best regards,
-> Romain
-> 
->>
->> Thanks,
->>
->> Thomas
->>
-> 
+diff --git a/package/aubio/aubio.hash b/package/aubio/aubio.hash
+index e447847..b4233ae 100644
+--- a/package/aubio/aubio.hash
++++ b/package/aubio/aubio.hash
+@@ -1,2 +1,2 @@
+-# From https://aubio.org/pub/aubio-0.4.3.tar.bz2.sha256
+-sha256 b62cdb073c0c64ae301917fa162969d42cba45e478bdf1e74490bd87e9cceaab  aubio-0.4.3.tar.bz2
++# From https://aubio.org/pub/aubio-0.4.5.tar.bz2.sha256
++sha256 70c2804e6f4fbf0ebc0fb9ac8cc9d465ef4a4d438311c074c9a7364e98827af6  aubio-0.4.5.tar.bz2
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index f8be19f..2a09ebb 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUBIO_VERSION = 0.4.3
++AUBIO_VERSION = 0.4.5
+ AUBIO_SITE = https://aubio.org/pub
+ AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
+ AUBIO_LICENSE = GPL-3.0+
+@@ -26,7 +26,8 @@ else
+ AUBIO_CONF_OPTS += --disable-sndfile
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++# Could not compile aubio in double precision mode with libsamplerate
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
+ AUBIO_DEPENDENCIES += libsamplerate
+ AUBIO_CONF_OPTS += --enable-samplerate
+ else
+-- 
+2.9.3
