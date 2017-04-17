@@ -1,78 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 21:54:05 +0200
-Subject: [Buildroot] [PATCH v5 06/34] package/kodi-jsonschemabuilder: new
-	host package
+Date: Mon, 17 Apr 2017 21:54:02 +0200
+Subject: [Buildroot] [PATCH v5 03/34] package/kodi-platform: bump version
 In-Reply-To: <20170417195433.26672-1-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
-Message-ID: <20170417195433.26672-7-bernd.kuhls@t-online.de>
+Message-ID: <20170417195433.26672-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for upcoming kodi version bump to 17.1-Krypton which will also
-switch the kodi build system to CMake.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-jsonschemabuilder.hash                    |  1 +
- .../kodi-jsonschemabuilder.mk                      | 23 ++++++++++++++++++++++
- .../0001-texturepacker.patch}                      |  0
- package/kodi/kodi.hash                             |  1 +
- 4 files changed, 25 insertions(+)
- create mode 120000 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
- create mode 100644 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
- rename package/{kodi/0002-texturepacker.patch => kodi-texturepacker/0001-texturepacker.patch} (100%)
+ package/kodi-platform/kodi-platform.hash | 2 +-
+ package/kodi-platform/kodi-platform.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
-new file mode 120000
-index 000000000..92a75949b
---- /dev/null
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
-@@ -0,0 +1 @@
-+/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/package/kodi/kodi.hash
-\ No newline at end of file
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-new file mode 100644
-index 000000000..97ba44426
---- /dev/null
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# kodi-jsonschemabuilder
-+#
-+################################################################################
-+
-+# Not possible to directly refer to kodi variables, because of
-+# first/second expansion trickery...
-+HOST_KODI_JSONSCHEMABUILDER_VERSION = 17.1-Krypton
-+HOST_KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(HOST_KODI_JSONSCHEMABUILDER_VERSION))
-+HOST_KODI_JSONSCHEMABUILDER_LICENSE = GPLv2
-+HOST_KODI_JSONSCHEMABUILDER_LICENSE_FILES = LICENSE.GPL
-+HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder
-+
-+HOST_KODI_JSONSCHEMABUILDER_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(@D)/project/cmake/modules
-+
-+HOST_KODI_JSONSCHEMABUILDER_INSTALL_CMDS = \
-+	$(INSTALL) -m 755 -D \
-+		$(@D)/tools/depends/native/JsonSchemaBuilder/JsonSchemaBuilder \
-+		$(HOST_DIR)/usr/bin/JsonSchemaBuilder
-+
-+$(eval $(host-cmake-package))
-diff --git a/package/kodi/0002-texturepacker.patch b/package/kodi-texturepacker/0001-texturepacker.patch
-similarity index 100%
-rename from package/kodi/0002-texturepacker.patch
-rename to package/kodi-texturepacker/0001-texturepacker.patch
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 5aa580ec7..b910af2d8 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
+index a2484484e..a8a58f4ef 100644
+--- a/package/kodi-platform/kodi-platform.hash
++++ b/package/kodi-platform/kodi-platform.hash
+@@ -1,2 +1,2 @@
  # Locally computed
- sha256	7d82c8aff2715c83deecdf10c566e26105bec0473af530a1356d4c747ebdfd10	kodi-16.1-Jarvis.tar.gz
-+sha256 303f3903cbb57ccc2961f09cf3746505542bcb129a464f0687d7ca8601cebbee  kodi-jsonschemabuilder-17.1-Krypton.tar.gz
+-sha256  88741358d5d54a0031553ac28aa63bc56c44d994a76f8651bac94a1e244a6595  kodi-platform-45d6ad1984fdb1dc855076ff18484dbec33939d1.tar.gz
++sha256 951bd9d74ff34aca18f96bb5eae15533c3ec489eb8ec946cd4a8b4073d49f56d  kodi-platform-c8188d82678fec6b784597db69a68e74ff4986b5.tar.gz
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+index 9658918e5..f38a7f443 100644
+--- a/package/kodi-platform/kodi-platform.mk
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PLATFORM_VERSION = 45d6ad1984fdb1dc855076ff18484dbec33939d1
++KODI_PLATFORM_VERSION = c8188d82678fec6b784597db69a68e74ff4986b5
+ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
+ KODI_PLATFORM_LICENSE = GPL-2.0+
+ KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
 -- 
 2.11.0
