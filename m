@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 21:54:11 +0200
-Subject: [Buildroot] [PATCH v5 12/34] package/kodi: add optional support for
-	bluez5
+Date: Mon, 17 Apr 2017 21:54:13 +0200
+Subject: [Buildroot] [PATCH v5 14/34] package/kodi: add optional support for
+	pulseaudio
 In-Reply-To: <20170417195433.26672-1-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
-Message-ID: <20170417195433.26672-13-bernd.kuhls@t-online.de>
+Message-ID: <20170417195433.26672-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,45 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 8 ++++++++
+ package/kodi/Config.in | 7 +++++++
  package/kodi/kodi.mk   | 7 +++++++
- 2 files changed, 15 insertions(+)
+ 2 files changed, 14 insertions(+)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 95f9f65ea..6d4148899 100644
+index e89644b56..c3f73e713 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -120,6 +120,14 @@ config BR2_PACKAGE_KODI_AVAHI
- 	  Enable Avahi support.
- 	  Select this if you want Kodi to support Bonjour protocol.
+@@ -185,6 +185,13 @@ config BR2_PACKAGE_KODI_NONFREE
+ 	  Enable components with non-free licenses. This option
+ 	  currently only controls support for RAR archives.
  
-+config BR2_PACKAGE_KODI_BLUEZ
-+	bool "bluetooth"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
-+	depends on !BR2_PACKAGE_BLUEZ_UTILS # bluez5_utils
-+	select BR2_PACKAGE_BLUEZ5_UTILS
++config BR2_PACKAGE_KODI_PULSEAUDIO
++	bool "pulseaudio"
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_PULSEAUDIO
 +	help
-+	    Enable bluetooth support
++	  Enable Pulseaudio support.
 +
- config BR2_PACKAGE_KODI_DBUS
- 	bool "dbus"
- 	select BR2_PACKAGE_DBUS
+ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ 	bool "shairport"
+ 	select BR2_PACKAGE_LIBSHAIRPLAY
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index dbe2fcd62..931f002f8 100644
+index 5e4853b8b..6cc56718d 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -194,6 +194,13 @@ else
- KODI_CONF_OPTS += -DENABLE_CAP=OFF
+@@ -329,6 +329,13 @@ else
+ KODI_CONF_OPTS += -DENABLE_OPTICAL=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_KODI_BLUEZ),y)
-+KODI_CONF_OPTS += -DENABLE_BLUETOOTH=ON
-+KODI_DEPENDENCIES += bluez5_utils
++ifeq ($(BR2_PACKAGE_KODI_PULSEAUDIO),y)
++KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=ON
++KODI_DEPENDENCIES += pulseaudio
 +else
-+KODI_CONF_OPTS += -DENABLE_BLUETOOTH=OFF
++KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_KODI_DBUS),y)
- KODI_DEPENDENCIES += dbus
- KODI_CONF_OPTS += -DENABLE_DBUS=ON
+ # Remove versioncheck addon, updating Kodi is done by building a new
+ # buildroot image.
+ KODI_ADDON_MANIFEST = $(TARGET_DIR)/usr/share/kodi/system/addon-manifest.xml
 -- 
 2.11.0
