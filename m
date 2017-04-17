@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Apr 2017 14:36:09 +0200
-Subject: [Buildroot] [PATCH 1/4] which: update homepage URL
-In-Reply-To: <1492421233-9868-1-git-send-email-rahulbedarkar89@gmail.com>
-References: <1492421233-9868-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <20170417143609.0daba659@free-electrons.com>
+Date: Mon, 17 Apr 2017 14:50:15 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-04-04
+In-Reply-To: <19D2C3F2-4C92-438A-A90C-662C225A5924@layer-7.net>
+References: <20170405062834.9228220820@mail.free-electrons.com>
+ <19D2C3F2-4C92-438A-A90C-662C225A5924@layer-7.net>
+Message-ID: <20170417145015.6f72334a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Apr 2017 14:57:10 +0530, Rahul Bedarkar wrote:
-> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-> ---
->  package/which/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 17 Apr 2017 12:45:41 +0200, Michael Rommel wrote:
 
-Series applied. Thanks!
+> the organisation SIXXS will shut down their services mi 2017. It was the only use case for the aiccu package.
+> I suggest, to completely remove this package from the tree, as it will no longer be of use for anybody.
+> 
+> Unfortunately I could not find a section in the documentation (chapter 21) telling me, how to remove a package.
+
+Just send a patch that removes the package, the entry in the DEVELOPERS
+file and adds an entry in Config.in.legacy for the removed option.
+
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
