@@ -1,131 +1,33 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 17 Apr 2017 13:55:04 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] new package: redland
-In-Reply-To: <1489044989-4047-2-git-send-email-erwan.gautron@yahoo.fr>
-References: <1489044989-4047-1-git-send-email-erwan.gautron@yahoo.fr>
- <1489044989-4047-2-git-send-email-erwan.gautron@yahoo.fr>
-Message-ID: <14641d0c-9887-a635-d68b-92515821a263@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Apr 2017 14:31:41 +0200
+Subject: [Buildroot] [PATCH 1/2] odroid-mali: rename pkg to odroid-gl
+In-Reply-To: <20170417065654.28313-1-daggs@gmx.com>
+References: <20170417065654.28313-1-daggs@gmx.com>
+Message-ID: <20170417143141.6ea473b0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Erwan,
+Hello,
 
-Le 09/03/2017 ? 08:36, Erwan Gautron a ?crit :
-> Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
-> 
-> 	  Redland is a set of free software C libraries
-> 	  that provide support for the
-> 	  Resource Description Framework (RDF).
-> 	  http://librdf.org/
+On Mon, 17 Apr 2017 09:56:53 +0300, Dagg Stompler wrote:
+> this pkg provides the GL implementation for the odroidc2 broad.
+> mali is the name of the kernel gpu driver, this might cause some
+> confusion. thus rename it for odroid-gl
 
-Same recommendation than for rasqal package.
+Mali is not the name of the kernel gpu driver, Mali is the name of the
+GPU sold by ARM. So both the kernel driver and the userspace blob are
+Mali-related.
 
-> 
-> Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/redland/Config.in  |  9 +++++++++
->  package/redland/redland.mk | 15 +++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100755 package/redland/Config.in
->  create mode 100755 package/redland/redland.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index afcf983..460c71a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -465,6 +465,7 @@ F:	package/szip/
->  
->  N:	Erwan Gautron <erwan.gautron@yahoo.fr>
->  F:	package/rasqal/
-> +F:	package/redland/
->  
->  N:	Evan Zelkowitz <evan.zelkowitz@gmail.com>
->  F:	package/sdl_gfx/
-> diff --git a/package/Config.in b/package/Config.in
-> index d46758d..541af9d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1161,6 +1161,7 @@ menu "JSON/XML"
->  	source "package/rapidxml/Config.in"
->  	source "package/raptor/Config.in"
->  	source "package/rasqal/Config.in"
-> +	source "package/redland/Config.in"
->  	source "package/tinyxml/Config.in"
->  	source "package/tinyxml2/Config.in"
->  	source "package/valijson/Config.in"
-> diff --git a/package/redland/Config.in b/package/redland/Config.in
-> new file mode 100755
-> index 0000000..cd0a41f
-> --- /dev/null
-> +++ b/package/redland/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_REDLAND
-> +	bool "Redland RDF Libraries"
-> +	select BR2_PACKAGE_RASQAL
-> +
+In addition, we already have sunxi-mali for Allwinner platforms, and
+mali-t76x. So please keep the odroid-mali name.
 
-Remove empty line here.
+Thanks,
 
-> +	help
-> +	  Redland is a set of free software C libraries
-> +	  that provide support for the 
-> +	  Resource Description Framework (RDF).
-
-Add a new line between the help text and the upstream URL.
-
-> +	  http://librdf.org/
-> diff --git a/package/redland/redland.mk b/package/redland/redland.mk
-> new file mode 100755
-> index 0000000..ab43efb
-> --- /dev/null
-> +++ b/package/redland/redland.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# redland
-> +#
-> +################################################################################
-
-Add a new line here.
-
-> +REDLAND_VERSION = 1.0.17
-> +REDLAND_SITE = http://download.librdf.org/source
-> +REDLAND_DEPENDENCIES = rasqal
-
-I tried to build redland but the build fail again due to incorrect include path:
- ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
-
-Can you check that?
-It seems related to Oracle Berkeley DB (BR2_PACKAGE_BERKELEYDB) dependency which
-is not handled here.
-Try with --with-bdb=$(STAGING_DIR)/usr
-
-> +REDLAND_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
-
-It should be:
-GPL-2.0 or LGPL-2.1+ or Apache-2.0
-
-> +REDLAND_LICENSE_FILES = LICENSE.txt
-
-Also add LICENSE-2.0.txt
-
-> +
-> +REDLAND_AUTORECONF = YES
-
-Add a comment about autoreconf.
-
-I'll mark your patch "Changes Requested" in patchwork, can you resend it after
-taking into account all comments ?
-
-Best regards,
-Romain
-
-> +REDLAND_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
