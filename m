@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Apr 2017 15:07:36 +0200
-Subject: [Buildroot] [PATCH v2] package/aubio: bump to version 0.4.5
-In-Reply-To: <20170416205106.28392-1-romain.naour@gmail.com>
-References: <20170416205106.28392-1-romain.naour@gmail.com>
-Message-ID: <20170417150736.663cc9c5@free-electrons.com>
+Date: Mon, 17 Apr 2017 15:08:12 +0200
+Subject: [Buildroot] [git commit] package/efl: add libunwind optional
+	dependency
+Message-ID: <20170417130858.AC44882757@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=51597e99e963075c20e5e6ed193aa02d50a98b29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Apr 2017 22:51:06 +0200, Romain Naour wrote:
+There is no configure option to enable/disable libunwind support.
+See efl/m4/efl_libunwind.m4
 
-> -ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-> +ifeq ($(BR2_PACKAGE_AUBIO_LIBSAMPLERATE),y)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efl/efl.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Since none of the other optional dependencies have a sub-option in this
-package, what about just:
-
-ifeq ($(BR2_PACKAGE_LIBSAMPLERATE)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
-
-Also, I don't quite understand your commit, because libsamplerate is
-itself built with --disable-fftw.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 4008d30..04e15f5 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -293,6 +293,10 @@ endef
+ EFL_POST_INSTALL_TARGET_HOOKS = EFL_HOOK_REMOVE_UPOWER
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
++EFL_DEPENDENCIES += libunwind
++endif
++
+ $(eval $(autotools-package))
+ 
+ ################################################################################
