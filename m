@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 21:54:02 +0200
-Subject: [Buildroot] [PATCH v5 03/34] package/kodi-platform: bump version
+Date: Mon, 17 Apr 2017 21:54:08 +0200
+Subject: [Buildroot] [PATCH v5 09/34] package/kodi: add patch to disable
+	online check
 In-Reply-To: <20170417195433.26672-1-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
-Message-ID: <20170417195433.26672-4-bernd.kuhls@t-online.de>
+Message-ID: <20170417195433.26672-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +13,80 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-platform/kodi-platform.hash | 2 +-
- package/kodi-platform/kodi-platform.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi/0004-disable-online-check.patch | 65 ++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/kodi/0004-disable-online-check.patch
 
-diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
-index a2484484e..a8a58f4ef 100644
---- a/package/kodi-platform/kodi-platform.hash
-+++ b/package/kodi-platform/kodi-platform.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  88741358d5d54a0031553ac28aa63bc56c44d994a76f8651bac94a1e244a6595  kodi-platform-45d6ad1984fdb1dc855076ff18484dbec33939d1.tar.gz
-+sha256 951bd9d74ff34aca18f96bb5eae15533c3ec489eb8ec946cd4a8b4073d49f56d  kodi-platform-c8188d82678fec6b784597db69a68e74ff4986b5.tar.gz
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-index 9658918e5..f38a7f443 100644
---- a/package/kodi-platform/kodi-platform.mk
-+++ b/package/kodi-platform/kodi-platform.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PLATFORM_VERSION = 45d6ad1984fdb1dc855076ff18484dbec33939d1
-+KODI_PLATFORM_VERSION = c8188d82678fec6b784597db69a68e74ff4986b5
- KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
- KODI_PLATFORM_LICENSE = GPL-2.0+
- KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
+diff --git a/package/kodi/0004-disable-online-check.patch b/package/kodi/0004-disable-online-check.patch
+new file mode 100644
+index 000000000..9c21064bf
+--- /dev/null
++++ b/package/kodi/0004-disable-online-check.patch
+@@ -0,0 +1,65 @@
++From 468f917d3c1ee6f84b1a075d327d7c7626f1e223 Mon Sep 17 00:00:00 2001
++From: Stefan Saraev <stefan@saraev.ca>
++Date: Sat, 18 Apr 2015 15:03:31 +0300
++Subject: [PATCH 03/13] disable online check
++
++Ported from LibreELEC
++https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.03-disable-online-check.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/GUIInfoManager.cpp              | 1 -
++ xbmc/utils/SystemInfo.cpp            | 5 +----
++ xbmc/windows/GUIWindowSystemInfo.cpp | 1 -
++ 3 files changed, 1 insertion(+), 6 deletions(-)
++
++diff --git a/xbmc/GUIInfoManager.cpp b/xbmc/GUIInfoManager.cpp
++index cb09e75..a218e1d 100644
++--- a/xbmc/GUIInfoManager.cpp
+++++ b/xbmc/GUIInfoManager.cpp
++@@ -278,7 +278,6 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
++                                   { "currentwindow",    SYSTEM_CURRENT_WINDOW },
++                                   { "currentcontrol",   SYSTEM_CURRENT_CONTROL },
++                                   { "dvdlabel",         SYSTEM_DVD_LABEL },
++-                                  { "internetstate",    SYSTEM_INTERNET_STATE },
++                                   { "osversioninfo",    SYSTEM_OS_VERSION_INFO },
++                                   { "kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
++                                   { "uptime",           SYSTEM_UPTIME },
++diff --git a/xbmc/utils/SystemInfo.cpp b/xbmc/utils/SystemInfo.cpp
++index f423cfe..d8483d0 100644
++--- a/xbmc/utils/SystemInfo.cpp
+++++ b/xbmc/utils/SystemInfo.cpp
++@@ -247,7 +247,6 @@ bool CSysInfoJob::DoWork()
++ {
++   m_info.systemUptime      = GetSystemUpTime(false);
++   m_info.systemTotalUptime = GetSystemUpTime(true);
++-  m_info.internetState     = GetInternetState();
++   m_info.videoEncoder      = GetVideoEncoder();
++   m_info.cpuFrequency      = GetCPUFreqInfo();
++   m_info.osVersionInfo     = CSysInfo::GetOsPrettyNameWithVersion() + " (kernel: " + CSysInfo::GetKernelName() + " " + CSysInfo::GetKernelVersionFull() + ")";
++@@ -1023,9 +1022,7 @@ int CSysInfo::GetXbmcBitness(void)
++ 
++ bool CSysInfo::HasInternet()
++ {
++-  if (m_info.internetState != CSysData::UNKNOWN)
++-    return m_info.internetState == CSysData::CONNECTED;
++-  return (m_info.internetState = CSysInfoJob::GetInternetState()) == CSysData::CONNECTED;
+++  return m_info.internetState == CSysData::UNKNOWN;
++ }
++ 
++ std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
++diff --git a/xbmc/windows/GUIWindowSystemInfo.cpp b/xbmc/windows/GUIWindowSystemInfo.cpp
++index 6ff2391..ee73c88 100644
++--- a/xbmc/windows/GUIWindowSystemInfo.cpp
+++++ b/xbmc/windows/GUIWindowSystemInfo.cpp
++@@ -125,7 +125,6 @@ void CGUIWindowSystemInfo::FrameMove()
++     SetControlLabel(i++, "%s: %s", 13160, NETWORK_GATEWAY_ADDRESS);
++     SetControlLabel(i++, "%s: %s", 13161, NETWORK_DNS1_ADDRESS);
++     SetControlLabel(i++, "%s: %s", 20307, NETWORK_DNS2_ADDRESS);
++-    SetControlLabel(i++, "%s %s", 13295, SYSTEM_INTERNET_STATE);
++   }
++ 
++   else if (m_section == CONTROL_BT_VIDEO)
++-- 
++2.5.0
++
 -- 
 2.11.0
