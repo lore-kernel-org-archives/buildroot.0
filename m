@@ -1,77 +1,411 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Apr 2017 21:07:21 +0200
-Subject: [Buildroot] [PATCH] package/libunwind: disable for x86 with musl
-In-Reply-To: <20170417173722.20719-1-romain.naour@gmail.com>
-References: <20170417173722.20719-1-romain.naour@gmail.com>
-Message-ID: <20170417190721.GD3441@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 17 Apr 2017 21:53:59 +0200
+Subject: [Buildroot] [PATCH v5 00/34] kodi: bump to version 17.1-Krypton
+Message-ID: <20170417195433.26672-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+this series bumps Kodi to 17.1-Krypton, released 2017/03/21:
+https://kodi.tv/kodi-v17-1-krypton/
 
-On 2017-04-17 19:37 +0200, Romain Naour spake thusly:
-> libunwind use sigreturn() and setcontext() while building for x86 [1]
-> but this function is not available with musl [2].
-> 
-> This throw a warning during libunwind build:
-> In file included from x86/Los-linux.c:4:0:
-> x86/Gos-linux.c: In function ?_ULx86_local_resume?:
-> x86/Gos-linux.c:298:7: warning: implicit declaration of function ?sigreturn? [-Wimplicit-function-declaration]
->       sigreturn (sc);
->       ^
-> But any program trying to link against libunwind-generic.so or
-> libunwind.so fail to build:
-> [...]/usr/lib/libunwind-generic.so: undefined reference to `sigreturn'
-> [...]/usr/lib/libunwind-generic.so: undefined reference to `setcontext'
-> collect2: error: ld returned 1 exit status
-> 
-> Disable libunwind for x86 target when musl is used.
-> 
-> Reported upstream by Waldemar [3]
-> 
-> [1] http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86/Gos-linux.c;h=17aebc2974af50eb0bf8292689b2ed22a4c97866;hb=HEAD#l299
-> [2] http://openwall.com/lists/musl/2016/02/04/3
-> [3] http://lists.nongnu.org/archive/html/libunwind-devel/2017-04/msg00030.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
+Patches 0001-0031 must be committed together to avoid having
+incompatible package versions in buildroot.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Please note the Kodi needs patched versions of libdvdcss, libdvdread
+and libdvdnav. Instead of including the Kodi-specific patches in the
+respective buildroot packages we let Kodi build the libraries during
+make and provide the pre-downloaded and patched tarballs for it.
+Debian chose a similar approach to avoid patching the system versions
+of libdvd*:
+https://sources.debian.net/src/kodi/2:17.1%2Bdfsg1-2/debian/README.source/#L11
 
-Regards,
-Yann E. MORIN.
+This patch series was compiled-tested using the testpkg script and this
+defconfig without errors:
 
-> ---
-> Patch rebased after http://patchwork.ozlabs.org/patch/751402/
-> ---
->  package/libunwind/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-> index 2003e96..1a25317 100644
-> --- a/package/libunwind/Config.in
-> +++ b/package/libunwind/Config.in
-> @@ -16,7 +16,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
->  		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
->  		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
->  	default y if BR2_TOOLCHAIN_USES_MUSL && \
-> -		(BR2_ARM_CPU_HAS_ARM || BR2_i386 || BR2_x86_64)
-> +		(BR2_ARM_CPU_HAS_ARM || BR2_x86_64)
->  
->  config BR2_PACKAGE_LIBUNWIND
->  	bool "libunwind"
-> -- 
-> 2.9.3
-> 
+BR2_INIT_NONE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_KODI_ALSA_LIB=y
+BR2_PACKAGE_KODI_AVAHI=y
+BR2_PACKAGE_KODI_DBUS=y
+BR2_PACKAGE_KODI_EVENTCLIENTS=y
+BR2_PACKAGE_KODI_LIBBLURAY=y
+BR2_PACKAGE_KODI_LIBCEC=y
+BR2_PACKAGE_KODI_LCMS2=y
+BR2_PACKAGE_KODI_LIRC=y
+BR2_PACKAGE_KODI_LIBMICROHTTPD=y
+BR2_PACKAGE_KODI_LIBNFS=y
+BR2_PACKAGE_KODI_MYSQL=y
+BR2_PACKAGE_KODI_NONFREE=y
+BR2_PACKAGE_KODI_PULSEAUDIO=y
+BR2_PACKAGE_KODI_LIBSHAIRPLAY=y
+BR2_PACKAGE_KODI_LIBSSH=y
+BR2_PACKAGE_KODI_LIBTHEORA=y
+BR2_PACKAGE_KODI_LIBVA=y
+BR2_PACKAGE_KODI_LIBVDPAU=y
+BR2_PACKAGE_KODI_UPNP=y
+BR2_PACKAGE_KODI_AUDIODECODER_MODPLUG=y
+BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART=y
+BR2_PACKAGE_KODI_AUDIODECODER_OPUS=y
+BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY=y
+BR2_PACKAGE_KODI_AUDIODECODER_SNESAPU=y
+BR2_PACKAGE_KODI_AUDIODECODER_STSOUND=y
+BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY=y
+BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM=y
+BR2_PACKAGE_KODI_ADSP_BASIC=y
+BR2_PACKAGE_KODI_AUDIOENCODER_FLAC=y
+BR2_PACKAGE_KODI_AUDIOENCODER_LAME=y
+BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS=y
+BR2_PACKAGE_KODI_AUDIOENCODER_WAV=y
+BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE=y
+BR2_PACKAGE_KODI_INPUTSTREAM_RTMP=y
+BR2_PACKAGE_KODI_PVR_ARGUSTV=y
+BR2_PACKAGE_KODI_PVR_DVBLINK=y
+BR2_PACKAGE_KODI_PVR_DVBVIEWER=y
+BR2_PACKAGE_KODI_PVR_FILMON=y
+BR2_PACKAGE_KODI_PVR_HDHOMERUN=y
+BR2_PACKAGE_KODI_PVR_HTS=y
+BR2_PACKAGE_KODI_PVR_IPTVSIMPLE=y
+BR2_PACKAGE_KODI_PVR_MYTHTV=y
+BR2_PACKAGE_KODI_PVR_NEXTPVR=y
+BR2_PACKAGE_KODI_PVR_NJOY=y
+BR2_PACKAGE_KODI_PVR_PCTV=y
+BR2_PACKAGE_KODI_PVR_STALKER=y
+BR2_PACKAGE_KODI_PVR_VBOX=y
+BR2_PACKAGE_KODI_PVR_VDR_VNSI=y
+BR2_PACKAGE_KODI_PVR_VUPLUS=y
+BR2_PACKAGE_KODI_PVR_WMC=y
+BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS=y
+BR2_PACKAGE_KODI_SCREENSAVER_ASTERWAVE=y
+BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS=y
+BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS=y
+BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH=y
+BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC=y
+BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS=y
+BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG=y
+BR2_PACKAGE_KODI_SCREENSAVER_PLANESTATE=y
+BR2_PACKAGE_KODI_SCREENSAVER_PYRO=y
+BR2_PACKAGE_KODI_SCREENSAVER_RSXS=y
+BR2_PACKAGE_KODI_SCREENSAVER_STARS=y
+BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE=y
+BR2_PACKAGE_KODI_SKIN_CONFLUENCE=y
+BR2_PACKAGE_KODI_VISUALISATION_FISHBMC=y
+BR2_PACKAGE_KODI_VISUALISATION_GOOM=y
+BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY=y
+BR2_PACKAGE_KODI_VISUALISATION_SPECTRUM=y
+BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE=y
+BR2_PACKAGE_KODI_VISUALISATION_WAVEFORM=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
+
+                armv5-ctng-linux-gnueabi [ 1/49]: OK
+              armv7-ctng-linux-gnueabihf [ 2/49]: OK
+                        br-aarch64-glibc [ 3/49]: OK
+                           br-arcle-hs38 [ 4/49]: SKIPPED
+                            br-arm-basic [ 5/49]: SKIPPED
+                  br-arm-cortex-a9-glibc [ 6/49]: OK
+                   br-arm-cortex-a9-musl [ 7/49]: SKIPPED
+                   br-arm-cortex-m4-full [ 8/49]: SKIPPED
+                             br-arm-full [ 9/49]: SKIPPED
+                    br-arm-full-nothread [10/49]: SKIPPED
+                      br-arm-full-static [11/49]: SKIPPED
+                            br-bfin-full [12/49]: SKIPPED
+                   br-i386-pentium4-full [13/49]: OK
+                br-i386-pentium-mmx-musl [14/49]: SKIPPED
+                       br-m68k-5208-full [15/49]: SKIPPED
+                      br-m68k-68040-full [16/49]: SKIPPED
+                    br-microblazeel-full [17/49]: SKIPPED
+                 br-mips32r6-el-hf-glibc [18/49]: SKIPPED
+                      br-mips64-n64-full [19/49]: OK
+                 br-mips64r6-el-hf-glibc [20/49]: OK
+                      br-mipsel-o32-full [21/49]: SKIPPED
+                          br-nios2-glibc [22/49]: SKIPPED
+                      br-openrisc-uclibc [23/49]: SKIPPED
+               br-powerpc-603e-basic-cpp [24/49]: SKIPPED
+             br-powerpc64le-power8-glibc [25/49]: OK
+               br-powerpc64-power7-glibc [26/49]: OK
+                  br-powerpc-e500mc-full [27/49]: SKIPPED
+                             br-sh4-full [28/49]: SKIPPED
+                        br-sparc64-glibc [29/49]: SKIPPED
+                         br-sparc-uclibc [30/49]: SKIPPED
+                    br-x86-64-core2-full [31/49]: OK
+                          br-x86-64-musl [32/49]: SKIPPED
+                          br-xtensa-full [33/49]: SKIPPED
+                     i686-ctng-linux-gnu [34/49]: OK
+                          linaro-aarch64 [35/49]: OK
+                              linaro-arm [36/49]: OK
+             mips64el-ctng_n32-linux-gnu [37/49]: OK
+             mips64el-ctng_n64-linux-gnu [38/49]: OK
+        powerpc-ctng_e500v2-linux-gnuspe [39/49]: SKIPPED
+                     sourcery-arm-armv4t [40/49]: OK
+                            sourcery-arm [41/49]: OK
+                     sourcery-arm-thumb2 [42/49]: OK
+                         sourcery-mips64 [43/49]: OK
+                           sourcery-mips [44/49]: SKIPPED
+                          sourcery-nios2 [45/49]: SKIPPED
+                             sourcery-sh [46/49]: SKIPPED
+                         sourcery-x86-64 [47/49]: OK
+                            sourcery-x86 [48/49]: SKIPPED
+           x86_64-ctng_locales-linux-gnu [49/49]: OK
+
+Regards, Bernd
+
+v5: removed patches for libdvd*
+    add dependency to libglib2 for pulseaudio
+    fix c/cxxflags for gles
+    BR2_PACKAGE_KODI_LIBVA depends on xorg
+    squashed patches to enhance supported archs
+    bumped kodi-pvr-dvblink
+    enable optional support for OpenGL on arm
+v4: package/kodi: switched up CMake, bumped to 17.1
+    package/libdvd*: static build is not needed anymore
+    various addon bumps and new optional packages for Kodi
+v3: fixed legal-info for libplatform & kodi-skin-confluence
+v2: added commit log to "package/kodi: add Kconfig option to make
+    TexturePacker optional" (Thomas)
+
+Bernd Kuhls (34):
+  package/kodi-visualisation-fountain: remove package
+  package/libplatform: bump version to 2.1.0
+  package/kodi-platform: bump version
+  package/libcec: bump version to 4.0.2
+  package/xmlstarlet: add host variant
+  package/kodi-jsonschemabuilder: new host package
+  package/kodi-texturepacker: new host package
+  package/kodi: bump to version 17.1-Krypton
+  package/kodi: add patch to disable online check
+  package/kodi-inputstream-rtmp: new package
+  package/kodi: move rtmp support to new addon kodi-inputstream-rtmp
+  package/kodi: add optional support for bluez5
+  package/kodi: libxslt is an optional package
+  package/kodi: add optional support for pulseaudio
+  package/kodi: add optional support for event clients
+  package/kodi: add optional support for lcms2
+  package/libsquish: remove deprecated package
+  package/kodi-pvr-*: mass version bump
+  package/kodi-pvr-mythtv: bump version to 4.15.0
+  package/kodi-pvr-nextpvr: bump version to 2.4.11
+  package/kodi-pvr-mediaportal-tvserver: needs locale support
+  package/kodi-adsp-basic: bump version
+  package/kodi-adsp-freesurround: bump version
+  package/kodi-audioencoder-*: mass version bump
+  package/kodi-audiodecoder-*: mass version bump
+  package/kodi-audiodecoder-timidity: bump version
+  package/kodi-screensaver-*: mass version bump
+  package/kodi-screensaver-rsxs: bump version
+  package/kodi-visualisation-*: mass version bump
+  package/kodi-visualisation-waveforhue: bump version
+  package/kodi-visualisation-shadertoy: bump version
+  package/kodi-inputstream-adaptive: new package
+  package/kodi-skin-confluence: new package
+  package/kodi: add Kconfig options to remove default skins
+
+ Config.in.legacy                                   |   22 +
+ DEVELOPERS                                         |    1 -
+ package/Config.in                                  |    1 -
+ package/kodi-adsp-basic/kodi-adsp-basic.hash       |    2 +-
+ package/kodi-adsp-basic/kodi-adsp-basic.mk         |    4 +-
+ .../kodi-adsp-freesurround.hash                    |    2 +-
+ .../kodi-adsp-freesurround.mk                      |    4 +-
+ .../kodi-audiodecoder-modplug.hash                 |    2 +-
+ .../kodi-audiodecoder-modplug.mk                   |    2 +-
+ .../kodi-audiodecoder-nosefart.hash                |    2 +-
+ .../kodi-audiodecoder-nosefart.mk                  |    2 +-
+ .../kodi-audiodecoder-opus.hash                    |    2 +-
+ .../kodi-audiodecoder-opus.mk                      |    2 +-
+ .../kodi-audiodecoder-sidplay.hash                 |    2 +-
+ .../kodi-audiodecoder-sidplay.mk                   |    2 +-
+ .../kodi-audiodecoder-snesapu.hash                 |    2 +-
+ .../kodi-audiodecoder-snesapu.mk                   |    2 +-
+ .../kodi-audiodecoder-stsound.hash                 |    2 +-
+ .../kodi-audiodecoder-stsound.mk                   |    2 +-
+ package/kodi-audiodecoder-timidity/Config.in       |    1 -
+ .../kodi-audiodecoder-timidity.hash                |    2 +-
+ .../kodi-audiodecoder-timidity.mk                  |    4 +-
+ .../kodi-audiodecoder-vgmstream.hash               |    2 +-
+ .../kodi-audiodecoder-vgmstream.mk                 |    2 +-
+ .../kodi-audioencoder-flac.hash                    |    2 +-
+ .../kodi-audioencoder-flac.mk                      |    2 +-
+ .../kodi-audioencoder-lame.hash                    |    2 +-
+ .../kodi-audioencoder-lame.mk                      |    2 +-
+ .../kodi-audioencoder-vorbis.hash                  |    2 +-
+ .../kodi-audioencoder-vorbis.mk                    |    2 +-
+ .../kodi-audioencoder-wav.hash                     |    2 +-
+ .../kodi-audioencoder-wav/kodi-audioencoder-wav.mk |    2 +-
+ package/kodi-inputstream-adaptive/Config.in        |    8 +
+ .../kodi-inputstream-adaptive.hash                 |    2 +
+ .../kodi-inputstream-adaptive.mk                   |   13 +
+ package/kodi-inputstream-rtmp/Config.in            |    7 +
+ .../kodi-inputstream-rtmp.hash                     |    2 +
+ .../kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk |   13 +
+ .../kodi-jsonschemabuilder.hash                    |    1 +
+ .../kodi-jsonschemabuilder.mk                      |   23 +
+ package/kodi-platform/kodi-platform.hash           |    2 +-
+ package/kodi-platform/kodi-platform.mk             |    2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.hash     |    2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.mk       |    4 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash     |    2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk       |    4 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash |    2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   |    4 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.hash       |    2 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.mk         |    4 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash |    2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   |    4 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash             |    2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk               |    4 +-
+ .../kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash   |    2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk |    4 +-
+ package/kodi-pvr-mediaportal-tvserver/Config.in    |    4 +
+ .../kodi-pvr-mediaportal-tvserver.hash             |    2 +-
+ .../kodi-pvr-mediaportal-tvserver.mk               |    4 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash       |    2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk         |    6 +-
+ ...epresentation-of-char_class_e-in-struct-t.patch |   48 -
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash     |    2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk       |    4 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.hash           |    2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.mk             |    4 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.hash           |    2 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk             |    4 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash     |    2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk       |    4 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.hash           |    2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.mk             |    4 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash   |    2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk     |    4 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash       |    2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk         |    4 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.hash             |    2 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.mk               |    4 +-
+ .../kodi-screensaver-asteroids.hash                |    2 +-
+ .../kodi-screensaver-asteroids.mk                  |    2 +-
+ .../kodi-screensaver-asterwave.hash                |    2 +-
+ .../kodi-screensaver-asterwave.mk                  |    2 +-
+ .../kodi-screensaver-biogenesis.hash               |    2 +-
+ .../kodi-screensaver-biogenesis.mk                 |    2 +-
+ .../kodi-screensaver-cpblobs.hash                  |    2 +-
+ .../kodi-screensaver-cpblobs.mk                    |    2 +-
+ .../kodi-screensaver-crystalmorph.hash             |    2 +-
+ .../kodi-screensaver-crystalmorph.mk               |    2 +-
+ .../kodi-screensaver-greynetic.hash                |    2 +-
+ .../kodi-screensaver-greynetic.mk                  |    2 +-
+ .../kodi-screensaver-matrixtrails.hash             |    2 +-
+ .../kodi-screensaver-matrixtrails.mk               |    2 +-
+ .../kodi-screensaver-pingpong.hash                 |    2 +-
+ .../kodi-screensaver-pingpong.mk                   |    2 +-
+ .../kodi-screensaver-planestate.hash               |    2 +-
+ .../kodi-screensaver-planestate.mk                 |    2 +-
+ .../kodi-screensaver-pyro.hash                     |    2 +-
+ .../kodi-screensaver-pyro/kodi-screensaver-pyro.mk |    2 +-
+ .../kodi-screensaver-rsxs/0001-cross-compile.patch |    2 +-
+ .../0002-fix-default-include-dir.patch             |   28 +
+ package/kodi-screensaver-rsxs/Config.in            |    1 +
+ .../kodi-screensaver-rsxs.hash                     |    2 +-
+ .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk |    5 +-
+ .../kodi-screensaver-stars.hash                    |    2 +-
+ .../kodi-screensaver-stars.mk                      |    2 +-
+ package/kodi-skin-confluence/Config.in             |    7 +
+ .../kodi-skin-confluence/kodi-skin-confluence.hash |    2 +
+ .../kodi-skin-confluence/kodi-skin-confluence.mk   |   25 +
+ .../0001-texturepacker.patch}                      |    0
+ package/kodi-texturepacker/kodi-texturepacker.hash |    1 +
+ package/kodi-texturepacker/kodi-texturepacker.mk   |   34 +
+ .../kodi-visualisation-fishbmc.hash                |    2 +-
+ .../kodi-visualisation-fishbmc.mk                  |    2 +-
+ package/kodi-visualisation-fountain/Config.in      |   11 -
+ .../kodi-visualisation-fountain.hash               |    2 -
+ .../kodi-visualisation-fountain.mk                 |   11 -
+ .../kodi-visualisation-goom.hash                   |    2 +-
+ .../kodi-visualisation-goom.mk                     |    2 +-
+ ...GLES2-also-search-for-egl-with-pkg-config.patch |    4 +-
+ package/kodi-visualisation-shadertoy/Config.in     |    1 -
+ .../kodi-visualisation-shadertoy.hash              |    2 +-
+ .../kodi-visualisation-shadertoy.mk                |    6 +-
+ .../kodi-visualisation-spectrum.hash               |    2 +-
+ .../kodi-visualisation-spectrum.mk                 |    2 +-
+ .../kodi-visualisation-waveforhue.hash             |    2 +-
+ .../kodi-visualisation-waveforhue.mk               |    4 +-
+ .../kodi-visualisation-waveform.hash               |    2 +-
+ .../kodi-visualisation-waveform.mk                 |    2 +-
+ package/kodi/0001-Fixup-include-path.patch         |   33 -
+ ....cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch |   42 +
+ package/kodi/0002-cmake-add-FindIconv.cmake.patch  |  171 +++
+ ...0003-ALSA-fix-device-change-event-support.patch |   67 -
+ ...e-dependency-on-gmp-and-libintl-from-Find.patch |   34 +
+ package/kodi/0004-disable-online-check.patch       |   65 +
+ ....cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch |   41 -
+ ...exturePacker-fix-compilation-with-gcc-4.6.patch |   53 -
+ package/kodi/0006-ffmpeg30.patch                   |  646 ---------
+ ...r-out-of-memory-errors-with-large-numbers.patch |   45 -
+ ...ding-issue-when-reading-certain-id3v1-tag.patch |   82 --
+ ...lib-cximage-6.0-fix-compilation-with-gcc6.patch | 1438 --------------------
+ ...10-curl-support-version-7.5.0-and-upwards.patch |   34 -
+ ...bmc_pvr_types.h-Fix-compilation-with-gcc6.patch |   30 -
+ package/kodi/0012-Fix_includes_in_amcodec.patch    |   38 -
+ package/kodi/Config.in                             |  139 +-
+ package/kodi/kodi.hash                             |   10 +-
+ package/kodi/kodi.mk                               |  393 ++++--
+ package/libcec/libcec.hash                         |    2 +-
+ package/libcec/libcec.mk                           |    4 +-
+ .../0001-p8-platform-config-fix-lookup-paths.patch |   38 +
+ ...nfig.cmake-fix-paths-for-cross-compilatio.patch |   40 -
+ package/libplatform/libplatform.hash               |    2 +-
+ package/libplatform/libplatform.mk                 |    8 +-
+ package/libsquish/0001-kodi.patch                  |  327 -----
+ package/libsquish/Config.in                        |   13 -
+ package/libsquish/libsquish.hash                   |    2 -
+ package/libsquish/libsquish.mk                     |   37 -
+ package/xmlstarlet/xmlstarlet.mk                   |    3 +
+ 157 files changed, 1048 insertions(+), 3315 deletions(-)
+ create mode 100644 package/kodi-inputstream-adaptive/Config.in
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+ create mode 100644 package/kodi-inputstream-rtmp/Config.in
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+ create mode 120000 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
+ create mode 100644 package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+ delete mode 100644 package/kodi-pvr-nextpvr/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
+ create mode 100644 package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
+ create mode 100644 package/kodi-skin-confluence/Config.in
+ create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.hash
+ create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.mk
+ rename package/{kodi/0002-texturepacker.patch => kodi-texturepacker/0001-texturepacker.patch} (100%)
+ create mode 120000 package/kodi-texturepacker/kodi-texturepacker.hash
+ create mode 100644 package/kodi-texturepacker/kodi-texturepacker.mk
+ delete mode 100644 package/kodi-visualisation-fountain/Config.in
+ delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+ delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+ delete mode 100644 package/kodi/0001-Fixup-include-path.patch
+ create mode 100644 package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+ create mode 100644 package/kodi/0002-cmake-add-FindIconv.cmake.patch
+ delete mode 100644 package/kodi/0003-ALSA-fix-device-change-event-support.patch
+ create mode 100644 package/kodi/0003-CMake-Remove-dependency-on-gmp-and-libintl-from-Find.patch
+ create mode 100644 package/kodi/0004-disable-online-check.patch
+ delete mode 100644 package/kodi/0004-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+ delete mode 100644 package/kodi/0005-native-TexturePacker-fix-compilation-with-gcc-4.6.patch
+ delete mode 100644 package/kodi/0006-ffmpeg30.patch
+ delete mode 100644 package/kodi/0007-exif-Fix-for-out-of-memory-errors-with-large-numbers.patch
+ delete mode 100644 package/kodi/0008-Fix-nullpadding-issue-when-reading-certain-id3v1-tag.patch
+ delete mode 100644 package/kodi/0009-lib-cximage-6.0-fix-compilation-with-gcc6.patch
+ delete mode 100644 package/kodi/0010-curl-support-version-7.5.0-and-upwards.patch
+ delete mode 100644 package/kodi/0011-xbmc_pvr_types.h-Fix-compilation-with-gcc6.patch
+ delete mode 100644 package/kodi/0012-Fix_includes_in_amcodec.patch
+ create mode 100644 package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
+ delete mode 100644 package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+ delete mode 100644 package/libsquish/0001-kodi.patch
+ delete mode 100644 package/libsquish/Config.in
+ delete mode 100644 package/libsquish/libsquish.hash
+ delete mode 100644 package/libsquish/libsquish.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
