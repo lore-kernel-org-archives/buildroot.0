@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Apr 2017 14:31:41 +0200
-Subject: [Buildroot] [PATCH 1/2] odroid-mali: rename pkg to odroid-gl
-In-Reply-To: <20170417065654.28313-1-daggs@gmx.com>
-References: <20170417065654.28313-1-daggs@gmx.com>
-Message-ID: <20170417143141.6ea473b0@free-electrons.com>
+Date: Mon, 17 Apr 2017 14:33:01 +0200
+Subject: [Buildroot] [git commit] sam-ba: use SPDX short identifier for
+	license string
+Message-ID: <20170417123448.960EB7FD79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e70af258412347a29a2ef864c7e8df38942cc0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Apr 2017 09:56:53 +0300, Dagg Stompler wrote:
-> this pkg provides the GL implementation for the odroidc2 broad.
-> mali is the name of the kernel gpu driver, this might cause some
-> confusion. thus rename it for odroid-gl
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sam-ba/sam-ba.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Mali is not the name of the kernel gpu driver, Mali is the name of the
-GPU sold by ARM. So both the kernel driver and the userspace blob are
-Mali-related.
-
-In addition, we already have sunxi-mali for Allwinner platforms, and
-mali-t76x. So please keep the odroid-mali name.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 7fc65c0..43e061b 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -8,7 +8,7 @@ SAM_BA_SITE = http://www.atmel.com/dyn/resources/prod_documents
+ SAM_BA_VERSION = 2.16
+ SAM_BA_SOURCE = sam-ba_$(SAM_BA_VERSION)_linux.zip
+ SAM_BA_LICENSE = SAM-BA license (sam-ba executable), \
+-		BSD-2c like, BSD-4c (TCL and applets code)
++		BSD-2-Clause like, BSD-4-Clause (TCL and applets code)
+ SAM_BA_LICENSE_FILES = doc/license.txt tcl_lib/boards.tcl \
+ 		applets/sam4c/libraries/libchip_sam4c/include/sam4c/sam4c32e-1.h
+ 
