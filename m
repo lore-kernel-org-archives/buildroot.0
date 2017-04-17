@@ -1,38 +1,48 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 17 Apr 2017 17:10:36 +0200
-Subject: [Buildroot] question about x86 portability issues
-Message-ID: <20170417151036.GF11446@waldemar-brodkorb.de>
+From: Semyon Kolganov <semenak94@mail.ru>
+Date: Mon, 17 Apr 2017 18:20:39 +0300
+Subject: [Buildroot] [PATCHv3] mpir: fix build failure fixes:
+	http://autobuild.buildroot.net/results/49b/49b4d4b8d8afc3e0353529146270ee8b289dc8be/
+In-Reply-To: <mpir: fix build failure>
+References: <mpir: fix build failure>
+Message-ID: <1492442439-2540-1-git-send-email-semenak94@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi developers,
+ http://autobuild.buildroot.net/results/b4c/b4c65ad8f35299588de67917be5d020a7f641ce7/
 
-with Buildroot we have some compile issues when using uClibc-ng or
-musl toolchains. The reason is the x86 specific code is using 
-deprecated sigreturn and setcontext functions.
+Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+---
+Changes between v1 and v2:
+ - removed unneeded depend on
+ - fixed build for powerpc
+---
+ package/mpir/mpir.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-With the attached patch I could compile libunwind with the uClibc-ng
-toolchain.
-
-But the best solution would be if the code would use a direct
-syscall to rt_sigreturn as the x86_64 code does:
-http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86_64/Gos-linux.c;h=6f70d3ffdb1e514a567d0c2146c852765bda953d;hb=HEAD#l148
-
-What do you think?
-
-I think sigreturn() is a noop in GNU C Library for x86 and x86_64.
-
-Thanks,
- Waldemar
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-x86-do-not-use-deprecated-sigreturn.patch
-Type: text/x-diff
-Size: 1201 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170417/1dfa1eef/attachment.bin>
+diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
+index 430d587..2a5807b 100644
+--- a/package/mpir/mpir.mk
++++ b/package/mpir/mpir.mk
+@@ -12,4 +12,17 @@ MPIR_LICENSE_FILES = COPYING.LIB
+ MPIR_INSTALL_STAGING = YES
+ MPIR_DEPENDENCIES = gmp host-yasm
+ 
++ifeq ($(BR2_MIPS_NABI32),y)
++MPIR_CONF_OPTS += ABI=n32
++endif
++
++ifeq ($(BR2_MIPS_NABI64),y)
++MPIR_CONF_OPTS += ABI=n64
++endif
++
++ifeq ($(BR2_powerpc_CLASSIC),y)
++MPIR_CONF_OPTS += ABI=mode64
++export MPN_PATH=generic
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.7.4
