@@ -1,46 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Apr 2017 16:06:41 +0200
-Subject: [Buildroot] [PATCH] package/kodi: re-install prompt for optical
-	drives
-Message-ID: <20170417140641.24527-1-yann.morin.1998@free.fr>
+Date: Mon, 17 Apr 2017 16:08:23 +0200
+Subject: [Buildroot] [PATCH] mpir: fix build failure
+In-Reply-To: <1492437588-19728-1-git-send-email-semenak94@mail.ru>
+References: <1492437588-19728-1-git-send-email-semenak94@mail.ru>
+Message-ID: <20170417140823.GB3441@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 81c438aa (package/kodi: Rework audio encoder support), the prompt for
-the optical drive support was dropped, on the assumption that such
-support was only needed when an audio encoder was enabled.
+Semyon, All,
 
-However, support for optical drives is also required when, surprisingly,
-one wants to read a DVD (and probably a BD as well, but this was not
-tested by lack of hardware).
+On 2017-04-17 16:59 +0300, Semyon Kolganov spake thusly:
+> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+> ---
+>  package/mpir/Config.in | 5 +++++
+>  package/mpir/mpir.mk   | 8 ++++++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/package/mpir/Config.in b/package/mpir/Config.in
+> index da4cc9f..4f7fa65 100644
+> --- a/package/mpir/Config.in
+> +++ b/package/mpir/Config.in
+> @@ -1,8 +1,13 @@
+>  config BR2_PACKAGE_MPIR
+>  	bool "mpir"
+> +	# asm files in mpn/powerpc64/mode64/* are Abi version 1.
+> +	depends on !BR2_powerpc64le
 
-Re-instate the prompt, so one can enable optical drive support even when
-no audio encoder enabled.
+Is it otherwise possible to disable use of the asm code and use some
+generic one (if any) ?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/kodi/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>  	select BR2_PACKAGE_GMP
+>  	help
+>  	  MPIR is a highly optimised library for bignum arithmetic
+>  	  forked from the GMP bignum library.
+>  
+>  	  http://www.mpir.org/
+> +
+> +comment "mpir conflicts with powerpc64le"
+> +	depends on BR2_powerpc64le
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f2a3e2e032..b993ac94a5 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -253,7 +253,9 @@ config BR2_PACKAGE_KODI_UPNP
- 	  Enable UPnP support
- 
- config BR2_PACKAGE_KODI_OPTICALDRIVE
--	bool
-+	bool "optical drives"
-+	help
-+	  Add support for optical drives, to read e.g. DVDs...
- 
- menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
+We do not usually add a comment for architecture dependencies.
+
+Regards,
+Yann E. MORIN.
+
+> diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
+> index 430d587..b835ca4 100644
+> --- a/package/mpir/mpir.mk
+> +++ b/package/mpir/mpir.mk
+> @@ -12,4 +12,12 @@ MPIR_LICENSE_FILES = COPYING.LIB
+>  MPIR_INSTALL_STAGING = YES
+>  MPIR_DEPENDENCIES = gmp host-yasm
+>  
+> +ifeq ($(BR2_MIPS_NABI32),y)
+> +MPIR_CONF_OPTS += ABI=n32
+> +endif
+> +
+> +ifeq ($(BR2_MIPS_NABI64),y)
+> +MPIR_CONF_OPTS += ABI=n64
+> +endif
+> +
+>  $(eval $(autotools-package))
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
