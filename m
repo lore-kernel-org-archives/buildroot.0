@@ -1,85 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Apr 2017 11:25:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libunwind: disable for x86 with
- uClibc toolchain
-In-Reply-To: <20170416194906.9842-2-romain.naour@gmail.com>
-References: <20170416194906.9842-1-romain.naour@gmail.com>
- <20170416194906.9842-2-romain.naour@gmail.com>
-Message-ID: <20170417092550.GA3441@scaer>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Mon, 17 Apr 2017 14:57:10 +0530
+Subject: [Buildroot] [PATCH 1/4] which: update homepage URL
+Message-ID: <1492421233-9868-1-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-04-16 21:49 +0200, Romain Naour spake thusly:
-> libunwind use sigreturn() while building for x86 [1] but this function
-> is not available with uClibc-ng.
-> 
-> This throw a warning during libunwind build:
-> In file included from x86/Los-linux.c:4:0:
-> x86/Gos-linux.c: In function ?_ULx86_local_resume?:
-> x86/Gos-linux.c:298:7: warning: implicit declaration of function ?sigreturn? [-Wimplicit-function-declaration]
->        sigreturn (sc);
->        ^
-> 
-> But any program trying to link against libunwind-generic.so fail to build:
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+---
+ package/which/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It's not only about libunwind-generic.so, see below...
-
-> [...]usr/lib/libunwind-generic.so: undefined reference to `sigreturn'
-> collect2: error: ld returned 1 exit status
-> 
-> Disable libunwind for x86 target when uClibc-ng is used.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/54a/54afac8148cff5f3c17e83f80917fd9006948fe0//build-end.log
-
-... as it lso fixes:
-http://autobuild.buildroot.org/results/0d1/0d1da7fa32b2f659816c51a05de96f26fef163e4/build-end.log
-
-[...]/output/host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libunwind.so:
-undefined reference to `sigreturn'
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> 
-> [1] http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86/Gos-linux.c;h=17aebc2974af50eb0bf8292689b2ed22a4c97866;hb=HEAD#l299
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/libunwind/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-> index 5527a2b..9007ce5 100644
-> --- a/package/libunwind/Config.in
-> +++ b/package/libunwind/Config.in
-> @@ -15,7 +15,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
->  		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
->  	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
->  		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> -		 BR2_i386 || BR2_mips || BR2_mipsel || \
-> +		 BR2_mips || BR2_mipsel || \
->  		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
->  	default y if BR2_TOOLCHAIN_USES_MUSL && \
->  		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-> -- 
-> 2.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/which/Config.in b/package/which/Config.in
+index db090ea..0dc31b2 100644
+--- a/package/which/Config.in
++++ b/package/which/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_WHICH
+ 	help
+ 	  The standard 'which' utility.
+ 
+-	  http://www.xs4all.nl/~carlo17/which/
++	  http://carlowood.github.io/which/index.html
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
