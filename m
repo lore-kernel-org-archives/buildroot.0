@@ -1,47 +1,22 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Apr 2017 21:54:29 +0200
-Subject: [Buildroot] [PATCH v5 30/34] package/kodi-visualisation-waveforhue:
-	bump version
-In-Reply-To: <20170417195433.26672-1-bernd.kuhls@t-online.de>
+Date: Mon, 17 Apr 2017 21:59:22 +0200
+Subject: [Buildroot] [PATCH v5 00/34] kodi: bump to version 17.1-Krypton
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
-Message-ID: <20170417195433.26672-31-bernd.kuhls@t-online.de>
+Message-ID: <qdjfsdxdtr.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed upstream repo as per:
-https://github.com/notspiff/visualization.waveforhue/pull/3#issuecomment-221105720
+Am Mon, 17 Apr 2017 21:53:59 +0200 schrieb Bernd Kuhls:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash  | 2 +-
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> this series bumps Kodi to 17.1-Krypton, released 2017/03/21:
+> https://kodi.tv/kodi-v17-1-krypton/
 
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-index 5f49daae9..e7e97f1d8 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 2590ce4ee1816ffdf59fe33580a36fba49fbd1f60f4c9022b3315e04debc9c73 kodi-visualisation-waveforhue-e87d5c7d7e7504036b80af8bc89f4cf6489085fe.tar.gz
-+sha256 80c466c55aee97d01442892135d4785070333e39f45942da17b65239758e5ae9  kodi-visualisation-waveforhue-b1805dbdba07e5e5b62115490c703aca43e9065c.tar.gz
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-index ce0fc1854..3ff32e658 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_WAVEFORHUE_VERSION = e87d5c7d7e7504036b80af8bc89f4cf6489085fe
--KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,notspiff,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
-+KODI_VISUALISATION_WAVEFORHUE_VERSION = b1805dbdba07e5e5b62115490c703aca43e9065c
-+KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,hardyt,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
- KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
- KODI_VISUALISATION_WAVEFORHUE_DEPENDENCIES = kodi
--- 
-2.11.0
+Hi,
+
+as usual you can also find my patch series here:
+https://github.com/bkuhls/buildroot/tree/kodi_cmake
+
+Regards, Bernd
