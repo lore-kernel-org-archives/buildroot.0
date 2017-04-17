@@ -1,48 +1,51 @@
-From: Semyon Kolganov <semenak94@mail.ru>
-Date: Mon, 17 Apr 2017 18:20:39 +0300
-Subject: [Buildroot] [PATCHv3] mpir: fix build failure fixes:
-	http://autobuild.buildroot.net/results/49b/49b4d4b8d8afc3e0353529146270ee8b289dc8be/
-In-Reply-To: <mpir: fix build failure>
-References: <mpir: fix build failure>
-Message-ID: <1492442439-2540-1-git-send-email-semenak94@mail.ru>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 Apr 2017 18:44:01 +0200
+Subject: [Buildroot] [PATCH] package/libunwind: simplify architectutre
+	dependencies
+Message-ID: <20170417164401.24236-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- http://autobuild.buildroot.net/results/b4c/b4c65ad8f35299588de67917be5d020a7f641ce7/
+BR2_ARM_CPU_HAS_ARM already embeddeds the fact that this is an ARM chip,
+so (BR2_arm || BR2_armeb) is forcibly true when BR2_ARM_CPU_HAS_ARM is.
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
----
-Changes between v1 and v2:
- - removed unneeded depend on
- - fixed build for powerpc
----
- package/mpir/mpir.mk | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+In other words, BR2_ARM_CPU_HAS_ARM can't be true unless either BR2_arm
+or BR2_armeb itslef is true.
 
-diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-index 430d587..2a5807b 100644
---- a/package/mpir/mpir.mk
-+++ b/package/mpir/mpir.mk
-@@ -12,4 +12,17 @@ MPIR_LICENSE_FILES = COPYING.LIB
- MPIR_INSTALL_STAGING = YES
- MPIR_DEPENDENCIES = gmp host-yasm
+Simplify the logic accordingly.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
+---
+ package/libunwind/Config.in | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+index 9007ce51c2..2003e96518 100644
+--- a/package/libunwind/Config.in
++++ b/package/libunwind/Config.in
+@@ -10,16 +10,13 @@
+ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
+-		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+-		 BR2_mips || BR2_mipsel || BR2_mips64 || \
++		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || BR2_mips64 || \
+ 		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+-		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+-		 BR2_mips || BR2_mipsel || \
++		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
+ 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_MUSL && \
+-		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+-		 BR2_i386 || BR2_x86_64)
++		(BR2_ARM_CPU_HAS_ARM || BR2_i386 || BR2_x86_64)
  
-+ifeq ($(BR2_MIPS_NABI32),y)
-+MPIR_CONF_OPTS += ABI=n32
-+endif
-+
-+ifeq ($(BR2_MIPS_NABI64),y)
-+MPIR_CONF_OPTS += ABI=n64
-+endif
-+
-+ifeq ($(BR2_powerpc_CLASSIC),y)
-+MPIR_CONF_OPTS += ABI=mode64
-+export MPN_PATH=generic
-+endif
-+
- $(eval $(autotools-package))
+ config BR2_PACKAGE_LIBUNWIND
+ 	bool "libunwind"
 -- 
-2.7.4
+2.11.0
