@@ -1,23 +1,38 @@
-From: sam <semenak94@mail.ru>
-Date: Mon, 17 Apr 2017 18:09:22 +0300
-Subject: [Buildroot] mpir: fix build failure
-Message-ID: <79c0ed6d-c51b-ae46-a5f9-e60f1a7fbba4@mail.ru>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 17 Apr 2017 17:10:36 +0200
+Subject: [Buildroot] question about x86 portability issues
+Message-ID: <20170417151036.GF11446@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here are fixes of these failure:
+Hi developers,
 
-http://autobuild.buildroot.net/results/df7/df7e532686303e8f975aefc82dafb9ee66c529c8//
+with Buildroot we have some compile issues when using uClibc-ng or
+musl toolchains. The reason is the x86 specific code is using 
+deprecated sigreturn and setcontext functions.
 
-http://autobuild.buildroot.net/results/b4c/b4c65ad8f35299588de67917be5d020a7f641ce7//
+With the attached patch I could compile libunwind with the uClibc-ng
+toolchain.
+
+But the best solution would be if the code would use a direct
+syscall to rt_sigreturn as the x86_64 code does:
+http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86_64/Gos-linux.c;h=6f70d3ffdb1e514a567d0c2146c852765bda953d;hb=HEAD#l148
+
+What do you think?
+
+I think sigreturn() is a noop in GNU C Library for x86 and x86_64.
+
+Thanks,
+ Waldemar
+
 
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: v2-0001-mpir-fix-build-failure.patch
-Type: text/x-patch
-Size: 942 bytes
+Name: 0001-x86-do-not-use-deprecated-sigreturn.patch
+Type: text/x-diff
+Size: 1201 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170417/86f6da15/attachment.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170417/1dfa1eef/attachment.bin>
