@@ -1,38 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Apr 2017 08:59:50 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-04-17
-In-Reply-To: <df818f20-0fb5-fbc6-010f-e1e5b88781e3@flatmax.org>
-References: <20170418062813.5B12E2084B@mail.free-electrons.com>
- <df818f20-0fb5-fbc6-010f-e1e5b88781e3@flatmax.org>
-Message-ID: <20170418085950.40987b07@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 18 Apr 2017 09:29:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.17
+Message-ID: <20170418072946.4093-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Added all upstream hashes.
 
-On Tue, 18 Apr 2017 16:48:57 +1000, Matt Flax wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/freeswitch/freeswitch.hash | 8 ++++++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-> An idea to improve this build statistics processes would be to include 
-> attempted executions of at least one binary in each package - where 
-> appropriate.
-> 
-> This would catch a large number of uclibc aarch64 g++ problems (I think).
-
-This is not possible with the current infrastructure: we don't do
-runtime testing at all with this autobuild.b.o thing.
-
-However, there is a pending patch series adding a runtime test
-infrastructure, which builds and boots test cases under Qemu. This
-would definitely allow testing things like this AArch64 C++ issue.
-
-Best regards,
-
-Thomas
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 1e79a4ff1..2bd7a8d52 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,2 +1,6 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.16.tar.xz.sha256
+-sha256 4caecd8d246265db4e4d37df0901e396accd84de060525dda8212935cd2ee285  freeswitch-1.6.16.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.17.tar.xz.md5
++md5 b50939fe562c66ca799f7a7f0e341488  freeswitch-1.6.17.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.17.tar.xz.sha1
++sha1 feda8e9334410bee1e5ae4d959a0982cf18c5bee  freeswitch-1.6.17.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.17.tar.xz.sha256
++sha256 709b3e43362d86b9682a7db14eb344b74362493d68244dfc4e6f40218089d4e1  freeswitch-1.6.17.tar.xz
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index b75cdab67..e6c1e8c93 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREESWITCH_VERSION = 1.6.16
++FREESWITCH_VERSION = 1.6.17
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ FREESWITCH_LICENSE = MPL-1.1, \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
