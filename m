@@ -1,48 +1,44 @@
 From: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
-Date: Tue, 18 Apr 2017 11:55:54 -0400
-Subject: [Buildroot] [RFC 4/4] genimage.sh: add usage to die function
+Date: Tue, 18 Apr 2017 11:55:51 -0400
+Subject: [Buildroot] [RFC 1/4] genimage.sh: fix argument parsing
 In-Reply-To: <20170418155554.28732-1-etienne.phelip@savoirfairelinux.com>
 References: <20170418155554.28732-1-etienne.phelip@savoirfairelinux.com>
-Message-ID: <20170418155554.28732-5-etienne.phelip@savoirfairelinux.com>
+Message-ID: <20170418155554.28732-2-etienne.phelip@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This also re-indents the die function using tabulations.
+When executed as a post-image script, BR sets BINARIE_DIR as first
+argument.
+
+This first argument causes the option parsing to break.
+
+This patch shifts the first argument before performing the getopts
+loop.
+
+	BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+	BR2_ROOTFS_POST_SCRIPT_ARGS="-c path/to/genimage.cfg"
 
 Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
 ---
- support/scripts/genimage.sh | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ support/scripts/genimage.sh | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-index 50d6907..d0d3491 100755
+index 0ed0e8b..6684e73 100755
 --- a/support/scripts/genimage.sh
 +++ b/support/scripts/genimage.sh
-@@ -1,8 +1,11 @@
- #!/bin/bash
- 
- die() {
--  echo "Error: $@" >&2
--  exit 1
-+	echo "Usage: ${0##*/} BINARIES_DIR -c GENIMAGE_CFG" >&2
-+	echo "" >&2
-+
-+	echo "Error: $@" >&2
-+	exit 1
- }
+@@ -7,6 +7,9 @@ die() {
  
  GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-@@ -18,7 +21,7 @@ while getopts :c: OPT ; do
- 	esac
- done
  
--[ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
-+[ -n "${GENIMAGE_CFG}" ] || die "missing option 'c'"
- 
- rm -rf "${GENIMAGE_TMP}"
- 
++# First argument is BINARIES_DIR, skip it
++shift
++
+ while getopts c: OPT ; do
+ 	case "${OPT}" in
+ 	c) GENIMAGE_CFG="${OPTARG}";;
 -- 
 2.9.3
