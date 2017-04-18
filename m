@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Apr 2017 12:53:55 +0200
-Subject: [Buildroot] [PATCH v8 1/2] genimage.sh: fix calling from
- BR2_ROOTFS_POST_IMAGE_SCRIPT
-In-Reply-To: <20170416174048.4737-1-abhimanyu.v@gmail.com>
-References: <20170416174048.4737-1-abhimanyu.v@gmail.com>
-Message-ID: <0cd26cff-61c0-7e9a-76c9-13ad682d29f2@mind.be>
+Date: Tue, 18 Apr 2017 12:59:01 +0200
+Subject: [Buildroot] [PATCH] config: update linux version in zebu
+ defconfig
+In-Reply-To: <1491928333-30537-1-git-send-email-vzakhar@synopsys.com>
+References: <1491928333-30537-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <cb3c3c49-d89f-f7d0-4ba4-ddbb7209764a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +13,46 @@ To: buildroot@busybox.net
 
 
 
-On 16-04-17 19:40, Abhimanyu Vishwakarma wrote:
-> From: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+On 11-04-17 18:32, Vlad Zakharov wrote:
+> With this commit we update snps_archs38_zebu_defconfig the following:
 > 
-> When called from BR2_ROOTFS_POST_IMAGE_SCRIPT, this script
-> ends up with following error:
-> 
-> Error: Missing argument
-> 
-> This is because, extra positional argument is also passed
-> along with BR2_ROOTFS_POST_SCRIPT_ARGS. genimage.sh didnt
-> had support to parse positional and optional argument
-> together.
-> 
-> Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
-> ---
->  Changes v7->v8
->    - New file
-> 
->  support/scripts/genimage.sh | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-> index 0ed0e8bcc..2b5549fb0 100755
-> --- a/support/scripts/genimage.sh
-> +++ b/support/scripts/genimage.sh
-> @@ -5,13 +5,18 @@ die() {
->    exit 1
->  }
->  
-> +# Parse arguments and put into argument list of the script
-> +eval set -- $(getopt -n genimage.sh -o c: -- "$@")
+>   - bump linux kernel version to 4.10.9
+>   - set up host linux headers to 4.10
 
- The proper way is to quote the $(getopt ...) part, because the eval will do an
-additional level of unquoting. Otherwise if an option contains a shell meta
-character (e.g. $) it will be expanded by eval. Also, instead of explicitly
-putting genimage.sh, it's better to pass the basename with which it was called.
-Also, getopt will print an error message and return false if something is wrong
-with the options, so better handle that.
+ This causes the build to fail because zebu_hs_smp has been renamed to
+haps_hs_smp in upstream commit 4988cc5. Have you tested this at all?
 
- So:
-
-opts="$(getopt -n "${0##*/}" -o c: -- "$@")" || exit $?
-eval set -- "$opts"
-
-
-> +
->  GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->  
-> -while getopts c: OPT ; do
-> -	case "${OPT}" in
-> -	c) GENIMAGE_CFG="${OPTARG}";;
-> -	:) die "option '${OPTARG}' expects a mandatory argument\n";;
-> -	\?) die "unknown option '${OPTARG}'\n";;
-> +while true ; do
-> +	case "$1" in
-> +	-c) [ ! -z "$2" ] || die "option '${1}' expects a mandatory argument\n";
-
- This check shouldn't be needed since it's already done by getopt.
-
-> +	    GENIMAGE_CFG="${2}";
-> +	    shift 2 ;;
-> +	--) shift 1; break ;;
-
- This could use a comment, e.g. # Discard all non-option parameters
-
- Also, since you use one line per statement above, do it here as well.
-
- In fact, I'm personally in favour of splitting off the case part (i.e., -c) and
---) ) on a separate line as well.
-
-> +	*) die "unknown option '${1}'\n";;
-
- This is not strictly needed since getopt will already detect it, but I guess
-better to keep it as an emergency fallback.
+ See also https://gitlab.com/buildroot.org/buildroot/builds/14419271
 
  Regards,
  Arnout
->  	esac
->  done
+
+> 
+> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> ---
+>  configs/snps_archs38_zebu_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/configs/snps_archs38_zebu_defconfig b/configs/snps_archs38_zebu_defconfig
+> index 96d941a..98beb2b 100644
+> --- a/configs/snps_archs38_zebu_defconfig
+> +++ b/configs/snps_archs38_zebu_defconfig
+> @@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
+>  BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
+>  BR2_TARGET_ROOTFS_INITRAMFS=y
 >  
+> -# Linux headers same as kernel, a 4.9 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+> +# Linux headers same as kernel, a 4.10 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
+>  
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.9"
+>  BR2_LINUX_KERNEL_DEFCONFIG="zebu_hs_smp"
+>  BR2_LINUX_KERNEL_VMLINUX=y
 > 
 
 -- 
