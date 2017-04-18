@@ -1,56 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 18 Apr 2017 09:39:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-04-17
-In-Reply-To: <20170418062812.EE31520851@mail.free-electrons.com>
-References: <20170418062812.EE31520851@mail.free-electrons.com>
-Message-ID: <CANLo3JjXhbfBx+OBQ97=2miyfnGnsm+0+W7sdUMJUGcx81SX9g@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 18 Apr 2017 03:53:59 -0400
+Subject: [Buildroot] [PATCH 1/1] docker-engine: fix handling of vendor tree
+Message-ID: <20170418075359.31520-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+The latest docker-engine release changes the vendor tree slightly. The Go tool
+will recognize a ./vendor directory and use it as a vendor tree
+automatically, but only when run inside a valid GOPATH. This patch
+adjusts how the GOPATH is built - now docker/docker is linked into a
+blank tree, and the Go tool recognizes the ./vendor directory
+correctly.
 
+The deleted patch is no longer necessary as of the last release and
+causes a build failure on my machine.
 
-Le 18 avr. 2017 08:28, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> a ?crit :
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/docker-engine/docker-engine.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Hello,
-
-This is the list of Buildroot build failures that occured on
-2017-04-17, and for which you are a registered architecture developer
-or package developer. Please help us improving the quality of
-Buildroot by investigating those build failures and sending patches to
-fix them. Thanks!
-
-Build failures related to your packages:
-
-        bfin |                  xenomai-3.0.4 | http://autobuild.buildroot.
-net/results/c867cc8a72858c69bb55daadf3613d1cb91c7695
-         arm |                  xenomai-3.0.4 | http://autobuild.buildroot.
-net/results/9e5e11329a162882e3c66953bb45101c777ba771
-        bfin |                  xenomai-3.0.4 | http://autobuild.buildroot.
-net/results/66018d8db250eff1c274e17b43020686091f4d60
-         arm |                  xenomai-3.0.4 | http://autobuild.buildroot.
-net/results/64b6276a7f78306d39c6c033df50dd5561309a0d
-     powerpc |                  xenomai-3.0.4 | http://autobuild.buildroot.
-net/results/3365eccfed1e04661e3b2fcca677430b64f7f17a
-     powerpc |                  xenomai-3.0.4 | http://autobuild.buildroot.
-net/results/c0798f47f7dfbd342e145c58fec7d783b905058e
-         arm |                  xenomai-3.0.4 | http://autobuild.buildroot.
-net/results/7e14116d915f4738a50a3df561e8681de44e4b90
-
-
-The site is down for the moment, I have the archive at home.
-
-Best regards,
-Romain
-
-
---
-http://autobuild.buildroot.net
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170418/b8c94455/attachment.html>
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 5101702..c4c1157 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -13,7 +13,7 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+ 
+ DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
+ 
+-DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
++DOCKER_ENGINE_GOPATH = "$(@D)/gopath"
+ DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	CGO_ENABLED=1 \
+ 	CGO_NO_EMULATION=1 \
+@@ -100,7 +100,8 @@ endif
+ 
+ define DOCKER_ENGINE_BUILD_CMDS
+ 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+-		cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) \
++		cd $(@D)/gopath/src/github.com/docker/docker; \
++		$(DOCKER_ENGINE_MAKE_ENV) \
+ 		$(HOST_DIR)/usr/bin/go build -v \
+ 			-o $(@D)/bin/$(target) \
+ 			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
+-- 
+2.10.2
