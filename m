@@ -1,55 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Apr 2017 19:52:07 +0200
-Subject: [Buildroot] [RFC 0/4] fix genimage wrapper argument parsing
-In-Reply-To: <20170418155554.28732-1-etienne.phelip@savoirfairelinux.com>
+Date: Tue, 18 Apr 2017 19:56:09 +0200
+Subject: [Buildroot] [RFC 4/4] genimage.sh: add usage to die function
+In-Reply-To: <20170418155554.28732-5-etienne.phelip@savoirfairelinux.com>
 References: <20170418155554.28732-1-etienne.phelip@savoirfairelinux.com>
-Message-ID: <d6663308-710e-97d7-2db8-1ea462bb0c03@mind.be>
+ <20170418155554.28732-5-etienne.phelip@savoirfairelinux.com>
+Message-ID: <0984e944-0208-e5df-6ac7-90cbab2994c1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Etienne,
+ Ah, sorry, I won't ack it :-)
 
 On 18-04-17 17:55, Etienne Phelip wrote:
-> The genimage wrapper can be used in the post-image script but 
-> BR2_ROOTFS_POST_SCRIPT_ARGS passes BINARIES_DIR as the first argument.
+> This also re-indents the die function using tabulations.
 > 
-> In order to make genimage.sh play nicely with
-> BR2_ROOTFS_POST_IMAGE_SCRIPT, this patch series shifts the first
-> argument by one before looping over the other arguments.
+> Signed-off-by: Etienne Phelip <etienne.phelip@savoirfairelinux.com>
+> ---
+>  support/scripts/genimage.sh | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> When calling genimage.sh directly, one should always pass BINARIES_DIR
-> as the first argument like:
-> 
->     ${TOPDIR}/support/scripts/genimage.sh ${BINARIES_DIR} \
->         -c path/to/genimage.cfg
+> diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+> index 50d6907..d0d3491 100755
+> --- a/support/scripts/genimage.sh
+> +++ b/support/scripts/genimage.sh
+> @@ -1,8 +1,11 @@
+>  #!/bin/bash
+>  
+>  die() {
+> -  echo "Error: $@" >&2
+> -  exit 1
+> +	echo "Usage: ${0##*/} BINARIES_DIR -c GENIMAGE_CFG" >&2
+> +	echo "" >&2
+> +
 
- I like Abhimanyu's solution [1] better, because it makes passing BINARIES_DIR
-optional and you can use it either directly as a post-image script or call it
-from your custom post-image script. I did make a few comments in [1], but you
-may want to have a look at it too and see if there is anything else to improve.
+ This empty line is not needed IMO.
 
- That invalidates patch 1-3. Patch 4 still applies though and is AFAICS
-independent of the rest. And it applies with a bit of fuzz on top of Abhimanyu's
-patch, so I'll ack that one. Patch 1-3 I'll mark as rejected in Patchwork - if
-you disagree, we can always re-instate them or you can resend.
+> +	echo "Error: $@" >&2
+
+ IMO Error should come first, then usage.
+
+ And of course, to be compatible with Abhimanyu's patch, BINARIES_DIR should be
+left out.
 
  Regards,
  Arnout
 
-[1] http://patchwork.ozlabs.org/patch/751165/
-
-> 
-> Etienne Phelip (4):
->   genimage.sh: fix argument parsing
->   genimage.sh: fix getopts traces
->   genimage.sh: strip getopts EOL characters
->   genimage.sh: add usage to die function
-> 
->  support/scripts/genimage.sh | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
+> +	exit 1
+>  }
+>  
+>  GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> @@ -18,7 +21,7 @@ while getopts :c: OPT ; do
+>  	esac
+>  done
+>  
+> -[ -n "${GENIMAGE_CFG}" ] || die "Missing argument"
+> +[ -n "${GENIMAGE_CFG}" ] || die "missing option 'c'"
+>  
+>  rm -rf "${GENIMAGE_TMP}"
+>  
 > 
 
 -- 
