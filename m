@@ -1,50 +1,39 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Tue, 18 Apr 2017 15:24:49 +0530
-Subject: [Buildroot] [PATCH] trinity: needs __sync_val_compare_and_swap_4
-In-Reply-To: <20170418094740.qaw7da6zrt22gyxo@sapphire.tkos.co.il>
-References: <1492507590-2781-1-git-send-email-rahulbedarkar89@gmail.com>
- <20170418094740.qaw7da6zrt22gyxo@sapphire.tkos.co.il>
-Message-ID: <CA+NV+Vmwyb2pzas6JXfFNHcE2MABn8dydVLiaTsU65Knw5QVNQ@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Apr 2017 11:15:21 +0100
+Subject: [Buildroot] [PATCH] php: bump version to 7.1.4
+Message-ID: <20170418101521.44690-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Apr 18, 2017 at 3:17 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Rahul,
->
-> On Tue, Apr 18, 2017 at 02:56:30PM +0530, Rahul Bedarkar wrote:
->> syscalls/futex.c uses sync_val_compare_and_swap(). So add dependency on
->> BR2_TOOLCHAIN_HAS_SYNC_4.
->>
->> Fixes:
->>   http://autobuild.buildroot.net/results/17f/17f7fe79242a40ff3e588748230de7bf2a010941
->>
->> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
->> ---
->>  package/trinity/Config.in | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/trinity/Config.in b/package/trinity/Config.in
->> index 0ce1f9a..0fc737e 100644
->> --- a/package/trinity/Config.in
->> +++ b/package/trinity/Config.in
->> @@ -2,6 +2,7 @@ config BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
->>       bool
->>       default y
->>       depends on BR2_USE_MMU # fork()
->> +     depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_val_compare_and_swap_4
->>       depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
->>               BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
->>               BR2_powerpc64le || BR2_sparc || BR2_x86_64
->
-> Please update the comment dependency as well.
-
-SYNC_4 dependency is added in BR2_PACKAGE_TRINITY_ARCH_SUPPORTS which
-is already a dependency of comment string.
-
-Thanks,
-Rahul
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0e71c4b..35c5925 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256 e4887c2634778e37fd962fbdf5c4a7d32cd708482fe07b448804625570cb0bb0  php-7.1.3.tar.xz
++sha256 71514386adf3e963df087c2044a0b3747900b8b1fc8da3a99f0a0ae9180d300b  php-7.1.4.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 22eeddd..46f57e4 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.1.3
++PHP_VERSION = 7.1.4
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.10.2
