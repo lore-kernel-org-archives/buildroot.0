@@ -1,47 +1,43 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 18 Apr 2017 12:42:09 +0300
-Subject: [Buildroot] [PATCH 1/1] openssh: add support for HW SSL engines
-In-Reply-To: <1492505276-25285-1-git-send-email-gilad@benyossef.com>
-References: <1492505276-25285-1-git-send-email-gilad@benyossef.com>
-Message-ID: <20170418094209.guuqycx7yrmodmj2@sapphire.tkos.co.il>
+Date: Tue, 18 Apr 2017 12:47:40 +0300
+Subject: [Buildroot] [PATCH] trinity: needs __sync_val_compare_and_swap_4
+In-Reply-To: <1492507590-2781-1-git-send-email-rahulbedarkar89@gmail.com>
+References: <1492507590-2781-1-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <20170418094740.qaw7da6zrt22gyxo@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gilad,
+Hi Rahul,
 
-Thanks for you contribution. I have a small comment inline below.
-
-On Tue, Apr 18, 2017 at 11:47:56AM +0300, Gilad Ben-Yossef wrote:
-> Add support for OpenSSH to use a hardware SSL engine if cryptodev-linux is
-> included.
+On Tue, Apr 18, 2017 at 02:56:30PM +0530, Rahul Bedarkar wrote:
+> syscalls/futex.c uses sync_val_compare_and_swap(). So add dependency on
+> BR2_TOOLCHAIN_HAS_SYNC_4.
 > 
-> Signed-off-by: Gilad Ben-Yossef <gilad@benyossef.com>
+> Fixes:
+>   http://autobuild.buildroot.net/results/17f/17f7fe79242a40ff3e588748230de7bf2a010941
+> 
+> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 > ---
->  package/openssh/openssh.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/trinity/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index f971e99..4a6c516 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -28,6 +28,11 @@ endif
->  
->  OPENSSH_DEPENDENCIES = zlib openssl
->  
-> +ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX), y)
+> diff --git a/package/trinity/Config.in b/package/trinity/Config.in
+> index 0ce1f9a..0fc737e 100644
+> --- a/package/trinity/Config.in
+> +++ b/package/trinity/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
+>  	bool
+>  	default y
+>  	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_val_compare_and_swap_4
+>  	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+>  		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
+>  		BR2_powerpc64le || BR2_sparc || BR2_x86_64
 
-Redundant space before 'y'.
-
-> +OPENSSH_DEPENDENCIES += cryptodev-linux
-> +OPENSSH_CONF_OPTS += --with-ssl-engine
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
->  define OPENSSH_INSTALL_PAM_CONF
->  	$(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
+Please update the comment dependency as well.
 
 baruch
 
