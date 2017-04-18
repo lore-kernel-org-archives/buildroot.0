@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Apr 2017 17:44:10 +0200
-Subject: [Buildroot] [git commit] linux: bump default version to 4.10.11
-Message-ID: <20170418154530.14B74816A1@busybox.osuosl.org>
+Date: Tue, 18 Apr 2017 17:45:41 +0200
+Subject: [Buildroot] [PATCH] arc: remove patch for linux vdk defconfig
+In-Reply-To: <1492530039-3194-1-git-send-email-vzakhar@synopsys.com>
+References: <1492530039-3194-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <20170418174541.5ccf72f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfd03e9dd0b8097b9d96756ff859a0b170ea934c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, 18 Apr 2017 18:40:39 +0300, Vlad Zakharov wrote:
+> The patch for linux vdk defconfig introduced ARC_SMP_HALT_ON_RESET
+> config symbol. In fact that is not required as this symbol is enabled by
+> default if ARC_UBOOT_SUPPORT config symbol is set (and it is set in
+> vdk configs).
+> 
+> Also this commit fixes build failure, pointed us by Arnout:
+> https://gitlab.com/buildroot.org/buildroot/builds/14419270
+> 
+> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> ---
+>  .../linux/0001-arc-vdk-Disable-halt-on-reset.patch | 32 ----------------------
+>  1 file changed, 32 deletions(-)
+>  delete mode 100644 board/synopsys/vdk/patches/linux/0001-arc-vdk-Disable-halt-on-reset.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 2a295f7..d71a6af 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.10.10)"
-+	bool "Latest version (4.10.11)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.10.11" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
