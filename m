@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Apr 2017 17:46:04 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.6.17
-Message-ID: <20170418154610.11FAA81EEE@busybox.osuosl.org>
+Date: Tue, 18 Apr 2017 17:46:37 +0200
+Subject: [Buildroot] [git commit] docker-engine: fix handling of vendor tree
+Message-ID: <20170418154656.65434826EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22137aa46067b66a2b1fc0865922833a8fe4d620
+commit: https://git.buildroot.net/buildroot/commit/?id=5d5b92f229ab69e704ef3d4cfb47c20d8b0d3c50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all upstream hashes.
+The latest docker-engine release changes the vendor tree slightly. The
+Go tool will recognize a ./vendor directory and use it as a vendor tree
+automatically, but only when run inside a valid GOPATH. This patch
+adjusts how the GOPATH is built - now docker/docker is linked into a
+blank tree, and the Go tool recognizes the ./vendor directory correctly.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freeswitch/freeswitch.hash | 8 ++++++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/docker-engine/docker-engine.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 1e79a4f..2bd7a8d 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,2 +1,6 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.16.tar.xz.sha256
--sha256 4caecd8d246265db4e4d37df0901e396accd84de060525dda8212935cd2ee285  freeswitch-1.6.16.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.17.tar.xz.md5
-+md5 b50939fe562c66ca799f7a7f0e341488  freeswitch-1.6.17.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.17.tar.xz.sha1
-+sha1 feda8e9334410bee1e5ae4d959a0982cf18c5bee  freeswitch-1.6.17.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.17.tar.xz.sha256
-+sha256 709b3e43362d86b9682a7db14eb344b74362493d68244dfc4e6f40218089d4e1  freeswitch-1.6.17.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b75cdab..e6c1e8c 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 5101702..c4c1157 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -13,7 +13,7 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
  
--FREESWITCH_VERSION = 1.6.16
-+FREESWITCH_VERSION = 1.6.17
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPL-1.1, \
+ DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
+ 
+-DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
++DOCKER_ENGINE_GOPATH = "$(@D)/gopath"
+ DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	CGO_ENABLED=1 \
+ 	CGO_NO_EMULATION=1 \
+@@ -100,7 +100,8 @@ endif
+ 
+ define DOCKER_ENGINE_BUILD_CMDS
+ 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+-		cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) \
++		cd $(@D)/gopath/src/github.com/docker/docker; \
++		$(DOCKER_ENGINE_MAKE_ENV) \
+ 		$(HOST_DIR)/usr/bin/go build -v \
+ 			-o $(@D)/bin/$(target) \
+ 			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
