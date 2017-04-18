@@ -1,35 +1,46 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Tue, 18 Apr 2017 14:56:30 +0530
-Subject: [Buildroot] [PATCH] trinity: needs __sync_val_compare_and_swap_4
-Message-ID: <1492507590-2781-1-git-send-email-rahulbedarkar89@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 18 Apr 2017 10:30:24 +0100
+Subject: [Buildroot] [PATCH 1/2] package/linux-headers: bump 3.2.x and
+ 4.{4, 9, 10}.x series
+In-Reply-To: <20170418073621.5215-1-bernd.kuhls@t-online.de>
+References: <20170418073621.5215-1-bernd.kuhls@t-online.de>
+Message-ID: <da9846b0-0c21-b706-fbde-02be6d967cd1@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-syscalls/futex.c uses sync_val_compare_and_swap(). So add dependency on
-BR2_TOOLCHAIN_HAS_SYNC_4.
+Just spotted a small mistake in the commit log.
 
-Fixes:
-  http://autobuild.buildroot.net/results/17f/17f7fe79242a40ff3e588748230de7bf2a010941
+s/3.2.x/3.12.x/
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
----
- package/trinity/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
 
-diff --git a/package/trinity/Config.in b/package/trinity/Config.in
-index 0ce1f9a..0fc737e 100644
---- a/package/trinity/Config.in
-+++ b/package/trinity/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_TRINITY_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_val_compare_and_swap_4
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
- 		BR2_powerpc64le || BR2_sparc || BR2_x86_64
--- 
-2.7.4
+Vincent
+
+On 18/04/17 08:36, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/linux-headers/Config.in.host | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 27b5a7ef4..7a6244295 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -216,9 +216,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+>  	default "3.2.88"	if BR2_KERNEL_HEADERS_3_2
+>  	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+>  	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+> -	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
+> +	default "3.12.73"	if BR2_KERNEL_HEADERS_3_12
+>  	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+> -	default "4.4.61"	if BR2_KERNEL_HEADERS_4_4
+> -	default "4.9.22"	if BR2_KERNEL_HEADERS_4_9
+> -	default "4.10.10"	if BR2_KERNEL_HEADERS_4_10
+> +	default "4.4.62"	if BR2_KERNEL_HEADERS_4_4
+> +	default "4.9.23"	if BR2_KERNEL_HEADERS_4_9
+> +	default "4.10.11"	if BR2_KERNEL_HEADERS_4_10
+>  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> 
