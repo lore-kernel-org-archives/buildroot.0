@@ -1,39 +1,33 @@
-From: James Balean <james@balean.com.au>
-Date: Tue, 18 Apr 2017 23:00:39 -0500
-Subject: [Buildroot] [PATCH] Restore .git directory in git package downloads
-Message-ID: <1492574439-4617-1-git-send-email-james@balean.com.au>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 19 Apr 2017 07:15:53 +0300
+Subject: [Buildroot] [PATCH] Restore .git directory in git package
+ downloads
+In-Reply-To: <1492574439-4617-1-git-send-email-james@balean.com.au>
+References: <1492574439-4617-1-git-send-email-james@balean.com.au>
+Message-ID: <20170419041553.w2hxo7dqnzuaccan@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removing the .git directory during package download and caching prevents
-Builroot users from making and testing changes to external software
-packages using Buildroot. This patch enables users to commit locally,
-make patches and contribute back to the projects they are using.
+Hi James,
 
-Signed-off-by: James Balean <james@balean.com.au>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/download/git | 4 ----
- 1 file changed, 4 deletions(-)
+On Tue, Apr 18, 2017 at 11:00:39PM -0500, James Balean wrote:
+> Removing the .git directory during package download and caching prevents
+> Builroot users from making and testing changes to external software
+> packages using Buildroot. This patch enables users to commit locally,
+> make patches and contribute back to the projects they are using.
 
-diff --git a/support/download/git b/support/download/git
-index 056057c..a7f307c 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -85,10 +85,6 @@ if [ ${recurse} -eq 1 ]; then
-     _git submodule update --init --recursive
- fi
- 
--# We do not need the .git dir; we keep other .git files, in case they
--# are the only files in their directory.
--rm -rf .git
--
- popd >/dev/null
- 
- # Generate the archive, sort with the C locale so that it is reproducible
+The OVERRIDE_SRCDIR mechanism is meant to cover this use case. See section 
+8.12.6 "Using Buildroot during development" in the manual[1]. Is there 
+anything missing for your use case?
+
+[1] http://nightly.buildroot.org/manual.html
+
+baruch
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
