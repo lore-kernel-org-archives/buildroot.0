@@ -1,97 +1,275 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Apr 2017 08:28:15 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-04-18
-Message-ID: <20170419062815.A6CFF207F7@mail.free-electrons.com>
+From: Joeri Barbarien <joeri.barbarien@gmail.com>
+Date: Wed, 19 Apr 2017 09:38:41 +0200
+Subject: [Buildroot] [PATCH 1/1] spidev_test: Select version based on
+	toolchain
+In-Reply-To: <154608cd-d798-1f88-ec5f-241891ff0c87@mind.be>
+References: <20170418150938.14088-1-joeri.barbarien@gmail.com>
+ <154608cd-d798-1f88-ec5f-241891ff0c87@mind.be>
+Message-ID: <CAN2VnkuEx_CKQb7NYpn2Krqu--jwO-r-xFhXsTBppsiEUPMtng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Arnout,
 
-Build statistics for 2017-04-18
-================================
+Thanks for the feedback. I will check if v4.10 spidev_test builds with
+v3.15 headers. If it does, I will rework the patch as you suggest and
+resubmit.
 
-      successes : 201
-       failures : 40 
-       timeouts : 2  
-          TOTAL : 243
+K.r.
 
-Classification of failures by reason
-====================================
+Joeri
 
-                 xenomai-3.0.4 | 10
-                    mpir-3.0.0 | 3 
-                poppler-0.53.0 | 3 
-                 binutils-2.27 | 2 
-                busybox-1.26.2 | 2 
-                    ffmpeg-3.3 | 2 
-                libepoxy-1.4.1 | 2 
-                  ntp-4.2.8p10 | 2 
-                  boost-1.63.0 | 1 
-                    cups-2.2.3 | 1 
-           libmemcached-1.0.18 | 1 
-        ltp-testsuite-20170116 | 1 
-             lttng-tools-2.9.4 | 1 
-make[2]: *** [smartd.o] Ter... | 1 
-                openssl-1.0.2k | 1 
-           oracle-mysql-5.1.73 | 1 
-               qt5webkit-5.6.2 | 1 
-                     qwt-6.1.3 | 1 
-             rabbitmq-c-v0.8.0 | 1 
-                  samba4-4.5.7 | 1 
-               syslog-ng-3.9.1 | 1 
-                   trinity-1.7 | 1 
-           uboot-tools-2017.03 | 1 
-                    xxhash-r40 | 1 
+2017-04-18 20:03 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+
+>  Hi Joeri,
+>
+>  Good idea, but I have a few remarks below. Care to fix up and resubmit?
+>
+> On 18-04-17 17:09, Joeri Barbarien wrote:
+> > From: Joeri Barbarien <joeri.barbarien@nokia.com>
+> >
+> > spidev_test has further evolved after kernel version 3.15, which
+> > is the most recent version that could be built in this package.
+> > This change allows to build the version of spidev_test corresponding
+> > to the toolchain's kernel header version. In this way, when building with
+> > a newer toolchain, we are able to benefit from the added functionality
+> > offered by newer versions of the tool.
+> >
+> > Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+> > ---
+> >  package/spidev_test/spidev_test.hash |  3 +++
+> >  package/spidev_test/spidev_test.mk   | 27 ++++++++++++++++++++++++++-
+> >  2 files changed, 29 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/spidev_test/spidev_test.hash
+> b/package/spidev_test/spidev_test.hash
+> > index 6871288..ab91a93 100644
+> > --- a/package/spidev_test/spidev_test.hash
+> > +++ b/package/spidev_test/spidev_test.hash
+> > @@ -1,3 +1,6 @@
+> >  # Locally calculated
+> >  sha256 80471c330d8c0bf5ba6479c434a54a54bdd2dc59a703b9c76c2541ec04cfb8c3
+> spidev_test.c?id=v3.0
+> >  sha256 57fa6c534e0b7b4d234075e18bc89e2f3c9fc4ecc27e80f349a8057708e0de46
+> spidev_test.c?id=v3.15
+> > +sha256 7af6f126248a479985a7e67238ed477c1dc20fab1453fab2f4a7e0db79d219c2
+> spidev_test.c?id=v4.1
+> > +sha256 94ec2ef4c7977f82aed43952ec6f5dfe472d879590ada8707bf841c24af8cc68
+> spidev_test.c?id=v4.5
+> > +sha256 b5918394f79f6ff3ceed20de063a6f7c49e20aee0d7bd91ec73c9e1ce9e4269a
+> spidev_test.c?id=v4.9
+> > diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/
+> spidev_test.mk
+> > index 50e7a30..33bca74 100644
+> > --- a/package/spidev_test/spidev_test.mk
+> > +++ b/package/spidev_test/spidev_test.mk
+> > @@ -7,12 +7,37 @@
+> >  # v3.15+ requires SPI_TX_QUAD/SPI_RX_QUAD to build
+> >  # Normally kernel headers can't be newer than kernel so switch based on
+> that.
+> >  # If you need quad-pumped spi support you need to upgrade your
+> toolchain.
+> > +
+> > +
+> > +# Build the version corresponding to the toolchain kernel headers
+> version.
+> > +# Note that the contents of spidev_test.c does not change between the
+> > +# versions referenced below.
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9),y)
+> > +SPIDEV_TEST_VERSION = v4.9
+>
+>  Is it possible to build e.g. spidev_test from v4.9 with kernel headers
+> v3.15?
+> If yes, then there is no need to have these intermediate versions, you can
+> just do
+>
+> ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+> SPIDEV_TEST_VERSION = v4.10
+> else
+> SPIDEV_TEST_VERSION = v3.0
+> endif
+>
+>  We just want the latest version. In fact, for headers < 3.15 we could
+> have used
+> v3.14 instead of v3.0, but there are no changes between those two versions.
+>
+>
+> > +else
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5),y)
+>
+>  If you do need to keep multiple versions, put the else ifeq on one line.
+> That
+> way you need only one endif at the end.
+>
+>  Regards,
+>  Arnout
+>
+> > +SPIDEV_TEST_VERSION = v4.5
+> > +else
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1),y)
+> > +SPIDEV_TEST_VERSION = v4.1
+> > +else
+> >  ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+> >  SPIDEV_TEST_VERSION = v3.15
+> >  else
+> >  SPIDEV_TEST_VERSION = v3.0
+> >  endif
+> > -SPIDEV_TEST_SITE = http://git.kernel.org/cgit/
+> linux/kernel/git/torvalds/linux.git/plain/Documentation/spi
+> > +endif
+> > +endif
+> > +endif
+> > +
+> > +# Location of spidev_test.c changes from v4.5 onwards.
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5),y)
+> > +SPIDEV_TEST_PATH=tools/spi
+> > +else
+> > +SPIDEV_TEST_PATH=Documentation/spi
+> > +endif
+> > +
+> > +SPIDEV_TEST_SITE = http://git.kernel.org/cgit/
+> linux/kernel/git/torvalds/linux.git/plain/$(SPIDEV_TEST_PATH)
+> >  SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
+> >  SPIDEV_TEST_LICENSE = GPL-2.0
+> >
+> >
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
 
 
-Detail of failures
-===================
+2017-04-18 20:03 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
 
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/13d086e7dd1cb6783e772b0e6ce77dd2307413c7 | ORPH
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/9d19f2130493b76263700ae5687c344ed91952f6 | ORPH
-     powerpc |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/6f8a1979262537de3aeac2cbba55512e856046ee |     
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/f582de34815f022d0136792837d0d60075217125 | ORPH
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/aea5900b47fad35f83cbf5bac008e6f786c85e60 | ORPH
-         arc |                     cups-2.2.3 | NOK | http://autobuild.buildroot.net/results/2910bca9f48b62428c9c7da05f68689c443364aa | ORPH
-        i586 |                     ffmpeg-3.3 | NOK | http://autobuild.buildroot.net/results/7e67d7e6e33b52ce7fbb9cb180b2b9b19e116eee |     
-        m68k |                     ffmpeg-3.3 | NOK | http://autobuild.buildroot.net/results/b09e47d9a6fd708704a6ade8f7f3e3c021c1d5c3 |     
-        sh4a |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/aa62cd936093be88542ed88bfa1f1aeff9d63aa5 |     
-    mips64el |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/5ab698b3745a853ee32c0cf08a71b158746896a2 |     
-      x86_64 |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/9b3ab1cff3990ee216fc482a40d77cbed8636e97 |     
-   powerpc64 |         ltp-testsuite-20170116 | NOK | http://autobuild.buildroot.net/results/3bd3a60916a8a2320705140d4666899fc00d70b6 |     
-         arm |              lttng-tools-2.9.4 | NOK | http://autobuild.buildroot.net/results/0575ed4079f8eccdaf99d7ab2b44b168707bf3ef |     
-microblazeel | make[2]: *** [smartd.o] Ter... | TIM | http://autobuild.buildroot.net/results/48f115589d3b39474b1cd8869e909235777fc97c |     
-    mips64el |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/def6661b02be5f866979846f574749f74c063c45 |     
- powerpc64le |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/ecdde998c6763c14b2314d4513f15db95305fa11 |     
-    mips64el |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/c25d797e4e2b621c72ba0770ba9cba94dee2401a |     
-        mips |                   ntp-4.2.8p10 | NOK | http://autobuild.buildroot.net/results/e61bf36380280e7d3a6b26c2d87f362a8b4fb849 | ORPH
-     aarch64 |                   ntp-4.2.8p10 | NOK | http://autobuild.buildroot.net/results/3072c3e1a1004e0533981c834e1386470b3e4b6c | ORPH
-         arm |                 openssl-1.0.2k | NOK | http://autobuild.buildroot.net/results/9feeb8b43f1c98d0d90fb03cf396fdf37bfa3811 | ORPH
-      x86_64 |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/30b59dfc7509aede74cfae4540311e9f8d4a7e66 | ORPH
-        m68k |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/955e09fd38fd2990f74c0d0410cd76fdff04094e |     
-        i686 |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/b5773a5219030f0f64482878d68edcdc1396195b |     
-         arc |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/f6632959046d84f5dfee3d48ec95f5f323c484c0 |     
-      x86_64 |                qt5webkit-5.6.2 | NOK | http://autobuild.buildroot.net/results/a88f43b667230d35d40826c70f394c5d0c11f011 |     
-         arm |                      qwt-6.1.3 | NOK | http://autobuild.buildroot.net/results/570fcd1fffe21dc04541beb7fee5560afa3411d4 | ORPH
-         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/4ef0a88423182d2f05062804441bb5030d0b6e60 |     
-         arc |                   samba4-4.5.7 | NOK | http://autobuild.buildroot.net/results/b8a962b9b02c2887b2aec5a5855fdb218f09282e |     
-      x86_64 |                syslog-ng-3.9.1 | NOK | http://autobuild.buildroot.net/results/3c32f4eb7436da06f3fb59f928363959df2a5e86 |     
-       sparc |                    trinity-1.7 | NOK | http://autobuild.buildroot.net/results/17f7fe79242a40ff3e588748230de7bf2a010941 |     
-         arm |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/242e8e844861ef80ac9d9b6df3077375c6fc2373 | ORPH
-        i686 |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/a07b65b85bead2ab4b57ac0e83e5e20eb0e79c82 |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/83ca28ccc742e2b1a449dab9ed6372feb0fbfe89 |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/859cc6766cb8a79a34318516d627f4ecfccacfbc |     
-     powerpc |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/514e4d1d7b16b624d0b9ec7b5287a9e7e5df8158 |     
-     powerpc |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/1e258139ed2b96b383162b925d0e3932b914dbbe |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/25d753d113678d9fea8ecd235e16e4f948cf5210 |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/fea7f7f61b4bf51f52a074d4b0037cf09c61dbb9 |     
-        i686 |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/0fd7bc4098118b909a49aa8a379c1c0a85bc93fc |     
-        i686 |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/7267acc0248d391e1c1ce069047e6d4104215639 |     
-      x86_64 |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/077ff7a8193539bdf79f8434f03c1c1047c258be |     
-    mips64el |                     xxhash-r40 | TIM | http://autobuild.buildroot.net/results/c4d69e92e331ab332232ec472b55b692fea3de64 |     
-
--- 
-http://autobuild.buildroot.net
+>  Hi Joeri,
+>
+>  Good idea, but I have a few remarks below. Care to fix up and resubmit?
+>
+> On 18-04-17 17:09, Joeri Barbarien wrote:
+> > From: Joeri Barbarien <joeri.barbarien@nokia.com>
+> >
+> > spidev_test has further evolved after kernel version 3.15, which
+> > is the most recent version that could be built in this package.
+> > This change allows to build the version of spidev_test corresponding
+> > to the toolchain's kernel header version. In this way, when building with
+> > a newer toolchain, we are able to benefit from the added functionality
+> > offered by newer versions of the tool.
+> >
+> > Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+> > ---
+> >  package/spidev_test/spidev_test.hash |  3 +++
+> >  package/spidev_test/spidev_test.mk   | 27 ++++++++++++++++++++++++++-
+> >  2 files changed, 29 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/spidev_test/spidev_test.hash
+> b/package/spidev_test/spidev_test.hash
+> > index 6871288..ab91a93 100644
+> > --- a/package/spidev_test/spidev_test.hash
+> > +++ b/package/spidev_test/spidev_test.hash
+> > @@ -1,3 +1,6 @@
+> >  # Locally calculated
+> >  sha256 80471c330d8c0bf5ba6479c434a54a54bdd2dc59a703b9c76c2541ec04cfb8c3
+> spidev_test.c?id=v3.0
+> >  sha256 57fa6c534e0b7b4d234075e18bc89e2f3c9fc4ecc27e80f349a8057708e0de46
+> spidev_test.c?id=v3.15
+> > +sha256 7af6f126248a479985a7e67238ed477c1dc20fab1453fab2f4a7e0db79d219c2
+> spidev_test.c?id=v4.1
+> > +sha256 94ec2ef4c7977f82aed43952ec6f5dfe472d879590ada8707bf841c24af8cc68
+> spidev_test.c?id=v4.5
+> > +sha256 b5918394f79f6ff3ceed20de063a6f7c49e20aee0d7bd91ec73c9e1ce9e4269a
+> spidev_test.c?id=v4.9
+> > diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/
+> spidev_test.mk
+> > index 50e7a30..33bca74 100644
+> > --- a/package/spidev_test/spidev_test.mk
+> > +++ b/package/spidev_test/spidev_test.mk
+> > @@ -7,12 +7,37 @@
+> >  # v3.15+ requires SPI_TX_QUAD/SPI_RX_QUAD to build
+> >  # Normally kernel headers can't be newer than kernel so switch based on
+> that.
+> >  # If you need quad-pumped spi support you need to upgrade your
+> toolchain.
+> > +
+> > +
+> > +# Build the version corresponding to the toolchain kernel headers
+> version.
+> > +# Note that the contents of spidev_test.c does not change between the
+> > +# versions referenced below.
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9),y)
+> > +SPIDEV_TEST_VERSION = v4.9
+>
+>  Is it possible to build e.g. spidev_test from v4.9 with kernel headers
+> v3.15?
+> If yes, then there is no need to have these intermediate versions, you can
+> just do
+>
+> ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+> SPIDEV_TEST_VERSION = v4.10
+> else
+> SPIDEV_TEST_VERSION = v3.0
+> endif
+>
+>  We just want the latest version. In fact, for headers < 3.15 we could
+> have used
+> v3.14 instead of v3.0, but there are no changes between those two versions.
+>
+>
+> > +else
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5),y)
+>
+>  If you do need to keep multiple versions, put the else ifeq on one line.
+> That
+> way you need only one endif at the end.
+>
+>  Regards,
+>  Arnout
+>
+> > +SPIDEV_TEST_VERSION = v4.5
+> > +else
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1),y)
+> > +SPIDEV_TEST_VERSION = v4.1
+> > +else
+> >  ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+> >  SPIDEV_TEST_VERSION = v3.15
+> >  else
+> >  SPIDEV_TEST_VERSION = v3.0
+> >  endif
+> > -SPIDEV_TEST_SITE = http://git.kernel.org/cgit/
+> linux/kernel/git/torvalds/linux.git/plain/Documentation/spi
+> > +endif
+> > +endif
+> > +endif
+> > +
+> > +# Location of spidev_test.c changes from v4.5 onwards.
+> > +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5),y)
+> > +SPIDEV_TEST_PATH=tools/spi
+> > +else
+> > +SPIDEV_TEST_PATH=Documentation/spi
+> > +endif
+> > +
+> > +SPIDEV_TEST_SITE = http://git.kernel.org/cgit/
+> linux/kernel/git/torvalds/linux.git/plain/$(SPIDEV_TEST_PATH)
+> >  SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
+> >  SPIDEV_TEST_LICENSE = GPL-2.0
+> >
+> >
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170419/9dfef5e1/attachment.html>
