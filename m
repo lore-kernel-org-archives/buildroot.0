@@ -1,63 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 19 Apr 2017 23:05:11 +0200
-Subject: [Buildroot] python-json-schema-validator,
- python-versiontools: Remove depends on BR2_PACKAGE_PYTHON
-In-Reply-To: <CAALS7HacsNUd7wUfKsZDLgwoCoBKVpV5qtZZq61cnH=TduWq2w@mail.gmail.com>
-References: <CAALS7HacsNUd7wUfKsZDLgwoCoBKVpV5qtZZq61cnH=TduWq2w@mail.gmail.com>
-Message-ID: <CAGm1_ks9bFJyeJ2ORqKf5yY1uV5QVAHh_a7x3A_zSwebSaSgEg@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 19 Apr 2017 20:37:50 -0300
+Subject: [Buildroot] [PATCH] Restore .git directory in git package
+ downloads
+References: <1492574439-4617-1-git-send-email-james@balean.com.au>
+Message-ID: <58f7f4cee98a1_4789f4cbd048736@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 19, 2017 at 7:44 PM, Matthew Carruth <carruthm@gmail.com> wrote:
-> From 13ff8c8b88a9b8c6d91c658d52105695bf09ea13 Mon Sep 17 00:00:00 2001
-> From: Matthew Carruth <carruthm@gmail.com>
-> Date: Wed, 19 Apr 2017 10:39:20 -0700
-> Subject: [PATCH] Remove depends on BR2_PACKAGE_PYTHON in 2 packages
->
-> python-json-schema-validator, python-versiontools: Remove depends on
-> BR2_PACKAGE_PYTHON. Both have valid python3 implementations as well
->
-> Signed-off-by: Matthew Carruth <carruthm@gmail.com>
+James,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Either I or my mail client did something stupid and the e-mail did not reach
+the mailing list and the patchwork. Resending to the list]
 
-Just forgot to tell, that you should split this patch in two to handle
-both packages separately.
+On Wed, Apr 19, 2017 at 01:00 AM, James Balean wrote:
+> +++ b/support/download/git
+> @@ -85,10 +85,6 @@ if [ ${recurse} -eq 1 ]; then
+>      _git submodule update --init --recursive
+>  fi
+>  
+> -# We do not need the .git dir; we keep other .git files, in case they
+> -# are the only files in their directory.
+> -rm -rf .git
 
-Yegor
+This patch cannot be applied as-is because:
 
-> ---
->  package/python-json-schema-validator/Config.in | 1 -
->  package/python-versiontools/Config.in          | 1 -
->  2 files changed, 2 deletions(-)
->
-> diff --git a/package/python-json-schema-validator/Config.in
-> b/package/python-json-schema-validator/Config.in
-> index 6ae1eb1..dbc5328 100644
-> --- a/package/python-json-schema-validator/Config.in
-> +++ b/package/python-json-schema-validator/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
->   bool "python-json-schema-validator"
-> - depends on BR2_PACKAGE_PYTHON
->   select BR2_PACKAGE_PYTHON_VERSIONTOOLS
->   help
->    JSON Schema Validator
-> diff --git a/package/python-versiontools/Config.in
-> b/package/python-versiontools/Config.in
-> index cb260c1..d15de1f 100644
-> --- a/package/python-versiontools/Config.in
-> +++ b/package/python-versiontools/Config.in
-> @@ -1,6 +1,5 @@
->  config BR2_PACKAGE_PYTHON_VERSIONTOOLS
->   bool "python-versiontools"
-> - depends on BR2_PACKAGE_PYTHON
->   help
->    Smart replacement for plain tuple used in __version__.
->
-> --
-> 2.9.3
->
+- it would make the tarballs for git packages not reproducible as the contents
+  now depend on the state of the remote server (i.e. in some cases a full clone
+  is needed; assume a tarball is generated, then a new commit is created in the
+  remote server in any branch, a new full clone with the same reference as
+  version would include that new commit and therefore the tarball is different);
+
+- it would make the tarballs for git packages much larger (gigabytes for some
+  linux trees) as they now include the .git directory;
+
+Of course I am not against the discussion looking for another solution.
+
+Regards,
+Ricardo
