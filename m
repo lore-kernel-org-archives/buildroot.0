@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 19 Apr 2017 22:00:02 +0200
-Subject: [Buildroot] [PATCH 4/9] xenomai: add option for Smokey skin
+Date: Wed, 19 Apr 2017 22:00:03 +0200
+Subject: [Buildroot] [PATCH 5/9] xenomai: update list of Analogy installed
+	files
 In-Reply-To: <20170419200007.12590-1-patrickdepinguin@gmail.com>
 References: <20170419200007.12590-1-patrickdepinguin@gmail.com>
-Message-ID: <20170419200007.12590-5-patrickdepinguin@gmail.com>
+Message-ID: <20170419200007.12590-6-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +13,34 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Xenomai has a skin 'Smokey' that Buildroot is currently unaware of, which
-means that the associated files are present on target even though most users
-will not need them.
-
-Add a config option and associated logic to remove the skin if not selected.
-
-Additionally, fixup order of VxWorks skin removal entry.
+Since Xenomai 3, the list of files installed for Analogy is longer, causing
+the extra files to remain on the target filesystem even if Analogy is not
+selected.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/xenomai/Config.in  | 5 +++++
- package/xenomai/xenomai.mk | 6 +++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/xenomai/xenomai.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 31d63f1..d6474bd 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -137,6 +137,11 @@ config BR2_PACKAGE_XENOMAI_RTAI_SKIN
- 	help
- 	  This option allows to install the RTAI Xenomai skin
- 
-+config BR2_PACKAGE_XENOMAI_SMOKEY_SKIN
-+	bool "Smokey skin"
-+	help
-+	  This option allows to install the Smokey Xenomai skin
-+
- config BR2_PACKAGE_XENOMAI_UITRON_SKIN
- 	bool "uITRON skin"
- 	help
 diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index e93fcf4..0866144 100644
+index 0866144..a9cb296 100644
 --- a/package/xenomai/xenomai.mk
 +++ b/package/xenomai/xenomai.mk
-@@ -94,10 +94,11 @@ endif
+@@ -81,11 +81,13 @@ endif
  
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,alchemy)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
--XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_SMOKEY_SKIN),,smokey)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
- 
- define XENOMAI_REMOVE_SKINS
-@@ -106,6 +107,9 @@ define XENOMAI_REMOVE_SKINS
- 		if [ $$i == "posix" ] ; then \
- 			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
- 		fi ; \
-+		if [ $$i == "smokey" ] ; then \
-+			rm -f $(TARGET_DIR)/usr/bin/smokey* ; \
-+		fi ; \
+ ifeq ($(BR2_PACKAGE_XENOMAI_ANALOGY),)
+ define XENOMAI_REMOVE_ANALOGY
+-	for i in cmd_bits cmd_read cmd_write insn_write \
+-		insn_bits insn_read ; do \
++	for i in cmd_read cmd_write cmd_bits insn_read insn_write insn_bits \
++			wf_generate ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
  	done
+-	rm -f $(TARGET_DIR)/usr/sbin/analogy_config
++	for i in analogy_config analogy_calibrate ; do \
++		rm -f $(TARGET_DIR)/usr/sbin/$$i ; \
++	done
+ 	rm -f $(TARGET_DIR)/usr/lib/libanalogy.*
  endef
  
 -- 
