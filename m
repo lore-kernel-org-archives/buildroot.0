@@ -1,39 +1,65 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 19 Apr 2017 10:20:11 -0300 (BRT)
-Subject: [Buildroot] [PATCH] gtest: fix usage on ARM platforms
-In-Reply-To: <20170419143331.384db10e@free-electrons.com>
-References: <1492602712-28828-1-git-send-email-casantos@datacom.ind.br>
- <20170419143331.384db10e@free-electrons.com>
-Message-ID: <646899361.19434448.1492608011628.JavaMail.zimbra@datacom.ind.br>
+From: Joeri Barbarien <joeri.barbarien@gmail.com>
+Date: Wed, 19 Apr 2017 15:30:44 +0200
+Subject: [Buildroot] [PATCH 1/1] spidev_test: Build latest version if
+	possible
+Message-ID: <20170419133044.23558-1-joeri.barbarien@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org
-> Sent: Wednesday, April 19, 2017 9:33:31 AM
-> Subject: Re: [Buildroot] [PATCH] gtest: fix usage on ARM platforms
+From: Joeri Barbarien <joeri.barbarien@nokia.com>
 
-> Hello,
-> 
-> On Wed, 19 Apr 2017 08:51:52 -0300, Carlos Santos wrote:
->> Ensure that GTest is compiled with -fPIC to allow linking the static
->> libraries with dynamically linked programs. This is not a requirement
->> for most architectures but is mandatory for ARM.
->> 
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> 
-> Is this fixing an autobuilder issue? If so, the reference to the
-> autobuilder failure should be included in the commit log.
+spidev_test has further evolved after kernel version 3.15, which
+is the most recent version that could be built in this package.
+This change allows to build the latest version of spidev_test if
+the toolchain's kernel header version allows it. In this way, when
+building with a newer toolchain, we are able to benefit from the
+added functionality offered by the newest version of the tool.
 
-It was observed during a local build of one of our products which
-has an ARM Cortex-A9 processor.
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+---
+ package/spidev_test/spidev_test.hash |  2 +-
+ package/spidev_test/spidev_test.mk   | 10 ++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
+diff --git a/package/spidev_test/spidev_test.hash b/package/spidev_test/spidev_test.hash
+index 6871288..7bc4a27 100644
+--- a/package/spidev_test/spidev_test.hash
++++ b/package/spidev_test/spidev_test.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256 80471c330d8c0bf5ba6479c434a54a54bdd2dc59a703b9c76c2541ec04cfb8c3  spidev_test.c?id=v3.0
+-sha256 57fa6c534e0b7b4d234075e18bc89e2f3c9fc4ecc27e80f349a8057708e0de46  spidev_test.c?id=v3.15
++sha256 3cf76b15d9a8644f3f5cbc0387cc02a7d4a392ade39788cbc6367cce98552e2f  spidev_test.c?id=v4.10
+diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
+index 50e7a30..1f34c6a 100644
+--- a/package/spidev_test/spidev_test.mk
++++ b/package/spidev_test/spidev_test.mk
+@@ -4,15 +4,21 @@
+ #
+ ################################################################################
+ 
++# Build the latest version that is compatible with the toolchain's kernel headers
+ # v3.15+ requires SPI_TX_QUAD/SPI_RX_QUAD to build
+ # Normally kernel headers can't be newer than kernel so switch based on that.
+ # If you need quad-pumped spi support you need to upgrade your toolchain.
++# Note that the location of spidev_test.c changes from v4.5 onwards.
++
+ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15),y)
+-SPIDEV_TEST_VERSION = v3.15
++SPIDEV_TEST_VERSION = v4.10
++SPIDEV_TEST_PATH = tools/spi
+ else
+ SPIDEV_TEST_VERSION = v3.0
++SPIDEV_TEST_PATH = Documentation/spi
+ endif
+-SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi
++
++SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/$(SPIDEV_TEST_PATH)
+ SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
+ SPIDEV_TEST_LICENSE = GPL-2.0
+ 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.9.3
