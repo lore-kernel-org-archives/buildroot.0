@@ -1,47 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Apr 2017 22:11:03 +0200
-Subject: [Buildroot] [PATCH] Restore .git directory in git package
- downloads
-In-Reply-To: <a767627c-ac45-d05d-f71b-05a2ea1550d9@andin.de>
-References: <1492574439-4617-1-git-send-email-james@balean.com.au>
- <20170419041553.w2hxo7dqnzuaccan@sapphire.tkos.co.il>
- <50405f08-370b-4d72-9130-d16479d61f9a@cesnet.cz>
- <a767627c-ac45-d05d-f71b-05a2ea1550d9@andin.de>
-Message-ID: <c271bc4a-498b-dd3a-1554-ee9fbcbbfac9@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 19 Apr 2017 23:05:11 +0200
+Subject: [Buildroot] python-json-schema-validator,
+ python-versiontools: Remove depends on BR2_PACKAGE_PYTHON
+In-Reply-To: <CAALS7HacsNUd7wUfKsZDLgwoCoBKVpV5qtZZq61cnH=TduWq2w@mail.gmail.com>
+References: <CAALS7HacsNUd7wUfKsZDLgwoCoBKVpV5qtZZq61cnH=TduWq2w@mail.gmail.com>
+Message-ID: <CAGm1_ks9bFJyeJ2ORqKf5yY1uV5QVAHh_a7x3A_zSwebSaSgEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Apr 19, 2017 at 7:44 PM, Matthew Carruth <carruthm@gmail.com> wrote:
+> From 13ff8c8b88a9b8c6d91c658d52105695bf09ea13 Mon Sep 17 00:00:00 2001
+> From: Matthew Carruth <carruthm@gmail.com>
+> Date: Wed, 19 Apr 2017 10:39:20 -0700
+> Subject: [PATCH] Remove depends on BR2_PACKAGE_PYTHON in 2 packages
+>
+> python-json-schema-validator, python-versiontools: Remove depends on
+> BR2_PACKAGE_PYTHON. Both have valid python3 implementations as well
+>
+> Signed-off-by: Matthew Carruth <carruthm@gmail.com>
 
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-On 19-04-17 16:39, Andreas Naumann wrote:
-> Hi,
-> 
-> Am 19.04.2017 um 15:01 schrieb Jan Kundr?t:
->> On st?eda 19. dubna 2017 6:15:53 CEST, Baruch Siach wrote:
->>> Is there anything missing for your use case?
->>
->> This is largely hypothetical (I don't know if any of these are packaged
->> for Buldroot), but I know several projects which try to look at the
->> output of `git describe` to create a pretty version string at build time
->> (such as "v0.7-220-g270d875").
-> 
-> For me, a custom kernel from private git repo being is one such project. Right
-> now I have a hack to append the shortened contents of
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION via .scmversion. But of course this is not
-> the same/as nice as what git describe or setlocalversion reports.
+Just forgot to tell, that you should split this patch in two to handle
+both packages separately.
 
- Cfr. http://patchwork.ozlabs.org/patch/732304/ and subsequent discussion.
+Yegor
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> ---
+>  package/python-json-schema-validator/Config.in | 1 -
+>  package/python-versiontools/Config.in          | 1 -
+>  2 files changed, 2 deletions(-)
+>
+> diff --git a/package/python-json-schema-validator/Config.in
+> b/package/python-json-schema-validator/Config.in
+> index 6ae1eb1..dbc5328 100644
+> --- a/package/python-json-schema-validator/Config.in
+> +++ b/package/python-json-schema-validator/Config.in
+> @@ -1,6 +1,5 @@
+>  config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
+>   bool "python-json-schema-validator"
+> - depends on BR2_PACKAGE_PYTHON
+>   select BR2_PACKAGE_PYTHON_VERSIONTOOLS
+>   help
+>    JSON Schema Validator
+> diff --git a/package/python-versiontools/Config.in
+> b/package/python-versiontools/Config.in
+> index cb260c1..d15de1f 100644
+> --- a/package/python-versiontools/Config.in
+> +++ b/package/python-versiontools/Config.in
+> @@ -1,6 +1,5 @@
+>  config BR2_PACKAGE_PYTHON_VERSIONTOOLS
+>   bool "python-versiontools"
+> - depends on BR2_PACKAGE_PYTHON
+>   help
+>    Smart replacement for plain tuple used in __version__.
+>
+> --
+> 2.9.3
+>
