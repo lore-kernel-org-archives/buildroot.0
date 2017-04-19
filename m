@@ -1,40 +1,76 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 19 Apr 2017 16:39:23 +0200
-Subject: [Buildroot] [PATCH] Restore .git directory in git package
- downloads
-In-Reply-To: <50405f08-370b-4d72-9130-d16479d61f9a@cesnet.cz>
-References: <1492574439-4617-1-git-send-email-james@balean.com.au>
- <20170419041553.w2hxo7dqnzuaccan@sapphire.tkos.co.il>
- <50405f08-370b-4d72-9130-d16479d61f9a@cesnet.cz>
-Message-ID: <a767627c-ac45-d05d-f71b-05a2ea1550d9@andin.de>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 19 Apr 2017 12:08:14 -0400
+Subject: [Buildroot] [PATCH v3 1/2] cracklib: New package
+In-Reply-To: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
+References: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
+Message-ID: <CANxTyt4uGKF9vz=mSWkgBp8OGZHSE=qt2ZwccmXaBmN9uhc7-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Stefan,
 
-Am 19.04.2017 um 15:01 schrieb Jan Kundr?t:
-> On st?eda 19. dubna 2017 6:15:53 CEST, Baruch Siach wrote:
->> Is there anything missing for your use case?
->
-> This is largely hypothetical (I don't know if any of these are packaged
-> for Buldroot), but I know several projects which try to look at the
-> output of `git describe` to create a pretty version string at build time
-> (such as "v0.7-220-g270d875").
+On Wed, Apr 19, 2017 at 3:56 AM, Stefan S?rensen
+<stefan.sorensen@spectralink.com> wrote:
+...snip...
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# cracklib
+> +#
+> +################################################################################
+> +
+> +CRACKLIB_VERSION = 2.9.6
+> +CRACKLIB_SITE = https://github.com/cracklib/cracklib/releases/download/cracklib-$(CRACKLIB_VERSION)
+> +CRACKLIB_LICENSE = LGPL-2.1
+> +CRACKLIB_LICENSE_FILES = COPYING.LIB
+> +CRACKLIB_INSTALL_STAGING = YES
+> +CRACKLIB_DEPENDENCIES = host-cracklib
 
-For me, a custom kernel from private git repo being is one such project. 
-Right now I have a hack to append the shortened contents of 
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION via .scmversion. But of course this 
-is not the same/as nice as what git describe or setlocalversion reports.
+It looks like cracklib's configure is checking for zlib.h.  To make
+the build reproducible, maybe you should add:
 
-regards,
-Andreas
+ifeq ($(BR2_PACKAGE_ZLIB),y)
+CRACKLIB_CONF_OPTS += --with-zlib
+CRACKLIB_DEPENDENCIES += zlib
+else
+CRACKLIB_CONF_OPTS += --without-zlib
+endif
 
->
-> With kind regards,
-> Jan
+HOST_CRACKLIB_CONF_OPTS += --without-zlib
+
+Regards,
+Danomi -
+
+
+> +
+> +ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
+> +CRACKLIB_EXTRA_DOWNLOADS = cracklib-words-$(CRACKLIB_VERSION).gz
+> +CRACKLIB_DICT_SOURCE = $(DL_DIR)/cracklib-words-$(CRACKLIB_VERSION).gz
+> +else
+> +CRACKLIB_DICT_SOURCE = $(@D)/dicts/cracklib-small
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
+> +define CRACKLIB_REMOVE_TOOLS
+> +       rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
+> +endef
+> +CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_REMOVE_TOOLS
+> +endif
+> +
+> +define CRACKLIB_BUILD_DICT
+> +       $(HOST_MAKE_ENV) cracklib-format $(CRACKLIB_DICT_SOURCE) | \
+> +               $(HOST_MAKE_ENV) cracklib-packer $(TARGET_DIR)/usr/share/cracklib/pw_dict
+> +       rm $(TARGET_DIR)/usr/share/cracklib/cracklib-small
+> +endef
+> +CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_BUILD_DICT
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> --
+> 2.9.3
 >
 > _______________________________________________
 > buildroot mailing list
