@@ -1,7 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 19 Apr 2017 21:59:58 +0200
-Subject: [Buildroot] [PATCH 0/9] xenomai 3.x fixups and extra config options
-Message-ID: <20170419200007.12590-1-patrickdepinguin@gmail.com>
+Date: Wed, 19 Apr 2017 21:59:59 +0200
+Subject: [Buildroot] [PATCH 1/9] xenomai: update LICENSE_FILES
+In-Reply-To: <20170419200007.12590-1-patrickdepinguin@gmail.com>
+References: <20170419200007.12590-1-patrickdepinguin@gmail.com>
+Message-ID: <20170419200007.12590-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +12,34 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Between Xenomai 2.x and 3.x a number of changes happened in the Xenomai sources,
-which were not taken into account in Buildroot. This would e.g. result in extra
-unwanted files on the target root filesystem, or missing license files.
+Xenomai sources contain much more license files than we currently list, so
+complete the current list.
 
-The first part of this series, patches 1 to 7 deals with this problem.
-Patches 8 and 9 cover additional config options for Xenomai.
+Based on:
+    find | grep -Ei 'copying|license|copyright' | sort
 
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/xenomai/xenomai.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Thomas De Schampheleire (9):
-  xenomai: update LICENSE_FILES
-  xenomai: native skin is now called alchemy
-  xenomai: group skin selection in separate menu and cleanup
-  xenomai: add option for Smokey skin
-  xenomai: update list of Analogy installed files
-  xenomai: update list of testsuite files
-  xenomai: restrict installed files further
-  xenomai: add support for registry
-  xenomai: add string option for additional configure options
-
- package/xenomai/Config.in  | 64 ++++++++++++++++++++++++++++++++++++----------
- package/xenomai/xenomai.mk | 52 +++++++++++++++++++++++++++----------
- 2 files changed, 88 insertions(+), 28 deletions(-)
-
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 7c0ad34..456f200 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -15,7 +15,12 @@ XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stable
+ XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+ XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
+ # GFDL is not included but refers to gnu.org
+-XENOMAI_LICENSE_FILES = debian/copyright include/COPYING lib/trank/COPYING kernel/cobalt/COPYING
++XENOMAI_LICENSE_FILES = debian/copyright include/COPYING kernel/cobalt/COPYING \
++	kernel/cobalt/posix/COPYING kernel/cobalt/rtdm/COPYING \
++	lib/alchemy/COPYING lib/analogy/COPYING \
++	lib/boilerplate/iniparser/LICENSE lib/boilerplate/COPYING \
++	lib/cobalt/COPYING lib/copperplate/COPYING lib/psos/COPYING \
++	lib/smokey/COPYING lib/trank/COPYING lib/vxworks/COPYING
+ 
+ XENOMAI_DEPENDENCIES = host-pkgconf
+ 
 -- 
 2.10.2
