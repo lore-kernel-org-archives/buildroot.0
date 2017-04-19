@@ -1,78 +1,35 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 19 Apr 2017 12:08:14 -0400
-Subject: [Buildroot] [PATCH v3 1/2] cracklib: New package
-In-Reply-To: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
-References: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
-Message-ID: <CANxTyt4uGKF9vz=mSWkgBp8OGZHSE=qt2ZwccmXaBmN9uhc7-g@mail.gmail.com>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Wed, 19 Apr 2017 18:23:22 +0200
+Subject: [Buildroot]
+	=?iso-8859-1?q?=5BPATCH=5D_gcc=3A_Fix_build_failure_r?=
+	=?iso-8859-1?q?elated_to_-fPIC_for_x86=5F64_-=3E_i686_builds?=
+Message-ID: <71cfdaf7-367d-44de-a1c6-9041e269c8de@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan,
-
-On Wed, Apr 19, 2017 at 3:56 AM, Stefan S?rensen
-<stefan.sorensen@spectralink.com> wrote:
-...snip...
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# cracklib
-> +#
-> +################################################################################
-> +
-> +CRACKLIB_VERSION = 2.9.6
-> +CRACKLIB_SITE = https://github.com/cracklib/cracklib/releases/download/cracklib-$(CRACKLIB_VERSION)
-> +CRACKLIB_LICENSE = LGPL-2.1
-> +CRACKLIB_LICENSE_FILES = COPYING.LIB
-> +CRACKLIB_INSTALL_STAGING = YES
-> +CRACKLIB_DEPENDENCIES = host-cracklib
-
-It looks like cracklib's configure is checking for zlib.h.  To make
-the build reproducible, maybe you should add:
-
-ifeq ($(BR2_PACKAGE_ZLIB),y)
-CRACKLIB_CONF_OPTS += --with-zlib
-CRACKLIB_DEPENDENCIES += zlib
-else
-CRACKLIB_CONF_OPTS += --without-zlib
-endif
-
-HOST_CRACKLIB_CONF_OPTS += --without-zlib
-
-Regards,
-Danomi -
-
-
-> +
-> +ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
-> +CRACKLIB_EXTRA_DOWNLOADS = cracklib-words-$(CRACKLIB_VERSION).gz
-> +CRACKLIB_DICT_SOURCE = $(DL_DIR)/cracklib-words-$(CRACKLIB_VERSION).gz
-> +else
-> +CRACKLIB_DICT_SOURCE = $(@D)/dicts/cracklib-small
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
-> +define CRACKLIB_REMOVE_TOOLS
-> +       rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
-> +endef
-> +CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_REMOVE_TOOLS
-> +endif
-> +
-> +define CRACKLIB_BUILD_DICT
-> +       $(HOST_MAKE_ENV) cracklib-format $(CRACKLIB_DICT_SOURCE) | \
-> +               $(HOST_MAKE_ENV) cracklib-packer $(TARGET_DIR)/usr/share/cracklib/pw_dict
-> +       rm $(TARGET_DIR)/usr/share/cracklib/cracklib-small
-> +endef
-> +CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_BUILD_DICT
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> --
-> 2.9.3
+> Without this patch, I cannot build the toolchain (both host-gcc-initial
+> and -final) on Gentoo's amd64 using GCC 4.9.3:
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>   
+> /usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/../../../../x86_64-pc-linux-gnu/bin/ld:
+>   gcov.o: relocation R_X86_64_32 against `.rodata.str1.8' can not
+>   be used when making a shared object; recompile with -fPIC
+
+One important piece I forgot to add -- I'm running "Hardened Gentoo GCC" 
+which enables PIE by default [1] [2]. As such, this might explain why other 
+are (presumably) not seeing this problem.
+
+BTW, I cannot find my original submission on patchwork. Was that e-mail OK? 
+I see it in the ML archive [3].
+
+With kind regards,
+Jan
+
+[1] 
+https://wiki.gentoo.org/wiki/Hardened/Toolchain#Automatic_generation_of_Position_Independent_Executables_.28PIEs.29
+[2] 
+https://wiki.gentoo.org/wiki/Hardened/Toolchain#Toolchain_modifications_for_automatic_PIEs
+[3] http://lists.busybox.net/pipermail/buildroot/2017-April/189441.html
