@@ -1,116 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Apr 2017 10:07:42 +0100
-Subject: [Buildroot] [PATCH] libcurl: bump version to 7.54.0 (security)
-Message-ID: <20170419090742.33430-1-Vincent.Riera@imgtec.com>
+From: Semyon Kolganov <semenak94@mail.ru>
+Date: Wed, 19 Apr 2017 12:12:57 +0300
+Subject: [Buildroot] [PATCHv4] mpir: fix build failure
+In-Reply-To: <mpir: fix build failure>
+References: <mpir: fix build failure>
+Message-ID: <1492593177-18336-1-git-send-email-semenak94@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security fixes:
- - CVE-2017-7468: switch off SSL session id when client cert is used
+fixes:
 
-Full changelog: https://curl.haxx.se/changes.html
+ http://autobuild.buildroot.net/results/ecd/ecdde998c6763c14b2314d4513f15db95305fa11//
+ http://autobuild.buildroot.net/results/b4c/b4c65ad8f35299588de67917be5d020a7f641ce7//
 
-Removing 0001-CVE-2017-7407.patch. It's included in this release:
-  https://github.com/curl/curl/commit/1890d59905414ab84a35892b2e45833654aa5c13
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
 ---
- package/libcurl/0001-CVE-2017-7407.patch | 61 --------------------------------
- package/libcurl/libcurl.hash             |  2 +-
- package/libcurl/libcurl.mk               |  2 +-
- 3 files changed, 2 insertions(+), 63 deletions(-)
- delete mode 100644 package/libcurl/0001-CVE-2017-7407.patch
+Changes between v3 and v4:
+ - small formatting change
 
-diff --git a/package/libcurl/0001-CVE-2017-7407.patch b/package/libcurl/0001-CVE-2017-7407.patch
-deleted file mode 100644
-index 3a9fa48..0000000
---- a/package/libcurl/0001-CVE-2017-7407.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 6019f1795b4e3b72507b84b0e02dc8c32024f562 Mon Sep 17 00:00:00 2001
--From: Dan Fandrich <dan@coneharvesters.com>
--Date: Sat, 11 Mar 2017 10:59:34 +0100
--Subject: [PATCH] CVE-2017-7407: fixed
--
--Bug: https://curl.haxx.se/docs/adv_20170403.html
--
--Reported-by: Brian Carpenter
--[baruch: remove tests]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: based on upstream suggested patch[1] that combines commits
--1890d59905414ab and 8e65877870c1.
--
--[1] https://curl.haxx.se/CVE-2017-7407.patch
--
--diff --git a/src/tool_writeout.c b/src/tool_writeout.c
--index 2fb77742a..5d92bd278 100644
----- a/src/tool_writeout.c
--+++ b/src/tool_writeout.c
--@@ -3,11 +3,11 @@
--  *  Project                     ___| | | |  _ \| |
--  *                             / __| | | | |_) | |
--  *                            | (__| |_| |  _ <| |___
--  *                             \___|\___/|_| \_\_____|
--  *
--- * Copyright (C) 1998 - 2016, Daniel Stenberg, <daniel@haxx.se>, et al.
--+ * Copyright (C) 1998 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
--  *
--  * This software is licensed as described in the file COPYING, which
--  * you should have received as part of this distribution. The terms
--  * are also available at https://curl.haxx.se/docs/copyright.html.
--  *
--@@ -111,11 +111,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
--   char *stringp = NULL;
--   long longinfo;
--   double doubleinfo;
-- 
--   while(ptr && *ptr) {
---    if('%' == *ptr) {
--+    if('%' == *ptr && ptr[1]) {
--       if('%' == ptr[1]) {
--         /* an escaped %-letter */
--         fputc('%', stream);
--         ptr += 2;
--       }
--@@ -339,11 +339,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
--           fputc(ptr[1], stream);
--           ptr += 2;
--         }
--       }
--     }
---    else if('\\' == *ptr) {
--+    else if('\\' == *ptr && ptr[1]) {
--       switch(ptr[1]) {
--       case 'r':
--         fputc('\r', stream);
--         break;
--       case 'n':
---- 2.11.0
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 9c521e9..f8885e0 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 1c7207c06d75e9136a944a2e0528337ce76f15b9ec9ae4bb30d703b59bf530e8  curl-7.53.1.tar.bz2
-+sha256 f50ebaf43c507fa7cc32be4b8108fa8bbd0f5022e90794388f3c7694a302ff06  curl-7.54.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 0249f5c..6f4803e 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes between v2 and v3:
+ - fixed build for mips
+
+Changes between v1 and v2:
+ - removed unneeded depend on
+ - fixed build for powerpc
+---
+ package/mpir/mpir.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
+index 430d587..24cd00d 100644
+--- a/package/mpir/mpir.mk
++++ b/package/mpir/mpir.mk
+@@ -12,4 +12,18 @@ MPIR_LICENSE_FILES = COPYING.LIB
+ MPIR_INSTALL_STAGING = YES
+ MPIR_DEPENDENCIES = gmp host-yasm
  
--LIBCURL_VERSION = 7.53.1
-+LIBCURL_VERSION = 7.54.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
++ifeq ($(BR2_MIPS_NABI32),y)
++MPIR_CONF_OPTS += ABI=n32
++endif
++
++ifeq ($(BR2_MIPS_NABI64),y)
++MPIR_CONF_OPTS += ABI=n64
++endif
++
++ifeq ($(BR2_powerpc_CLASSIC),y)
++MPIR_CONF_OPTS += \
++	ABI=mode64 \
++	MPN_PATH=generic
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.10.2
+2.7.4
