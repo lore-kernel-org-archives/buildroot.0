@@ -1,82 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Apr 2017 10:25:51 +0100
-Subject: [Buildroot] [PATCH] mutt: bump version to 1.8.2
-Message-ID: <20170419092551.19105-1-Vincent.Riera@imgtec.com>
+From: =?UTF-8?B?U2VtZW4gS29sZ2Fub3Y=?= <semenak94@mail.ru>
+Date: Wed, 19 Apr 2017 12:37:13 +0300
+Subject: [Buildroot] =?utf-8?q?=5BPATCHv5=5D_mpir=3A_fix_build_failure?=
+Message-ID: <1492594633.190844194@f358.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-0001-nodoc.patch is no longer necessary since a new --disable-doc
-configure option has been added by this commit:
-  https://dev.mutt.org/hg/mutt/rev/b45bfce1bb0e
+fixes:
 
-Use that option and remove the patch. Since we are not patching
-Makefile.am we also don't need to autoreconf.
+? http://autobuild.buildroot.net/results/ecd/ecdde998c6763c14b2314d4513f15db95305fa11//
+? http://autobuild.buildroot.net/results/b4c/b4c65ad8f35299588de67917be5d020a7f641ce7//
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/mutt/0001-nodoc.patch | 21 ---------------------
- package/mutt/mutt.hash        |  2 +-
- package/mutt/mutt.mk          |  5 ++---
- 3 files changed, 3 insertions(+), 25 deletions(-)
- delete mode 100644 package/mutt/0001-nodoc.patch
+PATCHv4 is incorrect
 
-diff --git a/package/mutt/0001-nodoc.patch b/package/mutt/0001-nodoc.patch
-deleted file mode 100644
-index 6fd556d..0000000
---- a/package/mutt/0001-nodoc.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Disable the documentation build
--
--The documentation tool is compiled for the target, but executed on the
--host. We don't bother fixing this, as we don't care of the
--documentation in Buildroot.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: mutt-1.5.17+20080114/Makefile.am
--===================================================================
----- mutt-1.5.17+20080114.orig/Makefile.am	2010-05-15 18:15:08.000000000 +0200
--+++ mutt-1.5.17+20080114/Makefile.am	2010-05-15 18:15:17.000000000 +0200
--@@ -9,7 +9,7 @@
-- IMAP_INCLUDES = -I$(top_srcdir)/imap
-- endif
-- 
---SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR)
--+SUBDIRS = m4 po intl contrib $(IMAP_SUBDIR)
-- 
-- bin_SCRIPTS = muttbug flea @SMIMEAUX_TARGET@
-- 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 460cd5f..6df2638 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 e9c6f88e83d48690033f0d862a70293ac746286b77241554f5448bc23bd0d6df  mutt-1.7.1.tar.gz
-+sha256 1d057bf1b565f2c38ee50c9a661654cbbe4165f98e25bfa361ebbd707d96f235  mutt-1.8.2.tar.gz
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 8c3be5e..8ff6649 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 1.7.1
-+MUTT_VERSION = 1.8.2
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
- MUTT_DEPENDENCIES = ncurses
--MUTT_CONF_OPTS = --disable-smtp
--MUTT_AUTORECONF = YES
-+MUTT_CONF_OPTS = --disable-doc --disable-smtp
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MUTT_DEPENDENCIES += libiconv
--- 
-2.10.2
+Semyon
+---------------
+Semyon Kolganov
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170419/0a11fac1/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: v5-0001-mpir-fix-build-failure.patch
+Type: application/x-patch
+Size: 1108 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170419/0a11fac1/attachment.bin>
