@@ -1,89 +1,95 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 19 Apr 2017 12:11:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/opencv: fix static linking
-In-Reply-To: <20170419101142.13051-1-bernd.kuhls@t-online.de>
-References: <20170419101142.13051-1-bernd.kuhls@t-online.de>
-Message-ID: <20170419101142.13051-2-bernd.kuhls@t-online.de>
+Date: Wed, 19 Apr 2017 12:11:41 +0200
+Subject: [Buildroot] [PATCH 1/2] package/opencv: bump version to 2.4.13.2
+Message-ID: <20170419101142.13051-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes ffmpeg static linking
-http://autobuild.buildroot.net/results/7e6/7e67d7e6e33b52ce7fbb9cb180b2b9b19e116eee/
+Removed patch applied upstream:
+https://github.com/opencv/opencv/commit/c7045184ce220a04796d8e9072ac42d2d362dc71
+
+Renumbered remaining patches.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...enCVGenPkgconfig.cmake-fix-static-linking.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/opencv/0004-cmake-OpenCVGenPkgconfig.cmake-fix-static-linking.patch
+ ...xt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch} |  0
+ ...ypes_c.h-Fix-compiling-VFP-assembler-code.patch | 37 ----------------------
+ package/opencv/opencv.hash                         |  2 +-
+ package/opencv/opencv.mk                           |  2 +-
+ 4 files changed, 2 insertions(+), 39 deletions(-)
+ rename package/opencv/{0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch => 0003-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch} (100%)
+ delete mode 100644 package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
 
-diff --git a/package/opencv/0004-cmake-OpenCVGenPkgconfig.cmake-fix-static-linking.patch b/package/opencv/0004-cmake-OpenCVGenPkgconfig.cmake-fix-static-linking.patch
-new file mode 100644
-index 000000000..1f49dd8b4
---- /dev/null
-+++ b/package/opencv/0004-cmake-OpenCVGenPkgconfig.cmake-fix-static-linking.patch
-@@ -0,0 +1,60 @@
-+From 7969a6c89a4144216654de5419999a5a04c18c64 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Wed, 19 Apr 2017 11:26:00 +0200
-+Subject: [PATCH 1/1] cmake/OpenCVGenPkgconfig.cmake: fix static linking
-+
-+https://github.com/opencv/opencv/commit/671a630f47635ee8e44daf5ae6e94969ac4b8e0f#diff-9076fba682f6d51a018b6de8648e1cdb
-+updated the code to create opencv.pc to fix build errors in buildroot.
-+
-+In case of static-only builds with glib-enabled qt this however creates
-+a broken opencv.pc because libname gets truncated from libglib-2.0.a to
-+libglib-2, same is valid for libgobject-2.0.a and libgthread-2.0.a.
-+
-+CMake get_filename_component removes all extensions from the filename
-+https://cmake.org/cmake/help/v3.0/command/get_filename_component.html
-+which is too much for our use-case.
-+
-+opencv.pc currently contains -lgobject-2 -lglib-2 -lgthread-2, linking
-+against these libs will fail, for example in ffmpeg, because the files
-+do not exist:
-+http://autobuild.buildroot.net/results/7e6/7e67d7e6e33b52ce7fbb9cb180b2b9b19e116eee/build-end.log
-+
-+Quoting ffmpeg configure.log:
-+
-+i586-buildroot-linux-musl/bin/ld: cannot find -lgobject-2
-+i586-buildroot-linux-musl/bin/ld: cannot find -lglib-2
-+i586-buildroot-linux-musl/bin/ld: cannot find -lgthread-2
-+
-+Instead of using get_filename_component we need a function which only
-+strips the last extension, copied from openjpeg:
-+
-+https://github.com/uclouvain/openjpeg/commit/820c04c6799ea38aacd4e5d637073e6ab1ec643c#diff-53c915af197ccc28c0551ce6aae49af7R53
-+
-+Patch sent upstream: https://github.com/opencv/opencv/pull/8611
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ cmake/OpenCVGenPkgconfig.cmake | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
-+index 4c46e66f4..d4eb9b6d3 100644
-+--- a/cmake/OpenCVGenPkgconfig.cmake
-++++ b/cmake/OpenCVGenPkgconfig.cmake
-+@@ -74,7 +74,12 @@ if(OpenCV_EXTRA_COMPONENTS)
-+       list(APPEND OpenCV_LIB_COMPONENTS_ "${extra_component}")
-+     elseif(extra_component MATCHES "[\\/]")
-+       get_filename_component(libdir "${extra_component}" PATH)
-+-      get_filename_component(libname "${extra_component}" NAME_WE)
-++# cannot use longest extension function, since some libnames contain
-++# multiple dots, like libglib-2.0.a.
-++# Instead write out own shortest extension function:
-++      get_filename_component(libname "${extra_component}" NAME)
-++      string(FIND ${libname} "." SHORTEST_EXT_POS REVERSE)
-++      string(SUBSTRING ${libname} 0 ${SHORTEST_EXT_POS} libname)
-+       string(REGEX REPLACE "^lib" "" libname "${libname}")
-+       list(APPEND OpenCV_LIB_COMPONENTS_ "-L${libdir}" "-l${libname}")
-+     else()
-+-- 
-+2.11.0
-+
+diff --git a/package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch b/package/opencv/0003-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
+similarity index 100%
+rename from package/opencv/0004-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
+rename to package/opencv/0003-CMakeLists.txt-Do-not-add-libdl-to-LINKER_LIBS-for-s.patch
+diff --git a/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch b/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
+deleted file mode 100644
+index 85a23a074..000000000
+--- a/package/opencv/0003-types_c.h-Fix-compiling-VFP-assembler-code.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 18c868c47307b786d1bea729dccaad7f8d696cb7 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Tue, 6 Sep 2016 11:49:00 +0200
+-Subject: [PATCH 1/1] types_c.h: Fix compiling VFP assembler code
+-
+-Replace asm by __asm__ according to
+-https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html#Alternate-Keywords
+-as suggested by Arnout Vandecappelle:
+-http://lists.busybox.net/pipermail/buildroot/2016-September/171491.html
+-
+-to fix build errors in ffmpeg with opencv2 support detected by
+-buildroot autobuilders:
+-http://autobuild.buildroot.net/results/c32/c32a21240a9933796ee850349a62ff3c2314f25c/build-end.log
+-
+-Patch sent upstream: https://github.com/opencv/opencv/pull/7242
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- modules/core/include/opencv2/core/types_c.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/modules/core/include/opencv2/core/types_c.h b/modules/core/include/opencv2/core/types_c.h
+-index c21cd2c..771715d 100644
+---- a/modules/core/include/opencv2/core/types_c.h
+-+++ b/modules/core/include/opencv2/core/types_c.h
+-@@ -318,7 +318,7 @@ enum {
+-     int res; \
+-     float temp; \
+-     (void)temp; \
+--    asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
+-+    __asm__(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
+-     return res;
+- // 2. version for double
+- #ifdef __clang__
+--- 
+-2.9.3
+-
+diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+index 9686cb287..2c1842bd5 100644
+--- a/package/opencv/opencv.hash
++++ b/package/opencv/opencv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 94ebcca61c30034d5fb16feab8ec12c8a868f5162d20a9f0396f0f5f6d8bbbff  opencv-2.4.13.tar.gz
++sha256 4b00c110e6c54943cbbb7cf0d35c5bc148133ab2095ee4aaa0ac0a4f67c58080  opencv-2.4.13.2.tar.gz
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 4ae550e8c..ff5ab02b1 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENCV_VERSION = 2.4.13
++OPENCV_VERSION = 2.4.13.2
+ OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
+ OPENCV_INSTALL_STAGING = YES
+ OPENCV_LICENSE = BSD-3-Clause
 -- 
 2.11.0
