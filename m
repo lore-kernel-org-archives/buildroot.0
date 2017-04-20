@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 09:17:31 +0200
-Subject: [Buildroot] [RFC] Adopt a coding style for Python scripts
-In-Reply-To: <58f797c522aa7_548710f62c4102f@ultri3.mail>
-References: <ff7902df-d244-bbdd-507e-84bf6bc6f1f5@mind.be>
- <58f797c522aa7_548710f62c4102f@ultri3.mail>
-Message-ID: <20170420091731.3de60ee5@free-electrons.com>
+Date: Thu, 20 Apr 2017 09:20:15 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
+In-Reply-To: <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
+References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
+Message-ID: <20170420092015.3b2f7fbd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 19 Apr 2017 14:00:53 -0300, Ricardo Martincoski wrote:
+On Fri, 14 Apr 2017 19:00:32 +0200, Arnout Vandecappelle wrote:
 
-> > On 14-04-17 01:44, Ricardo Martincoski wrote:  
-> >> D) adopt the recommendation PEP8 [1] as coding style and the tool pep8 [2] as
-> >>    automatic checker for coding style before submitting patches;
-> >>    It checks for a subset of the recommendation (e.g. file naming is not
-> >>    checked).  
-> > 
-> >  For me, option D is great. It can also be added to the checkpackage script.  
-> 
-> I can look into this integration.
+>  This is the correct approach I think. I think we could also do this for all the
+> other cases where we have a -> busybox dependency just because they install the
+> same apps.
 
-I have nothing against option (D), but I'm wondering what is the
-relation with the checkpackage script. checkpackage checks packages,
-written in Kconfig and Make, what is the relation with complying with
-the Python PEP8 recommendation?
+Yes, I'm also wondering if it isn't better to disable the Busybox
+applets (like Matt does in this patch for ncurses) rather then
+overwriting the symlinks.
+
+First of all, overwriting the symlinks means that if you "make
+busybox-reinstall", you no longer get the right thing (for sure, we
+never guarantee that partial builds/rebuilds give the correct output,
+but it's nice when they do). And then of course, it means that there is
+code in Busybox, consuming some space, that is never used.
+
+The only annoyance that I can see is a potential blotification of
+busybox.mk, with lots of conditional for various packages.
 
 Best regards,
 
