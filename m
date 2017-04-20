@@ -1,35 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 20 Apr 2017 23:37:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpng: bump version to 1.6.29
-References: <20170408151713.11047-1-bernd.kuhls@t-online.de>
- <20170409155442.1be46375@free-electrons.com>
-Message-ID: <09mnsdx40n.ln2@ID-313208.user.individual.net>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 20 Apr 2017 19:32:51 -0300
+Subject: [Buildroot] glmark2 regression on mx6
+Message-ID: <CAOMZO5COcgkg7X1wpnqMfpD6=1YCqzmetMMCANrqbqA=a9moxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Gary,
 
-Am Sun, 09 Apr 2017 15:54:42 +0200 schrieb Thomas Petazzoni:
+I have just tested glmark2 with Buildroot master on imx6 and I got the
+following error:
 
-> So in the context of Buildroot, a value of "yes" would be more logical,
-> of course if the PPC processor has VSX instructions. Should we have
-> another BR2_<foo> Config.in option for VSX ?
+# glmark2-es2-drm
+** Failed to set swap interval. Results may be bounded above by refresh rate.
+=======================================================
+    glmark2 2014.03
+=======================================================
+    OpenGL Information
+    GL_VENDOR:     etnaviv
+    GL_RENDERER:   Gallium 0.4 on Vivante GC2000 rev 5108
+    GL_VERSION:    OpenGL ES 2.0 Mesa 17.0.3
+=======================================================
+** Failed to set swap interval. Results may be bounded above by refresh rate.
+[build] use-vbo=false:Segmentation fault
 
-Maybe, but sorry, I do not know enough about the ppc arch to provide 
-patches for it so I removed the option in v2:
-http://patchwork.ozlabs.org/patch/753019/
+Before I start investigating this problem, I would like to know if you
+have already seen this issue or if you have any suggestions.
 
-While compiling ppc toolchains I got errors like these discussed in 2016:
-http://lists.busybox.net/pipermail/buildroot/2016-July/167298.html
+Thanks,
 
-> It would be nice to use --enable-<foo> / --disable-<foo> instead of
-> --enable-foo=yes / --enable-foo=no. I know there's an existing instance
-> of that of libpng.mk, but it would be good to clean it up in a
-> preparation patch.
-
-Done: http://patchwork.ozlabs.org/patch/753018/
-
-Regards, Bernd
+Fabio Estevam
