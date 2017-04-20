@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 22:27:53 +0200
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.18
-In-Reply-To: <1faf3e6543a43776864a74191a7e55d6a0f7d7fd.1492687289.git.baruch@tkos.co.il>
-References: <1faf3e6543a43776864a74191a7e55d6a0f7d7fd.1492687289.git.baruch@tkos.co.il>
-Message-ID: <20170420222753.1f63df36@free-electrons.com>
+Date: Thu, 20 Apr 2017 22:28:00 +0200
+Subject: [Buildroot] [PATCH 1/2] zic: bump to version 2017b
+In-Reply-To: <b5df99b2be617b084054ed74b46ea055b5d0899c.1492689766.git.baruch@tkos.co.il>
+References: <b5df99b2be617b084054ed74b46ea055b5d0899c.1492689766.git.baruch@tkos.co.il>
+Message-ID: <20170420222800.06a57496@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Apr 2017 14:21:29 +0300, Baruch Siach wrote:
+On Thu, 20 Apr 2017 15:02:45 +0300, Baruch Siach wrote:
+> Cc: Martin Bark <martin@barkynet.com>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/dbus/dbus.hash | 2 +-
->  package/dbus/dbus.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/zic/zic.hash | 4 ++--
+>  package/zic/zic.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
