@@ -1,41 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 09:20:15 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
-In-Reply-To: <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
-References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
- <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
-Message-ID: <20170420092015.3b2f7fbd@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 20 Apr 2017 09:35:50 +0000
+Subject: [Buildroot] [Bug 9826] New: post-build scritp - symlinks created in
+ post-build script are overwritten after exit of the script
+Message-ID: <bug-9826-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9826
 
-On Fri, 14 Apr 2017 19:00:32 +0200, Arnout Vandecappelle wrote:
+            Bug ID: 9826
+           Summary: post-build scritp - symlinks created in post-build
+                    script are overwritten after exit of the script
+           Product: buildroot
+           Version: 2017.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: timo.valimaki at sensoan.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
->  This is the correct approach I think. I think we could also do this for all the
-> other cases where we have a -> busybox dependency just because they install the
-> same apps.
+I'm trying to symlink  /etc/group, /etc/passwd and /etc/shadow to RW partition,
+in my case to /data/etc (rootfs-overlay).
 
-Yes, I'm also wondering if it isn't better to disable the Busybox
-applets (like Matt does in this patch for ncurses) rather then
-overwriting the symlinks.
 
-First of all, overwriting the symlinks means that if you "make
-busybox-reinstall", you no longer get the right thing (for sure, we
-never guarantee that partial builds/rebuilds give the correct output,
-but it's nice when they do). And then of course, it means that there is
-code in Busybox, consuming some space, that is never used.
+I created a post-build that moves above files to /data/etc/ directory and
+creates symlinks pointing to the moved files. When I'm pausing my post-build
+script just before the exit everything is looking fine.
 
-The only annoyance that I can see is a potential blotification of
-busybox.mk, with lots of conditional for various packages.
+/output/target:
 
-Best regards,
+lrwxrwxrwx  1 timo timo    17 huhti 20 12:24 group -> ../data/etc/group
+lrwxrwxrwx  1 timo timo    18 huhti 20 12:24 passwd -> ../data/etc/passwd
+lrwxrwxrwx  1 timo timo    18 huhti 20 12:24 shadow -> ../data/etc/shadow
 
-Thomas
+But when the Buildroot build is finished the above symlinks are overwritten
+-rw-r--r--  1 timo timo   320 huhti 20 12:29 group
+-rw-r--r--  1 timo timo   389 huhti 20 12:29 passwd
+-rw-------  1 timo timo   291 huhti 20 12:29 shadow
+
+Q: Is this as specified or a bug?
+Q: If as specified, what is correct way to symlink above files?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
