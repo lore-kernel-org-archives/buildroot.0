@@ -1,44 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 20 Apr 2017 15:33:52 +0300
-Subject: [Buildroot] [PATCH] zsh: bump to version 5.3.1
-Message-ID: <030236122406c9e436467c40fd5ce4eb4c9d254b.1492691632.git.baruch@tkos.co.il>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 20 Apr 2017 08:01:30 -0500
+Subject: [Buildroot] [PATCH 1/1] busybox: ncurses progs equiv as default
+In-Reply-To: <20170420040019.bjfwlwaknjvrj33c@tarshish>
+References: <1492654408-25342-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170420040019.bjfwlwaknjvrj33c@tarshish>
+Message-ID: <CANQCQpZ_6yXNSgpNLGmGLmNwGRsQy84EUPkDoCBMhOTuh49Jsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Phil Eichinger <phil.eichinger@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/zsh/zsh.hash | 6 +++---
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Baruch,
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 0eeebd43f4b8..9c6acf336ff3 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,4 +1,4 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	c5ba34e68fcf62a2e78adc56bf3d328a	zsh-5.3.tar.xz
--# Calculated based on the hash above
--sha256	76f82cfd5ce373cf799a03b6f395283f128430db49202e3e3f512fb5a19d6f8a	zsh-5.3.tar.xz
-+md5	67d3e5ed99de68340c16aef613b0ecf7	zsh-5.3.1.tar.xz
-+# Calculated based on the hash above and after checking signature
-+sha256	fc886cb2ade032d006da8322c09a7e92b2309177811428b121192d44832920da	zsh-5.3.1.tar.xz
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 9d11b9713df0..779114e5ea38 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZSH_VERSION = 5.3
-+ZSH_VERSION = 5.3.1
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
--- 
-2.11.0
+On Wed, Apr 19, 2017 at 11:00 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Matt,
+>
+> On Wed, Apr 19, 2017 at 09:13:28PM -0500, Matt Weber wrote:
+>> By default, enable the busybox equivalents of the ncurses
+>> clear and reset if ncurses progs are not enabled.
+>
+> Our default busybox.config enables these applets. If the user chooses to
+> disable them in a custom config, why should we force them back on?
+>
+
+True, I was thinking the use case of build time changing (then doing
+incremental build)if you use ncurses progs vs not and forcing the
+busybox reconfig to have it update the target folder respectively.
+
+I agree this isn't' ideal for all situations, but with these being
+terminal tools, would/should you ever turn them off and the amount of
+code is small?
+
+Other discussion related to this:
+https://patchwork.ozlabs.org/patch/750264/
+https://patchwork.ozlabs.org/patch/750721/
+
+-Matt
