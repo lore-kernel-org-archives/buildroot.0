@@ -1,60 +1,40 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 20 Apr 2017 08:03:53 -0400
-Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
-In-Reply-To: <20170420092015.3b2f7fbd@free-electrons.com>
-References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
- <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
- <20170420092015.3b2f7fbd@free-electrons.com>
-Message-ID: <CANxTyt7Ay4c2s2xhMf7kyqWs=1dVXAz+OJu8rv-ch72Oza-=YQ@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 20 Apr 2017 13:32:19 +0100
+Subject: [Buildroot] [PATCH] bind: bump version to 9.11.1
+Message-ID: <20170420123219.11807-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, Apr 20, 2017 at 3:20 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 14 Apr 2017 19:00:32 +0200, Arnout Vandecappelle wrote:
->
->>  This is the correct approach I think. I think we could also do this for all the
->> other cases where we have a -> busybox dependency just because they install the
->> same apps.
->
-> Yes, I'm also wondering if it isn't better to disable the Busybox
-> applets (like Matt does in this patch for ncurses) rather then
-> overwriting the symlinks.
->
-> First of all, overwriting the symlinks means that if you "make
-> busybox-reinstall", you no longer get the right thing (for sure, we
-> never guarantee that partial builds/rebuilds give the correct output,
-> but it's nice when they do).
-
-Actually, I think this situation is prevented by "busybox: enable
-noclobber option in install.sh",
-https://git.buildroot.net/buildroot/commit/?id=802bff9c42376078f28aa49d3eab630120940eb0
-
-But of course, the bloat factor is there regardless.
-
-Danomi -
-
-> And then of course, it means that there is
-> code in Busybox, consuming some space, that is never used.
->
-> The only annoyance that I can see is a potential blotification of
-> busybox.mk, with lots of conditional for various packages.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 8d44d99..9a7fb44 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P5/bind-9.11.0-P5.tar.gz.sha256.asc
+-sha256 1e283f0567b484687dfd7b936e26c9af4f64043daf73cbd8f3eb1122c9fb71f5  bind-9.11.0-P5.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.1/bind-9.11.1.tar.gz.sha256.asc
++sha256 22050095f5c82a1385cc4174190ac60392670bbc5d63d592ecae52a214bc10b2  bind-9.11.1.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 4290455..9c67601 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.0-P5
++BIND_VERSION = 9.11.1
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
+-- 
+2.10.2
