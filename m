@@ -1,93 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 22:33:56 +0200
-Subject: [Buildroot] [git commit] xenomai: group skin selection in separate
-	menu and cleanup
-Message-ID: <20170420211016.C3FAC817E3@busybox.osuosl.org>
+Date: Thu, 20 Apr 2017 22:34:08 +0200
+Subject: [Buildroot] [git commit] xenomai: add option for Smokey skin
+Message-ID: <20170420211016.D1F6B827F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d04d88b780bef14ef642ae026c45323c0c16456
+commit: https://git.buildroot.net/buildroot/commit/?id=83f3b353ef403c4cbe17624c563ca2fba269ef92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Clarify the Xenomai config options by grouping the skin-related options in a
-separate menu.
+Xenomai has a skin 'Smokey' that Buildroot is currently unaware of, which
+means that the associated files are present on target even though most users
+will not need them.
 
-Additionally:
-- update proper capitalization of skin names
-- sort entries
-- replace 'skin library' by 'skin' to match the terminology in Xenomai
-  sources
+Add a config option and associated logic to remove the skin if not selected.
+
+Additionally, fixup order of VxWorks skin removal entry.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xenomai/Config.in | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ package/xenomai/Config.in  | 5 +++++
+ package/xenomai/xenomai.mk | 6 +++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index e633896..31d63f1 100644
+index 31d63f1..d6474bd 100644
 --- a/package/xenomai/Config.in
 +++ b/package/xenomai/Config.in
-@@ -112,42 +112,46 @@ config BR2_PACKAGE_XENOMAI_ANALOGY
- 	  This option allows to install the Xenomai Analogy utilities
- 	  and libraries
- 
-+menu "Skin selection"
-+
- config BR2_PACKAGE_XENOMAI_NATIVE_SKIN
--	bool "Alchemy (native) skin library"
-+	bool "Alchemy (native) skin"
- 	default y
- 	help
- 	  This option allows to install the Alchemy Xenomai skin, previously
- 	  called 'native'
- 
- config BR2_PACKAGE_XENOMAI_POSIX_SKIN
--	bool "POSIX skin library"
-+	bool "POSIX skin"
- 	default y
- 	help
- 	  This option allows to install the POSIX Xenomai skin
- 
--config BR2_PACKAGE_XENOMAI_VXWORKS_SKIN
--	bool "VX-Works skin library"
--	help
--	  This option allows to install the VX-Works Xenomai skin
--
- config BR2_PACKAGE_XENOMAI_PSOS_SKIN
--	bool "PSOS skin library"
-+	bool "pSOS skin"
- 	help
--	  This option allows to install the PSOS Xenomai skin
-+	  This option allows to install the pSOS Xenomai skin
- 
- config BR2_PACKAGE_XENOMAI_RTAI_SKIN
--	bool "RTAI skin library"
-+	bool "RTAI skin"
+@@ -137,6 +137,11 @@ config BR2_PACKAGE_XENOMAI_RTAI_SKIN
  	help
  	  This option allows to install the RTAI Xenomai skin
  
- config BR2_PACKAGE_XENOMAI_UITRON_SKIN
--	bool "uiTron skin library"
-+	bool "uITRON skin"
- 	help
--	  This option allows to install the uiTron Xenomai skin
-+	  This option allows to install the uITRON Xenomai skin
- 
- config BR2_PACKAGE_XENOMAI_VRTX_SKIN
--	bool "VRTX skin library"
-+	bool "VRTX skin"
- 	help
- 	  This option allows to install the VRTX Xenomai skin
- 
-+config BR2_PACKAGE_XENOMAI_VXWORKS_SKIN
-+	bool "VxWorks skin"
++config BR2_PACKAGE_XENOMAI_SMOKEY_SKIN
++	bool "Smokey skin"
 +	help
-+	  This option allows to install the VxWorks Xenomai skin
++	  This option allows to install the Smokey Xenomai skin
 +
-+endmenu
-+
- endif
+ config BR2_PACKAGE_XENOMAI_UITRON_SKIN
+ 	bool "uITRON skin"
+ 	help
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index e93fcf4..0866144 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -94,10 +94,11 @@ endif
+ 
+ XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,alchemy)
+ XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
+-XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
+ XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
+ XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_SMOKEY_SKIN),,smokey)
+ XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
+ XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
+ 
+ define XENOMAI_REMOVE_SKINS
+@@ -106,6 +107,9 @@ define XENOMAI_REMOVE_SKINS
+ 		if [ $$i == "posix" ] ; then \
+ 			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
+ 		fi ; \
++		if [ $$i == "smokey" ] ; then \
++			rm -f $(TARGET_DIR)/usr/bin/smokey* ; \
++		fi ; \
+ 	done
+ endef
+ 
