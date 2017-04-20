@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 22:28:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/eudev: bump version to 3.2.2
-In-Reply-To: <20170420070613.19595-1-bernd.kuhls@t-online.de>
-References: <20170420070613.19595-1-bernd.kuhls@t-online.de>
-Message-ID: <20170420222820.136846d2@free-electrons.com>
+Date: Thu, 20 Apr 2017 22:28:24 +0200
+Subject: [Buildroot] [PATCH] download/git: clarify why .git is removed
+In-Reply-To: <20170420063647.30741-1-ricardo.martincoski@gmail.com>
+References: <20170420063647.30741-1-ricardo.martincoski@gmail.com>
+Message-ID: <20170420222824.1d5954d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Apr 2017 09:06:13 +0200, Bernd Kuhls wrote:
-> Removed patch 0001 applied upstream:
-> https://github.com/gentoo/eudev/commit/c0f63850ad29ec978d070a08b816dc2bfca337e3
+On Thu, 20 Apr 2017 03:36:47 -0300, Ricardo Martincoski wrote:
+> The removal of the .git dir before creating the tarball is not anymore
+> just an optimization. It is necessary to make the tarball reproducible.
+> Also, without the removal, large tarballs (gigabytes) would be created
+> for some linux trees.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Update the comment accordingly.
+> 
+> Reported-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > ---
->  .../0002-missing-defines-for-old-kernels.patch     | 44 ----------------------
->  package/eudev/eudev.hash                           |  4 +-
->  package/eudev/eudev.mk                             |  2 +-
->  3 files changed, 3 insertions(+), 47 deletions(-)
->  delete mode 100644 package/eudev/0002-missing-defines-for-old-kernels.patch
+> first removing .git, then not removing .git
+>      630730 fio-fio-2.13.tar.gz
+>     1369791 fio-fio-2.13.tar.gz
 
 Applied to master, thanks.
 
