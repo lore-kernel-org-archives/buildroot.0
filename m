@@ -1,71 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 22:34:08 +0200
-Subject: [Buildroot] [git commit] xenomai: add option for Smokey skin
-Message-ID: <20170420211016.D1F6B827F8@busybox.osuosl.org>
+Date: Thu, 20 Apr 2017 22:34:59 +0200
+Subject: [Buildroot] [git commit] xenomai: restrict installed files further
+Message-ID: <20170420211017.0B49981E81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83f3b353ef403c4cbe17624c563ca2fba269ef92
+commit: https://git.buildroot.net/buildroot/commit/?id=a12bcb7ff3fb7254358c70e7a4b20f716ce3ff03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Xenomai has a skin 'Smokey' that Buildroot is currently unaware of, which
-means that the associated files are present on target even though most users
-will not need them.
+Xenomai 3 installs quite some utils and other programs to the target
+filesystem, many of which will not be used by most users.
 
-Add a config option and associated logic to remove the skin if not selected.
+As it is currently unclear which utils are effectively useful, and as it is
+undesirable to create config options for each individual util, remove all
+remaining utils such that only the Xenomai libraries remain.
 
-Additionally, fixup order of VxWorks skin removal entry.
+At the point it becomes clear that certain utils _are_ desired by some
+users, we can identify how to group them in relevant config options.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xenomai/Config.in  | 5 +++++
- package/xenomai/xenomai.mk | 6 +++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/xenomai/xenomai.mk | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 31d63f1..d6474bd 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -137,6 +137,11 @@ config BR2_PACKAGE_XENOMAI_RTAI_SKIN
- 	help
- 	  This option allows to install the RTAI Xenomai skin
- 
-+config BR2_PACKAGE_XENOMAI_SMOKEY_SKIN
-+	bool "Smokey skin"
-+	help
-+	  This option allows to install the Smokey Xenomai skin
-+
- config BR2_PACKAGE_XENOMAI_UITRON_SKIN
- 	bool "uITRON skin"
- 	help
 diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index e93fcf4..0866144 100644
+index 30bdcdb..99f62f0 100644
 --- a/package/xenomai/xenomai.mk
 +++ b/package/xenomai/xenomai.mk
-@@ -94,10 +94,11 @@ endif
+@@ -45,13 +45,19 @@ else
+ XENOMAI_CONF_OPTS += --disable-smp
+ endif
  
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,alchemy)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
--XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_SMOKEY_SKIN),,smokey)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
- XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
- 
- define XENOMAI_REMOVE_SKINS
-@@ -106,6 +107,9 @@ define XENOMAI_REMOVE_SKINS
- 		if [ $$i == "posix" ] ; then \
- 			rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
- 		fi ; \
-+		if [ $$i == "smokey" ] ; then \
-+			rm -f $(TARGET_DIR)/usr/bin/smokey* ; \
-+		fi ; \
+-define XENOMAI_REMOVE_DEVFILES
+-	for i in xeno-config xeno-info wrap-link.sh ; do \
++# Some of these files may be desired by some users -- at that point specific
++# config options need to be added to keep a particular set.
++define XENOMAI_REMOVE_UNNEEDED_FILES
++	for i in xeno xeno-config xeno-info wrap-link.sh ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
  	done
++	for i in autotune corectl hdb rtnet nomaccfg rtcfg rtifconfig \
++		rtiwconfig rtping rtroute tdmacfg rtps slackspot version; do \
++		rm -f $(TARGET_DIR)/usr/sbin/$$i ; \
++	done
  endef
  
+-XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DEVFILES
++XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_UNNEEDED_FILES
+ 
+ ifeq ($(BR2_PACKAGE_XENOMAI_TESTSUITE),)
+ define XENOMAI_REMOVE_TESTSUITE
