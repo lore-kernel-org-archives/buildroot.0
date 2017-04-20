@@ -1,182 +1,252 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 20 Apr 2017 20:34:29 +0300
-Subject: [Buildroot] [PATCH 2/2] libnss: security bump to version 3.30.2
-In-Reply-To: <d86176bbf66ac3fbbdc5a47456314bd68006df13.1492709669.git.baruch@tkos.co.il>
-References: <d86176bbf66ac3fbbdc5a47456314bd68006df13.1492709669.git.baruch@tkos.co.il>
-Message-ID: <f4dcb1e701fce76f7f18bd8dfff60b1f2fdb2a4f.1492709669.git.baruch@tkos.co.il>
+From: abhimanyu.v at gmail.com <abhimanyu.v@gmail.com>
+Date: Thu, 20 Apr 2017 23:23:44 +0530
+Subject: [Buildroot] [PATCH v8 2/2] Add defconfig for MIPS Creator ci40
+In-Reply-To: <00a41e1f-2b06-a715-4d96-b317af6e2890@mind.be>
+References: <20170416174048.4737-1-abhimanyu.v@gmail.com>
+ <20170416174048.4737-2-abhimanyu.v@gmail.com>
+ <00a41e1f-2b06-a715-4d96-b317af6e2890@mind.be>
+Message-ID: <CA+V_ovvHApxEs-0xcUs-EX52GmLC4tuKQY2y2oXsWafK4=ySgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2017-5461 - Out-of-bounds write in Base64 encoding in NSS. Might cause
-remote arbitrary code execution
-(https://access.redhat.com/errata/RHSA-2017:1100).
+Thankyou again for review Arnout!
+Sorry for late reply as was out of station!
 
-CVE-2017-5462 - DRBG flaw in NSS
+On Tue, Apr 18, 2017 at 5:12 PM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
 
-Drop 0001-cross-compile.patch and TARGET* variables. Upstream Makefile now
-allows override of CC, so use TARGET_CONFIGURE_OPTS instead.
+>  Hi Abhimanyu,
+>
+>  I have a few tiny improvement suggestions still, but it looks good
+> already so
+> on your next iteration (with the improved genimage.sh) you can add my
+>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> On 16-04-17 19:40, Abhimanyu Vishwakarma wrote:
+> > From: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+> >
+> > Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
+>
+> [snip]
+> > diff --git a/board/ci40/post-build.sh b/board/ci40/post-build.sh
+> > new file mode 100755
+> > index 000000000..978ced585
+> > --- /dev/null
+> > +++ b/board/ci40/post-build.sh
+> > @@ -0,0 +1,4 @@
+> > +#!/bin/bash
+>
+>  It's a bit of a personal preference: when the script doesn't rely on
+> bashisms,
+> I prefer to use /bin/sh instead of /bin/bash.
+>
+>
+Will do it.
 
-Drop upstream 0003-it-uninitialized-fix.patch.
 
-Renumber the remaining patch.
+> > +
+> > +# Copy to target
+> > +cp ${BINARIES_DIR}/vmlinux.gz.itb ${TARGET_DIR}/fitImage
+> > diff --git a/board/ci40/readme.txt b/board/ci40/readme.txt
+> > new file mode 100644
+> > index 000000000..9d399c850
+> > --- /dev/null
+> > +++ b/board/ci40/readme.txt
+> > @@ -0,0 +1,64 @@
+> > +*********************
+> > +* MIPS Creator CI40 *
+> > +*********************
+> > +
+> > +This document details how to build and run a Buildroot system on the
+> > +MIPS Creator CI40 platform. For more details about the CI40, see
+> > +https://creatordev.io/ci40-iot-hub.html.
+> > +
+> > +How to build
+> > +------------
+> > +
+> > +$ make ci40_defconfig
+> > +$ make
+> > +
+> > +Prepare USB/MMC for boot
+> > +------------------------
+> > +
+> > +On successful build, "sdcard.img" file will be created in
+> 'output/images'
+> > +folder.
+> > +
+> > +Use following command to write image to bootable device
+> > +
+> > +# dd if=./output/images/sdcard.img of=/dev/<your-microsd-or-usb-device>
+>
+>  You could add here something like:
+>
+> You usually have to be root to be allowed to do this
+>
+> of just put sudo in front of the command line example (and start it with $
+> instead of #, of course).
+>
+>
+Thanks will update.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-Backport note: depends on libnspr version 4.14
----
- package/libnss/0001-cross-compile.patch            | 48 ----------------------
- .../{0002-uclibc.patch => 0001-uclibc.patch}       |  0
- package/libnss/0003-it-uninitialized-fix.patch     | 24 -----------
- package/libnss/libnss.hash                         |  4 +-
- package/libnss/libnss.mk                           | 12 ++----
- 5 files changed, 6 insertions(+), 82 deletions(-)
- delete mode 100644 package/libnss/0001-cross-compile.patch
- rename package/libnss/{0002-uclibc.patch => 0001-uclibc.patch} (100%)
- delete mode 100644 package/libnss/0003-it-uninitialized-fix.patch
+> +
+> > +Booting from USB/MMC
+> > +--------------------
+> > +
+> > +The boot loader is already present in NOR flash. To boot your newly
+> generated
+> > +Linux and root filesystem, you need to interrupt U-Boot autoboot.
+> Current
+> > +U-Boot is configured with 2 seconds of boot-delay, after expiry of this
+> > +boot-delay timeout U-Boot starts booting the default image. To interrupt
+> > +autoboot, press any key before the boot-delay time expires, U-Boot will
+> > +stop the autoboot process and give a U-Boot prompt. You can now boot to
+> > +your preferred boot method as describe below:
+>
+>  A little bit verbose, but very clear!
+>
+>
+Thankyou :)
 
-diff --git a/package/libnss/0001-cross-compile.patch b/package/libnss/0001-cross-compile.patch
-deleted file mode 100644
-index 31de71bc5add..000000000000
---- a/package/libnss/0001-cross-compile.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--This patch allows us to set a value for the cross compiler via TARGETCC without
--setting CC on the command line. CC is used for host tools as well as cross
--compiled code so we cannot define it on the command line without breaking
--the host tools build.
--
--[Gustavo: update for nss 3.16.1]
--[baruch: add OPTIMIZER handling]
--Signed-off-by: Will Newton <will.newton@imgtec.com>
--
--diff -Nuar nss-3.16.1-orig/nss/coreconf/Linux.mk nss-3.16.1/nss/coreconf/Linux.mk
----- nss-3.16.1-orig/nss/coreconf/Linux.mk	2014-05-02 06:27:18.000000000 +0300
--+++ nss-3.16.1/nss/coreconf/Linux.mk	2014-07-01 02:38:18.701480512 +0300
--@@ -16,9 +16,13 @@
-- 	IMPL_STRATEGY = _PTH
-- endif
-- 
---CC			= gcc
---CCC			= g++
---RANLIB			= ranlib
--+TARGETCC		= gcc
--+TARGETCCC		= g++
--+TARGETRANLIB		= ranlib
--+
--+CC			= $(TARGETCC)
--+CCC			= $(TARGETCCC)
--+RANLIB			= $(TARGETRANLIB)
-- 
-- DEFAULT_COMPILER = gcc
-- 
--@@ -125,6 +129,7 @@
-- endif
-- endif
-- 
--+OPTIMIZER = $(TARGET_OPTIMIZER)
-- 
-- ifeq ($(USE_PTHREADS),1)
-- OS_PTHREAD = -lpthread 
--diff -Nuar nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile nss-3.16.1/nss/coreconf/nsinstall/Makefile
----- nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile	2014-05-02 06:27:18.000000000 +0300
--+++ nss-3.16.1/nss/coreconf/nsinstall/Makefile	2014-07-01 02:38:48.102185011 +0300
--@@ -31,6 +31,7 @@
-- 
-- ifdef NATIVE_FLAGS
-- OS_CFLAGS=$(NATIVE_FLAGS)
--+OPTIMIZER=
-- endif
-- 
-- include $(DEPTH)/coreconf/rules.mk
-diff --git a/package/libnss/0002-uclibc.patch b/package/libnss/0001-uclibc.patch
-similarity index 100%
-rename from package/libnss/0002-uclibc.patch
-rename to package/libnss/0001-uclibc.patch
-diff --git a/package/libnss/0003-it-uninitialized-fix.patch b/package/libnss/0003-it-uninitialized-fix.patch
-deleted file mode 100644
-index 7736c6a939c8..000000000000
---- a/package/libnss/0003-it-uninitialized-fix.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--# HG changeset patch
--# User catdesk <catdesk@tuta.io>
--# Date 1477710600 -7200
--#      Sat Oct 29 05:10:00 2016 +0200
--# Node ID b9ef971b94ab110302d49255339077bc1b4aed7f
--# Parent  eb8c96563cd70aa69d48b01516085f7d2fb46178
--Bug 1313846 - Declare 'it = NULL' earlier. r=franziskus
--
--[Thomas: patch taken from upstream mercurial repository, revision
--12791.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--diff -r eb8c96563cd7 -r b9ef971b94ab lib/jar/jarfile.c
----- a/nss/lib/jar/jarfile.c	Mon Oct 31 17:31:20 2016 +0100
--+++ b/nss/lib/jar/jarfile.c	Sat Oct 29 05:10:00 2016 +0200
--@@ -657,7 +657,7 @@
-- jar_listzip(JAR *jar, JAR_FILE fp)
-- {
--     ZZLink *ent;
---    JAR_Item *it;
--+    JAR_Item *it = NULL;
--     JAR_Physical *phy = NULL;
--     struct ZipLocal *Local = PORT_ZNew(struct ZipLocal);
--     struct ZipCentral *Central = PORT_ZNew(struct ZipCentral);
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 975e52d23850..7be7e48a6951 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_27_2_RTM/src/SHA256SUMS
--sha256	dc8ac8524469d0230274fd13a53fdcd74efe4aa67205dde1a4a92be87dc28524	nss-3.27.2.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_30_2_RTM/src/SHA256SUMS
-+sha256	0d4a77ff26bcee79fa8afe0125e0df6ae9e798b6b36782fa29e28febf7cfce24	nss-3.30.2.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index d624cde09507..1e157df1df3c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.27.2
-+LIBNSS_VERSION = 3.30.2
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
-@@ -33,9 +33,6 @@ LIBNSS_BUILD_VARS = \
- 	NSS_USE_SYSTEM_SQLITE=1 \
- 	NSS_ENABLE_ECC=1 \
- 	NATIVE_CC="$(HOSTCC)" \
--	TARGETCC="$(TARGET_CC)" \
--	TARGETCCC="$(TARGET_CXX)" \
--	TARGETRANLIB="$(TARGET_RANLIB)" \
- 	OS_ARCH="Linux" \
- 	OS_RELEASE="2.6" \
- 	OS_TEST="$(ARCH)"
-@@ -55,17 +52,16 @@ endif
- endif
- 
- define LIBNSS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/nss coreconf \
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/nss coreconf \
- 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
- 		CHECKLOC= \
- 		$(LIBNSS_BUILD_VARS)
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/nss lib/dbm all \
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/nss lib/dbm all \
- 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
- 		CHECKLOC= \
--		$(LIBNSS_BUILD_VARS) TARGET_OPTIMIZER="$(TARGET_CFLAGS)" \
--		NATIVE_FLAGS="$(HOST_CFLAGS)"
-+		$(LIBNSS_BUILD_VARS) NATIVE_FLAGS="$(HOST_CFLAGS)"
- endef
- 
- define LIBNSS_INSTALL_STAGING_CMDS
--- 
-2.11.0
+
+> > +
+> > +From USB
+> > +  pistachio # run usbboot
+> > +
+> > +From SD-Card
+> > +  pistachio # run mmcboot
+> > +
+> > +Persistent boot command
+> > +-----------------------
+> > +
+> > +To boot automatically to your preferred boot method, use following
+> command to
+> > +make it persistent, for example to automatically boot to usb:
+> > +
+> > +  pistachio # setenv bootcmd run usbboot
+> > +  pistachio # saveenv
+> > +
+> > +Flash new bootloader
+> > +--------------------
+> > +
+> > +Bootloader image will be available in 'output/images' folder.
+> > +Use following command to flash new bootloader:
+> > +
+> > +# flashcp -v u-boot-pistachio_marduk-<version>.img /dev/mtd0
+>
+>  Although you were asked before to make this section shorter, I think it's
+> a
+> little bit too terse now. How about
+>
+> The bootloader image will be available in the 'output/images' folder. To
+> flash
+> the new bootloader, copy it to the device and use the following command on
+> the
+> device:
+>
+> # flashcp -v u-boot-pistachio_marduk-<version>.img /dev/mtd0
+>
+>
+It look good to me. I will also use the above comment to use sudo here too!
+
+
+> > +
+> > +Online docs
+> > +-----------
+> > +
+> > +Mostly for OpenWRT but it is applicable to Buildroot
+> > +https://docs.creatordev.io/ci40/guides/openwrt-platform/#overview
+> > +
+> > diff --git a/configs/ci40_defconfig b/configs/ci40_defconfig
+> > new file mode 100644
+> > index 000000000..2ea3afe47
+> > --- /dev/null
+> > +++ b/configs/ci40_defconfig
+> > @@ -0,0 +1,48 @@
+> > +# architecture
+> > +BR2_mipsel=y
+> > +BR2_mips_32r2=y
+>
+>  Perhaps it would make sense to add an explicit
+>
+> BR2_MIPS_SOFT_FLOAT=y
+>
+> ? Although we don't do this for any of the other MIPSes and I doubt we'll
+> change
+> the default any time soon for 32-bit MIPS.
+>
+>
+Since we have never done for other MIPSes i think we should keep it
+consistent? So will dropping this one.
+
+
+>  Regards,
+>  Arnout
+>
+> > +
+> > +# linux header same as custom kernel ie 4.4.x
+> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+> > +
+> > +# kernel
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
+> github,CreatorDev,linux,openwrt-4.4.14)/linux-openwrt-4.4.14.tar.gz"
+> > +BR2_LINUX_KERNEL_DEFCONFIG="pistachio"
+> > +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> > +# vmlinux.gz.itb image includes img/pistachio_marduk device tree
+> > +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="vmlinux.gz.itb"
+> > +
+> > +# bootloader flash support
+> > +BR2_PACKAGE_MTD=y
+> > +
+> > +# wireless firmware
+> > +BR2_PACKAGE_UCCP420WLAN=y
+> > +
+> > +# wireless package
+> > +BR2_PACKAGE_WIRELESS_TOOLS=y
+> > +BR2_PACKAGE_WPA_SUPPLICANT=y
+> > +BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+> > +
+> > +# bootloader
+> > +BR2_TARGET_UBOOT=y
+> > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pistachio_marduk"
+> > +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> > +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call
+> github,CreatorDev,u-boot,v1.0.5)/u-boot-CreatorDev-v1.0.5.tar.gz"
+> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-pistachio_
+> marduk-2015.10-v1.0.5.img"
+> > +
+> > +# fitimage / image generation
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+> > +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y
+> > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/ci40/post-build.sh"
+> > +
+> > +# image generation
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +BR2_PACKAGE_HOST_GENIMAGE=y
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> > +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci40/genimage.cfg"
+> >
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+
+Regards,
+Abhimanyu
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170420/a9b2f075/attachment.html>
