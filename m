@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 22:28:00 +0200
-Subject: [Buildroot] [PATCH 1/2] zic: bump to version 2017b
-In-Reply-To: <b5df99b2be617b084054ed74b46ea055b5d0899c.1492689766.git.baruch@tkos.co.il>
-References: <b5df99b2be617b084054ed74b46ea055b5d0899c.1492689766.git.baruch@tkos.co.il>
-Message-ID: <20170420222800.06a57496@free-electrons.com>
+Date: Thu, 20 Apr 2017 22:28:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/eudev: bump version to 3.2.2
+In-Reply-To: <20170420070613.19595-1-bernd.kuhls@t-online.de>
+References: <20170420070613.19595-1-bernd.kuhls@t-online.de>
+Message-ID: <20170420222820.136846d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 20 Apr 2017 15:02:45 +0300, Baruch Siach wrote:
-> Cc: Martin Bark <martin@barkynet.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Thu, 20 Apr 2017 09:06:13 +0200, Bernd Kuhls wrote:
+> Removed patch 0001 applied upstream:
+> https://github.com/gentoo/eudev/commit/c0f63850ad29ec978d070a08b816dc2bfca337e3
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/zic/zic.hash | 4 ++--
->  package/zic/zic.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  .../0002-missing-defines-for-old-kernels.patch     | 44 ----------------------
+>  package/eudev/eudev.hash                           |  4 +-
+>  package/eudev/eudev.mk                             |  2 +-
+>  3 files changed, 3 insertions(+), 47 deletions(-)
+>  delete mode 100644 package/eudev/0002-missing-defines-for-old-kernels.patch
 
-Both applied, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
