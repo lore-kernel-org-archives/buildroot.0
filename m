@@ -1,60 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 23:07:03 +0200
-Subject: [Buildroot] [git commit] xenomai: add string option for additional
-	configure options
-Message-ID: <20170420211017.2B8C181E81@busybox.osuosl.org>
+Date: Thu, 20 Apr 2017 22:33:56 +0200
+Subject: [Buildroot] [git commit] xenomai: group skin selection in separate
+	menu and cleanup
+Message-ID: <20170420211016.C3FAC817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9470687c0feeedec6cf7730ab95f5d35b62850b
+commit: https://git.buildroot.net/buildroot/commit/?id=7d04d88b780bef14ef642ae026c45323c0c16456
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Xenomai has many configure options that users may or may not want to set.
-Providing individual Buildroot config options for every single one of them
-is not maintainable.
+Clarify the Xenomai config options by grouping the skin-related options in a
+separate menu.
 
-Therefore, add a string option to allow the needed flexibility.
-Important options, or those that have 'select/depends on' impact, can still
-be turned into real Buildroot config options.
+Additionally:
+- update proper capitalization of skin names
+- sort entries
+- replace 'skin library' by 'skin' to match the terminology in Xenomai
+  sources
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-[Thomas: rewrap Config.in help text.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xenomai/Config.in  | 6 ++++++
- package/xenomai/xenomai.mk | 2 ++
- 2 files changed, 8 insertions(+)
+ package/xenomai/Config.in | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
 diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 6646ec0..4bbffb2 100644
+index e633896..31d63f1 100644
 --- a/package/xenomai/Config.in
 +++ b/package/xenomai/Config.in
-@@ -120,6 +120,12 @@ config BR2_PACKAGE_XENOMAI_ENABLE_REGISTRY_PATH
- 	  To use the Xenomai default (currently: /var/run/xenomai),
- 	  leave this option empty.
+@@ -112,42 +112,46 @@ config BR2_PACKAGE_XENOMAI_ANALOGY
+ 	  This option allows to install the Xenomai Analogy utilities
+ 	  and libraries
  
-+config BR2_PACKAGE_XENOMAI_ADDITIONAL_CONF_OPTS
-+	string "Additional configure options"
-+	help
-+	  Specify any additional options to pass to the configure
-+	  script here.  See Xenomai documentation for details.
++menu "Skin selection"
 +
- config BR2_PACKAGE_XENOMAI_TESTSUITE
- 	bool "Install testsuite"
+ config BR2_PACKAGE_XENOMAI_NATIVE_SKIN
+-	bool "Alchemy (native) skin library"
++	bool "Alchemy (native) skin"
+ 	default y
  	help
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 89b022a..2d92e91 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -57,6 +57,8 @@ else
- XENOMAI_CONF_OPTS += --disable-registry
- endif
+ 	  This option allows to install the Alchemy Xenomai skin, previously
+ 	  called 'native'
  
-+XENOMAI_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_XENOMAI_ADDITIONAL_CONF_OPTS))
+ config BR2_PACKAGE_XENOMAI_POSIX_SKIN
+-	bool "POSIX skin library"
++	bool "POSIX skin"
+ 	default y
+ 	help
+ 	  This option allows to install the POSIX Xenomai skin
+ 
+-config BR2_PACKAGE_XENOMAI_VXWORKS_SKIN
+-	bool "VX-Works skin library"
+-	help
+-	  This option allows to install the VX-Works Xenomai skin
+-
+ config BR2_PACKAGE_XENOMAI_PSOS_SKIN
+-	bool "PSOS skin library"
++	bool "pSOS skin"
+ 	help
+-	  This option allows to install the PSOS Xenomai skin
++	  This option allows to install the pSOS Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_RTAI_SKIN
+-	bool "RTAI skin library"
++	bool "RTAI skin"
+ 	help
+ 	  This option allows to install the RTAI Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_UITRON_SKIN
+-	bool "uiTron skin library"
++	bool "uITRON skin"
+ 	help
+-	  This option allows to install the uiTron Xenomai skin
++	  This option allows to install the uITRON Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_VRTX_SKIN
+-	bool "VRTX skin library"
++	bool "VRTX skin"
+ 	help
+ 	  This option allows to install the VRTX Xenomai skin
+ 
++config BR2_PACKAGE_XENOMAI_VXWORKS_SKIN
++	bool "VxWorks skin"
++	help
++	  This option allows to install the VxWorks Xenomai skin
 +
- # Some of these files may be desired by some users -- at that point specific
- # config options need to be added to keep a particular set.
- define XENOMAI_REMOVE_UNNEEDED_FILES
++endmenu
++
+ endif
