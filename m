@@ -1,46 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 23:29:40 +0200
-Subject: [Buildroot] [git commit] netsniff-ng: use upstream provided tarball
-Message-ID: <20170420213014.161A781699@busybox.osuosl.org>
+Date: Thu, 20 Apr 2017 23:29:50 +0200
+Subject: [Buildroot] [git commit] netsniff-ng: fix static build with
+	netfilter_conntrack
+Message-ID: <20170420213014.260947FE36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=418545457e0703dd27a33f7990bac30ab0df5d78
+commit: https://git.buildroot.net/buildroot/commit/?id=a72cdcb591c5fc6fd2619dc08a6a512ea276d9e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Use pkg-config to determine link flags.
+
+Fixes:
+http://autobuild.buildroot.net/results/0ef/0efb90d69fdffafe0630e6507d40198bfb1c5818/
+http://autobuild.buildroot.net/results/0ea/0eaf15dd387961641b42d977c49804fe8872074b/
+http://autobuild.buildroot.net/results/43d/43d3f2d54deb9d095a4f8cbf70a7b933c09ed618/
 
 Cc: Joris Lijssens <joris.lijssens@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsniff-ng/netsniff-ng.hash | 4 ++--
- package/netsniff-ng/netsniff-ng.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ ...e-PKG_CONFIG-into-account-for-libnetfilte.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
-index 67b3331..79dc686 100644
---- a/package/netsniff-ng/netsniff-ng.hash
-+++ b/package/netsniff-ng/netsniff-ng.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256 62e8aa970a4f46cdaddf54daf8ea26e7ae9f9f358efaf0651799c8c4e937c286 netsniff-ng-v0.6.2.tar.gz
-+# Locally calculated after checking signature
-+sha256 4f2f7afc96b5044b5ccd3b671d0c3b8cb166bfa7f1063cea6c2d5e0fd5a13cf5 netsniff-ng-0.6.2.tar.xz
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index 1a4017e..5d59747 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--NETSNIFF_NG_VERSION = v0.6.2
--NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
-+NETSNIFF_NG_VERSION = 0.6.2
-+NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
-+NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
- NETSNIFF_NG_LICENSE = GPL-2.0
- NETSNIFF_NG_LICENSE_FILES = README COPYING
- # Prevent netsniff-ng configure script from finding a host installed nacl
+diff --git a/package/netsniff-ng/0002-flowtop-take-PKG_CONFIG-into-account-for-libnetfilte.patch b/package/netsniff-ng/0002-flowtop-take-PKG_CONFIG-into-account-for-libnetfilte.patch
+new file mode 100644
+index 0000000..bd7619b
+--- /dev/null
++++ b/package/netsniff-ng/0002-flowtop-take-PKG_CONFIG-into-account-for-libnetfilte.patch
+@@ -0,0 +1,43 @@
++From 2d38d16d86db941fcb4d4fb8ad761e7e163c01e5 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 16 Apr 2017 07:41:38 +0300
++Subject: [PATCH] flowtop: take PKG_CONFIG into account for
++ libnetfilter_conntrack
++
++Use $PKG_CONFIG to determine the linker flags for libnetfilter_conntrack. This
++fixes static link failure like the following:
++
++  LD	flowtop
++.../usr/x86_64-buildroot-linux-musl/sysroot/usr/lib/../lib64/libnetfilter_conntrack.a(main.o): In function `nfct_open_nfnl':
++main.c:(.text+0x52): undefined reference to `nfnl_subsys_open'
++main.c:(.text+0x69): undefined reference to `nfnl_subsys_close'
++main.c:(.text+0x87): undefined reference to `nfnl_subsys_open'
++main.c:(.text+0xa3): undefined reference to `nfnl_subsys_close'
++.../usr/x86_64-buildroot-linux-musl/sysroot/usr/lib/../lib64/libnetfilter_conntrack.a(main.o): In function `nfct_open':
++main.c:(.text+0xc9): undefined reference to `nfnl_open'
++main.c:(.text+0xf0): undefined reference to `nfnl_close'
++...
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++
++Patch status: sent upstream
++http://www.mail-archive.com/netsniff-ng%40googlegroups.com/msg01971.html
++
++ flowtop/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/flowtop/Makefile b/flowtop/Makefile
++index effe7eb33fc3..e001ce8aaf13 100644
++--- a/flowtop/Makefile
+++++ b/flowtop/Makefile
++@@ -1,5 +1,5 @@
++ flowtop-libs =	-lurcu \
++-		-lnetfilter_conntrack \
+++		$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKG_CONFIG) --libs libnetfilter_conntrack 2> /dev/null ) \
++ 		$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKG_CONFIG) --libs ncurses 2> /dev/null \
++ 			|| echo '-lncurses') \
++ 		$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKG_CONFIG) --libs tinfo 2> /dev/null ) \
++-- 
++2.11.0
++
