@@ -1,30 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Apr 2017 23:31:11 +0200
-Subject: [Buildroot] [PATCH 1/3] netsniff-ng: use upstream provided
- tarball
-In-Reply-To: <30be9755f9125cfbd5a4c57ec4b84cfb67a5f131.1492626707.git.baruch@tkos.co.il>
-References: <30be9755f9125cfbd5a4c57ec4b84cfb67a5f131.1492626707.git.baruch@tkos.co.il>
-Message-ID: <20170420233111.6f90050e@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 20 Apr 2017 23:33:01 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpng: Cleanup neon support options
+Message-ID: <20170420213302.31155-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Suggested by Thomas:
+http://lists.busybox.net/pipermail/buildroot/2017-April/189086.html
 
-On Wed, 19 Apr 2017 21:31:45 +0300, Baruch Siach wrote:
-> Cc: Joris Lijssens <joris.lijssens@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/netsniff-ng/netsniff-ng.hash | 4 ++--
->  package/netsniff-ng/netsniff-ng.mk   | 5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libpng/libpng.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Series applied. Thanks!
-
-Thomas
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 249115702..4272f4e38 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -14,7 +14,12 @@ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkgconf zlib
+ HOST_LIBPNG_DEPENDENCIES = host-pkgconf host-zlib
+ LIBPNG_CONFIG_SCRIPTS = libpng$(LIBPNG_SERIES)-config libpng-config
+-LIBPNG_CONF_OPTS = $(if $(BR2_ARM_CPU_HAS_NEON),--enable-arm-neon=yes,--enable-arm-neon=no)
++
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++LIBPNG_CONF_OPTS += --enable-arm-neon=yes
++else
++LIBPNG_CONF_OPTS += --disable-arm-neon
++endif
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
