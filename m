@@ -1,41 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 21 Apr 2017 22:33:07 +0200
-Subject: [Buildroot] [PATCH 0/9] xenomai 3.x fixups and extra config
-	options
-In-Reply-To: <20170420231112.0014b5bd@free-electrons.com>
-References: <20170419200007.12590-1-patrickdepinguin@gmail.com>
- <20170420231112.0014b5bd@free-electrons.com>
-Message-ID: <CAAXf6LUGhwib+tB_XGBfdovPjMGdLFFTKB=-ASc0suhezTAFRA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 21 Apr 2017 23:31:04 +0200
+Subject: [Buildroot] [PATCH] package/expedite: fix build issue with C89
+Message-ID: <20170421213104.1477-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-04-20 23:11 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Wed, 19 Apr 2017 21:59:58 +0200, Thomas De Schampheleire wrote:
->
->> Thomas De Schampheleire (9):
->>   xenomai: update LICENSE_FILES
->>   xenomai: native skin is now called alchemy
->>   xenomai: group skin selection in separate menu and cleanup
->>   xenomai: add option for Smokey skin
->>   xenomai: update list of Analogy installed files
->>   xenomai: update list of testsuite files
->>   xenomai: restrict installed files further
->>   xenomai: add support for registry
->>   xenomai: add string option for additional configure options
->
-> I've applied the entire series, with some changes on PATCH 8/9 and 9/9.
-> I'll reply to the patches themselves.
+The code use for loop initial declarations which are only allowed in
+C99 mode. Use the default compiler version (gnu99) used by gcc 5+ to
+workaround some build issues with C99.
 
-Thanks!
-Sorry about the line lengths, I'm used to 80 character limits and
-didn't realize a different limit is used here, nor was I already used
-to using checkpackage. I'll remember it for next time!
+Fixes:
+http://autobuild.buildroot.net/results/ed8/ed840755e8e486e48eab8c13a8bb5e9a448199ce
 
-Best regards,
-Thomas
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/expedite/expedite.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+index d49e87a..9aa6a4a 100644
+--- a/package/expedite/expedite.mk
++++ b/package/expedite/expedite.mk
+@@ -15,6 +15,11 @@ EXPEDITE_DEPENDENCIES = host-efl host-pkgconf efl
+ # There is no configure script in the git tree.
+ EXPEDITE_AUTORECONF = YES
+ 
++# The code use for loop initial declarations which are only allowed in
++# C99 mode. Use the default compiler version (gnu99) used by gcc 5+ to
++# workaround some build issues with C99.
++EXPEDITE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++
+ ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
+ EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+-- 
+2.9.3
