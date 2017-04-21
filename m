@@ -1,115 +1,39 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Fri, 21 Apr 2017 14:52:04 +0530
-Subject: [Buildroot] [PATCH] nanomsg: new package
-Message-ID: <1492766524-3682-1-git-send-email-rahulbedarkar89@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 21 Apr 2017 10:32:31 +0100
+Subject: [Buildroot] [PATCH] tcpreplay: bump version to 4.2.3
+Message-ID: <20170421093231.59317-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/nanomsg/Config.in    | 23 +++++++++++++++++++++++
- package/nanomsg/nanomsg.hash |  2 ++
- package/nanomsg/nanomsg.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 51 insertions(+)
- create mode 100644 package/nanomsg/Config.in
- create mode 100644 package/nanomsg/nanomsg.hash
- create mode 100644 package/nanomsg/nanomsg.mk
+ package/tcpreplay/tcpreplay.hash | 2 +-
+ package/tcpreplay/tcpreplay.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 123a8f9..693cfe1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1303,6 +1303,7 @@ F:	package/glog/
- F:	package/gssdp/
- F:	package/gupnp/
- F:	package/gupnp-av/
-+F:	package/nanomsg/
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index 0b138a0..9909678 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 e674166b54486db8f5417554ed88c06f44f368d70585c2897b0bc085009d8dd5  tcpreplay-4.2.2.tar.gz
++sha256 68d8d49dab5bf58b2e8d244eee1ee7f2379d967da19fe97dd9d59bcf40a22abc  tcpreplay-4.2.3.tar.gz
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 7b03138..6d5c32b 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Rahul Jain <rahul.jain@imgtec.com>
- F:	package/uhttpd/
-diff --git a/package/Config.in b/package/Config.in
-index 4eaa95b..bfcfb73 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1306,6 +1306,7 @@ menu "Networking"
- 	source "package/libwebsockets/Config.in"
- 	source "package/lksctp-tools/Config.in"
- 	source "package/mongoose/Config.in"
-+	source "package/nanomsg/Config.in"
- 	source "package/neon/Config.in"
- 	source "package/norm/Config.in"
- 	source "package/nss-mdns/Config.in"
-diff --git a/package/nanomsg/Config.in b/package/nanomsg/Config.in
-new file mode 100644
-index 0000000..0cab8b4
---- /dev/null
-+++ b/package/nanomsg/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_NANOMSG
-+	bool "nanomsg"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  nanomsg is a socket library that provides several common
-+	  communication patterns. It aims to make the networking layer
-+	  fast, scalable, and easy to use. Implemented in C, it works
-+	  on a wide range of operating systems with no further
-+	  dependencies.
-+
-+	  http://nanomsg.org/
-+
-+if BR2_PACKAGE_NANOMSG
-+
-+config BR2_PACKAGE_NANOMSG_TOOLS
-+	bool "Build nanomsg tools"
-+	help
-+	  Build nanomsg tools
-+
-+endif
-+
-+comment "nanomsg needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/nanomsg/nanomsg.hash b/package/nanomsg/nanomsg.hash
-new file mode 100644
-index 0000000..5f947da
---- /dev/null
-+++ b/package/nanomsg/nanomsg.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 24afdeb71b2e362e8a003a7ecc906e1b84fd9f56ce15ec567481d1bb33132cc7  nanomsg-1.0.0.tar.gz
-diff --git a/package/nanomsg/nanomsg.mk b/package/nanomsg/nanomsg.mk
-new file mode 100644
-index 0000000..3b1c2ca
---- /dev/null
-+++ b/package/nanomsg/nanomsg.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# nanomsg
-+#
-+################################################################################
-+
-+NANOMSG_VERSION = 1.0.0
-+NANOMSG_SITE = $(call github,nanomsg,nanomsg,$(NANOMSG_VERSION))
-+NANOMSG_INSTALL_STAGING = YES
-+NANOMSG_LICENSE = MIT
-+NANOMSG_LICENSE_FILES = COPYING
-+NANOMSG_CONF_OPTS = -DNN_ENABLE_DOC=OFF -DNN_TESTS=OFF
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+NANOMSG_CONF_OPTS += -DNN_STATIC_LIB=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NANOMSG_TOOLS),y)
-+NANOMSG_CONF_OPTS += -DNN_TOOLS=ON
-+else
-+NANOMSG_CONF_OPTS += -DNN_TOOLS=OFF
-+endif
-+
-+$(eval $(cmake-package))
+-TCPREPLAY_VERSION = 4.2.2
++TCPREPLAY_VERSION = 4.2.3
+ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
+ TCPREPLAY_LICENSE = GPL-3.0
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
 -- 
-2.7.4
+2.10.2
