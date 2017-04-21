@@ -1,37 +1,45 @@
-From: Lijun QIN <lijun.qin2008@gmail.com>
-Date: Thu, 20 Apr 2017 22:13:15 -0500
-Subject: [Buildroot] VLAN interface and IPv6 SLAAC
-Message-ID: <CALD51P_iTYjDx7dNBcqpCpFrhE_5uVaK+UHF8XR=1Z2p=Ypi-g@mail.gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Fri, 21 Apr 2017 15:17:28 +1200
+Subject: [Buildroot] [PATCH] syslog-ng: use bundled libbson
+In-Reply-To: <20170420221955.7bc076c8@free-electrons.com>
+References: <cb65ed7b607b680814b733781dbb884fa78471f1.1492684628.git.baruch@tkos.co.il>
+ <20170420221955.7bc076c8@free-electrons.com>
+Message-ID: <CAFOYHZCCYj706p-EBjTBcqLjmG0R6qV9ZCWOqy_zfP8NsDgDCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marvell A38x SDK Buildroot-2015.11 which comes with Busybox-1.24.1.
-I need to add VLAN interface and get SLAAC address from this interface.
-I could add VLAN interface  with the following commands
-vconfig add eth1 3004   - vconfig is from busybox
-ifconfig eth1.3004  up
-ifconfig -a      - see the outpout of eth1.3004
+On Fri, Apr 21, 2017 at 8:19 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 20 Apr 2017 13:37:08 +0300, Baruch Siach wrote:
+>> libbson is a dependency of the mongo-c-driver that syslog-ng uses. Buildroot
+>> doesn't package mongo-c-driver so syslog-ng uses the bundled one. The bundled
+>> mongo-c-driver in turn may optionally use a bundled libbson. When Buildroot
+>> builds libbson mongo-c-driver detects that and does not configure its bundled
+>> libbson. This breaks the build of the syslog-ng mongodb module because it adds
+>> the bundled libbson to the headers search path.
+>>
+>> Always use the mongo-c-driver bundled libbson. Anyone concerned with the size
+>> impact should add a standalone mongo-c-driver to Buildroot.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/843/84331e9a168d8bdf2cceca8e9e1480611c1ecaed/
+>> http://autobuild.buildroot.net/results/b5b/b5bad64abbf5764faf2a7129a1a25ad75c34980b/
+>> http://autobuild.buildroot.net/results/3c3/3c32f4eb7436da06f3fb59f928363959df2a5e86/
+>>
+>> Cc: Chris Packham <judge.packham@gmail.com>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> ---
+>>  package/syslog-ng/syslog-ng.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Thanks for the patch. However, wouldn't it make more sense to disable
+> the mongo-c-driver of syslog-ng completely, until someone packages the
+> appropriate dependencies?
+>
 
-Two Questions:
-(1) How can  I  generate this VLAN interface eth1.3004 automatically on
-boot-up ?
-(2) Option  makes eth1.2004  aquires IPv6 SLAAC ?
-      My board vendor  says the slaac router advertisement is working.
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-eth1.3004 Link encap:Ethernet  HWaddr 00:50:43:66:35:37
-          inet6 addr: fe80::250:43ff:fe66:3537/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 (0.0 B)  TX bytes:468 (468.0 B)
-//////////////////////////////////////////////////////////////////////////////////////////////////
-Thank you so much,
- Lijun Qin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170420/e7db05ac/attachment.html>
+I'm fine with either approach.
