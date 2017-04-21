@@ -1,46 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 21 Apr 2017 01:05:32 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/rapidjson: switch to CMake
-Message-ID: <20170420230532.21678-1-bernd.kuhls@t-online.de>
+From: Lijun QIN <lijun.qin2008@gmail.com>
+Date: Thu, 20 Apr 2017 22:13:15 -0500
+Subject: [Buildroot] VLAN interface and IPv6 SLAAC
+Message-ID: <CALD51P_iTYjDx7dNBcqpCpFrhE_5uVaK+UHF8XR=1Z2p=Ypi-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upcoming Kodi v18 depends on RapidJSON and detects it by using pkg-conf:
-https://github.com/xbmc/xbmc/blob/master/cmake/modules/FindRapidJSON.cmake#L13
+Marvell A38x SDK Buildroot-2015.11 which comes with Busybox-1.24.1.
+I need to add VLAN interface and get SLAAC address from this interface.
+I could add VLAN interface  with the following commands
+vconfig add eth1 3004   - vconfig is from busybox
+ifconfig eth1.3004  up
+ifconfig -a      - see the outpout of eth1.3004
 
-Currently our package installs only the header files, but RapidJSON.pc
-is also needed. Luckily this can be fixed by switching to CMake which
-does the job, also add configure options to disable the CMake build of
-executables.
+Two Questions:
+(1) How can  I  generate this VLAN interface eth1.3004 automatically on
+boot-up ?
+(2) Option  makes eth1.2004  aquires IPv6 SLAAC ?
+      My board vendor  says the slaac router advertisement is working.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: add configure options to disable build of example code, rapidjson
-    is a header-only package, fixes broken -march=native (Thomas)
-
- package/rapidjson/rapidjson.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-index d06f52962..4d69bc345 100644
---- a/package/rapidjson/rapidjson.mk
-+++ b/package/rapidjson/rapidjson.mk
-@@ -13,8 +13,9 @@ RAPIDJSON_LICENSE_FILES = license.txt
- RAPIDJSON_INSTALL_TARGET = NO
- RAPIDJSON_INSTALL_STAGING = YES
- 
--define RAPIDJSON_INSTALL_STAGING_CMDS
--	cp -dpfr $(@D)/include/* $(STAGING_DIR)/usr/include
--endef
-+RAPIDJSON_CONF_OPTS = \
-+	-DRAPIDJSON_BUILD_DOC=OFF \
-+	-DRAPIDJSON_BUILD_EXAMPLES=OFF \
-+	-DRAPIDJSON_BUILD_TESTS=OFF
- 
--$(eval $(generic-package))
-+$(eval $(cmake-package))
--- 
-2.11.0
+//////////////////////////////////////////////////////////////////////////////////////////////////
+eth1.3004 Link encap:Ethernet  HWaddr 00:50:43:66:35:37
+          inet6 addr: fe80::250:43ff:fe66:3537/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:468 (468.0 B)
+//////////////////////////////////////////////////////////////////////////////////////////////////
+Thank you so much,
+ Lijun Qin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170420/e7db05ac/attachment.html>
