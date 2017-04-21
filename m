@@ -1,41 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Apr 2017 10:05:38 +0200
-Subject: [Buildroot] [PATCH] syslog-ng: use bundled libbson
-In-Reply-To: <20170421034032.bxgpf4xxsejwof3j@tarshish>
-References: <cb65ed7b607b680814b733781dbb884fa78471f1.1492684628.git.baruch@tkos.co.il>
- <20170420221955.7bc076c8@free-electrons.com>
- <20170421034032.bxgpf4xxsejwof3j@tarshish>
-Message-ID: <20170421100538.41bbc9fb@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Fri, 21 Apr 2017 10:19:26 +0200
+Subject: [Buildroot] glmark2 regression on mx6
+In-Reply-To: <CAOMZO5COcgkg7X1wpnqMfpD6=1YCqzmetMMCANrqbqA=a9moxA@mail.gmail.com>
+References: <CAOMZO5COcgkg7X1wpnqMfpD6=1YCqzmetMMCANrqbqA=a9moxA@mail.gmail.com>
+Message-ID: <CAAMH-yvDXjBz_PWh23SF1fb-vZHQK+r1zZqfXo-NFWNEby-DvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Fabio,
 
-On Fri, 21 Apr 2017 06:40:32 +0300, Baruch Siach wrote:
+On Fri, Apr 21, 2017 at 12:32 AM, Fabio Estevam <festevam@gmail.com> wrote:
+> Hi Gary,
+>
+> I have just tested glmark2 with Buildroot master on imx6 and I got the
+> following error:
+>
+> # glmark2-es2-drm
+> ** Failed to set swap interval. Results may be bounded above by refresh rate.
+> =======================================================
+>     glmark2 2014.03
+> =======================================================
+>     OpenGL Information
+>     GL_VENDOR:     etnaviv
+>     GL_RENDERER:   Gallium 0.4 on Vivante GC2000 rev 5108
+>     GL_VERSION:    OpenGL ES 2.0 Mesa 17.0.3
 
-> > Thanks for the patch. However, wouldn't it make more sense to disable
-> > the mongo-c-driver of syslog-ng completely, until someone packages the
-> > appropriate dependencies?  
-> 
-> The bundled mongo-c-driver and libbson seem to build fine with syslog-ng. It's 
-> only the recent introduction of libbson in Buildroot that broke the build. So 
-> the only drawback of forcing the bundled libbson is the loss of possible size 
-> reduction opportunity. As I noted in the commit log, anyone worried about that 
-> should package mongo-c-driver. But I don't think this is a reason to disable 
-> the mongodb module.
+Never tried Mesa 17.0.3. What's the kernel version you're using?
 
-Well, our policy is normally to avoid using bundled libraries. So if
-syslog-ng needs a dependency that isn't packaged in Buildroot, then
-this syslog-ng feature should be disabled rather than using bundled
-libraries.
+> =======================================================
+> ** Failed to set swap interval. Results may be bounded above by refresh rate.
 
-Best regards,
+That swap interval message I've seen in the past (and discarded it).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> [build] use-vbo=false:Segmentation fault
+
+Segfault however I've never seen. Is kmscube running fine with this setup?
+
+> Before I start investigating this problem, I would like to know if you
+> have already seen this issue or if you have any suggestions.
+
+Does this happen for each test? Have you tried specifying one test like:
+glmark2-es2-drm -b desktop:effect=shadow:windows=4:shadow-size=5
+glmark2-es2-drm -b jellyfish
+glmark2-es2-drm -b ideas
+
+Is the segfault happening on each example above?
+
+Other than this I don't have much suggestion except asking on IRC
+(#etnaviv), the channel is very active lately (Android work).
+
+Regards,
+Gary
