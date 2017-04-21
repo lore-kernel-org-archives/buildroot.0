@@ -1,11 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 21 Apr 2017 06:33:14 +0300
-Subject: [Buildroot] [PATCH 2/2] libnss: security bump to version 3.30.2
-In-Reply-To: <20170420215334.3aafce73@free-electrons.com>
-References: <d86176bbf66ac3fbbdc5a47456314bd68006df13.1492709669.git.baruch@tkos.co.il>
- <f4dcb1e701fce76f7f18bd8dfff60b1f2fdb2a4f.1492709669.git.baruch@tkos.co.il>
- <20170420215334.3aafce73@free-electrons.com>
-Message-ID: <20170421033314.mklmhr2tthqheazt@tarshish>
+Date: Fri, 21 Apr 2017 06:40:32 +0300
+Subject: [Buildroot] [PATCH] syslog-ng: use bundled libbson
+In-Reply-To: <20170420221955.7bc076c8@free-electrons.com>
+References: <cb65ed7b607b680814b733781dbb884fa78471f1.1492684628.git.baruch@tkos.co.il>
+ <20170420221955.7bc076c8@free-electrons.com>
+Message-ID: <20170421034032.bxgpf4xxsejwof3j@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +12,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Thomas,
-On Thu, Apr 20, 2017 at 09:53:34PM +0200, Thomas Petazzoni wrote:
-> On Thu, 20 Apr 2017 20:34:29 +0300, Baruch Siach wrote:
-> > CVE-2017-5461 - Out-of-bounds write in Base64 encoding in NSS. Might cause
-> > remote arbitrary code execution
-> > (https://access.redhat.com/errata/RHSA-2017:1100).
+
+On Thu, Apr 20, 2017 at 10:19:55PM +0200, Thomas Petazzoni wrote:
+> On Thu, 20 Apr 2017 13:37:08 +0300, Baruch Siach wrote:
+> > libbson is a dependency of the mongo-c-driver that syslog-ng uses. Buildroot
+> > doesn't package mongo-c-driver so syslog-ng uses the bundled one. The bundled
+> > mongo-c-driver in turn may optionally use a bundled libbson. When Buildroot
+> > builds libbson mongo-c-driver detects that and does not configure its bundled
+> > libbson. This breaks the build of the syslog-ng mongodb module because it adds
+> > the bundled libbson to the headers search path.
 > > 
-> > CVE-2017-5462 - DRBG flaw in NSS
+> > Always use the mongo-c-driver bundled libbson. Anyone concerned with the size
+> > impact should add a standalone mongo-c-driver to Buildroot.
 > > 
-> > Drop 0001-cross-compile.patch and TARGET* variables. Upstream Makefile now
-> > allows override of CC, so use TARGET_CONFIGURE_OPTS instead.
+> > Fixes:
+> > http://autobuild.buildroot.net/results/843/84331e9a168d8bdf2cceca8e9e1480611c1ecaed/
+> > http://autobuild.buildroot.net/results/b5b/b5bad64abbf5764faf2a7129a1a25ad75c34980b/
+> > http://autobuild.buildroot.net/results/3c3/3c32f4eb7436da06f3fb59f928363959df2a5e86/
 > > 
-> > Drop upstream 0003-it-uninitialized-fix.patch.
-> > 
-> > Renumber the remaining patch.
-> > 
+> > Cc: Chris Packham <judge.packham@gmail.com>
 > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > > ---
-> > Backport note: depends on libnspr version 4.14
-> > ---
-> >  package/libnss/0001-cross-compile.patch            | 48 ----------------------
-> >  .../{0002-uclibc.patch => 0001-uclibc.patch}       |  0
-> >  package/libnss/0003-it-uninitialized-fix.patch     | 24 -----------
-> >  package/libnss/libnss.hash                         |  4 +-
-> >  package/libnss/libnss.mk                           | 12 ++----
-> >  5 files changed, 6 insertions(+), 82 deletions(-)
-> >  delete mode 100644 package/libnss/0001-cross-compile.patch
-> >  rename package/libnss/{0002-uclibc.patch => 0001-uclibc.patch} (100%)
-> >  delete mode 100644 package/libnss/0003-it-uninitialized-fix.patch
+> >  package/syslog-ng/syslog-ng.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Applied to master, thanks.
-> 
-> Peter: we want this patch for the LTS branch. Baruch, can you comment
-> on whether PATCH 1/2 is also needed for the libnss security bump?
+> Thanks for the patch. However, wouldn't it make more sense to disable
+> the mongo-c-driver of syslog-ng completely, until someone packages the
+> appropriate dependencies?
 
-As I noted in the backport note above, this NSS version needs libnspr version 
-4.14, so PATCH 1/2 is prerequisite for this bump.
+The bundled mongo-c-driver and libbson seem to build fine with syslog-ng. It's 
+only the recent introduction of libbson in Buildroot that broke the build. So 
+the only drawback of forcing the bundled libbson is the loss of possible size 
+reduction opportunity. As I noted in the commit log, anyone worried about that 
+should package mongo-c-driver. But I don't think this is a reason to disable 
+the mongodb module.
 
 baruch
 
