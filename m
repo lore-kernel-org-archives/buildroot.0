@@ -1,70 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 21 Apr 2017 22:01:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 17.0.4
-In-Reply-To: <20170417181236.2799-1-bernd.kuhls@t-online.de>
-References: <20170417181236.2799-1-bernd.kuhls@t-online.de>
-Message-ID: <ba4c38fe-6a77-aa11-c25f-6983d73d38e6@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 21 Apr 2017 16:17:13 -0400
+Subject: [Buildroot] docker-engine: project rename to moby
+Message-ID: <CA+h8R2p-m7ZpxetdLYU+Gnr7uB2YL7KqU3Z-M0-CpX=mWm=7VA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Thomas, Peter, All:
 
-Le 17/04/2017 ? 20:12, Bernd Kuhls a ?crit :
-> Added all hashes provided by upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+I haven't had much time to read into this yet, but the Docker project
+apparently is re-branding their open source presence to "moby":
 
-Tested-by: Romain Naour <romain.naour@gmail.com>
+  - http://github.com/docker/docker -> https://github.com/moby/moby
 
-Best regards,
-Romain
+They have already re-directed the GitHub repository, but have assured
+the community that this will not break existing builds. I think we're
+safe in Buildroot for the foreseeable future, although it is
+concerning that the developers feel it acceptable to rename a project
+this mature with so little warning.
 
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  package/mesa3d/mesa3d.hash               | 7 +++++--
->  package/mesa3d/mesa3d.mk                 | 2 +-
->  3 files changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-> index 0dd262c2a..d247ffa27 100644
-> --- a/package/mesa3d-headers/mesa3d-headers.mk
-> +++ b/package/mesa3d-headers/mesa3d-headers.mk
-> @@ -12,7 +12,7 @@ endif
->  
->  # Not possible to directly refer to mesa3d variables, because of
->  # first/second expansion trickery...
-> -MESA3D_HEADERS_VERSION = 17.0.3
-> +MESA3D_HEADERS_VERSION = 17.0.4
->  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
->  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-> index 1ac8d86ab..b7f7924ef 100644
-> --- a/package/mesa3d/mesa3d.hash
-> +++ b/package/mesa3d/mesa3d.hash
-> @@ -1,2 +1,5 @@
-> -# From https://lists.freedesktop.org/archives/mesa-announce/2017-April/000315.html
-> -sha512 0bcf1609b54fdabb30ec0a500b78e039bd50060c2c7f5a2e57fca29e1a311fb785dadc3cd311018ebe8020d1cc6320181ece2d2aa39d2f215b0ebf2cb0a55165  mesa-17.0.3.tar.xz
-> +# From https://lists.freedesktop.org/archives/mesa-announce/2017-April/000318.html
-> +md5 4a16cfc1c6d034cc17314b866eada628  mesa-17.0.4.tar.xz
-> +sha1 1b9081614b1ec9a6f60849ced8637917ad0e8593  mesa-17.0.4.tar.xz
-> +sha256 1269dc8545a193932a0779b2db5bce9be4a5f6813b98c38b93b372be8362a346  mesa-17.0.4.tar.xz
-> +sha512 0b465dc165b55e4b2ae61aca2d2c6694714522885a14fb61272f73e685aef734be4aac3d58b8d2ceb2643db0578c6187da35fe2cbe41b62a89564e60659b201d  mesa-17.0.4.tar.xz
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 2e6528876..5d144dc72 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  # When updating the version, please also update mesa3d-headers
-> -MESA3D_VERSION = 17.0.3
-> +MESA3D_VERSION = 17.0.4
->  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
->  MESA3D_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_LICENSE = MIT, SGI, Khronos
-> 
+The project is splitting into components, but unfortunately things are
+not so clear cut. From what I've read, we now have:
+
+ - docker-ce: Community edition, still named Docker, still maintained
+by the same team, recommended for end users.
+ - docker-ee: Enterprise edition, closed source (?) presumably with
+extra features.
+ - moby: Open-source "framework for assembling dozens of components
+into custom container-based systems, and a place for all container
+enthusiasts to experiment and exchange ideas". It's recommended for
+"hackers who want to customize or patch their Docker build"
+
+"Docker the product will be assembled from components that are
+packaged by the Moby project." Also, "the Moby project provides a
+command-line tool called moby which assembles components. Currently it
+assembles bootable OS images, but soon it will also be used by Docker
+for assembling Docker out of components, many of which will be
+independent projects."
+
+What does this mean for Docker in buildroot? Well, I can't even find a
+repository link for "docker-ce" on the website, only links to
+"download Docker from the Docker Store," which is really concerning to
+say the least. It seems the entire Docker project still exists in the
+Moby repo, and they are proceeding in development on the same codebase
+there (working on a v17.05.0-ce-rc1 release at the moment). For now, I
+don't think we should or can change anything. We may need to re-name
+"docker-engine" in the future or add a "moby" package.
+
+I'll keep an eye on how things progress.
+
+~ Christian Stewart
