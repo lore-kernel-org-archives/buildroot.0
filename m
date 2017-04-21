@@ -1,55 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 21 Apr 2017 06:40:32 +0300
-Subject: [Buildroot] [PATCH] syslog-ng: use bundled libbson
-In-Reply-To: <20170420221955.7bc076c8@free-electrons.com>
-References: <cb65ed7b607b680814b733781dbb884fa78471f1.1492684628.git.baruch@tkos.co.il>
- <20170420221955.7bc076c8@free-electrons.com>
-Message-ID: <20170421034032.bxgpf4xxsejwof3j@tarshish>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Fri, 21 Apr 2017 08:26:47 +0200
+Subject: [Buildroot] [PATCH] tslib: update to 1.9
+Message-ID: <1492756007-31315-1-git-send-email-martin.kepplinger@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The curious ones will find the release notes here:
 
-On Thu, Apr 20, 2017 at 10:19:55PM +0200, Thomas Petazzoni wrote:
-> On Thu, 20 Apr 2017 13:37:08 +0300, Baruch Siach wrote:
-> > libbson is a dependency of the mongo-c-driver that syslog-ng uses. Buildroot
-> > doesn't package mongo-c-driver so syslog-ng uses the bundled one. The bundled
-> > mongo-c-driver in turn may optionally use a bundled libbson. When Buildroot
-> > builds libbson mongo-c-driver detects that and does not configure its bundled
-> > libbson. This breaks the build of the syslog-ng mongodb module because it adds
-> > the bundled libbson to the headers search path.
-> > 
-> > Always use the mongo-c-driver bundled libbson. Anyone concerned with the size
-> > impact should add a standalone mongo-c-driver to Buildroot.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/843/84331e9a168d8bdf2cceca8e9e1480611c1ecaed/
-> > http://autobuild.buildroot.net/results/b5b/b5bad64abbf5764faf2a7129a1a25ad75c34980b/
-> > http://autobuild.buildroot.net/results/3c3/3c32f4eb7436da06f3fb59f928363959df2a5e86/
-> > 
-> > Cc: Chris Packham <judge.packham@gmail.com>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/syslog-ng/syslog-ng.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Thanks for the patch. However, wouldn't it make more sense to disable
-> the mongo-c-driver of syslog-ng completely, until someone packages the
-> appropriate dependencies?
+    https://github.com/kergoth/tslib/releases
 
-The bundled mongo-c-driver and libbson seem to build fine with syslog-ng. It's 
-only the recent introduction of libbson in Buildroot that broke the build. So 
-the only drawback of forcing the bundled libbson is the loss of possible size 
-reduction opportunity. As I noted in the commit log, anyone worried about that 
-should package mongo-c-driver. But I don't think this is a reason to disable 
-the mongodb module.
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+---
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-baruch
-
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index f8f7ae3..e8e72c8 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+-# https://github.com/kergoth/tslib/releases/download/1.8/tslib-1.8.tar.xz.sha256
+-sha256  be00af1ad643e3535b1958e4e48fea9905888489d7f1480a957c9e3d1cbaeac5  tslib-1.8.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.9/tslib-1.9.tar.xz.sha256
++sha256  af4e40a4cf2aa7a81f1602de1613190a101760689709103cc3590132266ac7b8  tslib-1.9.tar.xz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index f3e0d94..e0f307a 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.8
++TSLIB_VERSION = 1.9
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL, LGPL
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.1.4
