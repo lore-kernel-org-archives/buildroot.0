@@ -1,43 +1,37 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 21 Apr 2017 10:44:02 +0100
-Subject: [Buildroot] [PATCH] opencv3: bump version to 3.2.0
-Message-ID: <20170421094402.6686-1-Vincent.Riera@imgtec.com>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Fri, 21 Apr 2017 12:33:08 +0200
+Subject: [Buildroot] [PATCH 1/1] Simple additional patch to allow
+	compilation of python-3.6.1 under mipsel-buildroot-linux-musl.
+Message-ID: <20170421103308.6557-1-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also switch to the official GitHub.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/opencv3/opencv3.hash | 2 +-
- package/opencv3/opencv3.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0005-mips-musl-fix-sgidefs_h-not-found-error.patch       | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch
 
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
-index 20859ea..6720028 100644
---- a/package/opencv3/opencv3.hash
-+++ b/package/opencv3/opencv3.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f00b3c4f42acda07d89031a2ebb5ebe390764a133502c03a511f67b78bbd4fbf  opencv3-3.1.0.tar.gz
-+sha256 b9d62dfffb8130d59d587627703d5f3e6252dce4a94c1955784998da7a39dd35  opencv3-3.2.0.tar.gz
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 10e0dfe..2e50ba2 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPENCV3_VERSION = 3.1.0
--OPENCV3_SITE = $(call github,itseez,opencv,$(OPENCV3_VERSION))
-+OPENCV3_VERSION = 3.2.0
-+OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
- OPENCV3_INSTALL_STAGING = YES
- OPENCV3_LICENSE = BSD-3-Clause
- OPENCV3_LICENSE_FILES = LICENSE
+diff --git a/package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch b/package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch
+new file mode 100644
+index 000000000..b9490f30a
+--- /dev/null
++++ b/package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch
+@@ -0,0 +1,12 @@
++diff -ru libffi-3.2.1_/src/mips/ffitarget.h libffi-3.2.1/src/mips/ffitarget.h
++--- libffi-3.2.1_/src/mips/ffitarget.h	2014-11-08 13:47:24.000000000 +0100
+++++ libffi-3.2.1/src/mips/ffitarget.h	2017-04-21 10:53:23.447304581 +0200
++@@ -32,7 +32,7 @@
++ #error "Please do not include ffitarget.h directly into your source.  Use ffi.h instead."
++ #endif
++ 
++-#ifdef linux
+++#ifdef __linux__
++ # include <asm/sgidefs.h>
++ #elif defined(__rtems__)
++ /*
 -- 
-2.10.2
+2.11.0
