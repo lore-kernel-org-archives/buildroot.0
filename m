@@ -1,54 +1,41 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 21 Apr 2017 16:17:13 -0400
-Subject: [Buildroot] docker-engine: project rename to moby
-Message-ID: <CA+h8R2p-m7ZpxetdLYU+Gnr7uB2YL7KqU3Z-M0-CpX=mWm=7VA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 21 Apr 2017 22:33:07 +0200
+Subject: [Buildroot] [PATCH 0/9] xenomai 3.x fixups and extra config
+	options
+In-Reply-To: <20170420231112.0014b5bd@free-electrons.com>
+References: <20170419200007.12590-1-patrickdepinguin@gmail.com>
+ <20170420231112.0014b5bd@free-electrons.com>
+Message-ID: <CAAXf6LUGhwib+tB_XGBfdovPjMGdLFFTKB=-ASc0suhezTAFRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter, All:
+2017-04-20 23:11 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Wed, 19 Apr 2017 21:59:58 +0200, Thomas De Schampheleire wrote:
+>
+>> Thomas De Schampheleire (9):
+>>   xenomai: update LICENSE_FILES
+>>   xenomai: native skin is now called alchemy
+>>   xenomai: group skin selection in separate menu and cleanup
+>>   xenomai: add option for Smokey skin
+>>   xenomai: update list of Analogy installed files
+>>   xenomai: update list of testsuite files
+>>   xenomai: restrict installed files further
+>>   xenomai: add support for registry
+>>   xenomai: add string option for additional configure options
+>
+> I've applied the entire series, with some changes on PATCH 8/9 and 9/9.
+> I'll reply to the patches themselves.
 
-I haven't had much time to read into this yet, but the Docker project
-apparently is re-branding their open source presence to "moby":
+Thanks!
+Sorry about the line lengths, I'm used to 80 character limits and
+didn't realize a different limit is used here, nor was I already used
+to using checkpackage. I'll remember it for next time!
 
-  - http://github.com/docker/docker -> https://github.com/moby/moby
-
-They have already re-directed the GitHub repository, but have assured
-the community that this will not break existing builds. I think we're
-safe in Buildroot for the foreseeable future, although it is
-concerning that the developers feel it acceptable to rename a project
-this mature with so little warning.
-
-The project is splitting into components, but unfortunately things are
-not so clear cut. From what I've read, we now have:
-
- - docker-ce: Community edition, still named Docker, still maintained
-by the same team, recommended for end users.
- - docker-ee: Enterprise edition, closed source (?) presumably with
-extra features.
- - moby: Open-source "framework for assembling dozens of components
-into custom container-based systems, and a place for all container
-enthusiasts to experiment and exchange ideas". It's recommended for
-"hackers who want to customize or patch their Docker build"
-
-"Docker the product will be assembled from components that are
-packaged by the Moby project." Also, "the Moby project provides a
-command-line tool called moby which assembles components. Currently it
-assembles bootable OS images, but soon it will also be used by Docker
-for assembling Docker out of components, many of which will be
-independent projects."
-
-What does this mean for Docker in buildroot? Well, I can't even find a
-repository link for "docker-ce" on the website, only links to
-"download Docker from the Docker Store," which is really concerning to
-say the least. It seems the entire Docker project still exists in the
-Moby repo, and they are proceeding in development on the same codebase
-there (working on a v17.05.0-ce-rc1 release at the moment). For now, I
-don't think we should or can change anything. We may need to re-name
-"docker-engine" in the future or add a "moby" package.
-
-I'll keep an eye on how things progress.
-
-~ Christian Stewart
+Best regards,
+Thomas
