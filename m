@@ -1,37 +1,40 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri, 21 Apr 2017 12:33:08 +0200
-Subject: [Buildroot] [PATCH 1/1] Simple additional patch to allow
-	compilation of python-3.6.1 under mipsel-buildroot-linux-musl.
-Message-ID: <20170421103308.6557-1-mc5686@mclink.it>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Fri, 21 Apr 2017 16:48:52 +0530
+Subject: [Buildroot] [PATCH] sg3_utils: improve license description
+Message-ID: <1492773532-12206-1-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- .../0005-mips-musl-fix-sgidefs_h-not-found-error.patch       | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
- create mode 100644 package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch
+Library is licensed under BSD-3-Clause. Some programs are licensed
+under GPL-2.0+ while other are BSD-3-Clause. Annotate licenses with
+components and improve readability of license strings when
+conditionally specifying license for programs using := instead of +=.
 
-diff --git a/package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch b/package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch
-new file mode 100644
-index 000000000..b9490f30a
---- /dev/null
-+++ b/package/libffi/0005-mips-musl-fix-sgidefs_h-not-found-error.patch
-@@ -0,0 +1,12 @@
-+diff -ru libffi-3.2.1_/src/mips/ffitarget.h libffi-3.2.1/src/mips/ffitarget.h
-+--- libffi-3.2.1_/src/mips/ffitarget.h	2014-11-08 13:47:24.000000000 +0100
-++++ libffi-3.2.1/src/mips/ffitarget.h	2017-04-21 10:53:23.447304581 +0200
-+@@ -32,7 +32,7 @@
-+ #error "Please do not include ffitarget.h directly into your source.  Use ffi.h instead."
-+ #endif
-+ 
-+-#ifdef linux
-++#ifdef __linux__
-+ # include <asm/sgidefs.h>
-+ #elif defined(__rtems__)
-+ /*
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+---
+ package/sg3_utils/sg3_utils.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index f010b3e..88827f3 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -7,10 +7,10 @@
+ SG3_UTILS_VERSION = 1.42
+ SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
+ SG3_UTILS_SITE = http://sg.danny.cz/sg/p
+-SG3_UTILS_LICENSE = BSD-3-Clause
+-# utils progs are GPL-2.0+ licenced
++SG3_UTILS_LICENSE = BSD-3-Clause (library)
++# Some utils progs are GPL-2.0+ licensed while others are BSD-3-Clause
+ ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),y)
+-SG3_UTILS_LICENSE += GPL-2.0+
++SG3_UTILS_LICENSE := $(SG3_UTILS_LICENSE), GPL-2.0+ (programs), BSD-3-Clause (programs)
+ endif
+ SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
+ 
 -- 
-2.11.0
+2.7.4
