@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Apr 2017 10:02:17 +0200
-Subject: [Buildroot] [PATCH] tslib: update to 1.9
-In-Reply-To: <1492756007-31315-1-git-send-email-martin.kepplinger@ginzinger.com>
-References: <1492756007-31315-1-git-send-email-martin.kepplinger@ginzinger.com>
-Message-ID: <20170421100217.41b83233@free-electrons.com>
+Date: Fri, 21 Apr 2017 10:04:16 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpng: Cleanup neon support
+ options
+In-Reply-To: <20170420213302.31155-1-bernd.kuhls@t-online.de>
+References: <20170420213302.31155-1-bernd.kuhls@t-online.de>
+Message-ID: <20170421100416.6f70aa9f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Apr 2017 08:26:47 +0200, Martin Kepplinger wrote:
-> The curious ones will find the release notes here:
-> 
->     https://github.com/kergoth/tslib/releases
-> 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-> ---
->  package/tslib/tslib.hash | 4 ++--
->  package/tslib/tslib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, 20 Apr 2017 23:33:01 +0200, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+> +ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+> +LIBPNG_CONF_OPTS += --enable-arm-neon=yes
+
+Well, my suggestion was to use just --enable-arm-neon, not
+--enable-arm-neon=yes.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
