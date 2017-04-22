@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 15:52:05 +0200
-Subject: [Buildroot] [PATCH 6/7] qt5.mk: add header
-In-Reply-To: <20170421152452.11236-6-aduskett@codeblue.com>
+Date: Sat, 22 Apr 2017 15:52:08 +0200
+Subject: [Buildroot] [PATCH 7/7] qt.mk: fix header.
+In-Reply-To: <20170421152452.11236-7-aduskett@codeblue.com>
 References: <20170421152452.11236-1-aduskett@codeblue.com>
- <20170421152452.11236-6-aduskett@codeblue.com>
-Message-ID: <20170422155205.695126d8@free-electrons.com>
+ <20170421152452.11236-7-aduskett@codeblue.com>
+Message-ID: <20170422155208.6e06c6d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Apr 2017 11:24:51 -0400, Adam Duskett wrote:
+On Fri, 21 Apr 2017 11:24:52 -0400, Adam Duskett wrote:
+> The header was non-standard according to check-package.
+> 
 > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 > ---
->  package/qt5/qt5.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  package/qt/qt.mk | 9 +--------
+>  1 file changed, 1 insertion(+), 8 deletions(-)
 
 Applied to master, thanks.
 
