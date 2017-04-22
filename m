@@ -1,46 +1,35 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 22 Apr 2017 13:18:11 -0400
-Subject: [Buildroot] [PATCH v2 25/25] fix ordering on configs starting with
-	'y'
-In-Reply-To: <20170422171811.1346-1-Adamduskett@outlook.com>
-References: <20170422171811.1346-1-Adamduskett@outlook.com>
-Message-ID: <20170422171811.1346-25-Adamduskett@outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 22 Apr 2017 19:18:50 +0200
+Subject: [Buildroot] [PATCH v5 06/34] package/kodi-jsonschemabuilder:
+	new host package
+References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
+ <20170417195433.26672-7-bernd.kuhls@t-online.de>
+ <20170422091649.GG15086@scaer>
+Message-ID: <qsfssdx9sb.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The check-package script when ran gives warnings on ordering issues
-on all of these Config files.  This patch cleans up all warnings
-related to the ordering in the Config files for packages starting with
-the letter y in the package directory.
+Am Sat, 22 Apr 2017 11:16:49 +0200 schrieb Yann E. MORIN:
 
-The appropriate ordering is: type, default, depends on, select, help
-See http://nightly.buildroot.org/#_config_files for more information.
+>> new file mode 120000
+>> index 000000000..92a75949b
+>> --- /dev/null
+>> +++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
+>> @@ -0,0 +1 @@
+>> +/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/package/kodi/kodi.hash
+>> \ No newline at end of file
+> 
+> Uh-Oh, bad symlink... :-/
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
-v1 -> v2:
-  - Broke package up into just packages starting with the letter y.
-  
- package/ympd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Yann,
 
-diff --git a/package/ympd/Config.in b/package/ympd/Config.in
-index d0901c7..39b3a86 100644
---- a/package/ympd/Config.in
-+++ b/package/ympd/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_YMPD
- 	bool "ympd"
--	select BR2_PACKAGE_LIBMPDCLIENT
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBMPDCLIENT
- 	help
- 	  ympd, a standalone MPD Web GUI written in C, utilizing
- 	  Websockets and Bootstrap/JS
--- 
-2.9.3
+I used the package mesa3d-headers as an example, its .hash file is a 
+symlink to mesa3d/mesa3d.hash. This construct was coded by you ;)
+
+https://git.buildroot.net/buildroot/commit/package/mesa3d-headers?
+id=8138a360181b60573ce070eb86b80f546dfc9cba
+
+Regards, Bernd
