@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 15:50:52 +0200
-Subject: [Buildroot] [git commit] package/qt5: add comment header
-Message-ID: <20170422135133.09D258223B@busybox.osuosl.org>
+Date: Sat, 22 Apr 2017 15:50:15 +0200
+Subject: [Buildroot] [git commit] package/xenomai: properly indent
+	XENOMAI_DEVICES variable
+Message-ID: <20170422135132.ECC888223B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edc2d7b0a4d0af8f5456310da106c1d26b50ab48
+commit: https://git.buildroot.net/buildroot/commit/?id=58dd42a59a963f05123e50a594ea4b82d1571733
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/xenomai/xenomai.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 9e77ce3..5c7af39 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1,3 +1,9 @@
-+################################################################################
-+#
-+# qt5
-+#
-+################################################################################
-+
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5_VERSION_MAJOR = 5.8
- QT5_VERSION = $(QT5_VERSION_MAJOR).0
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 2d92e91..4844fff 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -136,9 +136,9 @@ endef
+ XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_SKINS
+ 
+ define XENOMAI_DEVICES
+-/dev/rtheap  c  666  0  0  10  254  0  0  -
+-/dev/rtscope c  666  0  0  10  253  0  0  -
+-/dev/rtp     c  666  0  0  150 0    0  1  32
++	/dev/rtheap  c  666  0  0  10  254  0  0  -
++	/dev/rtscope c  666  0  0  10  253  0  0  -
++	/dev/rtp     c  666  0  0  150 0    0  1  32
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
