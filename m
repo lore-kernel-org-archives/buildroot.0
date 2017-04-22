@@ -1,35 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Apr 2017 19:18:50 +0200
-Subject: [Buildroot] [PATCH v5 06/34] package/kodi-jsonschemabuilder:
-	new host package
-References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
- <20170417195433.26672-7-bernd.kuhls@t-online.de>
- <20170422091649.GG15086@scaer>
-Message-ID: <qsfssdx9sb.ln2@ID-313208.user.individual.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 22 Apr 2017 13:23:00 -0400
+Subject: [Buildroot] [PATCH 2/7] package configs: clean up ordering.
+In-Reply-To: <20170422155639.09402617@free-electrons.com>
+References: <20170421152452.11236-1-aduskett@codeblue.com>
+ <20170421152452.11236-2-aduskett@codeblue.com>
+ <20170422155639.09402617@free-electrons.com>
+Message-ID: <CAFSsvmqDiyEWQBexA16eMGwzMYVhj6gzZwuVR-viA=TFaG7ikg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 22 Apr 2017 11:16:49 +0200 schrieb Yann E. MORIN:
+Hey, sorry about sending everything at once, I usually do a test-run to a
+separate account of mine to make sure all the formatting looks good, and I
+forgot to remove the buildroot email address out of it.
 
->> new file mode 120000
->> index 000000000..92a75949b
->> --- /dev/null
->> +++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
->> @@ -0,0 +1 @@
->> +/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/package/kodi/kodi.hash
->> \ No newline at end of file
-> 
-> Uh-Oh, bad symlink... :-/
+Totally my fault!
 
-Hi Yann,
-
-I used the package mesa3d-headers as an example, its .hash file is a 
-symlink to mesa3d/mesa3d.hash. This construct was coded by you ;)
-
-https://git.buildroot.net/buildroot/commit/package/mesa3d-headers?
-id=8138a360181b60573ce070eb86b80f546dfc9cba
-
-Regards, Bernd
+On Sat, Apr 22, 2017 at 9:56 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 21 Apr 2017 11:24:47 -0400, Adam Duskett wrote:
+>> The check-package script when ran gives warnings on ordering issues
+>> on all of these Config files.  This patch cleans up all warnings
+>> related to the ordering in the Config files in the package directory.
+>>
+>> The appropriate ordering is: type, default, depends on, select, help
+>> See http://nightly.buildroot.org/#_config_files for more information.
+>>
+>> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+>
+> This is really too long/too boring to review. I believe this should
+> rather be done progressively, or split into smaller patches. One patch
+> per package is quite certainly too much. Maybe one patch for packages
+> starting with "a", one for packages starting with "b", etc.
+>
+> But don't send the whole thing at once. We don't want to have the
+> patchwork backlog flooded by cleanup patches.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
