@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 15:52:02 +0200
-Subject: [Buildroot] [PATCH 5/7] xenomai.mk: fix expected indent with
+Date: Sat, 22 Apr 2017 15:51:59 +0200
+Subject: [Buildroot] [PATCH 4/7] busybox.mk: fix unexpected indent with
  tabs.
-In-Reply-To: <20170421152452.11236-5-aduskett@codeblue.com>
+In-Reply-To: <20170421152452.11236-4-aduskett@codeblue.com>
 References: <20170421152452.11236-1-aduskett@codeblue.com>
- <20170421152452.11236-5-aduskett@codeblue.com>
-Message-ID: <20170422155202.7c8550a6@free-electrons.com>
+ <20170421152452.11236-4-aduskett@codeblue.com>
+Message-ID: <20170422155159.471991ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 21 Apr 2017 11:24:50 -0400, Adam Duskett wrote:
+On Fri, 21 Apr 2017 11:24:49 -0400, Adam Duskett wrote:
 > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 > ---
->  package/xenomai/xenomai.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/busybox/busybox.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+The commit title was not properly formatted:
+
+ - The prefix should have been "busybox:" or "package/busybox:"
+
+ - No final dot
+
+Applied with this fixed.
 
 Thomas
 -- 
