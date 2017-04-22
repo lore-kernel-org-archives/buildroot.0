@@ -1,29 +1,120 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Apr 2017 22:40:45 +0200
-Subject: [Buildroot] [PATCH v5 08/34] package/kodi: bump to version
-	17.1-Krypton
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Apr 2017 22:45:08 +0200
+Subject: [Buildroot] [PATCH v5 09/34] package/kodi: add patch to disable
+ online check
+In-Reply-To: <20170417195433.26672-10-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
- <20170417195433.26672-9-bernd.kuhls@t-online.de>
- <20170422202457.GJ15086@scaer>
-Message-ID: <dnrssdx9sb.ln2@ID-313208.user.individual.net>
+ <20170417195433.26672-10-bernd.kuhls@t-online.de>
+Message-ID: <20170422204508.GL15086@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 22 Apr 2017 22:24:57 +0200 schrieb Yann E. MORIN:
+Bernd, All,
 
->>  package/kodi/0002-cmake-add-FindIconv.cmake.patch  |  171 +++
+On 2017-04-17 21:54 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+As I understand it, this patch disable the check that the system is
+"online", for those systems that are not connected to the internet
+(e.g not connected at all, or only to a LAN).
+
+Again, I think this is a feature patch, and we usually try to avoid
+feature patches.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/kodi/0004-disable-online-check.patch | 65 ++++++++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 package/kodi/0004-disable-online-check.patch
 > 
-> That patch to find iconv is a feature patch (add support for building
-> under uClibc). We avoid having feature patches. At best make it a
-> separate changeset.
+> diff --git a/package/kodi/0004-disable-online-check.patch b/package/kodi/0004-disable-online-check.patch
+> new file mode 100644
+> index 000000000..9c21064bf
+> --- /dev/null
+> +++ b/package/kodi/0004-disable-online-check.patch
+> @@ -0,0 +1,65 @@
+> +From 468f917d3c1ee6f84b1a075d327d7c7626f1e223 Mon Sep 17 00:00:00 2001
+> +From: Stefan Saraev <stefan@saraev.ca>
+> +Date: Sat, 18 Apr 2015 15:03:31 +0300
+> +Subject: [PATCH 03/13] disable online check
+> +
+> +Ported from LibreELEC
+> +https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.03-disable-online-check.patch
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + xbmc/GUIInfoManager.cpp              | 1 -
+> + xbmc/utils/SystemInfo.cpp            | 5 +----
+> + xbmc/windows/GUIWindowSystemInfo.cpp | 1 -
+> + 3 files changed, 1 insertion(+), 6 deletions(-)
+> +
+> +diff --git a/xbmc/GUIInfoManager.cpp b/xbmc/GUIInfoManager.cpp
+> +index cb09e75..a218e1d 100644
+> +--- a/xbmc/GUIInfoManager.cpp
+> ++++ b/xbmc/GUIInfoManager.cpp
+> +@@ -278,7 +278,6 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
+> +                                   { "currentwindow",    SYSTEM_CURRENT_WINDOW },
+> +                                   { "currentcontrol",   SYSTEM_CURRENT_CONTROL },
+> +                                   { "dvdlabel",         SYSTEM_DVD_LABEL },
+> +-                                  { "internetstate",    SYSTEM_INTERNET_STATE },
+> +                                   { "osversioninfo",    SYSTEM_OS_VERSION_INFO },
+> +                                   { "kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
+> +                                   { "uptime",           SYSTEM_UPTIME },
+> +diff --git a/xbmc/utils/SystemInfo.cpp b/xbmc/utils/SystemInfo.cpp
+> +index f423cfe..d8483d0 100644
+> +--- a/xbmc/utils/SystemInfo.cpp
+> ++++ b/xbmc/utils/SystemInfo.cpp
+> +@@ -247,7 +247,6 @@ bool CSysInfoJob::DoWork()
+> + {
+> +   m_info.systemUptime      = GetSystemUpTime(false);
+> +   m_info.systemTotalUptime = GetSystemUpTime(true);
+> +-  m_info.internetState     = GetInternetState();
+> +   m_info.videoEncoder      = GetVideoEncoder();
+> +   m_info.cpuFrequency      = GetCPUFreqInfo();
+> +   m_info.osVersionInfo     = CSysInfo::GetOsPrettyNameWithVersion() + " (kernel: " + CSysInfo::GetKernelName() + " " + CSysInfo::GetKernelVersionFull() + ")";
+> +@@ -1023,9 +1022,7 @@ int CSysInfo::GetXbmcBitness(void)
+> + 
+> + bool CSysInfo::HasInternet()
+> + {
+> +-  if (m_info.internetState != CSysData::UNKNOWN)
+> +-    return m_info.internetState == CSysData::CONNECTED;
+> +-  return (m_info.internetState = CSysInfoJob::GetInternetState()) == CSysData::CONNECTED;
+> ++  return m_info.internetState == CSysData::UNKNOWN;
+> + }
+> + 
+> + std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
+> +diff --git a/xbmc/windows/GUIWindowSystemInfo.cpp b/xbmc/windows/GUIWindowSystemInfo.cpp
+> +index 6ff2391..ee73c88 100644
+> +--- a/xbmc/windows/GUIWindowSystemInfo.cpp
+> ++++ b/xbmc/windows/GUIWindowSystemInfo.cpp
+> +@@ -125,7 +125,6 @@ void CGUIWindowSystemInfo::FrameMove()
+> +     SetControlLabel(i++, "%s: %s", 13160, NETWORK_GATEWAY_ADDRESS);
+> +     SetControlLabel(i++, "%s: %s", 13161, NETWORK_DNS1_ADDRESS);
+> +     SetControlLabel(i++, "%s: %s", 20307, NETWORK_DNS2_ADDRESS);
+> +-    SetControlLabel(i++, "%s %s", 13295, SYSTEM_INTERNET_STATE);
+> +   }
+> + 
+> +   else if (m_section == CONTROL_BT_VIDEO)
+> +-- 
+> +2.5.0
+> +
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Hi Yann,
-
-building Kodi 16 with uClibc is already possible, so imho it is not a 
-feature patch, instead it fixes the problem mentioned in the patch 
-description.
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
