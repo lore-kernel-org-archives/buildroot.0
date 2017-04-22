@@ -1,48 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 15:59:31 +0200
-Subject: [Buildroot] [git commit] syslog-ng: disable mongodb
-Message-ID: <20170422135936.B2B018262C@busybox.osuosl.org>
+Date: Sat, 22 Apr 2017 15:59:38 +0200
+Subject: [Buildroot] [PATCH v2] syslog-ng: disable mongodb
+In-Reply-To: <2882577850f3a9d14d85f8dbbf7ceaef7916be41.1492786513.git.baruch@tkos.co.il>
+References: <2882577850f3a9d14d85f8dbbf7ceaef7916be41.1492786513.git.baruch@tkos.co.il>
+Message-ID: <20170422155938.04623524@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c2b11977a70d418b7ae2cd7d4b62e77bddbc2c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libbson is a dependency of the mongo-c-driver that syslog-ng uses. Buildroot
-doesn't package mongo-c-driver so syslog-ng uses the bundled one. The bundled
-mongo-c-driver in turn may optionally use a bundled libbson. When Buildroot
-builds libbson mongo-c-driver detects that and does not configure its bundled
-libbson. This breaks the build of the syslog-ng mongodb module because it adds
-the bundled libbson to the headers search path.
+On Fri, 21 Apr 2017 17:55:13 +0300, Baruch Siach wrote:
+> libbson is a dependency of the mongo-c-driver that syslog-ng uses. Buildroot
+> doesn't package mongo-c-driver so syslog-ng uses the bundled one. The bundled
+> mongo-c-driver in turn may optionally use a bundled libbson. When Buildroot
+> builds libbson mongo-c-driver detects that and does not configure its bundled
+> libbson. This breaks the build of the syslog-ng mongodb module because it adds
+> the bundled libbson to the headers search path.
+> 
+> Disable the mongodb module to avoid this issue.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/843/84331e9a168d8bdf2cceca8e9e1480611c1ecaed/
+> http://autobuild.buildroot.net/results/b5b/b5bad64abbf5764faf2a7129a1a25ad75c34980b/
+> http://autobuild.buildroot.net/results/3c3/3c32f4eb7436da06f3fb59f928363959df2a5e86/
+> 
+> Cc: Chris Packham <judge.packham@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2: Don't use bundled mongo-c-driver and libbson, just disable mongodb (Thomas P)
+> ---
+>  package/syslog-ng/syslog-ng.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Disable the mongodb module to avoid this issue.
+Applied to master, thanks.
 
-Fixes:
-http://autobuild.buildroot.net/results/843/84331e9a168d8bdf2cceca8e9e1480611c1ecaed/
-http://autobuild.buildroot.net/results/b5b/b5bad64abbf5764faf2a7129a1a25ad75c34980b/
-http://autobuild.buildroot.net/results/3c3/3c32f4eb7436da06f3fb59f928363959df2a5e86/
-
-Cc: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/syslog-ng/syslog-ng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 192a52b..980c783 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -13,7 +13,7 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- # rabbit-mq needs -lrt
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
--	--disable-java --disable-java-modules
-+	--disable-java --disable-java-modules --disable-mongodb
- 
- # We override busybox's S01logging init script
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
