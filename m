@@ -1,47 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Apr 2017 21:04:36 +0200
-Subject: [Buildroot] [PATCH v5 06/34] package/kodi-jsonschemabuilder:
- new host package
-In-Reply-To: <qsfssdx9sb.ln2@ID-313208.user.individual.net>
-References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
- <20170417195433.26672-7-bernd.kuhls@t-online.de>
- <20170422091649.GG15086@scaer>
- <qsfssdx9sb.ln2@ID-313208.user.individual.net>
-Message-ID: <20170422190436.GI15086@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 22 Apr 2017 23:10:44 +0300
+Subject: [Buildroot] [PATCH] xorriso: disable libcdio
+Message-ID: <0a5dac7516bd86eca86510a190385617af60d738.1492891844.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+xorriso and libcdio define identically named symbols. This breaks static
+linking.
 
-On 2017-04-22 19:18 +0200, Bernd Kuhls spake thusly:
-> Am Sat, 22 Apr 2017 11:16:49 +0200 schrieb Yann E. MORIN:
-> 
-> >> new file mode 120000
-> >> index 000000000..92a75949b
-> >> --- /dev/null
-> >> +++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.hash
-> >> @@ -0,0 +1 @@
-> >> +/home/bernd/buildroot/br8_ffmpeg3_kodi17_github/package/kodi/kodi.hash
-> >> \ No newline at end of file
-> > 
-> > Uh-Oh, bad symlink... :-/
-> 
-> I used the package mesa3d-headers as an example, its .hash file is a 
-> symlink to mesa3d/mesa3d.hash. This construct was coded by you ;)
+Besides, upstream suggested that on Linux the built-in libburn adapter is much
+better tested than libcdio.
 
-Yes, indeed, but the symlink you created is absolute. You should make it
-relative.
+Disable libcdio.
 
-Regards,
-Yann E. MORIN.
+Fixes:
+http://autobuild.buildroot.net/results/430/430a6b548fcc311f20ea71cecaa11fafac1d5a19/
+http://autobuild.buildroot.net/results/a5d/a5d0f8bec0d39e48f6dfe4ecc07fe0ca3c6bd70a/
 
+Cc: Steve Kenton <skenton@ou.edu>
+Suggested-by: Thomas Schmitt <scdbackup@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/xorriso/xorriso.mk | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
+index b2055804302e..1f095911f80f 100644
+--- a/package/xorriso/xorriso.mk
++++ b/package/xorriso/xorriso.mk
+@@ -18,19 +18,14 @@ HOST_XORRISO_CONF_OPTS = \
+ 	--disable-libedit \
+ 	--disable-libacl
+ 
++# libcdio doesn't make sense for Linux
++# http://lists.gnu.org/archive/html/bug-xorriso/2017-04/msg00004.html
++XORRISO_CONF_OPTS = --disable-libcdio
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ XORRISO_DEPENDENCIES += libiconv
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBCDIO),y)
+-XORRISO_DEPENDENCIES += host-pkgconf libcdio
+-XORRISO_CONF_OPTS += \
+-	--enable-pkg-check-modules \
+-	--enable-libcdio
+-else
+-XORRISO_CONF_OPTS += --disable-libcdio
+-endif
+-
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ XORRISO_DEPENDENCIES += readline
+ XORRISO_CONF_OPTS += --enable-libreadline
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
