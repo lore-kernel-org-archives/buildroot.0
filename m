@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 22 Apr 2017 13:59:52 +0200
-Subject: [Buildroot] [PATCH v8 09/12] e2fsprogs: disable unneeded features
-	for host
+Date: Sat, 22 Apr 2017 13:59:53 +0200
+Subject: [Buildroot] [PATCH v8 10/12] e2fsprogs: add explicit
+	--enable/--disable configure options
 In-Reply-To: <20170422115955.22718-1-arnout@mind.be>
 References: <20170422115955.22718-1-arnout@mind.be>
-Message-ID: <20170422115955.22718-10-arnout@mind.be>
+Message-ID: <20170422115955.22718-11-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <casantos@datacom.ind.br>
 
-We don't need e2initrd_helper or the test I/O manager for the host, just
-like we don't need it for the target.
-
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-[Arnout: don't add --disable-rpath, since we *do* need rpath for the
- target; otherwise we have to explicitly pass LD_LIBRARY_PATH to be
- able to run tools linked with util-linux' libuuid/libblkid]
+[Arnout: don't split up the fuse2fs CONF_OPTS and DEPENDENCIES
+ handling]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/e2fsprogs/e2fsprogs.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/e2fsprogs/e2fsprogs.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index e0a7fa9354..632fdc250c 100644
+index 632fdc250c..a60c69b395 100644
 --- a/package/e2fsprogs/e2fsprogs.mk
 +++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -28,10 +28,12 @@ endif
- # Disable fuse2fs as well to avoid carrying over deps, and it's unused
- HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-defrag \
-+	--disable-e2initrd-helper \
- 	--disable-fuse2fs \
+@@ -40,12 +40,12 @@ HOST_E2FSPROGS_CONF_OPTS = \
+ E2FSPROGS_CONF_OPTS = \
+ 	--bindir=/bin \
+ 	--sbindir=/sbin \
+-	$(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
+-	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
+-	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
+-	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
++	$(if $(BR2_STATIC_LIBS),--disable-elf-shlibs,--enable-elf-shlibs) \
++	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),--enable-debugfs,--disable-debugfs) \
++	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),--enable-imager,--disable-imager) \
++	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),--enable-defrag,--disable-defrag) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_FSCK),--enable-fsck,--disable-fsck) \
+-	$(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
++	$(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),--enable-resizer,--disable-resizer) \
+ 	--disable-uuidd \
  	--disable-libblkid \
  	--disable-libuuid \
--	--enable-symlink-install
-+	--enable-symlink-install \
-+	--disable-testio-debug
- 
- # Set the binary directories to "/bin" and "/sbin" to override programs
- # installed by busybox.
 -- 
 2.11.0
