@@ -1,78 +1,125 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sat, 22 Apr 2017 12:39:06 +0530
-Subject: [Buildroot] [PATCH v9 2/2] Add defconfig for MIPS Creator ci40
-In-Reply-To: <20170421185839.17905-2-abhimanyu.v@gmail.com>
-References: <20170421185839.17905-1-abhimanyu.v@gmail.com>
- <20170421185839.17905-2-abhimanyu.v@gmail.com>
-Message-ID: <CA+NV+VnApSPvcfKTDJh+69AG3uP6An-JVOYM0AXho1MBzYCamw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Apr 2017 09:13:57 +0200
+Subject: [Buildroot] [PATCH v5 01/34]
+ package/kodi-visualisation-fountain: remove package
+In-Reply-To: <20170417195433.26672-2-bernd.kuhls@t-online.de>
+References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
+ <20170417195433.26672-2-bernd.kuhls@t-online.de>
+Message-ID: <20170422071357.GA15086@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Bernd, All,
 
-On Sat, Apr 22, 2017 at 12:28 AM, Abhimanyu Vishwakarma
-<abhimanyu.v@gmail.com> wrote:
-> From: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
->
-> Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
+On 2017-04-17 21:54 +0200, Bernd Kuhls spake thusly:
+> Remove broken package:
+> https://github.com/notspiff/visualization.fountain/issues/1#issuecomment-166156021
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  Changes v1->v2
->   - No change
->  Changes v2->v3 (Suggested by Arnout)
->   - Remove uImage and add fitImage generation
->   - Tidy readme.txt
->   - Tidy ci40_defconfig, remove custom toolchain and add wifi helper packages
->   Some changes are not done:
->   - Using git-helper:
->     - Custom kernel doesnt provide tar file, so it didnt work for me
->  Changes v3->v4 (Suggested by Arnout)
->   - Use github helper for getting kernel/u-boot
->   - rename fitImage.its -> fitImage.its.in to reflect as template file,
->     remove hardcoded dtb filename
->   - Find dtb file in output/images directory and use first dtb in fitImage
->   - Remove image size from genimage.cfg
->   - Tidy readme.txt and add section to explain how to stop u-boot autoboot,
->     how to make it persistent, and other grammar
->  Changes v4->v5 (Suggested by Thomas)
->   - Use fixed kernel entry addr
->   - Generate vmlinux.bin.gz from generate vmlinux.bin
->   - Remove generating uImage (not required for anything now)
->  Changes v5->v6
->   - Use kernel generate fitimage
->   - bump up u-boot version
->   - Change emailid from imgtec.com -> personal id
->  Changes v6->v7 (Suggested by Thomas)
->   - Use genimage.sh script
->   - Improve and fix grammer in readme.txt
->  Changes v7->v8 (Suggested by Arnout)
->   - Use genimage.sh script from POST_IMAGE_SCRIPT
->   - Use uboot kconfig base config
->   - Remove dts config from defconfig
->   - Some other small cleanup
->   - rebase on master
->  Changes v8->v9 (Suggested by Arnout)
->   - Use sh instead of bash where bash feature is not needed
->   - Use sudo for command run on user PC
->   - Update bootloader flashing help text in readme.txt
->
->  board/ci40/genimage.cfg  | 12 +++++++++
->  board/ci40/post-build.sh |  4 +++
->  board/ci40/readme.txt    | 65 ++++++++++++++++++++++++++++++++++++++++++++++++
->  configs/ci40_defconfig   | 48 +++++++++++++++++++++++++++++++++++
->  4 files changed, 129 insertions(+)
->  create mode 100644 board/ci40/genimage.cfg
->  create mode 100755 board/ci40/post-build.sh
->  create mode 100644 board/ci40/readme.txt
->  create mode 100644 configs/ci40_defconfig
+>  Config.in.legacy                                              |  7 +++++++
+>  package/kodi-visualisation-fountain/Config.in                 | 11 -----------
+>  .../kodi-visualisation-fountain.hash                          |  2 --
+>  .../kodi-visualisation-fountain.mk                            | 11 -----------
+>  package/kodi/Config.in                                        |  1 -
+>  5 files changed, 7 insertions(+), 25 deletions(-)
+>  delete mode 100644 package/kodi-visualisation-fountain/Config.in
+>  delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+>  delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 8e9f3d175..a13e4453b 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,13 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2017.05"
+>  
+> +config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
+> +	bool "kodi-visualisation-fountain has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  According to upstream 'the visualization is not currently
+> +	  in a working shape.'
+> +
+>  config BR2_PACKAGE_PORTMAP
+>  	bool "portmap has been removed"
+>  	select BR2_LEGACY
+> diff --git a/package/kodi-visualisation-fountain/Config.in b/package/kodi-visualisation-fountain/Config.in
+> deleted file mode 100644
+> index 570d16933..000000000
+> --- a/package/kodi-visualisation-fountain/Config.in
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
+> -	bool "kodi-visualisation-fountain"
+> -	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+> -	select BR2_PACKAGE_LIBSOIL
+> -	help
+> -	  Fountain visualization for Kodi
+> -
+> -	  https://github.com/notspiff/visualization.fountain
+> -
+> -comment "kodi-visualisation-fountain needs OpenGL"
+> -	depends on !BR2_PACKAGE_HAS_LIBGL
+> diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+> deleted file mode 100644
+> index 8dc933eff..000000000
+> --- a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally computed
+> -sha256 7b2867f415f22e4bc4ba834034f00117fcf76774aea0afc7bf30b5f2d1991dd7 kodi-visualisation-fountain-f22deacd2396a204694d346f85369ea9ea70e16f.tar.gz
+> diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+> deleted file mode 100644
+> index 5684402a2..000000000
+> --- a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -################################################################################
+> -#
+> -# kodi-visualisation-fountain
+> -#
+> -################################################################################
+> -
+> -KODI_VISUALISATION_FOUNTAIN_VERSION = f22deacd2396a204694d346f85369ea9ea70e16f
+> -KODI_VISUALISATION_FOUNTAIN_SITE = $(call github,notspiff,visualization.fountain,$(KODI_VISUALISATION_FOUNTAIN_VERSION))
+> -KODI_VISUALISATION_FOUNTAIN_DEPENDENCIES = kodi libsoil
+> -
+> -$(eval $(cmake-package))
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index f2a3e2e03..f94e2c7c2 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -315,7 +315,6 @@ endmenu
+>  
+>  menu "Visualisations"
+>  	source "package/kodi-visualisation-fishbmc/Config.in"
+> -	source "package/kodi-visualisation-fountain/Config.in"
+>  	source "package/kodi-visualisation-goom/Config.in"
+>  	source "package/kodi-visualisation-shadertoy/Config.in"
+>  	source "package/kodi-visualisation-spectrum/Config.in"
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Tried usbboot, Ci40 successfully booted using generated sdcard.img.
-
-Tested-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-
-Thanks,
-Rahul
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
