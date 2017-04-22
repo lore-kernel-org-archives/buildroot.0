@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 22 Apr 2017 23:57:14 +0200
-Subject: [Buildroot] [PATCH v8 04/12] e2fsprogs: remove uuidgen support
-In-Reply-To: <20170422142939.059c5ea6@free-electrons.com>
-References: <20170422115955.22718-1-arnout@mind.be>
- <20170422115955.22718-5-arnout@mind.be>
- <20170422142939.059c5ea6@free-electrons.com>
-Message-ID: <0c070703-ad51-3ce3-d799-5968e99ace3f@mind.be>
+Date: Sun, 23 Apr 2017 00:09:41 +0200
+Subject: [Buildroot] [PATCH 1/7] package configs: clean up indentation
+ warnings.
+In-Reply-To: <CAFSsvmrVYi1gn-U1Zk=+F2+aazno9_FSdci_KZ39P87K3OXN5Q@mail.gmail.com>
+References: <20170421152452.11236-1-aduskett@codeblue.com>
+ <20170422155352.7c6cca5a@free-electrons.com>
+ <CAFSsvmrVYi1gn-U1Zk=+F2+aazno9_FSdci_KZ39P87K3OXN5Q@mail.gmail.com>
+Message-ID: <04cd56df-3ec2-ad44-6a3b-184c3e736d27@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,46 +15,54 @@ To: buildroot@busybox.net
 
 
 
-On 22-04-17 14:29, Thomas Petazzoni wrote:
-> Hello,
+On 22-04-17 18:47, Adam Duskett wrote:
+> Hello;
 > 
-> On Sat, 22 Apr 2017 13:59:47 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> From: Carlos Santos <casantos@datacom.ind.br>
+> On Sat, Apr 22, 2017 at 9:53 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
 >>
->> In fact, uuidgen was never built because we pass --disable-libuuid. So
->> the option was a NOP.
+>> On Fri, 21 Apr 2017 11:24:46 -0400, Adam Duskett wrote:
+>>> The check-package script when ran gave warnings on indentation issues
+>>> on all of these Config files.  This patch cleans up all warnings
+>>> related to the indentation of the Config files in the package directory.
+>>>
+>>> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+>>> ---
+>>>  package/b43-firmware/Config.in       |   8 +-
+>>>  package/binutils/Config.in.host      |  12 +-
+>>>  package/gcc/Config.in.host           | 156 +++++------
+>>>  package/gdb/Config.in.host           |  12 +-
+>>>  package/jquery-ui-themes/Config.in   |  96 +++----
+>>>  package/kodi/Config.in               | 100 +++----
+>>>  package/linux-headers/Config.in.host |  85 +++---
+>>>  package/lua/Config.in                |  12 +-
+>>>  package/uclibc/Config.in             |  28 +-
+>>>  package/x11r7/Config.in              | 526 ++++++++++++++++++-----------------
+>>>  10 files changed, 522 insertions(+), 513 deletions(-)
 >>
->> Remove the license info for libuuid.
+>> This looks good overall, except for package/Config.in. The indentation
+>> is done on purpose in this file, I believe so that "diff" puts some
+>> useful text in the context, making the patches touching
+>> package/Config.in easier to read.
 >>
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
->> [Arnout:
->>  - do not remove --disable-uuidd - even though that is implied by
->>    --disable-libuuid, it's better to be explicit about it;
->>  - remove license info of libuuid]
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->>  package/e2fsprogs/Config.in    | 7 +++----
->>  package/e2fsprogs/e2fsprogs.mk | 5 ++---
->>  2 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> Applied to master, thanks. I suppose the logic for not having a
-> Config.in.legacy entry is that the tool had never been installed
-> anyway, so nobody could have been relying on this option to install
-> uuidgen. Am I right?
+>> So please drop the change to package/Config.in.
+>>
+> Not sure what you mean? I don't see package/Config.in in this patch?
 
- No, I just forgot :-) But indeed, the option was dysfunctional since commit
-044edd063 back in 2011, so no need for legacy handling.
+ He means package/x11r7/Config.in, which like package/Config.in is just a list
+of menu and source lines. Like Thomas said, the indentation is useful so that a
+diff shows in which menu entry something is changed (usually, a package is added).
 
+ However, it currently doesn't work for package/x11r7/Config.in, because git
+identifies the "if BR2_PACKAGE_XORG7" as the 'function' instead of the menu.
+Also, for x11r7, the reasoning of seeing the menu isn't so important, since the
+package name already tells the story (it starts with xlib_, xdriver_, xapp_, etc.)
+
+ Anyway, the x11r7 bit should certainly be a separate patch.
 
  Regards,
  Arnout
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
