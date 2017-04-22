@@ -1,47 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 14:29:39 +0200
-Subject: [Buildroot] [PATCH v8 04/12] e2fsprogs: remove uuidgen support
-In-Reply-To: <20170422115955.22718-5-arnout@mind.be>
-References: <20170422115955.22718-1-arnout@mind.be>
- <20170422115955.22718-5-arnout@mind.be>
-Message-ID: <20170422142939.059c5ea6@free-electrons.com>
+Date: Sat, 22 Apr 2017 14:30:30 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: use libblkid and libuuid from
+	util-linux for host
+Message-ID: <20170422123034.25F3582755@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aab5db994c5c520a6d990a560737c61d36205698
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 22 Apr 2017 13:59:47 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: Carlos Santos <casantos@datacom.ind.br>
-> 
-> In fact, uuidgen was never built because we pass --disable-libuuid. So
-> the option was a NOP.
-> 
-> Remove the license info for libuuid.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> [Arnout:
->  - do not remove --disable-uuidd - even though that is implied by
->    --disable-libuuid, it's better to be explicit about it;
->  - remove license info of libuuid]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/e2fsprogs/Config.in    | 7 +++----
->  package/e2fsprogs/e2fsprogs.mk | 5 ++---
->  2 files changed, 5 insertions(+), 7 deletions(-)
+We have a host-util-linux, so we can use it to provide libblkid and
+libuuid. This makes it consistent with the target package.
 
-Applied to master, thanks. I suppose the logic for not having a
-Config.in.legacy entry is that the tool had never been installed
-anyway, so nobody could have been relying on this option to install
-uuidgen. Am I right?
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/e2fsprogs/Config.in.host |  1 +
+ package/e2fsprogs/e2fsprogs.mk   | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/e2fsprogs/Config.in.host b/package/e2fsprogs/Config.in.host
+index de9148e..7591bbc 100644
+--- a/package/e2fsprogs/Config.in.host
++++ b/package/e2fsprogs/Config.in.host
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HOST_E2FSPROGS
+ 	bool "host e2fsprogs"
++	select BR2_PACKAGE_HOST_UTIL_LINUX
+ 	help
+ 	  The EXT2/3/4 file system utilities.
+ 
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 896f014..5231a97 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -10,14 +10,21 @@ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2F
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+ E2FSPROGS_LICENSE_FILES = NOTICE lib/ss/mit-sipb-copyright.h lib/et/internal.h
+ E2FSPROGS_INSTALL_STAGING = YES
++
++# Use libblkid and libuuid from util-linux for host and target packages.
++# This prevents overriding them with e2fsprogs' ones, which may cause
++# problems for other packages.
+ E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
+-# we don't have a host-util-linux
+-HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf
++HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf host-util-linux
+ 
+ # e4defrag doesn't build on older systems like RHEL5.x, and we don't
+ # need it on the host anyway.
+ # Disable fuse2fs as well to avoid carrying over deps, and it's unused
+-HOST_E2FSPROGS_CONF_OPTS += --disable-defrag --disable-fuse2fs
++HOST_E2FSPROGS_CONF_OPTS = \
++	--disable-defrag \
++	--disable-fuse2fs \
++	--disable-libblkid \
++	--disable-libuuid
+ 
+ E2FSPROGS_CONF_OPTS = \
+ 	$(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
