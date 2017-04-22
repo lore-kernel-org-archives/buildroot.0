@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 22 Apr 2017 13:59:44 +0200
-Subject: [Buildroot] [PATCH v8 01/12] e2fsprogs: change upstream URL sf.net
-	-> sourceforge.net
+Date: Sat, 22 Apr 2017 13:59:45 +0200
+Subject: [Buildroot] [PATCH v8 02/12] e2fsprogs: add missing arch depends to
+	comment
 In-Reply-To: <20170422115955.22718-1-arnout@mind.be>
 References: <20170422115955.22718-1-arnout@mind.be>
-Message-ID: <20170422115955.22718-2-arnout@mind.be>
+Message-ID: <20170422115955.22718-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,23 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <casantos@datacom.ind.br>
 
-sf.net redirects to sourceforge.net, so directly use that as upstream
-URL. Config.in.host already uses that URL.
-
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-[Arnout: remove trailing /]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/e2fsprogs/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/e2fsprogs/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index d1914a9953..da6aacf2fd 100644
+index da6aacf2fd..c83f84530d 100644
 --- a/package/e2fsprogs/Config.in
 +++ b/package/e2fsprogs/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_E2FSPROGS
- 	help
- 	  The EXT2 file system utilities.
+@@ -51,6 +51,7 @@ config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # sync_file_range not impl
  
--	  http://e2fsprogs.sf.net
-+	  http://e2fsprogs.sourceforge.net
+ comment "e4defrag needs a glibc or musl toolchain"
++	depends on !BR2_nios2
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC
  
- if BR2_PACKAGE_E2FSPROGS
- 
+ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
 -- 
 2.11.0
