@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 14:25:57 +0200
-Subject: [Buildroot] [PATCH] package/xen: Use POSIX complaint header
- includes
-In-Reply-To: <20170421172933.18487-1-alistair.francis@xilinx.com>
-References: <20170421172933.18487-1-alistair.francis@xilinx.com>
-Message-ID: <20170422142557.60c25d43@free-electrons.com>
+Date: Sat, 22 Apr 2017 14:26:54 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: add missing arch depends to
+	comment
+Message-ID: <20170422122658.AFD5B8215D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e6d7be83bea93629f766a1ca4f77869701525f9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Apr 2017 10:29:33 -0700, Alistair Francis wrote:
-> To fix build issues when using the musl library use POSIX compatible
-> library inclues.
-> 
-> This fixes this autobuilder issue:
-> http://autobuild.buildroot.net/results/1aa/1aa1303f60372f51aa5a7eb18caac4a5b5c1d9d4/build-end.log
-> 
-> These two patches have been by accepted upstream Xen and will be in 4.9:
-> http://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=b4cd5173183fbc118e2dc2a0d2e0d5038daf4fb5
-> http://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=4703a9ba9bb0c9c2804813ffe0943177d5f96039
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> V2:
->  - Update commit message to include build fixes and upstream status
->  - Update patches to include upstream reviews
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/e2fsprogs/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+index da6aacf..c83f845 100644
+--- a/package/e2fsprogs/Config.in
++++ b/package/e2fsprogs/Config.in
+@@ -51,6 +51,7 @@ config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # sync_file_range not impl
+ 
+ comment "e4defrag needs a glibc or musl toolchain"
++	depends on !BR2_nios2
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC
+ 
+ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
