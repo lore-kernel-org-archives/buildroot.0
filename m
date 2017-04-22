@@ -1,10 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 22 Apr 2017 13:18:05 -0400
-Subject: [Buildroot] [PATCH v2 19/25] fix ordering on configs starting with
-	's'
+Date: Sat, 22 Apr 2017 13:18:01 -0400
+Subject: [Buildroot] [PATCH v2 15/25] fix ordering on configs starting with
+	'o'
 In-Reply-To: <20170422171811.1346-1-Adamduskett@outlook.com>
 References: <20170422171811.1346-1-Adamduskett@outlook.com>
-Message-ID: <20170422171811.1346-19-Adamduskett@outlook.com>
+Message-ID: <20170422171811.1346-15-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,7 @@ To: buildroot@busybox.net
 The check-package script when ran gives warnings on ordering issues
 on all of these Config files.  This patch cleans up all warnings
 related to the ordering in the Config files for packages starting with
-the letter s in the package directory.
+the letter o in the package directory.
 
 The appropriate ordering is: type, default, depends on, select, help
 See http://nightly.buildroot.org/#_config_files for more information.
@@ -22,394 +22,417 @@ See http://nightly.buildroot.org/#_config_files for more information.
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
 v1 -> v2:
-  - Broke package up into just packages starting with the letter s.
+  - Broke package up into just packages starting with the letter o.
   
- package/s6-dns/Config.in               | 2 +-
- package/s6-linux-init/Config.in        | 2 +-
- package/s6-linux-utils/Config.in       | 2 +-
- package/s6-networking/Config.in        | 2 +-
- package/s6-portable-utils/Config.in    | 2 +-
- package/s6-rc/Config.in                | 2 +-
- package/s6/Config.in                   | 2 +-
- package/sepolgen/Config.in             | 2 +-
- package/setools/Config.in              | 8 ++++----
- package/sigrok-cli/Config.in           | 2 +-
- package/sispmctl/Config.in             | 4 ++--
- package/softether/Config.in            | 6 +++---
- package/speex/Config.in                | 2 +-
- package/sshfs/Config.in                | 8 ++++----
- package/startup-notification/Config.in | 2 +-
- package/stella/Config.in               | 6 +++---
- package/strongswan/Config.in           | 4 ++--
- package/subversion/Config.in           | 4 ++--
- package/sunxi-mali/Config.in           | 2 +-
- package/syslog-ng/Config.in            | 8 ++++----
- package/sysprof/Config.in              | 2 +-
- package/sysstat/Config.in              | 3 +--
- 22 files changed, 38 insertions(+), 39 deletions(-)
+ package/odroid-mali/Config.in       |  4 ++--
+ package/ola/Config.in               |  6 +++---
+ package/on2-8170-libs/Config.in     |  2 +-
+ package/opencv/Config.in            |  4 ++--
+ package/opencv3/Config.in           |  2 +-
+ package/opengl/libegl/Config.in     |  2 +-
+ package/opengl/libgl/Config.in      |  2 +-
+ package/opengl/libgles/Config.in    |  2 +-
+ package/opengl/libopenmax/Config.in |  2 +-
+ package/opengl/libopenvg/Config.in  |  2 +-
+ package/openocd/Config.in           | 34 +++++++++++++++++-----------------
+ package/openpowerlink/Config.in     |  2 +-
+ package/openvmtools/Config.in       |  2 +-
+ package/opkg/Config.in              |  2 +-
+ package/oprofile/Config.in          |  6 +++---
+ 15 files changed, 37 insertions(+), 37 deletions(-)
 
-diff --git a/package/s6-dns/Config.in b/package/s6-dns/Config.in
-index 75917f9..e982fda 100644
---- a/package/s6-dns/Config.in
-+++ b/package/s6-dns/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_S6_DNS
- 	bool "s6-dns"
--	select BR2_PACKAGE_SKALIBS
- 	depends on BR2_USE_MMU # skalibs
-+	select BR2_PACKAGE_SKALIBS
+diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
+index e5c07f2..1c31c2d 100644
+--- a/package/odroid-mali/Config.in
++++ b/package/odroid-mali/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_ODROID_MALI
+ 	bool "odroid-mali"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_aarch64 || BR2_ARM_EABIHF
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_ODROID_SCRIPTS # runtime
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+-	depends on BR2_aarch64 || BR2_ARM_EABIHF
  	help
- 	  s6-dns is a suite of DNS client programs and libraries for
- 	  Unix systems, as an alternative to the BIND, djbdns or other
-diff --git a/package/s6-linux-init/Config.in b/package/s6-linux-init/Config.in
-index d930e2f..b56b861 100644
---- a/package/s6-linux-init/Config.in
-+++ b/package/s6-linux-init/Config.in
+ 	  Install the ARM Mali drivers for odroidc2 based systems.
+ 
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index 90a92fd..7c3708d 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -5,13 +5,13 @@ comment "ola needs a toolchain w/ C++, threads, dynamic library"
+ 
+ menuconfig BR2_PACKAGE_OLA
+ 	bool "ola (open lighting architecture)"
+-	select BR2_PACKAGE_PROTOBUF
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	select BR2_PACKAGE_UTIL_LINUX
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX
+ 	help
+ 	  Open Lighting Architecture provides applications
+ 	  with a mechanism to send and receive DMX512 & RDM
+diff --git a/package/on2-8170-libs/Config.in b/package/on2-8170-libs/Config.in
+index 40cad3d..2a60c58 100644
+--- a/package/on2-8170-libs/Config.in
++++ b/package/on2-8170-libs/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_ON2_8170_LIBS
++	bool "on2-8170-libs"
+ 	#This is a binary only package which has been compiled for glibc
+ 	depends on BR2_arm926t
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_LINUX_KERNEL # on2-8170-modules
+ 	select BR2_PACKAGE_ON2_8170_MODULES # runtime
+-	bool "on2-8170-libs"
+ 	help
+ 	  Libraries for Hantro X170 video decoder
+ 
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index c046baa..0260851 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
 @@ -1,9 +1,9 @@
- config BR2_PACKAGE_S6_LINUX_INIT
- 	bool "s6-linux-init"
-+	depends on BR2_USE_MMU # s6
- 	select BR2_PACKAGE_S6
- 	select BR2_PACKAGE_S6_LINUX_UTILS
- 	select BR2_PACKAGE_S6_PORTABLE_UTILS
--	depends on BR2_USE_MMU # s6
- 	help
- 	  s6-linux-init is a set of minimalistic tools to create a
- 	  s6-based init system, including a /sbin/init binary, on a
-diff --git a/package/s6-linux-utils/Config.in b/package/s6-linux-utils/Config.in
-index 14af3cf..43e6bb9 100644
---- a/package/s6-linux-utils/Config.in
-+++ b/package/s6-linux-utils/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_S6_LINUX_UTILS
- 	bool "s6-linux-utils"
--	select BR2_PACKAGE_SKALIBS
- 	depends on BR2_USE_MMU # skalibs
-+	select BR2_PACKAGE_SKALIBS
- 	help
- 	  s6-linux-utils is a set of minimalistic Linux-specific
- 	  system utilities.
-diff --git a/package/s6-networking/Config.in b/package/s6-networking/Config.in
-index ebb77a7..bdf5847 100644
---- a/package/s6-networking/Config.in
-+++ b/package/s6-networking/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_S6_NETWORKING
- 	bool "s6-networking"
-+	depends on BR2_USE_MMU # s6
- 	select BR2_PACKAGE_S6_DNS
- 	select BR2_PACKAGE_S6
--	depends on BR2_USE_MMU # s6
- 	help
- 	  s6-networking is a suite of small networking utilities for
- 	  Unix systems. It includes command-line client and server
-diff --git a/package/s6-portable-utils/Config.in b/package/s6-portable-utils/Config.in
-index 86ebc4c..8521ecf 100644
---- a/package/s6-portable-utils/Config.in
-+++ b/package/s6-portable-utils/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_S6_PORTABLE_UTILS
- 	bool "s6-portable-utils"
--	select BR2_PACKAGE_SKALIBS
- 	depends on BR2_USE_MMU # skalibs
-+	select BR2_PACKAGE_SKALIBS
- 	help
- 	  s6-portable-utils is a set of tiny general Unix utilities,
- 	  often performing well-known tasks such as cut and grep, but
-diff --git a/package/s6-rc/Config.in b/package/s6-rc/Config.in
-index d2ec75e..39a924e 100644
---- a/package/s6-rc/Config.in
-+++ b/package/s6-rc/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_S6_RC
- 	bool "s6-rc"
--	select BR2_PACKAGE_S6
- 	depends on BR2_USE_MMU # s6
-+	select BR2_PACKAGE_S6
- 	help
- 	  s6-rc is a service manager for s6-based systems, i.e. a
- 	  suite of programs that can start and stop services, both
-diff --git a/package/s6/Config.in b/package/s6/Config.in
-index 7c192c1..043380f 100644
---- a/package/s6/Config.in
-+++ b/package/s6/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_S6
- 	bool "s6"
--	select BR2_PACKAGE_EXECLINE
- 	depends on BR2_USE_MMU # execline
-+	select BR2_PACKAGE_EXECLINE
- 	help
- 	  s6 is a small suite of programs for UNIX, designed to allow
- 	  process supervision (a.k.a service supervision), in the line
-diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
-index 3671816..8dd9038 100644
---- a/package/sepolgen/Config.in
-+++ b/package/sepolgen/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_SEPOLGEN
- 	bool "sepolgen"
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_WCHAR # python3
- 	depends on BR2_USE_MMU # python3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
- 	depends on !BR2_STATIC_LIBS # python3
-+	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	help
- 	  This package contains a Python module that forms the core of
- 	  the modern audit2allow (which is a part of the package
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index 5e7f39d..d7b119f 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_SETOOLS
- 	bool "setools"
--	select BR2_PACKAGE_LIBSELINUX
--	select BR2_PACKAGE_SQLITE
--	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_BZIP2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -14,6 +10,10 @@ config BR2_PACKAGE_SETOOLS
- 	# section for versioned symbol"
- 	# arc: libselinux not available
- 	depends on !BR2_nios2 && !BR2_bfin && !BR2_arc
-+	select BR2_PACKAGE_LIBSELINUX
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_BZIP2
- 	help
- 	  SETools is an open source project designed to facilitate
- 	  SELinux policy analysis. The primary tools are:
-diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
-index b8eb60d..2361665 100644
---- a/package/sigrok-cli/Config.in
-+++ b/package/sigrok-cli/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_SIGROK_CLI
- 	bool "sigrok-cli"
--	select BR2_PACKAGE_LIBSIGROK
- 	# libsigrok->libglib2:
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	# libsigrok
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+	select BR2_PACKAGE_LIBSIGROK
- 	help
- 	  Sigrok-cli is a command-line frontend for the sigrok
- 	  software suite.
-diff --git a/package/sispmctl/Config.in b/package/sispmctl/Config.in
-index 976b08f..6066dc0 100644
---- a/package/sispmctl/Config.in
-+++ b/package/sispmctl/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_SISPMCTL
- 	bool "sispmctl"
--	select BR2_PACKAGE_LIBUSB
--	select BR2_PACKAGE_LIBUSB_COMPAT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  sispmctl is an application enabling the use of the GEMBIRD
- 	  SiS-PM and mSiS(sispm) USB-controlled power-outlet device
-diff --git a/package/softether/Config.in b/package/softether/Config.in
-index 60f1357..55e5426 100644
---- a/package/softether/Config.in
-+++ b/package/softether/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_SOFTETHER
- 	bool "softether"
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_READLINE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_READLINE
- 	help
- 	  The SoftEther Server is a fully integrated implementation of the SSTP,
- 	  L2TP, L2TPv3, OpenVPN, and IPSec virtual private networking protocols
-diff --git a/package/speex/Config.in b/package/speex/Config.in
-index f18e866..c4e3df5 100644
---- a/package/speex/Config.in
-+++ b/package/speex/Config.in
-@@ -16,8 +16,8 @@ config BR2_PACKAGE_SPEEX_ARM4
- 	depends on BR2_ARM_CPU_ARMV4
- 
- config BR2_PACKAGE_SPEEX_ARM5E
--	default y
- 	bool
-+	default y
- 	depends on BR2_arm && !BR2_PACKAGE_SPEEX_ARM4
- 
- endif
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index 31fef9f..54aa831 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -1,14 +1,14 @@
- config BR2_PACKAGE_SSHFS
- 	bool "sshfs (FUSE)"
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, glib2
-+	depends on BR2_USE_MMU # libfuse, glib2
-+	depends on !BR2_STATIC_LIBS # libfuse
- 	select BR2_PACKAGE_LIBFUSE
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_OPENSSH
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, glib2
--	depends on BR2_USE_MMU # libfuse, glib2
--	depends on !BR2_STATIC_LIBS # libfuse
- 	help
- 	  FUSE filesystem client based on the SSH File Transfer Protocol.
- 
-diff --git a/package/startup-notification/Config.in b/package/startup-notification/Config.in
-index 1fc6dad..24771ea 100644
---- a/package/startup-notification/Config.in
-+++ b/package/startup-notification/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_STARTUP_NOTIFICATION
- 	bool "startup-notification"
--	select BR2_PACKAGE_XLIB_LIBX11
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_XLIB_LIBX11
- 	help
- 	  Startup-notification is a library used to monitor application startup.
- 
-diff --git a/package/stella/Config.in b/package/stella/Config.in
-index 55f177f..dd8e32a 100644
---- a/package/stella/Config.in
-+++ b/package/stella/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_STELLA
- 	bool "stella"
--	select BR2_PACKAGE_SDL2
--	select BR2_PACKAGE_LIBPNG
+ menuconfig BR2_PACKAGE_OPENCV
+ 	bool "opencv-2.4"
 -	select BR2_PACKAGE_ZLIB
- 	depends on !BR2_STATIC_LIBS # sdl2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	select BR2_PACKAGE_SDL2
-+	select BR2_PACKAGE_LIBPNG
+ 	depends on BR2_USE_WCHAR
 +	select BR2_PACKAGE_ZLIB
  	help
- 	  Stella is a multi-platform Atari 2600 VCS emulator.
- 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 0a95ac0..5119706 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -120,12 +120,12 @@ config BR2_PACKAGE_STRONGSWAN_SCEP
- 
- config BR2_PACKAGE_STRONGSWAN_SCRIPTS
- 	bool "Enable additional utilities (found in scripts directory)"
--	depends on BR2_PACKAGE_STRONGSWAN_CHARON
- 	default y
-+	depends on BR2_PACKAGE_STRONGSWAN_CHARON
- 
- config BR2_PACKAGE_STRONGSWAN_VICI
- 	bool "Enable vici/swanctl"
--	depends on BR2_PACKAGE_STRONGSWAN_CHARON
- 	default y
-+	depends on BR2_PACKAGE_STRONGSWAN_CHARON
- 
- endif
-diff --git a/package/subversion/Config.in b/package/subversion/Config.in
-index ffe424a..ecac518 100644
---- a/package/subversion/Config.in
-+++ b/package/subversion/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_SUBVERSION
- 	bool "subversion"
--	select BR2_PACKAGE_APR
--	select BR2_PACKAGE_APR_UTIL
- 	# apr really needs shared library support
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # apr
-+	select BR2_PACKAGE_APR
-+	select BR2_PACKAGE_APR_UTIL
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
-index c6754c2..71b1195 100644
---- a/package/sunxi-mali/Config.in
-+++ b/package/sunxi-mali/Config.in
-@@ -51,8 +51,8 @@ comment "r3p0 requires an EABIhf toolchain"
- 	depends on !BR2_ARM_EABIHF
- 
- config BR2_PACKAGE_SUNXI_MALI_R3P1
--	depends on BR2_ARM_EABIHF
- 	bool "r3p1"
-+	depends on BR2_ARM_EABIHF
- 
- comment "r3p1 requires an EABIhf toolchain"
- 	depends on !BR2_ARM_EABIHF
-diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
-index 7f47d86..fbc2362 100644
---- a/package/syslog-ng/Config.in
-+++ b/package/syslog-ng/Config.in
-@@ -1,13 +1,13 @@
- config BR2_PACKAGE_SYSLOG_NG
- 	bool "syslog-ng"
--	select BR2_PACKAGE_EVENTLOG
--	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_PCRE
--	select BR2_PACKAGE_OPENSSL
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_EVENTLOG
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_OPENSSL
+ 	  OpenCV (Open Source Computer Vision) is a library of programming
+ 	  functions for real time computer vision.
+@@ -52,13 +52,13 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
+ config BR2_PACKAGE_OPENCV_LIB_GPU
+ 	bool "gpu"
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # opencv libphoto
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	select BR2_PACKAGE_OPENCV_LIB_LEGACY
+ 	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+ 	select BR2_PACKAGE_OPENCV_LIB_PHOTO
+ 	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+-	depends on !BR2_STATIC_LIBS
  	help
- 	  syslog-ng is an enhanced log daemon, supporting a wide range
- 	  of input and output methods: syslog, unstructured text,
-diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
-index e1b0488..3913274 100644
---- a/package/sysprof/Config.in
-+++ b/package/sysprof/Config.in
+ 	  Include opencv_gpu module into the OpenCV build.
+ 
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index ee589f9..3b0a9d6 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
 @@ -1,12 +1,12 @@
- config BR2_PACKAGE_SYSPROF
- 	bool "sysprof"
--	select BR2_PACKAGE_LIBGLIB2
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	# In its util.h file, sysprof contains architecture-specific
- 	# code
- 	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sh4a || BR2_sh4aeb
-+	select BR2_PACKAGE_LIBGLIB2
+ menuconfig BR2_PACKAGE_OPENCV3
+ 	bool "opencv3"
+-	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS # include dlfcn.h
+ 	depends on !BR2_PACKAGE_OPENCV
++	select BR2_PACKAGE_ZLIB
  	help
- 	  Sysprof is a statistical, system-wide profiler that can
- 	  profile user and kernel code using the perf API.
-diff --git a/package/sysstat/Config.in b/package/sysstat/Config.in
-index c262799..923c48a 100644
---- a/package/sysstat/Config.in
-+++ b/package/sysstat/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_SYSSTAT
- 	bool "sysstat"
-+	depends on BR2_USE_MMU 	# fork()
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
--	# Uses fork()
--	depends on BR2_USE_MMU
+ 	  OpenCV (Open Source Computer Vision) is a library of programming
+ 	  functions for real time computer vision.
+diff --git a/package/opengl/libegl/Config.in b/package/opengl/libegl/Config.in
+index f756fbe..a236998 100644
+--- a/package/opengl/libegl/Config.in
++++ b/package/opengl/libegl/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+-	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	string
++	depends on BR2_PACKAGE_HAS_LIBEGL
+diff --git a/package/opengl/libgl/Config.in b/package/opengl/libgl/Config.in
+index 8b99e5b..b9a1602 100644
+--- a/package/opengl/libgl/Config.in
++++ b/package/opengl/libgl/Config.in
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBGL
+ 	bool
+ 
+ config BR2_PACKAGE_PROVIDES_LIBGL
+-	depends on BR2_PACKAGE_HAS_LIBGL
+ 	string
++	depends on BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/opengl/libgles/Config.in b/package/opengl/libgles/Config.in
+index b7b800f..090ef16 100644
+--- a/package/opengl/libgles/Config.in
++++ b/package/opengl/libgles/Config.in
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBGLES
+ 	bool
+ 
+ config BR2_PACKAGE_PROVIDES_LIBGLES
+-	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	string
++	depends on BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/opengl/libopenmax/Config.in b/package/opengl/libopenmax/Config.in
+index d50f2ce..901426a 100644
+--- a/package/opengl/libopenmax/Config.in
++++ b/package/opengl/libopenmax/Config.in
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBOPENMAX
+ 	bool
+ 
+ config BR2_PACKAGE_PROVIDES_LIBOPENMAX
+-	depends on BR2_PACKAGE_HAS_LIBOPENMAX
+ 	string
++	depends on BR2_PACKAGE_HAS_LIBOPENMAX
+diff --git a/package/opengl/libopenvg/Config.in b/package/opengl/libopenvg/Config.in
+index 53cde6a..37d9410 100644
+--- a/package/opengl/libopenvg/Config.in
++++ b/package/opengl/libopenvg/Config.in
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBOPENVG
+ 	bool
+ 
+ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+-	depends on BR2_PACKAGE_HAS_LIBOPENVG
+ 	string
++	depends on BR2_PACKAGE_HAS_LIBOPENVG
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index 2313671..d4c4719 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -11,109 +11,109 @@ comment "Adapters"
+ 
+ config BR2_PACKAGE_OPENOCD_FTDI
+ 	bool "MPSSE mode of FTDI based devices"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
  	help
- 	  The sysstat utilities are a collection of performance
- 	  monitoring tools for Linux. These include sar, sadf, mpstat,
+ 	  Enable building support for the MPSSE mode of FTDI
+ 	  (FT2xxx/FT4xxx) based devices (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_STLINK
+ 	bool "ST-Link JTAG Programmer"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Enable building support for the ST-Link JTAG
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_TI_ICDI
+ 	bool "TI ICDI JTAG Programmer"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Enable building support for the TI ICDI JTAG
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_ULINK
+ 	bool "Keil ULINK JTAG Programmer"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Enable building support for the Keil ULINK JTAG
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_UBLASTER2
+ 	bool "Altera USB-Blaster II Compatible"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Enable building support for the Altera USB-Blaster
+ 	  II Compatible (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_JLINK
+ 	bool "Segger J-Link JTAG Programmer"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Segger J-Link JTAG Programmer and clone such as Atmel
+ 	  SAM-ICE
+ 
+ config BR2_PACKAGE_OPENOCD_OSDBM
+ 	bool "OSDBM JTAG (only) Programmer"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Enable building support for the OSBDM (JTAG only)
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_OPENDOUS
+ 	bool "eStick/opendous JTAG Programmer"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Enable building support for the eStick/opendous JTAG
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_AICE
+ 	bool "Andes JTAG Programmer"
+-	select BR2_PACKAGE_LIBUSB
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Enable building support for the Andes JTAG
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_VSLLINK
+ 	bool "Versaloon-Link JTAG Programmer"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+ 	  Enable building support for the Versaloon-Link JTAG
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_USBPROG
+ 	bool "USBProg JTAG Programmer"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+ 	  Enable building support for the USBProg JTAG
+ 	  Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_RLINK
+ 	bool "Raisonance RLink JTAG Programmer"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+ 	  Enable building support for the Raisonance RLink
+ 	  JTAG Programmer (default is auto)
+ 
+ config BR2_PACKAGE_OPENOCD_ARMEW
+ 	bool "Olimex ARM-JTAG-EW Programmer"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
+ 	help
+ 	  Enable building support for the Olimex ARM-JTAG-EW
+ 	  Programmer (default is auto)
+@@ -125,8 +125,8 @@ config BR2_PACKAGE_OPENOCD_PARPORT
+ 
+ config BR2_PACKAGE_OPENOCD_FT2XXX
+ 	bool "FT2232 based devices (DEPRECATED)"
+-	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
++	select BR2_PACKAGE_LIBFTDI1
+ 	help
+ 	  (DEPRECATED) Enable building support for FT2232
+ 	  based devices using the libftdi library
+@@ -138,8 +138,8 @@ config BR2_PACKAGE_OPENOCD_VPI
+ 
+ config BR2_PACKAGE_OPENOCD_UBLASTER
+ 	bool "Altera USB-Blaster"
+-	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
++	select BR2_PACKAGE_LIBFTDI1
+ 	help
+ 	  Enable building support for the Altera USB-Blaster
+ 	  using the libftdi driver, opensource alternate of
+@@ -178,18 +178,18 @@ config BR2_PACKAGE_OPENOCD_GW16012
+ 
+ config BR2_PACKAGE_OPENOCD_PRESTO
+ 	bool "ASIX Presto Programmer"
+-	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
++	select BR2_PACKAGE_LIBFTDI1
+ 	help
+ 	  Enable building support for ASIX Presto Programmer
+ 	  using the libftdi driver
+ 
+ config BR2_PACKAGE_OPENOCD_OPENJTAG
+ 	bool "OpenJTAG Programmer"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	select BR2_PACKAGE_LIBFTDI1
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	help
+ 	  Enable building support for the OpenJTAG Programmer
+ 	  with ftdi driver
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+index d5e9764..68ea751 100644
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -110,8 +110,8 @@ endmenu
+ endif # BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
+ 
+ config BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER
+-	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
+ 	bool "PCIe Powerlink Driver"
++	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
+ 
+ menu "demos"
+ 
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 79c503c..f76bdf2 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -33,11 +33,11 @@ comment "procps support needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+ 
+ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ 	bool "PAM support"
+-	select BR2_PACKAGE_LINUX_PAM
+ 	# linux-pam needs locale and wchar, but we already have this
+ 	# dependency on the main symbol, above.
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
++	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Support for PAM in openvmtools
+ 
+diff --git a/package/opkg/Config.in b/package/opkg/Config.in
+index 5a4bbc2..a188a7b 100644
+--- a/package/opkg/Config.in
++++ b/package/opkg/Config.in
+@@ -4,9 +4,9 @@ comment "opkg needs a toolchain w/ wchar"
+ 
+ config BR2_PACKAGE_OPKG
+ 	bool "opkg"
+-	select BR2_PACKAGE_LIBARCHIVE
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR # libarchive
++	select BR2_PACKAGE_LIBARCHIVE
+ 	help
+ 	  Opkg is a lightweight package management system, based on ipkg. It is
+ 	  written in C and resembles apt/dpkg in operation. It is intended for
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index e2adde5..d99a7e6 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -15,14 +15,14 @@ config BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
+ config BR2_PACKAGE_OPROFILE
+ 	bool "oprofile"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_POPT
+-	select BR2_PACKAGE_BINUTILS
+-	select BR2_PACKAGE_LIBPFM4 if BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # binutils
+ 	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
++	select BR2_PACKAGE_POPT
++	select BR2_PACKAGE_BINUTILS
++	select BR2_PACKAGE_LIBPFM4 if BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
+ 	help
+ 	  OProfile is a system-wide profiler for Linux systems,
+ 	  capable of profiling all running code at low overhead.
 -- 
 2.9.3
