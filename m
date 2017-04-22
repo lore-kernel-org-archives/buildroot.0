@@ -1,101 +1,266 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 08:28:12 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-04-21
-Message-ID: <20170422062812.57A5E2085D@mail.free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 22 Apr 2017 08:34:06 +0200
+Subject: [Buildroot] [PATCH] perl-gd: bump to version 2.59
+Message-ID: <20170422063406.14258-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+remove patches merged upstream
 
-Build statistics for 2017-04-21
-================================
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-gd/0001-getoptions.patch              | 43 ----------------------
+ package/perl-gd/0002-lgd.patch                     | 28 --------------
+ package/perl-gd/0003-force.patch                   | 32 ----------------
+ .../0004-gdlib-config-is-now-configurable.patch    | 34 ++++++++---------
+ package/perl-gd/Config.in                          |  2 +-
+ package/perl-gd/perl-gd.hash                       |  4 +-
+ package/perl-gd/perl-gd.mk                         | 10 +----
+ 7 files changed, 22 insertions(+), 131 deletions(-)
+ delete mode 100644 package/perl-gd/0001-getoptions.patch
+ delete mode 100644 package/perl-gd/0002-lgd.patch
+ delete mode 100644 package/perl-gd/0003-force.patch
 
-      successes : 201
-       failures : 47 
-       timeouts : 0  
-          TOTAL : 248
-
-Classification of failures by reason
-====================================
-
-                 xenomai-3.0.4 | 9 
-           uboot-tools-2017.03 | 4 
-                busybox-1.26.2 | 3 
-                    mpir-3.0.0 | 3 
-                poppler-0.53.0 | 3 
-                 binutils-2.27 | 2 
-expedite-0529ce56b6fb01e965... | 2 
-                libmpeg2-0.5.1 | 2 
-             lttng-tools-2.9.4 | 2 
-                 qt5base-5.8.0 | 2 
-             rabbitmq-c-v0.8.0 | 2 
-toolchain-external-codesour... | 2 
-               acpica-20161117 | 1 
-                  arp-scan-1.9 | 1 
-                  dbus-1.10.18 | 1 
-                    ffmpeg-3.3 | 1 
-              ghostscript-9.21 | 1 
-             gutenprint-5.2.11 | 1 
-                 libxml2-2.9.4 | 1 
-          shairport-sync-3.0.1 | 1 
-               syslog-ng-3.9.1 | 1 
-uclibc-ng-test-c9b9876cefc1... | 1 
-                 xorriso-1.4.6 | 1 
-
-
-Detail of failures
-===================
-
-         arm |                acpica-20161117 | NOK | http://autobuild.buildroot.net/results/97c2cb3355dbe099fe2302c77e60d764f849aca1 |     
-         arm |                   arp-scan-1.9 | NOK | http://autobuild.buildroot.net/results/fc770dd08f21cbd9224fb3875a032ba2f6a140df |     
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/1d49ff3c58dd28d8126358e9697ac40561f9e692 | ORPH
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/a6235dc1a7bc56963263784c0203c5c258557773 | ORPH
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/087caa9cfea7b044247b1750af72d829c3a8eae9 | ORPH
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/de7877977e8b648e1d45dfd040fedad25adf9bc8 | ORPH
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/ea6cd0d5fdae564bdb1fc816c3a7c33d48e66280 | ORPH
-      xtensa |                   dbus-1.10.18 | NOK | http://autobuild.buildroot.net/results/e1d562a4c77124cd28dfdd55a0adc95791a72561 | ORPH
-      x86_64 | expedite-0529ce56b6fb01e965... | NOK | http://autobuild.buildroot.net/results/f48b1504f1ce8339f018030cc4473da8a108fb5e |     
-         arm | expedite-0529ce56b6fb01e965... | NOK | http://autobuild.buildroot.net/results/ed840755e8e486e48eab8c13a8bb5e9a448199ce |     
-        m68k |                     ffmpeg-3.3 | NOK | http://autobuild.buildroot.net/results/8bd1c0ac57a843f6bdf0707c40e94fcacfc8140a |     
-         arc |               ghostscript-9.21 | NOK | http://autobuild.buildroot.net/results/09881f67ef95f621b803eda7da02a17bc4227371 |     
-         arc |              gutenprint-5.2.11 | NOK | http://autobuild.buildroot.net/results/d18ac9762b8e94beb5742e80b0def851ced4e773 | ORPH
-       sparc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/cec78c1c558b59e43aecd1e037d518af120404d3 | ORPH
-       sparc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/55442f2ab41130d0a209f34401860f4362d53ecf | ORPH
-         arm |                  libxml2-2.9.4 | NOK | http://autobuild.buildroot.net/results/73484637ff0052bde53a18945b619c31a32fe750 | ORPH
-     powerpc |              lttng-tools-2.9.4 | NOK | http://autobuild.buildroot.net/results/cace04f1e784a06da7fbedfe5070073f639289dd |     
-     powerpc |              lttng-tools-2.9.4 | NOK | http://autobuild.buildroot.net/results/aabef01a7efdbb479b21e2e13ddd1929efec85bb |     
-    mips64el |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/c96ebfad883f298f46c019be4d5ca12418deb904 |     
-    mips64el |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/276e1ff0f3927c54bcadd8a5768f83234f58ae8d |     
- powerpc64le |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/01fc6449b18d67b65de7faaa48c64ef2b69e91a3 |     
-         sh4 |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/7b1f32a4cc925a86cc95ea7d0f20f7d1d0c0bf43 |     
-      mipsel |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/c945dce4446346e1e37be0f1397786485f4f3728 |     
-        mips |                 poppler-0.53.0 | NOK | http://autobuild.buildroot.net/results/954cff7380d55128367945229288808d319d9644 |     
-         arm |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/a64b4dacea935ad81f9a3cc03c27c12dffb5d81f |     
-     powerpc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/d24b91aba839643a867106ce7c15fb806f4b5e15 |     
-         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/276dcc0e17f334ea0e15ae7a49110848eefdd195 |     
-         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/6f041f643ee89839c88aa710f90c2d648ebeaacb |     
-     powerpc |           shairport-sync-3.0.1 | NOK | http://autobuild.buildroot.net/results/5bd922e06385cf1e56ffbafa8b3dc3cfbc225bff |     
-     powerpc |                syslog-ng-3.9.1 | NOK | http://autobuild.buildroot.net/results/dfda5b5bbc62b9c7e08d26fd6a1a79c06e0e8ab5 |     
-      x86_64 | toolchain-external-codesour... | NOK | http://autobuild.buildroot.net/results/30b2a2c6ab12fdc60b0c87b6eccea4bc799adc47 | ORPH
-      x86_64 | toolchain-external-codesour... | NOK | http://autobuild.buildroot.net/results/dab9d6b9e9cdebdd4e78b7d9e259db2976d3dccb | ORPH
-      x86_64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/394b425ae9f8154b14d62ebc665cb78b446e1a2b | ORPH
-         arm |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/2d8543190a9068d9649b39e4194dc308ddf4832f | ORPH
-     aarch64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/64b763fcdaaf37997ce5ff1b0440a91135e6e4be | ORPH
-     sparc64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/5123b0a62de2568ea22c691a213b63240f45cef1 | ORPH
-         arm | uclibc-ng-test-c9b9876cefc1... | NOK | http://autobuild.buildroot.net/results/f7c377dd925090f902cf66248a428cc2405a4a52 |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/45cdb417d82e6a9f8f1dd90c4799342d08861aaf |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/bc21e9529bb3b9d9ccf8a0fc6496d491b0ae99cf |     
-     powerpc |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/333d6c736aabbbdf1bcff7b9a87d4fc2a065e521 |     
-     powerpc |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/2cd9f99b39810705b04d458fec4a65771736f09f |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/ba1b5f5e75dd47668b2a29b990f7154c2847f79c |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/fc503260a78665c1949ce081f642253976c21025 |     
-     powerpc |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/936f1a402a43bd9ca49c056a0d11cb55a1f5a64b |     
-      x86_64 |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/92a8c678013689dd7b59917f0f5092fd37d8c903 |     
-      x86_64 |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/e0761d667aaa5c48267aa599368f4259ec577674 |     
-         arm |                  xorriso-1.4.6 | NOK | http://autobuild.buildroot.net/results/a5d0f8bec0d39e48f6dfe4ecc07fe0ca3c6bd70a |     
-
+diff --git a/package/perl-gd/0001-getoptions.patch b/package/perl-gd/0001-getoptions.patch
+deleted file mode 100644
+index 74f055bead..0000000000
+--- a/package/perl-gd/0001-getoptions.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-fix option handling in Makefile.PL
+-
+-the call to GetOptions() must be unique.
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-see https://github.com/lstein/Perl-GD/pull/6
+-
+-Index: b/Makefile.PL
+-===================================================================
+---- a/Makefile.PL
+-+++ b/Makefile.PL
+-@@ -24,7 +24,15 @@
+- my ($options,$lib_gd_path,$lib_ft_path,$lib_png_path,$lib_jpeg_path,$lib_xpm_path,$lib_zlib_path,$force);
+- 
+- use Getopt::Long;
+--GetOptions("ignore_missing_gd" => \$force);
+-+my $result = GetOptions("options=s"         => \$options,
+-+			"lib_gd_path=s"     => \$lib_gd_path,
+-+			"lib_ft_path=s"     => \$lib_ft_path,
+-+			"lib_png_path=s"    => \$lib_png_path,
+-+			"lib_jpeg_path=s"   => \$lib_jpeg_path,
+-+			"lib_xpm_path=s"    => \$lib_xpm_path,
+-+			"lib_zlib_path=s"   => \$lib_zlib_path,
+-+			"ignore_missing_gd" => \$force,
+-+		       );
+- 
+- unless (try_to_autoconfigure(\$options,\$lib_gd_path,\@INC,\@LIBPATH,\@LIBS) || $force) {
+-     die <<END;
+-@@ -47,14 +55,6 @@
+- #############################################################################################
+- # Build options passed in to script to support reproducible builds via Makefiles
+- #############################################################################################
+--my $result = GetOptions("options=s"       => \$options,
+--			"lib_gd_path=s"   => \$lib_gd_path,
+--			"lib_ft_path=s"   => \$lib_ft_path,
+--			"lib_png_path=s"  => \$lib_png_path,
+--			"lib_jpeg_path=s" => \$lib_jpeg_path,
+--			"lib_xpm_path=s"  => \$lib_xpm_path,
+--			"lib_zlib_path=s" => \$lib_zlib_path,
+--		       );
+- unless ($result) {
+-   print STDERR <<END;
+- Usage: perl Makefile.PL [options]
+diff --git a/package/perl-gd/0002-lgd.patch b/package/perl-gd/0002-lgd.patch
+deleted file mode 100644
+index 2827cd76b3..0000000000
+--- a/package/perl-gd/0002-lgd.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-refactor -lgd in @LIBS
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-see https://github.com/lstein/Perl-GD/pull/7
+-
+-Index: b/Makefile.PL
+-===================================================================
+---- a/Makefile.PL
+-+++ b/Makefile.PL
+-@@ -42,9 +42,9 @@
+- END
+- }
+- 
+-+push @LIBS, "-lgd";
+- @INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
+- @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
+-- at LIBS    = qw(-lgd) unless @LIBS;
+- 
+- # support for AMD64 libraries
+- if (-d '/usr/lib64') {
+-@@ -294,7 +294,6 @@
+-   @$LIBPATH      = map {s/^-L// && "-L$_"} split /\s+/,$ldflags;
+-   @$LIBS         = split /\s+/,$libs;
+- 
+--  push @$LIBS,"-lgd";
+-   push @$LIBPATH,"-L$libdir";
+-   ($$lib_gd_path = $libdir) =~ s!/[^/]+$!!;
+-   $$options      = $features;
+diff --git a/package/perl-gd/0003-force.patch b/package/perl-gd/0003-force.patch
+deleted file mode 100644
+index 611066b919..0000000000
+--- a/package/perl-gd/0003-force.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-let @INC and @LIBPATH empty when ignore_missing_gd
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-see https://github.com/lstein/Perl-GD/pull/7
+-
+-Index: b/Makefile.PL
+-===================================================================
+---- a/Makefile.PL
+-+++ b/Makefile.PL
+-@@ -43,13 +43,15 @@
+- }
+- 
+- push @LIBS, "-lgd";
+-- at INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
+-- at LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
+--
+--# support for AMD64 libraries
+--if (-d '/usr/lib64') {
+--  my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
+--  @LIBPATH = (@LIBPATH, at libs64);
+-+unless ($force) {
+-+  @INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
+-+  @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
+-+
+-+  # support for AMD64 libraries
+-+  if (-d '/usr/lib64') {
+-+    my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
+-+    @LIBPATH = (@LIBPATH, at libs64);
+-+  }
+- }
+- 
+- #############################################################################################
+diff --git a/package/perl-gd/0004-gdlib-config-is-now-configurable.patch b/package/perl-gd/0004-gdlib-config-is-now-configurable.patch
+index 58df2255a3..294279acd3 100644
+--- a/package/perl-gd/0004-gdlib-config-is-now-configurable.patch
++++ b/package/perl-gd/0004-gdlib-config-is-now-configurable.patch
+@@ -13,23 +13,23 @@ index dfe8ad7..0fa6ef3 100644
+ --- a/Makefile.PL
+ +++ b/Makefile.PL
+ @@ -21,7 +21,7 @@ END
+- my (@INC, at LIBPATH, at LIBS);
++ my (@INC, at LIBPATH, at LIBS,$LIBGD_VERSION);
+  my $AUTOCONFIG = 0;      # global set by try_to_autoconfigure() below
+  
+ -my ($options,$lib_gd_path,$lib_ft_path,$lib_png_path,$lib_jpeg_path,$lib_xpm_path,$lib_zlib_path,$force);
+ +my ($options,$lib_gd_path,$lib_ft_path,$lib_png_path,$lib_jpeg_path,$lib_xpm_path,$lib_zlib_path,$force,$gdlib_config_path);
+  
+  use Getopt::Long;
+- my $result = GetOptions("options=s"         => \$options,
+-@@ -32,6 +32,7 @@ my $result = GetOptions("options=s"         => \$options,
+- 			"lib_xpm_path=s"    => \$lib_xpm_path,
+- 			"lib_zlib_path=s"   => \$lib_zlib_path,
+- 			"ignore_missing_gd" => \$force,
++ my $result = GetOptions("ignore_missing_gd" => \$force,
++@@ -32,6 +32,7 @@ my $result = GetOptions("ignore_missing_gd" => \$force,
++ 			"lib_jpeg_path=s" => \$lib_jpeg_path,
++ 			"lib_xpm_path=s"  => \$lib_xpm_path,
++ 			"lib_zlib_path=s" => \$lib_zlib_path,
+ +			"gdlib_config_path=s" => \$gdlib_config_path,
+  		       );
+  
+  unless (try_to_autoconfigure(\$options,\$lib_gd_path,\@INC,\@LIBPATH,\@LIBS) || $force) {
+-@@ -72,6 +73,7 @@ Configure GD module.
++@@ -75,6 +76,7 @@ Configure GD module.
+       -lib_xpm_path  path            path to libxpm
+       -lib_zlib_path path            path to libpng
+       -ignore_missing_gd             Ignore missing or old libgd installations and try to compile anyway
+@@ -37,7 +37,7 @@ index dfe8ad7..0fa6ef3 100644
+  
+  If no options are passed on the command line.  The program will
+  attempt to autoconfigure itself with the gdlib-config program (present
+-@@ -118,6 +120,15 @@ if( defined($lib_zlib_path) )
++@@ -121,6 +123,15 @@ if( defined($lib_zlib_path) )
+      @INC     = ("-I$lib_zlib_path/include", @INC);
+      @LIBPATH = ("-L$lib_zlib_path/lib", @LIBPATH); 
+  }
+@@ -53,15 +53,15 @@ index dfe8ad7..0fa6ef3 100644
+  #############################################################################################
+  
+  if ($^O eq 'VMS'){
+-@@ -278,7 +289,7 @@ exit 0;
+- 
+- sub try_to_autoconfigure {
+-   my ($options,$lib_gd_path,$INC,$LIBPATH,$LIBS) = @_;
+--  my $config = `gdlib-config --all`;
+-+  my $config = `$gdlib_config_path --all`;
+-   return unless $config;
+-   $AUTOCONFIG++;
+- 
++@@ -289,7 +300,7 @@ sub try_to_autoconfigure {
++   my ($prefix) = $$lib_gd_path ? ($$lib_gd_path =~ m|(^.*)/lib|) : "";
++   my $bindir = $prefix ? "$prefix/bin/" : "";
++   my $config = `${bindir}gdlib-config --all` if -e "${bindir}gdlib-config";
++-  $config = `gdlib-config --all` if !$config;
+++  $config = `$gdlib_config_path --all` if !$config;
++   unless ($config) {
++       my %config;
++       require ExtUtils::PkgConfig;
+ -- 
+ 1.9.3
+ 
+diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
+index 2b7a265f15..61f7e5dadc 100644
+--- a/package/perl-gd/Config.in
++++ b/package/perl-gd/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_PERL_GD
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GD
+ 	help
+-	  Perl interface to the gd2 graphics library
++	  Interface to Gd Graphics Library
+ 
+ 	  https://metacpan.org/release/GD
+ 
+diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
+index 0c16d3f521..07f24710fe 100644
+--- a/package/perl-gd/perl-gd.hash
++++ b/package/perl-gd/perl-gd.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    c4b3afd98b2c4ce3c2e1027d101a8f1e GD-2.56.tar.gz
+-sha256 1f103d1c98de8621504642ed7fb79f1b40f5f6a63c2abe9390a8ab78617248f9 GD-2.56.tar.gz
++md5    b77596aedf8ba92106ada82c7a58dd29 GD-2.59.tar.gz
++sha256 b5f22854be579cd9c1696f4a5175d57f5623d3bf2e75173ffa8038a1a28afad6 GD-2.59.tar.gz
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index 89a21cf3e9..28a1b876e2 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
+@@ -4,18 +4,12 @@
+ #
+ ################################################################################
+ 
+-PERL_GD_VERSION = 2.56
++PERL_GD_VERSION = 2.59
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+-PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
++PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_GD_DEPENDENCIES = zlib libpng freetype gd
+ PERL_GD_LICENSE = Artistic or GPL-1.0+
+ PERL_GD_LICENSE_FILES = LICENSE
+-PERL_GD_PREFER_INSTALLER = EUMM
+-
+-define PERL_GD_MOVE_XS
+-	mv $(@D)/lib/GD.xs $(@D)/GD.xs
+-endef
+-PERL_GD_POST_PATCH_HOOKS += PERL_GD_MOVE_XS
+ 
+ PERL_GD_CONF_OPTS = \
+ 	-options=FT,PNG \
 -- 
-http://autobuild.buildroot.net
+2.11.0
