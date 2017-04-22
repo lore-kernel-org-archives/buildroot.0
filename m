@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Apr 2017 00:34:31 +0200
-Subject: [Buildroot] [PATCH v8 07/12] e2fsprogs: refactor to fix
- conflicts with busybox and util-linux
-In-Reply-To: <20170422150317.576c0b54@free-electrons.com>
+Date: Sun, 23 Apr 2017 00:34:53 +0200
+Subject: [Buildroot] [PATCH v8 09/12] e2fsprogs: disable unneeded
+ features for host
+In-Reply-To: <20170422150359.01e5a39b@free-electrons.com>
 References: <20170422115955.22718-1-arnout@mind.be>
- <20170422115955.22718-8-arnout@mind.be>
- <20170422150317.576c0b54@free-electrons.com>
-Message-ID: <d3b58050-8679-7eab-3b1a-ed5477f9f595@mind.be>
+ <20170422115955.22718-10-arnout@mind.be>
+ <20170422150359.01e5a39b@free-electrons.com>
+Message-ID: <42f068f3-aac4-8e07-c8bc-5c6526ea3423@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,30 +18,20 @@ To: buildroot@busybox.net
 On 22-04-17 15:03, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Sat, 22 Apr 2017 13:59:50 +0200, Arnout Vandecappelle
+> On Sat, 22 Apr 2017 13:59:52 +0200, Arnout Vandecappelle
 > (Essensium/Mind) wrote:
+>> From: Carlos Santos <casantos@datacom.ind.br>
+>>
+>> We don't need e2initrd_helper or the test I/O manager for the host, just
+>> like we don't need it for the target.
+>>
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>> [Arnout: don't add --disable-rpath, since we *do* need rpath for the
+>>  target; otherwise we have to explicitly pass LD_LIBRARY_PATH to be
 > 
->> +# If both e2fsprogs and busybox are selected, make certain e2fsprogs
->> +# wins the fight over who gets to have their utils actually installed
->> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
->> +E2FSPROGS_DEPENDENCIES += busybox
->> +endif
-> 
-> We recently had a ncurses/busybox discussion, in which to solve a
-> circular dependency problem we removed such a dependency on Busybox. As
-> part of this discussion, we started thinking about whether we should
-> stop using the solution of depending on busybox to allow a package to
-> override Busybox applets, and instead make sure the corresponding
-> applets in Busybox are disabled when another package will install the
-> full featured version of the program.
-> 
-> Should we generalize this idea, and apply it to e2fsprogs as well?
+> I guess you meant "we *do* need rpath for the host", right ?
 
- Yes, but it should be a separate patch. This patch basically preserves the
-existing behaviour of overriding the busybox versions. Note that the dependency
-is redundant because we already depend on util-linux which depends on busybox
-(for the same reason).
-
+ Yes, for host, obviously...
 
  Regards,
  Arnout
