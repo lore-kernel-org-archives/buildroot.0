@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 15:04:46 +0200
-Subject: [Buildroot] [PATCH v8 12/12] e2fsprogs: only add -lintl for
- static builds
-In-Reply-To: <20170422115955.22718-13-arnout@mind.be>
-References: <20170422115955.22718-1-arnout@mind.be>
- <20170422115955.22718-13-arnout@mind.be>
-Message-ID: <20170422150446.5596010b@free-electrons.com>
+Date: Sat, 22 Apr 2017 15:05:50 +0200
+Subject: [Buildroot] [git commit] uboot: fix target uboot defconfig warning
+Message-ID: <20170422130554.76D2C8222C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b7f095920a147c58f07b18f1b68553a1af03ae75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 22 Apr 2017 13:59:55 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+The warning currently reads:
 
-> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-> index a60c69b395..84af7abab8 100644
-> --- a/package/e2fsprogs/e2fsprogs.mk
-> +++ b/package/e2fsprogs/e2fsprogs.mk
-> @@ -77,17 +77,19 @@ HOST_E2FSPROGS_CONF_ENV += \
->  	ac_cv_header_magic_h=no \
->  	ac_cv_lib_magic_magic_file=no
->  
-> -ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_STATIC_LIBS),yy)
->  # util-linux libuuid pulls in libintl if needed, so ensure we also
->  # link against it, otherwise static linking fails
->  E2FSPROGS_CONF_ENV += LIBS=-lintl
->  endif
->  
->  E2FSPROGS_MAKE_OPTS = LDCONFIG=true
-> +
+  No board defconfig name specified, check your
+  BR2_TARGET_UBOOT_DEFCONFIG setting.
 
-Unrelated change.
+It should read:
 
->  E2FSPROGS_INSTALL_STAGING_OPTS = \
->  	DESTDIR=$(STAGING_DIR) \
->  	LDCONFIG=true \
->  	install-libs
-> +
+  No board defconfig name specified, check your
+  BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting.
 
-Ditto.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/uboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 91f8ec4..5320d5c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -311,7 +311,7 @@ endif # UBOOT_BOARD_NAME
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ ifeq ($(BR2_TARGET_UBOOT_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG)),)
+-$(error No board defconfig name specified, check your BR2_TARGET_UBOOT_DEFCONFIG setting)
++$(error No board defconfig name specified, check your BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting)
+ endif # qstrip BR2_TARGET_UBOOT_BOARD_DEFCONFIG
+ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
+ ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
