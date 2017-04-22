@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Apr 2017 14:24:22 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: change upstream URL sf.net ->
-	sourceforge.net
-Message-ID: <20170422122426.AB8E1825CC@busybox.osuosl.org>
+Date: Sat, 22 Apr 2017 14:25:57 +0200
+Subject: [Buildroot] [PATCH] package/xen: Use POSIX complaint header
+ includes
+In-Reply-To: <20170421172933.18487-1-alistair.francis@xilinx.com>
+References: <20170421172933.18487-1-alistair.francis@xilinx.com>
+Message-ID: <20170422142557.60c25d43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ca015a1ad4a0292a645de9666952b7f834c2267
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-sf.net redirects to sourceforge.net, so directly use that as upstream
-URL. Config.in.host already uses that URL.
+On Fri, 21 Apr 2017 10:29:33 -0700, Alistair Francis wrote:
+> To fix build issues when using the musl library use POSIX compatible
+> library inclues.
+> 
+> This fixes this autobuilder issue:
+> http://autobuild.buildroot.net/results/1aa/1aa1303f60372f51aa5a7eb18caac4a5b5c1d9d4/build-end.log
+> 
+> These two patches have been by accepted upstream Xen and will be in 4.9:
+> http://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=b4cd5173183fbc118e2dc2a0d2e0d5038daf4fb5
+> http://xenbits.xen.org/gitweb/?p=xen.git;a=commit;h=4703a9ba9bb0c9c2804813ffe0943177d5f96039
+> 
+> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> V2:
+>  - Update commit message to include build fixes and upstream status
+>  - Update patches to include upstream reviews
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-[Arnout: remove trailing /]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/e2fsprogs/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index d1914a9..da6aacf 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_E2FSPROGS
- 	help
- 	  The EXT2 file system utilities.
- 
--	  http://e2fsprogs.sf.net
-+	  http://e2fsprogs.sourceforge.net
- 
- if BR2_PACKAGE_E2FSPROGS
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
