@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 22:30:49 +0200
-Subject: [Buildroot] [PATCH 01/29] package/qt: default to approved license
+Date: Sun, 23 Apr 2017 22:30:50 +0200
+Subject: [Buildroot] [PATCH 02/29] package/qt5base: default to approved
+	license
 In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
 References: <cover.1492979449.git.yann.morin.1998@free.fr>
-Message-ID: <2a5a0f5d90206d67ede9c7b30e8379eca0dc1772.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <4113908a2a9404f2e2f3c4aba1ca7977e9dd116c.1492979449.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,7 +18,7 @@ Qt can come under non-free licenses, but we have no access to
 such licenses. The conditions to access the code under those
 non-free, non-public licenses is unknown.
 
-Besides, Qt (with Qt5) is the only package that has this choice;
+Besides, Qt5 (with Qt) is the only package that has this choice;
 for other packages in a similar situation, we only use the free,
 publicly-known licenses.
 
@@ -31,30 +32,31 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt/Config.in | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ package/qt5/qt5base/Config.in | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index a7617592a6..5f07bd22f9 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -100,15 +100,8 @@ config BR2_PACKAGE_QT_STATIC
- endchoice
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 337dcf2454..044aa5d545 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -28,16 +28,8 @@ config BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS
+ 	  -no-feature-style_windowsvista.
  
- config BR2_PACKAGE_QT_LICENSE_APPROVED
+ config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
 -	bool "Approve free license"
 -	help
 -	  Select this if you approve one of the available free licenses for the
--	  Qt4 library.
+-	  Qt5 library.
 -	  By doing this you will not be asked while the library is compiled.
 -	  Please read and understand the license terms before approving this.
 -
--	  LGPL v2.1: http://doc.trolltech.com/4.5/lgpl.html
--	  GPL  v3.0: http://doc.trolltech.com/4.5/gpl.html
+-	  LGPL: http://doc.qt.io/qt-5/lgpl.html
+-
+-	  See also http://doc.qt.io/qt-5/licensing.html
 +	bool
 +	default y
  
- config BR2_PACKAGE_QT_CONFIG_FILE
+ config BR2_PACKAGE_QT5BASE_CONFIG_FILE
  	string "Config file"
 -- 
 2.11.0
