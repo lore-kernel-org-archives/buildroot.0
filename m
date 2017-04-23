@@ -1,54 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 23 Apr 2017 17:26:43 +0200
-Subject: [Buildroot] [PATCH v5 08/34] package/kodi: bump to version
-	17.1-Krypton
-References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
- <20170417195433.26672-9-bernd.kuhls@t-online.de>
- <20170422202457.GJ15086@scaer>
-Message-ID: <jmtusdx7vl.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Apr 2017 20:03:14 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
+In-Reply-To: <20170420092015.3b2f7fbd@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 20 Apr 2017 09:20:15 +0200")
+References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
+ <20170420092015.3b2f7fbd@free-electrons.com>
+Message-ID: <87pog3ypb1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 22 Apr 2017 22:24:57 +0200 schrieb Yann E. MORIN:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
->> Bumped BR2_TOOLCHAIN_GCC_AT_LEAST to 4.8 to fix compile error with
->> http://autobuild.buildroot.net/toolchains/configs/sourcery-x86.config
-> 
-> So is it a bug in this toolchain, or does Kodi really need gcc-4.8 now?
+ > Hello,
+ > On Fri, 14 Apr 2017 19:00:32 +0200, Arnout Vandecappelle wrote:
 
-Hi Yann,
+ >> This is the correct approach I think. I think we could also do this for all the
+ >> other cases where we have a -> busybox dependency just because they install the
+ >> same apps.
 
-Kodi requires gcc-4.8, otherwise these build errors occur:
+ > Yes, I'm also wondering if it isn't better to disable the Busybox
+ > applets (like Matt does in this patch for ncurses) rather then
+ > overwriting the symlinks.
 
-output/build/kodi-17.1-Krypton/xbmc/pvr/timers/PVRTimers.h:49:13: error: looser throw specifier for 'virtual PVR::CPVRTimers::~CPVRTimers()'
+ > First of all, overwriting the symlinks means that if you "make
+ > busybox-reinstall", you no longer get the right thing (for sure, we
+ > never guarantee that partial builds/rebuilds give the correct output,
+ > but it's nice when they do). And then of course, it means that there is
+ > code in Busybox, consuming some space, that is never used.
 
-output/build/kodi-17.1-Krypton/xbmc/input/joysticks/DefaultJoystick.h:52:13: error: looser throw specifier for 'virtual JOYSTICK::CDefaultJoystick::~CDefaultJoystick()'
+ > The only annoyance that I can see is a potential blotification of
+ > busybox.mk, with lots of conditional for various packages.
 
-output/build/kodi-17.1-Krypton/xbmc/pvr/windows/GUIWindowPVRBase.h:68:13: error: looser throw specifier for 'virtual PVR::CGUIWindowPVRBase::~CGUIWindowPVRBase()'
+That and the fact that we're adding more "magic" to silently override
+the configuration behind the users' back. I get it that people may be
+less likely to tweak their busybox config than E.G. the kernel, but just
+like for the kernel config I prefer to keep the config overrides to the
+minimum.
 
-output/build/kodi-17.1-Krypton/xbmc/pvr/timers/PVRTimers.h:49:13: error: looser throw specifier for 'virtual PVR::CPVRTimers::~CPVRTimers()'
-
-output/build/kodi-17.1-Krypton/xbmc/pvr/PVRGUIInfo.h:49:13: error: looser throw specifier for 'virtual PVR::CPVRGUIInfo::~CPVRGUIInfo()'
-
-output/build/kodi-17.1-Krypton/xbmc/epg/EpgContainer.h:62:13: error: looser throw specifier for 'virtual EPG::CEpgContainer::~CEpgContainer()'
-
-output/build/kodi-17.1-Krypton/xbmc/windowing/WinEvents.h:34:19: error: looser throw specifier for 'virtual IWinEvents::~IWinEvents()'
-
-output/build/kodi-17.1-Krypton/xbmc/peripherals/addons/AddonButtonMapping.h:44:13: error: looser throw specifier for 'virtual PERIPHERALS::CAddonButtonMapping::~CAddonButtonMapping()'
-
-output/build/kodi-17.1-Krypton/xbmc/input/keyboard/KeymapActionMap.h:31:13: error: looser throw specifier for 'virtual KEYBOARD::CKeymapActionMap::~CKeymapActionMap()'
-
-output/build/kodi-17.1-Krypton/xbmc/input/joysticks/generic/ButtonMapping.h:216:13: error: looser throw specifier for 'virtual JOYSTICK::CButtonMapping::~CButtonMapping()'
-
-output/build/kodi-17.1-Krypton/xbmc/games/controllers/windows/GUIConfigurationWizard.h:52:13: error: looser throw specifier for 'virtual GAME::CGUIConfigurationWizard::~CGUIConfigurationWizard()'
-
-output/build/kodi-17.1-Krypton/xbmc/games/controllers/dialogs/GUIDialogButtonCapture.h:32:9: error: looser throw specifier for 'virtual GAME::CGUIDialogButtonCapture::~CGUIDialogButtonCapture()'
-
-According to https://forums.gentoo.org/viewtopic-p-7892382.html#7892382 gcc-4.7 can not compile the source code while gcc >= 4.8 can.
-
-According to http://stackoverflow.com/questions/6539009/gcc-exception-specification-of-default-destructor it might be possible to patch Kodi to make it compile with gcc-4.7 but neither do I have the knowledge nor the interest to do that so I restricted the Kodi package to gcc >= 4.8, this meets the build depends of the official Ubuntu package which also requires gcc-4.8: https://launchpad.net/~team-xbmc/+archive/ubuntu/xbmc-ppa-build-depends
-
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
