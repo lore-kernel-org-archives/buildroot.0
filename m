@@ -1,45 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 22:31:15 +0200
-Subject: [Buildroot] [PATCH 27/29] configs: drop Qt/Qt5 license approval
-	option
+Date: Sun, 23 Apr 2017 22:31:16 +0200
+Subject: [Buildroot] [PATCH 28/29] package/qt: drop option for license
+	approved
 In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
 References: <cover.1492979449.git.yann.morin.1998@free.fr>
-Message-ID: <f8b920cacd315533540214ebb46d77724da92c01.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <2389cf9ab684f7d56a7ab20b3d8a2be0fa612167.1492979449.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- configs/beaglebone_qt5_defconfig      | 1 -
- configs/firefly_rk3288_demo_defconfig | 1 -
- 2 files changed, 2 deletions(-)
+As stated in previous commits, Buildroot only ever uses the free
+license, and we do not have a click-wrap approval for any such free
+license for any other package.
 
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index cdf8b96c15..b65ca40ec4 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -17,7 +17,6 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
- BR2_PACKAGE_FBV=y
- BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
- BR2_PACKAGE_QT5BASE_EXAMPLES=y
- BR2_PACKAGE_QT5BASE_EGLFS=y
- BR2_PACKAGE_QT5QUICKCONTROLS=y
-diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
-index c2de701934..0f4dd368c4 100644
---- a/configs/firefly_rk3288_demo_defconfig
-+++ b/configs/firefly_rk3288_demo_defconfig
-@@ -19,7 +19,6 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-firefly"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
- BR2_PACKAGE_QT5BASE_EXAMPLES=y
- BR2_PACKAGE_QT5BASE_GUI=y
- BR2_PACKAGE_QT5BASE_EGLFS=y
+The option to approve the license now has no prompt and is no longer
+used anywhere. Drop it and make it a legacy entry.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+---
+ Config.in.legacy     | 6 ++++++
+ package/qt/Config.in | 4 ----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8e9f3d175d..52cda9808e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,12 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
+ 
++config BR2_PACKAGE_QT_LICENSE_APPROVED
++	bool "Qt free license now always approved"
++	select BR2_LEGACY
++	help
++	  Use of Qt in Buildroot now always use the free license of Qt.
++
+ config BR2_PACKAGE_PORTMAP
+ 	bool "portmap has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 5f07bd22f9..d3a01da87f 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -99,10 +99,6 @@ config BR2_PACKAGE_QT_STATIC
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_QT_LICENSE_APPROVED
+-	bool
+-	default y
+-
+ config BR2_PACKAGE_QT_CONFIG_FILE
+ 	string "Config file"
+ 	help
 -- 
 2.11.0
