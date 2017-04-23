@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Apr 2017 23:32:32 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: ncurses progs equiv as default
-In-Reply-To: <CANQCQpZ_6yXNSgpNLGmGLmNwGRsQy84EUPkDoCBMhOTuh49Jsg@mail.gmail.com>
-References: <1492654408-25342-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20170420040019.bjfwlwaknjvrj33c@tarshish>
- <CANQCQpZ_6yXNSgpNLGmGLmNwGRsQy84EUPkDoCBMhOTuh49Jsg@mail.gmail.com>
-Message-ID: <c5cb0b01-856f-aaa6-eb45-5f6af1df8c3a@mind.be>
+Date: Sun, 23 Apr 2017 23:34:59 +0200
+Subject: [Buildroot] [RFC] Adopt a coding style for Python scripts
+In-Reply-To: <20170420091731.3de60ee5@free-electrons.com>
+References: <ff7902df-d244-bbdd-507e-84bf6bc6f1f5@mind.be>
+ <58f797c522aa7_548710f62c4102f@ultri3.mail>
+ <20170420091731.3de60ee5@free-electrons.com>
+Message-ID: <488de6bd-5014-59b4-100b-8a73e9343cb6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,37 @@ To: buildroot@busybox.net
 
 
 
-On 20-04-17 15:01, Matthew Weber wrote:
-> Baruch,
+On 20-04-17 09:17, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On Wed, Apr 19, 2017 at 11:00 PM, Baruch Siach <baruch@tkos.co.il> wrote:
->> Hi Matt,
->>
->> On Wed, Apr 19, 2017 at 09:13:28PM -0500, Matt Weber wrote:
->>> By default, enable the busybox equivalents of the ncurses
->>> clear and reset if ncurses progs are not enabled.
->>
->> Our default busybox.config enables these applets. If the user chooses to
->> disable them in a custom config, why should we force them back on?
->>
+> On Wed, 19 Apr 2017 14:00:53 -0300, Ricardo Martincoski wrote:
 > 
-> True, I was thinking the use case of build time changing (then doing
-> incremental build)if you use ncurses progs vs not and forcing the
-> busybox reconfig to have it update the target folder respectively.
+>>> On 14-04-17 01:44, Ricardo Martincoski wrote:  
+>>>> D) adopt the recommendation PEP8 [1] as coding style and the tool pep8 [2] as
+>>>>    automatic checker for coding style before submitting patches;
+>>>>    It checks for a subset of the recommendation (e.g. file naming is not
+>>>>    checked).  
+>>>
+>>>  For me, option D is great. It can also be added to the checkpackage script.  
+>>
+>> I can look into this integration.
+> 
+> I have nothing against option (D), but I'm wondering what is the
+> relation with the checkpackage script. checkpackage checks packages,
+> written in Kconfig and Make, what is the relation with complying with
+> the Python PEP8 recommendation?
 
- This is a use case we certainly don't want to support. On the other hand, we
-*do* want to support the use case where the user has a custom busybox config,
-doesn't have ncurses, and doesn't want to have clear and reset in his system.
+ Actually, check-package checks files, not packages. It looks at the filename
+and if it is one it recognizes, it runs the appropriate checker on it. So a
+checker that applies to files ending with .py could certainly be added.
 
  Regards,
  Arnout
 
 > 
-> I agree this isn't' ideal for all situations, but with these being
-> terminal tools, would/should you ever turn them off and the amount of
-> code is small?
+> Best regards,
 > 
-> Other discussion related to this:
-> https://patchwork.ozlabs.org/patch/750264/
-> https://patchwork.ozlabs.org/patch/750721/
-> 
-> -Matt
+> Thomas
 > 
 
 -- 
