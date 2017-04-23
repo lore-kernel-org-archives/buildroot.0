@@ -1,104 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 08:40:27 +0200
-Subject: [Buildroot] [PATCH v5 07/34] package/kodi-texturepacker: new
- host package
-In-Reply-To: <e597f43c-aad0-f3a2-b527-a2f6ba2cb526@mind.be>
-References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
- <20170417195433.26672-8-bernd.kuhls@t-online.de>
- <20170422092650.GH15086@scaer>
- <e597f43c-aad0-f3a2-b527-a2f6ba2cb526@mind.be>
-Message-ID: <20170423064027.GB2819@scaer>
+Date: Sun, 23 Apr 2017 08:47:08 +0200
+Subject: [Buildroot] [PATCH v2] package/kodi: fix path to binary
+Message-ID: <20170423064708.10159-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rnout, All,
+Since XBMC was renamed to Kodi, upstream is progressively propagating
+the rename to directories and files, and in some cases kept a legacy
+symlink xbmc->kodi, like /usr/lib/xbmc pointing to /usr/lib/kodi.
 
-On 2017-04-23 00:19 +0200, Arnout Vandecappelle spake thusly:
-> On 22-04-17 11:26, Yann E. MORIN wrote:
-> > Bernd, All,
-> > 
-> > On 2017-04-17 21:54 +0200, Bernd Kuhls spake thusly:
-> >> Needed for upcoming kodi version bump to 17.1-Krypton which will also
-> >> switch the kodi build system to CMake.
-> > And now I see why you did not introduce a host-variant of Kodi: you need
-> > two tools from it, and they are in different subdirs.
-> 
->  ... and you don't want to build all of Kodi for the host.
+In 62165ae (package/kodi: Fix path to binary in service), the path was
+changed to use the new canonical path, but the init script was left out.
+This was not seen previously, because of the legacy symlink.
 
-I was not about building the whole Kodi for the host, but to have thinks
-like:
+But with the advent of Kodi 17 (Krypton), that legacy symlink is no
+more, and the init script no longer works.
 
-    HOST_KODI_SUBDIR = tools/blabla
+Do for the init script what was done two years ago for the service file.
 
-    define HOST_KODI_INSTALL_CMDS
-        $(INSTALL) -D -m 0755 $(@D)/tools/blabla/foo $(HOST_DIR)/usr/bin/foo
-    endef
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Marcus Hoffmann <m.hoffmann@cartelsol.com>
 
-    $(eval $(host-cmake-package))
+---
+Changes v1 -> v2:
+  - typoes  (Marcus)
+---
+ package/kodi/S50kodi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  Still, I think it might be easier to treat the host version as a generic
-> package, and call cmake and make explicitly, once for each tool.
-
-I would like we avoid duplicating the infra. When we fix something in
-the infra, we have to hunt down all dupes in the code...
-
-Unless we change the infra to have the common code in variables, like:
-
-1- outside the -inner define:
-
-    # $(1): uppercase package name
-    define CMAKE_CONFIGURE_CMD
-        (mkdir -p $($(1)_BUILDDIR) && \
-        cd $($(1)_BUILDDIR) && \
-        rm -f CMakeCache.txt && \
-        PATH=$$(BR_PATH) \
-        $($(1)_CONF_ENV) $(BR2_CMAKE) $($(1)_SRCDIR) \
-            -DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-            -DCMAKE_INSTALL_PREFIX="/usr" \
-            -DCMAKE_COLOR_MAKEFILE=OFF \
-            -DBUILD_DOC=OFF \
-            -DBUILD_DOCS=OFF \
-            -DBUILD_EXAMPLE=OFF \
-            -DBUILD_EXAMPLES=OFF \
-            -DBUILD_TEST=OFF \
-            -DBUILD_TESTS=OFF \
-            -DBUILD_TESTING=OFF \
-            -DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
-            $$(CMAKE_QUIET) \
-            $($(1)_CONF_OPTS) \
-        )
-    endef
-
-And then inside the -inner define:
-
-    ifndef $(2)_CONFIGURE_CMDS
-    define $(2)CONFIGURE_CMDS
-        $$(call CMAKE_CONFIGURE_CMD,$(2))
-    endef
-    endif
-
-Or something along those lines, which would allow us to re-use the
-infras and be sure that we can fix them in a single location.
-
-Of course, is it worth the effort?
-
-> > I still find it a bit of disapointing that the Kodi buildsystem can not
-> > build its own tools... :-(
-> 
->  Or indeed, patch Kodi's CMakeLists.txt so it can build its own build tools.
-
-Meh...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/kodi/S50kodi b/package/kodi/S50kodi
+index f00c59c5d9..0afe7a6706 100755
+--- a/package/kodi/S50kodi
++++ b/package/kodi/S50kodi
+@@ -4,7 +4,7 @@
+ #
+ 
+ BIN=/usr/bin/br-kodi
+-KODI=/usr/lib/xbmc/kodi.bin
++KODI=/usr/lib/kodi/kodi.bin
+ KODI_ARGS="--standalone -fs -n"
+ PIDFILE=/var/run/kodi.pid
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
