@@ -1,40 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 10:03:53 +0200
-Subject: [Buildroot] [PATCH v2] package/kodi: fix path to binary
-In-Reply-To: <m60usdxbil.ln2@ID-313208.user.individual.net>
-References: <20170423064708.10159-1-yann.morin.1998@free.fr>
- <m60usdxbil.ln2@ID-313208.user.individual.net>
-Message-ID: <20170423080353.GD2819@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 23 Apr 2017 11:06:40 +0300
+Subject: [Buildroot] [PATCH] lvm2: allow build since uclibc 1.0.24
+In-Reply-To: <20170423071104.GA28568@waldemar-brodkorb.de>
+References: <20170423071104.GA28568@waldemar-brodkorb.de>
+Message-ID: <20170423080640.dtzx2zxvbhiplkmo@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hi Waldemar,
 
-On 2017-04-23 09:03 +0200, Bernd Kuhls spake thusly:
-> Am Sun, 23 Apr 2017 08:47:08 +0200 schrieb Yann E. MORIN:
-> > Do for the init script what was done two years ago for the service file.
-> Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Sun, Apr 23, 2017 at 09:11:04AM +0200, Waldemar Brodkorb wrote:
+> uClibc-ng 1.0.24 allows to use long double wrappers for
+> every architecture.
 
-Thanks!
+Please revert commit 66f136a9f64b (lvm2: disable build with uClibc-ng). That 
+would also revert the propagation of the !BR2_TOOLCHAIN_USES_UCLIBC 
+dependency.
 
-I just saw that you had already reviewed the previous iteration. But
-because you do not Cc the author when replying, I missed it.
+baruch
 
-Could you, please, follow the usual practice that we follow on this
-mailing list (and the usual practice followed about everywhere on every
-mailing lists) to reply by mail with the author and the list as
-recipient, please?
-
-Regards,
-Yann E. MORIN.
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/lvm2/Config.in | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+> index b28b197..c1287dd 100644
+> --- a/package/lvm2/Config.in
+> +++ b/package/lvm2/Config.in
+> @@ -5,7 +5,6 @@ config BR2_PACKAGE_LVM2
+>  	depends on !BR2_STATIC_LIBS # It fails to build statically
+>  	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
+>  	depends on !BR2_TOOLCHAIN_USES_MUSL
+> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC # missing floorl(), nearbyintl()
+>  	help
+>  	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
+>  	  LVM supports enterprise level volume management of disk and disk
+> @@ -39,7 +38,7 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
+>  
+>  endif
+>  
+> -comment "lvm2 needs a glibc toolchain w/ threads, dynamic library"
+> +comment "lvm2 needs a glibc or uClibc toolchain w/ threads, dynamic library"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
+> -		|| BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_USES_UCLIBC
+> +		|| BR2_TOOLCHAIN_USES_MUSL
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
