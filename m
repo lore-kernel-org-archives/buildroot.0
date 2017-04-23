@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 10:40:01 +0200
-Subject: [Buildroot] [PATCH v5 14/34] package/kodi: add optional support
- for pulseaudio
-In-Reply-To: <20170417195433.26672-15-bernd.kuhls@t-online.de>
+Date: Sun, 23 Apr 2017 10:43:39 +0200
+Subject: [Buildroot] [PATCH v5 15/34] package/kodi: add optional support
+ for event clients
+In-Reply-To: <20170417195433.26672-16-bernd.kuhls@t-online.de>
 References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
- <20170417195433.26672-15-bernd.kuhls@t-online.de>
-Message-ID: <20170423084000.GG2819@scaer>
+ <20170417195433.26672-16-bernd.kuhls@t-online.de>
+Message-ID: <20170423084339.GH2819@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,65 +15,59 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2017-04-17 21:54 +0200, Bernd Kuhls spake thusly:
+> For details read
+> https://github.com/xbmc/xbmc/blob/master/tools/EventClients/README.txt
+
+This pointer...
+
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/kodi/Config.in | 7 +++++++
->  package/kodi/kodi.mk   | 7 +++++++
->  2 files changed, 14 insertions(+)
+>  package/kodi/Config.in | 5 +++++
+>  package/kodi/kodi.mk   | 6 ++++++
+>  2 files changed, 11 insertions(+)
 > 
 > diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index e89644b56..c3f73e713 100644
+> index c3f73e713..013d343a4 100644
 > --- a/package/kodi/Config.in
 > +++ b/package/kodi/Config.in
-> @@ -185,6 +185,13 @@ config BR2_PACKAGE_KODI_NONFREE
->  	  Enable components with non-free licenses. This option
->  	  currently only controls support for RAR archives.
+> @@ -132,6 +132,11 @@ config BR2_PACKAGE_KODI_DBUS
+>  	help
+>  	  Enable D-Bus support
+>  
+> +config BR2_PACKAGE_KODI_EVENTCLIENTS
+> +	bool "eventclients"
+> +	help
+> +	  Enable event clients support
 
-The dependencies for libglib2 are not carried over here. That's
-technically fine, because Kodi already has all those deps. But a small
-comment would be nice; at least, state so in the commit log.
+... should also be here in the help text. ;-)
 
-> +config BR2_PACKAGE_KODI_PULSEAUDIO
-> +	bool "pulseaudio"
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_PULSEAUDIO
-
-Pulseaudio has a dependency on SYNC_4, while kodi has a dependency on
-SYNC_8.
-
-Can we assume that a CPU with sync_8 will have sync_4? It would seem
-weird that this would not be the case (i.e. sync_8 is stronger thann
-sync_4), but I would not bet on it...
-
-Please propagate the dependency on sync_4 from pulseaudi.
+Otherwise:
+    
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +	help
-> +	  Enable Pulseaudio support.
-> +
->  config BR2_PACKAGE_KODI_LIBSHAIRPLAY
->  	bool "shairport"
->  	select BR2_PACKAGE_LIBSHAIRPLAY
+>  config BR2_PACKAGE_KODI_LIBBLURAY
+>  	bool "blu-ray"
+>  	select BR2_PACKAGE_LIBBLURAY
 > diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 5e4853b8b..6cc56718d 100644
+> index 6cc56718d..a0fc4d992 100644
 > --- a/package/kodi/kodi.mk
 > +++ b/package/kodi/kodi.mk
-> @@ -329,6 +329,13 @@ else
->  KODI_CONF_OPTS += -DENABLE_OPTICAL=OFF
+> @@ -213,6 +213,12 @@ else
+>  KODI_CONF_OPTS += -DENABLE_DBUS=OFF
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_KODI_PULSEAUDIO),y)
-> +KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=ON
-> +KODI_DEPENDENCIES += pulseaudio
+> +ifeq ($(BR2_PACKAGE_KODI_EVENTCLIENTS),y)
+> +KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=ON
 > +else
-> +KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
+> +KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=OFF
 > +endif
 > +
->  # Remove versioncheck addon, updating Kodi is done by building a new
->  # buildroot image.
->  KODI_ADDON_MANIFEST = $(TARGET_DIR)/usr/share/kodi/system/addon-manifest.xml
+>  ifeq ($(BR2_PACKAGE_KODI_ALSA_LIB),y)
+>  KODI_CONF_OPTS += -DENABLE_ALSA=ON
+>  KODI_DEPENDENCIES += alsa-lib
 > -- 
 > 2.11.0
 > 
