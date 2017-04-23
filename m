@@ -1,56 +1,81 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 23 Apr 2017 11:06:40 +0300
-Subject: [Buildroot] [PATCH] lvm2: allow build since uclibc 1.0.24
-In-Reply-To: <20170423071104.GA28568@waldemar-brodkorb.de>
-References: <20170423071104.GA28568@waldemar-brodkorb.de>
-Message-ID: <20170423080640.dtzx2zxvbhiplkmo@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Apr 2017 10:27:52 +0200
+Subject: [Buildroot] [PATCH v5 12/34] package/kodi: add optional support
+ for bluez5
+In-Reply-To: <20170417195433.26672-13-bernd.kuhls@t-online.de>
+References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
+ <20170417195433.26672-13-bernd.kuhls@t-online.de>
+Message-ID: <20170423082752.GE2819@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Bernd, All,
 
-On Sun, Apr 23, 2017 at 09:11:04AM +0200, Waldemar Brodkorb wrote:
-> uClibc-ng 1.0.24 allows to use long double wrappers for
-> every architecture.
+On 2017-04-17 21:54 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Please revert commit 66f136a9f64b (lvm2: disable build with uClibc-ng). That 
-would also revert the propagation of the !BR2_TOOLCHAIN_USES_UCLIBC 
-dependency.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-baruch
+Regards,
+Yann E. MORIN.
 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  package/lvm2/Config.in | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  package/kodi/Config.in | 8 ++++++++
+>  package/kodi/kodi.mk   | 7 +++++++
+>  2 files changed, 15 insertions(+)
 > 
-> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-> index b28b197..c1287dd 100644
-> --- a/package/lvm2/Config.in
-> +++ b/package/lvm2/Config.in
-> @@ -5,7 +5,6 @@ config BR2_PACKAGE_LVM2
->  	depends on !BR2_STATIC_LIBS # It fails to build statically
->  	# http://lists.busybox.net/pipermail/buildroot/2016-August/170592.html
->  	depends on !BR2_TOOLCHAIN_USES_MUSL
-> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC # missing floorl(), nearbyintl()
->  	help
->  	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
->  	  LVM supports enterprise level volume management of disk and disk
-> @@ -39,7 +38,7 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 95f9f65ea..6d4148899 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -120,6 +120,14 @@ config BR2_PACKAGE_KODI_AVAHI
+>  	  Enable Avahi support.
+>  	  Select this if you want Kodi to support Bonjour protocol.
 >  
+> +config BR2_PACKAGE_KODI_BLUEZ
+> +	bool "bluetooth"
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
+> +	depends on !BR2_PACKAGE_BLUEZ_UTILS # bluez5_utils
+> +	select BR2_PACKAGE_BLUEZ5_UTILS
+> +	help
+> +	    Enable bluetooth support
+> +
+>  config BR2_PACKAGE_KODI_DBUS
+>  	bool "dbus"
+>  	select BR2_PACKAGE_DBUS
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index dbe2fcd62..931f002f8 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -194,6 +194,13 @@ else
+>  KODI_CONF_OPTS += -DENABLE_CAP=OFF
 >  endif
 >  
-> -comment "lvm2 needs a glibc toolchain w/ threads, dynamic library"
-> +comment "lvm2 needs a glibc or uClibc toolchain w/ threads, dynamic library"
->  	depends on BR2_USE_MMU
->  	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
-> -		|| BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_USES_UCLIBC
-> +		|| BR2_TOOLCHAIN_USES_MUSL
+> +ifeq ($(BR2_PACKAGE_KODI_BLUEZ),y)
+> +KODI_CONF_OPTS += -DENABLE_BLUETOOTH=ON
+> +KODI_DEPENDENCIES += bluez5_utils
+> +else
+> +KODI_CONF_OPTS += -DENABLE_BLUETOOTH=OFF
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_KODI_DBUS),y)
+>  KODI_DEPENDENCIES += dbus
+>  KODI_CONF_OPTS += -DENABLE_DBUS=ON
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
