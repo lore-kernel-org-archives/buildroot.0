@@ -1,62 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 22:31:17 +0200
-Subject: [Buildroot] [PATCH 29/29] package/qt5: drop option for license
-	approved
-In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
-References: <cover.1492979449.git.yann.morin.1998@free.fr>
-Message-ID: <0edfc64dedabab8b436312b1212c08dcf9765a05.1492979449.git.yann.morin.1998@free.fr>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Sun, 23 Apr 2017 22:33:10 +0200
+Subject: [Buildroot] [PATCH 1/1] mongoose: bump to version 6.7
+Message-ID: <20170423203310.30473-1-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As stated in previous commits, Buildroot only ever uses the free
-license, and we do not have a click-wrap approval for any such free
-license for any other package.
-
-The option to approve the license now has no prompt and is no longer
-used anywhere. Drop it and make it a legacy entry.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
 ---
- Config.in.legacy              | 6 ++++++
- package/qt5/qt5base/Config.in | 4 ----
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/mongoose/mongoose.hash | 2 +-
+ package/mongoose/mongoose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 52cda9808e..93df6c52ad 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.05"
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index c131e48c4..d5252eb68 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	94b934da083afe8abb1c0af5abb8f25294050011793f048166b12f000f9433a0  mongoose-6.2.tar.gz
++sha256	ccc971298db70963d3f13766c3246a3c36ae7e388acfab7ba2180149d9c8c64f  mongoose-6.7.tar.gz
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index ad8b08c65..36fd8f899 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
-+	bool "Qt5 free license now always approved"
-+	select BR2_LEGACY
-+	help
-+	  Use of Qt5 in Buildroot now always use the free license of Qt5.
-+
- config BR2_PACKAGE_QT_LICENSE_APPROVED
- 	bool "Qt free license now always approved"
- 	select BR2_LEGACY
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 044aa5d545..4796fdb058 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -27,10 +27,6 @@ config BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS
- 	  E.g. to remove the Windows Vista style option, add the option
- 	  -no-feature-style_windowsvista.
- 
--config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
--	bool
--	default y
--
- config BR2_PACKAGE_QT5BASE_CONFIG_FILE
- 	string "Config file"
- 	help
+-MONGOOSE_VERSION = 6.2
++MONGOOSE_VERSION = 6.7
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
 -- 
 2.11.0
