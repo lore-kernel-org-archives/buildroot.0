@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 22:31:16 +0200
-Subject: [Buildroot] [PATCH 28/29] package/qt: drop option for license
+Date: Sun, 23 Apr 2017 22:31:17 +0200
+Subject: [Buildroot] [PATCH 29/29] package/qt5: drop option for license
 	approved
 In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
 References: <cover.1492979449.git.yann.morin.1998@free.fr>
-Message-ID: <2389cf9ab684f7d56a7ab20b3d8a2be0fa612167.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <0edfc64dedabab8b436312b1212c08dcf9765a05.1492979449.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,40 +22,40 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- Config.in.legacy     | 6 ++++++
- package/qt/Config.in | 4 ----
+ Config.in.legacy              | 6 ++++++
+ package/qt5/qt5base/Config.in | 4 ----
  2 files changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 8e9f3d175d..52cda9808e 100644
+index 52cda9808e..93df6c52ad 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,12 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2017.05"
  
-+config BR2_PACKAGE_QT_LICENSE_APPROVED
-+	bool "Qt free license now always approved"
++config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
++	bool "Qt5 free license now always approved"
 +	select BR2_LEGACY
 +	help
-+	  Use of Qt in Buildroot now always use the free license of Qt.
++	  Use of Qt5 in Buildroot now always use the free license of Qt5.
 +
- config BR2_PACKAGE_PORTMAP
- 	bool "portmap has been removed"
+ config BR2_PACKAGE_QT_LICENSE_APPROVED
+ 	bool "Qt free license now always approved"
  	select BR2_LEGACY
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 5f07bd22f9..d3a01da87f 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -99,10 +99,6 @@ config BR2_PACKAGE_QT_STATIC
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 044aa5d545..4796fdb058 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -27,10 +27,6 @@ config BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS
+ 	  E.g. to remove the Windows Vista style option, add the option
+ 	  -no-feature-style_windowsvista.
  
- endchoice
- 
--config BR2_PACKAGE_QT_LICENSE_APPROVED
+-config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
 -	bool
 -	default y
 -
- config BR2_PACKAGE_QT_CONFIG_FILE
+ config BR2_PACKAGE_QT5BASE_CONFIG_FILE
  	string "Config file"
  	help
 -- 
