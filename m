@@ -1,51 +1,54 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sun, 23 Apr 2017 19:21:11 +0530
-Subject: [Buildroot] [PATCH v3] package: protobuf/python-protobuf: bump
-	to v3.2.0.
-In-Reply-To: <20170423115940.GA12996@scaer>
-References: <20170417172225.20472-1-mrugiero@gmail.com>
- <20170421160637.6206-1-mrugiero@gmail.com>
- <20170423115940.GA12996@scaer>
-Message-ID: <CA+NV+V=XoYZToDU23_A+FhtDyNrHobYjfB1vOLTqe+Bq8sUAeg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 23 Apr 2017 17:26:43 +0200
+Subject: [Buildroot] [PATCH v5 08/34] package/kodi: bump to version
+	17.1-Krypton
+References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
+ <20170417195433.26672-9-bernd.kuhls@t-online.de>
+ <20170422202457.GJ15086@scaer>
+Message-ID: <jmtusdx7vl.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sat, 22 Apr 2017 22:24:57 +0200 schrieb Yann E. MORIN:
 
-On Sun, Apr 23, 2017 at 5:29 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Mario, All,
->
-> On 2017-04-21 13:06 -0300, mrugiero at gmail.com spake thusly:
->> From: "Mario J. Rugiero" <mrugiero@gmail.com>
->>
->> Both packages are coupled, so both were bumped and build-tested.
->> The atomics' support patch is no longer needed, and neither is
->> the autoreconf option, and SPARC64 is no longer broken.
->> To make sure of this, one config of each of the following archs
->> was tested (base defconfig in parens):
->> PowerPC (qemu_ppc_g3beige_defconfig)
->> SPARC (qemu_sparc_ss10_defconfig)
->> SPARC64 (qemu_sparc64_sun4u_defconfig)
->
-> This is causing a truckload of build failures:
->
->     http://autobuild.buildroot.org/?reason=host-protobuf-3.2.0
->
->     http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef9728c20d54/
->     http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e916c89f1e3/
->     http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc75b33d484c/
->
-> And so on...
->
-> Note however that all build failures occur on Thomas' autobuilder
-> instance, which is running quite an old distro (on purpose).
+>> Bumped BR2_TOOLCHAIN_GCC_AT_LEAST to 4.8 to fix compile error with
+>> http://autobuild.buildroot.net/toolchains/configs/sourcery-x86.config
+> 
+> So is it a bug in this toolchain, or does Kodi really need gcc-4.8 now?
 
-Is it running a CentOS ? There is upstream commit which may fix these
-build issues.
-https://github.com/google/protobuf/commit/a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff
+Hi Yann,
 
-Thanks,
-Rahul
+Kodi requires gcc-4.8, otherwise these build errors occur:
+
+output/build/kodi-17.1-Krypton/xbmc/pvr/timers/PVRTimers.h:49:13: error: looser throw specifier for 'virtual PVR::CPVRTimers::~CPVRTimers()'
+
+output/build/kodi-17.1-Krypton/xbmc/input/joysticks/DefaultJoystick.h:52:13: error: looser throw specifier for 'virtual JOYSTICK::CDefaultJoystick::~CDefaultJoystick()'
+
+output/build/kodi-17.1-Krypton/xbmc/pvr/windows/GUIWindowPVRBase.h:68:13: error: looser throw specifier for 'virtual PVR::CGUIWindowPVRBase::~CGUIWindowPVRBase()'
+
+output/build/kodi-17.1-Krypton/xbmc/pvr/timers/PVRTimers.h:49:13: error: looser throw specifier for 'virtual PVR::CPVRTimers::~CPVRTimers()'
+
+output/build/kodi-17.1-Krypton/xbmc/pvr/PVRGUIInfo.h:49:13: error: looser throw specifier for 'virtual PVR::CPVRGUIInfo::~CPVRGUIInfo()'
+
+output/build/kodi-17.1-Krypton/xbmc/epg/EpgContainer.h:62:13: error: looser throw specifier for 'virtual EPG::CEpgContainer::~CEpgContainer()'
+
+output/build/kodi-17.1-Krypton/xbmc/windowing/WinEvents.h:34:19: error: looser throw specifier for 'virtual IWinEvents::~IWinEvents()'
+
+output/build/kodi-17.1-Krypton/xbmc/peripherals/addons/AddonButtonMapping.h:44:13: error: looser throw specifier for 'virtual PERIPHERALS::CAddonButtonMapping::~CAddonButtonMapping()'
+
+output/build/kodi-17.1-Krypton/xbmc/input/keyboard/KeymapActionMap.h:31:13: error: looser throw specifier for 'virtual KEYBOARD::CKeymapActionMap::~CKeymapActionMap()'
+
+output/build/kodi-17.1-Krypton/xbmc/input/joysticks/generic/ButtonMapping.h:216:13: error: looser throw specifier for 'virtual JOYSTICK::CButtonMapping::~CButtonMapping()'
+
+output/build/kodi-17.1-Krypton/xbmc/games/controllers/windows/GUIConfigurationWizard.h:52:13: error: looser throw specifier for 'virtual GAME::CGUIConfigurationWizard::~CGUIConfigurationWizard()'
+
+output/build/kodi-17.1-Krypton/xbmc/games/controllers/dialogs/GUIDialogButtonCapture.h:32:9: error: looser throw specifier for 'virtual GAME::CGUIDialogButtonCapture::~CGUIDialogButtonCapture()'
+
+According to https://forums.gentoo.org/viewtopic-p-7892382.html#7892382 gcc-4.7 can not compile the source code while gcc >= 4.8 can.
+
+According to http://stackoverflow.com/questions/6539009/gcc-exception-specification-of-default-destructor it might be possible to patch Kodi to make it compile with gcc-4.7 but neither do I have the knowledge nor the interest to do that so I restricted the Kodi package to gcc >= 4.8, this meets the build depends of the official Ubuntu package which also requires gcc-4.8: https://launchpad.net/~team-xbmc/+archive/ubuntu/xbmc-ppa-build-depends
+
+Regards, Bernd
