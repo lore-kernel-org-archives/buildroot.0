@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 22:30:56 +0200
-Subject: [Buildroot] [PATCH 08/29] package/qt5declarative: always use the
+Date: Sun, 23 Apr 2017 22:30:57 +0200
+Subject: [Buildroot] [PATCH 09/29] package/qt5enginio: always use the
 	opensource license
 In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
 References: <cover.1492979449.git.yann.morin.1998@free.fr>
-Message-ID: <0c61b8e7ac55d3f3f1ad903257e332f6a4dadb79.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <4d5ac78935777de19a0d6212c66b2ab7cade686d.1492979449.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +15,35 @@ We never ask the user to confirm their assent about the use of a free
 license; there is no reason we do so for Qt.
 
 The output of legal-info is there to gather all the licenses used in a
-build; the license for qt5declarative will be there to be consulted as
-well.
+build; the license for qt5enginio will be there to be consulted as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5declarative/qt5declarative.mk | 5 -----
+ package/qt5/qt5enginio/qt5enginio.mk | 5 -----
  1 file changed, 5 deletions(-)
 
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-index c4b3f07402..f9ed8c7515 100644
---- a/package/qt5/qt5declarative/qt5declarative.mk
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -10,7 +10,6 @@ QT5DECLARATIVE_SOURCE = qtdeclarative-opensource-src-$(QT5DECLARATIVE_VERSION).t
- QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns
- QT5DECLARATIVE_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
+index e550fccfdc..bffd1f6274 100644
+--- a/package/qt5/qt5enginio/qt5enginio.mk
++++ b/package/qt5/qt5enginio/qt5enginio.mk
+@@ -12,16 +12,11 @@ QT5ENGINIO_SOURCE = qtenginio-opensource-src-$(QT5ENGINIO_VERSION).tar.xz
+ QT5ENGINIO_DEPENDENCIES = openssl qt5base
+ QT5ENGINIO_INSTALL_STAGING = YES
  
 -ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5DECLARATIVE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5DECLARATIVE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
-@@ -18,10 +17,6 @@ else
- QT5DECLARATIVE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
- QT5DECLARATIVE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ QT5ENGINIO_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5ENGINIO_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ QT5ENGINIO_LICENSE := $(QT5ENGINIO_LICENSE), BSD-3-Clause (examples)
  endif
 -else
--QT5DECLARATIVE_LICENSE = Commercial license
--QT5DECLARATIVE_REDISTRIBUTE = NO
+-QT5ENGINIO_LICENSE = Commercial license
+-QT5ENGINIO_REDISTRIBUTE = NO
 -endif
  
- define QT5DECLARATIVE_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5ENGINIO_DEPENDENCIES += qt5declarative
 -- 
 2.11.0
