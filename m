@@ -1,62 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 22:30:50 +0200
-Subject: [Buildroot] [PATCH 02/29] package/qt5base: default to approved
+Date: Sun, 23 Apr 2017 22:30:51 +0200
+Subject: [Buildroot] [PATCH 03/29] package/qt: always use the opensource
 	license
 In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
 References: <cover.1492979449.git.yann.morin.1998@free.fr>
-Message-ID: <4113908a2a9404f2e2f3c4aba1ca7977e9dd116c.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <784e61967e25160a8c161fc693674e7471f0976a.1492979449.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The only license we can act upon in Buildroot is the publicly
-available license.
+We never ask the user to confirm their assent about the use of a free
+license; there is no reason we do so for Qt.
 
-Qt can come under non-free licenses, but we have no access to
-such licenses. The conditions to access the code under those
-non-free, non-public licenses is unknown.
-
-Besides, Qt5 (with Qt) is the only package that has this choice;
-for other packages in a similar situation, we only use the free,
-publicly-known licenses.
-
-Finally, the name of the tarballs we download clearly hint that
-they can only be used under the free license.
-
-Drop the prompt to the accepted license, and make it mandatory;
-packages will be adapted in follow-up patches.
+The output of legal-info is there to gather all the licenses used in a
+build; the license for Qt will be there to be consulted as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5base/Config.in | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ package/qt/qt.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 337dcf2454..044aa5d545 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -28,16 +28,8 @@ config BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS
- 	  -no-feature-style_windowsvista.
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 690a4b4d9e..8b52208148 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -15,14 +15,10 @@ QT_DEPENDENCIES = host-pkgconf
+ QT_INSTALL_STAGING = YES
  
- config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
--	bool "Approve free license"
--	help
--	  Select this if you approve one of the available free licenses for the
--	  Qt5 library.
--	  By doing this you will not be asked while the library is compiled.
--	  Please read and understand the license terms before approving this.
--
--	  LGPL: http://doc.qt.io/qt-5/lgpl.html
--
--	  See also http://doc.qt.io/qt-5/licensing.html
-+	bool
-+	default y
+ QT_LICENSE := LGPL-2.1 with exceptions or GPL-3.0
+-ifneq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
+-QT_LICENSE := $(QT_LICENSE) or Digia Qt Commercial license
+-endif
+ QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
  
- config BR2_PACKAGE_QT5BASE_CONFIG_FILE
- 	string "Config file"
+-ifeq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
++# Opensource licenses are the only one we catter about
+ QT_CONFIGURE_OPTS += -opensource -confirm-license
+-endif
+ 
+ QT_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_QT_CONFIG_FILE))
+ 
 -- 
 2.11.0
