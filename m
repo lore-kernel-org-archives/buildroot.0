@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Apr 2017 23:59:18 +0200
-Subject: [Buildroot] uboot-tools autobuild failures
-In-Reply-To: <CANQCQpb0U3tO7Z-Lsz1pxmekaKYC8JyU7BJgtcXwLDWDgh1xNw@mail.gmail.com>
-References: <CANQCQpb0U3tO7Z-Lsz1pxmekaKYC8JyU7BJgtcXwLDWDgh1xNw@mail.gmail.com>
-Message-ID: <6de7b55d-97a1-0992-c4a9-13d7f2efd87d@mind.be>
+Date: Mon, 24 Apr 2017 00:06:30 +0200
+Subject: [Buildroot] [PATCH] gcc: Fix build failure related to -fPIC for
+ x86_64 -> i686 builds
+In-Reply-To: <71cfdaf7-367d-44de-a1c6-9041e269c8de@cesnet.cz>
+References: <71cfdaf7-367d-44de-a1c6-9041e269c8de@cesnet.cz>
+Message-ID: <aded779d-fd0d-e83c-5a3e-d0e7b28b5dfe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +13,51 @@ To: buildroot@busybox.net
 
 
 
-On 20-04-17 03:55, Matthew Weber wrote:
-> It looks like all of these recent failures are because the python swig
-> build does a "$(if $(shell which swig 2> /dev/null),_libfdt.so)" to
-> determine if the host system has swig and if so, try to build the
-> python bindings.  Obviously not taking into account any prefix we'd
-> provide to the host/ in out build.
+On 19-04-17 18:23, Jan Kundr?t wrote:
+>> Without this patch, I cannot build the toolchain (both host-gcc-initial
+>> and -final) on Gentoo's amd64 using GCC 4.9.3:
+>>
+>>   /usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/../../../../x86_64-pc-linux-gnu/bin/ld:
+>>   gcov.o: relocation R_X86_64_32 against `.rodata.str1.8' can not
+>>   be used when making a shared object; recompile with -fPIC
 > 
-> http://autobuild.buildroot.org/?reason=uboot-tools-2017.03
-> 
-> I don't directly have a need for those bindings, would a patch that
-> disables this swig detect be reasonable at this point?  Other option
-> would be to rewrite how they're doing it to search a prefix path vs
-> using the shell's which.  Then work upstreaming of that change.
+> One important piece I forgot to add -- I'm running "Hardened Gentoo GCC" which
+> enables PIE by default [1] [2]. As such, this might explain why other are
+> (presumably) not seeing this problem.
 
- The problem with patching uboot-tools is that you usually also built uboot when
-you build uboot-tools, and most likely uboot will also fail to build (at least
-if it's a recent version). But we can't patch uboot because we don't know which
-version it is... So we'd need to do horrible sed-based "patching" in uboot.mk...
+ Indeed. However, I wonder, won't you have a similar problem with other host
+packages that try to build something without -fPIC?
 
- So the ideal solution would be to convince the U-Boot build system that swig
-isn't available, without patching... But that would be difficult...
 
- How about just touching tools/_libfdt.so, so that it doesn't get rebuilt?
+ We don't like to accept patches where it is not clear what happens, i.e. how
+this particular change fixes your problem...
+
+
+> BTW, I cannot find my original submission on patchwork. Was that e-mail OK? I
+> see it in the ML archive [3].
+
+ I believe it's because you sent it base64-encoded, patchwork only likes
+plaintext. You didn't use git send-email, did you?
 
  Regards,
  Arnout
+
+> 
+> With kind regards,
+> Jan
+> 
+> [1]
+> https://wiki.gentoo.org/wiki/Hardened/Toolchain#Automatic_generation_of_Position_Independent_Executables_.28PIEs.29
+> 
+> [2]
+> https://wiki.gentoo.org/wiki/Hardened/Toolchain#Toolchain_modifications_for_automatic_PIEs
+> 
+> [3] http://lists.busybox.net/pipermail/buildroot/2017-April/189441.html
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
