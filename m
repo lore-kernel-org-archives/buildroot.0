@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Apr 2017 22:30:54 +0200
-Subject: [Buildroot] [PATCH 06/29] package/qt5canvas: always use the
+Date: Sun, 23 Apr 2017 22:30:55 +0200
+Subject: [Buildroot] [PATCH 07/29] package/qt5connectivity: always use the
 	opensource license
 In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
 References: <cover.1492979449.git.yann.morin.1998@free.fr>
-Message-ID: <078d2a81abf8c3c70754a61473e4494dc92b6aaf.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <51e80bc14205bef40244d0ac67e9c42c27d8c534.1492979449.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,38 @@ We never ask the user to confirm their assent about the use of a free
 license; there is no reason we do so for Qt.
 
 The output of legal-info is there to gather all the licenses used in a
-build; the license for qt5canvas will be there to be consulted as well.
+build; the license for qt5connectivity will be there to be consulted as
+well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5canvas3d/qt5canvas3d.mk | 5 -----
+ package/qt5/qt5connectivity/qt5connectivity.mk | 5 -----
  1 file changed, 5 deletions(-)
 
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.mk b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-index f49113b538..c0448cfd54 100644
---- a/package/qt5/qt5canvas3d/qt5canvas3d.mk
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-@@ -10,13 +10,8 @@ QT5CANVAS3D_SOURCE = qtcanvas3d-opensource-src-$(QT5CANVAS3D_VERSION).tar.xz
- QT5CANVAS3D_DEPENDENCIES = qt5base qt5declarative
- QT5CANVAS3D_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
+index a9518cb4cb..d53aa91f22 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.mk
++++ b/package/qt5/qt5connectivity/qt5connectivity.mk
+@@ -10,7 +10,6 @@ QT5CONNECTIVITY_SOURCE = qtconnectivity-opensource-src-$(QT5CONNECTIVITY_VERSION
+ QT5CONNECTIVITY_DEPENDENCIES = qt5base
+ QT5CONNECTIVITY_INSTALL_STAGING = YES
  
 -ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5CANVAS3D_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0
- QT5CANVAS3D_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5CONNECTIVITY_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5CONNECTIVITY_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+@@ -21,10 +20,6 @@ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ QT5CONNECTIVITY_LICENSE := $(QT5CONNECTIVITY_LICENSE), BSD-3-Clause (examples)
+ endif
 -else
--QT5CANVAS3D_LICENSE = Commercial license
--QT5CANVAS3D_REDISTRIBUTE = NO
+-QT5CONNECTIVITY_LICENSE = Commercial license
+-QT5CONNECTIVITY_REDISTRIBUTE = NO
 -endif
  
- define QT5CANVAS3D_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+ QT5CONNECTIVITY_DEPENDENCIES += $(if $(BR2_PACKAGE_QT5DECLARATIVE),qt5declarative)
+ QT5CONNECTIVITY_DEPENDENCIES += $(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils)
 -- 
 2.11.0
