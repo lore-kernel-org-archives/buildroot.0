@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 23 Apr 2017 22:55:24 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
-In-Reply-To: <87pog3ypb1.fsf@dell.be.48ers.dk>
-References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
- <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
- <20170420092015.3b2f7fbd@free-electrons.com>
- <87pog3ypb1.fsf@dell.be.48ers.dk>
-Message-ID: <8b127902-0268-8307-70da-065362773da9@mind.be>
+Date: Sun, 23 Apr 2017 22:59:58 +0200
+Subject: [Buildroot] [PATCH 28/29] package/qt: drop option for license
+ approved
+In-Reply-To: <2389cf9ab684f7d56a7ab20b3d8a2be0fa612167.1492979449.git.yann.morin.1998@free.fr>
+References: <cover.1492979449.git.yann.morin.1998@free.fr>
+ <2389cf9ab684f7d56a7ab20b3d8a2be0fa612167.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <3cbea545-9c8f-5502-eb50-aac7fb9a0bc5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,70 +14,68 @@ To: buildroot@busybox.net
 
 
 
-On 23-04-17 20:03, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 23-04-17 22:31, Yann E. MORIN wrote:
+> As stated in previous commits, Buildroot only ever uses the free
+> license, and we do not have a click-wrap approval for any such free
+> license for any other package.
 > 
->  > Hello,
->  > On Fri, 14 Apr 2017 19:00:32 +0200, Arnout Vandecappelle wrote:
+> The option to approve the license now has no prompt and is no longer
+> used anywhere. Drop it and make it a legacy entry.
 > 
->  >> This is the correct approach I think. I think we could also do this for all the
->  >> other cases where we have a -> busybox dependency just because they install the
->  >> same apps.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  Config.in.legacy     | 6 ++++++
+>  package/qt/Config.in | 4 ----
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 > 
->  > Yes, I'm also wondering if it isn't better to disable the Busybox
->  > applets (like Matt does in this patch for ncurses) rather then
->  > overwriting the symlinks.
-> 
->  > First of all, overwriting the symlinks means that if you "make
->  > busybox-reinstall", you no longer get the right thing (for sure, we
->  > never guarantee that partial builds/rebuilds give the correct output,
->  > but it's nice when they do). And then of course, it means that there is
->  > code in Busybox, consuming some space, that is never used.
-> 
->  > The only annoyance that I can see is a potential blotification of
->  > busybox.mk, with lots of conditional for various packages.
-> 
-> That and the fact that we're adding more "magic" to silently override
-> the configuration behind the users' back. I get it that people may be
-> less likely to tweak their busybox config than E.G. the kernel, but just
-> like for the kernel config I prefer to keep the config overrides to the
-> minimum.
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 8e9f3d175d..52cda9808e 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,12 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2017.05"
+>  
+> +config BR2_PACKAGE_QT_LICENSE_APPROVED
+> +	bool "Qt free license now always approved"
+> +	select BR2_LEGACY
+> +	help
+> +	  Use of Qt in Buildroot now always use the free license of Qt.
 
- Well, we are "overriding" the user's busybox config, but since the alternative
-is deleting the busybox-installed tool, whatever the user has configured is not
-available anyway...
+ IMO this doesn't bring any value. If the user already has selected to approve
+the free license, nothing really changes for them so there's no point drawing
+their attention to legacy.
 
- Well, except that it still is available by calling it as "busybox clear".
+ We should instead give a legacy warning when the user *didn't* have the option
+selected. But that's not possible, of course.
 
- So, the choice comes down to:
+ Therefore, I'd say we drop the legacy handling for this option.
 
-1. Add a dependency on busybox like we do now, but it's actually a fake
-dependency and can lead to circular dependencies. And it's anyway not failsafe
-because a "busybox-rebuild" will again overwrite it. On addition, it has the
-bloatification that Thomas mentions.
-
-2. Make sure that busybox doesn't overwrite a tool that already exists. Needs to
-be done for all the different ways that busybox can install things. Then the
-order doesn't matter. Great solution, except for the bloatification. Also, it is
-not great when you have FEATURE_INDIVIDUAL selected in busybox, because a
-busybox-rebuild will not actually rebuild anything.
-
-3. Like proposed in this patch, adapt busybox config. Has the advantage of no
-bloatification, but it means that the user sees his own config overridden which
-isn't nice. In addition, it's quite ugly for the busybox.mk to have all these
-references to other packages (about 40!).
-
-
- Of course, we can also choose to apply solution 3 only to the situation where 1
-doesn't work because of circular dependencies.
-
-
- I can't say which solution is the best. I therefore tend to say: stick to what
-we have, and find a workaround if needed. In other words, apply this patch, but
-don't do it for other packages until required.
 
  Regards,
  Arnout
+> +
+>  config BR2_PACKAGE_PORTMAP
+>  	bool "portmap has been removed"
+>  	select BR2_LEGACY
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 5f07bd22f9..d3a01da87f 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -99,10 +99,6 @@ config BR2_PACKAGE_QT_STATIC
+>  
+>  endchoice
+>  
+> -config BR2_PACKAGE_QT_LICENSE_APPROVED
+> -	bool
+> -	default y
+> -
+>  config BR2_PACKAGE_QT_CONFIG_FILE
+>  	string "Config file"
+>  	help
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
