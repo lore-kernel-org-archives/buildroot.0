@@ -1,45 +1,120 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 17:50:14 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] uboot: fix target uboot
-	defconfig warning
-Message-ID: <20170424193338.84BA6826FA@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 17:49:41 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: bump version to
+	7.54.0 (security)
+Message-ID: <20170424193338.73E6D821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24d80453afd77e2d8b1c3384ae023b6dfe8ee38d
+commit: https://git.buildroot.net/buildroot/commit/?id=86a16f169d36825d49b1780d8b90a51b1b3e4924
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The warning currently reads:
+Security fixes:
+ - CVE-2017-7468: switch off SSL session id when client cert is used
 
-  No board defconfig name specified, check your
-  BR2_TARGET_UBOOT_DEFCONFIG setting.
+Full changelog: https://curl.haxx.se/changes.html
 
-It should read:
+Removing 0001-CVE-2017-7407.patch. It's included in this release:
+  https://github.com/curl/curl/commit/1890d59905414ab84a35892b2e45833654aa5c13
 
-  No board defconfig name specified, check your
-  BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit b7f095920a147c58f07b18f1b68553a1af03ae75)
+(cherry picked from commit 034e95e51e7dbe97a11d708c7762ff64861ec705)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcurl/0001-CVE-2017-7407.patch | 61 --------------------------------
+ package/libcurl/libcurl.hash             |  2 +-
+ package/libcurl/libcurl.mk               |  2 +-
+ 3 files changed, 2 insertions(+), 63 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 6b9d544..782609a 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -293,7 +293,7 @@ endif # UBOOT_BOARD_NAME
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
- ifeq ($(BR2_TARGET_UBOOT_USE_DEFCONFIG),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG)),)
--$(error No board defconfig name specified, check your BR2_TARGET_UBOOT_DEFCONFIG setting)
-+$(error No board defconfig name specified, check your BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting)
- endif # qstrip BR2_TARGET_UBOOT_BOARD_DEFCONFIG
- endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
- ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
+diff --git a/package/libcurl/0001-CVE-2017-7407.patch b/package/libcurl/0001-CVE-2017-7407.patch
+deleted file mode 100644
+index 3a9fa48..0000000
+--- a/package/libcurl/0001-CVE-2017-7407.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From 6019f1795b4e3b72507b84b0e02dc8c32024f562 Mon Sep 17 00:00:00 2001
+-From: Dan Fandrich <dan@coneharvesters.com>
+-Date: Sat, 11 Mar 2017 10:59:34 +0100
+-Subject: [PATCH] CVE-2017-7407: fixed
+-
+-Bug: https://curl.haxx.se/docs/adv_20170403.html
+-
+-Reported-by: Brian Carpenter
+-[baruch: remove tests]
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: based on upstream suggested patch[1] that combines commits
+-1890d59905414ab and 8e65877870c1.
+-
+-[1] https://curl.haxx.se/CVE-2017-7407.patch
+-
+-diff --git a/src/tool_writeout.c b/src/tool_writeout.c
+-index 2fb77742a..5d92bd278 100644
+---- a/src/tool_writeout.c
+-+++ b/src/tool_writeout.c
+-@@ -3,11 +3,11 @@
+-  *  Project                     ___| | | |  _ \| |
+-  *                             / __| | | | |_) | |
+-  *                            | (__| |_| |  _ <| |___
+-  *                             \___|\___/|_| \_\_____|
+-  *
+-- * Copyright (C) 1998 - 2016, Daniel Stenberg, <daniel@haxx.se>, et al.
+-+ * Copyright (C) 1998 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
+-  *
+-  * This software is licensed as described in the file COPYING, which
+-  * you should have received as part of this distribution. The terms
+-  * are also available at https://curl.haxx.se/docs/copyright.html.
+-  *
+-@@ -111,11 +111,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
+-   char *stringp = NULL;
+-   long longinfo;
+-   double doubleinfo;
+- 
+-   while(ptr && *ptr) {
+--    if('%' == *ptr) {
+-+    if('%' == *ptr && ptr[1]) {
+-       if('%' == ptr[1]) {
+-         /* an escaped %-letter */
+-         fputc('%', stream);
+-         ptr += 2;
+-       }
+-@@ -339,11 +339,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
+-           fputc(ptr[1], stream);
+-           ptr += 2;
+-         }
+-       }
+-     }
+--    else if('\\' == *ptr) {
+-+    else if('\\' == *ptr && ptr[1]) {
+-       switch(ptr[1]) {
+-       case 'r':
+-         fputc('\r', stream);
+-         break;
+-       case 'n':
+--- 2.11.0
+-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 9c521e9..f8885e0 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 1c7207c06d75e9136a944a2e0528337ce76f15b9ec9ae4bb30d703b59bf530e8  curl-7.53.1.tar.bz2
++sha256 f50ebaf43c507fa7cc32be4b8108fa8bbd0f5022e90794388f3c7694a302ff06  curl-7.54.0.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 0249f5c..6f4803e 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.53.1
++LIBCURL_VERSION = 7.54.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
