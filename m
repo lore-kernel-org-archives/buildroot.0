@@ -1,70 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 11:46:06 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] pkg-python: ignore user
-	site-packages directory
-Message-ID: <20170424193336.7C09B827E3@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 15:44:25 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/dovecot: bump
+	version to 2.2.28
+Message-ID: <20170424193336.B753F800A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57120d614ede3ab51ce0721758e283d9f698b7ea
+commit: https://git.buildroot.net/buildroot/commit/?id=b937e29052b8a8519e62d96a5d787c003bb32b6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-According to PEP 370 Python will also search for the packages in the
-user site-packages directory. This can affect build reproducibility.
-
-The solution is to use PYTHONNOUSERSITE=1 for all Python packages,
-i.e. both host and target variants.
-
-Fixes bug #9791.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit f5da1951ad1e81cc8641f2c90e96fe36d08ec6f9)
+(cherry picked from commit 87b60b2586b44f81ada7e57768ca5dded612ffdc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-python.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 38bc45f..52c33f8 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -28,6 +28,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
- 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
- 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
-+	PYTHONNOUSERSITE=1 \
- 	_python_sysroot=$(STAGING_DIR) \
- 	_python_prefix=/usr \
- 	_python_exec_prefix=/usr
-@@ -43,7 +44,8 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index e7b9c33..b52ea8d 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed after checking signature
+-sha256 897f92a87cda4b27b243f8149ce0ba7b7e71a2be8fb7994eb0a025e54cde18e9  dovecot-2.2.27.tar.gz
++sha256 e0288f59e326ab87cb3881fdabadafe542f4dc7ab9996db13863a439ebbc1f25  dovecot-2.2.28.tar.gz
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index fe0afa5..caa6bba 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # Host distutils-based packages
- HOST_PKG_PYTHON_DISTUTILS_ENV = \
--	PATH=$(BR_PATH)
-+	PATH=$(BR_PATH) \
-+	PYTHONNOUSERSITE=1
- 
- HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
- 	--prefix=$(HOST_DIR)/usr
-@@ -52,6 +54,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
- PKG_PYTHON_SETUPTOOLS_ENV = \
- 	PATH=$(BR_PATH) \
- 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
-+	PYTHONNOUSERSITE=1 \
- 	_python_sysroot=$(STAGING_DIR) \
- 	_python_prefix=/usr \
- 	_python_exec_prefix=/usr
-@@ -70,7 +73,8 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
- 
- # Host setuptools-based packages
- HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
--	PATH=$(BR_PATH)
-+	PATH=$(BR_PATH) \
-+	PYTHONNOUSERSITE=1
- 
- HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
- 	--prefix=$(HOST_DIR)/usr
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).27
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).28
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPLv2.1
