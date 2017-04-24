@@ -1,48 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Apr 2017 22:03:25 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
-In-Reply-To: <CANxTyt40oC9PknEk-r7uBOmgjAEGJd4tgpQ-6uYKDksoFYVBxw@mail.gmail.com>
-References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
- <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
- <20170420092015.3b2f7fbd@free-electrons.com>
- <87pog3ypb1.fsf@dell.be.48ers.dk>
- <8b127902-0268-8307-70da-065362773da9@mind.be>
- <CANxTyt40oC9PknEk-r7uBOmgjAEGJd4tgpQ-6uYKDksoFYVBxw@mail.gmail.com>
-Message-ID: <ea987c1a-ef7d-8531-c29a-d2b68c1292c7@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 24 Apr 2017 22:13:23 +0200
+Subject: [Buildroot] [PATCH] busybox: no need to disable clear and reset
+Message-ID: <20170424201323.30582-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Removing clear and reset from the busybox config when the ncurses tools
+are enabled is not really needed.
 
+Since commit 802bff9c42, the busybox install will not overwrite
+existing programs. Therefore, the tools will be installed correctly
+regardless of the order of the build:
+- if busybox is built first, the clear and reset apps are installed,
+  but they will be overwritten by ncurses;
+- if ncurses is built first, it will install the clear and reset apps,
+  and busybox will no longer install them.
 
-On 24-04-17 17:36, Danomi Manchego wrote:
-> Arnout,
-> 
-> On Sun, Apr 23, 2017 at 4:55 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> 2. Make sure that busybox doesn't overwrite a tool that already exists. Needs to
->> be done for all the different ways that busybox can install things. Then the
->> order doesn't matter. Great solution, except for the bloatification. Also, it is
->> not great when you have FEATURE_INDIVIDUAL selected in busybox, because a
->> busybox-rebuild will not actually rebuild anything.
-> 
-> Does https://git.buildroot.net/buildroot/commit/?id=802bff9c42376078f28aa49d3eab630120940eb0
-> not take care of overwriting tools that already exist?
+We prefer not to modify the busybox configuration when not strictly
+necessary, because it is surprising for the user that his configuration
+is not applied. Clearly, it's not ideal that busybox is configured with
+redundant apps, but if the user wants to shrink it, it's possible to
+provide a custom config.
 
- Hey, I missed that one! So, that means that the dependencies on busybox are in
-fact redundant, right? So we could actually revert the busybox.mk part of
-33c72344a? Yep, tried that, I'll send a patch.
+This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
 
- So in fact, we can remove all dependencies on busybox? That's nice!
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/busybox/busybox.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
 
- Regards,
- Arnout
-
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 689830e7f8..a536ed2953 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -148,17 +148,6 @@ define BUSYBOX_MUSL_TWEAKS
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
+-# Ncurses package overlaps:
+-#     /usr/bin/clear
+-#     /usr/bin/reset -> /usr/bin/tset (symlink)
+-#
+-define BUSYBOX_DISABLE_NCURSES_PROGS
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+@@ -240,7 +229,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
+ 	$(BUSYBOX_MUSL_TWEAKS)
+-	$(BUSYBOX_DISABLE_NCURSES_PROGS)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
