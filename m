@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:25:59 +0200
-Subject: [Buildroot] [PATCH v2] glibc: fix sh4 compile issue
-In-Reply-To: <20170413215810.33e7c197@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 13 Apr 2017 21:58:10 +0200")
-References: <20170413050732.GA11817@waldemar-brodkorb.de>
- <20170413215810.33e7c197@free-electrons.com>
-Message-ID: <87shkxvc8o.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 21:29:03 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
+In-Reply-To: <8b127902-0268-8307-70da-065362773da9@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 23 Apr 2017 22:55:24 +0200")
+References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
+ <20170420092015.3b2f7fbd@free-electrons.com>
+ <87pog3ypb1.fsf@dell.be.48ers.dk>
+ <8b127902-0268-8307-70da-065362773da9@mind.be>
+Message-ID: <87o9vlvc3k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > Hello,
- > On Thu, 13 Apr 2017 07:07:32 +0200, Waldemar Brodkorb wrote:
- >> Fixes:
- >> https://bugs.busybox.net/show_bug.cgi?id=9756
- >> 
- >> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Hi,
 
- > I've applied, but there were several issues:
+ >  Of course, we can also choose to apply solution 3 only to the situation where 1
+ > doesn't work because of circular dependencies.
 
- >  - First, you still don't use Git to format patches. Please use Git to
- >    format patches.
+ >  I can't say which solution is the best. I therefore tend to say: stick to what
+ > we have, and find a workaround if needed. In other words, apply this patch, but
+ > don't do it for other packages until required.
 
- >  - If you had done that, then the patches would have automatically had
- >    the original description, which we want to have in Buildroot.
-
- >  - Finally, for the 2.23, there was already a 0001-<something> patch,
- >    so the numbering was wrong.
-
- > I've fixed up those issues, see
- > https://git.buildroot.org/buildroot/commit/?id=5f2cff973a8a64411d85ccb9d5c9a40962d67552.
-
-Committed to 2017.02.x, thanks.
+I'm in the same boat - So agreed!
 
 -- 
 Bye, Peter Korsgaard
