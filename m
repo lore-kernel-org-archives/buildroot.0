@@ -1,44 +1,60 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Apr 2017 23:32:05 +0200
-Subject: [Buildroot] [PATCH v6 30/31] package/libsquish: bump version to 1.15
+Date: Mon, 24 Apr 2017 23:31:59 +0200
+Subject: [Buildroot] [PATCH v6 24/31] package/kodi: add optional support for
+	pulseaudio
 In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
 References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
-Message-ID: <20170424213206.26247-31-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-25-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added md5 hash provided by upstream.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libsquish/libsquish.hash | 3 ++-
- package/libsquish/libsquish.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/kodi/Config.in | 10 ++++++++++
+ package/kodi/kodi.mk   |  7 +++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/libsquish/libsquish.hash b/package/libsquish/libsquish.hash
-index caa7198642..e68d28d66f 100644
---- a/package/libsquish/libsquish.hash
-+++ b/package/libsquish/libsquish.hash
-@@ -1,2 +1,3 @@
- # From http://sourceforge.net/projects/libsquish/files
--sha1	7bcdd7d0f0460a29e25dcdab8dc41a30e58bb366	libsquish-1.13.tgz
-+sha1 51844b9a8bc815a27e2cc0ffbede5fee3ef75110 libsquish-1.15.tgz
-+md5 c02645800131e55b519ff8dbe7284f93 libsquish-1.15.tgz
-diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
-index 73f8de9cc1..a707355b55 100644
---- a/package/libsquish/libsquish.mk
-+++ b/package/libsquish/libsquish.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 27cae8dddf..4693b69ea7 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -179,6 +179,16 @@ config BR2_PACKAGE_KODI_NONFREE
+ 	  Enable components with non-free licenses. This option
+ 	  currently only controls support for RAR archives.
  
--LIBSQUISH_VERSION = 1.13
-+LIBSQUISH_VERSION = 1.15
- LIBSQUISH_SOURCE = libsquish-$(LIBSQUISH_VERSION).tgz
- LIBSQUISH_SITE = http://downloads.sourceforge.net/project/libsquish
- LIBSQUISH_INSTALL_STAGING = YES
++config BR2_PACKAGE_KODI_PULSEAUDIO
++	bool "pulseaudio"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
++	# Kodi meets all dependencies of libglib2, so there is no need
++	# to propagate its dependencies here.
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_PULSEAUDIO
++	help
++	  Enable Pulseaudio support.
++
+ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ 	bool "shairport"
+ 	select BR2_PACKAGE_LIBSHAIRPLAY
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index a4678b2b97..7a0080216e 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -321,6 +321,13 @@ else
+ KODI_CONF_OPTS += -DENABLE_OPTICAL=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_PULSEAUDIO),y)
++KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=ON
++KODI_DEPENDENCIES += pulseaudio
++else
++KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
++endif
++
+ # Remove versioncheck addon, updating Kodi is done by building a new
+ # buildroot image.
+ KODI_ADDON_MANIFEST = $(TARGET_DIR)/usr/share/kodi/system/addon-manifest.xml
 -- 
 2.11.0
