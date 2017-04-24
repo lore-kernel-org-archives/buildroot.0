@@ -1,41 +1,46 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Mon, 24 Apr 2017 14:27:25 +0200
-Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.14
-In-Reply-To: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
-References: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
-Message-ID: <3cc20a82-673d-f87b-e5c6-0acc428cfb1c@ginzinger.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 24 Apr 2017 07:40:08 -0500
+Subject: [Buildroot] [PATCH 1/1] busybox: ncurses progs equiv as default
+In-Reply-To: <c5cb0b01-856f-aaa6-eb45-5f6af1df8c3a@mind.be>
+References: <1492654408-25342-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170420040019.bjfwlwaknjvrj33c@tarshish>
+ <CANQCQpZ_6yXNSgpNLGmGLmNwGRsQy84EUPkDoCBMhOTuh49Jsg@mail.gmail.com>
+ <c5cb0b01-856f-aaa6-eb45-5f6af1df8c3a@mind.be>
+Message-ID: <CANQCQpbrCc5UvMwGUY8iHmheUX-9B1_FZCnr5ye0mqT_d=BqmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-04-24 14:22, Martin Kepplinger wrote:
-> This uses x11vnc's new upstream location, github, via https. Autoreconf is
-> added, because it's really only a code snapshot release.
-> 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-> ---
->  package/x11vnc/x11vnc.hash | 2 +-
->  package/x11vnc/x11vnc.mk   | 9 +++++++--
->  2 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
-> index 5828b12..0da7765 100644
-> --- a/package/x11vnc/x11vnc.hash
-> +++ b/package/x11vnc/x11vnc.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed:
-> -sha256  f6829f2e629667a5284de62b080b13126a0736499fe47cdb447aedb07a59f13b  x11vnc-0.9.13.tar.gz
-> +sha256  45f87c5e4382988c73e8c7891ac2bfb45d8f9ce1196ae06651c84636684ea143  0.9.14.tar.gz
+Arnout,
 
+On Sun, Apr 23, 2017 at 4:32 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 20-04-17 15:01, Matthew Weber wrote:
+> > Baruch,
+> >
+> > On Wed, Apr 19, 2017 at 11:00 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> >> Hi Matt,
+> >>
+> >> On Wed, Apr 19, 2017 at 09:13:28PM -0500, Matt Weber wrote:
+> >>> By default, enable the busybox equivalents of the ncurses
+> >>> clear and reset if ncurses progs are not enabled.
+> >>
+> >> Our default busybox.config enables these applets. If the user chooses to
+> >> disable them in a custom config, why should we force them back on?
+> >>
+> >
+> > True, I was thinking the use case of build time changing (then doing
+> > incremental build)if you use ncurses progs vs not and forcing the
+> > busybox reconfig to have it update the target folder respectively.
+>
+>  This is a use case we certainly don't want to support. On the other hand, we
+> *do* want to support the use case where the user has a custom busybox config,
+> doesn't have ncurses, and doesn't want to have clear and reset in his system.
 
-It's ugly to have 0.9.14.tar.gz. Is there a buildroot-style solution to
-this?
-
-And other than that, is there a reason why x11vnc had not been updated
-before? 0.9.14 is one and a half years old.
-
-thanks
-
-                       martin
+Thanks for the feedback, this was more of a RFC to tie-off my previous
+patches. I'm good with it being rejected.
+-Matt
