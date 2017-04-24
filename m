@@ -1,35 +1,31 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 24 Apr 2017 20:27:52 +0200
-Subject: [Buildroot] [Patch v5 0/7] Add support for the Rust programming
- language
-In-Reply-To: <20170422173840.19694-1-eric.le.bihan.dev@free.fr>
-References: <20170422173840.19694-1-eric.le.bihan.dev@free.fr>
-Message-ID: <1493058472.5211.1.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Apr 2017 21:15:31 +0200
+Subject: [Buildroot] [git commit] libnspr: fix Microblaze patch
+In-Reply-To: <20170406141359.754828271B@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 6 Apr 2017 16:13:52 +0200")
+References: <20170406141359.754828271B@busybox.osuosl.org>
+Message-ID: <87efwhzkfg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sat, 2017-04-22 at 19:38 +0200, Eric Le Bihan wrote:
-> This series adds support for the Rust programming language by adding the
-> following packages:
-> 
->  - rustc: a virtual package for the Rust compiler.
->  - rust-bin: provides a pre-built version of rustc.
->  - rust: builds rustc from source.
-> 
-> Both providers are able to cross-compile code for ARM, MIPS, PowerPC and
-> x86_64 architectures. Only the host variants are provided.
-> 
-> The rustc virtual package is inspired by the mysql one.
-> 
-> As the Rust compiler is written in Rust and uses Cargo, the Rust package
-> manager, as build system, two additional packages are provided: rust-bootstrap
-> and cargo-bootstrap.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=7039c4d456259ca2c2708be16ebea98a82adee3f
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Many thanks for the work! I'll look into it, when I've some spare time.
+ > Due to a mistake, the Microblaze patch was adding another #elif
+ > defined(nios2), which doesn't make any sense. This commit gets rid of
+ > it.
 
-J?rg
+ > The rest of the noise in the change is due to the use of quilt to
+ > generate the patches.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed to 2017.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
