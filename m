@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 17:44:06 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/mpv: disable cuda
-	support
-Message-ID: <20170424193338.0F1E7821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 16:00:15 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/mplayer: mmxext
+	requires sse
+Message-ID: <20170424193337.6AB77821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e48857917e746bad70ce08464461d6843ed1ac8
+commit: https://git.buildroot.net/buildroot/commit/?id=27ff183a9caa836aa89743657a7d1d4b05443bfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-mpv wrongly detects cuda being available:
-
-Checking for CUDA hwaccel : yes
-
-leading to build errors.
-
-Fixes
-http://autobuild.buildroot.net/results/e89/e892a537265ad7259024403a0bb3ca5da85ed096/
+MPlayer contains mmxext code for which a SSE-enabled CPU is required,
+for details see https://bugs.funtoo.org/browse/FL-2202
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 030bebd7f137ffc9c41d4911c7957f720ed971c6)
+(cherry picked from commit 0d202de1dd3c801a3b5486605bc7b927a13439ed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpv/mpv.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/mplayer/mplayer.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 5b83b6d..25b54e5 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -23,6 +23,7 @@ MPV_CONF_OPTS = \
- 	--disable-cdda \
- 	--disable-cocoa \
- 	--disable-coreaudio \
-+	--disable-cuda-hwaccel \
- 	--disable-libv4l2 \
- 	--disable-opensles \
- 	--disable-rpi \
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index 8288dcb..38452ab 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -303,9 +303,9 @@ MPLAYER_CONF_OPTS += \
+ endif
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+-MPLAYER_CONF_OPTS += --enable-sse
++MPLAYER_CONF_OPTS += --enable-mmxext --enable-sse
+ else
+-MPLAYER_CONF_OPTS += --disable-sse
++MPLAYER_CONF_OPTS += --disable-mmxext --disable-sse
+ endif
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
