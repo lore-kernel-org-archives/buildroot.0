@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:15:39 +0200
-Subject: [Buildroot] [git commit] libnspr: use __nios2__ instead of nios2
-In-Reply-To: <20170406141359.88F768271B@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Thu, 6 Apr 2017 16:13:52 +0200")
-References: <20170406141359.88F768271B@busybox.osuosl.org>
-Message-ID: <87a875zkf8.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 21:16:07 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-base: remove legacy
+	freetype handling
+In-Reply-To: <20170406204348.7CAA97FCED@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 6 Apr 2017 22:43:40 +0200")
+References: <20170406204348.7CAA97FCED@busybox.osuosl.org>
+Message-ID: <8760htzkeg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +14,31 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=9a521546ed553d2be23740bbf1a7aa05bce9eb09
+ > commit: https://git.buildroot.net/buildroot/commit/?id=80e2a5465880965b93d3647ca96f4af5f55252c4
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Our patch adding nios2 support to libnspr uses the built-in compiler
- > define "nios2". However, this doesn't work with C++11, where only the
- > __nios2__ define is available. Since __nios2__ is always available,
- > use that instead:
+ > In 2010 commit 32d319e6f "gst-plugins-base: ensure <stdint.h> is used"
+ > introduced a typo (missing backslash) that made the code ineffective.
 
- > $ ./output/host/usr/bin/nios2-linux-gcc -dM -E - < /dev/null | grep -E "( nios2 | __nios2__ )"
+ > In 2013 commit f8e7fdcd3 "gst1-plugins-base: add gstreamer1 base
+ > plugins" copied the code.
 
- > $ ./output/host/usr/bin/nios2-linux-gcc -std=c++11 -x c++ -dM -E - < /dev/null | grep -E "( nios2 | __nios2__ )"
+ > It can be confirmed by looking at the output of:
+ > $ make printvars | grep '^GST1_PLUGINS_BASE_CONF_ENV\|^FT2_CONFIG'
+ > FT2_CONFIG=/bin/false ac_cv_header_stdint_t="stdint.h"
+ > GST1_PLUGINS_BASE_CONF_ENV=
 
- > Patch 0001-nios2.patch is therefore changed to use __nios2__ (the rest
- > of the change noise is due to using quilt to format the patch). Patch
- > 0002-microblaze.patch is simply updated to apply correctly on top of
- > the modified 0001-nios2.patch.
+ > Direct use of freetype was dropped in version 1.7.2 by upstream [1], so
+ > remove the code instead of fixing it.
 
- > This fixes the build of the poppler library on nios2. It is built with
- > -std=c++11, and includes nspr headers (through nss), causing a build
- > issue.
+ > Found using [2]:
+ > check-package --include-only Indent $(find * -type f)
+ > and manually removed.
 
- > Fixes:
+ > [1] https://cgit.freedesktop.org/gstreamer/gst-plugins-base/commit/?id=183610c035dd6955c9b3540b940aec50474af031
+ > [2] http://patchwork.ozlabs.org/patch/729669/
 
- >   http://autobuild.buildroot.net/results/9fee58076157d814616fa0da51afde8da21a8973/
-
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
