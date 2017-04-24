@@ -1,180 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 17:47:46 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libnss: security bump to
-	version 3.30.2
-Message-ID: <20170424193338.6042E821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 17:47:36 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libnspr: bump to version
+	4.14
+Message-ID: <20170424193338.4ECA1821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb64a4f87e959d07ac7dd325d05c6afd1f2592ee
+commit: https://git.buildroot.net/buildroot/commit/?id=6736d2f604ef037ecb07d073e97062c637bed674
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
-
-CVE-2017-5461 - Out-of-bounds write in Base64 encoding in NSS. Might cause
-remote arbitrary code execution
-(https://access.redhat.com/errata/RHSA-2017:1100).
-
-CVE-2017-5462 - DRBG flaw in NSS
-
-Drop 0001-cross-compile.patch and TARGET* variables. Upstream Makefile now
-allows override of CC, so use TARGET_CONFIGURE_OPTS instead.
-
-Drop upstream 0003-it-uninitialized-fix.patch.
-
-Renumber the remaining patch.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 09b8e1079ec97d9843430930414a95ac8450a652)
+(cherry picked from commit 7e1f3171ac98dd25d5e656a888bcff046353087d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/0001-cross-compile.patch            | 48 ----------------------
- .../{0002-uclibc.patch => 0001-uclibc.patch}       |  0
- package/libnss/0003-it-uninitialized-fix.patch     | 24 -----------
- package/libnss/libnss.hash                         |  4 +-
- package/libnss/libnss.mk                           | 12 ++----
- 5 files changed, 6 insertions(+), 82 deletions(-)
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/0001-cross-compile.patch b/package/libnss/0001-cross-compile.patch
-deleted file mode 100644
-index 31de71b..0000000
---- a/package/libnss/0001-cross-compile.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--This patch allows us to set a value for the cross compiler via TARGETCC without
--setting CC on the command line. CC is used for host tools as well as cross
--compiled code so we cannot define it on the command line without breaking
--the host tools build.
--
--[Gustavo: update for nss 3.16.1]
--[baruch: add OPTIMIZER handling]
--Signed-off-by: Will Newton <will.newton@imgtec.com>
--
--diff -Nuar nss-3.16.1-orig/nss/coreconf/Linux.mk nss-3.16.1/nss/coreconf/Linux.mk
----- nss-3.16.1-orig/nss/coreconf/Linux.mk	2014-05-02 06:27:18.000000000 +0300
--+++ nss-3.16.1/nss/coreconf/Linux.mk	2014-07-01 02:38:18.701480512 +0300
--@@ -16,9 +16,13 @@
-- 	IMPL_STRATEGY = _PTH
-- endif
-- 
---CC			= gcc
---CCC			= g++
---RANLIB			= ranlib
--+TARGETCC		= gcc
--+TARGETCCC		= g++
--+TARGETRANLIB		= ranlib
--+
--+CC			= $(TARGETCC)
--+CCC			= $(TARGETCCC)
--+RANLIB			= $(TARGETRANLIB)
-- 
-- DEFAULT_COMPILER = gcc
-- 
--@@ -125,6 +129,7 @@
-- endif
-- endif
-- 
--+OPTIMIZER = $(TARGET_OPTIMIZER)
-- 
-- ifeq ($(USE_PTHREADS),1)
-- OS_PTHREAD = -lpthread 
--diff -Nuar nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile nss-3.16.1/nss/coreconf/nsinstall/Makefile
----- nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile	2014-05-02 06:27:18.000000000 +0300
--+++ nss-3.16.1/nss/coreconf/nsinstall/Makefile	2014-07-01 02:38:48.102185011 +0300
--@@ -31,6 +31,7 @@
-- 
-- ifdef NATIVE_FLAGS
-- OS_CFLAGS=$(NATIVE_FLAGS)
--+OPTIMIZER=
-- endif
-- 
-- include $(DEPTH)/coreconf/rules.mk
-diff --git a/package/libnss/0002-uclibc.patch b/package/libnss/0001-uclibc.patch
-similarity index 100%
-rename from package/libnss/0002-uclibc.patch
-rename to package/libnss/0001-uclibc.patch
-diff --git a/package/libnss/0003-it-uninitialized-fix.patch b/package/libnss/0003-it-uninitialized-fix.patch
-deleted file mode 100644
-index 7736c6a..0000000
---- a/package/libnss/0003-it-uninitialized-fix.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--# HG changeset patch
--# User catdesk <catdesk@tuta.io>
--# Date 1477710600 -7200
--#      Sat Oct 29 05:10:00 2016 +0200
--# Node ID b9ef971b94ab110302d49255339077bc1b4aed7f
--# Parent  eb8c96563cd70aa69d48b01516085f7d2fb46178
--Bug 1313846 - Declare 'it = NULL' earlier. r=franziskus
--
--[Thomas: patch taken from upstream mercurial repository, revision
--12791.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--diff -r eb8c96563cd7 -r b9ef971b94ab lib/jar/jarfile.c
----- a/nss/lib/jar/jarfile.c	Mon Oct 31 17:31:20 2016 +0100
--+++ b/nss/lib/jar/jarfile.c	Sat Oct 29 05:10:00 2016 +0200
--@@ -657,7 +657,7 @@
-- jar_listzip(JAR *jar, JAR_FILE fp)
-- {
--     ZZLink *ent;
---    JAR_Item *it;
--+    JAR_Item *it = NULL;
--     JAR_Physical *phy = NULL;
--     struct ZipLocal *Local = PORT_ZNew(struct ZipLocal);
--     struct ZipCentral *Central = PORT_ZNew(struct ZipCentral);
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 975e52d..7be7e48 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index a4b19b7..9111a32 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
 @@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_27_2_RTM/src/SHA256SUMS
--sha256	dc8ac8524469d0230274fd13a53fdcd74efe4aa67205dde1a4a92be87dc28524	nss-3.27.2.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_30_2_RTM/src/SHA256SUMS
-+sha256	0d4a77ff26bcee79fa8afe0125e0df6ae9e798b6b36782fa29e28febf7cfce24	nss-3.30.2.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 76532e8..3c38bb0 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+-# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.13.1/src/SHA256SUMS
+-sha256	5e4c1751339a76e7c772c0c04747488d7f8c98980b434dc846977e43117833ab	nspr-4.13.1.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.14/src/SHA256SUMS
++sha256	64fc18826257403a9132240aa3c45193d577a84b08e96f7e7770a97c074d17d5	nspr-4.14.tar.gz
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index d95f970..f891bb3 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.27.2
-+LIBNSS_VERSION = 3.30.2
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
-@@ -33,9 +33,6 @@ LIBNSS_BUILD_VARS = \
- 	NSS_USE_SYSTEM_SQLITE=1 \
- 	NSS_ENABLE_ECC=1 \
- 	NATIVE_CC="$(HOSTCC)" \
--	TARGETCC="$(TARGET_CC)" \
--	TARGETCCC="$(TARGET_CXX)" \
--	TARGETRANLIB="$(TARGET_RANLIB)" \
- 	OS_ARCH="Linux" \
- 	OS_RELEASE="2.6" \
- 	OS_TEST="$(ARCH)"
-@@ -55,17 +52,16 @@ endif
- endif
- 
- define LIBNSS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/nss coreconf \
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/nss coreconf \
- 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
- 		CHECKLOC= \
- 		$(LIBNSS_BUILD_VARS)
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/nss lib/dbm all \
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/nss lib/dbm all \
- 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
- 		CHECKLOC= \
--		$(LIBNSS_BUILD_VARS) TARGET_OPTIMIZER="$(TARGET_CFLAGS)" \
--		NATIVE_FLAGS="$(HOST_CFLAGS)"
-+		$(LIBNSS_BUILD_VARS) NATIVE_FLAGS="$(HOST_CFLAGS)"
- endef
- 
- define LIBNSS_INSTALL_STAGING_CMDS
+-LIBNSPR_VERSION = 4.13.1
++LIBNSPR_VERSION = 4.14
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
