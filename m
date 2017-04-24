@@ -1,108 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 16:01:02 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/mplayer: fix
-	compilation failure with MMX in libmpcodecs/vf_fspp.c
-Message-ID: <20170424193337.80A38821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 17:45:11 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/libunwind:
+	disable for x86 with uClibc toolchain
+Message-ID: <20170424193338.2DF39821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=023919520fb74330ba477bed033fafcf790dbd0a
+commit: https://git.buildroot.net/buildroot/commit/?id=892e908120cebbc4ef2a8af7aa1a41d12d1280e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Compile error found while fixing
-http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
+libunwind use sigreturn() while building for x86 [1] but this function
+is not available with uClibc-ng.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This throw a warning during libunwind build:
+In file included from x86/Los-linux.c:4:0:
+x86/Gos-linux.c: In function ???_ULx86_local_resume???:
+x86/Gos-linux.c:298:7: warning: implicit declaration of function ???sigreturn??? [-Wimplicit-function-declaration]
+       sigreturn (sc);
+       ^
+
+But any program trying to link against libunwind-generic.so fail to build:
+[...]usr/lib/libunwind-generic.so: undefined reference to `sigreturn'
+collect2: error: ld returned 1 exit status
+
+Disable libunwind for x86 target when uClibc-ng is used.
+
+Fixes:
+http://autobuild.buildroot.net/results/54a/54afac8148cff5f3c17e83f80917fd9006948fe0//build-end.log
+
+[1] http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86/Gos-linux.c;h=17aebc2974af50eb0bf8292689b2ed22a4c97866;hb=HEAD#l299
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit eabf4102ce07168988a826b79c6eb0c34d685e09)
+(cherry picked from commit c5b56b0a20b2be24878d8bae66fbe665e8fea698)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mplayer/0007-fixmmx.patch | 77 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ package/libunwind/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mplayer/0007-fixmmx.patch b/package/mplayer/0007-fixmmx.patch
-new file mode 100644
-index 0000000..9634a3b
---- /dev/null
-+++ b/package/mplayer/0007-fixmmx.patch
-@@ -0,0 +1,77 @@
-+fix compilation failure with MMX
-+
-+Fixes
-+libmpcodecs/vf_fspp.c: In function 'column_fidct_c':
-+libmpcodecs/vf_fspp.c:750:5: error: unknown type name 'int_simd16_t'
-+libmpcodecs/vf_fspp.c:751:5: error: unknown type name 'int_simd16_t'
-+libmpcodecs/vf_fspp.c:752:5: error: unknown type name 'int_simd16_t'
-+libmpcodecs/vf_fspp.c:753:5: error: unknown type name 'int_simd16_t'
-+libmpcodecs/vf_fspp.c:789:18: error: 'FIX_0_707106781' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:789:18: note: each undeclared identifier is reported only once for each function it appears in
-+libmpcodecs/vf_fspp.c:804:21: error: 'FIX_1_414213562_A' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:817:18: error: 'FIX_0_382683433' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:818:18: error: 'FIX_0_541196100' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:819:18: error: 'FIX_1_306562965' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:844:21: error: 'FIX_1_414213562' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:845:21: error: 'FIX_1_847759065' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:846:21: error: 'FIX_1_082392200' undeclared (first use in this function)
-+libmpcodecs/vf_fspp.c:847:21: error: 'FIX_2_613125930' undeclared (first use in this function)
-+
-+found using this defconfig after fixing the original bug:
-+http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
-+
-+Downloaded from upstream mailinglist:
-+http://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2016-May/073488.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr MPlayer-1.3.0.org/libmpcodecs/vf_fspp.c MPlayer-1.3.0/libmpcodecs/vf_fspp.c
-+--- MPlayer-1.3.0.org/libmpcodecs/vf_fspp.c	2015-10-17 21:44:31.000000000 +0200
-++++ MPlayer-1.3.0/libmpcodecs/vf_fspp.c	2017-04-10 21:26:57.771819064 +0200
-+@@ -173,7 +173,6 @@
-+ #define store_slice_s store_slice_c
-+ #define store_slice2_s store_slice2_c
-+ #define mul_thrmat_s mul_thrmat_c
-+-#define column_fidct_s column_fidct_c
-+ #define row_idct_s row_idct_c
-+ #define row_fdct_s row_fdct_c
-+ 
-+@@ -393,7 +392,6 @@
-+         );
-+ }
-+ 
-+-static void column_fidct_mmx(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
-+ static void row_idct_mmx(int16_t* workspace,
-+                          int16_t* output_adr,  int output_stride,  int cnt);
-+ static void row_fdct_mmx(int16_t *data,  const uint8_t *pixels,  int line_size,  int cnt);
-+@@ -401,11 +399,18 @@
-+ #define store_slice_s store_slice_mmx
-+ #define store_slice2_s store_slice2_mmx
-+ #define mul_thrmat_s mul_thrmat_mmx
-+-#define column_fidct_s column_fidct_mmx
-+ #define row_idct_s row_idct_mmx
-+ #define row_fdct_s row_fdct_mmx
-+ #endif // HAVE_MMX_INLINE
-+ 
-++#if !HAVE_MMXEXT_INLINE
-++static void column_fidct_c(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
-++#define column_fidct_s column_fidct_c
-++#else
-++static void column_fidct_mmx(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
-++#define column_fidct_s column_fidct_mmx
-++#endif
-++
-+ static void filter(struct vf_priv_s *p, uint8_t *dst, uint8_t *src,
-+                    int dst_stride, int src_stride,
-+                    int width, int height,
-+@@ -728,7 +733,9 @@
-+ DECLARE_ASM_CONST(8, uint64_t, MM_DESCALE_RND)=C64(4);
-+ DECLARE_ASM_CONST(8, uint64_t, MM_2)=C64(2);
-+ 
-+-#else /* !HAVE_MMXEXT_INLINE */
-++#endif /* !HAVE_MMX_INLINE */
-++
-++#if !HAVE_MMX_INLINE || !HAVE_MMXEXT_INLINE
-+ 
-+ typedef int32_t int_simd16_t;
-+ static const int16_t FIX_0_382683433=FIX(0.382683433, 14);
+diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+index 5527a2b..9007ce5 100644
+--- a/package/libunwind/Config.in
++++ b/package/libunwind/Config.in
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+ 		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+ 		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+-		 BR2_i386 || BR2_mips || BR2_mipsel || \
++		 BR2_mips || BR2_mipsel || \
+ 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_MUSL && \
+ 		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
