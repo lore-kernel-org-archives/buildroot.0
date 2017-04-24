@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 22:27:21 +0200
-Subject: [Buildroot] [git commit] poppler: bump version to 0.54.0
-Message-ID: <20170424203123.DCFAB827D4@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 22:26:31 +0200
+Subject: [Buildroot] [git commit] x265: bump version to 2.4
+Message-ID: <20170424203123.B61F782765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc41dbe658267a70dc2661f51c6d1c9058817b64
+commit: https://git.buildroot.net/buildroot/commit/?id=acaa2e6f930a445091c3ab0ff75f2ae26e0d2a7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poppler/poppler.hash | 2 +-
- package/poppler/poppler.mk   | 2 +-
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index 83856a3..4ef5799 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index d53295c..1ad8170 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 592bf72960c6b5948b67657594b05e72d9a278daf7613c9f3cdff9a5b73096a8  poppler-0.53.0.tar.xz
-+sha256 10cca9a67cc2e6f4f9024192b1067c444218bf94430891f43dc819d78536ca31  poppler-0.54.0.tar.xz
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index aea90b0..056193c 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
+ # Locally generated
+-sha256 47520ac3424790168ea5c2db4a3cf12ca4d55a1790720007916652f07af3e41f  x265_2.3.tar.gz
++sha256 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d729  x265_2.4.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 2ea404b..2907ba3 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POPPLER_VERSION = 0.53.0
-+POPPLER_VERSION = 0.54.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+-X265_VERSION = 2.3
++X265_VERSION = 2.4
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPL-2.0+
