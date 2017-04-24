@@ -1,37 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 15:45:58 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
-	9, 10}.x series
-Message-ID: <20170424193336.DB666800A5@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 15:58:39 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] granite: fix md5 hash
+Message-ID: <20170424193337.45BAF821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eda721ef82db3d44cfcc8084ca7f1c8cb70c6380
+commit: https://git.buildroot.net/buildroot/commit/?id=be1ab94c9eb66bd3c77bb73ddfd3a7813237d793
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.10.x bump]
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 9d893df454517e7cb3d667cd872bb2e30ff04321)
+(cherry picked from commit 04d8d5961566f8ba80b16defdf1fc10542158537)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/granite/granite.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0698d06..a414fe0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.60"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.61"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.21"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.22"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/granite/granite.hash b/package/granite/granite.hash
+index 3c89685..e073307 100644
+--- a/package/granite/granite.hash
++++ b/package/granite/granite.hash
+@@ -1,4 +1,4 @@
+ # From https://launchpad.net/granite/0.4/0.4.0.1/+download/granite-0.4.0.1.tar.xz/+md5
+-md5	db41150ca6e77162392362686e848086	granite-0.3.1.tar.xz
++md5	db41150ca6e77162392362686e848086	granite-0.4.0.1.tar.xz
+ # Calculated based on the hash above
+ sha256	95a142a8befeedc35a089d638e759b657905508dc3007036d6c1fa3efe94c4dd	granite-0.4.0.1.tar.xz
