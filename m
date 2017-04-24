@@ -1,31 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:32:49 +0200
-Subject: [Buildroot] [PATCH 1/1] uboot: fix target uboot defconfig
-	warning
-In-Reply-To: <20170421195707.5238-1-christian@paral.in> (Christian Stewart's
- message of "Fri, 21 Apr 2017 15:57:07 -0400")
-References: <20170421195707.5238-1-christian@paral.in>
-Message-ID: <87efwhtxcu.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 11:29:45 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gst1-plugins-base: remove
+	legacy freetype handling
+Message-ID: <20170424193336.3C4D2800A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd00633729534a138c5114f56869d1d808d25eab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > The warning currently reads:
- >   No board defconfig name specified, check your
- >   BR2_TARGET_UBOOT_DEFCONFIG setting.
+In 2010 commit 32d319e6f "gst-plugins-base: ensure <stdint.h> is used"
+introduced a typo (missing backslash) that made the code ineffective.
 
- > It should read:
+In 2013 commit f8e7fdcd3 "gst1-plugins-base: add gstreamer1 base
+plugins" copied the code.
 
- >   No board defconfig name specified, check your
- >   BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting.
+It can be confirmed by looking at the output of:
+$ make printvars | grep '^GST1_PLUGINS_BASE_CONF_ENV\|^FT2_CONFIG'
+FT2_CONFIG=/bin/false ac_cv_header_stdint_t="stdint.h"
+GST1_PLUGINS_BASE_CONF_ENV=
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+Direct use of freetype was dropped in version 1.7.2 by upstream [1], so
+remove the code instead of fixing it.
 
-Committed to 2017.02.x, thanks.
+Found using [2]:
+check-package --include-only Indent $(find * -type f)
+and manually removed.
 
--- 
-Bye, Peter Korsgaard
+[1] https://cgit.freedesktop.org/gstreamer/gst-plugins-base/commit/?id=183610c035dd6955c9b3540b940aec50474af031
+[2] http://patchwork.ozlabs.org/patch/729669/
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 80e2a5465880965b93d3647ca96f4af5f55252c4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 6ab63a3..cb5da04 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -11,13 +11,6 @@ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+ GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
+ GST1_PLUGINS_BASE_LICENSE = LGPLv2+, LGPLv2.1+
+ 
+-# freetype is only used by examples, but if it is not found
+-# and the host has a freetype-config script, then the host
+-# include dirs are added to the search path causing trouble
+-GST1_PLUGINS_BASE_CONF_ENV =
+-	FT2_CONFIG=/bin/false \
+-	ac_cv_header_stdint_t="stdint.h"
+-
+ # gio_unix_2_0 is only used for tests
+ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
