@@ -1,114 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Apr 2017 23:31:53 +0200
-Subject: [Buildroot] [PATCH v6 18/31] package/kodi-screensaver-rsxs: bump
-	version
+Date: Mon, 24 Apr 2017 23:31:58 +0200
+Subject: [Buildroot] [PATCH v6 23/31] package/kodi: libxslt is an optional
+	package
 In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
 References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
-Message-ID: <20170424213206.26247-19-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-24-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ac_cv_type__Bool=yes is needed to fix compilation with gcc >= 5.
-Added patch to fix X.org includes.
-Added dependency for libpng previously provided by Kodi.
+After this commit
+https://github.com/xbmc/xbmc/commit/bad3902b4a2538a433f858c97b2cf91c44c7feff
+libxslt, together with libxml2, are an optional package.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-screensaver-rsxs/0001-cross-compile.patch |  2 +-
- .../0002-fix-default-include-dir.patch             | 28 ++++++++++++++++++++++
- package/kodi-screensaver-rsxs/Config.in            |  1 +
- .../kodi-screensaver-rsxs.hash                     |  2 +-
- .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk |  5 ++--
- 5 files changed, 33 insertions(+), 5 deletions(-)
- create mode 100644 package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
+ package/kodi/Config.in | 2 --
+ package/kodi/kodi.mk   | 9 +++++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-screensaver-rsxs/0001-cross-compile.patch b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-index 56c2f4e4ba..a7b2053d76 100644
---- a/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-+++ b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
-@@ -27,7 +27,7 @@ diff -uNr screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLi
-  endif()
-  externalproject_add(rsxs SOURCE_DIR ${PROJECT_SOURCE_DIR}/${rsxs_dir}
- -                    CONFIGURE_COMMAND ${configure_start}
--+                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no
-++                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no ac_cv_type__Bool=yes
- +                                      ac_cv_func_malloc_0_nonnull=yes
- +                                      ${configure_start}
-                                        --prefix=<INSTALL_DIR>
-diff --git a/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch b/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
-new file mode 100644
-index 0000000000..a7e7c74b0f
---- /dev/null
-+++ b/package/kodi-screensaver-rsxs/0002-fix-default-include-dir.patch
-@@ -0,0 +1,28 @@
-+Fix X include path to prevent error during configure
-+
-+Downloaded from
-+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi-binary-addons/screensavers.rsxs/patches/screensavers.rsxs-0002-fix-default-include-dir.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -Naur screensavers.rsxs-3241d29.orig/CMakeLists.txt screensavers.rsxs-3241d29/CMakeLists.txt
-+--- screensavers.rsxs-3241d29.orig/CMakeLists.txt	2015-10-22 23:59:38.187280475 -0700
-++++ screensavers.rsxs-3241d29/CMakeLists.txt	2015-10-23 00:00:27.228113829 -0700
-+@@ -17,7 +17,7 @@
-+ include_directories(${OpenGL_INCLUDE_DIR}
-+                     ${PNG_INCLUDE_DIR}
-+                     ${KODI_INCLUDE_DIR}
-+-                    ${X_INCLUDE_DIRS}
-++                    ${X_INCLUDE_DIR}
-+                     ${CMAKE_BINARY_DIR}/rsxs-prefix/src/rsxs-build
-+                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src
-+                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/lib
-+@@ -67,7 +67,7 @@
-+                                       --disable-skyrocket
-+                                       --disable-solarwinds
-+                                       --disable-sound
-+-                                      --x-includes=${X_INCLUDE_DIRS}
-++                                      --x-includes=${X_INCLUDE_DIR}
-+                                       --x-libraries=${X_LIBRARIES}
-+                                       ${PNG_PATH}
-+                                       ${EXTRA_FLAGS}
-diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
-index 11546ad1f8..c523ce5a1c 100644
---- a/package/kodi-screensaver-rsxs/Config.in
-+++ b/package/kodi-screensaver-rsxs/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
- 	bool "kodi-screensaver-rsxs"
- 	depends on BR2_PACKAGE_HAS_LIBGL # libglu
- 	depends on BR2_PACKAGE_XORG7 # xlib_libXmu
-+	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	help
- 	  RSXS screensaver add-ons for Kodi
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-index 568b44b37c..66d79a06f3 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 0797ffb720056ea2e04ac8b7ee4fc2dca1e42611ef138b347e928d8d7f3c696f kodi-screensaver-rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.tar.gz
-+sha256 8436c29d2f42bc65ff6f1abc2f1d05a613cc2ebb16d793e02b1f2bee296952a6  kodi-screensaver-rsxs-v1.3.0.tar.gz
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-index 2cd94da860..8445bf88d8 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 64f307c00a..27cae8dddf 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -65,8 +65,6 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBPLIST
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+-	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 809e0cfae0..a4678b2b97 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -34,8 +34,6 @@ KODI_DEPENDENCIES = \
+ 	libgcrypt \
+ 	libplist \
+ 	libsamplerate \
+-	libxml2 \
+-	libxslt \
+ 	lzo \
+ 	ncurses \
+ 	openssl \
+@@ -186,6 +184,13 @@ else
+ KODI_CONF_OPTS += -DENABLE_CAP=OFF
+ endif
  
--KODI_SCREENSAVER_RSXS_VERSION = 195e0ec3fbbcb2ee2012cd560e42d05167f0f259
-+KODI_SCREENSAVER_RSXS_VERSION = v1.3.0
- KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
- KODI_SCREENSAVER_RSXS_LICENSE = GPL-3.0
- KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
--
--KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi xlib_libXmu
-+KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi libpng xlib_libXmu
- 
- $(eval $(cmake-package))
++ifeq ($(BR2_PACKAGE_LIBXML2)$(BR2_PACKAGE_LIBXSLT),yy)
++KODI_CONF_OPTS += -DENABLE_XSLT=ON
++KODI_DEPENDENCIES += libxml2 libxslt
++else
++KODI_CONF_OPTS += -DENABLE_XSLT=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_BLUEZ),y)
+ KODI_CONF_OPTS += -DENABLE_BLUETOOTH=ON
+ KODI_DEPENDENCIES += bluez5_utils
 -- 
 2.11.0
