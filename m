@@ -1,45 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 17:47:36 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libnspr: bump to version
-	4.14
-Message-ID: <20170424193338.4ECA1821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 17:50:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] uboot: fix target uboot
+	defconfig warning
+Message-ID: <20170424193338.84BA6826FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6736d2f604ef037ecb07d073e97062c637bed674
+commit: https://git.buildroot.net/buildroot/commit/?id=24d80453afd77e2d8b1c3384ae023b6dfe8ee38d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+The warning currently reads:
+
+  No board defconfig name specified, check your
+  BR2_TARGET_UBOOT_DEFCONFIG setting.
+
+It should read:
+
+  No board defconfig name specified, check your
+  BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 7e1f3171ac98dd25d5e656a888bcff046353087d)
+(cherry picked from commit b7f095920a147c58f07b18f1b68553a1af03ae75)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/uboot/uboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index a4b19b7..9111a32 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.13.1/src/SHA256SUMS
--sha256	5e4c1751339a76e7c772c0c04747488d7f8c98980b434dc846977e43117833ab	nspr-4.13.1.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.14/src/SHA256SUMS
-+sha256	64fc18826257403a9132240aa3c45193d577a84b08e96f7e7770a97c074d17d5	nspr-4.14.tar.gz
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index d95f970..f891bb3 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSPR_VERSION = 4.13.1
-+LIBNSPR_VERSION = 4.14
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 6b9d544..782609a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -293,7 +293,7 @@ endif # UBOOT_BOARD_NAME
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ ifeq ($(BR2_TARGET_UBOOT_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG)),)
+-$(error No board defconfig name specified, check your BR2_TARGET_UBOOT_DEFCONFIG setting)
++$(error No board defconfig name specified, check your BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting)
+ endif # qstrip BR2_TARGET_UBOOT_BOARD_DEFCONFIG
+ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
+ ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
