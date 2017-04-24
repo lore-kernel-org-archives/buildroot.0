@@ -1,43 +1,78 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Mon, 24 Apr 2017 16:21:54 +0300
-Subject: [Buildroot] [PATCH] binutils: arc: fix custom patch
-Message-ID: <1493040114-32538-1-git-send-email-vzakhar@synopsys.com>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Mon, 24 Apr 2017 15:26:21 +0200
+Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.14
+In-Reply-To: <9cbb711a-6026-8a69-a6c6-85dc140e2e4c@imgtec.com>
+References: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
+ <3cc20a82-673d-f87b-e5c6-0acc428cfb1c@ginzinger.com>
+ <9cbb711a-6026-8a69-a6c6-85dc140e2e4c@imgtec.com>
+Message-ID: <d6771575-8b26-f608-5d57-4d3c573eee36@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit fixes another brown-paper-bag issue that I've introduced by
-my following patch:
-toolchain: Bump ARC tools to arc-2017.03-rc1
-(5f8ef7e25c5cc5c2e4ae4c8b6e8caa029ddf9a94)
 
-arc-2017.03-rc1 differs a bit from 2.28. And so corresponding
-of-the-tree patch should be updated appropriately.
 
-Fixes target binutils build for arc:
-http://autobuild.buildroot.net/results/f67/f67c905979870936d8050a505b61186be6dad85d//
+On 2017-04-24 14:55, Vicente Olivert Riera wrote:
+> Hi Martin,
+> 
+> On 24/04/17 13:27, Martin Kepplinger wrote:
+>> On 2017-04-24 14:22, Martin Kepplinger wrote:
+>>> This uses x11vnc's new upstream location, github, via https. Autoreconf is
+>>> added, because it's really only a code snapshot release.
+>>>
+>>> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+>>> ---
+>>>  package/x11vnc/x11vnc.hash | 2 +-
+>>>  package/x11vnc/x11vnc.mk   | 9 +++++++--
+>>>  2 files changed, 8 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
+>>> index 5828b12..0da7765 100644
+>>> --- a/package/x11vnc/x11vnc.hash
+>>> +++ b/package/x11vnc/x11vnc.hash
+>>> @@ -1,2 +1,2 @@
+>>>  # Locally computed:
+>>> -sha256  f6829f2e629667a5284de62b080b13126a0736499fe47cdb447aedb07a59f13b  x11vnc-0.9.13.tar.gz
+>>> +sha256  45f87c5e4382988c73e8c7891ac2bfb45d8f9ce1196ae06651c84636684ea143  0.9.14.tar.gz
+>>
+>>
+>> It's ugly to have 0.9.14.tar.gz. Is there a buildroot-style solution to
+>> this?
+> 
+> This is just fine, it's not the only package whose tarball name doesn't
+> include the package name. Look for instance the mpv and yaffs2utils
+> packages.
+> 
+>>
+>> And other than that, is there a reason why x11vnc had not been updated
+>> before? 0.9.14 is one and a half years old.
+> 
+> Because nobody did it, probably. Anyway, the 0.9.14 is considered a
+> bleeding edge development release (according to x11vnc's website) and
+> even with that, as you said, is one and a half years old. Just
+> wondering..., shouldn't be better to go with ToT (top of the tree) instead?
+> 
+> X11VNC_VERSION = e47d922d4a4d980f8dce3e466c73dc4665e4bc01
+> X11VNC_SITE = $(call github,LibVNC,x11vnc,$(X11VNC_VERSION))
+> 
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- .../binutils/arc-2017.03-rc1/0301-PATCH-check-ldrunpath-length.patch  | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+They don't seem to use development branches; While I think it would be
+fine to use the master branch, just from my personal feeling I'd use the
+tagged versions. Seems like the project is maintained and 0.9.15 somehow
+on the horizon sometime sooner or later.
 
-diff --git a/package/binutils/arc-2017.03-rc1/0301-PATCH-check-ldrunpath-length.patch b/package/binutils/arc-2017.03-rc1/0301-PATCH-check-ldrunpath-length.patch
-index f54b1b3..9bb2341 100644
---- a/package/binutils/arc-2017.03-rc1/0301-PATCH-check-ldrunpath-length.patch
-+++ b/package/binutils/arc-2017.03-rc1/0301-PATCH-check-ldrunpath-length.patch
-@@ -17,8 +17,8 @@ index d4837d0..937da8a 100644
-  	      && command_line.rpath == NULL)
-  	    {
-  	      path = (const char *) getenv ("LD_RUN_PATH");
--+	      if ((lib_path) && (strlen (lib_path) == 0))
--+	        lib_path = NULL;
-++	      if ((path) && (strlen (path) == 0))
-++	        path = NULL;
-  	      if (path
-  		  && gld${EMULATION_NAME}_search_needed (path, &n, force))
-  		break;
--- 
-2.7.4
+> Regards,
+> 
+> Vincent
+> 
+>>
+>> thanks
+>>
+>>                        martin
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
