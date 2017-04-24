@@ -1,12 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Apr 2017 21:47:58 +0200
-Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.14
-In-Reply-To: <d6771575-8b26-f608-5d57-4d3c573eee36@ginzinger.com>
-References: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
- <3cc20a82-673d-f87b-e5c6-0acc428cfb1c@ginzinger.com>
- <9cbb711a-6026-8a69-a6c6-85dc140e2e4c@imgtec.com>
- <d6771575-8b26-f608-5d57-4d3c573eee36@ginzinger.com>
-Message-ID: <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
+Date: Mon, 24 Apr 2017 22:03:25 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: preserve ncurses progs/tools
+In-Reply-To: <CANxTyt40oC9PknEk-r7uBOmgjAEGJd4tgpQ-6uYKDksoFYVBxw@mail.gmail.com>
+References: <1492140047-60102-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <4e5df153-6f58-8b65-faf4-f87fb91324cd@mind.be>
+ <20170420092015.3b2f7fbd@free-electrons.com>
+ <87pog3ypb1.fsf@dell.be.48ers.dk>
+ <8b127902-0268-8307-70da-065362773da9@mind.be>
+ <CANxTyt40oC9PknEk-r7uBOmgjAEGJd4tgpQ-6uYKDksoFYVBxw@mail.gmail.com>
+Message-ID: <ea987c1a-ef7d-8531-c29a-d2b68c1292c7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,72 +17,27 @@ To: buildroot@busybox.net
 
 
 
-On 24-04-17 15:26, Martin Kepplinger wrote:
+On 24-04-17 17:36, Danomi Manchego wrote:
+> Arnout,
 > 
+> On Sun, Apr 23, 2017 at 4:55 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> 2. Make sure that busybox doesn't overwrite a tool that already exists. Needs to
+>> be done for all the different ways that busybox can install things. Then the
+>> order doesn't matter. Great solution, except for the bloatification. Also, it is
+>> not great when you have FEATURE_INDIVIDUAL selected in busybox, because a
+>> busybox-rebuild will not actually rebuild anything.
 > 
-> On 2017-04-24 14:55, Vicente Olivert Riera wrote:
->> Hi Martin,
->>
->> On 24/04/17 13:27, Martin Kepplinger wrote:
->>> On 2017-04-24 14:22, Martin Kepplinger wrote:
->>>> This uses x11vnc's new upstream location, github, via https. Autoreconf is
->>>> added, because it's really only a code snapshot release.
->>>>
->>>> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
->>>> ---
->>>>  package/x11vnc/x11vnc.hash | 2 +-
->>>>  package/x11vnc/x11vnc.mk   | 9 +++++++--
->>>>  2 files changed, 8 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
->>>> index 5828b12..0da7765 100644
->>>> --- a/package/x11vnc/x11vnc.hash
->>>> +++ b/package/x11vnc/x11vnc.hash
->>>> @@ -1,2 +1,2 @@
->>>>  # Locally computed:
->>>> -sha256  f6829f2e629667a5284de62b080b13126a0736499fe47cdb447aedb07a59f13b  x11vnc-0.9.13.tar.gz
->>>> +sha256  45f87c5e4382988c73e8c7891ac2bfb45d8f9ce1196ae06651c84636684ea143  0.9.14.tar.gz
->>>
->>>
->>> It's ugly to have 0.9.14.tar.gz. Is there a buildroot-style solution to
->>> this?
+> Does https://git.buildroot.net/buildroot/commit/?id=802bff9c42376078f28aa49d3eab630120940eb0
+> not take care of overwriting tools that already exist?
 
- Yes, the github helper. If the link contains 'archive', it's for the github
-helper. If it contains 'releases', it's an uploaded tarball and you should use
-the expanded URL.
+ Hey, I missed that one! So, that means that the dependencies on busybox are in
+fact redundant, right? So we could actually revert the busybox.mk part of
+33c72344a? Yep, tried that, I'll send a patch.
 
-
->> This is just fine, it's not the only package whose tarball name doesn't
->> include the package name. Look for instance the mpv and yaffs2utils
->> packages.
->>
->>>
->>> And other than that, is there a reason why x11vnc had not been updated
->>> before? 0.9.14 is one and a half years old.
->>
->> Because nobody did it, probably. Anyway, the 0.9.14 is considered a
->> bleeding edge development release (according to x11vnc's website) and
->> even with that, as you said, is one and a half years old. Just
->> wondering..., shouldn't be better to go with ToT (top of the tree) instead?
->>
->> X11VNC_VERSION = e47d922d4a4d980f8dce3e466c73dc4665e4bc01
->> X11VNC_SITE = $(call github,LibVNC,x11vnc,$(X11VNC_VERSION))
->>
-> 
-> They don't seem to use development branches; While I think it would be
-> fine to use the master branch, just from my personal feeling I'd use the
-> tagged versions. Seems like the project is maintained and 0.9.15 somehow
-> on the horizon sometime sooner or later.
-
- We indeed prefer to stick to officially released versions when upstream has
-them. And we generally don't like to take releases that upstream considers a
-development/alpha/... release.
-
- Is there a reason why you need this bump?
+ So in fact, we can remove all dependencies on busybox? That's nice!
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
