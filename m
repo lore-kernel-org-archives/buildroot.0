@@ -1,70 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 23:29:42 +0200
-Subject: [Buildroot] [PATCH-2017.02.x] xen: security bump to version 4.7.2
-Message-ID: <20170424212942.11905-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 24 Apr 2017 23:31:36 +0200
+Subject: [Buildroot] [PATCH v6 01/31] package/kodi-visualisation-fountain:
+	remove package
+In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
+References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 4.7.2 release brings a number of bugfixes and improvements:
+Remove broken package:
+https://github.com/notspiff/visualization.fountain/issues/1#issuecomment-166156021
 
-https://www.xenproject.org/downloads/xen-archives/xen-project-47-series/xen-472.html
-
-Including fixes for the following security issues:
-
-XSA-191: x86 null segments not always treated as unusable (CVE-2016-9386)
-XSA-192: x86 task switch to VM86 mode mis-handled (CVE-2016-9382)
-XSA-193: x86 segment base write emulation lacking canonical address checks
-	 (CVE-2016-9385)
-XSA-194: guest 32-bit ELF symbol table load leaking host data (CVE-2016-9384)
-XSA-195: x86 64-bit bit test instruction emulation broken (CVE-2016-9383)
-XSA-196: x86 software interrupt injection mis-handled
-	 (CVE-2016-9377 CVE-2016-9378)
-XSA-197: qemu incautious about shared ring processing (CVE-2016-9381)
-XSA-198: delimiter injection vulnerabilities in pygrub
-	 (CVE-2016-9379 CVE-2016-9380)
-XSA-199: qemu ioport array overflow (CVE-2016-9637)
-XSA-200: x86 CMPXCHG8B emulation fails to ignore operand size override
-	 Files (CVE-2016-9932)
-XSA-201: ARM guests may induce host asynchronous abort
-         (CVE-2016-9815 CVE-2016-9816 CVE-2016-9817 CVE-2016-9818)
-XSA-202: x86 PV guests may be able to mask interrupts (CVE-2016-10024)
-XSA-203: x86: missing NULL pointer check in VMFUNC emulation (CVE-2016-10025)
-XSA-204: x86: Mishandling of SYSCALL singlestep during emulation
-         (CVE-2016-10013)
-XSA-207: memory leak when destroying guest without PT devices
-XSA-208: oob access in cirrus bitblt copy (CVE-2017-2615)
-XSA-209: cirrus_bitblt_cputovideo does not check if memory region is safe
-         (CVE-2017-2620)
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy                                              |  7 +++++++
+ package/kodi-visualisation-fountain/Config.in                 | 11 -----------
+ .../kodi-visualisation-fountain.hash                          |  2 --
+ .../kodi-visualisation-fountain.mk                            | 11 -----------
+ package/kodi/Config.in                                        |  1 -
+ 5 files changed, 7 insertions(+), 25 deletions(-)
+ delete mode 100644 package/kodi-visualisation-fountain/Config.in
+ delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+ delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index c3df2431e..2143f4661 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 e87f4b0575e78657ee23d31470a15ecf1ce8c3a92a771cda46bbcd4d0d671ffe xen-4.7.1.tar.gz
-+sha256 61494a56d9251e2108080f95b0dc8e3d175f1ba4da34603fc07b91cfebf358d5 xen-4.7.2.tar.gz
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 7d32e5270..9ff1b4022 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8e9f3d175d..a13e4453b2 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
  
--XEN_VERSION = 4.7.1
-+XEN_VERSION = 4.7.2
- XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
- XEN_LICENSE = GPLv2
- XEN_LICENSE_FILES = COPYING
++config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
++	bool "kodi-visualisation-fountain has been removed"
++	select BR2_LEGACY
++	help
++	  According to upstream 'the visualization is not currently
++	  in a working shape.'
++
+ config BR2_PACKAGE_PORTMAP
+ 	bool "portmap has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/kodi-visualisation-fountain/Config.in b/package/kodi-visualisation-fountain/Config.in
+deleted file mode 100644
+index 570d169338..0000000000
+--- a/package/kodi-visualisation-fountain/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
+-	bool "kodi-visualisation-fountain"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+-	select BR2_PACKAGE_LIBSOIL
+-	help
+-	  Fountain visualization for Kodi
+-
+-	  https://github.com/notspiff/visualization.fountain
+-
+-comment "kodi-visualisation-fountain needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+deleted file mode 100644
+index 8dc933effa..0000000000
+--- a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 7b2867f415f22e4bc4ba834034f00117fcf76774aea0afc7bf30b5f2d1991dd7 kodi-visualisation-fountain-f22deacd2396a204694d346f85369ea9ea70e16f.tar.gz
+diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+deleted file mode 100644
+index 5684402a2a..0000000000
+--- a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
++++ /dev/null
+@@ -1,11 +0,0 @@
+-################################################################################
+-#
+-# kodi-visualisation-fountain
+-#
+-################################################################################
+-
+-KODI_VISUALISATION_FOUNTAIN_VERSION = f22deacd2396a204694d346f85369ea9ea70e16f
+-KODI_VISUALISATION_FOUNTAIN_SITE = $(call github,notspiff,visualization.fountain,$(KODI_VISUALISATION_FOUNTAIN_VERSION))
+-KODI_VISUALISATION_FOUNTAIN_DEPENDENCIES = kodi libsoil
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index f2a3e2e032..f94e2c7c20 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -315,7 +315,6 @@ endmenu
+ 
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-fishbmc/Config.in"
+-	source "package/kodi-visualisation-fountain/Config.in"
+ 	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
 -- 
 2.11.0
