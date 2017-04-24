@@ -1,53 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 15:59:25 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/mplayer: fix musl
-	build error
-Message-ID: <20170424193337.5A121821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 15:57:28 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/hiredis: fix
+	installation logic of library
+Message-ID: <20170424193337.35919821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d482d1297e4512a586e7d3d45a8f02198dca94b2
+commit: https://git.buildroot.net/buildroot/commit/?id=4ff4b574a5e13611c06f3c84c0471791a9ad2885
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes
-http://autobuild.buildroot.net/results/08e/08ed316677f519c8005928366aea89570527a033/
+While testing minetest with libhiredis library, the game crached due to
+missing libhiredis.so.0.13 library.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The hiredis.mk doesn't use "make install" because "make install" depends
+on building both the shared and static libraries, which fails in
+static-only scenarios.
+
+However, the installation logic in hiredis.mk is bogus: it installs the
+library as libhiredis.so, while its SONAME is libhiredis.so.0.13. We fix
+this by using the same logic as the one done by the package "make
+install" process: install the library as libhiredis.so.0.13, and create
+libhiredis.so as a symbolic link to it.
+
+While at it:
+
+ - Install the library 0755, this is more common.
+
+ - Do not create $(TARGET_DIR)/usr/lib, since $(INSTALL) -D will create
+   the necessary directories for the destination path.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: rework to use the same installation logic as the one from
+hiredis "make install".]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 2184f48c4545d2629b1706112e7c9f380aac8d2b)
+
+(cherry picked from commit 96daacb720cffe1f83259462bef9d3da92925cd9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mplayer/0006-musl-ldt.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/hiredis/hiredis.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/mplayer/0006-musl-ldt.patch b/package/mplayer/0006-musl-ldt.patch
-new file mode 100644
-index 0000000..8165f6f
---- /dev/null
-+++ b/package/mplayer/0006-musl-ldt.patch
-@@ -0,0 +1,22 @@
-+Fixes musl build error
-+
-+loader/ldt_keeper.o: In function `Setup_LDT_Keeper':
-+ldt_keeper.c:(.text+0xab): undefined reference to `modify_ldt'
-+
-+Downloaded from
-+https://github.com/dimkr/rlsd2/blob/master/rules/mplayer/musl.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -rup MPlayer-1.1.1-orig/loader/ldt_keeper.c MPlayer-1.1.1/loader/ldt_keeper.c
-+--- MPlayer-1.1.1-orig/loader/ldt_keeper.c	2015-04-23 15:07:09.580805888 +0300
-++++ MPlayer-1.1.1/loader/ldt_keeper.c	2015-04-23 15:08:07.736807270 +0300
-+@@ -47,7 +47,7 @@
-+ #if defined(__GLIBC__) &&  (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ == 0))
-+ _syscall3( int, modify_ldt, int, func, void *, ptr, unsigned long, bytecount );
-+ #else
-+-int modify_ldt(int func, void *ptr, unsigned long bytecount);
-++#define modify_ldt(func, ptr, bytecount) syscall(__NR_modify_ldt, func, ptr, bytecount)
-+ #endif
-+ #else
-+ #if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index cd406f1..e485b42 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-HIREDIS_VERSION = v0.13.3
++HIREDIS_VERSION_MAJOR = 0.13
++HIREDIS_VERSION = v$(HIREDIS_VERSION_MAJOR).3
+ HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
+ HIREDIS_LICENSE = BSD-3c
+ HIREDIS_LICENSE_FILES = COPYING
+@@ -37,12 +38,15 @@ define HIREDIS_INSTALL_STAGING_CMDS
+ 		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
+ 	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
+-	$(INSTALL) -m 0644 -t $(STAGING_DIR)/usr/lib $(@D)/libhiredis*
++	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
++		$(STAGING_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
++	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(STAGING_DIR)/usr/lib/libhiredis.so
+ endef
+ 
+ define HIREDIS_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/lib $(@D)/libhiredis*
++	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
++		$(TARGET_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
++	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libhiredis.so
+ endef
+ 
+ $(eval $(generic-package))
