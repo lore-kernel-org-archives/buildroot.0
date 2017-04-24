@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 22:26:59 +0200
-Subject: [Buildroot] [PATCH] harfbuzz: bump version to 1.4.6
-In-Reply-To: <20170424092502.1480-1-Vincent.Riera@imgtec.com> (Vicente Olivert
- Riera's message of "Mon, 24 Apr 2017 10:25:02 +0100")
-References: <20170424092502.1480-1-Vincent.Riera@imgtec.com>
-Message-ID: <87shkxsga4.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 22:27:12 +0200
+Subject: [Buildroot] [PATCH] poppler: bump version to 0.54.0
+In-Reply-To: <20170424093311.12097-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 24 Apr 2017 10:33:11 +0100")
+References: <20170424093311.12097-1-Vincent.Riera@imgtec.com>
+Message-ID: <87o9vlsg9r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
