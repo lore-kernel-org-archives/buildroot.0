@@ -1,43 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 17:46:54 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/linux-headers:
-	bump 3.12.x and 4.{4, 9, 10}.x series
-Message-ID: <20170424193338.3E481821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 16:25:59 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/hiredis: fix
+	install step for static build only
+Message-ID: <20170424193337.F31B7821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bce9b77e0434aff0016bf67a85a2e2d2e5dcde4f
+commit: https://git.buildroot.net/buildroot/commit/?id=bac22a6f553267146b9454cb32ad19b6ae1f8483
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.10.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The previous patch [1] didn't take into acount the static build only
+scenario. It tries to unconditionally install a shared library.
+
+Handle the install step like for bzip2 package: install the shared
+library only if BR2_SHARED_LIBS or BR2_SHARED_STATIC_LIBS is set and
+install the static library only if BR2_STATIC_LIBS or
+BR2_SHARED_STATIC_LIBS is set.
+
+[1] 96daacb720cffe1f83259462bef9d3da92925cd9
+
+Fixes:
+http://autobuild.buildroot.net/results/6be/6be8024dd664af83fcf49ede29c8ad59a37f73d1
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit a96a8435d572a76b7529435a243654ab48bc6370)
+(cherry picked from commit 10ffe1f65ce2975eb7fad426c466a5d80e3a82ba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/hiredis/hiredis.mk | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a414fe0..f4a8430 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -217,12 +217,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.88"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.73"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.18.48"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.61"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.62"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.22"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.23"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index e485b42..598e014 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -31,6 +31,26 @@ endef
+ 
+ HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
+ 
++ifeq ($(BR2_SHARED_LIBS),)
++define HIREDIS_INSTALL_STAGING_STATIC_LIB
++	$(INSTALL) -D -m 0755 $(@D)/libhiredis.a \
++		$(STAGING_DIR)/usr/lib/libhiredis.a
++endef
++endif
++
++ifeq ($(BR2_STATIC_LIBS),)
++define HIREDIS_INSTALL_STAGING_SHARED_LIB
++	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
++		$(STAGING_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
++	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(STAGING_DIR)/usr/lib/libhiredis.so
++endef
++define HIREDIS_INSTALL_TARGET_SHARED_LIB
++	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
++		$(TARGET_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
++	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libhiredis.so
++endef
++endif
++
+ # Do not call make install as this target will build shared and static libraries
+ define HIREDIS_INSTALL_STAGING_CMDS
+ 	mkdir -p $(HIREDIS_INCLUDE_DIR)
+@@ -38,15 +58,12 @@ define HIREDIS_INSTALL_STAGING_CMDS
+ 		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
+ 	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
+-	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
+-		$(STAGING_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
+-	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(STAGING_DIR)/usr/lib/libhiredis.so
++	$(HIREDIS_INSTALL_STAGING_STATIC_LIB)
++	$(HIREDIS_INSTALL_STAGING_SHARED_LIB)
+ endef
+ 
+ define HIREDIS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
+-		$(TARGET_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
+-	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libhiredis.so
++	$(HIREDIS_INSTALL_TARGET_SHARED_LIB)
+ endef
+ 
+ $(eval $(generic-package))
