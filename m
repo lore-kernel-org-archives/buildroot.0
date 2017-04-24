@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:22:43 +0200
-Subject: [Buildroot] [PATCH] libcurl: apply upstream security patch
-In-Reply-To: <20170412211424.0551c425@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 12 Apr 2017 21:14:24 +0200")
-References: <1796640bb50f0f0d5f8f24ccd56081cc28a7598f.1491933372.git.baruch@tkos.co.il>
- <20170412211424.0551c425@free-electrons.com>
-Message-ID: <87vaptwqyk.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 21:23:23 +0200
+Subject: [Buildroot] [git commit] package/hiredis: fix installation
+	logic of library
+In-Reply-To: <20170412193436.95F9C80270@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Wed, 12 Apr 2017 21:34:12 +0200")
+References: <20170412193436.95F9C80270@busybox.osuosl.org>
+Message-ID: <87r30hwqxg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,34 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Hello,
- > On Tue, 11 Apr 2017 20:56:12 +0300, Baruch Siach wrote:
- >> CVE-2017-7407: --write-out out of buffer read
- >> 
- >> https://curl.haxx.se/docs/adv_20170403.html
- >> 
- >> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- >> ---
- >> package/libcurl/0001-CVE-2017-7407.patch | 61 ++++++++++++++++++++++++++++++++
- >> 1 file changed, 61 insertions(+)
- >> create mode 100644 package/libcurl/0001-CVE-2017-7407.patch
+ > commit: https://git.buildroot.net/buildroot/commit/?id=96daacb720cffe1f83259462bef9d3da92925cd9
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Applied to master, thanks.
+ > While testing minetest with libhiredis library, the game crached due to
+ > missing libhiredis.so.0.13 library.
 
- > Peter: we want this one in the LTS branch I believe.
+ > The hiredis.mk doesn't use "make install" because "make install" depends
+ > on building both the shared and static libraries, which fails in
+ > static-only scenarios.
+
+ > However, the installation logic in hiredis.mk is bogus: it installs the
+ > library as libhiredis.so, while its SONAME is libhiredis.so.0.13. We fix
+ > this by using the same logic as the one done by the package "make
+ > install" process: install the library as libhiredis.so.0.13, and create
+ > libhiredis.so as a symbolic link to it.
+
+ > While at it:
+
+ >  - Install the library 0755, this is more common.
+
+ >  - Do not create $(TARGET_DIR)/usr/lib, since $(INSTALL) -D will create
+ >    the necessary directories for the destination path.
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > [Thomas: rework to use the same installation logic as the one from
+ > hiredis "make install".]
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
