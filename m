@@ -1,45 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:25:28 +0200
-Subject: [Buildroot] [PATCH] wireshark: bump version to 2.2.6 (security)
-In-Reply-To: <20170413133720.38755-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Thu, 13 Apr 2017 14:37:20 +0100")
-References: <20170413133720.38755-1-Vincent.Riera@imgtec.com>
-Message-ID: <87wpa9vc9j.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 21:25:59 +0200
+Subject: [Buildroot] [PATCH v2] glibc: fix sh4 compile issue
+In-Reply-To: <20170413215810.33e7c197@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 13 Apr 2017 21:58:10 +0200")
+References: <20170413050732.GA11817@waldemar-brodkorb.de>
+ <20170413215810.33e7c197@free-electrons.com>
+Message-ID: <87shkxvc8o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Security fixes:
- > - wnpa-sec-2017-12
- >   IMAP dissector crash (Bug 13466) CVE-2017-7703
- > - wnpa-sec-2017-13
- >   WBMXL dissector infinite loop (Bug 13477) CVE-2017-7702
- > - wnpa-sec-2017-14
- >   NetScaler file parser infinite loop (Bug 13478) CVE-2017-7700
- > - wnpa-sec-2017-15
- >   RPCoRDMA dissector infinite loop (Bug 13558) CVE-2017-7705
- > - wnpa-sec-2017-16
- >   BGP dissector infinite loop (Bug 13557) CVE-2017-7701
- > - wnpa-sec-2017-17
- >   DOF dissector infinite loop (Bug 13453) CVE-2017-7704
- > - wnpa-sec-2017-18
- >   PacketBB dissector crash (Bug 13559)
- > - wnpa-sec-2017-19
- >   SLSK dissector long loop (Bug 13576)
- > - wnpa-sec-2017-20
- >   SIGCOMP dissector infinite loop (Bug 13578)
- > - wnpa-sec-2017-21
- >   WSP dissector infinite loop (Bug 13581)
+ > Hello,
+ > On Thu, 13 Apr 2017 07:07:32 +0200, Waldemar Brodkorb wrote:
+ >> Fixes:
+ >> https://bugs.busybox.net/show_bug.cgi?id=9756
+ >> 
+ >> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
- > Full release notes:
+ > I've applied, but there were several issues:
 
- >   https://www.wireshark.org/docs/relnotes/wireshark-2.2.6.html
+ >  - First, you still don't use Git to format patches. Please use Git to
+ >    format patches.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ >  - If you had done that, then the patches would have automatically had
+ >    the original description, which we want to have in Buildroot.
+
+ >  - Finally, for the 2.23, there was already a 0001-<something> patch,
+ >    so the numbering was wrong.
+
+ > I've fixed up those issues, see
+ > https://git.buildroot.org/buildroot/commit/?id=5f2cff973a8a64411d85ccb9d5c9a40962d67552.
 
 Committed to 2017.02.x, thanks.
 
