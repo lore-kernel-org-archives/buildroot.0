@@ -1,51 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 15:55:40 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] systemd: select fsck
-	wrapper from util-linux
-Message-ID: <20170424193337.04B9C821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 16:22:20 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] bind: bump version to
+	9.11.0-P5 (security)
+Message-ID: <20170424193337.A60C5821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d57b8ae51c9221cc00b208d5756947d5cf3a926
+commit: https://git.buildroot.net/buildroot/commit/?id=ae5cfc15f511e27e3b406546a0b67136ae151ae0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Select the fsck required by systemd provided by util-linux. This
-prevents ending up with fsck from busybox, which is incompatible
-with systemd.
+Security Fixes:
+ - rndc "" could trigger an assertion failure in named. This flaw is
+   disclosed in (CVE-2017-3138). [RT #44924]
+ - Some chaining (i.e., type CNAME or DNAME) responses to upstream
+   queries could trigger assertion failures. This flaw is disclosed in
+   CVE-2017-3137. [RT #44734]
+ - dns64 with break-dnssec yes; can result in an assertion failure. This
+   flaw is disclosed in CVE-2017-3136. [RT #44653]
+ - If a server is configured with a response policy zone (RPZ) that
+   rewrites an answer with local data, and is also configured for DNS64
+   address mapping, a NULL pointer can be read triggering a server
+   crash. This flaw is disclosed in CVE-2017-3135. [RT #44434]
+ - A coding error in the nxdomain-redirect feature could lead to an
+   assertion failure if the redirection namespace was served from a
+   local authoritative data source such as a local zone or a DLZ instead
+   of via recursive lookup. This flaw is disclosed in CVE-2016-9778.
+   [RT #43837]
+ - named could mishandle authority sections with missing RRSIGs,
+   triggering an assertion failure. This flaw is disclosed in
+   CVE-2016-9444. [RT #43632]
+ - named mishandled some responses where covering RRSIG records were
+   returned without the requested data, resulting in an assertion
+   failure. This flaw is disclosed in CVE-2016-9147. [RT #43548]
+ - named incorrectly tried to cache TKEY records which could trigger an
+   assertion failure when there was a class mismatch. This flaw is
+   disclosed in CVE-2016-9131. [RT #43522]
+ - It was possible to trigger assertions when processing responses
+   containing answers of type DNAME. This flaw is disclosed in
+   CVE-2016-8864. [RT #43465]
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Full release notes:
+
+  ftp://ftp.isc.org/isc/bind9/9.11.0-P5/RELEASE-NOTES-bind-9.11.0-P5.html
+
+Also, remove --enable-rrl configure option from bind.mk as it doesn't
+exist anymore.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3fddb73ffd17f8a8f701f780e3c28a0f70f45da4)
+(cherry picked from commit 1727ea972bb8202ba15247e53bc54b47fa76c69e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index aaed7dc..ac8175c 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -22,6 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_UTIL_LINUX_BINARIES
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
-+	select BR2_PACKAGE_UTIL_LINUX_FSCK
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
- 	select BR2_PACKAGE_KMOD_TOOLS
-@@ -61,6 +62,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  - libgcrypt package will add support for journal sealing and
- 	    DNSSEC verification in resolved.
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 780e43b..8d44d99 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P3/bind-9.11.0-P3.tar.gz.sha256.asc
+-sha256 0feee0374bcbdee73a9d4277f3c5007622279572d520d7c27a4b64015d8ca9e9  bind-9.11.0-P3.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P5/bind-9.11.0-P5.tar.gz.sha256.asc
++sha256 1e283f0567b484687dfd7b936e26c9af4f64043daf73cbd8f3eb1122c9fb71f5  bind-9.11.0-P5.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 860ee9d..2903a31 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+	  Notice that systemd selects the fsck wrapper from util-linux
-+	  but no particular fsck.<fstype> is selected. You must choose
-+	  the apropriate ones (e.g. e2fsck, from the e2fsprogs package)
-+	  according to the system configuration.
-+
- 	  http://freedesktop.org/wiki/Software/systemd
+-BIND_VERSION = 9.11.0-P3
++BIND_VERSION = 9.11.0-P5
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
+@@ -29,7 +29,6 @@ BIND_CONF_OPTS = \
+ 	--enable-epoll \
+ 	--with-libtool \
+ 	--with-gssapi=no \
+-	--enable-rrl \
+ 	--enable-filter-aaaa
  
- if BR2_PACKAGE_SYSTEMD
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
