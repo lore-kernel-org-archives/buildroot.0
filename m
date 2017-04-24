@@ -1,90 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 16:22:20 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] bind: bump version to
-	9.11.0-P5 (security)
-Message-ID: <20170424193337.A60C5821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 17:46:54 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/linux-headers:
+	bump 3.12.x and 4.{4, 9, 10}.x series
+Message-ID: <20170424193338.3E481821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae5cfc15f511e27e3b406546a0b67136ae151ae0
+commit: https://git.buildroot.net/buildroot/commit/?id=bce9b77e0434aff0016bf67a85a2e2d2e5dcde4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Security Fixes:
- - rndc "" could trigger an assertion failure in named. This flaw is
-   disclosed in (CVE-2017-3138). [RT #44924]
- - Some chaining (i.e., type CNAME or DNAME) responses to upstream
-   queries could trigger assertion failures. This flaw is disclosed in
-   CVE-2017-3137. [RT #44734]
- - dns64 with break-dnssec yes; can result in an assertion failure. This
-   flaw is disclosed in CVE-2017-3136. [RT #44653]
- - If a server is configured with a response policy zone (RPZ) that
-   rewrites an answer with local data, and is also configured for DNS64
-   address mapping, a NULL pointer can be read triggering a server
-   crash. This flaw is disclosed in CVE-2017-3135. [RT #44434]
- - A coding error in the nxdomain-redirect feature could lead to an
-   assertion failure if the redirection namespace was served from a
-   local authoritative data source such as a local zone or a DLZ instead
-   of via recursive lookup. This flaw is disclosed in CVE-2016-9778.
-   [RT #43837]
- - named could mishandle authority sections with missing RRSIGs,
-   triggering an assertion failure. This flaw is disclosed in
-   CVE-2016-9444. [RT #43632]
- - named mishandled some responses where covering RRSIG records were
-   returned without the requested data, resulting in an assertion
-   failure. This flaw is disclosed in CVE-2016-9147. [RT #43548]
- - named incorrectly tried to cache TKEY records which could trigger an
-   assertion failure when there was a class mismatch. This flaw is
-   disclosed in CVE-2016-9131. [RT #43522]
- - It was possible to trigger assertions when processing responses
-   containing answers of type DNAME. This flaw is disclosed in
-   CVE-2016-8864. [RT #43465]
-
-Full release notes:
-
-  ftp://ftp.isc.org/isc/bind9/9.11.0-P5/RELEASE-NOTES-bind-9.11.0-P5.html
-
-Also, remove --enable-rrl configure option from bind.mk as it doesn't
-exist anymore.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Peter: drop 4.10.x bump]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 1727ea972bb8202ba15247e53bc54b47fa76c69e)
+(cherry picked from commit a96a8435d572a76b7529435a243654ab48bc6370)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 780e43b..8d44d99 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P3/bind-9.11.0-P3.tar.gz.sha256.asc
--sha256 0feee0374bcbdee73a9d4277f3c5007622279572d520d7c27a4b64015d8ca9e9  bind-9.11.0-P3.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P5/bind-9.11.0-P5.tar.gz.sha256.asc
-+sha256 1e283f0567b484687dfd7b936e26c9af4f64043daf73cbd8f3eb1122c9fb71f5  bind-9.11.0-P5.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 860ee9d..2903a31 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.0-P3
-+BIND_VERSION = 9.11.0-P5
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
-@@ -29,7 +29,6 @@ BIND_CONF_OPTS = \
- 	--enable-epoll \
- 	--with-libtool \
- 	--with-gssapi=no \
--	--enable-rrl \
- 	--enable-filter-aaaa
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a414fe0..f4a8430 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -217,12 +217,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.88"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.72"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.73"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.18.48"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.61"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.62"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.22"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.23"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
