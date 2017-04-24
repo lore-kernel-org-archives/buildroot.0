@@ -1,68 +1,84 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 24 Apr 2017 22:13:23 +0200
-Subject: [Buildroot] [PATCH] busybox: no need to disable clear and reset
-Message-ID: <20170424201323.30582-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Apr 2017 22:21:28 +0200
+Subject: [Buildroot] [PATCH] gcc: Fix build failure related to -fPIC for
+ x86_64 -> i686 builds
+In-Reply-To: <8b7a3f29-c200-4292-8efb-8f6f24c3e7c7@cesnet.cz>
+References: <71cfdaf7-367d-44de-a1c6-9041e269c8de@cesnet.cz>
+ <aded779d-fd0d-e83c-5a3e-d0e7b28b5dfe@mind.be>
+ <8b7a3f29-c200-4292-8efb-8f6f24c3e7c7@cesnet.cz>
+Message-ID: <4697e49d-c953-cf51-2361-3e5d06bdd21b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removing clear and reset from the busybox config when the ncurses tools
-are enabled is not really needed.
 
-Since commit 802bff9c42, the busybox install will not overwrite
-existing programs. Therefore, the tools will be installed correctly
-regardless of the order of the build:
-- if busybox is built first, the clear and reset apps are installed,
-  but they will be overwritten by ncurses;
-- if ncurses is built first, it will install the clear and reset apps,
-  and busybox will no longer install them.
 
-We prefer not to modify the busybox configuration when not strictly
-necessary, because it is surprising for the user that his configuration
-is not applied. Clearly, it's not ideal that busybox is configured with
-redundant apps, but if the user wants to shrink it, it's possible to
-provide a custom config.
+On 24-04-17 13:19, Jan Kundr?t wrote:
+> On pond?l? 24. dubna 2017 0:06:30 CEST, Arnout Vandecappelle wrote:
+>>  Indeed. However, I wonder, won't you have a similar problem with other host
+>> packages that try to build something without -fPIC?
+> 
+> Here's a list of host packages that I built with no additional patches:
+> 
+[snip an impressive list of packages]
+> 
+> When I try to rebuild some of them (`make host-$foo-rebuild`), I don't see any
+> actual compilation for those that I tried (acl, kmod, swig).
 
-This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
+ Indeed, foo-rebuild will just call 'make' again, but since nothing changed it
+will not actually compile anything. If you want to do a clean rebuild you have
+to do 'make foo-dirclean foo'
 
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/busybox/busybox.mk | 12 ------------
- 1 file changed, 12 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 689830e7f8..a536ed2953 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -148,17 +148,6 @@ define BUSYBOX_MUSL_TWEAKS
- endef
- endif
- 
--ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
--# Ncurses package overlaps:
--#     /usr/bin/clear
--#     /usr/bin/reset -> /usr/bin/tset (symlink)
--#
--define BUSYBOX_DISABLE_NCURSES_PROGS
--	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
--endef
--endif
--
- define BUSYBOX_INSTALL_UDHCPC_SCRIPT
- 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-@@ -240,7 +229,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
- 	$(BUSYBOX_MUSL_TWEAKS)
--	$(BUSYBOX_DISABLE_NCURSES_PROGS)
- endef
- 
- define BUSYBOX_CONFIGURE_CMDS
+> It seems to me that
+> (except for the toolchain) the compilation is only performed when rebuilding the
+> package for the target, 
+
+ Nope, target behaves the same. Even if you changed the toolchain configuration,
+'make foo-rebuild' will not rebuild much... foo-rebuild is meant mainly for
+OVERRIDE_SRCDIR use cases.
+
+> and in that case, the newly built toolchain which has
+> been previously built by Buildroot gets invoked. I.e., the host GCC doesn't get
+> triggered after a toolchain has been built, as far as I can see now.
+> 
+> Am I missing something? Is there a host package that I should try to get
+> built/rebuilt?
+
+ No, if you managed to build all these host packages with the default-PIE host
+compiler, then I guess it's OK.
+
+> 
+>>> BTW, I cannot find my original submission on patchwork. Was that e-mail OK? I
+>>> see it in the ML archive [3].
+>>
+>>  I believe it's because you sent it base64-encoded, patchwork only likes
+>> plaintext. You didn't use git send-email, did you?
+> 
+> The copy of the original patch submission that I have in my sent folder doesn't
+> appear to be base64-encoded -- it was a result of a `git format-patch` with no
+> additional transformation after all.
+
+ The mail I received through the mailing list was base64-encoded.
+
+
+> However, I noticed that the outgoing e-mail was missing a Message-ID header, and
+> it seems legit to reject these messages for various reasons.
+
+ That could indeed be the reason as well. Checking in patchwork sources... Yes
+indeed, it checks for From, Subject and Message-Id and drops the mail if those
+are not there.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
