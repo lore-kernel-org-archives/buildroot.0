@@ -1,120 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 17:49:41 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: bump version to
-	7.54.0 (security)
-Message-ID: <20170424193338.73E6D821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 16:01:02 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/mplayer: fix
+	compilation failure with MMX in libmpcodecs/vf_fspp.c
+Message-ID: <20170424193337.80A38821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86a16f169d36825d49b1780d8b90a51b1b3e4924
+commit: https://git.buildroot.net/buildroot/commit/?id=023919520fb74330ba477bed033fafcf790dbd0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Security fixes:
- - CVE-2017-7468: switch off SSL session id when client cert is used
+Compile error found while fixing
+http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
 
-Full changelog: https://curl.haxx.se/changes.html
-
-Removing 0001-CVE-2017-7407.patch. It's included in this release:
-  https://github.com/curl/curl/commit/1890d59905414ab84a35892b2e45833654aa5c13
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 034e95e51e7dbe97a11d708c7762ff64861ec705)
+(cherry picked from commit eabf4102ce07168988a826b79c6eb0c34d685e09)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/0001-CVE-2017-7407.patch | 61 --------------------------------
- package/libcurl/libcurl.hash             |  2 +-
- package/libcurl/libcurl.mk               |  2 +-
- 3 files changed, 2 insertions(+), 63 deletions(-)
+ package/mplayer/0007-fixmmx.patch | 77 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/package/libcurl/0001-CVE-2017-7407.patch b/package/libcurl/0001-CVE-2017-7407.patch
-deleted file mode 100644
-index 3a9fa48..0000000
---- a/package/libcurl/0001-CVE-2017-7407.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 6019f1795b4e3b72507b84b0e02dc8c32024f562 Mon Sep 17 00:00:00 2001
--From: Dan Fandrich <dan@coneharvesters.com>
--Date: Sat, 11 Mar 2017 10:59:34 +0100
--Subject: [PATCH] CVE-2017-7407: fixed
--
--Bug: https://curl.haxx.se/docs/adv_20170403.html
--
--Reported-by: Brian Carpenter
--[baruch: remove tests]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: based on upstream suggested patch[1] that combines commits
--1890d59905414ab and 8e65877870c1.
--
--[1] https://curl.haxx.se/CVE-2017-7407.patch
--
--diff --git a/src/tool_writeout.c b/src/tool_writeout.c
--index 2fb77742a..5d92bd278 100644
----- a/src/tool_writeout.c
--+++ b/src/tool_writeout.c
--@@ -3,11 +3,11 @@
--  *  Project                     ___| | | |  _ \| |
--  *                             / __| | | | |_) | |
--  *                            | (__| |_| |  _ <| |___
--  *                             \___|\___/|_| \_\_____|
--  *
--- * Copyright (C) 1998 - 2016, Daniel Stenberg, <daniel@haxx.se>, et al.
--+ * Copyright (C) 1998 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
--  *
--  * This software is licensed as described in the file COPYING, which
--  * you should have received as part of this distribution. The terms
--  * are also available at https://curl.haxx.se/docs/copyright.html.
--  *
--@@ -111,11 +111,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
--   char *stringp = NULL;
--   long longinfo;
--   double doubleinfo;
-- 
--   while(ptr && *ptr) {
---    if('%' == *ptr) {
--+    if('%' == *ptr && ptr[1]) {
--       if('%' == ptr[1]) {
--         /* an escaped %-letter */
--         fputc('%', stream);
--         ptr += 2;
--       }
--@@ -339,11 +339,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
--           fputc(ptr[1], stream);
--           ptr += 2;
--         }
--       }
--     }
---    else if('\\' == *ptr) {
--+    else if('\\' == *ptr && ptr[1]) {
--       switch(ptr[1]) {
--       case 'r':
--         fputc('\r', stream);
--         break;
--       case 'n':
---- 2.11.0
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 9c521e9..f8885e0 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 1c7207c06d75e9136a944a2e0528337ce76f15b9ec9ae4bb30d703b59bf530e8  curl-7.53.1.tar.bz2
-+sha256 f50ebaf43c507fa7cc32be4b8108fa8bbd0f5022e90794388f3c7694a302ff06  curl-7.54.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 0249f5c..6f4803e 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.53.1
-+LIBCURL_VERSION = 7.54.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+diff --git a/package/mplayer/0007-fixmmx.patch b/package/mplayer/0007-fixmmx.patch
+new file mode 100644
+index 0000000..9634a3b
+--- /dev/null
++++ b/package/mplayer/0007-fixmmx.patch
+@@ -0,0 +1,77 @@
++fix compilation failure with MMX
++
++Fixes
++libmpcodecs/vf_fspp.c: In function 'column_fidct_c':
++libmpcodecs/vf_fspp.c:750:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:751:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:752:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:753:5: error: unknown type name 'int_simd16_t'
++libmpcodecs/vf_fspp.c:789:18: error: 'FIX_0_707106781' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:789:18: note: each undeclared identifier is reported only once for each function it appears in
++libmpcodecs/vf_fspp.c:804:21: error: 'FIX_1_414213562_A' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:817:18: error: 'FIX_0_382683433' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:818:18: error: 'FIX_0_541196100' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:819:18: error: 'FIX_1_306562965' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:844:21: error: 'FIX_1_414213562' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:845:21: error: 'FIX_1_847759065' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:846:21: error: 'FIX_1_082392200' undeclared (first use in this function)
++libmpcodecs/vf_fspp.c:847:21: error: 'FIX_2_613125930' undeclared (first use in this function)
++
++found using this defconfig after fixing the original bug:
++http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
++
++Downloaded from upstream mailinglist:
++http://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2016-May/073488.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr MPlayer-1.3.0.org/libmpcodecs/vf_fspp.c MPlayer-1.3.0/libmpcodecs/vf_fspp.c
++--- MPlayer-1.3.0.org/libmpcodecs/vf_fspp.c	2015-10-17 21:44:31.000000000 +0200
+++++ MPlayer-1.3.0/libmpcodecs/vf_fspp.c	2017-04-10 21:26:57.771819064 +0200
++@@ -173,7 +173,6 @@
++ #define store_slice_s store_slice_c
++ #define store_slice2_s store_slice2_c
++ #define mul_thrmat_s mul_thrmat_c
++-#define column_fidct_s column_fidct_c
++ #define row_idct_s row_idct_c
++ #define row_fdct_s row_fdct_c
++ 
++@@ -393,7 +392,6 @@
++         );
++ }
++ 
++-static void column_fidct_mmx(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
++ static void row_idct_mmx(int16_t* workspace,
++                          int16_t* output_adr,  int output_stride,  int cnt);
++ static void row_fdct_mmx(int16_t *data,  const uint8_t *pixels,  int line_size,  int cnt);
++@@ -401,11 +399,18 @@
++ #define store_slice_s store_slice_mmx
++ #define store_slice2_s store_slice2_mmx
++ #define mul_thrmat_s mul_thrmat_mmx
++-#define column_fidct_s column_fidct_mmx
++ #define row_idct_s row_idct_mmx
++ #define row_fdct_s row_fdct_mmx
++ #endif // HAVE_MMX_INLINE
++ 
+++#if !HAVE_MMXEXT_INLINE
+++static void column_fidct_c(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
+++#define column_fidct_s column_fidct_c
+++#else
+++static void column_fidct_mmx(int16_t* thr_adr,  int16_t *data,  int16_t *output,  int cnt);
+++#define column_fidct_s column_fidct_mmx
+++#endif
+++
++ static void filter(struct vf_priv_s *p, uint8_t *dst, uint8_t *src,
++                    int dst_stride, int src_stride,
++                    int width, int height,
++@@ -728,7 +733,9 @@
++ DECLARE_ASM_CONST(8, uint64_t, MM_DESCALE_RND)=C64(4);
++ DECLARE_ASM_CONST(8, uint64_t, MM_2)=C64(2);
++ 
++-#else /* !HAVE_MMXEXT_INLINE */
+++#endif /* !HAVE_MMX_INLINE */
+++
+++#if !HAVE_MMX_INLINE || !HAVE_MMXEXT_INLINE
++ 
++ typedef int32_t int_simd16_t;
++ static const int16_t FIX_0_382683433=FIX(0.382683433, 14);
