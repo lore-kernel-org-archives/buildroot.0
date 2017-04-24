@@ -1,56 +1,66 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 23 Apr 2017 22:33:56 -0300
-Subject: [Buildroot] [PATCH] docs/manual: PEP8 coding style for Python
-	scripts
-Message-ID: <20170424013356.2228-1-ricardo.martincoski@gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 24 Apr 2017 04:41:23 +0000
+Subject: [Buildroot] [PATCH] xorriso: disable libcdio
+In-Reply-To: <0a5dac7516bd86eca86510a190385617af60d738.1492891844.git.baruch@tkos.co.il>
+References: <0a5dac7516bd86eca86510a190385617af60d738.1492891844.git.baruch@tkos.co.il>
+Message-ID: <dcda91e6-6425-31a8-0da6-b4f481ed0a7c@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The advantages of using a pre-existing coding style instead of creating
-our own are:
-- documenting on the manual takes a single sentence;
-- there are automatic tools to help during development/review.
+Looks good to me
 
-So document that PEP8 recommendation should be followed.
+Ack - Steve Kenton
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-Here is the sentence I didn't add:
-The use of https://pypi.python.org/pypi/pycodestyle[Python style guide checker]
-is recommended before submitting new scripts.
 
-I mentioned in a thread the tool pep8/pycodestyle
-From https://pypi.python.org/pypi/pycodestyle :
-"This package used to be called pep8 but was renamed to pycodestyle to
-reduce confusion"
-Old url: https://pypi.python.org/pypi/pep8
 
-Also Thomas DS mentioned the tool flake8 that seems to me to group:
-pycodestyle + pyflakes + mccabe
-http://flake8.pycqa.org/en/latest/
----
- docs/manual/writing-rules.txt | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index e2ad41ebc..3a2c8dcb3 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -143,3 +143,8 @@ http://www.methods.co.nz/asciidoc/[asciidoc] format.
- 
- For further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
- syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
-+
-+=== Support scripts
-+
-+Some scripts in the +support/+ directory are written in Python and should follow
-+the https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
--- 
-2.11.0
+On 04/22/2017 08:10 PM, Baruch Siach wrote:
+> xorriso and libcdio define identically named symbols. This breaks static
+> linking.
+>
+> Besides, upstream suggested that on Linux the built-in libburn adapter is much
+> better tested than libcdio.
+>
+> Disable libcdio.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/430/430a6b548fcc311f20ea71cecaa11fafac1d5a19/
+> http://autobuild.buildroot.net/results/a5d/a5d0f8bec0d39e48f6dfe4ecc07fe0ca3c6bd70a/
+>
+> Cc: Steve Kenton <skenton@ou.edu>
+> Suggested-by: Thomas Schmitt <scdbackup@gmx.net>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>   package/xorriso/xorriso.mk | 13 ++++---------
+>   1 file changed, 4 insertions(+), 9 deletions(-)
+>
+> diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
+> index b2055804302e..1f095911f80f 100644
+> --- a/package/xorriso/xorriso.mk
+> +++ b/package/xorriso/xorriso.mk
+> @@ -18,19 +18,14 @@ HOST_XORRISO_CONF_OPTS = \
+>   	--disable-libedit \
+>   	--disable-libacl
+>   
+> +# libcdio doesn't make sense for Linux
+> +# http://lists.gnu.org/archive/html/bug-xorriso/2017-04/msg00004.html
+> +XORRISO_CONF_OPTS = --disable-libcdio
+> +
+>   ifeq ($(BR2_PACKAGE_LIBICONV),y)
+>   XORRISO_DEPENDENCIES += libiconv
+>   endif
+>   
+> -ifeq ($(BR2_PACKAGE_LIBCDIO),y)
+> -XORRISO_DEPENDENCIES += host-pkgconf libcdio
+> -XORRISO_CONF_OPTS += \
+> -	--enable-pkg-check-modules \
+> -	--enable-libcdio
+> -else
+> -XORRISO_CONF_OPTS += --disable-libcdio
+> -endif
+> -
+>   ifeq ($(BR2_PACKAGE_READLINE),y)
+>   XORRISO_DEPENDENCIES += readline
+>   XORRISO_CONF_OPTS += --enable-libreadline
