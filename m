@@ -1,87 +1,153 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 16:25:59 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/hiredis: fix
-	install step for static build only
-Message-ID: <20170424193337.F31B7821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 16:24:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] glibc: add patches to fix
+	sh4 compile issue
+Message-ID: <20170424193337.CC4BD821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bac22a6f553267146b9454cb32ad19b6ae1f8483
+commit: https://git.buildroot.net/buildroot/commit/?id=9d1e422788ec408fc9e2ed3fb679aade57490468
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The previous patch [1] didn't take into acount the static build only
-scenario. It tries to unconditionally install a shared library.
-
-Handle the install step like for bzip2 package: install the shared
-library only if BR2_SHARED_LIBS or BR2_SHARED_STATIC_LIBS is set and
-install the static library only if BR2_STATIC_LIBS or
-BR2_SHARED_STATIC_LIBS is set.
-
-[1] 96daacb720cffe1f83259462bef9d3da92925cd9
-
 Fixes:
-http://autobuild.buildroot.net/results/6be/6be8024dd664af83fcf49ede29c8ad59a37f73d1
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  https://bugs.busybox.net/show_bug.cgi?id=9756
+
+[Peter: drop 2.25.x patch]
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Thomas: rework patches as Git formatted patches, fix numbering.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 10ffe1f65ce2975eb7fad426c466a5d80e3a82ba)
+(cherry picked from commit 5f2cff973a8a64411d85ccb9d5c9a40962d67552)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hiredis/hiredis.mk | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ .../2.23/0005-sh-Fix-building-with-gcc5-6.patch    | 56 ++++++++++++++++++++++
+ .../2.24/0001-sh-Fix-building-with-gcc5-6.patch    | 56 ++++++++++++++++++++++
+ 2 files changed, 112 insertions(+)
 
-diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
-index e485b42..598e014 100644
---- a/package/hiredis/hiredis.mk
-+++ b/package/hiredis/hiredis.mk
-@@ -31,6 +31,26 @@ endef
- 
- HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
- 
-+ifeq ($(BR2_SHARED_LIBS),)
-+define HIREDIS_INSTALL_STAGING_STATIC_LIB
-+	$(INSTALL) -D -m 0755 $(@D)/libhiredis.a \
-+		$(STAGING_DIR)/usr/lib/libhiredis.a
-+endef
-+endif
+diff --git a/package/glibc/2.23/0005-sh-Fix-building-with-gcc5-6.patch b/package/glibc/2.23/0005-sh-Fix-building-with-gcc5-6.patch
+new file mode 100644
+index 0000000..fa43add
+--- /dev/null
++++ b/package/glibc/2.23/0005-sh-Fix-building-with-gcc5-6.patch
+@@ -0,0 +1,56 @@
++From dbb9ecfaac8db022292791936733e0841a0aa447 Mon Sep 17 00:00:00 2001
++From: Alexey Neyman <stilor@att.net>
++Date: Wed, 8 Feb 2017 16:00:57 -0200
++Subject: [PATCH] sh: Fix building with gcc5/6
 +
-+ifeq ($(BR2_STATIC_LIBS),)
-+define HIREDIS_INSTALL_STAGING_SHARED_LIB
-+	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
-+		$(STAGING_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
-+	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(STAGING_DIR)/usr/lib/libhiredis.so
-+endef
-+define HIREDIS_INSTALL_TARGET_SHARED_LIB
-+	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
-+		$(TARGET_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
-+	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libhiredis.so
-+endef
-+endif
++Build glibc for sh4-unknown-linux-gnu currently fails if one's
++using GCC5/6: in dl-conflict.c, the elf_machine_rela() function
++is called with NULL as its 3rd argument, sym. The implementation
++of that function in sysdeps/sh/dl-machine.h dereferences that pointer:
 +
- # Do not call make install as this target will build shared and static libraries
- define HIREDIS_INSTALL_STAGING_CMDS
- 	mkdir -p $(HIREDIS_INCLUDE_DIR)
-@@ -38,15 +58,12 @@ define HIREDIS_INSTALL_STAGING_CMDS
- 		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
- 	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
--	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
--		$(STAGING_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
--	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(STAGING_DIR)/usr/lib/libhiredis.so
-+	$(HIREDIS_INSTALL_STAGING_STATIC_LIB)
-+	$(HIREDIS_INSTALL_STAGING_SHARED_LIB)
- endef
- 
- define HIREDIS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
--		$(TARGET_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
--	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libhiredis.so
-+	$(HIREDIS_INSTALL_TARGET_SHARED_LIB)
- endef
- 
- $(eval $(generic-package))
++const Elf32_Sym *const refsym = sym;
++...
++if (map == &GL(dl_rtld_map))
++  value -= map->l_addr + refsym->st_value + reloc->r_addend;
++
++GCC discovers a null pointer dereference, and in accordance with
++-fdelete-null-pointer-checks (which is enabled in -O2) replaces this
++code with a trap - which, as SH does not implement a trap pattern in
++GCC, evaluates to an abort() call. This abort() call pulls many more
++objects from libc_nonshared.a, eventually resulting in link failure
++due to multiple definitions for a number of symbols.
++
++As far as I see, the conditional before this code is always false in
++rtld: _dl_resolve_conflicts() is called with main_map as the first
++argument, not GL(_dl_rtld_map), but since that call is in yet another
++compilation unit, GCC does not know about it. Patch that wraps this
++conditional into !defined RESOLVE_CONFLICT_FIND_MAP attached.
++
++	* sysdeps/sh/dl-machine.h (elf_machine_rela): The condition
++	in R_SH_DIR32 case is always false when inlined from
++	dl-conflict.c. Ifdef out to prevent GCC from insertin an
++	abort() call.
++
++[Waldemar: backport of
++https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01.]
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ sysdeps/sh/dl-machine.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sysdeps/sh/dl-machine.h b/sysdeps/sh/dl-machine.h
++index 5bb37d0..6509055 100644
++--- a/sysdeps/sh/dl-machine.h
+++++ b/sysdeps/sh/dl-machine.h
++@@ -389,7 +389,7 @@ elf_machine_rela (struct link_map *map, const Elf32_Rela *reloc,
++ 	  break;
++ 	case R_SH_DIR32:
++ 	  {
++-#ifndef RTLD_BOOTSTRAP
+++#if !defined RTLD_BOOTSTRAP && !defined RESOLVE_CONFLICT_FIND_MAP
++ 	   /* This is defined in rtld.c, but nowhere in the static
++ 	      libc.a; make the reference weak so static programs can
++ 	      still link.  This declaration cannot be done when
++-- 
++2.7.4
++
+diff --git a/package/glibc/2.24/0001-sh-Fix-building-with-gcc5-6.patch b/package/glibc/2.24/0001-sh-Fix-building-with-gcc5-6.patch
+new file mode 100644
+index 0000000..821f2c6
+--- /dev/null
++++ b/package/glibc/2.24/0001-sh-Fix-building-with-gcc5-6.patch
+@@ -0,0 +1,56 @@
++From 98cadd4b9fa8e32d1d0dea8e46b5ba829af4e8a2 Mon Sep 17 00:00:00 2001
++From: Alexey Neyman <stilor@att.net>
++Date: Wed, 8 Feb 2017 16:00:57 -0200
++Subject: [PATCH] sh: Fix building with gcc5/6
++
++Build glibc for sh4-unknown-linux-gnu currently fails if one's
++using GCC5/6: in dl-conflict.c, the elf_machine_rela() function
++is called with NULL as its 3rd argument, sym. The implementation
++of that function in sysdeps/sh/dl-machine.h dereferences that pointer:
++
++const Elf32_Sym *const refsym = sym;
++...
++if (map == &GL(dl_rtld_map))
++  value -= map->l_addr + refsym->st_value + reloc->r_addend;
++
++GCC discovers a null pointer dereference, and in accordance with
++-fdelete-null-pointer-checks (which is enabled in -O2) replaces this
++code with a trap - which, as SH does not implement a trap pattern in
++GCC, evaluates to an abort() call. This abort() call pulls many more
++objects from libc_nonshared.a, eventually resulting in link failure
++due to multiple definitions for a number of symbols.
++
++As far as I see, the conditional before this code is always false in
++rtld: _dl_resolve_conflicts() is called with main_map as the first
++argument, not GL(_dl_rtld_map), but since that call is in yet another
++compilation unit, GCC does not know about it. Patch that wraps this
++conditional into !defined RESOLVE_CONFLICT_FIND_MAP attached.
++
++	* sysdeps/sh/dl-machine.h (elf_machine_rela): The condition
++	in R_SH_DIR32 case is always false when inlined from
++	dl-conflict.c. Ifdef out to prevent GCC from insertin an
++	abort() call.
++
++[Waldemar: backport of
++https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01.]
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ sysdeps/sh/dl-machine.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sysdeps/sh/dl-machine.h b/sysdeps/sh/dl-machine.h
++index 5bb37d0..6509055 100644
++--- a/sysdeps/sh/dl-machine.h
+++++ b/sysdeps/sh/dl-machine.h
++@@ -389,7 +389,7 @@ elf_machine_rela (struct link_map *map, const Elf32_Rela *reloc,
++ 	  break;
++ 	case R_SH_DIR32:
++ 	  {
++-#ifndef RTLD_BOOTSTRAP
+++#if !defined RTLD_BOOTSTRAP && !defined RESOLVE_CONFLICT_FIND_MAP
++ 	   /* This is defined in rtld.c, but nowhere in the static
++ 	      libc.a; make the reference weak so static programs can
++ 	      still link.  This declaration cannot be done when
++-- 
++2.7.4
++
