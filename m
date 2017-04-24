@@ -1,35 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:32:11 +0200
-Subject: [Buildroot] [PATCH 2/2] libnss: security bump to version 3.30.2
-In-Reply-To: <f4dcb1e701fce76f7f18bd8dfff60b1f2fdb2a4f.1492709669.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 20 Apr 2017 20:34:29 +0300")
-References: <d86176bbf66ac3fbbdc5a47456314bd68006df13.1492709669.git.baruch@tkos.co.il>
- <f4dcb1e701fce76f7f18bd8dfff60b1f2fdb2a4f.1492709669.git.baruch@tkos.co.il>
-Message-ID: <87pog1txdw.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 21:32:38 +0200
+Subject: [Buildroot] [PATCH] libcurl: bump version to 7.54.0 (security)
+In-Reply-To: <20170419090742.33430-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Wed, 19 Apr 2017 10:07:42 +0100")
+References: <20170419090742.33430-1-Vincent.Riera@imgtec.com>
+Message-ID: <87inlttxd5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > CVE-2017-5461 - Out-of-bounds write in Base64 encoding in NSS. Might cause
- > remote arbitrary code execution
- > (https://access.redhat.com/errata/RHSA-2017:1100).
+ > Security fixes:
+ >  - CVE-2017-7468: switch off SSL session id when client cert is used
 
- > CVE-2017-5462 - DRBG flaw in NSS
+ > Full changelog: https://curl.haxx.se/changes.html
 
- > Drop 0001-cross-compile.patch and TARGET* variables. Upstream Makefile now
- > allows override of CC, so use TARGET_CONFIGURE_OPTS instead.
+ > Removing 0001-CVE-2017-7407.patch. It's included in this release:
+ >   https://github.com/curl/curl/commit/1890d59905414ab84a35892b2e45833654aa5c13
 
- > Drop upstream 0003-it-uninitialized-fix.patch.
-
- > Renumber the remaining patch.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > Backport note: depends on libnspr version 4.14
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed to 2017.02.x, thanks.
 
