@@ -1,44 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 15:44:25 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/dovecot: bump
-	version to 2.2.28
-Message-ID: <20170424193336.B753F800A5@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 11:50:04 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] python-pyyaml: correct
+	license name
+Message-ID: <20170424193336.AF1AB827E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b937e29052b8a8519e62d96a5d787c003bb32b6c
+commit: https://git.buildroot.net/buildroot/commit/?id=761533084bce35751335eeecab16c6e44104b804
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+LICENSE file contains MIT license text and README file clearly mentions
+pyyaml is released under MIT license.
+
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 87b60b2586b44f81ada7e57768ca5dded612ffdc)
+(cherry picked from commit 27fdc59e467e55bff1d5910c64e5381ca2814f5f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pyyaml/python-pyyaml.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e7b9c33..b52ea8d 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,2 +1,2 @@
- # Locally computed after checking signature
--sha256 897f92a87cda4b27b243f8149ce0ba7b7e71a2be8fb7994eb0a025e54cde18e9  dovecot-2.2.27.tar.gz
-+sha256 e0288f59e326ab87cb3881fdabadafe542f4dc7ab9996db13863a439ebbc1f25  dovecot-2.2.28.tar.gz
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index fe0afa5..caa6bba 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 0509a7a..beeaf88 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -8,7 +8,7 @@ PYTHON_PYYAML_VERSION = 3.12
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+ PYTHON_PYYAML_SITE = https://pypi.python.org/packages/4a/85/db5a2df477072b2902b0eb892feb37d88ac635d36245a72a6a69b23b383a
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+-PYTHON_PYYAML_LICENSE = Python software foundation license v2
++PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
+ PYTHON_PYYAML_DEPENDENCIES = libyaml
  
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).27
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).28
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPLv2.1
