@@ -1,27 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:32:38 +0200
-Subject: [Buildroot] [PATCH] libcurl: bump version to 7.54.0 (security)
-In-Reply-To: <20170419090742.33430-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Wed, 19 Apr 2017 10:07:42 +0100")
-References: <20170419090742.33430-1-Vincent.Riera@imgtec.com>
-Message-ID: <87inlttxd5.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 21:32:49 +0200
+Subject: [Buildroot] [PATCH 1/1] uboot: fix target uboot defconfig
+	warning
+In-Reply-To: <20170421195707.5238-1-christian@paral.in> (Christian Stewart's
+ message of "Fri, 21 Apr 2017 15:57:07 -0400")
+References: <20170421195707.5238-1-christian@paral.in>
+Message-ID: <87efwhtxcu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > Security fixes:
- >  - CVE-2017-7468: switch off SSL session id when client cert is used
+ > The warning currently reads:
+ >   No board defconfig name specified, check your
+ >   BR2_TARGET_UBOOT_DEFCONFIG setting.
 
- > Full changelog: https://curl.haxx.se/changes.html
+ > It should read:
 
- > Removing 0001-CVE-2017-7407.patch. It's included in this release:
- >   https://github.com/curl/curl/commit/1890d59905414ab84a35892b2e45833654aa5c13
+ >   No board defconfig name specified, check your
+ >   BR2_TARGET_UBOOT_BOARD_DEFCONFIG setting.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
 Committed to 2017.02.x, thanks.
 
