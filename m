@@ -1,104 +1,111 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Apr 2017 23:31:46 +0200
-Subject: [Buildroot] [PATCH v6 11/31] package/kodi-pvr-nextpvr: bump version
-	to 2.4.11
+Date: Mon, 24 Apr 2017 23:31:54 +0200
+Subject: [Buildroot] [PATCH v6 19/31] package/kodi-visualisation-*: mass
+	version bump
 In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
 References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
-Message-ID: <20170424213206.26247-12-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-https://github.com/kodi-pvr/pvr.nextpvr/commit/9e042807f1ce18df6937312cb0abded24d09bfb7
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...epresentation-of-char_class_e-in-struct-t.patch | 48 ----------------------
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash     |  2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk       |  4 +-
- 3 files changed, 3 insertions(+), 51 deletions(-)
- delete mode 100644 package/kodi-pvr-nextpvr/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash   | 2 +-
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk     | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.hash         | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.mk           | 2 +-
+ package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash | 2 +-
+ package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk   | 2 +-
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash | 2 +-
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk   | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/kodi-pvr-nextpvr/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch b/package/kodi-pvr-nextpvr/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
-deleted file mode 100644
-index 18e59951c6..0000000000
---- a/package/kodi-pvr-nextpvr/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 2698ac4eeca3a82967ff83386460c070ce387ead Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 28 Feb 2016 01:07:52 +0100
--Subject: [PATCH] Sync enum representation of char_class_e in struct traits
-- with definition
--
--Copied from
--https://github.com/kodi-pvr/pvr.mediaportal.tvserver/pull/28
--https://github.com/kodi-pvr/pvr.mediaportal.tvserver/pull/35
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Patch sent upstream: https://github.com/kodi-pvr/pvr.nextpvr/pull/42]
-----
-- src/uri.h | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/uri.h b/src/uri.h
--index 2757cf0..3dbca88 100644
----- a/src/uri.h
--+++ b/src/uri.h
--@@ -21,13 +21,13 @@
-- namespace uri
-- {
--   /// Char class.
---  enum char_class_e
--+  typedef enum char_class_e : signed char
--   {
--     CINV = -2, ///< invalid
--     CEND = -1, ///< end delimitor
--     CVAL = 0,  ///< valid any position
--     CVA2 = 1,  ///< valid anywhere but 1st position
---  };
--+  } char_class_e_type;
-- 
--   /// Traits used for parsing and encoding components.
--   struct traits
--@@ -35,7 +35,7 @@ namespace uri
--     const char* begin_cstring; ///< begin cstring (or 0 if none)
--     const char begin_char;     ///< begin char (or 0 if none)
--     const char end_char;       ///< end char (or 0 if none)
---    char char_class[256];      ///< map of char to class
--+    const char_class_e_type char_class[256];      ///< map of char to class
--   };
-- 
--   /**
---- 
--2.7.0
--
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 64c09cfe65..4deb220817 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+index 6a65a58fea..c89ca9a618 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 8c4a36c21dc65cc358b34e5c2db849997f0add2501c3f787f99df3ae0ea850c5 kodi-pvr-nextpvr-2055105c93e18e04e73c87578bece3edf7525e14.tar.gz
-+sha256 5b0839141c9bdd1150442ef06974755bccb381b2998ddffa584eb234a83b7af5  kodi-pvr-nextpvr-2.4.11-Krypton.tar.gz
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index a4df90e109..8f06f320cd 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-@@ -4,9 +4,9 @@
+-sha256 7047d501942bcd5095e0f1424f003caec8eb792b59d16d16ad25f14829844e50 kodi-visualisation-fishbmc-50c38c296a62e096a2216e43b86d864ee265c506.tar.gz
++sha256 cf42a21978578cb5ecb10c20fe09791183d8ef2998ff9d956a84142a7dda8f72  kodi-visualisation-fishbmc-v4.1.0.tar.gz
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+index 92c9190ad7..d08c215ee7 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Jarvis'
-+# This cset is on the branch 'Krypton'
- # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_NEXTPVR_VERSION = 2055105c93e18e04e73c87578bece3edf7525e14
-+KODI_PVR_NEXTPVR_VERSION = 2.4.11-Krypton
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = src/client.h
+-KODI_VISUALISATION_FISHBMC_VERSION = 50c38c296a62e096a2216e43b86d864ee265c506
++KODI_VISUALISATION_FISHBMC_VERSION = v4.1.0
+ KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
+ KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+index 8507c652a5..8d4548a7dd 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 66a71a5c5a1c0016d7020fcc9941634ee465dab14644cdc96023ce0a28408338 kodi-visualisation-goom-16747b7dba9cbdcfdc8df44e849eaf09450fc86f.tar.gz
++sha256 62a26efb6cd5d5fd109e38accb3deb71145972ae30b914bed7620eb40465c954  kodi-visualisation-goom-v1.1.0.tar.gz
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+index e7695052df..48e0425972 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_GOOM_VERSION = 16747b7dba9cbdcfdc8df44e849eaf09450fc86f
++KODI_VISUALISATION_GOOM_VERSION = v1.1.0
+ KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+ KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+index 18e38f577f..6c892ed0ba 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 aa417d6ad3d3770029e7d8d9f7f0ca8d56a8a4f47821267b5a8604fc26993334 kodi-visualisation-spectrum-9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e.tar.gz
++sha256 7ee78ff5c24e3f81b6e2a9208237f34667cb9faa5453d7bdb900ab65245973f1  kodi-visualisation-spectrum-v1.1.1.tar.gz
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+index ebc75779b8..3ab2c9975d 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_SPECTRUM_VERSION = 9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e
++KODI_VISUALISATION_SPECTRUM_VERSION = v1.1.1
+ KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
+ KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+index 728b857ecc..1fdecbede5 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 439bd50fcb1c0912532d0d113f7eeadf28f72bd2cb0c234581ee1acc2a70e45b kodi-visualisation-waveform-89aec48e2975f820004df5a1a53801339a5b3064.tar.gz
++sha256 cf10d8d78cb2bde4a0a21bb7e467445617b46593c093ef05f336f95a048f2d54  kodi-visualisation-waveform-v1.1.0.tar.gz
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+index 2263b7106f..d906c653c2 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_WAVEFORM_VERSION = 89aec48e2975f820004df5a1a53801339a5b3064
++KODI_VISUALISATION_WAVEFORM_VERSION = v1.1.0
+ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+ KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
 -- 
 2.11.0
