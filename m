@@ -1,27 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 21:24:40 +0200
-Subject: [Buildroot] [git commit] package/mplayer: fix compilation
-	failure with MMX in libmpcodecs/vf_fspp.c
-In-Reply-To: <20170412204705.9995E802B7@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 12 Apr 2017 22:45:13 +0200")
-References: <20170412204705.9995E802B7@busybox.osuosl.org>
-Message-ID: <87a875wqvb.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Apr 2017 21:24:56 +0200
+Subject: [Buildroot] [PATCH] trinity: fix glibc/kernel headers conflict
+In-Reply-To: <0c3077fb3a4c82ea2570106a3357e9cae19cdd3d.1492060046.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 13 Apr 2017 08:07:26 +0300")
+References: <0c3077fb3a4c82ea2570106a3357e9cae19cdd3d.1492060046.git.baruch@tkos.co.il>
+Message-ID: <8760htwquv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=eabf4102ce07168988a826b79c6eb0c34d685e09
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Add upstream patch that fixes conflicting definitions of ax25 related structs.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b40/b40d045f41dc4dbc66d5092ea5e9e045cd825e31/
+ > http://autobuild.buildroot.net/results/367/367199b6071c450159aa2ea74d6d1b4b7cb89a88/
+ > http://autobuild.buildroot.net/results/35e/35e97e51a6f7184d7b708c62a726ab91a0f546b2/
 
- > Compile error found while fixing
- > http://autobuild.buildroot.net/results/642/6422adeef19ec547c7bc3f8ad3b0d51702015240/
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.02.x, thanks.
 
