@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Apr 2017 10:43:16 +0100
-Subject: [Buildroot] [PATCH] python-dataproperty: bump version to 0.18.1
-Message-ID: <20170424094316.60728-1-Vincent.Riera@imgtec.com>
+Date: Mon, 24 Apr 2017 10:45:21 +0100
+Subject: [Buildroot] [PATCH] x265: bump version to 2.4
+Message-ID: <20170424094521.63027-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 21b70b1..1ab0a40 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
--md5 211c94a87f11e7e78fae61b20ee654a2  DataProperty-0.17.0.tar.gz
--sha256 6c7daed534e418badf5f0c8b601a353fed2fda40ec9b4e8052dfa8b40a5626a0  DataProperty-0.17.0.tar.gz
-+md5 70199d3e6e021810d0d3b4a42c37916f  DataProperty-0.18.1.tar.gz
-+sha256 950131bd9fb874be606835e5f4a84d99f505d919aed94145932ec010190c7c66  DataProperty-0.18.1.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index b649d43..7e34425 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index d53295c..1ad8170 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256 47520ac3424790168ea5c2db4a3cf12ca4d55a1790720007916652f07af3e41f  x265_2.3.tar.gz
++sha256 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d729  x265_2.4.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 2ea404b..2907ba3 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.17.0
-+PYTHON_DATAPROPERTY_VERSION = 0.18.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/91/35/c47884269202d25f28007a303c2510141c15bd111225fd203fdf9474a0c7
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/42/b6/591366869e9fc7b19420ca4c177727f25dcccc07a46cecbda8d6abffa866
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-X265_VERSION = 2.3
++X265_VERSION = 2.4
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPL-2.0+
 -- 
 2.10.2
