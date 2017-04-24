@@ -1,46 +1,53 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 23 Apr 2017 20:44:23 -0300
-Subject: [Buildroot] uboot-tools autobuild failures
-In-Reply-To: <CANQCQpb0U3tO7Z-Lsz1pxmekaKYC8JyU7BJgtcXwLDWDgh1xNw@mail.gmail.com>
-References: <CANQCQpb0U3tO7Z-Lsz1pxmekaKYC8JyU7BJgtcXwLDWDgh1xNw@mail.gmail.com>
-Message-ID: <CAOMZO5D8cXv4+TF=kXMwE5_YE_mCKMhgjS+PCAbSkKHkewzSjA@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 23 Apr 2017 22:25:29 -0300
+Subject: [Buildroot] [RFC] Adopt a coding style for Python scripts
+References: <488de6bd-5014-59b4-100b-8a73e9343cb6@mind.be>
+Message-ID: <58fd5409bb33e_6531ebf104465d3@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Arnout, Thomas P,
 
-On Wed, Apr 19, 2017 at 10:55 PM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> It looks like all of these recent failures are because the python swig
-> build does a "$(if $(shell which swig 2> /dev/null),_libfdt.so)" to
-> determine if the host system has swig and if so, try to build the
-> python bindings.  Obviously not taking into account any prefix we'd
-> provide to the host/ in out build.
->
-> http://autobuild.buildroot.org/?reason=uboot-tools-2017.03
->
-> I don't directly have a need for those bindings, would a patch that
-> disables this swig detect be reasonable at this point?  Other option
-> would be to rewrite how they're doing it to search a prefix path vs
-> using the shell's which.  Then work upstreaming of that change.
+On Sun, Apr 23, 2017 at 06:34 PM, Arnout Vandecappelle wrote:
 
-U-Boot mainline has a fix for this already:
-http://git.denx.de/?p=u-boot.git;a=commitdiff;h=9963890b8be1d208035945abc5ba9f77637b6542
+> On 20-04-17 09:17, Thomas Petazzoni wrote:
+>> Hello,
+>> 
+>> On Wed, 19 Apr 2017 14:00:53 -0300, Ricardo Martincoski wrote:
+>> 
+>>>> On 14-04-17 01:44, Ricardo Martincoski wrote:  
+>>>>> D) adopt the recommendation PEP8 [1] as coding style and the tool pep8 [2] as
+>>>>>    automatic checker for coding style before submitting patches;
+>>>>>    It checks for a subset of the recommendation (e.g. file naming is not
+>>>>>    checked).  
+>>>>
+>>>>  For me, option D is great. It can also be added to the checkpackage script.  
+>>>
+>>> I can look into this integration.
+>> 
+>> I have nothing against option (D), but I'm wondering what is the
+>> relation with the checkpackage script. checkpackage checks packages,
+>> written in Kconfig and Make, what is the relation with complying with
+>> the Python PEP8 recommendation?
+> 
+>  Actually, check-package checks files, not packages. It looks at the filename
+> and if it is one it recognizes, it runs the appropriate checker on it. So a
+> checker that applies to files ending with .py could certainly be added.
 
-My host PC does not have Python 3, so I cannot reproduce this error myself.
+It is feasible, probably using the library file-magic because not all Python
+scripts in the tree use .py extension.
 
-Could you please try the attached Buildroot patch?
+But maybe it is too much, at least for now. 
+
+Before submitting a patch for a package one can use check-package.
+Before submitting a patch for a Python script one can use pycodestyle (pep8).
+
+It's not really needed to have a unified script to check both a package and a
+Python script.
+They are in different directories and are sent in separate patches anyway.
 
 Regards,
-
-Fabio Estevam
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-libfdtfix.patch
-Type: text/x-patch
-Size: 2173 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170423/d6629d56/attachment.bin>
+Ricardo
