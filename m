@@ -1,100 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 10:46:32 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libnspr: use __nios2__
-	instead of nios2
-Message-ID: <20170424193336.2D394800A5@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 11:46:06 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] pkg-python: ignore user
+	site-packages directory
+Message-ID: <20170424193336.7C09B827E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d302e43c944408064259b85165deadad2bfe5ff
+commit: https://git.buildroot.net/buildroot/commit/?id=57120d614ede3ab51ce0721758e283d9f698b7ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Our patch adding nios2 support to libnspr uses the built-in compiler
-define "nios2". However, this doesn't work with C++11, where only the
-__nios2__ define is available. Since __nios2__ is always available,
-use that instead:
+According to PEP 370 Python will also search for the packages in the
+user site-packages directory. This can affect build reproducibility.
 
-$ ./output/host/usr/bin/nios2-linux-gcc -dM -E - < /dev/null | grep -E "( nios2 | __nios2__ )"
+The solution is to use PYTHONNOUSERSITE=1 for all Python packages,
+i.e. both host and target variants.
 
-$ ./output/host/usr/bin/nios2-linux-gcc -std=c++11 -x c++ -dM -E - < /dev/null | grep -E "( nios2 | __nios2__ )"
+Fixes bug #9791.
 
-Patch 0001-nios2.patch is therefore changed to use __nios2__ (the rest
-of the change noise is due to using quilt to format the patch). Patch
-0002-microblaze.patch is simply updated to apply correctly on top of
-the modified 0001-nios2.patch.
-
-This fixes the build of the poppler library on nios2. It is built with
--std=c++11, and includes nspr headers (through nss), causing a build
-issue.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/9fee58076157d814616fa0da51afde8da21a8973/
-
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 9a521546ed553d2be23740bbf1a7aa05bce9eb09)
+(cherry picked from commit f5da1951ad1e81cc8641f2c90e96fe36d08ec6f9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnspr/0001-nios2.patch      | 18 ++++++++++--------
- package/libnspr/0002-microblaze.patch |  2 +-
- 2 files changed, 11 insertions(+), 9 deletions(-)
+ package/pkg-python.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
-index 22cacd7..e10e7e9 100644
---- a/package/libnspr/0001-nios2.patch
-+++ b/package/libnspr/0001-nios2.patch
-@@ -3,14 +3,15 @@ Add Nios-II support
- [Gustavo: update for nspr 4.10.9]
- Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 38bc45f..52c33f8 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -28,6 +28,7 @@ PKG_PYTHON_DISTUTILS_ENV = \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	LDSHARED="$(TARGET_CROSS)gcc -shared" \
+ 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
++	PYTHONNOUSERSITE=1 \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+@@ -43,7 +44,8 @@ PKG_PYTHON_DISTUTILS_INSTALL_STAGING_OPTS = \
  
--diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/include/md/_linux.cfg
----- nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg	2015-10-03 08:11:43.229387215 -0300
--+++ nspr-4.10.9/nspr/pr/include/md/_linux.cfg	2015-10-03 08:11:55.277798841 -0300
-+Index: b/nspr/pr/include/md/_linux.cfg
-+===================================================================
-+--- a/nspr/pr/include/md/_linux.cfg
-++++ b/nspr/pr/include/md/_linux.cfg
- @@ -1017,6 +1017,51 @@
-  #define PR_BYTES_PER_WORD_LOG2   2
-  #define PR_BYTES_PER_DWORD_LOG2  3
-  
--+#elif defined(nios2)
-++#elif defined(__nios2__)
- +
- +#define IS_LITTLE_ENDIAN 1
- +#undef  IS_BIG_ENDIAN
-@@ -58,14 +59,15 @@ diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/in
-  #else
-  
-  #error "Unknown CPU architecture"
--diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.h nspr-4.10.9/nspr/pr/include/md/_linux.h
----- nspr-4.10.9.orig/nspr/pr/include/md/_linux.h	2015-10-03 08:11:43.229387215 -0300
--+++ nspr-4.10.9/nspr/pr/include/md/_linux.h	2015-10-03 08:12:22.474728003 -0300
-+Index: b/nspr/pr/include/md/_linux.h
-+===================================================================
-+--- a/nspr/pr/include/md/_linux.h
-++++ b/nspr/pr/include/md/_linux.h
- @@ -57,6 +57,8 @@
-  #define _PR_SI_ARCHITECTURE "m32r"
-  #elif defined(__or1k__)
-  #define _PR_SI_ARCHITECTURE "or1k"
--+#elif defined(nios2)
-++#elif defined(__nios2__)
- +#define _PR_SI_ARCHITECTURE "nios2"
-  #else
-  #error "Unknown CPU architecture"
-diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
-index 7fd650c..7cf1f0d 100644
---- a/package/libnspr/0002-microblaze.patch
-+++ b/package/libnspr/0002-microblaze.patch
-@@ -74,6 +74,6 @@ Index: b/nspr/pr/include/md/_linux.h
-  #define _PR_SI_ARCHITECTURE "or1k"
- +#elif defined(__microblaze__)
- +#define _PR_SI_ARCHITECTURE "microblaze"
-- #elif defined(nios2)
-+ #elif defined(__nios2__)
-  #define _PR_SI_ARCHITECTURE "nios2"
-  #else
+ # Host distutils-based packages
+ HOST_PKG_PYTHON_DISTUTILS_ENV = \
+-	PATH=$(BR_PATH)
++	PATH=$(BR_PATH) \
++	PYTHONNOUSERSITE=1
+ 
+ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR)/usr
+@@ -52,6 +54,7 @@ HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS = \
+ PKG_PYTHON_SETUPTOOLS_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	PYTHONPATH="$(if $(BR2_PACKAGE_PYTHON3),$(PYTHON3_PATH),$(PYTHON_PATH))" \
++	PYTHONNOUSERSITE=1 \
+ 	_python_sysroot=$(STAGING_DIR) \
+ 	_python_prefix=/usr \
+ 	_python_exec_prefix=/usr
+@@ -70,7 +73,8 @@ PKG_PYTHON_SETUPTOOLS_INSTALL_STAGING_OPTS = \
+ 
+ # Host setuptools-based packages
+ HOST_PKG_PYTHON_SETUPTOOLS_ENV = \
+-	PATH=$(BR_PATH)
++	PATH=$(BR_PATH) \
++	PYTHONNOUSERSITE=1
+ 
+ HOST_PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS = \
+ 	--prefix=$(HOST_DIR)/usr
