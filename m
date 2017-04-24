@@ -1,58 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 17:45:11 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/libunwind:
-	disable for x86 with uClibc toolchain
-Message-ID: <20170424193338.2DF39821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 16:25:37 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] busybox: preserve ncurses
+	progs/tools
+Message-ID: <20170424193337.E12AC821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=892e908120cebbc4ef2a8af7aa1a41d12d1280e3
+commit: https://git.buildroot.net/buildroot/commit/?id=2de0f39ed6ddbcde9fc20f9abe19f426cd3d11b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-libunwind use sigreturn() while building for x86 [1] but this function
-is not available with uClibc-ng.
+The ncurses package installs a full version of clear and reset(tset)
+tools.  Preserve these by disabling the options in the busybox config
+file.  This removes the need for ncurses to depend on busybox for solely
+ordering of target install.
 
-This throw a warning during libunwind build:
-In file included from x86/Los-linux.c:4:0:
-x86/Gos-linux.c: In function ???_ULx86_local_resume???:
-x86/Gos-linux.c:298:7: warning: implicit declaration of function ???sigreturn??? [-Wimplicit-function-declaration]
-       sigreturn (sc);
-       ^
-
-But any program trying to link against libunwind-generic.so fail to build:
-[...]usr/lib/libunwind-generic.so: undefined reference to `sigreturn'
-collect2: error: ld returned 1 exit status
-
-Disable libunwind for x86 target when uClibc-ng is used.
+This commit resolves the following python circular dependency with python.
+busybox -> libselinux -> python3 -> ncurses -> busybox
 
 Fixes:
-http://autobuild.buildroot.net/results/54a/54afac8148cff5f3c17e83f80917fd9006948fe0//build-end.log
+http://autobuild.buildroot.net/results/db1/db1e6f3054092fc5576ccab8e04a3b9d74ca9a8c/
 
-[1] http://git.savannah.gnu.org/gitweb/?p=libunwind.git;a=blob;f=src/x86/Gos-linux.c;h=17aebc2974af50eb0bf8292689b2ed22a4c97866;hb=HEAD#l299
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Thomas: minor tweaks.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c5b56b0a20b2be24878d8bae66fbe665e8fea698)
+
+(cherry picked from commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libunwind/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/busybox/busybox.mk | 12 ++++++++++++
+ package/ncurses/ncurses.mk |  5 -----
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index 5527a2b..9007ce5 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
- 		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		 BR2_i386 || BR2_mips || BR2_mipsel || \
-+		 BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_MUSL && \
- 		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 577f2f2..7cc559c 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -148,6 +148,17 @@ define BUSYBOX_MUSL_TWEAKS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
++# Ncurses package overlaps:
++#     /usr/bin/clear
++#     /usr/bin/reset -> /usr/bin/tset (symlink)
++#
++define BUSYBOX_DISABLE_NCURSES_PROGS
++	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
++endef
++endif
++
+ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+@@ -229,6 +240,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
+ 	$(BUSYBOX_MUSL_TWEAKS)
++	$(BUSYBOX_DISABLE_NCURSES_PROGS)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 9d1b75d..bc0ea29 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -28,11 +28,6 @@ NCURSES_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
+ 	--without-manpages
+ 
+-# Install after busybox for the full-blown versions
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-NCURSES_DEPENDENCIES += busybox
+-endif
+-
+ ifeq ($(BR2_STATIC_LIBS),y)
+ NCURSES_CONF_OPTS += --without-shared --with-normal
+ else ifeq ($(BR2_SHARED_LIBS),y)
