@@ -1,169 +1,297 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Apr 2017 17:53:52 +0200
-Subject: [Buildroot] [PATCH 00/29] qt,
- qt5: only ever use the free/opensource licenses
-In-Reply-To: <e3bb00f2-5309-2af3-5933-1dcce008251c@mind.be>
-References: <cover.1492979449.git.yann.morin.1998@free.fr>
- <e3bb00f2-5309-2af3-5933-1dcce008251c@mind.be>
-Message-ID: <20170424155352.GB3081@scaer>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Mon, 24 Apr 2017 16:53:52 +0100
+Subject: [Buildroot] [PATCH] buildroot: adding perftest and libraries
+In-Reply-To: <194981fbebe0ffdfada0fedd65903b417b278a32.1493048575.git.jpinto@synopsys.com>
+References: <194981fbebe0ffdfada0fedd65903b417b278a32.1493048575.git.jpinto@synopsys.com>
+Message-ID: <b060d6c3-3f3d-dc74-eb74-2a69cd8bf918@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On 2017-04-23 23:12 +0200, Arnout Vandecappelle spake thusly:
-> On 23-04-17 22:31, Yann E. MORIN wrote:
-> > Hello All!
-> > 
-> > This series drops the option to accept the "free license" (as per the
-> > current prompts), to only ever use that, and no longer claim to allow
-> > use of Qt/Qt5 under a proprietary version.
-> > 
-> > The rationale behind this change is multi-fold:
-> > 
-> >   - the name of the tarballs we download clearly hint that they can
-> >     only be used under the opensource license;
-> > 
-> >   - the proprietary license is unknown to us (the Buildroot community
-> >     at large); we do not even know if there is a single such license;
-> > 
-> >   - we do not have such license choice for any other package in a
-> >     similar situation (e.g. mongoose); we only ever use the publicly
-> >     available licenses, always;
-> > 
-> >   - finally, we do not have such click-wrap acceptance option for any
-> >     license, be it free, opensource, or proprietary, and whether it be
-> >     redistributable or not. The licenses are available in the output
-> >     of legal-info, which a user should consult before using or
-> >     distributing the result of a build.
-> 
->  In addition, this option (if not set) will stop the build for interactive
-> handling, which is something we want to avoid.
-> 
->  Big +1 to this series. I gave it a once-over and it looks OK to me (I didn't
-> look carefully enough to give it a Reviewed-by though). I do have an issue with
-> the legacy handling, as explained in my reply to that patch. I also wouldn't
-> have split it up as much, but OK.
-> 
-> > 
-> > So, we drop the option to "Approve free license" for both Qt and
-> > Qt5, and do as we do for all packages: just use the publicly-known
-> > opensource licenses.
-> > 
-> > Users interested in using Qt under a proprietary license will have
-> > to take special steps to use it (as they were already probably doing
-> > anyway).
-> 
->  Actually the proprietary Qt licenses that I've seen said that they also apply
-> to the free download. Admittedly that was a couple of years ago, still Qt4.
+Hi Thomas,
+Sorry wrong patch, this one is my development one.
+I will send you the right patch. Sorry for the inconvenience.
 
-Eh, what do I know of something I haven't seen? ;-)
+Best regards,
+Joao
 
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
+?s 4:48 PM de 4/24/2017, Joao Pinto escreveu:
+> This patch adds perftest and some necessary libraries.
+> This patch was made using Buildroot snapshot 2017.04.24.
 > 
-> > 
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> > 
-> > The following changes since commit 4c2b11977a70d418b7ae2cd7d4b62e77bddbc2c6
-> > 
-> >   syslog-ng: disable mongodb (2017-04-22 15:59:31 +0200)
-> > 
-> > 
-> > are available in the git repository at:
-> > 
-> >   git://git.buildroot.org/~ymorin/git/buildroot.git
-> > 
-> > for you to fetch changes up to 0edfc64dedabab8b436312b1212c08dcf9765a05
-> > 
-> >   package/qt5: drop option for license approved (2017-04-23 19:09:57 +0200)
-> > 
-> > 
-> > ----------------------------------------------------------------
-> > Yann E. MORIN (29):
-> >       package/qt: default to approved license
-> >       package/qt5base: default to approved license
-> >       package/qt: always use the opensource license
-> >       package/qt5base: always use the opensource license
-> >       package/qt53d: always use the opensource license
-> >       package/qt5canvas: always use the opensource license
-> >       package/qt5connectivity: always use the opensource license
-> >       package/qt5declarative: always use the opensource license
-> >       package/qt5enginio: always use the opensource license
-> >       package/qt5graphicaleffects: always use the opensource license
-> >       package/qt5imageformats: always use the opensource license
-> >       package/qt5location: always use the opensource license
-> >       package/qt5multimedia: always use the opensource license
-> >       package/qt5quickcontrols: always use the opensource license
-> >       package/qt5quickcontrols2: always use the opensource license
-> >       package/qt5script: always use the opensource license
-> >       package/qt5sensors: always use the opensource license
-> >       package/qt5serialbus: always use the opensource license
-> >       package/qt5serialport: always use the opensource license
-> >       package/qt5svg: always use the opensource license
-> >       package/qt5tools: always use the opensource license
-> >       package/qt5webchannel: always use the opensource license
-> >       package/qt5webkit: always use the opensource license
-> >       package/qt5websockets: always use the opensource license
-> >       package/qt5x11extras: always use the opensource license
-> >       package/qt5xmlpatterns: always use the opensource license
-> >       configs: drop Qt/Qt5 license approval option
-> >       package/qt: drop option for license approved
-> >       package/qt5: drop option for license approved
-> > 
-> >  Config.in.legacy                                       | 12 ++++++++++++
-> >  configs/beaglebone_qt5_defconfig                       |  1 -
-> >  configs/firefly_rk3288_demo_defconfig                  |  1 -
-> >  package/qt/Config.in                                   | 11 -----------
-> >  package/qt/qt.mk                                       |  6 +-----
-> >  package/qt5/qt53d/qt53d.mk                             |  5 -----
-> >  package/qt5/qt5base/Config.in                          | 12 ------------
-> >  package/qt5/qt5base/qt5base.mk                         |  5 -----
-> >  package/qt5/qt5canvas3d/qt5canvas3d.mk                 |  5 -----
-> >  package/qt5/qt5connectivity/qt5connectivity.mk         |  5 -----
-> >  package/qt5/qt5declarative/qt5declarative.mk           |  5 -----
-> >  package/qt5/qt5enginio/qt5enginio.mk                   |  5 -----
-> >  package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk |  5 -----
-> >  package/qt5/qt5imageformats/qt5imageformats.mk         |  5 -----
-> >  package/qt5/qt5location/qt5location.mk                 |  5 -----
-> >  package/qt5/qt5multimedia/qt5multimedia.mk             |  5 -----
-> >  package/qt5/qt5quickcontrols/qt5quickcontrols.mk       |  5 -----
-> >  package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk     |  5 -----
-> >  package/qt5/qt5script/qt5script.mk                     |  5 -----
-> >  package/qt5/qt5sensors/qt5sensors.mk                   |  5 -----
-> >  package/qt5/qt5serialbus/qt5serialbus.mk               |  5 -----
-> >  package/qt5/qt5serialport/qt5serialport.mk             |  5 -----
-> >  package/qt5/qt5svg/qt5svg.mk                           |  5 -----
-> >  package/qt5/qt5tools/qt5tools.mk                       |  5 -----
-> >  package/qt5/qt5webchannel/qt5webchannel.mk             |  5 -----
-> >  package/qt5/qt5webkit/qt5webkit.mk                     |  5 -----
-> >  package/qt5/qt5websockets/qt5websockets.mk             |  5 -----
-> >  package/qt5/qt5x11extras/qt5x11extras.mk               |  5 -----
-> >  package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk           |  5 -----
-> >  29 files changed, 13 insertions(+), 145 deletions(-)
-> > 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  package/Config.in                                  |  4 +++
+>  .../0001-fix-cross-compilation-error.patch         | 29 ++++++++++++++++++++++
+>  package/libibumad/Config.in                        |  9 +++++++
+>  package/libibumad/libibumad.hash                   |  2 ++
+>  package/libibumad/libibumad.mk                     | 12 +++++++++
+>  package/libibverbs/Config.in                       |  8 ++++++
+>  package/libibverbs/libibverbs.hash                 |  2 ++
+>  package/libibverbs/libibverbs.mk                   | 19 ++++++++++++++
+>  package/librdmacm/Config.in                        |  8 ++++++
+>  package/librdmacm/librdmacm.hash                   |  2 ++
+>  package/librdmacm/librdmacm.mk                     | 12 +++++++++
+>  package/perftest/Config.in                         | 10 ++++++++
+>  package/perftest/perftest.hash                     |  2 ++
+>  package/perftest/perftest.mk                       | 19 ++++++++++++++
+>  14 files changed, 138 insertions(+)
+>  create mode 100644 package/libibumad/0001-fix-cross-compilation-error.patch
+>  create mode 100644 package/libibumad/Config.in
+>  create mode 100644 package/libibumad/libibumad.hash
+>  create mode 100644 package/libibumad/libibumad.mk
+>  create mode 100644 package/libibverbs/Config.in
+>  create mode 100644 package/libibverbs/libibverbs.hash
+>  create mode 100644 package/libibverbs/libibverbs.mk
+>  create mode 100644 package/librdmacm/Config.in
+>  create mode 100644 package/librdmacm/librdmacm.hash
+>  create mode 100644 package/librdmacm/librdmacm.mk
+>  create mode 100644 package/perftest/Config.in
+>  create mode 100644 package/perftest/perftest.hash
+>  create mode 100644 package/perftest/perftest.mk
 > 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> diff --git a/package/Config.in b/package/Config.in
+> index c12e5b5..c75eecd 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1257,6 +1257,8 @@ menu "Networking"
+>  	source "package/libfcgi/Config.in"
+>  	source "package/libgsasl/Config.in"
+>  	source "package/libhttpparser/Config.in"
+> +	source "package/libibumad/Config.in"
+> +	source "package/libibverbs/Config.in"
+>  	source "package/libidn/Config.in"
+>  	source "package/libiscsi/Config.in"
+>  	source "package/libldns/Config.in"
+> @@ -1285,6 +1287,7 @@ menu "Networking"
+>  	source "package/libosip2/Config.in"
+>  	source "package/libpcap/Config.in"
+>  	source "package/libpjsip/Config.in"
+> +	source "package/librdmacm/Config.in"
+>  	source "package/librsync/Config.in"
+>  	source "package/libshairplay/Config.in"
+>  	source "package/libshout/Config.in"
+> @@ -1638,6 +1641,7 @@ endif
+>  	source "package/openswan/Config.in"
+>  	source "package/openvpn/Config.in"
+>  	source "package/p910nd/Config.in"
+> +	source "package/perftest/Config.in"
+>  	source "package/phidgetwebservice/Config.in"
+>  	source "package/pound/Config.in"
+>  	source "package/pppd/Config.in"
+> diff --git a/package/libibumad/0001-fix-cross-compilation-error.patch b/package/libibumad/0001-fix-cross-compilation-error.patch
+> new file mode 100644
+> index 0000000..e137d01
+> --- /dev/null
+> +++ b/package/libibumad/0001-fix-cross-compilation-error.patch
+> @@ -0,0 +1,29 @@
+> +From bb999ab4e2529accfbde97165964074a1ace2389 Mon Sep 17 00:00:00 2001
+> +Message-Id: <bb999ab4e2529accfbde97165964074a1ace2389.1492783647.git.jpinto@synopsys.com>
+> +From: Joao Pinto <jpinto@synopsys.com>
+> +Date: Fri, 21 Apr 2017 15:07:12 +0100
+> +Subject: [PATCH] fix cross compilation error
+> +
+> +This patch fixes the cross-compilation error "ERROR: unsafe header/library path
+> +used in cross-compilation: '-I/usr/include'".
+> +
+> +Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> +---
+> + Makefile.in | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/Makefile.in b/Makefile.in
+> +index 2b50610..eb38dec 100644
+> +--- a/Makefile.in
+> ++++ b/Makefile.in
+> +@@ -296,7 +296,6 @@ ACLOCAL_AMFLAGS = -I config
+> + SUBDIRS = .
+> + INCLUDES = -I$(srcdir)/include/infiniband \
+> + 	   -I$(srcdir)/include \
+> +-	   -I$(includedir)
+> + 
+> + man_MANS = man/umad_debug.3 man/umad_get_ca.3 \
+> + 	   man/umad_get_ca_portguids.3 man/umad_get_cas_names.3 \
+> +-- 
+> +2.9.3
+> +
+> diff --git a/package/libibumad/Config.in b/package/libibumad/Config.in
+> new file mode 100644
+> index 0000000..bd981a2
+> --- /dev/null
+> +++ b/package/libibumad/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_LIBIBUMAD
+> +	bool "libibumad"
+> +	select BR2_PACKAGE_LIBIBVERBS
+> +	help
+> +	  It is a library that provides userspace Infiniband Management
+> +	  Datagram (uMAD) functions which sit on top of the uMAD modules in the
+> +	  kernel. These are used by InfiniBand diagnostic and management tools.
+> +
+> +	  https://www.openfabrics.org
+> diff --git a/package/libibumad/libibumad.hash b/package/libibumad/libibumad.hash
+> new file mode 100644
+> index 0000000..c01d477
+> --- /dev/null
+> +++ b/package/libibumad/libibumad.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 500f74e31bd9f3d6c32dea912de3a2d1b299f3f23d7abd893652dd45c77a7e2e libibumad-1.3.10.2.tar.gz
+> diff --git a/package/libibumad/libibumad.mk b/package/libibumad/libibumad.mk
+> new file mode 100644
+> index 0000000..6379948
+> --- /dev/null
+> +++ b/package/libibumad/libibumad.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# LIBIBUMAD
+> +#
+> +################################################################################
+> +
+> +LIBIBUMAD_VERSION = 1.3.10.2
+> +LIBIBUMAD_SOURCE = libibumad-$(LIBIBUMAD_VERSION).tar.gz
+> +LIBIBUMAD_SITE = https://www.openfabrics.org/downloads/management
+> +LIBIBUMAD_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/libibverbs/Config.in b/package/libibverbs/Config.in
+> new file mode 100644
+> index 0000000..dd47022
+> --- /dev/null
+> +++ b/package/libibverbs/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LIBIBVERBS
+> +	bool "libibverbs"
+> +	help
+> +	  It is a library that allows userspace processes to use RDMA "verbs"
+> +	  as described in the InfiniBand Architecture Specification and the
+> +	  RDMA Protocol Verbs Specification.
+> +
+> +	  https://www.openfabrics.org
+> diff --git a/package/libibverbs/libibverbs.hash b/package/libibverbs/libibverbs.hash
+> new file mode 100644
+> index 0000000..08773a9
+> --- /dev/null
+> +++ b/package/libibverbs/libibverbs.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 844b4d50d476ebbaaf601929641b0e3c51d58daf56c7269914c1edc32c8beeec libibverbs-1.1.7.tar.gz
+> diff --git a/package/libibverbs/libibverbs.mk b/package/libibverbs/libibverbs.mk
+> new file mode 100644
+> index 0000000..859e1f3
+> --- /dev/null
+> +++ b/package/libibverbs/libibverbs.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# LIBIBVERBS
+> +#
+> +################################################################################
+> +
+> +LIBIBVERBS_VERSION = 1.1.7
+> +LIBIBVERBS_SOURCE = libibverbs-$(LIBIBVERBS_VERSION).tar.gz
+> +LIBIBVERBS_SITE = https://git.kernel.org/pub/scm/libs/infiniband/libibverbs.git/snapshot
+> +LIBIBVERBS_INSTALL_STAGING = YES
+> +
+> +# autogen.sh is because autotools stuff lives in other directories and
+> +# even AUTORECONF with _OPTS doesn't do it properly.
+> +define LIBIBVERBS_RUN_AUTOGEN
+> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> +endef
+> +LIBIBVERBS_POST_PATCH_HOOKS += LIBIBVERBS_RUN_AUTOGEN
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/librdmacm/Config.in b/package/librdmacm/Config.in
+> new file mode 100644
+> index 0000000..4c8a1dc
+> --- /dev/null
+> +++ b/package/librdmacm/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LIBRDMACM
+> +	bool "librdmacm"
+> +	select BR2_PACKAGE_LIBIBVERBS
+> +	help
+> +	  It is a library that allows applications to set up reliable connected
+> +	  and unreliable datagram transfers when using RDMA adapters
+> +
+> +	  https://www.openfabrics.org
+> diff --git a/package/librdmacm/librdmacm.hash b/package/librdmacm/librdmacm.hash
+> new file mode 100644
+> index 0000000..3351bc5
+> --- /dev/null
+> +++ b/package/librdmacm/librdmacm.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 b4a2a0a4f70c22611ca35aa8b9699420872803cba5af28ae3ca57dd90b60c6c6 librdmacm-1.0.15.tar.gz
+> diff --git a/package/librdmacm/librdmacm.mk b/package/librdmacm/librdmacm.mk
+> new file mode 100644
+> index 0000000..ac37c1f
+> --- /dev/null
+> +++ b/package/librdmacm/librdmacm.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# LIBRDMACM
+> +#
+> +################################################################################
+> +
+> +LIBRDMACM_VERSION = 1.0.15
+> +LIBRDMACM_SOURCE = librdmacm-$(LIBRDMACM_VERSION).tar.gz
+> +LIBRDMACM_SITE = https://www.openfabrics.org/downloads/rdmacm
+> +LIBRDMACM_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/perftest/Config.in b/package/perftest/Config.in
+> new file mode 100644
+> index 0000000..6273cf3
+> --- /dev/null
+> +++ b/package/perftest/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PERFTEST
+> +	bool "perftest"
+> +	select BR2_PACKAGE_LIBIBUMAD
+> +	select BR2_PACKAGE_LIBRDMACM
+> +	help
+> +	  It is a collection of tests written using Infiniband verbs intended
+> +	  for use as a performance micro-benchmark. The tests can measure the
+> +	  latency and bandwidth of Infiniband fabrics.
+> +
+> +	  https://www.openfabrics.org
+> diff --git a/package/perftest/perftest.hash b/package/perftest/perftest.hash
+> new file mode 100644
+> index 0000000..123330e
+> --- /dev/null
+> +++ b/package/perftest/perftest.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 6078dd4fc66d85ff1439ad8fe26cc0689ad18f24459fe3e7d20feda58c6d4609 perftest-3.4-0.9.g98a9a17.tar.gz
+> diff --git a/package/perftest/perftest.mk b/package/perftest/perftest.mk
+> new file mode 100644
+> index 0000000..dc16e4b
+> --- /dev/null
+> +++ b/package/perftest/perftest.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# PERFTEST
+> +#
+> +################################################################################
+> +
+> +PERFTEST_VERSION = 3.4-0.9.g98a9a17
+> +PERFTEST_SOURCE = perftest-$(PERFTEST_VERSION).tar.gz
+> +PERFTEST_SITE = https://www.openfabrics.org/downloads/perftest
+> +PERFTEST_INSTALL_STAGING = YES
+> +
+> +# autogen.sh is because autotools stuff lives in other directories and
+> +# even AUTORECONF with _OPTS doesn't do it properly.
+> +define PERFTEST_RUN_AUTOGEN
+> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> +endef
+> +PERFTEST_POST_PATCH_HOOKS += PERFTEST_RUN_AUTOGEN
+> +
+> +$(eval $(autotools-package))
+> 
