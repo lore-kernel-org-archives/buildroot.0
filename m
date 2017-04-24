@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Apr 2017 10:25:02 +0100
-Subject: [Buildroot] [PATCH] harfbuzz: bump version to 1.4.6
-Message-ID: <20170424092502.1480-1-Vincent.Riera@imgtec.com>
+Date: Mon, 24 Apr 2017 10:33:11 +0100
+Subject: [Buildroot] [PATCH] poppler: bump version to 0.54.0
+Message-ID: <20170424093311.12097-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index f4fb849..f487191 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index 83856a3..4ef5799 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
 @@ -1,2 +1,2 @@
--# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.5.tar.bz2.sha256
--sha256 d0e05438165884f21658154c709075feaf98c93ee5c694b951533ac425a9a711  harfbuzz-1.4.5.tar.bz2
-+# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.6.tar.bz2.sha256
-+sha256 21a78b81cd20cbffdb04b59ac7edfb410e42141869f637ae1d6778e74928d293  harfbuzz-1.4.6.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 39e2cfe..f9814ca 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally calculated
+-sha256 592bf72960c6b5948b67657594b05e72d9a278daf7613c9f3cdff9a5b73096a8  poppler-0.53.0.tar.xz
++sha256 10cca9a67cc2e6f4f9024192b1067c444218bf94430891f43dc819d78536ca31  poppler-0.54.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index aea90b0..056193c 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.4.5
-+HARFBUZZ_VERSION = 1.4.6
- HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-POPPLER_VERSION = 0.53.0
++POPPLER_VERSION = 0.54.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
 -- 
 2.10.2
