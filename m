@@ -1,43 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Apr 2017 23:31:39 +0200
-Subject: [Buildroot] [PATCH v6 04/31] package/libcec: bump version to 4.0.2
+Date: Mon, 24 Apr 2017 23:31:40 +0200
+Subject: [Buildroot] [PATCH v6 05/31] package/xmlstarlet: add host variant
 In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
 References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
-Message-ID: <20170424213206.26247-5-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed for the Kodi skin package to control the default skin setup.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xmlstarlet/xmlstarlet.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index 377f343a22..5416c20fec 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
-+sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index e2b5c1fb4d..6d14447958 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+index 61d38f29ff..091c371e82 100644
+--- a/package/xmlstarlet/xmlstarlet.mk
++++ b/package/xmlstarlet/xmlstarlet.mk
+@@ -24,4 +24,7 @@ else
+ XMLSTARLET_CONF_OPTS += --disable-static-libs
+ endif
  
--LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
--LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
-+LIBCEC_VERSION = 4.0.2
-+LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPL-2.0+
- LIBCEC_LICENSE_FILES = COPYING
- 
++HOST_XMLSTARLET_DEPENDENCIES += host-libxml2 host-libxslt
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.11.0
