@@ -1,93 +1,180 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 15:56:25 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: apply upstream
-	security patch
-Message-ID: <20170424193337.25511821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 17:47:46 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libnss: security bump to
+	version 3.30.2
+Message-ID: <20170424193338.6042E821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=578d192c3cf56712ec8548d4fa61bb61ddb818c3
+commit: https://git.buildroot.net/buildroot/commit/?id=bb64a4f87e959d07ac7dd325d05c6afd1f2592ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-CVE-2017-7407: --write-out out of buffer read
+CVE-2017-5461 - Out-of-bounds write in Base64 encoding in NSS. Might cause
+remote arbitrary code execution
+(https://access.redhat.com/errata/RHSA-2017:1100).
 
-https://curl.haxx.se/docs/adv_20170403.html
+CVE-2017-5462 - DRBG flaw in NSS
+
+Drop 0001-cross-compile.patch and TARGET* variables. Upstream Makefile now
+allows override of CC, so use TARGET_CONFIGURE_OPTS instead.
+
+Drop upstream 0003-it-uninitialized-fix.patch.
+
+Renumber the remaining patch.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 08bf26bb34f87b6820e07b2858bb4fe49eef9048)
+(cherry picked from commit 09b8e1079ec97d9843430930414a95ac8450a652)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/0001-CVE-2017-7407.patch | 61 ++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ package/libnss/0001-cross-compile.patch            | 48 ----------------------
+ .../{0002-uclibc.patch => 0001-uclibc.patch}       |  0
+ package/libnss/0003-it-uninitialized-fix.patch     | 24 -----------
+ package/libnss/libnss.hash                         |  4 +-
+ package/libnss/libnss.mk                           | 12 ++----
+ 5 files changed, 6 insertions(+), 82 deletions(-)
 
-diff --git a/package/libcurl/0001-CVE-2017-7407.patch b/package/libcurl/0001-CVE-2017-7407.patch
-new file mode 100644
-index 0000000..3a9fa48
---- /dev/null
-+++ b/package/libcurl/0001-CVE-2017-7407.patch
-@@ -0,0 +1,61 @@
-+From 6019f1795b4e3b72507b84b0e02dc8c32024f562 Mon Sep 17 00:00:00 2001
-+From: Dan Fandrich <dan@coneharvesters.com>
-+Date: Sat, 11 Mar 2017 10:59:34 +0100
-+Subject: [PATCH] CVE-2017-7407: fixed
-+
-+Bug: https://curl.haxx.se/docs/adv_20170403.html
-+
-+Reported-by: Brian Carpenter
-+[baruch: remove tests]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: based on upstream suggested patch[1] that combines commits
-+1890d59905414ab and 8e65877870c1.
-+
-+[1] https://curl.haxx.se/CVE-2017-7407.patch
-+
-+diff --git a/src/tool_writeout.c b/src/tool_writeout.c
-+index 2fb77742a..5d92bd278 100644
-+--- a/src/tool_writeout.c
-++++ b/src/tool_writeout.c
-+@@ -3,11 +3,11 @@
-+  *  Project                     ___| | | |  _ \| |
-+  *                             / __| | | | |_) | |
-+  *                            | (__| |_| |  _ <| |___
-+  *                             \___|\___/|_| \_\_____|
-+  *
-+- * Copyright (C) 1998 - 2016, Daniel Stenberg, <daniel@haxx.se>, et al.
-++ * Copyright (C) 1998 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
-+  *
-+  * This software is licensed as described in the file COPYING, which
-+  * you should have received as part of this distribution. The terms
-+  * are also available at https://curl.haxx.se/docs/copyright.html.
-+  *
-+@@ -111,11 +111,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
-+   char *stringp = NULL;
-+   long longinfo;
-+   double doubleinfo;
-+ 
-+   while(ptr && *ptr) {
-+-    if('%' == *ptr) {
-++    if('%' == *ptr && ptr[1]) {
-+       if('%' == ptr[1]) {
-+         /* an escaped %-letter */
-+         fputc('%', stream);
-+         ptr += 2;
-+       }
-+@@ -339,11 +339,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
-+           fputc(ptr[1], stream);
-+           ptr += 2;
-+         }
-+       }
-+     }
-+-    else if('\\' == *ptr) {
-++    else if('\\' == *ptr && ptr[1]) {
-+       switch(ptr[1]) {
-+       case 'r':
-+         fputc('\r', stream);
-+         break;
-+       case 'n':
-+-- 2.11.0
-+
+diff --git a/package/libnss/0001-cross-compile.patch b/package/libnss/0001-cross-compile.patch
+deleted file mode 100644
+index 31de71b..0000000
+--- a/package/libnss/0001-cross-compile.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-This patch allows us to set a value for the cross compiler via TARGETCC without
+-setting CC on the command line. CC is used for host tools as well as cross
+-compiled code so we cannot define it on the command line without breaking
+-the host tools build.
+-
+-[Gustavo: update for nss 3.16.1]
+-[baruch: add OPTIMIZER handling]
+-Signed-off-by: Will Newton <will.newton@imgtec.com>
+-
+-diff -Nuar nss-3.16.1-orig/nss/coreconf/Linux.mk nss-3.16.1/nss/coreconf/Linux.mk
+---- nss-3.16.1-orig/nss/coreconf/Linux.mk	2014-05-02 06:27:18.000000000 +0300
+-+++ nss-3.16.1/nss/coreconf/Linux.mk	2014-07-01 02:38:18.701480512 +0300
+-@@ -16,9 +16,13 @@
+- 	IMPL_STRATEGY = _PTH
+- endif
+- 
+--CC			= gcc
+--CCC			= g++
+--RANLIB			= ranlib
+-+TARGETCC		= gcc
+-+TARGETCCC		= g++
+-+TARGETRANLIB		= ranlib
+-+
+-+CC			= $(TARGETCC)
+-+CCC			= $(TARGETCCC)
+-+RANLIB			= $(TARGETRANLIB)
+- 
+- DEFAULT_COMPILER = gcc
+- 
+-@@ -125,6 +129,7 @@
+- endif
+- endif
+- 
+-+OPTIMIZER = $(TARGET_OPTIMIZER)
+- 
+- ifeq ($(USE_PTHREADS),1)
+- OS_PTHREAD = -lpthread 
+-diff -Nuar nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile nss-3.16.1/nss/coreconf/nsinstall/Makefile
+---- nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile	2014-05-02 06:27:18.000000000 +0300
+-+++ nss-3.16.1/nss/coreconf/nsinstall/Makefile	2014-07-01 02:38:48.102185011 +0300
+-@@ -31,6 +31,7 @@
+- 
+- ifdef NATIVE_FLAGS
+- OS_CFLAGS=$(NATIVE_FLAGS)
+-+OPTIMIZER=
+- endif
+- 
+- include $(DEPTH)/coreconf/rules.mk
+diff --git a/package/libnss/0002-uclibc.patch b/package/libnss/0001-uclibc.patch
+similarity index 100%
+rename from package/libnss/0002-uclibc.patch
+rename to package/libnss/0001-uclibc.patch
+diff --git a/package/libnss/0003-it-uninitialized-fix.patch b/package/libnss/0003-it-uninitialized-fix.patch
+deleted file mode 100644
+index 7736c6a..0000000
+--- a/package/libnss/0003-it-uninitialized-fix.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-# HG changeset patch
+-# User catdesk <catdesk@tuta.io>
+-# Date 1477710600 -7200
+-#      Sat Oct 29 05:10:00 2016 +0200
+-# Node ID b9ef971b94ab110302d49255339077bc1b4aed7f
+-# Parent  eb8c96563cd70aa69d48b01516085f7d2fb46178
+-Bug 1313846 - Declare 'it = NULL' earlier. r=franziskus
+-
+-[Thomas: patch taken from upstream mercurial repository, revision
+-12791.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-diff -r eb8c96563cd7 -r b9ef971b94ab lib/jar/jarfile.c
+---- a/nss/lib/jar/jarfile.c	Mon Oct 31 17:31:20 2016 +0100
+-+++ b/nss/lib/jar/jarfile.c	Sat Oct 29 05:10:00 2016 +0200
+-@@ -657,7 +657,7 @@
+- jar_listzip(JAR *jar, JAR_FILE fp)
+- {
+-     ZZLink *ent;
+--    JAR_Item *it;
+-+    JAR_Item *it = NULL;
+-     JAR_Physical *phy = NULL;
+-     struct ZipLocal *Local = PORT_ZNew(struct ZipLocal);
+-     struct ZipCentral *Central = PORT_ZNew(struct ZipCentral);
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 975e52d..7be7e48 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_27_2_RTM/src/SHA256SUMS
+-sha256	dc8ac8524469d0230274fd13a53fdcd74efe4aa67205dde1a4a92be87dc28524	nss-3.27.2.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_30_2_RTM/src/SHA256SUMS
++sha256	0d4a77ff26bcee79fa8afe0125e0df6ae9e798b6b36782fa29e28febf7cfce24	nss-3.30.2.tar.gz
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 76532e8..3c38bb0 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.27.2
++LIBNSS_VERSION = 3.30.2
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+@@ -33,9 +33,6 @@ LIBNSS_BUILD_VARS = \
+ 	NSS_USE_SYSTEM_SQLITE=1 \
+ 	NSS_ENABLE_ECC=1 \
+ 	NATIVE_CC="$(HOSTCC)" \
+-	TARGETCC="$(TARGET_CC)" \
+-	TARGETCCC="$(TARGET_CXX)" \
+-	TARGETRANLIB="$(TARGET_RANLIB)" \
+ 	OS_ARCH="Linux" \
+ 	OS_RELEASE="2.6" \
+ 	OS_TEST="$(ARCH)"
+@@ -55,17 +52,16 @@ endif
+ endif
+ 
+ define LIBNSS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/nss coreconf \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/nss coreconf \
+ 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
+ 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
+ 		CHECKLOC= \
+ 		$(LIBNSS_BUILD_VARS)
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/nss lib/dbm all \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/nss lib/dbm all \
+ 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
+ 		DIST=$(@D)/$(LIBNSS_DISTDIR) \
+ 		CHECKLOC= \
+-		$(LIBNSS_BUILD_VARS) TARGET_OPTIMIZER="$(TARGET_CFLAGS)" \
+-		NATIVE_FLAGS="$(HOST_CFLAGS)"
++		$(LIBNSS_BUILD_VARS) NATIVE_FLAGS="$(HOST_CFLAGS)"
+ endef
+ 
+ define LIBNSS_INSTALL_STAGING_CMDS
