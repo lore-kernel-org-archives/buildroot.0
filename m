@@ -1,96 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Apr 2017 23:32:02 +0200
-Subject: [Buildroot] [PATCH v6 27/31] package/kodi-inputstream-rtmp: new
-	package
+Date: Mon, 24 Apr 2017 23:32:05 +0200
+Subject: [Buildroot] [PATCH v6 30/31] package/libsquish: bump version to 1.15
 In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
 References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
-Message-ID: <20170424213206.26247-28-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-31-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select the new package by the legacy option for easier update.
+Added md5 hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                                         |  1 +
- package/kodi-inputstream-rtmp/Config.in                  |  7 +++++++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash |  2 ++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 13 +++++++++++++
- package/kodi/Config.in                                   |  4 ++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/kodi-inputstream-rtmp/Config.in
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+ package/libsquish/libsquish.hash | 3 ++-
+ package/libsquish/libsquish.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6b038dba2c..cfdcd193eb 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -148,6 +148,7 @@ comment "Legacy options removed in 2017.05"
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "kodi rtmp"
- 	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
- 	help
- 	  Internal rtmp support was removed from Kodi.
+diff --git a/package/libsquish/libsquish.hash b/package/libsquish/libsquish.hash
+index caa7198642..e68d28d66f 100644
+--- a/package/libsquish/libsquish.hash
++++ b/package/libsquish/libsquish.hash
+@@ -1,2 +1,3 @@
+ # From http://sourceforge.net/projects/libsquish/files
+-sha1	7bcdd7d0f0460a29e25dcdab8dc41a30e58bb366	libsquish-1.13.tgz
++sha1 51844b9a8bc815a27e2cc0ffbede5fee3ef75110 libsquish-1.15.tgz
++md5 c02645800131e55b519ff8dbe7284f93 libsquish-1.15.tgz
+diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
+index 73f8de9cc1..a707355b55 100644
+--- a/package/libsquish/libsquish.mk
++++ b/package/libsquish/libsquish.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
-new file mode 100644
-index 0000000000..c40bff2d7e
---- /dev/null
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
-+	bool "kodi-inputstream-rtmp"
-+	select BR2_PACKAGE_RTMPDUMP
-+	help
-+	  RTMP input stream add-on for Kodi
-+
-+	  https://github.com/notspiff/inputstream.rtmp
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-new file mode 100644
-index 0000000000..f5a82d2aae
---- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-v1.0.4.tar.gz
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-new file mode 100644
-index 0000000000..414c8dfc39
---- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-inputstream-rtmp
-+#
-+################################################################################
-+
-+KODI_INPUTSTREAM_RTMP_VERSION = v1.0.4
-+KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
-+KODI_INPUTSTREAM_RTMP_LICENSE = GPLv2+
-+KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
-+KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 662dd89f25..85b030dce8 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -291,6 +291,10 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
- endmenu
- 
-+menu "Inputstream addons"
-+	source "package/kodi-inputstream-rtmp/Config.in"
-+endmenu
-+
- menu "PVR addons"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
+-LIBSQUISH_VERSION = 1.13
++LIBSQUISH_VERSION = 1.15
+ LIBSQUISH_SOURCE = libsquish-$(LIBSQUISH_VERSION).tgz
+ LIBSQUISH_SITE = http://downloads.sourceforge.net/project/libsquish
+ LIBSQUISH_INSTALL_STAGING = YES
 -- 
 2.11.0
