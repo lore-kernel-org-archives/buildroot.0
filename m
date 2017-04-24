@@ -1,47 +1,58 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Apr 2017 23:31:55 +0200
-Subject: [Buildroot] [PATCH v6 20/31] package/kodi-visualisation-waveforhue:
-	bump version
+Date: Mon, 24 Apr 2017 23:32:01 +0200
+Subject: [Buildroot] [PATCH v6 26/31] package/kodi: add optional support for
+	lcms2
 In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
 References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
-Message-ID: <20170424213206.26247-21-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-27-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed upstream repo as per:
-https://github.com/notspiff/visualization.waveforhue/pull/3#issuecomment-221105720
+Support was added by https://github.com/xbmc/xbmc/pull/11846
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash  | 2 +-
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-index 5f49daae94..e7e97f1d86 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 2590ce4ee1816ffdf59fe33580a36fba49fbd1f60f4c9022b3315e04debc9c73 kodi-visualisation-waveforhue-e87d5c7d7e7504036b80af8bc89f4cf6489085fe.tar.gz
-+sha256 80c466c55aee97d01442892135d4785070333e39f45942da17b65239758e5ae9  kodi-visualisation-waveforhue-b1805dbdba07e5e5b62115490c703aca43e9065c.tar.gz
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-index ce0fc1854c..3ff32e658e 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index af88aa334f..662dd89f25 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -151,6 +151,12 @@ config BR2_PACKAGE_KODI_LIBCEC
+ comment "hdmi cec support needs udev /dev management"
+ 	depends on !BR2_PACKAGE_HAS_UDEV
  
--KODI_VISUALISATION_WAVEFORHUE_VERSION = e87d5c7d7e7504036b80af8bc89f4cf6489085fe
--KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,notspiff,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
-+KODI_VISUALISATION_WAVEFORHUE_VERSION = b1805dbdba07e5e5b62115490c703aca43e9065c
-+KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,hardyt,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
- KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
- KODI_VISUALISATION_WAVEFORHUE_DEPENDENCIES = kodi
++config BR2_PACKAGE_KODI_LCMS2
++	bool "lcms2"
++	select BR2_PACKAGE_LCMS2
++	help
++	  Enable color management support.
++
+ config BR2_PACKAGE_KODI_LIRC
+ 	bool "lirc"
+ 	help
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 7d8adcd2b9..245b8bfbe6 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -290,6 +290,13 @@ else
+ KODI_CONF_OPTS += -DENABLE_CEC=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_LCMS2),y)
++KODI_DEPENDENCIES += lcms2
++KODI_CONF_OPTS += -DENABLE_LCMS2=ON
++else
++KODI_CONF_OPTS += -DENABLE_LCMS2=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
+ KODI_CONF_OPTS += -DENABLE_LIRC=ON
+ else
 -- 
 2.11.0
