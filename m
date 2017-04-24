@@ -1,41 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 16:00:15 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/mplayer: mmxext
-	requires sse
-Message-ID: <20170424193337.6AB77821A2@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 15:56:25 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: apply upstream
+	security patch
+Message-ID: <20170424193337.25511821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27ff183a9caa836aa89743657a7d1d4b05443bfb
+commit: https://git.buildroot.net/buildroot/commit/?id=578d192c3cf56712ec8548d4fa61bb61ddb818c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-MPlayer contains mmxext code for which a SSE-enabled CPU is required,
-for details see https://bugs.funtoo.org/browse/FL-2202
+CVE-2017-7407: --write-out out of buffer read
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://curl.haxx.se/docs/adv_20170403.html
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0d202de1dd3c801a3b5486605bc7b927a13439ed)
+(cherry picked from commit 08bf26bb34f87b6820e07b2858bb4fe49eef9048)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mplayer/mplayer.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/0001-CVE-2017-7407.patch | 61 ++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 8288dcb..38452ab 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -303,9 +303,9 @@ MPLAYER_CONF_OPTS += \
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_SSE),y)
--MPLAYER_CONF_OPTS += --enable-sse
-+MPLAYER_CONF_OPTS += --enable-mmxext --enable-sse
- else
--MPLAYER_CONF_OPTS += --disable-sse
-+MPLAYER_CONF_OPTS += --disable-mmxext --disable-sse
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
+diff --git a/package/libcurl/0001-CVE-2017-7407.patch b/package/libcurl/0001-CVE-2017-7407.patch
+new file mode 100644
+index 0000000..3a9fa48
+--- /dev/null
++++ b/package/libcurl/0001-CVE-2017-7407.patch
+@@ -0,0 +1,61 @@
++From 6019f1795b4e3b72507b84b0e02dc8c32024f562 Mon Sep 17 00:00:00 2001
++From: Dan Fandrich <dan@coneharvesters.com>
++Date: Sat, 11 Mar 2017 10:59:34 +0100
++Subject: [PATCH] CVE-2017-7407: fixed
++
++Bug: https://curl.haxx.se/docs/adv_20170403.html
++
++Reported-by: Brian Carpenter
++[baruch: remove tests]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: based on upstream suggested patch[1] that combines commits
++1890d59905414ab and 8e65877870c1.
++
++[1] https://curl.haxx.se/CVE-2017-7407.patch
++
++diff --git a/src/tool_writeout.c b/src/tool_writeout.c
++index 2fb77742a..5d92bd278 100644
++--- a/src/tool_writeout.c
+++++ b/src/tool_writeout.c
++@@ -3,11 +3,11 @@
++  *  Project                     ___| | | |  _ \| |
++  *                             / __| | | | |_) | |
++  *                            | (__| |_| |  _ <| |___
++  *                             \___|\___/|_| \_\_____|
++  *
++- * Copyright (C) 1998 - 2016, Daniel Stenberg, <daniel@haxx.se>, et al.
+++ * Copyright (C) 1998 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
++  *
++  * This software is licensed as described in the file COPYING, which
++  * you should have received as part of this distribution. The terms
++  * are also available at https://curl.haxx.se/docs/copyright.html.
++  *
++@@ -111,11 +111,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
++   char *stringp = NULL;
++   long longinfo;
++   double doubleinfo;
++ 
++   while(ptr && *ptr) {
++-    if('%' == *ptr) {
+++    if('%' == *ptr && ptr[1]) {
++       if('%' == ptr[1]) {
++         /* an escaped %-letter */
++         fputc('%', stream);
++         ptr += 2;
++       }
++@@ -339,11 +339,11 @@ void ourWriteOut(CURL *curl, struct OutStruct *outs, const char *writeinfo)
++           fputc(ptr[1], stream);
++           ptr += 2;
++         }
++       }
++     }
++-    else if('\\' == *ptr) {
+++    else if('\\' == *ptr && ptr[1]) {
++       switch(ptr[1]) {
++       case 'r':
++         fputc('\r', stream);
++         break;
++       case 'n':
++-- 2.11.0
++
