@@ -1,42 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Apr 2017 22:27:07 +0200
-Subject: [Buildroot] [git commit] harfbuzz: bump version to 1.4.6
-Message-ID: <20170424203123.CF0E882765@busybox.osuosl.org>
+Date: Mon, 24 Apr 2017 22:26:47 +0200
+Subject: [Buildroot] [git commit] python-dataproperty: bump version to 0.18.1
+Message-ID: <20170424203123.C208982765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b53e4f0bb8c0cb55e277d66ad4fe5517512dcef5
+commit: https://git.buildroot.net/buildroot/commit/?id=3ac9e1e71b3a4c213567fc996951a83def004c42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-dataproperty/python-dataproperty.hash | 4 ++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index f4fb849..f487191 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.5.tar.bz2.sha256
--sha256 d0e05438165884f21658154c709075feaf98c93ee5c694b951533ac425a9a711  harfbuzz-1.4.5.tar.bz2
-+# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.6.tar.bz2.sha256
-+sha256 21a78b81cd20cbffdb04b59ac7edfb410e42141869f637ae1d6778e74928d293  harfbuzz-1.4.6.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 39e2cfe..f9814ca 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 21b70b1..1ab0a40 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
+-md5 211c94a87f11e7e78fae61b20ee654a2  DataProperty-0.17.0.tar.gz
+-sha256 6c7daed534e418badf5f0c8b601a353fed2fda40ec9b4e8052dfa8b40a5626a0  DataProperty-0.17.0.tar.gz
++md5 70199d3e6e021810d0d3b4a42c37916f  DataProperty-0.18.1.tar.gz
++sha256 950131bd9fb874be606835e5f4a84d99f505d919aed94145932ec010190c7c66  DataProperty-0.18.1.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index b649d43..7e34425 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.4.5
-+HARFBUZZ_VERSION = 1.4.6
- HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-PYTHON_DATAPROPERTY_VERSION = 0.17.0
++PYTHON_DATAPROPERTY_VERSION = 0.18.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/91/35/c47884269202d25f28007a303c2510141c15bd111225fd203fdf9474a0c7
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/42/b6/591366869e9fc7b19420ca4c177727f25dcccc07a46cecbda8d6abffa866
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
