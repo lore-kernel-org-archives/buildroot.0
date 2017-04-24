@@ -1,111 +1,61 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Apr 2017 23:31:54 +0200
-Subject: [Buildroot] [PATCH v6 19/31] package/kodi-visualisation-*: mass
-	version bump
+Date: Mon, 24 Apr 2017 23:31:51 +0200
+Subject: [Buildroot] [PATCH v6 16/31] package/kodi-audiodecoder-timidity:
+	bump version
 In-Reply-To: <20170424213206.26247-1-bernd.kuhls@t-online.de>
 References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
-Message-ID: <20170424213206.26247-20-bernd.kuhls@t-online.de>
+Message-ID: <20170424213206.26247-17-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+kodi-platform is not a dependency anymore:
+https://github.com/notspiff/audiodecoder.timidity/commit/b7ae86ad860b562f08ab02d9e87a546d99f1bb51
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash   | 2 +-
- package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk     | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash         | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk           | 2 +-
- package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash | 2 +-
- package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk   | 2 +-
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash | 2 +-
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk   | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+ package/kodi-audiodecoder-timidity/Config.in                       | 1 -
+ package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash | 2 +-
+ package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk   | 4 ++--
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-index 6a65a58fea..c89ca9a618 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+diff --git a/package/kodi-audiodecoder-timidity/Config.in b/package/kodi-audiodecoder-timidity/Config.in
+index 8f604adf00..3372dc5c05 100644
+--- a/package/kodi-audiodecoder-timidity/Config.in
++++ b/package/kodi-audiodecoder-timidity/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY
+ 	bool "kodi-audiodecoder-timidity"
+-	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
+ 	  Timidity decoder addon for Kodi
+ 
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+index d4af0197b3..5711b87a6c 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 7047d501942bcd5095e0f1424f003caec8eb792b59d16d16ad25f14829844e50 kodi-visualisation-fishbmc-50c38c296a62e096a2216e43b86d864ee265c506.tar.gz
-+sha256 cf42a21978578cb5ecb10c20fe09791183d8ef2998ff9d956a84142a7dda8f72  kodi-visualisation-fishbmc-v4.1.0.tar.gz
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-index 92c9190ad7..d08c215ee7 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-@@ -4,7 +4,7 @@
+-sha256 2e220b7d279fce73ff289536cd9e94b159ae648514fb8b423977dddb99c50e85 kodi-audiodecoder-timidity-a84559da92aa67744069fc9e9dc885732588c8ce.tar.gz
++sha256 83a740010dc7fa01101da370c74e79287ebd67bd28d27125e4372abe2fb3bb47  kodi-audiodecoder-timidity-v1.1.1.tar.gz
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+index 0d5f6ef2e4..e4a97fa7f6 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_FISHBMC_VERSION = 50c38c296a62e096a2216e43b86d864ee265c506
-+KODI_VISUALISATION_FISHBMC_VERSION = v4.1.0
- KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
- KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
- KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index 8507c652a5..8d4548a7dd 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 66a71a5c5a1c0016d7020fcc9941634ee465dab14644cdc96023ce0a28408338 kodi-visualisation-goom-16747b7dba9cbdcfdc8df44e849eaf09450fc86f.tar.gz
-+sha256 62a26efb6cd5d5fd109e38accb3deb71145972ae30b914bed7620eb40465c954  kodi-visualisation-goom-v1.1.0.tar.gz
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index e7695052df..48e0425972 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-KODI_AUDIODECODER_TIMIDITY_VERSION = a84559da92aa67744069fc9e9dc885732588c8ce
++KODI_AUDIODECODER_TIMIDITY_VERSION = v1.1.1
+ KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
+ KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
+-KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi-platform
++KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi
  
--KODI_VISUALISATION_GOOM_VERSION = 16747b7dba9cbdcfdc8df44e849eaf09450fc86f
-+KODI_VISUALISATION_GOOM_VERSION = v1.1.0
- KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-index 18e38f577f..6c892ed0ba 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 aa417d6ad3d3770029e7d8d9f7f0ca8d56a8a4f47821267b5a8604fc26993334 kodi-visualisation-spectrum-9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e.tar.gz
-+sha256 7ee78ff5c24e3f81b6e2a9208237f34667cb9faa5453d7bdb900ab65245973f1  kodi-visualisation-spectrum-v1.1.1.tar.gz
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-index ebc75779b8..3ab2c9975d 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_SPECTRUM_VERSION = 9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e
-+KODI_VISUALISATION_SPECTRUM_VERSION = v1.1.1
- KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
- KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-index 728b857ecc..1fdecbede5 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 439bd50fcb1c0912532d0d113f7eeadf28f72bd2cb0c234581ee1acc2a70e45b kodi-visualisation-waveform-89aec48e2975f820004df5a1a53801339a5b3064.tar.gz
-+sha256 cf10d8d78cb2bde4a0a21bb7e467445617b46593c093ef05f336f95a048f2d54  kodi-visualisation-waveform-v1.1.0.tar.gz
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index 2263b7106f..d906c653c2 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_WAVEFORM_VERSION = 89aec48e2975f820004df5a1a53801339a5b3064
-+KODI_VISUALISATION_WAVEFORM_VERSION = v1.1.0
- KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
+ $(eval $(cmake-package))
 -- 
 2.11.0
