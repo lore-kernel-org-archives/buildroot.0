@@ -1,22 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Apr 2017 17:51:31 +0200
-Subject: [Buildroot] [PATCH-2017.02.x] linux-headers: bump 3.18.x series
-	to 3.18.50
-In-Reply-To: <20170425065328.27645-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 25 Apr 2017 08:53:28 +0200")
-References: <20170425065328.27645-1-peter@korsgaard.com>
-Message-ID: <87tw5cqyd8.fsf@dell.be.48ers.dk>
+Date: Tue, 25 Apr 2017 17:50:39 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] nodejs: bump 6.x version
+	to 6.10.2
+Message-ID: <20170425155154.97FF97F91B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=039f7d0d2faf172f1a3a709c5d7fe193b2f094b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+6.10.2 is the latest release in the LTS series, fixing a number of issues:
 
-Committed to 2017.02.x, thanks.
+https://nodejs.org/en/blog/release/v6.10.2/
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/Config.in   | 2 +-
+ package/nodejs/nodejs.hash | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index b8c45f5..ad5ca05 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "6.9.4"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "6.10.2"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.48"
+ 
+ config BR2_PACKAGE_NODEJS_NPM
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 8c8c5a3..4c63f58 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
+ sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v6.9.4/SHASUMS256.txt
+-sha256  c51d7c61db40455d57428abcadc7eb0f0a08a8878cb1d8ea3c1e211c54532c35  node-v6.9.4.tar.xz
++# From upstream URL: http://nodejs.org/dist/v6.10.2/SHASUMS256.txt
++sha256  80aa11333da99813973a99646e2113c6be5b63f665c0731ed14ecb94cbe846b6  node-v6.10.2.tar.xz
