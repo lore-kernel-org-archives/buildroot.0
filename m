@@ -1,84 +1,99 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue, 25 Apr 2017 12:14:22 -0700
-Subject: [Buildroot] [PATCH 8/9]
-	package/python-backports-shutil-get-terminal-size: New package
+Date: Tue, 25 Apr 2017 12:14:20 -0700
+Subject: [Buildroot] [PATCH 6/9] package/python-pathlib2: New package
 In-Reply-To: <20170425191423.13294-1-andrew.smirnov@gmail.com>
 References: <20170425191423.13294-1-andrew.smirnov@gmail.com>
-Message-ID: <20170425191423.13294-9-andrew.smirnov@gmail.com>
+Message-ID: <20170425191423.13294-7-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 'scandir'[1] package to buildroot. Needed by 'IPython', when
-building against Python2.
+Add 'pathlib2'[1] package to Buildroot. Needed by 'pickleshare'
+package, which is added in the next patch.
 
-[1] https://pypi.python.org/pypi/backports.shutil_get_terminal_size
+[1] https://pypi.python.org/pypi/pathlib2
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/Config.in                                           |  1 +
- package/python-backports-shutil-get-terminal-size/Config.in |  9 +++++++++
- .../python-backports-shutil-get-terminal-size.hash          |  2 ++
- .../python-backports-shutil-get-terminal-size.mk            | 13 +++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-backports-shutil-get-terminal-size/Config.in
- create mode 100644 package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
- create mode 100644 package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
+ package/Config.in                            |  1 +
+ package/python-pathlib2/Config.in            | 14 ++++++++++++++
+ package/python-pathlib2/python-pathlib2.hash |  2 ++
+ package/python-pathlib2/python-pathlib2.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 41 insertions(+)
+ create mode 100644 package/python-pathlib2/Config.in
+ create mode 100644 package/python-pathlib2/python-pathlib2.hash
+ create mode 100644 package/python-pathlib2/python-pathlib2.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a749b78..87240ef 100644
+index c64105e..d8880df 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -675,6 +675,7 @@ menu "External python modules"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backports-abc/Config.in"
-+	source "package/python-backports-shutil-get-terminal-size/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bitstring/Config.in"
- 	source "package/python-bottle/Config.in"
-diff --git a/package/python-backports-shutil-get-terminal-size/Config.in b/package/python-backports-shutil-get-terminal-size/Config.in
+@@ -768,6 +768,7 @@ menu "External python modules"
+ 	source "package/python-paramiko/Config.in"
+ 	source "package/python-pathpy/Config.in"
+ 	source "package/python-pathtools/Config.in"
++	source "package/python-pathlib2/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
+ 	source "package/python-pexpect/Config.in"
+ 	source "package/python-pillow/Config.in"
+diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
 new file mode 100644
-index 0000000..24bf3b7
+index 0000000..80f1bc4
 --- /dev/null
-+++ b/package/python-backports-shutil-get-terminal-size/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE
-+	bool "python-backports-shutil-get-terminal-size"
++++ b/package/python-pathlib2/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_PATHLIB2
 +	depends on BR2_PACKAGE_PYTHON
++        select BR2_PACKAGE_PYTHON_SIX
++	select BR2_PACKAGE_PYTHON_SCANDIR
++	bool "python-pathlib2"
 +	help
++	  Object-oriented filesystem paths.
 +
-+	  A backport of the get_terminal_size function from Python
-+	  3.3's shutil.
++	  The goal of pathlib2 is to provide a backport of standard
++	  pathlib module which tracks the standard library module, so
++	  all the newest features of the standard pathlib can be used
++	  also on older Python versions.
 +
-+	  https://pypi.python.org/pypi/backports.shutil_get_terminal_size
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
++	  https://pypi.python.org/pypi/pathlib2
+diff --git a/package/python-pathlib2/python-pathlib2.hash b/package/python-pathlib2/python-pathlib2.hash
 new file mode 100644
-index 0000000..0df0cf7
+index 0000000..e09496a
 --- /dev/null
-+++ b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
++++ b/package/python-pathlib2/python-pathlib2.hash
 @@ -0,0 +1,2 @@
 +# sha256 locally computed
-+sha256 713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80 backports.shutil_get_terminal_size-1.0.0.tar.gz
-diff --git a/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
++sha256 ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d pathlib2-2.2.1.tar.gz
+diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
 new file mode 100644
-index 0000000..63cf363
+index 0000000..6c6ded4
 --- /dev/null
-+++ b/package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-pathlib2/python-pathlib2.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# python-backports-shutil-get-terminal-size
++# python-pathlib2
 +#
 +################################################################################
 +
-+PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_VERSION = 1.0.0
-+PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SOURCE = backports.shutil_get_terminal_size-$(PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_VERSION).tar.gz
-+PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SITE = https://pypi.python.org/packages/ec/9c/368086faa9c016efce5da3e0e13ba392c9db79e3ab740b763fe28620b18b
-+PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_SETUP_TYPE = setuptools
-+PYTHON_BACKPORTS_SHUTIL_GET_TERMINAL_SIZE_LICENSE = MIT
++PYTHON_PATHLIB2_VERSION = 2.2.1
++PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
++PYTHON_PATHLIB2_SITE = https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56
++PYTHON_PATHLIB2_LICENSE = MIT
++PYTHON_PATHLIB2_SETUP_TYPE = setuptools
++
++#
++# Strictly speaking any python from 2.7 to 3.4 should have this as a
++# dependency, but since BR ships 3.6+ for Python3, we can simplify
++# things a bit
++#
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++PYTHON_PATHLIB2_DEPENDS += python-scandir
++endif
++
++PYTHON_PATHLIB2_DEPENDS += python-six
 +
 +$(eval $(python-package))
 -- 
