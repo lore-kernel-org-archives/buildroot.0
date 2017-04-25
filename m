@@ -1,114 +1,42 @@
-From: Alexandre Leblanc <alexandre.leblanc@savoirfairelinux.com>
-Date: Tue, 25 Apr 2017 09:58:14 -0400
-Subject: [Buildroot] [PATCH] cukinia: new package
-Message-ID: <20170425135814.8787-1-alexandre.leblanc@savoirfairelinux.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Apr 2017 16:17:00 +0200
+Subject: [Buildroot] [PATCH 2/2] libcroco: bump to version 0.6.12
+In-Reply-To: <20170425141700.30077-1-peter@korsgaard.com>
+References: <20170425141700.30077-1-peter@korsgaard.com>
+Message-ID: <20170425141700.30077-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cukinia is designed to help Linux-based embedded firmware developers
-run simple validation tests on their firmware. For basic usage it
-requires no dependencies other than busybox.
-
-Cukinia can run tests at boot time which is why we are using SZZcukinia
-since it would possibly be the last script to be executed in 'init.d'.
-
-Signed-off-by: Alexandre Leblanc <alexandre.leblanc@savoirfairelinux.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in            |  1 +
- package/cukinia/Config.in    | 12 ++++++++++++
- package/cukinia/SZZcukinia   |  7 +++++++
- package/cukinia/cukinia.conf |  1 +
- package/cukinia/cukinia.mk   | 26 ++++++++++++++++++++++++++
- 5 files changed, 47 insertions(+)
- create mode 100644 package/cukinia/Config.in
- create mode 100644 package/cukinia/SZZcukinia
- create mode 100644 package/cukinia/cukinia.conf
- create mode 100644 package/cukinia/cukinia.mk
+ package/libcroco/libcroco.hash | 4 ++--
+ package/libcroco/libcroco.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4eaa95b..e3f8ce4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -73,6 +73,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-+	source "package/cukinia/Config.in"
- 	source "package/dhrystone/Config.in"
- 	source "package/dieharder/Config.in"
- 	source "package/dmalloc/Config.in"
-diff --git a/package/cukinia/Config.in b/package/cukinia/Config.in
-new file mode 100644
-index 0000000..2588bb6
---- /dev/null
-+++ b/package/cukinia/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_CUKINIA
-+	bool "cukinia"
-+	help
-+	  Cukinia is designed to help Linux-based embedded firmware
-+	  developers run simple validation tests on their firmware.
-+
-+	  https://github.com/savoirfairelinux/cukinia
-+
-+config BR2_PACKAGE_CUKINIA_BOOT
-+	bool "run at boot time"
-+	depends on BR2_PACKAGE_CUKINIA && (BR2_INIT_SYSV || BR2_INIT_BUSYBOX)
-+
-diff --git a/package/cukinia/SZZcukinia b/package/cukinia/SZZcukinia
-new file mode 100644
-index 0000000..d9dc144
---- /dev/null
-+++ b/package/cukinia/SZZcukinia
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+#
-+# Run cukinia
-+#
-+
-+[ "$1" == "start"] || exit 0
-+/usr/bin/cukinia
-diff --git a/package/cukinia/cukinia.conf b/package/cukinia/cukinia.conf
-new file mode 100644
-index 0000000..0593662
---- /dev/null
-+++ b/package/cukinia/cukinia.conf
-@@ -0,0 +1 @@
-+cukinia_user root
-diff --git a/package/cukinia/cukinia.mk b/package/cukinia/cukinia.mk
-new file mode 100644
-index 0000000..d507e33
---- /dev/null
-+++ b/package/cukinia/cukinia.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# cukinia
-+#
-+################################################################################
-+
-+CUKINIA_VERSION = 152d4965dd1024a3f345a9ee1df6cf663a5775ed
-+CUKINIA_SITE = $(call github,savoirfairelinux,cukinia,$(CUKINIA_VERSION))
-+CUKINIA_LICENSE = Apache-2.0 or GPLv3
-+
-+define CUKINIA_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/cukinia \
-+		$(TARGET_DIR)/usr/bin/cukinia
-+
-+	$(INSTALL) -D -m 0644 $(CUKINIA_PKGDIR)/cukinia.conf \
-+		$(TARGET_DIR)/etc/cukinia/cukinia.conf
-+endef
-+
-+ifeq ($(BR2_PACKAGE_CUKINIA_BOOT),y)
-+define CUKINIA_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(CUKINIA_PKGDIR)/SZZcukinia \
-+		$(TARGET_DIR)/etc/init.d/SZZcukinia
-+endef
-+endif
-+
-+$(eval $(generic-package))
+diff --git a/package/libcroco/libcroco.hash b/package/libcroco/libcroco.hash
+index edf0b1f38..83d2ffe51 100644
+--- a/package/libcroco/libcroco.hash
++++ b/package/libcroco/libcroco.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.11.sha256sum
+-sha256	132b528a948586b0dfa05d7e9e059901bca5a3be675b6071a90a90b81ae5a056	libcroco-0.6.11.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.12.sha256sum
++sha256	ddc4b5546c9fb4280a5017e2707fbd4839034ed1aba5b7d4372212f34f84f860	libcroco-0.6.12.tar.xz
+diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
+index 5ea0b77cd..612fd1f47 100644
+--- a/package/libcroco/libcroco.mk
++++ b/package/libcroco/libcroco.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCROCO_VERSION_MAJOR = 0.6
+-LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).11
++LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).12
+ LIBCROCO_SITE = http://ftp.gnome.org/pub/gnome/sources/libcroco/$(LIBCROCO_VERSION_MAJOR)
+ LIBCROCO_SOURCE = libcroco-$(LIBCROCO_VERSION).tar.xz
+ LIBCROCO_INSTALL_STAGING = YES
 -- 
-2.9.3
+2.11.0
