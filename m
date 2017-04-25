@@ -1,32 +1,48 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Tue, 25 Apr 2017 13:17:34 +0200
-Subject: [Buildroot]
-	=?iso-8859-1?q?=5BPATCH=5D_gcc=3A_Fix_build_failure_r?=
-	=?iso-8859-1?q?elated_to_-fPIC_for_x86=5F64_-=3E_i686_builds?=
-In-Reply-To: <4697e49d-c953-cf51-2361-3e5d06bdd21b@mind.be>
-References: <71cfdaf7-367d-44de-a1c6-9041e269c8de@cesnet.cz>
- <aded779d-fd0d-e83c-5a3e-d0e7b28b5dfe@mind.be>
- <8b7a3f29-c200-4292-8efb-8f6f24c3e7c7@cesnet.cz>
- <4697e49d-c953-cf51-2361-3e5d06bdd21b@mind.be>
-Message-ID: <207c32d9-841e-4a51-8f91-1a2475c4b45d@cesnet.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Apr 2017 13:44:34 +0200
+Subject: [Buildroot] [PATCH] minicom: security bump to version 2.7.1
+Message-ID: <20170425114434.1728-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On pond?l? 24. dubna 2017 22:21:28 CEST, Arnout Vandecappelle wrote:
-> No, if you managed to build all these host packages with the 
-> default-PIE host compiler, then I guess it's OK.
+Fixes CVE-2017-7467 - minicom and prl-vzvncserver vt100.c escparms[] buffer
+overflow.
 
-You're right. Indeed, my regular PIE-using compiler is used when building 
-these host utilities. Sorry for this confusion on my side re `make 
-foo-rebuild`.
+For more details about the issue, see the nice writeup on oss-security:
 
-Does that change your position on the original patch? Should I 
-resend/reformat it to explicitly refer to the Gentoo Hardened compiler 
-which is happy to use PIC/PIE? Or is that nonetheless something that does 
-not belong to Buildroot in your opinion?
+http://www.openwall.com/lists/oss-security/2017/04/18/5
 
-Cheers,
-Jan
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/minicom/minicom.hash | 2 +-
+ package/minicom/minicom.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index 33ba4ef10..ca3087160 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 9ac3a663b82f4f5df64114b4792b9926b536c85f59de0f2d2b321c7626a904f4  minicom-2.7.tar.gz
++sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index 75cd0c4ff..cb0648237 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MINICOM_VERSION = 2.7
+-MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/3977
++MINICOM_VERSION = 2.7.1
++MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/4215
+ MINICOM_LICENSE = GPL-2.0+
+ MINICOM_LICENSE_FILES = COPYING
+ 
+-- 
+2.11.0
