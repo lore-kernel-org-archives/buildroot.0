@@ -1,93 +1,86 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 24 Apr 2017 20:44:48 -0500
-Subject: [Buildroot] [PATCH] busybox: no need to disable clear and reset
-In-Reply-To: <20170424201323.30582-1-arnout@mind.be>
-References: <20170424201323.30582-1-arnout@mind.be>
-Message-ID: <CANQCQpZcKqHrQeQtY4+ot8sv3TM3dYmnBBPRFVCPYy7pWGgH6g@mail.gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 25 Apr 2017 16:00:51 +1200
+Subject: [Buildroot] [PATCH v6 31/31] package/kodi: Add support for more
+	archs
+In-Reply-To: <20170424213206.26247-32-bernd.kuhls@t-online.de>
+References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
+ <20170424213206.26247-32-bernd.kuhls@t-online.de>
+Message-ID: <CAFOYHZABJ6nDTRv0xxT=daZM4VacXDSepiCF9p3exCHyQ3j9ag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hi Bernd,
 
-On Mon, Apr 24, 2017 at 3:13 PM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> Removing clear and reset from the busybox config when the ncurses tools
-> are enabled is not really needed.
+On Tue, Apr 25, 2017 at 9:32 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> For the autoconf-based build system it was necessary to allow each
+> supported architecture separatly:
+> https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
 >
-> Since commit 802bff9c42, the busybox install will not overwrite
-> existing programs. Therefore, the tools will be installed correctly
-> regardless of the order of the build:
-> - if busybox is built first, the clear and reset apps are installed,
->   but they will be overwritten by ncurses;
-> - if ncurses is built first, it will install the clear and reset apps,
->   and busybox will no longer install them.
+> The CMake build system supports more archs which are added by this
+> commit.
 >
-> We prefer not to modify the busybox configuration when not strictly
-> necessary, because it is surprising for the user that his configuration
-> is not applied. Clearly, it's not ideal that busybox is configured with
-> redundant apps, but if the user wants to shrink it, it's possible to
-> provide a custom config.
->
-> This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
->
-
-Verified with a the BR default config doing a clean make all for each case.
-
-Tested-by: Matt Weber  <matthew.weber@rockwellcollins.com>
-
-
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Danomi Manchego <danomimanchego123@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/busybox/busybox.mk | 12 ------------
->  1 file changed, 12 deletions(-)
+>  package/kodi/Config.in | 9 ++++++++-
+>  package/kodi/kodi.mk   | 8 +++++++-
+>  2 files changed, 15 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 689830e7f8..a536ed2953 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -148,17 +148,6 @@ define BUSYBOX_MUSL_TWEAKS
->  endef
->  endif
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index a5fc940a2b..1f56874077 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -1,7 +1,14 @@
+>  config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+>         bool
+>         depends on BR2_USE_MMU # libcdio, and others
+> -       default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
+> +       default y if ( \
+> +               BR2_aarch64 || BR2_aarch64_be || \
+> +               BR2_arcle || BR2_arceb || \
+> +               BR2_arm || BR2_armeb || \
+> +               BR2_mips || BR2_mips64 || \
+> +               BR2_mipsel || BR2_mips64el || \
+> +               BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+> +               BR2_i386 || BR2_x86_64) \
+>                 && BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+>                 && BR2_TOOLCHAIN_HAS_SYNC_8
 >
-> -ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
-> -# Ncurses package overlaps:
-> -#     /usr/bin/clear
-> -#     /usr/bin/reset -> /usr/bin/tset (symlink)
-> -#
-> -define BUSYBOX_DISABLE_NCURSES_PROGS
-> -       $(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
-> -       $(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
-> -endef
-> -endif
-> -
->  define BUSYBOX_INSTALL_UDHCPC_SCRIPT
->         if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
->                 $(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-> @@ -240,7 +229,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
->         $(BUSYBOX_SET_WATCHDOG)
->         $(BUSYBOX_SET_SELINUX)
->         $(BUSYBOX_MUSL_TWEAKS)
-> -       $(BUSYBOX_DISABLE_NCURSES_PROGS)
->  endef
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 245b8bfbe6..455d38d97e 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -73,10 +73,16 @@ KODI_CONF_OPTS += \
+>         -DDEPENDS_PATH=$(@D) \
+>         -DWITH_TEXTUREPACKER=$(HOST_DIR)/usr/bin/TexturePacker
 >
->  define BUSYBOX_CONFIGURE_CMDS
+> -ifeq ($(BR2_arm),y)
+> +ifeq ($(BR2_aarch64),y)
+> +KODI_CONF_OPTS += -DWITH_ARCH=aarch64 -DWITH_CPU=aarch64
+
+Would it make more sense to have
+
+  KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
+
+and have explicit cases where BR2_arch doesn't meet Kodi's view of the world
+
+> +else ifeq ($(BR2_arm)$(BR2_armeb),y)
+>  KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
+>  else ifeq ($(BR2_mips),y)
+>  KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
+> +else ifeq ($(BR2_mips64el),y)
+> +KODI_CONF_OPTS += -DWITH_ARCH=mips64 -DWITH_CPU=mips64
+> +else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+> +KODI_CONF_OPTS += -DWITH_ARCH=powerpc64 -DWITH_CPU=powerpc64
+>  else ifeq ($(BR2_i386),y)
+>  KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
+>  else ifeq ($(BR2_x86_64),y)
 > --
 > 2.11.0
 >
-
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
