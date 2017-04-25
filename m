@@ -1,36 +1,39 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 25 Apr 2017 23:26:12 +0200
-Subject: [Buildroot] [PATCH] package/xenomai: fallback to http
-Message-ID: <20170425212612.4612-1-romain.naour@gmail.com>
+Date: Tue, 25 Apr 2017 23:32:02 +0200
+Subject: [Buildroot] [PATCH] package/bullet: bump to version 2.86.1
+Message-ID: <20170425213202.5399-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The https protocol return:
-"ERROR 503: Service Temporarily Unavailable"
-
-Fixes:
-http://autobuild.buildroot.net/results/120/12034603c46c8bd69590c88bbfe85261460b699c
-
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/xenomai/xenomai.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bullet/bullet.hash | 2 +-
+ package/bullet/bullet.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 4844fff..c1477d9 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -11,7 +11,7 @@ else
- BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
- endif
+diff --git a/package/bullet/bullet.hash b/package/bullet/bullet.hash
+index cccc425..c6a45c2 100644
+--- a/package/bullet/bullet.hash
++++ b/package/bullet/bullet.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 6e157c0b50373bc0e860de27f06397827bb28a4205bc568ae79d76a0f919ed62  bullet-2.85.1.tar.gz
++sha256 c058b2e4321ba6adaa656976c1a138c07b18fc03b29f5b82880d5d8228fbf059  bullet-2.86.1.tar.gz
+diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
+index 920ea87..3e8fae3 100644
+--- a/package/bullet/bullet.mk
++++ b/package/bullet/bullet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stable
-+XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
- XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
- XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
- # GFDL is not included but refers to gnu.org
+-BULLET_VERSION = 2.85.1
++BULLET_VERSION = 2.86.1
+ BULLET_SITE = $(call github,bulletphysics,bullet3,$(BULLET_VERSION))
+ BULLET_INSTALL_STAGING = YES
+ BULLET_LICENSE = Zlib
 -- 
 2.9.3
