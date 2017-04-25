@@ -1,87 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Apr 2017 17:35:54 +0200
-Subject: [Buildroot] [PATCH] imagemagick: add upstream security fix for
-	CVE-2017-7606
-Message-ID: <20170425153554.27006-1-peter@korsgaard.com>
+From: Olivier Valentin <ovalentin@awox.com>
+Date: Tue, 25 Apr 2017 17:42:16 +0200
+Subject: [Buildroot] libcurl: propagate buildroot debugging option
+Message-ID: <6e5e28bc-b89a-931e-be6c-98c2ebb5434f@awox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is not yet part of any release.
+When buildroot has debugging enabled, let libcurl configure
+its build accordingly.
 
-coders/rle.c in ImageMagick 7.0.5-4 has an "outside the range of
-representable values of type unsigned char" undefined behavior issue, which
-might allow remote attackers to cause a denial of service (application
-crash) or possibly have unspecified other impact via a crafted image.
-
-For more details, see:
-https://blogs.gentoo.org/ago/2017/04/02/imagemagick-undefined-behavior-in-codersrle-c/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Olivier Valentin <ovalentin@awox.com>
 ---
- ...ub.com-ImageMagick-ImageMagick-issues-415.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/imagemagick/0001-https-github.com-ImageMagick-ImageMagick-issues-415.patch
+   package/libcurl/libcurl.mk | 4 ++++
+   1 file changed, 4 insertions(+)
 
-diff --git a/package/imagemagick/0001-https-github.com-ImageMagick-ImageMagick-issues-415.patch b/package/imagemagick/0001-https-github.com-ImageMagick-ImageMagick-issues-415.patch
-new file mode 100644
-index 000000000..943679eda
---- /dev/null
-+++ b/package/imagemagick/0001-https-github.com-ImageMagick-ImageMagick-issues-415.patch
-@@ -0,0 +1,52 @@
-+From b218117cad34d39b9ffb587b45c71c5a49b12bde Mon Sep 17 00:00:00 2001
-+From: Cristy <urban-warrior@imagemagick.org>
-+Date: Fri, 31 Mar 2017 15:24:33 -0400
-+Subject: [PATCH] https://github.com/ImageMagick/ImageMagick/issues/415
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 6f4803e0c..cba771c61 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -22,6 +22,10 @@ LIBCURL_INSTALL_STAGING = YES
+   LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+       --enable-hidden-symbols --with-random=/dev/urandom 
+--disable-curldebug
+
++ifeq ($(BR2_ENABLE_DEBUG),y)
++LIBCURL_CONF_OPTS += --enable-debug
++endif
 +
-+Fixes CVE-2017-7606
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ coders/pnm.c | 2 +-
-+ coders/rle.c | 5 +++--
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/coders/pnm.c b/coders/pnm.c
-+index 9a1221d79..c525ebb8f 100644
-+--- a/coders/pnm.c
-++++ b/coders/pnm.c
-+@@ -1979,7 +1979,7 @@ static MagickBooleanType WritePNMImage(const ImageInfo *image_info,Image *image,
-+                           pixel=ScaleQuantumToChar(GetPixelRed(image,p));
-+                         else
-+                           pixel=ScaleQuantumToAny(GetPixelRed(image,p),
-+-                          max_value);
-++                            max_value);
-+                       }
-+                     q=PopCharPixel((unsigned char) pixel,q);
-+                     p+=GetPixelChannels(image);
-+diff --git a/coders/rle.c b/coders/rle.c
-+index 2318901ec..ec071dc7b 100644
-+--- a/coders/rle.c
-++++ b/coders/rle.c
-+@@ -271,7 +271,8 @@ static Image *ReadRLEImage(const ImageInfo *image_info,ExceptionInfo *exception)
-+         p=colormap;
-+         for (i=0; i < (ssize_t) number_colormaps; i++)
-+           for (x=0; x < (ssize_t) map_length; x++)
-+-            *p++=(unsigned char) ScaleShortToQuantum(ReadBlobLSBShort(image));
-++            *p++=(unsigned char) ScaleQuantumToChar(ScaleShortToQuantum(
-++              ReadBlobLSBShort(image)));
-+       }
-+     if ((flags & 0x08) != 0)
-+       {
-+@@ -476,7 +477,7 @@ static Image *ReadRLEImage(const ImageInfo *image_info,ExceptionInfo *exception)
-+               for (x=0; x < (ssize_t) number_planes; x++)
-+               {
-+                 ValidateColormapValue(image,(size_t) (x*map_length+
-+-                    (*p & mask)),&index,exception);
-++                  (*p & mask)),&index,exception);
-+                 *p=colormap[(ssize_t) index];
-+                 p++;
-+               }
-+-- 
-+2.11.0
-+
+   ifeq ($(BR2_PACKAGE_LIBCURL_VERBOSE),y)
+   LIBCURL_CONF_OPTS += --enable-verbose
+   else
 -- 
 2.11.0
