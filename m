@@ -1,36 +1,24 @@
-From: Olivier Valentin <ovalentin@awox.com>
-Date: Tue, 25 Apr 2017 17:42:16 +0200
-Subject: [Buildroot] libcurl: propagate buildroot debugging option
-Message-ID: <6e5e28bc-b89a-931e-be6c-98c2ebb5434f@awox.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Apr 2017 17:51:12 +0200
+Subject: [Buildroot] [PATCH-2017.02.x] nodejs: bump 6.x version to 6.10.2
+In-Reply-To: <20170424202440.22731-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 24 Apr 2017 22:24:40 +0200")
+References: <20170424202440.22731-1-peter@korsgaard.com>
+Message-ID: <8737cwscy7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When buildroot has debugging enabled, let libcurl configure
-its build accordingly.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Olivier Valentin <ovalentin@awox.com>
----
-   package/libcurl/libcurl.mk | 4 ++++
-   1 file changed, 4 insertions(+)
+ > 6.10.2 is the latest release in the LTS series, fixing a number of issues:
+ > https://nodejs.org/en/blog/release/v6.10.2/
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 6f4803e0c..cba771c61 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -22,6 +22,10 @@ LIBCURL_INSTALL_STAGING = YES
-   LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
-       --enable-hidden-symbols --with-random=/dev/urandom 
---disable-curldebug
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+LIBCURL_CONF_OPTS += --enable-debug
-+endif
-+
-   ifeq ($(BR2_PACKAGE_LIBCURL_VERBOSE),y)
-   LIBCURL_CONF_OPTS += --enable-verbose
-   else
+Committed to 2017.02.x, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
