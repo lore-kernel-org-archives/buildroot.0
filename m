@@ -1,48 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Apr 2017 13:44:34 +0200
-Subject: [Buildroot] [PATCH] minicom: security bump to version 2.7.1
-Message-ID: <20170425114434.1728-1-peter@korsgaard.com>
+Date: Tue, 25 Apr 2017 15:44:23 +0200
+Subject: [Buildroot] [PATCH] python-web2py: security bump to version 2.14.6
+Message-ID: <20170425134423.3313-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-7467 - minicom and prl-vzvncserver vt100.c escparms[] buffer
-overflow.
+CVE-2016-4806 - Web2py versions 2.14.5 and below was affected by Local File
+Inclusion vulnerability, which allows a malicious intended user to
+read/access web server sensitive files.
 
-For more details about the issue, see the nice writeup on oss-security:
+CVE-2016-4807 - Web2py versions 2.14.5 and below was affected by Reflected
+XSS vulnerability, which allows an attacker to perform an XSS attack on
+logged in user (admin).
 
-http://www.openwall.com/lists/oss-security/2017/04/18/5
+CVE-2016-4808 - Web2py versions 2.14.5 and below was affected by CSRF (Cross
+Site Request Forgery) vulnerability, which allows an attacker to trick a
+logged in user to perform some unwanted actions i.e An attacker can trick an
+victim to disable the installed application just by sending a URL to victim.
+
+CVE-2016-10321 - web2py before 2.14.6 does not properly check if a host is
+denied before verifying passwords, allowing a remote attacker to perform
+brute-force attacks.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minicom/minicom.hash | 2 +-
- package/minicom/minicom.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-web2py/python-web2py.hash | 2 +-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index 33ba4ef10..ca3087160 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index 3de8dbf4d..9c1de904c 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9ac3a663b82f4f5df64114b4792b9926b536c85f59de0f2d2b321c7626a904f4  minicom-2.7.tar.gz
-+sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index 75cd0c4ff..cb0648237 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -4,8 +4,8 @@
+ # sha256 locally computed
+-sha256 7e22a5624d8d2909e165110f0bec6b43ee36ff6834d689f4027e06dece662031   python-web2py-R-2.12.3.tar.gz
++sha256 6079aeaa352ec51e0da5e6abc71fa74cdb3a781e06a311b5826618624362a7b2   python-web2py-R-2.14.6.tar.gz
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 7fe9f82f8..9aadb3027 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINICOM_VERSION = 2.7
--MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/3977
-+MINICOM_VERSION = 2.7.1
-+MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/4215
- MINICOM_LICENSE = GPL-2.0+
- MINICOM_LICENSE_FILES = COPYING
- 
+-PYTHON_WEB2PY_VERSION = R-2.12.3
++PYTHON_WEB2PY_VERSION = R-2.14.6
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
 -- 
 2.11.0
