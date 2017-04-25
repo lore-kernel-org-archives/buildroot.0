@@ -1,56 +1,114 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Apr 2017 15:44:23 +0200
-Subject: [Buildroot] [PATCH] python-web2py: security bump to version 2.14.6
-Message-ID: <20170425134423.3313-1-peter@korsgaard.com>
+From: Alexandre Leblanc <alexandre.leblanc@savoirfairelinux.com>
+Date: Tue, 25 Apr 2017 09:58:14 -0400
+Subject: [Buildroot] [PATCH] cukinia: new package
+Message-ID: <20170425135814.8787-1-alexandre.leblanc@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2016-4806 - Web2py versions 2.14.5 and below was affected by Local File
-Inclusion vulnerability, which allows a malicious intended user to
-read/access web server sensitive files.
+Cukinia is designed to help Linux-based embedded firmware developers
+run simple validation tests on their firmware. For basic usage it
+requires no dependencies other than busybox.
 
-CVE-2016-4807 - Web2py versions 2.14.5 and below was affected by Reflected
-XSS vulnerability, which allows an attacker to perform an XSS attack on
-logged in user (admin).
+Cukinia can run tests at boot time which is why we are using SZZcukinia
+since it would possibly be the last script to be executed in 'init.d'.
 
-CVE-2016-4808 - Web2py versions 2.14.5 and below was affected by CSRF (Cross
-Site Request Forgery) vulnerability, which allows an attacker to trick a
-logged in user to perform some unwanted actions i.e An attacker can trick an
-victim to disable the installed application just by sending a URL to victim.
-
-CVE-2016-10321 - web2py before 2.14.6 does not properly check if a host is
-denied before verifying passwords, allowing a remote attacker to perform
-brute-force attacks.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexandre Leblanc <alexandre.leblanc@savoirfairelinux.com>
 ---
- package/python-web2py/python-web2py.hash | 2 +-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in            |  1 +
+ package/cukinia/Config.in    | 12 ++++++++++++
+ package/cukinia/SZZcukinia   |  7 +++++++
+ package/cukinia/cukinia.conf |  1 +
+ package/cukinia/cukinia.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 47 insertions(+)
+ create mode 100644 package/cukinia/Config.in
+ create mode 100644 package/cukinia/SZZcukinia
+ create mode 100644 package/cukinia/cukinia.conf
+ create mode 100644 package/cukinia/cukinia.mk
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index 3de8dbf4d..9c1de904c 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 7e22a5624d8d2909e165110f0bec6b43ee36ff6834d689f4027e06dece662031   python-web2py-R-2.12.3.tar.gz
-+sha256 6079aeaa352ec51e0da5e6abc71fa74cdb3a781e06a311b5826618624362a7b2   python-web2py-R-2.14.6.tar.gz
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 7fe9f82f8..9aadb3027 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_WEB2PY_VERSION = R-2.12.3
-+PYTHON_WEB2PY_VERSION = R-2.14.6
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
+diff --git a/package/Config.in b/package/Config.in
+index 4eaa95b..e3f8ce4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -73,6 +73,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/blktrace/Config.in"
+ 	source "package/bonnie/Config.in"
+ 	source "package/cache-calibrator/Config.in"
++	source "package/cukinia/Config.in"
+ 	source "package/dhrystone/Config.in"
+ 	source "package/dieharder/Config.in"
+ 	source "package/dmalloc/Config.in"
+diff --git a/package/cukinia/Config.in b/package/cukinia/Config.in
+new file mode 100644
+index 0000000..2588bb6
+--- /dev/null
++++ b/package/cukinia/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_CUKINIA
++	bool "cukinia"
++	help
++	  Cukinia is designed to help Linux-based embedded firmware
++	  developers run simple validation tests on their firmware.
++
++	  https://github.com/savoirfairelinux/cukinia
++
++config BR2_PACKAGE_CUKINIA_BOOT
++	bool "run at boot time"
++	depends on BR2_PACKAGE_CUKINIA && (BR2_INIT_SYSV || BR2_INIT_BUSYBOX)
++
+diff --git a/package/cukinia/SZZcukinia b/package/cukinia/SZZcukinia
+new file mode 100644
+index 0000000..d9dc144
+--- /dev/null
++++ b/package/cukinia/SZZcukinia
+@@ -0,0 +1,7 @@
++#!/bin/sh
++#
++# Run cukinia
++#
++
++[ "$1" == "start"] || exit 0
++/usr/bin/cukinia
+diff --git a/package/cukinia/cukinia.conf b/package/cukinia/cukinia.conf
+new file mode 100644
+index 0000000..0593662
+--- /dev/null
++++ b/package/cukinia/cukinia.conf
+@@ -0,0 +1 @@
++cukinia_user root
+diff --git a/package/cukinia/cukinia.mk b/package/cukinia/cukinia.mk
+new file mode 100644
+index 0000000..d507e33
+--- /dev/null
++++ b/package/cukinia/cukinia.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# cukinia
++#
++################################################################################
++
++CUKINIA_VERSION = 152d4965dd1024a3f345a9ee1df6cf663a5775ed
++CUKINIA_SITE = $(call github,savoirfairelinux,cukinia,$(CUKINIA_VERSION))
++CUKINIA_LICENSE = Apache-2.0 or GPLv3
++
++define CUKINIA_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/cukinia \
++		$(TARGET_DIR)/usr/bin/cukinia
++
++	$(INSTALL) -D -m 0644 $(CUKINIA_PKGDIR)/cukinia.conf \
++		$(TARGET_DIR)/etc/cukinia/cukinia.conf
++endef
++
++ifeq ($(BR2_PACKAGE_CUKINIA_BOOT),y)
++define CUKINIA_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(CUKINIA_PKGDIR)/SZZcukinia \
++		$(TARGET_DIR)/etc/init.d/SZZcukinia
++endef
++endif
++
++$(eval $(generic-package))
 -- 
-2.11.0
+2.9.3
