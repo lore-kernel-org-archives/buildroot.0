@@ -1,86 +1,87 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue, 25 Apr 2017 12:14:16 -0700
-Subject: [Buildroot] [PATCH 2/9] package/python-traitlets: New package
+Date: Tue, 25 Apr 2017 12:14:17 -0700
+Subject: [Buildroot] [PATCH 3/9] package/python-simplegeneric: New package
 In-Reply-To: <20170425191423.13294-1-andrew.smirnov@gmail.com>
 References: <20170425191423.13294-1-andrew.smirnov@gmail.com>
-Message-ID: <20170425191423.13294-3-andrew.smirnov@gmail.com>
+Message-ID: <20170425191423.13294-4-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 'traitlets'[1] package to Buildroot. Needed by IPython.
+Add 'simplegeneric'[1] package to Buildroot. Needed by IPython.
 
-[1] https://pypi.python.org/pypi/traitlets
+[1] https://pypi.python.org/pypi/simplegeneric
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/Config.in                              |  1 +
- package/python-traitlets/Config.in             |  8 ++++++++
- package/python-traitlets/python-traitlets.hash |  2 ++
- package/python-traitlets/python-traitlets.mk   | 18 ++++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-traitlets/Config.in
- create mode 100644 package/python-traitlets/python-traitlets.hash
- create mode 100644 package/python-traitlets/python-traitlets.mk
+ package/Config.in                                     |  1 +
+ package/python-simplegeneric/Config.in                |  6 ++++++
+ .../python-simplegeneric/python-simplegeneric.hash    |  4 ++++
+ package/python-simplegeneric/python-simplegeneric.mk  | 19 +++++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/python-simplegeneric/Config.in
+ create mode 100644 package/python-simplegeneric/python-simplegeneric.hash
+ create mode 100644 package/python-simplegeneric/python-simplegeneric.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index eb6d197..47f43eb 100644
+index 47f43eb..1a0702d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -843,6 +843,7 @@ menu "External python modules"
- 	source "package/python-tomako/Config.in"
- 	source "package/python-toml/Config.in"
- 	source "package/python-tornado/Config.in"
-+	source "package/python-traitlets/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-txaio/Config.in"
-diff --git a/package/python-traitlets/Config.in b/package/python-traitlets/Config.in
+@@ -830,6 +830,7 @@ menu "External python modules"
+ 	source "package/python-sh/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
+ 	source "package/python-simpleaudio/Config.in"
++	source "package/python-simplegeneric/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-simplegeneric/Config.in b/package/python-simplegeneric/Config.in
 new file mode 100644
-index 0000000..ba79218
+index 0000000..b5ebfec
 --- /dev/null
-+++ b/package/python-traitlets/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_TRAITLETS
-+	select BR2_PACKAGE_PYTHON_DECORATOR
-+	select BR2_PACKAGE_PYTHON_ENUM if BR2_PACKAGE_PYTHON
-+	bool "python-traitlets"
++++ b/package/python-simplegeneric/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_SIMPLEGENERIC
++	bool "python-simplegeneric"
 +	help
 +	  A configuration system for Python applications.
 +
-+	  https://pypi.python.org/pypi/traitlets
-diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
++	  https://pypi.python.org/pypi/simplegeneric
+diff --git a/package/python-simplegeneric/python-simplegeneric.hash b/package/python-simplegeneric/python-simplegeneric.hash
 new file mode 100644
-index 0000000..3b14991
+index 0000000..6ec74f9
 --- /dev/null
-+++ b/package/python-traitlets/python-traitlets.hash
-@@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 370f938ad730d52272ef74f96f831cb21138f6168e46fe582fe256c35cc656ce python-traitlets-4.3.2.tar.gz
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
++++ b/package/python-simplegeneric/python-simplegeneric.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/simplegeneric, sha256 locally computed
++md5 f9c1fab00fd981be588fc32759f474e3 simplegeneric-0.8.1.zip
++sha256 dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173 simplegeneric-0.8.1.zip
++
+diff --git a/package/python-simplegeneric/python-simplegeneric.mk b/package/python-simplegeneric/python-simplegeneric.mk
 new file mode 100644
-index 0000000..6cfd3e5
+index 0000000..684cda1
 --- /dev/null
-+++ b/package/python-traitlets/python-traitlets.mk
-@@ -0,0 +1,18 @@
++++ b/package/python-simplegeneric/python-simplegeneric.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# python-traitlets
++# python-simplegeneric
 +#
 +################################################################################
 +
-+PYTHON_TRAITLETS_VERSION = 4.3.2
-+PYTHON_TRAITLETS_SOURCE = python-traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
-+PYTHON_TRAITLETS_SITE = $(call github,ipython,traitlets,$(PYTHON_TRAITLETS_VERSION))
-+PYTHON_TRAITLETS_LICENSE = BSD-3c
-+PYTHON_TRAITLETS_SETUP_TYPE = distutils
-+PYTHON_TRAITLETS_DEPENDENCIES = python-decorator
++PYTHON_SIMPLEGENERIC_VERSION = 0.8.1
++PYTHON_SIMPLEGENERIC_SOURCE = simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION).zip
++PYTHON_SIMPLEGENERIC_SITE = https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b
++PYTHON_SIMPLEGENERIC_LICENSE = BSD-3c
++PYTHON_SIMPLEGENERIC_SETUP_TYPE = distutils
 +
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+PYTHON_TRAITLETS_DEPENDENCIES += python-enum
-+endif
++define PYTHON_SIMPLEGENERIC_EXTRACT_CMDS
++	unzip $(DL_DIR)/$(PYTHON_SIMPLEGENERIC_SOURCE) -d $(@D)
++	mv $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)/* $(@D)
++	rmdir $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)
++endef
 +
 +$(eval $(python-package))
 -- 
