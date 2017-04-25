@@ -1,99 +1,33 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Tue, 25 Apr 2017 09:23:33 +0200
-Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.14
-In-Reply-To: <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
-References: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
- <3cc20a82-673d-f87b-e5c6-0acc428cfb1c@ginzinger.com>
- <9cbb711a-6026-8a69-a6c6-85dc140e2e4c@imgtec.com>
- <d6771575-8b26-f608-5d57-4d3c573eee36@ginzinger.com>
- <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
-Message-ID: <341da979-e518-de72-4dee-8aa4a01912bd@ginzinger.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 25 Apr 2017 09:31:00 +0200
+Subject: [Buildroot] [PATCH v6 31/31] package/kodi: Add support for
+	more	archs
+References: <20170424213206.26247-1-bernd.kuhls@t-online.de>
+ <20170424213206.26247-32-bernd.kuhls@t-online.de>
+ <CAFOYHZABJ6nDTRv0xxT=daZM4VacXDSepiCF9p3exCHyQ3j9ag@mail.gmail.com>
+Message-ID: <kia3tdx7qg.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am Tue, 25 Apr 2017 16:00:51 +1200 schrieb Chris Packham:
 
+>> -ifeq ($(BR2_arm),y)
+>> +ifeq ($(BR2_aarch64),y)
+>> +KODI_CONF_OPTS += -DWITH_ARCH=aarch64 -DWITH_CPU=aarch64
+> 
+> Would it make more sense to have
+> 
+>   KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
+> 
+> and have explicit cases where BR2_arch doesn't meet Kodi's view of the
+> world
 
-On 2017-04-24 21:47, Arnout Vandecappelle wrote:
-> 
-> 
-> On 24-04-17 15:26, Martin Kepplinger wrote:
->>
->>
->> On 2017-04-24 14:55, Vicente Olivert Riera wrote:
->>> Hi Martin,
->>>
->>> On 24/04/17 13:27, Martin Kepplinger wrote:
->>>> On 2017-04-24 14:22, Martin Kepplinger wrote:
->>>>> This uses x11vnc's new upstream location, github, via https. Autoreconf is
->>>>> added, because it's really only a code snapshot release.
->>>>>
->>>>> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
->>>>> ---
->>>>>  package/x11vnc/x11vnc.hash | 2 +-
->>>>>  package/x11vnc/x11vnc.mk   | 9 +++++++--
->>>>>  2 files changed, 8 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
->>>>> index 5828b12..0da7765 100644
->>>>> --- a/package/x11vnc/x11vnc.hash
->>>>> +++ b/package/x11vnc/x11vnc.hash
->>>>> @@ -1,2 +1,2 @@
->>>>>  # Locally computed:
->>>>> -sha256  f6829f2e629667a5284de62b080b13126a0736499fe47cdb447aedb07a59f13b  x11vnc-0.9.13.tar.gz
->>>>> +sha256  45f87c5e4382988c73e8c7891ac2bfb45d8f9ce1196ae06651c84636684ea143  0.9.14.tar.gz
->>>>
->>>>
->>>> It's ugly to have 0.9.14.tar.gz. Is there a buildroot-style solution to
->>>> this?
-> 
->  Yes, the github helper. If the link contains 'archive', it's for the github
-> helper. If it contains 'releases', it's an uploaded tarball and you should use
-> the expanded URL.
+Hi Chris,
 
-thanks.
+yes, of course. It is part of my to-do list mentioned in the cover letter:
+http://lists.busybox.net/pipermail/buildroot/2017-April/190369.html ;)
 
-> 
-> 
->>> This is just fine, it's not the only package whose tarball name doesn't
->>> include the package name. Look for instance the mpv and yaffs2utils
->>> packages.
->>>
->>>>
->>>> And other than that, is there a reason why x11vnc had not been updated
->>>> before? 0.9.14 is one and a half years old.
->>>
->>> Because nobody did it, probably. Anyway, the 0.9.14 is considered a
->>> bleeding edge development release (according to x11vnc's website) and
->>> even with that, as you said, is one and a half years old. Just
->>> wondering..., shouldn't be better to go with ToT (top of the tree) instead?
->>>
->>> X11VNC_VERSION = e47d922d4a4d980f8dce3e466c73dc4665e4bc01
->>> X11VNC_SITE = $(call github,LibVNC,x11vnc,$(X11VNC_VERSION))
->>>
->>
->> They don't seem to use development branches; While I think it would be
->> fine to use the master branch, just from my personal feeling I'd use the
->> tagged versions. Seems like the project is maintained and 0.9.15 somehow
->> on the horizon sometime sooner or later.
-> 
->  We indeed prefer to stick to officially released versions when upstream has
-> them. And we generally don't like to take releases that upstream considers a
-> development/alpha/... release.
-> 
->  Is there a reason why you need this bump?
-
-Actually, no. There'd be a reason for me to have the next release. I
-just thought to update in order to make it easier for 0.9.15. Let's
-leave it as it is. I'll propose an update to 0.9.15 when released and
-tested.
-
-                          martin
-
-> 
->  Regards,
->  Arnout
-> 
-> 
+Regards, Bernd
