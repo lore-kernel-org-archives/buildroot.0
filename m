@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Apr 2017 10:02:15 +0200
-Subject: [Buildroot] [PATCH] xorriso: disable libcdio
-In-Reply-To: <0a5dac7516bd86eca86510a190385617af60d738.1492891844.git.baruch@tkos.co.il>
-References: <0a5dac7516bd86eca86510a190385617af60d738.1492891844.git.baruch@tkos.co.il>
-Message-ID: <20170426100215.66dfc389@free-electrons.com>
+Date: Wed, 26 Apr 2017 10:03:20 +0200
+Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.14
+In-Reply-To: <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
+References: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
+ <3cc20a82-673d-f87b-e5c6-0acc428cfb1c@ginzinger.com>
+ <9cbb711a-6026-8a69-a6c6-85dc140e2e4c@imgtec.com>
+ <d6771575-8b26-f608-5d57-4d3c573eee36@ginzinger.com>
+ <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
+Message-ID: <20170426100320.00702ce9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +16,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 22 Apr 2017 23:10:44 +0300, Baruch Siach wrote:
-> xorriso and libcdio define identically named symbols. This breaks static
-> linking.
-> 
-> Besides, upstream suggested that on Linux the built-in libburn adapter is much
-> better tested than libcdio.
-> 
-> Disable libcdio.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/430/430a6b548fcc311f20ea71cecaa11fafac1d5a19/
-> http://autobuild.buildroot.net/results/a5d/a5d0f8bec0d39e48f6dfe4ecc07fe0ca3c6bd70a/
-> 
-> Cc: Steve Kenton <skenton@ou.edu>
-> Suggested-by: Thomas Schmitt <scdbackup@gmx.net>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/xorriso/xorriso.mk | 13 ++++---------
->  1 file changed, 4 insertions(+), 9 deletions(-)
+On Mon, 24 Apr 2017 21:47:58 +0200, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+>  Is there a reason why you need this bump?
+
+Well, do we need a reason to bump a package, other than "upstream has a
+new release, possibly with new features/bug fixes" ? Tons of version
+bumps we merged are not motivated by a specific reason, other than
+making sure Buildroot uses recent versions of the different components.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
