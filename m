@@ -1,49 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:20:16 +0200
-Subject: [Buildroot] [git commit] minicom: security bump to version 2.7.1
-Message-ID: <20170426072113.9003580764@busybox.osuosl.org>
+Date: Wed, 26 Apr 2017 09:20:15 +0200
+Subject: [Buildroot] [git commit] busybox: no need to disable clear and reset
+Message-ID: <20170426072113.83BED80648@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=027a0d5b61326da318fb916ff52324b9f238d768
+commit: https://git.buildroot.net/buildroot/commit/?id=200282e2070ec0405184378c3cfb4e04ab26c5d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2017-7467 - minicom and prl-vzvncserver vt100.c escparms[] buffer
-overflow.
+Removing clear and reset from the busybox config when the ncurses tools
+are enabled is not really needed.
 
-For more details about the issue, see the nice writeup on oss-security:
+Since commit 802bff9c42, the busybox install will not overwrite
+existing programs. Therefore, the tools will be installed correctly
+regardless of the order of the build:
+- if busybox is built first, the clear and reset apps are installed,
+  but they will be overwritten by ncurses;
+- if ncurses is built first, it will install the clear and reset apps,
+  and busybox will no longer install them.
 
-http://www.openwall.com/lists/oss-security/2017/04/18/5
+We prefer not to modify the busybox configuration when not strictly
+necessary, because it is surprising for the user that his configuration
+is not applied. Clearly, it's not ideal that busybox is configured with
+redundant apps, but if the user wants to shrink it, it's possible to
+provide a custom config.
 
+This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
+
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Matt Weber  <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minicom/minicom.hash | 2 +-
- package/minicom/minicom.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/busybox.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index 33ba4ef..ca30871 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9ac3a663b82f4f5df64114b4792b9926b536c85f59de0f2d2b321c7626a904f4  minicom-2.7.tar.gz
-+sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index 75cd0c4..cb06482 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 689830e..a536ed2 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -148,17 +148,6 @@ define BUSYBOX_MUSL_TWEAKS
+ endef
+ endif
  
--MINICOM_VERSION = 2.7
--MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/3977
-+MINICOM_VERSION = 2.7.1
-+MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/4215
- MINICOM_LICENSE = GPL-2.0+
- MINICOM_LICENSE_FILES = COPYING
+-ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
+-# Ncurses package overlaps:
+-#     /usr/bin/clear
+-#     /usr/bin/reset -> /usr/bin/tset (symlink)
+-#
+-define BUSYBOX_DISABLE_NCURSES_PROGS
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+@@ -240,7 +229,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
+ 	$(BUSYBOX_MUSL_TWEAKS)
+-	$(BUSYBOX_DISABLE_NCURSES_PROGS)
+ endef
  
+ define BUSYBOX_CONFIGURE_CMDS
