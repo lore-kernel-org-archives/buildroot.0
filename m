@@ -1,33 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:09:28 +0200
-Subject: [Buildroot] docker-engine: project rename to moby
-In-Reply-To: <CA+h8R2p-m7ZpxetdLYU+Gnr7uB2YL7KqU3Z-M0-CpX=mWm=7VA@mail.gmail.com>
- (Christian Stewart's message of "Fri, 21 Apr 2017 16:17:13 -0400")
-References: <CA+h8R2p-m7ZpxetdLYU+Gnr7uB2YL7KqU3Z-M0-CpX=mWm=7VA@mail.gmail.com>
-Message-ID: <8737cvprvb.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Apr 2017 09:10:30 +0200
+Subject: [Buildroot] [PATCH] busybox: no need to disable clear and reset
+In-Reply-To: <20170424201323.30582-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Mon, 24 Apr 2017 22:13:23 +0200")
+References: <20170424201323.30582-1-arnout@mind.be>
+Message-ID: <87y3unod95.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Hi,
+ > Removing clear and reset from the busybox config when the ncurses tools
+ > are enabled is not really needed.
 
- > What does this mean for Docker in buildroot? Well, I can't even find a
- > repository link for "docker-ce" on the website, only links to
- > "download Docker from the Docker Store," which is really concerning to
- > say the least. It seems the entire Docker project still exists in the
- > Moby repo, and they are proceeding in development on the same codebase
- > there (working on a v17.05.0-ce-rc1 release at the moment). For now, I
- > don't think we should or can change anything. We may need to re-name
- > "docker-engine" in the future or add a "moby" package.
+ > Since commit 802bff9c42, the busybox install will not overwrite
+ > existing programs. Therefore, the tools will be installed correctly
+ > regardless of the order of the build:
+ > - if busybox is built first, the clear and reset apps are installed,
+ >   but they will be overwritten by ncurses;
+ > - if ncurses is built first, it will install the clear and reset apps,
+ >   and busybox will no longer install them.
 
- > I'll keep an eye on how things progress.
+ > We prefer not to modify the busybox configuration when not strictly
+ > necessary, because it is surprising for the user that his configuration
+ > is not applied. Clearly, it's not ideal that busybox is configured with
+ > redundant apps, but if the user wants to shrink it, it's possible to
+ > provide a custom config.
 
-Thanks for the heads up! I also saw the announcement and it is indeed
-all quite confusing.
+ > This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
+
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Cc: Danomi Manchego <danomimanchego123@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks!
 
 -- 
 Bye, Peter Korsgaard
