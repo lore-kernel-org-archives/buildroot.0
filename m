@@ -1,154 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:20:16 +0200
-Subject: [Buildroot] [git commit] libcroco: add upstream security fixes
-Message-ID: <20170426072113.A9B6D80648@busybox.osuosl.org>
+Date: Wed, 26 Apr 2017 09:01:30 +0200
+Subject: [Buildroot] [git commit] sg3_utils: improve license description
+Message-ID: <20170426072113.252A5801E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52bfb4b1ce25d870f9bab72d285f326ec7d0ad77
+commit: https://git.buildroot.net/buildroot/commit/?id=29f261beef6a81040d5b0f51b2b3ee82440488d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These have been added to upstream git after 0.6.12 was released.
+Library is licensed under BSD-3-Clause. Some programs are licensed
+under GPL-2.0+ while other are BSD-3-Clause. Annotate licenses with
+components and improve readability of license strings when
+conditionally specifying license for programs using := instead of +=.
 
-CVE-2017-7960 - The cr_input_new_from_uri function in cr-input.c in libcroco
-0.6.11 and 0.6.12 allows remote attackers to cause a denial of service
-(heap-based buffer over-read) via a crafted CSS file.
-
-CVE-2017-7961 - The cr_tknzr_parse_rgb function in cr-tknzr.c in libcroco
-0.6.11 and 0.6.12 has an "outside the range of representable values of type
-long" undefined behavior issue, which might allow remote attackers to cause
-a denial of service (application crash) or possibly have unspecified other
-impact via a crafted CSS file.
-
-For more details, see:
-https://blogs.gentoo.org/ago/2017/04/17/libcroco-heap-overflow-and-undefined-behavior/
-
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-check-end-of-input-before-reading-a-byte.patch | 62 ++++++++++++++++++++++
- ...02-tknzr-support-only-max-long-rgb-values.patch | 46 ++++++++++++++++
- 2 files changed, 108 insertions(+)
+ package/sg3_utils/sg3_utils.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcroco/0001-input-check-end-of-input-before-reading-a-byte.patch b/package/libcroco/0001-input-check-end-of-input-before-reading-a-byte.patch
-new file mode 100644
-index 0000000..831b1a7
---- /dev/null
-+++ b/package/libcroco/0001-input-check-end-of-input-before-reading-a-byte.patch
-@@ -0,0 +1,62 @@
-+From 898e3a8c8c0314d2e6b106809a8e3e93cf9d4394 Mon Sep 17 00:00:00 2001
-+From: Ignacio Casal Quinteiro <qignacio@amazon.com>
-+Date: Sun, 16 Apr 2017 13:13:43 +0200
-+Subject: [PATCH] input: check end of input before reading a byte
-+
-+Fixes CVE-2017-7960
-+
-+When reading bytes we weren't check that the index wasn't
-+out of bound and this could produce an invalid read which
-+could deal to a security bug.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/cr-input.c | 11 +++++++++--
-+ 1 file changed, 9 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/cr-input.c b/src/cr-input.c
-+index 49000b1..3b63a88 100644
-+--- a/src/cr-input.c
-++++ b/src/cr-input.c
-+@@ -256,7 +256,7 @@ cr_input_new_from_uri (const gchar * a_file_uri, enum CREncoding a_enc)
-+                  *we should  free buf here because it's own by CRInput.
-+                  *(see the last parameter of cr_input_new_from_buf().
-+                  */
-+-                buf = NULL ;
-++                buf = NULL;
-+         }
-+ 
-+  cleanup:
-+@@ -404,6 +404,8 @@ cr_input_get_nb_bytes_left (CRInput const * a_this)
-+ enum CRStatus
-+ cr_input_read_byte (CRInput * a_this, guchar * a_byte)
-+ {
-++        gulong nb_bytes_left = 0;
-++
-+         g_return_val_if_fail (a_this && PRIVATE (a_this)
-+                               && a_byte, CR_BAD_PARAM_ERROR);
-+ 
-+@@ -413,6 +415,12 @@ cr_input_read_byte (CRInput * a_this, guchar * a_byte)
-+         if (PRIVATE (a_this)->end_of_input == TRUE)
-+                 return CR_END_OF_INPUT_ERROR;
-+ 
-++        nb_bytes_left = cr_input_get_nb_bytes_left (a_this);
-++
-++        if (nb_bytes_left < 1) {
-++                return CR_END_OF_INPUT_ERROR;
-++        }
-++
-+         *a_byte = PRIVATE (a_this)->in_buf[PRIVATE (a_this)->next_byte_index];
-+ 
-+         if (PRIVATE (a_this)->nb_bytes -
-+@@ -477,7 +485,6 @@ cr_input_read_char (CRInput * a_this, guint32 * a_char)
-+                 if (*a_char == '\n') {
-+                         PRIVATE (a_this)->end_of_line = TRUE;
-+                 }
-+-
-+         }
-+ 
-+         return status;
-+-- 
-+2.11.0
-+
-diff --git a/package/libcroco/0002-tknzr-support-only-max-long-rgb-values.patch b/package/libcroco/0002-tknzr-support-only-max-long-rgb-values.patch
-new file mode 100644
-index 0000000..1a9bcd9
---- /dev/null
-+++ b/package/libcroco/0002-tknzr-support-only-max-long-rgb-values.patch
-@@ -0,0 +1,46 @@
-+From 9ad72875e9f08e4c519ef63d44cdbd94aa9504f7 Mon Sep 17 00:00:00 2001
-+From: Ignacio Casal Quinteiro <qignacio@amazon.com>
-+Date: Sun, 16 Apr 2017 13:56:09 +0200
-+Subject: [PATCH] tknzr: support only max long rgb values
-+
-+Fixes CVE-2017-7961
-+
-+This fixes a possible out of bound when reading rgbs which
-+are longer than the support MAXLONG
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/cr-tknzr.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/src/cr-tknzr.c b/src/cr-tknzr.c
-+index 1a7cfeb..1548c35 100644
-+--- a/src/cr-tknzr.c
-++++ b/src/cr-tknzr.c
-+@@ -1279,6 +1279,11 @@ cr_tknzr_parse_rgb (CRTknzr * a_this, CRRgb ** a_rgb)
-+         status = cr_tknzr_parse_num (a_this, &num);
-+         ENSURE_PARSING_COND ((status == CR_OK) && (num != NULL));
-+ 
-++        if (num->val > G_MAXLONG) {
-++                status = CR_PARSING_ERROR;
-++                goto error;
-++        }
-++
-+         red = num->val;
-+         cr_num_destroy (num);
-+         num = NULL;
-+@@ -1298,6 +1303,11 @@ cr_tknzr_parse_rgb (CRTknzr * a_this, CRRgb ** a_rgb)
-+                 status = cr_tknzr_parse_num (a_this, &num);
-+                 ENSURE_PARSING_COND ((status == CR_OK) && (num != NULL));
-+ 
-++                if (num->val > G_MAXLONG) {
-++                        status = CR_PARSING_ERROR;
-++                        goto error;
-++                }
-++
-+                 PEEK_BYTE (a_this, 1, &next_bytes[0]);
-+                 if (next_bytes[0] == '%') {
-+                         SKIP_CHARS (a_this, 1);
-+-- 
-+2.11.0
-+
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index f010b3e..88827f3 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -7,10 +7,10 @@
+ SG3_UTILS_VERSION = 1.42
+ SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
+ SG3_UTILS_SITE = http://sg.danny.cz/sg/p
+-SG3_UTILS_LICENSE = BSD-3-Clause
+-# utils progs are GPL-2.0+ licenced
++SG3_UTILS_LICENSE = BSD-3-Clause (library)
++# Some utils progs are GPL-2.0+ licensed while others are BSD-3-Clause
+ ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),y)
+-SG3_UTILS_LICENSE += GPL-2.0+
++SG3_UTILS_LICENSE := $(SG3_UTILS_LICENSE), GPL-2.0+ (programs), BSD-3-Clause (programs)
+ endif
+ SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
+ 
