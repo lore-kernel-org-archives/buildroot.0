@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 26 Apr 2017 09:20:15 +0200
-Subject: [Buildroot] [git commit] package/acsccid: bump version to 1.1.4
-Message-ID: <20170426072113.542DF8280F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/acpica: bump version to 20170303
+Message-ID: <20170426072113.436B68280F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff75225568eea04a92e8cf5173be59635dc3e3dd
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe176da86912220402c8fb47db3e3c9c780d98a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acsccid/acsccid.hash | 6 +++---
- package/acsccid/acsccid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/acpica/acpica.hash | 2 +-
+ package/acpica/acpica.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/acsccid/acsccid.hash b/package/acsccid/acsccid.hash
-index 1bfe9e4..24d2fa7 100644
---- a/package/acsccid/acsccid.hash
-+++ b/package/acsccid/acsccid.hash
-@@ -1,3 +1,3 @@
--# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.1/
--sha1 ae340256bbba36032a903c9f89883297a31ca340 acsccid-1.1.1.tar.bz2
--md5 26dc34141188e64fa2b3545032060357 acsccid-1.1.1.tar.bz2
-+# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.4/
-+sha1 8c0b42ff79032289731916d18a2698b258dfd6a2 acsccid-1.1.4.tar.bz2
-+md5 ac77b3aeae0a11723c96c7f98769490e acsccid-1.1.4.tar.bz2
-diff --git a/package/acsccid/acsccid.mk b/package/acsccid/acsccid.mk
-index 2fd2033..06a0418 100644
---- a/package/acsccid/acsccid.mk
-+++ b/package/acsccid/acsccid.mk
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index 71c110b..d69279e 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 dfb33db5599bd48134dbd6e50c8804099be0cf1c35d98975a6cb84dabca78b67 acpica-unix2-20161117.tar.gz
++sha256 b2d81e84107ac9a02be86ea43cbea7afa8fd4b4150270bc88c2d4c9fea0b8aad acpica-unix2-20170303.tar.gz
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index ebfa4b6..37e4941 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ACSCCID_VERSION = 1.1.1
-+ACSCCID_VERSION = 1.1.4
- ACSCCID_SOURCE = acsccid-$(ACSCCID_VERSION).tar.bz2
- ACSCCID_SITE = http://downloads.sourceforge.net/acsccid
- ACSCCID_LICENSE = LGPL-2.1+
+-ACPICA_VERSION = 20161117
++ACPICA_VERSION = 20170303
+ ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
