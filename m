@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:11:00 +0200
-Subject: [Buildroot] [PATCH] minicom: security bump to version 2.7.1
-In-Reply-To: <20170425114434.1728-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 25 Apr 2017 13:44:34 +0200")
-References: <20170425114434.1728-1-peter@korsgaard.com>
-Message-ID: <87tw5bod8b.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Apr 2017 09:11:10 +0200
+Subject: [Buildroot] [PATCH] python-web2py: security bump to version
+	2.14.6
+In-Reply-To: <20170425134423.3313-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 25 Apr 2017 15:44:23 +0200")
+References: <20170425134423.3313-1-peter@korsgaard.com>
+Message-ID: <87pofzod81.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2017-7467 - minicom and prl-vzvncserver vt100.c escparms[] buffer
- > overflow.
+ > CVE-2016-4806 - Web2py versions 2.14.5 and below was affected by Local File
+ > Inclusion vulnerability, which allows a malicious intended user to
+ > read/access web server sensitive files.
 
- > For more details about the issue, see the nice writeup on oss-security:
+ > CVE-2016-4807 - Web2py versions 2.14.5 and below was affected by Reflected
+ > XSS vulnerability, which allows an attacker to perform an XSS attack on
+ > logged in user (admin).
 
- > http://www.openwall.com/lists/oss-security/2017/04/18/5
+ > CVE-2016-4808 - Web2py versions 2.14.5 and below was affected by CSRF (Cross
+ > Site Request Forgery) vulnerability, which allows an attacker to trick a
+ > logged in user to perform some unwanted actions i.e An attacker can trick an
+ > victim to disable the installed application just by sending a URL to victim.
+
+ > CVE-2016-10321 - web2py before 2.14.6 does not properly check if a host is
+ > denied before verifying passwords, allowing a remote attacker to perform
+ > brute-force attacks.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
