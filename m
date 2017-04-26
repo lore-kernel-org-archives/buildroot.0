@@ -1,100 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:20:17 +0200
-Subject: [Buildroot] [git commit] uclibc: update to 1.0.24
-Message-ID: <20170426072113.EFE0D801E6@busybox.osuosl.org>
+Date: Wed, 26 Apr 2017 09:20:16 +0200
+Subject: [Buildroot] [git commit] package/xenomai: fallback to http
+Message-ID: <20170426072113.CD89580648@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=002d9ed3541caf4dd7087f97166d79d4e6988b49
+commit: https://git.buildroot.net/buildroot/commit/?id=2af19b0143ab0b4412304b27e488fd084dd3de25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes aarch64 C++ issue. Removes old implementations for fnmatch/regex.
-Allow long double wrappers for all architectures.
+The https protocol return:
+"ERROR 503: Service Temporarily Unavailable"
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes:
+http://autobuild.buildroot.net/results/120/12034603c46c8bd69590c88bbfe85261460b699c
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...l.h-fix-a-missing-struct-timespec-definit.patch | 34 ----------------------
- package/uclibc/uClibc-ng.config                    |  2 --
- package/uclibc/uclibc.hash                         |  4 +--
- package/uclibc/uclibc.mk                           |  2 +-
- 4 files changed, 3 insertions(+), 39 deletions(-)
+ package/xenomai/xenomai.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0001-Revert-fcntl.h-fix-a-missing-struct-timespec-definit.patch b/package/uclibc/0001-Revert-fcntl.h-fix-a-missing-struct-timespec-definit.patch
-deleted file mode 100644
-index f481b8f..0000000
---- a/package/uclibc/0001-Revert-fcntl.h-fix-a-missing-struct-timespec-definit.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 6d7cc87cb64dc8df20b0d1c7b3e3566f9ec5a3dc Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 4 Apr 2017 21:26:41 +0200
--Subject: [PATCH] Revert "fcntl.h: fix a missing `struct timespec` definition"
--
--This reverts commit 657c4a9d6c2e649d86307f46ce9d5e44192f6e7a, it breaks
--many packages in Buildroot:
--
--  http://autobuild.buildroot.net/results/fcd024f6658890861fd7165e15edc65f77a9d8e7/
--  http://autobuild.buildroot.net/results/431135d9f985f3b3f935cc29fe16728b2412dd3a/
--  etc.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/fcntl.h | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/include/fcntl.h b/include/fcntl.h
--index 5a73a98..adcd7ef 100644
----- a/include/fcntl.h
--+++ b/include/fcntl.h
--@@ -34,9 +34,6 @@ __BEGIN_DECLS
-- 
-- /* For XPG all symbols from <sys/stat.h> should also be available.  */
-- #ifdef __USE_XOPEN
---# ifdef __USE_XOPEN2K8
---#  define __need_timespec
---# endif
-- # include <sys/stat.h>
-- #endif
-- 
---- 
--2.7.4
--
-diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
-index 528bce9..6780ad6 100644
---- a/package/uclibc/uClibc-ng.config
-+++ b/package/uclibc/uClibc-ng.config
-@@ -30,8 +30,6 @@ UCLIBC_HAS_STDIO_PUTC_MACRO=y
- UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
- UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
- UCLIBC_HAS_PRINTF_M_SPEC=y
--# UCLIBC_HAS_REGEX_OLD is not set
--# UCLIBC_HAS_FNMATCH_OLD is not set
- UCLIBC_HAS_NFTW=y
- UCLIBC_HAS_FTW=y
- UCLIBC_HAS_GNU_GLOB=y
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index f5c49de..050a8eb 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,2 +1,2 @@
--# From http://www.uclibc-ng.org/
--sha256  a76ee9a69bce031d14cae22ce34527a856f724f888a6641bf53e6f07c6345c70        uClibc-ng-1.0.23.tar.xz
-+# From https://uclibc-ng.org/
-+sha256  b5bf5bea5d836b0a0724d94f2211b279df3f5bda18a95e02c728cbf4bd33e939        uClibc-ng-1.0.24.tar.xz
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 45bb6de..f47b3ec 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 4844fff..c1477d9 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -11,7 +11,7 @@ else
+ BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+ endif
  
--UCLIBC_VERSION = 1.0.23
-+UCLIBC_VERSION = 1.0.24
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+-XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stable
++XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
+ XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+ XENOMAI_LICENSE = GPL-2.0+ with exception (headers), LGPL-2.1+ (libraries), GPL-2.0+ (kernel), GFDL-1.2+ (docs), GPL-2.0 (ipipe patch, can driver)
+ # GFDL is not included but refers to gnu.org
