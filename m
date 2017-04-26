@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:20:15 +0200
-Subject: [Buildroot] [git commit] package/ccid: bump version to 1.4.26
-Message-ID: <20170426072113.633A680648@busybox.osuosl.org>
+Date: Wed, 26 Apr 2017 09:20:16 +0200
+Subject: [Buildroot] [git commit] minicom: security bump to version 2.7.1
+Message-ID: <20170426072113.9003580764@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9f19462fb06674e1c6bbb20e454b975684dd3a0
+commit: https://git.buildroot.net/buildroot/commit/?id=027a0d5b61326da318fb916ff52324b9f238d768
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changed _SITE according to
-http://lists.alioth.debian.org/pipermail/pcsclite-muscle/Week-of-Mon-20170102/000780.html
+Fixes CVE-2017-7467 - minicom and prl-vzvncserver vt100.c escparms[] buffer
+overflow.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+For more details about the issue, see the nice writeup on oss-security:
+
+http://www.openwall.com/lists/oss-security/2017/04/18/5
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ccid/ccid.hash | 5 +++--
- package/ccid/ccid.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/minicom/minicom.hash | 2 +-
+ package/minicom/minicom.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ccid/ccid.hash b/package/ccid/ccid.hash
-index a0e91da..3e1e962 100644
---- a/package/ccid/ccid.hash
-+++ b/package/ccid/ccid.hash
-@@ -1,2 +1,3 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ccid/ccid_1.4.18-1.dsc
--sha256	5fdba97a2d2eb1c652b7dd4aa0bb8cee4814bab0cf61aecb84b32b57272541aa	ccid_1.4.18.orig.tar.bz2
-+# From http://cdn-fastly.deb.debian.org/debian/pool/main/c/ccid/ccid_1.4.26-1.dsc
-+sha1 20e22c23b8458548a6b572b044e5dbe4ecdc42e5  ccid_1.4.26.tar.bz2
-+sha256 3267bf708ab780c02f01f6241b7c7277cb892d30fd1179a9926a8cc0ca40be2f  ccid_1.4.26.tar.bz2
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index cfe6d39..7fbf025 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index 33ba4ef..ca30871 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 9ac3a663b82f4f5df64114b4792b9926b536c85f59de0f2d2b321c7626a904f4  minicom-2.7.tar.gz
++sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index 75cd0c4..cb06482 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CCID_VERSION = 1.4.18
--CCID_SOURCE = ccid_$(CCID_VERSION).orig.tar.bz2
--CCID_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ccid
-+CCID_VERSION = 1.4.26
-+CCID_SOURCE = ccid_$(CCID_VERSION).tar.bz2
-+CCID_SITE = https://alioth.debian.org/frs/download.php/file/4205
- CCID_LICENSE = LGPL-2.1+
- CCID_LICENSE_FILES = COPYING
- CCID_INSTALL_STAGING = YES
+-MINICOM_VERSION = 2.7
+-MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/3977
++MINICOM_VERSION = 2.7.1
++MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/4215
+ MINICOM_LICENSE = GPL-2.0+
+ MINICOM_LICENSE_FILES = COPYING
+ 
