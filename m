@@ -1,34 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Apr 2017 10:03:20 +0200
-Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.14
-In-Reply-To: <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
-References: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
- <3cc20a82-673d-f87b-e5c6-0acc428cfb1c@ginzinger.com>
- <9cbb711a-6026-8a69-a6c6-85dc140e2e4c@imgtec.com>
- <d6771575-8b26-f608-5d57-4d3c573eee36@ginzinger.com>
- <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
-Message-ID: <20170426100320.00702ce9@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 26 Apr 2017 09:01:34 +0000
+Subject: [Buildroot] [Bug 9836] New: triggerhappy: systemd unit broken
+Message-ID: <bug-9836-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9836
 
-On Mon, 24 Apr 2017 21:47:58 +0200, Arnout Vandecappelle wrote:
+            Bug ID: 9836
+           Summary: triggerhappy: systemd unit broken
+           Product: buildroot
+           Version: 2017.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: posted at heine.so
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
->  Is there a reason why you need this bump?
+I'm using triggerhappy in combination with systemd and a bash based system (no
+busybox).
 
-Well, do we need a reason to bump a package, other than "upstream has a
-new release, possibly with new features/bug fixes" ? Tons of version
-bumps we merged are not motivated by a specific reason, other than
-making sure Buildroot uses recent versions of the different components.
 
-Best regards,
+The systemd unit fails with this error message:
 
-Thomas
+"Error opening '/dev/input/event*': No such file or directory"
+
+
+The systemd unit has the start command defined as follows:
+
+ExecStart=/usr/sbin/thd --triggers /etc/triggerhappy/triggers.d --socket
+/var/run/thd.socket --user nobody /dev/input/event*
+
+
+If you run the command directly from bash it is working, I guess because bash
+is already expanding the wildcard.
+
+
+thd started supporting Wildcards in Version 0.5.0. with the option
+"--deviceglob" [1]
+
+before it proposed a wrapper script for the systemd unit added in this commit:
+[2]
+
+I don't know if the unit currently supplied with buildroot ever worked, but not
+with the thd version currently used.
+
+Since 0.5.0 the systemd unit should be like this: [3]
+
+
+So I could supply a patch but I'm not sure what is preferable. Fix the systemd
+unit supplied with the current version included in buildroot 2017.02.1. Or bump
+the version and provide the new style unit?
+
+Regards,
+Michael
+
+[1]https://github.com/wertarbyte/triggerhappy/commit/c9b6556bd45529eebfabcad3b843beb185aca5fc
+[2]https://github.com/wertarbyte/triggerhappy/commit/47a9e4e842676c48d056aefe623af1d29a9b0e5e
+[3]https://github.com/wertarbyte/triggerhappy/commit/06720d2305bedc7fcef8b18919f5c73a73164f85
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
