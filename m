@@ -1,39 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 25 Apr 2017 23:32:02 +0200
-Subject: [Buildroot] [PATCH] package/bullet: bump to version 2.86.1
-Message-ID: <20170425213202.5399-1-romain.naour@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Apr 2017 06:38:12 +0300
+Subject: [Buildroot] [PATCH 9/9] package/python-ipython: Add dependecy
+ list
+In-Reply-To: <20170425191423.13294-10-andrew.smirnov@gmail.com>
+References: <20170425191423.13294-1-andrew.smirnov@gmail.com>
+ <20170425191423.13294-10-andrew.smirnov@gmail.com>
+Message-ID: <20170426033812.mzyxtmigeaz7m5zz@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/bullet/bullet.hash | 2 +-
- package/bullet/bullet.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Andrey,
 
-diff --git a/package/bullet/bullet.hash b/package/bullet/bullet.hash
-index cccc425..c6a45c2 100644
---- a/package/bullet/bullet.hash
-+++ b/package/bullet/bullet.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 6e157c0b50373bc0e860de27f06397827bb28a4205bc568ae79d76a0f919ed62  bullet-2.85.1.tar.gz
-+sha256 c058b2e4321ba6adaa656976c1a138c07b18fc03b29f5b82880d5d8228fbf059  bullet-2.86.1.tar.gz
-diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
-index 920ea87..3e8fae3 100644
---- a/package/bullet/bullet.mk
-+++ b/package/bullet/bullet.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BULLET_VERSION = 2.85.1
-+BULLET_VERSION = 2.86.1
- BULLET_SITE = $(call github,bulletphysics,bullet3,$(BULLET_VERSION))
- BULLET_INSTALL_STAGING = YES
- BULLET_LICENSE = Zlib
+On Tue, Apr 25, 2017 at 12:14:23PM -0700, Andrey Smirnov wrote:
+> List minimal set of packages needed to be installed alongside to be able
+> to run IPython with Python 3 (not tested on Python 2)
+
+[...]
+
+> diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+> index e57d69d..f627846 100644
+> --- a/package/python-ipython/python-ipython.mk
+> +++ b/package/python-ipython/python-ipython.mk
+> @@ -10,5 +10,19 @@ PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/6e/cf/c2a3ca5942e2d808457
+>  PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+>  PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
+>  PYTHON_IPYTHON_SETUP_TYPE = distutils
+> +PYTHON_IPYTHON_DEPENDS = 	\
+> +	python-traitlets 	\
+> +	python-six 		\
+> +	python-ipython-genutils \
+> +	python-pygments		\
+> +	python-pexpect		\
+> +	python-ptyprocess	\
+> +	python-pickleshare	\
+> +	python-prompt-toolkit	\
+> +	python-simplegeneric
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> +PYTHON_IPYTHON_DEPENDS += python-backports-shutil-get-terminal-size
+> +endif
+
+Are these run-time only dependencies? If so there is no need to list them in 
+<PKG>_DEPENDS, since they are not needed at build time.
+
+baruch
+
 -- 
-2.9.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
