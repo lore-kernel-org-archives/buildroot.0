@@ -1,62 +1,212 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 26 Apr 2017 14:43:11 +0200
-Subject: [Buildroot] [PATCH 1/1] setlocalversion: fix detection of hg
-	revision for untagged versions
-Message-ID: <20170426124311.11449-1-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Apr 2017 14:57:13 +0200
+Subject: [Buildroot] [PATCH] icu: add upstream security fix for utf-8
+	handling
+Message-ID: <20170426125713.6427-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Fixes:
 
-By default, cut prints the entire line if the specified delimiter is not
-present at all:
+CVE-2017-7867 - International Components for Unicode (ICU) for C/C++ before
+2017-02-13 has an out-of-bounds write caused by a heap-based buffer overflow
+related to the utf8TextAccess function in common/utext.cpp and the
+utext_setNativeIndex* function.
 
-    $ printf "foo bar" | cut -d' ' -f2
-    bar
-    $ printf "foobar" | cut -d' ' -f2
-    foobar
+CVE-2017-7868 - International Components for Unicode (ICU) for C/C++ before
+2017-02-13 has an out-of-bounds write caused by a heap-based buffer overflow
+related to the utf8TextAccess function in common/utext.cpp and the
+utext_moveIndex32* function.
 
-In setlocalversion, cut is presented with the output of 'hg id' which has
-the format:
+Upstream: http://bugs.icu-project.org/trac/changeset/39671
 
-    "<revision> <tags-if-any>"
-
-If the current revision is not tagged, the output of 'hg id' does not
-contain the delimiter (space), cut prints the entire string, and
-setlocalversion thinks the version is the tag.
-As setlocalversion does not print anything for tagged versions, there is no
-output overall, and no correct indication of the mercurial revision.
-
-Fix by passing the extra cut option '--only-delimited', which suppresses
-output if no delimiter is found.
-
-This problem likely went unnoticed for so long, because the tag 'tip' (i.e.
-most recent revision of the branch) is treated specially: in this case the
-mercurial revision _is_ printed, i.e. the situation is treated as
-'untagged'.
-The problem is only seen when you are _not_ at the most recent revision in
-your branch.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/setlocalversion | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...-utext-problems-with-handling-of-bad-utf8.patch | 173 +++++++++++++++++++++
+ 1 file changed, 173 insertions(+)
+ create mode 100644 package/icu/0006-utext-problems-with-handling-of-bad-utf8.patch
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index adeeb78..33cd605 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -54,7 +54,7 @@ fi
- 
- # Check for mercurial and a mercurial repo.
- if hgid=`hg id 2>/dev/null`; then
--	tag=`printf '%s' "$hgid" | cut -d' ' -f2`
-+	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
- 
- 	# Do we have an untagged version?
- 	if [ -z "$tag" -o "$tag" = tip ]; then
+diff --git a/package/icu/0006-utext-problems-with-handling-of-bad-utf8.patch b/package/icu/0006-utext-problems-with-handling-of-bad-utf8.patch
+new file mode 100644
+index 000000000..a4e51aef0
+--- /dev/null
++++ b/package/icu/0006-utext-problems-with-handling-of-bad-utf8.patch
+@@ -0,0 +1,173 @@
++ticket:12888 UText, problems with handling of bad UTF-8
++
++Fixes:
++
++CVE-2017-7867 - International Components for Unicode (ICU) for C/C++ before
++2017-02-13 has an out-of-bounds write caused by a heap-based buffer overflow
++related to the utf8TextAccess function in common/utext.cpp and the
++utext_setNativeIndex* function.
++
++CVE-2017-7868 - International Components for Unicode (ICU) for C/C++ before
++2017-02-13 has an out-of-bounds write caused by a heap-based buffer overflow
++related to the utf8TextAccess function in common/utext.cpp and the
++utext_moveIndex32* function.
++
++Upstream: http://bugs.icu-project.org/trac/changeset/39671
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++
++Index: /trunk/icu4c/source/common/utext.cpp
++===================================================================
++--- icu4c/source/common/utext.cpp	(revision 39670)
+++++ icu4c/source/common/utext.cpp	(revision 39671)
++@@ -848,7 +848,13 @@
++ 
++ // Chunk size.
++-//     Must be less than 85, because of byte mapping from UChar indexes to native indexes.
++-//     Worst case is three native bytes to one UChar.  (Supplemenaries are 4 native bytes
++-//     to two UChars.)
+++//     Must be less than 42  (256/6), because of byte mapping from UChar indexes to native indexes.
+++//     Worst case there are six UTF-8 bytes per UChar.
+++//         obsolete 6 byte form fd + 5 trails maps to fffd
+++//         obsolete 5 byte form fc + 4 trails maps to fffd
+++//         non-shortest 4 byte forms maps to fffd
+++//         normal supplementaries map to a pair of utf-16, two utf8 bytes per utf-16 unit
+++//     mapToUChars array size must allow for the worst case, 6.
+++//     This could be brought down to 4, by treating fd and fc as pure illegal,
+++//     rather than obsolete lead bytes. But that is not compatible with the utf-8 access macros.
++ //
++ enum { UTF8_TEXT_CHUNK_SIZE=32 };
++@@ -890,5 +896,5 @@
++                                                      //    one for a supplementary starting in the last normal position,
++                                                      //    and one for an entry for the buffer limit position.
++-    uint8_t   mapToUChars[UTF8_TEXT_CHUNK_SIZE*3+6]; // Map native offset from bufNativeStart to
+++    uint8_t   mapToUChars[UTF8_TEXT_CHUNK_SIZE*6+6]; // Map native offset from bufNativeStart to
++                                                      //   correspoding offset in filled part of buf.
++     int32_t   align;
++@@ -1033,4 +1039,5 @@
++             u8b = (UTF8Buf *)ut->p;   // the current buffer
++             mapIndex = ix - u8b->toUCharsMapStart;
+++            U_ASSERT(mapIndex < (int32_t)sizeof(UTF8Buf::mapToUChars));
++             ut->chunkOffset = u8b->mapToUChars[mapIndex] - u8b->bufStartIdx;
++             return TRUE;
++@@ -1299,4 +1306,8 @@
++         //   If index is at the end, there is no character there to look at.
++         if (ix != ut->b) {
+++            // Note: this function will only move the index back if it is on a trail byte
+++            //       and there is a preceding lead byte and the sequence from the lead 
+++            //       through this trail could be part of a valid UTF-8 sequence
+++            //       Otherwise the index remains unchanged.
++             U8_SET_CP_START(s8, 0, ix);
++         }
++@@ -1312,5 +1323,8 @@
++         uint8_t *mapToNative = u8b->mapToNative;
++         uint8_t *mapToUChars = u8b->mapToUChars;
++-        int32_t  toUCharsMapStart = ix - (UTF8_TEXT_CHUNK_SIZE*3 + 1);
+++        int32_t  toUCharsMapStart = ix - sizeof(UTF8Buf::mapToUChars) + 1;
+++        // Note that toUCharsMapStart can be negative. Happens when the remaining
+++        // text from current position to the beginning is less than the buffer size.
+++        // + 1 because mapToUChars must have a slot at the end for the bufNativeLimit entry.
++         int32_t  destIx = UTF8_TEXT_CHUNK_SIZE+2;   // Start in the overflow region
++                                                     //   at end of buffer to leave room
++@@ -1339,4 +1353,5 @@
++                 // Special case ASCII range for speed.
++                 buf[destIx] = (UChar)c;
+++                U_ASSERT(toUCharsMapStart <= srcIx);
++                 mapToUChars[srcIx - toUCharsMapStart] = (uint8_t)destIx;
++                 mapToNative[destIx] = (uint8_t)(srcIx - toUCharsMapStart);
++@@ -1368,4 +1383,5 @@
++                     mapToUChars[sIx-- - toUCharsMapStart] = (uint8_t)destIx;
++                 } while (sIx >= srcIx);
+++                U_ASSERT(toUCharsMapStart <= (srcIx+1));
++ 
++                 // Set native indexing limit to be the current position.
++@@ -1542,4 +1558,5 @@
++     U_ASSERT(index<=ut->chunkNativeLimit);
++     int32_t mapIndex = index - u8b->toUCharsMapStart;
+++    U_ASSERT(mapIndex < (int32_t)sizeof(UTF8Buf::mapToUChars));
++     int32_t offset = u8b->mapToUChars[mapIndex] - u8b->bufStartIdx;
++     U_ASSERT(offset>=0 && offset<=ut->chunkLength);
++Index: /trunk/icu4c/source/test/intltest/utxttest.cpp
++===================================================================
++--- icu4c/source/test/intltest/utxttest.cpp	(revision 39670)
+++++ icu4c/source/test/intltest/utxttest.cpp	(revision 39671)
++@@ -68,4 +68,6 @@
++         case 7: name = "Ticket12130";
++             if (exec) Ticket12130(); break;
+++        case 8: name = "Ticket12888";
+++            if (exec) Ticket12888(); break;
++         default: name = "";          break;
++     }
++@@ -1584,2 +1586,62 @@
++     utext_close(&ut);
++ }
+++
+++// Ticket 12888: bad handling of illegal utf-8 containing many instances of the archaic, now illegal,
+++//               six byte utf-8 forms. Original implementation had an assumption that
+++//               there would be at most three utf-8 bytes per UTF-16 code unit.
+++//               The five and six byte sequences map to a single replacement character.
+++
+++void UTextTest::Ticket12888() {
+++    const char *badString = 
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80"
+++            "\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80\xfd\x80\x80\x80\x80\x80";
+++
+++    UErrorCode status = U_ZERO_ERROR;
+++    LocalUTextPointer ut(utext_openUTF8(NULL, badString, -1, &status));
+++    TEST_SUCCESS(status);
+++    for (;;) {
+++        UChar32 c = utext_next32(ut.getAlias());
+++        if (c == U_SENTINEL) {
+++            break;
+++        }
+++    }
+++    int32_t endIdx = utext_getNativeIndex(ut.getAlias());
+++    if (endIdx != (int32_t)strlen(badString)) {
+++        errln("%s:%d expected=%d, actual=%d", __FILE__, __LINE__, strlen(badString), endIdx);
+++        return;
+++    }
+++
+++    for (int32_t prevIndex = endIdx; prevIndex>0;) {
+++        UChar32 c = utext_previous32(ut.getAlias());
+++        int32_t currentIndex = utext_getNativeIndex(ut.getAlias());
+++        if (c != 0xfffd) {
+++            errln("%s:%d (expected, actual, index) = (%d, %d, %d)\n",
+++                    __FILE__, __LINE__, 0xfffd, c, currentIndex);
+++            break;
+++        }
+++        if (currentIndex != prevIndex - 6) {
+++            errln("%s:%d: wrong index. Expected, actual = %d, %d",
+++                    __FILE__, __LINE__, prevIndex - 6, currentIndex);
+++            break;
+++        }
+++        prevIndex = currentIndex;
+++    }
+++}
++Index: /trunk/icu4c/source/test/intltest/utxttest.h
++===================================================================
++--- icu4c/source/test/intltest/utxttest.h	(revision 39670)
+++++ icu4c/source/test/intltest/utxttest.h	(revision 39671)
++@@ -39,4 +39,5 @@
++     void Ticket10983();
++     void Ticket12130();
+++    void Ticket12888();
++ 
++ private:
 -- 
-2.10.2
+2.11.0
