@@ -1,42 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Apr 2017 14:20:20 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-04-25
-In-Reply-To: <1101594360.20478325.1493204871665.JavaMail.zimbra@datacom.ind.br>
-References: <20170426062839.7446620CA4@mail.free-electrons.com>
- <1101594360.20478325.1493204871665.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20170426142020.41d27312@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Apr 2017 15:26:00 +0300
+Subject: [Buildroot] [PATCH 1/1] package/pcsc-lite: bump version to
+	1.8.20
+In-Reply-To: <87bmrjprzm.fsf@dell.be.48ers.dk>
+References: <20170421135351.8992-1-bernd.kuhls@t-online.de>
+ <87bmrjprzm.fsf@dell.be.48ers.dk>
+Message-ID: <20170426122600.ngu6qdfhsneanbje@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-On Wed, 26 Apr 2017 08:07:51 -0300 (BRT), Carlos Santos wrote:
-> > From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> > To: buildroot at buildroot.org
-> > Sent: Wednesday, April 26, 2017 3:28:39 AM
-> > Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-04-25  
-> ---8<---
-> > Build statistics for 2017-04-25
-> > ================================
-> >         arc |              util-linux-2.29.2 | NOK |
-> >         http://autobuild.buildroot.net/results/9bf1c9e84cab64bccc3c86a8a2899cd71b8f91d4  
-> ---8<---
+On Wed, Apr 26, 2017 at 09:06:53AM +0200, Peter Korsgaard wrote:
+> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 > 
-> Regression caused by commit 5f8ef7e25c5cc5c2e4ae4c8b6e8caa029ddf9a94.
+>  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > 
-> Should we revert it?
+> Committed, thanks.
 
-Let's wait a bit for Vlad's input on this, Synopsys is usually quite
-reactive in providing fixes for toolchain issues on ARC.
+Not in master as of 0a0524876b2872.
 
-Vlad?
+baruch
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
