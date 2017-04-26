@@ -1,29 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:12:00 +0200
-Subject: [Buildroot] [PATCH] imagemagick: add upstream security fix for
-	CVE-2017-7606
-In-Reply-To: <20170425153554.27006-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 25 Apr 2017 17:35:54 +0200")
-References: <20170425153554.27006-1-peter@korsgaard.com>
-Message-ID: <87d1bzod6n.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Apr 2017 09:13:33 +0200
+Subject: [Buildroot] [PATCH] package/xenomai: fallback to http
+In-Reply-To: <20170425212612.4612-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 25 Apr 2017 23:26:12 +0200")
+References: <20170425212612.4612-1-romain.naour@gmail.com>
+Message-ID: <878tmnod42.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > This is not yet part of any release.
- > coders/rle.c in ImageMagick 7.0.5-4 has an "outside the range of
- > representable values of type unsigned char" undefined behavior issue, which
- > might allow remote attackers to cause a denial of service (application
- > crash) or possibly have unspecified other impact via a crafted image.
+ > The https protocol return:
+ > "ERROR 503: Service Temporarily Unavailable"
 
- > For more details, see:
- > https://blogs.gentoo.org/ago/2017/04/02/imagemagick-undefined-behavior-in-codersrle-c/
+ > Fixes:
+ > http://autobuild.buildroot.net/results/120/12034603c46c8bd69590c88bbfe85261460b699c
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed, thanks.
 
