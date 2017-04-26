@@ -1,42 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Apr 2017 09:10:30 +0200
-Subject: [Buildroot] [PATCH] busybox: no need to disable clear and reset
-In-Reply-To: <20170424201323.30582-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Mon, 24 Apr 2017 22:13:23 +0200")
-References: <20170424201323.30582-1-arnout@mind.be>
-Message-ID: <87y3unod95.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Apr 2017 09:11:00 +0200
+Subject: [Buildroot] [PATCH] minicom: security bump to version 2.7.1
+In-Reply-To: <20170425114434.1728-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 25 Apr 2017 13:44:34 +0200")
+References: <20170425114434.1728-1-peter@korsgaard.com>
+Message-ID: <87tw5bod8b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Removing clear and reset from the busybox config when the ncurses tools
- > are enabled is not really needed.
+ > Fixes CVE-2017-7467 - minicom and prl-vzvncserver vt100.c escparms[] buffer
+ > overflow.
 
- > Since commit 802bff9c42, the busybox install will not overwrite
- > existing programs. Therefore, the tools will be installed correctly
- > regardless of the order of the build:
- > - if busybox is built first, the clear and reset apps are installed,
- >   but they will be overwritten by ncurses;
- > - if ncurses is built first, it will install the clear and reset apps,
- >   and busybox will no longer install them.
+ > For more details about the issue, see the nice writeup on oss-security:
 
- > We prefer not to modify the busybox configuration when not strictly
- > necessary, because it is surprising for the user that his configuration
- > is not applied. Clearly, it's not ideal that busybox is configured with
- > redundant apps, but if the user wants to shrink it, it's possible to
- > provide a custom config.
+ > http://www.openwall.com/lists/oss-security/2017/04/18/5
 
- > This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
- > Cc: Danomi Manchego <danomimanchego123@gmail.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed, thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
