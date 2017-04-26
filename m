@@ -1,70 +1,62 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Wed, 26 Apr 2017 14:37:15 +0200
-Subject: [Buildroot] [PATCH v2] x11vnc: update to 0.9.14
-In-Reply-To: <20170426100320.00702ce9@free-electrons.com>
-References: <20170426100320.00702ce9@free-electrons.com>
-Message-ID: <1493210235-7076-1-git-send-email-martin.kepplinger@ginzinger.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 26 Apr 2017 14:43:11 +0200
+Subject: [Buildroot] [PATCH 1/1] setlocalversion: fix detection of hg
+	revision for untagged versions
+Message-ID: <20170426124311.11449-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This uses x11vnc's new upstream location at github. Autoreconf is
-added because it's really only a code snapshot release.
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+By default, cut prints the entire line if the specified delimiter is not
+present at all:
+
+    $ printf "foo bar" | cut -d' ' -f2
+    bar
+    $ printf "foobar" | cut -d' ' -f2
+    foobar
+
+In setlocalversion, cut is presented with the output of 'hg id' which has
+the format:
+
+    "<revision> <tags-if-any>"
+
+If the current revision is not tagged, the output of 'hg id' does not
+contain the delimiter (space), cut prints the entire string, and
+setlocalversion thinks the version is the tag.
+As setlocalversion does not print anything for tagged versions, there is no
+output overall, and no correct indication of the mercurial revision.
+
+Fix by passing the extra cut option '--only-delimited', which suppresses
+output if no delimiter is found.
+
+This problem likely went unnoticed for so long, because the tag 'tip' (i.e.
+most recent revision of the branch) is treated specially: in this case the
+mercurial revision _is_ printed, i.e. the situation is treated as
+'untagged'.
+The problem is only seen when you are _not_ at the most recent revision in
+your branch.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
+ support/scripts/setlocalversion | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In the end you're right and there's nothing special here. Without any reason,
-buildroot doesn't hold on an old version. People do releases. People break
-stuff. People fix stuff. Since I happen to need a fix in the upcoming 0.9.15
-this is probably more reason to randomly update than other updates have.
-
-... I tested it. For me, using Xfbdev, this 0.9.14 works just fine :)
-
-
-revision history
-----------------
-v2: use the github helper instead of a URL
-v1: initial proposal to update 0.9.13 to 0.9.14
-
-
- package/x11vnc/x11vnc.hash | 2 +-
- package/x11vnc/x11vnc.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
-index 5828b12..3cdbfa1 100644
---- a/package/x11vnc/x11vnc.hash
-+++ b/package/x11vnc/x11vnc.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  f6829f2e629667a5284de62b080b13126a0736499fe47cdb447aedb07a59f13b  x11vnc-0.9.13.tar.gz
-+sha256  45f87c5e4382988c73e8c7891ac2bfb45d8f9ce1196ae06651c84636684ea143  x11vnc-0.9.14.tar.gz
-diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
-index 9f4af12..6c862dd 100644
---- a/package/x11vnc/x11vnc.mk
-+++ b/package/x11vnc/x11vnc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
+index adeeb78..33cd605 100755
+--- a/support/scripts/setlocalversion
++++ b/support/scripts/setlocalversion
+@@ -54,7 +54,7 @@ fi
  
--X11VNC_VERSION = 0.9.13
--X11VNC_SITE = http://downloads.sourceforge.net/project/libvncserver/x11vnc/$(X11VNC_VERSION)
-+X11VNC_VERSION = 0.9.14
-+X11VNC_SITE = $(call github,LibVNC,x11vnc,$(X11VNC_VERSION))
- # sdl support is not used in x11vnc, but host include / library search paths
- # leak in if host has sdl-config
- X11VNC_CONF_OPTS = --without-sdl
-@@ -13,6 +13,8 @@ X11VNC_DEPENDENCIES = xlib_libXt xlib_libXext xlib_libXtst
- X11VNC_LICENSE = GPL-2.0+
- X11VNC_LICENSE_FILES = COPYING
+ # Check for mercurial and a mercurial repo.
+ if hgid=`hg id 2>/dev/null`; then
+-	tag=`printf '%s' "$hgid" | cut -d' ' -f2`
++	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
  
-+X11VNC_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
- X11VNC_DEPENDENCIES += avahi dbus
- else
+ 	# Do we have an untagged version?
+ 	if [ -z "$tag" -o "$tag" = tip ]; then
 -- 
-2.1.4
+2.10.2
