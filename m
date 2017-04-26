@@ -1,52 +1,40 @@
-From: mrugiero at gmail.com <mrugiero@gmail.com>
-Date: Wed, 26 Apr 2017 13:28:50 -0300
-Subject: [Buildroot] [PATCH] package/protobuf: depend on gcc >= 4.5
-Message-ID: <20170426162850.5214-1-mrugiero@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 26 Apr 2017 19:48:02 +0200
+Subject: [Buildroot] [PATCH] binutils: fix bfin compile error
+Message-ID: <20170426174802.GA30776@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Mario J. Rugiero" <mrugiero@gmail.com>
+Newer gcc requires even lower optimization, only with -O0 we
+can successfully compile binutils for the target.
 
-Protobuf hits a bug in gcc < 4.5 which breaks the build.
-See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=189
+Fixes:
+  http://autobuild.buildroot.net/results/fb95cd7f7fcc532d036ed8f13853bc6f9a64d1b3
 
-Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/protobuf/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/binutils/binutils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 03d118cfc..e3c94dcd6 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -22,6 +22,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	default y if BR2_x86_64
- 	default y if BR2_sparc64
- 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_HOST_GCC_AT_LEAST_4_5
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 03fd3a5..72e2d0b 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -64,10 +64,10 @@ HOST_BINUTILS_CONF_ENV += MAKEINFO=true
+ HOST_BINUTILS_MAKE_OPTS += MAKEINFO=true
+ HOST_BINUTILS_INSTALL_OPTS += MAKEINFO=true install
  
-@@ -30,6 +31,7 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  Protocol buffers are Google's language-neutral, platform-neutral,
-@@ -37,7 +39,7 @@ config BR2_PACKAGE_PROTOBUF
+-# gcc bug with Os/O2/O3, PR77311
++# gcc bug with Os/O1/O2/O3, PR77311
+ # error: unable to find a register to spill in class 'CCREGS'
+ ifeq ($(BR2_bfin),y)
+-BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
++BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
+ endif
  
- 	  https://developers.google.com/protocol-buffers
- 
--comment "protobuf needs a toolchain w/ C++, threads, dynamic library"
-+comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.5"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ # Workaround a build issue with -Os for ARM Cortex-M cpus.
 -- 
-2.12.2
+2.1.4
