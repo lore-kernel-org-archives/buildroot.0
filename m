@@ -1,26 +1,35 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 26 Apr 2017 06:49:35 +0000
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.24
-In-Reply-To: <20170422225732.GA21566@waldemar-brodkorb.de>
-References: <20170422225732.GA21566@waldemar-brodkorb.de>
-Message-ID: <1493189374.3442.2.camel@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Apr 2017 08:51:30 +0200
+Subject: [Buildroot] Builroot - android ndk
+In-Reply-To: <20170416101954.5f581953@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 16 Apr 2017 10:19:54 +0200")
+References: <CAJU5dMciTnGkiu4=op-ZLhmHk4VEaeO6Zi2oEyKajy9TAAYhBA@mail.gmail.com>
+ <20170416101954.5f581953@free-electrons.com>
+Message-ID: <87inlrr79p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 2017-04-23 at 00:57 +0200, Waldemar Brodkorb wrote:
-> Fixes aarch64 C++ issue. Removes old implementations for fnmatch/regex.
+ > Hello,
+ > On Sat, 15 Apr 2017 13:38:05 -0400, Alvaro Denis wrote:
 
-This also fixes uClibc building for ARC with arc-2017.03 tools,
-this is captured in this autobuilder instance:
--------------------------->8------------------------
-http://autobuild.buildroot.net/results/f92/f92b5cdae0a389d911a12d309edc2871f84f994b/build-end.log
--------------------------->8------------------------
+ >> If I build the toolchain using make_standalone_toolchain.py
+ >> <https://developer.android.com/ndk/guides/standalone_toolchain.html>
+ >> it is a "pure toolchain"? it can be used in buildroot as preintstaled
+ >> toolchain?
 
-The fix is?https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=a3805b91ecdb458cd20245c20e49deacc58e9c32
+ > We have never tested Android toolchains, so I don't know. However, what
+ > is sure is that those toolchains use the bionic C library, which we
+ > don't support. And you most likely won't be able to build most of the
+ > Linux applications against bionic, at  least not without some effort.
 
--Alexey
+But you can afaik combine a Buildroot rootfs (built against
+glibc/musl/uclibc) with an android rootfs without much problems, as the
+same paths aren't used. In the worst case you can do a static build.
+
+-- 
+Bye, Peter Korsgaard
