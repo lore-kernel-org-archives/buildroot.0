@@ -1,41 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 27 Apr 2017 14:43:29 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.10.13
-In-Reply-To: <20170427134329.60945-1-Vincent.Riera@imgtec.com>
-References: <20170427134329.60945-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170427134329.60945-2-Vincent.Riera@imgtec.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 27 Apr 2017 16:40:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/live555: bump version to 2017.04.26
+Message-ID: <20170427144041.19425-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b651152..dc19a62 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 16f7077440..c06e13b12e 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,4 +1,4 @@
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5	df4ad1d60c2f5ae8155fb077bb011ab3	live.2016.03.16.tar.gz
++md5 7155e2d7313ef92929a8268856f0551c live.2017.04.26.tar.gz
+ # Locally generated
+-sha256	6f98a96d4cf6e986c7711f0a2431c02cb807a8107d6715eb491a6ed9d0446cf6	live.2016.03.16.tar.gz
++sha256 a97372c84d49520dbaa595b65c39800fbd7813e717b5df9cd6c70308ce1a6033  live.2017.04.26.tar.gz
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index a6dd13c06d..e51b588082 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.10.12)"
-+	bool "Latest version (4.10.13)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.10.12" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.10.13" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-LIVE555_VERSION = 2016.03.16
++LIVE555_VERSION = 2017.04.26
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPL-2.1+
 -- 
-2.10.2
+2.11.0
