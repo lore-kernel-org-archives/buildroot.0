@@ -1,31 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Apr 2017 22:04:26 +0200
-Subject: [Buildroot] [PATCH] libmpeg2: fix sparc32 build
-In-Reply-To: <2a47da42-569d-129c-3a24-3154b1c335da@mind.be> (Arnout
- Vandecappelle's message of "Thu, 27 Apr 2017 21:30:26 +0200")
-References: <20170427053609.GA20301@waldemar-brodkorb.de>
- <20170427102645.523f96c1@free-electrons.com>
- <87o9viky89.fsf@dell.be.48ers.dk>
- <20170427112243.2b5693c0@free-electrons.com>
- <2a47da42-569d-129c-3a24-3154b1c335da@mind.be>
-Message-ID: <878tmlk46t.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Apr 2017 21:27:27 +0200
+Subject: [Buildroot] [git commit] python-django: security bump to version
+	1.10.7
+Message-ID: <20170427200446.D63A4827EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3a66a81b7a9db8e45f15fa63cc0670d158003d5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Arnout, what do you think?
+Fixes the following security issues:
 
- >  When I spun that patch, I expected there would be more use cases than just
- > libmpeg2. But the autobuilders don't point to anything obvious, so perhaps not.
+Since 1.10.3:
 
- >  I've marked as Rejected in patchwork. We can pick it up again if something else
- > turns up.
+CVE-2016-9013 - User with hardcoded password created when running tests on
+Oracle
 
-Ok, sounds sensible - Thanks!
+Marti Raudsepp reported that a user with a hardcoded password is created
+when running tests with an Oracle database.
 
--- 
-Bye, Peter Korsgaard
+CVE-2016-9014 - DNS rebinding vulnerability when DEBUG=True
+
+Aymeric Augustin discovered that Django does not properly validate the Host
+header against settings.ALLOWED_HOSTS when the debug setting is enabled.  A
+remote attacker can take advantage of this flaw to perform DNS rebinding
+attacks.
+
+Since 1.10.7:
+
+CVE-2017-7233 - Open redirect and possible XSS attack via user-supplied
+numeric redirect URLs
+
+It was discovered that is_safe_url() does not properly handle certain
+numeric URLs as safe.  A remote attacker can take advantage of this flaw to
+perform XSS attacks or to use a Django server as an open redirect.
+
+CVE-2017-7234 - Open redirect vulnerability in django.views.static.serve()
+
+Phithon from Chaitin Tech discovered an open redirect vulnerability in the
+django.views.static.serve() view.  Note that this view is not intended for
+production use.
+
+Cc: Oli Vogt <oli.vogt.pub01@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 38b303b..09be184 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
+-md5	5342e77374b2acd2eafa86d2bb68f8c9  Django-1.10.2.tar.gz
+-sha256	e127f12a0bfb34843b6e8c82f91e26fff6445a7ca91d222c0794174cf97cbce1  Django-1.10.2.tar.gz
++md5	693dfeabad62c561cb205900d32c2a98  Django-1.10.7.tar.gz
++sha256	593d779dbc2350a245c4f76d26bdcad58a39895e87304fe6d725bbdf84b5b0b8  Django-1.10.7.tar.gz
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 9065a68..9056f00 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 1.10.2
++PYTHON_DJANGO_VERSION = 1.10.7
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://pypi.python.org/packages/57/9e/59444485f092b6ed4f1931e7d2e13b67fdab967c041d02f58a0d1dab8c23
++PYTHON_DJANGO_SITE = https://pypi.python.org/packages/15/b4/d4bb7313e02386bd23a60e1eb5670321313fb67289c6f36ec43bce747aff
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
