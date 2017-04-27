@@ -1,65 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Apr 2017 21:30:26 +0200
-Subject: [Buildroot] [PATCH] libmpeg2: fix sparc32 build
-In-Reply-To: <20170427112243.2b5693c0@free-electrons.com>
-References: <20170427053609.GA20301@waldemar-brodkorb.de>
- <20170427102645.523f96c1@free-electrons.com>
- <87o9viky89.fsf@dell.be.48ers.dk>
- <20170427112243.2b5693c0@free-electrons.com>
-Message-ID: <2a47da42-569d-129c-3a24-3154b1c335da@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Apr 2017 21:39:20 +0200
+Subject: [Buildroot] [PATCH] docs/manual: PEP8 coding style for Python
+	scripts
+In-Reply-To: <20170424013356.2228-1-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sun, 23 Apr 2017 22:33:56 -0300")
+References: <20170424013356.2228-1-ricardo.martincoski@gmail.com>
+Message-ID: <87d1bxk5cn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
+ > The advantages of using a pre-existing coding style instead of creating
+ > our own are:
+ > - documenting on the manual takes a single sentence;
+ > - there are automatic tools to help during development/review.
 
-On 27-04-17 11:22, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 27 Apr 2017 11:15:34 +0200, Peter Korsgaard wrote:
-> 
->>  > I am not sure this is the completely correct solution, and Arnout
->>  > proposed another solution, see:  
->>
->>  >   https://patchwork.ozlabs.org/patch/749138/
->>  >   https://patchwork.ozlabs.org/patch/749137/  
->>
->>  > The second patch has the explanation why Waldemar patch is not really
->>  > correct.  
->>
->> Ok. Can I take this as an acked-by for the check-bin-arch / pkg-generic
->> changes then? ;)
-> 
-> I haven't reviewed the implementation details, but on the general
-> principles, yes, I'm OK. It's a bit annoying to extend the package
-> infrastructure for such a specific case, but I don't really see a
-> better solution here, except hacking libmpeg2 to remove the runtime
-> detection logic.
-> 
-> On the other hand, do we care enough about libmpeg2 on SPARC to extend
-> the package infrastructure just for this purpose? In the end, even if
-> Waldemar's solution is not "correct", it avoids the need to extend the
-> package infrastructure just for a purpose of a single package that will
-> most likely never ever be used on SPARC.
-> 
-> Arnout, what do you think?
+ > So document that PEP8 recommendation should be followed.
 
- When I spun that patch, I expected there would be more use cases than just
-libmpeg2. But the autobuilders don't point to anything obvious, so perhaps not.
+Seems sensible to me. Committed, thanks.
 
- I've marked as Rejected in patchwork. We can pick it up again if something else
-turns up.
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+ > Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > ---
+ > Here is the sentence I didn't add:
+ > The use of https://pypi.python.org/pypi/pycodestyle[Python style guide checker]
+ > is recommended before submitting new scripts.
 
- Regards,
- Arnout
+ > I mentioned in a thread the tool pep8/pycodestyle
+ > From https://pypi.python.org/pypi/pycodestyle :
+ > "This package used to be called pep8 but was renamed to pycodestyle to
+ > reduce confusion"
+ > Old url: https://pypi.python.org/pypi/pep8
 
+ > Also Thomas DS mentioned the tool flake8 that seems to me to group:
+ > pycodestyle + pyflakes + mccabe
+ > http://flake8.pycqa.org/en/latest/
+
+Ok. We don't get new python scripts that often, so it probably isn't a
+huge deal.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
