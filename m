@@ -1,81 +1,70 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Thu, 27 Apr 2017 14:33:32 -0700
-Subject: [Buildroot] [PATCH v2 02/10] package/python-traitlets: New package
+Date: Thu, 27 Apr 2017 14:33:31 -0700
+Subject: [Buildroot] [PATCH v2 01/10] package/python-decorator: New package
 In-Reply-To: <20170427213340.26917-1-andrew.smirnov@gmail.com>
 References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
-Message-ID: <20170427213340.26917-3-andrew.smirnov@gmail.com>
+Message-ID: <20170427213340.26917-2-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 'traitlets'[1] package to Buildroot. Needed by IPython.
+Add 'decorator'[1] package to Buildroot. Needed by 'traitlets'
+package, which is added in the next patch.
 
-[1] https://pypi.python.org/pypi/traitlets
+[1] https://pypi.python.org/pypi/decorator
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/Config.in                              |  1 +
- package/python-traitlets/Config.in             |  8 ++++++++
- package/python-traitlets/python-traitlets.hash |  2 ++
- package/python-traitlets/python-traitlets.mk   | 13 +++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/python-traitlets/Config.in
- create mode 100644 package/python-traitlets/python-traitlets.hash
- create mode 100644 package/python-traitlets/python-traitlets.mk
+ package/Config.in                            |  1 +
+ package/python-decorator/Config.in           |  6 ++++++
+ package/python-decorator/python-decorator.mk | 13 +++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/python-decorator/Config.in
+ create mode 100644 package/python-decorator/python-decorator.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index eb6d197..47f43eb 100644
+index 25405c1..eb6d197 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -843,6 +843,7 @@ menu "External python modules"
- 	source "package/python-tomako/Config.in"
- 	source "package/python-toml/Config.in"
- 	source "package/python-tornado/Config.in"
-+	source "package/python-traitlets/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-txaio/Config.in"
-diff --git a/package/python-traitlets/Config.in b/package/python-traitlets/Config.in
+@@ -701,6 +701,7 @@ menu "External python modules"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
++	source "package/python-decorator/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-dialog3/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+diff --git a/package/python-decorator/Config.in b/package/python-decorator/Config.in
 new file mode 100644
-index 0000000..ea21c1b
+index 0000000..e7ec00c
 --- /dev/null
-+++ b/package/python-traitlets/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_TRAITLETS
-+	bool "python-traitlets"
-+	select BR2_PACKAGE_PYTHON_DECORATOR
-+	select BR2_PACKAGE_PYTHON_ENUM if BR2_PACKAGE_PYTHON
++++ b/package/python-decorator/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_DECORATOR
++	bool "python-decorator"
 +	help
-+	  A configuration system for Python applications.
++	  Better living through Python with decorators
 +
-+	  https://pypi.python.org/pypi/traitlets
-diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
++	  https://github.com/micheles/decorator
+diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
 new file mode 100644
-index 0000000..3b14991
+index 0000000..fac03a3
 --- /dev/null
-+++ b/package/python-traitlets/python-traitlets.hash
-@@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 370f938ad730d52272ef74f96f831cb21138f6168e46fe582fe256c35cc656ce python-traitlets-4.3.2.tar.gz
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-new file mode 100644
-index 0000000..45f393d
---- /dev/null
-+++ b/package/python-traitlets/python-traitlets.mk
++++ b/package/python-decorator/python-decorator.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-traitlets
++# python-decorator
 +#
 +################################################################################
 +
-+PYTHON_TRAITLETS_VERSION = 4.3.2
-+PYTHON_TRAITLETS_SOURCE = python-traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
-+PYTHON_TRAITLETS_SITE = $(call github,ipython,traitlets,$(PYTHON_TRAITLETS_VERSION))
-+PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
-+PYTHON_TRAITLETS_SETUP_TYPE = distutils
++PYTHON_DECORATOR_VERSION = 4.0.11
++PYTHON_DECORATOR_SITE = https://github.com/micheles/decorator.git
++PYTHON_DECORATOR_SITE_METHOD = git
++PYTHON_DECORATOR_LICENSE = BSD-2-Clause
++PYTHON_DECORATOR_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
