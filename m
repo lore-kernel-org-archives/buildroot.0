@@ -1,107 +1,936 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Apr 2017 08:28:42 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-04-26
-Message-ID: <20170427062842.48D022077A@mail.free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Apr 2017 09:36:32 +0200
+Subject: [Buildroot] [PATCH 1/2] tiff: add upstream security fixes
+Message-ID: <20170427073633.28576-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add upstream post-4.0.7 commits (except for ChangeLog modifications) fixing
+the following security issues:
 
-Build statistics for 2017-04-26
-================================
+CVE-2016-10266 - LibTIFF 4.0.7 allows remote attackers to cause a denial of
+service (divide-by-zero error and application crash) via a crafted TIFF
+image, related to libtiff/tif_read.c:351:22.
 
-      successes : 123
-       failures : 55 
-       timeouts : 1  
-          TOTAL : 179
+CVE-2016-10267 - LibTIFF 4.0.7 allows remote attackers to cause a denial of
+service (divide-by-zero error and application crash) via a crafted TIFF
+image, related to libtiff/tif_ojpeg.c:816:8.
 
-Classification of failures by reason
-====================================
+CVE-2016-10269 - LibTIFF 4.0.7 allows remote attackers to cause a denial of
+service (heap-based buffer over-read) or possibly have unspecified other
+impact via a crafted TIFF image, related to "READ of size 512" and
+libtiff/tif_unix.c:340:2.
 
-                    ola-0.10.2 | 12
-           aircrack-ng-1.2-rc4 | 7 
-                protobuf-3.2.0 | 6 
-                 mplayer-1.3.0 | 5 
-                    mpv-0.25.0 | 4 
-           uboot-tools-2017.03 | 3 
-                 xenomai-3.0.4 | 3 
-                 binutils-2.27 | 2 
-                  libcdio-0.94 | 2 
-                  samba4-4.5.7 | 2 
-                  boost-1.63.0 | 1 
-                busybox-1.26.2 | 1 
-                    ffmpeg-3.3 | 1 
-kvm-unit-tests-5731572b2ac2... | 1 
-                libepoxy-1.4.1 | 1 
-                libselinux-2.6 | 1 
-                    mpir-3.0.0 | 1 
-                  nodejs-7.9.0 | 1 
-                   scrub-2.6.1 | 1 
-               wireshark-2.2.6 | 1 
+CVE-2016-10270 - LibTIFF 4.0.7 allows remote attackers to cause a denial of
+service (heap-based buffer over-read) or possibly have unspecified other
+impact via a crafted TIFF image, related to "READ of size 8" and
+libtiff/tif_read.c:523:22.
 
+CVE-2017-5225 - LibTIFF version 4.0.7 is vulnerable to a heap buffer
+overflow in the tools/tiffcp resulting in DoS or code execution via a
+crafted BitsPerSample value.
 
-Detail of failures
-===================
+CVE-2017-7592 - The putagreytile function in tif_getimage.c in LibTIFF 4.0.7
+has a left-shift undefined behavior issue, which might allow remote
+attackers to cause a denial of service (application crash) or possibly have
+unspecified other impact via a crafted image.
 
-   powerpc64 |            aircrack-ng-1.2-rc4 | NOK | http://autobuild.buildroot.net/results/e1569dac0b663b9c81d7b4eaabdcd557d4ab6a06 |     
-         arm |            aircrack-ng-1.2-rc4 | NOK | http://autobuild.buildroot.net/results/b54bc31e820c906b501f390aab7d9a02e94fe490 |     
-    mips64el |            aircrack-ng-1.2-rc4 | NOK | http://autobuild.buildroot.net/results/4b95875b9317f44cfab707de8a70e2f691a6a703 |     
-       sparc |            aircrack-ng-1.2-rc4 | NOK | http://autobuild.buildroot.net/results/f10fd96a5ba41f7aacc3d1d2314e46dc984a9caa |     
-         arm |            aircrack-ng-1.2-rc4 | NOK | http://autobuild.buildroot.net/results/7631470016f923e8f4a7696e65437c71b8668b6e |     
-         arm |            aircrack-ng-1.2-rc4 | NOK | http://autobuild.buildroot.net/results/8182ce148de1127581813c0edbd90a33ced1d3c9 |     
-     powerpc |            aircrack-ng-1.2-rc4 | NOK | http://autobuild.buildroot.net/results/309345957dfceff5b98f1bd360b0b420757ebd1d |     
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/f861555ae03535d611a1ae448a210afaca7525ea | ORPH
-        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/42e506b65ea3cb1bc4f74d214d96906aef561c7f | ORPH
-         arm |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/2bc6919fc1183208fe5aed1c220b4d17325138c2 |     
-         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/ab7c50788d1f90ee51d3d1825d4ba2a55812e51e | ORPH
-        m68k |                     ffmpeg-3.3 | NOK | http://autobuild.buildroot.net/results/899271c1e1b1da9c8cb0ab5cb03bc1e9d03eb34e |     
-      x86_64 | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/3858a1fc8c414a9636a5fd5b22d824cf2e28adfa |     
-         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/13c5cdede0221db4cacfac8a5ab82993cf35ced3 |     
-         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/e470fd6fd38a1052856d3eec190b9a025337c175 |     
-   powerpc64 |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/d2207e22d2a6c851b95739e2b1df32f9100a1f59 |     
-         arm |                 libselinux-2.6 | NOK | http://autobuild.buildroot.net/results/d387aa27d248f8ff5bdc970ed5e14cb09c36e541 |     
-         arm |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/fd032f7dbd4cace84bb31e8017cb6139ef3c1072 |     
-         arc |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/8461a0f1d71e42891e4a6e2d6dd5754cb0bb674b |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/56bdfeea2c1f6b1a993fe7ca2a33221a59476ea9 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/97e792cf9dc41f5678171385abe7966593cea33a |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/b4aa3e3967e99284444928cd820634f4fc5495d5 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/36e4d8b7c2f7f9eda50c83782662c2ff6dab78ea |     
-     powerpc |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/a4fc6d0107620a3558a9e6dc662b5766d77bbadb |     
-    mips64el |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/f0ccc6cdd41a3649484e806d699a204ecc3c6a25 |     
-        mips |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/07a1527066cd87d3a4a0f600bbca326b77fbe5a5 |     
-        or1k |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/b658bd27a391c13731498d01256ff96719044ad6 |     
-        i586 |                   nodejs-7.9.0 | NOK | http://autobuild.buildroot.net/results/df920e7b17617f1e4867d94eda52cab38f7b0622 |     
-      x86_64 |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/bd30895d22003fb572abbffef849db1d58d384d7 |     
-         arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/70073c38a91d0ac7fa98769323f0e8b3829df94e |     
-        or1k |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/d6d657ae4437434887d0ad7f9d103a8a61bd8795 |     
-        or1k |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/aaab38f94fd58e3119437278f9dcfdf5418abd76 |     
-        mips |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/d0326ca1e7d0a5b5529484ecb5c58f4e00cdec61 |     
-     aarch64 |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/261482eea27739eccd9a93326cf4227c2e1a00d4 |     
-    mips64el |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/154f221cc607b3629dfcbb04013cf0c118b47070 |     
-         arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/30e7daf0bf5fd74a13665352e684abe54b485ef7 |     
-        mips |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/b83207bce589ecc85fbd1d353a40a1df7a2c3d5d |     
-     sparc64 |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/787bd10cbdf9e3e80f197fc51801e11eea926e2e |     
-      x86_64 |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/c9e389eb9db9620bd64b0f0b5e505b61314386bf |     
-        mips |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/a423cf023d9f53c98d3042c81b8dc9dc446bba6c |     
-         arm |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/c86f0df9c6f1f437e9887236618d93bb34f66d3a | ORPH
-         arm |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/f7a47ee73ea7bae816c5bcda85a43f8031baaa03 | ORPH
-         arm |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/f808670378ae66bab2c842448b9537083db43571 | ORPH
-       sparc |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/1ee16a289d1bc1061b2c45448d1545304f640190 | ORPH
-      x86_64 |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/1dac9d5e49342700036c90ed4785fff7398b8966 | ORPH
-         arm |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/da07861304ed14096edeaaded646ac109689b980 | ORPH
-         arc |                   samba4-4.5.7 | NOK | http://autobuild.buildroot.net/results/01eaccf39a15557fa7a1a480b40ec2900f6eac03 |     
-         arc |                   samba4-4.5.7 | NOK | http://autobuild.buildroot.net/results/1e84bc9271f8c18574a14d8468024f418a6b302d |     
-         arm |                    scrub-2.6.1 | TIM | http://autobuild.buildroot.net/results/5d8dd2faf00d7240ad77d5eea5a366cfb413e20a |     
-        sh4a |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/ace34f91656eddd038ac94c3de977ff9ca7e72f0 | ORPH
-     aarch64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/cef4074286d3bcbb5be5e8f90134bf2613c69eae | ORPH
-         arm |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/1510f33692d04f0a18eedb6ace18fcc7b1029a0b | ORPH
-         arc |                wireshark-2.2.6 | NOK | http://autobuild.buildroot.net/results/0a76f86a0373067dd37ab27e13e4fde825631975 |     
-      x86_64 |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/3ff8f5967f1e7afd4f46259dc3121b0405b2de6d |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/c0ffeb4c6c84153ed7dab0976f9313cd959f9a5e |     
-         arm |                  xenomai-3.0.4 | NOK | http://autobuild.buildroot.net/results/6a5dd7a52b4cc6281193df29b63d1ba0d9c93479 |     
+CVE-2017-7593 - tif_read.c in LibTIFF 4.0.7 does not ensure that tif_rawdata
+is properly initialized, which might allow remote attackers to obtain
+sensitive information from process memory via a crafted image.
 
+CVE-2017-7594 - The OJPEGReadHeaderInfoSecTablesDcTable function in
+tif_ojpeg.c in LibTIFF 4.0.7 allows remote attackers to cause a denial of
+service (memory leak) via a crafted image.
+
+CVE-2017-7595 - The JPEGSetupEncode function in tiff_jpeg.c in LibTIFF 4.0.7
+allows remote attackers to cause a denial of service (divide-by-zero error
+and application crash) via a crafted image.
+
+CVE-2017-7598 - tif_dirread.c in LibTIFF 4.0.7 might allow remote attackers
+to cause a denial of service (divide-by-zero error and application crash)
+via a crafted image.
+
+CVE-2017-7601 - LibTIFF 4.0.7 has a "shift exponent too large for 64-bit
+type long" undefined behavior issue, which might allow remote attackers to
+cause a denial of service (application crash) or possibly have unspecified
+other impact via a crafted image.
+
+CVE-2017-7602 - LibTIFF 4.0.7 has a signed integer overflow, which might
+allow remote attackers to cause a denial of service (application crash) or
+possibly have unspecified other impact via a crafted image.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ..._read.c-libtiff-tiffiop.h-fix-uint32-over.patch |  46 +++++++++
+ ..._ojpeg.c-make-OJPEGDecode-early-exit-in-c.patch |  53 ++++++++++
+ ..._pixarlog.c-libtiff-tif_luv.c-fix-heap-ba.patch | 110 +++++++++++++++++++++
+ ..._dirread.c-modify-ChopUpSingleUncompresse.patch | 107 ++++++++++++++++++++
+ ...p.c-error-out-cleanly-in-cpContig2Separat.patch |  74 ++++++++++++++
+ ..._getimage.c-add-explicit-uint32-cast-in-p.patch |  31 ++++++
+ ...fiop.h-tif_unix.c-tif_win32.c-tif_vms.c-a.patch |  88 +++++++++++++++++
+ ..._ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch |  43 ++++++++
+ ..._ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch |  36 +++++++
+ ..._jpeg.c-avoid-integer-division-by-zero-in.patch |  35 +++++++
+ ..._dirread.c-avoid-division-by-floating-poi.patch |  47 +++++++++
+ ..._jpeg.c-validate-BitsPerSample-in-JPEGSet.patch |  35 +++++++
+ ..._read.c-avoid-potential-undefined-behavio.patch |  56 +++++++++++
+ 13 files changed, 761 insertions(+)
+ create mode 100644 package/tiff/0001-libtiff-tif_read.c-libtiff-tiffiop.h-fix-uint32-over.patch
+ create mode 100644 package/tiff/0002-libtiff-tif_ojpeg.c-make-OJPEGDecode-early-exit-in-c.patch
+ create mode 100644 package/tiff/0003-libtiff-tif_pixarlog.c-libtiff-tif_luv.c-fix-heap-ba.patch
+ create mode 100644 package/tiff/0004-libtiff-tif_dirread.c-modify-ChopUpSingleUncompresse.patch
+ create mode 100644 package/tiff/0005-tools-tiffcp.c-error-out-cleanly-in-cpContig2Separat.patch
+ create mode 100644 package/tiff/0006-libtiff-tif_getimage.c-add-explicit-uint32-cast-in-p.patch
+ create mode 100644 package/tiff/0007-libtiff-tiffiop.h-tif_unix.c-tif_win32.c-tif_vms.c-a.patch
+ create mode 100644 package/tiff/0008-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch
+ create mode 100644 package/tiff/0009-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch
+ create mode 100644 package/tiff/0010-libtiff-tif_jpeg.c-avoid-integer-division-by-zero-in.patch
+ create mode 100644 package/tiff/0011-libtiff-tif_dirread.c-avoid-division-by-floating-poi.patch
+ create mode 100644 package/tiff/0012-libtiff-tif_jpeg.c-validate-BitsPerSample-in-JPEGSet.patch
+ create mode 100644 package/tiff/0013-libtiff-tif_read.c-avoid-potential-undefined-behavio.patch
+
+diff --git a/package/tiff/0001-libtiff-tif_read.c-libtiff-tiffiop.h-fix-uint32-over.patch b/package/tiff/0001-libtiff-tif_read.c-libtiff-tiffiop.h-fix-uint32-over.patch
+new file mode 100644
+index 000000000..9df4577e1
+--- /dev/null
++++ b/package/tiff/0001-libtiff-tif_read.c-libtiff-tiffiop.h-fix-uint32-over.patch
+@@ -0,0 +1,46 @@
++From 438274f938e046d33cb0e1230b41da32ffe223e1 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Fri, 2 Dec 2016 21:56:56 +0000
++Subject: [PATCH] * libtiff/tif_read.c, libtiff/tiffiop.h: fix uint32 overflow
++ in TIFFReadEncodedStrip() that caused an integer division by zero. Reported
++ by Agostino Sarubbo. Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2596
++
++Fixes CVE-2016-10266
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_read.c | 2 +-
++ libtiff/tiffiop.h  | 4 ++++
++ 2 files changed, 12 insertions(+), 1 deletion(-)
++
++diff --git a/libtiff/tif_read.c b/libtiff/tif_read.c
++index c26c55f4..52bbf507 100644
++--- a/libtiff/tif_read.c
+++++ b/libtiff/tif_read.c
++@@ -346,7 +346,7 @@ TIFFReadEncodedStrip(TIFF* tif, uint32 strip, void* buf, tmsize_t size)
++ 	rowsperstrip=td->td_rowsperstrip;
++ 	if (rowsperstrip>td->td_imagelength)
++ 		rowsperstrip=td->td_imagelength;
++-	stripsperplane=((td->td_imagelength+rowsperstrip-1)/rowsperstrip);
+++	stripsperplane= TIFFhowmany_32_maxuint_compat(td->td_imagelength, rowsperstrip);
++ 	stripinplane=(strip%stripsperplane);
++ 	plane=(uint16)(strip/stripsperplane);
++ 	rows=td->td_imagelength-stripinplane*rowsperstrip;
++diff --git a/libtiff/tiffiop.h b/libtiff/tiffiop.h
++index ffbb647b..cb59460a 100644
++--- a/libtiff/tiffiop.h
+++++ b/libtiff/tiffiop.h
++@@ -250,6 +250,10 @@ struct tiff {
++ #define TIFFhowmany_32(x, y) (((uint32)x < (0xffffffff - (uint32)(y-1))) ? \
++ 			   ((((uint32)(x))+(((uint32)(y))-1))/((uint32)(y))) : \
++ 			   0U)
+++/* Variant of TIFFhowmany_32() that doesn't return 0 if x close to MAXUINT. */
+++/* Caution: TIFFhowmany_32_maxuint_compat(x,y)*y might overflow */
+++#define TIFFhowmany_32_maxuint_compat(x, y) \
+++			   (((uint32)(x) / (uint32)(y)) + ((((uint32)(x) % (uint32)(y)) != 0) ? 1 : 0))
++ #define TIFFhowmany8_32(x) (((x)&0x07)?((uint32)(x)>>3)+1:(uint32)(x)>>3)
++ #define TIFFroundup_32(x, y) (TIFFhowmany_32(x,y)*(y))
++ #define TIFFhowmany_64(x, y) ((((uint64)(x))+(((uint64)(y))-1))/((uint64)(y)))
++-- 
++2.11.0
++
+diff --git a/package/tiff/0002-libtiff-tif_ojpeg.c-make-OJPEGDecode-early-exit-in-c.patch b/package/tiff/0002-libtiff-tif_ojpeg.c-make-OJPEGDecode-early-exit-in-c.patch
+new file mode 100644
+index 000000000..d99b9007e
+--- /dev/null
++++ b/package/tiff/0002-libtiff-tif_ojpeg.c-make-OJPEGDecode-early-exit-in-c.patch
+@@ -0,0 +1,53 @@
++From 43bc256d8ae44b92d2734a3c5bc73957a4d7c1ec Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Sat, 3 Dec 2016 11:15:18 +0000
++Subject: [PATCH] * libtiff/tif_ojpeg.c: make OJPEGDecode() early exit in case
++ of failure in OJPEGPreDecode(). This will avoid a divide by zero, and
++ potential other issues. Reported by Agostino Sarubbo. Fixes
++ http://bugzilla.maptools.org/show_bug.cgi?id=2611
++
++Fixes CVE-2016-10267
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_ojpeg.c | 8 ++++++++
++ 1 files changed, 15 insertions(+)
++
++diff --git a/libtiff/tif_ojpeg.c b/libtiff/tif_ojpeg.c
++index 1ccc3f9b..f19e8fd0 100644
++--- a/libtiff/tif_ojpeg.c
+++++ b/libtiff/tif_ojpeg.c
++@@ -244,6 +244,7 @@ typedef enum {
++ 
++ typedef struct {
++ 	TIFF* tif;
+++        int decoder_ok;
++ 	#ifndef LIBJPEG_ENCAP_EXTERNAL
++ 	JMP_BUF exit_jmpbuf;
++ 	#endif
++@@ -722,6 +723,7 @@ OJPEGPreDecode(TIFF* tif, uint16 s)
++ 		}
++ 		sp->write_curstrile++;
++ 	}
+++	sp->decoder_ok = 1;
++ 	return(1);
++ }
++ 
++@@ -784,8 +786,14 @@ OJPEGPreDecodeSkipScanlines(TIFF* tif)
++ static int
++ OJPEGDecode(TIFF* tif, uint8* buf, tmsize_t cc, uint16 s)
++ {
+++        static const char module[]="OJPEGDecode";
++ 	OJPEGState* sp=(OJPEGState*)tif->tif_data;
++ 	(void)s;
+++        if( !sp->decoder_ok )
+++        {
+++            TIFFErrorExt(tif->tif_clientdata,module,"Cannot decode: decoder not correctly initialized");
+++            return 0;
+++        }
++ 	if (sp->libjpeg_jpeg_query_style==0)
++ 	{
++ 		if (OJPEGDecodeRaw(tif,buf,cc)==0)
++-- 
++2.11.0
++
+diff --git a/package/tiff/0003-libtiff-tif_pixarlog.c-libtiff-tif_luv.c-fix-heap-ba.patch b/package/tiff/0003-libtiff-tif_pixarlog.c-libtiff-tif_luv.c-fix-heap-ba.patch
+new file mode 100644
+index 000000000..290834ec0
+--- /dev/null
++++ b/package/tiff/0003-libtiff-tif_pixarlog.c-libtiff-tif_luv.c-fix-heap-ba.patch
+@@ -0,0 +1,110 @@
++From 1044b43637fa7f70fb19b93593777b78bd20da86 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Fri, 2 Dec 2016 23:05:51 +0000
++Subject: [PATCH] * libtiff/tif_pixarlog.c, libtiff/tif_luv.c: fix heap-based
++ buffer overflow on generation of PixarLog / LUV compressed files, with
++ ColorMap, TransferFunction attached and nasty plays with bitspersample. The
++ fix for LUV has not been tested, but suffers from the same kind of issue of
++ PixarLog. Reported by Agostino Sarubbo. Fixes
++ http://bugzilla.maptools.org/show_bug.cgi?id=2604
++
++Fixes CVE-2016-10269
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_luv.c      | 18 ++++++++++++++----
++ libtiff/tif_pixarlog.c | 17 +++++++++++++++--
++ 2 files changed, 39 insertions(+), 6 deletions(-)
++
++diff --git a/libtiff/tif_luv.c b/libtiff/tif_luv.c
++index f68a9b13..e6783db5 100644
++--- a/libtiff/tif_luv.c
+++++ b/libtiff/tif_luv.c
++@@ -158,6 +158,7 @@
++ typedef struct logLuvState LogLuvState;
++ 
++ struct logLuvState {
+++        int                     encoder_state;  /* 1 if encoder correctly initialized */
++ 	int                     user_datafmt;   /* user data format */
++ 	int                     encode_meth;    /* encoding method */
++ 	int                     pixel_size;     /* bytes per pixel */
++@@ -1552,6 +1553,7 @@ LogLuvSetupEncode(TIFF* tif)
++ 		    td->td_photometric, "must be either LogLUV or LogL");
++ 		break;
++ 	}
+++	sp->encoder_state = 1;
++ 	return (1);
++ notsupported:
++ 	TIFFErrorExt(tif->tif_clientdata, module,
++@@ -1563,19 +1565,27 @@ notsupported:
++ static void
++ LogLuvClose(TIFF* tif)
++ {
+++        LogLuvState* sp = (LogLuvState*) tif->tif_data;
++ 	TIFFDirectory *td = &tif->tif_dir;
++ 
+++	assert(sp != 0);
++ 	/*
++ 	 * For consistency, we always want to write out the same
++ 	 * bitspersample and sampleformat for our TIFF file,
++ 	 * regardless of the data format being used by the application.
++ 	 * Since this routine is called after tags have been set but
++ 	 * before they have been recorded in the file, we reset them here.
+++         * Note: this is really a nasty approach. See PixarLogClose
++ 	 */
++-	td->td_samplesperpixel =
++-	    (td->td_photometric == PHOTOMETRIC_LOGL) ? 1 : 3;
++-	td->td_bitspersample = 16;
++-	td->td_sampleformat = SAMPLEFORMAT_INT;
+++        if( sp->encoder_state )
+++        {
+++            /* See PixarLogClose. Might avoid issues with tags whose size depends
+++             * on those below, but not completely sure this is enough. */
+++            td->td_samplesperpixel =
+++                (td->td_photometric == PHOTOMETRIC_LOGL) ? 1 : 3;
+++            td->td_bitspersample = 16;
+++            td->td_sampleformat = SAMPLEFORMAT_INT;
+++        }
++ }
++ 
++ static void
++diff --git a/libtiff/tif_pixarlog.c b/libtiff/tif_pixarlog.c
++index d1246c3d..aa99bc92 100644
++--- a/libtiff/tif_pixarlog.c
+++++ b/libtiff/tif_pixarlog.c
++@@ -1233,8 +1233,10 @@ PixarLogPostEncode(TIFF* tif)
++ static void
++ PixarLogClose(TIFF* tif)
++ {
+++        PixarLogState* sp = (PixarLogState*) tif->tif_data;
++ 	TIFFDirectory *td = &tif->tif_dir;
++ 
+++	assert(sp != 0);
++ 	/* In a really sneaky (and really incorrect, and untruthful, and
++ 	 * troublesome, and error-prone) maneuver that completely goes against
++ 	 * the spirit of TIFF, and breaks TIFF, on close, we covertly
++@@ -1243,8 +1245,19 @@ PixarLogClose(TIFF* tif)
++ 	 * readers that don't know about PixarLog, or how to set
++ 	 * the PIXARLOGDATFMT pseudo-tag.
++ 	 */
++-	td->td_bitspersample = 8;
++-	td->td_sampleformat = SAMPLEFORMAT_UINT;
+++
+++        if (sp->state&PLSTATE_INIT) {
+++            /* We test the state to avoid an issue such as in
+++             * http://bugzilla.maptools.org/show_bug.cgi?id=2604
+++             * What appends in that case is that the bitspersample is 1 and
+++             * a TransferFunction is set. The size of the TransferFunction
+++             * depends on 1<<bitspersample. So if we increase it, an access
+++             * out of the buffer will happen@directory flushing.
+++             * Another option would be to clear those targs. 
+++             */
+++            td->td_bitspersample = 8;
+++            td->td_sampleformat = SAMPLEFORMAT_UINT;
+++        }
++ }
++ 
++ static void
++-- 
++2.11.0
++
+diff --git a/package/tiff/0004-libtiff-tif_dirread.c-modify-ChopUpSingleUncompresse.patch b/package/tiff/0004-libtiff-tif_dirread.c-modify-ChopUpSingleUncompresse.patch
+new file mode 100644
+index 000000000..a24d5d848
+--- /dev/null
++++ b/package/tiff/0004-libtiff-tif_dirread.c-modify-ChopUpSingleUncompresse.patch
+@@ -0,0 +1,107 @@
++From 9a72a69e035ee70ff5c41541c8c61cd97990d018 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Sat, 3 Dec 2016 11:02:15 +0000
++Subject: [PATCH] * libtiff/tif_dirread.c: modify
++ ChopUpSingleUncompressedStrip() to instanciate compute ntrips as
++ TIFFhowmany_32(td->td_imagelength, rowsperstrip), instead of a logic based on
++ the total size of data. Which is faulty is the total size of data is not
++ sufficient to fill the whole image, and thus results in reading outside of
++ the StripByCounts/StripOffsets arrays when using TIFFReadScanline(). Reported
++ by Agostino Sarubbo. Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2608.
++
++* libtiff/tif_strip.c: revert the change in TIFFNumberOfStrips() done
++for http://bugzilla.maptools.org/show_bug.cgi?id=2587 / CVE-2016-9273 since
++the above change is a better fix that makes it unnecessary.
++
++Fixes CVE-2016-10270
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_dirread.c | 22 ++++++++++------------
++ libtiff/tif_strip.c   |  9 ---------
++ 2 files changed, 25 insertions(+), 21 deletions(-)
++
++diff --git a/libtiff/tif_dirread.c b/libtiff/tif_dirread.c
++index 3eec79c9..570d0c32 100644
++--- a/libtiff/tif_dirread.c
+++++ b/libtiff/tif_dirread.c
++@@ -5502,8 +5502,7 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
++ 	uint64 rowblockbytes;
++ 	uint64 stripbytes;
++ 	uint32 strip;
++-	uint64 nstrips64;
++-	uint32 nstrips32;
+++	uint32 nstrips;
++ 	uint32 rowsperstrip;
++ 	uint64* newcounts;
++ 	uint64* newoffsets;
++@@ -5534,18 +5533,17 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
++ 	    return;
++ 
++ 	/*
++-	 * never increase the number of strips in an image
+++	 * never increase the number of rows per strip
++ 	 */
++ 	if (rowsperstrip >= td->td_rowsperstrip)
++ 		return;
++-	nstrips64 = TIFFhowmany_64(bytecount, stripbytes);
++-	if ((nstrips64==0)||(nstrips64>0xFFFFFFFF)) /* something is wonky, do nothing. */
++-	    return;
++-	nstrips32 = (uint32)nstrips64;
+++        nstrips = TIFFhowmany_32(td->td_imagelength, rowsperstrip);
+++        if( nstrips == 0 )
+++            return;
++ 
++-	newcounts = (uint64*) _TIFFCheckMalloc(tif, nstrips32, sizeof (uint64),
+++	newcounts = (uint64*) _TIFFCheckMalloc(tif, nstrips, sizeof (uint64),
++ 				"for chopped \"StripByteCounts\" array");
++-	newoffsets = (uint64*) _TIFFCheckMalloc(tif, nstrips32, sizeof (uint64),
+++	newoffsets = (uint64*) _TIFFCheckMalloc(tif, nstrips, sizeof (uint64),
++ 				"for chopped \"StripOffsets\" array");
++ 	if (newcounts == NULL || newoffsets == NULL) {
++ 		/*
++@@ -5562,18 +5560,18 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
++ 	 * Fill the strip information arrays with new bytecounts and offsets
++ 	 * that reflect the broken-up format.
++ 	 */
++-	for (strip = 0; strip < nstrips32; strip++) {
+++	for (strip = 0; strip < nstrips; strip++) {
++ 		if (stripbytes > bytecount)
++ 			stripbytes = bytecount;
++ 		newcounts[strip] = stripbytes;
++-		newoffsets[strip] = offset;
+++		newoffsets[strip] = stripbytes ? offset : 0;
++ 		offset += stripbytes;
++ 		bytecount -= stripbytes;
++ 	}
++ 	/*
++ 	 * Replace old single strip info with multi-strip info.
++ 	 */
++-	td->td_stripsperimage = td->td_nstrips = nstrips32;
+++	td->td_stripsperimage = td->td_nstrips = nstrips;
++ 	TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
++ 
++ 	_TIFFfree(td->td_stripbytecount);
++diff --git a/libtiff/tif_strip.c b/libtiff/tif_strip.c
++index 4c46ecf5..1676e47d 100644
++--- a/libtiff/tif_strip.c
+++++ b/libtiff/tif_strip.c
++@@ -63,15 +63,6 @@ TIFFNumberOfStrips(TIFF* tif)
++ 	TIFFDirectory *td = &tif->tif_dir;
++ 	uint32 nstrips;
++ 
++-    /* If the value was already computed and store in td_nstrips, then return it,
++-       since ChopUpSingleUncompressedStrip might have altered and resized the
++-       since the td_stripbytecount and td_stripoffset arrays to the new value
++-       after the initial affectation of td_nstrips = TIFFNumberOfStrips() in
++-       tif_dirread.c ~line 3612.
++-       See http://bugzilla.maptools.org/show_bug.cgi?id=2587 */
++-    if( td->td_nstrips )
++-        return td->td_nstrips;
++-
++ 	nstrips = (td->td_rowsperstrip == (uint32) -1 ? 1 :
++ 	     TIFFhowmany_32(td->td_imagelength, td->td_rowsperstrip));
++ 	if (td->td_planarconfig == PLANARCONFIG_SEPARATE)
++-- 
++2.11.0
++
+diff --git a/package/tiff/0005-tools-tiffcp.c-error-out-cleanly-in-cpContig2Separat.patch b/package/tiff/0005-tools-tiffcp.c-error-out-cleanly-in-cpContig2Separat.patch
+new file mode 100644
+index 000000000..c93be89e7
+--- /dev/null
++++ b/package/tiff/0005-tools-tiffcp.c-error-out-cleanly-in-cpContig2Separat.patch
+@@ -0,0 +1,74 @@
++From 5c080298d59efa53264d7248bbe3a04660db6ef7 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Wed, 11 Jan 2017 19:25:44 +0000
++Subject: [PATCH] * tools/tiffcp.c: error out cleanly in cpContig2SeparateByRow
++ and cpSeparate2ContigByRow if BitsPerSample != 8 to avoid heap based
++ overflow. Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2656 and
++ http://bugzilla.maptools.org/show_bug.cgi?id=2657
++
++Fixes CVE-2017-5225
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ tools/tiffcp.c | 24 ++++++++++++++++++++++--
++ 1 file changed, 29 insertions(+), 2 deletions(-)
++
++diff --git a/tools/tiffcp.c b/tools/tiffcp.c
++index bdf754c3..8bbcd52f 100644
++--- a/tools/tiffcp.c
+++++ b/tools/tiffcp.c
++@@ -591,7 +591,7 @@ static	copyFunc pickCopyFunc(TIFF*, TIFF*, uint16, uint16);
++ static int
++ tiffcp(TIFF* in, TIFF* out)
++ {
++-	uint16 bitspersample, samplesperpixel = 1;
+++	uint16 bitspersample = 1, samplesperpixel = 1;
++ 	uint16 input_compression, input_photometric = PHOTOMETRIC_MINISBLACK;
++ 	copyFunc cf;
++ 	uint32 width, length;
++@@ -1067,6 +1067,16 @@ DECLAREcpFunc(cpContig2SeparateByRow)
++ 	register uint32 n;
++ 	uint32 row;
++ 	tsample_t s;
+++        uint16 bps = 0;
+++
+++        (void) TIFFGetField(in, TIFFTAG_BITSPERSAMPLE, &bps);
+++        if( bps != 8 )
+++        {
+++            TIFFError(TIFFFileName(in),
+++                      "Error, can only handle BitsPerSample=8 in %s",
+++                      "cpContig2SeparateByRow");
+++            return 0;
+++        }
++ 
++ 	inbuf = _TIFFmalloc(scanlinesizein);
++ 	outbuf = _TIFFmalloc(scanlinesizeout);
++@@ -1120,6 +1130,16 @@ DECLAREcpFunc(cpSeparate2ContigByRow)
++ 	register uint32 n;
++ 	uint32 row;
++ 	tsample_t s;
+++        uint16 bps = 0;
+++
+++        (void) TIFFGetField(in, TIFFTAG_BITSPERSAMPLE, &bps);
+++        if( bps != 8 )
+++        {
+++            TIFFError(TIFFFileName(in),
+++                      "Error, can only handle BitsPerSample=8 in %s",
+++                      "cpSeparate2ContigByRow");
+++            return 0;
+++        }
++ 
++ 	inbuf = _TIFFmalloc(scanlinesizein);
++ 	outbuf = _TIFFmalloc(scanlinesizeout);
++@@ -1784,7 +1804,7 @@ pickCopyFunc(TIFF* in, TIFF* out, uint16 bitspersample, uint16 samplesperpixel)
++ 	uint32 w, l, tw, tl;
++ 	int bychunk;
++ 
++-	(void) TIFFGetField(in, TIFFTAG_PLANARCONFIG, &shortv);
+++	(void) TIFFGetFieldDefaulted(in, TIFFTAG_PLANARCONFIG, &shortv);
++ 	if (shortv != config && bitspersample != 8 && samplesperpixel > 1) {
++ 		fprintf(stderr,
++ 		    "%s: Cannot handle different planar configuration w/ bits/sample != 8\n",
++-- 
++2.11.0
++
+diff --git a/package/tiff/0006-libtiff-tif_getimage.c-add-explicit-uint32-cast-in-p.patch b/package/tiff/0006-libtiff-tif_getimage.c-add-explicit-uint32-cast-in-p.patch
+new file mode 100644
+index 000000000..b3d8a40bb
+--- /dev/null
++++ b/package/tiff/0006-libtiff-tif_getimage.c-add-explicit-uint32-cast-in-p.patch
+@@ -0,0 +1,31 @@
++From 48780b4fcc425cddc4ef8ffdf536f96a0d1b313b Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Wed, 11 Jan 2017 16:38:26 +0000
++Subject: [PATCH] libtiff/tif_getimage.c: add explicit uint32 cast in putagreytile to
++ avoid UndefinedBehaviorSanitizer warning.
++ Patch by Nicol?s Pe?a.
++ Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2658
++
++Fixes CVE-2017-7592
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_getimage.c | 2 +-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/libtiff/tif_getimage.c b/libtiff/tif_getimage.c
++index fed31f1f..2fa1775c 100644
++--- a/libtiff/tif_getimage.c
+++++ b/libtiff/tif_getimage.c
++@@ -1302,7 +1302,7 @@ DECLAREContigPutFunc(putagreytile)
++     while (h-- > 0) {
++ 	for (x = w; x-- > 0;)
++         {
++-            *cp++ = BWmap[*pp][0] & (*(pp+1) << 24 | ~A1);
+++            *cp++ = BWmap[*pp][0] & ((uint32)*(pp+1) << 24 | ~A1);
++             pp += samplesperpixel;
++         }
++ 	cp += toskew;
++-- 
++2.11.0
++
+diff --git a/package/tiff/0007-libtiff-tiffiop.h-tif_unix.c-tif_win32.c-tif_vms.c-a.patch b/package/tiff/0007-libtiff-tiffiop.h-tif_unix.c-tif_win32.c-tif_vms.c-a.patch
+new file mode 100644
+index 000000000..ec45bbe1f
+--- /dev/null
++++ b/package/tiff/0007-libtiff-tiffiop.h-tif_unix.c-tif_win32.c-tif_vms.c-a.patch
+@@ -0,0 +1,88 @@
++From d60332057b9575ada4f264489582b13e30137be1 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Wed, 11 Jan 2017 19:02:49 +0000
++Subject: [PATCH] * libtiff/tiffiop.h, tif_unix.c, tif_win32.c, tif_vms.c: add
++ _TIFFcalloc()
++
++* libtiff/tif_read.c: TIFFReadBufferSetup(): use _TIFFcalloc() to zero
++initialize tif_rawdata.
++Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2651
++
++Fixes CVE-2017-7593
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_read.c  | 4 +++-
++ libtiff/tif_unix.c  | 8 ++++++++
++ libtiff/tif_win32.c | 8 ++++++++
++ libtiff/tiffio.h    | 1 +
++ 4 files changed, 36 insertions(+), 1 deletion(-)
++
++diff --git a/libtiff/tif_read.c b/libtiff/tif_read.c
++index 277fdd69..4535ccb3 100644
++--- a/libtiff/tif_read.c
+++++ b/libtiff/tif_read.c
++@@ -985,7 +985,9 @@ TIFFReadBufferSetup(TIFF* tif, void* bp, tmsize_t size)
++ 				 "Invalid buffer size");
++ 		    return (0);
++ 		}
++-		tif->tif_rawdata = (uint8*) _TIFFmalloc(tif->tif_rawdatasize);
+++		/* Initialize to zero to avoid uninitialized buffers in case of */
+++                /* short reads (http://bugzilla.maptools.org/show_bug.cgi?id=2651) */
+++		tif->tif_rawdata = (uint8*) _TIFFcalloc(1, tif->tif_rawdatasize);
++ 		tif->tif_flags |= TIFF_MYBUFFER;
++ 	}
++ 	if (tif->tif_rawdata == NULL) {
++diff --git a/libtiff/tif_unix.c b/libtiff/tif_unix.c
++index 7c7bc961..89dd32e8 100644
++--- a/libtiff/tif_unix.c
+++++ b/libtiff/tif_unix.c
++@@ -316,6 +316,14 @@ _TIFFmalloc(tmsize_t s)
++ 	return (malloc((size_t) s));
++ }
++ 
+++void* _TIFFcalloc(tmsize_t nmemb, tmsize_t siz)
+++{
+++    if( nmemb == 0 || siz == 0 )
+++        return ((void *) NULL);
+++
+++    return calloc((size_t) nmemb, (size_t)siz);
+++}
+++
++ void
++ _TIFFfree(void* p)
++ {
++diff --git a/libtiff/tif_win32.c b/libtiff/tif_win32.c
++index d730b3ab..3e9001b7 100644
++--- a/libtiff/tif_win32.c
+++++ b/libtiff/tif_win32.c
++@@ -360,6 +360,14 @@ _TIFFmalloc(tmsize_t s)
++ 	return (malloc((size_t) s));
++ }
++ 
+++void* _TIFFcalloc(tmsize_t nmemb, tmsize_t siz)
+++{
+++    if( nmemb == 0 || siz == 0 )
+++        return ((void *) NULL);
+++
+++    return calloc((size_t) nmemb, (size_t)siz);
+++}
+++
++ void
++ _TIFFfree(void* p)
++ {
++diff --git a/libtiff/tiffio.h b/libtiff/tiffio.h
++index 732da17f..fbd9171f 100644
++--- a/libtiff/tiffio.h
+++++ b/libtiff/tiffio.h
++@@ -293,6 +293,7 @@ extern TIFFCodec* TIFFGetConfiguredCODECs(void);
++  */
++ 
++ extern void* _TIFFmalloc(tmsize_t s);
+++extern void* _TIFFcalloc(tmsize_t nmemb, tmsize_t siz);
++ extern void* _TIFFrealloc(void* p, tmsize_t s);
++ extern void _TIFFmemset(void* p, int v, tmsize_t c);
++ extern void _TIFFmemcpy(void* d, const void* s, tmsize_t c);
++-- 
++2.11.0
++
+diff --git a/package/tiff/0008-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch b/package/tiff/0008-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch
+new file mode 100644
+index 000000000..418a3d698
+--- /dev/null
++++ b/package/tiff/0008-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch
+@@ -0,0 +1,43 @@
++From 2ea32f7372b65c24b2816f11c04bf59b5090d05b Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Thu, 12 Jan 2017 19:23:20 +0000
++Subject: [PATCH] * libtiff/tif_ojpeg.c: fix leak in
++ OJPEGReadHeaderInfoSecTablesQTable, OJPEGReadHeaderInfoSecTablesDcTable and
++ OJPEGReadHeaderInfoSecTablesAcTable
++
++Fixes CVE-2017-7594
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_ojpeg.c | 6 ++++++
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/libtiff/tif_ojpeg.c b/libtiff/tif_ojpeg.c
++index b92f0ebd..5f6c684c 100644
++--- a/libtiff/tif_ojpeg.c
+++++ b/libtiff/tif_ojpeg.c
++@@ -1790,7 +1790,10 @@ OJPEGReadHeaderInfoSecTablesQTable(TIFF* tif)
++ 			TIFFSeekFile(tif,sp->qtable_offset[m],SEEK_SET); 
++ 			p=(uint32)TIFFReadFile(tif,&ob[sizeof(uint32)+5],64);
++ 			if (p!=64)
+++                        {
+++                                _TIFFfree(ob);
++ 				return(0);
+++                        }
++ 			sp->qtable[m]=ob;
++ 			sp->sof_tq[m]=m;
++ 		}
++@@ -1854,7 +1857,10 @@ OJPEGReadHeaderInfoSecTablesDcTable(TIFF* tif)
++ 				rb[sizeof(uint32)+5+n]=o[n];
++ 			p=(uint32)TIFFReadFile(tif,&(rb[sizeof(uint32)+21]),q);
++ 			if (p!=q)
+++                        {
+++                                _TIFFfree(rb);
++ 				return(0);
+++                        }
++ 			sp->dctable[m]=rb;
++ 			sp->sos_tda[m]=(m<<4);
++ 		}
++-- 
++2.11.0
++
+diff --git a/package/tiff/0009-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch b/package/tiff/0009-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch
+new file mode 100644
+index 000000000..a1aae2dce
+--- /dev/null
++++ b/package/tiff/0009-libtiff-tif_ojpeg.c-fix-leak-in-OJPEGReadHeaderInfoS.patch
+@@ -0,0 +1,36 @@
++From 8283e4d1b7e53340684d12932880cbcbaf23a8c1 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Thu, 12 Jan 2017 17:43:25 +0000
++Subject: [PATCH] libtiff/tif_ojpeg.c: fix leak in
++ OJPEGReadHeaderInfoSecTablesAcTable when read fails.
++ Patch by Nicol?s Pe?a.
++ Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2659
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes CVE-2017-7594
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_ojpeg.c | 3 +++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/libtiff/tif_ojpeg.c b/libtiff/tif_ojpeg.c
++index f19e8fd0..b92f0ebd 100644
++--- a/libtiff/tif_ojpeg.c
+++++ b/libtiff/tif_ojpeg.c
++@@ -1918,7 +1918,10 @@ OJPEGReadHeaderInfoSecTablesAcTable(TIFF* tif)
++ 				rb[sizeof(uint32)+5+n]=o[n];
++ 			p=(uint32)TIFFReadFile(tif,&(rb[sizeof(uint32)+21]),q);
++ 			if (p!=q)
+++                        {
+++                                _TIFFfree(rb);
++ 				return(0);
+++                        }
++ 			sp->actable[m]=rb;
++ 			sp->sos_tda[m]=(sp->sos_tda[m]|m);
++ 		}
++-- 
++2.11.0
++
+diff --git a/package/tiff/0010-libtiff-tif_jpeg.c-avoid-integer-division-by-zero-in.patch b/package/tiff/0010-libtiff-tif_jpeg.c-avoid-integer-division-by-zero-in.patch
+new file mode 100644
+index 000000000..862aae2a5
+--- /dev/null
++++ b/package/tiff/0010-libtiff-tif_jpeg.c-avoid-integer-division-by-zero-in.patch
+@@ -0,0 +1,35 @@
++From 47f2fb61a3a64667bce1a8398a8fcb1b348ff122 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Wed, 11 Jan 2017 12:15:01 +0000
++Subject: [PATCH] * libtiff/tif_jpeg.c: avoid integer division by zero in
++ JPEGSetupEncode() when horizontal or vertical sampling is set to 0. Fixes
++ http://bugzilla.maptools.org/show_bug.cgi?id=2653
++
++Fixes CVE-2017-7595
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_jpeg.c | 7 +++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/libtiff/tif_jpeg.c b/libtiff/tif_jpeg.c
++index 38595f98..6c17c388 100644
++--- a/libtiff/tif_jpeg.c
+++++ b/libtiff/tif_jpeg.c
++@@ -1626,6 +1626,13 @@ JPEGSetupEncode(TIFF* tif)
++ 	case PHOTOMETRIC_YCBCR:
++ 		sp->h_sampling = td->td_ycbcrsubsampling[0];
++ 		sp->v_sampling = td->td_ycbcrsubsampling[1];
+++                if( sp->h_sampling == 0 || sp->v_sampling == 0 )
+++                {
+++                    TIFFErrorExt(tif->tif_clientdata, module,
+++                            "Invalig horizontal/vertical sampling value");
+++                    return (0);
+++                }
+++
++ 		/*
++ 		 * A ReferenceBlackWhite field *must* be present since the
++ 		 * default value is inappropriate for YCbCr.  Fill in the
++-- 
++2.11.0
++
+diff --git a/package/tiff/0011-libtiff-tif_dirread.c-avoid-division-by-floating-poi.patch b/package/tiff/0011-libtiff-tif_dirread.c-avoid-division-by-floating-poi.patch
+new file mode 100644
+index 000000000..c0c94291a
+--- /dev/null
++++ b/package/tiff/0011-libtiff-tif_dirread.c-avoid-division-by-floating-poi.patch
+@@ -0,0 +1,47 @@
++From 3cfd62d77c2a7e147a05bd678524c345fa9c2bb8 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Wed, 11 Jan 2017 13:28:01 +0000
++Subject: [PATCH] * libtiff/tif_dirread.c: avoid division by floating point 0
++ in TIFFReadDirEntryCheckedRational() and TIFFReadDirEntryCheckedSrational(),
++ and return 0 in that case (instead of infinity as before presumably)
++ Apparently some sanitizers do not like those divisions by zero. Fixes
++ http://bugzilla.maptools.org/show_bug.cgi?id=2644
++
++Fixes CVE-2017-7598
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_dirread.c | 10 ++++++++--
++ 1 file changed, 16 insertions(+), 2 deletions(-)
++
++diff --git a/libtiff/tif_dirread.c b/libtiff/tif_dirread.c
++index 570d0c32..8a1e42aa 100644
++--- a/libtiff/tif_dirread.c
+++++ b/libtiff/tif_dirread.c
++@@ -2872,7 +2872,10 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryCheckedRational(TIFF* tif, TIFFD
++ 		m.l = direntry->tdir_offset.toff_long8;
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabArrayOfLong(m.i,2);
++-	if (m.i[0]==0)
+++        /* Not completely sure what we should do when m.i[1]==0, but some */
+++        /* sanitizers do not like division by 0.0: */
+++        /* http://bugzilla.maptools.org/show_bug.cgi?id=2644 */
+++	if (m.i[0]==0 || m.i[1]==0)
++ 		*value=0.0;
++ 	else
++ 		*value=(double)m.i[0]/(double)m.i[1];
++@@ -2900,7 +2903,10 @@ static enum TIFFReadDirEntryErr TIFFReadDirEntryCheckedSrational(TIFF* tif, TIFF
++ 		m.l=direntry->tdir_offset.toff_long8;
++ 	if (tif->tif_flags&TIFF_SWAB)
++ 		TIFFSwabArrayOfLong(m.i,2);
++-	if ((int32)m.i[0]==0)
+++        /* Not completely sure what we should do when m.i[1]==0, but some */
+++        /* sanitizers do not like division by 0.0: */
+++        /* http://bugzilla.maptools.org/show_bug.cgi?id=2644 */
+++	if ((int32)m.i[0]==0 || m.i[1]==0)
++ 		*value=0.0;
++ 	else
++ 		*value=(double)((int32)m.i[0])/(double)m.i[1];
++-- 
++2.11.0
++
+diff --git a/package/tiff/0012-libtiff-tif_jpeg.c-validate-BitsPerSample-in-JPEGSet.patch b/package/tiff/0012-libtiff-tif_jpeg.c-validate-BitsPerSample-in-JPEGSet.patch
+new file mode 100644
+index 000000000..4f46d9bb0
+--- /dev/null
++++ b/package/tiff/0012-libtiff-tif_jpeg.c-validate-BitsPerSample-in-JPEGSet.patch
+@@ -0,0 +1,35 @@
++From 0a76a8c765c7b8327c59646284fa78c3c27e5490 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Wed, 11 Jan 2017 16:13:50 +0000
++Subject: [PATCH] * libtiff/tif_jpeg.c: validate BitsPerSample in
++ JPEGSetupEncode() to avoid undefined behaviour caused by invalid shift
++ exponent. Fixes http://bugzilla.maptools.org/show_bug.cgi?id=2648
++
++Fixes CVE-2017-7601
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_jpeg.c | 7 +++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/libtiff/tif_jpeg.c b/libtiff/tif_jpeg.c
++index 6c17c388..192989a9 100644
++--- a/libtiff/tif_jpeg.c
+++++ b/libtiff/tif_jpeg.c
++@@ -1632,6 +1632,13 @@ JPEGSetupEncode(TIFF* tif)
++                             "Invalig horizontal/vertical sampling value");
++                     return (0);
++                 }
+++                if( td->td_bitspersample > 16 )
+++                {
+++                    TIFFErrorExt(tif->tif_clientdata, module,
+++                                 "BitsPerSample %d not allowed for JPEG",
+++                                 td->td_bitspersample);
+++                    return (0);
+++                }
++ 
++ 		/*
++ 		 * A ReferenceBlackWhite field *must* be present since the
++-- 
++2.11.0
++
+diff --git a/package/tiff/0013-libtiff-tif_read.c-avoid-potential-undefined-behavio.patch b/package/tiff/0013-libtiff-tif_read.c-avoid-potential-undefined-behavio.patch
+new file mode 100644
+index 000000000..d049b130c
+--- /dev/null
++++ b/package/tiff/0013-libtiff-tif_read.c-avoid-potential-undefined-behavio.patch
+@@ -0,0 +1,56 @@
++From 66e7bd59520996740e4df5495a830b42fae48bc4 Mon Sep 17 00:00:00 2001
++From: erouault <erouault>
++Date: Wed, 11 Jan 2017 16:33:34 +0000
++Subject: [PATCH] * libtiff/tif_read.c: avoid potential undefined behaviour on
++ signed integer addition in TIFFReadRawStrip1() in isMapped() case. Fixes
++ http://bugzilla.maptools.org/show_bug.cgi?id=2650
++
++Fixes CVE-2017-7602
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libtiff/tif_read.c | 27 ++++++++++++++++++---------
++ 1 file changed, 24 insertions(+), 9 deletions(-)
++
++diff --git a/libtiff/tif_read.c b/libtiff/tif_read.c
++index 52bbf507..b7aacbda 100644
++--- a/libtiff/tif_read.c
+++++ b/libtiff/tif_read.c
++@@ -420,16 +420,25 @@ TIFFReadRawStrip1(TIFF* tif, uint32 strip, void* buf, tmsize_t size,
++ 			return ((tmsize_t)(-1));
++ 		}
++ 	} else {
++-		tmsize_t ma,mb;
+++		tmsize_t ma;
++ 		tmsize_t n;
++-		ma=(tmsize_t)td->td_stripoffset[strip];
++-		mb=ma+size;
++-		if ((td->td_stripoffset[strip] > (uint64)TIFF_TMSIZE_T_MAX)||(ma>tif->tif_size))
++-			n=0;
++-		else if ((mb<ma)||(mb<size)||(mb>tif->tif_size))
++-			n=tif->tif_size-ma;
++-		else
++-			n=size;
+++		if ((td->td_stripoffset[strip] > (uint64)TIFF_TMSIZE_T_MAX)||
+++                    ((ma=(tmsize_t)td->td_stripoffset[strip])>tif->tif_size))
+++                {
+++                    n=0;
+++                }
+++                else if( ma > TIFF_TMSIZE_T_MAX - size )
+++                {
+++                    n=0;
+++                }
+++                else
+++                {
+++                    tmsize_t mb=ma+size;
+++                    if (mb>tif->tif_size)
+++                            n=tif->tif_size-ma;
+++                    else
+++                            n=size;
+++                }
++ 		if (n!=size) {
++ #if defined(__WIN32__) && (defined(_MSC_VER) || defined(__MINGW32__))
++ 			TIFFErrorExt(tif->tif_clientdata, module,
++-- 
++2.11.0
++
 -- 
-http://autobuild.buildroot.net
+2.11.0
