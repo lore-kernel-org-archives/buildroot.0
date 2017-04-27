@@ -1,80 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Apr 2017 21:27:27 +0200
-Subject: [Buildroot] [git commit] python-django: security bump to version
-	1.10.7
-Message-ID: <20170427200446.D63A4827EC@busybox.osuosl.org>
+Date: Thu, 27 Apr 2017 21:37:50 +0200
+Subject: [Buildroot] [git commit] docs/manual: PEP8 coding style for Python
+	scripts
+Message-ID: <20170427200446.DE2A0802E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a66a81b7a9db8e45f15fa63cc0670d158003d5a
+commit: https://git.buildroot.net/buildroot/commit/?id=bb1c63763d862419e22f30b90fcd5179d40a0c5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+The advantages of using a pre-existing coding style instead of creating
+our own are:
+- documenting on the manual takes a single sentence;
+- there are automatic tools to help during development/review.
 
-Since 1.10.3:
+So document that PEP8 recommendation should be followed.
 
-CVE-2016-9013 - User with hardcoded password created when running tests on
-Oracle
-
-Marti Raudsepp reported that a user with a hardcoded password is created
-when running tests with an Oracle database.
-
-CVE-2016-9014 - DNS rebinding vulnerability when DEBUG=True
-
-Aymeric Augustin discovered that Django does not properly validate the Host
-header against settings.ALLOWED_HOSTS when the debug setting is enabled.  A
-remote attacker can take advantage of this flaw to perform DNS rebinding
-attacks.
-
-Since 1.10.7:
-
-CVE-2017-7233 - Open redirect and possible XSS attack via user-supplied
-numeric redirect URLs
-
-It was discovered that is_safe_url() does not properly handle certain
-numeric URLs as safe.  A remote attacker can take advantage of this flaw to
-perform XSS attacks or to use a Django server as an open redirect.
-
-CVE-2017-7234 - Open redirect vulnerability in django.views.static.serve()
-
-Phithon from Chaitin Tech discovered an open redirect vulnerability in the
-django.views.static.serve() view.  Note that this view is not intended for
-production use.
-
-Cc: Oli Vogt <oli.vogt.pub01@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ docs/manual/writing-rules.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 38b303b..09be184 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
--md5	5342e77374b2acd2eafa86d2bb68f8c9  Django-1.10.2.tar.gz
--sha256	e127f12a0bfb34843b6e8c82f91e26fff6445a7ca91d222c0794174cf97cbce1  Django-1.10.2.tar.gz
-+md5	693dfeabad62c561cb205900d32c2a98  Django-1.10.7.tar.gz
-+sha256	593d779dbc2350a245c4f76d26bdcad58a39895e87304fe6d725bbdf84b5b0b8  Django-1.10.7.tar.gz
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9065a68..9056f00 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index e2ad41e..3a2c8dc 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -143,3 +143,8 @@ http://www.methods.co.nz/asciidoc/[asciidoc] format.
  
--PYTHON_DJANGO_VERSION = 1.10.2
-+PYTHON_DJANGO_VERSION = 1.10.7
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://pypi.python.org/packages/57/9e/59444485f092b6ed4f1931e7d2e13b67fdab967c041d02f58a0d1dab8c23
-+PYTHON_DJANGO_SITE = https://pypi.python.org/packages/15/b4/d4bb7313e02386bd23a60e1eb5670321313fb67289c6f36ec43bce747aff
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+ For further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
+ syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
++
++=== Support scripts
++
++Some scripts in the +support/+ directory are written in Python and should follow
++the https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
