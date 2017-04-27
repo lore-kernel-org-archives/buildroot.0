@@ -1,87 +1,81 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Thu, 27 Apr 2017 14:33:33 -0700
-Subject: [Buildroot] [PATCH v2 03/10] package/python-simplegeneric: New
+Date: Thu, 27 Apr 2017 14:33:34 -0700
+Subject: [Buildroot] [PATCH v2 04/10] package/python-ipython-genutils: New
 	package
 In-Reply-To: <20170427213340.26917-1-andrew.smirnov@gmail.com>
 References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
-Message-ID: <20170427213340.26917-4-andrew.smirnov@gmail.com>
+Message-ID: <20170427213340.26917-5-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 'simplegeneric'[1] package to Buildroot. Needed by IPython.
+Add 'ipython_genutils'[1] package to Buildroot. Needed by IPython.
 
-[1] https://pypi.python.org/pypi/simplegeneric
+[1] https://pypi.python.org/pypi/ipython_genutils
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/Config.in                                     |  1 +
- package/python-simplegeneric/Config.in                |  6 ++++++
- .../python-simplegeneric/python-simplegeneric.hash    |  3 +++
- package/python-simplegeneric/python-simplegeneric.mk  | 19 +++++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-simplegeneric/Config.in
- create mode 100644 package/python-simplegeneric/python-simplegeneric.hash
- create mode 100644 package/python-simplegeneric/python-simplegeneric.mk
+ package/Config.in                                           |  1 +
+ package/python-ipython-genutils/Config.in                   |  6 ++++++
+ .../python-ipython-genutils/python-ipython-genutils.hash    |  3 +++
+ package/python-ipython-genutils/python-ipython-genutils.mk  | 13 +++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/python-ipython-genutils/Config.in
+ create mode 100644 package/python-ipython-genutils/python-ipython-genutils.hash
+ create mode 100644 package/python-ipython-genutils/python-ipython-genutils.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 47f43eb..1a0702d 100644
+index 1a0702d..143bccc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -830,6 +830,7 @@ menu "External python modules"
- 	source "package/python-sh/Config.in"
- 	source "package/python-shutilwhich/Config.in"
- 	source "package/python-simpleaudio/Config.in"
-+	source "package/python-simplegeneric/Config.in"
- 	source "package/python-simplejson/Config.in"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
-diff --git a/package/python-simplegeneric/Config.in b/package/python-simplegeneric/Config.in
+@@ -735,6 +735,7 @@ menu "External python modules"
+ 	source "package/python-ipaddress/Config.in"
+ 	source "package/python-ipy/Config.in"
+ 	source "package/python-ipython/Config.in"
++	source "package/python-ipython-genutils/Config.in"
+ 	source "package/python-itsdangerous/Config.in"
+ 	source "package/python-jinja2/Config.in"
+ 	source "package/python-jsonschema/Config.in"
+diff --git a/package/python-ipython-genutils/Config.in b/package/python-ipython-genutils/Config.in
 new file mode 100644
-index 0000000..b5ebfec
+index 0000000..d49442e
 --- /dev/null
-+++ b/package/python-simplegeneric/Config.in
++++ b/package/python-ipython-genutils/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_SIMPLEGENERIC
-+	bool "python-simplegeneric"
++config BR2_PACKAGE_PYTHON_IPYTHON_GENUTILS
++	bool "python-ipython-genutils"
 +	help
-+	  A configuration system for Python applications.
++	  IPython vestigial utilities
 +
-+	  https://pypi.python.org/pypi/simplegeneric
-diff --git a/package/python-simplegeneric/python-simplegeneric.hash b/package/python-simplegeneric/python-simplegeneric.hash
++	  https://pypi.python.org/pypi/ipython_genutils
+diff --git a/package/python-ipython-genutils/python-ipython-genutils.hash b/package/python-ipython-genutils/python-ipython-genutils.hash
 new file mode 100644
-index 0000000..24f652c
+index 0000000..76a74c9
 --- /dev/null
-+++ b/package/python-simplegeneric/python-simplegeneric.hash
++++ b/package/python-ipython-genutils/python-ipython-genutils.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/simplegeneric, sha256 locally computed
-+md5 f9c1fab00fd981be588fc32759f474e3 simplegeneric-0.8.1.zip
-+sha256 dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173 simplegeneric-0.8.1.zip
-diff --git a/package/python-simplegeneric/python-simplegeneric.mk b/package/python-simplegeneric/python-simplegeneric.mk
++# sha256 locally computed.
++
++sha256  424a6ecb33b8c9a8320f8601c533067ed75b491e4bc31621d6278f288497cb1a ipython_genutils-0.2.0.tar.gz
+diff --git a/package/python-ipython-genutils/python-ipython-genutils.mk b/package/python-ipython-genutils/python-ipython-genutils.mk
 new file mode 100644
-index 0000000..a741a21
+index 0000000..e888300
 --- /dev/null
-+++ b/package/python-simplegeneric/python-simplegeneric.mk
-@@ -0,0 +1,19 @@
++++ b/package/python-ipython-genutils/python-ipython-genutils.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-simplegeneric
++# python-ipython-genutils
 +#
 +################################################################################
 +
-+PYTHON_SIMPLEGENERIC_VERSION = 0.8.1
-+PYTHON_SIMPLEGENERIC_SOURCE = simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION).zip
-+PYTHON_SIMPLEGENERIC_SITE = https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b
-+PYTHON_SIMPLEGENERIC_LICENSE = BSD-3-Clause
-+PYTHON_SIMPLEGENERIC_SETUP_TYPE = distutils
-+
-+define PYTHON_SIMPLEGENERIC_EXTRACT_CMDS
-+	unzip $(DL_DIR)/$(PYTHON_SIMPLEGENERIC_SOURCE) -d $(@D)
-+	mv $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)/* $(@D)
-+	rmdir $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)
-+endef
++PYTHON_IPYTHON_GENUTILS_VERSION = 0.2.0
++PYTHON_IPYTHON_GENUTILS_SOURCE = ipython_genutils-$(PYTHON_IPYTHON_GENUTILS_VERSION).tar.gz
++PYTHON_IPYTHON_GENUTILS_SITE = $(call github,ipython,ipython_genutils,$(PYTHON_IPYTHON_GENUTILS_VERSION))
++PYTHON_IPYTHON_GENUTILS_LICENSE = BSD-3-Clause
++PYTHON_IPYTHON_GENUTILS_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
