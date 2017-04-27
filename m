@@ -1,113 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Apr 2017 10:14:54 +0200
-Subject: [Buildroot] [git commit] ncftp: use tar.gz to workaround upstream
-	changing tarball post-release
-Message-ID: <20170427081946.D210C82703@busybox.osuosl.org>
+Date: Thu, 27 Apr 2017 10:19:02 +0200
+Subject: [Buildroot] [git commit] tovid: bump version to 0.35.2
+Message-ID: <20170427081947.02F1182812@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3b548020404b5ca5b52d388d2a5bc9926db0b45
+commit: https://git.buildroot.net/buildroot/commit/?id=3046f64c6a341165a3108900fc978579af6959f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As explained here:
-http://lists.busybox.net/pipermail/buildroot/2017-March/185550.html
-
-Upstream has silently updated their 3.2.6 tarball some time between our
-version bump in late November and December 4th.  The changed tarball also
-contains a significant amount of source changes:
-
- libncftp/c_opennologin.c  |    4
- libncftp/ftp.c            |   31
- libncftp/ftw.c            |    2
- libncftp/io_getmem.c      |    2
- libncftp/io_list.c        |    6
- libncftp/io_sendfile.c    |    4
- libncftp/io_util.c        |    4
- libncftp/ncftp.h          |    2
- libncftp/open.c           |    4
- libncftp/rftw.c           |    2
- libncftp/rglobr.c         |    2
- libncftp/u_decodehost.c   |    2
- libncftp/u_decodeurl.c    |    2
- libncftp/u_getpass.c      |    2
- libncftp/u_misc.c         |    2
- libncftp/u_pathcat.c      |    4
- libncftp/u_scram.c        |    2
- libncftp/wincfg.h         |    1
- ncftp/cmds.c              |   38 -
- ncftp/gl_getline.c        |   26
- ncftp/ls.c                |    9
- ncftp/ls.h                |    9
- ncftp/progress.c          |    9
- ncftp/readln.c            |    4
- ncftp/shell.h             |   10
- ncftp/spoolutil.c         |    8
- ncftp/version.c           |    2
- sh/mksrctar.sh            |    1
- sh_util/gpshare.c         |   12
- sh_util/ncftpbatch.c      |  110 --
- sh_util/ncftpget.c        |    6
- sh_util/ncftpls.c         |    5
- sh_util/ncftpput.c        |   14
- sio/DNSUtil.c             |    4
- sio/Makefile.in           |   16
- sio/SBind.c               |   35
- sio/SConnect.c            |    9
- sio/SNew.c                |  115 ---
- sio/SRead.c               |    6
- sio/StrAddr.c             |    6
- sio/config.h.in           |   24
- sio/configure.in          |    8
- sio/sio.h                 |   18
- sio/wincfg.h              |    1
- vis/bmed.c                |   13
- vis/wgets.c               |   12
- vis/wgets.h               |    7
- vis/wutil.c               |    6
- vis/wutil.h               |    6
-
-Upstream has been contacted to verify if this change was intentional and the
-reason why. From the mail:
-
-> Is this update intentional? Why was the tarball regenerated?
-
-Yes.
-
-The old hash was unfortunately already used in the 2017.02 (and .1)
-releases, so just changing the hash and updating the tarball on
-sources.buildroot.org would break ncftp for users of those releases.
-Instead change to use the .tar.gz tarball as suggested by Arnout.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Steve Kenton <skenton@ou.edu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncftp/ncftp.hash | 2 +-
- package/ncftp/ncftp.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/tovid/tovid.hash | 4 ++--
+ package/tovid/tovid.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
-index 0a7c26c..f6f7310 100644
---- a/package/ncftp/ncftp.hash
-+++ b/package/ncftp/ncftp.hash
+diff --git a/package/tovid/tovid.hash b/package/tovid/tovid.hash
+index 9ddd750..0bd7668 100644
+--- a/package/tovid/tovid.hash
++++ b/package/tovid/tovid.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256 7abd3e8f848f0efb4bb6a4bc5da58a59524d4378fc8d70a52adb0fe1fd00b89d  ncftp-3.2.6-src.tar.xz
-+sha256 129e5954850290da98af012559e6743de193de0012e972ff939df9b604f81c23  ncftp-3.2.6-src.tar.gz
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index 11bfcca..816e0f1 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -5,7 +5,9 @@
+-# Locally computed:
+-sha256  06f7cb00b213bbe83d72f4f2076b675a662697034e1d2cdc2dce987e35c827bc  tovid-0.35.0.tar.gz
++# Locally calculated
++sha256 3193d081a7aa8e00f946b7514066f1fb7647f533ab1ebcc36b5ced927b0a1ab5  tovid-0.35.2.tar.gz
+diff --git a/package/tovid/tovid.mk b/package/tovid/tovid.mk
+index 079fada..c904b98 100644
+--- a/package/tovid/tovid.mk
++++ b/package/tovid/tovid.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- NCFTP_VERSION = 3.2.6
--NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.xz
-+# use .gz as upstream .xz tarball has changed after the hash was added for
-+# 2017.02. Can be changed back to .xz when version is bumped
-+NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.gz
- NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
- NCFTP_TARGET_BINS = ncftp
- NCFTP_LICENSE = Clarified Artistic License
+-TOVID_VERSION = 0.35.0
+-TOVID_SITE = https://github.com/tovid-suite/tovid/releases/download/v$(TOVID_VERSION)
++TOVID_VERSION = 0.35.2
++TOVID_SITE = https://github.com/tovid-suite/tovid/releases/download/$(TOVID_VERSION)
+ TOVID_LICENSE = GPL-2.0+
+ TOVID_LICENSE_FILES = COPYING
+ TOVID_SETUP_TYPE = distutils
