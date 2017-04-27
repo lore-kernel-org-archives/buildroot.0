@@ -1,70 +1,87 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Thu, 27 Apr 2017 14:33:31 -0700
-Subject: [Buildroot] [PATCH v2 01/10] package/python-decorator: New package
+Date: Thu, 27 Apr 2017 14:33:33 -0700
+Subject: [Buildroot] [PATCH v2 03/10] package/python-simplegeneric: New
+	package
 In-Reply-To: <20170427213340.26917-1-andrew.smirnov@gmail.com>
 References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
-Message-ID: <20170427213340.26917-2-andrew.smirnov@gmail.com>
+Message-ID: <20170427213340.26917-4-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 'decorator'[1] package to Buildroot. Needed by 'traitlets'
-package, which is added in the next patch.
+Add 'simplegeneric'[1] package to Buildroot. Needed by IPython.
 
-[1] https://pypi.python.org/pypi/decorator
+[1] https://pypi.python.org/pypi/simplegeneric
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/Config.in                            |  1 +
- package/python-decorator/Config.in           |  6 ++++++
- package/python-decorator/python-decorator.mk | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/python-decorator/Config.in
- create mode 100644 package/python-decorator/python-decorator.mk
+ package/Config.in                                     |  1 +
+ package/python-simplegeneric/Config.in                |  6 ++++++
+ .../python-simplegeneric/python-simplegeneric.hash    |  3 +++
+ package/python-simplegeneric/python-simplegeneric.mk  | 19 +++++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/python-simplegeneric/Config.in
+ create mode 100644 package/python-simplegeneric/python-simplegeneric.hash
+ create mode 100644 package/python-simplegeneric/python-simplegeneric.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 25405c1..eb6d197 100644
+index 47f43eb..1a0702d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -701,6 +701,7 @@ menu "External python modules"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dataproperty/Config.in"
- 	source "package/python-dateutil/Config.in"
-+	source "package/python-decorator/Config.in"
- 	source "package/python-dialog/Config.in"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
-diff --git a/package/python-decorator/Config.in b/package/python-decorator/Config.in
+@@ -830,6 +830,7 @@ menu "External python modules"
+ 	source "package/python-sh/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
+ 	source "package/python-simpleaudio/Config.in"
++	source "package/python-simplegeneric/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-simplegeneric/Config.in b/package/python-simplegeneric/Config.in
 new file mode 100644
-index 0000000..e7ec00c
+index 0000000..b5ebfec
 --- /dev/null
-+++ b/package/python-decorator/Config.in
++++ b/package/python-simplegeneric/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_DECORATOR
-+	bool "python-decorator"
++config BR2_PACKAGE_PYTHON_SIMPLEGENERIC
++	bool "python-simplegeneric"
 +	help
-+	  Better living through Python with decorators
++	  A configuration system for Python applications.
 +
-+	  https://github.com/micheles/decorator
-diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
++	  https://pypi.python.org/pypi/simplegeneric
+diff --git a/package/python-simplegeneric/python-simplegeneric.hash b/package/python-simplegeneric/python-simplegeneric.hash
 new file mode 100644
-index 0000000..fac03a3
+index 0000000..24f652c
 --- /dev/null
-+++ b/package/python-decorator/python-decorator.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-simplegeneric/python-simplegeneric.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/simplegeneric, sha256 locally computed
++md5 f9c1fab00fd981be588fc32759f474e3 simplegeneric-0.8.1.zip
++sha256 dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173 simplegeneric-0.8.1.zip
+diff --git a/package/python-simplegeneric/python-simplegeneric.mk b/package/python-simplegeneric/python-simplegeneric.mk
+new file mode 100644
+index 0000000..a741a21
+--- /dev/null
++++ b/package/python-simplegeneric/python-simplegeneric.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# python-decorator
++# python-simplegeneric
 +#
 +################################################################################
 +
-+PYTHON_DECORATOR_VERSION = 4.0.11
-+PYTHON_DECORATOR_SITE = https://github.com/micheles/decorator.git
-+PYTHON_DECORATOR_SITE_METHOD = git
-+PYTHON_DECORATOR_LICENSE = BSD-2-Clause
-+PYTHON_DECORATOR_SETUP_TYPE = setuptools
++PYTHON_SIMPLEGENERIC_VERSION = 0.8.1
++PYTHON_SIMPLEGENERIC_SOURCE = simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION).zip
++PYTHON_SIMPLEGENERIC_SITE = https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b
++PYTHON_SIMPLEGENERIC_LICENSE = BSD-3-Clause
++PYTHON_SIMPLEGENERIC_SETUP_TYPE = distutils
++
++define PYTHON_SIMPLEGENERIC_EXTRACT_CMDS
++	unzip $(DL_DIR)/$(PYTHON_SIMPLEGENERIC_SOURCE) -d $(@D)
++	mv $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)/* $(@D)
++	rmdir $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)
++endef
 +
 +$(eval $(python-package))
 -- 
