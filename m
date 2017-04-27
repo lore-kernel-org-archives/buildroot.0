@@ -1,42 +1,46 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Thu, 27 Apr 2017 05:29:21 +0000
-Subject: [Buildroot] [PATCH 1/1] tovid: bump version to 0.35.2
-Message-ID: <20170427052921.3343-1-skenton@ou.edu>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 27 Apr 2017 07:36:09 +0200
+Subject: [Buildroot] [PATCH] libmpeg2: fix sparc32 build
+Message-ID: <20170427053609.GA20301@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Steve Kenton <skenton@ou.edu>
----
- package/tovid/tovid.hash | 4 ++--
- package/tovid/tovid.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+The output detection recognized wrong target output, because
+sparcv9 optimization flags used for sparcv8 build.
 
-diff --git a/package/tovid/tovid.hash b/package/tovid/tovid.hash
-index 9ddd750..0bd7668 100644
---- a/package/tovid/tovid.hash
-+++ b/package/tovid/tovid.hash
-@@ -1,2 +1,2 @@
--# Locally computed:
--sha256  06f7cb00b213bbe83d72f4f2076b675a662697034e1d2cdc2dce987e35c827bc  tovid-0.35.0.tar.gz
-+# Locally calculated
-+sha256 3193d081a7aa8e00f946b7514066f1fb7647f533ab1ebcc36b5ced927b0a1ab5  tovid-0.35.2.tar.gz
-diff --git a/package/tovid/tovid.mk b/package/tovid/tovid.mk
-index 079fada..c904b98 100644
---- a/package/tovid/tovid.mk
-+++ b/package/tovid/tovid.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--TOVID_VERSION = 0.35.0
--TOVID_SITE = https://github.com/tovid-suite/tovid/releases/download/v$(TOVID_VERSION)
-+TOVID_VERSION = 0.35.2
-+TOVID_SITE = https://github.com/tovid-suite/tovid/releases/download/$(TOVID_VERSION)
- TOVID_LICENSE = GPL-2.0+
- TOVID_LICENSE_FILES = COPYING
- TOVID_SETUP_TYPE = distutils
+Fixes:
+  http://autobuild.buildroot.net/results/1b3158b03f7eaf5afb5a4dab9526091888f6c9b8
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/libmpeg2/0004-fix-sparc.patch | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/libmpeg2/0004-fix-sparc.patch
+
+diff --git a/package/libmpeg2/0004-fix-sparc.patch b/package/libmpeg2/0004-fix-sparc.patch
+new file mode 100644
+index 0000000..d876b66
+--- /dev/null
++++ b/package/libmpeg2/0004-fix-sparc.patch
+@@ -0,0 +1,16 @@
++Do not use sparcv9 optimization flags for sparcv8 builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur libmpeg2-0.5.1.orig/configure.ac libmpeg2-0.5.1/configure.ac
++--- libmpeg2-0.5.1.orig/configure.ac	2008-07-18 16:30:17.000000000 +0200
+++++ libmpeg2-0.5.1/configure.ac	2017-04-26 21:09:15.780838339 +0200
++@@ -95,7 +95,7 @@
++ 		break
++ 	    fi
++ 	done;;
++-    sparc-* | sparc64-*)
+++    sparc64-*)
++ 	AC_DEFINE([ARCH_SPARC],,[sparc architecture])
++ 	TRY_CFLAGS="$OPT_CFLAGS -mcpu=ultrasparc -mvis"
++ 	AC_TRY_CFLAGS([$TRY_CFLAGS $CFLAGS],[OPT_CFLAGS="$TRY_CFLAGS"]);;
 -- 
-2.9.0.137.gcf4c2cf
+2.1.4
