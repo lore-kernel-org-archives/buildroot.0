@@ -1,38 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Apr 2017 10:26:45 +0200
-Subject: [Buildroot] [PATCH] libmpeg2: fix sparc32 build
-In-Reply-To: <20170427053609.GA20301@waldemar-brodkorb.de>
-References: <20170427053609.GA20301@waldemar-brodkorb.de>
-Message-ID: <20170427102645.523f96c1@free-electrons.com>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Thu, 27 Apr 2017 11:15:13 +0200
+Subject: [Buildroot] [PATCH] tslib: speed up the build by skipping autoreconf
+Message-ID: <1493284513-7365-1-git-send-email-martin.kepplinger@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+---
+hi,
 
-On Thu, 27 Apr 2017 07:36:09 +0200, Waldemar Brodkorb wrote:
+this is more of a question what buildroot's stand is on this. Can there be
+benefit from doing autoreconf in a real tarball release? In case there is
+no patch against the relevant build sources, I guess not, but you'll know
+better.
 
-> +-    sparc-* | sparc64-*)
-> ++    sparc64-*)
-> + 	AC_DEFINE([ARCH_SPARC],,[sparc architecture])
-> + 	TRY_CFLAGS="$OPT_CFLAGS -mcpu=ultrasparc -mvis"
-> + 	AC_TRY_CFLAGS([$TRY_CFLAGS $CFLAGS],[OPT_CFLAGS="$TRY_CFLAGS"]);;
+thanks
+                       martin
 
-I am not sure this is the completely correct solution, and Arnout
-proposed another solution, see:
 
-  https://patchwork.ozlabs.org/patch/749138/
-  https://patchwork.ozlabs.org/patch/749137/
+ package/tslib/tslib.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-The second patch has the explanation why Waldemar patch is not really
-correct.
-
-Best regards,
-
-Thomas
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index e0f307a..27d960d 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -10,7 +10,6 @@ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL, LGPL
+ TSLIB_LICENSE_FILES = COPYING
+ 
+-TSLIB_AUTORECONF = YES
+ TSLIB_INSTALL_STAGING = YES
+ TSLIB_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
