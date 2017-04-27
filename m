@@ -1,73 +1,53 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 27 Apr 2017 23:01:50 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: fix examples compile with disabled
-	gui module
-Message-ID: <20170427210150.1838-1-ps.report@gmx.net>
+From: Mario Rugiero <mrugiero@gmail.com>
+Date: Thu, 27 Apr 2017 18:12:14 -0300
+Subject: [Buildroot] [PATCH] protobuf: fix musl build
+In-Reply-To: <703712d685c4c0e1459af8b8d3a0fcbd80a87c85.1493324348.git.baruch@tkos.co.il>
+References: <703712d685c4c0e1459af8b8d3a0fcbd80a87c85.1493324348.git.baruch@tkos.co.il>
+Message-ID: <CAKKQwLSUE_Th7oV=PW4wUWDo+W+kZSE9LZ5yRE4AnKmM18mXaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+Looks good to me.
 
-  Project ERROR: Could not find feature opengl.
-
-[1] http://autobuild.buildroot.net/results/040/040ab283dbbec623fe5ff4eaece754d9701fafc5
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...4-examples-fix-compile-without-gui-module.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
-
-diff --git a/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
-new file mode 100644
-index 000000000..148ced800
---- /dev/null
-+++ b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
-@@ -0,0 +1,42 @@
-+From fe8a9bacf781fcf290e04a08f2b8e37d881d58bb Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 27 Apr 2017 22:41:28 +0200
-+Subject: [PATCH] examples: fix compile without gui module
-+
-+Fixes:
-+
-+  Project ERROR: Could not find feature opengl.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/gui/gui.pro         | 2 +-
-+ examples/widgets/widgets.pro | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/examples/gui/gui.pro b/examples/gui/gui.pro
-+index a4d960d3f5..b8080c2075 100644
-+--- a/examples/gui/gui.pro
-++++ b/examples/gui/gui.pro
-+@@ -6,5 +6,5 @@ CONFIG += no_docs_target
-+ 
-+ SUBDIRS += analogclock
-+ SUBDIRS += rasterwindow
-+-qtConfig(opengl): \
-++qtHaveModule(gui):qtConfig(opengl): \
-+     SUBDIRS += openglwindow
-+diff --git a/examples/widgets/widgets.pro b/examples/widgets/widgets.pro
-+index 513ddc91f2..cef4936d32 100644
-+--- a/examples/widgets/widgets.pro
-++++ b/examples/widgets/widgets.pro
-+@@ -22,7 +22,7 @@ SUBDIRS       = \
-+                 tutorials \
-+                 widgets
-+ 
-+-qtConfig(opengl): \
-++qtHaveModule(gui):qtConfig(opengl): \
-+     SUBDIRS += windowcontainer
-+ 
-+ contains(DEFINES, QT_NO_CURSOR): SUBDIRS -= mainwindows
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+2017-04-27 17:19 GMT-03:00 Baruch Siach <baruch@tkos.co.il>:
+> Add upstream patch fixing conflict with musl defined major/minor macros.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/fc5/fc5ea266eecb6ecab011ea3542f0bb680fb8fb3b/
+> http://autobuild.buildroot.net/results/3b3/3b3fe16978f19e65a6c6dc1712d72cb349eed0d5/
+> http://autobuild.buildroot.net/results/1da/1dac9d5e49342700036c90ed4785fff7398b8966/
+>
+> Cc: Mario J. Rugiero <mrugiero@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/protobuf/protobuf.hash | 1 +
+>  package/protobuf/protobuf.mk   | 2 ++
+>  2 files changed, 3 insertions(+)
+>
+> diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+> index 9ec6bc759d8f..8c2ade37e7cd 100644
+> --- a/package/protobuf/protobuf.hash
+> +++ b/package/protobuf/protobuf.hash
+> @@ -1,2 +1,3 @@
+>  # Locally calculated
+>  sha256 51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6 protobuf-cpp-3.2.0.tar.gz
+> +sha256 da80c39838515913633f4cbd875fdd4ad711be95c83a50ff5096b9f1254033b3 416f90939d4de58fe1a4e2489120010313183291.patch
+> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+> index a3e96d4f898c..610da8c04a94 100644
+> --- a/package/protobuf/protobuf.mk
+> +++ b/package/protobuf/protobuf.mk
+> @@ -19,6 +19,8 @@ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+>
+>  PROTOBUF_INSTALL_STAGING = YES
+>
+> +PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
+> +
+>  ifeq ($(BR2_PACKAGE_ZLIB),y)
+>  PROTOBUF_DEPENDENCIES += zlib
+>  endif
+> --
+> 2.11.0
+>
