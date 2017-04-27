@@ -1,79 +1,45 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 27 Apr 2017 11:37:39 +0200
-Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
-In-Reply-To: <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
-References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
- <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
-Message-ID: <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Apr 2017 13:50:58 +0300
+Subject: [Buildroot] [PATCH] libnl: add upstream security fix
+Message-ID: <b4aa22c38bf917ebab1e80069dacbe2c892e9bc1.1493290258.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+CVE-2017-0553: An elevation of privilege vulnerability in libnl could enable a
+local malicious application to execute arbitrary code within the context of
+the Wi-Fi service
 
-Am 12.04.2017 um 15:59 schrieb Arnout Vandecappelle:
->
->
-> On 23-03-17 08:54, Wolfgang Grandegger wrote:
->> Hello,
->>
->> this is v3 of my RFC patch series to make the buildroot SDK (HOST_DIR)
->> relocatable. It sanitizes the RPATH of all ELF files in the "target"
->> and "host" tree using "patchelf --make-rpath-relative". I have started
->> the mainlining process implementing "--make-rpath-relative" using
->> GitHub pull request [1]... till now, no answer!
->>
->> Furthermore this patch creates the script "relocate-sdk.sh" in the top
->> directory of the "host" tree allowing to relocate the SDK after it has
->> been moved to a new location. It replaces the old path with the new
->> one in all text files identified by "file --mime-type". The location
->> is stored in "usr/share/buildroot/sdk-location".
->>
->> Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
->> libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
->>
->> Other Questions:
->>
->> - Why do we want relative RPATHs starting with "$ORIGIN" also for ELF
->>   files in the target tree. "/lib" and "/usr/lib" have been removed
->>   already.
->
->  Good point, I don't think we want that... Neither for the ones in staging, I
-> suppose. The RPATHs there should all be absolute paths which should be
-> interpreted relative to $(TARGET_DIR) resp. $(STAGING_DIR).
+https://www.mail-archive.com/debian-bugs-dist at lists.debian.org/msg1511855.html
 
-Could be done, no problem. Just requires some further modifications to 
-patchelf. BTW, so far I have not received any response to my related 
-Github pull request... like many others:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libnl/libnl.hash | 1 +
+ package/libnl/libnl.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-   https://github.com/NixOS/patchelf/pulls
-
-The project seems not really to be maintained... or I use the wrong 
-channel. In principle we could maintain your own version.
-
->  I'm not entirely sure about staging, whether ld will use RPATH as an
-> alternative to -L and in that case whether it is done relative to sysroot or not.
-
-So far, the patch series works for me very well. Just my usecase, of course.
-
->> Things not yet addressed:
->>
->> - "make toolchain" creates a toolchain tree which still has references
->>   to the build system (in ELF and text files).
->
->  A solution to this (and other problems) is to use the same approach as
-> check-bin-arch: do it as an instrumentation hook for each package, and only look
-> at the files added by that package. That way, the overhead is spread out over
-> the entire build process, and doing rebuilds doesn't run patchelf on all files
-> anymore in the finalize step.
-
-This is just to solve the issue mentioned above or a general approach 
-(instead of doning rtpath sanitation at the end)?
-
-How should I go ahead to get this patch series accepted sooner than 
-later? We could make the option configurable, for example, to reduce the 
-risk of breaking something.
-
-Wolfgang.
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index 9761a9580cc9..f357927ef773 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,2 +1,3 @@
+ # From https://github.com/thom311/libnl/releases/download/libnl3_2_29/libnl-3.2.29.tar.gz.sha256sum
+ sha256	0beb593dc6abfffa18a5c787b27884979c1b7e7f1fd468c801e3cc938a685922	libnl-3.2.29.tar.gz
++sha256	b7bb929194eefc56c786a7e1ae5176b54713f9013ccec63760f232742ae80361	3e18948f17148e6a3c4255bdeaaf01ef6081ceeb.patch
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 6de6825ca3bf..8226f87487d1 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -13,6 +13,8 @@ LIBNL_DEPENDENCIES = host-bison host-flex host-pkgconf
+ # Patching configure.ac
+ LIBNL_AUTORECONF = YES
+ 
++LIBNL_PATCH = https://github.com/thom311/libnl/commit/3e18948f17148e6a3c4255bdeaaf01ef6081ceeb.patch
++
+ ifeq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
+ LIBNL_CONF_OPTS += --enable-cli
+ else
+-- 
+2.11.0
