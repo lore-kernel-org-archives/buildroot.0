@@ -1,49 +1,42 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 26 Apr 2017 20:02:22 -0500
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump version to 1.18.0
-Message-ID: <1493254942-38586-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Thu, 27 Apr 2017 05:29:21 +0000
+Subject: [Buildroot] [PATCH 1/1] tovid: bump version to 0.35.2
+Message-ID: <20170427052921.3343-1-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Steve Kenton <skenton@ou.edu>
 ---
- package/libqmi/libqmi.hash | 2 +-
- package/libqmi/libqmi.mk   | 6 +++---
+ package/tovid/tovid.hash | 4 ++--
+ package/tovid/tovid.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 08da1ae..3f40154 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
+diff --git a/package/tovid/tovid.hash b/package/tovid/tovid.hash
+index 9ddd750..0bd7668 100644
+--- a/package/tovid/tovid.hash
++++ b/package/tovid/tovid.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  7ab6bb47fd23bf4d3fa17424e40ea5552d08b19e5ee4f125f21f316c8086ba2a  libqmi-1.16.0.tar.xz
-+sha256 a0a42c55935e75a630208e2f70840bd4407f56fe1c5258f5b0f6c0aaedf88cec  libqmi-1.18.0.tar.xz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index caa4398..92b635d 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
+-# Locally computed:
+-sha256  06f7cb00b213bbe83d72f4f2076b675a662697034e1d2cdc2dce987e35c827bc  tovid-0.35.0.tar.gz
++# Locally calculated
++sha256 3193d081a7aa8e00f946b7514066f1fb7647f533ab1ebcc36b5ced927b0a1ab5  tovid-0.35.2.tar.gz
+diff --git a/package/tovid/tovid.mk b/package/tovid/tovid.mk
+index 079fada..c904b98 100644
+--- a/package/tovid/tovid.mk
++++ b/package/tovid/tovid.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBQMI_VERSION = 1.16.0
-+LIBQMI_VERSION = 1.18.0
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
-@@ -13,7 +13,7 @@ LIBQMI_INSTALL_STAGING = YES
- 
- LIBQMI_DEPENDENCIES = libglib2
- 
--# we don't want -Werror
--LIBQMI_CONF_OPTS = --enable-more-warnings=no
-+# we don't want -Werror and disable gudev Gobject bindings
-+LIBQMI_CONF_OPTS = --enable-more-warnings=no --without-udev
- 
- $(eval $(autotools-package))
+-TOVID_VERSION = 0.35.0
+-TOVID_SITE = https://github.com/tovid-suite/tovid/releases/download/v$(TOVID_VERSION)
++TOVID_VERSION = 0.35.2
++TOVID_SITE = https://github.com/tovid-suite/tovid/releases/download/$(TOVID_VERSION)
+ TOVID_LICENSE = GPL-2.0+
+ TOVID_LICENSE_FILES = COPYING
+ TOVID_SETUP_TYPE = distutils
 -- 
-1.9.1
+2.9.0.137.gcf4c2cf
