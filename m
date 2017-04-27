@@ -1,61 +1,42 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 27 Apr 2017 06:18:07 -0500
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump version to 1.18.0
-In-Reply-To: <871ssemfh8.fsf@dell.be.48ers.dk>
-References: <1493254942-38586-1-git-send-email-matthew.weber@rockwellcollins.com>
- <871ssemfh8.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpY=4Ag39u3YDetPzq8VNr5sqcmXhjZhMr69P3sRFvxhQw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Apr 2017 14:30:14 +0300
+Subject: [Buildroot] [PATCH] aircrack-ng: don't build SSE code for non SSE
+	target
+Message-ID: <5343392152d546eef2d82eb4b98f78e82db64054.1493292614.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Fixes:
+http://autobuild.buildroot.net/results/763/7631470016f923e8f4a7696e65437c71b8668b6e/
+http://autobuild.buildroot.net/results/621/621588651b5cf54726bbf5361399a2dc301b8a29/
+http://autobuild.buildroot.net/results/628/628a66ef766308fba699f1faa942306e600e5575/
 
-On Thu, Apr 27, 2017 at 3:17 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
->
->  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->  > ---
->  >  package/libqmi/libqmi.hash | 2 +-
->  >  package/libqmi/libqmi.mk   | 6 +++---
->  >  2 files changed, 4 insertions(+), 4 deletions(-)
->
->  > diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
->  > index 08da1ae..3f40154 100644
->  > --- a/package/libqmi/libqmi.hash
->  > +++ b/package/libqmi/libqmi.hash
->  > @@ -1,2 +1,2 @@
->  >  # Locally computed:
->  > -sha256  7ab6bb47fd23bf4d3fa17424e40ea5552d08b19e5ee4f125f21f316c8086ba2a  libqmi-1.16.0.tar.xz
->  > +sha256 a0a42c55935e75a630208e2f70840bd4407f56fe1c5258f5b0f6c0aaedf88cec  libqmi-1.18.0.tar.xz
->  > diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
->  > index caa4398..92b635d 100644
->  > --- a/package/libqmi/libqmi.mk
->  > +++ b/package/libqmi/libqmi.mk
->  > @@ -4,7 +4,7 @@
->  >  #
->  >  ################################################################################
->
->  > -LIBQMI_VERSION = 1.16.0
->  > +LIBQMI_VERSION = 1.18.0
->  >  LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
->  >  LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
->  >  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
->  > @@ -13,7 +13,7 @@ LIBQMI_INSTALL_STAGING = YES
->
->  >  LIBQMI_DEPENDENCIES = libglib2
->
->  > -# we don't want -Werror
->  > -LIBQMI_CONF_OPTS = --enable-more-warnings=no
->  > +# we don't want -Werror and disable gudev Gobject bindings
->
-> Why? It would be good to describe why we don't want udev support.
+Cc: Laurent Cans <laurent.cans@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/aircrack-ng/aircrack-ng.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-Sure, should I add more to the comment in the file or patch submission
-that the gudev package currently isn't part of buildroot to provide
-the Gobject bindings between libqmi and eudev?
-
-Matt
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index b728624003c1..6b384c072003 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -53,6 +53,12 @@ else
+ AIRCRACK_NG_MAKE_OPTS += sqlite=false
+ endif
+ 
++ifeq ($(BR2_X86_CPU_HAS_SSE),y)
++AIRCRACK_NG_MAKE_OPTS += NEWSSE=true
++else
++AIRCRACK_NG_MAKE_OPTS += NEWSSE=false
++endif
++
+ define AIRCRACK_NG_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(AIRCRACK_NG_LDFLAGS)" \
+ 		$(MAKE) -C $(@D) $(AIRCRACK_NG_MAKE_OPTS)
+-- 
+2.11.0
