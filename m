@@ -1,34 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Apr 2017 13:44:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump version to 1.18.0
-In-Reply-To: <CANQCQpY=4Ag39u3YDetPzq8VNr5sqcmXhjZhMr69P3sRFvxhQw@mail.gmail.com>
- (Matthew Weber's message of "Thu, 27 Apr 2017 06:18:07 -0500")
-References: <1493254942-38586-1-git-send-email-matthew.weber@rockwellcollins.com>
- <871ssemfh8.fsf@dell.be.48ers.dk>
- <CANQCQpY=4Ag39u3YDetPzq8VNr5sqcmXhjZhMr69P3sRFvxhQw@mail.gmail.com>
-Message-ID: <87fugukrcc.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Apr 2017 14:13:03 +0200
+Subject: [Buildroot] [PATCH] icu: add upstream security fix for utf-8
+	handling
+In-Reply-To: <20170426125713.6427-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 26 Apr 2017 14:57:13 +0200")
+References: <20170426125713.6427-1-peter@korsgaard.com>
+Message-ID: <87bmrikq0g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Hi,
+ > Fixes:
+ > CVE-2017-7867 - International Components for Unicode (ICU) for C/C++ before
+ > 2017-02-13 has an out-of-bounds write caused by a heap-based buffer overflow
+ > related to the utf8TextAccess function in common/utext.cpp and the
+ > utext_setNativeIndex* function.
 
- >> > -# we don't want -Werror
- >> > -LIBQMI_CONF_OPTS = --enable-more-warnings=no
- >> > +# we don't want -Werror and disable gudev Gobject bindings
- >> 
- >> Why? It would be good to describe why we don't want udev support.
+ > CVE-2017-7868 - International Components for Unicode (ICU) for C/C++ before
+ > 2017-02-13 has an out-of-bounds write caused by a heap-based buffer overflow
+ > related to the utf8TextAccess function in common/utext.cpp and the
+ > utext_moveIndex32* function.
 
+ > Upstream: http://bugs.icu-project.org/trac/changeset/39671
 
- > Sure, should I add more to the comment in the file or patch submission
- > that the gudev package currently isn't part of buildroot to provide
- > the Gobject bindings between libqmi and eudev?
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Just adding it in the patch description is fine, thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
