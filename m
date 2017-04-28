@@ -1,61 +1,92 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 28 Apr 2017 22:17:37 +0200
-Subject: [Buildroot] [PATCH] x11vnc: update to 0.9.14
-In-Reply-To: <20170426100320.00702ce9@free-electrons.com>
-References: <1493036541-26331-1-git-send-email-martin.kepplinger@ginzinger.com>
- <3cc20a82-673d-f87b-e5c6-0acc428cfb1c@ginzinger.com>
- <9cbb711a-6026-8a69-a6c6-85dc140e2e4c@imgtec.com>
- <d6771575-8b26-f608-5d57-4d3c573eee36@ginzinger.com>
- <e8750710-f475-fe87-79a4-edd6f655d5a0@mind.be>
- <20170426100320.00702ce9@free-electrons.com>
-Message-ID: <328df89e-01f6-d25f-d2b8-6ac111f7e06c@mind.be>
+Date: Fri, 28 Apr 2017 22:23:59 +0200
+Subject: [Buildroot] [PATCH v2] x11vnc: update to 0.9.14
+In-Reply-To: <1493210235-7076-1-git-send-email-martin.kepplinger@ginzinger.com>
+References: <20170426100320.00702ce9@free-electrons.com>
+ <1493210235-7076-1-git-send-email-martin.kepplinger@ginzinger.com>
+Message-ID: <65322dd8-3b6b-e421-5e5b-9c69d88355a3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Martin,
 
-
-On 26-04-17 10:03, Thomas Petazzoni wrote:
-> Hello,
+On 26-04-17 14:37, Martin Kepplinger wrote:
+> This uses x11vnc's new upstream location at github. Autoreconf is
+> added because it's really only a code snapshot release.
 > 
-> On Mon, 24 Apr 2017 21:47:58 +0200, Arnout Vandecappelle wrote:
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+> ---
 > 
->>  Is there a reason why you need this bump?
+> In the end you're right and there's nothing special here. Without any reason,
+> buildroot doesn't hold on an old version. People do releases. People break
+> stuff. People fix stuff. Since I happen to need a fix in the upcoming 0.9.15
+> this is probably more reason to randomly update than other updates have.
 > 
-> Well, do we need a reason to bump a package, other than "upstream has a
-> new release, possibly with new features/bug fixes" ? Tons of version
-> bumps we merged are not motivated by a specific reason, other than
-> making sure Buildroot uses recent versions of the different components.
+> ... I tested it. For me, using Xfbdev, this 0.9.14 works just fine :)
+> 
+> 
+> revision history
+> ----------------
+> v2: use the github helper instead of a URL
+> v1: initial proposal to update 0.9.13 to 0.9.14
+> 
+> 
+>  package/x11vnc/x11vnc.hash | 2 +-
+>  package/x11vnc/x11vnc.mk   | 6 ++++--
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
+> index 5828b12..3cdbfa1 100644
+> --- a/package/x11vnc/x11vnc.hash
+> +++ b/package/x11vnc/x11vnc.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed:
+> -sha256  f6829f2e629667a5284de62b080b13126a0736499fe47cdb447aedb07a59f13b  x11vnc-0.9.13.tar.gz
+> +sha256  45f87c5e4382988c73e8c7891ac2bfb45d8f9ce1196ae06651c84636684ea143  x11vnc-0.9.14.tar.gz
+> diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
+> index 9f4af12..6c862dd 100644
+> --- a/package/x11vnc/x11vnc.mk
+> +++ b/package/x11vnc/x11vnc.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -X11VNC_VERSION = 0.9.13
+> -X11VNC_SITE = http://downloads.sourceforge.net/project/libvncserver/x11vnc/$(X11VNC_VERSION)
+> +X11VNC_VERSION = 0.9.14
+> +X11VNC_SITE = $(call github,LibVNC,x11vnc,$(X11VNC_VERSION))
+>  # sdl support is not used in x11vnc, but host include / library search paths
+>  # leak in if host has sdl-config
+>  X11VNC_CONF_OPTS = --without-sdl
+> @@ -13,6 +13,8 @@ X11VNC_DEPENDENCIES = xlib_libXt xlib_libXext xlib_libXtst
+>  X11VNC_LICENSE = GPL-2.0+
+>  X11VNC_LICENSE_FILES = COPYING
+>  
+> +X11VNC_AUTORECONF = YES
 
- Why did you remove the part that explains exactly this?
+ Please add a comment above it:
 
->> On Mon, 24 Apr 2017 21:47:58 +0200, Arnout Vandecappelle wrote:
->>>  We indeed prefer to stick to officially released versions when upstream has
->>> them. And we generally don't like to take releases that upstream considers a
->>> development/alpha/... release.
-
- Quoting the x11vnc website [1]:
-
------
-As of Sep 2011, the x11vnc-0.9.13.tar.gz source package is released (recommended
-download). [...] Also, you can get a copy of my latest, bleeding edge
-x11vnc-0.9.14-dev.tar.gz tarball to build the most up to date one.
------
+# Source coming from github, no configure included
 
 
- However, I didn't actually read that website before, I just read Vicente's
-comment. If I had read the website, I would have noticed that it refers to a
--dev tarball, and that at the time it was expected that a real release would
-happen end of 2011.
+ If you resubmit, you can add my
 
- With that in mind, I think we can conclude that the website is simply out of
-date and should be relied on, and that there is no reason not to bump to 0.9.14.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
 
  Regards,
  Arnout
+
+
+> +
+>  ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
+>  X11VNC_DEPENDENCIES += avahi dbus
+>  else
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
