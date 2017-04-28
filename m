@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 14:27:15 +0200
-Subject: [Buildroot] [PATCH 1/2] libcroco: add upstream security fixes
-In-Reply-To: <20170425141700.30077-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 25 Apr 2017 16:16:59 +0200")
-References: <20170425141700.30077-1-peter@korsgaard.com>
-Message-ID: <8737csiuos.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Apr 2017 14:28:39 +0200
+Subject: [Buildroot] [PATCH] imagemagick: add upstream security fix for
+	CVE-2017-7606
+In-Reply-To: <20170425153554.27006-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 25 Apr 2017 17:35:54 +0200")
+References: <20170425153554.27006-1-peter@korsgaard.com>
+Message-ID: <87y3ukhg20.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > These have been added to upstream git after 0.6.12 was released.
- > CVE-2017-7960 - The cr_input_new_from_uri function in cr-input.c in libcroco
- > 0.6.11 and 0.6.12 allows remote attackers to cause a denial of service
- > (heap-based buffer over-read) via a crafted CSS file.
-
- > CVE-2017-7961 - The cr_tknzr_parse_rgb function in cr-tknzr.c in libcroco
- > 0.6.11 and 0.6.12 has an "outside the range of representable values of type
- > long" undefined behavior issue, which might allow remote attackers to cause
- > a denial of service (application crash) or possibly have unspecified other
- > impact via a crafted CSS file.
+ > This is not yet part of any release.
+ > coders/rle.c in ImageMagick 7.0.5-4 has an "outside the range of
+ > representable values of type unsigned char" undefined behavior issue, which
+ > might allow remote attackers to cause a denial of service (application
+ > crash) or possibly have unspecified other impact via a crafted image.
 
  > For more details, see:
- > https://blogs.gentoo.org/ago/2017/04/17/libcroco-heap-overflow-and-undefined-behavior/
+ > https://blogs.gentoo.org/ago/2017/04/02/imagemagick-undefined-behavior-in-codersrle-c/
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
