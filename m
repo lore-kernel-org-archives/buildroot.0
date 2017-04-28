@@ -1,39 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Apr 2017 11:08:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-04-27
-In-Reply-To: <20170428084433.7pb5lamlgxy2hzau@tarshish>
-References: <20170428062842.1E44E20E06@mail.free-electrons.com>
- <20170428084433.7pb5lamlgxy2hzau@tarshish>
-Message-ID: <20170428110851.03eff198@free-electrons.com>
+From: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
+Date: Fri, 28 Apr 2017 11:35:21 +0200
+Subject: [Buildroot] [PATCH 2/2] Add DEPENDENCIES_HOST_PREREQ to the list of
+	packages
+In-Reply-To: <1493372121-32177-1-git-send-email-alfredo.alvarez_fernandez@nokia.com>
+References: <1493372121-32177-1-git-send-email-alfredo.alvarez_fernandez@nokia.com>
+Message-ID: <1493372121-32177-2-git-send-email-alfredo.alvarez_fernandez@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+That way packages included in that list like ccache will also be
+regarded as a normal packages for targets like external-deps,
+show-targets or legal-info
 
-On Fri, 28 Apr 2017 11:44:33 +0300, Baruch Siach wrote:
+Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Incompatibility of ola with protobuf 3.2.0. An upstream issue[1] is open since 
-> January.
-> 
-> Should we revert the protobuf bump? Remove ola?
-
-Remove ola is I believe the right approach. According to the Github
-issue, Fedora has done the same thing.
-
-I believe it's more important to stay up-to-date with protobuf than it
-is to keep ola as a package, especially since ola is not used as a
-dependency for any other package.
-
-Maybe just mark it BROKEN for now?
-
-Best regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 919d589..f041567 100644
+--- a/Makefile
++++ b/Makefile
+@@ -484,6 +484,8 @@ include package/Makefile.in
+ -include $(wildcard arch/arch.mk.*)
+ include support/dependencies/dependencies.mk
+ 
++PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
++
+ include toolchain/*.mk
+ include toolchain/*/*.mk
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
