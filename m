@@ -1,70 +1,50 @@
-From: Mario Rugiero <mrugiero@gmail.com>
-Date: Fri, 28 Apr 2017 10:45:42 -0300
-Subject: [Buildroot] [PATCH] protobuf: fix musl build
-In-Reply-To: <20170428062454.zitjjufo44yeq4ip@tarshish>
-References: <703712d685c4c0e1459af8b8d3a0fcbd80a87c85.1493324348.git.baruch@tkos.co.il>
- <CAKKQwLSUE_Th7oV=PW4wUWDo+W+kZSE9LZ5yRE4AnKmM18mXaA@mail.gmail.com>
- <20170428062454.zitjjufo44yeq4ip@tarshish>
-Message-ID: <CAKKQwLSNijz2V6DD+8uVfc_HpO2m6QNO72EYv+JTtehSTDJ-HA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 28 Apr 2017 17:07:58 +0300
+Subject: [Buildroot] [PATCH] ola: mark as broken
+Message-ID: <78a929f7208b78d17f45d4ddb8bc8df7f26ba74b.1493388478.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-04-28 3:24 GMT-03:00 Baruch Siach <baruch@tkos.co.il>:
-> Hi Mario,
->
-> On Thu, Apr 27, 2017 at 06:12:14PM -0300, Mario Rugiero wrote:
->> Looks good to me.
->
-> Thanks.
->
-> Care to send a formal Acked-by for patchwork to note?
->
-> baruch
->
->> 2017-04-27 17:19 GMT-03:00 Baruch Siach <baruch@tkos.co.il>:
->> > Add upstream patch fixing conflict with musl defined major/minor macros.
->> >
->> > Fixes:
->> > http://autobuild.buildroot.net/results/fc5/fc5ea266eecb6ecab011ea3542f0bb680fb8fb3b/
->> > http://autobuild.buildroot.net/results/3b3/3b3fe16978f19e65a6c6dc1712d72cb349eed0d5/
->> > http://autobuild.buildroot.net/results/1da/1dac9d5e49342700036c90ed4785fff7398b8966/
->> >
->> > Cc: Mario J. Rugiero <mrugiero@gmail.com>
->> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> > ---
->> >  package/protobuf/protobuf.hash | 1 +
->> >  package/protobuf/protobuf.mk   | 2 ++
->> >  2 files changed, 3 insertions(+)
->> >
->> > diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
->> > index 9ec6bc759d8f..8c2ade37e7cd 100644
->> > --- a/package/protobuf/protobuf.hash
->> > +++ b/package/protobuf/protobuf.hash
->> > @@ -1,2 +1,3 @@
->> >  # Locally calculated
->> >  sha256 51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6 protobuf-cpp-3.2.0.tar.gz
->> > +sha256 da80c39838515913633f4cbd875fdd4ad711be95c83a50ff5096b9f1254033b3 416f90939d4de58fe1a4e2489120010313183291.patch
->> > diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
->> > index a3e96d4f898c..610da8c04a94 100644
->> > --- a/package/protobuf/protobuf.mk
->> > +++ b/package/protobuf/protobuf.mk
->> > @@ -19,6 +19,8 @@ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
->> >
->> >  PROTOBUF_INSTALL_STAGING = YES
->> >
->> > +PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
->> > +
->> >  ifeq ($(BR2_PACKAGE_ZLIB),y)
->> >  PROTOBUF_DEPENDENCIES += zlib
->> >  endif
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Build with current protobuf is broken. Mark as broken until upstream resolves
+this issue.
 
-Acked-by: Mario J. Rugiero <mrugiero@gmail.com>
-Tested-by: Mario J. Rugiero <mrugiero@gmail.com>
+https://github.com/OpenLightingProject/ola/issues/1192
+
+Fixes:
+http://autobuild.buildroot.net/results/d9a/d9a24f7b715100be1580a568a5e3ff72b0389165/
+http://autobuild.buildroot.net/results/b31/b314811dedce04ebdc779df67de6cb59a1880cac/
+http://autobuild.buildroot.net/results/587/5877b2301b7da43c50127a4c5f648acd3b0264cc/
+
+Cc: Dave Skok <blanco.ether@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ola/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index 90a92fd2f2f4..656e82529a99 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -1,6 +1,7 @@
+ comment "ola needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| BR2_STATIC_LIBS
++	depends on BROKEN
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ menuconfig BR2_PACKAGE_OLA
+@@ -8,6 +9,9 @@ menuconfig BR2_PACKAGE_OLA
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_UTIL_LINUX
++	# Build fails with current protobuf
++	# https://github.com/OpenLightingProject/ola/issues/1192
++	depends on BROKEN
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.11.0
