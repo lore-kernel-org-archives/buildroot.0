@@ -1,60 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 14:25:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] python-web2py: security
-	bump to version 2.14.6
-Message-ID: <20170428125447.EAE0D82825@busybox.osuosl.org>
+Date: Fri, 28 Apr 2017 14:21:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+	9, 10}.x series
+Message-ID: <20170428125447.D219A827E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e514709f9955a29fea8f307b8907ec6f955ba9
+commit: https://git.buildroot.net/buildroot/commit/?id=6b671fa3b63d80ca0226ad297af64e77064aaeec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-CVE-2016-4806 - Web2py versions 2.14.5 and below was affected by Local File
-Inclusion vulnerability, which allows a malicious intended user to
-read/access web server sensitive files.
-
-CVE-2016-4807 - Web2py versions 2.14.5 and below was affected by Reflected
-XSS vulnerability, which allows an attacker to perform an XSS attack on
-logged in user (admin).
-
-CVE-2016-4808 - Web2py versions 2.14.5 and below was affected by CSRF (Cross
-Site Request Forgery) vulnerability, which allows an attacker to trick a
-logged in user to perform some unwanted actions i.e An attacker can trick an
-victim to disable the installed application just by sending a URL to victim.
-
-CVE-2016-10321 - web2py before 2.14.6 does not properly check if a host is
-denied before verifying passwords, allowing a remote attacker to perform
-brute-force attacks.
-
+[Peter: drop 4.10.x bump]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a534030c6e67ff0319f8af2b55fe977a06f17dfd)
+(cherry picked from commit 37159734b01b2246272f1d419110b750df40cad5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-web2py/python-web2py.hash | 2 +-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index 3de8dbf..9c1de90 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 7e22a5624d8d2909e165110f0bec6b43ee36ff6834d689f4027e06dece662031   python-web2py-R-2.12.3.tar.gz
-+sha256 6079aeaa352ec51e0da5e6abc71fa74cdb3a781e06a311b5826618624362a7b2   python-web2py-R-2.14.6.tar.gz
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 38faabc..af13e69 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_WEB2PY_VERSION = R-2.12.3
-+PYTHON_WEB2PY_VERSION = R-2.14.6
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPLv3
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7e246b9..747f24d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.62"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.63"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.23"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.24"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
