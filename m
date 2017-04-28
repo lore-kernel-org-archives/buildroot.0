@@ -1,135 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 09:49:30 +0200
-Subject: [Buildroot] [PATCH] ghostscript: add upstream security fixes for
-	CVE-2017-8291
-Message-ID: <20170428074930.26043-1-peter@korsgaard.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 28 Apr 2017 11:44:33 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-04-27
+In-Reply-To: <20170428062842.1E44E20E06@mail.free-electrons.com>
+References: <20170428062842.1E44E20E06@mail.free-electrons.com>
+Message-ID: <20170428084433.7pb5lamlgxy2hzau@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2017-8291 - Artifex Ghostscript through 2017-04-26 allows -dSAFER bypass
-and remote command execution via a "/OutputFile (%pipe%" substring in a
-crafted .eps document that is an input to the gs program, as exploited in
-the wild in April 2017.
+Hi Thomas, all,
 
-For more details, see https://bugzilla.suse.com/show_bug.cgi?id=1036453
+On Fri, Apr 28, 2017 at 08:28:42AM +0200, Thomas Petazzoni wrote:
+>          arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/02f731fa25356650367f82482d0560cd91f73fd6 |     
+>      powerpc |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/f51e44049e75b9459b9a214604d0f3fef2b6c9d8 |     
+>          arc |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/ba9d2c9d0547e5ea0ae5c74d03b830983477cf13 |     
+>          arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/e2f743a49db9f2be2940a30acfd1a9277a683536 |     
+>          arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/4975dbe9c0b78edbe4a8ee98a954a95f0945c4ac |     
+>          sh4 |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/4a4ddce130c3e921d37fdc1756f97e44ce7d5cdf |     
+>     mips64el |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/2c2a0f9745fb0b9043ef83d1e7c3d3c0463f0b4d |     
+>          arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/aa78260d85d22124c62b4307ffce7b9a15b3073c |     
+>       xtensa |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/ca412df3c23317f20465fbddc994e1f914dc58a9 |     
+>      powerpc |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/1f3e8ad6e019099f262ec5b7d48678c079c743c6 |     
+>         m68k |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/a1f0072c1c634186b6f3c9835c1b6fefd5639ac2 |     
+>  powerpc64le |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/358980f2ea11de64a7e1f0e1c41672e1c92cecf4 |     
+>         i686 |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/0e64a8e89a26065946b3d06f654717fd5b06cb65 |     
+>          arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/2b779b54234bbf5eef99bbc03fdc789c30a91e9b |     
+>     mips64el |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/197057bba433136833d3f26733ef090f200ff8d2 |     
+>     mips64el |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/198c9363b768a9627cdbc7c8ff4da40f55983bc3 |     
+>     mips64el |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/6cce4b0282f8b6edc39f64ef1edae5c383714522 |     
+>         mips |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/d87915146a81660bce24138f3afd48963e211477 |     
+>          arm |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/04100c7c98b3e041409b8f245476fe9a8ce054d1 |     
+>      sparc64 |                     ola-0.10.2 | NOK | http://autobuild.buildroot.net/results/2d75ca65cf60f4332a04c43ed8f9eac670c62c32 |     
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-697799-have-.eqproc-check-its-parameters.patch | 33 ++++++++++++
- ...7799-have-.rsdparams-check-its-parameters.patch | 62 ++++++++++++++++++++++
- 2 files changed, 95 insertions(+)
- create mode 100644 package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
- create mode 100644 package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
+Incompatibility of ola with protobuf 3.2.0. An upstream issue[1] is open since 
+January.
 
-diff --git a/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch b/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
-new file mode 100644
-index 000000000..becdc6605
---- /dev/null
-+++ b/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
-@@ -0,0 +1,33 @@
-+From 4f83478c88c2e05d6e8d79ca4557eb039354d2f3 Mon Sep 17 00:00:00 2001
-+From: Chris Liddell <chris.liddell@artifex.com>
-+Date: Thu, 27 Apr 2017 13:03:33 +0100
-+Subject: [PATCH] Bug 697799: have .eqproc check its parameters
-+
-+The Ghostscript custom operator .eqproc was not check the number or type of
-+the parameters it was given.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ psi/zmisc3.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/psi/zmisc3.c b/psi/zmisc3.c
-+index 54b304246..37293ff4b 100644
-+--- a/psi/zmisc3.c
-++++ b/psi/zmisc3.c
-+@@ -56,6 +56,12 @@ zeqproc(i_ctx_t *i_ctx_p)
-+     ref2_t stack[MAX_DEPTH + 1];
-+     ref2_t *top = stack;
-+ 
-++    if (ref_stack_count(&o_stack) < 2)
-++        return_error(gs_error_stackunderflow);
-++    if (!r_is_array(op - 1) || !r_is_array(op)) {
-++        return_error(gs_error_typecheck);
-++    }
-++
-+     make_array(&stack[0].proc1, 0, 1, op - 1);
-+     make_array(&stack[0].proc2, 0, 1, op);
-+     for (;;) {
-+-- 
-+2.11.0
-+
-diff --git a/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch b/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
-new file mode 100644
-index 000000000..9ba170b31
---- /dev/null
-+++ b/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
-@@ -0,0 +1,62 @@
-+From 04b37bbce174eed24edec7ad5b920eb93db4d47d Mon Sep 17 00:00:00 2001
-+From: Chris Liddell <chris.liddell@artifex.com>
-+Date: Thu, 27 Apr 2017 13:21:31 +0100
-+Subject: [PATCH] Bug 697799: have .rsdparams check its parameters
-+
-+The Ghostscript internal operator .rsdparams wasn't checking the number or
-+type of the operands it was being passed. Do so.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ psi/zfrsd.c | 22 +++++++++++++++-------
-+ 1 file changed, 15 insertions(+), 7 deletions(-)
-+
-+diff --git a/psi/zfrsd.c b/psi/zfrsd.c
-+index 191107d8a..950588d69 100644
-+--- a/psi/zfrsd.c
-++++ b/psi/zfrsd.c
-+@@ -49,13 +49,20 @@ zrsdparams(i_ctx_t *i_ctx_p)
-+     ref *pFilter;
-+     ref *pDecodeParms;
-+     int Intent = 0;
-+-    bool AsyncRead;
-++    bool AsyncRead = false;
-+     ref empty_array, filter1_array, parms1_array;
-+     uint i;
-+-    int code;
-++    int code = 0;
-++
-++    if (ref_stack_count(&o_stack) < 1)
-++        return_error(gs_error_stackunderflow);
-++    if (!r_has_type(op, t_dictionary) && !r_has_type(op, t_null)) {
-++        return_error(gs_error_typecheck);
-++    }
-+ 
-+     make_empty_array(&empty_array, a_readonly);
-+-    if (dict_find_string(op, "Filter", &pFilter) > 0) {
-++    if (r_has_type(op, t_dictionary)
-++        && dict_find_string(op, "Filter", &pFilter) > 0) {
-+         if (!r_is_array(pFilter)) {
-+             if (!r_has_type(pFilter, t_name))
-+                 return_error(gs_error_typecheck);
-+@@ -94,12 +101,13 @@ zrsdparams(i_ctx_t *i_ctx_p)
-+                 return_error(gs_error_typecheck);
-+         }
-+     }
-+-    code = dict_int_param(op, "Intent", 0, 3, 0, &Intent);
-++    if (r_has_type(op, t_dictionary))
-++        code = dict_int_param(op, "Intent", 0, 3, 0, &Intent);
-+     if (code < 0 && code != gs_error_rangecheck) /* out-of-range int is ok, use 0 */
-+         return code;
-+-    if ((code = dict_bool_param(op, "AsyncRead", false, &AsyncRead)) < 0
-+-        )
-+-        return code;
-++    if (r_has_type(op, t_dictionary))
-++        if ((code = dict_bool_param(op, "AsyncRead", false, &AsyncRead)) < 0)
-++            return code;
-+     push(1);
-+     op[-1] = *pFilter;
-+     if (pDecodeParms)
-+-- 
-+2.11.0
-+
+Should we revert the protobuf bump? Remove ola?
+
+[1] https://github.com/OpenLightingProject/ola/issues/1192
+
 -- 
-2.11.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
