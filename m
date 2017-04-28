@@ -1,100 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 14:31:24 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libsndfile: security bump
-	to version 1.0.28
-Message-ID: <20170428125448.39B8180DCE@busybox.osuosl.org>
+Date: Fri, 28 Apr 2017 14:53:27 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] python-django: security
+	bump to version 1.10.7
+Message-ID: <20170428125448.783617FC90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc633d98add5dbf147b28bea397fde6a9bd3bf4e
+commit: https://git.buildroot.net/buildroot/commit/?id=60e7c1075f6c3878a38a217c34d5212af1a19633
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
+Fixes the following security issues:
 
-CVE-2017-7585 - In libsndfile before 1.0.28, an error in the
-"flac_buffer_copy()" function (flac.c) can be exploited to cause a
-stack-based buffer overflow via a specially crafted FLAC file.
+Since 1.10.3:
 
-CVE-2017-7586 - In libsndfile before 1.0.28, an error in the "header_read()"
-function (common.c) when handling ID3 tags can be exploited to cause a
-stack-based buffer overflow via a specially crafted FLAC file.
+CVE-2016-9013 - User with hardcoded password created when running tests on
+Oracle
 
-CVE-2017-7741 - In libsndfile before 1.0.28, an error in the
-"flac_buffer_copy()" function (flac.c) can be exploited to cause a
-segmentation violation (with write memory access) via a specially crafted
-FLAC file during a resample attempt, a similar issue to CVE-2017-7585.
+Marti Raudsepp reported that a user with a hardcoded password is created
+when running tests with an Oracle database.
 
-CVE-2017-7742 - In libsndfile before 1.0.28, an error in the
-"flac_buffer_copy()" function (flac.c) can be exploited to cause a
-segmentation violation (with read memory access) via a specially crafted
-FLAC file during a resample attempt, a similar issue to CVE-2017-7585.
+CVE-2016-9014 - DNS rebinding vulnerability when DEBUG=True
 
-Dop undocumented patch adjusting SUBDIRS in Makefile.in as it no longer
-applies.  Instead pass --disable-full-suite to disable man pages,
-documentation and programs, as that was presumably the reason for the patch.
+Aymeric Augustin discovered that Django does not properly validate the Host
+header against settings.ALLOWED_HOSTS when the debug setting is enabled.  A
+remote attacker can take advantage of this flaw to perform DNS rebinding
+attacks.
 
+Since 1.10.7:
+
+CVE-2017-7233 - Open redirect and possible XSS attack via user-supplied
+numeric redirect URLs
+
+It was discovered that is_safe_url() does not properly handle certain
+numeric URLs as safe.  A remote attacker can take advantage of this flaw to
+perform XSS attacks or to use a Django server as an open redirect.
+
+CVE-2017-7234 - Open redirect vulnerability in django.views.static.serve()
+
+Phithon from Chaitin Tech discovered an open redirect vulnerability in the
+django.views.static.serve() view.  Note that this view is not intended for
+production use.
+
+Cc: Oli Vogt <oli.vogt.pub01@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c363e070d8ee036052fbcadd153d8c39ce0db55b)
+(cherry picked from commit 3a66a81b7a9db8e45f15fa63cc0670d158003d5a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsndfile/0001-srconly.patch | 17 -----------------
- package/libsndfile/libsndfile.hash    |  2 +-
- package/libsndfile/libsndfile.mk      |  5 +++--
- 3 files changed, 4 insertions(+), 20 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libsndfile/0001-srconly.patch b/package/libsndfile/0001-srconly.patch
-deleted file mode 100644
-index 417e340..0000000
---- a/package/libsndfile/0001-srconly.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
-----
-- Makefile.in |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: libsndfile-1.0.18/Makefile.in
--===================================================================
----- libsndfile-1.0.18.orig/Makefile.in
--+++ libsndfile-1.0.18/Makefile.in
--@@ -260,7 +260,7 @@
-- top_srcdir = @top_srcdir@
-- DISTCHECK_CONFIGURE_FLAGS = --enable-gcc-werror
-- @BUILD_OCTAVE_MOD_TRUE at octave_dir = Octave
---SUBDIRS = M4 man doc Win32 src $(octave_dir) examples regtest tests programs
--+SUBDIRS = src
-- DIST_SUBDIRS = M4 man doc Win32 src Octave examples regtest tests programs
-- EXTRA_DIST = libsndfile.spec.in sndfile.pc.in Mingw-make-dist.sh
-- pkgconfigdir = $(libdir)/pkgconfig
-diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
-index a87b7c3..31500cd 100644
---- a/package/libsndfile/libsndfile.hash
-+++ b/package/libsndfile/libsndfile.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	a391952f27f4a92ceb2b4c06493ac107896ed6c76be9a613a4731f076d30fac0	libsndfile-1.0.27.tar.gz
-+sha256	1ff33929f042fa333aed1e8923aa628c3ee9e1eb85512686c55092d1e5a9dfa9	libsndfile-1.0.28.tar.gz
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index c5cd1de..0d152a7 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 38b303b..09be184 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
+-md5	5342e77374b2acd2eafa86d2bb68f8c9  Django-1.10.2.tar.gz
+-sha256	e127f12a0bfb34843b6e8c82f91e26fff6445a7ca91d222c0794174cf97cbce1  Django-1.10.2.tar.gz
++md5	693dfeabad62c561cb205900d32c2a98  Django-1.10.7.tar.gz
++sha256	593d779dbc2350a245c4f76d26bdcad58a39895e87304fe6d725bbdf84b5b0b8  Django-1.10.7.tar.gz
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 2a50231..5bb7655 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBSNDFILE_VERSION = 1.0.27
-+LIBSNDFILE_VERSION = 1.0.28
- LIBSNDFILE_SITE = http://www.mega-nerd.com/libsndfile/files
- LIBSNDFILE_INSTALL_STAGING = YES
- LIBSNDFILE_LICENSE = LGPLv2.1+
-@@ -13,6 +13,7 @@ LIBSNDFILE_LICENSE_FILES = COPYING
- LIBSNDFILE_CONF_OPTS = \
- 	--disable-sqlite \
- 	--disable-alsa \
--	--disable-external-libs
-+	--disable-external-libs \
-+	--disable-full-suite
- 
- $(eval $(autotools-package))
+-PYTHON_DJANGO_VERSION = 1.10.2
++PYTHON_DJANGO_VERSION = 1.10.7
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://pypi.python.org/packages/57/9e/59444485f092b6ed4f1931e7d2e13b67fdab967c041d02f58a0d1dab8c23
++PYTHON_DJANGO_SITE = https://pypi.python.org/packages/15/b4/d4bb7313e02386bd23a60e1eb5670321313fb67289c6f36ec43bce747aff
+ PYTHON_DJANGO_LICENSE = BSD-3c
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
