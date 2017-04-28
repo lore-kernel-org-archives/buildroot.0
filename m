@@ -1,37 +1,35 @@
 From: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
-Date: Fri, 28 Apr 2017 11:35:21 +0200
-Subject: [Buildroot] [PATCH 2/2] Add DEPENDENCIES_HOST_PREREQ to the list of
-	packages
-In-Reply-To: <1493372121-32177-1-git-send-email-alfredo.alvarez_fernandez@nokia.com>
-References: <1493372121-32177-1-git-send-email-alfredo.alvarez_fernandez@nokia.com>
-Message-ID: <1493372121-32177-2-git-send-email-alfredo.alvarez_fernandez@nokia.com>
+Date: Fri, 28 Apr 2017 11:35:20 +0200
+Subject: [Buildroot] [PATCH 1/2] Use HOSTCC_NOCCACHE for both
+	core-dependencies and DEPENDENCIES_HOST_PREREQ
+Message-ID: <1493372121-32177-1-git-send-email-alfredo.alvarez_fernandez@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That way packages included in that list like ccache will also be
-regarded as a normal packages for targets like external-deps,
-show-targets or legal-info
+This also fixes make clean host-ccache
 
 Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
 ---
- Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ support/dependencies/dependencies.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 919d589..f041567 100644
---- a/Makefile
-+++ b/Makefile
-@@ -484,6 +484,8 @@ include package/Makefile.in
- -include $(wildcard arch/arch.mk.*)
- include support/dependencies/dependencies.mk
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index d4b0409..ef2ae9b 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -23,8 +23,8 @@ core-dependencies:
+ 		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
+ 		$(TOPDIR)/support/dependencies/dependencies.sh
  
-+PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
-+
- include toolchain/*.mk
- include toolchain/*/*.mk
+-dependencies: HOSTCC=$(HOSTCC_NOCCACHE)
+-dependencies: HOSTCXX=$(HOSTCXX_NOCCACHE)
++core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
++core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
+ dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
  
+ ################################################################################
 -- 
 2.7.4
