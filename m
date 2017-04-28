@@ -1,157 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 14:27:01 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libcroco: add upstream
-	security fixes
-Message-ID: <20170428125448.00C697FC90@busybox.osuosl.org>
+Date: Fri, 28 Apr 2017 14:43:28 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libnl: add upstream
+	security fix
+Message-ID: <20170428125448.5B51580DCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cef3aad7be515594e887b03e9cde15accb1b16d
+commit: https://git.buildroot.net/buildroot/commit/?id=e63c2c35665e17e9b63e53bc6620a20d6e748571
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-These have been added to upstream git after 0.6.12 was released.
+CVE-2017-0553: An elevation of privilege vulnerability in libnl could enable a
+local malicious application to execute arbitrary code within the context of
+the Wi-Fi service
 
-CVE-2017-7960 - The cr_input_new_from_uri function in cr-input.c in libcroco
-0.6.11 and 0.6.12 allows remote attackers to cause a denial of service
-(heap-based buffer over-read) via a crafted CSS file.
+https://www.mail-archive.com/debian-bugs-dist at lists.debian.org/msg1511855.html
 
-CVE-2017-7961 - The cr_tknzr_parse_rgb function in cr-tknzr.c in libcroco
-0.6.11 and 0.6.12 has an "outside the range of representable values of type
-long" undefined behavior issue, which might allow remote attackers to cause
-a denial of service (application crash) or possibly have unspecified other
-impact via a crafted CSS file.
-
-For more details, see:
-https://blogs.gentoo.org/ago/2017/04/17/libcroco-heap-overflow-and-undefined-behavior/
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 52bfb4b1ce25d870f9bab72d285f326ec7d0ad77)
+(cherry picked from commit 5efbd573c0a4df751e038a927c09af5aac1a233e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-check-end-of-input-before-reading-a-byte.patch | 62 ++++++++++++++++++++++
- ...02-tknzr-support-only-max-long-rgb-values.patch | 46 ++++++++++++++++
- 2 files changed, 108 insertions(+)
+ package/libnl/libnl.hash | 1 +
+ package/libnl/libnl.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/libcroco/0001-input-check-end-of-input-before-reading-a-byte.patch b/package/libcroco/0001-input-check-end-of-input-before-reading-a-byte.patch
-new file mode 100644
-index 0000000..831b1a7
---- /dev/null
-+++ b/package/libcroco/0001-input-check-end-of-input-before-reading-a-byte.patch
-@@ -0,0 +1,62 @@
-+From 898e3a8c8c0314d2e6b106809a8e3e93cf9d4394 Mon Sep 17 00:00:00 2001
-+From: Ignacio Casal Quinteiro <qignacio@amazon.com>
-+Date: Sun, 16 Apr 2017 13:13:43 +0200
-+Subject: [PATCH] input: check end of input before reading a byte
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index 2f1a3cb..eafba4a 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,2 +1,3 @@
+ # From https://github.com/thom311/libnl/releases/download/libnl3_2_27/libnl-3.2.27.tar.gz.sha256sum
+ sha256	4bbbf92b3c78a90f423cf96260bf419a28b75db8cced47051217a56795f58ec6	libnl-3.2.27.tar.gz
++sha256	b7bb929194eefc56c786a7e1ae5176b54713f9013ccec63760f232742ae80361	3e18948f17148e6a3c4255bdeaaf01ef6081ceeb.patch
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 85c0db8..af28382 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -11,6 +11,8 @@ LIBNL_LICENSE_FILES = COPYING
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison host-flex
+ 
++LIBNL_PATCH = https://github.com/thom311/libnl/commit/3e18948f17148e6a3c4255bdeaaf01ef6081ceeb.patch
 +
-+Fixes CVE-2017-7960
-+
-+When reading bytes we weren't check that the index wasn't
-+out of bound and this could produce an invalid read which
-+could deal to a security bug.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/cr-input.c | 11 +++++++++--
-+ 1 file changed, 9 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/cr-input.c b/src/cr-input.c
-+index 49000b1..3b63a88 100644
-+--- a/src/cr-input.c
-++++ b/src/cr-input.c
-+@@ -256,7 +256,7 @@ cr_input_new_from_uri (const gchar * a_file_uri, enum CREncoding a_enc)
-+                  *we should  free buf here because it's own by CRInput.
-+                  *(see the last parameter of cr_input_new_from_buf().
-+                  */
-+-                buf = NULL ;
-++                buf = NULL;
-+         }
-+ 
-+  cleanup:
-+@@ -404,6 +404,8 @@ cr_input_get_nb_bytes_left (CRInput const * a_this)
-+ enum CRStatus
-+ cr_input_read_byte (CRInput * a_this, guchar * a_byte)
-+ {
-++        gulong nb_bytes_left = 0;
-++
-+         g_return_val_if_fail (a_this && PRIVATE (a_this)
-+                               && a_byte, CR_BAD_PARAM_ERROR);
-+ 
-+@@ -413,6 +415,12 @@ cr_input_read_byte (CRInput * a_this, guchar * a_byte)
-+         if (PRIVATE (a_this)->end_of_input == TRUE)
-+                 return CR_END_OF_INPUT_ERROR;
-+ 
-++        nb_bytes_left = cr_input_get_nb_bytes_left (a_this);
-++
-++        if (nb_bytes_left < 1) {
-++                return CR_END_OF_INPUT_ERROR;
-++        }
-++
-+         *a_byte = PRIVATE (a_this)->in_buf[PRIVATE (a_this)->next_byte_index];
-+ 
-+         if (PRIVATE (a_this)->nb_bytes -
-+@@ -477,7 +485,6 @@ cr_input_read_char (CRInput * a_this, guint32 * a_char)
-+                 if (*a_char == '\n') {
-+                         PRIVATE (a_this)->end_of_line = TRUE;
-+                 }
-+-
-+         }
-+ 
-+         return status;
-+-- 
-+2.11.0
-+
-diff --git a/package/libcroco/0002-tknzr-support-only-max-long-rgb-values.patch b/package/libcroco/0002-tknzr-support-only-max-long-rgb-values.patch
-new file mode 100644
-index 0000000..1a9bcd9
---- /dev/null
-+++ b/package/libcroco/0002-tknzr-support-only-max-long-rgb-values.patch
-@@ -0,0 +1,46 @@
-+From 9ad72875e9f08e4c519ef63d44cdbd94aa9504f7 Mon Sep 17 00:00:00 2001
-+From: Ignacio Casal Quinteiro <qignacio@amazon.com>
-+Date: Sun, 16 Apr 2017 13:56:09 +0200
-+Subject: [PATCH] tknzr: support only max long rgb values
-+
-+Fixes CVE-2017-7961
-+
-+This fixes a possible out of bound when reading rgbs which
-+are longer than the support MAXLONG
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/cr-tknzr.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/src/cr-tknzr.c b/src/cr-tknzr.c
-+index 1a7cfeb..1548c35 100644
-+--- a/src/cr-tknzr.c
-++++ b/src/cr-tknzr.c
-+@@ -1279,6 +1279,11 @@ cr_tknzr_parse_rgb (CRTknzr * a_this, CRRgb ** a_rgb)
-+         status = cr_tknzr_parse_num (a_this, &num);
-+         ENSURE_PARSING_COND ((status == CR_OK) && (num != NULL));
-+ 
-++        if (num->val > G_MAXLONG) {
-++                status = CR_PARSING_ERROR;
-++                goto error;
-++        }
-++
-+         red = num->val;
-+         cr_num_destroy (num);
-+         num = NULL;
-+@@ -1298,6 +1303,11 @@ cr_tknzr_parse_rgb (CRTknzr * a_this, CRRgb ** a_rgb)
-+                 status = cr_tknzr_parse_num (a_this, &num);
-+                 ENSURE_PARSING_COND ((status == CR_OK) && (num != NULL));
-+ 
-++                if (num->val > G_MAXLONG) {
-++                        status = CR_PARSING_ERROR;
-++                        goto error;
-++                }
-++
-+                 PEEK_BYTE (a_this, 1, &next_bytes[0]);
-+                 if (next_bytes[0] == '%') {
-+                         SKIP_CHARS (a_this, 1);
-+-- 
-+2.11.0
-+
+ ifeq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
+ LIBNL_CONF_OPTS += --enable-cli
+ else
