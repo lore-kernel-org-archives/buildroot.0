@@ -1,153 +1,108 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 28 Apr 2017 23:25:04 +0200
-Subject: [Buildroot] [PATCH 1/1] Create 'make <pkt>-show-rrdepends'
- command
-In-Reply-To: <1493305458-15309-1-git-send-email-george.redivo@datacom.ind.br>
-References: <1493305458-15309-1-git-send-email-george.redivo@datacom.ind.br>
-Message-ID: <47ecd969-0c92-0ddd-e647-50bbb7fe5c6e@mind.be>
+From: J Evans <g4@novadsp.com>
+Date: Fri, 28 Apr 2017 23:28:05 +0100
+Subject: [Buildroot] [PATCH 1/2] ne10: bump to version 1.2.1. Remove
+	obsolete patch file for modifying thumb code generation.
+Message-ID: <1493418486-109149-1-git-send-email-g4@novadsp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi George,
+Signed-off-by: J Evans <g4@novadsp.com>
+---
+ ...sts-don-t-hard-code-thumb-code-generation.patch | 29 ----------------------
+ package/ne10/Config.in                             |  6 ++---
+ package/ne10/ne10.hash                             |  4 +--
+ package/ne10/ne10.mk                               |  2 +-
+ 4 files changed, 5 insertions(+), 36 deletions(-)
+ delete mode 100644 package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
+ mode change 100644 => 100755 package/ne10/Config.in
+ mode change 100644 => 100755 package/ne10/ne10.hash
+ mode change 100644 => 100755 package/ne10/ne10.mk
 
-On 27-04-17 17:04, George Redivo wrote:
-> The created command shows, recursively, the reverse depends of a
-> package,
-> it means that the command shows not only the direct dependants (which is
-> done by 'show-rdepends'), but also all indirect dependents.
-
- Could you explain a bit more what the use case is you are trying to solve?
-
-
-> To do this it was necessary to create a new parameter '--flat-list', or
-> '-f', to graph-depends.
-> This parameter instructs the script to just print the name of package
-> instead of the .dot syntax.
-
- See below for a better alternative.
-
-> 
-> Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
-> ---
->  Makefile                      |  1 +
->  package/pkg-generic.mk        | 10 ++++++++++
->  support/scripts/graph-depends | 16 ++++++++++++----
->  3 files changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 919d589..61943d8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -996,6 +996,7 @@ help:
->  	@echo '  <pkg>-build            - Build <pkg> up to the build step'
->  	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
->  	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
-> +	@echo '  <pkg>-show-rrdepends   - List, recursivelly, packages which have <pkg> as a dependency'
->  	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
->  	@echo '  <pkg>-graph-rdepends   - Generate a graph of <pkg>'\''s reverse dependencies'
->  	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 3b26e6b..c0f83b6 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -353,6 +353,13 @@ define pkg-graph-depends
->  		$$(GRAPHS_DIR)/$$(@).dot
->  endef
->  
-> +define pkg-rrdepends
-> +	@$$(INSTALL) -d $$(GRAPHS_DIR)
-> +	@cd "$$(CONFIG_DIR)"; \
-> +	$$(TOPDIR)/support/scripts/graph-depends $$(BR2_GRAPH_DEPS_OPTS) \
-> +		-p $(1) --reverse -f
-> +endef
-> +
->  ################################################################################
->  # inner-generic-package -- generates the make targets needed to build a
->  # generic package
-> @@ -737,6 +744,9 @@ $(1)-show-depends:
->  $(1)-show-rdepends:
->  			@echo $$($(2)_RDEPENDENCIES)
->  
-> +$(1)-show-rrdepends:
-> +	$(call pkg-rrdepends,$(1))
-
- It is better to use the approach like for show-build-order, i.e.:
-
-$(1)-show-rrdepends: $$(patsubst %,%-rrdepends,$$($(2)_FINAL_ALL_DEPENDENCIES))
-	@printf '%s' $$($(2)_RDEPENDENCIES)
-
- However, I would much prefer to rewrite graph-depends completely so it works in
-a single pass, and have just pkg-show-depends that works recursively like above.
-Then any filterling like depth or just a single package or reverting the arrows
-can be done by the graph-depends script itself. That would work a whole lot
-faster, and in addition would allow us to remove a lot of those annoying extra
-rules inside inner-generic-package (cfr. my rant recently).
-
- But that is of course a much bigger change, so for the time being I'm OK with
-adding this rrdepends.
-
- Regards,
- Arnout
-
-
-> +
->  $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
->  	$$(info $(1))
->  
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index b258c56..f6fec09 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -69,6 +69,8 @@ parser.add_argument("--direct", dest="direct", action='store_true', default=True
->                      help="Draw direct dependencies (the default)")
->  parser.add_argument("--reverse", dest="direct", action='store_false',
->                      help="Draw reverse dependencies")
-> +parser.add_argument("--flat-list", '-f', dest="flat_list", action='store_true', default=False,
-> +                    help="Do not draw, just print a flat list output.")
->  args = parser.parse_args()
->  
->  check_only = args.check_only
-> @@ -361,7 +363,10 @@ def print_pkg_deps(depth, pkg):
->      if pkg in done_deps:
->          return
->      done_deps.append(pkg)
-> -    print_attrs(pkg)
-> +    if args.flat_list:
-> +        outfile.write("%s\n" % (pkg))
-> +    else:
-> +        print_attrs(pkg)
->      if pkg not in dict_deps:
->          return
->      for p in stop_list:
-> @@ -385,13 +390,16 @@ def print_pkg_deps(depth, pkg):
->                      add = False
->                      break
->              if add:
-> -                outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-> +                if not args.flat_list:
-> +                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
->                  print_pkg_deps(depth+1, d)
->  
->  # Start printing the graph data
-> -outfile.write("digraph G {\n")
-> +if not args.flat_list:
-> +    outfile.write("digraph G {\n")
->  
->  done_deps = []
->  print_pkg_deps(0, rootpkg)
->  
-> -outfile.write("}\n")
-> +if not args.flat_list:
-> +    outfile.write("}\n")
-> 
-
+diff --git a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch b/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
+deleted file mode 100644
+index f140a60..0000000
+--- a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 9ff39800cec5f1dabba246b253794582d611bc6d Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 20 Feb 2015 10:44:15 -0600
+-Subject: [PATCH] CMakeLists: don't hard code thumb code generation
+-
+-Migrating to version 1.2.0
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index fdf01ec..34ae26e 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -84,7 +84,7 @@ if(ANDROID_PLATFORM)
+-     ${ANDROID_TOOLCHAIN_PATH}/arm-linux-androideabi-ar
+-     ${ANDROID_TOOLCHAIN_PATH}/arm-linux-androideabi-ranlib")
+- elseif(GNULINUX_PLATFORM)
+--    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
+-+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -march=armv7-a -mfpu=vfp3")
+-     set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
+- elseif(IOS_PLATFORM)
+-     #set minimal target ios version.If not provided this option, Xcode
+--- 
+-1.9.1
+-
+diff --git a/package/ne10/Config.in b/package/ne10/Config.in
+old mode 100644
+new mode 100755
+index 8d37579..ebd23a6
+--- a/package/ne10/Config.in
++++ b/package/ne10/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_NE10
+ 	bool "ne10"
+-	depends on BR2_arm
+-	depends on BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4
++	depends on BR2_aarch64 || (BR2_arm && (BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4))
+ 	help
+ 	  The Ne10 project has been set up to provide a set of common,
+ 	  useful functions which have been heavily optimized for the
+@@ -13,5 +12,4 @@ config BR2_PACKAGE_NE10
+ 	  http://projectne10.github.io/Ne10/
+ 
+ comment "ne10 needs a toolchain w/ neon"
+-	depends on BR2_arm
+-	depends on !(BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4)
++	depends on BR2_aarch64 || (BR2_arm && !(BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4))
+diff --git a/package/ne10/ne10.hash b/package/ne10/ne10.hash
+old mode 100644
+new mode 100755
+index db5b6f1..923e660
+--- a/package/ne10/ne10.hash
++++ b/package/ne10/ne10.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256 450dac5bb3a2351019ae23792e97c3bf965d16a21c0598b73cea9fbc3b3a56af  ne10-v1.2.0.tar.gz
++# Locally calculated after checking pgp signature
++sha256	dd1a96610c0692cc80154ae123edd5d25e6e0a3f81d0c16a96425f3ef57b9929	ne10-v1.2.1.tar.gz
+diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+old mode 100644
+new mode 100755
+index cb303bd..0da862c
+--- a/package/ne10/ne10.mk
++++ b/package/ne10/ne10.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NE10_VERSION = v1.2.0
++NE10_VERSION = v1.2.1
+ NE10_SITE = $(call github,projectNe10,Ne10,$(NE10_VERSION))
+ NE10_LICENSE = BSD-3-Clause or Apache-2.0
+ NE10_LICENSE_FILES = doc/LICENSE
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
