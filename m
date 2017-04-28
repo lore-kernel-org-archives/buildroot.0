@@ -1,64 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Apr 2017 22:55:52 +0200
-Subject: [Buildroot] [git commit] genimage.sh: fix calling from
-	BR2_ROOTFS_POST_IMAGE_SCRIPT
-Message-ID: <20170427213728.AD9A882839@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 28 Apr 2017 02:32:06 +0200
+Subject: [Buildroot] [PATCH] libmpeg2: fix sparc32 build
+In-Reply-To: <87wpa6l0uy.fsf@dell.be.48ers.dk>
+References: <20170427053609.GA20301@waldemar-brodkorb.de>
+ <87wpa6l0uy.fsf@dell.be.48ers.dk>
+Message-ID: <20170428003206.GX11446@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e73cf8a228a15ae11530cd589b11930cf4f4478d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
+Peter Korsgaard wrote,
 
-When called from BR2_ROOTFS_POST_IMAGE_SCRIPT, this script
-ends up with following error:
+> >>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+> 
+>  > The output detection recognized wrong target output, because
+>  > sparcv9 optimization flags used for sparcv8 build.
+> 
+>  > Fixes:
+>  >   http://autobuild.buildroot.net/results/1b3158b03f7eaf5afb5a4dab9526091888f6c9b8
+> 
+>  > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> 
+> Committed, thanks. Don't forget to submit it upstream as well.
 
-Error: Missing argument
+Upstream looks very inactive to me, I don't think I will submit it there.
 
-This is because, an extra positional argument is also passed
-along with BR2_ROOTFS_POST_SCRIPT_ARGS. genimage.sh didn't
-have support to parse positional and optional arguments
-together.
-
-Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.V@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/genimage.sh | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-index 0ed0e8b..6c8d9e5 100755
---- a/support/scripts/genimage.sh
-+++ b/support/scripts/genimage.sh
-@@ -5,13 +5,22 @@ die() {
-   exit 1
- }
- 
-+# Parse arguments and put into argument list of the script
-+opts="$(getopt -n "${0##*/}" -o c: -- "$@")" || exit $?
-+eval set -- "$opts"
-+
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
--while getopts c: OPT ; do
--	case "${OPT}" in
--	c) GENIMAGE_CFG="${OPTARG}";;
--	:) die "option '${OPTARG}' expects a mandatory argument\n";;
--	\?) die "unknown option '${OPTARG}'\n";;
-+while true ; do
-+	case "$1" in
-+	-c)
-+	  GENIMAGE_CFG="${2}";
-+	  shift 2 ;;
-+	--) # Discard all non-option parameters
-+	  shift 1;
-+	  break ;;
-+	*)
-+	  die "unknown option '${1}'" ;;
- 	esac
- done
- 
+best
+ Waldemar
