@@ -1,50 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 14:43:28 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libnl: add upstream
-	security fix
-Message-ID: <20170428125448.5B51580DCE@busybox.osuosl.org>
+Date: Fri, 28 Apr 2017 14:25:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] python-web2py: security
+	bump to version 2.14.6
+Message-ID: <20170428125447.EAE0D82825@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e63c2c35665e17e9b63e53bc6620a20d6e748571
+commit: https://git.buildroot.net/buildroot/commit/?id=32e514709f9955a29fea8f307b8907ec6f955ba9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-CVE-2017-0553: An elevation of privilege vulnerability in libnl could enable a
-local malicious application to execute arbitrary code within the context of
-the Wi-Fi service
+CVE-2016-4806 - Web2py versions 2.14.5 and below was affected by Local File
+Inclusion vulnerability, which allows a malicious intended user to
+read/access web server sensitive files.
 
-https://www.mail-archive.com/debian-bugs-dist at lists.debian.org/msg1511855.html
+CVE-2016-4807 - Web2py versions 2.14.5 and below was affected by Reflected
+XSS vulnerability, which allows an attacker to perform an XSS attack on
+logged in user (admin).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+CVE-2016-4808 - Web2py versions 2.14.5 and below was affected by CSRF (Cross
+Site Request Forgery) vulnerability, which allows an attacker to trick a
+logged in user to perform some unwanted actions i.e An attacker can trick an
+victim to disable the installed application just by sending a URL to victim.
+
+CVE-2016-10321 - web2py before 2.14.6 does not properly check if a host is
+denied before verifying passwords, allowing a remote attacker to perform
+brute-force attacks.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5efbd573c0a4df751e038a927c09af5aac1a233e)
+(cherry picked from commit a534030c6e67ff0319f8af2b55fe977a06f17dfd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnl/libnl.hash | 1 +
- package/libnl/libnl.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/python-web2py/python-web2py.hash | 2 +-
+ package/python-web2py/python-web2py.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
-index 2f1a3cb..eafba4a 100644
---- a/package/libnl/libnl.hash
-+++ b/package/libnl/libnl.hash
-@@ -1,2 +1,3 @@
- # From https://github.com/thom311/libnl/releases/download/libnl3_2_27/libnl-3.2.27.tar.gz.sha256sum
- sha256	4bbbf92b3c78a90f423cf96260bf419a28b75db8cced47051217a56795f58ec6	libnl-3.2.27.tar.gz
-+sha256	b7bb929194eefc56c786a7e1ae5176b54713f9013ccec63760f232742ae80361	3e18948f17148e6a3c4255bdeaaf01ef6081ceeb.patch
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index 85c0db8..af28382 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -11,6 +11,8 @@ LIBNL_LICENSE_FILES = COPYING
- LIBNL_INSTALL_STAGING = YES
- LIBNL_DEPENDENCIES = host-bison host-flex
+diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
+index 3de8dbf..9c1de90 100644
+--- a/package/python-web2py/python-web2py.hash
++++ b/package/python-web2py/python-web2py.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 7e22a5624d8d2909e165110f0bec6b43ee36ff6834d689f4027e06dece662031   python-web2py-R-2.12.3.tar.gz
++sha256 6079aeaa352ec51e0da5e6abc71fa74cdb3a781e06a311b5826618624362a7b2   python-web2py-R-2.14.6.tar.gz
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 38faabc..af13e69 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+LIBNL_PATCH = https://github.com/thom311/libnl/commit/3e18948f17148e6a3c4255bdeaaf01ef6081ceeb.patch
-+
- ifeq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
- LIBNL_CONF_OPTS += --enable-cli
- else
+-PYTHON_WEB2PY_VERSION = R-2.12.3
++PYTHON_WEB2PY_VERSION = R-2.14.6
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPLv3
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
