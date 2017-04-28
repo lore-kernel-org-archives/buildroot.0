@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 14:15:22 +0200
-Subject: [Buildroot] [PATCH 1/1] openocd: bump to 0.10.0
-In-Reply-To: <1493364505-17299-1-git-send-email-christophe.priouzeau@st.com>
- (Christophe PRIOUZEAU's message of "Fri, 28 Apr 2017 07:28:28 +0000")
-References: <1493364505-17299-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <87o9vgiv8l.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Apr 2017 14:15:47 +0200
+Subject: [Buildroot] [PATCH] ghostscript: add upstream security fixes
+	for CVE-2017-8291
+In-Reply-To: <20170428074930.26043-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 28 Apr 2017 09:49:30 +0200")
+References: <20170428074930.26043-1-peter@korsgaard.com>
+Message-ID: <87k264iv7w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christophe" == Christophe PRIOUZEAU <christophe.priouzeau@st.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Update openocd to 0.10.0
- > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+ > CVE-2017-8291 - Artifex Ghostscript through 2017-04-26 allows -dSAFER bypass
+ > and remote command execution via a "/OutputFile (%pipe%" substring in a
+ > crafted .eps document that is an input to the gs program, as exploited in
+ > the wild in April 2017.
 
-And no changes to any configure flags or pkg-config? Looking at the
-release notes it mentions several changes:
+ > For more details, see https://bugzilla.suse.com/show_bug.cgi?id=1036453
 
-https://sourceforge.net/p/openocd/mailman/message/35570895/
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
