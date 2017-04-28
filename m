@@ -1,39 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 12:01:10 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-04-27
-In-Reply-To: <20170428110851.03eff198@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 28 Apr 2017 11:08:51 +0200")
-References: <20170428062842.1E44E20E06@mail.free-electrons.com>
- <20170428084433.7pb5lamlgxy2hzau@tarshish>
- <20170428110851.03eff198@free-electrons.com>
-Message-ID: <87shksj1g9.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Apr 2017 14:15:22 +0200
+Subject: [Buildroot] [PATCH 1/1] openocd: bump to 0.10.0
+In-Reply-To: <1493364505-17299-1-git-send-email-christophe.priouzeau@st.com>
+ (Christophe PRIOUZEAU's message of "Fri, 28 Apr 2017 07:28:28 +0000")
+References: <1493364505-17299-1-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <87o9vgiv8l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Christophe" == Christophe PRIOUZEAU <christophe.priouzeau@st.com> writes:
 
- > Hello,
- > On Fri, 28 Apr 2017 11:44:33 +0300, Baruch Siach wrote:
+ > Update openocd to 0.10.0
+ > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 
- >> Incompatibility of ola with protobuf 3.2.0. An upstream issue[1] is open since 
- >> January.
- >> 
- >> Should we revert the protobuf bump? Remove ola?
+And no changes to any configure flags or pkg-config? Looking at the
+release notes it mentions several changes:
 
- > Remove ola is I believe the right approach. According to the Github
- > issue, Fedora has done the same thing.
-
- > I believe it's more important to stay up-to-date with protobuf than it
- > is to keep ola as a package, especially since ola is not used as a
- > dependency for any other package.
-
- > Maybe just mark it BROKEN for now?
-
-Yes, I think that is the best way forward as well.
+https://sourceforge.net/p/openocd/mailman/message/35570895/
 
 -- 
 Bye, Peter Korsgaard
