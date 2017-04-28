@@ -1,52 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Apr 2017 14:23:24 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] minicom: security bump to
-	version 2.7.1
-Message-ID: <20170428125447.DDB507FC90@busybox.osuosl.org>
+Date: Fri, 28 Apr 2017 14:27:58 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] imagemagick: bump version
+	to 7.0.5-2
+Message-ID: <20170428125448.0BA8D7FC90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf113c76dfd262dd8ba17e4eb19e7d3deed437bc
+commit: https://git.buildroot.net/buildroot/commit/?id=33adae56f9abc36791040b7c9bbde7714ac31beb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-7467 - minicom and prl-vzvncserver vt100.c escparms[] buffer
-overflow.
-
-For more details about the issue, see the nice writeup on oss-security:
-
-http://www.openwall.com/lists/oss-security/2017/04/18/5
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 027a0d5b61326da318fb916ff52324b9f238d768)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 22562f7f056623ce8ca6a90e89fb2b2cbd35ff19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minicom/minicom.hash | 2 +-
- package/minicom/minicom.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index 33ba4ef..ca30871 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 75bc9a9..5a281cf 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9ac3a663b82f4f5df64114b4792b9926b536c85f59de0f2d2b321c7626a904f4  minicom-2.7.tar.gz
-+sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index 94a4628..3aa11ed 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -4,8 +4,8 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 7362805eaa9f9b90cdb67a1f8762782bef4a42ca44939629aecad3c40305bf4c  ImageMagick-7.0.5-0.tar.xz
++sha256 a7c55f0fd5203cbff12bf4a8d9158c002fab8d4290859a8087c3d329013b1af8  ImageMagick-7.0.5-2.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index d1cd608..ac10cd6 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINICOM_VERSION = 2.7
--MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/3977
-+MINICOM_VERSION = 2.7.1
-+MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/4215
- MINICOM_LICENSE = GPLv2+
- MINICOM_LICENSE_FILES = COPYING
- 
+-IMAGEMAGICK_VERSION = 7.0.5-0
++IMAGEMAGICK_VERSION = 7.0.5-2
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
