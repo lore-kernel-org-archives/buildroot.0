@@ -1,45 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 15:53:54 +0200
-Subject: [Buildroot] [git commit] configs: drop Qt/Qt5 license approval
-	option
-Message-ID: <20170429135924.07EE48047C@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 15:53:51 +0200
+Subject: [Buildroot] [git commit] package/qt5x11extras: always use the
+	opensource license
+Message-ID: <20170429135923.E7F4A8047C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bdaebb39d23d9782601fea7964b68fbcc509178
+commit: https://git.buildroot.net/buildroot/commit/?id=a16e8bd7bdb09ba9affaec7098d772999848ede3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We never ask the user to confirm their assent about the use of a free
+license; there is no reason we do so for Qt.
+
+The output of legal-info is there to gather all the licenses used in a
+build; the license for qt5x11extras will be there to be consulted as
+well.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/beaglebone_qt5_defconfig      | 1 -
- configs/firefly_rk3288_demo_defconfig | 1 -
- 2 files changed, 2 deletions(-)
+ package/qt5/qt5x11extras/qt5x11extras.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index cdf8b96..b65ca40 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -17,7 +17,6 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
- BR2_PACKAGE_FBV=y
- BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
- BR2_PACKAGE_QT5BASE_EXAMPLES=y
- BR2_PACKAGE_QT5BASE_EGLFS=y
- BR2_PACKAGE_QT5QUICKCONTROLS=y
-diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
-index c2de701..0f4dd36 100644
---- a/configs/firefly_rk3288_demo_defconfig
-+++ b/configs/firefly_rk3288_demo_defconfig
-@@ -19,7 +19,6 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-firefly"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
- BR2_PACKAGE_QT5BASE_EXAMPLES=y
- BR2_PACKAGE_QT5BASE_GUI=y
- BR2_PACKAGE_QT5BASE_EGLFS=y
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
+index 7dc371c..00667c7 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.mk
++++ b/package/qt5/qt5x11extras/qt5x11extras.mk
+@@ -10,7 +10,6 @@ QT5X11EXTRAS_SOURCE = qtx11extras-opensource-src-$(QT5X11EXTRAS_VERSION).tar.xz
+ QT5X11EXTRAS_DEPENDENCIES = qt5base
+ QT5X11EXTRAS_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5X11EXTRAS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+@@ -18,10 +17,6 @@ else
+ QT5X11EXTRAS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+-else
+-QT5X11EXTRAS_LICENSE = Commercial license
+-QT5X11EXTRAS_REDISTRIBUTE = NO
+-endif
+ 
+ define QT5X11EXTRAS_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
