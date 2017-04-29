@@ -1,39 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 14:31:36 +0200
-Subject: [Buildroot] [PATCH] package/protobuf: depend on gcc >= 4.5
-In-Reply-To: <20170426162850.5214-1-mrugiero@gmail.com>
-References: <20170426162850.5214-1-mrugiero@gmail.com>
-Message-ID: <20170429143136.3da63d52@free-electrons.com>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Sat, 29 Apr 2017 14:42:29 +0200
+Subject: [Buildroot] [PATCH 1/2] x11r7: xdriver_xf86-input-tslib: new
+ upstream location
+In-Reply-To: <20170429135844.2fa76511@free-electrons.com>
+References: <1493382976-26007-1-git-send-email-martink@posteo.de>
+ <20170429135844.2fa76511@free-electrons.com>
+Message-ID: <a011515d-d662-c504-fcae-86d7b06ee6bd@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 26 Apr 2017 13:28:50 -0300, mrugiero at gmail.com wrote:
-> From: "Mario J. Rugiero" <mrugiero@gmail.com>
+Am 2017-04-29 um 13:58 schrieb Thomas Petazzoni:
+> Hello,
 > 
-> Protobuf hits a bug in gcc < 4.5 which breaks the build.
-> See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=189
+> On Fri, 28 Apr 2017 14:36:15 +0200, Martin Kepplinger wrote:
+> 
+>>  XDRIVER_XF86_INPUT_TSLIB_VERSION = 0.0.6
+>>  XDRIVER_XF86_INPUT_TSLIB_SOURCE = xf86-input-tslib-$(XDRIVER_XF86_INPUT_TSLIB_VERSION).tar.bz2
+>> -XDRIVER_XF86_INPUT_TSLIB_SITE = http://www.pengutronix.de/software/xf86-input-tslib/download
+>> +XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releases/download/$(TSLIB_VERSION)
+> 
+> This couldn't work: TSLIB_VERSION comes from tslib.mk and is set to
+> 1.9, which prevents the download from working. Changing this to
+> XDRIVER_XF86_INPUT_TSLIB_VERSION fixed the problem.
+> 
+> Applied with this fix. Thanks!
+> 
 
-This bug is marked as FIXED, and it has been fixed since many years.
-
-What is the actual problem you are seeing? Is there a reference to an
-autobuilder issue?
-
-I've tried to build with gcc 4.3, and indeed I'm getting:
-
-./google/protobuf/metadata.h: In constructor 'google::protobuf::internal::InternalMetadataWithArena::InternalMetadataWithArena(google::protobuf::Arena*)':
-./google/protobuf/metadata.h:175: error: class 'google::protobuf::internal::InternalMetadataWithArena' does not have any field named 'InternalMetadataWithArenaBase'
-./google/protobuf/metadata.h: In constructor 'google::protobuf::internal::InternalMetadataWithArenaLite::InternalMetadataWithArenaLite(google::protobuf::Arena*)':
-./google/protobuf/metadata.h:204: error: class 'google::protobuf::internal::InternalMetadataWithArenaLite' does not have any field named 'InternalMetadataWithArenaBase'
-
-Is this the issue we're talking about ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+oops. sorry. Should have taken more time to check everything. Thanks!
