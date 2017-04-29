@@ -1,72 +1,127 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Sat, 29 Apr 2017 15:00:34 +0200
-Subject: [Buildroot] [PATCH v3] x11vnc: update to 0.9.14
-In-Reply-To: <65322dd8-3b6b-e421-5e5b-9c69d88355a3@mind.be>
-References: <65322dd8-3b6b-e421-5e5b-9c69d88355a3@mind.be>
-Message-ID: <20170429130034.30200-1-martink@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Apr 2017 14:59:00 +0200
+Subject: [Buildroot] [git commit] openocd: bump to 0.10.0
+Message-ID: <20170429130134.B7676827DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This switches to x11vnc's new upstream location at github. Autoreconf is
-added because it's only a code snapshot release. Subsequent releases
-will most probably look the same, see
-https://github.com/LibVNC/x11vnc/issues/35#issuecomment-297474900
+commit: https://git.buildroot.net/buildroot/commit/?id=3b6c74d708252a32fe172be944951396d419ba88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Some configure options have been renamed. Support for the deprecated
+FT2232 devices has been removed in this release, so remove this option.
+
+Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+[Thomas:
+ - Add Config.in.legacy handling, suggested by Arnout.
+ - Improve commit log with more details, suggested by Arnout.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ Config.in.legacy             |  8 ++++++++
+ package/openocd/Config.in    |  8 --------
+ package/openocd/openocd.hash |  6 +++---
+ package/openocd/openocd.mk   | 15 +++++++--------
+ 4 files changed, 18 insertions(+), 19 deletions(-)
 
-redone the patch. As mentioned earlier, I at least did a test-run with
-this version. And 0.9.15 is indeed in the works, see
-https://github.com/LibVNC/x11vnc/milestone/2 :)
-
-
-revision history
-----------------
-v3: add a comment, why AUTORECONF is added; thanks Arnout Vandecappelle
-v2: use the github helper instead of a URL
-v1: initial proposal to update 0.9.13 to 0.9.14
-
-
- package/x11vnc/x11vnc.hash | 2 +-
- package/x11vnc/x11vnc.mk   | 7 +++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/x11vnc/x11vnc.hash b/package/x11vnc/x11vnc.hash
-index 5828b12cd..3cdbfa1b0 100644
---- a/package/x11vnc/x11vnc.hash
-+++ b/package/x11vnc/x11vnc.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  f6829f2e629667a5284de62b080b13126a0736499fe47cdb447aedb07a59f13b  x11vnc-0.9.13.tar.gz
-+sha256  45f87c5e4382988c73e8c7891ac2bfb45d8f9ce1196ae06651c84636684ea143  x11vnc-0.9.14.tar.gz
-diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
-index 9f4af1258..9233b7047 100644
---- a/package/x11vnc/x11vnc.mk
-+++ b/package/x11vnc/x11vnc.mk
-@@ -4,8 +4,8 @@
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 04f8eab..98b9eeb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
+ 
++config BR2_PACKAGE_OPENOCD_FT2XXX
++	bool "openocd ft2232 support has been removed"
++	select BR2_PACKAGE_OPENOCD_FTDI
++	select BR2_LEGACY
++	help
++	  FT2232 support in OpenOCD has been removed, it's replaced by
++	  FDTI support, which has automatically been enabled.
++
+ config BR2_PACKAGE_KODI_RTMPDUMP
+ 	bool "kodi rtmp has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index 2313671..41c2fc5 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -123,14 +123,6 @@ config BR2_PACKAGE_OPENOCD_PARPORT
+ 	help
+ 	  Enable building the pc parallel port driver
+ 
+-config BR2_PACKAGE_OPENOCD_FT2XXX
+-	bool "FT2232 based devices (DEPRECATED)"
+-	select BR2_PACKAGE_LIBFTDI1
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+-	help
+-	  (DEPRECATED) Enable building support for FT2232
+-	  based devices using the libftdi library
+-
+ config BR2_PACKAGE_OPENOCD_VPI
+ 	bool "JTAG VPI"
+ 	help
+diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
+index 4ca11e2..b36c816 100644
+--- a/package/openocd/openocd.hash
++++ b/package/openocd/openocd.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/openocd/files/openocd/0.9.0/
+-sha1 bcf99bb21f09513065b2c9ece148ace7d16cdd0c openocd-0.9.0.tar.bz2
+-md5 665cc98ae9e7297e09ec6ac7235fee49 openocd-0.9.0.tar.bz2
++# From http://sourceforge.net/projects/openocd/files/openocd/0.10.0/
++sha1 3245d43d60a1a93f8b0f6b1ce20b53e38cab7a4a  openocd-0.10.0.tar.bz2
++md5 b412bdef0481a3859c6585eb69f6f6ba  openocd-0.10.0.tar.bz2
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 911d311..63201ee 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X11VNC_VERSION = 0.9.13
--X11VNC_SITE = http://downloads.sourceforge.net/project/libvncserver/x11vnc/$(X11VNC_VERSION)
-+X11VNC_VERSION = 0.9.14
-+X11VNC_SITE = $(call github,LibVNC,x11vnc,$(X11VNC_VERSION))
- # sdl support is not used in x11vnc, but host include / library search paths
- # leak in if host has sdl-config
- X11VNC_CONF_OPTS = --without-sdl
-@@ -13,6 +13,9 @@ X11VNC_DEPENDENCIES = xlib_libXt xlib_libXext xlib_libXtst
- X11VNC_LICENSE = GPL-2.0+
- X11VNC_LICENSE_FILES = COPYING
+-OPENOCD_VERSION = 0.9.0
++OPENOCD_VERSION = 0.10.0
+ OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
+ OPENOCD_SITE = http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
  
-+# Source coming from github, no configure included
-+X11VNC_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
- X11VNC_DEPENDENCIES += avahi dbus
- else
--- 
-2.11.0
+@@ -45,9 +45,8 @@ OPENOCD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_OPENOCD_ARMEW),--enable-armjtagew,--disable-armjtagew) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_CMSIS_DAP),--enable-cmsis-dap,--disable-cmsis-dap) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_PARPORT),--enable-parport,--disable-parport) \
+-	$(if $(BR2_PACKAGE_OPENOCD_FT2XXX),--enable-legacy-ft2232_libftdi,--disable-legacy-ft2232_libftdi) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_VPI),--enable-jtag_vpi,--disable-jtag_vpi) \
+-	$(if $(BR2_PACKAGE_OPENOCD_UBLASTER),--enable-usb_blaster_libftdi,--disable-usb_blaster_libftdi) \
++	$(if $(BR2_PACKAGE_OPENOCD_UBLASTER),--enable-usb-blaster,--disable-usb-blaster) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_AMTJT),--enable-amtjtagaccel,--disable-amjtagaccel) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_ZY1000_MASTER),--enable-zy1000-master,--disable-zy1000-master) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_ZY1000),--enable-zy1000,--disable-zy1000) \
+@@ -55,8 +54,8 @@ OPENOCD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_OPENOCD_AT91RM),--enable-at91rm9200,--disable-at91rm9200) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_BCM2835),--enable-bcm2835gpio,--disable-bcm2835gpio) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_GW16012),--enable-gw16012,--disable-gw16012) \
+-	$(if $(BR2_PACKAGE_OPENOCD_PRESTO),--enable-presto_libftdi,--disable-presto_libftdi) \
+-	$(if $(BR2_PACKAGE_OPENOCD_OPENJTAG),--enable-openjtag_ftdi,--disable-openjtag_ftdi) \
++	$(if $(BR2_PACKAGE_OPENOCD_PRESTO),--enable-presto,--disable-presto) \
++	$(if $(BR2_PACKAGE_OPENOCD_OPENJTAG),--enable-openjtag,--disable-openjtag) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_BUSPIRATE),--enable-buspirate,--disable-buspirate) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_SYSFS),--enable-sysfsgpio,--disable-sysfsgpio)
+ 
+@@ -82,11 +81,11 @@ HOST_OPENOCD_CONF_OPTS = \
+ 	--enable-armjtagew \
+ 	--enable-parport \
+ 	--enable-jtag_vpi \
+-	--enable-usb_blaster_libftdi \
++	--enable-usb-blaster \
+ 	--enable-amtjtagaccel \
+ 	--enable-gw16012 \
+-	--enable-presto_libftdi \
+-	--enable-openjtag_ftdi \
++	--enable-presto \
++	--enable-openjtag \
+ 	--enable-buspirate \
+ 	--enable-sysfsgpio \
+ 	--oldincludedir=$(HOST_DIR)/usr/include \
