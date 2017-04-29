@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 21:03:58 +0200
-Subject: [Buildroot] [PATCH 1/2] ext2.mk: ensure file system block count
- is not zero (0)
-In-Reply-To: <1493481682-128366-1-git-send-email-g4@novadsp.com>
+Date: Sat, 29 Apr 2017 21:06:06 +0200
+Subject: [Buildroot] [PATCH 2/2] mke2img: add parameter sanity checks to
+ prevent odd error messages from genext2.fs
+In-Reply-To: <1493481682-128366-2-git-send-email-g4@novadsp.com>
 References: <1493481682-128366-1-git-send-email-g4@novadsp.com>
-Message-ID: <20170429210358.716c51d4@free-electrons.com>
+ <1493481682-128366-2-git-send-email-g4@novadsp.com>
+Message-ID: <20170429210606.37872b68@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 29 Apr 2017 17:01:21 +0100, J Evans wrote:
+On Sat, 29 Apr 2017 17:01:22 +0100, J Evans wrote:
 
-> -ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
-> +ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
-> +$(error BR2_TARGET_ROOTFS_EXT2_BLOCKS cannot be zero (0))
-> +else
->  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
->  endif
+> +    if [ -z "${nb_blocks}" ]; then
+> +        error "Error: you must specify a file system block count with '-b'. This cannot be zero, e.g. 61440 == 60MB\n"
+> +    fi
 
-What is the motivation for checking that the size is not zero? Zero is
-like any other size too small to contain the target directory contents,
-so I don't see why we would add a specific check for it.
+Check this is useless: there is already error checking done by getopt
+itself, because the -b option *must* have an argument. Indeed, the
+current mke2img behaves like this:
 
-Your commit log unfortunately only explains *what* the commit is doing
-(which is obvious by reading the code) but not *why* this change is
-necessary.
+$ ./package/mke2img/mke2img -b
+mke2img: option 'b' expects a mandatory argument
+
+So it is already checked that ${nb_blocks} cannot be empty.
+
+> +    if [ "${nb_blocks}" -eq 0 ]; then
+> +        error "Error: The file system block count size cannot be zero. e.g. 61440 == 60MB \n"
+> +    fi
+
+See my reply to the previous commit: I don't see why 0 should be
+checked specifically. Please explain in the commit log why it should be.
 
 Thanks!
 
