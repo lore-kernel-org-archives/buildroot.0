@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 13:58:58 +0200
-Subject: [Buildroot] [PATCH] ola: mark as broken
-In-Reply-To: <78a929f7208b78d17f45d4ddb8bc8df7f26ba74b.1493388478.git.baruch@tkos.co.il>
-References: <78a929f7208b78d17f45d4ddb8bc8df7f26ba74b.1493388478.git.baruch@tkos.co.il>
-Message-ID: <20170429135858.31524bb1@free-electrons.com>
+From: g4 at novadsp.com <g4@novadsp.com>
+Date: Sat, 29 Apr 2017 13:00:52 +0100
+Subject: [Buildroot] [PATCH 2/2] ne10: Add aarch64 configuration option
+In-Reply-To: <1493418486-109149-2-git-send-email-g4@novadsp.com>
+References: <1493418486-109149-1-git-send-email-g4@novadsp.com>
+ <1493418486-109149-2-git-send-email-g4@novadsp.com>
+Message-ID: <119801d2c0e0$416570a0$c43051e0$@novadsp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Fri, 28 Apr 2017 17:07:58 +0300, Baruch Siach wrote:
-> Build with current protobuf is broken. Mark as broken until upstream resolves
-> this issue.
+> -----Original Message-----
+> From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of J
+> Evans
+> Sent: 28 April 2017 23:28
+> To: buildroot at buildroot.org
+> Cc: Thomas Petazzoni; J Evans
+> Subject: [Buildroot] [PATCH 2/2] ne10: Add aarch64 configuration option
 > 
-> https://github.com/OpenLightingProject/ola/issues/1192
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d9a/d9a24f7b715100be1580a568a5e3ff72b0389165/
-> http://autobuild.buildroot.net/results/b31/b314811dedce04ebdc779df67de6cb59a1880cac/
-> http://autobuild.buildroot.net/results/587/5877b2301b7da43c50127a4c5f648acd3b0264cc/
-> 
-> Cc: Dave Skok <blanco.ether@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/ola/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+> Signed-off-by: J Evans <g4@novadsp.com>
 
-Applied to master, thanks.
+Apologies. This patch appears to be incomplete, please ignore. Whilst it
+works fine for ARM64 the latest does not want to configure correctly for a
+PI3 for example.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+BR,
+
+Jerry.
