@@ -1,92 +1,97 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 22:36:07 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/kodi-skin-confluence: new package
-Message-ID: <20170429203608.17700-1-bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 22:56:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add sysv
+	init script
+Message-ID: <20170429205643.24646-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We need ":0.0 vt01" to make sure Xorg finds the correct terminal.
+
+Quoting https://www.x.org/archive/X11R6.8.0/doc/Xorg.1.html
+
+-allowMouseOpenFail
+    Allow the server to start up even if the mouse device can't be
+    opened or initialised.
+
+We need this option in case BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE was
+not enabled.
+
+-noreset
+    prevents a server reset when the last client connection is closed.
+
+We need this option to prevent auto-close of Xorg.
+
+Tested with a qemu image and Kodi.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: bumped to git HEAD
-v1: Sending as v1 the unchanged patch from Kodi series v5.
+ package/x11r7/xserver_xorg-server/S40xorg          | 39 ++++++++++++++++++++++
+ .../xserver_xorg-server/xserver_xorg-server.mk     |  5 +++
+ 2 files changed, 44 insertions(+)
+ create mode 100755 package/x11r7/xserver_xorg-server/S40xorg
 
- package/kodi-skin-confluence/Config.in             |  6 ++++++
- .../kodi-skin-confluence/kodi-skin-confluence.hash |  2 ++
- .../kodi-skin-confluence/kodi-skin-confluence.mk   | 25 ++++++++++++++++++++++
- package/kodi/Config.in                             |  4 ++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/kodi-skin-confluence/Config.in
- create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.hash
- create mode 100644 package/kodi-skin-confluence/kodi-skin-confluence.mk
-
-diff --git a/package/kodi-skin-confluence/Config.in b/package/kodi-skin-confluence/Config.in
-new file mode 100644
-index 000000000..08b656808
+diff --git a/package/x11r7/xserver_xorg-server/S40xorg b/package/x11r7/xserver_xorg-server/S40xorg
+new file mode 100755
+index 000000000..4299ed4cd
 --- /dev/null
-+++ b/package/kodi-skin-confluence/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SKIN_CONFLUENCE
-+	bool "kodi-skin-confluence"
-+	help
-+	  Kodi confluence skin
-+
-+	  https://github.com/xbmc/skin.confluence
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-new file mode 100644
-index 000000000..9aa2ea4a8
---- /dev/null
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 47970d61b2f617921dfbc36188ed11de9af366cd97d9105e19cbe96598fe7b62  kodi-skin-confluence-7044dabb3a818d7ff47b7a34bfb3480f2a9441d9.tar.gz
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-new file mode 100644
-index 000000000..c679ec687
---- /dev/null
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-@@ -0,0 +1,25 @@
-+################################################################################
++++ b/package/x11r7/xserver_xorg-server/S40xorg
+@@ -0,0 +1,39 @@
++#!/bin/sh
 +#
-+# kodi-skin-confluence
++# Starts Xorg
 +#
-+################################################################################
 +
-+KODI_SKIN_CONFLUENCE_VERSION = 7044dabb3a818d7ff47b7a34bfb3480f2a9441d9
-+KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
-+KODI_SKIN_CONFLUENCE_LICENSE = GPLv2+
-+KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
-+KODI_SKIN_CONFLUENCE_DEPENDENCIES = kodi
-+KODI_SKIN_CONFLUENCE_CONF_OPTS = -DOVERRIDE_PATHS=1
++BIN=/usr/bin/Xorg
++XORG_ARGS=":0.0 vt01 -s 0 -noreset -allowMouseOpenFail"
++PIDFILE=/var/run/xorg.pid
 +
-+define KODI_SKIN_CONFLUENCE_BUILD_CMDS
-+	$(HOST_DIR)/usr/bin/TexturePacker -input $(@D)/media/ -output $(@D)/media/Textures.xbt -dupecheck -use_none
-+endef
++start() {
++	printf "Starting Xorg: "
++	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XORG_ARGS
++	[ $? = 0 ] && sleep 3 && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping Xorg: "
++	start-stop-daemon -K -q -p $PIDFILE
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	sleep 2
++	start
++}
 +
-+define KODI_SKIN_CONFLUENCE_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence
-+	cp -dpfr $(@D)/* $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.jpg -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.png -delete
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 6bc81338a..cc747e816 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -326,6 +326,10 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-stars/Config.in"
- endmenu
++case "$1" in
++	start)
++		start
++	;;
++	stop)
++		stop
++	;;
++	restart|reload)
++		restart
++	;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 306e9d03e..072819cb9 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -258,4 +258,9 @@ XSERVER_XORG_SERVER_CONF_OPTS += --with-sha1=libsha1
+ XSERVER_XORG_SERVER_DEPENDENCIES += libsha1
+ endif
  
-+menu "Skins"
-+	source "package/kodi-skin-confluence/Config.in"
-+endmenu
++define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
++		$(TARGET_DIR)/etc/init.d/S40xorg
++endef
 +
- menu "Visualisations"
- 	source "package/kodi-visualisation-fishbmc/Config.in"
- 	source "package/kodi-visualisation-goom/Config.in"
+ $(eval $(autotools-package))
 -- 
 2.11.0
