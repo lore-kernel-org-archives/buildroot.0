@@ -1,52 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 13:57:50 +0200
-Subject: [Buildroot] [git commit] ola: mark as broken
-Message-ID: <20170429115756.A4E1C82263@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 13:58:44 +0200
+Subject: [Buildroot] [PATCH 1/2] x11r7: xdriver_xf86-input-tslib: new
+ upstream location
+In-Reply-To: <1493382976-26007-1-git-send-email-martink@posteo.de>
+References: <1493382976-26007-1-git-send-email-martink@posteo.de>
+Message-ID: <20170429135844.2fa76511@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f80fce90b73ed28fbbc1315c3d9a5577523fddf8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Build with current protobuf is broken. Mark as broken until upstream resolves
-this issue.
+On Fri, 28 Apr 2017 14:36:15 +0200, Martin Kepplinger wrote:
 
-https://github.com/OpenLightingProject/ola/issues/1192
+>  XDRIVER_XF86_INPUT_TSLIB_VERSION = 0.0.6
+>  XDRIVER_XF86_INPUT_TSLIB_SOURCE = xf86-input-tslib-$(XDRIVER_XF86_INPUT_TSLIB_VERSION).tar.bz2
+> -XDRIVER_XF86_INPUT_TSLIB_SITE = http://www.pengutronix.de/software/xf86-input-tslib/download
+> +XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releases/download/$(TSLIB_VERSION)
 
-Fixes:
-http://autobuild.buildroot.net/results/d9a/d9a24f7b715100be1580a568a5e3ff72b0389165/
-http://autobuild.buildroot.net/results/b31/b314811dedce04ebdc779df67de6cb59a1880cac/
-http://autobuild.buildroot.net/results/587/5877b2301b7da43c50127a4c5f648acd3b0264cc/
+This couldn't work: TSLIB_VERSION comes from tslib.mk and is set to
+1.9, which prevents the download from working. Changing this to
+XDRIVER_XF86_INPUT_TSLIB_VERSION fixed the problem.
 
-Cc: Dave Skok <blanco.ether@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ola/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied with this fix. Thanks!
 
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-index 90a92fd..656e825 100644
---- a/package/ola/Config.in
-+++ b/package/ola/Config.in
-@@ -1,6 +1,7 @@
- comment "ola needs a toolchain w/ C++, threads, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| BR2_STATIC_LIBS
-+	depends on BROKEN
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- menuconfig BR2_PACKAGE_OLA
-@@ -8,6 +9,9 @@ menuconfig BR2_PACKAGE_OLA
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_UTIL_LINUX
-+	# Build fails with current protobuf
-+	# https://github.com/OpenLightingProject/ola/issues/1192
-+	depends on BROKEN
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
