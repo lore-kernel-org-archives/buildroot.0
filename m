@@ -1,41 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 15:46:49 +0200
-Subject: [Buildroot] [PATCH v7 30/31] package/libsquish: bump version to
-	1.15
-References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
- <20170429083751.19625-31-bernd.kuhls@t-online.de>
- <20170429154429.4404aa33@free-electrons.com>
-Message-ID: <93ietdxnoe.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Apr 2017 15:49:30 +0200
+Subject: [Buildroot] [git commit] package/libsquish: fix .pc file name
+Message-ID: <20170429134950.B8E0381828@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 29 Apr 2017 15:44:29 +0200 schrieb Thomas Petazzoni:
+commit: https://git.buildroot.net/buildroot/commit/?id=4f7c11e5ba7f248d70d03289990036e2698e246d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> 
-> On Sat, 29 Apr 2017 10:37:50 +0200, Bernd Kuhls wrote:
->> Added md5 hash provided by upstream.
->> 
->> Signed-off-by: Bernd Kuhls
->> <bernd.kuhls@t-online.de>
->> ---
->>  package/libsquish/libsquish.hash | 3 ++-
->>  package/libsquish/libsquish.mk   | 2 +-
->>  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> This patch causes a build failure:
-> http://autobuild.buildroot.net/
-results/04c/04c30f9a425d10111974a315a6d7474e243cbbd3/build-end.log.
-> 
-> Best regards,
-> 
-> Thomas
+squish.pc was renamed upstream to libsquish.pc
 
-Hi Thomas,
+Fixes
+http://autobuild.buildroot.net/results/04c30f9a425d10111974a315a6d7474e243cbbd3/
 
-patch sent: http://patchwork.ozlabs.org/patch/756745/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsquish/libsquish.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards, Bernd
+diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
+index a707355..9b447b0 100644
+--- a/package/libsquish/libsquish.mk
++++ b/package/libsquish/libsquish.mk
+@@ -21,7 +21,7 @@ define LIBSQUISH_INSTALL_STAGING_CMDS
+ 	mkdir -p $(STAGING_DIR)/usr/lib
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		install PREFIX=/usr INSTALL_DIR=$(STAGING_DIR)/usr
+-	$(INSTALL) -D -m 644 $(@D)/squish.pc $(STAGING_DIR)/usr/lib/pkgconfig/squish.pc
++	$(INSTALL) -D -m 644 $(@D)/libsquish.pc $(STAGING_DIR)/usr/lib/pkgconfig/libsquish.pc
+ 	ln -sf libsquish.so.0.0 $(STAGING_DIR)/usr/lib/libsquish.so
+ 	ln -sf libsquish.so.0.0 $(STAGING_DIR)/usr/lib/libsquish.so.0
+ endef
