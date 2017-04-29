@@ -1,62 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 15:53:16 +0200
-Subject: [Buildroot] [git commit] package/qt5base: default to approved
-	license
-Message-ID: <20170429135922.F16198047C@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 15:53:36 +0200
+Subject: [Buildroot] [git commit] package/qt5quickcontrols2: always use the
+	opensource license
+Message-ID: <20170429135923.855AF82629@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce79e0b2306302f50663d587cd423ea427f6f8cb
+commit: https://git.buildroot.net/buildroot/commit/?id=79802f5f7cbab351c63e64a2548df7d51d60e428
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The only license we can act upon in Buildroot is the publicly
-available license.
+We never ask the user to confirm their assent about the use of a free
+license; there is no reason we do so for Qt.
 
-Qt can come under non-free licenses, but we have no access to
-such licenses. The conditions to access the code under those
-non-free, non-public licenses is unknown.
-
-Besides, Qt5 (with Qt) is the only package that has this choice;
-for other packages in a similar situation, we only use the free,
-publicly-known licenses.
-
-Finally, the name of the tarballs we download clearly hint that
-they can only be used under the free license.
-
-Drop the prompt to the accepted license, and make it mandatory;
-packages will be adapted in follow-up patches.
+The output of legal-info is there to gather all the licenses used in a
+build; the license for qt5quickcontrols2 will be there to be consulted
+as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 337dcf2..044aa5d 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -28,16 +28,8 @@ config BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS
- 	  -no-feature-style_windowsvista.
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+index d6c3ee3..23bcbad 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+@@ -10,13 +10,8 @@ QT5QUICKCONTROLS2_SOURCE = qtquickcontrols2-opensource-src-$(QT5QUICKCONTROLS2_V
+ QT5QUICKCONTROLS2_DEPENDENCIES = qt5base qt5declarative
+ QT5QUICKCONTROLS2_INSTALL_STAGING = YES
  
- config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
--	bool "Approve free license"
--	help
--	  Select this if you approve one of the available free licenses for the
--	  Qt5 library.
--	  By doing this you will not be asked while the library is compiled.
--	  Please read and understand the license terms before approving this.
--
--	  LGPL: http://doc.qt.io/qt-5/lgpl.html
--
--	  See also http://doc.qt.io/qt-5/licensing.html
-+	bool
-+	default y
+-ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT5QUICKCONTROLS2_LICENSE = GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
+ QT5QUICKCONTROLS2_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+-else
+-QT5QUICKCONTROLS2_LICENSE = Commercial license
+-QT5QUICKCONTROLS2_REDISTRIBUTE = NO
+-endif
  
- config BR2_PACKAGE_QT5BASE_CONFIG_FILE
- 	string "Config file"
+ define QT5QUICKCONTROLS2_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
