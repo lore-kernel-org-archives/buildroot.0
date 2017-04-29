@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 16:07:26 +0200
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.5.8
-Message-ID: <20170429140737.53D2D8275D@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 16:08:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.5.8
+In-Reply-To: <20170429140207.6142-1-bernd.kuhls@t-online.de>
+References: <20170429140207.6142-1-bernd.kuhls@t-online.de>
+Message-ID: <20170429160810.0ee3e0d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67c25f897dd61802ea97c83619ca5dace8ba7c27
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Version bump includes a regression fix:
-https://www.samba.org/samba/history/samba-4.5.8.html
+On Sat, 29 Apr 2017 16:02:07 +0200, Bernd Kuhls wrote:
+> Version bump includes a regression fix:
+> https://www.samba.org/samba/history/samba-4.5.8.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/samba4/samba4.hash | 2 +-
+>  package/samba4/samba4.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 71d24f7..0a2a548 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	ac70f09af80639d8189e1b9bc0a554841ee44df2b1ef58e7e682ad5400fd9400	samba-4.5.7.tar.gz
-+sha256 f63b656d8823a280c50c9dbd6b692816cd7a88adfe9b47997ce697fd75bf81f0  samba-4.5.8.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 130b661..4de69a0 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.5.7
-+SAMBA4_VERSION = 4.5.8
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
