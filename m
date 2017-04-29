@@ -1,42 +1,58 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 16:02:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.5.8
-Message-ID: <20170429140207.6142-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Apr 2017 16:06:40 +0200
+Subject: [Buildroot] [PATCH 00/29] qt,
+ qt5: only ever use the free/opensource licenses
+In-Reply-To: <cover.1492979449.git.yann.morin.1998@free.fr>
+References: <cover.1492979449.git.yann.morin.1998@free.fr>
+Message-ID: <20170429160640.683e09bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version bump includes a regression fix:
-https://www.samba.org/samba/history/samba-4.5.8.html
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 23 Apr 2017 22:31:12 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 71d24f7fe..0a2a548a1 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	ac70f09af80639d8189e1b9bc0a554841ee44df2b1ef58e7e682ad5400fd9400	samba-4.5.7.tar.gz
-+sha256 f63b656d8823a280c50c9dbd6b692816cd7a88adfe9b47997ce697fd75bf81f0  samba-4.5.8.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 130b661c6..4de69a0fa 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.5.7
-+SAMBA4_VERSION = 4.5.8
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+> Yann E. MORIN (29):
+>       package/qt: default to approved license
+>       package/qt5base: default to approved license
+>       package/qt: always use the opensource license
+>       package/qt5base: always use the opensource license
+>       package/qt53d: always use the opensource license
+>       package/qt5canvas: always use the opensource license
+>       package/qt5connectivity: always use the opensource license
+>       package/qt5declarative: always use the opensource license
+>       package/qt5enginio: always use the opensource license
+>       package/qt5graphicaleffects: always use the opensource license
+>       package/qt5imageformats: always use the opensource license
+>       package/qt5location: always use the opensource license
+>       package/qt5multimedia: always use the opensource license
+>       package/qt5quickcontrols: always use the opensource license
+>       package/qt5quickcontrols2: always use the opensource license
+>       package/qt5script: always use the opensource license
+>       package/qt5sensors: always use the opensource license
+>       package/qt5serialbus: always use the opensource license
+>       package/qt5serialport: always use the opensource license
+>       package/qt5svg: always use the opensource license
+>       package/qt5tools: always use the opensource license
+>       package/qt5webchannel: always use the opensource license
+>       package/qt5webkit: always use the opensource license
+>       package/qt5websockets: always use the opensource license
+>       package/qt5x11extras: always use the opensource license
+>       package/qt5xmlpatterns: always use the opensource license
+>       configs: drop Qt/Qt5 license approval option
+>       package/qt: drop option for license approved
+>       package/qt5: drop option for license approved
+
+Series applied. As suggested by Arnout, I've dropped the legacy
+handling in the last two patches, as it doesn't serve any purpose.
+
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
