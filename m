@@ -1,51 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 15:46:34 +0200
-Subject: [Buildroot] [PATCH] mpv: bump version to 0.25.0
-In-Reply-To: <20170424094218.60220-1-Vincent.Riera@imgtec.com>
-References: <20170424094218.60220-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170429154634.03f88dd0@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 15:46:49 +0200
+Subject: [Buildroot] [PATCH v7 30/31] package/libsquish: bump version to
+	1.15
+References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
+ <20170429083751.19625-31-bernd.kuhls@t-online.de>
+ <20170429154429.4404aa33@free-electrons.com>
+Message-ID: <93ietdxnoe.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sat, 29 Apr 2017 15:44:29 +0200 schrieb Thomas Petazzoni:
 
-On Mon, 24 Apr 2017 10:42:18 +0100, Vicente Olivert Riera wrote:
-> Remove 0003-fix-build-with-have-gl.patch which is already included in
-> this release.
+> Hello,
 > 
-> Remove --{enable|disable}-standard-gl configure option because it
-> doesn't exist.
+> On Sat, 29 Apr 2017 10:37:50 +0200, Bernd Kuhls wrote:
+>> Added md5 hash provided by upstream.
+>> 
+>> Signed-off-by: Bernd Kuhls
+>> <bernd.kuhls@t-online.de>
+>> ---
+>>  package/libsquish/libsquish.hash | 3 ++-
+>>  package/libsquish/libsquish.mk   | 2 +-
+>>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/mpv/0003-fix-build-with-have-gl.patch | 39 ---------------------------
->  package/mpv/mpv.hash                          |  2 +-
->  package/mpv/mpv.mk                            |  6 ++---
->  3 files changed, 4 insertions(+), 43 deletions(-)
->  delete mode 100644 package/mpv/0003-fix-build-with-have-gl.patch
+> This patch causes a build failure:
+> http://autobuild.buildroot.net/
+results/04c/04c30f9a425d10111974a315a6d7474e243cbbd3/build-end.log.
+> 
+> Best regards,
+> 
+> Thomas
 
-This patch causes numerous build failures:
+Hi Thomas,
 
-  http://autobuild.buildroot.net/?reason=mpv-0.25.0
+patch sent: http://patchwork.ozlabs.org/patch/756745/
 
-That didn't exist with the previous version 0.24.0:
-
-  http://autobuild.buildroot.net/?reason=mpv-0.24.0
-
-The problem is:
-
-waf: error: no such option: --disable-xss
-
-Perhaps simply removing --disable-xss is the solution, but someone
-needs to investigate if it's the correct solution.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
