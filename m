@@ -1,30 +1,37 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Sat, 29 Apr 2017 13:00:52 +0100
-Subject: [Buildroot] [PATCH 2/2] ne10: Add aarch64 configuration option
-In-Reply-To: <1493418486-109149-2-git-send-email-g4@novadsp.com>
-References: <1493418486-109149-1-git-send-email-g4@novadsp.com>
- <1493418486-109149-2-git-send-email-g4@novadsp.com>
-Message-ID: <119801d2c0e0$416570a0$c43051e0$@novadsp.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Apr 2017 14:03:03 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: fix coldfire compile issue
+In-Reply-To: <20170429073019.GA22285@waldemar-brodkorb.de>
+References: <20170429073019.GA22285@waldemar-brodkorb.de>
+Message-ID: <20170429140303.3433bcf3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of J
-> Evans
-> Sent: 28 April 2017 23:28
-> To: buildroot at buildroot.org
-> Cc: Thomas Petazzoni; J Evans
-> Subject: [Buildroot] [PATCH 2/2] ne10: Add aarch64 configuration option
+Hello,
+
+On Sat, 29 Apr 2017 09:30:19 +0200, Waldemar Brodkorb wrote:
+> Fixes:
+>   http://autobuild.buildroot.net/results/7e95ac6d78bc1732127bea084b4f791e52637abd
 > 
-> Signed-off-by: J Evans <g4@novadsp.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  ...llow-to-directly-use-pthreads-atomics-com.patch | 65 ++++++++++++++++++++++
+>  package/ffmpeg/ffmpeg.mk                           |  6 ++
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 package/ffmpeg/0002-configure-allow-to-directly-use-pthreads-atomics-com.patch
 
-Apologies. This patch appears to be incomplete, please ignore. Whilst it
-works fine for ARM64 the latest does not want to configure correctly for a
-PI3 for example.
+I'm hesitating: do we apply this fix, or simply adjust
+BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS do disallow using ffmpeg on
+BR2_m68k_cf ? After all, who is realistically going to use ffmpeg on
+m68k_cf ?
 
-BR,
+Best regards,
 
-Jerry.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
