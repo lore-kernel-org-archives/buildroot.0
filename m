@@ -1,110 +1,102 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 29 Apr 2017 09:30:19 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix coldfire compile issue
-Message-ID: <20170429073019.GA22285@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 10:37:21 +0200
+Subject: [Buildroot] [PATCH v7 01/31] package/kodi-visualisation-fountain:
+	remove package
+In-Reply-To: <20170429083751.19625-1-bernd.kuhls@t-online.de>
+References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
+Message-ID: <20170429083751.19625-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/7e95ac6d78bc1732127bea084b4f791e52637abd
+Remove broken package:
+https://github.com/notspiff/visualization.fountain/issues/1#issuecomment-166156021
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...llow-to-directly-use-pthreads-atomics-com.patch | 65 ++++++++++++++++++++++
- package/ffmpeg/ffmpeg.mk                           |  6 ++
- 2 files changed, 71 insertions(+)
- create mode 100644 package/ffmpeg/0002-configure-allow-to-directly-use-pthreads-atomics-com.patch
+ Config.in.legacy                                              |  7 +++++++
+ package/kodi-visualisation-fountain/Config.in                 | 11 -----------
+ .../kodi-visualisation-fountain.hash                          |  2 --
+ .../kodi-visualisation-fountain.mk                            | 11 -----------
+ package/kodi/Config.in                                        |  1 -
+ 5 files changed, 7 insertions(+), 25 deletions(-)
+ delete mode 100644 package/kodi-visualisation-fountain/Config.in
+ delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+ delete mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
 
-diff --git a/package/ffmpeg/0002-configure-allow-to-directly-use-pthreads-atomics-com.patch b/package/ffmpeg/0002-configure-allow-to-directly-use-pthreads-atomics-com.patch
-new file mode 100644
-index 0000000..9b51da3
---- /dev/null
-+++ b/package/ffmpeg/0002-configure-allow-to-directly-use-pthreads-atomics-com.patch
-@@ -0,0 +1,65 @@
-+From b49d3d570c2512d4972affea2735de6505e7ad4f Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 29 Apr 2017 09:04:31 +0200
-+Subject: [PATCH] configure: allow to directly use pthreads atomics compat code
-+
-+For some architectures (like m68k coldfire) the check for gcc
-+atomics (atomic_store) succeeds, but other atomic operations
-+are broken and generate an internal compiler error.
-+ffmpeg can be successfully compiled when the compatibility
-+code with pthread_mutex_* is used.
-+
-+Add a new configure argument for this case.
-+
-+GCC bug:
-+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ configure | 9 ++++++++-
-+ 1 file changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index b3cb5b0..ae4b80d 100755
-+--- a/configure
-++++ b/configure
-+@@ -135,6 +135,7 @@ Component options:
-+   --disable-avfilter       disable libavfilter build
-+   --enable-avresample      enable libavresample build [no]
-+   --disable-pthreads       disable pthreads [autodetect]
-++  --enable-pthreads-atomics enable pthreads atomics compat code [no]
-+   --disable-w32threads     disable Win32 threads [autodetect]
-+   --disable-os2threads     disable OS/2 threads [autodetect]
-+   --disable-network        disable network support [no]
-+@@ -1684,6 +1685,7 @@ CONFIG_LIST="
-+     neon_clobber_test
-+     ossfuzz
-+     pic
-++    pthreads_atomics
-+     raise_major
-+     thumb
-+     valgrind_backtrace
-+@@ -6423,7 +6425,11 @@ for thread in $THREADS_LIST; do
-+     fi
-+ done
-+ 
-+-if disabled stdatomic_h; then
-++if enabled pthreads_atomics; then
-++  add_compat atomics/pthread/stdatomic.o
-++  add_cppflags '-I\$(SRC_PATH)/compat/atomics/pthread'
-++else
-++  if disabled stdatomic_h; then
-+     if enabled atomics_gcc; then
-+         add_cppflags '-I\$(SRC_PATH)/compat/atomics/gcc'
-+     elif enabled atomics_win32; then
-+@@ -6437,6 +6443,7 @@ if disabled stdatomic_h; then
-+         enabled threads && die "Threading is enabled, but no atomics are available"
-+         add_cppflags '-I\$(SRC_PATH)/compat/atomics/dummy'
-+     fi
-++  fi
-+ fi
-+ 
-+ # Check if requested libraries were found.
-+-- 
-+2.1.4
-+
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 10e4e74..7695507 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -473,6 +473,12 @@ else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
- FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
- endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8e9f3d175d..a13e4453b2 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
  
-+# Workaround https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467 by
-+# directly using atomics compat code
-+ifeq ($(BR2_m68k_cf),y)
-+FFMPEG_CONF_OPTS += --enable-pthreads-atomics
-+endif
++config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
++	bool "kodi-visualisation-fountain has been removed"
++	select BR2_LEGACY
++	help
++	  According to upstream 'the visualization is not currently
++	  in a working shape.'
 +
- FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ config BR2_PACKAGE_PORTMAP
+ 	bool "portmap has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/kodi-visualisation-fountain/Config.in b/package/kodi-visualisation-fountain/Config.in
+deleted file mode 100644
+index 570d169338..0000000000
+--- a/package/kodi-visualisation-fountain/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
+-	bool "kodi-visualisation-fountain"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+-	select BR2_PACKAGE_LIBSOIL
+-	help
+-	  Fountain visualization for Kodi
+-
+-	  https://github.com/notspiff/visualization.fountain
+-
+-comment "kodi-visualisation-fountain needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+deleted file mode 100644
+index 8dc933effa..0000000000
+--- a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 7b2867f415f22e4bc4ba834034f00117fcf76774aea0afc7bf30b5f2d1991dd7 kodi-visualisation-fountain-f22deacd2396a204694d346f85369ea9ea70e16f.tar.gz
+diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+deleted file mode 100644
+index 5684402a2a..0000000000
+--- a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
++++ /dev/null
+@@ -1,11 +0,0 @@
+-################################################################################
+-#
+-# kodi-visualisation-fountain
+-#
+-################################################################################
+-
+-KODI_VISUALISATION_FOUNTAIN_VERSION = f22deacd2396a204694d346f85369ea9ea70e16f
+-KODI_VISUALISATION_FOUNTAIN_SITE = $(call github,notspiff,visualization.fountain,$(KODI_VISUALISATION_FOUNTAIN_VERSION))
+-KODI_VISUALISATION_FOUNTAIN_DEPENDENCIES = kodi libsoil
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index f2a3e2e032..f94e2c7c20 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -315,7 +315,6 @@ endmenu
  
- # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-fishbmc/Config.in"
+-	source "package/kodi-visualisation-fountain/Config.in"
+ 	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
 -- 
-2.1.4
+2.11.0
