@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 12:00:09 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-waveforhue:
-	bump version
-Message-ID: <20170429101427.14A1D827B4@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 11:57:32 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
+	4.15.0
+Message-ID: <20170429101426.75406818B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47a8c5473a9c66f973af2c65eecadcca31a21fa1
+commit: https://git.buildroot.net/buildroot/commit/?id=7bf4ff23e019bc9a50d52b9f3b0b8739ee94014e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changed upstream repo as per:
-https://github.com/notspiff/visualization.waveforhue/pull/3#issuecomment-221105720
+Upstream repo was changed:
+https://github.com/xbmc/repo-binary-addons/commit/cf93c8be639a3122db3ecb11c0b42d76e2e1da98
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash  | 2 +-
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-index 5f49daa..e7e97f1 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 0e9eba8..57725a0 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 2590ce4ee1816ffdf59fe33580a36fba49fbd1f60f4c9022b3315e04debc9c73 kodi-visualisation-waveforhue-e87d5c7d7e7504036b80af8bc89f4cf6489085fe.tar.gz
-+sha256 80c466c55aee97d01442892135d4785070333e39f45942da17b65239758e5ae9  kodi-visualisation-waveforhue-b1805dbdba07e5e5b62115490c703aca43e9065c.tar.gz
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-index ce0fc18..3ff32e6 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-@@ -4,8 +4,8 @@
+-sha256 f6d61b134a96a25820b616e60e43ac1ed33bd3f8b9f7612a6f6324356b78582d kodi-pvr-mythtv-84b0b6b122ca779588de5c895ef77b6bc454e859.tar.gz
++sha256 30b6a20f846f0f0cc14c2347efbf3b72162c876daed53a3731d3f975d370765e  kodi-pvr-mythtv-4.15.0.tar.gz
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index 2c5d07a..515050b 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_WAVEFORHUE_VERSION = e87d5c7d7e7504036b80af8bc89f4cf6489085fe
--KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,notspiff,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
-+KODI_VISUALISATION_WAVEFORHUE_VERSION = b1805dbdba07e5e5b62115490c703aca43e9065c
-+KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,hardyt,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
- KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
- KODI_VISUALISATION_WAVEFORHUE_DEPENDENCIES = kodi
+-# This cset is on the branch 'Jarvis'
++# This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_MYTHTV_VERSION = 84b0b6b122ca779588de5c895ef77b6bc454e859
+-KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
++KODI_PVR_MYTHTV_VERSION = 4.15.0
++KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
+ KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
