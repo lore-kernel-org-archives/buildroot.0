@@ -1,49 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 17:15:44 +0200
-Subject: [Buildroot] [PATCH v2 01/25] package configs: clean up
- indentation warnings
-In-Reply-To: <20170422171811.1346-1-Adamduskett@outlook.com>
-References: <20170422171811.1346-1-Adamduskett@outlook.com>
-Message-ID: <20170429171544.3c285c4d@free-electrons.com>
+From: J Evans <g4@novadsp.com>
+Date: Sat, 29 Apr 2017 17:01:21 +0100
+Subject: [Buildroot] [PATCH 1/2] ext2.mk: ensure file system block count is
+	not zero (0)
+Message-ID: <1493481682-128366-1-git-send-email-g4@novadsp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: J Evans <g4@novadsp.com>
+---
+ fs/ext2/ext2.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Sat, 22 Apr 2017 13:17:47 -0400, Adam Duskett wrote:
-> The check-package script when ran gave warnings on indentation issues
-> on all of these Config files.  This patch cleans up all warnings
-> related to the indentation of the Config files in the package directory
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
-> v1 -> v2:
->   - No changes.
->   
->  package/b43-firmware/Config.in       |   8 +-
->  package/binutils/Config.in.host      |  12 +-
->  package/gcc/Config.in.host           | 156 +++++------
->  package/gdb/Config.in.host           |  12 +-
->  package/jquery-ui-themes/Config.in   |  96 +++----
->  package/kodi/Config.in               | 100 +++----
-
-I've dropped the changes on this file.
-
->  package/linux-headers/Config.in.host |  85 +++---
->  package/lua/Config.in                |  12 +-
->  package/uclibc/Config.in             |  28 +-
->  package/x11r7/Config.in              | 526 ++++++++++++++++++-----------------
-
-And the changes on this file. I'm not sure we want to apply the exact
-same indentation rule for those files.
-
-Applied after making those changes. Thanks!
-
-Thomas
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index 30f1d17..3a0c764 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -6,7 +6,9 @@
+ 
+ EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
+ 
+-ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
++ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
++$(error BR2_TARGET_ROOTFS_EXT2_BLOCKS cannot be zero (0))
++else
+ EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
