@@ -1,272 +1,358 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 11:59:30 +0200
-Subject: [Buildroot] [git commit] package/kodi-screensaver-*: mass version
-	bump
-Message-ID: <20170429101426.E4AE2818B3@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 12:07:09 +0200
+Subject: [Buildroot] [git commit] package/libsquish: Remove Kodi-specific
+	patch
+Message-ID: <20170429101427.570C8827B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b085746c833d748cbf43f1e0d3675aaae7c2018
+commit: https://git.buildroot.net/buildroot/commit/?id=a237d970425706cf22114223a04fd61f4cd36e3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Kodi 17 does not depend on libsquish anymore:
+https://github.com/xbmc/xbmc/commit/ed03f828be3615d294eb4a4cfccc5cdccec22997
+
+We can therefore remove the patch which was needed for Kodi <= 16.x.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash      | 2 +-
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk        | 2 +-
- package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash      | 2 +-
- package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk        | 2 +-
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash    | 2 +-
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk      | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash          | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk            | 2 +-
- .../kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash    | 2 +-
- package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk  | 2 +-
- package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash      | 2 +-
- package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk        | 2 +-
- .../kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash    | 2 +-
- package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk  | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash        | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk          | 2 +-
- package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash    | 2 +-
- package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk      | 2 +-
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash                | 2 +-
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk                  | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.hash              | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.mk                | 2 +-
- 22 files changed, 22 insertions(+), 22 deletions(-)
+ package/libsquish/0001-kodi.patch | 327 --------------------------------------
+ 1 file changed, 327 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-index a70f1b0..7d105be 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 b76b9ba122cebddc7c201b088d93e86fde8fc76e7e9f167ff3e43c3390088f3f kodi-screensaver-asteroids-c7ae05f1881b9abda6a1ac6beaca8d64a164c4fa.tar.gz
-+sha256 2e072e6aad12f707dec1e70b7df26c590bb41fed8880dcfdbe6c99949b7e287a  kodi-screensaver-asteroids-v1.1.2.tar.gz
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index b2eac1b..46df2e7 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_ASTEROIDS_VERSION = c7ae05f1881b9abda6a1ac6beaca8d64a164c4fa
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = v1.1.2
- KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-index 5f04031..f8f6d7b 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 6bf9367889c4ddece7e0c3720762d41bb0b22fc9ab28d1c8759edb1f77487ecd kodi-screensaver-asterwave-0dc2c48dadb100954eef823e7e3a5f502ce65b1e.tar.gz
-+sha256 48cd459b60b2407b8bae9107760a013d04ee29e00fddbce9550291896d42ef64  kodi-screensaver-asterwave-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-index 7c718cc..b8c3a2a 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_ASTERWAVE_VERSION = 0dc2c48dadb100954eef823e7e3a5f502ce65b1e
-+KODI_SCREENSAVER_ASTERWAVE_VERSION = v1.1.0
- KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,notspiff,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
- KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libglu libsoil
- 
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-index 6fc273d..63b9d3c 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 25e497c6843a7d933d1e4736e8dcb671bc9881328d5e27349dd0b25cb9be07eb kodi-screensaver-biogenesis-39928eef56ed639085d401dd97bf18f44b1f3e8b.tar.gz
-+sha256 b97dc804261b19df725e0a9f1af3be6903226ae616fcac170f7b9c1a67bf811a  kodi-screensaver-biogenesis-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 8e10a57..c5ebd85 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 39928eef56ed639085d401dd97bf18f44b1f3e8b
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = v1.1.0
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = src/Life.cpp
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-index ebf19d9..21443d8 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 c2d19c33aff73b99cbf51f943b62e58b2b6233dcf1d789ae8f73e92fa96f07bc kodi-screensaver-cpblobs-87a3abfbe6e4fd1089548eab77a84902d0e1af60.tar.gz
-+sha256 1ca5e4de61251de7e420dc6ded3156960f9bb52ed7ff0243f305768147d470e3  kodi-screensaver-cpblobs-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-index 0fc5c53..63a8dfa 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_CPBLOBS_VERSION = 87a3abfbe6e4fd1089548eab77a84902d0e1af60
-+KODI_SCREENSAVER_CPBLOBS_VERSION = v1.1.0
- KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,notspiff,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
- KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
- KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-index 01183d7..ff9d6d0 100644
---- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-+++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 680e9354adcb7048b5c2b55b3c49cf37cea0e12e6564018cd694feeb253c90dd kodi-screensaver-crystalmorph-2e7c10e3543f5aaab6fd2f5aa9d05b976a43ba68.tar.gz
-+sha256 a8400c8d8be0fe0ba616ad1d0ef5fd798980a9dd4e38ef88bee9bf74a06975d5  kodi-screensaver-crystalmorph-1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e.tar.gz
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-index 2e0209f..83629e4 100644
---- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-+++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 2e7c10e3543f5aaab6fd2f5aa9d05b976a43ba68
-+KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e
- KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
- KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-index 9339453..212aee6 100644
---- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 fc114434db18a885fda30ac6b82fe82ec1d5ed97e2ff6414b4927487da684871 kodi-screensaver-greynetic-80e850eb3cbc7ee2c937fcab666dc45d2b2ee0bb.tar.gz
-+sha256 55a77487f02d282e8431e64de3cb263489037c2374a4b9cdd7aa189093e7621f  kodi-screensaver-greynetic-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-index 7b00012..66435eb 100644
---- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_GREYNETIC_VERSION = 80e850eb3cbc7ee2c937fcab666dc45d2b2ee0bb
-+KODI_SCREENSAVER_GREYNETIC_VERSION = v1.1.0
- KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
- KODI_SCREENSAVER_GREYNETIC_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-index 5ae2459..55deabe 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 91990a29072cf85f4b9253a16a362d83fdfcc7595de796d982a189aa8618555c  kodi-screensaver-matrixtrails-16057e7195f930109f0a4aea999296ca315700e5.tar.gz
-+sha256 2b531f51b86536df2a5268547e3d1b7fabc8a1dc930808b46685afcc455bb8fa  kodi-screensaver-matrixtrails-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index b67ee4a..142e48d 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 16057e7195f930109f0a4aea999296ca315700e5
-+KODI_SCREENSAVER_MATRIXTRAILS_VERSION = v1.1.0
- KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,notspiff,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-index 79d4dd4..aad8314 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 59a5cdfa6387760205efabcd91bc64fdc92f103c8f213b650018160f6c1a691c kodi-screensaver-pingpong-5c7cf6fd9f9ff1468f620bb891e66bebd3a5fe17.tar.gz
-+sha256 99e9cbc3815d4e3dad964b2d233dbf6acc4416121398f7fca75f3811cb04d88f  kodi-screensaver-pingpong-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index db8e275..8b6426d 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_PINGPONG_VERSION = 5c7cf6fd9f9ff1468f620bb891e66bebd3a5fe17
-+KODI_SCREENSAVER_PINGPONG_VERSION = v1.1.0
- KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
- KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
-diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
-index 9aea929..de5f6cf 100644
---- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
-+++ b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 13ce2881f8eaf9936691cf66b9f3471a718ae87249d62ade55174201873fb496 kodi-screensaver-planestate-95b6d1ec72f37bcd16cf8e5d49806193dba883f0.tar.gz
-+sha256 6059630e56bd022a27f73fe7c94fcf6a66792e7bb10f54a7893f536c23b95b99  kodi-screensaver-planestate-5341406dd05439a1a0245ab3f6d1a8964461d0e5.tar.gz
-diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
-index 38885c5..0e90ffc 100644
---- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
-+++ b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_PLANESTATE_VERSION = 95b6d1ec72f37bcd16cf8e5d49806193dba883f0
-+KODI_SCREENSAVER_PLANESTATE_VERSION = 5341406dd05439a1a0245ab3f6d1a8964461d0e5
- KODI_SCREENSAVER_PLANESTATE_SITE = $(call github,notspiff,screensaver.planestate,$(KODI_SCREENSAVER_PLANESTATE_VERSION))
- KODI_SCREENSAVER_PLANESTATE_DEPENDENCIES = kodi libsoil
- 
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-index c79e3f5..a16ee8e 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 951bc3259407b7f21183c34556b1efc4c40bfafec61008cd543f382f67466184 kodi-screensaver-pyro-2476b77d9954980a27e07eb8eb0727e2af226351.tar.gz
-+sha256 0dcaed581ffe5595878338a8c9c55bd7acc87e03d30a4d3ca4a03c3f8db66ddc  kodi-screensaver-pyro-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-index 25c2bbd..bc50118 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_PYRO_VERSION = 2476b77d9954980a27e07eb8eb0727e2af226351
-+KODI_SCREENSAVER_PYRO_VERSION = v1.1.0
- KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
- KODI_SCREENSAVER_PYRO_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-index 107ada4..7f8c9ae 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 79633afcdccf5df31c98d2144bd23086d691e7749255b4295b183b535d9b7abf kodi-screensaver-stars-28bf79d4dce040e9fbdc25f51007e13950cab937.tar.gz
-+sha256 525caac94fd2bd858daf9fa7719eea4181c168e5c692bb896689625bf4437d32  kodi-screensaver-stars-v1.1.0.tar.gz
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-index da5fb5c..e94670c 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_STARS_VERSION = 28bf79d4dce040e9fbdc25f51007e13950cab937
-+KODI_SCREENSAVER_STARS_VERSION = v1.1.0
- KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
- KODI_SCREENSAVER_STARS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
+diff --git a/package/libsquish/0001-kodi.patch b/package/libsquish/0001-kodi.patch
+deleted file mode 100644
+index a9bca66..0000000
+--- a/package/libsquish/0001-kodi.patch
++++ /dev/null
+@@ -1,327 +0,0 @@
+-Add Kodi-specific patch
+-
+-Kodi 15.0 contains an updated version of libsquish:
+-https://github.com/xbmc/xbmc/tree/master/tools/depends/native/libsquish-native
+-
+-The OpenElec project provides a separate tarball including the Kodi-
+-specific patches:
+-http://sources.openelec.tv/devel/libsquish-1.10-openelec.tar.gz
+-
+-This patch contains the relevant diff between upstream libsquish 1.13
+-and the OpenElec tarball.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uwNr 1.13/squish.cpp libsquish-1.10-openelec/squish.cpp
+---- 1.13/squish.cpp	2015-04-30 12:48:49.000000000 +0200
+-+++ libsquish-1.10-openelec/squish.cpp	2015-01-09 10:58:43.000000000 +0100
+-@@ -23,6 +23,7 @@
+- 
+-    -------------------------------------------------------------------------- */
+- 
+-+#include <string.h>
+- #include <squish.h>
+- #include "colourset.h"
+- #include "maths.h"
+-@@ -39,7 +40,7 @@
+-     // grab the flag bits
+-     int method = flags & ( kDxt1 | kDxt3 | kDxt5 );
+-     int fit = flags & ( kColourIterativeClusterFit | kColourClusterFit | kColourRangeFit );
+--    int extra = flags & kWeightColourByAlpha;
+-+	int extra = flags & ( kWeightColourByAlpha | kSourceBGRA );
+- 
+-     // set defaults
+-     if( method != kDxt3 && method != kDxt5 )
+-@@ -124,8 +125,30 @@
+-     return blockcount*blocksize;
+- }
+- 
+-+void CopyRGBA( u8 const* source, u8* dest, int flags )
+-+{
+-+	if (flags & kSourceBGRA)
+-+	{
+-+		// convert from bgra to rgba
+-+		dest[0] = source[2];
+-+		dest[1] = source[1];
+-+		dest[2] = source[0];
+-+		dest[3] = source[3];
+-+	}
+-+	else
+-+	{
+-+		for( int i = 0; i < 4; ++i )
+-+			*dest++ = *source++;
+-+	}
+-+}
+-+
+- void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric )
+- {
+-+	CompressImage(rgba, width, height, width*4, blocks, flags, metric);
+-+}
+-+  
+-+void CompressImage( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric )
+-+{
+-     // fix any bad flags
+-     flags = FixFlags( flags );
+- 
+-@@ -154,20 +177,14 @@
+-                     if( sx < width && sy < height )
+-                     {
+-                         // copy the rgba value
+--                        u8 const* sourcePixel = rgba + 4*( width*sy + sx );
+--                        for( int i = 0; i < 4; ++i )
+--                            *targetPixel++ = *sourcePixel++;
+--
+-+						u8 const* sourcePixel = rgba + pitch*sy + 4*sx;
+-+						CopyRGBA(sourcePixel, targetPixel, flags);
+-                         // enable this pixel
+-                         mask |= ( 1 << ( 4*py + px ) );
+-                     }
+--                    else
+--                    {
+--                        // skip this pixel as its outside the image
+-                         targetPixel += 4;
+-                     }
+-                 }
+--            }
+- 
+-             // compress it into the output
+-             CompressMasked( sourceRgba, mask, targetBlock, flags, metric );
+-@@ -180,6 +197,11 @@
+- 
+- void DecompressImage( u8* rgba, int width, int height, void const* blocks, int flags )
+- {
+-+	DecompressImage( rgba, width, height, width*4, blocks, flags );
+-+}
+-+
+-+void DecompressImage( u8* rgba, int width, int height, int pitch, void const* blocks, int flags )
+-+{
+-     // fix any bad flags
+-     flags = FixFlags( flags );
+- 
+-@@ -207,24 +229,132 @@
+-                     int sy = y + py;
+-                     if( sx < width && sy < height )
+-                     {
+--                        u8* targetPixel = rgba + 4*( width*sy + sx );
+-+						u8* targetPixel = rgba + pitch*sy + 4*sx;
+- 
+-                         // copy the rgba value
+-+						CopyRGBA(sourcePixel, targetPixel, flags);
+-+					}
+-+					sourcePixel += 4;
+-+				}
+-+			}
+-+			
+-+			// advance
+-+			sourceBlock += bytesPerBlock;
+-+		}
+-+	}
+-+}
+-+
+-+static double ErrorSq(double x, double y)
+-+{
+-+	return (x - y) * (x - y);
+-+}
+-+
+-+static void ComputeBlockWMSE(u8 const *original, u8 const *compressed, unsigned int w, unsigned int h, double &cmse, double &amse)
+-+{
+-+	// Computes the MSE for the block and weights it by the variance of the original block.
+-+	// If the variance of the original block is less than 4 (i.e. a standard deviation of 1 per channel)
+-+	// then the block is close to being a single colour. Quantisation errors in single colour blocks
+-+	// are easier to see than similar errors in blocks that contain more colours, particularly when there
+-+	// are many such blocks in a large area (eg a blue sky background) as they cause banding.  Given that
+-+	// banding is easier to see than small errors in "complex" blocks, we weight the errors by a factor
+-+	// of 5. This implies that images with large, single colour areas will have a higher potential WMSE
+-+	// than images with lots of detail.
+-+
+-+	cmse = amse = 0;
+-+	unsigned int sum_p[4];  // per channel sum of pixels
+-+	unsigned int sum_p2[4]; // per channel sum of pixels squared
+-+	memset(sum_p, 0, sizeof(sum_p));
+-+	memset(sum_p2, 0, sizeof(sum_p2));
+-+	for( unsigned int py = 0; py < 4; ++py )
+-+	{
+-+		for( unsigned int px = 0; px < 4; ++px )
+-+		{
+-+			if( px < w && py < h )
+-+			{
+-+				double pixelCMSE = 0;
+-+				for( int i = 0; i < 3; ++i )
+-+				{
+-+					pixelCMSE += ErrorSq(original[i], compressed[i]);
+-+					sum_p[i] += original[i];
+-+					sum_p2[i] += (unsigned int)original[i]*original[i];
+-+				}
+-+				if( original[3] == 0 && compressed[3] == 0 )
+-+					pixelCMSE = 0; // transparent in both, so colour is inconsequential
+-+				amse += ErrorSq(original[3], compressed[3]);
+-+				cmse += pixelCMSE;
+-+				sum_p[3] += original[3];
+-+				sum_p2[3] += (unsigned int)original[3]*original[3];
+-+			}
+-+			original += 4;
+-+			compressed += 4;
+-+		}
+-+	}
+-+	unsigned int variance = 0;
+-                         for( int i = 0; i < 4; ++i )
+--                            *targetPixel++ = *sourcePixel++;
+-+		variance += w*h*sum_p2[i] - sum_p[i]*sum_p[i];
+-+	if( variance < 4 * w * w * h * h )
+-+	{
+-+		amse *= 5;
+-+		cmse *= 5;
+-                     }
+--                    else
+-+}
+-+  
+-+void ComputeMSE( u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE )
+-                     {
+--                        // skip this pixel as its outside the image
+--                        sourcePixel += 4;
+-+	ComputeMSE(rgba, width, height, width*4, dxt, flags, colourMSE, alphaMSE);
+-+}
+-+                
+-+void ComputeMSE( u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE )
+-+{
+-+	// fix any bad flags
+-+	flags = FixFlags( flags );
+-+	colourMSE = alphaMSE = 0;
+-+
+-+	// initialise the block input
+-+	squish::u8 const* sourceBlock = dxt;
+-+	int bytesPerBlock = ( ( flags & squish::kDxt1 ) != 0 ) ? 8 : 16;
+-+
+-+	// loop over blocks
+-+	for( int y = 0; y < height; y += 4 )
+-+	{
+-+		for( int x = 0; x < width; x += 4 )
+-+		{
+-+			// decompress the block
+-+			u8 targetRgba[4*16];
+-+			Decompress( targetRgba, sourceBlock, flags );
+-+			u8 const* sourcePixel = targetRgba;
+-+
+-+			// copy across to a similar pixel block
+-+			u8 originalRgba[4*16];
+-+			u8* originalPixel = originalRgba;
+-+
+-+			for( int py = 0; py < 4; ++py )
+-+			{
+-+				for( int px = 0; px < 4; ++px )
+-+				{
+-+					int sx = x + px;
+-+					int sy = y + py;
+-+					if( sx < width && sy < height )
+-+					{
+-+						u8 const* targetPixel = rgba + pitch*sy + 4*sx;
+-+						CopyRGBA(targetPixel, originalPixel, flags);
+-                     }
+-+					sourcePixel += 4;
+-+					originalPixel += 4;
+-                 }
+-             }
+- 
+-+			// compute the weighted MSE of the block
+-+			double blockCMSE, blockAMSE;
+-+			ComputeBlockWMSE(originalRgba, targetRgba, std::min(4, width - x), std::min(4, height - y), blockCMSE, blockAMSE);
+-+			colourMSE += blockCMSE;
+-+			alphaMSE += blockAMSE;
+-             // advance
+-             sourceBlock += bytesPerBlock;
+-         }
+-     }
+-+	colourMSE /= (width * height * 3);
+-+	alphaMSE /= (width * height);
+- }
+- 
+- } // namespace squish
+-diff -uwNr 1.13/squish.h libsquish-1.10-openelec/squish.h
+---- 1.13/squish.h	2015-04-30 12:55:27.000000000 +0200
+-+++ libsquish-1.10-openelec/squish.h	2015-01-09 10:58:43.000000000 +0100
+-@@ -57,7 +57,10 @@
+-     kColourRangeFit = ( 1 << 4 ),
+- 
+-     //! Weight the colour by alpha during cluster fit (disabled by default).
+--    kWeightColourByAlpha = ( 1 << 7 )
+-+	kWeightColourByAlpha = ( 1 << 7 ),
+-+	
+-+	//! Source is BGRA rather than RGBA
+-+	kSourceBGRA = ( 1 << 9 ),
+- };
+- 
+- // -----------------------------------------------------------------------------
+-@@ -194,6 +197,7 @@
+-     @param rgba   The pixels of the source.
+-     @param width  The width of the source image.
+-     @param height The height of the source image.
+-+	@param pitch	The pitch of the source image.
+-     @param blocks Storage for the compressed output.
+-     @param flags  Compression flags.
+-     @param metric An optional perceptual metric.
+-@@ -231,6 +235,7 @@
+-     to allocate for the compressed output.
+- */
+- void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric = 0 );
+-+void CompressImage( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric = 0 );
+- 
+- // -----------------------------------------------------------------------------
+- 
+-@@ -239,6 +244,7 @@
+-     @param rgba   Storage for the decompressed pixels.
+-     @param width  The width of the source image.
+-     @param height The height of the source image.
+-+	@param pitch    The pitch of the decompressed pixels.
+-     @param blocks The compressed DXT blocks.
+-     @param flags  Compression flags.
+- 
+-@@ -254,6 +260,32 @@
+-     Internally this function calls squish::Decompress for each block.
+- */
+- void DecompressImage( u8* rgba, int width, int height, void const* blocks, int flags );
+-+void DecompressImage( u8* rgba, int width, int height, int pitch, void const* blocks, int flags );
+-+
+-+// -----------------------------------------------------------------------------
+-+
+-+/*! @brief Computes MSE of an compressed image in memory.
+-+
+-+	@param rgba		The original image pixels.
+-+	@param width	The width of the source image.
+-+	@param height	The height of the source image.
+-+	@param pitch  	The pitch of the source image.
+-+	@param dxt		The compressed dxt blocks
+-+	@param flags	Compression flags.
+-+	@param colourMSE	The MSE of the colour values.
+-+	@param alphaMSE	The MSE of the alpha values.
+-+	
+-+	The colour MSE and alpha MSE are computed across all pixels. The colour MSE is
+-+	averaged across all rgb values (i.e. colourMSE = sum sum_k ||dxt.k - rgba.k||/3)
+-+	
+-+	The flags parameter should specify either kDxt1, kDxt3 or kDxt5 compression, 
+-+	however, DXT1 will be used by default if none is specified. All other flags 
+-+	are ignored.
+-+
+-+	Internally this function calls squish::Decompress for each block.
+-+*/
+-+void ComputeMSE(u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
+-+void ComputeMSE(u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
+- 
+- // -----------------------------------------------------------------------------
+- 
+-diff -uwNr 1.13/squish.pc.in libsquish-1.10-openelec/squish.pc.in
+---- 1.13/squish.pc	1970-01-01 01:00:00.000000000 +0100
+-+++ libsquish-1.10-openelec/squish.pc	2015-01-09 10:58:43.000000000 +0100
+-@@ -0,0 +1,13 @@
+-+prefix=/usr
+-+exec_prefix=${prefix}
+-+libdir=${prefix}/lib
+-+sharedlibdir=${libdir}
+-+includedir=${prefix}/include
+-+
+-+Name: squish
+-+Description: squish DXT lib
+-+Version: 1.1.3-kodi
+-+
+-+Requires:
+-+Libs: -L${libdir} -L${sharedlibdir} -lsquish
+-+Cflags: -I${includedir}
