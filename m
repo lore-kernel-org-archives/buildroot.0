@@ -1,49 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 15:53:27 +0200
-Subject: [Buildroot] [git commit] package/qt5enginio: always use the
-	opensource license
-Message-ID: <20170429135923.4B3CD82629@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 15:53:15 +0200
+Subject: [Buildroot] [git commit] package/qt: default to approved license
+Message-ID: <20170429135922.E527882629@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74f4a6c320ff6b49dc48ab1595c3502154e3d83c
+commit: https://git.buildroot.net/buildroot/commit/?id=a0153e8a197e5b2cf0623b06504d533645cba086
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We never ask the user to confirm their assent about the use of a free
-license; there is no reason we do so for Qt.
+The only license we can act upon in Buildroot is the publicly
+available license.
 
-The output of legal-info is there to gather all the licenses used in a
-build; the license for qt5enginio will be there to be consulted as well.
+Qt can come under non-free licenses, but we have no access to
+such licenses. The conditions to access the code under those
+non-free, non-public licenses is unknown.
+
+Besides, Qt (with Qt5) is the only package that has this choice;
+for other packages in a similar situation, we only use the free,
+publicly-known licenses.
+
+Finally, the name of the tarballs we download clearly hint that
+they can only be used under the free license.
+
+Drop the prompt to the accepted license, and make it mandatory;
+packages will be adapted in follow-up patches.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5enginio/qt5enginio.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/qt/Config.in | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
-index e550fcc..bffd1f6 100644
---- a/package/qt5/qt5enginio/qt5enginio.mk
-+++ b/package/qt5/qt5enginio/qt5enginio.mk
-@@ -12,16 +12,11 @@ QT5ENGINIO_SOURCE = qtenginio-opensource-src-$(QT5ENGINIO_VERSION).tar.xz
- QT5ENGINIO_DEPENDENCIES = openssl qt5base
- QT5ENGINIO_INSTALL_STAGING = YES
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index a761759..5f07bd2 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -100,15 +100,8 @@ config BR2_PACKAGE_QT_STATIC
+ endchoice
  
--ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5ENGINIO_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
- QT5ENGINIO_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- QT5ENGINIO_LICENSE := $(QT5ENGINIO_LICENSE), BSD-3-Clause (examples)
- endif
--else
--QT5ENGINIO_LICENSE = Commercial license
--QT5ENGINIO_REDISTRIBUTE = NO
--endif
+ config BR2_PACKAGE_QT_LICENSE_APPROVED
+-	bool "Approve free license"
+-	help
+-	  Select this if you approve one of the available free licenses for the
+-	  Qt4 library.
+-	  By doing this you will not be asked while the library is compiled.
+-	  Please read and understand the license terms before approving this.
+-
+-	  LGPL v2.1: http://doc.trolltech.com/4.5/lgpl.html
+-	  GPL  v3.0: http://doc.trolltech.com/4.5/gpl.html
++	bool
++	default y
  
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
- QT5ENGINIO_DEPENDENCIES += qt5declarative
+ config BR2_PACKAGE_QT_CONFIG_FILE
+ 	string "Config file"
