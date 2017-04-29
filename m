@@ -1,164 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 22:23:40 +0200
-Subject: [Buildroot] [PATCH 2/2] package/kodi: add Kconfig options to remove
-	default skins
-In-Reply-To: <20170429202340.26701-1-bernd.kuhls@t-online.de>
-References: <20170429202340.26701-1-bernd.kuhls@t-online.de>
-Message-ID: <20170429202340.26701-2-bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 22:24:40 +0200
+Subject: [Buildroot] [PATCH v5 33/34] package/kodi-skin-confluence: new
+	package
+References: <20170417195433.26672-1-bernd.kuhls@t-online.de>
+ <20170417195433.26672-34-bernd.kuhls@t-online.de>
+ <20170423103249.GO7228@scaer>
+Message-ID: <8d9ftdxnoe.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The skins estuary and estouchy are new in Kodi 17-Krypton and replace
-the skin confluence, used until Kodi 16-Jarvis.
+Am Sun, 23 Apr 2017 12:32:49 +0200 schrieb Yann E. MORIN:
 
-This patch allows to disable one or both of the new skins, it also takes
-care that at least one skin needs to be enabled. With this patch Kodi
-can be used only with skin confluence.
+> Bernd, All,
+> 
+> On 2017-04-17 21:54 +0200, Bernd Kuhls spake thusly:
+>> Signed-off-by: Bernd Kuhls
+>> <bernd.kuhls@t-online.de>
+> 
+> I did a build that had confuence enabled and set as the default skin,
+> but still the skin used was not conjfluence (it was estuary or the
+> other, I don't remeber), and confluence did not appear in the list of
+> available skins...
+> 
+> Regards,
+> Yann E. MORIN.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-Sending as v1 the unchanged patch from Kodi series v5.
+Hi Yann,
 
- package/kodi-skin-confluence/Config.in |  1 +
- package/kodi/Config.in                 | 35 ++++++++++++++++++++
- package/kodi/kodi.mk                   | 58 ++++++++++++++++++++++++++++++++++
- 3 files changed, 94 insertions(+)
+just tested the skin patches[1] with a qemu build booting a buildroot-
+created rootfs using, among others, these options:
 
-diff --git a/package/kodi-skin-confluence/Config.in b/package/kodi-skin-confluence/Config.in
-index 08b656808..a623b03da 100644
---- a/package/kodi-skin-confluence/Config.in
-+++ b/package/kodi-skin-confluence/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_SKIN_CONFLUENCE
- 	bool "kodi-skin-confluence"
-+	select BR2_PACKAGE_KODI_SKIN_ENABLED
- 	help
- 	  Kodi confluence skin
- 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index cc747e816..dfe92d2d1 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -55,6 +55,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_KODI_SKIN_ESTUARY if !BR2_PACKAGE_KODI_SKIN_ENABLED
- 	select BR2_PACKAGE_LIBASS
- 	select BR2_PACKAGE_LIBCDIO
- 	select BR2_PACKAGE_LIBCROSSGUID
-@@ -327,6 +328,40 @@ menu "Screensavers"
- endmenu
- 
- menu "Skins"
-+
-+config BR2_PACKAGE_KODI_SKIN_ENABLED
-+	bool
-+
-+choice
-+	prompt "Default skin"
-+
-+config BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTUARY
-+	bool "kodi-skin-estuary"
-+	depends on BR2_PACKAGE_KODI_SKIN_ESTUARY
-+
-+config BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTOUCHY
-+	bool "kodi-skin-estouchy"
-+	depends on BR2_PACKAGE_KODI_SKIN_ESTOUCHY
-+
-+config BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE
-+	bool "kodi-skin-confluence"
-+	depends on BR2_PACKAGE_KODI_SKIN_CONFLUENCE
-+
-+endchoice
-+
-+config BR2_PACKAGE_KODI_SKIN_ESTUARY
-+	bool "kodi-skin-estuary"
-+	default y
-+	help
-+	  Default skin Estuary
-+
-+config BR2_PACKAGE_KODI_SKIN_ESTOUCHY
-+	bool "kodi-skin-estouchy"
-+	default y
-+	select BR2_PACKAGE_KODI_SKIN_ENABLED
-+	help
-+	  Default skin Estouchy
-+
- 	source "package/kodi-skin-confluence/Config.in"
- endmenu
- 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 0b89bdd86..73e44f861 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -355,6 +355,64 @@ define KODI_CLEAN_UNUSED_ADDONS
- endef
- KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_UNUSED_ADDONS
- 
-+# Skins estuary and estouchy are installed by default and need to be
-+# removed if they are disabled in buildroot
-+ifeq ($(BR2_PACKAGE_KODI_SKIN_ESTUARY),y)
-+define KODI_CLEAN_SKIN_ESTUARY
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.gif -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.jpg -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.png -delete
-+endef
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_SKIN_ESTUARY
-+else
-+define KODI_REMOVE_SKIN_ESTUARY
-+	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary
-+	$(HOST_DIR)/usr/bin/xml ed -L \
-+		-d "/addons/addon[text()='skin.estuary']" \
-+		$(KODI_ADDON_MANIFEST)
-+endef
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_REMOVE_SKIN_ESTUARY
-+endif
-+
-+ifeq ($(BR2_PACKAGE_KODI_SKIN_ESTOUCHY),y)
-+define KODI_CLEAN_SKIN_ESTOUCHY
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.gif -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.jpg -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.png -delete
-+endef
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_SKIN_ESTOUCHY
-+else
-+define KODI_REMOVE_SKIN_ESTOUCHY
-+	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy
-+	$(HOST_DIR)/usr/bin/xml ed -L \
-+		-d "/addons/addon[text()='skin.estouchy']" \
-+		$(KODI_ADDON_MANIFEST)
-+endef
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_REMOVE_SKIN_ESTOUCHY
-+endif
-+
-+# The default value 'skin.estuary' is stored in
-+# xbmc/system/settings/settings.xml.
-+# If skin estuary is disabled this value needs to be changed to avoid
-+# https://github.com/xbmc/xbmc/blob/32a6916059a0b14ab5fc65cedb17b2615c039918/xbmc/Application.cpp#L1124
-+
-+define KODI_SET_DEFAULT_SKIN_ESTOUCHY
-+	$(SED) 's/skin.estuary/skin.estouchy/#g' $(TARGET_DIR)/usr/share/kodi/system/settings/settings.xml
-+endef
-+
-+define KODI_SET_DEFAULT_SKIN_CONFLUENCE
-+	$(SED) 's/skin.estuary/skin.confluence/#g' $(TARGET_DIR)/usr/share/kodi/system/settings/settings.xml
-+	$(HOST_DIR)/usr/bin/xml ed -L -O --subnode "/addons" \
-+		-t elem -n "addon" -v "skin.confluence" \
-+		$(KODI_ADDON_MANIFEST)
-+endef
-+
-+ifeq ($(BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTOUCHY),y)
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_SET_DEFAULT_SKIN_ESTOUCHY
-+else ifeq ($(BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE),y)
-+KODI_POST_INSTALL_TARGET_HOOKS += KODI_SET_DEFAULT_SKIN_CONFLUENCE
-+endif
-+
- define KODI_INSTALL_BR_WRAPPER
- 	$(INSTALL) -D -m 0755 package/kodi/br-kodi \
- 		$(TARGET_DIR)/usr/bin/br-kodi
--- 
-2.11.0
+BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE=y
+BR2_PACKAGE_KODI_SKIN_CONFLUENCE=y
+
+Kodi started with Confluence right from the beginning and it was also 
+possible to change to skin to estuary or estouchy, I saw these three 
+different entries in the list of available skin addons installed.
+
+Could you please post the defconfig you used so I can try to find the 
+problem?
+
+Regards, Bernd
+
+PS: I sent this also to your mail account, but the last mails were 
+rejected by your ISP, I hope this will reach you.
+
+[1] http://patchwork.ozlabs.org/patch/756782/
+    http://patchwork.ozlabs.org/patch/756783/
