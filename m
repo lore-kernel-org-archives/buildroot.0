@@ -1,65 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 12:03:39 +0200
-Subject: [Buildroot] [git commit] package/kodi: libxslt is an optional
-	package
-Message-ID: <20170429101427.35A2B827B4@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 11:25:51 +0200
+Subject: [Buildroot] [git commit] package/libcec: bump version to 4.0.2
+Message-ID: <20170429101426.1B2B5827B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf9bfd065ba3fab328fd041ca040f2bf134fecf2
+commit: https://git.buildroot.net/buildroot/commit/?id=ca958aa13c80672d7345f9d82cfc39ce12fdd197
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-After this commit
-https://github.com/xbmc/xbmc/commit/bad3902b4a2538a433f858c97b2cf91c44c7feff
-libxslt, together with libxml2, are an optional package.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/Config.in | 2 --
- package/kodi/kodi.mk   | 9 +++++++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index e8efd72..cd58cf2 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -64,8 +64,6 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_KODI_GL_EGL
- 	select BR2_PACKAGE_LIBPLIST
- 	select BR2_PACKAGE_LIBSAMPLERATE
--	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 7341cc3..4c7a2e8 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -33,8 +33,6 @@ KODI_DEPENDENCIES = \
- 	libfribidi \
- 	libplist \
- 	libsamplerate \
--	libxml2 \
--	libxslt \
- 	lzo \
- 	ncurses \
- 	openssl \
-@@ -183,6 +181,13 @@ else
- KODI_CONF_OPTS += -DENABLE_CAP=OFF
- endif
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 377f343..5416c20 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
++sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index e2b5c1f..6d14447 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBXML2)$(BR2_PACKAGE_LIBXSLT),yy)
-+KODI_CONF_OPTS += -DENABLE_XSLT=ON
-+KODI_DEPENDENCIES += libxml2 libxslt
-+else
-+KODI_CONF_OPTS += -DENABLE_XSLT=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_BLUEZ),y)
- KODI_CONF_OPTS += -DENABLE_BLUETOOTH=ON
- KODI_DEPENDENCIES += bluez5_utils
+-LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
+-LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
++LIBCEC_VERSION = 4.0.2
++LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPL-2.0+
+ LIBCEC_LICENSE_FILES = COPYING
+ 
