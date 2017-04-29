@@ -1,61 +1,31 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 15:06:30 +0200
-Subject: [Buildroot] [PATCH v7 08/31] package/kodi: bump to
-	version	17.1-Krypton
-References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
- <fe62a0d1-d466-2d4d-22c4-d5165882dc7b@t-online.de>
- <20170429144237.65dadbba@free-electrons.com>
-Message-ID: <mnfetdxnoe.ln2@ID-313208.user.individual.net>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Sat, 29 Apr 2017 13:43:46 +0100
+Subject: [Buildroot] [PATCH 2/2] ne10: Add aarch64 configuration option
+In-Reply-To: <20170429140953.0b7badef@free-electrons.com>
+References: <1493418486-109149-1-git-send-email-g4@novadsp.com>
+ <1493418486-109149-2-git-send-email-g4@novadsp.com>
+ <20170429140953.0b7badef@free-electrons.com>
+Message-ID: <119901d2c0e6$3e1a7ca0$ba4f75e0$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Am Sat, 29 Apr 2017 14:42:37 +0200 schrieb Thomas Petazzoni:
-
-> Hello,
 > 
-> On Sat, 29 Apr 2017 14:29:13 +0200, Bernd Kuhls wrote:
+> But I believe you should in fact rework your patches:
 > 
->> > I don't understand why you have this !BR2_PACKAGE_RPI_USERLAND
->> > dependency here. Can you explain?
->> 
->> We need to rule out that a rbpi build is done with opengl/egl,
->> otherwise the build will fail like this:
->> http://forum.kodi.tv/showthread.php?tid=305752&pid=2569701#pid2569701
+>  - One patch that just bumps ne10, keeping only the ARM support
 > 
-> But rpi-userland doesn't provide OpenGL support, only OpenGLES, so how
-> is it possible to get a RPi build with OpenGL support ?
-
-Mesa3d can provide libgl at the same time rpi-userland provides egl/gles 
-support:
-
-$ grep _PROVIDES_ .config
-BR2_PACKAGE_PROVIDES_LIBOPENMAX="rpi-userland"
-BR2_PACKAGE_PROVIDES_LIBGL="mesa3d"
-BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"
-BR2_PACKAGE_PROVIDES_LIBGLES="rpi-userland"
-BR2_PACKAGE_PROVIDES_LIBOPENVG="rpi-userland"
-
-With this defconfig I could reproduce the build error I mentioned today:
-
-BR2_arm=y
-BR2_cortex_a15=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_RPI_USERLAND=y
-
->> Because all these options do not exist in https://github.com/xbmc/xbmc/
->> blob/Krypton/project/cmake/scripts/rbpi/ArchSetup.cmake
+>  - One patch that refactors the architecture dependency with a
+>    Config.in hidden boolean BR2_PACKAGE_NE10_ARCH_SUPPORTS
 > 
-> OK. Good reason to add a comment in the .mk file.
+>  - One patch that allows to use ne10 on AArch64
 
-Sent patch: http://patchwork.ozlabs.org/patch/756741/
+OK, I will do that.
 
-Regards, Bernd
+BR
+
+Jerry
