@@ -1,21 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 21:15:31 +0200
-Subject: [Buildroot] [git commit] package/d*/Config.in: fix ordering of
+Date: Sat, 29 Apr 2017 21:16:42 +0200
+Subject: [Buildroot] [git commit] package/e*/Config.in: fix ordering of
 	statements
-Message-ID: <20170429191550.497F8826CA@busybox.osuosl.org>
+Message-ID: <20170429191659.CB9BD82289@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fd62b4e3712527200be5f051bde5f50aa78e2a9
+commit: https://git.buildroot.net/buildroot/commit/?id=a3a1aa680bb1effdf0e2b71f966105fc84b5d1b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The check-package script when ran gives warnings on ordering issues
 on all of these Config files.  This patch cleans up all warnings
 related to the ordering in the Config files for packages starting with
-the letter d in the package directory.
+the letter e in the package directory.
 
 The appropriate ordering is: type, default, depends on, select, help
 See http://nightly.buildroot.org/#_config_files for more information.
@@ -23,141 +23,138 @@ See http://nightly.buildroot.org/#_config_files for more information.
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ding-libs/Config.in     | 2 +-
- package/directfb/Config.in      | 6 +++---
- package/docker-engine/Config.in | 2 +-
- package/dos2unix/Config.in      | 2 +-
- package/dovecot/Config.in       | 2 +-
- package/dropwatch/Config.in     | 4 ++--
- package/dvblast/Config.in       | 4 ++--
- 7 files changed, 11 insertions(+), 11 deletions(-)
+ package/e2tools/Config.in        |  2 +-
+ package/easydbus/Config.in       |  2 +-
+ package/ecryptfs-utils/Config.in | 14 +++++++-------
+ package/efivar/Config.in         |  2 +-
+ package/elfutils/Config.in       |  6 +++---
+ package/execline/Config.in       |  2 +-
+ package/exiv2/Config.in          |  2 +-
+ 7 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
-index 7af75b7..d397f29 100644
---- a/package/ding-libs/Config.in
-+++ b/package/ding-libs/Config.in
+diff --git a/package/e2tools/Config.in b/package/e2tools/Config.in
+index 75029f7..e4a35e2 100644
+--- a/package/e2tools/Config.in
++++ b/package/e2tools/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_E2TOOLS
+ 	bool "e2tools"
+-	select BR2_PACKAGE_E2FSPROGS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR # uses wchar_t
+ 	depends on BR2_USE_MMU # e2fsprogs
++	select BR2_PACKAGE_E2FSPROGS
+ 	help
+ 	  E2tools is a simple set of GPL'ed utilities to read, write,
+ 	  and manipulate files in an ext2/ext3 filesystem. These
+diff --git a/package/easydbus/Config.in b/package/easydbus/Config.in
+index 51519d6..1fe8689 100644
+--- a/package/easydbus/Config.in
++++ b/package/easydbus/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_EASYDBUS
+ 	bool "easydbus"
+-	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Easy to use DBus library for Lua.
+ 
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index cb70e00..078ca36 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -1,12 +1,5 @@
+ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	bool "ecryptfs-utils"
+-	select BR2_PACKAGE_KEYUTILS
+-	select BR2_PACKAGE_LIBNSS
+-	# runtime dependency only, some scripts are using the
+-	# 'gettext' program to get translations
+-	select BR2_PACKAGE_GETTEXT
+-	# runtime dependency only
+-	select BR2_PACKAGE_GETENT
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_USE_MMU # keyutils
+ 	depends on !BR2_microblaze # keyutils
+@@ -14,6 +7,13 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+ 	depends on !BR2_STATIC_LIBS # libnss, keyutils
++	select BR2_PACKAGE_KEYUTILS
++	select BR2_PACKAGE_LIBNSS
++	# runtime dependency only, some scripts are using the
++	# 'gettext' program to get translations
++	select BR2_PACKAGE_GETTEXT
++	# runtime dependency only
++	select BR2_PACKAGE_GETENT
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+diff --git a/package/efivar/Config.in b/package/efivar/Config.in
+index 0ec8360..0fa9adf 100644
+--- a/package/efivar/Config.in
++++ b/package/efivar/Config.in
 @@ -1,8 +1,8 @@
- config BR2_PACKAGE_DING_LIBS
- 	bool "ding-libs"
-+	depends on BR2_USE_WCHAR || !BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	depends on BR2_USE_WCHAR || !BR2_NEEDS_GETTEXT
- 	help
- 	  The ding-libs packages contain a set of libraries used by
- 	  the System Security Services Daemon (SSSD) and other
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 6a3d718..e3b53e0 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -21,9 +21,9 @@ if BR2_PACKAGE_DIRECTFB
- 
- config BR2_PACKAGE_DIRECTFB_MULTI
- 	bool "directfb multi application"
--	select BR2_PACKAGE_LINUX_FUSION
- 	depends on BR2_USE_MMU # madvise()
- 	depends on BR2_LINUX_KERNEL
-+	select BR2_PACKAGE_LINUX_FUSION
- 	help
- 	  Enable use of multiple concurrent DirectFB applications
- 
-@@ -113,8 +113,8 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
- 
- config BR2_PACKAGE_DIRECTFB_TSLIB
- 	bool "enable touchscreen support"
--	depends on !BR2_STATIC_LIBS # tslib
- 	default y
-+	depends on !BR2_STATIC_LIBS # tslib
- 	select BR2_PACKAGE_TSLIB
- 
- comment "touchscreen support needs a toolchain w/ dynamic library"
-@@ -130,8 +130,8 @@ config BR2_PACKAGE_DIRECTFB_TIFF
- 
- config BR2_PACKAGE_DIRECTFB_IMLIB2
- 	bool "enable IMLIB2 support"
--	select BR2_PACKAGE_IMLIB2
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_IMLIB2
- 
- comment "imlib2 support needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 8cde4a4..caaf639 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -13,11 +13,11 @@ if BR2_PACKAGE_DOCKER_ENGINE
- 
- config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 	bool "docker daemon"
+ config BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
+ 	bool
 +	default y
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_IPTABLES # runtime dependency
- 	select BR2_PACKAGE_SQLITE # runtime dependency
+ 	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 \
+ 		|| BR2_powerpc64le || BR2_mipsel || BR2_mips64el
 -	default y
+ 
+ config BR2_PACKAGE_EFIVAR
+ 	bool "efivar"
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 7db8472..3228319 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -5,9 +5,6 @@ comment "elfutils needs a uClibc or glibc toolchain w/ wchar, dynamic library"
+ 
+ config BR2_PACKAGE_ELFUTILS
+ 	bool "elfutils"
+-	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
+ 	# Only glibc and uClibc implement the myriad of required GNUisms
+@@ -15,6 +12,9 @@ config BR2_PACKAGE_ELFUTILS
+ 	# build issue caused by the _ prefix used on blackfin for
+ 	# assembly symbols
+ 	depends on !BR2_bfin
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
  	help
- 	  Build the Docker system daemon.
- 	  If not selected, will build client only.
-diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
-index 0a4f5e2..6945f52 100644
---- a/package/dos2unix/Config.in
-+++ b/package/dos2unix/Config.in
+ 	  Libraries/utilities to handle ELF objects (drop in
+ 	  replacement for libelf).
+diff --git a/package/execline/Config.in b/package/execline/Config.in
+index 556f9a5..7a2278f 100644
+--- a/package/execline/Config.in
++++ b/package/execline/Config.in
 @@ -1,7 +1,7 @@
- config BR2_PACKAGE_DOS2UNIX
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	bool "dos2unix"
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ config BR2_PACKAGE_EXECLINE
+ 	bool "execline"
+-	select BR2_PACKAGE_SKALIBS
+ 	depends on BR2_USE_MMU # skalibs
++	select BR2_PACKAGE_SKALIBS
  	help
- 	  dos2unix converts text file line endings between CRLF and LF
+ 	  execline is a (non-interactive) scripting language, like sh;
+ 	  but its syntax is quite different from a traditional shell
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+index 8ca95eb..a94e5cd 100644
+--- a/package/exiv2/Config.in
++++ b/package/exiv2/Config.in
+@@ -39,8 +39,8 @@ config BR2_PACKAGE_EXIV2_PNG
  
-diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
-index d1ff7bc..b93e09f 100644
---- a/package/dovecot/Config.in
-+++ b/package/dovecot/Config.in
-@@ -17,9 +17,9 @@ if BR2_PACKAGE_DOVECOT
+ config BR2_PACKAGE_EXIV2_XMP
+ 	bool "XMP support"
+-	select BR2_PACKAGE_EXPAT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  Build with XMP support
  
- config BR2_PACKAGE_DOVECOT_MYSQL
- 	bool "mysql support"
--	select BR2_PACKAGE_MYSQL
- 	depends on BR2_INSTALL_LIBSTDCPP # mysql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
-+	select BR2_PACKAGE_MYSQL
- 	help
- 	  Enable MySQL support.
- 
-diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
-index 6f04c85..127b698 100644
---- a/package/dropwatch/Config.in
-+++ b/package/dropwatch/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_DROPWATCH
- 	bool "dropwatch"
--	select BR2_PACKAGE_BINUTILS
- 	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_LIBNL
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
- 	help
- 	  Dropwatch is an interactive utility for monitoring and
- 	  recording packets that are dropped by the kernel
-diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
-index b7f0c06..c358531 100644
---- a/package/dvblast/Config.in
-+++ b/package/dvblast/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_DVBLAST
- 	bool "dvblast"
-+	depends on !BR2_bfin  # libev
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
- 	select BR2_PACKAGE_BITSTREAM
- 	select BR2_PACKAGE_LIBEV
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	depends on !BR2_bfin  # libev
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
- 	help
- 	  DVBlast is a simple and powerful MPEG-2/TS demux and
- 	  streaming application.
