@@ -1,91 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 13:44:04 +0200
-Subject: [Buildroot] [PATCH v7 31/31] package/kodi: Add support for more
- archs
-In-Reply-To: <20170429083751.19625-32-bernd.kuhls@t-online.de>
-References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
- <20170429083751.19625-32-bernd.kuhls@t-online.de>
-Message-ID: <20170429134404.0f6c1442@free-electrons.com>
+Date: Sat, 29 Apr 2017 13:46:14 +0200
+Subject: [Buildroot] [git commit] package/kodi-visualisation-goom: bump
+	version
+Message-ID: <20170429114627.1D9AA827B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a29a0c96194aaf12b482f76486c19479d5769c2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Apr 2017 10:37:51 +0200, Bernd Kuhls wrote:
+This bump fixes a compile error on powerpc.
 
->  package/kodi/0003-Add-support-for-sh4.patch     | 108 ++++++++++++++++++++++++
->  package/kodi/0004-Add-support-for-sparc.patch   |  91 ++++++++++++++++++++
->  package/kodi/0005-Add-support-for-arc.patch     |  91 ++++++++++++++++++++
->  package/kodi/0006-Add-support-for-xtensa.patch  |  91 ++++++++++++++++++++
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Have these patches any chance of being merged upstream? Indeed, it's
-very unlikely that Kodi will ever be used on any of those
-architectures, so having to carry forever those patches doesn't seem
-like a great thing. I would prefer to exclude those architectures in
-Config.in.
-
->  	depends on BR2_USE_MMU # libcdio, and others
-> -	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
-> -		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
-> -		&& BR2_TOOLCHAIN_HAS_SYNC_8
-> +# i386: needs sse (see upstream PR 10351)
-> +	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
-> +		&& !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
-
-Kodi doesn't really support all architectures, since it contains
-architecture-specific definitions in several files...
-
-
-> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> +KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
-> +KODI_DEPENDENCIES += rpi-userland
-> +ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
-> +KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
-
-Why only for Raspberry Pi ?
-
-> +endif
-> +else  # BR2_PACKAGE_RPI_USERLAND
-> +ifeq ($(BR2_arceb)$(BR2_arcle),y)
-> +KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
-> +else ifeq ($(BR2_armeb),y)
->  KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
-> -else ifeq ($(BR2_mips),y)
-
-MIPS is handled here...
-
-> -KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
-> -else ifeq ($(BR2_i386),y)
-> -KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
-> -else ifeq ($(BR2_x86_64),y)
-> -KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
-> +else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-
-... and here.
-
-> +KODI_CONF_OPTS += \
-> +	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
-> +	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
-> +else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
-> +KODI_CONF_OPTS += \
-> +	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
-> +	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
-> +else ifeq ($(BR2_powerpc64)$(BR2_sparc64),y)
-> +KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
-> +else ifeq ($(BR2_sh4),y)
-> +KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
-> +else ifeq ($(BR2_xtensa),y)
-> +KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
-
-You can refactor those in one single assignment.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+index 8d4548a..fa5fbf6 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 62a26efb6cd5d5fd109e38accb3deb71145972ae30b914bed7620eb40465c954  kodi-visualisation-goom-v1.1.0.tar.gz
++sha256 501b8b1d5bd174ec71d57894293ae5eb0c1f41c3b725ab5e7b5a1c5eeea77a7f  kodi-visualisation-goom-54da35870930acd1a3a36195dd2c1498ac336b90.tar.gz
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+index 48e0425..a7503a9 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_GOOM_VERSION = v1.1.0
++KODI_VISUALISATION_GOOM_VERSION = 54da35870930acd1a3a36195dd2c1498ac336b90
+ KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+ KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
