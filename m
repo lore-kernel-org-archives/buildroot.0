@@ -1,39 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 14:26:41 +0200
-Subject: [Buildroot] [PATCH v2] package/uclibc: Enable wordexp
- functionality
-In-Reply-To: <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
-References: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
- <20170321160237.31058-2-andriy.shevchenko@linux.intel.com>
-Message-ID: <20170429142641.48ba4a8f@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 14:27:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: optimise libva/libvdpau
+	dependencies
+Message-ID: <20170429122732.29011-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Suggested by Thomas:
+http://lists.busybox.net/pipermail/buildroot/2017-April/190703.html
 
-On Tue, 21 Mar 2017 18:02:36 +0200, Andy Shevchenko wrote:
-> The commit d7c54cb0c0cf ("bluez5_utils: not available with uClibc")
-> disables bluez5_utils (most of them) to be built with uClibc. Looking to
-> the development of BlueZ user space support that commit basically makes
-> the bluez5_utils package somewhat piece of junk. Since bluez5_utils 5.44
-> deprecates all previously used tools and focuses on btmgmt and
-> bluetoothctl we need to restore status quo.
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  package/uclibc/uClibc-ng.config | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I've applied, after rewriting the commit message. If there's some
-bluez5_utils improvements that can be done now that wordexp is enabled,
-please send patches. Thanks!
-
-Thomas
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index bf4ea01549..b9458dae68 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -230,25 +230,25 @@ config BR2_PACKAGE_KODI_LIBUSB
+ 
+ config BR2_PACKAGE_KODI_LIBVA
+ 	bool "va"
+-	depends on !BR2_PACKAGE_KODI_EGL_GLES
++	depends on BR2_PACKAGE_KODI_EGL_GL
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBVA
+ 	help
+ 	  Enable libva support.
+ 
+ comment "libva support needs X.org with an openGL backend"
+-	depends on !BR2_PACKAGE_XORG7 || BR2_PACKAGE_KODI_EGL_GLES
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_KODI_EGL_GL
+ 
+ config BR2_PACKAGE_KODI_LIBVDPAU
+ 	bool "vdpau"
+-	depends on !BR2_PACKAGE_KODI_EGL_GLES
++	depends on BR2_PACKAGE_KODI_EGL_GL
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBVDPAU
+ 	help
+ 	  Enable libvdpau support.
+ 
+ comment "libvdpau support needs X.org with an openGL backend"
+-	depends on !BR2_PACKAGE_XORG7 || BR2_PACKAGE_KODI_EGL_GLES
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_KODI_EGL_GL
+ 
+ config BR2_PACKAGE_KODI_UPNP
+ 	bool "upnp"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
