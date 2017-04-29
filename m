@@ -1,49 +1,33 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Sat, 29 Apr 2017 18:08:06 +0100
-Subject: [Buildroot] [PATCH 1/1] mke2img: Sanity check block size and
-	fail if zero or missing.
-In-Reply-To: <20170429160215.GA19584@scaer>
-References: <1493477884-121871-1-git-send-email-g4@novadsp.com>
- <20170429160215.GA19584@scaer>
-Message-ID: <11d301d2c10b$2cb73190$862594b0$@novadsp.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 19:38:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsquish: fix legal-info
+Message-ID: <20170429173805.25690-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Fixes
+http://autobuild.buildroot.net/results/4f8/4f81644ca2e0ec4064f43c6cb00f2d5c858bbf77/
 
-> 
-> >      # Sanity checks
-> >      if [ -z "${root_dir}" ]; then
-> > -        error "you must specify a root directory with '-d'\n"
-> > +        error "Error: you must specify a root directory with '-d'\n"
-> >      fi
-> >      if [ -z "${image}" ]; then
-> > -        error "you must specify an output image file with '-o'\n"
-> > +        error "Error: you must specify an output image file with '-o'\n"
-> 
-> Is that really necessary?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libsquish/libsquish.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The original justification was for any user calling the script directly. Now I think no, it is not.
+diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
+index 9b447b0d8..67892dd9e 100644
+--- a/package/libsquish/libsquish.mk
++++ b/package/libsquish/libsquish.mk
+@@ -10,7 +10,7 @@ LIBSQUISH_SITE = http://downloads.sourceforge.net/project/libsquish
+ LIBSQUISH_INSTALL_STAGING = YES
+ LIBSQUISH_STRIP_COMPONENTS = 0
+ LIBSQUISH_LICENSE = MIT
+-LIBSQUISH_LICENSE_FILES = README
++LIBSQUISH_LICENSE_FILES = LICENSE.txt
  
-> 
-> There is an obvious error here: there is a missing space between '0' and the
-> closing bracket ']'.
-
-Indeed. <facepalm>
- 
-> However, I wonder why we should check for a zero size. The filesystem will
-> be non-creatable (is that a word?) because the requested size is too low,
-> similar to what a user would get by settign the nb_blocks to
-> (e.g.) 1024 (i.e. 1MiB) but have a target/ that is 2MiB: that won't fit.
-> 
-> So, I would just keep the check to being set, whatever the value (but I would
-> not oppose the check against 0 either.)
-
-My revised version applies a check in the ext2.mk file itself. I think this is much cleaner.
-
-Best,
-
-Jerry.
+ define LIBSQUISH_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-- 
+2.11.0
