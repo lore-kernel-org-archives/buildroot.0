@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 15:03:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: Extended comment about
-	RPi-only options
-Message-ID: <20170429130339.14991-1-bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 15:05:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/kodi: Extended comment about
+	non-RPi options
+Message-ID: <20170429130508.15042-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,8 @@ http://lists.busybox.net/pipermail/buildroot/2017-April/190767.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: fixed logic typo in subject
+
  package/kodi/kodi.mk | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
