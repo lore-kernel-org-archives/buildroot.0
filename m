@@ -1,49 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 15:56:38 +0200
-Subject: [Buildroot] [git commit] package/qt: drop option for license
-	approved
-Message-ID: <20170429135924.120138047C@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 15:53:45 +0200
+Subject: [Buildroot] [git commit] package/qt5tools: always use the
+	opensource license
+Message-ID: <20170429135923.BED45827E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b550e8bee29cc2559f973e309f3f8f6827fde49e
+commit: https://git.buildroot.net/buildroot/commit/?id=99d58c95e6f817d2f44042c78fd53bedee00baa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As stated in previous commits, Buildroot only ever uses the free
-license, and we do not have a click-wrap approval for any such free
-license for any other package.
+We never ask the user to confirm their assent about the use of a free
+license; there is no reason we do so for Qt.
 
-The option to approve the license now has no prompt and is no longer
-used anywhere.
-
-Legacy handling is not added because it is not useful: when the option
-was enabled, it meant "accept the open source license", which is now the
-default and only existing behavior.
+The output of legal-info is there to gather all the licenses used in a
+build; the license for qt5tools will be there to be consulted as well.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
-[Thomas: remove legacy handling as suggested by Arnout.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/qt5/qt5tools/qt5tools.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 5f07bd2..d3a01da 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -99,10 +99,6 @@ config BR2_PACKAGE_QT_STATIC
+diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+index c7d2e8f..7d5353a 100644
+--- a/package/qt5/qt5tools/qt5tools.mk
++++ b/package/qt5/qt5tools/qt5tools.mk
+@@ -19,7 +19,6 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5TOOLS_DEPENDENCIES += qt5declarative
+ endif
  
- endchoice
+-ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5TOOLS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5TOOLS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+@@ -27,10 +26,6 @@ else
+ QT5TOOLS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5TOOLS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+-else
+-QT5TOOLS_LICENSE = Commercial license
+-QT5TOOLS_REDISTRIBUTE = NO
+-endif
  
--config BR2_PACKAGE_QT_LICENSE_APPROVED
--	bool
--	default y
--
- config BR2_PACKAGE_QT_CONFIG_FILE
- 	string "Config file"
- 	help
+ QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+ 	linguist/lconvert linguist/lrelease linguist/lupdate
