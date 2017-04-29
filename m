@@ -1,83 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 10:37:41 +0200
-Subject: [Buildroot] [PATCH v7 21/31] package/kodi-visualisation-shadertoy:
-	bump version
+Date: Sat, 29 Apr 2017 10:37:45 +0200
+Subject: [Buildroot] [PATCH v7 25/31] package/kodi: add optional support for
+	event clients
 In-Reply-To: <20170429083751.19625-1-bernd.kuhls@t-online.de>
 References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
-Message-ID: <20170429083751.19625-22-bernd.kuhls@t-online.de>
+Message-ID: <20170429083751.19625-26-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased patch 0001.
-
-Upstream removed the optional dependency to libglew:
-https://github.com/notspiff/visualization.shadertoy/commit/11371c4e85f6eebdb8717c6e08d292e0e9b1841d
+For details read
+https://github.com/xbmc/xbmc/blob/master/tools/EventClients/README.txt
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch    | 4 ++--
- package/kodi-visualisation-shadertoy/Config.in                      | 1 -
- .../kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash  | 2 +-
- .../kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk    | 6 +-----
- 4 files changed, 4 insertions(+), 9 deletions(-)
+ package/kodi/Config.in | 7 +++++++
+ package/kodi/kodi.mk   | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
-index 6737296fe7..8de96a6de3 100644
---- a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
-+++ b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
-@@ -23,9 +23,9 @@ index 8b084cf..81bbe27 100644
-  
- -  include_directories(${OpenGL_INCLUDE_DIR}
- +  include_directories(${OpenGL_INCLUDE_DIR} ${OpenGLES2_INCLUDE_DIRS}
--                       ${GLEW_INCLUDE_DIR}
-                        ${KODI_INCLUDE_DIR}
--                       ${platform_INCLUDE_DIRS}
-+                       ${p8-platform_INCLUDE_DIRS}
-+                       ${PROJECT_SOURCE_DIR}/lib/kissfft
- diff --git a/FindOpenGLES2.cmake b/FindOpenGLES2.cmake
- index e1b7d21..2a9ce0d 100644
- --- a/FindOpenGLES2.cmake
-diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
-index ac17702709..3b981d0bf4 100644
---- a/package/kodi-visualisation-shadertoy/Config.in
-+++ b/package/kodi-visualisation-shadertoy/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
- 	bool "kodi-visualisation-shadertoy"
--	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBPLATFORM
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 6768533d0c..e30a57b33d 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -125,6 +125,13 @@ config BR2_PACKAGE_KODI_DBUS
  	help
- 	  Shadertoy visualiser for Kodi
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-index fdd81fd590..a0df397e8e 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 88732c399bb7e1237e8fc375583bb3789c96a28695a3805fb374361a7e5636c5 kodi-visualisation-shadertoy-f9988007681bf37e6c03d6992bae30133b020608.tar.gz
-+sha256 4456e88bc94bcb3e2481286b27926a1f6d85d6f857de31a46d50f44fead01abd  kodi-visualisation-shadertoy-v1.1.5.tar.gz
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 527c5e4402..923891595b 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-@@ -4,14 +4,10 @@
- #
- ################################################################################
+ 	  Enable D-Bus support
  
--KODI_VISUALISATION_SHADERTOY_VERSION = f9988007681bf37e6c03d6992bae30133b020608
-+KODI_VISUALISATION_SHADERTOY_VERSION = v1.1.5
- KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
- KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
- KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
- KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
++config BR2_PACKAGE_KODI_EVENTCLIENTS
++	bool "eventclients"
++	help
++	  Enable event clients support
++
++	  https://github.com/xbmc/xbmc/blob/master/tools/EventClients/README.txt
++
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 483f798b2e..330ae43c00 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -204,6 +204,12 @@ else
+ KODI_CONF_OPTS += -DENABLE_DBUS=OFF
+ endif
  
--ifeq ($(BR2_PACKAGE_LIBGLEW),y)
--KODI_VISUALISATION_SHADERTOY_DEPENDENCIES += libglew
--endif
--
- $(eval $(cmake-package))
++ifeq ($(BR2_PACKAGE_KODI_EVENTCLIENTS),y)
++KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=ON
++else
++KODI_CONF_OPTS += -DENABLE_EVENTCLIENTS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_ALSA_LIB),y)
+ KODI_CONF_OPTS += -DENABLE_ALSA=ON
+ KODI_DEPENDENCIES += alsa-lib
 -- 
 2.11.0
