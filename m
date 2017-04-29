@@ -1,61 +1,83 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 10:37:36 +0200
-Subject: [Buildroot] [PATCH v7 16/31] package/kodi-audiodecoder-timidity:
+Date: Sat, 29 Apr 2017 10:37:41 +0200
+Subject: [Buildroot] [PATCH v7 21/31] package/kodi-visualisation-shadertoy:
 	bump version
 In-Reply-To: <20170429083751.19625-1-bernd.kuhls@t-online.de>
 References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
-Message-ID: <20170429083751.19625-17-bernd.kuhls@t-online.de>
+Message-ID: <20170429083751.19625-22-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kodi-platform is not a dependency anymore:
-https://github.com/notspiff/audiodecoder.timidity/commit/b7ae86ad860b562f08ab02d9e87a546d99f1bb51
+Rebased patch 0001.
+
+Upstream removed the optional dependency to libglew:
+https://github.com/notspiff/visualization.shadertoy/commit/11371c4e85f6eebdb8717c6e08d292e0e9b1841d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-timidity/Config.in                       | 1 -
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash | 2 +-
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk   | 4 ++--
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ .../0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch    | 4 ++--
+ package/kodi-visualisation-shadertoy/Config.in                      | 1 -
+ .../kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash  | 2 +-
+ .../kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk    | 6 +-----
+ 4 files changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-timidity/Config.in b/package/kodi-audiodecoder-timidity/Config.in
-index 8f604adf00..3372dc5c05 100644
---- a/package/kodi-audiodecoder-timidity/Config.in
-+++ b/package/kodi-audiodecoder-timidity/Config.in
+diff --git a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
+index 6737296fe7..8de96a6de3 100644
+--- a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
++++ b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
+@@ -23,9 +23,9 @@ index 8b084cf..81bbe27 100644
+  
+ -  include_directories(${OpenGL_INCLUDE_DIR}
+ +  include_directories(${OpenGL_INCLUDE_DIR} ${OpenGLES2_INCLUDE_DIRS}
+-                       ${GLEW_INCLUDE_DIR}
+                        ${KODI_INCLUDE_DIR}
+-                       ${platform_INCLUDE_DIRS}
++                       ${p8-platform_INCLUDE_DIRS}
++                       ${PROJECT_SOURCE_DIR}/lib/kissfft
+ diff --git a/FindOpenGLES2.cmake b/FindOpenGLES2.cmake
+ index e1b7d21..2a9ce0d 100644
+ --- a/FindOpenGLES2.cmake
+diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+index ac17702709..3b981d0bf4 100644
+--- a/package/kodi-visualisation-shadertoy/Config.in
++++ b/package/kodi-visualisation-shadertoy/Config.in
 @@ -1,6 +1,5 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY
- 	bool "kodi-audiodecoder-timidity"
--	select BR2_PACKAGE_KODI_PLATFORM
+ config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
+ 	bool "kodi-visualisation-shadertoy"
+-	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_LIBPLATFORM
  	help
- 	  Timidity decoder addon for Kodi
- 
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-index d4af0197b3..5711b87a6c 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+ 	  Shadertoy visualiser for Kodi
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+index fdd81fd590..a0df397e8e 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 2e220b7d279fce73ff289536cd9e94b159ae648514fb8b423977dddb99c50e85 kodi-audiodecoder-timidity-a84559da92aa67744069fc9e9dc885732588c8ce.tar.gz
-+sha256 83a740010dc7fa01101da370c74e79287ebd67bd28d27125e4372abe2fb3bb47  kodi-audiodecoder-timidity-v1.1.1.tar.gz
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index 0d5f6ef2e4..e4a97fa7f6 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-@@ -4,10 +4,10 @@
+-sha256 88732c399bb7e1237e8fc375583bb3789c96a28695a3805fb374361a7e5636c5 kodi-visualisation-shadertoy-f9988007681bf37e6c03d6992bae30133b020608.tar.gz
++sha256 4456e88bc94bcb3e2481286b27926a1f6d85d6f857de31a46d50f44fead01abd  kodi-visualisation-shadertoy-v1.1.5.tar.gz
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+index 527c5e4402..923891595b 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+@@ -4,14 +4,10 @@
  #
  ################################################################################
  
--KODI_AUDIODECODER_TIMIDITY_VERSION = a84559da92aa67744069fc9e9dc885732588c8ce
-+KODI_AUDIODECODER_TIMIDITY_VERSION = v1.1.1
- KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
--KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi
+-KODI_VISUALISATION_SHADERTOY_VERSION = f9988007681bf37e6c03d6992bae30133b020608
++KODI_VISUALISATION_SHADERTOY_VERSION = v1.1.5
+ KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
+ KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
+ KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
  
+-ifeq ($(BR2_PACKAGE_LIBGLEW),y)
+-KODI_VISUALISATION_SHADERTOY_DEPENDENCIES += libglew
+-endif
+-
  $(eval $(cmake-package))
 -- 
 2.11.0
