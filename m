@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 21:06:06 +0200
-Subject: [Buildroot] [PATCH 2/2] mke2img: add parameter sanity checks to
- prevent odd error messages from genext2.fs
-In-Reply-To: <1493481682-128366-2-git-send-email-g4@novadsp.com>
-References: <1493481682-128366-1-git-send-email-g4@novadsp.com>
- <1493481682-128366-2-git-send-email-g4@novadsp.com>
-Message-ID: <20170429210606.37872b68@free-electrons.com>
+Date: Sat, 29 Apr 2017 21:06:26 +0200
+Subject: [Buildroot] [git commit] package/libsquish: fix legal-info
+Message-ID: <20170429190859.6419B816B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d1aa5740cb71a0e96e4763e267bc92a5909bdae2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Apr 2017 17:01:22 +0100, J Evans wrote:
+Fixes
+http://autobuild.buildroot.net/results/4f8/4f81644ca2e0ec4064f43c6cb00f2d5c858bbf77/
 
-> +    if [ -z "${nb_blocks}" ]; then
-> +        error "Error: you must specify a file system block count with '-b'. This cannot be zero, e.g. 61440 == 60MB\n"
-> +    fi
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsquish/libsquish.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Check this is useless: there is already error checking done by getopt
-itself, because the -b option *must* have an argument. Indeed, the
-current mke2img behaves like this:
-
-$ ./package/mke2img/mke2img -b
-mke2img: option 'b' expects a mandatory argument
-
-So it is already checked that ${nb_blocks} cannot be empty.
-
-> +    if [ "${nb_blocks}" -eq 0 ]; then
-> +        error "Error: The file system block count size cannot be zero. e.g. 61440 == 60MB \n"
-> +    fi
-
-See my reply to the previous commit: I don't see why 0 should be
-checked specifically. Please explain in the commit log why it should be.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
+index 9b447b0..67892dd 100644
+--- a/package/libsquish/libsquish.mk
++++ b/package/libsquish/libsquish.mk
+@@ -10,7 +10,7 @@ LIBSQUISH_SITE = http://downloads.sourceforge.net/project/libsquish
+ LIBSQUISH_INSTALL_STAGING = YES
+ LIBSQUISH_STRIP_COMPONENTS = 0
+ LIBSQUISH_LICENSE = MIT
+-LIBSQUISH_LICENSE_FILES = README
++LIBSQUISH_LICENSE_FILES = LICENSE.txt
+ 
+ define LIBSQUISH_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
