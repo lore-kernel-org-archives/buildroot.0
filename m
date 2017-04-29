@@ -1,50 +1,111 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 10:37:30 +0200
-Subject: [Buildroot] [PATCH v7 10/31] package/kodi-pvr-mythtv: bump version
-	to 4.15.0
+Date: Sat, 29 Apr 2017 10:37:39 +0200
+Subject: [Buildroot] [PATCH v7 19/31] package/kodi-visualisation-*: mass
+	version bump
 In-Reply-To: <20170429083751.19625-1-bernd.kuhls@t-online.de>
 References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
-Message-ID: <20170429083751.19625-11-bernd.kuhls@t-online.de>
+Message-ID: <20170429083751.19625-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream repo was changed:
-https://github.com/xbmc/repo-binary-addons/commit/cf93c8be639a3122db3ecb11c0b42d76e2e1da98
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash   | 2 +-
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk     | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.hash         | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.mk           | 2 +-
+ package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash | 2 +-
+ package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk   | 2 +-
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash | 2 +-
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk   | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 0e9eba87e2..57725a0ed7 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+index 6a65a58fea..c89ca9a618 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 f6d61b134a96a25820b616e60e43ac1ed33bd3f8b9f7612a6f6324356b78582d kodi-pvr-mythtv-84b0b6b122ca779588de5c895ef77b6bc454e859.tar.gz
-+sha256 30b6a20f846f0f0cc14c2347efbf3b72162c876daed53a3731d3f975d370765e  kodi-pvr-mythtv-4.15.0.tar.gz
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 2c5d07a64b..515050b176 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,10 +4,10 @@
+-sha256 7047d501942bcd5095e0f1424f003caec8eb792b59d16d16ad25f14829844e50 kodi-visualisation-fishbmc-50c38c296a62e096a2216e43b86d864ee265c506.tar.gz
++sha256 cf42a21978578cb5ecb10c20fe09791183d8ef2998ff9d956a84142a7dda8f72  kodi-visualisation-fishbmc-v4.1.0.tar.gz
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+index 92c9190ad7..d08c215ee7 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'Jarvis'
-+# This cset is on the branch 'Krypton'
- # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_MYTHTV_VERSION = 84b0b6b122ca779588de5c895ef77b6bc454e859
--KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
-+KODI_PVR_MYTHTV_VERSION = 4.15.0
-+KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
- KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
+-KODI_VISUALISATION_FISHBMC_VERSION = 50c38c296a62e096a2216e43b86d864ee265c506
++KODI_VISUALISATION_FISHBMC_VERSION = v4.1.0
+ KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
+ KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+index 8507c652a5..8d4548a7dd 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 66a71a5c5a1c0016d7020fcc9941634ee465dab14644cdc96023ce0a28408338 kodi-visualisation-goom-16747b7dba9cbdcfdc8df44e849eaf09450fc86f.tar.gz
++sha256 62a26efb6cd5d5fd109e38accb3deb71145972ae30b914bed7620eb40465c954  kodi-visualisation-goom-v1.1.0.tar.gz
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+index e7695052df..48e0425972 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_GOOM_VERSION = 16747b7dba9cbdcfdc8df44e849eaf09450fc86f
++KODI_VISUALISATION_GOOM_VERSION = v1.1.0
+ KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+ KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+index 18e38f577f..6c892ed0ba 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 aa417d6ad3d3770029e7d8d9f7f0ca8d56a8a4f47821267b5a8604fc26993334 kodi-visualisation-spectrum-9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e.tar.gz
++sha256 7ee78ff5c24e3f81b6e2a9208237f34667cb9faa5453d7bdb900ab65245973f1  kodi-visualisation-spectrum-v1.1.1.tar.gz
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+index ebc75779b8..3ab2c9975d 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_SPECTRUM_VERSION = 9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e
++KODI_VISUALISATION_SPECTRUM_VERSION = v1.1.1
+ KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
+ KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+index 728b857ecc..1fdecbede5 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 439bd50fcb1c0912532d0d113f7eeadf28f72bd2cb0c234581ee1acc2a70e45b kodi-visualisation-waveform-89aec48e2975f820004df5a1a53801339a5b3064.tar.gz
++sha256 cf10d8d78cb2bde4a0a21bb7e467445617b46593c093ef05f336f95a048f2d54  kodi-visualisation-waveform-v1.1.0.tar.gz
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+index 2263b7106f..d906c653c2 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_WAVEFORM_VERSION = 89aec48e2975f820004df5a1a53801339a5b3064
++KODI_VISUALISATION_WAVEFORM_VERSION = v1.1.0
+ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+ KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
 -- 
 2.11.0
