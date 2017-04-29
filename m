@@ -1,41 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 15:09:13 +0200
-Subject: [Buildroot] [git commit] package/kodi: extend comment about non-RPi
-	options
-Message-ID: <20170429130930.682C08220A@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 15:13:17 +0200
+Subject: [Buildroot] [PATCH v7 08/31] package/kodi: bump to version
+	17.1-Krypton
+In-Reply-To: <5bfda10f-6383-2bf6-afa7-4fffcd2fc5cb@t-online.de>
+References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
+ <5bfda10f-6383-2bf6-afa7-4fffcd2fc5cb@t-online.de>
+Message-ID: <20170429151317.703ce868@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f6de270e2224a06f5c9bcaa993b62bfb2b48961
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Suggested by Thomas:
-http://lists.busybox.net/pipermail/buildroot/2017-April/190767.html
+On Sat, 29 Apr 2017 15:06:36 +0200, Bernd Kuhls wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: improve wording.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kodi/kodi.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> Mesa3d can provide libgl at the same time rpi-userland provides egl/gles
+> support:
+> 
+> $ grep _PROVIDES_ .config
+> BR2_PACKAGE_PROVIDES_LIBOPENMAX="rpi-userland"
+> BR2_PACKAGE_PROVIDES_LIBGL="mesa3d"
+> BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"
+> BR2_PACKAGE_PROVIDES_LIBGLES="rpi-userland"
+> BR2_PACKAGE_PROVIDES_LIBOPENVG="rpi-userland"
+> 
+> With this defconfig I could reproduce the build error I mentioned today:
+> 
+> BR2_arm=y
+> BR2_cortex_a15=y
+> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_RPI_USERLAND=y
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 12dc311..0b89bdd 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -147,7 +147,11 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
- KODI_DEPENDENCIES += rpi-userland
- else
--# these options only exist on non-rpi systems
-+# Kodi considers "rpbi" and "linux" as two separate platforms. The
-+# below options, defined in
-+# project/cmake/scripts/linux/ArchSetup.cmake are only valid for the
-+# "linux" platforms. The "rpbi" platform has a different set of
-+# options, defined in project/cmake/scripts/rbpi/
- KODI_CONF_OPTS += -DENABLE_LDGOLD=OFF
- ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
- KODI_CONF_OPTS += -DENABLE_AML=ON
+Then your fix doesn't work, because for example sunxi-mali, like
+rpi-userland, also provides GLES but not full GL. So you can have a
+random configuration where OpenGLES is provided by sunxi-mali, but
+OpenGL is provided by Mesa.
+
+I believe this should not be solved in the Kodi package itself, so
+please send a patch to remove this line.
+
+Instead, what we want is a mechanism to make sure that we don't have
+conflicting OpenGL/OpenGLES providers, and Yann made a proposal on the
+mailing list about that some time ago. See the thread "[PATCH]
+package/opengl: ensure consistency between the various providers" on
+the mailing list.
+
+> > OK. Good reason to add a comment in the .mk file.  
+> 
+> Sent patch: http://patchwork.ozlabs.org/patch/756741/
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
