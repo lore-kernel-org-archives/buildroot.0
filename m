@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 14:43:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: optimise libva/libvdpau
- dependencies
-In-Reply-To: <20170429122732.29011-1-bernd.kuhls@t-online.de>
-References: <20170429122732.29011-1-bernd.kuhls@t-online.de>
-Message-ID: <20170429144317.59e46ea4@free-electrons.com>
+Date: Sat, 29 Apr 2017 14:52:55 +0200
+Subject: [Buildroot] [PATCH] Revert "lvm2: disable build with uClibc-ng"
+In-Reply-To: <20170426072646.GA31873@waldemar-brodkorb.de>
+References: <20170426072646.GA31873@waldemar-brodkorb.de>
+Message-ID: <20170429145255.618a52e5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 29 Apr 2017 14:27:32 +0200, Bernd Kuhls wrote:
-> Suggested by Thomas:
-> http://lists.busybox.net/pipermail/buildroot/2017-April/190703.html
+On Wed, 26 Apr 2017 09:26:47 +0200, Waldemar Brodkorb wrote:
+> This reverts commit 66f136a9f64b880eefa769c1261916773d8f28c0.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Issue fixed with uClibc-ng update to 1.0.24.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  package/kodi/Config.in | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  package/cryptsetup/Config.in    | 5 ++---
+>  package/dmraid/Config.in        | 5 ++---
+>  package/docker-engine/Config.in | 1 -
+>  package/lvm2/Config.in          | 6 ++----
+>  package/udisks/Config.in        | 6 ++----
+>  5 files changed, 8 insertions(+), 15 deletions(-)
 
-Applied to master, thanks.
+I have started a rebuild of all uClibc toolchains with 1.0.24 + wordexp
+enabled. Once those toolchains are ready and deployed, I will apply
+this patch. If I apply it before we will have lots of build issues in
+the autobuilders.
+
+Best regards,
 
 Thomas
 -- 
