@@ -1,54 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 29 Apr 2017 12:41:24 +0200
-Subject: [Buildroot] [PATCH] package/expedite: fix build issue with C89
-In-Reply-To: <20170422144236.49b73b04@free-electrons.com>
-References: <20170421213104.1477-1-romain.naour@gmail.com>
- <20170422144236.49b73b04@free-electrons.com>
-Message-ID: <5b4e38bc-bbac-8699-9c1f-4bb8eb32ae88@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 12:55:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-visualisation-goom: bump
+	version
+Message-ID: <20170429105544.23417-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This bump fixes a compile error on powerpc.
 
-Le 22/04/2017 ? 14:42, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Fri, 21 Apr 2017 23:31:04 +0200, Romain Naour wrote:
-> 
->> +# The code use for loop initial declarations which are only allowed in
->> +# C99 mode. Use the default compiler version (gnu99) used by gcc 5+ to
->> +# workaround some build issues with C99.
->> +EXPEDITE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-> 
-> What is the full command line used by expedite to build its C files?
-> Gcc 5.x uses -std=c11 by default, and C11 apparently accepts definition
-> of variables inside the initialization part of for() loops. So it seems
-> like expedite is overriding the default -std= GCC option with its
-> own...
-> 
-> Or maybe it's the configure.ac AC_PROG_CC that does this by default?
-> Anyway, it's worth checking and doing something upstreamable rather
-> than working around in the .mk file.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+I forgot to add this patch to v7 of the patch series, sorry.
+My fix was committed upstream today.
 
-The build system doesn't override the default C language version, it just use
-the one used by default by the compiler.
-The definition of variables inside the initialization part of for() loops was
-added by the latest commit without adding c99 or gnu99 in the cflags.
+ package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I used a gcc5 based toolchain while I tested this version of expedite, that's
-why I didn't had any issue.
-
-Another easy solution is to not use definition of variables inside the
-initialization part of for() loops.
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+index 8d4548a7dd..fa5fbf6c37 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 62a26efb6cd5d5fd109e38accb3deb71145972ae30b914bed7620eb40465c954  kodi-visualisation-goom-v1.1.0.tar.gz
++sha256 501b8b1d5bd174ec71d57894293ae5eb0c1f41c3b725ab5e7b5a1c5eeea77a7f  kodi-visualisation-goom-54da35870930acd1a3a36195dd2c1498ac336b90.tar.gz
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+index 48e0425972..a7503a97d8 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_GOOM_VERSION = v1.1.0
++KODI_VISUALISATION_GOOM_VERSION = 54da35870930acd1a3a36195dd2c1498ac336b90
+ KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+ KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
+-- 
+2.11.0
