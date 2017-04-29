@@ -1,96 +1,632 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 10:37:47 +0200
-Subject: [Buildroot] [PATCH v7 27/31] package/kodi-inputstream-rtmp: new
-	package
+Date: Sat, 29 Apr 2017 10:37:51 +0200
+Subject: [Buildroot] [PATCH v7 31/31] package/kodi: Add support for more
+	archs
 In-Reply-To: <20170429083751.19625-1-bernd.kuhls@t-online.de>
 References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
-Message-ID: <20170429083751.19625-28-bernd.kuhls@t-online.de>
+Message-ID: <20170429083751.19625-32-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select the new package by the legacy option for easier update.
+For the autoconf-based build system it was necessary to allow each
+supported architecture separatly:
+https://github.com/xbmc/xbmc/blob/Krypton/m4/xbmc_arch.m4
+
+For the CMake build system this is not necessary anymore so we only
+blacklist archs in Config.in known to be broken.
+
+Tested with testpkg using this defconfig:
+
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_KODI_ALSA_LIB=y
+BR2_PACKAGE_KODI_EVENTCLIENTS=y
+BR2_PACKAGE_KODI_LIBBLURAY=y
+BR2_PACKAGE_KODI_LIBCEC=y
+BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE=y
+BR2_PACKAGE_KODI_INPUTSTREAM_RTMP=y
+BR2_PACKAGE_KODI_PVR_HTS=y
+BR2_PACKAGE_KODI_SCREENSAVER_RSXS=y
+BR2_PACKAGE_KODI_VISUALISATION_GOOM=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
+
+with this result:
+
+                armv5-ctng-linux-gnueabi [ 1/49]: OK
+              armv7-ctng-linux-gnueabihf [ 2/49]: OK
+                        br-aarch64-glibc [ 3/49]: OK
+                           br-arcle-hs38 [ 4/49]: OK
+                            br-arm-basic [ 5/49]: SKIPPED
+                  br-arm-cortex-a9-glibc [ 6/49]: OK
+                   br-arm-cortex-a9-musl [ 7/49]: SKIPPED
+                   br-arm-cortex-m4-full [ 8/49]: SKIPPED
+                             br-arm-full [ 9/49]: OK
+                    br-arm-full-nothread [10/49]: SKIPPED
+                      br-arm-full-static [11/49]: SKIPPED
+                            br-bfin-full [12/49]: SKIPPED
+                   br-i386-pentium4-full [13/49]: OK
+                br-i386-pentium-mmx-musl [14/49]: SKIPPED
+                       br-m68k-5208-full [15/49]: SKIPPED
+                      br-m68k-68040-full [16/49]: SKIPPED
+                    br-microblazeel-full [17/49]: SKIPPED
+                 br-mips32r6-el-hf-glibc [18/49]: OK
+                      br-mips64-n64-full [19/49]: OK
+                 br-mips64r6-el-hf-glibc [20/49]: OK
+                      br-mipsel-o32-full [21/49]: OK
+                          br-nios2-glibc [22/49]: SKIPPED
+                      br-openrisc-uclibc [23/49]: SKIPPED
+               br-powerpc-603e-basic-cpp [24/49]: SKIPPED
+             br-powerpc64le-power8-glibc [25/49]: OK
+               br-powerpc64-power7-glibc [26/49]: OK
+                  br-powerpc-e500mc-full [27/49]: OK
+                             br-sh4-full [28/49]: OK
+                        br-sparc64-glibc [29/49]: OK
+                         br-sparc-uclibc [30/49]: SKIPPED
+                    br-x86-64-core2-full [31/49]: OK
+                          br-x86-64-musl [32/49]: SKIPPED
+                          br-xtensa-full [33/49]: OK
+                     i686-ctng-linux-gnu [34/49]: SKIPPED
+                          linaro-aarch64 [35/49]: OK
+                              linaro-arm [36/49]: OK
+             mips64el-ctng_n32-linux-gnu [37/49]: OK
+             mips64el-ctng_n64-linux-gnu [38/49]: OK
+        powerpc-ctng_e500v2-linux-gnuspe [39/49]: SKIPPED
+                     sourcery-arm-armv4t [40/49]: OK
+                            sourcery-arm [41/49]: OK
+                     sourcery-arm-thumb2 [42/49]: OK
+                         sourcery-mips64 [43/49]: OK
+                           sourcery-mips [44/49]: OK
+                          sourcery-nios2 [45/49]: SKIPPED
+                             sourcery-sh [46/49]: SKIPPED
+                         sourcery-x86-64 [47/49]: OK
+                            sourcery-x86 [48/49]: SKIPPED
+           x86_64-ctng_locales-linux-gnu [49/49]: OK
+49 builds, 20 skipped, 0 build failed, 0 legal-info failed
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                                         |  1 +
- package/kodi-inputstream-rtmp/Config.in                  |  7 +++++++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash |  2 ++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 13 +++++++++++++
- package/kodi/Config.in                                   |  4 ++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/kodi-inputstream-rtmp/Config.in
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
- create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+ package/kodi-pvr-mediaportal-tvserver/Config.in |   2 +
+ package/kodi/0003-Add-support-for-sh4.patch     | 108 ++++++++++++++++++++++++
+ package/kodi/0004-Add-support-for-sparc.patch   |  91 ++++++++++++++++++++
+ package/kodi/0005-Add-support-for-arc.patch     |  91 ++++++++++++++++++++
+ package/kodi/0006-Add-support-for-xtensa.patch  |  91 ++++++++++++++++++++
+ package/kodi/Config.in                          |   6 +-
+ package/kodi/kodi.mk                            |  51 ++++++++---
+ 7 files changed, 424 insertions(+), 16 deletions(-)
+ create mode 100644 package/kodi/0003-Add-support-for-sh4.patch
+ create mode 100644 package/kodi/0004-Add-support-for-sparc.patch
+ create mode 100644 package/kodi/0005-Add-support-for-arc.patch
+ create mode 100644 package/kodi/0006-Add-support-for-xtensa.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6b038dba2c..cfdcd193eb 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -148,6 +148,7 @@ comment "Legacy options removed in 2017.05"
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "kodi rtmp"
- 	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
+diff --git a/package/kodi-pvr-mediaportal-tvserver/Config.in b/package/kodi-pvr-mediaportal-tvserver/Config.in
+index 733ca8859e..ff93c249b1 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/Config.in
++++ b/package/kodi-pvr-mediaportal-tvserver/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
+ 	bool "kodi-pvr-mediaportal-tvserver"
++	# ARC toolchain lacks xlocale.h
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  Internal rtmp support was removed from Kodi.
- 
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
+ 	  MediaPortal TVServer PVR client addon for Kodi
+diff --git a/package/kodi/0003-Add-support-for-sh4.patch b/package/kodi/0003-Add-support-for-sh4.patch
 new file mode 100644
-index 0000000000..c40bff2d7e
+index 0000000000..8e0d2e2af0
 --- /dev/null
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
-+	bool "kodi-inputstream-rtmp"
-+	select BR2_PACKAGE_RTMPDUMP
-+	help
-+	  RTMP input stream add-on for Kodi
++++ b/package/kodi/0003-Add-support-for-sh4.patch
+@@ -0,0 +1,108 @@
++From 61c13c85d4dad978f793d0e3b75e99d95bc226c3 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Wed, 26 Apr 2017 22:34:40 +0200
++Subject: [PATCH] Add support for sh4
 +
-+	  https://github.com/notspiff/inputstream.rtmp
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++This commit fixes Kodi build with a buildroot toolchain for sh4, also
++rewrap code to prepare for more platforms.
++
++Patch sent upstream as PR 12015.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/cores/DllLoader/DllLoader.h                        | 7 ++++++-
++ xbmc/cores/DllLoader/ldt_keeper.c                       | 7 ++++++-
++ xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h | 8 +++++++-
++ xbmc/threads/Atomics.cpp                                | 6 +++++-
++ xbmc/utils/MathUtils.h                                  | 3 ++-
++ 5 files changed, 26 insertions(+), 5 deletions(-)
++
++diff --git a/xbmc/cores/DllLoader/DllLoader.h b/xbmc/cores/DllLoader/DllLoader.h
++index eb3c54c96b..f05c195b89 100644
++--- a/xbmc/cores/DllLoader/DllLoader.h
+++++ b/xbmc/cores/DllLoader/DllLoader.h
++@@ -23,7 +23,12 @@
++ #include "coffldr.h"
++ #include "LibraryLoader.h"
++ 
++-#if defined(__linux__) && !defined(__powerpc__) && !defined(__arm__) && !defined(__aarch64__) && !defined(__mips__)
+++#if defined(__linux__) && \
+++    !defined(__powerpc__) && \
+++    !defined(__arm__) && \
+++    !defined(__aarch64__) && \
+++    !defined(__mips__) && \
+++    !defined(__SH4__)
++ #define USE_LDT_KEEPER
++ #include "ldt_keeper.h"
++ #endif
++diff --git a/xbmc/cores/DllLoader/ldt_keeper.c b/xbmc/cores/DllLoader/ldt_keeper.c
++index 3fe68541e6..ff230d8469 100644
++--- a/xbmc/cores/DllLoader/ldt_keeper.c
+++++ b/xbmc/cores/DllLoader/ldt_keeper.c
++@@ -19,7 +19,12 @@
++  */
++ 
++ //#ifndef __powerpc__
++-#if !defined(__powerpc__) && !defined(__ppc__) && !defined(__arm__) && !defined(__aarch64__) && !defined(__mips__)
+++#if !defined(__powerpc__) && \
+++    !defined(__ppc__) && \
+++    !defined(__arm__) && \
+++    !defined(__aarch64__) && \
+++    !defined(__mips__) && \
+++    !defined(__SH4__)
++ 
++ #include "ldt_keeper.h"
++ 
++diff --git a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++index ce3afe985b..731341ef3d 100644
++--- a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
+++++ b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++@@ -293,7 +293,13 @@ protected:
++ 
++ 
++ inline int NP2( unsigned x ) {
++-#if defined(TARGET_POSIX) && !defined(__POWERPC__) && !defined(__PPC__) && !defined(__arm__) && !defined(__aarch64__) && !defined(__mips__)
+++#if defined(TARGET_POSIX) && \
+++    !defined(__POWERPC__) && \
+++    !defined(__PPC__) && \
+++    !defined(__arm__) && \
+++    !defined(__aarch64__) && \
+++    !defined(__mips__) && \
+++    !defined(__SH4__)
++   // If there are any issues compiling this, just append a ' && 0'
++   // to the above to make it '#if defined(TARGET_POSIX) && 0'
++ 
++diff --git a/xbmc/threads/Atomics.cpp b/xbmc/threads/Atomics.cpp
++index ecba3f1081..7aaea1f2ba 100644
++--- a/xbmc/threads/Atomics.cpp
+++++ b/xbmc/threads/Atomics.cpp
++@@ -106,7 +106,11 @@ long cas(volatile long *pAddr, long expectedVal, long swapVal)
++ ///////////////////////////////////////////////////////////////////////////
++ long long cas2(volatile long long* pAddr, long long expectedVal, long long swapVal)
++ {
++-#if defined(__ppc__) || defined(__powerpc__) || defined(__arm__) || defined(__aarch64__)// PowerPC and ARM
+++#if defined(__ppc__) || \
+++    defined(__powerpc__) || \
+++    defined(__arm__) || \
+++    defined(__aarch64__) || \
+++    defined(__SH4__)
++ // Not available/required
++ // Hack to allow compilation
++   throw "cas2 is not implemented";
++diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
++index 9ec1edba87..0be12d9abf 100644
++--- a/xbmc/utils/MathUtils.h
+++++ b/xbmc/utils/MathUtils.h
++@@ -36,7 +36,8 @@
++     defined(__powerpc__) || \
++     defined(__mips__) || \
++     defined(__arm__) || \
++-    defined(__aarch64__)
+++    defined(__aarch64__) || \
+++    defined(__SH4__)
++   #define DISABLE_MATHUTILS_ASM_ROUND_INT
++ #endif
++ 
++-- 
++2.11.0
++
+diff --git a/package/kodi/0004-Add-support-for-sparc.patch b/package/kodi/0004-Add-support-for-sparc.patch
 new file mode 100644
-index 0000000000..f5a82d2aae
+index 0000000000..301d11de73
 --- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-v1.0.4.tar.gz
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi/0004-Add-support-for-sparc.patch
+@@ -0,0 +1,91 @@
++From 72ccf12d7760da4e77e70ae4cfed5caab986e8a9 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Thu, 27 Apr 2017 09:02:11 +0200
++Subject: [PATCH] Add support for sparc
++
++This commit fixes Kodi build with a buildroot toolchain for sparc.
++
++Patch sent upstream as PR 12015.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/cores/DllLoader/DllLoader.h                        | 3 ++-
++ xbmc/cores/DllLoader/ldt_keeper.c                       | 3 ++-
++ xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h | 3 ++-
++ xbmc/threads/Atomics.cpp                                | 3 ++-
++ xbmc/utils/MathUtils.h                                  | 3 ++-
++ 5 files changed, 10 insertions(+), 5 deletions(-)
++
++diff --git a/xbmc/cores/DllLoader/DllLoader.h b/xbmc/cores/DllLoader/DllLoader.h
++index f05c195b89..1e51014f1a 100644
++--- a/xbmc/cores/DllLoader/DllLoader.h
+++++ b/xbmc/cores/DllLoader/DllLoader.h
++@@ -28,7 +28,8 @@
++     !defined(__arm__) && \
++     !defined(__aarch64__) && \
++     !defined(__mips__) && \
++-    !defined(__SH4__)
+++    !defined(__SH4__) && \
+++    !defined(__sparc__)
++ #define USE_LDT_KEEPER
++ #include "ldt_keeper.h"
++ #endif
++diff --git a/xbmc/cores/DllLoader/ldt_keeper.c b/xbmc/cores/DllLoader/ldt_keeper.c
++index ff230d8469..6aec5f8e67 100644
++--- a/xbmc/cores/DllLoader/ldt_keeper.c
+++++ b/xbmc/cores/DllLoader/ldt_keeper.c
++@@ -24,7 +24,8 @@
++     !defined(__arm__) && \
++     !defined(__aarch64__) && \
++     !defined(__mips__) && \
++-    !defined(__SH4__)
+++    !defined(__SH4__) && \
+++    !defined(__sparc__)
++ 
++ #include "ldt_keeper.h"
++ 
++diff --git a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++index 731341ef3d..67da6068b6 100644
++--- a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
+++++ b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++@@ -299,7 +299,8 @@ inline int NP2( unsigned x ) {
++     !defined(__arm__) && \
++     !defined(__aarch64__) && \
++     !defined(__mips__) && \
++-    !defined(__SH4__)
+++    !defined(__SH4__) && \
+++    !defined(__sparc__)
++   // If there are any issues compiling this, just append a ' && 0'
++   // to the above to make it '#if defined(TARGET_POSIX) && 0'
++ 
++diff --git a/xbmc/threads/Atomics.cpp b/xbmc/threads/Atomics.cpp
++index 7aaea1f2ba..90aabf947b 100644
++--- a/xbmc/threads/Atomics.cpp
+++++ b/xbmc/threads/Atomics.cpp
++@@ -110,7 +110,8 @@ long long cas2(volatile long long* pAddr, long long expectedVal, long long swapV
++     defined(__powerpc__) || \
++     defined(__arm__) || \
++     defined(__aarch64__) || \
++-    defined(__SH4__)
+++    defined(__SH4__) || \
+++    defined(__sparc__)
++ // Not available/required
++ // Hack to allow compilation
++   throw "cas2 is not implemented";
++diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
++index 0be12d9abf..873fbb8b0f 100644
++--- a/xbmc/utils/MathUtils.h
+++++ b/xbmc/utils/MathUtils.h
++@@ -37,7 +37,8 @@
++     defined(__mips__) || \
++     defined(__arm__) || \
++     defined(__aarch64__) || \
++-    defined(__SH4__)
+++    defined(__SH4__) || \
+++    defined(__sparc__)
++   #define DISABLE_MATHUTILS_ASM_ROUND_INT
++ #endif
++ 
++-- 
++2.11.0
++
+diff --git a/package/kodi/0005-Add-support-for-arc.patch b/package/kodi/0005-Add-support-for-arc.patch
 new file mode 100644
-index 0000000000..414c8dfc39
+index 0000000000..faa8e7d8c0
 --- /dev/null
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-inputstream-rtmp
-+#
-+################################################################################
++++ b/package/kodi/0005-Add-support-for-arc.patch
+@@ -0,0 +1,91 @@
++From 4e2d40e592b11380db10ff72970f2ed89206766a Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Thu, 27 Apr 2017 13:01:25 +0200
++Subject: [PATCH] Add support for arc
 +
-+KODI_INPUTSTREAM_RTMP_VERSION = v1.0.4
-+KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
-+KODI_INPUTSTREAM_RTMP_LICENSE = GPLv2+
-+KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
-+KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
++This commit fixes Kodi build with a buildroot toolchain for arc.
 +
-+$(eval $(cmake-package))
++Patch sent upstream as PR 12015.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/cores/DllLoader/DllLoader.h                        | 3 ++-
++ xbmc/cores/DllLoader/ldt_keeper.c                       | 3 ++-
++ xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h | 3 ++-
++ xbmc/threads/Atomics.cpp                                | 3 ++-
++ xbmc/utils/MathUtils.h                                  | 3 ++-
++ 5 files changed, 10 insertions(+), 5 deletions(-)
++
++diff --git a/xbmc/cores/DllLoader/DllLoader.h b/xbmc/cores/DllLoader/DllLoader.h
++index 1e51014f1a..5618445d51 100644
++--- a/xbmc/cores/DllLoader/DllLoader.h
+++++ b/xbmc/cores/DllLoader/DllLoader.h
++@@ -29,7 +29,8 @@
++     !defined(__aarch64__) && \
++     !defined(__mips__) && \
++     !defined(__SH4__) && \
++-    !defined(__sparc__)
+++    !defined(__sparc__) && \
+++    !defined(__arc__)
++ #define USE_LDT_KEEPER
++ #include "ldt_keeper.h"
++ #endif
++diff --git a/xbmc/cores/DllLoader/ldt_keeper.c b/xbmc/cores/DllLoader/ldt_keeper.c
++index 6aec5f8e67..a10acdb967 100644
++--- a/xbmc/cores/DllLoader/ldt_keeper.c
+++++ b/xbmc/cores/DllLoader/ldt_keeper.c
++@@ -25,7 +25,8 @@
++     !defined(__aarch64__) && \
++     !defined(__mips__) && \
++     !defined(__SH4__) && \
++-    !defined(__sparc__)
+++    !defined(__sparc__) && \
+++    !defined(__arc__)
++ 
++ #include "ldt_keeper.h"
++ 
++diff --git a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++index 67da6068b6..b0cd76da45 100644
++--- a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
+++++ b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++@@ -300,7 +300,8 @@ inline int NP2( unsigned x ) {
++     !defined(__aarch64__) && \
++     !defined(__mips__) && \
++     !defined(__SH4__) && \
++-    !defined(__sparc__)
+++    !defined(__sparc__) && \
+++    !defined(__arc__)
++   // If there are any issues compiling this, just append a ' && 0'
++   // to the above to make it '#if defined(TARGET_POSIX) && 0'
++ 
++diff --git a/xbmc/threads/Atomics.cpp b/xbmc/threads/Atomics.cpp
++index 90aabf947b..0c5b13ae73 100644
++--- a/xbmc/threads/Atomics.cpp
+++++ b/xbmc/threads/Atomics.cpp
++@@ -111,7 +111,8 @@ long long cas2(volatile long long* pAddr, long long expectedVal, long long swapV
++     defined(__arm__) || \
++     defined(__aarch64__) || \
++     defined(__SH4__) || \
++-    defined(__sparc__)
+++    defined(__sparc__) || \
+++    defined(__arc__)
++ // Not available/required
++ // Hack to allow compilation
++   throw "cas2 is not implemented";
++diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
++index 873fbb8b0f..b79be9e3d6 100644
++--- a/xbmc/utils/MathUtils.h
+++++ b/xbmc/utils/MathUtils.h
++@@ -38,7 +38,8 @@
++     defined(__arm__) || \
++     defined(__aarch64__) || \
++     defined(__SH4__) || \
++-    defined(__sparc__)
+++    defined(__sparc__) || \
+++    defined(__arc__)
++   #define DISABLE_MATHUTILS_ASM_ROUND_INT
++ #endif
++ 
++-- 
++2.11.0
++
+diff --git a/package/kodi/0006-Add-support-for-xtensa.patch b/package/kodi/0006-Add-support-for-xtensa.patch
+new file mode 100644
+index 0000000000..10a006b6fd
+--- /dev/null
++++ b/package/kodi/0006-Add-support-for-xtensa.patch
+@@ -0,0 +1,91 @@
++From 1de2a0afc083888686be6f169d1477e25ab80848 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Thu, 27 Apr 2017 16:51:36 +0200
++Subject: [PATCH] Add support for xtensa
++
++This commit fixes Kodi build with a buildroot toolchain for xtensa.
++
++Patch sent upstream as PR 12015.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xbmc/cores/DllLoader/DllLoader.h                        | 3 ++-
++ xbmc/cores/DllLoader/ldt_keeper.c                       | 3 ++-
++ xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h | 3 ++-
++ xbmc/threads/Atomics.cpp                                | 3 ++-
++ xbmc/utils/MathUtils.h                                  | 3 ++-
++ 5 files changed, 10 insertions(+), 5 deletions(-)
++
++diff --git a/xbmc/cores/DllLoader/DllLoader.h b/xbmc/cores/DllLoader/DllLoader.h
++index 5618445d51..26b41e258b 100644
++--- a/xbmc/cores/DllLoader/DllLoader.h
+++++ b/xbmc/cores/DllLoader/DllLoader.h
++@@ -30,7 +30,8 @@
++     !defined(__mips__) && \
++     !defined(__SH4__) && \
++     !defined(__sparc__) && \
++-    !defined(__arc__)
+++    !defined(__arc__) && \
+++    !defined(__xtensa__)
++ #define USE_LDT_KEEPER
++ #include "ldt_keeper.h"
++ #endif
++diff --git a/xbmc/cores/DllLoader/ldt_keeper.c b/xbmc/cores/DllLoader/ldt_keeper.c
++index a10acdb967..83fd023196 100644
++--- a/xbmc/cores/DllLoader/ldt_keeper.c
+++++ b/xbmc/cores/DllLoader/ldt_keeper.c
++@@ -26,7 +26,8 @@
++     !defined(__mips__) && \
++     !defined(__SH4__) && \
++     !defined(__sparc__) && \
++-    !defined(__arc__)
+++    !defined(__arc__) && \
+++    !defined(__xtensa__)
++ 
++ #include "ldt_keeper.h"
++ 
++diff --git a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++index b0cd76da45..32f8bc45c9 100644
++--- a/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
+++++ b/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++@@ -301,7 +301,8 @@ inline int NP2( unsigned x ) {
++     !defined(__mips__) && \
++     !defined(__SH4__) && \
++     !defined(__sparc__) && \
++-    !defined(__arc__)
+++    !defined(__arc__) && \
+++    !defined(__xtensa__)
++   // If there are any issues compiling this, just append a ' && 0'
++   // to the above to make it '#if defined(TARGET_POSIX) && 0'
++ 
++diff --git a/xbmc/threads/Atomics.cpp b/xbmc/threads/Atomics.cpp
++index 0c5b13ae73..7085a13882 100644
++--- a/xbmc/threads/Atomics.cpp
+++++ b/xbmc/threads/Atomics.cpp
++@@ -112,7 +112,8 @@ long long cas2(volatile long long* pAddr, long long expectedVal, long long swapV
++     defined(__aarch64__) || \
++     defined(__SH4__) || \
++     defined(__sparc__) || \
++-    defined(__arc__)
+++    defined(__arc__) || \
+++    defined(__xtensa__)
++ // Not available/required
++ // Hack to allow compilation
++   throw "cas2 is not implemented";
++diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
++index b79be9e3d6..556787ef82 100644
++--- a/xbmc/utils/MathUtils.h
+++++ b/xbmc/utils/MathUtils.h
++@@ -39,7 +39,8 @@
++     defined(__aarch64__) || \
++     defined(__SH4__) || \
++     defined(__sparc__) || \
++-    defined(__arc__)
+++    defined(__arc__) || \
+++    defined(__xtensa__)
++   #define DISABLE_MATHUTILS_ASM_ROUND_INT
++ #endif
++ 
++-- 
++2.11.0
++
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 2e1a2ba994..ed8fa75690 100644
+index f274019e99..bd2b226826 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -290,6 +290,10 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
- endmenu
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	depends on BR2_USE_MMU # libcdio, and others
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
+-		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+-		&& BR2_TOOLCHAIN_HAS_SYNC_8
++# i386: needs sse (see upstream PR 10351)
++	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
++		&& !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
  
-+menu "Inputstream addons"
-+	source "package/kodi-inputstream-rtmp/Config.in"
-+endmenu
+ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, locale, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index dea4d4c97a..c2c6f45d68 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -70,17 +70,40 @@ KODI_CONF_OPTS += \
+ 	-DENABLE_OPENSSL=ON \
+ 	-DNATIVEPREFIX=$(HOST_DIR)/usr \
+ 	-DDEPENDS_PATH=$(@D) \
+-	-DWITH_TEXTUREPACKER=$(HOST_DIR)/usr/bin/TexturePacker
++	-DWITH_TEXTUREPACKER=$(HOST_DIR)/usr/bin/TexturePacker \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(KODI_CXX_FLAGS)"
+ 
+-ifeq ($(BR2_arm),y)
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
++KODI_DEPENDENCIES += rpi-userland
++ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
++endif
++else  # BR2_PACKAGE_RPI_USERLAND
++ifeq ($(BR2_arceb)$(BR2_arcle),y)
++KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
++else ifeq ($(BR2_armeb),y)
+ KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
+-else ifeq ($(BR2_mips),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
+-else ifeq ($(BR2_i386),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
+-else ifeq ($(BR2_x86_64),y)
+-KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
++else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
++KODI_CONF_OPTS += \
++	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
++	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_powerpc64)$(BR2_sparc64),y)
++KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
++else ifeq ($(BR2_sh4),y)
++KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
++else ifeq ($(BR2_xtensa),y)
++KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
++else
++# Kodi auto-detects ARCH, tested: arm, aarch64, i386, x86_64
++# see project/cmake/scripts/linux/ArchSetup.cmake
++KODI_CONF_OPTS += -DWITH_CPU=$(BR2_ARCH)
+ endif
++endif # !BR2_PACKAGE_RPI_USERLAND
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+ KODI_CONF_OPTS += -D_SSE_OK=ON -D_SSE_TRUE=ON
+@@ -130,6 +153,11 @@ else
+ KODI_CONF_OPTS += -D_AVX2_OK=OFF -D_AVX2_TRUE=OFF
+ endif
+ 
++# mips: uses __atomic_load_8
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++KODI_CXX_FLAGS += -latomic
++endif
 +
- menu "PVR addons"
- 	source "package/kodi-pvr-argustv/Config.in"
- 	source "package/kodi-pvr-dvblink/Config.in"
+ ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+ KODI_CONF_OPTS += -DENABLE_MYSQLCLIENT=ON
+ KODI_DEPENDENCIES += mysql
+@@ -145,11 +173,8 @@ else
+ KODI_CONF_OPTS += -DENABLE_NONFREE=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
+-KODI_DEPENDENCIES += rpi-userland
+-else
+ # these options only exist on non-rbpi systems
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),)
+ KODI_CONF_OPTS += -DENABLE_LDGOLD=OFF
+ ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+ KODI_CONF_OPTS += -DENABLE_AML=ON
+@@ -225,7 +250,7 @@ else
+ KODI_CONF_OPTS += -DENABLE_OPENGL=OFF -DENABLE_X11=OFF
+ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+-KODI_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
++KODI_CXX_FLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
+ KODI_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
+ KODI_CONF_OPTS += -DENABLE_OPENGLES=ON
+ else
 -- 
 2.11.0
