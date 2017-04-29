@@ -1,62 +1,91 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 13:14:10 +0200
-Subject: [Buildroot] [PATCH v8 1/1] package/kodi: add optional support for
-	pulseaudio
-Message-ID: <20170429111410.29929-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Apr 2017 13:44:04 +0200
+Subject: [Buildroot] [PATCH v7 31/31] package/kodi: Add support for more
+ archs
+In-Reply-To: <20170429083751.19625-32-bernd.kuhls@t-online.de>
+References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
+ <20170429083751.19625-32-bernd.kuhls@t-online.de>
+Message-ID: <20170429134404.0f6c1442@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v8: exteneded comment about libglib2 dependency and its role in Kodi
-    (Thomas)
+Hello,
 
- package/kodi/Config.in | 11 +++++++++++
- package/kodi/kodi.mk   |  7 +++++++
- 2 files changed, 18 insertions(+)
+On Sat, 29 Apr 2017 10:37:51 +0200, Bernd Kuhls wrote:
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index bf4ea01549..fc403432fd 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -192,6 +192,17 @@ config BR2_PACKAGE_KODI_NONFREE
- 	  Enable components with non-free licenses. This option
- 	  currently only controls support for RAR archives.
- 
-+config BR2_PACKAGE_KODI_PULSEAUDIO
-+	bool "pulseaudio"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
-+	# Pulseaudio support in kodi needs glib support in Pulseaudio,
-+	# see FindPulseAudio.cmake. Kodi meets all dependencies of
-+	# libglib2, so there is no need to propagate them here.
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_PULSEAUDIO
-+	help
-+	  Enable Pulseaudio support.
-+
- config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
- 	select BR2_PACKAGE_LIBSHAIRPLAY
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index a4835f0207..12dc3117f8 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -333,6 +333,13 @@ else
- KODI_CONF_OPTS += -DENABLE_OPTICAL=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_KODI_PULSEAUDIO),y)
-+KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=ON
-+KODI_DEPENDENCIES += pulseaudio
-+else
-+KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
-+endif
-+
- # Remove versioncheck addon, updating Kodi is done by building a new
- # buildroot image.
- KODI_ADDON_MANIFEST = $(TARGET_DIR)/usr/share/kodi/system/addon-manifest.xml
+>  package/kodi/0003-Add-support-for-sh4.patch     | 108 ++++++++++++++++++++++++
+>  package/kodi/0004-Add-support-for-sparc.patch   |  91 ++++++++++++++++++++
+>  package/kodi/0005-Add-support-for-arc.patch     |  91 ++++++++++++++++++++
+>  package/kodi/0006-Add-support-for-xtensa.patch  |  91 ++++++++++++++++++++
+
+Have these patches any chance of being merged upstream? Indeed, it's
+very unlikely that Kodi will ever be used on any of those
+architectures, so having to carry forever those patches doesn't seem
+like a great thing. I would prefer to exclude those architectures in
+Config.in.
+
+>  	depends on BR2_USE_MMU # libcdio, and others
+> -	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
+> -		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+> -		&& BR2_TOOLCHAIN_HAS_SYNC_8
+> +# i386: needs sse (see upstream PR 10351)
+> +	default y if BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+> +		&& !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
+
+Kodi doesn't really support all architectures, since it contains
+architecture-specific definitions in several files...
+
+
+> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+> +KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
+> +KODI_DEPENDENCIES += rpi-userland
+> +ifeq ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
+> +KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)
+
+Why only for Raspberry Pi ?
+
+> +endif
+> +else  # BR2_PACKAGE_RPI_USERLAND
+> +ifeq ($(BR2_arceb)$(BR2_arcle),y)
+> +KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
+> +else ifeq ($(BR2_armeb),y)
+>  KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
+> -else ifeq ($(BR2_mips),y)
+
+MIPS is handled here...
+
+> -KODI_CONF_OPTS += -DWITH_ARCH=mips -DWITH_CPU=mips
+> -else ifeq ($(BR2_i386),y)
+> -KODI_CONF_OPTS += -DWITH_ARCH=i486-linux -DWITH_CPU=$(BR2_GCC_TARGET_ARCH)
+> -else ifeq ($(BR2_x86_64),y)
+> -KODI_CONF_OPTS += -DWITH_ARCH=x86_64-linux -DWITH_CPU=x86_64
+> +else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+
+... and here.
+
+> +KODI_CONF_OPTS += \
+> +	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
+> +	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
+> +else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
+> +KODI_CONF_OPTS += \
+> +	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
+> +	-DWITH_CPU=powerpc$(if $(BR2_ARCH_IS_64),64)
+> +else ifeq ($(BR2_powerpc64)$(BR2_sparc64),y)
+> +KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
+> +else ifeq ($(BR2_sh4),y)
+> +KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
+> +else ifeq ($(BR2_xtensa),y)
+> +KODI_CONF_OPTS += -DWITH_ARCH=$(BR2_ARCH) -DWITH_CPU=$(BR2_ARCH)
+
+You can refactor those in one single assignment.
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
