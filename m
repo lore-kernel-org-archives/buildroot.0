@@ -1,170 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 17:17:57 +0200
-Subject: [Buildroot] [git commit] package/b*/Config.in: fix ordering of
-	statements
-Message-ID: <20170429190129.0C9AC825CC@busybox.osuosl.org>
+Date: Sat, 29 Apr 2017 21:03:58 +0200
+Subject: [Buildroot] [PATCH 1/2] ext2.mk: ensure file system block count
+ is not zero (0)
+In-Reply-To: <1493481682-128366-1-git-send-email-g4@novadsp.com>
+References: <1493481682-128366-1-git-send-email-g4@novadsp.com>
+Message-ID: <20170429210358.716c51d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48bd50287fdebb9bcdc80952e743c331ccf9e4ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The check-package script when ran gives warnings on ordering issues
-on all of these Config files.  This patch cleans up all warnings
-related to the ordering in the Config files for packages starting with
-the letter b in the package directory.
+On Sat, 29 Apr 2017 17:01:21 +0100, J Evans wrote:
 
-The appropriate ordering is: type, default, depends on, select, help
-See http://nightly.buildroot.org/#_config_files for more information.
+> -ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+> +ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+> +$(error BR2_TARGET_ROOTFS_EXT2_BLOCKS cannot be zero (0))
+> +else
+>  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+>  endif
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/bandwidthd/Config.in    | 2 +-
- package/bash/Config.in          | 4 ++--
- package/binutils/Config.in      | 2 +-
- package/binutils/Config.in.host | 2 +-
- package/bluez5_utils/Config.in  | 2 +-
- package/boost/Config.in         | 4 ++--
- package/bustle/Config.in        | 4 ++--
- package/busybox/Config.in       | 4 ++--
- 8 files changed, 12 insertions(+), 12 deletions(-)
+What is the motivation for checking that the size is not zero? Zero is
+like any other size too small to contain the target directory contents,
+so I don't see why we would add a specific check for it.
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index b4a47f2..a503da4 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -32,8 +32,8 @@ if BR2_PACKAGE_BANDWIDTHD
- 
- config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	bool "enable postgresql log target support"
--	select BR2_PACKAGE_POSTGRESQL
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_POSTGRESQL
- 	help
- 	  Enable support for logging the bandwidthd data to a remote
- 	  (or local) postgresql server. This data can then be viewed
-diff --git a/package/bash/Config.in b/package/bash/Config.in
-index 783e4b3..5a9ebb8 100644
---- a/package/bash/Config.in
-+++ b/package/bash/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_BASH
- 	bool "bash"
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_READLINE
- 	# uses fork()
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_READLINE
- 	help
- 	  The standard GNU Bourne again shell.
- 
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index fdfdfe9..360dd5e 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_BINUTILS
- 	bool "binutils"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on !BR2_nios2
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Install binutils on the target
- 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index cca71fb..aa24fd7 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,8 +2,8 @@ comment "Binutils Options"
- 
- choice
- 	prompt "Binutils Version"
--	depends on !BR2_arc
- 	default BR2_BINUTILS_VERSION_2_27_X
-+	depends on !BR2_arc
- 	help
- 	  Select the version of binutils you wish to use.
- 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index a7c0ee4..3611c69 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -29,8 +29,8 @@ if BR2_PACKAGE_BLUEZ5_UTILS
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_OBEX
- 	bool "build OBEX support"
--	select BR2_PACKAGE_LIBICAL
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBICAL
- 	help
- 	  Enable the OBEX support in Bluez 5.x.
- 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 403bbf3..9825c09 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -115,9 +115,9 @@ config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
- 
- config BR2_PACKAGE_BOOST_METAPARSE
-+	bool "boost-metaparse"
- 	depends on BR2_USE_MMU # boost-test
- 	select BR2_PACKAGE_BOOST_TEST
--	bool "boost-metaparse"
- 
- config BR2_PACKAGE_BOOST_MPI
- 	bool "boost-mpi"
-@@ -126,8 +126,8 @@ config BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	bool "boost-program_options"
- 
- config BR2_PACKAGE_BOOST_PYTHON
--	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	bool "boost-python"
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 
- config BR2_PACKAGE_BOOST_RANDOM
- 	bool "boost-random"
-diff --git a/package/bustle/Config.in b/package/bustle/Config.in
-index f213da5..109ebde 100644
---- a/package/bustle/Config.in
-+++ b/package/bustle/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_BUSTLE
- 	bool "bustle"
--	select BR2_PACKAGE_LIBPCAP
--	select BR2_PACKAGE_LIBGLIB2
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_PACKAGE_DBUS # runtime
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  Bustle is a better dbus-monitor! It records and draws
- 	  sequence diagrams of D-Bus activity, showing signal
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 504cd8a..7eb7eb9 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -35,12 +35,12 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	  by busybox.
- 
- config BR2_PACKAGE_BUSYBOX_SELINUX
--	select BR2_PACKAGE_LIBSELINUX
-+	bool "Enable SELinux support"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
--	bool "Enable SELinux support"
-+	select BR2_PACKAGE_LIBSELINUX
- 	help
- 	  Enable SELinux support in BusyBox. Please note that
- 	  depending on your BusyBox configuration and the SELinux
+Your commit log unfortunately only explains *what* the commit is doing
+(which is obvious by reading the code) but not *why* this change is
+necessary.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
