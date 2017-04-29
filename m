@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 12:05:46 +0200
-Subject: [Buildroot] [PATCH v7 24/31] package/kodi: add optional support
- for pulseaudio
-In-Reply-To: <20170429083751.19625-25-bernd.kuhls@t-online.de>
+Date: Sat, 29 Apr 2017 12:06:31 +0200
+Subject: [Buildroot] [PATCH v7 25/31] package/kodi: add optional support
+ for event clients
+In-Reply-To: <20170429083751.19625-26-bernd.kuhls@t-online.de>
 References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
- <20170429083751.19625-25-bernd.kuhls@t-online.de>
-Message-ID: <20170429120546.06d58dbc@free-electrons.com>
+ <20170429083751.19625-26-bernd.kuhls@t-online.de>
+Message-ID: <20170429120631.2be71b69@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 29 Apr 2017 10:37:44 +0200, Bernd Kuhls wrote:
+On Sat, 29 Apr 2017 10:37:45 +0200, Bernd Kuhls wrote:
+> For details read
+> https://github.com/xbmc/xbmc/blob/master/tools/EventClients/README.txt
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi/Config.in | 7 +++++++
+>  package/kodi/kodi.mk   | 6 ++++++
+>  2 files changed, 13 insertions(+)
 
-> +config BR2_PACKAGE_KODI_PULSEAUDIO
-> +	bool "pulseaudio"
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
-> +	# Kodi meets all dependencies of libglib2, so there is no need
-> +	# to propagate its dependencies here.
-> +	select BR2_PACKAGE_LIBGLIB2
-
-There needs to be an explanation why libglib2 is selected here, but not
-in the KODI_DEPENDENCIES variable. I guess it's because you need glib2
-support in pulseaudio, but that should be explained by a comment
-because it's not very obvious.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
