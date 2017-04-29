@@ -1,39 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Apr 2017 15:05:08 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/kodi: Extended comment about
-	non-RPi options
-Message-ID: <20170429130508.15042-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Apr 2017 15:07:01 +0200
+Subject: [Buildroot] [PATCH v2] openocd: bump to 0.10.0
+In-Reply-To: <1493390072-10443-1-git-send-email-christophe.priouzeau@st.com>
+References: <1493364505-17299-1-git-send-email-christophe.priouzeau@st.com>
+ <1493390072-10443-1-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <20170429150701.4767ee81@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suggested by Thomas:
-http://lists.busybox.net/pipermail/buildroot/2017-April/190767.html
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: fixed logic typo in subject
+On Fri, 28 Apr 2017 14:34:34 +0000, Christophe PRIOUZEAU wrote:
+> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+> ---
+> Changes v1 -> v2:
+>   - align configuration flags (suggested by Peter Korsgaard)
 
- package/kodi/kodi.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I've applied, after adjusting the issues pointed by Arnout
+Vandecappelle.
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 12dc3117f8..80c7c1b074 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -147,7 +147,10 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi
- KODI_DEPENDENCIES += rpi-userland
- else
--# these options only exist on non-rpi systems
-+# The following options are defined only in
-+# project/cmake/scripts/linux/ArchSetup.cmake,
-+# rbpi uses its own ArchSetup.cmake, located in
-+# project/cmake/scripts/rbpi/
- KODI_CONF_OPTS += -DENABLE_LDGOLD=OFF
- ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
- KODI_CONF_OPTS += -DENABLE_AML=ON
+Since you're using OpenOCD, would you be willing to be added as a
+developer for this package in our DEVELOPERS file? This way, you could
+help us review patches sent for this package, and fix build issues
+caused by openocd.
+
+Thanks a lot for your contribution!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
