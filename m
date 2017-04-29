@@ -1,31 +1,24 @@
-From: jerry at chordia.co.uk <jerry@chordia.co.uk>
-Date: Sat, 29 Apr 2017 13:43:46 +0100
-Subject: [Buildroot] [PATCH 2/2] ne10: Add aarch64 configuration option
-In-Reply-To: <20170429140953.0b7badef@free-electrons.com>
-References: <1493418486-109149-1-git-send-email-g4@novadsp.com>
- <1493418486-109149-2-git-send-email-g4@novadsp.com>
- <20170429140953.0b7badef@free-electrons.com>
-Message-ID: <119901d2c0e6$3e1a7ca0$ba4f75e0$@chordia.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Apr 2017 15:07:22 +0200
+Subject: [Buildroot] [git commit] openocd: renumber patch
+Message-ID: <20170429130748.B47608275B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d3849946a3a5992d44b71833faec21dc60669658
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> 
-> But I believe you should in fact rework your patches:
-> 
->  - One patch that just bumps ne10, keeping only the ARM support
-> 
->  - One patch that refactors the architecture dependency with a
->    Config.in hidden boolean BR2_PACKAGE_NE10_ARCH_SUPPORTS
-> 
->  - One patch that allows to use ne10 on AArch64
+Patch 0001 was removed a while ago, so rename the 0002 patch to 0001.
 
-OK, I will do that.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ch => 0001-Fix-jimtcl-auto-configuration-to-force-static-librar.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-BR
-
-Jerry
+diff --git a/package/openocd/0002-Fix-jimtcl-auto-configuration-to-force-static-librar.patch b/package/openocd/0001-Fix-jimtcl-auto-configuration-to-force-static-librar.patch
+similarity index 100%
+rename from package/openocd/0002-Fix-jimtcl-auto-configuration-to-force-static-librar.patch
+rename to package/openocd/0001-Fix-jimtcl-auto-configuration-to-force-static-librar.patch
