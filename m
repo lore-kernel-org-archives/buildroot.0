@@ -1,21 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 17:17:02 +0200
-Subject: [Buildroot] [git commit] package/a*/Config.in: fix ordering of
+Date: Sat, 29 Apr 2017 17:17:57 +0200
+Subject: [Buildroot] [git commit] package/b*/Config.in: fix ordering of
 	statements
-Message-ID: <20170429190128.F2A4A825CC@busybox.osuosl.org>
+Message-ID: <20170429190129.0C9AC825CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b493e411f5b4473b275aa125d85386a5d1127a9
+commit: https://git.buildroot.net/buildroot/commit/?id=48bd50287fdebb9bcdc80952e743c331ccf9e4ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The check-package script when ran gives warnings on ordering issues
 on all of these Config files.  This patch cleans up all warnings
 related to the ordering in the Config files for packages starting with
-the letter a in the package directory.
+the letter b in the package directory.
 
 The appropriate ordering is: type, default, depends on, select, help
 See http://nightly.buildroot.org/#_config_files for more information.
@@ -23,247 +23,148 @@ See http://nightly.buildroot.org/#_config_files for more information.
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/agentpp/Config.in       |  2 +-
- package/aircrack-ng/Config.in   |  2 +-
- package/alsa-lib/Config.in      | 10 +++++-----
- package/alsa-utils/Config.in    |  4 ++--
- package/alsamixergui/Config.in  |  4 ++--
- package/android-tools/Config.in |  4 ++--
- package/apache/Config.in        |  4 ++--
- package/apr-util/Config.in      |  4 ++--
- package/atk/Config.in           |  2 +-
- package/atkmm/Config.in         |  6 +++---
- package/avrdude/Config.in       |  8 ++++----
- package/axel/Config.in          |  2 +-
- 12 files changed, 26 insertions(+), 26 deletions(-)
+ package/bandwidthd/Config.in    | 2 +-
+ package/bash/Config.in          | 4 ++--
+ package/binutils/Config.in      | 2 +-
+ package/binutils/Config.in.host | 2 +-
+ package/bluez5_utils/Config.in  | 2 +-
+ package/boost/Config.in         | 4 ++--
+ package/bustle/Config.in        | 4 ++--
+ package/busybox/Config.in       | 4 ++--
+ 8 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/agentpp/Config.in b/package/agentpp/Config.in
-index 4b70a1a..e591fb5 100644
---- a/package/agentpp/Config.in
-+++ b/package/agentpp/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_AGENTPP
- 	bool "agent++"
--	select BR2_PACKAGE_SNMPPP
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # snmp++
- 	depends on !BR2_STATIC_LIBS # snmp++
-+	select BR2_PACKAGE_SNMPPP
- 	help
- 	  AGENT++ is a set of C++ classes which provides a complete protocol
- 	  engine and dispatch table for the development of SNMP agents.
-diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
-index 00ce4e4..b6572dc 100644
---- a/package/aircrack-ng/Config.in
-+++ b/package/aircrack-ng/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_AIRCRACK_NG
- 	bool "aircrack-ng"
- 	depends on BR2_USE_MMU # uses fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# libnl has issues when linking statically
- 	# they need fixing in libnl itself
- 	select BR2_PACKAGE_LIBNL if !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  A set of tools for auditing wireless networks
+diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+index b4a47f2..a503da4 100644
+--- a/package/bandwidthd/Config.in
++++ b/package/bandwidthd/Config.in
+@@ -32,8 +32,8 @@ if BR2_PACKAGE_BANDWIDTHD
  
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index 97e8489..c355b2c 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -3,15 +3,15 @@ comment "alsa-lib needs a toolchain w/ threads"
- 
- menuconfig BR2_PACKAGE_ALSA_LIB
- 	bool "alsa-lib"
--	# Temporary until
--	# https://bugtrack.alsa-project.org/alsa-bug/view.php?id=4913
--	# is fixed
--	select BR2_PACKAGE_ALSA_LIB_PCM
- 	# Even though some parts of alsa-lib use threads only when
- 	# available, some PCM plugins use them unconditionally. Since
- 	# the usage of alsa-lib on no-thread systems is pretty
- 	# unlikely, just require thread support globally for alsa-lib.
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# Temporary until
-+	# https://bugtrack.alsa-project.org/alsa-bug/view.php?id=4913
-+	# is fixed
-+	select BR2_PACKAGE_ALSA_LIB_PCM
- 	help
- 	  The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
- 	  functionality to the Linux operating system.
-@@ -68,8 +68,8 @@ config BR2_PACKAGE_ALSA_LIB_SEQ
- 
- config BR2_PACKAGE_ALSA_LIB_ALISP
- 	bool "alisp"
--	depends on BR2_USE_MMU
- 	default y
-+	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS
- 	bool "old-symbols"
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index adc0aab..1d42f2e 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -33,10 +33,10 @@ config BR2_PACKAGE_ALSA_UTILS_ALSALOOP
- 
- config BR2_PACKAGE_ALSA_UTILS_ALSAMIXER
- 	bool "alsamixer"
-+	default y
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
--	depends on BR2_USE_WCHAR
--	default y
- 
- comment "alsamixer needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/alsamixergui/Config.in b/package/alsamixergui/Config.in
-index 5b61f38..2016a28 100644
---- a/package/alsamixergui/Config.in
-+++ b/package/alsamixergui/Config.in
-@@ -1,13 +1,13 @@
- config BR2_PACKAGE_ALSAMIXERGUI
-+	bool "alsamixergui"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fltk fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	select BR2_PACKAGE_FLTK
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_PCM
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
--	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
--	bool "alsamixergui"
- 	help
- 	  A nice GUI mixer for Alsa using fltk
- 
-diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
-index 19772ad..96e36e6 100644
---- a/package/android-tools/Config.in
-+++ b/package/android-tools/Config.in
-@@ -34,13 +34,13 @@ config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT_GOOD_KERNEL_HEADERS
- 
- config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	bool "fastboot"
--	select BR2_PACKAGE_LIBSELINUX
--	select BR2_PACKAGE_ZLIB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
- 	depends on !BR2_STATIC_LIBS # libselinux
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
- 	depends on !BR2_arc # libselinux
- 	depends on BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT_GOOD_KERNEL_HEADERS
-+	select BR2_PACKAGE_LIBSELINUX
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  This option will build and install the fastboot utility for
- 	  the target, which can be used to reflash other target devices
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-index 511876d..5916d30 100644
---- a/package/apache/Config.in
-+++ b/package/apache/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_APACHE
- 	bool "apache"
--	select BR2_PACKAGE_APR_UTIL
--	select BR2_PACKAGE_PCRE
+ config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
+ 	bool "enable postgresql log target support"
+-	select BR2_PACKAGE_POSTGRESQL
  	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # apr
-+	select BR2_PACKAGE_APR_UTIL
-+	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_POSTGRESQL
  	help
- 	  The Apache HTTP Server Project is an effort to develop and maintain an
- 	  open-source HTTP server for modern operating systems including UNIX
-diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
-index 1d7db2b..6c5e3bb 100644
---- a/package/apr-util/Config.in
-+++ b/package/apr-util/Config.in
+ 	  Enable support for logging the bandwidthd data to a remote
+ 	  (or local) postgresql server. This data can then be viewed
+diff --git a/package/bash/Config.in b/package/bash/Config.in
+index 783e4b3..5a9ebb8 100644
+--- a/package/bash/Config.in
++++ b/package/bash/Config.in
 @@ -1,10 +1,10 @@
- config BR2_PACKAGE_APR_UTIL
- 	bool "apr-util"
--	select BR2_PACKAGE_APR
--	select BR2_PACKAGE_EXPAT
- 	# apr really needs shared library support
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # apr
-+	select BR2_PACKAGE_APR
-+	select BR2_PACKAGE_EXPAT
- 	help
- 	  The utility library for the apache runtime project
- 
-diff --git a/package/atk/Config.in b/package/atk/Config.in
-index 1120a94..c980614 100644
---- a/package/atk/Config.in
-+++ b/package/atk/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_ATK
- 	bool "atk"
--	select BR2_PACKAGE_LIBGLIB2
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-+	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  The ATK accessibility toolkit, needed to build GTK+-2.x.
- 
-diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
-index 2091eab..edc8383 100644
---- a/package/atkmm/Config.in
-+++ b/package/atkmm/Config.in
-@@ -1,13 +1,13 @@
- config BR2_PACKAGE_ATKMM
- 	bool "atkmm"
--	select BR2_PACKAGE_ATK
--	select BR2_PACKAGE_GLIBMM
--	select BR2_PACKAGE_LIBSIGC
- 	depends on BR2_INSTALL_LIBSTDCPP # glibmm
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # atk/glibmm -> libglib2
- 	depends on BR2_USE_MMU # atk/glibmm -> libglib2
- 	depends on BR2_USE_WCHAR # atk/glibmm -> libglib2
-+	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_GLIBMM
-+	select BR2_PACKAGE_LIBSIGC
- 
- 	help
- 	  The atkmm package is a set of C++ bindings for Atk.
-diff --git a/package/avrdude/Config.in b/package/avrdude/Config.in
-index 8aca841..3757f17 100644
---- a/package/avrdude/Config.in
-+++ b/package/avrdude/Config.in
-@@ -1,14 +1,14 @@
- config BR2_PACKAGE_AVRDUDE
- 	bool "avrdude"
--	select BR2_PACKAGE_ELFUTILS
--	select BR2_PACKAGE_LIBUSB
--	select BR2_PACKAGE_LIBUSB_COMPAT
+ config BR2_PACKAGE_BASH
+ 	bool "bash"
 -	select BR2_PACKAGE_NCURSES
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on !BR2_bfin # elfutils
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
+-	select BR2_PACKAGE_READLINE
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 +	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
  	help
- 	  avrdude is a programmer for Atmel AVR microcontrollers
- 	  this package provides a version with new linuxspi driver
-diff --git a/package/axel/Config.in b/package/axel/Config.in
-index aa93f2a..aea85bf 100644
---- a/package/axel/Config.in
-+++ b/package/axel/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_AXEL
- 	bool "axel"
+ 	  The standard GNU Bourne again shell.
+ 
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index fdfdfe9..360dd5e 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_WCHAR
 +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  HTTP/FTP download accelerator.
+ 	  Install binutils on the target
  
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index cca71fb..aa24fd7 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -2,8 +2,8 @@ comment "Binutils Options"
+ 
+ choice
+ 	prompt "Binutils Version"
+-	depends on !BR2_arc
+ 	default BR2_BINUTILS_VERSION_2_27_X
++	depends on !BR2_arc
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index a7c0ee4..3611c69 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -29,8 +29,8 @@ if BR2_PACKAGE_BLUEZ5_UTILS
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_OBEX
+ 	bool "build OBEX support"
+-	select BR2_PACKAGE_LIBICAL
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBICAL
+ 	help
+ 	  Enable the OBEX support in Bluez 5.x.
+ 
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 403bbf3..9825c09 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -115,9 +115,9 @@ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
+ 
+ config BR2_PACKAGE_BOOST_METAPARSE
++	bool "boost-metaparse"
+ 	depends on BR2_USE_MMU # boost-test
+ 	select BR2_PACKAGE_BOOST_TEST
+-	bool "boost-metaparse"
+ 
+ config BR2_PACKAGE_BOOST_MPI
+ 	bool "boost-mpi"
+@@ -126,8 +126,8 @@ config BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	bool "boost-program_options"
+ 
+ config BR2_PACKAGE_BOOST_PYTHON
+-	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	bool "boost-python"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 
+ config BR2_PACKAGE_BOOST_RANDOM
+ 	bool "boost-random"
+diff --git a/package/bustle/Config.in b/package/bustle/Config.in
+index f213da5..109ebde 100644
+--- a/package/bustle/Config.in
++++ b/package/bustle/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_BUSTLE
+ 	bool "bustle"
+-	select BR2_PACKAGE_LIBPCAP
+-	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_PACKAGE_DBUS # runtime
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Bustle is a better dbus-monitor! It records and draws
+ 	  sequence diagrams of D-Bus activity, showing signal
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 504cd8a..7eb7eb9 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -35,12 +35,12 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	  by busybox.
+ 
+ config BR2_PACKAGE_BUSYBOX_SELINUX
+-	select BR2_PACKAGE_LIBSELINUX
++	bool "Enable SELinux support"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_arc
+-	bool "Enable SELinux support"
++	select BR2_PACKAGE_LIBSELINUX
+ 	help
+ 	  Enable SELinux support in BusyBox. Please note that
+ 	  depending on your BusyBox configuration and the SELinux
