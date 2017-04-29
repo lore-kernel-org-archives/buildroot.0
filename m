@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Apr 2017 15:37:13 +0200
-Subject: [Buildroot] [PATCH] buildroot: adding perftest and necessary
- libraries
-In-Reply-To: <68a54f3789b2b633f39c532cac87f87949368c4f.1493049330.git.jpinto@synopsys.com>
-References: <68a54f3789b2b633f39c532cac87f87949368c4f.1493049330.git.jpinto@synopsys.com>
-Message-ID: <20170429153713.2d079b97@free-electrons.com>
+Date: Sat, 29 Apr 2017 15:41:55 +0200
+Subject: [Buildroot] [PATCH v7 31/31] package/kodi: Add support for more
+	archs
+In-Reply-To: <8b5332b4-ff7b-7afc-a545-a5cef63612b4@t-online.de>
+References: <20170429083751.19625-1-bernd.kuhls@t-online.de>
+ <8b5332b4-ff7b-7afc-a545-a5cef63612b4@t-online.de>
+Message-ID: <20170429154155.5be161a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,149 +14,73 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 26 Apr 2017 12:00:42 +0100, Joao Pinto wrote:
-> This patch adds the tool perftest, which a collection of tests
-> written using Infiniband verbs intended for use as a performance
-> micro-benchmark. The tests can measure the latency and bandwidth
-> of Infiniband fabrics. It also adds 3 necessary libraries:
+On Sat, 29 Apr 2017 15:25:04 +0200, Bernd Kuhls wrote:
+
+> > Have these patches any chance of being merged upstream? Indeed, it's
+> > very unlikely that Kodi will ever be used on any of those architectures,
+> > so having to carry forever those patches doesn't seem like a great
+> > thing. I would prefer to exclude those architectures in Config.in.  
 > 
-> a) libibverbs (library that allows userspace processes to use RDMA "verbs")
-> b) librdmacm (library that allows applications to set up reliable connected
-> and unreliable datagram transfers when using RDMA adapters)
-> c) libibumad (library that provides userspace Infiniband Management Datagram
-> (uMAD) functions which sit on top of the uMAD modules in the kernel)
+> the patches are currently under review upstream, based on their decision
+> I will sent the next version of this patch.
+
+Great, thanks!
+
+> > Kodi doesn't really support all architectures, since it contains
+> > architecture-specific definitions in several files...  
 > 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> I am not sure that I understood what you mean here.
 
-Thanks for this, but it should be split in four patches, one for each
-package you're adding. Patches should be in the right order, so that if
-we apply only the first patches, nothing breaks.
+What I mean here is that Kodi *does* have architecture dependencies,
+since it contains a bunch of .c/.h files that have conditionals based
+on the architectures.
 
-Also, please add yourself for those packages in the DEVELOPERS file.
+Therefore, pretending in our Config.in that Kodi builds on all
+architectures is not correct. It only builds for those that Kodi
+supports. Your patch works today, but if tomorrow we add support for
+architecture "barfoo", then Kodi will fail to build on this
+architecture.
 
-> +diff --git a/Makefile.in b/Makefile.in
-> +index 2b50610..eb38dec 100644
-> +--- a/Makefile.in
-> ++++ b/Makefile.in
+Therefore, since Kodi has support only for a selection of
+architectures, I would prefer if kodi/Config.in was reflecting this
+list of architectures.
 
-Please patch Makefile.am instead and use LIBIBUMAD_AUTORECONF = YES.
+Some other packages that have architecture dependencies are more
+fundamental (like libffi) and therefore we really want them to exist on
+all architectures we support. However, Kodi is unlikely to be used on
+ARC, SuperH, Sparc, Xtensa, etc, so putting effort to make Kodi build
+on those platforms is not very useful.
 
-Also, please submit this patch to the upstream project, having
--I$(includedir) is always wrong.
+> >> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+> >> +KODI_CONF_OPTS += -DCORE_SYSTEM_NAME=rbpi +KODI_DEPENDENCIES +=
+> >> rpi-userland +ifeq
+> >> ($(BR2_arm1176jzf_s)$(BR2_cortex_a7)$(BR2_cortex_a53),y)
+> >> +KODI_CONF_OPTS += -DWITH_CPU=$(BR2_GCC_TARGET_CPU)  
+> > 
+> > Why only for Raspberry Pi ?  
+> 
+> These CPU-specific options are only needed for rbpi:
+> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/scripts/rbpi/
+> ArchSetup.cmake#L13
 
-> --- /dev/null
-> +++ b/package/libibumad/libibumad.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# LIBIBUMAD
+OK, then again, comment needed. The fact that Kodi handles RPi
+specially is very confusing.
 
-Should be lower-case.
+> >> +endif +else  # BR2_PACKAGE_RPI_USERLAND +ifeq
+> >> ($(BR2_arceb)$(BR2_arcle),y)
+> >> +KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc +else ifeq
+> >> ($(BR2_armeb),y)
+> >>  KODI_CONF_OPTS += -DWITH_ARCH=arm -DWITH_CPU=arm
+> >> -else ifeq ($(BR2_mips),y)  
+> > 
+> > MIPS is handled here...  
+> 
+> Not anymore, because I removed the check for mips ...
 
-> diff --git a/package/libibverbs/libibverbs.mk b/package/libibverbs/libibverbs.mk
-> new file mode 100644
-> index 0000000..859e1f3
-> --- /dev/null
-> +++ b/package/libibverbs/libibverbs.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# LIBIBVERBS
+Aaah, yes, my bad. It was a "-" at the beginning of the line, not a
+"+". Sorry about that.
 
-Should be lower-case.
-
-> +#
-> +################################################################################
-> +
-> +LIBIBVERBS_VERSION = 1.1.7
-> +LIBIBVERBS_SOURCE = libibverbs-$(LIBIBVERBS_VERSION).tar.gz
-> +LIBIBVERBS_SITE = https://git.kernel.org/pub/scm/libs/infiniband/libibverbs.git/snapshot
-> +LIBIBVERBS_INSTALL_STAGING = YES
-
-Are you sure about this?
-
-First, the latest version of libibverbs is 1.2.1. Second, libibverbs is
-no longer maintained, see
-https://git.kernel.org/pub/scm/libs/infiniband/libibverbs.git/tree/README. 
-
-https://github.com/linux-rdma/rdma-core now contains libibverbs and
-libibumad.
-
-> +# autogen.sh is because autotools stuff lives in other directories and
-> +# even AUTORECONF with _OPTS doesn't do it properly.
-> +define LIBIBVERBS_RUN_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-
-This doesn't work, because it doesn't add the dependency on
-host-autoconf, host-automake and host-libtool. So AUTORECONF=YES should
-really be used.
-
-> diff --git a/package/librdmacm/Config.in b/package/librdmacm/Config.in
-> new file mode 100644
-> index 0000000..4c8a1dc
-> --- /dev/null
-> +++ b/package/librdmacm/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBRDMACM
-> +	bool "librdmacm"
-
-This library is now also part of rdma-core,
-https://github.com/linux-rdma/rdma-core.
-
-> --- /dev/null
-> +++ b/package/librdmacm/librdmacm.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# LIBRDMACM
-
-Lower case.
-
-> diff --git a/package/perftest/Config.in b/package/perftest/Config.in
-> new file mode 100644
-> index 0000000..6273cf3
-> --- /dev/null
-> +++ b/package/perftest/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PERFTEST
-> +	bool "perftest"
-
-I know it's the upstream name, but it sounds very generic for something
-that is in fact very, very specific. Maybe ofed-perftest ? Or
-rdma-perftest ? Do you have some suggestion ?
-
-> +++ b/package/perftest/perftest.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# PERFTEST
-
-Lower case.
-
-> +#
-> +################################################################################
-> +
-> +PERFTEST_VERSION = 3.4-0.9.g98a9a17
-> +PERFTEST_SOURCE = perftest-$(PERFTEST_VERSION).tar.gz
-> +PERFTEST_SITE = https://www.openfabrics.org/downloads/perftest
-> +PERFTEST_INSTALL_STAGING = YES
-> +
-> +# autogen.sh is because autotools stuff lives in other directories and
-> +# even AUTORECONF with _OPTS doesn't do it properly.
-> +define PERFTEST_RUN_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> +endef
-> +PERFTEST_POST_PATCH_HOOKS += PERFTEST_RUN_AUTOGEN
-
-Same comment as above: this doesn't work, because there is no
-dependency on host-autoconf, host-automake and host-libtool. In
-addition, the tarball you are downloading already contains the
-configure script pre-generated, so it doesn't seem really useful to
-autoreconf this package.
-
-Could you fix the above issues and submit an updated patch series?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
