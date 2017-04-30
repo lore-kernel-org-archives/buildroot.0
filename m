@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 21:04:47 +0200
-Subject: [Buildroot] [PATCH] package/xenomai: update udev rules search
- path
-In-Reply-To: <20170430111438.11069-1-romain.naour@gmail.com>
-References: <20170430111438.11069-1-romain.naour@gmail.com>
-Message-ID: <20170430210447.0ca0ac5f@free-electrons.com>
+Date: Sun, 30 Apr 2017 19:33:23 +0200
+Subject: [Buildroot] [PATCH 1/1] ext2.mk: ensure -b option is always set
+ for mke2img and genext2fs
+In-Reply-To: <1493555747-27289-1-git-send-email-g4@novadsp.com>
+References: <1493555747-27289-1-git-send-email-g4@novadsp.com>
+Message-ID: <20170430193323.5ad396e1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 30 Apr 2017 13:14:38 +0200, Romain Naour wrote:
-> The udev rules has been moved to kernel/cobalt/udev.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/8eb/8eb4643faed523ffccd421f20c2955adfde634a6
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+On Sun, 30 Apr 2017 13:35:47 +0100, J Evans wrote:
+> Signed-off-by: J Evans <g4@novadsp.com>
+> ---
+>  fs/ext2/ext2.mk | 2 --
+>  1 file changed, 2 deletions(-)
 
-Applied, thanks!
+Applied to master, thanks.
 
-> Do we want to keep the old path in the .mk for backward compatibility
-> with Xenomai < 3 ?
+However, I believe we should do the same for the number of inodes:
 
-No, there are already lots of things that no longer work with Xenomai <
-3.
-
->  define XENOMAI_INSTALL_UDEV_RULES
->  	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
-
-Why do we have this test here? XENOMAI_INSTALL_UDEV_RULES is only used
-when udev is enabled, so this folder should already exist, no?
+ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
+EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
+endif
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
