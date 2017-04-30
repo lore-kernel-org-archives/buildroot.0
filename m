@@ -1,43 +1,48 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 30 Apr 2017 10:41:20 +0200
-Subject: [Buildroot] [PATCH] ifupdown: wordexp is enabled in uClibc now
-Message-ID: <20170430084120.GA17431@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 30 Apr 2017 11:43:51 +0300
+Subject: [Buildroot] [PATCH] x11vnc: make x11vnc select libvncserver
+In-Reply-To: <20170430083532.12941-1-martink@posteo.de>
+References: <20170430083532.12941-1-martink@posteo.de>
+Message-ID: <20170430084350.zpxjcn7y6ws4w4lf@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package can now be used for uClibc toolchains.
+Hi Martin,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/ifupdown/Config.in | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+On Sun, Apr 30, 2017 at 10:35:32AM +0200, Martin Kepplinger wrote:
+> x11vnc needs libvncserver, so select it explicitely.
+> 
+> In case of missing libvncserver, we see build failures like this:
+> 
+> http://autobuild.buildroot.net/results/34f/34f8045e772b96293cc7d25bd61ac0aa5842824f/
+> 
+> Signed-off-by: Martin Kepplinger <martink@posteo.de>
+> ---
+>  package/x11vnc/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/x11vnc/Config.in b/package/x11vnc/Config.in
+> index 0909b9aec..4542c5080 100644
+> --- a/package/x11vnc/Config.in
+> +++ b/package/x11vnc/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_X11VNC
+>  	select BR2_PACKAGE_XLIB_LIBXT
+>  	select BR2_PACKAGE_XLIB_LIBXEXT
+>  	select BR2_PACKAGE_XLIB_LIBXTST
+> +	select BR2_PACKAGE_LIBVNCSERVER
 
-diff --git a/package/ifupdown/Config.in b/package/ifupdown/Config.in
-index e683201..ccacd0f 100644
---- a/package/ifupdown/Config.in
-+++ b/package/ifupdown/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_IFUPDOWN
- 	bool "ifupdown"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
--	# Default/our uclibc lacks wordexp()
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	# runtime for ip binary
- 	select BR2_PACKAGE_IPROUTE2 if !BR2_PACKAGE_BUSYBOX
-@@ -14,8 +12,7 @@ config BR2_PACKAGE_IFUPDOWN
- 
- 	  https://tracker.debian.org/pkg/ifupdown
- 
--comment "ifupdown needs a glibc or musl toolchain w/ headers >= 3.0"
-+comment "ifupdown needs a toolchain w/ headers >= 3.0"
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+Since this is a build time dependency, you need to add it to 
+X11VNC_DEPENDENCIES to make sure libvncserver builds before x11vnc.
+
+You also need to propagate the additional BR2_PACKAGE_LIBVNCSERVER dependency, 
+!BR2_nios2.
+
+baruch
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
