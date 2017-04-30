@@ -1,39 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Apr 2017 11:18:45 +0200
-Subject: [Buildroot] [PATCH 1/2] ext2.mk: ensure file system block count
- is not zero (0)
-In-Reply-To: <20170429210358.716c51d4@free-electrons.com>
+Date: Sun, 30 Apr 2017 11:25:33 +0200
+Subject: [Buildroot] [PATCH 2/2] mke2img: add parameter sanity checks to
+ prevent odd error messages from genext2.fs
+In-Reply-To: <20170429210606.37872b68@free-electrons.com>
 References: <1493481682-128366-1-git-send-email-g4@novadsp.com>
- <20170429210358.716c51d4@free-electrons.com>
-Message-ID: <20170430091845.GA12749@scaer>
+ <1493481682-128366-2-git-send-email-g4@novadsp.com>
+ <20170429210606.37872b68@free-electrons.com>
+Message-ID: <20170430092533.GB12749@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J, Thomas, All,
+Thomas, All,
 
-On 2017-04-29 21:03 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 29 Apr 2017 17:01:21 +0100, J Evans wrote:
+On 2017-04-29 21:06 +0200, Thomas Petazzoni spake thusly:
+> Hello,
 > 
-> > -ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
-> > +ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
-> > +$(error BR2_TARGET_ROOTFS_EXT2_BLOCKS cannot be zero (0))
-> > +else
-> >  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
-> >  endif
+> On Sat, 29 Apr 2017 17:01:22 +0100, J Evans wrote:
 > 
-> What is the motivation for checking that the size is not zero? Zero is
-> like any other size too small to contain the target directory contents,
-> so I don't see why we would add a specific check for it.
+> > +    if [ -z "${nb_blocks}" ]; then
+> > +        error "Error: you must specify a file system block count with '-b'. This cannot be zero, e.g. 61440 == 60MB\n"
 
-I agree, and that's exactly what I said in my review to the previous
-iteration of the patch.
+Really, just state that it must be specified, this the value is
+explained in the help text.
 
-Just remove the check and keep the line:
+    error "Error: you must specify a file system block count with '-b'.\n"
 
-    EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+However, please also update the help text at the end of the script,m to
+remove a hint about auto calculation:
+
+    https://git.buildroot.org/buildroot/tree/package/mke2img/mke2img#n152
+
+    -b BLOCKS
+        Create a filesystem of BLOCKS 1024-byte blocs. The default is to
+        compute the required number of blocks.
+
+> > +    fi
+> 
+> Check this is useless: there is already error checking done by getopt
+> itself, because the -b option *must* have an argument. Indeed, the
+> current mke2img behaves like this:
+> 
+> $ ./package/mke2img/mke2img -b
+> mke2img: option 'b' expects a mandatory argument
+> 
+> So it is already checked that ${nb_blocks} cannot be empty.
+
+But if you don't pass the -b option, then nb_blocks *is* unset.
+
+Adding the check is correct in my opinion.
+
+> > +    if [ "${nb_blocks}" -eq 0 ]; then
+> > +        error "Error: The file system block count size cannot be zero. e.g. 61440 == 60MB \n"
+> > +    fi
+> 
+> See my reply to the previous commit: I don't see why 0 should be
+> checked specifically. Please explain in the commit log why it should be.
+
+Agreed, a zero size is like specifying any size that is too small to fit
+the content of target/. There is no way we can check that the given size
+is correct.
+
+zero if of course special, because we *know* it is incorrect. But since
+this is not the default value, the user would have explicitly set it to
+zero. Which is justa little tad stupid to begin with.
+
+As I previously said: I really don't see the point of checking that the
+size is not zero.
+
+Just keep the text tht nb_blocks is set, though, because it is required.
 
 Regards,
 Yann E. MORIN.
