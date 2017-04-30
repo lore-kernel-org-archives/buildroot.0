@@ -1,35 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 23:20:59 +0200
-Subject: [Buildroot] [git commit] toolchain-external: CodeSourcery aarch64
-	update upstream URL
-Message-ID: <20170430212245.BDA3481F57@busybox.osuosl.org>
+Date: Sun, 30 Apr 2017 23:23:02 +0200
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: CodeSourcery
+ aarch64 update upstream URL
+In-Reply-To: <20170430202048.11320-1-romain.naour@gmail.com>
+References: <20170430202048.11320-1-romain.naour@gmail.com>
+Message-ID: <20170430232302.3cef39eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e069f41bfd62cbb034ccd7f531b976564bda121
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The current URL returns error 403: Forbidden, so switch to https.
+On Sun, 30 Apr 2017 22:20:46 +0200, Romain Naour wrote:
+> The current URL returns error 403: Forbidden, so switch to https.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  .../toolchain-external-codesourcery-aarch64.mk                          | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../toolchain-external-codesourcery-aarch64.mk                          | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Series applied. Thanks!
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-index 5f4453a..192763a 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
