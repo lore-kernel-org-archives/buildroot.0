@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 23:08:34 +0200
-Subject: [Buildroot] [git commit] toolchain-external: CodeSourcery NIOSII
-	update upstream URL
-Message-ID: <20170430211459.144CF816A3@busybox.osuosl.org>
+Date: Sun, 30 Apr 2017 23:08:02 +0200
+Subject: [Buildroot] [git commit] package/tinyxml2: bump version to 4.0.1
+Message-ID: <20170430211459.0B9E3827F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d647b23e2e0127fc98012f15a57fceb873500bad
+commit: https://git.buildroot.net/buildroot/commit/?id=95d569eb263beca365e3a967267eb105942741a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The current URL returns error 403: Forbidden, so switch to https.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../toolchain-external-codesourcery-niosII.mk                           | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tinyxml2/tinyxml2.hash | 2 +-
+ package/tinyxml2/tinyxml2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-index 7381061..dcca94f 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
+index acbee09..e5e4d23 100644
+--- a/package/tinyxml2/tinyxml2.hash
++++ b/package/tinyxml2/tinyxml2.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 128aa1553e88403833e0cccf1b651f45ce87bc207871f53fdcc8e7f9ec795747 tinyxml2-3.0.0.tar.gz
++sha256 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267f20  tinyxml2-4.0.1.tar.gz
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index 461c36c..bb1e167 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION = 2016.11-32
- 
--TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
- TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SOURCE = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
- TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_ACTUAL_SOURCE_TARBALL = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
- 
+-TINYXML2_VERSION = 3.0.0
++TINYXML2_VERSION = 4.0.1
+ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+ TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = readme.md
