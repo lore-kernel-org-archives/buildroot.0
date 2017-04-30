@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 23:32:16 +0200
-Subject: [Buildroot] [git commit] supertux: select BR2_PACKAGE_LIBCURL
-Message-ID: <20170430213226.365387F8B8@busybox.osuosl.org>
+Date: Sun, 30 Apr 2017 23:32:50 +0200
+Subject: [Buildroot] [PATCH] supertux: select BR2_PACKAGE_LIBCURL
+In-Reply-To: <20170418155153.52641-1-Vincent.Riera@imgtec.com>
+References: <20170418155153.52641-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170430233250.7fe625ed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5855a3ef25c5851a4d2c609f926feb3aca4dc3ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libcurl is unconditionally added to the dependencies list in
-supertux.mk. However libcurl is not selected in Config.in.
+On Tue, 18 Apr 2017 16:51:53 +0100, Vicente Olivert Riera wrote:
+> libcurl is unconditionally added to the dependencies list in
+> supertux.mk. However libcurl is not selected in Config.in.
+> 
+> This patch fixes that.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/supertux/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-This patch fixes that.
+Applied to master, thanks.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Acked-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/supertux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/supertux/Config.in b/package/supertux/Config.in
-index d4fd80b..684c2cc 100644
---- a/package/supertux/Config.in
-+++ b/package/supertux/Config.in
-@@ -13,6 +13,7 @@ config BR2_PACKAGE_SUPERTUX
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGLEW
- 	select BR2_PACKAGE_LIBGLU # GL/glu.h
- 	select BR2_PACKAGE_LIBOGG
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
