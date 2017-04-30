@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 23:02:35 +0200
-Subject: [Buildroot] [PATCH v2] package/expedite: fix build issue with
- gcc < 5
-In-Reply-To: <20170430102528.11476-1-romain.naour@gmail.com>
-References: <20170430102528.11476-1-romain.naour@gmail.com>
-Message-ID: <20170430230235.70b7ffc5@free-electrons.com>
+Date: Sun, 30 Apr 2017 23:03:58 +0200
+Subject: [Buildroot] [PATCH v2] x11vnc: make x11vnc select libvncserver
+In-Reply-To: <20170430130502.32345-1-martink@posteo.de>
+References: <20170430084350.zpxjcn7y6ws4w4lf@sapphire.tkos.co.il>
+ <20170430130502.32345-1-martink@posteo.de>
+Message-ID: <20170430230358.1cd5d582@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,45 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 30 Apr 2017 12:25:28 +0200, Romain Naour wrote:
-> The code use for loop initial declarations which are only allowed in
-> C99 mode which is not the default C standard with gcc < 5.
-> 
-> This way of writing for loop was added by the latest commit and it is
-> not consistent with the rest of the code.
-> So revert to the C89 for loop syntax.
-> 
-> Reported upstream:
-> https://phab.enlightenment.org/T5440
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ed8/ed840755e8e486e48eab8c13a8bb5e9a448199ce
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../0001-fix-build-failure-with-gcc-5.patch        | 289 +++++++++++++++++++++
->  1 file changed, 289 insertions(+)
->  create mode 100644 package/expedite/0001-fix-build-failure-with-gcc-5.patch
+On Sun, 30 Apr 2017 15:05:02 +0200, Martin Kepplinger wrote:
 
-I'm not sure why you gave up on the -std=c99 solution, but OK, I've
-applied this patch. We'll see what upstream suggests.
+> diff --git a/package/x11vnc/Config.in b/package/x11vnc/Config.in
+> index 0909b9aec..9d9541cbf 100644
+> --- a/package/x11vnc/Config.in
+> +++ b/package/x11vnc/Config.in
+> @@ -2,9 +2,11 @@ config BR2_PACKAGE_X11VNC
+>  	bool "x11vnc"
+>  	depends on BR2_PACKAGE_XORG7
+>  	depends on BR2_USE_MMU # fork()
+> +	depends on !BR2_nios2 # from libvncserver
 
-Thanks!
+The comment is normally just "# libvncserver"
+
+>  	select BR2_PACKAGE_XLIB_LIBXT
+>  	select BR2_PACKAGE_XLIB_LIBXEXT
+>  	select BR2_PACKAGE_XLIB_LIBXTST
+> +	select BR2_PACKAGE_LIBVNCSERVER
+
+We try to keep things sorted alphabetically, so this select should have
+been before the other ones.
+
+> diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
+> index 9233b7047..5a505b920 100644
+> --- a/package/x11vnc/x11vnc.mk
+> +++ b/package/x11vnc/x11vnc.mk
+> @@ -16,6 +16,8 @@ X11VNC_LICENSE_FILES = COPYING
+>  # Source coming from github, no configure included
+>  X11VNC_AUTORECONF = YES
+>  
+> +X11VNC_DEPENDENCIES += libvncserver
+
+No need for a new X11VNC_DEPENDENCIES assignment here, there was
+already one a few lines above.
+
+I've fixed those minor issues and applied your patch. Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
