@@ -1,37 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 09:29:50 +0200
-Subject: [Buildroot] [PATCH] package/protobuf: depend on gcc >= 4.5
-In-Reply-To: <CAKKQwLRyHdGAqK8QtPuOexXp+nokJ+7wgAbwvRE6b9fkg25jKQ@mail.gmail.com>
-References: <20170426162850.5214-1-mrugiero@gmail.com>
- <20170429143136.3da63d52@free-electrons.com>
- <CAKKQwLR3sxMycDpH0_qvva7_-9s5DCZzs5kj-xJe4_7YJOZ59Q@mail.gmail.com>
- <CAKKQwLRyHdGAqK8QtPuOexXp+nokJ+7wgAbwvRE6b9fkg25jKQ@mail.gmail.com>
-Message-ID: <20170430092950.3e39e809@free-electrons.com>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Sun, 30 Apr 2017 10:35:32 +0200
+Subject: [Buildroot] [PATCH] x11vnc: make x11vnc select libvncserver
+Message-ID: <20170430083532.12941-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+x11vnc needs libvncserver, so select it explicitely.
 
-On Sat, 29 Apr 2017 17:02:26 -0300, Mario Rugiero wrote:
+In case of missing libvncserver, we see build failures like this:
 
-> I just realized there was more before The question I answered. The bug got
-> fixed in versi?n 4.5.0 of gcc, thus it is unsupported to build with earlier
-> versions. The message seen is an instance of this bug.
+http://autobuild.buildroot.net/results/34f/34f8045e772b96293cc7d25bd61ac0aa5842824f/
 
-Then we also have a problem with the host variant: host-protobuf also
-requires gcc >= 4.5.0. I've restarted my autobuilder, and it uses an
-old version of gcc on the host, which causes host-protobuf to fail
-building:
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/x11vnc/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-  http://autobuild.buildroot.net/results/539/53908fe11b5b6497205e17c151f02e94fab10999/build-end.log
-
-Best regards,
-
-Thomas
+diff --git a/package/x11vnc/Config.in b/package/x11vnc/Config.in
+index 0909b9aec..4542c5080 100644
+--- a/package/x11vnc/Config.in
++++ b/package/x11vnc/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_X11VNC
+ 	select BR2_PACKAGE_XLIB_LIBXT
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_LIBVNCSERVER
+ 	help
+ 	  VNC server for X11 display
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
