@@ -1,48 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 30 Apr 2017 11:43:51 +0300
-Subject: [Buildroot] [PATCH] x11vnc: make x11vnc select libvncserver
-In-Reply-To: <20170430083532.12941-1-martink@posteo.de>
-References: <20170430083532.12941-1-martink@posteo.de>
-Message-ID: <20170430084350.zpxjcn7y6ws4w4lf@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 30 Apr 2017 11:18:45 +0200
+Subject: [Buildroot] [PATCH 1/2] ext2.mk: ensure file system block count
+ is not zero (0)
+In-Reply-To: <20170429210358.716c51d4@free-electrons.com>
+References: <1493481682-128366-1-git-send-email-g4@novadsp.com>
+ <20170429210358.716c51d4@free-electrons.com>
+Message-ID: <20170430091845.GA12749@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Martin,
+J, Thomas, All,
 
-On Sun, Apr 30, 2017 at 10:35:32AM +0200, Martin Kepplinger wrote:
-> x11vnc needs libvncserver, so select it explicitely.
+On 2017-04-29 21:03 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 29 Apr 2017 17:01:21 +0100, J Evans wrote:
 > 
-> In case of missing libvncserver, we see build failures like this:
+> > -ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+> > +ifeq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
+> > +$(error BR2_TARGET_ROOTFS_EXT2_BLOCKS cannot be zero (0))
+> > +else
+> >  EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+> >  endif
 > 
-> http://autobuild.buildroot.net/results/34f/34f8045e772b96293cc7d25bd61ac0aa5842824f/
-> 
-> Signed-off-by: Martin Kepplinger <martink@posteo.de>
-> ---
->  package/x11vnc/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/x11vnc/Config.in b/package/x11vnc/Config.in
-> index 0909b9aec..4542c5080 100644
-> --- a/package/x11vnc/Config.in
-> +++ b/package/x11vnc/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_X11VNC
->  	select BR2_PACKAGE_XLIB_LIBXT
->  	select BR2_PACKAGE_XLIB_LIBXEXT
->  	select BR2_PACKAGE_XLIB_LIBXTST
-> +	select BR2_PACKAGE_LIBVNCSERVER
+> What is the motivation for checking that the size is not zero? Zero is
+> like any other size too small to contain the target directory contents,
+> so I don't see why we would add a specific check for it.
 
-Since this is a build time dependency, you need to add it to 
-X11VNC_DEPENDENCIES to make sure libvncserver builds before x11vnc.
+I agree, and that's exactly what I said in my review to the previous
+iteration of the patch.
 
-You also need to propagate the additional BR2_PACKAGE_LIBVNCSERVER dependency, 
-!BR2_nios2.
+Just remove the check and keep the line:
 
-baruch
+    EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
