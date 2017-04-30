@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 09:23:53 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Patrick Ziegler,
-	address bouncing
-Message-ID: <20170430072443.36888825B9@busybox.osuosl.org>
+Date: Sun, 30 Apr 2017 09:29:50 +0200
+Subject: [Buildroot] [PATCH] package/protobuf: depend on gcc >= 4.5
+In-Reply-To: <CAKKQwLRyHdGAqK8QtPuOexXp+nokJ+7wgAbwvRE6b9fkg25jKQ@mail.gmail.com>
+References: <20170426162850.5214-1-mrugiero@gmail.com>
+ <20170429143136.3da63d52@free-electrons.com>
+ <CAKKQwLR3sxMycDpH0_qvva7_-9s5DCZzs5kj-xJe4_7YJOZ59Q@mail.gmail.com>
+ <CAKKQwLRyHdGAqK8QtPuOexXp+nokJ+7wgAbwvRE6b9fkg25jKQ@mail.gmail.com>
+Message-ID: <20170430092950.3e39e809@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e147572cd5803805840977056cf2acd149c1cdd1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The e-mail address of Patrick Ziegler no longer exists:
+On Sat, 29 Apr 2017 17:02:26 -0300, Mario Rugiero wrote:
 
-  patrick.ziegler at fh-kl.de  - 550 5.1.1  User unknown
+> I just realized there was more before The question I answered. The bug got
+> fixed in versi?n 4.5.0 of gcc, thus it is unsupported to build with earlier
+> versions. The message seen is an instance of this bug.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+Then we also have a problem with the host variant: host-protobuf also
+requires gcc >= 4.5.0. I've restarted my autobuilder, and it uses an
+old version of gcc on the host, which causes host-protobuf to fail
+building:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 545ddc6..a95e5ba 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1209,10 +1209,6 @@ F:	package/google-breakpad/
- N:	Patrick Gerber <kpa_info@yahoo.fr>
- F:	package/yavta/
- 
--N:	Patrick Ziegler <patrick.ziegler@fh-kl.de>
--F:	package/aespipe/
--F:	package/libqmi/
--
- N:	Paul Cercueil <paul.cercueil@analog.com>
- F:	package/libiio/
- 
+  http://autobuild.buildroot.net/results/539/53908fe11b5b6497205e17c151f02e94fab10999/build-end.log
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
