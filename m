@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Apr 2017 19:31:52 +0200
-Subject: [Buildroot] [git commit] fs/ext2: ensure -b option is always set
-	for mke2img
-Message-ID: <20170430173247.CD3A3800BC@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 30 Apr 2017 21:33:18 +0300
+Subject: [Buildroot] [PATCH] aircrack-ng: requires C++
+Message-ID: <6863f849e68b9f2422f15fef9e815ac791b32c73.1493577198.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e1e3881222b59c5af7cb8de566746cac2eb67b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/9b1/9b1cba480102746389e80b58c0e327b68a235a29/
+http://autobuild.buildroot.net/results/f65/f65de186324e6c3cd689540a22fa46ae89afc8c8/
+http://autobuild.buildroot.net/results/e02/e02e832a49972ba464f7749cb89d2b20b8df4484/
 
-Signed-off-by: J Evans <g4@novadsp.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Laurent Cans <laurent.cans@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- fs/ext2/ext2.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/aircrack-ng/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 30f1d17..9d3e8fd 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -6,9 +6,7 @@
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+index b6572dc986c7..2164ad40703f 100644
+--- a/package/aircrack-ng/Config.in
++++ b/package/aircrack-ng/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_AIRCRACK_NG
+ 	bool "aircrack-ng"
+ 	depends on BR2_USE_MMU # uses fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	# libnl has issues when linking statically
+ 	# they need fixing in libnl itself
+ 	select BR2_PACKAGE_LIBNL if !BR2_STATIC_LIBS
+@@ -15,6 +16,6 @@ config BR2_PACKAGE_AIRCRACK_NG
  
- EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
+ 	  http://www.aircrack-ng.org/
  
--ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
- EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
--endif
- 
- ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
- EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
+-comment "aircrack-ng needs a toolchain w/ threads"
++comment "aircrack-ng needs a toolchain w/ threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-- 
+2.11.0
