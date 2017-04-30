@@ -1,49 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Apr 2017 21:43:52 +0200
-Subject: [Buildroot] [PATCH 1/1] ext2.mk: ensure -b option is always set
- for mke2img and genext2fs
-In-Reply-To: <20170430193323.5ad396e1@free-electrons.com>
-References: <1493555747-27289-1-git-send-email-g4@novadsp.com>
- <20170430193323.5ad396e1@free-electrons.com>
-Message-ID: <20170430194352.GA3972@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 30 Apr 2017 21:51:39 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: CodeSourcery NIOSII
+	update upstream URL
+Message-ID: <20170430195140.6401-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The current URL returns error 403: Forbidden, so switch to https.
 
-On 2017-04-30 19:33 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 30 Apr 2017 13:35:47 +0100, J Evans wrote:
-> > Signed-off-by: J Evans <g4@novadsp.com>
-> > ---
-> >  fs/ext2/ext2.mk | 2 --
-> >  1 file changed, 2 deletions(-)
-> 
-> Applied to master, thanks.
-> 
-> However, I believe we should do the same for the number of inodes:
-> 
-> ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
-> EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
-> endif
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ .../toolchain-external-codesourcery-niosII.mk                           | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yep, was going to work on that next...
-
-Regards,
-Yann E. MORIN.
-
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
+index 7381061..dcca94f 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
+@@ -6,7 +6,7 @@
+ 
+ TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION = 2016.11-32
+ 
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
++TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
+ TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SOURCE = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
+ TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_ACTUAL_SOURCE_TARBALL = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
