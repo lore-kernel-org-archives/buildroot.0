@@ -1,12 +1,15 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 30 Apr 2017 21:33:18 +0300
-Subject: [Buildroot] [PATCH] aircrack-ng: requires C++
-Message-ID: <6863f849e68b9f2422f15fef9e815ac791b32c73.1493577198.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Apr 2017 21:02:47 +0200
+Subject: [Buildroot] [git commit] aircrack-ng: requires C++
+Message-ID: <20170430190307.215B781780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b5dacefc1671a24a15457a99cbd6ff20a1d5473e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
 http://autobuild.buildroot.net/results/9b1/9b1cba480102746389e80b58c0e327b68a235a29/
@@ -16,12 +19,13 @@ http://autobuild.buildroot.net/results/e02/e02e832a49972ba464f7749cb89d2b20b8df4
 Cc: Laurent Cans <laurent.cans@gmail.com>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/aircrack-ng/Config.in | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
-index b6572dc986c7..2164ad40703f 100644
+index b6572dc..2164ad4 100644
 --- a/package/aircrack-ng/Config.in
 +++ b/package/aircrack-ng/Config.in
 @@ -2,6 +2,7 @@ config BR2_PACKAGE_AIRCRACK_NG
@@ -41,5 +45,3 @@ index b6572dc986c7..2164ad40703f 100644
  	depends on BR2_USE_MMU
 -	depends on !BR2_TOOLCHAIN_HAS_THREADS
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--- 
-2.11.0
