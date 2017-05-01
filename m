@@ -1,49 +1,47 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Mon,  1 May 2017 12:14:46 +0200
-Subject: [Buildroot] [PATCH 1/1] fdk-aac: bump to version 0.1.5
-Message-ID: <1493633686-1472-1-git-send-email-gilles.talis@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 1 May 2017 12:19:10 +0200
+Subject: [Buildroot] [PATCH v2 1/2] board: add stm32f429-disc1 config
+In-Reply-To: <20170501114920.43c7d757@free-electrons.com>
+References: <20170501091622.1930-1-s.martin49@gmail.com>
+ <20170501114920.43c7d757@free-electrons.com>
+Message-ID: <CAHXCMMJDOvFmYKyyrKxzORHc=A8ubFT5XTet-QihZnvuLaC2Mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, remove the compile flags to make it build
-with GCC6 as it was added upstream
+On Mon, May 1, 2017 at 11:49 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon,  1 May 2017 11:16:21 +0200, Samuel Martin wrote:
+>
+>>  board/stmicroelectronics/stm32f429-disc1            |  1 +
+>
+> Does it really make sense to create a symbolic link ?
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/fdk-aac/fdk-aac.hash | 2 +-
- package/fdk-aac/fdk-aac.mk   | 5 +----
- 2 files changed, 2 insertions(+), 5 deletions(-)
+indeed none, I'll remove it
 
-diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
-index 28a1eee..cd2e868 100644
---- a/package/fdk-aac/fdk-aac.hash
-+++ b/package/fdk-aac/fdk-aac.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  5910fe788677ca13532e3f47b7afaa01d72334d46a2d5e1d1f080f1173ff15ab  fdk-aac-0.1.4.tar.gz
-+sha256  2164592a67b467e5b20fdcdaf5bd4c50685199067391c6fcad4fa5521c9b4dd7  fdk-aac-0.1.5.tar.gz
-diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
-index 45a3cf5..0c9662e 100644
---- a/package/fdk-aac/fdk-aac.mk
-+++ b/package/fdk-aac/fdk-aac.mk
-@@ -4,14 +4,11 @@
- #
- ################################################################################
- 
--FDK_AAC_VERSION = 0.1.4
-+FDK_AAC_VERSION = 0.1.5
- FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
- FDK_AAC_LICENSE = fdk-aac license
- FDK_AAC_LICENSE_FILES = NOTICE
- 
- FDK_AAC_INSTALL_STAGING = YES
- 
--# Not compatible with GCC 6 which defaults to GNU++14
--FDK_AAC_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++98"
--
- $(eval $(autotools-package))
+>
+>> --- a/board/stmicroelectronics/stm32f429-disco/readme.txt
+>> +++ b/board/stmicroelectronics/stm32f429-disco/readme.txt
+>> @@ -15,8 +15,8 @@ Wire the UART
+>>
+>
+> The beginning of this document should be updated to mention that it
+> supports both platform, through the same defconfig.
+
+Done
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+
+
 -- 
-2.5.0
+Samuel
