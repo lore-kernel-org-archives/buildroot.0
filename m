@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 21:18:52 +0200
-Subject: [Buildroot] [PATCH 0/9] fs/ext2: cleanups and improvements
-In-Reply-To: <cover.1493654310.git.yann.morin.1998@free.fr>
-References: <cover.1493654310.git.yann.morin.1998@free.fr>
-Message-ID: <20170501211852.6193ab52@free-electrons.com>
+Date: Mon, 1 May 2017 21:27:07 +0200
+Subject: [Buildroot] [PATCH 1/1] libcsv: new package
+In-Reply-To: <1493660240-45710-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1493660240-45710-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20170501212707.2729be64@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  1 May 2017 17:58:39 +0200, Yann E. MORIN wrote:
+Thanks for this contribution, see some comments below.
 
-> J Evans (1):
->       ext2: add help text for BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> 
-> Yann E. MORIN (8):
->       package/mke2img: check nb_blocks is specified
->       package/mke2img: specifying zero inodes means auto
->       fs/ext2: always pass the number of inodes
->       fs/ext2: always pass the label option
->       fs/ext2: allow reserving zero block for root
->       fs/ext2: simplify code
->       package/mke2img: add option to specify block size
->       fs/ext2: add option to specify block size
+On Mon,  1 May 2017 12:37:20 -0500, Matt Weber wrote:
 
-In general, I find this good. However, it badly conflicts with the
-on-going work to move away from mke2img/genext2fs and use mkfs.ext2/3/4
-instead.
+>  package/Config.in          |  1 +
+>  package/libcsv/Config.in   | 10 ++++++++++
+>  package/libcsv/libcsv.hash |  2 ++
+>  package/libcsv/libcsv.mk   | 15 +++++++++++++++
 
-For example, I believe mkfs.ext2/3/4 will automatically chose a sane
-default block size depending on the filesystem size.
+Please add an entry to the DEVELOPERS file.
+
+> +LIBCSV_VERSION = 3.0.3
+> +LIBCSV_SITE = http://sourceforge.net/projects/libcsv/files
+> +LIBCSV_SOURCE = libcsv-$(LIBCSV_VERSION).tar.gz
+
+Not needed, this is the default value.
+
+> +LIBCSV_LICENSE = LGPLv2.1+
+
+Please use the SPDX license code: LGPL-2.1+
+
+> +LIBCSV_LICENSE_FILES = COPYING.LESSER
+> +LIBCSV_INSTALL_STAGING = YES
+> +
+> +$(eval $(host-autotools-package))
+
+Why are you adding a host package ? If you don't intend to use it as a
+dependency for another package or don't have a good reason to have a
+host package, please don't add a host variant.
+
+Thanks!
 
 Thomas
 -- 
