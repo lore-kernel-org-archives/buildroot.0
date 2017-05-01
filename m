@@ -1,47 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 May 2017 09:17:16 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/samba4: bump
-	version to 4.5.8
-Message-ID: <20170501072636.78F62821A2@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon,  1 May 2017 09:26:45 +0200
+Subject: [Buildroot] [PATCH 3/3] linux-header: bump default to version 4.11
+In-Reply-To: <20170501072645.5571-1-s.martin49@gmail.com>
+References: <20170501072645.5571-1-s.martin49@gmail.com>
+Message-ID: <20170501072645.5571-3-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eac5d8c01d2e338ecc46f2da692365800033ce4c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
-
-Version bump includes a regression fix:
-https://www.samba.org/samba/history/samba-4.5.8.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 67c25f897dd61802ea97c83619ca5dace8ba7c27)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 71d24f7..0a2a548 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	ac70f09af80639d8189e1b9bc0a554841ee44df2b1ef58e7e682ad5400fd9400	samba-4.5.7.tar.gz
-+sha256 f63b656d8823a280c50c9dbd6b692816cd7a88adfe9b47997ce697fd75bf81f0  samba-4.5.8.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index aa7cb57..741fb41 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5c67626b2..b1ef3d623 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_10
++	default BR2_KERNEL_HEADERS_4_11
+ 	help
+ 	  Select the kernel version to get headers from.
  
--SAMBA4_VERSION = 4.5.7
-+SAMBA4_VERSION = 4.5.8
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+@@ -62,6 +62,10 @@ config BR2_KERNEL_HEADERS_4_10
+ 	bool "Linux 4.10.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+ 
++config BR2_KERNEL_HEADERS_4_11
++	bool "Linux 4.11.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
++
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
+ 
+@@ -83,6 +87,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11
++	bool "4.11.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10
+ 	bool "4.10.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+@@ -222,4 +230,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.4.64"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.25"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.13"	if BR2_KERNEL_HEADERS_4_10
++	default "4.11"		if BR2_KERNEL_HEADERS_4_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.12.2
