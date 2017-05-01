@@ -1,74 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 May 2017 23:59:39 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] busybox: no need to
-	disable clear and reset
-Message-ID: <20170501220555.D4A2E817BA@busybox.osuosl.org>
+Date: Tue, 2 May 2017 00:05:42 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] Update for 2017.02.2
+Message-ID: <20170501220555.E4C4A8004B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abfcc5624b0bd01a8c8c3c01b4d9b91f9ddeda31
+commit: https://git.buildroot.net/buildroot/commit/?id=799aed7a181e82a6446403b7abe77119622a6779
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Removing clear and reset from the busybox config when the ncurses tools
-are enabled is not really needed.
-
-Since commit 802bff9c42, the busybox install will not overwrite
-existing programs. Therefore, the tools will be installed correctly
-regardless of the order of the build:
-- if busybox is built first, the clear and reset apps are installed,
-  but they will be overwritten by ncurses;
-- if ncurses is built first, it will install the clear and reset apps,
-  and busybox will no longer install them.
-
-We prefer not to modify the busybox configuration when not strictly
-necessary, because it is surprising for the user that his configuration
-is not applied. Clearly, it's not ideal that busybox is configured with
-redundant apps, but if the user wants to shrink it, it's possible to
-provide a custom config.
-
-This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
-
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Matt Weber  <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 200282e2070ec0405184378c3cfb4e04ab26c5d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+ CHANGES  | 19 +++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7cc559c..577f2f2 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -148,17 +148,6 @@ define BUSYBOX_MUSL_TWEAKS
- endef
- endif
+diff --git a/CHANGES b/CHANGES
+index 75163c3..f26077a 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,22 @@
++2017.02.2, Released May 1st, 2017
++
++	Important / security related fixes.
++
++	Use HTTPS for the Codesourcery external toolchains as the HTTP
++	URLs no longer work.
++
++	Updated/fixed packages: bind, busybox, dovecot, freetype,
++	ghostscript, glibc, granite, hiredis, icu, imagemagick,
++	gst-plugins-base, gst1-plugins-base, libcroco, libcurl, libnl,
++	libnspr, libnss, libsamplerate, libsndfile, libunwind,
++	minicom, mplayer, mpv, nodejs, python-django, python-pyyaml,
++	python-web2py, samba4, syslinux, systemd, tiff, trinity,
++	uboot, wireshark, xen
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9791: Python searches for packages in the user site directory
++
+ 2017.02.1, Released April 4th, 2017
  
--ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
--# Ncurses package overlaps:
--#     /usr/bin/clear
--#     /usr/bin/reset -> /usr/bin/tset (symlink)
--#
--define BUSYBOX_DISABLE_NCURSES_PROGS
--	$(call KCONFIG_DISABLE_OPT,CONFIG_CLEAR,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_DISABLE_OPT,CONFIG_RESET,$(BUSYBOX_BUILD_CONFIG))
--endef
--endif
--
- define BUSYBOX_INSTALL_UDHCPC_SCRIPT
- 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-@@ -240,7 +229,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
- 	$(BUSYBOX_MUSL_TWEAKS)
--	$(BUSYBOX_DISABLE_NCURSES_PROGS)
- endef
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 30e76fa..92ecdf1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -86,9 +86,9 @@ else # umask / $(CURDIR) / $(O)
+ all:
  
- define BUSYBOX_CONFIGURE_CMDS
+ # Set and export the version string
+-export BR2_VERSION := 2017.02.1
++export BR2_VERSION := 2017.02.2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1491392000
++BR2_VERSION_EPOCH = 1493676000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
