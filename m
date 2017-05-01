@@ -1,76 +1,127 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 May 2017 17:58:44 +0200
-Subject: [Buildroot] [PATCH 9/9] fs/ext2: add option to specify block size
-In-Reply-To: <cover.1493654310.git.yann.morin.1998@free.fr>
-References: <cover.1493654310.git.yann.morin.1998@free.fr>
-Message-ID: <c85507a4104956f6597a910e729118309f3ff432.1493654310.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 May 2017 11:59:26 +0200
+Subject: [Buildroot] [git commit] package/n*/Config.in: fix ordering of
+	statements
+Message-ID: <20170501165100.3959C82847@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- fs/ext2/Config.in | 28 ++++++++++++++++++++++++++--
- fs/ext2/ext2.mk   |  2 +-
- 2 files changed, 27 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=f998e0d092d90e3513e1e7f06afbef604ed01f76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 09ec87786f..627294e17f 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -44,12 +44,36 @@ config BR2_TARGET_ROOTFS_EXT2_REV
- config BR2_TARGET_ROOTFS_EXT2_LABEL
- 	string "filesystem label"
+The check-package script when ran gives warnings on ordering issues
+on all of these Config files.  This patch cleans up all warnings
+related to the ordering in the Config files for packages starting with
+the letter n in the package directory.
+
+The appropriate ordering is: type, default, depends on, select, help
+See http://nightly.buildroot.org/#_config_files for more information.
+
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/neon/Config.in           |  2 +-
+ package/netcat-openbsd/Config.in |  2 +-
+ package/netsniff-ng/Config.in    | 10 +++++-----
+ package/nfs-utils/Config.in      |  2 +-
+ package/nginx/Config.in          |  4 ++--
+ 5 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/package/neon/Config.in b/package/neon/Config.in
+index e76278c..9831343 100644
+--- a/package/neon/Config.in
++++ b/package/neon/Config.in
+@@ -27,8 +27,8 @@ config BR2_PACKAGE_NEON_XML
  
--# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
-+choice
-+	bool "block size"
-+	help
-+	  The size, in bytes, of a block.
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
-+	bool "1024"
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
-+	bool "2048"
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
-+	bool "4096"
-+
-+endchoice
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE
-+	int
-+	default 1024 if BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
-+	default 2048 if BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
-+	default 4096 if BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
-+
-+# 61440 block od 1024 bytes = 60MB, i.e usually small enough to fit
-+# on a 64MB media
- config BR2_TARGET_ROOTFS_EXT2_BLOCKS
- 	int "exact size in blocks"
- 	default 61440
+ config BR2_PACKAGE_NEON_EXPAT
+ 	bool "XML support with expat"
+-	select BR2_PACKAGE_EXPAT
+ 	depends on !BR2_PACKAGE_NEON_LIBXML2
++	select BR2_PACKAGE_EXPAT
  	help
--	  Specify the file system size as a number of 1024-byte blocks.
-+	  Specify the file system size as a number of blocks, which
-+	  size is specified above.
+ 	  Enable XML support in neon, using the Expat XML library.
  
- config BR2_TARGET_ROOTFS_EXT2_INODES
- 	int "exact number of inodes (leave at 0 for auto calculation)"
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 0d5fc7f118..ec49caa3a5 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -12,7 +12,7 @@ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
- EXT2_OPTS = \
- 	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
- 	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
--	-B 1024 \
-+	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
- 	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
- 	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
- 	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
--- 
-2.11.0
+diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
+index 0df997c..6df87ec 100644
+--- a/package/netcat-openbsd/Config.in
++++ b/package/netcat-openbsd/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_NETCAT_OPENBSD
+ 	bool "netcat-openbsd"
+-	select BR2_PACKAGE_LIBBSD
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_LIBBSD
+ 	help
+ 	  A simple Unix utility which reads and writes data across network
+ 	  connections using TCP or UDP protocol. It is designed to be a
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index b59c876..c4803b2 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -1,16 +1,16 @@
+ config BR2_PACKAGE_NETSNIFF_NG
+ 	bool "netsniff-ng"
++	# Build with uClibc fails due to missing ceill()
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBCLI
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBNET
+-	# Build with uClibc fails due to missing ceill()
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	help
+ 	  netsniff-ng is a free, performant Linux network analyzer and
+ 	  networking toolkit. If you will, the Swiss army knife for
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index bfaddd1..4e13936 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -5,9 +5,9 @@ comment "nfs-utils needs a toolchain w/ threads"
+ config BR2_PACKAGE_NFS_UTILS
+ 	bool "nfs-utils"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_RPCBIND # runtime
+-	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  The NFS Linux kernel server.
+ 
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index e6f2d96..36fa69c 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -141,8 +141,8 @@ config BR2_PACKAGE_NGINX_HTTP_CHARSET_MODULE
+ 
+ config BR2_PACKAGE_NGINX_HTTP_GZIP_MODULE
+ 	bool "ngx_http_gzip_module"
+-	select BR2_PACKAGE_ZLIB
+ 	default y
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Enable ngx_http_gzip_module
+ 
+@@ -202,8 +202,8 @@ config BR2_PACKAGE_NGINX_HTTP_REFERER_MODULE
+ 
+ config BR2_PACKAGE_NGINX_HTTP_REWRITE_MODULE
+ 	bool "ngx_http_rewrite_module"
+-	select BR2_PACKAGE_PCRE
+ 	default y
++	select BR2_PACKAGE_PCRE
+ 	help
+ 	  Enable ngx_http_rewrite_module
+ 
