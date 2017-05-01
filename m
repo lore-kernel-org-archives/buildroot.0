@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 May 2017 09:16:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.5.8
-In-Reply-To: <20170429140207.6142-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 29 Apr 2017 16:02:07 +0200")
-References: <20170429140207.6142-1-bernd.kuhls@t-online.de>
-Message-ID: <87ziexf3mi.fsf@dell.be.48ers.dk>
+Date: Mon, 01 May 2017 09:17:07 +0200
+Subject: [Buildroot] [PATCH] ghostscript: add upstream security fixes
+	for CVE-2017-8291
+In-Reply-To: <20170428074930.26043-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 28 Apr 2017 09:49:30 +0200")
+References: <20170428074930.26043-1-peter@korsgaard.com>
+Message-ID: <87vaplf3m4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Version bump includes a regression fix:
- > https://www.samba.org/samba/history/samba-4.5.8.html
+ > CVE-2017-8291 - Artifex Ghostscript through 2017-04-26 allows -dSAFER bypass
+ > and remote command execution via a "/OutputFile (%pipe%" substring in a
+ > crafted .eps document that is an input to the gs program, as exploited in
+ > the wild in April 2017.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > For more details, see https://bugzilla.suse.com/show_bug.cgi?id=1036453
 
-Committed to 2017.02.x (as the security bump was added there as well),
-thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
