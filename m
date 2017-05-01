@@ -1,32 +1,45 @@
-From: J Evans <g4@novadsp.com>
-Date: Mon,  1 May 2017 13:07:43 +0100
-Subject: [Buildroot] [PATCH 1/1] ext2: add help text for
-	BR2_TARGET_ROOTFS_EXT2_BLOCKS
-Message-ID: <1493640463-59836-1-git-send-email-g4@novadsp.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  1 May 2017 15:59:40 +0300
+Subject: [Buildroot] [PATCH 0/4] bluez5_utils: version bump fixes and updates
+Message-ID: <cover.1493643541.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J Evans <g4@novadsp.com>
----
- fs/ext2/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+The recent bluez5_utils version bump moved around the build options so that 
+some builds now fail, and the help text became incorrect. This short series 
+fixes some of these issues.
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 19ed140..e7cded5 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -48,6 +48,9 @@ config BR2_TARGET_ROOTFS_EXT2_LABEL
- config BR2_TARGET_ROOTFS_EXT2_BLOCKS
- 	int "exact size in blocks"
- 	default 61440
-+    help
-+      Determines the final size of your file system. The default
-+      value of 61440 creates a 60MB filesystem. 
- 
- config BR2_TARGET_ROOTFS_EXT2_INODES
- 	int "exact number of inodes (leave at 0 for auto calculation)"
+This series is mostly based on Andy Shevchenko's patch[1] with the following 
+main changes:
+
+  * Split out the DEPRECATED handling, adding a fix to the gatttool build 
+    issue in the process
+
+  * Remove the redundant BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL config option
+
+  * Split the option addition patch into two: one for options that were 
+    previously under --enable-experimental, and one for the newly introduced 
+    midi profile
+
+  * Add missing BR2_PACKAGE_ALSA_LIB_SEQ select
+
+[1] https://patchwork.ozlabs.org/patch/741645/
+
+Andy Shevchenko (2):
+  bluez5_utils: allow enabling formerly experimental plugins
+  bluez5_utils: allow building the midi profile
+
+Baruch Siach (2):
+  bluez5_utils: allow install of deprecated tools
+  bluez5_utils: correct the experimental option text
+
+ Config.in.legacy                     |  9 +++++++++
+ package/bluez5_utils/Config.in       | 39 +++++++++++++++++++++++++++---------
+ package/bluez5_utils/bluez5_utils.mk | 34 ++++++++++++++++++++++++++++++-
+ 3 files changed, 71 insertions(+), 11 deletions(-)
+
 -- 
-2.7.4
+2.11.0
