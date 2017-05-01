@@ -1,131 +1,55 @@
-From: Lijun QIN <lijun.qin2008@gmail.com>
-Date: Mon, 1 May 2017 15:55:15 -0500
-Subject: [Buildroot] compiling error - testglib failed
-Message-ID: <CALD51P9XnRjY-y41fib0tc8+H5r7k=N+rky1hADc53eM+PHnaQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 May 2017 22:58:21 +0200
+Subject: [Buildroot] [PATCH 0/9] fs/ext2: cleanups and improvements
+In-Reply-To: <20170501211852.6193ab52@free-electrons.com>
+References: <cover.1493654310.git.yann.morin.1998@free.fr>
+ <20170501211852.6193ab52@free-electrons.com>
+Message-ID: <20170501205821.GE3118@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Buildrooter.
-I need to move old  buildroot project to X64 ubuntu16.04 from X86
-ubuntu12.04
- Buildroot2011.05 + cross-compiler gcc 4.8 + x86 Ubuntu12.04 - success
- Buildroot2011.05 + cross-compiler gcc 4.8 + x84 Ubuntu 16.04 -Failed
- Error message is attached, Anybody could  please possibly provide any
-advice ?
- I have multiple buildroot projects and need to move them to single build
-machines.
- Thank you so much,
- Lijun Qin
+Thomas, All,
 
->>> host-pkg-config 0.25 Building
-PATH=/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011
-.05-sdk5.1.2/output/host/bin:/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/usr/bin:/
-home/dfvsdev/.local/bin:/opt/arm-2013.11/bin:/usr/local/
-bin:/usr/bin:/bin:/usr/local/games:/usr/games:/snap/bin
-LD_LIBRARY_PATH="/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2:"
-PKG_CONFIG="" PKG_CONFIG_LIBDIR="/home/dfvsmdev/workspace/obi-eval/rootfs/
-buildroot-2011.05-sdk5.1.2/output/host/usr/lib/pkgconfig"
-PERLLIB="/home/dfvsmdev/workspace/obi-eval/rootfs/bu.1.2/output/host/usr/lib/perl"
- /usr/bin/make -j8  -C /home/dfvsmdev/workspace/obi-e
-val/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg-config-0.25/
-make[2]: Entering directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg-config-0.25'
-/usr/bin/make  all-recursive
-make[3]: Entering directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg-config-0.25'
-Making all in glib-1.2.10
-make[4]: Entering directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg
--config-0.25/glib-1.2.10'
-/usr/bin/make  all-recursive
-make[5]: Entering directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg
--config-0.25/glib-1.2.10'
-Making all in .
-make[6]: Entering directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg
--config-0.25/glib-1.2.10'
-/bin/bash ./libtool --tag=CC   --mode=link /usr/bin/gcc  -O2
--I/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.
-05-sdk5.1.2/output/host/include -I/home/dfvsmdev/workspace/obi
--eval/1.05-sdk5.1.2/output/host/usr/include -Wall  -D_REENTRANT
- -L/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/lib
--L/home/dfvsmdev/workspace/obi-eval/rootfsdk5.1.2/output/host/usr/lib
--Wl,-rpath,/home/dfvsmdev/workspace/obi-eval/rootfs/buildroo
-t-2011.05-sdk5.1.2/output/host/usr/lib -o testgdate testgdate.o libglib.la
-/bin/bash ./libtool --tag=CC   --mode=link /usr/bin/gcc  -O2
--I/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.
-05-sdk5.1.2/output/host/include -I/home/dfvsmdev/workspace/obi
--eval/1.05-sdk5.1.2/output/host/usr/include -Wall  -D_REENTRANT
- -L/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/lib
--L/home/dfvsmdev/workspace/obi-eval/rootfsdk5.1.2/output/host/usr/lib
--Wl,-rpath,/home/dfvsmdev/workspace/obi-eval/rootfs/buildroo
-t-2011.05-sdk5.1.2/output/host/usr/lib -o testglib testglib.o libglib.la
-/bin/bash ./libtool --tag=CC   --mode=link /usr/bin/gcc  -O2
--I/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.
-05-sdk5.1.2/output/host/include -I/home/dfvsmdev/workspace/obi
--eval/1.05-sdk5.1.2/output/host/usr/include -Wall  -D_REENTRANT
- -L/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/lib
--L/home/dfvsmdev/workspace/obi-eval/rootfsdk5.1.2/output/host/usr/lib
--Wl,-rpath,/home/dfvsmdev/workspace/obi-eval/rootfs/buildroo
-t-2011.05-sdk5.1.2/output/host/usr/lib -o testgdateparser testgdateparser.o
-libglib.la
-libtool: link: /usr/bin/gcc -O2 -I/home/dfvsmdev/workspace/obi
--eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/include
--I/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-sdk5/include
--Wall -D_REENTRANT -Wl,-rpath -Wl,/home/dfvsmdev/workspace/o
-bi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/usr/lib -o testgdate
-testgdate.o  -L/home/dfvsmdev/workspace/obiot-2011.05-sdk5.1.2/output/host/lib
--L/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.
-05-sdk5.1.2/output/host/usr/lib ./.libs/libglib.a
-libtool: link: /usr/bin/gcc -O2 -I/home/dfvsmdev/workspace/obi
--eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/include
--I/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-sdk5/include
--Wall -D_REENTRANT -Wl,-rpath -Wl,/home/dfvsmdev/workspace/o
-bi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/usr/lib -o
-testgdateparser testgdateparser.o  -L/home/dfvsmdev/wotfs/buildr
-oot-2011.05-sdk5.1.2/output/host/lib -L/home/dfvsmdev/workspace/obi
--eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/usr/lib
-./.libs/libglib.a
-libtool: link: /usr/bin/gcc -O2 -I/home/dfvsmdev/workspace/obi
--eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/include
--I/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-sdk5/include
--Wall -D_REENTRANT -Wl,-rpath -Wl,/home/dfvsmdev/workspace/o
-bi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/usr/lib -o testglib
-testglib.o  -L/home/dfvsmdev/workspace/obi-e-2011.05-sdk5.1.2/output/host/lib
--L/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.
-05-sdk5.1.2/output/host/usr/lib ./.libs/libglib.a
-Makefile:455: recipe for target 'testglib' failed
-Makefile:449: recipe for target 'testgdate' failed
-Makefile:452: recipe for target 'testgdateparser' failed
-make[6]: Leaving directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg
--config-0.25/glib-1.2.10'
-Makefile:530: recipe for target 'all-recursive' failed
-make[5]: Leaving directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg
--config-0.25/glib-1.2.10'
-Makefile:363: recipe for target 'all' failed
-make[4]: Leaving directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg
--config-0.25/glib-1.2.10'
-Makefile:537: recipe for target 'all-recursive' failed
-make[3]: Leaving directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg-config-0.25'
-Makefile:310: recipe for target 'all' failed
-make[2]: Leaving directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-pkg-config-0.25'
-package/Makefile.package.in:295 <http://makefile.package.in:295/>: recipe
-for target '/home/dfvsmdev/workspace/obi-eval/rootfs/buildroot-2011.05-
-sdk5.1.2/output/build/host-pkg-config-0.25/.stamp_built' failed
-make[1]: Leaving directory '/home/dfvsmdev/workspace/obi-
-eval/rootfs/buildroot-2011.05-sdk5.1.2'
-Makefile:343: recipe for target 'rootfs.all' failed
-make: *** [rootfs.all] Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170501/dcab3559/attachment-0001.html>
+On 2017-05-01 21:18 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  1 May 2017 17:58:39 +0200, Yann E. MORIN wrote:
+> > J Evans (1):
+> >       ext2: add help text for BR2_TARGET_ROOTFS_EXT2_BLOCKS
+> > 
+> > Yann E. MORIN (8):
+> >       package/mke2img: check nb_blocks is specified
+> >       package/mke2img: specifying zero inodes means auto
+> >       fs/ext2: always pass the number of inodes
+> >       fs/ext2: always pass the label option
+> >       fs/ext2: allow reserving zero block for root
+> >       fs/ext2: simplify code
+> >       package/mke2img: add option to specify block size
+> >       fs/ext2: add option to specify block size
+> 
+> In general, I find this good. However, it badly conflicts with the
+> on-going work to move away from mke2img/genext2fs and use mkfs.ext2/3/4
+> instead.
+
+But this is not ready yet, is it?
+
+> For example, I believe mkfs.ext2/3/4 will automatically chose a sane
+> default block size depending on the filesystem size.
+
+And even if it does, ther are stil cases where one wants to override the
+auto-calculated size.
+
+So, even when we switch the backend that generates the filesystem, we'd
+still want to have those options, I believe.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
