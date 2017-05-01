@@ -1,85 +1,59 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  1 May 2017 12:24:36 +0200
-Subject: [Buildroot] [PATCH v3 1/3] board: add stm32f429-disc1 config
-Message-ID: <20170501102438.9403-1-s.martin49@gmail.com>
+Date: Mon,  1 May 2017 12:24:37 +0200
+Subject: [Buildroot] [PATCH v3 2/3] toolchain: add 4.11.x choice for headers
+In-Reply-To: <20170501102438.9403-1-s.martin49@gmail.com>
+References: <20170501102438.9403-1-s.martin49@gmail.com>
+Message-ID: <20170501102438.9403-2-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change renders the stm32f429discovery a bit more generic and reuse most
-of its settings for the stm32f429-disc1 board.
-
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Davide Viti <zinosat@tiscali.it>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
-changes v1 -> v2:
-- fix cc emails
-
-changes v2 -> v3:
-- remove symlink (ThomasP)
-- list supported board in readme file (ThomasP)
+changes v2 -> v3
+- new patch
 ---
- board/stmicroelectronics/stm32f429-disco/flash.sh   | 10 ++++++++--
- board/stmicroelectronics/stm32f429-disco/readme.txt |  9 ++++++++-
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ toolchain/toolchain-common.in                                        | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/board/stmicroelectronics/stm32f429-disco/flash.sh b/board/stmicroelectronics/stm32f429-disco/flash.sh
-index ffb8fcffa..74021369a 100755
---- a/board/stmicroelectronics/stm32f429-disco/flash.sh
-+++ b/board/stmicroelectronics/stm32f429-disco/flash.sh
-@@ -1,14 +1,20 @@
- #!/bin/bash
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 379006d02..37079fad3 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -247,10 +247,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
  
- OUTPUT_DIR=$1
-+BOARD_NAME=${2:-stm32f429discovery}
- 
- if ! test -d "${OUTPUT_DIR}" ; then
-     echo "ERROR: no output directory specified."
--    echo "Usage: $0 OUTPUT_DIR"
-+    echo "Usage: $0 OUTPUT_DIR BOARD_NAME"
-+    echo ""
-+    echo "Arguments:"
-+    echo "    OUTPUT_DIR    The Buildroot output directory."
-+    echo "    BOARD_NAME    One of the available boards among:"
-+    echo "                  stm32f429discovery, stm32f429disc1"
-     exit 1
- fi
- 
--${OUTPUT_DIR}/host/usr/bin/openocd -f board/stm32f429discovery.cfg \
-+${OUTPUT_DIR}/host/usr/bin/openocd -f board/${BOARD_NAME}.cfg \
-   -c "init" \
-   -c "reset init" \
-   -c "flash probe 0" \
-diff --git a/board/stmicroelectronics/stm32f429-disco/readme.txt b/board/stmicroelectronics/stm32f429-disco/readme.txt
-index 43a25b420..f512cb2e9 100644
---- a/board/stmicroelectronics/stm32f429-disco/readme.txt
-+++ b/board/stmicroelectronics/stm32f429-disco/readme.txt
-@@ -4,6 +4,12 @@ STM32F429 Discovery
- This tutorial describes how to use the predefined Buildroot
- configuration for the STM32F429 Discovery evaluation platform.
- 
-+Supported HW
-+------------
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
 +
-+ - STM32F429I-DISCO evaluation board
-+ - STM32F429I-DISC1 evaluation board
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+ 	default "4.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+ 	default "4.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ 	default "4.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 668ea3d9d..ba5b97702 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -89,6 +89,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_11
++	bool "4.11.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
 +
- Building
- --------
- 
-@@ -24,7 +30,8 @@ The UART is configured at 115200.
- Flashing
- --------
- 
--  ./board/stmicroelectronics/stm32f429-disco/flash.sh output/
-+  ./board/stmicroelectronics/stm32f429-disco/flash.sh output/ \
-+      {stm32f429discovery|stm32f429disc1}
- 
- It will flash the minimal bootloader, the Device Tree Blob, and the
- kernel image which includes the root filesystem as initramfs.
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10
+ 	bool "4.10.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
 -- 
 2.12.2
