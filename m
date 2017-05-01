@@ -1,41 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 10:53:55 +0200
-Subject: [Buildroot] [PATCH] package/kodi: re-install prompt for optical
- drives
-In-Reply-To: <20170417140641.24527-1-yann.morin.1998@free.fr>
-References: <20170417140641.24527-1-yann.morin.1998@free.fr>
-Message-ID: <20170501105355.3d3df2d8@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 May 2017 10:58:22 +0200
+Subject: [Buildroot] [Patch v5 1/7] pkg-virtual: fix host dependencies
+ handling
+In-Reply-To: <20170422173840.19694-2-eric.le.bihan.dev@free.fr>
+References: <20170422173840.19694-1-eric.le.bihan.dev@free.fr>
+ <20170422173840.19694-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20170501085822.GC3118@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Eric, All,
 
-On Mon, 17 Apr 2017 16:06:41 +0200, Yann E. MORIN wrote:
-> In 81c438aa (package/kodi: Rework audio encoder support), the prompt for
-> the optical drive support was dropped, on the assumption that such
-> support was only needed when an audio encoder was enabled.
+On 2017-04-22 19:38 +0200, Eric Le Bihan spake thusly:
+> If $(BR2_PACKAGE_HAS_HOST_FOO) is defined, then the pkg-virtual
+> infrastructure will check if $(BR2_PACKAGE_PROVIDES_HOST_FOO) is not
+> empty.
 > 
-> However, support for optical drives is also required when, surprisingly,
-> one wants to read a DVD (and probably a BD as well, but this was not
-> tested by lack of hardware).
+> But later, $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES) will be set from
+> $(BR2_PACKAGE_PROVIDES_FOO), ignoring $(BR2_PACKAGE_PROVIDES_HOST_FOO).
 > 
-> Re-instate the prompt, so one can enable optical drive support even when
-> no audio encoder enabled.
+> So fix this discrepancy by setting $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES)
+> from $(BR2_PACKAGE_PROVIDES_FOO) only if $(BR2_PACKAGE_PROVIDES_HOST_FOO)
+> is empty.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  package/kodi/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  package/pkg-virtual.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+> index 2e83e07..b8878ad 100644
+> --- a/package/pkg-virtual.mk
+> +++ b/package/pkg-virtual.mk
+> @@ -49,7 +49,11 @@ $(2)_IS_VIRTUAL = YES
+>  ifeq ($(4),target)
+>  $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+>  else
+> +ifeq ($$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2))),)
+>  $(2)_DEPENDENCIES += host-$$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(3)))
+> +else
+> +$(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+> +endif
+>  endif
+>  
+>  # Call the generic package infrastructure to generate the necessary
+> -- 
+> 2.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
