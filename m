@@ -1,51 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 May 2017 20:47:04 +0200
-Subject: [Buildroot] [git commit] fdk-aac: bump to version 0.1.5
-Message-ID: <20170501185524.C833682853@busybox.osuosl.org>
+Date: Mon, 1 May 2017 20:54:44 +0200
+Subject: [Buildroot] [git commit] linux-header: bump to 4.11 kernel version
+Message-ID: <20170501185525.093AC7FE01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=833466aeecb9146da3d42aa6fe34c1e75d7f3df8
+commit: https://git.buildroot.net/buildroot/commit/?id=00f367cc2a34fa067f88535ed7d25286f51c9462
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also, remove the compile flags to make it build
-with GCC6 as it was added upstream
-
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fdk-aac/fdk-aac.hash | 2 +-
- package/fdk-aac/fdk-aac.mk   | 5 +----
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
-index 28a1eee..cd2e868 100644
---- a/package/fdk-aac/fdk-aac.hash
-+++ b/package/fdk-aac/fdk-aac.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  5910fe788677ca13532e3f47b7afaa01d72334d46a2d5e1d1f080f1173ff15ab  fdk-aac-0.1.4.tar.gz
-+sha256  2164592a67b467e5b20fdcdaf5bd4c50685199067391c6fcad4fa5521c9b4dd7  fdk-aac-0.1.5.tar.gz
-diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
-index 45a3cf5..0c9662e 100644
---- a/package/fdk-aac/fdk-aac.mk
-+++ b/package/fdk-aac/fdk-aac.mk
-@@ -4,14 +4,11 @@
- #
- ################################################################################
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5c67626..b1ef3d6 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_10
++	default BR2_KERNEL_HEADERS_4_11
+ 	help
+ 	  Select the kernel version to get headers from.
  
--FDK_AAC_VERSION = 0.1.4
-+FDK_AAC_VERSION = 0.1.5
- FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
- FDK_AAC_LICENSE = fdk-aac license
- FDK_AAC_LICENSE_FILES = NOTICE
+@@ -62,6 +62,10 @@ config BR2_KERNEL_HEADERS_4_10
+ 	bool "Linux 4.10.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
  
- FDK_AAC_INSTALL_STAGING = YES
++config BR2_KERNEL_HEADERS_4_11
++	bool "Linux 4.11.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
++
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
  
--# Not compatible with GCC 6 which defaults to GNU++14
--FDK_AAC_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++98"
--
- $(eval $(autotools-package))
+@@ -83,6 +87,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11
++	bool "4.11.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10
+ 	bool "4.10.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+@@ -222,4 +230,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.4.64"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.25"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.13"	if BR2_KERNEL_HEADERS_4_10
++	default "4.11"		if BR2_KERNEL_HEADERS_4_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
