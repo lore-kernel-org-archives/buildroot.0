@@ -1,117 +1,29 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  1 May 2017 18:11:40 -0500
-Subject: [Buildroot] [PATCH v2 1/1] libcsv: new package
-Message-ID: <1493680300-30123-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 01 May 2017 20:34:14 -0300
+Subject: [Buildroot] [v3 1/1] configs: add raspberrypi3 64bits defconfig
+References: <20170418155959.27129-1-gael.portay@savoirfairelinux.com>
+Message-ID: <5907c5f664aed_46013f8c5aa7da0c8119@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: David Graziano <david.graziano@rockwellcollins.com>
+Hello,
 
-libcsv is a small, simple and fast CSV library written in pure
-ANSI C89 that can read and write CSV data.
+On Tue, Apr 18, 2017 at 12:59 PM, Ga?l PORTAY wrote:
 
-Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
-v1 -> v2
-[Thomas P
- - Updated to SPDX license identifier
- - Removed redundant src archive declaration
- - Removed host build as buildroot doesn't have
-   a dependent package using it
- - Added developers file entry
+> This configuration builds a 64bit image for RaspberryPi 3.
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- DEVELOPERS                 |  4 ++++
- package/Config.in          |  1 +
- package/libcsv/Config.in   | 10 ++++++++++
- package/libcsv/libcsv.hash |  2 ++
- package/libcsv/libcsv.mk   | 13 +++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/libcsv/Config.in
- create mode 100644 package/libcsv/libcsv.hash
- create mode 100644 package/libcsv/libcsv.mk
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[build-tested: in the host 'file output/target/bin/busybox' shows
+'setuid ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV)'...;
+boot-tested: I can login using the HDMI console,
+and in the target 'cat /proc/cpuinfo' shows 'CPU architecture: 8']
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8db6dc8..019e100 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -413,6 +413,9 @@ F:	package/openldap/
- N:	David du Colombier <0intro@gmail.com>
- F:	package/x264/
- 
-+N:	David Graziano <david.graziano@rockwellcollins.com>
-+F:	package/libcsv/
-+
- N:	David Lechner <david@lechnology.com>
- F:	board/lego/ev3/
- F:	configs/lego_ev3_defconfig
-@@ -1067,6 +1070,7 @@ F:	package/fmc/
- F:	package/fmlib/
- F:	package/igmpproxy/
- F:	package/iputils/
-+F:	package/libcsv/
- F:	package/omniorb/
- F:	package/python-ipy/
- F:	package/python-posix-ipc/
-diff --git a/package/Config.in b/package/Config.in
-index bfcfb73..e3b6682 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1367,6 +1367,7 @@ menu "Other"
- 	source "package/libcofi/Config.in"
- 	source "package/libcroco/Config.in"
- 	source "package/libcrossguid/Config.in"
-+	source "package/libcsv/Config.in"
- 	source "package/libdaemon/Config.in"
- 	source "package/libee/Config.in"
- 	source "package/libev/Config.in"
-diff --git a/package/libcsv/Config.in b/package/libcsv/Config.in
-new file mode 100644
-index 0000000..eaa6115
---- /dev/null
-+++ b/package/libcsv/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBCSV
-+	bool "libcsv"
-+	help
-+	  libcsv is a small, simple and fast CSV library written in pure
-+	  ANSI C89 that can read and write CSV data. It provides a
-+	  straight-forward interface using callback functions to handle
-+	  parsed fields and rows and can parse improperly formatted CSV
-+	  files.
-+
-+	  https://sourceforge.net/projects/libcsv/
-diff --git a/package/libcsv/libcsv.hash b/package/libcsv/libcsv.hash
-new file mode 100644
-index 0000000..e35c44f
---- /dev/null
-+++ b/package/libcsv/libcsv.hash
-@@ -0,0 +1,2 @@
-+#locally computed
-+sha256 d9c0431cb803ceb9896ce74f683e6e5a0954e96ae1d9e4028d6e0f967bebd7e4  libcsv-3.0.3.tar.gz
-diff --git a/package/libcsv/libcsv.mk b/package/libcsv/libcsv.mk
-new file mode 100644
-index 0000000..d0ce643
---- /dev/null
-+++ b/package/libcsv/libcsv.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libcsv
-+#
-+################################################################################
-+
-+LIBCSV_VERSION = 3.0.3
-+LIBCSV_SITE = http://sourceforge.net/projects/libcsv/files
-+LIBCSV_LICENSE = LGPL-2.1+
-+LIBCSV_LICENSE_FILES = COPYING.LESSER
-+LIBCSV_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
--- 
-1.9.1
+I can't test the mini UART yet, sorry.
+
+Regards,
+Ricardo
