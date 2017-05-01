@@ -1,86 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 10:39:48 +0200
-Subject: [Buildroot] [git commit] package/libpng: bump version to 1.6.29
-Message-ID: <20170501084017.D53B182747@busybox.osuosl.org>
+Date: Mon, 1 May 2017 10:43:44 +0200
+Subject: [Buildroot] [PATCH 1/3] board: add stm32f429-disc1 config
+In-Reply-To: <20170501072645.5571-1-s.martin49@gmail.com>
+References: <20170501072645.5571-1-s.martin49@gmail.com>
+Message-ID: <20170501104344.457114c8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f40bb40075c01ff01edcc482bf3a71970f164e4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Refactored patch 0002, added support for Intel SSE2.
+On Mon,  1 May 2017 09:26:43 +0200, Samuel Martin wrote:
+> This change renders the stm32f429discovery a bit more generic and reuse most
+> of its settings for the stm32f429-disc1 board.
+> 
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> Cc: Davide Viti <d.viti@infosolution.it>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  board/stmicroelectronics/stm32f429-disc1            |  1 +
+>  board/stmicroelectronics/stm32f429-disco/flash.sh   | 10 ++++++++--
+>  board/stmicroelectronics/stm32f429-disco/readme.txt |  7 ++++---
+>  3 files changed, 13 insertions(+), 5 deletions(-)
+>  create mode 120000 board/stmicroelectronics/stm32f429-disc1
 
-Changelog:
-https://sourceforge.net/p/libpng/code/ci/b363e01e6b5e865e536db62ca4480f3a2d4690bd/#diff-2
+So there's no new defconfig? The existing one works fine, and the board
+only differs in the wiring of the serial port and the JTAG connection ?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...02-Don-t-append-prefix-to-symbol-names-in-version-script.patch | 5 ++++-
- package/libpng/libpng.hash                                        | 6 +++---
- package/libpng/libpng.mk                                          | 8 +++++++-
- 3 files changed, 14 insertions(+), 5 deletions(-)
+Thanks,
 
-diff --git a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
-index 2a9bfd1..de77222 100644
---- a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
-+++ b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
-@@ -15,6 +15,9 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Julien: update for 1.6.25]
- Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
- 
-+[Bernd: update for 1.6.29]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- ---
-  Makefile.am | 2 +-
-@@ -44,7 +47,7 @@ index 4e67782..5f468d9 100644
-  	-DPNGLIB_VERSION='@PNGLIB_VERSION@' \
- -	-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
- +	-DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
-- 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_7)
-+ 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_9)
-  
-  # EXT_LIST is a list of the possibly library directory extensions, this exists
- -- 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index e5bd6ba..279420a 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.28/
--sha1 ff4dceadb15e2c929ad26283118d56f66f4a6cff libpng-1.6.28.tar.xz
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.29/
-+sha1 7dbe6a5088b938545fc0857c507d4e0cf5d9023e  libpng-1.6.29.tar.xz
- # Locally computed:
--sha256 d8d3ec9de6b5db740fefac702c37ffcf96ae46cb17c18c1544635a3852f78f7a  libpng-1.6.28.tar.xz
-+sha256 4245b684e8fe829ebb76186327bb37ce5a639938b219882b53d64bd3cfc5f239  libpng-1.6.29.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 7ae1dd5..c82c4ef 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.28
-+LIBPNG_VERSION = 1.6.29
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
-@@ -21,5 +21,11 @@ else
- LIBPNG_CONF_OPTS += --disable-arm-neon
- endif
- 
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+LIBPNG_CONF_OPTS += --enable-intel-sse
-+else
-+LIBPNG_CONF_OPTS += --disable-intel-sse
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
