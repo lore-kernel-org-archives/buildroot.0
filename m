@@ -1,42 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 11:08:26 +0200
-Subject: [Buildroot] [git commit] mpir: fix build failure on MIPS
-Message-ID: <20170501090836.C2EE182818@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 1 May 2017 11:10:08 +0200
+Subject: [Buildroot] [PATCH 1/3] board: add stm32f429-disc1 config
+In-Reply-To: <20170501104344.457114c8@free-electrons.com>
+References: <20170501072645.5571-1-s.martin49@gmail.com>
+ <20170501104344.457114c8@free-electrons.com>
+Message-ID: <CAHXCMMJU_Buy2gOf-zyfaA9QgZ4tf-D6BTMeKskhipxTkCvM9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e947766891c0473d0406afcf1e9a77e25292020a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all, Thomas,
 
-Fixes:
+On Mon, May 1, 2017 at 10:43 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon,  1 May 2017 09:26:43 +0200, Samuel Martin wrote:
+>> This change renders the stm32f429discovery a bit more generic and reuse most
+>> of its settings for the stm32f429-disc1 board.
+>>
+>> Cc: Waldemar Brodkorb <wbx@openadk.org>
+>> Cc: Davide Viti <d.viti@infosolution.it>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  board/stmicroelectronics/stm32f429-disc1            |  1 +
+>>  board/stmicroelectronics/stm32f429-disco/flash.sh   | 10 ++++++++--
+>>  board/stmicroelectronics/stm32f429-disco/readme.txt |  7 ++++---
+>>  3 files changed, 13 insertions(+), 5 deletions(-)
+>>  create mode 120000 board/stmicroelectronics/stm32f429-disc1
+>
+> So there's no new defconfig? The existing one works fine, and the board
+> only differs in the wiring of the serial port and the JTAG connection ?
 
-  http://autobuild.buildroot.net/results/3de0ef545a7303ec6564ecf1a1da3dd539957ed4/
+No new defconfig (just reuse the stm32f429-disc0 ones for both kernel
+and buildroot).
+Between the disc0 and the disc1 version, just the debugging chip
+differ (hence the new config to be used with openocd, this new config
+is already available in openocd-0.10).
+According to the datasheet, the serial pin should be unchanged.
 
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
-[Thomas: remove bogus PowerPC stuff, fix n64 specification, rework
-commit log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mpir/mpir.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Regards,
 
-diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-index 430d587..b7f3829 100644
---- a/package/mpir/mpir.mk
-+++ b/package/mpir/mpir.mk
-@@ -12,4 +12,12 @@ MPIR_LICENSE_FILES = COPYING.LIB
- MPIR_INSTALL_STAGING = YES
- MPIR_DEPENDENCIES = gmp host-yasm
- 
-+ifeq ($(BR2_MIPS_NABI32),y)
-+MPIR_CONF_OPTS += ABI=n32
-+endif
-+
-+ifeq ($(BR2_MIPS_NABI64),y)
-+MPIR_CONF_OPTS += ABI=64
-+endif
-+
- $(eval $(autotools-package))
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+
+-- 
+Samuel
