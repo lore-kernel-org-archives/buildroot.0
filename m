@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 10:45:43 +0200
-Subject: [Buildroot] [PATCH 2/3] linux: bump default to version 4.11
-In-Reply-To: <20170501072645.5571-2-s.martin49@gmail.com>
-References: <20170501072645.5571-1-s.martin49@gmail.com>
- <20170501072645.5571-2-s.martin49@gmail.com>
-Message-ID: <20170501104543.0815fcc0@free-electrons.com>
+Date: Mon, 1 May 2017 10:51:18 +0200
+Subject: [Buildroot] [PATCH] cukinia: new package
+In-Reply-To: <20170425135814.8787-1-alexandre.leblanc@savoirfairelinux.com>
+References: <20170425135814.8787-1-alexandre.leblanc@savoirfairelinux.com>
+Message-ID: <20170501105118.5ce1b97f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  1 May 2017 09:26:44 +0200, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  linux/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, 25 Apr 2017 09:58:14 -0400, Alexandre Leblanc wrote:
+> Cukinia is designed to help Linux-based embedded firmware developers
+> run simple validation tests on their firmware. For basic usage it
+> requires no dependencies other than busybox.
+> 
+> Cukinia can run tests at boot time which is why we are using SZZcukinia
+> since it would possibly be the last script to be executed in 'init.d'.
+> 
+> Signed-off-by: Alexandre Leblanc <alexandre.leblanc@savoirfairelinux.com>
 
-Applied to master, thanks.
+As much as I like adding new package in Buildroot, this project feels
+like your own project, very recently started, with no outside
+contributions. In the end it's just a single shell script providing a
+few functions. Could be useful, but I'm not sure we want to add this as
+a Buildroot package that quickly.
+
+Perhaps we need to see if there is some interest/adoption first?
+
+>  package/cukinia/Config.in    | 12 ++++++++++++
+>  package/cukinia/SZZcukinia   |  7 +++++++
+
+I'm not sure I like this idea of SZZcukinia, though indeed S99 wouldn't
+work because a few other Buildroot services are started at S99, and you
+want to be after those services. Maybe other developers will have some
+ideas?
+
+> +CUKINIA_LICENSE = Apache-2.0 or GPLv3
+
+GPLv3 should be GPL-3.0.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
