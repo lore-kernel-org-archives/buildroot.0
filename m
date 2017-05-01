@@ -1,67 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 1 May 2017 10:38:56 +0300
-Subject: [Buildroot] [PATCH] bluez5_utils: fix build of gatttool
-In-Reply-To: <20170501092142.216bc5b9@free-electrons.com>
-References: <813b44550d7406827f9307514a8386b4462b854d.1493620107.git.baruch@tkos.co.il>
- <20170501092142.216bc5b9@free-electrons.com>
-Message-ID: <20170501073856.cgnhegilk7dqvg3v@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 May 2017 09:46:21 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/kodi-skin-confluence: new
+ package
+In-Reply-To: <20170429203608.17700-1-bernd.kuhls@t-online.de>
+References: <20170429203608.17700-1-bernd.kuhls@t-online.de>
+Message-ID: <20170501074621.GA3118@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Bernd, All,
 
-On Mon, May 01, 2017 at 09:21:42AM +0200, Thomas Petazzoni wrote:
-> On Mon,  1 May 2017 09:28:27 +0300, Baruch Siach wrote:
-> > Since BlueZ 5.44 gatttool is hidden behind the --enable-deprecated configure
-> > option.
-> > 
-> > Also, update the help text with the new status of gatttool.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/ddb/ddb975c9e1475fee1da63cb21240d8d59b161076/
-> > http://autobuild.buildroot.net/results/19a/19adc0aa5a7e48119ef4ba25ba0403867f74f678/
-> > http://autobuild.buildroot.net/results/9bd/9bd8e13ddffdd0631ddca30ec40cc4664729b0cb/
-> > 
-> > Cc: Marcin Bis <marcin@bis.org.pl>
-> > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On 2017-04-29 22:36 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Yet, a little comment, blow...
+
+> ---
+[--SNIP--]
+> diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+> new file mode 100644
+> index 000000000..c679ec687
+> --- /dev/null
+> +++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# kodi-skin-confluence
+> +#
+> +################################################################################
+> +
+
+Like for other Kodi packages, should we add "on the Krypton branch" ?
+
+Regards,
+Yann E. MORIN.
+
+> +KODI_SKIN_CONFLUENCE_VERSION = 7044dabb3a818d7ff47b7a34bfb3480f2a9441d9
+> +KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+> +KODI_SKIN_CONFLUENCE_LICENSE = GPLv2+
+> +KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+> +KODI_SKIN_CONFLUENCE_DEPENDENCIES = kodi
+> +KODI_SKIN_CONFLUENCE_CONF_OPTS = -DOVERRIDE_PATHS=1
+> +
+> +define KODI_SKIN_CONFLUENCE_BUILD_CMDS
+> +	$(HOST_DIR)/usr/bin/TexturePacker -input $(@D)/media/ -output $(@D)/media/Textures.xbt -dupecheck -use_none
+> +endef
+> +
+> +define KODI_SKIN_CONFLUENCE_INSTALL_TARGET_CMDS
+> +	mkdir -p $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence
+> +	cp -dpfr $(@D)/* $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence
+> +	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.jpg -delete
+> +	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.png -delete
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 6bc81338a..cc747e816 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -326,6 +326,10 @@ menu "Screensavers"
+>  	source "package/kodi-screensaver-stars/Config.in"
+>  endmenu
+>  
+> +menu "Skins"
+> +	source "package/kodi-skin-confluence/Config.in"
+> +endmenu
+> +
+>  menu "Visualisations"
+>  	source "package/kodi-visualisation-fishbmc/Config.in"
+>  	source "package/kodi-visualisation-goom/Config.in"
+> -- 
+> 2.11.0
 > 
-> We have lots of patches pending on bluez5_utils, to solve this issue
-> and others. It's not clear what is the overall plan, as all the patches
-> have been sent separately (i.e not in a series).
-> 
-> See
-> https://patchwork.ozlabs.org/project/buildroot/list/?submitter=&state=&q=bluez&archive=&delegate=.
-> 
-> Essentially, your patch is the third one to solve the gattool problem.
-
-This patch is essentially equivalent to that of Bernd[1], expect that is also 
-updates the help text.
-
-I think Andy's suggestion[2] is better than both, but it needs some more work 
-to address Peter's comments, and maybe split into separate tools and plugins 
-patches. I also think that we should group all deprecated tools together, and 
-replace the BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL option with 
-BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED.
-
-I don't think we should remove gatttool installation as Sam suggests[3]. E.g. 
-the hciattach tool is also deprecated upstream, but it is unfortunately still 
-required for many real world Bluetooth installations.
-
-I'll take over Andy's patch as time permits.
-
-[1] https://patchwork.ozlabs.org/patch/736377/
-
-[2] https://patchwork.ozlabs.org/patch/741645/
-
-[3] https://patchwork.ozlabs.org/patch/748801/
-
-baruch
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
