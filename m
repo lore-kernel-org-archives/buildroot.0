@@ -1,9 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 1 May 2017 23:13:40 +0200
+Date: Mon, 1 May 2017 23:28:11 +0200
 Subject: [Buildroot] [PATCH v2] daemon: new package
 In-Reply-To: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
 References: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
-Message-ID: <9da2c9e4-6d5d-a40c-ff1c-3a1f3e5ae4f2@gmail.com>
+Message-ID: <47ac8a79-3586-a052-77df-3a4759c5e8d8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,56 +16,28 @@ Le 01/05/2017 ? 22:03, Baruch Siach a ?crit :
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
 > v2: add target installation (thanks Romain)
+> ---
 
-You're welcome!
-
-[...]
-
-> diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
 > new file mode 100644
-> index 000000000000..25ff07ba1ca9
+> index 000000000000..30954e77edc7
 > --- /dev/null
-> +++ b/package/daemon/daemon.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# daemon
-> +#
-> +################################################################################
-> +
-> +DAEMON_VERSION = 0.6.4
-> +DAEMON_SITE = http://libslack.org/daemon/download
-> +DAEMON_LICENSE = GPL-2.0+
-> +DAEMON_LICENSE_FILES = LICENSE
-> +
-> +define DAEMON_CONFIGURE_CMDS
-> +	(cd $(@D); ./config)
-> +endef
-> +
-> +define DAEMON_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> +endef
-> +
-> +define DAEMON_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) \
-> +		install-daemon-bin
+> +++ b/package/daemon/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_DAEMON
+> +	bool "daemon"
+> +	depends on BR2_USE_MMU # fork()
 
-There is still an issue with install-daemon-bin target... it try to strip the
-binary with the strip tool from the host.
+It also needs thread support:
 
-This cause a failure:
-case "$DEB_BUILD_OPTIONS" in *nostrip*);; *) strip
-output/target/usr/bin/daemon;; esac
-
-strip: Unable to recognise the format of the input file ?
-output/target/usr/bin/daemon ?
-
-Add DEB_BUILD_OPTIONS="nostrip" in DAEMON_INSTALL_TARGET_CMDS.
+In file included from libslack/coproc.c:56:0:
+libslack/std.h:102:21: fatal error: pthread.h: No such file or directory
 
 Best regards,
 Romain
 
-> +endef
+> +	help
+> +	  Daemon turns other process into daemons.
 > +
-> +$(eval $(generic-package))
+> +	  http://www.libslack.org/daemon/
+
 > 
