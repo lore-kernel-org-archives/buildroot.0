@@ -1,77 +1,80 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 1 May 2017 21:33:51 +0200
-Subject: [Buildroot] [PATCH] daemon: new package
-In-Reply-To: <d5dadc5047888dabaabd88b4f3b885558d30c0b7.1493666251.git.baruch@tkos.co.il>
-References: <d5dadc5047888dabaabd88b4f3b885558d30c0b7.1493666251.git.baruch@tkos.co.il>
-Message-ID: <8ff50b7e-e18d-39bb-ba93-12b9f78cda2d@gmail.com>
+From: semenak94 at mail.ru <semenak94@mail.ru>
+Date: Mon, 01 May 2017 22:40:49 +0300
+Subject: [Buildroot] =?utf-8?q?=5BPATCHv5=5D_mpir=3A_fix_build_failure?=
+In-Reply-To: <20170501112149.46c43ad1@free-electrons.com>
+References: <mpir:> <1492774031-25802-1-git-send-email-semenak94@mail.ru>
+ <20170501112149.46c43ad1@free-electrons.com>
+Message-ID: <1493667648.334487064@f28.my.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
 
-Le 01/05/2017 ? 21:17, Baruch Siach a ?crit :
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
+Hello, 
+Of course, I'll fixed it, as son as possible. 
+--
+Semyon
+-----------
+Semyon Kolganov  ???????????, 01 ??? 2017?., 12:21 +03:00 ?? Thomas Petazzoni  thomas.petazzoni at free-electrons.com :
 
-[...]
-
-> diff --git a/package/daemon/Config.in b/package/daemon/Config.in
-> new file mode 100644
-> index 000000000000..30954e77edc7
-> --- /dev/null
-> +++ b/package/daemon/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_DAEMON
-> +	bool "daemon"
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  Daemon turns other process into daemons.
-> +
-> +	  http://www.libslack.org/daemon/
-> diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-> new file mode 100644
-> index 000000000000..32308ea3f773
-> --- /dev/null
-> +++ b/package/daemon/daemon.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from http://www.libslack.org/daemon/; sha256 locally calculated
-> +md5 6cd0a28630a29ac279bc501f39baec66 daemon-0.6.4.tar.gz
-> +sha256 c4b9ea4aa74d55ea618c34f1e02c080ddf368549037cb239ee60c83191035ca1 daemon-0.6.4.tar.gz
-> diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-> new file mode 100644
-> index 000000000000..6b858ceb142d
-> --- /dev/null
-> +++ b/package/daemon/daemon.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# daemon
-> +#
-> +################################################################################
-> +
-> +DAEMON_VERSION = 0.6.4
-> +DAEMON_SITE = http://libslack.org/daemon/download
-> +DAEMON_LICENSE = GPL-2.0+
-> +DAEMON_LICENSE_FILES = LICENSE
-> +
-> +define DAEMON_CONFIGURE_CMDS
-> +	(cd $(@D); ./config)
-> +endef
-> +
-> +define DAEMON_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> +endef
-
-Almost good, except nothing is installed in TARGET_DIR :)
-
-DAEMON_INSTALL_TARGET_CMDS is missing.
-
-Best regards,
-Romain
-
-> +
-> +$(eval $(generic-package))
-> 
+>Hello,
+>
+>On Fri, 21 Apr 2017 14:27:11 +0300, Semyon Kolganov wrote:
+>> Signed-off-by: Semyon Kolganov < semenak94@mail.ru >
+>
+>When you're fixing build failures from the autobuilders, the commit log
+>should provide references to the autobuilder failures being fixed.
+>
+>> +ifeq ($(BR2_MIPS_NABI64),y)
+>> +MPIR_CONF_OPTS += ABI=n64
+>> +endif
+>
+>You did not even test this, because it fails to build:
+>
+>configure: error: ABI=n64 is not among the following valid choices: 64 n32 o32
+>
+>So I've fixed that to ABI=64
+>
+>> +ifeq ($(BR2_powerpc_CLASSIC),y)
+>> +MPIR_CONF_OPTS += ABI=mode64
+>> +MPIR_CONF_ENV += MPN_PATH=generic
+>> +endif
+>
+>This looks bogus. mode64 seems to refer to a 64-bit ABI, while
+>BR2_powerpc_CLASSIC is not necessarily 64 bit.
+>
+>So, I've applied after changing ABI=n64 to ABI=64, dropping the PowerPC
+>stuff and adding a reference to the autobuilder failure being fixes.
+>
+>That being said, there are still several other mpir related build
+>failures that have not been fixed:
+>
+>?* On ARM, we fail with the old Crosstool-NG toolchains, but apparently
+>???not with other ARM toolchains. Both the ARMv5 and ARMv7 Crosstool-NG
+>???toolchains are failing to build MPIR:
+>
+>??? http://autobuild.buildroot.net/results/fd0/fd032f7dbd4cace84bb31e8017cb6139ef3c1072/build-end.log
+>??? http://autobuild.buildroot.net/results/c36/c360581c2925529f18635aac32c2865899f5e0f5/build-end.log
+>
+>?* On MIPS64r6
+>
+>??? http://autobuild.buildroot.net/results/c45/c45dd59f10693b0d9a86dac4733c6c3dde4554f1/build-end.log
+>
+>?* On PowerPC64
+>
+>??? http://autobuild.buildroot.net/results/be1/be1478836b2e7b580174641f48de92c9b02512a7/build-end.log
+>
+>Could you have a look and fix those remaining issues?
+>
+>Thanks!
+>
+>Thomas
+>-- 
+>Thomas Petazzoni, CTO, Free Electrons
+>Embedded Linux and Kernel engineering
+>http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170501/87298ad8/attachment.html>
