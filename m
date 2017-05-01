@@ -1,53 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  1 May 2017 11:11:04 +0200
-Subject: [Buildroot] [PATCH] config/raspberrypi3: use correct CPU
-Message-ID: <20170501091104.3183-1-yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon,  1 May 2017 11:16:21 +0200
+Subject: [Buildroot] [PATCH v2 1/2] board: add stm32f429-disc1 config
+Message-ID: <20170501091622.1930-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We so far were using a Cortex-A7 as the CPU for the rpi3, as this was
-the closest we had available, in 32-bit mode, to the real CPU used in
-the rpi3.
+This change renders the stm32f429discovery a bit more generic and reuse most
+of its settings for the stm32f429-disc1 board.
 
-But now we can also use the Cortex-A53 in 32-bit mode, so we use that,
-which makes for an optimised build (A53 has an improved instruction set,
-as compared to the A7).
-
-Also drop the DTB overlay option, it defaults to 'y'.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Martin Bark <martin@barkynet.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Davide Viti <zinosat@tiscali.it>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
-Martin, Peter, you are the last ones to have touched this defconfig, and
-I lack a rpi3. Would you be kind enough to test this on your hw, please?
+changes v1 -> v2:
+- fix cc emails
 ---
- configs/raspberrypi3_defconfig | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ board/stmicroelectronics/stm32f429-disc1            |  1 +
+ board/stmicroelectronics/stm32f429-disco/flash.sh   | 10 ++++++++--
+ board/stmicroelectronics/stm32f429-disco/readme.txt |  7 ++++---
+ 3 files changed, 13 insertions(+), 5 deletions(-)
+ create mode 120000 board/stmicroelectronics/stm32f429-disc1
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 1b2134e0bb..f5bfebcb83 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -1,6 +1,5 @@
- BR2_arm=y
--BR2_cortex_a7=y
--BR2_ARM_EABIHF=y
-+BR2_cortex_a53=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/board/stmicroelectronics/stm32f429-disc1 b/board/stmicroelectronics/stm32f429-disc1
+new file mode 120000
+index 000000000..6b0439142
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f429-disc1
+@@ -0,0 +1 @@
++stm32f429-disco
+\ No newline at end of file
+diff --git a/board/stmicroelectronics/stm32f429-disco/flash.sh b/board/stmicroelectronics/stm32f429-disco/flash.sh
+index ffb8fcffa..74021369a 100755
+--- a/board/stmicroelectronics/stm32f429-disco/flash.sh
++++ b/board/stmicroelectronics/stm32f429-disco/flash.sh
+@@ -1,14 +1,20 @@
+ #!/bin/bash
  
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
-@@ -21,7 +20,6 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-cm3"
+ OUTPUT_DIR=$1
++BOARD_NAME=${2:-stm32f429discovery}
  
- BR2_PACKAGE_RPI_FIRMWARE=y
--BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+ if ! test -d "${OUTPUT_DIR}" ; then
+     echo "ERROR: no output directory specified."
+-    echo "Usage: $0 OUTPUT_DIR"
++    echo "Usage: $0 OUTPUT_DIR BOARD_NAME"
++    echo ""
++    echo "Arguments:"
++    echo "    OUTPUT_DIR    The Buildroot output directory."
++    echo "    BOARD_NAME    One of the available boards among:"
++    echo "                  stm32f429discovery, stm32f429disc1"
+     exit 1
+ fi
  
- # Required tools to create the SD image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-${OUTPUT_DIR}/host/usr/bin/openocd -f board/stm32f429discovery.cfg \
++${OUTPUT_DIR}/host/usr/bin/openocd -f board/${BOARD_NAME}.cfg \
+   -c "init" \
+   -c "reset init" \
+   -c "flash probe 0" \
+diff --git a/board/stmicroelectronics/stm32f429-disco/readme.txt b/board/stmicroelectronics/stm32f429-disco/readme.txt
+index 43a25b420..a1d91d234 100644
+--- a/board/stmicroelectronics/stm32f429-disco/readme.txt
++++ b/board/stmicroelectronics/stm32f429-disco/readme.txt
+@@ -15,8 +15,8 @@ Wire the UART
+ 
+ Use a USB to TTL adapter, and connect:
+ 
+- - RX to PA9
+- - TX to PA10
++ - RX to PA9 (or the RX pin on the stm32f429i-disc1 board)
++ - TX to PA10 (or the TX pin on the stm32f429i-disc1 board)
+  - GND to one of the GND available on the board
+ 
+ The UART is configured at 115200.
+@@ -24,7 +24,8 @@ The UART is configured at 115200.
+ Flashing
+ --------
+ 
+-  ./board/stmicroelectronics/stm32f429-disco/flash.sh output/
++  ./board/stmicroelectronics/stm32f429-disco/flash.sh output/ \
++      {stm32f429discovery|stm32f429disc1}
+ 
+ It will flash the minimal bootloader, the Device Tree Blob, and the
+ kernel image which includes the root filesystem as initramfs.
 -- 
-2.11.0
+2.12.2
