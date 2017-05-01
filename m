@@ -1,51 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 10:51:18 +0200
-Subject: [Buildroot] [PATCH] cukinia: new package
-In-Reply-To: <20170425135814.8787-1-alexandre.leblanc@savoirfairelinux.com>
-References: <20170425135814.8787-1-alexandre.leblanc@savoirfairelinux.com>
-Message-ID: <20170501105118.5ce1b97f@free-electrons.com>
+Date: Mon, 1 May 2017 10:53:37 +0200
+Subject: [Buildroot] [git commit] package/kodi: re-install prompt for
+	optical drives
+Message-ID: <20170501085343.0AE72827DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c97124f91104e88452fb35e5ac890a336a1557e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Apr 2017 09:58:14 -0400, Alexandre Leblanc wrote:
-> Cukinia is designed to help Linux-based embedded firmware developers
-> run simple validation tests on their firmware. For basic usage it
-> requires no dependencies other than busybox.
-> 
-> Cukinia can run tests at boot time which is why we are using SZZcukinia
-> since it would possibly be the last script to be executed in 'init.d'.
-> 
-> Signed-off-by: Alexandre Leblanc <alexandre.leblanc@savoirfairelinux.com>
+In 81c438aa (package/kodi: Rework audio encoder support), the prompt for
+the optical drive support was dropped, on the assumption that such
+support was only needed when an audio encoder was enabled.
 
-As much as I like adding new package in Buildroot, this project feels
-like your own project, very recently started, with no outside
-contributions. In the end it's just a single shell script providing a
-few functions. Could be useful, but I'm not sure we want to add this as
-a Buildroot package that quickly.
+However, support for optical drives is also required when, surprisingly,
+one wants to read a DVD (and probably a BD as well, but this was not
+tested by lack of hardware).
 
-Perhaps we need to see if there is some interest/adoption first?
+Re-instate the prompt, so one can enable optical drive support even when
+no audio encoder enabled.
 
->  package/cukinia/Config.in    | 12 ++++++++++++
->  package/cukinia/SZZcukinia   |  7 +++++++
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I'm not sure I like this idea of SZZcukinia, though indeed S99 wouldn't
-work because a few other Buildroot services are started at S99, and you
-want to be after those services. Maybe other developers will have some
-ideas?
-
-> +CUKINIA_LICENSE = Apache-2.0 or GPLv3
-
-GPLv3 should be GPL-3.0.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index d7b2692..e8285ed 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -266,7 +266,9 @@ config BR2_PACKAGE_KODI_UPNP
+ 	  Enable UPnP support
+ 
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+-	bool
++	bool "optical drives"
++	help
++	  Add support for optical drives, to read e.g. DVDs...
+ 
+ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
