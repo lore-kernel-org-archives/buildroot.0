@@ -1,39 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 1 May 2017 18:09:02 +0300
-Subject: [Buildroot] [PATCH 1/4] bluez5_utils: allow install of
- deprecated tools
-In-Reply-To: <20170501165750.1b6c9459@free-electrons.com>
-References: <cover.1493643541.git.baruch@tkos.co.il>
- <a98f6fda9cded4f8416b2a6f2249e85be944eca4.1493643541.git.baruch@tkos.co.il>
- <20170501165750.1b6c9459@free-electrons.com>
-Message-ID: <20170501150902.hcftaslekdgexeek@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  1 May 2017 17:58:39 +0200
+Subject: [Buildroot] [PATCH 0/9] fs/ext2: cleanups and improvements
+Message-ID: <cover.1493654310.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello All!
 
-On Mon, May 01, 2017 at 04:57:50PM +0200, Thomas Petazzoni wrote:
-> On Mon,  1 May 2017 15:59:41 +0300, Baruch Siach wrote:
-> 
-> > -ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
-> > +ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED),y)
-> >  define BLUEZ5_UTILS_INSTALL_GATTTOOL
-> >  	$(INSTALL) -D -m 0755 $(@D)/attrib/gatttool $(TARGET_DIR)/usr/bin/gatttool
-> >  endef
-> >  BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_GATTTOOL
-> > +BLUEZ5_UTILS_CONF_OPTS += --enable-deprecated
-> 
-> So the --enable-deprecated option only enables the build of gatttool ?
+This series brings in some cleanups about our ext2 filesystem handling,
+and a few enhancements, of which the ability to reserve 0 block for root,
+and set the block size.
 
-No. It enables all deprecated tools. But for all other tools bluez does the 
-installation as well. Only gatttool needs manual installation like before.
 
-baruch
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 5f14d0363248e8de253b7611e66b67eba45ce959
+
+  package/m*/Config.in: fix ordering of statements (2017-05-01 11:56:18 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to c85507a4104956f6597a910e729118309f3ff432
+
+  fs/ext2: add option to specify block size (2017-05-01 17:31:44 +0200)
+
+
+----------------------------------------------------------------
+J Evans (1):
+      ext2: add help text for BR2_TARGET_ROOTFS_EXT2_BLOCKS
+
+Yann E. MORIN (8):
+      package/mke2img: check nb_blocks is specified
+      package/mke2img: specifying zero inodes means auto
+      fs/ext2: always pass the number of inodes
+      fs/ext2: always pass the label option
+      fs/ext2: allow reserving zero block for root
+      fs/ext2: simplify code
+      package/mke2img: add option to specify block size
+      fs/ext2: add option to specify block size
+
+ fs/ext2/Config.in       | 35 +++++++++++++++++++++++++++++++++--
+ fs/ext2/ext2.mk         | 27 +++++++++++----------------
+ package/mke2img/mke2img | 15 ++++++++++++---
+ 3 files changed, 56 insertions(+), 21 deletions(-)
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
