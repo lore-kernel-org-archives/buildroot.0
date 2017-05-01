@@ -1,55 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 May 2017 22:58:21 +0200
-Subject: [Buildroot] [PATCH 0/9] fs/ext2: cleanups and improvements
-In-Reply-To: <20170501211852.6193ab52@free-electrons.com>
-References: <cover.1493654310.git.yann.morin.1998@free.fr>
- <20170501211852.6193ab52@free-electrons.com>
-Message-ID: <20170501205821.GE3118@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 1 May 2017 23:13:40 +0200
+Subject: [Buildroot] [PATCH v2] daemon: new package
+In-Reply-To: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
+References: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
+Message-ID: <9da2c9e4-6d5d-a40c-ff1c-3a1f3e5ae4f2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Baruch,
 
-On 2017-05-01 21:18 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  1 May 2017 17:58:39 +0200, Yann E. MORIN wrote:
-> > J Evans (1):
-> >       ext2: add help text for BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> > 
-> > Yann E. MORIN (8):
-> >       package/mke2img: check nb_blocks is specified
-> >       package/mke2img: specifying zero inodes means auto
-> >       fs/ext2: always pass the number of inodes
-> >       fs/ext2: always pass the label option
-> >       fs/ext2: allow reserving zero block for root
-> >       fs/ext2: simplify code
-> >       package/mke2img: add option to specify block size
-> >       fs/ext2: add option to specify block size
+Le 01/05/2017 ? 22:03, Baruch Siach a ?crit :
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2: add target installation (thanks Romain)
+
+You're welcome!
+
+[...]
+
+> diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
+> new file mode 100644
+> index 000000000000..25ff07ba1ca9
+> --- /dev/null
+> +++ b/package/daemon/daemon.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# daemon
+> +#
+> +################################################################################
+> +
+> +DAEMON_VERSION = 0.6.4
+> +DAEMON_SITE = http://libslack.org/daemon/download
+> +DAEMON_LICENSE = GPL-2.0+
+> +DAEMON_LICENSE_FILES = LICENSE
+> +
+> +define DAEMON_CONFIGURE_CMDS
+> +	(cd $(@D); ./config)
+> +endef
+> +
+> +define DAEMON_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +endef
+> +
+> +define DAEMON_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) \
+> +		install-daemon-bin
+
+There is still an issue with install-daemon-bin target... it try to strip the
+binary with the strip tool from the host.
+
+This cause a failure:
+case "$DEB_BUILD_OPTIONS" in *nostrip*);; *) strip
+output/target/usr/bin/daemon;; esac
+
+strip: Unable to recognise the format of the input file ?
+output/target/usr/bin/daemon ?
+
+Add DEB_BUILD_OPTIONS="nostrip" in DAEMON_INSTALL_TARGET_CMDS.
+
+Best regards,
+Romain
+
+> +endef
+> +
+> +$(eval $(generic-package))
 > 
-> In general, I find this good. However, it badly conflicts with the
-> on-going work to move away from mke2img/genext2fs and use mkfs.ext2/3/4
-> instead.
-
-But this is not ready yet, is it?
-
-> For example, I believe mkfs.ext2/3/4 will automatically chose a sane
-> default block size depending on the filesystem size.
-
-And even if it does, ther are stil cases where one wants to override the
-auto-calculated size.
-
-So, even when we switch the backend that generates the filesystem, we'd
-still want to have those options, I believe.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
