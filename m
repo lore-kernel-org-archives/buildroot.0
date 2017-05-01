@@ -1,43 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 1 May 2017 23:28:11 +0200
-Subject: [Buildroot] [PATCH v2] daemon: new package
-In-Reply-To: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
-References: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
-Message-ID: <47ac8a79-3586-a052-77df-3a4759c5e8d8@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 May 2017 00:01:11 +0200
+Subject: [Buildroot] [PATCH] busybox: no need to disable clear and reset
+In-Reply-To: <20170424201323.30582-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Mon, 24 Apr 2017 22:13:23 +0200")
+References: <20170424201323.30582-1-arnout@mind.be>
+Message-ID: <87fugodyoo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Le 01/05/2017 ? 22:03, Baruch Siach a ?crit :
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2: add target installation (thanks Romain)
-> ---
+ > Removing clear and reset from the busybox config when the ncurses tools
+ > are enabled is not really needed.
 
-> new file mode 100644
-> index 000000000000..30954e77edc7
-> --- /dev/null
-> +++ b/package/daemon/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_DAEMON
-> +	bool "daemon"
-> +	depends on BR2_USE_MMU # fork()
+ > Since commit 802bff9c42, the busybox install will not overwrite
+ > existing programs. Therefore, the tools will be installed correctly
+ > regardless of the order of the build:
+ > - if busybox is built first, the clear and reset apps are installed,
+ >   but they will be overwritten by ncurses;
+ > - if ncurses is built first, it will install the clear and reset apps,
+ >   and busybox will no longer install them.
 
-It also needs thread support:
+ > We prefer not to modify the busybox configuration when not strictly
+ > necessary, because it is surprising for the user that his configuration
+ > is not applied. Clearly, it's not ideal that busybox is configured with
+ > redundant apps, but if the user wants to shrink it, it's possible to
+ > provide a custom config.
 
-In file included from libslack/coproc.c:56:0:
-libslack/std.h:102:21: fatal error: pthread.h: No such file or directory
+ > This partially reverts commit 33c72344a8686a136c1da6a056ed6c0945bbf8b7.
 
-Best regards,
-Romain
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Cc: Danomi Manchego <danomimanchego123@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> +	help
-> +	  Daemon turns other process into daemons.
-> +
-> +	  http://www.libslack.org/daemon/
+Committed to 2017.02.x, thanks.
 
-> 
+-- 
+Bye, Peter Korsgaard
