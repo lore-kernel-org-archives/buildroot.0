@@ -1,129 +1,21 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  1 May 2017 23:03:15 +0300
-Subject: [Buildroot] [PATCH v2] daemon: new package
-Message-ID: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 May 2017 22:41:51 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 4.4.x series to 4.4.65
+In-Reply-To: <20170501185708.23340-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 1 May 2017 20:57:08 +0200")
+References: <20170501185708.23340-1-peter@korsgaard.com>
+Message-ID: <87o9vce2cw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: add target installation (thanks Romain)
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/daemon/0001-fix-musl.patch | 18 ++++++++++++++++++
- package/daemon/Config.in           |  7 +++++++
- package/daemon/daemon.hash         |  3 +++
- package/daemon/daemon.mk           | 25 +++++++++++++++++++++++++
- 6 files changed, 55 insertions(+)
- create mode 100644 package/daemon/0001-fix-musl.patch
- create mode 100644 package/daemon/Config.in
- create mode 100644 package/daemon/daemon.hash
- create mode 100644 package/daemon/daemon.mk
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8db6dc82a613..61b84309f2de 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -140,6 +140,7 @@ F:	package/pulseview/
- F:	package/sigrok-cli/
- 
- N:	Baruch Siach <baruch@tkos.co.il>
-+F:	package/daemon/
- F:	package/ebtables/
- F:	package/openipmi/
- F:	package/ti-uim/
-diff --git a/package/Config.in b/package/Config.in
-index 674b812d22d8..9d873f705fb1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1795,6 +1795,7 @@ menu "System tools"
- 	source "package/circus/Config.in"
- 	source "package/coreutils/Config.in"
- 	source "package/cpuload/Config.in"
-+	source "package/daemon/Config.in"
- 	source "package/dc3dd/Config.in"
- 	source "package/dcron/Config.in"
- 	source "package/ddrescue/Config.in"
-diff --git a/package/daemon/0001-fix-musl.patch b/package/daemon/0001-fix-musl.patch
-new file mode 100644
-index 000000000000..9454d72ae635
---- /dev/null
-+++ b/package/daemon/0001-fix-musl.patch
-@@ -0,0 +1,18 @@
-+daemon: fix build with musl
-+
-+musl requires the ttydefaults.h to be included explicitly for CEOF.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+
-+diff -Nuar daemon-0.6.4-orig/daemon.c daemon-0.6.4/daemon.c
-+--- daemon-0.6.4-orig/daemon.c	2010-06-12 16:37:00.000000000 +0300
-++++ daemon-0.6.4/daemon.c	2017-05-01 22:02:17.721413468 +0300
-+@@ -665,6 +665,7 @@
-+ #ifdef _RESTORE_POSIX_SOURCE
-+ #define _POSIX_SOURCE
-+ #endif
-++#include <sys/ttydefaults.h>
-+ #include <sys/wait.h>
-+ #include <sys/stat.h>
-+ #include <sys/select.h>
-diff --git a/package/daemon/Config.in b/package/daemon/Config.in
-new file mode 100644
-index 000000000000..30954e77edc7
---- /dev/null
-+++ b/package/daemon/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DAEMON
-+	bool "daemon"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Daemon turns other process into daemons.
-+
-+	  http://www.libslack.org/daemon/
-diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-new file mode 100644
-index 000000000000..32308ea3f773
---- /dev/null
-+++ b/package/daemon/daemon.hash
-@@ -0,0 +1,3 @@
-+# md5 from http://www.libslack.org/daemon/; sha256 locally calculated
-+md5 6cd0a28630a29ac279bc501f39baec66 daemon-0.6.4.tar.gz
-+sha256 c4b9ea4aa74d55ea618c34f1e02c080ddf368549037cb239ee60c83191035ca1 daemon-0.6.4.tar.gz
-diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-new file mode 100644
-index 000000000000..25ff07ba1ca9
---- /dev/null
-+++ b/package/daemon/daemon.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# daemon
-+#
-+################################################################################
-+
-+DAEMON_VERSION = 0.6.4
-+DAEMON_SITE = http://libslack.org/daemon/download
-+DAEMON_LICENSE = GPL-2.0+
-+DAEMON_LICENSE_FILES = LICENSE
-+
-+define DAEMON_CONFIGURE_CMDS
-+	(cd $(@D); ./config)
-+endef
-+
-+define DAEMON_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define DAEMON_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) \
-+		install-daemon-bin
-+endef
-+
-+$(eval $(generic-package))
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
