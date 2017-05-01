@@ -1,29 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 09:22:18 +0200
-Subject: [Buildroot] [PATCH] ifupdown: wordexp is enabled in uClibc now
-In-Reply-To: <20170430084120.GA17431@waldemar-brodkorb.de>
-References: <20170430084120.GA17431@waldemar-brodkorb.de>
-Message-ID: <20170501092218.6ae351de@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 May 2017 09:26:16 +0200
+Subject: [Buildroot] [PATCH 3/3] toolchain-external: CodeSourcery MIPS
+	update upstream URL
+In-Reply-To: <20170430202048.11320-3-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 30 Apr 2017 22:20:48 +0200")
+References: <20170430202048.11320-1-romain.naour@gmail.com>
+ <20170430202048.11320-3-romain.naour@gmail.com>
+Message-ID: <87efw9f36v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On Sun, 30 Apr 2017 10:41:20 +0200, Waldemar Brodkorb wrote:
-> Package can now be used for uClibc toolchains.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/ifupdown/Config.in | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+ > The current URL returns error 403: Forbidden, so switch to https.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Applied to master, thanks.
+Committed to 2017.02.x, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
