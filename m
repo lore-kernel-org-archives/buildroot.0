@@ -1,37 +1,136 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 May 2017 09:20:59 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] toolchain-external:
-	CodeSourcery aarch64 update upstream URL
-Message-ID: <20170501072636.E6D3A82836@busybox.osuosl.org>
+Date: Mon, 1 May 2017 08:38:47 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] ghostscript: add upstream
+	security fixes for CVE-2017-8291
+Message-ID: <20170501072636.62360827C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bc84f9612d9ccfa3bf8c03ec8299ae45887be94
+commit: https://git.buildroot.net/buildroot/commit/?id=8879b99a50c3d6977222e289124d8d85765e8632
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The current URL returns error 403: Forbidden, so switch to https.
+CVE-2017-8291 - Artifex Ghostscript through 2017-04-26 allows -dSAFER bypass
+and remote command execution via a "/OutputFile (%pipe%" substring in a
+crafted .eps document that is an input to the gs program, as exploited in
+the wild in April 2017.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3e069f41bfd62cbb034ccd7f531b976564bda121)
+For more details, see https://bugzilla.suse.com/show_bug.cgi?id=1036453
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 874becfd019bc8f4e126684d08c4164e984b11c3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external-codesourcery-aarch64.mk                          | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...-697799-have-.eqproc-check-its-parameters.patch | 33 ++++++++++++
+ ...7799-have-.rsdparams-check-its-parameters.patch | 62 ++++++++++++++++++++++
+ 2 files changed, 95 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-index bc58c44..e320d3d 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = http://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+diff --git a/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch b/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
+new file mode 100644
+index 0000000..becdc66
+--- /dev/null
++++ b/package/ghostscript/0003-Bug-697799-have-.eqproc-check-its-parameters.patch
+@@ -0,0 +1,33 @@
++From 4f83478c88c2e05d6e8d79ca4557eb039354d2f3 Mon Sep 17 00:00:00 2001
++From: Chris Liddell <chris.liddell@artifex.com>
++Date: Thu, 27 Apr 2017 13:03:33 +0100
++Subject: [PATCH] Bug 697799: have .eqproc check its parameters
++
++The Ghostscript custom operator .eqproc was not check the number or type of
++the parameters it was given.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ psi/zmisc3.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/psi/zmisc3.c b/psi/zmisc3.c
++index 54b304246..37293ff4b 100644
++--- a/psi/zmisc3.c
+++++ b/psi/zmisc3.c
++@@ -56,6 +56,12 @@ zeqproc(i_ctx_t *i_ctx_p)
++     ref2_t stack[MAX_DEPTH + 1];
++     ref2_t *top = stack;
++ 
+++    if (ref_stack_count(&o_stack) < 2)
+++        return_error(gs_error_stackunderflow);
+++    if (!r_is_array(op - 1) || !r_is_array(op)) {
+++        return_error(gs_error_typecheck);
+++    }
+++
++     make_array(&stack[0].proc1, 0, 1, op - 1);
++     make_array(&stack[0].proc2, 0, 1, op);
++     for (;;) {
++-- 
++2.11.0
++
+diff --git a/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch b/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
+new file mode 100644
+index 0000000..9ba170b
+--- /dev/null
++++ b/package/ghostscript/0004-Bug-697799-have-.rsdparams-check-its-parameters.patch
+@@ -0,0 +1,62 @@
++From 04b37bbce174eed24edec7ad5b920eb93db4d47d Mon Sep 17 00:00:00 2001
++From: Chris Liddell <chris.liddell@artifex.com>
++Date: Thu, 27 Apr 2017 13:21:31 +0100
++Subject: [PATCH] Bug 697799: have .rsdparams check its parameters
++
++The Ghostscript internal operator .rsdparams wasn't checking the number or
++type of the operands it was being passed. Do so.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ psi/zfrsd.c | 22 +++++++++++++++-------
++ 1 file changed, 15 insertions(+), 7 deletions(-)
++
++diff --git a/psi/zfrsd.c b/psi/zfrsd.c
++index 191107d8a..950588d69 100644
++--- a/psi/zfrsd.c
+++++ b/psi/zfrsd.c
++@@ -49,13 +49,20 @@ zrsdparams(i_ctx_t *i_ctx_p)
++     ref *pFilter;
++     ref *pDecodeParms;
++     int Intent = 0;
++-    bool AsyncRead;
+++    bool AsyncRead = false;
++     ref empty_array, filter1_array, parms1_array;
++     uint i;
++-    int code;
+++    int code = 0;
+++
+++    if (ref_stack_count(&o_stack) < 1)
+++        return_error(gs_error_stackunderflow);
+++    if (!r_has_type(op, t_dictionary) && !r_has_type(op, t_null)) {
+++        return_error(gs_error_typecheck);
+++    }
++ 
++     make_empty_array(&empty_array, a_readonly);
++-    if (dict_find_string(op, "Filter", &pFilter) > 0) {
+++    if (r_has_type(op, t_dictionary)
+++        && dict_find_string(op, "Filter", &pFilter) > 0) {
++         if (!r_is_array(pFilter)) {
++             if (!r_has_type(pFilter, t_name))
++                 return_error(gs_error_typecheck);
++@@ -94,12 +101,13 @@ zrsdparams(i_ctx_t *i_ctx_p)
++                 return_error(gs_error_typecheck);
++         }
++     }
++-    code = dict_int_param(op, "Intent", 0, 3, 0, &Intent);
+++    if (r_has_type(op, t_dictionary))
+++        code = dict_int_param(op, "Intent", 0, 3, 0, &Intent);
++     if (code < 0 && code != gs_error_rangecheck) /* out-of-range int is ok, use 0 */
++         return code;
++-    if ((code = dict_bool_param(op, "AsyncRead", false, &AsyncRead)) < 0
++-        )
++-        return code;
+++    if (r_has_type(op, t_dictionary))
+++        if ((code = dict_bool_param(op, "AsyncRead", false, &AsyncRead)) < 0)
+++            return code;
++     push(1);
++     op[-1] = *pFilter;
++     if (pDecodeParms)
++-- 
++2.11.0
++
