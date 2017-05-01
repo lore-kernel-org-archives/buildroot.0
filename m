@@ -1,81 +1,69 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  1 May 2017 11:16:22 +0200
-Subject: [Buildroot] [PATCH v2 2/2] linux-header: bump default to version
-	4.11
-In-Reply-To: <20170501091622.1930-1-s.martin49@gmail.com>
-References: <20170501091622.1930-1-s.martin49@gmail.com>
-Message-ID: <20170501091622.1930-2-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 May 2017 11:21:49 +0200
+Subject: [Buildroot] [PATCHv5] mpir: fix build failure
+In-Reply-To: <1492774031-25802-1-git-send-email-semenak94@mail.ru>
+References: <mpir: fix build failure>
+ <1492774031-25802-1-git-send-email-semenak94@mail.ru>
+Message-ID: <20170501112149.46c43ad1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Hello,
 
----
-changes v1 -> v2:
-- add missing BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 symbol (ThomasP)
----
- package/linux-headers/Config.in.host | 11 ++++++++++-
- toolchain/toolchain-common.in        |  4 ++++
- 2 files changed, 14 insertions(+), 1 deletion(-)
+On Fri, 21 Apr 2017 14:27:11 +0300, Semyon Kolganov wrote:
+> Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5c67626b2..b1ef3d623 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_4_10
-+	default BR2_KERNEL_HEADERS_4_11
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -62,6 +62,10 @@ config BR2_KERNEL_HEADERS_4_10
- 	bool "Linux 4.10.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 
-+config BR2_KERNEL_HEADERS_4_11
-+	bool "Linux 4.11.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-+
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
- 
-@@ -83,6 +87,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11
-+	bool "4.11.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10
- 	bool "4.10.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-@@ -222,4 +230,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.4.64"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.25"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.13"	if BR2_KERNEL_HEADERS_4_10
-+	default "4.11"		if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 379006d02..c47482455 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -247,6 +247,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+When you're fixing build failures from the autobuilders, the commit log
+should provide references to the autobuilder failures being fixed.
+
+> +ifeq ($(BR2_MIPS_NABI64),y)
+> +MPIR_CONF_OPTS += ABI=n64
+> +endif
+
+You did not even test this, because it fails to build:
+
+configure: error: ABI=n64 is not among the following valid choices: 64 n32 o32
+
+So I've fixed that to ABI=64
+
+> +ifeq ($(BR2_powerpc_CLASSIC),y)
+> +MPIR_CONF_OPTS += ABI=mode64
+> +MPIR_CONF_ENV += MPN_PATH=generic
+> +endif
+
+This looks bogus. mode64 seems to refer to a 64-bit ABI, while
+BR2_powerpc_CLASSIC is not necessarily 64 bit.
+
+So, I've applied after changing ABI=n64 to ABI=64, dropping the PowerPC
+stuff and adding a reference to the autobuilder failure being fixes.
+
+That being said, there are still several other mpir related build
+failures that have not been fixed:
+
+ * On ARM, we fail with the old Crosstool-NG toolchains, but apparently
+   not with other ARM toolchains. Both the ARMv5 and ARMv7 Crosstool-NG
+   toolchains are failing to build MPIR:
+
+   http://autobuild.buildroot.net/results/fd0/fd032f7dbd4cace84bb31e8017cb6139ef3c1072/build-end.log
+   http://autobuild.buildroot.net/results/c36/c360581c2925529f18635aac32c2865899f5e0f5/build-end.log
+
+ * On MIPS64r6
+
+   http://autobuild.buildroot.net/results/c45/c45dd59f10693b0d9a86dac4733c6c3dde4554f1/build-end.log
+
+ * On PowerPC64
+
+   http://autobuild.buildroot.net/results/be1/be1478836b2e7b580174641f48de92c9b02512a7/build-end.log
+
+Could you have a look and fix those remaining issues?
+
+Thanks!
+
+Thomas
 -- 
-2.12.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
