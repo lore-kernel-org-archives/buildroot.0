@@ -1,21 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 May 2017 18:57:46 +0200
-Subject: [Buildroot] [git commit] package/o*/Config.in: fix ordering of
+Date: Mon, 1 May 2017 19:01:15 +0200
+Subject: [Buildroot] [git commit] package/p*/Config.in: fix ordering of
 	statements
-Message-ID: <20170501165803.634FB81796@busybox.osuosl.org>
+Message-ID: <20170501170239.6F5AD827C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3483a98d01b319053bc1956aca25c658846c4ab5
+commit: https://git.buildroot.net/buildroot/commit/?id=289137ed619e134f3f57584ecbd93ad76d7ed197
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The check-package script when ran gives warnings on ordering issues
 on all of these Config files.  This patch cleans up all warnings
 related to the ordering in the Config files for packages starting with
-the letter o in the package directory.
+the letter p in the package directory.
 
 The appropriate ordering is: type, default, depends on, select, help
 See http://nightly.buildroot.org/#_config_files for more information.
@@ -23,381 +23,436 @@ See http://nightly.buildroot.org/#_config_files for more information.
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/odroid-mali/Config.in       |  4 ++--
- package/on2-8170-libs/Config.in     |  2 +-
- package/opencv/Config.in            |  4 ++--
- package/opencv3/Config.in           |  2 +-
- package/opengl/libegl/Config.in     |  2 +-
- package/opengl/libgl/Config.in      |  2 +-
- package/opengl/libgles/Config.in    |  2 +-
- package/opengl/libopenmax/Config.in |  2 +-
- package/opengl/libopenvg/Config.in  |  2 +-
- package/openocd/Config.in           | 32 ++++++++++++++++----------------
- package/openpowerlink/Config.in     |  2 +-
- package/openvmtools/Config.in       |  2 +-
- package/opkg/Config.in              |  2 +-
- package/oprofile/Config.in          |  6 +++---
- 14 files changed, 33 insertions(+), 33 deletions(-)
+ package/pangomm/Config.in                 |  8 ++++----
+ package/pcmanfm/Config.in                 |  8 ++++----
+ package/php/Config.ext                    |  8 ++++----
+ package/portaudio/Config.in               |  2 +-
+ package/powerpc-utils/Config.in           |  2 +-
+ package/powervr/Config.in                 |  2 +-
+ package/pppd/Config.in                    |  2 +-
+ package/pulseaudio/Config.in              |  2 +-
+ package/pulseview/Config.in               | 16 ++++++++--------
+ package/pure-ftpd/Config.in               |  2 +-
+ package/python-crossbar/Config.in         |  2 +-
+ package/python-ipaddr/Config.in           |  2 +-
+ package/python-libconfig/Config.in        |  6 +++---
+ package/python-msgpack/Config.in          |  2 +-
+ package/python-pylibftdi/Config.in        |  2 +-
+ package/python-pysnmp-apps/Config.in      |  2 +-
+ package/python-pysnmp-mibs/Config.in      |  2 +-
+ package/python-service-identity/Config.in |  2 +-
+ package/python-treq/Config.in             |  2 +-
+ package/python/Config.in                  | 12 ++++++------
+ 20 files changed, 43 insertions(+), 43 deletions(-)
 
-diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
-index e5c07f2..1c31c2d 100644
---- a/package/odroid-mali/Config.in
-+++ b/package/odroid-mali/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_ODROID_MALI
- 	bool "odroid-mali"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_aarch64 || BR2_ARM_EABIHF
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_ODROID_SCRIPTS # runtime
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_aarch64 || BR2_ARM_EABIHF
+diff --git a/package/pangomm/Config.in b/package/pangomm/Config.in
+index a7c41a0..08c6064 100644
+--- a/package/pangomm/Config.in
++++ b/package/pangomm/Config.in
+@@ -1,15 +1,15 @@
+ config BR2_PACKAGE_PANGOMM
+ 	bool "pangomm"
+-	select BR2_PACKAGE_CAIROMM
+-	select BR2_PACKAGE_GLIBMM
+-	select BR2_PACKAGE_PANGO
+-	select BR2_PACKAGE_LIBSIGC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # glibmm/pango
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/pango -> libglib2
+ 	depends on BR2_USE_MMU # *mm/pango -> libglib2
+ 	depends on BR2_USE_WCHAR # *mm/pango -> libglib2
++	select BR2_PACKAGE_CAIROMM
++	select BR2_PACKAGE_GLIBMM
++	select BR2_PACKAGE_PANGO
++	select BR2_PACKAGE_LIBSIGC
  	help
- 	  Install the ARM Mali drivers for odroidc2 based systems.
+ 	  The pangomm package is a set of C++ bindings for Pango.
  
-diff --git a/package/on2-8170-libs/Config.in b/package/on2-8170-libs/Config.in
-index 40cad3d..2a60c58 100644
---- a/package/on2-8170-libs/Config.in
-+++ b/package/on2-8170-libs/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_ON2_8170_LIBS
-+	bool "on2-8170-libs"
- 	#This is a binary only package which has been compiled for glibc
- 	depends on BR2_arm926t
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_LINUX_KERNEL # on2-8170-modules
- 	select BR2_PACKAGE_ON2_8170_MODULES # runtime
--	bool "on2-8170-libs"
+diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
+index 40ebbdf..979e747 100644
+--- a/package/pcmanfm/Config.in
++++ b/package/pcmanfm/Config.in
+@@ -1,15 +1,15 @@
+ config BR2_PACKAGE_PCMANFM
+ 	bool "pcmanfm"
+-	select BR2_PACKAGE_LIBFM
+-	select BR2_PACKAGE_MENU_CACHE
+-	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
++	select BR2_PACKAGE_LIBFM
++	select BR2_PACKAGE_MENU_CACHE
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
  	help
- 	  Libraries for Hantro X170 video decoder
+ 	  PCMan File Manager (PCManFM) is a file manager application developed
+ 	  by Hong Jen Yee from Taiwan which is meant to be a replacement for
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 7c3ba7e..43cc4b3 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -53,8 +53,8 @@ config BR2_PACKAGE_PHP_EXT_ZIP
  
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index c046baa..0260851 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -1,9 +1,9 @@
- menuconfig BR2_PACKAGE_OPENCV
- 	bool "opencv-2.4"
+ config BR2_PACKAGE_PHP_EXT_ZLIB
+ 	bool "zlib"
 -	select BR2_PACKAGE_ZLIB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
+ 	default y
 +	select BR2_PACKAGE_ZLIB
  	help
- 	  OpenCV (Open Source Computer Vision) is a library of programming
- 	  functions for real time computer vision.
-@@ -52,13 +52,13 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
- config BR2_PACKAGE_OPENCV_LIB_GPU
- 	bool "gpu"
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # opencv libphoto
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_LEGACY
- 	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	select BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	select BR2_PACKAGE_OPENCV_LIB_VIDEO
--	depends on !BR2_STATIC_LIBS
- 	help
- 	  Include opencv_gpu module into the OpenCV build.
+ 	  zlib support
  
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index ee589f9..3b0a9d6 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -1,12 +1,12 @@
- menuconfig BR2_PACKAGE_OPENCV3
- 	bool "opencv3"
--	select BR2_PACKAGE_ZLIB
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS # include dlfcn.h
- 	depends on !BR2_PACKAGE_OPENCV
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  OpenCV (Open Source Computer Vision) is a library of programming
- 	  functions for real time computer vision.
-diff --git a/package/opengl/libegl/Config.in b/package/opengl/libegl/Config.in
-index f756fbe..a236998 100644
---- a/package/opengl/libegl/Config.in
-+++ b/package/opengl/libegl/Config.in
-@@ -6,5 +6,5 @@ config BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	depends on BR2_PACKAGE_HAS_LIBEGL
+@@ -136,9 +136,9 @@ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
  
- config BR2_PACKAGE_PROVIDES_LIBEGL
--	depends on BR2_PACKAGE_HAS_LIBEGL
- 	string
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-diff --git a/package/opengl/libgl/Config.in b/package/opengl/libgl/Config.in
-index 8b99e5b..b9a1602 100644
---- a/package/opengl/libgl/Config.in
-+++ b/package/opengl/libgl/Config.in
-@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBGL
- 	bool
- 
- config BR2_PACKAGE_PROVIDES_LIBGL
--	depends on BR2_PACKAGE_HAS_LIBGL
- 	string
-+	depends on BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/opengl/libgles/Config.in b/package/opengl/libgles/Config.in
-index b7b800f..090ef16 100644
---- a/package/opengl/libgles/Config.in
-+++ b/package/opengl/libgles/Config.in
-@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBGLES
- 	bool
- 
- config BR2_PACKAGE_PROVIDES_LIBGLES
--	depends on BR2_PACKAGE_HAS_LIBGLES
- 	string
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-diff --git a/package/opengl/libopenmax/Config.in b/package/opengl/libopenmax/Config.in
-index d50f2ce..901426a 100644
---- a/package/opengl/libopenmax/Config.in
-+++ b/package/opengl/libopenmax/Config.in
-@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBOPENMAX
- 	bool
- 
- config BR2_PACKAGE_PROVIDES_LIBOPENMAX
--	depends on BR2_PACKAGE_HAS_LIBOPENMAX
- 	string
-+	depends on BR2_PACKAGE_HAS_LIBOPENMAX
-diff --git a/package/opengl/libopenvg/Config.in b/package/opengl/libopenvg/Config.in
-index 53cde6a..37d9410 100644
---- a/package/opengl/libopenvg/Config.in
-+++ b/package/opengl/libopenvg/Config.in
-@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_LIBOPENVG
- 	bool
- 
- config BR2_PACKAGE_PROVIDES_LIBOPENVG
--	depends on BR2_PACKAGE_HAS_LIBOPENVG
- 	string
-+	depends on BR2_PACKAGE_HAS_LIBOPENVG
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index 41c2fc5..6cba7a0 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -11,109 +11,109 @@ comment "Adapters"
- 
- config BR2_PACKAGE_OPENOCD_FTDI
- 	bool "MPSSE mode of FTDI based devices"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the MPSSE mode of FTDI
- 	  (FT2xxx/FT4xxx) based devices (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_STLINK
- 	bool "ST-Link JTAG Programmer"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the ST-Link JTAG
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_TI_ICDI
- 	bool "TI ICDI JTAG Programmer"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the TI ICDI JTAG
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_ULINK
- 	bool "Keil ULINK JTAG Programmer"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the Keil ULINK JTAG
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_UBLASTER2
- 	bool "Altera USB-Blaster II Compatible"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the Altera USB-Blaster
- 	  II Compatible (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_JLINK
- 	bool "Segger J-Link JTAG Programmer"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Segger J-Link JTAG Programmer and clone such as Atmel
- 	  SAM-ICE
- 
- config BR2_PACKAGE_OPENOCD_OSDBM
- 	bool "OSDBM JTAG (only) Programmer"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the OSBDM (JTAG only)
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_OPENDOUS
- 	bool "eStick/opendous JTAG Programmer"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the eStick/opendous JTAG
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_AICE
- 	bool "Andes JTAG Programmer"
--	select BR2_PACKAGE_LIBUSB
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
- 	help
- 	  Enable building support for the Andes JTAG
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_VSLLINK
- 	bool "Versaloon-Link JTAG Programmer"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
- 	  Enable building support for the Versaloon-Link JTAG
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_USBPROG
- 	bool "USBProg JTAG Programmer"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
- 	  Enable building support for the USBProg JTAG
- 	  Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_RLINK
- 	bool "Raisonance RLink JTAG Programmer"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
- 	  Enable building support for the Raisonance RLink
- 	  JTAG Programmer (default is auto)
- 
- config BR2_PACKAGE_OPENOCD_ARMEW
- 	bool "Olimex ARM-JTAG-EW Programmer"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb-compat -> libusb
- 	help
- 	  Enable building support for the Olimex ARM-JTAG-EW
- 	  Programmer (default is auto)
-@@ -130,8 +130,8 @@ config BR2_PACKAGE_OPENOCD_VPI
- 
- config BR2_PACKAGE_OPENOCD_UBLASTER
- 	bool "Altera USB-Blaster"
--	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
-+	select BR2_PACKAGE_LIBFTDI1
- 	help
- 	  Enable building support for the Altera USB-Blaster
- 	  using the libftdi driver, opensource alternate of
-@@ -170,18 +170,18 @@ config BR2_PACKAGE_OPENOCD_GW16012
- 
- config BR2_PACKAGE_OPENOCD_PRESTO
- 	bool "ASIX Presto Programmer"
--	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
-+	select BR2_PACKAGE_LIBFTDI1
- 	help
- 	  Enable building support for ASIX Presto Programmer
- 	  using the libftdi driver
- 
- config BR2_PACKAGE_OPENOCD_OPENJTAG
- 	bool "OpenJTAG Programmer"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
- 	select BR2_PACKAGE_LIBFTDI1
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT # needs usb.h
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
- 	help
- 	  Enable building support for the OpenJTAG Programmer
- 	  with ftdi driver
-diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-index d5e9764..68ea751 100644
---- a/package/openpowerlink/Config.in
-+++ b/package/openpowerlink/Config.in
-@@ -110,8 +110,8 @@ endmenu
- endif # BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
- 
- config BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER
--	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
- 	bool "PCIe Powerlink Driver"
-+	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
- 
- menu "demos"
- 
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 79c503c..f76bdf2 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -33,11 +33,11 @@ comment "procps support needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
- 
- config BR2_PACKAGE_OPENVMTOOLS_PAM
- 	bool "PAM support"
--	select BR2_PACKAGE_LINUX_PAM
- 	# linux-pam needs locale and wchar, but we already have this
- 	# dependency on the main symbol, above.
+ config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
+ 	bool "PostgreSQL"
+-	select BR2_PACKAGE_POSTGRESQL
+ 	depends on BR2_USE_MMU # postgresql
  	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
-+	select BR2_PACKAGE_LINUX_PAM
++	select BR2_PACKAGE_POSTGRESQL
  	help
- 	  Support for PAM in openvmtools
+ 	  PDO driver for PostgreSQL
  
-diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index 5a4bbc2..a188a7b 100644
---- a/package/opkg/Config.in
-+++ b/package/opkg/Config.in
-@@ -4,9 +4,9 @@ comment "opkg needs a toolchain w/ wchar"
+@@ -164,8 +164,8 @@ comment "Human language and character encoding support"
  
- config BR2_PACKAGE_OPKG
- 	bool "opkg"
--	select BR2_PACKAGE_LIBARCHIVE
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR # libarchive
-+	select BR2_PACKAGE_LIBARCHIVE
+ config BR2_PACKAGE_PHP_EXT_GETTEXT
+ 	bool "Gettext"
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
  	help
- 	  Opkg is a lightweight package management system, based on ipkg. It is
- 	  written in C and resembles apt/dpkg in operation. It is intended for
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index e2adde5..d99a7e6 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -15,14 +15,14 @@ config BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
- config BR2_PACKAGE_OPROFILE
- 	bool "oprofile"
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_POPT
--	select BR2_PACKAGE_BINUTILS
--	select BR2_PACKAGE_LIBPFM4 if BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
+ 	  Gettext support
+ 
+@@ -180,11 +180,11 @@ config BR2_PACKAGE_PHP_EXT_ICONV
+ 
+ config BR2_PACKAGE_PHP_EXT_INTL
+ 	bool "intl"
+-	select BR2_PACKAGE_ICU
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # binutils
- 	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
- 	# libpfm4 is needed on PowerPC, and requires thread support
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
-+	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_BINUTILS
-+	select BR2_PACKAGE_LIBPFM4 if BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
++	select BR2_PACKAGE_ICU
  	help
- 	  OProfile is a system-wide profiler for Linux systems,
- 	  capable of profiling all running code at low overhead.
+ 	  Internationalization support
+ 
+diff --git a/package/portaudio/Config.in b/package/portaudio/Config.in
+index 252a92a..18e87fd 100644
+--- a/package/portaudio/Config.in
++++ b/package/portaudio/Config.in
+@@ -14,8 +14,8 @@ if BR2_PACKAGE_PORTAUDIO
+ 
+ config BR2_PACKAGE_PORTAUDIO_ALSA
+ 	bool "alsa support"
+-	select BR2_PACKAGE_ALSA_LIB
+ 	default y
++	select BR2_PACKAGE_ALSA_LIB
+ 	help
+ 	  Compile with ALSA support.
+ 
+diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
+index fb2fb7f..b0ca847 100644
+--- a/package/powerpc-utils/Config.in
++++ b/package/powerpc-utils/Config.in
+@@ -16,8 +16,8 @@ if BR2_PACKAGE_POWERPC_UTILS
+ 
+ config BR2_PACKAGE_POWERPC_UTILS_RTAS
+ 	bool "RTAS support"
+-	select BR2_PACKAGE_LIBRTAS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_LIBRTAS
+ 	help
+ 	  Enable support for functions that require RTAS.
+ 
+diff --git a/package/powervr/Config.in b/package/powervr/Config.in
+index 746e15b..7be2b23 100644
+--- a/package/powervr/Config.in
++++ b/package/powervr/Config.in
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_POWERVR
+ 	bool
+ 
+ config BR2_PACKAGE_PROVIDES_POWERVR
+-	depends on BR2_PACKAGE_HAS_POWERVR
+ 	string
++	depends on BR2_PACKAGE_HAS_POWERVR
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index b56b623..8c56421 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -11,8 +11,8 @@ config BR2_PACKAGE_PPPD
+ if BR2_PACKAGE_PPPD
+ 
+ config BR2_PACKAGE_PPPD_FILTER
+-	select BR2_PACKAGE_LIBPCAP
+ 	bool "filtering"
++	select BR2_PACKAGE_LIBPCAP
+ 	help
+ 	  Packet filtering abilities for pppd. If enabled,
+ 	  the pppd active-filter and pass-filter options
+diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
+index 20aa374..0adfd88 100644
+--- a/package/pulseaudio/Config.in
++++ b/package/pulseaudio/Config.in
+@@ -4,11 +4,11 @@ config BR2_PACKAGE_PULSEAUDIO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBTOOL
+ 	select BR2_PACKAGE_JSON_C
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_SPEEX
+-	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  PulseAudio is a sound system for POSIX OSes, meaning that it
+ 	  is a proxy for your sound applications. It allows you to do
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index 46abe78..daa0fba 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -1,8 +1,15 @@
+ config BR2_PACKAGE_PULSEVIEW
+ 	bool "pulseview"
++	depends on BR2_PACKAGE_QT5
++	# libsigrok->libglib2:
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
++	depends on BR2_INSTALL_LIBSTDCPP
++	# libsigrok
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	select BR2_PACKAGE_LIBSIGROK
+ 	select BR2_PACKAGE_LIBSIGROKCXX
+-	depends on BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+ 	select BR2_PACKAGE_QT5BASE_PNG
+ 	select BR2_PACKAGE_QT5SVG
+@@ -10,13 +17,6 @@ config BR2_PACKAGE_PULSEVIEW
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+-	# libsigrok->libglib2:
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_USE_MMU
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	# libsigrok
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
+ 	  and MSO GUI for sigrok.
+diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
+index 57b78d1..0e1e9c2 100644
+--- a/package/pure-ftpd/Config.in
++++ b/package/pure-ftpd/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PURE_FTPD
+ 	bool "pure-ftpd"
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  Pure-FTPd is a free (BSD), secure, production-quality and standard-
+ 	  conformant FTP server. It doesn't provide useless bells and whistles,
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index be83325..faec922 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	bool "python-crossbar"
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
+ 	# All the following dependencies are runtime dependencies
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	select BR2_PACKAGE_PYTHON_CBOR
+@@ -31,7 +32,6 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_UBJSON
+ 	select BR2_PACKAGE_PYTHON_WATCHDOG
+ 	select BR2_PACKAGE_PYTHON_WSACCEL
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
+ 	help
+ 	  Crossbar.io is an open-source WAMP application router that
+ 	  allows to build advanced applications from loosely-coupled
+diff --git a/package/python-ipaddr/Config.in b/package/python-ipaddr/Config.in
+index 9db2dab..5727927 100644
+--- a/package/python-ipaddr/Config.in
++++ b/package/python-ipaddr/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_IPADDR
+-	depends on BR2_PACKAGE_PYTHON # included since python3.3
+ 	bool "python-ipaddr"
++	depends on BR2_PACKAGE_PYTHON # included since python3.3
+ 	help
+ 	  An IPv4/IPv6 manipulation library in Python. This library is
+ 	  used to create/poke/manipulate IPv4 and IPv6 addresses and
+diff --git a/package/python-libconfig/Config.in b/package/python-libconfig/Config.in
+index a222f9a..0068871 100644
+--- a/package/python-libconfig/Config.in
++++ b/package/python-libconfig/Config.in
+@@ -4,13 +4,13 @@ comment "python-libconfig needs a glibc or uClibc toolchain w/ C++, threads"
+ 
+ config BR2_PACKAGE_PYTHON_LIBCONFIG
+ 	bool "python-libconfig"
+-	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_PYTHON
+-	select BR2_PACKAGE_LIBCONFIG
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# error: invalid use of incomplete type 'struct _IO_FILE'
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_PYTHON
++	select BR2_PACKAGE_LIBCONFIG
+ 	help
+ 	  Python bindings to the C++ library libconfig
+ 
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index 7dfe8e8..9aa2b5f 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	bool "python-msgpack"
+-	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
++	select BR2_PACKAGE_MSGPACK
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+diff --git a/package/python-pylibftdi/Config.in b/package/python-pylibftdi/Config.in
+index f829071..d340974 100644
+--- a/package/python-pylibftdi/Config.in
++++ b/package/python-pylibftdi/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYLIBFTDI
+ 	bool "python-pylibftdi"
+-	select BR2_PACKAGE_LIBFTDI
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBFTDI
+ 	help
+ 	  This package contains the python language binding libftdi.
+ 
+diff --git a/package/python-pysnmp-apps/Config.in b/package/python-pysnmp-apps/Config.in
+index b032eba..32e3269 100644
+--- a/package/python-pysnmp-apps/Config.in
++++ b/package/python-pysnmp-apps/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYSNMP_APPS
+ 	bool "python-pysnmp-apps"
+-	select BR2_PACKAGE_PYTHON_PYSNMP
+ 	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
++	select BR2_PACKAGE_PYTHON_PYSNMP
+ 	help
+ 	  A collection of command-line tools for SNMP management
+ 	  purposes built on top of the PySNMP package.
+diff --git a/package/python-pysnmp-mibs/Config.in b/package/python-pysnmp-mibs/Config.in
+index eca17d2..521d95e 100644
+--- a/package/python-pysnmp-mibs/Config.in
++++ b/package/python-pysnmp-mibs/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYSNMP_MIBS
+ 	bool "python-pysnmp-mibs"
+-	select BR2_PACKAGE_PYTHON_PYSNMP
+ 	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
++	select BR2_PACKAGE_PYTHON_PYSNMP
+ 	help
+ 	  PySNMP MIBs is a set of IETF & IANA MIBs pre-compiled and
+ 	  packaged to simplify their use with the PySNMP library.
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+index c9cbb6c..304b38a 100644
+--- a/package/python-service-identity/Config.in
++++ b/package/python-service-identity/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	bool "python-service-identity"
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
+ 	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
+ 	help
+ 	  Service identity verification for pyOpenSSL.
+ 
+diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+index 4a23737..2047cc0 100644
+--- a/package/python-treq/Config.in
++++ b/package/python-treq/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_PYTHON_TREQ
+ 	bool "python-treq"
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
+ 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
+ 	help
+ 	  treq is an HTTP library inspired by requests but written on
+ 	  top of Twisted's Agents.  It provides a simple, higher level
+diff --git a/package/python/Config.in b/package/python/Config.in
+index fa83e77..054ccd2 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -39,14 +39,14 @@ menu "core python modules"
+ comment "The following modules are unusual or require extra libraries"
+ 
+ config BR2_PACKAGE_PYTHON_BZIP2
+-	select BR2_PACKAGE_BZIP2
+ 	bool "bzip2 module"
++	select BR2_PACKAGE_BZIP2
+ 	help
+ 	  bzip2 module for Python
+ 
+ config BR2_PACKAGE_PYTHON_BSDDB
+-	select BR2_PACKAGE_BERKELEYDB
+ 	bool "bsddb module"
++	select BR2_PACKAGE_BERKELEYDB
+ 	help
+ 	  bsddb module for Python.
+ 
+@@ -56,8 +56,8 @@ config BR2_PACKAGE_PYTHON_CODECSCJK
+ 	  Chinese/Japanese/Korean codecs module for Python (large).
+ 
+ config BR2_PACKAGE_PYTHON_CURSES
+-	select BR2_PACKAGE_NCURSES
+ 	bool "curses module"
++	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  curses module for Python.
+ 
+@@ -67,15 +67,15 @@ config BR2_PACKAGE_PYTHON_OSSAUDIODEV
+ 	  ossaudiodev module for Python.
+ 
+ config BR2_PACKAGE_PYTHON_READLINE
+-	select BR2_PACKAGE_READLINE
+ 	bool "readline"
++	select BR2_PACKAGE_READLINE
+ 	help
+ 	  readline module for Python (required for command-line
+ 	  editing in the Python shell).
+ 
+ config BR2_PACKAGE_PYTHON_SSL
+-	select BR2_PACKAGE_OPENSSL
+ 	bool "ssl"
++	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  _ssl module for Python (required for https in urllib etc).
+ 
+@@ -110,8 +110,8 @@ config BR2_PACKAGE_PYTHON_SQLITE
+ 	  SQLite database support
+ 
+ config BR2_PACKAGE_PYTHON_PYEXPAT
+-	select BR2_PACKAGE_EXPAT
+ 	bool "xml module"
++	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  pyexpat and xml libraries for Python
+ 
