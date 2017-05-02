@@ -1,38 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 May 2017 08:51:01 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-04-30
-In-Reply-To: <639b7947-cb49-8915-78fc-a16643a259ab@posteo.de>
-References: <20170501062807.07CDF2075C@mail.free-electrons.com>
- <639b7947-cb49-8915-78fc-a16643a259ab@posteo.de>
-Message-ID: <20170502085101.327b163e@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 May 2017 09:11:45 +0200
+Subject: [Buildroot] Buildroot 2017.02.2 released
+Message-ID: <87a86venri.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, 1 May 2017 19:30:09 +0200, Martin Kepplinger wrote:
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.net).
 
-> > Build failures related to your packages:
-> > 
-> >          arm |                  x11vnc-0.9.14 | http://autobuild.buildroot.net/results/e62decaf38b44306ab5e0c66bc3033c9de91a6cd  
-> 
-> I quickly took the config from the autobuild (removed some parts to
-> speed up the build) but can't reproduce this.
+Buildroot 2017.02.2 is released - Go download it at:
 
-According to
-http://autobuild.buildroot.net/results/e62/e62decaf38b44306ab5e0c66bc3033c9de91a6cd/gitid,
-this build was done at commit f7e7bf72a7ddbd72041090ae6ba97778f7b96948,
-which is *before* your "package/x11vnc: add dependency on libvncserver"
-was committed/pushed.
+http://buildroot.net/downloads/buildroot-2017.02.2.tar.gz
 
-Best regards,
+or
 
-Thomas
+http://buildroot.net/downloads/buildroot-2017.02.2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Buildroot 2017.02.2 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2017.02.1 release.
+
+- Security fixes for bind, dovecot, freetype, ghostscript, icu,
+  imagemagick, libcroco, libcurl, libnl, libnss, libsamplerate,
+  libsndfile, minicom, python-django, python-web2py, tiff, wireshark,
+  xen
+
+- Fixes for compilation/runtime issues in glibc, gst-plugins-base,
+  gst1-plugins-base, hiredis, libnspr, libunwind, mplayer, mpv, nodejs,
+  samba4, syslinux, systemd, trinity
+
+- License information fixes for freetype, icu, python-pyyaml
+
+- Ensure that the Python package infrastructure ignores user
+  site-package directory (#9791)
+
+- Fix for a download issue with the external Codesourcery toolchains
+  (http vs https)
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.02.1..
+    18  Peter Korsgaard
+    12  Vicente Olivert Riera
+     8  Bernd Kuhls
+     7  Romain Naour
+     5  Baruch Siach
+     3  Thomas Petazzoni
+     2  Rahul Bedarkar
+     2  Ricardo Martincoski
+     1  Arnout Vandecappelle
+     1  Beno?t Allard
+     1  Carlos Santos
+     1  Christian Stewart
+     1  J?rg Krause
+     1  Matt Weber
+     1  Waldemar Brodkorb
+     1  Yegor Yefremov
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
