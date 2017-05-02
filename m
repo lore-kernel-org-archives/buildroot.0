@@ -1,67 +1,48 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Tue, 02 May 2017 18:05:38 +0300
-Subject: [Buildroot] [PATCH 0/4] bluez5_utils: version bump fixes and
- updates
-In-Reply-To: <cover.1493643541.git.baruch@tkos.co.il>
-References: <cover.1493643541.git.baruch@tkos.co.il>
-Message-ID: <1493737538.24567.274.camel@linux.intel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 2 May 2017 21:58:34 +0200
+Subject: [Buildroot] [git commit] Update for 2017.02.2
+Message-ID: <20170502202055.ED78E82842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2017-05-01 at 15:59 +0300, Baruch Siach wrote:
-> The recent bluez5_utils version bump moved around the build options so
-> that?
-> some builds now fail, and the help text became incorrect. This short
-> series?
-> fixes some of these issues.
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=87ddf24d2aa5c92c1382b227fd6d434cb9a54732
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for taking care of this, I appreciate.
-I have no time to keep on it right now, so, feel free modify as it
-satisfies Thomas and others.
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 799aed7a181e82a6446403b7abe77119622a6779)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-On first glance what you did looks sane to me.
-
-> This series is mostly based on Andy Shevchenko's patch[1] with the
-> following?
-> main changes:
-> 
-> ? * Split out the DEPRECATED handling, adding a fix to the gatttool
-> build?
-> ????issue in the process
-> 
-> ? * Remove the redundant BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL config
-> option
-> 
-> ? * Split the option addition patch into two: one for options that
-> were?
-> ????previously under --enable-experimental, and one for the newly
-> introduced?
-> ????midi profile
-> 
-> ? * Add missing BR2_PACKAGE_ALSA_LIB_SEQ select
-> 
-> [1] https://patchwork.ozlabs.org/patch/741645/
-> 
-> Andy Shevchenko (2):
-> ? bluez5_utils: allow enabling formerly experimental plugins
-> ? bluez5_utils: allow building the midi profile
-> 
-> Baruch Siach (2):
-> ? bluez5_utils: allow install of deprecated tools
-> ? bluez5_utils: correct the experimental option text
-> 
-> ?Config.in.legacy?????????????????????|??9 +++++++++
-> ?package/bluez5_utils/Config.in???????| 39
-> +++++++++++++++++++++++++++---------
-> ?package/bluez5_utils/bluez5_utils.mk | 34
-> ++++++++++++++++++++++++++++++-
-> ?3 files changed, 71 insertions(+), 11 deletions(-)
-> 
-
--- 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+diff --git a/CHANGES b/CHANGES
+index 974f4e2..332580f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,22 @@
++2017.02.2, Released May 1st, 2017
++
++	Important / security related fixes.
++
++	Use HTTPS for the Codesourcery external toolchains as the HTTP
++	URLs no longer work.
++
++	Updated/fixed packages: bind, busybox, dovecot, freetype,
++	ghostscript, glibc, granite, hiredis, icu, imagemagick,
++	gst-plugins-base, gst1-plugins-base, libcroco, libcurl, libnl,
++	libnspr, libnss, libsamplerate, libsndfile, libunwind,
++	minicom, mplayer, mpv, nodejs, python-django, python-pyyaml,
++	python-web2py, samba4, syslinux, systemd, tiff, trinity,
++	uboot, wireshark, xen
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9791: Python searches for packages in the user site directory
++
+ 2017.02.1, Released April 4th, 2017
+ 
+ 	Important / security related fixes.
