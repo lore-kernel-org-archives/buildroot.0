@@ -1,35 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 May 2017 22:40:47 +0200
-Subject: [Buildroot] [RFC 1/2] configs: raspberrypi3: fix mismatch cpu
- arch
-In-Reply-To: <20170416151409.7665-2-gael.portay@savoirfairelinux.com>
-References: <20170416151409.7665-1-gael.portay@savoirfairelinux.com>
- <20170416151409.7665-2-gael.portay@savoirfairelinux.com>
-Message-ID: <20170502224047.0e8d2310@free-electrons.com>
+Date: Tue, 2 May 2017 22:46:08 +0200
+Subject: [Buildroot] [git commit] daemon: new package
+Message-ID: <20170502204820.9C49C82852@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=22b01ab9bfa5ac37931f2f028ed96eb5d1659f79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Apr 2017 11:14:08 -0400, Ga?l PORTAY wrote:
-> The raspberrypi3 is powered by a Broadcom BCM2837 which is a Cortex-A53.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  configs/raspberrypi3_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/daemon/0001-fix-musl.patch | 18 ++++++++++++++++++
+ package/daemon/Config.in           | 12 ++++++++++++
+ package/daemon/daemon.hash         |  3 +++
+ package/daemon/daemon.mk           | 26 ++++++++++++++++++++++++++
+ 6 files changed, 61 insertions(+)
 
-Thanks, I have applied https://patchwork.ozlabs.org/patch/757022/
-instead, which was a little bit more complete, but essentially does the
-same thing.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 019e100..82eb819 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -140,6 +140,7 @@ F:	package/pulseview/
+ F:	package/sigrok-cli/
+ 
+ N:	Baruch Siach <baruch@tkos.co.il>
++F:	package/daemon/
+ F:	package/ebtables/
+ F:	package/openipmi/
+ F:	package/ti-uim/
+diff --git a/package/Config.in b/package/Config.in
+index e3b6682..aaecd61 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1795,6 +1795,7 @@ menu "System tools"
+ 	source "package/circus/Config.in"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpuload/Config.in"
++	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+ 	source "package/dcron/Config.in"
+ 	source "package/ddrescue/Config.in"
+diff --git a/package/daemon/0001-fix-musl.patch b/package/daemon/0001-fix-musl.patch
+new file mode 100644
+index 0000000..9454d72
+--- /dev/null
++++ b/package/daemon/0001-fix-musl.patch
+@@ -0,0 +1,18 @@
++daemon: fix build with musl
++
++musl requires the ttydefaults.h to be included explicitly for CEOF.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++
++diff -Nuar daemon-0.6.4-orig/daemon.c daemon-0.6.4/daemon.c
++--- daemon-0.6.4-orig/daemon.c	2010-06-12 16:37:00.000000000 +0300
+++++ daemon-0.6.4/daemon.c	2017-05-01 22:02:17.721413468 +0300
++@@ -665,6 +665,7 @@
++ #ifdef _RESTORE_POSIX_SOURCE
++ #define _POSIX_SOURCE
++ #endif
+++#include <sys/ttydefaults.h>
++ #include <sys/wait.h>
++ #include <sys/stat.h>
++ #include <sys/select.h>
+diff --git a/package/daemon/Config.in b/package/daemon/Config.in
+new file mode 100644
+index 0000000..b97f8cf
+--- /dev/null
++++ b/package/daemon/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_DAEMON
++	bool "daemon"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Daemon turns other process into daemons.
++
++	  http://www.libslack.org/daemon/
++
++comment "daemon needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
+new file mode 100644
+index 0000000..32308ea
+--- /dev/null
++++ b/package/daemon/daemon.hash
+@@ -0,0 +1,3 @@
++# md5 from http://www.libslack.org/daemon/; sha256 locally calculated
++md5 6cd0a28630a29ac279bc501f39baec66 daemon-0.6.4.tar.gz
++sha256 c4b9ea4aa74d55ea618c34f1e02c080ddf368549037cb239ee60c83191035ca1 daemon-0.6.4.tar.gz
+diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
+new file mode 100644
+index 0000000..dfa573f
+--- /dev/null
++++ b/package/daemon/daemon.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# daemon
++#
++################################################################################
++
++DAEMON_VERSION = 0.6.4
++DAEMON_SITE = http://libslack.org/daemon/download
++DAEMON_LICENSE = GPL-2.0+
++DAEMON_LICENSE_FILES = LICENSE
++
++define DAEMON_CONFIGURE_CMDS
++	(cd $(@D); ./config)
++endef
++
++define DAEMON_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define DAEMON_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) DEB_BUILD_OPTIONS=nostrip \
++		$(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) \
++		install-daemon-bin
++endef
++
++$(eval $(generic-package))
