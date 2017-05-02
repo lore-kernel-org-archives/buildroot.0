@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 May 2017 22:35:21 +0200
-Subject: [Buildroot] [PATCH] luajit: bump to version 2.0.5
-In-Reply-To: <20170502075622.22153-1-francois.perrad@gadz.org>
-References: <20170502075622.22153-1-francois.perrad@gadz.org>
-Message-ID: <20170502223521.3e08b50b@free-electrons.com>
+Date: Tue, 2 May 2017 22:35:24 +0200
+Subject: [Buildroot] [PATCH] python-netaddr: change setup type to
+ setuptools
+In-Reply-To: <20170502121459.18710-1-yegorslists@googlemail.com>
+References: <20170502121459.18710-1-yegorslists@googlemail.com>
+Message-ID: <20170502223524.4aa3540e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  2 May 2017 09:56:22 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Tue,  2 May 2017 14:14:59 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> The latest netaddr version switched to setuptools.
+> 
+> Fixes:
+> 
+> http://autobuild.buildroot.net/results/e9b/e9b0013abe7e866fd224593f90ec30bdc809151f
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/luajit/0001-no-bin-symlink.patch | 10 +++++-----
->  package/luajit/0003-install-so.patch     | 22 ----------------------
->  package/luajit/luajit.hash               |  2 +-
->  package/luajit/luajit.mk                 |  2 +-
->  4 files changed, 7 insertions(+), 29 deletions(-)
->  delete mode 100644 package/luajit/0003-install-so.patch
+>  package/python-netaddr/python-netaddr.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
