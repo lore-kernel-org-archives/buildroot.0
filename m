@@ -1,24 +1,67 @@
-From: Mario Rugiero <mrugiero@gmail.com>
-Date: Tue, 2 May 2017 12:04:52 -0300
-Subject: [Buildroot] [PATCH] package/protobuf: depend on gcc >= 4.5
-In-Reply-To: <20170502140331.0b4a7cbf@free-electrons.com>
-References: <20170426162850.5214-1-mrugiero@gmail.com>
- <20170429143136.3da63d52@free-electrons.com>
- <CAKKQwLR3sxMycDpH0_qvva7_-9s5DCZzs5kj-xJe4_7YJOZ59Q@mail.gmail.com>
- <CAKKQwLRyHdGAqK8QtPuOexXp+nokJ+7wgAbwvRE6b9fkg25jKQ@mail.gmail.com>
- <20170430092950.3e39e809@free-electrons.com>
- <CAKKQwLQz=10qxvcFL6xgmKMTwXGbKmbt74xJHD8O9C6_7SakYA@mail.gmail.com>
- <CANQCQpbRkM0vcMM7hJv0tbBCD+mPZwyN=fXAq4_uNQ96jnbK=A@mail.gmail.com>
- <20170502140331.0b4a7cbf@free-electrons.com>
-Message-ID: <CAKKQwLRgg6zF-Gt12PCoVv+s4yQi6gjX1443zrtO-NXO29HnLg@mail.gmail.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Tue, 02 May 2017 18:05:38 +0300
+Subject: [Buildroot] [PATCH 0/4] bluez5_utils: version bump fixes and
+ updates
+In-Reply-To: <cover.1493643541.git.baruch@tkos.co.il>
+References: <cover.1493643541.git.baruch@tkos.co.il>
+Message-ID: <1493737538.24567.274.camel@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I got gcc 4.3 to build on my Arch box, so I'll try to get it building with it.
-I'll probably send the patches to work around this issue by the weekend.
+On Mon, 2017-05-01 at 15:59 +0300, Baruch Siach wrote:
+> The recent bluez5_utils version bump moved around the build options so
+> that?
+> some builds now fail, and the help text became incorrect. This short
+> series?
+> fixes some of these issues.
+> 
 
-Cheers,
-Mario.
+Thanks for taking care of this, I appreciate.
+I have no time to keep on it right now, so, feel free modify as it
+satisfies Thomas and others.
+
+On first glance what you did looks sane to me.
+
+> This series is mostly based on Andy Shevchenko's patch[1] with the
+> following?
+> main changes:
+> 
+> ? * Split out the DEPRECATED handling, adding a fix to the gatttool
+> build?
+> ????issue in the process
+> 
+> ? * Remove the redundant BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL config
+> option
+> 
+> ? * Split the option addition patch into two: one for options that
+> were?
+> ????previously under --enable-experimental, and one for the newly
+> introduced?
+> ????midi profile
+> 
+> ? * Add missing BR2_PACKAGE_ALSA_LIB_SEQ select
+> 
+> [1] https://patchwork.ozlabs.org/patch/741645/
+> 
+> Andy Shevchenko (2):
+> ? bluez5_utils: allow enabling formerly experimental plugins
+> ? bluez5_utils: allow building the midi profile
+> 
+> Baruch Siach (2):
+> ? bluez5_utils: allow install of deprecated tools
+> ? bluez5_utils: correct the experimental option text
+> 
+> ?Config.in.legacy?????????????????????|??9 +++++++++
+> ?package/bluez5_utils/Config.in???????| 39
+> +++++++++++++++++++++++++++---------
+> ?package/bluez5_utils/bluez5_utils.mk | 34
+> ++++++++++++++++++++++++++++++-
+> ?3 files changed, 71 insertions(+), 11 deletions(-)
+> 
+
+-- 
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Intel Finland Oy
