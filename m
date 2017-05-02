@@ -1,43 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 May 2017 14:03:31 +0200
-Subject: [Buildroot] [PATCH] package/protobuf: depend on gcc >= 4.5
-In-Reply-To: <CANQCQpbRkM0vcMM7hJv0tbBCD+mPZwyN=fXAq4_uNQ96jnbK=A@mail.gmail.com>
-References: <20170426162850.5214-1-mrugiero@gmail.com>
- <20170429143136.3da63d52@free-electrons.com>
- <CAKKQwLR3sxMycDpH0_qvva7_-9s5DCZzs5kj-xJe4_7YJOZ59Q@mail.gmail.com>
- <CAKKQwLRyHdGAqK8QtPuOexXp+nokJ+7wgAbwvRE6b9fkg25jKQ@mail.gmail.com>
- <20170430092950.3e39e809@free-electrons.com>
- <CAKKQwLQz=10qxvcFL6xgmKMTwXGbKmbt74xJHD8O9C6_7SakYA@mail.gmail.com>
- <CANQCQpbRkM0vcMM7hJv0tbBCD+mPZwyN=fXAq4_uNQ96jnbK=A@mail.gmail.com>
-Message-ID: <20170502140331.0b4a7cbf@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  2 May 2017 14:14:59 +0200
+Subject: [Buildroot] [PATCH] python-netaddr: change setup type to setuptools
+Message-ID: <20170502121459.18710-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Mon, 1 May 2017 20:43:27 -0500, Matthew Weber wrote:
+The latest netaddr version switched to setuptools.
 
-> > I'll give it a shot at reproducing locally. Hopefully I can patch the
-> > triggering instances.
-> > If I succeed, I'll commit a different patch to support building on
-> > older versions of gcc,
-> > and will send it upstream, too, so the patches can be dropped in a
-> > following version.
-> > Wish me luck!  
-> 
-> Another data point,  This Ubuntu host GCC seems to not have the issue,
-> so some distros have pulled the fix in.
-> g++ (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4
+Fixes:
 
-Well, the problem has been fixed in gcc upstream since 4.5 apparently,
-so obviously a 4.8 gcc does not exhibit the issue, and it's not because
-of distro-specific patches.
+http://autobuild.buildroot.net/results/e9b/e9b0013abe7e866fd224593f90ec30bdc809151f
 
-Thomas
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-netaddr/python-netaddr.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
+index 95f78f194..a539845d5 100644
+--- a/package/python-netaddr/python-netaddr.mk
++++ b/package/python-netaddr/python-netaddr.mk
+@@ -9,6 +9,6 @@ PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
+ PYTHON_NETADDR_SITE = https://pypi.python.org/packages/0c/13/7cbb180b52201c07c796243eeff4c256b053656da5cfe3916c3f5b57b3a0
+ PYTHON_NETADDR_LICENSE = BSD-3-Clause
+ PYTHON_NETADDR_LICENSE_FILES = LICENSE
+-PYTHON_NETADDR_SETUP_TYPE = distutils
++PYTHON_NETADDR_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
