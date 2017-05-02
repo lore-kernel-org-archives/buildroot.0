@@ -1,47 +1,101 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 1 May 2017 20:43:27 -0500
-Subject: [Buildroot] [PATCH] package/protobuf: depend on gcc >= 4.5
-In-Reply-To: <CAKKQwLQz=10qxvcFL6xgmKMTwXGbKmbt74xJHD8O9C6_7SakYA@mail.gmail.com>
-References: <20170426162850.5214-1-mrugiero@gmail.com>
- <20170429143136.3da63d52@free-electrons.com>
- <CAKKQwLR3sxMycDpH0_qvva7_-9s5DCZzs5kj-xJe4_7YJOZ59Q@mail.gmail.com>
- <CAKKQwLRyHdGAqK8QtPuOexXp+nokJ+7wgAbwvRE6b9fkg25jKQ@mail.gmail.com>
- <20170430092950.3e39e809@free-electrons.com>
- <CAKKQwLQz=10qxvcFL6xgmKMTwXGbKmbt74xJHD8O9C6_7SakYA@mail.gmail.com>
-Message-ID: <CANQCQpbRkM0vcMM7hJv0tbBCD+mPZwyN=fXAq4_uNQ96jnbK=A@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  1 May 2017 23:01:17 -0500
+Subject: [Buildroot] [PATCH 1/1] uboot-tools: disable libfdt swig wrapper
+Message-ID: <1493697677-24802-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+The current tools build assumes the host system
+when trying to detect if swig/python are present.
+It then uses those tools from the path.
 
-On Sun, Apr 30, 2017 at 11:57 PM, Mario Rugiero <mrugiero@gmail.com> wrote:
->
-> 2017-04-30 4:29 GMT-03:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
-> > Hello,
-> >
-> Hi
-> > On Sat, 29 Apr 2017 17:02:26 -0300, Mario Rugiero wrote:
-> >
-> > Then we also have a problem with the host variant: host-protobuf also
-> > requires gcc >= 4.5.0. I've restarted my autobuilder, and it uses an
-> > old version of gcc on the host, which causes host-protobuf to fail
-> > building:
-> I'll give it a shot at reproducing locally. Hopefully I can patch the
-> triggering instances.
-> If I succeed, I'll commit a different patch to support building on
-> older versions of gcc,
-> and will send it upstream, too, so the patches can be dropped in a
-> following version.
-> Wish me luck!
+The upstream RFC included this commit set's patch
+but offered up discussion on how to cleanly
+introduce a better method for detecting swig and
+using the tools.  The tools build really needs to
+be sysroot and prefix/host dir tools aware.
 
+Upsteam submission for RFC:
+https://lists.denx.de/pipermail/u-boot/2017-May/289520.html
 
-Another data point,  This Ubuntu host GCC seems to not have the issue,
-so some distros have pulled the fix in.
-g++ (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4
+Workaround for:
+http://autobuild.buildroot.net/results/6d5/6d52ac8bb71012aea6fc4c679691b31a3366728b
 
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ ...nditionally-disable-python-libfdt-wrapper.patch | 44 ++++++++++++++++++++++
+ package/uboot-tools/uboot-tools.mk                 |  5 +++
+ 2 files changed, 49 insertions(+)
+ create mode 100644 package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
 
-Matt
+diff --git a/package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch b/package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
+new file mode 100644
+index 0000000..43be380
+--- /dev/null
++++ b/package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
+@@ -0,0 +1,44 @@
++From 4dc3139cc9fa12882792053bdce7b69aca9b91bf Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Mon, 1 May 2017 22:19:57 -0500
++Subject: [PATCH 1/1] tools: conditionally disable python libfdt wrapper
++
++Not all host systems want the default swig to be
++used when building the tools.  Allow for the
++disabling of the wrapper to enable cross-compiling
++of the tools on a host system with swig.
++
++Upsteam submission for RFC:
++https://lists.denx.de/pipermail/u-boot/2017-May/289520.html
++
++Workaround for:
++http://autobuild.buildroot.net/results/6d5/6d52ac8bb71012aea6fc4c679691b31a3366728b
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ tools/Makefile | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/tools/Makefile b/tools/Makefile
++index 2fc4a58..7f6c29d 100644
++--- a/tools/Makefile
+++++ b/tools/Makefile
++@@ -114,6 +114,7 @@ fit_check_sign-objs   := $(dumpimage-mkimage-objs) fit_check_sign.o
++ 
++ # Build a libfdt Python module if swig is available
++ # Use 'sudo apt-get install swig libpython-dev' to enable this
+++ifndef CONFIG_TOOLS_PYTHON_WRAPPER_DISABLE
++ hostprogs-y += \
++ 	$(if $(shell which swig 2> /dev/null),_libfdt.so)
++ _libfdt.so-sharedobjs += $(LIBFDT_OBJS)
++@@ -126,6 +127,7 @@ tools/_libfdt.so: $(patsubst %.o,%.c,$(LIBFDT_OBJS)) tools/libfdt_wrap.c
++ 
++ tools/libfdt_wrap.c: $(srctree)/lib/libfdt/libfdt.swig
++ 	swig -python -o $@ $<
+++endif
++ 
++ # TODO(sjg@chromium.org): Is this correct on Mac OS?
++ 
++-- 
++1.9.1
++
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 2585c7b..352f53d 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -21,6 +21,11 @@ UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	STRIP=$(TARGET_STRIP)
+ 
++# This option was added through an additional patch
++# and allows the disabling of a host python swig
++# detect which as of 2017.5 assumes the host systems swig.
++UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_PYTHON_WRAPPER_DISABLE=y
++
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
+ UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y
+ UBOOT_TOOLS_DEPENDENCIES += dtc
+-- 
+1.9.1
