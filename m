@@ -1,28 +1,46 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 1 May 2017 23:02:56 -0500
-Subject: [Buildroot] uboot-tools autobuild failures
-In-Reply-To: <CAOMZO5BqQ1FC8j=sW=4tbozA1ytKZaEi6-dTCMPNSPcbaxDCag@mail.gmail.com>
-References: <CANQCQpb0U3tO7Z-Lsz1pxmekaKYC8JyU7BJgtcXwLDWDgh1xNw@mail.gmail.com>
- <CAOMZO5D8cXv4+TF=kXMwE5_YE_mCKMhgjS+PCAbSkKHkewzSjA@mail.gmail.com>
- <CANQCQpb5_1uO+TR6X6Mk6XFW0HBV1f5b6zVvd0BF=yOOOjTT3Q@mail.gmail.com>
- <CAOMZO5BqQ1FC8j=sW=4tbozA1ytKZaEi6-dTCMPNSPcbaxDCag@mail.gmail.com>
-Message-ID: <CANQCQpa_2orpqoRB_wXe2E3MmjkQ8ujbnj_Rtty+_YFtcHProg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 2 May 2017 08:04:52 +0300
+Subject: [Buildroot] [PATCH v2] daemon: new package
+In-Reply-To: <47ac8a79-3586-a052-77df-3a4759c5e8d8@gmail.com>
+References: <a92dc5869d0e5e3868f928293c8d68f2558728ef.1493668995.git.baruch@tkos.co.il>
+ <47ac8a79-3586-a052-77df-3a4759c5e8d8@gmail.com>
+Message-ID: <20170502050452.4iofjilonggc23gw@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Romain,
 
-On Tue, Apr 25, 2017 at 12:09 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> On Tue, Apr 25, 2017 at 2:07 PM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->
->> No luck, same error.  I did notice this seems to be impacted by -j level.
->
-> Please report this error in the U-boot list. Thanks
+On Mon, May 01, 2017 at 11:28:11PM +0200, Romain Naour wrote:
+> Le 01/05/2017 ? 22:03, Baruch Siach a ?crit :
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> > v2: add target installation (thanks Romain)
+> > ---
+> 
+> > new file mode 100644
+> > index 000000000000..30954e77edc7
+> > --- /dev/null
+> > +++ b/package/daemon/Config.in
+> > @@ -0,0 +1,7 @@
+> > +config BR2_PACKAGE_DAEMON
+> > +	bool "daemon"
+> > +	depends on BR2_USE_MMU # fork()
+> 
+> It also needs thread support:
+> 
+> In file included from libslack/coproc.c:56:0:
+> libslack/std.h:102:21: fatal error: pthread.h: No such file or directory
 
-Done and I submitted a workaround for now until a clean fix can be
-found upstream.
-https://patchwork.ozlabs.org/patch/757382/
+Thanks for your thorough review.
+
+I'll fix and resubmit.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
