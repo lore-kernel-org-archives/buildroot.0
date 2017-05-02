@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 May 2017 22:30:42 +0200
-Subject: [Buildroot] [git commit] package/y*/Config.in: fix ordering of
-	statements
-Message-ID: <20170502203100.40D68827C0@busybox.osuosl.org>
+Date: Tue, 2 May 2017 22:34:36 +0200
+Subject: [Buildroot] [PATCH v2 01/25] package configs: clean up
+ indentation warnings
+In-Reply-To: <20170422171811.1346-1-Adamduskett@outlook.com>
+References: <20170422171811.1346-1-Adamduskett@outlook.com>
+Message-ID: <20170502223436.7694ab7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5219885cec1a2365c98237cd4c87deaeccc707e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The check-package script when ran gives warnings on ordering issues
-on all of these Config files.  This patch cleans up all warnings
-related to the ordering in the Config files for packages starting with
-the letter y in the package directory.
+On Sat, 22 Apr 2017 13:17:47 -0400, Adam Duskett wrote:
+> The check-package script when ran gave warnings on indentation issues
+> on all of these Config files.  This patch cleans up all warnings
+> related to the indentation of the Config files in the package directory
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> ---
+> v1 -> v2:
+>   - No changes.
+>   
+>  package/b43-firmware/Config.in       |   8 +-
+>  package/binutils/Config.in.host      |  12 +-
+>  package/gcc/Config.in.host           | 156 +++++------
+>  package/gdb/Config.in.host           |  12 +-
+>  package/jquery-ui-themes/Config.in   |  96 +++----
+>  package/kodi/Config.in               | 100 +++----
+>  package/linux-headers/Config.in.host |  85 +++---
+>  package/lua/Config.in                |  12 +-
+>  package/uclibc/Config.in             |  28 +-
+>  package/x11r7/Config.in              | 526 ++++++++++++++++++-----------------
+>  10 files changed, 522 insertions(+), 513 deletions(-)
 
-The appropriate ordering is: type, default, depends on, select, help
-See http://nightly.buildroot.org/#_config_files for more information.
+I've finished applying all patches from this series. Thanks!
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ympd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/ympd/Config.in b/package/ympd/Config.in
-index d0901c7..39b3a86 100644
---- a/package/ympd/Config.in
-+++ b/package/ympd/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_YMPD
- 	bool "ympd"
--	select BR2_PACKAGE_LIBMPDCLIENT
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBMPDCLIENT
- 	help
- 	  ympd, a standalone MPD Web GUI written in C, utilizing
- 	  Websockets and Bootstrap/JS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
