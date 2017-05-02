@@ -1,28 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 May 2017 22:53:18 +0200
-Subject: [Buildroot] [PATCH] moarvm: bump version to 2017.04
-In-Reply-To: <20170418155442.53892-1-Vincent.Riera@imgtec.com>
-References: <20170418155442.53892-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170502225318.474fae42@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 2 May 2017 23:50:39 +0200
+Subject: [Buildroot] [PATCH] package/libloki: new package
+In-Reply-To: <1493758169-18291-1-git-send-email-corentin.guillevic@smile.fr>
+References: <1493758169-18291-1-git-send-email-corentin.guillevic@smile.fr>
+Message-ID: <e7358348-1adc-0743-63ac-f9d6e7c0cf70@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Corentin, All
 
-On Tue, 18 Apr 2017 16:54:42 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Le 02/05/2017 ? 22:49, Corentin GUILLEVIC a ?crit :
+> A C++ library of designs, containing flexible implementations of common design patterns and idioms.
+> 
+> Signed-off-by: Corentin GUILLEVIC <corentin.guillevic@smile.fr>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/moarvm/moarvm.hash | 2 +-
->  package/moarvm/moarvm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  DEVELOPERS                   |  3 +++
+>  package/Config.in            |  1 +
+>  package/libloki/Config.in    | 12 ++++++++++++
+>  package/libloki/libloki.hash |  5 +++++
+>  package/libloki/libloki.mk   | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 65 insertions(+)
+>  create mode 100644 package/libloki/Config.in
+>  create mode 100644 package/libloki/libloki.hash
+>  create mode 100644 package/libloki/libloki.mk
+> 
 
-Applied to master, thanks.
+Two patches are missing here to fix the install step.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Corentin, care to send an updated patch?
+
+Thanks!
+
+Best regards,
+Romain
