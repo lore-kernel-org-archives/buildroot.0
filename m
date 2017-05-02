@@ -1,21 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 May 2017 14:42:05 +0200
-Subject: [Buildroot] [git commit] package/t*/Config.in: fix ordering of
+Date: Tue, 2 May 2017 14:43:46 +0200
+Subject: [Buildroot] [git commit] package/u*/Config.in: fix ordering of
 	statements
-Message-ID: <20170502124241.186E48284C@busybox.osuosl.org>
+Message-ID: <20170502124616.148C1825CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=168be5c2dbfdd8e37bf87fff321d3bf45e0bb948
+commit: https://git.buildroot.net/buildroot/commit/?id=a2b31892a886a5b11bca85ca9e6a689f6f3df9c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The check-package script when ran gives warnings on ordering issues
 on all of these Config files.  This patch cleans up all warnings
 related to the ordering in the Config files for packages starting with
-the letter t in the package directory.
+the letter u in the package directory.
 
 The appropriate ordering is: type, default, depends on, select, help
 See http://nightly.buildroot.org/#_config_files for more information.
@@ -23,116 +23,184 @@ See http://nightly.buildroot.org/#_config_files for more information.
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tekui/Config.in     | 6 +++---
- package/tiff/Config.in      | 6 +++---
- package/tinc/Config.in      | 4 ++--
- package/tpm-tools/Config.in | 6 +++---
- package/trousers/Config.in  | 4 ++--
- 5 files changed, 13 insertions(+), 13 deletions(-)
+ package/ubus/Config.in                |  4 ++--
+ package/uclibc/Config.in              | 20 ++++++++++----------
+ package/udev/Config.in                |  2 +-
+ package/udisks/Config.in              |  2 +-
+ package/unionfs/Config.in             |  2 +-
+ package/usb_modeswitch_data/Config.in |  2 +-
+ package/ushare/Config.in              |  4 ++--
+ 7 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/package/tekui/Config.in b/package/tekui/Config.in
-index 1203667..b0f86bf 100644
---- a/package/tekui/Config.in
-+++ b/package/tekui/Config.in
-@@ -1,13 +1,13 @@
- config BR2_PACKAGE_TEKUI
- 	bool "tekui"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_LUAFILESYSTEM	# runtime only
- 	select BR2_PACKAGE_LUAEXPAT		# runtime only
- 	select BR2_PACKAGE_LUASOCKET		# runtime only
- 	select BR2_PACKAGE_LUAPOSIX		# runtime only
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
--	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/ubus/Config.in b/package/ubus/Config.in
+index c14f6a8..3d34121 100644
+--- a/package/ubus/Config.in
++++ b/package/ubus/Config.in
+@@ -4,10 +4,10 @@ comment "ubus needs a toolchain w/ dynamic library"
+ 
+ config BR2_PACKAGE_UBUS
+ 	bool "ubus"
+-	select BR2_PACKAGE_LIBUBOX
+-	select BR2_PACKAGE_JSON_C
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ 	depends on !BR2_STATIC_LIBS # libubox
++	select BR2_PACKAGE_LIBUBOX
++	select BR2_PACKAGE_JSON_C
  	help
- 	  TekUI is a small, freestanding and portable graphical user interface
- 	  (GUI) toolkit written in Lua and C. It was initially developed for
-diff --git a/package/tiff/Config.in b/package/tiff/Config.in
-index 092a7f3..f842c2e 100644
---- a/package/tiff/Config.in
-+++ b/package/tiff/Config.in
-@@ -37,8 +37,8 @@ config BR2_PACKAGE_TIFF_MDI
+ 	  IPC/RPC bus that allows communication between processes.
  
- config BR2_PACKAGE_TIFF_ZLIB
- 	bool "Zlib usage (required for Deflate compression)"
--	select BR2_PACKAGE_ZLIB
- 	default y
-+	select BR2_PACKAGE_ZLIB
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index bfce45c..b0b0b01 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -47,15 +47,15 @@ choice
  
- config BR2_PACKAGE_TIFF_XZ
- 	bool "XZ compression"
-@@ -46,13 +46,13 @@ config BR2_PACKAGE_TIFF_XZ
+ config BR2_PTHREADS_NATIVE
+ 	bool "Native POSIX Threading (NPTL)"
+-	select BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_m68k && !BR2_microblaze && !BR2_or1k
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
  
- config BR2_PACKAGE_TIFF_PIXARLOG
- 	bool "Pixar log-format algorithm (requires Zlib)"
--	select BR2_PACKAGE_TIFF_ZLIB
- 	default y
-+	select BR2_PACKAGE_TIFF_ZLIB
+ config BR2_PTHREADS
+ 	bool "linuxthreads"
+-	select BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_bfin || BR2_m68k || BR2_microblaze || BR2_or1k || BR2_arm || BR2_armeb || BR2_xtensa
++	select BR2_TOOLCHAIN_HAS_THREADS
  
- config BR2_PACKAGE_TIFF_JPEG
- 	bool "JPEG compression"
--	select BR2_PACKAGE_JPEG
- 	default y
-+	select BR2_PACKAGE_JPEG
+ config BR2_PTHREADS_NONE
+ 	bool "none"
+@@ -109,45 +109,44 @@ config BR2_UCLIBC_TARGET_ARCH
  
- config BR2_PACKAGE_TIFF_OLD_JPEG
- 	bool "Old JPEG decompression"
-diff --git a/package/tinc/Config.in b/package/tinc/Config.in
-index 1d8e2c4..837f556 100644
---- a/package/tinc/Config.in
-+++ b/package/tinc/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_TINC
- 	bool "tinc"
-+	depends on !BR2_STATIC_LIBS # tinc requires libdl for OpenSSL
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
--	depends on !BR2_STATIC_LIBS # tinc requires libdl for OpenSSL
--	depends on BR2_USE_MMU # fork()
+ config BR2_UCLIBC_ARC_TYPE
+ 	string
+-	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
+ 	default "ARC_CPU_700"	if BR2_arc750d
+ 	default "ARC_CPU_700"	if BR2_arc770d
+ 	default "ARC_CPU_HS"	if BR2_archs38
++	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
+ 
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+-	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
+ 	default "O32" if BR2_MIPS_OABI32
+ 	default "N32" if BR2_MIPS_NABI32
+ 	default "N64" if BR2_MIPS_NABI64
++	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
+ 
+ config BR2_UCLIBC_MIPS_NAN
+ 	string
+-	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
+ 	default "LEGACY" if BR2_MIPS_CPU_MIPS32 || BR2_MIPS_CPU_MIPS64
+ 	default "2008" if BR2_MIPS_CPU_MIPS32R6 || BR2_MIPS_CPU_MIPS64R6
++	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
+ 
+ config BR2_UCLIBC_SH_TYPE
+ 	string
+-	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
+ 	default "SH2A" if BR2_sh2a
+ 	default "SH4"  if BR2_sh4 || BR2_sh4eb
++	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
+ 
+ config BR2_UCLIBC_SPARC_TYPE
+ 	string
+-	depends on BR2_UCLIBC_TARGET_ARCH = "sparc"
+ 	default "V7"	if BR2_sparc_v7 || BR2_sparc_sparchfleon || BR2_sparc_sparcsfleon
+ 	default "V8"	if BR2_sparc_v8 || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleonv8
++	depends on BR2_UCLIBC_TARGET_ARCH = "sparc"
+ 
+ config BR2_UCLIBC_POWERPC_TYPE
+ 	string
+-	depends on BR2_UCLIBC_TARGET_ARCH = "powerpc"
+ 	default "CLASSIC" if !BR2_powerpc_8540 && !BR2_powerpc_8548
+ 	default "E500"    if BR2_powerpc_8540 || BR2_powerpc_8548
++	depends on BR2_UCLIBC_TARGET_ARCH = "powerpc"
+ 
+ config BR2_UCLIBC_X86_TYPE
+ 	string
+-	depends on BR2_UCLIBC_TARGET_ARCH = "i386"
+ 	default "486"        if BR2_x86_i486
+ 	default "586"        if BR2_x86_i586
+ 	default "586MMX"     if BR2_x86_pentium_mmx
+@@ -156,5 +155,6 @@ config BR2_UCLIBC_X86_TYPE
+ 	default "PENTIUMIII" if BR2_x86_pentium3
+ 	default "PENTIUM4"   if BR2_x86_pentium4 || BR2_x86_pentium_m || \
+ 	                        BR2_x86_nocona || BR2_x86_core2 || BR2_x86_corei7
++	depends on BR2_UCLIBC_TARGET_ARCH = "i386"
+ 
+ endif # BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+diff --git a/package/udev/Config.in b/package/udev/Config.in
+index 941a515..814a625 100644
+--- a/package/udev/Config.in
++++ b/package/udev/Config.in
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HAS_UDEV
+ 	bool
+ 
+ config BR2_PACKAGE_PROVIDES_UDEV
+-	depends on BR2_PACKAGE_HAS_UDEV
+ 	string
++	depends on BR2_PACKAGE_HAS_UDEV
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index 029860f..6573cda 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -5,9 +5,9 @@ config BR2_PACKAGE_UDISKS
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
++	depends on BR2_USE_WCHAR # dbus-glib -> glib2
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+-	depends on BR2_USE_WCHAR # dbus-glib -> glib2
+ 	select BR2_PACKAGE_SG3_UTILS
+ 	select BR2_PACKAGE_POLKIT
+ 	select BR2_PACKAGE_PARTED
+diff --git a/package/unionfs/Config.in b/package/unionfs/Config.in
+index ece83a5..fe03b95 100644
+--- a/package/unionfs/Config.in
++++ b/package/unionfs/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_UNIONFS
+ 	bool "unionfs (FUSE)"
+-	select BR2_PACKAGE_LIBFUSE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
+ 	depends on BR2_USE_MMU # libfuse
+ 	depends on !BR2_STATIC_LIBS # libfuse
++	select BR2_PACKAGE_LIBFUSE
  	help
- 	  tinc is a Virtual Private Network (VPN) daemon that uses
- 	  tunnelling and encryption to create a secure private network
-diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
-index 83b65f3..091f424 100644
---- a/package/tpm-tools/Config.in
-+++ b/package/tpm-tools/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_TPM_TOOLS
- 	bool "tpm-tools"
--	select BR2_PACKAGE_TROUSERS
--	select BR2_PACKAGE_OPENSSL
+ 	  A userspace unionfs implementation.
+ 
+diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
+index ad96726..95b2a07 100644
+--- a/package/usb_modeswitch_data/Config.in
++++ b/package/usb_modeswitch_data/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_USB_MODESWITCH_DATA
+ 	bool "usb_modeswitch_data"
+-	select BR2_PACKAGE_USB_MODESWITCH
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # usb_modeswitch -> libusb
++	select BR2_PACKAGE_USB_MODESWITCH
+ 	help
+ 	  USB mode switch data
+ 	  Contains udev rules and events to allow usb_modeswitch to
+diff --git a/package/ushare/Config.in b/package/ushare/Config.in
+index eba7acf..70bf24a 100644
+--- a/package/ushare/Config.in
++++ b/package/ushare/Config.in
+@@ -1,12 +1,12 @@
+ config BR2_PACKAGE_USHARE
+ 	bool "ushare"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
+-	select BR2_PACKAGE_LIBUPNP
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # trousers
- 	depends on !BR2_STATIC_LIBS # trousers
- 	depends on !BR2_arc # trousers
-+	select BR2_PACKAGE_TROUSERS
-+	select BR2_PACKAGE_OPENSSL
+ 	# ushare has a completely custom configure script that does
+ 	# broken things with library ordering, which breaks static
+ 	# linking.
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBUPNP
 +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  Tools to manage and diagnose a TPM
- 
-diff --git a/package/trousers/Config.in b/package/trousers/Config.in
-index de3b951..eb791d1 100644
---- a/package/trousers/Config.in
-+++ b/package/trousers/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_TROUSERS
- 	bool "trousers"
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# doesn't build properly in static only configurations
- 	depends on !BR2_STATIC_LIBS
- 	# ARC toolchain issue
- 	depends on !BR2_arc
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  The open-source TCG Software Stack (TSS).
- 
+ 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
+ 	  It implements the server component that provides UPnP media devices
