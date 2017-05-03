@@ -1,8 +1,8 @@
 From: Mario J. Rugiero <mrugiero@gmail.com>
-Date: Wed,  3 May 2017 17:45:41 -0300
-Subject: [Buildroot] [PATCH] package: protobuf,
+Date: Wed,  3 May 2017 17:59:45 -0300
+Subject: [Buildroot] [PATCH v2] package: protobuf,
 	python-protobuf: bump to v3.3.0
-Message-ID: <20170503204541.18889-1-mrugiero@gmail.com>
+Message-ID: <20170503205945.7065-1-mrugiero@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,9 +21,10 @@ qemu_aarch64_virt_defconfig
 
 Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
 ---
- package/protobuf/protobuf.hash | 3 +--
- package/protobuf/protobuf.mk   | 4 +---
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ package/protobuf/protobuf.hash               | 3 +--
+ package/protobuf/protobuf.mk                 | 4 +---
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
 index 8c2ade37e..91e70f236 100644
@@ -56,5 +57,13 @@ index 610da8c04..556773106 100644
  ifeq ($(BR2_PACKAGE_ZLIB),y)
  PROTOBUF_DEPENDENCIES += zlib
  endif
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index c87403f24..7da2fed03 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 c574e2b2178ffe66599274e8cfa11ecf83799a7992be30f0b68fb33ea0a0f1af protobuf-python-3.2.0.tar.gz
++sha256 3fd180eee78c7ee2e7a1b2f02657ef61ccbc2537a6767cd2493077d3b38c9d2d protobuf-python-3.3.0.tar.gz
 -- 
 2.12.2
