@@ -1,51 +1,98 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Wed, 3 May 2017 12:29:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-04-29
-In-Reply-To: <20170430062822.F06D82097E@mail.free-electrons.com>
-References: <20170430062822.F06D82097E@mail.free-electrons.com>
-Message-ID: <20170503102922.GB26389@argentina>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  3 May 2017 15:01:03 +0300
+Subject: [Buildroot] [PATCH] empty: bump to version 0.6.20b
+Message-ID: <551bc33d600ea93bb2e336a6bd972a6861601daf.1493812863.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Drop upstream patch.
 
-On Sun, Apr 30, 2017 at 08:28:22AM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2017-04-29, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Build failures related to your packages:
-> 
->          arm |      toolchain-external-custom | http://autobuild.buildroot.net/results/39888c188c0d13219a8419897a833275fcc81597
-> 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/empty/0002-fix-non-thread-build.patch | 49 ---------------------------
+ package/empty/empty.hash                      |  2 +-
+ package/empty/empty.mk                        |  2 +-
+ 3 files changed, 2 insertions(+), 51 deletions(-)
+ delete mode 100644 package/empty/0002-fix-non-thread-build.patch
 
-It seems that this is an invalid configuration:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_ARM_EABI=y
-BR2_ARM_INSTRUCTIONS_THUMB2=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_EXTERNAL=y
-
-
-With STATIC_LIBS set, there is no downloadable external toolchain.
-As such, Buildroot falls back to a preinstalled one and sets the toolchain
-location to /path/to/toolchain, which does not exist.
-
-However, I don't find this toolchain config in the list at:
-http://autobuild.buildroot.net/toolchains/configs/
-
-The build was submitted by Richard Braun, could it be that he is using toolchain
-configs that are not in this list?
-
-Thanks,
-Thomas
+diff --git a/package/empty/0002-fix-non-thread-build.patch b/package/empty/0002-fix-non-thread-build.patch
+deleted file mode 100644
+index a7e8d90a212f..000000000000
+--- a/package/empty/0002-fix-non-thread-build.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-empty uses SysV semaphores, so the ifdef is wrong here.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+---- empty-0.6.19b.orig/empty.c	2012-09-19 13:24:05.000000000 +0200
+-+++ empty-0.6.19b/empty.c	2015-07-09 02:00:09.000000000 +0200
+-@@ -179,25 +179,23 @@ int main (int argc, char *argv[]) {
+- 					   2 - unknown */
+- 	
+- /* semaphores */
+--#ifdef _POSIX_SEMAPHORES
+--	#if defined(__linux__) && defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
+--		/* union semun is defined by including <sys/sem.h> */
+--	#else
+--		union semun {
+--			int val;
+--			struct semid_ds *buf;
+--		#ifdef __SVR4
+--			ushort_t	*array;
+--		#endif
+--		#ifdef __hpux__
+--			ushort		*array;
+--		#endif
+--		#ifdef __linux__
+--			unsigned short *array;
+--			struct seminfo *__buf;		/* buffer for IPC_INFO */
+--		#endif
+--		};
+--  	#endif
+-+#if defined(__linux__) && defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
+-+	/* union semun is defined by including <sys/sem.h> */
+-+#else
+-+	union semun {
+-+		int val;
+-+		struct semid_ds *buf;
+-+	#ifdef __SVR4
+-+		ushort_t	*array;
+-+	#endif
+-+	#ifdef __hpux__
+-+		ushort		*array;
+-+	#endif
+-+	#ifdef __linux__
+-+		unsigned short *array;
+-+		struct seminfo *__buf;		/* buffer for IPC_INFO */
+-+	#endif
+-+	};
+- #endif
+- 	union semun semu;
+- 	
+diff --git a/package/empty/empty.hash b/package/empty/empty.hash
+index 91402889fa5e..e62939687db7 100644
+--- a/package/empty/empty.hash
++++ b/package/empty/empty.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  05b7cb361ef815774abda325c09c573f8c9039ccbb71eedc743439e4637c314a  empty-0.6.19b.tgz
++sha256  7e6636e400856984c4405ce7bd0843aaa3329fa3efd20c58df8400a9eaa35f09  empty-0.6.20b.tgz
+diff --git a/package/empty/empty.mk b/package/empty/empty.mk
+index a1cc3c0526a3..5e3ed42befd4 100644
+--- a/package/empty/empty.mk
++++ b/package/empty/empty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EMPTY_VERSION = 0.6.19b
++EMPTY_VERSION = 0.6.20b
+ EMPTY_SOURCE = empty-$(EMPTY_VERSION).tgz
+ EMPTY_SITE = http://downloads.sourceforge.net/project/empty/empty/empty-$(EMPTY_VERSION)
+ EMPTY_LICENSE = BSD-3-Clause
+-- 
+2.11.0
