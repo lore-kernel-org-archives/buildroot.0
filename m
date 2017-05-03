@@ -1,52 +1,55 @@
-From: xlcwu <xlcwu.taiwan@gmail.com>
-Date: Wed,  3 May 2017 03:43:55 +0000
-Subject: [Buildroot] [PATCH 1/1] libcgi: bump to version 1.1 and cleanup the
-	libcgi package,
-	by using https://github.com/rafaelsteil/libcgi as an upstream.
-Message-ID: <1493783035-17087-1-git-send-email-xlcwu.taiwan@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 3 May 2017 07:02:24 +0300
+Subject: [Buildroot] [PATCH] package: protobuf: fix build on gcc < 4.5.0
+In-Reply-To: <20170503001424.13534-1-mrugiero@gmail.com>
+References: <20170503001424.13534-1-mrugiero@gmail.com>
+Message-ID: <20170503040224.a2edqahwspu4lgtt@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: xlcwu <xlcwu.taiwan@gmail.com>
----
- package/libcgi/libcgi.hash |  2 +-
- package/libcgi/libcgi.mk   | 12 +++++++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+Hi Mario,
 
-diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
-index 6bd7c0c..1ac1440 100644
---- a/package/libcgi/libcgi.hash
-+++ b/package/libcgi/libcgi.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  861df39cc0195d43419c4c3de8dff4f42478db66c9ba0b0c1e994c99400e130c  libcgi-1.0.tar.gz
-+sha256  128445f2f828e84905d51bd53d11e2e08c489df3a07225ff9f198c1318092fe6  libcgi-1.1.tar.gz
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index de2a1e4..dce71e1 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -4,12 +4,14 @@
- #
- ################################################################################
- 
--LIBCGI_VERSION = 1.0
-+LIBCGI_VERSION = 1.1
- LIBCGI_SITE = http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
-+LIBCGI_SITE = $(call github,rafaelsteil,libcgi,$(LIBCGI_VERSION))
-+LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
-+
- LIBCGI_INSTALL_STAGING = YES
--# use cross CC/AR rather than host
--LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
--	$(if $(BR2_STATIC_LIBS),STATIC=1)
- LIBCGI_LICENSE = LGPL-2.1+
- 
--$(eval $(autotools-package))
-+LIBCGI_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+$(eval $(cmake-package))
+On Tue, May 02, 2017 at 09:14:24PM -0300, Mario J. Rugiero wrote:
+> Add upstream patch working around a gcc bug which got fixed in version 4.5.0.
+
+Is there a reason not to bump version to 3.3.0 that includes this fix?
+
+baruch
+
+> Fixes:
+> http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef9728c20d54/
+> http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e916c89f1e3/
+> http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc75b33d484c/
+> 
+> Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
+> ---
+>  package/protobuf/protobuf.hash | 1 +
+>  package/protobuf/protobuf.mk   | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+> index 8c2ade37e..9b8e1e86d 100644
+> --- a/package/protobuf/protobuf.hash
+> +++ b/package/protobuf/protobuf.hash
+> @@ -1,3 +1,4 @@
+>  # Locally calculated
+>  sha256 51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6 protobuf-cpp-3.2.0.tar.gz
+>  sha256 da80c39838515913633f4cbd875fdd4ad711be95c83a50ff5096b9f1254033b3 416f90939d4de58fe1a4e2489120010313183291.patch
+> +sha256 309c8fd476863ddf9726a9700023d6349f7305e05bec071a06f4ccf7e90a7053 a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff.patch
+> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+> index 610da8c04..92b6fe344 100644
+> --- a/package/protobuf/protobuf.mk
+> +++ b/package/protobuf/protobuf.mk
+> @@ -20,6 +20,7 @@ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+>  PROTOBUF_INSTALL_STAGING = YES
+>  
+>  PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
+> +PROTOBUF_PATCH += https://github.com/google/protobuf/commit/a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff.patch
+
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
