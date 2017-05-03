@@ -1,54 +1,35 @@
-From: Mario Rugiero <mrugiero@gmail.com>
-Date: Wed, 3 May 2017 16:21:01 -0300
-Subject: [Buildroot] [PATCH] package: protobuf: fix build on gcc < 4.5.0
-In-Reply-To: <20170503191657.18596-1-mrugiero@gmail.com>
-References: <20170503191657.18596-1-mrugiero@gmail.com>
-Message-ID: <CAKKQwLQXzTUJwxHig0Mrw_zqMunC9E3SSKK2Y0AA5_HhJW54gw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 03 May 2017 21:29:13 +0200
+Subject: [Buildroot] [PATCH 2/2] picocom: force target LDFLAGS
+In-Reply-To: <20170503170019.tzz5ok3gwkq67v5z@tarshish> (Baruch Siach's
+ message of "Wed, 3 May 2017 20:00:19 +0300")
+References: <04e1e4d95a425dfc0e0650088cb0120a9f3e46a8.1493815595.git.baruch@tkos.co.il>
+ <f7abac9c0ca017bffd3109f7df0d6bfa7f099281.1493815595.git.baruch@tkos.co.il>
+ <87h912c67z.fsf@dell.be.48ers.dk>
+ <20170503170019.tzz5ok3gwkq67v5z@tarshish>
+Message-ID: <87d1bpd9iu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-05-03 16:16 GMT-03:00 Mario J. Rugiero <mrugiero@gmail.com>:
-> Add upstream patch working around a gcc bug which got fixed in version 4.5.0.
->
-> Fixes:
-> http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef9728c20d54/
-> http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e916c89f1e3/
-> http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc75b33d484c/
->
-> Tested with:
-> qemu_aarch64_virt_defconfig
->
-> Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
-> ---
->  package/protobuf/protobuf.hash | 1 +
->  package/protobuf/protobuf.mk   | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-> index 8c2ade37e..9b8e1e86d 100644
-> --- a/package/protobuf/protobuf.hash
-> +++ b/package/protobuf/protobuf.hash
-> @@ -1,3 +1,4 @@
->  # Locally calculated
->  sha256 51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6 protobuf-cpp-3.2.0.tar.gz
->  sha256 da80c39838515913633f4cbd875fdd4ad711be95c83a50ff5096b9f1254033b3 416f90939d4de58fe1a4e2489120010313183291.patch
-> +sha256 309c8fd476863ddf9726a9700023d6349f7305e05bec071a06f4ccf7e90a7053 a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff.patch
-> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-> index 610da8c04..92b6fe344 100644
-> --- a/package/protobuf/protobuf.mk
-> +++ b/package/protobuf/protobuf.mk
-> @@ -20,6 +20,7 @@ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
->  PROTOBUF_INSTALL_STAGING = YES
->
->  PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
-> +PROTOBUF_PATCH += https://github.com/google/protobuf/commit/a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff.patch
->
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
->  PROTOBUF_DEPENDENCIES += zlib
-> --
-> 2.12.2
->
-Nevermind this, I thought I had bumped the version already.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+
+Hi,
+
+ >> Committed, thanks.
+ >> 
+ >> Is this only an issue for picocom 2.2, or also something we should
+ >> backport for the 2017.02.x branch?
+
+ > Version 2.1 is also affected. But I'm not sure the issue is bad enough for a 
+ > backport.
+
+Ok, thanks.
+
+I think the risk of it breaking something is quite low, and it does fix
+possible use cases, so it is imho a candidate for a backport.
+
+-- 
+Bye, Peter Korsgaard
