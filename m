@@ -1,44 +1,49 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Thu,  4 May 2017 00:34:14 +0530
-Subject: [Buildroot] [PATCH] tinyxml2: fix build in static libs configuration
-Message-ID: <1493838254-3658-1-git-send-email-rahulbedarkar89@gmail.com>
+From: Mario J. Rugiero <mrugiero@gmail.com>
+Date: Wed,  3 May 2017 16:16:57 -0300
+Subject: [Buildroot] [PATCH] package: protobuf: fix build on gcc < 4.5.0
+Message-ID: <20170503191657.18596-1-mrugiero@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tinyxml2 can build both static and shared libraries. By default, only
-shared library is built. Shared/static builds are controlled using
-separate cmake flags BUILD_SHARED_LIBS and BUILD_STATIC_LIBS.
+Add upstream patch working around a gcc bug which got fixed in version 4.5.0.
 
-In static libs configuration, we internally pass -DBUILD_SHARED_LIBS=OFF
-cmake flag to build system which disables both shared and static builds
-of library, resulting in failures while linking executable with library.
+Fixes:
+http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef9728c20d54/
+http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e916c89f1e3/
+http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc75b33d484c/
 
-So pass -DBUILD_STATIC_LIBS=ON cmake flag in case of static libs
-configuration.
+Tested with:
+qemu_aarch64_virt_defconfig
 
-fixes:
-  http://autobuild.buildroot.net/results/d30/d301bcbe5db26068b35eaa94bd816ae8cf8ef2e1
-
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
 ---
- package/tinyxml2/tinyxml2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/protobuf/protobuf.hash | 1 +
+ package/protobuf/protobuf.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
-index bb1e167..e289ca9 100644
---- a/package/tinyxml2/tinyxml2.mk
-+++ b/package/tinyxml2/tinyxml2.mk
-@@ -10,4 +10,8 @@ TINYXML2_LICENSE = Zlib
- TINYXML2_LICENSE_FILES = readme.md
- TINYXML2_INSTALL_STAGING = YES
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 8c2ade37e..9b8e1e86d 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256 51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6 protobuf-cpp-3.2.0.tar.gz
+ sha256 da80c39838515913633f4cbd875fdd4ad711be95c83a50ff5096b9f1254033b3 416f90939d4de58fe1a4e2489120010313183291.patch
++sha256 309c8fd476863ddf9726a9700023d6349f7305e05bec071a06f4ccf7e90a7053 a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff.patch
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 610da8c04..92b6fe344 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -20,6 +20,7 @@ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+ PROTOBUF_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+TINYXML2_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
-+endif
-+
- $(eval $(cmake-package))
+ PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
++PROTOBUF_PATCH += https://github.com/google/protobuf/commit/a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff.patch
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ PROTOBUF_DEPENDENCIES += zlib
 -- 
-2.7.4
+2.12.2
