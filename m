@@ -1,28 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 May 2017 17:25:52 +0200
-Subject: [Buildroot] [PATCH 2/2] picocom: force target LDFLAGS
-In-Reply-To: <f7abac9c0ca017bffd3109f7df0d6bfa7f099281.1493815595.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 3 May 2017 15:46:35 +0300")
-References: <04e1e4d95a425dfc0e0650088cb0120a9f3e46a8.1493815595.git.baruch@tkos.co.il>
- <f7abac9c0ca017bffd3109f7df0d6bfa7f099281.1493815595.git.baruch@tkos.co.il>
-Message-ID: <87h912c67z.fsf@dell.be.48ers.dk>
+Date: Wed, 3 May 2017 17:24:43 +0200
+Subject: [Buildroot] [git commit] picocom: force target LDFLAGS
+Message-ID: <20170503152613.665477FAD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=add51b89bfb5ebe7b533e14714088a4d3912c9a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This allows a static build of picocom when BR2_STATIC_LIBS=y but the toolchain
- > provides static and shared libraries.
+This allows a static build of picocom when BR2_STATIC_LIBS=y but the toolchain
+provides static and shared libraries.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/picocom/picocom.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Committed, thanks.
-
-Is this only an issue for picocom 2.2, or also something we should
-backport for the 2017.02.x branch?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 07bda0e..4e25556 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -10,7 +10,8 @@ PICOCOM_LICENSE = GPL-2.0+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
+ 
+ define PICOCOM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
+ endef
+ 
+ define PICOCOM_INSTALL_TARGET_CMDS
