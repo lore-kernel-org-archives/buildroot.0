@@ -1,30 +1,32 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 4 May 2017 09:11:09 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-05-01
-In-Reply-To: <20170502062817.7C03E207D4@mail.free-electrons.com>
-References: <20170502062817.7C03E207D4@mail.free-electrons.com>
-Message-ID: <CAOMZO5CG_H47Xcpo=eTF+K7Rm0YMd9XTjfvzwktrYrsCKULWgA@mail.gmail.com>
+Date: Thu, 4 May 2017 09:36:07 -0300
+Subject: [Buildroot] [PATCH] imx6q-sabresd: Add a qt5 defconfig variant
+In-Reply-To: <1492870186-31678-1-git-send-email-festevam@gmail.com>
+References: <1492870186-31678-1-git-send-email-festevam@gmail.com>
+Message-ID: <CAOMZO5BPu8UWkFZubWn0gc4gvGDXxm7tB2AWe3s8bg8rADuP2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 2, 2017 at 3:28 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+On Sat, Apr 22, 2017 at 11:09 AM, Fabio Estevam <festevam@gmail.com> wrote:
+> Introduce imx6q-sabresd_qt5_defconfig that supports the opensource
+> Etnaviv graphical stack.
 >
-> This is the list of Buildroot build failures that occured on
-> 2017-05-01, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
+> This defconfig provides a way to quickly test some graphical applications,
+> such as kmscube, qt5, glmark2.
 >
-> Build failures related to your packages:
+> Currently kernel mainline exhibits issues when running cpufreq as ondemand
+> governor on mx6, so add a linux fragment that disables such option for the
+> time being.
 >
->          arm | atest-895b0183a89c15f5e2305... | http://autobuild.buildroot.net/results/24081a28132899e9853dcb33a345db55c7c9d04a
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-What about adding a "depends on BR2_USE_MMU" to  package/atest/Config.in?
+Would it be possible to have this defconfig as part of the next
+Buildroot release?
 
-Would this be the correct fix for this issue?
+It would be very convenient for testing mx6 with kernel
+mainline/Mesa/Etnaviv/Qt5.
+
+Thanks
