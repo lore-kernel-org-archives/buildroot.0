@@ -1,47 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 23:09:33 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nvidia-driver: bump version to
- 381.09
-In-Reply-To: <20170419123214.18835-1-bernd.kuhls@t-online.de>
-References: <20170419123214.18835-1-bernd.kuhls@t-online.de>
-Message-ID: <20170504230933.1a80f407@free-electrons.com>
+Date: Thu, 4 May 2017 23:13:12 +0200
+Subject: [Buildroot] [git commit] nvidia-driver: use http:// instead of
+	ftp://
+Message-ID: <20170504211339.89DD382859@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2068c7c6a810cdaf55240faf15c226ce3b308f1b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 19 Apr 2017 14:32:13 +0200, Bernd Kuhls wrote:
-> libnvidia-egl-wayland.so was renamed in upstream archive.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes the download, which currently times out on http://.
 
-Yann, could you comment on this patch?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nvidia-driver/nvidia-driver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Bernd, unfortunately, I can't download it from here:
-
-thomas at skate:~/projets/buildroot (master)$ make nvidia-driver-extract
->>> nvidia-driver 381.09 Downloading
---2017-05-04 22:55:07--  ftp://download.nvidia.com/XFree86/Linux-x86/381.09/NVIDIA-Linux-x86-381.09.run
-           => ?/home/thomas/projets/buildroot/output/build/.NVIDIA-Linux-x86-381.09.run.ZpEVbh/output?
-Resolving download.nvidia.com (download.nvidia.com)... 192.229.220.191
-Connecting to download.nvidia.com (download.nvidia.com)|192.229.220.191|:21... failed: Connection timed out.
-Retrying.
-
---2017-05-04 22:57:15--  ftp://download.nvidia.com/XFree86/Linux-x86/381.09/NVIDIA-Linux-x86-381.09.run
-  (try: 2) => ?/home/thomas/projets/buildroot/output/build/.NVIDIA-Linux-x86-381.09.run.ZpEVbh/output?
-Connecting to download.nvidia.com (download.nvidia.com)|192.229.220.191|:21... failed: Connection timed out.
-Retrying.
-
---2017-05-04 22:59:25--  ftp://download.nvidia.com/XFree86/Linux-x86/381.09/NVIDIA-Linux-x86-381.09.run
-  (try: 3) => ?/home/thomas/projets/buildroot/output/build/.NVIDIA-Linux-x86-381.09.run.ZpEVbh/output?
-Connecting to download.nvidia.com (download.nvidia.com)|192.229.220.191|:21... failed: Connection timed out.
-Giving up.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 0d03110..6ed7d52 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -6,7 +6,7 @@
+ 
+ NVIDIA_DRIVER_VERSION = 375.20
+ NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
+-NVIDIA_DRIVER_SITE = ftp://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
++NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+ NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
+ NVIDIA_DRIVER_LICENSE = NVIDIA Software License
+ NVIDIA_DRIVER_LICENSE_FILES = LICENSE
