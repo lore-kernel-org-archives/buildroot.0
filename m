@@ -1,46 +1,44 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 4 May 2017 23:34:52 +0200
-Subject: [Buildroot] [PATCH v3 1/2] cracklib: New package
-In-Reply-To: <1493881807.2302.3.camel@spectralink.com>
-References: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
- <f24453b3-9fc6-1a1e-4e01-071da345bbdb@gmail.com>
- <1493881807.2302.3.camel@spectralink.com>
-Message-ID: <32863807-7cf4-75fc-1dd3-0e6f6517986e@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 May 2017 23:39:31 +0200
+Subject: [Buildroot] Conflict between uClibc-ng if_arp.h and kernel headers
+ since Linux 4.11 ?
+Message-ID: <20170504233931.450f0a40@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan, all,
+Hello,
 
-Le 04/05/2017 ? 09:10, S?rensen, Stefan a ?crit :
-> On Sun, 2017-04-30 at 15:36 +0200, Romain Naour wrote:
-> 
->> +ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
->>> +define CRACKLIB_REMOVE_TOOLS
->>> +	rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
->>
->> Maybe this part can be done in a post install script instead ?
-> 
-> Post install script? I can't find any reference to what that is.
+Since a few days, we are seeing build failures of the radvd package in
+Buildroot:
 
-Sorry, I meant post build scripts, see BR2_ROOTFS_POST_BUILD_SCRIPT option.
+  http://autobuild.buildroot.net/?reason=radvd-2.12
 
-> 
->>> +	rm $(TARGET_DIR)/usr/share/cracklib/cracklib-small
->>
->> Why do you remove cracklib-small binary ?
-> 
-> This is not a binary, but rather the source for the small dictionary.
-> It is not needed on the target.
+The build failure is:
 
-Ok, thanks for the explanation.
+/home/buildroot/autobuild/run/instance-2/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/linux/if_arp.h:121:8: error: redefinition of 'struct arpreq_old'
+ struct arpreq_old {
+        ^~~~~~~~~~
+In file included from includes.h:90:0,
+                 from recv.c:17:
+/home/buildroot/autobuild/run/instance-2/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/net/if_arp.h:147:8: note: originally defined here
+ struct arpreq_old
+        ^~~~~~~~~~
+[...]
 
-Best regards,
-Romain
+The build failures happens with uClibc-ng toolchains in combination
+with Linux 4.11 kernel headers, so it seems to be a new thing caused by
+Linux 4.11 headers. However the kernel Git history doesn't show any
+change on this header file between 4.10 and 4.11.
 
-> 
-> 
-> Stefan
-> 
+Any idea?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
