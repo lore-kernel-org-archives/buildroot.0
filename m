@@ -1,48 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 17:12:48 +0200
-Subject: [Buildroot] [PATCH 1/1] uboot-tools: disable libfdt swig wrapper
-In-Reply-To: <1493697677-24802-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1493697677-24802-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170504171248.77c9f3ff@free-electrons.com>
+Date: Thu, 4 May 2017 17:13:06 +0200
+Subject: [Buildroot] [git commit] libqmi: musl compat canonicalize_file_name
+Message-ID: <20170504151345.B6B3A800C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c78b65c4f161ec101ff02880788ef22eb7c87d76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  1 May 2017 23:01:17 -0500, Matt Weber wrote:
-> The current tools build assumes the host system
-> when trying to detect if swig/python are present.
-> It then uses those tools from the path.
-> 
-> The upstream RFC included this commit set's patch
-> but offered up discussion on how to cleanly
-> introduce a better method for detecting swig and
-> using the tools.  The tools build really needs to
-> be sysroot and prefix/host dir tools aware.
-> 
-> Upsteam submission for RFC:
-> https://lists.denx.de/pipermail/u-boot/2017-May/289520.html
-> 
-> Workaround for:
-> http://autobuild.buildroot.net/results/6d5/6d52ac8bb71012aea6fc4c679691b31a3366728b
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  ...nditionally-disable-python-libfdt-wrapper.patch | 44 ++++++++++++++++++++++
->  package/uboot-tools/uboot-tools.mk                 |  5 +++
->  2 files changed, 49 insertions(+)
->  create mode 100644 package/uboot-tools/0005-tools-conditionally-disable-python-libfdt-wrapper.patch
+Adds an inline equivalent of canonicalize_file_name
+using realpath().
 
-As I said, I'm not entirely happy with this solution, but it does the
-job for now, and nobody has provided a different patch.
+Bug report (origin of this patch):
+https://bugs.freedesktop.org/show_bug.cgi?id=99944
 
-So: applied, thanks!
+Resolves:
+http://autobuild.buildroot.net/results/afa/afa4b97e012586585b11be1e70ed3c63a7c48a4d/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  CCLD     test-generated
+  CCLD     test-utils
+  CCLD     test-message
+../../../src/libqmi-glib/.libs/libqmi-glib.so: undefined reference to `canonicalize_file_name'
+collect2: error: ld returned 1 exit status
+Makefile:440: recipe for target 'test-generated' failed
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-musl-compat-canonicalize_file_name.patch  | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/package/libqmi/0001-musl-compat-canonicalize_file_name.patch b/package/libqmi/0001-musl-compat-canonicalize_file_name.patch
+new file mode 100644
+index 0000000..5656d55
+--- /dev/null
++++ b/package/libqmi/0001-musl-compat-canonicalize_file_name.patch
+@@ -0,0 +1,48 @@
++From 2f44edc9fbcbf2202174aec723e8a8d191c13d2f Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Mon, 1 May 2017 19:55:07 -0500
++Subject: [PATCH] musl compat canonicalize_file_name()
++
++Adds an inline equivalent of canonicalize_file_name
++using realpath().
++
++Bug report (origin of this patch):
++https://bugs.freedesktop.org/show_bug.cgi?id=99944
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ src/libqmi-glib/qmi-utils.h | 18 ++++++++++++++++++
++ 1 file changed, 18 insertions(+)
++
++diff --git a/src/libqmi-glib/qmi-utils.h b/src/libqmi-glib/qmi-utils.h
++index 4fd5199..4869da5 100644
++--- a/src/libqmi-glib/qmi-utils.h
+++++ b/src/libqmi-glib/qmi-utils.h
++@@ -29,6 +29,24 @@
++ #error "Only <libqmi-glib.h> can be included directly."
++ #endif
++ 
+++#ifndef HAVE_CANONICALIZE_FILE_NAME
+++#include <limits.h>
+++#include <string.h>
+++#include <stdlib.h>
+++#include <stdio.h>
+++static char * canonicalize_file_name(const char *path)
+++{
+++       char buf[PATH_MAX] = { };
+++
+++       snprintf(buf, sizeof(buf) - 1, "%s", path);
+++
+++       if (!realpath(path, buf))
+++               return NULL;
+++
+++       return strdup(buf);
+++}
+++#endif
+++
++ #include <glib.h>
++ 
++ G_BEGIN_DECLS
++-- 
++1.9.1
++
