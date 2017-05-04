@@ -1,42 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 22:11:59 +0200
-Subject: [Buildroot] [PATCH v2 03/10] package/python-simplegeneric: New
- package
-In-Reply-To: <20170427213340.26917-4-andrew.smirnov@gmail.com>
-References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
- <20170427213340.26917-4-andrew.smirnov@gmail.com>
-Message-ID: <20170504221159.78c58dfa@free-electrons.com>
+Date: Thu, 4 May 2017 22:14:01 +0200
+Subject: [Buildroot] [git commit] python-simplegeneric: fix description
+Message-ID: <20170504201521.3E8C88179A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=811cdea0834810bf2b67358f8a6e9c28916556aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Apr 2017 14:33:33 -0700, Andrey Smirnov wrote:
+Use the description from https://pypi.python.org/pypi/simplegeneric.
 
->  package/Config.in                                     |  1 +
->  package/python-simplegeneric/Config.in                |  6 ++++++
->  .../python-simplegeneric/python-simplegeneric.hash    |  3 +++
->  package/python-simplegeneric/python-simplegeneric.mk  | 19 +++++++++++++++++++
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-simplegeneric/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Entry was missing in DEVELOPERS file.
-
-
-> +PYTHON_SIMPLEGENERIC_VERSION = 0.8.1
-> +PYTHON_SIMPLEGENERIC_SOURCE = simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION).zip
-> +PYTHON_SIMPLEGENERIC_SITE = https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b
-> +PYTHON_SIMPLEGENERIC_LICENSE = BSD-3-Clause
-
-This is wrong, license was ZPL-2.1.
-
-Committed with those two issues fixed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-simplegeneric/Config.in b/package/python-simplegeneric/Config.in
+index b5ebfec..623b1ae 100644
+--- a/package/python-simplegeneric/Config.in
++++ b/package/python-simplegeneric/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_SIMPLEGENERIC
+ 	bool "python-simplegeneric"
+ 	help
+-	  A configuration system for Python applications.
++	  Simple generic functions (similar to Python's own len(),
++	  pickle.dump(), etc.)
+ 
+ 	  https://pypi.python.org/pypi/simplegeneric
