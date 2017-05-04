@@ -1,59 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  4 May 2017 21:51:18 +0200
-Subject: [Buildroot] [PATCH v2] lttng-tools: disable on uClibc/musl
-Message-ID: <1493927478-27096-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 May 2017 21:57:29 +0200
+Subject: [Buildroot] [PATCH v2 02/10] package/python-traitlets: New
+ package
+In-Reply-To: <20170427213340.26917-3-andrew.smirnov@gmail.com>
+References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
+ <20170427213340.26917-3-andrew.smirnov@gmail.com>
+Message-ID: <20170504215729.7c270248@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lttng-tools has been broken on uClibc/musl since a long time due to
-dlmopen() and LM_ID_BASE not being implemented. The issue has been
-reported to the upstream lttng developers more than two months ago [1],
-and no fix has been provided. Therefore, it's time to disable it on
-uClibc and musl.
+Hello,
 
-Fixes:
+On Thu, 27 Apr 2017 14:33:32 -0700, Andrey Smirnov wrote:
 
-  http://autobuild.buildroot.net/results/f9e82a87618bcdcd46d670697b5ac75836f7250d/
-  (uclibc)
+> +config BR2_PACKAGE_PYTHON_TRAITLETS
+> +	bool "python-traitlets"
+> +	select BR2_PACKAGE_PYTHON_DECORATOR
+> +	select BR2_PACKAGE_PYTHON_ENUM if BR2_PACKAGE_PYTHON
 
-  http://autobuild.buildroot.net/results/cb0952483b580b053a585760e59d78d11f46fc60/
-  (musl)
+Are you sure?
 
-[1] https://lists.lttng.org/pipermail/lttng-dev/2017-February/026921.html
+According to https://pypi.python.org/pypi/traitlets/json:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes since v1:
- - Also disable on musl
----
- package/lttng-tools/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+        "requires_dist": [
+            "mock; python_version==\"2.7\" and extra == 'test'", 
+            "pytest; extra == 'test'", 
+            "enum34; python_version==\"3.3\"", 
+            "enum34; python_version==\"2.7\"", 
+            "six", 
+            "ipython-genutils", 
+            "decorator"
+        ], 
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index 187e424..8888ef7 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn
-+	# uclibc/musl don't implement dlmopen()/LM_ID_BASE
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_POPT
-@@ -27,6 +29,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 
- 	  http://lttng.org
- 
--comment "lttng-tools needs a toolchain w/ threads, dynamic library"
-+comment "lttng-tools needs a glibc toolchain w/ threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
+So it needs python-enum34, not python-enum it seems. It also needs
+ipython-genutils apparently.
+
+Generally, make sure that if you enable *ONLY* this package, and do a
+build, you can "import traitlets" without error on the target.
+
+> diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+> new file mode 100644
+> index 0000000..3b14991
+> --- /dev/null
+> +++ b/package/python-traitlets/python-traitlets.hash
+> @@ -0,0 +1,2 @@
+> +# sha256 locally computed
+> +sha256 370f938ad730d52272ef74f96f831cb21138f6168e46fe582fe256c35cc656ce python-traitlets-4.3.2.tar.gz
+
+Please also add md5 from https://pypi.python.org/pypi/traitlets/json.
+
+> diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+> new file mode 100644
+> index 0000000..45f393d
+> --- /dev/null
+> +++ b/package/python-traitlets/python-traitlets.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-traitlets
+> +#
+> +################################################################################
+> +
+> +PYTHON_TRAITLETS_VERSION = 4.3.2
+> +PYTHON_TRAITLETS_SOURCE = python-traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
+> +PYTHON_TRAITLETS_SITE = $(call github,ipython,traitlets,$(PYTHON_TRAITLETS_VERSION))
+
+Please use the tarball from https://pypi.python.org/pypi/traitlets/json.
+
+And add an entry to the DEVELOPERS file.
+
+Thanks,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
