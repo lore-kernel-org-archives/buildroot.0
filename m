@@ -1,69 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 4 May 2017 08:55:47 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-04-29
-In-Reply-To: <20170503150243.72d66fb9@free-electrons.com>
-References: <20170430062822.F06D82097E@mail.free-electrons.com>
- <20170503102922.GB26389@argentina>
- <20170503142939.3fc6a470@free-electrons.com>
- <20170503124713.GA17301@shattrath>
- <20170503150243.72d66fb9@free-electrons.com>
-Message-ID: <223d1087-7158-2bce-b145-774a871f1911@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 4 May 2017 09:07:45 +0200
+Subject: [Buildroot] [PATCH] toolchains/configs: make external toolchain
+	explicit
+Message-ID: <20170504070745.13349-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Some of the toolchain configs rely on the default to select which
+external toolchain to use. However, this is wrong for two reasons:
+- when the defaults change in Buildroot, the toolchain config will
+  change under the hood;
+- when the autobuild-run script adds some options (in particular,
+  BR2_STATIC_LIBS), it is possible that the default changes (or is
+  no longer available).
 
+Both can be fixed by explicitly adding the external toolchain option
+we want to the config file. Indeed, the autobuild-run script will
+then detect that there is a difference between the generated config
+and the base one, and will discard it.
 
-On 03-05-17 15:02, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 3 May 2017 14:47:13 +0200, Richard Braun wrote:
-> 
->>> Richard have you updated your autobuild-run script recently?  
->>
->> My builder should be running with version 6986aa15ed966e16312ebaef1a47f498ca76a197.
->>
->> It is automatically updated and restarted once a week.
-> 
-> Then you are running with the latest changes from Arnout, and most of
-> the other autobuilder slaves are not, which is why we only see this
-> issue coming from your autobuilder.
-> 
-> So, this confirms my hypothesis that the bug is in the changes from
-> Arnout :-)
+Fixes:
+http://autobuild.buildroot.net/results/39888c188c0d13219a8419897a833275fcc81597
 
- The problem is that that defconfig file (sourcery-arm-thumb2.config) doesn't
-specify which toolchain to use:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+I didn't really test this change, I just manually ran a config which
+each of them and checked if it was OK.
+---
+ web/toolchains/configs/linaro-aarch64.config      | 1 +
+ web/toolchains/configs/linaro-arm.config          | 1 +
+ web/toolchains/configs/sourcery-arm-thumb2.config | 1 +
+ web/toolchains/configs/sourcery-nios2.config      | 1 +
+ 4 files changed, 4 insertions(+)
 
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_ARM_EABI=y
-BR2_ARM_INSTRUCTIONS_THUMB2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TARGET_OPTIMIZATION=""
-
-It just relies on the default external toolchain.
-
- Obviously this isn't very robust to begin with: when the external toolchains
-change, this could implicitly change this toolchain defconfig. E.g. imagine that
-Linaro would grow a Thumb2 option, then suddenly this sourcery-arm-thumb2.config
-would build using a Linaro toolchain...
-
- So I think the solution is to explicitly add the predefined external toolchain
-to use to all the toolchain configs. I'll try to send a patch for that.
-
- BTW, I notice now that we don't have configs for the Codescape toolchains. Any
-reason for that?
-
- Regards,
- Arnout
+diff --git a/web/toolchains/configs/linaro-aarch64.config b/web/toolchains/configs/linaro-aarch64.config
+index bb466f3..f65f78a 100644
+--- a/web/toolchains/configs/linaro-aarch64.config
++++ b/web/toolchains/configs/linaro-aarch64.config
+@@ -1,2 +1,3 @@
+ BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+diff --git a/web/toolchains/configs/linaro-arm.config b/web/toolchains/configs/linaro-arm.config
+index 91149a7..d72e19b 100644
+--- a/web/toolchains/configs/linaro-arm.config
++++ b/web/toolchains/configs/linaro-arm.config
+@@ -2,3 +2,4 @@ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_ARM_EABIHF=y
+ BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+diff --git a/web/toolchains/configs/sourcery-arm-thumb2.config b/web/toolchains/configs/sourcery-arm-thumb2.config
+index 14b64b7..e726757 100644
+--- a/web/toolchains/configs/sourcery-arm-thumb2.config
++++ b/web/toolchains/configs/sourcery-arm-thumb2.config
+@@ -3,4 +3,5 @@ BR2_cortex_a8=y
+ BR2_ARM_EABI=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+ BR2_TARGET_OPTIMIZATION=""
+diff --git a/web/toolchains/configs/sourcery-nios2.config b/web/toolchains/configs/sourcery-nios2.config
+index 0124413..d58407d 100644
+--- a/web/toolchains/configs/sourcery-nios2.config
++++ b/web/toolchains/configs/sourcery-nios2.config
+@@ -1,2 +1,3 @@
+ BR2_nios2=y
+ BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
