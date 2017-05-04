@@ -1,81 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 21:57:29 +0200
-Subject: [Buildroot] [PATCH v2 02/10] package/python-traitlets: New
- package
-In-Reply-To: <20170427213340.26917-3-andrew.smirnov@gmail.com>
-References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
- <20170427213340.26917-3-andrew.smirnov@gmail.com>
-Message-ID: <20170504215729.7c270248@free-electrons.com>
+Date: Thu, 4 May 2017 22:09:27 +0200
+Subject: [Buildroot] [git commit] package/python-simplegeneric: New package
+Message-ID: <20170504200950.023CD81E3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4c5688cfc690d79a9854ce9b0f5c2b9d62ecffed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Apr 2017 14:33:32 -0700, Andrey Smirnov wrote:
+Add 'simplegeneric'[1] package to Buildroot. Needed by IPython.
 
-> +config BR2_PACKAGE_PYTHON_TRAITLETS
-> +	bool "python-traitlets"
-> +	select BR2_PACKAGE_PYTHON_DECORATOR
-> +	select BR2_PACKAGE_PYTHON_ENUM if BR2_PACKAGE_PYTHON
+[1] https://pypi.python.org/pypi/simplegeneric
 
-Are you sure?
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+[Thomas: add entry in DEVELOPERS file, fix license.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                                            |  1 +
+ package/Config.in                                     |  1 +
+ package/python-simplegeneric/Config.in                |  6 ++++++
+ .../python-simplegeneric/python-simplegeneric.hash    |  3 +++
+ package/python-simplegeneric/python-simplegeneric.mk  | 19 +++++++++++++++++++
+ 5 files changed, 30 insertions(+)
 
-According to https://pypi.python.org/pypi/traitlets/json:
-
-        "requires_dist": [
-            "mock; python_version==\"2.7\" and extra == 'test'", 
-            "pytest; extra == 'test'", 
-            "enum34; python_version==\"3.3\"", 
-            "enum34; python_version==\"2.7\"", 
-            "six", 
-            "ipython-genutils", 
-            "decorator"
-        ], 
-
-So it needs python-enum34, not python-enum it seems. It also needs
-ipython-genutils apparently.
-
-Generally, make sure that if you enable *ONLY* this package, and do a
-build, you can "import traitlets" without error on the target.
-
-> diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
-> new file mode 100644
-> index 0000000..3b14991
-> --- /dev/null
-> +++ b/package/python-traitlets/python-traitlets.hash
-> @@ -0,0 +1,2 @@
-> +# sha256 locally computed
-> +sha256 370f938ad730d52272ef74f96f831cb21138f6168e46fe582fe256c35cc656ce python-traitlets-4.3.2.tar.gz
-
-Please also add md5 from https://pypi.python.org/pypi/traitlets/json.
-
-> diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
-> new file mode 100644
-> index 0000000..45f393d
-> --- /dev/null
-> +++ b/package/python-traitlets/python-traitlets.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-traitlets
-> +#
-> +################################################################################
-> +
-> +PYTHON_TRAITLETS_VERSION = 4.3.2
-> +PYTHON_TRAITLETS_SOURCE = python-traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
-> +PYTHON_TRAITLETS_SITE = $(call github,ipython,traitlets,$(PYTHON_TRAITLETS_VERSION))
-
-Please use the tarball from https://pypi.python.org/pypi/traitlets/json.
-
-And add an entry to the DEVELOPERS file.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a3da397..d28e6fb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -73,6 +73,7 @@ F:	package/wine/
+ 
+ N:	Andrey Smirnov <andrew.smirnov at gmail.com
+ F:	package/python-decorator/
++F:	package/python-simplegeneric/
+ 
+ N:	Andrew Ruder <andrew.ruder@elecsyscorp.com>
+ F:	package/expect/
+diff --git a/package/Config.in b/package/Config.in
+index e38a934..47ad2c2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -826,6 +826,7 @@ menu "External python modules"
+ 	source "package/python-sh/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
+ 	source "package/python-simpleaudio/Config.in"
++	source "package/python-simplegeneric/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-simplegeneric/Config.in b/package/python-simplegeneric/Config.in
+new file mode 100644
+index 0000000..b5ebfec
+--- /dev/null
++++ b/package/python-simplegeneric/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_SIMPLEGENERIC
++	bool "python-simplegeneric"
++	help
++	  A configuration system for Python applications.
++
++	  https://pypi.python.org/pypi/simplegeneric
+diff --git a/package/python-simplegeneric/python-simplegeneric.hash b/package/python-simplegeneric/python-simplegeneric.hash
+new file mode 100644
+index 0000000..24f652c
+--- /dev/null
++++ b/package/python-simplegeneric/python-simplegeneric.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/simplegeneric, sha256 locally computed
++md5 f9c1fab00fd981be588fc32759f474e3 simplegeneric-0.8.1.zip
++sha256 dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173 simplegeneric-0.8.1.zip
+diff --git a/package/python-simplegeneric/python-simplegeneric.mk b/package/python-simplegeneric/python-simplegeneric.mk
+new file mode 100644
+index 0000000..556a478
+--- /dev/null
++++ b/package/python-simplegeneric/python-simplegeneric.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# python-simplegeneric
++#
++################################################################################
++
++PYTHON_SIMPLEGENERIC_VERSION = 0.8.1
++PYTHON_SIMPLEGENERIC_SOURCE = simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION).zip
++PYTHON_SIMPLEGENERIC_SITE = https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b
++PYTHON_SIMPLEGENERIC_LICENSE = ZPL-2.1
++PYTHON_SIMPLEGENERIC_SETUP_TYPE = distutils
++
++define PYTHON_SIMPLEGENERIC_EXTRACT_CMDS
++	unzip $(DL_DIR)/$(PYTHON_SIMPLEGENERIC_SOURCE) -d $(@D)
++	mv $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)/* $(@D)
++	rmdir $(@D)/simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION)
++endef
++
++$(eval $(python-package))
