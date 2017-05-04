@@ -1,45 +1,33 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Thu, 4 May 2017 13:27:14 -0700
-Subject: [Buildroot] [PATCH v2 05/10] package/python-scandir: New package
-In-Reply-To: <20170504221841.0eb0f3a6@free-electrons.com>
-References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
- <20170427213340.26917-6-andrew.smirnov@gmail.com>
- <20170504221841.0eb0f3a6@free-electrons.com>
-Message-ID: <CAHQ1cqEif2ED=vuWishBBqcc9a4Evdfb7dKYYhqAyXBWgB-Q=Q@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  4 May 2017 22:29:00 +0200
+Subject: [Buildroot] [PATCH] luvi: fix build
+Message-ID: <20170504202900.15617-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 4, 2017 at 1:18 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 27 Apr 2017 14:33:35 -0700, Andrey Smirnov wrote:
->
->> +config BR2_PACKAGE_PYTHON_SCANDIR
->> +     bool "python-scandir"
->> +     help
->> +       A configuration system for Python applications.
->
-> This description is bogus.
->
->> +       https://pypi.python.org/pypi/pickleshare
->
-> This URL is wrong.
->
-> And the entry to DEVELOPERS file is missing.
->
-> Could you please check your entire series, and verify all those
-> details? Once they are all fixed, could you resubmit an updated version?
+broken by LuaJIT 2.0.4 --> 2.0.5
+see http://autobuild.buildroot.net/results/3ee/3eef12dbe07fb375e87b2b2898dcc5ef0c11e7a5/build-end.log
 
-Sorry about that, my bad. I'll re-check the series and submit v3.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luvi/luvi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Please verify the dependencies and licenses as well.
-
-Will do.
-
-Thanks,
-Andrey Smirnov
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index ade63f5f..3b2094c4 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -33,7 +33,7 @@ LUVI_CONF_OPTS = \
+ 	-DBUILD_SHARED_LIBS=OFF \
+ 	-DWithSharedLibluv=ON \
+ 	-DTARGET_ARCH=$(LUVI_TARGET_ARCH) \
+-	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-2.0.4/?.lua
++	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/?.lua
+ 
+ # Add "rex" module (PCRE via bundled lrexlib)
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+-- 
+2.11.0
