@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 17:04:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2017-05-02
-In-Reply-To: <20170504093049.27618dbf@free-electrons.com>
-References: <20170503062809.135BB207F9@mail.free-electrons.com>
- <CAOMZO5B9sPeE+_YH4nWykogzB_dq7XUpz0AraMXjgazZjA_DxA@mail.gmail.com>
- <CAOMZO5BbPjn9b6i1uDr01ikFsSHWy9xkzfpk7F7GhssQyCuuJw@mail.gmail.com>
- <20170504093049.27618dbf@free-electrons.com>
-Message-ID: <20170504170422.273baea9@free-electrons.com>
+Date: Thu, 4 May 2017 17:05:25 +0200
+Subject: [Buildroot] [PATCH] toolchains/configs: make external toolchain
+ explicit
+In-Reply-To: <20170504070745.13349-1-arnout@mind.be>
+References: <20170504070745.13349-1-arnout@mind.be>
+Message-ID: <20170504170525.440fc631@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,18 +13,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 4 May 2017 09:30:49 +0200, Thomas Petazzoni wrote:
+On Thu, 4 May 2017 09:07:45 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Some of the toolchain configs rely on the default to select which
+> external toolchain to use. However, this is wrong for two reasons:
+> - when the defaults change in Buildroot, the toolchain config will
+>   change under the hood;
+> - when the autobuild-run script adds some options (in particular,
+>   BR2_STATIC_LIBS), it is possible that the default changes (or is
+>   no longer available).
+> 
+> Both can be fixed by explicitly adding the external toolchain option
+> we want to the config file. Indeed, the autobuild-run script will
+> then detect that there is a difference between the generated config
+> and the base one, and will discard it.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/39888c188c0d13219a8419897a833275fcc81597
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+> I didn't really test this change, I just manually ran a config which
+> each of them and checked if it was OK.
+> ---
+>  web/toolchains/configs/linaro-aarch64.config      | 1 +
+>  web/toolchains/configs/linaro-arm.config          | 1 +
+>  web/toolchains/configs/sourcery-arm-thumb2.config | 1 +
+>  web/toolchains/configs/sourcery-nios2.config      | 1 +
+>  4 files changed, 4 insertions(+)
 
-> Those ones are due to me having forgotten to rebuild the Microblaze
-> toolchain. I've just started the build, I will deploy once the build is
-> finished.
-
-Build finished, toolchain deployed and used by the autobuilders.
-
-Best regards,
+Applied to buildroot-test and deployed. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
