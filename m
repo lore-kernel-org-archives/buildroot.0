@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 22:19:02 +0200
-Subject: [Buildroot] [git commit] package/python-ipython: Reformat help text
-	to avoid warnings
-Message-ID: <20170504201906.C71328285E@busybox.osuosl.org>
+Date: Thu, 4 May 2017 22:19:07 +0200
+Subject: [Buildroot] [PATCH v2 09/10] package/python-ipython: Reformat
+ help text to avoid warnings
+In-Reply-To: <20170427213340.26917-10-andrew.smirnov@gmail.com>
+References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
+ <20170427213340.26917-10-andrew.smirnov@gmail.com>
+Message-ID: <20170504221907.77ea3c3c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40edddc8ccfa0b51136260969367cfa00ffeee65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Reformat help text in Config.in to avoid warnings from
-check-package. No content change intended.
+On Thu, 27 Apr 2017 14:33:39 -0700, Andrey Smirnov wrote:
+> Reformat help text in Config.in to avoid warnings from
+> check-package. No content change intended.
+> 
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  package/python-ipython/Config.in | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-ipython/Config.in | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/python-ipython/Config.in b/package/python-ipython/Config.in
-index 1d92873..b87f2bc 100644
---- a/package/python-ipython/Config.in
-+++ b/package/python-ipython/Config.in
-@@ -1,9 +1,10 @@
- config BR2_PACKAGE_PYTHON_IPYTHON
- 	bool "python-ipython"
- 	help
--	  IPython is a command shell for interactive computing in multiple
--	  programming languages, originally developed for the Python
--	  programming language, that offers enhanced introspection, rich
--	  media, additional shell syntax, tab completion, and rich history.
-+	  IPython is a command shell for interactive computing in
-+	  multiple programming languages, originally developed for the
-+	  Python programming language, that offers enhanced
-+	  introspection, rich media, additional shell syntax, tab
-+	  completion, and rich history.
- 
- 	  http://ipython.org/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
