@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 22:19:07 +0200
-Subject: [Buildroot] [PATCH v2 09/10] package/python-ipython: Reformat
- help text to avoid warnings
-In-Reply-To: <20170427213340.26917-10-andrew.smirnov@gmail.com>
-References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
- <20170427213340.26917-10-andrew.smirnov@gmail.com>
-Message-ID: <20170504221907.77ea3c3c@free-electrons.com>
+Date: Thu, 4 May 2017 22:20:25 +0200
+Subject: [Buildroot] [git commit] binutils: fix bfin compile error
+Message-ID: <20170504202029.AA32982612@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=33ad356ce5dacabe0d3dac89832ce264633793d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Apr 2017 14:33:39 -0700, Andrey Smirnov wrote:
-> Reformat help text in Config.in to avoid warnings from
-> check-package. No content change intended.
-> 
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
->  package/python-ipython/Config.in | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+Newer gcc requires even lower optimization, only with -O0 we
+can successfully compile binutils for the target.
 
-Applied to master, thanks.
+Fixes:
+  http://autobuild.buildroot.net/results/fb95cd7f7fcc532d036ed8f13853bc6f9a64d1b3
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/binutils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 03fd3a5..72e2d0b 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -64,10 +64,10 @@ HOST_BINUTILS_CONF_ENV += MAKEINFO=true
+ HOST_BINUTILS_MAKE_OPTS += MAKEINFO=true
+ HOST_BINUTILS_INSTALL_OPTS += MAKEINFO=true install
+ 
+-# gcc bug with Os/O2/O3, PR77311
++# gcc bug with Os/O1/O2/O3, PR77311
+ # error: unable to find a register to spill in class 'CCREGS'
+ ifeq ($(BR2_bfin),y)
+-BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
++BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
+ endif
+ 
+ # Workaround a build issue with -Os for ARM Cortex-M cpus.
