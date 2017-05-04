@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 22:33:01 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: avoid conflict with util-linux
-	fsck wrapper
-Message-ID: <20170504203649.2C71280300@busybox.osuosl.org>
+Date: Thu, 4 May 2017 22:32:25 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: disable unneeded features for
+	host
+Message-ID: <20170504203649.155F980300@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74cedf7eb91d5a2dfc94a3c1d4ec61bcacaeff6d
+commit: https://git.buildroot.net/buildroot/commit/?id=1a56b14d57b2326c9a3e8b9f53eddc17b541504a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The fsck wrapper from util-linux is better maintained, so it should be
-preferred. In particular, systemd relies on features in the util-linux
-fsck wrapper that don't exist in the e2fsprogs one. However, since
-e2fsprogs depends on util-linux, the one from e2fsprogs currently has
-precedence. So in order to have e2fsck from e2fsprogs and the fsck
-wrapper from util-linux, we disable e2fsprogs' fsck if the one from
-util-linux is selected.
+We don't need e2initrd_helper or the test I/O manager for the host, just
+like we don't need it for the target.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-CC: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-[Arnout: don't add comment]
+[Arnout: don't add --disable-rpath, since we *do* need rpath for the
+ host; otherwise we have to explicitly pass LD_LIBRARY_PATH to be able
+ to run tools linked with util-linux' libuuid/libblkid]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/e2fsprogs/e2fsprogs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index 23c4db5..b3d12b4 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -45,6 +45,7 @@ comment "e4defrag needs a glibc or musl toolchain"
- config BR2_PACKAGE_E2FSPROGS_FSCK
- 	bool "fsck"
- 	default y
-+	depends on !BR2_PACKAGE_UTIL_LINUX_FSCK
- 	help
- 	  Check and repair a Linux file system. This is a wrapper around
- 	  the filesystem-specific fsck tools.
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e0a7fa9..632fdc2 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -28,10 +28,12 @@ endif
+ # Disable fuse2fs as well to avoid carrying over deps, and it's unused
+ HOST_E2FSPROGS_CONF_OPTS = \
+ 	--disable-defrag \
++	--disable-e2initrd-helper \
+ 	--disable-fuse2fs \
+ 	--disable-libblkid \
+ 	--disable-libuuid \
+-	--enable-symlink-install
++	--enable-symlink-install \
++	--disable-testio-debug
+ 
+ # Set the binary directories to "/bin" and "/sbin" to override programs
+ # installed by busybox.
