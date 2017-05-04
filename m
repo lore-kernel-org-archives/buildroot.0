@@ -1,49 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 May 2017 23:02:59 +0200
-Subject: [Buildroot] [git commit] lua-resty-http: new package
-In-Reply-To: <20170504202355.59D7A826D5@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Thu, 4 May 2017 22:23:19 +0200")
-References: <20170504202355.59D7A826D5@busybox.osuosl.org>
-Message-ID: <87ziestjwc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 May 2017 23:09:33 +0200
+Subject: [Buildroot] [PATCH 1/2] package/nvidia-driver: bump version to
+ 381.09
+In-Reply-To: <20170419123214.18835-1-bernd.kuhls@t-online.de>
+References: <20170419123214.18835-1-bernd.kuhls@t-online.de>
+Message-ID: <20170504230933.1a80f407@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=e88995f065986dc56ce5a7c222f7a9f6cbff2b94
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 19 Apr 2017 14:32:13 +0200, Bernd Kuhls wrote:
+> libnvidia-egl-wayland.so was renamed in upstream archive.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  DEVELOPERS                                 |  1 +
- >  package/Config.in                          |  1 +
- >  package/lua-resty-http/Config.in           |  6 ++++++
- >  package/lua-resty-http/lua-resty-http.hash |  2 ++
- >  package/lua-resty-http/lua-resty-http.mk   | 12 ++++++++++++
- >  5 files changed, 22 insertions(+)
+Yann, could you comment on this patch?
 
- > +++ b/package/lua-resty-http/Config.in
- > @@ -0,0 +1,6 @@
- > +config BR2_PACKAGE_LUA_RESTY_HTTP
- > +	bool "lua-resty-http"
- > +	help
- > +	  Lua HTTP client cosocket driver for OpenResty / ngx_lua.
- > +
- > +	  http://github.com/pintsized/lua-resty-http
+Bernd, unfortunately, I can't download it from here:
 
-Sorry for the slow response, but this patch apparently never made it to
-my mailbox? (It is in the archive, so it must have been an issue on my
-side).
+thomas at skate:~/projets/buildroot (master)$ make nvidia-driver-extract
+>>> nvidia-driver 381.09 Downloading
+--2017-05-04 22:55:07--  ftp://download.nvidia.com/XFree86/Linux-x86/381.09/NVIDIA-Linux-x86-381.09.run
+           => ?/home/thomas/projets/buildroot/output/build/.NVIDIA-Linux-x86-381.09.run.ZpEVbh/output?
+Resolving download.nvidia.com (download.nvidia.com)... 192.229.220.191
+Connecting to download.nvidia.com (download.nvidia.com)|192.229.220.191|:21... failed: Connection timed out.
+Retrying.
 
-I'm far from an expert in nginx, but isn't this an extension to the
-lua-nginx-module that we don't (explicitly) have in Buildroot? Is it in
-any way useful without it?
+--2017-05-04 22:57:15--  ftp://download.nvidia.com/XFree86/Linux-x86/381.09/NVIDIA-Linux-x86-381.09.run
+  (try: 2) => ?/home/thomas/projets/buildroot/output/build/.NVIDIA-Linux-x86-381.09.run.ZpEVbh/output?
+Connecting to download.nvidia.com (download.nvidia.com)|192.229.220.191|:21... failed: Connection timed out.
+Retrying.
 
-What is your use case for it?
+--2017-05-04 22:59:25--  ftp://download.nvidia.com/XFree86/Linux-x86/381.09/NVIDIA-Linux-x86-381.09.run
+  (try: 3) => ?/home/thomas/projets/buildroot/output/build/.NVIDIA-Linux-x86-381.09.run.ZpEVbh/output?
+Connecting to download.nvidia.com (download.nvidia.com)|192.229.220.191|:21... failed: Connection timed out.
+Giving up.
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
