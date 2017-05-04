@@ -1,32 +1,49 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Thu, 4 May 2017 07:10:17 +0000
-Subject: [Buildroot] [PATCH v3 1/2] cracklib: New package
-In-Reply-To: <f24453b3-9fc6-1a1e-4e01-071da345bbdb@gmail.com>
-References: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
- <f24453b3-9fc6-1a1e-4e01-071da345bbdb@gmail.com>
-Message-ID: <1493881807.2302.3.camel@spectralink.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 May 2017 09:57:50 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-05-02
+In-Reply-To: <035B547B-A554-4715-A235-95E6A1E14EE9@uclibc-ng.org>
+References: <20170503062809.135BB207F9@mail.free-electrons.com>
+ <CAOMZO5B9sPeE+_YH4nWykogzB_dq7XUpz0AraMXjgazZjA_DxA@mail.gmail.com>
+ <CAOMZO5BbPjn9b6i1uDr01ikFsSHWy9xkzfpk7F7GhssQyCuuJw@mail.gmail.com>
+ <20170504093049.27618dbf@free-electrons.com>
+ <035B547B-A554-4715-A235-95E6A1E14EE9@uclibc-ng.org>
+Message-ID: <20170504095750.7cb38619@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2017-04-30 at 15:36 +0200, Romain Naour wrote:
+Hello,
 
-> +ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
-> > +define CRACKLIB_REMOVE_TOOLS
-> > +	rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
+On Thu, 4 May 2017 09:48:57 +0200, Waldemar Brodkorb wrote:
+
+> I wouldn't say it was wrong.
+> We have all internal toolchains fixed and we get a good idea about the quality of the latest release.
 > 
-> Maybe this part can be done in a post install script instead ?
+> May be it will motivate Synopsis to release a new tarball, as other important ARC Bugfixes are included
+> in this release. 
 
-Post install script? I can't find any reference to what that is.
+Well the problem is that in the mean time, we have autobuilder failures
+caused by this. We are about to release -rc1, so we will try to reduce
+the number of autobuilder failures, and this will get in the way. Which
+is why we need to find a solution here.
 
-> > +	rm $(TARGET_DIR)/usr/share/cracklib/cracklib-small
-> 
-> Why do you remove cracklib-small binary ?
+Options:
 
-This is not a binary, but rather the source for the small dictionary.
-It is not needed on the target.
+ (1) Synopsys quickly publishes a new pre-built toolchain with uClibc
+     1.0.24 + wordexp
 
+ (2) We disable the Synopsys toolchain from our autobuilders
 
-Stefan
+ (3) We re-add exceptions in the relevant packages, but only for the
+     Synopsys toolchain (and not uClibc globally)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
