@@ -1,51 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 May 2017 21:49:20 +0200
-Subject: [Buildroot] [PATCH v2 01/10] package/python-decorator: New
- package
-In-Reply-To: <20170427213340.26917-2-andrew.smirnov@gmail.com>
-References: <20170427213340.26917-1-andrew.smirnov@gmail.com>
- <20170427213340.26917-2-andrew.smirnov@gmail.com>
-Message-ID: <20170504214920.6bebd42b@free-electrons.com>
+Date: Thu,  4 May 2017 21:51:18 +0200
+Subject: [Buildroot] [PATCH v2] lttng-tools: disable on uClibc/musl
+Message-ID: <1493927478-27096-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+lttng-tools has been broken on uClibc/musl since a long time due to
+dlmopen() and LM_ID_BASE not being implemented. The issue has been
+reported to the upstream lttng developers more than two months ago [1],
+and no fix has been provided. Therefore, it's time to disable it on
+uClibc and musl.
 
-On Thu, 27 Apr 2017 14:33:31 -0700, Andrey Smirnov wrote:
+Fixes:
 
->  package/Config.in                            |  1 +
->  package/python-decorator/Config.in           |  6 ++++++
->  package/python-decorator/python-decorator.mk | 13 +++++++++++++
+  http://autobuild.buildroot.net/results/f9e82a87618bcdcd46d670697b5ac75836f7250d/
+  (uclibc)
 
-This was missing an addition to the DEVELOPERS file.
+  http://autobuild.buildroot.net/results/cb0952483b580b053a585760e59d78d11f46fc60/
+  (musl)
 
-> diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
-> new file mode 100644
-> index 0000000..fac03a3
-> --- /dev/null
-> +++ b/package/python-decorator/python-decorator.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-decorator
-> +#
-> +################################################################################
-> +
-> +PYTHON_DECORATOR_VERSION = 4.0.11
-> +PYTHON_DECORATOR_SITE = https://github.com/micheles/decorator.git
-> +PYTHON_DECORATOR_SITE_METHOD = git
+[1] https://lists.lttng.org/pipermail/lttng-dev/2017-February/026921.html
 
-We prefer downloading from Pypi, so I've changed that.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes since v1:
+ - Also disable on musl
+---
+ package/lttng-tools/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Also, a hash file was missing, so I've added one.
-
-Thanks,
-
-Thomas
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index 187e424..8888ef7 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn
++	# uclibc/musl don't implement dlmopen()/LM_ID_BASE
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_POPT
+@@ -27,6 +29,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 
+ 	  http://lttng.org
+ 
+-comment "lttng-tools needs a toolchain w/ threads, dynamic library"
++comment "lttng-tools needs a glibc toolchain w/ threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_USES_GLIBC
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
