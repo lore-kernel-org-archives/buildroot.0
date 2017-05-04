@@ -1,466 +1,148 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  3 May 2017 23:46:56 +0200
-Subject: [Buildroot] [WIP] package/gcc: add support for gcc 7
-Message-ID: <20170503214656.18802-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  4 May 2017 08:28:05 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-03
+Message-ID: <20170504062805.21F8320C54@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove upstream patches:
+Hello,
 
-831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch
+Build statistics for 2017-05-03
+================================
 
-870-xtensa-Fix-PR-target-78118.patch
+      successes : 202
+       failures : 86 
+       timeouts : 0  
+          TOTAL : 288
 
-871-xtensa-Fix-PR-target-78603.patch
+Classification of failures by reason
+====================================
 
-890-fix-m68k-compile.patch:
-https://github.com/gcc-mirror/gcc/commit/1701058da920d27de87dc82e8d327b8ca930e997
+           host-protobuf-3.2.0 | 27
+           uboot-tools-2017.03 | 6 
+                    mpir-3.0.0 | 5 
+               acpica-20170303 | 4 
+                 libqmi-1.18.0 | 4 
+                   luvi-v2.7.5 | 4 
+                    mpv-0.25.0 | 4 
+                 binutils-2.27 | 3 
+               ifupdown-0.8.16 | 3 
+atest-895b0183a89c15f5e2305... | 2 
+                 mplayer-1.3.0 | 2 
+                protobuf-3.2.0 | 2 
+                tinyxml2-4.0.1 | 2 
+                  arp-scan-1.9 | 1 
+                      bmon-4.0 | 1 
+                busybox-1.26.2 | 1 
+                 efibootmgr-14 | 1 
+kvm-unit-tests-5731572b2ac2... | 1 
+                  libcdio-0.94 | 1 
+             lttng-tools-2.9.4 | 1 
+        luasql-sqlite3-2.3.0-1 | 1 
+               opencv-2.4.13.2 | 1 
+                 opencv3-3.2.0 | 1 
+                poppler-0.54.0 | 1 
+               pulseview-0.3.0 | 1 
+                      qt-4.8.7 | 1 
+             rabbitmq-c-v0.8.0 | 1 
+                 sudo-1.8.19p2 | 1 
+toolchain-external-codesour... | 1 
+toolchain-external-codesour... | 1 
+             util-linux-2.29.2 | 1 
 
-892-libgcc-mkmap-symver-support-skip_underscore.patch:
-https://github.com/gcc-mirror/gcc/commit/6c8f362e1f17cce05131eb8ff53963d64bc69484
 
-893-libgcc-config-bfin-use-the-generic-linker-version-in.patch:
-https://github.com/gcc-mirror/gcc/commit/966d046c08ba50fc988ac614f84f2d49c1546e28
+Detail of failures
+===================
 
-894-libgcc-fix-DWARF-compilation-with-FDPIC-targets.patch:
-https://github.com/gcc-mirror/gcc/commit/397d0e43abb943f1fe57801220e7e46bc6636c7c
+         arm |                acpica-20170303 | NOK | http://autobuild.buildroot.net/results/89077c248570046c8285e9f689c684ef936d2b3e |     
+         arm |                acpica-20170303 | NOK | http://autobuild.buildroot.net/results/b9ebec1df2a6f54b1311b8936cfb3a0095eaa6b5 |     
+         arm |                acpica-20170303 | NOK | http://autobuild.buildroot.net/results/45749c63ef62c91bc7120a35960b4683db7f5fd6 |     
+         arm |                acpica-20170303 | NOK | http://autobuild.buildroot.net/results/250451b52c23c4d6abed80d93945fe4ee4c340a4 |     
+         arm |                   arp-scan-1.9 | NOK | http://autobuild.buildroot.net/results/a4ea4d04bcb7bb43074e93b11b3e69909be52305 |     
+         arc | atest-895b0183a89c15f5e2305... | NOK | http://autobuild.buildroot.net/results/f25db27e15a784b91e33fd51ddd10f268b73d56c |     
+microblazeel | atest-895b0183a89c15f5e2305... | NOK | http://autobuild.buildroot.net/results/56fd7e8d4d6b422cf63ff50eae06268660253080 |     
+        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/ad6b264bf61f2bf9654198cc7e0c587c9499e3b1 | ORPH
+        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/462046ff091029d1064dad5b2bc24a2d06d44c50 | ORPH
+        bfin |                  binutils-2.27 | NOK | http://autobuild.buildroot.net/results/277c8143322b43e32b9a7d58923448939a088b71 | ORPH
+         arm |                       bmon-4.0 | NOK | http://autobuild.buildroot.net/results/8bae854a574083b1007d9d9ececd8b2f2c643ace |     
+         arm |                 busybox-1.26.2 | NOK | http://autobuild.buildroot.net/results/cf6bd48143e3350b6b420929d7b8e4d492984563 | ORPH
+         arm |                  efibootmgr-14 | NOK | http://autobuild.buildroot.net/results/bbebee9e0170f6dc4e22c11ae68ba076d72b0df8 |     
+       nios2 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/ef9f8094964572067a2761a14ca15348e7489950 | ORPH
+         arm |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/f2f451bf208db662930e2a2e620a9aa9138bb212 | ORPH
+      x86_64 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/ff8c98c855658c121f4683e30631cbcc603febc9 | ORPH
+        or1k |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/a24621a48e70cede84ed13458bd5be2f5ef4cfb1 | ORPH
+         arm |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/379e3757b3ca809f0390a2262fad71beb56558b6 | ORPH
+        i686 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/d1f57cbd84a0a996da709279d0ca6b8e71118abe | ORPH
+      x86_64 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/7a52d3b55b2371e5c80de804a608a6316800e7fc | ORPH
+        bfin |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/836f1b86499f63adc66b8cbae54fb1eb26486ae1 | ORPH
+        mips |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/fe2cd93f27bc429b26e959f878427d925fa2bebf | ORPH
+    mips64el |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/a20219ef134855788903daf6882885bebef0e9e1 | ORPH
+        i686 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/f8fe71a742c217f234ce1d8ff173e41ce8d5233e | ORPH
+        m68k |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/77b1def3b5d550e53dfe59773afb7b2ae7ca5fd9 | ORPH
+      x86_64 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/c2f756d509e585b86220b85b74fd91d349a7602e | ORPH
+        i686 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/5f016bdb38cf16098124d7cbfced8059240b179c | ORPH
+         sh4 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/4aa2831df047c1f52da4753481ef7f61689758c7 | ORPH
+        i686 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/730ea3529eb75ffbf8fde9095b7e427ed037601b | ORPH
+        i686 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/677828e08a9239d58b219a420e1590d980498466 | ORPH
+         arm |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/bfd7972d4dcfb637542d8de7ed2eec1625ccbb85 | ORPH
+        m68k |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/a8952e824af19609decc4a820e2e60efb51fc13c | ORPH
+    mips64el |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/0e639e366a9ea6a2281693e5ad647153237b20a8 | ORPH
+     sparc64 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/9ae66b2cd8608f5470f16c45a51be2d2b2c1b9f8 | ORPH
+        i686 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/53ab12eaa9bce93003ea449ef8b6535220fbc5c3 | ORPH
+        i586 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/54807c9ae328f5f51b88d8ed6169e86564200059 | ORPH
+     powerpc |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/b0479011b5abb60e371c73bbcc134c196d330437 | ORPH
+     aarch64 |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/4410551110440d3bd6a6b7a178710946fd6ad2cc | ORPH
+         arc |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/6d3d9a8906ff7660fd13ecceaff0b8359720f14b | ORPH
+         arm |            host-protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/3037775c39566209bb18a534d34def3a992d0568 | ORPH
+         arc |                ifupdown-0.8.16 | NOK | http://autobuild.buildroot.net/results/067e5272cfdf7f66dd76db92a71cced8924ce962 |     
+         arc |                ifupdown-0.8.16 | NOK | http://autobuild.buildroot.net/results/35b540927a43672f84b14116dc5deca742ba9eea |     
+         arc |                ifupdown-0.8.16 | NOK | http://autobuild.buildroot.net/results/a0314570381c3e37945244393042d4094750a899 |     
+      x86_64 | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/af85f76a4e85b9067244feb9c32952c29b065215 |     
+         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/9d1d0daebd92b251645ce774b5f9760d331aa734 |     
+         arm |                  libqmi-1.18.0 | NOK | http://autobuild.buildroot.net/results/8d664a41fad5c2488dc266f532033505048d6bdc | ORPH
+         arm |                  libqmi-1.18.0 | NOK | http://autobuild.buildroot.net/results/6d4e3fd13cade397dd7fae38a65d4796516bbd62 | ORPH
+      x86_64 |                  libqmi-1.18.0 | NOK | http://autobuild.buildroot.net/results/d6ee9cbb1e2968a20362892241f2d7bd74b9949a | ORPH
+        i586 |                  libqmi-1.18.0 | NOK | http://autobuild.buildroot.net/results/bca2007dbbf4dc3216b0bb78ddd0a9e9781155b0 | ORPH
+         arm |              lttng-tools-2.9.4 | NOK | http://autobuild.buildroot.net/results/cb2cfcb40e742a46b8cdeed75cbcd811332324bd |     
+      x86_64 |         luasql-sqlite3-2.3.0-1 | NOK | http://autobuild.buildroot.net/results/63ace7923a8abe425b9a40a449146120026fd6bc |     
+         arm |                    luvi-v2.7.5 | NOK | http://autobuild.buildroot.net/results/d0fe97b9d1ceec911fa1eddf504d615fc09478b2 |     
+      x86_64 |                    luvi-v2.7.5 | NOK | http://autobuild.buildroot.net/results/b26bd7a39d7c2b40d4c8f8de7615c36841bfec2b |     
+        i686 |                    luvi-v2.7.5 | NOK | http://autobuild.buildroot.net/results/fcc289c05a12217be9b76e5829261be99b054aa1 |     
+     powerpc |                    luvi-v2.7.5 | NOK | http://autobuild.buildroot.net/results/1c666f1cfef63ee75cc0298bf7fb7fc05f482d53 |     
+    mips64el |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/dc7566898aec9639fea4c24aa50abe8dc7026811 |     
+         arm |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/4817cf37b27d7d8ab324b67b165ba5763e536a8f |     
+    mips64el |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/de2f3b7576bcfbbe7034322d15abd8c0861e986b |     
+    mips64el |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/3a297177f7fd701a2841910f00b5cb83aa8a9ed3 |     
+         arm |                     mpir-3.0.0 | NOK | http://autobuild.buildroot.net/results/185e41c73858d9200c3688fb7f74dd3c03d32ed0 |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/6a63260502f1794d9fd57800f64f5c94357515f0 |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/a321fe1bdf5857059fe06c9bd506f9e0c0b0af4b |     
+      xtensa |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/35f02d3f14703e14da6b03e792105a1f0820eda9 |     
+        mips |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/839401cc2bd7cf1ea7d86b7f6ab50fc8cec434bf |     
+    mips64el |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/e3684a8ddb9475bb8427db663915024199d6da4f |     
+     sparc64 |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/f0dd9195b7e85417d812ef99c21e6388901c7620 |     
+        sh4a |                opencv-2.4.13.2 | NOK | http://autobuild.buildroot.net/results/9d0bc0a1552b732a2e0e153d17016f1fc65ec686 |     
+      x86_64 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/af950c6172a578c4eeeb9440b6990ceb48263fa6 |     
+         arc |                 poppler-0.54.0 | NOK | http://autobuild.buildroot.net/results/54b787cb3f21dd0afbc877cc6d60fd6da7c437c8 |     
+       sparc |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/0cf510e47640463afd3882c8a066cadbcfd0f9c7 | ORPH
+       sparc |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/68828f6bd254a39ef2a80594980b964f2f9cd6ac | ORPH
+      x86_64 |                pulseview-0.3.0 | NOK | http://autobuild.buildroot.net/results/593939a5ef8115be8d0367cb4719d4ac4ca50ea9 |     
+        or1k |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/24ec59101f13f5681c2ff7633c03301abbc24604 | ORPH
+         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/4b05a512276ba187e9358eda4df05bb01be895d0 |     
+         arm |                  sudo-1.8.19p2 | NOK | http://autobuild.buildroot.net/results/05151c4ef7f0b3702a6cd5e6df4888d826a37431 | ORPH
+        i586 |                 tinyxml2-4.0.1 | NOK | http://autobuild.buildroot.net/results/79c998bee6236ba5a2c39e832068c59a049c7216 |     
+     powerpc |                 tinyxml2-4.0.1 | NOK | http://autobuild.buildroot.net/results/d301bcbe5db26068b35eaa94bd816ae8cf8ef2e1 |     
+      x86_64 | toolchain-external-codesour... | NOK | http://autobuild.buildroot.net/results/bd4159c5c6d74cc0c9d73d263dab88c1d5eed6bd | ORPH
+       nios2 | toolchain-external-codesour... | NOK | http://autobuild.buildroot.net/results/7dc5ac0f53992e674078a6aadaa4d87b0b1b2f1e | ORPH
+         sh4 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/cf0a13b7015b044d148f562d154b96535ecd6801 | ORPH
+         sh4 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/34434c72bdc075aa73cde8c561c5df253638aea4 | ORPH
+        sh4a |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/579dea9c03a217d27c9751c2c58f7a15b6502e80 | ORPH
+        or1k |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/a8da20f1d67b013c2c3c4e95b2398904be1cdf36 | ORPH
+       nios2 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/d9462941fe93e8af22b262c953dc15cc60db5658 | ORPH
+      x86_64 |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/7aa9b15fca97a14f98e62bde5c85f3f58dca9c08 | ORPH
+         arc |              util-linux-2.29.2 | NOK | http://autobuild.buildroot.net/results/417d816bd8c13b04301973326a301b5751f207bd |     
 
-895-bfin-define-REENTRANT.patch:
-https://github.com/gcc-mirror/gcc/commit/da89a4dcdf75bc3134f73520535c949bbbb0c845
-
-940-uclinux-enable-threads.patch:
-https://github.com/gcc-mirror/gcc/commit/b9ce54109ec78d18f6123a1e54aae1293bede716
-
-941-mips-Add-support-for-mips-r6-musl.patch:
-https://github.com/gcc-mirror/gcc/commit/83717065090bb8b954556d1216dd9dc397dc0243
-
-Remove obsolete patches:
-
-301-missing-execinfo_h.patch: boehm-gc removed from gcc sources:
-https://github.com/gcc-mirror/gcc/commit/baf71228766058f5541d929891237d394376c975
-
-830-arm_unbreak_armv4t.patch: SUBTARGET_CPU_DEFAULT removed:
-https://github.com/gcc-mirror/gcc/commit/ff3caa3ade14a42d5ab7e81cbd3605fe15aa998d
-
-Add a new patch to allow to build gcc 7.1 without extracting gcc/testsuite
-directory.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
----
-
-Build tested with musl and glibc.
-
-While testing with uClibc-ng 1.0.24, the gcc-final fail to build
-with the following error:
-
-../../../../libstdc++-v3/libsupc++/new_opa.cc: In function ?void* operator new(std::size_t, std::align_val_t)?:
-../../../../libstdc++-v3/libsupc++/new_opa.cc:103:33: error: ?aligned_alloc? was not declared in this scope
-   while (__builtin_expect ((p = aligned_alloc (align, sz)) == 0, false))
-                                 ^~~~~~~~~~~~~
-From libstdc++-v3/config.log:
-conftest.c:185:6: warning: conflicting types for built-in function 'aligned_alloc' [-Wbuiltin-declaration-mismatch]
- char aligned_alloc ();
-      ^~~~~~~~~~~~~
-configure:59951: $? = 0
-configure:59951: result: yes
-
-Waldemar, you worked on aligned_alloc() recently [1], do you have an idea?
-
-Best regards,
-Romain
-
-[1] https://cgit.openadk.org/cgi/cgit/uclibc-ng.git/commit/?id=cee0b058fa0b4501b289a2da365182d60314d746
----
- package/gcc/7.1.0/0100-uclibc-conf.patch           |  29 ++++++
- package/gcc/7.1.0/0810-arm-softfloat-libgcc.patch  |  45 +++++++++
- .../7.1.0/0860-cilk-fix-build-without-wchar.patch  |  64 ++++++++++++
- package/gcc/7.1.0/0891-fix-m68k-uclinux.patch      |  30 ++++++
- package/gcc/7.1.0/0900-remove-selftests.patch      | 111 +++++++++++++++++++++
- package/gcc/Config.in.host                         |  11 ++
- package/gcc/gcc.hash                               |   2 +
- toolchain/toolchain-common.in                      |   5 +
- 8 files changed, 297 insertions(+)
- create mode 100644 package/gcc/7.1.0/0100-uclibc-conf.patch
- create mode 100644 package/gcc/7.1.0/0810-arm-softfloat-libgcc.patch
- create mode 100644 package/gcc/7.1.0/0860-cilk-fix-build-without-wchar.patch
- create mode 100644 package/gcc/7.1.0/0891-fix-m68k-uclinux.patch
- create mode 100644 package/gcc/7.1.0/0900-remove-selftests.patch
-
-diff --git a/package/gcc/7.1.0/0100-uclibc-conf.patch b/package/gcc/7.1.0/0100-uclibc-conf.patch
-new file mode 100644
-index 0000000..d354baf
---- /dev/null
-+++ b/package/gcc/7.1.0/0100-uclibc-conf.patch
-@@ -0,0 +1,29 @@
-+From 326b880b20e5f8187dbda736b4c4c662cbfb00ca Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 2 May 2017 22:36:15 +0200
-+Subject: [PATCH] uclibc-conf
-+
-+[Romain: convert to git patch]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ contrib/regression/objs-gcc.sh | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/contrib/regression/objs-gcc.sh b/contrib/regression/objs-gcc.sh
-+index 60b0497..6dc7ead 100755
-+--- a/contrib/regression/objs-gcc.sh
-++++ b/contrib/regression/objs-gcc.sh
-+@@ -106,6 +106,10 @@ if [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-gnu ]
-+  then
-+   make all-gdb all-dejagnu all-ld || exit 1
-+   make install-gdb install-dejagnu install-ld || exit 1
-++elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
-++ then
-++  make all-gdb all-dejagnu all-ld || exit 1
-++  make install-gdb install-dejagnu install-ld || exit 1
-+ elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
-+   make bootstrap || exit 1
-+   make install || exit 1
-+-- 
-+2.9.3
-+
-diff --git a/package/gcc/7.1.0/0810-arm-softfloat-libgcc.patch b/package/gcc/7.1.0/0810-arm-softfloat-libgcc.patch
-new file mode 100644
-index 0000000..63880dd
---- /dev/null
-+++ b/package/gcc/7.1.0/0810-arm-softfloat-libgcc.patch
-@@ -0,0 +1,45 @@
-+From 420a304ac0daa29d66da6ed5b0b49fc4c482d522 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 2 May 2017 22:46:18 +0200
-+Subject: [PATCH] arm softfloat libgcc
-+
-+[Romain: convert to git patch]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/config/arm/linux-elf.h | 2 +-
-+ libgcc/config/arm/t-linux  | 7 ++++++-
-+ 2 files changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/arm/linux-elf.h b/gcc/config/arm/linux-elf.h
-+index 3d62367..dad0b97 100644
-+--- a/gcc/config/arm/linux-elf.h
-++++ b/gcc/config/arm/linux-elf.h
-+@@ -58,7 +58,7 @@
-+    %{shared:-lc} \
-+    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
-+ 
-+-#define LIBGCC_SPEC "%{mfloat-abi=soft*:-lfloat} -lgcc"
-++#define LIBGCC_SPEC "-lgcc"
-+ 
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
-+ 
-+diff --git a/libgcc/config/arm/t-linux b/libgcc/config/arm/t-linux
-+index 3d520de..e7bc042 100644
-+--- a/libgcc/config/arm/t-linux
-++++ b/libgcc/config/arm/t-linux
-+@@ -1,6 +1,11 @@
-+ LIB1ASMSRC = arm/lib1funcs.S
-+ LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx _clzsi2 _clzdi2 \
-+-	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3
-++	_ctzsi2 _arm_addsubdf3 _arm_addsubsf3 \
-++	_arm_addsubdf3 _arm_addsubsf3 \
-++	_arm_negdf2 _arm_muldivdf3 _arm_cmpdf2 _arm_unorddf2 \
-++	_arm_fixdfsi _arm_fixunsdfsi _arm_truncdfsf2 \
-++	_arm_negsf2 _arm_muldivsf3 _arm_cmpsf2 _arm_unordsf2 \
-++	_arm_fixsfsi _arm_fixunssfsi
-+ 
-+ # Just for these, we omit the frame pointer since it makes such a big
-+ # difference.
-+-- 
-+2.9.3
-+
-diff --git a/package/gcc/7.1.0/0860-cilk-fix-build-without-wchar.patch b/package/gcc/7.1.0/0860-cilk-fix-build-without-wchar.patch
-new file mode 100644
-index 0000000..61ab01c
---- /dev/null
-+++ b/package/gcc/7.1.0/0860-cilk-fix-build-without-wchar.patch
-@@ -0,0 +1,64 @@
-+From 714739e69ead1d9823233af40645277f6d4633ea Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Tue, 2 May 2017 23:21:46 +0200
-+Subject: [PATCH] cilk: fix build without wchar
-+
-+When building against uClibc with wchar support disabled, WCHAR_MIN and
-+WCHAR_MAX are not defined leading to compilation errors.
-+
-+Fix it by only including the wchar code if available.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Romain: convert to git patch]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ libcilkrts/include/cilk/reducer_min_max.h | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/libcilkrts/include/cilk/reducer_min_max.h b/libcilkrts/include/cilk/reducer_min_max.h
-+index 641aa82..4f8e010 100644
-+--- a/libcilkrts/include/cilk/reducer_min_max.h
-++++ b/libcilkrts/include/cilk/reducer_min_max.h
-+@@ -3289,7 +3289,9 @@ __CILKRTS_BEGIN_EXTERN_C
-+ CILK_C_REDUCER_MAX_INSTANCE(char,               char,       CHAR_MIN)
-+ CILK_C_REDUCER_MAX_INSTANCE(unsigned char,      uchar,      0)
-+ CILK_C_REDUCER_MAX_INSTANCE(signed char,        schar,      SCHAR_MIN)
-++#ifdef WCHAR_MIN
-+ CILK_C_REDUCER_MAX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
-++#endif
-+ CILK_C_REDUCER_MAX_INSTANCE(short,              short,      SHRT_MIN)
-+ CILK_C_REDUCER_MAX_INSTANCE(unsigned short,     ushort,     0)
-+ CILK_C_REDUCER_MAX_INSTANCE(int,                int,        INT_MIN)
-+@@ -3441,7 +3443,9 @@ __CILKRTS_BEGIN_EXTERN_C
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(char,               char,       CHAR_MIN)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(unsigned char,      uchar,      0)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(signed char,        schar,      SCHAR_MIN)
-++#ifdef WCHAR_MIN
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
-++#endif
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(short,              short,      SHRT_MIN)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(unsigned short,     ushort,     0)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(int,                int,        INT_MIN)
-+@@ -3567,7 +3571,9 @@ __CILKRTS_BEGIN_EXTERN_C
-+ CILK_C_REDUCER_MIN_INSTANCE(char,               char,       CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(unsigned char,      uchar,      CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(signed char,        schar,      SCHAR_MAX)
-++#ifdef WCHAR_MAX
-+ CILK_C_REDUCER_MIN_INSTANCE(wchar_t,            wchar_t,    WCHAR_MAX)
-++#endif
-+ CILK_C_REDUCER_MIN_INSTANCE(short,              short,      SHRT_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(unsigned short,     ushort,     USHRT_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(int,                int,        INT_MAX)
-+@@ -3719,7 +3725,9 @@ __CILKRTS_BEGIN_EXTERN_C
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(char,               char,       CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(unsigned char,      uchar,      CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(signed char,        schar,      SCHAR_MAX)
-++#ifdef WCHAR_MAX
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MAX)
-++#endif
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(short,              short,      SHRT_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(unsigned short,     ushort,     USHRT_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(int,                int,        INT_MAX)
-+-- 
-+2.9.3
-+
-diff --git a/package/gcc/7.1.0/0891-fix-m68k-uclinux.patch b/package/gcc/7.1.0/0891-fix-m68k-uclinux.patch
-new file mode 100644
-index 0000000..e84fd92
---- /dev/null
-+++ b/package/gcc/7.1.0/0891-fix-m68k-uclinux.patch
-@@ -0,0 +1,30 @@
-+From c2773170a1b0e2728f71f2275a99fd177ba2cef4 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 2 May 2017 23:25:17 +0200
-+Subject: [PATCH] fix m68k uclinux avoids internal compiler error while
-+ compiling linux-atomic.c See here:
-+ https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+[Romain: convert to git patch]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ libgcc/config.host | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libgcc/config.host b/libgcc/config.host
-+index b279a64..04fe183 100644
-+--- a/libgcc/config.host
-++++ b/libgcc/config.host
-+@@ -820,7 +820,7 @@ m68k*-*-netbsdelf*)
-+ m68k*-*-openbsd*)
-+ 	;;
-+ m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
-+-	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
-++	tmake_file="$tmake_file m68k/t-floatlib"
-+ 	md_unwind_header=m68k/linux-unwind.h
-+ 	;;
-+ m68k-*-linux*)			# Motorola m68k's running GNU/Linux
-+-- 
-+2.9.3
-+
-diff --git a/package/gcc/7.1.0/0900-remove-selftests.patch b/package/gcc/7.1.0/0900-remove-selftests.patch
-new file mode 100644
-index 0000000..a3bc7a5
---- /dev/null
-+++ b/package/gcc/7.1.0/0900-remove-selftests.patch
-@@ -0,0 +1,111 @@
-+From 63f0917d90eb83d267dc517fdfb6523a74b1917c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Wed, 3 May 2017 00:37:06 +0200
-+Subject: [PATCH] remove selftests
-+
-+When the gcc archive is extracted by the gcc.mk, the gcc/testsuite
-+is excluded:
-+
-+HOST_GCC_EXCLUDES = \
-+	libjava/* libgo/* \
-+	gcc/testsuite/* libstdc++-v3/testsuite/*
-+
-+The new Makefile target from the "Selftest framework" [1] added a dependency
-+on the gcc/testsuite/Makefile.
-+Revert partially the commit [1] to allow building gcc without selftest.
-+
-+[1] https://github.com/gcc-mirror/gcc/commit/99b4f3a2d5bf2c137de9731e27b483eb6b462fd9
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/Makefile.in | 46 +++++-----------------------------------------
-+ 1 file changed, 5 insertions(+), 41 deletions(-)
-+
-+diff --git a/gcc/Makefile.in b/gcc/Makefile.in
-+index 74d1912..652a554 100644
-+--- a/gcc/Makefile.in
-++++ b/gcc/Makefile.in
-+@@ -1581,14 +1581,13 @@ OBJS = \
-+ OBJS-libcommon = diagnostic.o diagnostic-color.o diagnostic-show-locus.o \
-+ 	edit-context.o \
-+ 	pretty-print.o intl.o \
-+-	vec.o input.o version.o hash-table.o ggc-none.o memory-block.o \
-+-	selftest.o
-++	vec.o input.o version.o hash-table.o ggc-none.o memory-block.o
-+ 
-+ # Objects in libcommon-target.a, used by drivers and by the core
-+ # compiler and containing target-dependent code.
-+ OBJS-libcommon-target = $(common_out_object_file) prefix.o params.o \
-+ 	opts.o opts-common.o options.o vec.o hooks.o common/common-targhooks.o \
-+-	hash-table.o file-find.o spellcheck.o selftest.o
-++	hash-table.o file-find.o spellcheck.o
-+ 
-+ # This lists all host objects for the front ends.
-+ ALL_HOST_FRONTEND_OBJS = $(foreach v,$(CONFIG_LANGUAGES),$($(v)_OBJS))
-+@@ -1865,10 +1864,10 @@ config.status: $(srcdir)/configure $(srcdir)/config.gcc
-+ quickstrap: all
-+ 	cd $(toplevel_builddir) && $(MAKE) all-target-libgcc
-+ 
-+-all.internal: start.encap rest.encap doc selftest
-++all.internal: start.encap rest.encap doc
-+ # This is what to compile if making a cross-compiler.
-+ all.cross: native gcc-cross$(exeext) cpp$(exeext) specs \
-+-	libgcc-support lang.all.cross doc selftest @GENINSRC@ srcextra
-++	libgcc-support lang.all.cross doc @GENINSRC@ srcextra
-+ # This is what must be made before installing GCC and converting libraries.
-+ start.encap: native xgcc$(exeext) cpp$(exeext) specs \
-+ 	libgcc-support lang.start.encap @GENINSRC@ srcextra
-+@@ -1888,41 +1887,6 @@ endif
-+ # This does the things that can't be done on the host machine.
-+ rest.cross: specs
-+ 
-+-# GCC's selftests.
-+-# Specify a dummy input file to placate the driver.
-+-# Specify -nostdinc to work around missing WIND_BASE environment variable
-+-# required for *-wrs-vxworks-* targets.
-+-# Specify -o /dev/null so the output of -S is discarded. More importantly
-+-# It does not try to create a file with the name "null.s" on POSIX and
-+-# "nul.s" on Windows. Because on Windows "nul" is a reserved file name.
-+-# Specify the path to gcc/testsuite/selftests within the srcdir
-+-# as an argument to -fself-test.
-+-SELFTEST_FLAGS = -nostdinc -x c /dev/null -S -o /dev/null \
-+-	-fself-test=$(srcdir)/testsuite/selftests
-+-
-+-# Run the selftests during the build once we have a driver and a cc1,
-+-# so that self-test failures are caught as early as possible.
-+-# Use "s-selftest" to ensure that we only run the selftests if the
-+-# driver, cc1, or selftest data change.
-+-.PHONY: selftest
-+-selftest: s-selftest
-+-s-selftest: $(GCC_PASSES) cc1$(exeext) stmp-int-hdrs \
-+-  $(srcdir)/testsuite/selftests
-+-	$(GCC_FOR_TARGET) $(SELFTEST_FLAGS)
-+-	$(STAMP) $@
-+-
-+-# Convenience method for running selftests under gdb:
-+-.PHONY: selftest-gdb
-+-selftest-gdb: $(GCC_PASSES) cc1$(exeext) stmp-int-hdrs
-+-	$(GCC_FOR_TARGET) $(SELFTEST_FLAGS) \
-+-	  -wrapper gdb,--args
-+-
-+-# Convenience method for running selftests under valgrind:
-+-.PHONY: selftest-valgrind
-+-selftest-valgrind: $(GCC_PASSES) cc1$(exeext) stmp-int-hdrs
-+-	$(GCC_FOR_TARGET) $(SELFTEST_FLAGS) \
-+-	  -wrapper valgrind,--leak-check=full
-+-
-+ # Recompile all the language-independent object files.
-+ # This is used only if the user explicitly asks for it.
-+ compilations: $(BACKEND)
-+@@ -2076,7 +2040,7 @@ gcc-nm.c: gcc-ar.c
-+ 	cp $^ $@
-+ 
-+ COLLECT2_OBJS = collect2.o collect2-aix.o tlink.o vec.o ggc-none.o \
-+-  collect-utils.o file-find.o hash-table.o selftest.o
-++  collect-utils.o file-find.o hash-table.o
-+ COLLECT2_LIBS = @COLLECT2_LIBS@
-+ collect2$(exeext): $(COLLECT2_OBJS) $(LIBDEPS)
-+ # Don't try modifying collect2 (aka ld) in place--it might be linking this.
-+-- 
-+2.9.3
-+
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 4bcb23e..f1c2faf 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -87,6 +87,16 @@ config BR2_GCC_VERSION_6_X
- 	depends on !BR2_mips_m6250 && !BR2_mips_p6600
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
-+config BR2_GCC_VERSION_7_X
-+	bool "gcc 7.x"
-+	# Broken or unsupported architectures
-+	depends on !BR2_arc
-+	depends on !BR2_microblaze
-+	depends on !BR2_or1k
-+	# Unsupported MIPS cores
-+	depends on !BR2_mips_m6250 && !BR2_mips_p6600
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+
- endchoice
- 
- # Indicates if GCC for architecture supports --with-{arch,cpu,..}  to
-@@ -106,6 +116,7 @@ config BR2_GCC_VERSION
- 	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
- 	default "5.4.0"     if BR2_GCC_VERSION_5_X
- 	default "6.3.0"     if BR2_GCC_VERSION_6_X
-+	default "7.1.0"     if BR2_GCC_VERSION_7_X
- 	default "arc-2017.03-rc1" if BR2_GCC_VERSION_ARC
- 	default "musl-5.4.0" if BR2_GCC_VERSION_OR1K
- 
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 052a825..7255d12 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -10,6 +10,8 @@ sha512  93abb78e16277454f41a8e9810f41f66c0fdffdc539a762ff6b67d3037f78db971378683
- sha512  2941cc950c8f2409a314df497631f9b0266211aa74746c1839c46e04f1c7c299afe2528d1ef16ea39def408a644ba48f97519ec7a7dd37d260c3e9423514265b  gcc-5.4.0.tar.bz2
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-6.3.0/sha512.sum
- sha512  234dd9b1bdc9a9c6e352216a7ef4ccadc6c07f156006a59759c5e0e6a69f0abcdc14630eff11e3826dd6ba5933a8faa43043f3d1d62df6bd5ab1e82862f9bf78  gcc-6.3.0.tar.bz2
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.1.0/sha512.sum
-+sha512  b5d952be9a10f0e0926bb2868877d10544039d6d2f35ba0a08f51231dd622a007650764a03e173194701467547789ad7d2d9cbc10adcdf118d619cdedbd14aec  gcc-7.1.0.tar.bz2
- 
- # Locally calculated (fetched from Github)
- sha512  e4fe5a179b8feabf932a8a6f4794ff6907b868a65487412d855a4b3671aa24ec8544a44f3b63e69ea2c12fcd4d8028d0619d40bf016ee7c1a5b5a99aa9315ef3  gcc-arc-2017.03-rc1.tar.gz
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 37079fa..e012d60 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -324,10 +324,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	bool
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
-+config BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	bool
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	string
-+	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	default "5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	default "4.9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 -- 
-2.9.3
+http://autobuild.buildroot.net
