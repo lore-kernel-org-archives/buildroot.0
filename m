@@ -1,36 +1,36 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri,  5 May 2017 17:30:28 -0300
-Subject: [Buildroot] [PATCH 0/3] Support a list of "cmake" candidates
-Message-ID: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
+Date: Fri,  5 May 2017 17:30:31 -0300
+Subject: [Buildroot] [PATCH 3/3] core: add "cmake3" to the list of cmake
+	candidates
+In-Reply-To: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
+References: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1494016231-50639-4-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On CentOS 7 the "cmake" package installs cmake 2.8.12, which is too old
-for us but the "cmake3" package (from EPEL) provides cmake 3.6.3, which
-is good enough.
+This is useful on CentOS 7, whose "cmake" utility corresponds to version
+2.8.12, which is too old for Buildroot.
 
-This series adds support to a list of candidates to be checked instead
-of resorting to host-cmake if "cmake" does not exist or is too old.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ support/dependencies/check-host-cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patch 1 modifies check-host-cmake.sh to support a list of candidates and
-the minimal version, keeping compatibility with the previous syntax.
-
-Patch 2 Introduces the BR2_CMAKE_CANDIDATES in check-host-cmake.mk, still
-keeping compatible with the previous behavior.
-
-Patch 3 adds "cmake3" to the list of cmake candidates.
-
-Carlos Santos (3):
-  core: allow check-host-cmake.sh to check several candidates
-  core: allow having a list of "cmake" candidates
-  core: add "cmake3" to the list of cmake candidates
-
- support/dependencies/check-host-cmake.mk |  7 ++--
- support/dependencies/check-host-cmake.sh | 66 ++++++++++++++++----------------
- 2 files changed, 38 insertions(+), 35 deletions(-)
-
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index 42aaee4..f2eef8b 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -10,7 +10,7 @@
+ #
+ BR2_CMAKE_VERSION_MIN = 3.1
+ 
+-BR2_CMAKE_CANDIDATES ?= cmake
++BR2_CMAKE_CANDIDATES ?= cmake cmake3
+ BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+ 	$(BR2_CMAKE_CANDIDATES) $(BR2_CMAKE_VERSION_MIN))
+ ifeq ($(BR2_CMAKE),)
 -- 
 1.8.3.1
