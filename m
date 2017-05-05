@@ -1,7 +1,7 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Fri,  5 May 2017 14:01:17 +0530
-Subject: [Buildroot] [PATCH] lua-resty-http: correct license file path
-Message-ID: <1493973077-5983-1-git-send-email-rahulbedarkar89@gmail.com>
+Date: Fri,  5 May 2017 14:05:55 +0530
+Subject: [Buildroot] [PATCH v2] lua-resty-http: correct license file path
+Message-ID: <1493973355-6187-1-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,14 @@ To: buildroot@busybox.net
 
 LICENSE file is present in subdirectory.
 
+Fixes:
+  http://autobuild.buildroot.net/results/d33/d33a322b4d2618b55849b5637082100702a91eea
+
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
+v2:
+  - Add link to Buildroot autobuild failure
+
  package/lua-resty-http/lua-resty-http.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
