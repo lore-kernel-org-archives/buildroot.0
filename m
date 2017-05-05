@@ -1,56 +1,56 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 5 May 2017 19:43:42 -0300 (BRT)
-Subject: [Buildroot] [PATCH 2/3] core: allow having a list of "cmake"
- candidates
-In-Reply-To: <20170505210928.GB3001@scaer>
+Date: Fri, 5 May 2017 20:19:04 -0300 (BRT)
+Subject: [Buildroot] [PATCH 1/3] core: allow check-host-cmake.sh to
+ check several candidates
+In-Reply-To: <829990645.21765498.1494023686203.JavaMail.zimbra@datacom.ind.br>
 References: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
- <1494016231-50639-3-git-send-email-casantos@datacom.ind.br>
- <20170505210928.GB3001@scaer>
-Message-ID: <1806928464.21765876.1494024222751.JavaMail.zimbra@datacom.ind.br>
+ <1494016231-50639-2-git-send-email-casantos@datacom.ind.br>
+ <20170505210703.GA3001@scaer>
+ <829990645.21765498.1494023686203.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <514021890.21766442.1494026344834.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
+> From: "Carlos Santos" <casantos@datacom.ind.br>
+> To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: buildroot at buildroot.org
-> Sent: Friday, May 5, 2017 6:09:28 PM
-> Subject: Re: [Buildroot] [PATCH 2/3] core: allow having a list of "cmake" candidates
->> @@ -10,9 +10,10 @@
->>  #
->>  BR2_CMAKE_VERSION_MIN = 3.1
->>  
->> -BR2_CMAKE ?= cmake
->> -ifeq ($(call suitable-host-package,cmake,\
->> -	$(BR2_CMAKE) $(BR2_CMAKE_VERSION_MIN)),)
->> +BR2_CMAKE_CANDIDATES ?= cmake
-> 
-> Do not rename the variable; keep it named BR2_CMAKE.
-> 
-> It was named as such so that one could do:
-> 
->    $ make BR2_CMAKE=/path/to/my/cmake3
-> 
-> and we want to keep it as such, so people can override the cmake they
-> want to use.
-> 
-> By the way, I hope you knew you could do that, didn't you? ;-)
+> Sent: Friday, May 5, 2017 7:34:46 PM
+> Subject: Re: [Buildroot] [PATCH 1/3] core: allow check-host-cmake.sh to check several candidates
 
-I did not rename the variable. It is still BR2_CMAKE and you still can
-pass it in the command line (yes, I knew).
+>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> To: "Carlos Santos" <casantos@datacom.ind.br>
+>> Cc: buildroot at buildroot.org
+>> Sent: Friday, May 5, 2017 6:07:03 PM
+>> Subject: Re: [Buildroot] [PATCH 1/3] core: allow check-host-cmake.sh to check
+>> several candidates
+>>> --- a/support/dependencies/check-host-cmake.sh
+>>> +++ b/support/dependencies/check-host-cmake.sh
+>>> @@ -1,39 +1,41 @@
+>>>  #!/bin/sh
+>>>  
+>>> -candidate="${1}"
+>>> -version_min="${2}"
+>>> +eval 'version_min="${'${#}'}"'
+>> 
+>> It took me a moment to understand what this was doing (and I am known
+>> for being a shell fanboy!).
+>> 
+>> Just revert the order options are passed: version first, then
+>> candidates. This will allow you to get rid of this weird construct.
+>> 
+>>    version_min="${1}"
+>>    shift # Keep only candidates
+> 
+> I did it that way because all invocations of the "suitable-host-package"
+> macro pass the candidate name as the first argument to the script but I
+> must admit that the script lost some readability.
 
->> +BR2_CMAKE ?= $(call suitable-host-package,cmake,\
-    ^^^^^^^^^^^^^
-
->> +	$(BR2_CMAKE_CANDIDATES) $(BR2_CMAKE_VERSION_MIN))
->> +ifeq ($(BR2_CMAKE),)
->>  BR2_CMAKE = $(HOST_DIR)/usr/bin/cmake
->>  BR2_CMAKE_HOST_DEPENDENCY = host-cmake
->>  endif
->> --
->> 1.8.3.1
+Also, doing it as you suggest requires modifying check-host-cmake.mk
+in the same patch to change the argument order, which I'd prefer to
+avoid.
 
 -- 
 Carlos Santos (Casantos) - DATACOM, P&D
