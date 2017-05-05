@@ -1,70 +1,102 @@
-From: Mario Rugiero <mrugiero@gmail.com>
-Date: Fri, 5 May 2017 15:27:21 -0300
-Subject: [Buildroot] [PATCH v2] package: protobuf,
- python-protobuf: bump to v3.3.0
-In-Reply-To: <20170505202049.643d7041@free-electrons.com>
-References: <20170503205945.7065-1-mrugiero@gmail.com>
- <20170504145610.39ba9d06@free-electrons.com>
- <CAKKQwLSKh5LijFRDNDXmocqgxtgSk1Gt_8vh8wnFDbCPbtdZJg@mail.gmail.com>
- <CAKKQwLQWLytghCPeEWWjMsLw2vrcL-DumzWcevz2Dz+uwE0HGQ@mail.gmail.com>
- <20170505202049.643d7041@free-electrons.com>
-Message-ID: <CAKKQwLS=83fJSV2hKHNm9VR_nD9jCc13eVF_35gqLKEq9TPmbA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  5 May 2017 20:37:41 +0200
+Subject: [Buildroot] [PATCH] rpi-wifi-firmware: new package
+Message-ID: <20170505183741.30214-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-05-05 15:20 GMT-03:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Fri, 5 May 2017 14:24:00 -0300, Mario Rugiero wrote:
->
->> I fixed that particular issue in my local copy, but fails because
->> Atomic32 is not supported in that toolchain.
->> Do you know if there is any similar toolchain with such support?
->> Otherwise, how should I fix that?
->
-> What error do you have exactly?
+Add firmware (NVRAM data) for the Raspberry Pi 3 and Zero W wifi module.
 
-/bin/sh ../libtool  --tag=CXX   --mode=compile
-/home/mrugiero/workspace/buildroot/output/host/usr/bin/arm-none-linux-gnueabi-g++
--DHAVE_CONFIG_H -I. -I..   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -pthread -DHAVE_PTHREAD=1  -Wall
--Wno-sign-compare  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -c -o google/protobuf/dynamic_message.lo
-goo
-gle/protobuf/dynamic_message.cc
-libtool: compile:
-/home/mrugiero/workspace/buildroot/output/host/usr/bin/arm-none-linux-gnueabi-g++
--DHAVE_CONFIG_H -I. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -pthread -DHAVE_PTHREAD=1 -Wall
--Wno-sign-compare -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Os -c google/protobuf/dynamic_message.cc
--fPIC -DPIC -o google/protobuf/.libs/dy
-namic_message.o
-In file included from google/protobuf/dynamic_message.cc:82:
-./google/protobuf/map_field.h: In member function 'void
-google::protobuf::internal::MapField<Derived, Key, Value,
-kKeyFieldType, kValueFieldType,
-default_enum_value>::Swap(google::protobuf::internal::MapField<Derived,
-Key, Value, kKeyFieldType, kValueFieldType, default_enum_value>*)':
-./google/protobuf/map_field.h:139: error: object missing in reference
-to 'google::protobuf::internal::MapFieldBase::repeated_field_'
-./google/protobuf/map_field_inl.h:255: error: from this location
-./google/protobuf/map_field.h:143: error: object missing in reference
-to 'google::protobuf::internal::MapFieldBase::state_'
-./google/protobuf/map_field_inl.h:257: error: from this location
+Notice that linux-firmware provides the main firmware
+(brcmfmac43430-sdio.bin), but the module also needs board specific
+configuration (NVRAM) data.
 
->
-> Something like an undefined reference to some __atomic_*() function? If
-> so, then make sure you link with -latomic.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+For the rpi, this data is available in the RPI firmware-nonfree git repo.
+As this repo contains a lot of unrelated data (~70MB), simply download the
+single NVRAM file instead of cloning the entire repo.
+
+A similar approach is used by openwrt and opensuse:
+
+https://dev.openwrt.org/browser/trunk/package/firmware/brcmfmac43430-firmware/Makefile?rev=49139
+https://build.opensuse.org/package/view_file/hardware/bcm43xx-firmware/bcm43xx-firmware.spec?rev=b1628448b36c85abc9215eab4785ef29
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in                                |  1 +
+ package/rpi-wifi-firmware/Config.in              | 10 ++++++++++
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash |  2 ++
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/rpi-wifi-firmware/Config.in
+ create mode 100644 package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+ create mode 100644 package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 1af815086..d57813c5c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -348,6 +348,7 @@ menu "Firmware"
+ 	source "package/linux-firmware/Config.in"
+ 	source "package/rpi-bt-firmware/Config.in"
+ 	source "package/rpi-firmware/Config.in"
++	source "package/rpi-wifi-firmware/Config.in"
+ 	source "package/sunxi-boards/Config.in"
+ 	source "package/ts4900-fpga/Config.in"
+ 	source "package/ux500-firmware/Config.in"
+diff --git a/package/rpi-wifi-firmware/Config.in b/package/rpi-wifi-firmware/Config.in
+new file mode 100644
+index 000000000..2c87c7584
+--- /dev/null
++++ b/package/rpi-wifi-firmware/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_RPI_WIFI_FIRMWARE
++	bool "rpi-wifi-firmware"
++	depends on BR2_arm || BR2_aarch64
++	select BR2_PACKAGE_LINUX_FIRMWARE
++	select BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX # runtime
++	help
++	  Raspberry Pi 3 and Zero W Broadcom BCM43430 wifi module
++	  NVRAM data.
++
++	  https://github.com/RPi-Distro/firmware-nonfree/
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+new file mode 100644
+index 000000000..c20506536
+--- /dev/null
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  872fde4f9942d9aba805880d6eaddfe050305626fd58ad955bfe77c04f6b75a5  brcmfmac43430-sdio.txt
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+new file mode 100644
+index 000000000..e90864fae
+--- /dev/null
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# rpi-wifi-firmware
++#
++################################################################################
++
++RPI_WIFI_FIRMWARE_VERSION = 54bab3d6a6d43239c71d26464e6e10e5067ffea7
++# brcmfmac43430-sdio.bin comes from linux-firmware
++RPI_WIFI_FIRMWARE_SOURCE = brcmfmac43430-sdio.txt
++# git repo contains a lot of unrelated files
++RPI_WIFI_FIRMWARE_SITE = https://raw.githubusercontent.com/RPi-Distro/firmware-nonfree/$(RPI_WIFI_FIRMWARE_VERSION)/brcm80211/brcm
++
++define RPI_WIFI_FIRMWARE_EXTRACT_CMDS
++	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
++endef
++
++define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/$(RPI_WIFI_FIRMWARE_SOURCE) \
++		$(TARGET_DIR)/lib/firmware/brcm/$(RPI_WIFI_FIRMWARE_SOURCE)
++endef
++
++$(eval $(generic-package))
+-- 
+2.11.0
