@@ -1,61 +1,72 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri, 5 May 2017 17:16:04 -0400
-Subject: [Buildroot] [git commit] lua-resty-http: new package
-In-Reply-To: <87ziers773.fsf@dell.be.48ers.dk>
-References: <1493935354.76899857@f13.my.com> <87pofntx51.fsf@dell.be.48ers.dk>
- <CANxTyt6gexW1NkVmi9xgN-A86eO_6A2L8dv_nFwCwLmEYfM=Pg@mail.gmail.com>
- <87ziers773.fsf@dell.be.48ers.dk>
-Message-ID: <CANxTyt5-gZMBts+x0fXcVSfA_aOFrKJOdQkQHOxLiEs_ddiroQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  5 May 2017 23:17:59 +0200
+Subject: [Buildroot] [PATCH v1] poppler: add missing std::vector include for
+	Qt code
+Message-ID: <20170505211759.1389-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Fixes [1], [2]:
 
-On Fri, May 5, 2017 at 10:34 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
->
->  >> We currently don't have any explicit handling of the nginx-lua
->  >> module. You could conceptually do something with the 'nginx additional
->  >> modules' (BR2_PACKAGE_NGINX_ADD_MODULES) option, but there's no
->  >> guarantee that nginx builds after luajit.
->  >>
->  >> I guess the proper solution would be to add an explicit nginx-lua
->  >> module, similar to what we already have for nginx-dav-ext / nginx-naxsi
->  >> / nginx-upload.
->
->  > FWIW - that's what we did in our project - an "ngx_lua" package that
->  > simply uses generic-package to download and untar the source, and an
->  > addition to nginx.mk like this:
->
->  > ifeq ($(BR2_PACKAGE_NGX_LUA),y)
->  > NGINX_DEPENDENCIES += ngx_lua luainterpreter
->
-> ngx_lua (or nginx-lua to follow the naming convention) should probably
-> be responsible for pulling in luainterpreter, but OK.
+  ../../poppler/Form.h:544:14: error: ?vector? in namespace ?std? does not name a template type
+     const std::vector<Ref> &getCalculateOrder() const { return calculateOrder; }
 
-Noted and corrected, thank you.
+  ../../poppler/Form.h:556:8: error: ?vector? in namespace ?std? does not name a template type
+     std::vector<Ref> calculateOrder;
 
->> NGINX_CONF_OPTS += --add-module=$(NGX_LUA_DIR)
->  > ifeq ($(BR2_PACKAGE_LUAJIT),y)
->  > NGINX_CONF_ENV += LUAJIT_LIB=$(STAGING_DIR)/usr/lib
->  > LUAJIT_INC=$(STAGING_DIR)/usr/include
->  > endif
->  > endif
->
->  > But then we ended up not actually using ngx_lua at all.
->
-> Would you be interested in contributing (and maintaining) such a package
-> in BR?
+[1] http://autobuild.buildroot.net/results/b749b252f63945f278358dcd76b6e9c55214ccd8
+[2] http://autobuild.buildroot.net/results/92e68defe746eb4852b3a45bb27af2282d3f4c7e
 
-I've not much interested in maintaining it since I consider it a
-failed experiment on our part.  We don't use it now at all.  But I can
-do a one-time contribution.  Is that okay?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ .../0001-Form-add-missing-std-vector-include.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/poppler/0001-Form-add-missing-std-vector-include.patch
 
-Danomi -
-
-
-> --
-> Bye, Peter Korsgaard
+diff --git a/package/poppler/0001-Form-add-missing-std-vector-include.patch b/package/poppler/0001-Form-add-missing-std-vector-include.patch
+new file mode 100644
+index 000000000..5bca75723
+--- /dev/null
++++ b/package/poppler/0001-Form-add-missing-std-vector-include.patch
+@@ -0,0 +1,36 @@
++From 156507c6e85ad05256ccba06a710d47d34cd8153 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 5 May 2017 22:21:19 +0200
++Subject: [PATCH] Form: add missing std::vector include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  ../../poppler/Form.h:544:14: error: ?vector? in namespace ?std? does not name a template type
++     const std::vector<Ref> &getCalculateOrder() const { return calculateOrder; }
++
++  ../../poppler/Form.h:556:8: error: ?vector? in namespace ?std? does not name a template type
++     std::vector<Ref> calculateOrder;
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ poppler/Form.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/poppler/Form.h b/poppler/Form.h
++index 8ddb6fe..e0a3a28 100644
++--- a/poppler/Form.h
+++++ b/poppler/Form.h
++@@ -27,6 +27,7 @@
++ #include "Annot.h"
++ 
++ #include <set>
+++#include <vector>
++ 
++ class GooString;
++ class Array;
++-- 
++2.11.0
++
+-- 
+2.11.0
