@@ -1,49 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 May 2017 16:34:56 +0200
-Subject: [Buildroot] [git commit] lua-resty-http: new package
-In-Reply-To: <CANxTyt6gexW1NkVmi9xgN-A86eO_6A2L8dv_nFwCwLmEYfM=Pg@mail.gmail.com>
- (Danomi Manchego's message of "Fri, 5 May 2017 09:59:51 -0400")
-References: <1493935354.76899857@f13.my.com> <87pofntx51.fsf@dell.be.48ers.dk>
- <CANxTyt6gexW1NkVmi9xgN-A86eO_6A2L8dv_nFwCwLmEYfM=Pg@mail.gmail.com>
-Message-ID: <87ziers773.fsf@dell.be.48ers.dk>
+From: Mario Rugiero <mrugiero@gmail.com>
+Date: Fri, 5 May 2017 14:24:00 -0300
+Subject: [Buildroot] [PATCH v2] package: protobuf,
+ python-protobuf: bump to v3.3.0
+In-Reply-To: <CAKKQwLSKh5LijFRDNDXmocqgxtgSk1Gt_8vh8wnFDbCPbtdZJg@mail.gmail.com>
+References: <20170503205945.7065-1-mrugiero@gmail.com>
+ <20170504145610.39ba9d06@free-electrons.com>
+ <CAKKQwLSKh5LijFRDNDXmocqgxtgSk1Gt_8vh8wnFDbCPbtdZJg@mail.gmail.com>
+Message-ID: <CAKKQwLQWLytghCPeEWWjMsLw2vrcL-DumzWcevz2Dz+uwE0HGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>> You can reproduce this by using the following configuration:
+>>
+>> BR2_arm=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+>> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>> BR2_TOOLCHAIN_EXTERNAL_URL="http://sources.buildroot.net/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2"
+>> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-none-linux-gnueabi"
+>> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>> BR2_INIT_NONE=y
+>> # BR2_PACKAGE_BUSYBOX is not set
+>> BR2_PACKAGE_PROTOBUF=y
+>> # BR2_TARGET_ROOTFS_TAR is not set
+>>
+>> Best regards,
+>>
+>> Thomas Petazzoni
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+> Thanks, I'll look into it.
+I fixed that particular issue in my local copy, but fails because
+Atomic32 is not supported in that toolchain.
+Do you know if there is any similar toolchain with such support?
+Otherwise, how should I fix that?
 
- >> We currently don't have any explicit handling of the nginx-lua
- >> module. You could conceptually do something with the 'nginx additional
- >> modules' (BR2_PACKAGE_NGINX_ADD_MODULES) option, but there's no
- >> guarantee that nginx builds after luajit.
- >> 
- >> I guess the proper solution would be to add an explicit nginx-lua
- >> module, similar to what we already have for nginx-dav-ext / nginx-naxsi
- >> / nginx-upload.
-
- > FWIW - that's what we did in our project - an "ngx_lua" package that
- > simply uses generic-package to download and untar the source, and an
- > addition to nginx.mk like this:
-
- > ifeq ($(BR2_PACKAGE_NGX_LUA),y)
- > NGINX_DEPENDENCIES += ngx_lua luainterpreter
-
-ngx_lua (or nginx-lua to follow the naming convention) should probably
-be responsible for pulling in luainterpreter, but OK.
-
-> NGINX_CONF_OPTS += --add-module=$(NGX_LUA_DIR)
- > ifeq ($(BR2_PACKAGE_LUAJIT),y)
- > NGINX_CONF_ENV += LUAJIT_LIB=$(STAGING_DIR)/usr/lib
- > LUAJIT_INC=$(STAGING_DIR)/usr/include
- > endif
- > endif
-
- > But then we ended up not actually using ngx_lua at all.
-
-Would you be interested in contributing (and maintaining) such a package
-in BR?
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Mario.
