@@ -1,33 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 May 2017 21:23:46 +0200
-Subject: [Buildroot] [PATCH 1/1] fix help text wrapping for configs
- starting with 'a'
-In-Reply-To: <20170505103343.27171-1-aduskett@codeblue.com>
-References: <20170505103343.27171-1-aduskett@codeblue.com>
-Message-ID: <20170505212346.2aa0b7c5@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 May 2017 21:26:52 +0200
+Subject: [Buildroot] [PATCH] gmp: Enable ASM for ARC again
+In-Reply-To: <20170505123520.45502-1-abrodkin@synopsys.com> (Alexey Brodkin's
+ message of "Fri, 5 May 2017 15:35:20 +0300")
+References: <20170505123520.45502-1-abrodkin@synopsys.com>
+Message-ID: <87mvarrtoj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-On Fri,  5 May 2017 06:33:43 -0400, Adam Duskett wrote:
+ > This commit reverts cdf63517de25 "gmp: disable assembly for arc"
+ > as in GMP v6.1.2 there's already a proper fix for ASM constraints, see
+ > https://gmplib.org/repo/gmp/rev/58879634af3ci
 
-> -	  Program to change the display mode of Allwinner ARM SOCs running
-> -	  the linux-sunxi kernel (and not the mainline kernel.)
-> +	  Program to change the display mode of Allwinner
-> +	  ARM SOCs running the linux-sunxi kernel
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-This rewrapping is wrong, the first line should end with "ARM SOCs", so
-only the word "running" should be on the next line.
+Committed, thanks.
 
-Please verify globally, ideally by using a tool that rewraps
-automatically to the correct length.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
