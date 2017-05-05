@@ -1,53 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 May 2017 10:46:45 +0200
-Subject: [Buildroot] [git commit] binutils: disallow selection of 2.27 on
-	ARM/noMMU
-Message-ID: <20170505084651.5ABAD828F6@busybox.osuosl.org>
+Date: Fri, 5 May 2017 10:46:53 +0200
+Subject: [Buildroot] [git commit] lttng-tools: disable on uClibc/musl
+Message-ID: <20170505084700.32CBD8193B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee707e5e76d9b8636a2a972761bea0b881e83a7d
+commit: https://git.buildroot.net/buildroot/commit/?id=a36f24f79b92558812e24823a951e803cc8689ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-binutils 2.27 triggers a segfault in elf2flt on ARM/noMMU. While Arnout
-has identified a binutils 2.28 commit that can be backported on 2.27,
-this commit is huge and we don't clearly understand the impact.
-
-Since both binutils 2.26 and 2.28 are unaffected by this issue, we
-simply disallow the selection of binutils 2.27 on ARM/noMMU, and default
-to binutils 2.28.
+lttng-tools has been broken on uClibc/musl since a long time due to
+dlmopen() and LM_ID_BASE not being implemented. The issue has been
+reported to the upstream lttng developers more than two months ago [1],
+and no fix has been provided. Therefore, it's time to disable it on
+uClibc and musl.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/e14cadb290b0b86cac12c4bfb681eb6eee9e6dea/
-  and lots of other similar ARM/Cortex-M4 failures
+  http://autobuild.buildroot.net/results/f9e82a87618bcdcd46d670697b5ac75836f7250d/
+  (uclibc)
+
+  http://autobuild.buildroot.net/results/cb0952483b580b053a585760e59d78d11f46fc60/
+  (musl)
+
+[1] https://lists.lttng.org/pipermail/lttng-dev/2017-February/026921.html
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/Config.in.host | 3 +++
- 1 file changed, 3 insertions(+)
+ package/lttng-tools/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index aa24fd7..e147ef0 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -3,6 +3,7 @@ comment "Binutils Options"
- choice
- 	prompt "Binutils Version"
- 	default BR2_BINUTILS_VERSION_2_27_X
-+	default BR2_BINUTILS_VERSION_2_28_X if (BR2_arm && !BR2_USE_MMU)
- 	depends on !BR2_arc
- 	help
- 	  Select the version of binutils you wish to use.
-@@ -12,6 +13,8 @@ config BR2_BINUTILS_VERSION_2_26_X
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index 187e424..8888ef7 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn
++	# uclibc/musl don't implement dlmopen()/LM_ID_BASE
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_POPT
+@@ -27,6 +29,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
  
- config BR2_BINUTILS_VERSION_2_27_X
- 	bool "binutils 2.27"
-+	# binutils 2.27 triggers a bug in elf2flt on ARM/noMMU
-+	depends on !(BR2_arm && !BR2_USE_MMU)
+ 	  http://lttng.org
  
- config BR2_BINUTILS_VERSION_2_28_X
- 	bool "binutils 2.28"
+-comment "lttng-tools needs a toolchain w/ threads, dynamic library"
++comment "lttng-tools needs a glibc toolchain w/ threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_USES_GLIBC
