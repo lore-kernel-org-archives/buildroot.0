@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 May 2017 14:37:11 +0200
-Subject: [Buildroot] [PATCH 2/4] bluez5_utils: correct the experimental
-	option text
-In-Reply-To: <f1815a98614986509ae602f348e2218ecaef1d25.1493643541.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 1 May 2017 15:59:42 +0300")
+Date: Fri, 05 May 2017 14:37:18 +0200
+Subject: [Buildroot] [PATCH 3/4] bluez5_utils: allow enabling formerly
+	experimental plugins
+In-Reply-To: <1dc2f9ce76c1cb1c4be2e05509b816445a31fec4.1493643541.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 1 May 2017 15:59:43 +0300")
 References: <cover.1493643541.git.baruch@tkos.co.il>
- <f1815a98614986509ae602f348e2218ecaef1d25.1493643541.git.baruch@tkos.co.il>
-Message-ID: <87d1bntr7s.fsf@dell.be.48ers.dk>
+ <1dc2f9ce76c1cb1c4be2e05509b816445a31fec4.1493643541.git.baruch@tkos.co.il>
+Message-ID: <878tmbtr7l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +15,15 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > In BlueZ 5.44 the --enable-experimental configure option only controls the
- > build of the Nokia OBEX PC Suite plugin. Correct the option prompt and help
- > text.
+ > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ > Disregard to increase just minor version BlueZ 5.44 is drastically different in
+ > a way what plugins that used to be enabled by the --enable-experimental
+ > configure option, now have their own option.
+
+ > Extend Buildroot package to cover these plugins.
 
  > Cc: Marcin Bis <marcin@bis.org.pl>
- > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
