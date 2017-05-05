@@ -1,368 +1,233 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Fri,  5 May 2017 14:33:57 +0200
-Subject: [Buildroot] [PATCH v4 1/2] cracklib: New package
-Message-ID: <20170505123358.29118-1-stefan.sorensen@spectralink.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri,  5 May 2017 10:08:05 -0400
+Subject: [Buildroot] [PATCH v2 1/4] fix help text wrapping for configs a
+Message-ID: <20170505140808.17696-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
----
- DEVELOPERS                                         |   1 +
- package/Config.in                                  |   1 +
- .../0001-Apply-patch-to-fix-CVE-2016-6318.patch    | 106 +++++++++++++++++++++
- ...x-a-buffer-overflow-processing-long-words.patch |  40 ++++++++
- ...to-treat-the-input-as-text-when-formattin.patch |  30 ++++++
- package/cracklib/Config.in                         |  28 ++++++
- package/cracklib/cracklib.hash                     |   3 +
- package/cracklib/cracklib.mk                       |  52 ++++++++++
- package/linux-pam/linux-pam.mk                     |   7 ++
- 9 files changed, 268 insertions(+)
- create mode 100644 package/cracklib/0001-Apply-patch-to-fix-CVE-2016-6318.patch
- create mode 100644 package/cracklib/0002-Fix-a-buffer-overflow-processing-long-words.patch
- create mode 100644 package/cracklib/0003-Force-grep-to-treat-the-input-as-text-when-formattin.patch
- create mode 100644 package/cracklib/Config.in
- create mode 100644 package/cracklib/cracklib.hash
- create mode 100644 package/cracklib/cracklib.mk
+The check-package script when ran gives warnings on text wrapping
+on all of these Config files.  This patch cleans up all warnings
+related to the text wrapping for the Config files starting with
+the letter a in the package directory.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8fbb69a..813706c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1495,6 +1495,7 @@ F:	package/proxychains-ng/
- F:	package/yasm/
+The appropriate indentation is: <tab><2 spaces><62 chars>
+See http://nightly.buildroot.org/#writing-rules-config-in for more
+information.
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+---
+v1 -> v2:
+  - Increase margins.  Margins were set too low in the origin patch.
+
+ package/a10disp/Config.in   |  4 ++--
+ package/acpid/Config.in     |  5 +++--
+ package/aespipe/Config.in   |  9 +++++----
+ package/agentpp/Config.in   | 15 ++++++++-------
+ package/alsa-lib/Config.in  |  4 ++--
+ package/apache/Config.in    | 11 ++++++-----
+ package/apr/Config.in       |  7 ++++---
+ package/assimp/Config.in    |  7 ++++---
+ package/aubio/Config.in     |  8 ++++----
+ package/aufs-util/Config.in |  3 ++-
+ package/autossh/Config.in   |  3 ++-
+ 11 files changed, 42 insertions(+), 34 deletions(-)
+
+diff --git a/package/a10disp/Config.in b/package/a10disp/Config.in
+index 18e2d8f..99ae0aa 100644
+--- a/package/a10disp/Config.in
++++ b/package/a10disp/Config.in
+@@ -3,8 +3,8 @@ config BR2_PACKAGE_A10DISP
+ 	depends on BR2_arm
+ 	depends on BR2_LINUX_KERNEL
+ 	help
+-	  Program to change the display mode of Allwinner ARM SOCs running
+-	  the linux-sunxi kernel (and not the mainline kernel.)
++	  Program to change the display mode of Allwinner ARM SOCs
++	  running the linux-sunxi kernel (and not the mainline kernel.)
  
- N:	Stefan S?rensen <stefan.sorensen@spectralink.com>
-+F:	package/cracklib/
- F:	package/libscrypt/
+ 	  http://github.com/hglm/a10disp
  
- N:	Stephan Hoffmann <sho@relinux.de>
-diff --git a/package/Config.in b/package/Config.in
-index 1af8150..62d5110 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1348,6 +1348,7 @@ menu "Other"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cppcms/Config.in"
-+	source "package/cracklib/Config.in"
- 	source "package/dawgdic/Config.in"
- 	source "package/ding-libs/Config.in"
- 	source "package/eigen/Config.in"
-diff --git a/package/cracklib/0001-Apply-patch-to-fix-CVE-2016-6318.patch b/package/cracklib/0001-Apply-patch-to-fix-CVE-2016-6318.patch
-new file mode 100644
-index 0000000..6180c4b
---- /dev/null
-+++ b/package/cracklib/0001-Apply-patch-to-fix-CVE-2016-6318.patch
-@@ -0,0 +1,106 @@
-+From 47e5dec521ab6243c9b249dd65b93d232d90d6b1 Mon Sep 17 00:00:00 2001
-+From: Jan Dittberner <jan@dittberner.info>
-+Date: Thu, 25 Aug 2016 17:13:49 +0200
-+Subject: [PATCH] Apply patch to fix CVE-2016-6318
-+
-+This patch fixes an issue with a stack-based buffer overflow whne
-+parsing large GECOS field. See
-+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-6318 and
-+https://security-tracker.debian.org/tracker/CVE-2016-6318 for more
-+information.
-+
-+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-+---
-+
-+Status: upstream, not yet released.
-+
-+ lib/fascist.c | 57 ++++++++++++++++++++++++++++++++-----------------------
-+ 2 files changed, 34 insertions(+), 24 deletions(-)
-+
-+diff --git a/lib/fascist.c b/lib/fascist.c
-+index a996509..d4deb15 100644
-+--- a/lib/fascist.c
-++++ b/lib/fascist.c
-+@@ -502,7 +502,7 @@ FascistGecosUser(char *password, const char *user, const char *gecos)
-+     char gbuffer[STRINGSIZE];
-+     char tbuffer[STRINGSIZE];
-+     char *uwords[STRINGSIZE];
-+-    char longbuffer[STRINGSIZE * 2];
-++    char longbuffer[STRINGSIZE];
-+ 
-+     if (gecos == NULL)
-+ 	gecos = "";
-+@@ -583,38 +583,47 @@ FascistGecosUser(char *password, const char *user, const char *gecos)
-+     {
-+ 	for (i = 0; i < j; i++)
-+ 	{
-+-	    strcpy(longbuffer, uwords[i]);
-+-	    strcat(longbuffer, uwords[j]);
-+-
-+-	    if (GTry(longbuffer, password))
-++	    if (strlen(uwords[i]) + strlen(uwords[j]) < STRINGSIZE)
-+ 	    {
-+-		return _("it is derived from your password entry");
-+-	    }
-++		strcpy(longbuffer, uwords[i]);
-++		strcat(longbuffer, uwords[j]);
-+ 
-+-	    strcpy(longbuffer, uwords[j]);
-+-	    strcat(longbuffer, uwords[i]);
-++		if (GTry(longbuffer, password))
-++		{
-++		    return _("it is derived from your password entry");
-++		}
-+ 
-+-	    if (GTry(longbuffer, password))
-+-	    {
-+-		return _("it's derived from your password entry");
-+-	    }
-++		strcpy(longbuffer, uwords[j]);
-++		strcat(longbuffer, uwords[i]);
-+ 
-+-	    longbuffer[0] = uwords[i][0];
-+-	    longbuffer[1] = '\0';
-+-	    strcat(longbuffer, uwords[j]);
-++		if (GTry(longbuffer, password))
-++		{
-++		   return _("it's derived from your password entry");
-++		}
-++	    }
-+ 
-+-	    if (GTry(longbuffer, password))
-++	    if (strlen(uwords[j]) < STRINGSIZE - 1)
-+ 	    {
-+-		return _("it is derivable from your password entry");
-++		longbuffer[0] = uwords[i][0];
-++		longbuffer[1] = '\0';
-++		strcat(longbuffer, uwords[j]);
-++
-++		if (GTry(longbuffer, password))
-++		{
-++		    return _("it is derivable from your password entry");
-++		}
-+ 	    }
-+ 
-+-	    longbuffer[0] = uwords[j][0];
-+-	    longbuffer[1] = '\0';
-+-	    strcat(longbuffer, uwords[i]);
-+-
-+-	    if (GTry(longbuffer, password))
-++	    if (strlen(uwords[i]) < STRINGSIZE - 1)
-+ 	    {
-+-		return _("it's derivable from your password entry");
-++		longbuffer[0] = uwords[j][0];
-++		longbuffer[1] = '\0';
-++		strcat(longbuffer, uwords[i]);
-++
-++		if (GTry(longbuffer, password))
-++		{
-++		    return _("it's derivable from your password entry");
-++		}
-+ 	    }
-+ 	}
-+     }
-+-- 
-+2.9.3
-+
-diff --git a/package/cracklib/0002-Fix-a-buffer-overflow-processing-long-words.patch b/package/cracklib/0002-Fix-a-buffer-overflow-processing-long-words.patch
-new file mode 100644
-index 0000000..63525cc
---- /dev/null
-+++ b/package/cracklib/0002-Fix-a-buffer-overflow-processing-long-words.patch
-@@ -0,0 +1,40 @@
-+From 33d7fa4585247cd2247a1ffa032ad245836c6edb Mon Sep 17 00:00:00 2001
-+From: Jan Dittberner <jan@dittberner.info>
-+Date: Thu, 25 Aug 2016 17:17:53 +0200
-+Subject: [PATCH] Fix a buffer overflow processing long words
-+
-+A buffer overflow processing long words has been discovered. This commit
-+applies the patch from
-+https://build.opensuse.org/package/view_file/Base:System/cracklib/0004-overflow-processing-long-words.patch
-+by Howard Guo.
-+
-+See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835386 and
-+http://www.openwall.com/lists/oss-security/2016/08/23/8
-+
-+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-+---
-+
-+Status: upstream, not yet released.
-+
-+ lib/rules.c | 5 ++---
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/lib/rules.c b/lib/rules.c
-+index d193cc0..3a2aa46 100644
-+--- a/lib/rules.c
-++++ b/lib/rules.c
-+@@ -434,9 +434,8 @@ Mangle(input, control)		/* returns a pointer to a controlled Mangle */
-+ {
-+     int limit;
-+     register char *ptr;
-+-    static char area[STRINGSIZE];
-+-    char area2[STRINGSIZE];
-+-    area[0] = '\0';
-++    static char area[STRINGSIZE * 2] = {0};
-++    char area2[STRINGSIZE * 2] = {0};
-+     strcpy(area, input);
-+ 
-+     for (ptr = control; *ptr; ptr++)
-+-- 
-+2.9.3
-+
-diff --git a/package/cracklib/0003-Force-grep-to-treat-the-input-as-text-when-formattin.patch b/package/cracklib/0003-Force-grep-to-treat-the-input-as-text-when-formattin.patch
-new file mode 100644
-index 0000000..b05a69c
---- /dev/null
-+++ b/package/cracklib/0003-Force-grep-to-treat-the-input-as-text-when-formattin.patch
-@@ -0,0 +1,30 @@
-+From d27062fe7a520d5791f7a56d175a5cb6a39bae61 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-+Date: Tue, 18 Apr 2017 12:00:39 +0200
-+Subject: [PATCH] Force grep to treat the input as text when formatting word
-+ files.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-+---
-+ util/cracklib-format | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/util/cracklib-format b/util/cracklib-format
-+index 1d7be5b..b1de8e8 100644
-+--- a/util/cracklib-format
-++++ b/util/cracklib-format
-+@@ -4,7 +4,7 @@
-+ # into cracklib-packer
-+ #
-+ gzip -cdf "$@" |
-+-    grep -v '^\(#\|$\)' |
-++    grep -a -v '^\(#\|$\)' |
-+     tr '[A-Z]' '[a-z]' |
-+     tr -cd '\012[a-z][0-9]' |
-+     env LC_ALL=C sort -u
-+-- 
-+2.9.3
-+
-diff --git a/package/cracklib/Config.in b/package/cracklib/Config.in
-new file mode 100644
-index 0000000..4a0f43f
---- /dev/null
-+++ b/package/cracklib/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_CRACKLIB
-+	bool "cracklib"
-+	help
-+	  CrackLib tests passwords to determine whether they match
-+	  certain security-oriented characteristics, with the purpose
-+	  of stopping users from choosing passwords that are easy to
-+	  guess. CrackLib performs several tests on passwords: it
-+	  tries to generate words from a username and gecos entry and
-+	  checks those words against the password; it checks for
-+	  simplistic patterns in passwords; and it checks for the
-+	  password in a dictionary.
-+
-+	  https://github.com/cracklib/cracklib
-+
-+if BR2_PACKAGE_CRACKLIB
-+
-+config BR2_PACKAGE_CRACKLIB_TOOLS
-+	bool "install tools"
-+	help
-+	  Install cracklib command line tools for creating dicts.
-+
-+config BR2_PACKAGE_CRACKLIB_FULL_DICT
-+	bool "full dict"
-+	help
-+	  Install the full cracklib dict (requires about 8Mb extra
-+	  target space).
-+
-+endif
-diff --git a/package/cracklib/cracklib.hash b/package/cracklib/cracklib.hash
-new file mode 100644
-index 0000000..3038a47
---- /dev/null
-+++ b/package/cracklib/cracklib.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256	17cf76943de272fd579ed831a1fd85339b393f8d00bf9e0d17c91e972f583343	cracklib-2.9.6.tar.gz
-+sha256	27973245225eeb9d0090e97f3dea4197dec99b64d9d3a791a60298f3b021824c	cracklib-words-2.9.6.gz
-diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
-new file mode 100644
-index 0000000..2fa3d3b
---- /dev/null
-+++ b/package/cracklib/cracklib.mk
-@@ -0,0 +1,52 @@
-+################################################################################
-+#
-+# cracklib
-+#
-+################################################################################
-+
-+CRACKLIB_VERSION = 2.9.6
-+CRACKLIB_SITE = https://github.com/cracklib/cracklib/releases/download/cracklib-$(CRACKLIB_VERSION)
-+CRACKLIB_LICENSE = LGPL-2.1
-+CRACKLIB_LICENSE_FILES = COPYING.LIB
-+CRACKLIB_INSTALL_STAGING = YES
-+CRACKLIB_DEPENDENCIES = host-cracklib
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+CRACKLIB_CONF_OPTS += --with-zlib
-+CRACKLIB_DEPENDENCIES += zlib
-+else
-+CRACKLIB_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+CRACKLIB_CONF_OPTS += --with-python
-+CRACKLIB_DEPENDENCIES += python
-+else
-+CRACKLIB_CONF_OPTS += --without-python
-+endif
-+
-+HOST_CRACKLIB_CONF_OPTS += --without-python --without-zlib
-+
-+ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
-+CRACKLIB_EXTRA_DOWNLOADS = cracklib-words-$(CRACKLIB_VERSION).gz
-+CRACKLIB_DICT_SOURCE = $(DL_DIR)/cracklib-words-$(CRACKLIB_VERSION).gz
-+else
-+CRACKLIB_DICT_SOURCE = $(@D)/dicts/cracklib-small
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
-+define CRACKLIB_REMOVE_TOOLS
-+	rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
-+endef
-+CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_REMOVE_TOOLS
-+endif
-+
-+define CRACKLIB_BUILD_DICT
-+	$(HOST_MAKE_ENV) cracklib-format $(CRACKLIB_DICT_SOURCE) | \
-+		$(HOST_MAKE_ENV) cracklib-packer $(TARGET_DIR)/usr/share/cracklib/pw_dict
-+	rm $(TARGET_DIR)/usr/share/cracklib/cracklib-small
-+endef
-+CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_BUILD_DICT
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 3522415..fb2f99c 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -44,6 +44,13 @@ else
- LINUX_PAM_CONF_OPTS += --disable-audit
- endif
+diff --git a/package/acpid/Config.in b/package/acpid/Config.in
+index 5aec7f1..2bd83ea 100644
+--- a/package/acpid/Config.in
++++ b/package/acpid/Config.in
+@@ -4,7 +4,8 @@ config BR2_PACKAGE_ACPID
+ 	help
+ 	  Advanced Configuration and Power Interface event daemon.
  
-+ifeq ($(BR2_PACKAGE_CRACKLIB),y)
-+LINUX_PAM_CONF_OPTS += --enable-cracklib
-+LINUX_PAM_DEPENDENCIES += cracklib
-+else
-+LINUX_PAM_CONF_OPTS += --disable-cracklib
-+endif
-+
- # Install default pam config (deny everything except login)
- define LINUX_PAM_INSTALL_CONFIG
- 	$(INSTALL) -m 0644 -D package/linux-pam/login.pam \
+-	  Acpid is designed to notify user-space programs of ACPI events,
+-	  and allows you to configure specific actions for specific events.
++	  Acpid is designed to notify user-space programs of ACPI
++	  events, and allows you to configure specific actions for
++	  specific events.
+ 
+ 	  http://sourceforge.net/projects/acpid2/
+diff --git a/package/aespipe/Config.in b/package/aespipe/Config.in
+index df99523..2c2ff5c 100644
+--- a/package/aespipe/Config.in
++++ b/package/aespipe/Config.in
+@@ -2,9 +2,10 @@ config BR2_PACKAGE_AESPIPE
+ 	bool "aespipe"
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  aespipe program is AES encrypting or decrypting pipe. It reads from
+-	  standard input and writes to standard output. It can be used to
+-	  create and restore encrypted tar or cpio archives. It can be used to
+-	  encrypt and decrypt loop-AES compatible encrypted disk images.
++	  aespipe program is AES encrypting or decrypting pipe. It reads
++	  from standard input and writes to standard output. It can be
++	  used to create and restore encrypted tar or cpio archives.
++	  It can be used to encrypt and decrypt loop-AES compatible
++	  encrypted disk images.
+ 
+ 	  http://koti.tnnet.fi/jari.ruusu/linux/
+diff --git a/package/agentpp/Config.in b/package/agentpp/Config.in
+index e591fb5..9e6eeed 100644
+--- a/package/agentpp/Config.in
++++ b/package/agentpp/Config.in
+@@ -5,13 +5,14 @@ config BR2_PACKAGE_AGENTPP
+ 	depends on !BR2_STATIC_LIBS # snmp++
+ 	select BR2_PACKAGE_SNMPPP
+ 	help
+-	  AGENT++ is a set of C++ classes which provides a complete protocol
+-	  engine and dispatch table for the development of SNMP agents.
+-	  AGENT++ is a multilingual API which supports SNMPv1, SNMPv2c, and
+-	  SNMPv3. It provides various C++ classes implementing prototypes for
+-	  scalar and table SNMP managed objects that can be customized by
+-	  derivation. Additional classes support the development of proxy
+-	  agents as well as sending notifications.
++	  AGENT++ is a set of C++ classes which provides a complete
++	  protocol engine and dispatch table for the development of SNMP
++	  agents. AGENT++ is a multilingual API which supports SNMPv1,
++	  SNMPv2c, and SNMPv3. It provides various C++ classes
++	  implementing prototypes for scalar and table SNMP managed
++	  objects that can be customized by derivation. Additional
++	  classes support the development of proxy agents as well as
++	  sending notifications.
+ 
+ 	  SNMPv3 support is enabled if SNMP++ enables it.
+ 
+diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
+index c355b2c..995d379 100644
+--- a/package/alsa-lib/Config.in
++++ b/package/alsa-lib/Config.in
+@@ -13,8 +13,8 @@ menuconfig BR2_PACKAGE_ALSA_LIB
+ 	# is fixed
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+ 	help
+-	  The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
+-	  functionality to the Linux operating system.
++	  The Advanced Linux Sound Architecture (ALSA) provides audio
++	  and MIDI functionality to the Linux operating system.
+ 
+ 	  http://www.alsa-project.org/
+ 
+diff --git a/package/apache/Config.in b/package/apache/Config.in
+index 5916d30..693ee20 100644
+--- a/package/apache/Config.in
++++ b/package/apache/Config.in
+@@ -6,11 +6,12 @@ config BR2_PACKAGE_APACHE
+ 	select BR2_PACKAGE_APR_UTIL
+ 	select BR2_PACKAGE_PCRE
+ 	help
+-	  The Apache HTTP Server Project is an effort to develop and maintain an
+-	  open-source HTTP server for modern operating systems including UNIX
+-	  and Windows NT. The goal of this project is to provide a secure,
+-	  efficient and extensible server that provides HTTP services in sync
+-	  with the current HTTP standards.
++	  The Apache HTTP Server Project is an effort to develop and
++	  maintain an open-source HTTP server for modern operating
++	  systems including UNIX and Windows NT. The goal of this
++	  project is to provide a secure, efficient and extensible
++	  server that provides HTTP services in sync with the current
++	  HTTP standards.
+ 
+ 	  http://httpd.apache.org
+ 
+diff --git a/package/apr/Config.in b/package/apr/Config.in
+index 5757272..67de925 100644
+--- a/package/apr/Config.in
++++ b/package/apr/Config.in
+@@ -4,9 +4,10 @@ config BR2_PACKAGE_APR
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork() in apr_proc_fork()
+ 	help
+-	  The mission of the Apache Portable Runtime (APR) project is to create
+-	  and maintain software libraries that provide a predictable and
+-	  consistent interface to underlying platform-specific implementations
++	  The mission of the Apache Portable Runtime (APR) project is to
++	  create and maintain software libraries that provide a
++	  predictable and consistent interface to underlying
++	  platform-specific implementations
+ 
+ 	  http://apr.apache.org/
+ 
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 93020f7..41c1bb3 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -8,9 +8,10 @@ config BR2_PACKAGE_ASSIMP
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Open Asset Import Library (assimp) is a portable Open Source
+-	  library to import various well-known 3D model formats in a uniform
+-	  manner. The most recent version also knows how to export 3d files
+-	  and is therefore suitable as a general-purpose 3D model converter.
++	  library to import various well-known 3D model formats in a
++	  uniform manner. The most recent version also knows how to
++	  export 3d files and is therefore suitable as a general-purpose
++	  3D model converter.
+ 
+ 	  http://www.assimp.org
+ 
+diff --git a/package/aubio/Config.in b/package/aubio/Config.in
+index c4c60db..18e7c4c 100644
+--- a/package/aubio/Config.in
++++ b/package/aubio/Config.in
+@@ -3,10 +3,10 @@ config BR2_PACKAGE_AUBIO
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+-	  aubio is a tool designed for the extraction of annotations from
+-	  audio signals. Its features include segmenting a sound file
+-	  before each of its attacks, performing pitch detection, tapping
+-	  the beat and producing midi streams from live audio.
++	  aubio is a tool designed for the extraction of annotations
++	  from audio signals. Its features include segmenting a sound
++	  file before each of its attacks, performing pitch detection,
++	  tapping the beat and producing midi streams from live audio.
+ 
+ 	  Because these tasks are difficult, we thought it was important
+ 	  to gather them in a dedicated library. To increase the fun, we
+diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
+index 93999fb..89b1f42 100644
+--- a/package/aufs-util/Config.in
++++ b/package/aufs-util/Config.in
+@@ -28,7 +28,8 @@ config BR2_PACKAGE_AUFS_UTIL_VERSION
+ 	  Usually, the sha1 of the cset you want to use; avoid using a
+ 	  branch name as this yields non-reproducible builds.
+ 
+-	  See the following resources to see what versions are available:
++	  See the following resources to see what versions are 
++	  available:
+ 
+ 	  https://sourceforge.net/p/aufs/aufs-util/ci/master/tree/
+ 
+diff --git a/package/autossh/Config.in b/package/autossh/Config.in
+index 6d1a085..351e23f 100644
+--- a/package/autossh/Config.in
++++ b/package/autossh/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_AUTOSSH
+ 	depends on BR2_PACKAGE_DROPBEAR || BR2_PACKAGE_OPENSSH
+ 	help
+ 	  autossh is a program to start a copy of ssh and monitor it,
+-	  restarting it as necessary should it die or stop passing traffic.
++	  restarting it as necessary should it die or stop passing
++	  traffic.
+ 
+ 	  http://www.harding.motd.ca/autossh/
 -- 
 2.9.3
