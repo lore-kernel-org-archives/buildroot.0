@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri,  5 May 2017 10:08:07 -0400
-Subject: [Buildroot] [PATCH v2 3/4] fix help text wrapping for configs c
+Date: Fri,  5 May 2017 10:08:08 -0400
+Subject: [Buildroot] [PATCH v2 4/4] fix help text wrapping for configs d
 In-Reply-To: <20170505140808.17696-1-aduskett@codeblue.com>
 References: <20170505140808.17696-1-aduskett@codeblue.com>
-Message-ID: <20170505140808.17696-3-aduskett@codeblue.com>
+Message-ID: <20170505140808.17696-4-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 The check-package script when ran gives warnings on text wrapping
 on all of these Config files.  This patch cleans up all warnings
 related to the text wrapping for the Config files starting with
-the letter c in the package directory.
+the letter d in the package directory.
 
 The appropriate indentation is: <tab><2 spaces><62 chars>
 See http://nightly.buildroot.org/#writing-rules-config-in for more
@@ -24,426 +24,374 @@ Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 v1 -> v2:
   - Added patch to series.
 
- package/ca-certificates/Config.in |  3 ++-
- package/canfestival/Config.in     | 10 ++++----
- package/ccrypt/Config.in          |  3 ++-
- package/cegui06/Config.in         | 12 +++++-----
- package/celt051/Config.in         |  8 +++----
- package/cjson/Config.in           |  4 ++--
- package/clamav/Config.in          |  4 ++--
- package/clapack/Config.in         |  9 +++----
- package/collectd/Config.in        | 50 +++++++++++++++++++++++----------------
- package/cppdb/Config.in           |  7 +++---
- package/cpuload/Config.in         |  7 +++---
- package/crda/Config.in            |  4 ++--
- package/cryptodev/Config.in       |  4 ++--
- package/curlftpfs/Config.in       |  4 ++--
- package/cvs/Config.in             |  3 ++-
- package/cwiid/Config.in           |  4 ++--
- 16 files changed, 76 insertions(+), 60 deletions(-)
+ package/dbus-triggerd/Config.in      |  4 ++--
+ package/ddrescue/Config.in           |  6 +++---
+ package/dialog/Config.in             |  7 ++++---
+ package/directfb-examples/Config.in  |  6 +++---
+ package/directfb/Config.in           | 12 +++++++-----
+ package/dmalloc/Config.in            |  8 ++++----
+ package/dmraid/Config.in             |  5 +++--
+ package/dnsmasq/Config.in            |  3 ++-
+ package/doom-wad/Config.in           |  6 ++++--
+ package/dovecot-pigeonhole/Config.in |  6 +++---
+ package/dovecot/Config.in            | 10 +++++-----
+ package/dstat/Config.in              | 25 +++++++++++++------------
+ package/dtach/Config.in              |  7 ++++---
+ package/dtc/Config.in                | 12 +++++++-----
+ package/dtc/Config.in.host           |  3 ++-
+ package/dvbsnoop/Config.in           | 28 ++++++++++++++--------------
+ package/dvdauthor/Config.in          | 11 ++++++-----
+ 17 files changed, 86 insertions(+), 73 deletions(-)
 
-diff --git a/package/ca-certificates/Config.in b/package/ca-certificates/Config.in
-index a278a62..6bb7182 100644
---- a/package/ca-certificates/Config.in
-+++ b/package/ca-certificates/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_CA_CERTIFICATES
- 	  connections.
- 
- 	  It includes, among others, certificate authorities used by the
--	  Debian infrastructure and those shipped with Mozilla's browsers.
-+	  Debian infrastructure and those shipped with Mozilla's
-+	  browsers.
- 
- 	  http://anonscm.debian.org/gitweb/?p=collab-maint/ca-certificates.git
-diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
-index ca94956..8300e26 100644
---- a/package/canfestival/Config.in
-+++ b/package/canfestival/Config.in
-@@ -16,8 +16,8 @@ config BR2_PACKAGE_CANFESTIVAL
- 	depends on !BR2_STATIC_LIBS
+diff --git a/package/dbus-triggerd/Config.in b/package/dbus-triggerd/Config.in
+index a39f911..331c414 100644
+--- a/package/dbus-triggerd/Config.in
++++ b/package/dbus-triggerd/Config.in
+@@ -4,8 +4,8 @@ config BR2_PACKAGE_DBUS_TRIGGERD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_PACKAGE_DBUS
  	help
- 	  CanFestival is an OpenSource CANOpen framework, licensed under
--	  LGPLv2.1 and GPLv2 for some drivers (virtual_kernel, lincan and
--	  copcican_comedi).
-+	  LGPLv2.1 and GPLv2 for some drivers (virtual_kernel, lincan
-+	  and copcican_comedi).
+-	  dbus-triggerd is a tool to trigger shell-commands upon receiving
+-	  a given dbus-signal.
++	  dbus-triggerd is a tool to trigger shell-commands upon
++	  receiving a given dbus-signal.
  
- 	  http://www.canfestival.org
+ 	  http://gareus.org/oss/dbustriggerd/start
  
-@@ -78,9 +78,9 @@ config BR2_PACKAGE_CANFESTIVAL_DRIVER
- config BR2_PACKAGE_CANFESTIVAL_ADDITIONAL_OPTIONS
- 	string "additional configure options"
+diff --git a/package/ddrescue/Config.in b/package/ddrescue/Config.in
+index 2ec3e7e..a58561c 100644
+--- a/package/ddrescue/Config.in
++++ b/package/ddrescue/Config.in
+@@ -2,9 +2,9 @@ config BR2_PACKAGE_DDRESCUE
+ 	bool "ddrescue"
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	help
--	  Additional options can be passed directly to the configure script
--	  (e.g.: --MAX_CAN_BUS_ID=..., --SDO_MAX_LENGTH_TRANSFER=...,
--	  --SDO_BLOCK_SIZE=...).
-+	  Additional options can be passed directly to the configure
-+	  script (e.g.: --MAX_CAN_BUS_ID=...,
-+	  --SDO_MAX_LENGTH_TRANSFER=..., --SDO_BLOCK_SIZE=...).
+-	  GNU ddrescue is a data recovery tool. It copies data from one file
+-	  or block device (hard disc, cdrom, etc) to another, trying to
+-	  rescue the good parts first in case of read errors.
++	  GNU ddrescue is a data recovery tool. It copies data from one
++	  file or block device (hard disc, cdrom, etc) to another,
++	  trying to rescue the good parts first in case of read errors.
  
- config BR2_PACKAGE_CANFESTIVAL_INSTALL_EXAMPLES
- 	bool "install examples"
-diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
-index ef5a7ee..109271a 100644
---- a/package/ccrypt/Config.in
-+++ b/package/ccrypt/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CCRYPT
- 	bool "ccrypt"
+ 	  http://www.gnu.org/software/ddrescue/ddrescue.html
+ 
+diff --git a/package/dialog/Config.in b/package/dialog/Config.in
+index 73b7176..830427e 100644
+--- a/package/dialog/Config.in
++++ b/package/dialog/Config.in
+@@ -6,8 +6,9 @@ config BR2_PACKAGE_DIALOG
  	help
--	  ccrypt is a utility for encrypting and decrypting files and streams.
-+	  ccrypt is a utility for encrypting and decrypting files and
-+	  streams.
+ 	  dialog - display dialog boxes from shell scripts
  
- 	  http://ccrypt.sourceforge.net/
-diff --git a/package/cegui06/Config.in b/package/cegui06/Config.in
-index e6a024a..0139d32 100644
---- a/package/cegui06/Config.in
-+++ b/package/cegui06/Config.in
-@@ -10,11 +10,11 @@ config BR2_PACKAGE_CEGUI06
+-	  This application provides a method of displaying several different
+-	  types of dialog boxes from shell scripts. This allows a developer
+-	  of a script to interact with the user in a much friendlier manner.
++	  This application provides a method of displaying several
++	  different types of dialog boxes from shell scripts. This
++	  allows a developer of a script to interact with the user in a
++	  much friendlier manner.
+ 
+ 	  http://invisible-island.net/dialog/dialog.html
+diff --git a/package/directfb-examples/Config.in b/package/directfb-examples/Config.in
+index eef9f5c..216e036 100644
+--- a/package/directfb-examples/Config.in
++++ b/package/directfb-examples/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES
+ 	bool "directfb examples"
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	help
+-	  The DirectFB-examples package contains a set of simple DirectFB
+-	  applications that can be used to test and demonstrate various
+-	  DirectFB features.
++	  The DirectFB-examples package contains a set of simple
++	  DirectFB applications that can be used to test and demonstrate
++	  various DirectFB features.
+ 
+ 	  http://directfb.org/downloads/Extras/README.DirectFB-examples
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index e3b53e0..554abe2 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -9,11 +9,13 @@ config BR2_PACKAGE_DIRECTFB
  	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_ZLIB
  	help
--	  Crazy Eddie's GUI System is a free library providing windowing and
--	  widgets for graphics APIs / engines where such functionality is not
--	  natively available, or severely lacking. The library is object
--	  orientated, written in C++, and targeted at games developers who
--	  should be spending their time creating great games, not building
--	  GUI sub-systems!
-+	  Crazy Eddie's GUI System is a free library providing windowing
-+	  and widgets for graphics APIs / engines where such
-+	  functionality is not natively available, or severely lacking.
-+	  The library is object orientated, written in C++, and targeted
-+	  at games developers who should be spending their time creating
-+	  great games, not building GUI sub-systems!
+-	  DirectFB (Direct Frame Buffer) is a set of graphics APIs implemented
+-	  on top of the Linux Frame Buffer (fbdev) abstraction layer. It is an
+-	  alternative to X11 with a smaller memory footprint that still has an
+-	  integrated windowing system. As of 4 October 2015, DirectFB's website
+-	  http://www.directfb.org/ is down. See alternative site listed below.
++	  DirectFB (Direct Frame Buffer) is a set of graphics APIs
++	  implemented on top of the Linux Frame Buffer (fbdev)
++	  abstraction layer. It is an alternative to X11 with a smaller
++	  memory footprint that still has an integrated windowing
++	  system. As of 4 October 2015, DirectFB's website
++	  http://www.directfb.org/ is down. See alternative site listed
++	  below.
  
- 	  http://www.cegui.org.uk/
-diff --git a/package/celt051/Config.in b/package/celt051/Config.in
-index 035e262..e151319 100644
---- a/package/celt051/Config.in
-+++ b/package/celt051/Config.in
-@@ -5,10 +5,10 @@ config BR2_PACKAGE_CELT051
- 	  The CELT ultra-low delay audio codec
+ 	  http://elinux.org/DirectFB
  
- 	  The CELT codec is a compression algorithm for audio. Like MP3,
--	  Vorbis, and AAC it is suitable for transmitting music with high
--	  quality. Unlike these formats CELT imposes very little delay on
--	  the signal, even less than is typical for speech centric formats
--	  like Speex, GSM, or G.729.
-+	  Vorbis, and AAC it is suitable for transmitting music with
-+	  high quality. Unlike these formats CELT imposes very little
-+	  delay on the signal, even less than is typical for speech
-+	  centric formats like Speex, GSM, or G.729.
- 
- 	  Note: this is version 0.5.1.3 of celt.
- 
-diff --git a/package/cjson/Config.in b/package/cjson/Config.in
-index 04eff4c..ee18fce 100644
---- a/package/cjson/Config.in
-+++ b/package/cjson/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_CJSON
- 	bool "cJSON"
+diff --git a/package/dmalloc/Config.in b/package/dmalloc/Config.in
+index 03d9f97..e5be109 100644
+--- a/package/dmalloc/Config.in
++++ b/package/dmalloc/Config.in
+@@ -5,9 +5,9 @@ config BR2_PACKAGE_DMALLOC
+ 	# different segments".
+ 	depends on !(BR2_microblaze && BR2_ENABLE_DEBUG)
  	help
--	  An ultra-lightweight, portable, single-file, simple-as-can-be ANSI-C
--	  compliant JSON parser, under MIT license.
-+	  An ultra-lightweight, portable, single-file, simple-as-can-be
-+	  ANSI-C compliant JSON parser, under MIT license.
+-	  A debug memory allocation library which is a drop in replacement for
+-	  the system's malloc, realloc, calloc, free and other memory management
+-	  routines while providing powerful debugging facilities configurable at
+-	  runtime.
++	  A debug memory allocation library which is a drop in
++	  replacement for the system's malloc, realloc, calloc, free and
++	  other memory management routines while providing powerful
++	  debugging facilities configurable at runtime.
  
- 	  https://github.com/DaveGamble/cJSON
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 051df0d..a962103 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -7,8 +7,8 @@ config BR2_PACKAGE_CLAMAV
+ 	  http://dmalloc.com/
+diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
+index 583f3f2..da951b1 100644
+--- a/package/dmraid/Config.in
++++ b/package/dmraid/Config.in
+@@ -6,8 +6,9 @@ config BR2_PACKAGE_DMRAID
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
+ 	select BR2_PACKAGE_LVM2
+ 	help
+-	  dmraid discovers, activates, deactivates and displays properties
+-	  of software RAID sets (eg, ATARAID) and contained DOS partitions.
++	  dmraid discovers, activates, deactivates and displays 
++	  properties of software RAID sets (eg, ATARAID) and contained
++	  DOS partitions.
+ 
+ 	  dmraid uses the Linux device-mapper to create devices with
+ 	  respective mappings for the ATARAID sets discovered.
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+index b4f34b8..936b1de 100644
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -34,7 +34,8 @@ config BR2_PACKAGE_DNSMASQ_IDN
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Enable IDN support in dnsmasq.
+-	  This option is a big space taker since it pulls in many libraries.
++	  This option is a big space taker since it pulls in many
++	  libraries.
+ 
+ config BR2_PACKAGE_DNSMASQ_LUA
+ 	bool "Lua scripting support"
+diff --git a/package/doom-wad/Config.in b/package/doom-wad/Config.in
+index edd299b..6f51cfb 100644
+--- a/package/doom-wad/Config.in
++++ b/package/doom-wad/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_DOOM_WAD
+ 	bool "shareware Doom WAD file"
+ 	depends on BR2_PACKAGE_CHOCOLATE_DOOM || BR2_PACKAGE_PRBOOM
+ 	help
+-	  This will install the shareware wad data file for the doom game.
++	  This will install the shareware wad data file for the doom
++	  game.
+ 
+-	  The wad file will be placed in the /usr/share/games/doom directory.
++	  The wad file will be placed in the /usr/share/games/doom
++	  directory.
+diff --git a/package/dovecot-pigeonhole/Config.in b/package/dovecot-pigeonhole/Config.in
+index 83f5287..bd6826b 100644
+--- a/package/dovecot-pigeonhole/Config.in
++++ b/package/dovecot-pigeonhole/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_DOVECOT_PIGEONHOLE
+ 	bool "dovecot-pigeonhole"
+ 	help
+-	  Pigeonhole is the name of the project that adds support for the Sieve
+-	  language (RFC 5228) and the ManageSieve protocol (RFC 5804) to the
+-	  Dovecot Secure IMAP Server.
++	  Pigeonhole is the name of the project that adds support for
++	  the Sieve language (RFC 5228) and the ManageSieve protocol
++	  (RFC 5804) to the Dovecot Secure IMAP Server.
+ 
+ 	  http://pigeonhole.dovecot.org
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index b93e09f..377fd4d 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -5,11 +5,11 @@ config BR2_PACKAGE_DOVECOT
  	select BR2_PACKAGE_OPENSSL
  	select BR2_PACKAGE_ZLIB
  	help
--	  ClamAV is an open source antivirus engine for detecting trojans,
--	  viruses, malware & other malicious threats.
-+	  ClamAV is an open source antivirus engine for detecting
-+	  trojans, viruses, malware & other malicious threats.
+-	  Dovecot is an open source IMAP and POP3 email server for Linux/UNIX-
+-	  like systems, written with security primarily in mind. Dovecot is an
+-	  excellent choice for both small and large installations. It's fast,
+-	  simple to set up, requires no special administration and it uses very
+-	  little memory.
++	  Dovecot is an open source IMAP and POP3 email server for
++	  Linux/UNIX- like systems, written with security primarily in
++	  mind. Dovecot is an excellent choice for both small and large
++	  installations. It's fast, simple to set up, requires no
++	  special administration and it uses very little memory.
  
- 	  http://www.clamav.net
+ 	  http://www.dovecot.org
  
-diff --git a/package/clapack/Config.in b/package/clapack/Config.in
-index 7d1f940..e5be0b6 100644
---- a/package/clapack/Config.in
-+++ b/package/clapack/Config.in
-@@ -23,10 +23,11 @@ config BR2_PACKAGE_CLAPACK_ARITH_H
- 	string "Custom BLAS arith.h"
- 	depends on BR2_PACKAGE_CLAPACK
+diff --git a/package/dstat/Config.in b/package/dstat/Config.in
+index 6536a5e..110aee8 100644
+--- a/package/dstat/Config.in
++++ b/package/dstat/Config.in
+@@ -6,19 +6,20 @@ config BR2_PACKAGE_DSTAT
+ 	depends on !BR2_STATIC_LIBS # python
+ 	select BR2_PACKAGE_PYTHON
  	help
--	  To optimize BLAS library for the hardware, an 'arith.h' header should
--	  be provided.
-+	  To optimize BLAS library for the hardware, an 'arith.h' header
-+	  should be provided.
+-	  Dstat, written in Python, is a versatile replacement for vmstat,
+-	  iostat, netstat and ifstat. Dstat overcomes some of their limitations
+-	  and adds some extra features, more counters and flexibility. Dstat is
+-	  handy for monitoring systems during performance tuning tests,
+-	  benchmarks or troubleshooting.
+-	  Dstat allows you to view all of your system resources in real-time,
+-	  you can e.g. compare disk utilization in combination with interrupts
+-	  from your IDE controller, or compare the network bandwidth numbers
+-	  directly with the disk throughput (in the same interval).
++	  Dstat, written in Python, is a versatile replacement for
++	  vmstat, iostat, netstat and ifstat. Dstat overcomes some of
++	  their limitations and adds some extra features, more counters
++	  and flexibility. Dstat is handy for monitoring systems during
++	  performance tuning tests, benchmarks or troubleshooting.
++	  Dstat allows you to view all of your system resources in
++	  real-time, you can e.g. compare disk utilization in
++	  combination with interrupts from your IDE controller, or
++	  compare the network bandwidth numbers directly with the disk
++	  throughput (in the same interval).
  
- 	  If empty, the library will not be optimized by the compiler.
+-	  Note that to get proper output, your terminal size should be known by
+-	  the termios subsystem. This can be done by running the 'resize'
+-	  utility of busybox.
++	  Note that to get proper output, your terminal size should be
++	  known by the termios subsystem. This can be done by running
++	  the 'resize' utility of busybox.
  
--	  In any case an 'arithchk' program is built (but not installed), to be run
--	  on the target to generate this arith.h header.
-+	  In any case an 'arithchk' program is built
-+	  (but not installed), to be run on the target to generate this
-+	  arith.h header.
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 47bfe95..3921d7c 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -89,8 +89,8 @@ config BR2_PACKAGE_COLLECTD_SYSLOG
- config BR2_PACKAGE_COLLECTD_THRESHOLD
- 	bool "threshold"
+ 	  http://dag.wieers.com/home-made/dstat/
+ 
+diff --git a/package/dtach/Config.in b/package/dtach/Config.in
+index bea112b..3e6e493 100644
+--- a/package/dtach/Config.in
++++ b/package/dtach/Config.in
+@@ -2,8 +2,9 @@ config BR2_PACKAGE_DTACH
+ 	bool "dtach"
+ 	depends on BR2_USE_MMU # fork()
  	help
--	  Checks values against configured thresholds and creates notifications
--	  if values are out of bounds.
-+	  Checks values against configured thresholds and creates
-+	  notifications if values are out of bounds.
+-	  dtach is a tiny program that emulates the detach feature of screen,
+-	  allowing you to run a program in an environment that is protected
+-	  from the controlling terminal and attach to it later.
++	  dtach is a tiny program that emulates the detach feature of
++	  screen, allowing you to run a program in an environment that
++	  is protected from the controlling terminal and attach to it
++	  later.
  
- endmenu
+ 	  http://dtach.sourceforge.net/
+diff --git a/package/dtc/Config.in b/package/dtc/Config.in
+index 39223f7..c3482e6 100644
+--- a/package/dtc/Config.in
++++ b/package/dtc/Config.in
+@@ -6,7 +6,8 @@ config BR2_PACKAGE_DTC
+ 	  a given format and outputs a device-tree in another format.
  
-@@ -140,17 +140,20 @@ config BR2_PACKAGE_COLLECTD_CGROUPS
- config BR2_PACKAGE_COLLECTD_CONNTRACK
- 	bool "conntrack"
+ 	  Note that only the library is installed.
+-	  If you want the programs, say 'y' here, and to "dtc programs", below.
++	  If you want the programs, say 'y' here, and to "dtc programs",
++	  below.
+ 
+ 	  https://git.kernel.org/cgit/utils/dtc/dtc.git
+ 
+@@ -19,13 +20,14 @@ config BR2_PACKAGE_DTC_PROGRAMS
+ 	    - convert-dtsv0     convert from version 0 to version 1
+ 	    - dtc               the device tree compiler
+ 	    - dtdiff            compare two device trees (needs bash)
+-	    - fdtdump           print a readable version of a flat device tree
++	    - fdtdump           print a readable version of a 
++	                        flat device tree
+ 	    - fdtget            read values from device tree
+ 	    - fdtput            write a property value to a device tree
+ 
+-	  Note: dtdiff requires bash, so if bash is not selected, dtdiff will
+-	        be removed from the target file system. Enable bash if you
+-	        need dtdiff on the target.
++	  Note: dtdiff requires bash, so if bash is not selected, dtdiff
++	  will be removed from the target file system. Enable bash if
++	  you need dtdiff on the target.
+ 
+ comment "dtdiff will not be installed: it requires bash"
+ 	depends on BR2_PACKAGE_DTC_PROGRAMS
+diff --git a/package/dtc/Config.in.host b/package/dtc/Config.in.host
+index cbabf0a..f80a49b 100644
+--- a/package/dtc/Config.in.host
++++ b/package/dtc/Config.in.host
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_HOST_DTC
+ 	  The Device Tree Compiler, dtc, takes as input a device-tree in
+ 	  a given format and outputs a device-tree in another format.
+ 
+-	  Install host tools: dtc, convert-dtsv0, fdtdump, fdtget and fdtput.
++	  Install host tools: dtc, convert-dtsv0, fdtdump, fdtget and
++	  fdtput.
+ 
+ 	  https://git.kernel.org/cgit/utils/dtc/dtc.git
+diff --git a/package/dvbsnoop/Config.in b/package/dvbsnoop/Config.in
+index fc34c34..fb63fa4 100644
+--- a/package/dvbsnoop/Config.in
++++ b/package/dvbsnoop/Config.in
+@@ -1,21 +1,21 @@
+ config BR2_PACKAGE_DVBSNOOP
+ 	bool "dvbsnoop"
  	help
--	  Collects the number of entries in Linux's connection tracking table.
-+	  Collects the number of entries in Linux's connection tracking
-+	  table.
+-	  Dvbsnoop is just a simple tool to analyze, view or debug a transport
+-	  stream (TS), program elementary stream (PES) or even a program stream
+-	  (PS). Dvbsnoop is trying to get input mostly direct from a frontend
+-	  (satellite or cable tuner inside a set-top box for example) via DVB
+-	  APIv3 to view into a TS, or a demux to view PES or PS (also mostly
+-	  inside the set-top box or even PCI Card or USB Plug) but also from a
+-	  file (recorded TS).
+-	  Dvbsnoop is working well on SD transport streams but may have some
+-	  limited functionality on HD transport streams (DVB-{C,S,T}2 because
+-	  of missing knowledge how to handle it.
++	  Dvbsnoop is just a simple tool to analyze, view or debug a
++	  transport stream (TS), program elementary stream (PES) or even
++	  a program stream (PS). Dvbsnoop is trying to get input mostly
++	  direct from a frontend (satellite or cable tuner inside a
++	  set-top box for example) via DVB APIv3 to view into a TS, or a
++	  demux to view PES or PS (also mostly inside the set-top box or
++	  even PCI Card or USB Plug) but also from a file (recorded TS).
++	  Dvbsnoop is working well on SD transport streams but may have
++	  some limited functionality on HD transport streams
++	  (DVB-{C,S,T}2 because of missing knowledge how to handle it.
  
- config BR2_PACKAGE_COLLECTD_CONTEXTSWITCH
- 	bool "contextswitch"
+-	  Dvbsnoop itself doesn't do the tuning on the frontend, this has to be
+-	  done by external helpers or manually driver call.
+-	  The dvbsnoop tool was written while developing the software Neutrino
+-	  on the set-top box DBox2.
++	  Dvbsnoop itself doesn't do the tuning on the frontend, this
++	  has to be done by external helpers or manually driver call.
++	  The dvbsnoop tool was written while developing the software
++	  Neutrino on the set-top box DBox2.
+ 
+ 	  http://dvbsnoop.sourceforge.net
+ 	  http://en.wikipedia.org/wiki/DBox2
+diff --git a/package/dvdauthor/Config.in b/package/dvdauthor/Config.in
+index 8b2bcb3..9ba5411 100644
+--- a/package/dvdauthor/Config.in
++++ b/package/dvdauthor/Config.in
+@@ -4,11 +4,12 @@ config BR2_PACKAGE_DVDAUTHOR
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_LIBPNG
  	help
--	  Collects the number of context switches done by the operating system.
-+	  Collects the number of context switches done by the operating
-+	  system.
+-	  DVDAuthor is a set of tools to help you author the file and directory
+-	  structure of a DVD-Video disc, including programmatic commands for
+-	  implementing interactive behaviour. It is driven by command lines and
+-	  XML control files, though there are other programs that provide
+-	  GUI-based front ends if you prefer
++	  DVDAuthor is a set of tools to help you author the file and
++	  directory structure of a DVD-Video disc, including
++	  programmatic commands for implementing interactive behaviour.
++	  It is driven by command lines and XML control files, though
++	  there are other programs that provide GUI-based front ends
++	  if you prefer
  
- config BR2_PACKAGE_COLLECTD_CPU
- 	bool "cpu"
- 	help
--	  Collects the amount of time spent by the CPU in various states.
-+	  Collects the amount of time spent by the CPU in various
-+	  states.
- 
- config BR2_PACKAGE_COLLECTD_CPUFREQ
- 	bool "cpufreq"
-@@ -229,7 +232,8 @@ config BR2_PACKAGE_COLLECTD_FHCOUNT
- config BR2_PACKAGE_COLLECTD_FILECOUNT
- 	bool "filecount"
- 	help
--	  Counts the number of files in a directory and all its subdirectories.
-+	  Counts the number of files in a directory and all its
-+	  subdirectories.
- 
- config BR2_PACKAGE_COLLECTD_FSCACHE
- 	bool "fscache"
-@@ -323,7 +327,8 @@ config BR2_PACKAGE_COLLECTD_MYSQL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
- 	select BR2_PACKAGE_MYSQL
- 	help
--	  Connects to a MySQL database and issues a "show status" command.
-+	  Connects to a MySQL database and issues a "show status"
-+	  command.
- 
- config BR2_PACKAGE_COLLECTD_NETLINK
- 	bool "netlink"
-@@ -334,7 +339,8 @@ config BR2_PACKAGE_COLLECTD_NETLINK
- config BR2_PACKAGE_COLLECTD_NFS
- 	bool "nfs"
- 	help
--	  Collects information about the usage of the Network File System.
-+	  Collects information about the usage of the Network File
-+	  System.
- 
- config BR2_PACKAGE_COLLECTD_NGINX
- 	bool "nginx"
-@@ -358,7 +364,8 @@ config BR2_PACKAGE_COLLECTD_OPENLDAP
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_OPENLDAP
- 	help
--	  Read monitoring information from OpenLDAP's cn=Monitor subtree.
-+	  Read monitoring information from OpenLDAP's cn=Monitor
-+	  subtree.
- 
- comment "openldap support needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
-@@ -409,8 +416,8 @@ config BR2_PACKAGE_COLLECTD_SMART
- 	depends on BR2_PACKAGE_HAS_UDEV # libatasmart
- 	select BR2_PACKAGE_LIBATASMART
- 	help
--	  Collect SMART statistics, notably load cycle count, temperature
--	  and bad sectors.
-+	  Collect SMART statistics, notably load cycle count,
-+	  temperature and bad sectors.
- 
- comment "SMART requires udev to be enabled"
- 	depends on !BR2_PACKAGE_HAS_UDEV
-@@ -445,8 +452,8 @@ config BR2_PACKAGE_COLLECTD_TAIL
- config BR2_PACKAGE_COLLECTD_TAIL_CSV
- 	bool "tail csv"
- 	help
--	  Follows (tails) files in CSV format, parses each line and submits
--	  extracted values.
-+	  Follows (tails) files in CSV format, parses each line and 
-+	  submits extracted values.
- 
- config BR2_PACKAGE_COLLECTD_TCPCONNS
- 	bool "tcpconns"
-@@ -516,7 +523,8 @@ comment "Select at least one for collectd to be useful"
- config BR2_PACKAGE_COLLECTD_CSV
- 	bool "csv"
- 	help
--	  Writes values to a plain-text file in Comma Separated Values format.
-+	  Writes values to a plain-text file in Comma Separated Values
-+	  format.
- 
- config BR2_PACKAGE_COLLECTD_GRAPHITE
- 	bool "graphite"
-@@ -554,7 +562,8 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
- 	select BR2_PACKAGE_RIEMANN_C_CLIENT
- 	select BR2_PACKAGE_LIBTOOL
- 	help
--	  Sends data to Riemann, a stream processing and monitoring system.
-+	  Sends data to Riemann, a stream processing and monitoring
-+	  system.
- 
- config BR2_PACKAGE_COLLECTD_UNIXSOCK
- 	bool "unixsock"
-@@ -566,7 +575,8 @@ config BR2_PACKAGE_COLLECTD_WRITEHTTP
- 	bool "write_http"
- 	select BR2_PACKAGE_LIBCURL
- 	help
--	  Sends values collected to a web-server using HTTP POST and PUTVAL.
-+	  Sends values collected to a web-server using HTTP POST and
-+	  PUTVAL.
- 
- config BR2_PACKAGE_COLLECTD_WRITELOG
- 	bool "write_log"
-@@ -590,14 +600,14 @@ comment "write_prometheus needs a toolchain w/ C++"
- config BR2_PACKAGE_COLLECTD_WRITESENSU
- 	bool "write_sensu"
- 	help
--	  Sends data to Sensu, a stream processing and monitoring system,
--	  via the Sensu client local TCP socket.
-+	  Sends data to Sensu, a stream processing and monitoring
-+	  system, via the Sensu client local TCP socket.
- 
- config BR2_PACKAGE_COLLECTD_WRITETSDB
- 	bool "write_tsdb"
- 	help
--	  Sends data OpenTSDB, a scalable no master, no shared state time
--	  series database.
-+	  Sends data OpenTSDB, a scalable no master, no shared state
-+	  time series database.
- 
- endmenu
- 
-diff --git a/package/cppdb/Config.in b/package/cppdb/Config.in
-index 9037a7a..ceff0ab 100644
---- a/package/cppdb/Config.in
-+++ b/package/cppdb/Config.in
-@@ -7,9 +7,10 @@ config BR2_PACKAGE_CPPDB
- 	# Can be built without them but it's useless
- 	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
- 	help
--	  CppDB is an SQL connectivity library that is designed to provide
--	  platform and Database independent connectivity API similarly
--	  to what JDBC, ODBC and other connectivity libraries do.
-+	  CppDB is an SQL connectivity library that is designed to
-+	  provide platform and Database independent connectivity API
-+	  similarly to what JDBC, ODBC and other connectivity libraries
-+	  do.
- 
- 	  http://cppcms.com/sql/cppdb/
- 
-diff --git a/package/cpuload/Config.in b/package/cpuload/Config.in
-index 82bc450..9a7b4e9 100644
---- a/package/cpuload/Config.in
-+++ b/package/cpuload/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_CPULOAD
- 	bool "cpuload"
- 	help
--	  cpuload is a simple tool to obtain intuitive vision of CPU load
--	  (including total, user, system, irq and softirq) within a certain
--	  time, which is especially useful for embedded system without GUI.
-+	  cpuload is a simple tool to obtain intuitive vision of CPU
-+	  load (including total, user, system, irq and softirq) within a
-+	  certain time, which is especially useful for embedded system
-+	  without GUI.
- 
- 	  https://github.com/kelvincheung/cpuload
-diff --git a/package/crda/Config.in b/package/crda/Config.in
-index 2cb0403..b9a2613 100644
---- a/package/crda/Config.in
-+++ b/package/crda/Config.in
-@@ -12,8 +12,8 @@ config BR2_PACKAGE_CRDA
- 
- 	  This package provides a Central Regulatory Domain Agent (CRDA)
- 	  to be used by the Linux kernel cf80211 wireless subsystem to
--	  query and apply the regulatory domain settings wireless devices
--	  may operate within for a given location.
-+	  query and apply the regulatory domain settings wireless
-+	  devices may operate within for a given location.
- 
- 	  http://linuxwireless.org/en/developers/Regulatory/CRDA
- 
-diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
-index 9f9df02..d1e6449 100644
---- a/package/cryptodev/Config.in
-+++ b/package/cryptodev/Config.in
-@@ -31,8 +31,8 @@ config BR2_PACKAGE_OCF_LINUX
- 	select BR2_PACKAGE_HAS_CRYPTODEV
- 	help
- 	  OCF-Linux is a Linux port of the OpenBSD/FreeBSD Cryptographic
--	  Framework (OCF). This port aims to bring full asynchronous HW/SW
--	  crypto acceleration to the Linux kernel and applications
-+	  Framework (OCF). This port aims to bring full asynchronous
-+	  HW/SW crypto acceleration to the Linux kernel and applications
- 	  running under Linux.
- 
- 	  http://ocf-linux.sourceforge.net/
-diff --git a/package/curlftpfs/Config.in b/package/curlftpfs/Config.in
-index c2d591a..986faf1 100644
---- a/package/curlftpfs/Config.in
-+++ b/package/curlftpfs/Config.in
-@@ -11,8 +11,8 @@ config BR2_PACKAGE_CURLFTPFS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBCURL
- 	help
--	  CurlFtpFS is a filesystem for accessing FTP hosts based on FUSE
--	  and libcurl.
-+	  CurlFtpFS is a filesystem for accessing FTP hosts based on
-+	  FUSE and libcurl.
- 
- 	  http://curlftpfs.sourceforge.net/
- 
-diff --git a/package/cvs/Config.in b/package/cvs/Config.in
-index 0036961..e8f0606 100644
---- a/package/cvs/Config.in
-+++ b/package/cvs/Config.in
-@@ -5,7 +5,8 @@ config BR2_PACKAGE_CVS
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_NCURSES
- 	help
--	  Concurrent Versions System - source code revision control tools.
-+	  Concurrent Versions System - source code revision control
-+	  tools.
- 
- 	  http://www.nongnu.org/cvs/
- 
-diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
-index 03b7dbb..50c05eb 100644
---- a/package/cwiid/Config.in
-+++ b/package/cwiid/Config.in
-@@ -6,8 +6,8 @@ config BR2_PACKAGE_CWIID
- 	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	help
--	  A collection of Linux tools written in C for interfacing to the
--	  Nintendo Wiimote.
-+	  A collection of Linux tools written in C for interfacing to
-+	  the Nintendo Wiimote.
- 
- 	  http://abstrakraft.org/cwiid/
+ 	  http://dvdauthor.sourceforge.net
  
 -- 
 2.9.3
