@@ -1,46 +1,38 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri,  5 May 2017 17:30:30 -0300
-Subject: [Buildroot] [PATCH 2/3] core: allow having a list of "cmake"
-	candidates
-In-Reply-To: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
-References: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1494016231-50639-3-git-send-email-casantos@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  5 May 2017 22:54:51 +0200
+Subject: [Buildroot] [PATCH] package/miraclecast: drop legacy systemd-kdbus
+	select
+Message-ID: <20170505205451.4664-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the BR2_CMAKE_CANDIDATES variable, containing a list of candidates
-to check and use as BR2_CMAKE, if possible.
+This options was recently removed and made it to legacy (in 815f7137739)
+but miraclecast still selects it.
 
-This allows using "cmake3" on CentOS 7, whose default cmake corresponds
-to version 2.8.12. Example:
+miraclecast builds fine without it, it seems, so just drop the select
+altogether.
 
-    $ make BR2_CMAKE_CANDIDATES="cmake cmake3"
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- support/dependencies/check-host-cmake.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/miraclecast/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 8002278..42aaee4 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -10,9 +10,10 @@
- #
- BR2_CMAKE_VERSION_MIN = 3.1
- 
--BR2_CMAKE ?= cmake
--ifeq ($(call suitable-host-package,cmake,\
--	$(BR2_CMAKE) $(BR2_CMAKE_VERSION_MIN)),)
-+BR2_CMAKE_CANDIDATES ?= cmake
-+BR2_CMAKE ?= $(call suitable-host-package,cmake,\
-+	$(BR2_CMAKE_CANDIDATES) $(BR2_CMAKE_VERSION_MIN))
-+ifeq ($(BR2_CMAKE),)
- BR2_CMAKE = $(HOST_DIR)/usr/bin/cmake
- BR2_CMAKE_HOST_DEPENDENCY = host-cmake
- endif
+diff --git a/package/miraclecast/Config.in b/package/miraclecast/Config.in
+index 4c6a8aaa07..57bd57a97b 100644
+--- a/package/miraclecast/Config.in
++++ b/package/miraclecast/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_MIRACLECAST
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_READLINE
+-	select BR2_PACKAGE_SYSTEMD_KDBUS
+ 	help
+ 	  The MiracleCast project provides software to connect external
+ 	  monitors to your system via Wifi. It is compatible to the
 -- 
-1.8.3.1
+2.11.0
