@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 May 2017 10:47:13 +0200
-Subject: [Buildroot] [PATCH] binutils: disallow selection of 2.27 on
- ARM/noMMU
-In-Reply-To: <1493911717-11921-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1493911717-11921-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170505104713.7daa4054@free-electrons.com>
+Date: Fri, 5 May 2017 10:47:17 +0200
+Subject: [Buildroot] [PATCH v2] lttng-tools: disable on uClibc/musl
+In-Reply-To: <1493927478-27096-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1493927478-27096-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170505104717.13fa5ab1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  4 May 2017 17:28:37 +0200, Thomas Petazzoni wrote:
-> binutils 2.27 triggers a segfault in elf2flt on ARM/noMMU. While Arnout
-> has identified a binutils 2.28 commit that can be backported on 2.27,
-> this commit is huge and we don't clearly understand the impact.
-> 
-> Since both binutils 2.26 and 2.28 are unaffected by this issue, we
-> simply disallow the selection of binutils 2.27 on ARM/noMMU, and default
-> to binutils 2.28.
+On Thu,  4 May 2017 21:51:18 +0200, Thomas Petazzoni wrote:
+> lttng-tools has been broken on uClibc/musl since a long time due to
+> dlmopen() and LM_ID_BASE not being implemented. The issue has been
+> reported to the upstream lttng developers more than two months ago [1],
+> and no fix has been provided. Therefore, it's time to disable it on
+> uClibc and musl.
 > 
 > Fixes:
 > 
->   http://autobuild.buildroot.net/results/e14cadb290b0b86cac12c4bfb681eb6eee9e6dea/
->   and lots of other similar ARM/Cortex-M4 failures
+>   http://autobuild.buildroot.net/results/f9e82a87618bcdcd46d670697b5ac75836f7250d/
+>   (uclibc)
+> 
+>   http://autobuild.buildroot.net/results/cb0952483b580b053a585760e59d78d11f46fc60/
+>   (musl)
+> 
+> [1] https://lists.lttng.org/pipermail/lttng-dev/2017-February/026921.html
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/binutils/Config.in.host | 3 +++
->  1 file changed, 3 insertions(+)
+> Changes since v1:
+>  - Also disable on musl
+> ---
+>  package/lttng-tools/Config.in | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
