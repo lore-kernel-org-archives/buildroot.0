@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 May 2017 10:45:59 +0200
-Subject: [Buildroot] invalid commads passed in compiler line results in
- failure.
-In-Reply-To: <trinity-c9000ae1-4900-4b9d-b1b4-48dcecd9c904-1493971657439@3capp-mailcom-bs14>
-References: <trinity-c9000ae1-4900-4b9d-b1b4-48dcecd9c904-1493971657439@3capp-mailcom-bs14>
-Message-ID: <20170505104559.434875f7@free-electrons.com>
+Date: Fri, 5 May 2017 10:46:23 +0200
+Subject: [Buildroot] [git commit] lua-resty-http: correct license file path
+Message-ID: <20170505084630.EC22E825B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d711c5868a4a890ef16df9f4ae6705a3abf7ca6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 5 May 2017 10:07:37 +0200, daggs wrote:
+LICENSE file is present in subdirectory.
 
-> I'm trying to add a new pkg what compile a kernel driver for arm, upon compilation, I get these errors:
-> aarch64-linux-gcc.br_real: error: unrecognized argument in option ?-mabi=apcs-gnu?
-> aarch64-linux-gcc.br_real: note: valid arguments to ?-mabi=? are: ilp32 lp64
-> aarch64-linux-gcc.br_real: error: unrecognized command line option ?-mapcs?; did you mean ?--specs??
-> aarch64-linux-gcc.br_real: error: unrecognized command line option ?-mno-sched-prolog?; did you mean ?-Wno-sign-promo??
-> aarch64-linux-gcc.br_real: error: unrecognized command line option ?-msoft-float?
+Fixes:
+  http://autobuild.buildroot.net/results/d33/d33a322b4d2618b55849b5637082100702a91eea
 
-You are passing ARM options to an AArch64 compiler: this cannot work.
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lua-resty-http/lua-resty-http.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lua-resty-http/lua-resty-http.mk b/package/lua-resty-http/lua-resty-http.mk
+index 927fdae..7ab8b0e 100644
+--- a/package/lua-resty-http/lua-resty-http.mk
++++ b/package/lua-resty-http/lua-resty-http.mk
+@@ -7,6 +7,6 @@
+ LUA_RESTY_HTTP_VERSION = 0.10-0
+ LUA_RESTY_HTTP_SUBDIR = lua-resty-http
+ LUA_RESTY_HTTP_LICENSE = BSD-2-Clause
+-LUA_RESTY_HTTP_LICENSE_FILES = LICENSE
++LUA_RESTY_HTTP_LICENSE_FILES = $(LUA_RESTY_HTTP_SUBDIR)/LICENSE
+ 
+ $(eval $(luarocks-package))
