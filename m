@@ -1,51 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 May 2017 21:57:36 +0200
-Subject: [Buildroot] [git commit] package/kyua: fix unmet dependencies
-Message-ID: <20170505195803.DD0FA82895@busybox.osuosl.org>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri,  5 May 2017 17:30:28 -0300
+Subject: [Buildroot] [PATCH 0/3] Support a list of "cmake" candidates
+Message-ID: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a65da16f630cea87fd0527ce73df0b529b73946c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On CentOS 7 the "cmake" package installs cmake 2.8.12, which is too old
+for us but the "cmake3" package (from EPEL) provides cmake 3.6.3, which
+is good enough.
 
-lutok is a lua module, so it depends on ! static libs. However, the
-dependency is implicit, being done because the lua modules are sourced
-globally under an if-block, and thus it is not easy to find that
-dependency.
+This series adds support to a list of candidates to be checked instead
+of resorting to host-cmake if "cmake" does not exist or is too old.
 
-Propagate that dependency to kyua, which was missing it (because it is
-not a lua module, so was missing the dependency).
+Patch 1 modifies check-host-cmake.sh to support a list of candidates and
+the minimal version, keeping compatibility with the previous syntax.
 
-[Peter: also update toolchain comment]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kyua/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Patch 2 Introduces the BR2_CMAKE_CANDIDATES in check-host-cmake.mk, still
+keeping compatible with the previous behavior.
 
-diff --git a/package/kyua/Config.in b/package/kyua/Config.in
-index 4f887b0..4fc5e09 100644
---- a/package/kyua/Config.in
-+++ b/package/kyua/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_KYUA
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
- 	depends on !BR2_PACKAGE_LUAJIT # lutok
-+	depends on !BR2_STATIC_LIBS # lutok
- 	depends on BR2_USE_MMU # atf
- 	select BR2_PACKAGE_ATF
- 	select BR2_PACKAGE_LUTOK
-@@ -16,7 +17,7 @@ config BR2_PACKAGE_KYUA
- 
- 	  https://github.com/jmmv/kyua
- 
--comment "kyua needs a toolchain w/ C++ and full Lua"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-+comment "kyua needs a toolchain w/ C++, dynamic library and full Lua"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT || BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
- 	depends on BR2_USE_MMU
+Patch 3 adds "cmake3" to the list of cmake candidates.
+
+Carlos Santos (3):
+  core: allow check-host-cmake.sh to check several candidates
+  core: allow having a list of "cmake" candidates
+  core: add "cmake3" to the list of cmake candidates
+
+ support/dependencies/check-host-cmake.mk |  7 ++--
+ support/dependencies/check-host-cmake.sh | 66 ++++++++++++++++----------------
+ 2 files changed, 38 insertions(+), 35 deletions(-)
+
+-- 
+1.8.3.1
