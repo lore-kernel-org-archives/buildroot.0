@@ -1,38 +1,34 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Fri, 5 May 2017 12:33:58 +0000
-Subject: [Buildroot] [PATCH v3 1/2] cracklib: New package
-In-Reply-To: <32863807-7cf4-75fc-1dd3-0e6f6517986e@gmail.com>
-References: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
- <f24453b3-9fc6-1a1e-4e01-071da345bbdb@gmail.com>
- <1493881807.2302.3.camel@spectralink.com>
- <32863807-7cf4-75fc-1dd3-0e6f6517986e@gmail.com>
-Message-ID: <1493987636.2742.3.camel@spectralink.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri,  5 May 2017 15:35:20 +0300
+Subject: [Buildroot] [PATCH] gmp: Enable ASM for ARC again
+Message-ID: <20170505123520.45502-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2017-05-04 at 23:34 +0200, Romain Naour wrote:
-> Hi Stefan, all,
-> 
-> Le 04/05/2017 ? 09:10, S?rensen, Stefan a ?crit :
-> > On Sun, 2017-04-30 at 15:36 +0200, Romain Naour wrote:
-> > 
-> > > +ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
-> > > > +define CRACKLIB_REMOVE_TOOLS
-> > > > +	rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
-> > > 
-> > > Maybe this part can be done in a post install script instead ?
-> > 
-> > Post install script? I can't find any reference to what that is.
-> 
-> Sorry, I meant post build scripts, see BR2_ROOTFS_POST_BUILD_SCRIPT
-> option.
+This commit reverts cdf63517de25 "gmp: disable assembly for arc"
+as in GMP v6.1.2 there's already a proper fix for ASM constraints, see
+https://gmplib.org/repo/gmp/rev/58879634af3ci
 
-The tools mostly for creating password dictionaries. I guess that these
-will rarely be used on the target, so to me it seems better to remove
-them in the package, rather than in post build scripts for everybody
-that does not need them.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+---
+ package/gmp/gmp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Stefan
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 5ea79ae754..7236e37bb4 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -15,7 +15,7 @@ HOST_GMP_DEPENDENCIES = host-m4
+ 
+ # GMP doesn't support assembly for coldfire or mips r6 ISA yet
+ # Disable for ARM v7m since it has different asm constraints
+-ifeq ($(BR2_m68k_cf)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6)$(BR2_ARM_CPU_ARMV7M)$(BR2_arc),y)
++ifeq ($(BR2_m68k_cf)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6)$(BR2_ARM_CPU_ARMV7M),y)
+ GMP_CONF_OPTS += --disable-assembly
+ endif
+ 
+-- 
+2.11.0
