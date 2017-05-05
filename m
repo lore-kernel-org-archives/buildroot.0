@@ -1,7 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri,  5 May 2017 10:08:05 -0400
-Subject: [Buildroot] [PATCH v2 1/4] fix help text wrapping for configs a
-Message-ID: <20170505140808.17696-1-aduskett@codeblue.com>
+Date: Fri,  5 May 2017 10:08:06 -0400
+Subject: [Buildroot] [PATCH v2 2/4] fix help text wrapping for configs b
+In-Reply-To: <20170505140808.17696-1-aduskett@codeblue.com>
+References: <20170505140808.17696-1-aduskett@codeblue.com>
+Message-ID: <20170505140808.17696-2-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,7 +13,7 @@ To: buildroot@busybox.net
 The check-package script when ran gives warnings on text wrapping
 on all of these Config files.  This patch cleans up all warnings
 related to the text wrapping for the Config files starting with
-the letter a in the package directory.
+the letter b in the package directory.
 
 The appropriate indentation is: <tab><2 spaces><62 chars>
 See http://nightly.buildroot.org/#writing-rules-config-in for more
@@ -20,214 +22,282 @@ information.
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
 v1 -> v2:
-  - Increase margins.  Margins were set too low in the origin patch.
+  - Added patch to series.
 
- package/a10disp/Config.in   |  4 ++--
- package/acpid/Config.in     |  5 +++--
- package/aespipe/Config.in   |  9 +++++----
- package/agentpp/Config.in   | 15 ++++++++-------
- package/alsa-lib/Config.in  |  4 ++--
- package/apache/Config.in    | 11 ++++++-----
- package/apr/Config.in       |  7 ++++---
- package/assimp/Config.in    |  7 ++++---
- package/aubio/Config.in     |  8 ++++----
- package/aufs-util/Config.in |  3 ++-
- package/autossh/Config.in   |  3 ++-
- 11 files changed, 42 insertions(+), 34 deletions(-)
+ package/babeld/Config.in       |  4 ++--
+ package/batman-adv/Config.in   |  3 ++-
+ package/bc/Config.in           |  9 +++++----
+ package/bcache-tools/Config.in |  9 +++++----
+ package/berkeleydb/Config.in   |  7 ++++---
+ package/bind/Config.in         | 15 +++++++++------
+ package/biosdevname/Config.in  | 12 ++++++------
+ package/bluez5_utils/Config.in |  3 ++-
+ package/bluez_utils/Config.in  |  5 +++--
+ package/bmon/Config.in         |  4 ++--
+ package/bootutils/Config.in    |  8 ++++----
+ package/bridge-utils/Config.in |  4 ++--
+ package/busybox/Config.in      | 12 +++++++-----
+ 13 files changed, 53 insertions(+), 42 deletions(-)
 
-diff --git a/package/a10disp/Config.in b/package/a10disp/Config.in
-index 18e2d8f..99ae0aa 100644
---- a/package/a10disp/Config.in
-+++ b/package/a10disp/Config.in
-@@ -3,8 +3,8 @@ config BR2_PACKAGE_A10DISP
- 	depends on BR2_arm
- 	depends on BR2_LINUX_KERNEL
- 	help
--	  Program to change the display mode of Allwinner ARM SOCs running
--	  the linux-sunxi kernel (and not the mainline kernel.)
-+	  Program to change the display mode of Allwinner ARM SOCs
-+	  running the linux-sunxi kernel (and not the mainline kernel.)
- 
- 	  http://github.com/hglm/a10disp
- 
-diff --git a/package/acpid/Config.in b/package/acpid/Config.in
-index 5aec7f1..2bd83ea 100644
---- a/package/acpid/Config.in
-+++ b/package/acpid/Config.in
-@@ -4,7 +4,8 @@ config BR2_PACKAGE_ACPID
- 	help
- 	  Advanced Configuration and Power Interface event daemon.
- 
--	  Acpid is designed to notify user-space programs of ACPI events,
--	  and allows you to configure specific actions for specific events.
-+	  Acpid is designed to notify user-space programs of ACPI
-+	  events, and allows you to configure specific actions for
-+	  specific events.
- 
- 	  http://sourceforge.net/projects/acpid2/
-diff --git a/package/aespipe/Config.in b/package/aespipe/Config.in
-index df99523..2c2ff5c 100644
---- a/package/aespipe/Config.in
-+++ b/package/aespipe/Config.in
-@@ -2,9 +2,10 @@ config BR2_PACKAGE_AESPIPE
- 	bool "aespipe"
+diff --git a/package/babeld/Config.in b/package/babeld/Config.in
+index 5d08c08..c7010e1 100644
+--- a/package/babeld/Config.in
++++ b/package/babeld/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_BABELD
+ 	bool "babeld"
  	depends on BR2_USE_MMU # fork()
  	help
--	  aespipe program is AES encrypting or decrypting pipe. It reads from
--	  standard input and writes to standard output. It can be used to
--	  create and restore encrypted tar or cpio archives. It can be used to
--	  encrypt and decrypt loop-AES compatible encrypted disk images.
-+	  aespipe program is AES encrypting or decrypting pipe. It reads
-+	  from standard input and writes to standard output. It can be
-+	  used to create and restore encrypted tar or cpio archives.
-+	  It can be used to encrypt and decrypt loop-AES compatible
-+	  encrypted disk images.
+-	  Babel is a loop-avoiding distance-vector routing protocol for IPv6
+-	  and IPv4 with fast convergence properties.
++	  Babel is a loop-avoiding distance-vector routing protocol for
++	  IPv6 and IPv4 with fast convergence properties.
  
- 	  http://koti.tnnet.fi/jari.ruusu/linux/
-diff --git a/package/agentpp/Config.in b/package/agentpp/Config.in
-index e591fb5..9e6eeed 100644
---- a/package/agentpp/Config.in
-+++ b/package/agentpp/Config.in
-@@ -5,13 +5,14 @@ config BR2_PACKAGE_AGENTPP
- 	depends on !BR2_STATIC_LIBS # snmp++
- 	select BR2_PACKAGE_SNMPPP
+ 	  http://www.pps.univ-paris-diderot.fr/~jch/software/babel/
+diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
+index fbef0d8..9d3d796 100644
+--- a/package/batman-adv/Config.in
++++ b/package/batman-adv/Config.in
+@@ -28,7 +28,8 @@ config BR2_PACKAGE_BATMAN_ADV_BATMAN_V
+ 	bool "enable B.A.T.M.A.N. V protocol (experimental)"
  	help
--	  AGENT++ is a set of C++ classes which provides a complete protocol
--	  engine and dispatch table for the development of SNMP agents.
--	  AGENT++ is a multilingual API which supports SNMPv1, SNMPv2c, and
--	  SNMPv3. It provides various C++ classes implementing prototypes for
--	  scalar and table SNMP managed objects that can be customized by
--	  derivation. Additional classes support the development of proxy
--	  agents as well as sending notifications.
-+	  AGENT++ is a set of C++ classes which provides a complete
-+	  protocol engine and dispatch table for the development of SNMP
-+	  agents. AGENT++ is a multilingual API which supports SNMPv1,
-+	  SNMPv2c, and SNMPv3. It provides various C++ classes
-+	  implementing prototypes for scalar and table SNMP managed
-+	  objects that can be customized by derivation. Additional
-+	  classes support the development of proxy agents as well as
-+	  sending notifications.
+ 	  Enables B.A.T.M.A.N. V network protocol.
+-	  This is the next-gen protocol and is experimental at this time.
++	  This is the next-gen protocol and is experimental at this
++	  time.
  
- 	  SNMPv3 support is enabled if SNMP++ enables it.
+ 	  https://www.open-mesh.org/projects/batman-adv/wiki/BATMAN_V
  
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index c355b2c..995d379 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -13,8 +13,8 @@ menuconfig BR2_PACKAGE_ALSA_LIB
- 	# is fixed
- 	select BR2_PACKAGE_ALSA_LIB_PCM
+diff --git a/package/bc/Config.in b/package/bc/Config.in
+index a28978d..54c4422 100644
+--- a/package/bc/Config.in
++++ b/package/bc/Config.in
+@@ -6,9 +6,10 @@ config BR2_PACKAGE_BC
+ 	  areas. It supports interactive execution of statements. 'Bc'
+ 	  is a utility included in the POSIX P1003.2/D11 draft standard.
+ 	  This version does not use the historical method of having bc
+-	  be a compiler for the dc calculator (the POSIX document doesn't
+-	  specify how bc must be implemented). This version has a single
+-	  executable that both compiles the language and runs the resulting
+-	  'byte code.' The byte code is not the dc language.
++	  be a compiler for the dc calculator (the POSIX document
++	  doesn't specify how bc must be implemented).
++	  This version has a single executable that both compiles the
++	  language and runs the resulting 'byte code.' The byte code is
++	  not the dc language.
+ 
+ 	  http://www.gnu.org/software/bc
+diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+index 7e6319b..c8e3f6d 100644
+--- a/package/bcache-tools/Config.in
++++ b/package/bcache-tools/Config.in
+@@ -7,13 +7,14 @@ config BR2_PACKAGE_BCACHE_TOOLS
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
  	help
--	  The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
--	  functionality to the Linux operating system.
-+	  The Advanced Linux Sound Architecture (ALSA) provides audio
-+	  and MIDI functionality to the Linux operating system.
+ 	  Bcache is a Linux kernel block layer cache. It allows one or
+-	  more fast disk drives such as flash-based solid state drives (SSDs)
+-	  to act as a cache for one or more slower hard disk drives.
++	  more fast disk drives such as flash-based solid state drives
++	  (SSDs) to act as a cache for one or more slower hard disk
++	  drives.
  
- 	  http://www.alsa-project.org/
+ 	  http://bcache.evilpiepirate.org/
  
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-index 5916d30..693ee20 100644
---- a/package/apache/Config.in
-+++ b/package/apache/Config.in
-@@ -6,11 +6,12 @@ config BR2_PACKAGE_APACHE
- 	select BR2_PACKAGE_APR_UTIL
- 	select BR2_PACKAGE_PCRE
+-	  This is the user space bcache tools, required to setup the linux
+-	  bcache feature of the Linux kernel.
++	  This is the user space bcache tools, required to setup the
++	  linux bcache feature of the Linux kernel.
+ 
+ comment "bcache-tools needs udev /dev management"
+ 	depends on BR2_USE_MMU
+diff --git a/package/berkeleydb/Config.in b/package/berkeleydb/Config.in
+index 5531b04..f32d13a 100644
+--- a/package/berkeleydb/Config.in
++++ b/package/berkeleydb/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_BERKELEYDB
+ 	bool "berkeleydb"
  	help
--	  The Apache HTTP Server Project is an effort to develop and maintain an
--	  open-source HTTP server for modern operating systems including UNIX
--	  and Windows NT. The goal of this project is to provide a secure,
--	  efficient and extensible server that provides HTTP services in sync
--	  with the current HTTP standards.
-+	  The Apache HTTP Server Project is an effort to develop and
-+	  maintain an open-source HTTP server for modern operating
-+	  systems including UNIX and Windows NT. The goal of this
-+	  project is to provide a secure, efficient and extensible
-+	  server that provides HTTP services in sync with the current
-+	  HTTP standards.
+-	  The Berkeley database. A very common library for database
+-	  applications.
++	  The Berkeley database. A very common library for
++	  database applications.
  
- 	  http://httpd.apache.org
+ 	  http://www.sleepycat.com/products/db.shtml
  
-diff --git a/package/apr/Config.in b/package/apr/Config.in
-index 5757272..67de925 100644
---- a/package/apr/Config.in
-+++ b/package/apr/Config.in
-@@ -4,9 +4,10 @@ config BR2_PACKAGE_APR
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_BERKELEYDB_COMPAT185
+ config BR2_PACKAGE_BERKELEYDB_TOOLS
+ 	bool "install tools"
+ 	help
+-	  Install berkeleydb tools, mostly useful for debugging purposes.
++	  Install berkeleydb tools, mostly useful for debugging
++	  purposes.
+ 
+ endif
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index a580f0e..049a90c 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -4,14 +4,16 @@ config BR2_PACKAGE_BIND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork() in apr_proc_fork()
  	help
--	  The mission of the Apache Portable Runtime (APR) project is to create
--	  and maintain software libraries that provide a predictable and
--	  consistent interface to underlying platform-specific implementations
-+	  The mission of the Apache Portable Runtime (APR) project is to
-+	  create and maintain software libraries that provide a
-+	  predictable and consistent interface to underlying
-+	  platform-specific implementations
+-	  BIND (Berkeley Internet Name Domain) is an implementation of
+-	  the Domain Name System (DNS) protocols and provides an openly
+-	  redistributable reference implementation of the major
+-	  components of the Domain Name System, including:
++	  BIND (Berkeley Internet Name Domain) is an
++	  implementation of the Domain Name System (DNS) protocols
++	  and provides an openly redistributable reference
++	  implementation of the major components of the Domain
++	  Name System, including:
  
- 	  http://apr.apache.org/
+ 	    * a Domain Name System server (named)
+ 	    * a Domain Name System resolver library
+-	    * tools for verifying the proper operation of the DNS server
++	    * tools for verifying the proper operation of the DNS
++	      server
  
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 93020f7..41c1bb3 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -8,9 +8,10 @@ config BR2_PACKAGE_ASSIMP
+ 	  The BIND DNS Server is used on the vast majority of name
+ 	  serving machines on the Internet, providing a robust and
+@@ -19,7 +21,8 @@ config BR2_PACKAGE_BIND
+ 	  architecture can be built. The resolver library included in
+ 	  the BIND distribution provides the standard APIs for
+ 	  translation between domain names and Internet addresses and is
+-	  intended to be linked with applications requiring name service.
++	  intended to be linked with applications requiring name
++	  service.
+ 
+ 	  http://www.isc.org/sw/bind/
+ 
+diff --git a/package/biosdevname/Config.in b/package/biosdevname/Config.in
+index f9202ac..7047167 100644
+--- a/package/biosdevname/Config.in
++++ b/package/biosdevname/Config.in
+@@ -5,11 +5,11 @@ config BR2_PACKAGE_BIOSDEVNAME
+ 	select BR2_PACKAGE_PCIUTILS
  	select BR2_PACKAGE_ZLIB
  	help
- 	  Open Asset Import Library (assimp) is a portable Open Source
--	  library to import various well-known 3D model formats in a uniform
--	  manner. The most recent version also knows how to export 3d files
--	  and is therefore suitable as a general-purpose 3D model converter.
-+	  library to import various well-known 3D model formats in a
-+	  uniform manner. The most recent version also knows how to
-+	  export 3d files and is therefore suitable as a general-purpose
-+	  3D model converter.
+-	  Biosdevname is a udev helper that looks at various BIOS tables to
+-	  figure out what the actual hardware names are for Ethernet ports
+-	  and renames the ports accordingly. This has the advantage of
+-	  always referring to the same port regardless of system or
+-	  hardware changes that might otherwise alter the typical ethX
+-	  naming.
++	  Biosdevname is a udev helper that looks at various BIOS tables
++	  to figure out what the actual hardware names are for Ethernet
++	  ports and renames the ports accordingly. This has the
++	  advantage of always referring to the same port regardless of
++	  system or hardware changes that might otherwise alter the
++	  typical ethX naming.
  
- 	  http://www.assimp.org
- 
-diff --git a/package/aubio/Config.in b/package/aubio/Config.in
-index c4c60db..18e7c4c 100644
---- a/package/aubio/Config.in
-+++ b/package/aubio/Config.in
-@@ -3,10 +3,10 @@ config BR2_PACKAGE_AUBIO
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	  http://linux.dell.com/biosdevname/
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index bdb6682..615dc6d 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -87,7 +87,8 @@ config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
+ 	bool "build sixaxis plugin"
+ 	depends on BR2_PACKAGE_HAS_UDEV
  	help
--	  aubio is a tool designed for the extraction of annotations from
--	  audio signals. Its features include segmenting a sound file
--	  before each of its attacks, performing pitch detection, tapping
--	  the beat and producing midi streams from live audio.
-+	  aubio is a tool designed for the extraction of annotations
-+	  from audio signals. Its features include segmenting a sound
-+	  file before each of its attacks, performing pitch detection,
-+	  tapping the beat and producing midi streams from live audio.
+-	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock controller)
++	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock
++	  controller)
  
- 	  Because these tasks are difficult, we thought it was important
- 	  to gather them in a dedicated library. To increase the fun, we
-diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
-index 93999fb..89b1f42 100644
---- a/package/aufs-util/Config.in
-+++ b/package/aufs-util/Config.in
-@@ -28,7 +28,8 @@ config BR2_PACKAGE_AUFS_UTIL_VERSION
- 	  Usually, the sha1 of the cset you want to use; avoid using a
- 	  branch name as this yields non-reproducible builds.
- 
--	  See the following resources to see what versions are available:
-+	  See the following resources to see what versions are 
-+	  available:
- 
- 	  https://sourceforge.net/p/aufs/aufs-util/ci/master/tree/
- 
-diff --git a/package/autossh/Config.in b/package/autossh/Config.in
-index 6d1a085..351e23f 100644
---- a/package/autossh/Config.in
-+++ b/package/autossh/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_AUTOSSH
- 	depends on BR2_PACKAGE_DROPBEAR || BR2_PACKAGE_OPENSSH
+ comment "sixaxis plugin needs udev /dev management"
+ 	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
+index 3848162..ea44068 100644
+--- a/package/bluez_utils/Config.in
++++ b/package/bluez_utils/Config.in
+@@ -36,8 +36,9 @@ config BR2_PACKAGE_BLUEZ_UTILS_GATT
+ 	bool "GATT support"
+ 	select BR2_PACKAGE_READLINE
  	help
- 	  autossh is a program to start a copy of ssh and monitor it,
--	  restarting it as necessary should it die or stop passing traffic.
-+	  restarting it as necessary should it die or stop passing
-+	  traffic.
+-	  Generic Attribute Profile (GATT) support. This provides profile
+-	  discovery and description services for Bluetooth Low Energy.
++	  Generic Attribute Profile (GATT) support. This provides
++	  profile discovery and description services for Bluetooth Low
++	  Energy.
+ 	  This will install the gatttool utility.
+ endif
  
- 	  http://www.harding.motd.ca/autossh/
+diff --git a/package/bmon/Config.in b/package/bmon/Config.in
+index bb79693..cb83cc2 100644
+--- a/package/bmon/Config.in
++++ b/package/bmon/Config.in
+@@ -5,8 +5,8 @@ config BR2_PACKAGE_BMON
+ 	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  bmon is a bandwidth monitor capable of retrieving statistics from
+-	  various input modules. It provides various output methods
++	  bmon is a bandwidth monitor capable of retrieving statistics
++	  from various input modules. It provides various output methods
+ 	  including a curses based interface.
+ 
+ 	  https://github.com/tgraf/bmon/
+diff --git a/package/bootutils/Config.in b/package/bootutils/Config.in
+index af4a170..30d647a 100644
+--- a/package/bootutils/Config.in
++++ b/package/bootutils/Config.in
+@@ -2,9 +2,9 @@ config BR2_PACKAGE_BOOTUTILS
+ 	bool "bootutils"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+-	  BootUtils is a collection of utilities to facilitate booting of
+-	  Linux 2.6-based systems. The process of finding the root volume
+-	  either by label or explicit label= on the kernel command line,
+-	  mounting it, and 'switchroot'ing is automated.
++	  BootUtils is a collection of utilities to facilitate booting
++	  of Linux 2.6-based systems. The process of finding the root
++	  volume either by label or explicit label= on the kernel
++	  command line, mounting it, and 'switchroot'ing is automated.
+ 
+ 	  http://bootutils.sourceforge.net/
+diff --git a/package/bridge-utils/Config.in b/package/bridge-utils/Config.in
+index fb9c7df..bc614b0 100644
+--- a/package/bridge-utils/Config.in
++++ b/package/bridge-utils/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_BRIDGE_UTILS
+ 	bool "bridge-utils"
+ 	help
+-	  Manage ethernet bridging; a way to connect networks together to
+-	  form a larger network.
++	  Manage ethernet bridging; a way to connect networks together
++	  to form a larger network.
+ 
+ 	  https://git.kernel.org/cgit/linux/kernel/git/shemminger/bridge-utils.git/
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 7eb7eb9..116a72e 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_BUSYBOX
+ 	bool "BusyBox"
+ 	default y
+ 	help
+-	  The Swiss Army Knife of embedded Linux. It slices, it dices, it
+-	  makes Julian Fries.
++	  The Swiss Army Knife of embedded Linux. It slices, it dices,
++	  it makes Julian Fries.
+ 
+ 	  http://busybox.net/
+ 
+@@ -15,10 +15,12 @@ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
+ 	default "package/busybox/busybox.config"
+ 	help
+-	  Some people may wish to use their own modified BusyBox configuration
+-	  file, and will specify their config file location with this option.
++	  Some people may wish to use their own modified BusyBox
++	  configuration file, and will specify their config file
++	  location with this option.
+ 
+-	  Most people will just use the default BusyBox configuration file.
++	  Most people will just use the default BusyBox configuration
++	  file.
+ 
+ config BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES
+ 	string "Additional BusyBox configuration fragment files"
 -- 
 2.9.3
