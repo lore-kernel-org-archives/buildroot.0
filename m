@@ -1,35 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 May 2017 14:32:37 +0200
-Subject: [Buildroot] [PATCH 1/4] bluez5_utils: allow install of
-	deprecated tools
-In-Reply-To: <a98f6fda9cded4f8416b2a6f2249e85be944eca4.1493643541.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 1 May 2017 15:59:41 +0300")
-References: <cover.1493643541.git.baruch@tkos.co.il>
- <a98f6fda9cded4f8416b2a6f2249e85be944eca4.1493643541.git.baruch@tkos.co.il>
-Message-ID: <87h90ztrfe.fsf@dell.be.48ers.dk>
+From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
+Date: Fri, 5 May 2017 12:33:58 +0000
+Subject: [Buildroot] [PATCH v3 1/2] cracklib: New package
+In-Reply-To: <32863807-7cf4-75fc-1dd3-0e6f6517986e@gmail.com>
+References: <20170419075602.22245-1-stefan.sorensen@spectralink.com>
+ <f24453b3-9fc6-1a1e-4e01-071da345bbdb@gmail.com>
+ <1493881807.2302.3.camel@spectralink.com>
+ <32863807-7cf4-75fc-1dd3-0e6f6517986e@gmail.com>
+Message-ID: <1493987636.2742.3.camel@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On Thu, 2017-05-04 at 23:34 +0200, Romain Naour wrote:
+> Hi Stefan, all,
+> 
+> Le 04/05/2017 ? 09:10, S?rensen, Stefan a ?crit :
+> > On Sun, 2017-04-30 at 15:36 +0200, Romain Naour wrote:
+> > 
+> > > +ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
+> > > > +define CRACKLIB_REMOVE_TOOLS
+> > > > +	rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
+> > > 
+> > > Maybe this part can be done in a post install script instead ?
+> > 
+> > Post install script? I can't find any reference to what that is.
+> 
+> Sorry, I meant post build scripts, see BR2_ROOTFS_POST_BUILD_SCRIPT
+> option.
 
- > Since BlueZ 5.44 many command line tools are deprecated, among them
- > gatttool. Add an option to install these tools.
+The tools mostly for creating password dictionaries. I guess that these
+will rarely be used on the target, so to me it seems better to remove
+them in the package, rather than in post build scripts for everybody
+that does not need them.
 
- > Remove the gatttool specific option, since it is redundant now.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/ddb/ddb975c9e1475fee1da63cb21240d8d59b161076/
- > http://autobuild.buildroot.net/results/19a/19adc0aa5a7e48119ef4ba25ba0403867f74f678/
- > http://autobuild.buildroot.net/results/9bd/9bd8e13ddffdd0631ddca30ec40cc4664729b0cb/
-
- > Cc: Marcin Bis <marcin@bis.org.pl>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Stefan
