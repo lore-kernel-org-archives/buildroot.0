@@ -1,26 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 May 2017 21:21:40 +0200
-Subject: [Buildroot] [PATCH] libnl: bump to version 3.3.0
-In-Reply-To: <e9a0eaeb1c229f466436422a54e7723175889f81.1493921149.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 4 May 2017 21:05:49 +0300")
-References: <e9a0eaeb1c229f466436422a54e7723175889f81.1493921149.git.baruch@tkos.co.il>
-Message-ID: <87r303rtx7.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 May 2017 21:23:46 +0200
+Subject: [Buildroot] [PATCH 1/1] fix help text wrapping for configs
+ starting with 'a'
+In-Reply-To: <20170505103343.27171-1-aduskett@codeblue.com>
+References: <20170505103343.27171-1-aduskett@codeblue.com>
+Message-ID: <20170505212346.2aa0b7c5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hello,
 
- > Drop upstream patches. Renumber remaining patches.
- > Add a revert of upstream patch to fix static build. Upstream pull request
- > (#141) is pending.
+On Fri,  5 May 2017 06:33:43 -0400, Adam Duskett wrote:
 
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> -	  Program to change the display mode of Allwinner ARM SOCs running
+> -	  the linux-sunxi kernel (and not the mainline kernel.)
+> +	  Program to change the display mode of Allwinner
+> +	  ARM SOCs running the linux-sunxi kernel
 
-Committed, thanks.
+This rewrapping is wrong, the first line should end with "ARM SOCs", so
+only the word "running" should be on the next line.
 
+Please verify globally, ideally by using a tool that rewraps
+automatically to the correct length.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
