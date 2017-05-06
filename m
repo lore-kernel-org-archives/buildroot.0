@@ -1,59 +1,156 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 May 2017 16:54:01 +0200
-Subject: [Buildroot] Analysis of build results for 2017-05-04
-In-Reply-To: <CANQCQpZJPwwSoFVJ2DCU8tDn7OQPrPr02RABi1UgWwZmH=S8QA@mail.gmail.com>
-References: <20170505062802.8C0262097E@mail.free-electrons.com>
- <20170505132423.3602e294@free-electrons.com>
- <CANQCQpYL-sL2xGKw==LAgEOSnoD_ULAaCtj=cb-KAFyM0ZJt4A@mail.gmail.com>
- <20170506145221.3db37159@free-electrons.com>
- <CANQCQpZJPwwSoFVJ2DCU8tDn7OQPrPr02RABi1UgWwZmH=S8QA@mail.gmail.com>
-Message-ID: <20170506165401.6405e548@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 06 May 2017 15:31:54 +0000
+Subject: [Buildroot] [Bug 9856] New: build libubox failed on ubuntu 17.04
+	64bit
+Message-ID: <bug-9856-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9856
 
-On Sat, 6 May 2017 09:14:04 -0500, Matthew Weber wrote:
+            Bug ID: 9856
+           Summary: build libubox failed on ubuntu 17.04  64bit
+           Product: buildroot
+           Version: 2017.02.1
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: linhuikui at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> I had been running 4 instances on a virtual machine and had symlinked
-> the dl folders together to one.   This was mostly for space reasons
-> and I've since restored it to what you'd expect.
+Created attachment 7061
+  --> https://bugs.busybox.net/attachment.cgi?id=7061&action=edit
+build libubox failed
 
-You can't symlink the download folder: for each instance, we run some
-logic before a build that removes 5 random tarballs from the download
-folder, in order to:
+I config builbroot with lua5.1 and libubox. but built failed.
+buildroot2017.02.1  on ubuntu 17.04  64bit
 
- 1. Keep the download folder size to a reasonable amount
-    (statistically, unused tarballs will be removed at some point)
+below is the build output with cmd make V=1. and the attachment is my .config
+file.
 
- 2. Regularly re-test the download of packages, in order to detect when
-    packages are no longer available upstream.
+begin output:
+make V=1
+umask 0022 && make -C /home/lhk/workspace/buildroot-2017.02.2
+O=/home/lhk/workspace/orangepi/. 
+>>> libubox 290c64ef5b5c3e75be851594f269d6a9568e64e5 Installing to staging directory
+PATH="/home/lhk/workspace/orangepi/host/bin:/home/lhk/workspace/orangepi/host/sbin:/home/lhk/workspace/orangepi/host/usr/bin:/home/lhk/workspace/orangepi/host/usr/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games/opt/Qt5.8.0/5.8/gcc_64/bin"
+ /usr/bin/make -j5 
+DESTDIR=/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot
+install/fast -C
+/home/lhk/workspace/orangepi/build/libubox-290c64ef5b5c3e75be851594f269d6a9568e64e5/
+/usr/bin/make -f CMakeFiles/Makefile2 preinstall
+make[3]: Nothing to be done for 'preinstall'.
+Install the project...
+/usr/bin/cmake -P cmake_install.cmake
+-- Install configuration: "Release"
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/avl-cmp.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/avl.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/blob.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/blobmsg.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/blobmsg_json.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/json_script.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/kvlist.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/list.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/md5.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/runqueue.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/safe_list.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/ulog.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/uloop.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/usock.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/ustream.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/utils.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libubox/vlist.h
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libubox.so
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libubox.a
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libblobmsg_json.so
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libblobmsg_json.a
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/jshn
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libjson_script.so
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/share/libubox/jshn.sh
+-- Up-to-date:
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/lua/5.1/uloop.so
+if test -n "" ; then \
+        echo ">>> libubox 290c64ef5b5c3e75be851594f269d6a9568e64e5 Fixing
+package configuration files" ;\
+                /bin/sed -i -e  "s,/home/lhk/workspace/orangepi, at BASE_DIR@,g" \
+                        -e
+"s,/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot, at STAGING_DIR@,g"
+\
+                        -e
+"s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+                        -e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+                        -e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+                        -e
+"s, at STAGING_DIR@,/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot,g"
+\
+                        -e "s, at BASE_DIR@,/home/lhk/workspace/orangepi,g" \
+                         ;\
+fi
+>>> libubox 290c64ef5b5c3e75be851594f269d6a9568e64e5 Fixing libtool files
+find
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib*
+-name "*.la" | xargs --no-run-if-empty \
+        /bin/sed -i -e "s:/home/lhk/workspace/orangepi:@BASE_DIR@:g" \
+                -e
+"s:/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot:@STAGING_DIR@:g"
+\
+                 -e
+"s:/home/lhk/workspace/orangepi/host/opt/ext-toolchain:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g"
+\
+                -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+                 -e
+"s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:/home/lhk/workspace/orangepi/host/opt/ext-toolchain:g"
+\
+                -e
+"s:@STAGING_DIR@:/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot:g"
+\
+                -e "s:@BASE_DIR@:/home/lhk/workspace/orangepi:g"
+libubox: installs files in
+/home/lhk/workspace/orangepi/host/usr/arm-buildroot-linux-gnueabihf/sysroot//home/lhk/workspace/orangepi
+package/pkg-generic.mk:255: recipe for target
+'/home/lhk/workspace/orangepi/build/libubox-290c64ef5b5c3e75be851594f269d6a9568e64e5/.stamp_staging_installed'
+failed
+make[1]: ***
+[/home/lhk/workspace/orangepi/build/libubox-290c64ef5b5c3e75be851594f269d6a9568e64e5/.stamp_staging_installed]
+Error 1
+Makefile:16: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-However, if you share the downloader folder between instances, this all
-breaks down: a tarball can be removed after it has been downloaded,
-but before it gets extracted (time window is small so almost never
-happens) or a tarball can be removed between the time it gets
-downloaded/extracted and the moment it gets used for "legal-info" (much
-longer time window, which is why we're seeing these issues).
 
-> Here's the whole story....  I have modified the scripts to use a
-> Primary Site from an internal FTP because of proxy stability affecting
-> builds.  Secondly, the script is modified to look at a result for a
-> failing package and see if the build_end.log has a failure related to
-> our proxy or if it's a actual failure (for the case of a new package
-> not yet being on our internal FTP).  The last modification is to use
-> our mirror of buildroot which is 6hrs behind upstream.  This again is
-> proxy related and we had some failures because of timeouts to pulling
-> upstream.   I will take a look at my patchset and see if there maybe
-> should be some enhancements I push upstream.
+End of output.
 
-Lots of issues :-/
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
