@@ -1,40 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 May 2017 10:55:02 +0200
-Subject: [Buildroot] [git commit] dbus: fix dbus symlink removal
-Message-ID: <20170506085526.1D04B827EF@busybox.osuosl.org>
+Date: Sat, 6 May 2017 10:52:51 +0200
+Subject: [Buildroot] [git commit] poppler: add missing std::vector include
+	for Qt code
+Message-ID: <20170506085526.0CF4C801AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2d6c4ac3277e545ef27b3d4f3e6d94e50d76256
+commit: https://git.buildroot.net/buildroot/commit/?id=cb9af5451cef12efba1e1602f3197415ceb1f1ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There was already a post-build hook to delete the /var/lib/dbus symlink
-created by buildroot after the package's own installation, to prevent
-a dbus installation error during "make dbus-rebuild".  However, this
-misses the case for when one might delete the .stamp_target_installed
-file manually, outside of dbus-rebuild.  This can be fixed by changing
-the post-build hook to a pre-install hook.  This seems appropriate,
-since it is really addressing an installation issue, not a build issue.
+Fixes [1], [2]:
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+  ../../poppler/Form.h:544:14: error: ???vector??? in namespace ???std??? does not name a template type
+     const std::vector<Ref> &getCalculateOrder() const { return calculateOrder; }
+
+  ../../poppler/Form.h:556:8: error: ???vector??? in namespace ???std??? does not name a template type
+     std::vector<Ref> calculateOrder;
+
+[1] http://autobuild.buildroot.net/results/b749b252f63945f278358dcd76b6e9c55214ccd8
+[2] http://autobuild.buildroot.net/results/92e68defe746eb4852b3a45bb27af2282d3f4c7e
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../0001-Form-add-missing-std-vector-include.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index d333b20..ce40329 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -82,7 +82,7 @@ define DBUS_REMOVE_VAR_LIB_DBUS
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
- endef
- 
--DBUS_POST_BUILD_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
-+DBUS_PRE_INSTALL_TARGET_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
- 
- define DBUS_REMOVE_DEVFILES
- 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+diff --git a/package/poppler/0001-Form-add-missing-std-vector-include.patch b/package/poppler/0001-Form-add-missing-std-vector-include.patch
+new file mode 100644
+index 0000000..5bca757
+--- /dev/null
++++ b/package/poppler/0001-Form-add-missing-std-vector-include.patch
+@@ -0,0 +1,36 @@
++From 156507c6e85ad05256ccba06a710d47d34cd8153 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 5 May 2017 22:21:19 +0200
++Subject: [PATCH] Form: add missing std::vector include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  ../../poppler/Form.h:544:14: error: ???vector??? in namespace ???std??? does not name a template type
++     const std::vector<Ref> &getCalculateOrder() const { return calculateOrder; }
++
++  ../../poppler/Form.h:556:8: error: ???vector??? in namespace ???std??? does not name a template type
++     std::vector<Ref> calculateOrder;
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ poppler/Form.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/poppler/Form.h b/poppler/Form.h
++index 8ddb6fe..e0a3a28 100644
++--- a/poppler/Form.h
+++++ b/poppler/Form.h
++@@ -27,6 +27,7 @@
++ #include "Annot.h"
++ 
++ #include <set>
+++#include <vector>
++ 
++ class GooString;
++ class Array;
++-- 
++2.11.0
++
