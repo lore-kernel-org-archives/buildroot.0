@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 May 2017 15:55:50 +0200
-Subject: [Buildroot] [PATCH 1/3] package/nodejs: remove support for
- express
-In-Reply-To: <1494076754-3224-1-git-send-email-martin@barkynet.com>
-References: <1494076754-3224-1-git-send-email-martin@barkynet.com>
-Message-ID: <20170506155550.10c369a4@free-electrons.com>
+Date: Sat, 6 May 2017 15:59:23 +0200
+Subject: [Buildroot] [autobuild-run: 1/2] autobuild-run: update cs nios2
+ toolchain comment about PR19405.
+In-Reply-To: <20170506134949.11995-1-romain.naour@gmail.com>
+References: <20170506134949.11995-1-romain.naour@gmail.com>
+Message-ID: <20170506155923.77b64608@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  6 May 2017 14:19:12 +0100, Martin Bark wrote:
-> BR2_PACKAGE_NODEJS_MODULES_EXPRESS has been deprecated.  To continue using
-> add express to BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL
+On Sat,  6 May 2017 15:49:48 +0200, Romain Naour wrote:
+> The toolchain was updated to 2017.02 but the PR19405 issue is still
+> present.
 > 
-> Fixes:
-> http://autobuild.buildroot.org/results/fcfa38e98c22c8809452f7d0ee86dfe2e9d2482f
-> http://autobuild.buildroot.org/results/946996fa78c7814d1e0ea0ef1239c6eb0c7aa8dd
-> http://autobuild.buildroot.org/results/df920e7b17617f1e4867d94eda52cab38f7b0622
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  Config.in.legacy         |  8 ++++++++
->  package/nodejs/Config.in | 10 ----------
->  package/nodejs/nodejs.mk |  1 -
->  3 files changed, 8 insertions(+), 11 deletions(-)
+>  scripts/autobuild-run | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, series applied!
+Both applied to buildroot-test, thanks!
 
 Thomas
 -- 
