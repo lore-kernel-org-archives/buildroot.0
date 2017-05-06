@@ -1,46 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 May 2017 23:01:55 +0200
-Subject: [Buildroot] [PATCH] package/cmake: propagate libuv dependencies
-Message-ID: <20170506210155.13171-1-yann.morin.1998@free.fr>
+Date: Sat,  6 May 2017 23:26:17 +0200
+Subject: [Buildroot] [PATCH] package/rpi-firmware: fix unmet dependencies
+Message-ID: <20170506212617.27587-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In c2c06a6de02,  cmake version was bumped and a new dependency on libuv
-was added, but it did not propagate all the dependencies of libuv,
-missing sync_4 (probably because sync_4 was added after the patch was
-sent on the list, but before it was applied to the tree).
+Currently, vcdbg is only supported in 32-bit mode. Furthermore, vcdbg
+needs rpi-userland, which we currently only support in 32-bit mode.
 
-Fix that, which fixes unmet dependencies.
+Add a dependency on BR2_arm.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/cmake/Config.in | 2 ++
+ package/rpi-firmware/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index 1c95d717b3..64ab15418d 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -19,6 +19,7 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_USE_MMU # libuv
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
- 	select BR2_PACKAGE_CMAKE
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_JSONCPP
-@@ -40,6 +41,7 @@ config BR2_PACKAGE_CMAKE_CTEST
- comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, NPTL"
- 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index 4efef8691e..a7fa1c3b33 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -67,6 +67,7 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+ 	bool "vcdbg"
++	depends on BR2_arm # rpi-userland
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
+ 	select BR2_PACKAGE_RPI_USERLAND
+@@ -74,6 +75,7 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+ 	  Install vcdbg, to help debug communication with the GPU.
+ 
+ comment "vcdbg needs a glibc toolchain w/ C++"
++	depends on BR2_arm
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
+ 
+ endif # BR2_PACKAGE_RPI_FIRMWARE
 -- 
 2.11.0
