@@ -1,102 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 May 2017 11:31:43 +0200
-Subject: [Buildroot] [git commit] rpi-wifi-firmware: new package
-Message-ID: <20170506095014.89C4880438@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat,  6 May 2017 13:02:47 +0200
+Subject: [Buildroot] [PATCH] package/openpowerlink: bump to v2.5.2
+Message-ID: <20170506110247.17670-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5634f4028403dade0ba4b37bcb7f1338863dd919
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove upstream patch.
 
-Add firmware (NVRAM data) for the Raspberry Pi 3 and Zero W wifi module.
-
-Notice that linux-firmware provides the main firmware
-(brcmfmac43430-sdio.bin), but the module also needs board specific
-configuration (NVRAM) data.
-
-For the rpi, this data is available in the RPI firmware-nonfree git repo.
-As this repo contains a lot of unrelated data (~70MB), simply download the
-single NVRAM file instead of cloning the entire repo.
-
-A similar approach is used by openwrt and opensuse:
-
-https://dev.openwrt.org/browser/trunk/package/firmware/brcmfmac43430-firmware/Makefile?rev=49139
-https://build.opensuse.org/package/view_file/hardware/bcm43xx-firmware/bcm43xx-firmware.spec?rev=b1628448b36c85abc9215eab4785ef29
-
-[Peter: add _FIRMWARE_LICENSE as suggested by Yann]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/Config.in                                |  1 +
- package/rpi-wifi-firmware/Config.in              | 10 ++++++++++
- package/rpi-wifi-firmware/rpi-wifi-firmware.hash |  2 ++
- package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
+ ...Veth-Fix-compilation-on-Linux-kernels-4.7.patch | 35 ----------------------
+ package/openpowerlink/openpowerlink.hash           |  8 ++---
+ package/openpowerlink/openpowerlink.mk             |  2 +-
+ 3 files changed, 5 insertions(+), 40 deletions(-)
+ delete mode 100644 package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 1af8150..d57813c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -348,6 +348,7 @@ menu "Firmware"
- 	source "package/linux-firmware/Config.in"
- 	source "package/rpi-bt-firmware/Config.in"
- 	source "package/rpi-firmware/Config.in"
-+	source "package/rpi-wifi-firmware/Config.in"
- 	source "package/sunxi-boards/Config.in"
- 	source "package/ts4900-fpga/Config.in"
- 	source "package/ux500-firmware/Config.in"
-diff --git a/package/rpi-wifi-firmware/Config.in b/package/rpi-wifi-firmware/Config.in
-new file mode 100644
-index 0000000..2c87c75
---- /dev/null
-+++ b/package/rpi-wifi-firmware/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_RPI_WIFI_FIRMWARE
-+	bool "rpi-wifi-firmware"
-+	depends on BR2_arm || BR2_aarch64
-+	select BR2_PACKAGE_LINUX_FIRMWARE
-+	select BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX # runtime
-+	help
-+	  Raspberry Pi 3 and Zero W Broadcom BCM43430 wifi module
-+	  NVRAM data.
-+
-+	  https://github.com/RPi-Distro/firmware-nonfree/
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-new file mode 100644
-index 0000000..c205065
---- /dev/null
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  872fde4f9942d9aba805880d6eaddfe050305626fd58ad955bfe77c04f6b75a5  brcmfmac43430-sdio.txt
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-new file mode 100644
-index 0000000..6c855a8
---- /dev/null
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# rpi-wifi-firmware
-+#
-+################################################################################
-+
-+RPI_WIFI_FIRMWARE_VERSION = 54bab3d6a6d43239c71d26464e6e10e5067ffea7
-+# brcmfmac43430-sdio.bin comes from linux-firmware
-+RPI_WIFI_FIRMWARE_SOURCE = brcmfmac43430-sdio.txt
-+# git repo contains a lot of unrelated files
-+RPI_WIFI_FIRMWARE_SITE = https://raw.githubusercontent.com/RPi-Distro/firmware-nonfree/$(RPI_WIFI_FIRMWARE_VERSION)/brcm80211/brcm
-+RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
-+
-+define RPI_WIFI_FIRMWARE_EXTRACT_CMDS
-+	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
-+endef
-+
-+define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/$(RPI_WIFI_FIRMWARE_SOURCE) \
-+		$(TARGET_DIR)/lib/firmware/brcm/$(RPI_WIFI_FIRMWARE_SOURCE)
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch b/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
+deleted file mode 100644
+index d246f46..0000000
+--- a/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 041799c4990d56b9822ee3ae3ffbb181e5c16c81 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Thu, 3 Nov 2016 21:09:57 +0100
+-Subject: [PATCH] [FIX] Veth: Fix compilation on Linux kernels >= 4.7
+-
+-dev->trans_start was replaced by netif_trans_update helper in kernel
+-4.7 by commit 860e9538a9482bb84589f7d0718a7e6d0a944d58.
+-
+-Upstream status: Pending
+-https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/177
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- stack/src/kernel/veth/veth-linuxkernel.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/stack/src/kernel/veth/veth-linuxkernel.c b/stack/src/kernel/veth/veth-linuxkernel.c
+-index 8c68c47..ecdc000 100644
+---- a/stack/src/kernel/veth/veth-linuxkernel.c
+-+++ b/stack/src/kernel/veth/veth-linuxkernel.c
+-@@ -287,7 +287,11 @@ static int vethStartXmit(struct sk_buff* pSkb_p, struct net_device* pNetDevice_p
+-     struct net_device_stats* pStats = netdev_priv(pNetDevice_p);
+- 
+-     //save time stamp
+-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 7, 0))
+-     pNetDevice_p->trans_start = jiffies;
+-+#else
+-+    netif_trans_update(pNetDevice_p);
+-+#endif
+- 
+-     frameInfo.frame.pBuffer = (tPlkFrame*)pSkb_p->data;
+-     frameInfo.frameSize = pSkb_p->len;
+--- 
+-2.5.5
+-
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index f9c94f9..7132090 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.5.0/
+-md5	929b778a6a4d448d502da5a428322949	openPOWERLINK_V2.5.0.tar.gz
+-sha1	28e2e5621550421e74ba94738f6c12eb8c279fce	openPOWERLINK_V2.5.0.tar.gz
++# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.5.2/
++md5	aa74d7f80d1ef6debcd40f97cd2df3f5	openPOWERLINK_V2.5.2.tar.gz
++sha1	7c46f337324e88096531d2cb74e47750833e851b	openPOWERLINK_V2.5.2.tar.gz
+ # sha256 locally computed
+-sha256	1cb8c44626dbb7f224520667e437b4b430a32699560914f379679b6c58c1309c	openPOWERLINK_V2.5.0.tar.gz
++sha256	4bc288be11ceebba2aa5c2a43a66489218f1e55bb75a07afc9e01e0e6233bcdc	openPOWERLINK_V2.5.2.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 06846ee..adcc48b 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENPOWERLINK_VERSION = V2.5.0
++OPENPOWERLINK_VERSION = V2.5.2
+ OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
+-- 
+2.9.3
