@@ -1,90 +1,78 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  6 May 2017 13:02:47 +0200
-Subject: [Buildroot] [PATCH] package/openpowerlink: bump to v2.5.2
-Message-ID: <20170506110247.17670-1-romain.naour@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 May 2017 14:40:26 +0200
+Subject: [Buildroot] [git commit] wpan-tools: add patch to fix build with
+	libnl 3.3.0
+Message-ID: <20170506124058.375DF827C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove upstream patch.
+commit: https://git.buildroot.net/buildroot/commit/?id=5d80e1c9263bbc142052da4b0612a4558b2b1aff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Fixes:
+
+  http://autobuild.buildroot.net/results/4680e17c3b9bc6714bd511d5beccccdfb976b6f9/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...Veth-Fix-compilation-on-Linux-kernels-4.7.patch | 35 ----------------------
- package/openpowerlink/openpowerlink.hash           |  8 ++---
- package/openpowerlink/openpowerlink.mk             |  2 +-
- 3 files changed, 5 insertions(+), 40 deletions(-)
- delete mode 100644 package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
+ ...tras.h-fix-compatibility-with-libnl-3.3.0.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch b/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
-deleted file mode 100644
-index d246f46..0000000
---- a/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 041799c4990d56b9822ee3ae3ffbb181e5c16c81 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Thu, 3 Nov 2016 21:09:57 +0100
--Subject: [PATCH] [FIX] Veth: Fix compilation on Linux kernels >= 4.7
--
--dev->trans_start was replaced by netif_trans_update helper in kernel
--4.7 by commit 860e9538a9482bb84589f7d0718a7e6d0a944d58.
--
--Upstream status: Pending
--https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/177
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- stack/src/kernel/veth/veth-linuxkernel.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/stack/src/kernel/veth/veth-linuxkernel.c b/stack/src/kernel/veth/veth-linuxkernel.c
--index 8c68c47..ecdc000 100644
----- a/stack/src/kernel/veth/veth-linuxkernel.c
--+++ b/stack/src/kernel/veth/veth-linuxkernel.c
--@@ -287,7 +287,11 @@ static int vethStartXmit(struct sk_buff* pSkb_p, struct net_device* pNetDevice_p
--     struct net_device_stats* pStats = netdev_priv(pNetDevice_p);
-- 
--     //save time stamp
--+#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 7, 0))
--     pNetDevice_p->trans_start = jiffies;
--+#else
--+    netif_trans_update(pNetDevice_p);
--+#endif
-- 
--     frameInfo.frame.pBuffer = (tPlkFrame*)pSkb_p->data;
--     frameInfo.frameSize = pSkb_p->len;
---- 
--2.5.5
--
-diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
-index f9c94f9..7132090 100644
---- a/package/openpowerlink/openpowerlink.hash
-+++ b/package/openpowerlink/openpowerlink.hash
-@@ -1,5 +1,5 @@
--# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.5.0/
--md5	929b778a6a4d448d502da5a428322949	openPOWERLINK_V2.5.0.tar.gz
--sha1	28e2e5621550421e74ba94738f6c12eb8c279fce	openPOWERLINK_V2.5.0.tar.gz
-+# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.5.2/
-+md5	aa74d7f80d1ef6debcd40f97cd2df3f5	openPOWERLINK_V2.5.2.tar.gz
-+sha1	7c46f337324e88096531d2cb74e47750833e851b	openPOWERLINK_V2.5.2.tar.gz
- # sha256 locally computed
--sha256	1cb8c44626dbb7f224520667e437b4b430a32699560914f379679b6c58c1309c	openPOWERLINK_V2.5.0.tar.gz
-+sha256	4bc288be11ceebba2aa5c2a43a66489218f1e55bb75a07afc9e01e0e6233bcdc	openPOWERLINK_V2.5.2.tar.gz
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 06846ee..adcc48b 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENPOWERLINK_VERSION = V2.5.0
-+OPENPOWERLINK_VERSION = V2.5.2
- OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
- OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
- OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
--- 
-2.9.3
+diff --git a/package/wpan-tools/0001-src-nl_extras.h-fix-compatibility-with-libnl-3.3.0.patch b/package/wpan-tools/0001-src-nl_extras.h-fix-compatibility-with-libnl-3.3.0.patch
+new file mode 100644
+index 0000000..8b881ad
+--- /dev/null
++++ b/package/wpan-tools/0001-src-nl_extras.h-fix-compatibility-with-libnl-3.3.0.patch
+@@ -0,0 +1,49 @@
++From bb522bd584f05e6658d5dba97f48ca018f46394c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 6 May 2017 14:36:08 +0200
++Subject: [PATCH] src/nl_extras.h: fix compatibility with libnl 3.3.0
++
++nl_extras.h defines a set of nla_set_s*() functions if not provided by
++libnl. They are provided by libnl since version 3.2.26. The test
++(LIBNL_VER_MIC <= 26) was working fine while libnl was in the 3.2.x
++series, but now that they have incremented the minor version, the
++micro version was reset to 0, with the latest libnl version being
++3.3.0.
++
++Due to this, the condition (LIBNL_VER_MIC <= 26) is true, and we get
++redefinition errors because nl_extras.h redefines functions already
++provided by libnl.
++
++This commit improves the condition so that nl_extras.h provides the
++missing functions only if the minor version is < 2, or if minor is 2
++and micro is < 26.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/nl_extras.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/nl_extras.h b/src/nl_extras.h
++index c4d1d14..37844f9 100644
++--- a/src/nl_extras.h
+++++ b/src/nl_extras.h
++@@ -1,7 +1,7 @@
++ #ifndef __NL_EXTRAS_H
++ #define __NL_EXTRAS_H
++ 
++-#if LIBNL_VER_MIC <= 26
+++#if (LIBNL_VER_MIN < 2) || (LIBNL_VER_MIN == 2) && (LIBNL_VER_MIC <= 26)
++ 
++ #ifndef NLA_S8
++ 
++@@ -45,6 +45,6 @@ static inline int32_t nla_get_s32(struct nlattr *nla)
++ 
++ #endif /* NLA_S64 */
++ 
++-#endif /* LIBNL_VER_MIC */
+++#endif /* LIBNL_VER_* */
++ 
++ #endif /* __NL_EXTRAS_H */
++-- 
++2.7.4
++
