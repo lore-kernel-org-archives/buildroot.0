@@ -1,78 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 May 2017 14:52:21 +0200
-Subject: [Buildroot] Analysis of build results for 2017-05-04
-In-Reply-To: <CANQCQpYL-sL2xGKw==LAgEOSnoD_ULAaCtj=cb-KAFyM0ZJt4A@mail.gmail.com>
-References: <20170505062802.8C0262097E@mail.free-electrons.com>
- <20170505132423.3602e294@free-electrons.com>
- <CANQCQpYL-sL2xGKw==LAgEOSnoD_ULAaCtj=cb-KAFyM0ZJt4A@mail.gmail.com>
-Message-ID: <20170506145221.3db37159@free-electrons.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat,  6 May 2017 14:19:12 +0100
+Subject: [Buildroot] [PATCH 1/3] package/nodejs: remove support for express
+Message-ID: <1494076754-3224-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+BR2_PACKAGE_NODEJS_MODULES_EXPRESS has been deprecated.  To continue using
+add express to BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL
 
-On Fri, 5 May 2017 17:11:08 -0500, Matthew Weber wrote:
+Fixes:
+http://autobuild.buildroot.org/results/fcfa38e98c22c8809452f7d0ee86dfe2e9d2482f
+http://autobuild.buildroot.org/results/946996fa78c7814d1e0ea0ef1239c6eb0c7aa8dd
+http://autobuild.buildroot.org/results/df920e7b17617f1e4867d94eda52cab38f7b0622
 
-> > Matt, since this issue occurred on your autobuilder slave, could you
-> > indicate if you have done some maintenance / manually removed some
-> > downloaded files ?  
-> 
-> Let me check, I have 4 autobuilders setup to share the same archive folder.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ Config.in.legacy         |  8 ++++++++
+ package/nodejs/Config.in | 10 ----------
+ package/nodejs/nodejs.mk |  1 -
+ 3 files changed, 8 insertions(+), 11 deletions(-)
 
-Why do you have such a setup? The autobuild-run script by itself is
-capable of running multiple slave instances at the same time, while
-making sure that each has its own download folder.
-
-> > chmod +x /accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-1/dl/ti_cgt_pru_2.1.4_linux_installer_x86.bin
-> > chmod: changing permissions of '/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-1/dl/ti_cgt_pru_2.1.4_linux_installer_x86.bin': Operation not permitted
-> >
-> > Matthew: this is a configuration issue on your autobuilder slave. It is
-> > not normal that we are not allowed to set execution permissions. Could
-> > you fix this?  
-> 
-> Yep, I'll resolve this tonight.  Similar issue to above, I'm using a
-> cached folder for my builds and the autobuilder.  I''ll fix the
-> permissions and separate the dl folders from being shared.
-
-OK. Please just use the autobuild-run script as-is, and run a single
-invocation of the script. It can spawn multiple instances by itself, as
-said above.
-
-
-> > Fixed by
-> > https://git.buildroot.org/buildroot/commit/?id=4d11848a21d4424a04e8428c4cd3bd5e972aacdf.
-> >
-> > Who wants to be in the DEVELOPERS file for this package ?  
-> 
-> I'll take it.  Want me to submit a patch?
-
-Yes, please :-)
-
-> >>     mips64el |                 libselinux-2.6 | NOK | http://autobuild.buildroot.net/results/98df2219b99c74f63d214dee5feb77925932f17d |  
-> >
-> > Python/SWIG issue in SELinux.
-> >
-> > Matthew? Adam?  
-> 
-> Ah fun, will take a look,  I'm starting to not like SWIG :-)
-
-Thanks!
-
-> > Matthew, are you doing something funky like sharing the download
-> > folders between the different instances ?  
-> 
-> Yes, I will separate them out.
-
-Thanks. But again, I'm worried about why they could be shared. The
-autobuild-run script does not make them shared between instances.
-
-Best regards,
-
-Thomas
+diff --git a/Config.in.legacy b/Config.in.legacy
+index bc14bf2..b0e9254 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
+ 
++config BR2_PACKAGE_NODEJS_MODULES_EXPRESS
++	bool "Express web application framework has been removed"
++	select BR2_LEGACY
++	help
++	  Support for the Express web application framework has been
++	  removed.  To continue using add express to
++	  BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL.
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	bool "bluez5_utils gatttool install option removed"
+ 	select BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 4810d59..d5034cc 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -44,16 +44,6 @@ config BR2_PACKAGE_NODEJS_NPM
+ 
+ 	  Note that NPM is always built for the buildroot host.
+ 
+-config BR2_PACKAGE_NODEJS_MODULES_EXPRESS
+-	bool "Express web application framework"
+-	help
+-	  Express is a minimal and flexible node.js web application
+-	  framework, providing a robust set of features for building
+-	  single and multi-page, and hybrid web applications.
+-
+-	  http://www.expressjs.com
+-	  https://github.com/visionmedia/express
+-
+ config BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT
+ 	bool "CoffeeScript"
+ 	help
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 1a19502..ba6ee4e 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -143,7 +143,6 @@ endef
+ # popular modules, as well as the "additional modules" list.
+ #
+ NODEJS_MODULES_LIST= $(call qstrip,\
+-	$(if $(BR2_PACKAGE_NODEJS_MODULES_EXPRESS),express) \
+ 	$(if $(BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT),coffee-script) \
+ 	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
