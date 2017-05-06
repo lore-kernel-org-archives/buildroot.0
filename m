@@ -1,59 +1,38 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 5 May 2017 20:19:04 -0300 (BRT)
-Subject: [Buildroot] [PATCH 1/3] core: allow check-host-cmake.sh to
- check several candidates
-In-Reply-To: <829990645.21765498.1494023686203.JavaMail.zimbra@datacom.ind.br>
-References: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
- <1494016231-50639-2-git-send-email-casantos@datacom.ind.br>
- <20170505210703.GA3001@scaer>
- <829990645.21765498.1494023686203.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <514021890.21766442.1494026344834.JavaMail.zimbra@datacom.ind.br>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Fri,  5 May 2017 20:51:18 -0400
+Subject: [Buildroot] [PATCH 1/1] dbus: fix dbus symlink removal
+Message-ID: <1494031878-2982-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Carlos Santos" <casantos@datacom.ind.br>
-> To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: buildroot at buildroot.org
-> Sent: Friday, May 5, 2017 7:34:46 PM
-> Subject: Re: [Buildroot] [PATCH 1/3] core: allow check-host-cmake.sh to check several candidates
+There was already a post-build hook to delete the /var/lib/dbus symlink
+created by buildroot after the package's own installation, to prevent
+a dbus installation error during "make dbus-rebuild".  However, this
+misses the case for when one might delete the .stamp_target_installed
+file manually, outside of dbus-rebuild.  This can be fixed by changing
+the post-build hook to a pre-install hook.  This seems appropriate,
+since it is really addressing an installation issue, not a build issue.
 
->> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> To: "Carlos Santos" <casantos@datacom.ind.br>
->> Cc: buildroot at buildroot.org
->> Sent: Friday, May 5, 2017 6:07:03 PM
->> Subject: Re: [Buildroot] [PATCH 1/3] core: allow check-host-cmake.sh to check
->> several candidates
->>> --- a/support/dependencies/check-host-cmake.sh
->>> +++ b/support/dependencies/check-host-cmake.sh
->>> @@ -1,39 +1,41 @@
->>>  #!/bin/sh
->>>  
->>> -candidate="${1}"
->>> -version_min="${2}"
->>> +eval 'version_min="${'${#}'}"'
->> 
->> It took me a moment to understand what this was doing (and I am known
->> for being a shell fanboy!).
->> 
->> Just revert the order options are passed: version first, then
->> candidates. This will allow you to get rid of this weird construct.
->> 
->>    version_min="${1}"
->>    shift # Keep only candidates
-> 
-> I did it that way because all invocations of the "suitable-host-package"
-> macro pass the candidate name as the first argument to the script but I
-> must admit that the script lost some readability.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, doing it as you suggest requires modifying check-host-cmake.mk
-in the same patch to change the argument order, which I'd prefer to
-avoid.
-
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index d333b20..ce40329 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -82,7 +82,7 @@ define DBUS_REMOVE_VAR_LIB_DBUS
+ 	rm -rf $(TARGET_DIR)/var/lib/dbus
+ endef
+ 
+-DBUS_POST_BUILD_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
++DBUS_PRE_INSTALL_TARGET_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
+ 
+ define DBUS_REMOVE_DEVFILES
+ 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.7.4
