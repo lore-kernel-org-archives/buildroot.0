@@ -1,29 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 May 2017 10:55:05 +0200
-Subject: [Buildroot] [PATCH 1/1] dbus: fix dbus symlink removal
-In-Reply-To: <1494031878-2982-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Fri, 5 May 2017 20:51:18 -0400")
-References: <1494031878-2982-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87o9v6qs9i.fsf@dell.be.48ers.dk>
+Date: Sat, 6 May 2017 10:55:02 +0200
+Subject: [Buildroot] [git commit] dbus: fix dbus symlink removal
+Message-ID: <20170506085526.1D04B827EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c2d6c4ac3277e545ef27b3d4f3e6d94e50d76256
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > There was already a post-build hook to delete the /var/lib/dbus symlink
- > created by buildroot after the package's own installation, to prevent
- > a dbus installation error during "make dbus-rebuild".  However, this
- > misses the case for when one might delete the .stamp_target_installed
- > file manually, outside of dbus-rebuild.  This can be fixed by changing
- > the post-build hook to a pre-install hook.  This seems appropriate,
- > since it is really addressing an installation issue, not a build issue.
+There was already a post-build hook to delete the /var/lib/dbus symlink
+created by buildroot after the package's own installation, to prevent
+a dbus installation error during "make dbus-rebuild".  However, this
+misses the case for when one might delete the .stamp_target_installed
+file manually, outside of dbus-rebuild.  This can be fixed by changing
+the post-build hook to a pre-install hook.  This seems appropriate,
+since it is really addressing an installation issue, not a build issue.
 
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index d333b20..ce40329 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -82,7 +82,7 @@ define DBUS_REMOVE_VAR_LIB_DBUS
+ 	rm -rf $(TARGET_DIR)/var/lib/dbus
+ endef
+ 
+-DBUS_POST_BUILD_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
++DBUS_PRE_INSTALL_TARGET_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
+ 
+ define DBUS_REMOVE_DEVFILES
+ 	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
