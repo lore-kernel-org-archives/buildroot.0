@@ -1,29 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 06 May 2017 19:52:52 +0000
-Subject: [Buildroot] [Bug 9856] build libubox failed on ubuntu 17.04 64bit
-In-Reply-To: <bug-9856-163@https.bugs.busybox.net/>
-References: <bug-9856-163@https.bugs.busybox.net/>
-Message-ID: <bug-9856-163-hNsfGz34V0@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  6 May 2017 22:26:10 +0200
+Subject: [Buildroot] [PATCH] package/libubox: fix lua module install path
+Message-ID: <20170506202610.19962-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9856
+The LUAPATH variable is only used when installing the lua module, and
+cmake knows very well how to do out-of-tree isntalls, so there is no
+reason to include the staging path in LUAPATH, which will cause our
+post-install sanity checks to kick in and whine:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+    libubox: installs files in /home/lhk/workspace/orangepi/host/usr/a
+    rm-buildroot-linux-gnueabihf/sysroot//home/lhk/workspace/orangepi
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
-                 CC|                            |yann.morin.1998 at free.fr
+As for libuci, just pass the runtime LUAPATH.
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Confirmed, and I have an idea what to investigate. Hold on...
+Fixes #9856
 
+Reported-by: linhuikui at gmail.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libubox/libubox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 5e2efad0e8..d3e3b709dc 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -13,7 +13,7 @@ LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
+ ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
+ LIBUBOX_DEPENDENCIES += lua
+ LIBUBOX_CONF_OPTS += -DBUILD_LUA=ON \
+-	-DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
++	-DLUAPATH=/usr/lib/lua/5.1 \
+ 	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
+ else
+ LIBUBOX_CONF_OPTS += -DBUILD_LUA=OFF
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
