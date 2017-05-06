@@ -1,49 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 May 2017 10:18:12 +0200
-Subject: [Buildroot] [PATCH 3/3] core: add "cmake3" to the list of cmake
- candidates
-In-Reply-To: <1494016231-50639-4-git-send-email-casantos@datacom.ind.br>
-References: <1494016231-50639-1-git-send-email-casantos@datacom.ind.br>
- <1494016231-50639-4-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170506081812.GC2934@scaer>
+Date: Sat, 6 May 2017 10:27:58 +0200
+Subject: [Buildroot] [PATCH] rpi-wifi-firmware: new package
+In-Reply-To: <20170505183741.30214-1-peter@korsgaard.com>
+References: <20170505183741.30214-1-peter@korsgaard.com>
+Message-ID: <20170506082758.GD2934@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Peter, All,
 
-On 2017-05-05 17:30 -0300, Carlos Santos spake thusly:
-> This is useful on CentOS 7, whose "cmake" utility corresponds to version
-> 2.8.12, which is too old for Buildroot.
+On 2017-05-05 20:37 +0200, Peter Korsgaard spake thusly:
+> Add firmware (NVRAM data) for the Raspberry Pi 3 and Zero W wifi module.
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> Notice that linux-firmware provides the main firmware
+> (brcmfmac43430-sdio.bin), but the module also needs board specific
+> configuration (NVRAM) data.
+> 
+> For the rpi, this data is available in the RPI firmware-nonfree git repo.
+> As this repo contains a lot of unrelated data (~70MB), simply download the
+> single NVRAM file instead of cloning the entire repo.
+> 
+> A similar approach is used by openwrt and opensuse:
+> 
+> https://dev.openwrt.org/browser/trunk/package/firmware/brcmfmac43430-firmware/Makefile?rev=49139
+> https://build.opensuse.org/package/view_file/hardware/bcm43xx-firmware/bcm43xx-firmware.spec?rev=b1628448b36c85abc9215eab4785ef29
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[--SNIP--]
+> diff --git a/package/rpi-wifi-firmware/Config.in b/package/rpi-wifi-firmware/Config.in
+> new file mode 100644
+> index 000000000..2c87c7584
+> --- /dev/null
+> +++ b/package/rpi-wifi-firmware/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_RPI_WIFI_FIRMWARE
+> +	bool "rpi-wifi-firmware"
+> +	depends on BR2_arm || BR2_aarch64
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I know it read "rpi-wifi-firmware" and thus it is arm or aarch64. But
+can we expect the same chip to be used on a non-arm board?
+
+I would just drop the architecture dependency here, because there is
+nothing specific to the SoC here; the WiFi chip is a secondary chip, so
+could well be present on other boards that are non-arm.
+
+> +	select BR2_PACKAGE_LINUX_FIRMWARE
+> +	select BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX # runtime
+> +	help
+> +	  Raspberry Pi 3 and Zero W Broadcom BCM43430 wifi module
+> +	  NVRAM data.
+> +
+> +	  https://github.com/RPi-Distro/firmware-nonfree/
+> diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+> new file mode 100644
+> index 000000000..c20506536
+> --- /dev/null
+> +++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256  872fde4f9942d9aba805880d6eaddfe050305626fd58ad955bfe77c04f6b75a5  brcmfmac43430-sdio.txt
+> diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+> new file mode 100644
+> index 000000000..e90864fae
+> --- /dev/null
+> +++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# rpi-wifi-firmware
+> +#
+> +################################################################################
+> +
+> +RPI_WIFI_FIRMWARE_VERSION = 54bab3d6a6d43239c71d26464e6e10e5067ffea7
+> +# brcmfmac43430-sdio.bin comes from linux-firmware
+> +RPI_WIFI_FIRMWARE_SOURCE = brcmfmac43430-sdio.txt
+> +# git repo contains a lot of unrelated files
+> +RPI_WIFI_FIRMWARE_SITE = https://raw.githubusercontent.com/RPi-Distro/firmware-nonfree/$(RPI_WIFI_FIRMWARE_VERSION)/brcm80211/brcm
+
+License?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  support/dependencies/check-host-cmake.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-> index 42aaee4..f2eef8b 100644
-> --- a/support/dependencies/check-host-cmake.mk
-> +++ b/support/dependencies/check-host-cmake.mk
-> @@ -10,7 +10,7 @@
->  #
->  BR2_CMAKE_VERSION_MIN = 3.1
->  
-> -BR2_CMAKE_CANDIDATES ?= cmake
-> +BR2_CMAKE_CANDIDATES ?= cmake cmake3
->  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
->  	$(BR2_CMAKE_CANDIDATES) $(BR2_CMAKE_VERSION_MIN))
->  ifeq ($(BR2_CMAKE),)
+> +define RPI_WIFI_FIRMWARE_EXTRACT_CMDS
+> +	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
+> +endef
+> +
+> +define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/$(RPI_WIFI_FIRMWARE_SOURCE) \
+> +		$(TARGET_DIR)/lib/firmware/brcm/$(RPI_WIFI_FIRMWARE_SOURCE)
+> +endef
+> +
+> +$(eval $(generic-package))
 > -- 
-> 1.8.3.1
+> 2.11.0
 > 
 > _______________________________________________
 > buildroot mailing list
