@@ -1,30 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 May 2017 10:52:17 +0200
-Subject: [Buildroot] [PATCH] package/miraclecast: drop legacy
-	systemd-kdbus select
-In-Reply-To: <20170505205451.4664-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Fri, 5 May 2017 22:54:51 +0200")
-References: <20170505205451.4664-1-yann.morin.1998@free.fr>
-Message-ID: <87wp9uqse6.fsf@dell.be.48ers.dk>
+Date: Sat, 06 May 2017 10:53:18 +0200
+Subject: [Buildroot] [PATCH v1] poppler: add missing std::vector include
+	for Qt code
+In-Reply-To: <20170505211759.1389-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 5 May 2017 23:17:59 +0200")
+References: <20170505211759.1389-1-ps.report@gmx.net>
+Message-ID: <87shkiqsch.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > This options was recently removed and made it to legacy (in 815f7137739)
- > but miraclecast still selects it.
+ > Fixes [1], [2]:
+ >   ../../poppler/Form.h:544:14: error: ?vector? in namespace ?std? does not name a template type
+ >      const std::vector<Ref> &getCalculateOrder() const { return calculateOrder; }
 
- > miraclecast builds fine without it, it seems, so just drop the select
- > altogether.
+ >   ../../poppler/Form.h:556:8: error: ?vector? in namespace ?std? does not name a template type
+ >      std::vector<Ref> calculateOrder;
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
+ > [1] http://autobuild.buildroot.net/results/b749b252f63945f278358dcd76b6e9c55214ccd8
+ > [2] http://autobuild.buildroot.net/results/92e68defe746eb4852b3a45bb27af2282d3f4c7e
 
-Committed, thanks.
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks. Don't forget to send the patch upstream.
 
 -- 
 Bye, Peter Korsgaard
