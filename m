@@ -1,85 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 May 2017 15:54:44 +0200
-Subject: [Buildroot] [git commit] package/nodejs: remove support for
-	coffeescript
-Message-ID: <20170506135507.B1A917FAB0@busybox.osuosl.org>
+Date: Sat, 6 May 2017 15:55:26 +0200
+Subject: [Buildroot] [git commit] package/openpowerlink: bump to v2.5.2
+Message-ID: <20170506135530.A253C8229A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d999a7f249a26714260b37e00f95ce172b3025ca
+commit: https://git.buildroot.net/buildroot/commit/?id=86b4eeccc47d59a0e4d874861514e78669f68f14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT has been deprecated.  To continue
-using add coffee-script to BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL.
+Remove upstream patch.
 
-Fixes:
-http://autobuild.buildroot.org/results/0e4fb1a615ab9654ad2b4b1274a34583e02aa44e
-http://autobuild.buildroot.org/results/fabf2f5f25c62be615fd09e59e6ad9234385645f
-http://autobuild.buildroot.org/results/8653d78a190df1e691f52a911d8153104c46226b
-http://autobuild.buildroot.org/results/2fc7e5e64ad6ced02a47e5062176d316eed0f43b
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy         | 8 ++++++++
- package/nodejs/Config.in | 7 -------
- package/nodejs/nodejs.mk | 4 +---
- 3 files changed, 9 insertions(+), 10 deletions(-)
+ ...Veth-Fix-compilation-on-Linux-kernels-4.7.patch | 35 ----------------------
+ package/openpowerlink/openpowerlink.hash           |  8 ++---
+ package/openpowerlink/openpowerlink.mk             |  2 +-
+ 3 files changed, 5 insertions(+), 40 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 501581c..3e043d4 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,14 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.05"
- 
-+config BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT
-+	bool "CoffeeScript option has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The option to enable NodeJS CoffeeScript has been removed.
-+	  To continue using it, add "coffee-script" to
-+	  BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL.
-+
- config BR2_PACKAGE_NODEJS_MODULES_EXPRESS
- 	bool "Express web application framework option has been removed"
- 	select BR2_LEGACY
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index d5034cc..3022f9c 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -44,13 +44,6 @@ config BR2_PACKAGE_NODEJS_NPM
- 
- 	  Note that NPM is always built for the buildroot host.
- 
--config BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT
--	bool "CoffeeScript"
--	help
--	  CoffeeScript is a little language that compiles into JavaScript.
+diff --git a/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch b/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
+deleted file mode 100644
+index d246f46..0000000
+--- a/package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 041799c4990d56b9822ee3ae3ffbb181e5c16c81 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Thu, 3 Nov 2016 21:09:57 +0100
+-Subject: [PATCH] [FIX] Veth: Fix compilation on Linux kernels >= 4.7
 -
--	  http://www.coffeescript.org
+-dev->trans_start was replaced by netif_trans_update helper in kernel
+-4.7 by commit 860e9538a9482bb84589f7d0718a7e6d0a944d58.
 -
- config BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL
- 	string "Additional modules"
- 	help
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index ba6ee4e..84f0e2e 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -139,11 +139,9 @@ define NODEJS_BUILD_CMDS
- endef
- 
+-Upstream status: Pending
+-https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/177
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- stack/src/kernel/veth/veth-linuxkernel.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/stack/src/kernel/veth/veth-linuxkernel.c b/stack/src/kernel/veth/veth-linuxkernel.c
+-index 8c68c47..ecdc000 100644
+---- a/stack/src/kernel/veth/veth-linuxkernel.c
+-+++ b/stack/src/kernel/veth/veth-linuxkernel.c
+-@@ -287,7 +287,11 @@ static int vethStartXmit(struct sk_buff* pSkb_p, struct net_device* pNetDevice_p
+-     struct net_device_stats* pStats = netdev_priv(pNetDevice_p);
+- 
+-     //save time stamp
+-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 7, 0))
+-     pNetDevice_p->trans_start = jiffies;
+-+#else
+-+    netif_trans_update(pNetDevice_p);
+-+#endif
+- 
+-     frameInfo.frame.pBuffer = (tPlkFrame*)pSkb_p->data;
+-     frameInfo.frameSize = pSkb_p->len;
+--- 
+-2.5.5
+-
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index f9c94f9..7132090 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.5.0/
+-md5	929b778a6a4d448d502da5a428322949	openPOWERLINK_V2.5.0.tar.gz
+-sha1	28e2e5621550421e74ba94738f6c12eb8c279fce	openPOWERLINK_V2.5.0.tar.gz
++# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.5.2/
++md5	aa74d7f80d1ef6debcd40f97cd2df3f5	openPOWERLINK_V2.5.2.tar.gz
++sha1	7c46f337324e88096531d2cb74e47750833e851b	openPOWERLINK_V2.5.2.tar.gz
+ # sha256 locally computed
+-sha256	1cb8c44626dbb7f224520667e437b4b430a32699560914f379679b6c58c1309c	openPOWERLINK_V2.5.0.tar.gz
++sha256	4bc288be11ceebba2aa5c2a43a66489218f1e55bb75a07afc9e01e0e6233bcdc	openPOWERLINK_V2.5.2.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 06846ee..adcc48b 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,7 +4,7 @@
  #
--# Build the list of modules to install based on the booleans for
--# popular modules, as well as the "additional modules" list.
-+# Build the list of modules to install.
- #
- NODEJS_MODULES_LIST= $(call qstrip,\
--	$(if $(BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT),coffee-script) \
- 	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
+ ################################################################################
  
- # Define NPM for other packages to use
+-OPENPOWERLINK_VERSION = V2.5.0
++OPENPOWERLINK_VERSION = V2.5.2
+ OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
