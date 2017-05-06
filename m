@@ -1,32 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 May 2017 10:53:18 +0200
-Subject: [Buildroot] [PATCH v1] poppler: add missing std::vector include
-	for Qt code
-In-Reply-To: <20170505211759.1389-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 5 May 2017 23:17:59 +0200")
-References: <20170505211759.1389-1-ps.report@gmx.net>
-Message-ID: <87shkiqsch.fsf@dell.be.48ers.dk>
+Date: Sat, 06 May 2017 10:55:05 +0200
+Subject: [Buildroot] [PATCH 1/1] dbus: fix dbus symlink removal
+In-Reply-To: <1494031878-2982-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Fri, 5 May 2017 20:51:18 -0400")
+References: <1494031878-2982-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87o9v6qs9i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- > Fixes [1], [2]:
- >   ../../poppler/Form.h:544:14: error: ?vector? in namespace ?std? does not name a template type
- >      const std::vector<Ref> &getCalculateOrder() const { return calculateOrder; }
+ > There was already a post-build hook to delete the /var/lib/dbus symlink
+ > created by buildroot after the package's own installation, to prevent
+ > a dbus installation error during "make dbus-rebuild".  However, this
+ > misses the case for when one might delete the .stamp_target_installed
+ > file manually, outside of dbus-rebuild.  This can be fixed by changing
+ > the post-build hook to a pre-install hook.  This seems appropriate,
+ > since it is really addressing an installation issue, not a build issue.
 
- >   ../../poppler/Form.h:556:8: error: ?vector? in namespace ?std? does not name a template type
- >      std::vector<Ref> calculateOrder;
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
- > [1] http://autobuild.buildroot.net/results/b749b252f63945f278358dcd76b6e9c55214ccd8
- > [2] http://autobuild.buildroot.net/results/92e68defe746eb4852b3a45bb27af2282d3f4c7e
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Committed, thanks. Don't forget to send the patch upstream.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
