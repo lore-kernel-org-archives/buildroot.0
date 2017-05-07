@@ -1,99 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 May 2017 11:47:06 +0200
-Subject: [Buildroot] [PATCH v2 2/4] core: allow check-host-cmake.sh to
- try several candidates
-In-Reply-To: <1494131541-2960-2-git-send-email-casantos@datacom.ind.br>
-References: <1494131541-2960-1-git-send-email-casantos@datacom.ind.br>
- <1494131541-2960-2-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170507094706.GB2949@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 May 2017 13:32:04 +0200
+Subject: [Buildroot] [PATCH 2/3] package/kodi-peripheral-steamcontroller:
+	new package
+In-Reply-To: <20170507113205.1861-1-bernd.kuhls@t-online.de>
+References: <20170507113205.1861-1-bernd.kuhls@t-online.de>
+Message-ID: <20170507113205.1861-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-peripheral-steamcontroller/Config.in           |  8 ++++++++
+ .../kodi-peripheral-steamcontroller.hash                    |  2 ++
+ .../kodi-peripheral-steamcontroller.mk                      | 13 +++++++++++++
+ package/kodi/Config.in                                      |  1 +
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-peripheral-steamcontroller/Config.in
+ create mode 100644 package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
+ create mode 100644 package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
 
-On 2017-05-07 01:32 -0300, Carlos Santos spake thusly:
-> This is useful on CentOS 7 whose "cmake" package provides cmake 2.8.12,
-> which is too old, but the "cmake3" package (from EPEL) provides version
-> 3.6.3, which is satisfactory. Examples:
-> 
->     $ sh support/dependencies/check-host-cmake.sh 2.8 cmake cmake3
->     /usr/bin/cmake
-> 
->     $ sh support/dependencies/check-host-cmake.sh 3.1 cmake cmake3
->     /usr/bin/cmake3
-> 
->     $ sh support/dependencies/check-host-cmake.sh 3.8 cmake cmake3
->     (nothing)
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, there is a small nit-pick I'd like to point out...
-
-[--SNIP--]
-> +for candidate; do
-> +
-> +    # Try to locate the candidate. Discard it if not located.
-> +    cmake=`which "${candidate}" 2>/dev/null`
-> +    [ -n "${cmake}" ] || continue
-> +
-> +    # Extract version X.Y from versions in the form X.Y or X.Y.Z
-> +    # with X, Y and Z numbers with one or more digits each, e.g.
-> +    #   3.2     -> 3.2
-> +    #   3.2.3   -> 3.2
-> +    #   3.2.42  -> 3.2
-> +    #   3.10    -> 3.10
-> +    #   3.10.4  -> 3.10
-> +    #   3.10.42 -> 3.10
-> +    # Discard the candidate if no version can be obtained
-> +    version="$(${cmake} --version \
-> +               |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
-> +                       -e 's//\1/'
-> +              )"
-> +    [ -n "${version}" ] || continue
-
-... here: the check that version is not empty is new, and semantically
-it looks like it should have been in a spearate patch (prossibly before
-that one).
-
-Unless it is the act of testing multiple candidates that introduces a
-case where the version is empty, but I fil to see how that would be.
-
-In any case, don't re-spin just for that.
-
-Regards,
-Yann E. MORIN.
-
-> +    major="${version%.*}"
-> +    minor="${version#*.}"
-> +
-> +    if [ ${major} -gt ${major_min} ]; then
->          echo "${cmake}"
-> -    else
-> -        # echo nothing: no suitable cmake found
-> -        exit 1
-> +        exit
-> +    elif [ ${major} -eq ${major_min} -a ${minor} -ge ${minor_min} ]; then
-> +        echo "${cmake}"
-> +        exit
->      fi
-> -fi
-> +done
-> +
-> +# echo nothing: no suitable cmake found
-> +exit 1
-> -- 
-> 2.7.4
-> 
-
+diff --git a/package/kodi-peripheral-steamcontroller/Config.in b/package/kodi-peripheral-steamcontroller/Config.in
+new file mode 100644
+index 0000000000..a994f4c9fb
+--- /dev/null
++++ b/package/kodi-peripheral-steamcontroller/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_PERIPHERAL_STEAMCONTROLLER
++	bool "kodi-peripheral-steamcontroller"
++	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Steam controller driver for Kodi
++
++	  https://github.com/kodi-game/peripheral.steamcontroller
+diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
+new file mode 100644
+index 0000000000..c0b3bf6e22
+--- /dev/null
++++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 d5547b78ba84c9743c884a9377c398b540bfcf23e467e1edf8be2625d400c205  kodi-peripheral-steamcontroller-ef527cd81cfcd6c8342691f5c764e5c51df1fca2.tar.gz
+diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+new file mode 100644
+index 0000000000..98cccc8520
+--- /dev/null
++++ b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-peripheral-steamcontroller
++#
++################################################################################
++
++KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = ef527cd81cfcd6c8342691f5c764e5c51df1fca2
++KODI_PERIPHERAL_STEAMCONTROLLER_SITE = $(call github,kodi-game,peripheral.steamcontroller,$(KODI_PERIPHERAL_STEAMCONTROLLER_VERSION))
++KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE = GPL-2.0+
++KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE_FILES = src/addon.cpp
++KODI_PERIPHERAL_STEAMCONTROLLER_DEPENDENCIES = kodi-platform libusb
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 3f0cac684d..aac4b4463d 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -301,6 +301,7 @@ endmenu
+ 
+ menu "Peripheral addons"
+ 	source "package/kodi-peripheral-joystick/Config.in"
++	source "package/kodi-peripheral-steamcontroller/Config.in"
+ endmenu
+ 
+ menu "PVR addons"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
