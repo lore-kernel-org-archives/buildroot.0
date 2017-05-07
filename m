@@ -1,35 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 22:18:23 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: fix examples compile with
- disabled gui module
-In-Reply-To: <20170427210150.1838-1-ps.report@gmx.net>
-References: <20170427210150.1838-1-ps.report@gmx.net>
-Message-ID: <20170507221823.4e2f3285@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 07 May 2017 22:27:31 +0200
+Subject: [Buildroot] Xorg libs and proto
+References: <1494183428.953970867@f205.i.mail.ru>
+Message-ID: <jic4udxkgi.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sun, 07 May 2017 21:57:08 +0300 schrieb ONE TWO:
 
-On Thu, 27 Apr 2017 23:01:50 +0200, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->   Project ERROR: Could not find feature opengl.
-> 
-> [1] http://autobuild.buildroot.net/results/040/040ab283dbbec623fe5ff4eaece754d9701fafc5
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...4-examples-fix-compile-without-gui-module.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
+> What libraries and proto depend for xorg-server! Write these names of
+> libs and proto! :D
 
-Applied to master, thanks.
+Hi,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+the packages xserver_xorg-server depends on are selected by the package:
+
+https://git.buildroot.net/buildroot/tree/package/x11r7/xserver_xorg-
+server/Config.in
+
+Regards, Bernd
