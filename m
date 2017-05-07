@@ -1,24 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 07 May 2017 22:27:31 +0200
-Subject: [Buildroot] Xorg libs and proto
-References: <1494183428.953970867@f205.i.mail.ru>
-Message-ID: <jic4udxkgi.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  7 May 2017 22:38:56 +0200
+Subject: [Buildroot] [PATCH] package/espeak: add comment to ignore 'unmet
+	dependencies'
+Message-ID: <20170507203856.5328-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 07 May 2017 21:57:08 +0300 schrieb ONE TWO:
+On master 86b4eeccc4, espeak can generate spurious 'unmet dependencies'
+messages:
 
-> What libraries and proto depend for xorg-server! Write these names of
-> libs and proto! :D
+    $ make KCONFIG_SEED=0x7A85DEE0 randconfig
+    warning: (BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA) selects
+    BR2_PACKAGE_PORTAUDIO_CXX which has unmet directdependencies
+    (BR2_PACKAGE_PORTAUDIO && BR2_INSTALL_LIBSTDCPP)
 
-Hi,
+However, the dpendency chain *is* correct. There is something that
+causes the kconfig parser to get really confused...
 
-the packages xserver_xorg-server depends on are selected by the package:
+Add a comment statng the issue is spurious, so noone tries to fix it.
 
-https://git.buildroot.net/buildroot/tree/package/x11r7/xserver_xorg-
-server/Config.in
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnaud Aujon <arnaud@intelibre.fr>
+---
+ package/espeak/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards, Bernd
+diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+index aed627af92..6a8f1d4098 100644
+--- a/package/espeak/Config.in
++++ b/package/espeak/Config.in
+@@ -27,6 +27,9 @@ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
+ 
+ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
+ 	bool "alsa via portaudio"
++	# Selecting portaudio generates spurious "unmet dependencies"
++	# warnings. Unless you are changing the dependencies of espeak
++	# or portaudio, just ignore those spurious warnings.
+ 	select BR2_PACKAGE_PORTAUDIO
+ 	select BR2_PACKAGE_PORTAUDIO_CXX
+ 
+-- 
+2.11.0
