@@ -1,30 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 May 2017 21:48:14 +0200
-Subject: [Buildroot] [PATCH] package/cmake: propagate libuv dependencies
-In-Reply-To: <20170506210155.13171-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 6 May 2017 23:01:55 +0200")
-References: <20170506210155.13171-1-yann.morin.1998@free.fr>
-Message-ID: <87tw4wphxd.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 7 May 2017 21:55:00 +0200
+Subject: [Buildroot] [WIP] package/gcc: add support for gcc 7
+In-Reply-To: <20170507143021.GD11446@waldemar-brodkorb.de>
+References: <20170503214656.18802-1-romain.naour@gmail.com>
+ <20170507143021.GD11446@waldemar-brodkorb.de>
+Message-ID: <81fc0b4b-ed43-7145-c2ec-4561d897e7d8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Waldemar,
 
- > In c2c06a6de02,  cmake version was bumped and a new dependency on libuv
- > was added, but it did not propagate all the dependencies of libuv,
- > missing sync_4 (probably because sync_4 was added after the patch was
- > sent on the list, but before it was applied to the tree).
+Le 07/05/2017 ? 16:30, Waldemar Brodkorb a ?crit :
+> Hi Romain,
+> 
+> can you try attached patch?
+> It is for uClibc-ng.
 
- > Fix that, which fixes unmet dependencies.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+efl, enlightenment, lugaru, supertux, minetest, supertuxkart, all the system
+complied with gcc 7 and uclibc + your patch runtime tested successfully :)
 
-Committed, thanks.
+I'll keep this setting for further runtime testing with uClibc-ng on real
+hardware (x86_64 PC target).
 
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
+
+> 
+> best regards
+>  Waldemar
+> 
