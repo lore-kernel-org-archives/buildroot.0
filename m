@@ -1,103 +1,143 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 14:55:48 +0200
-Subject: [Buildroot] Buildroot defconfig failures
-Message-ID: <20170507145548.336e29ad@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  7 May 2017 15:16:52 +0200
+Subject: [Buildroot] [PATCH] package/protobuf: needs gcc >= 4.5
+Message-ID: <20170507131652.22322-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Even with an upstream patch from protobuf v3.3 [1], the build fail with another issue:
 
-Fabio, Ren: there are some questions for you below.
+In file included from google/protobuf/dynamic_message.cc:80:
+./google/protobuf/map_field.h: In member function 'void google::protobuf::internal::MapField<Key, T, key_wire_type, value_wire_type, default_enum_value>::Swap(google::protobuf::internal::MapFieldLite<Key, T, kKeyFieldType, kValueFieldType, default_enum_value>*)':
+./google/protobuf/map_field.h:139: error: object missing in reference to 'google::protobuf::internal::MapFieldBase::repeated_field_'
+./google/protobuf/map_field_inl.h:342: error: from this location
+./google/protobuf/map_field.h:150: error: object missing in reference to 'google::protobuf::internal::MapFieldBase::state_'
+./google/protobuf/map_field_inl.h:344: error: from this location
 
-I took a look at the Buildroot defconfig failures, which have been
-built tested by Gitlab CI this morning. I've fixed a number of them,
-but there are a few that still need fixing:
+Add a dependency on gcc >= 4.5.
 
- - The CSKY defconfig does not build, with "SSP support not available
-   in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP".
-   However, I can't reproduce locally. So I'm not sure what happening.
+[1] https://github.com/google/protobuf/commit/a83ac8663fb8042a881bc60b12a8bd3a0c03a3ff
 
-   There is no hash on the toolchain tarball, but the one I downloaded
-   locally has the exact same size as the one that was downloaded by
-   Gitlab CI. While not an 100% guaranteed proof that it's the same
-   toolchain, it would be unlikely to have the toolchain tarball
-   changed in the mean time.
+Fixes:
+http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef9728c20d54
+http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e916c89f1e3
+http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc75b33d484c
 
-   So the only explanation would be that the SSP check for some reason
-   fails in the Gitlab CI infrastructure.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Mario J. Rugiero <mrugiero@gmail.com>
+---
+ package/mosh/Config.in            | 7 +++++--
+ package/ola/Config.in             | 7 +++++--
+ package/protobuf-c/Config.in      | 6 ++++--
+ package/protobuf/Config.in        | 7 +++++--
+ package/python-protobuf/Config.in | 1 +
+ 5 files changed, 20 insertions(+), 8 deletions(-)
 
-   Arnout, what do you think ?
-
-   Ren, do you have an idea ?
-
-   See https://gitlab.com/buildroot.org/buildroot/builds/15762185
-
- - All Freescale defconfigs that rely on git.freescale.com are failing
-   with "Connection timed out". I'm also not able to clone from
-   git.freescale.com from my local machine, at least with git://. I'm
-   currently trying with http://. If that works, I'll update the
-   defconfigs accordingly.
-
-   Fabio, do you have a suggestion?
-
-The ones that have been fixed:
-
- - armadeus_apf9328_defconfig
-
-   https://gitlab.com/buildroot.org/buildroot/builds/15762159
-
-   Fixed by:
-   https://git.buildroot.org/buildroot/commit/?id=423e1381b426eb63695b1bc36c2d60aaf4001cf0
-
- - beaglebone_qt5_defconfig
-
-   https://gitlab.com/buildroot.org/buildroot/builds/15762182
-
-   Fixed by:
-   https://git.buildroot.org/buildroot/commit/?id=028eb673c8f2c79fb26dfe7287d43bc237441035
-
- - check-gitlab-cy.yml
-
-   https://gitlab.com/buildroot.org/buildroot/builds/15762148
-
-   Fixed by:
-   https://git.buildroot.org/buildroot/commit/?id=6520c06e5b0478e2094a4d61a9b621579cadf0df
-
- - galileo_defconfig
-
-   https://gitlab.com/buildroot.org/buildroot/builds/15762201
-
-   Fixed by:
-   https://git.buildroot.org/buildroot/commit/?id=fcbb098a0c87337752afdd5cb76bd9714a9873eb
-
- - pc_x86_64_efi_defconfig
-
-   https://gitlab.com/buildroot.org/buildroot/builds/15762234
-
-   Fixed by:
-   https://git.buildroot.org/buildroot/commit/?id=a4b8342bbe4761b5e9e5306ff549f0ca8bc166bb
-
- - snps_archs38_zebu_defconfig
-
-   https://gitlab.com/buildroot.org/buildroot/builds/15762277
-
-   Fixed by
-   https://git.buildroot.org/buildroot/commit/?id=ef1ad1fe66a6f55a7d5e1c45c88f665c9470c363
-
- - stm32f469_disco_defconfig 
-
-   https://gitlab.com/buildroot.org/buildroot/builds/15762279
-
-   Fixed by:
-   https://git.buildroot.org/buildroot/commit/?id=c383e8fc8be95deb16032fecd1de00792e2cddb0
-
-Best regards,
-
-Thomas
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index d1fbd63..e0ff2cf 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -1,6 +1,7 @@
+-comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar"
++comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, host and target gcc >= 4.5"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
++		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
++		|| !BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_MOSH
+@@ -8,6 +9,8 @@ config BR2_PACKAGE_MOSH
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
++	depends on BR2_HOST_GCC_AT_LEAST_4_5 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_PROTOBUF
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index 656e825..45e8f8f 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -1,6 +1,7 @@
+-comment "ola needs a toolchain w/ C++, threads, dynamic library"
++comment "ola needs a toolchain w/ C++, threads, dynamic library, host and target gcc >= 4.5"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_4_5 \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on BROKEN
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+@@ -16,6 +17,8 @@ menuconfig BR2_PACKAGE_OLA
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_4_5 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # protobuf
+ 	help
+ 	  Open Lighting Architecture provides applications
+ 	  with a mechanism to send and receive DMX512 & RDM
+diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
+index a32e6cd..6f916c5 100644
+--- a/package/protobuf-c/Config.in
++++ b/package/protobuf-c/Config.in
+@@ -4,12 +4,14 @@ config BR2_PACKAGE_PROTOBUF_C
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
+ 	help
+ 	  Code generator and runtime libraries to use Protocol Buffers
+ 	  from pure C (not C++).
+ 
+ 	  https://github.com/protobuf-c/protobuf-c
+ 
+-comment "protobuf-c needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "protobuf-c needs a toolchain w/ C++, threads, host gcc >= 4.5"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_HOST_GCC_AT_LEAST_4_5
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 03d118c..8287035 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -30,6 +30,8 @@ config BR2_PACKAGE_PROTOBUF
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_4_5
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Protocol buffers are Google's language-neutral, platform-neutral,
+@@ -37,7 +39,8 @@ config BR2_PACKAGE_PROTOBUF
+ 
+ 	  https://developers.google.com/protocol-buffers
+ 
+-comment "protobuf needs a toolchain w/ C++, threads, dynamic library"
++comment "protobuf needs a toolchain w/ C++, threads, dynamic library, host and target gcc >= 4.5"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_4_5 \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
+index 3cfddd3..68523e9 100644
+--- a/package/python-protobuf/Config.in
++++ b/package/python-protobuf/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_PROTOBUF
+ 	depends on BR2_PACKAGE_PYTHON
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
+ 	help
+ 	  Python implementation of the Google Protocol Buffers.
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
