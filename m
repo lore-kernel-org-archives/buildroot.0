@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 22:09:30 +0200
-Subject: [Buildroot] [PATCH] Revert "toolchain-external: CodeSourcery
- NiosII 2015.11 affected by PR19405"
-In-Reply-To: <20170506135420.12274-1-romain.naour@gmail.com>
-References: <20170506135420.12274-1-romain.naour@gmail.com>
-Message-ID: <20170507220930.137da1d8@free-electrons.com>
+Date: Sun, 7 May 2017 22:16:49 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/cwiid: add optional
+ dependency to bluez5_utils
+In-Reply-To: <16e63a8d-e200-457d-bd74-01176c67d4fe@mind.be>
+References: <20170321072207.5396-1-bernd.kuhls@t-online.de>
+ <20170321073124.5qynrhrg4cp5gndm@tarshish>
+ <16e63a8d-e200-457d-bd74-01176c67d4fe@mind.be>
+Message-ID: <20170507221649.132031c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +15,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  6 May 2017 15:54:20 +0200, Romain Naour wrote:
-> An autobuilder exception has been added to avoid testing qt gui module
-> with the CodeSourcery NiosII toolchain. This allow to remove the
-> BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 symbol.
-> 
-> This reverts commit 5dce3c05b5ea38539f6ee6efc24c13db936260dc.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/opencv/Config.in                                           | 7 -------
->  package/opencv3/Config.in                                          | 5 ++---
->  package/pinentry/Config.in                                         | 4 ----
->  package/poppler/Config.in                                          | 4 ----
->  package/qt/Config.in                                               | 7 -------
->  package/qwt/Config.in                                              | 6 +-----
->  toolchain/toolchain-common.in                                      | 4 ----
->  .../toolchain-external-codesourcery-niosII/Config.in               | 1 -
->  8 files changed, 3 insertions(+), 35 deletions(-)
+On Tue, 21 Mar 2017 09:36:23 +0100, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+> >> -	select BR2_PACKAGE_BLUEZ_UTILS
+> >> +	select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS  
+> > 
+> > You need to add missing bluez5_utils dependencies 
+> > (BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4, BR2_TOOLCHAIN_HAS_SYNC_4). Changing 
+> > bluez_utils to bluez5_utils in the comments above would also be nice.  
+> 
+>  Darn, this is getting complicated... We would want to keep the dependencies as
+> they are, and use bluez_utils in case bluez5_utils are not available. But that
+> would mean something like:
+> 
+> 	select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS \
+> 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
+> 		&& BR2_TOOLCHAIN_HAS_SYNC_4
+> 	select BR2_PACKAGE_BLUEZ_UTILS if !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
+> 		|| !BR2_TOOLCHAIN_HAS_SYNC_4
+> 
+>  Yuk...
+> 
+>  Perhaps a BR2_PACKAGE_BLUEZ5_UTILS_ARCH_SUPPORTS would help?
+
+Perhaps it's a case where we need to use a "depends on" dependency
+rather than a "select" dependency, i.e do:
+
+	depends on BR2_PACKAGE_BLUEZ5_UTILS || BR2_PACKAGE_BLUEZ_UTILS
+
+Bernd, could you resubmit your patch with this idea? Don't forget to
+remove the "depends on" on toolchain/architecture features that are no
+longer needed.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
