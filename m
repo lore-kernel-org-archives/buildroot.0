@@ -1,37 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 7 May 2017 21:55:00 +0200
-Subject: [Buildroot] [WIP] package/gcc: add support for gcc 7
-In-Reply-To: <20170507143021.GD11446@waldemar-brodkorb.de>
-References: <20170503214656.18802-1-romain.naour@gmail.com>
- <20170507143021.GD11446@waldemar-brodkorb.de>
-Message-ID: <81fc0b4b-ed43-7145-c2ec-4561d897e7d8@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 7 May 2017 21:53:39 +0200
+Subject: [Buildroot] [git commit] rpi-firmware: extend vcdbg architecture
+	dependency comment
+Message-ID: <20170507195639.BB03B82856@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+commit: https://git.buildroot.net/buildroot/commit/?id=04829295c78bd49f4d6238f2ffdb03d744202932
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 07/05/2017 ? 16:30, Waldemar Brodkorb a ?crit :
-> Hi Romain,
-> 
-> can you try attached patch?
-> It is for uClibc-ng.
+The main reason why vcdbg is only available on ARM is the fact that this is
+a prebuilt ARM binary rather than the rpi-userland dependency, so adjust the
+comment to clarify.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpi-firmware/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-efl, enlightenment, lugaru, supertux, minetest, supertuxkart, all the system
-complied with gcc 7 and uclibc + your patch runtime tested successfully :)
-
-I'll keep this setting for further runtime testing with uClibc-ng on real
-hardware (x86_64 PC target).
-
-Best regards,
-Romain
-
-> 
-> best regards
->  Waldemar
-> 
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index a7fa1c3..da32b8e 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -67,7 +67,7 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+ 	bool "vcdbg"
+-	depends on BR2_arm # rpi-userland
++	depends on BR2_arm # prebuilt arm binary, rpi-userland
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
+ 	select BR2_PACKAGE_RPI_USERLAND
