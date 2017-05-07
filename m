@@ -1,43 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 15:20:52 +0200
-Subject: [Buildroot] [PATCH] package/protobuf: needs gcc >= 4.5
-In-Reply-To: <20170507131652.22322-1-romain.naour@gmail.com>
-References: <20170507131652.22322-1-romain.naour@gmail.com>
-Message-ID: <20170507152052.011081f0@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 07 May 2017 15:32:45 +0200
+Subject: [Buildroot] Kodi 17.1 - segfault - arm - gcc 5.x
+References: <CACPGbctoBjhuJ8PVCziKzJpN8j5KnPTKOkX6Sk9OZtniQVvVhw@mail.gmail.com>
+Message-ID: <t8k3udxufq.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Sun,  7 May 2017 15:16:52 +0200, Romain Naour wrote:
+Am Fri, 05 May 2017 15:12:01 +0200 schrieb Nicolas Adenis-Lamarre:
 
-> diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-> index a32e6cd..6f916c5 100644
-> --- a/package/protobuf-c/Config.in
-> +++ b/package/protobuf-c/Config.in
-> @@ -4,12 +4,14 @@ config BR2_PACKAGE_PROTOBUF_C
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	# host-protobuf only builds on certain architectures
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
+> Kodi 17.1 won't compile with gcc 4.9.
 
-You're adding a new dependency to protobuf-c, but protobuf-c is also
-selected by a few packages:
+What happened? I could build Kodi right now using this defconfig:
 
-package/collectd/Config.in:     select BR2_PACKAGE_PROTOBUF_C
-package/riemann-c-client/Config.in:     select BR2_PACKAGE_PROTOBUF_C
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_ARM_FPU_VFPV4=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_KERNEL_HEADERS_4_9=y
+BR2_GCC_VERSION_4_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_RPI_USERLAND=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
 
-You also need to propagate the dependency to these packages.
+> I've upgraded to 5.4, but the segfaults came back.
+> 
+> I've reproduced on rpi2 and odroid xu4. i've not managed to reproduce on
+> x86.
 
-Generally speaking, when propagating new dependencies, you should not
-only take care of first level reverse dependencies, but also
-recursively take care of all reverse dependencies.
+can you provide a gdb backtrace?
+FYI: I do not have access to arm hardware so maybe I can not help much.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> For information, the kodi-joystick package should be added in buildroot
+> while it's usefull on embeded devices :
+> https://github.com/nadenislamarre/batocera.linux/tree/master/package/
+batocera/kodi-joystick
+
+http://patchwork.ozlabs.org/patch/759427/
+
+Regards, Bernd
