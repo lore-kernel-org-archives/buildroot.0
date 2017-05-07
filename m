@@ -1,54 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 07 May 2017 19:34:54 +0000
-Subject: [Buildroot] [Bug 9846] musl libc not installed correctly in target
-	folder
-In-Reply-To: <bug-9846-163@https.bugs.busybox.net/>
-References: <bug-9846-163@https.bugs.busybox.net/>
-Message-ID: <bug-9846-163-axMbp7PuyX@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 May 2017 21:38:54 +0200
+Subject: [Buildroot] [PATCH] mpir: fix ARM,
+ PowerPC and mips builds failure
+In-Reply-To: <1494178984-19821-2-git-send-email-semenak94@mail.ru>
+References: <mpir: fix ARM, PowerPC64 and MIPS build failure>
+ <1494178984-19821-1-git-send-email-semenak94@mail.ru>
+ <1494178984-19821-2-git-send-email-semenak94@mail.ru>
+Message-ID: <20170507213854.413cfc6c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9846
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Sun,  7 May 2017 20:43:04 +0300, Semyon Kolganov wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
-             Status|NEW                         |RESOLVED
+> +# Prefer generic build
+> +MPIR_CONF_ENV += MPN_PATH=generic
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for your report. Unfortunately, I'm not able to reproduce. The musl
-system produced by your defconfig looks OK to me:
+I think this is really wrong, because it will use in all cases the
+non-optimized generic code, instead of the more optimized assembly code
+available for a number of architectures:
 
-$ ls -l target/lib/libc.so 
--rwxr-xr-x 1 test test 587296 May  7 15:29 target/lib/libc.so
+$ ls mpn/
+alpha  arm  asm-defs.m4  cpp-ccas  generic  ia64  m4-ccas  Makeasm.am  Makefile.am  Makefile.in  mips32  mips64  powerpc32  powerpc64  README  sparc32  sparc64  x86  x86_64  x86_64w  x86w
 
-And it boots just fine (tested under Qemu):
+Best regards,
 
-Welcome to TEST
-test login: 
-Welcome to TEST
-test login: 
-
-So, a few options:
-
- 1. Something has been fixed since then, but I don't recall any fix related to
-this being applied recently.
-
- 2. Something is different on your build machine.
-
- 3. You did not clean up the build completely.
-
-I'll mark the bug as WORKSFORME for now. If you manage to reproduce again with
-the latest Buildroot, could you try to preview a simpler defconfig that
-exhibits the issue so that we can try to narrow down the issue ?
-
-Keeping the full build log would also be useful.
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
