@@ -1,10 +1,11 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 7 May 2017 22:55:48 +0200
-Subject: [Buildroot] [PATCH v3 3/5] support/testing: add fs tests
-In-Reply-To: <1490042214-6762-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 May 2017 23:07:31 +0200
+Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
+ infrastructure
+In-Reply-To: <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490042214-6762-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <dff1d449-5d0a-c6f8-2fd7-000e5a79247b@lucaceresoli.net>
+ <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <dd7ec6aa-0778-8e92-b031-cbc82c982005@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,163 +19,168 @@ been applied, I've reworded it as a list of proposed improvements and
 request for clarifications.
 
 On 20/03/2017 21:36, Thomas Petazzoni wrote:
-> This commit adds a number of test cases for various filesystem formats:
-> ext2/3/4, iso9660, jffs2, squashfs, ubi/ubifs and yaffs2. All of them
-> except yaffs2 are runtime tested. The iso9660 set of test cases is
-> particularly rich, testing the proper operation of the iso9660 support
-> with all of grub, grub2 and isolinux.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/testing/conf/grub-menu.lst                 |  20 +++
->  support/testing/conf/grub2.cfg                     |   7 +
->  support/testing/conf/isolinux.cfg                  |   5 +
->  .../testing/conf/minimal-x86-qemu-kernel.config    |  23 +++
->  support/testing/tests/fs/__init__.py               |   0
->  support/testing/tests/fs/test_ext.py               | 119 +++++++++++++++
->  support/testing/tests/fs/test_iso9660.py           | 162 +++++++++++++++++++++
->  support/testing/tests/fs/test_jffs2.py             |  45 ++++++
->  support/testing/tests/fs/test_squashfs.py          |  37 +++++
->  support/testing/tests/fs/test_ubi.py               |  39 +++++
->  support/testing/tests/fs/test_yaffs2.py            |  12 ++
->  11 files changed, 469 insertions(+)
->  create mode 100644 support/testing/conf/grub-menu.lst
->  create mode 100644 support/testing/conf/grub2.cfg
->  create mode 100644 support/testing/conf/isolinux.cfg
+> This commit adds the core of a new testing infrastructure that allows to
+> perform runtime testing of Buildroot generated systems. This
+> infrastructure uses the Python unittest logic as its foundation.
 
-I suspect it's already been suggested, but I would rather put these
-files in the 'fs' subdirectory, unless we expect to use them for non-fs
-tests.
+Good we have this on master now!
 
-Do other people agree? Should I send a patch?
+Things that I already commented about and for which I plan to send patches:
+- remove smart_open
+- document code
+- better reporting
 
-> diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+[...]
+
+> diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
 > new file mode 100644
-> index 0000000..f7e2e85
+> index 0000000..c3f645c
 > --- /dev/null
-> +++ b/support/testing/tests/fs/test_ext.py
-[...]
-> +def dumpe2fs_getprop(out, prop):
-> +    for lines in out:
+> +++ b/support/testing/infra/__init__.py
+> @@ -0,0 +1,89 @@
+> +import contextlib
+> +import os
+> +import re
+> +import sys
+> +import tempfile
+> +import subprocess
+> +from urllib2 import urlopen, HTTPError, URLError
+> +
+> +ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
 
-Here 'lines' is set to a string (one line)...
-
-> +        lines = lines.split(": ")
-
-...and here it is reassigned to a list (the line fields, as they are
-called in awk. Or is the second assignment of 'lines' creating a new
-variable with the same name? Whether the reply, I don't like this.
-
-> +        if lines[0] == prop:
-> +            return lines[1].strip()
-
-My proposal (tested):
-
-def dumpe2fs_getprop(out, prop):
-    for line in out:
-        fields = line.split(": ")
-        if fields[0] == prop:
-            return fields[1].strip()
-
-Unless there's a good reason to keep the code as is, I'll send a patch
-anyway, to improve readability at least.
-
-> +def boot_img_and_check_fs_type(emulator, builddir, fs_type):
-> +    img = os.path.join(builddir, "images", "rootfs.{}".format(fs_type))
-
-Here (and similarly in several other places) this looks a lot more
-intuitive and concise to me:
-
-  "rootfs." + fs_type
-
-Any good reason the initial form is preferred? Pythonists out there?
+Since you renamed artefacts to artifacts, it's probably good to rename
+in the URL too (and update the server). Sure it's a minor nit, but since
+it's an URL that should stay available for long, better having it fixed
+as soon as possible.
 
 [...]
 
-> +class TestExt3(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +"""
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_3=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +"""
-> +
-> +    def test_run(self):
-> +        out = dumpe2fs_run(self.builddir, "rootfs.ext3")
-> +        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
-> +        self.assertIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
-> +
-> +        exit_code = boot_img_and_check_fs_type(self.emulator,
-> +                                               self.builddir, "ext3")
-> +        self.assertEqual(exit_code, 0)
-> +
-> +class TestExt4(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +"""
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_BLOCKS=16384
-> +BR2_TARGET_ROOTFS_EXT2_INODES=3000
-> +BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +"""
-> +
-> +    def test_run(self):
-> +        out = dumpe2fs_run(self.builddir, "rootfs.ext4")
-> +        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
-> +        self.assertEqual(dumpe2fs_getprop(out, BLOCKCNT_PROP), "16384")
-> +        # Yes there are 8 more inodes than requested
-> +        self.assertEqual(dumpe2fs_getprop(out, INODECNT_PROP), "3008")
-> +        self.assertEqual(dumpe2fs_getprop(out, RESBLKCNT_PROP), "1638")
-> +        self.assertIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
-> +        self.assertIn("extent", dumpe2fs_getprop(out, FEATURES_PROP))
-
-It would be nice to have both positive and a negative test for each
-tested item. Specifically, I'd add self.assertIn("extent", ...) for ext3.
-
-I'll send a patch for this.
-
-> diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
+> diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
 > new file mode 100644
-> index 0000000..eec6e89
+> index 0000000..7c476cb
 > --- /dev/null
-> +++ b/support/testing/tests/fs/test_iso9660.py
-
-[...]
-
-> +#
-> +# Syslinux
-> +#
+> +++ b/support/testing/infra/emulator.py
+> @@ -0,0 +1,135 @@
+> +import socket
+> +import subprocess
+> +import telnetlib
 > +
-> +class TestIso9660SyslinuxExternal(infra.basetest.BRTest):
+> +import infra
+> +import infra.basetest
+> +
+> +# TODO: Most of the telnet stuff need to be replaced by stdio/pexpect to discuss
+> +# with the qemu machine.
+> +class Emulator(object):
+> +
+> +    def __init__(self, builddir, downloaddir, logtofile):
+> +        self.qemu = None
+> +        self.__tn = None
+> +        self.downloaddir = downloaddir
+> +        self.log = ""
+> +        self.log_file = "{}-run.log".format(builddir)
+> +        if logtofile is None:
+> +            self.log_file = None
+> +
+> +    # Start Qemu to boot the system
+> +    #
+> +    # arch: Qemu architecture to use
+> +    #
+> +    # kernel: path to the kernel image, or the special string
+> +    # 'builtin'. 'builtin' means a pre-built kernel image will be
+> +    # downloaded from ARTEFACTS_URL and suitable options are
+> +    # automatically passed to qemu and added to the kernel cmdline. So
+> +    # far only armv5, armv7 and i386 builtin kernels are available.
+> +    # If None, then no kernel is used, and we assume a bootable device
+> +    # will be specified.
+> +    #
+> +    # kernel_cmdline: array of kernel arguments to pass to Qemu -append option
+> +    #
+> +    # options: array of command line options to pass to Qemu
+> +    #
+> +    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
+> +        if arch in ["armv7", "armv5"]:
+> +            qemu_arch = "arm"
+> +        else:
+> +            qemu_arch = arch
+> +
+> +        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
+> +                    "-serial", "telnet::1234,server",
+> +                    "-display", "none"]
+> +
+> +        if options:
+> +            qemu_cmd += options
+> +
+> +        if kernel_cmdline is None:
+> +            kernel_cmdline = []
+> +
+> +        if kernel:
+> +            if kernel == "builtin":
+> +                if arch in ["armv7", "armv5"]:
+> +                    kernel_cmdline.append("console=ttyAMA0")
+> +
+> +                if arch == "armv7":
+> +                    kernel = infra.download(self.downloaddir,
+> +                                            "kernel-vexpress")
+> +                    dtb = infra.download(self.downloaddir,
+> +                                         "vexpress-v2p-ca9.dtb")
+> +                    qemu_cmd += ["-dtb", dtb]
+> +                    qemu_cmd += ["-M", "vexpress-a9"]
+> +                elif arch == "armv5":
+> +                    kernel = infra.download(self.downloaddir,
+> +                                            "kernel-versatile")
+> +                    qemu_cmd += ["-M", "versatilepb"]
+> +
+> +            qemu_cmd += ["-kernel", kernel]
 
-The two syslinux tests are failing on top of current master. This is
-since commit 6e432d5ecb46 ("syslinux: build with the target toolchain").
+I'm OK with the "builtin" logic, but I really dislike it being
+hard-coded in Emulator.boot(). It's acceptable for the moment since we
+have only very few builtin kernels. Should we add more in the future, I
+think we should at least have a sort of "database" of builtin kernels,
+perhaps in the form of an associative array.
 
-The error message is:
-
-  .../i686-linux-ld: unrecognized option '--no-dynamic-linker'
-
-> diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
-> new file mode 100644
-> index 0000000..edaa087
+> diff --git a/support/testing/run-tests b/support/testing/run-tests
+> new file mode 100755
+> index 0000000..339bb66
 > --- /dev/null
-> +++ b/support/testing/tests/fs/test_squashfs.py
-[...]
-> +    def test_run(self):
-> +        unsquashfs_cmd = ["host/usr/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
-> +        out = subprocess.check_output(unsquashfs_cmd,
-> +                                      cwd=self.builddir,
-> +                                      env={"LANG": "C"})
-> +        out = out.splitlines()
-> +        self.assertEqual(out[0],
-> +                         "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
-> +        self.assertEqual(out[3], "Compression lz4")
+> +++ b/support/testing/run-tests
+> @@ -0,0 +1,83 @@
+> +#!/usr/bin/env python2
+> +import argparse
+> +import sys
+> +import os
+> +import nose2
 > +
-> +        img = os.path.join(self.builddir, "images", "rootfs.squashfs")
-> +        subprocess.call(["truncate", "-s", "%1M", img])
+> +from infra.basetest import BRTest
+> +
+> +def main():
+> +    parser = argparse.ArgumentParser(description='Run Buildroot tests')
+> +    parser.add_argument('testname', nargs='*',
+> +                        help='list of test cases to execute')
+> +    parser.add_argument('--list', '-l', action='store_true',
+> +                        help='list of available test cases')
+> +    parser.add_argument('--all', '-a', action='store_true',
+> +                        help='execute all test cases')
+> +    parser.add_argument('--stdout', '-s', action='store_true',
+> +                        help='log everything to stdout')
+> +    parser.add_argument('--output', '-o',
+> +                        help='output directory')
+> +    parser.add_argument('--download', '-d',
+> +                        help='download directory')
+> +    parser.add_argument('--keep', '-k',
+> +                        help='keep build directories',
+> +                        action='store_true')
 
-Why do we need this call to truncate?
+Stylish note: I would put the one-letter form before the long form. This
+is not only my personal taste, but also what the manpages usually do,
+and what Python does with the automatically-added -h/--help parameter:
+
+  $ ./support/testing/run-tests
+  [...]
+  optional arguments:
+    -h, --help            show this help message and exit
+    --list, -l            list of available test cases
+
+I'll send a patch.
 
 -- 
 Luca
