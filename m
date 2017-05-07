@@ -1,236 +1,524 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 7 May 2017 22:04:54 +0200
-Subject: [Buildroot] [git commit] support/testing: add core tests
-Message-ID: <20170507200502.DE734827D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: core testing
+	infrastructure
+Message-ID: <20170507200502.C830C82823@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96e21b617d72fc94445e18b6fb1e653850e0885e
+commit: https://git.buildroot.net/buildroot/commit/?id=a732fb222b8a60076a93d490834d459b0a1c1d6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a few Buildroot "core" tests, testing functionalities
-such as:
+This commit adds the core of a new testing infrastructure that allows to
+perform runtime testing of Buildroot generated systems. This
+infrastructure uses the Python unittest logic as its foundation.
 
- - post-build and post-image scripts
- - root filesystem overlays
- - timezone support
+This core infrastructure commit includes the following aspects:
+
+ - A base test class, called BRTest, defined in
+   support/testing/infra/basetest.py. This base test class inherited
+   from the Python provided unittest.TestCase, and must be subclassed by
+   all Buildroot test cases.
+
+   Its main purpose is to provide the Python unittest setUp() and
+   tearDown() methods. In our case, setUp() takes care of building the
+   Buildroot system described in the test case, and instantiate the
+   Emulator object in case runtime testing is needed. The tearDown()
+   method simply cleans things up (stop the emulator, remove the output
+   directory).
+
+ - A Builder class, defined in support/testing/infra/builder.py, simply
+   responsible for building the Buildroot system in each test case.
+
+ - An Emulator class, defined in support/testing/infra/emulator.py,
+   responsible for running the generated system under Qemu, allowing
+   each test case to run arbitrary commands inside the emulated system.
+
+ - A run-tests script, which is the entry point to start the tests.
+
+Even though I wrote the original version of this small infrastructure, a
+huge amount of rework and improvement has been done by Maxime
+Hadjinlian, and squashed into this patch. So many thanks to Maxime for
+cleaning up and improving my Python code!
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/tests/core/__init__.py             |  0
- support/testing/tests/core/post-build.sh           | 12 ++++
- support/testing/tests/core/post-image.sh           | 12 ++++
- .../testing/tests/core/rootfs-overlay1/test-file1  |  1 +
- .../tests/core/rootfs-overlay2/etc/test-file2      |  1 +
- support/testing/tests/core/test_post_scripts.py    | 40 +++++++++++++
- support/testing/tests/core/test_rootfs_overlay.py  | 27 +++++++++
- support/testing/tests/core/test_timezone.py        | 66 ++++++++++++++++++++++
- 8 files changed, 159 insertions(+)
+ support/testing/conf/unittest.cfg |   6 ++
+ support/testing/infra/__init__.py |  89 +++++++++++++++++++++++++
+ support/testing/infra/basetest.py |  66 +++++++++++++++++++
+ support/testing/infra/builder.py  |  49 ++++++++++++++
+ support/testing/infra/emulator.py | 135 ++++++++++++++++++++++++++++++++++++++
+ support/testing/run-tests         |  83 +++++++++++++++++++++++
+ support/testing/tests/__init__.py |   0
+ 7 files changed, 428 insertions(+)
 
-diff --git a/support/testing/tests/core/__init__.py b/support/testing/tests/core/__init__.py
+diff --git a/support/testing/conf/unittest.cfg b/support/testing/conf/unittest.cfg
 new file mode 100644
-index 0000000..e69de29
-diff --git a/support/testing/tests/core/post-build.sh b/support/testing/tests/core/post-build.sh
-new file mode 100755
-index 0000000..b1fb834
+index 0000000..6eaa234
 --- /dev/null
-+++ b/support/testing/tests/core/post-build.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+(
-+printf "arg1,%s\n" "${1}"
-+printf "arg2,%s\n" "${2}"
-+printf "arg3,%s\n" "${3}"
-+printf "TARGET_DIR,%s\n" "${TARGET_DIR}"
-+printf "BUILD_DIR,%s\n" "${BUILD_DIR}"
-+printf "HOST_DIR,%s\n" "${HOST_DIR}"
-+printf "STAGING_DIR,%s\n" "${STAGING_DIR}"
-+printf "BINARIES_DIR,%s\n" "${BINARIES_DIR}"
-+printf "BR2_CONFIG,%s\n" "${BR2_CONFIG}"
-+) > ${BUILD_DIR}/post-build.log
-diff --git a/support/testing/tests/core/post-image.sh b/support/testing/tests/core/post-image.sh
-new file mode 100755
-index 0000000..1c2a0f2
---- /dev/null
-+++ b/support/testing/tests/core/post-image.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+(
-+printf "arg1,%s\n" "${1}"
-+printf "arg2,%s\n" "${2}"
-+printf "arg3,%s\n" "${3}"
-+printf "TARGET_DIR,%s\n" "${TARGET_DIR}"
-+printf "BUILD_DIR,%s\n" "${BUILD_DIR}"
-+printf "HOST_DIR,%s\n" "${HOST_DIR}"
-+printf "STAGING_DIR,%s\n" "${STAGING_DIR}"
-+printf "BINARIES_DIR,%s\n" "${BINARIES_DIR}"
-+printf "BR2_CONFIG,%s\n" "${BR2_CONFIG}"
-+) > ${BUILD_DIR}/post-image.log
-diff --git a/support/testing/tests/core/rootfs-overlay1/test-file1 b/support/testing/tests/core/rootfs-overlay1/test-file1
++++ b/support/testing/conf/unittest.cfg
+@@ -0,0 +1,6 @@
++[unittest]
++plugins = nose2.plugins.mp
++
++[multiprocess]
++processes = 1
++always-on = True
+diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
 new file mode 100644
-index 0000000..323fae0
+index 0000000..c3f645c
 --- /dev/null
-+++ b/support/testing/tests/core/rootfs-overlay1/test-file1
-@@ -0,0 +1 @@
-+foobar
-diff --git a/support/testing/tests/core/rootfs-overlay2/etc/test-file2 b/support/testing/tests/core/rootfs-overlay2/etc/test-file2
-new file mode 100644
-index 0000000..34a3ec2
---- /dev/null
-+++ b/support/testing/tests/core/rootfs-overlay2/etc/test-file2
-@@ -0,0 +1 @@
-+barfoo
-diff --git a/support/testing/tests/core/test_post_scripts.py b/support/testing/tests/core/test_post_scripts.py
-new file mode 100644
-index 0000000..d2a0be1
---- /dev/null
-+++ b/support/testing/tests/core/test_post_scripts.py
-@@ -0,0 +1,40 @@
++++ b/support/testing/infra/__init__.py
+@@ -0,0 +1,89 @@
++import contextlib
 +import os
-+import csv
++import re
++import sys
++import tempfile
++import subprocess
++from urllib2 import urlopen, HTTPError, URLError
 +
-+import infra.basetest
++ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
 +
-+class TestPostScripts(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++ at contextlib.contextmanager
++def smart_open(filename=None):
++    """
++    Return a file-like object that can be written to using the 'with'
++    keyword, as in the example:
++    with infra.smart_open("test.log") as outfile:
++       outfile.write("Hello, world!\n")
++    """
++    if filename and filename != '-':
++        fhandle = open(filename, 'a+')
++    else:
++        fhandle = sys.stdout
++
++    try:
++        yield fhandle
++    finally:
++        if fhandle is not sys.stdout:
++            fhandle.close()
++
++def filepath(relpath):
++    return os.path.join(os.getcwd(), "support/testing", relpath)
++
++def download(dldir, filename):
++    finalpath = os.path.join(dldir, filename)
++    if os.path.exists(finalpath):
++        return finalpath
++
++    if not os.path.exists(dldir):
++        os.makedirs(dldir)
++
++    tmpfile = tempfile.mktemp(dir=dldir)
++    print "Downloading to {}".format(tmpfile)
++
++    try:
++        url_fh = urlopen(os.path.join(ARTIFACTS_URL, filename))
++        with open(tmpfile, "w+") as tmpfile_fh:
++            tmpfile_fh.write(url_fh.read())
++    except (HTTPError, URLError), err:
++        os.unlink(tmpfile)
++        raise err
++
++    print "Renaming from %s to %s" % (tmpfile, finalpath)
++    os.rename(tmpfile, finalpath)
++    return finalpath
++
++def get_elf_arch_tag(builddir, prefix, fpath, tag):
++    """
++    Runs the cross readelf on 'fpath', then extracts the value of tag 'tag'.
++    Example:
++    >>> get_elf_arch_tag('output', 'arm-none-linux-gnueabi-',
++                         'bin/busybox', 'Tag_CPU_arch')
++    v5TEJ
++    >>>
++    """
++    cmd = ["host/usr/bin/{}-readelf".format(prefix),
++           "-A", os.path.join("target", fpath)]
++    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
++    regexp = re.compile("^  {}: (.*)$".format(tag))
++    for line in out.splitlines():
++        m = regexp.match(line)
++        if not m:
++            continue
++        return m.group(1)
++    return None
++
++def get_file_arch(builddir, prefix, fpath):
++    return get_elf_arch_tag(builddir, prefix, fpath, "Tag_CPU_arch")
++
++def get_elf_prog_interpreter(builddir, prefix, fpath):
++    cmd = ["host/usr/bin/{}-readelf".format(prefix),
++           "-l", os.path.join("target", fpath)]
++    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
++    regexp = re.compile("^ *\[Requesting program interpreter: (.*)\]$")
++    for line in out.splitlines():
++        m = regexp.match(line)
++        if not m:
++            continue
++        return m.group(1)
++    return None
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+new file mode 100644
+index 0000000..eb9da90
+--- /dev/null
++++ b/support/testing/infra/basetest.py
+@@ -0,0 +1,66 @@
++import unittest
++import os
++import datetime
++
++from infra.builder import Builder
++from infra.emulator import Emulator
++
++BASIC_TOOLCHAIN_CONFIG = \
++"""
++BR2_arm=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
++BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-1190-g4a48479.tar.bz2"
++BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
++BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
++BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
++# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
++BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
++BR2_TOOLCHAIN_EXTERNAL_CXX=y
++"""
++
++MINIMAL_CONFIG = \
 +"""
 +BR2_INIT_NONE=y
 +BR2_SYSTEM_BIN_SH_NONE=y
 +# BR2_PACKAGE_BUSYBOX is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="{}"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="foobar baz"
-+""".format(infra.filepath("tests/core/post-build.sh"),
-+           infra.filepath("tests/core/post-image.sh"))
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
 +
-+    def check_post_log_file(self, path, what):
-+        lines = {}
-+        with open(path, 'rb') as csvfile:
-+            r = csv.reader(csvfile, delimiter=',')
-+            for row in r:
-+                lines[row[0]] = row[1]
++class BRTest(unittest.TestCase):
++    config = None
++    downloaddir = None
++    outputdir = None
++    logtofile = True
++    keepbuilds = False
 +
-+        self.assertEqual(lines["arg1"], os.path.join(self.builddir, what))
-+        self.assertEqual(lines["arg2"], "foobar")
-+        self.assertEqual(lines["arg3"], "baz")
-+        self.assertEqual(lines["TARGET_DIR"], os.path.join(self.builddir, "target"))
-+        self.assertEqual(lines["BUILD_DIR"], os.path.join(self.builddir, "build"))
-+        self.assertEqual(lines["HOST_DIR"], os.path.join(self.builddir, "host"))
-+        staging = os.readlink(os.path.join(self.builddir, "staging"))
-+        self.assertEqual(lines["STAGING_DIR"], staging)
-+        self.assertEqual(lines["BINARIES_DIR"], os.path.join(self.builddir, "images"))
-+        self.assertEqual(lines["BR2_CONFIG"], os.path.join(self.builddir, ".config"))
++    def show_msg(self, msg):
++        print "[%s/%s/%s] %s" % (os.path.basename(self.__class__.outputdir),
++                                 self.testname,
++                                 datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
++                                 msg)
++    def setUp(self):
++        self.testname = self.__class__.__name__
++        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
++        self.runlog = self.builddir + "-run.log"
++        self.emulator = None
++        self.show_msg("Starting")
++        self.b = Builder(self.__class__.config, self.builddir, self.logtofile)
 +
-+    def test_run(self):
-+        f = os.path.join(self.builddir, "build", "post-build.log")
-+        self.check_post_log_file(f, "target")
-+        f = os.path.join(self.builddir, "build", "post-image.log")
-+        self.check_post_log_file(f, "images")
-diff --git a/support/testing/tests/core/test_rootfs_overlay.py b/support/testing/tests/core/test_rootfs_overlay.py
++        if not self.keepbuilds:
++            self.b.delete()
++
++        if not self.b.is_finished():
++            self.show_msg("Building")
++            self.b.build()
++            self.show_msg("Building done")
++
++        self.emulator = Emulator(self.builddir, self.downloaddir, self.logtofile)
++
++    def tearDown(self):
++        self.show_msg("Cleaning up")
++        if self.emulator:
++            self.emulator.stop()
++        if self.b and not self.keepbuilds:
++            self.b.delete()
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
 new file mode 100644
-index 0000000..42d890b
+index 0000000..105da01
 --- /dev/null
-+++ b/support/testing/tests/core/test_rootfs_overlay.py
-@@ -0,0 +1,27 @@
++++ b/support/testing/infra/builder.py
+@@ -0,0 +1,49 @@
 +import os
++import shutil
 +import subprocess
 +
-+import infra.basetest
++import infra
 +
-+def compare_file(file1, file2):
-+    return subprocess.call(["cmp", file1, file2])
++class Builder(object):
++    def __init__(self, config, builddir, logtofile):
++        self.config = config
++        self.builddir = builddir
++        self.logtofile = logtofile
 +
-+class TestRootfsOverlay(infra.basetest.BRTest):
++    def build(self):
++        if not os.path.isdir(self.builddir):
++            os.makedirs(self.builddir)
 +
-+    rootfs_overlay_path = infra.filepath("tests/core/rootfs-overlay")
-+    rootfs_overlay = "BR2_ROOTFS_OVERLAY=\"{0}1 {0}2\"".format(rootfs_overlay_path)
++        log = "{}-build.log".format(self.builddir)
++        if not self.logtofile:
++            log = None
 +
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+            infra.basetest.MINIMAL_CONFIG + \
-+            rootfs_overlay
++        config_file = os.path.join(self.builddir, ".config")
++        with open(config_file, "w+") as cf:
++            cf.write(self.config)
 +
-+    def test_run(self):
-+        target_file = os.path.join(self.builddir, "target", "test-file1")
-+        overlay_file = "{}1/test-file1".format(self.rootfs_overlay_path)
-+        ret = compare_file(overlay_file, target_file)
-+        self.assertEqual(ret, 0)
++        cmd = ["make",
++               "O={}".format(self.builddir),
++               "olddefconfig"]
++        with infra.smart_open(log) as log_fh:
++            ret = subprocess.call(cmd, stdout=log_fh, stderr=log_fh)
++        if ret != 0:
++            raise SystemError("Cannot olddefconfig")
 +
-+        target_file = os.path.join(self.builddir, "target", "etc", "test-file2")
-+        overlay_file = "{}2/etc/test-file2".format(self.rootfs_overlay_path)
-+        ret = compare_file(overlay_file, target_file)
-+        self.assertEqual(ret, 0)
-diff --git a/support/testing/tests/core/test_timezone.py b/support/testing/tests/core/test_timezone.py
++        cmd = ["make", "-C", self.builddir]
++        with infra.smart_open(log) as log_fh:
++            ret = subprocess.call(cmd, stdout=log_fh, stderr=log_fh)
++        if ret != 0:
++            raise SystemError("Build failed")
++
++        open(self.stamp_path(), 'a').close()
++
++    def stamp_path(self):
++        return os.path.join(self.builddir, "build-done")
++
++    def is_finished(self):
++        return os.path.exists(self.stamp_path())
++
++    def delete(self):
++        if os.path.exists(self.builddir):
++            shutil.rmtree(self.builddir)
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
 new file mode 100644
-index 0000000..9776b4b
+index 0000000..7c476cb
 --- /dev/null
-+++ b/support/testing/tests/core/test_timezone.py
-@@ -0,0 +1,66 @@
-+import os
++++ b/support/testing/infra/emulator.py
+@@ -0,0 +1,135 @@
++import socket
++import subprocess
++import telnetlib
 +
++import infra
 +import infra.basetest
 +
-+def boot_armv5_cpio(emulator, builddir):
-+        img = os.path.join(builddir, "images", "rootfs.cpio")
-+        emulator.boot(arch="armv5", kernel="builtin",
-+                      options=["-initrd", img])
-+        emulator.login()
++# TODO: Most of the telnet stuff need to be replaced by stdio/pexpect to discuss
++# with the qemu machine.
++class Emulator(object):
 +
-+class TestNoTimezone(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+             """
-+# BR2_TARGET_TZ_INFO is not set
-+BR2_TARGET_ROOTFS_CPIO=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+"""
++    def __init__(self, builddir, downloaddir, logtofile):
++        self.qemu = None
++        self.__tn = None
++        self.downloaddir = downloaddir
++        self.log = ""
++        self.log_file = "{}-run.log".format(builddir)
++        if logtofile is None:
++            self.log_file = None
 +
-+    def test_run(self):
-+        boot_armv5_cpio(self.emulator, self.builddir)
-+        tz, _ = self.emulator.run("TZ=UTC date +%Z")
-+        self.assertEqual(tz[0].strip(), "UTC")
-+        tz, _ = self.emulator.run("TZ=America/Los_Angeles date +%Z")
-+        self.assertEqual(tz[0].strip(), "UTC")
++    # Start Qemu to boot the system
++    #
++    # arch: Qemu architecture to use
++    #
++    # kernel: path to the kernel image, or the special string
++    # 'builtin'. 'builtin' means a pre-built kernel image will be
++    # downloaded from ARTEFACTS_URL and suitable options are
++    # automatically passed to qemu and added to the kernel cmdline. So
++    # far only armv5, armv7 and i386 builtin kernels are available.
++    # If None, then no kernel is used, and we assume a bootable device
++    # will be specified.
++    #
++    # kernel_cmdline: array of kernel arguments to pass to Qemu -append option
++    #
++    # options: array of command line options to pass to Qemu
++    #
++    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
++        if arch in ["armv7", "armv5"]:
++            qemu_arch = "arm"
++        else:
++            qemu_arch = arch
 +
-+class TestGlibcAllTimezone(infra.basetest.BRTest):
-+    config = """
-+BR2_arm=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TARGET_TZ_INFO=y
-+BR2_TARGET_ROOTFS_CPIO=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+"""
++        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
++                    "-serial", "telnet::1234,server",
++                    "-display", "none"]
 +
-+    def test_run(self):
-+        boot_armv5_cpio(self.emulator, self.builddir)
-+        tz, _ = self.emulator.run("date +%Z")
-+        self.assertEqual(tz[0].strip(), "UTC")
-+        tz, _ = self.emulator.run("TZ=UTC date +%Z")
-+        self.assertEqual(tz[0].strip(), "UTC")
-+        tz, _ = self.emulator.run("TZ=America/Los_Angeles date +%Z")
-+        self.assertEqual(tz[0].strip(), "PST")
-+        tz, _ = self.emulator.run("TZ=Europe/Paris date +%Z")
-+        self.assertEqual(tz[0].strip(), "CET")
++        if options:
++            qemu_cmd += options
 +
-+class TestGlibcNonDefaultLimitedTimezone(infra.basetest.BRTest):
-+    config = """
-+BR2_arm=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TARGET_TZ_INFO=y
-+BR2_TARGET_TZ_ZONELIST="northamerica"
-+BR2_TARGET_LOCALTIME="America/New_York"
-+BR2_TARGET_ROOTFS_CPIO=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+"""
++        if kernel_cmdline is None:
++            kernel_cmdline = []
 +
-+    def test_run(self):
-+        boot_armv5_cpio(self.emulator, self.builddir)
-+        tz, _ = self.emulator.run("date +%Z")
-+        self.assertEqual(tz[0].strip(), "EST")
-+        tz, _ = self.emulator.run("TZ=UTC date +%Z")
-+        self.assertEqual(tz[0].strip(), "UTC")
-+        tz, _ = self.emulator.run("TZ=America/Los_Angeles date +%Z")
-+        self.assertEqual(tz[0].strip(), "PST")
-+        tz, _ = self.emulator.run("TZ=Europe/Paris date +%Z")
-+        self.assertEqual(tz[0].strip(), "Europe")
++        if kernel:
++            if kernel == "builtin":
++                if arch in ["armv7", "armv5"]:
++                    kernel_cmdline.append("console=ttyAMA0")
++
++                if arch == "armv7":
++                    kernel = infra.download(self.downloaddir,
++                                            "kernel-vexpress")
++                    dtb = infra.download(self.downloaddir,
++                                         "vexpress-v2p-ca9.dtb")
++                    qemu_cmd += ["-dtb", dtb]
++                    qemu_cmd += ["-M", "vexpress-a9"]
++                elif arch == "armv5":
++                    kernel = infra.download(self.downloaddir,
++                                            "kernel-versatile")
++                    qemu_cmd += ["-M", "versatilepb"]
++
++            qemu_cmd += ["-kernel", kernel]
++
++        if kernel_cmdline:
++            qemu_cmd += ["-append", " ".join(kernel_cmdline)]
++
++        with infra.smart_open(self.log_file) as lfh:
++            lfh.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
++            self.qemu = subprocess.Popen(qemu_cmd, stdout=lfh, stderr=lfh)
++
++        # Wait for the telnet port to appear and connect to it.
++        while True:
++            try:
++                self.__tn = telnetlib.Telnet("localhost", 1234)
++                if self.__tn:
++                    break
++            except socket.error:
++                continue
++
++    def __read_until(self, waitstr, timeout=5):
++        data = self.__tn.read_until(waitstr, timeout)
++        self.log += data
++        with infra.smart_open(self.log_file) as lfh:
++            lfh.write(data)
++        return data
++
++    def __write(self, wstr):
++        self.__tn.write(wstr)
++
++    # Wait for the login prompt to appear, and then login as root with
++    # the provided password, or no password if not specified.
++    def login(self, password=None):
++        self.__read_until("buildroot login:", 10)
++        if "buildroot login:" not in self.log:
++            with infra.smart_open(self.log_file) as lfh:
++                lfh.write("==> System does not boot")
++            raise SystemError("System does not boot")
++
++        self.__write("root\n")
++        if password:
++            self.__read_until("Password:")
++            self.__write(password + "\n")
++        self.__read_until("# ")
++        if "# " not in self.log:
++            raise SystemError("Cannot login")
++        self.run("dmesg -n 1")
++
++    # Run the given 'cmd' on the target
++    # return a tuple (output, exit_code)
++    def run(self, cmd):
++        self.__write(cmd + "\n")
++        output = self.__read_until("# ")
++        output = output.strip().splitlines()
++        output = output[1:len(output)-1]
++
++        self.__write("echo $?\n")
++        exit_code = self.__read_until("# ")
++        exit_code = exit_code.strip().splitlines()[1]
++        exit_code = int(exit_code)
++
++        return output, exit_code
++
++    def stop(self):
++        if self.qemu is None:
++            return
++        self.qemu.terminate()
++        self.qemu.kill()
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+new file mode 100755
+index 0000000..339bb66
+--- /dev/null
++++ b/support/testing/run-tests
+@@ -0,0 +1,83 @@
++#!/usr/bin/env python2
++import argparse
++import sys
++import os
++import nose2
++
++from infra.basetest import BRTest
++
++def main():
++    parser = argparse.ArgumentParser(description='Run Buildroot tests')
++    parser.add_argument('testname', nargs='*',
++                        help='list of test cases to execute')
++    parser.add_argument('--list', '-l', action='store_true',
++                        help='list of available test cases')
++    parser.add_argument('--all', '-a', action='store_true',
++                        help='execute all test cases')
++    parser.add_argument('--stdout', '-s', action='store_true',
++                        help='log everything to stdout')
++    parser.add_argument('--output', '-o',
++                        help='output directory')
++    parser.add_argument('--download', '-d',
++                        help='download directory')
++    parser.add_argument('--keep', '-k',
++                        help='keep build directories',
++                        action='store_true')
++
++    args = parser.parse_args()
++
++    script_path = os.path.realpath(__file__)
++    test_dir = os.path.dirname(script_path)
++
++    if args.stdout:
++        BRTest.logtofile = False
++
++    if args.list:
++        print "List of tests"
++        nose2.discover(argv=[script_path,
++                             "-s", test_dir,
++                             "-v",
++                             "--collect-only"],
++                       plugins=["nose2.plugins.collect"])
++        return 0
++
++    if args.download is None:
++        args.download = os.getenv("BR2_DL_DIR")
++        if args.download is None:
++            print "Missing download directory, please use -d/--download"
++            print ""
++            parser.print_help()
++            return 1
++
++    BRTest.downloaddir = os.path.abspath(args.download)
++
++    if args.output is None:
++        print "Missing output directory, please use -o/--output"
++        print ""
++        parser.print_help()
++        return 1
++
++    if not os.path.exists(args.output):
++        os.mkdir(args.output)
++
++    BRTest.outputdir = os.path.abspath(args.output)
++
++    if args.all is False and len(args.testname) == 0:
++        print "No test selected"
++        print ""
++        parser.print_help()
++        return 1
++
++    BRTest.keepbuilds = args.keep
++
++    nose2_args = ["-v",
++                  "-s", "support/testing",
++                  "-c", "support/testing/conf/unittest.cfg"]
++
++    if len(args.testname) != 0:
++        nose2_args += args.testname
++
++    nose2.discover(argv=nose2_args)
++
++if __name__ == "__main__":
++    sys.exit(main())
+diff --git a/support/testing/tests/__init__.py b/support/testing/tests/__init__.py
+new file mode 100644
+index 0000000..e69de29
