@@ -1,12 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 23:38:35 +0200
-Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
- infrastructure
-In-Reply-To: <dd7ec6aa-0778-8e92-b031-cbc82c982005@lucaceresoli.net>
-References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <dd7ec6aa-0778-8e92-b031-cbc82c982005@lucaceresoli.net>
-Message-ID: <20170507233835.2afdeb9e@free-electrons.com>
+Date: Sun,  7 May 2017 23:40:52 +0200
+Subject: [Buildroot] [PATCH 0/3] mpir build fixes
+Message-ID: <1494193255-15762-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +10,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 7 May 2017 23:07:31 +0200, Luca Ceresoli wrote:
+This short series fixed the build of mpir with 5 toolchain
+configurations:
 
-> Things that I already commented about and for which I plan to send patches:
-> - remove smart_open
-> - document code
-> - better reporting
+ - Crosstool-NG ARMv5 and ARMv7 toolchains
 
-Great!
+ - Buildroot ARM/Cortex-M4 toolchain
 
-> > +ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"  
-> 
-> Since you renamed artefacts to artifacts, it's probably good to rename
-> in the URL too (and update the server). Sure it's a minor nit, but since
-> it's an URL that should stay available for long, better having it fixed
-> as soon as possible.
+ - Buildroot mips32r6 and mips64r6 toolchains
 
-Correct, I'll fix that up.
+There are still other mpir build issues with other toolchains, but I
+thought I would send the ones I have right now.
 
-
-> > +            qemu_cmd += ["-kernel", kernel]  
-> 
-> I'm OK with the "builtin" logic, but I really dislike it being
-> hard-coded in Emulator.boot(). It's acceptable for the moment since we
-> have only very few builtin kernels. Should we add more in the future, I
-> think we should at least have a sort of "database" of builtin kernels,
-> perhaps in the form of an associative array.
-
-Fully agreed. What we have now is OK for a few kernel/qemu setups, but
-clearly does not scale, and will have to be improved.
-
-> Stylish note: I would put the one-letter form before the long form. This
-> is not only my personal taste, but also what the manpages usually do,
-> and what Python does with the automatically-added -h/--help parameter:
-
-Indeed. Patch welcome! :-)
-
-Thanks!
+Best regards,
 
 Thomas
+
+Thomas Petazzoni (3):
+  mpir: fix build on ARM with old binutils versions
+  mpir: fix build on ARM Thumb-only platforms
+  mpir: fix build on mips32r6/mips64r6
+
+ ...rm-udiv.asm-workaround-binutils-bug-14887.patch | 40 ++++++++++++++++++++++
+ package/mpir/mpir.mk                               | 11 ++++++
+ 2 files changed, 51 insertions(+)
+ create mode 100644 package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
