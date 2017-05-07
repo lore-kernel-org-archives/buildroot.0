@@ -1,44 +1,35 @@
-From: Semyon Kolganov <semenak94@mail.ru>
-Date: Sun,  7 May 2017 20:43:04 +0300
-Subject: [Buildroot] [PATCH] mpir: fix ARM, PowerPC and mips builds failure
-In-Reply-To: <1494178984-19821-1-git-send-email-semenak94@mail.ru>
-References: <mpir: fix ARM, PowerPC64 and MIPS build failure>
- <1494178984-19821-1-git-send-email-semenak94@mail.ru>
-Message-ID: <1494178984-19821-2-git-send-email-semenak94@mail.ru>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  7 May 2017 20:54:00 +0300
+Subject: [Buildroot] [PATCH] connman: update musl incompatibility reason
+Message-ID: <37435abb853673f385d36cb7a54f71dc0b69d526.1494179640.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- * ARM
-     http://autobuild.buildroot.net/results/fd0/fd032f7dbd4cace84bb31e8017cb6139ef3c1072
-     http://autobuild.buildroot.net/results/c36/c360581c2925529f18635aac32c2865899f5e0f5
+connman no longer triggers a conflict of userspace and kernel headers since
+commit 69ced96355 (musl: workaround kernel if_ether.h header conflict). The
+real blocker for musl build (besides a few missing includes here and there)
+is the missing res_ninit() implementation. Update the comment accordingly.
 
- * MIPS
-     http://autobuild.buildroot.net/results/c45/c45dd59f10693b0d9a86dac4733c6c3dde4554f1
-
- * PowerPC64
-      http://autobuild.buildroot.net/results/be1/be1478836b2e7b580174641f48de92c9b02512a7
-
-Signed-off-by: Semyon Kolganov <semenak94@mail.ru>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/mpir/mpir.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/connman/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-index b7f3829..420d065 100644
---- a/package/mpir/mpir.mk
-+++ b/package/mpir/mpir.mk
-@@ -12,6 +12,9 @@ MPIR_LICENSE_FILES = COPYING.LIB
- MPIR_INSTALL_STAGING = YES
- MPIR_DEPENDENCIES = gmp host-yasm
- 
-+# Prefer generic build
-+MPIR_CONF_ENV += MPN_PATH=generic
-+
- ifeq ($(BR2_MIPS_NABI32),y)
- MPIR_CONF_OPTS += ABI=n32
- endif
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 39a81ee9f0f8..28cf16861c8d 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_CONNMAN
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on !BR2_STATIC_LIBS # needs dlopen()
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # mixes userspace and kernel headers
++	depends on !BR2_TOOLCHAIN_USES_MUSL # missing res_ninit()
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_IPTABLES
 -- 
-2.7.4
+2.11.0
