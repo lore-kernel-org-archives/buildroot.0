@@ -1,43 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 14:11:16 +0200
-Subject: [Buildroot] [git commit] configs/armadeus_apf9328_defconfig: remove
-	RPC option
-Message-ID: <20170507121250.AC0318286E@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  7 May 2017 14:23:24 +0200
+Subject: [Buildroot] [PATCH] package/ltp-testsuite: needs threads NPTL
+Message-ID: <20170507122324.31452-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=423e1381b426eb63695b1bc36c2d60aaf4001cf0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The BR2_TOOLCHAIN_BUILDROOT_INET_RPC has been removed in commit
-98f7de8796b282e72d42d3fc4d82d8eec43c6053, following the removal from
-upstream uClibc-ng of the RPC support.
-
-However, armadeus_apf9328_defconfig was selecting this option, causing a
-build failure due to the selection of a legacy option. We simply remove
-it as anyway defconfigs should not needlessly enable toolchain options.
-
 Fixes:
+http://autobuild.buildroot.net/results/3e0/3e0bbf41e339e62422463773bf07945f048a9501
 
-  https://gitlab.com/buildroot.org/buildroot/builds/15762159
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- configs/armadeus_apf9328_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ package/ltp-testsuite/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
-index fbc9864..8abfcfd 100644
---- a/configs/armadeus_apf9328_defconfig
-+++ b/configs/armadeus_apf9328_defconfig
-@@ -6,7 +6,6 @@ BR2_arm920t=y
- BR2_PACKAGE_GDB=y
- BR2_PACKAGE_HOST_GDB=y
- BR2_ENABLE_LOCALE_PURGE=y
--BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
- BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+index 5309107..a7d3e58 100644
+--- a/package/ltp-testsuite/Config.in
++++ b/package/ltp-testsuite/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LTP_TESTSUITE
+ 	bool "ltp-testsuite"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	# does not build, cachectl.h issue
+ 	depends on !BR2_nios2
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
  
+ 	  http://linux-test-project.github.io
+ 
+-comment "ltp-testsuite needs a glibc or uClibc toolchain w/ threads"
++comment "ltp-testsuite needs a glibc or uClibc toolchain w/ NPTL"
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_TOOLCHAIN_USES_MUSL
+-- 
+2.9.3
