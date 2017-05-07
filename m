@@ -1,38 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 7 May 2017 01:05:04 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-05-05
-In-Reply-To: <20170506215714.frikpdlcuwom57fm@tarshish>
-References: <20170506062848.3CE3120C7A@mail.free-electrons.com>
- <20170506215714.frikpdlcuwom57fm@tarshish>
-Message-ID: <20170506220504.c4pyl4d2hfmglxw5@tarshish>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun,  7 May 2017 01:32:21 -0300
+Subject: [Buildroot] [PATCH v2 4/4] core: add "cmake3" to the list of cmake
+	candidates
+In-Reply-To: <1494131541-2960-1-git-send-email-casantos@datacom.ind.br>
+References: <1494131541-2960-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1494131541-2960-4-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This is useful on CentOS 7, whose "cmake" utility corresponds to version
+2.8.12, which is too old for Buildroot.
 
-On Sun, May 07, 2017 at 12:57:14AM +0300, Baruch Siach wrote:
-> On Sat, May 06, 2017 at 08:28:48AM +0200, Thomas Petazzoni wrote:
-> >          arm |                 wpan-tools-0.7 | NOK | http://autobuild.buildroot.net/results/7091ad71e743efb5fd530357b0f59c5c2b0e6d8f |     
-> 
-> Seems to be related to the recent libnl version bump, though I could not 
-> figure out how. I could not reproduce this failure here, even after installing 
-> host libnl header files.
-> 
-> For some reason the following wpan-tools macro evaluates to true:
-> 
-> src/nl_extras.h:
-> #if (LIBNL_VER_MIN < 2) || (LIBNL_VER_MIN == 2) && (LIBNL_VER_MIC <= 26)
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ support/dependencies/check-host-cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Scratch that. Just found your commit 5d80e1c9263b in my tree.
-
-Sorry for the noise,
-baruch
-
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index ef080ff..07b064c 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -10,7 +10,7 @@
+ #
+ BR2_CMAKE_VERSION_MIN = 3.1
+ 
+-BR2_CMAKE_CANDIDATES ?= cmake
++BR2_CMAKE_CANDIDATES ?= cmake cmake3
+ BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+ 	$(BR2_CMAKE_VERSION_MIN) $(BR2_CMAKE_CANDIDATES))
+ ifeq ($(BR2_CMAKE),)
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
