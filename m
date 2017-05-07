@@ -1,28 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 07 May 2017 14:07:49 +0000
-Subject: [Buildroot] [Bug 9596] KODI: --enable-lirc needs "HAVE_LIRC"
- compiler definition to use the lirc subsystem
-In-Reply-To: <bug-9596-163@https.bugs.busybox.net/>
-References: <bug-9596-163@https.bugs.busybox.net/>
-Message-ID: <bug-9596-163-udtWF8PFda@https.bugs.busybox.net/>
+Date: Sun, 07 May 2017 14:08:56 +0000
+Subject: [Buildroot] [Bug 9436] e2fsprogs remove busybox applets even of
+ unselected e2fsprogs components
+In-Reply-To: <bug-9436-163@https.bugs.busybox.net/>
+References: <bug-9436-163@https.bugs.busybox.net/>
+Message-ID: <bug-9436-163-gc2T8BnNPG@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9596
+https://bugs.busybox.net/show_bug.cgi?id=9436
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
+             Status|REOPENED                    |RESOLVED
          Resolution|---                         |FIXED
 
 --- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-OK, let's mark the bug as fixed. The bug submitter can reopen the bug if it
-still exists with Kodi 17.
+Fixed by
+https://git.buildroot.org/buildroot/commit/package/e2fsprogs?id=742d6bf13e5bddc5e30edeb8b8c314f47cf97e4d.
 
 -- 
 You are receiving this mail because:
