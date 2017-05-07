@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 21:38:54 +0200
-Subject: [Buildroot] [PATCH] mpir: fix ARM,
- PowerPC and mips builds failure
-In-Reply-To: <1494178984-19821-2-git-send-email-semenak94@mail.ru>
-References: <mpir: fix ARM, PowerPC64 and MIPS build failure>
- <1494178984-19821-1-git-send-email-semenak94@mail.ru>
- <1494178984-19821-2-git-send-email-semenak94@mail.ru>
-Message-ID: <20170507213854.413cfc6c@free-electrons.com>
+Date: Sun, 7 May 2017 21:41:31 +0200
+Subject: [Buildroot] [git commit] package/rpi-firmware: fix unmet
+	dependencies
+Message-ID: <20170507194152.E8A6981EC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=db4c811b9e2cc47523aac75db7ed0282382a87c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  7 May 2017 20:43:04 +0300, Semyon Kolganov wrote:
+Currently, vcdbg is only supported in 32-bit mode. Furthermore, vcdbg
+needs rpi-userland, which we currently only support in 32-bit mode.
 
-> +# Prefer generic build
-> +MPIR_CONF_ENV += MPN_PATH=generic
+Add a dependency on BR2_arm.
 
-I think this is really wrong, because it will use in all cases the
-non-optimized generic code, instead of the more optimized assembly code
-available for a number of architectures:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-firmware/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-$ ls mpn/
-alpha  arm  asm-defs.m4  cpp-ccas  generic  ia64  m4-ccas  Makeasm.am  Makefile.am  Makefile.in  mips32  mips64  powerpc32  powerpc64  README  sparc32  sparc64  x86  x86_64  x86_64w  x86w
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index 4efef86..a7fa1c3 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -67,6 +67,7 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+ 	bool "vcdbg"
++	depends on BR2_arm # rpi-userland
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
+ 	select BR2_PACKAGE_RPI_USERLAND
+@@ -74,6 +75,7 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
+ 	  Install vcdbg, to help debug communication with the GPU.
+ 
+ comment "vcdbg needs a glibc toolchain w/ C++"
++	depends on BR2_arm
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
+ 
+ endif # BR2_PACKAGE_RPI_FIRMWARE
