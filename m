@@ -1,36 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 14:01:52 +0200
-Subject: [Buildroot] [PATCH] configs/snps_archs38_zebu: rename zebu to
- haps
-In-Reply-To: <1492532385-24563-1-git-send-email-vzakhar@synopsys.com>
-References: <1492532385-24563-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20170507140152.1dc0db36@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 07 May 2017 14:04:29 +0200
+Subject: [Buildroot] kodi aarch64 support
+References: <trinity-41637461-8d25-4a68-a201-0dd8a146259d-1494094631395@3capp-mailcom-bs10>
+ <kin2udxufq.ln2@ID-313208.user.individual.net>
+Message-ID: <d3f3udxufq.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sun, 07 May 2017 07:23:00 +0200 schrieb Bernd Kuhls:
 
-On Tue, 18 Apr 2017 19:19:45 +0300, Vlad Zakharov wrote:
-> As in upstream Linux zebu_hs_smp_defconfig was renamed to
-> haps_hs_smp_defconfig we update Linux kernel defconfig name
-> respectively.
+> I am waiting for a decision from Kodi upstream whether they accept
+> https://github.com/xbmc/xbmc/pull/12014 or not.
 > 
-> Also it fixes build failure, pointed us by Arnout:
-> https://gitlab.com/buildroot.org/buildroot/builds/14419271
-> 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> ---
->  configs/{snps_archs38_zebu_defconfig => snps_archs38_haps_defconfig} | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->  rename configs/{snps_archs38_zebu_defconfig => snps_archs38_haps_defconfig} (91%)
+> After that I will rebase my patch for buildroot.
 
-Applied to master, thanks.
+Hi Dagg,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+done: http://patchwork.ozlabs.org/patch/759432/
+
+Regards, Bernd
