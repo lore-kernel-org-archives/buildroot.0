@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 7 May 2017 22:41:09 +0200
-Subject: [Buildroot] [PATCH v3 0/5] Runtime testing infrastructure
-In-Reply-To: <20170507220901.4000ec8e@free-electrons.com>
+Date: Sun, 7 May 2017 22:55:48 +0200
+Subject: [Buildroot] [PATCH v3 3/5] support/testing: add fs tests
+In-Reply-To: <1490042214-6762-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170507220901.4000ec8e@free-electrons.com>
-Message-ID: <8b9222c3-8547-fe79-09dc-288553b2a9e2@lucaceresoli.net>
+ <1490042214-6762-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <dff1d449-5d0a-c6f8-2fd7-000e5a79247b@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,168 @@ To: buildroot@busybox.net
 
 Hi,
 
-On 07/05/2017 22:09, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 20 Mar 2017 21:36:49 +0100, Thomas Petazzoni wrote:
-> 
->> Thomas Petazzoni (5):
->>   support/testing: core testing infrastructure
->>   support/testing: add core tests
->>   support/testing: add fs tests
->>   support/testing: add package tests
->>   support/testing: add toolchain tests
-> 
-> Since this has been around for a long time, I've finally applied this
-> series.
+this the review I had written a few days ago. Since the patch has just
+been applied, I've reworded it as a list of proposed improvements and
+request for clarifications.
 
-Bad timing on my side: I was reviewing all this work in detail a couple
-of days ago, but my reviews to 2 patches are in my drafts folder waiting
-for the remaining ones... Ok, I'll send them anyway right noe as a list
-of proposed improvements.
+On 20/03/2017 21:36, Thomas Petazzoni wrote:
+> This commit adds a number of test cases for various filesystem formats:
+> ext2/3/4, iso9660, jffs2, squashfs, ubi/ubifs and yaffs2. All of them
+> except yaffs2 are runtime tested. The iso9660 set of test cases is
+> particularly rich, testing the proper operation of the iso9660 support
+> with all of grub, grub2 and isolinux.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/testing/conf/grub-menu.lst                 |  20 +++
+>  support/testing/conf/grub2.cfg                     |   7 +
+>  support/testing/conf/isolinux.cfg                  |   5 +
+>  .../testing/conf/minimal-x86-qemu-kernel.config    |  23 +++
+>  support/testing/tests/fs/__init__.py               |   0
+>  support/testing/tests/fs/test_ext.py               | 119 +++++++++++++++
+>  support/testing/tests/fs/test_iso9660.py           | 162 +++++++++++++++++++++
+>  support/testing/tests/fs/test_jffs2.py             |  45 ++++++
+>  support/testing/tests/fs/test_squashfs.py          |  37 +++++
+>  support/testing/tests/fs/test_ubi.py               |  39 +++++
+>  support/testing/tests/fs/test_yaffs2.py            |  12 ++
+>  11 files changed, 469 insertions(+)
+>  create mode 100644 support/testing/conf/grub-menu.lst
+>  create mode 100644 support/testing/conf/grub2.cfg
+>  create mode 100644 support/testing/conf/isolinux.cfg
 
-> I know Luca, Ricardo and Thomas DS had some comments, but I believe it
-> would be easier to address them as follow-up patches. So Luca, Ricardo,
-> Thomas, your patches to improve this testing infrastructure are more
-> than welcome. I'm sure it needs to be extended and improved in many
-> different ways to test more Buildroot functionalities.
+I suspect it's already been suggested, but I would rather put these
+files in the 'fs' subdirectory, unless we expect to use them for non-fs
+tests.
 
-I totally agree this is the best way to proceed. Now everybody can
-easily send small, incremental patches to improve the work. Thanks for
-having applied these patches.
+Do other people agree? Should I send a patch?
 
-Any plan to have the tests run automatically (on the autobuilders maybe)?
+> diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+> new file mode 100644
+> index 0000000..f7e2e85
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_ext.py
+[...]
+> +def dumpe2fs_getprop(out, prop):
+> +    for lines in out:
+
+Here 'lines' is set to a string (one line)...
+
+> +        lines = lines.split(": ")
+
+...and here it is reassigned to a list (the line fields, as they are
+called in awk. Or is the second assignment of 'lines' creating a new
+variable with the same name? Whether the reply, I don't like this.
+
+> +        if lines[0] == prop:
+> +            return lines[1].strip()
+
+My proposal (tested):
+
+def dumpe2fs_getprop(out, prop):
+    for line in out:
+        fields = line.split(": ")
+        if fields[0] == prop:
+            return fields[1].strip()
+
+Unless there's a good reason to keep the code as is, I'll send a patch
+anyway, to improve readability at least.
+
+> +def boot_img_and_check_fs_type(emulator, builddir, fs_type):
+> +    img = os.path.join(builddir, "images", "rootfs.{}".format(fs_type))
+
+Here (and similarly in several other places) this looks a lot more
+intuitive and concise to me:
+
+  "rootfs." + fs_type
+
+Any good reason the initial form is preferred? Pythonists out there?
+
+[...]
+
+> +class TestExt3(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +"""
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_3=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +"""
+> +
+> +    def test_run(self):
+> +        out = dumpe2fs_run(self.builddir, "rootfs.ext3")
+> +        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
+> +        self.assertIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
+> +
+> +        exit_code = boot_img_and_check_fs_type(self.emulator,
+> +                                               self.builddir, "ext3")
+> +        self.assertEqual(exit_code, 0)
+> +
+> +class TestExt4(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +"""
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_BLOCKS=16384
+> +BR2_TARGET_ROOTFS_EXT2_INODES=3000
+> +BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +"""
+> +
+> +    def test_run(self):
+> +        out = dumpe2fs_run(self.builddir, "rootfs.ext4")
+> +        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
+> +        self.assertEqual(dumpe2fs_getprop(out, BLOCKCNT_PROP), "16384")
+> +        # Yes there are 8 more inodes than requested
+> +        self.assertEqual(dumpe2fs_getprop(out, INODECNT_PROP), "3008")
+> +        self.assertEqual(dumpe2fs_getprop(out, RESBLKCNT_PROP), "1638")
+> +        self.assertIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
+> +        self.assertIn("extent", dumpe2fs_getprop(out, FEATURES_PROP))
+
+It would be nice to have both positive and a negative test for each
+tested item. Specifically, I'd add self.assertIn("extent", ...) for ext3.
+
+I'll send a patch for this.
+
+> diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
+> new file mode 100644
+> index 0000000..eec6e89
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_iso9660.py
+
+[...]
+
+> +#
+> +# Syslinux
+> +#
+> +
+> +class TestIso9660SyslinuxExternal(infra.basetest.BRTest):
+
+The two syslinux tests are failing on top of current master. This is
+since commit 6e432d5ecb46 ("syslinux: build with the target toolchain").
+
+The error message is:
+
+  .../i686-linux-ld: unrecognized option '--no-dynamic-linker'
+
+> diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
+> new file mode 100644
+> index 0000000..edaa087
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_squashfs.py
+[...]
+> +    def test_run(self):
+> +        unsquashfs_cmd = ["host/usr/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
+> +        out = subprocess.check_output(unsquashfs_cmd,
+> +                                      cwd=self.builddir,
+> +                                      env={"LANG": "C"})
+> +        out = out.splitlines()
+> +        self.assertEqual(out[0],
+> +                         "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
+> +        self.assertEqual(out[3], "Compression lz4")
+> +
+> +        img = os.path.join(self.builddir, "images", "rootfs.squashfs")
+> +        subprocess.call(["truncate", "-s", "%1M", img])
+
+Why do we need this call to truncate?
 
 -- 
 Luca
