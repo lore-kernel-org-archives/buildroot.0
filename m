@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 23:10:28 +0200
-Subject: [Buildroot] [PATCH v3 0/5] Runtime testing infrastructure
-In-Reply-To: <8b9222c3-8547-fe79-09dc-288553b2a9e2@lucaceresoli.net>
+Date: Sun, 7 May 2017 23:38:35 +0200
+Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
+ infrastructure
+In-Reply-To: <dd7ec6aa-0778-8e92-b031-cbc82c982005@lucaceresoli.net>
 References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170507220901.4000ec8e@free-electrons.com>
- <8b9222c3-8547-fe79-09dc-288553b2a9e2@lucaceresoli.net>
-Message-ID: <20170507231028.3316cffd@free-electrons.com>
+ <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <dd7ec6aa-0778-8e92-b031-cbc82c982005@lucaceresoli.net>
+Message-ID: <20170507233835.2afdeb9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +15,43 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 7 May 2017 22:41:09 +0200, Luca Ceresoli wrote:
+On Sun, 7 May 2017 23:07:31 +0200, Luca Ceresoli wrote:
 
-> Bad timing on my side: I was reviewing all this work in detail a couple
-> of days ago, but my reviews to 2 patches are in my drafts folder waiting
-> for the remaining ones... Ok, I'll send them anyway right noe as a list
-> of proposed improvements.
+> Things that I already commented about and for which I plan to send patches:
+> - remove smart_open
+> - document code
+> - better reporting
 
-Thanks for your review!
+Great!
 
-> > I know Luca, Ricardo and Thomas DS had some comments, but I believe it
-> > would be easier to address them as follow-up patches. So Luca, Ricardo,
-> > Thomas, your patches to improve this testing infrastructure are more
-> > than welcome. I'm sure it needs to be extended and improved in many
-> > different ways to test more Buildroot functionalities.  
+> > +ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"  
 > 
-> I totally agree this is the best way to proceed. Now everybody can
-> easily send small, incremental patches to improve the work. Thanks for
-> having applied these patches.
+> Since you renamed artefacts to artifacts, it's probably good to rename
+> in the URL too (and update the server). Sure it's a minor nit, but since
+> it's an URL that should stay available for long, better having it fixed
+> as soon as possible.
 
-Yes, it will allow everyone to send small, incremental patches, me
-included.
+Correct, I'll fix that up.
 
-> Any plan to have the tests run automatically (on the autobuilders maybe)?
 
-Yes, we will definitely want to do that. I don't think the autobuilders
-will do it. Instead I believe running the tests on Gitlab CI would be
-easier and more appropriate.
+> > +            qemu_cmd += ["-kernel", kernel]  
+> 
+> I'm OK with the "builtin" logic, but I really dislike it being
+> hard-coded in Emulator.boot(). It's acceptable for the moment since we
+> have only very few builtin kernels. Should we add more in the future, I
+> think we should at least have a sort of "database" of builtin kernels,
+> perhaps in the form of an associative array.
 
-I'm sure Arnout can help :-)
+Fully agreed. What we have now is OK for a few kernel/qemu setups, but
+clearly does not scale, and will have to be improved.
 
-Best regards,
+> Stylish note: I would put the one-letter form before the long form. This
+> is not only my personal taste, but also what the manpages usually do,
+> and what Python does with the automatically-added -h/--help parameter:
+
+Indeed. Patch welcome! :-)
+
+Thanks!
 
 Thomas
 -- 
