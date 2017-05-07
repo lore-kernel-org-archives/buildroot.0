@@ -1,36 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 May 2017 21:53:39 +0200
-Subject: [Buildroot] [git commit] rpi-firmware: extend vcdbg architecture
-	dependency comment
-Message-ID: <20170507195639.BB03B82856@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 May 2017 22:04:54 +0200
+Subject: [Buildroot] [git commit] support/testing: add package tests
+Message-ID: <20170507200503.1B25D82823@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04829295c78bd49f4d6238f2ffdb03d744202932
+commit: https://git.buildroot.net/buildroot/commit/?id=8db88df8c9488b6aacb21d4af87b39653e2154e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The main reason why vcdbg is only available on ARM is the fact that this is
-a prebuilt ARM binary rather than the rpi-userland dependency, so adjust the
-comment to clarify.
+This commit adds some basic tests for two Buildroot packages: python and
+dropbear. These tests are by no mean meant to be exhaustive, but mainly
+to serve as initial examples for other tests.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-firmware/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/__init__.py      |  0
+ support/testing/tests/package/test_dropbear.py | 28 +++++++++++++++++++++
+ support/testing/tests/package/test_python.py   | 35 ++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index a7fa1c3..da32b8e 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -67,7 +67,7 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- 
- config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
- 	bool "vcdbg"
--	depends on BR2_arm # rpi-userland
-+	depends on BR2_arm # prebuilt arm binary, rpi-userland
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
- 	select BR2_PACKAGE_RPI_USERLAND
+diff --git a/support/testing/tests/package/__init__.py b/support/testing/tests/package/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/support/testing/tests/package/test_dropbear.py b/support/testing/tests/package/test_dropbear.py
+new file mode 100644
+index 0000000..a64b782
+--- /dev/null
++++ b/support/testing/tests/package/test_dropbear.py
+@@ -0,0 +1,28 @@
++import os
++
++import infra.basetest
++
++class TestDropbear(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_TARGET_GENERIC_ROOT_PASSWD="testpwd"
++BR2_SYSTEM_DHCP="eth0"
++BR2_PACKAGE_DROPBEAR=y
++BR2_TARGET_ROOTFS_CPIO=y
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img,
++                                    "-net", "nic",
++                                    "-net", "user,hostfwd=tcp::2222-:22"])
++        self.emulator.login("testpwd")
++        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        # Would be useful to try to login through SSH here, through
++        # localhost:2222, though it is not easy to pass the ssh
++        # password on the command line.
+diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
+new file mode 100644
+index 0000000..5532fb5
+--- /dev/null
++++ b/support/testing/tests/package/test_python.py
+@@ -0,0 +1,35 @@
++import os
++
++import infra.basetest
++
++class TestPythonBase(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_PACKAGE_PYTHON=y
++BR2_TARGET_ROOTFS_CPIO=y
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++        cmd = "python --version 2>&1 | grep '^Python 2'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "python -c 'import math; math.floor(12.3)'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "python -c 'import ctypes;"
++        cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.1\");"
++        cmd += "print libc.time(None)'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "python -c 'import zlib'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 1)
