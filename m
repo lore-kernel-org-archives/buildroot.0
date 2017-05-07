@@ -1,56 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 May 2017 22:16:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/cwiid: add optional
- dependency to bluez5_utils
-In-Reply-To: <16e63a8d-e200-457d-bd74-01176c67d4fe@mind.be>
-References: <20170321072207.5396-1-bernd.kuhls@t-online.de>
- <20170321073124.5qynrhrg4cp5gndm@tarshish>
- <16e63a8d-e200-457d-bd74-01176c67d4fe@mind.be>
-Message-ID: <20170507221649.132031c2@free-electrons.com>
+Date: Sun, 7 May 2017 22:18:09 +0200
+Subject: [Buildroot] [git commit] qt5base: fix examples compile with
+	disabled gui module
+Message-ID: <20170507201815.EE66C81844@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4860e05a63bf01156466a1a8007de38e2839501a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Mar 2017 09:36:23 +0100, Arnout Vandecappelle wrote:
+Fixes [1]:
 
-> >> -	select BR2_PACKAGE_BLUEZ_UTILS
-> >> +	select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS  
-> > 
-> > You need to add missing bluez5_utils dependencies 
-> > (BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4, BR2_TOOLCHAIN_HAS_SYNC_4). Changing 
-> > bluez_utils to bluez5_utils in the comments above would also be nice.  
-> 
->  Darn, this is getting complicated... We would want to keep the dependencies as
-> they are, and use bluez_utils in case bluez5_utils are not available. But that
-> would mean something like:
-> 
-> 	select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS \
-> 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
-> 		&& BR2_TOOLCHAIN_HAS_SYNC_4
-> 	select BR2_PACKAGE_BLUEZ_UTILS if !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
-> 		|| !BR2_TOOLCHAIN_HAS_SYNC_4
-> 
->  Yuk...
-> 
->  Perhaps a BR2_PACKAGE_BLUEZ5_UTILS_ARCH_SUPPORTS would help?
+  Project ERROR: Could not find feature opengl.
 
-Perhaps it's a case where we need to use a "depends on" dependency
-rather than a "select" dependency, i.e do:
+[1] http://autobuild.buildroot.net/results/040/040ab283dbbec623fe5ff4eaece754d9701fafc5
 
-	depends on BR2_PACKAGE_BLUEZ5_UTILS || BR2_PACKAGE_BLUEZ_UTILS
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...4-examples-fix-compile-without-gui-module.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-Bernd, could you resubmit your patch with this idea? Don't forget to
-remove the "depends on" on toolchain/architecture features that are no
-longer needed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
+new file mode 100644
+index 0000000..148ced8
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
+@@ -0,0 +1,42 @@
++From fe8a9bacf781fcf290e04a08f2b8e37d881d58bb Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 27 Apr 2017 22:41:28 +0200
++Subject: [PATCH] examples: fix compile without gui module
++
++Fixes:
++
++  Project ERROR: Could not find feature opengl.
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ examples/gui/gui.pro         | 2 +-
++ examples/widgets/widgets.pro | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/examples/gui/gui.pro b/examples/gui/gui.pro
++index a4d960d3f5..b8080c2075 100644
++--- a/examples/gui/gui.pro
+++++ b/examples/gui/gui.pro
++@@ -6,5 +6,5 @@ CONFIG += no_docs_target
++ 
++ SUBDIRS += analogclock
++ SUBDIRS += rasterwindow
++-qtConfig(opengl): \
+++qtHaveModule(gui):qtConfig(opengl): \
++     SUBDIRS += openglwindow
++diff --git a/examples/widgets/widgets.pro b/examples/widgets/widgets.pro
++index 513ddc91f2..cef4936d32 100644
++--- a/examples/widgets/widgets.pro
+++++ b/examples/widgets/widgets.pro
++@@ -22,7 +22,7 @@ SUBDIRS       = \
++                 tutorials \
++                 widgets
++ 
++-qtConfig(opengl): \
+++qtHaveModule(gui):qtConfig(opengl): \
++     SUBDIRS += windowcontainer
++ 
++ contains(DEFINES, QT_NO_CURSOR): SUBDIRS -= mainwindows
++-- 
++2.11.0
++
