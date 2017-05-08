@@ -1,45 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 May 2017 21:45:49 +0200
-Subject: [Buildroot] [PATCH v2 3/4] mpir: fix build on mips32r6/mips64r6
-In-Reply-To: <1494272750-20723-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1494272750-20723-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1494272750-20723-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 May 2017 21:49:11 +0200
+Subject: [Buildroot] [PATCH] package/espeak: add comment to ignore
+ 'unmet dependencies'
+In-Reply-To: <20170507203856.5328-1-yann.morin.1998@free.fr>
+References: <20170507203856.5328-1-yann.morin.1998@free.fr>
+Message-ID: <20170508214911.6c0abdb4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The optimized mips32 and mips64 assembly code is not compatible with
-mips32r6/mips64r6, so use the generic code of MPIR on such platforms.
+Hello,
 
-Fixes:
+On Sun,  7 May 2017 22:38:56 +0200, Yann E. MORIN wrote:
+> On master 86b4eeccc4, espeak can generate spurious 'unmet dependencies'
+> messages:
+> 
+>     $ make KCONFIG_SEED=0x7A85DEE0 randconfig
+>     warning: (BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA) selects
+>     BR2_PACKAGE_PORTAUDIO_CXX which has unmet directdependencies
+>     (BR2_PACKAGE_PORTAUDIO && BR2_INSTALL_LIBSTDCPP)
+> 
+> However, the dpendency chain *is* correct. There is something that
+> causes the kconfig parser to get really confused...
+> 
+> Add a comment statng the issue is spurious, so noone tries to fix it.
 
- - http://autobuild.buildroot.net/results/db2542a2ec3029eda81738a7ae5faeb9ea4aedee/
-   mips32r6 toolchain
+Indeed, I don't see anything wrong in this dependency chain.
 
- - http://autobuild.buildroot.net/results/50b94e6d0dbc33664c6bfe06f83b211083aa07f7/
-   mips64r6 toolchain
+>  config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
+>  	bool "alsa via portaudio"
+> +	# Selecting portaudio generates spurious "unmet dependencies"
+> +	# warnings. Unless you are changing the dependencies of espeak
+> +	# or portaudio, just ignore those spurious warnings.
+>  	select BR2_PACKAGE_PORTAUDIO
+>  	select BR2_PACKAGE_PORTAUDIO_CXX
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/mpir/mpir.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Perhaps we could simply add a "depends on BR2_INSTALL_LIBSTDCPP" here,
+which most likely would silence the warning?
 
-diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-index cf17502..03f21d8 100644
---- a/package/mpir/mpir.mk
-+++ b/package/mpir/mpir.mk
-@@ -26,4 +26,9 @@ ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
- MPIR_CONF_ENV += MPN_PATH="generic"
- endif
- 
-+# Optimized mips32/mips64 code not suitable for mips32r6/mips64r6
-+ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
-+MPIR_CONF_ENV += MPN_PATH="generic"
-+endif
-+
- $(eval $(autotools-package))
+Thanks,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
