@@ -1,109 +1,39 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon,  8 May 2017 08:37:16 -0700
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump to version 10.1.23
-Message-ID: <20170508153716.16809-1-bluemrp9@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 8 May 2017 17:00:33 +0100
+Subject: [Buildroot] [PATCH] nano: bump version to 2.8.2
+Message-ID: <20170508160033.41103-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-
-CVE-2017-3302 - Crash in libmysqlclient.so in Oracle MySQL before 5.6.21 and
-5.7.x before 5.7.5 and MariaDB through 5.5.54, 10.0.x through 10.0.29,
-10.1.x through 10.1.21, and 10.2.x through 10.2.3.
-
-CVE-2017-3313 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: MyISAM). Supported versions that are affected are
-5.5.53 and earlier, 5.6.34 and earlier and 5.7.16 and earlier. Difficult to
-exploit vulnerability allows low privileged attacker with logon to the
-infrastructure where MySQL Server executes to compromise MySQL Server.
-Successful attacks of this vulnerability can result in unauthorized access
-to critical data or complete access to all MySQL Server accessible data.
-
-CVE-2017-3308 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server. While the vulnerability is
-in MySQL Server, attacks may significantly impact additional products.
-Successful attacks of this vulnerability can result in unauthorized
-ability to cause a hang or frequently repeatable crash (complete DOS) of
-MySQL Server.
-
-CVE-2017-3309 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
-"exploitable" vulnerability allows low privileged attacker with network
-access via multiple protocols to compromise MySQL Server. While the
-vulnerability is in MySQL Server, attacks may significantly impact
-additional products. Successful attacks of this vulnerability can result
-in unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2017-3453 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
-"exploitable" vulnerability allows low privileged attacker with network
-access via multiple protocols to compromise MySQL Server. Successful attacks
-of this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2017-3456 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows high privileged attacker with network access via
-multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2017-3464 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized update, insert or delete access to
-some of MySQL Server accessible data.
-
-And a number of important, but non-security related fixes:
-
-MDEV-12602: Fixed some race conditions in InnoDB encryption
-
-MariaDB Backup alpha introduced
-
-Galera wsrep library updated to 25.3.20
-
-For details, see the release notes:
-https://mariadb.com/kb/en/mariadb/mariadb-10123-release-notes/
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index afcf37803..580fe987d 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 12baecf..2c030a1 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,2 +1,2 @@
--# From https://downloads.mariadb.org/mariadb/10.1.22/
--sha256 bcb0572e7ad32cea9740a21e9255f733bdf60a5561ffbda317c22dd12b3966ce  mariadb-10.1.22.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.23/
-+sha256 54d8114e24bfa5e3ebdc7d69e071ad1471912847ea481b227d204f9d644300bf  mariadb-10.1.23.tar.gz
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 5a1f06d86..672d45425 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256 e935a8bb373345c833dff3a304c6d392775d206b94c802d9285ae80ac6b66d0b  nano-2.8.1.tar.xz
++sha256 023e8a7b38b2420d5476d7b2b4d8524d7de55c0853b4dc0b02e4a4adf7ecb9e0  nano-2.8.2.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 9e7fdc7..0f01e46 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MARIADB_VERSION = 10.1.22
-+MARIADB_VERSION = 10.1.23
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
+ NANO_VERSION_MAJOR = 2.8
+-NANO_VERSION = $(NANO_VERSION_MAJOR).1
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
-2.11.0
+2.10.2
