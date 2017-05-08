@@ -1,39 +1,53 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 8 May 2017 18:26:17 +0100
-Subject: [Buildroot] [PATCH] tcpreplay: bump version to 4.2.4
-Message-ID: <20170508172617.60370-1-Vincent.Riera@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 8 May 2017 20:34:56 +0300
+Subject: [Buildroot] [PATCH v3 1/2] rhash: new package
+In-Reply-To: <20170508170007.13923-1-Vincent.Riera@imgtec.com>
+References: <20170508170007.13923-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170508173456.fep2syi43cvqs7ul@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/tcpreplay/tcpreplay.hash | 2 +-
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Vicente,
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 9909678..9e8d151 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 68d8d49dab5bf58b2e8d244eee1ee7f2379d967da19fe97dd9d59bcf40a22abc  tcpreplay-4.2.3.tar.gz
-+sha256 da78ea1a1fe8ff177a4f9e71c4c6739b79ac86db2c2bb90955318b8e8439beb7  tcpreplay-4.2.4.tar.gz
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 6d5c32b..879f518 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPREPLAY_VERSION = 4.2.3
-+TCPREPLAY_VERSION = 4.2.4
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+On Mon, May 08, 2017 at 06:00:06PM +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v2 -> v3:
+> - Nothing
+> Changes v1 -> v2:
+> - rename package to rhash
+> - take the help text of the library instead of the console utility
+> - sub-config option for the rhash binary starts with the package name
+> - conditionals for shared/static/shared-static reordered
+> - put make options into a make_opts variable
+> - install the console utility to staging as well
+>   (All suggestions by Arnout)
+
+[...]
+
+> +ifeq ($(BR2_PACKAGE_RHASH_BIN),y)
+> +define RHASH_INSTALL_RHASH_BIN
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		DESTDIR="$(STAGING_DIR)" $(RHASH_MAKE_OPTS) install-shared
+
+You mention above that Arnout suggested to install the binaries to staging. 
+But this is quite unusual. A comment explaining the reason for that would be 
+nice.
+
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		DESTDIR="$(TARGET_DIR)" $(RHASH_MAKE_OPTS) install-shared
+> +endef
+> +RHASH_POST_INSTALL_TARGET_HOOKS += RHASH_INSTALL_RHASH_BIN
+> +endif
+> +
+> +$(eval $(generic-package))
+
+baruch
+
 -- 
-2.10.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
