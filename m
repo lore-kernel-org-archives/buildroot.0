@@ -1,28 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 08 May 2017 07:12:59 +0000
-Subject: [Buildroot] [Bug 9436] e2fsprogs remove busybox applets even of
- unselected e2fsprogs components
-In-Reply-To: <bug-9436-163@https.bugs.busybox.net/>
-References: <bug-9436-163@https.bugs.busybox.net/>
-Message-ID: <bug-9436-163-jDjMn7NezC@https.bugs.busybox.net/>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Mon,  8 May 2017 10:14:33 +0200
+Subject: [Buildroot] [PATCH] sudo: honor target cflags/ldflags
+Message-ID: <1494231273-6554-1-git-send-email-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9436
+sudo would previously have not been build using flags passed
+via BR2_TARGET_OPTIMIZATION.
 
---- Comment #6 from Joergen Pihlflyckt <Jorgen.Pihlflyckt@ajeco.fi> ---
-I agree to this method.
+in our case -fPIE was being ignored.
 
-The main problem with the missing utilities (lsattr, chattr) is resolved in
-this way, even though it's not the way initially suggested. I thing the matter
-of Busybox versus util-linux is much less important that the fact that the
-needed utilities _do_ actually get built and installed in the first place.
------
-Jorgen.Pihlflyckt at ajeco.fi
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/sudo/sudo.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 0fcd740..dc15b4f 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -10,6 +10,7 @@ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
+ # This is to avoid sudo's make install from chown()ing files which fails
+ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
++SUDO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
+ SUDO_CONF_OPTS = \
+ 	--without-lecture \
+ 	--without-sendmail \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
