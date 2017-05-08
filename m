@@ -1,72 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 May 2017 22:54:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ltp-testsuite: disable for sparc
-In-Reply-To: <dfb284aa-556a-e072-6901-75e45f0a8762@gmail.com>
-References: <20170508190819.28493-1-romain.naour@gmail.com>
- <20170508190819.28493-2-romain.naour@gmail.com>
- <20170508212552.651ed63b@free-electrons.com>
- <dfb284aa-556a-e072-6901-75e45f0a8762@gmail.com>
-Message-ID: <20170508225421.14efb2b1@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  8 May 2017 23:11:49 +0200
+Subject: [Buildroot] [PATCH v2] package/efl: fix unmet dependencies
+Message-ID: <20170508211149.1964-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+EFL's elput selects libinput but forgot to propagate its dependencies.
+Which requires they be propagated further to a second sub-option, then
+to a third one.
 
-On Mon, 8 May 2017 22:31:00 +0200, Romain Naour wrote:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
 
-> > This is wrong: we have BR2_TOOLCHAIN_HAS_SYNC_xyz symbols for this.
-> > Sparc is not the only architecture affected.  
-> 
-> I was able to build ltp-testsuite with the following config where none of
-> BR2_TOOLCHAIN_HAS_SYNC_* are set:
-> 
-> BR2_arcle=y
-> # BR2_ARC_ATOMIC_EXT is not set
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_PACKAGE_LTP_TESTSUITE=y
-> 
-> Other architecture are not available due to toolchain dependencies
-> 
-> So It's seems related to sparc.
-> 
-> I tested with test-pkg to discover these two build issues.
+---
+Changes v1 -> v2:
+  - porpagate dependency to comments as well  (Romain)
+  - fix commit log typoes  (Romain, me)
+---
+ package/efl/Config.in | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-Investigation of include/tst_atomic.h explains what's happening. Here
-is the code in tst_atomic.h:
-
-#if HAVE_SYNC_ADD_AND_FETCH == 1
-static inline int tst_atomic_add_return(int i, int *v)
-{
-        return __sync_add_and_fetch(v, i);
-}
-
-#elif defined(__i386__) || defined(__x86_64__)
-... x86 specific implementation of tst_atomic_add_return()
-#elif defined(__powerpc__) || defined(__powerpc64__)
-... powerpc specific implementation of tst_atomic_add_return()
-#elif defined(__s390__) || defined(__s390x__)
-... S390 specific implementation of tst_atomic_add_return()
-#elif defined(__arc__)
-... ARC specific implementation of tst_atomic_add_return()
-#else /* HAVE_SYNC_ADD_AND_FETCH == 1 */
-# error Your compiler does not provide __sync_add_and_fetch and LTP\
-        implementation is missing for your architecture.
-#endif
-
-So, the right dependency is:
-
-	# Needs __sync*() built-ins for 4-byte data, except on a few
-	# architectures for which a specific implementation is provided
-	# in ltp-testsuite
-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_arc || BR2_i386 || BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64
-
-Best regards,
-
-Thomas
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 371ed3f0d4..7b29e57c0a 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -178,13 +178,15 @@ config BR2_PACKAGE_EFL_WAYLAND
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
+ 	depends on BR2_PACKAGE_EFL_EEZE # efl drm
+ 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
++	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- linput
+ 	select BR2_PACKAGE_EFL_DRM
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 
+-comment "Wayland support needs udev /dev management (eeze) and OpenGL ES w/ EGL, threads"
++comment "Wayland support needs udev /dev management (eeze), OpenGL ES w/ EGL, threads, locales"
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
+-		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE
++		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE \
++		|| !BR2_ENABLE_LOCALE
+ 
+ choice
+ 	bool "OpenGL support"
+@@ -216,6 +218,7 @@ endchoice # OpenGL support
+ 
+ config BR2_PACKAGE_EFL_ELPUT
+ 	bool "Elput"
++	depends on BR2_ENABLE_LOCALE # libinput
+ 	depends on BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+@@ -226,23 +229,24 @@ config BR2_PACKAGE_EFL_ELPUT
+ 	  libinput without having to duplicate the code in each
+ 	  subsystem.
+ 
+-comment "Elput support needs udev /dev management (eeze)"
+-	depends on !BR2_PACKAGE_EFL_EEZE
++comment "Elput support needs udev /dev management (eeze), locales"
++	depends on !BR2_PACKAGE_EFL_EEZE || !BR2_ENABLE_LOCALE
+ 
+ config BR2_PACKAGE_EFL_DRM
+ 	bool "Evas DRM Engine"
+ 	depends on BR2_PACKAGE_EFL_EEZE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
++	depends on BR2_ENABLE_LOCALE # efl-elput <- libinput
+ 	select BR2_PACKAGE_EFL_ELPUT
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+ 	help
+ 	  This option enable building support for the Evas DRM Engine.
+ 
+-comment "Evas DRM Engine needs udev /dev management (eeze) and mesa3d w/ EGL support, threads"
++comment "Evas DRM Engine needs udev /dev management (eeze), mesa3d w/ EGL support, threads, locales"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
+-		|| !BR2_PACKAGE_EFL_EEZE
++		|| !BR2_PACKAGE_EFL_EEZE || !Br2_EMNABLE_LOCALE
+ 
+ comment "libevas loaders"
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
