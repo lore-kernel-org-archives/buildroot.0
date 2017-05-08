@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 May 2017 21:02:44 +0200
-Subject: [Buildroot] [PATCH] cryptsetup: bump version to 1.7.5
-In-Reply-To: <20170508171419.46474-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 8 May 2017 18:14:19 +0100")
-References: <20170508171419.46474-1-Vincent.Riera@imgtec.com>
-Message-ID: <878tm7p3xn.fsf@dell.be.48ers.dk>
+Date: Mon, 08 May 2017 21:03:10 +0200
+Subject: [Buildroot] [PATCH] libinput: bump version to 1.7.2
+In-Reply-To: <20170508171326.45897-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 8 May 2017 18:13:26 +0100")
+References: <20170508171326.45897-1-Vincent.Riera@imgtec.com>
+Message-ID: <874lwvp3wx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
