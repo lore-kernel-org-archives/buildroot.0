@@ -1,33 +1,33 @@
-From: ren_guo <ren_guo@c-sky.com>
-Date: Mon, 8 May 2017 21:43:40 +0800
-Subject: [Buildroot] Buildroot defconfig failures
-In-Reply-To: <20170508142023.6b95ccf7@free-electrons.com>
-References: <20170507145548.336e29ad@free-electrons.com>
- <df95a70f-0e89-750f-1702-25998944fc3a@c-sky.com>
- <20170508142023.6b95ccf7@free-electrons.com>
-Message-ID: <bcb5bdd6-08a2-4782-70f4-0a4db45c41ab@c-sky.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  8 May 2017 17:28:26 +0300
+Subject: [Buildroot] [PATCH] lua: use target LDFLAGS
+Message-ID: <6d72098cd529e9364107dd2727d22eda57635c80.1494253706.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi Thomas,
+This adds '-static' to the link command when BR2_STATIC_LIBS=y, making the lua
+binary really static.
 
-> Yes, it's OK here as well. And it seems to work fine on Gitlab CI for
-> many other toolEchains as well. So we have something weird here.
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/lua/lua.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-We will try to make a Gitlab CI environment to determine csky-linux-gcc problem.
-
-> Where will you add the hash? You can't add the hash in Buildroot for
-> custom external toolchains.
-
-En... I want to add a toolchain-external-csky, is that ok?
-
-Best Regards
-
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 5ef61e039e36..bc0a9d456b9c 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -70,6 +70,7 @@ define LUA_BUILD_CMDS
+ 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
+ 	CFLAGS="$(TARGET_CFLAGS) $(LUA_CFLAGS)" \
+ 	MYLIBS="$(LUA_MYLIBS)" AR="$(TARGET_CROSS)ar rcu" \
++	MYLDFLAGS="$(TARGET_LDFLAGS)" \
+ 	BUILDMODE=$(LUA_BUILDMODE) \
+ 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
+ endef
 -- 
-Guo Ren, Software Engineer, C-SKY
-3 XiDoumen Rd,BldgA,15F,Hangzhou,China
-P.C: 310012
-http://www.c-sky.com
+2.11.0
