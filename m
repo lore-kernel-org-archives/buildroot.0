@@ -1,45 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 8 May 2017 14:14:07 -0300 (BRT)
-Subject: [Buildroot] [PATCH v2 2/4] core: allow check-host-cmake.sh to
- try several candidates
-In-Reply-To: <20170507161132.GC2949@scaer>
-References: <1494131541-2960-1-git-send-email-casantos@datacom.ind.br>
- <1494131541-2960-2-git-send-email-casantos@datacom.ind.br>
- <20170507094706.GB2949@scaer>
- <401111742.21785804.1494170896679.JavaMail.zimbra@datacom.ind.br>
- <20170507161132.GC2949@scaer>
-Message-ID: <1996554357.21917191.1494263647817.JavaMail.zimbra@datacom.ind.br>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 8 May 2017 18:14:19 +0100
+Subject: [Buildroot] [PATCH] cryptsetup: bump version to 1.7.5
+Message-ID: <20170508171419.46474-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org
-> Sent: Sunday, May 7, 2017 1:11:32 PM
-> Subject: Re: [PATCH v2 2/4] core: allow check-host-cmake.sh to try several candidates
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->>     $ sh check-host-cmake.sh 3.1 python
->>     Python 2.7.12
->>     check-host-cmake.sh: 35: [: -gt: unexpected operator
->>     check-host-cmake.sh: 38: [: -eq: unexpected operator
-> 
-> Well, this can only happen in one condition: the 'cmake' (or 'cmake3')
-> executable is in fact not CMake, which would be an excessively stupid
-> situation...
----8<---
-> 
-> I'm not against having a stricter regex, but remember what you are
-> trying to protect against... And I personally don't think the cases you
-> point at would ever happen, unless one of the candidates is in fact not
-> CMake.
-
-OK, let's keep the paranoia at its current level. :-)
-
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index f328bc3..6d0fb58 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
+-sha256 7ccf893ef79a38fb92d61f03c17b964982119f5319cdaa85a1335b8558cca016  cryptsetup-1.7.4.tar.xz
++sha256 2b30cd1d0dd606a53ac77b406e1d37798d4b0762fa89de6ea546201906a251bd  cryptsetup-1.7.5.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index a3358a9..787331c 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CRYPTSETUP_VERSION_MAJOR = 1.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).5
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.10.2
