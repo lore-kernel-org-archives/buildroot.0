@@ -1,109 +1,146 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 May 2017 15:32:51 +0200
-Subject: [Buildroot] [PATCH] mpv: fix X11 logic after bump to 0.25.0
-Message-ID: <1494250371-13487-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 8 May 2017 14:38:13 +0100
+Subject: [Buildroot] [PATCH] flex: bump version to 2.6.4
+Message-ID: <20170508133813.13442-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Between 0.24.0 and 0.25.0, mpv has changed its logic around the
-detection/usage of X11 (in upstream commit
-https://github.com/mpv-player/mpv/commit/927afa311d4a89b022305508acbf4e7325fe3928). Instead
-of having fine grained option for x11, xext, xinerama, xscreensaver and
-xrandr, mpv now requires all five libraries to be available in order to
-enable X.org support.
+- 0001 patch removed. It doesn't apply on this version and is also not
+  necessary since the AR binary is now handled correctly with AR = @AR at .
+- 0002 patch removed. It's already included in this release:
+  https://github.com/westes/flex/commit/a5cbe929ac3255d371e698f62dc256afe7006466
+- The flex project has moved to GitHub, so modify the URLs in both
+  flex.mk and Config.in files.
+- The sed command over Makefile.in to prevent the flex binary to be
+  built fails, so remove it. Instead, let the user decide if he wants to
+  install the flex binary via a BR2_PACKAGE_FLEX_BINARY option.
 
-Therefore, this commit adjusts the mpv packaging so that:
-
- 1. All necessary X11 libraries are selected if BR2_PACKAGE_XORG7 is
-    enabled. It would indeed be too cumbersome for the user to know that
-    all of x11, xext, xinerama, xscreensaver and xrandr are necessary in
-    order to have X.org support.
-
- 2. mpv.mk is simplified by enabling X.org support when
-    BR2_PACKAGE_XORG7 is enabled.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/b470cfba451ce9ba648e3a2f3ae08429db8bdee9/
-  (--disable-xss was used to disable xscreensaver support, and this
-  option no longer exists)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/mpv/Config.in |  6 ++++++
- package/mpv/mpv.mk    | 33 +++++++--------------------------
- 2 files changed, 13 insertions(+), 26 deletions(-)
+ package/flex/0001-prog-ar.patch           | 11 -----------
+ package/flex/0002-fix-CVE-2016-6354.patch | 25 -------------------------
+ package/flex/Config.in                    | 11 ++++++++++-
+ package/flex/flex.hash                    |  2 +-
+ package/flex/flex.mk                      | 18 ++++++++----------
+ 5 files changed, 19 insertions(+), 48 deletions(-)
+ delete mode 100644 package/flex/0001-prog-ar.patch
+ delete mode 100644 package/flex/0002-fix-CVE-2016-6354.patch
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 6e115ae..ce6f367 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -12,6 +12,12 @@ config BR2_PACKAGE_MPV
- 	select BR2_PACKAGE_ZLIB
- 	# Select xkbcommon for wayland to avoid being mysterious
- 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
-+	# Select all necessary X11 dependencies if X.org is enabled
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXINERAMA if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
- 	help
- 	  mpv is a fork of mplayer2 and MPlayer. It shares some features
- 	  with the former projects while introducing many more.
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 24ccf8c..37548c9 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -173,7 +173,7 @@ endif
- # This requires one or more of the egl-drm, wayland, x11 backends
- # For now we support wayland and x11
- ifeq ($(BR2_PACKAGE_LIBVA),y)
--ifneq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XLIB_LIBX11),)
-+ifneq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XORG7),)
- MPV_CONF_OPTS += --enable-vaapi
- MPV_DEPENDENCIES += libva
- else
-@@ -191,31 +191,12 @@ else
- MPV_CONF_OPTS += --disable-wayland
- endif
+diff --git a/package/flex/0001-prog-ar.patch b/package/flex/0001-prog-ar.patch
+deleted file mode 100644
+index e0626ff..0000000
+--- a/package/flex/0001-prog-ar.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+-diff -rup flex-2.5.33.orig/Makefile.in flex-2.5.33/Makefile.in
+---- flex-2.5.33.orig/Makefile.in	2007-01-18 17:29:25.000000000 +0100
+-+++ flex-2.5.33/Makefile.in	2007-01-18 18:28:22.000000000 +0100
+-@@ -105,7 +105,6 @@ am__installdirs = "$(DESTDIR)$(libdir)"
+- 	"$(DESTDIR)$(includedir)"
+- libLIBRARIES_INSTALL = $(INSTALL_DATA)
+- LIBRARIES = $(lib_LIBRARIES)
+--AR = ar
+- ARFLAGS = cru
+- libfl_a_AR = $(AR) $(ARFLAGS)
+- libfl_a_LIBADD =
+diff --git a/package/flex/0002-fix-CVE-2016-6354.patch b/package/flex/0002-fix-CVE-2016-6354.patch
+deleted file mode 100644
+index b0c780b..0000000
+--- a/package/flex/0002-fix-CVE-2016-6354.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From a5cbe929ac3255d371e698f62dc256afe7006466 Mon Sep 17 00:00:00 2001
+-From: Will Estes <westes575@gmail.com>
+-Date: Sat, 27 Feb 2016 11:56:05 -0500
+-Subject: [PATCH] Fixed incorrect integer type
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Status: upstream
+-
+- flex.skl | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/flex.skl b/src/flex.skl
+-index 36a526a..64f853d 100644
+---- a/flex.skl
+-+++ b/flex.skl
+-@@ -1703,7 +1703,7 @@ int yyFlexLexer::yy_get_next_buffer()
+- 
+- 	else
+- 		{
+--			yy_size_t num_to_read =
+-+			int num_to_read =
+- 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
+- 
+- 		while ( num_to_read <= 0 )
+diff --git a/package/flex/Config.in b/package/flex/Config.in
+index 0a70a1c..fea0ea7 100644
+--- a/package/flex/Config.in
++++ b/package/flex/Config.in
+@@ -5,4 +5,13 @@ config BR2_PACKAGE_FLEX
+ 	  A fast lexical analyser generator. A tool for generating
+ 	  programs that perform pattern-matching on text.
  
--# Base X11 support
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
--MPV_CONF_OPTS += --enable-x11 --disable-xss
--MPV_DEPENDENCIES += xlib_libX11
--# xext
--ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
--MPV_CONF_OPTS += --enable-xext
--MPV_DEPENDENCIES += xlib_libXext
--else
--MPV_CONF_OPTS += --disable-xext
--endif
--# xinerama
--ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
--MPV_CONF_OPTS += --enable-xinerama
--MPV_DEPENDENCIES += xlib_libXinerama
--else
--MPV_CONF_OPTS += --disable-xinerama
--endif
--# xrandr
--ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
--MPV_CONF_OPTS += --enable-xrandr
--MPV_DEPENDENCIES += xlib_libXrandr
--else
--MPV_CONF_OPTS += --disable-xrandr
--endif
-+# Base X11 support. Config.in ensures that if BR2_PACKAGE_XORG7 is
-+# enabled, xlib_libX11, xlib_libXext, xlib_libXinerama,
-+# xlib_libXrandr, xlib_libXScrnSaver.
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+MPV_CONF_OPTS += --enable-x11
-+MPV_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXinerama xlib_libXrandr xlib_libXScrnSaver
- # XVideo
- ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
- MPV_CONF_OPTS += --enable-xv
+-	  http://flex.sourceforge.net/
++	  https://github.com/westes/flex/
++
++if BR2_PACKAGE_FLEX
++
++config BR2_PACKAGE_FLEX_BINARY
++	bool "flex binary"
++	help
++	  Install flex binary as well
++
++endif
+diff --git a/package/flex/flex.hash b/package/flex/flex.hash
+index b91ab57..cf2ce85 100644
+--- a/package/flex/flex.hash
++++ b/package/flex/flex.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  bf693433a3effe6b1f42e44abd787491e4e213984b1859545b92267a86088dd3  flex-2.5.37.tar.gz
++sha256 e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995  flex-2.6.4.tar.gz
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 9a3f840..2f78810 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-FLEX_VERSION = 2.5.37
+-FLEX_SITE = http://download.sourceforge.net/project/flex
++FLEX_VERSION = 2.6.4
++FLEX_SITE = https://github.com/westes/flex/files/981163
+ FLEX_INSTALL_STAGING = YES
+ FLEX_LICENSE = FLEX
+ FLEX_LICENSE_FILES = COPYING
+@@ -15,16 +15,14 @@ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
+ # we don't have a host-gettext/libintl
+ HOST_FLEX_DEPENDENCIES = host-m4
+ 
+-define FLEX_DISABLE_PROGRAM
+-	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/Makefile.in
+-endef
+-FLEX_POST_PATCH_HOOKS += FLEX_DISABLE_PROGRAM
+-
+-# flex++ symlink is broken when flex binary is not installed
+-define FLEX_REMOVE_BROKEN_SYMLINK
++# Remove flex binary and its flex++ symlink when appropriate
++ifeq ($(BR2_PACKAGE_FLEX_BINARY),)
++define FLEX_REMOVE_FLEX_BINARY
++	rm -f $(TARGET_DIR)/usr/bin/flex
+ 	rm -f $(TARGET_DIR)/usr/bin/flex++
+ endef
+-FLEX_POST_INSTALL_TARGET_HOOKS += FLEX_REMOVE_BROKEN_SYMLINK
++FLEX_POST_INSTALL_TARGET_HOOKS += FLEX_REMOVE_FLEX_BINARY
++endif
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.7.4
+2.10.2
