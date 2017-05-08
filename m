@@ -1,39 +1,29 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 8 May 2017 17:39:23 +0100
-Subject: [Buildroot] [PATCH] cjson: bump version to 1.5.1
-Message-ID: <20170508163923.5693-1-Vincent.Riera@imgtec.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  8 May 2017 11:52:30 -0500
+Subject: [Buildroot] [PATCH 1/5] DEVELOPERS: add Matt Weber -> package/libqmi
+Message-ID: <1494262354-51074-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index da6a8fc..09cc335 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 d320a180be80726d13b399b17dcaf226484dc362a8d7a1c6a9a9e3bd8eb184fd  cjson-v1.4.7.tar.gz
-+sha256 81e6574f0b1c0d7cd34fa5e0f3fd34b162fc1c568fc1473880999c2030bfb6f0  cjson-v1.5.1.tar.gz
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 779cd3b..43cd8bd 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = v1.4.7
-+CJSON_VERSION = v1.5.1
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8fbb69a..63b111f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1076,6 +1076,7 @@ F:	package/fmlib/
+ F:	package/igmpproxy/
+ F:	package/iputils/
+ F:	package/libcsv/
++F:	package/libqmi/
+ F:	package/omniorb/
+ F:	package/python-ipy/
+ F:	package/python-posix-ipc/
 -- 
-2.10.2
+1.9.1
