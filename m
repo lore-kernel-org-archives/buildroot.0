@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 May 2017 21:03:10 +0200
-Subject: [Buildroot] [PATCH] libinput: bump version to 1.7.2
-In-Reply-To: <20170508171326.45897-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 8 May 2017 18:13:26 +0100")
-References: <20170508171326.45897-1-Vincent.Riera@imgtec.com>
-Message-ID: <874lwvp3wx.fsf@dell.be.48ers.dk>
+Date: Mon, 08 May 2017 21:03:25 +0200
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.171
+In-Reply-To: <20170508171226.45349-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 8 May 2017 18:12:25 +0100")
+References: <20170508171226.45349-1-Vincent.Riera@imgtec.com>
+Message-ID: <87ziennpc2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
