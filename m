@@ -1,47 +1,90 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 8 May 2017 22:31:00 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ltp-testsuite: disable for sparc
-In-Reply-To: <20170508212552.651ed63b@free-electrons.com>
-References: <20170508190819.28493-1-romain.naour@gmail.com>
- <20170508190819.28493-2-romain.naour@gmail.com>
- <20170508212552.651ed63b@free-electrons.com>
-Message-ID: <dfb284aa-556a-e072-6901-75e45f0a8762@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  8 May 2017 22:41:43 +0200
+Subject: [Buildroot] [PATCH] kvm-unit-tests: fix build on x86-64 with
+	specific gcc versions
+Message-ID: <1494276103-22722-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+kvm-unit-tests uses the following code on x86/x86-64:
 
-Le 08/05/2017 ? 21:25, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Mon,  8 May 2017 21:08:19 +0200, Romain Naour wrote:
-> 
->> +	# missing __sync_*() family of functions
->> +	depends on !BR2_sparc
-> 
-> This is wrong: we have BR2_TOOLCHAIN_HAS_SYNC_xyz symbols for this.
-> Sparc is not the only architecture affected.
+static inline u64 scale_delta(u64 delta, u64 mul_frac)
+{
+        u64 product, unused;
 
-I was able to build ltp-testsuite with the following config where none of
-BR2_TOOLCHAIN_HAS_SYNC_* are set:
+        __asm__ (
+                "mul %3"
+                : "=d" (product), "=a" (unused) : "1" (delta), "rm" ((u64)mul_frac) );
 
-BR2_arcle=y
-# BR2_ARC_ATOMIC_EXT is not set
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_PACKAGE_LTP_TESTSUITE=y
+        return product;
+}
 
-Other architecture are not available due to toolchain dependencies
+The "mul" instruction does not have a suffix that indicates the width of
+the data being multiplied. When the data is passed in a register, there
+is no need to specify the width, but with some gcc versions, the data is
+passed as a memory reference, and therefore the assembler does not know
+the width of the data to be multiplied. It causes the following build
+failure:
 
-So It's seems related to sparc.
+x86/hyperv_clock.c: Assembler messages:
+x86/hyperv_clock.c:21: Error: no instruction mnemonic suffix given and no register operands; can't size instruction
 
-I tested with test-pkg to discover these two build issues.
+Since the data being multiplied is 64 bit, we explicitly specify the
+instruction as being "mulq".
 
-Best regards,
-Romain
+Fixes:
 
-> 
-> Thomas
-> 
+  http://autobuild.buildroot.net/results/a4a65d01f049db83a93de92660f228dd18532625/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...clock-be-explicit-about-mul-instruction-d.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch
+
+diff --git a/package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch b/package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch
+new file mode 100644
+index 0000000..c8ee6b1
+--- /dev/null
++++ b/package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch
+@@ -0,0 +1,35 @@
++From 022ae220d6e7b5bd064bc8698c271dca4dac7d8c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 8 May 2017 22:27:25 +0200
++Subject: [PATCH] x86/hyperv_clock: be explicit about mul instruction data size
++
++With gcc 4.7.2, the build fails with:
++
++x86/hyperv_clock.c: Assembler messages:
++x86/hyperv_clock.c:21: Error: no instruction mnemonic suffix given and no register operands; can't size instruction
++
++In order to avoid this, make the mul instruction data size explicit by
++adding the appropriate suffix. It operates on 64-bit data, so use
++"mulq".
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ x86/hyperv_clock.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/x86/hyperv_clock.c b/x86/hyperv_clock.c
++index 8b1deba..6c4dd56 100644
++--- a/x86/hyperv_clock.c
+++++ b/x86/hyperv_clock.c
++@@ -19,7 +19,7 @@ static inline u64 scale_delta(u64 delta, u64 mul_frac)
++ 	u64 product, unused;
++ 
++ 	__asm__ (
++-		"mul %3"
+++		"mulq %3"
++ 		: "=d" (product), "=a" (unused) : "1" (delta), "rm" ((u64)mul_frac) );
++ 
++ 	return product;
++-- 
++2.7.4
++
+-- 
+2.7.4
