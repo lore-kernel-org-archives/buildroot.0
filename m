@@ -1,10 +1,10 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  8 May 2017 11:52:34 -0500
-Subject: [Buildroot] [PATCH 5/5] DEVELOPERS: add Matt Weber ->
-	package/valijson
+Date: Mon,  8 May 2017 11:52:33 -0500
+Subject: [Buildroot] [PATCH 4/5] DEVELOPERS: add Matt Weber ->
+	package/cgroupfs-mount
 In-Reply-To: <1494262354-51074-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1494262354-51074-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1494262354-51074-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1494262354-51074-4-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,16 +17,16 @@ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d8113d7..13c72ed 100644
+index 6af8531..d8113d7 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1095,6 +1095,7 @@ F:	package/setools/
- F:	package/simicsfs/
- F:	package/smcroute/
- F:	package/tclap/
-+F:	package/valijson/
- 
- N:	Mauro Condarelli <mc5686@mclink.it>
- F:	package/mc/
+@@ -1071,6 +1071,7 @@ F:	package/ts4900-fpga/
+ N:	Matt Weber <matthew.weber@rockwellcollins.com>
+ F:	package/bc/
+ F:	package/checkpolicy/
++F:	package/cgroupfs-mount/
+ F:	package/eigen/
+ F:	package/fmc/
+ F:	package/fmlib/
 -- 
 1.9.1
