@@ -1,39 +1,109 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  8 May 2017 17:38:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump version to 5.45
-Message-ID: <20170508153856.18321-1-bernd.kuhls@t-online.de>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Mon,  8 May 2017 08:37:16 -0700
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump to version 10.1.23
+Message-ID: <20170508153716.16809-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/bluez5_utils/bluez5_utils.hash | 2 +-
- package/bluez5_utils/bluez5_utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
 
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 75fb5d555..e7a6a8911 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
+CVE-2017-3302 - Crash in libmysqlclient.so in Oracle MySQL before 5.6.21 and
+5.7.x before 5.7.5 and MariaDB through 5.5.54, 10.0.x through 10.0.29,
+10.1.x through 10.1.21, and 10.2.x through 10.2.3.
+
+CVE-2017-3313 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: MyISAM). Supported versions that are affected are
+5.5.53 and earlier, 5.6.34 and earlier and 5.7.16 and earlier. Difficult to
+exploit vulnerability allows low privileged attacker with logon to the
+infrastructure where MySQL Server executes to compromise MySQL Server.
+Successful attacks of this vulnerability can result in unauthorized access
+to critical data or complete access to all MySQL Server accessible data.
+
+CVE-2017-3308 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
+and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server. While the vulnerability is
+in MySQL Server, attacks may significantly impact additional products.
+Successful attacks of this vulnerability can result in unauthorized
+ability to cause a hang or frequently repeatable crash (complete DOS) of
+MySQL Server.
+
+CVE-2017-3309 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
+"exploitable" vulnerability allows low privileged attacker with network
+access via multiple protocols to compromise MySQL Server. While the
+vulnerability is in MySQL Server, attacks may significantly impact
+additional products. Successful attacks of this vulnerability can result
+in unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
+
+CVE-2017-3453 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
+"exploitable" vulnerability allows low privileged attacker with network
+access via multiple protocols to compromise MySQL Server. Successful attacks
+of this vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2017-3456 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
+and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
+vulnerability allows high privileged attacker with network access via
+multiple protocols to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2017-3464 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are 5.5.54
+and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized update, insert or delete access to
+some of MySQL Server accessible data.
+
+And a number of important, but non-security related fixes:
+
+MDEV-12602: Fixed some race conditions in InnoDB encryption
+
+MariaDB Backup alpha introduced
+
+Galera wsrep library updated to 25.3.20
+
+For details, see the release notes:
+https://mariadb.com/kb/en/mariadb/mariadb-10123-release-notes/
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index afcf37803..580fe987d 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256 0c321e291f8b45e6a78e379dfe80592b65955a0f0ab191f1cca0edd8ec356c85  bluez-5.44.tar.xz
-+sha256 4cacb00703a6bc149cb09502257d321597d43952374a16f3558766ffa85364e9  bluez-5.45.tar.xz
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 4a0323488..c69e58bff 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
+-# From https://downloads.mariadb.org/mariadb/10.1.22/
+-sha256 bcb0572e7ad32cea9740a21e9255f733bdf60a5561ffbda317c22dd12b3966ce  mariadb-10.1.22.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.23/
++sha256 54d8114e24bfa5e3ebdc7d69e071ad1471912847ea481b227d204f9d644300bf  mariadb-10.1.23.tar.gz
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 5a1f06d86..672d45425 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BLUEZ5_UTILS_VERSION = 5.44
-+BLUEZ5_UTILS_VERSION = 5.45
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+-MARIADB_VERSION = 10.1.22
++MARIADB_VERSION = 10.1.23
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
 -- 
 2.11.0
