@@ -1,33 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  8 May 2017 17:28:26 +0300
-Subject: [Buildroot] [PATCH] lua: use target LDFLAGS
-Message-ID: <6d72098cd529e9364107dd2727d22eda57635c80.1494253706.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 8 May 2017 16:33:33 +0200
+Subject: [Buildroot] Buildroot defconfig failures
+In-Reply-To: <bcb5bdd6-08a2-4782-70f4-0a4db45c41ab@c-sky.com>
+References: <20170507145548.336e29ad@free-electrons.com>
+ <df95a70f-0e89-750f-1702-25998944fc3a@c-sky.com>
+ <20170508142023.6b95ccf7@free-electrons.com>
+ <bcb5bdd6-08a2-4782-70f4-0a4db45c41ab@c-sky.com>
+Message-ID: <2a49a86b-da86-6e7e-df4d-bf857d3ee66c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds '-static' to the link command when BR2_STATIC_LIBS=y, making the lua
-binary really static.
 
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/lua/lua.mk | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 5ef61e039e36..bc0a9d456b9c 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -70,6 +70,7 @@ define LUA_BUILD_CMDS
- 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
- 	CFLAGS="$(TARGET_CFLAGS) $(LUA_CFLAGS)" \
- 	MYLIBS="$(LUA_MYLIBS)" AR="$(TARGET_CROSS)ar rcu" \
-+	MYLDFLAGS="$(TARGET_LDFLAGS)" \
- 	BUILDMODE=$(LUA_BUILDMODE) \
- 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
- endef
+On 08-05-17 15:43, ren_guo wrote:
+> hi Thomas,
+> 
+>> Yes, it's OK here as well. And it seems to work fine on Gitlab CI for
+>> many other toolEchains as well. So we have something weird here.
+> 
+> We will try to make a Gitlab CI environment to determine csky-linux-gcc problem.
+
+ You can just create a gitlab account, fork the official gitlab buildroot
+repository, modify .gitlab-ci.yml and push it. The you use the real gitlab
+server for you debugging.
+
+ You can do this on a branch that you delete later to "forget" about this
+debugging run.
+
+ Regards,
+ Arnout
+
+> 
+>> Where will you add the hash? You can't add the hash in Buildroot for
+>> custom external toolchains.
+> 
+> En... I want to add a toolchain-external-csky, is that ok?
+> 
+> Best Regards
+> 
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
