@@ -1,49 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 May 2017 21:49:11 +0200
-Subject: [Buildroot] [PATCH] package/espeak: add comment to ignore
- 'unmet dependencies'
-In-Reply-To: <20170507203856.5328-1-yann.morin.1998@free.fr>
-References: <20170507203856.5328-1-yann.morin.1998@free.fr>
-Message-ID: <20170508214911.6c0abdb4@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  8 May 2017 22:30:30 +0200
+Subject: [Buildroot] [PATCH] package/efl: fix unmet dependencies
+Message-ID: <20170508203030.8852-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+EFL's elput selects libinput but forgot to propagate its dependencies.
+Which reauires they be propagated fruther to a seonc sub-option, and
+then to a third one.
 
-On Sun,  7 May 2017 22:38:56 +0200, Yann E. MORIN wrote:
-> On master 86b4eeccc4, espeak can generate spurious 'unmet dependencies'
-> messages:
-> 
->     $ make KCONFIG_SEED=0x7A85DEE0 randconfig
->     warning: (BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA) selects
->     BR2_PACKAGE_PORTAUDIO_CXX which has unmet directdependencies
->     (BR2_PACKAGE_PORTAUDIO && BR2_INSTALL_LIBSTDCPP)
-> 
-> However, the dpendency chain *is* correct. There is something that
-> causes the kconfig parser to get really confused...
-> 
-> Add a comment statng the issue is spurious, so noone tries to fix it.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
+---
+ package/efl/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Indeed, I don't see anything wrong in this dependency chain.
-
->  config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
->  	bool "alsa via portaudio"
-> +	# Selecting portaudio generates spurious "unmet dependencies"
-> +	# warnings. Unless you are changing the dependencies of espeak
-> +	# or portaudio, just ignore those spurious warnings.
->  	select BR2_PACKAGE_PORTAUDIO
->  	select BR2_PACKAGE_PORTAUDIO_CXX
-
-Perhaps we could simply add a "depends on BR2_INSTALL_LIBSTDCPP" here,
-which most likely would silence the warning?
-
-Thanks,
-
-Thomas
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 371ed3f0d4..e5b5643c79 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -178,6 +178,7 @@ config BR2_PACKAGE_EFL_WAYLAND
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
+ 	depends on BR2_PACKAGE_EFL_EEZE # efl drm
+ 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
++	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- linput
+ 	select BR2_PACKAGE_EFL_DRM
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 
+@@ -216,6 +217,7 @@ endchoice # OpenGL support
+ 
+ config BR2_PACKAGE_EFL_ELPUT
+ 	bool "Elput"
++	depends on BR2_ENABLE_LOCALE # libinput
+ 	depends on BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+@@ -234,6 +236,7 @@ config BR2_PACKAGE_EFL_DRM
+ 	depends on BR2_PACKAGE_EFL_EEZE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
++	depends on BR2_ENABLE_LOCALE # efl-elput <- libinput
+ 	select BR2_PACKAGE_EFL_ELPUT
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBXKBCOMMON
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
