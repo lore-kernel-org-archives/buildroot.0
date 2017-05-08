@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  8 May 2017 21:45:46 +0200
-Subject: [Buildroot] [PATCH v2 0/4] mpir build fixes
-Message-ID: <1494272750-20723-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon,  8 May 2017 21:45:48 +0200
+Subject: [Buildroot] [PATCH v2 2/4] mpir: fix build on ARM Thumb-only
+	platforms
+In-Reply-To: <1494272750-20723-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1494272750-20723-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1494272750-20723-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The optimized ARM assembly code is not suitable for Thumb-only
+platforms, so use the generic code in such situations.
 
-This new version of the mpir build fixes series now fixes the build
-for all 49 toolchain configurations, tested with the test-pkg script.
+Fixes:
 
-Changes since v1:
+  http://autobuild.buildroot.net/results/4d7f2a1326f75e11693bdd51ad274079b0dd0ce4/
+  (ARM Cortex-M4 toolchain)
 
- - Fix a typo in the mips32r6/mips64r6 that originally made it useless
-   (BR2_mips32r6 was used, while the option is name BR2_mips_32r6)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpir/mpir.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- - Add a patch to fix the powerpc64le build
-
-Best regards,
-
-Thomas
-
-Thomas Petazzoni (4):
-  mpir: fix build on ARM with old binutils versions
-  mpir: fix build on ARM Thumb-only platforms
-  mpir: fix build on mips32r6/mips64r6
-  mpir: fix build on powerpc64le
-
- ...rm-udiv.asm-workaround-binutils-bug-14887.patch | 40 ++++++++++++++++++++++
- package/mpir/mpir.mk                               | 16 +++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch
-
+diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
+index b7f3829..cf17502 100644
+--- a/package/mpir/mpir.mk
++++ b/package/mpir/mpir.mk
+@@ -20,4 +20,10 @@ ifeq ($(BR2_MIPS_NABI64),y)
+ MPIR_CONF_OPTS += ABI=64
+ endif
+ 
++# The optimized ARM assembly code uses ARM-only (i.e not Thumb1/2
++# compatible) instructions.
++ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
++MPIR_CONF_ENV += MPN_PATH="generic"
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.7.4
