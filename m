@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 8 May 2017 18:10:36 +0100
-Subject: [Buildroot] [PATCH] lttng-modules: bump version to 2.9.2
-Message-ID: <20170508171036.51864-1-Vincent.Riera@imgtec.com>
+Date: Mon, 8 May 2017 18:12:25 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.171
+Message-ID: <20170508171226.45349-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lttng-modules/lttng-modules.hash | 6 +++---
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index ec733ef..6849d5d 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,3 +1,3 @@
--# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.1.tar.bz2.{md5,sha1}
--md5 5a16bca52233cc2bdff572b1120a88f6  lttng-modules-2.9.1.tar.bz2
--sha1 5b47e923a8d697b0f5799f0eb226a41c4957966c  lttng-modules-2.9.1.tar.bz2
-+# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.2.tar.bz2.{md5,sha1}
-+md5 6c02645c77fd4d6475a4f83bda1d75ff  lttng-modules-2.9.2.tar.bz2
-+sha1 da54a8478019c0d551590c37826e78c058e9cb8b  lttng-modules-2.9.2.tar.bz2
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index 9f624e5..f53b085 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 566c487..81d0e97 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 971a40f93db2b18a4b5c04f2b34d48cbcce81e6e3999760a474ddc52e8653317ac4969f402b9c9e12e486772bc27da8d9ca448f0551338b2a62031082a113f7c  LVM2.2.02.170.tgz
++sha512 801adcc2ae483f81edf6bfba73090b6b8f710370e48764f08a62da71d617157075bea01593c2535ad5ba71dcb5e0cfe83cec9a65180a6e8b9e0d214bdee79883  LVM2.2.02.171.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 11fd8a2..9a422fe 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LTTNG_MODULES_VERSION = 2.9.1
-+LTTNG_MODULES_VERSION = 2.9.2
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+-LVM2_VERSION = 2.02.170
++LVM2_VERSION = 2.02.171
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
 2.10.2
