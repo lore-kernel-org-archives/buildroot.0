@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 May 2017 23:29:20 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/ltp-testsuite: remove ldd
- commande test with static only build
-In-Reply-To: <20170508211833.3462-1-romain.naour@gmail.com>
+Date: Mon, 8 May 2017 23:30:04 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/ltp-testsuite: add
+ dependency on BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <20170508211833.3462-2-romain.naour@gmail.com>
 References: <20170508211833.3462-1-romain.naour@gmail.com>
-Message-ID: <20170508232920.6d777844@free-electrons.com>
+ <20170508211833.3462-2-romain.naour@gmail.com>
+Message-ID: <20170508233004.55d93b91@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  8 May 2017 23:18:32 +0200, Romain Naour wrote:
-> ldd command build system try to build a shared library unconditionally:
-> 
-> arc-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -matomic -Os -static \
-> 	-I[...]/sysroot/usr/include/tirpc   -g -O2 -fno-strict-aliasing -pipe \
-> 	-Wall -W -Wold-style-definition -shared -o lddfile1.obj.so lddfile1.o
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/2ec/2eccf9f517ab15d8d459b06195423fdfe3fba9fa
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+On Mon,  8 May 2017 23:18:33 +0200, Romain Naour wrote:
 
-Typo in commit title: s/commande/command. No need to respin for this.
+>  comment "ltp-testsuite needs a glibc or uClibc toolchain w/ NPTL"
+>  	depends on !BR2_nios2
+> +	depends on !BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_arc && !BR2_i386 \
+> +		&& !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le \
+> +		&& !BR2_x86_64
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Wrong. You want the dependencies on the Config.in comment in the same
+direction as for the main symbol. Or better: introduce a
+BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS.
 
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
