@@ -1,75 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 May 2017 23:16:03 +0200
-Subject: [Buildroot] [PATCH v3 1/2] rhash: new package
-In-Reply-To: <20170508173456.fep2syi43cvqs7ul@tarshish>
-References: <20170508170007.13923-1-Vincent.Riera@imgtec.com>
- <20170508173456.fep2syi43cvqs7ul@tarshish>
-Message-ID: <20170508211603.GB3544@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  8 May 2017 23:18:32 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/ltp-testsuite: remove ldd
+	commande test with static only build
+Message-ID: <20170508211833.3462-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, Baruch, All,
+ldd command build system try to build a shared library unconditionally:
 
-On 2017-05-08 20:34 +0300, Baruch Siach spake thusly:
-> Hi Vicente,
-> 
-> On Mon, May 08, 2017 at 06:00:06PM +0100, Vicente Olivert Riera wrote:
-> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > ---
-> > Changes v2 -> v3:
-> > - Nothing
-> > Changes v1 -> v2:
-> > - rename package to rhash
-> > - take the help text of the library instead of the console utility
-> > - sub-config option for the rhash binary starts with the package name
-> > - conditionals for shared/static/shared-static reordered
-> > - put make options into a make_opts variable
-> > - install the console utility to staging as well
-> >   (All suggestions by Arnout)
-> 
-> [...]
-> 
-> > +ifeq ($(BR2_PACKAGE_RHASH_BIN),y)
-> > +define RHASH_INSTALL_RHASH_BIN
-> > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> > +		DESTDIR="$(STAGING_DIR)" $(RHASH_MAKE_OPTS) install-shared
-> 
-> You mention above that Arnout suggested to install the binaries to staging. 
-> But this is quite unusual. A comment explaining the reason for that would be 
-> nice.
+arc-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -matomic -Os -static \
+	-I[...]/sysroot/usr/include/tirpc   -g -O2 -fno-strict-aliasing -pipe \
+	-Wall -W -Wold-style-definition -shared -o lddfile1.obj.so lddfile1.o
 
-And please do so in a post-staging-install hook, not in the post-target-install
-hook.
+Fixes:
+http://autobuild.buildroot.net/results/2ec/2eccf9f517ab15d8d459b06195423fdfe3fba9fa
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> > +		DESTDIR="$(TARGET_DIR)" $(RHASH_MAKE_OPTS) install-shared
-> > +endef
-> > +RHASH_POST_INSTALL_TARGET_HOOKS += RHASH_INSTALL_RHASH_BIN
-> > +endif
-> > +
-> > +$(eval $(generic-package))
-> 
-> baruch
-> 
-> -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 7f26bd2..2a7f620 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -68,4 +68,12 @@ endef
+ LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
+ endif
+ 
++# ldd command build system try to build a shared library unconditionally.
++ifeq ($(BR2_STATIC_LIBS),y)
++define LTP_TESTSUITE_REMOVE_LDD
++	rm -rf $(@D)/testcases/commands/ldd
++endef
++LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_LDD
++endif
++
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
