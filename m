@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 May 2017 21:00:19 +0200
-Subject: [Buildroot] [PATCH] cjson: bump version to 1.5.1
-In-Reply-To: <20170508163923.5693-1-Vincent.Riera@imgtec.com> (Vicente Olivert
- Riera's message of "Mon, 8 May 2017 17:39:23 +0100")
-References: <20170508163923.5693-1-Vincent.Riera@imgtec.com>
-Message-ID: <87lgq7p41o.fsf@dell.be.48ers.dk>
+Date: Mon, 08 May 2017 21:00:32 +0200
+Subject: [Buildroot] [PATCH] nano: bump version to 2.8.2
+In-Reply-To: <20170508160033.41103-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 8 May 2017 17:00:33 +0100")
+References: <20170508160033.41103-1-Vincent.Riera@imgtec.com>
+Message-ID: <87h90vp41b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
