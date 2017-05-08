@@ -1,50 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 May 2017 22:30:30 +0200
-Subject: [Buildroot] [PATCH] package/efl: fix unmet dependencies
-Message-ID: <20170508203030.8852-1-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 8 May 2017 22:31:00 +0200
+Subject: [Buildroot] [PATCH 2/2] package/ltp-testsuite: disable for sparc
+In-Reply-To: <20170508212552.651ed63b@free-electrons.com>
+References: <20170508190819.28493-1-romain.naour@gmail.com>
+ <20170508190819.28493-2-romain.naour@gmail.com>
+ <20170508212552.651ed63b@free-electrons.com>
+Message-ID: <dfb284aa-556a-e072-6901-75e45f0a8762@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-EFL's elput selects libinput but forgot to propagate its dependencies.
-Which reauires they be propagated fruther to a seonc sub-option, and
-then to a third one.
+Hi Thomas,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@openwide.fr>
----
- package/efl/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+Le 08/05/2017 ? 21:25, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Mon,  8 May 2017 21:08:19 +0200, Romain Naour wrote:
+> 
+>> +	# missing __sync_*() family of functions
+>> +	depends on !BR2_sparc
+> 
+> This is wrong: we have BR2_TOOLCHAIN_HAS_SYNC_xyz symbols for this.
+> Sparc is not the only architecture affected.
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 371ed3f0d4..e5b5643c79 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -178,6 +178,7 @@ config BR2_PACKAGE_EFL_WAYLAND
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
- 	depends on BR2_PACKAGE_EFL_EEZE # efl drm
- 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
-+	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- linput
- 	select BR2_PACKAGE_EFL_DRM
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 
-@@ -216,6 +217,7 @@ endchoice # OpenGL support
- 
- config BR2_PACKAGE_EFL_ELPUT
- 	bool "Elput"
-+	depends on BR2_ENABLE_LOCALE # libinput
- 	depends on BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
-@@ -234,6 +236,7 @@ config BR2_PACKAGE_EFL_DRM
- 	depends on BR2_PACKAGE_EFL_EEZE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
-+	depends on BR2_ENABLE_LOCALE # efl-elput <- libinput
- 	select BR2_PACKAGE_EFL_ELPUT
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBXKBCOMMON
--- 
-2.11.0
+I was able to build ltp-testsuite with the following config where none of
+BR2_TOOLCHAIN_HAS_SYNC_* are set:
+
+BR2_arcle=y
+# BR2_ARC_ATOMIC_EXT is not set
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_PACKAGE_LTP_TESTSUITE=y
+
+Other architecture are not available due to toolchain dependencies
+
+So It's seems related to sparc.
+
+I tested with test-pkg to discover these two build issues.
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
