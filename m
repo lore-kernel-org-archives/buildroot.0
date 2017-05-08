@@ -1,53 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  8 May 2017 21:08:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ltp-testsuite: disable for sparc
-In-Reply-To: <20170508190819.28493-1-romain.naour@gmail.com>
-References: <20170508190819.28493-1-romain.naour@gmail.com>
-Message-ID: <20170508190819.28493-2-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 08 May 2017 21:10:57 +0200
+Subject: [Buildroot] [PATCH] mpv: fix X11 logic after bump to 0.25.0
+In-Reply-To: <1494250371-13487-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 8 May 2017 15:32:51 +0200")
+References: <1494250371-13487-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87mvannozi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As stated in commit [1], sparc toolchains doesn't have
-any of __sync_*() family of functions implementation.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-When __sync_add_and_fetch() is missing, ltp fallback to a local
-implementation of tst_atomic_add_return() specific for each
-supported architecture.
-But there is none for sparc.
+ > Between 0.24.0 and 0.25.0, mpv has changed its logic around the
+ > detection/usage of X11 (in upstream commit
+ > https://github.com/mpv-player/mpv/commit/927afa311d4a89b022305508acbf4e7325fe3928). Instead
+ > of having fine grained option for x11, xext, xinerama, xscreensaver and
+ > xrandr, mpv now requires all five libraries to be available in order to
+ > enable X.org support.
 
-Fixes:
-http://autobuild.buildroot.net/results/d7c/d7c3b145a64ed3916b89ddb4090050f3b9205e37
+ > Therefore, this commit adjusts the mpv packaging so that:
 
-[1] 6856e417da4f3aa77e2a814db2a89429af072f7d
+ >  1. All necessary X11 libraries are selected if BR2_PACKAGE_XORG7 is
+ >     enabled. It would indeed be too cumbersome for the user to know that
+ >     all of x11, xext, xinerama, xscreensaver and xrandr are necessary in
+ >     order to have X.org support.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/ltp-testsuite/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ >  2. mpv.mk is simplified by enabling X.org support when
+ >     BR2_PACKAGE_XORG7 is enabled.
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index a7d3e58..070374a 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	# missing __sync_*() family of functions
-+	depends on !BR2_sparc
- 	# does not build, cachectl.h issue
- 	depends on !BR2_nios2
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-@@ -12,6 +14,6 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	  http://linux-test-project.github.io
- 
- comment "ltp-testsuite needs a glibc or uClibc toolchain w/ NPTL"
--	depends on !BR2_nios2
-+	depends on !BR2_nios2 && !BR2_sparc
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_TOOLCHAIN_USES_MUSL
+ > Fixes:
+
+ > +# Base X11 support. Config.in ensures that if BR2_PACKAGE_XORG7 is
+ > +# enabled, xlib_libX11, xlib_libXext, xlib_libXinerama,
+ > +# xlib_libXrandr, xlib_libXScrnSaver.
+
+It sounds like something is missing from this sentence. I've changed it
+to:
+
+'if BR2_PACKAGE_XORG7 is enabled, so is xlib_libX11, ..'
+
+And committed, thanks.
+
 -- 
-2.9.3
+Bye, Peter Korsgaard
