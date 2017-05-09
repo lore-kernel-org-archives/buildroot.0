@@ -1,43 +1,33 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 9 May 2017 18:21:19 +0100
-Subject: [Buildroot] [PATCH next 11/11] gst1-rtsp-server: bump version to
-	1.12.0
-In-Reply-To: <20170509172119.33642-1-Vincent.Riera@imgtec.com>
-References: <20170509172119.33642-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170509172119.33642-11-Vincent.Riera@imgtec.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 9 May 2017 15:35:17 -0300
+Subject: [Buildroot] Buildroot defconfig failures
+In-Reply-To: <CAOMZO5A77jgnHZQEAMJLEpbDH_ca2QJs84HRcqJ=NxmUeA1v6A@mail.gmail.com>
+References: <20170507145548.336e29ad@free-electrons.com>
+ <CAOMZO5A77jgnHZQEAMJLEpbDH_ca2QJs84HRcqJ=NxmUeA1v6A@mail.gmail.com>
+Message-ID: <CAOMZO5ABjzuSCeYC5id0cgUEiBe8VZKsNJvAhbUkCuG6a0ao-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Thomas,
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index d4c540d..78393ed 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.4.tar.xz.sha256sum
--sha256 2f6e12fd4e3568ee190dc24e57e4c3a878971c3a3fb6904a9674404fac256de6  gst-rtsp-server-1.10.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.12.0.tar.xz.sha256sum
-+sha256 85ae6bbe173b365ddf4859967144f1999b436531ecbe09935914bfa9f6b37652  gst-rtsp-server-1.12.0.tar.xz
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 5ab00d0..cc9d1f3 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_RTSP_SERVER_VERSION = 1.10.4
-+GST1_RTSP_SERVER_VERSION = 1.12.0
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
--- 
-2.10.2
+On Sun, May 7, 2017 at 9:25 PM, Fabio Estevam <festevam@gmail.com> wrote:
+> Hi Thomas,
+>
+> On Sun, May 7, 2017 at 9:55 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>
+>>  - All Freescale defconfigs that rely on git.freescale.com are failing
+>>    with "Connection timed out". I'm also not able to clone from
+>>    git.freescale.com from my local machine, at least with git://. I'm
+>>    currently trying with http://. If that works, I'll update the
+>>    defconfigs accordingly.
+>>
+>>    Fabio, do you have a suggestion?
+>
+> Thanks for reporting. I will talk to the people responsible for the
+> git server at NXP.
+
+The git service has been restored, thanks.
