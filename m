@@ -1,77 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 May 2017 17:24:11 +0200
-Subject: [Buildroot] List of ARC toolchain issues
-Message-ID: <20170509172411.7abd8421@free-electrons.com>
+From: Petr Kulhavy <brain@jikos.cz>
+Date: Tue, 9 May 2017 17:26:46 +0200
+Subject: [Buildroot] [PATCH 1/1] ptp4l: new package
+In-Reply-To: <CANxTyt6ChbT+SjZuFJoeWnz4THM7tuLSFEfvRSBmunWfG=688Q@mail.gmail.com>
+References: <1494322944-22289-1-git-send-email-brain@jikos.cz>
+ <CANxTyt6ChbT+SjZuFJoeWnz4THM7tuLSFEfvRSBmunWfG=688Q@mail.gmail.com>
+Message-ID: <5f4427d7-bc16-b1d8-2567-17b80dc1d0fa@jikos.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey,
+Thanks, Danomi!
 
-In order to hopefully help in the resolution of ARC toolchain issues, I
-compiled below the list of ARC toolchain issues that caused Buildroot
-autobuilder failures recently:
+Petr
 
- * util-linux
-
-   libuuid/src/gen_uuid.c: In function '__uuid_generate_time':
-   libuuid/src/gen_uuid.c:429:1: internal compiler error: in change_address_1, at emit-rtl.c:2126
-
-   http://autobuild.buildroot.net/results/634/63430db3374840866f178fdbfe017ef68bc8701b/build-end.log
-
-   Fails to build with the internal toolchain backend, building on
-   ARC700. Interestingly, it seems it fails to build only when
-   BR2_STATIC_LIBS=y.
-
-   See http://autobuild.buildroot.net/?reason=util-linux-2.29.2&arch=arc
-
- * libcdio
-
-   iso9660.c: In function 'strip_trail':
-   iso9660.c:155:1: error: unrecognized supposed constant
-
-   http://autobuild.buildroot.net/results/17b/17baccfb72de050aee9bc8ba2b46442afe45292d/build-end.log
-
-   This is happening both with the internal toolchain backend (ARC700)
-   and the pre-built external toolchain (ARC HS).
-
-   http://autobuild.buildroot.net/?reason=libcdio-0.94&arch=arc
-
- * cups
-
-   /tmp/ccC9w3Ls.s: Assembler messages:
-   /tmp/ccC9w3Ls.s:114: Error: operand out of range (128 is not between -128 and 127)
-
-   http://autobuild.buildroot.net/results/fe7/fe7fda3a1975571523558d02c8396deda7b65f9c/build-end.log
-
-   This is happening with the internal toolchain backend (ARC700),
-   though with a sample of only two build failures, it's hard to draw
-   some conclusions.
-
-   http://autobuild.buildroot.net/?reason=cups-2.2.3
-
- * quagga
-
-   ospf_ri.c: In function 'ospf_router_info_lsa_refresh':
-   ospf_ri.c:839:1: error: unrecognizable insn:
-   [...]
-   ospf_ri.c:839:1: internal compiler error: in extract_insn, at recog.c:2287
-
-   http://autobuild.buildroot.net/results/e7d/e7dbac5addf0f873cef9354eec175a56c1cbcb31/build-end.log
-
-   This is happening only with external toolchain backend (ARC HS).
-
-   http://autobuild.buildroot.net/?reason=quagga-1.1.1&arch=arc
-
-These are the four issues I could identify that seem to be relevant. Do
-you think you could have a look into them?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+On 09/05/17 17:10, Danomi Manchego wrote:
+> Petr,
+>
+> On Tue, May 9, 2017 at 5:42 AM, Petr Kulhavy <brain@jikos.cz> wrote:
+> <snip>
+>> +PTP4L_CFLAGS = $(TARGET_CFLAGS)
+>> +
+>> +
+>> +define PTP4L_BUILD_CMDS
+>> +       $(TARGET_MAKE_ENV) $(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) CC=$(TARGET_CC) EXTRA_CFLAGS="$(PTP4L_CFLAGS)" -C $(@D) all
+>> +endef
+> Perhaps you should add EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" as well.
+> (In addition to eliminating PTP4L_CFLAGS and using
+> EXTRA_CFLAGS="$(TARGET_CFLAGS)" instead,)
+>
+> FWIW: changing the name to linuxptp: +1
+>
+> Danomi -
+>
+>
+>> +
+>> +define PTP4L_INSTALL_TARGET_CMDS
+>> +       $(TARGET_MAKE_ENV) $(MAKE) prefix=$(TARGET_DIR)/usr $(TARGET_CONFIGURE_OPTS) -C $(@D) install
+>> +endef
+>> +
+>> +define PTP4L_INSTALL_INIT_SYSV
+>> +       $(INSTALL) -m 755 -D $(@D)/package/ptp4l/S65ptp4l \
+>> +               $(TARGET_DIR)/etc/init.d/S65ptp4l
+>> +endef
+>> +
+>> +define PTP4L_INSTALL_INIT_SYSTEMD
+>> +       $(INSTALL) -D -m 644 $(PTP4L_PKGDIR)/ptp4l.service \
+>> +               $(TARGET_DIR)/usr/lib/systemd/system/ptp4l.service
+>> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>> +       ln -sf ../../../../usr/lib/systemd/system/ptp4l.service \
+>> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ptp4l.service
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>> +
+>> diff --git a/package/ptp4l/ptp4l.service b/package/ptp4l/ptp4l.service
+>> new file mode 100644
+>> index 0000000..ec6bbc5
+>> --- /dev/null
+>> +++ b/package/ptp4l/ptp4l.service
+>> @@ -0,0 +1,10 @@
+>> +[Unit]
+>> +Description=Precision Time Protocol daemon
+>> +After=syslog.target network.target
+>> +
+>> +[Service]
+>> +ExecStart=/usr/sbin/ptp4l -A -i eth0
+>> +Restart=always
+>> +
+>> +[Install]
+>> +WantedBy=multi-user.target
+>> --
+>> 2.7.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
