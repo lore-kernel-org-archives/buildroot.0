@@ -1,41 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 May 2017 17:13:20 +0200
-Subject: [Buildroot] [git commit] daemon: fix parallel build
-Message-ID: <20170509151441.6AFDD825B1@busybox.osuosl.org>
+Date: Tue, 09 May 2017 17:15:39 +0200
+Subject: [Buildroot] [PATCH next] python-pytablewriter: bump version to
+	0.19.5
+In-Reply-To: <20170509094325.7315-1-Vincent.Riera@imgtec.com> (Vicente Olivert
+ Riera's message of "Tue, 9 May 2017 10:43:25 +0100")
+References: <20170509094325.7315-1-Vincent.Riera@imgtec.com>
+Message-ID: <87shkem57o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c23236d387a84a73940b490f363c3d3d364e3c96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-The 'ready' target creates a symlink in the libslack/ subdirectory to make
-up the path to header files.  Unfortunately, the target building sources
-files that need that symlink, does not depend on the 'ready' target.  This
-might break highly parallel builds.  As a workaround make the 'ready' target
-before making 'all'.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Should fix:
-http://autobuild.buildroot.net/results/ed2/ed21ac166f2151aa69a7790a17ff05f05afa512d/
-http://autobuild.buildroot.net/results/333/3338539743c8b0399c6b0fcbbb7c28b58bf3f387/
+Committed to next, thanks.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/daemon/daemon.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-index dfa573f..79cf3f7 100644
---- a/package/daemon/daemon.mk
-+++ b/package/daemon/daemon.mk
-@@ -14,6 +14,7 @@ define DAEMON_CONFIGURE_CMDS
- endef
- 
- define DAEMON_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) ready
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
- endef
- 
+-- 
+Bye, Peter Korsgaard
