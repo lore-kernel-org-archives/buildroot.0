@@ -1,9 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 9 May 2017 18:21:18 +0100
-Subject: [Buildroot] [PATCH next 10/11] gst1-validate: bump version to 1.12.0
+Date: Tue, 9 May 2017 18:21:16 +0100
+Subject: [Buildroot] [PATCH next 08/11] gst1-plugins-good: bump version to
+	1.12.0
 In-Reply-To: <20170509172119.33642-1-Vincent.Riera@imgtec.com>
 References: <20170509172119.33642-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170509172119.33642-10-Vincent.Riera@imgtec.com>
+Message-ID: <20170509172119.33642-8-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +13,47 @@ To: buildroot@busybox.net
 
 Remove non-existant configure options:
 
-  --disable-sphinx-doc:
-  Even if it looks like there is some code for that in configure.ac, it
-  seems that is not taken into account and that configure option is not
-  even recognized.
+  --disable-esd, --disable-esdtest:
+  https://github.com/GStreamer/gst-plugins-good/commit/3d6955d68624c089d7066bfdbf38ef69c1dc07b6
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
- package/gstreamer1/gst1-validate/gst1-validate.mk   | 4 +---
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-index 10c6667..edb5ccd 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.hash
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 21ee18d..ef9f757 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.10.4.tar.xz.sha256sum
--sha256 e59c00bf64cca9c477cdb44eb8dd0b3aac5499b17d77bf28ee054fd211e8d73c  gst-validate-1.10.4.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.12.0.tar.xz.sha256sum
-+sha256 73efaf123638b97159c1ff6575dd05ea0cf7dc6d71b07806b5a5f25188a67fbb  gst-validate-1.12.0.tar.xz
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index f108e5d..d6a5a55 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -4,14 +4,12 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.10.4.tar.xz.sha256sum
+-sha256 8a86c61434a8c44665365bd0b3557a040937d1f44bf69caee4e9ea816ce74d7e  gst-plugins-good-1.10.4.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.12.0.tar.xz.sha256sum
++sha256 8a1d734db7338e00c28b794a7f0a5a9e67d1c5c8b0074075b50638207d372ebc  gst-plugins-good-1.12.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 6bf159d..febb141 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VALIDATE_VERSION = 1.10.4
-+GST1_VALIDATE_VERSION = 1.12.0
- GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
- GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
- GST1_VALIDATE_LICENSE = LGPL-2.1+
- GST1_VALIDATE_LICENSE_FILES = COPYING
+-GST1_PLUGINS_GOOD_VERSION = 1.10.4
++GST1_PLUGINS_GOOD_VERSION = 1.12.0
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+@@ -20,9 +20,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+ 	--disable-osx_video \
+ 	--disable-aalib \
+ 	--disable-aalibtest \
+-	--disable-libcaca \
+-	--disable-esd \
+-	--disable-esdtest
++	--disable-libcaca
  
--GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
--
- GST1_VALIDATE_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_GOOD_CONF_OPTS += \
 -- 
 2.10.2
