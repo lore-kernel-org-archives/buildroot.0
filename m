@@ -1,37 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 May 2017 21:42:01 +0200
-Subject: [Buildroot] Upgrading Erlang and ejabberd
-In-Reply-To: <CAJtjsKZU5FzxA9gidh0ZVoiQVdag6YEbWH75iDQ3XCmQ+KBC-Q@mail.gmail.com>
-References: <CA+-urNQWNUXKHZdjvkcijZYW0OQJr3DMtgQNZmhThC-TssdnNw@mail.gmail.com>
- <8760hano0p.fsf@dell.be.48ers.dk>
- <l449udxe78.ln2@ID-313208.user.individual.net>
- <CAJtjsKZU5FzxA9gidh0ZVoiQVdag6YEbWH75iDQ3XCmQ+KBC-Q@mail.gmail.com>
-Message-ID: <20170509214201.7772feeb@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue,  9 May 2017 22:59:27 +0200
+Subject: [Buildroot] [PATCH v3 1/3] package/ltp-testsuite: remove ldd
+	command test with static only build
+Message-ID: <20170509205929.8394-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ldd command build system try to build a shared library unconditionally:
 
-On Tue, 9 May 2017 18:37:27 +0200, Johan Oudinet wrote:
+arc-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -matomic -Os -static \
+	-I[...]/sysroot/usr/include/tirpc   -g -O2 -fno-strict-aliasing -pipe \
+	-Wall -W -Wold-style-definition -shared -o lddfile1.obj.so lddfile1.o
 
-> I won't have time to work on updating ejabberd this week but I can have a
-> look next week.
-> Feel free to upgrade erlang in the meantime even if it breaks ejabberd.
+Fixes:
+http://autobuild.buildroot.net/results/2ec/2eccf9f517ab15d8d459b06195423fdfe3fba9fa
 
-Anyway the "master" branch is closed to version bumps, so new version
-bumps will go in the "next" branch. We can therefore take the erlang
-bump, and merge later the ejabberd bump.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Or perhaps, we will not even have merged the erlang bump by the time
-your work on bumping ejabberd.
-
-Best regards,
-
-Thomas
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 7f26bd2..2a7f620 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -68,4 +68,12 @@ endef
+ LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
+ endif
+ 
++# ldd command build system try to build a shared library unconditionally.
++ifeq ($(BR2_STATIC_LIBS),y)
++define LTP_TESTSUITE_REMOVE_LDD
++	rm -rf $(@D)/testcases/commands/ldd
++endef
++LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_LDD
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
