@@ -1,33 +1,37 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 9 May 2017 15:35:17 -0300
-Subject: [Buildroot] Buildroot defconfig failures
-In-Reply-To: <CAOMZO5A77jgnHZQEAMJLEpbDH_ca2QJs84HRcqJ=NxmUeA1v6A@mail.gmail.com>
-References: <20170507145548.336e29ad@free-electrons.com>
- <CAOMZO5A77jgnHZQEAMJLEpbDH_ca2QJs84HRcqJ=NxmUeA1v6A@mail.gmail.com>
-Message-ID: <CAOMZO5ABjzuSCeYC5id0cgUEiBe8VZKsNJvAhbUkCuG6a0ao-A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 May 2017 21:42:01 +0200
+Subject: [Buildroot] Upgrading Erlang and ejabberd
+In-Reply-To: <CAJtjsKZU5FzxA9gidh0ZVoiQVdag6YEbWH75iDQ3XCmQ+KBC-Q@mail.gmail.com>
+References: <CA+-urNQWNUXKHZdjvkcijZYW0OQJr3DMtgQNZmhThC-TssdnNw@mail.gmail.com>
+ <8760hano0p.fsf@dell.be.48ers.dk>
+ <l449udxe78.ln2@ID-313208.user.individual.net>
+ <CAJtjsKZU5FzxA9gidh0ZVoiQVdag6YEbWH75iDQ3XCmQ+KBC-Q@mail.gmail.com>
+Message-ID: <20170509214201.7772feeb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Sun, May 7, 2017 at 9:25 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> Hi Thomas,
->
-> On Sun, May 7, 2017 at 9:55 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->
->>  - All Freescale defconfigs that rely on git.freescale.com are failing
->>    with "Connection timed out". I'm also not able to clone from
->>    git.freescale.com from my local machine, at least with git://. I'm
->>    currently trying with http://. If that works, I'll update the
->>    defconfigs accordingly.
->>
->>    Fabio, do you have a suggestion?
->
-> Thanks for reporting. I will talk to the people responsible for the
-> git server at NXP.
+On Tue, 9 May 2017 18:37:27 +0200, Johan Oudinet wrote:
 
-The git service has been restored, thanks.
+> I won't have time to work on updating ejabberd this week but I can have a
+> look next week.
+> Feel free to upgrade erlang in the meantime even if it breaks ejabberd.
+
+Anyway the "master" branch is closed to version bumps, so new version
+bumps will go in the "next" branch. We can therefore take the erlang
+bump, and merge later the ejabberd bump.
+
+Or perhaps, we will not even have merged the erlang bump by the time
+your work on bumping ejabberd.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
