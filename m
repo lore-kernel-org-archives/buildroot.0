@@ -1,33 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 May 2017 23:30:04 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/ltp-testsuite: add
- dependency on BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <20170508211833.3462-2-romain.naour@gmail.com>
-References: <20170508211833.3462-1-romain.naour@gmail.com>
- <20170508211833.3462-2-romain.naour@gmail.com>
-Message-ID: <20170508233004.55d93b91@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 09 May 2017 07:24:51 +0200
+Subject: [Buildroot] Analysis of build results for 2017-05-07
+References: <20170508062835.044A8207F0@mail.free-electrons.com>
+ <20170508224233.7332472b@free-electrons.com>
+Message-ID: <3e08udxddn.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Mon, 08 May 2017 22:42:33 +0200 schrieb Thomas Petazzoni:
 
-On Mon,  8 May 2017 23:18:33 +0200, Romain Naour wrote:
+>>         m68k |                     ffmpeg-3.3 | NOK |
+>>         http://autobuild.buildroot.net/results/
+dc5a042952c3f1f6a6fa06db0e7ac70f701c50dc
+>>         |
+> 
+> undefined reference to `__sync_fetch_and_add_4'
+> 
+> We should add the appropriate BR2_TOOLCHAIN_* dependency.
 
->  comment "ltp-testsuite needs a glibc or uClibc toolchain w/ NPTL"
->  	depends on !BR2_nios2
-> +	depends on !BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_arc && !BR2_i386 \
-> +		&& !BR2_powerpc && !BR2_powerpc64 && !BR2_powerpc64le \
-> +		&& !BR2_x86_64
+Hi Thomas,
 
-Wrong. You want the dependencies on the Config.in comment in the same
-direction as for the main symbol. Or better: introduce a
-BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS.
+corresponding patches were discussed in the last weeks:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+http://patchwork.ozlabs.org/patch/756664/
+http://patchwork.ozlabs.org/patch/751131/
+
+Regards, Bernd
