@@ -1,47 +1,164 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 9 May 2017 12:15:13 +0100
-Subject: [Buildroot] [PATCH next 2/2] python-dataproperty: bump version to
-	0.21.1
-In-Reply-To: <20170509111513.64192-1-Vincent.Riera@imgtec.com>
-References: <20170509111513.64192-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170509111513.64192-2-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 May 2017 13:51:19 +0200
+Subject: [Buildroot] [PATCH 1/1] ptp4l: new package
+In-Reply-To: <1494322944-22289-1-git-send-email-brain@jikos.cz>
+References: <1494322944-22289-1-git-send-email-brain@jikos.cz>
+Message-ID: <20170509135119.242c028e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello Petr,
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 1ab0a40..ad88498 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
--md5 70199d3e6e021810d0d3b4a42c37916f  DataProperty-0.18.1.tar.gz
--sha256 950131bd9fb874be606835e5f4a84d99f505d919aed94145932ec010190c7c66  DataProperty-0.18.1.tar.gz
-+md5 89e78396b91e6156c522175b3316546f  DataProperty-0.21.1.tar.gz
-+sha256 7a5c77004e8f1bca734838966e30e555e323c06bda613ed3985fa9bef2665c71  DataProperty-0.21.1.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 7e34425..d9d0783 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DATAPROPERTY_VERSION = 0.18.1
-+PYTHON_DATAPROPERTY_VERSION = 0.21.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/42/b6/591366869e9fc7b19420ca4c177727f25dcccc07a46cecbda8d6abffa866
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/fc/9a/e6cc202b81b02aec39f35f2d13a6efc349cdc62ae3890f84b586468597ad
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+Thanks for this contribution! Looks mostly good, just a few comments,
+see below.
+
+On Tue,  9 May 2017 11:42:24 +0200, Petr Kulhavy wrote:
+
+>  package/Config.in           |  1 +
+>  package/ptp4l/Config.in     | 13 +++++++++++++
+>  package/ptp4l/S65ptp4l      | 29 +++++++++++++++++++++++++++++
+>  package/ptp4l/ptp4l.hash    |  2 ++
+>  package/ptp4l/ptp4l.mk      | 37 +++++++++++++++++++++++++++++++++++++
+>  package/ptp4l/ptp4l.service | 10 ++++++++++
+
+Could you add yourself to the DEVELOPERS file for this package?
+
+> diff --git a/package/ptp4l/Config.in b/package/ptp4l/Config.in
+> new file mode 100644
+> index 0000000..a070545
+> --- /dev/null
+> +++ b/package/ptp4l/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PTP4L
+> +	bool "ptp4l / Linux PTP"
+
+Just:
+
+	bool "ptp4l"
+
+> +	help
+> +	  The Linux PTP Project is the Precision Time Protocol implementation
+> +	  according to IEEE standard 1588 for Linux.
+> +
+> +	  The dual design goals are to provide a robust implementation of the
+> +	  standard and to use the most relevant and modern Application
+> +	  Programming Interfaces (API) offered by the Linux kernel. Supporting
+> +	  legacy APIs and other platforms is not a goal.
+> +
+> +	  http://linuxptp.sourceforge.net/
+> +
+
+Unneeded empty new line.
+
+> +case "$1" in
+> +  start)
+> +	printf "Starting ptp4l: "
+> +	start-stop-daemon -S -b -q -x /usr/sbin/ptp4l -- -A -i eth0
+> +	if [ $? != 0 ]; then
+> +		echo "FAILED"
+> +		exit 1
+> +	else
+> +		echo "OK"
+> +	fi
+
+Use:
+
+	[ $? = 0 ] && echo "OK" || echo "FAIL"
+
+Also, please specify a PID file using:
+
+	-p /var/run/ptp4l.pid
+
+> +  stop)
+> +	printf "Stopping ptp4l: "
+> +	start-stop-daemon -K -q -x /usr/sbin/ptp4l
+
+And use the PID file here as well.
+
+> +  restart|reload)
+> +	;;
+
+Nothing?
+
+> +PTP4L_VERSION = 1.8
+> +PTP4L_SOURCE = linuxptp-$(PTP4L_VERSION).tgz
+> +PTP4L_SITE = http://sourceforge.net/projects/linuxptp/files/v$(PTP4L_VERSION)
+> +PTP4L_LICENSE = GPLv2
+
+You should use SPDX license code, so instead of GPLv2 it should be
+GPL-2.0.
+
+However, after checking the actual tarball, it seems like the license
+is GPL-2.0+ (i.e GPLv2 or later).
+
+> +PTP4L_LICENSE_FILES = COPYING
+> +PTP4L_CFLAGS = $(TARGET_CFLAGS)
+
+Why is this variable useful?
+
+> +
+> +
+
+One too many empty new line.
+
+> +define PTP4L_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) CC=$(TARGET_CC) EXTRA_CFLAGS="$(PTP4L_CFLAGS)" -C $(@D) all
+
+Just use TARGET_CFLAGS instead of PTP4L_CFLAGS.
+
+Also, split this line that is a bit too long.
+
+What is KBUILD_OUTPUT used for ?
+
+> +endef
+> +
+> +define PTP4L_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) prefix=$(TARGET_DIR)/usr $(TARGET_CONFIGURE_OPTS) -C $(@D) install
+
+Please use instead:
+
+	prefix=/usr DESTDIR=$(TARGET_DIR)
+
+Why are you passing TARGET_CONFIGURE_OPTS at install time and not build
+time ?
+
+> +endef
+> +
+> +define PTP4L_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 755 -D $(@D)/package/ptp4l/S65ptp4l \
+> +		$(TARGET_DIR)/etc/init.d/S65ptp4l
+> +endef
+> +
+> +define PTP4L_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 644 $(PTP4L_PKGDIR)/ptp4l.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/ptp4l.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -sf ../../../../usr/lib/systemd/system/ptp4l.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ptp4l.service
+> +endef
+> +
+> +$(eval $(generic-package))
+> +
+
+Useless empty new line.
+
+Final questions/comments:
+
+ - Why is your package named ptp4l and not linuxptp like the upstream
+   tarball/project ?
+
+ - Make sure to run support/scripts/check-package (to verify that there
+   are no coding style issues in your package) and
+   support/scripts/test-pkg (to make sure your package builds fine with
+   all toolchains).
+
+Thanks a lot!
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
