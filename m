@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 May 2017 17:18:56 +0200
-Subject: [Buildroot] [PATCH next] xfsprogs: bump version to 4.11.0
-In-Reply-To: <20170509100827.36914-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Tue, 9 May 2017 11:08:27 +0100")
-References: <20170509100827.36914-1-Vincent.Riera@imgtec.com>
-Message-ID: <87k25qm527.fsf@dell.be.48ers.dk>
+Date: Tue, 09 May 2017 17:21:21 +0200
+Subject: [Buildroot] [PATCH next 1/2] python-pillow: bump version to
+	4.1.1
+In-Reply-To: <20170509111513.64192-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Tue, 9 May 2017 12:15:12 +0100")
+References: <20170509111513.64192-1-Vincent.Riera@imgtec.com>
+Message-ID: <87fugem4y6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > 0003 patch already included in this release:
- >   https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit?id=0a71e38396304b4d1215ba0b51cd6ce8e33eb40d
-
  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Committed to next, thanks.
+I wonder if we should perhaps also apply this to master as it looks to
+be purely bugfixes:
+
+https://github.com/python-pillow/Pillow/blob/master/CHANGES.rst
+
+What do pillow users say?
+
+But so far I have only applied it to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
