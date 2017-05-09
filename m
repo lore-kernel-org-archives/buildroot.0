@@ -1,41 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 May 2017 17:03:23 +0200
-Subject: [Buildroot] [git commit] mpir: fix build on ARM Thumb-only platforms
-Message-ID: <20170509151441.244F57FA5C@busybox.osuosl.org>
+Date: Tue, 9 May 2017 17:04:20 +0200
+Subject: [Buildroot] [git commit] mpir: fix build on powerpc64le
+Message-ID: <20170509151441.554688285A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa3fbeb1bf4b0d3bed85bbeab4bd0f7b1c13e21a
+commit: https://git.buildroot.net/buildroot/commit/?id=c1d1879abaa4f5c7c9c8f0d7304ebb683dc9c679
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The optimized ARM assembly code is not suitable for Thumb-only
-platforms, so use the generic code in such situations.
+The optimized powerpc64 code is not compatible with powerpc64le, so use
+the generic MPIR code on powerpc64le.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/4d7f2a1326f75e11693bdd51ad274079b0dd0ce4/
-  (ARM Cortex-M4 toolchain)
+   http://autobuild.buildroot.net/results/17e523be894b60d7a9b2a3303f02c3fb34816828/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpir/mpir.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/mpir/mpir.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-index b7f3829..cf17502 100644
+index 03f21d8..697e838 100644
 --- a/package/mpir/mpir.mk
 +++ b/package/mpir/mpir.mk
-@@ -20,4 +20,10 @@ ifeq ($(BR2_MIPS_NABI64),y)
- MPIR_CONF_OPTS += ABI=64
+@@ -31,4 +31,9 @@ ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
+ MPIR_CONF_ENV += MPN_PATH="generic"
  endif
  
-+# The optimized ARM assembly code uses ARM-only (i.e not Thumb1/2
-+# compatible) instructions.
-+ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
++# Optimized powerpc64 code is not suitable for powerpc64le
++ifeq ($(BR2_powerpc64le),y)
 +MPIR_CONF_ENV += MPN_PATH="generic"
 +endif
 +
