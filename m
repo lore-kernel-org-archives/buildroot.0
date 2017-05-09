@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 May 2017 17:21:21 +0200
-Subject: [Buildroot] [PATCH next 1/2] python-pillow: bump version to
-	4.1.1
-In-Reply-To: <20170509111513.64192-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Tue, 9 May 2017 12:15:12 +0100")
+Date: Tue, 09 May 2017 17:21:32 +0200
+Subject: [Buildroot] [PATCH next 2/2] python-dataproperty: bump version
+	to 0.21.1
+In-Reply-To: <20170509111513.64192-2-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Tue, 9 May 2017 12:15:13 +0100")
 References: <20170509111513.64192-1-Vincent.Riera@imgtec.com>
-Message-ID: <87fugem4y6.fsf@dell.be.48ers.dk>
+ <20170509111513.64192-2-Vincent.Riera@imgtec.com>
+Message-ID: <87bmr2m4xv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,14 +17,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-I wonder if we should perhaps also apply this to master as it looks to
-be purely bugfixes:
-
-https://github.com/python-pillow/Pillow/blob/master/CHANGES.rst
-
-What do pillow users say?
-
-But so far I have only applied it to next, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
