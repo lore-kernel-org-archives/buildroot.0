@@ -1,104 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 May 2017 17:16:10 +0200
-Subject: [Buildroot] [git commit branch/next] imagemagick: bump version to
-	7.0.5-5
-Message-ID: <20170509152255.89D89818A4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 May 2017 17:24:11 +0200
+Subject: [Buildroot] List of ARC toolchain issues
+Message-ID: <20170509172411.7abd8421@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4a385342336e6edefb6727be9234580724ebff4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Alexey,
 
-0001 patch already included in this release:
-  https://github.com/ImageMagick/ImageMagick/commit/b218117cad34d39b9ffb587b45c71c5a49b12bde
+In order to hopefully help in the resolution of ARC toolchain issues, I
+compiled below the list of ARC toolchain issues that caused Buildroot
+autobuilder failures recently:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ub.com-ImageMagick-ImageMagick-issues-415.patch | 52 ----------------------
- package/imagemagick/imagemagick.hash               |  2 +-
- package/imagemagick/imagemagick.mk                 |  2 +-
- 3 files changed, 2 insertions(+), 54 deletions(-)
+ * util-linux
 
-diff --git a/package/imagemagick/0001-https-github.com-ImageMagick-ImageMagick-issues-415.patch b/package/imagemagick/0001-https-github.com-ImageMagick-ImageMagick-issues-415.patch
-deleted file mode 100644
-index 943679e..0000000
---- a/package/imagemagick/0001-https-github.com-ImageMagick-ImageMagick-issues-415.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From b218117cad34d39b9ffb587b45c71c5a49b12bde Mon Sep 17 00:00:00 2001
--From: Cristy <urban-warrior@imagemagick.org>
--Date: Fri, 31 Mar 2017 15:24:33 -0400
--Subject: [PATCH] https://github.com/ImageMagick/ImageMagick/issues/415
--
--Fixes CVE-2017-7606
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- coders/pnm.c | 2 +-
-- coders/rle.c | 5 +++--
-- 2 files changed, 4 insertions(+), 3 deletions(-)
--
--diff --git a/coders/pnm.c b/coders/pnm.c
--index 9a1221d79..c525ebb8f 100644
----- a/coders/pnm.c
--+++ b/coders/pnm.c
--@@ -1979,7 +1979,7 @@ static MagickBooleanType WritePNMImage(const ImageInfo *image_info,Image *image,
--                           pixel=ScaleQuantumToChar(GetPixelRed(image,p));
--                         else
--                           pixel=ScaleQuantumToAny(GetPixelRed(image,p),
---                          max_value);
--+                            max_value);
--                       }
--                     q=PopCharPixel((unsigned char) pixel,q);
--                     p+=GetPixelChannels(image);
--diff --git a/coders/rle.c b/coders/rle.c
--index 2318901ec..ec071dc7b 100644
----- a/coders/rle.c
--+++ b/coders/rle.c
--@@ -271,7 +271,8 @@ static Image *ReadRLEImage(const ImageInfo *image_info,ExceptionInfo *exception)
--         p=colormap;
--         for (i=0; i < (ssize_t) number_colormaps; i++)
--           for (x=0; x < (ssize_t) map_length; x++)
---            *p++=(unsigned char) ScaleShortToQuantum(ReadBlobLSBShort(image));
--+            *p++=(unsigned char) ScaleQuantumToChar(ScaleShortToQuantum(
--+              ReadBlobLSBShort(image)));
--       }
--     if ((flags & 0x08) != 0)
--       {
--@@ -476,7 +477,7 @@ static Image *ReadRLEImage(const ImageInfo *image_info,ExceptionInfo *exception)
--               for (x=0; x < (ssize_t) number_planes; x++)
--               {
--                 ValidateColormapValue(image,(size_t) (x*map_length+
---                    (*p & mask)),&index,exception);
--+                  (*p & mask)),&index,exception);
--                 *p=colormap[(ssize_t) index];
--                 p++;
--               }
---- 
--2.11.0
--
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index ff7b24a..06a957a 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 4a1dde5bdfec0fc549955a051be25b7ff96dfb192060997699e43c7ce0f06ab2  ImageMagick-7.0.5-4.tar.xz
-+sha256 c3644119dce993aa241fa08eced2cb6043fb5345f0eee7a7822a497f1142ebe3  ImageMagick-7.0.5-5.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 9bef6f7..6b5cd4e 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.5-4
-+IMAGEMAGICK_VERSION = 7.0.5-5
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+   libuuid/src/gen_uuid.c: In function '__uuid_generate_time':
+   libuuid/src/gen_uuid.c:429:1: internal compiler error: in change_address_1, at emit-rtl.c:2126
+
+   http://autobuild.buildroot.net/results/634/63430db3374840866f178fdbfe017ef68bc8701b/build-end.log
+
+   Fails to build with the internal toolchain backend, building on
+   ARC700. Interestingly, it seems it fails to build only when
+   BR2_STATIC_LIBS=y.
+
+   See http://autobuild.buildroot.net/?reason=util-linux-2.29.2&arch=arc
+
+ * libcdio
+
+   iso9660.c: In function 'strip_trail':
+   iso9660.c:155:1: error: unrecognized supposed constant
+
+   http://autobuild.buildroot.net/results/17b/17baccfb72de050aee9bc8ba2b46442afe45292d/build-end.log
+
+   This is happening both with the internal toolchain backend (ARC700)
+   and the pre-built external toolchain (ARC HS).
+
+   http://autobuild.buildroot.net/?reason=libcdio-0.94&arch=arc
+
+ * cups
+
+   /tmp/ccC9w3Ls.s: Assembler messages:
+   /tmp/ccC9w3Ls.s:114: Error: operand out of range (128 is not between -128 and 127)
+
+   http://autobuild.buildroot.net/results/fe7/fe7fda3a1975571523558d02c8396deda7b65f9c/build-end.log
+
+   This is happening with the internal toolchain backend (ARC700),
+   though with a sample of only two build failures, it's hard to draw
+   some conclusions.
+
+   http://autobuild.buildroot.net/?reason=cups-2.2.3
+
+ * quagga
+
+   ospf_ri.c: In function 'ospf_router_info_lsa_refresh':
+   ospf_ri.c:839:1: error: unrecognizable insn:
+   [...]
+   ospf_ri.c:839:1: internal compiler error: in extract_insn, at recog.c:2287
+
+   http://autobuild.buildroot.net/results/e7d/e7dbac5addf0f873cef9354eec175a56c1cbcb31/build-end.log
+
+   This is happening only with external toolchain backend (ARC HS).
+
+   http://autobuild.buildroot.net/?reason=quagga-1.1.1&arch=arc
+
+These are the four issues I could identify that seem to be relevant. Do
+you think you could have a look into them?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
