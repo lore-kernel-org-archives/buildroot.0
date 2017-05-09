@@ -1,40 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 May 2017 17:12:25 +0200
-Subject: [Buildroot] [PATCH v2 0/4] mpir build fixes
-In-Reply-To: <1494272750-20723-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 8 May 2017 21:45:46 +0200")
-References: <1494272750-20723-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <871srynjxi.fsf@dell.be.48ers.dk>
+Date: Tue, 09 May 2017 17:14:05 +0200
+Subject: [Buildroot] [PATCH] daemon: fix parallel build
+In-Reply-To: <b7b648fdc787feae767f23b1a334ce5e7f13072a.1494266507.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 8 May 2017 21:01:47 +0300")
+References: <b7b648fdc787feae767f23b1a334ce5e7f13072a.1494266507.git.baruch@tkos.co.il>
+Message-ID: <87wp9qm5aa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hello,
- > This new version of the mpir build fixes series now fixes the build
- > for all 49 toolchain configurations, tested with the test-pkg script.
+ > The 'ready' target creates a symlink in the libslack/ subdirectory to make up
+ > the path to header files. Unfortunately, the target building sources files
+ > that need on that symlink, does not depend on the 'ready' target. This might
 
- > Changes since v1:
-
- >  - Fix a typo in the mips32r6/mips64r6 that originally made it useless
- >    (BR2_mips32r6 was used, while the option is name BR2_mips_32r6)
-
- >  - Add a patch to fix the powerpc64le build
-
- > Best regards,
-
- > Thomas
-
- > Thomas Petazzoni (4):
- >   mpir: fix build on ARM with old binutils versions
- >   mpir: fix build on ARM Thumb-only platforms
- >   mpir: fix build on mips32r6/mips64r6
- >   mpir: fix build on powerpc64le
-
-Committed all 4, thanks.
+Dropped 'on' from 'need on that' and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
