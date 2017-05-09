@@ -1,40 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 May 2017 15:44:06 +0200
-Subject: [Buildroot] Upgrading Erlang and ejabberd
-In-Reply-To: <CA+-urNQWNUXKHZdjvkcijZYW0OQJr3DMtgQNZmhThC-TssdnNw@mail.gmail.com>
- (Frank Hunleth's message of "Tue, 9 May 2017 09:07:11 -0400")
-References: <CA+-urNQWNUXKHZdjvkcijZYW0OQJr3DMtgQNZmhThC-TssdnNw@mail.gmail.com>
-Message-ID: <8760hano0p.fsf@dell.be.48ers.dk>
+From: ren_guo <ren_guo@c-sky.com>
+Date: Tue, 9 May 2017 21:49:37 +0800
+Subject: [Buildroot] Buildroot defconfig failures
+In-Reply-To: <2a49a86b-da86-6e7e-df4d-bf857d3ee66c@mind.be>
+References: <20170507145548.336e29ad@free-electrons.com>
+ <df95a70f-0e89-750f-1702-25998944fc3a@c-sky.com>
+ <20170508142023.6b95ccf7@free-electrons.com>
+ <bcb5bdd6-08a2-4782-70f4-0a4db45c41ab@c-sky.com>
+ <2a49a86b-da86-6e7e-df4d-bf857d3ee66c@mind.be>
+Message-ID: <20dab2a0-8ae7-ce89-77f9-216db68a1955@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-Hi Frank,
-
- > I'd very much like to update the version of Erlang used in Buildroot.
- > I had been doing this quite a while ago, but stopped pushing my
- > changes upstream due to ejabberd breaking. I don't use ejabberd.
- > Updating it and all of its dependencies to work with more recent
- > Erlang versions is turning out to be quite a bit of work and I don't
- > know how to test it to make sure that I didn't break anything.
-
- > Erlang 20 will be released soon and it has some really interesting
- > improvements that would be great to have available by default in
- > Buildroot. (BR currently has Erlang 18.3; 19.3 is the current
- > release). Is there anyone out there who would mind helping update
- > ejabberd? Johan - you're listed as the ejabberd package maintainer,
- > could you help? Or if not Johan, is anyone else interested?
-
-Added Johan in To:.
-
-Thanks for bringing it up, it would indeed be good to get our erlang
-package updated. In the worst case, if nobody wants to do the work to
-keep ejabberd uptodate and compatible with newer erlang versions then I
-think the way forward is to drop the ejabberd package.
+>   You can just create a gitlab account, fork the official gitlab buildroot
+> repository, modify .gitlab-ci.yml and push it. The you use the real gitlab
+> server for you debugging.
+>
+>   You can do this on a branch that you delete later to "forget" about this
+> debugging run.
+>
+>   Regards,
+>   Arnout
+>
+Thx, nice tips!
 
 -- 
-Bye, Peter Korsgaard
+Guo Ren, Software Engineer, C-SKY
+3 XiDoumen Rd,BldgA,15F,Hangzhou,China
+P.C: 310012
+http://www.c-sky.com
