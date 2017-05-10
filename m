@@ -1,49 +1,44 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 10 May 2017 11:26:16 +0200
-Subject: [Buildroot] Analysis of build results for 2017-05-08
-In-Reply-To: <20170509114619.727892c8@free-electrons.com>
-References: <20170509062824.6D04D208E1@mail.free-electrons.com>
- <20170509093537.5560182b@free-electrons.com>
- <CAGm1_ktz8-x5g=bHt9-Hi88Vo3eb_VyR2TmaamLcKwNzB5PGWQ@mail.gmail.com>
- <20170509114619.727892c8@free-electrons.com>
-Message-ID: <CAGm1_ku7Fu15Tko5LbrUYXKi7OxZ8eS0ki+uRidR6M=5bEautg@mail.gmail.com>
+From: =?UTF-8?B?U2VtZW4gS29sZ2Fub3Y=?= <semenak94@mail.ru>
+Date: Wed, 10 May 2017 12:44:03 +0300
+Subject: [Buildroot]
+ =?utf-8?q?=5Bautobuild=2Ebuildroot=2Enet=5D_Your_buil?=
+ =?utf-8?q?d_results_for_2017-05-09?=
+In-Reply-To: <20170510062820.5D44A220AC@mail.free-electrons.com>
+References: <20170510062820.5D44A220AC@mail.free-electrons.com>
+Message-ID: <1494409443.44851161@f116.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 9, 2017 at 11:46 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 9 May 2017 11:20:19 +0200, Yegor Yefremov wrote:
->
->> > error: Name clash for '<pstage/lib>libboost_system.a'
->> >
->> > Yegor, you are in the DEVELOPERS file for Boost, could you have a look ?
->>
->> OMG I'm the only one registered as DEVELOPER for boost.
->
-> Good luck :-)
->
-> Feel free to find other volunteers to maintain this wonderful package!
->
->> This situation seems to occur, when both iconv and icu are selected:
->>
->>     - iconv (libc)             : yes
->>     - icu                      : yes
->>
->> Need to dig further.
->
-> Great, thanks!
+Hello, Thomas
 
-Seems like it is a problem of locale, regex modules and static ICU.
-See [1] for details. I think we should disable both modules if static
-and ICU are selected.
+This build failures were fixed by your yesterday patch series. Tests failed before Peter commited these fixes.
 
-Patch sent.
 
-[1] http://boost.2283326.n4.nabble.com/bjam-Building-Regex-with-static-runtime-linking-td2588874.html
+>?????, 10 ??? 2017, 9:28 +03:00 ?? Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+>
+>Hello,
+>
+>This is the list of Buildroot build failures that occured on
+>2017-05-09, and for which you are a registered architecture developer
+>or package developer. Please help us improving the quality of
+>Buildroot by investigating those build failures and sending patches to
+>fix them. Thanks!
+>
+>Build failures related to your packages:
+>
+>????mips64el |                     mpir-3.0.0 |  http://autobuild.buildroot.net/results/f33cb1e0b49fe8aee68fb4b66ea4c304b71a6f8f
+>?????????arm |                     mpir-3.0.0 |  http://autobuild.buildroot.net/results/7ebaf7dc02475f654f4385990f3aa4ebc18f493a
+>
+>-- 
+>http://autobuild.buildroot.net
 
-Yegor
+
+Semyon
+---------------
+Semyon Kolganov
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170510/89dddda6/attachment.html>
