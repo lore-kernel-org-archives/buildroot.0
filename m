@@ -1,99 +1,89 @@
 From: Christian Stewart <christian@paral.in>
-Date: Tue,  9 May 2017 22:51:08 -0400
-Subject: [Buildroot] [PATCH 3/3] docker-engine: add support for init
-	processes
-In-Reply-To: <20170510025108.21169-1-christian@paral.in>
-References: <20170510025108.21169-1-christian@paral.in>
-Message-ID: <20170510025108.21169-3-christian@paral.in>
+Date: Tue,  9 May 2017 22:51:06 -0400
+Subject: [Buildroot] [PATCH 1/3] dumb-init: new package
+Message-ID: <20170510025108.21169-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a docker container is run with the --init flag, the Docker engine
-uses the docker-init binary as PID 1 inside the container. This is
-necessary in may cases to avoid issues with signal handling, zombie
-processes, and other quirks when running as PID 1.
+dumb-init is a minimal init process to act as PID 1 for containers.
 
-The docker-init binary is backed by tini on default, but optionally can
-be changed to docker-init by user preference.
-
-Furthermore, this patch fixes the following Docker error:
-
-  dockerd: level=warning msg="failed to retrieve docker-init version"
+dumb-init can be used to satisfy docker-engine's docker-init binary
+requirement.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk | 11 +++++++++++
- 2 files changed, 37 insertions(+)
+ package/Config.in                |  1 +
+ package/dumb-init/Config.in      |  7 +++++++
+ package/dumb-init/dumb-init.hash |  2 ++
+ package/dumb-init/dumb-init.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/dumb-init/Config.in
+ create mode 100644 package/dumb-init/dumb-init.hash
+ create mode 100644 package/dumb-init/dumb-init.mk
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 05670a7..7d9a87f 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -33,6 +33,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
- 
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 
-+choice
-+	bool "docker-init to use"
-+	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	help
-+	  The docker engine uses a minimal init process as PID 1
-+	  inside containers. There are several implementations
-+	  of this init process.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	bool "tini"
-+	select BR2_PACKAGE_TINI
-+	help
-+	  Use Tini as the container init process.
-+
-+	  https://github.com/krallin/tini
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
+diff --git a/package/Config.in b/package/Config.in
+index d57813c..b784f4a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1770,6 +1770,7 @@ comment "Utilities"
+ 	source "package/crudini/Config.in"
+ 	source "package/dialog/Config.in"
+ 	source "package/dtach/Config.in"
++	source "package/dumb-init/Config.in"
+ 	source "package/file/Config.in"
+ 	source "package/gnupg/Config.in"
+ 	source "package/gnupg2/Config.in"
+diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
+new file mode 100644
+index 0000000..e817493
+--- /dev/null
++++ b/package/dumb-init/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DUMB_INIT
 +	bool "dumb-init"
-+	select BR2_PACKAGE_DUMB_INIT
 +	help
-+	  Use dumb-init as the container init process.
++	  dumb-init is a simple but valid init binary to
++	  act as PID 1 for containers.
 +
 +	  https://github.com/Yelp/dumb-init
+diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
+new file mode 100644
+index 0000000..4705ce4
+--- /dev/null
++++ b/package/dumb-init/dumb-init.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	74486997321bd939cad2ee6af030f481d39751bc9aa0ece84ed55f864e309a3f	v1.2.0.tar.gz
+diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
+new file mode 100644
+index 0000000..f06fe6a
+--- /dev/null
++++ b/package/dumb-init/dumb-init.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# dumb-init
++#
++################################################################################
 +
-+endchoice
++DUMB_INIT_VERSION = v1.2.0
++DUMB_INIT_SITE = https://github.com/Yelp/dumb-init/archive
++DUMB_INIT_SOURCE = $(DUMB_INIT_VERSION).tar.gz
++DUMB_INIT_LICENSE = MIT
++DUMB_INIT_LICENSE_FILES = LICENSE
 +
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index c4c1157..bdb2f31 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -45,6 +45,13 @@ endif
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- DOCKER_ENGINE_BUILD_TAGS += daemon
- DOCKER_ENGINE_BUILD_TARGETS += dockerd
++define DUMB_INIT_BUILD_CMDS
++	$(TARGET_CC) \
++		-o $(@D)/dumb-init $(@D)/dumb-init.c
++endef
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-+DOCKER_ENGINE_INIT = dumb-init
-+else
-+DOCKER_ENGINE_INIT = tini
-+endif
++define DUMB_INIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/dumb-init $(TARGET_DIR)/usr/bin/dumb-init
++endef
 +
- endif
- 
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-@@ -114,6 +121,10 @@ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
- 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
- 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
- 	)
-+
-+	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
-+		ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
-+	)
- endef
- 
- $(eval $(generic-package))
++$(eval $(generic-package))
 -- 
 2.10.2
