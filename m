@@ -1,70 +1,37 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 10 May 2017 23:33:44 +0200
-Subject: [Buildroot] [PATCH 1/3] support/testing: show messages in a more
-	readable format
-Message-ID: <1494452026-21567-1-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 May 2017 23:34:15 +0200
+Subject: [Buildroot] [PATCH master] mpir: fix build on MIPS R6 CPUs
+In-Reply-To: <20170510105546.51108-1-Vincent.Riera@imgtec.com>
+References: <20170510105546.51108-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170510233415.4906cef4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently messages from run-tests are quite unpleasant:
+Hello,
 
-[br-tests/TestPostScripts/2017-05-09 15:51:57] Building
-[br-tests/TestPostScripts/2017-05-09 15:52:23] Building done
-[br-tests/TestPostScripts/2017-05-09 15:52:23] Cleaning up
-.[br-tests/TestNoTimezone/2017-05-09 15:52:23] Starting
-[br-tests/TestNoTimezone/2017-05-09 15:52:23] Building
-[br-tests/TestNoTimezone/2017-05-09 15:53:17] Building done
-[br-tests/TestNoTimezone/2017-05-09 15:53:22] Cleaning up
-.[br-tests/TestGlibcNonDefaultLimitedTimezone/2017-05-09 15:53:22] Starting
-[br-tests/TestGlibcNonDefaultLimitedTimezone/2017-05-09 15:53:22] Building
-[br-tests/TestGlibcNonDefaultLimitedTimezone/2017-05-09 15:54:33] Building done
-[br-tests/TestGlibcNonDefaultLimitedTimezone/2017-05-09 15:54:37] Cleaning up
-[...]
+On Wed, 10 May 2017 11:55:46 +0100, Vicente Olivert Riera wrote:
+> Commit ef9eebf65f554d9aacfd420600c8ba17787151a8 tried to fix this
+> problem in a wrong way. It was fixed only for generic R6 CPUs, so the
+> problem still persist if you choose any other R6 CPU, like I6400 for
+> instance.
+> 
+> Fix it properly by using the right kconfig options.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/f33/f33cb1e0b49fe8aee68fb4b66ea4c304b71a6f8f/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/mpir/mpir.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Change them in a more readable way by removing the date and using a
-columnar style:
+Applied to master, thanks.
 
-15:12:22 TestPostScripts                          Starting
-15:12:25 TestPostScripts                          Building
-15:12:48 TestPostScripts                          Building done
-15:12:48 TestPostScripts                          Cleaning up
-.15:12:48 TestNoTimezone                           Starting
-15:12:54 TestNoTimezone                           Building
-15:13:44 TestNoTimezone                           Building done
-15:13:49 TestNoTimezone                           Cleaning up
-.15:13:49 TestGlibcNonDefaultLimitedTimezone       Starting
-15:14:00 TestGlibcNonDefaultLimitedTimezone       Building
-15:14:56 TestGlibcNonDefaultLimitedTimezone       Building done
-15:15:01 TestGlibcNonDefaultLimitedTimezone       Cleaning up
-[...]
-
-Note the '.' and other characters presented by nose2 are still
-printed. They are not affected by this change.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- support/testing/infra/basetest.py | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index eb9da90119ac..cb5d2100f44a 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -36,10 +36,8 @@ class BRTest(unittest.TestCase):
-     keepbuilds = False
- 
-     def show_msg(self, msg):
--        print "[%s/%s/%s] %s" % (os.path.basename(self.__class__.outputdir),
--                                 self.testname,
--                                 datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
--                                 msg)
-+        print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
-+                                    self.testname, msg)
-     def setUp(self):
-         self.testname = self.__class__.__name__
-         self.builddir = os.path.join(self.__class__.outputdir, self.testname)
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
