@@ -1,50 +1,49 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 10 May 2017 11:25:54 +0200
-Subject: [Buildroot] [PATCH] boost: disable locale and regex modules if
-	static build and icu are enabled
-Message-ID: <1494408354-20297-1-git-send-email-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 10 May 2017 11:26:16 +0200
+Subject: [Buildroot] Analysis of build results for 2017-05-08
+In-Reply-To: <20170509114619.727892c8@free-electrons.com>
+References: <20170509062824.6D04D208E1@mail.free-electrons.com>
+ <20170509093537.5560182b@free-electrons.com>
+ <CAGm1_ktz8-x5g=bHt9-Hi88Vo3eb_VyR2TmaamLcKwNzB5PGWQ@mail.gmail.com>
+ <20170509114619.727892c8@free-electrons.com>
+Message-ID: <CAGm1_ku7Fu15Tko5LbrUYXKi7OxZ8eS0ki+uRidR6M=5bEautg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Tue, May 9, 2017 at 11:46 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 9 May 2017 11:20:19 +0200, Yegor Yefremov wrote:
+>
+>> > error: Name clash for '<pstage/lib>libboost_system.a'
+>> >
+>> > Yegor, you are in the DEVELOPERS file for Boost, could you have a look ?
+>>
+>> OMG I'm the only one registered as DEVELOPER for boost.
+>
+> Good luck :-)
+>
+> Feel free to find other volunteers to maintain this wonderful package!
+>
+>> This situation seems to occur, when both iconv and icu are selected:
+>>
+>>     - iconv (libc)             : yes
+>>     - icu                      : yes
+>>
+>> Need to dig further.
+>
+> Great, thanks!
 
-Boost build system doesn't support ICU static only building [1], so
-so disable locale and regex modules for this case.
+Seems like it is a problem of locale, regex modules and static ICU.
+See [1] for details. I think we should disable both modules if static
+and ICU are selected.
+
+Patch sent.
 
 [1] http://boost.2283326.n4.nabble.com/bjam-Building-Regex-with-static-runtime-linking-td2588874.html
 
-Fixes:
-http://autobuild.buildroot.net/results/436/436f6173bb29a945abc75899a6b74e1266362fc9
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/boost/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 9825c09..76efe3b 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -98,6 +98,8 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
- 
- config BR2_PACKAGE_BOOST_LOCALE
- 	bool "boost-locale"
-+	# Boost build system doesn't support ICU static only building
-+	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 
- config BR2_PACKAGE_BOOST_LOG
-@@ -134,6 +136,8 @@ config BR2_PACKAGE_BOOST_RANDOM
- 
- config BR2_PACKAGE_BOOST_REGEX
- 	bool "boost-regex"
-+	# Boost build system doesn't support ICU static only building
-+	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
- 
- config BR2_PACKAGE_BOOST_SERIALIZATION
- 	bool "boost-serialization"
--- 
-2.1.4
+Yegor
