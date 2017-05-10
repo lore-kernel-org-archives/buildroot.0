@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 May 2017 23:41:59 +0200
-Subject: [Buildroot] [PATCH v3 2/3] package/ltp-testsuite: introduce
- BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS
-In-Reply-To: <20170509205929.8394-2-romain.naour@gmail.com>
-References: <20170509205929.8394-1-romain.naour@gmail.com>
- <20170509205929.8394-2-romain.naour@gmail.com>
-Message-ID: <20170510234159.13af13af@free-electrons.com>
+Date: Wed, 10 May 2017 23:42:27 +0200
+Subject: [Buildroot] [git commit] support/testing: remove unused variable
+Message-ID: <20170510214233.857CD8215B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bab4a2fd37b1ce4bdeb25f7bf98adf07eea8c504
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 May 2017 22:59:28 +0200, Romain Naour wrote:
-> ltp-testsuite needs __sync*() built-ins for 4-byte data, except on a few
-> architectures for which a specific implementation is provided in
-> ltp-testsuite source code.
-> 
-> To prepare for the introduction of this dependency, add
-> BR2_PACKAGE_LTP_TESTSUITE_ARCH_SUPPORTS.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/ltp-testsuite/Config.in | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/infra/basetest.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks, I've applied patches 2 and 3, after changing a bit how the
-ARCH_SUPPORTS option is defined, as I suggested in my review of patch 3.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index cb5d210..557baa2 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -41,7 +41,6 @@ class BRTest(unittest.TestCase):
+     def setUp(self):
+         self.testname = self.__class__.__name__
+         self.builddir = os.path.join(self.__class__.outputdir, self.testname)
+-        self.runlog = self.builddir + "-run.log"
+         self.emulator = None
+         self.show_msg("Starting")
+         self.b = Builder(self.__class__.config, self.builddir, self.logtofile)
