@@ -1,28 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 May 2017 14:03:08 +0200
-Subject: [Buildroot] [PATCH v2 next] flex: bump version to 2.6.4
-In-Reply-To: <20170510113123.36929-1-Vincent.Riera@imgtec.com>
-References: <20170510113123.36929-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170510140308.3e7041f9@free-electrons.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 10 May 2017 09:00:57 -0400
+Subject: [Buildroot] [PATCH 1/1] swig: bump to 3.0.12
+Message-ID: <20170510130057.16408-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+---
+ package/swig/swig.hash | 2 +-
+ package/swig/swig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 10 May 2017 12:31:23 +0100, Vicente Olivert Riera wrote:
-
-> - The sed command over Makefile.in to prevent the flex binary to be
->   built fails, so remove it. Instead, just remove the flex binary and
->   its flex++ symlink using a post-target-install hook.
-
-Have you tried to build this with a noMMU toolchain? I believe it will
-fail to build, because the flex program uses fork().
-
-Thomas
+diff --git a/package/swig/swig.hash b/package/swig/swig.hash
+index 92ddc11..77c93a9 100644
+--- a/package/swig/swig.hash
++++ b/package/swig/swig.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	2939aae39dec06095462f1b95ce1c958ac80d07b926e48871046d17c0094f44c	swig-3.0.10.tar.gz
++sha256	7cf9f447ae7ed1c51722efc45e7f14418d15d7a1e143ac9f09a668999f4fc94d	swig-3.0.12.tar.gz
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 740b597..cdf9533 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SWIG_VERSION_MAJOR = 3.0
+-SWIG_VERSION = $(SWIG_VERSION_MAJOR).10
++SWIG_VERSION = $(SWIG_VERSION_MAJOR).12
+ SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+ HOST_SWIG_DEPENDENCIES = host-bison
+ HOST_SWIG_CONF_OPTS = \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
