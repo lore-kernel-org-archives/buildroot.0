@@ -1,45 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 10 May 2017 08:59:43 -0500
-Subject: [Buildroot] [PATCH 1/1] swig: bump to 3.0.12
-In-Reply-To: <20170510130057.16408-1-aduskett@codeblue.com>
-References: <20170510130057.16408-1-aduskett@codeblue.com>
-Message-ID: <CANQCQpa1PO3tanP0tQtZJqz21gyUAcDzT3fBQtY_cGVFDxyW0w@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 10 May 2017 15:35:32 +0100
+Subject: [Buildroot] [PATCH next] libgtk3: bump version to 3.22.13
+Message-ID: <20170510143532.34253-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Wed, May 10, 2017 at 8:00 AM, Adam Duskett <aduskett@gmail.com> wrote:
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
->  package/swig/swig.hash | 2 +-
->  package/swig/swig.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/swig/swig.hash b/package/swig/swig.hash
-> index 92ddc11..77c93a9 100644
-> --- a/package/swig/swig.hash
-> +++ b/package/swig/swig.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed:
-> -sha256 2939aae39dec06095462f1b95ce1c958ac80d07b926e48871046d17c0094f44c        swig-3.0.10.tar.gz
-> +sha256 7cf9f447ae7ed1c51722efc45e7f14418d15d7a1e143ac9f09a668999f4fc94d        swig-3.0.12.tar.gz
-> diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-> index 740b597..cdf9533 100644
-> --- a/package/swig/swig.mk
-> +++ b/package/swig/swig.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->
->  SWIG_VERSION_MAJOR = 3.0
-> -SWIG_VERSION = $(SWIG_VERSION_MAJOR).10
-> +SWIG_VERSION = $(SWIG_VERSION_MAJOR).12
->  SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
->  HOST_SWIG_DEPENDENCIES = host-bison
->  HOST_SWIG_CONF_OPTS = \
-
-
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 10dcb4d..8e3979a 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.12.sha256sum
+-sha256 84fae0cefb6a11ee2b4e86b8ac42fe46a3d30b4ad16661d5fc51e8ae03e2a98c  gtk+-3.22.12.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.13.sha256sum
++sha256 575f45571fc7c0081ede9ba745b752514cd883c3b5f69cf5bee0a5ee11c6bee6  gtk+-3.22.13.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 1759953..8b0c7bb 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).12
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).13
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
+-- 
+2.10.2
