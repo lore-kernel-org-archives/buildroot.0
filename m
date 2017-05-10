@@ -1,38 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 May 2017 23:36:14 +0200
-Subject: [Buildroot] [PATCH v3 1/3] package/ltp-testsuite: remove ldd
- command test with static only build
-In-Reply-To: <20170509205929.8394-1-romain.naour@gmail.com>
-References: <20170509205929.8394-1-romain.naour@gmail.com>
-Message-ID: <20170510233614.3f3e2f1a@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 10 May 2017 21:39:16 +0000
+Subject: [Buildroot] [Bug 9796] source-check broken for Git downloads
+In-Reply-To: <bug-9796-163@https.bugs.busybox.net/>
+References: <bug-9796-163@https.bugs.busybox.net/>
+Message-ID: <bug-9796-163-gyXf4HMcWE@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9796
 
-On Tue,  9 May 2017 22:59:27 +0200, Romain Naour wrote:
-> ldd command build system try to build a shared library unconditionally:
-> 
-> arc-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -matomic -Os -static \
-> 	-I[...]/sysroot/usr/include/tirpc   -g -O2 -fno-strict-aliasing -pipe \
-> 	-Wall -W -Wold-style-definition -shared -o lddfile1.obj.so lddfile1.o
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/2ec/2eccf9f517ab15d8d459b06195423fdfe3fba9fa
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/ltp-testsuite/ltp-testsuite.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Thomas
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+The underlying reason s that foo-source-check has no stamp file
+associated to it, and eventually, $(PKG) is empty.
+
+I'll fix soonish...
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
