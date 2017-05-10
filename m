@@ -1,42 +1,205 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 May 2017 23:44:36 +0200
-Subject: [Buildroot] [git commit branch/next] tcpreplay: bump version to
-	4.2.5
-Message-ID: <20170510214447.3980280ACC@busybox.osuosl.org>
+Date: Wed, 10 May 2017 23:44:27 +0200
+Subject: [Buildroot] [git commit branch/next] git: bump version to 2.13.0
+Message-ID: <20170510214447.17E838288A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb2919bd460767425062f4b9748e10862acc3eb6
+commit: https://git.buildroot.net/buildroot/commit/?id=312d71c7a9139e3a23f0c9c284d4b36414f48623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Patches 0001 and 0002 already included in this release:
+  https://github.com/git/git/commit/379642bcd8d89db52feba88a651e4e56d6ac5767
+  https://github.com/git/git/commit/2225e1ea20481a7c0da526891470abf9ece623e7
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcpreplay/tcpreplay.hash | 2 +-
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../git/0001-grep-set-default-output-method.patch  | 59 ---------------
+ ...ep-fix-builds-with-with-no-thread-support.patch | 87 ----------------------
+ package/git/git.hash                               |  2 +-
+ package/git/git.mk                                 |  2 +-
+ 4 files changed, 2 insertions(+), 148 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 9e8d151..c908964 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
+diff --git a/package/git/0001-grep-set-default-output-method.patch b/package/git/0001-grep-set-default-output-method.patch
+deleted file mode 100644
+index ade35eb..0000000
+--- a/package/git/0001-grep-set-default-output-method.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 379642bcd8d89db52feba88a651e4e56d6ac5767 Mon Sep 17 00:00:00 2001
+-From: Brandon Williams <bmwill@google.com>
+-Date: Fri, 17 Mar 2017 11:41:54 -0700
+-Subject: [PATCH] grep: set default output method
+-
+-Signed-off-by: Brandon Williams <bmwill@google.com>
+-Signed-off-by: Junio C Hamano <gitster@pobox.com>
+-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+----
+- grep.c | 12 +++++++-----
+- 1 file changed, 7 insertions(+), 5 deletions(-)
+-
+-diff --git a/grep.c b/grep.c
+-index 0dbdc1d..56ef0ec 100644
+---- a/grep.c
+-+++ b/grep.c
+-@@ -12,6 +12,11 @@ static int grep_source_is_binary(struct grep_source *gs);
+- 
+- static struct grep_opt grep_defaults;
+- 
+-+static void std_output(struct grep_opt *opt, const void *buf, size_t size)
+-+{
+-+	fwrite(buf, size, 1, stdout);
+-+}
+-+
+- /*
+-  * Initialize the grep_defaults template with hardcoded defaults.
+-  * We could let the compiler do this, but without C99 initializers
+-@@ -42,6 +47,7 @@ void init_grep_defaults(void)
+- 	color_set(opt->color_selected, "");
+- 	color_set(opt->color_sep, GIT_COLOR_CYAN);
+- 	opt->color = -1;
+-+	opt->output = std_output;
+- }
+- 
+- static int parse_pattern_type_arg(const char *opt, const char *arg)
+-@@ -152,6 +158,7 @@ void grep_init(struct grep_opt *opt, const char *prefix)
+- 	opt->pathname = def->pathname;
+- 	opt->regflags = def->regflags;
+- 	opt->relative = def->relative;
+-+	opt->output = def->output;
+- 
+- 	color_set(opt->color_context, def->color_context);
+- 	color_set(opt->color_filename, def->color_filename);
+-@@ -1379,11 +1386,6 @@ static int look_ahead(struct grep_opt *opt,
+- 	return 0;
+- }
+- 
+--static void std_output(struct grep_opt *opt, const void *buf, size_t size)
+--{
+--	fwrite(buf, size, 1, stdout);
+--}
+--
+- static int fill_textconv_grep(struct userdiff_driver *driver,
+- 			      struct grep_source *gs)
+- {
+--- 
+-2.6.2
+-
+diff --git a/package/git/0002-grep-fix-builds-with-with-no-thread-support.patch b/package/git/0002-grep-fix-builds-with-with-no-thread-support.patch
+deleted file mode 100644
+index 077b554..0000000
+--- a/package/git/0002-grep-fix-builds-with-with-no-thread-support.patch
++++ /dev/null
+@@ -1,87 +0,0 @@
+-From 2225e1ea20481a7c0da526891470abf9ece623e7 Mon Sep 17 00:00:00 2001
+-From: Brandon Williams <bmwill@google.com>
+-Date: Fri, 17 Mar 2017 11:41:55 -0700
+-Subject: [PATCH] grep: fix builds with with no thread support
+-
+-Commit 0281e487fd91 ("grep: optionally recurse into submodules")
+-added functions grep_submodule() and grep_submodule_launch() which
+-use "struct work_item" which is defined only when thread support
+-is available.
+-
+-The original implementation of grep_submodule() used the "struct
+-work_item" in order to gain access to a strbuf to store its output which
+-was to be printed at a later point in time.  This differs from how both
+-grep_file() and grep_sha1() handle their output.  This patch eliminates
+-the reliance on the "struct work_item" and instead opts to use the
+-output function stored in the output field of the "struct grep_opt"
+-object directly, making it behave similarly to both grep_file() and
+-grep_sha1().
+-
+-Reported-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+-Signed-off-by: Brandon Williams <bmwill@google.com>
+-Reviewed-by: Jonathan Nieder <jrnieder@gmail.com>
+-Signed-off-by: Junio C Hamano <gitster@pobox.com>
+-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+----
+- builtin/grep.c | 21 +++++++++------------
+- 1 file changed, 9 insertions(+), 12 deletions(-)
+-
+-diff --git a/builtin/grep.c b/builtin/grep.c
+-index 2c727ef..33561f2 100644
+---- a/builtin/grep.c
+-+++ b/builtin/grep.c
+-@@ -538,7 +538,7 @@ static int grep_submodule_launch(struct grep_opt *opt,
+- 	int status, i;
+- 	const char *end_of_base;
+- 	const char *name;
+--	struct work_item *w = opt->output_priv;
+-+	struct strbuf child_output = STRBUF_INIT;
+- 
+- 	end_of_base = strchr(gs->name, ':');
+- 	if (gs->identifier && end_of_base)
+-@@ -593,14 +593,16 @@ static int grep_submodule_launch(struct grep_opt *opt,
+- 	 * child process.  A '0' indicates a hit, a '1' indicates no hit and
+- 	 * anything else is an error.
+- 	 */
+--	status = capture_command(&cp, &w->out, 0);
+-+	status = capture_command(&cp, &child_output, 0);
+- 	if (status && (status != 1)) {
+- 		/* flush the buffer */
+--		write_or_die(1, w->out.buf, w->out.len);
+-+		write_or_die(1, child_output.buf, child_output.len);
+- 		die("process for submodule '%s' failed with exit code: %d",
+- 		    gs->name, status);
+- 	}
+- 
+-+	opt->output(opt, child_output.buf, child_output.len);
+-+	strbuf_release(&child_output);
+- 	/* invert the return code to make a hit equal to 1 */
+- 	return !status;
+- }
+-@@ -641,19 +643,14 @@ static int grep_submodule(struct grep_opt *opt, const unsigned char *sha1,
+- 	} else
+- #endif
+- 	{
+--		struct work_item w;
+-+		struct grep_source gs;
+- 		int hit;
+- 
+--		grep_source_init(&w.source, GREP_SOURCE_SUBMODULE,
+-+		grep_source_init(&gs, GREP_SOURCE_SUBMODULE,
+- 				 filename, path, sha1);
+--		strbuf_init(&w.out, 0);
+--		opt->output_priv = &w;
+--		hit = grep_submodule_launch(opt, &w.source);
+-+		hit = grep_submodule_launch(opt, &gs);
+- 
+--		write_or_die(1, w.out.buf, w.out.len);
+--
+--		grep_source_clear(&w.source);
+--		strbuf_release(&w.out);
+-+		grep_source_clear(&gs);
+- 		return hit;
+- 	}
+- }
+--- 
+-2.6.2
+-
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 9af360e..efe6225 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 da78ea1a1fe8ff177a4f9e71c4c6739b79ac86db2c2bb90955318b8e8439beb7  tcpreplay-4.2.4.tar.gz
-+sha256 941026be34e1db5101d3d22ebddd6fff76179a1ee81e273338f533ba4eca89d7  tcpreplay-4.2.5.tar.gz
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 879f518..d303c60 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 d21a9e23506e618d561fb25a8a7bd6134f927b86147930103487117a7a678c4a  git-2.12.2.tar.xz
++sha256 4bbf2ab6f2341253a38f95306ec7936833eb1c42572da5c1fa61f0abb2191258  git-2.13.0.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index c2e4b8d..9cc88dd 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPREPLAY_VERSION = 4.2.4
-+TCPREPLAY_VERSION = 4.2.5
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+-GIT_VERSION = 2.12.2
++GIT_VERSION = 2.13.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
