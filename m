@@ -1,41 +1,43 @@
-From: lemonoje <lemonoje@gmail.com>
-Date: Thu, 11 May 2017 13:19:29 -0700 (PDT)
-Subject: [Buildroot] Altera SoC Buildroot external toolchain
-	incompatible error
-In-Reply-To: <20170511221419.1e5e9baf@free-electrons.com>
-References: <1494532269551-164744.post@n4.nabble.com>
- <20170511221419.1e5e9baf@free-electrons.com>
-Message-ID: <1494533969065-164751.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 May 2017 22:33:07 +0200
+Subject: [Buildroot] [PATCH] package/libloki: new package
+In-Reply-To: <20170506140707.12931-1-romain.naour@gmail.com>
+References: <20170506140707.12931-1-romain.naour@gmail.com>
+Message-ID: <20170511223307.157be03a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-Wow - thanks for the quick reply.  I am using the make ... ...  nconfig menu
-utility.  Under Target EABI--->, I had no option for EABIhf, but now I just
-selected *"Enable VFP extension support"* which then gives me the Target
-ABI--->EABIhf.  I should have my C library as glibc, correct?  
+Hello,
 
-I get a little further...now stalled at:
+On Sat,  6 May 2017 16:07:07 +0200, Romain Naour wrote:
 
->>> toolchain-external  Installing to staging directory
-/usr/bin/install -D -m 0755
-/sf/ArriaX/ltsi_4_1_33/buildroot/output/build/toolchain-external/toolchain-wrapper
-/sf/ArriaX/ltsi_4_1_33/buildroot/output/host/usr/bin/toolchain-wrapper
-ln: failed to create symbolic link
-?/sf/ArriaX/ltsi_4_1_33/buildroot/output/host/usr/ARM-buildroot-linux-gnueabihf/sysroot/usr/lib?:
-No such file or directory
-package/pkg-generic.mk:255: recipe for target
-'/sf/ArriaX/ltsi_4_1_33/buildroot/output/build/toolchain-external/.stamp_staging_installed'
-failed
+> +# install to TARGET_DIR only the shared library
+> +ifeq ($(BR2_STATIC_LIBS),)
+> +define LIBLOKI_INSTALL_STAGING_SHARED_LIB
+> +	$(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) $(LIBLOKI_INSTALL_TARGETS)
+> +endef
+> +endif
+> +
+> +define LIBLOKI_INSTALL_TARGET_CMDS
+> +	$(LIBLOKI_INSTALL_STAGING_SHARED_LIB)
+> +endef
 
-I do not have the 'usr' path under  ^^^ path/sysroot
+This was a bit unnecessarily complicated, calling:
 
+	$(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) $(LIBLOKI_INSTALL_TARGETS)
 
+unconditionally is just fine. Yes for static libraries, it means they
+will be installed in $(TARGET_DIR), but they are anyway removed in the
+target-finalize step. So in such situations, I do prefer to keep a
+simple .mk file.
 
+Committed to next with this fixed. Thanks!
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Altera-SoC-Buildroot-external-toolchain-incompatible-error-tp164744p164751.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
