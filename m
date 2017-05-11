@@ -1,40 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 22:51:59 +0200
-Subject: [Buildroot] [PATCH] package/opencv3: fix build for x86_64 target
-In-Reply-To: <20170504215333.4172-1-s.martin49@gmail.com>
-References: <20170504215333.4172-1-s.martin49@gmail.com>
-Message-ID: <20170511225159.00ddcb69@free-electrons.com>
+From: lemonoje <lemonoje@gmail.com>
+Date: Thu, 11 May 2017 13:46:39 -0700 (PDT)
+Subject: [Buildroot] Altera SoC Buildroot external toolchain
+	incompatible error
+In-Reply-To: <20170511225147.7466e9ff@free-electrons.com>
+References: <1494532269551-164744.post@n4.nabble.com>
+ <20170511221419.1e5e9baf@free-electrons.com>
+ <1494533969065-164751.post@n4.nabble.com>
+ <20170511225147.7466e9ff@free-electrons.com>
+Message-ID: <1494535599131-164758.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Sure thing, it is:
 
-On Thu,  4 May 2017 23:53:33 +0200, Samuel Martin wrote:
-> This change backports a fix from upstream fixing missing symbols due to
-> wrong compiler optimization flags.
-> 
-> On Buildroot side, also remove deprecated options passed on the
-> configure command.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/af9/af950c6172a578c4eeeb9440b6990ceb48263fa6/build-end.log
->   http://autobuild.buildroot.net/results/e88/e8832302cd4f30cec076f67965f6aacbaca5b955/build-end.log
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  .../0001-cmake-support-multiple-CPU-targets.patch  | 2501 ++++++++++++++++++++
->  package/opencv3/opencv3.mk                         |   16 +-
->  2 files changed, 2502 insertions(+), 15 deletions(-)
->  create mode 100644 package/opencv3/0001-cmake-support-multiple-CPU-targets.patch
 
-Applied to master, thanks.
+https://releases.linaro.org/components/toolchain/binaries/5.4-2017.01/arm-linux-gnueabihf/gcc-linaro-5.4.1-2017.01-x86_64_arm-linux-gnueabihf.tar.xz
+<https://releases.linaro.org/components/toolchain/binaries/5.4-2017.01/arm-linux-gnueabihf/gcc-linaro-5.4.1-2017.01-x86_64_arm-linux-gnueabihf.tar.xz>  
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+thanks for the help!
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Altera-SoC-Buildroot-external-toolchain-incompatible-error-tp164744p164758.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
