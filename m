@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 23:38:13 +0200
-Subject: [Buildroot] [PATCH next 05/11] gst1-plugins-bad: bump version
+Date: Thu, 11 May 2017 23:38:46 +0200
+Subject: [Buildroot] [PATCH next 09/11] gst1-plugins-ugly: bump version
  to 1.12.0
-In-Reply-To: <20170509172119.33642-5-Vincent.Riera@imgtec.com>
+In-Reply-To: <20170509172119.33642-9-Vincent.Riera@imgtec.com>
 References: <20170509172119.33642-1-Vincent.Riera@imgtec.com>
- <20170509172119.33642-5-Vincent.Riera@imgtec.com>
-Message-ID: <20170511233813.4ffb0130@free-electrons.com>
+ <20170509172119.33642-9-Vincent.Riera@imgtec.com>
+Message-ID: <20170511233846.7bace87c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 9 May 2017 18:21:13 +0100, Vicente Olivert Riera wrote:
+On Tue, 9 May 2017 18:21:17 +0100, Vicente Olivert Riera wrote:
 
->  package/gstreamer1/gst1-plugins-bad/Config.in      | 46 +----------
+> -config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
+> -	bool "mad (*.mp3 audio)"
 
-You're removing lots of Config.in options here, but you forgot to add
-the appropriate logic to Config.in.legacy. Could you fix that up?
+You're removing an option, so a change to Config.in.legacy is needed.
 
-Also, could you comment on how much build testing and runtime testing
-this series has received ?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
