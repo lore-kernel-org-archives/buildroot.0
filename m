@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 22:14:19 +0200
-Subject: [Buildroot] Altera SoC Buildroot external toolchain
- incompatible error
-In-Reply-To: <1494532269551-164744.post@n4.nabble.com>
-References: <1494532269551-164744.post@n4.nabble.com>
-Message-ID: <20170511221419.1e5e9baf@free-electrons.com>
+Date: Thu, 11 May 2017 22:15:05 +0200
+Subject: [Buildroot] Problems building iotop
+In-Reply-To: <CA+12NBKMFcGUA_ipbN-FOBgXDcS_aVPiziRmt2k9Q9C17SE++Q@mail.gmail.com>
+References: <CA+12NB+dzKMw2x=mBESq+Ti0COMiQmbHTiRaO=E35xOZch+4gw@mail.gmail.com>
+ <20170511174933.28030e0a@free-electrons.com>
+ <CA+12NBKMFcGUA_ipbN-FOBgXDcS_aVPiziRmt2k9Q9C17SE++Q@mail.gmail.com>
+Message-ID: <20170511221505.3c793c93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 May 2017 12:51:09 -0700 (PDT), lemonoje wrote:
+Please keep the Buildroot mailing list in Cc, thanks.
 
-> Incorrect ABI setting: EABI selected, but toolchain is incompatible
+On Thu, 11 May 2017 13:42:04 -0400, Linux User wrote:
+> Oh my buildroot is already setup. I am build everything else just fine but
+> iotop.
+> 
+> Below is the example of ftop working just fine. But iotop wont.
 
-Your toolchain is an EABIhf toolchain, but you have selected EABI in
-your Buildroot configuration.
-
-Best regards,
+Which Buildroot version are you using?
 
 Thomas
 -- 
