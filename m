@@ -1,66 +1,41 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Thu, 11 May 2017 09:21:27 -0400
-Subject: [Buildroot] [PATCH 1/1] erlang: bump version to 19.3
-Message-ID: <1494508887-7015-1-git-send-email-fhunleth@troodon-software.com>
+Date: Thu, 11 May 2017 09:24:24 -0400
+Subject: [Buildroot] Upgrading Erlang and ejabberd
+In-Reply-To: <20170509214201.7772feeb@free-electrons.com>
+References: <CA+-urNQWNUXKHZdjvkcijZYW0OQJr3DMtgQNZmhThC-TssdnNw@mail.gmail.com>
+ <8760hano0p.fsf@dell.be.48ers.dk>
+ <l449udxe78.ln2@ID-313208.user.individual.net>
+ <CAJtjsKZU5FzxA9gidh0ZVoiQVdag6YEbWH75iDQ3XCmQ+KBC-Q@mail.gmail.com>
+ <20170509214201.7772feeb@free-electrons.com>
+Message-ID: <CA+-urNQXG9iPeWz-Fe=yH6gfBRexPsseRUVD4TU8oL7Nd25FhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change bumps the Erlang version from 18.3 to 19.3. Erlang 19.0 has
-many improvements but introduces a few incompatible changes to Erlang
-18.3. Details are at:
+Hello all,
 
-  http://erlang.org/download/otp_src_19.0.readme
+On Tue, May 9, 2017 at 3:42 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 9 May 2017 18:37:27 +0200, Johan Oudinet wrote:
+>
+>> I won't have time to work on updating ejabberd this week but I can have a
+>> look next week.
+>> Feel free to upgrade erlang in the meantime even if it breaks ejabberd.
+>
+> Anyway the "master" branch is closed to version bumps, so new version
+> bumps will go in the "next" branch. We can therefore take the erlang
+> bump, and merge later the ejabberd bump.
+>
+> Or perhaps, we will not even have merged the erlang bump by the time
+> your work on bumping ejabberd.
 
-The 19.x minor releases primarily contain bug fixes, optimizations and
-other minor imporvements. Details are at:
+I submitted a version bump patch for erlang. I'll check back
+periodically on how the ejabberd work goes since it sounds like
+there's some time before any changes would make their way to "master".
 
-  http://erlang.org/download/otp_src_19.1.readme
-  http://erlang.org/download/otp_src_19.2.readme
-  http://erlang.org/download/otp_src_19.3.readme
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
-
-IMPORTANT: This change will break ejabberd.
-
- package/erlang/erlang.hash | 4 ++--
- package/erlang/erlang.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
-index c39c26e..dc12ccd 100644
---- a/package/erlang/erlang.hash
-+++ b/package/erlang/erlang.hash
-@@ -1,3 +1,3 @@
- # md5 from http://www.erlang.org/download/MD5, sha256 locally computed
--md5	7e4ff32f97c36fb3dab736f8d481830b	otp_src_18.3.tar.gz
--sha256	fdab8129a1cb935db09f1832e3a7d511a4aeb2b9bb3602ca6a7ccb9730d5c9c3	otp_src_18.3.tar.gz
-+md5	a8c259ec47bf84e77510673e1b76b6db	otp_src_19.3.tar.gz
-+sha256  fe4a00651db39b8542b04530a48d24b2f2e7e0b77cbe93d728c9f05325bdfe83	otp_src_19.3.tar.gz
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 364085c..0f04a84 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -5,7 +5,7 @@
- ################################################################################
-
- # See note below when updating Erlang
--ERLANG_VERSION = 18.3
-+ERLANG_VERSION = 19.3
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
-@@ -19,7 +19,7 @@ ERLANG_AUTORECONF = YES
-
- # Whenever updating Erlang, this value should be updated as well, to the
- # value of EI_VSN in the file lib/erl_interface/vsn.mk
--ERLANG_EI_VSN = 3.8.2
-+ERLANG_EI_VSN = 3.9.3
-
- # The configure checks for these functions fail incorrectly
- ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
---
-2.7.4
+Thanks!
+Frank
