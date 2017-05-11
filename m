@@ -1,38 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 21:16:40 +0200
-Subject: [Buildroot] [PATCH 1/1] erlang: bump version to 19.3
-In-Reply-To: <1494508887-7015-1-git-send-email-fhunleth@troodon-software.com>
-References: <1494508887-7015-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20170511211640.3e52fb16@free-electrons.com>
+Date: Thu, 11 May 2017 21:18:12 +0200
+Subject: [Buildroot] [git commit branch/next] network-manager: add optional
+	ofono support
+Message-ID: <20170511191817.6E0B380102@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b33b493b7feebfc933873cb34ac70c042e89a1d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 11 May 2017 09:21:27 -0400, Frank Hunleth wrote:
-> This change bumps the Erlang version from 18.3 to 19.3. Erlang 19.0 has
-> many improvements but introduces a few incompatible changes to Erlang
-> 18.3. Details are at:
-> 
->   http://erlang.org/download/otp_src_19.0.readme
-> 
-> The 19.x minor releases primarily contain bug fixes, optimizations and
-> other minor imporvements. Details are at:
-> 
->   http://erlang.org/download/otp_src_19.1.readme
->   http://erlang.org/download/otp_src_19.2.readme
->   http://erlang.org/download/otp_src_19.3.readme
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/network-manager/network-manager.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 9f4cebe..4a05a65 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -32,6 +32,13 @@ NETWORK_MANAGER_CONF_OPTS = \
+ 	--disable-ifupdown \
+ 	--disable-ifnet
+ 
++ifeq ($(BR2_PACKAGE_OFONO),y)
++NETWORK_MANAGER_DEPENDENCIES += ofono
++NETWORK_MANAGER_CONF_OPTS += --with-ofono
++else
++NETWORK_MANAGER_CONF_OPTS += --without-ofono
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ NETWORK_MANAGER_DEPENDENCIES += libcurl
+ NETWORK_MANAGER_CONF_OPTS += --enable-concheck
