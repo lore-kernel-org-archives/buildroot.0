@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 17:50:39 +0200
-Subject: [Buildroot] [PATCH] efibootmgr: backport upstream patch to fix
- build with gcc 6.x
-In-Reply-To: <1494488882-32282-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1494488882-32282-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170511175039.008b0607@free-electrons.com>
+Date: Thu, 11 May 2017 17:51:07 +0200
+Subject: [Buildroot] [git commit branch/next] wine: Bump to version 2.0.1
+Message-ID: <20170511155115.CA8B5828F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5d43155294e658b6d9c6b616d2d4f0856fdccf2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 11 May 2017 09:48:02 +0200, Thomas Petazzoni wrote:
-> efibootmgr was built with -fshort-wchar, which causes gcc to use
-> 2-byte wchar_t instead of the normal 4-byte wchar_t. But this doesn't
-> work anymore with gcc 6.x, as it causes a build failure:
-> 
-> /home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efibootmgr.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
-> /home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efi.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
-> /home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: unparse_path.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
-> 
-> Upstream solution was do simply drop -fshort-wchar:
-> 
->   https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f
-> 
-> So this commit simply backports this upstream patch.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/87c3ff2427331eb9ab31c9eb685fe80954a0a98f/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/efibootmgr/efibootmgr.hash | 1 +
->  package/efibootmgr/efibootmgr.mk   | 3 +++
->  2 files changed, 4 insertions(+)
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index b4b67cd..3490c7e 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 9756f5a2129b6a83ba701e546173cbff86caa671b0af73eb8f72c03b20c066c6 wine-2.0.tar.bz2
++sha256 6cfb4eaae566dc7afb7ac0f1f2db2c0d69969952acab0debf084ee8f7b071583 wine-2.0.1.tar.xz
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 5c47186..68ebd48 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 2.0
+-WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
++WINE_VERSION = 2.0.1
++WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+ WINE_SITE = https://dl.winehq.org/wine/source/2.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
