@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 21:18:44 +0200
-Subject: [Buildroot] [PATCH next 1/3] network-manager: bump version to
- 1.8.0
-In-Reply-To: <20170511135639.43280-1-Vincent.Riera@imgtec.com>
-References: <20170511135639.43280-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170511211844.62d2f695@free-electrons.com>
+Date: Thu, 11 May 2017 21:19:00 +0200
+Subject: [Buildroot] [git commit branch/next] sudo: bump version to 1.8.20
+Message-ID: <20170511191905.1E2E98284E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=190731df61b9fa0083ae37cbb9c044d2773d0f29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 11 May 2017 14:56:37 +0100, Vicente Olivert Riera wrote:
-> Added --disable-concheck to avoid configure failure when libcurl is not
-> available:
-> 
->   checking for LIBCURL... no
->   configure: error: --enable-concheck requires libcurl library.
-> 
-> One would expect the concheck functionality to be automatically disabled
-> if libcurl is not found. But upstream wants to be explicitly disabled if
-> now wanted to prevent building NetworkManager without connectivity
-> check support without any evident warning on systems where libcurl is
-> not installed. See:
-> 
->   https://github.com/NetworkManager/NetworkManager/commit/faa1b85dab647baad7ce856e83f343af841aa6a5
-> 
-> Proper support for concheck will be added in a subsequent patch.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/network-manager/network-manager.hash | 4 ++--
->  package/network-manager/network-manager.mk   | 7 ++++---
->  2 files changed, 6 insertions(+), 5 deletions(-)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sudo/sudo.hash | 2 +-
+ package/sudo/sudo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Series applied to next, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 82e1ad6..63b1dd0 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,2 +1,2 @@
+ # From: http://www.sudo.ws/download.html
+-sha256 237e18e67c2ad59ecacfa4b7707198b09fcf84914621585a9bc670dcc31a52e0  sudo-1.8.19p2.tar.gz
++sha256 9e97b8da859c6cc1b5b8c31db93002b750eae16af1bbda9140f8dd85b970e0e0  sudo-1.8.20.tar.gz
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 0fcd740..60767a3 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION = 1.8.19p2
++SUDO_VERSION = 1.8.20
+ SUDO_SITE = http://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
