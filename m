@@ -1,27 +1,60 @@
-From: Linux User <newhorizons009@gmail.com>
-Date: Thu, 11 May 2017 11:45:59 -0400
-Subject: [Buildroot] Problems building iotop
-Message-ID: <CA+12NB+dzKMw2x=mBESq+Ti0COMiQmbHTiRaO=E35xOZch+4gw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 May 2017 09:46:40 +0200
+Subject: [Buildroot] [git commit] efibootmgr: backport upstream patch to fix
+	build with gcc 6.x
+Message-ID: <20170511154826.42A4882563@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3e254b82c77f5b91907ee96e9cb053ac65cca00b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I am getting,
+efibootmgr was built with -fshort-wchar, which causes gcc to use
+2-byte wchar_t instead of the normal 4-byte wchar_t. But this doesn't
+work anymore with gcc 6.x, as it causes a build failure:
 
-make iotop
-make: *** No rule to make target `iotop'.  Stop.
+/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efibootmgr.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
+/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efi.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
+/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: unparse_path.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
 
-I added iotop to my /package/ dir. I update Config.in in /package/
+Upstream solution was do simply drop -fshort-wchar:
 
-But I get above error. The build root version, I have, it doesn't have
-iotop, so I grabbed it from the newer buildroot repo. I did the same
-exercise with ftop and that builds fine.
+  https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f
 
-Can some one pls help ?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170511/32a65e11/attachment.html>
+So this commit simply backports this upstream patch.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/87c3ff2427331eb9ab31c9eb685fe80954a0a98f/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efibootmgr/efibootmgr.hash | 1 +
+ package/efibootmgr/efibootmgr.mk   | 3 +++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
+index f71dced..3f934ba 100644
+--- a/package/efibootmgr/efibootmgr.hash
++++ b/package/efibootmgr/efibootmgr.hash
+@@ -1,2 +1,3 @@
+ # locally computed hash
+ sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
++sha256 8e91f16927d296ffebd4f7fafda2f84c0f6201aba089a35e8090abd5aacdc58e	3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
+diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
+index 094dd28..a946d5f 100644
+--- a/package/efibootmgr/efibootmgr.mk
++++ b/package/efibootmgr/efibootmgr.mk
+@@ -6,6 +6,9 @@
+ 
+ EFIBOOTMGR_VERSION = 14
+ EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
++# Patch fixes the build with gcc 6.x.
++EFIBOOTMGR_PATCH = \
++	https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
+ EFIBOOTMGR_LICENSE = GPL-2.0+
+ EFIBOOTMGR_LICENSE_FILES = COPYING
+ EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
