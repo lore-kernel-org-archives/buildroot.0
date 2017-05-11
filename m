@@ -1,61 +1,66 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 11 May 2017 08:03:53 -0500
-Subject: [Buildroot] libqmi and modem-manager
-In-Reply-To: <30a337fc-837b-624c-06f0-3a8252b5693e@imgtec.com>
-References: <30a337fc-837b-624c-06f0-3a8252b5693e@imgtec.com>
-Message-ID: <CANQCQpbeJsrHxXLr00Do4WAYcD07mrKybo8BaDP53b_=As9K9g@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 11 May 2017 09:21:27 -0400
+Subject: [Buildroot] [PATCH 1/1] erlang: bump version to 19.3
+Message-ID: <1494508887-7015-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente,
+This change bumps the Erlang version from 18.3 to 19.3. Erlang 19.0 has
+many improvements but introduces a few incompatible changes to Erlang
+18.3. Details are at:
 
-On Thu, May 11, 2017 at 8:01 AM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> Hello Thomas and Matthew,
->
-> this commit from Matthew broke libqmi compilation:
->
-> https://git.busybox.net/buildroot/commit/?id=c78b65c4f161ec101ff02880788ef22eb7c87d76
->
-> Then this commit from Thomas fixed the former bogus commit and libqmi
-> started to compile file again:
->
-> https://git.busybox.net/buildroot/commit/?id=4d11848a21d4424a04e8428c4cd3bd5e972aacdf
->
-> The problem is that now modem-manager with qmi support fails to compile
-> with an error like this one:
->
->   CC       mm-modem-helpers-qmi.lo
-> In file included from
-> /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-message.h:39:0,
->                  from
-> /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-device.h:34,
->                  from
-> /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/libqmi-glib.h:32,
->                  from mm-modem-helpers-qmi.h:22,
->                  from mm-modem-helpers-qmi.c:16:
-> /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-utils.h:37:15:
-> error: static declaration of ?canonicalize_file_name? follows non-static
-> declaration
->  static char * canonicalize_file_name(const char *path)
->
-> If I revert both commits modem-manager with qmi support compiles just fine.
->
-> Could you please have a look to that issue?
->
-> This is the defconfig I'm using:
->
-> BR2_mipsel=y
-> BR2_mips_32r2=y
-> # BR2_MIPS_SOFT_FLOAT is not set
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_MODEM_MANAGER=y
-> BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
+  http://erlang.org/download/otp_src_19.0.readme
 
-I'll take a look, sorry about the indirect build failure.
+The 19.x minor releases primarily contain bug fixes, optimizations and
+other minor imporvements. Details are at:
+
+  http://erlang.org/download/otp_src_19.1.readme
+  http://erlang.org/download/otp_src_19.2.readme
+  http://erlang.org/download/otp_src_19.3.readme
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+
+IMPORTANT: This change will break ejabberd.
+
+ package/erlang/erlang.hash | 4 ++--
+ package/erlang/erlang.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
+index c39c26e..dc12ccd 100644
+--- a/package/erlang/erlang.hash
++++ b/package/erlang/erlang.hash
+@@ -1,3 +1,3 @@
+ # md5 from http://www.erlang.org/download/MD5, sha256 locally computed
+-md5	7e4ff32f97c36fb3dab736f8d481830b	otp_src_18.3.tar.gz
+-sha256	fdab8129a1cb935db09f1832e3a7d511a4aeb2b9bb3602ca6a7ccb9730d5c9c3	otp_src_18.3.tar.gz
++md5	a8c259ec47bf84e77510673e1b76b6db	otp_src_19.3.tar.gz
++sha256  fe4a00651db39b8542b04530a48d24b2f2e7e0b77cbe93d728c9f05325bdfe83	otp_src_19.3.tar.gz
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 364085c..0f04a84 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+
+ # See note below when updating Erlang
+-ERLANG_VERSION = 18.3
++ERLANG_VERSION = 19.3
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
+@@ -19,7 +19,7 @@ ERLANG_AUTORECONF = YES
+
+ # Whenever updating Erlang, this value should be updated as well, to the
+ # value of EI_VSN in the file lib/erl_interface/vsn.mk
+-ERLANG_EI_VSN = 3.8.2
++ERLANG_EI_VSN = 3.9.3
+
+ # The configure checks for these functions fail incorrectly
+ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+--
+2.7.4
