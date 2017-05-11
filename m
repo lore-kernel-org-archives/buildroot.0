@@ -1,33 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 22:49:40 +0200
-Subject: [Buildroot] [git commit] package/opencv3: fix build for x86_64
-	target
-Message-ID: <20170511204957.3BC3B8285F@busybox.osuosl.org>
+Date: Thu, 11 May 2017 22:51:47 +0200
+Subject: [Buildroot] Altera SoC Buildroot external toolchain
+ incompatible error
+In-Reply-To: <1494533969065-164751.post@n4.nabble.com>
+References: <1494532269551-164744.post@n4.nabble.com>
+ <20170511221419.1e5e9baf@free-electrons.com>
+ <1494533969065-164751.post@n4.nabble.com>
+Message-ID: <20170511225147.7466e9ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86666f3a21a2380e19b5f0de90b6b6329ce3de53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This change backports a fix from upstream fixing missing symbols due to
-wrong compiler optimization flags.
+On Thu, 11 May 2017 13:19:29 -0700 (PDT), lemonoje wrote:
 
-On Buildroot side, also remove deprecated options passed on the
-configure command.
+> Wow - thanks for the quick reply.  I am using the make ... ...  nconfig menu
+> utility.  Under Target EABI--->, I had no option for EABIhf, but now I just
+> selected *"Enable VFP extension support"* which then gives me the Target
+> ABI--->EABIhf.  I should have my C library as glibc, correct?  
 
-Fixes:
-  http://autobuild.buildroot.net/results/af950c6172a578c4eeeb9440b6990ceb48263fa6/
-  http://autobuild.buildroot.net/results/e8832302cd4f30cec076f67965f6aacbaca5b955/
+It depends what your toolchain is.
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-cmake-support-multiple-CPU-targets.patch  | 2499 ++++++++++++++++++++
- package/opencv3/opencv3.mk                         |   16 +-
- 2 files changed, 2500 insertions(+), 15 deletions(-)
+> >>> toolchain-external  Installing to staging directory  
+> /usr/bin/install -D -m 0755
+> /sf/ArriaX/ltsi_4_1_33/buildroot/output/build/toolchain-external/toolchain-wrapper
+> /sf/ArriaX/ltsi_4_1_33/buildroot/output/host/usr/bin/toolchain-wrapper
+> ln: failed to create symbolic link
+> ?/sf/ArriaX/ltsi_4_1_33/buildroot/output/host/usr/ARM-buildroot-linux-gnueabihf/sysroot/usr/lib?:
+> No such file or directory
+> package/pkg-generic.mk:255: recipe for target
+> '/sf/ArriaX/ltsi_4_1_33/buildroot/output/build/toolchain-external/.stamp_staging_installed'
+> failed
+> 
+> I do not have the 'usr' path under  ^^^ path/sysroot
 
-Patch is too large, so refusing to show it
+Is your external toolchain available somewhere so that I can try to
+reproduce?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
