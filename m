@@ -1,68 +1,49 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 11 May 2017 14:56:37 +0100
-Subject: [Buildroot] [PATCH next 1/3] network-manager: bump version to 1.8.0
-Message-ID: <20170511135639.43280-1-Vincent.Riera@imgtec.com>
+Date: Thu, 11 May 2017 15:20:14 +0100
+Subject: [Buildroot] [PATCH master] postgresql: bump version to 9.6.3
+	(security)
+Message-ID: <20170511142014.20027-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added --disable-concheck to avoid configure failure when libcurl is not
-available:
+Three security vulnerabilities have been closed by this release:
 
-  checking for LIBCURL... no
-  configure: error: --enable-concheck requires libcurl library.
+CVE-2017-7484: selectivity estimators bypass SELECT privilege checks
+CVE-2017-7485: libpq ignores PGREQUIRESSL environment variable
+CVE-2017-7486: pg_user_mappings view discloses foreign server passwords
 
-One would expect the concheck functionality to be automatically disabled
-if libcurl is not found. But upstream wants to be explicitly disabled if
-now wanted to prevent building NetworkManager without connectivity
-check support without any evident warning on systems where libcurl is
-not installed. See:
-
-  https://github.com/NetworkManager/NetworkManager/commit/faa1b85dab647baad7ce856e83f343af841aa6a5
-
-Proper support for concheck will be added in a subsequent patch.
+More details: https://www.postgresql.org/about/news/1746/
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/network-manager/network-manager.hash | 4 ++--
- package/network-manager/network-manager.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 94f3e26..2861aed 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 1524a34..c65edf7 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.4/NetworkManager-1.4.2.sha256sum
--sha256 a864e347ddf6da8dabd40e0185b8c10a655d4a94b45cbaa2b3bb4b5e8360d204  NetworkManager-1.4.2.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.8/NetworkManager-1.8.0.sha256sum
-+sha256 fa5a5c6a36cdf95b12df34cc575bd61a74f297ede9be22cac4807a1aff3cf69e  NetworkManager-1.8.0.tar.xz
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 6adc9b1..1d17ec4 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -4,8 +4,8 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.2/postgresql-9.6.2.tar.bz2.sha256
+-sha256 0187b5184be1c09034e74e44761505e52357248451b0c854dddec6c231fe50c9  postgresql-9.6.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.3/postgresql-9.6.3.tar.bz2.sha256
++sha256 1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6  postgresql-9.6.3.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index e07afc9..62b41cb 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETWORK_MANAGER_VERSION_MAJOR = 1.4
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
-+NETWORK_MANAGER_VERSION_MAJOR = 1.8
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
-@@ -30,7 +30,8 @@ NETWORK_MANAGER_CONF_OPTS = \
- 	--with-crypto=gnutls \
- 	--with-iptables=/usr/sbin/iptables \
- 	--disable-ifupdown \
--	--disable-ifnet
-+	--disable-ifnet \
-+	--disable-concheck
- 
- ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
- NETWORK_MANAGER_DEPENDENCIES += newt
+-POSTGRESQL_VERSION = 9.6.2
++POSTGRESQL_VERSION = 9.6.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
 2.10.2
