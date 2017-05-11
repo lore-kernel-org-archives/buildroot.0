@@ -1,50 +1,56 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 11 May 2017 14:00:40 +0100
-Subject: [Buildroot] [PATCH] sudo: fix static linking with openldap having
-	openssl support
-Message-ID: <20170511130040.26036-1-Vincent.Riera@imgtec.com>
+Date: Thu, 11 May 2017 14:01:28 +0100
+Subject: [Buildroot] libqmi and modem-manager
+Message-ID: <30a337fc-837b-624c-06f0-3a8252b5693e@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If we are building sudo statically and openldap was linked with openssl,
-then when we link sudo with openldap we need to specify the openssl
-libs, otherwise it will fail with "undefined reference" errors.
+Hello Thomas and Matthew,
 
-Fixes:
-  http://autobuild.buildroot.net/results/ebb/ebbb4c3138b5023a0c8bd938db1932a25ba5b6fb/
-  http://autobuild.buildroot.net/results/58e/58ee4fddea85f0c79b26582b04a573258e27eb47/
-  http://autobuild.buildroot.net/results/051/05151c4ef7f0b3702a6cd5e6df4888d826a37431/
-  http://autobuild.buildroot.net/results/b1d/b1dfae81985daee106700191fcb82387833c2e3f/
-  http://autobuild.buildroot.net/results/5b4/5b42e8505856156389d480d0da19f6982cf120d8/
-  http://autobuild.buildroot.net/results/30a/30a76190428f902f03bcf54ba9f1f4f4377c6fc9/
-  http://autobuild.buildroot.net/results/e8c/e8c6bdc314b9a8d5de303633a3abd7b7e44beb2e/
-  http://autobuild.buildroot.net/results/483/4830c69cc6a62080e1516f0d9009c2ba619c23c1/
+this commit from Matthew broke libqmi compilation:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/sudo/sudo.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+https://git.busybox.net/buildroot/commit/?id=c78b65c4f161ec101ff02880788ef22eb7c87d76
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 0fcd740..56f83ea 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -40,6 +40,13 @@ endif
- ifeq ($(BR2_PACKAGE_OPENLDAP),y)
- SUDO_DEPENDENCIES += openldap
- SUDO_CONF_OPTS += --with-ldap
-+# If we are building sudo statically and openldap was linked with openssl, then
-+# when we link sudo with openldap we need to specify the openssl libs, otherwise
-+# it will fail with "undefined reference" errors.
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_OPENSSL),yy)
-+SUDO_DEPENDENCIES += host-pkgconf
-+SUDO_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
-+endif
- else
- SUDO_CONF_OPTS += --without-ldap
- endif
+Then this commit from Thomas fixed the former bogus commit and libqmi
+started to compile file again:
+
+https://git.busybox.net/buildroot/commit/?id=4d11848a21d4424a04e8428c4cd3bd5e972aacdf
+
+The problem is that now modem-manager with qmi support fails to compile
+with an error like this one:
+
+  CC       mm-modem-helpers-qmi.lo
+In file included from
+/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-message.h:39:0,
+                 from
+/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-device.h:34,
+                 from
+/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/libqmi-glib.h:32,
+                 from mm-modem-helpers-qmi.h:22,
+                 from mm-modem-helpers-qmi.c:16:
+/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-utils.h:37:15:
+error: static declaration of ?canonicalize_file_name? follows non-static
+declaration
+ static char * canonicalize_file_name(const char *path)
+
+If I revert both commits modem-manager with qmi support compiles just fine.
+
+Could you please have a look to that issue?
+
+This is the defconfig I'm using:
+
+BR2_mipsel=y
+BR2_mips_32r2=y
+# BR2_MIPS_SOFT_FLOAT is not set
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MODEM_MANAGER=y
+BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Thanks,
 -- 
-2.10.2
+Vincent
