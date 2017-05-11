@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 21:51:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/clamav: renumber patch
-In-Reply-To: <20170508175930.23584-1-bernd.kuhls@t-online.de>
-References: <20170508175930.23584-1-bernd.kuhls@t-online.de>
-Message-ID: <20170511215108.0f93eee0@free-electrons.com>
+Date: Thu, 11 May 2017 21:51:24 +0200
+Subject: [Buildroot] [git commit] lua: use target LDFLAGS
+Message-ID: <20170511195349.4F56B8212D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e48c824309641c9eec41ee3dd7292a579888965
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  8 May 2017 19:59:30 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../clamav/{0003-backtrace-uClibc.patch => 0002-backtrace-uClibc.patch}   | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename package/clamav/{0003-backtrace-uClibc.patch => 0002-backtrace-uClibc.patch} (100%)
+This adds '-static' to the link command when BR2_STATIC_LIBS=y, making the lua
+binary really static.
 
-Applied to master, thanks.
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lua/lua.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 5ef61e0..bc0a9d4 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -70,6 +70,7 @@ define LUA_BUILD_CMDS
+ 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
+ 	CFLAGS="$(TARGET_CFLAGS) $(LUA_CFLAGS)" \
+ 	MYLIBS="$(LUA_MYLIBS)" AR="$(TARGET_CROSS)ar rcu" \
++	MYLDFLAGS="$(TARGET_LDFLAGS)" \
+ 	BUILDMODE=$(LUA_BUILDMODE) \
+ 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
+ endef
