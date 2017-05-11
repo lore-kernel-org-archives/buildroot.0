@@ -1,62 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 09:37:50 +0200
-Subject: [Buildroot] [PATCH] radvd: fix build with 4.11 kernel headers
-Message-ID: <1494488270-10121-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 May 2017 09:48:02 +0200
+Subject: [Buildroot] [PATCH] efibootmgr: backport upstream patch to fix
+	build with gcc 6.x
+Message-ID: <1494488882-32282-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the introduction of 4.11 kernel headers in Buildroot, radvd has
-failed to build with all toolchains using this kernel header version.
+efibootmgr was built with -fshort-wchar, which causes gcc to use
+2-byte wchar_t instead of the normal 4-byte wchar_t. But this doesn't
+work anymore with gcc 6.x, as it causes a build failure:
 
-The issue comes from the fact that radvd includes both <net/if_arp.h>
-and <linux/if_arp.h> if they are available. Until 4.11,
-<linux/if_arp.h> was in fact not included, because the
-AC_CHECK_HEADERS() test concluded this header was unsuitable. This has
-been fixed in the upstream kernel by commit
-2618be7dccf8739b89e1906b64bd8d551af351e6 ("uapi: fix linux/if.h
-userspace compilation errors"). So now, the radvd configure script
-considers both <net/if_arp.h> and <linux/if_arp.h> as suitable
-headers, and includes both of them, leading to the duplicate
-definition of various types.
+/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efibootmgr.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
+/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efi.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
+/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: unparse_path.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
 
-Since it's redundant to include both <net/if_arp.h> and
-<linux/if_arp.h>, we simply force radvd to believe that
-<linux/if_arp.h> is not available by passing the appropriate autoconf
-cache variable. This gets us back to the previous situation, where
-<linux/if_arp.h> was never used.
+Upstream solution was do simply drop -fshort-wchar:
 
-This has been tested with a uClibc toolchain using 4.11 kernel
-headers, and verified to work on glibc and musl with older kernel
-headers as well.
+  https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f
+
+So this commit simply backports this upstream patch.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/949a75d96299394e4ac957746fa23a4b52f31b43/
+  http://autobuild.buildroot.net/results/87c3ff2427331eb9ab31c9eb685fe80954a0a98f/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/radvd/radvd.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/efibootmgr/efibootmgr.hash | 1 +
+ package/efibootmgr/efibootmgr.mk   | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 64f755d..8822187 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -8,7 +8,11 @@ RADVD_VERSION = 2.12
- RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
--RADVD_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+# We need to ignore <linux/if_arp.h>, because radvd already includes
-+# <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
-+RADVD_CONF_ENV = \
-+	ac_cv_prog_cc_c99='-std=gnu99' \
-+	ac_cv_header_linux_if_arp_h=no
- # For 0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
- RADVD_AUTORECONF = YES
- RADVD_LICENSE = BSD-4-Clause-like
+diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
+index f71dced..3f934ba 100644
+--- a/package/efibootmgr/efibootmgr.hash
++++ b/package/efibootmgr/efibootmgr.hash
+@@ -1,2 +1,3 @@
+ # locally computed hash
+ sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
++sha256 8e91f16927d296ffebd4f7fafda2f84c0f6201aba089a35e8090abd5aacdc58e	3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
+diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
+index 094dd28..a946d5f 100644
+--- a/package/efibootmgr/efibootmgr.mk
++++ b/package/efibootmgr/efibootmgr.mk
+@@ -6,6 +6,9 @@
+ 
+ EFIBOOTMGR_VERSION = 14
+ EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
++# Patch fixes the build with gcc 6.x.
++EFIBOOTMGR_PATCH = \
++	https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
+ EFIBOOTMGR_LICENSE = GPL-2.0+
+ EFIBOOTMGR_LICENSE_FILES = COPYING
+ EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
 -- 
 2.7.4
