@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 22:33:07 +0200
-Subject: [Buildroot] [PATCH] package/libloki: new package
-In-Reply-To: <20170506140707.12931-1-romain.naour@gmail.com>
-References: <20170506140707.12931-1-romain.naour@gmail.com>
-Message-ID: <20170511223307.157be03a@free-electrons.com>
+Date: Thu, 11 May 2017 22:49:40 +0200
+Subject: [Buildroot] [git commit] package/opencv3: fix build for x86_64
+	target
+Message-ID: <20170511204957.3BC3B8285F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=86666f3a21a2380e19b5f0de90b6b6329ce3de53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  6 May 2017 16:07:07 +0200, Romain Naour wrote:
+This change backports a fix from upstream fixing missing symbols due to
+wrong compiler optimization flags.
 
-> +# install to TARGET_DIR only the shared library
-> +ifeq ($(BR2_STATIC_LIBS),)
-> +define LIBLOKI_INSTALL_STAGING_SHARED_LIB
-> +	$(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) $(LIBLOKI_INSTALL_TARGETS)
-> +endef
-> +endif
-> +
-> +define LIBLOKI_INSTALL_TARGET_CMDS
-> +	$(LIBLOKI_INSTALL_STAGING_SHARED_LIB)
-> +endef
+On Buildroot side, also remove deprecated options passed on the
+configure command.
 
-This was a bit unnecessarily complicated, calling:
+Fixes:
+  http://autobuild.buildroot.net/results/af950c6172a578c4eeeb9440b6990ceb48263fa6/
+  http://autobuild.buildroot.net/results/e8832302cd4f30cec076f67965f6aacbaca5b955/
 
-	$(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) $(LIBLOKI_INSTALL_TARGETS)
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-cmake-support-multiple-CPU-targets.patch  | 2499 ++++++++++++++++++++
+ package/opencv3/opencv3.mk                         |   16 +-
+ 2 files changed, 2500 insertions(+), 15 deletions(-)
 
-unconditionally is just fine. Yes for static libraries, it means they
-will be installed in $(TARGET_DIR), but they are anyway removed in the
-target-finalize step. So in such situations, I do prefer to keep a
-simple .mk file.
-
-Committed to next with this fixed. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Patch is too large, so refusing to show it
