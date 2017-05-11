@@ -1,88 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 11 May 2017 14:22:11 +0300
-Subject: [Buildroot] [PATCH] strongswan: fix crypt() redefinition
-Message-ID: <8087559eb746cd7594ec07431a2c6794678f0905.1494501731.git.baruch@tkos.co.il>
+From: ren_guo <ren_guo@c-sky.com>
+Date: Thu, 11 May 2017 19:33:14 +0800
+Subject: [Buildroot] Buildroot defconfig failures
+In-Reply-To: <2a49a86b-da86-6e7e-df4d-bf857d3ee66c@mind.be>
+References: <20170507145548.336e29ad@free-electrons.com>
+ <df95a70f-0e89-750f-1702-25998944fc3a@c-sky.com>
+ <20170508142023.6b95ccf7@free-electrons.com>
+ <bcb5bdd6-08a2-4782-70f4-0a4db45c41ab@c-sky.com>
+ <2a49a86b-da86-6e7e-df4d-bf857d3ee66c@mind.be>
+Message-ID: <6ac5b223-e348-7c0d-4ca0-2f4c4c1e6a1d@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch from upstream pending pull request (#72) to fix crypt() definition
-conflict.
+Dear Arnout,
 
-Fixes:
-http://autobuild.buildroot.net/results/612/6120add5ad6e7f5d575fc2a2442cd7fe5302eb46/
-http://autobuild.buildroot.net/results/ba1/ba1298e71ef28857654ae8d4593d09e4fe8cdda0/
-http://autobuild.buildroot.net/results/6b9/6b928e2a6a35bfb21c792fca083bc4cbdaef9304/
+>   You can just create a gitlab account, fork the official gitlab buildroot
+> repository, modify .gitlab-ci.yml and push it. The you use the real gitlab
+> server for you debugging.
+>
+>   You can do this on a branch that you delete later to "forget" about this
+> debugging run.
 
-Cc: J?r?me Pouiller <jezz@sysmic.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...0001-af_alg-fix-crypt-definition-conflict.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/strongswan/0001-af_alg-fix-crypt-definition-conflict.patch
+1. The problem is lose "libelf1" package, csky-linux-gcc will failed like this:
 
-diff --git a/package/strongswan/0001-af_alg-fix-crypt-definition-conflict.patch b/package/strongswan/0001-af_alg-fix-crypt-definition-conflict.patch
-new file mode 100644
-index 000000000000..442e53eb9eeb
---- /dev/null
-+++ b/package/strongswan/0001-af_alg-fix-crypt-definition-conflict.patch
-@@ -0,0 +1,55 @@
-+From 0b906cb025a506be1b73e5b485179585d1a90be2 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 11 May 2017 14:04:47 +0300
-+Subject: [PATCH] af_alg: fix crypt() definition conflict
-+
-+Rename the crypt() method to avoid conflict with POSIX crypt(). Fixes the
-+following build failure with musl libc:
-+
-+In file included from ../../../../src/libstrongswan/utils/utils.h:53:0,
-+                 from ../../../../src/libstrongswan/library.h:101,
-+                 from af_alg_ops.h:24,
-+                 from af_alg_ops.c:16:
-+af_alg_ops.c:110:22: error: conflicting types for 'crypt'
-+ METHOD(af_alg_ops_t, crypt, bool,
-+                      ^
-+../../../../src/libstrongswan/utils/utils/object.h:99:13: note: in definition of macro 'METHOD'
-+  static ret name(union {iface *_public; this;} \
-+             ^
-+In file included from af_alg_ops.c:18:0:
-+.../host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/unistd.h:144:7: note: previous declaration of 'crypt' was here
-+ char *crypt(const char *, const char *);
-+       ^
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/strongswan/strongswan/pull/72
-+
-+ src/libstrongswan/plugins/af_alg/af_alg_ops.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/libstrongswan/plugins/af_alg/af_alg_ops.c b/src/libstrongswan/plugins/af_alg/af_alg_ops.c
-+index 331d1e8010aa..452cd1ac30c9 100644
-+--- a/src/libstrongswan/plugins/af_alg/af_alg_ops.c
-++++ b/src/libstrongswan/plugins/af_alg/af_alg_ops.c
-+@@ -107,7 +107,7 @@ METHOD(af_alg_ops_t, hash, bool,
-+ 	return TRUE;
-+ }
-+ 
-+-METHOD(af_alg_ops_t, crypt, bool,
-++METHOD(af_alg_ops_t, crypt_, bool,
-+ 	private_af_alg_ops_t *this, u_int32_t type, chunk_t iv, chunk_t data,
-+ 	char *out)
-+ {
-+@@ -224,7 +224,7 @@ af_alg_ops_t *af_alg_ops_create(char *type, char *alg)
-+ 		.public = {
-+ 			.hash = _hash,
-+ 			.reset = _reset,
-+-			.crypt = _crypt,
-++			.crypt = _crypt_,
-+ 			.set_key = _set_key,
-+ 			.destroy = _destroy,
-+ 		},
-+-- 
-+2.11.0
-+
+|$ echo 'void main(){}' | ./bin/csky-linux-gcc -fstack-protector -x c - 
+-o hello && echo y 
+/builds/guoren83/buildroot/bin/../libexec/gcc/csky-linux/4.5.1/cc1: 
+error while loading shared libraries: libelf.so.1: cannot open shared 
+object file: No such file or directory test failed log: 
+https://gitlab.com/guoren83/buildroot/builds/16073656 2. I add libelf1 
+in .gitlab-ci.yml, see below 
+https://gitlab.com/guoren83/buildroot/commit/8e718d6ac2d49900042861652cac585c2cb063c7 
+Test is OK :) https://gitlab.com/guoren83/buildroot/builds/16074189 Best 
+Regards |
+
 -- 
-2.11.0
+Guo Ren, Software Engineer, C-SKY
+3 XiDoumen Rd,BldgA,15F,Hangzhou,China
+P.C: 310012
+http://www.c-sky.com
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170511/b593779b/attachment.html>
