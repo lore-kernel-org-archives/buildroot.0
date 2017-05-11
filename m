@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 22:51:47 +0200
-Subject: [Buildroot] Altera SoC Buildroot external toolchain
- incompatible error
-In-Reply-To: <1494533969065-164751.post@n4.nabble.com>
-References: <1494532269551-164744.post@n4.nabble.com>
- <20170511221419.1e5e9baf@free-electrons.com>
- <1494533969065-164751.post@n4.nabble.com>
-Message-ID: <20170511225147.7466e9ff@free-electrons.com>
+Date: Thu, 11 May 2017 22:51:59 +0200
+Subject: [Buildroot] [PATCH] package/opencv3: fix build for x86_64 target
+In-Reply-To: <20170504215333.4172-1-s.martin49@gmail.com>
+References: <20170504215333.4172-1-s.martin49@gmail.com>
+Message-ID: <20170511225159.00ddcb69@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 May 2017 13:19:29 -0700 (PDT), lemonoje wrote:
-
-> Wow - thanks for the quick reply.  I am using the make ... ...  nconfig menu
-> utility.  Under Target EABI--->, I had no option for EABIhf, but now I just
-> selected *"Enable VFP extension support"* which then gives me the Target
-> ABI--->EABIhf.  I should have my C library as glibc, correct?  
-
-It depends what your toolchain is.
-
-> >>> toolchain-external  Installing to staging directory  
-> /usr/bin/install -D -m 0755
-> /sf/ArriaX/ltsi_4_1_33/buildroot/output/build/toolchain-external/toolchain-wrapper
-> /sf/ArriaX/ltsi_4_1_33/buildroot/output/host/usr/bin/toolchain-wrapper
-> ln: failed to create symbolic link
-> ?/sf/ArriaX/ltsi_4_1_33/buildroot/output/host/usr/ARM-buildroot-linux-gnueabihf/sysroot/usr/lib?:
-> No such file or directory
-> package/pkg-generic.mk:255: recipe for target
-> '/sf/ArriaX/ltsi_4_1_33/buildroot/output/build/toolchain-external/.stamp_staging_installed'
-> failed
+On Thu,  4 May 2017 23:53:33 +0200, Samuel Martin wrote:
+> This change backports a fix from upstream fixing missing symbols due to
+> wrong compiler optimization flags.
 > 
-> I do not have the 'usr' path under  ^^^ path/sysroot
+> On Buildroot side, also remove deprecated options passed on the
+> configure command.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/af9/af950c6172a578c4eeeb9440b6990ceb48263fa6/build-end.log
+>   http://autobuild.buildroot.net/results/e88/e8832302cd4f30cec076f67965f6aacbaca5b955/build-end.log
+> 
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  .../0001-cmake-support-multiple-CPU-targets.patch  | 2501 ++++++++++++++++++++
+>  package/opencv3/opencv3.mk                         |   16 +-
+>  2 files changed, 2502 insertions(+), 15 deletions(-)
+>  create mode 100644 package/opencv3/0001-cmake-support-multiple-CPU-targets.patch
 
-Is your external toolchain available somewhere so that I can try to
-reproduce?
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
