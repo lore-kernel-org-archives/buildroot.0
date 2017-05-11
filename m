@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 21:21:05 +0200
-Subject: [Buildroot] [PATCH] strongswan: fix crypt() redefinition
-In-Reply-To: <8087559eb746cd7594ec07431a2c6794678f0905.1494501731.git.baruch@tkos.co.il>
-References: <8087559eb746cd7594ec07431a2c6794678f0905.1494501731.git.baruch@tkos.co.il>
-Message-ID: <20170511212105.0b3b0b67@free-electrons.com>
+Date: Thu, 11 May 2017 21:38:30 +0200
+Subject: [Buildroot] [PATCH] boost: disable locale and regex modules if
+ static build and icu are enabled
+In-Reply-To: <1494408354-20297-1-git-send-email-yegorslists@googlemail.com>
+References: <1494408354-20297-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20170511213830.252bddbb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +13,52 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 May 2017 14:22:11 +0300, Baruch Siach wrote:
-> Add patch from upstream pending pull request (#72) to fix crypt() definition
-> conflict.
+On Wed, 10 May 2017 11:25:54 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/612/6120add5ad6e7f5d575fc2a2442cd7fe5302eb46/
-> http://autobuild.buildroot.net/results/ba1/ba1298e71ef28857654ae8d4593d09e4fe8cdda0/
-> http://autobuild.buildroot.net/results/6b9/6b928e2a6a35bfb21c792fca083bc4cbdaef9304/
+> Boost build system doesn't support ICU static only building [1], so
+> so disable locale and regex modules for this case.
 > 
-> Cc: J?r?me Pouiller <jezz@sysmic.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...0001-af_alg-fix-crypt-definition-conflict.patch | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/strongswan/0001-af_alg-fix-crypt-definition-conflict.patch
+> [1] http://boost.2283326.n4.nabble.com/bjam-Building-Regex-with-static-runtime-linking-td2588874.html
 
-Applied to master, thanks.
+This thread doesn't really say it doesn't support ICU static linking. I
+found https://svn.boost.org/trac/boost/ticket/9685 to be somewhat more
+informative.
+
+>  config BR2_PACKAGE_BOOST_LOCALE
+>  	bool "boost-locale"
+> +	# Boost build system doesn't support ICU static only building
+> +	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
+>  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>  
+>  config BR2_PACKAGE_BOOST_LOG
+> @@ -134,6 +136,8 @@ config BR2_PACKAGE_BOOST_RANDOM
+>  
+>  config BR2_PACKAGE_BOOST_REGEX
+>  	bool "boost-regex"
+> +	# Boost build system doesn't support ICU static only building
+> +	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
+
+Is this the right way? Wouldn't it be better to do:
+
+ifeq ($(BR2_PACKAGE_ICU):$(BR2_STATIC_LIBS),y:)
+BOOST_FLAGS += --with-icu=$(STAGING_DIR)/usr
+BOOST_DEPENDENCIES += icu
+else
+BOOST_FLAGS += --without-icu
+endif
+
+My understanding is that it's not Boost::Locale and Boost::Regex that
+have a problem, but the fact of using ICU in a static linking
+situation. If that's the case, then I believe tweaking the .mk file to
+not use ICU in static linking scenarios is probably better.
+
+What do you think? Could you test this?
+
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
