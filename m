@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 May 2017 23:23:56 +0200
-Subject: [Buildroot] [PATCH v4 1/2] cracklib: New package
-In-Reply-To: <20170505123527.29434-1-stefan.sorensen@spectralink.com>
+Date: Thu, 11 May 2017 23:24:02 +0200
+Subject: [Buildroot] [PATCH v4 2/2] libpwquality: New package
+In-Reply-To: <20170505123527.29434-2-stefan.sorensen@spectralink.com>
 References: <20170505123527.29434-1-stefan.sorensen@spectralink.com>
-Message-ID: <20170511232356.4e12aab0@free-electrons.com>
+ <20170505123527.29434-2-stefan.sorensen@spectralink.com>
+Message-ID: <20170511232402.66f06ff2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  5 May 2017 14:35:26 +0200, Stefan S?rensen wrote:
+On Fri,  5 May 2017 14:35:27 +0200, Stefan S?rensen wrote:
+> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+> ---
 
-> +ifeq ($(BR2_PACKAGE_CRACKLIB),y)
-> +LINUX_PAM_CONF_OPTS += --enable-cracklib
-> +LINUX_PAM_DEPENDENCIES += cracklib
-> +else
-> +LINUX_PAM_CONF_OPTS += --disable-cracklib
-> +endif
-
-This should have been in a separate patch, so I've split that into a
-separate commit.
-
-Other than that: applied to the next branch, thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
