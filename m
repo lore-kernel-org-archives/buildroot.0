@@ -1,59 +1,71 @@
-From: lemonoje <lemonoje@gmail.com>
-Date: Fri, 12 May 2017 07:45:42 -0700 (PDT)
-Subject: [Buildroot] Altera SoC Buildroot external toolchain
-	incompatible error
-In-Reply-To: <1494598560669-164820.post@n4.nabble.com>
-References: <1494532269551-164744.post@n4.nabble.com>
- <20170511221419.1e5e9baf@free-electrons.com>
- <1494533969065-164751.post@n4.nabble.com>
- <20170511225147.7466e9ff@free-electrons.com>
- <1494535599131-164758.post@n4.nabble.com>
- <20170511232316.693f8e6c@free-electrons.com>
- <1494594693346-164814.post@n4.nabble.com>
- <20170512155205.526ea00c@free-electrons.com>
- <1494598560669-164820.post@n4.nabble.com>
-Message-ID: <1494600342392-164824.post@n4.nabble.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 May 2017 17:40:39 +0200
+Subject: [Buildroot] [PATCH] support/scripts/apply-patches.sh: do not
+ apply patches with renames
+In-Reply-To: <1494584944-23924-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1494584944-23924-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170512154039.GA2955@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Okay, removing the entire BR directory, re-clone, and re-checkout fixed the
-error.  Previous failures must have mucked something up!  
-Now it builds for about 10 minutes and gets to compiling in valgrind
-(recommended by Rocketboards materials)  and that portion fails with:
+Thomas, All,
 
-*
-Toolchain wrapper executing:
-   
-'/sf/ArriaX/ltsi_4_1_33/gcc-linaro-6.2.1-2016.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc'
-    '--sysroot'
-   
-'/sf/ArriaX/ltsi_4_1_33/buildroot/output/host/usr/ARM-buildroot-linux-gnueabihf/sysroot'
-    '-mabi=aapcs-linux'
-    '-mfpu=neon'
-    '-marm'
-    '-mfloat-abi=hard'
-    '-mcpu=cortex-a9'
-    '--version'
-ok (6.2.1)
-checking build system type... x86_64-pc-linux-gnu
-checking host system type... Invalid configuration
-`ARM-buildroot-linux-gnueabihf': machine `ARM-buildroot' not recognized
-configure: error: /bin/sh ./config.sub ARM-buildroot-linux-gnueabihf failed
-package/pkg-generic.mk:206: recipe for target
-'/sf/ArriaX/ltsi_4_1_33/buildroot/output/build/valgrind-3.12.0/.stamp_configured'
-failed
-make: ***
-[/sf/ArriaX/ltsi_4_1_33/buildroot/output/build/valgrind-3.12.0/.stamp_configured]
-Error 1*
+On 2017-05-12 12:29 +0200, Thomas Petazzoni spake thusly:
+> Patches with renames apply properly with patch >= 2.7, but not with
+> older patch versions. Since "git format-patch" by default generates
+> patches with renames, Buildroot developers often don't realize that
+> their patches will not apply properly on build machines that have
+> patch < 2.7. In order to prevent such a situation from happening
+> again, this commit adds some logic in apply-patches.sh to refuse
+> applying patches that contain renames.
 
+Meh. path-2.7 was released 5 years ago. Oh well, let's be kind for those
+stuck with ancient entreprise-grade distros... ;-)
 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/scripts/apply-patches.sh | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 7ccb39d..6f40280c 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -113,6 +113,11 @@ function apply_patch {
+>          echo "  to be applied  : ${path}/${patch}"
+>          exit 1
+>      fi
+> +    if grep -q "^rename from" ${path}/${patch} -a
+> +       grep -q "^rename to" ${path}/${patch} ; then
 
+Oh-oh... Not good:  the '-a' will be passed as an option to grep; this
+is not a [...] construct.
 
+What you want instead is:
 
+    if grep -q "^rename from" ${path}/${patch} && \
+       grep -q "^rename to" ${path}/${patch} ; then
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Altera-SoC-Buildroot-external-toolchain-incompatible-error-tp164744p164824.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Regards,
+Yann E. MORIN.
+
+> +	echo "Error: patch contains some renames, not supported by old patch versions"
+> +	exit 1
+> +    fi
+>      echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+>      ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
+>      if [ $? != 0 ] ; then
+> -- 
+> 2.7.4
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
