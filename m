@@ -1,53 +1,61 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 12 May 2017 19:47:45 +0000
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.03-rc2
-Message-ID: <767d3192-fcf1-42e2-8eb5-ab6e0020e709@email.android.com>
+From: Mario Rugiero <mrugiero@gmail.com>
+Date: Fri, 12 May 2017 17:01:34 -0300
+Subject: [Buildroot] [PATCH v2] package: protobuf,
+ python-protobuf: bump to v3.3.0
+In-Reply-To: <CAKKQwLR2GHUqVVnTFrPgyF4y5=D0RO_LpEYW7H0xnmXqam=5yg@mail.gmail.com>
+References: <20170511230019.3f18b34a@free-electrons.com>
+ <20170512073503.601-1-mrugiero@gmail.com>
+ <20170512100757.3e865c73@free-electrons.com>
+ <CAKKQwLR2GHUqVVnTFrPgyF4y5=D0RO_LpEYW7H0xnmXqam=5yg@mail.gmail.com>
+Message-ID: <CAKKQwLRcN_jcUZz9NvzV4AB_dsf038M2a-0CLvRcW9HmTa9C0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+El may. 12, 2017 5:13, "Mario Rugiero" <mrugiero@gmail.com> escribi?:
 
-12 ??? 2017 ?. 20:15 ???????????? Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ???????:
-Hello,
-
-On Fri, 12 May 2017 21:31:04 +0300, Alexey Brodkin wrote:
-> This commit bumps ARC toolchain to arc-2017.03-rc2
+2017-05-12 5:07 GMT-03:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
 >
-> Please note that it is a release candidate and it might contain some
-> breakages, please don't use it for production builds.
+> On Fri, 12 May 2017 04:35:03 -0300, Mario J. Rugiero wrote:
+>> Includes upstream patch working around a gcc bug which got fixed in
+version 4.5.0.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef
+9728c20d54/
+>> http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e
+916c89f1e3/
+>> http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc
+75b33d484c/
+>>
+>> Tested with:
+>> qemu_aarch64_virt_defconfig
+>>
+>> Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
 >
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> OK, but you just changed the hash... why did the hash change in the
+> first place, between the original 3.3.0 and the new 3.3.0 version ?
+>
+> Did upstream re-upload a different tarball ? If that's the case, could
+> you tell upstream that this is really really bad ?
+>
+My guess is as good as yours. I have no relation with upstream, I'm just a
+user.
+I did report an issue with them, tho.
 
-What should we do in Buildroot master branch? We're currently using
-arc-2017.03-rc1, which is also a release candidate. We are planning on
-releasing Buildroot at the end of the month.
+Regards,
+Mario.
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
-Should we pick -rc2 instead of -rc1 for this release ? We normally
-don't upgrade components after Buildroot has released its -rc1, but I
-guess we could make an exception since a release candidate is used for
-ARC toolchain components.
-
-Well we plan to cut the final release in coming weeks but not sure if we do it before the end of the month :(
-
-Still this RC2 contains important fixes which we really want to have. Moreover some existing Buildroot failures could be cured by RC2 (still I need to verify all known issues).
-
-Anyways in Buildroot release we'd like to see either final release of Arc told or at least RC3 if it happens.
-
--Alexey
-
-
-Best regards,
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-https://urldefense.proofpoint.com/v2/url?u=http-3A__free-2Delectrons.com&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=dy177ajnNqVA4CYkWXphyVbEsZDTwuZVr71ricsNERI&s=LYifeyOCO5rqYczIcClowzhVZTS6BdGynVJdxRdTIKI&e=
-
+The maintainer reuploaded it. Just confirming.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170512/2284ce73/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170512/a1c7a746/attachment.html>
