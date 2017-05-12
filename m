@@ -1,64 +1,53 @@
-From: lemonoje <lemonoje@gmail.com>
-Date: Fri, 12 May 2017 06:11:33 -0700 (PDT)
-Subject: [Buildroot] Altera SoC Buildroot external toolchain
-	incompatible error
-In-Reply-To: <20170511232316.693f8e6c@free-electrons.com>
-References: <1494532269551-164744.post@n4.nabble.com>
- <20170511221419.1e5e9baf@free-electrons.com>
- <1494533969065-164751.post@n4.nabble.com>
- <20170511225147.7466e9ff@free-electrons.com>
- <1494535599131-164758.post@n4.nabble.com>
- <20170511232316.693f8e6c@free-electrons.com>
-Message-ID: <1494594693346-164814.post@n4.nabble.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Fri, 12 May 2017 06:44:50 -0700
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump to version
+	10.1.23
+In-Reply-To: <87efvzno6c.fsf@dell.be.48ers.dk>
+References: <20170508153716.16809-1-bluemrp9@gmail.com>
+ <87efvzno6c.fsf@dell.be.48ers.dk>
+Message-ID: <7f264a9b-c5cf-feaf-a8bf-929d112fb7f0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You have selected to download the toolchain whereas I already have it
-downloaded, so my config is not using the EXTERNAL_URL.  (Note the path is
-not set below as I pass that in when I build).  Here is my config that
-produces the error:
-
-BR2_ARCH="arm"
-BR2_GCC_TARGET_CPU="cortex-a9"
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_ARM_EABIHF=y
-BR2_TOOLCHAIN=y
-BR2_TOOLCHAIN_USES_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/loc"
-BR2_TOOLCHAIN_EXTERNAL_GLIBC=y
-BR2_PACKAGE_HAS_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL="toolchain-external-custom"
-BR2_TOOLCHAIN_EXTERNAL_PREFIX="arm-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS=""
-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+Peter, All,
 
 
-But now I see once I choose to enable VFP, I can then choose Target
-ABI=EABIhf.  And then the Linaro custom toolchain option (2016.11) appears
-in the Toolchain External Options.  That would then mean I have to already
-have 2016.11 installed and use BR2_TOOLCHAIN_EXTERNAL_PATH to tell BR where
-it's at, right?
-
-So, the external Linaro toolchains you can select differ between versions of
-Buildroot.  Is there a listing of which ones support which toolchains?
-
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Altera-SoC-Buildroot-external-toolchain-incompatible-error-tp164744p164814.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+On 5/8/2017 12:28 PM, Peter Korsgaard wrote:
+>>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+>   > Fixes:
+>   > CVE-2017-3302 - Crash in libmysqlclient.so in Oracle MySQL before 5.6.21 and
+>   > 5.7.x before 5.7.5 and MariaDB through 5.5.54, 10.0.x through 10.0.29,
+>   > 10.1.x through 10.1.21, and 10.2.x through 10.2.3.
+>
+> [snip]
+>
+>   > -MARIADB_VERSION = 10.1.22
+>   > +MARIADB_VERSION = 10.1.23
+>   >  MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+>   >  MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL
+>   > client library), LGPL-2.0 (LGPL client library)
+>   >  MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
+>
+> Thanks, I (obviously) want to apply this, but something odd is going on
+> with the licensing. COPYING.LESSER has been removed by this commit:
+>
+> https://github.com/MariaDB/server/commit/577915def8
+>
+> But the client library IS listed as being LGPL:
+>
+> https://mariadb.com/kb/en/mariadb/mariadb-connector-c/
+>
+> And same for the "old" one:
+>
+> https://mariadb.com/kb/en/mariadb/lgpl-mysql-client-library-32358/
+>
+> Grepping around in the 10.1.23 tarball, I don't see a lot of references
+> to Lesser og LGPL.
+>
+> Now, I know next to nothing about mariadb. Do you have any idea what is
+> going on here?
+>
+I am really not sure what is going on there.
