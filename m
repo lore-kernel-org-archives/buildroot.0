@@ -1,9 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 12 May 2017 13:45:18 +0100
-Subject: [Buildroot] [PATCH next 5/8] php-imagick: bump version to 3.4.3
-In-Reply-To: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
-References: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170512124521.4619-5-Vincent.Riera@imgtec.com>
+Date: Fri, 12 May 2017 13:45:14 +0100
+Subject: [Buildroot] [PATCH next 1/8] php: bump version to 7.1.5
+Message-ID: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/php-imagick/php-imagick.hash | 2 +-
- package/php-imagick/php-imagick.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
-index e991237..abb29d4 100644
---- a/package/php-imagick/php-imagick.hash
-+++ b/package/php-imagick/php-imagick.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 35c5925..d34242f 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 50bbc46e78cd6e1ea5d7660be1722258e60b1729483ca14b02da7cf9f5ed3e6a  imagick-3.4.3RC1.tgz
-+sha256 1f3c5b5eeaa02800ad22f506cd100e8889a66b2ec937e192eaaa30d74562567c  imagick-3.4.3.tgz
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index c8c2b85..9c47244 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
+ # From http://php.net/downloads.php
+-sha256 71514386adf3e963df087c2044a0b3747900b8b1fc8da3a99f0a0ae9180d300b  php-7.1.4.tar.xz
++sha256 d149a3c396c45611f5dc6bf14be190f464897145a76a8e5851cf18ff7094f6ac  php-7.1.5.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 46f57e4..cfc6789 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_IMAGICK_VERSION = 3.4.3RC1
-+PHP_IMAGICK_VERSION = 3.4.3
- PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
- PHP_IMAGICK_SITE = http://pecl.php.net/get
- PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_VERSION = 7.1.4
++PHP_VERSION = 7.1.5
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.10.2
