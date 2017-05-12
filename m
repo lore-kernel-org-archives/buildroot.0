@@ -1,41 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 May 2017 21:15:09 +0200
-Subject: [Buildroot] [PATCH] package/odroid-scripts: relax dependencies to
-	include armeb
-Message-ID: <20170512191509.25736-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 May 2017 21:15:35 +0200
+Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.03-rc2
+In-Reply-To: <20170512183104.37886-1-abrodkin@synopsys.com>
+References: <20170512183104.37886-1-abrodkin@synopsys.com>
+Message-ID: <20170512211535.555af2a5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-odroid-scripts are just scripts, so they should also work on a armeb
-board.
+Hello,
 
-Besides, odroid-mali selects it, but it only depends on arm-eabihf,
-which means armeb is not ruled out.
+On Fri, 12 May 2017 21:31:04 +0300, Alexey Brodkin wrote:
+> This commit bumps ARC toolchain to arc-2017.03-rc2
+> 
+> Please note that it is a release candidate and it might contain some
+> breakages, please don't use it for production builds.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Fixes unmet dependencies (with BR2_armeb=y):
-    warning: (BR2_PACKAGE_ODROID_MALI) selects BR2_PACKAGE_ODROID_SCRIPTS
-    which has unmet direct dependencies(BR2_aarch64 || BR2_arm)
+What should we do in Buildroot master branch? We're currently using
+arc-2017.03-rc1, which is also a release candidate. We are planning on
+releasing Buildroot at the end of the month.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Dagg Stompler <daggs@gmx.com>
----
- package/odroid-scripts/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Should we pick -rc2 instead of -rc1 for this release ? We normally
+don't upgrade components after Buildroot has released its -rc1, but I
+guess we could make an exception since a release candidate is used for
+ARC toolchain components.
 
-diff --git a/package/odroid-scripts/Config.in b/package/odroid-scripts/Config.in
-index c4e09cad72..c07c3a4c09 100644
---- a/package/odroid-scripts/Config.in
-+++ b/package/odroid-scripts/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_ODROID_SCRIPTS
- 	bool "odroid-scripts"
--	depends on BR2_aarch64 || BR2_arm
-+	depends on BR2_aarch64 || BR2_arm || BR2_armeb
- 	select BR2_PACKAGE_FBSET # runtime
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # needed for fbset
- 	help
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
