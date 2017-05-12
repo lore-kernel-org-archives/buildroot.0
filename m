@@ -1,195 +1,59 @@
-From: Mario J. Rugiero <mrugiero@gmail.com>
-Date: Fri, 12 May 2017 19:15:46 -0300
-Subject: [Buildroot] [PATCH] package: libcgi: set upstream to
-	https://github.com/rafaelsteil/libcgi
-Message-ID: <20170512221546.20280-1-mrugiero@gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 12 May 2017 23:40:20 +0000
+Subject: [Buildroot] libfakeroot problem - solved
+In-Reply-To: <f672b599-946e-6bdc-236a-7508df02dc30@ou.edu>
+References: <f672b599-946e-6bdc-236a-7508df02dc30@ou.edu>
+Message-ID: <188f3de7-0bdc-4bda-0499-6127018e05c0@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, bump to version 1.1 and cleanup. The patch is no longer needed.
+On 05/12/2017 05:06 PM, Steve Kenton wrote:
 
-Tested with:
-nitrogen6sx_defconfig
+> I've got an embedded project I would like to update from 2016.05 to 
+> 2017.05 so I pulled the latest snapshot late last night.
+> The 64-bit build always gets an error with libfakeroot. Is this a 
+> known issue? I just resubscribed, but I did not see anything obvious 
+> in the archives.
+>
+> My development box runs Ubuntu and to make testing easier I try to use 
+> a compatible kernel/headers, hence the 4.4
+>
+> hdi at hdi-H110N:~/updatetest/buildroot-2017.05$ uname -a
+> Linux hdi-H110N 4.4.0-72-generic #93~14.04.1-Ubuntu SMP Fri Mar 31 
+> 15:05:15 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+>
+> Here is what I have for a stripped down defconfig after "make 
+> savedefconfig"
+>
+> hdi at hdi-H110N:~/updatetest/buildroot-2017.05$ more defconfig
+> BR2_x86_64=y
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_KERNEL_HEADERS_4_4=y
+>
+> Here are the last few lines after "make olddefconfig; make"
+>
+> ERROR: ld.so: object 'libfakeroot.so' from LD_PRELOAD cannot be 
+> preloaded (cannot open shared object file): ignored.
+> /usr/bin/install -m 0644 support/misc/target-dir-warning.txt 
+> /home/hdi/updatetest/buildroot-2017.05/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+>
+OK, I found it. It was leakage from the build host. Testing something 
+for the embedded system I had run getcap to give /bin/tar some 
+capabilities and did not remove them afterwards. Somehow that interacted 
+badly with libfakeroot and the creation of output/images/rootfs.tar at 
+the end of the build. The reason I did not see it on the 32-bit builds 
+is that being intended for recovery and reinstall they used initramfs 
+linked into the kernel for the rootfs instead of the  rootfs.tar file. 
+When the libfakeroot issue manifested, root did not own the root 
+filesystem files in rootfs.tar when it was expanded with "sudo tar xf  
+rootfs.tar ....." Which resulted in a system which was bootable but 
+would not run properly because of the file ownership/permission problems.
 
-Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
----
- package/libcgi/0001-misc-fixes.patch | 122 -----------------------------------
- package/libcgi/Config.in             |   2 +-
- package/libcgi/libcgi.hash           |   4 +-
- package/libcgi/libcgi.mk             |  10 ++-
- 4 files changed, 7 insertions(+), 131 deletions(-)
- delete mode 100644 package/libcgi/0001-misc-fixes.patch
+This was clearly a self inflicted problem, but the fact that tar is not 
+included in the output/host/* tools and thus the build system /bin/tar 
+was used certainly make it "interesting" to find.
 
-diff --git a/package/libcgi/0001-misc-fixes.patch b/package/libcgi/0001-misc-fixes.patch
-deleted file mode 100644
-index b57617854..000000000
---- a/package/libcgi/0001-misc-fixes.patch
-+++ /dev/null
-@@ -1,122 +0,0 @@
--Index: b/src/cgi.c
--===================================================================
----- a/src/cgi.c
--+++ b/src/cgi.c
--@@ -336,7 +336,7 @@
-- 	hextable['b'] = 11;
-- 	hextable['c'] = 12;
-- 	hextable['d'] = 13;
---	hextable['e'] = 13;
--+	hextable['e'] = 14;
-- 	hextable['f'] = 15;
-- 	hextable['A'] = 10;
-- 	hextable['B'] = 11;
--Index: b/src/string.c
--===================================================================
----- a/src/string.c
--+++ b/src/string.c
--@@ -584,7 +584,7 @@
-- 
-- 	va_start(ptr, s);
-- 
---	va_copy(bkp, str);
--+	va_copy(bkp, ptr);
-- 	len = strlen(s);
-- 
-- 	while (*str) {
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -5,22 +5,32 @@
-- prefix = @prefix@
-- exec_prefix = @exec_prefix@
-- 
---SHAREDOPT = -shared
--+SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
-- LIBDIR = $(prefix)/lib
---INCDIR = $(prefix)/include
--+INCDIR = $(prefix)/include/libcgi/
-- MANDIR	= $(prefix)/man/man3
-- SHELL = /bin/sh
-- EXTRA_LIBS = 
-- 
-- INCS =  -Isrc
---FLAGS = -Wall -fpic
--+FLAGS = -Wall -D_REENTRANT
-- 
-- OBJS = src/error.o src/cgi.o src/session.o src/base64.o src/md5.o \
-- 	src/string.o src/general.o src/list.o src/cookie.o
--+SHOBJS=$(OBJS:.o=.sh.o)
-- 
---.c.o: $(CC) $(FLAGS) -c $<
--+ALL_TARGETS = src/libcgi.a
--+ifeq ($(STATIC),)
--+ALL_TARGETS += src/libcgi.so
--+endif
-- 
---all: $(OBJS) src/libcgi.so
--+%.o: %.c
--+	$(CC) $(FLAGS) -c $*.c -o $@
--+
--+%.sh.o: %.c
--+	$(CC) $(FLAGS) -fPIC -c $*.c -o $@
--+
--+all: $(ALL_TARGETS)
-- 
-- 	@echo ""
-- 	@echo ""
--@@ -48,14 +58,17 @@
-- src/libcgi.a: $(OBJS)
-- 	$(AR) rc src/libcgi.a $(OBJS)
-- 
---src/libcgi.so: src/libcgi.a
---	$(CC) $(SHAREDOPT) -o src/libcgi.so $(OBJS) $(EXTRA_LIBS)
--+src/libcgi.so: $(SHOBJS)
--+	$(CC) $(SHAREDOPT) -o src/libcgi.so $(SHOBJS) $(EXTRA_LIBS)
-- 
-- install:
---	cp src/libcgi.a $(LIBDIR)
---	cp src/libcgi.so $(LIBDIR)
---	cp src/cgi.h $(INCDIR)
---	cp src/session.h $(INCDIR)
--+	cp src/libcgi.a $(DESTDIR)/$(LIBDIR)
--+ifeq ($(STATIC),)
--+	cp src/libcgi.so $(DESTDIR)/$(LIBDIR)
--+endif
--+	[ -d $(DESTDIR)/$(INCDIR) ] || mkdir -p $(DESTDIR)/$(INCDIR)
--+	cp src/cgi.h $(DESTDIR)/$(INCDIR)
--+	cp src/session.h $(DESTDIR)/$(INCDIR)
-- 
-- 
-- src/error.o: src/error.c src/error.h
--@@ -69,8 +82,9 @@
-- src/list.o: src/list.c
-- 
-- clean:
---	find src/ -name *.*o -exec rm -f {} \;
--+	find src/ -name *.o -exec rm -f {} \;
-- 	find src/ -name *.a -exec rm -f {} \;
--+	find src/ -name *.so -exec rm -f {} \;
-- 
-- uninstall: clean
-- 	rm -f $(LIBDIR)/libcgi.*
--@@ -78,11 +92,11 @@
-- 	rm -f $(INCDIR)/session.h
-- 	rm -f $(MANDIR)/libcgi*
-- 
---install_man:
---	cp doc/man/man3/libcgi_base64.3 $(MANDIR)
---	cp doc/man/man3/libcgi_cgi.3 $(MANDIR)
---	cp doc/man/man3/libcgi_general.3 $(MANDIR)
---	cp doc/man/man3/libcgi_string.3 $(MANDIR)
---	cp doc/man/man3/libcgi_session.3 $(MANDIR)
---	cp doc/man/man3/libcgi_cookie.3 $(MANDIR)
--+#install_man:
--+#	cp doc/man/man3/libcgi_base64.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_cgi.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_general.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_string.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_session.3 $(MANDIR)
--+#	cp doc/man/man3/libcgi_cookie.3 $(MANDIR)
-- 
-diff --git a/package/libcgi/Config.in b/package/libcgi/Config.in
-index 430039e55..7a60c60d7 100644
---- a/package/libcgi/Config.in
-+++ b/package/libcgi/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBCGI
- 	  session and cookie support, GET and POST methods manipulation
- 	  etc..., to help you to quickly write powerful CGI programs.
- 
--	  http://libcgi.sourceforge.net/
-+	  https://github.com/rafaelsteil/libcgi
-diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
-index 6bd7c0c3d..097340811 100644
---- a/package/libcgi/libcgi.hash
-+++ b/package/libcgi/libcgi.hash
-@@ -1,2 +1,2 @@
--# Locally computed:
--sha256  861df39cc0195d43419c4c3de8dff4f42478db66c9ba0b0c1e994c99400e130c  libcgi-1.0.tar.gz
-+# Upstream computed
-+sha256 128445f2f828e84905d51bd53d11e2e08c489df3a07225ff9f198c1318092fe6 libcgi-1.1.tar.gz
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index de2a1e4be..da6dc0d3e 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
- 
--LIBCGI_VERSION = 1.0
--LIBCGI_SITE = http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VERSION)
-+LIBCGI_VERSION = 1.1
-+LIBCGI_SOURCE = libcgi-$(LIBCGI_VERSION).tar.gz
-+LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
- LIBCGI_INSTALL_STAGING = YES
--# use cross CC/AR rather than host
--LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)" \
--	$(if $(BR2_STATIC_LIBS),STATIC=1)
- LIBCGI_LICENSE = LGPL-2.1+
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
--- 
-2.13.0
+Steve Kenton
