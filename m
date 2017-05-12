@@ -1,45 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 May 2017 11:20:54 +0200
-Subject: [Buildroot] [PATCH] package/opencv3: fix build for x86_64 target
-In-Reply-To: <20170504215333.4172-1-s.martin49@gmail.com>
-References: <20170504215333.4172-1-s.martin49@gmail.com>
-Message-ID: <20170512112054.447fb67a@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 12 May 2017 10:44:11 +0100
+Subject: [Buildroot] [PATCH next] libgtk3: bump version to 3.22.15
+Message-ID: <20170512094411.22656-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Thu,  4 May 2017 23:53:33 +0200, Samuel Martin wrote:
-> This change backports a fix from upstream fixing missing symbols due to
-> wrong compiler optimization flags.
-> 
-> On Buildroot side, also remove deprecated options passed on the
-> configure command.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/af9/af950c6172a578c4eeeb9440b6990ceb48263fa6/build-end.log
->   http://autobuild.buildroot.net/results/e88/e8832302cd4f30cec076f67965f6aacbaca5b955/build-end.log
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  .../0001-cmake-support-multiple-CPU-targets.patch  | 2501 ++++++++++++++++++++
->  package/opencv3/opencv3.mk                         |   16 +-
->  2 files changed, 2502 insertions(+), 15 deletions(-)
->  create mode 100644 package/opencv3/0001-cmake-support-multiple-CPU-targets.patch
-
-This patch does more harm than good: it breaks a lot of configurations.
-See http://autobuild.buildroot.net/?reason=opencv3-3.2.0.
-
-I'll revert later today unless a better fix is proposed.
-
-Thanks!
-
-Thomas
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index cbba7ca..0f259e9 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.14.sha256sum
+-sha256 d6120e4fd64e432b74a61e8abd972b1948cf54e4dc4f0e081c05ab625f087131  gtk+-3.22.14.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.15.sha256sum
++sha256 c8a012c2a99132629ab043f764a2b7cb6388483a015cd15c7a4288bec3590fdb  gtk+-3.22.15.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 7d8eecb..f3b1705 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).14
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.2
