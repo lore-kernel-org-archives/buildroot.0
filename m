@@ -1,37 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 May 2017 21:19:10 +0200
-Subject: [Buildroot] Problems building iotop
-In-Reply-To: <CA+12NBL_ABjQZETEs4xUVZf8kcCW4+Qm1KEafXxbZi7o1VzK1g@mail.gmail.com>
-References: <CA+12NB+dzKMw2x=mBESq+Ti0COMiQmbHTiRaO=E35xOZch+4gw@mail.gmail.com>
- <20170511174933.28030e0a@free-electrons.com>
- <CA+12NBKcGynVqiynZvETmSQEdLr138tM9s8n32RpwDgE1w7ABg@mail.gmail.com>
- <20170512161308.1881fcb5@free-electrons.com>
- <CA+12NBL_ABjQZETEs4xUVZf8kcCW4+Qm1KEafXxbZi7o1VzK1g@mail.gmail.com>
-Message-ID: <20170512211910.4919fb79@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 12 May 2017 19:47:45 +0000
+Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.03-rc2
+Message-ID: <767d3192-fcf1-42e2-8eb5-ab6e0020e709@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
+
+12 ??? 2017 ?. 20:15 ???????????? Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ???????:
 Hello,
 
-On Fri, 12 May 2017 13:31:57 -0400, Linux User wrote:
+On Fri, 12 May 2017 21:31:04 +0300, Alexey Brodkin wrote:
+> This commit bumps ARC toolchain to arc-2017.03-rc2
+>
+> Please note that it is a release candidate and it might contain some
+> breakages, please don't use it for production builds.
+>
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> I do understand that. But for 1 package, I dont want to upgrade to entire
-> BR. What I am trying to do should be possible. Isn't it ? If you can give
-> me some pointers, I dont mind, working on it.
+What should we do in Buildroot master branch? We're currently using
+arc-2017.03-rc1, which is also a release candidate. We are planning on
+releasing Buildroot at the end of the month.
 
-Well, you can certainly backport the package. But beware that a simple
-copy of package/iotop/ will most likely not work. Indeed between a
-Buildroot of ~2013 (that you are using) and a Buildroot of 2015 (which
-has iotop), we most likely made some changes in the package
-infrastructure. So you will have to re-adapt iotop.mk.
+Should we pick -rc2 instead of -rc1 for this release ? We normally
+don't upgrade components after Buildroot has released its -rc1, but I
+guess we could make an exception since a release candidate is used for
+ARC toolchain components.
+
+Well we plan to cut the final release in coming weeks but not sure if we do it before the end of the month :(
+
+Still this RC2 contains important fixes which we really want to have. Moreover some existing Buildroot failures could be cured by RC2 (still I need to verify all known issues).
+
+Anyways in Buildroot release we'd like to see either final release of Arc told or at least RC3 if it happens.
+
+-Alexey
+
 
 Best regards,
 
 Thomas
--- 
+--
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
-http://free-electrons.com
+https://urldefense.proofpoint.com/v2/url?u=http-3A__free-2Delectrons.com&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=dy177ajnNqVA4CYkWXphyVbEsZDTwuZVr71ricsNERI&s=LYifeyOCO5rqYczIcClowzhVZTS6BdGynVJdxRdTIKI&e=
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170512/2284ce73/attachment.html>
