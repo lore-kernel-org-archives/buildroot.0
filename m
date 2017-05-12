@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 May 2017 21:15:35 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.03-rc2
-In-Reply-To: <20170512183104.37886-1-abrodkin@synopsys.com>
-References: <20170512183104.37886-1-abrodkin@synopsys.com>
-Message-ID: <20170512211535.555af2a5@free-electrons.com>
+Date: Fri, 12 May 2017 21:19:10 +0200
+Subject: [Buildroot] Problems building iotop
+In-Reply-To: <CA+12NBL_ABjQZETEs4xUVZf8kcCW4+Qm1KEafXxbZi7o1VzK1g@mail.gmail.com>
+References: <CA+12NB+dzKMw2x=mBESq+Ti0COMiQmbHTiRaO=E35xOZch+4gw@mail.gmail.com>
+ <20170511174933.28030e0a@free-electrons.com>
+ <CA+12NBKcGynVqiynZvETmSQEdLr138tM9s8n32RpwDgE1w7ABg@mail.gmail.com>
+ <20170512161308.1881fcb5@free-electrons.com>
+ <CA+12NBL_ABjQZETEs4xUVZf8kcCW4+Qm1KEafXxbZi7o1VzK1g@mail.gmail.com>
+Message-ID: <20170512211910.4919fb79@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +16,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 12 May 2017 21:31:04 +0300, Alexey Brodkin wrote:
-> This commit bumps ARC toolchain to arc-2017.03-rc2
-> 
-> Please note that it is a release candidate and it might contain some
-> breakages, please don't use it for production builds.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Fri, 12 May 2017 13:31:57 -0400, Linux User wrote:
 
-What should we do in Buildroot master branch? We're currently using
-arc-2017.03-rc1, which is also a release candidate. We are planning on
-releasing Buildroot at the end of the month.
+> I do understand that. But for 1 package, I dont want to upgrade to entire
+> BR. What I am trying to do should be possible. Isn't it ? If you can give
+> me some pointers, I dont mind, working on it.
 
-Should we pick -rc2 instead of -rc1 for this release ? We normally
-don't upgrade components after Buildroot has released its -rc1, but I
-guess we could make an exception since a release candidate is used for
-ARC toolchain components.
+Well, you can certainly backport the package. But beware that a simple
+copy of package/iotop/ will most likely not work. Indeed between a
+Buildroot of ~2013 (that you are using) and a Buildroot of 2015 (which
+has iotop), we most likely made some changes in the package
+infrastructure. So you will have to re-adapt iotop.mk.
 
 Best regards,
 
