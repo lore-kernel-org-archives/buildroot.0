@@ -1,72 +1,41 @@
-From: Antony Pavlov <antonynpavlov@gmail.com>
-Date: Fri, 12 May 2017 15:41:01 +0300
-Subject: [Buildroot] [PATCH v2] lsscsi: add new package
-Message-ID: <20170512124101.3876-1-antonynpavlov@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 12 May 2017 13:45:15 +0100
+Subject: [Buildroot] [PATCH next 2/8] php-amqp: bump version to 1.9.0
+In-Reply-To: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
+References: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170512124521.4619-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Antony Pavlov <antonynpavlov@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/Config.in          |  1 +
- package/lsscsi/Config.in   |  6 ++++++
- package/lsscsi/lsscsi.hash |  2 ++
- package/lsscsi/lsscsi.mk   | 13 +++++++++++++
- 4 files changed, 22 insertions(+)
+ package/php-amqp/php-amqp.hash | 2 +-
+ package/php-amqp/php-amqp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d57813c5c7..35e047b475 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -423,6 +423,7 @@ endmenu
- 	source "package/lirc-tools/Config.in"
- 	source "package/lm-sensors/Config.in"
- 	source "package/lshw/Config.in"
-+	source "package/lsscsi/Config.in"
- 	source "package/lsuio/Config.in"
- 	source "package/lvm2/Config.in"
- 	source "package/mali-t76x/Config.in"
-diff --git a/package/lsscsi/Config.in b/package/lsscsi/Config.in
-new file mode 100644
-index 0000000000..1c856863a4
---- /dev/null
-+++ b/package/lsscsi/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LSSCSI
-+	bool "lsscsi"
-+	help
-+	  lsscsi - list SCSI devices (or hosts) and their attributes
-+
-+	  http://sg.danny.cz/scsi/lsscsi.html
-diff --git a/package/lsscsi/lsscsi.hash b/package/lsscsi/lsscsi.hash
-new file mode 100644
-index 0000000000..d39da9bc80
---- /dev/null
-+++ b/package/lsscsi/lsscsi.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 025d009a1af42bc5b2fca664c44c9ecdfd754356e4a44f5c6aced2420afadd50  lsscsi-0.28.tgz
-diff --git a/package/lsscsi/lsscsi.mk b/package/lsscsi/lsscsi.mk
-new file mode 100644
-index 0000000000..f5370b1843
---- /dev/null
-+++ b/package/lsscsi/lsscsi.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# lsscsi
-+#
-+################################################################################
-+
-+LSSCSI_VERSION = 0.28
-+LSSCSI_SOURCE = lsscsi-$(LSSCSI_VERSION).tgz
-+LSSCSI_SITE = http://sg.danny.cz/scsi
-+LSSCSI_LICENSE = GPLv2
-+LSSCSI_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/php-amqp/php-amqp.hash b/package/php-amqp/php-amqp.hash
+index 73c69d9..4b3b197 100644
+--- a/package/php-amqp/php-amqp.hash
++++ b/package/php-amqp/php-amqp.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 38a92eaef1aa863404170bcd15605f7f78140eeec1ff5be6af65c5b8081e2599  amqp-1.7.1.tgz
++sha256 f45831d498b8fa47a151c31f6abdc0530aa6eabda6e2e10514aca3bdc76a5098  amqp-1.9.0.tgz
+diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
+index fe49f4b..a2815d6 100644
+--- a/package/php-amqp/php-amqp.mk
++++ b/package/php-amqp/php-amqp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_AMQP_VERSION = 1.7.1
++PHP_AMQP_VERSION = 1.9.0
+ PHP_AMQP_SOURCE = amqp-$(PHP_AMQP_VERSION).tgz
+ PHP_AMQP_SITE = https://pecl.php.net/get
+ PHP_AMQP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 -- 
-2.11.0
+2.10.2
