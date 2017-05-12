@@ -1,9 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 12 May 2017 13:45:17 +0100
-Subject: [Buildroot] [PATCH next 4/8] php-gnupg: bump version to 1.4.0
+Date: Fri, 12 May 2017 13:45:19 +0100
+Subject: [Buildroot] [PATCH next 6/8] php-memcached: bump version to 3.0.3
 In-Reply-To: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
 References: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170512124521.4619-4-Vincent.Riera@imgtec.com>
+Message-ID: <20170512124521.4619-6-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +14,33 @@ And switch to the official PECL site.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/php-gnupg/php-gnupg.hash | 2 +-
- package/php-gnupg/php-gnupg.mk   | 5 +++--
+ package/php-memcached/php-memcached.hash | 2 +-
+ package/php-memcached/php-memcached.mk   | 5 +++--
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
-index f0654b5..4185665 100644
---- a/package/php-gnupg/php-gnupg.hash
-+++ b/package/php-gnupg/php-gnupg.hash
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
+index f2a096f..7a8ec28 100644
+--- a/package/php-memcached/php-memcached.hash
++++ b/package/php-memcached/php-memcached.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 6f1a4b5a95fe501519de76d66602e46290cc452fc48f3a5ec2eacaffe68d9a01  php-gnupg-30fab6eaf9eb61c65b3b46987442be058cbd7823.tar.gz
-+sha256 35e16bee11345a7d6bf57bea3cadf45e371ad1ed4e0218b0c06f6f637e4e1772  gnupg-1.4.0.tgz
-diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
-index e595cd3..55772aa 100644
---- a/package/php-gnupg/php-gnupg.mk
-+++ b/package/php-gnupg/php-gnupg.mk
+-sha256 73266212e791a4817da06be1daddf9ff7dd5b5b0b650b3fbd0f5fc6ccc18491b  php-memcached-6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce.tar.gz
++sha256 5d1c29a1d5e391d6bb7b736a07e063d2f0834800673dd246d64ce1b73e47645d  memcached-3.0.3.tgz
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+index c4b7636..1f962b0 100644
+--- a/package/php-memcached/php-memcached.mk
++++ b/package/php-memcached/php-memcached.mk
 @@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PHP_GNUPG_VERSION = 30fab6eaf9eb61c65b3b46987442be058cbd7823
--PHP_GNUPG_SITE = $(call github,Sean-Der,pecl-encryption-gnupg,$(PHP_GNUPG_VERSION))
-+PHP_GNUPG_VERSION = 1.4.0
-+PHP_GNUPG_SOURCE = gnupg-$(PHP_GNUPG_VERSION).tgz
-+PHP_GNUPG_SITE = https://pecl.php.net/get
- # phpize does the autoconf magic
- PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
- PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_MEMCACHED_VERSION = 6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce
+-PHP_MEMCACHED_SITE = $(call github,php-memcached-dev,php-memcached,$(PHP_MEMCACHED_VERSION))
++PHP_MEMCACHED_VERSION = 3.0.3
++PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
++PHP_MEMCACHED_SITE = https://pecl.php.net/get
+ PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ 	--disable-memcached-sasl \
+ 	--with-libmemcached-dir=$(STAGING_DIR)/usr \
 -- 
 2.10.2
