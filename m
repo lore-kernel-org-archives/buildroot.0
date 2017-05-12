@@ -1,61 +1,102 @@
-From: Mario Rugiero <mrugiero@gmail.com>
-Date: Fri, 12 May 2017 17:01:34 -0300
-Subject: [Buildroot] [PATCH v2] package: protobuf,
- python-protobuf: bump to v3.3.0
-In-Reply-To: <CAKKQwLR2GHUqVVnTFrPgyF4y5=D0RO_LpEYW7H0xnmXqam=5yg@mail.gmail.com>
-References: <20170511230019.3f18b34a@free-electrons.com>
- <20170512073503.601-1-mrugiero@gmail.com>
- <20170512100757.3e865c73@free-electrons.com>
- <CAKKQwLR2GHUqVVnTFrPgyF4y5=D0RO_LpEYW7H0xnmXqam=5yg@mail.gmail.com>
-Message-ID: <CAKKQwLRcN_jcUZz9NvzV4AB_dsf038M2a-0CLvRcW9HmTa9C0g@mail.gmail.com>
+From: Mario J. Rugiero <mrugiero@gmail.com>
+Date: Fri, 12 May 2017 19:02:46 -0300
+Subject: [Buildroot] [PATCH] new package: ratpoison
+Message-ID: <20170512220246.18575-1-mrugiero@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El may. 12, 2017 5:13, "Mario Rugiero" <mrugiero@gmail.com> escribi?:
+Tested with:
+nitrogen6sx_defconfig
 
-2017-05-12 5:07 GMT-03:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Fri, 12 May 2017 04:35:03 -0300, Mario J. Rugiero wrote:
->> Includes upstream patch working around a gcc bug which got fixed in
-version 4.5.0.
->>
->> Fixes:
->> http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef
-9728c20d54/
->> http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e
-916c89f1e3/
->> http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc
-75b33d484c/
->>
->> Tested with:
->> qemu_aarch64_virt_defconfig
->>
->> Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
->
-> OK, but you just changed the hash... why did the hash change in the
-> first place, between the original 3.3.0 and the new 3.3.0 version ?
->
-> Did upstream re-upload a different tarball ? If that's the case, could
-> you tell upstream that this is really really bad ?
->
-My guess is as good as yours. I have no relation with upstream, I'm just a
-user.
-I did report an issue with them, tho.
+Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
+---
+ package/Config.in                |  1 +
+ package/ratpoison/Config.in      | 22 ++++++++++++++++++++++
+ package/ratpoison/ratpoison.hash |  2 ++
+ package/ratpoison/ratpoison.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 package/ratpoison/Config.in
+ create mode 100644 package/ratpoison/ratpoison.hash
+ create mode 100644 package/ratpoison/ratpoison.mk
 
-Regards,
-Mario.
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-The maintainer reuploaded it. Just confirming.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170512/a1c7a746/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 3876ffa93..6ad761bc1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -339,6 +339,7 @@ comment "X window managers"
+ 	source "package/matchbox/Config.in"
+ 	source "package/metacity/Config.in"
+ 	source "package/openbox/Config.in"
++	source "package/ratpoison/Config.in"
+ endmenu
+ 
+ menu "Hardware handling"
+diff --git a/package/ratpoison/Config.in b/package/ratpoison/Config.in
+new file mode 100644
+index 000000000..c5c5cc774
+--- /dev/null
++++ b/package/ratpoison/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_RATPOISON
++	bool "ratpoison"
++	depends on BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_LIBERATION
++	select BR2_PACKAGE_FONTCONFIG
++	help
++	  Ratpoison is a simple Window Manager. It is largely modelled after
++	  GNU Screen and focuses on the keyboard instead of a mouse.
++
++	  The screen can be split into non-overlapping frames.
++	  All windows are kept maximized inside their frames to take full
++	  advantage of your precious screen real estate. 
++
++	  http://www.nongnu.org/ratpoison/
++
++config BR2_PACKAGE_RATPOISON_RANDR
++	bool "Xrandr support"
++	depends on BR2_PACKAGE_RATPOISON
++	depends on BR2_PACKAGE_XLIB_LIBXRANDR
++	help
++	  Build ratpoison with randr support, mainly for multihead.
+diff --git a/package/ratpoison/ratpoison.hash b/package/ratpoison/ratpoison.hash
+new file mode 100644
+index 000000000..0f6e169d4
+--- /dev/null
++++ b/package/ratpoison/ratpoison.hash
+@@ -0,0 +1,2 @@
++#Locally computed
++sha256 d98fa4be025ecca453c407ff311ab3949f29f20d6d8abedf8f0716b85fc8d1f1 ratpoison-1.4.9.tar.xz
+diff --git a/package/ratpoison/ratpoison.mk b/package/ratpoison/ratpoison.mk
+new file mode 100644
+index 000000000..1545cb17c
+--- /dev/null
++++ b/package/ratpoison/ratpoison.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# ratpoison
++#
++#############################################################
++
++RATPOISON_VERSION = 1.4.9
++RATPOISON_SOURCE = ratpoison-$(RATPOISON_VERSION).tar.xz
++RATPOISON_SITE = http://download.savannah.nongnu.org/releases/ratpoison
++
++RATPOISON_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
++		      --x-libraries=$(STAGING_DIR)/usr/lib
++
++RATPOISON_DEPENDENCIES = $(XSERVER) xlib_libX11
++
++ifeq ($(BR2_PACKAGE_RATPOISON_RANDR),y)
++	RATPOISON_DEPENDENCIES += xlib_libXrandr
++else
++	RATPOISON_CONF_OPTS += --without-xrandr
++endif
++
++$(eval $(autotools-package))
+-- 
+2.13.0
