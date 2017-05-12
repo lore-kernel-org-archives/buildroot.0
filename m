@@ -1,67 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 May 2017 08:29:50 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-11
-Message-ID: <20170512062950.23CF0220A8@mail.free-electrons.com>
+From: Mario J. Rugiero <mrugiero@gmail.com>
+Date: Fri, 12 May 2017 04:35:03 -0300
+Subject: [Buildroot] [PATCH v2] package: protobuf,
+	python-protobuf: bump to v3.3.0
+In-Reply-To: <20170511230019.3f18b34a@free-electrons.com>
+References: <20170511230019.3f18b34a@free-electrons.com>
+Message-ID: <20170512073503.601-1-mrugiero@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Includes upstream patch working around a gcc bug which got fixed in version 4.5.0.
 
-Build statistics for 2017-05-11
-================================
+Fixes:
+http://autobuild.buildroot.org/results/77d/77dbb6bbbc0ea9e9bcdd22b10011ef9728c20d54/
+http://autobuild.buildroot.org/results/21f/21f5e1ea4f37e1d174604d6da78c0e916c89f1e3/
+http://autobuild.buildroot.org/results/24e/24e880086c87d40b5d79a90d805acc75b33d484c/
 
-      successes : 244
-       failures : 21 
-       timeouts : 0  
-          TOTAL : 265
+Tested with:
+qemu_aarch64_virt_defconfig
 
-Classification of failures by reason
-====================================
+Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
+---
+ package/protobuf/protobuf.hash               | 3 +--
+ package/protobuf/protobuf.mk                 | 4 +---
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-                 opencv3-3.2.0 | 3 
-                  libcdio-0.94 | 2 
-                 mplayer-1.3.0 | 2 
-                  ntp-4.2.8p10 | 2 
-                    radvd-2.12 | 2 
-             bluez_utils-4.101 | 1 
-        ltp-testsuite-20170116 | 1 
-                   mimic-1.1.0 | 1 
-openblas-f04af36ad0e85b64f1... | 1 
-                poppler-0.54.0 | 1 
-                protobuf-3.2.0 | 1 
-               skalibs-2.4.0.2 | 1 
-                 sudo-1.8.19p2 | 1 
-uclibc-ng-test-c9b9876cefc1... | 1 
-               upmpdcli-1.2.12 | 1 
-
-
-Detail of failures
-===================
-
-         arm |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/07e2f952ec974ab765acdf9209d2026504d495cc |     
-         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/6c305d720062c651dd856ed0bc5d30ab5fb31285 |     
-         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/ebc83038f86b49bce818bf43b4479ca5df86b2dd |     
-    mips64el |         ltp-testsuite-20170116 | NOK | http://autobuild.buildroot.net/results/b448569c1f899f08f704e556208b1db2be04f46e |     
-      mipsel |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/a814dc78a9fc7bc80d0b82083817ddfe9cdb3c29 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/525048619d7d4438092ccb2f5d5da8c1e8929f1e |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/b4dfa228118c20737e47323650194e9202567381 |     
-     aarch64 |                   ntp-4.2.8p10 | NOK | http://autobuild.buildroot.net/results/1e5d70b1a48bdda4e2708ab584b61a966cbef62a | ORPH
-        mips |                   ntp-4.2.8p10 | NOK | http://autobuild.buildroot.net/results/c2a945855172970736a8ffea9c564f029a023344 | ORPH
-       sparc | openblas-f04af36ad0e85b64f1... | NOK | http://autobuild.buildroot.net/results/6699b89f96ed7095a14bfa18248444534eb81083 |     
-    mips64el |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/421ba36bae19ead1bbe366cc7eac429b45a29990 |     
-         arm |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/6b89c74c72694f61a5e86e5f8c26263d9e0afe47 |     
-      x86_64 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/32d6ac30ca5621b45f7090abb5fb76d9f577c066 |     
-         arm |                 poppler-0.54.0 | NOK | http://autobuild.buildroot.net/results/1cc931a2d9658beebf2b82f10013c04cc3823bdc |     
-       sparc |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/1a328ea6e202898d5e39c904f713da3667b25806 | ORPH
-      xtensa |                     radvd-2.12 | NOK | http://autobuild.buildroot.net/results/7b9d92c859aa5ba11d6a1b10b482f887d8201eb1 | ORPH
-microblazeel |                     radvd-2.12 | NOK | http://autobuild.buildroot.net/results/949a75d96299394e4ac957746fa23a4b52f31b43 | ORPH
-       sparc |                skalibs-2.4.0.2 | NOK | http://autobuild.buildroot.net/results/85062b5f9dbe74d7d1c6edfeda085268ecaef4c2 |     
-         arm |                  sudo-1.8.19p2 | NOK | http://autobuild.buildroot.net/results/ebbb4c3138b5023a0c8bd938db1932a25ba5b6fb | ORPH
-       nios2 | uclibc-ng-test-c9b9876cefc1... | NOK | http://autobuild.buildroot.net/results/8a0eaea2d3b2fb76bd68fab22623e118e00173cb |     
-         arm |                upmpdcli-1.2.12 | NOK | http://autobuild.buildroot.net/results/251c6ea384f638a8ab6831394b62373baef6f63a |     
-
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 8c2ade37e..1c7bd43b0 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256 51d773e4297238b282eaa4c1dd317099675b12eef2b414732b851c00459225c6 protobuf-cpp-3.2.0.tar.gz
+-sha256 da80c39838515913633f4cbd875fdd4ad711be95c83a50ff5096b9f1254033b3 416f90939d4de58fe1a4e2489120010313183291.patch
++sha256 5e2587dea2f9287885e3b04d3a94ed4e8b9b2d2c5dd1f0032ceef3ea1d153bd7 protobuf-cpp-3.3.0.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 610da8c04..556773106 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.2.0
++PROTOBUF_VERSION = 3.3.0
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+@@ -19,8 +19,6 @@ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+ 
+ PROTOBUF_INSTALL_STAGING = YES
+ 
+-PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ PROTOBUF_DEPENDENCIES += zlib
+ endif
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index c87403f24..7da2fed03 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 c574e2b2178ffe66599274e8cfa11ecf83799a7992be30f0b68fb33ea0a0f1af protobuf-python-3.2.0.tar.gz
++sha256 3fd180eee78c7ee2e7a1b2f02657ef61ccbc2537a6767cd2493077d3b38c9d2d protobuf-python-3.3.0.tar.gz
 -- 
-http://autobuild.buildroot.net
+2.13.0
