@@ -1,40 +1,77 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 12 May 2017 10:44:11 +0100
-Subject: [Buildroot] [PATCH next] libgtk3: bump version to 3.22.15
-Message-ID: <20170512094411.22656-1-Vincent.Riera@imgtec.com>
+Date: Fri, 12 May 2017 11:18:02 +0100
+Subject: [Buildroot] [PATCH v2 next 06/11] gst1-plugins-bad: add Image
+	Quality Assessment (IQA) plugin
+In-Reply-To: <20170512101807.42378-1-Vincent.Riera@imgtec.com>
+References: <20170512101807.42378-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170512101807.42378-6-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This plugin replaces the recently removed videomeasure plugin.
+
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+- Specify that this plugin replaces the videomeasure plugin in
+  Config.in.legacy
+---
+ Config.in.legacy                                        | 4 ++++
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 3 files changed, 15 insertions(+)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index cbba7ca..0f259e9 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.14.sha256sum
--sha256 d6120e4fd64e432b74a61e8abd972b1948cf54e4dc4f0e081c05ab625f087131  gtk+-3.22.14.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.15.sha256sum
-+sha256 c8a012c2a99132629ab043f764a2b7cb6388483a015cd15c7a4288bec3590fdb  gtk+-3.22.15.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 7d8eecb..f3b1705 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index de02d4c..1fb99c6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -183,7 +183,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA
  
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).14
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOMEASURE
+ 	bool "videomeasure removed"
++	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA
+ 	select BR2_LEGACY
++	help
++	  videomeasure plugin has been removed and has been replaced by
++	  iqa, which has automatically been enabled.
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_APEXSINK
+ 	bool "apexsink removed"
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index d137a6c..35d3f16 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -407,6 +407,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOFRAME_AUDIOLEVEL
+ 	help
+ 	  videoframe_audiolevel
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA
++	bool "iqa"
++	help
++	  Image Quality Assessment
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS
+ 	bool "videoparsers"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 9dbde14..f597065 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -476,6 +476,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-videoframe_audiolevel
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-iqa
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-iqa
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-videoparsers
+ else
 -- 
 2.10.2
