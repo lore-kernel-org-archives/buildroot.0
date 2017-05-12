@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 May 2017 12:27:23 +0200
-Subject: [Buildroot] [PATCH] package/opencv3: fix build for x86_64 target
-In-Reply-To: <20170512112054.447fb67a@free-electrons.com>
-References: <20170504215333.4172-1-s.martin49@gmail.com>
- <20170512112054.447fb67a@free-electrons.com>
-Message-ID: <20170512122723.48912a90@free-electrons.com>
+Date: Fri, 12 May 2017 12:29:04 +0200
+Subject: [Buildroot] [PATCH] support/scripts/apply-patches.sh: do not apply
+	patches with renames
+Message-ID: <1494584944-23924-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Patches with renames apply properly with patch >= 2.7, but not with
+older patch versions. Since "git format-patch" by default generates
+patches with renames, Buildroot developers often don't realize that
+their patches will not apply properly on build machines that have
+patch < 2.7. In order to prevent such a situation from happening
+again, this commit adds some logic in apply-patches.sh to refuse
+applying patches that contain renames.
 
-On Fri, 12 May 2017 11:20:54 +0200, Thomas Petazzoni wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/apply-patches.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> On Thu,  4 May 2017 23:53:33 +0200, Samuel Martin wrote:
-> > This change backports a fix from upstream fixing missing symbols due to
-> > wrong compiler optimization flags.
-> > 
-> > On Buildroot side, also remove deprecated options passed on the
-> > configure command.
-> > 
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/af9/af950c6172a578c4eeeb9440b6990ceb48263fa6/build-end.log
-> >   http://autobuild.buildroot.net/results/e88/e8832302cd4f30cec076f67965f6aacbaca5b955/build-end.log
-> > 
-> > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> > ---
-> >  .../0001-cmake-support-multiple-CPU-targets.patch  | 2501 ++++++++++++++++++++
-> >  package/opencv3/opencv3.mk                         |   16 +-
-> >  2 files changed, 2502 insertions(+), 15 deletions(-)
-> >  create mode 100644 package/opencv3/0001-cmake-support-multiple-CPU-targets.patch  
-> 
-> This patch does more harm than good: it breaks a lot of configurations.
-> See http://autobuild.buildroot.net/?reason=opencv3-3.2.0.
-> 
-> I'll revert later today unless a better fix is proposed.
-
-I have found and fixed the problem: your patch contains a file rename,
-and patch < 2.7 don't support file renames. So I've re-generated the
-patch without file renames (git format-patch --no-renames). I verified
-that it indeed fixes the problem on build machines with patch < 2.7.
-
-Best regards,
-
-Thomas Petazzoni
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 7ccb39d..6f40280c 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -113,6 +113,11 @@ function apply_patch {
+         echo "  to be applied  : ${path}/${patch}"
+         exit 1
+     fi
++    if grep -q "^rename from" ${path}/${patch} -a
++       grep -q "^rename to" ${path}/${patch} ; then
++	echo "Error: patch contains some renames, not supported by old patch versions"
++	exit 1
++    fi
+     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
+     if [ $? != 0 ] ; then
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
