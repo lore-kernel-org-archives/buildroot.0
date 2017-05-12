@@ -1,50 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 May 2017 17:53:40 +0200
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches.sh: do not
- apply patches with renames
-In-Reply-To: <20170512154039.GA2955@scaer>
-References: <1494584944-23924-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170512154039.GA2955@scaer>
-Message-ID: <20170512175340.6e94a47c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 May 2017 17:54:29 +0200
+Subject: [Buildroot] [PATCH] core/download: fix source check for git method
+Message-ID: <20170512155429.26176-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Running foo-source-check on packages retrieved from git fails.
 
-On Fri, 12 May 2017 17:40:39 +0200, Yann E. MORIN wrote:
+This is because there is no associated stamp file, so we do not have a
+rule-assignment that sets PKG for foo-source-check.
 
-> Meh. path-2.7 was released 5 years ago. Oh well, let's be kind for those
-> stuck with ancient entreprise-grade distros... ;-)
+But it does not make sense to have a stamp file at all, because
+source-check is not supposed to change anything: the status after is
+exactly the same as before; nothing is downlaoded, so there is no
+progress (whatsoever) to memorise.
 
-Exactly :)
+Fix that by just defining PKG in the source-check rule definition.
 
+Fixes #9796.
 
-> Oh-oh... Not good:  the '-a' will be passed as an option to grep; this
-> is not a [...] construct.
-> 
-> What you want instead is:
-> 
->     if grep -q "^rename from" ${path}/${patch} && \
->        grep -q "^rename to" ${path}/${patch} ; then
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-OK, will fix.
-
-However, what bothers me with this is that if the patch description
-contains "rename from" and "rename to" at the beginning of two lines,
-then it will also trigger this condition.
-
-But I'm not sure if it's a really realistic case, and if it ever
-happens, we can always fix/improve the script. Unless there is a better
-but still simple way to check if a patch uses renames. Ideally we would
-want patch >= 2.7 to bail out if there's a rename, but I couldn't find
-any option doing this... and this option would anyway not exist with
-patch < 2.7.
-
-Thomas
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3b26e6b483..f474704980 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -694,6 +694,7 @@ $(1)-legal-source:	$$($(2)_TARGET_ACTUAL_SOURCE)
+ endif # actual sources != sources
+ endif # actual sources != ""
+ 
++$(1)-source-check: PKG=$(2)
+ $(1)-source-check:
+ 	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
