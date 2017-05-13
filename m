@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 May 2017 14:58:24 +0200
-Subject: [Buildroot] [PATCH] package/uclibc-ng-test: disable tst-cond22
- with glibc based toolchain
-In-Reply-To: <20170513123636.23978-1-romain.naour@gmail.com>
-References: <20170513123636.23978-1-romain.naour@gmail.com>
-Message-ID: <20170513145824.7373c3c9@free-electrons.com>
+Date: Sat, 13 May 2017 14:58:27 +0200
+Subject: [Buildroot] [PATCH] package/gpsd: do not interact with systemd
+ on install
+In-Reply-To: <20170513082736.22734-1-yann.morin.1998@free.fr>
+References: <20170513082736.22734-1-yann.morin.1998@free.fr>
+Message-ID: <20170513145827.7b8a2e2b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 13 May 2017 14:36:36 +0200, Romain Naour wrote:
-> uclibc-ng-test is broken with glibc 2.25 due to pthread_cond_t changes
-> introduced by [1].
-> Waldemar has disabled this test (tst-cond22) with glibc based toolchain
-> [2] but the current uclibc-ng-test package doesn't contain this patch.
+On Sat, 13 May 2017 10:27:36 +0200, Yann E. MORIN wrote:
+> When building on a systemd-based host for a systemd-based target, gpsd's
+> buildsystem will try to tell systemd to reload the its configuration and
+> recreate the entire dependency tree of services.
 > 
-> So here it is.
+> Of course, this can not work when run as a user:
+>     >>> gpsd 3.16 Installing to target  
+>     ==== AUTHENTICATING FOR org.freedesktop.systemd1.reload-daemon ===
+>     Authentication is required to reload the systemd state.
+>     Authenticating as: root
+>     Password:
 > 
-> Fixes:
-> [nios2] http://autobuild.buildroot.net/results/d61c8d169fc070271114a515159650f7a0f333c0
-> [arm] http://autobuild.buildroot.net/results/22295711046c519df44d5d976e0bfcae1f006e5a
+> In fact, this does not even mean anything in cross-compilation.
 > 
-> [1] https://sourceware.org/git/?p=glibc.git;a=commit;h=ed19993b5b0d05d62cc883571519a67dae481a14
-> [2] https://gogs.waldemar-brodkorb.de/linux/uclibc-ng-test/commit/787e584f18afc967d91cfe1a8443df2657579ecb
+> Fortunately, upstream has already fixed their sin, so we backport it
+> (tweaked to apply onto 3.16).
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> 
 > ---
->  .../uclibc-ng-test/0001-disable-for-glibc.patch    | 40 ++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/uclibc-ng-test/0001-disable-for-glibc.patch
+> Note: this was never observed in any of the autobuilders, even those
+> running on a systemd-based distro, because in this case stdin is
+> redirected and systemctl simply fails, but the construct is just to
+> ignore the failure, so the build proceeds; the issue only occurs when
+> there is an actual terminal to provide user input... :-/
+> ---
+>  ...eract-with-systemctl-when-cross-compiling.patch | 41 ++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
 
 Applied to master, thanks.
 
