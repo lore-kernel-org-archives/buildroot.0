@@ -1,90 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 May 2017 10:27:36 +0200
-Subject: [Buildroot] [PATCH] package/gpsd: do not interact with systemd on
-	install
-Message-ID: <20170513082736.22734-1-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 13 May 2017 11:21:33 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/vlc: bump to version 2.2.5.1
+Message-ID: <20170513092133.23370-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building on a systemd-based host for a systemd-based target, gpsd's
-buildsystem will try to tell systemd to reload the its configuration and
-recreate the entire dependency tree of services.
+Added all hashes provided by upstream.
 
-Of course, this can not work when run as a user:
-    >>> gpsd 3.16 Installing to target
-    ==== AUTHENTICATING FOR org.freedesktop.systemd1.reload-daemon ===
-    Authentication is required to reload the systemd state.
-    Authenticating as: root
-    Password:
-
-In fact, this does not even mean anything in cross-compilation.
-
-Fortunately, upstream has already fixed their sin, so we backport it
-(tweaked to apply onto 3.16).
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Note: this was never observed in any of the autobuilders, even those
-running on a systemd-based distro, because in this case stdin is
-redirected and systemctl simply fails, but the construct is just to
-ignore the failure, so the build proceeds; the issue only occurs when
-there is an actual terminal to provide user input... :-/
----
- ...eract-with-systemctl-when-cross-compiling.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
+ package/vlc/vlc.hash | 8 ++++++--
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch b/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
-new file mode 100644
-index 0000000000..9e91a02ef3
---- /dev/null
-+++ b/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
-@@ -0,0 +1,41 @@
-+From 777cb3737ae85b13642fff48eabb601c4d40f527 Mon Sep 17 00:00:00 2001
-+From: James Knight <james.d.knight@live.com>
-+Date: Tue, 16 Feb 2016 23:51:08 -0500
-+Subject: [PATCH] do not interact with systemctl when cross-compiling
-+
-+The installation process for GPSd on a systemd environment will attempt
-+to reload systemd's manager configuration (systemctl daemon-reload).
-+This is to allow the system to take advantage of the newly installed
-+GPSd services. When cross-compiling, the installation process should not
-+attempt to interact with the build environment's systemd instance (if
-+any). The following change checks if the build is not cross compiling
-+(via 'not env["sysroot"]') before attempting to do a systemd reload.
-+
-+Signed-off-by: James Knight <james.d.knight@live.com>
-+[yann.morin.1998 at free.fr: tweak to apply on 3.16]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ SConstruct | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/SConstruct b/SConstruct
-+index c3bfd0d1..97c1b3a9 100644
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -1909,10 +1909,12 @@ udev_install = Utility('udev-install', 'install', [
-+     ] + hotplug_wrapper_install)
-+ 
-+ if env['systemd']:
-++    env.Requires(udev_install, systemd_install)
-++
-++if env['systemd'] and not env["sysroot"]:
-+     systemctl_daemon_reload = Utility('systemctl-daemon-reload', '', [ 'systemctl daemon-reload || true'])
-+     env.AlwaysBuild(systemctl_daemon_reload)
-+     env.Precious(systemctl_daemon_reload)
-+-    env.Requires(udev_install, systemd_install)
-+     env.Requires(systemctl_daemon_reload, systemd_install)
-+     env.Requires(udev_install, systemctl_daemon_reload)
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index efd4e27e7..0f1b6dccd 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,2 +1,6 @@
+-# From http://download.videolan.org/pub/videolan/vlc/2.2.3/vlc-2.2.3.tar.xz.sha256
+-sha256 1632e91d2a0087e0ef4c3fb4c95c3c2890f7715a9d1d43ffd46329f428cf53be  vlc-2.2.4.tar.xz
++# From http://get.videolan.org/vlc/2.2.5.1/vlc-2.2.5.1.tar.xz.md5
++md5 7ab63964ffec4c92a54deb018f23318b vlc-2.2.5.1.tar.xz
++# From http://get.videolan.org/vlc/2.2.5.1/vlc-2.2.5.1.tar.xz.sha1
++sha1 042962dba68e1414aa563883b0172ee121cf9555 vlc-2.2.5.1.tar.xz
++# From http://get.videolan.org/vlc/2.2.5.1/vlc-2.2.5.1.tar.xz.sha256
++sha256 b28b8a28f578c0c6cb1ebed293aca2a3cd368906cf777d1ab599e2784ddda1cc vlc-2.2.5.1.tar.xz
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 36b5fd3ea..3799acae8 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 2.2.4
++VLC_VERSION = 2.2.5.1
+ VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
 2.11.0
