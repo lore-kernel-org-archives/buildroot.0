@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 May 2017 15:14:24 +0200
-Subject: [Buildroot] [PATCH] core/download: fix source check for git
- method
-In-Reply-To: <20170512155429.26176-1-yann.morin.1998@free.fr>
-References: <20170512155429.26176-1-yann.morin.1998@free.fr>
-Message-ID: <20170513151424.65382928@free-electrons.com>
+Date: Sat, 13 May 2017 15:14:30 +0200
+Subject: [Buildroot] [PATCH] radvd: fix build with 4.11 kernel headers
+In-Reply-To: <1494488270-10121-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1494488270-10121-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170513151430.19c863d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +12,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 12 May 2017 17:54:29 +0200, Yann E. MORIN wrote:
-> Running foo-source-check on packages retrieved from git fails.
+On Thu, 11 May 2017 09:37:50 +0200, Thomas Petazzoni wrote:
+> Since the introduction of 4.11 kernel headers in Buildroot, radvd has
+> failed to build with all toolchains using this kernel header version.
 > 
-> This is because there is no associated stamp file, so we do not have a
-> rule-assignment that sets PKG for foo-source-check.
+> The issue comes from the fact that radvd includes both <net/if_arp.h>
+> and <linux/if_arp.h> if they are available. Until 4.11,
+> <linux/if_arp.h> was in fact not included, because the
+> AC_CHECK_HEADERS() test concluded this header was unsuitable. This has
+> been fixed in the upstream kernel by commit
+> 2618be7dccf8739b89e1906b64bd8d551af351e6 ("uapi: fix linux/if.h
+> userspace compilation errors"). So now, the radvd configure script
+> considers both <net/if_arp.h> and <linux/if_arp.h> as suitable
+> headers, and includes both of them, leading to the duplicate
+> definition of various types.
 > 
-> But it does not make sense to have a stamp file at all, because
-> source-check is not supposed to change anything: the status after is
-> exactly the same as before; nothing is downlaoded, so there is no
-> progress (whatsoever) to memorise.
+> Since it's redundant to include both <net/if_arp.h> and
+> <linux/if_arp.h>, we simply force radvd to believe that
+> <linux/if_arp.h> is not available by passing the appropriate autoconf
+> cache variable. This gets us back to the previous situation, where
+> <linux/if_arp.h> was never used.
 > 
-> Fix that by just defining PKG in the source-check rule definition.
+> This has been tested with a uClibc toolchain using 4.11 kernel
+> headers, and verified to work on glibc and musl with older kernel
+> headers as well.
 > 
-> Fixes #9796.
+> Fixes:
 > 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>   http://autobuild.buildroot.net/results/949a75d96299394e4ac957746fa23a4b52f31b43/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/pkg-generic.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/radvd/radvd.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
 Applied to master, thanks.
 
