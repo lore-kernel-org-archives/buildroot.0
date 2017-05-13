@@ -1,81 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 May 2017 14:57:24 +0200
-Subject: [Buildroot] [git commit] package/uclibc-ng-test: disable tst-cond22
-	with glibc based toolchain
-Message-ID: <20170513125728.3DBCD82716@busybox.osuosl.org>
+Date: Sat, 13 May 2017 14:58:11 +0200
+Subject: [Buildroot] [git commit] package/gpsd: do not interact with systemd
+	on install
+Message-ID: <20170513125815.9319081829@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7a64ddcbc0b262eaa549fede9bd1e8ca3bb310f
+commit: https://git.buildroot.net/buildroot/commit/?id=0d0fcfa443754ed33ab81b52dd22c5e89ea45c24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uclibc-ng-test is broken with glibc 2.25 due to pthread_cond_t changes
-introduced by [1].
-Waldemar has disabled this test (tst-cond22) with glibc based toolchain
-[2] but the current uclibc-ng-test package doesn't contain this patch.
+When building on a systemd-based host for a systemd-based target, gpsd's
+buildsystem will try to tell systemd to reload the its configuration and
+recreate the entire dependency tree of services.
 
-So here it is.
+Of course, this can not work when run as a user:
+    >>> gpsd 3.16 Installing to target
+    ==== AUTHENTICATING FOR org.freedesktop.systemd1.reload-daemon ===
+    Authentication is required to reload the systemd state.
+    Authenticating as: root
+    Password:
 
-Fixes:
-[nios2] http://autobuild.buildroot.net/results/d61c8d169fc070271114a515159650f7a0f333c0
-[arm] http://autobuild.buildroot.net/results/22295711046c519df44d5d976e0bfcae1f006e5a
+In fact, this does not even mean anything in cross-compilation.
 
-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=ed19993b5b0d05d62cc883571519a67dae481a14
-[2] https://gogs.waldemar-brodkorb.de/linux/uclibc-ng-test/commit/787e584f18afc967d91cfe1a8443df2657579ecb
+Fortunately, upstream has already fixed their sin, so we backport it
+(tweaked to apply onto 3.16).
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../uclibc-ng-test/0001-disable-for-glibc.patch    | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ ...eract-with-systemctl-when-cross-compiling.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/uclibc-ng-test/0001-disable-for-glibc.patch b/package/uclibc-ng-test/0001-disable-for-glibc.patch
+diff --git a/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch b/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
 new file mode 100644
-index 0000000..13786c9
+index 0000000..9e91a02
 --- /dev/null
-+++ b/package/uclibc-ng-test/0001-disable-for-glibc.patch
-@@ -0,0 +1,40 @@
-+From 787e584f18afc967d91cfe1a8443df2657579ecb Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 12 May 2017 00:44:01 +0200
-+Subject: [PATCH] disable for glibc
++++ b/package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
+@@ -0,0 +1,41 @@
++From 777cb3737ae85b13642fff48eabb601c4d40f527 Mon Sep 17 00:00:00 2001
++From: James Knight <james.d.knight@live.com>
++Date: Tue, 16 Feb 2016 23:51:08 -0500
++Subject: [PATCH] do not interact with systemctl when cross-compiling
 +
-+uclibc-ng-test is broken with glibc 2.25 due to pthread_cond_t changes introduced by [1].
-+Disable test-cond22 for glibc based toolchain.
++The installation process for GPSd on a systemd environment will attempt
++to reload systemd's manager configuration (systemctl daemon-reload).
++This is to allow the system to take advantage of the newly installed
++GPSd services. When cross-compiling, the installation process should not
++attempt to interact with the build environment's systemd instance (if
++any). The following change checks if the build is not cross compiling
++(via 'not env["sysroot"]') before attempting to do a systemd reload.
 +
-+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=ed19993b5b0d05d62cc883571519a67dae481a14
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Signed-off-by: James Knight <james.d.knight@live.com>
++[yann.morin.1998 at free.fr: tweak to apply on 3.16]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +---
-+ test/nptl/tst-cond22.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ SConstruct | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/test/nptl/tst-cond22.c b/test/nptl/tst-cond22.c
-+index 3255cc0..23697dd 100644
-+--- a/test/nptl/tst-cond22.c
-++++ b/test/nptl/tst-cond22.c
-+@@ -2,7 +2,7 @@
-+ #include <stdio.h>
-+ #include <stdlib.h>
++diff --git a/SConstruct b/SConstruct
++index c3bfd0d1..97c1b3a9 100644
++--- a/SConstruct
+++++ b/SConstruct
++@@ -1909,10 +1909,12 @@ udev_install = Utility('udev-install', 'install', [
++     ] + hotplug_wrapper_install)
 + 
-+-#if defined(__GLIBC__) || defined(__UCLIBC__)
-++#if defined(__UCLIBC__)
-+ static pthread_barrier_t b;
-+ static pthread_cond_t c = PTHREAD_COND_INITIALIZER;
-+ static pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
-+@@ -54,7 +54,7 @@ tf (void *arg)
-+ static int
-+ do_test (void)
-+ {
-+-#if defined(__GLIBC__) || defined(__UCLIBC__)
-++#if defined(__UCLIBC__)
-+   int status = 0;
++ if env['systemd']:
+++    env.Requires(udev_install, systemd_install)
+++
+++if env['systemd'] and not env["sysroot"]:
++     systemctl_daemon_reload = Utility('systemctl-daemon-reload', '', [ 'systemctl daemon-reload || true'])
++     env.AlwaysBuild(systemctl_daemon_reload)
++     env.Precious(systemctl_daemon_reload)
++-    env.Requires(udev_install, systemd_install)
++     env.Requires(systemctl_daemon_reload, systemd_install)
++     env.Requires(udev_install, systemctl_daemon_reload)
 + 
-+   if (pthread_barrier_init (&b, NULL, 2) != 0)
 +-- 
-+2.9.3
++2.11.0
 +
