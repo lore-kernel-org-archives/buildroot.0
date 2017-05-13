@@ -1,37 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 May 2017 15:16:59 +0200
-Subject: [Buildroot] [git commit] package/mke2img: check nb_blocks is
-	specified
-Message-ID: <20170513131741.67AB8827FB@busybox.osuosl.org>
+Date: Sat, 13 May 2017 15:27:06 +0200
+Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
+ install
+In-Reply-To: <CA+TH9VnNgxSvsUiSTPUstqpa3uuEbKbMxR+OfK1xMEdDqq3Z0w@mail.gmail.com>
+References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
+ <20170318153923.56903d45@free-electrons.com>
+ <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
+ <CA+TH9VnNgxSvsUiSTPUstqpa3uuEbKbMxR+OfK1xMEdDqq3Z0w@mail.gmail.com>
+Message-ID: <20170513152706.0319d7de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48d5bebe76fafdd7cc3a990b1e6e49468397a2cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Angelo,
 
-Since we do not have autocalculation anymore, the user must specify the
-exact number of blocks.
+On Thu, 6 Apr 2017 19:08:35 +0200, Angelo Compagnucci wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mke2img/mke2img | 3 +++
- 1 file changed, 3 insertions(+)
+> > Below is the diff between staging and host. I am using a Ubuntu VM to
+> > compile for an ARM target with uCLibc.
+> > The appropriate .so files (libc.so.0) are referenced in the config file in
+> > the staging directory but not in the host.
+> > The patch I referenced in my commit is:
+> >   * package/mono/0002-Adjust-libc.so-path-depending-on-C-
+> > library-being-use.patch
+> > This patch addresses the proper generation of the /etc/mono/config file in
+> > the staging directory, I believe.
+> >
+> > Thanks!
+> >  
+> 
+> Could you send me a minimal example that exibits the problem?!
 
-diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-index b773aa9..758b6de 100755
---- a/package/mke2img/mke2img
-+++ b/package/mke2img/mke2img
-@@ -44,6 +44,9 @@ main() {
-     if [ -z "${image}" ]; then
-         error "you must specify an output image file with '-o'\n"
-     fi
-+    if [ -z "${nb_blocks}" ]; then
-+        error "you must specify the size of the output image with '-b'\n"
-+    fi
-     case "${gen}:${rev}" in
-     2:0|2:1|3:1|4:1)
-         ;;
+Do you have some further feedback on this issue? Dustin's patch is
+still pending, waiting for you to confirm or not the issue and indicate
+if Dustin's solution is the most appropriate or not.
+
+Thanks for your feedback,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
