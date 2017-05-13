@@ -1,7 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 13 May 2017 19:58:26 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/oracle-mysql: Fix gcc7 compile
-Message-ID: <20170513175826.11550-1-bernd.kuhls@t-online.de>
+Date: Sat, 13 May 2017 20:29:44 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-stalker: fix gcc7
+	compile
+Message-ID: <20170513182944.29833-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +11,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/oracle-mysql/0008-gcc7.patch | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/oracle-mysql/0008-gcc7.patch
+ .../0001-src-CWatchdog.h-Fix-gcc7-build.patch      | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
 
-diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0008-gcc7.patch
+diff --git a/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
 new file mode 100644
-index 0000000000..2cf6d26125
+index 0000000000..54d18a996c
 --- /dev/null
-+++ b/package/oracle-mysql/0008-gcc7.patch
-@@ -0,0 +1,24 @@
-+Fix gcc7 compile
++++ b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
+@@ -0,0 +1,33 @@
++From bb16ccd14deb3a01049daec37b6d2e7711ef4738 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 13 May 2017 20:22:08 +0200
++Subject: [PATCH 1/1] src/CWatchdog.h: Fix gcc7 build
 +
-+mysql.cc: In function 'void build_completion_hash(bool, bool)':
-+mysql.cc:2687:37: error: invalid conversion from 'char' to 'char*' [-fpermissive]
-+       field_names[i][num_fields*2]= '\0';
-+                                     ^~~~
++Building with gcc7 is broken:
 +
-+Patch was partly backported from upstream commit:
-+https://github.com/mysql/mysql-server/commit/ae21683d980d5fe9e39bd0193827ea3604256eb9
++src/CWatchdog.h:31:58: error: 'std::function' has not been declared
++    CWatchdog(unsigned int interval, SAPI *api, std::function<void(SError)> errorCallback);
++                                                     ^~~~~~~~
++
++Patch sent upstream as PR 93.
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/CWatchdog.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
-+--- mysql-5.1.73.org/client/mysql.cc	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/client/mysql.cc	2017-05-13 19:52:10.125101101 +0200
-+@@ -2684,7 +2684,7 @@
-+         mysql_free_result(fields);
-+         break;
-+       }
-+-      field_names[i][num_fields*2]= '\0';
-++      field_names[i][num_fields*2]= NULL;
-+       j=0;
-+       while ((sql_field=mysql_fetch_field(fields)))
-+       {
++diff --git a/src/CWatchdog.h b/src/CWatchdog.h
++index c465e91..239d95d 100644
++--- a/src/CWatchdog.h
+++++ b/src/CWatchdog.h
++@@ -22,6 +22,7 @@
++  */
++ 
++ #include <thread>
+++#include <functional>
++ 
++ #include "SAPI.h"
++ 
++-- 
++2.11.0
++
 -- 
 2.11.0
