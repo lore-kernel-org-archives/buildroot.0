@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 May 2017 14:58:27 +0200
-Subject: [Buildroot] [PATCH] package/gpsd: do not interact with systemd
- on install
-In-Reply-To: <20170513082736.22734-1-yann.morin.1998@free.fr>
-References: <20170513082736.22734-1-yann.morin.1998@free.fr>
-Message-ID: <20170513145827.7b8a2e2b@free-electrons.com>
+Date: Sat, 13 May 2017 14:59:22 +0200
+Subject: [Buildroot] [PATCH] package: libcgi: set upstream to
+ https://github.com/rafaelsteil/libcgi
+In-Reply-To: <20170512221546.20280-1-mrugiero@gmail.com>
+References: <20170512221546.20280-1-mrugiero@gmail.com>
+Message-ID: <20170513145922.5e2626c5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 13 May 2017 10:27:36 +0200, Yann E. MORIN wrote:
-> When building on a systemd-based host for a systemd-based target, gpsd's
-> buildsystem will try to tell systemd to reload the its configuration and
-> recreate the entire dependency tree of services.
+On Fri, 12 May 2017 19:15:46 -0300, Mario J. Rugiero wrote:
+> Also, bump to version 1.1 and cleanup. The patch is no longer needed.
 > 
-> Of course, this can not work when run as a user:
->     >>> gpsd 3.16 Installing to target  
->     ==== AUTHENTICATING FOR org.freedesktop.systemd1.reload-daemon ===
->     Authentication is required to reload the systemd state.
->     Authenticating as: root
->     Password:
+> Tested with:
+> nitrogen6sx_defconfig
 > 
-> In fact, this does not even mean anything in cross-compilation.
-> 
-> Fortunately, upstream has already fixed their sin, so we backport it
-> (tweaked to apply onto 3.16).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> 
-> ---
-> Note: this was never observed in any of the autobuilders, even those
-> running on a systemd-based distro, because in this case stdin is
-> redirected and systemctl simply fails, but the construct is just to
-> ignore the failure, so the build proceeds; the issue only occurs when
-> there is an actual terminal to provide user input... :-/
-> ---
->  ...eract-with-systemctl-when-cross-compiling.patch | 41 ++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/gpsd/0001-do-not-interact-with-systemctl-when-cross-compiling.patch
+> Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
 
-Applied to master, thanks.
+Thanks, but we already have a similar patch submitted, in
+https://patchwork.ozlabs.org/patch/757847/.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
