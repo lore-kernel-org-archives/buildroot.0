@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 May 2017 15:16:03 +0200
-Subject: [Buildroot] [PATCH] .gitignore: add vim temporary files
-In-Reply-To: <fec91e1a48d4dd8d7fc7d019329ee4c3cf5c0c79.1494313042.git.baruch@tkos.co.il>
-References: <fec91e1a48d4dd8d7fc7d019329ee4c3cf5c0c79.1494313042.git.baruch@tkos.co.il>
-Message-ID: <20170513151603.1c91e894@free-electrons.com>
+Date: Sat, 13 May 2017 15:17:32 +0200
+Subject: [Buildroot] [PATCH 2/9] package/mke2img: check nb_blocks is
+ specified
+In-Reply-To: <aaa50531bc8d795818d2c4aa8955ad366342e0e4.1493654310.git.yann.morin.1998@free.fr>
+References: <cover.1493654310.git.yann.morin.1998@free.fr>
+ <aaa50531bc8d795818d2c4aa8955ad366342e0e4.1493654310.git.yann.morin.1998@free.fr>
+Message-ID: <20170513151732.141be5ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  9 May 2017 09:57:22 +0300, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Mon,  1 May 2017 17:58:37 +0200, Yann E. MORIN wrote:
+> Since we do not have autocalculation anymore, the user must specify the
+> exact number of blocks.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  .gitignore | 1 +
->  1 file changed, 1 insertion(+)
+>  package/mke2img/mke2img | 3 +++
+>  1 file changed, 3 insertions(+)
 
-We got exactly the same patch about a year ago, and here was the
-feedback from Arnout:
-
-  http://lists.busybox.net/pipermail/buildroot/2016-February/151271.html
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
