@@ -1,64 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 May 2017 08:31:25 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-12
-Message-ID: <20170513063125.BA761220BB@mail.free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 13 May 2017 10:16:51 +0200
+Subject: [Buildroot] [PATCH/next] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.0.6
+Message-ID: <20170513081651.3088-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Build statistics for 2017-05-12
-================================
-
-      successes : 232
-       failures : 22 
-       timeouts : 0  
-          TOTAL : 254
-
-Classification of failures by reason
-====================================
-
-                 opencv3-3.2.0 | 8 
-                  libcdio-0.94 | 3 
-             rabbitmq-c-v0.8.0 | 2 
-uclibc-ng-test-c9b9876cefc1... | 2 
-               domoticz-3.5877 | 1 
-                    ffmpeg-3.3 | 1 
-                  libcec-4.0.2 | 1 
-                 mplayer-1.3.0 | 1 
-openblas-f04af36ad0e85b64f1... | 1 
-                      qt-4.8.7 | 1 
-               qt5webkit-5.8.0 | 1 
-
-
-Detail of failures
-===================
-
-      x86_64 |                domoticz-3.5877 | NOK | http://autobuild.buildroot.net/results/3c35110f53601bce09028249f9a069934f05782a |     
-        m68k |                     ffmpeg-3.3 | NOK | http://autobuild.buildroot.net/results/66b48ed9ab5c816cf5b2a50133c0ecbec1be7e54 |     
-         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/e837737abaea851bea428a35ea9d3395a6565c54 |     
-         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/1dab93aff5555f092ff30674ec0b35301ce62411 |     
-         arc |                   libcdio-0.94 | NOK | http://autobuild.buildroot.net/results/90f0899f158af53dfa62ba20a46276e72d2facfd |     
-      x86_64 |                   libcec-4.0.2 | NOK | http://autobuild.buildroot.net/results/643f200d63f1505f8a44eae82a00572c1ee2bcaa |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/7e6c45a56d09a61fe63bdb4ed807091f140045df |     
-       sparc | openblas-f04af36ad0e85b64f1... | NOK | http://autobuild.buildroot.net/results/996e0b2872f7712db9e8ec6aa724fb373c578d43 |     
-        i686 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/3932419d50af337230e58964238a3bb9e6c8ac15 |     
-        i586 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/93fd12dd4deac0569f88ea18ee593159a218740f |     
-        i686 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/f0beae1fe9825d5561e8f6b13ff318071b2a4629 |     
-         arc |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/2f2bdfa62da64124a86401cadcfd300239042698 |     
-   powerpc64 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/347d8fd2e286b3e4e5e18743e64d862bdb66dbb9 |     
-   powerpc64 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/e54dc73660bc3e0edbe4bee6c54a10d6723c522d |     
-        i586 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/ca7c9442a98bdc0eef7d5860f99f7b3f6e1df18b |     
-     aarch64 |                  opencv3-3.2.0 | NOK | http://autobuild.buildroot.net/results/0a5c2f06dd447801efc9378b09dd31bb3399cf77 |     
-         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/6756c1e49da27aa5af8e42a69e908380a91235bf | ORPH
-      mipsel |                qt5webkit-5.8.0 | NOK | http://autobuild.buildroot.net/results/5f6aa282d19019a078ad0b3aec112eb4f05e8799 |     
-         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/fe6f800c292633e4cf296a23c614b6379f8be42f |     
-        m68k |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/27695ec6b216acc379f31b24fd2777ae8d85aba0 |     
-       nios2 | uclibc-ng-test-c9b9876cefc1... | NOK | http://autobuild.buildroot.net/results/d61c8d169fc070271114a515159650f7a0f333c0 |     
-         arm | uclibc-ng-test-c9b9876cefc1... | NOK | http://autobuild.buildroot.net/results/22295711046c519df44d5d976e0bfcae1f006e5a |     
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index d0dceb7d5..fbde9ec33 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.0.5
++MESA3D_HEADERS_VERSION = 17.0.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 3e1017837..ccd1afe7c 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-April/000322.html
+-md5 5587b6b693260e3a3125f60fed6a625d  mesa-17.0.5.tar.xz
+-sha1 030fe080bb53377e44ece3f99b969af08e4a4ff8  mesa-17.0.5.tar.xz
+-sha256 668efa445d2f57a26e5c096b1965a685733a3b57d9c736f9d6460263847f9bfe  mesa-17.0.5.tar.xz
+-sha512 942fa62c9098bcd030856cd622696eae418f292addb912e1d558cf27d396f25c3f2000dae97a12d1ff233f1ea157497259442082005035bb27b9bafb2cfc33c3  mesa-17.0.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-May/000327.html
++md5 77ea38dc0ab899864b06ea2941ac31a4  mesa-17.0.6.tar.xz
++sha1 f348781d5e4342ef5b78572f68ef9749e308dbd7  mesa-17.0.6.tar.xz
++sha256 89ecf3bcd0f18dcca5aaa42bf36bb52a2df33be89889f94aaaad91f7a504a69d  mesa-17.0.6.tar.xz
++sha512 537d28aa694c2d48811d2467e33b3adc841067d5f1cdb7e0809ba100f71869090285bbb246e57e5f0177401a539b44cc32b1ccfcb32a1855c14b011b92d32eaf  mesa-17.0.6.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b26d67747..1404f8407 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.0.5
++MESA3D_VERSION = 17.0.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-http://autobuild.buildroot.net
+2.11.0
