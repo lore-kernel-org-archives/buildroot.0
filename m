@@ -1,49 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 13 May 2017 19:18:41 +0200
-Subject: [Buildroot] [for-next 3/3] package/gcc: remove gcc 4.8
-In-Reply-To: <a6njudxk1o.ln2@ID-313208.user.individual.net>
-References: <20170513113732.8154-1-romain.naour@gmail.com>
- <20170513113732.8154-3-romain.naour@gmail.com>
- <a6njudxk1o.ln2@ID-313208.user.individual.net>
-Message-ID: <cb96a34a-0b54-c1eb-1c6a-14ca2ab909cb@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 13 May 2017 19:58:26 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/oracle-mysql: Fix gcc7 compile
+Message-ID: <20170513175826.11550-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/oracle-mysql/0008-gcc7.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/oracle-mysql/0008-gcc7.patch
 
-Le 13/05/2017 ? 18:00, Bernd Kuhls a ?crit :
-> Am Sat, 13 May 2017 13:37:32 +0200 schrieb Romain Naour:
-> 
->> -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> 
-> Hi,
-> 
-> lots of packages contain
-> 
-> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> 
-> like Kodi:
-> https://git.buildroot.net/buildroot/tree/package/kodi/Config.in#n40
-> 
-> With this patch applied these packages can not be selected anymore 
-> because you removed the option BR2_TOOLCHAIN_GCC_AT_LEAST_4_8.
-
-I'm not removing BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 option but BR2_GCC_VERSION_4_8_X
-(i.e the option for the internal toolchain).
-
-Thanks for taking a look!
-
-Best regards,
-Romain
-
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0008-gcc7.patch
+new file mode 100644
+index 0000000000..2cf6d26125
+--- /dev/null
++++ b/package/oracle-mysql/0008-gcc7.patch
+@@ -0,0 +1,24 @@
++Fix gcc7 compile
++
++mysql.cc: In function 'void build_completion_hash(bool, bool)':
++mysql.cc:2687:37: error: invalid conversion from 'char' to 'char*' [-fpermissive]
++       field_names[i][num_fields*2]= '\0';
++                                     ^~~~
++
++Patch was partly backported from upstream commit:
++https://github.com/mysql/mysql-server/commit/ae21683d980d5fe9e39bd0193827ea3604256eb9
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
++--- mysql-5.1.73.org/client/mysql.cc	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/client/mysql.cc	2017-05-13 19:52:10.125101101 +0200
++@@ -2684,7 +2684,7 @@
++         mysql_free_result(fields);
++         break;
++       }
++-      field_names[i][num_fields*2]= '\0';
+++      field_names[i][num_fields*2]= NULL;
++       j=0;
++       while ((sql_field=mysql_fetch_field(fields)))
++       {
+-- 
+2.11.0
