@@ -1,40 +1,33 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 May 2017 12:49:56 +0200
-Subject: [Buildroot] [PATCH] package/binutils: finalize the bump ARC tools
-	to arc-2017.03-rc2
-Message-ID: <20170514104956.4160-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 May 2017 13:56:38 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: regenerate after
+	snps_archs38_zebu_defconfig rename
+Message-ID: <20170514115704.1EA72827E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commit bumping ARC tools to arc-2017.03-rc2 [1] forgot to
-update the ARC tools version in binutils.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=be95978f3c83a481b88eccb57de8814522a40c88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] 043737282010f83e8ec20618a034131bc7e8cae1
-
-Fixes:
-http://autobuild.buildroot.net/results/f9c/f9c40610209fc22ac8c0db6bd57bd3b11bbe6d9c
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/binutils.mk | 2 +-
+ .gitlab-ci.yml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 72e2d0b..bc0268e 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -9,7 +9,7 @@
- BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
- ifeq ($(BINUTILS_VERSION),)
- ifeq ($(BR2_arc),y)
--BINUTILS_VERSION = arc-2017.03-rc1
-+BINUTILS_VERSION = arc-2017.03-rc2
- else
- BINUTILS_VERSION = 2.27
- endif
--- 
-2.9.3
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index a60cf91..5fb6454 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -179,8 +179,8 @@ sheevaplug_defconfig: *defconfig
+ snps_aarch64_vdk_defconfig: *defconfig
+ snps_arc700_axs101_defconfig: *defconfig
+ snps_archs38_axs103_defconfig: *defconfig
++snps_archs38_haps_defconfig: *defconfig
+ snps_archs38_vdk_defconfig: *defconfig
+-snps_archs38_zebu_defconfig: *defconfig
+ stm32f429_disco_defconfig: *defconfig
+ stm32f469_disco_defconfig: *defconfig
+ telit_evk_pro3_defconfig: *defconfig
