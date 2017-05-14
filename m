@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 May 2017 21:57:34 +0200
-Subject: [Buildroot] [git commit] package/bluez_utils: select
-	BR2_PACKAGE_CHECK
-Message-ID: <20170514195753.C315D822C0@busybox.osuosl.org>
+Date: Sun, 14 May 2017 21:57:31 +0200
+Subject: [Buildroot] [git commit] package/opencv3: disable explicitly lapack
+	support
+Message-ID: <20170514195753.932E782889@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00f6de5fc77e38ae80c6ef1a0f0a74b57373344b
+commit: https://git.buildroot.net/buildroot/commit/?id=a4aaf6eae0c99d5da0ae16c2db53eec84d549cef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit [1] added check package to bluez_utils dependencies without
-selecting it at Kconfig level.
+lapack support is enabled by default but the opencv3.mk doesn't handle
+this dependency yet.
 
 Fixes:
-Makefile:535: *** check is in the dependency chain of bluez_utils that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.
-
-[1] 8554be9f82301282161cf6310bacdb6067fefb16
+http://autobuild.buildroot.net/results/c8a/c8a25af38c405594722b44aef34e5e4c549639db
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bluez_utils/Config.in | 1 +
+ package/opencv3/opencv3.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
-index 3848162..86c9085 100644
---- a/package/bluez_utils/Config.in
-+++ b/package/bluez_utils/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_BLUEZ_UTILS
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-+	select BR2_PACKAGE_CHECK
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 153fd06..6df5705 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -192,6 +192,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_EIGEN=OFF \
+ 	-DWITH_GDAL=OFF \
+ 	-DWITH_GPHOTO2=OFF \
++	-DWITH_LAPACK=OFF \
+ 	-DWITH_MATLAB=OFF \
+ 	-DWITH_OPENCL=OFF \
+ 	-DWITH_OPENCL_SVM=OFF \
