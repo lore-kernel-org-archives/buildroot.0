@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 May 2017 16:04:57 +0200
+Date: Sun, 14 May 2017 16:05:51 +0200
 Subject: [Buildroot] [PATCH 2/3] bluez_utils: add missing check
  dependency for test program
-In-Reply-To: <20170513171009.5219-2-romain.naour@gmail.com>
+In-Reply-To: <20170513202845.GB15337@scaer>
 References: <20170513171009.5219-1-romain.naour@gmail.com>
  <20170513171009.5219-2-romain.naour@gmail.com>
-Message-ID: <20170514160457.3be49ed3@free-electrons.com>
+ <20170513202845.GB15337@scaer>
+Message-ID: <20170514160551.68cc2329@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +15,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 13 May 2017 19:10:08 +0200, Romain Naour wrote:
-> Tests are enabled since this has been introduced [1], so keep
-> them for now.
-> 
-> bluez_utils needs check tool and check if it's available [2].
-> 
-> [1] 06c3e2159686a886e52b2522a47e60c300cfb7f7
-> [2] https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/configure.ac?h=4.101#n51
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/bluez_utils/bluez_utils.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 13 May 2017 22:28:45 +0200, Yann E. MORIN wrote:
 
-Applied to master, thanks.
+> On 2017-05-13 19:10 +0200, Romain Naour spake thusly:
+> > Tests are enabled since this has been introduced [1], so keep
+> > them for now.  
+> 
+> Why don't you want to simply disable tests altogehter, especially since
+> there is an option for that:
+> 
+>     --disable-test
+> 
+> And if we disable tests, then we do not need patch 3/3.
+
+In bluez_utils, "tests" apparently a good number of tools that are not
+really tests, and might be needed on the target. I'll let Yegor answer
+on this though, but in the mean time, I believe it's better to fix
+things rather than changing the set of available tools on the target,
+which is why I've applied Romain's patch.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
