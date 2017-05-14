@@ -1,7 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 May 2017 14:34:54 +0200
-Subject: [Buildroot] Analysis of defconfig failures
-Message-ID: <20170514143454.44443932@free-electrons.com>
+Date: Sun, 14 May 2017 14:37:33 +0200
+Subject: [Buildroot] [PATCH] x11r7: xf86-input-tslib: upgrade to 1.0.0
+In-Reply-To: <20170514075026.13434-1-martink@posteo.de>
+References: <20170514075026.13434-1-martink@posteo.de>
+Message-ID: <20170514143733.5fa069e9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-Our last build of the defconfigs has almost been entirely successful,
-there are only a few remaining issues to fix:
+On Sun, 14 May 2017 09:50:26 +0200, Martin Kepplinger wrote:
+> As the update from 0.0.X to 1.0.0 suggests, this is a major update. The driver
+> uses X11's touch API now, instead of motion with button emulation. Furthermore
+> it supports multitouch when a recent version of tslib is installed.
+> 
+> It is not backwards compatible for very old versions of the X server. See
+> https://github.com/merge/xf86-input-tslib/releases for some details.
 
- * beaglebone_qt5_defconfig
+What do you call "very old versions of the X server" ?
 
-   It fails to build because we use an older kernel than
-   beaglebone_defconfig, and this older kernel doesn't build the Device
-   Tree for the BeagleBone Green. In a previous commit, I removed
-   building the BeagleBone Green DT from beaglebone_qt5_defconfig, but
-   it continues to fail building because the genimage.cfg file
-   references am335x-bonegreen.dtb, and this genimage.cfg is shared by
-   both beaglebone_defconfig and beaglebone_qt5_defconfig.
-
-   See https://gitlab.com/buildroot.org/buildroot/builds/16253472.
-
-   Since Lothar (who contributed beaglebone_qt5_defconfig) hasn't
-   provided any fix since quite a long time for this problem, my
-   proposal would be to get rid of beaglebone_qt5_defconfig. I'll send
-   a patch doing this.
-
- * csky_gx6605s_defconfig
-
-   It fails to build because the pre-built external toolchain needs
-   libelf installed on the host machine.
-
-   Arnout, do you think it's reasonable to add libelf in the list of
-   packages to install in the .gitlab-ci.yml file, just for the sake of
-   the csky external toolchain ?
-
- * snps_archs38_zebu_defconfig
-
-   Failed to build because the defconfig has been renamed, and I had
-   forgotten to regenerate .gitlab-ci.yml. This is already fixed.
-
-Bottom line: we have only two defconfigs that still have build issues,
-so we're not far from a 100% build success here.
+Buildroot still supports the X server in version 1.14.7. Does this
+qualify as a "very old version" ?
 
 Best regards,
 
