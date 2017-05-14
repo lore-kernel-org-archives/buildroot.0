@@ -1,41 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 13 May 2017 23:49:17 +0200
-Subject: [Buildroot] [PATCH] package/ntp: fix aarch64/mips build,
-	-fPIC required
-Message-ID: <20170513214917.3305-1-romain.naour@gmail.com>
+From: Mario Rugiero <mrugiero@gmail.com>
+Date: Sun, 14 May 2017 01:24:10 -0300
+Subject: [Buildroot] [PATCH] package: libcgi: set upstream to
+	https://github.com/rafaelsteil/libcgi
+In-Reply-To: <20170513145922.5e2626c5@free-electrons.com>
+References: <20170512221546.20280-1-mrugiero@gmail.com>
+ <20170513145922.5e2626c5@free-electrons.com>
+Message-ID: <CAKKQwLRvWC34J-vJwuB2WO1m8a1UWLCukf8X+dOyUT0KAxtfkA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add -fPIC to CFLAGS to avoid ntpsnmpd link issues with libntpq.a
+That's right, I should've checked.
+There's an upstream computed sha256sum though, shouldn't that be in use?
 
-Fixes:
-[aarch64] http://autobuild.buildroot.net/results/866/866b1d28595efd8b6becf83d0a64b596538d58b0
-[mips] http://autobuild.buildroot.net/results/c2a/c2a945855172970736a8ffea9c564f029a023344
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/ntp/ntp.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index cd6cb16..9b65c5e 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -20,6 +20,12 @@ NTP_CONF_OPTS = \
- 	--disable-local-libevent \
- 	--with-crypto
- 
-+# ntp build unconditionnaly some static libraries (libntpq.a, libntp.a etc...)
-+# The build system fail to create ntpsnmpd while linking these libraries when
-+# built without -fPIC.
-+NTP_CONF_ENV += \
-+	CFLAGS="-fPIC $(TARGET_CFLAGS)"
-+
- # 0002-ntp-syscalls-fallback.patch
- NTP_AUTORECONF = YES
- 
--- 
-2.9.3
+2017-05-13 9:59 GMT-03:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Fri, 12 May 2017 19:15:46 -0300, Mario J. Rugiero wrote:
+>> Also, bump to version 1.1 and cleanup. The patch is no longer needed.
+>>
+>> Tested with:
+>> nitrogen6sx_defconfig
+>>
+>> Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
+>
+> Thanks, but we already have a similar patch submitted, in
+> https://patchwork.ozlabs.org/patch/757847/.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
