@@ -1,37 +1,61 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 May 2017 20:26:55 +0200
-Subject: [Buildroot] [PATCH] package/opencv3: disable explicitly lapack
-	support
-Message-ID: <20170514182655.4945-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 May 2017 21:19:56 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-05-11
+In-Reply-To: <20170514174506.GA16283@itchy>
+References: <20170512062950.23CF0220A8@mail.free-electrons.com>
+ <20170514174506.GA16283@itchy>
+Message-ID: <20170514211956.662430db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lapack support is enabled by default but the opencv3.mk doesn't handle
-this dependency yet.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/c8a/c8a25af38c405594722b44aef34e5e4c549639db
+On Sun, 14 May 2017 19:45:06 +0200, Eric Le Bihan wrote:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
----
- package/opencv3/opencv3.mk | 1 +
- 1 file changed, 1 insertion(+)
+> On 17-05-12 08:29:50, Thomas Petazzoni wrote:
+> 
+> >        sparc |                skalibs-2.4.0.2 | NOK | http://autobuild.buildroot.net/results/85062b5f9dbe74d7d1c6edfeda085268ecaef4c2 |  
+> 
+> This one is puzzling. The configure steps ends with the following error:
+> 
+> ```
+> Checking whether system has auto-close after fd-passing...
+>   ... test crashed, aborting.
+>   make: ***
+>   [/accts/mlweber1/instance-2/output/build/skalibs-2.4.0.2/.stamp_configured]
+>   Error 111
+>   make: Leaving directory `/accts/mlweber1/instance-2/buildroot'
+> ```
+> 
+> The configure script tries to cross-compile and execute a program
+> (tryancilautoclose). The cross-compilation succeeds and of course the
+> execution fails, as it means running a program compiled for the
+> SPARC architecture on a x86 machine. Normally, the shell which executes
+> the program should return the code 126, as mentioned in the list of Bash
+> exit codes with special meaning [1].
+> 
+> Here the exit code is 111. When looking at tryancilautoclose.c, we can
+> see that 111 may be returned.
+> 
+> So this error means that either the shell managed to execute the
+> cross-compiled program or the shell does not follow the convention [1].
+> 
+> Which are the architecture of the build machine and the shell used?
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 153fd06..6df5705 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -192,6 +192,7 @@ OPENCV3_CONF_OPTS += \
- 	-DWITH_EIGEN=OFF \
- 	-DWITH_GDAL=OFF \
- 	-DWITH_GPHOTO2=OFF \
-+	-DWITH_LAPACK=OFF \
- 	-DWITH_MATLAB=OFF \
- 	-DWITH_OPENCL=OFF \
- 	-DWITH_OPENCL_SVM=OFF \
+Thanks for investigating this issue. This build failure occurred on
+Matt Weber's autobuilder instance, so I've added him in Cc. His
+instance has already triggered some weird issues recently due to an
+unusual setup. Hopefully Matt will be able to shed some light on what's
+going on, possibly reproduce by hand the issue and investigate.
+
+Thanks!
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
