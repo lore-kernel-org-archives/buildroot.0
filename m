@@ -1,67 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 May 2017 23:22:42 +0200
-Subject: [Buildroot] [PATCH] rabbitmq-c: openssl/popt sub-options don't work
-	in stat_ic linking
-Message-ID: <1494796962-24132-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 14 May 2017 23:26:43 +0200
+Subject: [Buildroot] [PATCH] package/faketime: fix build with gcc >= 6
+Message-ID: <20170514212643.17153-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rabbitmq-c currently fails to build in a number of static linking
-situations, due to two issues:
-
- - CMake FindOpenSSL module is buggy. Even though it uses pkg-config,
-   it doesn't use the information returned by pkg-config, and
-   therefore doesn't know about second order libraries that need be
-   part of the link for static linking to succeed. Due to this, -lz is
-   not passed, and therefore rabbitmq-c fails when linking against
-   libssl/libcrypto. This issue has been reported to upstream CMake at
-   https://gitlab.kitware.com/cmake/cmake/issues/16885.
-
- - popt might use libintl, but CMake doesn't know about that. For
-   autotools based packages, we typically work around this by passing
-   LIBS=, but CMake apparently has no equivalent to LIBS=.
-
-To workaround this, we only use the OpenSSL and Popt optional
-dependencies in dynamic linking situations.
+Upstream added -Wno-nonnull-compare to disable this error [1].
 
 Fixes:
+libfaketime.c:513:7: error?: nonnull argument ??buf?? compared to NULL [-Werror=nonnull-compare]
+    if (buf != NULL)
+       ^
+[1] https://github.com/wolfcw/libfaketime/commit/47e958b753fc15098a2b7d0e9ef26b83ee255874
 
-  http://autobuild.buildroot.net/results/798dbe5e5fd0463bb2066cb115656795144c327f/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/rabbitmq-c/rabbitmq-c.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ ...isable-the-non-null-compare-warning-error.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index 1ca35ad..eef09ec 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -21,14 +21,20 @@ else ifeq ($(BR2_SHARED_LIBS),y)
- RABBITMQ_C_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+# CMake OpenSSL detection is buggy, and doesn't properly use
-+# pkg-config, so it fails when statically linking. See
-+# https://gitlab.kitware.com/cmake/cmake/issues/16885.
-+ifeq ($(BR2_PACKAGE_OPENSSL):$(BR2_STATIC_LIBS),y:)
- RABBITMQ_C_CONF_OPTS += -DENABLE_SSL_SUPPORT=ON
- RABBITMQ_C_DEPENDENCIES += openssl
- else
- RABBITMQ_C_CONF_OPTS += -DENABLE_SSL_SUPPORT=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_POPT), y)
-+# Popt is sometimes linked against libintl, but CMake doesn't know
-+# about that, and there's no way to tell manually CMake to link
-+# against an additional library.
-+ifeq ($(BR2_PACKAGE_POPT):$(BR2_STATIC_LIBS),y:)
- RABBITMQ_C_CONF_OPTS += -DBUILD_TOOLS=ON
- RABBITMQ_C_DEPENDENCIES += popt
- else
+diff --git a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
+new file mode 100644
+index 0000000..859592e
+--- /dev/null
++++ b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
+@@ -0,0 +1,31 @@
++From e85a157b51b1276c91c736d8624d9f3e876e9189 Mon Sep 17 00:00:00 2001
++From: Andreas Rammhold <andreas@rammhold.de>
++Date: Tue, 20 Dec 2016 19:25:32 +0100
++Subject: [PATCH] Disable the non-null compare warning/error.
++
++We rely on the provided local library definitions for the hooked
++functions which in some cases (GCC >6) carry a non-null-attribute flag
++which causes compile errors on `!= NULL` checks.
++
++[Romain: rebase on 0.9.6]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index 51634b0..bbbd476 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -67,7 +67,7 @@ INSTALL ?= install
++ PREFIX ?= /usr/local
++ LIBDIRNAME ?= /lib/faketime
++ 
++-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
+++CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
++ LIB_LDFLAGS += -shared
++ LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
++ LDADD += -ldl -lm -lrt
++-- 
++2.9.3
++
 -- 
-2.7.4
+2.9.3
