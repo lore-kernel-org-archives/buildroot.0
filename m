@@ -1,61 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 May 2017 21:19:56 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-05-11
-In-Reply-To: <20170514174506.GA16283@itchy>
-References: <20170512062950.23CF0220A8@mail.free-electrons.com>
- <20170514174506.GA16283@itchy>
-Message-ID: <20170514211956.662430db@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 14 May 2017 21:55:18 +0200
+Subject: [Buildroot] [PATCH] package/bluez_utils: select BR2_PACKAGE_CHECK
+Message-ID: <20170514195518.9038-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commit [1] added check package to bluez_utils dependencies without
+selecting it at Kconfig level.
 
-On Sun, 14 May 2017 19:45:06 +0200, Eric Le Bihan wrote:
+Fixes:
+Makefile:535: *** check is in the dependency chain of bluez_utils that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.
 
-> On 17-05-12 08:29:50, Thomas Petazzoni wrote:
-> 
-> >        sparc |                skalibs-2.4.0.2 | NOK | http://autobuild.buildroot.net/results/85062b5f9dbe74d7d1c6edfeda085268ecaef4c2 |  
-> 
-> This one is puzzling. The configure steps ends with the following error:
-> 
-> ```
-> Checking whether system has auto-close after fd-passing...
->   ... test crashed, aborting.
->   make: ***
->   [/accts/mlweber1/instance-2/output/build/skalibs-2.4.0.2/.stamp_configured]
->   Error 111
->   make: Leaving directory `/accts/mlweber1/instance-2/buildroot'
-> ```
-> 
-> The configure script tries to cross-compile and execute a program
-> (tryancilautoclose). The cross-compilation succeeds and of course the
-> execution fails, as it means running a program compiled for the
-> SPARC architecture on a x86 machine. Normally, the shell which executes
-> the program should return the code 126, as mentioned in the list of Bash
-> exit codes with special meaning [1].
-> 
-> Here the exit code is 111. When looking at tryancilautoclose.c, we can
-> see that 111 may be returned.
-> 
-> So this error means that either the shell managed to execute the
-> cross-compiled program or the shell does not follow the convention [1].
-> 
-> Which are the architecture of the build machine and the shell used?
+[1] 8554be9f82301282161cf6310bacdb6067fefb16
 
-Thanks for investigating this issue. This build failure occurred on
-Matt Weber's autobuilder instance, so I've added him in Cc. His
-instance has already triggered some weird issues recently due to an
-unusual setup. Hopefully Matt will be able to shed some light on what's
-going on, possibly reproduce by hand the issue and investigate.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/bluez_utils/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
+index 3848162..86c9085 100644
+--- a/package/bluez_utils/Config.in
++++ b/package/bluez_utils/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BLUEZ_UTILS
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
++	select BR2_PACKAGE_CHECK
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
