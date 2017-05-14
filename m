@@ -1,111 +1,159 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 14 May 2017 13:40:50 -0400
-Subject: [Buildroot] [PATCH v3 0/3] refpolicy: new package cover letter.
-Message-ID: <20170514174053.26140-1-Adamduskett@outlook.com>
+Date: Sun, 14 May 2017 13:40:51 -0400
+Subject: [Buildroot] [PATCH v3 1/3] refpolicy: new package
+In-Reply-To: <20170514174053.26140-1-Adamduskett@outlook.com>
+References: <20170514174053.26140-1-Adamduskett@outlook.com>
+Message-ID: <20170514174053.26140-2-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Refpolicy is one of the last pieces for buildroot to truley have a easy way to
-create a buildroot build with SELinux enabled.  As such I feel it's important
-to have it in the buildroot mainline.
+The patch is for adding selinux reference policy (refpolicy).
+It is a complete SELinux policy that can be used as the system policy
+for a variety of systems and used as the basis for creating other policies.
 
-The patchset by Bryce Ferguson that was submitted in January adds a refpolicy
-that is from early 2015, and as such is quite out of date.  Also the overall
-package submitted has some issues that I wanted to fix up as well.
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+Changes v2 -> v3:
+  - Removed 0001-fc_sort-use-CFLAGS_FOR_BUILD.patch as this causes compilation
+    problems in the newer refpolicy and doesn't seem to be needed anymore.
 
-I contacted Bryce on May 10th and asked if I could take over the refpolicy
-patches again from him and he was glad to let me do so, if anybody needs a copy
-of the email I will gladly forward it to them.
-
-
-Here are some of the issues I saw that were cleaned up or are changed from
-Bryce Fergusons patch set:
-
-Patch1: refpolicy: new package.
-  - Removed 0001-Fix-awk-references-to-use-variable.patch: Fixed upstream.
-  - Removed 0002-support-fc_sort-use-_FOR_BUILD.patch as this doesn't work in
-    the new version of refpolicy.
-  - Updated 0001-fc_sort-use-CFLAGS_FOR_BUILD.patch to work with new version
-    of Refpolicy.
-  - Remove S00selinux, as this would be a bit too much for section 21.5.1
-    paragraph 3 of the buildroot manual.  The first patch in this series
-    should build and install just a reference policy on the target.
-  - Stripped down patch to include just enough to build refpolicy and
-    install the policy on the target.
-    
-  Config.in:
-    - Fixed attributes order.
-    - Fixed text wrapping.
-    - Removed policy type selection.
-    - Removed default state selection.
-
-  refpolicy.hash:  
-    - Updated hash, however this doesn't work anyways because git
-      submodule packages aren't checked for hash consistancy yet.
-
-  refpolicy.mk:
-    - Updated version number in refpolicy.mk
-    - Changed ordering in refpolicy.mk.  I tend to put the DEPENDENCIES line
-      below lines that aren't likely to change often, such as INSTALL_STAGING.
-    - Combined REFPOLICY_MAKE_OPTS and REFPOLICY_MAKE_ENV into REFPOLICY_MAKE.
-      This cleans up the rest of the makefile.
-    - Removed AWK= and M4= in refpolicy.mk, as these are no longer needed with
-      the newer version of refpolicy.
-    - Removed REFPOLICY_NAME, as the first patch only references a policy name
-      once.
-    - Changed "br_policy" to "targeted", as that's what most distributions
-      that use SELinux have for their default name.
-    - Set the default policy version number to 30, as this is the highest
-      currently supported by the kernel.
-    - Removed install-docs, as they generally installed for buildroot.
-    - Broke up CONFIFGURE_CMDS and BUILD_CMDS:  The original patch configured
-      and built refpolicies in REFPOLICY_CONFIGURE_CMDS, which doesn't follow
-      other buildroot package.mk conventions.
-    - Combined making bare and conf into a single line.
-    - Removed creatings $(TARGET_DIR)/etc/selinux/config in initial patch.
-    - Removed INIT_SYSV section.
-
-
-patch2: refpolicy-add-ability-to-specify-policy-version
-  - The reason why this is a standalone patch is that it follows section 21.5.1
-    paragraph 3 of the buildroot manual.  Adding the ability to set a default
-    state is secondary to the policy version.  As such I decided to break up
-    this patch into it's own seperate patch.
-  
-
-patch3: refpolicy-add-ability-to-specify-policy-version
-  - Broke this patch up into it's own seperate patch so that it follows section
-    21.5.1 paragraph 3 of the buildroot manual.  This patch adds only the
-    ability to set the default selinux state.
-  - Re-added a template config file with SELINUXTYPE of targeted.
-    
-  Config.in:
-    - Changed ENFORCE to ENFORCING because it matches the actual string.
-    - Changed DISABLE to DISABLED because it matches the actual string.
-  
-  refpolicy.mk:
-    - Added only one set command to $(TARGET_DIR)/etc/selinux/config
-
-Adam Duskett (3):
-  refpolicy: new package
-  add ability to specify policy version
-  refpolicy: add ability to set default state.
+Changes v1 -> v2:
+  - Added cover letter explaining the new patch set. 
+  - Added 0001-fc_sort-use-CFLAGS_FOR_BUILD.patch from previous patch set.
+  - Readded dependencies from  Bryce Ferguson's patch set.
+  - Readded comment in refpolicy.mk explaining why git submodules is needed.
 
  package/Config.in                                  |  1 +
- .../0001-fc_sort-use-CFLAGS_FOR_BUILD.patch        | 30 ++++++++++
- package/refpolicy/Config.in                        | 70 ++++++++++++++++++++++
- package/refpolicy/config                           |  9 +++
+ .../0001-fc_sort-use-CFLAGS_FOR_BUILD.patch        | 30 +++++++++++++
+ package/refpolicy/Config.in                        | 37 ++++++++++++++++
  package/refpolicy/refpolicy.hash                   |  2 +
- package/refpolicy/refpolicy.mk                     | 55 +++++++++++++++++
- 6 files changed, 167 insertions(+)
+ package/refpolicy/refpolicy.mk                     | 49 ++++++++++++++++++++++
+ 5 files changed, 119 insertions(+)
  create mode 100644 package/refpolicy/0001-fc_sort-use-CFLAGS_FOR_BUILD.patch
  create mode 100644 package/refpolicy/Config.in
- create mode 100644 package/refpolicy/config
  create mode 100644 package/refpolicy/refpolicy.hash
  create mode 100644 package/refpolicy/refpolicy.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index d57813c..6aa6885 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1754,6 +1754,7 @@ endmenu
+ menu "Security"
+ 	source "package/checkpolicy/Config.in"
+ 	source "package/policycoreutils/Config.in"
++	source "package/refpolicy/Config.in"
+ 	source "package/sepolgen/Config.in"
+ 	source "package/setools/Config.in"
+ endmenu
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+new file mode 100644
+index 0000000..a937055
+--- /dev/null
++++ b/package/refpolicy/Config.in
+@@ -0,0 +1,37 @@
++config BR2_PACKAGE_REFPOLICY
++	bool "refpolicy"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
++	depends on BR2_TOOLCHAIN_USES_GLIBC # policycoreutils
++	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
++	depends on BR2_TOOLCHAIN_USES_GLIBC # libsemanage
++	depends on !BR2_STATIC_LIBS #libsemanage
++	depends on !BR2_arc # libsemanage
++	select BR2_PACKAGE_POLICYCOREUTILS
++	select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
++	help
++	  The SELinux Reference Policy project (refpolicy) is a
++	  complete SELinux policy that can be used as the system
++	  policy for a variety of systems and used as the basis
++	  for creating other policies. Reference Policy was originally
++	  based on the NSA example policy, but aims to accomplish
++	  many additional goals.
++
++	  The current refpolicy does not fully support Buildroot
++	  and needs modifications to work with the default system
++	  file layout. These changes should be added as patches to
++	  the refpolicy that modify a single SELinux policy.
++
++	  The refpolicy works for the most part in permissive mode. Only
++	  the basic set of utilities are enabled in the example policy
++	  config and some of the pathing in the policies is not correct.
++	  Individual policies would need to be tweaked to get everything
++	  functioning properly.
++
++	  https://github.com/TresysTechnology/refpolicy
++
++comment "refpolicy needs a glibc toolchain w/ threads, dynamic library"
++	depends on !BR2_arc
++	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+new file mode 100644
+index 0000000..7aeac41
+--- /dev/null
++++ b/package/refpolicy/refpolicy.hash
+@@ -0,0 +1,2 @@
++#From https://github.com/TresysTechnology/refpolicy/wiki/DownloadRelease
++sha256 08f9e2afc5e4939c23e56deeec7c47da029d7b85d82fb4ded01a36eb5da0651e  refpolicy-RELEASE_2_20170204.tar.gz
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+new file mode 100644
+index 0000000..d565cbd
+--- /dev/null
++++ b/package/refpolicy/refpolicy.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# refpolicy
++#
++################################################################################
++
++REFPOLICY_VERSION = RELEASE_2_20170204
++
++# Do not use GitHub helper as git submodules are needed for refpolicy-contrib
++REFPOLICY_SITE = https://github.com/TresysTechnology/refpolicy.git
++REFPOLICY_SITE_METHOD = git
++REFPOLICY_GIT_SUBMODULES = y # Required for refpolicy-contrib
++REFPOLICY_LICENSE = GPLv2
++REFPOLICY_LICENSE_FILES = COPYING
++REFPOLICY_INSTALL_STAGING = YES
++REFPOLICY_DEPENDENCIES += \
++	host-m4 \
++	host-checkpolicy \
++	host-policycoreutils \
++	host-setools \
++	host-gawk \
++	host-python \
++	policycoreutils
++
++REFPOLICY_PYINC = -I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/site-packages
++
++# Cannot use multiple threads to build the reference policy
++REFPOLICY_MAKE = PYTHON="$(HOST_DIR)/usr/bin/python2" $(TARGET_MAKE_ENV) $(MAKE1)
++
++define REFPOLICY_CONFIGURE_CMDS
++	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = 30" $(@D)/build.conf
++	$(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
++	$(SED) "/NAME/c\NAME = targeted" $(@D)/build.conf
++endef
++
++define REFPOLICY_BUILD_CMDS
++	$(REFPOLICY_MAKE) -C $(@D) bare conf DESTDIR=$(STAGING_DIR)
++endef
++
++define REFPOLICY_INSTALL_STAGING_CMDS
++	$(REFPOLICY_MAKE) -C $(@D) install-src install-headers \
++	DESTDIR=$(STAGING_DIR)
++endef
++
++define REFPOLICY_INSTALL_TARGET_CMDS
++	$(REFPOLICY_MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
++endef
++
++$(eval $(generic-package))
 -- 
 2.9.3
