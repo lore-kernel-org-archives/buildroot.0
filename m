@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 May 2017 15:56:14 +0200
-Subject: [Buildroot] Why is /var/log symlinked to a tmpfs?
-In-Reply-To: <1494763200132-164905.post@n4.nabble.com>
-References: <1494763200132-164905.post@n4.nabble.com>
-Message-ID: <20170514155614.50032272@free-electrons.com>
+Date: Sun, 14 May 2017 15:57:37 +0200
+Subject: [Buildroot] [git commit] package/bluez_utils: add missing
+	host-pkgconf dependency
+Message-ID: <20170514135745.E68BB82675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5fec33bd5e4a928d60bdc8693ca2917b3e91a43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 14 May 2017 05:00:00 -0700 (PDT), PTaylor.us wrote:
-> First, I must say that buildroot is a great tool. Thank you.
-> 
-> I am using buildroot branch 2016.11.x.
-> 
-> Why is /var/log a symlink to /tmp (which is mounted with a tmpfs). My
-> understanding is that */var/log should be persistent across reboots*. I'm
-> very curious why the default skeleton was setup like this. It is causing
-> problems, for one, with journald where the "fix" I've seen suggested on this
-> mailing list is to set the logging to "volatile". 
+The configure script use pkg-config.
 
-The reason why /var/log is a symlink to a tmpfs is because we want to
-support the root filesystem to be mounted read only.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bluez_utils/bluez_utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We know the current skeleton has some issues with journald (see
-https://bugs.busybox.net/show_bug.cgi?id=7892), and Yann E. Morin is
-working on a patch series to address this, see:
-
-  https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/systemd-skeleton
-  https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/systemd-skeleton-2
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
+index b396886..526804a 100644
+--- a/package/bluez_utils/bluez_utils.mk
++++ b/package/bluez_utils/bluez_utils.mk
+@@ -8,7 +8,7 @@ BLUEZ_UTILS_VERSION = 4.101
+ BLUEZ_UTILS_SOURCE = bluez-$(BLUEZ_UTILS_VERSION).tar.xz
+ BLUEZ_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ_UTILS_INSTALL_STAGING = YES
+-BLUEZ_UTILS_DEPENDENCIES = dbus libglib2
++BLUEZ_UTILS_DEPENDENCIES = host-pkgconf dbus libglib2
+ BLUEZ_UTILS_CONF_OPTS = --enable-test --enable-tools
+ BLUEZ_UTILS_AUTORECONF = YES
+ BLUEZ_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
