@@ -1,41 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 May 2017 16:08:55 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mplayer: disable inline sse on
- i386
-In-Reply-To: <20170513150918.25427-1-bernd.kuhls@t-online.de>
-References: <20170513150918.25427-1-bernd.kuhls@t-online.de>
-Message-ID: <20170514160855.2dea324b@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 May 2017 16:28:21 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/tor: bump version to 0.3.0.6
+Message-ID: <20170514142821.16259-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 13 May 2017 17:09:16 +0200, Bernd Kuhls wrote:
-> Fixes
-> 
-> libavcodec/x86/ac3dsp_init.c: In function 'ac3_downmix_sse':
-> libavcodec/x86/ac3dsp_init.c:161:9: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
-> libavcodec/x86/ac3dsp_init.c:165:9: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
-> libavcodec/x86/ac3dsp_init.c:161:9: error: 'asm' operand has impossible constraints
-> libavcodec/x86/ac3dsp_init.c:165:9: error: 'asm' operand has impossible constraints
-> libavcodec/x86/ac3dsp_init.c:174:9: error: 'asm' operand has impossible constraints
-> 
-> found by autobuilder job
-> http://autobuild.buildroot.net/results/9f5/9f5a497c6242860fb67a5aa2996c3509f49a4564//
-> 
-> Please note that this patch alone will not fix all build errors, sse2
-> and mmxext show similar errors and are fixed by follow-up patches.
-
-All of this is very messy. Why isn't the ffmpeg code building properly
-on x86 ? It's a major platform, shouldn't x86 just work ?
-
-Best regards,
-
-Thomas
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index d14db040e..5b83aa43d 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d611283e1fb284b5f884f8c07e7d3151016851848304f56cfdf3be2a88bd1341  tor-0.2.9.10.tar.gz
++sha256 a3e512e93cb555601fd207d914d7c5fe981d66d6ebb5821ecdf5dea738c2fb14  tor-0.3.0.6.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 389af6656..e6cb2b729 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.2.9.10
++TOR_VERSION = 0.3.0.6
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
