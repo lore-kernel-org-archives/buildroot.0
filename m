@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 14:07:50 +0200
-Subject: [Buildroot] [PATCH] package/gpsd: do not interact with systemd
-	on install
-In-Reply-To: <20170513082736.22734-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 13 May 2017 10:27:36 +0200")
-References: <20170513082736.22734-1-yann.morin.1998@free.fr>
-Message-ID: <87fug6iaqx.fsf@dell.be.48ers.dk>
+Date: Mon, 15 May 2017 14:09:28 +0200
+Subject: [Buildroot] [PATCH] core/download: fix source check for git
+	method
+In-Reply-To: <20170512155429.26176-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Fri, 12 May 2017 17:54:29 +0200")
+References: <20170512155429.26176-1-yann.morin.1998@free.fr>
+Message-ID: <87bmquiao7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > When building on a systemd-based host for a systemd-based target, gpsd's
- > buildsystem will try to tell systemd to reload the its configuration and
- > recreate the entire dependency tree of services.
+ > Running foo-source-check on packages retrieved from git fails.
+ > This is because there is no associated stamp file, so we do not have a
+ > rule-assignment that sets PKG for foo-source-check.
 
- > Of course, this can not work when run as a user:
- >>>> gpsd 3.16 Installing to target
- >     ==== AUTHENTICATING FOR org.freedesktop.systemd1.reload-daemon ===
- >     Authentication is required to reload the systemd state.
- >     Authenticating as: root
- >     Password:
+ > But it does not make sense to have a stamp file at all, because
+ > source-check is not supposed to change anything: the status after is
+ > exactly the same as before; nothing is downlaoded, so there is no
+ > progress (whatsoever) to memorise.
 
- > In fact, this does not even mean anything in cross-compilation.
+ > Fix that by just defining PKG in the source-check rule definition.
 
- > Fortunately, upstream has already fixed their sin, so we backport it
- > (tweaked to apply onto 3.16).
+ > Fixes #9796.
 
+ > Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
- > ---
- > Note: this was never observed in any of the autobuilders, even those
- > running on a systemd-based distro, because in this case stdin is
- > redirected and systemctl simply fails, but the construct is just to
- > ignore the failure, so the build proceeds; the issue only occurs when
- > there is an actual terminal to provide user input... :-/
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
