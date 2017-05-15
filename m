@@ -1,76 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 12:15:45 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] qt5base: fix examples
-	compile with disabled gui module
-Message-ID: <20170515125326.D0FB98286F@busybox.osuosl.org>
+Date: Mon, 15 May 2017 14:04:37 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/vlc: security
+	bump to version 2.2.5.1
+Message-ID: <20170515125327.C85C082901@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff1e2c2c0d3a9e5b806308325585994f43f2c858
+commit: https://git.buildroot.net/buildroot/commit/?id=5b58f1ee7268e528b024ec57f32823ee2615dbba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes [1]:
+This release contains "various security improvements in demuxers and
+decoders".
+Release notes: http://www.videolan.org/vlc/releases/2.2.5.html
 
-  Project ERROR: Could not find feature opengl.
+Added all hashes provided by upstream.
 
-[1] http://autobuild.buildroot.net/results/040/040ab283dbbec623fe5ff4eaece754d9701fafc5
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4860e05a63bf01156466a1a8007de38e2839501a)
+(cherry picked from commit c04fa8fad0e7d6631b00e8e0766244cc04a8364b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...4-examples-fix-compile-without-gui-module.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/vlc/vlc.hash | 8 ++++++--
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
-new file mode 100644
-index 0000000..148ced8
---- /dev/null
-+++ b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
-@@ -0,0 +1,42 @@
-+From fe8a9bacf781fcf290e04a08f2b8e37d881d58bb Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 27 Apr 2017 22:41:28 +0200
-+Subject: [PATCH] examples: fix compile without gui module
-+
-+Fixes:
-+
-+  Project ERROR: Could not find feature opengl.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/gui/gui.pro         | 2 +-
-+ examples/widgets/widgets.pro | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/examples/gui/gui.pro b/examples/gui/gui.pro
-+index a4d960d3f5..b8080c2075 100644
-+--- a/examples/gui/gui.pro
-++++ b/examples/gui/gui.pro
-+@@ -6,5 +6,5 @@ CONFIG += no_docs_target
-+ 
-+ SUBDIRS += analogclock
-+ SUBDIRS += rasterwindow
-+-qtConfig(opengl): \
-++qtHaveModule(gui):qtConfig(opengl): \
-+     SUBDIRS += openglwindow
-+diff --git a/examples/widgets/widgets.pro b/examples/widgets/widgets.pro
-+index 513ddc91f2..cef4936d32 100644
-+--- a/examples/widgets/widgets.pro
-++++ b/examples/widgets/widgets.pro
-+@@ -22,7 +22,7 @@ SUBDIRS       = \
-+                 tutorials \
-+                 widgets
-+ 
-+-qtConfig(opengl): \
-++qtHaveModule(gui):qtConfig(opengl): \
-+     SUBDIRS += windowcontainer
-+ 
-+ contains(DEFINES, QT_NO_CURSOR): SUBDIRS -= mainwindows
-+-- 
-+2.11.0
-+
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index efd4e27..0f1b6dc 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,2 +1,6 @@
+-# From http://download.videolan.org/pub/videolan/vlc/2.2.3/vlc-2.2.3.tar.xz.sha256
+-sha256 1632e91d2a0087e0ef4c3fb4c95c3c2890f7715a9d1d43ffd46329f428cf53be  vlc-2.2.4.tar.xz
++# From http://get.videolan.org/vlc/2.2.5.1/vlc-2.2.5.1.tar.xz.md5
++md5 7ab63964ffec4c92a54deb018f23318b vlc-2.2.5.1.tar.xz
++# From http://get.videolan.org/vlc/2.2.5.1/vlc-2.2.5.1.tar.xz.sha1
++sha1 042962dba68e1414aa563883b0172ee121cf9555 vlc-2.2.5.1.tar.xz
++# From http://get.videolan.org/vlc/2.2.5.1/vlc-2.2.5.1.tar.xz.sha256
++sha256 b28b8a28f578c0c6cb1ebed293aca2a3cd368906cf777d1ab599e2784ddda1cc vlc-2.2.5.1.tar.xz
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 583edf3..7f0c4f5 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 2.2.4
++VLC_VERSION = 2.2.5.1
+ VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPLv2+, LGPLv2.1+
