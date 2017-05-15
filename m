@@ -1,40 +1,47 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 15 May 2017 14:18:32 +0100
-Subject: [Buildroot] [PATCH next] libgtk3: bump version to 3.22.15
-Message-ID: <20170515131832.59631-1-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 May 2017 15:51:11 +0200
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump to version
+	10.1.23
+In-Reply-To: <7f264a9b-c5cf-feaf-a8bf-929d112fb7f0@gmail.com> (Ryan Coe's
+ message of "Fri, 12 May 2017 06:44:50 -0700")
+References: <20170508153716.16809-1-bluemrp9@gmail.com>
+ <87efvzno6c.fsf@dell.be.48ers.dk>
+ <7f264a9b-c5cf-feaf-a8bf-929d112fb7f0@gmail.com>
+Message-ID: <87bmqugre8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index cbba7ca62..0f259e9a1 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.14.sha256sum
--sha256 d6120e4fd64e432b74a61e8abd972b1948cf54e4dc4f0e081c05ab625f087131  gtk+-3.22.14.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.15.sha256sum
-+sha256 c8a012c2a99132629ab043f764a2b7cb6388483a015cd15c7a4288bec3590fdb  gtk+-3.22.15.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 7d8eecbd6..f3b1705d9 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).14
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+Hi,
+
+ >> Thanks, I (obviously) want to apply this, but something odd is going on
+ >> with the licensing. COPYING.LESSER has been removed by this commit:
+ >> 
+ >> https://github.com/MariaDB/server/commit/577915def8
+ >> 
+ >> But the client library IS listed as being LGPL:
+ >> 
+ >> https://mariadb.com/kb/en/mariadb/mariadb-connector-c/
+ >> 
+ >> And same for the "old" one:
+ >> 
+ >> https://mariadb.com/kb/en/mariadb/lgpl-mysql-client-library-32358/
+ >> 
+ >> Grepping around in the 10.1.23 tarball, I don't see a lot of references
+ >> to Lesser og LGPL.
+ >> 
+ >> Now, I know next to nothing about mariadb. Do you have any idea what is
+ >> going on here?
+ >> 
+ > I am really not sure what is going on there.
+
+:/
+
+Could you perhaps try to contact the mariadb developers?
+
 -- 
-2.13.0
+Bye, Peter Korsgaard
