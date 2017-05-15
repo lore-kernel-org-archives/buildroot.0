@@ -1,90 +1,34 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Mon, 15 May 2017 13:05:53 +0200
-Subject: [Buildroot] [PATCH v3 1/1] linuxptp: new package
-In-Reply-To: <20170515114030.0e40ace0@free-electrons.com>
-References: <1494836789-26058-1-git-send-email-brain@jikos.cz>
- <20170515114030.0e40ace0@free-electrons.com>
-Message-ID: <fdc03daa-39dd-7863-155f-1b86753789dc@jikos.cz>
+From: Lothar Felten <lothar.felten@gmail.com>
+Date: Mon, 15 May 2017 13:12:04 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: bump kernel version to
+	4.4.41
+Message-ID: <1494846724-30126-1-git-send-email-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks, Thomas. I have corrected the issues and sent a new version.
+Switch to Linux kernel version 4.4.41 from the TI SDK 03.03.00.04
+(TI SDK release date: 29.03.2017)
 
-Petr
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+---
+ configs/beaglebone_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 15/05/17 11:40, Thomas Petazzoni wrote:
-> Hello,
->
-> On Mon, 15 May 2017 10:26:29 +0200, Petr Kulhavy wrote:
->> Add the Linux PTP Project package.
->> http://linuxptp.sourceforge.net/
->>
->> The sysV and systemd init scripts start the daemon in automatic mode on eth0.
->>
->> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
-> Thanks for this new iteration! A few comments below.
->
->
->>   package/linuxptp/0001-adjtime-fix.patch         | 12 ++++
->>   package/linuxptp/0002-ethhdr-fix.patch          | 10 ++++
->>   package/linuxptp/0003-time_t-fix.patch          | 10 ++++
->>   package/linuxptp/0004-clock_nanosleep-fix.patch | 74 +++++++++++++++++++++++++
->>   package/linuxptp/Config.in                      | 13 +++++
->>   package/linuxptp/S65ptp4l                       | 36 ++++++++++++
-> Everything should be named linuxptp.
->
->>   package/linuxptp/linuxptp.hash                  |  2 +
->>   package/linuxptp/linuxptp.mk                    | 38 +++++++++++++
->>   package/linuxptp/ptp4l.service                  | 10 ++++
-> Ditto. Please search globally for every occurrence of ptp4l in your
-> patch, and fix the different instances to be linuxptp, i.e the name of
-> the package.
->
->> diff --git a/package/linuxptp/0001-adjtime-fix.patch b/package/linuxptp/0001-adjtime-fix.patch
->> new file mode 100644
->> index 0000000..a892220
->> --- /dev/null
->> +++ b/package/linuxptp/0001-adjtime-fix.patch
-> All patches should have a description + Signed-off-by. Since the
-> upstream Linux PTP project uses Git, please create Git formatted
-> patches (git format-patch -N).
->
->> +--- linuxptp-1.8/makefile.old	2017-05-15 00:41:33.370113834 +0200
->> ++++ linuxptp-1.8/makefile	2017-05-15 00:41:03.710283744 +0200
->> +@@ -20,7 +20,7 @@
->> + DEBUG	=
->> + CC	= $(CROSS_COMPILE)gcc
->> + VER     = -DVER=$(version)
->> +-CFLAGS	= -Wall $(VER) $(incdefs) $(DEBUG) $(EXTRA_CFLAGS)
->> ++CFLAGS	+= -Wall $(VER) $(incdefs) $(DEBUG) $(EXTRA_CFLAGS)
-> How is this related to the clock_nanosleep() issue ?
->
->> diff --git a/package/linuxptp/Config.in b/package/linuxptp/Config.in
->> new file mode 100644
->> index 0000000..7e4a77b
->> --- /dev/null
->> +++ b/package/linuxptp/Config.in
->> @@ -0,0 +1,13 @@
->> +config BR2_PACKAGE_LINUXPTP
->> +	bool "Linux PTP"
-> Please use just the name of the package, all lowercase:
->
-> 	bool "linuxptp"
->
->> diff --git a/package/linuxptp/S65ptp4l b/package/linuxptp/S65ptp4l
->> new file mode 100755
->> index 0000000..50b9e96
->> --- /dev/null
->> +++ b/package/linuxptp/S65ptp4l
->> @@ -0,0 +1,36 @@
->> +#!/bin/sh
->> +#
->> +# Start ptp4l
-> ptp4l -> linuxptp (everywhere).
->
-> Thanks!
->
-> Thomas
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index b74ffbc..611b694 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="adde2ca9f86797071f6e7b2b9e779fa5e4a8f3cd"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f9f6f0db2d5e4f9d2ff46eb31a5a05276a92ed7d"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
+-- 
+1.9.1
