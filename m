@@ -1,50 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 14:09:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] core/download: fix source
-	check for git method
-Message-ID: <20170515125328.2DDFD82901@busybox.osuosl.org>
+Date: Mon, 15 May 2017 14:10:24 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openblas: SPARC support
+	is for Sparc v9
+Message-ID: <20170515125328.50FE17FB96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f99117fd8b83fdfb3842140e0053b14cc2c12424
+commit: https://git.buildroot.net/buildroot/commit/?id=af6daa4cbf5db69dc7c88751b407b99ed3b03d26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Running foo-source-check on packages retrieved from git fails.
+Makefile.sparc in the openblas source code passes -mcpu=v9, i.e it
+assumes a SPARCv9 CPU. Therefore, this commit adjusts openblas
+Config.in file so that SPARC is only used for BR2_sparc_v9.
 
-This is because there is no associated stamp file, so we do not have a
-rule-assignment that sets PKG for foo-source-check.
+Fixes:
 
-But it does not make sense to have a stamp file at all, because
-source-check is not supposed to change anything: the status after is
-exactly the same as before; nothing is downlaoded, so there is no
-progress (whatsoever) to memorise.
+  http://autobuild.buildroot.net/results/805087e87b8bb7d11adb49d9eca3959a37aca3a2/
 
-Fix that by just defining PKG in the source-check rule definition.
-
-Fixes #9796.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4c0aacbc317d298397cede593f74ece26d0a89f0)
+(cherry picked from commit 6714d79a22b4c0ad7651659c8009f93574bbd59d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/openblas/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e8a8021..fd8c217 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -683,6 +683,7 @@ $(1)-legal-source:	$$($(2)_TARGET_ACTUAL_SOURCE)
- endif # actual sources != sources
- endif # actual sources != ""
- 
-+$(1)-source-check: PKG=$(2)
- $(1)-source-check:
- 	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
- 
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index de26ab3..bc62896 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -31,7 +31,8 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "SICORTEX"     if BR2_MIPS_CPU_MIPS64
+ 	# I6400 is built with MSA support which is only available in Codescape toolchains
+ 	default "I6400"        if BR2_mips_i6400 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+-	default "SPARC"        if BR2_sparc
++	# OpenBLAS assumes SPARC=Sparc v9
++	default "SPARC"        if BR2_sparc_v9
+ 	# Cortex-A15 always have a VFPv4
+ 	default "CORTEXA15"    if (BR2_cortex_a15 && BR2_ARM_EABIHF)
+ 	# Cortex-A9 have an optional VFPv3, so we need to make sure it
