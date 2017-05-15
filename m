@@ -1,49 +1,95 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 15 May 2017 10:30:06 +0200
-Subject: [Buildroot] [PATCH] package/boost: disable boost-locale for
-	static only build
-In-Reply-To: <20170515091516.0b3e6112@free-electrons.com>
-References: <20170514214556.17980-1-romain.naour@gmail.com>
- <20170515091516.0b3e6112@free-electrons.com>
-Message-ID: <CAGm1_ksMXXjviJAact4vDgnRJCrfvQUMxKU2Jytjn2rBwBU2qw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 May 2017 11:40:30 +0200
+Subject: [Buildroot] [PATCH v3 1/1] linuxptp: new package
+In-Reply-To: <1494836789-26058-1-git-send-email-brain@jikos.cz>
+References: <1494836789-26058-1-git-send-email-brain@jikos.cz>
+Message-ID: <20170515114030.0e40ace0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Hello,
 
-On Mon, May 15, 2017 at 9:15 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sun, 14 May 2017 23:45:56 +0200, Romain Naour wrote:
->
->> diff --git a/package/boost/Config.in b/package/boost/Config.in
->> index 9825c09..6ffa8f0 100644
->> --- a/package/boost/Config.in
->> +++ b/package/boost/Config.in
->> @@ -98,8 +98,15 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
->>
->>  config BR2_PACKAGE_BOOST_LOCALE
->>       bool "boost-locale"
->> +     # boost-locale build system try to link dynamically with icu
->> +     # see <link>shared and <runtime-link>shared in locale/build/Jamfile.v2
->> +     # Related to https://svn.boost.org/trac/boost/ticket/9685
->> +     depends on !BR2_STATIC_LIBS
->>       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
->
-> OK, but doesn't the problem occurs only when icu is enabled? Do we want
-> to prevent from using boost-locale in static linking situations in all
-> cases, or only when combined with icu?
->
-> Perhaps we should keep it simple and do like you suggest, i.e make it
-> unavailable for all static linking configurations, regardless of icu
-> availability. I'm just trying to figure out the best/right approach
-> between yours and the one proposed by Yegor.
+On Mon, 15 May 2017 10:26:29 +0200, Petr Kulhavy wrote:
+> Add the Linux PTP Project package.
+> http://linuxptp.sourceforge.net/
+> 
+> The sysV and systemd init scripts start the daemon in automatic mode on eth0.
+> 
+> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
 
-Have you also tested regex module? It seems to have the same
-structure/dependencies as locale module.
+Thanks for this new iteration! A few comments below.
 
-Yegor
+
+>  package/linuxptp/0001-adjtime-fix.patch         | 12 ++++
+>  package/linuxptp/0002-ethhdr-fix.patch          | 10 ++++
+>  package/linuxptp/0003-time_t-fix.patch          | 10 ++++
+>  package/linuxptp/0004-clock_nanosleep-fix.patch | 74 +++++++++++++++++++++++++
+>  package/linuxptp/Config.in                      | 13 +++++
+>  package/linuxptp/S65ptp4l                       | 36 ++++++++++++
+
+Everything should be named linuxptp.
+
+>  package/linuxptp/linuxptp.hash                  |  2 +
+>  package/linuxptp/linuxptp.mk                    | 38 +++++++++++++
+>  package/linuxptp/ptp4l.service                  | 10 ++++
+
+Ditto. Please search globally for every occurrence of ptp4l in your
+patch, and fix the different instances to be linuxptp, i.e the name of
+the package.
+
+> diff --git a/package/linuxptp/0001-adjtime-fix.patch b/package/linuxptp/0001-adjtime-fix.patch
+> new file mode 100644
+> index 0000000..a892220
+> --- /dev/null
+> +++ b/package/linuxptp/0001-adjtime-fix.patch
+
+All patches should have a description + Signed-off-by. Since the
+upstream Linux PTP project uses Git, please create Git formatted
+patches (git format-patch -N).
+
+> +--- linuxptp-1.8/makefile.old	2017-05-15 00:41:33.370113834 +0200
+> ++++ linuxptp-1.8/makefile	2017-05-15 00:41:03.710283744 +0200
+> +@@ -20,7 +20,7 @@
+> + DEBUG	=
+> + CC	= $(CROSS_COMPILE)gcc
+> + VER     = -DVER=$(version)
+> +-CFLAGS	= -Wall $(VER) $(incdefs) $(DEBUG) $(EXTRA_CFLAGS)
+> ++CFLAGS	+= -Wall $(VER) $(incdefs) $(DEBUG) $(EXTRA_CFLAGS)
+
+How is this related to the clock_nanosleep() issue ?
+
+> diff --git a/package/linuxptp/Config.in b/package/linuxptp/Config.in
+> new file mode 100644
+> index 0000000..7e4a77b
+> --- /dev/null
+> +++ b/package/linuxptp/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_LINUXPTP
+> +	bool "Linux PTP"
+
+Please use just the name of the package, all lowercase:
+
+	bool "linuxptp"
+
+> diff --git a/package/linuxptp/S65ptp4l b/package/linuxptp/S65ptp4l
+> new file mode 100755
+> index 0000000..50b9e96
+> --- /dev/null
+> +++ b/package/linuxptp/S65ptp4l
+> @@ -0,0 +1,36 @@
+> +#!/bin/sh
+> +#
+> +# Start ptp4l
+
+ptp4l -> linuxptp (everywhere).
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
