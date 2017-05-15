@@ -1,45 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 13:37:35 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] postgresql: bump version
-	to 9.6.2
-Message-ID: <20170515125327.063BA828FB@busybox.osuosl.org>
+Date: Mon, 15 May 2017 13:36:19 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] sudo: fix static linking
+	with openldap having openssl support
+Message-ID: <20170515125326.EC76D828FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5149066e594a7c7f1f0bbe195f371309c0c5bc07
+commit: https://git.buildroot.net/buildroot/commit/?id=fe43fddcfc91b5d9e4f4463930ae424bb48281e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+
+If we are building sudo statically and openldap was linked with openssl,
+then when we link sudo with openldap we need to specify the openssl
+libs, otherwise it will fail with "undefined reference" errors.
+
+Fixes:
+  http://autobuild.buildroot.net/results/ebb/ebbb4c3138b5023a0c8bd938db1932a25ba5b6fb/
+  http://autobuild.buildroot.net/results/58e/58ee4fddea85f0c79b26582b04a573258e27eb47/
+  http://autobuild.buildroot.net/results/051/05151c4ef7f0b3702a6cd5e6df4888d826a37431/
+  http://autobuild.buildroot.net/results/b1d/b1dfae81985daee106700191fcb82387833c2e3f/
+  http://autobuild.buildroot.net/results/5b4/5b42e8505856156389d480d0da19f6982cf120d8/
+  http://autobuild.buildroot.net/results/30a/30a76190428f902f03bcf54ba9f1f4f4377c6fc9/
+  http://autobuild.buildroot.net/results/e8c/e8c6bdc314b9a8d5de303633a3abd7b7e44beb2e/
+  http://autobuild.buildroot.net/results/483/4830c69cc6a62080e1516f0d9009c2ba619c23c1/
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit cd3d6c32ca515d5fb8dcc47cb17b2677fd480948)
+(cherry picked from commit bf899e50d89439b1a1bdf22bc933075958ffc108)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sudo/sudo.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 900a55a..1524a34 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.6.1/postgresql-9.6.1.tar.bz2.sha256
--sha256 e5101e0a49141fc12a7018c6dad594694d3a3325f5ab71e93e0e51bd94e51fcd  postgresql-9.6.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.6.2/postgresql-9.6.2.tar.bz2.sha256
-+sha256 0187b5184be1c09034e74e44761505e52357248451b0c854dddec6c231fe50c9  postgresql-9.6.2.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index bc2bf47..e07afc9 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 9.6.1
-+POSTGRESQL_VERSION = 9.6.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index bb0a2b5..7f0b132 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -40,6 +40,13 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENLDAP),y)
+ SUDO_DEPENDENCIES += openldap
+ SUDO_CONF_OPTS += --with-ldap
++# If we are building sudo statically and openldap was linked with openssl, then
++# when we link sudo with openldap we need to specify the openssl libs, otherwise
++# it will fail with "undefined reference" errors.
++ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_OPENSSL),yy)
++SUDO_DEPENDENCIES += host-pkgconf
++SUDO_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
++endif
+ else
+ SUDO_CONF_OPTS += --without-ldap
+ endif
