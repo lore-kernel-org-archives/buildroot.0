@@ -1,39 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 May 2017 22:38:32 +0200
-Subject: [Buildroot] [PATCH] protobuf: link with libatomic when needed
-Message-ID: <1494880712-28989-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 15 May 2017 22:38:08 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mplayer: disable inline sse on
+	i386
+References: <20170513150918.25427-1-bernd.kuhls@t-online.de>
+ <20170514160855.2dea324b@free-electrons.com>
+Message-ID: <XnsA776E64284194berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The protobuf library uses atomic intrinsics, so we need to link
-against libatomic.
+[posted and mailed]
 
-Fixes the build of protobuf on Sparc:
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20170514160855.2dea324b at free-electrons.com:
 
-  http://autobuild.buildroot.net/results/f3d76eaebd529a61bce849e355182c60f233ed06/
+> All of this is very messy. Why isn't the ffmpeg code building properly
+> on x86 ? It's a major platform, shouldn't x86 just work ?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/protobuf/protobuf.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Hi Thomas,
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 610da8c..2cd10eb 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -17,6 +17,10 @@ PROTOBUF_LICENSE_FILES = LICENSE
- PROTOBUF_DEPENDENCIES = host-protobuf
- PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+PROTOBUF_CONF_ENV += LIBS=-latomic
-+endif
-+
- PROTOBUF_INSTALL_STAGING = YES
- 
- PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
--- 
-2.7.4
+honestly I have no idea what causes the problem. Maybe activating inline asm 
+on x86 at all is a problem due to hardware constraints as described here: 
+http://stackoverflow.com/questions/8275859/error-cant-find-a-register-in-
+class-general-regs-while-reloading-asm ?
+
+Regards, Bernd
