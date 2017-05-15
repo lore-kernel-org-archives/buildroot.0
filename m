@@ -1,48 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 11:46:43 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/ltp-testsuite:
-	needs threads NPTL
-Message-ID: <20170515125326.C33218286F@busybox.osuosl.org>
+Date: Mon, 15 May 2017 13:40:45 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openvpn: Add explicit
+	support for external lz4
+Message-ID: <20170515125327.420F8828FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21724ff539da1be1788171fe7df216d300b6d228
+commit: https://git.buildroot.net/buildroot/commit/?id=655ff05b9f42160d25fbe0001dd80f74bdf66beb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/3e0/3e0bbf41e339e62422463773bf07945f048a9501
+2.4.0 added lz4 support. Make that choice explicit or the bundled compat-lz4
+"stub" will be used.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Jeroen Roovers <jer@airfi.aero>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 362d185b309a1634901d4cb35bc1778d58e2015a)
+(cherry picked from commit 65e6f6ff2adc21f2fea4c0c8bc4dcd9e3b865264)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ltp-testsuite/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/Config.in  | 7 +++++++
+ package/openvpn/openvpn.mk | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 274b03e..60e1922 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -5,7 +5,7 @@ comment "ltp-testsuite needs specific uClibc options, see help"
- config BR2_PACKAGE_LTP_TESTSUITE
- 	bool "ltp-testsuite"
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	# does not build, cachectl.h issue
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+index 5fa191d..0a16755 100644
+--- a/package/openvpn/Config.in
++++ b/package/openvpn/Config.in
+@@ -14,6 +14,13 @@ config BR2_PACKAGE_OPENVPN
  
- 	  http://linux-test-project.github.io
+ if BR2_PACKAGE_OPENVPN
  
--comment "ltp-testsuite needs a glibc or uClibc toolchain w/ threads"
-+comment "ltp-testsuite needs a glibc or uClibc toolchain w/ NPTL"
- 	depends on !BR2_nios2
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_TOOLCHAIN_USES_MUSL
++config BR2_PACKAGE_OPENVPN_LZ4
++	bool "LZ4 compression"
++	default y
++	select BR2_PACKAGE_LZ4
++	help
++	  Enable LZ4 compression.
++
+ config BR2_PACKAGE_OPENVPN_LZO
+ 	bool "LZO compression"
+ 	default y
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index a2e21f9..6581a4e 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -35,6 +35,12 @@ else
+ OPENVPN_CONF_ENV += IPROUTE=/sbin/ip
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENVPN_LZ4),y)
++OPENVPN_DEPENDENCIES += lz4
++else
++OPENVPN_CONF_OPTS += --disable-lz4
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENVPN_LZO),y)
+ OPENVPN_DEPENDENCIES += lzo
+ else
