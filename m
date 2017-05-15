@@ -1,269 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 23:01:24 +0200
-Subject: [Buildroot] [PATCH] rpcbind: add upstream security fix for
-	CVE-2017-8779
-Message-ID: <20170515210124.6657-1-peter@korsgaard.com>
+Date: Mon, 15 May 2017 23:04:18 +0200
+Subject: [Buildroot] [PATCH] tslib: update to 1.10
+In-Reply-To: <3db12153-8a12-cc62-9a4c-bb7177d22bef@ginzinger.com> (Martin
+ Kepplinger's message of "Mon, 15 May 2017 09:51:06 +0200")
+References: <1494577068-13998-1-git-send-email-martink@posteo.de>
+ <3db12153-8a12-cc62-9a4c-bb7177d22bef@ginzinger.com>
+Message-ID: <87inl1al2l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2017-8779: rpcbind through 0.2.4, LIBTIRPC through 1.0.1 and 1.0.2-rc
-through 1.0.2-rc3, and NTIRPC through 1.4.3 do not consider the maximum RPC
-data size during memory allocation for XDR strings, which allows remote
-attackers to cause a denial of service (memory consumption with no
-subsequent free) via a crafted UDP packet to port 111, aka rpcbomb.
+>>>>> "Martin" == Martin Kepplinger <martin.kepplinger@ginzinger.com> writes:
 
-For more details, see:
-https://guidovranken.wordpress.com/2017/05/03/rpcbomb-remote-rpcbind-denial-of-service-patches/
+ > On 2017-05-12 10:17, Martin Kepplinger wrote:
+ >> If you're overly interested, check out the release notes at
+ >> https://github.com/kergoth/tslib/releases
+ >> 
+ >> Signed-off-by: Martin Kepplinger <martink@posteo.de>
+ >> ---
 
-Backport upstream fix to version 0.2.3 and unconditionally include syslog.h
-to fix a build issue when RPCBIND_DEBUG is disabled (which it is in
-Buildroot).
+ > bump. Could have been lost on the weekend :)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...r-all-svc_getargs-calls-with-svc_freeargs.patch | 231 +++++++++++++++++++++
- 1 file changed, 231 insertions(+)
- create mode 100644 package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
+;)
 
-diff --git a/package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch b/package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
-new file mode 100644
-index 000000000..130e5d77c
---- /dev/null
-+++ b/package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
-@@ -0,0 +1,231 @@
-+From 093bf65c79af417cffa09d6475f58923540eebcc Mon Sep 17 00:00:00 2001
-+From: Doran Moppert <dmoppert@redhat.com>
-+Date: Thu, 11 May 2017 11:42:54 -0400
-+Subject: [PATCH] rpcbind: pair all svc_getargs() calls with svc_freeargs() to
-+ avoid memory leak
-+
-+This patch is to address CVE-2017-8779 "rpcbomb" in rpcbind, discussed
-+at [1], [2], [3].  The last link suggests this issue is actually a bug
-+in rpcbind, which led me here.
-+
-+The leak caused by the reproducer at [4] appears to come from
-+rpcb_service_4(), in the case where svc_getargs() returns false and the
-+function had an early return, rather than passing through the cleanup
-+path at done:, as would otherwise occur.
-+
-+It also addresses a couple of other locations where the same fault seems
-+to exist, though I haven't been able to exercise those.  I hope someone
-+more intimate with rpc(3) can confirm my understanding is correct, and
-+that I haven't introduced any new bugs.
-+
-+Without this patch, using the reproducer (and variants) repeatedly
-+against rpcbind with a numBytes argument of 1_000_000_000, /proc/$(pidof
-+rpcbind)/status reports VmSize increase of 976564 kB each call, and
-+VmRSS increase of around 260 kB every 33 calls - the specific numbers
-+are probably an artifact of my rhel/glibc version.  With the patch,
-+there is a small (~50 kB) VmSize increase with the first message, but
-+thereafter both VmSize and VmRSS remain steady.
-+
-+[1]: http://seclists.org/oss-sec/2017/q2/209
-+[2]: https://bugzilla.redhat.com/show_bug.cgi?id=1448124
-+[3]: https://sourceware.org/ml/libc-alpha/2017-05/msg00129.html
-+[4]: https://github.com/guidovranken/rpcbomb/
-+
-+Signed-off-by: Doran Moppert <dmoppert@redhat.com>
-+Signed-off-by: Steve Dickson <steved@redhat.com>
-+(cherry picked from commit 7ea36eeece56b59f98e469934e4c20b4da043346)
-+[Peter: unconditionally include syslog.h for LOG_DEBUG]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/pmap_svc.c     | 58 ++++++++++++++++++++++++++++++++++++++++++++----------
-+ src/rpcb_svc.c     |  2 +-
-+ src/rpcb_svc_4.c   |  2 +-
-+ src/rpcb_svc_com.c |  8 ++++++++
-+ 4 files changed, 58 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/pmap_svc.c b/src/pmap_svc.c
-+index ad28b93..f730bed 100644
-+--- a/src/pmap_svc.c
-++++ b/src/pmap_svc.c
-+@@ -53,8 +53,8 @@ static	char sccsid[] = "@(#)pmap_svc.c 1.23 89/04/05 Copyr 1984 Sun Micro";
-+ #include <rpc/rpc.h>
-+ #include <rpc/pmap_prot.h>
-+ #include <rpc/rpcb_prot.h>
-+-#ifdef RPCBIND_DEBUG
-+ #include <syslog.h>
-++#ifdef RPCBIND_DEBUG
-+ #include <stdlib.h>
-+ #endif
-+ #include "rpcbind.h"
-+@@ -175,6 +175,7 @@ pmapproc_change(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt, unsigned long
-+ 	long ans;
-+ 	uid_t uid;
-+ 	char uidbuf[32];
-++	int rc = TRUE;
-+ 
-+ 	/*
-+ 	 * Can't use getpwnam here. We might end up calling ourselves
-+@@ -194,7 +195,8 @@ pmapproc_change(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt, unsigned long
-+ 
-+ 	if (!svc_getargs(xprt, (xdrproc_t) xdr_pmap, (char *)&reg)) {
-+ 		svcerr_decode(xprt);
-+-		return (FALSE);
-++		rc = FALSE;
-++		goto done;
-+ 	}
-+ #ifdef RPCBIND_DEBUG
-+ 	if (debugging)
-+@@ -205,7 +207,8 @@ pmapproc_change(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt, unsigned long
-+ 
-+ 	if (!check_access(xprt, op, reg.pm_prog, PMAPVERS)) {
-+ 		svcerr_weakauth(xprt);
-+-		return (FALSE);
-++		rc = (FALSE);
-++		goto done;
-+ 	}
-+ 
-+ 	rpcbreg.r_prog = reg.pm_prog;
-+@@ -258,7 +261,16 @@ done_change:
-+ 		rpcbs_set(RPCBVERS_2_STAT, ans);
-+ 	else
-+ 		rpcbs_unset(RPCBVERS_2_STAT, ans);
-+-	return (TRUE);
-++done:
-++	if (!svc_freeargs(xprt, (xdrproc_t) xdr_pmap, (char *)&reg)) {
-++		if (debugging) {
-++			(void) xlog(LOG_DEBUG, "unable to free arguments\n");
-++			if (doabort) {
-++				rpcbind_abort();
-++			}
-++		}
-++	}
-++	return (rc);
-+ }
-+ 
-+ /* ARGSUSED */
-+@@ -272,15 +284,18 @@ pmapproc_getport(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt)
-+ #ifdef RPCBIND_DEBUG
-+ 	char *uaddr;
-+ #endif
-++	int rc = TRUE;
-+ 
-+ 	if (!svc_getargs(xprt, (xdrproc_t) xdr_pmap, (char *)&reg)) {
-+ 		svcerr_decode(xprt);
-+-		return (FALSE);
-++		rc = FALSE;
-++		goto done;
-+ 	}
-+ 
-+ 	if (!check_access(xprt, PMAPPROC_GETPORT, reg.pm_prog, PMAPVERS)) {
-+ 		svcerr_weakauth(xprt);
-+-		return FALSE;
-++		rc = FALSE;
-++		goto done;
-+ 	}
-+ 
-+ #ifdef RPCBIND_DEBUG
-+@@ -330,21 +345,34 @@ pmapproc_getport(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt)
-+ 		pmap_ipprot2netid(reg.pm_prot) ?: "<unknown>",
-+ 		port ? udptrans : "");
-+ 
-+-	return (TRUE);
-++done:
-++	if (!svc_freeargs(xprt, (xdrproc_t) xdr_pmap, (char *)&reg)) {
-++		if (debugging) {
-++			(void) xlog(LOG_DEBUG, "unable to free arguments\n");
-++			if (doabort) {
-++				rpcbind_abort();
-++			}
-++		}
-++	}
-++	return (rc);
-+ }
-+ 
-+ /* ARGSUSED */
-+ static bool_t
-+ pmapproc_dump(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt)
-+ {
-++	int rc = TRUE;
-++
-+ 	if (!svc_getargs(xprt, (xdrproc_t)xdr_void, NULL)) {
-+ 		svcerr_decode(xprt);
-+-		return (FALSE);
-++		rc = FALSE;
-++		goto done;
-+ 	}
-+ 
-+ 	if (!check_access(xprt, PMAPPROC_DUMP, 0, PMAPVERS)) {
-+ 		svcerr_weakauth(xprt);
-+-		return FALSE;
-++		rc = FALSE;
-++		goto done;
-+ 	}
-+ 	
-+ 	if ((!svc_sendreply(xprt, (xdrproc_t) xdr_pmaplist_ptr,
-+@@ -354,7 +382,17 @@ pmapproc_dump(struct svc_req *rqstp /*__unused*/, SVCXPRT *xprt)
-+ 			rpcbind_abort();
-+ 		}
-+ 	}
-+-	return (TRUE);
-++
-++done:
-++	if (!svc_freeargs(xprt, (xdrproc_t) xdr_pmap, (char *)NULL)) {
-++		if (debugging) {
-++			(void) xlog(LOG_DEBUG, "unable to free arguments\n");
-++			if (doabort) {
-++				rpcbind_abort();
-++			}
-++		}
-++	}
-++	return (rc);
-+ }
-+ 
-+ int pmap_netid2ipprot(const char *netid)
-+diff --git a/src/rpcb_svc.c b/src/rpcb_svc.c
-+index bd92201..0c22a9d 100644
-+--- a/src/rpcb_svc.c
-++++ b/src/rpcb_svc.c
-+@@ -166,7 +166,7 @@ rpcb_service_3(struct svc_req *rqstp, SVCXPRT *transp)
-+ 		svcerr_decode(transp);
-+ 		if (debugging)
-+ 			(void) xlog(LOG_DEBUG, "rpcbind: could not decode");
-+-		return;
-++		goto done;
-+ 	}
-+ 
-+ 	if (rqstp->rq_proc == RPCBPROC_SET
-+diff --git a/src/rpcb_svc_4.c b/src/rpcb_svc_4.c
-+index b673452..3e37b54 100644
-+--- a/src/rpcb_svc_4.c
-++++ b/src/rpcb_svc_4.c
-+@@ -220,7 +220,7 @@ rpcb_service_4(struct svc_req *rqstp, SVCXPRT *transp)
-+ 		svcerr_decode(transp);
-+ 		if (debugging)
-+ 			(void) xlog(LOG_DEBUG, "rpcbind: could not decode\n");
-+-		return;
-++		goto done;
-+ 	}
-+ 
-+ 	if (rqstp->rq_proc == RPCBPROC_SET
-+diff --git a/src/rpcb_svc_com.c b/src/rpcb_svc_com.c
-+index ff9ce6b..98ede61 100644
-+--- a/src/rpcb_svc_com.c
-++++ b/src/rpcb_svc_com.c
-+@@ -931,6 +931,14 @@ error:
-+ 	if (call_msg.rm_xid != 0)
-+ 		(void) free_slot_by_xid(call_msg.rm_xid);
-+ out:
-++	if (!svc_freeargs(transp, (xdrproc_t) xdr_rmtcall_args, (char *) &a)) {
-++		if (debugging) {
-++			(void) xlog(LOG_DEBUG, "unable to free arguments\n");
-++			if (doabort) {
-++				rpcbind_abort();
-++			}
-++		}
-++	}
-+ 	if (local_uaddr)
-+ 		free(local_uaddr);
-+ 	if (buf_alloc)
-+-- 
-+2.11.0
-+
+Committed to next, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
