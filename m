@@ -1,41 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 20:14:46 +0200
-Subject: [Buildroot] [git commit] ffmpeg: bump version to 3.3.1
-Message-ID: <20170515181605.70891828FB@busybox.osuosl.org>
+Date: Mon, 15 May 2017 20:24:04 +0200
+Subject: [Buildroot] [PATCH] package/faketime: fix build with gcc >= 6
+In-Reply-To: <20170514212643.17153-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 14 May 2017 23:26:43 +0200")
+References: <20170514212643.17153-1-romain.naour@gmail.com>
+Message-ID: <87mvae9dx7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86d902035dddcf4d63d99e26c3a02c3fb637574c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Upstream added -Wno-nonnull-compare to disable this error [1].
+ > Fixes:
+ > libfaketime.c:513:7: error?: nonnull argument ??buf?? compared to NULL [-Werror=nonnull-compare]
+ >     if (buf != NULL)
+ >        ^
+ > [1] https://github.com/wolfcw/libfaketime/commit/47e958b753fc15098a2b7d0e9ef26b83ee255874
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index e243acc..ab7ba5e 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 599e7f7c017221c22011c4037b88bdcd1c47cd40c1e466838bc3c465f3e9569d  ffmpeg-3.3.tar.xz
-+sha256 b702a7fc656ac23e276b8c823a2f646e4e6f6309bb2788435a708e69bea98f2f  ffmpeg-3.3.1.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 10e4e74..d69923b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.3
-+FFMPEG_VERSION = 3.3.1
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > ---
+ >  ...isable-the-non-null-compare-warning-error.patch | 31 ++++++++++++++++++++++
+ >  1 file changed, 31 insertions(+)
+ >  create mode 100644 package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
+
+ > diff --git a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
+ > new file mode 100644
+ > index 0000000..859592e
+ > --- /dev/null
+ > +++ b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
+ > @@ -0,0 +1,31 @@
+ > +From e85a157b51b1276c91c736d8624d9f3e876e9189 Mon Sep 17 00:00:00 2001
+ > +From: Andreas Rammhold <andreas@rammhold.de>
+ > +Date: Tue, 20 Dec 2016 19:25:32 +0100
+ > +Subject: [PATCH] Disable the non-null compare warning/error.
+ > +
+ > +We rely on the provided local library definitions for the hooked
+ > +functions which in some cases (GCC >6) carry a non-null-attribute flag
+ > +which causes compile errors on `!= NULL` checks.
+ > +
+ > +[Romain: rebase on 0.9.6]
+ > +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+It is nice if you use the -x option to git cherry-pick so it adds a
+comment about the original git commit id. I've now manually added it.
+
+
+> +---
+ > + src/Makefile | 2 +-
+ > + 1 file changed, 1 insertion(+), 1 deletion(-)
+ > +
+ > +diff --git a/src/Makefile b/src/Makefile
+ > +index 51634b0..bbbd476 100644
+ > +--- a/src/Makefile
+ > ++++ b/src/Makefile
+ > +@@ -67,7 +67,7 @@ INSTALL ?= install
+ > + PREFIX ?= /usr/local
+ > + LIBDIRNAME ?= /lib/faketime
+ > + 
+ > +-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
+ > ++CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
+
+The -Wall -Werror flags are not so nice, but oh well.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
