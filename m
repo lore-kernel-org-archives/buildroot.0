@@ -1,35 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 14:09:28 +0200
-Subject: [Buildroot] [PATCH] core/download: fix source check for git
-	method
-In-Reply-To: <20170512155429.26176-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Fri, 12 May 2017 17:54:29 +0200")
-References: <20170512155429.26176-1-yann.morin.1998@free.fr>
-Message-ID: <87bmquiao7.fsf@dell.be.48ers.dk>
+Date: Mon, 15 May 2017 14:10:49 +0200
+Subject: [Buildroot] [git commit] openblas: SPARC support is for Sparc v9
+In-Reply-To: <20170513141121.921D582867@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 13 May 2017 16:09:53 +0200")
+References: <20170513141121.921D582867@busybox.osuosl.org>
+Message-ID: <877f1iialy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Running foo-source-check on packages retrieved from git fails.
- > This is because there is no associated stamp file, so we do not have a
- > rule-assignment that sets PKG for foo-source-check.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=6714d79a22b4c0ad7651659c8009f93574bbd59d
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > But it does not make sense to have a stamp file at all, because
- > source-check is not supposed to change anything: the status after is
- > exactly the same as before; nothing is downlaoded, so there is no
- > progress (whatsoever) to memorise.
+ > Makefile.sparc in the openblas source code passes -mcpu=v9, i.e it
+ > assumes a SPARCv9 CPU. Therefore, this commit adjusts openblas
+ > Config.in file so that SPARC is only used for BR2_sparc_v9.
 
- > Fix that by just defining PKG in the source-check rule definition.
+ > Fixes:
 
- > Fixes #9796.
+ >   http://autobuild.buildroot.net/results/805087e87b8bb7d11adb49d9eca3959a37aca3a2/
 
- > Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed to 2017.02.x, thanks.
 
