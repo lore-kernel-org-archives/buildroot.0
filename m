@@ -1,43 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 23:05:30 +0200
-Subject: [Buildroot] [git commit branch/next] libgtk3: bump version to
-	3.22.15
-Message-ID: <20170515210736.343ED800FA@busybox.osuosl.org>
+Date: Mon, 15 May 2017 23:10:17 +0200
+Subject: [Buildroot] [PATCH next 1/8] php: bump version to 7.1.5
+In-Reply-To: <20170512124521.4619-1-Vincent.Riera@imgtec.com> (Vicente Olivert
+ Riera's message of "Fri, 12 May 2017 13:45:14 +0100")
+References: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
+Message-ID: <87a86daksm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57f0f9d43f9427f5e64dc5dfea806716c81c4f2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ >  package/php/php.hash | 2 +-
+ >  package/php/php.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index cbba7ca..0f259e9 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.14.sha256sum
--sha256 d6120e4fd64e432b74a61e8abd972b1948cf54e4dc4f0e081c05ab625f087131  gtk+-3.22.14.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.15.sha256sum
-+sha256 c8a012c2a99132629ab043f764a2b7cb6388483a015cd15c7a4288bec3590fdb  gtk+-3.22.15.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 7d8eecb..f3b1705 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ > diff --git a/package/php/php.hash b/package/php/php.hash
+ > index 35c5925..d34242f 100644
+ > --- a/package/php/php.hash
+ > +++ b/package/php/php.hash
+ > @@ -1,2 +1,2 @@
+ >  # From http://php.net/downloads.php
+ > -sha256 71514386adf3e963df087c2044a0b3747900b8b1fc8da3a99f0a0ae9180d300b  php-7.1.4.tar.xz
+ > +sha256 d149a3c396c45611f5dc6bf14be190f464897145a76a8e5851cf18ff7094f6ac  php-7.1.5.tar.xz
+ > diff --git a/package/php/php.mk b/package/php/php.mk
+ > index 46f57e4..cfc6789 100644
+ > --- a/package/php/php.mk
+ > +++ b/package/php/php.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).14
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
+ > -PHP_VERSION = 7.1.4
+ > +PHP_VERSION = 7.1.5
+
+Looking at the changelog:
+
+http://www.php.net/ChangeLog-7.php#7.1.5
+
+It seems to be purely fixes, and some of them quite serious (endless
+loop, segfault, compile error, invalid free, ..) - So I've applied it to
+master instead.
+
+-- 
+Bye, Peter Korsgaard
