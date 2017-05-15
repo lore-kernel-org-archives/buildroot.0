@@ -1,27 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 11:43:57 +0200
-Subject: [Buildroot] [PATCH 1/1] dbus: fix dbus symlink removal
-In-Reply-To: <1494031878-2982-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Fri, 5 May 2017 20:51:18 -0400")
-References: <1494031878-2982-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87h90mlajm.fsf@dell.be.48ers.dk>
+Date: Mon, 15 May 2017 11:45:13 +0200
+Subject: [Buildroot] [PATCH] package/libubox: fix lua module install path
+In-Reply-To: <20170506202610.19962-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 6 May 2017 22:26:10 +0200")
+References: <20170506202610.19962-1-yann.morin.1998@free.fr>
+Message-ID: <87d1balahi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > There was already a post-build hook to delete the /var/lib/dbus symlink
- > created by buildroot after the package's own installation, to prevent
- > a dbus installation error during "make dbus-rebuild".  However, this
- > misses the case for when one might delete the .stamp_target_installed
- > file manually, outside of dbus-rebuild.  This can be fixed by changing
- > the post-build hook to a pre-install hook.  This seems appropriate,
- > since it is really addressing an installation issue, not a build issue.
+ > The LUAPATH variable is only used when installing the lua module, and
+ > cmake knows very well how to do out-of-tree isntalls, so there is no
+ > reason to include the staging path in LUAPATH, which will cause our
+ > post-install sanity checks to kick in and whine:
 
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ >     libubox: installs files in /home/lhk/workspace/orangepi/host/usr/a
+ >     rm-buildroot-linux-gnueabihf/sysroot//home/lhk/workspace/orangepi
+
+ > As for libuci, just pass the runtime LUAPATH.
+
+ > Fixes #9856
+
+ > Reported-by: linhuikui at gmail.com
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed to 2017.02.x, thanks.
 
