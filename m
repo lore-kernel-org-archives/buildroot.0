@@ -1,87 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 14:00:01 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/efl: fix unmet
-	dependencies
-Message-ID: <20170515125327.8129080649@busybox.osuosl.org>
+Date: Mon, 15 May 2017 13:37:44 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] postgresql: bump version
+	to 9.6.3 (security)
+Message-ID: <20170515125327.13988828FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d21206802b8bf1cad26543b93fe72ef867fde1b9
+commit: https://git.buildroot.net/buildroot/commit/?id=2fb0ed2be293acf6a6b3fc657fca9d039cc82a22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-EFL's elput selects libinput but forgot to propagate its dependencies.
-Which requires they be propagated further to a second sub-option, then
-to a third one.
+Three security vulnerabilities have been closed by this release:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@openwide.fr>
-[Thomas: fix typoes.]
-[Peter: fix more typoes]
+CVE-2017-7484: selectivity estimators bypass SELECT privilege checks
+CVE-2017-7485: libpq ignores PGREQUIRESSL environment variable
+CVE-2017-7486: pg_user_mappings view discloses foreign server passwords
+
+More details: https://www.postgresql.org/about/news/1746/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 31bd2b46a83f6009518935e11b4136668bd4d330)
+(cherry picked from commit e2bb446ff50c3bd346beca07d5e7f3dc11591a1c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/Config.in | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 5e89af6..a91609d 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -179,12 +179,14 @@ config BR2_PACKAGE_EFL_WAYLAND
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
- 	depends on BR2_PACKAGE_EFL_EEZE # efl drm
- 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
-+	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- libinput
- 	select BR2_PACKAGE_EFL_DRM
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 1524a34..c65edf7 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.2/postgresql-9.6.2.tar.bz2.sha256
+-sha256 0187b5184be1c09034e74e44761505e52357248451b0c854dddec6c231fe50c9  postgresql-9.6.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.3/postgresql-9.6.3.tar.bz2.sha256
++sha256 1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6  postgresql-9.6.3.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index e07afc9..62b41cb 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "Wayland support needs udev /dev management (eeze) and OpenGL ES w/ EGL, threads"
-+comment "Wayland support needs udev /dev management (eeze), OpenGL ES w/ EGL, threads, locales"
- 	depends on BR2_PACKAGE_WAYLAND
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
--		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE
-+		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE \
-+		|| !BR2_ENABLE_LOCALE
- 
- choice
- 	bool "OpenGL support"
-@@ -216,6 +218,7 @@ endchoice # OpenGL support
- 
- config BR2_PACKAGE_EFL_ELPUT
- 	bool "Elput"
-+	depends on BR2_ENABLE_LOCALE # libinput
- 	depends on BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
-@@ -225,23 +228,24 @@ config BR2_PACKAGE_EFL_ELPUT
- 	  ecore_drm, etc) to handle interfacing with libinput without
- 	  having to duplicate the code in each subsystem.
- 
--comment "Elput support needs udev /dev management (eeze)"
--	depends on !BR2_PACKAGE_EFL_EEZE
-+comment "Elput support needs udev /dev management (eeze), locales"
-+	depends on !BR2_PACKAGE_EFL_EEZE || !BR2_ENABLE_LOCALE
- 
- config BR2_PACKAGE_EFL_DRM
- 	bool "Evas DRM Engine"
- 	depends on BR2_PACKAGE_EFL_EEZE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
-+	depends on BR2_ENABLE_LOCALE # efl-elput <- libinput
- 	select BR2_PACKAGE_EFL_ELPUT
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	help
- 	  This option enable building support for the Evas DRM Engine.
- 
--comment "Evas DRM Engine needs udev /dev management (eeze) and mesa3d w/ EGL support, threads"
-+comment "Evas DRM Engine needs udev /dev management (eeze), mesa3d w/ EGL support, threads, locales"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
--		|| !BR2_PACKAGE_EFL_EEZE
-+		|| !BR2_PACKAGE_EFL_EEZE || !BR2_ENABLE_LOCALE
- 
- comment "libevas loaders"
- 
+-POSTGRESQL_VERSION = 9.6.2
++POSTGRESQL_VERSION = 9.6.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
