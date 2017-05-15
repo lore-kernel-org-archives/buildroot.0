@@ -1,85 +1,91 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 14 May 2017 21:29:20 -0500
-Subject: [Buildroot] libqmi and modem-manager
-In-Reply-To: <CANQCQpYiw=mN-9TfQrkWDCo1GyGEvN6x5HqSiG-PMNUKWM=ENw@mail.gmail.com>
-References: <30a337fc-837b-624c-06f0-3a8252b5693e@imgtec.com>
- <CANQCQpbeJsrHxXLr00Do4WAYcD07mrKybo8BaDP53b_=As9K9g@mail.gmail.com>
- <CANQCQpYiw=mN-9TfQrkWDCo1GyGEvN6x5HqSiG-PMNUKWM=ENw@mail.gmail.com>
-Message-ID: <CANQCQpZSyP2mTLXkS8eP4fn81G2wu_zfJ_3pMibEcJP+_c2nXg@mail.gmail.com>
+Date: Sun, 14 May 2017 21:53:46 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-05-11
+In-Reply-To: <CANQCQpaFEJtVONm4=0nNvKCU0CYqNo+M87QEvXda3PLzHB6TLA@mail.gmail.com>
+References: <20170512062950.23CF0220A8@mail.free-electrons.com>
+ <20170514174506.GA16283@itchy> <20170514211956.662430db@free-electrons.com>
+ <CANQCQpaFEJtVONm4=0nNvKCU0CYqNo+M87QEvXda3PLzHB6TLA@mail.gmail.com>
+Message-ID: <CANQCQpZWfvYShTNGVQ_X+f=8EKMj19B5nBqBYHGujTnpSap1gw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente,
+Eric,
 
-On Fri, May 12, 2017 at 10:13 PM, Matthew Weber
+On Sun, May 14, 2017 at 8:09 PM, Matthew Weber
 <matthew.weber@rockwellcollins.com> wrote:
-> Vicente,
+> Thomas/Eric,
 >
-> On Thu, May 11, 2017 at 8:03 AM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
+> On Sun, May 14, 2017 at 2:19 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
 >>
->> Vicente,
+>> On Sun, 14 May 2017 19:45:06 +0200, Eric Le Bihan wrote:
 >>
->> On Thu, May 11, 2017 at 8:01 AM, Vicente Olivert Riera
->> <Vincent.Riera@imgtec.com> wrote:
->> > Hello Thomas and Matthew,
->> >
->> > this commit from Matthew broke libqmi compilation:
->> >
->> > https://git.busybox.net/buildroot/commit/?id=c78b65c4f161ec101ff02880788ef22eb7c87d76
->> >
->> > Then this commit from Thomas fixed the former bogus commit and libqmi
->> > started to compile file again:
->> >
->> > https://git.busybox.net/buildroot/commit/?id=4d11848a21d4424a04e8428c4cd3bd5e972aacdf
->> >
->> > The problem is that now modem-manager with qmi support fails to compile
->> > with an error like this one:
->> >
->> >   CC       mm-modem-helpers-qmi.lo
->> > In file included from
->> > /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-message.h:39:0,
->> >                  from
->> > /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-device.h:34,
->> >                  from
->> > /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/libqmi-glib.h:32,
->> >                  from mm-modem-helpers-qmi.h:22,
->> >                  from mm-modem-helpers-qmi.c:16:
->> > /br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/libqmi-glib/qmi-utils.h:37:15:
->> > error: static declaration of ?canonicalize_file_name? follows non-static
->> > declaration
->> >  static char * canonicalize_file_name(const char *path)
->> >
->> > If I revert both commits modem-manager with qmi support compiles just fine.
->> >
->> > Could you please have a look to that issue?
->> >
->> > This is the defconfig I'm using:
->> >
->> > BR2_mipsel=y
->> > BR2_mips_32r2=y
->> > # BR2_MIPS_SOFT_FLOAT is not set
->> > BR2_TOOLCHAIN_EXTERNAL=y
->> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->> > BR2_PACKAGE_MODEM_MANAGER=y
->> > BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
->> > # BR2_TARGET_ROOTFS_TAR is not set
->> >
+>>> On 17-05-12 08:29:50, Thomas Petazzoni wrote:
+>>>
+>>> >        sparc |                skalibs-2.4.0.2 | NOK | http://autobuild.buildroot.net/results/85062b5f9dbe74d7d1c6edfeda085268ecaef4c2 |
+>>>
+>>> This one is puzzling. The configure steps ends with the following error:
+>>>
+>>> ```
+>>> Checking whether system has auto-close after fd-passing...
+>>>   ... test crashed, aborting.
+>>>   make: ***
+>>>   [/accts/mlweber1/instance-2/output/build/skalibs-2.4.0.2/.stamp_configured]
+>>>   Error 111
+>>>   make: Leaving directory `/accts/mlweber1/instance-2/buildroot'
+>>> ```
+>>>
+>>> The configure script tries to cross-compile and execute a program
+>>> (tryancilautoclose). The cross-compilation succeeds and of course the
+>>> execution fails, as it means running a program compiled for the
+>>> SPARC architecture on a x86 machine. Normally, the shell which executes
+>>> the program should return the code 126, as mentioned in the list of Bash
+>>> exit codes with special meaning [1].
+>>>
+>>> Here the exit code is 111. When looking at tryancilautoclose.c, we can
+>>> see that 111 may be returned.
+>>>
+>>> So this error means that either the shell managed to execute the
+>>> cross-compiled program or the shell does not follow the convention [1].
+>>>
+>>> Which are the architecture of the build machine and the shell used?
 >>
+>> Thanks for investigating this issue. This build failure occurred on
+>> Matt Weber's autobuilder instance, so I've added him in Cc. His
+>> instance has already triggered some weird issues recently due to an
+>> unusual setup. Hopefully Matt will be able to shed some light on what's
+>> going on, possibly reproduce by hand the issue and investigate.
 >>
 >
-> So the fix I'm currently testing removes the static inline from the
-> libqmi header and instead puts the function in the file where it's
-> used.  I didn't realize the header was a shared file for other
-> packages to use.  So far no build failures across both musl and glibc
-> test builds.
+> Here's the machine info
+> # uname -a
+> Linux largo 3.13.0-43-generic #72-Ubuntu SMP Mon Dec 8 19:35:06 UTC
+> 2014 x86_64 x86_64 x86_64 GNU/Linux
+> # ls -l /bin/sh
+> lrwxrwxrwx 1 root root 4 Nov 18  2014 /bin/sh -> bash
+> # bash --version
+> GNU bash, version 4.3.11(1)-release (x86_64-pc-linux-gnu)
+>
+> I'll kick off a manual recreation now and see how it ends up.
 >
 
+Well this is interesting and I'll have to dig around some more but
+here's what I've found after doing a build.  It looks like I have
+SPARC ELF ABI compatibility on my x86_64 Ubuntu 14.04.1 machine.  I
+can execute the test app since it's statically linked.
 
-I've created the following patch and so far it tests out to accomplish
-the original musl fix in libqmi and the modem-manager issue above.
+# ./tryancilautoclose
+Unsupported ancillary data: 65535/1
+# echo $?
+111
+# file tryancilautoclose
+tryancilautoclose: ELF 32-bit MSB  executable, SPARC version 1 (SYSV),
+statically linked, with unknown capability 0x41000000 = 0xf676e75,
+with unknown capability 0x10000 = 0x70403, not stripped
 
-https://patchwork.ozlabs.org/patch/762195/
+Matt
