@@ -1,36 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 May 2017 21:16:37 +0200
-Subject: [Buildroot] IASL Support in BuildRoot?
-In-Reply-To: <CAKmqyKOOgf2kKSAag=uLUzQX+Qkjom9ZyXQPHhdCuBG3t7XxuA@mail.gmail.com>
-References: <CAKmqyKOOgf2kKSAag=uLUzQX+Qkjom9ZyXQPHhdCuBG3t7XxuA@mail.gmail.com>
-Message-ID: <20170515211637.1b982225@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 15 May 2017 21:56:09 +0200
+Subject: [Buildroot] [PATCH] package/boost: disable boost-locale for
+	static only build
+In-Reply-To: <CAGm1_ksMXXjviJAact4vDgnRJCrfvQUMxKU2Jytjn2rBwBU2qw@mail.gmail.com>
+References: <20170514214556.17980-1-romain.naour@gmail.com>
+ <20170515091516.0b3e6112@free-electrons.com>
+ <CAGm1_ksMXXjviJAact4vDgnRJCrfvQUMxKU2Jytjn2rBwBU2qw@mail.gmail.com>
+Message-ID: <f55f2318-2f79-83c1-71d8-4e0d27737cf8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yegor,
 
-On Mon, 15 May 2017 10:24:47 -0700, Alistair Francis wrote:
-> + BuildRoot mailing list
-> Change the subject, was: [autobuild.buildroot.net] Your build results
-> for 2017-05-01
+Le 15/05/2017 ? 10:30, Yegor Yefremov a ?crit :
+> Hi Romain,
 > 
-> This is failing because the host doesn't have iasl (from the
-> acpi-tools package).
+> On Mon, May 15, 2017 at 9:15 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Sun, 14 May 2017 23:45:56 +0200, Romain Naour wrote:
+>>
+>>> diff --git a/package/boost/Config.in b/package/boost/Config.in
+>>> index 9825c09..6ffa8f0 100644
+>>> --- a/package/boost/Config.in
+>>> +++ b/package/boost/Config.in
+>>> @@ -98,8 +98,15 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
+>>>
+>>>  config BR2_PACKAGE_BOOST_LOCALE
+>>>       bool "boost-locale"
+>>> +     # boost-locale build system try to link dynamically with icu
+>>> +     # see <link>shared and <runtime-link>shared in locale/build/Jamfile.v2
+>>> +     # Related to https://svn.boost.org/trac/boost/ticket/9685
+>>> +     depends on !BR2_STATIC_LIBS
+>>>       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>>
+>> OK, but doesn't the problem occurs only when icu is enabled? Do we want
+>> to prevent from using boost-locale in static linking situations in all
+>> cases, or only when combined with icu?
+>>
+>> Perhaps we should keep it simple and do like you suggest, i.e make it
+>> unavailable for all static linking configurations, regardless of icu
+>> availability. I'm just trying to figure out the best/right approach
+>> between yours and the one proposed by Yegor.
 > 
-> I looked at BuildRoot and it supports building this for the target,
-> but no host support. What is the usual process here? Do we add it as a
-> host requirement or do we add support to build it?
+> Have you also tested regex module? It seems to have the same
+> structure/dependencies as locale module.
 
-Adding support to build it is our normal way of solving this type of
-dependency.
+Yes, the boost-regex module was still selected when I disabled boost-locale and
+rebuilt boost package (after a boost-dirclean).
+
+Maybe I missed something, please share a defconfig if you're able to trigger the
+issue with boost-regex :)
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> 
+> Yegor
+> 
