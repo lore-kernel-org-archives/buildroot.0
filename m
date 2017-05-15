@@ -1,39 +1,49 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 15 May 2017 13:31:44 +0100
-Subject: [Buildroot] [PATCH next] imagemagick: bump version to 7.0.5-6
-Message-ID: <20170515123144.52524-1-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 May 2017 14:43:39 +0200
+Subject: [Buildroot] [PATCH 2/3] bluez_utils: add missing check
+	dependency for test program
+In-Reply-To: <20170514160551.68cc2329@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 14 May 2017 16:05:51 +0200")
+References: <20170513171009.5219-1-romain.naour@gmail.com>
+ <20170513171009.5219-2-romain.naour@gmail.com>
+ <20170513202845.GB15337@scaer>
+ <20170514160551.68cc2329@free-electrons.com>
+Message-ID: <87shk6guis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 06a957a89..b7be7bc66 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 c3644119dce993aa241fa08eced2cb6043fb5345f0eee7a7822a497f1142ebe3  ImageMagick-7.0.5-5.tar.xz
-+sha256 f60c3e3466ccbf9a0e643284ffec3467363edf9611f16a98387f927a974b49ab  ImageMagick-7.0.5-6.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 6b5cd4eae..b1048f5f6 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.5-5
-+IMAGEMAGICK_VERSION = 7.0.5-6
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ > Hello,
+ > On Sat, 13 May 2017 22:28:45 +0200, Yann E. MORIN wrote:
+
+ >> On 2017-05-13 19:10 +0200, Romain Naour spake thusly:
+ >> > Tests are enabled since this has been introduced [1], so keep
+ >> > them for now.  
+ >> 
+ >> Why don't you want to simply disable tests altogehter, especially since
+ >> there is an option for that:
+ >> 
+ >> --disable-test
+ >> 
+ >> And if we disable tests, then we do not need patch 3/3.
+
+ > In bluez_utils, "tests" apparently a good number of tools that are not
+ > really tests, and might be needed on the target. I'll let Yegor answer
+ > on this though, but in the mean time, I believe it's better to fix
+ > things rather than changing the set of available tools on the target,
+ > which is why I've applied Romain's patch.
+
+:/
+
+It looks to be a bit of a mess. The only thing that gets linked with
+libcheck (check is a library, not a program) is unit/test-eir, which
+doesn't even get installed.
+
+But oh well, it is indeed safer to keep it enabled.
+
 -- 
-2.13.0
+Bye, Peter Korsgaard
