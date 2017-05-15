@@ -1,30 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 13:55:50 +0200
-Subject: [Buildroot] [PATCH] strongswan: fix crypt() redefinition
-In-Reply-To: <8087559eb746cd7594ec07431a2c6794678f0905.1494501731.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 11 May 2017 14:22:11 +0300")
-References: <8087559eb746cd7594ec07431a2c6794678f0905.1494501731.git.baruch@tkos.co.il>
-Message-ID: <871srqjpvd.fsf@dell.be.48ers.dk>
+Date: Mon, 15 May 2017 14:01:18 +0200
+Subject: [Buildroot] [PATCH v2] package/efl: fix unmet dependencies
+In-Reply-To: <20170508211149.1964-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Mon, 8 May 2017 23:11:49 +0200")
+References: <20170508211149.1964-1-yann.morin.1998@free.fr>
+Message-ID: <87wp9iib1t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Add patch from upstream pending pull request (#72) to fix crypt() definition
- > conflict.
+ > EFL's elput selects libinput but forgot to propagate its dependencies.
+ > Which requires they be propagated further to a second sub-option, then
+ > to a third one.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/612/6120add5ad6e7f5d575fc2a2442cd7fe5302eb46/
- > http://autobuild.buildroot.net/results/ba1/ba1298e71ef28857654ae8d4593d09e4fe8cdda0/
- > http://autobuild.buildroot.net/results/6b9/6b928e2a6a35bfb21c792fca083bc4cbdaef9304/
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Romain Naour <romain.naour@openwide.fr>
 
- > Cc: J?r?me Pouiller <jezz@sysmic.org>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > Changes v1 -> v2:
+ >   - porpagate dependency to comments as well  (Romain)
+ >   - fix commit log typoes  (Romain, me)
+ > ---
+ >  package/efl/Config.in | 16 ++++++++++------
+ >  1 file changed, 10 insertions(+), 6 deletions(-)
 
-Committed to 2017.02.x, thanks.
+ > diff --git a/package/efl/Config.in b/package/efl/Config.in
+ > index 371ed3f0d4..7b29e57c0a 100644
+ > --- a/package/efl/Config.in
+ > +++ b/package/efl/Config.in
+ > @@ -178,13 +178,15 @@ config BR2_PACKAGE_EFL_WAYLAND
+ >  	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
+ >  	depends on BR2_PACKAGE_EFL_EEZE # efl drm
+ >  	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
+ > +	depends on BR2_ENABLE_LOCALE # efl-drm <- efl-elput <- linput
+
+Committed to 2017.02.x after fixing the s/linput/libinput/ typo, thanks.
 
 -- 
 Bye, Peter Korsgaard
