@@ -1,34 +1,35 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Mon, 15 May 2017 13:12:04 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: bump kernel version to
-	4.4.41
-Message-ID: <1494846724-30126-1-git-send-email-lothar.felten@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 May 2017 13:22:38 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: fix examples compile with
+	disabled gui module
+In-Reply-To: <20170507221823.4e2f3285@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 7 May 2017 22:18:23 +0200")
+References: <20170427210150.1838-1-ps.report@gmx.net>
+ <20170507221823.4e2f3285@free-electrons.com>
+Message-ID: <874lwml5z5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to Linux kernel version 4.4.41 from the TI SDK 03.03.00.04
-(TI SDK release date: 29.03.2017)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
- configs/beaglebone_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Hello,
+ > On Thu, 27 Apr 2017 23:01:50 +0200, Peter Seiderer wrote:
+ >> Fixes [1]:
+ >> 
+ >> Project ERROR: Could not find feature opengl.
+ >> 
+ >> [1] http://autobuild.buildroot.net/results/040/040ab283dbbec623fe5ff4eaece754d9701fafc5
+ >> 
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ >> ---
+ >> ...4-examples-fix-compile-without-gui-module.patch | 42 ++++++++++++++++++++++
+ >> 1 file changed, 42 insertions(+)
+ >> create mode 100644 package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index b74ffbc..611b694 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="adde2ca9f86797071f6e7b2b9e779fa5e4a8f3cd"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f9f6f0db2d5e4f9d2ff46eb31a5a05276a92ed7d"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
+Committed to 2017.02.x, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
