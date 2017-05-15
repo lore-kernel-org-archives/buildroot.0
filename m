@@ -1,53 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 13:37:44 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] postgresql: bump version
-	to 9.6.3 (security)
-Message-ID: <20170515125327.13988828FB@busybox.osuosl.org>
+Date: Mon, 15 May 2017 13:40:35 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openvpn: bump version to
+	2.4.1
+Message-ID: <20170515125327.33EE082901@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb0ed2be293acf6a6b3fc657fca9d039cc82a22
+commit: https://git.buildroot.net/buildroot/commit/?id=ebe3a0265627e9172a8101cf2e0c9cf75ae734b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Three security vulnerabilities have been closed by this release:
-
-CVE-2017-7484: selectivity estimators bypass SELECT privilege checks
-CVE-2017-7485: libpq ignores PGREQUIRESSL environment variable
-CVE-2017-7486: pg_user_mappings view discloses foreign server passwords
-
-More details: https://www.postgresql.org/about/news/1746/
+--disable-eurephia configure option doesn't exist, so remove it.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e2bb446ff50c3bd346beca07d5e7f3dc11591a1c)
+(cherry picked from commit 9ecbe727aa2e5a47bf23687c82afad806d882bb2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 1524a34..c65edf7 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 600c250..a03345e 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
 @@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.6.2/postgresql-9.6.2.tar.bz2.sha256
--sha256 0187b5184be1c09034e74e44761505e52357248451b0c854dddec6c231fe50c9  postgresql-9.6.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.6.3/postgresql-9.6.3.tar.bz2.sha256
-+sha256 1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6  postgresql-9.6.3.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index e07afc9..62b41cb 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+ # Locally calculated
+-sha256 6f23ba49a1dbeb658f49c7ae17d9ea979de6d92c7357de3d55cd4525e1b2f87e  openvpn-2.4.0.tar.xz
++sha256 fde9e22c6df7a335d2d58c6a4d5967be76df173c766a5c51ece57fd044c76ee5  openvpn-2.4.1.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 5e3df59..a2e21f9 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 9.6.2
-+POSTGRESQL_VERSION = 9.6.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-OPENVPN_VERSION = 2.4.0
++OPENVPN_VERSION = 2.4.1
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
+@@ -22,8 +22,7 @@ OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
+ ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
+ OPENVPN_CONF_OPTS += \
+ 	--enable-small \
+-	--disable-plugins \
+-	--disable-eurephia
++	--disable-plugins
+ endif
+ 
+ # BusyBox 1.21+ places the ip applet in the "correct" place
