@@ -1,65 +1,45 @@
-From: Petr Kulhavy <brain@jikos.cz>
-Date: Mon, 15 May 2017 16:05:54 +0200
-Subject: [Buildroot] [PATCH v4 1/1] linuxptp: new package
-In-Reply-To: <20170515135628.gf5xzgh3o3frf6sc@tarshish>
-References: <1494843913-13912-1-git-send-email-brain@jikos.cz>
- <20170515135628.gf5xzgh3o3frf6sc@tarshish>
-Message-ID: <d3b65d29-e82b-3252-c5f6-d30b16ad626a@jikos.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 May 2017 16:44:47 +0200
+Subject: [Buildroot] [PATCH] git: security bump to version 2.12.3
+Message-ID: <20170515144447.8596-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Fixes CVE-2017-8386 - Git Shell Bypass By Abusing Less
 
-yes, it works in both ways.
+For more details, see:
+https://insinuator.net/2017/05/git-shell-bypass-by-abusing-less-cve-2017-8386/
+http://www.mail-archive.com/git at vger.kernel.org/msg120982.html
 
-Petr
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 15/05/17 15:56, Baruch Siach wrote:
-> Hi Petr,
->
-> On Mon, May 15, 2017 at 12:25:13PM +0200, Petr Kulhavy wrote:
->> diff --git a/package/linuxptp/0002-Remove-conflicting-netinet-ether.h.patch b/package/linuxptp/0002-Remove-conflicting-netinet-ether.h.patch
->> new file mode 100644
->> index 0000000..28ddb15
->> --- /dev/null
->> +++ b/package/linuxptp/0002-Remove-conflicting-netinet-ether.h.patch
->> @@ -0,0 +1,32 @@
->> +From 8e8db2a5b90a611be39922694c7bdacbffbabcd5 Mon Sep 17 00:00:00 2001
->> +From: Petr Kulhavy <brain@jikos.cz>
->> +Date: Mon, 15 May 2017 09:36:30 +0200
->> +Subject: [PATCH] Remove conflicting netinet/ether.h
->> +
->> +On some platforms like br-arm-cortex-a9-musl struct ethhdr was defined twice
->> +due to including of both linux/if_ether.h and netinet/ether.h. Which lead
->> +to a compilation error.
->> +
->> +Remove netinet/ether.h as the official header for struct ethhdr is
->> +linux/if_ether.h
-> I think that removing the kernel header, if possible, would be better. Relying
-> on libc headers alone generally makes for better code portability.
->
-> Does that work for you?
->
->> +
->> +Signed-off-by: Petr Kulhavy <brain@jikos.cz>
->> +---
->> + raw.c | 1 -
->> + 1 file changed, 1 deletion(-)
->> +
->> +diff --git a/raw.c b/raw.c
->> +index f51c829..73e45b4 100644
->> +--- a/raw.c
->> ++++ b/raw.c
->> +@@ -20,7 +20,6 @@
->> + #include <fcntl.h>
->> + #include <linux/filter.h>
->> + #include <linux/if_ether.h>
->> +-#include <net/ethernet.h>
->> + #include <net/if.h>
->> + #include <netinet/in.h>
->> + #include <netpacket/packet.h>
-> baruch
->
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 9af360ee2..4782dcbef 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 d21a9e23506e618d561fb25a8a7bd6134f927b86147930103487117a7a678c4a  git-2.12.2.tar.xz
++sha256 016124c54ce2db7a4c2bd26b0de21fbf8f6bcaee04842aa221c7243141df4e42  git-2.12.3.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index c2e4b8d15..9cea8de6b 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.12.2
++GIT_VERSION = 2.12.3
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-- 
+2.11.0
