@@ -1,84 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 15 May 2017 22:36:10 +0200
-Subject: [Buildroot] [PATCH] package/faketime: fix build with gcc >= 6
-In-Reply-To: <87mvae9dx7.fsf@dell.be.48ers.dk>
-References: <20170514212643.17153-1-romain.naour@gmail.com>
- <87mvae9dx7.fsf@dell.be.48ers.dk>
-Message-ID: <60001b91-3306-48fb-4973-bf16d3b02f01@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 May 2017 22:38:32 +0200
+Subject: [Buildroot] [PATCH] protobuf: link with libatomic when needed
+Message-ID: <1494880712-28989-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+The protobuf library uses atomic intrinsics, so we need to link
+against libatomic.
 
-Le 15/05/2017 ? 20:24, Peter Korsgaard a ?crit :
->>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
-> 
->  > Upstream added -Wno-nonnull-compare to disable this error [1].
->  > Fixes:
->  > libfaketime.c:513:7: error : nonnull argument ? buf ? compared to NULL [-Werror=nonnull-compare]
->  >     if (buf != NULL)
->  >        ^
->  > [1] https://github.com/wolfcw/libfaketime/commit/47e958b753fc15098a2b7d0e9ef26b83ee255874
-> 
->  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
->  > ---
->  >  ...isable-the-non-null-compare-warning-error.patch | 31 ++++++++++++++++++++++
->  >  1 file changed, 31 insertions(+)
->  >  create mode 100644 package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
-> 
->  > diff --git a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
->  > new file mode 100644
->  > index 0000000..859592e
->  > --- /dev/null
->  > +++ b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
->  > @@ -0,0 +1,31 @@
->  > +From e85a157b51b1276c91c736d8624d9f3e876e9189 Mon Sep 17 00:00:00 2001
->  > +From: Andreas Rammhold <andreas@rammhold.de>
->  > +Date: Tue, 20 Dec 2016 19:25:32 +0100
->  > +Subject: [PATCH] Disable the non-null compare warning/error.
->  > +
->  > +We rely on the provided local library definitions for the hooked
->  > +functions which in some cases (GCC >6) carry a non-null-attribute flag
->  > +which causes compile errors on `!= NULL` checks.
->  > +
->  > +[Romain: rebase on 0.9.6]
->  > +Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> 
-> It is nice if you use the -x option to git cherry-pick so it adds a
-> comment about the original git commit id. I've now manually added it.
+Fixes the build of protobuf on Sparc:
 
-Well, sometime I just use git format-patch -1 HASH when the patch apply cleanly
-without creating a new branch and cherry-picking. In that case there is no -x
-option...
-Ok, I'll take care to keep the upstream hash :)
+  http://autobuild.buildroot.net/results/f3d76eaebd529a61bce849e355182c60f233ed06/
 
-> 
-> 
->> +---
->  > + src/Makefile | 2 +-
->  > + 1 file changed, 1 insertion(+), 1 deletion(-)
->  > +
->  > +diff --git a/src/Makefile b/src/Makefile
->  > +index 51634b0..bbbd476 100644
->  > +--- a/src/Makefile
->  > ++++ b/src/Makefile
->  > +@@ -67,7 +67,7 @@ INSTALL ?= install
->  > + PREFIX ?= /usr/local
->  > + LIBDIRNAME ?= /lib/faketime
->  > + 
->  > +-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
->  > ++CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-> 
-> The -Wall -Werror flags are not so nice, but oh well.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/protobuf/protobuf.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-ha yes... do you want I send a new patch removing Werror instead ?
-
-Best regards,
-Romain
-
-> 
-> Committed, thanks.
-> 
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 610da8c..2cd10eb 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -17,6 +17,10 @@ PROTOBUF_LICENSE_FILES = LICENSE
+ PROTOBUF_DEPENDENCIES = host-protobuf
+ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++PROTOBUF_CONF_ENV += LIBS=-latomic
++endif
++
+ PROTOBUF_INSTALL_STAGING = YES
+ 
+ PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
+-- 
+2.7.4
