@@ -1,62 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 13:24:46 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] efibootmgr: backport
-	upstream patch to fix build with gcc 6.x
-Message-ID: <20170515125326.DDF927FA0C@busybox.osuosl.org>
+Date: Mon, 15 May 2017 13:37:35 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] postgresql: bump version
+	to 9.6.2
+Message-ID: <20170515125327.063BA828FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f3915ef79a161e24fe47c2ad83d0ab761fa7eab
+commit: https://git.buildroot.net/buildroot/commit/?id=5149066e594a7c7f1f0bbe195f371309c0c5bc07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-efibootmgr was built with -fshort-wchar, which causes gcc to use
-2-byte wchar_t instead of the normal 4-byte wchar_t. But this doesn't
-work anymore with gcc 6.x, as it causes a build failure:
-
-/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efibootmgr.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
-/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: efi.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
-/home/test/autobuild/run/instance-3/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/6.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: unparse_path.o uses 2-byte wchar_t yet the output is to use 4-byte wchar_t; use of wchar_t values across objects may fail
-
-Upstream solution was do simply drop -fshort-wchar:
-
-  https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f
-
-So this commit simply backports this upstream patch.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/87c3ff2427331eb9ab31c9eb685fe80954a0a98f/
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3e254b82c77f5b91907ee96e9cb053ac65cca00b)
+(cherry picked from commit cd3d6c32ca515d5fb8dcc47cb17b2677fd480948)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efibootmgr/efibootmgr.hash | 1 +
- package/efibootmgr/efibootmgr.mk   | 3 +++
- 2 files changed, 4 insertions(+)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
-index f71dced..3f934ba 100644
---- a/package/efibootmgr/efibootmgr.hash
-+++ b/package/efibootmgr/efibootmgr.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
- sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
-+sha256 8e91f16927d296ffebd4f7fafda2f84c0f6201aba089a35e8090abd5aacdc58e	3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index 487c8ca..7f5f494 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -6,6 +6,9 @@
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 900a55a..1524a34 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.1/postgresql-9.6.1.tar.bz2.sha256
+-sha256 e5101e0a49141fc12a7018c6dad594694d3a3325f5ab71e93e0e51bd94e51fcd  postgresql-9.6.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.2/postgresql-9.6.2.tar.bz2.sha256
++sha256 0187b5184be1c09034e74e44761505e52357248451b0c854dddec6c231fe50c9  postgresql-9.6.2.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index bc2bf47..e07afc9 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
-+# Patch fixes the build with gcc 6.x.
-+EFIBOOTMGR_PATCH = \
-+	https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
- EFIBOOTMGR_LICENSE = GPLv2+
- EFIBOOTMGR_LICENSE_FILES = COPYING
- EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
+-POSTGRESQL_VERSION = 9.6.1
++POSTGRESQL_VERSION = 9.6.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
