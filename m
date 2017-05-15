@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 13:36:56 +0200
-Subject: [Buildroot] [PATCH] sudo: fix static linking with openldap
-	having openssl support
-In-Reply-To: <20170511130040.26036-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Thu, 11 May 2017 14:00:40 +0100")
-References: <20170511130040.26036-1-Vincent.Riera@imgtec.com>
-Message-ID: <87vap2jqqv.fsf@dell.be.48ers.dk>
+Date: Mon, 15 May 2017 13:37:59 +0200
+Subject: [Buildroot] [PATCH master] postgresql: bump version to 9.6.3
+	(security)
+In-Reply-To: <20170511142014.20027-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Thu, 11 May 2017 15:20:14 +0100")
+References: <20170511142014.20027-1-Vincent.Riera@imgtec.com>
+Message-ID: <87r2zqjqp4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > If we are building sudo statically and openldap was linked with openssl,
- > then when we link sudo with openldap we need to specify the openssl
- > libs, otherwise it will fail with "undefined reference" errors.
+ > Three security vulnerabilities have been closed by this release:
+ > CVE-2017-7484: selectivity estimators bypass SELECT privilege checks
+ > CVE-2017-7485: libpq ignores PGREQUIRESSL environment variable
+ > CVE-2017-7486: pg_user_mappings view discloses foreign server passwords
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/ebb/ebbb4c3138b5023a0c8bd938db1932a25ba5b6fb/
- >   http://autobuild.buildroot.net/results/58e/58ee4fddea85f0c79b26582b04a573258e27eb47/
- >   http://autobuild.buildroot.net/results/051/05151c4ef7f0b3702a6cd5e6df4888d826a37431/
- >   http://autobuild.buildroot.net/results/b1d/b1dfae81985daee106700191fcb82387833c2e3f/
- >   http://autobuild.buildroot.net/results/5b4/5b42e8505856156389d480d0da19f6982cf120d8/
- >   http://autobuild.buildroot.net/results/30a/30a76190428f902f03bcf54ba9f1f4f4377c6fc9/
- >   http://autobuild.buildroot.net/results/e8c/e8c6bdc314b9a8d5de303633a3abd7b7e44beb2e/
- >   http://autobuild.buildroot.net/results/483/4830c69cc6a62080e1516f0d9009c2ba619c23c1/
+ > More details: https://www.postgresql.org/about/news/1746/
 
  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > ---
- >  package/sudo/sudo.mk | 7 +++++++
- >  1 file changed, 7 insertions(+)
-
- > diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
- > index 0fcd740..56f83ea 100644
- > --- a/package/sudo/sudo.mk
- > +++ b/package/sudo/sudo.mk
- > @@ -40,6 +40,13 @@ endif
- >  ifeq ($(BR2_PACKAGE_OPENLDAP),y)
- >  SUDO_DEPENDENCIES += openldap
- >  SUDO_CONF_OPTS += --with-ldap
- > +# If we are building sudo statically and openldap was linked with openssl, then
- > +# when we link sudo with openldap we need to specify the openssl libs, otherwise
- > +# it will fail with "undefined reference" errors.
- > +ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_OPENSSL),yy)
- > +SUDO_DEPENDENCIES += host-pkgconf
- > +SUDO_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
- > +endif
 
 Committed to 2017.02.x, thanks.
 
