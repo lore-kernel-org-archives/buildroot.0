@@ -1,182 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 May 2017 14:46:21 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/bluez_utils: fix
-	test build issues with musl
-Message-ID: <20170515125328.96B2180649@busybox.osuosl.org>
+Date: Mon, 15 May 2017 12:15:45 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] qt5base: fix examples
+	compile with disabled gui module
+Message-ID: <20170515125326.D0FB98286F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=353ffb24975b3c7ae0f073749838d3ca3422de7a
+commit: https://git.buildroot.net/buildroot/commit/?id=ff1e2c2c0d3a9e5b806308325585994f43f2c858
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Add one missing header and avoid encrypt redefinition.
+Fixes [1]:
 
-Fixes:
-http://autobuild.buildroot.net/results/06c/06c930d9c5299b79500d018ac3fb2861ce834c7c/
+  Project ERROR: Could not find feature opengl.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+[1] http://autobuild.buildroot.net/results/040/040ab283dbbec623fe5ff4eaece754d9701fafc5
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d09d3a7fa00585ca570a75fee59b9cb3ac983d98)
+(cherry picked from commit 4860e05a63bf01156466a1a8007de38e2839501a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../bluez_utils/0004-test-add-missing-header.patch |  34 +++++++
- ...test-avoid-conflict-with-encrypt-function.patch | 107 +++++++++++++++++++++
- 2 files changed, 141 insertions(+)
+ ...4-examples-fix-compile-without-gui-module.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/bluez_utils/0004-test-add-missing-header.patch b/package/bluez_utils/0004-test-add-missing-header.patch
+diff --git a/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
 new file mode 100644
-index 0000000..c74afb8
+index 0000000..148ced8
 --- /dev/null
-+++ b/package/bluez_utils/0004-test-add-missing-header.patch
-@@ -0,0 +1,34 @@
-+From d3c098c2fde55ddf0c7d56eae56925103d35da73 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 13 May 2017 18:56:51 +0200
-+Subject: [PATCH] test: add missing header
-+
-+test/attest.c: In function 'at_command':
-+test/attest.c:43:2: error: unknown type name 'fd_set'
-+  fd_set rfds;
-+  ^
++++ b/package/qt5/qt5base/5.8.0/0004-examples-fix-compile-without-gui-module.patch
+@@ -0,0 +1,42 @@
++From fe8a9bacf781fcf290e04a08f2b8e37d881d58bb Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 27 Apr 2017 22:41:28 +0200
++Subject: [PATCH] examples: fix compile without gui module
 +
 +Fixes:
-+http://autobuild.buildroot.net/results/06c/06c930d9c5299b79500d018ac3fb2861ce834c7c/
 +
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
++  Project ERROR: Could not find feature opengl.
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ test/attest.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ examples/gui/gui.pro         | 2 +-
++ examples/widgets/widgets.pro | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/test/attest.c b/test/attest.c
-+index 12ba682..2626cf1 100644
-+--- a/test/attest.c
-++++ b/test/attest.c
-+@@ -35,6 +35,8 @@
-+ #include <sys/ioctl.h>
-+ #include <sys/socket.h>
++diff --git a/examples/gui/gui.pro b/examples/gui/gui.pro
++index a4d960d3f5..b8080c2075 100644
++--- a/examples/gui/gui.pro
+++++ b/examples/gui/gui.pro
++@@ -6,5 +6,5 @@ CONFIG += no_docs_target
 + 
-++#include <sys/select.h>
-++
-+ #include <bluetooth/bluetooth.h>
-+ #include <bluetooth/rfcomm.h>
++ SUBDIRS += analogclock
++ SUBDIRS += rasterwindow
++-qtConfig(opengl): \
+++qtHaveModule(gui):qtConfig(opengl): \
++     SUBDIRS += openglwindow
++diff --git a/examples/widgets/widgets.pro b/examples/widgets/widgets.pro
++index 513ddc91f2..cef4936d32 100644
++--- a/examples/widgets/widgets.pro
+++++ b/examples/widgets/widgets.pro
++@@ -22,7 +22,7 @@ SUBDIRS       = \
++                 tutorials \
++                 widgets
 + 
++-qtConfig(opengl): \
+++qtHaveModule(gui):qtConfig(opengl): \
++     SUBDIRS += windowcontainer
++ 
++ contains(DEFINES, QT_NO_CURSOR): SUBDIRS -= mainwindows
 +-- 
-+2.9.3
-+
-diff --git a/package/bluez_utils/0005-test-avoid-conflict-with-encrypt-function.patch b/package/bluez_utils/0005-test-avoid-conflict-with-encrypt-function.patch
-new file mode 100644
-index 0000000..438da97
---- /dev/null
-+++ b/package/bluez_utils/0005-test-avoid-conflict-with-encrypt-function.patch
-@@ -0,0 +1,107 @@
-+From d8056252d0c99bfb2482f0a420dcf9a36019ddf8 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 13 May 2017 18:58:51 +0200
-+Subject: [PATCH] test: avoid conflict with encrypt function
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+With a musl based toolchain:
-+
-+test/l2test.c:110:12: error: ???encrypt??? redeclared as different kind of symbol
-+ static int encrypt = 0;
-+            ^
-+In file included from test/l2test.c:34:0:
-+[...]/sysroot/usr/include/unistd.h:145:6: note: previous declaration of ???encrypt??? was here
-+ void encrypt(char *, int);
-+      ^
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ test/l2test.c | 8 ++++----
-+ test/rctest.c | 8 ++++----
-+ 2 files changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/test/l2test.c b/test/l2test.c
-+index f66486d..9ef6faf 100644
-+--- a/test/l2test.c
-++++ b/test/l2test.c
-+@@ -107,7 +107,7 @@ static char *filename = NULL;
-+ static int rfcmode = 0;
-+ static int master = 0;
-+ static int auth = 0;
-+-static int encrypt = 0;
-++static int _encrypt = 0;
-+ static int secure = 0;
-+ static int socktype = SOCK_SEQPACKET;
-+ static int linger = 0;
-+@@ -340,7 +340,7 @@ static int do_connect(char *svr)
-+ 		opt |= L2CAP_LM_MASTER;
-+ 	if (auth)
-+ 		opt |= L2CAP_LM_AUTH;
-+-	if (encrypt)
-++	if (_encrypt)
-+ 		opt |= L2CAP_LM_ENCRYPT;
-+ 	if (secure)
-+ 		opt |= L2CAP_LM_SECURE;
-+@@ -475,7 +475,7 @@ static void do_listen(void (*handler)(int sk))
-+ 		opt |= L2CAP_LM_MASTER;
-+ 	if (auth)
-+ 		opt |= L2CAP_LM_AUTH;
-+-	if (encrypt)
-++	if (_encrypt)
-+ 		opt |= L2CAP_LM_ENCRYPT;
-+ 	if (secure)
-+ 		opt |= L2CAP_LM_SECURE;
-+@@ -1407,7 +1407,7 @@ int main(int argc, char *argv[])
-+ 			break;
-+ 
-+ 		case 'E':
-+-			encrypt = 1;
-++			_encrypt = 1;
-+ 			break;
-+ 
-+ 		case 'S':
-+diff --git a/test/rctest.c b/test/rctest.c
-+index 4d7c90a..7ad5a0b 100644
-+--- a/test/rctest.c
-++++ b/test/rctest.c
-+@@ -79,7 +79,7 @@ static char *filename = NULL;
-+ 
-+ static int master = 0;
-+ static int auth = 0;
-+-static int encrypt = 0;
-++static int _encrypt = 0;
-+ static int secure = 0;
-+ static int socktype = SOCK_STREAM;
-+ static int linger = 0;
-+@@ -200,7 +200,7 @@ static int do_connect(const char *svr)
-+ 		opt |= RFCOMM_LM_MASTER;
-+ 	if (auth)
-+ 		opt |= RFCOMM_LM_AUTH;
-+-	if (encrypt)
-++	if (_encrypt)
-+ 		opt |= RFCOMM_LM_ENCRYPT;
-+ 	if (secure)
-+ 		opt |= RFCOMM_LM_SECURE;
-+@@ -291,7 +291,7 @@ static void do_listen(void (*handler)(int sk))
-+ 		opt |= RFCOMM_LM_MASTER;
-+ 	if (auth)
-+ 		opt |= RFCOMM_LM_AUTH;
-+-	if (encrypt)
-++	if (_encrypt)
-+ 		opt |= RFCOMM_LM_ENCRYPT;
-+ 	if (secure)
-+ 		opt |= RFCOMM_LM_SECURE;
-+@@ -701,7 +701,7 @@ int main(int argc, char *argv[])
-+ 			break;
-+ 
-+ 		case 'E':
-+-			encrypt = 1;
-++			_encrypt = 1;
-+ 			break;
-+ 
-+ 		case 'S':
-+-- 
-+2.9.3
++2.11.0
 +
