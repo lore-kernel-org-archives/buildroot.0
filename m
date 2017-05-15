@@ -1,47 +1,48 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 15 May 2017 17:05:43 +0100
-Subject: [Buildroot] [PATCH next 2/2] python-pytablewriter: bump version to
-	0.19.7
-In-Reply-To: <20170515160543.21760-1-Vincent.Riera@imgtec.com>
-References: <20170515160543.21760-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170515160543.21760-2-Vincent.Riera@imgtec.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 15 May 2017 10:24:47 -0700
+Subject: [Buildroot] IASL Support in BuildRoot?
+Message-ID: <CAKmqyKOOgf2kKSAag=uLUzQX+Qkjom9ZyXQPHhdCuBG3t7XxuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
- package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
++ BuildRoot mailing list
+Change the subject, was: [autobuild.buildroot.net] Your build results
+for 2017-05-01
 
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index eefcb3a81..570a7ab02 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
--md5 fb404abd5a6aab2d8da8c93f24c9c974  pytablewriter-0.19.5.tar.gz
--sha256 0f06a73fc13fea7d6004ec9d96f2aeef920defaee1704268558a45e97455d35a  pytablewriter-0.19.5.tar.gz
-+md5 0f559538d2d40b1f59904b3bf6c66b35  pytablewriter-0.19.7.tar.gz
-+sha256 09c841a08cfcecc51e7ffc1846c5200b9f25ef6a3ed82a1a33f714b1c0d9ef94  pytablewriter-0.19.7.tar.gz
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index 50e85c2bd..24a4d2e94 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTABLEWRITER_VERSION = 0.19.5
-+PYTHON_PYTABLEWRITER_VERSION = 0.19.7
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/db/c6/517cb51aee3c83b7eb60353f818aab0f39d310c925ea103cc54c0e0f8cd2
-+PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/2d/5d/02baae4e38413608a77abec5f4ad9a665ba788802e84d7f84cfd9fbe49a2
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
--- 
-2.13.0
+This is failing because the host doesn't have iasl (from the
+acpi-tools package).
+
+I looked at BuildRoot and it supports building this for the target,
+but no host support. What is the usual process here? Do we add it as a
+host requirement or do we add support to build it?
+
+Thanks,
+
+Alistair
+
+>
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: Monday, 1 May 2017 11:28 PM
+> To: Alistair Francis <alistai@xilinx.com>
+> Subject: [autobuild.buildroot.net] Your build results for 2017-05-0
+>
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2017-05-01, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Build failures related to your packages:
+>
+>      aarch64 |                      xen-4.8.1 |
+> http://autobuild.buildroot.net/results/afa199864d6b546fe759bb582a9c10702ea7fa
+> 78
+>
+> --
+> http://autobuild.buildroot.net
