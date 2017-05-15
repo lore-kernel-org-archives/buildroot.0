@@ -1,29 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 May 2017 14:05:16 +0200
-Subject: [Buildroot] [PATCH] kvm-unit-tests: fix build on x86-64 with
- specific gcc versions
-In-Reply-To: <1494276103-22722-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1494276103-22722-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170515140516.06b7fa02@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 May 2017 14:07:50 +0200
+Subject: [Buildroot] [PATCH] package/gpsd: do not interact with systemd
+	on install
+In-Reply-To: <20170513082736.22734-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 13 May 2017 10:27:36 +0200")
+References: <20170513082736.22734-1-yann.morin.1998@free.fr>
+Message-ID: <87fug6iaqx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon,  8 May 2017 22:41:43 +0200, Thomas Petazzoni wrote:
+ > When building on a systemd-based host for a systemd-based target, gpsd's
+ > buildsystem will try to tell systemd to reload the its configuration and
+ > recreate the entire dependency tree of services.
 
->  ...clock-be-explicit-about-mul-instruction-d.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/kvm-unit-tests/0001-x86-hyperv_clock-be-explicit-about-mul-instruction-d.patch
+ > Of course, this can not work when run as a user:
+ >>>> gpsd 3.16 Installing to target
+ >     ==== AUTHENTICATING FOR org.freedesktop.systemd1.reload-daemon ===
+ >     Authentication is required to reload the systemd state.
+ >     Authenticating as: root
+ >     Password:
 
-This patch has been accepted upstream:
-https://git.kernel.org/pub/scm/virt/kvm/kvm-unit-tests.git/commit/?id=45276b5860522921c77fb3ccc1458ff5f223c3c6.
+ > In fact, this does not even mean anything in cross-compilation.
 
-Thomas
+ > Fortunately, upstream has already fixed their sin, so we backport it
+ > (tweaked to apply onto 3.16).
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+ > ---
+ > Note: this was never observed in any of the autobuilders, even those
+ > running on a systemd-based distro, because in this case stdin is
+ > redirected and systemctl simply fails, but the construct is just to
+ > ignore the failure, so the build proceeds; the issue only occurs when
+ > there is an actual terminal to provide user input... :-/
+
+Committed to 2017.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
