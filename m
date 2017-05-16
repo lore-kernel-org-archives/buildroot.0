@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 May 2017 09:25:12 +0200
-Subject: [Buildroot] [PATCH] rpcbind: add upstream security fix for
- CVE-2017-8779
-In-Reply-To: <20170515210124.6657-1-peter@korsgaard.com>
-References: <20170515210124.6657-1-peter@korsgaard.com>
-Message-ID: <20170516092512.74a6f42b@free-electrons.com>
+Date: Tue, 16 May 2017 09:25:32 +0200
+Subject: [Buildroot] [git commit] rtmpdump: security bump to current HEAD
+Message-ID: <20170516072544.B765481983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4ebd2fa277fdffecca146d07c78954653517eff4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 15 May 2017 23:01:24 +0200, Peter Korsgaard wrote:
-> CVE-2017-8779: rpcbind through 0.2.4, LIBTIRPC through 1.0.1 and 1.0.2-rc
-> through 1.0.2-rc3, and NTIRPC through 1.4.3 do not consider the maximum RPC
-> data size during memory allocation for XDR strings, which allows remote
-> attackers to cause a denial of service (memory consumption with no
-> subsequent free) via a crafted UDP packet to port 111, aka rpcbomb.
-> 
-> For more details, see:
-> https://guidovranken.wordpress.com/2017/05/03/rpcbomb-remote-rpcbind-denial-of-service-patches/
-> 
-> Backport upstream fix to version 0.2.3 and unconditionally include syslog.h
-> to fix a build issue when RPCBIND_DEBUG is disabled (which it is in
-> Buildroot).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...r-all-svc_getargs-calls-with-svc_freeargs.patch | 231 +++++++++++++++++++++
->  1 file changed, 231 insertions(+)
->  create mode 100644 package/rpcbind/0004-rpcbind-pair-all-svc_getargs-calls-with-svc_freeargs.patch
+Fixes:
 
-Applied to master, thanks.
+- CVE-2015-8271: The AMF3CD_AddProp function in amf.c in RTMPDump 2.4 allows
+  remote RTMP Media servers to execute arbitrary code
+  https://www.talosintelligence.com/reports/TALOS-2016-0067/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+- CVE-2015-8272: RTMPDump 2.4 allows remote attackers to trigger a denial of
+  service (NULL pointer dereference and process crash).
+  https://www.talosintelligence.com/reports/TALOS-2016-0068/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rtmpdump/rtmpdump.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index 19d9b04..f5d430c 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTMPDUMP_VERSION = a107cef9b392616dff54fabfd37f985ee2190a6f
++RTMPDUMP_VERSION = fa8646daeb19dfd12c181f7d19de708d623704c0
+ RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
+ RTMPDUMP_INSTALL_STAGING = YES
+ # Note that rtmpdump is GPL-2.0 but librtmp has its own license and since we only
