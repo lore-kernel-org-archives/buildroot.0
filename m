@@ -1,41 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 May 2017 08:55:08 +0200
-Subject: [Buildroot] [PATCH] fxload: do not pass -g on Microblaze
-In-Reply-To: <871srp9x9f.fsf@dell.be.48ers.dk>
-References: <1494878505-27111-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <871srp9x9f.fsf@dell.be.48ers.dk>
-Message-ID: <20170516085508.4e416332@free-electrons.com>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Tue, 16 May 2017 08:59:22 +0200
+Subject: [Buildroot] [PATCH] x11r7: xf86-input-tslib: upgrade to 1.0.0
+In-Reply-To: <7b39e63f-791f-2999-8fc2-e2e7c0df7ffc@posteo.de>
+References: <20170514075026.13434-1-martink@posteo.de>
+ <20170514143733.5fa069e9@free-electrons.com>
+ <7b39e63f-791f-2999-8fc2-e2e7c0df7ffc@posteo.de>
+Message-ID: <d63bddd1-163e-d34e-6d3e-284d4c0efcb1@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 16 May 2017 07:38:36 +0200, Peter Korsgaard wrote:
 
->  > A possible alternate solution is to disable fxload on Microblaze
->  > entirely. If you prefer this option, let me know, and I'll send a
->  > different patch.  
+On 2017-05-15 08:28, Martin Kepplinger wrote:
+> Am 2017-05-14 um 14:37 schrieb Thomas Petazzoni:
+>> Hello,
+>>
+>> On Sun, 14 May 2017 09:50:26 +0200, Martin Kepplinger wrote:
+>>> As the update from 0.0.X to 1.0.0 suggests, this is a major update. The driver
+>>> uses X11's touch API now, instead of motion with button emulation. Furthermore
+>>> it supports multitouch when a recent version of tslib is installed.
+>>>
+>>> It is not backwards compatible for very old versions of the X server. See
+>>> https://github.com/merge/xf86-input-tslib/releases for some details.
+>>
+>> What do you call "very old versions of the X server" ?
+>>
+>> Buildroot still supports the X server in version 1.14.7. Does this
+>> qualify as a "very old version" ?
+>>
 > 
-> I wouldn't mind just disabling fxload. I personally haven't seen any hw
-> with the cypress 8051's needing fxload in the last 10 years or so, and
-> there are no reverse dependencies.
+> While, to be honest I'm still digging for the definitive answer here,
+> I'm pretty sure 1.12 is the minimum X.org xserver version supported for
+> 1.0.0 here.
+> 
+> 1.14 and up is supported.
 
-OK, I'll send a patch disabling fxload entirely then.
+yes. 1.12 it is. So 1.11 is "very old" :)
 
-> I see that the bug is very old :/ I wonder why we don't have a lot of
-> other fallout from it - Is fxload really the only package passing -g or
-> is the fxload source code so special that the bug only triggers there?
-
-We don't seem to see it with other packages, so there must be something
-special in fxload's code that triggers the bug. But I must say I
-haven't looked too deeply, fixing Microblaze gcc issues is not really my
-top priority.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+thanks
+                      martin
