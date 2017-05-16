@@ -1,47 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 May 2017 23:13:13 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qt5base: link with -latomic for
-	sparc
-In-Reply-To: <cover.1494969180.git.yann.morin.1998@free.fr>
-References: <cover.1494969180.git.yann.morin.1998@free.fr>
-Message-ID: <628b089124e34bcc2f6cd9be57c65d567872ef1f.1494969180.git.yann.morin.1998@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 16 May 2017 23:23:54 +0200
+Subject: [Buildroot] RPi B+ update
+In-Reply-To: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com>
+References: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com>
+Message-ID: <20170516232354.2080bf15@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt 5.8 needs atomic operations, which on sparc are provided with
--latomic.
+Hello Marco,
 
-Fixes:
-    http://autobuild.buildroot.org/results/49b/49bc9345b9849c9c3c53ace290c534ff7bb98683/
-    http://autobuild.buildroot.org/results/9f2/9f213406954be51dfcad76ebdce8b73850842180/
+On Tue, 16 May 2017 21:32:26 +0200, Marco Trapanese <marcotrapanese@gmail.com> wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5base/qt5base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> Hi!
+> A couple of years ago (it was in 2015) I built a buildroot environment 
+> for RPi B+. We ended up with an sd-card image that was cloned for every 
+> installation.
+> This months we've bought some other RPi B+ but with this batch the 
+> system refuses to boot: it hangs with black screen and the raspberry 
+> icon at the top-left corner.
+> 
+> We're aware they have changed the RAM chips (from Samsung to Elpida) and 
+> likely we should update the drivers with the new ones.
+> 
+> Here the buildroot related question: is it possible to change something 
+> in the current sd-card image instead of updating and rebuilding the 
+> whole system?
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 65320cbe04..7c9ed0b4e3 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -215,6 +215,13 @@ endef
- endif
- 
- QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
-+ifeq ($(BR2_sparc)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
-+# Qt 5.8 needs atomics, which on sparc are in -latomic
-+define QT5BASE_ARCH_CONFIG
-+	printf 'LIBS += -latomic\n' >$(QT5BASE_ARCH_CONFIG_FILE)
-+endef
-+endif
-+
- define QT5BASE_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
- 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
--- 
-2.11.0
+You can try to exchange only the firmware, device tree and the linux
+kernel files on the first partition of the sd-card image with ones from
+an actual build (after testing if the actual complete sd-card image
+boots well)...
+
+Regards,
+Peter
+
+> 
+> This is because if we need to go with the second option we're going to 
+> deeply upgrade the application and this is not affordable right now.
+> 
+> Of course, feel free to ask any details you need to try to help me!
+> 
+> Thanks in advance!
+> Marco
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
