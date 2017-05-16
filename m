@@ -1,62 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 May 2017 23:13:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/qt5base: install arch-specific
-	configuration
+Date: Tue, 16 May 2017 23:13:13 +0200
+Subject: [Buildroot] [PATCH 2/2] package/qt5base: link with -latomic for
+	sparc
 In-Reply-To: <cover.1494969180.git.yann.morin.1998@free.fr>
 References: <cover.1494969180.git.yann.morin.1998@free.fr>
-Message-ID: <0251e17047b7b3c82e23fe1026af7a9847a6a43b.1494969180.git.yann.morin.1998@free.fr>
+Message-ID: <628b089124e34bcc2f6cd9be57c65d567872ef1f.1494969180.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some architectures, it is necessary to link with additional
-libraries, such as -latomic for sparc.
+Qt 5.8 needs atomic operations, which on sparc are provided with
+-latomic.
 
-Add a bit of support to make that easy; actual use will be introduced in
-the following patch.
+Fixes:
+    http://autobuild.buildroot.org/results/49b/49bc9345b9849c9c3c53ace290c534ff7bb98683/
+    http://autobuild.buildroot.org/results/9f2/9f213406954be51dfcad76ebdce8b73850842180/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Julien Corjon <corjon.j@ecagroup.com>
 Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5base/qmake.conf | 3 +++
- package/qt5/qt5base/qt5base.mk | 3 +++
- 2 files changed, 6 insertions(+)
+ package/qt5/qt5base/qt5base.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
-index 49cf898316..8b6debe583 100644
---- a/package/qt5/qt5base/qmake.conf
-+++ b/package/qt5/qt5base/qmake.conf
-@@ -21,5 +21,8 @@ CONFIG                 += nostrip
- QMAKE_LIBS             += -lrt -lpthread -ldl
- QMAKE_CFLAGS_ISYSTEM   =
- 
-+# Architecturespecific configuration
-+include(arch.conf)
-+
- include(../common/linux_device_post.conf)
- load(qt_config)
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 0c088350e5..65320cbe04 100644
+index 65320cbe04..7c9ed0b4e3 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -214,12 +214,15 @@ define QT5BASE_CONFIGURE_CONFIG_FILE
- endef
+@@ -215,6 +215,13 @@ endef
  endif
  
-+QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
+ QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
++ifeq ($(BR2_sparc)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
++# Qt 5.8 needs atomics, which on sparc are in -latomic
++define QT5BASE_ARCH_CONFIG
++	printf 'LIBS += -latomic\n' >$(QT5BASE_ARCH_CONFIG_FILE)
++endef
++endif
++
  define QT5BASE_CONFIGURE_CMDS
  	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
  		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
- 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
- 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
- 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
-+	touch $(QT5BASE_ARCH_CONFIG_FILE)
-+	$(QT5BASE_ARCH_CONFIG)
- 	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
 -- 
 2.11.0
