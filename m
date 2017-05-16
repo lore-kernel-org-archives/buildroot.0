@@ -1,64 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 May 2017 08:41:59 +0200
-Subject: [Buildroot] [PATCH] package/faketime: fix build with gcc >= 6
-In-Reply-To: <60001b91-3306-48fb-4973-bf16d3b02f01@gmail.com> (Romain Naour's
- message of "Mon, 15 May 2017 22:36:10 +0200")
-References: <20170514212643.17153-1-romain.naour@gmail.com>
- <87mvae9dx7.fsf@dell.be.48ers.dk>
- <60001b91-3306-48fb-4973-bf16d3b02f01@gmail.com>
-Message-ID: <87wp9h8frc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 May 2017 08:55:08 +0200
+Subject: [Buildroot] [PATCH] fxload: do not pass -g on Microblaze
+In-Reply-To: <871srp9x9f.fsf@dell.be.48ers.dk>
+References: <1494878505-27111-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <871srp9x9f.fsf@dell.be.48ers.dk>
+Message-ID: <20170516085508.4e416332@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+Hello,
 
-Hi,
+On Tue, 16 May 2017 07:38:36 +0200, Peter Korsgaard wrote:
 
- >> > +[Romain: rebase on 0.9.6]
- >> > +Signed-off-by: Romain Naour <romain.naour@gmail.com>
- >> 
- >> It is nice if you use the -x option to git cherry-pick so it adds a
- >> comment about the original git commit id. I've now manually added it.
+>  > A possible alternate solution is to disable fxload on Microblaze
+>  > entirely. If you prefer this option, let me know, and I'll send a
+>  > different patch.  
+> 
+> I wouldn't mind just disabling fxload. I personally haven't seen any hw
+> with the cypress 8051's needing fxload in the last 10 years or so, and
+> there are no reverse dependencies.
 
- > Well, sometime I just use git format-patch -1 HASH when the patch apply cleanly
- > without creating a new branch and cherry-picking. In that case there is no -x
- > option...
+OK, I'll send a patch disabling fxload entirely then.
 
-No, but in that case you are not rebasing, so the git hash listed in the
-commit is the correct one. The -x option is only when you rebase /
-cherry-pick for traceability.
+> I see that the bug is very old :/ I wonder why we don't have a lot of
+> other fallout from it - Is fxload really the only package passing -g or
+> is the fxload source code so special that the bug only triggers there?
 
->>> +---
- >> > + src/Makefile | 2 +-
- >> > + 1 file changed, 1 insertion(+), 1 deletion(-)
- >> > +
- >> > +diff --git a/src/Makefile b/src/Makefile
- >> > +index 51634b0..bbbd476 100644
- >> > +--- a/src/Makefile
- >> > ++++ b/src/Makefile
- >> > +@@ -67,7 +67,7 @@ INSTALL ?= install
- >> > + PREFIX ?= /usr/local
- >> > + LIBDIRNAME ?= /lib/faketime
- >> > + 
- >> > +-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT
- >> > -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC
- >> > -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
- >> > ++CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare
- >> > -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS
- >> > -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
- >> 
- >> The -Wall -Werror flags are not so nice, but oh well.
+We don't seem to see it with other packages, so there must be something
+special in fxload's code that triggers the bug. But I must say I
+haven't looked too deeply, fixing Microblaze gcc issues is not really my
+top priority.
 
- > ha yes... do you want I send a new patch removing Werror instead ?
-
-So far we don't seem to have any build failures from it (besides this
-one), so it isn't strictly needed - Just a potential problem.
-
-I would leave it as is for now, unless if we can convince upstream to
-accept such a patch.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
