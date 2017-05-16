@@ -1,59 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 May 2017 23:13:08 +0200
-Subject: [Buildroot] [PATCH 0/2] package/qt5base: fix sparc compilation
-Message-ID: <cover.1494969180.git.yann.morin.1998@free.fr>
+Date: Tue, 16 May 2017 23:13:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/qt5base: install arch-specific
+	configuration
+In-Reply-To: <cover.1494969180.git.yann.morin.1998@free.fr>
+References: <cover.1494969180.git.yann.morin.1998@free.fr>
+Message-ID: <0251e17047b7b3c82e23fe1026af7a9847a6a43b.1494969180.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+For some architectures, it is necessary to link with additional
+libraries, such as -latomic for sparc.
 
-This small series aims at fixing the build of qt-5.8 on sparc.
+Add a bit of support to make that easy; actual use will be introduced in
+the following patch.
 
-Qt 5.8 needs atomic operations, which on some architectures are compiler
-builtins, while on other archs they are provided by a helper library,
-libatomic. For sparc, atomics are in libatomic.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5base/qmake.conf | 3 +++
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 2 files changed, 6 insertions(+)
 
-First, we introduce a new qmake config snippet, arch.conf, which is
-included from our qmake.conf.
-
-By default, that file is empty, except on sparc, where it add -latomic
-to the list of libraries to link with.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 4e00f9daa04e9a84f5191f479d7236dea72fbf35
-
-  gcc: drop unused legacy arc-2016.09 patch (2017-05-16 21:24:02 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 628b089124e34bcc2f6cd9be57c65d567872ef1f
-
-  package/qt5base: link with -latomic for sparc (2017-05-16 23:11:23 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/qt5base: install arch-specific configuration
-      package/qt5base: link with -latomic for sparc
-
- package/qt5/qt5base/qmake.conf |  3 +++
- package/qt5/qt5base/qt5base.mk | 10 ++++++++++
- 2 files changed, 13 insertions(+)
-
+diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+index 49cf898316..8b6debe583 100644
+--- a/package/qt5/qt5base/qmake.conf
++++ b/package/qt5/qt5base/qmake.conf
+@@ -21,5 +21,8 @@ CONFIG                 += nostrip
+ QMAKE_LIBS             += -lrt -lpthread -ldl
+ QMAKE_CFLAGS_ISYSTEM   =
+ 
++# Architecturespecific configuration
++include(arch.conf)
++
+ include(../common/linux_device_post.conf)
+ load(qt_config)
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 0c088350e5..65320cbe04 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -214,12 +214,15 @@ define QT5BASE_CONFIGURE_CONFIG_FILE
+ endef
+ endif
+ 
++QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
+ define QT5BASE_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
++	touch $(QT5BASE_ARCH_CONFIG_FILE)
++	$(QT5BASE_ARCH_CONFIG)
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
