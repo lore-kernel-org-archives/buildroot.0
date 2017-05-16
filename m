@@ -1,48 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 May 2017 23:04:44 +0200
-Subject: [Buildroot] dts: compiling aarch64 vendored dts files?
-In-Reply-To: <CA+h8R2pXBkv6juGSt3wdZtEjuVP=Q6ixTi51-6+tJDVNgw5acA@mail.gmail.com>
- (Christian Stewart's message of "Mon, 15 May 2017 22:15:38 -0400")
-References: <CA+h8R2pXBkv6juGSt3wdZtEjuVP=Q6ixTi51-6+tJDVNgw5acA@mail.gmail.com>
-Message-ID: <87ziec7btf.fsf@dell.be.48ers.dk>
+Date: Tue, 16 May 2017 23:00:26 +0200
+Subject: [Buildroot] [git commit] protobuf: link with libatomic when needed
+Message-ID: <20170516210515.35BA082675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ef9ffa3426edc895dc180d45b48bf305522b3450
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Thomas, All,
- > I can't figure out a correct way of configuring Buildroot to compile a
- > DTS under a vendor directory in the kernel:
+The protobuf library uses atomic intrinsics, so we need to link
+against libatomic.
 
- > /arch/arm64/boot/dts/nexell/s5p6818-artik710-raptor-rev03.dts
- >                                        ^
+Fixes the build of protobuf on Sparc:
 
- > The source I'm trying to build is here:
+  http://autobuild.buildroot.net/results/f3d76eaebd529a61bce849e355182c60f233ed06/
 
- > https://github.com/SamsungARTIK/linux-artik/tree/A710/v4.4/arch/arm64/boot/dts/nexell
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/protobuf/protobuf.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > The issue is that unlike most arches, arm64 has the dts files under
- > subdirectories - in this case, nexell. I've tried:
-
- >  - BR2_LINUX_KERNEL_INTREE_DTS_NAME="s5p6818-artik710-raptor-rev03"
- >  - BR2_LINUX_KERNEL_INTREE_DTS_NAME="nexell-s5p6818-artik710-raptor-rev03"
- >  - BR2_LINUX_KERNEL_INTREE_DTS_NAME="nexell/s5p6818-artik710-raptor-rev03"
-
- > The developers recommend using "make dtbs" in the kernel, which
- > probably finds these automatically. AFAIK there is no mechanism in
- > Buildroot to allow running something like this.
-
-What error are you getting exactly? We have a number of aarch64
-defconfigs using this feature without problems:
-
-git grep 'INTREE_DTS_NAME=.*/' configs
-configs/arm_foundationv8_defconfig:BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
-configs/arm_juno_defconfig:BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
-configs/nexbox_a95x_defconfig:BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-nexbox-a95x"
-configs/raspberrypi3_64_defconfig:BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2837-rpi-3-b"
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 610da8c..2cd10eb 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -17,6 +17,10 @@ PROTOBUF_LICENSE_FILES = LICENSE
+ PROTOBUF_DEPENDENCIES = host-protobuf
+ PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++PROTOBUF_CONF_ENV += LIBS=-latomic
++endif
++
+ PROTOBUF_INSTALL_STAGING = YES
+ 
+ PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
