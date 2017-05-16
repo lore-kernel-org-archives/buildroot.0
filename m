@@ -1,41 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 May 2017 23:00:26 +0200
-Subject: [Buildroot] [git commit] protobuf: link with libatomic when needed
-Message-ID: <20170516210515.35BA082675@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 16 May 2017 23:13:08 +0200
+Subject: [Buildroot] [PATCH 0/2] package/qt5base: fix sparc compilation
+Message-ID: <cover.1494969180.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef9ffa3426edc895dc180d45b48bf305522b3450
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-The protobuf library uses atomic intrinsics, so we need to link
-against libatomic.
+This small series aims at fixing the build of qt-5.8 on sparc.
 
-Fixes the build of protobuf on Sparc:
+Qt 5.8 needs atomic operations, which on some architectures are compiler
+builtins, while on other archs they are provided by a helper library,
+libatomic. For sparc, atomics are in libatomic.
 
-  http://autobuild.buildroot.net/results/f3d76eaebd529a61bce849e355182c60f233ed06/
+First, we introduce a new qmake config snippet, arch.conf, which is
+included from our qmake.conf.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/protobuf/protobuf.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+By default, that file is empty, except on sparc, where it add -latomic
+to the list of libraries to link with.
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 610da8c..2cd10eb 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -17,6 +17,10 @@ PROTOBUF_LICENSE_FILES = LICENSE
- PROTOBUF_DEPENDENCIES = host-protobuf
- PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/usr/bin/protoc
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+PROTOBUF_CONF_ENV += LIBS=-latomic
-+endif
-+
- PROTOBUF_INSTALL_STAGING = YES
- 
- PROTOBUF_PATCH = https://github.com/google/protobuf/commit/416f90939d4de58fe1a4e2489120010313183291.patch
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 4e00f9daa04e9a84f5191f479d7236dea72fbf35
+
+  gcc: drop unused legacy arc-2016.09 patch (2017-05-16 21:24:02 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 628b089124e34bcc2f6cd9be57c65d567872ef1f
+
+  package/qt5base: link with -latomic for sparc (2017-05-16 23:11:23 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/qt5base: install arch-specific configuration
+      package/qt5base: link with -latomic for sparc
+
+ package/qt5/qt5base/qmake.conf |  3 +++
+ package/qt5/qt5base/qt5base.mk | 10 ++++++++++
+ 2 files changed, 13 insertions(+)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
