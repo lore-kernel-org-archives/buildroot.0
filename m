@@ -1,67 +1,68 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 16 May 2017 22:45:31 +0200
-Subject: [Buildroot] [PATCH 3/3] support/testing/run-tests: help: put the
-	one-letter form before the long form
-In-Reply-To: <1494967531-6463-1-git-send-email-luca@lucaceresoli.net>
-References: <1494967531-6463-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1494967531-6463-3-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 May 2017 22:56:02 +0200
+Subject: [Buildroot] [PATCH 1/1] lego: ev3: use mainline kernel
+In-Reply-To: <1494890483-11249-1-git-send-email-david@lechnology.com> (David
+ Lechner's message of "Mon, 15 May 2017 18:21:23 -0500")
+References: <1494890483-11249-1-git-send-email-david@lechnology.com>
+Message-ID: <878tlw8qsd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is what the manpages usually do, and what Python does with the
-automatically-added -h/--help parameter:
+>>>>> "David" == David Lechner <david@lechnology.com> writes:
 
-Before the change:
-  $ ./support/testing/run-tests
-    [...]
-  optional arguments:
-    -h, --help            show this help message and exit
-    --list, -l            list of available test cases
-    --all, -a             execute all test cases
+ > It is finally possible to boot LEGO MINDSTORMS EV3 from the mainline
+ > Linux kernel. This patch updates the defconfg to use the mainline kernel
+ > instead of the custom ev3dev kernel.
 
-After the change:
-  $ ./support/testing/run-tests
-    [...]
-  optional arguments:
-    -h, --help            show this help message and exit
-    -l, --list            list of available test cases
-    -a, --all             execute all test cases
+Great, thanks!
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- support/testing/run-tests | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ >  .../patches/linux/0001-adc-device-tree-node.patch  | 56 ++++++++++++++
+ >  .../linux/0002-sound-device-tree-node.patch        | 85 ++++++++++++++++++++++
 
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-index 339bb66efa34..07dad0d8b938 100755
---- a/support/testing/run-tests
-+++ b/support/testing/run-tests
-@@ -10,17 +10,17 @@ def main():
-     parser = argparse.ArgumentParser(description='Run Buildroot tests')
-     parser.add_argument('testname', nargs='*',
-                         help='list of test cases to execute')
--    parser.add_argument('--list', '-l', action='store_true',
-+    parser.add_argument('-l', '--list', action='store_true',
-                         help='list of available test cases')
--    parser.add_argument('--all', '-a', action='store_true',
-+    parser.add_argument('-a', '--all', action='store_true',
-                         help='execute all test cases')
--    parser.add_argument('--stdout', '-s', action='store_true',
-+    parser.add_argument('-s', '--stdout', action='store_true',
-                         help='log everything to stdout')
--    parser.add_argument('--output', '-o',
-+    parser.add_argument('-o', '--output',
-                         help='output directory')
--    parser.add_argument('--download', '-d',
-+    parser.add_argument('-d', '--download',
-                         help='download directory')
--    parser.add_argument('--keep', '-k',
-+    parser.add_argument('-k', '--keep',
-                         help='keep build directories',
-                         action='store_true')
+I see these patches are already in mainline post-4.11, so that's great.
+
+> +++ b/board/lego/ev3/genimage.cfg
+ > @@ -19,7 +19,7 @@ image flash.bin {
+ >  		size = 320K
+ >  	}
+ >  	partition uimage {
+ > -		image = "uImage"
+ > +		image = "uImage.da850-lego-ev3"
+ >  		size = 3M
+ >  		offset = 0x50000
+ >  	}
+
+I guess this change isn't strictly needed because of the symlink, but
+OK.
+
+> diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
+ > index 543a227..0996b8c 100644
+ > --- a/configs/lego_ev3_defconfig
+ > +++ b/configs/lego_ev3_defconfig
+ > @@ -2,22 +2,26 @@
+ >  BR2_arm=y
+ >  BR2_arm926t=y
  
+ > +# Build options
+ > +BR2_GLOBAL_PATCH_DIR="board/lego/ev3/patches"
+ > +
+ >  # system
+ >  BR2_TARGET_GENERIC_GETTY=y
+ >  BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
+ >  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lego/ev3/post-image.sh"
+ > -# Linux headers same as kernel, a 4.4 series
+ > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+
+This shouldn't be dropped (after changing to 4.11) as the defconfig
+would otherwise break whenever 4.12 gets added.
+
+Committed to next with that fixed, thanks.
+
+I see you are still using a relatively old u-boot and ext3. Any reason
+to not use 2017.05 and ext4?
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
