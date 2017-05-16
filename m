@@ -1,26 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 May 2017 19:42:31 +0000
-Subject: [Buildroot] [Bug 9866] BASE_DIR usage
-In-Reply-To: <bug-9866-163@https.bugs.busybox.net/>
-References: <bug-9866-163@https.bugs.busybox.net/>
-Message-ID: <bug-9866-163-RBamnavnD1@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 May 2017 21:36:15 +0200
+Subject: [Buildroot] [git commit branch/next] imagemagick: bump version to
+	7.0.5-6
+Message-ID: <20170516194312.6A8EA82823@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9866
+commit: https://git.buildroot.net/buildroot/commit/?id=9cd8ad2364cb178e7d6c99462b05668dac1485d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> ---
-(In reply to Yann E. MORIN from comment #5)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Ahh yes, as you can see I don't use BR2_EXTERNAL (and local.mk normally doesn't
-matter for a post-build / post-image script).
-
-Grepping the linux and u-boot sources, I do see some references to CONFIG_DIR
-though, so we have to be careful.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 06a957a..b7be7bc 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 c3644119dce993aa241fa08eced2cb6043fb5345f0eee7a7822a497f1142ebe3  ImageMagick-7.0.5-5.tar.xz
++sha256 f60c3e3466ccbf9a0e643284ffec3467363edf9611f16a98387f927a974b49ab  ImageMagick-7.0.5-6.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 6b5cd4e..b1048f5 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.5-5
++IMAGEMAGICK_VERSION = 7.0.5-6
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
