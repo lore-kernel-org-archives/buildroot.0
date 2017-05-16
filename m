@@ -1,24 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 May 2017 21:41:45 +0200
-Subject: [Buildroot] [PATCH next] sysstat: bump version to 11.4.4
-In-Reply-To: <20170515125637.24381-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 15 May 2017 13:56:37 +0100")
-References: <20170515125637.24381-1-Vincent.Riera@imgtec.com>
-Message-ID: <87d1b88u86.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 May 2017 19:42:31 +0000
+Subject: [Buildroot] [Bug 9866] BASE_DIR usage
+In-Reply-To: <bug-9866-163@https.bugs.busybox.net/>
+References: <bug-9866-163@https.bugs.busybox.net/>
+Message-ID: <bug-9866-163-RBamnavnD1@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9866
 
- > Rename --disable-man-group option to --disable-file-attr
- > https://github.com/sysstat/sysstat/commit/fcd4de4080e20705a09f475646dc431d8c9378ef
+--- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> ---
+(In reply to Yann E. MORIN from comment #5)
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Ahh yes, as you can see I don't use BR2_EXTERNAL (and local.mk normally doesn't
+matter for a post-build / post-image script).
 
-Committed to next, thanks.
+Grepping the linux and u-boot sources, I do see some references to CONFIG_DIR
+though, so we have to be careful.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
