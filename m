@@ -1,34 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 May 2017 09:25:55 +0200
-Subject: [Buildroot] [PATCH] git: security bump to version 2.12.3
-In-Reply-To: <20170515144447.8596-1-peter@korsgaard.com>
-References: <20170515144447.8596-1-peter@korsgaard.com>
-Message-ID: <20170516092555.17b5acf0@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 16 May 2017 10:32:13 +0300
+Subject: [Buildroot] [PATCH] Revert "libcdio: disable on ARC,
+	triggers a toolchain bug"
+Message-ID: <20170516073213.9321-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This reverts commit 459f7302df8cdc45aa0f7f2581ebb6f05fb6432a.
 
-On Mon, 15 May 2017 16:44:47 +0200, Peter Korsgaard wrote:
-> Fixes CVE-2017-8386 - Git Shell Bypass By Abusing Less
-> 
-> For more details, see:
-> https://insinuator.net/2017/05/git-shell-bypass-by-abusing-less-cve-2017-8386/
-> http://www.mail-archive.com/git at vger.kernel.org/msg120982.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/git/git.hash | 2 +-
->  package/git/git.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+libcdio building is fixed for ARC in
+2b360bd547f1 "gcc: arc-2017.03-rc2: Fix "unrecognized supposed constant" error"
 
-Applied to master, thanks.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+---
+ package/libcdio/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-Thomas
+diff --git a/package/libcdio/Config.in b/package/libcdio/Config.in
+index 531af3bb93..fdc001ec40 100644
+--- a/package/libcdio/Config.in
++++ b/package/libcdio/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_LIBCDIO
+ 	bool "libcdio"
+ 	depends on BR2_USE_MMU # fork()
+-	# ARC toolchain issue
+-	depends on !BR2_arc
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  The GNU Compact Disc Input and Control library.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
