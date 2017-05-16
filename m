@@ -1,39 +1,23 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 May 2017 23:46:28 +0200
-Subject: [Buildroot] RPi B+ update
-In-Reply-To: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com> (Marco
- Trapanese's message of "Tue, 16 May 2017 21:32:26 +0200")
-References: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com>
-Message-ID: <87vap079vv.fsf@dell.be.48ers.dk>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 16 May 2017 14:50:17 -0700
+Subject: [Buildroot] dts: compiling aarch64 vendored dts files?
+In-Reply-To: <87ziec7btf.fsf@dell.be.48ers.dk>
+References: <CA+h8R2pXBkv6juGSt3wdZtEjuVP=Q6ixTi51-6+tJDVNgw5acA@mail.gmail.com>
+ <87ziec7btf.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2rMr5X0wooOputuq-KPUqCAWioEnEUCqHqNnjpjYskqVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marco" == Marco Trapanese <marcotrapanese@gmail.com> writes:
+Hi Peter,
 
- > Hi!
- > A couple of years ago (it was in 2015) I built a buildroot environment
- > for RPi B+. We ended up with an sd-card image that was cloned for
- > every installation.
- > This months we've bought some other RPi B+ but with this batch the
- > system refuses to boot: it hangs with black screen and the raspberry
- > icon at the top-left corner.
+On Tue, May 16, 2017 at 2:04 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> What error are you getting exactly? We have a number of aarch64
+> defconfigs using this feature without problems:
 
- > We're aware they have changed the RAM chips (from Samsung to Elpida)
- > and likely we should update the drivers with the new ones.
+It turned out to be an unrelated issue. Thanks for the help!
 
- > Here the buildroot related question: is it possible to change
- > something in the current sd-card image instead of updating and
- > rebuilding the whole system?
-
- > This is because if we need to go with the second option we're going to
- > deeply upgrade the application and this is not affordable right now.
-
-If it doesn't boot at all (E.G. no output on the serial port), then the
-problem is most likely in the rpi-firmware and/or Linux kernel, so you
-could try updating those and leaving the rootfs as is.
-
--- 
-Bye, Peter Korsgaard
+Best,
+Christian
