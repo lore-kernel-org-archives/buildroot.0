@@ -1,32 +1,21 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Tue, 16 May 2017 21:32:26 +0200
-Subject: [Buildroot] RPi B+ update
-Message-ID: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 May 2017 21:41:31 +0200
+Subject: [Buildroot] [PATCH next] imagemagick: bump version to 7.0.5-6
+In-Reply-To: <20170515123144.52524-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 15 May 2017 13:31:44 +0100")
+References: <20170515123144.52524-1-Vincent.Riera@imgtec.com>
+Message-ID: <87h90k8u8k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-A couple of years ago (it was in 2015) I built a buildroot environment 
-for RPi B+. We ended up with an sd-card image that was cloned for every 
-installation.
-This months we've bought some other RPi B+ but with this batch the 
-system refuses to boot: it hangs with black screen and the raspberry 
-icon at the top-left corner.
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-We're aware they have changed the RAM chips (from Samsung to Elpida) and 
-likely we should update the drivers with the new ones.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Here the buildroot related question: is it possible to change something 
-in the current sd-card image instead of updating and rebuilding the 
-whole system?
+Committed to next, thanks.
 
-This is because if we need to go with the second option we're going to 
-deeply upgrade the application and this is not affordable right now.
-
-Of course, feel free to ask any details you need to try to help me!
-
-Thanks in advance!
-Marco
+-- 
+Bye, Peter Korsgaard
