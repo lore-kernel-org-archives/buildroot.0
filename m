@@ -1,113 +1,32 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 16 May 2017 20:52:01 +0200
-Subject: [Buildroot] [PATCH v1] qt5declarative: fix examples compile without
-	OpenGL support
-Message-ID: <20170516185201.7259-1-ps.report@gmx.net>
+Date: Tue, 16 May 2017 21:01:16 +0200
+Subject: [Buildroot] Analysis of build results for 2017-05-04
+In-Reply-To: <20170505132423.3602e294@free-electrons.com>
+References: <20170505062802.8C0262097E@mail.free-electrons.com>
+ <20170505132423.3602e294@free-electrons.com>
+Message-ID: <20170516210116.140c9c63@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+On Fri, 5 May 2017 13:24:23 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+ 
+> >          arm |           qt5declarative-5.8.0 | NOK | http://autobuild.buildroot.net/results/64a198397736db12b73c1f693dbe1c47d73b53da |     
+> 
+> logo.h:52:11: error: 'GLfloat' does not name a type
+>      const GLfloat *constData() const { return m_data.constData(); }
+> 
+> Peter, an idea ?
+> 
+> There's no OpenGL backend enabled in this configuration.
+> 
 
-   main.cpp:(.text._ZN11QQmlPrivate10createIntoI6FbItemEEvPv[_ZN11QQmlPrivate10createIntoI6FbItemEEvPv]+0x18): undefined reference to `QQuickFramebufferObject::QQuickFramebufferObject(QQuickItem*)'
-   .obj/main.o: In function `QQmlPrivate::QQmlElement<FbItem>::~QQmlElement()':
-   main.cpp:(.text._ZN11QQmlPrivate11QQmlElementI6FbItemED2Ev[_ZN11QQmlPrivate11QQmlElementI6FbItemED5Ev]+0x5c): undefined reference to `vtable for QQuickFramebufferObject'
-   .obj/main.o: In function `QQmlPrivate::QQmlElement<FbItem>::~QQmlElement()':
-   main.cpp:(.text._ZN11QQmlPrivate11QQmlElementI6FbItemED0Ev[_ZN11QQmlPrivate11QQmlElementI6FbItemED0Ev]+0x64): undefined reference to `vtable for QQuickFramebufferObject'
-   .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0x48): undefined reference to `QQuickFramebufferObject::isTextureProvider() const'
-   .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0x4c): undefined reference to `QQuickFramebufferObject::textureProvider() const'
-   .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xb4): undefined reference to `QQuickFramebufferObject::geometryChanged(QRectF const&, QRectF const&)'
-   .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xb8): undefined reference to `QQuickFramebufferObject::updatePaintNode(QSGNode*, QQuickItem::UpdatePaintNodeData*)'
-   .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xbc): undefined reference to `QQuickFramebufferObject::releaseResources()'
-   .obj/moc_fbitem.o: In function `FbItem::qt_metacast(char const*)':
-   moc_fbitem.cpp:(.text+0x70): undefined reference to `QQuickFramebufferObject::qt_metacast(char const*)'
-   .obj/moc_fbitem.o: In function `FbItem::qt_metacall(QMetaObject::Call, int, void**)':
-   moc_fbitem.cpp:(.text+0x80): undefined reference to `QQuickFramebufferObject::qt_metacall(QMetaObject::Call, int, void**)'
-   .obj/moc_fbitem.o: In function `FbItem::~FbItem()':
-   moc_fbitem.cpp:(.text._ZN6FbItemD2Ev[_ZN6FbItemD5Ev]+0x38): undefined reference to `vtable for QQuickFramebufferObject'
-   .obj/moc_fbitem.o: In function `FbItem::~FbItem()':
-   moc_fbitem.cpp:(.text._ZN6FbItemD0Ev[_ZN6FbItemD0Ev]+0x40): undefined reference to `vtable for QQuickFramebufferObject'
-   .obj/moc_fbitem.o:(.data.rel.ro+0x8): undefined reference to `typeinfo for QQuickFramebufferObject'
-   .obj/moc_fbitem.o:(.data.rel.ro+0x58): undefined reference to `QQuickFramebufferObject::isTextureProvider() const'
-   .obj/moc_fbitem.o:(.data.rel.ro+0x5c): undefined reference to `QQuickFramebufferObject::textureProvider() const'
-   .obj/moc_fbitem.o:(.data.rel.ro+0xc4): undefined reference to `QQuickFramebufferObject::geometryChanged(QRectF const&, QRectF const&)'
-   .obj/moc_fbitem.o:(.data.rel.ro+0xc8): undefined reference to `QQuickFramebufferObject::updatePaintNode(QSGNode*, QQuickItem::UpdatePaintNodeData*)'
-   .obj/moc_fbitem.o:(.data.rel.ro+0xcc): undefined reference to `QQuickFramebufferObject::releaseResources()'
-   .obj/moc_fbitem.o:(.data.rel.ro+0xf0): undefined reference to `QQuickFramebufferObject::staticMetaObject'
+Should be fixed by [1], do not compile examples which depend on a OpenGL backend...
 
-[1] http://autobuild.buildroot.net/results/64a/64a198397736db12b73c1f693dbe1c47d73b53da
+Regards,
+Peter
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...uickviewcomparison-and-quickwidget-needs-.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
 
-diff --git a/package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch b/package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-new file mode 100644
-index 000000000..875634fdb
---- /dev/null
-+++ b/package/qt5/qt5declarative/0002-examples-qquickviewcomparison-and-quickwidget-needs-.patch
-@@ -0,0 +1,58 @@
-+From b4db5c6cef877b33b5e7cd5a07fe4a7e6797dcfc Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 16 May 2017 19:47:19 +0200
-+Subject: [PATCH] examples: qquickviewcomparison and quickwidget needs OpenGL
-+ support
-+
-+Fixes:
-+
-+  main.cpp:(.text._ZN11QQmlPrivate10createIntoI6FbItemEEvPv[_ZN11QQmlPrivate10createIntoI6FbItemEEvPv]+0x18): undefined reference to `QQuickFramebufferObject::QQuickFramebufferObject(QQuickItem*)'
-+  .obj/main.o: In function `QQmlPrivate::QQmlElement<FbItem>::~QQmlElement()':
-+  main.cpp:(.text._ZN11QQmlPrivate11QQmlElementI6FbItemED2Ev[_ZN11QQmlPrivate11QQmlElementI6FbItemED5Ev]+0x5c): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/main.o: In function `QQmlPrivate::QQmlElement<FbItem>::~QQmlElement()':
-+  main.cpp:(.text._ZN11QQmlPrivate11QQmlElementI6FbItemED0Ev[_ZN11QQmlPrivate11QQmlElementI6FbItemED0Ev]+0x64): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0x48): undefined reference to `QQuickFramebufferObject::isTextureProvider() const'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0x4c): undefined reference to `QQuickFramebufferObject::textureProvider() const'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xb4): undefined reference to `QQuickFramebufferObject::geometryChanged(QRectF const&, QRectF const&)'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xb8): undefined reference to `QQuickFramebufferObject::updatePaintNode(QSGNode*, QQuickItem::UpdatePaintNodeData*)'
-+  .obj/main.o:(.data.rel.ro._ZTVN11QQmlPrivate11QQmlElementI6FbItemEE[_ZTVN11QQmlPrivate11QQmlElementI6FbItemEE]+0xbc): undefined reference to `QQuickFramebufferObject::releaseResources()'
-+  .obj/moc_fbitem.o: In function `FbItem::qt_metacast(char const*)':
-+  moc_fbitem.cpp:(.text+0x70): undefined reference to `QQuickFramebufferObject::qt_metacast(char const*)'
-+  .obj/moc_fbitem.o: In function `FbItem::qt_metacall(QMetaObject::Call, int, void**)':
-+  moc_fbitem.cpp:(.text+0x80): undefined reference to `QQuickFramebufferObject::qt_metacall(QMetaObject::Call, int, void**)'
-+  .obj/moc_fbitem.o: In function `FbItem::~FbItem()':
-+  moc_fbitem.cpp:(.text._ZN6FbItemD2Ev[_ZN6FbItemD5Ev]+0x38): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/moc_fbitem.o: In function `FbItem::~FbItem()':
-+  moc_fbitem.cpp:(.text._ZN6FbItemD0Ev[_ZN6FbItemD0Ev]+0x40): undefined reference to `vtable for QQuickFramebufferObject'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0x8): undefined reference to `typeinfo for QQuickFramebufferObject'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0x58): undefined reference to `QQuickFramebufferObject::isTextureProvider() const'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0x5c): undefined reference to `QQuickFramebufferObject::textureProvider() const'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xc4): undefined reference to `QQuickFramebufferObject::geometryChanged(QRectF const&, QRectF const&)'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xc8): undefined reference to `QQuickFramebufferObject::updatePaintNode(QSGNode*, QQuickItem::UpdatePaintNodeData*)'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xcc): undefined reference to `QQuickFramebufferObject::releaseResources()'
-+  .obj/moc_fbitem.o:(.data.rel.ro+0xf0): undefined reference to `QQuickFramebufferObject::staticMetaObject'
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ examples/quick/quick.pro | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/examples/quick/quick.pro b/examples/quick/quick.pro
-+index 445dfb0fa..26ca0138e 100644
-+--- a/examples/quick/quick.pro
-++++ b/examples/quick/quick.pro
-+@@ -36,7 +36,10 @@ qtConfig(opengl(es1|es2)?) {
-+ # Widget dependent examples
-+ qtHaveModule(widgets) {
-+     SUBDIRS += embeddedinwidgets
-+-    qtHaveModule(quickwidgets): SUBDIRS += quickwidgets
-++    # OpenGL Support Required
-++    qtConfig(opengl(es1|es2)?) {
-++        qtHaveModule(quickwidgets): SUBDIRS += quickwidgets
-++    }
-+ }
-+ 
-+ EXAMPLE_FILES = \
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+[1] https://patchwork.ozlabs.org/patch/763122/
