@@ -1,61 +1,62 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 16 May 2017 15:56:27 +0200
-Subject: [Buildroot] [PATCH] python-can: bump to 1.5.2
-Message-ID: <20170516135627.2634-1-yegorslists@googlemail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 16 May 2017 14:07:19 +0000
+Subject: [Buildroot] [PATCH] gcc: arc-2017.03-rc2: Fix "unrecognized
+ supposed constant" error
+In-Reply-To: <87vap29eja.fsf@dell.be.48ers.dk>
+References: <20170515155657.22513-1-abrodkin@synopsys.com>
+ <87vap29eja.fsf@dell.be.48ers.dk>
+Message-ID: <1494943638.2500.72.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Peter,
 
-Also add Python SQLite3 dependency that first appeared in 1.5.2.
+On Mon, 2017-05-15 at 20:10 +0200, Peter Korsgaard wrote:
+> > 
+> > > 
+> > > > 
+> > > > > 
+> > > > > > 
+> > > > > > "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+> 
+> ?> This fixes the following problem:
+> ?> arc-linux-gcc -c -Os -fPIC iso9660.i
+> ?> iso9660.c: In function 'strip_trail':
+> ?> iso9660.c:155:1: error: unrecognized supposed constant
+> ?>??}
+> ?>??^
+> ?> (unspec:SI [
+> ?>?????????(symbol_ref:SI ("*.LANCHOR1") [flags 0x182])
+> ?>?????] ARC_UNSPEC_GOTOFFPC)
+> ?> iso9660.c:155:1: internal compiler error: in arc_legitimate_constant_p, at config/arc/arc.c:6028
+> 
+> ?> Found by Buildroot autobuilder [1].
+> 
+> ?> The fix [2] is in arc-2017.03 development branch of ARC GCC and once it
+> ?> becomes a part the next release of ARC tools this should be removed
+> ?> from Buildroot.
+> 
+> ?> [1] https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_c90_c909e8c397ab972b6aa4d370572cad4fae284d00_build-2Dend.
+> log&d=DwIBAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=eyEAZfBkQhTd80xpTFI0NPKpz57Aa8duF3Uu1L_JgXM&s=PiWGi8QYaMIbOlEL
+> BukiJt2-WQi9IqfQlPFkxgNqbE8&e=?
+> ?> [2]
+> ?> https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_foss-2Dfor-2Dsynopsys-2Ddwc-2Darc-2Dprocessors_gcc_commit_139fed9d29ab935b3bc5159
+> c0bdf7b8b8a39442d&d=DwIBAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=eyEAZfBkQhTd80xpTFI0NPKpz57Aa8duF3Uu1L_JgXM&s=OK
+> r0FRgbINPdN6fRMnB18MICruG3PJVXVDpOjxISyVk&e=?
+> 
+> Committed, thanks.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-can/Config.in       | 2 ++
- package/python-can/python-can.hash | 6 +++---
- package/python-can/python-can.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+Thanks for that.
 
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-index 6b4e0fa76..465d2ee58 100644
---- a/package/python-can/Config.in
-+++ b/package/python-can/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_CAN
- 	bool "python-can"
-+	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3
- 	help
- 	  This module provides controller area network support for Python.
- 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index a8778622b..bd19d194b 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9b556fe6f016c0a3b27cc67790cf821, sha256 locally computed
--md5     b9b556fe6f016c0a3b27cc67790cf821  python-can-1.4.3.tar.gz
--sha256  2dcd32737cc39fbf39f41521146a9685f594942c99c6183bad7e3c404930198b  python-can-1.4.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/python-can/json, sha256 locally computed
-+md5     f653aecf8b9034bbba32cc04ca6a7b6d  python-can-1.5.2.tar.gz
-+sha256  edabb426e6cd11c2dc7a98980340135aa0eb02143b0d51bf14e3e6178c131cc3  python-can-1.5.2.tar.gz
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index eddefdb4f..a271baea0 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_CAN_VERSION = 1.4.3
--PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
-+PYTHON_CAN_VERSION = 1.5.2
-+PYTHON_CAN_SITE = https://pypi.python.org/packages/a1/b1/80f023e2b728c7ebccbf989aec777f3add3dd4cee650573ce5d38132a07c
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
- PYTHON_CAN_SETUP_TYPE = setuptools
--- 
-2.11.0
+> I just noticed that we still have a patch from arc-2016.09. Can you
+> confirm that this isn't needed any more?
+
+No this is not needed any longer - was just a reminder of incomplete
+patch that bumped ARC tools version.
+
+Care to remove this or you'd prefer a patch from my on that regard?
+
+-Alexey
