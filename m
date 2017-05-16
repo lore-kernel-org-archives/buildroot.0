@@ -1,36 +1,41 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 16 May 2017 10:32:13 +0300
-Subject: [Buildroot] [PATCH] Revert "libcdio: disable on ARC,
-	triggers a toolchain bug"
-Message-ID: <20170516073213.9321-1-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 May 2017 09:38:38 +0200
+Subject: [Buildroot] [git commit] fxload: disable on Microblaze
+Message-ID: <20170516074018.3C02381DA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 459f7302df8cdc45aa0f7f2581ebb6f05fb6432a.
+commit: https://git.buildroot.net/buildroot/commit/?id=af486457dfa9e0cd8c0b1ce636821e48bcc896c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libcdio building is fixed for ARC in
-2b360bd547f1 "gcc: arc-2017.03-rc2: Fix "unrecognized supposed constant" error"
+gcc on Microblaze is affected by PR63261, which causes a build failure
+when optimization *and* debugging symbols are enabled. Since anyway
+fxload is unlikely to be useful on Microblaze, let's disable this
+package on this architecture.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/24640a042d84f45339246c0a18e10905494b2199/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcdio/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/fxload/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libcdio/Config.in b/package/libcdio/Config.in
-index 531af3bb93..fdc001ec40 100644
---- a/package/libcdio/Config.in
-+++ b/package/libcdio/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_LIBCDIO
- 	bool "libcdio"
- 	depends on BR2_USE_MMU # fork()
--	# ARC toolchain issue
--	depends on !BR2_arc
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+diff --git a/package/fxload/Config.in b/package/fxload/Config.in
+index ac190f0..d178e2c 100644
+--- a/package/fxload/Config.in
++++ b/package/fxload/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_FXLOAD
+ 	bool "fxload"
++	# Hits gcc PR63261 on Microblaze with debugging symbols
++	# enabled. Since this package is unlikely to be useful on
++	# Microblaze, just disable it on this architecture.
++	depends on !BR2_microblaze
  	help
- 	  The GNU Compact Disc Input and Control library.
--- 
-2.11.0
+ 	  This program is conveniently able to download firmware into FX, FX2,
+ 	  and FX2LP EZ-USB devices, as well as the original AnchorChips EZ-USB.
