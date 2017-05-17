@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 10:36:01 +0200
-Subject: [Buildroot] [PATCH 1/1] libmaxminddb: bump to version 1.2.1
-In-Reply-To: <1494967277-26141-1-git-send-email-fontaine.fabrice@gmail.com>
- (Fabrice Fontaine's message of "Tue, 16 May 2017 22:41:17 +0200")
-References: <1494967277-26141-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <87inkz7udq.fsf@dell.be.48ers.dk>
+Date: Wed, 17 May 2017 10:37:46 +0200
+Subject: [Buildroot] [PATCH next 1/2] python-dataproperty: bump version
+	to 0.22.0
+In-Reply-To: <20170515160543.21760-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 15 May 2017 17:05:42 +0100")
+References: <20170515160543.21760-1-Vincent.Riera@imgtec.com>
+Message-ID: <87efvn7uat.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Remove 0001-Add-disable-tests-to-configure.patch as it has been
- > integrated upstream
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed to next, thanks.
 
