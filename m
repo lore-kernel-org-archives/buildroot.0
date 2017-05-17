@@ -1,16 +1,33 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Wed, 17 May 2017 17:28:26 +0200
-Subject: [Buildroot] RPi B+ update
-In-Reply-To: <224ff827-03b8-16d6-34fd-8be05cea607d@gmail.com>
-References: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com>
- <20170516232354.2080bf15@gmx.net>
- <224ff827-03b8-16d6-34fd-8be05cea607d@gmail.com>
-Message-ID: <24ea86ee-9b48-816f-3e7a-6d5a985ea339@gmail.com>
+From: samMHN <mouhoune@osmos-group.com>
+Date: Wed, 17 May 2017 08:45:33 -0700 (PDT)
+Subject: [Buildroot] Hop tout set svn credentials when using svn to
+ download tarballs
+In-Reply-To: <87a86ejq1i.fsf@dell.be.48ers.dk>
+References: <D02BDAEC-5CBA-4A06-9645-C6663DB2F3DC@osmos-group.com>
+ <87a86ejq1i.fsf@dell.be.48ers.dk>
+Message-ID: <1495035933771-165163.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170517/46ddbecf/attachment.html>
+Hi Peter,
+
+Thank your for you feedback,
+
+I solved the issue I had with the SVN credential.  
+
+In fact what I noticed is that as my svn server url start with something
+like http://XXXX/svn/XXXX  the wget command is used by buildroot instead of
+svn to download the tarballs.   by adding the --user toto  --password xxxx I
+was able to be correctly authentified by my svn server.
+
+Thank you again.
+Samir MOUHOUNE 
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Hop-tout-set-svn-credentials-when-using-svn-to-download-tarballs-tp164671p165163.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
