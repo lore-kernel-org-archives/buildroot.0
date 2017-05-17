@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:37:46 +0200
-Subject: [Buildroot] [PATCH] rtmpdump: security bump to current HEAD
-In-Reply-To: <20170515153229.29831-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 15 May 2017 17:32:29 +0200")
-References: <20170515153229.29831-1-peter@korsgaard.com>
-Message-ID: <87pof743tx.fsf@dell.be.48ers.dk>
+Date: Wed, 17 May 2017 22:40:17 +0200
+Subject: [Buildroot] [PATCH] git: security bump to version 2.12.3
+In-Reply-To: <20170515144447.8596-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 15 May 2017 16:44:47 +0200")
+References: <20170515144447.8596-1-peter@korsgaard.com>
+Message-ID: <87lgpv43pq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- > - CVE-2015-8271: The AMF3CD_AddProp function in amf.c in RTMPDump 2.4 allows
- >   remote RTMP Media servers to execute arbitrary code
- >   https://www.talosintelligence.com/reports/TALOS-2016-0067/
-
- > - CVE-2015-8272: RTMPDump 2.4 allows remote attackers to trigger a denial of
- >   service (NULL pointer dereference and process crash).
- >   https://www.talosintelligence.com/reports/TALOS-2016-0068/
+ > Fixes CVE-2017-8386 - Git Shell Bypass By Abusing Less
+ > For more details, see:
+ > https://insinuator.net/2017/05/git-shell-bypass-by-abusing-less-cve-2017-8386/
+ > http://www.mail-archive.com/git at vger.kernel.org/msg120982.html
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
