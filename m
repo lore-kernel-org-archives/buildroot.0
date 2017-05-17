@@ -1,86 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 May 2017 21:20:23 +0200
-Subject: [Buildroot] Analysis of build results for 2017-05-16
-In-Reply-To: <20170517062751.2CBF020789@mail.free-electrons.com>
-References: <20170517062751.2CBF020789@mail.free-electrons.com>
-Message-ID: <20170517212023.478bd24a@free-electrons.com>
+Date: Wed, 17 May 2017 21:24:41 +0200
+Subject: [Buildroot] [git commit] libqmi: move canonicalize_file_name()
+Message-ID: <20170517192459.A48BA82641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2677210f545c3f3e8c52c973e08c3a460c521e5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 17 May 2017 08:27:51 +0200 (CEST), Thomas Petazzoni wrote:
+Previously was defined in qmi-util.h to fix musl
+compatibility.  It was missed that this is a shared
+header which causes other dependent package builds
+to fail, so the static definition was moved into the
+implementation where it was used.
 
->       successes : 251
->        failures : 10 
+Upstream bug report has been updated and this resolves
+the following autobuilder related failures.
 
-This is getting better, and better, and better. We're down to 3.83% of
-failures for yesterday. Today will be a little bit worse, with
-currently 4.19% failures. But we're really below 5% of failures, which
-is very good.
+ http://autobuild.buildroot.net/results/fe9b6b1b1399a4e8aafc6a326c81ec97c2480025
+ http://autobuild.buildroot.net/results/40eef797b4d8d53fc6e10f2048316d63549caf6d
 
->       x86_64 |                    cmake-3.7.2 | NOK | http://autobuild.buildroot.net/results/e89a29fb06991d8da9b946e284741c56397ac4bc |     
+test-pkg testing was performed against 10 random toolchains
 
-/home/test/autobuild/run/instance-2/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/bdver3/usr/lib64/libgcrypt.so.20: undefined reference to `gpg_err_set_errno at GPG_ERROR_1.0'
+++ Config snippet ++
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
+BR2_PACKAGE_MODEM_MANAGER=y
+BR2_PACKAGE_LIBQMI=y
 
-Weird, because this looks like a static linking issue, but this is not
-a statically linked configuration.
+++ Tested Toolchains ++ (Verified I hit all libc variants)
+br-arm-cortex-a9-musl
+br-arm-full-static
+br-m68k-68040-full    (uclibc)
+br-mips32r6-el-hf-glibc
+br-mips64-n64-full
+br-mips64r6-el-hf-glibc
+br-mipsel-o32-full
+br-sparc64-glibc
+linaro-arm
+sourcery-arm
 
-It appeared three times, but only with this toolchain (Sourcery CodeBench):
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-musl-compat-canonicalize_file_name.patch  | 37 +++++++++++-----------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
 
-  http://autobuild.buildroot.net/?reason=cmake-3.7.2
-
->       x86_64 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/a7eb1ede552ae14f409cfd7bd877bcf25ca69a74 | ORPH
-
-It's the same issue as the cmake issue above:
-
-/home/test/autobuild/run/instance-3/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_set_errno at GPG_ERROR_1.0'
-/home/test/autobuild/run/instance-3/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_init at GPG_ERROR_1.0'
-/home/test/autobuild/run/instance-3/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_destroy at GPG_ERROR_1.0'
-
->          sh4 |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/38701cee74110de90cd72f720b3ee8bd69666325 |     
-
-The EGL issue, I will send a patch.
-
->       x86_64 |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/5ee26b9676acc1a360bb86aa13a0c992727309a2 |     
-
--fPIC issue it seems. It's weird because they only seem to appear with
-musl toolchains.
-
->       x86_64 |            modem-manager-1.6.4 | NOK | http://autobuild.buildroot.net/results/8a551a29263d5daa12e1036a4e3804214fd4066a |     
-
-Would be fixed by https://patchwork.ozlabs.org/patch/762195/. I'll
-apply.
-
->     mips64el |                   ntp-4.2.8p10 | NOK | http://autobuild.buildroot.net/results/25efd86193d0b0fea2a4b2d84fb7f19baa140eb5 | ORPH
-
-Another -fPIC issue. We have a patch proposed at
-https://patchwork.ozlabs.org/patch/762084/, I'll try it out.
-
->       x86_64 |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/61074b69b81cd5c17a7f74dc1f7b31f3fc35fd8a | ORPH
-
-protocol.cc:27:40: error: narrowing conversion of ''\37777777776'' from 'char' to 'uchar {aka unsigned char}' inside { } [-Wnarrowing]
- static uchar eof_buff[1]= { (char) 254 }; /* Marker for end of fields */
-
-I searched the oracle-mysql Git history, and I believe I might have a
-fix for this.
-
->        sparc |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/4329cda610082053d0a8fd7796a690ddaa21de04 | ORPH
->        sparc |                 protobuf-3.2.0 | NOK | http://autobuild.buildroot.net/results/d1640867dee1b0fe8341698b1d4d02c5edff90a1 | ORPH
-
-Fixed by https://git.buildroot.org/buildroot/commit/?id=ef9ffa3426edc895dc180d45b48bf305522b3450.
-
->          arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/d90fc2ccf61518f3c3198ef566976096f75c2776 |     
-
-Fixed by https://git.buildroot.org/buildroot/commit/?id=beb6524225f12549a216183abc07745f8d36e764
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libqmi/0001-musl-compat-canonicalize_file_name.patch b/package/libqmi/0001-musl-compat-canonicalize_file_name.patch
+index fd606d8..3ae1c2e 100644
+--- a/package/libqmi/0001-musl-compat-canonicalize_file_name.patch
++++ b/package/libqmi/0001-musl-compat-canonicalize_file_name.patch
+@@ -1,22 +1,24 @@
+-From 85863c9e051fe59add4e47dbfcb37072234f0110 Mon Sep 17 00:00:00 2001
++From 8f6181b6f8dd82aa1ab1288cc7f2fd05d4a2519f Mon Sep 17 00:00:00 2001
+ From: Matt Weber <matthew.weber@rockwellcollins.com>
+ Date: Mon, 1 May 2017 19:55:07 -0500
+ Subject: [PATCH] musl compat canonicalize_file_name()
+ 
+-Adds an inline equivalent of canonicalize_file_name
++Adds an equivalent of canonicalize_file_name
+ using realpath().
+ 
+ Bug report (origin of this patch):
+ https://bugs.freedesktop.org/show_bug.cgi?id=99944
+ 
++Bug report has been updated with suggestion to not use inline.
++
+ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ ---
+  configure.ac                |  2 ++
+- src/libqmi-glib/qmi-utils.h | 18 ++++++++++++++++++
+- 2 files changed, 20 insertions(+)
++ src/libqmi-glib/qmi-utils.c | 15 +++++++++++++++
++ 2 files changed, 17 insertions(+)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 162d5ae..9cb82fd 100644
++index c56fa3e..d835db4 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -80,6 +80,8 @@ AC_SUBST(GLIB_LIBS)
+@@ -28,19 +30,16 @@ index 162d5ae..9cb82fd 100644
+  dnl qmi-firmware-update is optional, enabled by default
+  AC_ARG_ENABLE([firmware-update],
+                AS_HELP_STRING([--enable-firmware-update],
+-diff --git a/src/libqmi-glib/qmi-utils.h b/src/libqmi-glib/qmi-utils.h
+-index 4fd5199..4869da5 100644
+---- a/src/libqmi-glib/qmi-utils.h
+-+++ b/src/libqmi-glib/qmi-utils.h
+-@@ -29,6 +29,24 @@
+- #error "Only <libqmi-glib.h> can be included directly."
+- #endif
++diff --git a/src/libqmi-glib/qmi-utils.c b/src/libqmi-glib/qmi-utils.c
++index 29e5f22..26aff9e 100644
++--- a/src/libqmi-glib/qmi-utils.c
+++++ b/src/libqmi-glib/qmi-utils.c
++@@ -34,6 +34,21 @@
++ #include "qmi-utils.h"
++ #include "qmi-error-types.h"
+  
+ +#ifndef HAVE_CANONICALIZE_FILE_NAME
+ +#include <limits.h>
+-+#include <string.h>
+-+#include <stdlib.h>
+-+#include <stdio.h>
+ +static char * canonicalize_file_name(const char *path)
+ +{
+ +       char buf[PATH_MAX] = { };
+@@ -54,9 +53,9 @@ index 4fd5199..4869da5 100644
+ +}
+ +#endif
+ +
+- #include <glib.h>
+- 
+- G_BEGIN_DECLS
++ /**
++  * SECTION:qmi-utils
++  * @title: Common utilities
+ -- 
+-2.7.4
++1.9.1
+ 
