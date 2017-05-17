@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:37:24 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] rtmpdump: security bump
-	to current HEAD
-Message-ID: <20170517204653.5D38B82862@busybox.osuosl.org>
+Date: Wed, 17 May 2017 22:39:27 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] git: bump version to
+	2.12.1
+Message-ID: <20170517204653.798C28295F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9737f2b9fa15a71c6cd26b2db81471edc27b34bf
+commit: https://git.buildroot.net/buildroot/commit/?id=3e0057455967846a8c75e125587a0616d15774c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
-
-- CVE-2015-8271: The AMF3CD_AddProp function in amf.c in RTMPDump 2.4 allows
-  remote RTMP Media servers to execute arbitrary code
-  https://www.talosintelligence.com/reports/TALOS-2016-0067/
-
-- CVE-2015-8272: RTMPDump 2.4 allows remote attackers to trigger a denial of
-  service (NULL pointer dereference and process crash).
-  https://www.talosintelligence.com/reports/TALOS-2016-0068/
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4ebd2fa277fdffecca146d07c78954653517eff4)
+(cherry picked from commit cbb23d5d053710da7667d9b77fc4665b2194d2af)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtmpdump/rtmpdump.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 2e3428f..eb2d810 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 71e340e..e79e8b1 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 1821766479062d052cc1897d0ded95212e81e5c7f1039786bc4aec2225a32027  git-2.12.0.tar.xz
++sha256 db11674364b764e101966d829a2e271c9b9d2a8bd4d8ecb4221a1dcdc9a3ada2  git-2.12.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 75d5140..e7ea98d 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTMPDUMP_VERSION = a107cef9b392616dff54fabfd37f985ee2190a6f
-+RTMPDUMP_VERSION = fa8646daeb19dfd12c181f7d19de708d623704c0
- RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
- RTMPDUMP_INSTALL_STAGING = YES
- # Note that rtmpdump is GPLv2 but librtmp has its own license and since we only
+-GIT_VERSION = 2.12.0
++GIT_VERSION = 2.12.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2, LGPLv2.1+
