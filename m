@@ -1,70 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:35:31 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/faketime: fix
-	build with gcc >= 6
-Message-ID: <20170517204653.40CCF82862@busybox.osuosl.org>
+Date: Wed, 17 May 2017 22:40:01 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] git: bump version to
+	2.12.2
+Message-ID: <20170517204653.8A67F82862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f0c43a9a640309cbdeb01b0a8d1e7adfca5d730
+commit: https://git.buildroot.net/buildroot/commit/?id=9f69fa3ade8bb699879ba0b4ffa809595d1ce228
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Upstream added -Wno-nonnull-compare to disable this error [1].
-
-Fixes:
-libfaketime.c:513:7: error??: nonnull argument ????buf???? compared to NULL [-Werror=nonnull-compare]
-    if (buf != NULL)
-       ^
-[1] https://github.com/wolfcw/libfaketime/commit/47e958b753fc15098a2b7d0e9ef26b83ee255874
-
-[Peter: add upstream git commit id to patch]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 2a1401fa923e65de2efd78bbb4e66f73291a3fe2)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 3967abfc891b69415891ee30945326e6135969f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...isable-the-non-null-compare-warning-error.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
-new file mode 100644
-index 0000000..f8c7484
---- /dev/null
-+++ b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
-@@ -0,0 +1,32 @@
-+From e85a157b51b1276c91c736d8624d9f3e876e9189 Mon Sep 17 00:00:00 2001
-+From: Andreas Rammhold <andreas@rammhold.de>
-+Date: Tue, 20 Dec 2016 19:25:32 +0100
-+Subject: [PATCH] Disable the non-null compare warning/error.
-+
-+We rely on the provided local library definitions for the hooked
-+functions which in some cases (GCC >6) carry a non-null-attribute flag
-+which causes compile errors on `!= NULL` checks.
-+
-+[Romain: rebase on 0.9.6]
-+(cherry picked from commit 47e958b753fc15098a2b7d0e9ef26b83ee255874)
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index 51634b0..bbbd476 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -67,7 +67,7 @@ INSTALL ?= install
-+ PREFIX ?= /usr/local
-+ LIBDIRNAME ?= /lib/faketime
-+ 
-+-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-++CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-+ LIB_LDFLAGS += -shared
-+ LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
-+ LDADD += -ldl -lm -lrt
-+-- 
-+2.9.3
-+
+diff --git a/package/git/git.hash b/package/git/git.hash
+index e79e8b1..9af360e 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 db11674364b764e101966d829a2e271c9b9d2a8bd4d8ecb4221a1dcdc9a3ada2  git-2.12.1.tar.xz
++sha256 d21a9e23506e618d561fb25a8a7bd6134f927b86147930103487117a7a678c4a  git-2.12.2.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index e7ea98d..b49ddd5 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.12.1
++GIT_VERSION = 2.12.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2, LGPLv2.1+
