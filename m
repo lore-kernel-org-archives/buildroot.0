@@ -1,46 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 16:52:51 +0200
-Subject: [Buildroot] [PATCH] fbgrab: explicitly build fbgrab target to
-	workaround gzip issue
-Message-ID: <20170517145251.9047-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 May 2017 14:55:47 +0000
+Subject: [Buildroot] [Bug 9871] fbgrab 1.3 won't build with BR2_REPRODUCIBLE
+	set
+In-Reply-To: <bug-9871-163@https.bugs.busybox.net/>
+References: <bug-9871-163@https.bugs.busybox.net/>
+Message-ID: <bug-9871-163-vpwojbsQjg@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes #9871
+https://bugs.busybox.net/show_bug.cgi?id=9871
 
-gzip reads default command line options from the environment variable GZIP.
-The fbgrab Makefile internally also uses a GZIP make variable to know what
-command to use to compress the manpage. Unfortunaly make will export the
-value of this make variable to the environment if GZIP is already present in
-the enviroment, confusing gzip (as 'gzip' isn't a valid command line argument).
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-This can either be triggered by users having GZIP set in their environment
-(E.G.  for custom options), or by enabling BR2_REPRODUCIBLE, where we use
-this feature to force the -n option (to not store name/timestamp) to gzip.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-We don't really need to compress the manpage as it isn't installed anyway,
-so work around the issue by only building the fbgrab application.
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
+fbgrab upstream isn't very active, so it is unlikely that we can get the fix
+integrated in the near future. I've submitted a simpler patch that simply
+doesn't compress the (unused) man page instead:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fbgrab/fbgrab.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://patchwork.ozlabs.org/patch/763602/
 
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index 15e0a95c9..d81a5ee2a 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
-@@ -11,7 +11,7 @@ FBGRAB_LICENSE = GPL-2.0
- FBGRAB_LICENSE_FILES = COPYING
- 
- define FBGRAB_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) fbgrab
- endef
- 
- define FBGRAB_INSTALL_TARGET_CMDS
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
