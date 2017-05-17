@@ -1,33 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:45:37 +0200
-Subject: [Buildroot] [git commit] ntp: add patch to fix -fPIC issue
-In-Reply-To: <20170517194628.761F38267D@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 17 May 2017 21:46:14 +0200")
-References: <20170517194628.761F38267D@busybox.osuosl.org>
-Message-ID: <878tlv43gu.fsf@dell.be.48ers.dk>
+Date: Wed, 17 May 2017 22:46:18 +0200
+Subject: [Buildroot] [PATCH] fbgrab: explicitly build fbgrab target to
+	workaround gzip issue
+In-Reply-To: <20170517145251.9047-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 17 May 2017 16:52:51 +0200")
+References: <20170517145251.9047-1-peter@korsgaard.com>
+Message-ID: <874lwj43fp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=7fde83cdf0da338937dae13144eea2923e5c2730
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fixes #9871
+ > gzip reads default command line options from the environment variable GZIP.
+ > The fbgrab Makefile internally also uses a GZIP make variable to know what
+ > command to use to compress the manpage. Unfortunaly make will export the
+ > value of this make variable to the environment if GZIP is already present in
+ > the enviroment, confusing gzip (as 'gzip' isn't a valid command line argument).
 
- > This commit adds a patch that fixes the build on AArch64 and MIPS of the
- > ntp package, which was caused by some parts of ntp being built without
- > -fPIC.
+ > This can either be triggered by users having GZIP set in their environment
+ > (E.G.  for custom options), or by enabling BR2_REPRODUCIBLE, where we use
+ > this feature to force the -n option (to not store name/timestamp) to gzip.
 
- > Fixes:
+ > We don't really need to compress the manpage as it isn't installed anyway,
+ > so work around the issue by only building the fbgrab application.
 
- >   [aarch64] http://autobuild.buildroot.net/results/866b1d28595efd8b6becf83d0a64b596538d58b0
- >   [mips]    http://autobuild.buildroot.net/results/c2a945855172970736a8ffea9c564f029a023344
-
- > Thanks to Romain Naour for the initial analysis.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
 
