@@ -1,71 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 May 2017 21:46:14 +0200
-Subject: [Buildroot] [git commit] ntp: add patch to fix -fPIC issue
-Message-ID: <20170517194628.761F38267D@busybox.osuosl.org>
+Date: Wed, 17 May 2017 21:48:10 +0200
+Subject: [Buildroot] [PATCH] package/ntp: fix aarch64/mips build,
+ -fPIC required
+In-Reply-To: <20170513214917.3305-1-romain.naour@gmail.com>
+References: <20170513214917.3305-1-romain.naour@gmail.com>
+Message-ID: <20170517214810.35d31ce4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fde83cdf0da338937dae13144eea2923e5c2730
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This commit adds a patch that fixes the build on AArch64 and MIPS of the
-ntp package, which was caused by some parts of ntp being built without
--fPIC.
+On Sat, 13 May 2017 23:49:17 +0200, Romain Naour wrote:
 
-Fixes:
+> +# ntp build unconditionnaly some static libraries (libntpq.a, libntp.a etc...)
+> +# The build system fail to create ntpsnmpd while linking these libraries when
+> +# built without -fPIC.
+> +NTP_CONF_ENV += \
+> +	CFLAGS="-fPIC $(TARGET_CFLAGS)"
 
-  [aarch64] http://autobuild.buildroot.net/results/866b1d28595efd8b6becf83d0a64b596538d58b0
-  [mips]    http://autobuild.buildroot.net/results/c2a945855172970736a8ffea9c564f029a023344
+Thanks for this analysis. However, I was a bit surprised by your patch,
+because I saw many -fPIC all over the place in the ntp build log, even
+without your patch.
 
-Thanks to Romain Naour for the initial analysis.
+So I dug a little bit deeper, and found this Gentoo patch
+https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=494143c3b4921a5c8b8596d58f2c8b98296bf688,
+which simply re-adds the proper flags to just the ntpq module. And this
+does indeed solve the issue.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ntp/0003-ntpq-fpic.patch | 23 +++++++++++++++++++++++
- package/ntp/ntp.mk               |  1 +
- 2 files changed, 24 insertions(+)
+So I've instead committed a patch that adds the Gentoo patch. Thanks
+anyway for your initial analysis, it was very useful to understand what
+was going on.
 
-diff --git a/package/ntp/0003-ntpq-fpic.patch b/package/ntp/0003-ntpq-fpic.patch
-new file mode 100644
-index 0000000..6e05a67
---- /dev/null
-+++ b/package/ntp/0003-ntpq-fpic.patch
-@@ -0,0 +1,23 @@
-+ntpq/Makefile.am: add NTP_HARD_CFLAGS
-+
-+Pass NTP_HARD_CFLAGS when building ntpq, like in all other ntp
-+modules, to make sure -fPIC is passed.
-+
-+Originally taken from
-+https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=494143c3b4921a5c8b8596d58f2c8b98296bf688.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/ntpq/Makefile.am
-+===================================================================
-+--- a/ntpq/Makefile.am
-++++ b/ntpq/Makefile.am
-+@@ -23,7 +23,7 @@
-+ ntpq_LDADD += $(LDADD_NTP)
-+ noinst_HEADERS=	ntpq.h
-+ noinst_LIBRARIES=	libntpq.a
-+-libntpq_a_CFLAGS=	-DNO_MAIN_ALLOWED -DBUILD_AS_LIB
-++libntpq_a_CFLAGS=	$(NTP_HARD_CFLAGS) -DNO_MAIN_ALLOWED -DBUILD_AS_LIB
-+ CLEANFILES=
-+ DISTCLEANFILES=	.version version.c config.log $(man_MANS)
-+ ETAGS_ARGS=	Makefile.am
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index cd6cb16..26f5862 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -21,6 +21,7 @@ NTP_CONF_OPTS = \
- 	--with-crypto
- 
- # 0002-ntp-syscalls-fallback.patch
-+# 0003-ntpq-fpic.patch
- NTP_AUTORECONF = YES
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
