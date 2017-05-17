@@ -1,47 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 10:37:38 +0200
-Subject: [Buildroot] [git commit branch/next] python-pytablewriter: bump
-	version to 0.19.7
-Message-ID: <20170517084754.D7C268029F@busybox.osuosl.org>
+Date: Wed, 17 May 2017 10:46:53 +0200
+Subject: [Buildroot] [git commit branch/next] configs: beaglebone: bump
+	kernel version to 4.4.41
+Message-ID: <20170517084754.F221082929@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b23c9ae44f668a1cc9592113307502c6856721aa
+commit: https://git.buildroot.net/buildroot/commit/?id=eb1a20049b00d4dfe0c4b06f073824a4d4e1d1f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Switch to Linux kernel version 4.4.41 from the TI SDK 03.03.00.04
+(TI SDK release date: 29.03.2017)
+
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
- package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/beaglebone_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index eefcb3a..570a7ab 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
--md5 fb404abd5a6aab2d8da8c93f24c9c974  pytablewriter-0.19.5.tar.gz
--sha256 0f06a73fc13fea7d6004ec9d96f2aeef920defaee1704268558a45e97455d35a  pytablewriter-0.19.5.tar.gz
-+md5 0f559538d2d40b1f59904b3bf6c66b35  pytablewriter-0.19.7.tar.gz
-+sha256 09c841a08cfcecc51e7ffc1846c5200b9f25ef6a3ed82a1a33f714b1c0d9ef94  pytablewriter-0.19.7.tar.gz
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index 50e85c2..24a4d2e 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYTABLEWRITER_VERSION = 0.19.5
-+PYTHON_PYTABLEWRITER_VERSION = 0.19.7
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/db/c6/517cb51aee3c83b7eb60353f818aab0f39d310c925ea103cc54c0e0f8cd2
-+PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/2d/5d/02baae4e38413608a77abec5f4ad9a665ba788802e84d7f84cfd9fbe49a2
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index b74ffbc..611b694 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="adde2ca9f86797071f6e7b2b9e779fa5e4a8f3cd"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f9f6f0db2d5e4f9d2ff46eb31a5a05276a92ed7d"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
