@@ -1,24 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 14:27:33 +0200
-Subject: [Buildroot] [PATCH v3] package/pulseview: fix a build issue
-In-Reply-To: <1495015800-30480-1-git-send-email-brgl@bgdev.pl> (Bartosz
- Golaszewski's message of "Wed, 17 May 2017 12:10:00 +0200")
-References: <1495015800-30480-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <87k25f653e.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 May 2017 12:32:51 +0000
+Subject: [Buildroot] [Bug 9876] aarch64 support with gcc 4.8 toolchain
+In-Reply-To: <bug-9876-163@https.bugs.busybox.net/>
+References: <bug-9876-163@https.bugs.busybox.net/>
+Message-ID: <bug-9876-163-0lRiv1DfNT@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bartosz" == Bartosz Golaszewski <brgl@bgdev.pl> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9876
 
- > Backport an upstream patch fixing the build issue related to boost
- > math definitions.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Committed after adding a reference to the autobuilder failures, thanks.
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
+(In reply to Jean-pierre Cartal from comment #0)
+
+You could remove the lp64 line from arch/Config.in.arm, but considering how old
+gcc 4.8 is compared to aarch64, does it really make sense to use such an old
+toolchain?
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
