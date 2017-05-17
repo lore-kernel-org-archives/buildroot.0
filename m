@@ -1,67 +1,41 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 17 May 2017 10:57:04 +0200
-Subject: [Buildroot] [PATCH] package/pulseview: fix a build issue
-In-Reply-To: <1495009562-7144-1-git-send-email-brgl@bgdev.pl>
-References: <1495009562-7144-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <CAMRc=McUBKr6ymESWvCyRtP1jy3zDBS7vdTuPC8jiZf7+tPSPw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 May 2017 10:57:13 +0200
+Subject: [Buildroot] [PATCH] rabbitmq-c: openssl/popt sub-options don't
+	work in stat_ic linking
+In-Reply-To: <1494796962-24132-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 14 May 2017 23:22:42 +0200")
+References: <1494796962-24132-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wp9f6ety.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-05-17 10:26 GMT+02:00 Bartosz Golaszewski <brgl@bgdev.pl>:
-> Add a downstream patch fixing a build issue related to Boost.Math.
->
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> ---
->  ...-boost-math-related-build-issue-with-musl.patch | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/pulseview/0003-build-fix-a-boost-math-related-build-issue-with-musl.patch
->
-> diff --git a/package/pulseview/0003-build-fix-a-boost-math-related-build-issue-with-musl.patch b/package/pulseview/0003-build-fix-a-boost-math-related-build-issue-with-musl.patch
-> new file mode 100644
-> index 0000000..d67a0b2
-> --- /dev/null
-> +++ b/package/pulseview/0003-build-fix-a-boost-math-related-build-issue-with-musl.patch
-> @@ -0,0 +1,29 @@
-> +From 7b5446117bce40af352823189cab771f33558622 Mon Sep 17 00:00:00 2001
-> +From: Bartosz Golaszewski <brgl@bgdev.pl>
-> +Date: Tue, 16 May 2017 15:38:06 +0200
-> +Subject: [PATCH 3/3] build: fix a boost math related build issue with musl
-> +
-> +Boost causes problems with its BOOST_MATH_BIG_CONSTANT definition when
-> +building with a musl libc toolchain. Add the -fext-numeric-literals to
-> +fix it.
-> +
-> +Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> +---
-> + CMakeLists.txt | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index e8bc79f..c064cdb 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -395,6 +395,7 @@ add_definitions(${QT_DEFINITIONS} -DQT_NO_KEYWORDS)
-> + add_definitions(-D__STDC_LIMIT_MACROS)
-> + add_definitions(-Wall -Wextra)
-> + add_definitions(-std=c++11)
-> ++add_definitions(-fext-numeric-literals)
-> +
-> + if(ENABLE_DECODE)
-> +       add_definitions(-DENABLE_DECODE)
-> +--
-> +2.9.3
-> +
-> --
-> 2.9.3
->
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Ugh -ETOEARLY
+ > rabbitmq-c currently fails to build in a number of static linking
+ > situations, due to two issues:
 
-Please don't apply this patch, this is fixed upstream, just in a
-different way and I missed it.
+ >  - CMake FindOpenSSL module is buggy. Even though it uses pkg-config,
+ >    it doesn't use the information returned by pkg-config, and
+ >    therefore doesn't know about second order libraries that need be
+ >    part of the link for static linking to succeed. Due to this, -lz is
+ >    not passed, and therefore rabbitmq-c fails when linking against
+ >    libssl/libcrypto. This issue has been reported to upstream CMake at
+ >    https://gitlab.kitware.com/cmake/cmake/issues/16885.
 
-Thanks,
-Bartosz Golaszewski
+ >  - popt might use libintl, but CMake doesn't know about that. For
+ >    autotools based packages, we typically work around this by passing
+ >    LIBS=, but CMake apparently has no equivalent to LIBS=.
+
+ > To workaround this, we only use the OpenSSL and Popt optional
+ > dependencies in dynamic linking situations.
+
+I was hesitating if it wasn't better to just make rabbitmq-c depend on
+!static, but OK.
+
+Committed after fixing subject, thanks.
+
+-- 
+Bye, Peter Korsgaard
