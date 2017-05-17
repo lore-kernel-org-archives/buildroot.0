@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 May 2017 21:56:38 +0200
-Subject: [Buildroot] [git commit] support/testing: document
-	get_elf_prog_interpreter
-Message-ID: <20170517195656.D0EA282940@busybox.osuosl.org>
+Date: Wed, 17 May 2017 21:56:32 +0200
+Subject: [Buildroot] [git commit] support/testing: rename check_broken_links
+	to has_broken_links
+Message-ID: <20170517195656.C55D382940@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee72dbe576e0c8e11a0bd61028950b2f8de29642
+commit: https://git.buildroot.net/buildroot/commit/?id=52258901eccb72eeafab61f855f4b8ce34bf4159
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+has_broken_links makes it self-explanatory that this is a predicate
+function, and that the return value tells whether there _are_ broken
+links, not the opposite.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/infra/__init__.py | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ support/testing/tests/toolchain/test_external.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
-index c3f645c..b5634f6 100644
---- a/support/testing/infra/__init__.py
-+++ b/support/testing/infra/__init__.py
-@@ -77,6 +77,16 @@ def get_file_arch(builddir, prefix, fpath):
-     return get_elf_arch_tag(builddir, prefix, fpath, "Tag_CPU_arch")
+diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
+index 1fbf81f..0b15d48 100644
+--- a/support/testing/tests/toolchain/test_external.py
++++ b/support/testing/tests/toolchain/test_external.py
+@@ -7,7 +7,7 @@ BR2_TARGET_ROOTFS_CPIO=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ """
  
- def get_elf_prog_interpreter(builddir, prefix, fpath):
-+    """
-+    Runs the cross readelf on 'fpath' to extract the program interpreter
-+    name and returns it.
-+    Example:
-+    >>> get_elf_prog_interpreter('br-tests/TestExternalToolchainLinaroArm',
-+                                 'arm-linux-gnueabihf',
-+                                 'bin/busybox')
-+    /lib/ld-linux-armhf.so.3
-+    >>>
-+    """
-     cmd = ["host/usr/bin/{}-readelf".format(prefix),
-            "-l", os.path.join("target", fpath)]
-     out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
+-def check_broken_links(path):
++def has_broken_links(path):
+     for root, dirs, files in os.walk(path):
+         for f in files:
+             fpath = os.path.join(root, f)
+@@ -20,9 +20,9 @@ class TestExternalToolchain(infra.basetest.BRTest):
+         # Check for broken symlinks
+         for d in ["lib", "usr/lib"]:
+             path = os.path.join(self.builddir, "staging", d)
+-            self.assertFalse(check_broken_links(path))
++            self.assertFalse(has_broken_links(path))
+             path = os.path.join(self.builddir, "target", d)
+-            self.assertFalse(check_broken_links(path))
++            self.assertFalse(has_broken_links(path))
+ 
+         interp = infra.get_elf_prog_interpreter(self.builddir,
+                                                 self.toolchain_prefix,
