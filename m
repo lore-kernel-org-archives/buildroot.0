@@ -1,36 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:46:18 +0200
-Subject: [Buildroot] [PATCH] fbgrab: explicitly build fbgrab target to
-	workaround gzip issue
-In-Reply-To: <20170517145251.9047-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 17 May 2017 16:52:51 +0200")
-References: <20170517145251.9047-1-peter@korsgaard.com>
-Message-ID: <874lwj43fp.fsf@dell.be.48ers.dk>
+Date: Wed, 17 May 2017 22:29:45 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+	9, 10, 11}.x series
+Message-ID: <20170517204653.31C3F82862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=594b4174b22901f311d22234fd830676f04dfdd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Fixes #9871
- > gzip reads default command line options from the environment variable GZIP.
- > The fbgrab Makefile internally also uses a GZIP make variable to know what
- > command to use to compress the manpage. Unfortunaly make will export the
- > value of this make variable to the environment if GZIP is already present in
- > the enviroment, confusing gzip (as 'gzip' isn't a valid command line argument).
+[Peter: drop 4.10.x / 4.11.x bump]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5879cc71dd048472d2da85b7cbafd884f275bcc4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > This can either be triggered by users having GZIP set in their environment
- > (E.G.  for custom options), or by enabling BR2_REPRODUCIBLE, where we use
- > this feature to force the -n option (to not store name/timestamp) to gzip.
-
- > We don't really need to compress the manpage as it isn't installed anyway,
- > so work around the issue by only building the fbgrab application.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8159e41..6c18220 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.67"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.68"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.27"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.28"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
