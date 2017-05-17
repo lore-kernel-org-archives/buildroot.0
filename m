@@ -1,74 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:45:25 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] ntp: add patch to fix
-	-fPIC issue
-Message-ID: <20170517204653.C364982862@busybox.osuosl.org>
+Date: Wed, 17 May 2017 22:35:31 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/faketime: fix
+	build with gcc >= 6
+Message-ID: <20170517204653.40CCF82862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ff1bf944f5b38df75a09b6e991e0d2291ce99e1
+commit: https://git.buildroot.net/buildroot/commit/?id=8f0c43a9a640309cbdeb01b0a8d1e7adfca5d730
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This commit adds a patch that fixes the build on AArch64 and MIPS of the
-ntp package, which was caused by some parts of ntp being built without
--fPIC.
+Upstream added -Wno-nonnull-compare to disable this error [1].
 
 Fixes:
+libfaketime.c:513:7: error??: nonnull argument ????buf???? compared to NULL [-Werror=nonnull-compare]
+    if (buf != NULL)
+       ^
+[1] https://github.com/wolfcw/libfaketime/commit/47e958b753fc15098a2b7d0e9ef26b83ee255874
 
-  [aarch64] http://autobuild.buildroot.net/results/866b1d28595efd8b6becf83d0a64b596538d58b0
-  [mips]    http://autobuild.buildroot.net/results/c2a945855172970736a8ffea9c564f029a023344
+[Peter: add upstream git commit id to patch]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Thanks to Romain Naour for the initial analysis.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 7fde83cdf0da338937dae13144eea2923e5c2730)
+(cherry picked from commit 2a1401fa923e65de2efd78bbb4e66f73291a3fe2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/0003-ntpq-fpic.patch | 23 +++++++++++++++++++++++
- package/ntp/ntp.mk               |  1 +
- 2 files changed, 24 insertions(+)
+ ...isable-the-non-null-compare-warning-error.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/ntp/0003-ntpq-fpic.patch b/package/ntp/0003-ntpq-fpic.patch
+diff --git a/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
 new file mode 100644
-index 0000000..6e05a67
+index 0000000..f8c7484
 --- /dev/null
-+++ b/package/ntp/0003-ntpq-fpic.patch
-@@ -0,0 +1,23 @@
-+ntpq/Makefile.am: add NTP_HARD_CFLAGS
++++ b/package/faketime/0001-Disable-the-non-null-compare-warning-error.patch
+@@ -0,0 +1,32 @@
++From e85a157b51b1276c91c736d8624d9f3e876e9189 Mon Sep 17 00:00:00 2001
++From: Andreas Rammhold <andreas@rammhold.de>
++Date: Tue, 20 Dec 2016 19:25:32 +0100
++Subject: [PATCH] Disable the non-null compare warning/error.
 +
-+Pass NTP_HARD_CFLAGS when building ntpq, like in all other ntp
-+modules, to make sure -fPIC is passed.
++We rely on the provided local library definitions for the hooked
++functions which in some cases (GCC >6) carry a non-null-attribute flag
++which causes compile errors on `!= NULL` checks.
 +
-+Originally taken from
-+https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=494143c3b4921a5c8b8596d58f2c8b98296bf688.
++[Romain: rebase on 0.9.6]
++(cherry picked from commit 47e958b753fc15098a2b7d0e9ef26b83ee255874)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++diff --git a/src/Makefile b/src/Makefile
++index 51634b0..bbbd476 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -67,7 +67,7 @@ INSTALL ?= install
++ PREFIX ?= /usr/local
++ LIBDIRNAME ?= /lib/faketime
++ 
++-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
+++CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
++ LIB_LDFLAGS += -shared
++ LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
++ LDADD += -ldl -lm -lrt
++-- 
++2.9.3
 +
-+Index: b/ntpq/Makefile.am
-+===================================================================
-+--- a/ntpq/Makefile.am
-++++ b/ntpq/Makefile.am
-+@@ -23,7 +23,7 @@
-+ ntpq_LDADD += $(LDADD_NTP)
-+ noinst_HEADERS=	ntpq.h
-+ noinst_LIBRARIES=	libntpq.a
-+-libntpq_a_CFLAGS=	-DNO_MAIN_ALLOWED -DBUILD_AS_LIB
-++libntpq_a_CFLAGS=	$(NTP_HARD_CFLAGS) -DNO_MAIN_ALLOWED -DBUILD_AS_LIB
-+ CLEANFILES=
-+ DISTCLEANFILES=	.version version.c config.log $(man_MANS)
-+ ETAGS_ARGS=	Makefile.am
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index e3e53a8..24403cf 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -21,6 +21,7 @@ NTP_CONF_OPTS = \
- 	--with-crypto
- 
- # 0002-ntp-syscalls-fallback.patch
-+# 0003-ntpq-fpic.patch
- NTP_AUTORECONF = YES
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
