@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 May 2017 21:58:39 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/tor: bump version to
- 0.3.0.6
-In-Reply-To: <20170514142821.16259-1-bernd.kuhls@t-online.de>
-References: <20170514142821.16259-1-bernd.kuhls@t-online.de>
-Message-ID: <20170517215839.38b1b38b@free-electrons.com>
+Date: Wed, 17 May 2017 22:00:06 +0200
+Subject: [Buildroot] [PATCH 3/3] support/testing: simplify logging by
+ keeping the log file open
+In-Reply-To: <1494452026-21567-3-git-send-email-luca@lucaceresoli.net>
+References: <1494452026-21567-1-git-send-email-luca@lucaceresoli.net>
+ <1494452026-21567-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20170517220006.02dd1e60@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 14 May 2017 16:28:21 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Wed, 10 May 2017 23:33:46 +0200, Luca Ceresoli wrote:
+> We currently call infra.smart_open() to open log files each time we
+> need to write to them.
+> 
+> Opening the file once in the constructor of Builder and Emulator and
+> writing to it whenever needed is simpler and slightly more efficient.
+> 
+> Remove smart_open and instead create a new open_log_file() function
+> which just opens the logfile. Also let it compute the filename, in
+> order to simplify even further the Builder and Emulator code.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  package/tor/tor.hash | 2 +-
->  package/tor/tor.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  support/testing/infra/__init__.py | 21 +++++++--------------
+>  support/testing/infra/builder.py  | 12 +++---------
+>  support/testing/infra/emulator.py | 15 +++++----------
+>  3 files changed, 15 insertions(+), 33 deletions(-)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
