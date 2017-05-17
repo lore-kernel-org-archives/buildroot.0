@@ -1,35 +1,60 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Wed, 17 May 2017 22:49:41 +0200
-Subject: [Buildroot] RPi B+ update
-In-Reply-To: <2C134724-B0DB-4EAB-907E-3C97364972DC@openadk.org>
-References: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com>
- <20170516232354.2080bf15@gmx.net>
- <224ff827-03b8-16d6-34fd-8be05cea607d@gmail.com>
- <24ea86ee-9b48-816f-3e7a-6d5a985ea339@gmail.com>
- <2C134724-B0DB-4EAB-907E-3C97364972DC@openadk.org>
-Message-ID: <a52ce23c-ed55-3ff3-5295-14270be23f1c@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 17 May 2017 23:15:23 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] package/qt5base: fix sparc compilation
+Message-ID: <cover.1495055675.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 17/05/2017 19:36, Waldemar Brodkorb ha scritto:
-> what happens if you keep your old kernel and dtb and just update the firmware (start.elf, fixup.dat and the other file)?
->
-> I think new firmware can handle dt and non-dt kernel. You might need to add the trailer magic to the old kernel with mkknlimg.
+Hello All!
+
+This small series aims at fixing the build of qt-5.8 on sparc.
+
+Qt 5.8 needs atomic operations, which on some architectures are compiler
+builtins, while on other archs they are provided by a helper library,
+libatomic. For sparc, atomics are in libatomic.
+
+First, we introduce a new qmake config snippet, arch.conf, which is
+included from our qmake.conf.
+
+By default, that file is empty, except when libatomic is present in the
+toolchain, in which case it add -latomic to the list of libraries to
+link with.
 
 
-Il 17/05/2017 21:29, Peter Korsgaard ha scritto:
-
->
-> Unless the system boots with new fw and the old zImage. Did you try that
-> combination?
+Regards,
+Yann E. MORIN.
 
 
-Hi both!
-I've just tried to boot with the old zImage and the new firmware: it 
-hangs on the colored background on power up. The same happens using 
-mkknlimg on the old kernel.
+The following changes since commit 19e78e509e5e729437d2188b28aee7655340c67d
 
-Marco
+  oracle-mysql: add patch to fix gcc 6.x build issue (2017-05-17 22:24:14 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 6bdfcdff79478a9835c4c5d0296f8f62d5b64d66
+
+  package/qt5base: link with -latomic for sparc (2017-05-17 23:08:55 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/qt5base: install arch-specific configuration
+      package/qt5base: link with -latomic for sparc
+
+ package/qt5/qt5base/qmake.conf |  3 +++
+ package/qt5/qt5base/qt5base.mk | 10 ++++++++++
+ 2 files changed, 13 insertions(+)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
