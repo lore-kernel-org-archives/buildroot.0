@@ -1,49 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 May 2017 11:34:55 +0000
-Subject: [Buildroot] [Bug 9876] New: aarch64 support with gcc 4.8 toolchain
-Message-ID: <bug-9876-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 May 2017 14:27:33 +0200
+Subject: [Buildroot] [PATCH v3] package/pulseview: fix a build issue
+In-Reply-To: <1495015800-30480-1-git-send-email-brgl@bgdev.pl> (Bartosz
+ Golaszewski's message of "Wed, 17 May 2017 12:10:00 +0200")
+References: <1495015800-30480-1-git-send-email-brgl@bgdev.pl>
+Message-ID: <87k25f653e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9876
+>>>>> "Bartosz" == Bartosz Golaszewski <brgl@bgdev.pl> writes:
 
-            Bug ID: 9876
-           Summary: aarch64 support with gcc 4.8 toolchain
-           Product: buildroot
-           Version: 2017.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jpcartal at free.fr
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+ > Backport an upstream patch fixing the build issue related to boost
+ > math definitions.
 
-Hello,
+ > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 
-I'm trying to compile for the aarch64 architecture using an external gcc 4.8
-toolchain.
-However I get the following error :
->>> toolchain-external-custom  Installing to staging directory
-/usr/bin/install -D -m 0755
-/home/jpcartal/Dev/Ssd/buildroot/buildroot-2017.02/N30_test/build/toolchain-external-custom/toolchain-wrapper
-/home/jpcartal/Dev/Ssd/buildroot/buildroot-2017.02/N30_test/host/usr/bin/toolchain-wrapper
-aarch64-linux-gcc: error: unrecognized command line option '-mabi=lp64'
-
-My understanding is that the mabi=lp64 option is only available on gcc 4.9.x
-and newer.
-
-Is there any solution available to compile for aarch64 architecture with a gcc
-4.8.x toolchain ?
-
-Thanks for your help.
+Committed after adding a reference to the autobuilder failures, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
