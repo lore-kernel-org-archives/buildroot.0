@@ -1,52 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 May 2017 23:15:29 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/qt5base: link with -latomic for
-	sparc
-In-Reply-To: <cover.1495055675.git.yann.morin.1998@free.fr>
-References: <cover.1495055675.git.yann.morin.1998@free.fr>
-Message-ID: <6bdfcdff79478a9835c4c5d0296f8f62d5b64d66.1495055675.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 May 2017 23:53:21 +0200
+Subject: [Buildroot] [PATCH] cppcms: fix build on machines with libgpg-error
+	installed
+Message-ID: <1495058001-29457-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt 5.8 needs atomic operations, which are provided in libatomic when it
-exists, ike on sparc with gcc >= 4.8.
+In configuration where target architecture == host architecture, and
+libgpg-error is installed system-wide with development files, the build
+of cppcms fails with:
+
+/home/test/buildroot/output/host/usr/bin/x86_64-amd-linux-gnu-g++  --sysroot=/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -Wextra  -DNDEBUG   CMakeFiles/base64_test.dir/tests/base64_test.cpp.o  -o base64_test  -L/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib -Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib -rdynamic libcppcms.so.1.0.5 booster/libbooster.so.0.0.3 -lpthread /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpcre.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libdl.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_set_errno at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_init at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_destroy at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_syserror at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_errno at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_unlock at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strerror at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strsource at GPG_ERROR_1.0'
+/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_lock at GPG_ERROR_1.0'
+
+The problem comes from the
+"-Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib"
+option, which tells the linker to search for libraries in /usr/lib.
+
+This commit fixes that by asking CMake to not add any rpath when
+building cppcms.
 
 Fixes:
-    http://autobuild.buildroot.org/results/49b/49bc9345b9849c9c3c53ace290c534ff7bb98683/
-    http://autobuild.buildroot.org/results/9f2/9f213406954be51dfcad76ebdce8b73850842180/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
+  http://autobuild.buildroot.net/results/a7eb1ede552ae14f409cfd7bd877bcf25ca69a74/
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-  - condition is on HAS_LIBATOMIC, not on BR2_sparc  (Thomas)
----
- package/qt5/qt5base/qt5base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/cppcms/cppcms.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 81774b74a6..5944c869bb 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -215,6 +215,13 @@ endef
- endif
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index 1f6c09d..9d05e81 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -11,6 +11,10 @@ CPPCMS_LICENSE_FILES = COPYING.TXT
+ CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+ CPPCMS_INSTALL_STAGING = YES
  
- QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
-+# Qt 5.8 needs atomics, which on sparc are in -latomic
-+define QT5BASE_CONFIGURE_ARCH_CONFIG
-+	printf 'LIBS += -latomic\n' >$(QT5BASE_ARCH_CONFIG_FILE)
-+endef
-+endif
++# disable rpath to avoid getting /usr/lib added to the link search
++# path
++CPPCMS_CONF_OPTS = -DCMAKE_SKIP_RPATH=ON
 +
- define QT5BASE_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
- 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ CPPCMS_DEPENDENCIES = zlib pcre libgcrypt
+ 
+ ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
 -- 
-2.11.0
+2.7.4
