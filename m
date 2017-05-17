@@ -1,50 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:46:06 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] fbgrab: explicitly build
-	fbgrab target to workaround gzip issue
-Message-ID: <20170517204653.D2A2E82862@busybox.osuosl.org>
+Date: Wed, 17 May 2017 22:40:10 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] git: security bump to
+	version 2.12.3
+Message-ID: <20170517204653.9825B82862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e75f4d6f636af65750486ff746f49d7c26946488
+commit: https://git.buildroot.net/buildroot/commit/?id=c554c84ec1c0fab86eef41af63b990ac52b812fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes #9871
+Fixes CVE-2017-8386 - Git Shell Bypass By Abusing Less
 
-gzip reads default command line options from the environment variable GZIP.
-The fbgrab Makefile internally also uses a GZIP make variable to know what
-command to use to compress the manpage. Unfortunaly make will export the
-value of this make variable to the environment if GZIP is already present in
-the enviroment, confusing gzip (as 'gzip' isn't a valid command line argument).
-
-This can either be triggered by users having GZIP set in their environment
-(E.G.  for custom options), or by enabling BR2_REPRODUCIBLE, where we use
-this feature to force the -n option (to not store name/timestamp) to gzip.
-
-We don't really need to compress the manpage as it isn't installed anyway,
-so work around the issue by only building the fbgrab application.
+For more details, see:
+https://insinuator.net/2017/05/git-shell-bypass-by-abusing-less-cve-2017-8386/
+http://www.mail-archive.com/git at vger.kernel.org/msg120982.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit be8d1efd1e5b8c4ceed34e8144d2cac075ab364e)
+(cherry picked from commit 4a146b933e7ab9c6d1b353f61a610c69bc95bc55)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbgrab/fbgrab.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index 4455423..5cdf028 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
-@@ -11,7 +11,7 @@ FBGRAB_LICENSE = GPLv2
- FBGRAB_LICENSE_FILES = COPYING
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 9af360e..4782dcb 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 d21a9e23506e618d561fb25a8a7bd6134f927b86147930103487117a7a678c4a  git-2.12.2.tar.xz
++sha256 016124c54ce2db7a4c2bd26b0de21fbf8f6bcaee04842aa221c7243141df4e42  git-2.12.3.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index b49ddd5..04cd577 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define FBGRAB_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) fbgrab
- endef
- 
- define FBGRAB_INSTALL_TARGET_CMDS
+-GIT_VERSION = 2.12.2
++GIT_VERSION = 2.12.3
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2, LGPLv2.1+
