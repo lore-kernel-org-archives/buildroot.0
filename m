@@ -1,44 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:40:01 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] git: bump version to
-	2.12.2
-Message-ID: <20170517204653.8A67F82862@busybox.osuosl.org>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Wed, 17 May 2017 22:49:41 +0200
+Subject: [Buildroot] RPi B+ update
+In-Reply-To: <2C134724-B0DB-4EAB-907E-3C97364972DC@openadk.org>
+References: <38b2ad6e-f9bd-c0f7-e5be-c0531fd22f2a@gmail.com>
+ <20170516232354.2080bf15@gmx.net>
+ <224ff827-03b8-16d6-34fd-8be05cea607d@gmail.com>
+ <24ea86ee-9b48-816f-3e7a-6d5a985ea339@gmail.com>
+ <2C134724-B0DB-4EAB-907E-3C97364972DC@openadk.org>
+Message-ID: <a52ce23c-ed55-3ff3-5295-14270be23f1c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f69fa3ade8bb699879ba0b4ffa809595d1ce228
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Il 17/05/2017 19:36, Waldemar Brodkorb ha scritto:
+> what happens if you keep your old kernel and dtb and just update the firmware (start.elf, fixup.dat and the other file)?
+>
+> I think new firmware can handle dt and non-dt kernel. You might need to add the trailer magic to the old kernel with mkknlimg.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3967abfc891b69415891ee30945326e6135969f0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index e79e8b1..9af360e 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 db11674364b764e101966d829a2e271c9b9d2a8bd4d8ecb4221a1dcdc9a3ada2  git-2.12.1.tar.xz
-+sha256 d21a9e23506e618d561fb25a8a7bd6134f927b86147930103487117a7a678c4a  git-2.12.2.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index e7ea98d..b49ddd5 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.12.1
-+GIT_VERSION = 2.12.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2, LGPLv2.1+
+Il 17/05/2017 21:29, Peter Korsgaard ha scritto:
+
+>
+> Unless the system boots with new fw and the old zImage. Did you try that
+> combination?
+
+
+Hi both!
+I've just tried to boot with the old zImage and the new firmware: it 
+hangs on the colored background on power up. The same happens using 
+mkknlimg on the old kernel.
+
+Marco
