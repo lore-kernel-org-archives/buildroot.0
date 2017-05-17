@@ -1,41 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 10:41:05 +0200
-Subject: [Buildroot] how to install package ltp-testsuite outside of
-	target directory
-In-Reply-To: <8729016553E3654398EA69218DA29EEF15B99E23@cnshjmbx02> (YUAN
- Linyu's message of "Tue, 16 May 2017 02:23:33 +0000")
-References: <8729016553E3654398EA69218DA29EEF15B99E23@cnshjmbx02>
-Message-ID: <8760gz7u5a.fsf@dell.be.48ers.dk>
+Date: Wed, 17 May 2017 10:47:23 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: bump kernel
+	version to 4.4.41
+In-Reply-To: <1494846724-30126-1-git-send-email-lothar.felten@gmail.com>
+ (Lothar Felten's message of "Mon, 15 May 2017 13:12:04 +0200")
+References: <1494846724-30126-1-git-send-email-lothar.felten@gmail.com>
+Message-ID: <871srn7tus.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "YUAN" == YUAN Linyu <Linyu.Yuan@alcatel-sbell.com.cn> writes:
+>>>>> "Lothar" == Lothar Felten <lothar.felten@gmail.com> writes:
 
- > Hi,
- > When I build ltp-testsuite into a ARM initramfs image, it's very big, 
- > so system can't load module which can load without ltp-testsuite built.
+ > Switch to Linux kernel version 4.4.41 from the TI SDK 03.03.00.04
+ > (TI SDK release date: 29.03.2017)
 
- > section 3 reloc 1 sym 'vmalloc_to_page': relocation 28 out of range
- >  (0xbf000034 -> 0xc1a18f1c)
+ > Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+ > ---
+ >  configs/beaglebone_defconfig | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
- > I try to build ltp-testsuite outside the target rootfs.,
- > for example, $(BASE_DIR)/ ltp-testsuite, 
- > it need change below configuration in pkg-autotools.mk,
- > and add one configuration item to enable user define a directory for install.
+Committed to next, thanks.
 
- > $(2)_INSTALL_TARGET_OPTS                ?= DESTDIR=$$(TARGET_DIR) install
- > ==>
- > $(2)_TARGET_DIR		?= $$(TARGET_DIR)
- > $(2)_INSTALL_TARGET_OPTS                ?= DESTDIR=$$($(2)_TARGET_DIR) install
-
- > anyone have a better solution?
-
-An alternative is to write a post-build script to remove these files
-from the rootfs and instead create a seperate filesystem with the ltp
-files.
+What about beaglebone_qt5_defconfig?
 
 -- 
 Bye, Peter Korsgaard
