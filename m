@@ -1,47 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 10:37:31 +0200
-Subject: [Buildroot] [git commit branch/next] python-dataproperty: bump
-	version to 0.22.0
-Message-ID: <20170517084752.F41458290E@busybox.osuosl.org>
+Date: Wed, 17 May 2017 10:37:38 +0200
+Subject: [Buildroot] [git commit branch/next] python-pytablewriter: bump
+	version to 0.19.7
+Message-ID: <20170517084754.D7C268029F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eecf091dfe804c4075ae61420226cb066b1135a9
+commit: https://git.buildroot.net/buildroot/commit/?id=b23c9ae44f668a1cc9592113307502c6856721aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index ad88498..6ab0646 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
+diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
+index eefcb3a..570a7ab 100644
+--- a/package/python-pytablewriter/python-pytablewriter.hash
++++ b/package/python-pytablewriter/python-pytablewriter.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
--md5 89e78396b91e6156c522175b3316546f  DataProperty-0.21.1.tar.gz
--sha256 7a5c77004e8f1bca734838966e30e555e323c06bda613ed3985fa9bef2665c71  DataProperty-0.21.1.tar.gz
-+md5 7b41e6f9b250c4f04f07bbd2999c4259  DataProperty-0.22.0.tar.gz
-+sha256 3ed49c923a996cbabc008fba7f2df8b2f303e961d64507348120faaacb6b5157  DataProperty-0.22.0.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index d9d0783..7feeed5 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
+ # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
+-md5 fb404abd5a6aab2d8da8c93f24c9c974  pytablewriter-0.19.5.tar.gz
+-sha256 0f06a73fc13fea7d6004ec9d96f2aeef920defaee1704268558a45e97455d35a  pytablewriter-0.19.5.tar.gz
++md5 0f559538d2d40b1f59904b3bf6c66b35  pytablewriter-0.19.7.tar.gz
++sha256 09c841a08cfcecc51e7ffc1846c5200b9f25ef6a3ed82a1a33f714b1c0d9ef94  pytablewriter-0.19.7.tar.gz
+diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
+index 50e85c2..24a4d2e 100644
+--- a/package/python-pytablewriter/python-pytablewriter.mk
++++ b/package/python-pytablewriter/python-pytablewriter.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.21.1
-+PYTHON_DATAPROPERTY_VERSION = 0.22.0
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/fc/9a/e6cc202b81b02aec39f35f2d13a6efc349cdc62ae3890f84b586468597ad
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/ed/00/091f46cc81869b925d4001300bef31ea2224436c494d1de7145d4bb56df1
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-PYTHON_PYTABLEWRITER_VERSION = 0.19.5
++PYTHON_PYTABLEWRITER_VERSION = 0.19.7
+ PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
+-PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/db/c6/517cb51aee3c83b7eb60353f818aab0f39d310c925ea103cc54c0e0f8cd2
++PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/2d/5d/02baae4e38413608a77abec5f4ad9a665ba788802e84d7f84cfd9fbe49a2
+ PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEWRITER_LICENSE = MIT
+ PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
