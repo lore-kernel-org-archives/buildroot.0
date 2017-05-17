@@ -1,22 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:34:37 +0200
-Subject: [Buildroot] [PATCH master 1/2] linux-headers: bump 4.{4, 9, 10,
-	11}.x series
-In-Reply-To: <20170515113612.45653-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 15 May 2017 12:36:11 +0100")
-References: <20170515113612.45653-1-Vincent.Riera@imgtec.com>
-Message-ID: <8737c35ijm.fsf@dell.be.48ers.dk>
+Date: Wed, 17 May 2017 22:35:46 +0200
+Subject: [Buildroot] [PATCH] package/faketime: fix build with gcc >= 6
+In-Reply-To: <20170514212643.17153-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 14 May 2017 23:26:43 +0200")
+References: <20170514212643.17153-1-romain.naour@gmail.com>
+Message-ID: <87y3tv43x9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Upstream added -Wno-nonnull-compare to disable this error [1].
+ > Fixes:
+ > libfaketime.c:513:7: error?: nonnull argument ??buf?? compared to NULL [-Werror=nonnull-compare]
+ >     if (buf != NULL)
+ >        ^
+ > [1] https://github.com/wolfcw/libfaketime/commit/47e958b753fc15098a2b7d0e9ef26b83ee255874
 
-Committed to 2017.02.x, thanks (except for 4.10.x / 4.11.x).
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
