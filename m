@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 May 2017 21:48:10 +0200
-Subject: [Buildroot] [PATCH] package/ntp: fix aarch64/mips build,
- -fPIC required
-In-Reply-To: <20170513214917.3305-1-romain.naour@gmail.com>
-References: <20170513214917.3305-1-romain.naour@gmail.com>
-Message-ID: <20170517214810.35d31ce4@free-electrons.com>
+Date: Wed, 17 May 2017 21:48:27 +0200
+Subject: [Buildroot] [git commit] fbgrab: explicitly build fbgrab target to
+	workaround gzip issue
+Message-ID: <20170517194840.9E5F2826E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=be8d1efd1e5b8c4ceed34e8144d2cac075ab364e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 13 May 2017 23:49:17 +0200, Romain Naour wrote:
+Fixes #9871
 
-> +# ntp build unconditionnaly some static libraries (libntpq.a, libntp.a etc...)
-> +# The build system fail to create ntpsnmpd while linking these libraries when
-> +# built without -fPIC.
-> +NTP_CONF_ENV += \
-> +	CFLAGS="-fPIC $(TARGET_CFLAGS)"
+gzip reads default command line options from the environment variable GZIP.
+The fbgrab Makefile internally also uses a GZIP make variable to know what
+command to use to compress the manpage. Unfortunaly make will export the
+value of this make variable to the environment if GZIP is already present in
+the enviroment, confusing gzip (as 'gzip' isn't a valid command line argument).
 
-Thanks for this analysis. However, I was a bit surprised by your patch,
-because I saw many -fPIC all over the place in the ntp build log, even
-without your patch.
+This can either be triggered by users having GZIP set in their environment
+(E.G.  for custom options), or by enabling BR2_REPRODUCIBLE, where we use
+this feature to force the -n option (to not store name/timestamp) to gzip.
 
-So I dug a little bit deeper, and found this Gentoo patch
-https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=494143c3b4921a5c8b8596d58f2c8b98296bf688,
-which simply re-adds the proper flags to just the ntpq module. And this
-does indeed solve the issue.
+We don't really need to compress the manpage as it isn't installed anyway,
+so work around the issue by only building the fbgrab application.
 
-So I've instead committed a patch that adds the Gentoo patch. Thanks
-anyway for your initial analysis, it was very useful to understand what
-was going on.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fbgrab/fbgrab.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 15e0a95..d81a5ee 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -11,7 +11,7 @@ FBGRAB_LICENSE = GPL-2.0
+ FBGRAB_LICENSE_FILES = COPYING
+ 
+ define FBGRAB_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) fbgrab
+ endef
+ 
+ define FBGRAB_INSTALL_TARGET_CMDS
