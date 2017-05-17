@@ -1,30 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 May 2017 12:32:51 +0000
-Subject: [Buildroot] [Bug 9876] aarch64 support with gcc 4.8 toolchain
-In-Reply-To: <bug-9876-163@https.bugs.busybox.net/>
-References: <bug-9876-163@https.bugs.busybox.net/>
-Message-ID: <bug-9876-163-0lRiv1DfNT@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 May 2017 14:26:52 +0200
+Subject: [Buildroot] [git commit] package/pulseview: fix a build issue
+Message-ID: <20170517123421.329538267D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9876
+commit: https://git.buildroot.net/buildroot/commit/?id=f884abe4de72b942406ca16c4f54e02a0c57cce4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Backport an upstream patch fixing the build issue related to boost
+math definitions.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+Fixes:
+http://autobuild.buildroot.net/results/e9f/e9f3f175e203529c44ecf92a34b82a0b3a473e34/
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-(In reply to Jean-pierre Cartal from comment #0)
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...txt-Avoid-fext-numeric-literals-not-suppo.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-You could remove the lp64 line from arch/Config.in.arm, but considering how old
-gcc 4.8 is compared to aarch64, does it really make sense to use such an old
-toolchain?
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch b/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch
+new file mode 100644
+index 0000000..89137f2
+--- /dev/null
++++ b/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch
+@@ -0,0 +1,28 @@
++From 6ad4d7a6f17edecc3523a7ab3d627f9a70dbacc1 Mon Sep 17 00:00:00 2001
++From: Uwe Hermann <uwe@hermann-uwe.de>
++Date: Wed, 17 May 2017 11:00:44 +0200
++Subject: [PATCH] CMakeLists.txt: Avoid -fext-numeric-literals, (not supported
++ by clang).
++
++This (re-)fixes bug #863.
++
++Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e8bc79f..e7e4432 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -395,6 +395,7 @@ add_definitions(${QT_DEFINITIONS} -DQT_NO_KEYWORDS)
++ add_definitions(-D__STDC_LIMIT_MACROS)
++ add_definitions(-Wall -Wextra)
++ add_definitions(-std=c++11)
+++add_definitions(-DBOOST_MATH_DISABLE_FLOAT128=1)
++ 
++ if(ENABLE_DECODE)
++ 	add_definitions(-DENABLE_DECODE)
++-- 
++2.9.3
++
