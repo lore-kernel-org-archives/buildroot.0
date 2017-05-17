@@ -1,58 +1,239 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Wed, 17 May 2017 22:11:18 +0200
-Subject: [Buildroot] ti-sgx-km package status
-In-Reply-To: <a9b7d13527c841eab3207f1743c32434@DBXPR90MB0160.MGDPHG.emi.philips.com>
-References: <a9b7d13527c841eab3207f1743c32434@DBXPR90MB0160.MGDPHG.emi.philips.com>
-Message-ID: <0111321a-5349-d92c-aba2-134f897d5f77@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 17 May 2017 22:16:46 +0200
+Subject: [Buildroot] [PATCH 1/1] lxc: bump to version 2.0.8
+Message-ID: <1495052206-26375-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tim,
+Remove 0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch as
+it has been integrated upstream
 
-the TI SDK > 03.x ships with SGX binaries for newer kernels depending on 
-wayland and some additional libs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-5985-Ensure-target-netns-is-caller-owned.patch | 189 ---------------------
+ package/lxc/lxc.hash                               |   2 +-
+ package/lxc/lxc.mk                                 |   2 +-
+ 3 files changed, 2 insertions(+), 191 deletions(-)
+ delete mode 100644 package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
 
-Older TI SDKs use Qt5 on eglfs, that's what the beaglebone_qt5_defconfig 
-provides at the moment: qt5/eglfs.
-These binaries won't work with a newer kernel.
-
-Current status: it compiles, but I still need to work on qt5. Some of 
-the build steps need fixes and a clean up for patches. An additional 
-ti-sgx package is required too.
-
-Best regards,
-Lothar
-
-On 17.05.2017 17:32, Harron, Tim wrote:
-> Hi Lothar,
->
->
->
-> I was told you were working on a fix for a problem with the ti-sgx-km in
-> TI kernels > 4.1 (per https://bugs.busybox.net/show_bug.cgi?id=9781).
->
->
->
-> Would you please let me know the status of this effort? Are the patches
-> in a usable state?
->
->
->
-> Thanks!
->
->
->
-> -Tim
->
->
-> ------------------------------------------------------------------------
-> The information contained in this message may be confidential and
-> legally protected under applicable law. The message is intended solely
-> for the addressee(s). If you are not the intended recipient, you are
-> hereby notified that any use, forwarding, dissemination, or reproduction
-> of this message is strictly prohibited and may be unlawful. If you are
-> not the intended recipient, please contact the sender by return e-mail
-> and destroy all copies of the original message.
+diff --git a/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch b/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
+deleted file mode 100644
+index 79d19b3..0000000
+--- a/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
++++ /dev/null
+@@ -1,189 +0,0 @@
+-From 16af238036a5464ae8f2420ed3af214f0de875f9 Mon Sep 17 00:00:00 2001
+-From: Christian Brauner <christian.brauner@ubuntu.com>
+-Date: Sat, 28 Jan 2017 13:02:34 +0100
+-Subject: [PATCH] CVE-2017-5985: Ensure target netns is caller-owned
+-
+-Before this commit, lxc-user-nic could potentially have been tricked into
+-operating on a network namespace over which the caller did not hold privilege.
+-
+-This commit ensures that the caller is privileged over the network namespace by
+-temporarily dropping privilege.
+-
+-Launchpad: https://bugs.launchpad.net/ubuntu/+source/lxc/+bug/1654676
+-Reported-by: Jann Horn <jannh@google.com>
+-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/lxc/lxc_user_nic.c | 119 ++++++++++++++++++++++++++++++++++++-------------
+- 1 file changed, 87 insertions(+), 32 deletions(-)
+-
+-diff --git a/src/lxc/lxc_user_nic.c b/src/lxc/lxc_user_nic.c
+-index 409a53a1..96dc3986 100644
+---- a/src/lxc/lxc_user_nic.c
+-+++ b/src/lxc/lxc_user_nic.c
+-@@ -50,6 +50,14 @@
+- #include "utils.h"
+- #include "network.h"
+- 
+-+#define usernic_debug_stream(stream, format, ...)                              \
+-+	do {                                                                   \
+-+		fprintf(stream, "%s: %d: %s: " format, __FILE__, __LINE__,     \
+-+			__func__, __VA_ARGS__);                                \
+-+	} while (false)
+-+
+-+#define usernic_error(format, ...) usernic_debug_stream(stderr, format, __VA_ARGS__)
+-+
+- static void usage(char *me, bool fail)
+- {
+- 	fprintf(stderr, "Usage: %s lxcpath name pid type bridge nicname\n", me);
+-@@ -670,68 +678,115 @@ again:
+- }
+- 
+- #define VETH_DEF_NAME "eth%d"
+--
+- static int rename_in_ns(int pid, char *oldname, char **newnamep)
+- {
+--	int fd = -1, ofd = -1, ret, ifindex = -1;
+-+	uid_t ruid, suid, euid;
+-+	int fret = -1;
+-+	int fd = -1, ifindex = -1, ofd = -1, ret;
+- 	bool grab_newname = false;
+- 
+- 	ofd = lxc_preserve_ns(getpid(), "net");
+- 	if (ofd < 0) {
+--		fprintf(stderr, "Failed opening network namespace path for '%d'.", getpid());
+--		return -1;
+-+		usernic_error("Failed opening network namespace path for '%d'.", getpid());
+-+		return fret;
+- 	}
+- 
+- 	fd = lxc_preserve_ns(pid, "net");
+- 	if (fd < 0) {
+--		fprintf(stderr, "Failed opening network namespace path for '%d'.", pid);
+--		return -1;
+-+		usernic_error("Failed opening network namespace path for '%d'.", pid);
+-+		goto do_partial_cleanup;
+-+	}
+-+
+-+	ret = getresuid(&ruid, &euid, &suid);
+-+	if (ret < 0) {
+-+		usernic_error("Failed to retrieve real, effective, and saved "
+-+			      "user IDs: %s\n",
+-+			      strerror(errno));
+-+		goto do_partial_cleanup;
+-+	}
+-+
+-+	ret = setns(fd, CLONE_NEWNET);
+-+	close(fd);
+-+	fd = -1;
+-+	if (ret < 0) {
+-+		usernic_error("Failed to setns() to the network namespace of "
+-+			      "the container with PID %d: %s.\n",
+-+			      pid, strerror(errno));
+-+		goto do_partial_cleanup;
+- 	}
+- 
+--	if (setns(fd, 0) < 0) {
+--		fprintf(stderr, "setns to container network namespace\n");
+--		goto out_err;
+-+	ret = setresuid(ruid, ruid, 0);
+-+	if (ret < 0) {
+-+		usernic_error("Failed to drop privilege by setting effective "
+-+			      "user id and real user id to %d, and saved user "
+-+			      "ID to 0: %s.\n",
+-+			      ruid, strerror(errno));
+-+		// COMMENT(brauner): It's ok to jump to do_full_cleanup here
+-+		// since setresuid() will succeed when trying to set real,
+-+		// effective, and saved to values they currently have.
+-+		goto do_full_cleanup;
+- 	}
+--	close(fd); fd = -1;
+-+
+- 	if (!*newnamep) {
+- 		grab_newname = true;
+- 		*newnamep = VETH_DEF_NAME;
+--		if (!(ifindex = if_nametoindex(oldname))) {
+--			fprintf(stderr, "failed to get netdev index\n");
+--			goto out_err;
+-+
+-+		ifindex = if_nametoindex(oldname);
+-+		if (!ifindex) {
+-+			usernic_error("Failed to get netdev index: %s.\n", strerror(errno));
+-+			goto do_full_cleanup;
+- 		}
+- 	}
+--	if ((ret = lxc_netdev_rename_by_name(oldname, *newnamep)) < 0) {
+--		fprintf(stderr, "Error %d renaming netdev %s to %s in container\n", ret, oldname, *newnamep);
+--		goto out_err;
+-+
+-+	ret = lxc_netdev_rename_by_name(oldname, *newnamep);
+-+	if (ret < 0) {
+-+		usernic_error("Error %d renaming netdev %s to %s in container.\n", ret, oldname, *newnamep);
+-+		goto do_full_cleanup;
+- 	}
+-+
+- 	if (grab_newname) {
+--		char ifname[IFNAMSIZ], *namep = ifname;
+-+		char ifname[IFNAMSIZ];
+-+		char *namep = ifname;
+-+
+- 		if (!if_indextoname(ifindex, namep)) {
+--			fprintf(stderr, "Failed to get new netdev name\n");
+--			goto out_err;
+-+			usernic_error("Failed to get new netdev name: %s.\n", strerror(errno));
+-+			goto do_full_cleanup;
+- 		}
+-+
+- 		*newnamep = strdup(namep);
+- 		if (!*newnamep)
+--			goto out_err;
+-+			goto do_full_cleanup;
+- 	}
+--	if (setns(ofd, 0) < 0) {
+--		fprintf(stderr, "Error returning to original netns\n");
+--		close(ofd);
+--		return -1;
+-+
+-+	fret = 0;
+-+
+-+do_full_cleanup:
+-+	ret = setresuid(ruid, euid, suid);
+-+	if (ret < 0) {
+-+		usernic_error("Failed to restore privilege by setting effective "
+-+			      "user id to %d, real user id to %d, and saved user "
+-+			      "ID to %d: %s.\n",
+-+			      ruid, euid, suid, strerror(errno));
+-+		fret = -1;
+-+		// COMMENT(brauner): setns() should fail if setresuid() doesn't
+-+		// succeed but there's no harm in falling through; keeps the
+-+		// code cleaner.
+- 	}
+--	close(ofd);
+- 
+--	return 0;
+-+	ret = setns(ofd, CLONE_NEWNET);
+-+	if (ret < 0) {
+-+		usernic_error("Failed to setns() to original network namespace "
+-+			      "of PID %d: %s.\n",
+-+			      ofd, strerror(errno));
+-+		fret = -1;
+-+	}
+- 
+--out_err:
+--	if (ofd >= 0)
+--		close(ofd);
+--	if (setns(ofd, 0) < 0)
+--		fprintf(stderr, "Error returning to original network namespace\n");
+-+do_partial_cleanup:
+- 	if (fd >= 0)
+- 		close(fd);
+--	return -1;
+-+	close(ofd);
+-+
+-+	return fret;
+- }
+- 
+- /*
+--- 
+-2.11.0
+-
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index f80c88d..086b139 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	1c09c075f06ec029f86fa6370c7d379494ff4c66a129eda17af7b7b41e055f5d	lxc-2.0.7.tar.gz
++sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 9412df5..4ba6d9f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 2.0.7
++LXC_VERSION = 2.0.8
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPL-2.1+
+ LXC_LICENSE_FILES = COPYING
+-- 
+2.5.0
