@@ -1,62 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:43:50 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/pulseview: fix a
-	build issue
-Message-ID: <20170517204653.B51C982862@busybox.osuosl.org>
+Date: Wed, 17 May 2017 22:45:25 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] ntp: add patch to fix
+	-fPIC issue
+Message-ID: <20170517204653.C364982862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=731997c0e1f6392ced5df9c9f7d1cc4641c32e53
+commit: https://git.buildroot.net/buildroot/commit/?id=4ff1bf944f5b38df75a09b6e991e0d2291ce99e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Backport an upstream patch fixing the build issue related to boost
-math definitions.
+This commit adds a patch that fixes the build on AArch64 and MIPS of the
+ntp package, which was caused by some parts of ntp being built without
+-fPIC.
 
 Fixes:
-http://autobuild.buildroot.net/results/e9f/e9f3f175e203529c44ecf92a34b82a0b3a473e34/
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f884abe4de72b942406ca16c4f54e02a0c57cce4)
+  [aarch64] http://autobuild.buildroot.net/results/866b1d28595efd8b6becf83d0a64b596538d58b0
+  [mips]    http://autobuild.buildroot.net/results/c2a945855172970736a8ffea9c564f029a023344
+
+Thanks to Romain Naour for the initial analysis.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 7fde83cdf0da338937dae13144eea2923e5c2730)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...txt-Avoid-fext-numeric-literals-not-suppo.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/ntp/0003-ntpq-fpic.patch | 23 +++++++++++++++++++++++
+ package/ntp/ntp.mk               |  1 +
+ 2 files changed, 24 insertions(+)
 
-diff --git a/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch b/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch
+diff --git a/package/ntp/0003-ntpq-fpic.patch b/package/ntp/0003-ntpq-fpic.patch
 new file mode 100644
-index 0000000..89137f2
+index 0000000..6e05a67
 --- /dev/null
-+++ b/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch
-@@ -0,0 +1,28 @@
-+From 6ad4d7a6f17edecc3523a7ab3d627f9a70dbacc1 Mon Sep 17 00:00:00 2001
-+From: Uwe Hermann <uwe@hermann-uwe.de>
-+Date: Wed, 17 May 2017 11:00:44 +0200
-+Subject: [PATCH] CMakeLists.txt: Avoid -fext-numeric-literals, (not supported
-+ by clang).
++++ b/package/ntp/0003-ntpq-fpic.patch
+@@ -0,0 +1,23 @@
++ntpq/Makefile.am: add NTP_HARD_CFLAGS
 +
-+This (re-)fixes bug #863.
++Pass NTP_HARD_CFLAGS when building ntpq, like in all other ntp
++modules, to make sure -fPIC is passed.
 +
-+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-+---
-+ CMakeLists.txt | 1 +
-+ 1 file changed, 1 insertion(+)
++Originally taken from
++https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=494143c3b4921a5c8b8596d58f2c8b98296bf688.
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index e8bc79f..e7e4432 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -395,6 +395,7 @@ add_definitions(${QT_DEFINITIONS} -DQT_NO_KEYWORDS)
-+ add_definitions(-D__STDC_LIMIT_MACROS)
-+ add_definitions(-Wall -Wextra)
-+ add_definitions(-std=c++11)
-++add_definitions(-DBOOST_MATH_DISABLE_FLOAT128=1)
-+ 
-+ if(ENABLE_DECODE)
-+ 	add_definitions(-DENABLE_DECODE)
-+-- 
-+2.9.3
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
++Index: b/ntpq/Makefile.am
++===================================================================
++--- a/ntpq/Makefile.am
+++++ b/ntpq/Makefile.am
++@@ -23,7 +23,7 @@
++ ntpq_LDADD += $(LDADD_NTP)
++ noinst_HEADERS=	ntpq.h
++ noinst_LIBRARIES=	libntpq.a
++-libntpq_a_CFLAGS=	-DNO_MAIN_ALLOWED -DBUILD_AS_LIB
+++libntpq_a_CFLAGS=	$(NTP_HARD_CFLAGS) -DNO_MAIN_ALLOWED -DBUILD_AS_LIB
++ CLEANFILES=
++ DISTCLEANFILES=	.version version.c config.log $(man_MANS)
++ ETAGS_ARGS=	Makefile.am
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index e3e53a8..24403cf 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -21,6 +21,7 @@ NTP_CONF_OPTS = \
+ 	--with-crypto
+ 
+ # 0002-ntp-syscalls-fallback.patch
++# 0003-ntpq-fpic.patch
+ NTP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
