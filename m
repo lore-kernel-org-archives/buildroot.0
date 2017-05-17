@@ -1,39 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 May 2017 22:26:01 +0200
-Subject: [Buildroot] Analysis of build results for 2017-05-16
-In-Reply-To: <877f1f5kfk.fsf@dell.be.48ers.dk>
-References: <20170517062751.2CBF020789@mail.free-electrons.com>
- <20170517212023.478bd24a@free-electrons.com>
- <877f1f5kfk.fsf@dell.be.48ers.dk>
-Message-ID: <20170517222601.0c65aecf@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 May 2017 22:34:37 +0200
+Subject: [Buildroot] [PATCH master 1/2] linux-headers: bump 4.{4, 9, 10,
+	11}.x series
+In-Reply-To: <20170515113612.45653-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 15 May 2017 12:36:11 +0100")
+References: <20170515113612.45653-1-Vincent.Riera@imgtec.com>
+Message-ID: <8737c35ijm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Wed, 17 May 2017 21:53:51 +0200, Peter Korsgaard wrote:
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
->  >> x86_64 | oracle-mysql-5.1.73 | NOK |
->  >> http://autobuild.buildroot.net/results/61074b69b81cd5c17a7f74dc1f7b31f3fc35fd8a
->  >> | ORPH  
-> 
->  > protocol.cc:27:40: error: narrowing conversion of ''\37777777776''
->  > from 'char' to 'uchar {aka unsigned char}' inside { } [-Wnarrowing]
->  >  static uchar eof_buff[1]= { (char) 254 }; /* Marker for end of fields */  
-> 
->  > I searched the oracle-mysql Git history, and I believe I might have a
->  > fix for this.  
-> 
-> Hmm, isn't it just the cast that is wrong? E.G. it should be (uchar) 254
+Committed to 2017.02.x, thanks (except for 4.10.x / 4.11.x).
 
-Indeed, fixed in
-https://git.buildroot.org/buildroot/commit/?id=19e78e509e5e729437d2188b28aee7655340c67d.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
