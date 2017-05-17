@@ -1,50 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 21:49:37 +0200
-Subject: [Buildroot] [PATCH 1/1] lego: ev3: use mainline kernel
-In-Reply-To: <41fbf82c-5eab-e25b-1529-29230794e8b5@lechnology.com> (David
- Lechner's message of "Wed, 17 May 2017 10:28:12 -0500")
-References: <1494890483-11249-1-git-send-email-david@lechnology.com>
- <878tlw8qsd.fsf@dell.be.48ers.dk>
- <41fbf82c-5eab-e25b-1529-29230794e8b5@lechnology.com>
-Message-ID: <87bmqr5kmm.fsf@dell.be.48ers.dk>
+Date: Wed, 17 May 2017 21:53:51 +0200
+Subject: [Buildroot] Analysis of build results for 2017-05-16
+In-Reply-To: <20170517212023.478bd24a@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 17 May 2017 21:20:23 +0200")
+References: <20170517062751.2CBF020789@mail.free-electrons.com>
+ <20170517212023.478bd24a@free-electrons.com>
+Message-ID: <877f1f5kfk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "David" == David Lechner <david@lechnology.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ > Hello,
+ > On Wed, 17 May 2017 08:27:51 +0200 (CEST), Thomas Petazzoni wrote:
 
- >> I guess this change isn't strictly needed because of the symlink, but
- >> OK.
+ >> successes : 251
+ >> failures : 10 
 
- > The symlink is something that I meant to ask about but forgot. I made
- > the symlink so that the file name in the FAT partition is correct when
- > creating an SD card image. I was wondering if there might be a better
- > way to rename the file using the genimage tool.
+ > This is getting better, and better, and better. We're down to 3.83% of
+ > failures for yesterday. Today will be a little bit worse, with
+ > currently 4.19% failures. But we're really below 5% of failures, which
+ > is very good.
 
-Looking at the source code, you CAN do it using the file argument
-(instead of files):
+Indeed, very nice!
 
-image boot.vfat {
-	vfat {
-		file uImage {
-		     image = "uImage.da850-lego-ev3"
-		}
-	}
-	size = 16M
-}
+ >> x86_64 | oracle-mysql-5.1.73 | NOK |
+ >> http://autobuild.buildroot.net/results/61074b69b81cd5c17a7f74dc1f7b31f3fc35fd8a
+ >> | ORPH
 
-The file section title (uImage) is the name the file will have inside
-the fat filesystem, and image is the source name.
+ > protocol.cc:27:40: error: narrowing conversion of ''\37777777776''
+ > from 'char' to 'uchar {aka unsigned char}' inside { } [-Wnarrowing]
+ >  static uchar eof_buff[1]= { (char) 254 }; /* Marker for end of fields */
 
-If this is really more readable than the symlink or not I don't know.
+ > I searched the oracle-mysql Git history, and I believe I might have a
+ > fix for this.
 
- > No reason. I will send another patch to update.
-
-Great, thanks!
+Hmm, isn't it just the cast that is wrong? E.G. it should be (uchar) 254
 
 -- 
 Bye, Peter Korsgaard
