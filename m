@@ -1,32 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:22:42 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump
-	3.18.x version to 3.18.53
-Message-ID: <20170517202329.8A746828E8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 May 2017 22:24:14 +0200
+Subject: [Buildroot] [git commit] oracle-mysql: add patch to fix gcc 6.x
+	build issue
+Message-ID: <20170517202503.66468826F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1b2912c0bb98042469bb552e3f1cb63fa64842b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=19e78e509e5e729437d2188b28aee7655340c67d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+
+ http://autobuild.buildroot.net/results/61074b69b81cd5c17a7f74dc1f7b31f3fc35fd8a/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../oracle-mysql/0008-fix-type-conversion.patch    | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0fd5f68..8159e41 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -218,7 +218,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "3.18.51"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.53"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+diff --git a/package/oracle-mysql/0008-fix-type-conversion.patch b/package/oracle-mysql/0008-fix-type-conversion.patch
+new file mode 100644
+index 0000000..65babf4
+--- /dev/null
++++ b/package/oracle-mysql/0008-fix-type-conversion.patch
+@@ -0,0 +1,22 @@
++Fix type conversion
++
++Fixes the following build error with gcc 6.x:
++
++protocol.cc:27:40: error: narrowing conversion of ''\37777777776'' from 'char' to 'uchar {aka unsigned char}' inside { } [-Wnarrowing]
++ static uchar eof_buff[1]= { (char) 254 }; /* Marker for end of fields */
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/server-tools/instance-manager/protocol.cc
++===================================================================
++--- a/server-tools/instance-manager/protocol.cc
+++++ b/server-tools/instance-manager/protocol.cc
++@@ -24,7 +24,7 @@
++ #include <m_string.h>
++ 
++ 
++-static uchar eof_buff[1]= { (char) 254 }; /* Marker for end of fields */
+++static uchar eof_buff[1]= { (uchar) 254 }; /* Marker for end of fields */
++ static const char ERROR_PACKET_CODE= (char) 255;
++ 
++ 
