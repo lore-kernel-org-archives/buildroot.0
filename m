@@ -1,50 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:40:10 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] git: security bump to
-	version 2.12.3
-Message-ID: <20170517204653.9825B82862@busybox.osuosl.org>
+Date: Wed, 17 May 2017 22:43:50 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/pulseview: fix a
+	build issue
+Message-ID: <20170517204653.B51C982862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c554c84ec1c0fab86eef41af63b990ac52b812fb
+commit: https://git.buildroot.net/buildroot/commit/?id=731997c0e1f6392ced5df9c9f7d1cc4641c32e53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-8386 - Git Shell Bypass By Abusing Less
+Backport an upstream patch fixing the build issue related to boost
+math definitions.
 
-For more details, see:
-https://insinuator.net/2017/05/git-shell-bypass-by-abusing-less-cve-2017-8386/
-http://www.mail-archive.com/git at vger.kernel.org/msg120982.html
+Fixes:
+http://autobuild.buildroot.net/results/e9f/e9f3f175e203529c44ecf92a34b82a0b3a473e34/
 
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4a146b933e7ab9c6d1b353f61a610c69bc95bc55)
+(cherry picked from commit f884abe4de72b942406ca16c4f54e02a0c57cce4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...txt-Avoid-fext-numeric-literals-not-suppo.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 9af360e..4782dcb 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 d21a9e23506e618d561fb25a8a7bd6134f927b86147930103487117a7a678c4a  git-2.12.2.tar.xz
-+sha256 016124c54ce2db7a4c2bd26b0de21fbf8f6bcaee04842aa221c7243141df4e42  git-2.12.3.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index b49ddd5..04cd577 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.12.2
-+GIT_VERSION = 2.12.3
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2, LGPLv2.1+
+diff --git a/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch b/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch
+new file mode 100644
+index 0000000..89137f2
+--- /dev/null
++++ b/package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch
+@@ -0,0 +1,28 @@
++From 6ad4d7a6f17edecc3523a7ab3d627f9a70dbacc1 Mon Sep 17 00:00:00 2001
++From: Uwe Hermann <uwe@hermann-uwe.de>
++Date: Wed, 17 May 2017 11:00:44 +0200
++Subject: [PATCH] CMakeLists.txt: Avoid -fext-numeric-literals, (not supported
++ by clang).
++
++This (re-)fixes bug #863.
++
++Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e8bc79f..e7e4432 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -395,6 +395,7 @@ add_definitions(${QT_DEFINITIONS} -DQT_NO_KEYWORDS)
++ add_definitions(-D__STDC_LIMIT_MACROS)
++ add_definitions(-Wall -Wextra)
++ add_definitions(-std=c++11)
+++add_definitions(-DBOOST_MATH_DISABLE_FLOAT128=1)
++ 
++ if(ENABLE_DECODE)
++ 	add_definitions(-DENABLE_DECODE)
++-- 
++2.9.3
++
