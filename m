@@ -1,71 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 May 2017 22:43:07 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] rabbitmq-c: openssl/popt
-	sub-options don't work in static linking
-Message-ID: <20170517204653.A661182862@busybox.osuosl.org>
+Date: Wed, 17 May 2017 22:46:06 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] fbgrab: explicitly build
+	fbgrab target to workaround gzip issue
+Message-ID: <20170517204653.D2A2E82862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdd9db2fae1bdecd14661a3234e1821efcf4fa2a
+commit: https://git.buildroot.net/buildroot/commit/?id=e75f4d6f636af65750486ff746f49d7c26946488
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-rabbitmq-c currently fails to build in a number of static linking
-situations, due to two issues:
+Fixes #9871
 
- - CMake FindOpenSSL module is buggy. Even though it uses pkg-config,
-   it doesn't use the information returned by pkg-config, and
-   therefore doesn't know about second order libraries that need be
-   part of the link for static linking to succeed. Due to this, -lz is
-   not passed, and therefore rabbitmq-c fails when linking against
-   libssl/libcrypto. This issue has been reported to upstream CMake at
-   https://gitlab.kitware.com/cmake/cmake/issues/16885.
+gzip reads default command line options from the environment variable GZIP.
+The fbgrab Makefile internally also uses a GZIP make variable to know what
+command to use to compress the manpage. Unfortunaly make will export the
+value of this make variable to the environment if GZIP is already present in
+the enviroment, confusing gzip (as 'gzip' isn't a valid command line argument).
 
- - popt might use libintl, but CMake doesn't know about that. For
-   autotools based packages, we typically work around this by passing
-   LIBS=, but CMake apparently has no equivalent to LIBS=.
+This can either be triggered by users having GZIP set in their environment
+(E.G.  for custom options), or by enabling BR2_REPRODUCIBLE, where we use
+this feature to force the -n option (to not store name/timestamp) to gzip.
 
-To workaround this, we only use the OpenSSL and Popt optional
-dependencies in dynamic linking situations.
+We don't really need to compress the manpage as it isn't installed anyway,
+so work around the issue by only building the fbgrab application.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/798dbe5e5fd0463bb2066cb115656795144c327f/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit beb6524225f12549a216183abc07745f8d36e764)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit be8d1efd1e5b8c4ceed34e8144d2cac075ab364e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rabbitmq-c/rabbitmq-c.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/fbgrab/fbgrab.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index 1ca35ad..eef09ec 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -21,14 +21,20 @@ else ifeq ($(BR2_SHARED_LIBS),y)
- RABBITMQ_C_CONF_OPTS += -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
- endif
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 4455423..5cdf028 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -11,7 +11,7 @@ FBGRAB_LICENSE = GPLv2
+ FBGRAB_LICENSE_FILES = COPYING
  
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+# CMake OpenSSL detection is buggy, and doesn't properly use
-+# pkg-config, so it fails when statically linking. See
-+# https://gitlab.kitware.com/cmake/cmake/issues/16885.
-+ifeq ($(BR2_PACKAGE_OPENSSL):$(BR2_STATIC_LIBS),y:)
- RABBITMQ_C_CONF_OPTS += -DENABLE_SSL_SUPPORT=ON
- RABBITMQ_C_DEPENDENCIES += openssl
- else
- RABBITMQ_C_CONF_OPTS += -DENABLE_SSL_SUPPORT=OFF
- endif
+ define FBGRAB_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) fbgrab
+ endef
  
--ifeq ($(BR2_PACKAGE_POPT), y)
-+# Popt is sometimes linked against libintl, but CMake doesn't know
-+# about that, and there's no way to tell manually CMake to link
-+# against an additional library.
-+ifeq ($(BR2_PACKAGE_POPT):$(BR2_STATIC_LIBS),y:)
- RABBITMQ_C_CONF_OPTS += -DBUILD_TOOLS=ON
- RABBITMQ_C_DEPENDENCIES += popt
- else
+ define FBGRAB_INSTALL_TARGET_CMDS
