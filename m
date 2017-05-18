@@ -1,80 +1,43 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 18 May 2017 10:47:46 +0100
-Subject: [Buildroot] [PATCH v5 next 2/2] cmake: bump version to 3.8.1
-In-Reply-To: <20170518094746.657-1-Vincent.Riera@imgtec.com>
-References: <20170518094746.657-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170518094746.657-2-Vincent.Riera@imgtec.com>
+Date: Thu, 18 May 2017 11:32:34 +0100
+Subject: [Buildroot] [PATCH next] redis: bump version to 3.2.9
+Message-ID: <20170518103234.27730-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cmake depends on rhash, but host-cmake doesn't. This is because we use
-the bundled dependencies for host-cmake but not for target.
+Remove sha1 hash. Upstream provides now a sha256 hash.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-Changes v4 -> v5:
-- Nothing
-Changes v3 -> v4:
-- Nothing
-Changes v2 -> v3:
-- Bump version to 3.8.1
-- Change LIBRHASH references to RHASH
-Changes v1 -> v2:
-- Added explanation in the commit log about why rhash dependency is
-  needed for cmake but not for host-cmake. (Arnout)
----
- package/cmake/Config.in  | 1 +
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/redis/redis.hash | 4 +---
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index 64ab15418..e7bd14e69 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -29,6 +29,7 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_XZ
- 	select BR2_PACKAGE_LIBUV
-+	select BR2_PACKAGE_RHASH
- 	help
- 	  CTest is a testing tool distributed as a part of CMake. It
- 	  can be used to automate updating (using CVS for example),
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 13c023759..2aea9bc11 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.7/cmake-3.7.2-SHA-256.txt
--sha256 dc1246c4e6d168ea4d6e042cfba577c1acd65feea27e56f5ff37df920c30cae0  cmake-3.7.2.tar.gz
-+# From http://www.cmake.org/files/v3.8/cmake-3.8.1-SHA-256.txt
-+sha256 ce5d9161396e06501b00e52933783150a87c33080d4bdcef461b5b7fd24ac228  cmake-3.8.1.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index d9eea3285..10af41504 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 3cd86470b..2eef91cc0 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,2 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
+-# Calculated based on the hash above
+-sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
++sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 3f4956cf3..67e9e7e8c 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CMAKE_VERSION_MAJOR = 3.7
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
-+CMAKE_VERSION_MAJOR = 3.8
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
- CMAKE_LICENSE_FILES = Copyright.txt
-@@ -22,7 +22,7 @@ CMAKE_LICENSE_FILES = Copyright.txt
- #   the system-wide libraries instead of rebuilding and statically
- #   linking with the ones bundled into the CMake sources.
- 
--CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz libuv
-+CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz libuv rhash
- 
- CMAKE_CONF_OPTS = \
- 	-DKWSYS_LFS_WORKS=TRUE \
+-REDIS_VERSION = 3.2.8
++REDIS_VERSION = 3.2.9
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
 2.13.0
