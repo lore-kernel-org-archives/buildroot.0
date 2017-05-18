@@ -1,71 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 18 May 2017 07:57:54 +0300
-Subject: [Buildroot] [PATCH v2 1/3] toolchain: workaround musl/kernel
- headers conflict
-In-Reply-To: <20170517153353.0bd784c9@free-electrons.com>
-References: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
- <20170517153353.0bd784c9@free-electrons.com>
-Message-ID: <20170518045754.ecwqdtj35acvzk6b@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 May 2017 08:31:52 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-17
+Message-ID: <20170518063152.500E82080B@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Wed, May 17, 2017 at 03:33:53PM +0200, Thomas Petazzoni wrote:
-> I'm reviving this old thread, because my colleague Florent (in Cc) has
-> found an issue with this patch.
-> 
-> On Thu, 10 Nov 2016 15:27:11 +0200, Baruch Siach wrote:
-> 
-> > +# [1] http://www.openwall.com/lists/musl/2015/10/08/2
-> > +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-> > +define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
-> > +	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
-> > +		$(STAGING_DIR)/usr/include/linux/libc-compat.h
-> > +endef
-> 
-> The problem with this is that libc-compat.h was introduced only in
-> kernel 3.12 (it seems). Therefore, trying to build a musl toolchain
-> with kernel headers 3.10 currently fails, with this $(SED) command
-> failing because $(STAGING_DIR)/usr/include/linux/libc-compat.h does not
-> exist.
-> 
-> So, we could add a kernel headers >= 3.12 to the condition to make the
-> build work, but then we wouldn't have the fix that these modifications
-> provide to avoid conflicts between libc and kernel headers.
-> 
-> Do you know if kernel headers < 3.12 are unaffected by the libc/kernel
-> headers conflict issue? If they are, do you know what the solution is
-> for kernel headers < 3.12 ?
+Build statistics for 2017-05-17
+================================
 
-I have not tested kernel headers earlier than v3.12. Having a look at the 
-headers and the log of kernel commit cfd280c91253cc28 (net: sync some IP 
-headers with glibc), I'm pretty sure that the same issue also affects older 
-kernels.
+      successes : 206
+       failures : 8  
+       timeouts : 0  
+          TOTAL : 214
 
-Should we just disallow build of musl toolchain with older kernels? Something 
-like:
+Classification of failures by reason
+====================================
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 91cddc237429..396f6d8ec2a5 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -74,6 +74,8 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	# sh2 nommu is supported by musl, but we don't have support
- 	# for it in Buildroot.
- 	depends on BR2_USE_MMU
-+	# We need the kernel libc-compat.h header
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 	select BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  This option selects musl as the C library for the
+           modem-manager-1.6.4 | 2 
+                      icu-58.2 | 1 
+                libepoxy-1.4.1 | 1 
+                    mpv-0.25.0 | 1 
+               pulseview-0.3.0 | 1 
+             rabbitmq-c-v0.8.0 | 1 
+                       unknown | 1 
 
-baruch
+
+Detail of failures
+===================
+
+        bfin |                       icu-58.2 | NOK | http://autobuild.buildroot.net/results/4828d9fc18283bda4c07af2c67f8ca9490dca28d | ORPH
+    mips64el |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/c29d2ffffe960c5d3e565ff00706ca6fd7622f1d |     
+      xtensa |            modem-manager-1.6.4 | NOK | http://autobuild.buildroot.net/results/94c111c8014aa98998efa0af2ed726002b7fdca6 |     
+microblazeel |            modem-manager-1.6.4 | NOK | http://autobuild.buildroot.net/results/fb7f7cb3bd903d90c9d9bd97a49acbfb6d137f29 |     
+         arm |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/501101000e36ea17deab198b12f9f611641f43fd |     
+      x86_64 |                pulseview-0.3.0 | NOK | http://autobuild.buildroot.net/results/8dbaaca8d894bb335bc876a9f36a874364dd34f4 |     
+         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/3e15dad9ee4803cf465277b999dca69318fda09d |     
+     powerpc |                        unknown | NOK | http://autobuild.buildroot.net/results/ea140fa600616f20e282902f25899f600741b123 |     
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+http://autobuild.buildroot.net
