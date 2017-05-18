@@ -1,31 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 May 2017 18:23:47 +0200
-Subject: [Buildroot] ~/buildroot/packages
-In-Reply-To: <CACo+m-trSpHVnX6ccbqQM+1x1FSfBWSj39C8Nk2+961VCT3hLQ@mail.gmail.com>
- (moi moi's message of "Thu, 18 May 2017 17:08:42 +0200")
-References: <CACo+m-trSpHVnX6ccbqQM+1x1FSfBWSj39C8Nk2+961VCT3hLQ@mail.gmail.com>
-Message-ID: <87ziea2kx8.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 18 May 2017 13:51:26 -0500
+Subject: [Buildroot] [PATCH v3 1/3] refpolicy: new package
+In-Reply-To: <20170514174053.26140-2-Adamduskett@outlook.com>
+References: <20170514174053.26140-1-Adamduskett@outlook.com>
+ <20170514174053.26140-2-Adamduskett@outlook.com>
+Message-ID: <CANQCQpaRQPFAtiYuEQ-MPwU6ZPHBLx3cHvXQkmLAx=ZgLYSNGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "moi" == moi moi <shmrcoffee800@gmail.com> writes:
+Adam,
 
- > Is it normal behaviour of buildroot to populate the packages folder with
- > 40+MBs of various .mk and .in files? Does buildroot copy packages from the
- > host system? I have run menuconfig once but have not buildt a system with
- > make. There are even folder for opencv and fetchmail there (which are
- > present on my host system). I run Debian 8.7.
+On Sun, May 14, 2017 at 12:40 PM, Adam Duskett <aduskett@gmail.com> wrote:
+> The patch is for adding selinux reference policy (refpolicy).
+> It is a complete SELinux policy that can be used as the system policy
+> for a variety of systems and used as the basis for creating other policies.
+>
 
-Well, not populate as in Buildroot generating this data - But yes, these
-files are part of Buildroot. This is the meta data describing how to
-build the 2000+ packages available in Buildroot.
+I pulled this in and tried to build our existing project which uses
+our version of the patchset.  Here's what I ran into below. Is your
+build machine by chance a selinux enabled distro?
 
-Please have a look at the manual for details:
+Creating targeted policy.conf
+cat tmp/pre_te_files.conf tmp/all_attrs_types.conf
+tmp/global_bools.conf tmp/only_te_rules.conf tmp/all_post.conf >
+policy.conf
+Compiling and installing targeted
+/accts/mlweber1/target_build/target/etc/selinux/targeted/policy/policy.
+/usr/bin/checkpolicy -c 30 -U deny  policy.conf -o
+/accts/mlweber1/target_build/target/etc/selinux/targeted/policy/policy.
+make[2]: /usr/bin/checkpolicy: Command not found
+make[2]: *** [/accts/mlweber1/target_build/target/etc/selinux/targeted/policy/policy.]
+Error 127
+make[1]: *** [/accts/mlweber1/target_build/build/refpolicy-cs_RELEASE_2_20170204/.stamp_target_installed]
+Error 2
+make: *** [_all] Error 2
 
-https://buildroot.org/downloads/manual/manual.html
-
--- 
-Bye, Peter Korsgaard
+Matt
