@@ -1,27 +1,39 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 18 May 2017 07:37:54 -0500
-Subject: [Buildroot] [PATCH 1/1] package/avrdude: fix gpio definition,
-	add kconfig option
-In-Reply-To: <1495061934-57465-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1495061934-57465-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpbh3RSGKfkEiO=appPaJ67rOOqq7W5AxJm9yPAzBL+aWg@mail.gmail.com>
+From: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+Date: Thu, 18 May 2017 16:03:16 +0300
+Subject: [Buildroot] [PATCH 1/1] toolchain-external: dynamic loader symlink
+	to actual location of musl libc.so
+Message-ID: <1495112596-26182-1-git-send-email-ilya.kuzmich@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Test whenever musl libc.so located at /lib or /usr/lib and create dynamic
+library loader symlink accordingly.
 
-On Wed, May 17, 2017 at 5:58 PM, Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> From: Sam Voss <samuel.voss@rockwellcollins.com>
->
-> Fix bug causing '--enable-linuxgpio' to not work
-> due to a misnamed definition. This patch has been
-> submitted upstream at https://github.com/kcuzner/avrdude/pull/15.
+Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-The upstream portion was merged yesterday, will send a v2 later today
-removing it and bumping the version.
-
-Matt
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 9670350..438d714 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -489,7 +489,12 @@ else
+ MUSL_ARCH = $(ARCH)
+ endif
+ define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+-	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
++	if test -e $(STAGING_DIR)/usr/lib/libc.so; then \
++		LD_LINK_TARGET=../usr/lib/libc.so ;\
++	else \
++	    LD_LINK_TARGET=libc.so ;\
++	fi ;\
++	ln -sf "$${LD_LINK_TARGET}" $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1 ;
+ endef
+ endif
+ 
+-- 
+2.7.4
