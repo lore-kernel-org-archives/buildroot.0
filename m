@@ -1,43 +1,58 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 18 May 2017 11:32:34 +0100
-Subject: [Buildroot] [PATCH next] redis: bump version to 3.2.9
-Message-ID: <20170518103234.27730-1-Vincent.Riera@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 18 May 2017 14:17:44 +0300
+Subject: [Buildroot] [PATCH v2 1/3] toolchain: workaround musl/kernel
+ headers conflict
+In-Reply-To: <20170518091030.66a9cbee@free-electrons.com>
+References: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
+ <20170517153353.0bd784c9@free-electrons.com>
+ <20170518045754.ecwqdtj35acvzk6b@tarshish>
+ <20170518091030.66a9cbee@free-electrons.com>
+Message-ID: <20170518111744.pto4qg53yttqe4a2@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove sha1 hash. Upstream provides now a sha256 hash.
+Hi Thomas,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/redis/redis.hash | 4 +---
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 4 deletions(-)
+On Thu, May 18, 2017 at 09:10:30AM +0200, Thomas Petazzoni wrote:
+> On Thu, 18 May 2017 07:57:54 +0300, Baruch Siach wrote:
+> 
+> > I have not tested kernel headers earlier than v3.12. Having a look at the 
+> > headers and the log of kernel commit cfd280c91253cc28 (net: sync some IP 
+> > headers with glibc), I'm pretty sure that the same issue also affects older 
+> > kernels.
+> > 
+> > Should we just disallow build of musl toolchain with older kernels? Something 
+> > like:
+> 
+> That's one option, though a bit annoying, no? Just for this "small"
+> reason, we prevent people from using musl toolchains on kernels older
+> than 3.12 ?
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 3cd86470b..2eef91cc0 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,2 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
--# Calculated based on the hash above
--sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
-+sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 3f4956cf3..67e9e7e8c 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
+Would that be better (untested)?
+
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index e29837357a27..e15ceeb426fa 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -21,8 +21,10 @@ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+ # IFF_DORMANT and IFF_ECHO, add another macro to suppress them in the
+ # kernel header, and avoid macro/enum conflict.
  #
- ################################################################################
- 
--REDIS_VERSION = 3.2.8
-+REDIS_VERSION = 3.2.9
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
++# Kernel version 3.12 introduced the libc-compat.h header.
++#
+ # [1] http://www.openwall.com/lists/musl/2015/10/08/2
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),yy)
+ define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
+ 	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
+ 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
+
+baruch
+
 -- 
-2.13.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
