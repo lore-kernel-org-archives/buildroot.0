@@ -1,51 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 17 May 2017 22:28:43 -0500
-Subject: [Buildroot] [PATCH 1/1] package/avrdude: fix gpio definition,
- add kconfig option
-In-Reply-To: <20170518032306.mbvzslnrmtrh45it@tarshish>
-References: <1495061934-57465-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20170518032306.mbvzslnrmtrh45it@tarshish>
-Message-ID: <CANQCQpZr+7AfiP9DeLhHDENtU8qNvedGoKb+rO3dzOFYsg4B_g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 18 May 2017 06:34:00 +0300
+Subject: [Buildroot] [PATCH 2/2 v2] package/qt5base: link with -latomic
+ for sparc
+In-Reply-To: <6bdfcdff79478a9835c4c5d0296f8f62d5b64d66.1495055675.git.yann.morin.1998@free.fr>
+References: <cover.1495055675.git.yann.morin.1998@free.fr>
+ <6bdfcdff79478a9835c4c5d0296f8f62d5b64d66.1495055675.git.yann.morin.1998@free.fr>
+Message-ID: <20170518033400.oh4mq2zywtjs7dhr@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Hi Yann,
 
-On May 17, 2017 10:23 PM, "Baruch Siach" <baruch@tkos.co.il> wrote:
+On Wed, May 17, 2017 at 11:15:29PM +0200, Yann E. MORIN wrote:
+> Qt 5.8 needs atomic operations, which are provided in libatomic when it
+> exists, ike on sparc with gcc >= 4.8.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/49b/49bc9345b9849c9c3c53ace290c534ff7bb98683/
+>     http://autobuild.buildroot.org/results/9f2/9f213406954be51dfcad76ebdce8b73850842180/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> 
+> ---
+> Changes v1 -> v2:
+>   - condition is on HAS_LIBATOMIC, not on BR2_sparc  (Thomas)
 
-Hi Matt, Sam,
-
-On Wed, May 17, 2017 at 05:58:54PM -0500, Matt Weber wrote:
-> +if BR2_PACKAGE_AVRDUDE
-> +
-> +config BR2_PACKAGE_AVRDUDE_LINUXGPIO
-> +     bool "linux gpio"
-> +     depends on BR2_PACKAGE_AVRDUDE
-> +     help
-> +       Enables the tool to use the Linux Sysfs based GPIO framework for
-GPIO
-> +       access by configuring AVRDude with '--enable-linuxgpio'.
-> +endif
-
-How big is the size impact of enabling this option? If it is relatively
-small,
-enabling gpio support unconditionally would be better, I think.
-
-
-Agreed, the only reason we made it optional was compatibility, as currently
-it's disabled.
-
-
+The commit subject line should also to match that change.
 
 baruch
 
---
+-- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
 =}------------------------------------------------ooO--U--Ooo------------{=
    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170517/a0f23692/attachment.html>
