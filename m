@@ -1,41 +1,71 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 18 May 2017 06:34:00 +0300
-Subject: [Buildroot] [PATCH 2/2 v2] package/qt5base: link with -latomic
- for sparc
-In-Reply-To: <6bdfcdff79478a9835c4c5d0296f8f62d5b64d66.1495055675.git.yann.morin.1998@free.fr>
-References: <cover.1495055675.git.yann.morin.1998@free.fr>
- <6bdfcdff79478a9835c4c5d0296f8f62d5b64d66.1495055675.git.yann.morin.1998@free.fr>
-Message-ID: <20170518033400.oh4mq2zywtjs7dhr@tarshish>
+Date: Thu, 18 May 2017 07:57:54 +0300
+Subject: [Buildroot] [PATCH v2 1/3] toolchain: workaround musl/kernel
+ headers conflict
+In-Reply-To: <20170517153353.0bd784c9@free-electrons.com>
+References: <b2085612a223f59a2f7ef18a9bd97603226aa03d.1478784433.git.baruch@tkos.co.il>
+ <20170517153353.0bd784c9@free-electrons.com>
+Message-ID: <20170518045754.ecwqdtj35acvzk6b@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Thomas,
 
-On Wed, May 17, 2017 at 11:15:29PM +0200, Yann E. MORIN wrote:
-> Qt 5.8 needs atomic operations, which are provided in libatomic when it
-> exists, ike on sparc with gcc >= 4.8.
+On Wed, May 17, 2017 at 03:33:53PM +0200, Thomas Petazzoni wrote:
+> I'm reviving this old thread, because my colleague Florent (in Cc) has
+> found an issue with this patch.
 > 
-> Fixes:
->     http://autobuild.buildroot.org/results/49b/49bc9345b9849c9c3c53ace290c534ff7bb98683/
->     http://autobuild.buildroot.org/results/9f2/9f213406954be51dfcad76ebdce8b73850842180/
+> On Thu, 10 Nov 2016 15:27:11 +0200, Baruch Siach wrote:
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
+> > +# [1] http://www.openwall.com/lists/musl/2015/10/08/2
+> > +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> > +define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
+> > +	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
+> > +		$(STAGING_DIR)/usr/include/linux/libc-compat.h
+> > +endef
 > 
-> ---
-> Changes v1 -> v2:
->   - condition is on HAS_LIBATOMIC, not on BR2_sparc  (Thomas)
+> The problem with this is that libc-compat.h was introduced only in
+> kernel 3.12 (it seems). Therefore, trying to build a musl toolchain
+> with kernel headers 3.10 currently fails, with this $(SED) command
+> failing because $(STAGING_DIR)/usr/include/linux/libc-compat.h does not
+> exist.
+> 
+> So, we could add a kernel headers >= 3.12 to the condition to make the
+> build work, but then we wouldn't have the fix that these modifications
+> provide to avoid conflicts between libc and kernel headers.
+> 
+> Do you know if kernel headers < 3.12 are unaffected by the libc/kernel
+> headers conflict issue? If they are, do you know what the solution is
+> for kernel headers < 3.12 ?
 
-The commit subject line should also to match that change.
+I have not tested kernel headers earlier than v3.12. Having a look at the 
+headers and the log of kernel commit cfd280c91253cc28 (net: sync some IP 
+headers with glibc), I'm pretty sure that the same issue also affects older 
+kernels.
+
+Should we just disallow build of musl toolchain with older kernels? Something 
+like:
+
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 91cddc237429..396f6d8ec2a5 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -74,6 +74,8 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	# sh2 nommu is supported by musl, but we don't have support
+ 	# for it in Buildroot.
+ 	depends on BR2_USE_MMU
++	# We need the kernel libc-compat.h header
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	select BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  This option selects musl as the C library for the
 
 baruch
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
 =}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
