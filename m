@@ -1,37 +1,16 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 May 2017 09:13:39 +0200
-Subject: [Buildroot] Rootfs and bzimage question?
-In-Reply-To: <1495151500802-165253.post@n4.nabble.com>
-References: <1495151500802-165253.post@n4.nabble.com>
-Message-ID: <20170519091339.6ba67ec0@free-electrons.com>
+From: Riko Ho <antonius.riko@gmail.com>
+Date: Fri, 19 May 2017 18:40:49 +0800
+Subject: [Buildroot] qemu_x86_64_defconfig ==> X11 ?
+In-Reply-To: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
+References: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
+Message-ID: <a15bebf0-17c7-9378-65d0-5f8c606ac4a5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Everyone,
 
-On Thu, 18 May 2017 16:51:40 -0700 (PDT), bianchi wrote:
-
-> I learned using build root and finished compiling, how to use bzImage and
-> rootfs.ext3 into mydisk.img to make it bootable in qemu. My host is Ubuntu
-> 16.04. 
-> So far I got kernel panic, can not find rootfs.
-> Any clues or scripts doing it?
-
-If you're trying to make a Buildroot system that boots under Qemu,
-please use our Qemu defconfigs:
-
-$ make list-defconfigs | grep qemu
-
-And follow the instructions in the appropriate board/qemu/*/readme.txt
-file.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+How can I make X11 server / X windows run based from qemu_x86_64_defconfig ?
+Thanks
