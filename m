@@ -1,45 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 May 2017 15:27:54 +0200
-Subject: [Buildroot] [git commit branch/next] redis: bump version to 3.2.9
-Message-ID: <20170519132814.D1E757F8CA@busybox.osuosl.org>
+Date: Fri, 19 May 2017 15:29:28 +0200
+Subject: [Buildroot] [PATCH] toolchain: limit musl workaround to kernel
+	headers 3.12+
+In-Reply-To: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 19 May 2017 07:20:37 +0300")
+References: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
+Message-ID: <87a8692cw7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34761b2c409cf4bfd8be46e2e531adeafb39b742
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Remove sha1 hash. Upstream provides now a sha256 hash.
+ > The libc-compat.h first appeared in kernel version 3.12. Trying to build a
+ > musl toolchain using earlier headers leads to the following failure:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash | 4 +---
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ > /bin/sed: can't read .../output/host/usr/arm-buildroot-linux-musleabi/sysroot/usr/include/linux/libc-compat.h: No such file or directory
+ > package/pkg-generic.mk:266: recipe for target '.../output/build/toolchain/.stamp_staging_installed' failed
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 3cd8647..2eef91c 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,2 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
--# Calculated based on the hash above
--sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
-+sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 3f4956c..67e9e7e 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 3.2.8
-+REDIS_VERSION = 3.2.9
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ > Don't apply the sed patch to older headers.
+
+ > Reported-by: Florent Jacquet <florent.jacquet@free-electrons.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
