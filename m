@@ -1,51 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 May 2017 08:31:57 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-18
-Message-ID: <20170519063157.2654320766@mail.free-electrons.com>
+From: Riko Ho <antonius.riko@gmail.com>
+Date: Fri, 19 May 2017 14:34:43 +0800
+Subject: [Buildroot] Xorg and buildroot ?
+In-Reply-To: <20170519063157.2654320766@mail.free-electrons.com>
+References: <20170519063157.2654320766@mail.free-electrons.com>
+Message-ID: <a5661180-e821-196a-ce4e-76fbb4cab7ea@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I tried to run xorg in qemu and got, it's X86_64 architecture and I can 
+not see complete xorg.conf.
 
-Build statistics for 2017-05-18
-================================
+===
 
-      successes : 276
-       failures : 10 
-       timeouts : 1  
-          TOTAL : 287
-
-Classification of failures by reason
-====================================
-
-                libepoxy-1.4.1 | 2 
-                 mplayer-1.3.0 | 2 
-                cegui06-0.6.2b | 1 
-           modem-manager-1.6.4 | 1 
-                     php-7.1.5 | 1 
-                 qt5base-5.8.0 | 1 
-                  quagga-1.1.1 | 1 
-                   taskd-1.1.0 | 1 
-vpnc-b1243d29e0c00312ead038... | 1 
+# startx
+expr: warning: '^/dev/tty[0-9]\+$': using '^' as the first character
+of a basic regular expression is not portable; it is ignored
+xauth:  file /root/.serverauth.1032 does not exist
+xauth:  file /root/.Xauthority does not exist
 
 
-Detail of failures
-===================
+X.Org X Server 1.14.7
+Release Date: 2014-06-05
+X Protocol Version 11, Revision 0
+Build Operating System: Linux 4.4.0-75-generic x86_64
+Current Operating System: Linux RikoRoot 4.11.0 #1 SMP Fri May 19 
+11:38:11 AWST 2017 x86_64
+Kernel command line: console=ttyS0
+Build Date: 19 May 2017  10:53:50AM
 
-         arm |                 cegui06-0.6.2b | TIM | http://autobuild.buildroot.net/results/614a7ffd798552d9fa14e2550fd93de82279032d |     
-         arm |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/6a495d25f3d87ae00254258fa862884ffada09b4 |     
-      xtensa |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/44c7fa9f2ecda70ed4fa58019d31a39739914662 |     
-         arm |            modem-manager-1.6.4 | NOK | http://autobuild.buildroot.net/results/8beab6e29fad77eea8a0f3e3129dcde2b7cfdcc8 |     
-         arm |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/5dfdd18bc9aa0713bf8eb8e5f374932686b13d9b |     
-      x86_64 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/29f572c35815b8e474f137039a7db9f8499fb0e3 |     
-        i686 |                      php-7.1.5 | NOK | http://autobuild.buildroot.net/results/6e1cb08d385b1a406c0c0d4960bfb279d3137020 | ORPH
-       sparc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/995656a6f9fff594af6b10297253788683a0098f |     
-         arc |                   quagga-1.1.1 | NOK | http://autobuild.buildroot.net/results/ffc84eb08e32dabdccc579d67c8d1f8ae71ab1e4 | ORPH
-microblazeel |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/b8c18a2cc5e7170695c273e8017a4771096167b6 |     
-       sparc | vpnc-b1243d29e0c00312ead038... | NOK | http://autobuild.buildroot.net/results/54c2daad582fab6558815608ea388e8ec82ea384 | ORPH
+Current version of pixman: 0.34.0
+     Before reporting problems, check http://wiki.x.org
+     to make sure that you have the latest version.
+Markers: (--) probed, (**) from config file, (==) default setting,
+     (++) from command line, (!!) notice, (II) informational,
+     (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+(==) Log file: "/var/log/Xorg.0.log", Time: Fri May 19 06:32:26 2017
+(==) Using config file: "/etc/X11/xorg.conf"
+(==) Using system config directory "/usr/share/X11/xorg.conf.d"
+Initializing built-in extension Generic Event Extension
+Initializing built-in extension SHAPE
+Initializing built-in extension MIT-SHM
+Initializing built-in extension XInputExtension
+Initializing built-in extension XTEST
+Initializing built-in extension BIG-REQUESTS
+Initializing built-in extension SYNC
+Initializing built-in extension XKEYBOARD
+Initializing built-in extension XC-MISC
+Initializing built-in extension XINERAMA
+Initializing built-in extension XFIXES
+Initializing built-in extension RENDER
+Initializing built-in extension RANDR
+Initializing built-in extension DAMAGE
+Initializing built-in extension DOUBLE-BUFFER
+Initializing built-in extension RECORD
+Initializing built-in extension DPMS
+Initializing built-in extension X-Resource
+Initializing built-in extension XVideo
+Initializing built-in extension XVideo-MotionCompensation
+Initializing built-in extension XFree86-VidModeExtension
+Initializing built-in extension XFree86-DGA
+(EE)
+Fatal server error:
+(EE) no screens found(EE)
+(EE)
+Please consult the The X.Org Foundation support
+      at http://wiki.x.org
+  for help.
+(EE) Please also check the log file at "/var/log/Xorg.0.log" for 
+additional information.
+(EE)
+(EE) Server terminated with error (1). Closing log file.
+
+====
+
+Any ideas ?
+
 
 -- 
-http://autobuild.buildroot.net
+*
+
+/*******/
+Sent by Ubuntu LTS 16.04,
+??,
+Regards,
+Riko Ho
+/*******/
+
+*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170519/0d1aaa76/attachment.html>
