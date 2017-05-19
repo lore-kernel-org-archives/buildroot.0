@@ -1,57 +1,43 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 19 May 2017 03:29:16 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-05-17
-In-Reply-To: <20170518175758.6fb2c43d@free-electrons.com>
-References: <20170518063152.500E82080B@mail.free-electrons.com>
- <20170518175758.6fb2c43d@free-electrons.com>
-Message-ID: <20170519012916.GA6202@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 19 May 2017 07:20:37 +0300
+Subject: [Buildroot] [PATCH] toolchain: limit musl workaround to kernel
+	headers 3.12+
+Message-ID: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+The libc-compat.h first appeared in kernel version 3.12. Trying to build a
+musl toolchain using earlier headers leads to the following failure:
 
-> Hello,
-> 
-> >       successes : 206
-> >        failures : 8  
-> 
-> Wowo!
-> 
-> On 8 failures, we have:
-> 
->  - 5 already fixed
->  - 1 with a patch in progress
->  - 2 that need investigation
-> 
-> Looks good!
-> 
-> On Thu, 18 May 2017 08:31:52 +0200 (CEST), Thomas Petazzoni wrote:
-> 
-> >         bfin |                       icu-58.2 | NOK | http://autobuild.buildroot.net/results/4828d9fc18283bda4c07af2c67f8ca9490dca28d | ORPH
-> 
-> Toolchain issue:
-> 
->   bfin-buildroot-linux-uclibc/bin/ld: LINKER BUG: .rofixup section size mismatch
-> 
-> Waldemar, do you have an idea? Is this a recent regression?
+/bin/sed: can't read .../output/host/usr/arm-buildroot-linux-musleabi/sysroot/usr/include/linux/libc-compat.h: No such file or directory
+package/pkg-generic.mk:266: recipe for target '.../output/build/toolchain/.stamp_staging_installed' failed
 
-We have seen this error in the past and we could fix it by applying
-following patch:
-https://git.busybox.net/buildroot/tree/package/binutils/2.26.1/0905-bfin-rofixup-bug.patch
+Don't apply the sed patch to older headers.
 
-It seems the workaround does not work when FDPIC + static +
--Wl,--gc-sections used. It seems icu is adding  -Wl,--gc-sections
-only in the static case on a Linux host. 
+Reported-by: Florent Jacquet <florent.jacquet@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ toolchain/toolchain/toolchain.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-This is a minor linker optimization. 
-
-How should we handle this? Patching configure.ac and autoreconf the
-package?
-
-best regards
- Waldemar
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index e29837357a27..e15ceeb426fa 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -21,8 +21,10 @@ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+ # IFF_DORMANT and IFF_ECHO, add another macro to suppress them in the
+ # kernel header, and avoid macro/enum conflict.
+ #
++# Kernel version 3.12 introduced the libc-compat.h header.
++#
+ # [1] http://www.openwall.com/lists/musl/2015/10/08/2
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),yy)
+ define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
+ 	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
+ 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
+-- 
+2.11.0
