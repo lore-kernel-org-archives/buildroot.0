@@ -1,48 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 May 2017 15:11:41 +0200
-Subject: [Buildroot] [PATCH] cppcms: fix build on machines with
-	libgpg-error installed
-In-Reply-To: <1495058001-29457-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 17 May 2017 23:53:21 +0200")
-References: <1495058001-29457-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vaox2dpu.fsf@dell.be.48ers.dk>
+Date: Fri, 19 May 2017 15:14:07 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/avrdude: add linux gpio
+	kconfig option
+In-Reply-To: <1495120094-44581-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Thu, 18 May 2017 10:08:13 -0500")
+References: <1495120094-44581-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87r2zl2dls.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > In configuration where target architecture == host architecture, and
- > libgpg-error is installed system-wide with development files, the build
- > of cppcms fails with:
+ > From: Sam Voss <samuel.voss@rockwellcollins.com>
+ > Add the option to enable linux sysfs gpio framework
+ > configure option in menuconfig.
 
- > /home/test/buildroot/output/host/usr/bin/x86_64-amd-linux-gnu-g++  --sysroot=/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -Wextra  -DNDEBUG   CMakeFiles/base64_test.dir/tests/base64_test.cpp.o  -o base64_test  -L/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib -Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib -rdynamic libcppcms.so.1.0.5 booster/libbooster.so.0.0.3 -lpthread /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpcre.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libdl.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_set_errno at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_init at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_destroy at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_syserror at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_errno at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_unlock at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strerror at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strsource at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_lock at GPG_ERROR_1.0'
+ > Signed-off-by: Sam Voss <samuel.voss@rockwellcollins.com>
+ > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
- > The problem comes from the
- > "-Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib"
- > option, which tells the linker to search for libraries in /usr/lib.
+ > ---
 
- > This commit fixes that by asking CMake to not add any rpath when
- > building cppcms.
+ > Change Log
 
- > Fixes:
+ > v1 -> v2
+ >  - upstream accepted linux gpio fix, removed patch
 
- >   http://autobuild.buildroot.net/results/a7eb1ede552ae14f409cfd7bd877bcf25ca69a74/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+Didn't you just agree with Baruch that we could just enable it
+unconditially and not have a Config.in option for it?
 
 -- 
 Bye, Peter Korsgaard
