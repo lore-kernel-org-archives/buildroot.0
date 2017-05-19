@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 May 2017 09:08:09 +0200
-Subject: [Buildroot] Xorg and buildroot ?
-In-Reply-To: <a5661180-e821-196a-ce4e-76fbb4cab7ea@gmail.com>
-References: <20170519063157.2654320766@mail.free-electrons.com>
- <a5661180-e821-196a-ce4e-76fbb4cab7ea@gmail.com>
-Message-ID: <20170519090809.15b167b7@free-electrons.com>
+Date: Fri, 19 May 2017 09:13:39 +0200
+Subject: [Buildroot] Rootfs and bzimage question?
+In-Reply-To: <1495151500802-165253.post@n4.nabble.com>
+References: <1495151500802-165253.post@n4.nabble.com>
+Message-ID: <20170519091339.6ba67ec0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 19 May 2017 14:34:43 +0800, Riko Ho wrote:
+On Thu, 18 May 2017 16:51:40 -0700 (PDT), bianchi wrote:
 
-> Fatal server error:
-> (EE) no screens found(EE)
-> (EE)
-> Please consult the The X.Org Foundation support
->       at http://wiki.x.org
->   for help.
-> (EE) Please also check the log file at "/var/log/Xorg.0.log" for 
-> additional information.
-> (EE)
-> (EE) Server terminated with error (1). Closing log file.
-> 
-> ====
-> 
-> Any ideas ?
+> I learned using build root and finished compiling, how to use bzImage and
+> rootfs.ext3 into mydisk.img to make it bootable in qemu. My host is Ubuntu
+> 16.04. 
+> So far I got kernel panic, can not find rootfs.
+> Any clues or scripts doing it?
 
-What graphics HW do you have, what is your Buildroot .config, and which
-version of Buildroot are you using ?
+If you're trying to make a Buildroot system that boots under Qemu,
+please use our Qemu defconfigs:
+
+$ make list-defconfigs | grep qemu
+
+And follow the instructions in the appropriate board/qemu/*/readme.txt
+file.
 
 Best regards,
 
