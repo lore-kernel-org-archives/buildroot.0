@@ -1,209 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 May 2017 15:27:29 +0200
-Subject: [Buildroot] [git commit branch/next] ltp-testsuite: bump version to
-	20170516
-Message-ID: <20170519132814.C3A2380279@busybox.osuosl.org>
+Date: Fri, 19 May 2017 15:27:54 +0200
+Subject: [Buildroot] [git commit branch/next] redis: bump version to 3.2.9
+Message-ID: <20170519132814.D1E757F8CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58d34c15adc7dde2569cd78ca1cb0bfb72deb1b6
+commit: https://git.buildroot.net/buildroot/commit/?id=34761b2c409cf4bfd8be46e2e531adeafb39b742
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patch accepted upstream.
+Remove sha1 hash. Upstream provides now a sha256 hash.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-unused-and-not-available-for-uClibc-ng-l.patch | 157 ---------------------
- package/ltp-testsuite/ltp-testsuite.hash           |   4 +-
- package/ltp-testsuite/ltp-testsuite.mk             |   2 +-
- 3 files changed, 3 insertions(+), 160 deletions(-)
+ package/redis/redis.hash | 4 +---
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/ltp-testsuite/0004-rusers.h-is-unused-and-not-available-for-uClibc-ng-l.patch b/package/ltp-testsuite/0004-rusers.h-is-unused-and-not-available-for-uClibc-ng-l.patch
-deleted file mode 100644
-index fc3dce9..0000000
---- a/package/ltp-testsuite/0004-rusers.h-is-unused-and-not-available-for-uClibc-ng-l.patch
-+++ /dev/null
-@@ -1,157 +0,0 @@
--From 780bec6c2742231ca73d4dee51c727815cf857b3 Mon Sep 17 00:00:00 2001
--From: Erico Nunes <nunes.erico@gmail.com>
--Date: Fri, 30 Sep 2016 17:45:31 +0200
--Subject: [PATCH] rusers.h is unused and not available for uClibc-ng / libtirpc
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--[Erico: Rebase for ltp 20160920]
--Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-----
-- .../tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c    | 1 -
-- .../rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c         | 1 -
-- .../rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c         | 1 -
-- .../rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c   | 1 -
-- .../rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c  | 1 -
-- .../rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c     | 1 -
-- .../rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c     | 1 -
-- .../rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c      | 1 -
-- .../rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c   | 1 -
-- .../rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c  | 1 -
-- .../rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c     | 1 -
-- 11 files changed, 11 deletions(-)
--
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c
--index 7f157e1..728c023 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c
--index d9a3111..8d80a5e 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c
--index cabffc7..a4d1d6f 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c
--index 4f10466..863aec7 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c
--index 290f357..e849468 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c
--index 55bac16..8c1800b 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c
--index 09d1bf9..384a00d 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c
--index 3e15306..285eb21 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c
--index a7030a2..1f2690a 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c
--index 06f4740..faa8ef6 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
--diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c
--index ca38aa0..974f5fb 100644
----- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c
--+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c
--@@ -30,7 +30,6 @@
-- #include <time.h>
-- #include <rpc/rpc.h>
-- #include <sys/socket.h>
---#include <rpcsvc/rusers.h>
-- #include <utmp.h>
-- #include <sys/time.h>
-- #include <netdb.h>
---- 
--2.7.4
--
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index b8311e0..68b9523 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,2 +1,2 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20170116/ltp-full-20170116.tar.xz.sha1
--sha1 b42047fe0d30db9b2c760bd1ab901ecb133835fc  ltp-full-20170116.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20170516/ltp-full-20170516.tar.xz.sha1
-+sha1 bd5210b73b14708c88449089a3a3c64ace3cd22a  ltp-full-20170516.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 7f26bd2..1790309 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 3cd8647..2eef91c 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,2 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
+-# Calculated based on the hash above
+-sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
++sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 3f4956c..67e9e7e 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LTP_TESTSUITE_VERSION = 20170116
-+LTP_TESTSUITE_VERSION = 20170516
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+-REDIS_VERSION = 3.2.8
++REDIS_VERSION = 3.2.9
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
