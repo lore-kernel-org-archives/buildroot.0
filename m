@@ -1,240 +1,209 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 May 2017 15:26:55 +0200
-Subject: [Buildroot] [git commit branch/next] lxc: bump to version 2.0.8
-Message-ID: <20170519132814.B578E81D5C@busybox.osuosl.org>
+Date: Fri, 19 May 2017 15:27:29 +0200
+Subject: [Buildroot] [git commit branch/next] ltp-testsuite: bump version to
+	20170516
+Message-ID: <20170519132814.C3A2380279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b318e08dd87e43d9ee86965b592cf43b81b8675b
+commit: https://git.buildroot.net/buildroot/commit/?id=58d34c15adc7dde2569cd78ca1cb0bfb72deb1b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove 0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch as
-it has been integrated upstream
+Drop patch accepted upstream.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-5985-Ensure-target-netns-is-caller-owned.patch | 189 ---------------------
- package/lxc/lxc.hash                               |   2 +-
- package/lxc/lxc.mk                                 |   2 +-
- 3 files changed, 2 insertions(+), 191 deletions(-)
+ ...-unused-and-not-available-for-uClibc-ng-l.patch | 157 ---------------------
+ package/ltp-testsuite/ltp-testsuite.hash           |   4 +-
+ package/ltp-testsuite/ltp-testsuite.mk             |   2 +-
+ 3 files changed, 3 insertions(+), 160 deletions(-)
 
-diff --git a/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch b/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
+diff --git a/package/ltp-testsuite/0004-rusers.h-is-unused-and-not-available-for-uClibc-ng-l.patch b/package/ltp-testsuite/0004-rusers.h-is-unused-and-not-available-for-uClibc-ng-l.patch
 deleted file mode 100644
-index 79d19b3..0000000
---- a/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
+index fc3dce9..0000000
+--- a/package/ltp-testsuite/0004-rusers.h-is-unused-and-not-available-for-uClibc-ng-l.patch
 +++ /dev/null
-@@ -1,189 +0,0 @@
--From 16af238036a5464ae8f2420ed3af214f0de875f9 Mon Sep 17 00:00:00 2001
--From: Christian Brauner <christian.brauner@ubuntu.com>
--Date: Sat, 28 Jan 2017 13:02:34 +0100
--Subject: [PATCH] CVE-2017-5985: Ensure target netns is caller-owned
+@@ -1,157 +0,0 @@
+-From 780bec6c2742231ca73d4dee51c727815cf857b3 Mon Sep 17 00:00:00 2001
+-From: Erico Nunes <nunes.erico@gmail.com>
+-Date: Fri, 30 Sep 2016 17:45:31 +0200
+-Subject: [PATCH] rusers.h is unused and not available for uClibc-ng / libtirpc
 -
--Before this commit, lxc-user-nic could potentially have been tricked into
--operating on a network namespace over which the caller did not hold privilege.
--
--This commit ensures that the caller is privileged over the network namespace by
--temporarily dropping privilege.
--
--Launchpad: https://bugs.launchpad.net/ubuntu/+source/lxc/+bug/1654676
--Reported-by: Jann Horn <jannh@google.com>
--Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-[Erico: Rebase for ltp 20160920]
+-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ----
-- src/lxc/lxc_user_nic.c | 119 ++++++++++++++++++++++++++++++++++++-------------
-- 1 file changed, 87 insertions(+), 32 deletions(-)
+- .../tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c    | 1 -
+- .../rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c         | 1 -
+- .../rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c         | 1 -
+- .../rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c   | 1 -
+- .../rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c  | 1 -
+- .../rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c     | 1 -
+- .../rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c     | 1 -
+- .../rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c      | 1 -
+- .../rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c   | 1 -
+- .../rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c  | 1 -
+- .../rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c     | 1 -
+- 11 files changed, 11 deletions(-)
 -
--diff --git a/src/lxc/lxc_user_nic.c b/src/lxc/lxc_user_nic.c
--index 409a53a1..96dc3986 100644
----- a/src/lxc/lxc_user_nic.c
--+++ b/src/lxc/lxc_user_nic.c
--@@ -50,6 +50,14 @@
-- #include "utils.h"
-- #include "network.h"
-- 
--+#define usernic_debug_stream(stream, format, ...)                              \
--+	do {                                                                   \
--+		fprintf(stream, "%s: %d: %s: " format, __FILE__, __LINE__,     \
--+			__func__, __VA_ARGS__);                                \
--+	} while (false)
--+
--+#define usernic_error(format, ...) usernic_debug_stream(stderr, format, __VA_ARGS__)
--+
-- static void usage(char *me, bool fail)
-- {
-- 	fprintf(stderr, "Usage: %s lxcpath name pid type bridge nicname\n", me);
--@@ -670,68 +678,115 @@ again:
-- }
-- 
-- #define VETH_DEF_NAME "eth%d"
---
-- static int rename_in_ns(int pid, char *oldname, char **newnamep)
-- {
---	int fd = -1, ofd = -1, ret, ifindex = -1;
--+	uid_t ruid, suid, euid;
--+	int fret = -1;
--+	int fd = -1, ifindex = -1, ofd = -1, ret;
-- 	bool grab_newname = false;
-- 
-- 	ofd = lxc_preserve_ns(getpid(), "net");
-- 	if (ofd < 0) {
---		fprintf(stderr, "Failed opening network namespace path for '%d'.", getpid());
---		return -1;
--+		usernic_error("Failed opening network namespace path for '%d'.", getpid());
--+		return fret;
-- 	}
-- 
-- 	fd = lxc_preserve_ns(pid, "net");
-- 	if (fd < 0) {
---		fprintf(stderr, "Failed opening network namespace path for '%d'.", pid);
---		return -1;
--+		usernic_error("Failed opening network namespace path for '%d'.", pid);
--+		goto do_partial_cleanup;
--+	}
--+
--+	ret = getresuid(&ruid, &euid, &suid);
--+	if (ret < 0) {
--+		usernic_error("Failed to retrieve real, effective, and saved "
--+			      "user IDs: %s\n",
--+			      strerror(errno));
--+		goto do_partial_cleanup;
--+	}
--+
--+	ret = setns(fd, CLONE_NEWNET);
--+	close(fd);
--+	fd = -1;
--+	if (ret < 0) {
--+		usernic_error("Failed to setns() to the network namespace of "
--+			      "the container with PID %d: %s.\n",
--+			      pid, strerror(errno));
--+		goto do_partial_cleanup;
-- 	}
-- 
---	if (setns(fd, 0) < 0) {
---		fprintf(stderr, "setns to container network namespace\n");
---		goto out_err;
--+	ret = setresuid(ruid, ruid, 0);
--+	if (ret < 0) {
--+		usernic_error("Failed to drop privilege by setting effective "
--+			      "user id and real user id to %d, and saved user "
--+			      "ID to 0: %s.\n",
--+			      ruid, strerror(errno));
--+		// COMMENT(brauner): It's ok to jump to do_full_cleanup here
--+		// since setresuid() will succeed when trying to set real,
--+		// effective, and saved to values they currently have.
--+		goto do_full_cleanup;
-- 	}
---	close(fd); fd = -1;
--+
-- 	if (!*newnamep) {
-- 		grab_newname = true;
-- 		*newnamep = VETH_DEF_NAME;
---		if (!(ifindex = if_nametoindex(oldname))) {
---			fprintf(stderr, "failed to get netdev index\n");
---			goto out_err;
--+
--+		ifindex = if_nametoindex(oldname);
--+		if (!ifindex) {
--+			usernic_error("Failed to get netdev index: %s.\n", strerror(errno));
--+			goto do_full_cleanup;
-- 		}
-- 	}
---	if ((ret = lxc_netdev_rename_by_name(oldname, *newnamep)) < 0) {
---		fprintf(stderr, "Error %d renaming netdev %s to %s in container\n", ret, oldname, *newnamep);
---		goto out_err;
--+
--+	ret = lxc_netdev_rename_by_name(oldname, *newnamep);
--+	if (ret < 0) {
--+		usernic_error("Error %d renaming netdev %s to %s in container.\n", ret, oldname, *newnamep);
--+		goto do_full_cleanup;
-- 	}
--+
-- 	if (grab_newname) {
---		char ifname[IFNAMSIZ], *namep = ifname;
--+		char ifname[IFNAMSIZ];
--+		char *namep = ifname;
--+
-- 		if (!if_indextoname(ifindex, namep)) {
---			fprintf(stderr, "Failed to get new netdev name\n");
---			goto out_err;
--+			usernic_error("Failed to get new netdev name: %s.\n", strerror(errno));
--+			goto do_full_cleanup;
-- 		}
--+
-- 		*newnamep = strdup(namep);
-- 		if (!*newnamep)
---			goto out_err;
--+			goto do_full_cleanup;
-- 	}
---	if (setns(ofd, 0) < 0) {
---		fprintf(stderr, "Error returning to original netns\n");
---		close(ofd);
---		return -1;
--+
--+	fret = 0;
--+
--+do_full_cleanup:
--+	ret = setresuid(ruid, euid, suid);
--+	if (ret < 0) {
--+		usernic_error("Failed to restore privilege by setting effective "
--+			      "user id to %d, real user id to %d, and saved user "
--+			      "ID to %d: %s.\n",
--+			      ruid, euid, suid, strerror(errno));
--+		fret = -1;
--+		// COMMENT(brauner): setns() should fail if setresuid() doesn't
--+		// succeed but there's no harm in falling through; keeps the
--+		// code cleaner.
-- 	}
---	close(ofd);
-- 
---	return 0;
--+	ret = setns(ofd, CLONE_NEWNET);
--+	if (ret < 0) {
--+		usernic_error("Failed to setns() to original network namespace "
--+			      "of PID %d: %s.\n",
--+			      ofd, strerror(errno));
--+		fret = -1;
--+	}
-- 
---out_err:
---	if (ofd >= 0)
---		close(ofd);
---	if (setns(ofd, 0) < 0)
---		fprintf(stderr, "Error returning to original network namespace\n");
--+do_partial_cleanup:
-- 	if (fd >= 0)
-- 		close(fd);
---	return -1;
--+	close(ofd);
--+
--+	return fret;
-- }
-- 
-- /*
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c
+-index 7f157e1..728c023 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c
+-index d9a3111..8d80a5e 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c
+-index cabffc7..a4d1d6f 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c
+-index 4f10466..863aec7 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c
+-index 290f357..e849468 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c
+-index 55bac16..8c1800b 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c
+-index 09d1bf9..384a00d 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c
+-index 3e15306..285eb21 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c
+-index a7030a2..1f2690a 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c
+-index 06f4740..faa8ef6 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
+-diff --git a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c
+-index ca38aa0..974f5fb 100644
+---- a/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c
+-+++ b/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c
+-@@ -30,7 +30,6 @@
+- #include <time.h>
+- #include <rpc/rpc.h>
+- #include <sys/socket.h>
+--#include <rpcsvc/rusers.h>
+- #include <utmp.h>
+- #include <sys/time.h>
+- #include <netdb.h>
 --- 
--2.11.0
+-2.7.4
 -
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index f80c88d..086b139 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index b8311e0..68b9523 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	1c09c075f06ec029f86fa6370c7d379494ff4c66a129eda17af7b7b41e055f5d	lxc-2.0.7.tar.gz
-+sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 9412df5..4ba6d9f 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
+-# From: https://github.com/linux-test-project/ltp/releases/download/20170116/ltp-full-20170116.tar.xz.sha1
+-sha1 b42047fe0d30db9b2c760bd1ab901ecb133835fc  ltp-full-20170116.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20170516/ltp-full-20170516.tar.xz.sha1
++sha1 bd5210b73b14708c88449089a3a3c64ace3cd22a  ltp-full-20170516.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 7f26bd2..1790309 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LXC_VERSION = 2.0.7
-+LXC_VERSION = 2.0.8
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
+-LTP_TESTSUITE_VERSION = 20170116
++LTP_TESTSUITE_VERSION = 20170516
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
