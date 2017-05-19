@@ -1,57 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 May 2017 23:04:41 +0200
-Subject: [Buildroot] [PATCH 2/2] fetchmail: adjust zlib handling
-In-Reply-To: <1495227881-1899-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1495227881-1899-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1495227881-1899-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 May 2017 23:31:30 +0200
+Subject: [Buildroot] [PATCH] grep: gettext is not mandatory
+Message-ID: <1495229490-4820-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fetchmail itself does not need zlib, there is no reference to it in its
-source, so the "select BR2_PACKAGE_ZLIB" is not necessary. Moreover,
-"zlib" was not added to FETCHMAIL_DEPENDENCIES (but was anyway in the
-dependency chain through openssl).
+Even when locales are enabled, gettext is not mandatory to build
+grep, i.e the following defconfig builds fine:
 
-In addition, LIBS="-lz" is only needed in static linking configurations,
-to help fetchmail's configure script find OpenSSL (it doesn't use
-pkg-config unfortunately).
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.02-1096-g54a5333.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_GETTEXT=y
+BR2_PACKAGE_GREP=y
+
+However, if gettext provides libintl, it gets used. Therefore this
+commit moves gettext from a mandatory dependency to an optional
+dependency.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fetchmail/Config.in    | 1 -
- package/fetchmail/fetchmail.mk | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ package/grep/Config.in | 1 -
+ package/grep/grep.mk   | 6 +++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
-index 7c14176..62f4f84 100644
---- a/package/fetchmail/Config.in
-+++ b/package/fetchmail/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_FETCHMAIL
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_CA_CERTIFICATES
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_ZLIB
+diff --git a/package/grep/Config.in b/package/grep/Config.in
+index 6427650..5b0471b 100644
+--- a/package/grep/Config.in
++++ b/package/grep/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GREP
+ 	bool "grep"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  Fetchmail - the mail-retrieval daemon
- 	  Client daemon to move mail from POP and IMAP to your local computer
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 49ce0d3..164b2f8 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -13,7 +13,11 @@ FETCHMAIL_LICENSE_FILES = COPYING
- FETCHMAIL_AUTORECONF = YES
- FETCHMAIL_GETTEXTIZE = YES
+ 	  The GNU regular expression matcher.
  
-+# needed to help fetchmail detecting the availability of openssl,
-+# because it doesn't use pkg-config
-+ifeq ($(BR2_STATIC_LIBS),y)
- FETCHMAIL_CONF_ENV += LIBS="-lz"
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 92a915c..5101dda 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -11,7 +11,11 @@ GREP_LICENSE = GPL-3.0+
+ GREP_LICENSE_FILES = COPYING
+ GREP_CONF_OPTS = --disable-perl-regexp \
+ 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
+-GREP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++
++# Can use libintl if available
++ifeq ($(BR2_PACKAGE_GETTEXT),y)
++GREP_DEPENDENCIES += gettext
 +endif
  
- FETCHMAIL_CONF_OPTS = \
- 	--with-ssl=$(STAGING_DIR)/usr
+ # link with iconv if enabled
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
 -- 
 2.7.4
