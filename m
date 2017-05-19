@@ -1,31 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 May 2017 15:43:03 +0200
-Subject: [Buildroot] [PATCH] cppcms: fix build on machines with
- libgpg-error installed
-In-Reply-To: <a75f7181-47dd-94fa-5e39-4d7e4f92d9e2@gmail.com>
-References: <1495058001-29457-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <a75f7181-47dd-94fa-5e39-4d7e4f92d9e2@gmail.com>
-Message-ID: <20170519154303.19097c93@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 19 May 2017 15:48:02 +0200
+Subject: [Buildroot] [PATCH] libminiupnpc: add upstream security fix for
+	CVE-2017-8798
+Message-ID: <20170519134802.9606-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+CVE-2017-8798: Integer signedness error in MiniUPnP MiniUPnPc v1.4.20101221
+through v2.0 allows remote attackers to cause a denial of service or
+possibly have unspecified other impact.
 
-On Thu, 18 May 2017 23:35:57 +0200, Romain Naour wrote:
+For more details including a PoC, see:
+https://github.com/tintinweb/pub/tree/master/pocs/cve-2017-8798
 
-> I'm unable to reproduce this issue since I don't have /usr/lib at the end of
-> "-Wl,-rpath" line.
-> 
-> Even trying to execute the command line manually it build fine here. (I checked
-> that libgpg-error is installed).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-miniupnpc-Fix-CVE-2017-8798.patch         | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
 
-Do you have libgpg-error-dev installed as well?
-
-Thomas
+diff --git a/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
+new file mode 100644
+index 000000000..25591fc4a
+--- /dev/null
++++ b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
+@@ -0,0 +1,59 @@
++From f0f1f4b22d6a98536377a1bb07e7c20e4703d229 Mon Sep 17 00:00:00 2001
++From: Thomas Bernard <miniupnp@free.fr>
++Date: Tue, 9 May 2017 12:00:47 +0200
++Subject: [PATCH] miniupnpc: Fix CVE-2017-8798
++
++Thanks to tin/Team OSTStrom
++
++[Peter: drop Changelog.txt modification, convert to -p1 format]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ miniupnpc/miniwget.c    | 12 +++++++-----
++ 1 file changed, 9 insertions(+), 5 deletions(-)
++
++diff --git a/miniwget.c b/miniwget.c
++index 37cb47b7..1eda57c5 100644
++--- a/miniwget.c
+++++ b/miniwget.c
++@@ -284,11 +284,12 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 							goto end_of_stream;
++ 						}
++ 					}
++-					bytestocopy = ((int)chunksize < (n - i))?chunksize:(unsigned int)(n - i);
+++					/* it is guaranteed that (n >= i) */
+++					bytestocopy = (chunksize < (unsigned int)(n - i))?chunksize:(unsigned int)(n - i);
++ 					if((content_buf_used + bytestocopy) > content_buf_len)
++ 					{
++ 						char * tmp;
++-						if(content_length >= (int)(content_buf_used + bytestocopy)) {
+++						if((content_length >= 0) && ((unsigned int)content_length >= (content_buf_used + bytestocopy))) {
++ 							content_buf_len = content_length;
++ 						} else {
++ 							content_buf_len = content_buf_used + bytestocopy;
++@@ -313,14 +314,15 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 			{
++ 				/* not chunked */
++ 				if(content_length > 0
++-				   && (int)(content_buf_used + n) > content_length) {
+++				   && (content_buf_used + n) > (unsigned int)content_length) {
++ 					/* skipping additional bytes */
++ 					n = content_length - content_buf_used;
++ 				}
++ 				if(content_buf_used + n > content_buf_len)
++ 				{
++ 					char * tmp;
++-					if(content_length >= (int)(content_buf_used + n)) {
+++					if(content_length >= 0
+++					   && (unsigned int)content_length >= (content_buf_used + n)) {
++ 						content_buf_len = content_length;
++ 					} else {
++ 						content_buf_len = content_buf_used + n;
++@@ -340,7 +342,7 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 			}
++ 		}
++ 		/* use the Content-Length header value if available */
++-		if(content_length > 0 && (int)content_buf_used >= content_length)
+++		if(content_length > 0 && content_buf_used >= (unsigned int)content_length)
++ 		{
++ #ifdef DEBUG
++ 			printf("End of HTTP content\n");
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
