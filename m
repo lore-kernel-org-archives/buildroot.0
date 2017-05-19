@@ -1,35 +1,76 @@
-From: Sam Voss <samuel.voss@rockwellcollins.com>
-Date: Fri, 19 May 2017 10:40:19 -0500
-Subject: [Buildroot] [PATCH v2 1/2] package/avrdude: add linux gpio
-	kconfig option
-In-Reply-To: <CANQCQpZ_2FD3KG5oH=U=fc3nZExhmKCaFcpHTx2Ykx2XcyXSSg@mail.gmail.com>
-References: <1495120094-44581-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87r2zl2dls.fsf@dell.be.48ers.dk>
- <CANQCQpagwa4KgHS0gw-YL_U2-KUV5_tuFM5a0gqt_1TahN6Vjw@mail.gmail.com>
- <8760gw3ntd.fsf@dell.be.48ers.dk>
- <CANQCQpZ_2FD3KG5oH=U=fc3nZExhmKCaFcpHTx2Ykx2XcyXSSg@mail.gmail.com>
-Message-ID: <CAH=K+6nK0gqwcNY2cNE6Lo3dOt6qMOjY5LZcVq_gQ4RhaXx=Hw@mail.gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Fri, 19 May 2017 08:44:53 -0700
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump to version
+	10.1.23
+In-Reply-To: <87bmqugre8.fsf@dell.be.48ers.dk>
+References: <20170508153716.16809-1-bluemrp9@gmail.com>
+ <87efvzno6c.fsf@dell.be.48ers.dk>
+ <7f264a9b-c5cf-feaf-a8bf-929d112fb7f0@gmail.com>
+ <87bmqugre8.fsf@dell.be.48ers.dk>
+Message-ID: <049c9e3d-2262-476b-008a-12e53d0a8598@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> I notice that we are using a fork of avrdude which hasn't really been
->> updated significantly since 2013 instead of the official one which had a
->> release in 2016. Any reason we shouldn't be using the official one
->> instead?
->
-> Very good question, we are unsure.  I've added a few people that have
-> modified that package to this email to ask.
->
-> Wojciech / Samuel / Gregory,  any reason to stay on this fork of avrdude?
+Peter, All,
 
-The biggest reason is due to the fact that the spi functionality has
-not been merged back into mainline, and requests to do it have fallen
-onto deaf ears. I sent an email recently to the mainline avrdude
-asking about getting this functionality merged in and have yet to hear
-anything from them.
 
--- 
-Sam Voss
+On 5/15/2017 6:51 AM, Peter Korsgaard wrote:
+>>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+> Hi,
+>
+>   >> Thanks, I (obviously) want to apply this, but something odd is going on
+>   >> with the licensing. COPYING.LESSER has been removed by this commit:
+>   >>
+>   >> https://github.com/MariaDB/server/commit/577915def8
+>   >>
+>   >> But the client library IS listed as being LGPL:
+>   >>
+>   >> https://mariadb.com/kb/en/mariadb/mariadb-connector-c/
+>   >>
+>   >> And same for the "old" one:
+>   >>
+>   >> https://mariadb.com/kb/en/mariadb/lgpl-mysql-client-library-32358/
+>   >>
+>   >> Grepping around in the 10.1.23 tarball, I don't see a lot of references
+>   >> to Lesser og LGPL.
+>   >>
+>   >> Now, I know next to nothing about mariadb. Do you have any idea what is
+>   >> going on here?
+>   >>
+>   > I am really not sure what is going on there.
+>
+> :/
+>
+> Could you perhaps try to contact the mariadb developers?
+>
+Below is the response that I received on this issue:
+
+https://jira.mariadb.org/browse/MDEV-12297
+
+This is the full story:
+
+* All MySQL code, including libmysqlclient, is GPLv2
+* When implementing async API for libmysqlclient, we have licensed it
+   under LGPL. That's when COPYING.LESSER was added. Apparently someone
+   thought that having both COPYING and COPYING.LESSER means that the
+   project includes both GPL and LGPL components
+* Then we got MDEV-12297, saying Github suddenly started showing MariaDB
+   license as LGPL
+* Github uses a library "licensee" to detect the license, and it was a
+   recent bugfix in licensee to return "LGPL" when both COPYING and
+   COPYING.LESSER are present.
+* Indeed,https://www.gnu.org/licenses/gpl-howto.html  says that LGPL
+   licensed projects should have both files. So licensee and Github were
+   right.
+* At that point in time we already have all async API code in
+   MariaDB Connector/C library (which is LGPL as a whole), so the
+   simplest solution was to remove COPYING.LESSER, basically relicensing
+   async API for libmysqlclient under GPLv2.
+
+Practically it changes nothing.
+MariaDB server was and is GPLv2, we cannot change that.
+libmysqlclient library was and is GPLv2, we cannot change that.
+MariaDB Connector/C was and is LGPLv2.1
