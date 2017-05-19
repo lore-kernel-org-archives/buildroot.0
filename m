@@ -1,82 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 May 2017 21:44:54 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 19 May 2017 22:39:58 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2017-05-18
-In-Reply-To: <20170519063157.2654320766@mail.free-electrons.com>
+In-Reply-To: <20170519214454.08c259df@free-electrons.com>
 References: <20170519063157.2654320766@mail.free-electrons.com>
-Message-ID: <20170519214454.08c259df@free-electrons.com>
+ <20170519214454.08c259df@free-electrons.com>
+Message-ID: <20170519203958.GA3259@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, Peter (S), All,
 
-On Fri, 19 May 2017 08:31:57 +0200 (CEST), Thomas Petazzoni wrote:
+On 2017-05-19 21:44 +0200, Thomas Petazzoni spake thusly:
+> >        sparc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/995656a6f9fff594af6b10297253788683a0098f |     
+> This would be fixed by:
+>   https://patchwork.ozlabs.org/patch/763762/
+>   https://patchwork.ozlabs.org/patch/763763/
+> I was hoping to get some review/feedback from Peter Seiderer on this.
+> Peter, could you have a look?
 
->          arm |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/6a495d25f3d87ae00254258fa862884ffada09b4 |     
->       xtensa |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/44c7fa9f2ecda70ed4fa58019d31a39739914662 |     
+I am afraid that I may have to withdraw my patches.
 
-I've sent a patch for these:
+I was looking again at this build failure, and we can see that, prior to
+checking for atomicfptr, it already tests for libatomic:
 
-  https://patchwork.ozlabs.org/patch/764820/
+    Checking for 64 bit atomics... 
+    [...]
+    > atomic64.cpp:(.text+0x28): undefined reference to `__atomic_exchange_8'
+    > atomic64.cpp:(.text+0x48): undefined reference to `__atomic_compare_exchange_8'
+    [...]
+    test config.corelib.tests.atomic64 FAILED
+    Checking for 64 bit atomics in libatomic... 
+    [...]
+    [...]/sparc-linux-g++ [...] -Wl,-O1 -o atomic64 atomic64.o -lrt -lpthread -ldl -latomic
+     => source accepted.
+    test config.corelib.libraries.libatomic succeeded
 
->          arm |            modem-manager-1.6.4 | NOK | http://autobuild.buildroot.net/results/8beab6e29fad77eea8a0f3e3129dcde2b7cfdcc8 |     
+But then it forgets to link with it when it looks for atomicfptr:
 
-Already fixed by:
+    [...]/sparc-linux-g++ [...] -Wl,-O1 -o atomicfptr atomicfptr.o -lrt -lpthread -ldl
+    > atomicfptr.o: In function `test(std::atomic<void (*)(int)> volatile&)':
+    > atomicfptr.cpp:(.text+0x4c): undefined reference to `__atomic_compare_exchange_4'
 
-  https://git.buildroot.org/buildroot/commit/?id=2677210f545c3f3e8c52c973e08c3a460c521e5b
+So, in my opinion, the real and correct fix would be to have the
+atomicfptr test actually use the result of the previous libatomic test.
 
->          arm |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/5dfdd18bc9aa0713bf8eb8e5f374932686b13d9b |     
->       x86_64 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/29f572c35815b8e474f137039a7db9f8499fb0e3 |     
+I've had a (rather quick) look, and I have no idea on how to do this...
+Peter (Seiderer), we'd need some help on this...
 
-libpostproc/postprocess.c:94:53: error: expected ',' or ';' before 'FFMPEG_VERSION'
- const char postproc_ffversion[] = "FFmpeg version " FFMPEG_VERSION;
+Regards,
+Yann E. MORIN.
 
-This error is weird, it happens on different architectures. I'll try to reproduce.
-
->         i686 |                      php-7.1.5 | NOK | http://autobuild.buildroot.net/results/6e1cb08d385b1a406c0c0d4960bfb279d3137020 | ORPH
-
-/home/buildroot/autobuild/run/instance-1/output/host/usr/i686-buildroot-linux-uclibc/sysroot/usr/lib/libicui18n.a(umsg.o): In function `icu_58::MessageFormatAdapter::getArgTypeList(icu_58::MessageFormat const&, int&)':
-umsg.cpp:(.text._ZN6icu_5820MessageFormatAdapter14getArgTypeListERKNS_13MessageFormatERi+0x0): multiple definition of `icu_58::MessageFormatAdapter::getArgTypeList(icu_58::MessageFormat const&, int&)'
-ext/intl/msgformat/msgformat_helpers.o:msgformat_helpers.cpp:(.text+0x24): first defined here
-collect2: error: ld returned 1 exit status
-
-Static linking configuration.
-
->        sparc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/995656a6f9fff594af6b10297253788683a0098f |     
-
-This would be fixed by:
-
-  https://patchwork.ozlabs.org/patch/763762/
-  https://patchwork.ozlabs.org/patch/763763/
-
-I was hoping to get some review/feedback from Peter Seiderer on this.
-Peter, could you have a look?
-
->          arc |                   quagga-1.1.1 | NOK | http://autobuild.buildroot.net/results/ffc84eb08e32dabdccc579d67c8d1f8ae71ab1e4 | ORPH
-
-Compiler failure on ARC:
-
-  ospf_ri.c:839:1: internal compiler error: in extract_insn, at recog.c:2287
-
-Alexey, is this one already known?
-
-> microblazeel |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/b8c18a2cc5e7170695c273e8017a4771096167b6 |     
-
-Issue when linking against gnutls, itself linked against libunistring.
-Romain and I have already identified an issue in gnutls .pc file while
-investigating a ffmpeg build failure. It might be the same issue here.
-
->        sparc | vpnc-b1243d29e0c00312ead038... | NOK | http://autobuild.buildroot.net/results/54c2daad582fab6558815608ea388e8ec82ea384 | ORPH
-
-Classical libintl missing when statically linking.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
