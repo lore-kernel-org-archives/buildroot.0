@@ -1,56 +1,69 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 19 May 2017 17:51:15 -0300
-Subject: [Buildroot] [PATCH v2 3/3] imx6q-sabresd: Bump U-Boot and kernel
-	versions
-In-Reply-To: <1495227075-3762-1-git-send-email-festevam@gmail.com>
-References: <1495227075-3762-1-git-send-email-festevam@gmail.com>
-Message-ID: <1495227075-3762-3-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 May 2017 23:04:40 +0200
+Subject: [Buildroot] [PATCH 1/2] fetchmail: gettext is not mandatory
+Message-ID: <1495227881-1899-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2017.05 and kernel to 4.11.
+Even when locales are enabled, gettext is not mandatory to build
+fetchmail, i.e the following defconfig builds fine:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.02-1096-g54a5333.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_FETCHMAIL=y
+
+However, if gettext provides libintl, it gets used. Therefore this
+commit moves gettext from a mandatory dependency to an optional
+dependency.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes since v1:
-- Fix typo in commit log: 2017.05
+ package/fetchmail/Config.in    | 1 -
+ package/fetchmail/fetchmail.mk | 8 ++++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
- configs/imx6q-sabresd_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
-index cc37ecf..b26dc2a 100644
---- a/configs/imx6q-sabresd_defconfig
-+++ b/configs/imx6q-sabresd_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
+index 1e829a0..7c14176 100644
+--- a/package/fetchmail/Config.in
++++ b/package/fetchmail/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_FETCHMAIL
+ 	select BR2_PACKAGE_CA_CERTIFICATES
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Fetchmail - the mail-retrieval daemon
+ 	  Client daemon to move mail from POP and IMAP to your local computer
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 2c3786f..49ce0d3 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -20,8 +20,12 @@ FETCHMAIL_CONF_OPTS = \
  
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.11 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ FETCHMAIL_DEPENDENCIES = \
+ 	ca-certificates \
+-	openssl \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++	openssl
++
++# libintl is an optional dependency
++ifeq ($(BR2_PACKAGE_GETTEXT),y)
++FETCHMAIL_DEPENDENCIES += gettext
++endif
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -24,13 +24,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
+ # fetchmailconf.py script is not (yet) python3-compliant.
+ # Prevent the pyc-compilation with python-3 from failing by removing this
 -- 
 2.7.4
