@@ -1,63 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 May 2017 22:39:58 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-05-18
-In-Reply-To: <20170519214454.08c259df@free-electrons.com>
-References: <20170519063157.2654320766@mail.free-electrons.com>
- <20170519214454.08c259df@free-electrons.com>
-Message-ID: <20170519203958.GA3259@scaer>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 19 May 2017 17:49:16 -0300
+Subject: [Buildroot] [PATCH 1/3] boot/uboot: bump to version 2017.05
+Message-ID: <1495226958-3630-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter (S), All,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2017-05-19 21:44 +0200, Thomas Petazzoni spake thusly:
-> >        sparc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/995656a6f9fff594af6b10297253788683a0098f |     
-> This would be fixed by:
->   https://patchwork.ozlabs.org/patch/763762/
->   https://patchwork.ozlabs.org/patch/763763/
-> I was hoping to get some review/feedback from Peter Seiderer on this.
-> Peter, could you have a look?
-
-I am afraid that I may have to withdraw my patches.
-
-I was looking again at this build failure, and we can see that, prior to
-checking for atomicfptr, it already tests for libatomic:
-
-    Checking for 64 bit atomics... 
-    [...]
-    > atomic64.cpp:(.text+0x28): undefined reference to `__atomic_exchange_8'
-    > atomic64.cpp:(.text+0x48): undefined reference to `__atomic_compare_exchange_8'
-    [...]
-    test config.corelib.tests.atomic64 FAILED
-    Checking for 64 bit atomics in libatomic... 
-    [...]
-    [...]/sparc-linux-g++ [...] -Wl,-O1 -o atomic64 atomic64.o -lrt -lpthread -ldl -latomic
-     => source accepted.
-    test config.corelib.libraries.libatomic succeeded
-
-But then it forgets to link with it when it looks for atomicfptr:
-
-    [...]/sparc-linux-g++ [...] -Wl,-O1 -o atomicfptr atomicfptr.o -lrt -lpthread -ldl
-    > atomicfptr.o: In function `test(std::atomic<void (*)(int)> volatile&)':
-    > atomicfptr.cpp:(.text+0x4c): undefined reference to `__atomic_compare_exchange_4'
-
-So, in my opinion, the real and correct fix would be to have the
-atomicfptr test actually use the result of the previous libatomic test.
-
-I've had a (rather quick) look, and I have no idea on how to do this...
-Peter (Seiderer), we'd need some help on this...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 004f9c0..547822d 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2017.03"
++	bool "2017.05"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2017.03"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2017.05"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 9606d9f..e11d92f 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  f54baf3f9325bf444c7905f3a5b6f83680edb1e6e1a4d5f8a5ad80abe885113f  u-boot-2017.03.tar.bz2
++sha256  c8373949d7f0de1059e507b83a655d4cea539f75dc66ccdbb27adbd38d83095e  u-boot-2017.05.tar.bz2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
