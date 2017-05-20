@@ -1,45 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 May 2017 15:27:54 +0200
-Subject: [Buildroot] [git commit] redis: bump version to 3.2.9
-Message-ID: <20170601202852.292E88261C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 May 2017 16:17:07 +0200
+Subject: [Buildroot] [git commit] lxc: set libcap as an optional dependency
+Message-ID: <20170601202852.38DB08261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34761b2c409cf4bfd8be46e2e531adeafb39b742
+commit: https://git.buildroot.net/buildroot/commit/?id=5f16c203185011548bf6dd036e344521a46e0307
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove sha1 hash. Upstream provides now a sha256 hash.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/redis/redis.hash | 4 +---
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ package/lxc/Config.in |  1 -
+ package/lxc/lxc.hash  |  1 +
+ package/lxc/lxc.mk    | 13 ++++++++++++-
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 3cd8647..2eef91c 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,2 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
--# Calculated based on the hash above
--sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
-+sha256 6eaacfa983b287e440d0839ead20c2231749d5d6b78bbe0e0ffa3a890c59ff26  redis-3.2.9.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 3f4956c..67e9e7e 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index c5c75ea..22aa813 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_LXC
+ 	# build system forcefully builds a shared library
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
+-	select BR2_PACKAGE_LIBCAP
+ 	help
+ 	  Linux Containers (LXC), provides the ability to group and isolate
+ 	  of a set of processes in a jail by virtualizing and accounting the
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 086b139..801759a 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
++sha256	c79443c5db7e7defd53992d120cad2bc8afc2ff363b1e84ec31bc2b95ec5ca44	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 4ba6d9f..8a200e7 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -8,9 +8,13 @@ LXC_VERSION = 2.0.8
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPL-2.1+
+ LXC_LICENSE_FILES = COPYING
+-LXC_DEPENDENCIES = libcap host-pkgconf
++LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
  
--REDIS_VERSION = 3.2.8
-+REDIS_VERSION = 3.2.9
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
++# This patch fixes compilation without capabilities
++LXC_PATCH = \
++	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
++
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+@@ -22,6 +26,13 @@ else
+ LXC_CONF_OPTS += --disable-gnutls
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++LXC_CONF_OPTS += --enable-capabilities
++LXC_DEPENDENCIES += libcap
++else
++LXC_CONF_OPTS += --disable-capabilities
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ LXC_CONF_OPTS += --enable-seccomp
+ LXC_DEPENDENCIES += libseccomp
