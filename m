@@ -1,75 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 May 2017 16:17:07 +0200
-Subject: [Buildroot] [git commit branch/next] lxc: set libcap as an optional
-	dependency
-Message-ID: <20170520153521.C600B8284B@busybox.osuosl.org>
+Date: Sat, 20 May 2017 17:38:17 +0200
+Subject: [Buildroot] [PATCH 1/1] flex: remove
+ disable-flex-binary-and-doc patch.
+In-Reply-To: <20170520151752.22320-1-Adamduskett@outlook.com>
+References: <20170520151752.22320-1-Adamduskett@outlook.com>
+Message-ID: <20170520173817.01107631@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f16c203185011548bf6dd036e344521a46e0307
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lxc/Config.in |  1 -
- package/lxc/lxc.hash  |  1 +
- package/lxc/lxc.mk    | 13 ++++++++++++-
- 3 files changed, 13 insertions(+), 2 deletions(-)
+On Sat, 20 May 2017 11:17:52 -0400, Adam Duskett wrote:
+> Currently the flex makefile blindly links flex++ to flex in
+> host/usr/bin, but because of the patch
+> 0001-flex-disable-flex-binary-and-documentation.patch, this binary no
+> longer exists, so it's a invalid simlink to begin with.
+> 
+> Furthermore, host-checkpolicy requires host/usr/bin/flex to be present,
+> and will fail with a "host/usr/bin/flex: Command not found" error.
+> 
+> The patch itself says:
+> "Since we prevent the flex binary to be built, we also need to prevent
+> the documentation to be built, otherwise it will fail"
+> 
+> Since the flex binary needs to be built, this patch is no longer necessary.
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index c5c75ea..22aa813 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_LXC
- 	# build system forcefully builds a shared library
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
--	select BR2_PACKAGE_LIBCAP
- 	help
- 	  Linux Containers (LXC), provides the ability to group and isolate
- 	  of a set of processes in a jail by virtualizing and accounting the
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 086b139..801759a 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
-+sha256	c79443c5db7e7defd53992d120cad2bc8afc2ff363b1e84ec31bc2b95ec5ca44	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 4ba6d9f..8a200e7 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -8,9 +8,13 @@ LXC_VERSION = 2.0.8
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
--LXC_DEPENDENCIES = libcap host-pkgconf
-+LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
- 
-+# This patch fixes compilation without capabilities
-+LXC_PATCH = \
-+	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
-+
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-python --disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
-@@ -22,6 +26,13 @@ else
- LXC_CONF_OPTS += --disable-gnutls
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+LXC_CONF_OPTS += --enable-capabilities
-+LXC_DEPENDENCIES += libcap
-+else
-+LXC_CONF_OPTS += --disable-capabilities
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- LXC_CONF_OPTS += --enable-seccomp
- LXC_DEPENDENCIES += libseccomp
+There is indeed a bug in commit
+e9a5f5843d0685c69b3c379b91bb9cce8864b8a2 in that it no longer
+builds/installs the flex binary, for both the host and target variant.
+
+We do want to build the flex binary when building host-flex (since it's
+needed as a build dependency for other packages), but we do *NOT* want
+to build the flex binary when building the target flex, because
+building the flex binary is not possible on noMMU platforms.
+
+Bottom line: e9a5f5843d0685c69b3c379b91bb9cce8864b8a2 is bogus, but
+your patch is also bogus.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
