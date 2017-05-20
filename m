@@ -1,122 +1,55 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 20 May 2017 16:41:43 -0400
-Subject: [Buildroot] [PATCH v4 3/3] refpolicy: add ability to set default
-	state.
-In-Reply-To: <20170520204143.18154-1-Adamduskett@outlook.com>
-References: <20170520204143.18154-1-Adamduskett@outlook.com>
-Message-ID: <20170520204143.18154-3-Adamduskett@outlook.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sat, 20 May 2017 14:54:19 -0600
+Subject: [Buildroot] rpath and runpath
+In-Reply-To: <20170519212701.6824e4e3@free-electrons.com>
+References: <952e1471-12e9-7935-16c2-af56ad4fead7@ou.edu>
+ <20170519212701.6824e4e3@free-electrons.com>
+Message-ID: <a76b77be-c123-81ff-69f7-26508465e3c4@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SELinux requires a config file in /etc/selinux which controls the state
-of SELinux on the system.
 
-This config file has two options set in it:
-SELINUX which set's the state of selinux on boot.
-SELINUXTYPE which should equal the name of the policy.  In this case, the
-default name is targeted.
 
-This patch adds:
-- A choice menu on Config.in that allows the user to select a default
-  SELinux state.
+On 05/19/2017 01:27 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Fri, 19 May 2017 07:55:24 -0600, Steve Kenton wrote:
+>
+>> The chrpath command can display and/or modify the (pre LD_LIBRARY_PATH)
+>> rpath and (post LD_LIBRARY_PATH) runpath settings in the ELF executable.
+>> As an example looking at the host and target /usr/sbin directory gives
+>> the 95 lines of output below.
+>>
+>> I can see the reason for having the host executables use an RPATH to the
+>> build directory, although I think a relative path using "$ORIGIN" at
+>> link time which would allow the tree to be relocated would be even better.
+> The problem with $ORIGIN is that it contains a $, and this means it
+> easily gets expanded as a shell variable within Buildroot or inside the
+> package build system. So our attempts to use $ORIGIN directly during
+> the build have failed so far.
+>
+> Therefore, the approach we are moving towards is keeping the absolute
+> rpath during the build, and at the very end of the build, do a
+> post-processing step that replaces the absolute rpath with relative
+> rpath using $ORIGIN.
+>
+>> However, some of the target target executables also have RPATH to the
+>> build directory which makes no real sense to me and other have no RPATH
+>> or RUNPATH at all.
+> The plan is to get rid of them as well.
+>
+>> What is the purpose of this arrangement, or is it just a historical
+>> accident?
+> See the patch series from Wolfgang Grandegger at
+> http://lists.busybox.net/pipermail/buildroot/2017-March/185714.html.
+>
+> Best regards,
+>
+> Thomas
+Thanks for the information. Is this a long term project or something 
+likely to happen in the next few releases?
 
-- A basic config file that will be installed to
-  target/etc/selinux and will set SELINUX= to the selected state.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
-Changes v3 -> v4:
-  - Removed a trailing newline in refpolicy/config
-  - Removed Coverletter from patch set.
-
-Changes v2 -> v3:
-  - No changes.
-
-Changes v1 -> v2:
-  - Added cover letter explaining the new patch set. 
-
-  
- package/refpolicy/Config.in    | 26 ++++++++++++++++++++++++++
- package/refpolicy/config       |  8 ++++++++
- package/refpolicy/refpolicy.mk |  6 ++++++
- 3 files changed, 40 insertions(+)
- create mode 100644 package/refpolicy/config
-
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index 9d4e0e6..3eb2a7f 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -42,4 +42,30 @@ config BR2_PACKAGE_REFPOLICY_VERSION
- 	string "Policy version"
- 	default "30"
- 
-+choice
-+	prompt "SELinux default state"
-+	default BR2_PACKAGE_REFPOLICY_STATE_PERMISSIVE
-+
-+config BR2_PACKAGE_REFPOLICY_STATE_ENFORCING
-+	bool "Enforcing"
-+	help
-+	  SELinux security policy is enforced
-+
-+config BR2_PACKAGE_REFPOLICY_STATE_PERMISSIVE
-+	bool "Permissive"
-+	help
-+	  SELinux prints warnings instead of enforcing
-+
-+config BR2_PACKAGE_REFPOLICY_STATE_DISABLED
-+	bool "Disabled"
-+	help
-+	  No SELinux policy is loaded
-+endchoice
-+
-+config BR2_PACKAGE_REFPOLICY_STATE
-+	string
-+	default "permissive" if BR2_PACKAGE_REFPOLICY_STATE_PERMISSIVE
-+	default "enforcing" if BR2_PACKAGE_REFPOLICY_STATE_ENFORCING
-+	default "disabled" if BR2_PACKAGE_REFPOLICY_STATE_DISABLED
-+
- endif
-diff --git a/package/refpolicy/config b/package/refpolicy/config
-new file mode 100644
-index 0000000..087297c
---- /dev/null
-+++ b/package/refpolicy/config
-@@ -0,0 +1,8 @@
-+# This file controls the state of SELinux on the system.
-+# SELINUX= can take one of these three values:
-+#     enforcing - SELinux security policy is enforced.
-+#     permissive - SELinux prints warnings instead of enforcing.
-+#     disabled - No SELinux policy is loaded.
-+SELINUX=disabled
-+
-+SELINUXTYPE=targeted
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index fa02b5a..94a0cf8 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -23,6 +23,7 @@ REFPOLICY_DEPENDENCIES += \
- 	policycoreutils
- 
- REFPOLICY_PYINC = -I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/site-packages
-+REFPOLICY_NAME = "targeted"
- 
- # Cannot use multiple threads to build the reference policy
- REFPOLICY_MAKE = \
-@@ -48,6 +49,11 @@ endef
- 
- define REFPOLICY_INSTALL_TARGET_CMDS
- 	$(REFPOLICY_MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+	$(INSTALL) -m 0755 -D package/refpolicy/config \
-+		$(TARGET_DIR)/etc/selinux/config
-+
-+	$(SED) "/^SELINUX=/c\SELINUX=$(BR2_PACKAGE_REFPOLICY_STATE)" \
-+		$(TARGET_DIR)/etc/selinux/config
- endef
- 
- $(eval $(generic-package))
--- 
-2.9.3
+Steve Kenton
