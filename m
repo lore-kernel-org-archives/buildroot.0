@@ -1,53 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 May 2017 07:38:07 +0000
-Subject: [Buildroot] [Bug 9886] New: Build fails with "unexpected EOF while
- looking for matching `"'" if PATH contains a newline
-Message-ID: <bug-9886-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 May 2017 10:20:05 +0200
+Subject: [Buildroot] [PATCH] support/dependencies: check PATH does not carry
+	a \n
+Message-ID: <20170520082005.11668-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9886
+... otherwise it fails spectacularly as soon as PATH is referenced in a
+package rule (i.e. very soon, fortunately):
 
-            Bug ID: 9886
-           Summary: Build fails with "unexpected EOF while looking for
-                    matching `"'" if PATH contains a newline
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ciro.santilli at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+    >>> host-lzip 1.18 Downloading
+    /bin/bash: -c: line 0: unexpected EOF while looking for matching `"'
+    /bin/bash: -c: line 1: syntax error: unexpected end of file
 
-I know newlines in PATH are bad, but we shouldn't punish unsuspecting users
-with unhelpful error messages because of it :-)
+Fixes # 9886.
 
-Reproduce:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ciro Santilli <ciro.santilli@gmail.com>
+---
+ support/dependencies/dependencies.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-    git checkout 4d1c2c82e8945a5847d636458f3825c55529835b
-    make qemu_x86_64_defconfig
-    PATH="$PATH:"$'\n'":lalala" make
-
-Gives:
-
->>> host-lzip 1.18 Downloading
-/bin/bash: -c: line 0: unexpected EOF while looking for matching `"'
-/bin/bash: -c: line 1: syntax error: unexpected end of file
-package/pkg-generic.mk:139: recipe for target
-'/data/git/buildroot/output/build/host-lzip-1.18/.stamp_downloaded' failed
-make[1]: ***
-[/data/git/buildroot/output/build/host-lzip-1.18/.stamp_downloaded] Error 1
-Makefile:79: recipe for target '_all' failed
-make: *** [_all] Error 2
-
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 168d1960a1..925414cf18 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -29,6 +29,18 @@ if test -n "$LD_LIBRARY_PATH" ; then
+ 	fi
+ fi;
+ 
++# PATH should not contain a newline, otherwise it fails in spectacular ways
++# as soon as PATH is referenced in a package rule
++case "${PATH}" in
++(*"
++"*) printf "\n"
++    # Break the '\n' sequence, or a \n is printed (which is not what we want).
++    printf "Your PATH contains a newline (%sn) charater.\n" "\\"
++    printf "This doesn't work. Fix you PATH.\n"
++    exit 1
++    ;;
++esac
++
+ # sanity check for CWD in PATH. Having the current working directory
+ # in the PATH makes the toolchain build process break.
+ # try not to rely on egrep..
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
