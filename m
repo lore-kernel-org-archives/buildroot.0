@@ -1,51 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 May 2017 17:38:17 +0200
-Subject: [Buildroot] [PATCH 1/1] flex: remove
- disable-flex-binary-and-doc patch.
-In-Reply-To: <20170520151752.22320-1-Adamduskett@outlook.com>
-References: <20170520151752.22320-1-Adamduskett@outlook.com>
-Message-ID: <20170520173817.01107631@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 20 May 2017 18:27:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/sngrep: add libgcrypt missing
+	dependencies
+Message-ID: <20170520162751.30809-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Even if libgcrypt is selected at Kconfig level, it's missing from
+Makefile level.
 
-On Sat, 20 May 2017 11:17:52 -0400, Adam Duskett wrote:
-> Currently the flex makefile blindly links flex++ to flex in
-> host/usr/bin, but because of the patch
-> 0001-flex-disable-flex-binary-and-documentation.patch, this binary no
-> longer exists, so it's a invalid simlink to begin with.
-> 
-> Furthermore, host-checkpolicy requires host/usr/bin/flex to be present,
-> and will fail with a "host/usr/bin/flex: Command not found" error.
-> 
-> The patch itself says:
-> "Since we prevent the flex binary to be built, we also need to prevent
-> the documentation to be built, otherwise it will fail"
-> 
-> Since the flex binary needs to be built, this patch is no longer necessary.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Fixes:
+http://autobuild.buildroot.net/results/36c/36c28e7e49b31ed2398a67db2e9b08e3aad5a3ee
 
-There is indeed a bug in commit
-e9a5f5843d0685c69b3c379b91bb9cce8864b8a2 in that it no longer
-builds/installs the flex binary, for both the host and target variant.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ package/sngrep/sngrep.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We do want to build the flex binary when building host-flex (since it's
-needed as a build dependency for other packages), but we do *NOT* want
-to build the flex binary when building the target flex, because
-building the flex binary is not possible on noMMU platforms.
-
-Bottom line: e9a5f5843d0685c69b3c379b91bb9cce8864b8a2 is bogus, but
-your patch is also bogus.
-
-Best regards,
-
-Thomas
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 74b05b1..7ae271f 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -23,7 +23,7 @@ SNGREP_DEPENDENCIES += openssl
+ SNGREP_CONF_OPTS += --with-openssl --without-gnutls
+ # gnutls support also requires libgcrypt
+ else ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
+-SNGREP_DEPENDENCIES += gnutls
++SNGREP_DEPENDENCIES += gnutls libgcrypt
+ SNGREP_CONF_OPTS += --with-gnutls --without-openssl
+ else
+ SNGREP_CONF_OPTS += --without-gnutls --without-openssl
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.4
