@@ -1,101 +1,75 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 20 May 2017 11:22:29 -0400
-Subject: [Buildroot] [PATCH 1/1] checkpolicy: remove -lfl from LDLIBS patch.
-Message-ID: <20170520152229.22752-1-Adamduskett@outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 May 2017 16:17:07 +0200
+Subject: [Buildroot] [git commit branch/next] lxc: set libcap as an optional
+	dependency
+Message-ID: <20170520153521.C600B8284B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-from: https://patchwork.kernel.org/patch/9450549/
-When building checkpolicy/test, the linker reports the following error:
+commit: https://git.buildroot.net/buildroot/commit/?id=5f16c203185011548bf6dd036e344521a46e0307
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-    cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a
-    -L/usr/src/selinux/DESTDIR/usr/lib -o dispol
-
-    /usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so:
-    undefined reference to `yylex'
-
-    collect2: error: ld returned 1 exit status
-
-According to flex documentation
-(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
-to provide an implementation for yywrap(). However every flex file now
-uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
-this option from checkpolicy Makefiles.
-
-The patch is slightly modified to remove the /checkpolicy path.
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-checkpolicy-remove-lfl-from-LDLIBS.patch  | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
+ package/lxc/Config.in |  1 -
+ package/lxc/lxc.hash  |  1 +
+ package/lxc/lxc.mk    | 13 ++++++++++++-
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
-new file mode 100644
-index 0000000..c0b6de8
---- /dev/null
-+++ b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
-@@ -0,0 +1,58 @@
-+From 4d215a1e8111e14f6074f7abe2559800b6f4838c Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Adamduskett@outlook.com>
-+Date: Sat, 20 May 2017 11:01:08 -0400
-+Subject: [PATCH] checkpolicy: remove -lfl from LDLIBSlogin
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index c5c75ea..22aa813 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_LXC
+ 	# build system forcefully builds a shared library
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
+-	select BR2_PACKAGE_LIBCAP
+ 	help
+ 	  Linux Containers (LXC), provides the ability to group and isolate
+ 	  of a set of processes in a jail by virtualizing and accounting the
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 086b139..801759a 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
++sha256	c79443c5db7e7defd53992d120cad2bc8afc2ff363b1e84ec31bc2b95ec5ca44	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 4ba6d9f..8a200e7 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -8,9 +8,13 @@ LXC_VERSION = 2.0.8
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPL-2.1+
+ LXC_LICENSE_FILES = COPYING
+-LXC_DEPENDENCIES = libcap host-pkgconf
++LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
+ 
++# This patch fixes compilation without capabilities
++LXC_PATCH = \
++	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
 +
-+When building checkpolicy/test, the linker reports the following error:
-+cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a
-+-L/usr/src/selinux/DESTDIR/usr/lib -o dispol
-+/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so:
-+undefined reference to `yylex'
-+collect2: error: ld returned 1 exit status
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+@@ -22,6 +26,13 @@ else
+ LXC_CONF_OPTS += --disable-gnutls
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++LXC_CONF_OPTS += --enable-capabilities
++LXC_DEPENDENCIES += libcap
++else
++LXC_CONF_OPTS += --disable-capabilities
++endif
 +
-+According to flex documentation
-+(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
-+to provide an implementation for yywrap(). However every flex file now
-+uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
-+this option from checkpolicy Makefiles.
-+
-+
-+Backported from:
-+https://patchwork.kernel.org/patch/9450549/
-+
-+Original author: Nicolas Iooss <nicolas.iooss@m4x.org>
-+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-+---
-+ Makefile      | 2 +-
-+ test/Makefile | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 53a3074..875cf00 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -20,7 +20,7 @@ CHECKOBJS = y.tab.o lex.yy.o queue.o module_compiler.o parse_util.o \
-+ CHECKPOLOBJS = $(CHECKOBJS) checkpolicy.o
-+ CHECKMODOBJS = $(CHECKOBJS) checkmodule.o
-+ 
-+-LDLIBS=$(LIBDIR)/libsepol.a -lfl
-++LDLIBS=$(LIBDIR)/libsepol.a
-+ 
-+ GENERATED=lex.yy.c y.tab.c y.tab.h
-+ 
-+diff --git a/test/Makefile b/test/Makefile
-+index c2367e1..e7bd717 100644
-+--- a/test/Makefile
-++++ b/test/Makefile
-+@@ -9,7 +9,7 @@ INCLUDEDIR ?= $(PREFIX)/include
-+ CFLAGS ?= -g -Wall -W -Werror -O2 -pipe
-+ override CFLAGS += -I$(INCLUDEDIR)
-+ 
-+-LDLIBS=-lfl $(LIBDIR)/libsepol.a -L$(LIBDIR)
-++LDLIBS=$(LIBDIR)/libsepol.a -L$(LIBDIR)
-+ 
-+ all: dispol dismod
-+ 
-+-- 
-+2.9.3
-+
--- 
-2.9.3
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ LXC_CONF_OPTS += --enable-seccomp
+ LXC_DEPENDENCIES += libseccomp
