@@ -1,74 +1,101 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 20 May 2017 11:17:52 -0400
-Subject: [Buildroot] [PATCH 1/1] flex: remove disable-flex-binary-and-doc
-	patch.
-Message-ID: <20170520151752.22320-1-Adamduskett@outlook.com>
+Date: Sat, 20 May 2017 11:22:29 -0400
+Subject: [Buildroot] [PATCH 1/1] checkpolicy: remove -lfl from LDLIBS patch.
+Message-ID: <20170520152229.22752-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently the flex makefile blindly links flex++ to flex in
-host/usr/bin, but because of the patch
-0001-flex-disable-flex-binary-and-documentation.patch, this binary no
-longer exists, so it's a invalid simlink to begin with.
+from: https://patchwork.kernel.org/patch/9450549/
+When building checkpolicy/test, the linker reports the following error:
 
-Furthermore, host-checkpolicy requires host/usr/bin/flex to be present,
-and will fail with a "host/usr/bin/flex: Command not found" error.
+    cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a
+    -L/usr/src/selinux/DESTDIR/usr/lib -o dispol
 
-The patch itself says:
-"Since we prevent the flex binary to be built, we also need to prevent
-the documentation to be built, otherwise it will fail"
+    /usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so:
+    undefined reference to `yylex'
 
-Since the flex binary needs to be built, this patch is no longer necessary.
+    collect2: error: ld returned 1 exit status
+
+According to flex documentation
+(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
+to provide an implementation for yywrap(). However every flex file now
+uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
+this option from checkpolicy Makefiles.
+
+The patch is slightly modified to remove the /checkpolicy path.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- ...lex-disable-flex-binary-and-documentation.patch | 35 ----------------------
- 1 file changed, 35 deletions(-)
- delete mode 100644 package/flex/0001-flex-disable-flex-binary-and-documentation.patch
+ .../0001-checkpolicy-remove-lfl-from-LDLIBS.patch  | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
 
-diff --git a/package/flex/0001-flex-disable-flex-binary-and-documentation.patch b/package/flex/0001-flex-disable-flex-binary-and-documentation.patch
-deleted file mode 100644
-index d035ef4..0000000
---- a/package/flex/0001-flex-disable-flex-binary-and-documentation.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--flex: prevent flex binary to be built
--
--Since we prevent the flex binary to be built, we also need to prevent
--the documentation to be built, otherwise it will fail like this:
--
--Making all in doc
--make[2]: Entering directory '/br/output/build/flex-2.6.4/doc'
--make[2]: *** No rule to make target '../src/flex', needed by 'flex.1'.
--Stop.
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--diff -rup a/Makefile.in b/Makefile.in
----- a/Makefile.in	2017-05-06 15:49:09.000000000 +0100
--+++ b/Makefile.in	2017-05-10 14:35:20.152794902 +0100
--@@ -450,7 +450,6 @@ EXTRA_DIST = \
-- 
-- SUBDIRS = \
-- 	src \
---	doc \
-- 	examples \
-- 	po \
-- 	tests \
--diff -rup a/src/Makefile.in b/src/Makefile.in
----- a/src/Makefile.in	2017-05-06 15:49:09.000000000 +0100
--+++ b/src/Makefile.in	2017-05-10 14:35:01.918464036 +0100
--@@ -90,7 +90,7 @@ PRE_UNINSTALL = :
-- POST_UNINSTALL = :
-- build_triplet = @build@
-- host_triplet = @host@
---bin_PROGRAMS = flex$(EXEEXT)
--+bin_PROGRAMS =
-- @ENABLE_BOOTSTRAP_TRUE at noinst_PROGRAMS = stage1flex$(EXEEXT)
-- @CROSS_TRUE at am__append_1 = \
-- @CROSS_TRUE@		      ../lib/malloc.c \
+diff --git a/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
+new file mode 100644
+index 0000000..c0b6de8
+--- /dev/null
++++ b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
+@@ -0,0 +1,58 @@
++From 4d215a1e8111e14f6074f7abe2559800b6f4838c Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Adamduskett@outlook.com>
++Date: Sat, 20 May 2017 11:01:08 -0400
++Subject: [PATCH] checkpolicy: remove -lfl from LDLIBSlogin
++
++When building checkpolicy/test, the linker reports the following error:
++cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a
++-L/usr/src/selinux/DESTDIR/usr/lib -o dispol
++/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so:
++undefined reference to `yylex'
++collect2: error: ld returned 1 exit status
++
++According to flex documentation
++(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
++to provide an implementation for yywrap(). However every flex file now
++uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
++this option from checkpolicy Makefiles.
++
++
++Backported from:
++https://patchwork.kernel.org/patch/9450549/
++
++Original author: Nicolas Iooss <nicolas.iooss@m4x.org>
++Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
++---
++ Makefile      | 2 +-
++ test/Makefile | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 53a3074..875cf00 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -20,7 +20,7 @@ CHECKOBJS = y.tab.o lex.yy.o queue.o module_compiler.o parse_util.o \
++ CHECKPOLOBJS = $(CHECKOBJS) checkpolicy.o
++ CHECKMODOBJS = $(CHECKOBJS) checkmodule.o
++ 
++-LDLIBS=$(LIBDIR)/libsepol.a -lfl
+++LDLIBS=$(LIBDIR)/libsepol.a
++ 
++ GENERATED=lex.yy.c y.tab.c y.tab.h
++ 
++diff --git a/test/Makefile b/test/Makefile
++index c2367e1..e7bd717 100644
++--- a/test/Makefile
+++++ b/test/Makefile
++@@ -9,7 +9,7 @@ INCLUDEDIR ?= $(PREFIX)/include
++ CFLAGS ?= -g -Wall -W -Werror -O2 -pipe
++ override CFLAGS += -I$(INCLUDEDIR)
++ 
++-LDLIBS=-lfl $(LIBDIR)/libsepol.a -L$(LIBDIR)
+++LDLIBS=$(LIBDIR)/libsepol.a -L$(LIBDIR)
++ 
++ all: dispol dismod
++ 
++-- 
++2.9.3
++
 -- 
 2.9.3
