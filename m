@@ -1,165 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 May 2017 23:46:32 +0200
-Subject: [Buildroot] [PATCH/next] package/c-periphery: bump version to 1.1.1
-Message-ID: <20170521214632.22535-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 May 2017 23:57:43 +0200
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump to version
+	10.1.23
+In-Reply-To: <049c9e3d-2262-476b-008a-12e53d0a8598@gmail.com> (Ryan Coe's
+ message of "Fri, 19 May 2017 08:44:53 -0700")
+References: <20170508153716.16809-1-bluemrp9@gmail.com>
+ <87efvzno6c.fsf@dell.be.48ers.dk>
+ <7f264a9b-c5cf-feaf-a8bf-929d112fb7f0@gmail.com>
+ <87bmqugre8.fsf@dell.be.48ers.dk>
+ <049c9e3d-2262-476b-008a-12e53d0a8598@gmail.com>
+Message-ID: <87k25927qg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patches applied upstream:
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
-0001-Add-missing-header-for-musl-compatibility.patch
-https://github.com/vsergeev/c-periphery/commit/27a95527201a368c825aeaf937700c279e13922a
+Hi,
 
-0002-Fix-build-on-SPARC.patch
-https://github.com/vsergeev/c-periphery/commit/114c715c78ce300a5cd64fb71f32ffd2bce5326c
+ >> Could you perhaps try to contact the mariadb developers?
+ >> 
+ > Below is the response that I received on this issue:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...Add-missing-header-for-musl-compatibility.patch | 32 ----------
- package/c-periphery/0002-Fix-build-on-SPARC.patch  | 70 ----------------------
- package/c-periphery/c-periphery.hash               |  2 +-
- package/c-periphery/c-periphery.mk                 |  2 +-
- 4 files changed, 2 insertions(+), 104 deletions(-)
- delete mode 100644 package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch
- delete mode 100644 package/c-periphery/0002-Fix-build-on-SPARC.patch
+ > https://jira.mariadb.org/browse/MDEV-12297
 
-diff --git a/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch b/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch
-deleted file mode 100644
-index 108297c9c..000000000
---- a/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 1d8cb0ad54099c3d7261aaa19a2c0786f16736d0 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 8 Aug 2015 22:42:39 +0200
--Subject: [PATCH] Add missing header for musl compatibility
--
--<linux/ioctl.h> is needed to get the definition of _IOC_SIZEBITS and
--solve the following build failure:
--
--src/spi.c: In function 'spi_transfer':
--src/spi.c:100:24: error: '_IOC_SIZEBITS' undeclared (first use in this function)
--     if (ioctl(spi->fd, SPI_IOC_MESSAGE(1), &spi_xfer) < 1)
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- src/spi.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/spi.c b/src/spi.c
--index 52a8d3d..1a6b17c 100644
----- a/src/spi.c
--+++ b/src/spi.c
--@@ -16,6 +16,7 @@
-- #include <errno.h>
-- 
-- #include <sys/ioctl.h>
--+#include <linux/ioctl.h>
-- #include <linux/spi/spidev.h>
-- 
-- #include "spi.h"
---- 
--2.5.0
--
-diff --git a/package/c-periphery/0002-Fix-build-on-SPARC.patch b/package/c-periphery/0002-Fix-build-on-SPARC.patch
-deleted file mode 100644
-index e491f6f72..000000000
---- a/package/c-periphery/0002-Fix-build-on-SPARC.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From 295316c3f44c3e779e85d7453424496a3bb4bc48 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 8 Aug 2015 22:56:09 +0200
--Subject: [PATCH] Fix build on SPARC
--
--On SPARC, the definitions of B2500000, B3000000, B3500000 and B4000000
--are not necessarily available, so use those values only if defined in
--the kernel headers.
--
--It fixes SPARC build failures such as:
--
--src/serial.c: In function '_serial_baudrate_to_bits':
--src/serial.c:73:30: error: 'B2500000' undeclared (first use in this function)
--         case 2500000: return B2500000;
--                              ^
--src/serial.c:73:30: note: each undeclared identifier is reported only once for each function it appears in
--src/serial.c:74:30: error: 'B3000000' undeclared (first use in this function)
--         case 3000000: return B3000000;
--                              ^
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- src/serial.c | 16 ++++++++++++++++
-- 1 file changed, 16 insertions(+)
--
--diff --git a/src/serial.c b/src/serial.c
--index e385309..efd425e 100644
----- a/src/serial.c
--+++ b/src/serial.c
--@@ -70,10 +70,18 @@ static int _serial_baudrate_to_bits(uint32_t baudrate) {
--         case 1152000: return B1152000;
--         case 1500000: return B1500000;
--         case 2000000: return B2000000;
--+#ifdef B2500000
--         case 2500000: return B2500000;
--+#endif
--+#ifdef B3000000
--         case 3000000: return B3000000;
--+#endif
--+#ifdef B3500000
--         case 3500000: return B3500000;
--+#endif
--+#ifdef B4000000
--         case 4000000: return B4000000;
--+#endif
--         default: return -1;
--     }
-- }
--@@ -107,10 +115,18 @@ static int _serial_bits_to_baudrate(uint32_t bits) {
--         case B1152000: return 1152000;
--         case B1500000: return 1500000;
--         case B2000000: return 2000000;
--+#ifdef B2500000
--         case B2500000: return 2500000;
--+#endif
--+#ifdef B3000000
--         case B3000000: return 3000000;
--+#endif
--+#ifdef B3500000
--         case B3500000: return 3500000;
--+#endif
--+#ifdef B4000000
--         case B4000000: return 4000000;
--+#endif
--         default: return -1;
--     }
-- }
---- 
--2.5.0
--
-diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
-index 516d340d9..524925ff9 100644
---- a/package/c-periphery/c-periphery.hash
-+++ b/package/c-periphery/c-periphery.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 5ae4c3f9de0e64d8153ee58b85c4a5defb9f755c6ae215f11b46719bbbac1335  c-periphery-v1.0.3.tar.gz
-+sha256 c6cfaae7496ff6500b747106571de6b4ca7d80a383297e592ffcfa3413b66321  c-periphery-v1.1.1.tar.gz
-diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
-index 730b3bc30..359c860e8 100644
---- a/package/c-periphery/c-periphery.mk
-+++ b/package/c-periphery/c-periphery.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--C_PERIPHERY_VERSION = v1.0.3
-+C_PERIPHERY_VERSION = v1.1.1
- C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,$(C_PERIPHERY_VERSION))
- C_PERIPHERY_INSTALL_STAGING = YES
- # only a static library
+ > This is the full story:
+
+ > * All MySQL code, including libmysqlclient, is GPLv2
+ > * When implementing async API for libmysqlclient, we have licensed it
+ >   under LGPL. That's when COPYING.LESSER was added. Apparently someone
+ >   thought that having both COPYING and COPYING.LESSER means that the
+ >   project includes both GPL and LGPL components
+ > * Then we got MDEV-12297, saying Github suddenly started showing MariaDB
+ >   license as LGPL
+ > * Github uses a library "licensee" to detect the license, and it was a
+ >   recent bugfix in licensee to return "LGPL" when both COPYING and
+ >   COPYING.LESSER are present.
+ > * Indeed,https://www.gnu.org/licenses/gpl-howto.html  says that LGPL
+ >   licensed projects should have both files. So licensee and Github were
+ >   right.
+ > * At that point in time we already have all async API code in
+ >   MariaDB Connector/C library (which is LGPL as a whole), so the
+ >   simplest solution was to remove COPYING.LESSER, basically relicensing
+ >   async API for libmysqlclient under GPLv2.
+
+ > Practically it changes nothing.
+ > MariaDB server was and is GPLv2, we cannot change that.
+ > libmysqlclient library was and is GPLv2, we cannot change that.
+ > MariaDB Connector/C was and is LGPLv2.1
+
+Ok, thanks for checking!
+
+Committed after adding this link and dropping COPYING.LESSER from
+_LICENSE_FILES, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
