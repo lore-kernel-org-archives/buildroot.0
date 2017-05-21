@@ -1,69 +1,67 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 May 2017 19:11:01 +0200
-Subject: [Buildroot] [PATCH/next] package/apitrace: bump version
-Message-ID: <20170521171101.14097-1-bernd.kuhls@t-online.de>
+Date: Sun, 21 May 2017 19:12:16 +0200
+Subject: [Buildroot] [PATCH/next] package/autoconf-archive: bump version to
+	2017.03.21
+Message-ID: <20170521171216.432-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently we have version 7.0, released July 2015. Latest upstream
-release 7.1, which dates back to November 2015, causes build errors.
-
-Therefore we bump to git HEAD, updated May 2017, which builds fine.
-
-The package requires gcc-4.9 or later now:
-https://github.com/apitrace/apitrace/commit/2940c642832ba9dd0322a351034a2c52331e6e2b
+Needed to rebased patch 0001.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/apitrace/Config.in     | 6 +++---
- package/apitrace/apitrace.hash | 2 +-
- package/apitrace/apitrace.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch | 6 ++++--
+ package/autoconf-archive/autoconf-archive.hash              | 2 +-
+ package/autoconf-archive/autoconf-archive.mk                | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
-index 7fdd35af3..b622823c2 100644
---- a/package/apitrace/Config.in
-+++ b/package/apitrace/Config.in
-@@ -1,13 +1,13 @@
--comment "apitrace needs a glibc toolchain w/ C++, gcc >= 4.6"
-+comment "apitrace needs a glibc toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+index 6d345d346..c0efeb335 100644
+--- a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
++++ b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+@@ -17,6 +17,8 @@ fi
+ Remove the [] on the third part of AS_IF.
  
- config BR2_PACKAGE_APITRACE
- 	bool "apitrace"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # uses glibc specific __libc_dlsym
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_LIBPNG
-diff --git a/package/apitrace/apitrace.hash b/package/apitrace/apitrace.hash
-index eac470b03..1daaa46e8 100644
---- a/package/apitrace/apitrace.hash
-+++ b/package/apitrace/apitrace.hash
+ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++(rebased against version 2017.03.21)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  m4/ax_tls.m4 | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -29,8 +31,8 @@ index 809b761..2135dd2 100644
+  #   modified version of the Autoconf Macro, you may extend this special
+  #   exception to the GPL to apply to your modified version as well.
+  
+--#serial 11
+-+#serial 12
++-#serial 13
+++#serial 14
+  
+  AC_DEFUN([AX_TLS], [
+    AC_MSG_CHECKING([for thread local storage (TLS) class])
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index 6982a4dd6..2c537b33a 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 21d0cc765b84e537c5a3a117073818942653b85685b9633d364836ccfe0b9fd5  apitrace-7.0.tar.gz
-+sha256 0aae8902696ad23ba91d61c57007861a3f6e3c2d4f0f43b783b4b7a58e3f9172  apitrace-15d7f975f9688372467ebd63d2a57d3957823f93.tar.gz
-diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
-index fbd957c61..c66f6b3e3 100644
---- a/package/apitrace/apitrace.mk
-+++ b/package/apitrace/apitrace.mk
+ # Computed locally
+-sha256 88fb2efff640eddd28a52ae550ff5561bca3bd2bba09e1d7b0580e719875e437  autoconf-archive-2016.03.20.tar.xz
++sha256 386ad455f12bdeb3a7d19280441a5ab77355142349200ff11040a8d9d455d765  autoconf-archive-2017.03.21.tar.xz
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index 053ea33fa..6a7ac4da3 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APITRACE_VERSION = 7.0
-+APITRACE_VERSION = 15d7f975f9688372467ebd63d2a57d3957823f93
- APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
- APITRACE_LICENSE = MIT
- APITRACE_LICENSE_FILES = LICENSE
+-AUTOCONF_ARCHIVE_VERSION = 2016.03.20
++AUTOCONF_ARCHIVE_VERSION = 2017.03.21
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
 -- 
 2.11.0
