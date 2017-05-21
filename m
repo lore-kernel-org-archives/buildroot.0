@@ -1,36 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 May 2017 23:32:02 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 10,
-	11}.x series
-Message-ID: <20170521213905.1E32D8267B@busybox.osuosl.org>
+Date: Sun, 21 May 2017 23:32:10 +0200
+Subject: [Buildroot] [git commit] linux: bump default version to 4.11.2
+Message-ID: <20170521213905.3179782123@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=daf1c350251ac1872ee3849a6b79476d1d026c2f
+commit: https://git.buildroot.net/buildroot/commit/?id=8213190bfa88d0d222b24c81515bd201f25efb7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 014ae70..0c53416 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -227,8 +227,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.68"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.28"	if BR2_KERNEL_HEADERS_4_9
--	default "4.10.16"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.1"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.4.69"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.29"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
-+	default "4.11.2"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 41545f7..9c4d1c8 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.11.1)"
++	bool "Latest version (4.11.2)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.11.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.11.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
