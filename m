@@ -1,74 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 May 2017 16:17:07 +0200
-Subject: [Buildroot] [git commit] lxc: set libcap as an optional dependency
-Message-ID: <20170601202852.38DB08261C@busybox.osuosl.org>
+Date: Sun, 21 May 2017 20:38:56 +0200
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.5.9
+Message-ID: <20170601202852.47E328261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f16c203185011548bf6dd036e344521a46e0307
+commit: https://git.buildroot.net/buildroot/commit/?id=ca1d9c3a89f38995d1788b1b3d56239cbc890447
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For details, see the release notes:
+https://www.samba.org/samba/history/samba-4.5.9.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lxc/Config.in |  1 -
- package/lxc/lxc.hash  |  1 +
- package/lxc/lxc.mk    | 13 ++++++++++++-
- 3 files changed, 13 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index c5c75ea..22aa813 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_LXC
- 	# build system forcefully builds a shared library
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
--	select BR2_PACKAGE_LIBCAP
- 	help
- 	  Linux Containers (LXC), provides the ability to group and isolate
- 	  of a set of processes in a jail by virtualizing and accounting the
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 086b139..801759a 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 0a2a548..c0ac04a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
-+sha256	c79443c5db7e7defd53992d120cad2bc8afc2ff363b1e84ec31bc2b95ec5ca44	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 4ba6d9f..8a200e7 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -8,9 +8,13 @@ LXC_VERSION = 2.0.8
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPL-2.1+
- LXC_LICENSE_FILES = COPYING
--LXC_DEPENDENCIES = libcap host-pkgconf
-+LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
+-sha256 f63b656d8823a280c50c9dbd6b692816cd7a88adfe9b47997ce697fd75bf81f0  samba-4.5.8.tar.gz
++sha256 e7b04b5d7ce10ed1205cc552200958e3c487ecf9647ea4c7b8c5f049f97c6be4  samba-4.5.9.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4de69a0..209d8ef 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# This patch fixes compilation without capabilities
-+LXC_PATCH = \
-+	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
-+
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-python --disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
-@@ -22,6 +26,13 @@ else
- LXC_CONF_OPTS += --disable-gnutls
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+LXC_CONF_OPTS += --enable-capabilities
-+LXC_DEPENDENCIES += libcap
-+else
-+LXC_CONF_OPTS += --disable-capabilities
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- LXC_CONF_OPTS += --enable-seccomp
- LXC_DEPENDENCIES += libseccomp
+-SAMBA4_VERSION = 4.5.8
++SAMBA4_VERSION = 4.5.9
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
