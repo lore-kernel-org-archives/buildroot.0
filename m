@@ -1,39 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 May 2017 20:28:38 +0200
-Subject: [Buildroot] [PATCH/next] package/bustle: bump version to 0.5.4
-Message-ID: <20170521182838.2161-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 May 2017 20:34:52 +0200
+Subject: [Buildroot] [PATCH 1/1] lxc: set libcap as an optional
+ dependency
+In-Reply-To: <1495203359-57057-1-git-send-email-fontaine.fabrice@gmail.com>
+References: <1495203359-57057-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <20170521203452.784787e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/bustle/bustle.hash | 2 +-
- package/bustle/bustle.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/bustle/bustle.hash b/package/bustle/bustle.hash
-index 9c6df5671..49890f74f 100644
---- a/package/bustle/bustle.hash
-+++ b/package/bustle/bustle.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	6c76cb5182c20b8ce7d6911f8aebc4fae43f919e747a003f1a66698628b27682  bustle-0.4.3.tar.gz
-+sha256 921c2cbbb957dcb02c3aa8fd1eeff3534cb437fa9eeca1c25206ad1e741a3f14  bustle-0.5.4.tar.gz
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index 4cd446065..ffbfbe40f 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUSTLE_VERSION = 0.4.3
-+BUSTLE_VERSION = 0.5.4
- BUSTLE_SITE = http://www.willthompson.co.uk/bustle/releases/$(BUSTLE_VERSION)
- BUSTLE_LICENSE = LGPL-2.1+
- BUSTLE_LICENSE_FILES = LICENSE
+On Fri, 19 May 2017 16:15:59 +0200, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/lxc/Config.in |  1 -
+>  package/lxc/lxc.hash  |  1 +
+>  package/lxc/lxc.mk    | 13 ++++++++++++-
+>  3 files changed, 13 insertions(+), 2 deletions(-)
+
+Applied to next, thanks.
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
