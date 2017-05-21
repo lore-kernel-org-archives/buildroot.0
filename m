@@ -1,38 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 May 2017 23:32:34 +0200
-Subject: [Buildroot] [PATCH] dropbear: security bump to version 2017.75
-In-Reply-To: <20170520151548.23594-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 20 May 2017 17:15:48 +0200")
-References: <20170520151548.23594-1-peter@korsgaard.com>
-Message-ID: <87shjx28wd.fsf@dell.be.48ers.dk>
+Date: Sun, 21 May 2017 23:38:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-enum34: change setup
+	type to setuptools
+In-Reply-To: <20170521114625.7884-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 21 May 2017 13:46:25 +0200")
+References: <20170521114625.7884-1-bernd.kuhls@t-online.de>
+Message-ID: <87o9ul28ml.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes:
- > - CVE-2017-9078: A double-free in the server could be triggered by an
- >   authenticated user if dropbear is running with -a (Allow connections to
- >   forwarded ports from any host) This could potentially allow arbitrary code
- >   execution as root by an authenticated user.  Affects versions 2013.56 to
- >   2016.74.  Thanks to Mark Shepard for reporting the crash.
+ > With version 1.1.3 the project switched to setuptools:
+ > https://bitbucket.org/stoneleaf/enum34/commits/589b4f9d2e733a32c6e67a1e7aa50f476920d121
 
- > - CVE-2017-9079: Dropbear parsed authorized_keys as root, even if it were a
- >   symlink.  The fix is to switch to user permissions when opening
- >   authorized_keys.
- >   A user could symlink their ~/.ssh/authorized_keys to a root-owned file
- >   they couldn't normally read.  If they managed to get that file to contain
- >   valid authorized_keys with command= options it might be possible to read
- >   other contents of that file.  This information disclosure is to an already
- >   authenticated user.  Thanks to Jann Horn of Google Project Zero for
- >   reporting this.
+ > Fixes
+ > http://autobuild.buildroot.net/results/cb6/cb678ca9e57382a876f3f6034a47a4e2c59bc8d0/
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed, thanks.
+Are you sure. I don't know much about Python packaging, but it still
+has:
+
+from distutils.core import setup
+
+..
+
+if __name__ == '__main__':
+    setup(**data)
+
+
+The tarball (and not git) has a dummy setup.cfg, which afaik is related
+to setuptools.
+
+I'm not sure what the correct fix is. Yegor? Either we patch out the
+'import setuptools' line or we add host-python-setuptools to the
+dependencies.
 
 -- 
 Bye, Peter Korsgaard
