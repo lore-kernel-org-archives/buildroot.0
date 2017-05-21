@@ -1,38 +1,28 @@
-From: Riko Ho <antonius.riko@gmail.com>
-Date: Sun, 21 May 2017 11:26:05 +0800
-Subject: [Buildroot] A qemu and startx with mouse ?
-In-Reply-To: <20170520152229.22752-1-Adamduskett@outlook.com>
-References: <20170520152229.22752-1-Adamduskett@outlook.com>
-Message-ID: <8c175f05-d579-7297-f53f-b5ca83fb1046@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 May 2017 07:15:12 +0200
+Subject: [Buildroot] rpath and runpath
+In-Reply-To: <a76b77be-c123-81ff-69f7-26508465e3c4@ou.edu>
+References: <952e1471-12e9-7935-16c2-af56ad4fead7@ou.edu>
+ <20170519212701.6824e4e3@free-electrons.com>
+ <a76b77be-c123-81ff-69f7-26508465e3c4@ou.edu>
+Message-ID: <20170521071512.5474167b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Everyone,
+Hello,
 
-How can I use mouse on qemu and startx ?
-  I can run twm and xterm but mouse and keyboard in qemu is off ?
+On Sat, 20 May 2017 14:54:19 -0600, Steve Kenton wrote:
 
-Here are some captures :
+> Thanks for the information. Is this a long term project or something 
+> likely to happen in the next few releases?
 
+I'm hoping to get something like this merge in the next few releases.
 
-Thanks
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170521/10ccceea/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: dpianjcmiebpeoge.png
-Type: image/png
-Size: 134231 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170521/10ccceea/attachment-0002.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: kgalipafngibiaek.png
-Type: image/png
-Size: 43120 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170521/10ccceea/attachment-0003.png>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
