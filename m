@@ -1,42 +1,37 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 May 2017 13:37:50 +0200
-Subject: [Buildroot] [PATCH/next] package/samba4: bump version to 4.5.9
-Message-ID: <20170521113750.11789-1-bernd.kuhls@t-online.de>
+Date: Sun, 21 May 2017 13:46:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-enum34: change setup type to
+	setuptools
+Message-ID: <20170521114625.7884-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details, see the release notes:
-https://www.samba.org/samba/history/samba-4.5.9.html
+With version 1.1.3 the project switched to setuptools:
+https://bitbucket.org/stoneleaf/enum34/commits/589b4f9d2e733a32c6e67a1e7aa50f476920d121
+
+Fixes
+http://autobuild.buildroot.net/results/cb6/cb678ca9e57382a876f3f6034a47a4e2c59bc8d0/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-enum34/python-enum34.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 0a2a548a1..c0ac04a61 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f63b656d8823a280c50c9dbd6b692816cd7a88adfe9b47997ce697fd75bf81f0  samba-4.5.8.tar.gz
-+sha256 e7b04b5d7ce10ed1205cc552200958e3c487ecf9647ea4c7b8c5f049f97c6be4  samba-4.5.9.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4de69a0fa..209d8ef72 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-enum34/python-enum34.mk b/package/python-enum34/python-enum34.mk
+index 1a4c6c694..c612cb65e 100644
+--- a/package/python-enum34/python-enum34.mk
++++ b/package/python-enum34/python-enum34.mk
+@@ -7,7 +7,7 @@
+ PYTHON_ENUM34_VERSION = 1.1.6
+ PYTHON_ENUM34_SOURCE = enum34-$(PYTHON_ENUM34_VERSION).tar.gz
+ PYTHON_ENUM34_SITE = https://pypi.python.org/packages/bf/3e/31d502c25302814a7c2f1d3959d2a3b3f78e509002ba91aea64993936876
+-PYTHON_ENUM34_SETUP_TYPE = distutils
++PYTHON_ENUM34_SETUP_TYPE = setuptools
+ PYTHON_ENUM34_LICENSE = BSD-3-Clause
+ PYTHON_ENUM34_LICENSE_FILES = enum/LICENSE
  
--SAMBA4_VERSION = 4.5.8
-+SAMBA4_VERSION = 4.5.9
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
 -- 
 2.11.0
