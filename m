@@ -1,119 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 May 2017 23:55:38 +0200
-Subject: [Buildroot] [git commit] mariadb: security bump to version 10.1.23
-Message-ID: <20170521220050.89EDE825B1@busybox.osuosl.org>
+Date: Mon, 22 May 2017 00:00:13 +0200
+Subject: [Buildroot] [git commit] libminiupnpc: add upstream security fix
+	for CVE-2017-8798
+Message-ID: <20170521220051.D57F37FAE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6213e8ee68cbb637997ff02abe7945ec1cc168c
+commit: https://git.buildroot.net/buildroot/commit/?id=a0c4cf0f9698ed109b97cb1e33f4070f505e3988
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+CVE-2017-8798: Integer signedness error in MiniUPnP MiniUPnPc v1.4.20101221
+through v2.0 allows remote attackers to cause a denial of service or
+possibly have unspecified other impact.
 
-CVE-2017-3302 - Crash in libmysqlclient.so in Oracle MySQL before 5.6.21 and
-5.7.x before 5.7.5 and MariaDB through 5.5.54, 10.0.x through 10.0.29,
-10.1.x through 10.1.21, and 10.2.x through 10.2.3.
+For more details including a PoC, see:
+https://github.com/tintinweb/pub/tree/master/pocs/cve-2017-8798
 
-CVE-2017-3313 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: MyISAM). Supported versions that are affected are
-5.5.53 and earlier, 5.6.34 and earlier and 5.7.16 and earlier. Difficult to
-exploit vulnerability allows low privileged attacker with logon to the
-infrastructure where MySQL Server executes to compromise MySQL Server.
-Successful attacks of this vulnerability can result in unauthorized access
-to critical data or complete access to all MySQL Server accessible data.
-
-CVE-2017-3308 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server. While the vulnerability is
-in MySQL Server, attacks may significantly impact additional products.
-Successful attacks of this vulnerability can result in unauthorized
-ability to cause a hang or frequently repeatable crash (complete DOS) of
-MySQL Server.
-
-CVE-2017-3309 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
-"exploitable" vulnerability allows low privileged attacker with network
-access via multiple protocols to compromise MySQL Server. While the
-vulnerability is in MySQL Server, attacks may significantly impact
-additional products. Successful attacks of this vulnerability can result
-in unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2017-3453 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
-"exploitable" vulnerability allows low privileged attacker with network
-access via multiple protocols to compromise MySQL Server. Successful attacks
-of this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2017-3456 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows high privileged attacker with network access via
-multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2017-3464 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized update, insert or delete access to
-some of MySQL Server accessible data.
-
-And a number of important, but non-security related fixes:
-
-MDEV-12602: Fixed some race conditions in InnoDB encryption
-
-MariaDB Backup alpha introduced
-
-Galera wsrep library updated to 25.3.20
-
-For details, see the release notes:
-https://mariadb.com/kb/en/mariadb/mariadb-10123-release-notes/
-
-[Peter: drop COPYING.LESSER and add a reference to the bugtracker issue
-	explaining why]
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .../0001-miniupnpc-Fix-CVE-2017-8798.patch         | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index afcf378..580fe98 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,2 +1,2 @@
--# From https://downloads.mariadb.org/mariadb/10.1.22/
--sha256 bcb0572e7ad32cea9740a21e9255f733bdf60a5561ffbda317c22dd12b3966ce  mariadb-10.1.22.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.23/
-+sha256 54d8114e24bfa5e3ebdc7d69e071ad1471912847ea481b227d204f9d644300bf  mariadb-10.1.23.tar.gz
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 5a1f06d..757352b 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.22
-+MARIADB_VERSION = 10.1.23
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
--MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
-+# Tarball no longer contains LGPL license text
-+# https://jira.mariadb.org/browse/MDEV-12297
-+MARIADB_LICENSE_FILES = README COPYING
- MARIADB_INSTALL_STAGING = YES
- MARIADB_PROVIDES = mysql
- 
+diff --git a/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
+new file mode 100644
+index 0000000..25591fc
+--- /dev/null
++++ b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
+@@ -0,0 +1,59 @@
++From f0f1f4b22d6a98536377a1bb07e7c20e4703d229 Mon Sep 17 00:00:00 2001
++From: Thomas Bernard <miniupnp@free.fr>
++Date: Tue, 9 May 2017 12:00:47 +0200
++Subject: [PATCH] miniupnpc: Fix CVE-2017-8798
++
++Thanks to tin/Team OSTStrom
++
++[Peter: drop Changelog.txt modification, convert to -p1 format]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ miniupnpc/miniwget.c    | 12 +++++++-----
++ 1 file changed, 9 insertions(+), 5 deletions(-)
++
++diff --git a/miniwget.c b/miniwget.c
++index 37cb47b7..1eda57c5 100644
++--- a/miniwget.c
+++++ b/miniwget.c
++@@ -284,11 +284,12 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 							goto end_of_stream;
++ 						}
++ 					}
++-					bytestocopy = ((int)chunksize < (n - i))?chunksize:(unsigned int)(n - i);
+++					/* it is guaranteed that (n >= i) */
+++					bytestocopy = (chunksize < (unsigned int)(n - i))?chunksize:(unsigned int)(n - i);
++ 					if((content_buf_used + bytestocopy) > content_buf_len)
++ 					{
++ 						char * tmp;
++-						if(content_length >= (int)(content_buf_used + bytestocopy)) {
+++						if((content_length >= 0) && ((unsigned int)content_length >= (content_buf_used + bytestocopy))) {
++ 							content_buf_len = content_length;
++ 						} else {
++ 							content_buf_len = content_buf_used + bytestocopy;
++@@ -313,14 +314,15 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 			{
++ 				/* not chunked */
++ 				if(content_length > 0
++-				   && (int)(content_buf_used + n) > content_length) {
+++				   && (content_buf_used + n) > (unsigned int)content_length) {
++ 					/* skipping additional bytes */
++ 					n = content_length - content_buf_used;
++ 				}
++ 				if(content_buf_used + n > content_buf_len)
++ 				{
++ 					char * tmp;
++-					if(content_length >= (int)(content_buf_used + n)) {
+++					if(content_length >= 0
+++					   && (unsigned int)content_length >= (content_buf_used + n)) {
++ 						content_buf_len = content_length;
++ 					} else {
++ 						content_buf_len = content_buf_used + n;
++@@ -340,7 +342,7 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 			}
++ 		}
++ 		/* use the Content-Length header value if available */
++-		if(content_length > 0 && (int)content_buf_used >= content_length)
+++		if(content_length > 0 && content_buf_used >= (unsigned int)content_length)
++ 		{
++ #ifdef DEBUG
++ 			printf("End of HTTP content\n");
