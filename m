@@ -1,46 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 May 2017 14:04:17 +0200
-Subject: [Buildroot] [PATCH/next] package/minidlna: bump version to 1.2.0
-Message-ID: <20170521120417.18504-1-bernd.kuhls@t-online.de>
+Date: Sun, 21 May 2017 14:29:28 +0200
+Subject: [Buildroot] [PATCH/next] package/libmicrohttpd: bump version to
+	0.9.54
+Message-ID: <20170521122928.28569-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added locally computed sha256 hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/minidlna/minidlna.hash | 8 +++++---
- package/minidlna/minidlna.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minidlna/minidlna.hash b/package/minidlna/minidlna.hash
-index d1ed4b918..8f6b1cc2d 100644
---- a/package/minidlna/minidlna.hash
-+++ b/package/minidlna/minidlna.hash
-@@ -1,3 +1,5 @@
--# From http://sourceforge.net/projects/minidlna/files/minidlna/1.1.5/
--md5	1970e553a1eb8a3e7e302e2ce292cbc4	minidlna-1.1.5.tar.gz
--sha1	8185337621f5f9111118d8a4bca1e8cfcdd19505	minidlna-1.1.5.tar.gz
-+# From http://sourceforge.net/projects/minidlna/files/minidlna/1.2.0/
-+md5 5f59700431e9f66198238deeb4e0d0de  minidlna-1.2.0.tar.gz
-+sha1 700e07440167ddef44b06aa59cabe5e3abe612f6  minidlna-1.2.0.tar.gz
-+# Locally computed
-+sha256 8d34436580c4c44be25976d5e46bc5b71af69bf441c4492774eac001164c4433  minidlna-1.2.0.tar.gz
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 40f918c3e..4fa55454c 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 5c15b9dfd..e72255a0b 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	54797f6e763d417627f89f60e4ae0a431dab0523f92f83def23ea02d0defafea	libmicrohttpd-0.9.52.tar.gz
++sha256 bcc721895d4a114b0548a39d2241c35caacb9e2e072d40e11b55c60e3d5ddcbe  libmicrohttpd-0.9.54.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 785e88672..939e06e9d 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINIDLNA_VERSION = 1.1.5
-+MINIDLNA_VERSION = 1.2.0
- MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
- MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
- MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
+-LIBMICROHTTPD_VERSION = 0.9.52
++LIBMICROHTTPD_VERSION = 0.9.54
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
 -- 
 2.11.0
