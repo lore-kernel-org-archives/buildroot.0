@@ -1,44 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 May 2017 23:38:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-enum34: change setup
-	type to setuptools
-In-Reply-To: <20170521114625.7884-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 21 May 2017 13:46:25 +0200")
-References: <20170521114625.7884-1-bernd.kuhls@t-online.de>
-Message-ID: <87o9ul28ml.fsf@dell.be.48ers.dk>
+Date: Sun, 21 May 2017 23:32:02 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 10,
+	11}.x series
+Message-ID: <20170521213905.1E32D8267B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=daf1c350251ac1872ee3849a6b79476d1d026c2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > With version 1.1.3 the project switched to setuptools:
- > https://bitbucket.org/stoneleaf/enum34/commits/589b4f9d2e733a32c6e67a1e7aa50f476920d121
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- > Fixes
- > http://autobuild.buildroot.net/results/cb6/cb678ca9e57382a876f3f6034a47a4e2c59bc8d0/
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Are you sure. I don't know much about Python packaging, but it still
-has:
-
-from distutils.core import setup
-
-..
-
-if __name__ == '__main__':
-    setup(**data)
-
-
-The tarball (and not git) has a dummy setup.cfg, which afaik is related
-to setuptools.
-
-I'm not sure what the correct fix is. Yegor? Either we patch out the
-'import setuptools' line or we add host-python-setuptools to the
-dependencies.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 014ae70..0c53416 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -227,8 +227,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.68"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.28"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.10.16"	if BR2_KERNEL_HEADERS_4_10
+-	default "4.11.1"	if BR2_KERNEL_HEADERS_4_11
++	default "4.4.69"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.29"	if BR2_KERNEL_HEADERS_4_9
++	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
++	default "4.11.2"	if BR2_KERNEL_HEADERS_4_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
