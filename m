@@ -1,31 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 May 2017 20:39:04 +0200
-Subject: [Buildroot] [PATCH/next] package/samba4: bump version to 4.5.9
-In-Reply-To: <20170521113750.11789-1-bernd.kuhls@t-online.de>
-References: <20170521113750.11789-1-bernd.kuhls@t-online.de>
-Message-ID: <20170521203904.19a48546@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 May 2017 23:32:24 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 10,
+	11}.x series
+In-Reply-To: <20170520151007.15764-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 20 May 2017 17:10:06 +0200")
+References: <20170520151007.15764-1-peter@korsgaard.com>
+Message-ID: <871srh3nh3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sun, 21 May 2017 13:37:50 +0200, Bernd Kuhls wrote:
-> For details, see the release notes:
-> https://www.samba.org/samba/history/samba-4.5.9.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/samba4/samba4.hash | 2 +-
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Applied to next, thanks.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
