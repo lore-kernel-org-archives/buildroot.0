@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 May 2017 23:41:18 +0200
-Subject: [Buildroot] [PATCH/next 3/9] package/c-icap: add optional support
-	for openldap
+Date: Sun, 21 May 2017 23:41:22 +0200
+Subject: [Buildroot] [PATCH/next 7/9] package/c-icap: bump version to 0.5.2
 In-Reply-To: <20170521214124.20328-1-bernd.kuhls@t-online.de>
 References: <20170521214124.20328-1-bernd.kuhls@t-online.de>
-Message-ID: <20170521214124.20328-3-bernd.kuhls@t-online.de>
+Message-ID: <20170521214124.20328-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/c-icap/c-icap.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/c-icap/c-icap.hash | 5 +++--
+ package/c-icap/c-icap.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
+index 2b083ef65..38bbb5643 100644
+--- a/package/c-icap/c-icap.hash
++++ b/package/c-icap/c-icap.hash
+@@ -1,2 +1,3 @@
+-# Locally calculated
+-sha256 b138c7d7d9828d54c3307bcfe7b4917911266593832ffc26a60df9a0dfd2511e c_icap-0.4.2.tar.gz
++# From https://sourceforge.net/projects/c-icap/files/c-icap/0.5.x/
++md5 c0ad392336eb401d1630174cc67c0f71  c_icap-0.5.2.tar.gz
++sha1 fdb357eccbed37e0151a74a13430eec63dd76545  c_icap-0.5.2.tar.gz
 diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 7925f5bc3..388979f3a 100644
+index dd1129e67..58127c151 100644
 --- a/package/c-icap/c-icap.mk
 +++ b/package/c-icap/c-icap.mk
-@@ -13,7 +13,6 @@ C_ICAP_INSTALL_STAGING = YES
- C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
- C_ICAP_CONF_OPTS = \
- 	--with-process-mutexes=posix \
--	--without-ldap \
- 	--without-perl \
- 	--enable-large-files \
- 	--enable-ipv6
-@@ -42,6 +41,13 @@ else
- C_ICAP_CONF_OPTS += --without-bzlib
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_OPENLDAP),y)
-+C_ICAP_CONF_OPTS += --with-ldap
-+C_ICAP_DEPENDENCIES += openldap
-+else
-+C_ICAP_CONF_OPTS += --without-ldap
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- C_ICAP_CONF_OPTS += --with-zlib
- C_ICAP_DEPENDENCIES += zlib
+-C_ICAP_VERSION = 0.4.2
++C_ICAP_VERSION = 0.5.2
+ C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
+ C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_LICENSE = LGPL-2.1+
 -- 
 2.11.0
