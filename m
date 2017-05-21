@@ -1,67 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 May 2017 19:12:16 +0200
-Subject: [Buildroot] [PATCH/next] package/autoconf-archive: bump version to
-	2017.03.21
-Message-ID: <20170521171216.432-1-bernd.kuhls@t-online.de>
+Date: Sun, 21 May 2017 19:13:36 +0200
+Subject: [Buildroot] [PATCH/next] package/augeas: bump version to 1.8.0
+Message-ID: <20170521171336.541-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed to rebased patch 0001.
+Removed AUGEAS_PATCH, patch is included in version bump.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch | 6 ++++--
- package/autoconf-archive/autoconf-archive.hash              | 2 +-
- package/autoconf-archive/autoconf-archive.mk                | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/augeas/augeas.hash | 3 +--
+ package/augeas/augeas.mk   | 5 +----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
-index 6d345d346..c0efeb335 100644
---- a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
-+++ b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
-@@ -17,6 +17,8 @@ fi
- Remove the [] on the third part of AS_IF.
- 
- Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+(rebased against version 2017.03.21)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  m4/ax_tls.m4 | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-@@ -29,8 +31,8 @@ index 809b761..2135dd2 100644
-  #   modified version of the Autoconf Macro, you may extend this special
-  #   exception to the GPL to apply to your modified version as well.
-  
---#serial 11
--+#serial 12
-+-#serial 13
-++#serial 14
-  
-  AC_DEFUN([AX_TLS], [
-    AC_MSG_CHECKING([for thread local storage (TLS) class])
-diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-index 6982a4dd6..2c537b33a 100644
---- a/package/autoconf-archive/autoconf-archive.hash
-+++ b/package/autoconf-archive/autoconf-archive.hash
-@@ -1,2 +1,2 @@
- # Computed locally
--sha256 88fb2efff640eddd28a52ae550ff5561bca3bd2bba09e1d7b0580e719875e437  autoconf-archive-2016.03.20.tar.xz
-+sha256 386ad455f12bdeb3a7d19280441a5ab77355142349200ff11040a8d9d455d765  autoconf-archive-2017.03.21.tar.xz
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-index 053ea33fa..6a7ac4da3 100644
---- a/package/autoconf-archive/autoconf-archive.mk
-+++ b/package/autoconf-archive/autoconf-archive.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
+index 04fbcba3e..797bddbb6 100644
+--- a/package/augeas/augeas.hash
++++ b/package/augeas/augeas.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  b9315575d07f7ba28ca2f9f60b4987dfe77b5970c98b59dc6ca7873fc4979763  augeas-1.7.0.tar.gz
+-sha256  12a987e78166032b59d816aced96c97813cb109108e7c2336cb8ae369c32e2bf  05a27f4e374e9f0dc2cda6301b52d2a6b109b2e8.patch
++sha256  515ce904138d99ff51d45ba7ed0d809bdee6c42d3bc538c8c820e010392d4cc5  augeas-1.8.0.tar.gz
+diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
+index 4c855a356..1c1461e36 100644
+--- a/package/augeas/augeas.mk
++++ b/package/augeas/augeas.mk
+@@ -4,16 +4,13 @@
  #
  ################################################################################
  
--AUTOCONF_ARCHIVE_VERSION = 2016.03.20
-+AUTOCONF_ARCHIVE_VERSION = 2017.03.21
- AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
- AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
- AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
+-AUGEAS_VERSION = 1.7.0
++AUGEAS_VERSION = 1.8.0
+ AUGEAS_SITE = http://download.augeas.net
+ AUGEAS_INSTALL_STAGING = YES
+ AUGEAS_LICENSE = LGPL-2.1+
+ AUGEAS_LICENSE_FILES = COPYING
+ AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
+ 
+-# Fetch upstream patch to fix static linking
+-AUGEAS_PATCH = https://github.com/hercules-team/augeas/commit/05a27f4e374e9f0dc2cda6301b52d2a6b109b2e8.patch
+-
+ AUGEAS_CONF_OPTS = --disable-gnulib-tests
+ 
+ # Remove the test lenses which occupy about 1.4 MB on the target
 -- 
 2.11.0
