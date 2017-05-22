@@ -1,53 +1,57 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 22 May 2017 16:52:06 +0200
+Date: Mon, 22 May 2017 16:53:40 +0200
 Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
 	install
-In-Reply-To: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
+In-Reply-To: <20170513152706.0319d7de@free-electrons.com>
 References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
-Message-ID: <CA+TH9Vnt+rUA3ECViAMXYwg4sFHyV=vYp+-1RQW631n3hprjgA@mail.gmail.com>
+ <20170318153923.56903d45@free-electrons.com>
+ <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
+ <CA+TH9VnNgxSvsUiSTPUstqpa3uuEbKbMxR+OfK1xMEdDqq3Z0w@mail.gmail.com>
+ <20170513152706.0319d7de@free-electrons.com>
+Message-ID: <CA+TH9VkFFXP7pnmg1jJP1=OMyZzPiZ=70iH7_LQmOUuFQMBpdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-03-15 3:24 GMT+01:00 Dustin Johnson <dustin.r.johnson@gmail.com>:
-> When the mono package is installed, the autotools installer installs
-> the /etc/mono files to the target. A post_install hook then copies
-> over the mono libraries to the target as well as the host /etc/mono
-> files which overrides the target files. The target specific mono
-> configuration file (/etc/mono/config) is overridden with the host
-> settings. This causes mono on the target to be unable to locate target
-> specific .so files as it overrides the changes enacted by the patches
-> for the package.
+Dear Thomas, Dusty,
+
+2017-05-13 15:27 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Angelo,
 >
-> Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
-Tested-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Reviewed-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Acked-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/mono/mono.mk | 1 -
->  1 file changed, 1 deletion(-)
+> On Thu, 6 Apr 2017 19:08:35 +0200, Angelo Compagnucci wrote:
 >
-> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-> index 20b920568..4996b7c60 100644
-> --- a/package/mono/mono.mk
-> +++ b/package/mono/mono.mk
-> @@ -31,7 +31,6 @@ MONO_CONF_OPTS = --disable-gtk-doc \
->  define MONO_INSTALL_LIBS
->         rsync -av --exclude=*.so --exclude=*.mdb \
->                 $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
-> -       rsync -av $(HOST_DIR)/etc/mono $(TARGET_DIR)/etc
->  endef
+>> > Below is the diff between staging and host. I am using a Ubuntu VM to
+>> > compile for an ARM target with uCLibc.
+>> > The appropriate .so files (libc.so.0) are referenced in the config file in
+>> > the staging directory but not in the host.
+>> > The patch I referenced in my commit is:
+>> >   * package/mono/0002-Adjust-libc.so-path-depending-on-C-
+>> > library-being-use.patch
+>> > This patch addresses the proper generation of the /etc/mono/config file in
+>> > the staging directory, I believe.
+>> >
+>> > Thanks!
+>> >
+>>
+>> Could you send me a minimal example that exibits the problem?!
 >
->  MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
+> Do you have some further feedback on this issue? Dustin's patch is
+> still pending, waiting for you to confirm or not the issue and indicate
+> if Dustin's solution is the most appropriate or not.
+
+Sorry for the late reply. The patch is good, I tested it and it solves
+a real bug. Great Dustin that nailed it, good catch!
+
+> Thanks for your feedback,
+>
+> Thomas
 > --
-> 2.12.0.windows.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
 
 
