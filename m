@@ -1,31 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 22:00:36 +0200
-Subject: [Buildroot] [PATCH 1/3] configs/linksprite_pcduino_defconfig:
- update bsp versions
-In-Reply-To: <20170520170643.19786-2-geomatsi@gmail.com>
-References: <20170520170643.19786-1-geomatsi@gmail.com>
- <20170520170643.19786-2-geomatsi@gmail.com>
-Message-ID: <20170522220036.02dcd373@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 May 2017 22:15:31 +0200
+Subject: [Buildroot] [PATCH/next] package/bustle: bump version to 0.5.4
+In-Reply-To: <20170521182838.2161-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 21 May 2017 20:28:38 +0200")
+References: <20170521182838.2161-1-bernd.kuhls@t-online.de>
+Message-ID: <87h90czlzw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Sat, 20 May 2017 20:06:41 +0300, Sergey Matyukevich wrote:
-> Bump u-boot version to 2017.03 and kernel version to 4.11.
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->  configs/linksprite_pcduino_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/bustle/bustle.hash | 2 +-
+ >  package/bustle/bustle.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-All three patches applied to next. Thanks!
+ > diff --git a/package/bustle/bustle.hash b/package/bustle/bustle.hash
+ > index 9c6df5671..49890f74f 100644
+ > --- a/package/bustle/bustle.hash
+ > +++ b/package/bustle/bustle.hash
+ > @@ -1,2 +1,2 @@
+ >  # Locally calculated
+ > -sha256	6c76cb5182c20b8ce7d6911f8aebc4fae43f919e747a003f1a66698628b27682  bustle-0.4.3.tar.gz
+ > +sha256 921c2cbbb957dcb02c3aa8fd1eeff3534cb437fa9eeca1c25206ad1e741a3f14  bustle-0.5.4.tar.gz
+ > diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+ > index 4cd446065..ffbfbe40f 100644
+ > --- a/package/bustle/bustle.mk
+ > +++ b/package/bustle/bustle.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -BUSTLE_VERSION = 0.4.3
+ > +BUSTLE_VERSION = 0.5.4
+ >  BUSTLE_SITE = http://www.willthompson.co.uk/bustle/releases/$(BUSTLE_VERSION)
 
-Thomas
+While this still works, it seems bustle has moved to freedesktop - So it
+would be good to change the homepage link to:
+
+https://wiki.freedesktop.org/www/Software/Bustle/
+
+And the download link to:
+
+https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
