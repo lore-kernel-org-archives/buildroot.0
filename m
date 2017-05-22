@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 16:14:34 +0200
-Subject: [Buildroot] [PATCH/next] package/bootstrap: bump version to
- 3.3.7
-In-Reply-To: <20170521181024.27233-1-bernd.kuhls@t-online.de>
-References: <20170521181024.27233-1-bernd.kuhls@t-online.de>
-Message-ID: <20170522161434.4df9d628@free-electrons.com>
+Date: Mon, 22 May 2017 16:14:49 +0200
+Subject: [Buildroot] [git commit branch/next] package/botan: bump version to
+	1.10.16
+Message-ID: <20170522141814.C51E38289A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=033aa8d4e9ad13ee56dbb372ad45a7d83bca4f53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 21 May 2017 20:10:24 +0200, Bernd Kuhls wrote:
-> Changed _INSTALL_TARGET_CMDS to reflect updated internal zip structure:
-> 
-> $ unzip -l ../dl/bootstrap-3.3.1-dist.zip
-> Archive:  ../dl/bootstrap-3.3.1-dist.zip
->   Length      Date    Time    Name
-> ---------  ---------- -----   ----
->         0  2014-11-12 18:03   dist/
->         0  2014-11-12 18:03   dist/css/
-> [...]
-> 
-> $ unzip -l ../dl/bootstrap-3.3.7-dist.zip
-> Archive:  ../dl/bootstrap-3.3.7-dist.zip
->   Length      Date    Time    Name
-> ---------  ---------- -----   ----
->         0  2016-07-25 15:53   bootstrap-3.3.7-dist/css/
-> [...]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Changing INSTALL_TARGET_CMDS is not the right way of handling. Instead,
-the EXTRACT_CMDS should be changed to drop the useless sub-directory,
-i.e to mimic what tar --strip-components=1 does.
-
-Could you fix this up?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 3da5f69..3d46a13 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	23ec973d4b4a4fe04f490d409e08ac5638afe3aa09acd7f520daaff38ba19b90  Botan-1.10.13.tgz
++sha256 6c5472401d06527e87adcb53dd270f3c9b1fb688703b04dd7a7cfb86289efe52  Botan-1.10.16.tgz
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 7694b8d..2f24151 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOTAN_VERSION = 1.10.13
++BOTAN_VERSION = 1.10.16
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tgz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
