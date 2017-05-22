@@ -1,65 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 15:58:28 +0200
-Subject: [Buildroot] [git commit branch/next] package/apr: bump version to
-	1.5.2
-Message-ID: <20170522140012.A9A0280526@busybox.osuosl.org>
+Date: Mon, 22 May 2017 15:59:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/autoconf-archive: bump
+	version to 2017.03.21
+Message-ID: <20170522140012.C4B148027E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=614da9ef8a7847ec511e5962cd34a2fdcc0d5b13
+commit: https://git.buildroot.net/buildroot/commit/?id=5d1e711887b0730fbe694cd2f601a0a2b87cc0e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Rebased patch 0001 and changed _SOURCE to .tar.bz2.
+Patch 0001 has been rebased.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/apr/0001-cross-compile.patch | 6 +++---
- package/apr/apr.hash                 | 4 ++--
- package/apr/apr.mk                   | 3 ++-
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch | 6 ++++--
+ package/autoconf-archive/autoconf-archive.hash              | 2 +-
+ package/autoconf-archive/autoconf-archive.mk                | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/apr/0001-cross-compile.patch b/package/apr/0001-cross-compile.patch
-index 5b596fb..559ebb7 100644
---- a/package/apr/0001-cross-compile.patch
-+++ b/package/apr/0001-cross-compile.patch
-@@ -42,10 +42,10 @@ diff -uNr apr-1.5.1.org/Makefile.in apr-1.5.1/Makefile.in
+diff --git a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+index 6d345d3..c0efeb3 100644
+--- a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
++++ b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+@@ -17,6 +17,8 @@ fi
+ Remove the [] on the third part of AS_IF.
+ 
+ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++(rebased against version 2017.03.21)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  m4/ax_tls.m4 | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -29,8 +31,8 @@ index 809b761..2135dd2 100644
+  #   modified version of the Autoconf Macro, you may extend this special
+  #   exception to the GPL to apply to your modified version as well.
   
-  # get substituted into some targets
-  APR_MAJOR_VERSION=@APR_MAJOR_VERSION@
--@@ -134,8 +136,13 @@
-+@@ -134,8 +134,13 @@
-+ 	$(APR_MKDIR) tools
-+ 	$(LT_COMPILE)
+--#serial 11
+-+#serial 12
++-#serial 13
+++#serial 14
   
-- OBJECTS_gen_test_char = tools/gen_test_char.lo $(LOCAL_LIBS)
-- tools/gen_test_char.lo: make_tools_dir
- +ifdef CC_FOR_BUILD
- +tools/gen_test_char at EXEEXT@: tools/gen_test_char.c $(LOCAL_LIBS)
- +	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -DCROSS_COMPILE -o $@ $<
-diff --git a/package/apr/apr.hash b/package/apr/apr.hash
-index 50d657a..917ce56 100644
---- a/package/apr/apr.hash
-+++ b/package/apr/apr.hash
+  AC_DEFUN([AX_TLS], [
+    AC_MSG_CHECKING([for thread local storage (TLS) class])
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index 6982a4d..2c537b3 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
 @@ -1,2 +1,2 @@
--# From http://archive.apache.org/dist/apr/apr-1.5.1.tar.gz.sha1
--sha1	9caa83e3f50f3abc9fab7c4a3f2739a12b14c3a3	apr-1.5.1.tar.gz
-+# From http://archive.apache.org/dist/apr/apr-1.5.2.tar.bz2.sha1
-+sha1 6d757fcf7c687fc300c1066076f2e8380ff8cbc0  apr-1.5.2.tar.bz2
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index f09f943..4a97f7e 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -4,7 +4,8 @@
+ # Computed locally
+-sha256 88fb2efff640eddd28a52ae550ff5561bca3bd2bba09e1d7b0580e719875e437  autoconf-archive-2016.03.20.tar.xz
++sha256 386ad455f12bdeb3a7d19280441a5ab77355142349200ff11040a8d9d455d765  autoconf-archive-2017.03.21.tar.xz
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index 053ea33..6a7ac4d 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APR_VERSION = 1.5.1
-+APR_VERSION = 1.5.2
-+APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
- APR_LICENSE_FILES = LICENSE
+-AUTOCONF_ARCHIVE_VERSION = 2016.03.20
++AUTOCONF_ARCHIVE_VERSION = 2017.03.21
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
