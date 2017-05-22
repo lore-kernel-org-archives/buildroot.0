@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 16:07:01 +0200
-Subject: [Buildroot] [PATCH/next] package/bdwgc: bump version to 7.6.0
-In-Reply-To: <20170521174103.6779-1-bernd.kuhls@t-online.de>
-References: <20170521174103.6779-1-bernd.kuhls@t-online.de>
-Message-ID: <20170522160701.0fa79d53@free-electrons.com>
+Date: Mon, 22 May 2017 16:10:30 +0200
+Subject: [Buildroot] [git commit branch/next] fio: re-enable on uClibc
+Message-ID: <20170522141157.21BDF827E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc5d15a480df91f6cc768dab5bbbefe74b1b13aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 21 May 2017 19:41:03 +0200, Bernd Kuhls wrote:
-> Removed patches applied upstream:
-> 
-> 0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
-> https://github.com/ivmai/bdwgc/commit/c887470e0e3310c81ecdb7e736bc5d2ead45db2a
-> 
-> 0003-Revert-Move-asm-machine-dependent-files-to-src-folde.patch
-> https://github.com/ivmai/bdwgc/commit/5e756d4d8df2949cb3b6e51532d3016cbb276fd7
-> 
-> 0004-configure-match-uclinux-pattern.patch
-> https://github.com/ivmai/bdwgc/commit/a628c90bdbf397465ac2ab2b11f14eb2e853651c
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...include-sigcontext.h-and-asm-sigcontext.h.patch |  61 ---
->  ...-asm-machine-dependent-files-to-src-folde.patch | 424 ---------------------
->  .../0004-configure-match-uclinux-pattern.patch     |  32 --
->  package/bdwgc/bdwgc.hash                           |   2 +-
->  package/bdwgc/bdwgc.mk                             |   2 +-
->  5 files changed, 2 insertions(+), 519 deletions(-)
->  delete mode 100644 package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
->  delete mode 100644 package/bdwgc/0003-Revert-Move-asm-machine-dependent-files-to-src-folde.patch
->  delete mode 100644 package/bdwgc/0004-configure-match-uclinux-pattern.patch
+The fio package was disabled on uClibc because posix_madvise() was
+back then not implemented in an official release of uClibc. It now
+exists in uClibc-ng since its version 1.0.0, so we can assume it's
+available. We already make lots of assumptions about external uClibc
+toolchains, and they should definitely be using a recent version of
+uClibc-ng to be usable by Buildroot.
 
-Applied to next, thanks.
+Also, the Config.in comment was not handling this uClibc exception.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fio/Config.in | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index 89f54f9..8da227d 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -4,12 +4,6 @@ config BR2_PACKAGE_FIO
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# fio uses posix_madvise(), which is not part of any official
+-	# release of uClibc, but is part of uClibc Git, and backported
+-	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
+-	# disable the build of fio for external uClibc toolchains
+-	# (which use an unknown uClibc version)
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	# fio uses fallocate() which becomes fallocate64() while compiling with
+ 	# largefile support, but fallocate64() is not available on nios2
+ 	depends on !BR2_nios2
