@@ -1,41 +1,33 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 22 May 2017 12:30:58 +0200
-Subject: [Buildroot] [PATCH] package/lua-ev: bump version to git master
-Message-ID: <20170522103058.24045-1-m.niestroj@grinn-global.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 May 2017 11:35:33 +0000
+Subject: [Buildroot] [Bug 9891] parted 3.1 => 3.2?
+In-Reply-To: <bug-9891-163@https.bugs.busybox.net/>
+References: <bug-9891-163@https.bugs.busybox.net/>
+Message-ID: <bug-9891-163-L4EYDxBD5V@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current git master version has Lua 5.3 compatibility added.
+https://bugs.busybox.net/show_bug.cgi?id=9891
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/lua-ev/lua-ev.hash | 2 +-
- package/lua-ev/lua-ev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-diff --git a/package/lua-ev/lua-ev.hash b/package/lua-ev/lua-ev.hash
-index 522e7e7e8..3f8d98129 100644
---- a/package/lua-ev/lua-ev.hash
-+++ b/package/lua-ev/lua-ev.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f7f5df5ecfe4bd54797261d1b1bd3f770d39128b7aba72deef6d1d8d8e2b53fe  lua-ev-v1.4.tar.gz
-+sha256 4e26e05830955fdd882a1b48b535be94356582eea310327f839f830cd9250d3a  lua-ev-339426fbe528f11cb3cd1af69a88f06bba367981.tar.gz
-diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
-index 68f7fc75b..39394875b 100644
---- a/package/lua-ev/lua-ev.mk
-+++ b/package/lua-ev/lua-ev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_EV_VERSION = v1.4
-+LUA_EV_VERSION = 339426fbe528f11cb3cd1af69a88f06bba367981
- LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
- LUA_EV_DEPENDENCIES = luainterpreter libev
- LUA_EV_LICENSE = MIT
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+> can we please have an option for parted 3.2?
+> Switching [...] sounds not like too challenging,
+> so can we please have this?
+
+Can you please send a patch doing so?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.13.0
+You are receiving this mail because:
+You are on the CC list for the bug.
