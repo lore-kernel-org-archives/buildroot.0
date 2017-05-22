@@ -1,98 +1,165 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:13:36 +0200
-Subject: [Buildroot] [git commit] package/uclibc: add upstream patch to fix
-	build issue with gcc7
-Message-ID: <20170601202855.4D77F807D3@busybox.osuosl.org>
+Date: Mon, 22 May 2017 15:39:21 +0200
+Subject: [Buildroot] [git commit] package/c-periphery: bump version to 1.1.1
+Message-ID: <20170601202852.F1B13807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10809c03ad2c3263281bb644d4d82123db5acce4
+commit: https://git.buildroot.net/buildroot/commit/?id=4ff538cfc77c16e6458c787f9bfb2ee93e005a2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As reported on the mailing list [1], there is a build issue with gcc 7
-and uClibc-ng.
+Removed patches applied upstream:
 
-Thanks to Waldemar for the fix :)
+0001-Add-missing-header-for-musl-compatibility.patch
+https://github.com/vsergeev/c-periphery/commit/27a95527201a368c825aeaf937700c279e13922a
 
-[1] http://lists.busybox.net/pipermail/buildroot/2017-May/191140.html
+0002-Fix-build-on-SPARC.patch
+https://github.com/vsergeev/c-periphery/commit/114c715c78ce300a5cd64fb71f32ffd2bce5326c
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...es.h-with-GNU-C-library-fixes-gcc-7.1-too.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ ...Add-missing-header-for-musl-compatibility.patch | 32 ----------
+ package/c-periphery/0002-Fix-build-on-SPARC.patch  | 70 ----------------------
+ package/c-periphery/c-periphery.hash               |  2 +-
+ package/c-periphery/c-periphery.mk                 |  2 +-
+ 4 files changed, 2 insertions(+), 104 deletions(-)
 
-diff --git a/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch b/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch
-new file mode 100644
-index 0000000..eb1459b
---- /dev/null
-+++ b/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch
-@@ -0,0 +1,64 @@
-+From 5b0f49037e8ea8500b05c8f31ee88529ccac4cee Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sun, 7 May 2017 16:28:14 +0200
-+Subject: [PATCH] sync features.h with GNU C library, fixes gcc 7.1 toolchain
-+ creation
-+
-+[Romain: backport to uClibc-ng 1.0.24]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ include/features.h | 17 ++++++++++++-----
-+ 1 file changed, 12 insertions(+), 5 deletions(-)
-+
-+diff --git a/include/features.h b/include/features.h
-+index e76bbba..f982079 100644
-+--- a/include/features.h
-++++ b/include/features.h
-+@@ -55,6 +55,7 @@
-+    These are defined by this file and are used by the
-+    header files to decide what to declare or define:
-+ 
-++   __USE_ISOC11		Define ISO C11 things.
-+    __USE_ISOC99		Define ISO C99 things.
-+    __USE_ISOC95		Define ISO C90 AMD1 (C95) things.
-+    __USE_POSIX		Define IEEE Std 1003.1 things.
-+@@ -91,6 +92,7 @@
-+ 
-+ 
-+ /* Undefine everything, so we get a clean slate.  */
-++#undef	__USE_ISOC11
-+ #undef	__USE_ISOC99
-+ #undef	__USE_ISOC95
-+ #undef	__USE_POSIX
-+@@ -151,6 +153,8 @@
-+ #ifdef _GNU_SOURCE
-+ # undef  _ISOC99_SOURCE
-+ # define _ISOC99_SOURCE	1
-++# undef  _ISOC11_SOURCE
-++# define _ISOC11_SOURCE	1
-+ # undef  _POSIX_SOURCE
-+ # define _POSIX_SOURCE	1
-+ # undef  _POSIX_C_SOURCE
-+@@ -223,11 +227,14 @@
-+ # define _SVID_SOURCE	1
-+ #endif
-+ 
-+-/* This is to enable the ISO C99 extension.  Also recognize the old macro
-+-   which was used prior to the standard acceptance.  This macro will
-+-   eventually go away and the features enabled by default once the ISO C99
-+-   standard is widely adopted.  */
-+-#if (defined _ISOC99_SOURCE || defined _ISOC9X_SOURCE \
-++/* This is to enable the ISO C11 extension.  */
-++#if (defined _ISOC11_SOURCE \
-++     || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 201112L))
-++# define __USE_ISOC11	1
-++#endif
-++
-++/* This is to enable the ISO C99 extension.  */
-++#if (defined _ISOC99_SOURCE || defined _ISOC11_SOURCE \
-+      || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L))
-+ # define __USE_ISOC99	1
-+ #endif
-+-- 
-+2.9.3
-+
+diff --git a/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch b/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch
+deleted file mode 100644
+index 108297c..0000000
+--- a/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 1d8cb0ad54099c3d7261aaa19a2c0786f16736d0 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 8 Aug 2015 22:42:39 +0200
+-Subject: [PATCH] Add missing header for musl compatibility
+-
+-<linux/ioctl.h> is needed to get the definition of _IOC_SIZEBITS and
+-solve the following build failure:
+-
+-src/spi.c: In function 'spi_transfer':
+-src/spi.c:100:24: error: '_IOC_SIZEBITS' undeclared (first use in this function)
+-     if (ioctl(spi->fd, SPI_IOC_MESSAGE(1), &spi_xfer) < 1)
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/spi.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/spi.c b/src/spi.c
+-index 52a8d3d..1a6b17c 100644
+---- a/src/spi.c
+-+++ b/src/spi.c
+-@@ -16,6 +16,7 @@
+- #include <errno.h>
+- 
+- #include <sys/ioctl.h>
+-+#include <linux/ioctl.h>
+- #include <linux/spi/spidev.h>
+- 
+- #include "spi.h"
+--- 
+-2.5.0
+-
+diff --git a/package/c-periphery/0002-Fix-build-on-SPARC.patch b/package/c-periphery/0002-Fix-build-on-SPARC.patch
+deleted file mode 100644
+index e491f6f..0000000
+--- a/package/c-periphery/0002-Fix-build-on-SPARC.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From 295316c3f44c3e779e85d7453424496a3bb4bc48 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 8 Aug 2015 22:56:09 +0200
+-Subject: [PATCH] Fix build on SPARC
+-
+-On SPARC, the definitions of B2500000, B3000000, B3500000 and B4000000
+-are not necessarily available, so use those values only if defined in
+-the kernel headers.
+-
+-It fixes SPARC build failures such as:
+-
+-src/serial.c: In function '_serial_baudrate_to_bits':
+-src/serial.c:73:30: error: 'B2500000' undeclared (first use in this function)
+-         case 2500000: return B2500000;
+-                              ^
+-src/serial.c:73:30: note: each undeclared identifier is reported only once for each function it appears in
+-src/serial.c:74:30: error: 'B3000000' undeclared (first use in this function)
+-         case 3000000: return B3000000;
+-                              ^
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/serial.c | 16 ++++++++++++++++
+- 1 file changed, 16 insertions(+)
+-
+-diff --git a/src/serial.c b/src/serial.c
+-index e385309..efd425e 100644
+---- a/src/serial.c
+-+++ b/src/serial.c
+-@@ -70,10 +70,18 @@ static int _serial_baudrate_to_bits(uint32_t baudrate) {
+-         case 1152000: return B1152000;
+-         case 1500000: return B1500000;
+-         case 2000000: return B2000000;
+-+#ifdef B2500000
+-         case 2500000: return B2500000;
+-+#endif
+-+#ifdef B3000000
+-         case 3000000: return B3000000;
+-+#endif
+-+#ifdef B3500000
+-         case 3500000: return B3500000;
+-+#endif
+-+#ifdef B4000000
+-         case 4000000: return B4000000;
+-+#endif
+-         default: return -1;
+-     }
+- }
+-@@ -107,10 +115,18 @@ static int _serial_bits_to_baudrate(uint32_t bits) {
+-         case B1152000: return 1152000;
+-         case B1500000: return 1500000;
+-         case B2000000: return 2000000;
+-+#ifdef B2500000
+-         case B2500000: return 2500000;
+-+#endif
+-+#ifdef B3000000
+-         case B3000000: return 3000000;
+-+#endif
+-+#ifdef B3500000
+-         case B3500000: return 3500000;
+-+#endif
+-+#ifdef B4000000
+-         case B4000000: return 4000000;
+-+#endif
+-         default: return -1;
+-     }
+- }
+--- 
+-2.5.0
+-
+diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
+index 516d340..524925f 100644
+--- a/package/c-periphery/c-periphery.hash
++++ b/package/c-periphery/c-periphery.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 5ae4c3f9de0e64d8153ee58b85c4a5defb9f755c6ae215f11b46719bbbac1335  c-periphery-v1.0.3.tar.gz
++sha256 c6cfaae7496ff6500b747106571de6b4ca7d80a383297e592ffcfa3413b66321  c-periphery-v1.1.1.tar.gz
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index 730b3bc..359c860 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_PERIPHERY_VERSION = v1.0.3
++C_PERIPHERY_VERSION = v1.1.1
+ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+ # only a static library
