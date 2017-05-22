@@ -1,42 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:40:34 +0200
-Subject: [Buildroot] [git commit] package/c-icap: add optional support for
-	openssl
-Message-ID: <20170601202854.721A0807D3@busybox.osuosl.org>
+Date: Mon, 22 May 2017 21:59:24 +0200
+Subject: [Buildroot] [git commit] configs/linksprite_pcduino_defconfig:
+	update Linux and U-Boot versions
+Message-ID: <20170601202853.E9570807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c8cc5dadd7f587e22b9de02ffc1b0ad8679ae29
+commit: https://git.buildroot.net/buildroot/commit/?id=5e9915a4a0be2f6d6a76e621252ae5a38fd3fcdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Optional OpenSSL was added with version 0.5.1:
-https://sourceforge.net/p/c-icap/news/2017/03/the-c-icap-051-is-released-/
-https://sourceforge.net/p/c-icap/code/1253/#diff-5
+Bump u-boot version to 2017.03 and kernel version to 4.11.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/c-icap/c-icap.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ configs/linksprite_pcduino_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 82b2574..e57ecd0 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -54,6 +54,13 @@ else
- C_ICAP_CONF_OPTS += --without-ldap
- endif
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index fb82714..e736e48 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -17,13 +17,13 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
+ # For kernel modules autoloading
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+C_ICAP_CONF_OPTS += --with-openssl
-+C_ICAP_DEPENDENCIES += openssl
-+else
-+C_ICAP_CONF_OPTS += --without-openssl
-+endif
-+
- ifeq ($(BR2_PACKAGE_PCRE),y)
- C_ICAP_CONF_OPTS += --with-pcre
- C_ICAP_DEPENDENCIES += pcre
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
+@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
+ BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
