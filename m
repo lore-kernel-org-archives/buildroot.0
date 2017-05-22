@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 16:10:30 +0200
-Subject: [Buildroot] [git commit branch/next] fio: re-enable on uClibc
-Message-ID: <20170522141157.21BDF827E4@busybox.osuosl.org>
+Date: Mon, 22 May 2017 16:07:48 +0200
+Subject: [Buildroot] [git commit branch/next] package/fio: bump version to
+	2.20, add hash
+Message-ID: <20170522141157.18C8682936@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc5d15a480df91f6cc768dab5bbbefe74b1b13aa
+commit: https://git.buildroot.net/buildroot/commit/?id=3a74a010116f4a76bad6100bb4a663e9423fffae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The fio package was disabled on uClibc because posix_madvise() was
-back then not implemented in an official release of uClibc. It now
-exists in uClibc-ng since its version 1.0.0, so we can assume it's
-available. We already make lots of assumptions about external uClibc
-toolchains, and they should definitely be using a recent version of
-uClibc-ng to be usable by Buildroot.
-
-Also, the Config.in comment was not handling this uClibc exception.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fio/Config.in | 6 ------
- 1 file changed, 6 deletions(-)
+ package/fio/fio.hash | 2 ++
+ package/fio/fio.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/fio/Config.in b/package/fio/Config.in
-index 89f54f9..8da227d 100644
---- a/package/fio/Config.in
-+++ b/package/fio/Config.in
-@@ -4,12 +4,6 @@ config BR2_PACKAGE_FIO
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# fio uses posix_madvise(), which is not part of any official
--	# release of uClibc, but is part of uClibc Git, and backported
--	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
--	# disable the build of fio for external uClibc toolchains
--	# (which use an unknown uClibc version)
--	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	# fio uses fallocate() which becomes fallocate64() while compiling with
- 	# largefile support, but fallocate64() is not available on nios2
- 	depends on !BR2_nios2
+diff --git a/package/fio/fio.hash b/package/fio/fio.hash
+new file mode 100644
+index 0000000..7eb0814
+--- /dev/null
++++ b/package/fio/fio.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 1952db4d534221e6e8454f851dfcc38328b0ed4a3f499ea25a51ca2b5ccc8136  fio-fio-2.20.tar.gz
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index e7e9fbe..c109f07 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FIO_VERSION = fio-2.13
++FIO_VERSION = fio-2.20
+ FIO_SITE = git://git.kernel.dk/fio.git
+ FIO_LICENSE = GPL-2.0 + special obligations
+ FIO_LICENSE_FILES = COPYING
