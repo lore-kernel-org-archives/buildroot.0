@@ -1,69 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 15:59:43 +0200
-Subject: [Buildroot] [git commit] package/autoconf-archive: bump version to
-	2017.03.21
-Message-ID: <20170601202853.434A3807D3@busybox.osuosl.org>
+Date: Mon, 22 May 2017 21:46:42 +0200
+Subject: [Buildroot] [git commit] package/libva-intel-driver: bump version
+	to 1.8.2
+Message-ID: <20170601202853.C4EDA807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d1e711887b0730fbe694cd2f601a0a2b87cc0e4
+commit: https://git.buildroot.net/buildroot/commit/?id=ea3b6a4083b708e6f9c52d8241aaac4e8aa43098
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Patch 0001 has been rebased.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch | 6 ++++--
- package/autoconf-archive/autoconf-archive.hash              | 2 +-
- package/autoconf-archive/autoconf-archive.mk                | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
+ package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
-index 6d345d3..c0efeb3 100644
---- a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
-+++ b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
-@@ -17,6 +17,8 @@ fi
- Remove the [] on the third part of AS_IF.
- 
- Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+(rebased against version 2017.03.21)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  m4/ax_tls.m4 | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-@@ -29,8 +31,8 @@ index 809b761..2135dd2 100644
-  #   modified version of the Autoconf Macro, you may extend this special
-  #   exception to the GPL to apply to your modified version as well.
-  
---#serial 11
--+#serial 12
-+-#serial 13
-++#serial 14
-  
-  AC_DEFUN([AX_TLS], [
-    AC_MSG_CHECKING([for thread local storage (TLS) class])
-diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-index 6982a4d..2c537b3 100644
---- a/package/autoconf-archive/autoconf-archive.hash
-+++ b/package/autoconf-archive/autoconf-archive.hash
-@@ -1,2 +1,2 @@
- # Computed locally
--sha256 88fb2efff640eddd28a52ae550ff5561bca3bd2bba09e1d7b0580e719875e437  autoconf-archive-2016.03.20.tar.xz
-+sha256 386ad455f12bdeb3a7d19280441a5ab77355142349200ff11040a8d9d455d765  autoconf-archive-2017.03.21.tar.xz
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-index 053ea33..6a7ac4d 100644
---- a/package/autoconf-archive/autoconf-archive.mk
-+++ b/package/autoconf-archive/autoconf-archive.mk
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index 6115f81..d20ecd1 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/01org/intel-vaapi-driver/releases
+-sha1 f29e89b9a9fcafa153110a6a1762541c2a80f899 intel-vaapi-driver-1.8.1.tar.bz2
++sha1 1564e41f36b1ec646250418eeb344a916eb28407 intel-vaapi-driver-1.8.2.tar.bz2
+ # Locally computed
+-sha256 efd041602635ce9450fbdf864563d3b95341ef3877337772af708d9cc17b2fce  intel-vaapi-driver-1.8.1.tar.bz2
++sha256 866cdf9974911e58b0d3a2cade29dbe7b5b68836e142cf092b99db68e366b702  intel-vaapi-driver-1.8.2.tar.bz2
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index 8683210..c8d28e2 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUTOCONF_ARCHIVE_VERSION = 2016.03.20
-+AUTOCONF_ARCHIVE_VERSION = 2017.03.21
- AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
- AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
- AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
+-LIBVA_INTEL_DRIVER_VERSION = 1.8.1
++LIBVA_INTEL_DRIVER_VERSION = 1.8.2
+ LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+ LIBVA_INTEL_DRIVER_SITE = \
+ 	https://github.com/01org/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
