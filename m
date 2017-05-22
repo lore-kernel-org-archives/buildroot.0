@@ -1,42 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 May 2017 14:00:51 +0200
-Subject: [Buildroot] [git commit] package/libmicrohttpd: bump version to
-	0.9.54
-Message-ID: <20170601202852.62A578261C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 May 2017 21:43:07 +0200
+Subject: [Buildroot] [git commit] package/btrfs-progs: bump version to 4.11
+Message-ID: <20170601202853.96256807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8ed9c5c48cc404863c54976f0dce5e7816c1a52
+commit: https://git.buildroot.net/buildroot/commit/?id=6c2015e5584037171b805b364e91396464710cca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 5c15b9d..e72255a 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 17dedba..0b213ee 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	54797f6e763d417627f89f60e4ae0a431dab0523f92f83def23ea02d0defafea	libmicrohttpd-0.9.52.tar.gz
-+sha256 bcc721895d4a114b0548a39d2241c35caacb9e2e072d40e11b55c60e3d5ddcbe  libmicrohttpd-0.9.54.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 785e886..939e06e 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 ed09df670338562a52d9e7d76a362cc932737e2a67adca4c09395374be1de60a  btrfs-progs-v4.10.2.tar.xz
++sha256 e17a68cc52a27d905b715445e91ddbaa4d42de4847d54836d6ed21e012dabf0e  btrfs-progs-v4.11.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 6594e51..2ea2f72 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.52
-+LIBMICROHTTPD_VERSION = 0.9.54
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+-BTRFS_PROGS_VERSION = 4.10.2
++BTRFS_PROGS_VERSION = 4.11
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
