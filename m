@@ -1,42 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 16:14:49 +0200
-Subject: [Buildroot] [git commit branch/next] package/botan: bump version to
-	1.10.16
-Message-ID: <20170522141814.C51E38289A@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 22 May 2017 16:52:06 +0200
+Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
+	install
+In-Reply-To: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
+References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
+Message-ID: <CA+TH9Vnt+rUA3ECViAMXYwg4sFHyV=vYp+-1RQW631n3hprjgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=033aa8d4e9ad13ee56dbb372ad45a7d83bca4f53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+2017-03-15 3:24 GMT+01:00 Dustin Johnson <dustin.r.johnson@gmail.com>:
+> When the mono package is installed, the autotools installer installs
+> the /etc/mono files to the target. A post_install hook then copies
+> over the mono libraries to the target as well as the host /etc/mono
+> files which overrides the target files. The target specific mono
+> configuration file (/etc/mono/config) is overridden with the host
+> settings. This causes mono on the target to be unable to locate target
+> specific .so files as it overrides the changes enacted by the patches
+> for the package.
+>
+> Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
+Tested-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Reviewed-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Acked-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  package/mono/mono.mk | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+> index 20b920568..4996b7c60 100644
+> --- a/package/mono/mono.mk
+> +++ b/package/mono/mono.mk
+> @@ -31,7 +31,6 @@ MONO_CONF_OPTS = --disable-gtk-doc \
+>  define MONO_INSTALL_LIBS
+>         rsync -av --exclude=*.so --exclude=*.mdb \
+>                 $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
+> -       rsync -av $(HOST_DIR)/etc/mono $(TARGET_DIR)/etc
+>  endef
+>
+>  MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
+> --
+> 2.12.0.windows.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 3da5f69..3d46a13 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	23ec973d4b4a4fe04f490d409e08ac5638afe3aa09acd7f520daaff38ba19b90  Botan-1.10.13.tgz
-+sha256 6c5472401d06527e87adcb53dd270f3c9b1fb688703b04dd7a7cfb86289efe52  Botan-1.10.16.tgz
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 7694b8d..2f24151 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOTAN_VERSION = 1.10.13
-+BOTAN_VERSION = 1.10.16
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tgz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
