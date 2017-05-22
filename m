@@ -1,64 +1,133 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 22 May 2017 18:22:55 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-05-21
-In-Reply-To: <8E2EE25B-898A-4D7A-9936-BD2517D6D86A@openadk.org>
-References: <20170522063013.3FE2A206ED@mail.free-electrons.com>
- <20170522120753.vebsgc6s2fz5fb6a@tarshish>
- <8E2EE25B-898A-4D7A-9936-BD2517D6D86A@openadk.org>
-Message-ID: <20170522152255.7dkweqx25ohzcg7u@tarshish>
+Date: Mon, 22 May 2017 18:38:21 +0300
+Subject: [Buildroot] [PATCH next] iproute2: bump to version 4.11.0
+Message-ID: <253a2c4e93de89e3b56f014ad580bd62064a3f94.1495467501.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Drop upstream patch.
 
-On Mon, May 22, 2017 at 04:14:28PM +0200, Waldemar Brodkorb wrote:
-> take a look here:
-> https://github.com/richfelker/musl-cross-make/blob/master/patches/gcc-6.3.0/0010-static-pie-support.diff
+Add a patch fixing struct ethhdr conflict using the Buildroot local if_ether.h
+kernel header suppression patch.
 
-Thanks for the pointer.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0003-ip-include-libc-headers-first.patch       | 35 ++++++++++++++++++++
+ .../0003-tc-add-missing-limits.h-header.patch      | 38 ----------------------
+ package/iproute2/iproute2.hash                     |  2 +-
+ package/iproute2/iproute2.mk                       |  2 +-
+ 4 files changed, 37 insertions(+), 40 deletions(-)
+ create mode 100644 package/iproute2/0003-ip-include-libc-headers-first.patch
+ delete mode 100644 package/iproute2/0003-tc-add-missing-limits.h-header.patch
 
-I don't see this, or equivalent, patch in any gcc version that Buildroot 
-supports. Is this the right fix to the cifs-utils build failure?
-
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 152a3eeccf8a..ceedcf5de86f 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -12,6 +12,8 @@ CIFS_UTILS_LICENSE_FILES = COPYING
+diff --git a/package/iproute2/0003-ip-include-libc-headers-first.patch b/package/iproute2/0003-ip-include-libc-headers-first.patch
+new file mode 100644
+index 000000000000..b8421424437b
+--- /dev/null
++++ b/package/iproute2/0003-ip-include-libc-headers-first.patch
+@@ -0,0 +1,35 @@
++From 8afdd8babb9e82bcfde78e851b24b698436a6f9f Mon Sep 17 00:00:00 2001
++Message-Id: <8afdd8babb9e82bcfde78e851b24b698436a6f9f.1495466847.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Mon, 22 May 2017 15:42:49 +0300
++Subject: [PATCH] ip: include libc headers first
++
++Including libc headers first helps as a workaround to redefinition of struct
++ethhdr with a suitably patched musl libc that suppresses the kernel
++if_ether.h.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: posted http://marc.info/?l=linux-netdev&m=149545968900803&w=2
++
++ ip/iplink_bridge.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ip/iplink_bridge.c b/ip/iplink_bridge.c
++index 818b43c89b5b..cccdec1c203a 100644
++--- a/ip/iplink_bridge.c
+++++ b/ip/iplink_bridge.c
++@@ -13,9 +13,9 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <netinet/in.h>
+++#include <netinet/ether.h>
++ #include <linux/if_link.h>
++ #include <linux/if_bridge.h>
++-#include <netinet/ether.h>
++ #include <net/if.h>
++ 
++ #include "rt_names.h"
++-- 
++2.11.0
++
+diff --git a/package/iproute2/0003-tc-add-missing-limits.h-header.patch b/package/iproute2/0003-tc-add-missing-limits.h-header.patch
+deleted file mode 100644
+index b9b27f31a704..000000000000
+--- a/package/iproute2/0003-tc-add-missing-limits.h-header.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 1f4547b0a81db617f4b0d02711d9e39278eb8283 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 22 Dec 2016 20:45:11 +0200
+-Subject: [PATCH] tc: add missing limits.h header
+-
+-This fixes under musl build issues like:
+-
+-f_matchall.c: In function ?matchall_parse_opt?:
+-f_matchall.c:48:12: error: ?LONG_MIN? undeclared (first use in this function)
+-   if (h == LONG_MIN || h == LONG_MAX) {
+-            ^
+-f_matchall.c:48:12: note: each undeclared identifier is reported only once for each function it appears in
+-f_matchall.c:48:29: error: ?LONG_MAX? undeclared (first use in this function)
+-   if (h == LONG_MIN || h == LONG_MAX) {
+-                             ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: posted http://marc.info/?l=linux-netdev&m=148243283002957&w=2
+----
+- tc/tc_util.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/tc/tc_util.h b/tc/tc_util.h
+-index f198a4ad5554..4db26c6d5e25 100644
+---- a/tc/tc_util.h
+-+++ b/tc/tc_util.h
+-@@ -2,6 +2,7 @@
+- #define _TC_UTIL_H_ 1
+- 
+- #define MAX_MSG 16384
+-+#include <limits.h>
+- #include <linux/pkt_sched.h>
+- #include <linux/pkt_cls.h>
+- #include <linux/gen_stats.h>
+--- 
+-2.11.0
+-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 5cacc7f99c65..5bc47d8da4ff 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,2 +1,2 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	c0f30f043f7767cc1b2cd2197b08d4e9b2392c95823fabe30bbce308c30116c4	iproute2-4.9.0.tar.xz
++sha256	72671028bda696d0cb8f48ec8e702581c3a501caeed33eec3a81d7041cbc8026	iproute2-4.11.0.tar.xz
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 6ecfc09847f6..5502d7358be2 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- CIFS_UTILS_CONF_OPTS += --disable-pie
-+else ifeq ($(BR2_STATIC_LIBS),y)
-+CIFS_UTILS_CONF_OPTS += --disable-pie
- endif
- 
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
-
-baruch
-
-> > Am 22.05.2017 um 14:07 schrieb Baruch Siach <baruch@tkos.co.il>:
-> > 
-> >> On Mon, May 22, 2017 at 08:30:13AM +0200, Thomas Petazzoni wrote: 
-> >>      x86_64 |                 cifs-utils-6.6 | NOK | http://autobuild.buildroot.net/results/d19bcfcfb33cc5f5b082b97bbd5852d479823b97 |     
-> > 
-> > In commit 3c93901bcd2 (toolchain: add hidden symbol for PIE support) you 
-> > mentioned
-> > 
-> >  With musl toolchains you might have static PIE support with little
-> >  patching of gcc.
-> > 
-> > What patch of gcc do you refer to? Commit 3c93901bcd2 enables 
-> > BR2_TOOLCHAIN_SUPPORTS_PIE for musl toolchains unconditionally. But this 
-> > cifs-utils build failure indicates that there is still an issue with musl and 
-> > static PIE.
-> > 
-> > Any idea?
-
+-IPROUTE2_VERSION = 4.9.0
++IPROUTE2_VERSION = 4.11.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
