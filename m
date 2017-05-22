@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 21:43:07 +0200
-Subject: [Buildroot] [git commit] package/btrfs-progs: bump version to 4.11
-Message-ID: <20170601202853.96256807D3@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 May 2017 13:51:53 +0200
+Subject: [Buildroot] [git commit] package/minidlna: bump version to 1.2.0
+Message-ID: <20170601202852.560438261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c2015e5584037171b805b364e91396464710cca
+commit: https://git.buildroot.net/buildroot/commit/?id=01f32ecdbc3c33ffb17e557bca9832f6eba0b29c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Added locally computed sha256 hash.
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 17dedba..0b213ee 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 ed09df670338562a52d9e7d76a362cc932737e2a67adca4c09395374be1de60a  btrfs-progs-v4.10.2.tar.xz
-+sha256 e17a68cc52a27d905b715445e91ddbaa4d42de4847d54836d6ed21e012dabf0e  btrfs-progs-v4.11.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 6594e51..2ea2f72 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/minidlna/minidlna.hash | 8 +++++---
+ package/minidlna/minidlna.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/minidlna/minidlna.hash b/package/minidlna/minidlna.hash
+index d1ed4b9..8f6b1cc 100644
+--- a/package/minidlna/minidlna.hash
++++ b/package/minidlna/minidlna.hash
+@@ -1,3 +1,5 @@
+-# From http://sourceforge.net/projects/minidlna/files/minidlna/1.1.5/
+-md5	1970e553a1eb8a3e7e302e2ce292cbc4	minidlna-1.1.5.tar.gz
+-sha1	8185337621f5f9111118d8a4bca1e8cfcdd19505	minidlna-1.1.5.tar.gz
++# From http://sourceforge.net/projects/minidlna/files/minidlna/1.2.0/
++md5 5f59700431e9f66198238deeb4e0d0de  minidlna-1.2.0.tar.gz
++sha1 700e07440167ddef44b06aa59cabe5e3abe612f6  minidlna-1.2.0.tar.gz
++# Locally computed
++sha256 8d34436580c4c44be25976d5e46bc5b71af69bf441c4492774eac001164c4433  minidlna-1.2.0.tar.gz
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index 40f918c..4fa5545 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BTRFS_PROGS_VERSION = 4.10.2
-+BTRFS_PROGS_VERSION = 4.11
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+-MINIDLNA_VERSION = 1.1.5
++MINIDLNA_VERSION = 1.2.0
+ MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
+ MINIDLNA_LICENSE = GPL-2.0, BSD-3-Clause
+ MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
