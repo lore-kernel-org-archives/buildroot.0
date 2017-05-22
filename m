@@ -1,35 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 22 May 2017 21:03:04 +0200
-Subject: [Buildroot] [PATCH/next] package/bootstrap: bump version to
-	3.3.7
-References: <20170521181024.27233-1-bernd.kuhls@t-online.de>
- <20170522161434.4df9d628@free-electrons.com>
-Message-ID: <88pbvdxolo.ln2@ID-313208.user.individual.net>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 22 May 2017 19:22:14 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-05-18
+In-Reply-To: <20170519214454.08c259df@free-electrons.com>
+References: <20170519063157.2654320766@mail.free-electrons.com>
+ <20170519214454.08c259df@free-electrons.com>
+Message-ID: <1495480933.20961.55.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 22 May 2017 16:14:34 +0200 schrieb Thomas Petazzoni:
-
-> Changing INSTALL_TARGET_CMDS is not the right way of handling. Instead,
-> the EXTRACT_CMDS should be changed to drop the useless sub-directory,
-> i.e to mimic what tar --strip-components=1 does.
-
 Hi Thomas,
 
-is there an equivalent of --strip-components=1 for unzip?
+On Fri, 2017-05-19 at 21:44 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 19 May 2017 08:31:57 +0200 (CEST), Thomas Petazzoni wrote:
+>?
+> > ?????????arc |???????????????????quagga-1.1.1 | NOK | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_ffc84eb0
+> > 8e32dabdccc579d67c8d1f8ae71ab1e4&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=0LYQlMzI9D5n6XsyeqEGqg4ii88QIXh
+> > 418hRH-Uw8cA&s=mu0MUYnbYvnsfZGE0JraJzF0s4kBlmHjASZovSIox8M&e=??| ORPH
+> 
+> Compiler failure on ARC:
+> 
+> ? ospf_ri.c:839:1: internal compiler error: in extract_insn, at recog.c:2287
+> 
+> Alexey, is this one already known?
 
-Apparently no, unless you use some ugly script commands to move files 
-around:
+Nope, just reported it to our compiler guy.
+Hopefully it gets fixed in a day or two, stay tuned.
 
-https://superuser.com/questions/518347/equivalent-to-tars-strip-
-components-1-in-unzip
-
-https://superuser.com/questions/443891/unzip-how-to-trim-top-directories
-
-https://unix.stackexchange.com/questions/38162/how-can-i-force-unzip-zip-
-not-to-create-a-subdirectory-when-i-extract-it
-
-Regards, Bernd
+-Alexey
