@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 21:55:10 +0200
-Subject: [Buildroot] [git commit] package/c-icap: fix bzip2 configure option
-Message-ID: <20170522195515.3AAFB828FA@busybox.osuosl.org>
+Date: Mon, 22 May 2017 21:58:12 +0200
+Subject: [Buildroot] [PATCH v3 next] flex: bump version to 2.6.4
+In-Reply-To: <20170510135139.30976-1-Vincent.Riera@imgtec.com>
+References: <20170510135139.30976-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170522215812.078b9c7b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a396b3ab1ecc0dff00be9e04f36494d0d68569f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The configure option controlling bzip2 support got its current name in
-2012 with its initial commit:
+On Wed, 10 May 2017 14:51:39 +0100, Vicente Olivert Riera wrote:
+> - 0001 patch removed. It doesn't apply on this version and is also not
+>   necessary since the AR binary is now handled correctly with AR = @AR at .
+> - 0002 patch removed. It's already included in this release:
+>   https://github.com/westes/flex/commit/a5cbe929ac3255d371e698f62dc256afe7006466
+> - The flex project has moved to GitHub, so modify the URLs in both
+>   flex.mk and Config.in files.
+> - The sed command over Makefile.in to prevent the flex binary to be
+>   built fails, so remove it. That logic has been moved to
+>   src/Makefile.in, and whenever we disable the flex binary to be built
+>   then the compilation fails when building the documentation because
+>   some bits require "../src/flex", which is the flex binary.
+>   We prevent building the flex binary and the documentation using a new
+>   patch.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-https://sourceforge.net/p/c-icap/code/890/#diff-2
+This commit causes a major bug: host-flex no longer builds/installs the
+"flex" program. This will cause a huge number of build failures,
+because there are a lot of packages that depend on host-flex to get the
+flex program.
 
-This patch fixes the configure warning:
+Could you send a patch that fixes this? Either revert back to the
+previous solution of patching the Makefile.in in flex.mk, or adding a
+proper configure.ac option to enable/disable building/installation the
+flex program.
 
-configure: WARNING: unrecognized options: [...] --without-bzip2
+Thanks,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/c-icap/c-icap.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 466d08b..7925f5b 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -36,10 +36,10 @@ C_ICAP_CONF_OPTS += --without-bdb
- endif
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
--C_ICAP_CONF_OPTS += --with-bzip2
-+C_ICAP_CONF_OPTS += --with-bzlib
- C_ICAP_DEPENDENCIES += bzip2
- else
--C_ICAP_CONF_OPTS += --without-bzip2
-+C_ICAP_CONF_OPTS += --without-bzlib
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
