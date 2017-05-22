@@ -1,52 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 21:59:57 +0200
-Subject: [Buildroot] [git commit] configs/orangepi_pc_defconfig: update
-	Linux and U-Boot versions
-Message-ID: <20170601202854.0D8A1807D3@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 22 May 2017 14:08:36 +0200
+Subject: [Buildroot] [git commit] package/bitstream: bump version to 1.2
+Message-ID: <20170601202852.8DD5E807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2c9c7cdf563f7b776f498f539b7392e10372391
+commit: https://git.buildroot.net/buildroot/commit/?id=7bc8809064bd2460c174323454ee33e4a25954e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump u-boot version to 2017.03 and kernel version to 4.11.
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/orangepi_pc_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/bitstream/bitstream.hash | 8 ++++----
+ package/bitstream/bitstream.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
-index a3a5700..104c2f6 100644
---- a/configs/orangepi_pc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -1,14 +1,14 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-pc/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi-pc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
-@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/bitstream/bitstream.hash b/package/bitstream/bitstream.hash
+index 7a3b7f8..a62f733 100644
+--- a/package/bitstream/bitstream.hash
++++ b/package/bitstream/bitstream.hash
+@@ -1,4 +1,4 @@
+-# from https://get.videolan.org/bitstream/1.1/bitstream-1.1.tar.bz2.md5
+-md5 88e6e786242196b4d73a5b6075aeb1a2 bitstream-1.1.tar.bz2
+-# locally calculated
+-sha256 90b65f619895d31e652386d5d7d2d2d62cccd44383c1fac9145d659013a2de9e bitstream-1.1.tar.bz2
++# From https://get.videolan.org/bitstream/1.2/bitstream-1.2.tar.bz2
++sha256 ccfbb438711606de1fad881b58c8f134e2d82b4d53a88ea48f2d1bcb49ca5ad2  bitstream-1.2.tar.bz2
++# From https://get.videolan.org/bitstream/1.2/bitstream-1.2.tar.bz2.md5
++md5 c4b2dbd84eb5799f1525eb9a4e01dc56  bitstream-1.2.tar.bz2
+diff --git a/package/bitstream/bitstream.mk b/package/bitstream/bitstream.mk
+index 9c8c6f5..0b28ffe 100644
+--- a/package/bitstream/bitstream.mk
++++ b/package/bitstream/bitstream.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BITSTREAM_VERSION = 1.1
++BITSTREAM_VERSION = 1.2
+ BITSTREAM_SOURCE = bitstream-$(BITSTREAM_VERSION).tar.bz2
+ BITSTREAM_SITE = https://get.videolan.org/bitstream/$(BITSTREAM_VERSION)
+ BITSTREAM_LICENSE = MIT
