@@ -1,45 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 May 2017 14:07:05 +0200
-Subject: [Buildroot] [git commit] package/batctl: bump version to 2017.0
-Message-ID: <20170601202852.75066807D3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 May 2017 15:59:43 +0200
+Subject: [Buildroot] [git commit] package/autoconf-archive: bump version to
+	2017.03.21
+Message-ID: <20170601202853.434A3807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d39df12dd79e39d8d6835e2220504ecd91256cf7
+commit: https://git.buildroot.net/buildroot/commit/?id=5d1e711887b0730fbe694cd2f601a0a2b87cc0e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/batctl/batctl.hash | 6 +++---
- package/batctl/batctl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Patch 0001 has been rebased.
 
-diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
-index 5920ff0..257e1ff 100644
---- a/package/batctl/batctl.hash
-+++ b/package/batctl/batctl.hash
-@@ -1,4 +1,4 @@
--# http://downloads.open-mesh.org/batman/releases/batman-adv-2016.1/batctl-2016.1.tar.gz.sha1
--sha1 72b974bde707594e2cf0cc122d7d7da0f1f65160 batctl-2016.1.tar.gz
-+# From https://downloads.open-mesh.org/batman/releases/batman-adv-2017.0/batctl-2017.0.tar.gz.sha1
-+sha1 0fbc329b56b465fa4f674cfecd7348144609f8e5  batctl-2017.0.tar.gz
- # Locally calculated
--sha256 c854397b2ddd2cb8d15d1e65839819380648ccb37507d0303e133011fe6f03c9  batctl-2016.1.tar.gz
-+sha256 c0bb1127d6070b46abeb8d6a63d1150d71fa85f87f9a846873b649a21934c686  batctl-2017.0.tar.gz
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-index 73d4598..122263e 100644
---- a/package/batctl/batctl.mk
-+++ b/package/batctl/batctl.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch | 6 ++++--
+ package/autoconf-archive/autoconf-archive.hash              | 2 +-
+ package/autoconf-archive/autoconf-archive.mk                | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+index 6d345d3..c0efeb3 100644
+--- a/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
++++ b/package/autoconf-archive/0001-AX_TLS-fix-syntax-error.patch
+@@ -17,6 +17,8 @@ fi
+ Remove the [] on the third part of AS_IF.
+ 
+ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++(rebased against version 2017.03.21)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  m4/ax_tls.m4 | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -29,8 +31,8 @@ index 809b761..2135dd2 100644
+  #   modified version of the Autoconf Macro, you may extend this special
+  #   exception to the GPL to apply to your modified version as well.
+  
+--#serial 11
+-+#serial 12
++-#serial 13
+++#serial 14
+  
+  AC_DEFUN([AX_TLS], [
+    AC_MSG_CHECKING([for thread local storage (TLS) class])
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index 6982a4d..2c537b3 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256 88fb2efff640eddd28a52ae550ff5561bca3bd2bba09e1d7b0580e719875e437  autoconf-archive-2016.03.20.tar.xz
++sha256 386ad455f12bdeb3a7d19280441a5ab77355142349200ff11040a8d9d455d765  autoconf-archive-2017.03.21.tar.xz
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index 053ea33..6a7ac4d 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BATCTL_VERSION = 2016.1
-+BATCTL_VERSION = 2017.0
- BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
- BATCTL_LICENSE = GPL-2.0
- BATCTL_DEPENDENCIES = libnl host-pkgconf
+-AUTOCONF_ARCHIVE_VERSION = 2016.03.20
++AUTOCONF_ARCHIVE_VERSION = 2017.03.21
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPL-3.0+ with exception
