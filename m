@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 15:59:44 +0200
-Subject: [Buildroot] [git commit] package/cgic: bump version to 2.07
-Message-ID: <20170601202854.D9E83807D3@busybox.osuosl.org>
+Date: Mon, 22 May 2017 16:07:48 +0200
+Subject: [Buildroot] [git commit] package/fio: bump version to 2.20, add hash
+Message-ID: <20170601202853.6F7EF807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46ff1eda54e6ba52073a5bfc2b9d9c1ac3bd51d5
+commit: https://git.buildroot.net/buildroot/commit/?id=3a74a010116f4a76bad6100bb4a663e9423fffae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cgic/cgic.hash | 2 +-
- package/cgic/cgic.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fio/fio.hash | 2 ++
+ package/fio/fio.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/cgic/cgic.hash b/package/cgic/cgic.hash
-index 6137875..fa1d0bc 100644
---- a/package/cgic/cgic.hash
-+++ b/package/cgic/cgic.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  9562e0b6af59ebc2090107eab5946ce0788a1de36146ad181970cf53e9be7a33  cgic206.tar.gz
-+sha256 1e8834642a4b89528bb7bde2f287e133c6b07e210e68681a34137c436d59d320  cgic207.tar.gz
-diff --git a/package/cgic/cgic.mk b/package/cgic/cgic.mk
-index f07c62e..cd08413 100644
---- a/package/cgic/cgic.mk
-+++ b/package/cgic/cgic.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/fio/fio.hash b/package/fio/fio.hash
+new file mode 100644
+index 0000000..7eb0814
+--- /dev/null
++++ b/package/fio/fio.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 1952db4d534221e6e8454f851dfcc38328b0ed4a3f499ea25a51ca2b5ccc8136  fio-fio-2.20.tar.gz
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index e7e9fbe..c109f07 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CGIC_VERSION = 2.06
--CGIC_SOURCE = cgic206.tar.gz
-+CGIC_VERSION = 2.07
-+CGIC_SOURCE = cgic207.tar.gz
- CGIC_SITE = http://boutell.com/cgic
- CGIC_LICENSE = Custom
- CGIC_LICENSE_FILES = license.txt
+-FIO_VERSION = fio-2.13
++FIO_VERSION = fio-2.20
+ FIO_SITE = git://git.kernel.dk/fio.git
+ FIO_LICENSE = GPL-2.0 + special obligations
+ FIO_LICENSE_FILES = COPYING
