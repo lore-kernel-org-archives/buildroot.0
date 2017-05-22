@@ -1,39 +1,376 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 May 2017 11:12:02 +0200
-Subject: [Buildroot] [git commit] package/python-enum34: change setup type
-	to setuptools
-Message-ID: <20170522092418.78F03827E4@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 22 May 2017 10:53:58 +0100
+Subject: [Buildroot] [PATCH next] xenomai: bump version to 3.0.5
+Message-ID: <20170522095358.20262-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c54b7086fc0eaddb7f04560f30bb8cc99860b25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Patch 0001 already included in this release:
+  https://git.xenomai.org/xenomai-3.git/commit/?id=3fa4dcdc397c35d27b67534c04e0ffb6e9d6d1d2
 
-With version 1.1.3 the project switched to setuptools:
-https://bitbucket.org/stoneleaf/enum34/commits/589b4f9d2e733a32c6e67a1e7aa50f476920d121
+Patch 0002 already included in this release:
+  https://git.xenomai.org/xenomai-3.git/commit/?id=4c593544d2ff39ba6631cc3fa0b91493973674d4
 
-Fixes
-http://autobuild.buildroot.net/results/cb6/cb678ca9e57382a876f3f6034a47a4e2c59bc8d0/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/python-enum34/python-enum34.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../xenomai/0001-arm-enable-armv5tej-support.patch |  32 ---
+ ...plate-build-obstack-support-conditionally.patch | 283 ---------------------
+ package/xenomai/xenomai.hash                       |   2 +-
+ package/xenomai/xenomai.mk                         |   2 +-
+ 4 files changed, 2 insertions(+), 317 deletions(-)
+ delete mode 100644 package/xenomai/0001-arm-enable-armv5tej-support.patch
+ delete mode 100644 package/xenomai/0002-boilerplate-build-obstack-support-conditionally.patch
 
-diff --git a/package/python-enum34/python-enum34.mk b/package/python-enum34/python-enum34.mk
-index 1a4c6c6..c612cb6 100644
---- a/package/python-enum34/python-enum34.mk
-+++ b/package/python-enum34/python-enum34.mk
-@@ -7,7 +7,7 @@
- PYTHON_ENUM34_VERSION = 1.1.6
- PYTHON_ENUM34_SOURCE = enum34-$(PYTHON_ENUM34_VERSION).tar.gz
- PYTHON_ENUM34_SITE = https://pypi.python.org/packages/bf/3e/31d502c25302814a7c2f1d3959d2a3b3f78e509002ba91aea64993936876
--PYTHON_ENUM34_SETUP_TYPE = distutils
-+PYTHON_ENUM34_SETUP_TYPE = setuptools
- PYTHON_ENUM34_LICENSE = BSD-3-Clause
- PYTHON_ENUM34_LICENSE_FILES = enum/LICENSE
+diff --git a/package/xenomai/0001-arm-enable-armv5tej-support.patch b/package/xenomai/0001-arm-enable-armv5tej-support.patch
+deleted file mode 100644
+index 5feaa59e8..000000000
+--- a/package/xenomai/0001-arm-enable-armv5tej-support.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From fcd06f42fef4d52bb0d9772fa71015988c828b1b Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Fri, 31 Mar 2017 21:10:23 +0200
+-Subject: [PATCH] arm: enable armv5tej support
+-
+-armv5tej are not detected in lib/cobalt/arch/arm/include/asm/xenomai/features.h
+-
+-Apply the same patch from xenomai-2.6:
+-https://git.xenomai.org/xenomai-2.6.git/commit/?id=ebc2779baa222db4a5936c3d3022803355585b8c
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- lib/cobalt/arch/arm/include/asm/xenomai/features.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/cobalt/arch/arm/include/asm/xenomai/features.h b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
+-index 10bd0c7..e84b809 100644
+---- a/lib/cobalt/arch/arm/include/asm/xenomai/features.h
+-+++ b/lib/cobalt/arch/arm/include/asm/xenomai/features.h
+-@@ -34,7 +34,8 @@
+- #endif /* armv4 */
+- 
+- #if defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) \
+--	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__)
+-+	|| defined(__ARM_ARCH_5E__) || defined(__ARM_ARCH_5TE__) \
+-+	|| defined(__ARM_ARCH_5TEJ__)
+- #define __LINUX_ARM_ARCH__ 5
+- #endif /* armv5 */
+- 
+--- 
+-2.9.3
+-
+diff --git a/package/xenomai/0002-boilerplate-build-obstack-support-conditionally.patch b/package/xenomai/0002-boilerplate-build-obstack-support-conditionally.patch
+deleted file mode 100644
+index 1c61aa178..000000000
+--- a/package/xenomai/0002-boilerplate-build-obstack-support-conditionally.patch
++++ /dev/null
+@@ -1,283 +0,0 @@
+-From 4c593544d2ff39ba6631cc3fa0b91493973674d4 Mon Sep 17 00:00:00 2001
+-From: Philippe Gerum <rpm@xenomai.org>
+-Date: Fri, 14 Apr 2017 18:28:36 +0200
+-Subject: [PATCH] boilerplate: build obstack support conditionally
+-
+-If the underlying *libc does not support obstacks, build a private
+-implementation, otherwise fully rely on the native support.
+-
+-This fixes a long-standing issue building replacement code for the
+-native obstack support, which ended up breaking builds over uClibc
+-1.0.21 and later.  See https://patchwork.ozlabs.org/patch/745792/.
+-
+-[Backport from upstream.]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- configure.ac                  |   4 ++
+- include/boilerplate/obstack.h |  12 +++--
+- lib/boilerplate/Makefile.am   |   5 +-
+- lib/boilerplate/obstack.c     | 111 +++++++-----------------------------------
+- 4 files changed, 34 insertions(+), 98 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 8222e1d..fbfb60f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -495,6 +495,10 @@ fi
+- 
+- test x$CONFIG_XENO_VALGRIND_API = xy && AC_DEFINE(CONFIG_XENO_VALGRIND_API,1,[config])
+- 
+-+dnl Check for obstack support in *libc
+-+AC_CHECK_HEADERS(obstack.h,libc_has_obstack=y)
+-+AM_CONDITIONAL(XENO_PRIVATE_OBSTACK,[test x$libc_has_obstack = x])
+-+
+- dnl Check for presence of some headers
+- AC_CHECK_HEADERS(mqueue.h)
+- 
+-diff --git a/include/boilerplate/obstack.h b/include/boilerplate/obstack.h
+-index 206fe55..95eb792 100644
+---- a/include/boilerplate/obstack.h
+-+++ b/include/boilerplate/obstack.h
+-@@ -103,8 +103,12 @@ Summary:
+- 
+- /* Don't do the contents of this file more than once.  */
+- 
+--#ifndef _OBSTACK_H
+--#define _OBSTACK_H 1
+-+#ifndef _BOILERPLATE_OBSTACK_H
+-+#define _BOILERPLATE_OBSTACK_H 1
+-+
+-+#ifdef HAVE_OBSTACK_H
+-+#include_next <obstack.h>
+-+#else
+- 
+- #ifdef __cplusplus
+- extern "C" {
+-@@ -506,4 +510,6 @@ __extension__								\
+- }	/* C++ */
+- #endif
+- 
+--#endif /* obstack.h */
+-+#endif /* !HAVE_OBSTACK_H */
+-+
+-+#endif /* _BOILERPLATE_OBSTACK_H */
+-diff --git a/lib/boilerplate/Makefile.am b/lib/boilerplate/Makefile.am
+-index 9b8612d..d7e6324 100644
+---- a/lib/boilerplate/Makefile.am
+-+++ b/lib/boilerplate/Makefile.am
+-@@ -6,10 +6,13 @@ libboilerplate_la_LIBADD = libversion.la libiniparser.la
+- libboilerplate_la_SOURCES =	\
+- 	ancillaries.c		\
+- 	hash.c			\
+--	obstack.c		\
+- 	setup.c			\
+- 	time.c
+- 
+-+if XENO_PRIVATE_OBSTACK
+-+libboilerplate_la_SOURCES += obstack.c
+-+endif
+-+
+- if XENO_DEBUG
+- libboilerplate_la_SOURCES += debug.c
+- endif
+-diff --git a/lib/boilerplate/obstack.c b/lib/boilerplate/obstack.c
+-index 4c645b2..fab62ce 100644
+---- a/lib/boilerplate/obstack.c
+-+++ b/lib/boilerplate/obstack.c
+-@@ -22,39 +22,11 @@
+- #include <xeno_config.h>
+- #include <boilerplate/obstack.h>
+- 
+--/* NOTE BEFORE MODIFYING THIS FILE: This version number must be
+--   incremented whenever callers compiled using an old obstack.h can no
+--   longer properly call the functions in this obstack.c.  */
+--#define OBSTACK_INTERFACE_VERSION 1
+--
+--/* Comment out all this code if we are using the GNU C Library, and are not
+--   actually compiling the library itself, and the installed library
+--   supports the same library interface we do.  This code is part of the GNU
+--   C Library, but also included in many other GNU distributions.  Compiling
+--   and linking in this code is a waste when using the GNU C library
+--   (especially if it is a shared library).  Rather than having every GNU
+--   program understand `configure --with-gnu-libc' and omit the object
+--   files, it is simpler to just do this in the source for each such file.  */
+--
+--#include <stdio.h>		/* Random thing to get __GNU_LIBRARY__.  */
+--#if !defined _LIBC && defined __GNU_LIBRARY__ && __GNU_LIBRARY__ > 1
+--# include <gnu-versions.h>
+--# if _GNU_OBSTACK_INTERFACE_VERSION == OBSTACK_INTERFACE_VERSION
+--#  define ELIDE_CODE
+--# endif
+--#endif
+-+/* Use this obstack implementation unconditionally.  */
+- 
+-+#include <stdio.h>
+- #include <stddef.h>
+--
+--#ifndef ELIDE_CODE
+--
+--
+--# if HAVE_INTTYPES_H
+--#  include <inttypes.h>
+--# endif
+--# if HAVE_STDINT_H || defined _LIBC
+--#  include <stdint.h>
+--# endif
+-+#include <stdint.h>
+- 
+- /* Determine default alignment.  */
+- union fooround
+-@@ -97,22 +69,7 @@ void (*obstack_alloc_failed_handler) (void) = print_and_abort;
+- 
+- /* Exit value used when `print_and_abort' is used.  */
+- # include <stdlib.h>
+--# ifdef _LIBC
+- int obstack_exit_failure = EXIT_FAILURE;
+--# else
+--#  include "exitfail.h"
+--#  define obstack_exit_failure exit_failure
+--# endif
+--
+--# ifdef _LIBC
+--#  if SHLIB_COMPAT (libc, GLIBC_2_0, GLIBC_2_3_4)
+--/* A looong time ago (before 1994, anyway; we're not sure) this global variable
+--   was used by non-GNU-C macros to avoid multiple evaluation.  The GNU C
+--   library still exports it because somebody might use it.  */
+--struct obstack *_obstack_compat;
+--compat_symbol (libc, _obstack_compat, _obstack, GLIBC_2_0);
+--#  endif
+--# endif
+- 
+- /* Define a macro that either calls functions with the traditional malloc/free
+-    calling interface, or calls functions with the mmalloc/mfree interface
+-@@ -148,7 +105,7 @@ _obstack_begin (struct obstack *h,
+- 		void *(*chunkfun) (long),
+- 		void (*freefun) (void *))
+- {
+--  register struct _obstack_chunk *chunk; /* points to new chunk */
+-+  struct _obstack_chunk *chunk; /* points to new chunk */
+- 
+-   if (alignment == 0)
+-     alignment = DEFAULT_ALIGNMENT;
+-@@ -195,7 +152,7 @@ _obstack_begin_1 (struct obstack *h, int size, int alignment,
+- 		  void (*freefun) (void *, void *),
+- 		  void *arg)
+- {
+--  register struct _obstack_chunk *chunk; /* points to new chunk */
+-+  struct _obstack_chunk *chunk; /* points to new chunk */
+- 
+-   if (alignment == 0)
+-     alignment = DEFAULT_ALIGNMENT;
+-@@ -246,11 +203,11 @@ _obstack_begin_1 (struct obstack *h, int size, int alignment,
+- void
+- _obstack_newchunk (struct obstack *h, int length)
+- {
+--  register struct _obstack_chunk *old_chunk = h->chunk;
+--  register struct _obstack_chunk *new_chunk;
+--  register long	new_size;
+--  register long obj_size = h->next_free - h->object_base;
+--  register long i;
+-+  struct _obstack_chunk *old_chunk = h->chunk;
+-+  struct _obstack_chunk *new_chunk;
+-+  long	new_size;
+-+  long obj_size = h->next_free - h->object_base;
+-+  long i;
+-   long already;
+-   char *object_base;
+- 
+-@@ -308,9 +265,6 @@ _obstack_newchunk (struct obstack *h, int length)
+-   /* The new chunk certainly contains no empty object yet.  */
+-   h->maybe_empty_object = 0;
+- }
+--# ifdef _LIBC
+--libc_hidden_def (_obstack_newchunk)
+--# endif
+- 
+- /* Return nonzero if object OBJ has been allocated from obstack H.
+-    This is here for debugging.
+-@@ -323,8 +277,8 @@ int _obstack_allocated_p (struct obstack *h, void *obj);
+- int
+- _obstack_allocated_p (struct obstack *h, void *obj)
+- {
+--  register struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
+--  register struct _obstack_chunk *plp;	/* point to previous chunk if any */
+-+  struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
+-+  struct _obstack_chunk *plp;	/* point to previous chunk if any */
+- 
+-   lp = (h)->chunk;
+-   /* We use >= rather than > since the object cannot be exactly at
+-@@ -346,8 +300,8 @@ _obstack_allocated_p (struct obstack *h, void *obj)
+- void
+- obstack_free (struct obstack *h, void *obj)
+- {
+--  register struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
+--  register struct _obstack_chunk *plp;	/* point to previous chunk if any */
+-+  struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
+-+  struct _obstack_chunk *plp;	/* point to previous chunk if any */
+- 
+-   lp = h->chunk;
+-   /* We use >= because there cannot be an object at the beginning of a chunk.
+-@@ -373,17 +327,12 @@ obstack_free (struct obstack *h, void *obj)
+-     abort ();
+- }
+- 
+--# ifdef _LIBC
+--/* Older versions of libc used a function _obstack_free intended to be
+--   called by non-GCC compilers.  */
+--strong_alias (obstack_free, _obstack_free)
+--# endif
+- 
+- int
+- _obstack_memory_used (struct obstack *h)
+- {
+--  register struct _obstack_chunk* lp;
+--  register int nbytes = 0;
+-+  struct _obstack_chunk* lp;
+-+  int nbytes = 0;
+- 
+-   for (lp = h->chunk; lp != 0; lp = lp->prev)
+-     {
+-@@ -393,26 +342,6 @@ _obstack_memory_used (struct obstack *h)
+- }
+- 
+- /* Define the error handler.  */
+--# ifdef _LIBC
+--#  include <libintl.h>
+--# else
+--#  include "gettext.h"
+--# endif
+--# ifndef _
+--#  define _(msgid) gettext (msgid)
+--# endif
+--
+--# ifdef _LIBC
+--#  include <libio/iolibio.h>
+--# endif
+--
+--# ifndef __attribute__
+--/* This feature is available in gcc versions 2.5 and later.  */
+--#  if __GNUC__ < 2 || (__GNUC__ == 2 && __GNUC_MINOR__ < 5)
+--#   define __attribute__(Spec) /* empty */
+--#  endif
+--# endif
+--
+- static void
+- __attribute__ ((noreturn))
+- print_and_abort (void)
+-@@ -422,12 +351,6 @@ print_and_abort (void)
+-      happen because the "memory exhausted" message appears in other places
+-      like this and the translation should be reused instead of creating
+-      a very similar string which requires a separate translation.  */
+--# ifdef _LIBC
+--  (void) __fxprintf (NULL, "%s\n", _("memory exhausted"));
+--# else
+--  fprintf (stderr, "%s\n", _("memory exhausted"));
+--# endif
+-+  fprintf (stderr, "memory exhausted\n");
+-   exit (obstack_exit_failure);
+- }
+--
+--#endif	/* !ELIDE_CODE */
+--- 
+-2.9.3
+-
+diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+index a6c43edfc..1290ca54f 100644
+--- a/package/xenomai/xenomai.hash
++++ b/package/xenomai/xenomai.hash
+@@ -1,2 +1,2 @@
+ # Locally computed;
+-sha256  8a03e150d80ebf5935f97804881095d2d5d7509de22f7b8791776688a29d7110  xenomai-3.0.4.tar.bz2
++sha256 84836a43b6a996dcdcb42b0b1653a3271cc201df2a2d42c1b4b3bafb2cca7c63  xenomai-3.0.5.tar.bz2
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index fa4681959..c53d5148f 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -6,7 +6,7 @@
  
+ XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+ ifeq ($(XENOMAI_VERSION),)
+-XENOMAI_VERSION = 3.0.4
++XENOMAI_VERSION = 3.0.5
+ else
+ BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+ endif
+-- 
+2.13.0
