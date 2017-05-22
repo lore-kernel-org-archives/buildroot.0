@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 21:46:38 +0200
-Subject: [Buildroot] [git commit branch/next] package/libva: bump version to
-	1.8.2
-Message-ID: <20170522194704.A580F82905@busybox.osuosl.org>
+Date: Mon, 22 May 2017 21:46:47 +0200
+Subject: [Buildroot] [git commit branch/next] package/imagemagick: bump
+	version to 7.0.5-7
+Message-ID: <20170522194706.0CC8780634@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=882d769ff11adf2039e3d45bff0cdfdd5bccdc0d
+commit: https://git.buildroot.net/buildroot/commit/?id=3d311a0a3f7c209795ab2c054b40b07629c4e5b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 0590423..875a4d1 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/01org/libva/releases
--sha1 ae1f580d3ca54199393133214ac1e5a66d9cbeb3  libva-1.8.1.tar.bz2
-+sha1 7c4253c97f5e1e76500ff75321287131941494bc  libva-1.8.2.tar.bz2
- # Locally computed
--sha256 c1d5d85b6b40b76f37993b4da33388d3d73b64998dcbc160b7578e24ed775c73  libva-1.8.1.tar.bz2
-+sha256 9ed3e3ddc8f47a715d4c6ec366beb21c83fc4e8a3d4d39a811baff76f0a0cede  libva-1.8.2.tar.bz2
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index ffd990f..b89d5fa 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index b7be7bc..8f74618 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 f60c3e3466ccbf9a0e643284ffec3467363edf9611f16a98387f927a974b49ab  ImageMagick-7.0.5-6.tar.xz
++sha256 f72d089074d6c968bab38d1c18b22bd92c876e7ae23f7261db0b7c3552186586  ImageMagick-7.0.5-7.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b1048f5..46ee404 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 1.8.1
-+LIBVA_VERSION = 1.8.2
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/01org/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
+-IMAGEMAGICK_VERSION = 7.0.5-6
++IMAGEMAGICK_VERSION = 7.0.5-7
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
