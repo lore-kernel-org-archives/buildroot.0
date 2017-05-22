@@ -1,27 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 15:59:26 +0200
-Subject: [Buildroot] [git commit] package/cgic: fix typo in hash file
-Message-ID: <20170601202854.CB500807D3@busybox.osuosl.org>
+Date: Mon, 22 May 2017 15:43:43 +0200
+Subject: [Buildroot] [git commit] package/alsa-utils: bump version to 1.1.4
+Message-ID: <20170601202853.174A9807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dee470e8bea93afadab8a42cd4be3e541c6ef68
+commit: https://git.buildroot.net/buildroot/commit/?id=16d3f60adac6bb57cd393d220fb7244a7aa17701
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cgic/cgic.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/alsa-utils/alsa-utils.hash | 2 +-
+ package/alsa-utils/alsa-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cgic/cgic.hash b/package/cgic/cgic.hash
-index 6c0fee6..6137875 100644
---- a/package/cgic/cgic.hash
-+++ b/package/cgic/cgic.hash
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index 1add17e..538990b 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
 @@ -1,2 +1,2 @@
--# Localy computed
-+# Locally computed
- sha256  9562e0b6af59ebc2090107eab5946ce0788a1de36146ad181970cf53e9be7a33  cgic206.tar.gz
+ # Locally calculated
+-sha256 127217a54eea0f9a49700a2f239a2d4f5384aa094d68df04a8eb80132eb6167c  alsa-utils-1.1.3.tar.bz2
++sha256 a7831044de92c5bf33bf3365a3f36e49397f4191e934df460ae1ca15138c9d9d  alsa-utils-1.1.4.tar.bz2
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 847a97f..f0b964a 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_UTILS_VERSION = 1.1.3
++ALSA_UTILS_VERSION = 1.1.4
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
