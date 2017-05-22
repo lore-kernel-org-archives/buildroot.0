@@ -1,49 +1,39 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 22 May 2017 10:25:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-enum34: change setup
-	type to setuptools
-In-Reply-To: <87o9ul28ml.fsf@dell.be.48ers.dk>
-References: <20170521114625.7884-1-bernd.kuhls@t-online.de>
- <87o9ul28ml.fsf@dell.be.48ers.dk>
-Message-ID: <CAGm1_ks5=EtZ27+=OiOE3o6Qkb7ikeSJjLGicLpYSewOU7XnSA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 22 May 2017 10:06:51 +0100
+Subject: [Buildroot] [PATCH next] nano: bump version to 2.8.4
+Message-ID: <20170522090651.10582-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 21, 2017 at 11:38 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
->
->  > With version 1.1.3 the project switched to setuptools:
->  > https://bitbucket.org/stoneleaf/enum34/commits/589b4f9d2e733a32c6e67a1e7aa50f476920d121
->
->  > Fixes
->  > http://autobuild.buildroot.net/results/cb6/cb678ca9e57382a876f3f6034a47a4e2c59bc8d0/
->
->  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> Are you sure. I don't know much about Python packaging, but it still
-> has:
->
-> from distutils.core import setup
->
-> ..
->
-> if __name__ == '__main__':
->     setup(**data)
->
->
-> The tarball (and not git) has a dummy setup.cfg, which afaik is related
-> to setuptools.
->
-> I'm not sure what the correct fix is. Yegor? Either we patch out the
-> 'import setuptools' line or we add host-python-setuptools to the
-> dependencies.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I would take Bernd's fix as it is. Defining setuptype as setuptools
-adds host-python-setuptools and  distutils.core is available anyway.
-This doesn't seem to hurt. I've written an e-mail to the enum34
-maintainer with a request to clarify this setup situation.
-
-Yegor
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 2c030a10b..dfc660336 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 023e8a7b38b2420d5476d7b2b4d8524d7de55c0853b4dc0b02e4a4adf7ecb9e0  nano-2.8.2.tar.xz
++sha256 c7cf264f0f3e4af43ecdbc4ec72c3b1e831c69a1a5f6512d5b0c109e6bac7b11  nano-2.8.4.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 0f01e4671..966d43b53 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 2.8
+-NANO_VERSION = $(NANO_VERSION_MAJOR).2
++NANO_VERSION = $(NANO_VERSION_MAJOR).4
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
+-- 
+2.13.0
