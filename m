@@ -1,39 +1,57 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 22 May 2017 11:32:03 +0100
-Subject: [Buildroot] [PATCH next] pcsc-lite: bump version to 1.8.21
-Message-ID: <20170522103203.9586-1-Vincent.Riera@imgtec.com>
+Date: Mon, 22 May 2017 12:03:56 +0100
+Subject: [Buildroot] [PATCH next] poppler: bump version to 0.55.0
+Message-ID: <20170522110356.29537-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+--enable-libjpeg option is now --enable-dctdecoder=libjpeg, and
+--disable-libjpeg is now --enable-dctdecoder=none. See this upstream
+commit:
+  https://cgit.freedesktop.org/poppler/poppler/commit/?id=b286a6b5b1a63563263072305da04604cb022488
+
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/pcsc-lite/pcsc-lite.hash | 2 +-
- package/pcsc-lite/pcsc-lite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
-index 8df43a105..4a3bd6319 100644
---- a/package/pcsc-lite/pcsc-lite.hash
-+++ b/package/pcsc-lite/pcsc-lite.hash
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index 4ef5799ad..699e7057b 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 ec7d0114016c788c1c09859c84860f6cec6c4595436d23245105154b9c046bb2 pcsc-lite-1.8.20.tar.bz2
-+sha256 ec7d0114016c788c1c09859c84860f6cec6c4595436d23245105154b9c046bb2 pcsc-lite-1.8.21.tar.bz2
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index c6c4962ce..0fbc3b390 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
+-sha256 10cca9a67cc2e6f4f9024192b1067c444218bf94430891f43dc819d78536ca31  poppler-0.54.0.tar.xz
++sha256 537f2bc60d796525705ad9ca8e46899dcc99c2e9480b80051808bae265cdc658  poppler-0.55.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 056193c59..5757100b5 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCSC_LITE_VERSION = 1.8.20
-+PCSC_LITE_VERSION = 1.8.21
- PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
- PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/file/4203
- PCSC_LITE_INSTALL_STAGING = YES
+-POPPLER_VERSION = 0.54.0
++POPPLER_VERSION = 0.55.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+@@ -46,10 +46,10 @@ POPPLER_CONF_OPTS += --disable-libtiff
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+-POPPLER_CONF_OPTS += --enable-libjpeg
++POPPLER_CONF_OPTS += --enable-dctdecoder=libjpeg
+ POPPLER_DEPENDENCIES += jpeg
+ else
+-POPPLER_CONF_OPTS += --disable-libjpeg
++POPPLER_CONF_OPTS += --enable-dctdecoder=none
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
 -- 
 2.13.0
