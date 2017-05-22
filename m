@@ -1,136 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 22 May 2017 14:40:15 +0100
-Subject: [Buildroot] [PATCH next 2/2] parted: bump version to 3.2
-In-Reply-To: <20170522134015.54040-1-Vincent.Riera@imgtec.com>
-References: <20170522134015.54040-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170522134015.54040-2-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 May 2017 15:43:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/alsa-utils: bump
+	version to 1.1.4
+Message-ID: <20170522134348.6113F8293C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch 0001 already included in this release:
-  http://git.savannah.gnu.org/cgit/parted.git/commit/?id=cc382c3753e1b430c00df46f0937b74db36ccb8a
+commit: https://git.buildroot.net/buildroot/commit/?id=16d3f60adac6bb57cd393d220fb7244a7aa17701
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-LVM2 dependency is necessary otherwise it will fail. See:
-  https://lists.gnu.org/archive/html/bug-parted/2014-08/msg00001.html
-
-Due to the LVM2 dependency, the --enable-device-mapper option is
-automatically enabled so there is no need to add it explicitly to the
-LVM2_CONF_OPTS.
-
---disable-device-mapper has been removed from HOST_LVM2_CONF_OPTS to
-avoid a build failure.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/parted/0001-readline-deprecated.patch | 19 -------------------
- package/parted/Config.in                      | 11 +++++++++--
- package/parted/parted.hash                    |  2 +-
- package/parted/parted.mk                      | 17 ++++-------------
- 4 files changed, 14 insertions(+), 35 deletions(-)
- delete mode 100644 package/parted/0001-readline-deprecated.patch
+ package/alsa-utils/alsa-utils.hash | 2 +-
+ package/alsa-utils/alsa-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/parted/0001-readline-deprecated.patch b/package/parted/0001-readline-deprecated.patch
-deleted file mode 100644
-index a3f40c8df..000000000
---- a/package/parted/0001-readline-deprecated.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--The CPPFunction typedef (among others) have been deprecated in favour of
--specific prototyped typedefs since readline 4.2.
--It's been working since because compatibility typedefs have been
--in place until they were removed in readline 6.3.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura parted-3.1.orig/parted/ui.c parted-3.1/parted/ui.c
----- parted-3.1.orig/parted/ui.c	2014-03-01 16:11:41.970827134 -0300
--+++ parted-3.1/parted/ui.c	2014-03-01 16:11:55.540259786 -0300
--@@ -1474,7 +1474,7 @@
-- #ifdef HAVE_LIBREADLINE
--   if (!opt_script_mode) {
--     rl_initialize ();
---    rl_attempted_completion_function = (CPPFunction*) complete_function;
--+    rl_attempted_completion_function = (rl_completion_func_t *) complete_function;
--     readline_state.in_readline = 0;
--   }
-- #endif
-diff --git a/package/parted/Config.in b/package/parted/Config.in
-index 9d78f0f1f..692659443 100644
---- a/package/parted/Config.in
-+++ b/package/parted/Config.in
-@@ -1,12 +1,19 @@
- config BR2_PACKAGE_PARTED
- 	bool "parted"
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-+	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_STATIC_LIBS # lvm2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_LVM2
- 	help
- 	  parted, the GNU partition resizing program
- 
- 	  http://www.gnu.org/software/parted/
- 
--comment "parted needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-+comment "parted needs a glibc/uClibc toolchain w/ threads, dynamic library, wchar"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/parted/parted.hash b/package/parted/parted.hash
-index 297b5d7bb..25cd604a5 100644
---- a/package/parted/parted.hash
-+++ b/package/parted/parted.hash
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index 1add17e..538990b 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5e9cc1f91eaf016e5033d85b9b893fd6d3ffaca532a48de1082df9b94225ca15	parted-3.1.tar.xz
-+sha256 858b589c22297cacdf437f3baff6f04b333087521ab274f7ab677cb8c6bb78e4  parted-3.2.tar.xz
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index fb4987fd5..e8eac8213 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
-@@ -4,10 +4,10 @@
+ # Locally calculated
+-sha256 127217a54eea0f9a49700a2f239a2d4f5384aa094d68df04a8eb80132eb6167c  alsa-utils-1.1.3.tar.bz2
++sha256 a7831044de92c5bf33bf3365a3f36e49397f4191e934df460ae1ca15138c9d9d  alsa-utils-1.1.4.tar.bz2
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 847a97f..f0b964a 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PARTED_VERSION = 3.1
-+PARTED_VERSION = 3.2
- PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
- PARTED_SITE = $(BR2_GNU_MIRROR)/parted
--PARTED_DEPENDENCIES = host-pkgconf util-linux
-+PARTED_DEPENDENCIES = host-pkgconf lvm2 util-linux
- PARTED_INSTALL_STAGING = YES
- # For uclinux patch
- PARTED_AUTORECONF = YES
-@@ -22,21 +22,12 @@ else
- PARTED_CONF_OPTS += --without-readline
- endif
- 
--ifeq ($(BR2_PACKAGE_LVM2),y)
--PARTED_DEPENDENCIES += lvm2
--PARTED_CONF_OPTS += --enable-device-mapper
--else
--PARTED_CONF_OPTS += --disable-device-mapper
--endif
--
- ifeq ($(BR2_STATIC_LIBS),y)
- PARTED_CONF_OPTS += --disable-dynamic-loading
- endif
- 
--HOST_PARTED_DEPENDENCIES = host-pkgconf host-util-linux
--HOST_PARTED_CONF_OPTS += \
--	--without-readline \
--	--disable-device-mapper
-+HOST_PARTED_DEPENDENCIES = host-lvm2 host-pkgconf host-util-linux
-+HOST_PARTED_CONF_OPTS += --without-readline
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.13.0
+-ALSA_UTILS_VERSION = 1.1.3
++ALSA_UTILS_VERSION = 1.1.4
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
