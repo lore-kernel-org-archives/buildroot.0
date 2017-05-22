@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 22 May 2017 15:13:06 +0200
-Subject: [Buildroot] [PATCH 2/3] sdl2_net: new package
+Date: Mon, 22 May 2017 15:13:07 +0200
+Subject: [Buildroot] [PATCH 3/3] lua-sdl2: new package
 In-Reply-To: <20170522131307.27529-1-francois.perrad@gadz.org>
 References: <20170522131307.27529-1-francois.perrad@gadz.org>
-Message-ID: <20170522131307.27529-2-francois.perrad@gadz.org>
+Message-ID: <20170522131307.27529-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +13,70 @@ To: buildroot@busybox.net
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
  package/Config.in              |  1 +
- package/sdl2_net/Config.in     |  9 +++++++++
- package/sdl2_net/sdl2_net.hash |  2 ++
- package/sdl2_net/sdl2_net.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/sdl2_net/Config.in
- create mode 100644 package/sdl2_net/sdl2_net.hash
- create mode 100644 package/sdl2_net/sdl2_net.mk
+ package/lua-sdl2/Config.in     | 12 ++++++++++++
+ package/lua-sdl2/lua-sdl2.hash |  2 ++
+ package/lua-sdl2/lua-sdl2.mk   | 13 +++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/lua-sdl2/Config.in
+ create mode 100644 package/lua-sdl2/lua-sdl2.hash
+ create mode 100644 package/lua-sdl2/lua-sdl2.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3eb05651c2..5fa21afc60 100644
+index 5fa21afc60..be9e6fa666 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -282,6 +282,7 @@ comment "Graphic libraries"
- 	source "package/sdl2_gfx/Config.in"
- 	source "package/sdl2_image/Config.in"
- 	source "package/sdl2_mixer/Config.in"
-+	source "package/sdl2_net/Config.in"
- 	source "package/sdl2_ttf/Config.in"
- 
- comment "Other GUIs"
-diff --git a/package/sdl2_net/Config.in b/package/sdl2_net/Config.in
+@@ -565,6 +565,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
+ 	source "package/lua-periphery/Config.in"
++	source "package/lua-sdl2/Config.in"
+ 	source "package/lua-testmore/Config.in"
+ 	source "package/luabitop/Config.in"
+ 	source "package/luacrypto/Config.in"
+diff --git a/package/lua-sdl2/Config.in b/package/lua-sdl2/Config.in
 new file mode 100644
-index 0000000000..d5e749f5ac
+index 0000000000..83b84acaa2
 --- /dev/null
-+++ b/package/sdl2_net/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SDL2_NET
-+	bool "sdl2_net"
-+	depends on BR2_PACKAGE_SDL2
++++ b/package/lua-sdl2/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LUA_SDL2
++	bool "lua-sdl2"
++	select BR2_PACKAGE_SDL2
++	select BR2_PACKAGE_SDL2_IMAGE
++	select BR2_PACKAGE_SDL2_MIXER
++	select BR2_PACKAGE_SDL2_NET
++	select BR2_PACKAGE_SDL2_TTF
 +	help
-+	  This is a small sample cross-platform networking library,
-+	  with a sample chat client and server application. The chat
-+	  client uses the GUIlib GUI framework library.
++	  Lua-SDL2 is a pure C binding of SDL2 to Lua 5.1, Lua 5.2, Lua 5.3,
++	  and LuaJIT.
 +
-+	  http://www.libsdl.org/projects/SDL_net/
-diff --git a/package/sdl2_net/sdl2_net.hash b/package/sdl2_net/sdl2_net.hash
++	  https://github.com/Tangent128/luasdl2
+diff --git a/package/lua-sdl2/lua-sdl2.hash b/package/lua-sdl2/lua-sdl2.hash
 new file mode 100644
-index 0000000000..c5f4433837
+index 0000000000..56a2eeda6c
 --- /dev/null
-+++ b/package/sdl2_net/sdl2_net.hash
++++ b/package/lua-sdl2/lua-sdl2.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 15ce8a7e5a23dafe8177c8df6e6c79b6749a03fff1e8196742d3571657609d21  SDL2_net-2.0.1.tar.gz
-diff --git a/package/sdl2_net/sdl2_net.mk b/package/sdl2_net/sdl2_net.mk
++sha256	36b626485529f318f284e0cc0c806d5a425fbde4e1e6329d4d5ee9f495ecff62  lua-sdl2-2.0.5.6.0-1.src.rock
+diff --git a/package/lua-sdl2/lua-sdl2.mk b/package/lua-sdl2/lua-sdl2.mk
 new file mode 100644
-index 0000000000..2fa4a8c2e0
+index 0000000000..adb3723c84
 --- /dev/null
-+++ b/package/sdl2_net/sdl2_net.mk
-@@ -0,0 +1,15 @@
++++ b/package/lua-sdl2/lua-sdl2.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# sdl2_net
++# lua-sdl2
 +#
 +################################################################################
 +
-+SDL2_NET_VERSION = 2.0.1
-+SDL2_NET_SOURCE = SDL2_net-$(SDL2_NET_VERSION).tar.gz
-+SDL2_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
-+SDL2_NET_LICENSE = Zlib
-+SDL2_NET_LICENSE_FILES = COPYING.txt
-+SDL2_NET_INSTALL_STAGING = YES
-+SDL2_NET_DEPENDENCIES = sdl2
++LUA_SDL2_VERSION = 2.0.5.6.0-1
++LUA_SDL2_LICENSE = ISC
++LUA_SDL2_SUBDIR = luasdl2-2.0.5-6.0
++LUA_SDL2_LICENSE_FILES = $(LUA_SDL2_SUBDIR)/LICENSE
++LUA_SDL2_DEPENDENCIES = sdl2 sdl2_image sdl2_mixer sdl2_net sdl2_ttf
 +
-+$(eval $(autotools-package))
++$(eval $(luarocks-package))
 -- 
 2.11.0
