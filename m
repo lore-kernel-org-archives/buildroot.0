@@ -1,64 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 15:58:28 +0200
-Subject: [Buildroot] [git commit] package/apr: bump version to 1.5.2
-Message-ID: <20170601202853.25B39807D3@busybox.osuosl.org>
+Date: Mon, 22 May 2017 16:10:30 +0200
+Subject: [Buildroot] [git commit] fio: re-enable on uClibc
+Message-ID: <20170601202853.7B6C3807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=614da9ef8a7847ec511e5962cd34a2fdcc0d5b13
+commit: https://git.buildroot.net/buildroot/commit/?id=bc5d15a480df91f6cc768dab5bbbefe74b1b13aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rebased patch 0001 and changed _SOURCE to .tar.bz2.
+The fio package was disabled on uClibc because posix_madvise() was
+back then not implemented in an official release of uClibc. It now
+exists in uClibc-ng since its version 1.0.0, so we can assume it's
+available. We already make lots of assumptions about external uClibc
+toolchains, and they should definitely be using a recent version of
+uClibc-ng to be usable by Buildroot.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also, the Config.in comment was not handling this uClibc exception.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/apr/0001-cross-compile.patch | 6 +++---
- package/apr/apr.hash                 | 4 ++--
- package/apr/apr.mk                   | 3 ++-
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ package/fio/Config.in | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/apr/0001-cross-compile.patch b/package/apr/0001-cross-compile.patch
-index 5b596fb..559ebb7 100644
---- a/package/apr/0001-cross-compile.patch
-+++ b/package/apr/0001-cross-compile.patch
-@@ -42,10 +42,10 @@ diff -uNr apr-1.5.1.org/Makefile.in apr-1.5.1/Makefile.in
-  
-  # get substituted into some targets
-  APR_MAJOR_VERSION=@APR_MAJOR_VERSION@
--@@ -134,8 +136,13 @@
-+@@ -134,8 +134,13 @@
-+ 	$(APR_MKDIR) tools
-+ 	$(LT_COMPILE)
-  
-- OBJECTS_gen_test_char = tools/gen_test_char.lo $(LOCAL_LIBS)
-- tools/gen_test_char.lo: make_tools_dir
- +ifdef CC_FOR_BUILD
- +tools/gen_test_char at EXEEXT@: tools/gen_test_char.c $(LOCAL_LIBS)
- +	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -DCROSS_COMPILE -o $@ $<
-diff --git a/package/apr/apr.hash b/package/apr/apr.hash
-index 50d657a..917ce56 100644
---- a/package/apr/apr.hash
-+++ b/package/apr/apr.hash
-@@ -1,2 +1,2 @@
--# From http://archive.apache.org/dist/apr/apr-1.5.1.tar.gz.sha1
--sha1	9caa83e3f50f3abc9fab7c4a3f2739a12b14c3a3	apr-1.5.1.tar.gz
-+# From http://archive.apache.org/dist/apr/apr-1.5.2.tar.bz2.sha1
-+sha1 6d757fcf7c687fc300c1066076f2e8380ff8cbc0  apr-1.5.2.tar.bz2
-diff --git a/package/apr/apr.mk b/package/apr/apr.mk
-index f09f943..4a97f7e 100644
---- a/package/apr/apr.mk
-+++ b/package/apr/apr.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--APR_VERSION = 1.5.1
-+APR_VERSION = 1.5.2
-+APR_SOURCE = apr-$(APR_VERSION).tar.bz2
- APR_SITE = http://archive.apache.org/dist/apr
- APR_LICENSE = Apache-2.0
- APR_LICENSE_FILES = LICENSE
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index 89f54f9..8da227d 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -4,12 +4,6 @@ config BR2_PACKAGE_FIO
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# fio uses posix_madvise(), which is not part of any official
+-	# release of uClibc, but is part of uClibc Git, and backported
+-	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
+-	# disable the build of fio for external uClibc toolchains
+-	# (which use an unknown uClibc version)
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	# fio uses fallocate() which becomes fallocate64() while compiling with
+ 	# largefile support, but fallocate64() is not available on nios2
+ 	depends on !BR2_nios2
