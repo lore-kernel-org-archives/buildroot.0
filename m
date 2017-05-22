@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 15:36:14 +0200
-Subject: [Buildroot] [PATCH next] pcsc-lite: bump version to 1.8.21
-In-Reply-To: <20170522103203.9586-1-Vincent.Riera@imgtec.com>
-References: <20170522103203.9586-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170522153614.214953ea@free-electrons.com>
+Date: Mon, 22 May 2017 15:36:16 +0200
+Subject: [Buildroot] [PATCH next] poppler: bump version to 0.55.0
+In-Reply-To: <20170522110356.29537-1-Vincent.Riera@imgtec.com>
+References: <20170522110356.29537-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170522153616.54c70c91@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 22 May 2017 11:32:03 +0100, Vicente Olivert Riera wrote:
+On Mon, 22 May 2017 12:03:56 +0100, Vicente Olivert Riera wrote:
+> --enable-libjpeg option is now --enable-dctdecoder=libjpeg, and
+> --disable-libjpeg is now --enable-dctdecoder=none. See this upstream
+> commit:
+>   https://cgit.freedesktop.org/poppler/poppler/commit/?id=b286a6b5b1a63563263072305da04604cb022488
+> 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/pcsc-lite/pcsc-lite.hash | 2 +-
->  package/pcsc-lite/pcsc-lite.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/poppler/poppler.hash | 2 +-
+>  package/poppler/poppler.mk   | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to next, thanks.
 
