@@ -1,59 +1,64 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 22 May 2017 16:53:40 +0200
-Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
-	install
-In-Reply-To: <20170513152706.0319d7de@free-electrons.com>
-References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
- <20170318153923.56903d45@free-electrons.com>
- <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
- <CA+TH9VnNgxSvsUiSTPUstqpa3uuEbKbMxR+OfK1xMEdDqq3Z0w@mail.gmail.com>
- <20170513152706.0319d7de@free-electrons.com>
-Message-ID: <CA+TH9VkFFXP7pnmg1jJP1=OMyZzPiZ=70iH7_LQmOUuFQMBpdg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 22 May 2017 18:22:55 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-05-21
+In-Reply-To: <8E2EE25B-898A-4D7A-9936-BD2517D6D86A@openadk.org>
+References: <20170522063013.3FE2A206ED@mail.free-electrons.com>
+ <20170522120753.vebsgc6s2fz5fb6a@tarshish>
+ <8E2EE25B-898A-4D7A-9936-BD2517D6D86A@openadk.org>
+Message-ID: <20170522152255.7dkweqx25ohzcg7u@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas, Dusty,
+Hi Waldemar,
 
-2017-05-13 15:27 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Angelo,
->
-> On Thu, 6 Apr 2017 19:08:35 +0200, Angelo Compagnucci wrote:
->
->> > Below is the diff between staging and host. I am using a Ubuntu VM to
->> > compile for an ARM target with uCLibc.
->> > The appropriate .so files (libc.so.0) are referenced in the config file in
->> > the staging directory but not in the host.
->> > The patch I referenced in my commit is:
->> >   * package/mono/0002-Adjust-libc.so-path-depending-on-C-
->> > library-being-use.patch
->> > This patch addresses the proper generation of the /etc/mono/config file in
->> > the staging directory, I believe.
->> >
->> > Thanks!
->> >
->>
->> Could you send me a minimal example that exibits the problem?!
->
-> Do you have some further feedback on this issue? Dustin's patch is
-> still pending, waiting for you to confirm or not the issue and indicate
-> if Dustin's solution is the most appropriate or not.
+On Mon, May 22, 2017 at 04:14:28PM +0200, Waldemar Brodkorb wrote:
+> take a look here:
+> https://github.com/richfelker/musl-cross-make/blob/master/patches/gcc-6.3.0/0010-static-pie-support.diff
 
-Sorry for the late reply. The patch is good, I tested it and it solves
-a real bug. Great Dustin that nailed it, good catch!
+Thanks for the pointer.
 
-> Thanks for your feedback,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+I don't see this, or equivalent, patch in any gcc version that Buildroot 
+supports. Is this the right fix to the cifs-utils build failure?
 
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 152a3eeccf8a..ceedcf5de86f 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -12,6 +12,8 @@ CIFS_UTILS_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ CIFS_UTILS_CONF_OPTS += --disable-pie
++else ifeq ($(BR2_STATIC_LIBS),y)
++CIFS_UTILS_CONF_OPTS += --disable-pie
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
 
+baruch
+
+> > Am 22.05.2017 um 14:07 schrieb Baruch Siach <baruch@tkos.co.il>:
+> > 
+> >> On Mon, May 22, 2017 at 08:30:13AM +0200, Thomas Petazzoni wrote: 
+> >>      x86_64 |                 cifs-utils-6.6 | NOK | http://autobuild.buildroot.net/results/d19bcfcfb33cc5f5b082b97bbd5852d479823b97 |     
+> > 
+> > In commit 3c93901bcd2 (toolchain: add hidden symbol for PIE support) you 
+> > mentioned
+> > 
+> >  With musl toolchains you might have static PIE support with little
+> >  patching of gcc.
+> > 
+> > What patch of gcc do you refer to? Commit 3c93901bcd2 enables 
+> > BR2_TOOLCHAIN_SUPPORTS_PIE for musl toolchains unconditionally. But this 
+> > cifs-utils build failure indicates that there is still an issue with musl and 
+> > static PIE.
+> > 
+> > Any idea?
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
