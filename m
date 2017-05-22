@@ -1,73 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 23 May 2017 00:25:44 +0300
-Subject: [Buildroot] [PATCH next] iproute2: drop obsolete patch
-Message-ID: <3f1f6da8f2c5cb78bfb9d7273291dd755d345a6f.1495488344.git.baruch@tkos.co.il>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 22 May 2017 23:54:14 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-05-21
+In-Reply-To: <20170522175415.pcy3uykh7ycoh42b@tarshish>
+References: <20170522063013.3FE2A206ED@mail.free-electrons.com>
+ <20170522120753.vebsgc6s2fz5fb6a@tarshish>
+ <8E2EE25B-898A-4D7A-9936-BD2517D6D86A@openadk.org>
+ <20170522152255.7dkweqx25ohzcg7u@tarshish>
+ <20170522175415.pcy3uykh7ycoh42b@tarshish>
+Message-ID: <20170522215414.GD6202@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 4.5.0 the iptables_common.h header is unused. Don't bother
-patching this file.
+Hi Baruch,
+Baruch Siach wrote,
 
-Renumber the following patch.
+> Hi Waldemar,
+> 
+> On Mon, May 22, 2017 at 06:22:55PM +0300, Baruch Siach wrote:
+> > On Mon, May 22, 2017 at 04:14:28PM +0200, Waldemar Brodkorb wrote:
+> > > take a look here:
+> > > https://github.com/richfelker/musl-cross-make/blob/master/patches/gcc-6.3.0/0010-static-pie-support.diff
+> > 
+> > Thanks for the pointer.
+> > 
+> > I don't see this, or equivalent, patch in any gcc version that Buildroot 
+> > supports. Is this the right fix to the cifs-utils build failure?
+> > 
+> > diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+> > index 152a3eeccf8a..ceedcf5de86f 100644
+> > --- a/package/cifs-utils/cifs-utils.mk
+> > +++ b/package/cifs-utils/cifs-utils.mk
+> > @@ -12,6 +12,8 @@ CIFS_UTILS_LICENSE_FILES = COPYING
+> >  
+> >  ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+> >  CIFS_UTILS_CONF_OPTS += --disable-pie
+> > +else ifeq ($(BR2_STATIC_LIBS),y)
+> > +CIFS_UTILS_CONF_OPTS += --disable-pie
+> >  endif
+> >  
+> >  ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+> 
+> A more generic solution might be this, which is similar to what we do with 
+> uClibc-ng toolchains:
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 652c9d8c1df4..6aaf68bf6547 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -28,7 +28,7 @@ config BR2_TOOLCHAIN_USES_MUSL
+>  	select BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+>  	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> -	select BR2_TOOLCHAIN_SUPPORTS_PIE
+> +	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_STATIC_LIBS
+>  
+>  choice
+>  	prompt "Toolchain type"
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0002-Add-missing-sys-types.h-include.patch     | 38 ----------------------
- ...ch => 0002-ip-include-libc-headers-first.patch} |  0
- 2 files changed, 38 deletions(-)
- delete mode 100644 package/iproute2/0002-Add-missing-sys-types.h-include.patch
- rename package/iproute2/{0003-ip-include-libc-headers-first.patch => 0002-ip-include-libc-headers-first.patch} (100%)
 
-diff --git a/package/iproute2/0002-Add-missing-sys-types.h-include.patch b/package/iproute2/0002-Add-missing-sys-types.h-include.patch
-deleted file mode 100644
-index ef918140dae1..000000000000
---- a/package/iproute2/0002-Add-missing-sys-types.h-include.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 560dee4b4be54699c0c9679771c9e0d61e4db80a Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 19 Nov 2015 17:48:55 +0100
--Subject: [PATCH] Add missing <sys/types.h> include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The u_intXX_t types are defined in <sys/types.h>, so it should be
--included before using those types. Otherwise, with certain C
--libraries, the build fails with:
--
--In file included from ../include/iptables.h:4:0,
--                 from m_ipt.c:18:
--../include/iptables_common.h:47:16: error: unknown type name ?u_int32_t?
-- #define __le32 u_int32_t
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/iptables_common.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/include/iptables_common.h b/include/iptables_common.h
--index 9099667..2c27a4b 100644
----- a/include/iptables_common.h
--+++ b/include/iptables_common.h
--@@ -43,6 +43,8 @@ extern char *lib_dir;
--   extern void init_extensions(void);
-- #endif
-- 
--+#include <sys/types.h>
--+
-- #define __be32	u_int32_t
-- #define __le32	u_int32_t
-- #define __be16	u_int16_t
---- 
--2.6.3
--
-diff --git a/package/iproute2/0003-ip-include-libc-headers-first.patch b/package/iproute2/0002-ip-include-libc-headers-first.patch
-similarity index 100%
-rename from package/iproute2/0003-ip-include-libc-headers-first.patch
-rename to package/iproute2/0002-ip-include-libc-headers-first.patch
--- 
-2.11.0
+You can add my Acked-By.
+
+Best regards
+ Waldemar
