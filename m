@@ -1,35 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:39:52 +0200
-Subject: [Buildroot] [git commit] package/c-icap: remove configure option
-	process-mutexes
-Message-ID: <20170601202854.54E4E807D3@busybox.osuosl.org>
+Date: Tue, 23 May 2017 15:41:55 +0200
+Subject: [Buildroot] [git commit] imx6q-sabresd: Bump U-Boot and kernel
+	versions
+Message-ID: <20170601202854.9C39A807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06afaf5b067a374fa9e91562d4d8a7ccd8c23ad5
+commit: https://git.buildroot.net/buildroot/commit/?id=3525b970c0e5a5575b74dd1c6983f98ce6bcd3db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This option was removed in 2014:
-https://sourceforge.net/p/c-icap/code/1102/#diff-3
+Bump U-Boot to 2017.05 and kernel to 4.11.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/c-icap/c-icap.mk | 1 -
- 1 file changed, 1 deletion(-)
+ configs/imx6q-sabresd_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index e32e0dc..82b2574 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -12,7 +12,6 @@ C_ICAP_LICENSE_FILES = COPYING
- C_ICAP_INSTALL_STAGING = YES
- C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
- C_ICAP_CONF_OPTS = \
--	--with-process-mutexes=posix \
- 	--without-perl \
- 	--enable-large-files \
- 	--enable-ipv6
+diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
+index cc37ecf..b26dc2a 100644
+--- a/configs/imx6q-sabresd_defconfig
++++ b/configs/imx6q-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -24,13 +24,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
