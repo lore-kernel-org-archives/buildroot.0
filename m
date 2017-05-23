@@ -1,45 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 May 2017 23:05:22 +0200
-Subject: [Buildroot] [PATCH/next] package/ccid: bump version to 1.4.27
-Message-ID: <20170523210522.10138-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 23 May 2017 23:09:19 +0200
+Subject: [Buildroot] [PATCH 1/2] package/sngrep: add libgcrypt missing
+ dependencies
+In-Reply-To: <20170523161950.2b24f43f@free-electrons.com>
+References: <20170520162751.30809-1-romain.naour@gmail.com>
+ <20170523161950.2b24f43f@free-electrons.com>
+Message-ID: <f09dc6c1-557c-885b-4bb9-370a1ca9b8ae@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ccid/ccid.hash | 6 +++---
- package/ccid/ccid.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Le 23/05/2017 ? 16:19, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Sat, 20 May 2017 18:27:50 +0200, Romain Naour wrote:
+>> Even if libgcrypt is selected at Kconfig level, it's missing from
+>> Makefile level.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/36c/36c28e7e49b31ed2398a67db2e9b08e3aad5a3ee
+> 
+> Could you explain how this build failure apparently related to ncurses
+> has something to do with the gnutls/libgcrypt issue ?
+> 
+> The patch itself looks good, but the relation with this particular
+> build failure isn't really clear. Could you clarify?
 
-diff --git a/package/ccid/ccid.hash b/package/ccid/ccid.hash
-index 3e1e962a5..a7d4875c0 100644
---- a/package/ccid/ccid.hash
-+++ b/package/ccid/ccid.hash
-@@ -1,3 +1,3 @@
--# From http://cdn-fastly.deb.debian.org/debian/pool/main/c/ccid/ccid_1.4.26-1.dsc
--sha1 20e22c23b8458548a6b572b044e5dbe4ecdc42e5  ccid_1.4.26.tar.bz2
--sha256 3267bf708ab780c02f01f6241b7c7277cb892d30fd1179a9926a8cc0ca40be2f  ccid_1.4.26.tar.bz2
-+# From http://cdn-fastly.deb.debian.org/debian/pool/main/c/ccid/ccid_1.4.27-1.dsc
-+sha1 d72ee816422183a86006e0083ccd643236b4e12a  ccid_1.4.27.tar.bz2
-+sha256 a660e269606986cb94840ad5ba802ffb0cd23dd12b98f69a35035e0deb9dd137  ccid_1.4.27.tar.bz2
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index 7fbf025a6..e566afe07 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CCID_VERSION = 1.4.26
-+CCID_VERSION = 1.4.27
- CCID_SOURCE = ccid_$(CCID_VERSION).tar.bz2
--CCID_SITE = https://alioth.debian.org/frs/download.php/file/4205
-+CCID_SITE = https://alioth.debian.org/frs/download.php/file/4218
- CCID_LICENSE = LGPL-2.1+
- CCID_LICENSE_FILES = COPYING
- CCID_INSTALL_STAGING = YES
--- 
-2.11.0
+Sorry,
+
+I was looking for this kind of build failure with a glibc based system:
+
+checking for ncurses.h... yes
+checking for initscr in -lncurses... yes
+checking for new_panel in -lpanel... yes
+checking for new_form in -lform... yes
+checking for new_item in -lmenu... yes
+checking for gnutls_init in -lgnutls... yes
+checking for gcry_md_map_name in -lgcrypt... no
+configure: error:  You need to have libgcrypt installed to compile sngrep
+
+I just read what I wanted to read in the autobuilder reference...
+
+It's weird that the autobuilder didn't catch it.
+
+Best regards,
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
