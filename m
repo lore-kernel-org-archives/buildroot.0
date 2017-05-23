@@ -1,41 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:37:11 +0200
-Subject: [Buildroot] [PATCH] toolchain: disable PIE for static build
- with musl
-In-Reply-To: <e5ceac77a5ace9cfb989319cb33261d32885bd04.1495490829.git.baruch@tkos.co.il>
-References: <e5ceac77a5ace9cfb989319cb33261d32885bd04.1495490829.git.baruch@tkos.co.il>
-Message-ID: <20170523153711.470cb291@free-electrons.com>
+Date: Tue, 23 May 2017 15:37:51 +0200
+Subject: [Buildroot] [git commit branch/next] iproute2: drop obsolete patch
+Message-ID: <20170523133758.15888822E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1e0a7254790329e08934ec0642d3e576fd904107
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 23 May 2017 01:07:09 +0300, Baruch Siach wrote:
-> As mentioned in commit 3c93901bcd2 (toolchain: add hidden symbol for PIE
-> support), support for static PIE using musl requires a gcc patch[1]. Buildroot
-> doesn't carry this patch. Don't enable BR2_TOOLCHAIN_SUPPORTS_PIE in static
-> build with musl.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d19/d19bcfcfb33cc5f5b082b97bbd5852d479823b97/
-> http://autobuild.buildroot.net/results/91f/91f7c6954c337b03f5ac141050d9b1bee1623376/
-> http://autobuild.buildroot.net/results/996/996116da9241686110b9525eed08cc5acfd379a6/
-> 
-> [1] https://github.com/richfelker/musl-cross-make/blob/b854a42fc1ea19b8c4ec7104848f9d1a6d7995f0/patches/gcc-6.3.0/0010-static-pie-support.diff
-> 
-> Acked-by: Waldemar Brodkorb <wbx@openadk.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  toolchain/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Since version 4.5.0 the iptables_common.h header is unused. Don't bother
+patching this file.
 
-Applied to master, thanks.
+Renumber the following patch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-Add-missing-sys-types.h-include.patch     | 38 ----------------------
+ ...ch => 0002-ip-include-libc-headers-first.patch} |  0
+ 2 files changed, 38 deletions(-)
+
+diff --git a/package/iproute2/0002-Add-missing-sys-types.h-include.patch b/package/iproute2/0002-Add-missing-sys-types.h-include.patch
+deleted file mode 100644
+index ef91814..0000000
+--- a/package/iproute2/0002-Add-missing-sys-types.h-include.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 560dee4b4be54699c0c9679771c9e0d61e4db80a Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 19 Nov 2015 17:48:55 +0100
+-Subject: [PATCH] Add missing <sys/types.h> include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The u_intXX_t types are defined in <sys/types.h>, so it should be
+-included before using those types. Otherwise, with certain C
+-libraries, the build fails with:
+-
+-In file included from ../include/iptables.h:4:0,
+-                 from m_ipt.c:18:
+-../include/iptables_common.h:47:16: error: unknown type name ???u_int32_t???
+- #define __le32 u_int32_t
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- include/iptables_common.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/include/iptables_common.h b/include/iptables_common.h
+-index 9099667..2c27a4b 100644
+---- a/include/iptables_common.h
+-+++ b/include/iptables_common.h
+-@@ -43,6 +43,8 @@ extern char *lib_dir;
+-   extern void init_extensions(void);
+- #endif
+- 
+-+#include <sys/types.h>
+-+
+- #define __be32	u_int32_t
+- #define __le32	u_int32_t
+- #define __be16	u_int16_t
+--- 
+-2.6.3
+-
+diff --git a/package/iproute2/0003-ip-include-libc-headers-first.patch b/package/iproute2/0002-ip-include-libc-headers-first.patch
+similarity index 100%
+rename from package/iproute2/0003-ip-include-libc-headers-first.patch
+rename to package/iproute2/0002-ip-include-libc-headers-first.patch
