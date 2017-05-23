@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 May 2017 23:10:21 +0200
-Subject: [Buildroot] [PATCH 1/2] package/benejson: typo fix
-Message-ID: <20170523211022.27047-1-bernd.kuhls@t-online.de>
+Date: Tue, 23 May 2017 23:14:53 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/benejson: typo fix
+Message-ID: <20170523211454.30470-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,6 +10,8 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: no changes
+
  package/benejson/benejson.hash | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
