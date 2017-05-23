@@ -1,51 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 08:31:48 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-22
-Message-ID: <20170523063148.BE93A20857@mail.free-electrons.com>
+From: Pascal K <pascalkrauth@gmail.com>
+Date: Tue, 23 May 2017 08:35:52 +0000
+Subject: [Buildroot] Building Network Manager fails at configure due to uuid
+ package requirements error
+Message-ID: <CADj18OV=YojdFc_mYeHjf0zuQzec3e=ivO=B78=m9T1NVqeEnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello everyone,
 
-Build statistics for 2017-05-22
-================================
+I use buildroot-2016-08 with a out-of-tree out of source build environment
+structure.
+I tried to build the network-manager package (i think 1.0.14 and now I
+switched to 1.4.2) both builds fail at configure due to the uuid Package
+requirements.
 
-      successes : 231
-       failures : 8  
-       timeouts : 3  
-          TOTAL : 242
+So I would like to use the hint in the build process which points to set
+the environment variables, but where do I set them for my type of build
+(and where to point them to)?
+Why does this error even appear (the libuuid is configured)?
 
-Classification of failures by reason
-====================================
+Here some console output:
+$make
+...
+build/buildroot-config/conf --silentoldconfig Config.in
+>>> network-manager 1.4.2 Configuring
+...
+checking for LIBNL... yes
+checking for UUID... no
+configure: error: Package requirements (uuid) were not met:
 
-       host-erlang-rebar-2.6.4 | 2 
-                   taskd-1.1.0 | 2 
-                  ffmpeg-3.3.1 | 1 
-                 libv4l-1.12.2 | 1 
- make[2]: *** [all] Terminated | 1 
-                openocd-0.10.0 | 1 
-                 qt5base-5.8.0 | 1 
-                   redis-3.2.8 | 1 
-    xserver_xorg-server-1.19.3 | 1 
+Package uuid was not found in the pkg-config search path.
+Perhaps you should add the directory containing `uuid.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'uuid', required by 'world', not found
 
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-Detail of failures
-===================
+Alternatively, you may set the environment variables UUID_CFLAGS
+and UUID_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-         arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/bb575f6dfef376070aff9447a6f7264956acf6dd |     
-     aarch64 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/6503e59f67466170df51ff88b58158434a7e42c1 |     
-        i586 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/e76217fa73082e787366d39835e7879b7d006ce2 |     
-       sparc |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/967e7b7b6960ff49afc5c845832abd49d93ed676 | ORPH
-        i686 |  make[2]: *** [all] Terminated | TIM | http://autobuild.buildroot.net/results/b4685dee77a2b121e63be249633c8f3878324621 |     
-         arm |                 openocd-0.10.0 | NOK | http://autobuild.buildroot.net/results/dbffc53ecc9da8d584fd22b82b129529d5483a61 | ORPH
-       sparc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/5c17441a45b6da610e3f3de1dbcc1bac8cec623f |     
-       sparc |                    redis-3.2.8 | NOK | http://autobuild.buildroot.net/results/7f1ecccbfdb6bd95824d9c884f1577e71e0e1e09 |     
-        or1k |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/3e0582c728765250d44b088b6e5b4e731c2c98a4 |     
-     powerpc |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/46c5b8abed5518bcb668b93cbb0bc7aa81da5c6e |     
-       sparc |     xserver_xorg-server-1.19.3 | NOK | http://autobuild.buildroot.net/results/3b8b319b069206052a0050ad8d779ca8e0cbae5e |     
+Parts of my config, which I thought should do the trick with the uuid:
+BR2_PACKAGE_UTIL_LINUX=y
+BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
+# BR2_PACKAGE_UTIL_LINUX_LIBMOUNT is not set
+# BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS is not set
+BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
 
--- 
-http://autobuild.buildroot.net
+Best regards,
+Pascal
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170523/3fb5fd65/attachment.html>
