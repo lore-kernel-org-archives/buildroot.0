@@ -1,51 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:41:48 +0200
-Subject: [Buildroot] [git commit branch/next] boot/uboot: bump to version
-	2017.05
-Message-ID: <20170523134217.C0E2A8295E@busybox.osuosl.org>
+Date: Tue, 23 May 2017 15:41:55 +0200
+Subject: [Buildroot] [git commit branch/next] imx6q-sabresd: Bump U-Boot and
+	kernel versions
+Message-ID: <20170523134217.D70E08295E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d704045a144cc091083f1ab74fb429fe5e040ed0
+commit: https://git.buildroot.net/buildroot/commit/?id=3525b970c0e5a5575b74dd1c6983f98ce6bcd3db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Bump U-Boot to 2017.05 and kernel to 4.11.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/imx6q-sabresd_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 004f9c0..547822d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -38,7 +38,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
+index cc37ecf..b26dc2a 100644
+--- a/configs/imx6q-sabresd_defconfig
++++ b/configs/imx6q-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2017.03"
-+	bool "2017.05"
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
  
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -86,7 +86,7 @@ endif
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -24,13 +24,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2017.03"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2017.05"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 9606d9f..e11d92f 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  f54baf3f9325bf444c7905f3a5b6f83680edb1e6e1a4d5f8a5ad80abe885113f  u-boot-2017.03.tar.bz2
-+sha256  c8373949d7f0de1059e507b83a655d4cea539f75dc66ccdbb27adbd38d83095e  u-boot-2017.05.tar.bz2
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
