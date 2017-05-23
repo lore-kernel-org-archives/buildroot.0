@@ -1,48 +1,34 @@
-From: Daniel Sabogal <dsabogalcc@gmail.com>
-Date: Tue, 23 May 2017 13:19:31 -0400
-Subject: [Buildroot] [PATCH] bash: disable bash malloc by default
-Message-ID: <20170523171931.18744-1-dsabogalcc@gmail.com>
+From: David Lechner <david@lechnology.com>
+Date: Tue, 23 May 2017 13:04:04 -0500
+Subject: [Buildroot] [PATCH 1/3] lego: ev3: Bump U-Boot version
+In-Reply-To: <1495562646-4410-1-git-send-email-david@lechnology.com>
+References: <1495562646-4410-1-git-send-email-david@lechnology.com>
+Message-ID: <1495562646-4410-2-git-send-email-david@lechnology.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bash's malloc relies on sbrk which is implemented as
-a fail-only stub in musl. Presently, it is disabled
-when configured for static libs. Instead, default to
-using libc malloc.
+This bumps U-Boot to the current stable version (2017.05).
 
-Fixes:
-# bash
-bash: xmalloc: locale.c:81: cannot allocate 18 bytes (0 bytes allocated)
-
-Signed-off-by: Daniel Sabogal <dsabogalcc@gmail.com>
+Signed-off-by: David Lechner <david@lechnology.com>
 ---
- package/bash/bash.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ configs/lego_ev3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 639f01204..32c87a659 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -9,7 +9,7 @@ BASH_SITE = $(BR2_GNU_MIRROR)/bash
- # Build after since bash is better than busybox shells
- BASH_DEPENDENCIES = ncurses readline host-bison \
- 	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
--BASH_CONF_OPTS = --with-installed-readline
-+BASH_CONF_OPTS = --with-installed-readline --without-bash-malloc
- BASH_LICENSE = GPL-3.0+
- BASH_LICENSE_FILES = COPYING
+diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
+index 4d764c5..0c1ab01 100644
+--- a/configs/lego_ev3_defconfig
++++ b/configs/lego_ev3_defconfig
+@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="legoev3"
  
-@@ -24,7 +24,7 @@ BASH_CONF_ENV += \
- 
- # The static build needs some trickery
- ifeq ($(BR2_STATIC_LIBS),y)
--BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
-+BASH_CONF_OPTS += --enable-static-link
- # bash wants to redefine the getenv() function. To check whether this is
- # possible, AC_TRY_RUN is used which is not possible in
- # cross-compilation.
+ # host
 -- 
-2.13.0
+2.7.4
