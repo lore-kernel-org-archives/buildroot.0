@@ -1,10 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 16:29:08 +0200
-Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
- install
-In-Reply-To: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
-References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
-Message-ID: <20170523162908.069ae88c@free-electrons.com>
+From: Pascal K <pascalkrauth@gmail.com>
+Date: Tue, 23 May 2017 14:40:03 +0000
+Subject: [Buildroot] Building Network Manager fails at configure due to
+ uuid package requirements error
+In-Reply-To: <20170523152652.0b449cbe@free-electrons.com>
+References: <CADj18OV=YojdFc_mYeHjf0zuQzec3e=ivO=B78=m9T1NVqeEnQ@mail.gmail.com>
+ <20170523152652.0b449cbe@free-electrons.com>
+Message-ID: <CADj18OXwjeKnSWMENVNU9ncLMvVqfvm2D4Gam2rq3vKAF16Dxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +14,66 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Mar 2017 22:24:58 -0400, Dustin Johnson wrote:
-> When the mono package is installed, the autotools installer installs
-> the /etc/mono files to the target. A post_install hook then copies
-> over the mono libraries to the target as well as the host /etc/mono
-> files which overrides the target files. The target specific mono
-> configuration file (/etc/mono/config) is overridden with the host
-> settings. This causes mono on the target to be unable to locate target
-> specific .so files as it overrides the changes enacted by the patches
-> for the package.
-> 
-> Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
-> ---
->  package/mono/mono.mk | 1 -
->  1 file changed, 1 deletion(-)
+you were right.
 
-Applied to master, thanks. Thanks also to Angelo for having
-tested/reviewed the patch!
+To integrate the NetworkManager I had to switch from "devtmpfs+mdev" to
+"eudev" which seemed to cause a inconsistency in my setup ( a clean build
+removes this) .
+
+Thanks for your help.
 
 Best regards,
+Pascal
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schrieb am Di., 23.
+Mai 2017 um 15:26 Uhr:
+
+> Hello,
+>
+> On Tue, 23 May 2017 08:35:52 +0000, Pascal K wrote:
+>
+> > Here some console output:
+> > $make
+> > ...
+> > build/buildroot-config/conf --silentoldconfig Config.in
+> > >>> network-manager 1.4.2 Configuring
+> > ...
+> > checking for LIBNL... yes
+> > checking for UUID... no
+> > configure: error: Package requirements (uuid) were not met:
+> >
+> > Package uuid was not found in the pkg-config search path.
+> > Perhaps you should add the directory containing `uuid.pc'
+> > to the PKG_CONFIG_PATH environment variable
+> > Package 'uuid', required by 'world', not found
+> >
+> > Consider adjusting the PKG_CONFIG_PATH environment variable if you
+> > installed software in a non-standard prefix.
+> >
+> > Alternatively, you may set the environment variables UUID_CFLAGS
+> > and UUID_LIBS to avoid the need to call pkg-config.
+> > See the pkg-config man page for more details.
+> >
+> > Parts of my config, which I thought should do the trick with the uuid:
+> > BR2_PACKAGE_UTIL_LINUX=y
+> > BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
+> > # BR2_PACKAGE_UTIL_LINUX_LIBMOUNT is not set
+> > # BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS is not set
+> > BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
+>
+> Can you reproduce after a full rebuild, i.e "make clean all" ?
+>
+> If so, could you please provide a complete .config file that reproduces
+> the issue ?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170523/96ff4818/attachment.html>
