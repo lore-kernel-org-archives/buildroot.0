@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:38:02 +0200
-Subject: [Buildroot] [PATCH next] iproute2: drop obsolete patch
-In-Reply-To: <3f1f6da8f2c5cb78bfb9d7273291dd755d345a6f.1495488344.git.baruch@tkos.co.il>
-References: <3f1f6da8f2c5cb78bfb9d7273291dd755d345a6f.1495488344.git.baruch@tkos.co.il>
-Message-ID: <20170523153802.604851ce@free-electrons.com>
+Date: Tue, 23 May 2017 15:39:23 +0200
+Subject: [Buildroot] [git commit branch/next] package/c-icap: add optional
+	support for pcre
+Message-ID: <20170523134044.13AB4822A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ec1c9bf34684746262e7c379f8d4fd5911067b7e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 23 May 2017 00:25:44 +0300, Baruch Siach wrote:
-> Since version 4.5.0 the iptables_common.h header is unused. Don't bother
-> patching this file.
-> 
-> Renumber the following patch.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0002-Add-missing-sys-types.h-include.patch     | 38 ----------------------
->  ...ch => 0002-ip-include-libc-headers-first.patch} |  0
->  2 files changed, 38 deletions(-)
->  delete mode 100644 package/iproute2/0002-Add-missing-sys-types.h-include.patch
->  rename package/iproute2/{0003-ip-include-libc-headers-first.patch => 0002-ip-include-libc-headers-first.patch} (100%)
+Support for pcre was added in 2014:
+https://sourceforge.net/p/c-icap/code/1135/#diff-4
 
-Applied to next, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/c-icap/c-icap.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 2d8b309..750b231 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -48,6 +48,13 @@ else
+ C_ICAP_CONF_OPTS += --without-ldap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PCRE),y)
++C_ICAP_CONF_OPTS += --with-pcre
++C_ICAP_DEPENDENCIES += pcre
++else
++C_ICAP_CONF_OPTS += --without-pcre
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ C_ICAP_CONF_OPTS += --with-zlib
+ C_ICAP_DEPENDENCIES += zlib
