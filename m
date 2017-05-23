@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:39:52 +0200
-Subject: [Buildroot] [git commit branch/next] package/c-icap: remove
-	configure option process-mutexes
-Message-ID: <20170523134044.2A7FD8295F@busybox.osuosl.org>
+Date: Tue, 23 May 2017 15:40:34 +0200
+Subject: [Buildroot] [git commit branch/next] package/c-icap: add optional
+	support for openssl
+Message-ID: <20170523134044.48BA7822A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06afaf5b067a374fa9e91562d4d8a7ccd8c23ad5
+commit: https://git.buildroot.net/buildroot/commit/?id=5c8cc5dadd7f587e22b9de02ffc1b0ad8679ae29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This option was removed in 2014:
-https://sourceforge.net/p/c-icap/code/1102/#diff-3
+Optional OpenSSL was added with version 0.5.1:
+https://sourceforge.net/p/c-icap/news/2017/03/the-c-icap-051-is-released-/
+https://sourceforge.net/p/c-icap/code/1253/#diff-5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/c-icap/c-icap.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/c-icap/c-icap.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index e32e0dc..82b2574 100644
+index 82b2574..e57ecd0 100644
 --- a/package/c-icap/c-icap.mk
 +++ b/package/c-icap/c-icap.mk
-@@ -12,7 +12,6 @@ C_ICAP_LICENSE_FILES = COPYING
- C_ICAP_INSTALL_STAGING = YES
- C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
- C_ICAP_CONF_OPTS = \
--	--with-process-mutexes=posix \
- 	--without-perl \
- 	--enable-large-files \
- 	--enable-ipv6
+@@ -54,6 +54,13 @@ else
+ C_ICAP_CONF_OPTS += --without-ldap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++C_ICAP_CONF_OPTS += --with-openssl
++C_ICAP_DEPENDENCIES += openssl
++else
++C_ICAP_CONF_OPTS += --without-openssl
++endif
++
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ C_ICAP_CONF_OPTS += --with-pcre
+ C_ICAP_DEPENDENCIES += pcre
