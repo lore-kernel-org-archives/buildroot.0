@@ -1,58 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:26:52 +0200
-Subject: [Buildroot] Building Network Manager fails at configure due to
- uuid package requirements error
-In-Reply-To: <CADj18OV=YojdFc_mYeHjf0zuQzec3e=ivO=B78=m9T1NVqeEnQ@mail.gmail.com>
-References: <CADj18OV=YojdFc_mYeHjf0zuQzec3e=ivO=B78=m9T1NVqeEnQ@mail.gmail.com>
-Message-ID: <20170523152652.0b449cbe@free-electrons.com>
+Date: Tue, 23 May 2017 15:36:08 +0200
+Subject: [Buildroot] [git commit] toolchain: disable PIE for static build
+	with musl
+Message-ID: <20170523133658.F33E981EBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fa397537bb64536bb58663df886b1a2c8886961c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 23 May 2017 08:35:52 +0000, Pascal K wrote:
+As mentioned in commit 3c93901bcd2 (toolchain: add hidden symbol for PIE
+support), support for static PIE using musl requires a gcc patch[1]. Buildroot
+doesn't carry this patch. Don't enable BR2_TOOLCHAIN_SUPPORTS_PIE in static
+build with musl.
 
-> Here some console output:
-> $make
-> ...
-> build/buildroot-config/conf --silentoldconfig Config.in
-> >>> network-manager 1.4.2 Configuring  
-> ...
-> checking for LIBNL... yes
-> checking for UUID... no
-> configure: error: Package requirements (uuid) were not met:
-> 
-> Package uuid was not found in the pkg-config search path.
-> Perhaps you should add the directory containing `uuid.pc'
-> to the PKG_CONFIG_PATH environment variable
-> Package 'uuid', required by 'world', not found
-> 
-> Consider adjusting the PKG_CONFIG_PATH environment variable if you
-> installed software in a non-standard prefix.
-> 
-> Alternatively, you may set the environment variables UUID_CFLAGS
-> and UUID_LIBS to avoid the need to call pkg-config.
-> See the pkg-config man page for more details.
-> 
-> Parts of my config, which I thought should do the trick with the uuid:
-> BR2_PACKAGE_UTIL_LINUX=y
-> BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
-> # BR2_PACKAGE_UTIL_LINUX_LIBMOUNT is not set
-> # BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS is not set
-> BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
+Fixes:
+http://autobuild.buildroot.net/results/d19/d19bcfcfb33cc5f5b082b97bbd5852d479823b97/
+http://autobuild.buildroot.net/results/91f/91f7c6954c337b03f5ac141050d9b1bee1623376/
+http://autobuild.buildroot.net/results/996/996116da9241686110b9525eed08cc5acfd379a6/
 
-Can you reproduce after a full rebuild, i.e "make clean all" ?
+[1] https://github.com/richfelker/musl-cross-make/blob/b854a42fc1ea19b8c4ec7104848f9d1a6d7995f0/patches/gcc-6.3.0/0010-static-pie-support.diff
 
-If so, could you please provide a complete .config file that reproduces
-the issue ?
+Acked-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 652c9d8..6aaf68b 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -28,7 +28,7 @@ config BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_TOOLCHAIN_SUPPORTS_PIE
++	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_STATIC_LIBS
+ 
+ choice
+ 	prompt "Toolchain type"
