@@ -1,43 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 15:36:37 +0200
-Subject: [Buildroot] [git commit] package/lua-ev: bump version to git master
-Message-ID: <20170601202852.B471F807D3@busybox.osuosl.org>
+Date: Tue, 23 May 2017 15:48:02 +0200
+Subject: [Buildroot] [git commit] flex: only prevent the flex binary to be
+	built for target, not for host
+Message-ID: <20170601202854.AF6C7807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf725fdd8a3b9e8207a718288dfb25bb9ff565fa
+commit: https://git.buildroot.net/buildroot/commit/?id=41ee484bafe402cfadcf1d480b7c8b44bf206af1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Current git master version has Lua 5.3 compatibility added.
+We do want to build the flex binary when building host-flex since it's
+needed as a build dependency for other packages.
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua-ev/lua-ev.hash | 2 +-
- package/lua-ev/lua-ev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ntation.patch => 0001-flex-disable-documentation.patch} | 14 +-------------
+ package/flex/flex.mk                                       |  5 +++++
+ 2 files changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/package/lua-ev/lua-ev.hash b/package/lua-ev/lua-ev.hash
-index 522e7e7..3f8d981 100644
---- a/package/lua-ev/lua-ev.hash
-+++ b/package/lua-ev/lua-ev.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f7f5df5ecfe4bd54797261d1b1bd3f770d39128b7aba72deef6d1d8d8e2b53fe  lua-ev-v1.4.tar.gz
-+sha256 4e26e05830955fdd882a1b48b535be94356582eea310327f839f830cd9250d3a  lua-ev-339426fbe528f11cb3cd1af69a88f06bba367981.tar.gz
-diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
-index 68f7fc7..3939487 100644
---- a/package/lua-ev/lua-ev.mk
-+++ b/package/lua-ev/lua-ev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/flex/0001-flex-disable-flex-binary-and-documentation.patch b/package/flex/0001-flex-disable-documentation.patch
+similarity index 55%
+rename from package/flex/0001-flex-disable-flex-binary-and-documentation.patch
+rename to package/flex/0001-flex-disable-documentation.patch
+index d035ef4..68bec12 100644
+--- a/package/flex/0001-flex-disable-flex-binary-and-documentation.patch
++++ b/package/flex/0001-flex-disable-documentation.patch
+@@ -1,4 +1,4 @@
+-flex: prevent flex binary to be built
++flex: disable documentation
  
--LUA_EV_VERSION = v1.4
-+LUA_EV_VERSION = 339426fbe528f11cb3cd1af69a88f06bba367981
- LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
- LUA_EV_DEPENDENCIES = luainterpreter libev
- LUA_EV_LICENSE = MIT
+ Since we prevent the flex binary to be built, we also need to prevent
+ the documentation to be built, otherwise it will fail like this:
+@@ -21,15 +21,3 @@ diff -rup a/Makefile.in b/Makefile.in
+  	examples \
+  	po \
+  	tests \
+-diff -rup a/src/Makefile.in b/src/Makefile.in
+---- a/src/Makefile.in	2017-05-06 15:49:09.000000000 +0100
+-+++ b/src/Makefile.in	2017-05-10 14:35:01.918464036 +0100
+-@@ -90,7 +90,7 @@ PRE_UNINSTALL = :
+- POST_UNINSTALL = :
+- build_triplet = @build@
+- host_triplet = @host@
+--bin_PROGRAMS = flex$(EXEEXT)
+-+bin_PROGRAMS =
+- @ENABLE_BOOTSTRAP_TRUE at noinst_PROGRAMS = stage1flex$(EXEEXT)
+- @CROSS_TRUE at am__append_1 = \
+- @CROSS_TRUE@		      ../lib/malloc.c \
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 81cbdc1..aa6c026 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -15,6 +15,11 @@ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
+ # we don't have a host-gettext/libintl
+ HOST_FLEX_DEPENDENCIES = host-m4
+ 
++define FLEX_DISABLE_PROGRAM
++	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/src/Makefile.in
++endef
++FLEX_POST_PATCH_HOOKS += FLEX_DISABLE_PROGRAM
++
+ # flex++ symlink is broken when flex binary is not installed
+ define FLEX_REMOVE_BROKEN_SYMLINK
+ 	rm -f $(TARGET_DIR)/usr/bin/flex++
