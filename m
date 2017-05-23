@@ -1,53 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:41:55 +0200
-Subject: [Buildroot] [git commit] imx6q-sabresd: Bump U-Boot and kernel
-	versions
-Message-ID: <20170601202854.9C39A807D3@busybox.osuosl.org>
+Date: Tue, 23 May 2017 15:40:02 +0200
+Subject: [Buildroot] [git commit] package/c-icap-modules: bump version to
+	0.4.5
+Message-ID: <20170601202854.6326F807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3525b970c0e5a5575b74dd1c6983f98ce6bcd3db
+commit: https://git.buildroot.net/buildroot/commit/?id=80ab228959b67b2023d6db383e9aa0640e853b77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2017.05 and kernel to 4.11.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/imx6q-sabresd_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/c-icap-modules/c-icap-modules.hash | 4 ++--
+ package/c-icap-modules/c-icap-modules.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
-index cc37ecf..b26dc2a 100644
---- a/configs/imx6q-sabresd_defconfig
-+++ b/configs/imx6q-sabresd_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+diff --git a/package/c-icap-modules/c-icap-modules.hash b/package/c-icap-modules/c-icap-modules.hash
+index 5df1449..a9fee87 100644
+--- a/package/c-icap-modules/c-icap-modules.hash
++++ b/package/c-icap-modules/c-icap-modules.hash
+@@ -1,3 +1,3 @@
+ # From http://sourceforge.net/projects/c-icap/files/c-icap-modules/0.4.x/
+-md5	5acd9487679ed47fbee00270d436718d	c_icap_modules-0.4.2.tar.gz
+-sha1	e5f4203980b732b9de165c1e83c4703734c3e0e2	c_icap_modules-0.4.2.tar.gz
++md5 1a7eaa7a34ff35c2440cf303f7b45f22  c_icap_modules-0.4.5.tar.gz
++sha1 515145e6d29413aff8543937504dc5c419043fd5  c_icap_modules-0.4.5.tar.gz
+diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
+index 9daee58..d754378 100644
+--- a/package/c-icap-modules/c-icap-modules.mk
++++ b/package/c-icap-modules/c-icap-modules.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.11 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -24,13 +24,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
+-C_ICAP_MODULES_VERSION = 0.4.2
++C_ICAP_MODULES_VERSION = 0.4.5
+ C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
+ C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_MODULES_LICENSE = GPL-2.0+
