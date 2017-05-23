@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 21:46:38 +0200
-Subject: [Buildroot] [git commit] package/libva: bump version to 1.8.2
-Message-ID: <20170601202853.B87CD807D3@busybox.osuosl.org>
+Date: Tue, 23 May 2017 15:39:03 +0200
+Subject: [Buildroot] [git commit] package/c-icap: add optional support for
+	openldap
+Message-ID: <20170601202854.28A0E807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=882d769ff11adf2039e3d45bff0cdfdd5bccdc0d
+commit: https://git.buildroot.net/buildroot/commit/?id=6cea5f5daf446b2edd5fa93bd13f4730bcb23f24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/c-icap/c-icap.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 0590423..875a4d1 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/01org/libva/releases
--sha1 ae1f580d3ca54199393133214ac1e5a66d9cbeb3  libva-1.8.1.tar.bz2
-+sha1 7c4253c97f5e1e76500ff75321287131941494bc  libva-1.8.2.tar.bz2
- # Locally computed
--sha256 c1d5d85b6b40b76f37993b4da33388d3d73b64998dcbc160b7578e24ed775c73  libva-1.8.1.tar.bz2
-+sha256 9ed3e3ddc8f47a715d4c6ec366beb21c83fc4e8a3d4d39a811baff76f0a0cede  libva-1.8.2.tar.bz2
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index ffd990f..b89d5fa 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 17f3459..2d8b309 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -13,7 +13,6 @@ C_ICAP_INSTALL_STAGING = YES
+ C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
+ C_ICAP_CONF_OPTS = \
+ 	--with-process-mutexes=posix \
+-	--without-ldap \
+ 	--without-perl \
+ 	--enable-large-files \
+ 	--enable-ipv6
+@@ -42,6 +41,13 @@ else
+ C_ICAP_CONF_OPTS += --without-bzip2
+ endif
  
--LIBVA_VERSION = 1.8.1
-+LIBVA_VERSION = 1.8.2
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/01org/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++C_ICAP_CONF_OPTS += --with-ldap
++C_ICAP_DEPENDENCIES += openldap
++else
++C_ICAP_CONF_OPTS += --without-ldap
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ C_ICAP_CONF_OPTS += --with-zlib
+ C_ICAP_DEPENDENCIES += zlib
