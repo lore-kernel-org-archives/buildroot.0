@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 16:16:59 +0200
-Subject: [Buildroot] [PATCH 1/1] checkpolicy: remove -lfl from LDLIBS
- patch.
-In-Reply-To: <20170520152229.22752-1-Adamduskett@outlook.com>
-References: <20170520152229.22752-1-Adamduskett@outlook.com>
-Message-ID: <20170523161659.167d0074@free-electrons.com>
+Date: Tue, 23 May 2017 16:19:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/sngrep: add libgcrypt missing
+ dependencies
+In-Reply-To: <20170520162751.30809-1-romain.naour@gmail.com>
+References: <20170520162751.30809-1-romain.naour@gmail.com>
+Message-ID: <20170523161950.2b24f43f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 20 May 2017 11:22:29 -0400, Adam Duskett wrote:
-> from: https://patchwork.kernel.org/patch/9450549/
+On Sat, 20 May 2017 18:27:50 +0200, Romain Naour wrote:
+> Even if libgcrypt is selected at Kconfig level, it's missing from
+> Makefile level.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/36c/36c28e7e49b31ed2398a67db2e9b08e3aad5a3ee
 
-Please do not use from: <something> at the beginning of the commit log,
-because Git believes this is the "Author".
+Could you explain how this build failure apparently related to ncurses
+has something to do with the gnutls/libgcrypt issue ?
 
-Besides that: applied on next, thanks.
+The patch itself looks good, but the relation with this particular
+build failure isn't really clear. Could you clarify?
+
+Thanks!
 
 Thomas
 -- 
