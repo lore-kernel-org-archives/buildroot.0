@@ -1,30 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:00:16 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/cgic: typo fix
-In-Reply-To: <20170523211831.30719-1-bernd.kuhls@t-online.de>
-References: <20170523211831.30719-1-bernd.kuhls@t-online.de>
-Message-ID: <20170524160016.0d968df8@free-electrons.com>
+Date: Wed, 24 May 2017 16:00:11 +0200
+Subject: [Buildroot] [git commit branch/next] package/cgroupfs-mount: bump
+	version to 1.4
+Message-ID: <20170524140026.612E38211E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9aef0338042ee6521cdcd0003a674ec9b98a19a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 23 May 2017 23:18:30 +0200, Bernd Kuhls wrote:
-> Cherry-picked from http://patchwork.ozlabs.org/patch/766226/ for next
-> branch to ease merging next branch back into master branch.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/cgic/cgic.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Removed empty line from cgroupfs-mount.mk as well.
 
-Applied to next, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cgroupfs-mount/cgroupfs-mount.hash | 2 +-
+ package/cgroupfs-mount/cgroupfs-mount.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.hash b/package/cgroupfs-mount/cgroupfs-mount.hash
+index 34f5167..926a031 100644
+--- a/package/cgroupfs-mount/cgroupfs-mount.hash
++++ b/package/cgroupfs-mount/cgroupfs-mount.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	  fb32a8d9de491358d28f56ab76a56e1a611b90d5b6326910d3a69395fa539027	cgroupfs-mount-7285bf44402029394808339f69f4f293730fc2c6.tar.gz
++sha256 d6c8aff7af59c7d0082ee3018c97f73b0421e81a49bb28ad9f66a36da5cd6ec7  cgroupfs-mount-1.4.tar.gz
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
+index 096c728..9a76799 100644
+--- a/package/cgroupfs-mount/cgroupfs-mount.mk
++++ b/package/cgroupfs-mount/cgroupfs-mount.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CGROUPFS_MOUNT_VERSION = 7285bf44402029394808339f69f4f293730fc2c6
++CGROUPFS_MOUNT_VERSION = 1.4
+ CGROUPFS_MOUNT_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_MOUNT_VERSION))
+ CGROUPFS_MOUNT_LICENSE = GPL-3.0+
+ CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
+@@ -17,7 +17,6 @@ endef
+ define CGROUPFS_MOUNT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D $(CGROUPFS_MOUNT_PKGDIR)/S30cgroupfs \
+ 		$(TARGET_DIR)/etc/init.d/S30cgroupfs
+-
+ endef
+ 
+ $(eval $(generic-package))
