@@ -1,63 +1,51 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 24 May 2017 21:41:42 +0200
-Subject: [Buildroot] [PATCH 1/2] package/sngrep: add libgcrypt missing
- dependencies
-In-Reply-To: <20170524084439.56e64c59@free-electrons.com>
-References: <20170520162751.30809-1-romain.naour@gmail.com>
- <20170523161950.2b24f43f@free-electrons.com>
- <f09dc6c1-557c-885b-4bb9-370a1ca9b8ae@gmail.com>
- <20170524084439.56e64c59@free-electrons.com>
-Message-ID: <cc45b380-dbda-98f0-0fab-e7f8adbb75da@gmail.com>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Wed, 24 May 2017 13:30:29 -0700
+Subject: [Buildroot] [PATCH 1/2] package: acpica: Add host buildling support
+In-Reply-To: <20170524203030.8187-1-alistair.francis@xilinx.com>
+References: <20170524203030.8187-1-alistair.francis@xilinx.com>
+Message-ID: <20170524203030.8187-2-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Add support to build the ACPICA package for the host. This is useful for
+the iasl command which is required to build some packaged, including Xen
+tools
 
-Le 24/05/2017 ? 08:44, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Tue, 23 May 2017 23:09:19 +0200, Romain Naour wrote:
-> 
->> I was looking for this kind of build failure with a glibc based system:
->>
->> checking for ncurses.h... yes
->> checking for initscr in -lncurses... yes
->> checking for new_panel in -lpanel... yes
->> checking for new_form in -lform... yes
->> checking for new_item in -lmenu... yes
->> checking for gnutls_init in -lgnutls... yes
->> checking for gcry_md_map_name in -lgcrypt... no
->> configure: error:  You need to have libgcrypt installed to compile sngrep
->>
->> I just read what I wanted to read in the autobuilder reference...
->>
->> It's weird that the autobuilder didn't catch it.
-> 
-> So in other words, there are no autobuilder reference for the build
-> failure you are fixing? If so, could you add in the commit log a
-> minimal defconfig that exhibits the issue?
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+---
+ package/acpica/acpica.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Exactly...
-
-Here the minimal defconfig:
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_NEON=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_GNUTLS=y
-BR2_PACKAGE_LIBGCRYPT=y
-BR2_PACKAGE_SNGREP=y
-
-Best regards,
-Romain
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 37e4941a6..96d0dad2b 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -11,6 +11,11 @@ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+ ACPICA_LICENSE_FILES = source/include/acpi.h
+ ACPICA_DEPENDENCIES = host-bison host-flex
+ 
++define HOST_ACPICA_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		all
++endef
++
+ define ACPICA_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
+@@ -23,4 +28,11 @@ define ACPICA_INSTALL_TARGET_CMDS
+ 		INSTALLFLAGS=-m755 install
+ endef
+ 
++define HOST_ACPICA_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR="$(HOST_DIR)" \
++		INSTALLFLAGS=-m755 install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
+2.11.0
