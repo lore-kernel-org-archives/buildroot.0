@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:02:12 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/cjson: bump version to
- v1.5.3
-In-Reply-To: <20170523213042.4174-1-bernd.kuhls@t-online.de>
-References: <20170523213042.4174-1-bernd.kuhls@t-online.de>
-Message-ID: <20170524160212.02ba4f04@free-electrons.com>
+Date: Wed, 24 May 2017 16:02:58 +0200
+Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add entry for
+	libconfuse
+Message-ID: <20170524140313.84429827C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3ff892b97fb7e57853a44832c1e0c726d6ff9064
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 23 May 2017 23:30:42 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/cjson/cjson.hash | 2 +-
->  package/cjson/cjson.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index de34d06..a8fa143 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -581,6 +581,7 @@ F:	support/scripts/scancpan
+ 
+ N:	Frank Hunleth <fhunleth@troodon-software.com>
+ F:	package/am335x-pru-package/
++F:	package/libconfuse/
+ F:	package/libdmtx/
+ F:	package/libsodium/
+ F:	package/php-amqp/
