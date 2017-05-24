@@ -1,66 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 24 May 2017 17:32:39 +0200
-Subject: [Buildroot] [PATCH/next v2] package/bootstrap: bump version to 3.3.7
-Message-ID: <20170524153239.8485-1-bernd.kuhls@t-online.de>
+Date: Wed, 24 May 2017 17:36:32 +0200
+Subject: [Buildroot] [PATCH/next] package/libdrm: bump version to 2.4.81
+Message-ID: <20170524153632.21763-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extended _EXTRACT_CMDS to handle updated internal zip structure:
-
-$ unzip -l ../dl/bootstrap-3.3.1-dist.zip
-Archive:  ../dl/bootstrap-3.3.1-dist.zip
-  Length      Date    Time    Name
----------  ---------- -----   ----
-        0  2014-11-12 18:03   dist/
-        0  2014-11-12 18:03   dist/css/
-[...]
-
-$ unzip -l ../dl/bootstrap-3.3.7-dist.zip
-Archive:  ../dl/bootstrap-3.3.7-dist.zip
-  Length      Date    Time    Name
----------  ---------- -----   ----
-        0  2016-07-25 15:53   bootstrap-3.3.7-dist/css/
-[...]
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: changed _EXTRACT_CMDS instead of _INSTALL_TARGET_CMDS
-    to handle updated internal zip structure (Thomas)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
- package/bootstrap/bootstrap.hash | 2 +-
- package/bootstrap/bootstrap.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
-index acb06b424..abc09da21 100644
---- a/package/bootstrap/bootstrap.hash
-+++ b/package/bootstrap/bootstrap.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  95ca4a02aff37570660c81a87065b53ebc281c33fa86b91a6a7a650eee10678f  bootstrap-3.3.1-dist.zip
-+sha256 f498a8ff2dd007e29c2074f5e4b01a9a01775c3ff3aeaf6906ea503bc5791b7b  bootstrap-3.3.7-dist.zip
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 17752ce06..520cfeb2e 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
-@@ -4,13 +4,14 @@
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index f322ba147..247e63181 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-April/139263.html
+-md5 4867866477f228973a64e68051ca9c66  libdrm-2.4.80.tar.bz2
+-sha1 eabfc3e04d0737834ccb49fe34fc369f0e0588f9  libdrm-2.4.80.tar.bz2
+-sha256 a82a519601e9cdfad795e760807eb07ac8913b225e25fc8fe9bc03e3be6549f1 libdrm-2.4.80.tar.bz2
+-sha512 478f64bcc6f4815368ae86d023f11ba6b37595bb9d8baa588b466c6c0e2aae48a50a489137750ed21fbabef5afabf183c78c152eb770bfe316fa7401b191a30b libdrm-2.4.80.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2017-May/142708.html
++md5 d04f3567f0a812188d06f860fded5ab7  libdrm-2.4.81.tar.bz2
++sha1 40f0994b5fb9992e6f55d3a14537def21719d896  libdrm-2.4.81.tar.bz2
++sha256 8cc05c195ac8708199979a94c4e4d1a928c14ec338ecbcb38ead09f54dae11ae  libdrm-2.4.81.tar.bz2
++sha512 5f7a1524acad59890d3f890bed90a660a424e18a88d587ca356223bde4a7446d1c540f97ec11cb10d2e7ed1b4ae86127957634354a1be6d04199295ab24782e5  libdrm-2.4.81.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 01b1aed76..54187f3cb 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOOTSTRAP_VERSION = 3.3.1
-+BOOTSTRAP_VERSION = 3.3.7
- BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
- BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
- 
- define BOOTSTRAP_EXTRACT_CMDS
- 	$(UNZIP) $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
-+	mv $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist $(@D)/dist
- endef
- 
- define BOOTSTRAP_INSTALL_TARGET_CMDS
+-LIBDRM_VERSION = 2.4.80
++LIBDRM_VERSION = 2.4.81
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
 2.11.0
