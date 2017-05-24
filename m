@@ -1,47 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:20:15 +0200
-Subject: [Buildroot] [git commit] package/ccid: bump version to 1.4.27
-Message-ID: <20170601202855.8A953807D3@busybox.osuosl.org>
+Date: Wed, 24 May 2017 16:17:06 +0200
+Subject: [Buildroot] [git commit] package/gcc: remove gcc 4.8
+Message-ID: <20170601202855.7CEC6807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba330eab1364f0e276501aadc3db1bc38174c800
+commit: https://git.buildroot.net/buildroot/commit/?id=f66952197b41452b77dfa065adc7172137e4c243
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+We're already using 5.x as default, and have 4.9.x on the lower side
+together with 7.x (7.1) on the higher side.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ccid/ccid.hash | 6 +++---
- package/ccid/ccid.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ Config.in.legacy                                   |  10 +
+ ...et-68059-libgcc-should-not-use-__write-fo.patch |  43 --
+ package/gcc/4.8.5/100-uclibc-conf.patch            |  15 -
+ ...00-powerpc-link-with-math-lib.patch.conditional | 122 ----
+ package/gcc/4.8.5/111-pr65730.patch                |  37 --
+ ...gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch |  29 -
+ package/gcc/4.8.5/130-fix_build_with_gcc-6.patch   | 153 -----
+ package/gcc/4.8.5/130-pr43538.patch                |  25 -
+ package/gcc/4.8.5/301-missing-execinfo_h.patch     |  13 -
+ .../gcc/4.8.5/305-libmudflap-susv3-legacy.patch    |  49 --
+ package/gcc/4.8.5/810-arm-softfloat-libgcc.patch   |  30 -
+ package/gcc/4.8.5/830-arm_unbreak_armv4t.patch     |  13 -
+ package/gcc/4.8.5/841-PR57717-E500v2.patch         |  23 -
+ package/gcc/4.8.5/842-PR60155.patch                | 111 ----
+ .../4.8.5/843-aarch64-vmlaq_lane_s32-typo.patch    |  24 -
+ package/gcc/4.8.5/850-libstdcxx-uclibc-c99.patch   | 273 ---------
+ package/gcc/4.8.5/851-PR-other-56780.patch         | 244 --------
+ .../870-xtensa-add-mauto-litpools-option.patch     | 290 ---------
+ .../871-xtensa-reimplement-register-spilling.patch |  76 ---
+ ...unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch |  33 --
+ .../gcc/4.8.5/873-xtensa-fix-_Unwind_GetCFA.patch  |  40 --
+ .../gcc/4.8.5/874-xtensa-add-uclinux-support.patch | 174 ------
+ package/gcc/4.8.5/890-fix-m68k-compile.patch       |  15 -
+ package/gcc/4.8.5/891-fix-m68k-uclinux.patch       |  18 -
+ package/gcc/4.8.5/900-musl-support.patch           | 648 ---------------------
+ .../930-libgcc-disable-split-stack-nothreads.patch |  14 -
+ package/gcc/4.8.5/940-uclinux-enable-threads.patch |  19 -
+ package/gcc/Config.in.host                         |  24 -
+ package/uclibc/uclibc.mk                           |   6 -
+ 29 files changed, 10 insertions(+), 2561 deletions(-)
 
-diff --git a/package/ccid/ccid.hash b/package/ccid/ccid.hash
-index 3e1e962..a7d4875 100644
---- a/package/ccid/ccid.hash
-+++ b/package/ccid/ccid.hash
-@@ -1,3 +1,3 @@
--# From http://cdn-fastly.deb.debian.org/debian/pool/main/c/ccid/ccid_1.4.26-1.dsc
--sha1 20e22c23b8458548a6b572b044e5dbe4ecdc42e5  ccid_1.4.26.tar.bz2
--sha256 3267bf708ab780c02f01f6241b7c7277cb892d30fd1179a9926a8cc0ca40be2f  ccid_1.4.26.tar.bz2
-+# From http://cdn-fastly.deb.debian.org/debian/pool/main/c/ccid/ccid_1.4.27-1.dsc
-+sha1 d72ee816422183a86006e0083ccd643236b4e12a  ccid_1.4.27.tar.bz2
-+sha256 a660e269606986cb94840ad5ba802ffb0cd23dd12b98f69a35035e0deb9dd137  ccid_1.4.27.tar.bz2
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index 7fbf025..e566afe 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CCID_VERSION = 1.4.26
-+CCID_VERSION = 1.4.27
- CCID_SOURCE = ccid_$(CCID_VERSION).tar.bz2
--CCID_SITE = https://alioth.debian.org/frs/download.php/file/4205
-+CCID_SITE = https://alioth.debian.org/frs/download.php/file/4218
- CCID_LICENSE = LGPL-2.1+
- CCID_LICENSE_FILES = COPYING
- CCID_INSTALL_STAGING = YES
+Patch is too large, so refusing to show it
