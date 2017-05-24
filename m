@@ -1,31 +1,37 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 24 May 2017 10:01:01 -0400
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add entry for libconfuse
-In-Reply-To: <1495634461-17815-1-git-send-email-fhunleth@troodon-software.com>
-References: <1495634461-17815-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <1495634461-17815-2-git-send-email-fhunleth@troodon-software.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 May 2017 16:01:33 +0200
+Subject: [Buildroot] tried to add ethtool now get config error - Working
+ zlib library and headers not found
+In-Reply-To: <1495574614309-165534.post@n4.nabble.com>
+References: <1495574614309-165534.post@n4.nabble.com>
+Message-ID: <20170524160133.73c8229a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3155264..f6c3753 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -580,6 +580,7 @@ F:	support/scripts/scancpan
- 
- N:	Frank Hunleth <fhunleth@troodon-software.com>
- F:	package/am335x-pru-package/
-+F:	package/libconfuse/
- F:	package/libdmtx/
- F:	package/libsodium/
- F:	package/php-amqp/
+On Tue, 23 May 2017 14:23:34 -0700 (PDT), lemonoje wrote:
+
+> After successfully building and using my BR rootfs on my target Arria 10 SoC
+> kit, I am trying to simply rebuild with enabling of the ethtool utility.  I
+> get the following error trying to rebuild now, whether I have ethtool
+> enabled or not, so that is very confusing as nothing else should have
+> changed.  Any ideas on the cause?  It compiles everything else fine up to
+> this point.
+
+Do a full rebuild: "make clean all". If you can reproduce the problem,
+then post your complete Buildroot .config file.
+
+Also, make sure you read
+https://buildroot.org/downloads/manual/manual.html#full-rebuild.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
