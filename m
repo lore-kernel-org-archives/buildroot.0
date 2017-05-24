@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 08:47:33 +0200
-Subject: [Buildroot] [PATCH 2/2] package/sngrep: fix static build with
- gnutls
-In-Reply-To: <9efd1b94-8830-15b9-8d17-608ce8eace50@gmail.com>
-References: <20170520162751.30809-1-romain.naour@gmail.com>
- <20170520162751.30809-2-romain.naour@gmail.com>
- <20170523162742.23372fb2@free-electrons.com>
- <9efd1b94-8830-15b9-8d17-608ce8eace50@gmail.com>
-Message-ID: <20170524084733.37fd3ca1@free-electrons.com>
+Date: Wed, 24 May 2017 08:50:43 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-05-22
+In-Reply-To: <76527289-8958-f114-4f12-dd19af603b76@gmail.com>
+References: <20170523063148.BE93A20857@mail.free-electrons.com>
+ <76527289-8958-f114-4f12-dd19af603b76@gmail.com>
+Message-ID: <20170524085043.7cae3b38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 May 2017 23:20:14 +0200, Romain Naour wrote:
+On Wed, 24 May 2017 00:01:51 +0200, Romain Naour wrote:
 
-> I think this patch is not necessary anymore since gnutls shouldn't be linked
-> statically, see [1].
+> >      aarch64 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/6503e59f67466170df51ff88b58158434a7e42c1 |     
+> >         i586 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/e76217fa73082e787366d39835e7879b7d006ce2 |       
 > 
-> The code use __attribute__((constructor)) and __attribute__((destructor)) to
-> call constructor/desctructor when a shared library is loaded.
-> Constructor/desctructor are not used when a static library is used (except when
-> if -Wl,--whole-archive -lgnutls -Wno-whole-archive is used, not tested).
-> 
-> Even if gnutls initialization (_gnutls_global_init()) may be called manually,
-> the maintainer said it's not supported.
-> 
-> So we should add !BR2_STATIC_LIBS for gnutls package ?
-> Doing so, it will avoid all static linking issues with gnutls (taskd, ffmpeg,
-> sngrep...)
+> Thomas, what did you do to avoid such issue on your autobuilder ?
+> I remember Arnout helped a lot for the investigation.
 
-Yes, I believe we should add !BR2_STATIC_LIBS, of course propagated to
-all reverse dependencies (but there are not too many of them).
-
-A side question is: is there a way to detect/error out when some code
-is using this constructor/destructor mechanism in a way that doesn't
-work for static linking? It would be useful to check if other packages
-are affected.
-
-Thanks!
+See the thread at
+http://lists.busybox.net/pipermail/buildroot/2015-August/137197.html.
+Lots of discussion, but no conclusion :-/
 
 Thomas
 -- 
