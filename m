@@ -1,65 +1,39 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 24 May 2017 14:47:50 +0000
-Subject: [Buildroot] [PATCH v2 2/3] package/gcc: add support for gcc 7
-In-Reply-To: <20170524162612.09a18a25@free-electrons.com>
-References: <20170523202440.6949-1-romain.naour@gmail.com>
- <20170523202440.6949-2-romain.naour@gmail.com>
- <20170524162612.09a18a25@free-electrons.com>
-Message-ID: <1495637269.2909.25.camel@synopsys.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 24 May 2017 17:24:27 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/tor: bump version to 0.3.0.7
+Message-ID: <20170524152427.3704-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 2017-05-24 at 16:26 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> First of all, thanks for doing this work!
-> 
-> I've added Alexey, Waldemar and Vicente in Cc, since there are some
-> ARC, Microblaze, OpenRISC and MIPS questions below.
-> 
-> On Tue, 23 May 2017 22:24:39 +0200, Romain Naour wrote:
-> > 
-> > Remove upstream patches:
-> 
-> [...]
-> 
-> Nice to see that so many patches are upstream, and that our stack of
-> gcc patches for 7.x is now really small!
-> 
-> Perhaps we should start some effort to upstream the last few remaining
-> patches?
-> 
-> > 
-> > +config BR2_GCC_VERSION_7_X
-> > +	bool "gcc 7.x"
-> > +	# Broken or unsupported architectures
-> > +	depends on !BR2_arc
-> > +	depends on !BR2_microblaze
-> > +	depends on !BR2_or1k
-> 
-> ARC is indeed still not supported fully in gcc 7.x I believe. Alexey,
-> do you confirm?
-
-Well I'd say something completely opposite :)
-
-GCC 7.x has as much of ARC support as it could be now. We submit all our changes
-to gcc immediately and it's only a matter of review and approval delay for when it
-lands in master branch of GCC. The same applies to GCC releases - whatever got merged
-by the time of release is there. So I'd say we barely differ here a lot from other first
-class citizens in GCC.
-
-Moreover GCC 7.1 should work for us just fine and very limited amount of patches could
-be needed to fix things here and there.
-
-BTW and the same is true for Binutils. And frankly for quite some time now I was planning
-to give upstream GCC/Binutils a try in Buildroot for ARC. So while we're on topic I guess
-we may start from having 2 options for ARC users:
-?* Build toolchain from ARC releases from GitHub forks of GCC and Binutils
-?* Build toolchain from upstream releases
-
--Alexey
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 5b83aa43d..bfdf055f4 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 a3e512e93cb555601fd207d914d7c5fe981d66d6ebb5821ecdf5dea738c2fb14  tor-0.3.0.6.tar.gz
++sha256 9640c4448ef3cad7237c68ed6984e705db8fb2b9d6bb74c8815d01bb06527d02  tor-0.3.0.7.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index e6cb2b729..305f6bf40 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.3.0.6
++TOR_VERSION = 0.3.0.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
+-- 
+2.11.0
