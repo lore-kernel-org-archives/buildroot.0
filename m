@@ -1,27 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:12:22 +0200
-Subject: [Buildroot] [git commit] package/benejson: fix typo in hash file
-Message-ID: <20170601202855.2BE45807D3@busybox.osuosl.org>
+Date: Wed, 24 May 2017 16:00:11 +0200
+Subject: [Buildroot] [git commit] package/cgroupfs-mount: bump version to 1.4
+Message-ID: <20170601202854.E7E9F807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=948c967c3877cccf85ac29edd33bd61657834e3a
+commit: https://git.buildroot.net/buildroot/commit/?id=9aef0338042ee6521cdcd0003a674ec9b98a19a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed empty line from cgroupfs-mount.mk as well.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/benejson/benejson.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cgroupfs-mount/cgroupfs-mount.hash | 2 +-
+ package/cgroupfs-mount/cgroupfs-mount.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/benejson/benejson.hash b/package/benejson/benejson.hash
-index 1dfda90..696dc4f 100644
---- a/package/benejson/benejson.hash
-+++ b/package/benejson/benejson.hash
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.hash b/package/cgroupfs-mount/cgroupfs-mount.hash
+index 34f5167..926a031 100644
+--- a/package/cgroupfs-mount/cgroupfs-mount.hash
++++ b/package/cgroupfs-mount/cgroupfs-mount.hash
 @@ -1,2 +1,2 @@
--# Localy computed
-+# Locally computed
- sha256  2ce5f3c2323500bdf651e7fcaecbd1011997141e6067567b8d2caa4cf7182f4a  benejson-0.9.7.tar.gz
+ # Locally calculated
+-sha256	  fb32a8d9de491358d28f56ab76a56e1a611b90d5b6326910d3a69395fa539027	cgroupfs-mount-7285bf44402029394808339f69f4f293730fc2c6.tar.gz
++sha256 d6c8aff7af59c7d0082ee3018c97f73b0421e81a49bb28ad9f66a36da5cd6ec7  cgroupfs-mount-1.4.tar.gz
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
+index 096c728..9a76799 100644
+--- a/package/cgroupfs-mount/cgroupfs-mount.mk
++++ b/package/cgroupfs-mount/cgroupfs-mount.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CGROUPFS_MOUNT_VERSION = 7285bf44402029394808339f69f4f293730fc2c6
++CGROUPFS_MOUNT_VERSION = 1.4
+ CGROUPFS_MOUNT_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_MOUNT_VERSION))
+ CGROUPFS_MOUNT_LICENSE = GPL-3.0+
+ CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
+@@ -17,7 +17,6 @@ endef
+ define CGROUPFS_MOUNT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D $(CGROUPFS_MOUNT_PKGDIR)/S30cgroupfs \
+ 		$(TARGET_DIR)/etc/init.d/S30cgroupfs
+-
+ endef
+ 
+ $(eval $(generic-package))
