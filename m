@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 08:50:43 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-05-22
-In-Reply-To: <76527289-8958-f114-4f12-dd19af603b76@gmail.com>
-References: <20170523063148.BE93A20857@mail.free-electrons.com>
- <76527289-8958-f114-4f12-dd19af603b76@gmail.com>
-Message-ID: <20170524085043.7cae3b38@free-electrons.com>
+Date: Wed, 24 May 2017 15:49:09 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: Remove Niranjan Reddy from
+	cgroupfs-mount
+Message-ID: <20170524135737.146C48285A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6bc8de6f9d5856213cb45f4a86556b55321e3575
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 24 May 2017 00:01:51 +0200, Romain Naour wrote:
+He can re-add with a new email if he wants, but his
+current Rockwell email will bounce.
 
-> >      aarch64 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/6503e59f67466170df51ff88b58158434a7e42c1 |     
-> >         i586 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/e76217fa73082e787366d39835e7879b7d006ce2 |       
-> 
-> Thomas, what did you do to avoid such issue on your autobuilder ?
-> I remember Arnout helped a lot for the investigation.
+Signed-off-by: Matt Weber <matt@thewebers.ws>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-See the thread at
-http://lists.busybox.net/pipermail/buildroot/2015-August/137197.html.
-Lots of discussion, but no conclusion :-/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3155264..4d43358 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1195,9 +1195,6 @@ F:	package/nvidia-tegra23/nvidia-tegra23-codecs/
+ N:	Nimai Mahajan <nimaim@gmail.com>
+ F:	package/libucl/
+ 
+-N:	Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+-F:	package/cgroupfs-mount/
+-
+ N:	No?? Rubinstein <noe.rubinstein@gmail.com>
+ F:	package/tpm-tools/
+ F:	package/trousers/
