@@ -1,51 +1,36 @@
 From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Wed, 24 May 2017 13:30:29 -0700
-Subject: [Buildroot] [PATCH 1/2] package: acpica: Add host buildling support
+Date: Wed, 24 May 2017 13:30:30 -0700
+Subject: [Buildroot] [PATCH 2/2] package: xen: Depend on the host-acpica
+	package
 In-Reply-To: <20170524203030.8187-1-alistair.francis@xilinx.com>
 References: <20170524203030.8187-1-alistair.francis@xilinx.com>
-Message-ID: <20170524203030.8187-2-alistair.francis@xilinx.com>
+Message-ID: <20170524203030.8187-3-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support to build the ACPICA package for the host. This is useful for
-the iasl command which is required to build some packaged, including Xen
-tools
+Add a dependency on the host ACPICA package as Xen tools require iasl to
+build.
 
 Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 ---
- package/acpica/acpica.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/xen/xen.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 37e4941a6..96d0dad2b 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -11,6 +11,11 @@ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
- ACPICA_LICENSE_FILES = source/include/acpi.h
- ACPICA_DEPENDENCIES = host-bison host-flex
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 89c09f872..79c511ac5 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -8,7 +8,7 @@ XEN_VERSION = 4.8.1
+ XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
+-XEN_DEPENDENCIES = host-python
++XEN_DEPENDENCIES = host-python host-acpica
  
-+define HOST_ACPICA_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		all
-+endef
-+
- define ACPICA_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
-@@ -23,4 +28,11 @@ define ACPICA_INSTALL_TARGET_CMDS
- 		INSTALLFLAGS=-m755 install
- endef
- 
-+define HOST_ACPICA_INSTALL_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR="$(HOST_DIR)" \
-+		INSTALLFLAGS=-m755 install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ # Calculate XEN_ARCH
+ ifeq ($(ARCH),aarch64)
 -- 
 2.11.0
