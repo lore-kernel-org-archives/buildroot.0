@@ -1,52 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:17:06 +0200
-Subject: [Buildroot] [git commit branch/next] package/gcc: remove gcc 4.8
-Message-ID: <20170524141954.B1AB87FEC9@busybox.osuosl.org>
+Date: Wed, 24 May 2017 16:13:36 +0200
+Subject: [Buildroot] [git commit branch/next] package/uclibc: add upstream
+	patch to fix build issue with gcc7
+Message-ID: <20170524141954.8DFD882258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f66952197b41452b77dfa065adc7172137e4c243
+commit: https://git.buildroot.net/buildroot/commit/?id=10809c03ad2c3263281bb644d4d82123db5acce4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We're already using 5.x as default, and have 4.9.x on the lower side
-together with 7.x (7.1) on the higher side.
+As reported on the mailing list [1], there is a build issue with gcc 7
+and uClibc-ng.
+
+Thanks to Waldemar for the fix :)
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-May/191140.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |  10 +
- ...et-68059-libgcc-should-not-use-__write-fo.patch |  43 --
- package/gcc/4.8.5/100-uclibc-conf.patch            |  15 -
- ...00-powerpc-link-with-math-lib.patch.conditional | 122 ----
- package/gcc/4.8.5/111-pr65730.patch                |  37 --
- ...gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch |  29 -
- package/gcc/4.8.5/130-fix_build_with_gcc-6.patch   | 153 -----
- package/gcc/4.8.5/130-pr43538.patch                |  25 -
- package/gcc/4.8.5/301-missing-execinfo_h.patch     |  13 -
- .../gcc/4.8.5/305-libmudflap-susv3-legacy.patch    |  49 --
- package/gcc/4.8.5/810-arm-softfloat-libgcc.patch   |  30 -
- package/gcc/4.8.5/830-arm_unbreak_armv4t.patch     |  13 -
- package/gcc/4.8.5/841-PR57717-E500v2.patch         |  23 -
- package/gcc/4.8.5/842-PR60155.patch                | 111 ----
- .../4.8.5/843-aarch64-vmlaq_lane_s32-typo.patch    |  24 -
- package/gcc/4.8.5/850-libstdcxx-uclibc-c99.patch   | 273 ---------
- package/gcc/4.8.5/851-PR-other-56780.patch         | 244 --------
- .../870-xtensa-add-mauto-litpools-option.patch     | 290 ---------
- .../871-xtensa-reimplement-register-spilling.patch |  76 ---
- ...unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch |  33 --
- .../gcc/4.8.5/873-xtensa-fix-_Unwind_GetCFA.patch  |  40 --
- .../gcc/4.8.5/874-xtensa-add-uclinux-support.patch | 174 ------
- package/gcc/4.8.5/890-fix-m68k-compile.patch       |  15 -
- package/gcc/4.8.5/891-fix-m68k-uclinux.patch       |  18 -
- package/gcc/4.8.5/900-musl-support.patch           | 648 ---------------------
- .../930-libgcc-disable-split-stack-nothreads.patch |  14 -
- package/gcc/4.8.5/940-uclinux-enable-threads.patch |  19 -
- package/gcc/Config.in.host                         |  24 -
- package/uclibc/uclibc.mk                           |   6 -
- 29 files changed, 10 insertions(+), 2561 deletions(-)
+ ...es.h-with-GNU-C-library-fixes-gcc-7.1-too.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-Patch is too large, so refusing to show it
+diff --git a/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch b/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch
+new file mode 100644
+index 0000000..eb1459b
+--- /dev/null
++++ b/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch
+@@ -0,0 +1,64 @@
++From 5b0f49037e8ea8500b05c8f31ee88529ccac4cee Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Sun, 7 May 2017 16:28:14 +0200
++Subject: [PATCH] sync features.h with GNU C library, fixes gcc 7.1 toolchain
++ creation
++
++[Romain: backport to uClibc-ng 1.0.24]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ include/features.h | 17 ++++++++++++-----
++ 1 file changed, 12 insertions(+), 5 deletions(-)
++
++diff --git a/include/features.h b/include/features.h
++index e76bbba..f982079 100644
++--- a/include/features.h
+++++ b/include/features.h
++@@ -55,6 +55,7 @@
++    These are defined by this file and are used by the
++    header files to decide what to declare or define:
++ 
+++   __USE_ISOC11		Define ISO C11 things.
++    __USE_ISOC99		Define ISO C99 things.
++    __USE_ISOC95		Define ISO C90 AMD1 (C95) things.
++    __USE_POSIX		Define IEEE Std 1003.1 things.
++@@ -91,6 +92,7 @@
++ 
++ 
++ /* Undefine everything, so we get a clean slate.  */
+++#undef	__USE_ISOC11
++ #undef	__USE_ISOC99
++ #undef	__USE_ISOC95
++ #undef	__USE_POSIX
++@@ -151,6 +153,8 @@
++ #ifdef _GNU_SOURCE
++ # undef  _ISOC99_SOURCE
++ # define _ISOC99_SOURCE	1
+++# undef  _ISOC11_SOURCE
+++# define _ISOC11_SOURCE	1
++ # undef  _POSIX_SOURCE
++ # define _POSIX_SOURCE	1
++ # undef  _POSIX_C_SOURCE
++@@ -223,11 +227,14 @@
++ # define _SVID_SOURCE	1
++ #endif
++ 
++-/* This is to enable the ISO C99 extension.  Also recognize the old macro
++-   which was used prior to the standard acceptance.  This macro will
++-   eventually go away and the features enabled by default once the ISO C99
++-   standard is widely adopted.  */
++-#if (defined _ISOC99_SOURCE || defined _ISOC9X_SOURCE \
+++/* This is to enable the ISO C11 extension.  */
+++#if (defined _ISOC11_SOURCE \
+++     || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 201112L))
+++# define __USE_ISOC11	1
+++#endif
+++
+++/* This is to enable the ISO C99 extension.  */
+++#if (defined _ISOC99_SOURCE || defined _ISOC11_SOURCE \
++      || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L))
++ # define __USE_ISOC99	1
++ #endif
++-- 
++2.9.3
++
