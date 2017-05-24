@@ -1,35 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:07:25 +0200
-Subject: [Buildroot] [PATCH 1/2] libconfuse: bump version to 3.1
-In-Reply-To: <1495634461-17815-1-git-send-email-fhunleth@troodon-software.com>
-References: <1495634461-17815-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20170524160725.4378ad92@free-electrons.com>
+Date: Wed, 24 May 2017 16:12:22 +0200
+Subject: [Buildroot] [git commit branch/next] package/benejson: fix typo in
+	hash file
+Message-ID: <20170524141248.832E3828E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=948c967c3877cccf85ac29edd33bd61657834e3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 24 May 2017 10:01:00 -0400, Frank Hunleth wrote:
-> Release notes are at:
-> 
-> https://github.com/martinh/libconfuse/releases/tag/v3.1
-> 
-> Also, this release now ships with lexer.c so flex is no longer required
-> for building libconfuse.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/libconfuse/libconfuse.hash | 6 +++---
->  package/libconfuse/libconfuse.mk   | 4 +---
->  2 files changed, 4 insertions(+), 6 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/benejson/benejson.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both applied to next, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/benejson/benejson.hash b/package/benejson/benejson.hash
+index 1dfda90..696dc4f 100644
+--- a/package/benejson/benejson.hash
++++ b/package/benejson/benejson.hash
+@@ -1,2 +1,2 @@
+-# Localy computed
++# Locally computed
+ sha256  2ce5f3c2323500bdf651e7fcaecbd1011997141e6067567b8d2caa4cf7182f4a  benejson-0.9.7.tar.gz
