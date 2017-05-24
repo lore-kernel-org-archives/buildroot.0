@@ -1,43 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 24 May 2017 23:06:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump to version
-	4.5.10
-Message-ID: <20170524210611.3155-1-bernd.kuhls@t-online.de>
+Date: Wed, 24 May 2017 23:13:17 +0200
+Subject: [Buildroot] [PATCH/next] package/vlc: bump version to 2.2.6
+Message-ID: <20170524211317.3831-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-7494:
-https://www.samba.org/samba/history/samba-4.5.10.html
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/vlc.hash | 4 ++--
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 0a2a548a1..a16d83470 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index efd4e27e7..628dad74d 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f63b656d8823a280c50c9dbd6b692816cd7a88adfe9b47997ce697fd75bf81f0  samba-4.5.8.tar.gz
-+sha256 7cb753f5f6d5527ef40d4c1f47dacafb7c876cb304b4906ccb390c6a18477714  samba-4.5.10.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4de69a0fa..93c45daa5 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+-# From http://download.videolan.org/pub/videolan/vlc/2.2.3/vlc-2.2.3.tar.xz.sha256
+-sha256 1632e91d2a0087e0ef4c3fb4c95c3c2890f7715a9d1d43ffd46329f428cf53be  vlc-2.2.4.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/2.2.6/vlc-2.2.6.tar.xz.sha256
++sha256 c403d3accd9a400eb2181c958f3e7bc5524fe5738425f4253d42883b425a42a8  vlc-2.2.6.tar.xz
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 36b5fd3ea..49390a285 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.5.8
-+SAMBA4_VERSION = 4.5.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-VLC_VERSION = 2.2.4
++VLC_VERSION = 2.2.6
+ VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
 2.11.0
