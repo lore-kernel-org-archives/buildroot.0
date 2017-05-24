@@ -1,52 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:00:11 +0200
-Subject: [Buildroot] [git commit branch/next] package/cgroupfs-mount: bump
-	version to 1.4
-Message-ID: <20170524140026.612E38211E@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 24 May 2017 10:01:00 -0400
+Subject: [Buildroot] [PATCH 1/2] libconfuse: bump version to 3.1
+Message-ID: <1495634461-17815-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aef0338042ee6521cdcd0003a674ec9b98a19a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Release notes are at:
 
-Removed empty line from cgroupfs-mount.mk as well.
+https://github.com/martinh/libconfuse/releases/tag/v3.1
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Also, this release now ships with lexer.c so flex is no longer required
+for building libconfuse.
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/cgroupfs-mount/cgroupfs-mount.hash | 2 +-
- package/cgroupfs-mount/cgroupfs-mount.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/libconfuse/libconfuse.hash | 6 +++---
+ package/libconfuse/libconfuse.mk   | 4 +---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/cgroupfs-mount/cgroupfs-mount.hash b/package/cgroupfs-mount/cgroupfs-mount.hash
-index 34f5167..926a031 100644
---- a/package/cgroupfs-mount/cgroupfs-mount.hash
-+++ b/package/cgroupfs-mount/cgroupfs-mount.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	  fb32a8d9de491358d28f56ab76a56e1a611b90d5b6326910d3a69395fa539027	cgroupfs-mount-7285bf44402029394808339f69f4f293730fc2c6.tar.gz
-+sha256 d6c8aff7af59c7d0082ee3018c97f73b0421e81a49bb28ad9f66a36da5cd6ec7  cgroupfs-mount-1.4.tar.gz
-diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
-index 096c728..9a76799 100644
---- a/package/cgroupfs-mount/cgroupfs-mount.mk
-+++ b/package/cgroupfs-mount/cgroupfs-mount.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
+index ec485a1..e57e59c 100644
+--- a/package/libconfuse/libconfuse.hash
++++ b/package/libconfuse/libconfuse.hash
+@@ -1,3 +1,3 @@
+-# From https://github.com/martinh/libconfuse/releases/download/v3.0/confuse-3.0.tar.xz.md5, sha256 locally computed.
+-md5  c534b51a2118ed57031dc548032304a3  confuse-3.0.tar.xz
+-sha256  bb75174e02aa8b44fa1a872a47beeea1f5fe715ab669694c97803eb6127cc861  confuse-3.0.tar.xz
++# From https://github.com/martinh/libconfuse/releases/download/v3.1/confuse-3.1.tar.xz.md5, sha256 locally computed.
++md5  08f1ace0055f92d80a8ad11671346a37  confuse-3.1.tar.xz
++sha256  8171f31e0071d5e4460269fdcc8b4e748cf23b4bf6bbe672f718a136dd63ca66  confuse-3.1.tar.xz
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index 2908af3..5f1d5cd 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--CGROUPFS_MOUNT_VERSION = 7285bf44402029394808339f69f4f293730fc2c6
-+CGROUPFS_MOUNT_VERSION = 1.4
- CGROUPFS_MOUNT_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_MOUNT_VERSION))
- CGROUPFS_MOUNT_LICENSE = GPL-3.0+
- CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
-@@ -17,7 +17,6 @@ endef
- define CGROUPFS_MOUNT_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D $(CGROUPFS_MOUNT_PKGDIR)/S30cgroupfs \
- 		$(TARGET_DIR)/etc/init.d/S30cgroupfs
--
- endef
+-LIBCONFUSE_VERSION = 3.0
++LIBCONFUSE_VERSION = 3.1
+ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
+ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
+ LIBCONFUSE_INSTALL_STAGING = YES
+ LIBCONFUSE_CONF_OPTS = --disable-rpath
+-LIBCONFUSE_DEPENDENCIES = host-flex
+-HOST_LIBCONFUSE_DEPENDENCIES = host-flex
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = LICENSE
  
- $(eval $(generic-package))
+-- 
+2.7.4
