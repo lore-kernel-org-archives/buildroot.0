@@ -1,41 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 May 2017 16:14:49 +0200
-Subject: [Buildroot] [git commit] package/botan: bump version to 1.10.16
-Message-ID: <20170601202853.88951807D3@busybox.osuosl.org>
+Date: Wed, 24 May 2017 16:02:56 +0200
+Subject: [Buildroot] [git commit] libconfuse: bump version to 3.1
+Message-ID: <20170601202855.0E8C5807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=033aa8d4e9ad13ee56dbb372ad45a7d83bca4f53
+commit: https://git.buildroot.net/buildroot/commit/?id=4a7b70f2e4a0afc6f6ee1e6c445cffa9ca41543b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Release notes are at:
+
+https://github.com/martinh/libconfuse/releases/tag/v3.1
+
+Also, this release now ships with lexer.c so flex is no longer required
+for building libconfuse.
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libconfuse/libconfuse.hash | 6 +++---
+ package/libconfuse/libconfuse.mk   | 4 +---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 3da5f69..3d46a13 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	23ec973d4b4a4fe04f490d409e08ac5638afe3aa09acd7f520daaff38ba19b90  Botan-1.10.13.tgz
-+sha256 6c5472401d06527e87adcb53dd270f3c9b1fb688703b04dd7a7cfb86289efe52  Botan-1.10.16.tgz
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 7694b8d..2f24151 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
+index ec485a1..e57e59c 100644
+--- a/package/libconfuse/libconfuse.hash
++++ b/package/libconfuse/libconfuse.hash
+@@ -1,3 +1,3 @@
+-# From https://github.com/martinh/libconfuse/releases/download/v3.0/confuse-3.0.tar.xz.md5, sha256 locally computed.
+-md5  c534b51a2118ed57031dc548032304a3  confuse-3.0.tar.xz
+-sha256  bb75174e02aa8b44fa1a872a47beeea1f5fe715ab669694c97803eb6127cc861  confuse-3.0.tar.xz
++# From https://github.com/martinh/libconfuse/releases/download/v3.1/confuse-3.1.tar.xz.md5, sha256 locally computed.
++md5  08f1ace0055f92d80a8ad11671346a37  confuse-3.1.tar.xz
++sha256  8171f31e0071d5e4460269fdcc8b4e748cf23b4bf6bbe672f718a136dd63ca66  confuse-3.1.tar.xz
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index 2908af3..5f1d5cd 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--BOTAN_VERSION = 1.10.13
-+BOTAN_VERSION = 1.10.16
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tgz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
+-LIBCONFUSE_VERSION = 3.0
++LIBCONFUSE_VERSION = 3.1
+ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
+ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
+ LIBCONFUSE_INSTALL_STAGING = YES
+ LIBCONFUSE_CONF_OPTS = --disable-rpath
+-LIBCONFUSE_DEPENDENCIES = host-flex
+-HOST_LIBCONFUSE_DEPENDENCIES = host-flex
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = LICENSE
+ 
