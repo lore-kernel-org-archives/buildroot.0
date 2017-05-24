@@ -1,48 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:20:15 +0200
-Subject: [Buildroot] [git commit branch/next] package/ccid: bump version to
-	1.4.27
-Message-ID: <20170524142108.8D9FB826C1@busybox.osuosl.org>
+Date: Wed, 24 May 2017 16:21:24 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/uclibc: add upstream patch
+ to fix build issue with gcc7
+In-Reply-To: <20170523202440.6949-1-romain.naour@gmail.com>
+References: <20170523202440.6949-1-romain.naour@gmail.com>
+Message-ID: <20170524162124.7d8cd4c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba330eab1364f0e276501aadc3db1bc38174c800
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ccid/ccid.hash | 6 +++---
- package/ccid/ccid.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Tue, 23 May 2017 22:24:38 +0200, Romain Naour wrote:
+> As reported on the mailing list [1], there is a build issue with gcc 7
+> and uClibc-ng.
+> 
+> Thanks to Waldemar for the fix :)
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2017-May/191140.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  ...es.h-with-GNU-C-library-fixes-gcc-7.1-too.patch | 64 ++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch
 
-diff --git a/package/ccid/ccid.hash b/package/ccid/ccid.hash
-index 3e1e962..a7d4875 100644
---- a/package/ccid/ccid.hash
-+++ b/package/ccid/ccid.hash
-@@ -1,3 +1,3 @@
--# From http://cdn-fastly.deb.debian.org/debian/pool/main/c/ccid/ccid_1.4.26-1.dsc
--sha1 20e22c23b8458548a6b572b044e5dbe4ecdc42e5  ccid_1.4.26.tar.bz2
--sha256 3267bf708ab780c02f01f6241b7c7277cb892d30fd1179a9926a8cc0ca40be2f  ccid_1.4.26.tar.bz2
-+# From http://cdn-fastly.deb.debian.org/debian/pool/main/c/ccid/ccid_1.4.27-1.dsc
-+sha1 d72ee816422183a86006e0083ccd643236b4e12a  ccid_1.4.27.tar.bz2
-+sha256 a660e269606986cb94840ad5ba802ffb0cd23dd12b98f69a35035e0deb9dd137  ccid_1.4.27.tar.bz2
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index 7fbf025..e566afe 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CCID_VERSION = 1.4.26
-+CCID_VERSION = 1.4.27
- CCID_SOURCE = ccid_$(CCID_VERSION).tar.bz2
--CCID_SITE = https://alioth.debian.org/frs/download.php/file/4205
-+CCID_SITE = https://alioth.debian.org/frs/download.php/file/4218
- CCID_LICENSE = LGPL-2.1+
- CCID_LICENSE_FILES = COPYING
- CCID_INSTALL_STAGING = YES
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
