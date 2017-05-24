@@ -1,84 +1,43 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Wed, 24 May 2017 13:42:35 -0700
-Subject: [Buildroot] [PATCH] package: xen: Backport a header include fix for
-	makedev
-Message-ID: <20170524204235.17875-1-alistair.francis@xilinx.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 24 May 2017 23:06:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump to version
+	4.5.10
+Message-ID: <20170524210611.3155-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-maekdev() is avaliable from sys/types.h but only due to a bug in glibc. This
-is being fixed by printing an error when using makedev() from sys/types.h.
-To fix the issue we should innclude sys/sysmacros.h for makedev(). As this
-has already been fixed in upstream Xen we can backport the patch.
+Fixes CVE-2017-7494:
+https://www.samba.org/samba/history/samba-4.5.10.html
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-This fixes autobuild issue:
-http://autobuild.buildroot.net/results/552/552e66d764885341b2fe208a0e4382b5fe05ea9d/
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- ...07-tools-include-sys-sysmacros.h-on-Linux.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/xen/0007-tools-include-sys-sysmacros.h-on-Linux.patch
-
-diff --git a/package/xen/0007-tools-include-sys-sysmacros.h-on-Linux.patch b/package/xen/0007-tools-include-sys-sysmacros.h-on-Linux.patch
-new file mode 100644
-index 000000000..67f040617
---- /dev/null
-+++ b/package/xen/0007-tools-include-sys-sysmacros.h-on-Linux.patch
-@@ -0,0 +1,51 @@
-+From 796dea37fb229c34740f98bf80f3263d7a4e3c6d Mon Sep 17 00:00:00 2001
-+From: Olaf Hering <olaf@aepfle.de>
-+Date: Wed, 15 Mar 2017 07:01:34 +0000
-+Subject: [PATCH] tools: include sys/sysmacros.h on Linux
-+
-+Due to a bug in the glibc headers the macros makedev(), major() and
-+minor() where avaialble by including sys/types.h. This bug was
-+addressed in glibc-2.25 by introducing a warning when these macros are
-+used. Since Xen is build with -Werror this new warning cause a compile
-+error.
-+
-+Use sys/sysmacros.h to define these three macros.
-+
-+blktap2 is already Linux specific. The kernel header which was used to
-+get makedev() does not provided it anymore, and it was wrong to use a
-+kernel header anyway.
-+
-+Signed-off-by: Olaf Hering <olaf@aepfle.de>
-+Acked-by: Wei Liu <wei.liu2@citrix.com>
-+---
-+ tools/blktap2/control/tap-ctl-allocate.c | 1 +
-+ tools/libxl/libxl_osdeps.h               | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/tools/blktap2/control/tap-ctl-allocate.c b/tools/blktap2/control/tap-ctl-allocate.c
-+index 8a6471e987..187cadcde7 100644
-+--- a/tools/blktap2/control/tap-ctl-allocate.c
-++++ b/tools/blktap2/control/tap-ctl-allocate.c
-+@@ -33,6 +33,7 @@
-+ #include <string.h>
-+ #include <getopt.h>
-+ #include <libgen.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+ #include <sys/ioctl.h>
-+diff --git a/tools/libxl/libxl_osdeps.h b/tools/libxl/libxl_osdeps.h
-+index a40d62066b..de1d24ecae 100644
-+--- a/tools/libxl/libxl_osdeps.h
-++++ b/tools/libxl/libxl_osdeps.h
-+@@ -39,6 +39,7 @@
-+ #define SYSFS_PCI_DEV          "/sys/bus/pci/devices"
-+ #define SYSFS_PCIBACK_DRIVER   "/sys/bus/pci/drivers/pciback"
-+ #define NETBACK_NIC_NAME       "vif%u.%d"
-++#include <sys/sysmacros.h>
-+ #include <pty.h>
-+ #include <uuid/uuid.h>
-+ #elif defined(__sun__)
-+-- 
-+2.11.0
-+
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 0a2a548a1..a16d83470 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 f63b656d8823a280c50c9dbd6b692816cd7a88adfe9b47997ce697fd75bf81f0  samba-4.5.8.tar.gz
++sha256 7cb753f5f6d5527ef40d4c1f47dacafb7c876cb304b4906ccb390c6a18477714  samba-4.5.10.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4de69a0fa..93c45daa5 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.5.8
++SAMBA4_VERSION = 4.5.10
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.11.0
