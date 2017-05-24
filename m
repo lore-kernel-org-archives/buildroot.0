@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 08:44:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/sngrep: add libgcrypt missing
- dependencies
-In-Reply-To: <f09dc6c1-557c-885b-4bb9-370a1ca9b8ae@gmail.com>
+Date: Wed, 24 May 2017 08:47:33 +0200
+Subject: [Buildroot] [PATCH 2/2] package/sngrep: fix static build with
+ gnutls
+In-Reply-To: <9efd1b94-8830-15b9-8d17-608ce8eace50@gmail.com>
 References: <20170520162751.30809-1-romain.naour@gmail.com>
- <20170523161950.2b24f43f@free-electrons.com>
- <f09dc6c1-557c-885b-4bb9-370a1ca9b8ae@gmail.com>
-Message-ID: <20170524084439.56e64c59@free-electrons.com>
+ <20170520162751.30809-2-romain.naour@gmail.com>
+ <20170523162742.23372fb2@free-electrons.com>
+ <9efd1b94-8830-15b9-8d17-608ce8eace50@gmail.com>
+Message-ID: <20170524084733.37fd3ca1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +16,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 May 2017 23:09:19 +0200, Romain Naour wrote:
+On Tue, 23 May 2017 23:20:14 +0200, Romain Naour wrote:
 
-> I was looking for this kind of build failure with a glibc based system:
+> I think this patch is not necessary anymore since gnutls shouldn't be linked
+> statically, see [1].
 > 
-> checking for ncurses.h... yes
-> checking for initscr in -lncurses... yes
-> checking for new_panel in -lpanel... yes
-> checking for new_form in -lform... yes
-> checking for new_item in -lmenu... yes
-> checking for gnutls_init in -lgnutls... yes
-> checking for gcry_md_map_name in -lgcrypt... no
-> configure: error:  You need to have libgcrypt installed to compile sngrep
+> The code use __attribute__((constructor)) and __attribute__((destructor)) to
+> call constructor/desctructor when a shared library is loaded.
+> Constructor/desctructor are not used when a static library is used (except when
+> if -Wl,--whole-archive -lgnutls -Wno-whole-archive is used, not tested).
 > 
-> I just read what I wanted to read in the autobuilder reference...
+> Even if gnutls initialization (_gnutls_global_init()) may be called manually,
+> the maintainer said it's not supported.
 > 
-> It's weird that the autobuilder didn't catch it.
+> So we should add !BR2_STATIC_LIBS for gnutls package ?
+> Doing so, it will avoid all static linking issues with gnutls (taskd, ffmpeg,
+> sngrep...)
 
-So in other words, there are no autobuilder reference for the build
-failure you are fixing? If so, could you add in the commit log a
-minimal defconfig that exhibits the issue?
+Yes, I believe we should add !BR2_STATIC_LIBS, of course propagated to
+all reverse dependencies (but there are not too many of them).
+
+A side question is: is there a way to detect/error out when some code
+is using this constructor/destructor mechanism in a way that doesn't
+work for static linking? It would be useful to check if other packages
+are affected.
 
 Thanks!
 
