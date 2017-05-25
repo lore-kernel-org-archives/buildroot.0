@@ -1,7 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 26 May 2017 00:39:50 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/dmidecode: bump version to 3.1
-Message-ID: <20170525223950.25714-1-bernd.kuhls@t-online.de>
+Date: Fri, 26 May 2017 00:45:57 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/docker-containerd: bump
+	version to v0.2.8
+Message-ID: <20170525224557.4601-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +11,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dmidecode/dmidecode.hash | 4 ++--
- package/dmidecode/dmidecode.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
-index 307c306ad..1e8154b37 100644
---- a/package/dmidecode/dmidecode.hash
-+++ b/package/dmidecode/dmidecode.hash
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index a161f3bd9..fc3735f78 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
 @@ -1,2 +1,2 @@
--# http://http.debian.net/debian/pool/main/d/dmidecode/dmidecode_3.0-2.dsc
--sha256	7ec35bb193729c1d593a1460b59d82d24b89102ab23fd0416e6cf4325d077e45	dmidecode-3.0.tar.xz
-+# Locally computed
-+sha256 d766ce9b25548c59b1e7e930505b4cad9a7bb0b904a1a391fbb604d529781ac0  dmidecode-3.1.tar.xz
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index b6c59db70..b6f96b6df 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
+ # Computed locally
+-sha256	8223d934fa767fcabf45c734bdb616818a5eab8c95d525de6a69a350f4aeb826	docker-containerd-422e31ce907fd9c3833a38d7b8fdd023e5a76e73.tar.gz
++sha256 f002d4d93a86cd3a0c9e7d9d71455a94790302daab1e51dd2dd53e7f0ba4d217  docker-containerd-v0.2.8.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index c0b001285..f8e1f5fed 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DMIDECODE_VERSION = 3.0
-+DMIDECODE_VERSION = 3.1
- DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPL-2.0+
+-DOCKER_CONTAINERD_VERSION = 422e31ce907fd9c3833a38d7b8fdd023e5a76e73
++DOCKER_CONTAINERD_VERSION = v0.2.8
+ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
 -- 
 2.11.0
