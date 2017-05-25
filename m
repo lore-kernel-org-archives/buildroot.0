@@ -1,43 +1,73 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 25 May 2017 11:07:21 +0100
-Subject: [Buildroot] [PATCH next] vdr: bump version to 2.3.5
-Message-ID: <20170525100721.2071-1-Vincent.Riera@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 25 May 2017 10:41:00 +0000
+Subject: [Buildroot] [Bug 9896] New: host-gcc-initial error downloading
+ because incorrect URL
+Message-ID: <bug-9896-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/vdr/vdr.hash | 6 +++---
- package/vdr/vdr.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9896
 
-diff --git a/package/vdr/vdr.hash b/package/vdr/vdr.hash
-index b4800d53f..2ced98d96 100644
---- a/package/vdr/vdr.hash
-+++ b/package/vdr/vdr.hash
-@@ -1,4 +1,4 @@
--# From https://www.linuxtv.org/pipermail/vdr/2017-April/029243.html
--md5 7b1c985d5e7703f7ec46e3818f546702  vdr-2.3.4.tar.bz2
-+# From https://www.linuxtv.org/pipermail/vdr/2017-May/029263.html
-+md5 01fabef4d20ec01f11d53354d99a9642  vdr-2.3.5.tar.bz2
- # Locally computed
--sha256 97600301e8bb16ac6a6ed58c0b7c18a48e3ab1cc7130311d405178109777c03a  vdr-2.3.4.tar.bz2
-+sha256 323fd01e4f8daef24bbdcb906023d18c998a204a22de110d1cb0089532e818b5  vdr-2.3.5.tar.bz2
-diff --git a/package/vdr/vdr.mk b/package/vdr/vdr.mk
-index 694081389..6c4656624 100644
---- a/package/vdr/vdr.mk
-+++ b/package/vdr/vdr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VDR_VERSION = 2.3.4
-+VDR_VERSION = 2.3.5
- VDR_SOURCE = vdr-$(VDR_VERSION).tar.bz2
- VDR_SITE = ftp://ftp.tvdr.de/vdr/Developer
- VDR_LICENSE = GPL-2.0+
+            Bug ID: 9896
+           Summary: host-gcc-initial error downloading because incorrect
+                    URL
+           Product: buildroot
+           Version: 2017.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: orion_33 at bk.ru
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+I try to use many external toolchains. Internal are not suit for me because
+u-boot from old src works not correct. All external toolchains including
+arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu can't download gcc
+package because it have wrong URL without version number.
+
+orion at ubuntu-vm:~/workdir/buildroot$ make host-gcc-initial
+>>> host-gcc-initial  Downloading
+--2017-05-24 17:59:44--  http://ftpmirror.gnu.org/gcc/gcc-/gcc-.tar.bz2
+???????????? ftpmirror.gnu.org (ftpmirror.gnu.org)? 208.118.235.200
+??????????? ? ftpmirror.gnu.org (ftpmirror.gnu.org)|208.118.235.200|:80...
+?????????? ???????????.
+HTTP-?????? ?????????. ???????? ??????? 302 Moved Temporarily
+?????: http://mirror.tochlab.net/pub/gnu/gcc/gcc-/gcc-.tar.bz2 [???????]
+--2017-05-24 17:59:44-- 
+http://mirror.tochlab.net/pub/gnu/gcc/gcc-/gcc-.tar.bz2
+???????????? mirror.tochlab.net (mirror.tochlab.net)? 5.178.86.222
+??????????? ? mirror.tochlab.net (mirror.tochlab.net)|5.178.86.222|:80...
+?????????? ???????????.
+HTTP-?????? ?????????. ???????? ??????? 404 Not Found
+2017-05-24 17:59:44 ?????? 404: Not Found.
+
+--2017-05-24 17:59:44--  http://sources.buildroot.net/gcc-.tar.bz2
+???????????? sources.buildroot.net (sources.buildroot.net)? 176.9.16.109
+??????????? ? sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
+?????????? ???????????.
+HTTP-?????? ?????????. ???????? ??????? 404 Not Found
+2017-05-24 17:59:44 ?????? 404: Not Found.
+
+package/pkg-generic.mk:139: ?????? ?????????? ??????? ??? ????
+?/home/orion/workdir/buildroot/output/build/host-gcc-initial/.stamp_downloaded?
+make[1]: ***
+[/home/orion/workdir/buildroot/output/build/host-gcc-initial/.stamp_downloaded]
+?????? 1
+Makefile:79: ?????? ?????????? ??????? ??? ???? ?_all?
+make: *** [_all] ?????? 2
+orion at ubuntu-vm:~/workdir/buildroot$ make menuconfig
+
+
+*** End of the configuration.
+*** Execute 'make' to start the build or try 'make help'.
+
 -- 
-2.13.0
+You are receiving this mail because:
+You are on the CC list for the bug.
