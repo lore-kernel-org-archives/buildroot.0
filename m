@@ -1,29 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 May 2017 21:15:54 +0200
-Subject: [Buildroot] [PATCH 01/01] sngrep: bump version to v1.4.3
-In-Reply-To: <20170525143412.3318-1-aduskett@codeblue.com>
-References: <20170525143412.3318-1-aduskett@codeblue.com>
-Message-ID: <20170525211554.0e23d28a@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 25 May 2017 20:17:04 +0000
+Subject: [Buildroot] [Bug 9896] host-gcc-initial error downloading because
+	incorrect URL
+In-Reply-To: <bug-9896-163@https.bugs.busybox.net/>
+References: <bug-9896-163@https.bugs.busybox.net/>
+Message-ID: <bug-9896-163-KvhKWJjsco@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9896
 
-On Thu, 25 May 2017 10:34:12 -0400, Adam Duskett wrote:
-> The two patches were committed upstream.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+--- Comment #2 from Orion33 <orion_33@bk.ru> ---
+Thanks for the advice, cap. I did the same, of course. The result is the same
 
-If both patches have been committed upstream, do we still need
-SNGREP_AUTORECONF = YES ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
