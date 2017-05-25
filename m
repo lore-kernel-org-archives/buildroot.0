@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 May 2017 15:27:44 +0200
-Subject: [Buildroot] [PATCH] gcc: arc: Fix tst_movb pattern
-In-Reply-To: <20170524153919.44524-1-abrodkin@synopsys.com>
-References: <20170524153919.44524-1-abrodkin@synopsys.com>
-Message-ID: <20170525152744.05f96957@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 May 2017 15:32:00 +0200
+Subject: [Buildroot] [Bug 9876] aarch64 support with gcc 4.8 toolchain
+In-Reply-To: <bug-9876-163-wRsUeogIPH@https.bugs.busybox.net/>
+References: <bug-9876-163@https.bugs.busybox.net/>
+ <bug-9876-163-wRsUeogIPH@https.bugs.busybox.net/>
+Message-ID: <20170525133200.GB2964@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2017-05-25 13:21 +0000, bugzilla at busybox.net spake thusly:
+> https://bugs.busybox.net/show_bug.cgi?id=9876
+> 
+> Yann E. MORIN <yann.morin.1998@free.fr> changed:
+> 
+>            What    |Removed                     |Added
+> ----------------------------------------------------------------------------
+>                  CC|                            |yann.morin.1998 at free.fr
+> 
+> --- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+> We don't try to prevent the user from using an unsupported gcc version
+> depending on the selected architecture, and I don't think we want to go down
+> this route.
+> 
+> So I don't think we'll try to solve this problem.
 
-On Wed, 24 May 2017 18:39:19 +0300, Alexey Brodkin wrote:
-> Fixes building of quagga [1]:
-> ------------------------------>8---------------------------  
-> 839:1: error: unrecognizable insn:
->  }
->  ^
-> (insn 183 24 26 4 (set (reg:CC_ZN 61 cc)
->         (and:SI (reg:SI 0 r0 [orig:192 _12->id.s_addr ] [192])
->             (const_int -256 [0xffffffffffffff00]))) ospf_ri.c:790 -1
->      (nil))
-> ospf_ri.c:839:1: internal compiler error: in extract_insn, at recog.c:2287
-> ------------------------------>8---------------------------  
+Woops... It seems I was not fast enough to cancel my reply after I
+accidentally hit "apply changes" in the tracker. Sorry...
 
-Applied to master, thanks.
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
