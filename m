@@ -1,84 +1,58 @@
-From: Julien Viard de Galbert <julien@vdg.name>
-Date: Thu, 25 May 2017 00:06:17 +0200
-Subject: [Buildroot] [PATCH 1/1] easy-rsa: new package
-Message-ID: <1495663577-4622-1-git-send-email-julien@vdg.name>
+From: Riko Ho <antonius.riko@gmail.com>
+Date: Thu, 25 May 2017 10:03:00 +0800
+Subject: [Buildroot] systemd question?
+Message-ID: <6ed89ee4-7373-2e12-0919-4e6e7a227673@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
----
- package/Config.in              |  1 +
- package/easy-rsa/Config.in     | 11 +++++++++++
- package/easy-rsa/easy-rsa.hash |  2 ++
- package/easy-rsa/easy-rsa.mk   | 18 ++++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/easy-rsa/Config.in
- create mode 100644 package/easy-rsa/easy-rsa.hash
- create mode 100644 package/easy-rsa/easy-rsa.mk
+Hello Everyone,
 
-diff --git a/package/Config.in b/package/Config.in
-index 71bd44a..6f71a08 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -934,6 +934,7 @@ menu "Crypto"
- 	source "package/botan/Config.in"
- 	source "package/ca-certificates/Config.in"
- 	source "package/cryptodev/Config.in"
-+	source "package/easy-rsa/Config.in"
- 	source "package/gcr/Config.in"
- 	source "package/gnutls/Config.in"
- 	source "package/libassuan/Config.in"
-diff --git a/package/easy-rsa/Config.in b/package/easy-rsa/Config.in
-new file mode 100644
-index 0000000..7a063cd
---- /dev/null
-+++ b/package/easy-rsa/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_EASY_RSA
-+	bool "easy-rsa"
-+	select BR2_PACKAGE_OPENSSL_BIN
-+	help
-+	  Simple shell based CA utility
-+	  This package eases the creation of certificates, for example
-+	  for openvpn clients.
-+
-+	  This was formerly part of the openvpn package.
-+
-+	  https://github.com/OpenVPN/easy-rsa
-diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
-new file mode 100644
-index 0000000..e2d658a
---- /dev/null
-+++ b/package/easy-rsa/easy-rsa.hash
-@@ -0,0 +1,2 @@
-+# Locally computed: (after verifying gpg sig)
-+sha512 d20f646e33ec803444dfcd446553f1d6001227fedec93280c212b34cccee11b184599f1b2ae6a3ce9cf6c9ac52f2b840ebb645536df6ddf55382fa25c22df81f EasyRSA-3.0.1.tgz
-diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
-new file mode 100644
-index 0000000..384e4b1
---- /dev/null
-+++ b/package/easy-rsa/easy-rsa.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# easy-rsa
-+#
-+################################################################################
-+
-+EASY_RSA_VERSION = 3.0.1
-+EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
-+EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/$(EASY_RSA_VERSION)
-+
-+define EASY_RSA_INSTALL_TARGET_CMDS
-+    $(INSTALL) -D -m 0755 $(@D)/easyrsa $(TARGET_DIR)/usr/bin
-+    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/easy-rsa/x509-types
-+    $(INSTALL) -D -m 0644 $(@D)/x509-types/* $(TARGET_DIR)/etc/easy-rsa/x509-types
-+    $(INSTALL) -T -m 0644 $(@D)/vars.example $(TARGET_DIR)/etc/easy-rsa/vars
-+endef
-+
-+$(eval $(generic-package))
+I tried to start with systemd initialization and got this message below:
+
+=====
+
+You are in emergency mode. After logging in, typ/bin/sh: 
+/home/bianchi77/buildrd
+You are in emergency mode. After logging in, type "journalctl -xb" to view
+system logs, "systemctl reboot" to reboot, "systemctl default" or ^D to
+try again to boot into default mode.
+/bin/sh: /home/bianchi77/buildroot/output/host/usr/sbin/sulogin: not found
+You are in emergency mode. After logging in, type "journalctl -xb" to view
+system logs, "systemctl reboot" to reboot, "systemctl default" or ^D to
+try again to boot into default mode.
+/bin/sh: /home/bianchi77/buildroot/output/host/usr/sbin/sulogin: not found
+You are in emergency mode. After logging in, type "journalctl -xb" to view
+system logs, "systemctl reboot" to reboot, "systemctl default" or ^D to
+try again to boot into default mode.
+/bin/sh: /home/bianchi77/buildroot/output/host/usr/sbin/sulogin: not found
+You are in emergency mode. After logging in, type "journalctl -xb" to view
+system logs, "systemctl reboot" to reboot, "systemctl default" or ^D to
+try again to boot into default mode.
+/bin/sh: /home/bianchi77/buildroot/output/host/usr/sbin/sulogin: not found
+You are in emergency mode. After logging in, type "journalctl -xb" to view
+system logs, "systemctl reboot" to reboot, "systemctl default" or ^D to
+try again to boot into default mode.
+/bin/sh: /home/bianchi77/buildroot/output/host/usr/sbin/sulogin: not found
+You are in emergency mode. After logging in, type "journalctl -xb" to view
+system logs, "systemctl reboot" to reboot, "systemct/bin/sh: 
+/home/bianchi77/bud
+====
+
+What do you reckon I missed here ? thanks
 -- 
-2.1.4
+*
+
+/*******/
+Sent by Ubuntu LTS 16.04,
+??,
+Regards,
+Riko Ho
+/*******/
+
+*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170525/7b4422d0/attachment.html>
