@@ -1,44 +1,31 @@
-From: Ilya Kuzmich <ilya.kuzmich@gmail.com>
-Date: Thu, 25 May 2017 15:09:19 +0300
-Subject: [Buildroot] [PATCH 1/1] toolchain-external: dynamic loader
- symlink to actual location of musl libc.so
-In-Reply-To: <1495112596-26182-1-git-send-email-ilya.kuzmich@gmail.com>
-References: <1495112596-26182-1-git-send-email-ilya.kuzmich@gmail.com>
-Message-ID: <20170525120919.GD14358@uxa>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 25 May 2017 13:12:13 +0000
+Subject: [Buildroot] [Bug 9896] host-gcc-initial error downloading because
+	incorrect URL
+In-Reply-To: <bug-9896-163@https.bugs.busybox.net/>
+References: <bug-9896-163@https.bugs.busybox.net/>
+Message-ID: <bug-9896-163-4ZQou8V7I9@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping?
-On 18/05, Ilya Kuzmich wrote:
-> Test whenever musl libc.so located at /lib or /usr/lib and create dynamic
-> library loader symlink accordingly.
-> 
-> Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
-> ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index 9670350..438d714 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -489,7 +489,12 @@ else
->  MUSL_ARCH = $(ARCH)
->  endif
->  define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-> -	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
-> +	if test -e $(STAGING_DIR)/usr/lib/libc.so; then \
-> +		LD_LINK_TARGET=../usr/lib/libc.so ;\
-> +	else \
-> +	    LD_LINK_TARGET=libc.so ;\
-> +	fi ;\
-> +	ln -sf "$${LD_LINK_TARGET}" $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1 ;
->  endef
->  endif
->  
-> -- 
-> 2.7.4
-> 
+https://bugs.busybox.net/show_bug.cgi?id=9896
+
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WORKSFORME
+             Status|NEW                         |RESOLVED
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Running "make host-gcc-initial" doesn't make any sense when the configuration
+specifies to use an external toolchain.
+
+If you're not familiar with Buildroot, don't run anything but just "make".
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
