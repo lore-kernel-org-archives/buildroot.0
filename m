@@ -1,177 +1,367 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 25 May 2017 10:47:49 -0400
-Subject: [Buildroot] [PATCH 01/01] sngrep: fix wchar detection.
-Message-ID: <20170525144749.19333-1-aduskett@codeblue.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 25 May 2017 18:25:12 +0200
+Subject: [Buildroot] [PATCH/next] package/kodi-pvr-*: mass version bump
+Message-ID: <20170525162512.1618-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ncurses detection is currently broken in buildroot.
+This commit brings our package versions in-line with upstream repo:
+https://github.com/xbmc/repo-binary-addons/tree/Krypton
 
-This patch does the following:
- - Add SNGREP_CHECK_SCRIPT to configure.ac which checks for a
-   libname, a function in that library, sets a define if found, and
-   if not found, moves on to the next part. This is taken from the
-   htop configure.ac.
+after this commit:
+https://github.com/xbmc/repo-binary-addons/commit/a6621cbdc6ae2ef35b4188d909ca7f37a38a41f0
 
- - Adds SNGREP_CHECK_LIB to configure.ac which checks for a
-   library, a function within that library, sets a define if that function
-   is found, and if not found, moves on to the next part.
-   This is taken from the htop configure.ac
-
- - Modifies scrollbar.h and ui_panel.h to include <wctypes.h> instead of
-   <ncursesw/ncurses.h> if unicode is supported.
-
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../sngrep/0001-fix-ncurses-wchar-detection.patch  | 119 +++++++++++++++++++++
- package/sngrep/sngrep.mk                           |   5 +-
- 2 files changed, 123 insertions(+), 1 deletion(-)
- create mode 100644 package/sngrep/0001-fix-ncurses-wchar-detection.patch
+ package/kodi-pvr-argustv/kodi-pvr-argustv.hash                          | 2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.mk                            | 2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash                          | 2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk                            | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash                      | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk                        | 2 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.hash                            | 2 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.mk                              | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash                      | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk                        | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash                                  | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk                                    | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash                    | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk                      | 2 +-
+ .../kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash    | 2 +-
+ package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk  | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash                          | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk                            | 2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.hash                                | 2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.mk                                  | 2 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.hash                                | 2 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk                                  | 2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash                          | 2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk                            | 2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.hash                                | 2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.mk                                  | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash                            | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk                              | 2 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.hash                                  | 2 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.mk                                    | 2 +-
+ 30 files changed, 30 insertions(+), 30 deletions(-)
 
-diff --git a/package/sngrep/0001-fix-ncurses-wchar-detection.patch b/package/sngrep/0001-fix-ncurses-wchar-detection.patch
-new file mode 100644
-index 0000000..b387ac5
---- /dev/null
-+++ b/package/sngrep/0001-fix-ncurses-wchar-detection.patch
-@@ -0,0 +1,119 @@
-+From f812ceb065536697b238227b6a1fd432700f4ea9 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@codeblue.com>
-+Date: Thu, 25 May 2017 10:13:12 -0400
-+Subject: [PATCH] Fix ncurses wchar detection.
-+
-+Currently ncurses wchar detection relies on the ncurses header
-+to be located at wncurses/ncurses.h.  This currently doesn't work
-+with buildroot.  This patch fixes detection of the ncurses header
-+and the ifdef's in the relevant header files.
-+
-+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-+---
-+ configure.ac           | 47 ++++++++++++++++++++++++++++++++++++++++-------
-+ src/curses/scrollbar.h |  5 ++---
-+ src/curses/ui_panel.h  |  5 ++---
-+ 3 files changed, 44 insertions(+), 13 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0255ad2..7a7f0ab 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -40,6 +40,39 @@ AC_CHECK_HEADER([pcap.h], [], [
-+     AC_MSG_ERROR([ You need to have libpcap development files installed to compile sngrep.])
-+ ])
-+ 
-++# SNGREP_CHECK_SCRIPT(LIBNAME, FUNCTION, DEFINE, CONFIG_SCRIPT, ELSE_PART)
-++m4_define([SNGREP_CHECK_SCRIPT],
-++[
-++   if test ! -z "m4_toupper($SNGREP_[$1]_CONFIG_SCRIPT)"; then
-++      # to be used to set the path to ncurses*-config when cross-compiling
-++      sngrep_config_script=$(m4_toupper($SNGREP_[$1]_CONFIG_SCRIPT) --libs 2> /dev/null)
-++   else
-++      sngrep_config_script=$([$4] --libs 2> /dev/null)
-++   fi
-++   sngrep_script_success=no
-++   sngrep_save_LDFLAGS="$LDFLAGS"
-++   if test ! "x$sngrep_config_script" = x; then
-++      LDFLAGS="$sngrep_config_script $LDFLAGS"
-++      AC_CHECK_LIB([$1], [$2], [
-++         AC_DEFINE([$3], 1, [The library is present.])
-++         LIBS="$sngrep_config_script $LIBS "
-++         sngrep_script_success=yes
-++      ], [])
-++      LDFLAGS="$save_LDFLAGS"
-++   fi
-++   if test "x$sngrep_script_success" = xno; then
-++      [$5]
-++   fi
-++])
-++
-++# SNGREP_CHECK_LIB(LIBNAME, FUNCTION, DEFINE, ELSE_PART)
-++m4_define([SNGREP_CHECK_LIB],
-++[
-++   AC_CHECK_LIB([$1], [$2], [
-++      AC_DEFINE([$3], 1, [The library is present.])
-++      LIBS="-l[$1] $LIBS "
-++   ], [$4])
-++])
-+ ####
-+ #### Ncurses Wide character support
-+ ####
-+@@ -53,13 +86,13 @@ AS_IF([test "x$enable_unicode" == "xyes"], [
-+ 	# Ncurses with wide-character support
-+ 	AC_DEFINE([WITH_UNICODE], [], [Compile With Unicode compatibility])
-+ 
-+-	AC_CHECK_HEADER([ncursesw/ncurses.h], [], [
-+-	    AC_MSG_ERROR([ You need to have ncurses development files installed to compile sngrep.])
-+-	])
-+-
-+-	AC_CHECK_LIB([ncursesw], [initscr], [], [
-+-	    AC_MSG_ERROR([ You need to have libncursesw installed to compile sngrep.])
-+-	])
-++   SNGREP_CHECK_SCRIPT([ncursesw6], [addnwstr], [WITH_UNICODE], "ncursesw6-config",
-++    SNGREP_CHECK_SCRIPT([ncursesw], [addnwstr], [WITH_UNICODE], "ncursesw5-config",
-++     SNGREP_CHECK_SCRIPT([ncurses], [addnwstr], [WITH_UNICODE], "ncurses5-config",
-++      SNGREP_CHECK_LIB([ncursesw6], [addnwstr], [WITH_UNICODE],
-++       SNGREP_CHECK_LIB([ncursesw], [addnwstr], [WITH_UNICODE],
-++        SNGREP_CHECK_LIB([ncurses], [addnwstr], [WITH_UNICODE],
-++	))))))
-+ 
-+ 	AC_CHECK_LIB([panelw], [new_panel], [], [
-+ 	    AC_MSG_ERROR([ You need to have ncurses panelw library installed to compile sngrep.])
-+diff --git a/src/curses/scrollbar.h b/src/curses/scrollbar.h
-+index 960b936..c9fbfdc 100644
-+--- a/src/curses/scrollbar.h
-++++ b/src/curses/scrollbar.h
-+@@ -32,10 +32,9 @@
-+ 
-+ #ifdef WITH_UNICODE
-+ #define _X_OPEN_SOURCE_EXTENDED
-+-#include <ncursesw/ncurses.h>
-+-#else
-+-#include <ncurses.h>
-++#include <wctype.h>
-+ #endif
-++#include <ncurses.h>
-+ 
-+ //! Shorter declaration of scrollbar
-+ typedef struct scrollbar scrollbar_t;
-+diff --git a/src/curses/ui_panel.h b/src/curses/ui_panel.h
-+index 9a4082a..549b593 100644
-+--- a/src/curses/ui_panel.h
-++++ b/src/curses/ui_panel.h
-+@@ -33,10 +33,9 @@
-+ 
-+ #ifdef WITH_UNICODE
-+ #define _X_OPEN_SOURCE_EXTENDED
-+-#include <ncursesw/ncurses.h>
-+-#else
-+-#include <ncurses.h>
-++#include <wctype.h>
-+ #endif
-++#include <ncurses.h>
-+ #include <panel.h>
-+ #include <form.h>
-+ #include <stdbool.h>
-+-- 
-+2.9.4
-+
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 560872f..9b62408 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -14,8 +14,11 @@ SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
- SNGREP_CONF_ENV += \
- 	$(if $(BR2_STATIC_LIBS),LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`")
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+index fa1785a4e..138efa1d0 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d890af9db0b69c50d2e0f55d19ea9d678c335543c9f21287e98cb872c008d2bc  kodi-pvr-argustv-9040b1447bd622bcbae3f8944e7b84d933037644.tar.gz
++sha256 ba9e4d76b9e6d2d879e95eeda0d919ca5eabc0d6f59037f173cd9294b2ce8e4a  kodi-pvr-argustv-2.5.6-Krypton.tar.gz
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+index 5a610aa3a..2cf4d7529 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+@@ -6,7 +6,7 @@
  
--# our ncurses wchar support is not properly detected
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+SNGREP_CONF_OPTS += --enable-unicode
-+else
- SNGREP_CONF_OPTS += --disable-unicode
-+endif
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_ARGUSTV_VERSION = 9040b1447bd622bcbae3f8944e7b84d933037644
++KODI_PVR_ARGUSTV_VERSION = 2.5.6-Krypton
+ KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
+ KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
+ KODI_PVR_ARGUSTV_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
+index b4c5eb790..e9b867318 100644
+--- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 ac26d449915157a1d2833902c53dcb7fb341097bf984a7510c80f31a700bcba2  kodi-pvr-dvblink-17d12632b22efad4d3c4e73b8e48f58a6b13de01.tar.gz
++sha256 a45fff0c1fe6d91fd957e2a4e62e9c72a5c36d796c41caa6b1e5a4814f82a503  kodi-pvr-dvblink-3.4.5v2-Krypton.tar.gz
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+index 5f4b9e750..9860b63b2 100644
+--- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+@@ -6,7 +6,7 @@
  
- # openssl and gnutls can't be enabled at the same time.
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_DVBLINK_VERSION = 17d12632b22efad4d3c4e73b8e48f58a6b13de01
++KODI_PVR_DVBLINK_VERSION = 3.4.5v2-Krypton
+ KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
+ KODI_PVR_DVBLINK_LICENSE = GPL-2.0+
+ KODI_PVR_DVBLINK_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index 620606f4b..ccb45219c 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 6a6f0dc33d347d84233e22efa5da4033f9477fe6a9e8bb0a58d0b3f3152df384  kodi-pvr-dvbviewer-602042c9a7aa0035d799c6296e6ea06b5d5c3c4f.tar.gz
++sha256 4332fa50172409271909c90a8f923eb336ff93b0a7d61b183ce84d6975fa622e  kodi-pvr-dvbviewer-2.4.11-Krypton.tar.gz
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index d950b36a2..0c62c5a5b 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_DVBVIEWER_VERSION = 602042c9a7aa0035d799c6296e6ea06b5d5c3c4f
++KODI_PVR_DVBVIEWER_VERSION = 2.4.11-Krypton
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+ KODI_PVR_DVBVIEWER_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+index 74882d3d1..7417b2672 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d59c4c5906411aff0c0160a8a478cdbee6559bd9a842b172cc24888da9abee25  kodi-pvr-filmon-ab9b5198feb7eb2ff94ea495414ff214c09c9391.tar.gz
++sha256 0384db9cbcd8ab2e7b8b0eb8c22e8913e734e436234c43d357718c5273058605  kodi-pvr-filmon-1.4.8-Krypton.tar.gz
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+index ff1d11594..daa3e39df 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_FILMON_VERSION = ab9b5198feb7eb2ff94ea495414ff214c09c9391
++KODI_PVR_FILMON_VERSION = 1.4.8-Krypton
+ KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
+ KODI_PVR_FILMON_LICENSE = GPL-2.0+
+ KODI_PVR_FILMON_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+index c2af4c76a..8262f4e11 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 8de6dff4853a6dab886e41dcd01bd017e9ee35fecdb0f6cfdec739bfe9214ad6  kodi-pvr-hdhomerun-60d89d16dd953d38947e8a6da2f8bb84a0f764ef.tar.gz
++sha256 3c000b3ebab2b12f5635451f6a71ad01c4f4d7043623cfeebfe6b7c662e026d9  kodi-pvr-hdhomerun-2.4.7-Krypton.tar.gz
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+index ab14f062c..75fa48764 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_HDHOMERUN_VERSION = 60d89d16dd953d38947e8a6da2f8bb84a0f764ef
++KODI_PVR_HDHOMERUN_VERSION = 2.4.7-Krypton
+ KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
+ KODI_PVR_HDHOMERUN_LICENSE = GPL-2.0+
+ KODI_PVR_HDHOMERUN_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index 790667f9a..5656e8e3b 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f3458e36811da1fcca88e0c0cd41b326845e1d45198d78b3c6e635b03f3bd40e  kodi-pvr-hts-4e2a8334d4e62e63720a33a18c3e3c7ff4b4ad0b.tar.gz
++sha256 29867bd1fad4c4d69ec0d25ea1bb1507fd4543442aef890a2124f63f67318d92  kodi-pvr-hts-3.4.24-Krypton.tar.gz
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index a167295f2..fb5873bff 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_HTS_VERSION = 4e2a8334d4e62e63720a33a18c3e3c7ff4b4ad0b
++KODI_PVR_HTS_VERSION = 3.4.24-Krypton
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+ KODI_PVR_HTS_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 12026d58d..906cbb575 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 789f6b83565de5607dc444ee7e1cf11b7568caea5373f9b994d68effcb98c62a  kodi-pvr-iptvsimple-d7828163f26a0ccb175058faa9d87b1fcdc89220.tar.gz
++sha256 0a006e275cddba02d5d3fd22a95cec6411a765719509a9bc8fcc93dfa247bd4c  kodi-pvr-iptvsimple-2.4.11-Krypton.tar.gz
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index e6796e605..5ea0a454f 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_IPTVSIMPLE_VERSION = d7828163f26a0ccb175058faa9d87b1fcdc89220
++KODI_PVR_IPTVSIMPLE_VERSION = 2.4.11-Krypton
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+index 5abc082a4..6eb0abfba 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0b5b1ba387fa2f7c2374bc501bbb5a77aa95c016ac1b34a3b3933a89a21b0038  kodi-pvr-mediaportal-tvserver-d261c83a4ab40441be32c1202138fc6409a22974.tar.gz
++sha256 3f5c022f83636b3739f26c1a07166b498eac82e8081ed7551980f4bb27c6b56e  kodi-pvr-mediaportal-tvserver-2.4.19v2-Krypton.tar.gz
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+index 6520e4ff9..99a318911 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = d261c83a4ab40441be32c1202138fc6409a22974
++KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 2.4.19v2-Krypton
+ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index 9c538882f..3d10b5bbe 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 039bf21f42032235056aeb9fc8800c41d5c4c842bbc1a0fb340a33cd04049587  kodi-pvr-nextpvr-dd03d62adab4f07c1354652033dffa6da25ba9b7.tar.gz
++sha256 b126943a6d48ea4d2df38951505f385c2a499e399201eccd798a34076d3c5842  kodi-pvr-nextpvr-2.4.13-Krypton.tar.gz
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 6776d1423..d0a04991d 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_NEXTPVR_VERSION = dd03d62adab4f07c1354652033dffa6da25ba9b7
++KODI_PVR_NEXTPVR_VERSION = 2.4.13-Krypton
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+index c201a73ad..261558ee3 100644
+--- a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
++++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 6dc95a7fc0faeab30fb5e09ef3bc341f44bfa96500daaf3c169ae4e539745f71  kodi-pvr-njoy-ce66c1d40819cb42b3e70a3b616a7755099b2f3d.tar.gz
++sha256 e4e0a6bb1bf0c6f8ae011eba58c5f0ae19a6574bb35fc6a7fbdbb99d20242a2c  kodi-pvr-njoy-2.4.3-Krypton.tar.gz
+diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
+index 1c7c4dd7b..e946e6783 100644
+--- a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
++++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_NJOY_VERSION = ce66c1d40819cb42b3e70a3b616a7755099b2f3d
++KODI_PVR_NJOY_VERSION = 2.4.3-Krypton
+ KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
+ KODI_PVR_NJOY_LICENSE = GPL-2.0+
+ KODI_PVR_NJOY_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+index a1e650b7d..504480676 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 c348eb924d2a2842de919fd9561f2efd07586dfdef18cdb6b55a331e1ed3f11f  kodi-pvr-pctv-85d6eae79876af8a6db2413e3884296520271768.tar.gz
++sha256 95f95f39739baf6013bb6c9188743f842f6ba3e1fa541907067f795e1a3c66a1  kodi-pvr-pctv-1.4.7-Krypton.tar.gz
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+index e3ff8b2d5..6c7a03049 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_PCTV_VERSION = 85d6eae79876af8a6db2413e3884296520271768
++KODI_PVR_PCTV_VERSION = 1.4.7-Krypton
+ KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
+ KODI_PVR_PCTV_LICENSE = GPL-2.0+
+ KODI_PVR_PCTV_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+index 4027d2bda..07c768f25 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 4156e9e1bf35621a5ef35ad4e944380ba3725789bc51694d397a831341ab517d  kodi-pvr-stalker-df111a0d0a67669b732d8986e5473f3ffd9d7d9c.tar.gz
++sha256 466cb3869927cdd245a746a32d92250e198befe577f7a847884eab1fd8eeb139  kodi-pvr-stalker-2.8.6-Krypton.tar.gz
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index 51dffb468..ee61171d7 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_STALKER_VERSION = df111a0d0a67669b732d8986e5473f3ffd9d7d9c
++KODI_PVR_STALKER_VERSION = 2.8.6-Krypton
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPL-2.0+
+ KODI_PVR_STALKER_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+index 5472be8e4..5f2c78f0f 100644
+--- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
++++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f8e6cb967a175450bfc74225ae0b06b9a5e6fb91458f5123359191b4831c5921  kodi-pvr-vbox-adc6c346cc3570a232d336fcebfb0905eaaa9b96.tar.gz
++sha256 78065a46b95b3988b1e49fe05da249a1896f54a2c30116a9446f7c4f55db743b  kodi-pvr-vbox-3.6.10-Krypton.tar.gz
+diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
+index e786cbf37..2c54e1493 100644
+--- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
++++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_VBOX_VERSION = adc6c346cc3570a232d336fcebfb0905eaaa9b96
++KODI_PVR_VBOX_VERSION = 3.6.10-Krypton
+ KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
+ KODI_PVR_VBOX_LICENSE = GPL-2.0+
+ KODI_PVR_VBOX_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index 70c564e8e..7c91e3606 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0c17505be16c581d4fad2912350b96f8efbf776657467f67becfd499950bd82d  kodi-pvr-vuplus-25c4883e7c73c71d77fd32c8e33284ed5f081287.tar.gz
++sha256 79cd3ea79957ae2bca67c9a1cefe3546f27a6d4e88adb4973bb08228425be2fe  kodi-pvr-vuplus-2.4.10-Krypton.tar.gz
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index 1ea0d9482..e99f2260f 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_VUPLUS_VERSION = 25c4883e7c73c71d77fd32c8e33284ed5f081287
++KODI_PVR_VUPLUS_VERSION = 2.4.10-Krypton
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+ KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
+diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
+index 21fdd7128..4c050fb65 100644
+--- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
++++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 77eecab002e178ebdaa78c45ba43c836da002813e8c17769f6752dc91a8fef42  kodi-pvr-wmc-ed67cfedc1dad168c167d86d20fe4d0934504633.tar.gz
++sha256 7f5dfb88f54d511d575b7aabd94e1a862afb7e8a0b89fa957db6a135c31846eb  kodi-pvr-wmc-1.4.9v2-Krypton.tar.gz
+diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+index c2969b805..b6e3d4325 100644
+--- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
++++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_WMC_VERSION = ed67cfedc1dad168c167d86d20fe4d0934504633
++KODI_PVR_WMC_VERSION = 1.4.9v2-Krypton
+ KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
+ KODI_PVR_WMC_LICENSE = GPL-2.0+
+ KODI_PVR_WMC_LICENSE_FILES = src/client.h
 -- 
-2.9.4
+2.11.0
