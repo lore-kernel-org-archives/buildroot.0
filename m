@@ -1,98 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 May 2017 15:50:39 +0200
-Subject: [Buildroot] [git commit] checkpolicy: add patch to fix flex related
-	build failure
-Message-ID: <20170601202854.BD95B807D3@busybox.osuosl.org>
+Date: Thu, 25 May 2017 15:40:16 +0200
+Subject: [Buildroot] [git commit] python-service-identity: bump version to
+	17.0.0
+Message-ID: <20170601202855.D8FF2807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b869760f11f148a06027e63c0d0bbccb55a217f3
+commit: https://git.buildroot.net/buildroot/commit/?id=3e10c1e46738f28918054bcf5d53ac302dd07cb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When building checkpolicy/test, the linker reports the following error:
-
-    cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a -L/usr/src/selinux/DESTDIR/usr/lib -o dispol
-    /usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so: undefined reference to `yylex'
-    collect2: error: ld returned 1 exit status
-
-According to flex documentation
-(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
-to provide an implementation for yywrap(). However every flex file now
-uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
-this option from checkpolicy Makefiles.
-
-Patch taken from https://patchwork.kernel.org/patch/9450549/
-
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-checkpolicy-remove-lfl-from-LDLIBS.patch  | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ package/python-service-identity/python-service-identity.hash | 4 ++--
+ package/python-service-identity/python-service-identity.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
-new file mode 100644
-index 0000000..c0b6de8
---- /dev/null
-+++ b/package/checkpolicy/0001-checkpolicy-remove-lfl-from-LDLIBS.patch
-@@ -0,0 +1,58 @@
-+From 4d215a1e8111e14f6074f7abe2559800b6f4838c Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Adamduskett@outlook.com>
-+Date: Sat, 20 May 2017 11:01:08 -0400
-+Subject: [PATCH] checkpolicy: remove -lfl from LDLIBSlogin
-+
-+When building checkpolicy/test, the linker reports the following error:
-+cc   dispol.o  -lfl /usr/src/selinux/DESTDIR/usr/lib/libsepol.a
-+-L/usr/src/selinux/DESTDIR/usr/lib -o dispol
-+/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/../../../../lib/libfl.so:
-+undefined reference to `yylex'
-+collect2: error: ld returned 1 exit status
-+
-+According to flex documentation
-+(https://github.com/westes/flex/blob/master/doc/flex.texi), -lfl is used
-+to provide an implementation for yywrap(). However every flex file now
-+uses "%option noyywrap", which makes -lfl no longer mandatory. Remove
-+this option from checkpolicy Makefiles.
-+
-+
-+Backported from:
-+https://patchwork.kernel.org/patch/9450549/
-+
-+Original author: Nicolas Iooss <nicolas.iooss@m4x.org>
-+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-+---
-+ Makefile      | 2 +-
-+ test/Makefile | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 53a3074..875cf00 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -20,7 +20,7 @@ CHECKOBJS = y.tab.o lex.yy.o queue.o module_compiler.o parse_util.o \
-+ CHECKPOLOBJS = $(CHECKOBJS) checkpolicy.o
-+ CHECKMODOBJS = $(CHECKOBJS) checkmodule.o
-+ 
-+-LDLIBS=$(LIBDIR)/libsepol.a -lfl
-++LDLIBS=$(LIBDIR)/libsepol.a
-+ 
-+ GENERATED=lex.yy.c y.tab.c y.tab.h
-+ 
-+diff --git a/test/Makefile b/test/Makefile
-+index c2367e1..e7bd717 100644
-+--- a/test/Makefile
-++++ b/test/Makefile
-+@@ -9,7 +9,7 @@ INCLUDEDIR ?= $(PREFIX)/include
-+ CFLAGS ?= -g -Wall -W -Werror -O2 -pipe
-+ override CFLAGS += -I$(INCLUDEDIR)
-+ 
-+-LDLIBS=-lfl $(LIBDIR)/libsepol.a -L$(LIBDIR)
-++LDLIBS=$(LIBDIR)/libsepol.a -L$(LIBDIR)
-+ 
-+ all: dispol dismod
-+ 
-+-- 
-+2.9.3
-+
+diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
+index 09561d8..7caaaf9 100644
+--- a/package/python-service-identity/python-service-identity.hash
++++ b/package/python-service-identity/python-service-identity.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/service_identity/json, sha256 locally computed
+-md5	d52392597b9c44a740abf322bfdb21e6  service_identity-16.0.0.tar.gz
+-sha256	0630e222f59f91f3db498be46b1d879ff220955d7bbad719a5cb9ad14e3c3036  service_identity-16.0.0.tar.gz
++md5 f509cb41ca2f8420bd8496291136d6cc  service_identity-17.0.0.tar.gz
++sha256 4001fbb3da19e0df22c47a06d29681a398473af4aa9d745eca525b3b2c2302ab  service_identity-17.0.0.tar.gz
+diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
+index 88549ab..ccc6e71 100644
+--- a/package/python-service-identity/python-service-identity.mk
++++ b/package/python-service-identity/python-service-identity.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SERVICE_IDENTITY_VERSION = 16.0.0
++PYTHON_SERVICE_IDENTITY_VERSION = 17.0.0
+ PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
+-PYTHON_SERVICE_IDENTITY_SITE = https://pypi.python.org/packages/f3/2a/7c04e7ab74f9f2be026745a9ffa81fd9d56139fa6f5f4b4c8a8c07b2bfba
++PYTHON_SERVICE_IDENTITY_SITE = https://pypi.python.org/packages/de/2a/cab6e30be82c8fcd2339ef618036720eda954cf05daef514e386661c9221
+ PYTHON_SERVICE_IDENTITY_LICENSE = MIT
+ PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
+ PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
