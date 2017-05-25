@@ -1,46 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 25 May 2017 19:19:46 +0200
-Subject: [Buildroot] [for-next] package/enlightenment: bump to 0.21.8
-Message-ID: <20170525171946.9243-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 25 May 2017 19:44:12 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 4.11.3
+In-Reply-To: <20170525174412.1853-1-bernd.kuhls@t-online.de>
+References: <20170525174412.1853-1-bernd.kuhls@t-online.de>
+Message-ID: <20170525174412.1853-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://www.enlightenment.org/news/e0.21.8_release
-
-"We are aware of a issue when running su/sudo under kernel 4.11 the fix
-for this issue will be in an upcoming kernel release rather then here
-see (https://phab.enlightenment.org/T5470)"
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index e69c7ff..0cb433f 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e-0.21.7-release
--sha256	7643f7fd4aadaca44c886f21063987624c50d4c50266e87600e902a59b7c76f7 	enlightenment-0.21.7.tar.xz
-+# From https://www.enlightenment.org/news/e0.21.8_release
-+sha256	fac21c5fb9cab89fb717b3577f7980fd0644ff1e94b144a55ba841116e8c5232 	enlightenment-0.21.8.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 7bfc25b..b0c261a 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 9c4d1c8463..305929de05 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
--ENLIGHTENMENT_VERSION = 0.21.7
-+ENLIGHTENMENT_VERSION = 0.21.8
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2-Clause
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.11.2)"
++	bool "Latest version (4.11.3)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.11.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.11.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-2.9.4
+2.11.0
