@@ -1,73 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 25 May 2017 10:41:00 +0000
-Subject: [Buildroot] [Bug 9896] New: host-gcc-initial error downloading
- because incorrect URL
-Message-ID: <bug-9896-163@https.bugs.busybox.net/>
+From: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+Date: Thu, 25 May 2017 15:09:19 +0300
+Subject: [Buildroot] [PATCH 1/1] toolchain-external: dynamic loader
+ symlink to actual location of musl libc.so
+In-Reply-To: <1495112596-26182-1-git-send-email-ilya.kuzmich@gmail.com>
+References: <1495112596-26182-1-git-send-email-ilya.kuzmich@gmail.com>
+Message-ID: <20170525120919.GD14358@uxa>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9896
-
-            Bug ID: 9896
-           Summary: host-gcc-initial error downloading because incorrect
-                    URL
-           Product: buildroot
-           Version: 2017.02.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: orion_33 at bk.ru
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-I try to use many external toolchains. Internal are not suit for me because
-u-boot from old src works not correct. All external toolchains including
-arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu can't download gcc
-package because it have wrong URL without version number.
-
-orion at ubuntu-vm:~/workdir/buildroot$ make host-gcc-initial
->>> host-gcc-initial  Downloading
---2017-05-24 17:59:44--  http://ftpmirror.gnu.org/gcc/gcc-/gcc-.tar.bz2
-???????????? ftpmirror.gnu.org (ftpmirror.gnu.org)? 208.118.235.200
-??????????? ? ftpmirror.gnu.org (ftpmirror.gnu.org)|208.118.235.200|:80...
-?????????? ???????????.
-HTTP-?????? ?????????. ???????? ??????? 302 Moved Temporarily
-?????: http://mirror.tochlab.net/pub/gnu/gcc/gcc-/gcc-.tar.bz2 [???????]
---2017-05-24 17:59:44-- 
-http://mirror.tochlab.net/pub/gnu/gcc/gcc-/gcc-.tar.bz2
-???????????? mirror.tochlab.net (mirror.tochlab.net)? 5.178.86.222
-??????????? ? mirror.tochlab.net (mirror.tochlab.net)|5.178.86.222|:80...
-?????????? ???????????.
-HTTP-?????? ?????????. ???????? ??????? 404 Not Found
-2017-05-24 17:59:44 ?????? 404: Not Found.
-
---2017-05-24 17:59:44--  http://sources.buildroot.net/gcc-.tar.bz2
-???????????? sources.buildroot.net (sources.buildroot.net)? 176.9.16.109
-??????????? ? sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
-?????????? ???????????.
-HTTP-?????? ?????????. ???????? ??????? 404 Not Found
-2017-05-24 17:59:44 ?????? 404: Not Found.
-
-package/pkg-generic.mk:139: ?????? ?????????? ??????? ??? ????
-?/home/orion/workdir/buildroot/output/build/host-gcc-initial/.stamp_downloaded?
-make[1]: ***
-[/home/orion/workdir/buildroot/output/build/host-gcc-initial/.stamp_downloaded]
-?????? 1
-Makefile:79: ?????? ?????????? ??????? ??? ???? ?_all?
-make: *** [_all] ?????? 2
-orion at ubuntu-vm:~/workdir/buildroot$ make menuconfig
-
-
-*** End of the configuration.
-*** Execute 'make' to start the build or try 'make help'.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+ping?
+On 18/05, Ilya Kuzmich wrote:
+> Test whenever musl libc.so located at /lib or /usr/lib and create dynamic
+> library loader symlink accordingly.
+> 
+> Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 9670350..438d714 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -489,7 +489,12 @@ else
+>  MUSL_ARCH = $(ARCH)
+>  endif
+>  define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+> -	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
+> +	if test -e $(STAGING_DIR)/usr/lib/libc.so; then \
+> +		LD_LINK_TARGET=../usr/lib/libc.so ;\
+> +	else \
+> +	    LD_LINK_TARGET=libc.so ;\
+> +	fi ;\
+> +	ln -sf "$${LD_LINK_TARGET}" $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1 ;
+>  endef
+>  endif
+>  
+> -- 
+> 2.7.4
+> 
