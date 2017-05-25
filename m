@@ -1,7 +1,8 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 25 May 2017 10:42:54 +0100
-Subject: [Buildroot] [PATCH next] sqlite: bump version to 3190100 (3.19.1)
-Message-ID: <20170525094254.60145-1-Vincent.Riera@imgtec.com>
+Date: Thu, 25 May 2017 11:05:42 +0100
+Subject: [Buildroot] [PATCH next 1/2] python-pytablewriter: bump version to
+	0.19.8
+Message-ID: <20170525100543.889-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +11,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 78748b003..3547300ff 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 74559194e1dd9b9d577cac001c0e9d370856671b  sqlite-autoconf-3180000.tar.gz
-+sha1 7906083f3d744c7c1ccf8c0f79caaacfd58b363d  sqlite-autoconf-3190100.tar.gz
- # Calculated based on the hash above
--sha256 a4e485ad3a16e054765baf6371826b5000beed07e626510896069c0bf013874c  sqlite-autoconf-3170000.tar.gz
-+sha256 b516e665952c6659638eab3283f09f317afb212fd8e39d6415b4b6259c37b0f5  sqlite-autoconf-3190000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index af4c571df..ca0005963 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
+index 570a7ab02..533d21a5b 100644
+--- a/package/python-pytablewriter/python-pytablewriter.hash
++++ b/package/python-pytablewriter/python-pytablewriter.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
+-md5 0f559538d2d40b1f59904b3bf6c66b35  pytablewriter-0.19.7.tar.gz
+-sha256 09c841a08cfcecc51e7ffc1846c5200b9f25ef6a3ed82a1a33f714b1c0d9ef94  pytablewriter-0.19.7.tar.gz
++md5 a2d3fe29adc7708ce986646f41c1d229  pytablewriter-0.19.8.tar.gz
++sha256 b76cb1591504ed1dcdc14ccf383806f45e2027bd72d844e545c6a0d18552d46c  pytablewriter-0.19.8.tar.gz
+diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
+index 24a4d2e94..ddbc17bed 100644
+--- a/package/python-pytablewriter/python-pytablewriter.mk
++++ b/package/python-pytablewriter/python-pytablewriter.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3180000
-+SQLITE_VERSION = 3190000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
+-PYTHON_PYTABLEWRITER_VERSION = 0.19.7
++PYTHON_PYTABLEWRITER_VERSION = 0.19.8
+ PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
+-PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/2d/5d/02baae4e38413608a77abec5f4ad9a665ba788802e84d7f84cfd9fbe49a2
++PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/9b/89/1883fcd076f40034539f577b033636b20d9a7983a8ba99e9b8ef11b680b2
+ PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEWRITER_LICENSE = MIT
+ PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
 -- 
 2.13.0
