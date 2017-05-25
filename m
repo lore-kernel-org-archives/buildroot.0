@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:00:22 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/cgroupfs-mount: bump
- version to 1.4
-In-Reply-To: <20170523212145.31602-1-bernd.kuhls@t-online.de>
-References: <20170523212145.31602-1-bernd.kuhls@t-online.de>
-Message-ID: <20170524160022.66beb485@free-electrons.com>
+Date: Thu, 25 May 2017 15:27:44 +0200
+Subject: [Buildroot] [PATCH] gcc: arc: Fix tst_movb pattern
+In-Reply-To: <20170524153919.44524-1-abrodkin@synopsys.com>
+References: <20170524153919.44524-1-abrodkin@synopsys.com>
+Message-ID: <20170525152744.05f96957@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 May 2017 23:21:45 +0200, Bernd Kuhls wrote:
-> Removed empty line from cgroupfs-mount.mk as well.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/cgroupfs-mount/cgroupfs-mount.hash | 2 +-
->  package/cgroupfs-mount/cgroupfs-mount.mk   | 3 +--
->  2 files changed, 2 insertions(+), 3 deletions(-)
+On Wed, 24 May 2017 18:39:19 +0300, Alexey Brodkin wrote:
+> Fixes building of quagga [1]:
+> ------------------------------>8---------------------------  
+> 839:1: error: unrecognizable insn:
+>  }
+>  ^
+> (insn 183 24 26 4 (set (reg:CC_ZN 61 cc)
+>         (and:SI (reg:SI 0 r0 [orig:192 _12->id.s_addr ] [192])
+>             (const_int -256 [0xffffffffffffff00]))) ospf_ri.c:790 -1
+>      (nil))
+> ospf_ri.c:839:1: internal compiler error: in extract_insn, at recog.c:2287
+> ------------------------------>8---------------------------  
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
