@@ -1,8 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 26 May 2017 00:28:29 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/dialog: bump version to
-	1.3-20170509
-Message-ID: <20170525222829.32718-1-bernd.kuhls@t-online.de>
+Date: Fri, 26 May 2017 00:34:18 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/diffutils: bump version to 3.6
+Message-ID: <20170525223418.3379-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dialog/dialog.hash | 2 +-
- package/dialog/dialog.mk   | 2 +-
+ package/diffutils/diffutils.hash | 2 +-
+ package/diffutils/diffutils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
-index 75a79189c..ac4278469 100644
---- a/package/dialog/dialog.hash
-+++ b/package/dialog/dialog.hash
+diff --git a/package/diffutils/diffutils.hash b/package/diffutils/diffutils.hash
+index 7e99f1fc6..5506ab275 100644
+--- a/package/diffutils/diffutils.hash
++++ b/package/diffutils/diffutils.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	1d98ec7cc81f11f9019fa0b90f1afdaa86579cae1ce8869a6fd61deb9d4b887a	dialog-1.2-20150125.tgz
-+sha256 2ff1ba74c632b9d13a0d0d2c942295dd4e8909694eeeded7908a467d0bcd4756  dialog-1.3-20170509.tgz
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index f1c0e4c06..61ec2659a 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
+-sha256	dad398ccd5b9faca6b0ab219a036453f62a602a56203ac659b43e889bec35533	diffutils-3.5.tar.xz
++sha256 d621e8bdd4b573918c8145f7ae61817d1be9deb4c8d2328a65cea8e11d783bd6  diffutils-3.6.tar.xz
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index dee3faca1..4662e2bc3 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DIALOG_VERSION = 1.2-20150125
-+DIALOG_VERSION = 1.3-20170509
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = ftp://invisible-island.net/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+-DIFFUTILS_VERSION = 3.5
++DIFFUTILS_VERSION = 3.6
+ DIFFUTILS_SOURCE = diffutils-$(DIFFUTILS_VERSION).tar.xz
+ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+ DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
 -- 
 2.11.0
