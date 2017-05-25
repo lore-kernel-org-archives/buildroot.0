@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 May 2017 15:58:10 +0200
-Subject: [Buildroot] [PATCH] Revert "libcdio: disable on ARC,
- triggers a toolchain bug"
-In-Reply-To: <20170516073213.9321-1-abrodkin@synopsys.com>
-References: <20170516073213.9321-1-abrodkin@synopsys.com>
-Message-ID: <20170525155810.30f17175@free-electrons.com>
+Date: Thu, 25 May 2017 15:58:45 +0200
+Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.03
+ release
+In-Reply-To: <1495719401.3673.4.camel@synopsys.com>
+References: <20170523184137.48708-1-abrodkin@synopsys.com>
+ <20170525152739.364680be@free-electrons.com>
+ <1495719401.3673.4.camel@synopsys.com>
+Message-ID: <20170525155845.7bd549e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +15,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 16 May 2017 10:32:13 +0300, Alexey Brodkin wrote:
-> This reverts commit 459f7302df8cdc45aa0f7f2581ebb6f05fb6432a.
-> 
-> libcdio building is fixed for ARC in
-> 2b360bd547f1 "gcc: arc-2017.03-rc2: Fix "unrecognized supposed constant" error"
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  package/libcdio/Config.in | 2 --
->  1 file changed, 2 deletions(-)
+On Thu, 25 May 2017 13:36:42 +0000, Alexey Brodkin wrote:
 
-Applied to master, thanks.
+> That's well understood indeed.
+> But that was the whole point of keeping up with RCs of ARC tools in
+> Buildroot's RCs so we can finally bump to the release.
+> 
+> Just for the record below are changes in between rc2 and final release.
+> 
+> GCC:
+> e406b240f26e - [FIX] Typo (10 days ago) <claziss>
+> 139fed9d29ab - [FIX] PIC: return false for any PIC related??unspecs (10 days ago) <Claudiu Zissulescu>
+> fd593a115f30 - Revert "Changed filename for the expected dynamic loader for glibc." (2 weeks ago) <Vineet Gupta>
+> 566195a06808 - Small fix to unwinding in ARC700. (2 weeks ago) <Cupertino Miranda>
+> 7d380d8350a6 - [ARC] Update sleep builtin. (2 weeks ago) <claziss>
+> 
+> Binutils:
+> bf4076d02bdd - [FIX] revert jli: don't check for argument alignment (7 days ago) <claziss>
+> 7ed115c021fb - [ARC] Update MAX_INSN_FLGS. (7 days ago) <claziss>
+> ed389633c649 - [ARC] Reformat error messages. (7 days ago) <claziss>
+> f27d6d99f566 - [ARC] Add ldi_base and ei_base aux regs (13 days ago) <claziss>
+> e02bf1fe7f06 - [JLI][FIX] Add test ld/testsuite/ld-arc/jli-overflow. Correct jli reloc (13 days ago) <claziss>
+> 
+> Hopefully these fixes won't cause more pain :)
+
+OK, thanks for the details!
+
+I have rebuilt and deployed the pre-built ARC toolchain.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
