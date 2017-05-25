@@ -1,49 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 May 2017 08:30:58 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-24
-Message-ID: <20170525063058.AF5A520B91@mail.free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 25 May 2017 09:19:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/redis: fix static linking with
+	libatomic
+Message-ID: <20170525071934.31057-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes
+http://autobuild.buildroot.net/results/7f1/7f1ecccbfdb6bd95824d9c884f1577e71e0e1e09/
+http://autobuild.buildroot.net/results/c0b/c0b1bdcc5fbddf8b996b923015184d753882d4b8/
 
-Build statistics for 2017-05-24
-================================
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/redis/redis.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-      successes : 279
-       failures : 10 
-       timeouts : 1  
-          TOTAL : 290
-
-Classification of failures by reason
-====================================
-
-                  ffmpeg-3.3.1 | 3 
-                   taskd-1.1.0 | 3 
-                libselinux-2.6 | 1 
-        ltp-testsuite-20170116 | 1 
-make[6]: *** [libavfilter/a... | 1 
-                 qt5base-5.8.0 | 1 
-                  quagga-1.1.1 | 1 
-
-
-Detail of failures
-===================
-
-         arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/64c5100de12e0589d04909b25f23d144added7d7 |     
-         arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/bce22080b64f5e4725109de7189c8a28980ba13c |     
-         arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/f7e08d06fb75bf2fbb7b9d68b285ec75e7a124ac |     
-    mips64el |                 libselinux-2.6 | NOK | http://autobuild.buildroot.net/results/507914963c3279657701d98894fbbe3519469f89 |     
-         arc |         ltp-testsuite-20170116 | NOK | http://autobuild.buildroot.net/results/f51909d886af7077410d97c7dcea7090d29e89ca |     
-microblazeel | make[6]: *** [libavfilter/a... | TIM | http://autobuild.buildroot.net/results/75741cf4cbd6d734ec22e36423d957b0fd2b9e0c |     
-       sparc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/732d72df2a050e342162b9ec15270bff5867f7cb |     
-         arc |                   quagga-1.1.1 | NOK | http://autobuild.buildroot.net/results/3c12c4609d4a77ab8ccd3ea94840884d70520efa | ORPH
-microblazeel |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/b0130004b0767368ca2e5894134d05990d48e152 |     
-        m68k |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/d1f96897dd552e616e6b9c2ffe2ebe6cb1a0d0bc |     
-         arm |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/3bb841d4a5d2b6178d8572b987274b55c6b1a200 |     
-
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 3f4956cf3..2a5012812 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -14,8 +14,14 @@ define REDIS_USERS
+ endef
+ 
+ # Uses __atomic_fetch_add_4
++# src/Makefile contains a wrong linking order which breaks linking
++# for static builds. We need to add -latomic to FINAL_LIBS to provide
++# -latomic at the correct place in the linking command.
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-REDIS_LIBATOMIC = -latomic
++define REDIS_FIX_MAKEFILE
++	$(SED) 's/FINAL_LIBS=-lm/FINAL_LIBS=-lm -latomic/' $(@D)/src/Makefile
++endef
++REDIS_POST_PATCH_HOOKS = REDIS_FIX_MAKEFILE
+ endif
+ 
+ # Redis doesn't support DESTDIR (yet, see
 -- 
-http://autobuild.buildroot.net
+2.11.0
