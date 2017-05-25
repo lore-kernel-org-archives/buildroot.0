@@ -1,174 +1,177 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 25 May 2017 10:34:12 -0400
-Subject: [Buildroot] [PATCH 01/01] sngrep: bump version to v1.4.3
-Message-ID: <20170525143412.3318-1-aduskett@codeblue.com>
+Date: Thu, 25 May 2017 10:47:49 -0400
+Subject: [Buildroot] [PATCH 01/01] sngrep: fix wchar detection.
+Message-ID: <20170525144749.19333-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The two patches were committed upstream.
+Ncurses detection is currently broken in buildroot.
+
+This patch does the following:
+ - Add SNGREP_CHECK_SCRIPT to configure.ac which checks for a
+   libname, a function in that library, sets a define if found, and
+   if not found, moves on to the next part. This is taken from the
+   htop configure.ac.
+
+ - Adds SNGREP_CHECK_LIB to configure.ac which checks for a
+   library, a function within that library, sets a define if that function
+   is found, and if not found, moves on to the next part.
+   This is taken from the htop configure.ac
+
+ - Modifies scrollbar.h and ui_panel.h to include <wctypes.h> instead of
+   <ncursesw/ncurses.h> if unicode is supported.
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- .../0001-src-Makefile.am-don-t-use-VPATH.patch     | 43 -------------
- ...e.ac-switch-to-pkg-config-to-find-openssl.patch | 75 ----------------------
- package/sngrep/sngrep.hash                         |  2 +-
- package/sngrep/sngrep.mk                           |  2 +-
- 4 files changed, 2 insertions(+), 120 deletions(-)
- delete mode 100644 package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
- delete mode 100644 package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
+ .../sngrep/0001-fix-ncurses-wchar-detection.patch  | 119 +++++++++++++++++++++
+ package/sngrep/sngrep.mk                           |   5 +-
+ 2 files changed, 123 insertions(+), 1 deletion(-)
+ create mode 100644 package/sngrep/0001-fix-ncurses-wchar-detection.patch
 
-diff --git a/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch b/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
-deleted file mode 100644
-index 3d98203..0000000
---- a/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From b6dcae8ec4334e2436cfa19a8052c3473f57a586 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 4 Mar 2017 15:02:43 +0100
--Subject: [PATCH 1/2] src/Makefile.am: don't use VPATH
--
--VPATH is a mechanism used to allow out-of-tree build, not to use source
--code from a different directory. For this purpose, one should simply use
--the "subdir-objects" AUTOMAKE_OPTIONS, and reference the source code of
--the sub-directory in the <prog>_SOURCES variable.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Upstream-status: https://github.com/irontec/sngrep/pull/176
-----
-- src/Makefile.am | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/src/Makefile.am b/src/Makefile.am
--index 931ee06..961f4a0 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -1,5 +1,5 @@
--+AUTOMAKE_OPTIONS=subdir-objects
-- bin_PROGRAMS=sngrep
---VPATH=curses
-- sngrep_SOURCES=capture.c
-- if USE_EEP
-- sngrep_SOURCES+=capture_eep.c
--@@ -12,8 +12,8 @@ sngrep_SOURCES+=capture_openssl.c
-- endif
-- sngrep_SOURCES+=address.c packet.c sip.c sip_call.c sip_msg.c sip_attr.c main.c
-- sngrep_SOURCES+=option.c group.c filter.c keybinding.c media.c setting.c rtp.c
---sngrep_SOURCES+=util.c hash.c vector.c ui_panel.c scrollbar.c
---sngrep_SOURCES+=ui_manager.c ui_call_list.c ui_call_flow.c ui_call_raw.c
---sngrep_SOURCES+=ui_stats.c ui_filter.c ui_save.c ui_msg_diff.c
---sngrep_SOURCES+=ui_column_select.c ui_settings.c
--+sngrep_SOURCES+=util.c hash.c vector.c curses/ui_panel.c curses/scrollbar.c
--+sngrep_SOURCES+=curses/ui_manager.c curses/ui_call_list.c curses/ui_call_flow.c curses/ui_call_raw.c
--+sngrep_SOURCES+=curses/ui_stats.c curses/ui_filter.c curses/ui_save.c curses/ui_msg_diff.c
--+sngrep_SOURCES+=curses/ui_column_select.c curses/ui_settings.c
-- 
---- 
--2.7.4
--
-diff --git a/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch b/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
-deleted file mode 100644
-index b51581f..0000000
---- a/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
-+++ /dev/null
-@@ -1,75 +0,0 @@
--From 22b08ab1a45eb3773b3c90dc37a31a7574520daa Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 4 Mar 2017 14:56:53 +0100
--Subject: [PATCH 2/2] configure.ac: switch to pkg-config to find openssl
--
--Using AC_CHECK_LIB() doesn't work properly for static linking, because
--it doesn't return information on transitive dependencies of
--libraries. For example, if library A internally uses library B, then
--with dynamic linking, doing -lA is sufficient. However, with static
--linking, one must do -lA -lB, and AC_CHECK_LIB() will only give the -lA
--information. This for example causes a build failure when building
--sngrep statically with openssl enabled:
--
--checking for SSL_new in -lssl... no
--configure: error:  You need to have libssl installed to compile sngrep
--
--due to undefined symbols in the OpenSSL library.
--
--The proper solution for this is to discover the library using
--pkg-config, because pkg-config properly returns the list of necessary
--libraries, as it understands the concept of "list of libraries needed
--when dynamic linking" and "list of libraries needed for static linking".
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Upstream-status: https://github.com/irontec/sngrep/pull/176
-----
-- configure.ac    | 9 +--------
-- src/Makefile.am | 4 ++++
-- 2 files changed, 5 insertions(+), 8 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 42e00e9..9f8e6d2 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -129,14 +129,7 @@ AS_IF([test "x$WITH_OPENSSL" == "xyes"], [
-- 	AS_IF([test "x$WITH_GNUTLS" == "xyes"], [
-- 	    AC_MSG_ERROR([ GnuTLS and OpenSSL can not be enabled at the same time ])
-- 	], [])
---
---	AC_CHECK_LIB([ssl], [SSL_new], [], [
---	    AC_MSG_ERROR([ You need to have libssl installed to compile sngrep])
---	])
---
---	AC_CHECK_LIB([crypto], [EVP_get_cipherbyname], [], [
---	    AC_MSG_ERROR([ You need to have libcrypto installed to compile sngrep])
---	])
--+	PKG_CHECK_MODULES([SSL], [libssl libcrypto])
-- 	AC_DEFINE([WITH_OPENSSL],[],[Compile With Openssl compatibility])
-- ], [])
-- 
--diff --git a/src/Makefile.am b/src/Makefile.am
--index 961f4a0..3a471b7 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -1,6 +1,8 @@
-- AUTOMAKE_OPTIONS=subdir-objects
-- bin_PROGRAMS=sngrep
-- sngrep_SOURCES=capture.c
--+sngrep_CFLAGS=
--+sngrep_LDADD=
-- if USE_EEP
-- sngrep_SOURCES+=capture_eep.c
-- endif
--@@ -9,6 +11,8 @@ sngrep_SOURCES+=capture_gnutls.c
-- endif
-- if WITH_OPENSSL
-- sngrep_SOURCES+=capture_openssl.c
--+sngrep_CFLAGS+=$(SSL_CFLAGS)
--+sngrep_LDADD+=$(SSL_LIBS)
-- endif
-- sngrep_SOURCES+=address.c packet.c sip.c sip_call.c sip_msg.c sip_attr.c main.c
-- sngrep_SOURCES+=option.c group.c filter.c keybinding.c media.c setting.c rtp.c
---- 
--2.7.4
--
-diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
-index dd75f89..bc28545 100644
---- a/package/sngrep/sngrep.hash
-+++ b/package/sngrep/sngrep.hash
-@@ -1 +1 @@
--sha256 30fbfb4f90ed8805194b39683a8a2ed465776ffd60df4482bd029d63b316b3f1 sngrep-v1.4.2.tar.gz
-+sha256 7385ac202de6d6a1feffb2fd514600563133d9dfa7fb47be052de839abcc1d52 sngrep-v1.4.3.tar.gz
+diff --git a/package/sngrep/0001-fix-ncurses-wchar-detection.patch b/package/sngrep/0001-fix-ncurses-wchar-detection.patch
+new file mode 100644
+index 0000000..b387ac5
+--- /dev/null
++++ b/package/sngrep/0001-fix-ncurses-wchar-detection.patch
+@@ -0,0 +1,119 @@
++From f812ceb065536697b238227b6a1fd432700f4ea9 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@codeblue.com>
++Date: Thu, 25 May 2017 10:13:12 -0400
++Subject: [PATCH] Fix ncurses wchar detection.
++
++Currently ncurses wchar detection relies on the ncurses header
++to be located at wncurses/ncurses.h.  This currently doesn't work
++with buildroot.  This patch fixes detection of the ncurses header
++and the ifdef's in the relevant header files.
++
++Signed-off-by: Adam Duskett <aduskett@codeblue.com>
++---
++ configure.ac           | 47 ++++++++++++++++++++++++++++++++++++++++-------
++ src/curses/scrollbar.h |  5 ++---
++ src/curses/ui_panel.h  |  5 ++---
++ 3 files changed, 44 insertions(+), 13 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 0255ad2..7a7f0ab 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -40,6 +40,39 @@ AC_CHECK_HEADER([pcap.h], [], [
++     AC_MSG_ERROR([ You need to have libpcap development files installed to compile sngrep.])
++ ])
++ 
+++# SNGREP_CHECK_SCRIPT(LIBNAME, FUNCTION, DEFINE, CONFIG_SCRIPT, ELSE_PART)
+++m4_define([SNGREP_CHECK_SCRIPT],
+++[
+++   if test ! -z "m4_toupper($SNGREP_[$1]_CONFIG_SCRIPT)"; then
+++      # to be used to set the path to ncurses*-config when cross-compiling
+++      sngrep_config_script=$(m4_toupper($SNGREP_[$1]_CONFIG_SCRIPT) --libs 2> /dev/null)
+++   else
+++      sngrep_config_script=$([$4] --libs 2> /dev/null)
+++   fi
+++   sngrep_script_success=no
+++   sngrep_save_LDFLAGS="$LDFLAGS"
+++   if test ! "x$sngrep_config_script" = x; then
+++      LDFLAGS="$sngrep_config_script $LDFLAGS"
+++      AC_CHECK_LIB([$1], [$2], [
+++         AC_DEFINE([$3], 1, [The library is present.])
+++         LIBS="$sngrep_config_script $LIBS "
+++         sngrep_script_success=yes
+++      ], [])
+++      LDFLAGS="$save_LDFLAGS"
+++   fi
+++   if test "x$sngrep_script_success" = xno; then
+++      [$5]
+++   fi
+++])
+++
+++# SNGREP_CHECK_LIB(LIBNAME, FUNCTION, DEFINE, ELSE_PART)
+++m4_define([SNGREP_CHECK_LIB],
+++[
+++   AC_CHECK_LIB([$1], [$2], [
+++      AC_DEFINE([$3], 1, [The library is present.])
+++      LIBS="-l[$1] $LIBS "
+++   ], [$4])
+++])
++ ####
++ #### Ncurses Wide character support
++ ####
++@@ -53,13 +86,13 @@ AS_IF([test "x$enable_unicode" == "xyes"], [
++ 	# Ncurses with wide-character support
++ 	AC_DEFINE([WITH_UNICODE], [], [Compile With Unicode compatibility])
++ 
++-	AC_CHECK_HEADER([ncursesw/ncurses.h], [], [
++-	    AC_MSG_ERROR([ You need to have ncurses development files installed to compile sngrep.])
++-	])
++-
++-	AC_CHECK_LIB([ncursesw], [initscr], [], [
++-	    AC_MSG_ERROR([ You need to have libncursesw installed to compile sngrep.])
++-	])
+++   SNGREP_CHECK_SCRIPT([ncursesw6], [addnwstr], [WITH_UNICODE], "ncursesw6-config",
+++    SNGREP_CHECK_SCRIPT([ncursesw], [addnwstr], [WITH_UNICODE], "ncursesw5-config",
+++     SNGREP_CHECK_SCRIPT([ncurses], [addnwstr], [WITH_UNICODE], "ncurses5-config",
+++      SNGREP_CHECK_LIB([ncursesw6], [addnwstr], [WITH_UNICODE],
+++       SNGREP_CHECK_LIB([ncursesw], [addnwstr], [WITH_UNICODE],
+++        SNGREP_CHECK_LIB([ncurses], [addnwstr], [WITH_UNICODE],
+++	))))))
++ 
++ 	AC_CHECK_LIB([panelw], [new_panel], [], [
++ 	    AC_MSG_ERROR([ You need to have ncurses panelw library installed to compile sngrep.])
++diff --git a/src/curses/scrollbar.h b/src/curses/scrollbar.h
++index 960b936..c9fbfdc 100644
++--- a/src/curses/scrollbar.h
+++++ b/src/curses/scrollbar.h
++@@ -32,10 +32,9 @@
++ 
++ #ifdef WITH_UNICODE
++ #define _X_OPEN_SOURCE_EXTENDED
++-#include <ncursesw/ncurses.h>
++-#else
++-#include <ncurses.h>
+++#include <wctype.h>
++ #endif
+++#include <ncurses.h>
++ 
++ //! Shorter declaration of scrollbar
++ typedef struct scrollbar scrollbar_t;
++diff --git a/src/curses/ui_panel.h b/src/curses/ui_panel.h
++index 9a4082a..549b593 100644
++--- a/src/curses/ui_panel.h
+++++ b/src/curses/ui_panel.h
++@@ -33,10 +33,9 @@
++ 
++ #ifdef WITH_UNICODE
++ #define _X_OPEN_SOURCE_EXTENDED
++-#include <ncursesw/ncurses.h>
++-#else
++-#include <ncurses.h>
+++#include <wctype.h>
++ #endif
+++#include <ncurses.h>
++ #include <panel.h>
++ #include <form.h>
++ #include <stdbool.h>
++-- 
++2.9.4
++
 diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 74b05b1..560872f 100644
+index 560872f..9b62408 100644
 --- a/package/sngrep/sngrep.mk
 +++ b/package/sngrep/sngrep.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -14,8 +14,11 @@ SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
+ SNGREP_CONF_ENV += \
+ 	$(if $(BR2_STATIC_LIBS),LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`")
  
--SNGREP_VERSION = v1.4.2
-+SNGREP_VERSION = v1.4.3
- SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
- SNGREP_LICENSE = GPL-3.0+
- SNGREP_LICENSE_FILES = LICENSE
+-# our ncurses wchar support is not properly detected
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++SNGREP_CONF_OPTS += --enable-unicode
++else
+ SNGREP_CONF_OPTS += --disable-unicode
++endif
+ 
+ # openssl and gnutls can't be enabled at the same time.
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
 -- 
 2.9.4
