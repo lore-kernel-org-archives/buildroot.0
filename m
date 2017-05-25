@@ -1,84 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 May 2017 15:34:03 +0200
-Subject: [Buildroot] [git commit branch/next] package/bootstrap: bump
-	version to 3.3.7
-Message-ID: <20170525133427.D5A1F800AF@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 25 May 2017 13:36:42 +0000
+Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2017.03
+ release
+In-Reply-To: <20170525152739.364680be@free-electrons.com>
+References: <20170523184137.48708-1-abrodkin@synopsys.com>
+ <20170525152739.364680be@free-electrons.com>
+Message-ID: <1495719401.3673.4.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc7e8828729441393c3e825500094ac2fbf54694
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Thomas,
 
-Extended _EXTRACT_CMDS and _INSTALL_TARGET_CMDS to handle updated
-internal zip structure:
+On Thu, 2017-05-25 at 15:27 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 23 May 2017 21:41:37 +0300, Alexey Brodkin wrote:
+> > 
+> > This commit finally bumps ARC toolchain to arc-2017.03 release.
+> > More info on this release could be found here:
+> > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_foss-2Dfor-2Dsynopsys-2Ddwc-2Darc-2Dprocessors_toolchain_releases_tag_arc-2D2017.0
+> > 3&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=NwE8728l_IQUKFg_WQ1Yxh-
+> > LEQ9zHJLRTmkZwaKPAeY&s=MiPhqRzYXkEc1aRWYCVMFpNgmLxqjXg72Ctkq60H2cA&e=?
+> > 
+> > Note mentioned above web-page is not yet populated but should be very soon.
+> > As a safe fall-back interested could refer to RC2 page here:
+> > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_foss-2Dfor-2Dsynopsys-2Ddwc-2Darc-2Dprocessors_toolchain_releases_tag_arc-2D2017.0
+> > 3-2Drc2&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=NwE8728l_IQUKFg_WQ1Yxh-
+> > LEQ9zHJLRTmkZwaKPAeY&s=3N44QqVhn9-WVdCqm5Xrlr8VbHVWa5yZuwy7UJa5-0k&e=?
+> > 
+> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> > ?package/binutils/Config.in.host????????????????????|??2 +-
+> > ?.../0300-PATCH-ld-makefile.patch???????????????????|??0
+> > ?.../0301-PATCH-check-ldrunpath-length.patch????????|??0
+> > ?.../0500-add-sysroot-fix-from-bug-3049.patch???????|??0
+> > ?.../0600-poison-system-directories.patch???????????|??0
+> > ?package/binutils/binutils.hash?????????????????????|??2 +-
+> > ?package/binutils/binutils.mk???????????????????????|??2 +-
+> > ?package/gcc/Config.in.host?????????????????????????|??2 +-
+> > ?...-return-false-for-any-PIC-related-unspecs.patch | 58 ----------------------
+> > ?.../301-missing-execinfo_h.patch???????????????????|??0
+> > ?.../860-cilk-wchar.patch???????????????????????????|??0
+> > ?.../940-uclinux-enable-threads.patch???????????????|??0
+> > ?package/gcc/gcc.hash???????????????????????????????|??2 +-
+> > ?package/gdb/Config.in.host?????????????????????????|??2 +-
+> > ?package/gdb/gdb.hash???????????????????????????????|??2 +-
+> > ?15 files changed, 7 insertions(+), 65 deletions(-)
+> > ?rename package/binutils/{arc-2017.03-rc2 => arc-2017.03}/0300-PATCH-ld-makefile.patch (100%)
+> > ?rename package/binutils/{arc-2017.03-rc2 => arc-2017.03}/0301-PATCH-check-ldrunpath-length.patch (100%)
+> > ?rename package/binutils/{arc-2017.03-rc2 => arc-2017.03}/0500-add-sysroot-fix-from-bug-3049.patch (100%)
+> > ?rename package/binutils/{arc-2017.03-rc2 => arc-2017.03}/0600-poison-system-directories.patch (100%)
+> > ?delete mode 100644 package/gcc/arc-2017.03-rc2/0001-FIX-PIC-return-false-for-any-PIC-related-unspecs.patch
+> > ?rename package/gcc/{arc-2017.03-rc2 => arc-2017.03}/301-missing-execinfo_h.patch (100%)
+> > ?rename package/gcc/{arc-2017.03-rc2 => arc-2017.03}/860-cilk-wchar.patch (100%)
+> > ?rename package/gcc/{arc-2017.03-rc2 => arc-2017.03}/940-uclinux-enable-threads.patch (100%)
+> 
+> It's normally way too late for version bumps, but since this is a bump
+> from a -rc2 version to the final version, and limited to ARC stuff,
+> I've applied it to master. I really hope it won't cause new build
+> failures!
 
-$ unzip -l ../dl/bootstrap-3.3.1-dist.zip
-Archive:  ../dl/bootstrap-3.3.1-dist.zip
-  Length      Date    Time    Name
----------  ---------- -----   ----
-        0  2014-11-12 18:03   dist/
-        0  2014-11-12 18:03   dist/css/
-[...]
+That's well understood indeed.
+But that was the whole point of keeping up with RCs of ARC tools in
+Buildroot's RCs so we can finally bump to the release.
 
-$ unzip -l ../dl/bootstrap-3.3.7-dist.zip
-Archive:  ../dl/bootstrap-3.3.7-dist.zip
-  Length      Date    Time    Name
----------  ---------- -----   ----
-        0  2016-07-25 15:53   bootstrap-3.3.7-dist/css/
-[...]
+Just for the record below are changes in between rc2 and final release.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: better fix for the EXTRACT_CMDS, which consists in removing the
-dist/ sub-directory.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/bootstrap/bootstrap.hash |  2 +-
- package/bootstrap/bootstrap.mk   | 12 +++++++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+GCC:
+e406b240f26e - [FIX] Typo (10 days ago) <claziss>
+139fed9d29ab - [FIX] PIC: return false for any PIC related??unspecs (10 days ago) <Claudiu Zissulescu>
+fd593a115f30 - Revert "Changed filename for the expected dynamic loader for glibc." (2 weeks ago) <Vineet Gupta>
+566195a06808 - Small fix to unwinding in ARC700. (2 weeks ago) <Cupertino Miranda>
+7d380d8350a6 - [ARC] Update sleep builtin. (2 weeks ago) <claziss>
 
-diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
-index acb06b4..abc09da 100644
---- a/package/bootstrap/bootstrap.hash
-+++ b/package/bootstrap/bootstrap.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  95ca4a02aff37570660c81a87065b53ebc281c33fa86b91a6a7a650eee10678f  bootstrap-3.3.1-dist.zip
-+sha256 f498a8ff2dd007e29c2074f5e4b01a9a01775c3ff3aeaf6906ea503bc5791b7b  bootstrap-3.3.7-dist.zip
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 17752ce..33161f5 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
-@@ -4,23 +4,25 @@
- #
- ################################################################################
- 
--BOOTSTRAP_VERSION = 3.3.1
-+BOOTSTRAP_VERSION = 3.3.7
- BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
- BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
- 
- define BOOTSTRAP_EXTRACT_CMDS
- 	$(UNZIP) $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
-+	mv $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist/* $(@D)/
-+	rmdir $(@D)/bootstrap-$(BOOTSTRAP_VERSION)-dist
- endef
- 
- define BOOTSTRAP_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/dist/css/bootstrap-theme.min.css \
-+	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap-theme.min.css \
- 		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap-theme.min.css
--	$(INSTALL) -m 0644 -D $(@D)/dist/css/bootstrap.min.css \
-+	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css \
- 		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css
--	$(INSTALL) -m 0644 -D $(@D)/dist/js/bootstrap.min.js \
-+	$(INSTALL) -m 0644 -D $(@D)/js/bootstrap.min.js \
- 		$(TARGET_DIR)/var/www/bootstrap/js/bootstrap.min.js
--	cp -r $(@D)/dist/fonts $(TARGET_DIR)/var/www/bootstrap/
-+	cp -r $(@D)/fonts $(TARGET_DIR)/var/www/bootstrap/
- endef
- 
- $(eval $(generic-package))
+Binutils:
+bf4076d02bdd - [FIX] revert jli: don't check for argument alignment (7 days ago) <claziss>
+7ed115c021fb - [ARC] Update MAX_INSN_FLGS. (7 days ago) <claziss>
+ed389633c649 - [ARC] Reformat error messages. (7 days ago) <claziss>
+f27d6d99f566 - [ARC] Add ldi_base and ei_base aux regs (13 days ago) <claziss>
+e02bf1fe7f06 - [JLI][FIX] Add test ld/testsuite/ld-arc/jli-overflow. Correct jli reloc (13 days ago) <claziss>
+
+Hopefully these fixes won't cause more pain :)
+
+-Alexey
