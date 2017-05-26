@@ -1,50 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 08:31:40 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-25
-Message-ID: <20170526063140.E17A320E27@mail.free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 26 May 2017 10:32:27 +0100
+Subject: [Buildroot] [PATCH v2 next] sqlite: bump version to 3190200 (3.19.2)
+Message-ID: <20170526093227.48974-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Bump to 3.19.2 instead of 3.19.1
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Build statistics for 2017-05-25
-================================
-
-      successes : 281
-       failures : 9  
-       timeouts : 3  
-          TOTAL : 293
-
-Classification of failures by reason
-====================================
-
-                  ffmpeg-3.3.1 | 3 
-                 mplayer-1.3.0 | 3 
-                   zmqpp-4.1.2 | 2 
-       host-erlang-rebar-2.6.4 | 1 
-make[1]: *** wait: No child... | 1 
-make[2]: *** [all-recursive... | 1 
-                 sngrep-v1.4.2 | 1 
-
-
-Detail of failures
-===================
-
-        m68k |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/bcaaf71311899861c257078e347a19ff0676f374 |     
-         arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/c017b85802c10700d92a38d582327781a34ab677 |     
-         arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/ea76e7a1b9b0eeae68b0a2e5ec5d6a672fe65aa1 |     
-      x86_64 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/bb08a31261ad72ab29bd4eab3408b715ecc3aa10 |     
-      xtensa | make[1]: *** wait: No child... | TIM | http://autobuild.buildroot.net/results/973d51afb82fade38cc524bd52b89e89d2a5277b |     
-microblazeel | make[2]: *** [all-recursive... | TIM | http://autobuild.buildroot.net/results/79b4c881ab8764755b80bf96c2220fab8b717849 |     
- powerpc64le |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/7995d7996c95c9f3e697963186ac54355b38f524 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/0fc8082f7a217b32feac73bf70e726bb5a6f2688 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/2df7e601dc5ab435994ffc59c7bf334185606806 |     
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/f0dfad2a040cf3e21d4ba2c1799ac17db57518ff |     
-        or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/bd08c1f748ff6ec8f32b8d1e86775f46274c8ac8 |     
-        or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/54114b7ec9cd9c58ee9f7927d31e5bc25fdaf65c |     
-
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 78748b003..093ec6d64 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 74559194e1dd9b9d577cac001c0e9d370856671b  sqlite-autoconf-3180000.tar.gz
++sha1 597735a7039ebb105ea36366783ff0a3177f9131  sqlite-autoconf-3190200.tar.gz
+ # Calculated based on the hash above
+-sha256 a4e485ad3a16e054765baf6371826b5000beed07e626510896069c0bf013874c  sqlite-autoconf-3170000.tar.gz
++sha256 ca5361fb01cc3ad63d6fd4eb2cb0b6398e629595896d3558f7e121d37dac2ffc  sqlite-autoconf-3190200.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index af4c571df..17b4d2dd3 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3180000
++SQLITE_VERSION = 3190200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2017
+ SQLITE_LICENSE = Public domain
 -- 
-http://autobuild.buildroot.net
+2.13.0
