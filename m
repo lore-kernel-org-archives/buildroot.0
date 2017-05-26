@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:59:33 +0200
-Subject: [Buildroot] [git commit branch/next] package/diffutils: bump
-	version to 3.6
-Message-ID: <20170526130121.BB4A982A0B@busybox.osuosl.org>
+Date: Fri, 26 May 2017 14:59:50 +0200
+Subject: [Buildroot] [git commit branch/next] package/enlightenment: bump to
+	0.21.8
+Message-ID: <20170526130121.DBF7A82A0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f29a79816cf18cca1c931bfab3777434efcae8e6
+commit: https://git.buildroot.net/buildroot/commit/?id=ea91455700e16afa001dc8503494d559e343fc48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+See https://www.enlightenment.org/news/e0.21.8_release
+
+"We are aware of a issue when running su/sudo under kernel 4.11 the fix
+for this issue will be in an upcoming kernel release rather then here
+see (https://phab.enlightenment.org/T5470)"
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/diffutils/diffutils.hash | 2 +-
- package/diffutils/diffutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/diffutils/diffutils.hash b/package/diffutils/diffutils.hash
-index 7e99f1f..5506ab2 100644
---- a/package/diffutils/diffutils.hash
-+++ b/package/diffutils/diffutils.hash
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index e69c7ff..0cb433f 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	dad398ccd5b9faca6b0ab219a036453f62a602a56203ac659b43e889bec35533	diffutils-3.5.tar.xz
-+sha256 d621e8bdd4b573918c8145f7ae61817d1be9deb4c8d2328a65cea8e11d783bd6  diffutils-3.6.tar.xz
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index dee3fac..4662e2b 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
+-# From https://www.enlightenment.org/news/e-0.21.7-release
+-sha256	7643f7fd4aadaca44c886f21063987624c50d4c50266e87600e902a59b7c76f7 	enlightenment-0.21.7.tar.xz
++# From https://www.enlightenment.org/news/e0.21.8_release
++sha256	fac21c5fb9cab89fb717b3577f7980fd0644ff1e94b144a55ba841116e8c5232 	enlightenment-0.21.8.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 7bfc25b..b0c261a 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DIFFUTILS_VERSION = 3.5
-+DIFFUTILS_VERSION = 3.6
- DIFFUTILS_SOURCE = diffutils-$(DIFFUTILS_VERSION).tar.xz
- DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
- DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+-ENLIGHTENMENT_VERSION = 0.21.7
++ENLIGHTENMENT_VERSION = 0.21.8
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause
