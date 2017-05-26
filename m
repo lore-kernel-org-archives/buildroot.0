@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:13:06 +0200
-Subject: [Buildroot] [git commit] package/efl: bump to 1.19.1
-Message-ID: <20170601202855.3E23A807D3@busybox.osuosl.org>
+Date: Fri, 26 May 2017 14:59:50 +0200
+Subject: [Buildroot] [git commit] package/enlightenment: bump to 0.21.8
+Message-ID: <20170601202856.79859820E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2e5583f10ed8ad64b8c94bfba91f0402ac1d7f9
+commit: https://git.buildroot.net/buildroot/commit/?id=ea91455700e16afa001dc8503494d559e343fc48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See:
-https://www.enlightenment.org/news/efl-1.19.1
+See https://www.enlightenment.org/news/e0.21.8_release
+
+"We are aware of a issue when running su/sudo under kernel 4.11 the fix
+for this issue will be in an upcoming kernel release rather then here
+see (https://phab.enlightenment.org/T5470)"
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 39e0f93..eefcbef 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index e69c7ff..0cb433f 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
 @@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.19.0.tar.xz.sha256
--sha256	a4e0341081778007db414f8cd4e3b77b9d5398870292cab67e6b40cc1445eadf	efl-1.19.0.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.19.1.tar.xz.sha256
-+sha256	8c69eaf5f3489245dff6112394bf3685fb9d6fd3915035fe022f27c554e6cd3a	efl-1.19.1.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 04e15f5..766b359 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
+-# From https://www.enlightenment.org/news/e-0.21.7-release
+-sha256	7643f7fd4aadaca44c886f21063987624c50d4c50266e87600e902a59b7c76f7 	enlightenment-0.21.7.tar.xz
++# From https://www.enlightenment.org/news/e0.21.8_release
++sha256	fac21c5fb9cab89fb717b3577f7980fd0644ff1e94b144a55ba841116e8c5232 	enlightenment-0.21.8.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 7bfc25b..b0c261a 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFL_VERSION = 1.19.0
-+EFL_VERSION = 1.19.1
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
+-ENLIGHTENMENT_VERSION = 0.21.7
++ENLIGHTENMENT_VERSION = 0.21.8
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause
