@@ -1,31 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 15:12:41 +0200
-Subject: [Buildroot] [PATCH/next] package/tvheadend: bump version
-In-Reply-To: <20170525165940.3929-1-bernd.kuhls@t-online.de>
-References: <20170525165940.3929-1-bernd.kuhls@t-online.de>
-Message-ID: <20170526151241.6797e978@free-electrons.com>
+Date: Fri, 26 May 2017 15:13:19 +0200
+Subject: [Buildroot] [git commit branch/next] package/gcc: switch to gcc 6.x
+	as the default
+Message-ID: <20170526131331.DFF10822C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6cda724efb20682bb98e6d738e5f7c909415ae07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 25 May 2017 18:59:40 +0200, Bernd Kuhls wrote:
-> Added optional pcre support implemented upstream by
-> https://github.com/tvheadend/tvheadend/commit/74a1c698c2c13bc9bfa6221aaf6b255e0e270e4c
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tvheadend/tvheadend.hash | 2 +-
->  package/tvheadend/tvheadend.mk   | 9 ++++++++-
->  2 files changed, 9 insertions(+), 2 deletions(-)
+Even if gcc 5 is still maintained for some time (gcc 5.5 is pending),
+switch to gcc 6.x since it has been released since 2016-04-27 and
+gcc 7.x is available since 2017-05-02.
 
-Applied to next, thanks.
+We have been having toolchains in the autobuilders with gcc
+6.x for a while, so the vast majority of the problems should have
+already been solved.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 61b0582..4c1d64c 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_OR1K if BR2_or1k
+-	default BR2_GCC_VERSION_5_X
++	default BR2_GCC_VERSION_6_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+ 
