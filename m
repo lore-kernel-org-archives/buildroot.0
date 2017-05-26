@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:56:34 +0200
-Subject: [Buildroot] [PATCH v2 next] sqlite: bump version to 3190200
- (3.19.2)
-In-Reply-To: <20170526093227.48974-1-Vincent.Riera@imgtec.com>
-References: <20170526093227.48974-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170526145634.23f8eb2b@free-electrons.com>
+Date: Fri, 26 May 2017 14:57:21 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/dstat: bump version to
+ 0.7.3
+In-Reply-To: <20170525231207.22360-1-bernd.kuhls@t-online.de>
+References: <20170525231207.22360-1-bernd.kuhls@t-online.de>
+Message-ID: <20170526145721.056e3ee8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 26 May 2017 10:32:27 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Fri, 26 May 2017 01:12:06 +0200, Bernd Kuhls wrote:
+> Upstream moved tarballs to github according to
+> http://dag.wiee.rs/home-made/dstat/
+> 
+> "or grab the latest 0.7.3 tarball at:
+>  https://github.com/dagwieers/dstat/archive/0.7.3.tar.gz"
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> Changes v1 -> v2:
->  - Bump to 3.19.2 instead of 3.19.1
-> ---
->  package/sqlite/sqlite.hash | 4 ++--
->  package/sqlite/sqlite.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/dstat/dstat.hash | 2 +-
+>  package/dstat/dstat.mk   | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 
 Applied to next, thanks.
 
