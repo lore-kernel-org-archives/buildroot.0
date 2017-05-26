@@ -1,32 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 15:14:14 +0200
-Subject: [Buildroot] [for-next 3/3] package/gcc: remove gcc 4.9
-In-Reply-To: <20170525183457.12169-3-romain.naour@gmail.com>
-References: <20170525183457.12169-1-romain.naour@gmail.com>
- <20170525183457.12169-3-romain.naour@gmail.com>
-Message-ID: <20170526151414.11f2d47a@free-electrons.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 26 May 2017 08:14:20 -0500
+Subject: [Buildroot] [PATCH v3 1/2] package/avrdude: enable linuxgpio by
+	default
+Message-ID: <1495804461-33097-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Sam Voss <samuel.voss@rockwellcollins.com>
 
-On Thu, 25 May 2017 20:34:57 +0200, Romain Naour wrote:
-> We're already using 6.x as default, and have 5.x on the lower side
-> together with 7.x (7.1) on the higher side.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Dagg Stompler <daggs@gmx.com>
+Enable linux sysfs gpio framework cfg opt.
 
-I'll wait a little bit for additional feedback on this one. If nobody
-complains in the next few days, I'm going to apply it.
+Signed-off-by: Sam Voss <samuel.voss@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
 
-Thanks!
+v2 -> v3
+ - Set linuxgpio to default (Suggested by Baruch)
 
-Thomas
+v1 -> v2
+ - upstream accepted linux gpio fix, removed patch
+---
+ package/avrdude/avrdude.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index f914ed7..c379707 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -12,6 +12,7 @@ AVRDUDE_SUBDIR = avrdude
+ # Sources coming from git, without generated configure and Makefile.in
+ # files.
+ AVRDUDE_AUTORECONF = YES
++AVRDUDE_CONF_OPTS = --enable-linuxgpio
+ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+ 	host-flex host-bison
+ AVRDUDE_LICENSE = GPL-2.0+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
