@@ -1,51 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:57:19 +0200
-Subject: [Buildroot] [git commit branch/next] package/dstat: bump version to
-	0.7.3
-Message-ID: <20170526125911.AE4EF8274E@busybox.osuosl.org>
+Date: Fri, 26 May 2017 14:59:39 +0200
+Subject: [Buildroot] [git commit branch/next] package/dialog: bump version
+	to 1.3-20170509
+Message-ID: <20170526130121.C6B4982A0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49867a4325d2c59a86e647c8461dad316f539b21
+commit: https://git.buildroot.net/buildroot/commit/?id=371ded7ab2a82c609f538b8a24dab02923140574
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Upstream moved tarballs to github according to
-http://dag.wiee.rs/home-made/dstat/
-
-"or grab the latest 0.7.3 tarball at:
- https://github.com/dagwieers/dstat/archive/0.7.3.tar.gz"
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dstat/dstat.hash | 2 +-
- package/dstat/dstat.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/dialog/dialog.hash | 2 +-
+ package/dialog/dialog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dstat/dstat.hash b/package/dstat/dstat.hash
-index f701561..a4dbcc9 100644
---- a/package/dstat/dstat.hash
-+++ b/package/dstat/dstat.hash
+diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
+index 75a7918..ac42784 100644
+--- a/package/dialog/dialog.hash
++++ b/package/dialog/dialog.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  34a986d9d7c028bd9dcb6b2ef1c740f7220de5c9cf976870a2b62aca23b33bae  dstat-0.7.2.tar.bz2
-+sha256 46e63821857b69fbc60cb2c7d893ccdd6f31cd9ef24b8bb0b68951e1c7374898  dstat-0.7.3.tar.gz
-diff --git a/package/dstat/dstat.mk b/package/dstat/dstat.mk
-index b535328..9c4b445 100644
---- a/package/dstat/dstat.mk
-+++ b/package/dstat/dstat.mk
-@@ -4,9 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	1d98ec7cc81f11f9019fa0b90f1afdaa86579cae1ce8869a6fd61deb9d4b887a	dialog-1.2-20150125.tgz
++sha256 2ff1ba74c632b9d13a0d0d2c942295dd4e8909694eeeded7908a467d0bcd4756  dialog-1.3-20170509.tgz
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index f1c0e4c..61ec265 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DSTAT_VERSION = 0.7.2
--DSTAT_SOURCE = dstat-$(DSTAT_VERSION).tar.bz2
--DSTAT_SITE = http://dag.wieers.com/home-made/dstat
-+DSTAT_VERSION = 0.7.3
-+DSTAT_SITE = $(call github,dagwieers,dstat,$(DSTAT_VERSION))
- DSTAT_LICENSE = GPL-2.0
- DSTAT_LICENSE_FILES = COPYING
- 
+-DIALOG_VERSION = 1.2-20150125
++DIALOG_VERSION = 1.3-20170509
+ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+ DIALOG_SITE = ftp://invisible-island.net/dialog
+ DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
