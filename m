@@ -1,58 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 15:11:29 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: bump version
-Message-ID: <20170601202856.89D2682A3B@busybox.osuosl.org>
+Date: Fri, 26 May 2017 15:13:02 +0200
+Subject: [Buildroot] [git commit] package/gcc: remove old hashes (gcc 4.5,
+	4.7, 4.8)
+Message-ID: <20170601202856.9AFDF82863@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63fd7ac7e26c3eb8ab26998a129b49e3e0643501
+commit: https://git.buildroot.net/buildroot/commit/?id=4532dbc2ff7e200d97617ccb3a1fa1ceaed59ed4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added optional pcre support implemented upstream by
-https://github.com/tvheadend/tvheadend/commit/74a1c698c2c13bc9bfa6221aaf6b255e0e270e4c
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ package/gcc/gcc.hash | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index cfd9c01..3154b32 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 94efc13b6c80c204dc4e3cf2ac79632f3c2cafe9cad4ee8948a71be6e4569a16  tvheadend-5cbaac172b4997fbf89667d79ac6e03b46460060.tar.gz
-+sha256 1994e379c798b118243e70f7fa38064a9b288d6e38b9ced0e8ad465f5d2e8fd9  tvheadend-54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 5ac44da..d66c0a6 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 5cbaac172b4997fbf89667d79ac6e03b46460060
-+TVHEADEND_VERSION = 54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
-@@ -57,6 +57,13 @@ TVHEADEND_DEPENDENCIES += liburiparser
- TVHEADEND_CFLAGS += $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)
- endif
- 
-+ifeq ($(BR2_PACKAGE_PCRE),y)
-+TVHEADEND_DEPENDENCIES += pcre
-+TVHEADEND_CONF_OPTS += --enable-pcre
-+else
-+TVHEADEND_CONF_OPTS += --disable-pcre
-+endif
-+
- TVHEADEND_DEPENDENCIES += dtv-scan-tables
- 
- # The tvheadend build system expects the transponder data to be present inside
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 7255d12..7a37bb6 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -1,9 +1,3 @@
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.5.4/sha512.sum
+-sha512  78696b287d46aacd6f150920da376ea32f58ad9f0dafd2d3b7fa6dbdd8dd7afe659108d1dfaa5807617fc5248719f50b39c37ade0173ea5b9fec2091f4656115  gcc-4.5.4.tar.bz2
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.7.4/sha512.sum
+-sha512  dfcb737073191e628231031a3571ec77ee760a59377630f4a6e4fdfa66f9ddad39fde47e3f0f227eb43cdf90e0d34cde5abdc9ac892c1e111a911062a66c9189  gcc-4.7.4.tar.bz2
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.5/sha512.sum
+-sha512  47fdfeca0c0a624cdec9c4ae47137d056c918d5c386d4b96985bb3c8172aba377cb66cbcc30e80832fd244a7d98f562c20198056915c70cfef0977545073a8ea  gcc-4.8.5.tar.bz2
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.9.4/sha512.sum
+ sha512  93abb78e16277454f41a8e9810f41f66c0fdffdc539a762ff6b67d3037f78db971378683fd2ebf707d1d51c059fad2161fe42d110c330027f40214b7db0f3efe  gcc-4.9.4.tar.bz2
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-5.4.0/sha512.sum
