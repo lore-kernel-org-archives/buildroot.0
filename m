@@ -1,49 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:59:50 +0200
-Subject: [Buildroot] [git commit branch/next] package/enlightenment: bump to
-	0.21.8
-Message-ID: <20170526130121.DBF7A82A0B@busybox.osuosl.org>
+Date: Fri, 26 May 2017 14:59:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/dejavu: bump version
+	to 2.37
+Message-ID: <20170526130121.D2B3682A0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea91455700e16afa001dc8503494d559e343fc48
+commit: https://git.buildroot.net/buildroot/commit/?id=966afab2176e015a23b10cc7b7d91f757cf2db02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See https://www.enlightenment.org/news/e0.21.8_release
+Changed _SITE to https, fixed broken hash url.
 
-"We are aware of a issue when running su/sudo under kernel 4.11 the fix
-for this issue will be in an upcoming kernel release rather then here
-see (https://phab.enlightenment.org/T5470)"
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dejavu/dejavu.hash | 4 ++--
+ package/dejavu/dejavu.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index e69c7ff..0cb433f 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
+diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
+index 37868c1..db7365a 100644
+--- a/package/dejavu/dejavu.hash
++++ b/package/dejavu/dejavu.hash
 @@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e-0.21.7-release
--sha256	7643f7fd4aadaca44c886f21063987624c50d4c50266e87600e902a59b7c76f7 	enlightenment-0.21.7.tar.xz
-+# From https://www.enlightenment.org/news/e0.21.8_release
-+sha256	fac21c5fb9cab89fb717b3577f7980fd0644ff1e94b144a55ba841116e8c5232 	enlightenment-0.21.8.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 7bfc25b..b0c261a 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
+-# From http://dejavu-fonts.org/wiki/Download
+-sha256	f6d7965586101ff3a8a5c3ec503e082bb6a9604ff53413e10702e5917c194d88	dejavu-fonts-ttf-2.35.tar.bz2
++# From https://dejavu-fonts.github.io/Download.html
++sha256 fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7  dejavu-fonts-ttf-2.37.tar.bz2
+diff --git a/package/dejavu/dejavu.mk b/package/dejavu/dejavu.mk
+index 3dbcc94..9b57f09 100644
+--- a/package/dejavu/dejavu.mk
++++ b/package/dejavu/dejavu.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ENLIGHTENMENT_VERSION = 0.21.7
-+ENLIGHTENMENT_VERSION = 0.21.8
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2-Clause
+-DEJAVU_VERSION = 2.35
+-DEJAVU_SITE = http://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
++DEJAVU_VERSION = 2.37
++DEJAVU_SITE = https://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
+ DEJAVU_SOURCE = dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
+ DEJAVU_LICENSE_FILES = LICENSE
+ 
