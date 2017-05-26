@@ -1,42 +1,35 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 26 May 2017 10:46:28 -0400
-Subject: [Buildroot] [V2 1/1] Developers: Add selinux packages under Adam
-	Duskett
-Message-ID: <20170526144628.27137-1-aduskett@codeblue.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 26 May 2017 16:56:38 +0200
+Subject: [Buildroot] [PATCH next 1/2] mesa3d: bump version to 17.1.1
+References: <20170526131607.34436-1-Vincent.Riera@imgtec.com>
+Message-ID: <6aslvdxn3j.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
-Changes
-  v1 -> v2: Fix indentation (Requested by Thomas Petazzoni)
- DEVELOPERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Am Fri, 26 May 2017 14:16:06 +0100 schrieb Vicente Olivert Riera:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4d43358..083d84f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -30,9 +30,17 @@ N:	Abhilash Tuse <abhilash.tuse@imgtec.com>
- F:	package/gstreamer1/gst1-rtsp-server/
- 
- N:	Adam Duskett <aduskett@gmail.com>
-+F:	package/audit/
-+F:	package/checkpolicy
- F:	package/gstreamer1/gst1-vaapi/
-+F:	package/libselinux/
-+F:	package/libsemanage/
-+F:	package/libsepol/
- F:	package/nginx-naxsi/
-+F:	package/policycoreutils/
- F:	package/python-mutagen/
-+F:	package/sepolgen/
-+F:	package/setools
- F:	package/sngrep/
- 
- N:	Alex Suykov <alex.suykov@gmail.com>
--- 
-2.9.4
+> Patch 0005 tweaked to apply on this release.
+> 
+> Patch 0006 already included in this release:
+>   https://cgit.freedesktop.org/mesa/mesa/commit/?
+id=e75001811e3b66986b4ede165a0fdde703d4f05b
+> 
+> zlib is now a mandatory dependency.
+
+Hi,
+
+the Vulkan Intel driver does not depend on the i965 dri driver anymore:
+
+https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?
+h=17.1&id=9aebdb5d082ec640fe8a14704201952bddb50a88
+
+So please add this change as well: https://github.com/bkuhls/buildroot/
+commit/8e880784e52728e6f6bc066d8a2dae5408b593d5#diff-30324b744ed4e90dac736d90b54ad0dfL156
+
+Did you send your patches by using the get-developers script? I am asking 
+because I did not receive your patches in CC as maintainer for mesa3d.
+
+Regards, Bernd
