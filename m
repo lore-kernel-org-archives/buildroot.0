@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:29:58 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/dstat: needs python
-In-Reply-To: <20170525231207.22360-2-bernd.kuhls@t-online.de>
-References: <20170525231207.22360-1-bernd.kuhls@t-online.de>
- <20170525231207.22360-2-bernd.kuhls@t-online.de>
-Message-ID: <20170526142958.0f422ff7@free-electrons.com>
+Date: Fri, 26 May 2017 14:55:46 +0200
+Subject: [Buildroot] [PATCH 1/1] Developers: Add selinux packages under
+ Adam Duskett
+In-Reply-To: <20170526121046.20967-1-aduskett@codeblue.com>
+References: <20170526121046.20967-1-aduskett@codeblue.com>
+Message-ID: <20170526145546.49e60f43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 26 May 2017 01:12:07 +0200, Bernd Kuhls wrote:
-> The package contains a python script, so having python compiled for
-> target is needed for the package to work.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Fri, 26 May 2017 08:10:46 -0400, Adam Duskett wrote:
 
-Python is just a runtime dependency, dstat builds just fine *before*
-python. So the current situation is correct. The only thing that could
-be improved is the addition of a:
+>  N:	Adam Duskett <aduskett@gmail.com>
+> +F:  package/audit/
+> +F:  package/checkpolicy
+>  F:	package/gstreamer1/gst1-vaapi/
+> +F:  package/libselinux/
+> +F:  package/libsemanage/
+> +F:  package/libsepol/
+>  F:	package/nginx-naxsi/
+> +F:  package/policycoreutils/
+>  F:	package/python-mutagen/
+> +F:  package/sepolgen/
+> +F:  package/setools
+>  F:	package/sngrep/
 
-	# runtime dependency
-
-comment in the Config.in, above the "select BR2_PACKAGE_PYTHON".
-
-Thanks!
+Broken indentation.
 
 Thomas
 -- 
