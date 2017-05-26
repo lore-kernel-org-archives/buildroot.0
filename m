@@ -1,47 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:59:43 +0200
-Subject: [Buildroot] [git commit branch/next] package/dejavu: bump version
-	to 2.37
-Message-ID: <20170526130121.D2B3682A0B@busybox.osuosl.org>
+Date: Fri, 26 May 2017 15:10:02 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 11}.x series
+Message-ID: <20170526131045.B0EFD82975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=966afab2176e015a23b10cc7b7d91f757cf2db02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Changed _SITE to https, fixed broken hash url.
+commit: https://git.buildroot.net/buildroot/commit/?id=f19a4433d4560b087b4890b17e2baaa21b3e6871
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dejavu/dejavu.hash | 4 ++--
- package/dejavu/dejavu.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
-index 37868c1..db7365a 100644
---- a/package/dejavu/dejavu.hash
-+++ b/package/dejavu/dejavu.hash
-@@ -1,2 +1,2 @@
--# From http://dejavu-fonts.org/wiki/Download
--sha256	f6d7965586101ff3a8a5c3ec503e082bb6a9604ff53413e10702e5917c194d88	dejavu-fonts-ttf-2.35.tar.bz2
-+# From https://dejavu-fonts.github.io/Download.html
-+sha256 fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7  dejavu-fonts-ttf-2.37.tar.bz2
-diff --git a/package/dejavu/dejavu.mk b/package/dejavu/dejavu.mk
-index 3dbcc94..9b57f09 100644
---- a/package/dejavu/dejavu.mk
-+++ b/package/dejavu/dejavu.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DEJAVU_VERSION = 2.35
--DEJAVU_SITE = http://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
-+DEJAVU_VERSION = 2.37
-+DEJAVU_SITE = https://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
- DEJAVU_SOURCE = dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
- DEJAVU_LICENSE_FILES = LICENSE
- 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0c53416..5a0cd03 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -227,8 +227,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.69"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.29"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.70"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.30"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+-	default "4.11.2"	if BR2_KERNEL_HEADERS_4_11
++	default "4.11.3"	if BR2_KERNEL_HEADERS_4_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
