@@ -1,50 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:57:19 +0200
-Subject: [Buildroot] [git commit] package/dstat: bump version to 0.7.3
-Message-ID: <20170601202856.017EF8261C@busybox.osuosl.org>
+Date: Fri, 26 May 2017 15:11:29 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
+Message-ID: <20170601202856.89D2682A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49867a4325d2c59a86e647c8461dad316f539b21
+commit: https://git.buildroot.net/buildroot/commit/?id=63fd7ac7e26c3eb8ab26998a129b49e3e0643501
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream moved tarballs to github according to
-http://dag.wiee.rs/home-made/dstat/
-
-"or grab the latest 0.7.3 tarball at:
- https://github.com/dagwieers/dstat/archive/0.7.3.tar.gz"
+Added optional pcre support implemented upstream by
+https://github.com/tvheadend/tvheadend/commit/74a1c698c2c13bc9bfa6221aaf6b255e0e270e4c
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dstat/dstat.hash | 2 +-
- package/dstat/dstat.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/dstat/dstat.hash b/package/dstat/dstat.hash
-index f701561..a4dbcc9 100644
---- a/package/dstat/dstat.hash
-+++ b/package/dstat/dstat.hash
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index cfd9c01..3154b32 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  34a986d9d7c028bd9dcb6b2ef1c740f7220de5c9cf976870a2b62aca23b33bae  dstat-0.7.2.tar.bz2
-+sha256 46e63821857b69fbc60cb2c7d893ccdd6f31cd9ef24b8bb0b68951e1c7374898  dstat-0.7.3.tar.gz
-diff --git a/package/dstat/dstat.mk b/package/dstat/dstat.mk
-index b535328..9c4b445 100644
---- a/package/dstat/dstat.mk
-+++ b/package/dstat/dstat.mk
-@@ -4,9 +4,8 @@
+ # Locally computed
+-sha256 94efc13b6c80c204dc4e3cf2ac79632f3c2cafe9cad4ee8948a71be6e4569a16  tvheadend-5cbaac172b4997fbf89667d79ac6e03b46460060.tar.gz
++sha256 1994e379c798b118243e70f7fa38064a9b288d6e38b9ced0e8ad465f5d2e8fd9  tvheadend-54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 5ac44da..d66c0a6 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DSTAT_VERSION = 0.7.2
--DSTAT_SOURCE = dstat-$(DSTAT_VERSION).tar.bz2
--DSTAT_SITE = http://dag.wieers.com/home-made/dstat
-+DSTAT_VERSION = 0.7.3
-+DSTAT_SITE = $(call github,dagwieers,dstat,$(DSTAT_VERSION))
- DSTAT_LICENSE = GPL-2.0
- DSTAT_LICENSE_FILES = COPYING
+-TVHEADEND_VERSION = 5cbaac172b4997fbf89667d79ac6e03b46460060
++TVHEADEND_VERSION = 54e63e3f9af8fdc0d23f61f3cda7fa7b246c1732
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -57,6 +57,13 @@ TVHEADEND_DEPENDENCIES += liburiparser
+ TVHEADEND_CFLAGS += $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)
+ endif
  
++ifeq ($(BR2_PACKAGE_PCRE),y)
++TVHEADEND_DEPENDENCIES += pcre
++TVHEADEND_CONF_OPTS += --enable-pcre
++else
++TVHEADEND_CONF_OPTS += --disable-pcre
++endif
++
+ TVHEADEND_DEPENDENCIES += dtv-scan-tables
+ 
+ # The tvheadend build system expects the transponder data to be present inside
