@@ -1,47 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 May 2017 15:40:12 +0200
-Subject: [Buildroot] [git commit] python-pytablewriter: bump version to
-	0.19.8
-Message-ID: <20170601202855.CA51D807D3@busybox.osuosl.org>
+Date: Fri, 26 May 2017 14:58:13 +0200
+Subject: [Buildroot] [git commit] package/drbd-utils: bump version to 8.9.6
+Message-ID: <20170601202856.0FDDA807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f317023804642b691775b6791aa484ca9cd1f7fc
+commit: https://git.buildroot.net/buildroot/commit/?id=ff1649574649811e9ed4801e9d4d3a89320bf1b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
- package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/drbd-utils/drbd-utils.hash | 2 +-
+ package/drbd-utils/drbd-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index 570a7ab..533d21a 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
--md5 0f559538d2d40b1f59904b3bf6c66b35  pytablewriter-0.19.7.tar.gz
--sha256 09c841a08cfcecc51e7ffc1846c5200b9f25ef6a3ed82a1a33f714b1c0d9ef94  pytablewriter-0.19.7.tar.gz
-+md5 a2d3fe29adc7708ce986646f41c1d229  pytablewriter-0.19.8.tar.gz
-+sha256 b76cb1591504ed1dcdc14ccf383806f45e2027bd72d844e545c6a0d18552d46c  pytablewriter-0.19.8.tar.gz
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index 24a4d2e..ddbc17b 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index ebd13ef..0a38fdd 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	38929279d1bf549fd1ade4ce6773a6fe209db51bbb0efe7bf6d2b7871ba0afbc	drbd-utils-8.9.4.tar.gz
++sha256 297b77c9b3f88de2e7dae459234f2753ea4fc2805282b2d276e35cf51e292913  drbd-utils-8.9.6.tar.gz
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index f71a4ae..7bac28b 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYTABLEWRITER_VERSION = 0.19.7
-+PYTHON_PYTABLEWRITER_VERSION = 0.19.8
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/2d/5d/02baae4e38413608a77abec5f4ad9a665ba788802e84d7f84cfd9fbe49a2
-+PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/9b/89/1883fcd076f40034539f577b033636b20d9a7983a8ba99e9b8ef11b680b2
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
+-DRBD_UTILS_VERSION = 8.9.4
++DRBD_UTILS_VERSION = 8.9.6
+ DRBD_UTILS_SITE = http://oss.linbit.com/drbd
+ DRBD_UTILS_LICENSE = GPL-2.0+
+ DRBD_UTILS_LICENSE_FILES = COPYING
