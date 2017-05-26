@@ -1,40 +1,36 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 26 May 2017 08:10:46 -0400
-Subject: [Buildroot] [PATCH 1/1] Developers: Add selinux packages under Adam
-	Duskett
-Message-ID: <20170526121046.20967-1-aduskett@codeblue.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 May 2017 14:29:58 +0200
+Subject: [Buildroot] [PATCH/next 2/2] package/dstat: needs python
+In-Reply-To: <20170525231207.22360-2-bernd.kuhls@t-online.de>
+References: <20170525231207.22360-1-bernd.kuhls@t-online.de>
+ <20170525231207.22360-2-bernd.kuhls@t-online.de>
+Message-ID: <20170526142958.0f422ff7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
- DEVELOPERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Hello,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4d43358..083d84f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -30,9 +30,17 @@ N:	Abhilash Tuse <abhilash.tuse@imgtec.com>
- F:	package/gstreamer1/gst1-rtsp-server/
- 
- N:	Adam Duskett <aduskett@gmail.com>
-+F:  package/audit/
-+F:  package/checkpolicy
- F:	package/gstreamer1/gst1-vaapi/
-+F:  package/libselinux/
-+F:  package/libsemanage/
-+F:  package/libsepol/
- F:	package/nginx-naxsi/
-+F:  package/policycoreutils/
- F:	package/python-mutagen/
-+F:  package/sepolgen/
-+F:  package/setools
- F:	package/sngrep/
- 
- N:	Alex Suykov <alex.suykov@gmail.com>
+On Fri, 26 May 2017 01:12:07 +0200, Bernd Kuhls wrote:
+> The package contains a python script, so having python compiled for
+> target is needed for the package to work.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Python is just a runtime dependency, dstat builds just fine *before*
+python. So the current situation is correct. The only thing that could
+be improved is the addition of a:
+
+	# runtime dependency
+
+comment in the Config.in, above the "select BR2_PACKAGE_PYTHON".
+
+Thanks!
+
+Thomas
 -- 
-2.9.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
