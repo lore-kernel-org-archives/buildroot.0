@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 May 2017 17:23:11 +0200
-Subject: [Buildroot] [git commit branch/next] package/libv4l: bump version
-	to 1.12.5
-Message-ID: <20170527152323.9C5A182929@busybox.osuosl.org>
+Date: Fri, 26 May 2017 15:15:20 +0200
+Subject: [Buildroot] [git commit branch/next] file: bump version to 5.31
+Message-ID: <20170527152323.79F74826C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d6d3fff93ff71058e108a4e01337cb111dad6f3
+commit: https://git.buildroot.net/buildroot/commit/?id=e173bbe958ef7ef51400fe0c0d9b2deb7d89f7aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libv4l/libv4l.hash | 2 +-
- package/libv4l/libv4l.mk   | 2 +-
+ package/file/file.hash | 2 +-
+ package/file/file.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index c02fa0a..fc7bd1b 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 3fafff8..dcf96ec 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	ac9f8c88bfffa3a7e85c0edd04f7d3d54e6a30c214e79f2c6ecc6fbf57cb229d	v4l-utils-1.12.2.tar.bz2
-+sha256 0618162ddb0b57fe7c45407d4d66ed79e3a134cdbc9e72598d34e61d3359e20d  v4l-utils-1.12.5.tar.bz2
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 465f6cc..b139fa2 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
+-sha256 694c2432e5240187524c9e7cf1ec6acc77b47a0e19554d34c14773e43dbbf214  file-5.30.tar.gz
++sha256 09c588dac9cff4baa054f51a36141793bcf64926edc909594111ceae60fce4ee  file-5.31.tar.gz
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 1cd09c5..375c60c 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBV4L_VERSION = 1.12.2
-+LIBV4L_VERSION = 1.12.5
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
+-FILE_VERSION = 5.30
++FILE_VERSION = 5.31
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
