@@ -1,48 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 14:59:50 +0200
-Subject: [Buildroot] [git commit] package/enlightenment: bump to 0.21.8
-Message-ID: <20170601202856.79859820E4@busybox.osuosl.org>
+Date: Fri, 26 May 2017 15:15:24 +0200
+Subject: [Buildroot] [git commit] tinyalsa: bump version to 1.1.1
+Message-ID: <20170601202857.01ABA82863@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea91455700e16afa001dc8503494d559e343fc48
+commit: https://git.buildroot.net/buildroot/commit/?id=050b52515ba9b2c04cc14d648835e9385a55654f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://www.enlightenment.org/news/e0.21.8_release
-
-"We are aware of a issue when running su/sudo under kernel 4.11 the fix
-for this issue will be in an upcoming kernel release rather then here
-see (https://phab.enlightenment.org/T5470)"
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tinyalsa/0001-disable-doxygen-usage.patch | 21 ++++++++++++---------
+ package/tinyalsa/tinyalsa.hash                    |  2 +-
+ package/tinyalsa/tinyalsa.mk                      |  2 +-
+ 3 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index e69c7ff..0cb433f 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
+diff --git a/package/tinyalsa/0001-disable-doxygen-usage.patch b/package/tinyalsa/0001-disable-doxygen-usage.patch
+index 9c867a8..ed939fb 100644
+--- a/package/tinyalsa/0001-disable-doxygen-usage.patch
++++ b/package/tinyalsa/0001-disable-doxygen-usage.patch
+@@ -4,29 +4,32 @@ In order to avoid a dependency on doxygen on the build machine, this
+ patch adjusts the main Makefile to not build and install the
+ documentation.
+ 
++[Vincent: tweak patch for 1.1.1 version]
++
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 
+-Index: b/Makefile
+-===================================================================
+---- a/Makefile
+-+++ b/Makefile
+-@@ -13,13 +13,11 @@
++diff -rup a/Makefile b/Makefile
++--- a/Makefile	2017-05-24 05:23:57.000000000 +0100
+++++ b/Makefile	2017-05-25 10:35:20.781747053 +0100
++@@ -11,14 +11,12 @@ export MANDIR ?= $(PREFIX)/share/man
+  all:
+  	$(MAKE) -C src
+  	$(MAKE) -C utils
+ -	$(MAKE) -C doxygen
++ 	$(MAKE) -C examples
+  
+  .PHONY: clean
+  clean:
+  	$(MAKE) -C src clean
+  	$(MAKE) -C utils clean
+ -	$(MAKE) -C doxygen clean
++ 	$(MAKE) -C examples clean
+  
+  .PHONY: install
+- install:
+-@@ -27,5 +25,3 @@
+- 	cp -Ru include/tinyalsa $(DESTDIR)$(INCDIR)/
++@@ -30,5 +28,4 @@ install:
++ 	install include/tinyalsa/version.h $(DESTDIR)$(INCDIR)/
+  	$(MAKE) -C src install
+  	$(MAKE) -C utils install
+ -	$(MAKE) -C doxygen install
+--
++ 
+diff --git a/package/tinyalsa/tinyalsa.hash b/package/tinyalsa/tinyalsa.hash
+index b6bea47..f9be664 100644
+--- a/package/tinyalsa/tinyalsa.hash
++++ b/package/tinyalsa/tinyalsa.hash
 @@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e-0.21.7-release
--sha256	7643f7fd4aadaca44c886f21063987624c50d4c50266e87600e902a59b7c76f7 	enlightenment-0.21.7.tar.xz
-+# From https://www.enlightenment.org/news/e0.21.8_release
-+sha256	fac21c5fb9cab89fb717b3577f7980fd0644ff1e94b144a55ba841116e8c5232 	enlightenment-0.21.8.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 7bfc25b..b0c261a 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
+ # locally computed
+-sha256  93f4ca1e6345974167dc5577e8151a31fa2e6a628727a72d59e18db2289e7a1c  tinyalsa-1.1.0.tar.gz
++sha256 d92b438cea348ae316c4b2cbf367b4f01ed821a947e6a34d813624e9e3c936c1  tinyalsa-1.1.1.tar.gz
+diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
+index 064dfd0..bd9d9a0 100644
+--- a/package/tinyalsa/tinyalsa.mk
++++ b/package/tinyalsa/tinyalsa.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ENLIGHTENMENT_VERSION = 0.21.7
-+ENLIGHTENMENT_VERSION = 0.21.8
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2-Clause
+-TINYALSA_VERSION = 1.1.0
++TINYALSA_VERSION = 1.1.1
+ TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,$(TINYALSA_VERSION))
+ TINYALSA_LICENSE = BSD-3-Clause
+ TINYALSA_LICENSE_FILES = NOTICE
