@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 15:15:38 +0200
-Subject: [Buildroot] [PATCH next] tinyalsa: bump version to 1.1.1
-In-Reply-To: <20170525093826.54868-1-Vincent.Riera@imgtec.com>
-References: <20170525093826.54868-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170526151538.340cba37@free-electrons.com>
+Date: Fri, 26 May 2017 15:15:42 +0200
+Subject: [Buildroot] [PATCH next] file: bump version to 5.31
+In-Reply-To: <20170525093324.49860-1-Vincent.Riera@imgtec.com>
+References: <20170525093324.49860-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170526151542.2139dbdf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 25 May 2017 10:38:26 +0100, Vicente Olivert Riera wrote:
+On Thu, 25 May 2017 10:33:24 +0100, Vicente Olivert Riera wrote:
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/tinyalsa/0001-disable-doxygen-usage.patch | 21 ++++++++++++---------
->  package/tinyalsa/tinyalsa.hash                    |  2 +-
->  package/tinyalsa/tinyalsa.mk                      |  2 +-
->  3 files changed, 14 insertions(+), 11 deletions(-)
+>  package/file/file.hash | 2 +-
+>  package/file/file.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
