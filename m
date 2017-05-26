@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 15:13:44 +0200
-Subject: [Buildroot] [for-next 2/3] package/gcc: switch to gcc 6.x as
- the default
-In-Reply-To: <20170525183457.12169-2-romain.naour@gmail.com>
+Date: Fri, 26 May 2017 15:14:14 +0200
+Subject: [Buildroot] [for-next 3/3] package/gcc: remove gcc 4.9
+In-Reply-To: <20170525183457.12169-3-romain.naour@gmail.com>
 References: <20170525183457.12169-1-romain.naour@gmail.com>
- <20170525183457.12169-2-romain.naour@gmail.com>
-Message-ID: <20170526151344.2db79ce8@free-electrons.com>
+ <20170525183457.12169-3-romain.naour@gmail.com>
+Message-ID: <20170526151414.11f2d47a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 25 May 2017 20:34:56 +0200, Romain Naour wrote:
-> Even if gcc 5 is still maintained for some time (gcc 5.5 is pending),
-> switch to gcc 6.x since it has been released since 2016-04-27 and
-> gcc 7.x is available since 2017-05-02.
-> 
-> We have been having toolchains in the autobuilders with gcc
-> 6.x for a while, so the vast majority of the problems should have
-> already been solved.
+On Thu, 25 May 2017 20:34:57 +0200, Romain Naour wrote:
+> We're already using 6.x as default, and have 5.x on the lower side
+> together with 7.x (7.1) on the higher side.
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/gcc/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Cc: Dagg Stompler <daggs@gmx.com>
 
-Applied to next, thanks.
+I'll wait a little bit for additional feedback on this one. If nobody
+complains in the next few days, I'm going to apply it.
+
+Thanks!
 
 Thomas
 -- 
