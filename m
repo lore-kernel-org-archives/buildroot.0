@@ -1,51 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 May 2017 16:00:11 +0200
-Subject: [Buildroot] [git commit] package/cgroupfs-mount: bump version to 1.4
-Message-ID: <20170601202854.E7E9F807D3@busybox.osuosl.org>
+Date: Fri, 26 May 2017 14:57:19 +0200
+Subject: [Buildroot] [git commit] package/dstat: bump version to 0.7.3
+Message-ID: <20170601202856.017EF8261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aef0338042ee6521cdcd0003a674ec9b98a19a9
+commit: https://git.buildroot.net/buildroot/commit/?id=49867a4325d2c59a86e647c8461dad316f539b21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed empty line from cgroupfs-mount.mk as well.
+Upstream moved tarballs to github according to
+http://dag.wiee.rs/home-made/dstat/
+
+"or grab the latest 0.7.3 tarball at:
+ https://github.com/dagwieers/dstat/archive/0.7.3.tar.gz"
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cgroupfs-mount/cgroupfs-mount.hash | 2 +-
- package/cgroupfs-mount/cgroupfs-mount.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/dstat/dstat.hash | 2 +-
+ package/dstat/dstat.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/cgroupfs-mount/cgroupfs-mount.hash b/package/cgroupfs-mount/cgroupfs-mount.hash
-index 34f5167..926a031 100644
---- a/package/cgroupfs-mount/cgroupfs-mount.hash
-+++ b/package/cgroupfs-mount/cgroupfs-mount.hash
+diff --git a/package/dstat/dstat.hash b/package/dstat/dstat.hash
+index f701561..a4dbcc9 100644
+--- a/package/dstat/dstat.hash
++++ b/package/dstat/dstat.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	  fb32a8d9de491358d28f56ab76a56e1a611b90d5b6326910d3a69395fa539027	cgroupfs-mount-7285bf44402029394808339f69f4f293730fc2c6.tar.gz
-+sha256 d6c8aff7af59c7d0082ee3018c97f73b0421e81a49bb28ad9f66a36da5cd6ec7  cgroupfs-mount-1.4.tar.gz
-diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
-index 096c728..9a76799 100644
---- a/package/cgroupfs-mount/cgroupfs-mount.mk
-+++ b/package/cgroupfs-mount/cgroupfs-mount.mk
-@@ -4,7 +4,7 @@
+ # Locally computed:
+-sha256  34a986d9d7c028bd9dcb6b2ef1c740f7220de5c9cf976870a2b62aca23b33bae  dstat-0.7.2.tar.bz2
++sha256 46e63821857b69fbc60cb2c7d893ccdd6f31cd9ef24b8bb0b68951e1c7374898  dstat-0.7.3.tar.gz
+diff --git a/package/dstat/dstat.mk b/package/dstat/dstat.mk
+index b535328..9c4b445 100644
+--- a/package/dstat/dstat.mk
++++ b/package/dstat/dstat.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--CGROUPFS_MOUNT_VERSION = 7285bf44402029394808339f69f4f293730fc2c6
-+CGROUPFS_MOUNT_VERSION = 1.4
- CGROUPFS_MOUNT_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_MOUNT_VERSION))
- CGROUPFS_MOUNT_LICENSE = GPL-3.0+
- CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
-@@ -17,7 +17,6 @@ endef
- define CGROUPFS_MOUNT_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D $(CGROUPFS_MOUNT_PKGDIR)/S30cgroupfs \
- 		$(TARGET_DIR)/etc/init.d/S30cgroupfs
--
- endef
+-DSTAT_VERSION = 0.7.2
+-DSTAT_SOURCE = dstat-$(DSTAT_VERSION).tar.bz2
+-DSTAT_SITE = http://dag.wieers.com/home-made/dstat
++DSTAT_VERSION = 0.7.3
++DSTAT_SITE = $(call github,dagwieers,dstat,$(DSTAT_VERSION))
+ DSTAT_LICENSE = GPL-2.0
+ DSTAT_LICENSE_FILES = COPYING
  
- $(eval $(generic-package))
