@@ -1,8 +1,8 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 26 May 2017 10:23:32 -0400
+Date: Fri, 26 May 2017 10:46:28 -0400
 Subject: [Buildroot] [V2 1/1] Developers: Add selinux packages under Adam
 	Duskett
-Message-ID: <20170526142332.31880-1-aduskett@codeblue.com>
+Message-ID: <20170526144628.27137-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,17 +24,17 @@ index 4d43358..083d84f 100644
  F:	package/gstreamer1/gst1-rtsp-server/
  
  N:	Adam Duskett <aduskett@gmail.com>
-+F: package/audit/
-+F: package/checkpolicy
++F:	package/audit/
++F:	package/checkpolicy
  F:	package/gstreamer1/gst1-vaapi/
-+F: package/libselinux/
-+F: package/libsemanage/
-+F: package/libsepol/
++F:	package/libselinux/
++F:	package/libsemanage/
++F:	package/libsepol/
  F:	package/nginx-naxsi/
-+F: package/policycoreutils/
++F:	package/policycoreutils/
  F:	package/python-mutagen/
-+F: package/sepolgen/
-+F: package/setools
++F:	package/sepolgen/
++F:	package/setools
  F:	package/sngrep/
  
  N:	Alex Suykov <alex.suykov@gmail.com>
