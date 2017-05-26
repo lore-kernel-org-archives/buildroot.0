@@ -1,11 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 26 May 2017 08:16:55 -0500
-Subject: [Buildroot] [PATCH v4 2/3] refpolicy add ability to specify
- policy version
-In-Reply-To: <20170520204143.18154-2-Adamduskett@outlook.com>
+Date: Fri, 26 May 2017 08:17:37 -0500
+Subject: [Buildroot] [PATCH v4 3/3] refpolicy: add ability to set
+	default state.
+In-Reply-To: <20170520204143.18154-3-Adamduskett@outlook.com>
 References: <20170520204143.18154-1-Adamduskett@outlook.com>
- <20170520204143.18154-2-Adamduskett@outlook.com>
-Message-ID: <CANQCQpZKt_Re0Z887-vDXWEqz0TNqf-Ps+ZCic3RNQQDRptGDQ@mail.gmail.com>
+ <20170520204143.18154-3-Adamduskett@outlook.com>
+Message-ID: <CANQCQpb+Q4s1rVntYedzWfZYzN66H8z6A9O7934VDpFiadA1nw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,73 +15,21 @@ To: buildroot@busybox.net
 Adam,
 
 On Sat, May 20, 2017 at 3:41 PM, Adam Duskett <aduskett@gmail.com> wrote:
-> Refpolicy by default will build the highest version supported.
-> This may cause older kernels to not load the policy.
+> SELinux requires a config file in /etc/selinux which controls the state
+> of SELinux on the system.
 >
-> This patch adds a custom policy version string which is defaulted
-> to 30, which is the highest supported as of today.
+> This config file has two options set in it:
+> SELINUX which set's the state of selinux on boot.
+> SELINUXTYPE which should equal the name of the policy.  In this case, the
+> default name is targeted.
+>
+> This patch adds:
+> - A choice menu on Config.in that allows the user to select a default
+>   SELinux state.
+>
+> - A basic config file that will be installed to
+>   target/etc/selinux and will set SELINUX= to the selected state.
 >
 > Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-
 Acked-by: Matt Weber  <matthew.weber@rockwellcollins.com>
-
-> ---
-> Changes v2 -> v3:
->   - Removed Coverletter from patch set.
->
-> Changes v1 -> v2:
->   - Added cover letter explaining the new patch set.
->
->  package/refpolicy/Config.in    | 8 ++++++++
->  package/refpolicy/refpolicy.mk | 2 +-
->  2 files changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-> index a937055..9d4e0e6 100644
-> --- a/package/refpolicy/Config.in
-> +++ b/package/refpolicy/Config.in
-> @@ -35,3 +35,11 @@ comment "refpolicy needs a glibc toolchain w/ threads, dynamic library"
->         depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
->         depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
->                 !BR2_TOOLCHAIN_USES_GLIBC
-> +
-> +if BR2_PACKAGE_REFPOLICY
-> +
-> +config BR2_PACKAGE_REFPOLICY_VERSION
-> +       string "Policy version"
-> +       default "30"
-> +
-> +endif
-> diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-> index 117e570..fa02b5a 100644
-> --- a/package/refpolicy/refpolicy.mk
-> +++ b/package/refpolicy/refpolicy.mk
-> @@ -32,7 +32,7 @@ REFPOLICY_MAKE = \
->         $(MAKE1)
->
->  define REFPOLICY_CONFIGURE_CMDS
-> -       $(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = 30" $(@D)/build.conf
-> +       $(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(BR2_PACKAGE_REFPOLICY_VERSION)" $(@D)/build.conf
->         $(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
->         $(SED) "/NAME/c\NAME = targeted" $(@D)/build.conf
->  endef
-> --
-> 2.9.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
