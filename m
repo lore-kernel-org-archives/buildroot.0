@@ -1,88 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 May 2017 15:15:24 +0200
-Subject: [Buildroot] [git commit branch/next] tinyalsa: bump version to 1.1.1
-Message-ID: <20170527152323.8378482912@busybox.osuosl.org>
+Date: Sat, 27 May 2017 17:23:11 +0200
+Subject: [Buildroot] [git commit branch/next] package/libv4l: bump version
+	to 1.12.5
+Message-ID: <20170527152323.9C5A182929@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=050b52515ba9b2c04cc14d648835e9385a55654f
+commit: https://git.buildroot.net/buildroot/commit/?id=5d6d3fff93ff71058e108a4e01337cb111dad6f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tinyalsa/0001-disable-doxygen-usage.patch | 21 ++++++++++++---------
- package/tinyalsa/tinyalsa.hash                    |  2 +-
- package/tinyalsa/tinyalsa.mk                      |  2 +-
- 3 files changed, 14 insertions(+), 11 deletions(-)
+ package/libv4l/libv4l.hash | 2 +-
+ package/libv4l/libv4l.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinyalsa/0001-disable-doxygen-usage.patch b/package/tinyalsa/0001-disable-doxygen-usage.patch
-index 9c867a8..ed939fb 100644
---- a/package/tinyalsa/0001-disable-doxygen-usage.patch
-+++ b/package/tinyalsa/0001-disable-doxygen-usage.patch
-@@ -4,29 +4,32 @@ In order to avoid a dependency on doxygen on the build machine, this
- patch adjusts the main Makefile to not build and install the
- documentation.
- 
-+[Vincent: tweak patch for 1.1.1 version]
-+
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- 
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -13,13 +13,11 @@
-+diff -rup a/Makefile b/Makefile
-+--- a/Makefile	2017-05-24 05:23:57.000000000 +0100
-++++ b/Makefile	2017-05-25 10:35:20.781747053 +0100
-+@@ -11,14 +11,12 @@ export MANDIR ?= $(PREFIX)/share/man
-  all:
-  	$(MAKE) -C src
-  	$(MAKE) -C utils
- -	$(MAKE) -C doxygen
-+ 	$(MAKE) -C examples
-  
-  .PHONY: clean
-  clean:
-  	$(MAKE) -C src clean
-  	$(MAKE) -C utils clean
- -	$(MAKE) -C doxygen clean
-+ 	$(MAKE) -C examples clean
-  
-  .PHONY: install
-- install:
--@@ -27,5 +25,3 @@
-- 	cp -Ru include/tinyalsa $(DESTDIR)$(INCDIR)/
-+@@ -30,5 +28,4 @@ install:
-+ 	install include/tinyalsa/version.h $(DESTDIR)$(INCDIR)/
-  	$(MAKE) -C src install
-  	$(MAKE) -C utils install
- -	$(MAKE) -C doxygen install
---
-+ 
-diff --git a/package/tinyalsa/tinyalsa.hash b/package/tinyalsa/tinyalsa.hash
-index b6bea47..f9be664 100644
---- a/package/tinyalsa/tinyalsa.hash
-+++ b/package/tinyalsa/tinyalsa.hash
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index c02fa0a..fc7bd1b 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
 @@ -1,2 +1,2 @@
- # locally computed
--sha256  93f4ca1e6345974167dc5577e8151a31fa2e6a628727a72d59e18db2289e7a1c  tinyalsa-1.1.0.tar.gz
-+sha256 d92b438cea348ae316c4b2cbf367b4f01ed821a947e6a34d813624e9e3c936c1  tinyalsa-1.1.1.tar.gz
-diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
-index 064dfd0..bd9d9a0 100644
---- a/package/tinyalsa/tinyalsa.mk
-+++ b/package/tinyalsa/tinyalsa.mk
+ # Locally calculated
+-sha256	ac9f8c88bfffa3a7e85c0edd04f7d3d54e6a30c214e79f2c6ecc6fbf57cb229d	v4l-utils-1.12.2.tar.bz2
++sha256 0618162ddb0b57fe7c45407d4d66ed79e3a134cdbc9e72598d34e61d3359e20d  v4l-utils-1.12.5.tar.bz2
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 465f6cc..b139fa2 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TINYALSA_VERSION = 1.1.0
-+TINYALSA_VERSION = 1.1.1
- TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,$(TINYALSA_VERSION))
- TINYALSA_LICENSE = BSD-3-Clause
- TINYALSA_LICENSE_FILES = NOTICE
+-LIBV4L_VERSION = 1.12.2
++LIBV4L_VERSION = 1.12.5
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
