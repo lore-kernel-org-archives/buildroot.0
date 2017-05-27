@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 May 2017 16:44:13 +0200
-Subject: [Buildroot] regression for microblaze architecture
-In-Reply-To: <20170527085122.GB24800@waldemar-brodkorb.de>
-References: <20170527085122.GB24800@waldemar-brodkorb.de>
-Message-ID: <20170527164413.5cba5b05@free-electrons.com>
+Date: Sat, 27 May 2017 16:50:03 +0200
+Subject: [Buildroot] [PATCH next 1/2] mesa3d: bump version to 17.1.1
+In-Reply-To: <6aslvdxn3j.ln2@ID-313208.user.individual.net>
+References: <20170526131607.34436-1-Vincent.Riera@imgtec.com>
+ <6aslvdxn3j.ln2@ID-313208.user.individual.net>
+Message-ID: <20170527165003.4aa52137@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 27 May 2017 10:51:22 +0200, Waldemar Brodkorb wrote:
+On Fri, 26 May 2017 16:56:38 +0200, Bernd Kuhls wrote:
 
-> Buildroot and OpenADK have samples to create a Linux system to be
-> bootup in Qemu system emulation for microblaze architecture.
+> the Vulkan Intel driver does not depend on the i965 dri driver anymore:
 > 
-> With gcc 6.3 and 7.1 the samples are not working anymore, 
-> because the Linux system userland does not boot.
-> Qemu 2.9.0:
-> Kernel panic - not syncing: Attempted to kill init!
-> exitcode=0x0000000b
-> (with glibc, musl and uClibc-ng toolchains)
+> https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?
+> h=17.1&id=9aebdb5d082ec640fe8a14704201952bddb50a88
 > 
-> I bisected gcc source code and found the bad commit:
-> 6dcad60c0ef48af584395a40feeb256fb82986a8
+> So please add this change as well: https://github.com/bkuhls/buildroot/
+> commit/8e880784e52728e6f6bc066d8a2dae5408b593d5#diff-30324b744ed4e90dac736d90b54ad0dfL156
 
-Nice, great work!
-
-> When reverting the change, gcc 6.3 and 7.1 produces working
-> Linux rootfs again.
-> 
-> What can we do about it?
-
- 1. Add a revert of this commit in Buildroot for gcc 6.x and 7.x
-
- 2. Report the bug upstream, pointing to the problematic commit
+OK, I'll wait for a v2 from Vicente. In the mean time, I've marked
+both patches as Changes Requested.
 
 Best regards,
 
