@@ -1,37 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 May 2017 14:41:56 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/qt5base: link with -latomic
-	for	sparc
-References: <cover.1495055675.git.yann.morin.1998@free.fr>
- <6bdfcdff79478a9835c4c5d0296f8f62d5b64d66.1495055675.git.yann.morin.1998@free.fr>
-Message-ID: <kp8ovdxale.ln2@ID-313208.user.individual.net>
+From: Ilias Apalodimas <apalos@gmail.com>
+Date: Sat, 27 May 2017 15:47:47 +0300
+Subject: [Buildroot] [PATCH 1/1] keepalived: Allow the package to be
+	selected only if linux-headers >= 3.4
+Message-ID: <1495889267-7358-1-git-send-email-apalos@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 17 May 2017 23:15:29 +0200 schrieb Yann E. MORIN:
+Hello everyone,
 
-> Qt 5.8 needs atomic operations, which are provided in libatomic when it
-> exists, ike on sparc with gcc >= 4.8.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/
-results/49b/49bc9345b9849c9c3c53ace290c534ff7bb98683/
->     http://autobuild.buildroot.org/
-results/9f2/9f213406954be51dfcad76ebdce8b73850842180/
-> 
-> Signed-off-by: "Yann E. MORIN"
-> <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
+This patch fixes build issues of keepalived reported here:
+http://autobuild.buildroot.net/results/770d8fd2f3bacbdbe233da1b4d6e64e20a84d5a5
+http://autobuild.buildroot.net/results/1adb710b915427f681eae37452a0942833ce533e
+http://autobuild.buildroot.net/results/70b31547e51ec7213372d2ef07bec34c5df77560
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-(compile-tested using http://autobuild.buildroot.net/
-results/967/967e7b7b6960ff49afc5c845832abd49d93ed676/ )
+These builds are all using an external toolchain and linux-3.2 headers.
+Keepalived includes linux_ip_set.h when ipset package is enabled,
+which conflicts with linux xt_set.h header(prior to 3.4).
 
-This patch series also fixes http://autobuild.buildroot.net/
-results/967/967e7b7b6960ff49afc5c845832abd49d93ed676/
+As Yann Morin suggested we are making keepalived depending on the kernel-headers
+version.
+
+Regards
+Ilias
+
+Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
+---
+ package/keepalived/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+index efa745a..790cc03 100644
+--- a/package/keepalived/Config.in
++++ b/package/keepalived/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_KEEPALIVED
+ 	bool "keepalived"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS # uses libdl
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_POPT
+ 	help
+@@ -15,6 +16,6 @@ config BR2_PACKAGE_KEEPALIVED
+ 
+ 	  http://www.keepalived.org/
+ 
+-comment "keepalived needs a toolchain w/ dynamic library"
++comment "keepalived needs a toolchain w/ dynamic library w/ headers >= 3.4"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+-- 
+1.9.1
