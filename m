@@ -1,33 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 May 2017 15:37:14 +0200
-Subject: [Buildroot] [PATCH v2] package/gnutls: disable for static build
-References: <20170525163443.5234-1-romain.naour@gmail.com>
-Message-ID: <a1covdxale.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 May 2017 16:44:13 +0200
+Subject: [Buildroot] regression for microblaze architecture
+In-Reply-To: <20170527085122.GB24800@waldemar-brodkorb.de>
+References: <20170527085122.GB24800@waldemar-brodkorb.de>
+Message-ID: <20170527164413.5cba5b05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 25 May 2017 18:34:43 +0200 schrieb Romain Naour:
+Hello,
 
-> Signed-off-by: Bernd Kuhls
-> <bernd.kuhls@t-online.de>
-> [Romain: merge our two patches together
->     add some option comment disable static libgnutls.a add sngrep
->     autobuilder reference]
-> Signed-off-by: Romain Naour
-> <romain.naour@gmail.com>
+On Sat, 27 May 2017 10:51:22 +0200, Waldemar Brodkorb wrote:
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Buildroot and OpenADK have samples to create a Linux system to be
+> bootup in Qemu system emulation for microblaze architecture.
+> 
+> With gcc 6.3 and 7.1 the samples are not working anymore, 
+> because the Linux system userland does not boot.
+> Qemu 2.9.0:
+> Kernel panic - not syncing: Attempted to kill init!
+> exitcode=0x0000000b
+> (with glibc, musl and uClibc-ng toolchains)
+> 
+> I bisected gcc source code and found the bad commit:
+> 6dcad60c0ef48af584395a40feeb256fb82986a8
 
-Compile-tested using these defconfigs:
+Nice, great work!
 
-ffmpeg: http://autobuild.buildroot.net/results/b00/
-b006fe2583485f8c0986056937fded730d4d148b//
+> When reverting the change, gcc 6.3 and 7.1 produces working
+> Linux rootfs again.
+> 
+> What can we do about it?
 
-taskd: http://autobuild.buildroot.net/
-results/3d2/3d2f73d7c4248e2fdf28de147a09cb52e2d26b7b/
+ 1. Add a revert of this commit in Buildroot for gcc 6.x and 7.x
 
-sngrep: http://autobuild.buildroot.net/results/f0d/
-f0dfad2a040cf3e21d4ba2c1799ac17db57518ff/
+ 2. Report the bug upstream, pointing to the problematic commit
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
