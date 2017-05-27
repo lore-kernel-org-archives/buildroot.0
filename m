@@ -1,35 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 May 2017 16:50:03 +0200
-Subject: [Buildroot] [PATCH next 1/2] mesa3d: bump version to 17.1.1
-In-Reply-To: <6aslvdxn3j.ln2@ID-313208.user.individual.net>
-References: <20170526131607.34436-1-Vincent.Riera@imgtec.com>
- <6aslvdxn3j.ln2@ID-313208.user.individual.net>
-Message-ID: <20170527165003.4aa52137@free-electrons.com>
+Date: Sat, 27 May 2017 17:10:21 +0200
+Subject: [Buildroot] [git commit] keepalived: needs headers >= 3.4
+Message-ID: <20170527151043.23C4682816@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d01b0bbad04b97a5e8e1dd3ac3c1026555f793fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 26 May 2017 16:56:38 +0200, Bernd Kuhls wrote:
+keepalived fails to build on toolchains with headers older than 3.4,
+because of a namespace clash between the xt_set.h header from the
+kernel and the linux_ip_set.h header installed by ipset.
 
-> the Vulkan Intel driver does not depend on the i965 dri driver anymore:
-> 
-> https://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?
-> h=17.1&id=9aebdb5d082ec640fe8a14704201952bddb50a88
-> 
-> So please add this change as well: https://github.com/bkuhls/buildroot/
-> commit/8e880784e52728e6f6bc066d8a2dae5408b593d5#diff-30324b744ed4e90dac736d90b54ad0dfL156
+Even though keepalived does check for pre-3.4 headers, the check
+somehow fails to work correctly.
 
-OK, I'll wait for a v2 from Vicente. In the mean time, I've marked
-both patches as Changes Requested.
+We fix that by making keepalived depend on headers 3.4 or later.
 
-Best regards,
+Fixes:
+http://autobuild.buildroot.org/results/770/770d8fd2f3bacbdbe233da1b4d6e64e20a84d5a5/
+http://autobuild.buildroot.org/results/1ad/1adb710b915427f681eae37452a0942833ce533e/
+http://autobuild.buildroot.org/results/70b/70b31547e51ec7213372d2ef07bec34c5df77560/
+[...]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/keepalived/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+index efa745a..0140e62 100644
+--- a/package/keepalived/Config.in
++++ b/package/keepalived/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_KEEPALIVED
+ 	bool "keepalived"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS # uses libdl
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_POPT
+ 	help
+@@ -15,6 +16,6 @@ config BR2_PACKAGE_KEEPALIVED
+ 
+ 	  http://www.keepalived.org/
+ 
+-comment "keepalived needs a toolchain w/ dynamic library"
++comment "keepalived needs a toolchain w/ dynamic library, headers >= 3.4"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
