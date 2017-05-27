@@ -1,40 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 May 2017 19:18:54 +0200
-Subject: [Buildroot] [PATCH/next] package/mpd: bump version to 0.20.7
-Message-ID: <20170527171854.28263-1-bernd.kuhls@t-online.de>
+Date: Sat, 27 May 2017 19:27:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openpowerlink: disable demos for
+	static builds
+Message-ID: <20170527172745.9020-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes
+http://autobuild.buildroot.net/results/f43/f437d09ac6c689c911e1885b95da33b692f2cb3c/
+http://autobuild.buildroot.net/results/385/3859dc0f4de7e3284a96d5841f040f69f71842df/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openpowerlink/Config.in | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 37141971e..cea79e264 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  f4055e1189e5cc00e83706b2e0b5ead924ced0303e073d7802ee9f9a8eba4b47  mpd-0.20.6.tar.xz
-+sha256  005ac663b39a76701ba043cce4caef82ac6b0c2f16aae12fdc28e1b3b5b6c780  mpd-0.20.7.tar.xz
- sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7fd9bc9f5..fce247299 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+index 68ea75195..f00d6377b 100644
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -113,6 +113,8 @@ config BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER
+ 	bool "PCIe Powerlink Driver"
+ 	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
  
- MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
- ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
--MPD_VERSION = $(MPD_VERSION_MAJOR).6
-+MPD_VERSION = $(MPD_VERSION_MAJOR).7
- else
- MPD_VERSION = $(MPD_VERSION_MAJOR).21
- endif
++if !BR2_STATIC_LIBS
++
+ menu "demos"
+ 
+ config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE
+@@ -125,4 +127,13 @@ config BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE
+ 
+ endmenu
+ 
++endif
++
++if BR2_STATIC_LIBS
++
++comment "demos needs a toolchain w/ dynamic library"
++	depends on  BR2_STATIC_LIBS
++
++endif
++
+ endif # BR2_PACKAGE_OPENPOWERLINK
 -- 
 2.11.0
