@@ -1,85 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 14:56:02 +0200
-Subject: [Buildroot] [git commit] package/elf2flt: bump version
-Message-ID: <20170601202857.DAB6382641@busybox.osuosl.org>
+Date: Sun, 28 May 2017 14:55:59 +0200
+Subject: [Buildroot] [git commit] package/openssl: bump verstion to 1.0.2l
+Message-ID: <20170601202857.A9D5882641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32c52fa87dd00b19ce3da9565e303e9842fc47b2
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4f96335b9597ec68c4e560d5eae8ae605cf9ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch applied upstream:
-https://github.com/uclinux-dev/elf2flt/commit/a87f68ae9e879360a9624f2a02999e67cfbe5a2f
+According to https://www.openssl.org/news/newslog.html this release
+does not contain security fixes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-relocation-support-for-R_ARM_TARGET-type.patch | 34 ----------------------
- package/elf2flt/elf2flt.hash                       |  2 +-
- package/elf2flt/elf2flt.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 36 deletions(-)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch b/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
-deleted file mode 100644
-index b9615ab..0000000
---- a/package/elf2flt/0001-elf2flt-fix-relocation-support-for-R_ARM_TARGET-type.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From dedce8765d203c1c162a57e6259375e0b457173f Mon Sep 17 00:00:00 2001
--From: Greg Ungerer <gerg@linux-m68k.org>
--Date: Fri, 19 Aug 2016 23:49:51 +1000
--Subject: [PATCH] elf2flt: fix relocation support for R_ARM_TARGET types
--
--R_ARM_TARGET1 (and I think R_ARM_TARGET2) relocation types should be
--treated in the same way as R_ARM_ABS32. Fix them to write out the addend
--to the flat binary in network byte order.
--
--Signed-off-by: Greg Ungerer <gerg@uclinux.org>
--Tested-by: Waldemar Brodkorb <wbx@openadk.org>
--
-----
-- elf2flt.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/elf2flt.c b/elf2flt.c
--index 5ae7dd9..3f31569 100644
----- a/elf2flt.c
--+++ b/elf2flt.c
--@@ -1505,7 +1505,9 @@ DIS29_RELOCATION:
-- 					(((*p)->howto->type != R_ARM_PC24) &&
-- 					((*p)->howto->type != R_ARM_PLT32)))
-- 					tmp.c[i3] = (hl >> 24) & 0xff;
---				if ((*p)->howto->type == R_ARM_ABS32)
--+				if (((*p)->howto->type == R_ARM_ABS32) ||
--+				    ((*p)->howto->type == R_ARM_TARGET1) ||
--+				    ((*p)->howto->type == R_ARM_TARGET2))
-- 					*(uint32_t *)r_mem = htonl(hl);
-- 				else
-- 					*(uint32_t *)r_mem = tmp.l;
---- 
--1.9.1
--
-diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
-index 9c18ba5..40df62c 100644
---- a/package/elf2flt/elf2flt.hash
-+++ b/package/elf2flt/elf2flt.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 6a45a787a08da64f0f3036d3ae1865bc13f8f40d13f07511a2bf1b736acc4808 elf2flt-9dbc458c6122c495bbdec8dc975a15c9d39e5ff2.tar.gz
-+sha256 7713bd1debd24a94b795b7fc698dc97e306e7cbcc1d0580856c79fe70aac9c45  elf2flt-6d80ab6c93409e796f85da404bde84b841231531.tar.gz
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 1829b10..995dfed 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 064eeca..da911c5 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
+-sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2l.tar.gz.sha256
++sha256	ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c	openssl-1.0.2l.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 1536982..5f56b44 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELF2FLT_VERSION = 9dbc458c6122c495bbdec8dc975a15c9d39e5ff2
-+ELF2FLT_VERSION = 6d80ab6c93409e796f85da404bde84b841231531
- ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
- ELF2FLT_LICENSE = GPL-2.0+
- ELF2FLT_LICENSE_FILES = LICENSE.TXT
+-OPENSSL_VERSION = 1.0.2k
++OPENSSL_VERSION = 1.0.2l
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
