@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 22:35:15 +0200
-Subject: [Buildroot] [git commit branch/next] shairport-sync: bump to
-	version 3.0.2
-Message-ID: <20170529203608.7AC1782A1B@busybox.osuosl.org>
+Date: Sun, 28 May 2017 16:15:15 +0200
+Subject: [Buildroot] [git commit branch/next] package/fping: bump version to
+	4.0
+Message-ID: <20170529203608.4A1C58281D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5cc2ea7129369b18cbbb41d522efd04472c72f5
+commit: https://git.buildroot.net/buildroot/commit/?id=3934120ede459b16eaabcc173d27843a289d9a7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Please note that according to the release notes
+https://github.com/schweikert/fping/releases/tag/v4.0
+
+"fping and fping6 are now unified into one binary."
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
+ package/fping/fping.hash | 2 +-
+ package/fping/fping.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 9e305da..45dbbe8 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
+diff --git a/package/fping/fping.hash b/package/fping/fping.hash
+index 8c1909e..e97709c 100644
+--- a/package/fping/fping.hash
++++ b/package/fping/fping.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  3fbde4f6e7f5cbc7200f782bd9faca25f7e91edf7dd7a3b514cd616e556a1fee  shairport-sync-3.0.1.tar.gz
-+sha256  b348b9b3cf3994d9222430bc514c94a22f2ed173956fdb097f3354cdba8fd198  shairport-sync-3.0.2.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 650c6d7..208a9b3 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
+-sha256	2f753094e4df3cdb1d99be1687c0fb7d2f14c0d526ebf03158c8c5519bc78f54	fping-3.16.tar.gz
++sha256 67eb4152b98ad34f99d2eec4e1098a0bb52caf13c0c89cd147349d08190fe8ce  fping-4.0.tar.gz
+diff --git a/package/fping/fping.mk b/package/fping/fping.mk
+index 5970d63..5af46c6 100644
+--- a/package/fping/fping.mk
++++ b/package/fping/fping.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHAIRPORT_SYNC_VERSION = 3.0.1
-+SHAIRPORT_SYNC_VERSION = 3.0.2
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+-FPING_VERSION = 3.16
++FPING_VERSION = 4.0
+ FPING_SITE = http://fping.org/dist
+ FPING_LICENSE = BSD-like
+ FPING_LICENSE_FILES = COPYING
