@@ -1,47 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 14:55:56 +0200
-Subject: [Buildroot] [git commit branch/next] package/dvblast: bump version
-	to 3.1
-Message-ID: <20170528130532.78CF981EB9@busybox.osuosl.org>
+Date: Sun, 28 May 2017 14:55:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/openssl: bump verstion
+	to 1.0.2l
+Message-ID: <20170528130534.1074681EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=308487a626ebdefff85ec4527aa27817acdc6907
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4f96335b9597ec68c4e560d5eae8ae605cf9ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream now provides sha256 hash.
+According to https://www.openssl.org/news/newslog.html this release
+does not contain security fixes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dvblast/dvblast.hash | 6 ++----
- package/dvblast/dvblast.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dvblast/dvblast.hash b/package/dvblast/dvblast.hash
-index 198549f..d6ec4cb 100644
---- a/package/dvblast/dvblast.hash
-+++ b/package/dvblast/dvblast.hash
-@@ -1,4 +1,2 @@
--# from https://get.videolan.org/dvblast/3.0/dvblast-3.0.tar.bz2.md5
--md5 89ea9ffb16476d47b8853e52a8a3ee63 dvblast-3.0.tar.bz2
--# locally calculated
--sha256 4fc3eb2a3d3545cb76a5c515a16671d1c34fe2f5dad57b71e89bd54c14c3045e dvblast-3.0.tar.bz2
-+# From https://get.videolan.org/dvblast/3.1/dvblast-3.1.tar.bz2
-+sha256 3159e8666a3b1822aeccd01684bdcad712a0da88d758bef6b7e2c396f27fd3e0  dvblast-3.1.tar.bz2
-diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
-index 1247276..3cf24df 100644
---- a/package/dvblast/dvblast.mk
-+++ b/package/dvblast/dvblast.mk
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 064eeca..da911c5 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
+-sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2l.tar.gz.sha256
++sha256	ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c	openssl-1.0.2l.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 1536982..5f56b44 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DVBLAST_VERSION = 3.0
-+DVBLAST_VERSION = 3.1
- DVBLAST_SOURCE = dvblast-$(DVBLAST_VERSION).tar.bz2
- DVBLAST_SITE = https://get.videolan.org/dvblast/$(DVBLAST_VERSION)
- DVBLAST_LICENSE = GPL-2.0+, WTFPL
+-OPENSSL_VERSION = 1.0.2k
++OPENSSL_VERSION = 1.0.2l
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
