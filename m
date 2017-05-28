@@ -1,43 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 14:48:56 +0200
-Subject: [Buildroot] [PATCH/next] package/evemu: bump version to 2.6.0
-Message-ID: <20170528124856.2260-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 May 2017 14:54:43 +0200
+Subject: [Buildroot] [git commit] support/testing: rename variables for
+	readability
+Message-ID: <20170528125452.461B58266F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream did not sent an announcement so the hash had to be computed
-locally.
+commit: https://git.buildroot.net/buildroot/commit/?id=ad79bb50858aebd5296fbac981abd8b50b682ddf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The 'lines' variable is overwritten with its own fields. Thus it
+contains a line first, and then a list of fields -- it never contains
+'lines'.
+
+Use two different variables named 'line' and 'fields' to make the code
+more readable.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/evemu/evemu.hash | 4 ++--
- package/evemu/evemu.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/fs/test_ext.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
-index 5e653f7d5..b5f0bf5d5 100644
---- a/package/evemu/evemu.hash
-+++ b/package/evemu/evemu.hash
-@@ -1,2 +1,2 @@
--# Hash from https://lists.freedesktop.org/archives/input-tools/2016-September/001330.html
--sha256 541cc138f0215b7d0cd4ad5e6bb1402518ffc5e31294c36bb67b4ff1791bb27f evemu-2.5.0.tar.xz
-+# Locally computed
-+sha256 ed81dd4552ffeb92c346b47e56b249c67f1cb37d5b31fc073ea0ad4858ae3dcc  evemu-2.6.0.tar.xz
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index d52520732..fba45216c 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+index 545bf1e..ea3d3f1 100644
+--- a/support/testing/tests/fs/test_ext.py
++++ b/support/testing/tests/fs/test_ext.py
+@@ -21,10 +21,10 @@ def dumpe2fs_run(builddir, image):
+     return ret.strip().splitlines()
  
--EVEMU_VERSION = 2.5.0
-+EVEMU_VERSION = 2.6.0
- EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPL-3.0 (library), GPL-3.0 (tools)
--- 
-2.11.0
+ def dumpe2fs_getprop(out, prop):
+-    for lines in out:
+-        lines = lines.split(": ")
+-        if lines[0] == prop:
+-            return lines[1].strip()
++    for line in out:
++        fields = line.split(": ")
++        if fields[0] == prop:
++            return fields[1].strip()
+ 
+ def boot_img_and_check_fs_type(emulator, builddir, fs_type):
+     img = os.path.join(builddir, "images", "rootfs.{}".format(fs_type))
