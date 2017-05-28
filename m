@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 15:34:10 +0200
-Subject: [Buildroot] [git commit] package/fftw: bump version to 3.3.6-pl2
-Message-ID: <20170601202858.54ACF82A6D@busybox.osuosl.org>
+Date: Sun, 28 May 2017 15:34:24 +0200
+Subject: [Buildroot] [git commit] package/feh: bump version to 2.18.3
+Message-ID: <20170601202858.73AAD82641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8e133e28c3a03ea45ea27b06eb2d4c41b300e08
+commit: https://git.buildroot.net/buildroot/commit/?id=d427e98a6424a66d312b6dda9c28df60db044bbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added sha256 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fftw/fftw.hash | 6 ++++--
- package/fftw/fftw.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fftw/fftw.hash b/package/fftw/fftw.hash
-index 62b8f0f..b00f447 100644
---- a/package/fftw/fftw.hash
-+++ b/package/fftw/fftw.hash
-@@ -1,2 +1,4 @@
--# From http://www.fftw.org/fftw-3.3.4.tar.gz.md5sum
--md5	2edab8c06b24feeb3b82bbb3ebf3e7b3	fftw-3.3.4.tar.gz
-+# From http://www.fftw.org/fftw-3.3.6-pl2.tar.gz.md5sum
-+md5 927e481edbb32575397eb3d62535a856  fftw-3.3.6-pl2.tar.gz
-+# Locally computed
-+sha256 a5de35c5c824a78a058ca54278c706cdf3d4abba1c56b63531c2cb05f5d57da2  fftw-3.3.6-pl2.tar.gz
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 671c99b..0f32f79 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index faca43d..c11ff64 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  a9e818a4ad6ab427597e1799527a7576856c233525e67afb1eb2cb3ae709d853  feh-2.17.1.tar.bz2
++sha256 d82f68c7a96e1860dab3584ed58bda69446b692ae79a4ca999018507da310563  feh-2.18.3.tar.bz2
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 03651cd..ac8f683 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFTW_VERSION = 3.3.4
-+FFTW_VERSION = 3.3.6-pl2
- FFTW_SITE = http://www.fftw.org
- FFTW_INSTALL_STAGING = YES
- FFTW_LICENSE = GPL-2.0+
+-FEH_VERSION = 2.17.1
++FEH_VERSION = 2.18.3
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
