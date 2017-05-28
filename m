@@ -1,39 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 16:10:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/font-awesome: bump version to 4.7.0
-Message-ID: <20170528141005.17239-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 May 2017 16:12:57 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/gettext: update wint_t.m4
+ from gnulib
+In-Reply-To: <20170525215647.10315-1-bernd.kuhls@t-online.de>
+References: <20170525215647.10315-1-bernd.kuhls@t-online.de>
+Message-ID: <20170528161257.4840e1c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/font-awesome/font-awesome.hash | 2 +-
- package/font-awesome/font-awesome.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/font-awesome/font-awesome.hash b/package/font-awesome/font-awesome.hash
-index 9f3715e5b..e266168ac 100644
---- a/package/font-awesome/font-awesome.hash
-+++ b/package/font-awesome/font-awesome.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  7813f416057da622b16229b10fef550e1dc64c5bb59871cd38fa86e76dfdbae8  font-awesome-v4.5.0.tar.gz
-+sha256 de512ba0e1dead382bbfce372cde74b3f18971d876fffb635ee9333f0db05d43  font-awesome-v4.7.0.tar.gz
-diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
-index 893378327..f39401041 100644
---- a/package/font-awesome/font-awesome.mk
-+++ b/package/font-awesome/font-awesome.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FONT_AWESOME_VERSION = v4.5.0
-+FONT_AWESOME_VERSION = v4.7.0
- FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
- FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
- FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
+On Thu, 25 May 2017 23:56:46 +0200, Bernd Kuhls wrote:
+> Needed for coreutils bump to 8.27
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../gettext/0002-Update-after-gnulib-changed.patch | 86 ++++++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644 package/gettext/0002-Update-after-gnulib-changed.patch
+
+I've applied both patches to next. However, what would be nice is to
+submit upstream the coreutils patch. Once upstreamed, we will be able
+to stop autoreconfiguring coreutils, which would be a better solution.
+
+Of course, in the mean time, gettext will have probably released a new
+version containing the win_t fix, but upstreaming our coreutils patch
+would nonetheless be a good thing.
+
+Could you look into this?
+
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
