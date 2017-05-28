@@ -1,39 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 15:00:32 +0200
-Subject: [Buildroot] [PATCH/next] package/exfat-utils: bump version to 1.2.6
-Message-ID: <20170528130032.9691-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 May 2017 14:55:56 +0200
+Subject: [Buildroot] [git commit branch/next] package/dvblast: bump version
+	to 3.1
+Message-ID: <20170528130532.78CF981EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/exfat-utils/exfat-utils.hash | 2 +-
- package/exfat-utils/exfat-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=308487a626ebdefff85ec4527aa27817acdc6907
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/exfat-utils/exfat-utils.hash b/package/exfat-utils/exfat-utils.hash
-index b40e632a5..f0d6b6425 100644
---- a/package/exfat-utils/exfat-utils.hash
-+++ b/package/exfat-utils/exfat-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	6aa51926416b9d0977b456902f4c4cd10bcce4b2d160859a7a2fc9ca6bcbbb11	exfat-utils-1.2.4.tar.gz
-+sha256 b96b6692cf92a629c9eca0fe8c782646e20479524c7d2a99b7e9b43c3cf8ac43  exfat-utils-1.2.6.tar.gz
-diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
-index 622c18178..c1b5a9354 100644
---- a/package/exfat-utils/exfat-utils.mk
-+++ b/package/exfat-utils/exfat-utils.mk
+Upstream now provides sha256 hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dvblast/dvblast.hash | 6 ++----
+ package/dvblast/dvblast.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/package/dvblast/dvblast.hash b/package/dvblast/dvblast.hash
+index 198549f..d6ec4cb 100644
+--- a/package/dvblast/dvblast.hash
++++ b/package/dvblast/dvblast.hash
+@@ -1,4 +1,2 @@
+-# from https://get.videolan.org/dvblast/3.0/dvblast-3.0.tar.bz2.md5
+-md5 89ea9ffb16476d47b8853e52a8a3ee63 dvblast-3.0.tar.bz2
+-# locally calculated
+-sha256 4fc3eb2a3d3545cb76a5c515a16671d1c34fe2f5dad57b71e89bd54c14c3045e dvblast-3.0.tar.bz2
++# From https://get.videolan.org/dvblast/3.1/dvblast-3.1.tar.bz2
++sha256 3159e8666a3b1822aeccd01684bdcad712a0da88d758bef6b7e2c396f27fd3e0  dvblast-3.1.tar.bz2
+diff --git a/package/dvblast/dvblast.mk b/package/dvblast/dvblast.mk
+index 1247276..3cf24df 100644
+--- a/package/dvblast/dvblast.mk
++++ b/package/dvblast/dvblast.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXFAT_UTILS_VERSION = 1.2.4
-+EXFAT_UTILS_VERSION = 1.2.6
- EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTILS_VERSION)
- EXFAT_UTILS_LICENSE = GPL-3.0+
- EXFAT_UTILS_LICENSE_FILES = COPYING
--- 
-2.11.0
+-DVBLAST_VERSION = 3.0
++DVBLAST_VERSION = 3.1
+ DVBLAST_SOURCE = dvblast-$(DVBLAST_VERSION).tar.bz2
+ DVBLAST_SITE = https://get.videolan.org/dvblast/$(DVBLAST_VERSION)
+ DVBLAST_LICENSE = GPL-2.0+, WTFPL
