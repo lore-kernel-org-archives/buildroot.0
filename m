@@ -1,130 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 14:55:58 +0200
-Subject: [Buildroot] [git commit branch/next] package/dvdauthor: bump
-	version to 0.7.2
-Message-ID: <20170528130533.1BF257FFCF@busybox.osuosl.org>
+Date: Sun, 28 May 2017 14:56:01 +0200
+Subject: [Buildroot] [git commit branch/next] package/eigen: bump version to
+	3.3.3
+Message-ID: <20170528130535.27B357FB32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49c44daa6d31c31da0560dfefb193e89ec37d325
+commit: https://git.buildroot.net/buildroot/commit/?id=21ac9b542124d7c7fff42ed7553efc2e6684c80a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changed _SITE to https, added upstream hashes.
-
-Removed patch applied upstream:
-https://github.com/ldo/dvdauthor/commit/176172d5dcba4d6e2704a1a2cc48c9e687761996
-
-Also remove autoreconf-related code, basically reverting the original
-commit:
-https://git.buildroot.net/buildroot/commit/package/dvdauthor?id=1cac78fbb044279f1854b1c7c59e94f03fb061f1
+Added hash, changed _SITE to upstream tarball according to
+http://eigen.tuxfamily.org/index.php
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-configure.ac-fix-static-build.patch       | 55 ----------------------
- package/dvdauthor/dvdauthor.hash                   |  5 +-
- package/dvdauthor/dvdauthor.mk                     |  9 +---
- 3 files changed, 6 insertions(+), 63 deletions(-)
+ package/eigen/eigen.hash | 2 ++
+ package/eigen/eigen.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/dvdauthor/0001-configure.ac-fix-static-build.patch b/package/dvdauthor/0001-configure.ac-fix-static-build.patch
-deleted file mode 100644
-index 0e016b8..0000000
---- a/package/dvdauthor/0001-configure.ac-fix-static-build.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From da77704c575f0583fa871ff02bd52906a7979576 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Sun, 15 Feb 2015 11:05:43 +0100
--Subject: [PATCH] configure.ac: fix static build
--
--Add LT_INIT macro to handle --enable-shared option.
--
--If enable-shared=no then add --static flag to resolve FREETYPE_LIBS.
--
--Otherwise, dvdauthor forget to link witk -lbz2 when linking with freetype2.
--
--Fixes:
--http://autobuild.buildroot.net/results/1d8/1d83390a3dd9f6bb595e9fc7b321500b4dc533a8/
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- configure.ac | 8 +++++++-
-- 1 file changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index c43df92..d78d56a 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -4,6 +4,7 @@ AM_CONFIG_HEADER(src/config.h)
-- AC_CONFIG_AUX_DIR(autotools)
-- 
-- AM_INIT_AUTOMAKE
--+LT_INIT
-- 
-- AC_PROG_INSTALL
-- 
--@@ -39,6 +40,11 @@ PKG_CHECK_MODULES(LIBPNG, [libpng])
-- AC_SUBST(LIBPNG_CFLAGS)
-- AC_SUBST(LIBPNG_LIBS)
-- 
--+config_static=''
--+if test "$enable_shared" = 'no'; then
--+    config_static='--static'
--+fi
--+
-- usemagick=0
-- 
-- AC_CHECK_PROGS(MAGICKCONFIG, [Magick-config])
--@@ -95,7 +101,7 @@ AC_SUBST(FRIBIDI_LIBS)
-- AC_CHECK_PROGS(FREETYPECONFIG, [freetype-config])
-- if test -n "$FREETYPECONFIG"; then
--     FREETYPE_CPPFLAGS="`$FREETYPECONFIG --cflags`"
---    FREETYPE_LIBS="`$FREETYPECONFIG --libs`"
--+    FREETYPE_LIBS="`$FREETYPECONFIG --libs $config_static`"
--     AC_DEFINE(HAVE_FREETYPE, 1, [Whether FreeType is available])
-- 
--     ac_save_CPPFLAGS="$CPPFLAGS"
---- 
--1.9.3
--
-diff --git a/package/dvdauthor/dvdauthor.hash b/package/dvdauthor/dvdauthor.hash
-index fe92b29..36d5d0e 100644
---- a/package/dvdauthor/dvdauthor.hash
-+++ b/package/dvdauthor/dvdauthor.hash
-@@ -1,2 +1,5 @@
-+# From https://sourceforge.net/projects/dvdauthor/files
-+md5 1173dcb8d40e74fc90c0f3a25dbd642d  dvdauthor-0.7.2.tar.gz
-+sha1 0e605642140576bfb3e963414d77630d1c073a51  dvdauthor-0.7.2.tar.gz
- # Locally computed
--sha256 501fb11b09c6eb9c5a229dcb400bd81e408cc78d34eab6749970685023c51fe9 dvdauthor-0.7.1.tar.gz
-+sha256 3020a92de9f78eb36f48b6f22d5a001c47107826634a785a62dfcd080f612eb7  dvdauthor-0.7.2.tar.gz
-diff --git a/package/dvdauthor/dvdauthor.mk b/package/dvdauthor/dvdauthor.mk
-index 689367d..3f9c218 100644
---- a/package/dvdauthor/dvdauthor.mk
-+++ b/package/dvdauthor/dvdauthor.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/eigen/eigen.hash b/package/eigen/eigen.hash
+new file mode 100644
+index 0000000..6320a6e
+--- /dev/null
++++ b/package/eigen/eigen.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 a4143fc45e4454b4b98fcea3516b3a79b8cdb3bc7fadf996d088c6a0d805fea1  3.3.3.tar.bz2
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+index 6ae2911..79f02e4 100644
+--- a/package/eigen/eigen.mk
++++ b/package/eigen/eigen.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--DVDAUTHOR_VERSION = 0.7.1
--DVDAUTHOR_SITE = http://sourceforge.net/projects/dvdauthor/files/dvdauthor/$(DVDAUTHOR_VERSION)
-+DVDAUTHOR_VERSION = 0.7.2
-+DVDAUTHOR_SITE = https://sourceforge.net/projects/dvdauthor/files
- DVDAUTHOR_DEPENDENCIES = host-pkgconf libxml2 freetype libpng
- DVDAUTHOR_LICENSE = GPL-2.0+
- DVDAUTHOR_LICENSE_FILES = COPYING
-@@ -14,11 +14,6 @@ DVDAUTHOR_CONF_ENV = \
- 	ac_cv_path_XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config \
- 	ac_cv_prog_GMAGICKCONFIG=
- 
--# configure.ac patched by 0001-configure.ac-fix-static-build.patch
--DVDAUTHOR_AUTORECONF = YES
--# add host-gettext for AM_ICONV macro
--DVDAUTHOR_DEPENDENCIES += host-gettext
--
- ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
- DVDAUTHOR_DEPENDENCIES += imagemagick
- DVDAUTHOR_CONF_ENV += \
+-EIGEN_VERSION = 3.2.5
+-EIGEN_SITE = https://bitbucket.org/eigen/eigen
+-EIGEN_SITE_METHOD = hg
++EIGEN_VERSION = 3.3.3
++EIGEN_SOURCE = $(EIGEN_VERSION).tar.bz2
++EIGEN_SITE = https://bitbucket.org/eigen/eigen/get
+ EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
+ EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
+ EIGEN_INSTALL_STAGING = YES
