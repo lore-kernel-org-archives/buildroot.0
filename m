@@ -1,85 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 17:00:38 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/fwup: bump version to 0.14.3
-Message-ID: <20170528150038.29202-1-bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 17:32:03 +0200
+Subject: [Buildroot] [PATCH 2/2] package/aespipe: fix host compile
+References: <20161217071659.3975-1-bernd.kuhls@t-online.de>
+ <20161217071659.3975-2-bernd.kuhls@t-online.de>
+ <20161217155904.4d5b4511@free-electrons.com>
+ <87inqia42h.fsf@dell.be.48ers.dk>
+Message-ID: <j47rvdxfme.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added patch to fix uclibc build.
+Am Sat, 17 Dec 2016 17:55:02 +0100 schrieb Peter Korsgaard:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fwup/0001-Fix-uclibc-build.patch | 36 ++++++++++++++++++++++++++++++++
- package/fwup/fwup.hash                   |  2 +-
- package/fwup/fwup.mk                     |  2 +-
- 3 files changed, 38 insertions(+), 2 deletions(-)
- create mode 100644 package/fwup/0001-Fix-uclibc-build.patch
+>>>>>> "Thomas" == Thomas Petazzoni
+>>>>>> <thomas.petazzoni-wi1
++55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org>
+>>>>>> writes:
+> 
+>  > Hello,
+>  > On Sat, 17 Dec 2016 08:16:59 +0100, Bernd Kuhls wrote:
+> 
+>  >> +HOST_AESPIPE_CONF_ENV = \ +	CFLAGS="$(HOST_CFLAGS) -no-pie" \
+>  >> +	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
+> 
+>  > I reverted this patch as it breaks the build on systems where gcc
+>  > does not understand -no-pie:
+> 
+>  >   http://autobuild.buildroot.net/?reason=host-aespipe-2.4d
+> 
+> Crap, so the option is also a Debian specific change? :/
+> 
+>  > A better solution is needed for this problem.
 
-diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
-new file mode 100644
-index 000000000..f7bf24504
---- /dev/null
-+++ b/package/fwup/0001-Fix-uclibc-build.patch
-@@ -0,0 +1,36 @@
-+From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 28 May 2017 16:56:39 +0200
-+Subject: [PATCH 1/1] Fix uclibc build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Without sys/types.h the build breaks with errors like this:
-+
-+parse_file.h:28:5: error: unknown type name ?off_t?
-+     off_t *map;
-+     ^
-+
-+Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/sparse_file.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/sparse_file.h b/src/sparse_file.h
-+index 21bf5f9..579fbaa 100644
-+--- a/src/sparse_file.h
-++++ b/src/sparse_file.h
-+@@ -18,6 +18,7 @@
-+ #define SPARSE_FILE_H
-+ 
-+ #include <confuse.h>
-++#include <sys/types.h>
-+ 
-+ struct sparse_file_map
-+ {
-+-- 
-+2.11.0
-+
-diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-index e21eff0a6..8679dcb26 100644
---- a/package/fwup/fwup.hash
-+++ b/package/fwup/fwup.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256   64c3a0ac38dc11c0c05b2588a89638cbc37f5552ac0f1c290f7ee5365f2bba49      fwup-v0.8.2.tar.gz
-+sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index 0c2b0f919..e47ecbe6d 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FWUP_VERSION = v0.8.2
-+FWUP_VERSION = v0.14.3
- FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
- FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
--- 
-2.11.0
+Hi,
+
+any progress on this issue? I just stumbled across it while building an 
+allyesconfig setup on the next branch.
+
+Regards, Bernd
