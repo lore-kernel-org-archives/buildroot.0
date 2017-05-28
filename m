@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 16:13:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/font-awesome: bump version to
- 4.7.0
-In-Reply-To: <20170528141005.17239-1-bernd.kuhls@t-online.de>
-References: <20170528141005.17239-1-bernd.kuhls@t-online.de>
-Message-ID: <20170528161357.58235b64@free-electrons.com>
+Date: Sun, 28 May 2017 16:13:54 +0200
+Subject: [Buildroot] [PATCH/next] package/fltk: bump version to 1.3.4-1
+In-Reply-To: <20170528140516.15901-1-bernd.kuhls@t-online.de>
+References: <20170528140516.15901-1-bernd.kuhls@t-online.de>
+Message-ID: <20170528161354.65c09cd1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 28 May 2017 16:10:05 +0200, Bernd Kuhls wrote:
+On Sun, 28 May 2017 16:05:16 +0200, Bernd Kuhls wrote:
+> Removed patch 0002-jpeg-9.patch, applied upstream.
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/font-awesome/font-awesome.hash | 2 +-
->  package/font-awesome/font-awesome.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/fltk/0002-jpeg-9.patch | 26 --------------------------
+>  package/fltk/fltk.hash         |  6 +++---
+>  package/fltk/fltk.mk           |  4 ++--
+>  3 files changed, 5 insertions(+), 31 deletions(-)
+>  delete mode 100644 package/fltk/0002-jpeg-9.patch
 
 Applied to next, thanks.
 
