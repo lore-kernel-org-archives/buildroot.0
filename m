@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 22:40:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libev: fix download URL
-Message-ID: <20170528204057.28697-1-bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 22:44:04 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libev: bump version to 4.24
+Message-ID: <20170528204404.8916-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libev/libev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libev/libev.hash | 2 +-
+ package/libev/libev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/libev/libev.hash b/package/libev/libev.hash
+index 7f029df7f..d3b7bb5ca 100644
+--- a/package/libev/libev.hash
++++ b/package/libev/libev.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	736079e8ac543c74d59af73f9c52737b3bfec9601f020bf25a87a4f4d0f01bd6	libev-4.22.tar.gz
++sha256 973593d3479abdf657674a55afe5f78624b0e440614e2b8cb3a07f16d4d7f821  libev-4.24.tar.gz
 diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index 2e3ed4543..87cdd6f61 100644
+index 2e3ed4543..d64fdaecb 100644
 --- a/package/libev/libev.mk
 +++ b/package/libev/libev.mk
-@@ -5,7 +5,7 @@
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBEV_VERSION = 4.22
--LIBEV_SITE = http://dist.schmorp.de/libev
-+LIBEV_SITE = http://dist.schmorp.de/libev/Attic
+-LIBEV_VERSION = 4.22
++LIBEV_VERSION = 4.24
+ LIBEV_SITE = http://dist.schmorp.de/libev
  LIBEV_INSTALL_STAGING = YES
  LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
- LIBEV_LICENSE_FILES = LICENSE
 -- 
 2.11.0
