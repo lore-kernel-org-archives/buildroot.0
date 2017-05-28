@@ -1,42 +1,28 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 17:32:03 +0200
-Subject: [Buildroot] [PATCH 2/2] package/aespipe: fix host compile
-References: <20161217071659.3975-1-bernd.kuhls@t-online.de>
- <20161217071659.3975-2-bernd.kuhls@t-online.de>
- <20161217155904.4d5b4511@free-electrons.com>
- <87inqia42h.fsf@dell.be.48ers.dk>
-Message-ID: <j47rvdxfme.ln2@ID-313208.user.individual.net>
+Date: Sun, 28 May 2017 17:38:16 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/tremor: add upstream site to
+	help text
+Message-ID: <20170528153816.3555-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 17 Dec 2016 17:55:02 +0100 schrieb Peter Korsgaard:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tremor/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
->>>>>> "Thomas" == Thomas Petazzoni
->>>>>> <thomas.petazzoni-wi1
-+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org>
->>>>>> writes:
-> 
->  > Hello,
->  > On Sat, 17 Dec 2016 08:16:59 +0100, Bernd Kuhls wrote:
-> 
->  >> +HOST_AESPIPE_CONF_ENV = \ +	CFLAGS="$(HOST_CFLAGS) -no-pie" \
->  >> +	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
-> 
->  > I reverted this patch as it breaks the build on systems where gcc
->  > does not understand -no-pie:
-> 
->  >   http://autobuild.buildroot.net/?reason=host-aespipe-2.4d
-> 
-> Crap, so the option is also a Debian specific change? :/
-> 
->  > A better solution is needed for this problem.
-
-Hi,
-
-any progress on this issue? I just stumbled across it while building an 
-allyesconfig setup on the next branch.
-
-Regards, Bernd
+diff --git a/package/tremor/Config.in b/package/tremor/Config.in
+index 1a478c47a..ec7b8f8c0 100644
+--- a/package/tremor/Config.in
++++ b/package/tremor/Config.in
+@@ -6,3 +6,5 @@ config BR2_PACKAGE_TREMOR
+ 	  decoder. It provides a decoding API similar to libvorbis,
+ 	  but gives much better performance on systems without a
+ 	  floating-point unit.
++
++	  https://wiki.xiph.org/Tremor
+-- 
+2.11.0
