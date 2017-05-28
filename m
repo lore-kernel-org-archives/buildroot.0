@@ -1,67 +1,69 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 20:27:04 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/bdwgc: fix uclibc build after
-	bump to 7.6.0
-Message-ID: <20170528182704.29837-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 28 May 2017 20:51:32 +0200
+Subject: [Buildroot] [PATCH for-next 2/3] package/google-breakpad:
+ switch to the new git repository
+In-Reply-To: <clgrvdxfme.ln2@ID-313208.user.individual.net>
+References: <1480263400-29605-1-git-send-email-romain.naour@gmail.com>
+ <1480263400-29605-2-git-send-email-romain.naour@gmail.com>
+ <clgrvdxfme.ln2@ID-313208.user.individual.net>
+Message-ID: <0530a854-021a-33e4-96f2-7cacc7eac0a5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/bdwgc/0002-Fix-uClibc-build.patch | 42 +++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/bdwgc/0002-Fix-uClibc-build.patch
+Hi Bernd,
 
-diff --git a/package/bdwgc/0002-Fix-uClibc-build.patch b/package/bdwgc/0002-Fix-uClibc-build.patch
-new file mode 100644
-index 000000000..55896eb19
---- /dev/null
-+++ b/package/bdwgc/0002-Fix-uClibc-build.patch
-@@ -0,0 +1,42 @@
-+From 8d3caf00db5d71ec19f03fbf96cecf6f70b4e868 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 28 May 2017 20:21:09 +0200
-+Subject: [PATCH] Fix uClibc build
-+
-+uClibc defines __GLIBC__ but does not contain libc-version.h leading to
-+a build error:
-+
-+./include/private/gcconfig.h:1426:72: fatal error: gnu/libc-version.h: No such file or directory
-+
-+Patch sent upstream: https://github.com/ivmai/bdwgc/pull/164
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ include/private/gcconfig.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
-+index d7912e9e..bf17dd63 100644
-+--- a/include/private/gcconfig.h
-++++ b/include/private/gcconfig.h
-+@@ -1442,7 +1442,7 @@
-+ #         define GC_PREFETCH_FOR_WRITE(x) \
-+             __asm__ __volatile__ ("prefetchw %0" : : "m"(*(char *)(x)))
-+ #       endif
-+-#       if defined(__GLIBC__)
-++#       if defined(__GLIBC__) && !defined(__UCLIBC__)
-+           /* Workaround lock elision implementation for some glibc.     */
-+ #         define GLIBC_2_19_TSX_BUG
-+ #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
-+@@ -2455,7 +2455,7 @@
-+           /* FIXME: This seems to be fixed in GLibc v2.14.              */
-+ #         define GETCONTEXT_FPU_EXCMASK_BUG
-+ #       endif
-+-#       if defined(__GLIBC__)
-++#       if defined(__GLIBC__) && !defined(__UCLIBC__)
-+           /* Workaround lock elision implementation for some glibc.     */
-+ #         define GLIBC_2_19_TSX_BUG
-+ #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Le 28/05/2017 ? 20:14, Bernd Kuhls a ?crit :
+> Am Sun, 27 Nov 2016 17:16:39 +0100 schrieb Romain Naour:
+> 
+>> +GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad linux-syscall-
+> support
+>> +
+>> +HOST_GOOGLE_BREAKPAD_DEPENDENCIES = host-linux-syscall-support 
+>> +
+>> +# Avoid using depot-tools to download this file.
+>> +define HOST_GOOGLE_BREAKPAD_LSS
+>> +	$(INSTALL) -D -m 0644 \
+>> +		$(HOST_DIR)/usr/include/linux_syscall_support.h \
+>> +		$(@D)/src/third_party/lss/linux_syscall_support.h
+>> +endef
+>> +HOST_GOOGLE_BREAKPAD_POST_EXTRACT_HOOKS += HOST_GOOGLE_BREAKPAD_LSS
+> 
+> Hi,
+> 
+> I do not know whether I found a bug or not while currently testing an 
+> allyesconfig with "make legal-info" only.
+> 
+> In this case the package linux-syscall-support was not installed to 
+> staging, therefore linux_syscall_support.h cannot be installed by 
+> _POST_EXTRACT_HOOKS breaking the google-breakpad-legal-info target:
+> 
+> /usr/bin/install: cannot stat '/home/bernd/buildroot/buildroot/output/
+> host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/
+> linux_syscall_support.h': No such file or directory
+> 
+> Is the legal-info target meant to be used that way, this means without 
+> building the package first, or do the packages have to be built before?
+> In this case the problem would not exist.
+
+Thanks for the report, I reproduced the bug here.
+
+You're right, you can generate a defconfig and then extract legal-info without
+building at all.
+
+It seems I used the wrong hook to copy the linux_syscall_support.h file.
+What do you think about PRE_CONFIGURE instead ?
+
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
