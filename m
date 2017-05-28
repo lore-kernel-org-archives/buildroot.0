@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 14:56:01 +0200
-Subject: [Buildroot] [git commit branch/next] package/eigen: bump version to
-	3.3.3
-Message-ID: <20170528130535.27B357FB32@busybox.osuosl.org>
+Date: Sun, 28 May 2017 14:56:03 +0200
+Subject: [Buildroot] [git commit branch/next] package/emlog: bump version to
+	0.60
+Message-ID: <20170528130537.8FC9D7FCAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21ac9b542124d7c7fff42ed7553efc2e6684c80a
+commit: https://git.buildroot.net/buildroot/commit/?id=b7ca77b8c7d8fe225abe71199e15e37e6dc6e199
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Added hash, changed _SITE to upstream tarball according to
-http://eigen.tuxfamily.org/index.php
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/eigen/eigen.hash | 2 ++
- package/eigen/eigen.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/emlog/emlog.hash | 2 +-
+ package/emlog/emlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eigen/eigen.hash b/package/eigen/eigen.hash
-new file mode 100644
-index 0000000..6320a6e
---- /dev/null
-+++ b/package/eigen/eigen.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 a4143fc45e4454b4b98fcea3516b3a79b8cdb3bc7fadf996d088c6a0d805fea1  3.3.3.tar.bz2
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 6ae2911..79f02e4 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/emlog/emlog.hash b/package/emlog/emlog.hash
+index e946917..9d81d47 100644
+--- a/package/emlog/emlog.hash
++++ b/package/emlog/emlog.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 0d82f06301b8486c54e5e36f304d5a83c2347c23b93c1344eacb0b5b3044485a  emlog-576a6c0fcf76dfeff48124b2f5fc0b4207d88ca1.tar.gz
++sha256 9f791a00c86215306597b761ef5c5ad267efee5f01efbe23cfcc04e583aa402d  emlog-emlog-0.60.tar.gz
+diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
+index 70d133a..e0926e6 100644
+--- a/package/emlog/emlog.mk
++++ b/package/emlog/emlog.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EIGEN_VERSION = 3.2.5
--EIGEN_SITE = https://bitbucket.org/eigen/eigen
--EIGEN_SITE_METHOD = hg
-+EIGEN_VERSION = 3.3.3
-+EIGEN_SOURCE = $(EIGEN_VERSION).tar.bz2
-+EIGEN_SITE = https://bitbucket.org/eigen/eigen/get
- EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
- EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
- EIGEN_INSTALL_STAGING = YES
+-EMLOG_VERSION = 576a6c0fcf76dfeff48124b2f5fc0b4207d88ca1
++EMLOG_VERSION = emlog-0.60
+ EMLOG_SITE = $(call github,nicupavel,emlog,$(EMLOG_VERSION))
+ EMLOG_LICENSE = GPL-2.0
+ EMLOG_LICENSE_FILES = COPYING
