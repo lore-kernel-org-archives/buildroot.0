@@ -1,58 +1,29 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 28 May 2017 00:52:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openpowerlink: disable demos
- for static builds
-In-Reply-To: <20170527172745.9020-1-bernd.kuhls@t-online.de>
-References: <20170527172745.9020-1-bernd.kuhls@t-online.de>
-Message-ID: <28bfc84b-d0ee-989b-0372-36126719eeb3@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 27 May 2017 21:45:50 -0300
+Subject: [Buildroot] [PATH 1/2] support/testing: rename variables for
+ readability
+References: <1495922327-16174-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <592a1dbee08ce_416e3fd3b8998434103cf@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hello,
 
-NAK on this one, can you try this one http://patchwork.ozlabs.org/patch/767793/
+On Sat, May 27, 2017 at 06:58 PM, Luca Ceresoli wrote:
 
-Best regards,
-Romain
+> The 'lines' variable is overwritten with its own fields. Thus it
+> contains a line first, and then a list of fields -- it never contains
+> 'lines'.
+> 
+> Use two different variables named 'line' and 'fields' to make the code
+> more readable.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Le 27/05/2017 ? 19:27, Bernd Kuhls a ?crit :
-> Fixes
-> http://autobuild.buildroot.net/results/f43/f437d09ac6c689c911e1885b95da33b692f2cb3c/
-> http://autobuild.buildroot.net/results/385/3859dc0f4de7e3284a96d5841f040f69f71842df/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/openpowerlink/Config.in | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-> index 68ea75195..f00d6377b 100644
-> --- a/package/openpowerlink/Config.in
-> +++ b/package/openpowerlink/Config.in
-> @@ -113,6 +113,8 @@ config BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER
->  	bool "PCIe Powerlink Driver"
->  	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
->  
-> +if !BR2_STATIC_LIBS
-> +
->  menu "demos"
->  
->  config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE
-> @@ -125,4 +127,13 @@ config BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE
->  
->  endmenu
->  
-> +endif
-> +
-> +if BR2_STATIC_LIBS
-> +
-> +comment "demos needs a toolchain w/ dynamic library"
-> +	depends on  BR2_STATIC_LIBS
-> +
-> +endif
-> +
->  endif # BR2_PACKAGE_OPENPOWERLINK
-> 
+Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+Regards,
+Ricardo
