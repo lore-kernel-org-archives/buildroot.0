@@ -1,69 +1,40 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 28 May 2017 20:51:32 +0200
-Subject: [Buildroot] [PATCH for-next 2/3] package/google-breakpad:
- switch to the new git repository
-In-Reply-To: <clgrvdxfme.ln2@ID-313208.user.individual.net>
-References: <1480263400-29605-1-git-send-email-romain.naour@gmail.com>
- <1480263400-29605-2-git-send-email-romain.naour@gmail.com>
- <clgrvdxfme.ln2@ID-313208.user.individual.net>
-Message-ID: <0530a854-021a-33e4-96f2-7cacc7eac0a5@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 21:08:53 +0200
+Subject: [Buildroot] [PATCH 1/1] lxc: set libcap as an optional
+	dependency
+References: <1495203359-57057-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <5rjrvdxfme.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Am Fri, 19 May 2017 16:15:59 +0200 schrieb Fabrice Fontaine:
 
-Le 28/05/2017 ? 20:14, Bernd Kuhls a ?crit :
-> Am Sun, 27 Nov 2016 17:16:39 +0100 schrieb Romain Naour:
-> 
->> +GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad linux-syscall-
-> support
->> +
->> +HOST_GOOGLE_BREAKPAD_DEPENDENCIES = host-linux-syscall-support 
->> +
->> +# Avoid using depot-tools to download this file.
->> +define HOST_GOOGLE_BREAKPAD_LSS
->> +	$(INSTALL) -D -m 0644 \
->> +		$(HOST_DIR)/usr/include/linux_syscall_support.h \
->> +		$(@D)/src/third_party/lss/linux_syscall_support.h
->> +endef
->> +HOST_GOOGLE_BREAKPAD_POST_EXTRACT_HOOKS += HOST_GOOGLE_BREAKPAD_LSS
-> 
-> Hi,
-> 
-> I do not know whether I found a bug or not while currently testing an 
-> allyesconfig with "make legal-info" only.
-> 
-> In this case the package linux-syscall-support was not installed to 
-> staging, therefore linux_syscall_support.h cannot be installed by 
-> _POST_EXTRACT_HOOKS breaking the google-breakpad-legal-info target:
-> 
-> /usr/bin/install: cannot stat '/home/bernd/buildroot/buildroot/output/
-> host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/
-> linux_syscall_support.h': No such file or directory
-> 
-> Is the legal-info target meant to be used that way, this means without 
-> building the package first, or do the packages have to be built before?
-> In this case the problem would not exist.
+> --- a/package/lxc/lxc.hash
+> +++ b/package/lxc/lxc.hash
+> @@ -1,2 +1,3 @@
+>  # Locally calculated
+>  sha256	
+0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	
+lxc-2.0.8.tar.gz
+> +sha256	
+c79443c5db7e7defd53992d120cad2bc8afc2ff363b1e84ec31bc2b95ec5ca44	
+bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
 
-Thanks for the report, I reproduced the bug here.
+Hi Fabrice,
 
-You're right, you can generate a defconfig and then extract legal-info without
-building at all.
+there seems to be a problem with the hash:
 
-It seems I used the wrong hook to copy the linux_syscall_support.h file.
-What do you think about PRE_CONFIGURE instead ?
+ERROR: bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch has wrong sha256 
+hash:
 
-Best regards,
-Romain
+ERROR: expected: 
+c79443c5db7e7defd53992d120cad2bc8afc2ff363b1e84ec31bc2b95ec5ca44
 
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+ERROR: got     : 
+16cf466db42a45bd579bdb66efbeb63764cd93d049f05a6d8a659846cab9b47f
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+Regards, Bernd
