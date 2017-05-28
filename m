@@ -1,48 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 16:37:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/redis: fix static linking with
- libatomic
-In-Reply-To: <20170525071934.31057-1-bernd.kuhls@t-online.de>
-References: <20170525071934.31057-1-bernd.kuhls@t-online.de>
-Message-ID: <20170528163736.175ff4bc@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 16:48:14 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/fping: bump version to 4.0
+Message-ID: <20170528144815.29502-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Please note that according to the release notes
+https://github.com/schweikert/fping/releases/tag/v4.0
 
-On Thu, 25 May 2017 09:19:34 +0200, Bernd Kuhls wrote:
+"fping and fping6 are now unified into one binary."
 
->  # Uses __atomic_fetch_add_4
-> +# src/Makefile contains a wrong linking order which breaks linking
-> +# for static builds. We need to add -latomic to FINAL_LIBS to provide
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: fixed subject prefix, patch is meant for next branch
 
-The Makefile doesn't really contain a "wrong linking" order, it's
-simply that LDFLAGS are used before the list of object files. So I've
-reworded a bit the comment here.
+ package/fping/fping.hash | 2 +-
+ package/fping/fping.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +# -latomic at the correct place in the linking command.
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -REDIS_LIBATOMIC = -latomic
-
-You forgot to adjust the place where REDIS_LIBATOMIC was used, so I've
-adjusted that as well.
-
-Applied to master with those two issues fixed.
-
-Could you submit a patch upstream that adds something like
-EXTRA_FINAL_LIBS:
-
-FINAL_LIBS = -lm $(EXTRA_FINAL_LIBS)
-
-This way we could nicely pass it from the environment.
-
-Thanks!
-
-Thomas
+diff --git a/package/fping/fping.hash b/package/fping/fping.hash
+index 8c1909ed9..e97709ca1 100644
+--- a/package/fping/fping.hash
++++ b/package/fping/fping.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	2f753094e4df3cdb1d99be1687c0fb7d2f14c0d526ebf03158c8c5519bc78f54	fping-3.16.tar.gz
++sha256 67eb4152b98ad34f99d2eec4e1098a0bb52caf13c0c89cd147349d08190fe8ce  fping-4.0.tar.gz
+diff --git a/package/fping/fping.mk b/package/fping/fping.mk
+index 5970d6379..5af46c67f 100644
+--- a/package/fping/fping.mk
++++ b/package/fping/fping.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FPING_VERSION = 3.16
++FPING_VERSION = 4.0
+ FPING_SITE = http://fping.org/dist
+ FPING_LICENSE = BSD-like
+ FPING_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
