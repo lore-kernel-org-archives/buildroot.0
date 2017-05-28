@@ -1,57 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 16:31:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ftop: Fix broken download URL
-Message-ID: <20170528143135.14428-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 May 2017 16:26:56 +0200
+Subject: [Buildroot] [git commit] package/redis: fix static linking with
+	libatomic
+Message-ID: <20170528143520.22CAF81DD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also use bz2 tarball and provide md5 & sha256 hashes.
+commit: https://git.buildroot.net/buildroot/commit/?id=019ad605670670a51055fb5d27a2a1f374a33289
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes
+http://autobuild.buildroot.net/results/7f1/7f1ecccbfdb6bd95824d9c884f1577e71e0e1e09/
+http://autobuild.buildroot.net/results/c0b/c0b1bdcc5fbddf8b996b923015184d753882d4b8/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas:
+ - improve comment to explain the fix
+ - remove useless LDFLAGS related code]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ftop/Config.in | 2 +-
- package/ftop/ftop.hash | 7 +++++--
- package/ftop/ftop.mk   | 3 ++-
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ package/redis/redis.mk | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/ftop/Config.in b/package/ftop/Config.in
-index 1f5ebbbbf..aefe4f515 100644
---- a/package/ftop/Config.in
-+++ b/package/ftop/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_FTOP
- 	  Ftop is to files what top is to processes.
- 	  The progress of all open files and file systems can be monitored.
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 3f4956c..458ed4f 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -13,16 +13,21 @@ define REDIS_USERS
+ 	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
+ endef
  
--	  https://code.google.com/p/ftop/
-+	  https://sourceforge.net/projects/ftop/
-diff --git a/package/ftop/ftop.hash b/package/ftop/ftop.hash
-index 06f2fb1f4..ca8dc827e 100644
---- a/package/ftop/ftop.hash
-+++ b/package/ftop/ftop.hash
-@@ -1,2 +1,5 @@
--# From https://code.google.com/p/ftop/downloads/detail?name=ftop-1.0.tar.gz&can=2&q=
--sha1	a0523862dd63ed3bec14846b6e05afcfdebb15c2	ftop-1.0.tar.gz
-+# From https://sourceforge.net/projects/ftop/files/ftop/1.0/
-+md5 57c68b6e7431f4219d9eddaebcb395da ftop-1.0.tar.bz2
-+sha1 d3ef1b74825f50c7c442d299b29d23c2478f199b ftop-1.0.tar.bz2
-+# Locally computed
-+sha256 3a705f4f291384344cd32c3dd5f5f6a7cd7cea7624c83cb7e923966dbcd47f82  ftop-1.0.tar.bz2
-diff --git a/package/ftop/ftop.mk b/package/ftop/ftop.mk
-index d10e9cd0c..5498fb524 100644
---- a/package/ftop/ftop.mk
-+++ b/package/ftop/ftop.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+-# Uses __atomic_fetch_add_4
++# Uses __atomic_fetch_add_4. Adding -latomic to LDFLAGS does not work,
++# because LDFLAGS is used before the list of object files. We need to
++# add -latomic to FINAL_LIBS to provide -latomic at the correct place
++# in the linking command.
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-REDIS_LIBATOMIC = -latomic
++define REDIS_FIX_MAKEFILE
++	$(SED) 's/FINAL_LIBS=-lm/FINAL_LIBS=-lm -latomic/' $(@D)/src/Makefile
++endef
++REDIS_POST_PATCH_HOOKS = REDIS_FIX_MAKEFILE
+ endif
  
- FTOP_VERSION = 1.0
--FTOP_SITE = http://ftop.googlecode.com/files
-+FTOP_SOURCE = ftop-$(FTOP_VERSION).tar.bz2
-+FTOP_SITE = https://sourceforge.net/projects/ftop/files/ftop/$(FTOP_VERSION)
- FTOP_DEPENDENCIES = ncurses
- FTOP_LICENSE = GPL-3.0+
- FTOP_LICENSE_FILES = COPYING
--- 
-2.11.0
+ # Redis doesn't support DESTDIR (yet, see
+ # https://github.com/antirez/redis/pull/609).  We set PREFIX
+ # instead.
+ REDIS_BUILDOPTS = $(TARGET_CONFIGURE_OPTS) \
+-	LDFLAGS="$(TARGET_LDFLAGS) $(REDIS_LIBATOMIC)" \
+ 	PREFIX=$(TARGET_DIR)/usr MALLOC=libc
+ 
+ define REDIS_BUILD_CMDS
