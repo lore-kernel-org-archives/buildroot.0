@@ -1,44 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 16:13:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fping: bump version to 4.0
-Message-ID: <20170528141354.18968-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 May 2017 16:13:51 +0200
+Subject: [Buildroot] [PATCH/next] package/flann: bump version to 1.9.1
+In-Reply-To: <20170528134230.11926-1-bernd.kuhls@t-online.de>
+References: <20170528134230.11926-1-bernd.kuhls@t-online.de>
+Message-ID: <20170528161351.7740bcb6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please note that according to the release notes
-https://github.com/schweikert/fping/releases/tag/v4.0
+Hello,
 
-"fping and fping6 are now unified into one binary."
+On Sun, 28 May 2017 15:42:30 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/flann/flann.hash | 2 +-
+>  package/flann/flann.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fping/fping.hash | 2 +-
- package/fping/fping.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/fping/fping.hash b/package/fping/fping.hash
-index 8c1909ed9..e97709ca1 100644
---- a/package/fping/fping.hash
-+++ b/package/fping/fping.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2f753094e4df3cdb1d99be1687c0fb7d2f14c0d526ebf03158c8c5519bc78f54	fping-3.16.tar.gz
-+sha256 67eb4152b98ad34f99d2eec4e1098a0bb52caf13c0c89cd147349d08190fe8ce  fping-4.0.tar.gz
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-index 5970d6379..5af46c67f 100644
---- a/package/fping/fping.mk
-+++ b/package/fping/fping.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FPING_VERSION = 3.16
-+FPING_VERSION = 4.0
- FPING_SITE = http://fping.org/dist
- FPING_LICENSE = BSD-like
- FPING_LICENSE_FILES = COPYING
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
