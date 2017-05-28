@@ -1,47 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 22:17:05 +0200
-Subject: [Buildroot] [PATCH for-next 2/3] package/google-breakpad:
- switch to	the new git repository
-In-Reply-To: <clgrvdxfme.ln2@ID-313208.user.individual.net>
-References: <1480263400-29605-1-git-send-email-romain.naour@gmail.com>
- <1480263400-29605-2-git-send-email-romain.naour@gmail.com>
- <clgrvdxfme.ln2@ID-313208.user.individual.net>
-Message-ID: <20170528221705.6e946c2a@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 22:35:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/armadillo: fix download URL
+Message-ID: <20170528203552.7479-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/armadillo/armadillo.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Sun, 28 May 2017 20:14:36 +0200, Bernd Kuhls wrote:
-
-> I do not know whether I found a bug or not while currently testing an 
-> allyesconfig with "make legal-info" only.
-> 
-> In this case the package linux-syscall-support was not installed to 
-> staging, therefore linux_syscall_support.h cannot be installed by 
-> _POST_EXTRACT_HOOKS breaking the google-breakpad-legal-info target:
-> 
-> /usr/bin/install: cannot stat '/home/bernd/buildroot/buildroot/output/
-> host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/
-> linux_syscall_support.h': No such file or directory
-> 
-> Is the legal-info target meant to be used that way, this means without 
-> building the package first, or do the packages have to be built before?
-> In this case the problem would not exist.
-
-I confirm that we should be able to run "make legal-info" without doing
-a build first. So, something like:
-
- $ make foo_defconfig
- $ make legal-info
-
-is supposed to work.
-
-Thomas
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 714c1b2dd..beb60c8c6 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -5,7 +5,9 @@
+ ################################################################################
+ 
+ ARMADILLO_VERSION = 6.500.4
+-ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
++# upstream removed tarball from
++# http://downloads.sourceforge.net/project/arma
++ARMADILLO_SITE = https://ftp.fau.de/macports/distfiles/armadillo
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
+ ARMADILLO_LICENSE = MPL-2.0
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
