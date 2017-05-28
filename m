@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 16:12:57 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/gettext: update wint_t.m4
- from gnulib
-In-Reply-To: <20170525215647.10315-1-bernd.kuhls@t-online.de>
-References: <20170525215647.10315-1-bernd.kuhls@t-online.de>
-Message-ID: <20170528161257.4840e1c9@free-electrons.com>
+Date: Sun, 28 May 2017 16:13:42 +0200
+Subject: [Buildroot] [git commit branch/next] package/font-awesome: bump
+	version to 4.7.0
+Message-ID: <20170528141347.1CEE38292B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dcdd5e363b4033d49de76bfff8913a356e39a84e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 25 May 2017 23:56:46 +0200, Bernd Kuhls wrote:
-> Needed for coreutils bump to 8.27
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../gettext/0002-Update-after-gnulib-changed.patch | 86 ++++++++++++++++++++++
->  1 file changed, 86 insertions(+)
->  create mode 100644 package/gettext/0002-Update-after-gnulib-changed.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/font-awesome/font-awesome.hash | 2 +-
+ package/font-awesome/font-awesome.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've applied both patches to next. However, what would be nice is to
-submit upstream the coreutils patch. Once upstreamed, we will be able
-to stop autoreconfiguring coreutils, which would be a better solution.
-
-Of course, in the mean time, gettext will have probably released a new
-version containing the win_t fix, but upstreaming our coreutils patch
-would nonetheless be a good thing.
-
-Could you look into this?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/font-awesome/font-awesome.hash b/package/font-awesome/font-awesome.hash
+index 9f3715e..e266168 100644
+--- a/package/font-awesome/font-awesome.hash
++++ b/package/font-awesome/font-awesome.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  7813f416057da622b16229b10fef550e1dc64c5bb59871cd38fa86e76dfdbae8  font-awesome-v4.5.0.tar.gz
++sha256 de512ba0e1dead382bbfce372cde74b3f18971d876fffb635ee9333f0db05d43  font-awesome-v4.7.0.tar.gz
+diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+index 8933783..f394010 100644
+--- a/package/font-awesome/font-awesome.mk
++++ b/package/font-awesome/font-awesome.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FONT_AWESOME_VERSION = v4.5.0
++FONT_AWESOME_VERSION = v4.7.0
+ FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
+ FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
+ FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
