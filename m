@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 16:15:15 +0200
-Subject: [Buildroot] [git commit] package/fping: bump version to 4.0
-Message-ID: <20170601202858.C3975818F2@busybox.osuosl.org>
+Date: Sun, 28 May 2017 16:04:38 +0200
+Subject: [Buildroot] [git commit] package/coreutils: bump version to 8.27
+Message-ID: <20170601202858.8E985818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3934120ede459b16eaabcc173d27843a289d9a7e
+commit: https://git.buildroot.net/buildroot/commit/?id=4731bb9d73c40d3e17ef00c876b27770c34b6d54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Please note that according to the release notes
-https://github.com/schweikert/fping/releases/tag/v4.0
-
-"fping and fping6 are now unified into one binary."
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fping/fping.hash | 2 +-
- package/fping/fping.mk   | 2 +-
+ package/coreutils/coreutils.hash | 2 +-
+ package/coreutils/coreutils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fping/fping.hash b/package/fping/fping.hash
-index 8c1909e..e97709c 100644
---- a/package/fping/fping.hash
-+++ b/package/fping/fping.hash
+diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
+index 37d630b..472cab5 100644
+--- a/package/coreutils/coreutils.hash
++++ b/package/coreutils/coreutils.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2f753094e4df3cdb1d99be1687c0fb7d2f14c0d526ebf03158c8c5519bc78f54	fping-3.16.tar.gz
-+sha256 67eb4152b98ad34f99d2eec4e1098a0bb52caf13c0c89cd147349d08190fe8ce  fping-4.0.tar.gz
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-index 5970d63..5af46c6 100644
---- a/package/fping/fping.mk
-+++ b/package/fping/fping.mk
+ # Locally calculated after checking pgp signature
+-sha256	155e94d748f8e2bc327c66e0cbebdb8d6ab265d2f37c3c928f7bf6c3beba9a8e	coreutils-8.26.tar.xz
++sha256 8891d349ee87b9ff7870f52b6d9312a9db672d2439d289bc57084771ca21656b  coreutils-8.27.tar.xz
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 0769bca..14b952f 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FPING_VERSION = 3.16
-+FPING_VERSION = 4.0
- FPING_SITE = http://fping.org/dist
- FPING_LICENSE = BSD-like
- FPING_LICENSE_FILES = COPYING
+-COREUTILS_VERSION = 8.26
++COREUTILS_VERSION = 8.27
+ COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPL-3.0+
