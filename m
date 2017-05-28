@@ -1,22 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 15:37:50 +0200
-Subject: [Buildroot] [PATCH] package/firejail: mark as broken
-References: <1489325570-3550-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <ee0rvdxfme.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 May 2017 15:41:45 +0200
+Subject: [Buildroot] [PATCH/next] package/exiv2: bump version to 0.26
+In-Reply-To: <20170528130719.15164-1-bernd.kuhls@t-online.de>
+References: <20170528130719.15164-1-bernd.kuhls@t-online.de>
+Message-ID: <20170528154145.3aede1c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 12 Mar 2017 14:32:50 +0100 schrieb Yann E. MORIN:
+Hello,
 
-> If the package is not fixed before 2017.05-rc1, we will remove it
-> altogether (as it was never part of an official release so far).
+On Sun, 28 May 2017 15:07:19 +0200, Bernd Kuhls wrote:
+> Changed download URL according to http://www.exiv2.org/download.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/exiv2/exiv2.hash | 4 ++--
+>  package/exiv2/exiv2.mk   | 5 +++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-Hi,
+Applied to next, thanks.
 
-what about removing the package on master branch before releasing 2017.05?
-FYI: version 0.9.46 still has no cross-compile support.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
