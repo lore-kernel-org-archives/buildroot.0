@@ -1,36 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 14:48:08 +0200
-Subject: [Buildroot] [git commit] support/testing: fs/ext: add a negative
-	test for the "extent" feature
-Message-ID: <20170528124817.BB59782765@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 14:48:56 +0200
+Subject: [Buildroot] [PATCH/next] package/evemu: bump version to 2.6.0
+Message-ID: <20170528124856.2260-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfecdfadc1c980e3bb6dc86101b3b932a0969017
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Upstream did not sent an announcement so the hash had to be computed
+locally.
 
-We only have a positive test for it, in ext4. Let's have a negative
-one as well.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/testing/tests/fs/test_ext.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/evemu/evemu.hash | 4 ++--
+ package/evemu/evemu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
-index f7e2e85..545bf1e 100644
---- a/support/testing/tests/fs/test_ext.py
-+++ b/support/testing/tests/fs/test_ext.py
-@@ -86,6 +86,7 @@ BR2_TARGET_ROOTFS_EXT2_3=y
-         out = dumpe2fs_run(self.builddir, "rootfs.ext3")
-         self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
-         self.assertIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
-+        self.assertNotIn("extent", dumpe2fs_getprop(out, FEATURES_PROP))
+diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
+index 5e653f7d5..b5f0bf5d5 100644
+--- a/package/evemu/evemu.hash
++++ b/package/evemu/evemu.hash
+@@ -1,2 +1,2 @@
+-# Hash from https://lists.freedesktop.org/archives/input-tools/2016-September/001330.html
+-sha256 541cc138f0215b7d0cd4ad5e6bb1402518ffc5e31294c36bb67b4ff1791bb27f evemu-2.5.0.tar.xz
++# Locally computed
++sha256 ed81dd4552ffeb92c346b47e56b249c67f1cb37d5b31fc073ea0ad4858ae3dcc  evemu-2.6.0.tar.xz
+diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
+index d52520732..fba45216c 100644
+--- a/package/evemu/evemu.mk
++++ b/package/evemu/evemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-         exit_code = boot_img_and_check_fs_type(self.emulator,
-                                                self.builddir, "ext3")
+-EVEMU_VERSION = 2.5.0
++EVEMU_VERSION = 2.6.0
+ EVEMU_SITE = http://www.freedesktop.org/software/evemu
+ EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
+ EVEMU_LICENSE = LGPL-3.0 (library), GPL-3.0 (tools)
+-- 
+2.11.0
