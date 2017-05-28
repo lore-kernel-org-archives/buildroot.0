@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 15:06:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/exfat: bump version to
-	1.2.6
-Message-ID: <20170528133446.D3FC77FA52@busybox.osuosl.org>
+Date: Sun, 28 May 2017 15:06:46 +0200
+Subject: [Buildroot] [git commit branch/next] package/exfat-utils: bump
+	version to 1.2.6
+Message-ID: <20170528133447.3B0F8807C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9101f89a9920518bb9ccef782d19d35d8a2d49b
+commit: https://git.buildroot.net/buildroot/commit/?id=8847227411d3382b82e7bcec86bdc8baadc32e41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/exfat/exfat.hash | 2 +-
- package/exfat/exfat.mk   | 2 +-
+ package/exfat-utils/exfat-utils.hash | 2 +-
+ package/exfat-utils/exfat-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
-index cf3aab1..15b67f0 100644
---- a/package/exfat/exfat.hash
-+++ b/package/exfat/exfat.hash
+diff --git a/package/exfat-utils/exfat-utils.hash b/package/exfat-utils/exfat-utils.hash
+index b40e632..f0d6b64 100644
+--- a/package/exfat-utils/exfat-utils.hash
++++ b/package/exfat-utils/exfat-utils.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	9312d23a5d82543ad2e9ab7f0a0b471aea53eeb8eae664451c881b46d849756e	fuse-exfat-1.2.4.tar.gz
-+sha256 e1105256d75860c0678f98bbae0b8fe465d4c96ed187b7035556097f152478e7  fuse-exfat-1.2.6.tar.gz
-diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
-index ae89217..f5ed13e 100644
---- a/package/exfat/exfat.mk
-+++ b/package/exfat/exfat.mk
+-sha256	6aa51926416b9d0977b456902f4c4cd10bcce4b2d160859a7a2fc9ca6bcbbb11	exfat-utils-1.2.4.tar.gz
++sha256 b96b6692cf92a629c9eca0fe8c782646e20479524c7d2a99b7e9b43c3cf8ac43  exfat-utils-1.2.6.tar.gz
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index 622c181..c1b5a93 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXFAT_VERSION = 1.2.4
-+EXFAT_VERSION = 1.2.6
- EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
- EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
- EXFAT_DEPENDENCIES = libfuse host-pkgconf
+-EXFAT_UTILS_VERSION = 1.2.4
++EXFAT_UTILS_VERSION = 1.2.6
+ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTILS_VERSION)
+ EXFAT_UTILS_LICENSE = GPL-3.0+
+ EXFAT_UTILS_LICENSE_FILES = COPYING
