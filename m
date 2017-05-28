@@ -1,46 +1,154 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 16:48:14 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/fping: bump version to 4.0
-Message-ID: <20170528144815.29502-1-bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 16:48:15 +0200
+Subject: [Buildroot] [PATCH/next 2/2] package/freetype: bump version to 2.8
+In-Reply-To: <20170528144815.29502-1-bernd.kuhls@t-online.de>
+References: <20170528144815.29502-1-bernd.kuhls@t-online.de>
+Message-ID: <20170528144815.29502-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please note that according to the release notes
-https://github.com/schweikert/fping/releases/tag/v4.0
+Added md5 & sha1 hashes supplied by sourceforge mirror.
 
-"fping and fping6 are now unified into one binary."
+Removed patches applied upstream:
+
+0001-psaux-Better-protect-flex-handling.patch
+http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=f958c48ee431bef8d4d466b40c9cb2d4dbcb7791
+
+0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
+http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=3774fc08b502c3e685afca098b6e8a195aded6a0
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v2: fixed subject prefix, patch is meant for next branch
 
- package/fping/fping.hash | 2 +-
- package/fping/fping.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-psaux-Better-protect-flex-handling.patch  | 47 ----------------------
+ ...sobjs.c-t1_builder_close_contour-Add-safe.patch | 35 ----------------
+ package/freetype/freetype.hash                     |  5 ++-
+ package/freetype/freetype.mk                       |  2 +-
+ 4 files changed, 5 insertions(+), 84 deletions(-)
+ delete mode 100644 package/freetype/0001-psaux-Better-protect-flex-handling.patch
+ delete mode 100644 package/freetype/0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
 
-diff --git a/package/fping/fping.hash b/package/fping/fping.hash
-index 8c1909ed9..e97709ca1 100644
---- a/package/fping/fping.hash
-+++ b/package/fping/fping.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2f753094e4df3cdb1d99be1687c0fb7d2f14c0d526ebf03158c8c5519bc78f54	fping-3.16.tar.gz
-+sha256 67eb4152b98ad34f99d2eec4e1098a0bb52caf13c0c89cd147349d08190fe8ce  fping-4.0.tar.gz
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-index 5970d6379..5af46c67f 100644
---- a/package/fping/fping.mk
-+++ b/package/fping/fping.mk
+diff --git a/package/freetype/0001-psaux-Better-protect-flex-handling.patch b/package/freetype/0001-psaux-Better-protect-flex-handling.patch
+deleted file mode 100644
+index a59f5b34f..000000000
+--- a/package/freetype/0001-psaux-Better-protect-flex-handling.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From f958c48ee431bef8d4d466b40c9cb2d4dbcb7791 Mon Sep 17 00:00:00 2001
+-From: Werner Lemberg <wl@gnu.org>
+-Date: Fri, 24 Mar 2017 09:15:10 +0100
+-Subject: [PATCH] [psaux] Better protect `flex' handling.
+-
+-Reported as
+-
+-  https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=935
+-
+-* src/psaux/t1decode.c (t1_decoder_parse_charstrings)
+-<callothersubr>: Since there is not a single flex operator but a
+-series of subroutine calls, malformed fonts can call arbitrary other
+-operators after the start of a flex, possibly adding points.  For
+-this reason we have to check the available number of points before
+-inserting a point.
+-
+-Fixes CVE-2017-8105
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+-diff --git a/src/psaux/t1decode.c b/src/psaux/t1decode.c
+-index af7b465e..7dd45135 100644
+---- a/src/psaux/t1decode.c
+-+++ b/src/psaux/t1decode.c
+-@@ -780,10 +780,19 @@
+-             /* point without adding any point to the outline    */
+-             idx = decoder->num_flex_vectors++;
+-             if ( idx > 0 && idx < 7 )
+-+            {
+-+              /* in malformed fonts it is possible to have other */
+-+              /* opcodes in the middle of a flex (which don't    */
+-+              /* increase `num_flex_vectors'); we thus have to   */
+-+              /* check whether we can add a point                */
+-+              if ( FT_SET_ERROR( t1_builder_check_points( builder, 1 ) ) )
+-+                goto Syntax_Error;
+-+
+-               t1_builder_add_point( builder,
+-                                     x,
+-                                     y,
+-                                     (FT_Byte)( idx == 3 || idx == 6 ) );
+-+            }
+-           }
+-           break;
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/freetype/0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch b/package/freetype/0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
+deleted file mode 100644
+index 1b9d90a7d..000000000
+--- a/package/freetype/0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 3774fc08b502c3e685afca098b6e8a195aded6a0 Mon Sep 17 00:00:00 2001
+-From: Werner Lemberg <wl@gnu.org>
+-Date: Sun, 26 Mar 2017 08:32:09 +0200
+-Subject: [PATCH] * src/psaux/psobjs.c (t1_builder_close_contour): Add safety
+- guard.
+-
+-Reported as
+-
+-  https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=941
+-
+-Fixes CVE-2017-8287
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-diff --git a/src/psaux/psobjs.c b/src/psaux/psobjs.c
+-index d18e821a..0baf8368 100644
+---- a/src/psaux/psobjs.c
+-+++ b/src/psaux/psobjs.c
+-@@ -1718,6 +1718,14 @@
+-     first = outline->n_contours <= 1
+-             ? 0 : outline->contours[outline->n_contours - 2] + 1;
+- 
+-+    /* in malformed fonts it can happen that a contour was started */
+-+    /* but no points were added                                    */
+-+    if ( outline->n_contours && first == outline->n_points )
+-+    {
+-+      outline->n_contours--;
+-+      return;
+-+    }
+-+
+-     /* We must not include the last point in the path if it */
+-     /* is located on the first point.                       */
+-     if ( outline->n_points > 1 )
+--- 
+-2.11.0
+-
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index b2cec04d3..beff85846 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,2 +1,5 @@
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.8/
++md5 2413ac3eaf508ada019c63959ea81a92  freetype-2.8.tar.bz2
++sha1 42c6b1f733fe13a3eba135f5025b22cb68450f91  freetype-2.8.tar.bz2
+ # Locally calculated after checking pgp signature
+-sha256	3a3bb2c4e15ffb433f2032f50a5b5a92558206822e22bfe8cbe339af4aa82f88	freetype-2.7.1.tar.bz2
++sha256 a3c603ed84c3c2495f9c9331fe6bba3bb0ee65e06ec331e0a0fb52158291b40b  freetype-2.8.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 57f9b2048..9a98b4068 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FPING_VERSION = 3.16
-+FPING_VERSION = 4.0
- FPING_SITE = http://fping.org/dist
- FPING_LICENSE = BSD-like
- FPING_LICENSE_FILES = COPYING
+-FREETYPE_VERSION = 2.7.1
++FREETYPE_VERSION = 2.8
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
 -- 
 2.11.0
