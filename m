@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 14:55:59 +0200
-Subject: [Buildroot] [git commit] package/openssl: bump verstion to 1.0.2l
-Message-ID: <20170601202857.A9D5882641@busybox.osuosl.org>
+Date: Sun, 28 May 2017 15:06:37 +0200
+Subject: [Buildroot] [git commit] package/mpd: bump version to 0.20.7
+Message-ID: <20170601202858.275C082641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b4f96335b9597ec68c4e560d5eae8ae605cf9ef
+commit: https://git.buildroot.net/buildroot/commit/?id=ae6571d3e677787105317d6dc93a06a1696b070c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-According to https://www.openssl.org/news/newslog.html this release
-does not contain security fixes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 064eeca..da911c5 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
--sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2l.tar.gz.sha256
-+sha256	ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c	openssl-1.0.2l.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 1536982..5f56b44 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 3714197..cea79e2 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  f4055e1189e5cc00e83706b2e0b5ead924ced0303e073d7802ee9f9a8eba4b47  mpd-0.20.6.tar.xz
++sha256  005ac663b39a76701ba043cce4caef82ac6b0c2f16aae12fdc28e1b3b5b6c780  mpd-0.20.7.tar.xz
+ sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7fd9bc9..fce2472 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -6,7 +6,7 @@
  
--OPENSSL_VERSION = 1.0.2k
-+OPENSSL_VERSION = 1.0.2l
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+ MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
+ ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
+-MPD_VERSION = $(MPD_VERSION_MAJOR).6
++MPD_VERSION = $(MPD_VERSION_MAJOR).7
+ else
+ MPD_VERSION = $(MPD_VERSION_MAJOR).21
+ endif
