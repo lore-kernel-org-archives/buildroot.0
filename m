@@ -1,52 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 15:33:23 +0200
-Subject: [Buildroot] [PATCH] package/openpowerlink: use pcap-config to
- fix static linking with libpcap
-In-Reply-To: <20170527225119.26015-1-romain.naour@gmail.com>
-References: <20170527225119.26015-1-romain.naour@gmail.com>
-Message-ID: <20170528153323.6e7f716b@free-electrons.com>
+Date: Sun, 28 May 2017 15:06:37 +0200
+Subject: [Buildroot] [git commit branch/next] package/mpd: bump version to
+	0.20.7
+Message-ID: <20170528133446.62D9181939@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae6571d3e677787105317d6dc93a06a1696b070c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 28 May 2017 00:51:19 +0200, Romain Naour wrote:
-> When linking demo_mn_console statically with pcap, the CMake build
-> system forget to link with other libraries linked with libpcap
-> (-lnl-genl-3 -lnl-3 -ldbus-1 -pthread).
-> 
-> [100%] Linking C executable demo_mn_console
-> lib64/libpcap.a(pcap-linux.o): In function nl80211_init': pcap-linux.c:(.text+0x41e): undefined reference tonl_socket_alloc'
-> 
-> To fix this, the build system could use pcap-config:
-> pcap-config --libs --static
-> -L/path/to/sysroot/usr/lib -lpcap -L/path/to/sysroot/usr/lib/.libs
-> -lnl-genl-3 -lnl-3 -L/path/to/sysroot/usr/lib -ldbus-1 -pthread
-> 
-> Also don't use getopt() from contrib directory to avoid a clash with
-> libc definition.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f43/f437d09ac6c689c911e1885b95da33b692f2cb3c
-> http://autobuild.buildroot.net/results/385/3859dc0f4de7e3284a96d5841f040f69f71842df
-> https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/issues/187
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...04-FIX-use-contrib-getopt-only-on-Windows.patch | 102 +++++++++++++
->  ...p-config-to-fix-static-linking-with-libpc.patch | 166 +++++++++++++++++++++
->  package/openpowerlink/openpowerlink.mk             |   6 +-
->  3 files changed, 272 insertions(+), 2 deletions(-)
->  create mode 100644 package/openpowerlink/0004-FIX-use-contrib-getopt-only-on-Windows.patch
->  create mode 100644 package/openpowerlink/0005-FIX-use-pcap-config-to-fix-static-linking-with-libpc.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 3714197..cea79e2 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  f4055e1189e5cc00e83706b2e0b5ead924ced0303e073d7802ee9f9a8eba4b47  mpd-0.20.6.tar.xz
++sha256  005ac663b39a76701ba043cce4caef82ac6b0c2f16aae12fdc28e1b3b5b6c780  mpd-0.20.7.tar.xz
+ sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7fd9bc9..fce2472 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -6,7 +6,7 @@
+ 
+ MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
+ ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
+-MPD_VERSION = $(MPD_VERSION_MAJOR).6
++MPD_VERSION = $(MPD_VERSION_MAJOR).7
+ else
+ MPD_VERSION = $(MPD_VERSION_MAJOR).21
+ endif
