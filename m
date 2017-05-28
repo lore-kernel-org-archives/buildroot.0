@@ -1,128 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 12:33:34 +0200
-Subject: [Buildroot] [PATCH/next] package/dvdauthor: bump version to 0.7.2
-Message-ID: <20170528103334.30361-1-bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 12:47:48 +0200
+Subject: [Buildroot] [PATCH/next] package/openssl: bump verstion to 1.0.2l
+Message-ID: <20170528104748.30727-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed _SITE to https, added upstream hashes.
-
-Removed patch applied upstream:
-https://github.com/ldo/dvdauthor/commit/176172d5dcba4d6e2704a1a2cc48c9e687761996
-
-Also remove autoreconf-related code, basically reverting the original
-commit:
-https://git.buildroot.net/buildroot/commit/package/dvdauthor?id=1cac78fbb044279f1854b1c7c59e94f03fb061f1
+According to https://www.openssl.org/news/newslog.html this release
+does not contain security fixes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-configure.ac-fix-static-build.patch       | 55 ----------------------
- package/dvdauthor/dvdauthor.hash                   |  5 +-
- package/dvdauthor/dvdauthor.mk                     |  9 +---
- 3 files changed, 6 insertions(+), 63 deletions(-)
- delete mode 100644 package/dvdauthor/0001-configure.ac-fix-static-build.patch
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dvdauthor/0001-configure.ac-fix-static-build.patch b/package/dvdauthor/0001-configure.ac-fix-static-build.patch
-deleted file mode 100644
-index 0e016b8cb..000000000
---- a/package/dvdauthor/0001-configure.ac-fix-static-build.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From da77704c575f0583fa871ff02bd52906a7979576 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Sun, 15 Feb 2015 11:05:43 +0100
--Subject: [PATCH] configure.ac: fix static build
--
--Add LT_INIT macro to handle --enable-shared option.
--
--If enable-shared=no then add --static flag to resolve FREETYPE_LIBS.
--
--Otherwise, dvdauthor forget to link witk -lbz2 when linking with freetype2.
--
--Fixes:
--http://autobuild.buildroot.net/results/1d8/1d83390a3dd9f6bb595e9fc7b321500b4dc533a8/
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- configure.ac | 8 +++++++-
-- 1 file changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index c43df92..d78d56a 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -4,6 +4,7 @@ AM_CONFIG_HEADER(src/config.h)
-- AC_CONFIG_AUX_DIR(autotools)
-- 
-- AM_INIT_AUTOMAKE
--+LT_INIT
-- 
-- AC_PROG_INSTALL
-- 
--@@ -39,6 +40,11 @@ PKG_CHECK_MODULES(LIBPNG, [libpng])
-- AC_SUBST(LIBPNG_CFLAGS)
-- AC_SUBST(LIBPNG_LIBS)
-- 
--+config_static=''
--+if test "$enable_shared" = 'no'; then
--+    config_static='--static'
--+fi
--+
-- usemagick=0
-- 
-- AC_CHECK_PROGS(MAGICKCONFIG, [Magick-config])
--@@ -95,7 +101,7 @@ AC_SUBST(FRIBIDI_LIBS)
-- AC_CHECK_PROGS(FREETYPECONFIG, [freetype-config])
-- if test -n "$FREETYPECONFIG"; then
--     FREETYPE_CPPFLAGS="`$FREETYPECONFIG --cflags`"
---    FREETYPE_LIBS="`$FREETYPECONFIG --libs`"
--+    FREETYPE_LIBS="`$FREETYPECONFIG --libs $config_static`"
--     AC_DEFINE(HAVE_FREETYPE, 1, [Whether FreeType is available])
-- 
--     ac_save_CPPFLAGS="$CPPFLAGS"
---- 
--1.9.3
--
-diff --git a/package/dvdauthor/dvdauthor.hash b/package/dvdauthor/dvdauthor.hash
-index fe92b29c5..36d5d0e68 100644
---- a/package/dvdauthor/dvdauthor.hash
-+++ b/package/dvdauthor/dvdauthor.hash
-@@ -1,2 +1,5 @@
-+# From https://sourceforge.net/projects/dvdauthor/files
-+md5 1173dcb8d40e74fc90c0f3a25dbd642d  dvdauthor-0.7.2.tar.gz
-+sha1 0e605642140576bfb3e963414d77630d1c073a51  dvdauthor-0.7.2.tar.gz
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 064eeca6f..da911c5ce 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
+-sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2l.tar.gz.sha256
++sha256	ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c	openssl-1.0.2l.tar.gz
  # Locally computed
--sha256 501fb11b09c6eb9c5a229dcb400bd81e408cc78d34eab6749970685023c51fe9 dvdauthor-0.7.1.tar.gz
-+sha256 3020a92de9f78eb36f48b6f22d5a001c47107826634a785a62dfcd080f612eb7  dvdauthor-0.7.2.tar.gz
-diff --git a/package/dvdauthor/dvdauthor.mk b/package/dvdauthor/dvdauthor.mk
-index 689367d3f..3f9c2186c 100644
---- a/package/dvdauthor/dvdauthor.mk
-+++ b/package/dvdauthor/dvdauthor.mk
-@@ -4,8 +4,8 @@
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 1536982f8..5f56b445a 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DVDAUTHOR_VERSION = 0.7.1
--DVDAUTHOR_SITE = http://sourceforge.net/projects/dvdauthor/files/dvdauthor/$(DVDAUTHOR_VERSION)
-+DVDAUTHOR_VERSION = 0.7.2
-+DVDAUTHOR_SITE = https://sourceforge.net/projects/dvdauthor/files
- DVDAUTHOR_DEPENDENCIES = host-pkgconf libxml2 freetype libpng
- DVDAUTHOR_LICENSE = GPL-2.0+
- DVDAUTHOR_LICENSE_FILES = COPYING
-@@ -14,11 +14,6 @@ DVDAUTHOR_CONF_ENV = \
- 	ac_cv_path_XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config \
- 	ac_cv_prog_GMAGICKCONFIG=
- 
--# configure.ac patched by 0001-configure.ac-fix-static-build.patch
--DVDAUTHOR_AUTORECONF = YES
--# add host-gettext for AM_ICONV macro
--DVDAUTHOR_DEPENDENCIES += host-gettext
--
- ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
- DVDAUTHOR_DEPENDENCIES += imagemagick
- DVDAUTHOR_CONF_ENV += \
+-OPENSSL_VERSION = 1.0.2k
++OPENSSL_VERSION = 1.0.2l
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
 2.11.0
