@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 15:06:37 +0200
-Subject: [Buildroot] [git commit] package/mpd: bump version to 0.20.7
-Message-ID: <20170601202858.275C082641@busybox.osuosl.org>
+Date: Sun, 28 May 2017 14:56:01 +0200
+Subject: [Buildroot] [git commit] package/eigen: bump version to 3.3.3
+Message-ID: <20170601202857.C9D6E82641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae6571d3e677787105317d6dc93a06a1696b070c
+commit: https://git.buildroot.net/buildroot/commit/?id=21ac9b542124d7c7fff42ed7553efc2e6684c80a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Added hash, changed _SITE to upstream tarball according to
+http://eigen.tuxfamily.org/index.php
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/eigen/eigen.hash | 2 ++
+ package/eigen/eigen.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 3714197..cea79e2 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  f4055e1189e5cc00e83706b2e0b5ead924ced0303e073d7802ee9f9a8eba4b47  mpd-0.20.6.tar.xz
-+sha256  005ac663b39a76701ba043cce4caef82ac6b0c2f16aae12fdc28e1b3b5b6c780  mpd-0.20.7.tar.xz
- sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7fd9bc9..fce2472 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/eigen/eigen.hash b/package/eigen/eigen.hash
+new file mode 100644
+index 0000000..6320a6e
+--- /dev/null
++++ b/package/eigen/eigen.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 a4143fc45e4454b4b98fcea3516b3a79b8cdb3bc7fadf996d088c6a0d805fea1  3.3.3.tar.bz2
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+index 6ae2911..79f02e4 100644
+--- a/package/eigen/eigen.mk
++++ b/package/eigen/eigen.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
- ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
--MPD_VERSION = $(MPD_VERSION_MAJOR).6
-+MPD_VERSION = $(MPD_VERSION_MAJOR).7
- else
- MPD_VERSION = $(MPD_VERSION_MAJOR).21
- endif
+-EIGEN_VERSION = 3.2.5
+-EIGEN_SITE = https://bitbucket.org/eigen/eigen
+-EIGEN_SITE_METHOD = hg
++EIGEN_VERSION = 3.3.3
++EIGEN_SOURCE = $(EIGEN_VERSION).tar.bz2
++EIGEN_SITE = https://bitbucket.org/eigen/eigen/get
+ EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
+ EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
+ EIGEN_INSTALL_STAGING = YES
