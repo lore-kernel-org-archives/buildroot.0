@@ -1,47 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 15:07:19 +0200
-Subject: [Buildroot] [PATCH/next] package/exiv2: bump version to 0.26
-Message-ID: <20170528130719.15164-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 May 2017 15:07:26 +0200
+Subject: [Buildroot] [PATCH/next] package/mpd: bump version to 0.20.7
+In-Reply-To: <20170527171854.28263-1-bernd.kuhls@t-online.de>
+References: <20170527171854.28263-1-bernd.kuhls@t-online.de>
+Message-ID: <20170528150726.671e1206@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed download URL according to http://www.exiv2.org/download.html
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/exiv2/exiv2.hash | 4 ++--
- package/exiv2/exiv2.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+On Sat, 27 May 2017 19:18:54 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mpd/mpd.hash | 2 +-
+>  package/mpd/mpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-index b1e78d2c9..cdd840c22 100644
---- a/package/exiv2/exiv2.hash
-+++ b/package/exiv2/exiv2.hash
-@@ -1,4 +1,4 @@
- # From http://www.exiv2.org/download.html
--md5 258d4831b30f75a01e0234065c6c2806 exiv2-0.25.tar.gz
-+md5 f936d2ca5cbe1e18c71ca2baa5e84fb4 exiv2-0.26-trunk.tar.gz
- # Locally calculated
--sha256 c80bfc778a15fdb06f71265db2c3d49d8493c382e516cb99b8c9f9cbde36efa4 exiv2-0.25.tar.gz
-+sha256 0c625cbeb494aa1b9221280a5b053b54d0c9720d48fa9120cef7c6f93efd4dc3 exiv2-0.26-trunk.tar.gz
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 95d03cf18..f56e86122 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--EXIV2_VERSION = 0.25
--EXIV2_SITE = http://www.exiv2.org
-+EXIV2_VERSION = 0.26
-+EXIV2_SITE = http://www.exiv2.org/builds
-+EXIV2_SOURCE = exiv2-$(EXIV2_VERSION)-trunk.tar.gz
- EXIV2_INSTALL_STAGING = YES
- 
- EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
+Applied to next, thanks.
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
