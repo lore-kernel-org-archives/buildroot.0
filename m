@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:51:21 +0200
-Subject: [Buildroot] [git commit] erlang-p1-utils: bump to version 1.0.8
-Message-ID: <20170601202859.5337A818F2@busybox.osuosl.org>
+Date: Sun, 28 May 2017 15:06:46 +0200
+Subject: [Buildroot] [git commit] package/exfat-utils: bump version to 1.2.6
+Message-ID: <20170601202858.45E5782A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46a6deb2f3e78c5c405b69b41a5e886993737fd2
+commit: https://git.buildroot.net/buildroot/commit/?id=8847227411d3382b82e7bcec86bdc8baadc32e41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License changed to Apache-2.0.
-
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-utils/erlang-p1-utils.hash | 2 +-
- package/erlang-p1-utils/erlang-p1-utils.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/exfat-utils/exfat-utils.hash | 2 +-
+ package/exfat-utils/exfat-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-utils/erlang-p1-utils.hash b/package/erlang-p1-utils/erlang-p1-utils.hash
-index c41e5ef..200d102 100644
---- a/package/erlang-p1-utils/erlang-p1-utils.hash
-+++ b/package/erlang-p1-utils/erlang-p1-utils.hash
+diff --git a/package/exfat-utils/exfat-utils.hash b/package/exfat-utils/exfat-utils.hash
+index b40e632..f0d6b64 100644
+--- a/package/exfat-utils/exfat-utils.hash
++++ b/package/exfat-utils/exfat-utils.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 9c7e9fa2990edd419953a6ae609ffed0b90e671b57c468d97c0d85d866d80210 erlang-p1-utils-1.0.3.tar.gz
-+sha256 9b43e025b923221cfe6a6efc76790d97b1c233e3e2db37fc804294d847bcfaa3 erlang-p1-utils-1.0.8.tar.gz
-diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
-index c9d9299..32564cf 100644
---- a/package/erlang-p1-utils/erlang-p1-utils.mk
-+++ b/package/erlang-p1-utils/erlang-p1-utils.mk
-@@ -4,10 +4,11 @@
+-sha256	6aa51926416b9d0977b456902f4c4cd10bcce4b2d160859a7a2fc9ca6bcbbb11	exfat-utils-1.2.4.tar.gz
++sha256 b96b6692cf92a629c9eca0fe8c782646e20479524c7d2a99b7e9b43c3cf8ac43  exfat-utils-1.2.6.tar.gz
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index 622c181..c1b5a93 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_UTILS_VERSION = 1.0.3
-+ERLANG_P1_UTILS_VERSION = 1.0.8
- ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
--ERLANG_P1_UTILS_LICENSE = GPL-2.0+
-+ERLANG_P1_UTILS_LICENSE = Apache-2.0
- ERLANG_P1_UTILS_LICENSE_FILES = LICENSE.txt
- ERLANG_P1_UTILS_INSTALL_STAGING = YES
- 
- $(eval $(rebar-package))
-+$(eval $(host-rebar-package))
+-EXFAT_UTILS_VERSION = 1.2.4
++EXFAT_UTILS_VERSION = 1.2.6
+ EXFAT_UTILS_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_UTILS_VERSION)
+ EXFAT_UTILS_LICENSE = GPL-3.0+
+ EXFAT_UTILS_LICENSE_FILES = COPYING
