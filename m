@@ -1,49 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:51:22 +0200
-Subject: [Buildroot] [git commit] erlang-p1-zlib: bump to version 1.0.2
-Message-ID: <20170601202859.60E41818F2@busybox.osuosl.org>
+Date: Sun, 28 May 2017 16:13:41 +0200
+Subject: [Buildroot] [git commit] package/fltk: bump version to 1.3.4-1
+Message-ID: <20170601202858.AB038818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83a626b7812498b568d0e51d5d1978b2316909c6
+commit: https://git.buildroot.net/buildroot/commit/?id=b5d979a0e30c406e1a8677981caa40a10f88dc5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License changed to Apache-2.0.
+Removed patch 0002-jpeg-9.patch, applied upstream.
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-zlib/erlang-p1-zlib.hash | 2 +-
- package/erlang-p1-zlib/erlang-p1-zlib.mk   | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/fltk/0002-jpeg-9.patch | 26 --------------------------
+ package/fltk/fltk.hash         |  6 +++---
+ package/fltk/fltk.mk           |  4 ++--
+ 3 files changed, 5 insertions(+), 31 deletions(-)
 
-diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.hash b/package/erlang-p1-zlib/erlang-p1-zlib.hash
-index 488e752..eded821 100644
---- a/package/erlang-p1-zlib/erlang-p1-zlib.hash
-+++ b/package/erlang-p1-zlib/erlang-p1-zlib.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 cb534ee8d8746e38027ada0ccd7e910daa025c74461286ded60ffaa933e3cf7b erlang-p1-zlib-1.0.0.tar.gz
-+sha256 2200330f7d4fc595caf8806fec1318b853009ab3d643cf063d19bff59bf2b45e erlang-p1-zlib-1.0.2.tar.gz
-diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
-index 89574b8..a57b19f 100644
---- a/package/erlang-p1-zlib/erlang-p1-zlib.mk
-+++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/fltk/0002-jpeg-9.patch b/package/fltk/0002-jpeg-9.patch
+deleted file mode 100644
+index 11ae85e..0000000
+--- a/package/fltk/0002-jpeg-9.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From http://www.fltk.org/str.php?L2920
+-However it's not yet applied apparently until bundled jpeg is upgraded.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura fltk-1.3.2.orig/src/Fl_JPEG_Image.cxx fltk-1.3.2/src/Fl_JPEG_Image.cxx
+---- fltk-1.3.2.orig/src/Fl_JPEG_Image.cxx	2014-07-03 12:56:27.731197463 -0300
+-+++ fltk-1.3.2/src/Fl_JPEG_Image.cxx	2014-07-03 12:56:57.907218257 -0300
+-@@ -155,7 +155,7 @@
+-   
+-   jpeg_create_decompress(&dinfo);
+-   jpeg_stdio_src(&dinfo, fp);
+--  jpeg_read_header(&dinfo, 1);
+-+  jpeg_read_header(&dinfo, TRUE);
+-   
+-   dinfo.quantize_colors      = (boolean)FALSE;
+-   dinfo.out_color_space      = JCS_RGB;
+-@@ -333,7 +333,7 @@
+-   
+-   jpeg_create_decompress(&dinfo);
+-   jpeg_mem_src(&dinfo, data);
+--  jpeg_read_header(&dinfo, 1);
+-+  jpeg_read_header(&dinfo, TRUE);
+-   
+-   dinfo.quantize_colors      = (boolean)FALSE;
+-   dinfo.out_color_space      = JCS_RGB;
+diff --git a/package/fltk/fltk.hash b/package/fltk/fltk.hash
+index 7b9b67d..af968aa 100644
+--- a/package/fltk/fltk.hash
++++ b/package/fltk/fltk.hash
+@@ -1,4 +1,4 @@
+-# From http://www.fltk.org/software.php?VERSION=1.3.3
+-md5	9ccdb0d19dc104b87179bd9fd10822e3	fltk-1.3.3-source.tar.gz
++# From http://www.fltk.org/software.php?VERSION=1.3.4
++md5 d7fcd27ab928648e1a1366dd2e273970 fltk-1.3.4-1-source.tar.gz
+ # Locally generated
+-sha256	f8398d98d7221d40e77bc7b19e761adaf2f1ef8bb0c30eceb7beb4f2273d0d97	fltk-1.3.3-source.tar.gz
++sha256 7fb2c8882433ce694e6900c94fda505e8f4ed3fa9c7e597007098a33b85c53f4  fltk-1.3.4-1-source.tar.gz
+diff --git a/package/fltk/fltk.mk b/package/fltk/fltk.mk
+index 7ad717b..611d79d 100644
+--- a/package/fltk/fltk.mk
++++ b/package/fltk/fltk.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ERLANG_P1_ZLIB_VERSION = 1.0.0
--ERLANG_P1_ZLIB_SITE = $(call github,processone,zlib,$(ERLANG_P1_ZLIB_VERSION))
--ERLANG_P1_ZLIB_LICENSE = GPL-2.0+
--ERLANG_P1_ZLIB_LICENSE_FILES = COPYING
-+ERLANG_P1_ZLIB_VERSION = 1.0.2
-+ERLANG_P1_ZLIB_SITE = $(call github,processone,ezlib,$(ERLANG_P1_ZLIB_VERSION))
-+ERLANG_P1_ZLIB_LICENSE = Apache-2.0
-+ERLANG_P1_ZLIB_LICENSE_FILES = LICENSE.txt
- ERLANG_P1_ZLIB_DEPENDENCIES = zlib
- 
- $(eval $(rebar-package))
+-FLTK_VERSION = 1.3.3
+-FLTK_SOURCE = fltk-$(FLTK_VERSION)-source.tar.gz
++FLTK_VERSION = 1.3.4
++FLTK_SOURCE = fltk-$(FLTK_VERSION)-1-source.tar.gz
+ FLTK_SITE = http://fltk.org/pub/fltk/$(FLTK_VERSION)
+ FLTK_INSTALL_STAGING = YES
+ # We force --libdir=/usr/lib, because by default, it is set to
