@@ -1,44 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 May 2017 12:48:56 +0200
-Subject: [Buildroot] [PATCH/next] package/ecryptfs-utils: bump version to 111
-Message-ID: <20170528104856.30837-1-bernd.kuhls@t-online.de>
+Date: Sun, 28 May 2017 13:01:20 +0200
+Subject: [Buildroot] [PATCH/next] package/eigen: bump version to 3.3.3
+Message-ID: <20170528110120.24283-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added sha256 hash.
+Added hash, changed _SITE to upstream tarball according to
+http://eigen.tuxfamily.org/index.php
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ecryptfs-utils/ecryptfs-utils.hash | 6 ++++--
- package/ecryptfs-utils/ecryptfs-utils.mk   | 2 +-
+ package/eigen/eigen.hash | 2 ++
+ package/eigen/eigen.mk   | 6 +++---
  2 files changed, 5 insertions(+), 3 deletions(-)
+ create mode 100644 package/eigen/eigen.hash
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.hash b/package/ecryptfs-utils/ecryptfs-utils.hash
-index 40cc17cdd..1e08661e2 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.hash
-+++ b/package/ecryptfs-utils/ecryptfs-utils.hash
-@@ -1,2 +1,4 @@
--# From https://launchpad.net/ecryptfs/trunk/109/+download/ecryptfs-utils_109.orig.tar.gz/+md5
--md5	8e33f096c8cb8288f9c29a9936cd0d28	ecryptfs-utils_109.orig.tar.gz
-+# From https://launchpad.net/ecryptfs/trunk/111/+download/ecryptfs-utils_111.orig.tar.gz/+md5
-+md5 83513228984f671930752c3518cac6fd  ecryptfs-utils_111.orig.tar.gz
+diff --git a/package/eigen/eigen.hash b/package/eigen/eigen.hash
+new file mode 100644
+index 000000000..6320a6ec3
+--- /dev/null
++++ b/package/eigen/eigen.hash
+@@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 112cb3e37e81a1ecd8e39516725dec0ce55c5f3df6284e0f4cc0f118750a987f  ecryptfs-utils_111.orig.tar.gz
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index 334e1151c..eb3194b6d 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -4,7 +4,7 @@
++sha256 a4143fc45e4454b4b98fcea3516b3a79b8cdb3bc7fadf996d088c6a0d805fea1  3.3.3.tar.bz2
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+index 6ae29118b..79f02e42a 100644
+--- a/package/eigen/eigen.mk
++++ b/package/eigen/eigen.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ECRYPTFS_UTILS_VERSION = 109
-+ECRYPTFS_UTILS_VERSION = 111
- ECRYPTFS_UTILS_SOURCE = ecryptfs-utils_$(ECRYPTFS_UTILS_VERSION).orig.tar.gz
- ECRYPTFS_UTILS_SITE = https://launchpad.net/ecryptfs/trunk/$(ECRYPTFS_UTILS_VERSION)/+download
- ECRYPTFS_UTILS_LICENSE = GPL-2.0+
+-EIGEN_VERSION = 3.2.5
+-EIGEN_SITE = https://bitbucket.org/eigen/eigen
+-EIGEN_SITE_METHOD = hg
++EIGEN_VERSION = 3.3.3
++EIGEN_SOURCE = $(EIGEN_VERSION).tar.bz2
++EIGEN_SITE = https://bitbucket.org/eigen/eigen/get
+ EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
+ EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
+ EIGEN_INSTALL_STAGING = YES
 -- 
 2.11.0
