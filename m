@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 15:06:05 +0200
-Subject: [Buildroot] [PATCH/next] package/ecryptfs-utils: bump version
- to 111
-In-Reply-To: <20170528104856.30837-1-bernd.kuhls@t-online.de>
-References: <20170528104856.30837-1-bernd.kuhls@t-online.de>
-Message-ID: <20170528150605.3d896da3@free-electrons.com>
+Date: Sun, 28 May 2017 15:06:08 +0200
+Subject: [Buildroot] [PATCH/next] package/eigen: bump version to 3.3.3
+In-Reply-To: <20170528110120.24283-1-bernd.kuhls@t-online.de>
+References: <20170528110120.24283-1-bernd.kuhls@t-online.de>
+Message-ID: <20170528150608.3806e793@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 28 May 2017 12:48:56 +0200, Bernd Kuhls wrote:
-> Added sha256 hash.
+On Sun, 28 May 2017 13:01:20 +0200, Bernd Kuhls wrote:
+> Added hash, changed _SITE to upstream tarball according to
+> http://eigen.tuxfamily.org/index.php
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/ecryptfs-utils/ecryptfs-utils.hash | 6 ++++--
->  package/ecryptfs-utils/ecryptfs-utils.mk   | 2 +-
+>  package/eigen/eigen.hash | 2 ++
+>  package/eigen/eigen.mk   | 6 +++---
 >  2 files changed, 5 insertions(+), 3 deletions(-)
+>  create mode 100644 package/eigen/eigen.hash
 
 Applied to next, thanks.
 
