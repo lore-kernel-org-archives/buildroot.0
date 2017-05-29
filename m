@@ -1,7 +1,10 @@
 From: Julien Viard de Galbert <julien@vdg.name>
-Date: Mon, 29 May 2017 22:08:54 +0200
-Subject: [Buildroot] [PATCH v2 1/2] easy-rsa: new package
-Message-ID: <1496088535-25501-1-git-send-email-julien@vdg.name>
+Date: Mon, 29 May 2017 22:08:55 +0200
+Subject: [Buildroot] [PATCH v2 2/2] Update DEVELOPERS to track new easy-rsa
+	package
+In-Reply-To: <1496088535-25501-1-git-send-email-julien@vdg.name>
+References: <1496088535-25501-1-git-send-email-julien@vdg.name>
+Message-ID: <1496088535-25501-2-git-send-email-julien@vdg.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,86 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
 ---
-Changes v1 -> v2
-  - Install missing file 'openssl-1.0.cnf'
-  - Add select BR2_PACKAGE_OPENSSL and update description (Thanks Romain Naour)
-  - Updated INSTALL call (Thanks Romain Naour)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
----
- package/Config.in              |  1 +
- package/easy-rsa/Config.in     | 14 ++++++++++++++
- package/easy-rsa/easy-rsa.hash |  2 ++
- package/easy-rsa/easy-rsa.mk   | 19 +++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/easy-rsa/Config.in
- create mode 100644 package/easy-rsa/easy-rsa.hash
- create mode 100644 package/easy-rsa/easy-rsa.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index d57813c..14e5b14 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -942,6 +942,7 @@ menu "Crypto"
- 	source "package/botan/Config.in"
- 	source "package/ca-certificates/Config.in"
- 	source "package/cryptodev/Config.in"
-+	source "package/easy-rsa/Config.in"
- 	source "package/gcr/Config.in"
- 	source "package/gnutls/Config.in"
- 	source "package/libassuan/Config.in"
-diff --git a/package/easy-rsa/Config.in b/package/easy-rsa/Config.in
-new file mode 100644
-index 0000000..62a8ca3
---- /dev/null
-+++ b/package/easy-rsa/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_EASY_RSA
-+	bool "easy-rsa"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_BIN
-+	help
-+	  Simple shell based CA utility
-+	  This package eases the creation of certificates, for example
-+	  for openvpn clients.
-+
-+	  This was formerly part of the openvpn package.
-+
-+	  easy-rsa is a wrapper script around OpenSSL binaries.
-+
-+	  https://github.com/OpenVPN/easy-rsa
-diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
-new file mode 100644
-index 0000000..e2d658a
---- /dev/null
-+++ b/package/easy-rsa/easy-rsa.hash
-@@ -0,0 +1,2 @@
-+# Locally computed: (after verifying gpg sig)
-+sha512 d20f646e33ec803444dfcd446553f1d6001227fedec93280c212b34cccee11b184599f1b2ae6a3ce9cf6c9ac52f2b840ebb645536df6ddf55382fa25c22df81f EasyRSA-3.0.1.tgz
-diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
-new file mode 100644
-index 0000000..a958750
---- /dev/null
-+++ b/package/easy-rsa/easy-rsa.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# easy-rsa
-+#
-+################################################################################
-+
-+EASY_RSA_VERSION = 3.0.1
-+EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
-+EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/$(EASY_RSA_VERSION)
-+
-+define EASY_RSA_INSTALL_TARGET_CMDS
-+    $(INSTALL) -D -m 0755 $(@D)/easyrsa $(TARGET_DIR)/usr/bin/easyrsa
-+    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/easy-rsa/x509-types
-+    $(INSTALL) -D -m 0644 $(@D)/x509-types/* $(TARGET_DIR)/etc/easy-rsa/x509-types
-+    $(INSTALL) -D -m 0644 $(@D)/openssl-1.0.cnf $(TARGET_DIR)/etc/easy-rsa/openssl-1.0.cnf
-+    $(INSTALL) -D -m 0644 $(@D)/vars.example $(TARGET_DIR)/etc/easy-rsa/vars
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f80b89f..00f4a2f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -930,6 +930,7 @@ F:	package/lldpd/
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
++F:	package/easy-rsa/
+ 
+ N:	Justin Maggard <jmaggard@netgear.com>
+ F:	package/dtach/
 -- 
 2.1.4
