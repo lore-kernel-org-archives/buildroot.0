@@ -1,38 +1,311 @@
-From: =?UTF-8?q?Gon=C3=A7alo=20Salazar?= <glbsalazar@gmail.com>
-Date: Mon, 29 May 2017 22:53:41 +0100
-Subject: [Buildroot] [PATCH 1/1] mosh: add notes to clarify runtime issues
-Message-ID: <1496094821-31964-1-git-send-email-glbsalazar@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 May 2017 23:53:47 +0200
+Subject: [Buildroot] [git commit] elfutils: security bump to version 0.169
+Message-ID: <20170529215354.4C467801E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added notes to the mosh package help to clarify some runtime
-issues related with it to ensure mosh will work properly after adding it.
-This includes adding a proper LOCALE and an extra flag when using
-mosh with dropbear.
+commit: https://git.buildroot.net/buildroot/commit/?id=27e0626e99e79655b949e13a16ebdda28c0faca2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
+Fixes a number of security issues: CVE-2017-7607, CVE-2017-7608,
+CVE-2017-7609, CVE-2017-7610, CVE-2017-7611, CVE-2017-7612, CVE-2017-7613.
+
+Rebase patches, and convert to git format.
+
+Remove --disable-werror; unrecognized configure option.
+
+Use upstream provided hash.
+
+Cc: Stefan Fr??berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mosh/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/elfutils/0002-disable-progs.patch          | 52 ++++++++-----
+ package/elfutils/0003-fts.patch                    | 91 ++++++++++++++--------
+ ...y-make-werror-conditional-to-build-werror.patch | 22 ++++--
+ package/elfutils/elfutils.hash                     |  4 +-
+ package/elfutils/elfutils.mk                       |  4 +-
+ 5 files changed, 109 insertions(+), 64 deletions(-)
 
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index e0ff2cf..1806520 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -24,4 +24,11 @@ config BR2_PACKAGE_MOSH
- 	  allows roaming, and provides speculative local echo and line editing
- 	  of user keystrokes.
+diff --git a/package/elfutils/0002-disable-progs.patch b/package/elfutils/0002-disable-progs.patch
+index ea6b934..3f80fe6 100644
+--- a/package/elfutils/0002-disable-progs.patch
++++ b/package/elfutils/0002-disable-progs.patch
+@@ -1,4 +1,7 @@
+-Add a --{enable,disable}-progs configure option
++From dfea82b761b2ea4708fbf9370a5467ae4be525ca Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 29 May 2017 23:03:48 +0300
++Subject: [PATCH] Add a --{enable,disable}-progs configure option
  
-+	  Mosh requires that the remote machine has a locale setting matching
-+	  the one on the client.
+ Add a --{enable,disable}-progs configuration option to elfutils. This
+ allows to selectively disable the compilation of the elfutils programs
+@@ -13,26 +16,15 @@ Based on the former patch by Thomas Petazzoni.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ Makefile.am  | 6 +++++-
++ configure.ac | 6 ++++++
++ 2 files changed, 11 insertions(+), 1 deletion(-)
+ 
+-diff -rup a/configure.ac b/configure.ac
+---- a/configure.ac	2016-03-31 09:48:08.000000000 +0100
+-+++ b/configure.ac	2016-06-17 14:47:03.561704498 +0100
+-@@ -253,6 +253,12 @@ AC_SUBST([LIBEBL_SUBDIR])
+- AC_DEFINE_UNQUOTED(LIBEBL_SUBDIR, "$LIBEBL_SUBDIR")
+- AH_TEMPLATE([LIBEBL_SUBDIR], [$libdir subdirectory containing libebl modules.])
+- 
+-+AC_ARG_ENABLE([progs],
+-+	AS_HELP_STRING([--enable-progs], [enable progs]),
+-+	enable_progs=$enableval,
+-+	enable_progs=yes)
+-+AM_CONDITIONAL(ENABLE_PROGS, test "$enable_progs" = yes)
+-+
+- dnl zlib is mandatory.
+- save_LIBS="$LIBS"
+- LIBS=
+-diff -rup a/Makefile.am b/Makefile.am
+---- a/Makefile.am	2016-01-12 12:49:19.000000000 +0000
+-+++ b/Makefile.am	2016-06-17 14:48:02.585861468 +0100
++diff --git a/Makefile.am b/Makefile.am
++index 2ff444e7bf1d..70443abb4fb6 100644
++--- a/Makefile.am
+++++ b/Makefile.am
+ @@ -26,9 +26,13 @@ AM_MAKEFLAGS = --no-print-directory
+  
+  pkginclude_HEADERS = version.h
+@@ -48,3 +40,23 @@ diff -rup a/Makefile.am b/Makefile.am
+  
+  EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
+  	     COPYING COPYING-GPLV2 COPYING-LGPLV3
++diff --git a/configure.ac b/configure.ac
++index c2c1d90b2133..7b4c38381cca 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -259,6 +259,12 @@ AC_SUBST([LIBEBL_SUBDIR])
++ AC_DEFINE_UNQUOTED(LIBEBL_SUBDIR, "$LIBEBL_SUBDIR")
++ AH_TEMPLATE([LIBEBL_SUBDIR], [$libdir subdirectory containing libebl modules.])
++ 
+++AC_ARG_ENABLE([progs],
+++	AS_HELP_STRING([--enable-progs], [enable progs]),
+++	enable_progs=$enableval,
+++	enable_progs=yes)
+++AM_CONDITIONAL(ENABLE_PROGS, test "$enable_progs" = yes)
+++
++ dnl zlib is mandatory.
++ save_LIBS="$LIBS"
++ LIBS=
++-- 
++2.11.0
 +
-+	  When using mosh with dropbear on a remote machine, the client needs mosh
-+	  with a version above 1.3.0 and the --no-ssh-pty option needs to be passed
-+	  when starting the connection.
+diff --git a/package/elfutils/0003-fts.patch b/package/elfutils/0003-fts.patch
+index 0131b75..cf5ba25 100644
+--- a/package/elfutils/0003-fts.patch
++++ b/package/elfutils/0003-fts.patch
+@@ -1,4 +1,7 @@
+-Add an implementation of the fts_*() functions
++From 098760f7eac1fb86b3f6871d5bb10f9f44468f2d Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 29 May 2017 23:08:05 +0300
++Subject: [PATCH] Add an implementation of the fts_*() functions
+ 
+ The fts_*() functions are optional in uClibc, and not compiled in our
+ default configuration. The best option would be to migrate this
+@@ -28,11 +31,21 @@ Based on the former patch by Thomas Petazzoni.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ configure.ac                   |    4 +
++ libdwfl/Makefile.am            |    3 +
++ libdwfl/fts.c                  | 1095 ++++++++++++++++++++++++++++++++++++++++
++ libdwfl/fts_.h                 |  131 +++++
++ libdwfl/linux-kernel-modules.c |    4 +
++ 5 files changed, 1237 insertions(+)
++ create mode 100644 libdwfl/fts.c
++ create mode 100644 libdwfl/fts_.h
+ 
+-diff -Nrup a/configure.ac b/configure.ac
+---- a/configure.ac	2016-06-17 14:47:03.561704498 +0100
+-+++ b/configure.ac	2016-06-17 14:52:35.038200412 +0100
+-@@ -259,6 +259,10 @@ AC_ARG_ENABLE([progs],
++diff --git a/configure.ac b/configure.ac
++index 7b4c38381cca..bcebb05fa532 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -265,6 +265,10 @@ AC_ARG_ENABLE([progs],
+  	enable_progs=yes)
+  AM_CONDITIONAL(ENABLE_PROGS, test "$enable_progs" = yes)
+  
+@@ -43,9 +56,25 @@ diff -Nrup a/configure.ac b/configure.ac
+  dnl zlib is mandatory.
+  save_LIBS="$LIBS"
+  LIBS=
+-diff -Nrup a/libdwfl/fts.c b/libdwfl/fts.c
+---- a/libdwfl/fts.c	1970-01-01 01:00:00.000000000 +0100
+-+++ b/libdwfl/fts.c	2016-06-17 14:57:26.649912084 +0100
++diff --git a/libdwfl/Makefile.am b/libdwfl/Makefile.am
++index 89ca92ed8110..a5a5615c5f94 100644
++--- a/libdwfl/Makefile.am
+++++ b/libdwfl/Makefile.am
++@@ -77,6 +77,9 @@ endif
++ if LZMA
++ libdwfl_a_SOURCES += lzma.c
++ endif
+++if !HAVE_FTS
+++libdwfl_a_SOURCES += fts.c
+++endif
++ 
++ libdwfl = $(libdw)
++ libdw = ../libdw/libdw.so
++diff --git a/libdwfl/fts.c b/libdwfl/fts.c
++new file mode 100644
++index 000000000000..f34cc03bd963
++--- /dev/null
+++++ b/libdwfl/fts.c
+ @@ -0,0 +1,1095 @@
+ +/*-
+ + * Copyright (c) 1990, 1993, 1994
+@@ -1142,9 +1171,11 @@ diff -Nrup a/libdwfl/fts.c b/libdwfl/fts.c
+ +	errno = oerrno;
+ +	return (ret);
+ +}
+-diff -Nrup a/libdwfl/fts_.h b/libdwfl/fts_.h
+---- a/libdwfl/fts_.h	1970-01-01 01:00:00.000000000 +0100
+-+++ b/libdwfl/fts_.h	2016-06-17 14:58:42.003387566 +0100
++diff --git a/libdwfl/fts_.h b/libdwfl/fts_.h
++new file mode 100644
++index 000000000000..0a070ba8dce5
++--- /dev/null
+++++ b/libdwfl/fts_.h
+ @@ -0,0 +1,131 @@
+ +/*
+ + * Copyright (c) 1989, 1993
+@@ -1277,31 +1308,25 @@ diff -Nrup a/libdwfl/fts_.h b/libdwfl/fts_.h
+ +__END_DECLS
+ +
+ +#endif /* fts.h */
+-diff -Nrup a/libdwfl/linux-kernel-modules.c b/libdwfl/linux-kernel-modules.c
+---- a/libdwfl/linux-kernel-modules.c	2016-03-02 16:25:38.000000000 +0000
+-+++ b/libdwfl/linux-kernel-modules.c	2016-06-17 14:59:50.267724089 +0100
+-@@ -29,7 +29,11 @@
+- /* We include this before config.h because it can't handle _FILE_OFFSET_BITS.
+-    Everything we need here is fine if its declarations just come first.  */
+- 
++diff --git a/libdwfl/linux-kernel-modules.c b/libdwfl/linux-kernel-modules.c
++index 9d0fef2cf260..47f0e3892294 100644
++--- a/libdwfl/linux-kernel-modules.c
+++++ b/libdwfl/linux-kernel-modules.c
++@@ -31,10 +31,14 @@
++    Everything we need here is fine if its declarations just come first.
++    Also, include sys/types.h before fts. On some systems fts.h is not self
++    contained. */
+ +#ifdef HAVE_FTS_H
+- #include <fts.h>
++ #ifdef BAD_FTS
++   #include <sys/types.h>
++   #include <fts.h>
++ #endif
+ +#else
+ +#include <fts_.h>
+ +#endif
+  
+  #include <config.h>
+- 
+-diff -Nrup a/libdwfl/Makefile.am b/libdwfl/Makefile.am
+---- a/libdwfl/Makefile.am	2016-01-12 12:49:19.000000000 +0000
+-+++ b/libdwfl/Makefile.am	2016-06-17 15:01:03.492157569 +0100
+-@@ -77,6 +77,9 @@ endif
+- if LZMA
+- libdwfl_a_SOURCES += lzma.c
+- endif
+-+if !HAVE_FTS
+-+libdwfl_a_SOURCES += fts.c
+-+endif
+- 
+- libdwfl = $(libdw)
+- libdw = ../libdw/libdw.so
++ #include <system.h>
++-- 
++2.11.0
 +
- 	  https://mosh.mit.edu
--- 
-2.7.4
+diff --git a/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch b/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
+index aa4d12d..a7017d6 100644
+--- a/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
++++ b/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
+@@ -1,4 +1,7 @@
+-Really make -Werror conditional to BUILD_WERROR
++From 1d8f27d73df6369b19ddd6732960df0d4fdec338 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Mon, 29 May 2017 23:24:42 +0300
++Subject: [PATCH] Really make -Werror conditional to BUILD_WERROR
+ 
+ Otherwise it will fail with an error message like this one:
+ 
+@@ -12,15 +15,22 @@ cc1: all warnings being treated as errors
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ config/eu.am | 1 -
++ 1 file changed, 1 deletion(-)
+ 
+-diff -rup a/config/eu.am b/config/eu.am
+---- a/config/eu.am	2016-03-02 16:25:38.000000000 +0000
+-+++ b/config/eu.am	2016-06-17 15:05:08.270974835 +0100
+-@@ -65,7 +65,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -W
++diff --git a/config/eu.am b/config/eu.am
++index 8fe1e259f9e2..c5a6209a4e04 100644
++--- a/config/eu.am
+++++ b/config/eu.am
++@@ -71,7 +71,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
+  	    -Wold-style-definition -Wstrict-prototypes \
+  	    $(LOGICAL_OP_WARNING) $(DUPLICATED_COND_WARNING) \
+- 	    $(NULL_DEREFERENCE_WARNING) \
++ 	    $(NULL_DEREFERENCE_WARNING) $(IMPLICIT_FALLTHROUGH_WARNING) \
+ -	    $(if $($(*F)_no_Werror),,-Werror) \
+  	    $(if $($(*F)_no_Wunused),,-Wunused -Wextra) \
+  	    $(if $($(*F)_no_Wstack_usage),,$(STACK_USAGE_WARNING)) \
+  	    $($(*F)_CFLAGS)
++-- 
++2.11.0
++
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index 9fa9403..76b6dc6 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256 3c056914c8a438b210be0d790463b960fc79d234c3f05ce707cbff80e94cba30  elfutils-0.166.tar.bz2
++# From https://sourceware.org/elfutils/ftp/0.169/sha512.sum
++sha512 0a81a20bb2aff533d035d6b76f1403437b2e11bce390db57e34b8c26e4b9b3150346d83dddcbfbbdc58063f046ca3223508dba35c6ce88e375d201e7a777a8b9  elfutils-0.169.tar.bz2
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index de2ef9c..e43d036 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELFUTILS_VERSION = 0.166
++ELFUTILS_VERSION = 0.169
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+@@ -20,11 +20,9 @@ HOST_ELFUTILS_AUTORECONF = YES
+ # Pass a custom program prefix to avoid a naming conflict between
+ # elfutils binaries and binutils binaries.
+ ELFUTILS_CONF_OPTS += \
+-	--disable-werror \
+ 	--program-prefix="eu-"
+ 
+ HOST_ELFUTILS_CONF_OPTS = \
+-	--disable-werror \
+ 	--with-bzlib \
+ 	--with-lzma \
+ 	--disable-progs
