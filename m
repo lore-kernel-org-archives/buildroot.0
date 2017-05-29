@@ -1,114 +1,41 @@
-From: Julien Viard de Galbert <julien@vdg.name>
-Date: Mon, 29 May 2017 23:03:39 +0200
-Subject: [Buildroot] [PATCH v3 1/1] easy-rsa: new package
-Message-ID: <1496091819-27396-1-git-send-email-julien@vdg.name>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 May 2017 23:15:11 +0200
+Subject: [Buildroot] [PATCH 1/1] Added notes to the mosh package help to
+ clarify run time issues.
+In-Reply-To: <CAPJzBTrho+CL8vKFHh0NzoQ49RfJEcfzg4ZUNMGi2+f599UxFg@mail.gmail.com>
+References: <1496082575-24450-1-git-send-email-glbsalazar@gmail.com>
+ <20170529223932.2acf7216@free-electrons.com>
+ <CAPJzBTrho+CL8vKFHh0NzoQ49RfJEcfzg4ZUNMGi2+f599UxFg@mail.gmail.com>
+Message-ID: <20170529231511.07303b15@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
----
-Changes v1 -> v2
-  - Install missing file 'openssl-1.0.cnf'
-  - Add select BR2_PACKAGE_OPENSSL and update description (Thanks Romain Naour)
-  - Updated INSTALL call (Thanks Romain Naour)
+Hello,
 
-Changes v2 -> v3 after Thomas Petazzoni's review (Thanks!):
-  - Moving package from Libraries->Crypto to Shell and utilities:Utilities
-  - Indenting EASY_RSA_INSTALL_TARGET_CMDS with tabs (really don't know
-    how I messed this up)
-  - Update DEVELOPERS to track the easy-rsa package
+On Mon, 29 May 2017 22:02:08 +0100, Gon?alo Salazar wrote:
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/easy-rsa/Config.in     | 14 ++++++++++++++
- package/easy-rsa/easy-rsa.hash |  2 ++
- package/easy-rsa/easy-rsa.mk   | 19 +++++++++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 package/easy-rsa/Config.in
- create mode 100644 package/easy-rsa/easy-rsa.hash
- create mode 100644 package/easy-rsa/easy-rsa.mk
+> Thank you for the inputs, I realize that the notes are not really clear.
+> I'm trying to convey the idea of runtime dependencies that exist if
+> you are trying to include mosh in a host you will be accessing later.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f80b89f..00f4a2f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -930,6 +930,7 @@ F:	package/lldpd/
- 
- N:	Julien Viard de Galbert <julien@vdg.name>
- F:	package/dieharder/
-+F:	package/easy-rsa/
- 
- N:	Justin Maggard <jmaggard@netgear.com>
- F:	package/dtach/
-diff --git a/package/Config.in b/package/Config.in
-index d57813c..1c1b95e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1771,6 +1771,7 @@ comment "Utilities"
- 	source "package/dialog/Config.in"
- 	source "package/dtach/Config.in"
- 	source "package/file/Config.in"
-+	source "package/easy-rsa/Config.in"
- 	source "package/gnupg/Config.in"
- 	source "package/gnupg2/Config.in"
- 	source "package/inotify-tools/Config.in"
-diff --git a/package/easy-rsa/Config.in b/package/easy-rsa/Config.in
-new file mode 100644
-index 0000000..62a8ca3
---- /dev/null
-+++ b/package/easy-rsa/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_EASY_RSA
-+	bool "easy-rsa"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_BIN
-+	help
-+	  Simple shell based CA utility
-+	  This package eases the creation of certificates, for example
-+	  for openvpn clients.
-+
-+	  This was formerly part of the openvpn package.
-+
-+	  easy-rsa is a wrapper script around OpenSSL binaries.
-+
-+	  https://github.com/OpenVPN/easy-rsa
-diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
-new file mode 100644
-index 0000000..e2d658a
---- /dev/null
-+++ b/package/easy-rsa/easy-rsa.hash
-@@ -0,0 +1,2 @@
-+# Locally computed: (after verifying gpg sig)
-+sha512 d20f646e33ec803444dfcd446553f1d6001227fedec93280c212b34cccee11b184599f1b2ae6a3ce9cf6c9ac52f2b840ebb645536df6ddf55382fa25c22df81f EasyRSA-3.0.1.tgz
-diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
-new file mode 100644
-index 0000000..16aff30
---- /dev/null
-+++ b/package/easy-rsa/easy-rsa.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# easy-rsa
-+#
-+################################################################################
-+
-+EASY_RSA_VERSION = 3.0.1
-+EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
-+EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/$(EASY_RSA_VERSION)
-+
-+define EASY_RSA_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/easyrsa $(TARGET_DIR)/usr/bin/easyrsa
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/easy-rsa/x509-types
-+	$(INSTALL) -D -m 0644 $(@D)/x509-types/* $(TARGET_DIR)/etc/easy-rsa/x509-types
-+	$(INSTALL) -D -m 0644 $(@D)/openssl-1.0.cnf $(TARGET_DIR)/etc/easy-rsa/openssl-1.0.cnf
-+	$(INSTALL) -D -m 0644 $(@D)/vars.example $(TARGET_DIR)/etc/easy-rsa/vars
-+endef
-+
-+$(eval $(generic-package))
+Beware that in the context of Buildroot, "host" is often used to
+indicate the machine where the Buildroot build is done, as opposed to
+the "target", where the stuff built by Buildroot is executed.
+
+Hence, it should be made extra clear that you mean "host" in the
+networking sense, and not the build sense.
+
+> Should I resubmit the patch after clarifying the notes?
+
+Yes, please.
+
+Thanks!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
