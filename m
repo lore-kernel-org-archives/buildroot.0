@@ -1,46 +1,46 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 29 May 2017 10:39:16 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Your
- build results for 2017-05-27
-In-Reply-To: <20170528062749.B447920E8B@mail.free-electrons.com>
-References: <20170528062749.B447920E8B@mail.free-electrons.com>
-Message-ID: <1496054355.7990.5.camel@synopsys.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 May 2017 13:03:35 +0200
+Subject: [Buildroot] [PATCH/next 1/1] lxc: fix hash of patch
+In-Reply-To: <20170529121236.5318e2d8@free-electrons.com>
+References: <1496044092-78363-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170529121236.5318e2d8@free-electrons.com>
+Message-ID: <CAPi7W83jQ9Z2t9TDLc5ZRo1tmPHF4SkYD86aBAKkOD0=99zwnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Thomas,
 
-On Sun, 2017-05-28 at 08:27 +0200, Thomas Petazzoni wrote:
+2017-05-29 12:12 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
 > Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2017-05-27, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Build failures related to your architectures:
-> 
-> ?????????arc |????????????????wireshark-2.2.6 | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_6aefa88b01161c2e
-> 9e730cdb7ec68478e034d3c0&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=sDHcL0pAdgIBIQ7zmgIaqHh6szUoxNj5jT2Kzu-
-> WvjQ&s=u73vlDz5xil5ezLPswIZDvcVhFwUV4WlU5g8s4qNVwM&e=?
+>
+> On Mon, 29 May 2017 09:48:12 +0200, Fabrice Fontaine wrote:
+> > Fix hash of bc5b27d6f6d166d2a6df47982cbe36041ce6b73.patch
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Why did the hash changed?
+>
+I don't know, Bernd sent me an email about it so I fixed it. I don't think
+I made a mistake in my first patch because I had to delete my local patch
+file in dl repository to reproduce the issue. Can the hash on a github
+commit change? Should I download 7e0ed7ffa0438a3d0e200a881f2166dc3632dcda
+(merge commit) instead of bc5b27d6f6d166d2a6df47982cbe36041ce6b73?
 
-That seems to be a well-known generic problem with gcc 6.x headers:
------------------------------------->8-----------------------------------
-/home/peko/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.3.0/cstdlib:75:25: fatal error: stdlib.h: No such file or
-directory
-?#include_next <stdlib.h>
-?????????????????????????^
------------------------------------->8-----------------------------------
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+Best Regards,
 
-ARM/glibc:?http://autobuild.buildroot.net/results/8b8/8b8cdb727d770bbea5d1b7c74a85c7574331a5f5//
-AARCH64/glibc:?http://autobuild.buildroot.net/results/77f/77ffd6956022e3f535a8aefdde8a36af05ed32b2//
-
-I remember we saw that quite some times in other packages.
-
-I'll take a look at it sometime soon if time permits.
-
--Alexey
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170529/0803049b/attachment.html>
