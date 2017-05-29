@@ -1,27 +1,95 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 29 May 2017 21:59:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libev: fix download URL
-References: <20170528204057.28697-1-bernd.kuhls@t-online.de>
- <20170529215415.39d9e8a3@free-electrons.com>
-Message-ID: <75buvdxcra.ln2@ID-313208.user.individual.net>
+From: Julien Viard de Galbert <julien@vdg.name>
+Date: Mon, 29 May 2017 22:08:54 +0200
+Subject: [Buildroot] [PATCH v2 1/2] easy-rsa: new package
+Message-ID: <1496088535-25501-1-git-send-email-julien@vdg.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 29 May 2017 21:54:15 +0200 schrieb Thomas Petazzoni:
+Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+---
+Changes v1 -> v2
+  - Install missing file 'openssl-1.0.cnf'
+  - Add select BR2_PACKAGE_OPENSSL and update description (Thanks Romain Naour)
+  - Updated INSTALL call (Thanks Romain Naour)
 
-> Applied to master, thanks. Could you contact the upstream developer to
-> ask him to stop moving the tarballs around? It is really annoying that
-> the latest version is available in http://dist.schmorp.de/libev/, and
-> then gets moved to http://dist.schmorp.de/libev/Attic/ as soon as a
-> newer version is released.
+Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+---
+ package/Config.in              |  1 +
+ package/easy-rsa/Config.in     | 14 ++++++++++++++
+ package/easy-rsa/easy-rsa.hash |  2 ++
+ package/easy-rsa/easy-rsa.mk   | 19 +++++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/easy-rsa/Config.in
+ create mode 100644 package/easy-rsa/easy-rsa.hash
+ create mode 100644 package/easy-rsa/easy-rsa.mk
 
-Hi Thomas,
-
-http://dist.schmorp.de/libev/ contains the current version which is also 
-available in Attic/ so I think we should be fine in the future by only 
-using Attic/, like I did in my patch.
-
-Regards, Bernd
+diff --git a/package/Config.in b/package/Config.in
+index d57813c..14e5b14 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -942,6 +942,7 @@ menu "Crypto"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+ 	source "package/cryptodev/Config.in"
++	source "package/easy-rsa/Config.in"
+ 	source "package/gcr/Config.in"
+ 	source "package/gnutls/Config.in"
+ 	source "package/libassuan/Config.in"
+diff --git a/package/easy-rsa/Config.in b/package/easy-rsa/Config.in
+new file mode 100644
+index 0000000..62a8ca3
+--- /dev/null
++++ b/package/easy-rsa/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_EASY_RSA
++	bool "easy-rsa"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_BIN
++	help
++	  Simple shell based CA utility
++	  This package eases the creation of certificates, for example
++	  for openvpn clients.
++
++	  This was formerly part of the openvpn package.
++
++	  easy-rsa is a wrapper script around OpenSSL binaries.
++
++	  https://github.com/OpenVPN/easy-rsa
+diff --git a/package/easy-rsa/easy-rsa.hash b/package/easy-rsa/easy-rsa.hash
+new file mode 100644
+index 0000000..e2d658a
+--- /dev/null
++++ b/package/easy-rsa/easy-rsa.hash
+@@ -0,0 +1,2 @@
++# Locally computed: (after verifying gpg sig)
++sha512 d20f646e33ec803444dfcd446553f1d6001227fedec93280c212b34cccee11b184599f1b2ae6a3ce9cf6c9ac52f2b840ebb645536df6ddf55382fa25c22df81f EasyRSA-3.0.1.tgz
+diff --git a/package/easy-rsa/easy-rsa.mk b/package/easy-rsa/easy-rsa.mk
+new file mode 100644
+index 0000000..a958750
+--- /dev/null
++++ b/package/easy-rsa/easy-rsa.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# easy-rsa
++#
++################################################################################
++
++EASY_RSA_VERSION = 3.0.1
++EASY_RSA_SOURCE = EasyRSA-$(EASY_RSA_VERSION).tgz
++EASY_RSA_SITE = https://github.com/OpenVPN/easy-rsa/releases/download/$(EASY_RSA_VERSION)
++
++define EASY_RSA_INSTALL_TARGET_CMDS
++    $(INSTALL) -D -m 0755 $(@D)/easyrsa $(TARGET_DIR)/usr/bin/easyrsa
++    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/easy-rsa/x509-types
++    $(INSTALL) -D -m 0644 $(@D)/x509-types/* $(TARGET_DIR)/etc/easy-rsa/x509-types
++    $(INSTALL) -D -m 0644 $(@D)/openssl-1.0.cnf $(TARGET_DIR)/etc/easy-rsa/openssl-1.0.cnf
++    $(INSTALL) -D -m 0644 $(@D)/vars.example $(TARGET_DIR)/etc/easy-rsa/vars
++endef
++
++$(eval $(generic-package))
+-- 
+2.1.4
