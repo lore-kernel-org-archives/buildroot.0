@@ -1,43 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 29 May 2017 18:59:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: security bump
-	version to 0.9.55
-Message-ID: <20170529165945.23073-1-bernd.kuhls@t-online.de>
+Date: Mon, 29 May 2017 19:16:43 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/xscreensaver: bump versionto
+	5.36
+Message-ID: <20170529171643.8782-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details refer to release notes:
-http://lists.gnu.org/archive/html/info-gnu/2017-05/msg00014.html
+Switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xscreensaver/xscreensaver.hash | 2 +-
+ package/xscreensaver/xscreensaver.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 5c15b9dfd..a1460fd72 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
+diff --git a/package/xscreensaver/xscreensaver.hash b/package/xscreensaver/xscreensaver.hash
+index 7e7a07e3e..48bc2b1eb 100644
+--- a/package/xscreensaver/xscreensaver.hash
++++ b/package/xscreensaver/xscreensaver.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	54797f6e763d417627f89f60e4ae0a431dab0523f92f83def23ea02d0defafea	libmicrohttpd-0.9.52.tar.gz
-+sha256 0c1cab8dc9f2588bd3076a28f77a7f8de9560cbf2d80e53f9a8696ada80ed0f8  libmicrohttpd-0.9.55.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 785e88672..a87c93b3a 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
+-sha256 4252a6079d2d2f5b342e8bdd172cbad5f0af73daf4e412b61a68344d91ca93bd xscreensaver-5.32.tar.gz
++sha256 6b8b5238047f1613d99149bb02d5ed3384675f3ce74a0a8ba25290bd61abc06c  xscreensaver-5.36.tar.gz
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index a726bee50..77c37a9e9 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.52
-+LIBMICROHTTPD_VERSION = 0.9.55
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+-XSCREENSAVER_VERSION = 5.32
+-XSCREENSAVER_SITE = http://www.jwz.org/xscreensaver
++XSCREENSAVER_VERSION = 5.36
++XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
+ 
+ # N.B. GPL-2.0+ code (in the hacks/glx subdirectory) is not currently built.
+ XSCREENSAVER_LICENSE = MIT-like, GPL-2.0+
 -- 
 2.11.0
