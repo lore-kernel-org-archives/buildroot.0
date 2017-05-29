@@ -1,44 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 23:39:15 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: fix coldfire compile issue
-In-Reply-To: <20170429140303.3433bcf3@free-electrons.com>
-References: <20170429073019.GA22285@waldemar-brodkorb.de>
- <20170429140303.3433bcf3@free-electrons.com>
-Message-ID: <20170529233915.3bf7326f@free-electrons.com>
+Date: Mon, 29 May 2017 23:47:38 +0200
+Subject: [Buildroot] [git commit] package/acpica: add host package
+Message-ID: <20170529214947.113308285C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bd6ec23ed350abdf4a9fa208398bc79c510104c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Apr 2017 14:03:03 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat, 29 Apr 2017 09:30:19 +0200, Waldemar Brodkorb wrote:
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/7e95ac6d78bc1732127bea084b4f791e52637abd
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > ---
-> >  ...llow-to-directly-use-pthreads-atomics-com.patch | 65 ++++++++++++++++++++++
-> >  package/ffmpeg/ffmpeg.mk                           |  6 ++
-> >  2 files changed, 71 insertions(+)
-> >  create mode 100644 package/ffmpeg/0002-configure-allow-to-directly-use-pthreads-atomics-com.patch  
-> 
-> I'm hesitating: do we apply this fix, or simply adjust
-> BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS do disallow using ffmpeg on
-> BR2_m68k_cf ? After all, who is realistically going to use ffmpeg on
-> m68k_cf ?
+Add support to build the ACPICA package for the host. This is useful
+for the iasl command which is required to build some packages,
+including Xen tools.
 
-I've excluded m68k_cf, see
-https://git.buildroot.org/buildroot/commit/?id=2d9f199061fa0629847b63e6b6317a7b12a9d99f.
+This is a necessary requirement before changing the Xen package to
+address:
 
-Thanks!
+  http://autobuild.buildroot.net/results/afa199864d6b546fe759bb582a9c10702ea7fa78/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+Acked-by: Erico Nunes <nunes.erico@gmail.com>
+[Thomas: use PREFIX= and not DESTDIR= for host installation, tweak
+commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/acpica/acpica.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 37e4941..c80989a 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -17,10 +17,22 @@ define ACPICA_BUILD_CMDS
+ 		all
+ endef
+ 
++define HOST_ACPICA_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		all
++endef
++
+ define ACPICA_INSTALL_TARGET_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" \
+ 		INSTALLFLAGS=-m755 install
+ endef
+ 
++define HOST_ACPICA_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		PREFIX="$(HOST_DIR)/usr" \
++		INSTALLFLAGS=-m755 install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
