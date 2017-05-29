@@ -1,40 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 22:17:13 +0200
-Subject: [Buildroot] [PATCH] package/firejail: remove broken package
-In-Reply-To: <20170529195811.12354-1-romain.naour@gmail.com>
-References: <20170529195811.12354-1-romain.naour@gmail.com>
-Message-ID: <20170529221713.55dc157d@free-electrons.com>
+Date: Mon, 29 May 2017 22:20:07 +0200
+Subject: [Buildroot] [git commit] package/google-breakpad: use PRE_CONFIGURE
+	hooks to copy linux_syscall_support.h
+Message-ID: <20170529202019.B8FDD80339@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=557f8d649d9a959e810a3c92774020a434d567a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 29 May 2017 21:58:11 +0200, Romain Naour wrote:
-> firejail has been marked as broken since 3ad100fdcbf6e2bf850b4b2f528c87c74f7c93ff
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Chris Frederick <chrisf@cdf123.net>
-> ---
-> We don't need legacy handling since this package was added
-> after the last release (2017.02)
-> ---
->  DEVELOPERS                     |  3 ---
->  package/Config.in              |  1 -
->  package/firejail/Config.in     | 21 ---------------------
->  package/firejail/firejail.hash |  3 ---
->  package/firejail/firejail.mk   | 28 ----------------------------
->  5 files changed, 56 deletions(-)
->  delete mode 100644 package/firejail/Config.in
->  delete mode 100644 package/firejail/firejail.hash
->  delete mode 100644 package/firejail/firejail.mk
+As reported by Bernd [1], using POST_EXTRACT to copy
+linux_syscall_support.h break the legal-info target when
+google-breakpad package is selected:
 
-Applied to master, thanks.
+/usr/bin/install: cannot stat '/home/bernd/buildroot/buildroot/output/ost/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/linux_syscall_support.h': No such file or directory
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+This is because linux_syscall_support.h is installed by a dependency
+of google-breakpad, and dependencies are only guaranteed to be
+available for the configure step of a package. To fix this, we use a
+PRE_CONFIGURE hook instead of POST_EXTRACT hook.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-May/192844.html
+
+Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/google-breakpad/google-breakpad.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+index 191ee5b..3501f45 100644
+--- a/package/google-breakpad/google-breakpad.mk
++++ b/package/google-breakpad/google-breakpad.mk
+@@ -23,14 +23,14 @@ define HOST_GOOGLE_BREAKPAD_LSS
+ 		$(HOST_DIR)/usr/include/linux_syscall_support.h \
+ 		$(@D)/src/third_party/lss/linux_syscall_support.h
+ endef
+-HOST_GOOGLE_BREAKPAD_POST_EXTRACT_HOOKS += HOST_GOOGLE_BREAKPAD_LSS
++HOST_GOOGLE_BREAKPAD_PRE_CONFIGURE_HOOKS += HOST_GOOGLE_BREAKPAD_LSS
+ 
+ define GOOGLE_BREAKPAD_LSS
+ 	$(INSTALL) -D -m 0644 \
+ 		$(STAGING_DIR)/usr/include/linux_syscall_support.h \
+ 		$(@D)/src/third_party/lss/linux_syscall_support.h
+ endef
+-GOOGLE_BREAKPAD_POST_EXTRACT_HOOKS += GOOGLE_BREAKPAD_LSS
++GOOGLE_BREAKPAD_PRE_CONFIGURE_HOOKS += GOOGLE_BREAKPAD_LSS
+ 
+ define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+ 	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
