@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 16:04:38 +0200
-Subject: [Buildroot] [git commit] package/coreutils: bump version to 8.27
-Message-ID: <20170601202858.8E985818F2@busybox.osuosl.org>
+Date: Mon, 29 May 2017 22:35:06 +0200
+Subject: [Buildroot] [git commit] libupnpp: bump to version 0.15.2
+Message-ID: <20170601202858.D25D582A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4731bb9d73c40d3e17ef00c876b27770c34b6d54
+commit: https://git.buildroot.net/buildroot/commit/?id=0343227ad9f7c8636cf0126772e4fca9259064db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/coreutils/coreutils.hash | 2 +-
- package/coreutils/coreutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
-index 37d630b..472cab5 100644
---- a/package/coreutils/coreutils.hash
-+++ b/package/coreutils/coreutils.hash
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index dde4c4f..4e759bd 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	155e94d748f8e2bc327c66e0cbebdb8d6ab265d2f37c3c928f7bf6c3beba9a8e	coreutils-8.26.tar.xz
-+sha256 8891d349ee87b9ff7870f52b6d9312a9db672d2439d289bc57084771ca21656b  coreutils-8.27.tar.xz
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 0769bca..14b952f 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.15.1.tar.gz.sha256
+-sha256  c558e6285d61485e656bc973511396665b68b1d5cfa34db5fa4e64e0f2026c3a  libupnpp-0.15.1.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.15.2.tar.gz.sha256
++sha256  3abcc0c951ac37b92b9b1f6d10255a5b54353a1cb43a58d48324c08c6e41a6ab  libupnpp-0.15.2.tar.gz
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 52753cf..961051c 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--COREUTILS_VERSION = 8.26
-+COREUTILS_VERSION = 8.27
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPL-3.0+
+-LIBUPNPP_VERSION = 0.15.1
++LIBUPNPP_VERSION = 0.15.2
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = GPL-2.0+
+ LIBUPNPP_LICENSE_FILES = COPYING
