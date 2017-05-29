@@ -1,269 +1,48 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 29 May 2017 12:21:46 -0400
-Subject: [Buildroot] [1/1] speex: bump version to 1.2.0
-Message-ID: <20170529162146.29207-1-Adamduskett@outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 29 May 2017 18:43:48 +0200
+Subject: [Buildroot] [PATCH/next 1/1] lxc: fix hash of patch
+References: <1496044092-78363-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170529121236.5318e2d8@free-electrons.com>
+ <CAPi7W83jQ9Z2t9TDLc5ZRo1tmPHF4SkYD86aBAKkOD0=99zwnQ@mail.gmail.com>
+Message-ID: <4nvtvdxcra.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch is no longer needed and has been merged with upstream.
+Am Mon, 29 May 2017 13:03:35 +0200 schrieb Fabrice Fontaine:
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/speex/0001-thumb2-support.patch | 220 --------------------------------
- package/speex/speex.hash                |   2 +-
- package/speex/speex.mk                  |   2 +-
- 3 files changed, 2 insertions(+), 222 deletions(-)
- delete mode 100644 package/speex/0001-thumb2-support.patch
+> Dear Thomas,
+> 
+> 2017-05-29 12:12 GMT+02:00 Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com>:
+> 
+>> Hello,
+>>
+>> On Mon, 29 May 2017 09:48:12 +0200, Fabrice Fontaine wrote:
+>> > Fix hash of bc5b27d6f6d166d2a6df47982cbe36041ce6b73.patch
+>> >
+>> > Signed-off-by: Fabrice Fontaine
+>> > <fontaine.fabrice@gmail.com>
+>>
+>> Why did the hash changed?
+>>
+> I don't know, Bernd sent me an email about it so I fixed it. I don't
+> think I made a mistake in my first patch because I had to delete my
+> local patch file in dl repository to reproduce the issue. Can the hash
+> on a github commit change? Should I download
+> 7e0ed7ffa0438a3d0e200a881f2166dc3632dcda (merge commit) instead of
+> bc5b27d6f6d166d2a6df47982cbe36041ce6b73?
 
-diff --git a/package/speex/0001-thumb2-support.patch b/package/speex/0001-thumb2-support.patch
-deleted file mode 100644
-index b6f7369..0000000
---- a/package/speex/0001-thumb2-support.patch
-+++ /dev/null
-@@ -1,220 +0,0 @@
--Make speex Thumb2 compatible
--
--Patch written by Michael Hope from Linaro, available at
--http://lists.xiph.org/pipermail/speex-dev/2010-November/008041.html.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--diff --git a/libspeex/filters_arm4.h b/libspeex/filters_arm4.h
--index 7a74042..6ec1f75 100644
----- a/libspeex/filters_arm4.h
--+++ b/libspeex/filters_arm4.h
--@@ -47,8 +47,10 @@ int normalize16(const spx_sig_t *x, spx_word16_t *y, spx_sig_t max_scale, int le
-- 
--          "\tldr %4, [%0], #4 \n"
--          "\tcmps %4, %1 \n"
--+         "\tit gt \n"
--          "\tmovgt %1, %4 \n"
--          "\tcmps %4, %3 \n"
--+         "\tit lt \n"
--          "\tmovlt %3, %4 \n"
-- 
--          "\tsubs %2, %2, #1 \n"
--@@ -56,6 +58,7 @@ int normalize16(const spx_sig_t *x, spx_word16_t *y, spx_sig_t max_scale, int le
-- 
--          "\trsb %3, %3, #0 \n"
--          "\tcmp %1, %3 \n"
--+         "\tit lt \n"
--          "\tmovlt %1, %3 \n"
--    : "=r" (dead1), "=r" (max_val), "=r" (dead3), "=r" (dead4),
--    "=r" (dead5), "=r" (dead6)
--diff --git a/libspeex/fixed_arm4.h b/libspeex/fixed_arm4.h
--index b6981ca..b6218ca 100644
----- a/libspeex/fixed_arm4.h
--+++ b/libspeex/fixed_arm4.h
--@@ -69,72 +69,90 @@ static inline short DIV32_16(int a, int b)
--    __asm__ __volatile__ (
--          "\teor %5, %0, %1\n"
--          "\tmovs %4, %0\n"
--+         "\tit mi \n"
--          "\trsbmi %0, %0, #0 \n"
--          "\tmovs %4, %1\n"
--+         "\tit mi \n"
--          "\trsbmi %1, %1, #0 \n"
--          "\tmov %4, #1\n"
-- 
--          "\tsubs %3, %0, %1, asl #14 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #14 \n"
-- 
--          "\tsubs %3, %0, %1, asl #13 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #13 \n"
-- 
--          "\tsubs %3, %0, %1, asl #12 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #12 \n"
-- 
--          "\tsubs %3, %0, %1, asl #11 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #11 \n"
-- 
--          "\tsubs %3, %0, %1, asl #10 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #10 \n"
-- 
--          "\tsubs %3, %0, %1, asl #9 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #9 \n"
-- 
--          "\tsubs %3, %0, %1, asl #8 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #8 \n"
-- 
--          "\tsubs %3, %0, %1, asl #7 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #7 \n"
-- 
--          "\tsubs %3, %0, %1, asl #6 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #6 \n"
--          
--          "\tsubs %3, %0, %1, asl #5 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #5 \n"
-- 
--          "\tsubs %3, %0, %1, asl #4 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #4 \n"
-- 
--          "\tsubs %3, %0, %1, asl #3 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #2 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #2 \n"
-- 
--          "\tsubs %3, %0, %1, asl #1 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4, asl #1 \n"
-- 
--          "\tsubs %3, %0, %1 \n"
--+         "\titt pl \n"
--          "\tmovpl %0, %3 \n"
--          "\torrpl %2, %2, %4 \n"
-- 
--          "\tmovs %5, %5, lsr #31 \n"
--+         "\tit ne \n"
--          "\trsbne %2, %2, #0 \n"
--    : "=r" (dead1), "=r" (dead2), "=r" (res),
--    "=r" (dead3), "=r" (dead4), "=r" (dead5)
--diff --git a/libspeex/fixed_arm5e.h b/libspeex/fixed_arm5e.h
--index 9b4861c..bdadd02 100644
----- a/libspeex/fixed_arm5e.h
--+++ b/libspeex/fixed_arm5e.h
--@@ -97,72 +97,90 @@ static inline short DIV32_16(int a, int b)
--    __asm__ __volatile__ (
--          "\teor %5, %0, %1\n"
--          "\tmovs %4, %0\n"
--+         "\tit mi \n"
--          "\trsbmi %0, %0, #0 \n"
--          "\tmovs %4, %1\n"
--+         "\tit mi \n"
--          "\trsbmi %1, %1, #0 \n"
--          "\tmov %4, #1\n"
-- 
--          "\tsubs %3, %0, %1, asl #14 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #14 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #13 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #13 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #12 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #12 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #11 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #11 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #10 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #10 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #9 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #9 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #8 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #8 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #7 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #7 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #6 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #6 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #5 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #5 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #4 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #4 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #3 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #3 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #2 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #2 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1, asl #1 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4, asl #1 \n"
--          "\tmovpl %0, %3 \n"
-- 
--          "\tsubs %3, %0, %1 \n"
--+         "\titt pl \n"
--          "\torrpl %2, %2, %4 \n"
--          "\tmovpl %0, %3 \n"
--          
--          "\tmovs %5, %5, lsr #31 \n"
--+         "\tit ne \n"
--          "\trsbne %2, %2, #0 \n"
--    : "=r" (dead1), "=r" (dead2), "=r" (res),
--    "=r" (dead3), "=r" (dead4), "=r" (dead5)
-diff --git a/package/speex/speex.hash b/package/speex/speex.hash
-index c38a0a7..cebf794 100644
---- a/package/speex/speex.hash
-+++ b/package/speex/speex.hash
-@@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/speex/SHA256SUMS.txt
--sha256	342f30dc57bd4a6dad41398365baaa690429660b10d866b7d508e8f1179cb7a6	speex-1.2rc1.tar.gz
-+sha256	eaae8af0ac742dc7d542c9439ac72f1f385ce838392dc849cae4536af9210094	speex-1.2.0.tar.gz
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index 1b278ea..d623f0b 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPEEX_VERSION = 1.2rc1
-+SPEEX_VERSION = 1.2.0
- SPEEX_SITE = http://downloads.us.xiph.org/releases/speex
- SPEEX_LICENSE = BSD-3-Clause
- SPEEX_LICENSE_FILES = COPYING
--- 
-2.9.4
+Hi,
+
+afaics there are two more hashes wrong for github patches:
+
+In package/jack2/jack2.hash
+ff1ed2c4524095055140370c1008a2d9cccc5645.patch
+
+In package/qt/qt.hash the hash is wrong for
+b8f98d956501dfa4ce03a137f15d404930a56066.patch
+
+Regards, Bernd
