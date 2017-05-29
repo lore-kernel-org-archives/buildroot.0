@@ -1,59 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 21:58:37 +0200
-Subject: [Buildroot] [git commit] package/ftop: Fix broken download URL
-Message-ID: <20170529201308.7D795826E5@busybox.osuosl.org>
+Date: Mon, 29 May 2017 21:57:21 +0200
+Subject: [Buildroot] [git commit] package/armadillo: fix download URL
+Message-ID: <20170529201308.70C96827CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d35b447f09b5bd766a7627b596869b8f8b3f91ba
+commit: https://git.buildroot.net/buildroot/commit/?id=96f3ae6c24e5517014666a0e22b050773188392e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also use bz2 tarball and provide md5 & sha256 hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ftop/Config.in | 2 +-
- package/ftop/ftop.hash | 7 +++++--
- package/ftop/ftop.mk   | 3 ++-
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ package/armadillo/armadillo.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/ftop/Config.in b/package/ftop/Config.in
-index 1f5ebbb..aefe4f5 100644
---- a/package/ftop/Config.in
-+++ b/package/ftop/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_FTOP
- 	  Ftop is to files what top is to processes.
- 	  The progress of all open files and file systems can be monitored.
- 
--	  https://code.google.com/p/ftop/
-+	  https://sourceforge.net/projects/ftop/
-diff --git a/package/ftop/ftop.hash b/package/ftop/ftop.hash
-index 06f2fb1..ca8dc82 100644
---- a/package/ftop/ftop.hash
-+++ b/package/ftop/ftop.hash
-@@ -1,2 +1,5 @@
--# From https://code.google.com/p/ftop/downloads/detail?name=ftop-1.0.tar.gz&can=2&q=
--sha1	a0523862dd63ed3bec14846b6e05afcfdebb15c2	ftop-1.0.tar.gz
-+# From https://sourceforge.net/projects/ftop/files/ftop/1.0/
-+md5 57c68b6e7431f4219d9eddaebcb395da ftop-1.0.tar.bz2
-+sha1 d3ef1b74825f50c7c442d299b29d23c2478f199b ftop-1.0.tar.bz2
-+# Locally computed
-+sha256 3a705f4f291384344cd32c3dd5f5f6a7cd7cea7624c83cb7e923966dbcd47f82  ftop-1.0.tar.bz2
-diff --git a/package/ftop/ftop.mk b/package/ftop/ftop.mk
-index d10e9cd..5498fb5 100644
---- a/package/ftop/ftop.mk
-+++ b/package/ftop/ftop.mk
-@@ -5,7 +5,8 @@
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 714c1b2..beb60c8 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -5,7 +5,9 @@
  ################################################################################
  
- FTOP_VERSION = 1.0
--FTOP_SITE = http://ftop.googlecode.com/files
-+FTOP_SOURCE = ftop-$(FTOP_VERSION).tar.bz2
-+FTOP_SITE = https://sourceforge.net/projects/ftop/files/ftop/$(FTOP_VERSION)
- FTOP_DEPENDENCIES = ncurses
- FTOP_LICENSE = GPL-3.0+
- FTOP_LICENSE_FILES = COPYING
+ ARMADILLO_VERSION = 6.500.4
+-ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
++# upstream removed tarball from
++# http://downloads.sourceforge.net/project/arma
++ARMADILLO_SITE = https://ftp.fau.de/macports/distfiles/armadillo
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
+ ARMADILLO_LICENSE = MPL-2.0
