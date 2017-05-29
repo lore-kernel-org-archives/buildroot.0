@@ -1,39 +1,46 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 29 May 2017 12:26:00 +0200
-Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.0.2
-Message-ID: <20170529102600.31146-1-joerg.krause@embedded.rocks>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 29 May 2017 10:39:16 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Your
+ build results for 2017-05-27
+In-Reply-To: <20170528062749.B447920E8B@mail.free-electrons.com>
+References: <20170528062749.B447920E8B@mail.free-electrons.com>
+Message-ID: <1496054355.7990.5.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 9e305dadd..45dbbe898 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  3fbde4f6e7f5cbc7200f782bd9faca25f7e91edf7dd7a3b514cd616e556a1fee  shairport-sync-3.0.1.tar.gz
-+sha256  b348b9b3cf3994d9222430bc514c94a22f2ed173956fdb097f3354cdba8fd198  shairport-sync-3.0.2.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 650c6d73e..208a9b3b1 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 3.0.1
-+SHAIRPORT_SYNC_VERSION = 3.0.2
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
--- 
-2.13.0
+On Sun, 2017-05-28 at 08:27 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> This is the list of Buildroot build failures that occured on
+> 2017-05-27, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Build failures related to your architectures:
+> 
+> ?????????arc |????????????????wireshark-2.2.6 | https://urldefense.proofpoint.com/v2/url?u=http-3A__autobuild.buildroot.net_results_6aefa88b01161c2e
+> 9e730cdb7ec68478e034d3c0&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=sDHcL0pAdgIBIQ7zmgIaqHh6szUoxNj5jT2Kzu-
+> WvjQ&s=u73vlDz5xil5ezLPswIZDvcVhFwUV4WlU5g8s4qNVwM&e=?
+
+That seems to be a well-known generic problem with gcc 6.x headers:
+------------------------------------>8-----------------------------------
+/home/peko/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/include/c++/6.3.0/cstdlib:75:25: fatal error: stdlib.h: No such file or
+directory
+?#include_next <stdlib.h>
+?????????????????????????^
+------------------------------------>8-----------------------------------
+
+ARM/glibc:?http://autobuild.buildroot.net/results/8b8/8b8cdb727d770bbea5d1b7c74a85c7574331a5f5//
+AARCH64/glibc:?http://autobuild.buildroot.net/results/77f/77ffd6956022e3f535a8aefdde8a36af05ed32b2//
+
+I remember we saw that quite some times in other packages.
+
+I'll take a look at it sometime soon if time permits.
+
+-Alexey
