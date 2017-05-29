@@ -1,50 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 29 May 2017 23:28:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: needs sync_4
-In-Reply-To: <20170525093119.15205-1-bernd.kuhls@t-online.de>
-References: <20170525093119.15205-1-bernd.kuhls@t-online.de>
-Message-ID: <bbef8bc4-a0d8-d836-aee0-3c490103cdd5@gmail.com>
+From: =?UTF-8?Q?Gon=C3=A7alo_Salazar?= <glbsalazar@gmail.com>
+Date: Mon, 29 May 2017 22:30:29 +0100
+Subject: [Buildroot] [PATCH 1/1] Added notes to the mosh package help to
+ clarify run time issues.
+In-Reply-To: <20170529231511.07303b15@free-electrons.com>
+References: <1496082575-24450-1-git-send-email-glbsalazar@gmail.com>
+ <20170529223932.2acf7216@free-electrons.com>
+ <CAPJzBTrho+CL8vKFHh0NzoQ49RfJEcfzg4ZUNMGi2+f599UxFg@mail.gmail.com>
+ <20170529231511.07303b15@free-electrons.com>
+Message-ID: <CAPJzBTqAjB8mgm9VuKgAGBRwx3WLrWao_pEPokY3Z6SrYn0bPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hello,
 
-Le 25/05/2017 ? 11:31, Bernd Kuhls a ?crit :
-> Fixes
-> http://autobuild.buildroot.net/results/b3e/b3eaaf6d73cd49f5919143aeaa5cbb4d15a7ccc3/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ffmpeg/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-> index 383374ddb..1326c7b8d 100644
-> --- a/package/ffmpeg/Config.in
-> +++ b/package/ffmpeg/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
->  	# No support for ARMv7-M in the ARM assembly logic
->  	# Microblaze build affected by gcc PR71124 (infinite loop)
->  	default y if !BR2_nios2 && !BR2_ARM_CPU_ARMV7M && !BR2_microblaze
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+Just to ensure that the patch is submitted correctly this time, is this clearer?
 
-The code libavutil/buffer.c use atomic_fetch_add_explicit() and ffmpeg should
-build correctly if you disable BR2_PACKAGE_FFMPEG_FFMPEG with this defconfig.
 
-But with all option enabled except BR2_PACKAGE_FFMPEG_FFMPEG, it fail elsewhere:
-ffmpeg-3.3.1/libavdevice/v4l2.c:515: undefined reference to `__sync_fetch_and_add_4
+Mosh requires that the remote machine has a locale setting matching
+the one on the client.
 
-So,
+ When using mosh with dropbear on a remote machine, the client needs mosh
+ with a version above 1.3.0 and the --no-ssh-pty option needs to be passed
+ when starting the connection.
 
-Acked-by: Romain Naour <romain.naour@gmail.com>
+Thanks,
+Gon?alo Salazar
 
-Best regards,
-Romain
 
->  
->  menuconfig BR2_PACKAGE_FFMPEG
->  	bool "ffmpeg"
-> 
+2017-05-29 22:15 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Mon, 29 May 2017 22:02:08 +0100, Gon?alo Salazar wrote:
+>
+>> Thank you for the inputs, I realize that the notes are not really clear.
+>> I'm trying to convey the idea of runtime dependencies that exist if
+>> you are trying to include mosh in a host you will be accessing later.
+>
+> Beware that in the context of Buildroot, "host" is often used to
+> indicate the machine where the Buildroot build is done, as opposed to
+> the "target", where the stuff built by Buildroot is executed.
+>
+> Hence, it should be made extra clear that you mean "host" in the
+> networking sense, and not the build sense.
+>
+>> Should I resubmit the patch after clarifying the notes?
+>
+> Yes, please.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
