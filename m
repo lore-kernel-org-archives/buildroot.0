@@ -1,43 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 09:07:39 +0200
-Subject: [Buildroot] [PATCH] package/expect: don't tells the linker to
- search for libraries in /usr/lib
-In-Reply-To: <20170528203721.21138-1-romain.naour@gmail.com>
-References: <20170528203721.21138-1-romain.naour@gmail.com>
-Message-ID: <20170529090739.257b0182@free-electrons.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 May 2017 09:48:12 +0200
+Subject: [Buildroot] [PATCH/next 1/1] lxc: fix hash of patch
+Message-ID: <1496044092-78363-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fix hash of bc5b27d6f6d166d2a6df47982cbe36041ce6b73.patch
 
-On Sun, 28 May 2017 22:37:21 +0200, Romain Naour wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lxc/lxc.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> [...]/x86_64-linux-gcc \
->     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
->     -Os  -pipe -O2 -fomit-frame-pointer -Wall -fPIC -D_LARGEFILE_SOURCE \
->     -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
->     -Wl,--export-dynamic  \
->     -o expect exp_main_exp.o \
->     -L[...]/output/build/expect-2014-05-02 -lexpect5.45.3 \
->     -L[...]/output/build/tcl-8.6.6/unix -ltcl8.6 \
->     -ldl   \
->     -Wl,-rpath,/usr/lib \
->     -Wl,-rpath,/usr/lib/expect5.45.3
-
-Problem is that /usr/lib/expect5.45.3 is a non-standard library path.
-So if the expect binary does not have a RPATH to this location, it
-won't find the shared libraries in /usr/lib/expect5.45.3, unless they
-are explicitly dlopen()ed.
-
-Have you verified that?
-
-Best regards,
-
-Thomas
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 801759a..501f869 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
+-sha256	c79443c5db7e7defd53992d120cad2bc8afc2ff363b1e84ec31bc2b95ec5ca44	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
++sha256	16cf466db42a45bd579bdb66efbeb63764cd93d049f05a6d8a659846cab9b47f	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.5.0
