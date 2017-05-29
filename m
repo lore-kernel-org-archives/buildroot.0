@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 16:15:15 +0200
-Subject: [Buildroot] [git commit branch/next] package/fping: bump version to
-	4.0
-Message-ID: <20170529203608.4A1C58281D@busybox.osuosl.org>
+Date: Mon, 29 May 2017 22:35:10 +0200
+Subject: [Buildroot] [git commit branch/next] upmpdcli: bump to version
+	1.2.14
+Message-ID: <20170529203608.759D3827E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3934120ede459b16eaabcc173d27843a289d9a7e
+commit: https://git.buildroot.net/buildroot/commit/?id=271581ea3ef8b8c9de22b19a1a95dea05b6aa811
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Please note that according to the release notes
-https://github.com/schweikert/fping/releases/tag/v4.0
-
-"fping and fping6 are now unified into one binary."
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fping/fping.hash | 2 +-
- package/fping/fping.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fping/fping.hash b/package/fping/fping.hash
-index 8c1909e..e97709c 100644
---- a/package/fping/fping.hash
-+++ b/package/fping/fping.hash
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index bcd7831..b192d0e 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2f753094e4df3cdb1d99be1687c0fb7d2f14c0d526ebf03158c8c5519bc78f54	fping-3.16.tar.gz
-+sha256 67eb4152b98ad34f99d2eec4e1098a0bb52caf13c0c89cd147349d08190fe8ce  fping-4.0.tar.gz
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-index 5970d63..5af46c6 100644
---- a/package/fping/fping.mk
-+++ b/package/fping/fping.mk
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.12.tar.gz.sha256:
+-sha256  20d97c2e5ff6911e1e1538edb1487823479802cba6bd4f4c4a74035edf61cb26  upmpdcli-1.2.12.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.14.tar.gz.sha256:
++sha256  fbfb392deec0b353704f8067d9863535dc2512f719d3305dbd73452ca59ec2fe  upmpdcli-1.2.14.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index eabc04a..cc9f652 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FPING_VERSION = 3.16
-+FPING_VERSION = 4.0
- FPING_SITE = http://fping.org/dist
- FPING_LICENSE = BSD-like
- FPING_LICENSE_FILES = COPYING
+-UPMPDCLI_VERSION = 1.2.12
++UPMPDCLI_VERSION = 1.2.14
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPL-2.0+
+ UPMPDCLI_LICENSE_FILES = COPYING
