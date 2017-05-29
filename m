@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 09:04:29 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Andrew Ruder
-Message-ID: <20170529070451.F32D7827F2@busybox.osuosl.org>
+Date: Mon, 29 May 2017 09:07:39 +0200
+Subject: [Buildroot] [PATCH] package/expect: don't tells the linker to
+ search for libraries in /usr/lib
+In-Reply-To: <20170528203721.21138-1-romain.naour@gmail.com>
+References: <20170528203721.21138-1-romain.naour@gmail.com>
+Message-ID: <20170529090739.257b0182@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27d7ef126bc7f4eb1a757128466befa11245bbfd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-His e-mail address is bouncing:
+On Sun, 28 May 2017 22:37:21 +0200, Romain Naour wrote:
 
-<andrew.ruder@elecsyscorp.com>: host mx1-us1.ppe-hosted.com[67.231.154.162]
-    said: 550 5.7.1 <andrew.ruder@elecsyscorp.com>: Recipient address rejected:
-    User email address is marked as invalid. (in reply to RCPT TO command)
+> [...]/x86_64-linux-gcc \
+>     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
+>     -Os  -pipe -O2 -fomit-frame-pointer -Wall -fPIC -D_LARGEFILE_SOURCE \
+>     -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
+>     -Wl,--export-dynamic  \
+>     -o expect exp_main_exp.o \
+>     -L[...]/output/build/expect-2014-05-02 -lexpect5.45.3 \
+>     -L[...]/output/build/tcl-8.6.6/unix -ltcl8.6 \
+>     -ldl   \
+>     -Wl,-rpath,/usr/lib \
+>     -Wl,-rpath,/usr/lib/expect5.45.3
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+Problem is that /usr/lib/expect5.45.3 is a non-standard library path.
+So if the expect binary does not have a RPATH to this location, it
+won't find the shared libraries in /usr/lib/expect5.45.3, unless they
+are explicitly dlopen()ed.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 37f2fb8..f80b89f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -83,9 +83,6 @@ N:	Andrey Smirnov <andrew.smirnov at gmail.com
- F:	package/python-decorator/
- F:	package/python-simplegeneric/
- 
--N:	Andrew Ruder <andrew.ruder@elecsyscorp.com>
--F:	package/expect/
--
- N:	Andy Kennedy <andy.kennedy@adtran.com>
- F:	package/libunwind/
- 
+Have you verified that?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
