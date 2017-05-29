@@ -1,41 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 23:53:58 +0200
-Subject: [Buildroot] [PATCH] elfutils: security bump to version 0.169
-In-Reply-To: <b55c4c39417ad139014c611fc3a24ecf312d68db.1496091203.git.baruch@tkos.co.il>
-References: <b55c4c39417ad139014c611fc3a24ecf312d68db.1496091203.git.baruch@tkos.co.il>
-Message-ID: <20170529235358.683ea67e@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 May 2017 23:54:48 +0200
+Subject: [Buildroot] [PATCH] libtasn1: security bump to version 4.12
+Message-ID: <20170529215448.763-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes CVE-2017-7650: Two errors in the "asn1_find_node()" function
+(lib/parser_aux.c) within GnuTLS libtasn1 version 4.10 can be exploited to
+cause a stacked-based buffer overflow by tricking a user into processing a
+specially crafted assignments file via the e.g.  asn1Coding utility.
 
-On Mon, 29 May 2017 23:53:23 +0300, Baruch Siach wrote:
-> Fixes a number of security issues: CVE-2017-7607, CVE-2017-7608,
-> CVE-2017-7609, CVE-2017-7610, CVE-2017-7611, CVE-2017-7612, CVE-2017-7613.
-> 
-> Rebase patches, and convert to git format.
-> 
-> Remove --disable-werror; unrecognized configure option.
-> 
-> Use upstream provided hash.
-> 
-> Cc: Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/elfutils/0002-disable-progs.patch          | 52 ++++++++-----
->  package/elfutils/0003-fts.patch                    | 91 ++++++++++++++--------
->  ...y-make-werror-conditional-to-build-werror.patch | 22 ++++--
->  package/elfutils/elfutils.hash                     |  4 +-
->  package/elfutils/elfutils.mk                       |  4 +-
->  5 files changed, 109 insertions(+), 64 deletions(-)
+For more details, see:
 
-Applied to master, thanks.
+https://secuniaresearch.flexerasoftware.com/secunia_research/2017-11/
 
-Thomas
+Or the 1.4.11 release mail (no mail about 1.4.12, but identical to 1.4.11 +
+a soname fix):
+
+https://lists.gnu.org/archive/html/help-libtasn1/2017-05/msg00003.html
+
+Remove 0001-configure-don-t-add-Werror-to-build-flags.patch and autoreconf
+as that patch is now upstream.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...configure-don-t-add-Werror-to-build-flags.patch | 28 ----------------------
+ package/libtasn1/libtasn1.hash                     |  2 +-
+ package/libtasn1/libtasn1.mk                       |  4 +---
+ 3 files changed, 2 insertions(+), 32 deletions(-)
+ delete mode 100644 package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
+
+diff --git a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch b/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
+deleted file mode 100644
+index 387ba7aa3b..0000000000
+--- a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From dd091c8af163213e12aa92f61bc4916e0f102633 Mon Sep 17 00:00:00 2001
+-From: Nikos Mavrogiannopoulos <nmav@redhat.com>
+-Date: Tue, 26 Jul 2016 08:45:33 +0200
+-Subject: [PATCH] configure: don't add -Werror to build flags
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Patch status: upstream
+-
+- configure.ac | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 7a14e04..066f5fe 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -70,8 +70,6 @@ AC_ARG_ENABLE([gcc-warnings],
+- )
+- 
+- if test "$gl_gcc_warnings" = yes; then
+--  gl_WARN_ADD([-Werror], [WERROR_CFLAGS])
+--
+-   nw="$nw -Wsystem-headers"         # Don't let system headers trigger warnings
+-   nw="$nw -Wc++-compat"             # We don't care strongly about C++ compilers
+-   nw="$nw -Wtraditional"            # Warns on #elif which we use often
+--- 
+-2.7.3
+-
+diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
+index 5b2100e87d..699c14050a 100644
+--- a/package/libtasn1/libtasn1.hash
++++ b/package/libtasn1/libtasn1.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	4f6f7a8fd691ac2b8307c8ca365bad711db607d4ad5966f6938a9d2ecd65c920	libtasn1-4.9.tar.gz
++sha256	6753da2e621257f33f5b051cc114d417e5206a0818fe0b1ecfd6153f70934753	libtasn1-4.12.tar.gz
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index 714c4f88e6..b34a3b63f0 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTASN1_VERSION = 4.9
++LIBTASN1_VERSION = 4.12
+ LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
+@@ -12,7 +12,5 @@ LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
+ LIBTASN1_INSTALL_STAGING = YES
+ # 'missing' fallback logic botched so disable it completely
+ LIBTASN1_CONF_ENV = MAKEINFO="true"
+-# For 0001-configure-don-t-add-Werror-to-build-flags.patch
+-LIBTASN1_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
