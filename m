@@ -1,32 +1,59 @@
-From: Julien Viard de Galbert <julien@vdg.name>
-Date: Mon, 29 May 2017 22:08:55 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Update DEVELOPERS to track new easy-rsa
-	package
-In-Reply-To: <1496088535-25501-1-git-send-email-julien@vdg.name>
-References: <1496088535-25501-1-git-send-email-julien@vdg.name>
-Message-ID: <1496088535-25501-2-git-send-email-julien@vdg.name>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 May 2017 21:58:37 +0200
+Subject: [Buildroot] [git commit] package/ftop: Fix broken download URL
+Message-ID: <20170529201308.7D795826E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=d35b447f09b5bd766a7627b596869b8f8b3f91ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f80b89f..00f4a2f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -930,6 +930,7 @@ F:	package/lldpd/
+Also use bz2 tarball and provide md5 & sha256 hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ftop/Config.in | 2 +-
+ package/ftop/ftop.hash | 7 +++++--
+ package/ftop/ftop.mk   | 3 ++-
+ 3 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/ftop/Config.in b/package/ftop/Config.in
+index 1f5ebbb..aefe4f5 100644
+--- a/package/ftop/Config.in
++++ b/package/ftop/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_FTOP
+ 	  Ftop is to files what top is to processes.
+ 	  The progress of all open files and file systems can be monitored.
  
- N:	Julien Viard de Galbert <julien@vdg.name>
- F:	package/dieharder/
-+F:	package/easy-rsa/
+-	  https://code.google.com/p/ftop/
++	  https://sourceforge.net/projects/ftop/
+diff --git a/package/ftop/ftop.hash b/package/ftop/ftop.hash
+index 06f2fb1..ca8dc82 100644
+--- a/package/ftop/ftop.hash
++++ b/package/ftop/ftop.hash
+@@ -1,2 +1,5 @@
+-# From https://code.google.com/p/ftop/downloads/detail?name=ftop-1.0.tar.gz&can=2&q=
+-sha1	a0523862dd63ed3bec14846b6e05afcfdebb15c2	ftop-1.0.tar.gz
++# From https://sourceforge.net/projects/ftop/files/ftop/1.0/
++md5 57c68b6e7431f4219d9eddaebcb395da ftop-1.0.tar.bz2
++sha1 d3ef1b74825f50c7c442d299b29d23c2478f199b ftop-1.0.tar.bz2
++# Locally computed
++sha256 3a705f4f291384344cd32c3dd5f5f6a7cd7cea7624c83cb7e923966dbcd47f82  ftop-1.0.tar.bz2
+diff --git a/package/ftop/ftop.mk b/package/ftop/ftop.mk
+index d10e9cd..5498fb5 100644
+--- a/package/ftop/ftop.mk
++++ b/package/ftop/ftop.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
  
- N:	Justin Maggard <jmaggard@netgear.com>
- F:	package/dtach/
--- 
-2.1.4
+ FTOP_VERSION = 1.0
+-FTOP_SITE = http://ftop.googlecode.com/files
++FTOP_SOURCE = ftop-$(FTOP_VERSION).tar.bz2
++FTOP_SITE = https://sourceforge.net/projects/ftop/files/ftop/$(FTOP_VERSION)
+ FTOP_DEPENDENCIES = ncurses
+ FTOP_LICENSE = GPL-3.0+
+ FTOP_LICENSE_FILES = COPYING
