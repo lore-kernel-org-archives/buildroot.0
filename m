@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 23:52:08 +0200
-Subject: [Buildroot] [PATCH 1/2] package: acpica: Add host buildling
- support
-In-Reply-To: <20170524203030.8187-2-alistair.francis@xilinx.com>
+Date: Mon, 29 May 2017 23:53:21 +0200
+Subject: [Buildroot] [PATCH 2/2] package: xen: Depend on the host-acpica
+ package
+In-Reply-To: <20170524203030.8187-3-alistair.francis@xilinx.com>
 References: <20170524203030.8187-1-alistair.francis@xilinx.com>
- <20170524203030.8187-2-alistair.francis@xilinx.com>
-Message-ID: <20170529235208.7e6fef31@free-electrons.com>
+ <20170524203030.8187-3-alistair.francis@xilinx.com>
+Message-ID: <20170529235321.14dc3fa4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,55 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-Commit titles should have prefixes that look like:
+Same comment on the commit title: use "package/xen: " as a prefix.
 
-	acpica:
+On Wed, 24 May 2017 13:30:30 -0700, Alistair Francis wrote:
+> Add a dependency on the host ACPICA package as Xen tools require iasl to
+> build.
 
-or:
+Lacks a reference to the autobuilder issue being fixed. I know you have
+it in the cover letter, but this is not the place where it is useful:
+the cover letter contents don't get committed/preserved anywhere. While
+the commit log becomes part of the Git history. So we want to have the
+autobuilder reference as part of the commit log.
 
-	package/acpica:
+>  XEN_LICENSE_FILES = COPYING
+> -XEN_DEPENDENCIES = host-python
+> +XEN_DEPENDENCIES = host-python host-acpica
 
-and not:
+Alphabetic ordering not respected.
 
-	package: acpica:
-
-Yes, that's a silly convention, but conventions are always silly :)
-
-On Wed, 24 May 2017 13:30:29 -0700, Alistair Francis wrote:
-> Add support to build the ACPICA package for the host. This is useful for
-> the iasl command which is required to build some packaged, including Xen
-> tools
-
-This should have reference the autobuilder issue that it helps fixing
-(even if it's only part of the fix).
-
-> +define HOST_ACPICA_BUILD_CMDS
-> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		all
-> +endef
-
-Weird that you put the host build command before the target build
-command, and then the host install command *after* the target install
-command. So I've reordered this.
-
-> +
->  define ACPICA_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
->  		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
-> @@ -23,4 +28,11 @@ define ACPICA_INSTALL_TARGET_CMDS
->  		INSTALLFLAGS=-m755 install
->  endef
->  
-> +define HOST_ACPICA_INSTALL_CMDS
-> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		DESTDIR="$(HOST_DIR)" \
-
-DESTDIR="$(HOST_DIR)" is wrong, so I've replaced with
-PREFIX="$(HOST_DIR)/usr". See
-https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
-for a quick explanation about the difference.
-
-Applied to master with those changes. Thanks!
+I've fixed those issues and applied to master. Thanks!
 
 Thomas
 -- 
