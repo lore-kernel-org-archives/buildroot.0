@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:51:18 +0200
-Subject: [Buildroot] [git commit] erlang-goldrush: bump version to 0.1.9
-Message-ID: <20170601202859.38DC4818F2@busybox.osuosl.org>
+Date: Mon, 29 May 2017 22:35:10 +0200
+Subject: [Buildroot] [git commit] upmpdcli: bump to version 1.2.14
+Message-ID: <20170601202858.DEE1B82A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=457bceea666296e6c481b6752e243b61db00d73b
+commit: https://git.buildroot.net/buildroot/commit/?id=271581ea3ef8b8c9de22b19a1a95dea05b6aa811
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-goldrush/erlang-goldrush.hash | 2 +-
- package/erlang-goldrush/erlang-goldrush.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-goldrush/erlang-goldrush.hash b/package/erlang-goldrush/erlang-goldrush.hash
-index 00ccb43..d575aa4 100644
---- a/package/erlang-goldrush/erlang-goldrush.hash
-+++ b/package/erlang-goldrush/erlang-goldrush.hash
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index bcd7831..b192d0e 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 739d8ce15049c54f7e00528edbf536f63a24fdb9dfa053d176e6f97a9832b834 erlang-goldrush-0.1.8.tar.gz
-+sha256 6fb8ac6345d940396ecf89d4ce6b9b809039f336d85d7a54239e85106a807612 erlang-goldrush-0.1.9.tar.gz
-diff --git a/package/erlang-goldrush/erlang-goldrush.mk b/package/erlang-goldrush/erlang-goldrush.mk
-index 2fa8810..e95b09c 100644
---- a/package/erlang-goldrush/erlang-goldrush.mk
-+++ b/package/erlang-goldrush/erlang-goldrush.mk
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.12.tar.gz.sha256:
+-sha256  20d97c2e5ff6911e1e1538edb1487823479802cba6bd4f4c4a74035edf61cb26  upmpdcli-1.2.12.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.14.tar.gz.sha256:
++sha256  fbfb392deec0b353704f8067d9863535dc2512f719d3305dbd73452ca59ec2fe  upmpdcli-1.2.14.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index eabc04a..cc9f652 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_GOLDRUSH_VERSION = 0.1.8
-+ERLANG_GOLDRUSH_VERSION = 0.1.9
- ERLANG_GOLDRUSH_SITE = $(call github,DeadZen,goldrush,$(ERLANG_GOLDRUSH_VERSION))
- ERLANG_GOLDRUSH_LICENSE = ISC
- ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
+-UPMPDCLI_VERSION = 1.2.12
++UPMPDCLI_VERSION = 1.2.14
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPL-2.0+
+ UPMPDCLI_LICENSE_FILES = COPYING
