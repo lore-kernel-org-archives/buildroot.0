@@ -1,60 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 29 May 2017 22:13:29 +0200
-Subject: [Buildroot] [PATCH] package/google-breakpad: use PRE_CONFIGURE
-	hooks to copy linux_syscall_support.h
-Message-ID: <20170529201329.13455-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 May 2017 22:15:34 +0200
+Subject: [Buildroot] [PATCH v2 1/2] easy-rsa: new package
+In-Reply-To: <1496088535-25501-1-git-send-email-julien@vdg.name>
+References: <1496088535-25501-1-git-send-email-julien@vdg.name>
+Message-ID: <20170529221534.72b6dfd3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Bernd [1], using POST_EXTRACT to copy
-linux_syscall_support.h break the legal-info target when
-google-breakpad package is selected.
+Hello,
 
-Step to reproduce:
+On Mon, 29 May 2017 22:08:54 +0200, Julien Viard de Galbert wrote:
+> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> ---
+> Changes v1 -> v2
+>   - Install missing file 'openssl-1.0.cnf'
+>   - Add select BR2_PACKAGE_OPENSSL and update description (Thanks Romain Naour)
+>   - Updated INSTALL call (Thanks Romain Naour)
+> 
+> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> ---
+>  package/Config.in              |  1 +
+>  package/easy-rsa/Config.in     | 14 ++++++++++++++
+>  package/easy-rsa/easy-rsa.hash |  2 ++
+>  package/easy-rsa/easy-rsa.mk   | 19 +++++++++++++++++++
 
-Create a foo defconfig with google-breakpad package:
-$ make foo_defconfig
+Please merge the change to the DEVELOPERS file in the same patch.
 
-Call legal-info
-$ make legal-info
 
-/usr/bin/install: cannot stat '/home/bernd/buildroot/buildroot/output/
-host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/
-linux_syscall_support.h': No such file or directory
+> diff --git a/package/Config.in b/package/Config.in
+> index d57813c..14e5b14 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -942,6 +942,7 @@ menu "Crypto"
+>  	source "package/botan/Config.in"
+>  	source "package/ca-certificates/Config.in"
+>  	source "package/cryptodev/Config.in"
+> +	source "package/easy-rsa/Config.in"
 
-Use PRE_CONFIGURE hooks instead since there are not used by legal-info.
+easy-rsa is not a library, so it shouldn't go in Libraries->Crypto.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2017-May/192844.html
+> +define EASY_RSA_INSTALL_TARGET_CMDS
+> +    $(INSTALL) -D -m 0755 $(@D)/easyrsa $(TARGET_DIR)/usr/bin/easyrsa
+> +    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/easy-rsa/x509-types
+> +    $(INSTALL) -D -m 0644 $(@D)/x509-types/* $(TARGET_DIR)/etc/easy-rsa/x509-types
+> +    $(INSTALL) -D -m 0644 $(@D)/openssl-1.0.cnf $(TARGET_DIR)/etc/easy-rsa/openssl-1.0.cnf
+> +    $(INSTALL) -D -m 0644 $(@D)/vars.example $(TARGET_DIR)/etc/easy-rsa/vars
 
-Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/google-breakpad/google-breakpad.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Use one tab for indentation here, not 4 spaces.
 
-diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-index 191ee5b..3501f45 100644
---- a/package/google-breakpad/google-breakpad.mk
-+++ b/package/google-breakpad/google-breakpad.mk
-@@ -23,14 +23,14 @@ define HOST_GOOGLE_BREAKPAD_LSS
- 		$(HOST_DIR)/usr/include/linux_syscall_support.h \
- 		$(@D)/src/third_party/lss/linux_syscall_support.h
- endef
--HOST_GOOGLE_BREAKPAD_POST_EXTRACT_HOOKS += HOST_GOOGLE_BREAKPAD_LSS
-+HOST_GOOGLE_BREAKPAD_PRE_CONFIGURE_HOOKS += HOST_GOOGLE_BREAKPAD_LSS
- 
- define GOOGLE_BREAKPAD_LSS
- 	$(INSTALL) -D -m 0644 \
- 		$(STAGING_DIR)/usr/include/linux_syscall_support.h \
- 		$(@D)/src/third_party/lss/linux_syscall_support.h
- endef
--GOOGLE_BREAKPAD_POST_EXTRACT_HOOKS += GOOGLE_BREAKPAD_LSS
-+GOOGLE_BREAKPAD_PRE_CONFIGURE_HOOKS += GOOGLE_BREAKPAD_LSS
- 
- define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
- 	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
+Thanks!
+
+Thomas
 -- 
-2.9.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
