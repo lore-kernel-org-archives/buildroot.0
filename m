@@ -1,264 +1,309 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 22:52:34 +0200
-Subject: [Buildroot] [git commit] package/gnutls: disable for static build
-Message-ID: <20170529205317.61B2E82721@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 29 May 2017 23:53:23 +0300
+Subject: [Buildroot] [PATCH] elfutils: security bump to version 0.169
+Message-ID: <b55c4c39417ad139014c611fc3a24ecf312d68db.1496091203.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30ed9de2fd8a572ffce26f7a9c8187335c567668
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes a number of security issues: CVE-2017-7607, CVE-2017-7608,
+CVE-2017-7609, CVE-2017-7610, CVE-2017-7611, CVE-2017-7612, CVE-2017-7613.
 
-The gnutils code uses __attribute__((constructor)) and
-__attribute__((destructor)) to call constructor/desctructor when a
-shared library is loaded.
-Constructor/desctructor are not used when a static library is used
-(except when if -Wl,--whole-archive -lgnutls -Wno-whole-archive is
-used, not tested).
+Rebase patches, and convert to git format.
 
-Even if gnutls initialization (_gnutls_global_init()) may be
-called manually, the gnutls maintainer said it's not supported [1].
+Remove --disable-werror; unrecognized configure option.
 
-"Note that static linking applications with gnutls is not something
- supported. gnutls relies on library constructors and destructors
- which are not loaded when linking statically."
+Use upstream provided hash.
 
-Now the gnutls script warns about static linking [2].
-
-So disable gnutls statically by adding "depends on !BR2_STATIC_LIBS"
-at Kconfig level and --disable-static in GNUTLS_CONF_OPTS.
-
-Fixes:
-[taskd] http://autobuild.buildroot.net/results/c2d/c2dd5c1c9dc87d2943c15e58ee56e67d7375368c
-[ffmpeg] http://autobuild.buildroot.net/results/892/8926d319d6d1cd1ee72239ad7d9ca869d2355628
-[sngrep] http://autobuild.buildroot.net/results/f7f/f7fb42d3742f6f01000a0d181e0c785640284405
-
-[1] https://gitlab.com/gnutls/gnutls/issues/203
-[2] https://gitlab.com/gnutls/gnutls/commit/6b748886799f88ddee9721dba4fc4d52854832ae
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Romain: merge our two patches together
-    add some option comment
-    disable static libgnutls.a
-    add sngrep autobuilder reference]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: do not disable libgnutls.a]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/aiccu/Config.in           | 6 ++++--
- package/connman/Config.in         | 4 ++++
- package/gnutls/Config.in          | 6 ++++--
- package/libmicrohttpd/Config.in   | 5 +++--
- package/libsoup/Config.in         | 4 ++++
- package/network-manager/Config.in | 5 +++--
- package/samba4/Config.in          | 2 +-
- package/taskd/Config.in           | 6 ++++--
- package/vpnc/Config.in            | 5 +++--
- package/webkitgtk/Config.in       | 4 ++++
- 10 files changed, 34 insertions(+), 13 deletions(-)
+ package/elfutils/0002-disable-progs.patch          | 52 ++++++++-----
+ package/elfutils/0003-fts.patch                    | 91 ++++++++++++++--------
+ ...y-make-werror-conditional-to-build-werror.patch | 22 ++++--
+ package/elfutils/elfutils.hash                     |  4 +-
+ package/elfutils/elfutils.mk                       |  4 +-
+ 5 files changed, 109 insertions(+), 64 deletions(-)
 
-diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
-index b346328..a2d6100 100644
---- a/package/aiccu/Config.in
-+++ b/package/aiccu/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_AICCU
- 	bool "aiccu"
-+	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-@@ -18,6 +19,7 @@ config BR2_PACKAGE_AICCU
+diff --git a/package/elfutils/0002-disable-progs.patch b/package/elfutils/0002-disable-progs.patch
+index ea6b934dfc8e..3f80fe60df6f 100644
+--- a/package/elfutils/0002-disable-progs.patch
++++ b/package/elfutils/0002-disable-progs.patch
+@@ -1,4 +1,7 @@
+-Add a --{enable,disable}-progs configure option
++From dfea82b761b2ea4708fbf9370a5467ae4be525ca Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 29 May 2017 23:03:48 +0300
++Subject: [PATCH] Add a --{enable,disable}-progs configure option
  
- 	  http://www.sixxs.net/tools/aiccu/
+ Add a --{enable,disable}-progs configuration option to elfutils. This
+ allows to selectively disable the compilation of the elfutils programs
+@@ -13,26 +16,15 @@ Based on the former patch by Thomas Petazzoni.
  
--comment "aiccu needs a toolchain w/ wchar, threads"
-+comment "aiccu needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_STATIC_LIBS
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 28cf168..253c604 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -33,12 +33,16 @@ config BR2_PACKAGE_CONNMAN_WIFI
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ Makefile.am  | 6 +++++-
++ configure.ac | 6 ++++++
++ 2 files changed, 11 insertions(+), 1 deletion(-)
  
- config BR2_PACKAGE_CONNMAN_WISPR
- 	bool "enable WISPr support"
-+	depends on !BR2_STATIC_LIBS # gnutls
- 	select BR2_PACKAGE_GNUTLS
- 	help
- 	  Enable support for Wireless Internet Service Provider
- 	  roaming (WISPr). A RADIUS server is used to authenticate the
- 	  subscriber's credentials.
- 
-+comment "connman WISPr needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+-diff -rup a/configure.ac b/configure.ac
+---- a/configure.ac	2016-03-31 09:48:08.000000000 +0100
+-+++ b/configure.ac	2016-06-17 14:47:03.561704498 +0100
+-@@ -253,6 +253,12 @@ AC_SUBST([LIBEBL_SUBDIR])
+- AC_DEFINE_UNQUOTED(LIBEBL_SUBDIR, "$LIBEBL_SUBDIR")
+- AH_TEMPLATE([LIBEBL_SUBDIR], [$libdir subdirectory containing libebl modules.])
+- 
+-+AC_ARG_ENABLE([progs],
+-+	AS_HELP_STRING([--enable-progs], [enable progs]),
+-+	enable_progs=$enableval,
+-+	enable_progs=yes)
+-+AM_CONDITIONAL(ENABLE_PROGS, test "$enable_progs" = yes)
+-+
+- dnl zlib is mandatory.
+- save_LIBS="$LIBS"
+- LIBS=
+-diff -rup a/Makefile.am b/Makefile.am
+---- a/Makefile.am	2016-01-12 12:49:19.000000000 +0000
+-+++ b/Makefile.am	2016-06-17 14:48:02.585861468 +0100
++diff --git a/Makefile.am b/Makefile.am
++index 2ff444e7bf1d..70443abb4fb6 100644
++--- a/Makefile.am
+++++ b/Makefile.am
+ @@ -26,9 +26,13 @@ AM_MAKEFLAGS = --no-print-directory
+  
+  pkginclude_HEADERS = version.h
+@@ -48,3 +40,23 @@ diff -rup a/Makefile.am b/Makefile.am
+  
+  EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
+  	     COPYING COPYING-GPLV2 COPYING-LGPLV3
++diff --git a/configure.ac b/configure.ac
++index c2c1d90b2133..7b4c38381cca 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -259,6 +259,12 @@ AC_SUBST([LIBEBL_SUBDIR])
++ AC_DEFINE_UNQUOTED(LIBEBL_SUBDIR, "$LIBEBL_SUBDIR")
++ AH_TEMPLATE([LIBEBL_SUBDIR], [$libdir subdirectory containing libebl modules.])
++ 
+++AC_ARG_ENABLE([progs],
+++	AS_HELP_STRING([--enable-progs], [enable progs]),
+++	enable_progs=$enableval,
+++	enable_progs=yes)
+++AM_CONDITIONAL(ENABLE_PROGS, test "$enable_progs" = yes)
+++
++ dnl zlib is mandatory.
++ save_LIBS="$LIBS"
++ LIBS=
++-- 
++2.11.0
 +
- config BR2_PACKAGE_CONNMAN_BLUETOOTH
- 	bool "enable Bluetooth support"
- 	help
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index 1af00cd..1db069c 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_GNUTLS
- 	bool "gnutls"
-+	# https://gitlab.com/gnutls/gnutls/issues/203
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBUNISTRING
-@@ -22,5 +24,5 @@ config BR2_PACKAGE_GNUTLS_TOOLS
+diff --git a/package/elfutils/0003-fts.patch b/package/elfutils/0003-fts.patch
+index 0131b750f8f3..cf5ba25c823d 100644
+--- a/package/elfutils/0003-fts.patch
++++ b/package/elfutils/0003-fts.patch
+@@ -1,4 +1,7 @@
+-Add an implementation of the fts_*() functions
++From 098760f7eac1fb86b3f6871d5bb10f9f44468f2d Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 29 May 2017 23:08:05 +0300
++Subject: [PATCH] Add an implementation of the fts_*() functions
  
- endif
+ The fts_*() functions are optional in uClibc, and not compiled in our
+ default configuration. The best option would be to migrate this
+@@ -28,11 +31,21 @@ Based on the former patch by Thomas Petazzoni.
  
--comment "gnutls needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-+comment "gnutls needs a toolchain w/ wchar, dynamic library"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index 302dbb7..2a685ca 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -12,14 +12,15 @@ if BR2_PACKAGE_LIBMICROHTTPD
- config BR2_PACKAGE_LIBMICROHTTPD_SSL
- 	bool "https support"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
-+	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_LIBGCRYPT
- 	help
- 	  Enable HTTPS (SSL) support.
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ configure.ac                   |    4 +
++ libdwfl/Makefile.am            |    3 +
++ libdwfl/fts.c                  | 1095 ++++++++++++++++++++++++++++++++++++++++
++ libdwfl/fts_.h                 |  131 +++++
++ libdwfl/linux-kernel-modules.c |    4 +
++ 5 files changed, 1237 insertions(+)
++ create mode 100644 libdwfl/fts.c
++ create mode 100644 libdwfl/fts_.h
  
--comment "libmicrohttpd https support needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-+comment "libmicrohttpd https support needs a toolchain w/ wchar, dynamic library"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
- 
- endif
- 
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index bc0ba95..236d3c4 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -22,11 +22,15 @@ config BR2_PACKAGE_LIBSOUP_GNOME
- 
- config BR2_PACKAGE_LIBSOUP_SSL
- 	bool "https support"
-+	depends on !BR2_STATIC_LIBS # gnutls
- 	select BR2_PACKAGE_GLIB_NETWORKING
- 	select BR2_PACKAGE_GNUTLS
- 	help
- 	  Enable HTTPS (SSL) support.
- 
-+comment "libsoup https support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+-diff -Nrup a/configure.ac b/configure.ac
+---- a/configure.ac	2016-06-17 14:47:03.561704498 +0100
+-+++ b/configure.ac	2016-06-17 14:52:35.038200412 +0100
+-@@ -259,6 +259,10 @@ AC_ARG_ENABLE([progs],
++diff --git a/configure.ac b/configure.ac
++index 7b4c38381cca..bcebb05fa532 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -265,6 +265,10 @@ AC_ARG_ENABLE([progs],
+  	enable_progs=yes)
+  AM_CONDITIONAL(ENABLE_PROGS, test "$enable_progs" = yes)
+  
+@@ -43,9 +56,25 @@ diff -Nrup a/configure.ac b/configure.ac
+  dnl zlib is mandatory.
+  save_LIBS="$LIBS"
+  LIBS=
+-diff -Nrup a/libdwfl/fts.c b/libdwfl/fts.c
+---- a/libdwfl/fts.c	1970-01-01 01:00:00.000000000 +0100
+-+++ b/libdwfl/fts.c	2016-06-17 14:57:26.649912084 +0100
++diff --git a/libdwfl/Makefile.am b/libdwfl/Makefile.am
++index 89ca92ed8110..a5a5615c5f94 100644
++--- a/libdwfl/Makefile.am
+++++ b/libdwfl/Makefile.am
++@@ -77,6 +77,9 @@ endif
++ if LZMA
++ libdwfl_a_SOURCES += lzma.c
++ endif
+++if !HAVE_FTS
+++libdwfl_a_SOURCES += fts.c
+++endif
++ 
++ libdwfl = $(libdw)
++ libdw = ../libdw/libdw.so
++diff --git a/libdwfl/fts.c b/libdwfl/fts.c
++new file mode 100644
++index 000000000000..f34cc03bd963
++--- /dev/null
+++++ b/libdwfl/fts.c
+ @@ -0,0 +1,1095 @@
+ +/*-
+ + * Copyright (c) 1990, 1993, 1994
+@@ -1142,9 +1171,11 @@ diff -Nrup a/libdwfl/fts.c b/libdwfl/fts.c
+ +	errno = oerrno;
+ +	return (ret);
+ +}
+-diff -Nrup a/libdwfl/fts_.h b/libdwfl/fts_.h
+---- a/libdwfl/fts_.h	1970-01-01 01:00:00.000000000 +0100
+-+++ b/libdwfl/fts_.h	2016-06-17 14:58:42.003387566 +0100
++diff --git a/libdwfl/fts_.h b/libdwfl/fts_.h
++new file mode 100644
++index 000000000000..0a070ba8dce5
++--- /dev/null
+++++ b/libdwfl/fts_.h
+ @@ -0,0 +1,131 @@
+ +/*
+ + * Copyright (c) 1989, 1993
+@@ -1277,31 +1308,25 @@ diff -Nrup a/libdwfl/fts_.h b/libdwfl/fts_.h
+ +__END_DECLS
+ +
+ +#endif /* fts.h */
+-diff -Nrup a/libdwfl/linux-kernel-modules.c b/libdwfl/linux-kernel-modules.c
+---- a/libdwfl/linux-kernel-modules.c	2016-03-02 16:25:38.000000000 +0000
+-+++ b/libdwfl/linux-kernel-modules.c	2016-06-17 14:59:50.267724089 +0100
+-@@ -29,7 +29,11 @@
+- /* We include this before config.h because it can't handle _FILE_OFFSET_BITS.
+-    Everything we need here is fine if its declarations just come first.  */
+- 
++diff --git a/libdwfl/linux-kernel-modules.c b/libdwfl/linux-kernel-modules.c
++index 9d0fef2cf260..47f0e3892294 100644
++--- a/libdwfl/linux-kernel-modules.c
+++++ b/libdwfl/linux-kernel-modules.c
++@@ -31,10 +31,14 @@
++    Everything we need here is fine if its declarations just come first.
++    Also, include sys/types.h before fts. On some systems fts.h is not self
++    contained. */
+ +#ifdef HAVE_FTS_H
+- #include <fts.h>
++ #ifdef BAD_FTS
++   #include <sys/types.h>
++   #include <fts.h>
++ #endif
+ +#else
+ +#include <fts_.h>
+ +#endif
+  
+  #include <config.h>
+- 
+-diff -Nrup a/libdwfl/Makefile.am b/libdwfl/Makefile.am
+---- a/libdwfl/Makefile.am	2016-01-12 12:49:19.000000000 +0000
+-+++ b/libdwfl/Makefile.am	2016-06-17 15:01:03.492157569 +0100
+-@@ -77,6 +77,9 @@ endif
+- if LZMA
+- libdwfl_a_SOURCES += lzma.c
+- endif
+-+if !HAVE_FTS
+-+libdwfl_a_SOURCES += fts.c
+-+endif
+- 
+- libdwfl = $(libdw)
+- libdw = ../libdw/libdw.so
++ #include <system.h>
++-- 
++2.11.0
 +
- endif
+diff --git a/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch b/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
+index aa4d12d6a219..a7017d6e88c2 100644
+--- a/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
++++ b/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
+@@ -1,4 +1,7 @@
+-Really make -Werror conditional to BUILD_WERROR
++From 1d8f27d73df6369b19ddd6732960df0d4fdec338 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Mon, 29 May 2017 23:24:42 +0300
++Subject: [PATCH] Really make -Werror conditional to BUILD_WERROR
  
- comment "libsoup needs a toolchain w/ wchar, threads"
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index c9dabfd..04bb651 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_NETWORK_MANAGER
- 	bool "networkmanager"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
-+	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	# Tested with 3.2, but may even work with earlier versions
-@@ -57,8 +58,8 @@ comment "pppd support needs a glibc or uClibc toolchain"
+ Otherwise it will fail with an error message like this one:
  
- endif
+@@ -12,15 +15,22 @@ cc1: all warnings being treated as errors
  
--comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.7"
-+comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.7, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_UDEV || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 4474185..ba48b8a 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_SAMBA4
- 	depends on BR2_USE_WCHAR # python
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # python -> libffi
--	depends on !BR2_STATIC_LIBS # python
-+	depends on !BR2_STATIC_LIBS # python, gnutls
- 	depends on !BR2_nios2 # binary too large, relocations don't fit
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_E2FSPROGS
-diff --git a/package/taskd/Config.in b/package/taskd/Config.in
-index 7d26aba..19d123f 100644
---- a/package/taskd/Config.in
-+++ b/package/taskd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TASKD
- 	bool "taskd"
-+	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_TASKD
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ config/eu.am | 1 -
++ 1 file changed, 1 deletion(-)
  
- 	  http://taskwarrior.org/
- 
--comment "taskd needs a toolchain w/ C++, wchar"
-+comment "taskd needs a toolchain w/ C++, wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-+		BR2_STATIC_LIBS
-diff --git a/package/vpnc/Config.in b/package/vpnc/Config.in
-index 2049c45..6455b0d 100644
---- a/package/vpnc/Config.in
-+++ b/package/vpnc/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_VPNC
- 	bool "vpnc"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
-+	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_LIBGCRYPT
-@@ -15,6 +16,6 @@ config BR2_PACKAGE_VPNC
- 
- 	  http://www.unix-ag.uni-kl.de/~massar/vpnc
- 
--comment "vpnc needs a toolchain w/ wchar"
-+comment "vpnc needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 25f6fad..0e53d06 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -49,11 +49,15 @@ if BR2_PACKAGE_WEBKITGTK
- 
- config BR2_PACKAGE_WEBKITGTK_HTTPS
- 	bool "HTTPS support"
-+	depends on !BR2_STATIC_LIBS # gnutls -> libsoup
- 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
- 	select BR2_PACKAGE_LIBSOUP_SSL
- 	help
- 	  Enable HTTPS protocol support.
- 
-+comment "webkitgtk https support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+-diff -rup a/config/eu.am b/config/eu.am
+---- a/config/eu.am	2016-03-02 16:25:38.000000000 +0000
+-+++ b/config/eu.am	2016-06-17 15:05:08.270974835 +0100
+-@@ -65,7 +65,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -W
++diff --git a/config/eu.am b/config/eu.am
++index 8fe1e259f9e2..c5a6209a4e04 100644
++--- a/config/eu.am
+++++ b/config/eu.am
++@@ -71,7 +71,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
+  	    -Wold-style-definition -Wstrict-prototypes \
+  	    $(LOGICAL_OP_WARNING) $(DUPLICATED_COND_WARNING) \
+- 	    $(NULL_DEREFERENCE_WARNING) \
++ 	    $(NULL_DEREFERENCE_WARNING) $(IMPLICIT_FALLTHROUGH_WARNING) \
+ -	    $(if $($(*F)_no_Werror),,-Werror) \
+  	    $(if $($(*F)_no_Wunused),,-Wunused -Wextra) \
+  	    $(if $($(*F)_no_Wstack_usage),,$(STACK_USAGE_WARNING)) \
+  	    $($(*F)_CFLAGS)
++-- 
++2.11.0
 +
- config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- 	bool "multimedia support"
- 	select BR2_PACKAGE_GSTREAMER1
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index 9fa9403f3fac..76b6dc64588d 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256 3c056914c8a438b210be0d790463b960fc79d234c3f05ce707cbff80e94cba30  elfutils-0.166.tar.bz2
++# From https://sourceware.org/elfutils/ftp/0.169/sha512.sum
++sha512 0a81a20bb2aff533d035d6b76f1403437b2e11bce390db57e34b8c26e4b9b3150346d83dddcbfbbdc58063f046ca3223508dba35c6ce88e375d201e7a777a8b9  elfutils-0.169.tar.bz2
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index de2ef9caa08f..e43d0367ad86 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELFUTILS_VERSION = 0.166
++ELFUTILS_VERSION = 0.169
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+@@ -20,11 +20,9 @@ HOST_ELFUTILS_AUTORECONF = YES
+ # Pass a custom program prefix to avoid a naming conflict between
+ # elfutils binaries and binutils binaries.
+ ELFUTILS_CONF_OPTS += \
+-	--disable-werror \
+ 	--program-prefix="eu-"
+ 
+ HOST_ELFUTILS_CONF_OPTS = \
+-	--disable-werror \
+ 	--with-bzlib \
+ 	--with-lzma \
+ 	--disable-progs
+-- 
+2.11.0
