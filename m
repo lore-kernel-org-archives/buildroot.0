@@ -1,100 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 May 2017 23:54:48 +0200
-Subject: [Buildroot] [PATCH] libtasn1: security bump to version 4.12
-Message-ID: <20170529215448.763-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 30 May 2017 00:00:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libxshmfence: needs
+ sync_4
+In-Reply-To: <20170521113056.15378-1-bernd.kuhls@t-online.de>
+References: <20170521113056.15378-1-bernd.kuhls@t-online.de>
+Message-ID: <f222239f-ad51-b113-d7a0-5104c6d5df33@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-7650: Two errors in the "asn1_find_node()" function
-(lib/parser_aux.c) within GnuTLS libtasn1 version 4.10 can be exploited to
-cause a stacked-based buffer overflow by tricking a user into processing a
-specially crafted assignments file via the e.g.  asn1Coding utility.
+Hi Bernd,
 
-For more details, see:
+Le 21/05/2017 ? 13:30, Bernd Kuhls a ?crit :
+> Also propagate reverse dependency to mesa3d and xserver_xorg-server.
+> 
+> Fixes xserver_xorg-server build
+> http://autobuild.buildroot.net/results/7da/7da8b46cda8786422e8293f26b79582b35a433d6/
+> 
+> For patch discussion refer to http://patchwork.ozlabs.org/patch/674595/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/Config.in                                 | 3 ++-
+>  package/mesa3d/mesa3d.mk                                 | 2 +-
+>  package/x11r7/xlib_libxshmfence/Config.in                | 1 +
+>  package/x11r7/xserver_xorg-server/Config.in              | 3 ++-
+>  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
+>  5 files changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index e5ff7d73d..2e19817a6 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -30,7 +30,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>  config BR2_PACKAGE_MESA3D_DRI_DRIVER
+>  	bool
+>  	select BR2_PACKAGE_MESA3D_DRIVER
+> -	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+> +		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
+>  	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
 
-https://secuniaresearch.flexerasoftware.com/secunia_research/2017-11/
+Here BR2_PACKAGE_XPROTO_PRESENTPROTO is still selected but...
 
-Or the 1.4.11 release mail (no mail about 1.4.12, but identical to 1.4.11 +
-a soname fix):
+>  
+>  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index b26d67747..5173e680b 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -90,7 +90,7 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+>  MESA3D_CONF_OPTS += \
+>  	--without-dri-drivers --disable-dri3
+>  else
+> -ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+>  MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
 
-https://lists.gnu.org/archive/html/help-libtasn1/2017-05/msg00003.html
+it's removed from the dependencies since BR2_PACKAGE_XLIB_LIBXSHMFENCE is disabled.
 
-Remove 0001-configure-don-t-add-Werror-to-build-flags.patch and autoreconf
-as that patch is now upstream.
+Best regards,
+Romain
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...configure-don-t-add-Werror-to-build-flags.patch | 28 ----------------------
- package/libtasn1/libtasn1.hash                     |  2 +-
- package/libtasn1/libtasn1.mk                       |  4 +---
- 3 files changed, 2 insertions(+), 32 deletions(-)
- delete mode 100644 package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
-
-diff --git a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch b/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
-deleted file mode 100644
-index 387ba7aa3b..0000000000
---- a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From dd091c8af163213e12aa92f61bc4916e0f102633 Mon Sep 17 00:00:00 2001
--From: Nikos Mavrogiannopoulos <nmav@redhat.com>
--Date: Tue, 26 Jul 2016 08:45:33 +0200
--Subject: [PATCH] configure: don't add -Werror to build flags
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Patch status: upstream
--
-- configure.ac | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 7a14e04..066f5fe 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -70,8 +70,6 @@ AC_ARG_ENABLE([gcc-warnings],
-- )
-- 
-- if test "$gl_gcc_warnings" = yes; then
---  gl_WARN_ADD([-Werror], [WERROR_CFLAGS])
---
--   nw="$nw -Wsystem-headers"         # Don't let system headers trigger warnings
--   nw="$nw -Wc++-compat"             # We don't care strongly about C++ compilers
--   nw="$nw -Wtraditional"            # Warns on #elif which we use often
---- 
--2.7.3
--
-diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
-index 5b2100e87d..699c14050a 100644
---- a/package/libtasn1/libtasn1.hash
-+++ b/package/libtasn1/libtasn1.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	4f6f7a8fd691ac2b8307c8ca365bad711db607d4ad5966f6938a9d2ecd65c920	libtasn1-4.9.tar.gz
-+sha256	6753da2e621257f33f5b051cc114d417e5206a0818fe0b1ecfd6153f70934753	libtasn1-4.12.tar.gz
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index 714c4f88e6..b34a3b63f0 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTASN1_VERSION = 4.9
-+LIBTASN1_VERSION = 4.12
- LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
-@@ -12,7 +12,5 @@ LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
- LIBTASN1_INSTALL_STAGING = YES
- # 'missing' fallback logic botched so disable it completely
- LIBTASN1_CONF_ENV = MAKEINFO="true"
--# For 0001-configure-don-t-add-Werror-to-build-flags.patch
--LIBTASN1_AUTORECONF = YES
- 
- $(eval $(autotools-package))
--- 
-2.11.0
+>  MESA3D_CONF_OPTS += --enable-dri3
+>  else
+> diff --git a/package/x11r7/xlib_libxshmfence/Config.in b/package/x11r7/xlib_libxshmfence/Config.in
+> index d0595f6d6..d4e87b3e8 100644
+> --- a/package/x11r7/xlib_libxshmfence/Config.in
+> +++ b/package/x11r7/xlib_libxshmfence/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_XLIB_LIBXSHMFENCE
+>  	bool "libxshmfence"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_XPROTO_XPROTO
+>  	help
+>  	  X.Org shmfence library
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index b04ccf4d7..5971e13f5 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -114,7 +114,8 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+>  	select BR2_PACKAGE_LIBDRM if (BR2_PACKAGE_XPROTO_XF86DRIPROTO || \
+>  		BR2_PACKAGE_XPROTO_DRI2PROTO)
+>  	select BR2_PACKAGE_LIBPCIACCESS
+> -	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
+> +	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+> +		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
+>  	help
+>  	  This variant of the X.org server is the full-blown variant,
+>  	  as used by desktop GNU/Linux distributions. The drivers (for
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> index 306e9d03e..12c3ed06c 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> @@ -220,7 +220,7 @@ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri2
+>  else
+>  XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2
+>  endif
+> -ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+> +ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+>  XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
+>  XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+>  ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
+> 
