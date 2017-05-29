@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 29 May 2017 21:07:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stella: fix project URLs
-Message-ID: <20170529190736.31638-1-bernd.kuhls@t-online.de>
+Date: Mon, 29 May 2017 21:14:28 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/stella: fix project URLs
+Message-ID: <20170529191429.11102-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
