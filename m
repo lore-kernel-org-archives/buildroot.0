@@ -1,41 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 23:49:40 +0200
-Subject: [Buildroot] [git commit] package/xen: add dependency on host-acpica
-Message-ID: <20170529214947.1D1E18285C@busybox.osuosl.org>
+Date: Mon, 29 May 2017 23:52:08 +0200
+Subject: [Buildroot] [PATCH 1/2] package: acpica: Add host buildling
+ support
+In-Reply-To: <20170524203030.8187-2-alistair.francis@xilinx.com>
+References: <20170524203030.8187-1-alistair.francis@xilinx.com>
+ <20170524203030.8187-2-alistair.francis@xilinx.com>
+Message-ID: <20170529235208.7e6fef31@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92c1b8132dd298dbbd35bfff8cc07f326924d92d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This commit adds a dependency on the host ACPICA package as Xen tools
-require iasl to build.
+Commit titles should have prefixes that look like:
 
-Fixes:
+	acpica:
 
-  http://autobuild.buildroot.net/results/afa199864d6b546fe759bb582a9c10702ea7fa78/
+or:
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-Acked-by: Erico Nunes <nunes.erico@gmail.com>
-[Thomas: tweak commit log, add autobuilder reference.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xen/xen.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+	package/acpica:
 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 89c09f8..821ab21 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -8,7 +8,7 @@ XEN_VERSION = 4.8.1
- XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
--XEN_DEPENDENCIES = host-python
-+XEN_DEPENDENCIES = host-acpica host-python
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
+and not:
+
+	package: acpica:
+
+Yes, that's a silly convention, but conventions are always silly :)
+
+On Wed, 24 May 2017 13:30:29 -0700, Alistair Francis wrote:
+> Add support to build the ACPICA package for the host. This is useful for
+> the iasl command which is required to build some packaged, including Xen
+> tools
+
+This should have reference the autobuilder issue that it helps fixing
+(even if it's only part of the fix).
+
+> +define HOST_ACPICA_BUILD_CMDS
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		all
+> +endef
+
+Weird that you put the host build command before the target build
+command, and then the host install command *after* the target install
+command. So I've reordered this.
+
+> +
+>  define ACPICA_BUILD_CMDS
+>  	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+>  		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
+> @@ -23,4 +28,11 @@ define ACPICA_INSTALL_TARGET_CMDS
+>  		INSTALLFLAGS=-m755 install
+>  endef
+>  
+> +define HOST_ACPICA_INSTALL_CMDS
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		DESTDIR="$(HOST_DIR)" \
+
+DESTDIR="$(HOST_DIR)" is wrong, so I've replaced with
+PREFIX="$(HOST_DIR)/usr". See
+https://stackoverflow.com/questions/11307465/destdir-and-prefix-of-make
+for a quick explanation about the difference.
+
+Applied to master with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
