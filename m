@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 21:53:19 +0200
-Subject: [Buildroot] [git commit] package/libev: fix download URL
-Message-ID: <20170529195333.A7B76827CF@busybox.osuosl.org>
+Date: Mon, 29 May 2017 21:54:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libev: fix download URL
+In-Reply-To: <20170528204057.28697-1-bernd.kuhls@t-online.de>
+References: <20170528204057.28697-1-bernd.kuhls@t-online.de>
+Message-ID: <20170529215415.39d9e8a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f0cdaad8b0b797f5727a35737a0badd97cb3ddc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libev/libev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 28 May 2017 22:40:57 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libev/libev.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index 2e3ed45..87cdd6f 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBEV_VERSION = 4.22
--LIBEV_SITE = http://dist.schmorp.de/libev
-+LIBEV_SITE = http://dist.schmorp.de/libev/Attic
- LIBEV_INSTALL_STAGING = YES
- LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
- LIBEV_LICENSE_FILES = LICENSE
+Applied to master, thanks. Could you contact the upstream developer to
+ask him to stop moving the tarballs around? It is really annoying that
+the latest version is available in http://dist.schmorp.de/libev/, and
+then gets moved to http://dist.schmorp.de/libev/Attic/ as soon as a
+newer version is released.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
