@@ -1,41 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 23:53:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package: xen: Depend on the host-acpica
- package
-In-Reply-To: <20170524203030.8187-3-alistair.francis@xilinx.com>
-References: <20170524203030.8187-1-alistair.francis@xilinx.com>
- <20170524203030.8187-3-alistair.francis@xilinx.com>
-Message-ID: <20170529235321.14dc3fa4@free-electrons.com>
+From: =?UTF-8?q?Gon=C3=A7alo=20Salazar?= <glbsalazar@gmail.com>
+Date: Mon, 29 May 2017 22:53:41 +0100
+Subject: [Buildroot] [PATCH 1/1] mosh: add notes to clarify runtime issues
+Message-ID: <1496094821-31964-1-git-send-email-glbsalazar@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Added notes to the mosh package help to clarify some runtime
+issues related with it to ensure mosh will work properly after adding it.
+This includes adding a proper LOCALE and an extra flag when using
+mosh with dropbear.
 
-Same comment on the commit title: use "package/xen: " as a prefix.
+Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
+---
+ package/mosh/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Wed, 24 May 2017 13:30:30 -0700, Alistair Francis wrote:
-> Add a dependency on the host ACPICA package as Xen tools require iasl to
-> build.
-
-Lacks a reference to the autobuilder issue being fixed. I know you have
-it in the cover letter, but this is not the place where it is useful:
-the cover letter contents don't get committed/preserved anywhere. While
-the commit log becomes part of the Git history. So we want to have the
-autobuilder reference as part of the commit log.
-
->  XEN_LICENSE_FILES = COPYING
-> -XEN_DEPENDENCIES = host-python
-> +XEN_DEPENDENCIES = host-python host-acpica
-
-Alphabetic ordering not respected.
-
-I've fixed those issues and applied to master. Thanks!
-
-Thomas
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index e0ff2cf..1806520 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -24,4 +24,11 @@ config BR2_PACKAGE_MOSH
+ 	  allows roaming, and provides speculative local echo and line editing
+ 	  of user keystrokes.
+ 
++	  Mosh requires that the remote machine has a locale setting matching
++	  the one on the client.
++
++	  When using mosh with dropbear on a remote machine, the client needs mosh
++	  with a version above 1.3.0 and the --no-ssh-pty option needs to be passed
++	  when starting the connection.
++
+ 	  https://mosh.mit.edu
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
