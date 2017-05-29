@@ -1,47 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 21:49:59 +0200
-Subject: [Buildroot] [PATCH] ola: remove package
-In-Reply-To: <9bcbb3a321628ffd33521b6558185a373ec60bff.1496080955.git.baruch@tkos.co.il>
-References: <9bcbb3a321628ffd33521b6558185a373ec60bff.1496080955.git.baruch@tkos.co.il>
-Message-ID: <20170529214959.4a0af486@free-electrons.com>
+Date: Mon, 29 May 2017 21:50:10 +0200
+Subject: [Buildroot] [git commit] erlang: fix check-package help text
+	warnings
+Message-ID: <20170529195027.D696B82968@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=01ad3a38d25af99ae29a7ffa65d8e838bfdbec03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 29 May 2017 21:02:35 +0300, Baruch Siach wrote:
-> ola does not build with current protobuf. Upstream bug report is still open.
-> 
-> https://github.com/OpenLightingProject/ola/issues/1192
-> 
-> Cc: Dave Skok <blanco.ether@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  DEVELOPERS                                         |   3 -
->  package/Config.in                                  |   1 -
->  .../0001-Remove-fvisibiliy-inlines-hidden.patch    |  26 ---
->  .../ola/0002-Remove-replacing-I-with-isystem.patch | 106 ------------
->  package/ola/Config.in                              | 138 ----------------
->  package/ola/ola.hash                               |   2 -
->  package/ola/ola.mk                                 | 180 ---------------------
->  7 files changed, 456 deletions(-)
->  delete mode 100644 package/ola/0001-Remove-fvisibiliy-inlines-hidden.patch
->  delete mode 100644 package/ola/0002-Remove-replacing-I-with-isystem.patch
->  delete mode 100644 package/ola/Config.in
->  delete mode 100644 package/ola/ola.hash
->  delete mode 100644 package/ola/ola.mk
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/Config.in | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
-Applied to master, thanks. I think we should also remove the "firejail"
-package, which has been marked BROKEN for a while, with nobody taking
-care of it.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 11407db..1cd93ca 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -16,11 +16,12 @@ config BR2_PACKAGE_ERLANG
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+ 	help
+-	  Erlang is a programming language used to build massively scalable
+-	  soft real-time systems with requirements on high availability.
+-	  Some of its uses are in telecoms, banking, e-commerce, computer
+-	  telephony and instant messaging. Erlang's runtime system has
+-	  built-in support for concurrency, distribution and fault tolerance.
++	  Erlang is a programming language used to build massively
++	  scalable soft real-time systems with requirements on high
++	  availability. Some of its uses are in telecoms, banking,
++	  e-commerce, computer telephony and instant messaging.
++	  Erlang's runtime system has built-in support for
++	  concurrency, distribution and fault tolerance.
+ 
+ 	  http://www.erlang.org
+ 
+@@ -29,18 +30,19 @@ if BR2_PACKAGE_ERLANG
+ config BR2_PACKAGE_ERLANG_SMP
+ 	bool "enable SMP support"
+ 	help
+-	  Erlang provides both a UP and an SMP emulator. The UP emulator
+-	  is always built, and this option enables compilation of the SMP
+-	  emulator. The choice of which emulator to use is made at runtime.
+-	  If you do not need SMP support, turning this option off reduces
+-	  compile time and the size of the Erlang installation.
++	  Erlang provides both a UP and an SMP emulator. The UP
++	  emulator is always built, and this option enables
++	  compilation of the SMP emulator. The choice of which
++	  emulator to use is made at runtime. If you do not need SMP
++	  support, turning this option off reduces compile time and
++	  the size of the Erlang installation.
+ 
+ config BR2_PACKAGE_ERLANG_MEGACO
+ 	bool "install megaco application"
+ 	help
+-	  The Megaco application is a framework for building applications
+-	  on top of the Megaco/H.248 protocol. It is approximately 14MB in
+-	  size so if you do not need it then it is recommended not to
+-	  enable it.
++	  The Megaco application is a framework for building
++	  applications on top of the Megaco/H.248 protocol. It is
++	  approximately 14MB in size so if you do not need it then
++	  it is recommended not to enable it.
+ 
+ endif # BR2_PACKAGE_ERLANG
