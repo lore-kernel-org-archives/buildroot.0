@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 May 2017 22:35:15 +0200
-Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.0.2
-Message-ID: <20170601202858.EC9CC82A3B@busybox.osuosl.org>
+Date: Tue, 30 May 2017 23:51:18 +0200
+Subject: [Buildroot] [git commit] erlang-goldrush: bump version to 0.1.9
+Message-ID: <20170601202859.38DC4818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5cc2ea7129369b18cbbb41d522efd04472c72f5
+commit: https://git.buildroot.net/buildroot/commit/?id=457bceea666296e6c481b6752e243b61db00d73b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
+ package/erlang-goldrush/erlang-goldrush.hash | 2 +-
+ package/erlang-goldrush/erlang-goldrush.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 9e305da..45dbbe8 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
+diff --git a/package/erlang-goldrush/erlang-goldrush.hash b/package/erlang-goldrush/erlang-goldrush.hash
+index 00ccb43..d575aa4 100644
+--- a/package/erlang-goldrush/erlang-goldrush.hash
++++ b/package/erlang-goldrush/erlang-goldrush.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  3fbde4f6e7f5cbc7200f782bd9faca25f7e91edf7dd7a3b514cd616e556a1fee  shairport-sync-3.0.1.tar.gz
-+sha256  b348b9b3cf3994d9222430bc514c94a22f2ed173956fdb097f3354cdba8fd198  shairport-sync-3.0.2.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 650c6d7..208a9b3 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
+-sha256 739d8ce15049c54f7e00528edbf536f63a24fdb9dfa053d176e6f97a9832b834 erlang-goldrush-0.1.8.tar.gz
++sha256 6fb8ac6345d940396ecf89d4ce6b9b809039f336d85d7a54239e85106a807612 erlang-goldrush-0.1.9.tar.gz
+diff --git a/package/erlang-goldrush/erlang-goldrush.mk b/package/erlang-goldrush/erlang-goldrush.mk
+index 2fa8810..e95b09c 100644
+--- a/package/erlang-goldrush/erlang-goldrush.mk
++++ b/package/erlang-goldrush/erlang-goldrush.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHAIRPORT_SYNC_VERSION = 3.0.1
-+SHAIRPORT_SYNC_VERSION = 3.0.2
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+-ERLANG_GOLDRUSH_VERSION = 0.1.8
++ERLANG_GOLDRUSH_VERSION = 0.1.9
+ ERLANG_GOLDRUSH_SITE = $(call github,DeadZen,goldrush,$(ERLANG_GOLDRUSH_VERSION))
+ ERLANG_GOLDRUSH_LICENSE = ISC
+ ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
