@@ -1,39 +1,35 @@
-From: =?UTF-8?Q?Gon=C3=A7alo_Salazar?= <glbsalazar@gmail.com>
-Date: Tue, 30 May 2017 12:15:17 +0100
-Subject: [Buildroot] [PATCH 1/1] mosh: add notes to clarify runtime
-	issues
-In-Reply-To: <87vaoiaksz.fsf@dell.be.48ers.dk>
-References: <1496094821-31964-1-git-send-email-glbsalazar@gmail.com>
- <87vaoiaksz.fsf@dell.be.48ers.dk>
-Message-ID: <CAPJzBTrAN_j+8KcsP9rsbtWFUdR_anfCAq=cdqBrJzZMwWpKDg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 May 2017 13:41:53 +0200
+Subject: [Buildroot] Analysis of build results for 2017-05-29
+In-Reply-To: <20170530095148.0f0d4980@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 30 May 2017 09:51:48 +0200")
+References: <20170530063003.4239020C46@mail.free-electrons.com>
+ <20170530095148.0f0d4980@free-electrons.com>
+Message-ID: <87a85ua7we.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I'll look into it, need to bump it and try to compile it.
+Hi,
 
-I won't be able to test multiple combinations of it but I'll ensure it
-compiles on my machine.
+ >> powerpc64 | v4l2grab-f8d8844d52387b3db7... | NOK |
+ >> http://autobuild.buildroot.net/results/9eea759992d2c57764156dfeba5682eed8c39797
+ >> |
 
-Gon?alo Salazar
+ > Bogus:
 
+ >   sort: write failed: standard output: No space left on device
 
-2017-05-30 8:03 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Gon?alo" == Gon?alo Salazar <glbsalazar@gmail.com> writes:
->
->  > Added notes to the mosh package help to clarify some runtime
->  > issues related with it to ensure mosh will work properly after adding it.
->  > This includes adding a proper LOCALE and an extra flag when using
->  > mosh with dropbear.
->
->  > Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
->
-> Committed, thanks. How about sending a patch to bump our mosh version to
-> 1.3.0?
->
-> --
-> Bye, Peter Korsgaard
+ > Peter, could you do some cleanup on gcc21 ? :-)
+
+I can try, but for some reason I cannot ssh to the machine right
+now. Last week I started looking into moving to the new gcc67/gcc68
+machines instead, but I need to build a few host tools manually
+(E.G. bc) or get somebody to install them there first.
+
+-- 
+Bye, Peter Korsgaard
