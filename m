@@ -1,43 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 30 May 2017 21:16:57 +0000
-Subject: [Buildroot] [Bug 9906] genimage: Disk full
-In-Reply-To: <bug-9906-163@https.bugs.busybox.net/>
-References: <bug-9906-163@https.bugs.busybox.net/>
-Message-ID: <bug-9906-163-jl90vC8k1f@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 May 2017 23:17:53 +0200
+Subject: [Buildroot] [git commit branch/next] package/hwloc: install package
+	to staging directory
+Message-ID: <20170530211816.B8D387F8BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9906
+commit: https://git.buildroot.net/buildroot/commit/?id=10b386d2dc03b53b03d6923d84c4a128f47322e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+The hwloc package consists of a library and utilities so it should be
+installed to both the staging and target directories.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|ASSIGNED                    |RESOLVED
-                 CC|                            |yann.morin.1998 at free.fr
+Signed-off-by: Graham Holland <gmh7@sfu.ca>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/hwloc/hwloc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Alexander, Peter, All,
-
-> I just did a test build with 2017.05-rc3 here and raspberrypi3_64_defconfig,
-> and I end up with ~15 MB used in the fat partition[...]
-
-Ditto.
-
-> If you change the configuration significantly then it isn't surprising
-> that you may need to tweak other things, so this IMHO isn't a bug.
-
-Agreed.
-
-I'm closing this report. If you still have the issue with a stock
-Buildroot rpi3_64 defconfig, please re-open.
-
-Thanks! :-)
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+index ad2e090..5de84f7 100644
+--- a/package/hwloc/hwloc.mk
++++ b/package/hwloc/hwloc.mk
+@@ -11,6 +11,7 @@ HWLOC_SITE = http://www.open-mpi.org/software/hwloc/v$(HWLOC_VERSION_MAJOR)/down
+ HWLOC_LICENSE = BSD-3-Clause
+ HWLOC_LICENSE_FILES = COPYING
+ HWLOC_DEPENDENCIES = host-pkgconf
++HWLOC_INSTALL_STAGING = YES
+ # 0001-utils-hwloc-Makefile.am-fix-install-man-race-conditi.patch touches Makefile.am
+ HWLOC_AUTORECONF = YES
+ 
