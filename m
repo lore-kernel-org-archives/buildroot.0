@@ -1,148 +1,74 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 30 May 2017 16:53:17 +0200
-Subject: [Buildroot] [PATCH] package/madplay: add custom libtool patch
-Message-ID: <20170530145317.9552-1-romain.naour@gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 30 May 2017 16:52:06 +0200
+Subject: [Buildroot] [PATCH 11/16] erlang-p1-xml: bump to version 1.1.22
+In-Reply-To: <20170530145211.15320-1-johan.oudinet@gmail.com>
+References: <20170530145211.15320-1-johan.oudinet@gmail.com>
+Message-ID: <20170530145211.15320-12-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Madplay use a libtool script version 1.5.2 but the libtool patch
-"buildroot-libtool-v1.5.patch.patch" doesn't apply.
-
-From [1]:
-"It's libtool dropping -static. That's because madplay has a
-weird version of libtool, on which our libtool patch doesn't apply so
-we have MADPLAY_LIBTOOL_PATCH = NO. Therefore, the hack we have that
-makes libtool -static behave like -all-static isn't applied, causing
-this build failure."
-
-Fixes:
-http://autobuild.buildroot.net/results/60def1b15ea61d3cb5f50e9de3f354dd2e17d270
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-May/192959.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- .../0002-buildroot-libtool-v1.5.patch.patch        | 109 +++++++++++++++++++++
- 1 file changed, 109 insertions(+)
- create mode 100644 package/madplay/0002-buildroot-libtool-v1.5.patch.patch
+ .../0001-remove-dependencies-from-rebar-config.patch   | 18 ++++++++++++++++++
+ package/erlang-p1-xml/erlang-p1-xml.hash               |  2 +-
+ package/erlang-p1-xml/erlang-p1-xml.mk                 |  5 +++--
+ 3 files changed, 22 insertions(+), 3 deletions(-)
+ create mode 100644 package/erlang-p1-xml/0001-remove-dependencies-from-rebar-config.patch
 
-diff --git a/package/madplay/0002-buildroot-libtool-v1.5.patch.patch b/package/madplay/0002-buildroot-libtool-v1.5.patch.patch
+diff --git a/package/erlang-p1-xml/0001-remove-dependencies-from-rebar-config.patch b/package/erlang-p1-xml/0001-remove-dependencies-from-rebar-config.patch
 new file mode 100644
-index 0000000..c0578dd
+index 0000000000..9b0a53502c
 --- /dev/null
-+++ b/package/madplay/0002-buildroot-libtool-v1.5.patch.patch
-@@ -0,0 +1,109 @@
-+From ce661985c098635965573aac8fc983a72f60d396 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 30 May 2017 16:42:34 +0200
-+Subject: [PATCH] buildroot-libtool-v1.5.patch
++++ b/package/erlang-p1-xml/0001-remove-dependencies-from-rebar-config.patch
+@@ -0,0 +1,18 @@
++Without this patch, dependencies would be downloaded and compiled
++by rebar at build time.
 +
-+Aplly buildroot-libtool-v1.5.patch rebased on libtool 1.5.2 used
-+in madplay and fixing all conflicts.
++Signed-off-by: Christophe Romain <cromain@process-one.net>
 +
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ ltmain.sh | 40 ++++++++++++++++++++++++++++++----------
-+ 1 file changed, 30 insertions(+), 10 deletions(-)
++diff --git a/rebar.config b/rebar.config
++index 3e20029..a47f1ff 100644
++--- a/rebar.config
+++++ b/rebar.config
++@@ -31,8 +31,6 @@
++ {port_specs, [{"priv/lib/fxml.so", ["c_src/fxml.c"]},
++               {"priv/lib/fxml_stream.so", ["c_src/fxml_stream.c"]}]}.
 +
-+diff --git a/ltmain.sh b/ltmain.sh
-+index 4b9f940..0b71220 100644
-+--- a/ltmain.sh
-++++ b/ltmain.sh
-+@@ -164,6 +164,11 @@ do
-+   arg="$1"
-+   shift
-+ 
-++  # Make -static behave as -all-static
-++  case $arg in
-++  -static) arg="-all-static" ;;
-++  esac
-++
-+   case $arg in
-+   -*=*) optarg=`$echo "X$arg" | $Xsed -e 's/[-_a-zA-Z0-9]*=//'` ;;
-+   *) optarg= ;;
-+@@ -549,8 +554,9 @@ if test -z "$show_help"; then
-+ 	# line option must be used.
-+ 	if test -z "$tagname"; then
-+ 	  $echo "$modename: unable to infer tagged configuration"
-+-	  $echo "$modename: specify a tag with \`--tag'" 1>&2
-+-	  exit 1
-++	  $echo "$modename: defaulting to \`CC'"
-++	  $echo "$modename: if this is not correct, specify a tag with \`--tag'"
-++#	  exit 1
-+ #        else
-+ #          $echo "$modename: using $tagname tagged configuration"
-+ 	fi
-+@@ -1228,7 +1234,8 @@ EOF
-+       prevarg="$arg"
-+ 
-+       case $arg in
-+-      -all-static)
-++      # Make -static behave like -all-static
-++      -all-static | -static)
-+ 	if test -n "$link_static_flag"; then
-+ 	  compile_command="$compile_command $link_static_flag"
-+ 	  finalize_command="$finalize_command $link_static_flag"
-+@@ -2135,8 +2142,14 @@ EOF
-+ 	    absdir="$abs_ladir"
-+ 	    libdir="$abs_ladir"
-+ 	  else
-+-	    dir="$libdir"
-+-	    absdir="$libdir"
-++            # Adding 'libdir' from the .la file to our library search paths
-++            # breaks crosscompilation horribly.  We cheat here and don't add
-++            # it, instead adding the path where we found the .la.  -CL
-++	    dir="$abs_ladir"
-++	    absdir="$abs_ladir"
-++	    libdir="$abs_ladir"
-++	    #dir="$libdir"
-++	    #absdir="$libdir"
-+ 	  fi
-+ 	else
-+ 	  dir="$ladir/$objdir"
-+@@ -2261,7 +2274,7 @@ EOF
-+ 	   { test "$prefer_static_libs" = no || test -z "$old_library"; }; then
-+ 	  if test "$installed" = no; then
-+ 	    notinst_deplibs="$notinst_deplibs $lib"
-+-	    need_relink=yes
-++	    need_relink=no
-+ 	  fi
-+ 	  # This is a shared library
-+ 	
-+@@ -5146,6 +5159,10 @@ fi\
-+ 	    # Replace all uninstalled libtool libraries with the installed ones
-+ 	    newdependency_libs=
-+ 	    for deplib in $dependency_libs; do
-++              # Replacing uninstalled with installed can easily break crosscompilation,
-++              # since the installed path is generally the wrong architecture.  -CL
-++              newdependency_libs="$newdependency_libs $deplib"
-++              continue
-+ 	      case $deplib in
-+ 	      *.la)
-+ 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
-+@@ -5464,10 +5481,13 @@ relink_command=\"$relink_command\""
-+ 	  # At present, this check doesn't affect windows .dll's that
-+ 	  # are installed into $libdir/../bin (currently, that works fine)
-+ 	  # but it's something to keep an eye on.
-+-	  if test "$inst_prefix_dir" = "$destdir"; then
-+-	    $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
-+-	    exit 1
-+-	  fi
-++	  #
-++	  # This breaks install into our staging area.  -PB
-++	  # 
-++	  # if test "$inst_prefix_dir" = "$destdir"; then
-++	  #   $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
-++	  #   exit 1
-++	  # fi
-+ 
-+ 	  if test -n "$inst_prefix_dir"; then
-+ 	    # Stick the inst_prefix_dir data into the link command.
-+-- 
-+2.9.4
++-{deps, [{p1_utils, ".*", {git, "https://github.com/processone/p1_utils", {tag, "1.0.7"}}}]}.
++-
++ {clean_files, ["c_src/fxml.gcda", "c_src/fxml.gcno", "c_src/fxml_stream.gcda", "c_src/fxml_stream.gcno"]}.
 +
++ {cover_enabled, true}.
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.hash b/package/erlang-p1-xml/erlang-p1-xml.hash
+index 8e4a79fee1..00b90b52ec 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.hash
++++ b/package/erlang-p1-xml/erlang-p1-xml.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 4c163c5b9572baa93eb97e03544db57dc751c7995a5279081a0d56f5fdaa2521 erlang-p1-xml-1.1.1.tar.gz
++sha256 0163e7bd11b6705732fd7281209925e39534c9ea123887574218422c34762d7c erlang-p1-xml-1.1.22.tar.gz
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
+index 31bab2311d..1e43400fc1 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.mk
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ERLANG_P1_XML_VERSION = 1.1.1
+-ERLANG_P1_XML_SITE = $(call github,processone,xml,$(ERLANG_P1_XML_VERSION))
++ERLANG_P1_XML_VERSION = 1.1.22
++ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
+ ERLANG_P1_XML_LICENSE = Apache-2.0
+ ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_XML_DEPENDENCIES = expat erlang-p1-utils
+@@ -14,3 +14,4 @@ ERLANG_P1_XML_INSTALL_STAGING = YES
+ ERLANG_P1_XML_USE_AUTOCONF = YES
+ 
+ $(eval $(rebar-package))
++$(eval $(host-rebar-package))
 -- 
-2.9.4
+2.11.0
