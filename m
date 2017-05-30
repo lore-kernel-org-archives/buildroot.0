@@ -1,10 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:31:39 +0200
-Subject: [Buildroot] [PATCH v2] package/xen: Backport a header include
- fix for makedev
-In-Reply-To: <20170530172613.12571-1-alistair.francis@xilinx.com>
-References: <20170530172613.12571-1-alistair.francis@xilinx.com>
-Message-ID: <20170530233139.22835773@free-electrons.com>
+From: Ricardo Herrero <ricardo.herrero@gmail.com>
+Date: Tue, 30 May 2017 23:35:35 +0200
+Subject: [Buildroot] Makefile: add check of binaries architecture
+Message-ID: <CABLXdK_3=64R13wD+_WN7DceLiLtwEy2Hg8Rtqdd_p6Xu4tXEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +10,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 30 May 2017 10:26:13 -0700, Alistair Francis wrote:
-> maekdev() is avaliable from sys/types.h but only due to a bug in glibc. This
-> is being fixed by printing an error when using makedev() from sys/types.h.
-> To fix the issue we should innclude sys/sysmacros.h for makedev(). As this
-> has already been fixed in upstream Xen we can backport the patch.
-> 
-> Fixes:
->     http://autobuild.buildroot.net/results/552/552e66d764885341b2fe208a0e4382b5fe05ea9d/
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+ I have been compiling some packages both ARM and linux-x86_64 archs
+together until I have tested with Buildroot 2017.05_rc2. It adds a check
+for proper binaries during build stage. But I need to build both archs. So
+I need to know if there is a way to bypass this check or if I can do
+something else. My problem is that I need a package to compile both x86_64
+and arm in order to compile another package  both in x86_64. So I cannot
+remove x86_64 folders right after build, I need all of them until install
+phase. I have seen this, but I don?t know how to avoid
+GLOBAL_INSTRUMENTATION_HOOKS (http://patchwork.ozlabs.org/patch/737884/)
 
-Applied to master after fixing the typos in the commit log. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Thanks for your help.
+Ricardo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170530/8910616b/attachment.html>
