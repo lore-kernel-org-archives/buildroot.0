@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:19:23 +0200
-Subject: [Buildroot] [PATCH 1/1] go: bump version to 1.8.3
-In-Reply-To: <20170530193613.27160-1-christian@paral.in>
-References: <20170530193613.27160-1-christian@paral.in>
-Message-ID: <20170530231923.0f3afa17@free-electrons.com>
+Date: Tue, 30 May 2017 23:20:12 +0200
+Subject: [Buildroot] [git commit] rtl8188eu: fix help text format
+Message-ID: <20170530212121.9F2147FE16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5bd7415e244ef9469d4b54b8d41d4a8b54e58e5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 30 May 2017 12:36:13 -0700, Christian Stewart wrote:
-> Bumping Go to 1.8.3 from 1.7.
-> 
-> Go 1.8 comes with significant performance improvements, particularly
-> around ARM: "CPU time required by our benchmark programs was reduced by
-> 20-30% on 32-bit ARM systems."
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/go/go.hash | 2 +-
->  package/go/go.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Warning reported by check-package.
 
-Applied to next, thanks.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rtl8188eu/Config.in | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
+index 09cde24..9263802 100644
+--- a/package/rtl8188eu/Config.in
++++ b/package/rtl8188eu/Config.in
+@@ -4,14 +4,14 @@ config BR2_PACKAGE_RTL8188EU
+ 	help
+ 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
+ 	  This is needed only for Linux kernels before 3.12.
+-	  Since 3.12, there is a (staging) driver in mainline, with a similar
+-	  codebase.
++	  Since 3.12, there is a (staging) driver in mainline, with a
++	  similar codebase.
+ 
+-	  Make sure your target kernel has the CONFIG_WIRELESS_EXT config
+-	  option enabled.
++	  Make sure your target kernel has the CONFIG_WIRELESS_EXT
++	  config option enabled.
+ 
+-	  Note: this package needs a firmware loading mechanism to load the
+-	  binary blob for the chip to work.
++	  Note: this package needs a firmware loading mechanism to load
++	  the binary blob for the chip to work.
+ 
+ 	  https://github.com/lwfinger/rtl8188eu
+ 
