@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 30 May 2017 19:01:25 +0200
-Subject: [Buildroot] [PATCH 3/6] qpid-proton: fix help text format
+Date: Tue, 30 May 2017 19:01:28 +0200
+Subject: [Buildroot] [PATCH 6/6] stm32flash: fix help text format
 In-Reply-To: <1496163688-20870-1-git-send-email-luca@lucaceresoli.net>
 References: <1496163688-20870-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1496163688-20870-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1496163688-20870-6-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,22 @@ Warning reported by check-package.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/qpid-proton/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/stm32flash/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qpid-proton/Config.in b/package/qpid-proton/Config.in
-index 47cddebe9141..b49a2afa7eb4 100644
---- a/package/qpid-proton/Config.in
-+++ b/package/qpid-proton/Config.in
-@@ -6,10 +6,10 @@ config BR2_PACKAGE_QPID_PROTON
+diff --git a/package/stm32flash/Config.in b/package/stm32flash/Config.in
+index cb6f4805ed0a..87afe3b8ffa7 100644
+--- a/package/stm32flash/Config.in
++++ b/package/stm32flash/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_STM32FLASH
+ 	bool "stm32flash"
  	help
- 	  The AMQP messaging toolkit
+ 	  Open source cross platform flash program for the STM32 ARM
+-	  microcontrollers using the built-in ST serial bootloader over UART
+-	  or I2C.
++	  microcontrollers using the built-in ST serial bootloader
++	  over UART or I2C.
  
--	  Qpid Proton is a high-performance, lightweight messaging library.
--	  It can be used in the widest range of messaging applications,
--	  including brokers, client libraries, routers, bridges, proxies, and
--	  more.
-+	  Qpid Proton is a high-performance, lightweight messaging
-+	  library. It can be used in the widest range of messaging
-+	  applications, including brokers, client libraries, routers,
-+	  bridges, proxies, and more.
- 
- 	  https://qpid.apache.org/proton/
- 
+ 	  http://sourceforge.net/projects/stm32flash/
 -- 
 2.7.4
