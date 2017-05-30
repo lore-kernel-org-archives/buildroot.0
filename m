@@ -1,38 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:20:17 +0200
-Subject: [Buildroot] [git commit] snmppp: fix help text format
-Message-ID: <20170530212121.A05A3829FF@busybox.osuosl.org>
+Date: Tue, 30 May 2017 23:21:28 +0200
+Subject: [Buildroot] [PATCH 1/6] agentpp: fix help text format
+In-Reply-To: <1496163688-20870-1-git-send-email-luca@lucaceresoli.net>
+References: <1496163688-20870-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20170530232128.30e36af1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae8704c7529e7c293f7f040412f199507939f61b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Warning reported by check-package.
+On Tue, 30 May 2017 19:01:23 +0200, Luca Ceresoli wrote:
+> Warning reported by check-package.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  package/agentpp/Config.in | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/snmppp/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Entire series applied to master. Thanks!
 
-diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
-index 9e800fd..8d28467 100644
---- a/package/snmppp/Config.in
-+++ b/package/snmppp/Config.in
-@@ -14,8 +14,9 @@ config BR2_PACKAGE_SNMPPP_LOGGING
- 	bool "enable logging"
- 	help
- 	  Enable logging output for SNMP++.
--	  According to the SNMP++ documentation, disabling logging "increases
--	  performance drastically and minimizes memory consumption".
-+	  According to the SNMP++ documentation, disabling logging
-+	  "increases performance drastically and minimizes memory
-+	  consumption".
- 
- config BR2_PACKAGE_SNMPPP_SNMPV3
- 	bool "enable SNMPv3"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
