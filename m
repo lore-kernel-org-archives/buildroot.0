@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:51:21 +0200
-Subject: [Buildroot] [git commit branch/next] erlang-p1-utils: bump to
-	version 1.0.8
-Message-ID: <20170530220258.0CF6A7FB4A@busybox.osuosl.org>
+Date: Tue, 30 May 2017 23:51:19 +0200
+Subject: [Buildroot] [git commit branch/next] erlang-lager: bump to version
+	3.2.1
+Message-ID: <20170530220257.F2C707FB4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46a6deb2f3e78c5c405b69b41a5e886993737fd2
+commit: https://git.buildroot.net/buildroot/commit/?id=11acd9da16f7a82c565bd89037aa02e11cf6526e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License changed to Apache-2.0.
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-utils/erlang-p1-utils.hash | 2 +-
- package/erlang-p1-utils/erlang-p1-utils.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/erlang-lager/erlang-lager.hash | 2 +-
+ package/erlang-lager/erlang-lager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-utils/erlang-p1-utils.hash b/package/erlang-p1-utils/erlang-p1-utils.hash
-index c41e5ef..200d102 100644
---- a/package/erlang-p1-utils/erlang-p1-utils.hash
-+++ b/package/erlang-p1-utils/erlang-p1-utils.hash
+diff --git a/package/erlang-lager/erlang-lager.hash b/package/erlang-lager/erlang-lager.hash
+index e436fdc..97bf4c6 100644
+--- a/package/erlang-lager/erlang-lager.hash
++++ b/package/erlang-lager/erlang-lager.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 9c7e9fa2990edd419953a6ae609ffed0b90e671b57c468d97c0d85d866d80210 erlang-p1-utils-1.0.3.tar.gz
-+sha256 9b43e025b923221cfe6a6efc76790d97b1c233e3e2db37fc804294d847bcfaa3 erlang-p1-utils-1.0.8.tar.gz
-diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
-index c9d9299..32564cf 100644
---- a/package/erlang-p1-utils/erlang-p1-utils.mk
-+++ b/package/erlang-p1-utils/erlang-p1-utils.mk
-@@ -4,10 +4,11 @@
+-sha256 168a8e48646b04bcee1ab0c97c1ff63563bd7fd25638f1504b8d8f674d2ddd1b erlang-lager-2.2.0.tar.gz
++sha256 5ef0f65e0c18a7df5c5f2cd8e96780396f13369127d87857e7931670c79a9327 erlang-lager-3.2.1.tar.gz
+diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
+index b55b6f7..208ccf1 100644
+--- a/package/erlang-lager/erlang-lager.mk
++++ b/package/erlang-lager/erlang-lager.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_UTILS_VERSION = 1.0.3
-+ERLANG_P1_UTILS_VERSION = 1.0.8
- ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
--ERLANG_P1_UTILS_LICENSE = GPL-2.0+
-+ERLANG_P1_UTILS_LICENSE = Apache-2.0
- ERLANG_P1_UTILS_LICENSE_FILES = LICENSE.txt
- ERLANG_P1_UTILS_INSTALL_STAGING = YES
- 
- $(eval $(rebar-package))
-+$(eval $(host-rebar-package))
+-ERLANG_LAGER_VERSION = 2.2.0
++ERLANG_LAGER_VERSION = 3.2.1
+ ERLANG_LAGER_SITE = $(call github,basho,lager,$(ERLANG_LAGER_VERSION))
+ ERLANG_LAGER_LICENSE = Apache-2.0
+ ERLANG_LAGER_LICENSE_FILES = LICENSE
