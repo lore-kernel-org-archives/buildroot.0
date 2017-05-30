@@ -1,56 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 May 2017 10:35:34 +0200
-Subject: [Buildroot] Buildroot 2017.05-rc3 released
-Message-ID: <87efv6agix.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 May 2017 11:39:40 +0200
+Subject: [Buildroot] [git commit] toolchain-external: adjust musl dynamic
+	linker symlink for mips-sf
+Message-ID: <20170530093954.6D502828B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=a6a4a8b2ef1fa747fdc79bc7bae0518417910f5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot 2017.05-rc3 is released - Go download it at:
+The external toolchain code has some logic to calculate the correct name
+for the dynamic linker symbolic link that needs to be created when the
+musl C library is being used. There was already some handling for the
+mipsel+soft-float case, but not for the mips+soft-float case. Due to
+this, the symbolic link was incorrectly named, and programs were
+referencing an non-existing file.
 
-http://buildroot.net/downloads/buildroot-2017.05-rc3.tar.gz
+Reported-by: Florent Jacquet <florent.jacquet@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-or
-
-http://buildroot.net/downloads/buildroot-2017.05-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2017.05-rc2..
-    22  Bernd Kuhls
-     9  Peter Korsgaard
-     7  Thomas Petazzoni
-     6  Luca Ceresoli
-     4  Baruch Siach
-     4  Romain Naour
-     3  Alexey Brodkin
-     2  Alistair Francis
-     2  Matt Weber
-     1  Adam Duskett
-     1  Bartosz Golaszewski
-     1  Christian Stewart
-     1  Dustin Johnson
-     1  Frank Hunleth
-     1  Gon?alo Salazar
-     1  Ilias Apalodimas
-     1  Ryan Coe
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.05-rc3
-
-Expect the final 2017.05 release in a day or two.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 9670350..856be65 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -481,6 +481,8 @@ ifeq ($(BR2_i386),y)
+ MUSL_ARCH = i386
+ else ifeq ($(BR2_ARM_EABIHF),y)
+ MUSL_ARCH = armhf
++else ifeq ($(BR2_mips):$(BR2_SOFT_FLOAT),y:y)
++MUSL_ARCH = mips-sf
+ else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
+ MUSL_ARCH = mipsel-sf
+ else ifeq ($(BR2_sh),y)
