@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:57:51 +0200
-Subject: [Buildroot] [git commit branch/next] erlang-p1-iconv: bump to
-	version 1.0.4
-Message-ID: <20170530220258.2F1E382867@busybox.osuosl.org>
+Date: Tue, 30 May 2017 23:57:52 +0200
+Subject: [Buildroot] [git commit branch/next] erlang-p1-tls: bump to version
+	1.0.11
+Message-ID: <20170530220258.4511C82867@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=399a10bd1c5b10cf799f8336a22d4983c83099aa
+commit: https://git.buildroot.net/buildroot/commit/?id=dd8580fdd5d2d96292cfd33a2650663be1fe85d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 License changed to Apache-2.0.
@@ -17,47 +17,48 @@ License changed to Apache-2.0.
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-iconv/Config.in            | 1 +
- package/erlang-p1-iconv/erlang-p1-iconv.hash | 2 +-
- package/erlang-p1-iconv/erlang-p1-iconv.mk   | 9 +++++----
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/erlang-p1-tls/Config.in          |  1 +
+ package/erlang-p1-tls/erlang-p1-tls.hash |  2 +-
+ package/erlang-p1-tls/erlang-p1-tls.mk   | 10 +++++-----
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/erlang-p1-iconv/Config.in b/package/erlang-p1-iconv/Config.in
-index 98efb21..cec17d0 100644
---- a/package/erlang-p1-iconv/Config.in
-+++ b/package/erlang-p1-iconv/Config.in
+diff --git a/package/erlang-p1-tls/Config.in b/package/erlang-p1-tls/Config.in
+index 0df3348..a684fbb 100644
+--- a/package/erlang-p1-tls/Config.in
++++ b/package/erlang-p1-tls/Config.in
 @@ -1,5 +1,6 @@
- config BR2_PACKAGE_ERLANG_P1_ICONV
- 	bool "erlang-p1-iconv"
+ config BR2_PACKAGE_ERLANG_P1_TLS
+ 	bool "erlang-p1-tls"
 +	select BR2_PACKAGE_ERLANG_P1_UTILS
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_OPENSSL
  	help
- 	  Erlang interface to libiconv
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.hash b/package/erlang-p1-iconv/erlang-p1-iconv.hash
-index a284189..883fd52 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.hash
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.hash
+ 	  Erlang interface to OpenSSL
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.hash b/package/erlang-p1-tls/erlang-p1-tls.hash
+index fd8d801..eb707f1 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.hash
++++ b/package/erlang-p1-tls/erlang-p1-tls.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 3ef1fb814fdf23e8ad8a210efb66681fa67cd42753be536521bf9686158880d3 erlang-p1-iconv-0.9.0.tar.gz
-+sha256 ca20d58166a4fb38883977600aca61e02bfd1257b8bded8c8ddd82d2a96084e6 erlang-p1-iconv-1.0.4.tar.gz
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-index 64a6ad4..044361e 100644
---- a/package/erlang-p1-iconv/erlang-p1-iconv.mk
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-@@ -4,10 +4,11 @@
+-sha256 8e8b848a112ff6bf146df34b4f6bc50160a8858a18499a7a6124193b37237a40 erlang-p1-tls-1.0.0.tar.gz
++sha256 c42237e5dd231c558b48633788a0e9ca55b4f3b5bc4692107fee031a8f91cda3 erlang-p1-tls-1.0.11.tar.gz
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
+index b2451df..63d0112 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.mk
++++ b/package/erlang-p1-tls/erlang-p1-tls.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--ERLANG_P1_ICONV_VERSION = 0.9.0
--ERLANG_P1_ICONV_SITE = $(call github,processone,eiconv,$(ERLANG_P1_ICONV_VERSION))
--ERLANG_P1_ICONV_LICENSE = GPL-2.0+
--ERLANG_P1_ICONV_LICENSE_FILES = COPYING
-+ERLANG_P1_ICONV_VERSION = 1.0.4
-+ERLANG_P1_ICONV_SITE = $(call github,processone,iconv,$(ERLANG_P1_ICONV_VERSION))
-+ERLANG_P1_ICONV_LICENSE = Apache-2.0
-+ERLANG_P1_ICONV_LICENSE_FILES = LICENSE.txt
-+ERLANG_P1_ICONV_DEPENDENCIES = erlang-p1-utils
+-ERLANG_P1_TLS_VERSION = 1.0.0
+-ERLANG_P1_TLS_SITE = $(call github,processone,tls,$(ERLANG_P1_TLS_VERSION))
+-ERLANG_P1_TLS_LICENSE = GPL-2.0+ with OpenSSL exception
+-ERLANG_P1_TLS_LICENSE_FILES = COPYING
++ERLANG_P1_TLS_VERSION = 1.0.11
++ERLANG_P1_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_P1_TLS_VERSION))
++ERLANG_P1_TLS_LICENSE = Apache-2.0
++ERLANG_P1_TLS_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_TLS_INSTALL_STAGING = YES
+-ERLANG_P1_TLS_DEPENDENCIES = openssl
++ERLANG_P1_TLS_DEPENDENCIES = openssl erlang-p1-utils
  
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- ERLANG_P1_ICONV_DEPENDENCIES += libiconv
+ $(eval $(rebar-package))
