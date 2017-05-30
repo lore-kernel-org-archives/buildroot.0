@@ -1,282 +1,144 @@
-From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Tue, 30 May 2017 07:22:36 +0000
-Subject: [Buildroot] [PATCH v2] configs/stm32f4xx: use kernel version 4.11
-In-Reply-To: <1496059605-1998-1-git-send-email-christophe.priouzeau@st.com>
-References: <1496059605-1998-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <1496128932-30283-1-git-send-email-christophe.priouzeau@st.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 May 2017 09:51:48 +0200
+Subject: [Buildroot] Analysis of build results for 2017-05-29
+In-Reply-To: <20170530063003.4239020C46@mail.free-electrons.com>
+References: <20170530063003.4239020C46@mail.free-electrons.com>
+Message-ID: <20170530095148.0f0d4980@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Linux kernel support the two stm32f4 discovery board since
-kernel 4.5 (stm32f429i-disco and stm32f469i-disco).
+Hello,
 
-Use last kernel supported on buildroot for stm32f429 and
-stm32f469 board.
+Usual analysis of build results. Matt, Waldemar, Vicente, Peter, please
+see below. Thanks!
 
-Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
----
-Changes v1 -> v2:
- - change the commit header (suggested by Thomas)
+On Tue, 30 May 2017 08:30:03 +0200 (CEST), Thomas Petazzoni wrote:
 
- ...-ARM-stm32-Identify-a-new-board-STM32F469.patch |  25 -----
- ...49-disco-don-t-force-init-in-chosen-boota.patch |  33 +++++++
- ...upply-a-DTS-file-for-the-STM32F469-Discov.patch | 101 ---------------------
- ...-Add-new-config-fragment-to-change-RAM-st.patch |  28 ------
- configs/stm32f429_disco_defconfig                  |   4 +-
- configs/stm32f469_disco_defconfig                  |   4 +-
- 6 files changed, 35 insertions(+), 160 deletions(-)
- delete mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32-Identify-a-new-board-STM32F469.patch
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
- delete mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0002-ARM-stm32-Supply-a-DTS-file-for-the-STM32F469-Discov.patch
- delete mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0003-ARM-configs-Add-new-config-fragment-to-change-RAM-st.patch
+>       x86_64 |                    cmake-3.7.2 | NOK | http://autobuild.buildroot.net/results/cebeb6d5da3f581be395ef0ad51ded0cfc2f540b |     
 
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32-Identify-a-new-board-STM32F469.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32-Identify-a-new-board-STM32F469.patch
-deleted file mode 100644
-index 01af415..0000000
---- a/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32-Identify-a-new-board-STM32F469.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 3b572676972f9bcf69695fd85a582c6622f7faa8 Mon Sep 17 00:00:00 2001
--From: Lee Jones <lee.jones@linaro.org>
--Date: Tue, 16 Feb 2016 14:04:17 +0000
--Subject: [PATCH] ARM: stm32: Identify a new board - STM32F469
--
--Signed-off-by: Lee Jones <lee.jones@linaro.org>
-----
-- arch/arm/mach-stm32/board-dt.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/arch/arm/mach-stm32/board-dt.c b/arch/arm/mach-stm32/board-dt.c
--index f2ad772..ceee477 100644
----- a/arch/arm/mach-stm32/board-dt.c
--+++ b/arch/arm/mach-stm32/board-dt.c
--@@ -10,6 +10,7 @@
-- 
-- static const char *const stm32_compat[] __initconst = {
-- 	"st,stm32f429",
--+	"st,stm32f469",
-- 	NULL
-- };
-- 
---- 
--2.6.4
--
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
-new file mode 100644
-index 0000000..750e477
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
-@@ -0,0 +1,33 @@
-+From c8f8f33c2f0460a34c9545b01a7972a7ed2df0e9 Mon Sep 17 00:00:00 2001
-+From: Christophe Priouzeau <christophe.priouzeau@st.com>
-+Date: Mon, 29 May 2017 13:38:16 +0200
-+Subject: [PATCH] ARM: stm32f249-disco: don't force init= in /chosen/bootargs
-+
-+There is no reason to override the kernel's default init= value, as
-+this breaks userspace that assumes the kernel default of /init is
-+used. Since stm32 is often used with a minimal bootloader
-+(afboot-stm32) that doesn't provide any mechanism to override the DTB,
-+we need to adjust the kernel command line in the Device Tree source.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
-+---
-+ arch/arm/boot/dts/stm32f469-disco.dts | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
-+index 0dd56ef..93ee1b2 100644
-+--- a/arch/arm/boot/dts/stm32f469-disco.dts
-++++ b/arch/arm/boot/dts/stm32f469-disco.dts
-+@@ -53,7 +53,7 @@
-+ 	compatible = "st,stm32f469i-disco", "st,stm32f469";
-+ 
-+ 	chosen {
-+-		bootargs = "root=/dev/ram rdinit=/linuxrc";
-++		bootargs = "root=/dev/ram";
-+ 		stdout-path = "serial0:115200n8";
-+ 	};
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-ARM-stm32-Supply-a-DTS-file-for-the-STM32F469-Discov.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-ARM-stm32-Supply-a-DTS-file-for-the-STM32F469-Discov.patch
-deleted file mode 100644
-index 45f5228..0000000
---- a/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-ARM-stm32-Supply-a-DTS-file-for-the-STM32F469-Discov.patch
-+++ /dev/null
-@@ -1,101 +0,0 @@
--From a08561ffdfb13986e2628296ccfd42f8a273b729 Mon Sep 17 00:00:00 2001
--From: Lee Jones <lee.jones@linaro.org>
--Date: Tue, 16 Feb 2016 13:53:47 +0000
--Subject: [PATCH] ARM: stm32: Supply a DTS file for the STM32F469 Discovery
-- board
--
--It's pretty similar to the STM32F429, but there are some
--subtle changes required to boot successfully.
--
--Signed-off-by: Lee Jones <lee.jones@linaro.org>
--[Thomas: remove rdinit= from /chosen/bootargs.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- arch/arm/boot/dts/stm32f469-disco.dts | 75 +++++++++++++++++++++++++++++++++++
-- 1 file changed, 75 insertions(+)
-- create mode 100644 arch/arm/boot/dts/stm32f469-disco.dts
--
--diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
--new file mode 100644
--index 0000000..9e73656
----- /dev/null
--+++ b/arch/arm/boot/dts/stm32f469-disco.dts
--@@ -0,0 +1,75 @@
--+/*
--+ * Copyright 2016 - Lee Jones <lee.jones@linaro.org>
--+ *
--+ * This file is dual-licensed: you can use it either under the terms
--+ * of the GPL or the X11 license, at your option. Note that this dual
--+ * licensing only applies to this file, and not this project as a
--+ * whole.
--+ *
--+ *  a) This file is free software; you can redistribute it and/or
--+ *     modify it under the terms of the GNU General Public License as
--+ *     published by the Free Software Foundation; either version 2 of the
--+ *     License, or (at your option) any later version.
--+ *
--+ *     This file is distributed in the hope that it will be useful,
--+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
--+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--+ *     GNU General Public License for more details.
--+ *
--+ *     You should have received a copy of the GNU General Public
--+ *     License along with this file; if not, write to the Free
--+ *     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
--+ *     MA 02110-1301 USA
--+ *
--+ * Or, alternatively,
--+ *
--+ *  b) Permission is hereby granted, free of charge, to any person
--+ *     obtaining a copy of this software and associated documentation
--+ *     files (the "Software"), to deal in the Software without
--+ *     restriction, including without limitation the rights to use,
--+ *     copy, modify, merge, publish, distribute, sublicense, and/or
--+ *     sell copies of the Software, and to permit persons to whom the
--+ *     Software is furnished to do so, subject to the following
--+ *     conditions:
--+ *
--+ *     The above copyright notice and this permission notice shall be
--+ *     included in all copies or substantial portions of the Software.
--+ *
--+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
--+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
--+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
--+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
--+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
--+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
--+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
--+ *     OTHER DEALINGS IN THE SOFTWARE.
--+ */
--+
--+/dts-v1/;
--+#include "stm32f429.dtsi"
--+
--+/ {
--+	model = "STMicroelectronics STM32F469i-DISCO board";
--+	compatible = "st,stm32f469i-disco", "st,stm32f469";
--+
--+	chosen {
--+		bootargs = "root=/dev/ram";
--+		stdout-path = "serial0:115200n8";
--+	};
--+
--+	memory {
--+		reg = <0x00000000 0x800000>;
--+	};
--+
--+	aliases {
--+		serial0 = &usart3;
--+	};
--+};
--+
--+&clk_hse {
--+	clock-frequency = <8000000>;
--+};
--+
--+&usart3 {
--+	status = "okay";
--+};
---- 
--2.6.4
--
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-ARM-configs-Add-new-config-fragment-to-change-RAM-st.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-ARM-configs-Add-new-config-fragment-to-change-RAM-st.patch
-deleted file mode 100644
-index e12c9bc..0000000
---- a/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-ARM-configs-Add-new-config-fragment-to-change-RAM-st.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 7d67f4be6e1b4d08126023c3902e3fc39488bbf9 Mon Sep 17 00:00:00 2001
--From: Lee Jones <lee.jones@linaro.org>
--Date: Tue, 16 Feb 2016 13:56:13 +0000
--Subject: [PATCH] ARM: configs: Add new config fragment to change RAM start
-- point
--
--Rather than duplicate a defconfig for each difference
--between platforms, we can choose to pick a basic defconfig and
--manipulate it at run-time using config fragments.  Here we're
--adding a new fragment to over-ride the RAM start point to 0x0.
--
--Cc: Arnd Bergmann <arnd@arndb.de>
--Signed-off-by: Lee Jones <lee.jones@linaro.org>
-----
-- arch/arm/configs/dram_0x00000000.config | 1 +
-- 1 file changed, 1 insertion(+)
-- create mode 100644 arch/arm/configs/dram_0x00000000.config
--
--diff --git a/arch/arm/configs/dram_0x00000000.config b/arch/arm/configs/dram_0x00000000.config
--new file mode 100644
--index 0000000..db96dcb
----- /dev/null
--+++ b/arch/arm/configs/dram_0x00000000.config
--@@ -0,0 +1 @@
--+CONFIG_DRAM_BASE=0x00000000
---- 
--2.6.4
--
-diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
-index 3799794..fe2b22d 100644
---- a/configs/stm32f429_disco_defconfig
-+++ b/configs/stm32f429_disco_defconfig
-@@ -1,11 +1,9 @@
- BR2_arm=y
- BR2_cortex_m4=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
-+BR2_LINUX_KERNEL_LATEST_VERSION=y
- BR2_LINUX_KERNEL_DEFCONFIG="stm32"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
- BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
-diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-index 327134d..8c169e0 100644
---- a/configs/stm32f469_disco_defconfig
-+++ b/configs/stm32f469_disco_defconfig
-@@ -1,11 +1,9 @@
- BR2_arm=y
- BR2_cortex_m4=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
-+BR2_LINUX_KERNEL_LATEST_VERSION=y
- BR2_LINUX_KERNEL_DEFCONFIG="stm32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+/home/test/autobuild/run/instance-0/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/bdver3/usr/lib64/libgcrypt.so.20: undefined reference to `gpg_err_set_errno at GPG_ERROR_1.0'
+/home/test/autobuild/run/instance-0/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/bdver3/usr/lib64/libgcrypt.so.20: undefined reference to `gpgrt_lock_init at GPG_ERROR_1.0'
+/home/test/autobuild/run/instance-0/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so: undefined reference to `libssh2_scp_recv2'
+
+I think this is another rpath,/usr/lib issue.
+
+>          arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/15f4c33170dcc0bc5a4e348c3b769fb632c3471d |     
+>          arm |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/9c0efce0c7d1bb750c7ebf209f77dad51b16c52f |     
+
+ERROR: gnutls not found using pkg-config
+Note: When building a static binary, add --pkg-config-flags="--static".
+
+I believe those should be fixed by the recent commit that disables
+gnutls in static only configurations.
+
+>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/2f049cc47ed0a59d743a9b948077227fd83b10d2 |     
+>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/4428b0ac0452ce79dd7fbdd473675a90acd3e73c |     
+>          arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/39e5134b2abf58b9a20a20b13d1b0e33e150f960 |     
+
+Matthew, looking at
+http://autobuild.buildroot.net/?reason=host-erlang-rebar-2.6.4 is quite
+interesting:
+
+ - The issue only appears on your autobuilder instance
+
+ - It appeared until October 17th, then stopped. And then suddenly, it
+   started reappearing again on May 20, more than 6 months later.
+
+What changed? How can we investigate this?
+
+>       xtensa |                madplay-0.15.2b | NOK | http://autobuild.buildroot.net/results/60def1b15ea61d3cb5f50e9de3f354dd2e17d270 | ORPH
+
+/home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/usr/lib/gcc/xtensa-buildroot-linux-uclibc/5.4.0/libgcc.a(unwind-dw2-fde-dip.o): In function `__gthread_mutex_lock':
+/home/rclinux/rc-buildroot-test/scripts/instance-0/output/build/host-gcc-final-5.4.0/build/xtensa-buildroot-linux-uclibc/libgcc/./gthr-default.h:748: undefined reference to `dl_iterate_phdr'
+
+Ah, yes. It's libtool dropping -static. That's because madplay has a
+weird version of libtool, on which our libtool patch doesn't apply so
+we have MADPLAY_LIBTOOL_PATCH = NO. Therefore, the hack we have that
+makes libtool -static behave like -all-static isn't applied, causing
+this build failure.
+
+Fix: add a custom patch for madplay that adds the -static/-all-static
+hack.
+
+> microblazeel | make[7]: *** wait: No child... | TIM | http://autobuild.buildroot.net/results/eeb75fae7c47c3ba770c53636d20c1ab00fba02f |     
+
+Occurred after 1h21 of build, so seems like the compiler was stuck in
+an infinite loop. And it seems to be quite reproducible:
+
+   http://autobuild.buildroot.net/?status=TIMEOUT&arch=microblazeel
+
+Always on gst-ffmpeg.
+
+Waldemar, perhaps?
+
+>         i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/90a4410274c201a22c2e6d15b302179b9e9c34c8 |     
+>         i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/9e76e46e57fdec477d6b8902d448d219f5275a4c |     
+
+I'll apply Bernd patches, even if I'm not entirely happy with them.
+
+>      aarch64 |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/fbfd428c0e18671fcb618dd007b35812f6e71a6c |     
+
+video/out/opengl/egl_helpers.c.14.o: In function `create_context':
+/home/test/autobuild/run/instance-3/output/build/mpv-0.25.0/build/../video/out/opengl/egl_helpers.c:116: undefined reference to `mpgl_preferred_gl_versions'
+/home/test/autobuild/run/instance-3/output/build/mpv-0.25.0/build/../video/out/opengl/egl_helpers.c:116: undefined reference to `mpgl_preferred_gl_versions'
+/home/test/autobuild/run/instance-3/output/build/mpv-0.25.0/build/../video/out/opengl/egl_helpers.c:116: undefined reference to `mpgl_preferred_gl_versions'
+video/out/opengl/egl_helpers.c.14.o: In function `mpegl_load_functions':
+/home/test/autobuild/run/instance-3/output/build/mpv-0.25.0/build/../video/out/opengl/egl_helpers.c:231: undefined reference to `mpgl_load_functions2'
+/home/test/autobuild/run/instance-3/output/build/mpv-0.25.0/build/../video/out/opengl/egl_helpers.c:231: undefined reference to `mpgl_load_functions2'
+
+Don't know. Needs investigation.
+
+>          arm |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/704fa126d3ed62c482285819816d7e80472b620d |     
+>          arm |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/150ca78deb7d5d94ee85688e9638ed406c2000d9 |     
+
+/home/peko/autobuild/instance-0/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/eglplatform.h:125:22: fatal error: X11/Xlib.h: No such file or directory
+ #include <X11/Xlib.h>
+
+Same, needs investigation.
+
+>     mips64el |                      php-7.1.5 | NOK | http://autobuild.buildroot.net/results/57879e99eca1e0755001af7fd5163646cdaa6b0f | ORPH
+
+/home/buildroot/buildroot-test/instance-1/output/host/usr/mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(regex.os): In function `re_compile_pattern':
+regex.c:(.text+0xd4a0): multiple definition of `re_compile_pattern'
+ext/mbstring/oniguruma/reggnu.o:reggnu.c:(.text+0xfc): first defined here
+/home/buildroot/buildroot-test/instance-1/output/host/usr/mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(regex.os): In function `re_match':
+regex.c:(.text+0xe13c): multiple definition of `re_match'
+ext/mbstring/oniguruma/reggnu.o:reggnu.c:(.text+0xb4): first defined here
+/home/buildroot/buildroot-test/instance-1/output/host/usr/mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(regex.os): In function `__GI_re_search':
+regex.c:(.text+0xe164): multiple definition of `re_search'
+
+Static linking issue. Needs to rename some functions?
+
+>       mipsel |                qt5webkit-5.6.2 | NOK | http://autobuild.buildroot.net/results/c3a096fda15ef01b527261a8efbab67ac76829fa |     
+
+{standard input}: Assembler messages:
+{standard input}:708: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movz $v0,$t8,$t7'
+{standard input}:759: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movz $v1,$t8,$t7'
+{standard input}:765: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movz $t2,$t8,$t7'
+{standard input}:770: Error: opcode not supported on this processor: mips32r6 (mips32r6) `movz $v1,$t7,$t8'
+
+Vicente, could you comment on this?
+
+>    powerpc64 | v4l2grab-f8d8844d52387b3db7... | NOK | http://autobuild.buildroot.net/results/9eea759992d2c57764156dfeba5682eed8c39797 |     
+
+Bogus:
+
+  sort: write failed: standard output: No space left on device
+
+Peter, could you do some cleanup on gcc21 ? :-)
+
+>         or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/63153b044e7883b9b6f97c7fd8ff50015f624efc |     
+
+src/client/options.cpp: In function 'client_options process_command_line(int, const char**)':
+src/client/options.cpp:139:1: internal compiler error: in merge_overlapping_regs, at regrename.c:304
+
+Compiler bug. Waldemar?
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
