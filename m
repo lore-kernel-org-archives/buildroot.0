@@ -1,28 +1,29 @@
-From: =?UTF-8?Q?H=C3=A5kan_Engblom?= <hkengblom@gmail.com>
-Date: Tue, 30 May 2017 04:52:50 -0700 (PDT)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 May 2017 14:08:40 +0200
 Subject: [Buildroot] genimage maintainers
 In-Reply-To: <79e53714-c9c9-361a-02d3-d8c23db5cfe9@ginzinger.com>
 References: <1496138688562-165972.post@n4.nabble.com>
  <79e53714-c9c9-361a-02d3-d8c23db5cfe9@ginzinger.com>
-Message-ID: <1496145170661-165978.post@n4.nabble.com>
+Message-ID: <20170530140840.65b8b658@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Yes you're right, that seems to be the place for this issue. Sorry for
-cluttering the Buildroot mailing list with this issue.
-(I did look at github, but I only found an outdated repo with genimage that
-was not updated since before latest release. Evidently I did not search
-enough)
+On Tue, 30 May 2017 13:58:01 +0200, Martin Kepplinger wrote:
 
-br H?kan
+> haven't you tried to just look for it? It seems like it's developed on
+> github, and an issue with the problem you describe is already open there:
+> https://github.com/vivien/genimage/issues/2
 
+Actually the real upstream is
+https://git.pengutronix.de/cgit/genimage/log/.
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/genimage-maintainers-tp165972p165978.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
