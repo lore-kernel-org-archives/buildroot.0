@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:51:23 +0200
-Subject: [Buildroot] [git commit] erlang-p1-cache-tab: bump to version 1.0.7
-Message-ID: <20170601202859.70115818F2@busybox.osuosl.org>
+Date: Tue, 30 May 2017 23:18:56 +0200
+Subject: [Buildroot] [git commit] go: bump version to 1.8.3
+Message-ID: <20170601202859.2B1D582A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb67eaad924fb06ff7f2c0084a6ee4c250c25f1e
+commit: https://git.buildroot.net/buildroot/commit/?id=0ccc3395caadfb35828d10c19466c87591ba8ee9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Bumping Go to 1.8.3 from 1.7.
+
+Go 1.8 comes with significant performance improvements, particularly
+around ARM: "CPU time required by our benchmark programs was reduced by
+20-30% on 32-bit ARM systems."
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash | 2 +-
- package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk   | 2 +-
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
-index d8b09f9..b6f7fb3 100644
---- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
-+++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
+diff --git a/package/go/go.hash b/package/go/go.hash
+index e50f004..1836af2 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 752b649f695e9f2777efd6b2d8dfdcc1f435104b4e363f5f0454b99fd009015c erlang-p1-cache-tab-1.0.1.tar.gz
-+sha256 9376c14eaeb78c3847c3cf38853bb6e6860fb63959e182deeff5c819b23c95a4 erlang-p1-cache-tab-1.0.7.tar.gz
-diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
-index 8f13123..6f1a139 100644
---- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
-+++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+ # Locally computed:
+-sha256 4c189111e9ba651a2bb3ee868aa881fab36b2f2da3409e80885ca758a6b614cc  go1.7.4.src.tar.gz
++sha256	5f5dea2447e7dcfdc50fa6b94c512e58bfba5673c039259fd843f68829d99fa6	go1.8.3.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index a461342..a64356e 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_CACHE_TAB_VERSION = 1.0.1
-+ERLANG_P1_CACHE_TAB_VERSION = 1.0.7
- ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
- ERLANG_P1_CACHE_TAB_LICENSE = Apache-2.0
- ERLANG_P1_CACHE_TAB_LICENSE_FILES = LICENSE.txt
+-GO_VERSION = 1.7.4
++GO_VERSION = 1.8.3
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
