@@ -1,30 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 May 2017 09:14:02 +0200
-Subject: [Buildroot] [PATCH 1/1] docker-engine: fix journald logging
-	driver
-In-Reply-To: <20170530035004.28855-1-christian@paral.in> (Christian Stewart's
- message of "Mon, 29 May 2017 20:50:04 -0700")
-References: <20170530035004.28855-1-christian@paral.in>
-Message-ID: <87inkiakat.fsf@dell.be.48ers.dk>
+Date: Tue, 30 May 2017 08:59:45 +0200
+Subject: [Buildroot] [git commit] mosh: add notes to clarify runtime issues
+Message-ID: <20170530071503.DCAE882290@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eddaf1f00eb0b54b21f2e450fc66f0db8b7dbdca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The Docker engine can optionally log to systemd-journald. For this
- > driver to work correctly, Docker needs to build against
- > systemd-journald's client library.
+Added notes to the mosh package help to clarify some runtime
+issues related with it to ensure mosh will work properly after adding it.
+This includes adding a proper LOCALE and an extra flag when using
+mosh with dropbear.
 
- > This patch conditionally adds a build-time dependency on systemd and
- > enables compiling the journald driver in docker-engine if systemd is
- > used as the Buildroot init process.
+Signed-off-by: Gon??alo Salazar <glbsalazar@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosh/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index e0ff2cf..1806520 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -24,4 +24,11 @@ config BR2_PACKAGE_MOSH
+ 	  allows roaming, and provides speculative local echo and line editing
+ 	  of user keystrokes.
+ 
++	  Mosh requires that the remote machine has a locale setting matching
++	  the one on the client.
++
++	  When using mosh with dropbear on a remote machine, the client needs mosh
++	  with a version above 1.3.0 and the --no-ssh-pty option needs to be passed
++	  when starting the connection.
++
+ 	  https://mosh.mit.edu
