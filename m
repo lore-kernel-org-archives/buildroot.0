@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:44:22 +0200
-Subject: [Buildroot] Makefile: add check of binaries architecture
-In-Reply-To: <CABLXdK_3=64R13wD+_WN7DceLiLtwEy2Hg8Rtqdd_p6Xu4tXEg@mail.gmail.com>
-References: <CABLXdK_3=64R13wD+_WN7DceLiLtwEy2Hg8Rtqdd_p6Xu4tXEg@mail.gmail.com>
-Message-ID: <20170530234422.23923aef@free-electrons.com>
+Date: Tue, 30 May 2017 23:44:31 +0200
+Subject: [Buildroot] [PATCH] strongswan: add upstream security patches
+In-Reply-To: <20170530130324.28875-1-peter@korsgaard.com>
+References: <20170530130324.28875-1-peter@korsgaard.com>
+Message-ID: <20170530234431.27357464@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 30 May 2017 23:35:35 +0200, Ricardo Herrero wrote:
+On Tue, 30 May 2017 15:03:24 +0200, Peter Korsgaard wrote:
+> Fixes:
+> 
+> CVE-2017-9022 - RSA public keys passed to the gmp plugin aren't
+> validated sufficiently before attempting signature verification, so that
+> invalid input might lead to a floating point exception and crash of the
+> process.  A certificate with an appropriately prepared public key sent by a
+> peer could be used for a denial-of-service attack.
+> 
+> https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9022%29.html
+> 
+> CVE-2017-9023 - ASN.1 CHOICE types are not correctly handled by the ASN.1
+> parser when parsing X.509 certificates with extensions that use such types.
+> This could lead to infinite looping of the thread parsing a specifically
+> crafted certificate.
+> 
+> https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9023%29.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/strongswan/strongswan.hash | 3 +++
+>  package/strongswan/strongswan.mk   | 3 +++
+>  2 files changed, 6 insertions(+)
 
->  I have been compiling some packages both ARM and linux-x86_64 archs
-> together until I have tested with Buildroot 2017.05_rc2. It adds a check
-> for proper binaries during build stage. But I need to build both archs. So
-> I need to know if there is a way to bypass this check or if I can do
-> something else. My problem is that I need a package to compile both x86_64
-> and arm in order to compile another package  both in x86_64. So I cannot
-> remove x86_64 folders right after build, I need all of them until install
-> phase.
-
-Can you explain your use case in more detail? I don't understand why
-you are mixing ARM and x86-64 binaries in the target folder. So before
-proposing a solution to workaround the architecture check, I'd like to
-make sure that there isn't a deeper problem in the approach you're
-using to build those packages.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
