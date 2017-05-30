@@ -1,41 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 May 2017 08:51:14 +0200
-Subject: [Buildroot] [git commit] libupnp: bump to version 1.6.22
-Message-ID: <20170601202859.DBA05818F2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 May 2017 23:57:52 +0200
+Subject: [Buildroot] [git commit] erlang-p1-sip: bump to version 1.0.11
+Message-ID: <20170601202859.B3E19818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efe0c65b4bf556711dca540a8d0a8f723eaead6d
+commit: https://git.buildroot.net/buildroot/commit/?id=2f0b06c72de435acc0523041fb6bc05fbb7e93ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+License changed to Apache-2.0.
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index df39f32..1012461 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-remove-dependencies-from-rebar-config.patch | 20 ++++++++++++++++++++
+ package/erlang-p1-sip/erlang-p1-sip.hash             |  2 +-
+ package/erlang-p1-sip/erlang-p1-sip.mk               |  8 ++++----
+ 3 files changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/package/erlang-p1-sip/0002-remove-dependencies-from-rebar-config.patch b/package/erlang-p1-sip/0002-remove-dependencies-from-rebar-config.patch
+new file mode 100644
+index 0000000..5fe86d9
+--- /dev/null
++++ b/package/erlang-p1-sip/0002-remove-dependencies-from-rebar-config.patch
+@@ -0,0 +1,20 @@
++Without this patch, dependencies would be downloaded and compiled
++by rebar at build time.
++
++Signed-off-by: Christophe Romain <cromain@process-one.net>
++
++diff --git a/rebar.config b/rebar.config
++index fbc69a1..6250420 100644
++--- a/rebar.config
+++++ b/rebar.config
++@@ -29,10 +29,6 @@
++
++ {port_specs, [{"priv/lib/esip_drv.so", ["c_src/esip_codec.c"]}]}.
++
++-{deps, [{stun, ".*", {git, "https://github.com/processone/stun", {tag, "1.0.10"}}},
++-	{fast_tls, ".*", {git, "https://github.com/processone/fast_tls", {tag, "1.0.11"}}},
++-	{p1_utils, ".*", {git, "https://github.com/processone/p1_utils", {tag, "1.0.7"}}}]}.
++-
++ {clean_files, ["c_src/esip_codec.gcda", "c_src/esip_codec.gcno"]}.
++
++ {cover_enabled, true}.
+diff --git a/package/erlang-p1-sip/erlang-p1-sip.hash b/package/erlang-p1-sip/erlang-p1-sip.hash
+index 74382cc..2ea7bc8 100644
+--- a/package/erlang-p1-sip/erlang-p1-sip.hash
++++ b/package/erlang-p1-sip/erlang-p1-sip.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	af3f3c0846a1d75baeadae4aa5a2bda427567e2a1fb4559bf73ccff0a4f9a39b	libupnp-1.6.21.tar.bz2
-+sha256	0bdfacb7fa8d99b78343b550800ff193264f92c66ef67852f87f042fd1a1ebbc	libupnp-1.6.22.tar.bz2
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 0701fb2..bf01b4d 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256 2d6dfad997931668eb83a0cb127ccca8c51f8a383d76f9dea393c0b3a4eabae7 erlang-p1-sip-1.0.0.tar.gz
++sha256 2c6ed00220ead631a4755000ad9f118d79c8c4d41aa7c98bd27365a8345f9a5d erlang-p1-sip-1.0.11.tar.gz
+diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
+index b589721..0f4b33e 100644
+--- a/package/erlang-p1-sip/erlang-p1-sip.mk
++++ b/package/erlang-p1-sip/erlang-p1-sip.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBUPNP_VERSION = 1.6.21
-+LIBUPNP_VERSION = 1.6.22
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+-ERLANG_P1_SIP_VERSION = 1.0.0
+-ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
+-ERLANG_P1_SIP_LICENSE = GPL-2.0 with OpenSSL exception
+-ERLANG_P1_SIP_LICENSE_FILES = COPYING
++ERLANG_P1_SIP_VERSION = 1.0.11
++ERLANG_P1_SIP_SITE = $(call github,processone,esip,$(ERLANG_P1_SIP_VERSION))
++ERLANG_P1_SIP_LICENSE = Apache-2.0
++ERLANG_P1_SIP_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_SIP_DEPENDENCIES = erlang-p1-stun erlang-p1-tls erlang-p1-utils
+ ERLANG_P1_SIP_INSTALL_STAGING = YES
+ 
