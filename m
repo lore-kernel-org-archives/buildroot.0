@@ -1,21 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 30 May 2017 14:57:11 +0000
-Subject: [Buildroot] [Bug 9911] qt5 does not build on sparc
-In-Reply-To: <bug-9911-163@https.bugs.busybox.net/>
-References: <bug-9911-163@https.bugs.busybox.net/>
-Message-ID: <bug-9911-163-Ap7bB1qdRM@https.bugs.busybox.net/>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 30 May 2017 16:57:51 +0200
+Subject: [Buildroot] Upgrading Erlang and ejabberd
+In-Reply-To: <CA+-urNQXG9iPeWz-Fe=yH6gfBRexPsseRUVD4TU8oL7Nd25FhA@mail.gmail.com>
+References: <CA+-urNQWNUXKHZdjvkcijZYW0OQJr3DMtgQNZmhThC-TssdnNw@mail.gmail.com>
+ <8760hano0p.fsf@dell.be.48ers.dk>
+ <l449udxe78.ln2@ID-313208.user.individual.net>
+ <CAJtjsKZU5FzxA9gidh0ZVoiQVdag6YEbWH75iDQ3XCmQ+KBC-Q@mail.gmail.com>
+ <20170509214201.7772feeb@free-electrons.com>
+ <CA+-urNQXG9iPeWz-Fe=yH6gfBRexPsseRUVD4TU8oL7Nd25FhA@mail.gmail.com>
+Message-ID: <CAJtjsKahFPG-vJo26Z+u9FPcR=3gLE0Zq0sfrn4XUF6xaEXdEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9911
+Hi Frank,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Would be fixed by https://patchwork.ozlabs.org/patch/763762/ and
-https://patchwork.ozlabs.org/patch/763763/.
+On Thu, May 11, 2017 at 3:24 PM, Frank Hunleth
+<fhunleth@troodon-software.com> wrote:
+>
+> I submitted a version bump patch for erlang. I'll check back
+> periodically on how the ejabberd work goes since it sounds like
+> there's some time before any changes would make their way to "master".
+>
 
+I've just submitted a version bump patch for ejabberd, which is
+compatible with erlang 19.03.
+Christophe Romain helped in this process by sending me a preliminary
+version of this patch.
+
+Best,
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Johan
