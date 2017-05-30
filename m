@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 23:20:12 +0200
-Subject: [Buildroot] [git commit] rtl8188eu: fix help text format
-Message-ID: <20170530212121.9F2147FE16@busybox.osuosl.org>
+Date: Tue, 30 May 2017 23:20:22 +0200
+Subject: [Buildroot] [git commit] stm32flash: fix help text format
+Message-ID: <20170530212121.A9F2482A07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bd7415e244ef9469d4b54b8d41d4a8b54e58e5f
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff4293c94790e7f6bdb1a2c1263dc2a3998c3a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Warning reported by check-package.
@@ -16,31 +16,20 @@ Warning reported by check-package.
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rtl8188eu/Config.in | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/stm32flash/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
-index 09cde24..9263802 100644
---- a/package/rtl8188eu/Config.in
-+++ b/package/rtl8188eu/Config.in
-@@ -4,14 +4,14 @@ config BR2_PACKAGE_RTL8188EU
+diff --git a/package/stm32flash/Config.in b/package/stm32flash/Config.in
+index cb6f480..87afe3b 100644
+--- a/package/stm32flash/Config.in
++++ b/package/stm32flash/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_STM32FLASH
+ 	bool "stm32flash"
  	help
- 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
- 	  This is needed only for Linux kernels before 3.12.
--	  Since 3.12, there is a (staging) driver in mainline, with a similar
--	  codebase.
-+	  Since 3.12, there is a (staging) driver in mainline, with a
-+	  similar codebase.
+ 	  Open source cross platform flash program for the STM32 ARM
+-	  microcontrollers using the built-in ST serial bootloader over UART
+-	  or I2C.
++	  microcontrollers using the built-in ST serial bootloader
++	  over UART or I2C.
  
--	  Make sure your target kernel has the CONFIG_WIRELESS_EXT config
--	  option enabled.
-+	  Make sure your target kernel has the CONFIG_WIRELESS_EXT
-+	  config option enabled.
- 
--	  Note: this package needs a firmware loading mechanism to load the
--	  binary blob for the chip to work.
-+	  Note: this package needs a firmware loading mechanism to load
-+	  the binary blob for the chip to work.
- 
- 	  https://github.com/lwfinger/rtl8188eu
- 
+ 	  http://sourceforge.net/projects/stm32flash/
