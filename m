@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 May 2017 15:06:42 +0200
-Subject: [Buildroot] [git commit] package/exfat: bump version to 1.2.6
-Message-ID: <20170601202858.36CE982641@busybox.osuosl.org>
+Date: Tue, 30 May 2017 23:51:21 +0200
+Subject: [Buildroot] [git commit] erlang-p1-utils: bump to version 1.0.8
+Message-ID: <20170601202859.5337A818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9101f89a9920518bb9ccef782d19d35d8a2d49b
+commit: https://git.buildroot.net/buildroot/commit/?id=46a6deb2f3e78c5c405b69b41a5e886993737fd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+License changed to Apache-2.0.
+
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/exfat/exfat.hash | 2 +-
- package/exfat/exfat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/erlang-p1-utils/erlang-p1-utils.hash | 2 +-
+ package/erlang-p1-utils/erlang-p1-utils.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
-index cf3aab1..15b67f0 100644
---- a/package/exfat/exfat.hash
-+++ b/package/exfat/exfat.hash
+diff --git a/package/erlang-p1-utils/erlang-p1-utils.hash b/package/erlang-p1-utils/erlang-p1-utils.hash
+index c41e5ef..200d102 100644
+--- a/package/erlang-p1-utils/erlang-p1-utils.hash
++++ b/package/erlang-p1-utils/erlang-p1-utils.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	9312d23a5d82543ad2e9ab7f0a0b471aea53eeb8eae664451c881b46d849756e	fuse-exfat-1.2.4.tar.gz
-+sha256 e1105256d75860c0678f98bbae0b8fe465d4c96ed187b7035556097f152478e7  fuse-exfat-1.2.6.tar.gz
-diff --git a/package/exfat/exfat.mk b/package/exfat/exfat.mk
-index ae89217..f5ed13e 100644
---- a/package/exfat/exfat.mk
-+++ b/package/exfat/exfat.mk
-@@ -4,7 +4,7 @@
+-sha256 9c7e9fa2990edd419953a6ae609ffed0b90e671b57c468d97c0d85d866d80210 erlang-p1-utils-1.0.3.tar.gz
++sha256 9b43e025b923221cfe6a6efc76790d97b1c233e3e2db37fc804294d847bcfaa3 erlang-p1-utils-1.0.8.tar.gz
+diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
+index c9d9299..32564cf 100644
+--- a/package/erlang-p1-utils/erlang-p1-utils.mk
++++ b/package/erlang-p1-utils/erlang-p1-utils.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--EXFAT_VERSION = 1.2.4
-+EXFAT_VERSION = 1.2.6
- EXFAT_SITE = https://github.com/relan/exfat/releases/download/v$(EXFAT_VERSION)
- EXFAT_SOURCE = fuse-exfat-$(EXFAT_VERSION).tar.gz
- EXFAT_DEPENDENCIES = libfuse host-pkgconf
+-ERLANG_P1_UTILS_VERSION = 1.0.3
++ERLANG_P1_UTILS_VERSION = 1.0.8
+ ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
+-ERLANG_P1_UTILS_LICENSE = GPL-2.0+
++ERLANG_P1_UTILS_LICENSE = Apache-2.0
+ ERLANG_P1_UTILS_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_UTILS_INSTALL_STAGING = YES
+ 
+ $(eval $(rebar-package))
++$(eval $(host-rebar-package))
