@@ -1,29 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 May 2017 09:03:08 +0200
-Subject: [Buildroot] [PATCH 1/1] mosh: add notes to clarify runtime
-	issues
-In-Reply-To: <1496094821-31964-1-git-send-email-glbsalazar@gmail.com>
- (=?utf-8?Q?=22Gon=C3=A7alo?= Salazar"'s message of "Mon, 29 May 2017
- 22:53:41 +0100")
-References: <1496094821-31964-1-git-send-email-glbsalazar@gmail.com>
-Message-ID: <87vaoiaksz.fsf@dell.be.48ers.dk>
+Date: Tue, 30 May 2017 09:03:26 +0200
+Subject: [Buildroot] [PATCH] libtasn1: security bump to version 4.12
+In-Reply-To: <20170529215448.763-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 29 May 2017 23:54:48 +0200")
+References: <20170529215448.763-1-peter@korsgaard.com>
+Message-ID: <87r2z6aksh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gon?alo" == Gon?alo Salazar <glbsalazar@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Added notes to the mosh package help to clarify some runtime
- > issues related with it to ensure mosh will work properly after adding it.
- > This includes adding a proper LOCALE and an extra flag when using
- > mosh with dropbear.
+ > Fixes CVE-2017-7650: Two errors in the "asn1_find_node()" function
+ > (lib/parser_aux.c) within GnuTLS libtasn1 version 4.10 can be exploited to
+ > cause a stacked-based buffer overflow by tricking a user into processing a
+ > specially crafted assignments file via the e.g.  asn1Coding utility.
 
- > Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
+ > For more details, see:
 
-Committed, thanks. How about sending a patch to bump our mosh version to
-1.3.0?
+ > https://secuniaresearch.flexerasoftware.com/secunia_research/2017-11/
+
+ > Or the 1.4.11 release mail (no mail about 1.4.12, but identical to 1.4.11 +
+ > a soname fix):
+
+ > https://lists.gnu.org/archive/html/help-libtasn1/2017-05/msg00003.html
+
+ > Remove 0001-configure-don-t-add-Werror-to-build-flags.patch and autoreconf
+ > as that patch is now upstream.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
