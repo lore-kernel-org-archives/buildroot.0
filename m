@@ -1,33 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 May 2017 08:58:59 +0200
-Subject: [Buildroot] [PATCH] mosquitto: security bump to version 1.4.12
-In-Reply-To: <20170529211959.8430-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 29 May 2017 23:19:59 +0200")
-References: <20170529211959.8430-1-peter@korsgaard.com>
-Message-ID: <87ziduakzw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 May 2017 08:59:27 +0200
+Subject: [Buildroot] package hwloc does not install to staging
+In-Reply-To: <66428c29-990f-e0d4-9164-92e5dae4e736@sfu.ca>
+References: <66428c29-990f-e0d4-9164-92e5dae4e736@sfu.ca>
+Message-ID: <20170530085927.5cf55844@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello,
 
- > Fixes CVE-2017-7650: Pattern based ACLs can be bypassed by clients that set
- > their username/client id to ?#? or ?+?.  This allows locally or remotely
- > connected clients to access MQTT topics that they do have the rights to.
- > The same issue may be present in third party authentication/access control
- > plugins for Mosquitto.
+On Mon, 29 May 2017 16:20:46 -0700, Graham Holland wrote:
 
- > For more details, see:
- > https://mosquitto.org/2017/05/security-advisory-cve-2017-7650/
+> I'm curious if there is a reason for the hwloc package not including
+> the following:
+> 
+> HWLOC_INSTALL_STAGING = YES
+> 
+> so that the hwloc.h header is copied to the staging directory
+> 
+> I am porting a package that has a dependency on hwloc and which uses
+> pkg-config in its build system to detect hwloc compiler flags. If I
+> modify the hwloc.mk file to include the above, then this works
+> correctly.
 
- > Remove 0001-Remove-lanl-when-WITH_ADNS-is-unset.patch as that patch is now
- > upstream.
+There is no specific reason other than the fact that nobody needed it
+until now. So don't hesitate to send a patch adding
+HWLOC_INSTALL_STAGING = YES (and possibly your additional package if
+it's some public available software package).
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Best regards,
 
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
