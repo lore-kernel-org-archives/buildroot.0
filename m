@@ -1,41 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 May 2017 14:32:08 +0200
-Subject: [Buildroot] genimage maintainers
-In-Reply-To: <1496138688562-165972.post@n4.nabble.com> (hkengblom@gmail.com's
- message of "Tue, 30 May 2017 03:04:48 -0700 (PDT)")
-References: <1496138688562-165972.post@n4.nabble.com>
-Message-ID: <8760gia5kn.fsf@dell.be.48ers.dk>
+Date: Tue, 30 May 2017 15:03:24 +0200
+Subject: [Buildroot] [PATCH] strongswan: add upstream security patches
+Message-ID: <20170530130324.28875-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "hkengblom" == hkengblom  <hkengblom@gmail.com> writes:
+Fixes:
 
-Hi,
+CVE-2017-9022 - RSA public keys passed to the gmp plugin aren't
+validated sufficiently before attempting signature verification, so that
+invalid input might lead to a floating point exception and crash of the
+process.  A certificate with an appropriately prepared public key sent by a
+peer could be used for a denial-of-service attack.
 
- > I've made a patch for it, but I don't know where to send it, or make
- > a pull-request. Further, I'm not that familiar with genimage, so it
- > would be good if someone with more insight in genimage could take a
- > look at it.
+https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9022%29.html
 
- > Can anyone point me to someone that might be the "receiver" of such a
- > patch?
+CVE-2017-9023 - ASN.1 CHOICE types are not correctly handled by the ASN.1
+parser when parsing X.509 certificates with extensions that use such types.
+This could lead to infinite looping of the thread parsing a specifically
+crafted certificate.
 
-Sorry, I have never used this mountpoint option (and it isn't directly
-clear to me what it does), but the upstream git repo for genimage is at:
+https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9023%29.html
 
-git://git.pengutronix.de/git/genimage.git
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/strongswan/strongswan.hash | 3 +++
+ package/strongswan/strongswan.mk   | 3 +++
+ 2 files changed, 6 insertions(+)
 
-And looking at the git history, the most active developers looks to be:
-
-git shortlog -sne | head -n 3
-    84  Michael Olbrich <m.olbrich@pengutronix.de>
-    15  Juergen Beisert <jbe@pengutronix.de>
-    15  Sascha Hauer <s.hauer@pengutronix.de>
-
-So perhaps mailing them is the best way forward.
-
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 97fb1998e4..cbc4e3857a 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -2,3 +2,6 @@
+ md5	9d7c77b0da9b69f859624897e5e9ebbf	strongswan-5.4.0.tar.bz2
+ # Calculated based on the hash above
+ sha256	f8288faaea6a9cd8a7d413c0b76b7922be5da3dfcd01fd05cb30d2c55d3bbe89	strongswan-5.4.0.tar.bz2
++# Locally calculated
++sha256	f5ba7f46cf7ae81dd81bc86f9e4cfa0c5c7c6987149b3bc9c0b8bf08598a1063  strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch
++sha256	03db8c7a4133e877e8992e155c046dd27ec4810d50f239abf55595f0280caf31  strongswan-5.0.0-5.5.2_asn1_choice.patch
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 2a852f22d0..1070eeaf8b 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -7,6 +7,9 @@
+ STRONGSWAN_VERSION = 5.4.0
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
++STRONGSWAN_PATCH = \
++	$(STRONGSWAN_SITE)/patches/21_gmp_mpz_powm_sec_patch/strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch \
++	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch
+ STRONGSWAN_LICENSE = GPL-2.0+
+ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
 -- 
-Bye, Peter Korsgaard
+2.11.0
