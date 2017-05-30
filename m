@@ -1,27 +1,41 @@
-From: Graham Holland <gmh7@sfu.ca>
-Date: Mon, 29 May 2017 16:20:46 -0700
-Subject: [Buildroot] package hwloc does not install to staging
-Message-ID: <66428c29-990f-e0d4-9164-92e5dae4e736@sfu.ca>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 29 May 2017 20:50:04 -0700
+Subject: [Buildroot] [PATCH 1/1] docker-engine: fix journald logging driver
+Message-ID: <20170530035004.28855-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The Docker engine can optionally log to systemd-journald. For this
+driver to work correctly, Docker needs to build against
+systemd-journald's client library.
 
-I'm curious if there is a reason for the hwloc package not including
-the following:
+This patch conditionally adds a build-time dependency on systemd and
+enables compiling the journald driver in docker-engine if systemd is
+used as the Buildroot init process.
 
-HWLOC_INSTALL_STAGING = YES
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/docker-engine/docker-engine.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-so that the hwloc.h header is copied to the staging directory
-
-I am porting a package that has a dependency on hwloc and which uses
-pkg-config in its build system to detect hwloc compiler flags. If I
-modify the hwloc.mk file to include the above, then this works
-correctly.
-
-Thanks,
-
-Graham
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index c4c1157..0176f51 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -42,6 +42,11 @@ DOCKER_ENGINE_BUILD_TAGS += seccomp
+ DOCKER_ENGINE_DEPENDENCIES += libseccomp
+ endif
+ 
++ifeq ($(BR2_INIT_SYSTEMD),y)
++DOCKER_ENGINE_BUILD_TAGS += journald
++DOCKER_ENGINE_DEPENDENCIES += systemd
++endif
++
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+ DOCKER_ENGINE_BUILD_TAGS += daemon
+ DOCKER_ENGINE_BUILD_TARGETS += dockerd
+-- 
+2.10.2
