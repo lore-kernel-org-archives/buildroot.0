@@ -1,40 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 May 2017 08:59:27 +0200
-Subject: [Buildroot] package hwloc does not install to staging
-In-Reply-To: <66428c29-990f-e0d4-9164-92e5dae4e736@sfu.ca>
-References: <66428c29-990f-e0d4-9164-92e5dae4e736@sfu.ca>
-Message-ID: <20170530085927.5cf55844@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 May 2017 09:03:08 +0200
+Subject: [Buildroot] [PATCH 1/1] mosh: add notes to clarify runtime
+	issues
+In-Reply-To: <1496094821-31964-1-git-send-email-glbsalazar@gmail.com>
+ (=?utf-8?Q?=22Gon=C3=A7alo?= Salazar"'s message of "Mon, 29 May 2017
+ 22:53:41 +0100")
+References: <1496094821-31964-1-git-send-email-glbsalazar@gmail.com>
+Message-ID: <87vaoiaksz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Gon?alo" == Gon?alo Salazar <glbsalazar@gmail.com> writes:
 
-On Mon, 29 May 2017 16:20:46 -0700, Graham Holland wrote:
+ > Added notes to the mosh package help to clarify some runtime
+ > issues related with it to ensure mosh will work properly after adding it.
+ > This includes adding a proper LOCALE and an extra flag when using
+ > mosh with dropbear.
 
-> I'm curious if there is a reason for the hwloc package not including
-> the following:
-> 
-> HWLOC_INSTALL_STAGING = YES
-> 
-> so that the hwloc.h header is copied to the staging directory
-> 
-> I am porting a package that has a dependency on hwloc and which uses
-> pkg-config in its build system to detect hwloc compiler flags. If I
-> modify the hwloc.mk file to include the above, then this works
-> correctly.
+ > Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
 
-There is no specific reason other than the fact that nobody needed it
-until now. So don't hesitate to send a patch adding
-HWLOC_INSTALL_STAGING = YES (and possibly your additional package if
-it's some public available software package).
+Committed, thanks. How about sending a patch to bump our mosh version to
+1.3.0?
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
