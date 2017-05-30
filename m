@@ -1,60 +1,144 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 May 2017 15:03:24 +0200
-Subject: [Buildroot] [PATCH] strongswan: add upstream security patches
-Message-ID: <20170530130324.28875-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 30 May 2017 13:51:10 +0000
+Subject: [Buildroot] [Bug 9911] New: qt5 does not build on sparc
+Message-ID: <bug-9911-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=9911
 
-CVE-2017-9022 - RSA public keys passed to the gmp plugin aren't
-validated sufficiently before attempting signature verification, so that
-invalid input might lead to a floating point exception and crash of the
-process.  A certificate with an appropriately prepared public key sent by a
-peer could be used for a denial-of-service attack.
+            Bug ID: 9911
+           Summary: qt5 does not build on sparc
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: uwe at hermann-uwe.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9022%29.html
+Qt5 apparently doesn't build due to "ERROR: detected a std::atomic
+implementation that fails for function pointers" on sparc. Is this a
+known/reproducible issue?
 
-CVE-2017-9023 - ASN.1 CHOICE types are not correctly handled by the ASN.1
-parser when parsing X.509 certificates with extensions that use such types.
-This could lead to infinite looping of the thread parsing a specifically
-crafted certificate.
 
-https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9023%29.html
+Log:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/strongswan/strongswan.hash | 3 +++
- package/strongswan/strongswan.mk   | 3 +++
- 2 files changed, 6 insertions(+)
+Configure summary:
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index 97fb1998e4..cbc4e3857a 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -2,3 +2,6 @@
- md5	9d7c77b0da9b69f859624897e5e9ebbf	strongswan-5.4.0.tar.bz2
- # Calculated based on the hash above
- sha256	f8288faaea6a9cd8a7d413c0b76b7922be5da3dfcd01fd05cb30d2c55d3bbe89	strongswan-5.4.0.tar.bz2
-+# Locally calculated
-+sha256	f5ba7f46cf7ae81dd81bc86f9e4cfa0c5c7c6987149b3bc9c0b8bf08598a1063  strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch
-+sha256	03db8c7a4133e877e8992e155c046dd27ec4810d50f239abf55595f0280caf31  strongswan-5.0.0-5.5.2_asn1_choice.patch
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 2a852f22d0..1070eeaf8b 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -7,6 +7,9 @@
- STRONGSWAN_VERSION = 5.4.0
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
-+STRONGSWAN_PATCH = \
-+	$(STRONGSWAN_SITE)/patches/21_gmp_mpz_powm_sec_patch/strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch \
-+	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch
- STRONGSWAN_LICENSE = GPL-2.0+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
+Building on:  x86_64
+Building for: sparc
+Configuration: cross_compile compile_examples enable_new_dtags largefile
+accessibility shared release c++11 c++14 c++1z concurrent mremap reduce_exports
+release_tools stl
+Build options:
+  Mode ................................... release; optimized tools
+  Building shared libraries .............. yes
+  Using C++ standard ..................... C++1z
+  Using gold linker ...................... no
+  Using new DTAGS ........................ yes
+  Using precompiled headers .............. no
+  Using LTCG ............................. no
+  Target compiler supports:
+  Build parts ............................ libs
+Qt modules and options:
+  Qt Concurrent .......................... yes
+  Qt D-Bus ............................... no
+  Qt D-Bus directly linked to libdbus .... no
+  Qt Gui ................................. yes
+  Qt Widgets ............................. yes
+Support enabled for:
+  Accessibility .......................... yes
+  Using pkg-config ....................... yes
+  QML debugging .......................... yes
+  udev ................................... no
+  Using system zlib ...................... yes
+Qt Core:
+  DoubleConversion ....................... yes
+    Using system DoubleConversion ........ no
+  GLib ................................... yes
+  iconv .................................. no
+  ICU .................................... no
+  Logging backends:
+    journald ............................. no
+    syslog ............................... no
+  Using system PCRE ...................... yes
+Qt Network:
+  getaddrinfo() .......................... yes
+  getifaddrs() ........................... yes
+  IPv6 ifname ............................ yes
+  libproxy ............................... no
+  OpenSSL ................................ no
+    Qt directly linked to OpenSSL ........ no
+  SCTP ................................... no
+  Use system proxies ..................... yes
+Qt Sql:
+  DB2 (IBM) .............................. no
+  InterBase .............................. no
+  MySql .................................. no
+  OCI (Oracle) ........................... no
+  ODBC ................................... no
+  PostgreSQL ............................. no
+  SQLite2 ................................ no
+  SQLite ................................. no
+    Using system provided SQLite ......... no
+  TDS (Sybase) ........................... no
+Qt Gui:
+  FreeType ............................... yes
+    Using system FreeType ................ yes
+  HarfBuzz ............................... yes
+    Using system HarfBuzz ................ no
+  Fontconfig ............................. no
+  Image formats:
+    GIF .................................. no
+    ICO .................................. yes
+    JPEG ................................. yes
+      Using system libjpeg ............... yes
+    PNG .................................. yes
+      Using system libpng ................ yes
+  OpenGL:
+    EGL .................................. no
+    Desktop OpenGL ....................... no
+    OpenGL ES 2.0 ........................ no
+    OpenGL ES 3.0 ........................ no
+    OpenGL ES 3.1 ........................ no
+  Session Management ..................... yes
+Features used by QPA backends:
+  evdev .................................. yes
+  libinput ............................... no
+  mtdev .................................. no
+  tslib .................................. no
+  xkbcommon-evdev ........................ no
+QPA backends:
+  DirectFB ............................... no
+  EGLFS .................................. no
+  LinuxFB ................................ yes
+  Mir client ............................. no
+Qt Widgets:
+  GTK+ ................................... no
+  Styles ................................. Fusion Windows
+Qt PrintSupport:
+  CUPS ................................... no
+
+Note: -optimized-tools is not useful in -release mode.
+
+Note: Dropped compiler flags '-pthread' when detecting library 'glib'.
+
+ERROR: detected a std::atomic implementation that fails for function pointers.
+Please apply the patch corresponding to your Standard Library vendor, found in
+  qtbase/config.tests/common/atomicfptr
+
+package/pkg-generic.mk:206: recipe for target
+'[...]/output/build/qt5base-5.8.0/.stamp_configured' failed
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
