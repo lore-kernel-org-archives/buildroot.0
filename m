@@ -1,7 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 30 May 2017 19:01:23 +0200
-Subject: [Buildroot] [PATCH 1/6] agentpp: fix help text format
-Message-ID: <1496163688-20870-1-git-send-email-luca@lucaceresoli.net>
+Date: Tue, 30 May 2017 19:01:26 +0200
+Subject: [Buildroot] [PATCH 4/6] rtl8188eu: fix help text format
+In-Reply-To: <1496163688-20870-1-git-send-email-luca@lucaceresoli.net>
+References: <1496163688-20870-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1496163688-20870-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +14,33 @@ Warning reported by check-package.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/agentpp/Config.in | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ package/rtl8188eu/Config.in | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/agentpp/Config.in b/package/agentpp/Config.in
-index e591fb5f3cc4..8c6b11d644e4 100644
---- a/package/agentpp/Config.in
-+++ b/package/agentpp/Config.in
-@@ -5,13 +5,14 @@ config BR2_PACKAGE_AGENTPP
- 	depends on !BR2_STATIC_LIBS # snmp++
- 	select BR2_PACKAGE_SNMPPP
+diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
+index 09cde24a0fe5..9263802e09a4 100644
+--- a/package/rtl8188eu/Config.in
++++ b/package/rtl8188eu/Config.in
+@@ -4,14 +4,14 @@ config BR2_PACKAGE_RTL8188EU
  	help
--	  AGENT++ is a set of C++ classes which provides a complete protocol
--	  engine and dispatch table for the development of SNMP agents.
--	  AGENT++ is a multilingual API which supports SNMPv1, SNMPv2c, and
--	  SNMPv3. It provides various C++ classes implementing prototypes for
--	  scalar and table SNMP managed objects that can be customized by
--	  derivation. Additional classes support the development of proxy
--	  agents as well as sending notifications.
-+	  AGENT++ is a set of C++ classes which provides a complete
-+	  protocol engine and dispatch table for the development of
-+	  SNMP agents. AGENT++ is a multilingual API which supports
-+	  SNMPv1, SNMPv2c, and SNMPv3. It provides various C++ classes
-+	  implementing prototypes for scalar and table SNMP managed
-+	  objects that can be customized by derivation. Additional
-+	  classes support the development of proxy agents as well as
-+	  sending notifications.
+ 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
+ 	  This is needed only for Linux kernels before 3.12.
+-	  Since 3.12, there is a (staging) driver in mainline, with a similar
+-	  codebase.
++	  Since 3.12, there is a (staging) driver in mainline, with a
++	  similar codebase.
  
- 	  SNMPv3 support is enabled if SNMP++ enables it.
+-	  Make sure your target kernel has the CONFIG_WIRELESS_EXT config
+-	  option enabled.
++	  Make sure your target kernel has the CONFIG_WIRELESS_EXT
++	  config option enabled.
+ 
+-	  Note: this package needs a firmware loading mechanism to load the
+-	  binary blob for the chip to work.
++	  Note: this package needs a firmware loading mechanism to load
++	  the binary blob for the chip to work.
+ 
+ 	  https://github.com/lwfinger/rtl8188eu
  
 -- 
 2.7.4
