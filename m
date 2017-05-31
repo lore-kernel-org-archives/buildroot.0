@@ -1,55 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:31:30 +0200
-Subject: [Buildroot] [git commit] mosh: bump to version 1.3.0
-Message-ID: <20170601202900.3C09E818F2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 31 May 2017 08:51:44 +0200
+Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.2.30
+Message-ID: <20170601202859.E7FFA82A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08660e224f60cc9da876eacda1d8d7322704c2f5
+commit: https://git.buildroot.net/buildroot/commit/?id=bcded15090db5796126bf2298ce1b2304a544a5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gon??alo Salazar <glbsalazar@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosh/Config.in | 2 +-
- package/mosh/mosh.hash | 4 ++--
- package/mosh/mosh.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index e0ff2cf..96c3b94 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -24,4 +24,4 @@ config BR2_PACKAGE_MOSH
- 	  allows roaming, and provides speculative local echo and line editing
- 	  of user keystrokes.
- 
--	  https://mosh.mit.edu
-+	  https://mosh.org
-diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
-index 31f59c7..4dae51d 100644
---- a/package/mosh/mosh.hash
-+++ b/package/mosh/mosh.hash
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 46e7c5a..8c6e14e 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
 @@ -1,2 +1,2 @@
--# From https://mailman.mit.edu/pipermail/mosh-users/2016-August/000330.html
--sha256 7e82b7fbfcc698c70f5843bb960dadb8e7bd7ac1d4d2151c9d979372ea850e85 mosh-1.2.6.tar.gz
-+# From https://mailman.mit.edu/pipermail/mosh-users/2017-March/000340.html
-+sha256 320e12f461e55d71566597976bd9440ba6c5265fa68fbf614c6f1c8401f93376 mosh-1.3.0.tar.gz
-diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-index 0da9105..06502f6 100644
---- a/package/mosh/mosh.mk
-+++ b/package/mosh/mosh.mk
-@@ -4,8 +4,8 @@
- #
+ # Locally computed after checking signature
+-sha256 ccfa9ffb7eb91e9e87c21c108324b911250c9ffa838bffb64b1caafadcb0f388  dovecot-2.2.29.1.tar.gz
++sha256 126b07cbf4c313e8fc6df273282f60710b453a7a678f502fd45c2fa7192127f3  dovecot-2.2.30.tar.gz
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 3f71f68..ace8cf0 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MOSH_VERSION = 1.2.6
--MOSH_SITE = https://mosh.mit.edu
-+MOSH_VERSION = 1.3.0
-+MOSH_SITE = https://mosh.org
- MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
- MOSH_LICENSE = GPL-3.0+ with exception
- MOSH_LICENSE_FILES = COPYING COPYING.iOS
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).29.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).30
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1
