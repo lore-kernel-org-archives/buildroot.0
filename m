@@ -1,123 +1,151 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Wed, 31 May 2017 18:35:43 +0200
-Subject: [Buildroot] [PATCH v2 2/4] erlang-p1-oauth2: New package
+Date: Wed, 31 May 2017 18:35:44 +0200
+Subject: [Buildroot] [PATCH v2 3/4] erlang-p1-xmpp: New package
 In-Reply-To: <20170531163545.23552-1-johan.oudinet@gmail.com>
 References: <20170531163545.23552-1-johan.oudinet@gmail.com>
-Message-ID: <20170531163545.23552-2-johan.oudinet@gmail.com>
+Message-ID: <20170531163545.23552-3-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OAuth2 library for Erlang
-https://github.com/processone/p1_oauth2
+XMPP library for Erlang.
+https://github.com/processone/xmpp
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 
 ---
 Changes v1 -> v2:
- - Fix github URL and rename the package accordingly (suggested by Thomas)
- - Add en entry to the DEVELOPERS file
+ - Add an entry to the DEVELOPERS file (suggested by Thomas)
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/ejabberd/Config.in                     |  8 +++++++-
- package/erlang-p1-oauth2/Config.in             |  6 ++++++
- package/erlang-p1-oauth2/erlang-p1-oauth2.hash |  2 ++
- package/erlang-p1-oauth2/erlang-p1-oauth2.mk   | 13 +++++++++++++
- 6 files changed, 30 insertions(+), 1 deletion(-)
- create mode 100644 package/erlang-p1-oauth2/Config.in
- create mode 100644 package/erlang-p1-oauth2/erlang-p1-oauth2.hash
- create mode 100644 package/erlang-p1-oauth2/erlang-p1-oauth2.mk
+ DEVELOPERS                                             |  1 +
+ package/Config.in                                      |  1 +
+ package/erlang-p1-xmpp/0001-fix-includes.patch         | 16 ++++++++++++++++
+ .../0002-remove-dependencies-from-rebar-config.patch   | 18 ++++++++++++++++++
+ package/erlang-p1-xmpp/Config.in                       |  8 ++++++++
+ package/erlang-p1-xmpp/erlang-p1-xmpp.hash             |  2 ++
+ package/erlang-p1-xmpp/erlang-p1-xmpp.mk               | 16 ++++++++++++++++
+ 7 files changed, 62 insertions(+)
+ create mode 100644 package/erlang-p1-xmpp/0001-fix-includes.patch
+ create mode 100644 package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch
+ create mode 100644 package/erlang-p1-xmpp/Config.in
+ create mode 100644 package/erlang-p1-xmpp/erlang-p1-xmpp.hash
+ create mode 100644 package/erlang-p1-xmpp/erlang-p1-xmpp.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 231e73323b..269fd79a21 100644
+index 269fd79a21..aa9ecc1256 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -865,6 +865,7 @@ F:	package/erlang-jiffy/
- F:	package/erlang-lager/
- F:	package/erlang-p1-cache-tab/
- F:	package/erlang-p1-iconv/
-+F:	package/erlang-p1-oauth2/
- F:	package/erlang-p1-sip/
- F:	package/erlang-p1-stringprep/
- F:	package/erlang-p1-stun/
+@@ -872,6 +872,7 @@ F:	package/erlang-p1-stun/
+ F:	package/erlang-p1-tls/
+ F:	package/erlang-p1-utils/
+ F:	package/erlang-p1-xml/
++F:	package/erlang-p1-xmpp/
+ F:	package/erlang-p1-yaml/
+ F:	package/erlang-p1-zlib/
+ F:	package/nginx-dav-ext/
 diff --git a/package/Config.in b/package/Config.in
-index 2b53add300..a82ed039b8 100644
+index a82ed039b8..e515510aa1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -514,6 +514,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-lager/Config.in"
- 	source "package/erlang-p1-cache-tab/Config.in"
- 	source "package/erlang-p1-iconv/Config.in"
-+	source "package/erlang-p1-oauth2/Config.in"
- 	source "package/erlang-p1-sip/Config.in"
- 	source "package/erlang-p1-stringprep/Config.in"
- 	source "package/erlang-p1-stun/Config.in"
-diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
-index 5d176c3af6..a7542cd12d 100644
---- a/package/ejabberd/Config.in
-+++ b/package/ejabberd/Config.in
-@@ -1,13 +1,19 @@
- config BR2_PACKAGE_EJABBERD
- 	bool "ejabberd"
- 	depends on BR2_PACKAGE_ERLANG
--	depends on BR2_INSTALL_LIBSTDCPP # stringprep
-+	depends on BR2_INSTALL_LIBSTDCPP # jiffy, stringprep
-+	select BR2_PACKAGE_ERLANG_JIFFY
- 	select BR2_PACKAGE_ERLANG_LAGER
- 	select BR2_PACKAGE_ERLANG_P1_CACHE_TAB
- 	select BR2_PACKAGE_ERLANG_P1_ICONV
-+	select BR2_PACKAGE_ERLANG_P1_OAUTH2
- 	select BR2_PACKAGE_ERLANG_P1_SIP
- 	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
-+	select BR2_PACKAGE_ERLANG_P1_STUN
-+	select BR2_PACKAGE_ERLANG_P1_TLS
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
- 	select BR2_PACKAGE_ERLANG_P1_XML
-+	select BR2_PACKAGE_ERLANG_P1_XMPP
- 	select BR2_PACKAGE_ERLANG_P1_YAML
- 	select BR2_PACKAGE_ERLANG_P1_ZLIB
- 	select BR2_PACKAGE_GETENT
-diff --git a/package/erlang-p1-oauth2/Config.in b/package/erlang-p1-oauth2/Config.in
+@@ -521,6 +521,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-tls/Config.in"
+ 	source "package/erlang-p1-utils/Config.in"
+ 	source "package/erlang-p1-xml/Config.in"
++	source "package/erlang-p1-xmpp/Config.in"
+ 	source "package/erlang-p1-yaml/Config.in"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+diff --git a/package/erlang-p1-xmpp/0001-fix-includes.patch b/package/erlang-p1-xmpp/0001-fix-includes.patch
 new file mode 100644
-index 0000000000..32e79ec99a
+index 0000000000..d0a267b721
 --- /dev/null
-+++ b/package/erlang-p1-oauth2/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ERLANG_P1_OAUTH2
-+	bool "erlang-p1-oauth2"
-+	help
-+	  OAuth2 library for Erlang
++++ b/package/erlang-p1-xmpp/0001-fix-includes.patch
+@@ -0,0 +1,16 @@
++Without this patch, rebar fails to find include file fxml.hrl.
 +
-+	  https://github.com/processone/p1_oauth2
-diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
++Signed-off-by: Christophe Romain <cromain@process-one.net>
++
++diff --git a/include/xmpp.hrl b/include/xmpp.hrl
++index afa5f61..678858e 100644
++--- a/include/xmpp.hrl
+++++ b/include/xmpp.hrl
++@@ -26,7 +26,7 @@
++ -include("ns.hrl").
++ -include("jid.hrl").
++ -include("xmpp_codec.hrl").
++--include("fxml.hrl").
+++-include_lib("p1_xml/include/fxml.hrl").
++
++ -type stanza() :: iq() | presence() | message().
+diff --git a/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch b/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch
 new file mode 100644
-index 0000000000..3666519f5f
+index 0000000000..fa5c269c22
 --- /dev/null
-+++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
++++ b/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch
+@@ -0,0 +1,18 @@
++Without this patch, dependencies would be downloaded and compiled
++by rebar at build time.
++
++Signed-off-by: Christophe Romain <cromain@process-one.net>
++
++diff --git a/rebar.config b/rebar.config
++index 79494b7..8d769f1 100644
++--- a/rebar.config
+++++ b/rebar.config
++@@ -24,9 +24,6 @@
++ 	    {i, "../fast_xml/include"},
++ 	    {i, "deps/fast_xml/include"}]}.
++
++-{deps, [{fast_xml, ".*", {git, "https://github.com/processone/fast_xml", {tag, "1.1.22"}}},
++-	{stringprep, ".*", {git, "https://github.com/processone/stringprep", {tag, "1.0.8"}}}]}.
++-
++ {cover_enabled, true}.
++ {cover_export_enabled, true}.
+diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
+new file mode 100644
+index 0000000000..1d518e2023
+--- /dev/null
++++ b/package/erlang-p1-xmpp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_ERLANG_P1_XMPP
++	bool "erlang-p1-xmpp"
++	select BR2_PACKAGE_ERLANG_P1_XML
++	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
++	help
++	  XMPP library for Erlang.
++
++	  https://github.com/processone/xmpp
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.hash b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
+new file mode 100644
+index 0000000000..f245c843e8
+--- /dev/null
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 86e4d93f0206135bc6017b6001d061305513917f79c53294e534d6e66fd54727 erlang-p1-oauth2-0.6.1.tar.gz
-diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
++sha256 e7b5db5ab6204f5bc6ebf91a183ebeae2b43ca6372dd2506599a8e8168a99c50 erlang-p1-xmpp-1.1.9.tar.gz
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
 new file mode 100644
-index 0000000000..c85706c8db
+index 0000000000..149d8bc5c7
 --- /dev/null
-+++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
-@@ -0,0 +1,13 @@
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# erlang-p1-oauth2
++# erlang-p1-xmpp
 +#
 +################################################################################
 +
-+ERLANG_P1_OAUTH2_VERSION = 0.6.1
-+ERLANG_P1_OAUTH2_SITE = $(call github,processone,p1_oauth2,$(ERLANG_P1_OAUTH2_VERSION))
-+ERLANG_P1_OAUTH2_LICENSE = MIT
-+ERLANG_P1_OAUTH2_LICENSE_FILES = LICENSE
-+ERLANG_P1_OAUTH2_INSTALL_STAGING = YES
++ERLANG_P1_XMPP_VERSION = 1.1.9
++ERLANG_P1_XMPP_SITE = $(call github,processone,xmpp,$(ERLANG_P1_XMPP_VERSION))
++ERLANG_P1_XMPP_LICENSE = Apache-2.0
++ERLANG_P1_XMPP_LICENSE_FILES = LICENSE.txt
++ERLANG_P1_XMPP_INSTALL_STAGING = YES
++ERLANG_P1_XMPP_DEPENDENCIES = erlang-p1-xml erlang-p1-stringprep \
++	host-erlang-p1-xml
 +
 +$(eval $(rebar-package))
++$(eval $(host-rebar-package))
 -- 
 2.11.0
