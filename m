@@ -1,56 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 23:04:53 +0200
-Subject: [Buildroot] [git commit branch/next] fetchmail: adjust zlib handling
-Message-ID: <20170531210510.739E7818C0@busybox.osuosl.org>
+Date: Wed, 31 May 2017 23:05:22 +0200
+Subject: [Buildroot] [PATCH 1/2] fetchmail: gettext is not mandatory
+In-Reply-To: <1495227881-1899-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1495227881-1899-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170531230522.14dbba29@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=281d8451c4082fb2e1f0e65c7e10aecfbe192482
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-fetchmail itself does not need zlib, there is no reference to it in its
-source, so the "select BR2_PACKAGE_ZLIB" is not necessary. Moreover,
-"zlib" was not added to FETCHMAIL_DEPENDENCIES (but was anyway in the
-dependency chain through openssl).
+On Fri, 19 May 2017 23:04:40 +0200, Thomas Petazzoni wrote:
+> Even when locales are enabled, gettext is not mandatory to build
+> fetchmail, i.e the following defconfig builds fine:
+> 
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.02-1096-g54a5333.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> BR2_PACKAGE_FETCHMAIL=y
+> 
+> However, if gettext provides libintl, it gets used. Therefore this
+> commit moves gettext from a mandatory dependency to an optional
+> dependency.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/fetchmail/Config.in    | 1 -
+>  package/fetchmail/fetchmail.mk | 8 ++++++--
+>  2 files changed, 6 insertions(+), 3 deletions(-)
 
-In addition, LIBS="-lz" is only needed in static linking configurations,
-to help fetchmail's configure script find OpenSSL (it doesn't use
-pkg-config unfortunately).
+Both applied to next.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fetchmail/Config.in    | 1 -
- package/fetchmail/fetchmail.mk | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
-index 7c14176..62f4f84 100644
---- a/package/fetchmail/Config.in
-+++ b/package/fetchmail/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_FETCHMAIL
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_CA_CERTIFICATES
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_ZLIB
- 	help
- 	  Fetchmail - the mail-retrieval daemon
- 	  Client daemon to move mail from POP and IMAP to your local computer
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 49ce0d3..164b2f8 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -13,7 +13,11 @@ FETCHMAIL_LICENSE_FILES = COPYING
- FETCHMAIL_AUTORECONF = YES
- FETCHMAIL_GETTEXTIZE = YES
- 
-+# needed to help fetchmail detecting the availability of openssl,
-+# because it doesn't use pkg-config
-+ifeq ($(BR2_STATIC_LIBS),y)
- FETCHMAIL_CONF_ENV += LIBS="-lz"
-+endif
- 
- FETCHMAIL_CONF_OPTS = \
- 	--with-ssl=$(STAGING_DIR)/usr
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
