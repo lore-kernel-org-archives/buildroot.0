@@ -1,38 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:56:35 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/freetype: bump version to
- 2.8
-In-Reply-To: <20170528144815.29502-2-bernd.kuhls@t-online.de>
-References: <20170528144815.29502-1-bernd.kuhls@t-online.de>
- <20170528144815.29502-2-bernd.kuhls@t-online.de>
-Message-ID: <20170531215635.2b83c221@free-electrons.com>
+Date: Wed, 31 May 2017 21:59:08 +0200
+Subject: [Buildroot] [git commit branch/next] package/fwup: bump version to
+	0.14.3
+Message-ID: <20170531195912.C3732827C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=682405ec762bf5659b69e7c1f2852502dcf80372
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 28 May 2017 16:48:15 +0200, Bernd Kuhls wrote:
-> Added md5 & sha1 hashes supplied by sourceforge mirror.
-> 
-> Removed patches applied upstream:
-> 
-> 0001-psaux-Better-protect-flex-handling.patch
-> http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=f958c48ee431bef8d4d466b40c9cb2d4dbcb7791
-> 
-> 0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
-> http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=3774fc08b502c3e685afca098b6e8a195aded6a0
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: fixed subject prefix, patch is meant for next branch
+Added patch to fix uclibc build.
 
-Applied to next, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fwup/0001-Fix-uclibc-build.patch | 36 ++++++++++++++++++++++++++++++++
+ package/fwup/fwup.hash                   |  2 +-
+ package/fwup/fwup.mk                     |  2 +-
+ 3 files changed, 38 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
+new file mode 100644
+index 0000000..f7bf245
+--- /dev/null
++++ b/package/fwup/0001-Fix-uclibc-build.patch
+@@ -0,0 +1,36 @@
++From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 28 May 2017 16:56:39 +0200
++Subject: [PATCH 1/1] Fix uclibc build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Without sys/types.h the build breaks with errors like this:
++
++parse_file.h:28:5: error: unknown type name ???off_t???
++     off_t *map;
++     ^
++
++Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/sparse_file.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/sparse_file.h b/src/sparse_file.h
++index 21bf5f9..579fbaa 100644
++--- a/src/sparse_file.h
+++++ b/src/sparse_file.h
++@@ -18,6 +18,7 @@
++ #define SPARSE_FILE_H
++ 
++ #include <confuse.h>
+++#include <sys/types.h>
++ 
++ struct sparse_file_map
++ {
++-- 
++2.11.0
++
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index e21eff0..8679dcb 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256   64c3a0ac38dc11c0c05b2588a89638cbc37f5552ac0f1c290f7ee5365f2bba49      fwup-v0.8.2.tar.gz
++sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index 0c2b0f9..e47ecbe 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FWUP_VERSION = v0.8.2
++FWUP_VERSION = v0.14.3
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
