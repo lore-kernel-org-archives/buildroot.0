@@ -1,30 +1,30 @@
-From: mjp112 <mika.penttila@gmail.com>
-Date: Tue, 30 May 2017 20:53:56 -0700 (PDT)
-Subject: [Buildroot] glmark2 regression on mx6
-In-Reply-To: <CAOMZO5AyBmD+hmVGFf+PxT5girPaK13xOtKyj1W5XWPoQtAJ5g@mail.gmail.com>
-References: <CAOMZO5COcgkg7X1wpnqMfpD6=1YCqzmetMMCANrqbqA=a9moxA@mail.gmail.com>
- <CAAMH-yvDXjBz_PWh23SF1fb-vZHQK+r1zZqfXo-NFWNEby-DvA@mail.gmail.com>
- <CAOMZO5AyBmD+hmVGFf+PxT5girPaK13xOtKyj1W5XWPoQtAJ5g@mail.gmail.com>
-Message-ID: <1496202836112-166062.post@n4.nabble.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 31 May 2017 07:52:08 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.1.x series
+Message-ID: <20170531055208.2171-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am seeing the exaclty same results..
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-My setup is : imx6q kernel 4.12-rc3 and
-   OpenGL Information
-    GL_VENDOR:     etnaviv
-    GL_RENDERER:   Gallium 0.4 on Vivante GC2000 rev 5108
-    GL_VERSION:    OpenGL ES 2.0 Mesa 17.0.5
-
-Any ideas what is causing this? 
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/glmark2-regression-on-mx6-tp162973p166062.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5a0cd0382..c7a371052 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -226,7 +226,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+-	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.40"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.70"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.30"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+-- 
+2.11.0
