@@ -1,34 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 22:58:19 +0200
-Subject: [Buildroot] [git commit] configs/lego_ev3: bump U-Boot version
-Message-ID: <20170601202901.21FFF8294C@busybox.osuosl.org>
+Date: Wed, 31 May 2017 23:05:06 +0200
+Subject: [Buildroot] [git commit] grep: gettext is not mandatory
+Message-ID: <20170601202901.6B81D7FDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb47cdbee39ab54959b52caa3ba17a6007464a23
+commit: https://git.buildroot.net/buildroot/commit/?id=8276c96fc907e0a06f764ab550cf4071d2ac7901
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bumps U-Boot to the current stable version (2017.05).
+Even when locales are enabled, gettext is not mandatory to build
+grep, i.e the following defconfig builds fine:
 
-Signed-off-by: David Lechner <david@lechnology.com>
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.02-1096-g54a5333.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_GETTEXT=y
+BR2_PACKAGE_GREP=y
+
+However, if gettext provides libintl, it gets used. Therefore this
+commit moves gettext from a mandatory dependency to an optional
+dependency.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/lego_ev3_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/grep/Config.in | 1 -
+ package/grep/grep.mk   | 6 +++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
-index 4d764c5..0c1ab01 100644
---- a/configs/lego_ev3_defconfig
-+++ b/configs/lego_ev3_defconfig
-@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="legoev3"
+diff --git a/package/grep/Config.in b/package/grep/Config.in
+index 6427650..5b0471b 100644
+--- a/package/grep/Config.in
++++ b/package/grep/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GREP
+ 	bool "grep"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  The GNU regular expression matcher.
  
- # host
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 92a915c..5101dda 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -11,7 +11,11 @@ GREP_LICENSE = GPL-3.0+
+ GREP_LICENSE_FILES = COPYING
+ GREP_CONF_OPTS = --disable-perl-regexp \
+ 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
+-GREP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++
++# Can use libintl if available
++ifeq ($(BR2_PACKAGE_GETTEXT),y)
++GREP_DEPENDENCIES += gettext
++endif
+ 
+ # link with iconv if enabled
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
