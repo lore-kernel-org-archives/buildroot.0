@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 23:35:20 +0200
-Subject: [Buildroot] [git commit] php-imagick: bump version to 3.4.3
-Message-ID: <20170601202901.D49CD7FDDD@busybox.osuosl.org>
+Date: Wed, 31 May 2017 23:35:03 +0200
+Subject: [Buildroot] [git commit] php-geoip: bump version to 1.1.1
+Message-ID: <20170601202901.B8A217FDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95dfdd1396b853791d29a587e5c1fb12db587c8c
+commit: https://git.buildroot.net/buildroot/commit/?id=d005bacbb44cc156946ce821ad7c97fac02ceb3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And switch to the official PECL site.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-imagick/php-imagick.hash | 2 +-
- package/php-imagick/php-imagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php-geoip/php-geoip.hash | 2 +-
+ package/php-geoip/php-geoip.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
-index e991237..abb29d4 100644
---- a/package/php-imagick/php-imagick.hash
-+++ b/package/php-imagick/php-imagick.hash
+diff --git a/package/php-geoip/php-geoip.hash b/package/php-geoip/php-geoip.hash
+index 3729880..21e26c8 100644
+--- a/package/php-geoip/php-geoip.hash
++++ b/package/php-geoip/php-geoip.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 50bbc46e78cd6e1ea5d7660be1722258e60b1729483ca14b02da7cf9f5ed3e6a  imagick-3.4.3RC1.tgz
-+sha256 1f3c5b5eeaa02800ad22f506cd100e8889a66b2ec937e192eaaa30d74562567c  imagick-3.4.3.tgz
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index c8c2b85..9c47244 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
-@@ -4,7 +4,7 @@
+-sha256 63167b717f624580b93f3c6c050d8d64ebc6cbe1377069646eb387534c7a2f7e  php-geoip-ebb68228ad94298a305710f701b2ade9acff985d.tar.gz
++sha256 b2d05c03019d46135c249b5a7fa0dbd43ca5ee98aea8ed807bc7aa90ac8c0f06  geoip-1.1.1.tgz
+diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
+index 8f4e3bf..1853f7d 100644
+--- a/package/php-geoip/php-geoip.mk
++++ b/package/php-geoip/php-geoip.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PHP_IMAGICK_VERSION = 3.4.3RC1
-+PHP_IMAGICK_VERSION = 3.4.3
- PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
- PHP_IMAGICK_SITE = http://pecl.php.net/get
- PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_GEOIP_VERSION = ebb68228ad94298a305710f701b2ade9acff985d
+-PHP_GEOIP_SITE = $(call github,php7-extensions,ext-php7-geoip,$(PHP_GEOIP_VERSION))
++PHP_GEOIP_VERSION = 1.1.1
++PHP_GEOIP_SOURCE = geoip-$(PHP_GEOIP_VERSION).tgz
++PHP_GEOIP_SITE = https://pecl.php.net/get
+ PHP_GEOIP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ 	--with-geoip=$(STAGING_DIR)/usr
+ # phpize does the autoconf magic
