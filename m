@@ -1,51 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:18:13 +0200
-Subject: [Buildroot] [PATCH v2 4/4] ejabberd: bump to version 17.04
-In-Reply-To: <20170531163545.23552-4-johan.oudinet@gmail.com>
-References: <20170531163545.23552-1-johan.oudinet@gmail.com>
- <20170531163545.23552-4-johan.oudinet@gmail.com>
-Message-ID: <20170531211813.07198038@free-electrons.com>
+Date: Wed, 31 May 2017 21:28:18 +0200
+Subject: [Buildroot] [git commit branch/next] package/luaossl: new package
+Message-ID: <20170531192829.2639682A21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=26903e429e7b8b9214189f9f12134a5ae91a9361
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 31 May 2017 18:35:45 +0200, Johan Oudinet wrote:
-> There are new dependencies: erlang-p1-jiffy, erlang-p1-oauth2,
-> erlang-p1-stun, erlang-p1-tls, erlang-p1-utils, erlang-p1-xmpp
-> 
-> as well as two host dependencies on erlang-p1-utils and
-> erlang-p1-xmpp. Otherwise the compilation via rebar fails.
-> 
-> 4 patches have been refreshed and a new patch have been introduced to
-> tell rebar to use host dependencies instead of trying to download them.
-> Hopefully this patch could be drop in ejabberd 17.06.
-> 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> 
-> ---
-> Changes v1 -> v2:
->  - Describe in the commit log the new dependencies and patches
-> ---
->  .../0001-remove-make-targets-for-deps.patch        |  42 +------
->  ...002-remove-dependencies-from-rebar-config.patch | 129 +++++++++++----------
->  .../ejabberd/0006-fix-install-permissions.patch    |  42 +++----
->  package/ejabberd/0007-fix-ejabberdctl.patch        |  12 +-
->  .../0008-rebar-uses-host-dependencies.patch        |  33 ++++++
->  package/ejabberd/ejabberd.hash                     |   4 +-
->  package/ejabberd/ejabberd.mk                       |   6 +-
->  7 files changed, 136 insertions(+), 132 deletions(-)
->  create mode 100644 package/ejabberd/0008-rebar-uses-host-dependencies.patch
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/luaossl/Config.in    | 18 ++++++++++++++++++
+ package/luaossl/luaossl.hash |  2 ++
+ package/luaossl/luaossl.mk   | 14 ++++++++++++++
+ 5 files changed, 36 insertions(+)
 
-So this one lacks the changes in package/ejabberd/Config.in.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f86e5c6..5e8b695 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1039,6 +1039,7 @@ F:	board/grinn/
+ F:	configs/grinn_*
+ F:	package/argparse/
+ F:	package/easydbus/
++F:	package/luaossl/
+ F:	package/rs485conf/
+ F:	package/turbolua/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 1b150b2..c1c6e65 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -573,6 +573,7 @@ menu "Lua libraries/modules"
+ 	source "package/luafilesystem/Config.in"
+ 	source "package/luajson/Config.in"
+ 	source "package/lualogging/Config.in"
++	source "package/luaossl/Config.in"
+ 	source "package/luaposix/Config.in"
+ 	source "package/lua-resty-http/Config.in"
+ 	source "package/luasec/Config.in"
+diff --git a/package/luaossl/Config.in b/package/luaossl/Config.in
+new file mode 100644
+index 0000000..d8763e7
+--- /dev/null
++++ b/package/luaossl/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LUAOSSL
++	bool "luaossl"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_OPENSSL
++	help
++	  luaossl is a comprehensive binding to OpenSSL for Lua 5.1,
++	  5.2, and later.
++
++	  It includes support for certificate and key management,
++	  key generation, signature verification, and deep bindings
++	  to the distinguished name, alternative name, and X.509v3
++	  extension interfaces. It also binds OpenSSL's bignum, message
++	  digest, HMAC, cipher, and CSPRNG interfaces.
++
++	  http://25thandclement.com/~william/projects/luaossl.html
++
++comment "luaossl needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
+new file mode 100644
+index 0000000..ea9f5e3
+--- /dev/null
++++ b/package/luaossl/luaossl.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	51641d8971c19b2c65d3954ded12c306d4ecf6315ff8f1ec584e9a23ca998576  luaossl-20161214-0.src.rock
+diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
+new file mode 100644
+index 0000000..5bb3e82
+--- /dev/null
++++ b/package/luaossl/luaossl.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# luaossl
++#
++################################################################################
++
++LUAOSSL_VERSION_UPSTREAM = 20161214
++LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
++LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
++LUAOSSL_LICENSE = MIT
++LUAOSSL_LICENSE_FILES = $(LUAOSSL_SUBDIR)/LICENSE
++LUAOSSL_DEPENDENCIES = openssl
++
++$(eval $(luarocks-package))
