@@ -1,59 +1,34 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Wed, 31 May 2017 10:49:53 +0200
-Subject: [Buildroot] [PATCH 00/16] Bump ejabberd version to 17.04
-In-Reply-To: <20170531000435.0505e871@free-electrons.com>
-References: <20170530145211.15320-1-johan.oudinet@gmail.com>
- <20170531000435.0505e871@free-electrons.com>
-Message-ID: <CAJtjsKZEskDUE4by9rRfAwBPjrz1G-NwOacE+e_uUQ6C1x0ZAg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 May 2017 10:58:51 +0200
+Subject: [Buildroot] Cherry-pick 2530fe810ee7ece8da30e246af522e2e0be8e83f in
+	2017.02.x
+Message-ID: <20170531105851.0e4d6b37@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Peter,
 
-On Wed, May 31, 2017 at 12:04 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Thanks a lot for this work!
+I think you could cherry-pick commit
+2530fe810ee7ece8da30e246af522e2e0be8e83f into the 2017.02.x branch. It
+fixes a build failure of gdb with uclibc/musl caused by
+rpl_gettimeofday().
 
-You're welcome. It was indeed a bit more work than what I expected.
+I.e, on 2017.02.2, the following defconfig fails to build gdb:
 
->
-> On Tue, 30 May 2017 16:51:55 +0200, Johan Oudinet wrote:
->
->>   erlang-goldrush: bump version to 0.1.9
->>   erlang-lager: bump to version 3.2.1
->>   erlang-p1-utils: bump to version 1.0.8
->>   erlang-p1-zlib: bump to version 1.0.2
->>   erlang-p1-cache-tab: bump to version 1.0.7
->>   erlang-p1-iconv: bump to version 1.0.4
->>   erlang-p1-stringprep: bump to version 1.0.8
->>   erlang-p1-tls: bump to version 1.0.11
->>   erlang-p1-stun: bump to version 1.0.10
->>   erlang-p1-sip: bump to version 1.0.11
->>   erlang-p1-xml: bump to version 1.1.22
->>   erlang-p1-yaml: bump to version 1.0.9
->
-> I've applied those ones to the next branch, with some minor changes on a
-> few patches. I'll reply to the individual patches.
+BR2_aarch64=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PTHREAD_DEBUG=y
+BR2_PACKAGE_GDB=y
 
-Wow, you're fast. Thanks.
+With this commit cherry-picked, it builds fine.
 
->
->>   erlang-jiffy: New package
->>   erlang-p1-oauth: New package
->>   erlang-p1-xmpp: New package
->>   ejabberd: bump to version 17.04
->
-> I do have comments on those ones, so I'll reply to them.
+Thanks,
 
-Ok, I'll check your comments. I've also put Christophe in CC as he is
-the one who made those new packages (except for erlang-jiffy).
-
-> If you respin before the next branch gets merged back into master,
-> please base your next iteration on top of the latest next branch.
-
-Yeah, I've already done that for these patches.
+Thomas
 -- 
-Johan
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
