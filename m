@@ -1,87 +1,151 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:59:08 +0200
-Subject: [Buildroot] [git commit branch/next] package/fwup: bump version to
-	0.14.3
-Message-ID: <20170531195912.C3732827C7@busybox.osuosl.org>
+Date: Wed, 31 May 2017 21:56:27 +0200
+Subject: [Buildroot] [git commit branch/next] package/freetype: bump version
+	to 2.8
+Message-ID: <20170531195912.B7E04827F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=682405ec762bf5659b69e7c1f2852502dcf80372
+commit: https://git.buildroot.net/buildroot/commit/?id=fdabb80e4267f43f112d3c97c4692f5396b5fcf8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Added patch to fix uclibc build.
+Added md5 & sha1 hashes supplied by sourceforge mirror.
+
+Removed patches applied upstream:
+
+0001-psaux-Better-protect-flex-handling.patch
+http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=f958c48ee431bef8d4d466b40c9cb2d4dbcb7791
+
+0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
+http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=3774fc08b502c3e685afca098b6e8a195aded6a0
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fwup/0001-Fix-uclibc-build.patch | 36 ++++++++++++++++++++++++++++++++
- package/fwup/fwup.hash                   |  2 +-
- package/fwup/fwup.mk                     |  2 +-
- 3 files changed, 38 insertions(+), 2 deletions(-)
+ .../0001-psaux-Better-protect-flex-handling.patch  | 47 ----------------------
+ ...sobjs.c-t1_builder_close_contour-Add-safe.patch | 35 ----------------
+ package/freetype/freetype.hash                     |  5 ++-
+ package/freetype/freetype.mk                       |  2 +-
+ 4 files changed, 5 insertions(+), 84 deletions(-)
 
-diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
-new file mode 100644
-index 0000000..f7bf245
---- /dev/null
-+++ b/package/fwup/0001-Fix-uclibc-build.patch
-@@ -0,0 +1,36 @@
-+From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 28 May 2017 16:56:39 +0200
-+Subject: [PATCH 1/1] Fix uclibc build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Without sys/types.h the build breaks with errors like this:
-+
-+parse_file.h:28:5: error: unknown type name ???off_t???
-+     off_t *map;
-+     ^
-+
-+Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/sparse_file.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/sparse_file.h b/src/sparse_file.h
-+index 21bf5f9..579fbaa 100644
-+--- a/src/sparse_file.h
-++++ b/src/sparse_file.h
-+@@ -18,6 +18,7 @@
-+ #define SPARSE_FILE_H
-+ 
-+ #include <confuse.h>
-++#include <sys/types.h>
-+ 
-+ struct sparse_file_map
-+ {
-+-- 
-+2.11.0
-+
-diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-index e21eff0..8679dcb 100644
---- a/package/fwup/fwup.hash
-+++ b/package/fwup/fwup.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256   64c3a0ac38dc11c0c05b2588a89638cbc37f5552ac0f1c290f7ee5365f2bba49      fwup-v0.8.2.tar.gz
-+sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index 0c2b0f9..e47ecbe 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
+diff --git a/package/freetype/0001-psaux-Better-protect-flex-handling.patch b/package/freetype/0001-psaux-Better-protect-flex-handling.patch
+deleted file mode 100644
+index a59f5b3..0000000
+--- a/package/freetype/0001-psaux-Better-protect-flex-handling.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From f958c48ee431bef8d4d466b40c9cb2d4dbcb7791 Mon Sep 17 00:00:00 2001
+-From: Werner Lemberg <wl@gnu.org>
+-Date: Fri, 24 Mar 2017 09:15:10 +0100
+-Subject: [PATCH] [psaux] Better protect `flex' handling.
+-
+-Reported as
+-
+-  https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=935
+-
+-* src/psaux/t1decode.c (t1_decoder_parse_charstrings)
+-<callothersubr>: Since there is not a single flex operator but a
+-series of subroutine calls, malformed fonts can call arbitrary other
+-operators after the start of a flex, possibly adding points.  For
+-this reason we have to check the available number of points before
+-inserting a point.
+-
+-Fixes CVE-2017-8105
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+-diff --git a/src/psaux/t1decode.c b/src/psaux/t1decode.c
+-index af7b465e..7dd45135 100644
+---- a/src/psaux/t1decode.c
+-+++ b/src/psaux/t1decode.c
+-@@ -780,10 +780,19 @@
+-             /* point without adding any point to the outline    */
+-             idx = decoder->num_flex_vectors++;
+-             if ( idx > 0 && idx < 7 )
+-+            {
+-+              /* in malformed fonts it is possible to have other */
+-+              /* opcodes in the middle of a flex (which don't    */
+-+              /* increase `num_flex_vectors'); we thus have to   */
+-+              /* check whether we can add a point                */
+-+              if ( FT_SET_ERROR( t1_builder_check_points( builder, 1 ) ) )
+-+                goto Syntax_Error;
+-+
+-               t1_builder_add_point( builder,
+-                                     x,
+-                                     y,
+-                                     (FT_Byte)( idx == 3 || idx == 6 ) );
+-+            }
+-           }
+-           break;
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/freetype/0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch b/package/freetype/0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
+deleted file mode 100644
+index 1b9d90a..0000000
+--- a/package/freetype/0002-src-psaux-psobjs.c-t1_builder_close_contour-Add-safe.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 3774fc08b502c3e685afca098b6e8a195aded6a0 Mon Sep 17 00:00:00 2001
+-From: Werner Lemberg <wl@gnu.org>
+-Date: Sun, 26 Mar 2017 08:32:09 +0200
+-Subject: [PATCH] * src/psaux/psobjs.c (t1_builder_close_contour): Add safety
+- guard.
+-
+-Reported as
+-
+-  https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=941
+-
+-Fixes CVE-2017-8287
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-diff --git a/src/psaux/psobjs.c b/src/psaux/psobjs.c
+-index d18e821a..0baf8368 100644
+---- a/src/psaux/psobjs.c
+-+++ b/src/psaux/psobjs.c
+-@@ -1718,6 +1718,14 @@
+-     first = outline->n_contours <= 1
+-             ? 0 : outline->contours[outline->n_contours - 2] + 1;
+- 
+-+    /* in malformed fonts it can happen that a contour was started */
+-+    /* but no points were added                                    */
+-+    if ( outline->n_contours && first == outline->n_points )
+-+    {
+-+      outline->n_contours--;
+-+      return;
+-+    }
+-+
+-     /* We must not include the last point in the path if it */
+-     /* is located on the first point.                       */
+-     if ( outline->n_points > 1 )
+--- 
+-2.11.0
+-
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index b2cec04..beff858 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,2 +1,5 @@
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.8/
++md5 2413ac3eaf508ada019c63959ea81a92  freetype-2.8.tar.bz2
++sha1 42c6b1f733fe13a3eba135f5025b22cb68450f91  freetype-2.8.tar.bz2
+ # Locally calculated after checking pgp signature
+-sha256	3a3bb2c4e15ffb433f2032f50a5b5a92558206822e22bfe8cbe339af4aa82f88	freetype-2.7.1.tar.bz2
++sha256 a3c603ed84c3c2495f9c9331fe6bba3bb0ee65e06ec331e0a0fb52158291b40b  freetype-2.8.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 57f9b20..9a98b40 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FWUP_VERSION = v0.8.2
-+FWUP_VERSION = v0.14.3
- FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
- FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
+-FREETYPE_VERSION = 2.7.1
++FREETYPE_VERSION = 2.8
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
