@@ -1,32 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 May 2017 08:02:27 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.1.x series
-Message-ID: <20170531060309.2C1207FA85@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 May 2017 08:31:22 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-05-30
+Message-ID: <20170531063122.6EA0220F0D@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e0cb0c12dcbb0625b42481d7057b17d7bf4ad3d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Build statistics for 2017-05-30
+================================
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5a0cd03..c7a3710 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -226,7 +226,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.40"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.70"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.30"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+      successes : 234
+       failures : 6  
+       timeouts : 2  
+          TOTAL : 242
+
+Classification of failures by reason
+====================================
+
+                 mplayer-1.3.0 | 2 
+                  ffmpeg-3.3.1 | 1 
+       host-erlang-rebar-2.6.4 | 1 
+ make[2]: *** [all] Terminated | 1 
+                    mpv-0.25.0 | 1 
+                     php-7.1.5 | 1 
+               qt5webkit-5.8.0 | 1 
+
+
+Detail of failures
+===================
+
+      x86_64 |                   ffmpeg-3.3.1 | NOK | http://autobuild.buildroot.net/results/7ba485532fcab74928246a8f95dba7e5eea9d4a5 |     
+        i686 |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/e0561d1f5888593e2378caa1fc5cb8dc2d069768 |     
+        i686 |  make[2]: *** [all] Terminated | TIM | http://autobuild.buildroot.net/results/d07e88bf9f2c01953a95e60aaee1bb6fb492b2bf |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/cd83a0d4706e4920984d6b071eadf5ff9bccc254 |     
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/5bad003f1582a0fc0c93be2be6a942ea2f9f00c4 |     
+     aarch64 |                     mpv-0.25.0 | NOK | http://autobuild.buildroot.net/results/e0252930525768f5002e06a200387fbb139348ac |     
+        or1k |                      php-7.1.5 | NOK | http://autobuild.buildroot.net/results/d98702ec6ef83c0b3bfa39cd64d2403677e0fd7d | ORPH
+      mipsel |                qt5webkit-5.8.0 | NOK | http://autobuild.buildroot.net/results/62aee38cda0ea877f84ea54413d969427bac2111 |     
+
+-- 
+http://autobuild.buildroot.net
