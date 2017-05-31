@@ -1,41 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 May 2017 08:51:44 +0200
-Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.2.30
-Message-ID: <20170601202859.E7FFA82A3B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 May 2017 21:59:08 +0200
+Subject: [Buildroot] [git commit] package/fwup: bump version to 0.14.3
+Message-ID: <20170601202900.677F5818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcded15090db5796126bf2298ce1b2304a544a5d
+commit: https://git.buildroot.net/buildroot/commit/?id=682405ec762bf5659b69e7c1f2852502dcf80372
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Added patch to fix uclibc build.
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 46e7c5a..8c6e14e 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fwup/0001-Fix-uclibc-build.patch | 36 ++++++++++++++++++++++++++++++++
+ package/fwup/fwup.hash                   |  2 +-
+ package/fwup/fwup.mk                     |  2 +-
+ 3 files changed, 38 insertions(+), 2 deletions(-)
+
+diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
+new file mode 100644
+index 0000000..f7bf245
+--- /dev/null
++++ b/package/fwup/0001-Fix-uclibc-build.patch
+@@ -0,0 +1,36 @@
++From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 28 May 2017 16:56:39 +0200
++Subject: [PATCH 1/1] Fix uclibc build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Without sys/types.h the build breaks with errors like this:
++
++parse_file.h:28:5: error: unknown type name ???off_t???
++     off_t *map;
++     ^
++
++Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/sparse_file.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/sparse_file.h b/src/sparse_file.h
++index 21bf5f9..579fbaa 100644
++--- a/src/sparse_file.h
+++++ b/src/sparse_file.h
++@@ -18,6 +18,7 @@
++ #define SPARSE_FILE_H
++ 
++ #include <confuse.h>
+++#include <sys/types.h>
++ 
++ struct sparse_file_map
++ {
++-- 
++2.11.0
++
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index e21eff0..8679dcb 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
 @@ -1,2 +1,2 @@
- # Locally computed after checking signature
--sha256 ccfa9ffb7eb91e9e87c21c108324b911250c9ffa838bffb64b1caafadcb0f388  dovecot-2.2.29.1.tar.gz
-+sha256 126b07cbf4c313e8fc6df273282f60710b453a7a678f502fd45c2fa7192127f3  dovecot-2.2.30.tar.gz
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 3f71f68..ace8cf0 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256   64c3a0ac38dc11c0c05b2588a89638cbc37f5552ac0f1c290f7ee5365f2bba49      fwup-v0.8.2.tar.gz
++sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index 0c2b0f9..e47ecbe 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).29.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).30
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1
+-FWUP_VERSION = v0.8.2
++FWUP_VERSION = v0.14.3
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
