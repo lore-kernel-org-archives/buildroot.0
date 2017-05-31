@@ -1,31 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 May 2017 07:26:14 +0000
-Subject: [Buildroot] [Bug 9906] genimage: Disk full
-In-Reply-To: <bug-9906-163@https.bugs.busybox.net/>
-References: <bug-9906-163@https.bugs.busybox.net/>
-Message-ID: <bug-9906-163-6t4k1rfA7d@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 May 2017 09:28:43 +0200
+Subject: [Buildroot] [PATCH 14/16] erlang-p1-oauth: New package
+In-Reply-To: <20170530230314.GN2009@localhost>
+References: <20170530145211.15320-1-johan.oudinet@gmail.com>
+ <20170530145211.15320-15-johan.oudinet@gmail.com>
+ <20170531000857.331cee23@free-electrons.com>
+ <20170530230314.GN2009@localhost>
+Message-ID: <20170531092843.10015bf7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9906
+Hello,
 
---- Comment #3 from Alexander Klauer <Alexander.Klauer@itwm.fraunhofer.de> ---
-Just for the record, this was on version
-a6a4a8b2ef1fa747fdc79bc7bae0518417910f5d. And yes, I added the ramdisk option
-in the config, plus some other things.
+On Wed, 31 May 2017 01:03:14 +0200, Christophe Romain wrote:
 
-I agree that more than 32M bootfs might not be necessary for most people. The
-error simply came somewhat unexpected for me, since I "just changed the config"
-;-)
+> >> +ERLANG_P1_OAUTH_VERSION = 0.6.1
+> >> +ERLANG_P1_OAUTH_SITE = $(call github,processone,p1_oauth,$(ERLANG_P1_OAUTH_VERSION))  
+> >
+> >But I don't see how this URL (which is different) can actually work.
+> >Isn't there a typo here?  
+> 
+> oups, there is indeed a typo from me.
+> repository is p1_oauth2 of course
 
-Would it make sense to be able to configure the bootfs size via make nconfig
-just as the rootfs size? Or at least print some error message pointing to the
-appropriate genimage.cfg so that users don't have to dig for the size option?
-If so, I could open an enhancement bug.
+OK.
 
+> >Should the package be named erlang-p1-oauth2 instead ?  
+> 
+> I don't know what's your packaging naming convention.
+> rename is not mandatory from what i understand, but can make sense.
+> up to you guys.
+
+There is no "rename" involved since it's a new package. We generally
+prefer to use the upstream package name, so erlang-p1-oauth2 seems
+better here.
+
+Thanks!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
