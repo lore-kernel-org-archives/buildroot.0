@@ -1,18 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 23:05:06 +0200
-Subject: [Buildroot] [git commit branch/next] grep: gettext is not mandatory
-Message-ID: <20170531210510.8243282A48@busybox.osuosl.org>
+Date: Wed, 31 May 2017 23:04:30 +0200
+Subject: [Buildroot] [git commit branch/next] fetchmail: gettext is not
+	mandatory
+Message-ID: <20170531210510.64649819C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8276c96fc907e0a06f764ab550cf4071d2ac7901
+commit: https://git.buildroot.net/buildroot/commit/?id=e613c6eb4a79b0c4e79d099e12c35e27370ecb60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Even when locales are enabled, gettext is not mandatory to build
-grep, i.e the following defconfig builds fine:
+fetchmail, i.e the following defconfig builds fine:
 
 BR2_arm=y
 BR2_TOOLCHAIN_EXTERNAL=y
@@ -25,8 +26,7 @@ BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_INIT_NONE=y
 BR2_SYSTEM_BIN_SH_NONE=y
-BR2_PACKAGE_GETTEXT=y
-BR2_PACKAGE_GREP=y
+BR2_PACKAGE_FETCHMAIL=y
 
 However, if gettext provides libintl, it gets used. Therefore this
 commit moves gettext from a mandatory dependency to an optional
@@ -34,36 +34,38 @@ dependency.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/grep/Config.in | 1 -
- package/grep/grep.mk   | 6 +++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/fetchmail/Config.in    | 1 -
+ package/fetchmail/fetchmail.mk | 8 ++++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/grep/Config.in b/package/grep/Config.in
-index 6427650..5b0471b 100644
---- a/package/grep/Config.in
-+++ b/package/grep/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_GREP
- 	bool "grep"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
+index 1e829a0..7c14176 100644
+--- a/package/fetchmail/Config.in
++++ b/package/fetchmail/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_FETCHMAIL
+ 	select BR2_PACKAGE_CA_CERTIFICATES
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  The GNU regular expression matcher.
+ 	  Fetchmail - the mail-retrieval daemon
+ 	  Client daemon to move mail from POP and IMAP to your local computer
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 2c3786f..49ce0d3 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -20,8 +20,12 @@ FETCHMAIL_CONF_OPTS = \
  
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 92a915c..5101dda 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -11,7 +11,11 @@ GREP_LICENSE = GPL-3.0+
- GREP_LICENSE_FILES = COPYING
- GREP_CONF_OPTS = --disable-perl-regexp \
- 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
--GREP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ FETCHMAIL_DEPENDENCIES = \
+ 	ca-certificates \
+-	openssl \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++	openssl
 +
-+# Can use libintl if available
++# libintl is an optional dependency
 +ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+GREP_DEPENDENCIES += gettext
++FETCHMAIL_DEPENDENCIES += gettext
 +endif
  
- # link with iconv if enabled
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ # fetchmailconf.py script is not (yet) python3-compliant.
+ # Prevent the pyc-compilation with python-3 from failing by removing this
