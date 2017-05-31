@@ -1,86 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:59:08 +0200
-Subject: [Buildroot] [git commit] package/fwup: bump version to 0.14.3
-Message-ID: <20170601202900.677F5818F2@busybox.osuosl.org>
+Date: Wed, 31 May 2017 22:00:51 +0200
+Subject: [Buildroot] [git commit] package/bdwgc: fix uclibc build after bump
+	to 7.6.0
+Message-ID: <20170601202900.99E0C818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=682405ec762bf5659b69e7c1f2852502dcf80372
+commit: https://git.buildroot.net/buildroot/commit/?id=9b04ae71c5e4c3be32a78f67cae963c7b1d3b03b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added patch to fix uclibc build.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fwup/0001-Fix-uclibc-build.patch | 36 ++++++++++++++++++++++++++++++++
- package/fwup/fwup.hash                   |  2 +-
- package/fwup/fwup.mk                     |  2 +-
- 3 files changed, 38 insertions(+), 2 deletions(-)
+ package/bdwgc/0002-Fix-uClibc-build.patch | 42 +++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/fwup/0001-Fix-uclibc-build.patch b/package/fwup/0001-Fix-uclibc-build.patch
+diff --git a/package/bdwgc/0002-Fix-uClibc-build.patch b/package/bdwgc/0002-Fix-uClibc-build.patch
 new file mode 100644
-index 0000000..f7bf245
+index 0000000..55896eb
 --- /dev/null
-+++ b/package/fwup/0001-Fix-uclibc-build.patch
-@@ -0,0 +1,36 @@
-+From 0301cb4ffbf4705316ba017516745a535d66d552 Mon Sep 17 00:00:00 2001
++++ b/package/bdwgc/0002-Fix-uClibc-build.patch
+@@ -0,0 +1,42 @@
++From 8d3caf00db5d71ec19f03fbf96cecf6f70b4e868 Mon Sep 17 00:00:00 2001
 +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 28 May 2017 16:56:39 +0200
-+Subject: [PATCH 1/1] Fix uclibc build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++Date: Sun, 28 May 2017 20:21:09 +0200
++Subject: [PATCH] Fix uClibc build
 +
-+Without sys/types.h the build breaks with errors like this:
++uClibc defines __GLIBC__ but does not contain libc-version.h leading to
++a build error:
 +
-+parse_file.h:28:5: error: unknown type name ???off_t???
-+     off_t *map;
-+     ^
++./include/private/gcconfig.h:1426:72: fatal error: gnu/libc-version.h: No such file or directory
 +
-+Patch sent upstream: https://github.com/fhunleth/fwup/pull/61
++Patch sent upstream: https://github.com/ivmai/bdwgc/pull/164
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ src/sparse_file.h | 1 +
-+ 1 file changed, 1 insertion(+)
++ include/private/gcconfig.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/sparse_file.h b/src/sparse_file.h
-+index 21bf5f9..579fbaa 100644
-+--- a/src/sparse_file.h
-++++ b/src/sparse_file.h
-+@@ -18,6 +18,7 @@
-+ #define SPARSE_FILE_H
-+ 
-+ #include <confuse.h>
-++#include <sys/types.h>
-+ 
-+ struct sparse_file_map
-+ {
++diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
++index d7912e9e..bf17dd63 100644
++--- a/include/private/gcconfig.h
+++++ b/include/private/gcconfig.h
++@@ -1442,7 +1442,7 @@
++ #         define GC_PREFETCH_FOR_WRITE(x) \
++             __asm__ __volatile__ ("prefetchw %0" : : "m"(*(char *)(x)))
++ #       endif
++-#       if defined(__GLIBC__)
+++#       if defined(__GLIBC__) && !defined(__UCLIBC__)
++           /* Workaround lock elision implementation for some glibc.     */
++ #         define GLIBC_2_19_TSX_BUG
++ #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
++@@ -2455,7 +2455,7 @@
++           /* FIXME: This seems to be fixed in GLibc v2.14.              */
++ #         define GETCONTEXT_FPU_EXCMASK_BUG
++ #       endif
++-#       if defined(__GLIBC__)
+++#       if defined(__GLIBC__) && !defined(__UCLIBC__)
++           /* Workaround lock elision implementation for some glibc.     */
++ #         define GLIBC_2_19_TSX_BUG
++ #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
 +-- 
 +2.11.0
 +
-diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-index e21eff0..8679dcb 100644
---- a/package/fwup/fwup.hash
-+++ b/package/fwup/fwup.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256   64c3a0ac38dc11c0c05b2588a89638cbc37f5552ac0f1c290f7ee5365f2bba49      fwup-v0.8.2.tar.gz
-+sha256 cf2e6ff729c21bc000dbe008211cf9d4901be9b42c82a06e4068deb638ea8f6e  fwup-v0.14.3.tar.gz
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index 0c2b0f9..e47ecbe 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FWUP_VERSION = v0.8.2
-+FWUP_VERSION = v0.14.3
- FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
- FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
