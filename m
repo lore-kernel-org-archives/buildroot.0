@@ -1,29 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 23:36:16 +0200
-Subject: [Buildroot] [PATCH next 2/8] php-amqp: bump version to 1.9.0
-In-Reply-To: <20170512124521.4619-2-Vincent.Riera@imgtec.com>
-References: <20170512124521.4619-1-Vincent.Riera@imgtec.com>
- <20170512124521.4619-2-Vincent.Riera@imgtec.com>
-Message-ID: <20170531233616.7a2694f1@free-electrons.com>
+From: Alexandre Esse <alexandre.esse.dev@gmail.com>
+Date: Wed, 31 May 2017 23:40:45 +0200
+Subject: [Buildroot] [PATCH 1/1] imx-uuc: fix start-stop-daemon stop failure
+Message-ID: <1496266845-11307-1-git-send-email-alexandre.esse.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The daemon service script associated with imx-uuc failed to stop the daemon 
+since the PID of the process wasn't stored at start time.
 
-On Fri, 12 May 2017 13:45:15 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/php-amqp/php-amqp.hash | 2 +-
->  package/php-amqp/php-amqp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Adding -m option allowed to create the uuc.pid file as expected.
 
-Patches 2 to 8 applied to the next branch. Thanks!
+Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
+---
+ package/freescale-imx/imx-uuc/S80imx-uuc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/freescale-imx/imx-uuc/S80imx-uuc b/package/freescale-imx/imx-uuc/S80imx-uuc
+index 8a02f88..9a92c98 100644
+--- a/package/freescale-imx/imx-uuc/S80imx-uuc
++++ b/package/freescale-imx/imx-uuc/S80imx-uuc
+@@ -6,7 +6,7 @@ DAEMON=/usr/bin/$NAME
+ case "$1" in
+     start)
+ 	printf "Starting $NAME: "
+-	start-stop-daemon -S -q -b -p /var/run/${NAME}.pid -x $DAEMON
++	start-stop-daemon -S -q -b -m -p /var/run/${NAME}.pid -x $DAEMON
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     stop)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
