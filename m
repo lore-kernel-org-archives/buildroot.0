@@ -1,91 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:14:12 +0200
-Subject: [Buildroot] [git commit] erlang-jiffy: new package
-Message-ID: <20170601202900.12BFC818F2@busybox.osuosl.org>
+Date: Wed, 31 May 2017 21:31:30 +0200
+Subject: [Buildroot] [git commit] mosh: bump to version 1.3.0
+Message-ID: <20170601202900.3C09E818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ded9546447d649b1b26546944da1725e5639faed
+commit: https://git.buildroot.net/buildroot/commit/?id=08660e224f60cc9da876eacda1d8d7322704c2f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Gon??alo Salazar <glbsalazar@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/erlang-jiffy/Config.in         | 10 ++++++++++
- package/erlang-jiffy/erlang-jiffy.hash |  2 ++
- package/erlang-jiffy/erlang-jiffy.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ package/mosh/Config.in | 2 +-
+ package/mosh/mosh.hash | 4 ++--
+ package/mosh/mosh.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a8fa143..231e733 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -861,6 +861,7 @@ F:	package/python-libconfig/
- N:	Johan Oudinet <johan.oudinet@gmail.com>
- F:	package/ejabberd/
- F:	package/erlang-goldrush/
-+F:	package/erlang-jiffy/
- F:	package/erlang-lager/
- F:	package/erlang-p1-cache-tab/
- F:	package/erlang-p1-iconv/
-diff --git a/package/Config.in b/package/Config.in
-index 7991353..2b53add 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -510,6 +510,7 @@ menu "Interpreter languages and scripting"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
- 	source "package/erlang-goldrush/Config.in"
-+	source "package/erlang-jiffy/Config.in"
- 	source "package/erlang-lager/Config.in"
- 	source "package/erlang-p1-cache-tab/Config.in"
- 	source "package/erlang-p1-iconv/Config.in"
-diff --git a/package/erlang-jiffy/Config.in b/package/erlang-jiffy/Config.in
-new file mode 100644
-index 0000000..d65f42c
---- /dev/null
-+++ b/package/erlang-jiffy/Config.in
-@@ -0,0 +1,10 @@
-+comment "erlang-jiffy needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_ERLANG_JIFFY
-+	bool "erlang-jiffy"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  JSON NIFs for Erlang.
-+
-+	  https://github.com/davisp/jiffy
-diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
-new file mode 100644
-index 0000000..1f83e27
---- /dev/null
-+++ b/package/erlang-jiffy/erlang-jiffy.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 7d1054c475c82c626de3ad57201a7fc51da38667c8a7502149eb751edc6b601d erlang-jiffy-0.14.8.tar.gz
-diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
-new file mode 100644
-index 0000000..674c80f
---- /dev/null
-+++ b/package/erlang-jiffy/erlang-jiffy.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# erlang-jiffy
-+#
-+################################################################################
-+
-+ERLANG_JIFFY_VERSION = 0.14.8
-+ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
-+ERLANG_JIFFY_LICENSE = MIT (core), \
-+	BSD-3-Clause (Google double conversion library), \
-+	BSD-3-Clause (tests)
-+ERLANG_JIFFY_LICENSE_FILES = LICENSE
-+
-+$(eval $(rebar-package))
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index e0ff2cf..96c3b94 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -24,4 +24,4 @@ config BR2_PACKAGE_MOSH
+ 	  allows roaming, and provides speculative local echo and line editing
+ 	  of user keystrokes.
+ 
+-	  https://mosh.mit.edu
++	  https://mosh.org
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
+index 31f59c7..4dae51d 100644
+--- a/package/mosh/mosh.hash
++++ b/package/mosh/mosh.hash
+@@ -1,2 +1,2 @@
+-# From https://mailman.mit.edu/pipermail/mosh-users/2016-August/000330.html
+-sha256 7e82b7fbfcc698c70f5843bb960dadb8e7bd7ac1d4d2151c9d979372ea850e85 mosh-1.2.6.tar.gz
++# From https://mailman.mit.edu/pipermail/mosh-users/2017-March/000340.html
++sha256 320e12f461e55d71566597976bd9440ba6c5265fa68fbf614c6f1c8401f93376 mosh-1.3.0.tar.gz
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index 0da9105..06502f6 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MOSH_VERSION = 1.2.6
+-MOSH_SITE = https://mosh.mit.edu
++MOSH_VERSION = 1.3.0
++MOSH_SITE = https://mosh.org
+ MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
+ MOSH_LICENSE = GPL-3.0+ with exception
+ MOSH_LICENSE_FILES = COPYING COPYING.iOS
