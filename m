@@ -1,139 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:16:02 +0200
-Subject: [Buildroot] [git commit] erlang-p1-xmpp: new package
-Message-ID: <20170601202900.20F2A82A3B@busybox.osuosl.org>
+Date: Wed, 31 May 2017 21:14:12 +0200
+Subject: [Buildroot] [git commit] erlang-jiffy: new package
+Message-ID: <20170601202900.12BFC818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=704cca3ef5e0f4eb384c3fdc4b367252c3ed16df
+commit: https://git.buildroot.net/buildroot/commit/?id=ded9546447d649b1b26546944da1725e5639faed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                                             |  1 +
- package/Config.in                                      |  1 +
- package/erlang-p1-xmpp/0001-fix-includes.patch         | 16 ++++++++++++++++
- .../0002-remove-dependencies-from-rebar-config.patch   | 18 ++++++++++++++++++
- package/erlang-p1-xmpp/Config.in                       |  8 ++++++++
- package/erlang-p1-xmpp/erlang-p1-xmpp.hash             |  2 ++
- package/erlang-p1-xmpp/erlang-p1-xmpp.mk               | 16 ++++++++++++++++
- 7 files changed, 62 insertions(+)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/erlang-jiffy/Config.in         | 10 ++++++++++
+ package/erlang-jiffy/erlang-jiffy.hash |  2 ++
+ package/erlang-jiffy/erlang-jiffy.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 231e733..f86e5c6 100644
+index a8fa143..231e733 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -871,6 +871,7 @@ F:	package/erlang-p1-stun/
- F:	package/erlang-p1-tls/
- F:	package/erlang-p1-utils/
- F:	package/erlang-p1-xml/
-+F:	package/erlang-p1-xmpp/
- F:	package/erlang-p1-yaml/
- F:	package/erlang-p1-zlib/
- F:	package/nginx-dav-ext/
+@@ -861,6 +861,7 @@ F:	package/python-libconfig/
+ N:	Johan Oudinet <johan.oudinet@gmail.com>
+ F:	package/ejabberd/
+ F:	package/erlang-goldrush/
++F:	package/erlang-jiffy/
+ F:	package/erlang-lager/
+ F:	package/erlang-p1-cache-tab/
+ F:	package/erlang-p1-iconv/
 diff --git a/package/Config.in b/package/Config.in
-index 2b53add..1b150b2 100644
+index 7991353..2b53add 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -520,6 +520,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-tls/Config.in"
- 	source "package/erlang-p1-utils/Config.in"
- 	source "package/erlang-p1-xml/Config.in"
-+	source "package/erlang-p1-xmpp/Config.in"
- 	source "package/erlang-p1-yaml/Config.in"
- 	source "package/erlang-p1-zlib/Config.in"
- endmenu
-diff --git a/package/erlang-p1-xmpp/0001-fix-includes.patch b/package/erlang-p1-xmpp/0001-fix-includes.patch
+@@ -510,6 +510,7 @@ menu "Interpreter languages and scripting"
+ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
+ 	source "package/erlang-goldrush/Config.in"
++	source "package/erlang-jiffy/Config.in"
+ 	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-p1-cache-tab/Config.in"
+ 	source "package/erlang-p1-iconv/Config.in"
+diff --git a/package/erlang-jiffy/Config.in b/package/erlang-jiffy/Config.in
 new file mode 100644
-index 0000000..d0a267b
+index 0000000..d65f42c
 --- /dev/null
-+++ b/package/erlang-p1-xmpp/0001-fix-includes.patch
-@@ -0,0 +1,16 @@
-+Without this patch, rebar fails to find include file fxml.hrl.
++++ b/package/erlang-jiffy/Config.in
+@@ -0,0 +1,10 @@
++comment "erlang-jiffy needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 +
-+Signed-off-by: Christophe Romain <cromain@process-one.net>
-+
-+diff --git a/include/xmpp.hrl b/include/xmpp.hrl
-+index afa5f61..678858e 100644
-+--- a/include/xmpp.hrl
-++++ b/include/xmpp.hrl
-+@@ -26,7 +26,7 @@
-+ -include("ns.hrl").
-+ -include("jid.hrl").
-+ -include("xmpp_codec.hrl").
-+--include("fxml.hrl").
-++-include_lib("p1_xml/include/fxml.hrl").
-+
-+ -type stanza() :: iq() | presence() | message().
-diff --git a/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch b/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch
-new file mode 100644
-index 0000000..fa5c269
---- /dev/null
-+++ b/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch
-@@ -0,0 +1,18 @@
-+Without this patch, dependencies would be downloaded and compiled
-+by rebar at build time.
-+
-+Signed-off-by: Christophe Romain <cromain@process-one.net>
-+
-+diff --git a/rebar.config b/rebar.config
-+index 79494b7..8d769f1 100644
-+--- a/rebar.config
-++++ b/rebar.config
-+@@ -24,9 +24,6 @@
-+ 	    {i, "../fast_xml/include"},
-+ 	    {i, "deps/fast_xml/include"}]}.
-+
-+-{deps, [{fast_xml, ".*", {git, "https://github.com/processone/fast_xml", {tag, "1.1.22"}}},
-+-	{stringprep, ".*", {git, "https://github.com/processone/stringprep", {tag, "1.0.8"}}}]}.
-+-
-+ {cover_enabled, true}.
-+ {cover_export_enabled, true}.
-diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
-new file mode 100644
-index 0000000..1d518e2
---- /dev/null
-+++ b/package/erlang-p1-xmpp/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_ERLANG_P1_XMPP
-+	bool "erlang-p1-xmpp"
-+	select BR2_PACKAGE_ERLANG_P1_XML
-+	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
++config BR2_PACKAGE_ERLANG_JIFFY
++	bool "erlang-jiffy"
++	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  XMPP library for Erlang.
++	  JSON NIFs for Erlang.
 +
-+	  https://github.com/processone/xmpp
-diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.hash b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
++	  https://github.com/davisp/jiffy
+diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
 new file mode 100644
-index 0000000..f245c84
+index 0000000..1f83e27
 --- /dev/null
-+++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
++++ b/package/erlang-jiffy/erlang-jiffy.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 e7b5db5ab6204f5bc6ebf91a183ebeae2b43ca6372dd2506599a8e8168a99c50 erlang-p1-xmpp-1.1.9.tar.gz
-diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
++# Locally computed
++sha256 7d1054c475c82c626de3ad57201a7fc51da38667c8a7502149eb751edc6b601d erlang-jiffy-0.14.8.tar.gz
+diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
 new file mode 100644
-index 0000000..149d8bc
+index 0000000..674c80f
 --- /dev/null
-+++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
-@@ -0,0 +1,16 @@
++++ b/package/erlang-jiffy/erlang-jiffy.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# erlang-p1-xmpp
++# erlang-jiffy
 +#
 +################################################################################
 +
-+ERLANG_P1_XMPP_VERSION = 1.1.9
-+ERLANG_P1_XMPP_SITE = $(call github,processone,xmpp,$(ERLANG_P1_XMPP_VERSION))
-+ERLANG_P1_XMPP_LICENSE = Apache-2.0
-+ERLANG_P1_XMPP_LICENSE_FILES = LICENSE.txt
-+ERLANG_P1_XMPP_INSTALL_STAGING = YES
-+ERLANG_P1_XMPP_DEPENDENCIES = erlang-p1-xml erlang-p1-stringprep \
-+	host-erlang-p1-xml
++ERLANG_JIFFY_VERSION = 0.14.8
++ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
++ERLANG_JIFFY_LICENSE = MIT (core), \
++	BSD-3-Clause (Google double conversion library), \
++	BSD-3-Clause (tests)
++ERLANG_JIFFY_LICENSE_FILES = LICENSE
 +
 +$(eval $(rebar-package))
-+$(eval $(host-rebar-package))
