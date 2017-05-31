@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 22:38:21 +0200
-Subject: [Buildroot] [git commit] package/monolite: bump to version 156
-Message-ID: <20170601202900.E11098294C@busybox.osuosl.org>
+Date: Wed, 31 May 2017 22:25:31 +0200
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.3.0.7
+Message-ID: <20170601202900.C8EBF8294C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aa50798d1a24470b59f83c1be09c4468b7ef372
+commit: https://git.buildroot.net/buildroot/commit/?id=bf422099f719204945bc2cffa0a96e3570acb96b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps monolite to version 156.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 621e5e4..09f9554 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 5b83aa4..bfdf055 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
 @@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 c01e9ba37d8d8f9ef68e08170b2582cc710a8a77756e2412dff298a39b3c4d2b  monolite-149-latest.tar.gz
-+sha256 2cdf6cff1d82d76412461a4c8a3616bb2aa1e835fb55479941662dec3799c924  monolite-156-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 6b982b3..73f2352 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
+ # Locally computed
+-sha256 a3e512e93cb555601fd207d914d7c5fe981d66d6ebb5821ecdf5dea738c2fb14  tor-0.3.0.6.tar.gz
++sha256 9640c4448ef3cad7237c68ed6984e705db8fb2b9d6bb74c8815d01bb06527d02  tor-0.3.0.7.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index e6cb2b7..305f6bf 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONOLITE_VERSION = 149
-+MONOLITE_VERSION = 156
- MONOLITE_SITE = http://download.mono-project.com/monolite/
- MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPL-2.0 or commercial
+-TOR_VERSION = 0.3.0.6
++TOR_VERSION = 0.3.0.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
