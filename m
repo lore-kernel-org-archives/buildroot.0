@@ -1,52 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 22:58:25 +0200
-Subject: [Buildroot] [git commit branch/next] configs/lego_ev3: use genimage
-	to rename uImage file
-Message-ID: <20170531205846.80D217FA85@busybox.osuosl.org>
+Date: Wed, 31 May 2017 22:58:19 +0200
+Subject: [Buildroot] [git commit branch/next] configs/lego_ev3: bump U-Boot
+	version
+Message-ID: <20170531205846.77DBA82281@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13a4d5e580f67b9ebda548b818dd6fea226851a6
+commit: https://git.buildroot.net/buildroot/commit/?id=fb47cdbee39ab54959b52caa3ba17a6007464a23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This uses a genimage feature to rename the uImage file instead
-of manually creating a symlink in the post-image script.
+This bumps U-Boot to the current stable version (2017.05).
 
 Signed-off-by: David Lechner <david@lechnology.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/lego/ev3/genimage.cfg  | 4 ++--
- board/lego/ev3/post-image.sh | 2 --
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ configs/lego_ev3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/lego/ev3/genimage.cfg b/board/lego/ev3/genimage.cfg
-index 3568295..0ec580c 100644
---- a/board/lego/ev3/genimage.cfg
-+++ b/board/lego/ev3/genimage.cfg
-@@ -34,8 +34,8 @@ image flash.bin {
+diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
+index 4d764c5..0c1ab01 100644
+--- a/configs/lego_ev3_defconfig
++++ b/configs/lego_ev3_defconfig
+@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="legoev3"
  
- image boot.vfat {
- 	vfat {
--		files = {
--			"uImage"
-+		file uImage {
-+			image = "uImage.da850-lego-ev3"
- 		}
- 	}
- 	size = 16M
-diff --git a/board/lego/ev3/post-image.sh b/board/lego/ev3/post-image.sh
-index 553d27a..81626dc 100755
---- a/board/lego/ev3/post-image.sh
-+++ b/board/lego/ev3/post-image.sh
-@@ -4,8 +4,6 @@ BOARD_DIR="$(dirname $0)"
- GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
--ln -sf "uImage.da850-lego-ev3" "${BINARIES_DIR}/uImage"
--
- rm -rf "${GENIMAGE_TMP}"
- 
- genimage \
+ # host
