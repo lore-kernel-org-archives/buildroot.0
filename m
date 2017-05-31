@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 23:35:14 +0200
-Subject: [Buildroot] [git commit] php-gnupg: bump version to 1.4.0
-Message-ID: <20170601202901.C6B967FDDD@busybox.osuosl.org>
+Date: Wed, 31 May 2017 23:35:20 +0200
+Subject: [Buildroot] [git commit] php-imagick: bump version to 3.4.3
+Message-ID: <20170601202901.D49CD7FDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dda4fa63f2a51591c51215f49fa2627fd45b11f6
+commit: https://git.buildroot.net/buildroot/commit/?id=95dfdd1396b853791d29a587e5c1fb12db587c8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And switch to the official PECL site.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-gnupg/php-gnupg.hash | 2 +-
- package/php-gnupg/php-gnupg.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/php-imagick/php-imagick.hash | 2 +-
+ package/php-imagick/php-imagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
-index f0654b5..4185665 100644
---- a/package/php-gnupg/php-gnupg.hash
-+++ b/package/php-gnupg/php-gnupg.hash
+diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
+index e991237..abb29d4 100644
+--- a/package/php-imagick/php-imagick.hash
++++ b/package/php-imagick/php-imagick.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 6f1a4b5a95fe501519de76d66602e46290cc452fc48f3a5ec2eacaffe68d9a01  php-gnupg-30fab6eaf9eb61c65b3b46987442be058cbd7823.tar.gz
-+sha256 35e16bee11345a7d6bf57bea3cadf45e371ad1ed4e0218b0c06f6f637e4e1772  gnupg-1.4.0.tgz
-diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
-index e595cd3..55772aa 100644
---- a/package/php-gnupg/php-gnupg.mk
-+++ b/package/php-gnupg/php-gnupg.mk
-@@ -4,8 +4,9 @@
+-sha256 50bbc46e78cd6e1ea5d7660be1722258e60b1729483ca14b02da7cf9f5ed3e6a  imagick-3.4.3RC1.tgz
++sha256 1f3c5b5eeaa02800ad22f506cd100e8889a66b2ec937e192eaaa30d74562567c  imagick-3.4.3.tgz
+diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
+index c8c2b85..9c47244 100644
+--- a/package/php-imagick/php-imagick.mk
++++ b/package/php-imagick/php-imagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_GNUPG_VERSION = 30fab6eaf9eb61c65b3b46987442be058cbd7823
--PHP_GNUPG_SITE = $(call github,Sean-Der,pecl-encryption-gnupg,$(PHP_GNUPG_VERSION))
-+PHP_GNUPG_VERSION = 1.4.0
-+PHP_GNUPG_SOURCE = gnupg-$(PHP_GNUPG_VERSION).tgz
-+PHP_GNUPG_SITE = https://pecl.php.net/get
- # phpize does the autoconf magic
- PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
- PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_IMAGICK_VERSION = 3.4.3RC1
++PHP_IMAGICK_VERSION = 3.4.3
+ PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
+ PHP_IMAGICK_SITE = http://pecl.php.net/get
+ PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
