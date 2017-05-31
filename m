@@ -1,98 +1,122 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Wed, 31 May 2017 18:35:42 +0200
-Subject: [Buildroot] [PATCH v2 1/4] erlang-jiffy: New package
-Message-ID: <20170531163545.23552-1-johan.oudinet@gmail.com>
+Date: Wed, 31 May 2017 18:35:43 +0200
+Subject: [Buildroot] [PATCH v2 2/4] erlang-p1-oauth2: New package
+In-Reply-To: <20170531163545.23552-1-johan.oudinet@gmail.com>
+References: <20170531163545.23552-1-johan.oudinet@gmail.com>
+Message-ID: <20170531163545.23552-2-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-JSON NIFs for Erlang.
-https://github.com/davisp/jiffy
+OAuth2 library for Erlang
+https://github.com/processone/p1_oauth2
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 
 ---
 Changes v1 -> v2:
-  - Fix license info (suggested by Thomas)
-  - Add an entry to the DEVELOPERS file
+ - Fix github URL and rename the package accordingly (suggested by Thomas)
+ - Add en entry to the DEVELOPERS file
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/erlang-jiffy/Config.in         | 10 ++++++++++
- package/erlang-jiffy/erlang-jiffy.hash |  2 ++
- package/erlang-jiffy/erlang-jiffy.mk   | 13 +++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/erlang-jiffy/Config.in
- create mode 100644 package/erlang-jiffy/erlang-jiffy.hash
- create mode 100644 package/erlang-jiffy/erlang-jiffy.mk
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/ejabberd/Config.in                     |  8 +++++++-
+ package/erlang-p1-oauth2/Config.in             |  6 ++++++
+ package/erlang-p1-oauth2/erlang-p1-oauth2.hash |  2 ++
+ package/erlang-p1-oauth2/erlang-p1-oauth2.mk   | 13 +++++++++++++
+ 6 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 package/erlang-p1-oauth2/Config.in
+ create mode 100644 package/erlang-p1-oauth2/erlang-p1-oauth2.hash
+ create mode 100644 package/erlang-p1-oauth2/erlang-p1-oauth2.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a8fa14365c..231e73323b 100644
+index 231e73323b..269fd79a21 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -861,6 +861,7 @@ F:	package/python-libconfig/
- N:	Johan Oudinet <johan.oudinet@gmail.com>
- F:	package/ejabberd/
- F:	package/erlang-goldrush/
-+F:	package/erlang-jiffy/
+@@ -865,6 +865,7 @@ F:	package/erlang-jiffy/
  F:	package/erlang-lager/
  F:	package/erlang-p1-cache-tab/
  F:	package/erlang-p1-iconv/
++F:	package/erlang-p1-oauth2/
+ F:	package/erlang-p1-sip/
+ F:	package/erlang-p1-stringprep/
+ F:	package/erlang-p1-stun/
 diff --git a/package/Config.in b/package/Config.in
-index 7991353f99..2b53add300 100644
+index 2b53add300..a82ed039b8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -510,6 +510,7 @@ menu "Interpreter languages and scripting"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
- 	source "package/erlang-goldrush/Config.in"
-+	source "package/erlang-jiffy/Config.in"
+@@ -514,6 +514,7 @@ menu "Erlang libraries/modules"
  	source "package/erlang-lager/Config.in"
  	source "package/erlang-p1-cache-tab/Config.in"
  	source "package/erlang-p1-iconv/Config.in"
-diff --git a/package/erlang-jiffy/Config.in b/package/erlang-jiffy/Config.in
++	source "package/erlang-p1-oauth2/Config.in"
+ 	source "package/erlang-p1-sip/Config.in"
+ 	source "package/erlang-p1-stringprep/Config.in"
+ 	source "package/erlang-p1-stun/Config.in"
+diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
+index 5d176c3af6..a7542cd12d 100644
+--- a/package/ejabberd/Config.in
++++ b/package/ejabberd/Config.in
+@@ -1,13 +1,19 @@
+ config BR2_PACKAGE_EJABBERD
+ 	bool "ejabberd"
+ 	depends on BR2_PACKAGE_ERLANG
+-	depends on BR2_INSTALL_LIBSTDCPP # stringprep
++	depends on BR2_INSTALL_LIBSTDCPP # jiffy, stringprep
++	select BR2_PACKAGE_ERLANG_JIFFY
+ 	select BR2_PACKAGE_ERLANG_LAGER
+ 	select BR2_PACKAGE_ERLANG_P1_CACHE_TAB
+ 	select BR2_PACKAGE_ERLANG_P1_ICONV
++	select BR2_PACKAGE_ERLANG_P1_OAUTH2
+ 	select BR2_PACKAGE_ERLANG_P1_SIP
+ 	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
++	select BR2_PACKAGE_ERLANG_P1_STUN
++	select BR2_PACKAGE_ERLANG_P1_TLS
++	select BR2_PACKAGE_ERLANG_P1_UTILS
+ 	select BR2_PACKAGE_ERLANG_P1_XML
++	select BR2_PACKAGE_ERLANG_P1_XMPP
+ 	select BR2_PACKAGE_ERLANG_P1_YAML
+ 	select BR2_PACKAGE_ERLANG_P1_ZLIB
+ 	select BR2_PACKAGE_GETENT
+diff --git a/package/erlang-p1-oauth2/Config.in b/package/erlang-p1-oauth2/Config.in
 new file mode 100644
-index 0000000000..d65f42c9fd
+index 0000000000..32e79ec99a
 --- /dev/null
-+++ b/package/erlang-jiffy/Config.in
-@@ -0,0 +1,10 @@
-+comment "erlang-jiffy needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_ERLANG_JIFFY
-+	bool "erlang-jiffy"
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/erlang-p1-oauth2/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ERLANG_P1_OAUTH2
++	bool "erlang-p1-oauth2"
 +	help
-+	  JSON NIFs for Erlang.
++	  OAuth2 library for Erlang
 +
-+	  https://github.com/davisp/jiffy
-diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
++	  https://github.com/processone/p1_oauth2
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
 new file mode 100644
-index 0000000000..1f83e2789c
+index 0000000000..3666519f5f
 --- /dev/null
-+++ b/package/erlang-jiffy/erlang-jiffy.hash
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
 @@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 7d1054c475c82c626de3ad57201a7fc51da38667c8a7502149eb751edc6b601d erlang-jiffy-0.14.8.tar.gz
-diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
++# Locally calculated
++sha256 86e4d93f0206135bc6017b6001d061305513917f79c53294e534d6e66fd54727 erlang-p1-oauth2-0.6.1.tar.gz
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
 new file mode 100644
-index 0000000000..4c2195af48
+index 0000000000..c85706c8db
 --- /dev/null
-+++ b/package/erlang-jiffy/erlang-jiffy.mk
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-jiffy
++# erlang-p1-oauth2
 +#
 +################################################################################
 +
-+ERLANG_JIFFY_VERSION = 0.14.8
-+ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
-+ERLANG_JIFFY_LICENSE = MIT (core), BSD-3-Clause (Google double \
-+conversion library), BSD-3-Clause (tests)
-+ERLANG_JIFFY_LICENSE_FILES = LICENSE
++ERLANG_P1_OAUTH2_VERSION = 0.6.1
++ERLANG_P1_OAUTH2_SITE = $(call github,processone,p1_oauth2,$(ERLANG_P1_OAUTH2_VERSION))
++ERLANG_P1_OAUTH2_LICENSE = MIT
++ERLANG_P1_OAUTH2_LICENSE_FILES = LICENSE
++ERLANG_P1_OAUTH2_INSTALL_STAGING = YES
 +
 +$(eval $(rebar-package))
 -- 
