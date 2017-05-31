@@ -1,18 +1,18 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 22:58:19 +0200
-Subject: [Buildroot] [git commit branch/next] configs/lego_ev3: bump U-Boot
-	version
-Message-ID: <20170531205846.77DBA82281@busybox.osuosl.org>
+Date: Wed, 31 May 2017 22:58:30 +0200
+Subject: [Buildroot] [git commit branch/next] configs/lego_ev3: use ext4
+	file system
+Message-ID: <20170531205846.91F7082863@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb47cdbee39ab54959b52caa3ba17a6007464a23
+commit: https://git.buildroot.net/buildroot/commit/?id=3a51b42a24fc61ea637516b914d9c578be249103
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This bumps U-Boot to the current stable version (2017.05).
+Change from using ext3 to ext4.
 
 Signed-off-by: David Lechner <david@lechnology.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -21,15 +21,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
-index 4d764c5..0c1ab01 100644
+index 0c1ab01..dea84d9 100644
 --- a/configs/lego_ev3_defconfig
 +++ b/configs/lego_ev3_defconfig
-@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="legoev3"
+@@ -27,7 +27,7 @@ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/lego/ev3/busybox.fragment"
  
- # host
+ # filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_3=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_SQUASHFS=y
+ BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
+ # BR2_TARGET_ROOTFS_TAR is not set
