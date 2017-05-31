@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 22:04:53 +0200
-Subject: [Buildroot] [PATCH 01/01] sngrep: bump version to v1.4.3
-In-Reply-To: <20170525143412.3318-1-aduskett@codeblue.com>
-References: <20170525143412.3318-1-aduskett@codeblue.com>
-Message-ID: <20170531220453.683484a8@free-electrons.com>
+Date: Wed, 31 May 2017 22:07:12 +0200
+Subject: [Buildroot] [PATCH 01/01] sngrep: fix wchar detection.
+In-Reply-To: <20170525144749.19333-1-aduskett@codeblue.com>
+References: <20170525144749.19333-1-aduskett@codeblue.com>
+Message-ID: <20170531220712.72c0e405@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 25 May 2017 10:34:12 -0400, Adam Duskett wrote:
-> The two patches were committed upstream.
+On Thu, 25 May 2017 10:47:49 -0400, Adam Duskett wrote:
+> Ncurses detection is currently broken in buildroot.
+> 
+> This patch does the following:
+>  - Add SNGREP_CHECK_SCRIPT to configure.ac which checks for a
+>    libname, a function in that library, sets a define if found, and
+>    if not found, moves on to the next part. This is taken from the
+>    htop configure.ac.
+> 
+>  - Adds SNGREP_CHECK_LIB to configure.ac which checks for a
+>    library, a function within that library, sets a define if that function
+>    is found, and if not found, moves on to the next part.
+>    This is taken from the htop configure.ac
+> 
+>  - Modifies scrollbar.h and ui_panel.h to include <wctypes.h> instead of
+>    <ncursesw/ncurses.h> if unicode is supported.
 > 
 > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 > ---
->  .../0001-src-Makefile.am-don-t-use-VPATH.patch     | 43 -------------
->  ...e.ac-switch-to-pkg-config-to-find-openssl.patch | 75 ----------------------
->  package/sngrep/sngrep.hash                         |  2 +-
->  package/sngrep/sngrep.mk                           |  2 +-
->  4 files changed, 2 insertions(+), 120 deletions(-)
->  delete mode 100644 package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
->  delete mode 100644 package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
+>  .../sngrep/0001-fix-ncurses-wchar-detection.patch  | 119 +++++++++++++++++++++
 
-Applied to next, thanks.
+Could you try first to upstream this in the sngrep project? It's a
+non-trivial change, so it would be nice to get upstream approval on
+this.
+
+Thanks,
 
 Thomas
 -- 
