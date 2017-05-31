@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:53:24 +0200
+Date: Wed, 31 May 2017 21:53:27 +0200
 Subject: [Buildroot] [PATCH/next 1/1] lxc: fix hash of patch
-In-Reply-To: <20170529215223.1d3808f9@free-electrons.com>
+In-Reply-To: <1496044092-78363-1-git-send-email-fontaine.fabrice@gmail.com>
 References: <1496044092-78363-1-git-send-email-fontaine.fabrice@gmail.com>
- <20170529121236.5318e2d8@free-electrons.com>
- <CAPi7W83jQ9Z2t9TDLc5ZRo1tmPHF4SkYD86aBAKkOD0=99zwnQ@mail.gmail.com>
- <4nvtvdxcra.ln2@ID-313208.user.individual.net>
- <20170529215223.1d3808f9@free-electrons.com>
-Message-ID: <20170531215324.43afad6b@free-electrons.com>
+Message-ID: <20170531215327.397194d8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,35 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 29 May 2017 21:52:23 +0200, Thomas Petazzoni wrote:
+On Mon, 29 May 2017 09:48:12 +0200, Fabrice Fontaine wrote:
+> Fix hash of bc5b27d6f6d166d2a6df47982cbe36041ce6b73.patch
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/lxc/lxc.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Then it would be nice to compare the old and new .patch files, and see
-> how they differ.
-
-OK, so I've checked the difference between the old and the new patch,
-and here it is:
-
---- /home/thomas/dl/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch.old	2017-05-20 16:13:12.193576930 +0200
-+++ bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch	2017-05-31 21:49:49.177157735 +0200
-@@ -9,7 +9,7 @@
-  1 file changed, 8 insertions(+)
- 
- diff --git a/src/lxc/conf.c b/src/lxc/conf.c
--index 35bdb24..76a1901 100644
-+index 35bdb249b..76a190120 100644
- --- a/src/lxc/conf.c
- +++ b/src/lxc/conf.c
- @@ -130,6 +130,14 @@ lxc_log_define(lxc_conf, lxc);
-
-So, the patch change to use slightly longer commit hashes. Is this
-because there was a conflicting commit in the repository added in the
-mean time? Or Github changing to a different length in the commit
-hashes?
-
-Anyway, I've applied the patch.
+Applied to next, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
