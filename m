@@ -1,30 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 16:22:16 +0200
-Subject: [Buildroot] [PATCH v3] configs/stm32f4xx: use kernel version
- 4.11
-In-Reply-To: <1496234729-31091-1-git-send-email-christophe.priouzeau@st.com>
-References: <1496059605-1998-1-git-send-email-christophe.priouzeau@st.com>
- <1496234729-31091-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <20170531162216.35f4c86e@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 31 May 2017 16:31:48 +0000
+Subject: [Buildroot] [Bug 9921] New: lockfile module within python-daemon
+	not available
+Message-ID: <bug-9921-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9921
 
-On Wed, 31 May 2017 12:45:32 +0000, Christophe PRIOUZEAU wrote:
+            Bug ID: 9921
+           Summary: lockfile module within python-daemon not available
+           Product: buildroot
+           Version: 2017.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: reto.rayen at outlook.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
+Hi guys
 
-You're still removing those lines. Please keep them, but update them to
-4.11.
+we found a bug which is encountering when we use the python-daemon to run a
+script as a daemon. When we want to start the daemon. It always fails because
+the lockfile within the python-daemon is not available. Can you please add this
+to the standard buildroot image when the package "python-daemon" gets compiled.
+We encounter the issue with python2 and python3. In both versions it's not
+included. Below you can find a error trace:
 
-Thanks,
+Traceback (most recent call last):
+  File "/usr/local/bin/bender-daemon", line 9, in <module>
+    from daemon import runner
+  File
+"/home/deployer/projects/buildroot-2017.02.2/output/target/usr/lib/python3.5/site-packages/daemon/runner.py",
+line 33, in <module>
+ImportError: No module named 'lockfile'
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
