@@ -1,47 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 09:28:43 +0200
-Subject: [Buildroot] [PATCH 14/16] erlang-p1-oauth: New package
-In-Reply-To: <20170530230314.GN2009@localhost>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 31 May 2017 10:49:53 +0200
+Subject: [Buildroot] [PATCH 00/16] Bump ejabberd version to 17.04
+In-Reply-To: <20170531000435.0505e871@free-electrons.com>
 References: <20170530145211.15320-1-johan.oudinet@gmail.com>
- <20170530145211.15320-15-johan.oudinet@gmail.com>
- <20170531000857.331cee23@free-electrons.com>
- <20170530230314.GN2009@localhost>
-Message-ID: <20170531092843.10015bf7@free-electrons.com>
+ <20170531000435.0505e871@free-electrons.com>
+Message-ID: <CAJtjsKZEskDUE4by9rRfAwBPjrz1G-NwOacE+e_uUQ6C1x0ZAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 31 May 2017 01:03:14 +0200, Christophe Romain wrote:
+On Wed, May 31, 2017 at 12:04 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Thanks a lot for this work!
 
-> >> +ERLANG_P1_OAUTH_VERSION = 0.6.1
-> >> +ERLANG_P1_OAUTH_SITE = $(call github,processone,p1_oauth,$(ERLANG_P1_OAUTH_VERSION))  
-> >
-> >But I don't see how this URL (which is different) can actually work.
-> >Isn't there a typo here?  
-> 
-> oups, there is indeed a typo from me.
-> repository is p1_oauth2 of course
+You're welcome. It was indeed a bit more work than what I expected.
 
-OK.
+>
+> On Tue, 30 May 2017 16:51:55 +0200, Johan Oudinet wrote:
+>
+>>   erlang-goldrush: bump version to 0.1.9
+>>   erlang-lager: bump to version 3.2.1
+>>   erlang-p1-utils: bump to version 1.0.8
+>>   erlang-p1-zlib: bump to version 1.0.2
+>>   erlang-p1-cache-tab: bump to version 1.0.7
+>>   erlang-p1-iconv: bump to version 1.0.4
+>>   erlang-p1-stringprep: bump to version 1.0.8
+>>   erlang-p1-tls: bump to version 1.0.11
+>>   erlang-p1-stun: bump to version 1.0.10
+>>   erlang-p1-sip: bump to version 1.0.11
+>>   erlang-p1-xml: bump to version 1.1.22
+>>   erlang-p1-yaml: bump to version 1.0.9
+>
+> I've applied those ones to the next branch, with some minor changes on a
+> few patches. I'll reply to the individual patches.
 
-> >Should the package be named erlang-p1-oauth2 instead ?  
-> 
-> I don't know what's your packaging naming convention.
-> rename is not mandatory from what i understand, but can make sense.
-> up to you guys.
+Wow, you're fast. Thanks.
 
-There is no "rename" involved since it's a new package. We generally
-prefer to use the upstream package name, so erlang-p1-oauth2 seems
-better here.
+>
+>>   erlang-jiffy: New package
+>>   erlang-p1-oauth: New package
+>>   erlang-p1-xmpp: New package
+>>   ejabberd: bump to version 17.04
+>
+> I do have comments on those ones, so I'll reply to them.
 
-Thanks!
+Ok, I'll check your comments. I've also put Christophe in CC as he is
+the one who made those new packages (except for erlang-jiffy).
 
-Thomas
+> If you respin before the next branch gets merged back into master,
+> please base your next iteration on top of the latest next branch.
+
+Yeah, I've already done that for these patches.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Johan
