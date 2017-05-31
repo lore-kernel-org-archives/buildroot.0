@@ -1,99 +1,139 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 May 2017 21:28:18 +0200
-Subject: [Buildroot] [git commit] package/luaossl: new package
-Message-ID: <20170601202900.2F813818F2@busybox.osuosl.org>
+Date: Wed, 31 May 2017 21:16:02 +0200
+Subject: [Buildroot] [git commit] erlang-p1-xmpp: new package
+Message-ID: <20170601202900.20F2A82A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26903e429e7b8b9214189f9f12134a5ae91a9361
+commit: https://git.buildroot.net/buildroot/commit/?id=704cca3ef5e0f4eb384c3fdc4b367252c3ed16df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/luaossl/Config.in    | 18 ++++++++++++++++++
- package/luaossl/luaossl.hash |  2 ++
- package/luaossl/luaossl.mk   | 14 ++++++++++++++
- 5 files changed, 36 insertions(+)
+ DEVELOPERS                                             |  1 +
+ package/Config.in                                      |  1 +
+ package/erlang-p1-xmpp/0001-fix-includes.patch         | 16 ++++++++++++++++
+ .../0002-remove-dependencies-from-rebar-config.patch   | 18 ++++++++++++++++++
+ package/erlang-p1-xmpp/Config.in                       |  8 ++++++++
+ package/erlang-p1-xmpp/erlang-p1-xmpp.hash             |  2 ++
+ package/erlang-p1-xmpp/erlang-p1-xmpp.mk               | 16 ++++++++++++++++
+ 7 files changed, 62 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f86e5c6..5e8b695 100644
+index 231e733..f86e5c6 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1039,6 +1039,7 @@ F:	board/grinn/
- F:	configs/grinn_*
- F:	package/argparse/
- F:	package/easydbus/
-+F:	package/luaossl/
- F:	package/rs485conf/
- F:	package/turbolua/
- 
+@@ -871,6 +871,7 @@ F:	package/erlang-p1-stun/
+ F:	package/erlang-p1-tls/
+ F:	package/erlang-p1-utils/
+ F:	package/erlang-p1-xml/
++F:	package/erlang-p1-xmpp/
+ F:	package/erlang-p1-yaml/
+ F:	package/erlang-p1-zlib/
+ F:	package/nginx-dav-ext/
 diff --git a/package/Config.in b/package/Config.in
-index 1b150b2..c1c6e65 100644
+index 2b53add..1b150b2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -573,6 +573,7 @@ menu "Lua libraries/modules"
- 	source "package/luafilesystem/Config.in"
- 	source "package/luajson/Config.in"
- 	source "package/lualogging/Config.in"
-+	source "package/luaossl/Config.in"
- 	source "package/luaposix/Config.in"
- 	source "package/lua-resty-http/Config.in"
- 	source "package/luasec/Config.in"
-diff --git a/package/luaossl/Config.in b/package/luaossl/Config.in
+@@ -520,6 +520,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-tls/Config.in"
+ 	source "package/erlang-p1-utils/Config.in"
+ 	source "package/erlang-p1-xml/Config.in"
++	source "package/erlang-p1-xmpp/Config.in"
+ 	source "package/erlang-p1-yaml/Config.in"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+diff --git a/package/erlang-p1-xmpp/0001-fix-includes.patch b/package/erlang-p1-xmpp/0001-fix-includes.patch
 new file mode 100644
-index 0000000..d8763e7
+index 0000000..d0a267b
 --- /dev/null
-+++ b/package/luaossl/Config.in
++++ b/package/erlang-p1-xmpp/0001-fix-includes.patch
+@@ -0,0 +1,16 @@
++Without this patch, rebar fails to find include file fxml.hrl.
++
++Signed-off-by: Christophe Romain <cromain@process-one.net>
++
++diff --git a/include/xmpp.hrl b/include/xmpp.hrl
++index afa5f61..678858e 100644
++--- a/include/xmpp.hrl
+++++ b/include/xmpp.hrl
++@@ -26,7 +26,7 @@
++ -include("ns.hrl").
++ -include("jid.hrl").
++ -include("xmpp_codec.hrl").
++--include("fxml.hrl").
+++-include_lib("p1_xml/include/fxml.hrl").
++
++ -type stanza() :: iq() | presence() | message().
+diff --git a/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch b/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch
+new file mode 100644
+index 0000000..fa5c269
+--- /dev/null
++++ b/package/erlang-p1-xmpp/0002-remove-dependencies-from-rebar-config.patch
 @@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LUAOSSL
-+	bool "luaossl"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  luaossl is a comprehensive binding to OpenSSL for Lua 5.1,
-+	  5.2, and later.
++Without this patch, dependencies would be downloaded and compiled
++by rebar at build time.
 +
-+	  It includes support for certificate and key management,
-+	  key generation, signature verification, and deep bindings
-+	  to the distinguished name, alternative name, and X.509v3
-+	  extension interfaces. It also binds OpenSSL's bignum, message
-+	  digest, HMAC, cipher, and CSPRNG interfaces.
++Signed-off-by: Christophe Romain <cromain@process-one.net>
 +
-+	  http://25thandclement.com/~william/projects/luaossl.html
++diff --git a/rebar.config b/rebar.config
++index 79494b7..8d769f1 100644
++--- a/rebar.config
+++++ b/rebar.config
++@@ -24,9 +24,6 @@
++ 	    {i, "../fast_xml/include"},
++ 	    {i, "deps/fast_xml/include"}]}.
 +
-+comment "luaossl needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
++-{deps, [{fast_xml, ".*", {git, "https://github.com/processone/fast_xml", {tag, "1.1.22"}}},
++-	{stringprep, ".*", {git, "https://github.com/processone/stringprep", {tag, "1.0.8"}}}]}.
++-
++ {cover_enabled, true}.
++ {cover_export_enabled, true}.
+diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
 new file mode 100644
-index 0000000..ea9f5e3
+index 0000000..1d518e2
 --- /dev/null
-+++ b/package/luaossl/luaossl.hash
++++ b/package/erlang-p1-xmpp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_ERLANG_P1_XMPP
++	bool "erlang-p1-xmpp"
++	select BR2_PACKAGE_ERLANG_P1_XML
++	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
++	help
++	  XMPP library for Erlang.
++
++	  https://github.com/processone/xmpp
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.hash b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
+new file mode 100644
+index 0000000..f245c84
+--- /dev/null
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	51641d8971c19b2c65d3954ded12c306d4ecf6315ff8f1ec584e9a23ca998576  luaossl-20161214-0.src.rock
-diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
++sha256 e7b5db5ab6204f5bc6ebf91a183ebeae2b43ca6372dd2506599a8e8168a99c50 erlang-p1-xmpp-1.1.9.tar.gz
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
 new file mode 100644
-index 0000000..5bb3e82
+index 0000000..149d8bc
 --- /dev/null
-+++ b/package/luaossl/luaossl.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# luaossl
++# erlang-p1-xmpp
 +#
 +################################################################################
 +
-+LUAOSSL_VERSION_UPSTREAM = 20161214
-+LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
-+LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
-+LUAOSSL_LICENSE = MIT
-+LUAOSSL_LICENSE_FILES = $(LUAOSSL_SUBDIR)/LICENSE
-+LUAOSSL_DEPENDENCIES = openssl
++ERLANG_P1_XMPP_VERSION = 1.1.9
++ERLANG_P1_XMPP_SITE = $(call github,processone,xmpp,$(ERLANG_P1_XMPP_VERSION))
++ERLANG_P1_XMPP_LICENSE = Apache-2.0
++ERLANG_P1_XMPP_LICENSE_FILES = LICENSE.txt
++ERLANG_P1_XMPP_INSTALL_STAGING = YES
++ERLANG_P1_XMPP_DEPENDENCIES = erlang-p1-xml erlang-p1-stringprep \
++	host-erlang-p1-xml
 +
-+$(eval $(luarocks-package))
++$(eval $(rebar-package))
++$(eval $(host-rebar-package))
