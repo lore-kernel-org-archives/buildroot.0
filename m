@@ -1,46 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Jun 2017 20:28:50 -0000
-Subject: [Buildroot] [git commit] python-dataproperty: bump version to 0.21.1
-Message-ID: <20170601202849.48A2782A6B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cjson: bump version to v1.5.2
+Message-ID: <20170601202849.5C7C081735@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c075d80d6dd3d46055e775bf890e47e4562b7268
+commit: https://git.buildroot.net/buildroot/commit/?id=6a72aea6161b8deb1779af090f36e536c4e6478a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 1ab0a40..ad88498 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
--md5 70199d3e6e021810d0d3b4a42c37916f  DataProperty-0.18.1.tar.gz
--sha256 950131bd9fb874be606835e5f4a84d99f505d919aed94145932ec010190c7c66  DataProperty-0.18.1.tar.gz
-+md5 89e78396b91e6156c522175b3316546f  DataProperty-0.21.1.tar.gz
-+sha256 7a5c77004e8f1bca734838966e30e555e323c06bda613ed3985fa9bef2665c71  DataProperty-0.21.1.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 7e34425..d9d0783 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 09cc335..14853da 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 81e6574f0b1c0d7cd34fa5e0f3fd34b162fc1c568fc1473880999c2030bfb6f0  cjson-v1.5.1.tar.gz
++sha256 6d1482c1b492893b25ab7e77ee6098fe3ef10585df660e5ffe67e632a8c5b9e4  cjson-v1.5.2.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 43cd8bd..c0f4b98 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.18.1
-+PYTHON_DATAPROPERTY_VERSION = 0.21.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/42/b6/591366869e9fc7b19420ca4c177727f25dcccc07a46cecbda8d6abffa866
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/fc/9a/e6cc202b81b02aec39f35f2d13a6efc349cdc62ae3890f84b586468597ad
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-CJSON_VERSION = v1.5.1
++CJSON_VERSION = v1.5.2
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
