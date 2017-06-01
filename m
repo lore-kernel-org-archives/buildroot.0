@@ -1,122 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:06:13 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mariadb: security bump to
-	version 10.1.23
-Message-ID: <20170601144623.298908296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:11:50 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] toolchain: disable PIE
+	for static build with musl
+Message-ID: <20170601144623.430658296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68abab0fcf0593292ad122ed925cdca9fcced2ab
+commit: https://git.buildroot.net/buildroot/commit/?id=ca4feb41937139de5d742502ecb428930205f777
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
+As mentioned in commit 3c93901bcd2 (toolchain: add hidden symbol for PIE
+support), support for static PIE using musl requires a gcc patch[1]. Buildroot
+doesn't carry this patch. Don't enable BR2_TOOLCHAIN_SUPPORTS_PIE in static
+build with musl.
+
 Fixes:
+http://autobuild.buildroot.net/results/d19/d19bcfcfb33cc5f5b082b97bbd5852d479823b97/
+http://autobuild.buildroot.net/results/91f/91f7c6954c337b03f5ac141050d9b1bee1623376/
+http://autobuild.buildroot.net/results/996/996116da9241686110b9525eed08cc5acfd379a6/
 
-CVE-2017-3302 - Crash in libmysqlclient.so in Oracle MySQL before 5.6.21 and
-5.7.x before 5.7.5 and MariaDB through 5.5.54, 10.0.x through 10.0.29,
-10.1.x through 10.1.21, and 10.2.x through 10.2.3.
+[1] https://github.com/richfelker/musl-cross-make/blob/b854a42fc1ea19b8c4ec7104848f9d1a6d7995f0/patches/gcc-6.3.0/0010-static-pie-support.diff
 
-CVE-2017-3313 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: MyISAM). Supported versions that are affected are
-5.5.53 and earlier, 5.6.34 and earlier and 5.7.16 and earlier. Difficult to
-exploit vulnerability allows low privileged attacker with logon to the
-infrastructure where MySQL Server executes to compromise MySQL Server.
-Successful attacks of this vulnerability can result in unauthorized access
-to critical data or complete access to all MySQL Server accessible data.
-
-CVE-2017-3308 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server. While the vulnerability is
-in MySQL Server, attacks may significantly impact additional products.
-Successful attacks of this vulnerability can result in unauthorized
-ability to cause a hang or frequently repeatable crash (complete DOS) of
-MySQL Server.
-
-CVE-2017-3309 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
-"exploitable" vulnerability allows low privileged attacker with network
-access via multiple protocols to compromise MySQL Server. While the
-vulnerability is in MySQL Server, attacks may significantly impact
-additional products. Successful attacks of this vulnerability can result
-in unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2017-3453 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
-"exploitable" vulnerability allows low privileged attacker with network
-access via multiple protocols to compromise MySQL Server. Successful attacks
-of this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2017-3456 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows high privileged attacker with network access via
-multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2017-3464 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL). Supported versions that are affected are 5.5.54
-and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized update, insert or delete access to
-some of MySQL Server accessible data.
-
-And a number of important, but non-security related fixes:
-
-MDEV-12602: Fixed some race conditions in InnoDB encryption
-
-MariaDB Backup alpha introduced
-
-Galera wsrep library updated to 25.3.20
-
-For details, see the release notes:
-https://mariadb.com/kb/en/mariadb/mariadb-10123-release-notes/
-
-[Peter: drop COPYING.LESSER and add a reference to the bugtracker issue
-	explaining why]
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e6213e8ee68cbb637997ff02abe7945ec1cc168c)
+Acked-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit fa397537bb64536bb58663df886b1a2c8886961c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ toolchain/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index afcf378..580fe98 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,2 +1,2 @@
--# From https://downloads.mariadb.org/mariadb/10.1.22/
--sha256 bcb0572e7ad32cea9740a21e9255f733bdf60a5561ffbda317c22dd12b3966ce  mariadb-10.1.22.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.23/
-+sha256 54d8114e24bfa5e3ebdc7d69e071ad1471912847ea481b227d204f9d644300bf  mariadb-10.1.23.tar.gz
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 8c7375a..e171e0e 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index de01585..92a4926 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -28,7 +28,7 @@ config BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_TOOLCHAIN_SUPPORTS_PIE
++	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_STATIC_LIBS
  
--MARIADB_VERSION = 10.1.22
-+MARIADB_VERSION = 10.1.23
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
--MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
-+# Tarball no longer contains LGPL license text
-+# https://jira.mariadb.org/browse/MDEV-12297
-+MARIADB_LICENSE_FILES = README COPYING
- MARIADB_INSTALL_STAGING = YES
- MARIADB_PROVIDES = mysql
- 
+ choice
+ 	prompt "Toolchain type"
