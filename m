@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jun 2017 13:26:17 +0200
-Subject: [Buildroot] [PATCH] gcc: allow gcc 7.1 for microblaze
- architecture
-In-Reply-To: <20170601090236.GA23718@waldemar-brodkorb.de>
-References: <20170601090236.GA23718@waldemar-brodkorb.de>
-Message-ID: <20170601132617.3714933e@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 1 Jun 2017 13:49:01 +0200
+Subject: [Buildroot] [PATCH 1/1] imx-uuc: fix start-stop-daemon stop
+	failure
+In-Reply-To: <1496266845-11307-1-git-send-email-alexandre.esse.dev@gmail.com>
+References: <1496266845-11307-1-git-send-email-alexandre.esse.dev@gmail.com>
+Message-ID: <CAAMH-yue_PV20OS_jwxZ6_FfxMT7d8EGn6yRN78ax_ui8kinpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Alexandre,
 
-On Thu, 1 Jun 2017 11:02:36 +0200, Waldemar Brodkorb wrote:
-> Add patch from gcc upstream master to fix an issue.
+On Wed, May 31, 2017 at 11:40 PM, Alexandre Esse
+<alexandre.esse.dev@gmail.com> wrote:
+> The daemon service script associated with imx-uuc failed to stop the daemon
+> since the PID of the process wasn't stored at start time.
+>
+> Adding -m option allowed to create the uuc.pid file as expected.
+>
+> Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
 
-"an issue" ?
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-I know what the issue is, but it would be nice to have it mentioned in
-the commit log rather than this vague "an issue".
+Thanks for your patch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards,
+Gary
