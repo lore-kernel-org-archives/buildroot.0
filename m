@@ -1,191 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:20:20 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/audiofile: add
-	security fix
-Message-ID: <20170601144623.8E4C18296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:07:26 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libminiupnpc: add
+	upstream security fix for CVE-2017-8798
+Message-ID: <20170601144623.370F18296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff08ec1982e0dd8432047555c95a3f28ff530362
+commit: https://git.buildroot.net/buildroot/commit/?id=f459be48e0e98a4ed3cc0ef17121f2f1f145d00d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2015-7747
+CVE-2017-8798: Integer signedness error in MiniUPnP MiniUPnPc v1.4.20101221
+through v2.0 allows remote attackers to cause a denial of service or
+possibly have unspecified other impact.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit a2ad9cf71da39efc4ab942578cdbceb5c30a4025)
+For more details including a PoC, see:
+https://github.com/tintinweb/pub/tree/master/pocs/cve-2017-8798
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a0c4cf0f9698ed109b97cb1e33f4070f505e3988)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/audiofile/0008-CVE-2015-7747.patch | 161 +++++++++++++++++++++++++++++
- 1 file changed, 161 insertions(+)
+ .../0001-miniupnpc-Fix-CVE-2017-8798.patch         | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/package/audiofile/0008-CVE-2015-7747.patch b/package/audiofile/0008-CVE-2015-7747.patch
+diff --git a/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
 new file mode 100644
-index 0000000..1325612
+index 0000000..25591fc
 --- /dev/null
-+++ b/package/audiofile/0008-CVE-2015-7747.patch
-@@ -0,0 +1,161 @@
-+Description: fix buffer overflow when changing both sample format and
-+ number of channels
-+Origin: https://github.com/mpruett/audiofile/pull/25
-+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/audiofile/+bug/1502721
-+Bug-Debian: https://bugs.debian.org/801102
++++ b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
+@@ -0,0 +1,59 @@
++From f0f1f4b22d6a98536377a1bb07e7c20e4703d229 Mon Sep 17 00:00:00 2001
++From: Thomas Bernard <miniupnp@free.fr>
++Date: Tue, 9 May 2017 12:00:47 +0200
++Subject: [PATCH] miniupnpc: Fix CVE-2017-8798
 +
-+Downloaded from
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/audiofile/files/audiofile-0.3.6-CVE-2015-7747.patch
++Thanks to tin/Team OSTStrom
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Peter: drop Changelog.txt modification, convert to -p1 format]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ miniupnpc/miniwget.c    | 12 +++++++-----
++ 1 file changed, 9 insertions(+), 5 deletions(-)
 +
-+--- a/libaudiofile/modules/ModuleState.cpp
-++++ b/libaudiofile/modules/ModuleState.cpp
-+@@ -402,7 +402,7 @@ status ModuleState::arrange(AFfilehandle
-+ 		addModule(new Transform(outfc, in.pcm, out.pcm));
-+ 
-+ 	if (in.channelCount != out.channelCount)
-+-		addModule(new ApplyChannelMatrix(infc, isReading,
-++		addModule(new ApplyChannelMatrix(outfc, isReading,
-+ 			in.channelCount, out.channelCount,
-+ 			in.pcm.minClip, in.pcm.maxClip,
-+ 			track->channelMatrix));
-+--- a/test/Makefile.am
-++++ b/test/Makefile.am
-+@@ -26,6 +26,7 @@ TESTS = \
-+ 	VirtualFile \
-+ 	floatto24 \
-+ 	query2 \
-++	sixteen-stereo-to-eight-mono \
-+ 	sixteen-to-eight \
-+ 	testchannelmatrix \
-+ 	testdouble \
-+@@ -139,6 +140,7 @@ printmarkers_SOURCES = printmarkers.c
-+ printmarkers_LDADD = $(LIBAUDIOFILE) -lm
-+ 
-+ sixteen_to_eight_SOURCES = sixteen-to-eight.c TestUtilities.cpp TestUtilities.h
-++sixteen_stereo_to_eight_mono_SOURCES = sixteen-stereo-to-eight-mono.c TestUtilities.cpp TestUtilities.h
-+ 
-+ testchannelmatrix_SOURCES = testchannelmatrix.c TestUtilities.cpp TestUtilities.h
-+ 
-+--- /dev/null
-++++ b/test/sixteen-stereo-to-eight-mono.c
-+@@ -0,0 +1,118 @@
-++/*
-++	Audio File Library
-++
-++	Copyright 2000, Silicon Graphics, Inc.
-++
-++	This program is free software; you can redistribute it and/or modify
-++	it under the terms of the GNU General Public License as published by
-++	the Free Software Foundation; either version 2 of the License, or
-++	(at your option) any later version.
-++
-++	This program is distributed in the hope that it will be useful,
-++	but WITHOUT ANY WARRANTY; without even the implied warranty of
-++	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++	GNU General Public License for more details.
-++
-++	You should have received a copy of the GNU General Public License along
-++	with this program; if not, write to the Free Software Foundation, Inc.,
-++	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-++*/
-++
-++/*
-++	sixteen-stereo-to-eight-mono.c
-++
-++	This program tests the conversion from 2-channel 16-bit integers to
-++	1-channel 8-bit	integers.
-++*/
-++
-++#ifdef HAVE_CONFIG_H
-++#include <config.h>
-++#endif
-++
-++#include <stdint.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include <string.h>
-++#include <unistd.h>
-++#include <limits.h>
-++
-++#include <audiofile.h>
-++
-++#include "TestUtilities.h"
-++
-++int main (int argc, char **argv)
-++{
-++	AFfilehandle file;
-++	AFfilesetup setup;
-++	int16_t frames16[] = {14298, 392, 3923, -683, 958, -1921};
-++	int8_t frames8[] = {28, 6, -2};
-++	int i, frameCount = 3;
-++	int8_t byte;
-++	AFframecount result;
-++
-++	setup = afNewFileSetup();
-++
-++	afInitFileFormat(setup, AF_FILE_WAVE);
-++
-++	afInitSampleFormat(setup, AF_DEFAULT_TRACK, AF_SAMPFMT_TWOSCOMP, 16);
-++	afInitChannels(setup, AF_DEFAULT_TRACK, 2);
-++
-++	char *testFileName;
-++	if (!createTemporaryFile("sixteen-to-eight", &testFileName))
-++	{
-++		fprintf(stderr, "Could not create temporary file.\n");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	file = afOpenFile(testFileName, "w", setup);
-++	if (file == AF_NULL_FILEHANDLE)
-++	{
-++		fprintf(stderr, "could not open file for writing\n");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	afFreeFileSetup(setup);
-++
-++	afWriteFrames(file, AF_DEFAULT_TRACK, frames16, frameCount);
-++
-++	afCloseFile(file);
-++
-++	file = afOpenFile(testFileName, "r", AF_NULL_FILESETUP);
-++	if (file == AF_NULL_FILEHANDLE)
-++	{
-++		fprintf(stderr, "could not open file for reading\n");
-++		exit(EXIT_FAILURE);
-++	}
-++
-++	afSetVirtualSampleFormat(file, AF_DEFAULT_TRACK, AF_SAMPFMT_TWOSCOMP, 8);
-++	afSetVirtualChannels(file, AF_DEFAULT_TRACK, 1);
-++
-++	for (i=0; i<frameCount; i++)
-++	{
-++		/* Read one frame. */
-++		result = afReadFrames(file, AF_DEFAULT_TRACK, &byte, 1);
-++
-++		if (result != 1)
-++			break;
-++
-++		/* Compare the byte read with its precalculated value. */
-++		if (memcmp(&byte, &frames8[i], 1) != 0)
-++		{
-++			printf("error\n");
-++			printf("expected %d, got %d\n", frames8[i], byte);
-++			exit(EXIT_FAILURE);
-++		}
-++		else
-++		{
-++#ifdef DEBUG
-++			printf("got what was expected: %d\n", byte);
-++#endif
-++		}
-++	}
-++
-++	afCloseFile(file);
-++	unlink(testFileName);
-++	free(testFileName);
-++
-++	exit(EXIT_SUCCESS);
-++}
++diff --git a/miniwget.c b/miniwget.c
++index 37cb47b7..1eda57c5 100644
++--- a/miniwget.c
+++++ b/miniwget.c
++@@ -284,11 +284,12 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 							goto end_of_stream;
++ 						}
++ 					}
++-					bytestocopy = ((int)chunksize < (n - i))?chunksize:(unsigned int)(n - i);
+++					/* it is guaranteed that (n >= i) */
+++					bytestocopy = (chunksize < (unsigned int)(n - i))?chunksize:(unsigned int)(n - i);
++ 					if((content_buf_used + bytestocopy) > content_buf_len)
++ 					{
++ 						char * tmp;
++-						if(content_length >= (int)(content_buf_used + bytestocopy)) {
+++						if((content_length >= 0) && ((unsigned int)content_length >= (content_buf_used + bytestocopy))) {
++ 							content_buf_len = content_length;
++ 						} else {
++ 							content_buf_len = content_buf_used + bytestocopy;
++@@ -313,14 +314,15 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 			{
++ 				/* not chunked */
++ 				if(content_length > 0
++-				   && (int)(content_buf_used + n) > content_length) {
+++				   && (content_buf_used + n) > (unsigned int)content_length) {
++ 					/* skipping additional bytes */
++ 					n = content_length - content_buf_used;
++ 				}
++ 				if(content_buf_used + n > content_buf_len)
++ 				{
++ 					char * tmp;
++-					if(content_length >= (int)(content_buf_used + n)) {
+++					if(content_length >= 0
+++					   && (unsigned int)content_length >= (content_buf_used + n)) {
++ 						content_buf_len = content_length;
++ 					} else {
++ 						content_buf_len = content_buf_used + n;
++@@ -340,7 +342,7 @@ getHTTPResponse(int s, int * size, int * status_code)
++ 			}
++ 		}
++ 		/* use the Content-Length header value if available */
++-		if(content_length > 0 && (int)content_buf_used >= content_length)
+++		if(content_length > 0 && content_buf_used >= (unsigned int)content_length)
++ 		{
++ #ifdef DEBUG
++ 			printf("End of HTTP content\n");
