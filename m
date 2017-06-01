@@ -1,89 +1,152 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:34:50 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mosquitto: bump to
-	version 1.4.11
-Message-ID: <20170601144624.2CB6F8296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:38:47 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/madplay: add
+	custom libtool patch
+Message-ID: <20170601144624.637C38296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79e3be0f66ea40e81186d3cc221c6c0aeff11bec
+commit: https://git.buildroot.net/buildroot/commit/?id=9bc38c800d776060be2140dfc811146c8d56de8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-- This version requires a patch (sent upstream) to remove -lanl from
-all Linux builds as this library is only needed for adns support
- - sha512 must be computed locally as eclipse.org does not give it for
-this version
+madplay use a libtool script in version 1.5.2 but the libtool patch
+"buildroot-libtool-v1.5.patch.patch" doesn't apply.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d098e18d14551062937bf987a9e1cac3696a9b53)
+From [1]:
+"It's libtool dropping -static. That's because madplay has a
+weird version of libtool, on which our libtool patch doesn't apply so
+we have MADPLAY_LIBTOOL_PATCH = NO. Therefore, the hack we have that
+makes libtool -static behave like -all-static isn't applied, causing
+this build failure."
+
+Fixes:
+http://autobuild.buildroot.net/results/60def1b15ea61d3cb5f50e9de3f354dd2e17d270
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-May/192959.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 2fcb07fbe3c2a861cd6c988d6d13d11be22a3683)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-lanl-when-WITH_ADNS-is-unset.patch | 32 ++++++++++++++++++++++
- package/mosquitto/mosquitto.hash                   |  4 +--
- package/mosquitto/mosquitto.mk                     |  2 +-
- 3 files changed, 35 insertions(+), 3 deletions(-)
+ .../0002-buildroot-libtool-v1.5.patch.patch        | 109 +++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-diff --git a/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch b/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch
+diff --git a/package/madplay/0002-buildroot-libtool-v1.5.patch.patch b/package/madplay/0002-buildroot-libtool-v1.5.patch.patch
 new file mode 100644
-index 0000000..f9b1b27
+index 0000000..2be3363
 --- /dev/null
-+++ b/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch
-@@ -0,0 +1,32 @@
-+From 0de640dd834b6c01c4904e11d51f3a1406c89469 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 3 Apr 2017 20:34:07 +0200
-+Subject: [PATCH] Remove -lanl when WITH_ADNS is unset
++++ b/package/madplay/0002-buildroot-libtool-v1.5.patch.patch
+@@ -0,0 +1,109 @@
++From ce661985c098635965573aac8fc983a72f60d396 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Tue, 30 May 2017 16:42:34 +0200
++Subject: [PATCH] buildroot-libtool-v1.5.patch
 +
-+Do not add -lanl to BROKER_LIBS for all Linux builds.
-+Indeed, -lanl is only needed for getaddrinfo_a which is only used in
-+_mosquitto_try_connect_step1 when WITH_ADNS is set
++Apply buildroot-libtool-v1.5.patch rebased on libtool 1.5.2 used
++in madplay and fixing all conflicts.
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ config.mk | 4 ----
-+ 1 file changed, 4 deletions(-)
++ ltmain.sh | 40 ++++++++++++++++++++++++++++++----------
++ 1 file changed, 30 insertions(+), 10 deletions(-)
 +
-+diff --git a/config.mk b/config.mk
-+index 6e369c2..44639d2 100644
-+--- a/config.mk
-++++ b/config.mk
-+@@ -159,10 +159,6 @@ ifeq ($(UNAME),QNX)
-+ 	LIB_LIBS:=$(LIB_LIBS) -lsocket
-+ endif
++diff --git a/ltmain.sh b/ltmain.sh
++index 4b9f940..0b71220 100644
++--- a/ltmain.sh
+++++ b/ltmain.sh
++@@ -164,6 +164,11 @@ do
++   arg="$1"
++   shift
 + 
-+-ifeq ($(UNAME),Linux)
-+-	BROKER_LIBS:=$(BROKER_LIBS) -lanl
-+-endif
-+-
-+ ifeq ($(WITH_WRAP),yes)
-+ 	BROKER_LIBS:=$(BROKER_LIBS) -lwrap
-+ 	BROKER_CFLAGS:=$(BROKER_CFLAGS) -DWITH_WRAP
+++  # Make -static behave as -all-static
+++  case $arg in
+++  -static) arg="-all-static" ;;
+++  esac
+++
++   case $arg in
++   -*=*) optarg=`$echo "X$arg" | $Xsed -e 's/[-_a-zA-Z0-9]*=//'` ;;
++   *) optarg= ;;
++@@ -549,8 +554,9 @@ if test -z "$show_help"; then
++ 	# line option must be used.
++ 	if test -z "$tagname"; then
++ 	  $echo "$modename: unable to infer tagged configuration"
++-	  $echo "$modename: specify a tag with \`--tag'" 1>&2
++-	  exit 1
+++	  $echo "$modename: defaulting to \`CC'"
+++	  $echo "$modename: if this is not correct, specify a tag with \`--tag'"
+++#	  exit 1
++ #        else
++ #          $echo "$modename: using $tagname tagged configuration"
++ 	fi
++@@ -1228,7 +1234,8 @@ EOF
++       prevarg="$arg"
++ 
++       case $arg in
++-      -all-static)
+++      # Make -static behave like -all-static
+++      -all-static | -static)
++ 	if test -n "$link_static_flag"; then
++ 	  compile_command="$compile_command $link_static_flag"
++ 	  finalize_command="$finalize_command $link_static_flag"
++@@ -2135,8 +2142,14 @@ EOF
++ 	    absdir="$abs_ladir"
++ 	    libdir="$abs_ladir"
++ 	  else
++-	    dir="$libdir"
++-	    absdir="$libdir"
+++            # Adding 'libdir' from the .la file to our library search paths
+++            # breaks crosscompilation horribly.  We cheat here and don't add
+++            # it, instead adding the path where we found the .la.  -CL
+++	    dir="$abs_ladir"
+++	    absdir="$abs_ladir"
+++	    libdir="$abs_ladir"
+++	    #dir="$libdir"
+++	    #absdir="$libdir"
++ 	  fi
++ 	else
++ 	  dir="$ladir/$objdir"
++@@ -2261,7 +2274,7 @@ EOF
++ 	   { test "$prefer_static_libs" = no || test -z "$old_library"; }; then
++ 	  if test "$installed" = no; then
++ 	    notinst_deplibs="$notinst_deplibs $lib"
++-	    need_relink=yes
+++	    need_relink=no
++ 	  fi
++ 	  # This is a shared library
++ 	
++@@ -5146,6 +5159,10 @@ fi\
++ 	    # Replace all uninstalled libtool libraries with the installed ones
++ 	    newdependency_libs=
++ 	    for deplib in $dependency_libs; do
+++              # Replacing uninstalled with installed can easily break crosscompilation,
+++              # since the installed path is generally the wrong architecture.  -CL
+++              newdependency_libs="$newdependency_libs $deplib"
+++              continue
++ 	      case $deplib in
++ 	      *.la)
++ 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
++@@ -5464,10 +5481,13 @@ relink_command=\"$relink_command\""
++ 	  # At present, this check doesn't affect windows .dll's that
++ 	  # are installed into $libdir/../bin (currently, that works fine)
++ 	  # but it's something to keep an eye on.
++-	  if test "$inst_prefix_dir" = "$destdir"; then
++-	    $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
++-	    exit 1
++-	  fi
+++	  #
+++	  # This breaks install into our staging area.  -PB
+++	  # 
+++	  # if test "$inst_prefix_dir" = "$destdir"; then
+++	  #   $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
+++	  #   exit 1
+++	  # fi
++ 
++ 	  if test -n "$inst_prefix_dir"; then
++ 	    # Stick the inst_prefix_dir data into the link command.
 +-- 
-+2.5.0
++2.9.4
 +
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index b0b860f..5514c21 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,2 @@
--# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.10.tar.gz
--sha512  fe5d6d7196a137a496ba6881c77d852396baefb4f0b83ccd9a22175fc05b09e48a09ea249e30ec7db966e11de134ebcc4e2e9b1fd40b31dc59fb0fa2f60b75a1  mosquitto-1.4.10.tar.gz
-+# Locally computed:
-+sha512  c05ca8679b9a6f540868f4ccf701257fcabc114d5450ac0bbbe80b91bb7cd4fc52668773e945506760c7a5bd8a494e0a56100714112e5d2713d57bfab8951587  mosquitto-1.4.11.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 96607f3..e79a042 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.4.10
-+MOSQUITTO_VERSION = 1.4.11
- MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
