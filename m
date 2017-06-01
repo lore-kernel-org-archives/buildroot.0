@@ -1,31 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Jun 2017 16:01:36 +0200
-Subject: [Buildroot] [PATCH] toolchain: limit musl workaround to kernel
-	headers 3.12+
-In-Reply-To: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 19 May 2017 07:20:37 +0300")
-References: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
-Message-ID: <8760gfn6wv.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Jun 2017 16:03:23 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 10,
+	11}.x series
+In-Reply-To: <20170520151007.15764-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 20 May 2017 17:10:06 +0200")
+References: <20170520151007.15764-1-peter@korsgaard.com>
+Message-ID: <871sr3n6tw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > The libc-compat.h first appeared in kernel version 3.12. Trying to build a
- > musl toolchain using earlier headers leads to the following failure:
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > /bin/sed: can't read .../output/host/usr/arm-buildroot-linux-musleabi/sysroot/usr/include/linux/libc-compat.h: No such file or directory
- > package/pkg-generic.mk:266: recipe for target '.../output/build/toolchain/.stamp_staging_installed' failed
-
- > Don't apply the sed patch to older headers.
-
- > Reported-by: Florent Jacquet <florent.jacquet@free-electrons.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2017.02.x, thanks.
+Committed to 2017.02.x (except for 4.10.x/4.11.x), thanks.
 
 -- 
 Bye, Peter Korsgaard
