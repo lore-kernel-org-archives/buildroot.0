@@ -1,33 +1,38 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 31 May 2017 22:00:10 -0300
-Subject: [Buildroot] [PATCH] util-linux: wrap help text at column 72
-Message-ID: <20170601010010.18346-1-casantos@datacom.ind.br>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 31 May 2017 19:29:11 -0700
+Subject: [Buildroot] systemd: build failure against pam on arm
+Message-ID: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Respect the <tab><2 spaces><62 chars> rule.
+Hi all,
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/util-linux/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Compiling against 2017.05, with the following defconfig:
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index e957f848b..86db3722c 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -99,7 +99,8 @@ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
- 	select BR2_PACKAGE_ZLIB
- 	help
--	  Utilities for compressed ROM file system (fsck.cramfs, mkfs.cramfs)
-+	  Utilities for compressed ROM file system (fsck.cramfs,
-+	  mkfs.cramfs)
- 
- config BR2_PACKAGE_UTIL_LINUX_EJECT
- 	bool "eject"
--- 
-2.11.0
+BR2_arm=y
+BR2_cortex_a15=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_SYSTEMD=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_LINUX_PAM=y
+
+I get this error consistently during the systemd compilation when PAM
+is enabled:
+
+/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+error: /lib/libpam.so: incompatible target
+/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+error: /lib/libpam_misc.so: incompatible target
+collect2: error: ld returned 1 exit status
+
+It looks like it's attempting to link against /lib/libpam.so from my system.
+
+This is a pretty huge showstopper!
+
+Thanks,
+Christian Stewart
