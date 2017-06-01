@@ -1,126 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jun 2017 10:37:13 +0200
-Subject: [Buildroot] [PATCH] new package: ratpoison
-In-Reply-To: <20170512220246.18575-1-mrugiero@gmail.com>
-References: <20170512220246.18575-1-mrugiero@gmail.com>
-Message-ID: <20170601103713.7cad99d1@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 1 Jun 2017 11:02:36 +0200
+Subject: [Buildroot] [PATCH] gcc: allow gcc 7.1 for microblaze architecture
+Message-ID: <20170601090236.GA23718@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add patch from gcc upstream master to fix an issue.
 
-Thanks for your contribution. However, there's a number of things that
-aren't really correct in the patch. See my comments below.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/gcc/7.1.0/0892-microblaze-Revert.patch | 40 ++++++++++++++++++++++++++
+ package/gcc/Config.in.host                     |  1 -
+ 2 files changed, 40 insertions(+), 1 deletion(-)
+ create mode 100644 package/gcc/7.1.0/0892-microblaze-Revert.patch
 
-On Fri, 12 May 2017 19:02:46 -0300, Mario J. Rugiero wrote:
-
->  package/Config.in                |  1 +
->  package/ratpoison/Config.in      | 22 ++++++++++++++++++++++
->  package/ratpoison/ratpoison.hash |  2 ++
->  package/ratpoison/ratpoison.mk   | 22 ++++++++++++++++++++++
-
-Missing addition to the DEVELOPERS file.
-
-> +config BR2_PACKAGE_RATPOISON
-> +	bool "ratpoison"
-> +	depends on BR2_PACKAGE_XORG || BR2_PACKAGE_XORG7
-
-BR2_PACKAGE_XORG doesn't exist, so this should just be:
-
-	depends on BR2_PACKAGE_XORG7	
-
-> +	depends on BR2_PACKAGE_XLIB_LIBX11
-
-This should be a "select".
-
-> +	select BR2_PACKAGE_LIBERATION
-> +	select BR2_PACKAGE_FONTCONFIG
-
-And please order selects by alphabetic ordering.
-
-> +	help
-> +	  Ratpoison is a simple Window Manager. It is largely modelled after
-> +	  GNU Screen and focuses on the keyboard instead of a mouse.
-> +
-> +	  The screen can be split into non-overlapping frames.
-> +	  All windows are kept maximized inside their frames to take full
-> +	  advantage of your precious screen real estate. 
-> +
-> +	  http://www.nongnu.org/ratpoison/
-> +
-> +config BR2_PACKAGE_RATPOISON_RANDR
-> +	bool "Xrandr support"
-> +	depends on BR2_PACKAGE_RATPOISON
-> +	depends on BR2_PACKAGE_XLIB_LIBXRANDR
-> +	help
-> +	  Build ratpoison with randr support, mainly for multihead.
-
-No need for a sub-option, just enable xrandr support in the .mk file
-when BR2_PACKAGE_XLIB_LIBXRANDR is enabled.
-
-> diff --git a/package/ratpoison/ratpoison.hash b/package/ratpoison/ratpoison.hash
-> new file mode 100644
-> index 000000000..0f6e169d4
-> --- /dev/null
-> +++ b/package/ratpoison/ratpoison.hash
-> @@ -0,0 +1,2 @@
-> +#Locally computed
-
-Space between # and Locally.
-
-> +sha256 d98fa4be025ecca453c407ff311ab3949f29f20d6d8abedf8f0716b85fc8d1f1 ratpoison-1.4.9.tar.xz
-> diff --git a/package/ratpoison/ratpoison.mk b/package/ratpoison/ratpoison.mk
-> new file mode 100644
-> index 000000000..1545cb17c
-> --- /dev/null
-> +++ b/package/ratpoison/ratpoison.mk
-> @@ -0,0 +1,22 @@
-> +#############################################################
-> +#
-> +# ratpoison
-> +#
-> +#############################################################
-
-Wrong number of #. Please pass your package through
-supports/scripts/check-package before submission.
-
-> +RATPOISON_VERSION = 1.4.9
-> +RATPOISON_SOURCE = ratpoison-$(RATPOISON_VERSION).tar.xz
-> +RATPOISON_SITE = http://download.savannah.nongnu.org/releases/ratpoison
-
-Missing license and license file.
-
-> +
-> +RATPOISON_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
-> +		      --x-libraries=$(STAGING_DIR)/usr/lib
-> +
-> +RATPOISON_DEPENDENCIES = $(XSERVER) xlib_libX11
-
-$(XSERVER) doesn't exist.
-
-> +
-> +ifeq ($(BR2_PACKAGE_RATPOISON_RANDR),y)
-> +	RATPOISON_DEPENDENCIES += xlib_libXrandr
-> +else
-> +	RATPOISON_CONF_OPTS += --without-xrandr
-> +endif
-
-Please replace with:
-
-ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-RATPOISON_DEPENDENCIES += xlib_libXrandr
-RATPOISON_CONF_OPTS += --with-xrandr
-else
-RATPOISON_CONF_OPTS += --without-xrandr
-endif
-
-Thanks,
-
-Thomas
+diff --git a/package/gcc/7.1.0/0892-microblaze-Revert.patch b/package/gcc/7.1.0/0892-microblaze-Revert.patch
+new file mode 100644
+index 0000000..7026d0e
+--- /dev/null
++++ b/package/gcc/7.1.0/0892-microblaze-Revert.patch
+@@ -0,0 +1,40 @@
++From 707a69dfb56a2976e2b5c010f0e5cb2ac9905a07 Mon Sep 17 00:00:00 2001
++From: eager <eager@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Sat, 27 May 2017 18:29:40 +0000
++Subject: [PATCH] 	Revert: 	2016-01-21  Ajit Agarwal 
++ <ajitkum@xilinx.com>
++
++	See https://gcc.gnu.org/ml/gcc/2017-05/msg00221.html.
++
++	* config/microblaze/microblaze.h
++	(FIXED_REGISTERS): Update in macro.
++	(CALL_USED_REGISTERS): Update in macro.
++
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 248540 138bc75d-0d04-0410-961f-82ee72b054a4
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
++index 66e4ef5..2c9ece1 100644
++--- a/gcc/config/microblaze/microblaze.h
+++++ b/gcc/config/microblaze/microblaze.h
++@@ -269,14 +269,14 @@ extern enum pipeline_type microblaze_pipe;
++ #define FIXED_REGISTERS							\
++ {									\
++   1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,			\
++-  1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
+++  1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
++   1, 1, 1, 1 								\
++ }
++ 
++ #define CALL_USED_REGISTERS						\
++ {									\
++   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,			\
++-  1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
+++  1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
++   1, 1, 1, 1								\
++ }
++ #define GP_REG_FIRST    0
++-- 
++2.1.4
++
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 3e7fb80..bb56c15 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -67,7 +67,6 @@ config BR2_GCC_VERSION_7_X
+ 	bool "gcc 7.x"
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
+-	depends on !BR2_microblaze
+ 	depends on !BR2_or1k
+ 	# Unsupported MIPS cores
+ 	depends on !BR2_mips_m6250 && !BR2_mips_p6600
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
