@@ -1,172 +1,237 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Jun 2017 20:28:51 -0000
-Subject: [Buildroot] [git commit] flex: bump version to 2.6.4
-Message-ID: <20170601202850.41AE2807D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libloki: new package
+Message-ID: <20170601202850.6FAD3807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9a5f5843d0685c69b3c379b91bb9cce8864b8a2
+commit: https://git.buildroot.net/buildroot/commit/?id=7e2fd9eeb96e1d851c1fc3fb15a814afea9d16fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- 0001 patch removed. It doesn't apply on this version and is also not
-  necessary since the AR binary is now handled correctly with AR = @AR at .
-- 0002 patch removed. It's already included in this release:
-  https://github.com/westes/flex/commit/a5cbe929ac3255d371e698f62dc256afe7006466
-- The flex project has moved to GitHub, so modify the URLs in both
-  flex.mk and Config.in files.
-- The sed command over Makefile.in to prevent the flex binary to be
-  built fails, so remove it. That logic has been moved to
-  src/Makefile.in, and whenever we disable the flex binary to be built
-  then the compilation fails when building the documentation because
-  some bits require "../src/flex", which is the flex binary.
-  We prevent building the flex binary and the documentation using a new
-  patch.
+A C++ library of designs, containing flexible implementations of
+common design patterns and idioms.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Sigend-off-by: Corentin GUILLEVIC <corentin.guillevic@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: simplify target installation.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...lex-disable-flex-binary-and-documentation.patch | 35 ++++++++++++++++++++++
- package/flex/0001-prog-ar.patch                    | 11 -------
- package/flex/0002-fix-CVE-2016-6354.patch          | 25 ----------------
- package/flex/Config.in                             |  2 +-
- package/flex/flex.hash                             |  2 +-
- package/flex/flex.mk                               |  9 ++----
- 6 files changed, 39 insertions(+), 45 deletions(-)
+ DEVELOPERS                                         |  3 +
+ package/Config.in                                  |  1 +
+ ...stall-to-a-specific-location-using-DESTDI.patch | 65 ++++++++++++++++++++++
+ package/libloki/0002-use-ln-snf.patch              | 31 +++++++++++
+ package/libloki/Config.in                          | 12 ++++
+ package/libloki/libloki.hash                       |  5 ++
+ package/libloki/libloki.mk                         | 38 +++++++++++++
+ 7 files changed, 155 insertions(+)
 
-diff --git a/package/flex/0001-flex-disable-flex-binary-and-documentation.patch b/package/flex/0001-flex-disable-flex-binary-and-documentation.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8fbb69a..27a4e20 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -361,6 +361,9 @@ F:	package/policycoreutils/
+ F:	package/sepolgen/
+ F:	package/ustr/
+ 
++N:	Corentin Guillevic <corentin.guillevic@smile.fr>
++F:	package/libloki/
++
+ N:	C??dric Ch??pied <cedric.chepied@gmail.com>
+ F:	package/znc/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index d57813c..a5e71ef 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1385,6 +1385,7 @@ menu "Other"
+ 	source "package/libical/Config.in"
+ 	source "package/libite/Config.in"
+ 	source "package/liblinear/Config.in"
++	source "package/libloki/Config.in"
+ 	source "package/libnpth/Config.in"
+ 	source "package/libnspr/Config.in"
+ 	source "package/libpfm4/Config.in"
+diff --git a/package/libloki/0001-allow-to-install-to-a-specific-location-using-DESTDI.patch b/package/libloki/0001-allow-to-install-to-a-specific-location-using-DESTDI.patch
 new file mode 100644
-index 0000000..d035ef4
+index 0000000..d19306f
 --- /dev/null
-+++ b/package/flex/0001-flex-disable-flex-binary-and-documentation.patch
-@@ -0,0 +1,35 @@
-+flex: prevent flex binary to be built
++++ b/package/libloki/0001-allow-to-install-to-a-specific-location-using-DESTDI.patch
+@@ -0,0 +1,65 @@
++From 0b80e8beff68a0570fdc2d9281992060414475c1 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 29 Apr 2017 22:13:54 +0200
++Subject: [PATCH] allow to install to a specific location using DESTDIR
 +
-+Since we prevent the flex binary to be built, we also need to prevent
-+the documentation to be built, otherwise it will fail like this:
++DESTDIR is the autotools standard variable where to copy
++headers, libraries and binaries. It's not the same as "prefix".
 +
-+Making all in doc
-+make[2]: Entering directory '/br/output/build/flex-2.6.4/doc'
-+make[2]: *** No rule to make target '../src/flex', needed by 'flex.1'.
-+Stop.
++So while installing to Buildroot STAGING directory, use prefix=/usr
++and DESTOR=$(STAGING_DIR).
 +
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Sigend-off-by: Corentin GUILLEVIC <corentin.guillevic@smile.fr>
++---
++ include/Makefile | 12 ++++++------
++ src/Makefile     | 10 +++++-----
++ 2 files changed, 11 insertions(+), 11 deletions(-)
 +
-+diff -rup a/Makefile.in b/Makefile.in
-+--- a/Makefile.in	2017-05-06 15:49:09.000000000 +0100
-++++ b/Makefile.in	2017-05-10 14:35:20.152794902 +0100
-+@@ -450,7 +450,6 @@ EXTRA_DIST = \
++diff --git a/include/Makefile b/include/Makefile
++index 26a8139..a8cf369 100644
++--- a/include/Makefile
+++++ b/include/Makefile
++@@ -2,10 +2,10 @@ include ../Makefile.common
 + 
-+ SUBDIRS = \
-+ 	src \
-+-	doc \
-+ 	examples \
-+ 	po \
-+ 	tests \
-+diff -rup a/src/Makefile.in b/src/Makefile.in
-+--- a/src/Makefile.in	2017-05-06 15:49:09.000000000 +0100
-++++ b/src/Makefile.in	2017-05-10 14:35:01.918464036 +0100
-+@@ -90,7 +90,7 @@ PRE_UNINSTALL = :
-+ POST_UNINSTALL = :
-+ build_triplet = @build@
-+ host_triplet = @host@
-+-bin_PROGRAMS = flex$(EXEEXT)
-++bin_PROGRAMS =
-+ @ENABLE_BOOTSTRAP_TRUE at noinst_PROGRAMS = stage1flex$(EXEEXT)
-+ @CROSS_TRUE at am__append_1 = \
-+ @CROSS_TRUE@		      ../lib/malloc.c \
-diff --git a/package/flex/0001-prog-ar.patch b/package/flex/0001-prog-ar.patch
-deleted file mode 100644
-index e0626ff..0000000
---- a/package/flex/0001-prog-ar.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
--diff -rup flex-2.5.33.orig/Makefile.in flex-2.5.33/Makefile.in
----- flex-2.5.33.orig/Makefile.in	2007-01-18 17:29:25.000000000 +0100
--+++ flex-2.5.33/Makefile.in	2007-01-18 18:28:22.000000000 +0100
--@@ -105,7 +105,6 @@ am__installdirs = "$(DESTDIR)$(libdir)"
-- 	"$(DESTDIR)$(includedir)"
-- libLIBRARIES_INSTALL = $(INSTALL_DATA)
-- LIBRARIES = $(lib_LIBRARIES)
---AR = ar
-- ARFLAGS = cru
-- libfl_a_AR = $(AR) $(ARFLAGS)
-- libfl_a_LIBADD =
-diff --git a/package/flex/0002-fix-CVE-2016-6354.patch b/package/flex/0002-fix-CVE-2016-6354.patch
-deleted file mode 100644
-index b0c780b..0000000
---- a/package/flex/0002-fix-CVE-2016-6354.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From a5cbe929ac3255d371e698f62dc256afe7006466 Mon Sep 17 00:00:00 2001
--From: Will Estes <westes575@gmail.com>
--Date: Sat, 27 Feb 2016 11:56:05 -0500
--Subject: [PATCH] Fixed incorrect integer type
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: upstream
--
-- flex.skl | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/flex.skl b/src/flex.skl
--index 36a526a..64f853d 100644
----- a/flex.skl
--+++ b/flex.skl
--@@ -1703,7 +1703,7 @@ int yyFlexLexer::yy_get_next_buffer()
-- 
-- 	else
-- 		{
---			yy_size_t num_to_read =
--+			int num_to_read =
-- 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
-- 
-- 		while ( num_to_read <= 0 )
-diff --git a/package/flex/Config.in b/package/flex/Config.in
-index 0a70a1c..76e8bc7 100644
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_FLEX
- 	  A fast lexical analyser generator. A tool for generating
- 	  programs that perform pattern-matching on text.
- 
--	  http://flex.sourceforge.net/
-+	  https://github.com/westes/flex/
-diff --git a/package/flex/flex.hash b/package/flex/flex.hash
-index b91ab57..cf2ce85 100644
---- a/package/flex/flex.hash
-+++ b/package/flex/flex.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  bf693433a3effe6b1f42e44abd787491e4e213984b1859545b92267a86088dd3  flex-2.5.37.tar.gz
-+sha256 e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995  flex-2.6.4.tar.gz
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 9a3f840..81cbdc1 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FLEX_VERSION = 2.5.37
--FLEX_SITE = http://download.sourceforge.net/project/flex
-+FLEX_VERSION = 2.6.4
-+FLEX_SITE = https://github.com/westes/flex/files/981163
- FLEX_INSTALL_STAGING = YES
- FLEX_LICENSE = FLEX
- FLEX_LICENSE_FILES = COPYING
-@@ -15,11 +15,6 @@ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
- # we don't have a host-gettext/libintl
- HOST_FLEX_DEPENDENCIES = host-m4
- 
--define FLEX_DISABLE_PROGRAM
--	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/Makefile.in
--endef
--FLEX_POST_PATCH_HOOKS += FLEX_DISABLE_PROGRAM
--
- # flex++ symlink is broken when flex binary is not installed
- define FLEX_REMOVE_BROKEN_SYMLINK
- 	rm -f $(TARGET_DIR)/usr/bin/flex++
++ .PHONY: install
++ install:
++-	mkdir -p $(prefix)/include/loki
++-	mkdir -p $(prefix)/include/loki/flex
++-	mkdir -p $(prefix)/include/loki/yasli
+++	mkdir -p $(DESTDIR)$(prefix)/include/loki
+++	mkdir -p $(DESTDIR)$(prefix)/include/loki/flex
+++	mkdir -p $(DESTDIR)$(prefix)/include/loki/yasli
++ 	
++-	install -m 644 loki/*.h $(prefix)/include/loki
++-	install -m 644 loki/flex/*.h $(prefix)/include/loki/flex
++-	install -m 644 loki/yasli/*.h $(prefix)/include/loki/yasli
+++	install -m 644 loki/*.h $(DESTDIR)$(prefix)/include/loki
+++	install -m 644 loki/flex/*.h $(DESTDIR)$(prefix)/include/loki/flex
+++	install -m 644 loki/yasli/*.h $(DESTDIR)$(prefix)/include/loki/yasli
++diff --git a/src/Makefile b/src/Makefile
++index b272929..054285e 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -74,13 +74,13 @@ INSTALL_DATA := $(INSTALL) -m 644
++ install: install-static install-shared
++ 
++ install-static: $(RESULT_DIR)$(STATIC_LIB)
++-	mkdir -p $(prefix)/lib
++-	$(INSTALL_DATA) $(RESULT_DIR)$(STATIC_LIB) $(prefix)/lib
+++	mkdir -p $(DESTDIR)$(prefix)/lib
+++	$(INSTALL_DATA) $(RESULT_DIR)$(STATIC_LIB) $(DESTDIR)$(prefix)/lib
++ 
++ install-shared: $(RESULT_DIR)$(SHARED_LIB_VERSIONED)
++-	mkdir -p $(prefix)/lib
++-	$(INSTALL_DATA) $(RESULT_DIR)$(SHARED_LIB_VERSIONED) $(prefix)/lib
++-	cd $(prefix)/lib; ln -s $(SHARED_LIB_VERSIONED) $(SHARED_LIB_BASE)
+++	mkdir -p $(DESTDIR)$(prefix)/lib
+++	$(INSTALL_DATA) $(RESULT_DIR)$(SHARED_LIB_VERSIONED) $(DESTDIR)$(prefix)/lib
+++	cd $(DESTDIR)$(prefix)/lib; ln -s $(SHARED_LIB_VERSIONED) $(SHARED_LIB_BASE)
++ 
++ %.lo : %.cpp
++ 	$(CXX) -c $(CXXFLAGS) -fPIC $(CPPFLAGS) -o $@ $<
++-- 
++2.9.3
++
+diff --git a/package/libloki/0002-use-ln-snf.patch b/package/libloki/0002-use-ln-snf.patch
+new file mode 100644
+index 0000000..5b73d7f
+--- /dev/null
++++ b/package/libloki/0002-use-ln-snf.patch
+@@ -0,0 +1,31 @@
++From 7fcaa080ef3fddb3f7dcfaf2984bc397d7c9e96c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 29 Apr 2017 22:27:26 +0200
++Subject: [PATCH] use ln -snf
++
++Otherwise the install step fail due to existing symlink.
++
++'libloki.so': File exists
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Sigend-off-by: Corentin GUILLEVIC <corentin.guillevic@smile.fr>
++---
++ src/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index 054285e..2c169ab 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -80,7 +80,7 @@ install-static: $(RESULT_DIR)$(STATIC_LIB)
++ install-shared: $(RESULT_DIR)$(SHARED_LIB_VERSIONED)
++ 	mkdir -p $(DESTDIR)$(prefix)/lib
++ 	$(INSTALL_DATA) $(RESULT_DIR)$(SHARED_LIB_VERSIONED) $(DESTDIR)$(prefix)/lib
++-	cd $(DESTDIR)$(prefix)/lib; ln -s $(SHARED_LIB_VERSIONED) $(SHARED_LIB_BASE)
+++	cd $(DESTDIR)$(prefix)/lib; ln -snf $(SHARED_LIB_VERSIONED) $(SHARED_LIB_BASE)
++ 
++ %.lo : %.cpp
++ 	$(CXX) -c $(CXXFLAGS) -fPIC $(CPPFLAGS) -o $@ $<
++-- 
++2.9.3
++
+diff --git a/package/libloki/Config.in b/package/libloki/Config.in
+new file mode 100644
+index 0000000..4ce4429
+--- /dev/null
++++ b/package/libloki/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBLOKI
++	bool "libloki"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  A C++ library of designs, containing flexible
++	  implementations of common design patterns and idioms.
++
++	  http://sourceforge.net/projects/loki-lib
++
++comment "libloki needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libloki/libloki.hash b/package/libloki/libloki.hash
+new file mode 100644
+index 0000000..52d67c8
+--- /dev/null
++++ b/package/libloki/libloki.hash
+@@ -0,0 +1,5 @@
++# From https://sourceforge.net/projects/loki-lib/files/Loki/Loki%200.1.7
++md5 33a24bcbb99fa2ec8fcbbab65649f3f6 loki-0.1.7.tar.bz2
++sha1 006c630217b1e1fd33015dc0597d2d743d8ee4e3 loki-0.1.7.tar.bz2
++# locally computed
++sha256 07553754f6be2738559947db69b0718512665bf4a34015fa3a875b6eb1111198 loki-0.1.7.tar.bz2
+diff --git a/package/libloki/libloki.mk b/package/libloki/libloki.mk
+new file mode 100644
+index 0000000..7564239
+--- /dev/null
++++ b/package/libloki/libloki.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# libloki
++#
++################################################################################
++
++LIBLOKI_VERSION = 0.1.7
++LIBLOKI_SOURCE = loki-$(LIBLOKI_VERSION).tar.bz2
++LIBLOKI_SITE = https://sourceforge.net/projects/loki-lib/files/Loki/Loki%20$(LIBLOKI_VERSION)
++LIBLOKI_LICENSE = MIT
++LIBLOKI_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBLOKI_BUILD_TARGETS += build-static
++LIBLOKI_INSTALL_TARGETS += install-static
++else ifeq ($(BR2_SHARED_LIBS),y)
++LIBLOKI_BUILD_TARGETS += build-shared
++LIBLOKI_INSTALL_TARGETS += install-shared
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++LIBLOKI_BUILD_TARGETS += build-static build-shared
++LIBLOKI_INSTALL_TARGETS += install-static install-shared
++endif
++
++define LIBLOKI_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		-C $(@D) $(LIBLOKI_BUILD_TARGETS)
++endef
++
++define LIBLOKI_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D)/src DESTDIR=$(STAGING_DIR) $(LIBLOKI_INSTALL_TARGETS)
++	$(MAKE) -C $(@D)/include DESTDIR=$(STAGING_DIR) install
++endef
++
++define LIBLOKI_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) $(LIBLOKI_INSTALL_TARGETS)
++endef
++
++$(eval $(generic-package))
