@@ -1,64 +1,122 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 15:59:35 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] cppcms: fix build on
-	machines with libgpg-error installed
-Message-ID: <20170601144622.E701B82A0F@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:06:13 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mariadb: security bump to
+	version 10.1.23
+Message-ID: <20170601144623.298908296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e44457add4d3b48b6c389ea8f84d49da754ec89
+commit: https://git.buildroot.net/buildroot/commit/?id=68abab0fcf0593292ad122ed925cdca9fcced2ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
-
-In configuration where target architecture == host architecture, and
-libgpg-error is installed system-wide with development files, the build
-of cppcms fails with:
-
-/home/test/buildroot/output/host/usr/bin/x86_64-amd-linux-gnu-g++  --sysroot=/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -Wextra  -DNDEBUG   CMakeFiles/base64_test.dir/tests/base64_test.cpp.o  -o base64_test  -L/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib -Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib -rdynamic libcppcms.so.1.0.5 booster/libbooster.so.0.0.3 -lpthread /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpcre.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libdl.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_set_errno at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_init at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_destroy at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_syserror at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_errno at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_unlock at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strerror at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strsource at GPG_ERROR_1.0'
-/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_lock at GPG_ERROR_1.0'
-
-The problem comes from the
-"-Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib"
-option, which tells the linker to search for libraries in /usr/lib.
-
-This commit fixes that by asking CMake to not add any rpath when
-building cppcms.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/a7eb1ede552ae14f409cfd7bd877bcf25ca69a74/
+CVE-2017-3302 - Crash in libmysqlclient.so in Oracle MySQL before 5.6.21 and
+5.7.x before 5.7.5 and MariaDB through 5.5.54, 10.0.x through 10.0.29,
+10.1.x through 10.1.21, and 10.2.x through 10.2.3.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+CVE-2017-3313 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: MyISAM). Supported versions that are affected are
+5.5.53 and earlier, 5.6.34 and earlier and 5.7.16 and earlier. Difficult to
+exploit vulnerability allows low privileged attacker with logon to the
+infrastructure where MySQL Server executes to compromise MySQL Server.
+Successful attacks of this vulnerability can result in unauthorized access
+to critical data or complete access to all MySQL Server accessible data.
+
+CVE-2017-3308 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
+and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server. While the vulnerability is
+in MySQL Server, attacks may significantly impact additional products.
+Successful attacks of this vulnerability can result in unauthorized
+ability to cause a hang or frequently repeatable crash (complete DOS) of
+MySQL Server.
+
+CVE-2017-3309 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
+"exploitable" vulnerability allows low privileged attacker with network
+access via multiple protocols to compromise MySQL Server. While the
+vulnerability is in MySQL Server, attacks may significantly impact
+additional products. Successful attacks of this vulnerability can result
+in unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
+
+CVE-2017-3453 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.54 and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily
+"exploitable" vulnerability allows low privileged attacker with network
+access via multiple protocols to compromise MySQL Server. Successful attacks
+of this vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2017-3456 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DML). Supported versions that are affected are 5.5.54
+and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
+vulnerability allows high privileged attacker with network access via
+multiple protocols to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2017-3464 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are 5.5.54
+and earlier, 5.6.35 and earlier and 5.7.17 and earlier. Easily "exploitable"
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server. Successful attacks of this
+vulnerability can result in unauthorized update, insert or delete access to
+some of MySQL Server accessible data.
+
+And a number of important, but non-security related fixes:
+
+MDEV-12602: Fixed some race conditions in InnoDB encryption
+
+MariaDB Backup alpha introduced
+
+Galera wsrep library updated to 25.3.20
+
+For details, see the release notes:
+https://mariadb.com/kb/en/mariadb/mariadb-10123-release-notes/
+
+[Peter: drop COPYING.LESSER and add a reference to the bugtracker issue
+	explaining why]
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 15423bd46e925b1aed12aac8eddeaf249b4bd999)
+(cherry picked from commit e6213e8ee68cbb637997ff02abe7945ec1cc168c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cppcms/cppcms.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index 611020c..d908d7b 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -11,6 +11,10 @@ CPPCMS_LICENSE_FILES = COPYING.TXT
- CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
- CPPCMS_INSTALL_STAGING = YES
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index afcf378..580fe98 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,2 +1,2 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.22/
+-sha256 bcb0572e7ad32cea9740a21e9255f733bdf60a5561ffbda317c22dd12b3966ce  mariadb-10.1.22.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.23/
++sha256 54d8114e24bfa5e3ebdc7d69e071ad1471912847ea481b227d204f9d644300bf  mariadb-10.1.23.tar.gz
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 8c7375a..e171e0e 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
  
-+# disable rpath to avoid getting /usr/lib added to the link search
-+# path
-+CPPCMS_CONF_OPTS = -DCMAKE_SKIP_RPATH=ON
-+
- CPPCMS_DEPENDENCIES = zlib pcre libgcrypt
+-MARIADB_VERSION = 10.1.22
++MARIADB_VERSION = 10.1.23
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
+-MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
++# Tarball no longer contains LGPL license text
++# https://jira.mariadb.org/browse/MDEV-12297
++MARIADB_LICENSE_FILES = README COPYING
+ MARIADB_INSTALL_STAGING = YES
+ MARIADB_PROVIDES = mysql
  
- ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
