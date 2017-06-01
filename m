@@ -1,34 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Jun 2017 16:39:00 +0200
-Subject: [Buildroot] [PATCH] package/madplay: add custom libtool patch
-In-Reply-To: <20170530145317.9552-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 30 May 2017 16:53:17 +0200")
-References: <20170530145317.9552-1-romain.naour@gmail.com>
-Message-ID: <8760gfixh7.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Jun 2017 16:40:46 +0200
+Subject: [Buildroot] [PATCH] strongswan: add upstream security patches
+In-Reply-To: <20170530130324.28875-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 30 May 2017 15:03:24 +0200")
+References: <20170530130324.28875-1-peter@korsgaard.com>
+Message-ID: <871sr3ixe9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
-
- > Madplay use a libtool script version 1.5.2 but the libtool patch
- > "buildroot-libtool-v1.5.patch.patch" doesn't apply.
-
- > From [1]:
- > "It's libtool dropping -static. That's because madplay has a
- > weird version of libtool, on which our libtool patch doesn't apply so
- > we have MADPLAY_LIBTOOL_PATCH = NO. Therefore, the hack we have that
- > makes libtool -static behave like -all-static isn't applied, causing
- > this build failure."
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes:
- > http://autobuild.buildroot.net/results/60def1b15ea61d3cb5f50e9de3f354dd2e17d270
+ > CVE-2017-9022 - RSA public keys passed to the gmp plugin aren't
+ > validated sufficiently before attempting signature verification, so that
+ > invalid input might lead to a floating point exception and crash of the
+ > process.  A certificate with an appropriately prepared public key sent by a
+ > peer could be used for a denial-of-service attack.
 
- > [1] http://lists.busybox.net/pipermail/buildroot/2017-May/192959.html
+ > https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9022%29.html
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > CVE-2017-9023 - ASN.1 CHOICE types are not correctly handled by the ASN.1
+ > parser when parsing X.509 certificates with extensions that use such types.
+ > This could lead to infinite looping of the thread parsing a specifically
+ > crafted certificate.
+
+ > https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9023%29.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
 
