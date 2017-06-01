@@ -1,36 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Jun 2017 16:42:33 +0200
-Subject: [Buildroot] [PATCH] sudo: add upstream security patch for
-	CVE-2017-1000367
-In-Reply-To: <20170531064718.13667-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 31 May 2017 08:47:18 +0200")
-References: <20170531064718.13667-1-peter@korsgaard.com>
-Message-ID: <87shjjhiqu.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Jun 2017 16:43:09 +0200
+Subject: [Buildroot] [PATCH] package/hans: fix build failures with high
+	'make -j' values
+In-Reply-To: <20170531191249.18287-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Wed, 31 May 2017 21:12:49 +0200")
+References: <20170531191249.18287-1-romain.naour@gmail.com>
+Message-ID: <87o9u7hipu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > CVE-2017-1000367 - Potential overwrite of arbitrary files on Linux
- > On Linux systems, sudo parses the /proc/[pid]/stat file to determine the
- > device number of the process's tty (field 7).  The fields in the file are
- > space-delimited, but it is possible for the command name (field 2) to
- > include spaces, which sudo does not account for.  A user with sudo
- > privileges can cause sudo to use a device number of the user's choosing by
- > creating a symbolic link from the sudo binary to a name that contains a
- > space, followed by a number.
+ > The top-level doesn't handle correctly the build dependencies
+ > between .o files.
 
- > If SELinux is enabled on the system and sudo was built with SELinux support,
- > a user with sudo privileges may be able to to overwrite an arbitrary file.
- > This can be escalated to full root access by rewriting a trusted file such
- > as /etc/shadow or even /etc/sudoers.
+ > Since hans doesn't take too many time to build, just use MAKE1.
 
- > For more details, see: https://www.sudo.ws/alerts/linux_tty.html
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d14/d142f4a439d4d5fcc89865abde3e593c45ad5d96
+ > http://autobuild.buildroot.net/results/28e/28ed230e40cc154db9274f9765085cd7f0eee85a
+ > http://autobuild.buildroot.net/results/900/9008c3be3bcf46f0fc21a34f48e3cf9da1397d9a
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed to 2017.02.x, thanks.
 
