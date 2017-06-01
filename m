@@ -1,35 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:29:17 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/libev: fix
-	download URL
-Message-ID: <20170601144623.DC95D8296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:13:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mono: remove nonexistent
+	configure options
+Message-ID: <20170601144623.5011F8296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9af8504a4d036e84f3fbcf9af33744d4b361b13d
+commit: https://git.buildroot.net/buildroot/commit/?id=ae353794f00a5297e1d8f57f06bee6de40367536
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The .mk file for the mono package contains out of date configuration
+options. The --disable-gtk-doc option is no longer available in
+configure. Moonlight is no longer supported in Mono and the
+--with-moonlight=no option is no longer required.
+
+Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 3f0cdaad8b0b797f5727a35737a0badd97cb3ddc)
+(cherry picked from commit 2ba4fee836b9dec5f30a039fe2a03ad889b7cac1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libev/libev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mono/mono.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index 02bc72c..8925a62 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 20b9205..866bff2 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -18,9 +18,7 @@ MONO_INSTALL_STAGING = YES
+ MONO_AUTORECONF = YES
  
- LIBEV_VERSION = 4.22
--LIBEV_SITE = http://dist.schmorp.de/libev
-+LIBEV_SITE = http://dist.schmorp.de/libev/Attic
- LIBEV_INSTALL_STAGING = YES
- LIBEV_LICENSE = BSD-2c or GPLv2+
- LIBEV_LICENSE_FILES = LICENSE
+ # Disable managed code (mcs folder) from building
+-MONO_CONF_OPTS = --disable-gtk-doc \
+-	--with-mcs-docs=no \
+-	--with-moonlight=no \
++MONO_CONF_OPTS = --with-mcs-docs=no \
+ 	--with-ikvm-native=no \
+ 	--enable-minimal=profiler,debug \
+ 	--disable-mcs-build \
+@@ -44,9 +42,7 @@ MONO_DEPENDENCIES += host-mono
+ 
+ ## Mono managed
+ 
+-HOST_MONO_CONF_OPTS = --disable-gtk-doc \
+-	--with-mcs-docs=no \
+-	--with-moonlight=no \
++HOST_MONO_CONF_OPTS = --with-mcs-docs=no \
+ 	--disable-libraries \
+ 	--with-ikvm-native=no \
+ 	--enable-minimal=profiler,debug \
