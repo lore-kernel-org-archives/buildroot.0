@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 01 Jun 2017 20:28:52 -0000
-Subject: [Buildroot] [git commit] nano: bump version to 2.8.2
-Message-ID: <20170601202848.7FD1582612@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lttng-modules: bump version to 2.9.2
+Message-ID: <20170601202849.2462982612@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1e3fe300f4d6271826da1bc370b607ebd45e247
+commit: https://git.buildroot.net/buildroot/commit/?id=e285cabf7d4b8dee3f173dc678ee16bcb6525b5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lttng-modules/lttng-modules.hash | 6 +++---
+ package/lttng-modules/lttng-modules.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 12baecf..2c030a1 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 e935a8bb373345c833dff3a304c6d392775d206b94c802d9285ae80ac6b66d0b  nano-2.8.1.tar.xz
-+sha256 023e8a7b38b2420d5476d7b2b4d8524d7de55c0853b4dc0b02e4a4adf7ecb9e0  nano-2.8.2.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 9e7fdc7..0f01e46 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index ec733ef..6849d5d 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,3 +1,3 @@
+-# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.1.tar.bz2.{md5,sha1}
+-md5 5a16bca52233cc2bdff572b1120a88f6  lttng-modules-2.9.1.tar.bz2
+-sha1 5b47e923a8d697b0f5799f0eb226a41c4957966c  lttng-modules-2.9.1.tar.bz2
++# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.2.tar.bz2.{md5,sha1}
++md5 6c02645c77fd4d6475a4f83bda1d75ff  lttng-modules-2.9.2.tar.bz2
++sha1 da54a8478019c0d551590c37826e78c058e9cb8b  lttng-modules-2.9.2.tar.bz2
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 9f624e5..f53b085 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 2.8
--NANO_VERSION = $(NANO_VERSION_MAJOR).1
-+NANO_VERSION = $(NANO_VERSION_MAJOR).2
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-LTTNG_MODULES_VERSION = 2.9.1
++LTTNG_MODULES_VERSION = 2.9.2
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
