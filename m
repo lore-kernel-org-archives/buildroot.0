@@ -1,93 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:07:26 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libminiupnpc: add
-	upstream security fix for CVE-2017-8798
-Message-ID: <20170601144623.370F18296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:28:32 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/mxml: fix
+	download URL
+Message-ID: <20170601144623.D09CF7FC9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f459be48e0e98a4ed3cc0ef17121f2f1f145d00d
+commit: https://git.buildroot.net/buildroot/commit/?id=a40c4d70ed0765a9aeb918458a6d66e4c9e4de05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-CVE-2017-8798: Integer signedness error in MiniUPnP MiniUPnPc v1.4.20101221
-through v2.0 allows remote attackers to cause a denial of service or
-possibly have unspecified other impact.
+The project moved to github, the current download URL is broken:
 
-For more details including a PoC, see:
-https://github.com/tintinweb/pub/tree/master/pocs/cve-2017-8798
+$ wget -q  http://www.msweet.org/files/project3/mxml-2.10.tar.gz
+$ file mxml-2.10.tar.gz
+mxml-2.10.tar.gz: HTML document, UTF-8 Unicode text, with very long lines
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a0c4cf0f9698ed109b97cb1e33f4070f505e3988)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit eca61c93d5e6061a0749c94f7a4b5da73e332777)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-miniupnpc-Fix-CVE-2017-8798.patch         | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ package/mxml/mxml.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
-new file mode 100644
-index 0000000..25591fc
---- /dev/null
-+++ b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
-@@ -0,0 +1,59 @@
-+From f0f1f4b22d6a98536377a1bb07e7c20e4703d229 Mon Sep 17 00:00:00 2001
-+From: Thomas Bernard <miniupnp@free.fr>
-+Date: Tue, 9 May 2017 12:00:47 +0200
-+Subject: [PATCH] miniupnpc: Fix CVE-2017-8798
-+
-+Thanks to tin/Team OSTStrom
-+
-+[Peter: drop Changelog.txt modification, convert to -p1 format]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ miniupnpc/miniwget.c    | 12 +++++++-----
-+ 1 file changed, 9 insertions(+), 5 deletions(-)
-+
-+diff --git a/miniwget.c b/miniwget.c
-+index 37cb47b7..1eda57c5 100644
-+--- a/miniwget.c
-++++ b/miniwget.c
-+@@ -284,11 +284,12 @@ getHTTPResponse(int s, int * size, int * status_code)
-+ 							goto end_of_stream;
-+ 						}
-+ 					}
-+-					bytestocopy = ((int)chunksize < (n - i))?chunksize:(unsigned int)(n - i);
-++					/* it is guaranteed that (n >= i) */
-++					bytestocopy = (chunksize < (unsigned int)(n - i))?chunksize:(unsigned int)(n - i);
-+ 					if((content_buf_used + bytestocopy) > content_buf_len)
-+ 					{
-+ 						char * tmp;
-+-						if(content_length >= (int)(content_buf_used + bytestocopy)) {
-++						if((content_length >= 0) && ((unsigned int)content_length >= (content_buf_used + bytestocopy))) {
-+ 							content_buf_len = content_length;
-+ 						} else {
-+ 							content_buf_len = content_buf_used + bytestocopy;
-+@@ -313,14 +314,15 @@ getHTTPResponse(int s, int * size, int * status_code)
-+ 			{
-+ 				/* not chunked */
-+ 				if(content_length > 0
-+-				   && (int)(content_buf_used + n) > content_length) {
-++				   && (content_buf_used + n) > (unsigned int)content_length) {
-+ 					/* skipping additional bytes */
-+ 					n = content_length - content_buf_used;
-+ 				}
-+ 				if(content_buf_used + n > content_buf_len)
-+ 				{
-+ 					char * tmp;
-+-					if(content_length >= (int)(content_buf_used + n)) {
-++					if(content_length >= 0
-++					   && (unsigned int)content_length >= (content_buf_used + n)) {
-+ 						content_buf_len = content_length;
-+ 					} else {
-+ 						content_buf_len = content_buf_used + n;
-+@@ -340,7 +342,7 @@ getHTTPResponse(int s, int * size, int * status_code)
-+ 			}
-+ 		}
-+ 		/* use the Content-Length header value if available */
-+-		if(content_length > 0 && (int)content_buf_used >= content_length)
-++		if(content_length > 0 && content_buf_used >= (unsigned int)content_length)
-+ 		{
-+ #ifdef DEBUG
-+ 			printf("End of HTTP content\n");
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index f36c75c..1ed5eb9 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MXML_VERSION = 2.10
+-MXML_SITE = http://www.msweet.org/files/project3
++MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/release-$(MXML_VERSION)
+ MXML_LICENSE = LGPLv2+ with exceptions
+ MXML_LICENSE_FILES = COPYING
+ MXML_INSTALL_STAGING = YES
