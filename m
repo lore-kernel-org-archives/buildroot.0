@@ -1,44 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Jun 2017 15:59:54 +0200
-Subject: [Buildroot] [PATCH] cppcms: fix build on machines with
-	libgpg-error installed
-In-Reply-To: <1495058001-29457-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 17 May 2017 23:53:21 +0200")
-References: <1495058001-29457-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a85rn6zp.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Jun 2017 16:01:36 +0200
+Subject: [Buildroot] [PATCH] toolchain: limit musl workaround to kernel
+	headers 3.12+
+In-Reply-To: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 19 May 2017 07:20:37 +0300")
+References: <9f5573bb9c8401ad32d34c22c69e062e14b834de.1495167637.git.baruch@tkos.co.il>
+Message-ID: <8760gfn6wv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > In configuration where target architecture == host architecture, and
- > libgpg-error is installed system-wide with development files, the build
- > of cppcms fails with:
+ > The libc-compat.h first appeared in kernel version 3.12. Trying to build a
+ > musl toolchain using earlier headers leads to the following failure:
 
- > /home/test/buildroot/output/host/usr/bin/x86_64-amd-linux-gnu-g++  --sysroot=/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -Wextra  -DNDEBUG   CMakeFiles/base64_test.dir/tests/base64_test.cpp.o  -o base64_test  -L/home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib -Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib -rdynamic libcppcms.so.1.0.5 booster/libbooster.so.0.0.3 -lpthread /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpcre.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libdl.so /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libz.so
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_set_errno at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_init at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_destroy at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_syserror at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_err_code_from_errno at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_unlock at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strerror at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpg_strsource at GPG_ERROR_1.0'
- > /home/test/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libgcrypt.so: undefined reference to `gpgrt_lock_lock at GPG_ERROR_1.0'
+ > /bin/sed: can't read .../output/host/usr/arm-buildroot-linux-musleabi/sysroot/usr/include/linux/libc-compat.h: No such file or directory
+ > package/pkg-generic.mk:266: recipe for target '.../output/build/toolchain/.stamp_staging_installed' failed
 
- > The problem comes from the
- > "-Wl,-rpath,/home/test/buildroot/output/build/cppcms-1.0.5:/home/test/buildroot/output/build/cppcms-1.0.5/booster:/usr/lib"
- > option, which tells the linker to search for libraries in /usr/lib.
+ > Don't apply the sed patch to older headers.
 
- > This commit fixes that by asking CMake to not add any rpath when
- > building cppcms.
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/a7eb1ede552ae14f409cfd7bd877bcf25ca69a74/
+ > Reported-by: Florent Jacquet <florent.jacquet@free-electrons.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.02.x, thanks.
 
