@@ -1,61 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:03:50 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] dropbear: security bump
-	to version 2017.75
-Message-ID: <20170601144623.1B5398296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:40:50 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] strongswan: add upstream
+	security patches
+Message-ID: <20170601144624.6ECB78296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdf7dc37a225131d7d855ceb1ecbd5a38ea9b8fc
+commit: https://git.buildroot.net/buildroot/commit/?id=8bba6f823ea063d3c0247c35251b54f7687c6f69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 Fixes:
 
-- CVE-2017-9078: A double-free in the server could be triggered by an
-  authenticated user if dropbear is running with -a (Allow connections to
-  forwarded ports from any host) This could potentially allow arbitrary code
-  execution as root by an authenticated user.  Affects versions 2013.56 to
-  2016.74.  Thanks to Mark Shepard for reporting the crash.
+CVE-2017-9022 - RSA public keys passed to the gmp plugin aren't
+validated sufficiently before attempting signature verification, so that
+invalid input might lead to a floating point exception and crash of the
+process.  A certificate with an appropriately prepared public key sent by a
+peer could be used for a denial-of-service attack.
 
-- CVE-2017-9079: Dropbear parsed authorized_keys as root, even if it were a
-  symlink.  The fix is to switch to user permissions when opening
-  authorized_keys.
-  A user could symlink their ~/.ssh/authorized_keys to a root-owned file
-  they couldn't normally read.  If they managed to get that file to contain
-  valid authorized_keys with command= options it might be possible to read
-  other contents of that file.  This information disclosure is to an already
-  authenticated user.  Thanks to Jann Horn of Google Project Zero for
-  reporting this.
+https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9022%29.html
+
+CVE-2017-9023 - ASN.1 CHOICE types are not correctly handled by the ASN.1
+parser when parsing X.509 certificates with extensions that use such types.
+This could lead to infinite looping of the thread parsing a specifically
+crafted certificate.
+
+https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9023%29.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8644a83bd806d1e6efdfd972908798e8e00f7006)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit e43efb9b654ae19e9e47ae5828d9e99b044f37c9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strongswan/strongswan.hash | 3 +++
+ package/strongswan/strongswan.mk   | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index 88f3e6e..98776e7 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,2 +1,2 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256 2720ea54ed009af812701bcc290a2a601d5c107d12993e5d92c0f5f81f718891 dropbear-2016.74.tar.bz2
-+sha256 6cbc1dcb1c9709d226dff669e5604172a18cf5dbf9a201474d5618ae4465098c dropbear-2017.75.tar.bz2
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 743d524..144619f 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2016.74
-+DROPBEAR_VERSION = 2017.75
- DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 97fb199..cbc4e38 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -2,3 +2,6 @@
+ md5	9d7c77b0da9b69f859624897e5e9ebbf	strongswan-5.4.0.tar.bz2
+ # Calculated based on the hash above
+ sha256	f8288faaea6a9cd8a7d413c0b76b7922be5da3dfcd01fd05cb30d2c55d3bbe89	strongswan-5.4.0.tar.bz2
++# Locally calculated
++sha256	f5ba7f46cf7ae81dd81bc86f9e4cfa0c5c7c6987149b3bc9c0b8bf08598a1063  strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch
++sha256	03db8c7a4133e877e8992e155c046dd27ec4810d50f239abf55595f0280caf31  strongswan-5.0.0-5.5.2_asn1_choice.patch
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 36b5148..99862fd 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -7,6 +7,9 @@
+ STRONGSWAN_VERSION = 5.4.0
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
++STRONGSWAN_PATCH = \
++	$(STRONGSWAN_SITE)/patches/21_gmp_mpz_powm_sec_patch/strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch \
++	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch
+ STRONGSWAN_LICENSE = GPLv2+
+ STRONGSWAN_LICENSE_FILES = COPYING LICENSE
+ STRONGSWAN_DEPENDENCIES = host-pkgconf
