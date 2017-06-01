@@ -1,41 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Jun 2017 20:28:52 -0000
-Subject: [Buildroot] [git commit] imagemagick: bump version to 7.0.5-6
-Message-ID: <20170601202851.6C7C48261C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] swig: bump to 3.0.12
+Message-ID: <20170601202850.236FC807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cd8ad2364cb178e7d6c99462b05668dac1485d2
+commit: https://git.buildroot.net/buildroot/commit/?id=c5e197ecd70e24635d255b21b5eec7ccc89cd308
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
+ package/swig/swig.hash | 2 +-
+ package/swig/swig.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 06a957a..b7be7bc 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/swig/swig.hash b/package/swig/swig.hash
+index 92ddc11..77c93a9 100644
+--- a/package/swig/swig.hash
++++ b/package/swig/swig.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 c3644119dce993aa241fa08eced2cb6043fb5345f0eee7a7822a497f1142ebe3  ImageMagick-7.0.5-5.tar.xz
-+sha256 f60c3e3466ccbf9a0e643284ffec3467363edf9611f16a98387f927a974b49ab  ImageMagick-7.0.5-6.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 6b5cd4e..b1048f5 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed:
+-sha256	2939aae39dec06095462f1b95ce1c958ac80d07b926e48871046d17c0094f44c	swig-3.0.10.tar.gz
++sha256	7cf9f447ae7ed1c51722efc45e7f14418d15d7a1e143ac9f09a668999f4fc94d	swig-3.0.12.tar.gz
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 740b597..cdf9533 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.5-5
-+IMAGEMAGICK_VERSION = 7.0.5-6
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ SWIG_VERSION_MAJOR = 3.0
+-SWIG_VERSION = $(SWIG_VERSION_MAJOR).10
++SWIG_VERSION = $(SWIG_VERSION_MAJOR).12
+ SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+ HOST_SWIG_DEPENDENCIES = host-bison
+ HOST_SWIG_CONF_OPTS = \
