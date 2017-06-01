@@ -1,65 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:40:50 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] strongswan: add upstream
-	security patches
-Message-ID: <20170601144624.6ECB78296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:34:50 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mosquitto: bump to
+	version 1.4.11
+Message-ID: <20170601144624.2CB6F8296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bba6f823ea063d3c0247c35251b54f7687c6f69
+commit: https://git.buildroot.net/buildroot/commit/?id=79e3be0f66ea40e81186d3cc221c6c0aeff11bec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
+- This version requires a patch (sent upstream) to remove -lanl from
+all Linux builds as this library is only needed for adns support
+ - sha512 must be computed locally as eclipse.org does not give it for
+this version
 
-CVE-2017-9022 - RSA public keys passed to the gmp plugin aren't
-validated sufficiently before attempting signature verification, so that
-invalid input might lead to a floating point exception and crash of the
-process.  A certificate with an appropriately prepared public key sent by a
-peer could be used for a denial-of-service attack.
-
-https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9022%29.html
-
-CVE-2017-9023 - ASN.1 CHOICE types are not correctly handled by the ASN.1
-parser when parsing X.509 certificates with extensions that use such types.
-This could lead to infinite looping of the thread parsing a specifically
-crafted certificate.
-
-https://www.strongswan.org/blog/2017/05/30/strongswan-vulnerability-%28cve-2017-9023%29.html
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e43efb9b654ae19e9e47ae5828d9e99b044f37c9)
+(cherry picked from commit d098e18d14551062937bf987a9e1cac3696a9b53)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash | 3 +++
- package/strongswan/strongswan.mk   | 3 +++
- 2 files changed, 6 insertions(+)
+ .../0001-Remove-lanl-when-WITH_ADNS-is-unset.patch | 32 ++++++++++++++++++++++
+ package/mosquitto/mosquitto.hash                   |  4 +--
+ package/mosquitto/mosquitto.mk                     |  2 +-
+ 3 files changed, 35 insertions(+), 3 deletions(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index 97fb199..cbc4e38 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -2,3 +2,6 @@
- md5	9d7c77b0da9b69f859624897e5e9ebbf	strongswan-5.4.0.tar.bz2
- # Calculated based on the hash above
- sha256	f8288faaea6a9cd8a7d413c0b76b7922be5da3dfcd01fd05cb30d2c55d3bbe89	strongswan-5.4.0.tar.bz2
-+# Locally calculated
-+sha256	f5ba7f46cf7ae81dd81bc86f9e4cfa0c5c7c6987149b3bc9c0b8bf08598a1063  strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch
-+sha256	03db8c7a4133e877e8992e155c046dd27ec4810d50f239abf55595f0280caf31  strongswan-5.0.0-5.5.2_asn1_choice.patch
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 36b5148..99862fd 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -7,6 +7,9 @@
- STRONGSWAN_VERSION = 5.4.0
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
-+STRONGSWAN_PATCH = \
-+	$(STRONGSWAN_SITE)/patches/21_gmp_mpz_powm_sec_patch/strongswan-4.4.0-5.5.2_gmp_mpz_powm_sec.patch \
-+	$(STRONGSWAN_SITE)/patches/22_asn1_choice_patch/strongswan-5.0.0-5.5.2_asn1_choice.patch
- STRONGSWAN_LICENSE = GPLv2+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
+diff --git a/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch b/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch
+new file mode 100644
+index 0000000..f9b1b27
+--- /dev/null
++++ b/package/mosquitto/0001-Remove-lanl-when-WITH_ADNS-is-unset.patch
+@@ -0,0 +1,32 @@
++From 0de640dd834b6c01c4904e11d51f3a1406c89469 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 3 Apr 2017 20:34:07 +0200
++Subject: [PATCH] Remove -lanl when WITH_ADNS is unset
++
++Do not add -lanl to BROKER_LIBS for all Linux builds.
++Indeed, -lanl is only needed for getaddrinfo_a which is only used in
++_mosquitto_try_connect_step1 when WITH_ADNS is set
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ config.mk | 4 ----
++ 1 file changed, 4 deletions(-)
++
++diff --git a/config.mk b/config.mk
++index 6e369c2..44639d2 100644
++--- a/config.mk
+++++ b/config.mk
++@@ -159,10 +159,6 @@ ifeq ($(UNAME),QNX)
++ 	LIB_LIBS:=$(LIB_LIBS) -lsocket
++ endif
++ 
++-ifeq ($(UNAME),Linux)
++-	BROKER_LIBS:=$(BROKER_LIBS) -lanl
++-endif
++-
++ ifeq ($(WITH_WRAP),yes)
++ 	BROKER_LIBS:=$(BROKER_LIBS) -lwrap
++ 	BROKER_CFLAGS:=$(BROKER_CFLAGS) -DWITH_WRAP
++-- 
++2.5.0
++
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index b0b860f..5514c21 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,2 +1,2 @@
+-# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.10.tar.gz
+-sha512  fe5d6d7196a137a496ba6881c77d852396baefb4f0b83ccd9a22175fc05b09e48a09ea249e30ec7db966e11de134ebcc4e2e9b1fd40b31dc59fb0fa2f60b75a1  mosquitto-1.4.10.tar.gz
++# Locally computed:
++sha512  c05ca8679b9a6f540868f4ccf701257fcabc114d5450ac0bbbe80b91bb7cd4fc52668773e945506760c7a5bd8a494e0a56100714112e5d2713d57bfab8951587  mosquitto-1.4.11.tar.gz
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 96607f3..e79a042 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.4.10
++MOSQUITTO_VERSION = 1.4.11
+ MOSQUITTO_SITE = http://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
