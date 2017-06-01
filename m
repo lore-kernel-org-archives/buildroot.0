@@ -1,103 +1,224 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:35:46 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libtasn1: security bump
-	to version 4.12
-Message-ID: <20170601144624.4EE9E8296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:20:51 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/audiofile: Fix
+	static linking with libsndfile
+Message-ID: <20170601144623.9B43A8296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4174cdd16fc3bbadfdd90c9f6a270eccdbf60e39
+commit: https://git.buildroot.net/buildroot/commit/?id=b1206d48d4ef4f445071ac8600bd56da7ab4f2a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-7650: Two errors in the "asn1_find_node()" function
-(lib/parser_aux.c) within GnuTLS libtasn1 version 4.10 can be exploited to
-cause a stacked-based buffer overflow by tricking a user into processing a
-specially crafted assignments file via the e.g.  asn1Coding utility.
+Fixes mpd:
+http://autobuild.buildroot.net/results/799/7997ccd698f03885f98d00bd150dc3a578e4b161/
 
-For more details, see:
-
-https://secuniaresearch.flexerasoftware.com/secunia_research/2017-11/
-
-Or the 1.4.11 release mail (no mail about 1.4.12, but identical to 1.4.11 +
-a soname fix):
-
-https://lists.gnu.org/archive/html/help-libtasn1/2017-05/msg00003.html
-
-Remove 0001-configure-don-t-add-Werror-to-build-flags.patch and autoreconf
-as that patch is now upstream.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2fb7cbeb743e343fcc4aa37d6015b0a523c8b16f)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a7777eecd4eaebd65b28e26fb1075b8609ac8f7c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...configure-don-t-add-Werror-to-build-flags.patch | 28 ----------------------
- package/libtasn1/libtasn1.hash                     |  2 +-
- package/libtasn1/libtasn1.mk                       |  4 +---
- 3 files changed, 2 insertions(+), 32 deletions(-)
+ .../0009-Fix-static-linking-with-libsndfile.patch  | 193 +++++++++++++++++++++
+ 1 file changed, 193 insertions(+)
 
-diff --git a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch b/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
-deleted file mode 100644
-index 387ba7a..0000000
---- a/package/libtasn1/0001-configure-don-t-add-Werror-to-build-flags.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From dd091c8af163213e12aa92f61bc4916e0f102633 Mon Sep 17 00:00:00 2001
--From: Nikos Mavrogiannopoulos <nmav@redhat.com>
--Date: Tue, 26 Jul 2016 08:45:33 +0200
--Subject: [PATCH] configure: don't add -Werror to build flags
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Patch status: upstream
--
-- configure.ac | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 7a14e04..066f5fe 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -70,8 +70,6 @@ AC_ARG_ENABLE([gcc-warnings],
-- )
-- 
-- if test "$gl_gcc_warnings" = yes; then
---  gl_WARN_ADD([-Werror], [WERROR_CFLAGS])
---
--   nw="$nw -Wsystem-headers"         # Don't let system headers trigger warnings
--   nw="$nw -Wc++-compat"             # We don't care strongly about C++ compilers
--   nw="$nw -Wtraditional"            # Warns on #elif which we use often
---- 
--2.7.3
--
-diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
-index 5b2100e..699c140 100644
---- a/package/libtasn1/libtasn1.hash
-+++ b/package/libtasn1/libtasn1.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	4f6f7a8fd691ac2b8307c8ca365bad711db607d4ad5966f6938a9d2ecd65c920	libtasn1-4.9.tar.gz
-+sha256	6753da2e621257f33f5b051cc114d417e5206a0818fe0b1ecfd6153f70934753	libtasn1-4.12.tar.gz
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index ac99868..8d3daca 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTASN1_VERSION = 4.9
-+LIBTASN1_VERSION = 4.12
- LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPLv3+ (tests, tools), LGPLv2.1+ (library)
-@@ -12,7 +12,5 @@ LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
- LIBTASN1_INSTALL_STAGING = YES
- # 'missing' fallback logic botched so disable it completely
- LIBTASN1_CONF_ENV = MAKEINFO="true"
--# For 0001-configure-don-t-add-Werror-to-build-flags.patch
--LIBTASN1_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+diff --git a/package/audiofile/0009-Fix-static-linking-with-libsndfile.patch b/package/audiofile/0009-Fix-static-linking-with-libsndfile.patch
+new file mode 100644
+index 0000000..c48e664
+--- /dev/null
++++ b/package/audiofile/0009-Fix-static-linking-with-libsndfile.patch
+@@ -0,0 +1,193 @@
++From d89a938f48e97b5770509d53c5478c5c3008d6e8 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 27 May 2017 17:53:33 +0200
++Subject: [PATCH 1/1] Fix static linking with libsndfile
++
++libsndfile and audiofile both contain mixXX functions in their alac
++code which lead to symbol name clashes when apps like mpd try to
++statically link to both audiofile and libsndfile at the same time.
++
++This patch renames these functions to avoid the problem which was
++detected by the buildroot autobuilders:
++http://autobuild.buildroot.net/results/799/7997ccd698f03885f98d00bd150dc3a578e4b161/
++
++Patch sent upstream: https://github.com/mpruett/audiofile/pull/45
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libaudiofile/alac/ALACEncoder.cpp | 28 ++++++++++++++--------------
++ libaudiofile/alac/matrix_enc.c    |  8 ++++----
++ libaudiofile/alac/matrixlib.h     |  8 ++++----
++ 3 files changed, 22 insertions(+), 22 deletions(-)
++
++diff --git a/libaudiofile/alac/ALACEncoder.cpp b/libaudiofile/alac/ALACEncoder.cpp
++index da922c2..3d088cc 100644
++--- a/libaudiofile/alac/ALACEncoder.cpp
+++++ b/libaudiofile/alac/ALACEncoder.cpp
++@@ -332,19 +332,19 @@ int32_t ALACEncoder::EncodeStereo( BitBuffer * bitstream, void * inputBuffer, ui
++         switch ( mBitDepth )
++         {
++             case 16:
++-                mix16( (int16_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate, mixBits, mixRes );
+++                audiofile_alac_mix16( (int16_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate, mixBits, mixRes );
++                 break;
++             case 20:
++-                mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate, mixBits, mixRes );
+++                audiofile_alac_mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate, mixBits, mixRes );
++                 break;
++             case 24:
++                 // includes extraction of shifted-off bytes
++-                mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate,
+++                audiofile_alac_mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate,
++                         mixBits, mixRes, mShiftBufferUV, bytesShifted );
++                 break;
++             case 32:
++                 // includes extraction of shifted-off bytes
++-                mix32( (int32_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate,
+++                audiofile_alac_mix32( (int32_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples/dilate,
++                         mixBits, mixRes, mShiftBufferUV, bytesShifted );
++                 break;
++         }
++@@ -379,19 +379,19 @@ int32_t ALACEncoder::EncodeStereo( BitBuffer * bitstream, void * inputBuffer, ui
++ 	switch ( mBitDepth )
++ 	{
++ 		case 16:
++-			mix16( (int16_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
+++			audiofile_alac_mix16( (int16_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
++ 			break;
++ 		case 20:
++-			mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
+++			audiofile_alac_mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
++ 			break;
++ 		case 24:
++ 			// also extracts the shifted off bytes into the shift buffers
++-			mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
+++			audiofile_alac_mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
++ 					mixBits, mixRes, mShiftBufferUV, bytesShifted );
++ 			break;
++ 		case 32:
++ 			// also extracts the shifted off bytes into the shift buffers
++-			mix32( (int32_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
+++			audiofile_alac_mix32( (int32_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
++ 					mixBits, mixRes, mShiftBufferUV, bytesShifted );
++ 			break;
++ 	}
++@@ -605,19 +605,19 @@ int32_t ALACEncoder::EncodeStereoFast( BitBuffer * bitstream, void * inputBuffer
++ 	switch ( mBitDepth )
++ 	{
++ 		case 16:
++-			mix16( (int16_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
+++			audiofile_alac_mix16( (int16_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
++ 			break;
++ 		case 20:
++-			mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
+++			audiofile_alac_mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, mixBits, mixRes );
++ 			break;
++ 		case 24:
++ 			// also extracts the shifted off bytes into the shift buffers
++-			mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
+++			audiofile_alac_mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
++ 					mixBits, mixRes, mShiftBufferUV, bytesShifted );
++ 			break;
++ 		case 32:
++ 			// also extracts the shifted off bytes into the shift buffers
++-			mix32( (int32_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
+++			audiofile_alac_mix32( (int32_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples,
++ 					mixBits, mixRes, mShiftBufferUV, bytesShifted );
++ 			break;
++ 	}
++@@ -756,7 +756,7 @@ int32_t ALACEncoder::EncodeStereoEscape( BitBuffer * bitstream, void * inputBuff
++ 			break;
++ 		case 20:
++ 			// mix20() with mixres param = 0 means de-interleave so use it to simplify things
++-			mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, 0, 0 );
+++			audiofile_alac_mix20( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, 0, 0 );
++ 			for ( index = 0; index < numSamples; index++ )
++ 			{
++ 				BitBufferWrite( bitstream, mMixBufferU[index], 20 );
++@@ -765,7 +765,7 @@ int32_t ALACEncoder::EncodeStereoEscape( BitBuffer * bitstream, void * inputBuff
++ 			break;
++ 		case 24:
++ 			// mix24() with mixres param = 0 means de-interleave so use it to simplify things
++-			mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, 0, 0, mShiftBufferUV, 0 );
+++			audiofile_alac_mix24( (uint8_t *) inputBuffer, stride, mMixBufferU, mMixBufferV, numSamples, 0, 0, mShiftBufferUV, 0 );
++ 			for ( index = 0; index < numSamples; index++ )
++ 			{
++ 				BitBufferWrite( bitstream, mMixBufferU[index], 24 );
++diff --git a/libaudiofile/alac/matrix_enc.c b/libaudiofile/alac/matrix_enc.c
++index e194330..8abd556 100644
++--- a/libaudiofile/alac/matrix_enc.c
+++++ b/libaudiofile/alac/matrix_enc.c
++@@ -57,7 +57,7 @@
++ 
++ // 16-bit routines
++ 
++-void mix16( int16_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres )
+++void audiofile_alac_mix16( int16_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres )
++ {
++ 	int16_t	*	ip = in;
++ 	int32_t			j;
++@@ -95,7 +95,7 @@ void mix16( int16_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t num
++ // 20-bit routines
++ // - the 20 bits of data are left-justified in 3 bytes of storage but right-aligned for input/output predictor buffers
++ 
++-void mix20( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres )
+++void audiofile_alac_mix20( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres )
++ {
++ 	int32_t		l, r;
++ 	uint8_t *	ip = in;
++@@ -140,7 +140,7 @@ void mix20( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t num
++ // 24-bit routines
++ // - the 24 bits of data are right-justified in the input/output predictor buffers
++ 
++-void mix24( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
+++void audiofile_alac_mix24( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
++ 			int32_t mixbits, int32_t mixres, uint16_t * shiftUV, int32_t bytesShifted )
++ {	
++ 	int32_t		l, r;
++@@ -240,7 +240,7 @@ void mix24( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t num
++ // - otherwise, the calculations might overflow into the 33rd bit and be lost
++ // - therefore, these routines deal with the specified "unused lower" bytes in the "shift" buffers
++ 
++-void mix32( int32_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
+++void audiofile_alac_mix32( int32_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
++ 			int32_t mixbits, int32_t mixres, uint16_t * shiftUV, int32_t bytesShifted )
++ {
++ 	int32_t	*	ip = in;
++diff --git a/libaudiofile/alac/matrixlib.h b/libaudiofile/alac/matrixlib.h
++index 0a4f371..5728b6d 100644
++--- a/libaudiofile/alac/matrixlib.h
+++++ b/libaudiofile/alac/matrixlib.h
++@@ -38,17 +38,17 @@ extern "C" {
++ #endif
++ 
++ // 16-bit routines
++-void	mix16( int16_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres );
+++void	audiofile_alac_mix16( int16_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres );
++ void	unmix16( int32_t * u, int32_t * v, int16_t * out, uint32_t stride, int32_t numSamples, int32_t mixbits, int32_t mixres );
++ 
++ // 20-bit routines
++-void	mix20( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres );
+++void	audiofile_alac_mix20( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples, int32_t mixbits, int32_t mixres );
++ void	unmix20( int32_t * u, int32_t * v, uint8_t * out, uint32_t stride, int32_t numSamples, int32_t mixbits, int32_t mixres );
++ 
++ // 24-bit routines
++ // - 24-bit data sometimes compresses better by shifting off the bottom byte so these routines deal with
++ //	 the specified "unused lower bytes" in the combined "shift" buffer
++-void	mix24( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
+++void	audiofile_alac_mix24( uint8_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
++ 				int32_t mixbits, int32_t mixres, uint16_t * shiftUV, int32_t bytesShifted );
++ void	unmix24( int32_t * u, int32_t * v, uint8_t * out, uint32_t stride, int32_t numSamples,
++ 				 int32_t mixbits, int32_t mixres, uint16_t * shiftUV, int32_t bytesShifted );
++@@ -57,7 +57,7 @@ void	unmix24( int32_t * u, int32_t * v, uint8_t * out, uint32_t stride, int32_t
++ // - note that these really expect the internal data width to be < 32-bit but the arrays are 32-bit
++ // - otherwise, the calculations might overflow into the 33rd bit and be lost
++ // - therefore, these routines deal with the specified "unused lower" bytes in the combined "shift" buffer
++-void	mix32( int32_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
+++void	audiofile_alac_mix32( int32_t * in, uint32_t stride, int32_t * u, int32_t * v, int32_t numSamples,
++ 				int32_t mixbits, int32_t mixres, uint16_t * shiftUV, int32_t bytesShifted );
++ void	unmix32( int32_t * u, int32_t * v, int32_t * out, uint32_t stride, int32_t numSamples,
++ 				 int32_t mixbits, int32_t mixres, uint16_t * shiftUV, int32_t bytesShifted );
++-- 
++2.11.0
++
