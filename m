@@ -1,45 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  1 Jun 2017 22:39:30 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: fix static linking with alsa
-In-Reply-To: <20170601203930.1069-1-bernd.kuhls@t-online.de>
-References: <20170601203930.1069-1-bernd.kuhls@t-online.de>
-Message-ID: <20170601203930.1069-2-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Jun 2017 00:03:14 +0200
+Subject: [Buildroot] systemd: build failure against pam on arm
+In-Reply-To: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
+ (Christian Stewart's message of "Wed, 31 May 2017 19:29:11 -0700")
+References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
+Message-ID: <87fufjgycd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If BR2_PACKAGE_ALSA_LIB_RAWMIDI is enabled ffmpeg needs also
-BR2_PACKAGE_ALSA_LIB_SEQ to link against alsa.
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-A similar patch was committed to alsa-utils:
-https://git.buildroot.net/buildroot/commit/package/alsa-utils?id=c69088b8c35177cecdd0f1f385c13f5b2c509f1d
+ > Hi all,
+ > Compiling against 2017.05, with the following defconfig:
 
-Fixes
-http://autobuild.buildroot.net/results/7ba/7ba485532fcab74928246a8f95dba7e5eea9d4a5/
+ > BR2_arm=y
+ > BR2_cortex_a15=y
+ > BR2_ARM_FPU_NEON_VFPV4=y
+ > BR2_OPTIMIZE_2=y
+ > BR2_TOOLCHAIN_EXTERNAL=y
+ > BR2_INIT_SYSTEMD=y
+ > # BR2_TARGET_ROOTFS_TAR is not set
+ > BR2_PACKAGE_LINUX_PAM=y
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ > I get this error consistently during the systemd compilation when PAM
+ > is enabled:
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 279f94f0d..da1a47e86 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -167,10 +167,12 @@ config BR2_PACKAGE_FFMPEG_FILTERS
- 
- config BR2_PACKAGE_FFMPEG_INDEVS
- 	bool "Enable input devices"
-+	select BR2_PACKAGE_ALSA_LIB_SEQ if BR2_PACKAGE_ALSA_LIB_RAWMIDI
- 	default y
- 
- config BR2_PACKAGE_FFMPEG_OUTDEVS
- 	bool "Enable output devices"
-+	select BR2_PACKAGE_ALSA_LIB_SEQ if BR2_PACKAGE_ALSA_LIB_RAWMIDI
- 	default y
- 
- config BR2_PACKAGE_FFMPEG_EXTRACONF
+ > /output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+ > error: /lib/libpam.so: incompatible target
+ > /output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+ > error: /lib/libpam_misc.so: incompatible target
+ > collect2: error: ld returned 1 exit status
+
+ > It looks like it's attempting to link against /lib/libpam.so from my system.
+
+Can you paste a few more lines above this error?
+
+I cannot reproduce it here, not even after install libpam0g-dev on my
+build host.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
