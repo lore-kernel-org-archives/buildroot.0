@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Jun 2017 20:28:50 -0000
-Subject: [Buildroot] [git commit] tcpreplay: bump version to 4.2.5
-Message-ID: <20170601202849.6B99281735@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] network-manager: add optional ofono support
+Message-ID: <20170601202849.E3C518261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb2919bd460767425062f4b9748e10862acc3eb6
+commit: https://git.buildroot.net/buildroot/commit/?id=b33b493b7feebfc933873cb34ac70c042e89a1d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcpreplay/tcpreplay.hash | 2 +-
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/network-manager/network-manager.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 9e8d151..c908964 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 da78ea1a1fe8ff177a4f9e71c4c6739b79ac86db2c2bb90955318b8e8439beb7  tcpreplay-4.2.4.tar.gz
-+sha256 941026be34e1db5101d3d22ebddd6fff76179a1ee81e273338f533ba4eca89d7  tcpreplay-4.2.5.tar.gz
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 879f518..d303c60 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 9f4cebe..4a05a65 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -32,6 +32,13 @@ NETWORK_MANAGER_CONF_OPTS = \
+ 	--disable-ifupdown \
+ 	--disable-ifnet
  
--TCPREPLAY_VERSION = 4.2.4
-+TCPREPLAY_VERSION = 4.2.5
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
++ifeq ($(BR2_PACKAGE_OFONO),y)
++NETWORK_MANAGER_DEPENDENCIES += ofono
++NETWORK_MANAGER_CONF_OPTS += --with-ofono
++else
++NETWORK_MANAGER_CONF_OPTS += --without-ofono
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ NETWORK_MANAGER_DEPENDENCIES += libcurl
+ NETWORK_MANAGER_CONF_OPTS += --enable-concheck
