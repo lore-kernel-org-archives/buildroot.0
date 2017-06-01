@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Jun 2017 16:20:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/audiofile: Fix static linking
-	with libsndfile
-In-Reply-To: <20170527160446.31082-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 27 May 2017 18:04:46 +0200")
-References: <20170527160446.31082-1-bernd.kuhls@t-online.de>
-Message-ID: <87tw3zkcvp.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Jun 2017 16:22:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: security bump to
+	version 0.9.9
+In-Reply-To: <20170528135611.10218-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 28 May 2017 15:56:11 +0200")
+References: <20170528135611.10218-1-bernd.kuhls@t-online.de>
+Message-ID: <87poenkcts.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes mpd:
- > http://autobuild.buildroot.net/results/799/7997ccd698f03885f98d00bd150dc3a578e4b161/
+ > Fixes buffer overflow:
+ > https://mail.coreboot.org/pipermail/flashrom/2016-March/014523.html
+
+ > Removed patch 0002-sys-io.h.patch, not needed anymore, hwaccess.h now
+ > contains a similar fix:
+
+ >   elif defined(__linux__) || defined(__GLIBC__)
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
