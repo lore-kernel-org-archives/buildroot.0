@@ -1,48 +1,191 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:11:50 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] toolchain: disable PIE
-	for static build with musl
-Message-ID: <20170601144623.430658296D@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:20:20 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/audiofile: add
+	security fix
+Message-ID: <20170601144623.8E4C18296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca4feb41937139de5d742502ecb428930205f777
+commit: https://git.buildroot.net/buildroot/commit/?id=ff08ec1982e0dd8432047555c95a3f28ff530362
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-As mentioned in commit 3c93901bcd2 (toolchain: add hidden symbol for PIE
-support), support for static PIE using musl requires a gcc patch[1]. Buildroot
-doesn't carry this patch. Don't enable BR2_TOOLCHAIN_SUPPORTS_PIE in static
-build with musl.
+Fixes CVE-2015-7747
 
-Fixes:
-http://autobuild.buildroot.net/results/d19/d19bcfcfb33cc5f5b082b97bbd5852d479823b97/
-http://autobuild.buildroot.net/results/91f/91f7c6954c337b03f5ac141050d9b1bee1623376/
-http://autobuild.buildroot.net/results/996/996116da9241686110b9525eed08cc5acfd379a6/
-
-[1] https://github.com/richfelker/musl-cross-make/blob/b854a42fc1ea19b8c4ec7104848f9d1a6d7995f0/patches/gcc-6.3.0/0010-static-pie-support.diff
-
-Acked-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit fa397537bb64536bb58663df886b1a2c8886961c)
+(cherry picked from commit a2ad9cf71da39efc4ab942578cdbceb5c30a4025)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/audiofile/0008-CVE-2015-7747.patch | 161 +++++++++++++++++++++++++++++
+ 1 file changed, 161 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index de01585..92a4926 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -28,7 +28,7 @@ config BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_SUPPORTS_PIE
-+	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_STATIC_LIBS
- 
- choice
- 	prompt "Toolchain type"
+diff --git a/package/audiofile/0008-CVE-2015-7747.patch b/package/audiofile/0008-CVE-2015-7747.patch
+new file mode 100644
+index 0000000..1325612
+--- /dev/null
++++ b/package/audiofile/0008-CVE-2015-7747.patch
+@@ -0,0 +1,161 @@
++Description: fix buffer overflow when changing both sample format and
++ number of channels
++Origin: https://github.com/mpruett/audiofile/pull/25
++Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/audiofile/+bug/1502721
++Bug-Debian: https://bugs.debian.org/801102
++
++Downloaded from
++https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/audiofile/files/audiofile-0.3.6-CVE-2015-7747.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- a/libaudiofile/modules/ModuleState.cpp
+++++ b/libaudiofile/modules/ModuleState.cpp
++@@ -402,7 +402,7 @@ status ModuleState::arrange(AFfilehandle
++ 		addModule(new Transform(outfc, in.pcm, out.pcm));
++ 
++ 	if (in.channelCount != out.channelCount)
++-		addModule(new ApplyChannelMatrix(infc, isReading,
+++		addModule(new ApplyChannelMatrix(outfc, isReading,
++ 			in.channelCount, out.channelCount,
++ 			in.pcm.minClip, in.pcm.maxClip,
++ 			track->channelMatrix));
++--- a/test/Makefile.am
+++++ b/test/Makefile.am
++@@ -26,6 +26,7 @@ TESTS = \
++ 	VirtualFile \
++ 	floatto24 \
++ 	query2 \
+++	sixteen-stereo-to-eight-mono \
++ 	sixteen-to-eight \
++ 	testchannelmatrix \
++ 	testdouble \
++@@ -139,6 +140,7 @@ printmarkers_SOURCES = printmarkers.c
++ printmarkers_LDADD = $(LIBAUDIOFILE) -lm
++ 
++ sixteen_to_eight_SOURCES = sixteen-to-eight.c TestUtilities.cpp TestUtilities.h
+++sixteen_stereo_to_eight_mono_SOURCES = sixteen-stereo-to-eight-mono.c TestUtilities.cpp TestUtilities.h
++ 
++ testchannelmatrix_SOURCES = testchannelmatrix.c TestUtilities.cpp TestUtilities.h
++ 
++--- /dev/null
+++++ b/test/sixteen-stereo-to-eight-mono.c
++@@ -0,0 +1,118 @@
+++/*
+++	Audio File Library
+++
+++	Copyright 2000, Silicon Graphics, Inc.
+++
+++	This program is free software; you can redistribute it and/or modify
+++	it under the terms of the GNU General Public License as published by
+++	the Free Software Foundation; either version 2 of the License, or
+++	(at your option) any later version.
+++
+++	This program is distributed in the hope that it will be useful,
+++	but WITHOUT ANY WARRANTY; without even the implied warranty of
+++	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++	GNU General Public License for more details.
+++
+++	You should have received a copy of the GNU General Public License along
+++	with this program; if not, write to the Free Software Foundation, Inc.,
+++	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+++*/
+++
+++/*
+++	sixteen-stereo-to-eight-mono.c
+++
+++	This program tests the conversion from 2-channel 16-bit integers to
+++	1-channel 8-bit	integers.
+++*/
+++
+++#ifdef HAVE_CONFIG_H
+++#include <config.h>
+++#endif
+++
+++#include <stdint.h>
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include <string.h>
+++#include <unistd.h>
+++#include <limits.h>
+++
+++#include <audiofile.h>
+++
+++#include "TestUtilities.h"
+++
+++int main (int argc, char **argv)
+++{
+++	AFfilehandle file;
+++	AFfilesetup setup;
+++	int16_t frames16[] = {14298, 392, 3923, -683, 958, -1921};
+++	int8_t frames8[] = {28, 6, -2};
+++	int i, frameCount = 3;
+++	int8_t byte;
+++	AFframecount result;
+++
+++	setup = afNewFileSetup();
+++
+++	afInitFileFormat(setup, AF_FILE_WAVE);
+++
+++	afInitSampleFormat(setup, AF_DEFAULT_TRACK, AF_SAMPFMT_TWOSCOMP, 16);
+++	afInitChannels(setup, AF_DEFAULT_TRACK, 2);
+++
+++	char *testFileName;
+++	if (!createTemporaryFile("sixteen-to-eight", &testFileName))
+++	{
+++		fprintf(stderr, "Could not create temporary file.\n");
+++		exit(EXIT_FAILURE);
+++	}
+++
+++	file = afOpenFile(testFileName, "w", setup);
+++	if (file == AF_NULL_FILEHANDLE)
+++	{
+++		fprintf(stderr, "could not open file for writing\n");
+++		exit(EXIT_FAILURE);
+++	}
+++
+++	afFreeFileSetup(setup);
+++
+++	afWriteFrames(file, AF_DEFAULT_TRACK, frames16, frameCount);
+++
+++	afCloseFile(file);
+++
+++	file = afOpenFile(testFileName, "r", AF_NULL_FILESETUP);
+++	if (file == AF_NULL_FILEHANDLE)
+++	{
+++		fprintf(stderr, "could not open file for reading\n");
+++		exit(EXIT_FAILURE);
+++	}
+++
+++	afSetVirtualSampleFormat(file, AF_DEFAULT_TRACK, AF_SAMPFMT_TWOSCOMP, 8);
+++	afSetVirtualChannels(file, AF_DEFAULT_TRACK, 1);
+++
+++	for (i=0; i<frameCount; i++)
+++	{
+++		/* Read one frame. */
+++		result = afReadFrames(file, AF_DEFAULT_TRACK, &byte, 1);
+++
+++		if (result != 1)
+++			break;
+++
+++		/* Compare the byte read with its precalculated value. */
+++		if (memcmp(&byte, &frames8[i], 1) != 0)
+++		{
+++			printf("error\n");
+++			printf("expected %d, got %d\n", frames8[i], byte);
+++			exit(EXIT_FAILURE);
+++		}
+++		else
+++		{
+++#ifdef DEBUG
+++			printf("got what was expected: %d\n", byte);
+++#endif
+++		}
+++	}
+++
+++	afCloseFile(file);
+++	unlink(testFileName);
+++	free(testFileName);
+++
+++	exit(EXIT_SUCCESS);
+++}
