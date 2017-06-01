@@ -1,37 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Jun 2017 16:17:07 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
-	9, 11}.x series
-Message-ID: <20170601144623.67ABB7FC9E@busybox.osuosl.org>
+Date: Thu, 1 Jun 2017 16:43:59 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] bash: disable bash malloc
+	by default
+Message-ID: <20170601144624.9D5918296D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0528344f31acb9c330c1eff4863897fb5f32ed8e
+commit: https://git.buildroot.net/buildroot/commit/?id=a3f1167c5d908a3ed477645047306bd01b7f5a65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.10.x / 4.11.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Bash's malloc relies on sbrk which is implemented as a fail-only stub in
+musl. Presently, it is disabled when configured for static
+libs. Instead, default to using libc malloc.
+
+Fixes:
+
+  # bash
+  bash: xmalloc: locale.c:81: cannot allocate 18 bytes (0 bytes allocated)
+
+Signed-off-by: Daniel Sabogal <dsabogalcc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit f19a4433d4560b087b4890b17e2baaa21b3e6871)
+(cherry picked from commit 43552504c8aacda2a163c933203a3b77146409c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
+ package/bash/bash.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d84313b..a94d83d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.39"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.69"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.70"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.29"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.30"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 090cf52..0f42fd1 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -9,7 +9,7 @@ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+ # Build after since bash is better than busybox shells
+ BASH_DEPENDENCIES = ncurses readline host-bison \
+ 	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
+-BASH_CONF_OPTS = --with-installed-readline
++BASH_CONF_OPTS = --with-installed-readline --without-bash-malloc
+ BASH_LICENSE = GPLv3+
+ BASH_LICENSE_FILES = COPYING
+ 
+@@ -24,7 +24,7 @@ BASH_CONF_ENV += \
+ 
+ # The static build needs some trickery
+ ifeq ($(BR2_STATIC_LIBS),y)
+-BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
++BASH_CONF_OPTS += --enable-static-link
+ # bash wants to redefine the getenv() function. To check whether this is
+ # possible, AC_TRY_RUN is used which is not possible in
+ # cross-compilation.
