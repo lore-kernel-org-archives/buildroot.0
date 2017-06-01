@@ -1,26 +1,29 @@
-From: Jimmy at 86Pixels <hello@86pixels.com>
-Date: Thu, 01 Jun 2017 06:19:43 -0700
-Subject: [Buildroot] OpenCV-Python Support
-Message-ID: <1496323183.528769.995383584.4FE97B8B@webmail.messagingengine.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Jun 2017 15:59:10 +0200
+Subject: [Buildroot] [git commit] oracle-mysql: add patch to fix gcc 6.x
+	build issue
+In-Reply-To: <20170517202503.66468826F3@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Wed, 17 May 2017 22:24:14 +0200")
+References: <20170517202503.66468826F3@busybox.osuosl.org>
+Message-ID: <87efv3n70x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good day all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I noticed that back in 2015 there was a patch submitted and signed off
-that added opencv_python as a build option for OpenCV 2.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=19e78e509e5e729437d2188b28aee7655340c67d
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I noticed that it was then reverted in this commit when OpenCV 2.4 was
-targeted.
+ > Fixes:
 
-https://github.com/buildroot/buildroot/commit/ac57d05076d7554d5bf43375cc7269fc0e658acc#diff-44c9b82a4a4d16aae921f9f88a95634b
+ >  http://autobuild.buildroot.net/results/61074b69b81cd5c17a7f74dc1f7b31f3fc35fd8a/
 
-To my knowledge, this should still work, was this simply a mistake, or
-am I missing something?  I'd love to add it back in as its a dependency
-of mine.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thanks!
-Jimmy
+Committed to 2017.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
