@@ -1,31 +1,33 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 1 Apr 2017 00:23:36 +0200
-Subject: [Buildroot] python: move to Git formatted patches
-Message-ID: <ef3812a0-4628-8d2c-3b6e-294a1cc1cc3c@dawncrow.de>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 31 May 2017 22:00:10 -0300
+Subject: [Buildroot] [PATCH] util-linux: wrap help text at column 72
+Message-ID: <20170601010010.18346-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Respect the <tab><2 spaces><62 chars> rule.
 
-I just started a new hobby project using buildroot (of course) and stumbled across a problem with Python not finding its zlib module...
-There's an old bug about it (https://bugs.busybox.net/show_bug.cgi?id=7971) directing me to
-https://git.buildroot.net/buildroot/commit/package/python?id=238bf198cf4f31a3301b81a924d5e22044945955
-which sadly was (unintentionally?) reverted by:
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/util-linux/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-commit 652076293235276e2f978fe377322a6cbd615455
-Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date:   Wed Mar 8 00:00:26 2017 +0100
-
-    python: move to Git formatted patches
-    
-    Now that the cpython project has a nice Github repository, with tags,
-    it's much nicer to handle the stack of Python patches with Git. The
-    python3 package patches had already been converted, but not the python
-    package patches. Therefore, this commit does the move.
-    
-    There is no functional change, only reformatting of the patches.
-
-Should I send a patch to add it back, or is there something I don't see?
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index e957f848b..86db3722c 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -99,7 +99,8 @@ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+ 	bool "cramfs utilities"
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+-	  Utilities for compressed ROM file system (fsck.cramfs, mkfs.cramfs)
++	  Utilities for compressed ROM file system (fsck.cramfs,
++	  mkfs.cramfs)
+ 
+ config BR2_PACKAGE_UTIL_LINUX_EJECT
+ 	bool "eject"
+-- 
+2.11.0
