@@ -1,212 +1,447 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 01 Jun 2017 20:29:06 -0000
-Subject: [Buildroot] [git commit] libpwquality: new package
-Message-ID: <20170601202850.A51D88261C@busybox.osuosl.org>
+Date: Thu, 01 Jun 2017 20:29:08 -0000
+Subject: [Buildroot] [git commit] package/c*/Config.in: fix help text
+	wrapping
+Message-ID: <20170601202850.DE50C8261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=462040443ca943694fc59ec8380c82f8bf9aaddc
+commit: https://git.buildroot.net/buildroot/commit/?id=ee71aa2375a57bdebb9d8aa13a474e97e942e313
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+The check-package script when ran gives warnings on text wrapping
+on all of these Config files.  This patch cleans up all warnings
+related to the text wrapping for the Config files starting with
+the letter c in the package directory.
+
+The appropriate indentation is: <tab><2 spaces><62 chars>
+See http://nightly.buildroot.org/#writing-rules-config-in for more
+information.
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...ith-disable-nls-on-platforms-without-libi.patch | 47 ++++++++++++++++++++++
- ...leak-in-settings-when-using-bad-word-list.patch | 26 ++++++++++++
- package/libpwquality/Config.in                     | 19 +++++++++
- package/libpwquality/libpwquality.hash             |  2 +
- package/libpwquality/libpwquality.mk               | 39 ++++++++++++++++++
- 7 files changed, 135 insertions(+)
+ package/ca-certificates/Config.in |  3 ++-
+ package/canfestival/Config.in     | 10 ++++----
+ package/ccrypt/Config.in          |  3 ++-
+ package/cegui06/Config.in         | 12 +++++-----
+ package/celt051/Config.in         |  8 +++----
+ package/cjson/Config.in           |  4 ++--
+ package/clamav/Config.in          |  4 ++--
+ package/clapack/Config.in         |  9 +++----
+ package/collectd/Config.in        | 50 +++++++++++++++++++++++----------------
+ package/cppdb/Config.in           |  7 +++---
+ package/cpuload/Config.in         |  7 +++---
+ package/crda/Config.in            |  4 ++--
+ package/cryptodev/Config.in       |  4 ++--
+ package/curlftpfs/Config.in       |  4 ++--
+ package/cvs/Config.in             |  3 ++-
+ package/cwiid/Config.in           |  4 ++--
+ 16 files changed, 76 insertions(+), 60 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c8d354d..de34d06 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1499,6 +1499,7 @@ F:	package/yasm/
+diff --git a/package/ca-certificates/Config.in b/package/ca-certificates/Config.in
+index a278a62..6bb7182 100644
+--- a/package/ca-certificates/Config.in
++++ b/package/ca-certificates/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_CA_CERTIFICATES
+ 	  connections.
  
- N:	Stefan S??rensen <stefan.sorensen@spectralink.com>
- F:	package/cracklib/
-+F:	package/libpwquality/
- F:	package/libscrypt/
+ 	  It includes, among others, certificate authorities used by the
+-	  Debian infrastructure and those shipped with Mozilla's browsers.
++	  Debian infrastructure and those shipped with Mozilla's
++	  browsers.
  
- N:	Stephan Hoffmann <sho@relinux.de>
-diff --git a/package/Config.in b/package/Config.in
-index 6d24a58..7991353 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1394,6 +1394,7 @@ menu "Other"
- 	source "package/libplist/Config.in"
- 	source "package/libpthread-stubs/Config.in"
- 	source "package/libpthsem/Config.in"
-+	source "package/libpwquality/Config.in"
- 	source "package/libseccomp/Config.in"
- 	source "package/libsigc/Config.in"
- 	source "package/libsigsegv/Config.in"
-diff --git a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch b/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-new file mode 100644
-index 0000000..3bae15c
---- /dev/null
-+++ b/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-@@ -0,0 +1,47 @@
-+From fd1694c9d85666a39fe39e76518581b1ccd5a6c5 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-+Date: Thu, 2 Feb 2017 11:16:49 +0100
-+Subject: [PATCH] Fix build with --disable-nls on platforms without libintl
-+ included in libc.
-+
-+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-+
-+---
-+
-+Status: accepted upstream, not yet released.
-+
-+diff --git a/src/pwmake.c b/src/pwmake.c
-+index 5b8cfb8..81f7cd3 100644
-+--- a/src/pwmake.c
-++++ b/src/pwmake.c
-+@@ -33,9 +33,11 @@ main(int argc, char *argv[])
-+         int bits;
-+         void *auxerror;
-+ 
-++#ifdef ENABLE_NLS
-+         setlocale(LC_ALL, "");
-+         bindtextdomain("libpwquality", "/usr/share/locale");
-+         textdomain("libpwquality");
-++#endif
-+ 
-+         if (argc != 2) {
-+                 usage(basename(argv[0]));
-+diff --git a/src/pwscore.c b/src/pwscore.c
-+index 219a175..24c13f2 100644
-+--- a/src/pwscore.c
-++++ b/src/pwscore.c
-+@@ -34,9 +34,11 @@ main(int argc, char *argv[])
-+         size_t len;
-+         char *user = NULL;
-+ 
-++#ifdef ENABLE_NLS
-+         setlocale(LC_ALL, "");
-+         bindtextdomain("libpwquality", "/usr/share/locale");
-+         textdomain("libpwquality");
-++#endif
-+ 
-+         if (argc > 2) {
-+                 usage(basename(argv[0]));
-+-- 
-+2.9.3
-+
-diff --git a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch b/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-new file mode 100644
-index 0000000..1b4f242
---- /dev/null
-+++ b/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-@@ -0,0 +1,26 @@
-+From b1f2f1f71894fa0af92041fb4d5b6146101d63e5 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-+Date: Thu, 2 Feb 2017 11:17:26 +0100
-+Subject: [PATCH] Fix memory leak in settings when using bad word list.
-+
-+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-+
-+---
-+
-+Status: accepted upstream, not yet released.
-+
-+diff --git a/src/settings.c b/src/settings.c
-+index 5c38b30..4b026b1 100644
-+--- a/src/settings.c
-++++ b/src/settings.c
-+@@ -46,6 +46,7 @@ pwquality_free_settings(pwquality_settings_t *pwq)
-+ {
-+         if (pwq) {
-+                 free(pwq->dict_path);
-++                free(pwq->bad_words);
-+                 free(pwq);
-+         }
-+ }
-+-- 
-+2.9.3
-+
-diff --git a/package/libpwquality/Config.in b/package/libpwquality/Config.in
-new file mode 100644
-index 0000000..4e85525
---- /dev/null
-+++ b/package/libpwquality/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBPWQUALITY
-+	bool "libpwquality"
-+	help
-+	  This is a library for password quality checks and generation
-+	  of random passwords that pass the checks.  This library uses
-+	  the cracklib and cracklib dictionaries to perform some of
-+	  the checks.
-+
-+	  https://github.com/libpwquality/libpwquality
-+
-+if BR2_PACKAGE_LIBPWQUALITY
-+
-+config BR2_PACKAGE_LIBPWQUALITY_TOOLS
-+	bool "install tools"
-+	help
-+	  Install libpwquality command line tools generating/checking
-+	  passwords.
-+
-+endif
-diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
-new file mode 100644
-index 0000000..0e3f9e3
---- /dev/null
-+++ b/package/libpwquality/libpwquality.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	74d2ea90e103323c1f2d6a6cc9617cdae6877573eddb31aaf31a40f354cc2d2a	libpwquality-1.3.0.tar.bz2
-diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
-new file mode 100644
-index 0000000..66b15d8
---- /dev/null
-+++ b/package/libpwquality/libpwquality.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# libpwquality
-+#
-+################################################################################
-+
-+LIBPWQUALITY_VERSION = 1.3.0
-+LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
-+LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
-+LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
-+LIBPWQUALITY_INSTALL_STAGING = YES
-+LIBPWQUALITY_DEPENDENCIES = cracklib
-+LIBPWQUALITY_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+LIBPWQUALITY_CONF_OPTS += --enable-python-bindings
-+LIBPWQUALITY_DEPENDENCIES += python
-+LIBPWQUALITY_MAKE_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
-+else
-+LIBPWQUALITY_CONF_OPTS += --disable-python-bindings
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+LIBPWQUALITY_CONF_OPTS += --enable-pam
-+LIBPWQUALITY_DEPENDENCIES += linux-pam
-+else
-+LIBPWQUALITY_CONF_OPTS += --disable-pam
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPWQUALITY_TOOLS),)
-+define LIBPWQUALITY_REMOVE_TOOLS
-+	rm -f $(TARGET_DIR)/usr/bin/pwmake
-+	rm -f $(TARGET_DIR)/usr/bin/pwscore
-+endef
-+
-+LIBPWQUALITY_POST_INSTALL_TARGET_HOOKS += LIBPWQUALITY_REMOVE_TOOLS
-+endif
-+
-+$(eval $(autotools-package))
+ 	  http://anonscm.debian.org/gitweb/?p=collab-maint/ca-certificates.git
+diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
+index ca94956..8300e26 100644
+--- a/package/canfestival/Config.in
++++ b/package/canfestival/Config.in
+@@ -16,8 +16,8 @@ config BR2_PACKAGE_CANFESTIVAL
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  CanFestival is an OpenSource CANOpen framework, licensed under
+-	  LGPLv2.1 and GPLv2 for some drivers (virtual_kernel, lincan and
+-	  copcican_comedi).
++	  LGPLv2.1 and GPLv2 for some drivers (virtual_kernel, lincan
++	  and copcican_comedi).
+ 
+ 	  http://www.canfestival.org
+ 
+@@ -78,9 +78,9 @@ config BR2_PACKAGE_CANFESTIVAL_DRIVER
+ config BR2_PACKAGE_CANFESTIVAL_ADDITIONAL_OPTIONS
+ 	string "additional configure options"
+ 	help
+-	  Additional options can be passed directly to the configure script
+-	  (e.g.: --MAX_CAN_BUS_ID=..., --SDO_MAX_LENGTH_TRANSFER=...,
+-	  --SDO_BLOCK_SIZE=...).
++	  Additional options can be passed directly to the configure
++	  script (e.g.: --MAX_CAN_BUS_ID=...,
++	  --SDO_MAX_LENGTH_TRANSFER=..., --SDO_BLOCK_SIZE=...).
+ 
+ config BR2_PACKAGE_CANFESTIVAL_INSTALL_EXAMPLES
+ 	bool "install examples"
+diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
+index ef5a7ee..109271a 100644
+--- a/package/ccrypt/Config.in
++++ b/package/ccrypt/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_CCRYPT
+ 	bool "ccrypt"
+ 	help
+-	  ccrypt is a utility for encrypting and decrypting files and streams.
++	  ccrypt is a utility for encrypting and decrypting files and
++	  streams.
+ 
+ 	  http://ccrypt.sourceforge.net/
+diff --git a/package/cegui06/Config.in b/package/cegui06/Config.in
+index e6a024a..0139d32 100644
+--- a/package/cegui06/Config.in
++++ b/package/cegui06/Config.in
+@@ -10,11 +10,11 @@ config BR2_PACKAGE_CEGUI06
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_PCRE
+ 	help
+-	  Crazy Eddie's GUI System is a free library providing windowing and
+-	  widgets for graphics APIs / engines where such functionality is not
+-	  natively available, or severely lacking. The library is object
+-	  orientated, written in C++, and targeted at games developers who
+-	  should be spending their time creating great games, not building
+-	  GUI sub-systems!
++	  Crazy Eddie's GUI System is a free library providing windowing
++	  and widgets for graphics APIs / engines where such
++	  functionality is not natively available, or severely lacking.
++	  The library is object orientated, written in C++, and targeted
++	  at games developers who should be spending their time creating
++	  great games, not building GUI sub-systems!
+ 
+ 	  http://www.cegui.org.uk/
+diff --git a/package/celt051/Config.in b/package/celt051/Config.in
+index 035e262..e151319 100644
+--- a/package/celt051/Config.in
++++ b/package/celt051/Config.in
+@@ -5,10 +5,10 @@ config BR2_PACKAGE_CELT051
+ 	  The CELT ultra-low delay audio codec
+ 
+ 	  The CELT codec is a compression algorithm for audio. Like MP3,
+-	  Vorbis, and AAC it is suitable for transmitting music with high
+-	  quality. Unlike these formats CELT imposes very little delay on
+-	  the signal, even less than is typical for speech centric formats
+-	  like Speex, GSM, or G.729.
++	  Vorbis, and AAC it is suitable for transmitting music with
++	  high quality. Unlike these formats CELT imposes very little
++	  delay on the signal, even less than is typical for speech
++	  centric formats like Speex, GSM, or G.729.
+ 
+ 	  Note: this is version 0.5.1.3 of celt.
+ 
+diff --git a/package/cjson/Config.in b/package/cjson/Config.in
+index 04eff4c..ee18fce 100644
+--- a/package/cjson/Config.in
++++ b/package/cjson/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_CJSON
+ 	bool "cJSON"
+ 	help
+-	  An ultra-lightweight, portable, single-file, simple-as-can-be ANSI-C
+-	  compliant JSON parser, under MIT license.
++	  An ultra-lightweight, portable, single-file, simple-as-can-be
++	  ANSI-C compliant JSON parser, under MIT license.
+ 
+ 	  https://github.com/DaveGamble/cJSON
+diff --git a/package/clamav/Config.in b/package/clamav/Config.in
+index 051df0d..a962103 100644
+--- a/package/clamav/Config.in
++++ b/package/clamav/Config.in
+@@ -7,8 +7,8 @@ config BR2_PACKAGE_CLAMAV
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+-	  ClamAV is an open source antivirus engine for detecting trojans,
+-	  viruses, malware & other malicious threats.
++	  ClamAV is an open source antivirus engine for detecting
++	  trojans, viruses, malware & other malicious threats.
+ 
+ 	  http://www.clamav.net
+ 
+diff --git a/package/clapack/Config.in b/package/clapack/Config.in
+index 7d1f940..e5be0b6 100644
+--- a/package/clapack/Config.in
++++ b/package/clapack/Config.in
+@@ -23,10 +23,11 @@ config BR2_PACKAGE_CLAPACK_ARITH_H
+ 	string "Custom BLAS arith.h"
+ 	depends on BR2_PACKAGE_CLAPACK
+ 	help
+-	  To optimize BLAS library for the hardware, an 'arith.h' header should
+-	  be provided.
++	  To optimize BLAS library for the hardware, an 'arith.h' header
++	  should be provided.
+ 
+ 	  If empty, the library will not be optimized by the compiler.
+ 
+-	  In any case an 'arithchk' program is built (but not installed), to be run
+-	  on the target to generate this arith.h header.
++	  In any case an 'arithchk' program is built
++	  (but not installed), to be run on the target to generate this
++	  arith.h header.
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index d270494..ccd3fbe 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -89,8 +89,8 @@ config BR2_PACKAGE_COLLECTD_SYSLOG
+ config BR2_PACKAGE_COLLECTD_THRESHOLD
+ 	bool "threshold"
+ 	help
+-	  Checks values against configured thresholds and creates notifications
+-	  if values are out of bounds.
++	  Checks values against configured thresholds and creates
++	  notifications if values are out of bounds.
+ 
+ endmenu
+ 
+@@ -140,17 +140,20 @@ config BR2_PACKAGE_COLLECTD_CGROUPS
+ config BR2_PACKAGE_COLLECTD_CONNTRACK
+ 	bool "conntrack"
+ 	help
+-	  Collects the number of entries in Linux's connection tracking table.
++	  Collects the number of entries in Linux's connection tracking
++	  table.
+ 
+ config BR2_PACKAGE_COLLECTD_CONTEXTSWITCH
+ 	bool "contextswitch"
+ 	help
+-	  Collects the number of context switches done by the operating system.
++	  Collects the number of context switches done by the operating
++	  system.
+ 
+ config BR2_PACKAGE_COLLECTD_CPU
+ 	bool "cpu"
+ 	help
+-	  Collects the amount of time spent by the CPU in various states.
++	  Collects the amount of time spent by the CPU in various
++	  states.
+ 
+ config BR2_PACKAGE_COLLECTD_CPUFREQ
+ 	bool "cpufreq"
+@@ -229,7 +232,8 @@ config BR2_PACKAGE_COLLECTD_FHCOUNT
+ config BR2_PACKAGE_COLLECTD_FILECOUNT
+ 	bool "filecount"
+ 	help
+-	  Counts the number of files in a directory and all its subdirectories.
++	  Counts the number of files in a directory and all its
++	  subdirectories.
+ 
+ config BR2_PACKAGE_COLLECTD_FSCACHE
+ 	bool "fscache"
+@@ -323,7 +327,8 @@ config BR2_PACKAGE_COLLECTD_MYSQL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
+ 	select BR2_PACKAGE_MYSQL
+ 	help
+-	  Connects to a MySQL database and issues a "show status" command.
++	  Connects to a MySQL database and issues a "show status"
++	  command.
+ 
+ config BR2_PACKAGE_COLLECTD_NETLINK
+ 	bool "netlink"
+@@ -334,7 +339,8 @@ config BR2_PACKAGE_COLLECTD_NETLINK
+ config BR2_PACKAGE_COLLECTD_NFS
+ 	bool "nfs"
+ 	help
+-	  Collects information about the usage of the Network File System.
++	  Collects information about the usage of the Network File
++	  System.
+ 
+ config BR2_PACKAGE_COLLECTD_NGINX
+ 	bool "nginx"
+@@ -358,7 +364,8 @@ config BR2_PACKAGE_COLLECTD_OPENLDAP
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_OPENLDAP
+ 	help
+-	  Read monitoring information from OpenLDAP's cn=Monitor subtree.
++	  Read monitoring information from OpenLDAP's cn=Monitor
++	  subtree.
+ 
+ comment "openldap support needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+@@ -409,8 +416,8 @@ config BR2_PACKAGE_COLLECTD_SMART
+ 	depends on BR2_PACKAGE_HAS_UDEV # libatasmart
+ 	select BR2_PACKAGE_LIBATASMART
+ 	help
+-	  Collect SMART statistics, notably load cycle count, temperature
+-	  and bad sectors.
++	  Collect SMART statistics, notably load cycle count,
++	  temperature and bad sectors.
+ 
+ comment "SMART requires udev to be enabled"
+ 	depends on !BR2_PACKAGE_HAS_UDEV
+@@ -445,8 +452,8 @@ config BR2_PACKAGE_COLLECTD_TAIL
+ config BR2_PACKAGE_COLLECTD_TAIL_CSV
+ 	bool "tail csv"
+ 	help
+-	  Follows (tails) files in CSV format, parses each line and submits
+-	  extracted values.
++	  Follows (tails) files in CSV format, parses each line and
++	  submits extracted values.
+ 
+ config BR2_PACKAGE_COLLECTD_TCPCONNS
+ 	bool "tcpconns"
+@@ -516,7 +523,8 @@ comment "Select at least one for collectd to be useful"
+ config BR2_PACKAGE_COLLECTD_CSV
+ 	bool "csv"
+ 	help
+-	  Writes values to a plain-text file in Comma Separated Values format.
++	  Writes values to a plain-text file in Comma Separated Values
++	  format.
+ 
+ config BR2_PACKAGE_COLLECTD_GRAPHITE
+ 	bool "graphite"
+@@ -555,7 +563,8 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
+ 	select BR2_PACKAGE_RIEMANN_C_CLIENT
+ 	select BR2_PACKAGE_LIBTOOL
+ 	help
+-	  Sends data to Riemann, a stream processing and monitoring system.
++	  Sends data to Riemann, a stream processing and monitoring
++	  system.
+ 
+ config BR2_PACKAGE_COLLECTD_UNIXSOCK
+ 	bool "unixsock"
+@@ -567,7 +576,8 @@ config BR2_PACKAGE_COLLECTD_WRITEHTTP
+ 	bool "write_http"
+ 	select BR2_PACKAGE_LIBCURL
+ 	help
+-	  Sends values collected to a web-server using HTTP POST and PUTVAL.
++	  Sends values collected to a web-server using HTTP POST and
++	  PUTVAL.
+ 
+ config BR2_PACKAGE_COLLECTD_WRITELOG
+ 	bool "write_log"
+@@ -592,14 +602,14 @@ comment "write_prometheus needs a toolchain w/ C++, host gcc >= 4.5"
+ config BR2_PACKAGE_COLLECTD_WRITESENSU
+ 	bool "write_sensu"
+ 	help
+-	  Sends data to Sensu, a stream processing and monitoring system,
+-	  via the Sensu client local TCP socket.
++	  Sends data to Sensu, a stream processing and monitoring
++	  system, via the Sensu client local TCP socket.
+ 
+ config BR2_PACKAGE_COLLECTD_WRITETSDB
+ 	bool "write_tsdb"
+ 	help
+-	  Sends data OpenTSDB, a scalable no master, no shared state time
+-	  series database.
++	  Sends data OpenTSDB, a scalable no master, no shared state
++	  time series database.
+ 
+ endmenu
+ 
+diff --git a/package/cppdb/Config.in b/package/cppdb/Config.in
+index 9037a7a..ceff0ab 100644
+--- a/package/cppdb/Config.in
++++ b/package/cppdb/Config.in
+@@ -7,9 +7,10 @@ config BR2_PACKAGE_CPPDB
+ 	# Can be built without them but it's useless
+ 	depends on BR2_PACKAGE_MYSQL || BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_SQLITE
+ 	help
+-	  CppDB is an SQL connectivity library that is designed to provide
+-	  platform and Database independent connectivity API similarly
+-	  to what JDBC, ODBC and other connectivity libraries do.
++	  CppDB is an SQL connectivity library that is designed to
++	  provide platform and Database independent connectivity API
++	  similarly to what JDBC, ODBC and other connectivity libraries
++	  do.
+ 
+ 	  http://cppcms.com/sql/cppdb/
+ 
+diff --git a/package/cpuload/Config.in b/package/cpuload/Config.in
+index 82bc450..9a7b4e9 100644
+--- a/package/cpuload/Config.in
++++ b/package/cpuload/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_CPULOAD
+ 	bool "cpuload"
+ 	help
+-	  cpuload is a simple tool to obtain intuitive vision of CPU load
+-	  (including total, user, system, irq and softirq) within a certain
+-	  time, which is especially useful for embedded system without GUI.
++	  cpuload is a simple tool to obtain intuitive vision of CPU
++	  load (including total, user, system, irq and softirq) within a
++	  certain time, which is especially useful for embedded system
++	  without GUI.
+ 
+ 	  https://github.com/kelvincheung/cpuload
+diff --git a/package/crda/Config.in b/package/crda/Config.in
+index 2cb0403..b9a2613 100644
+--- a/package/crda/Config.in
++++ b/package/crda/Config.in
+@@ -12,8 +12,8 @@ config BR2_PACKAGE_CRDA
+ 
+ 	  This package provides a Central Regulatory Domain Agent (CRDA)
+ 	  to be used by the Linux kernel cf80211 wireless subsystem to
+-	  query and apply the regulatory domain settings wireless devices
+-	  may operate within for a given location.
++	  query and apply the regulatory domain settings wireless
++	  devices may operate within for a given location.
+ 
+ 	  http://linuxwireless.org/en/developers/Regulatory/CRDA
+ 
+diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
+index 9f9df02..d1e6449 100644
+--- a/package/cryptodev/Config.in
++++ b/package/cryptodev/Config.in
+@@ -31,8 +31,8 @@ config BR2_PACKAGE_OCF_LINUX
+ 	select BR2_PACKAGE_HAS_CRYPTODEV
+ 	help
+ 	  OCF-Linux is a Linux port of the OpenBSD/FreeBSD Cryptographic
+-	  Framework (OCF). This port aims to bring full asynchronous HW/SW
+-	  crypto acceleration to the Linux kernel and applications
++	  Framework (OCF). This port aims to bring full asynchronous
++	  HW/SW crypto acceleration to the Linux kernel and applications
+ 	  running under Linux.
+ 
+ 	  http://ocf-linux.sourceforge.net/
+diff --git a/package/curlftpfs/Config.in b/package/curlftpfs/Config.in
+index c2d591a..986faf1 100644
+--- a/package/curlftpfs/Config.in
++++ b/package/curlftpfs/Config.in
+@@ -11,8 +11,8 @@ config BR2_PACKAGE_CURLFTPFS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBCURL
+ 	help
+-	  CurlFtpFS is a filesystem for accessing FTP hosts based on FUSE
+-	  and libcurl.
++	  CurlFtpFS is a filesystem for accessing FTP hosts based on
++	  FUSE and libcurl.
+ 
+ 	  http://curlftpfs.sourceforge.net/
+ 
+diff --git a/package/cvs/Config.in b/package/cvs/Config.in
+index 0036961..e8f0606 100644
+--- a/package/cvs/Config.in
++++ b/package/cvs/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_CVS
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  Concurrent Versions System - source code revision control tools.
++	  Concurrent Versions System - source code revision control
++	  tools.
+ 
+ 	  http://www.nongnu.org/cvs/
+ 
+diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
+index 03b7dbb..50c05eb 100644
+--- a/package/cwiid/Config.in
++++ b/package/cwiid/Config.in
+@@ -6,8 +6,8 @@ config BR2_PACKAGE_CWIID
+ 	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+-	  A collection of Linux tools written in C for interfacing to the
+-	  Nintendo Wiimote.
++	  A collection of Linux tools written in C for interfacing to
++	  the Nintendo Wiimote.
+ 
+ 	  http://abstrakraft.org/cwiid/
+ 
