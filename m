@@ -1,47 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Jun 2017 20:28:50 -0000
-Subject: [Buildroot] [git commit] python-pytablewriter: bump version to
-	0.19.5
-Message-ID: <20170601202849.1E56382A81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] tcpreplay: bump version to 4.2.5
+Message-ID: <20170601202849.6B99281735@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07f8f378a1ead35ae97ce8c58eb93d509078fe0f
+commit: https://git.buildroot.net/buildroot/commit/?id=eb2919bd460767425062f4b9748e10862acc3eb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
- package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tcpreplay/tcpreplay.hash | 2 +-
+ package/tcpreplay/tcpreplay.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
-index 80a9a02..eefcb3a 100644
---- a/package/python-pytablewriter/python-pytablewriter.hash
-+++ b/package/python-pytablewriter/python-pytablewriter.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
--md5 c63d4d14836ae291e11448219abdf348  pytablewriter-0.17.2.tar.gz
--sha256 629ecb7bfe3fb033427e02e0291270d13ff14bfc4caf2cac66b797ac5aea5fd1  pytablewriter-0.17.2.tar.gz
-+md5 fb404abd5a6aab2d8da8c93f24c9c974  pytablewriter-0.19.5.tar.gz
-+sha256 0f06a73fc13fea7d6004ec9d96f2aeef920defaee1704268558a45e97455d35a  pytablewriter-0.19.5.tar.gz
-diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
-index 2788c85..50e85c2 100644
---- a/package/python-pytablewriter/python-pytablewriter.mk
-+++ b/package/python-pytablewriter/python-pytablewriter.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index 9e8d151..c908964 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 da78ea1a1fe8ff177a4f9e71c4c6739b79ac86db2c2bb90955318b8e8439beb7  tcpreplay-4.2.4.tar.gz
++sha256 941026be34e1db5101d3d22ebddd6fff76179a1ee81e273338f533ba4eca89d7  tcpreplay-4.2.5.tar.gz
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 879f518..d303c60 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYTABLEWRITER_VERSION = 0.17.2
-+PYTHON_PYTABLEWRITER_VERSION = 0.19.5
- PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
--PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/47/5c/cbfed107164e56a6739d52694c4c584635970d6621b7e531464e89534956
-+PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/db/c6/517cb51aee3c83b7eb60353f818aab0f39d310c925ea103cc54c0e0f8cd2
- PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
- PYTHON_PYTABLEWRITER_LICENSE = MIT
- PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
+-TCPREPLAY_VERSION = 4.2.4
++TCPREPLAY_VERSION = 4.2.5
+ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
+ TCPREPLAY_LICENSE = GPL-3.0
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
