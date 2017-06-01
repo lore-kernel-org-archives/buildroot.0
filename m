@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Jun 2017 20:28:49 -0000
-Subject: [Buildroot] [git commit] tcpreplay: bump version to 4.2.4
-Message-ID: <20170601202848.90D1B8274A@busybox.osuosl.org>
+Date: Thu, 01 Jun 2017 20:28:50 -0000
+Subject: [Buildroot] [git commit] libinput: bump version to 1.7.2
+Message-ID: <20170601202848.ACE4A82A6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=501ea05ad2050796cf30fecf1870d7536c9eca18
+commit: https://git.buildroot.net/buildroot/commit/?id=f46984d45a1700c5e455f88c875be3c687663aa5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpreplay/tcpreplay.hash | 2 +-
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 9909678..9e8d151 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 3663b51..490131c 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 68d8d49dab5bf58b2e8d244eee1ee7f2379d967da19fe97dd9d59bcf40a22abc  tcpreplay-4.2.3.tar.gz
-+sha256 da78ea1a1fe8ff177a4f9e71c4c6739b79ac86db2c2bb90955318b8e8439beb7  tcpreplay-4.2.4.tar.gz
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 6d5c32b..879f518 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-March/033531.html
+-sha256 12a670f63d01e9e9c98ad0b31aef22160aac52187b4ee8f068a6902181c1a8a8  libinput-1.7.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-May/034037.html
++sha256 0b1e5a6c106ccc609ccececd9e33e6b27c8b01fc7457ddb4c1dd266e780d6bc2  libinput-1.7.2.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 801a813..4ecc2d1 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPREPLAY_VERSION = 4.2.3
-+TCPREPLAY_VERSION = 4.2.4
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPL-3.0
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+-LIBINPUT_VERSION = 1.7.0
++LIBINPUT_VERSION = 1.7.2
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
