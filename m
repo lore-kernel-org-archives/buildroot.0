@@ -1,62 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Jun 2017 20:28:58 -0000
-Subject: [Buildroot] [git commit] python-can: bump to 1.5.2
-Message-ID: <20170601202851.5E9E28261C@busybox.osuosl.org>
+Date: Thu, 01 Jun 2017 20:28:59 -0000
+Subject: [Buildroot] [git commit] libmaxminddb: bump to version 1.2.1
+Message-ID: <20170601202851.97ED48261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee5bce16478b799aa2ac72f5e47f322cbef5e10f
+commit: https://git.buildroot.net/buildroot/commit/?id=929b57fb92819265b720e7c51edc8b2d8cbcf260
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add Python SQLite3 dependency that first appeared in 1.5.2.
+Remove 0001-Add-disable-tests-to-configure.patch as it has been
+integrated upstream
 
-[Peter: clarify that this is a runtime dependency]
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-can/Config.in       | 2 ++
- package/python-can/python-can.hash | 6 +++---
- package/python-can/python-can.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ .../0001-Add-disable-tests-to-configure.patch      | 49 ----------------------
+ package/libmaxminddb/libmaxminddb.hash             |  2 +-
+ package/libmaxminddb/libmaxminddb.mk               |  5 +--
+ 3 files changed, 3 insertions(+), 53 deletions(-)
 
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-index 6b4e0fa..3e1b012 100644
---- a/package/python-can/Config.in
-+++ b/package/python-can/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_CAN
- 	bool "python-can"
-+	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3 # runtime
- 	help
- 	  This module provides controller area network support for Python.
- 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index a877862..bd19d19 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9b556fe6f016c0a3b27cc67790cf821, sha256 locally computed
--md5     b9b556fe6f016c0a3b27cc67790cf821  python-can-1.4.3.tar.gz
--sha256  2dcd32737cc39fbf39f41521146a9685f594942c99c6183bad7e3c404930198b  python-can-1.4.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/python-can/json, sha256 locally computed
-+md5     f653aecf8b9034bbba32cc04ca6a7b6d  python-can-1.5.2.tar.gz
-+sha256  edabb426e6cd11c2dc7a98980340135aa0eb02143b0d51bf14e3e6178c131cc3  python-can-1.5.2.tar.gz
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index eddefdb..a271bae 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+deleted file mode 100644
+index 8ff64e9..0000000
+--- a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 8287848f747bd37298a2d32b8fd06cc59eb28028 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 9 Feb 2017 21:40:43 +0100
+-Subject: [PATCH] Add --disable-tests to configure
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile.am  | 6 +++++-
+- configure.ac | 6 ++++++
+- 2 files changed, 11 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 1804945..cebcd31 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -5,8 +5,12 @@ nodist_include_HEADERS = include/maxminddb_config.h
+- 
+- SUBDIRS = \
+-   src     \
+--  bin     \
+-+  bin
+-+
+-+if TESTS
+-+SUBDIRS += \
+-   t
+-+endif
+- 
+- EXTRA_DIST = doc t Changes.md LICENSE NOTICE README.md projects/VS12 projects/VS12-tests
+- dist-hook:
+-diff --git a/configure.ac b/configure.ac
+-index 7916212..2a22fab 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -119,6 +119,12 @@ AC_ARG_ENABLE(
+-         esac],[debug=false])
+- AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
+- 
+-+AC_ARG_ENABLE([tests],
+-+        AS_HELP_STRING([--enable-tests], [Compilation of tests code]),
+-+        [enable_tests=${enableval}],
+-+        [enable_tests=yes])
+-+AM_CONDITIONAL([TESTS], [test "${enable_tests}" = "yes"])
+-+
+- AC_CONFIG_FILES([Makefile
+-                  src/Makefile
+-                  bin/Makefile
+--- 
+-2.5.0
+-
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index 3d5b4ca..952a655 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	4147241d4e3103bd843167ae5a0d5cf176632b6898cb1cca6223d2d58cc53ef5	libmaxminddb-1.2.0.tar.gz
++sha256	06a0ec3d1496e1a7e30d74ea15373e0010bbe392ea1819c149aaf724dc57dd9a	libmaxminddb-1.2.1.tar.gz
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index c6e70c5..f0678a0 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -4,13 +4,12 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 1.4.3
--PYTHON_CAN_SITE = https://pypi.python.org/packages/source/p/python-can
-+PYTHON_CAN_VERSION = 1.5.2
-+PYTHON_CAN_SITE = https://pypi.python.org/packages/a1/b1/80f023e2b728c7ebccbf989aec777f3add3dd4cee650573ce5d38132a07c
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
- PYTHON_CAN_SETUP_TYPE = setuptools
+-LIBMAXMINDDB_VERSION = 1.2.0
++LIBMAXMINDDB_VERSION = 1.2.1
+ LIBMAXMINDDB_SITE = $(call github,maxmind,libmaxminddb,$(LIBMAXMINDDB_VERSION))
+ LIBMAXMINDDB_INSTALL_STAGING = YES
+ LIBMAXMINDDB_LICENSE = Apache-2.0
+ LIBMAXMINDDB_LICENSE_FILES = LICENSE
+-# Fetched from Github, with no configure script, and we're patching
+-# configure.ac
++# Fetched from Github, with no configure script
+ LIBMAXMINDDB_AUTORECONF = YES
+ LIBMAXMINDDB_CONF_OPTS = --disable-tests
+ 
