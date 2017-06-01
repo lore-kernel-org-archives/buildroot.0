@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Jun 2017 20:28:52 -0000
-Subject: [Buildroot] [git commit] network-manager: add optional concheck
-	support
-Message-ID: <20170601202849.CFBFD8274A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] audit: bump to 2.7.6
+Message-ID: <20170601202850.30C25807D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4be3f800dccec67cc873c15f83aeda73c5b1a673
+commit: https://git.buildroot.net/buildroot/commit/?id=9235a19f1ae01de6eaa2c36c41cc6a790892f2fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/network-manager/network-manager.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 1d17ec4..9f4cebe 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -30,8 +30,14 @@ NETWORK_MANAGER_CONF_OPTS = \
- 	--with-crypto=gnutls \
- 	--with-iptables=/usr/sbin/iptables \
- 	--disable-ifupdown \
--	--disable-ifnet \
--	--disable-concheck
-+	--disable-ifnet
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+NETWORK_MANAGER_DEPENDENCIES += libcurl
-+NETWORK_MANAGER_CONF_OPTS += --enable-concheck
-+else
-+NETWORK_MANAGER_CONF_OPTS += --disable-concheck
-+endif
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 2ae8f99..7dd3e55 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,2 +1,2 @@
+ #Locally computed
+-sha256 0441790794fd9375dbca598fa0ffb46c57ff37b3a24b94ffec0bbee3215cca09 audit-2.7.1.tar.gz
++sha256 fa65289cffdc95a25bfbdba541f43ee1b12c707090a38fd027dcf9354b9014e7 audit-2.7.6.tar.gz
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index b94d0bf..95b6078 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
- NETWORK_MANAGER_DEPENDENCIES += newt
+-AUDIT_VERSION = 2.7.1
++AUDIT_VERSION = 2.7.6
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), unclear (libraries)
+ AUDIT_LICENSE_FILES = COPYING
