@@ -1,96 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 01 Jun 2017 20:28:55 -0000
-Subject: [Buildroot] [git commit] package/tmux: bump to v2.4
-Message-ID: <20170601202851.373168274A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-dataproperty: bump version to 0.22.0
+Message-ID: <20170601202851.A43928261C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1b31f07e6a915336fb8ff6750851b94369bf68b
+commit: https://git.buildroot.net/buildroot/commit/?id=eecf091dfe804c4075ae61420226cb066b1135a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also removes 0001-compat-don-t-re-define-program_invocation_short_name.patch,
-since it's applied to upstream in this version.
-
-Tested with:
-qemu_ppc_g3beige_defconfig
-
-Signed-off-by: Mario J. Rugiero <mrugiero@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-re-define-program_invocation_short_name.patch | 42 ----------------------
- package/tmux/tmux.hash                             |  2 +-
- package/tmux/tmux.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 44 deletions(-)
+ package/python-dataproperty/python-dataproperty.hash | 4 ++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tmux/0001-compat-don-t-re-define-program_invocation_short_name.patch b/package/tmux/0001-compat-don-t-re-define-program_invocation_short_name.patch
-deleted file mode 100644
-index bddc2c7..0000000
---- a/package/tmux/0001-compat-don-t-re-define-program_invocation_short_name.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 9b18a98614a9f201b0883c2b15e7c7bde0aa0ff2 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 5 Feb 2017 17:12:00 +0100
--Subject: [PATCH] compat: don't re-define program_invocation_short_name
--
--program_invocation_short_name is defined in errno.h, and its definition
--can differ between the various C libraries: glibc defines it as:
--    extern char *program_invocation_short_name;
--
--while uClibc defines it as:
--    extern const char *program_invocation_short_name;
--
--So there is not simple solution to know the prototype.
--
--But since it is defined in errno.h, there is no reason to try and define
--it ourselves; let's just trust what the header provides.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- compat/getprogname.c | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/compat/getprogname.c b/compat/getprogname.c
--index 80a496d..ad619fc 100644
----- a/compat/getprogname.c
--+++ b/compat/getprogname.c
--@@ -19,11 +19,10 @@
-- #include "compat.h"
-- 
-- #if defined(HAVE_PROGRAM_INVOCATION_SHORT_NAME)
--+#include <errno.h>
-- const char *
-- getprogname(void)
-- {
---	extern char	*program_invocation_short_name;
---
-- 	return (program_invocation_short_name);
-- }
-- #elif defined(HAVE___PROGNAME)
---- 
--2.7.4
--
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index 9195a16..ac42571 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 55313e132f0f42de7e020bf6323a1939ee02ab79c48634aa07475db41573852b  tmux-2.3.tar.gz
-+sha256 757d6b13231d0d9dd48404968fc114ac09e005d475705ad0cd4b7166f799b349 tmux-2.4.tar.gz
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index f6dd1a9..6636b9b 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index ad88498..6ab0646 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
+-md5 89e78396b91e6156c522175b3316546f  DataProperty-0.21.1.tar.gz
+-sha256 7a5c77004e8f1bca734838966e30e555e323c06bda613ed3985fa9bef2665c71  DataProperty-0.21.1.tar.gz
++md5 7b41e6f9b250c4f04f07bbd2999c4259  DataProperty-0.22.0.tar.gz
++sha256 3ed49c923a996cbabc008fba7f2df8b2f303e961d64507348120faaacb6b5157  DataProperty-0.22.0.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index d9d0783..7feeed5 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--TMUX_VERSION = 2.3
-+TMUX_VERSION = 2.4
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = README
+-PYTHON_DATAPROPERTY_VERSION = 0.21.1
++PYTHON_DATAPROPERTY_VERSION = 0.22.0
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/fc/9a/e6cc202b81b02aec39f35f2d13a6efc349cdc62ae3890f84b586468597ad
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/ed/00/091f46cc81869b925d4001300bef31ea2224436c494d1de7145d4bb56df1
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
