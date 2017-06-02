@@ -1,41 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jun 2017 13:30:49 +0200
-Subject: [Buildroot] [git commit] tmux: bump version to 2.5
-Message-ID: <20170602113407.DD52882A57@busybox.osuosl.org>
+Date: Fri, 2 Jun 2017 13:31:48 +0200
+Subject: [Buildroot] [git commit] wireshark: bump version to 2.2.7 (security)
+Message-ID: <20170602113408.0704482A2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb019e4473c8ac02ea491d20f6073e665d4579f6
+commit: https://git.buildroot.net/buildroot/commit/?id=c87443e65e0d25e88868d75cefba5cd901130925
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Security fixes:
+
+- wnpa-sec-2017-22
+  Bazaar dissector infinite loop (Bug 13599) CVE-2017-9352
+- wnpa-sec-2017-23
+  DOF dissector read overflow (Bug 13608) CVE-2017-9348
+- wnpa-sec-2017-24
+  DHCP dissector read overflow (Bug 13609, Bug 13628) CVE-2017-9351
+- wnpa-sec-2017-25
+  SoulSeek dissector infinite loop (Bug 13631) CVE-2017-9346
+- wnpa-sec-2017-26
+  DNS dissector infinite loop (Bug 13633) CVE-2017-9345
+- wnpa-sec-2017-27
+  DICOM dissector infinite loop (Bug 13685) CVE-2017-9349
+- wnpa-sec-2017-28
+  openSAFETY dissector memory exhaustion (Bug 13649) CVE-2017-9350
+- wnpa-sec-2017-29
+  BT L2CAP dissector divide by zero (Bug 13701) CVE-2017-9344
+- wnpa-sec-2017-30
+  MSNIP dissector crash (Bug 13725) CVE-2017-9343
+- wnpa-sec-2017-31
+  ROS dissector crash (Bug 13637) CVE-2017-9347
+- wnpa-sec-2017-32
+  RGMP dissector crash (Bug 13646) CVE-2017-9354
+- wnpa-sec-2017-33
+  IPv6 dissector crash (Bug 13675) CVE-2017-9353
+
+Full release notes:
+
+  https://www.wireshark.org/docs/relnotes/wireshark-2.2.7.html
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tmux/tmux.hash | 2 +-
- package/tmux/tmux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index ac42571..8d82b80 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 09f6573..c61c520 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256 757d6b13231d0d9dd48404968fc114ac09e005d475705ad0cd4b7166f799b349 tmux-2.4.tar.gz
-+sha256 ae135ec37c1bf6b7750a84e3a35e93d91033a806943e034521c8af51b12d95df  tmux-2.5.tar.gz
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 6636b9b..44ba613 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.6.txt
+-sha256 f627d51eda85f5ae5f5c8c9fc1f6539ffc2a270dd7500dc7f67490a8534ca849  wireshark-2.2.6.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.7.txt
++sha256 689ddf62221b152779d8846ab5b2063cc7fd41ec1a9f04eefab09b5d5486dbb5  wireshark-2.2.7.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index fee6a81..69e50ad 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TMUX_VERSION = 2.4
-+TMUX_VERSION = 2.5
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = README
+-WIRESHARK_VERSION = 2.2.6
++WIRESHARK_VERSION = 2.2.7
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
