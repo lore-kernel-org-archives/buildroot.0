@@ -1,43 +1,44 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Fri, 2 Jun 2017 15:27:06 +0200
-Subject: [Buildroot] Beaglebone Black : tweaking the device tree
-Message-ID: <d1331942-3474-94b7-8746-99c6f1b342a0@yahoo.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 2 Jun 2017 16:20:45 +0100
+Subject: [Buildroot] [PATCH] openldap: bump version to 2.4.45
+Message-ID: <20170602152045.47774-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/openldap/openldap.hash | 8 ++++----
+ package/openldap/openldap.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I need to enable the CAN bus on the Beaglebone Black. To do so, I need 
-to play with the device tree.
-
-Thanks to the example I found [1] and some other references, I can 
-picture roughly what to write in some dts file.
-
-But still, I wonder what is the proper way to modify a device tree in 
-Buildroot ?
-
-
-- Are device tree overlays supported in Buildroot ?
-- If not, should I patch or include 
-arch/arm/boot/dts/arm335x-boneblack.dts ?
-- What is the purpose of BR2_TARGET_UBOOT_CUSTOM_DTS_PATH ?
-- Where should I save my .dts (I'm building out of tree).
-
-
-David.
-
-
-[1] Example :
--------------
-I successfully enabled the CAN bus on Debian installed by default on the 
-eMMC using this guide (uses device a tree overlay):
-http://www.embedded-things.com/bbb/enable-canbus-on-the-beaglebone-black/
-
-
-My config :
------------
-Buildroot 2017.05, beaglebone_qt5_defconfig, kernel v4.1, plus this patch :
-https://patchwork.ozlabs.org/patch/762346/
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 785c4897f..aec4aaebf 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,4 +1,4 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.md5
+-md5	693ac26de86231f8dcae2b4e9d768e51	openldap-2.4.44.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.sha1
+-sha1	016a738d050a68d388602a74b5e991035cdba149	openldap-2.4.44.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.md5
++md5 00ff8301277cdfd0af728a6927042a13  openldap-2.4.45.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.sha1
++sha1 c98437385d3eaee80c9e2c09f3f0d4b7c140233d  openldap-2.4.45.tgz
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 2f738e51d..90ff1123b 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLDAP_VERSION = 2.4.44
++OPENLDAP_VERSION = 2.4.45
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+-- 
+2.13.0
