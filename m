@@ -1,123 +1,26 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 2 Jun 2017 12:11:33 +0100
-Subject: [Buildroot] [PATCH] acpica: bump version to 20170531
-Message-ID: <20170602111133.21866-1-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Jun 2017 13:30:38 +0200
+Subject: [Buildroot] [PATCH] tinyalsa: fix musl build
+In-Reply-To: <d5dd1e14ebcc23f33a51c9f24bbd7bfaf37d1509.1496395973.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 2 Jun 2017 12:32:53 +0300")
+References: <d5dd1e14ebcc23f33a51c9f24bbd7bfaf37d1509.1496395973.git.baruch@tkos.co.il>
+Message-ID: <87lgpafwyp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/acpica/0001-build-do-not-use-Werror.patch | 45 +++++++++++++----------
- package/acpica/acpica.hash                        |  2 +-
- package/acpica/acpica.mk                          |  2 +-
- 3 files changed, 27 insertions(+), 22 deletions(-)
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
-index 4ccb4d4d3..e7449e982 100644
---- a/package/acpica/0001-build-do-not-use-Werror.patch
-+++ b/package/acpica/0001-build-do-not-use-Werror.patch
-@@ -9,17 +9,20 @@ newer versions that introduce new warnings.
- 
- Remove use of -Werror.
- 
-+[Vincent: tweak patch for 20170531 release]
-+
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Signed-off-by: "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
- ---
-  generate/unix/Makefile.config |  1 -
-  generate/unix/iasl/Makefile   | 12 ++++++------
-  2 files changed, 6 insertions(+), 7 deletions(-)
- 
- diff --git a/generate/unix/Makefile.config b/generate/unix/Makefile.config
--index da0f61d..1476e27 100644
-+index 4d4f182..a7120e3 100644
- --- a/generate/unix/Makefile.config
- +++ b/generate/unix/Makefile.config
--@@ -185,7 +185,6 @@ CWARNINGFLAGS = \
-+@@ -194,7 +194,6 @@ CWARNINGFLAGS = \
-      -Wall\
-      -Wbad-function-cast\
-      -Wdeclaration-after-statement\
-@@ -28,35 +31,37 @@ index da0f61d..1476e27 100644
-      -Wmissing-declarations\
-      -Wmissing-prototypes\
- diff --git a/generate/unix/iasl/Makefile b/generate/unix/iasl/Makefile
--index a3759cc..c2dc8f0 100644
-+index 156c23a..28ffc06 100644
- --- a/generate/unix/iasl/Makefile
- +++ b/generate/unix/iasl/Makefile
--@@ -320,19 +320,19 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
-- # by the utilities above and they are not necessarily ANSI C, etc.
-+@@ -335,24 +335,24 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
-  #
-  $(OBJDIR)/aslcompilerlex.o :   $(OBJDIR)/aslcompilerlex.c
---	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-  
-  $(OBJDIR)/aslcompilerparse.o : $(OBJDIR)/aslcompilerparse.c
---	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-  
-  $(OBJDIR)/dtparserlex.o :      $(OBJDIR)/dtparserlex.c
---	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-  
-  $(OBJDIR)/dtparserparse.o :    $(OBJDIR)/dtparserparse.c
---	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-  
-  $(OBJDIR)/prparserlex.o :      $(OBJDIR)/prparserlex.c
---	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	$(CC) -c $(CFLAGS) -Wall -o$@ $<
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-  
-  $(OBJDIR)/prparserparse.o :    $(OBJDIR)/prparserparse.c
---	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
--+	$(CC) -c $(CFLAGS) -Wall -o$@ $<
---- 
--2.7.4
--
-+ 	@echo "- " "Intermediate" $<
-+-	@$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
-++	@$(CC) -c $(CFLAGS) -Wall -o$@ $<
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index d69279e6c..4942fe454 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 b2d81e84107ac9a02be86ea43cbea7afa8fd4b4150270bc88c2d4c9fea0b8aad acpica-unix2-20170303.tar.gz
-+sha256 0b979b778bcf711a2b8702b1831affd7dac4a776235d7877fd185651b6a390a3  acpica-unix2-20170531.tar.gz
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index c80989a1e..8cfe79351 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ACPICA_VERSION = 20170303
-+ACPICA_VERSION = 20170531
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+ > Add a patch adding missing header to fix build with musl.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/de9/de97fbd0b9c88bb5d9aa81ea6d73cdcaadb9c763/
+
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-2.13.0
+Bye, Peter Korsgaard
