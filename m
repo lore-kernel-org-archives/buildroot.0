@@ -1,63 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  2 Jun 2017 20:50:51 +0200
-Subject: [Buildroot] [PATCH 1/3] package/ipsec-tools: allow autoreconf
-Message-ID: <20170602185053.11029-1-bernd.kuhls@t-online.de>
+Date: Fri,  2 Jun 2017 20:50:53 +0200
+Subject: [Buildroot] [PATCH 3/3] package/ipsec-tools: add security patch to
+	fix CVE-2015-4047
+In-Reply-To: <20170602185053.11029-1-bernd.kuhls@t-online.de>
+References: <20170602185053.11029-1-bernd.kuhls@t-online.de>
+Message-ID: <20170602185053.11029-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream release is broken w.r.t autoreconf, patch 0002 fixes it.
-Needed to prepare for upcoming patch to fix linking against newer
-flex versions.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ipsec-tools/0002-configure-automake.patch | 21 +++++++++++++++++++++
- package/ipsec-tools/ipsec-tools.mk                |  2 ++
- 2 files changed, 23 insertions(+)
- create mode 100644 package/ipsec-tools/0002-configure-automake.patch
+ package/ipsec-tools/0004-CVE-2015-4047.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/ipsec-tools/0004-CVE-2015-4047.patch
 
-diff --git a/package/ipsec-tools/0002-configure-automake.patch b/package/ipsec-tools/0002-configure-automake.patch
+diff --git a/package/ipsec-tools/0004-CVE-2015-4047.patch b/package/ipsec-tools/0004-CVE-2015-4047.patch
 new file mode 100644
-index 000000000..a006516f2
+index 000000000..f53fe5cc1
 --- /dev/null
-+++ b/package/ipsec-tools/0002-configure-automake.patch
-@@ -0,0 +1,21 @@
-+Needed to fix broken autoreconf
++++ b/package/ipsec-tools/0004-CVE-2015-4047.patch
+@@ -0,0 +1,26 @@
++ipsec-tools: CVE-2015-4047: null pointer dereference crash in racoon
++
++See: https://bugs.gentoo.org/show_bug.cgi?id=550118
 +
 +Downloaded from
-+https://sources.debian.net/src/ipsec-tools/1:0.8.2%2B20140711-8/debian/patches/automake-options/
++https://gitweb.gentoo.org/repo/gentoo.git/tree/net-vpn/ipsec-tools/files/ipsec-tools-CVE-2015-4047.patch
++
++See also
++https://sources.debian.net/src/ipsec-tools/1:0.8.2%2B20140711-8/debian/patches/bug785778-null-pointer-deref.patch/
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+Index: pkg-ipsec-tools/configure.ac
-+===================================================================
-+--- pkg-ipsec-tools.orig/configure.ac	2014-06-28 17:25:22.000000000 +0200
-++++ pkg-ipsec-tools/configure.ac	2014-06-28 17:28:13.818373322 +0200
-+@@ -6,7 +6,8 @@ AC_INIT(ipsec-tools, 0.8.2)
-+ AC_CONFIG_SRCDIR([configure.ac])
-+ AC_CONFIG_HEADERS(config.h)
++--- ./src/racoon/gssapi.c    9 Sep 2006 16:22:09 -0000       1.4
+++++ ./src/racoon/gssapi.c    19 May 2015 15:16:00 -0000      1.6
++@@ -192,6 +192,11 @@
++	gss_name_t princ, canon_princ;
++	OM_uint32 maj_stat, min_stat;
 + 
-+-AM_INIT_AUTOMAKE(dist-bzip2)
-++AC_CONFIG_MACRO_DIR([.])
-++AM_INIT_AUTOMAKE([dist-bzip2 foreign serial-tests])
-+ 
-+ AC_ENABLE_SHARED(no)
-+ 
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index eb910bc49..c0b180de5 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -10,6 +10,8 @@ IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools
- IPSEC_TOOLS_INSTALL_STAGING = YES
- IPSEC_TOOLS_MAKE = $(MAKE1)
- IPSEC_TOOLS_DEPENDENCIES = openssl flex host-flex
-+# we patch configure.ac
-+IPSEC_TOOLS_AUTORECONF = YES
- 
- # configure hardcodes -Werror, so override CFLAGS on make invocation
- IPSEC_TOOLS_MAKE_OPTS = CFLAGS='$(TARGET_CFLAGS)'
+++	if (iph1->rmconf == NULL) {
+++		plog(LLV_ERROR, LOCATION, NULL, "no remote config\n");
+++		return -1;
+++	}
+++
++	gps = racoon_calloc(1, sizeof (struct gssapi_ph1_state));
++	if (gps == NULL) {
++		plog(LLV_ERROR, LOCATION, NULL, "racoon_calloc failed\n");
 -- 
 2.11.0
