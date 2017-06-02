@@ -1,100 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jun 2017 15:18:55 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.02.3
-Message-ID: <20170602131926.0103282723@busybox.osuosl.org>
+Date: Fri, 2 Jun 2017 15:15:07 +0200
+Subject: [Buildroot] [git commit] Update for 2017.02.3
+Message-ID: <20170602131925.EA79D827F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac187d7e2ce20d4faf0c4157b698f3c6a8347ede
+commit: https://git.buildroot.net/buildroot/commit/?id=1ba865a5001757c7c0e63f460c159441e3faceb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cae46d7b8d010392a91a5b5a87b57b72542df154)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index c9a0a35..fe4cb5b 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/CHANGES b/CHANGES
+index 1b764a2..cf4b22b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -204,6 +204,30 @@
+ 	#9846: musl libc not installed correctly in target folder
+ 	#9856: build libubox failed on ubuntu 17.04 64bit
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.2</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.3</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2017.02.2.tar.gz">buildroot-2017.02.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.3.tar.gz">buildroot-2017.02.3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2017.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2017.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2017.02.2.tar.bz2">buildroot-2017.02.2.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2017.02.2.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.3.tar.bz2">buildroot-2017.02.3.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 55c5f81..be3766d 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>2 June 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.02.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.02.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-June/193485.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.3.tar.bz2">2017.02.3 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2017.02.3, Released June 2nd, 2017
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Download: <pkg>-source-check fixed for packages from git.
++
++	External toolchain: musl dynamic linker symlink for mips-sf
++	corrected.
++
++	Updated/fixed packages: armadillo, audiofile, bash,
++	bluez_utils, cppcms, dbus, dhcp, dropbear, efibootmgr, efl,
++	elfutils, faketime, fbgrab, flashrom, ftop, gdb, git,
++	google-breakpad, gpsd, hans, kvm-unit-tests, kyua, libev,
++	libmicrohttpd, libminiupnpc, libtasn1, libubox, ltp-testsuite,
++	lua, madplay, mariadb, mono, mosquitto, mxml, ntp,
++	nvidia-driver, openblas, openvpn, oracle-mysql, picocom, popt,
++	postgresql, pulseview, qt5base, qwt, rabbitmq-c, redis,
++	rpcbind, rtmpdump, samba4, strongswan, sudo, vlc
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9796: source-check broken for Git downloads
++	#9871: fbgrab 1.3 won't build with BR2_REPRODUCIBLE set
++
+ 2017.02.2, Released May 1st, 2017
+ 
+ 	Important / security related fixes.
