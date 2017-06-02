@@ -1,24 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Jun 2017 13:30:38 +0200
-Subject: [Buildroot] [PATCH] tinyalsa: fix musl build
-In-Reply-To: <d5dd1e14ebcc23f33a51c9f24bbd7bfaf37d1509.1496395973.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 2 Jun 2017 12:32:53 +0300")
-References: <d5dd1e14ebcc23f33a51c9f24bbd7bfaf37d1509.1496395973.git.baruch@tkos.co.il>
-Message-ID: <87lgpafwyp.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Jun 2017 13:30:52 +0200
+Subject: [Buildroot] [PATCH] tmux: bump version to 2.5
+In-Reply-To: <20170602101536.630-1-Vincent.Riera@imgtec.com> (Vicente Olivert
+ Riera's message of "Fri, 2 Jun 2017 11:15:36 +0100")
+References: <20170602101536.630-1-Vincent.Riera@imgtec.com>
+Message-ID: <87h8zyfwyb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Add a patch adding missing header to fix build with musl.
- > Fixes:
- > http://autobuild.buildroot.net/results/de9/de97fbd0b9c88bb5d9aa81ea6d73cdcaadb9c763/
-
- > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
