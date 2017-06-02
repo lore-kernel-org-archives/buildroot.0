@@ -1,53 +1,122 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  2 Jun 2017 20:50:53 +0200
-Subject: [Buildroot] [PATCH 3/3] package/ipsec-tools: add security patch to
-	fix CVE-2015-4047
+Date: Fri,  2 Jun 2017 20:50:52 +0200
+Subject: [Buildroot] [PATCH 2/3] package/ipsec-tools: fix build error with
+	newer flex versions
 In-Reply-To: <20170602185053.11029-1-bernd.kuhls@t-online.de>
 References: <20170602185053.11029-1-bernd.kuhls@t-online.de>
-Message-ID: <20170602185053.11029-3-bernd.kuhls@t-online.de>
+Message-ID: <20170602185053.11029-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes
+http://autobuild.buildroot.net/results/5c1/5c1e80d4dd57dac73345e08702af4c3fbc55f8e0/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ipsec-tools/0004-CVE-2015-4047.patch | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/ipsec-tools/0004-CVE-2015-4047.patch
+ .../0003-Don-t-link-against-libfl.patch            | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100644 package/ipsec-tools/0003-Don-t-link-against-libfl.patch
 
-diff --git a/package/ipsec-tools/0004-CVE-2015-4047.patch b/package/ipsec-tools/0004-CVE-2015-4047.patch
+diff --git a/package/ipsec-tools/0003-Don-t-link-against-libfl.patch b/package/ipsec-tools/0003-Don-t-link-against-libfl.patch
 new file mode 100644
-index 000000000..f53fe5cc1
+index 000000000..4fa0a02d5
 --- /dev/null
-+++ b/package/ipsec-tools/0004-CVE-2015-4047.patch
-@@ -0,0 +1,26 @@
-+ipsec-tools: CVE-2015-4047: null pointer dereference crash in racoon
++++ b/package/ipsec-tools/0003-Don-t-link-against-libfl.patch
+@@ -0,0 +1,92 @@
++From e48b9097dce7bc2bfbb9e9c542124d3b5cebab39 Mon Sep 17 00:00:00 2001
++From: Paul Barker <paul@paulbarker.me.uk>
++Date: Wed, 5 Mar 2014 13:39:14 +0000
++Subject: [PATCH] Don't link against libfl
 +
-+See: https://bugs.gentoo.org/show_bug.cgi?id=550118
++We can remove all references to yywrap by adding "%option noyywrap" statements
++to each flex source file that doesn't override yywrap. After this, we no longer
++need to link against libfl and so no longer get errors about undefined
++references to yylex.
++
++Signed-off-by: Paul Barker <paul@paulbarker.me.uk>
++Upstream-status: Submitted 2014-03-11
++    see http://sourceforge.net/p/ipsec-tools/mailman/ipsec-tools-devel/thread/CANyK_8ewmxGA3vBVJW6s1APXPmxPR%2BDFWZ61EL8pCt288aKQ6w%40mail.gmail.com/#msg32088797
 +
 +Downloaded from
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/net-vpn/ipsec-tools/files/ipsec-tools-CVE-2015-4047.patch
-+
-+See also
-+https://sources.debian.net/src/ipsec-tools/1:0.8.2%2B20140711-8/debian/patches/bug785778-null-pointer-deref.patch/
++http://cgit.openembedded.org/meta-openembedded/tree/meta-networking/recipes-support/ipsec-tools/ipsec-tools/0002-Don-t-link-against-libfl.patch
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/libipsec/Makefile.am | 1 -
++ src/racoon/Makefile.am   | 2 +-
++ src/racoon/cftoken.l     | 2 ++
++ src/setkey/Makefile.am   | 1 -
++ src/setkey/token.l       | 2 ++
++ 5 files changed, 5 insertions(+), 3 deletions(-)
 +
-+--- ./src/racoon/gssapi.c    9 Sep 2006 16:22:09 -0000       1.4
-++++ ./src/racoon/gssapi.c    19 May 2015 15:16:00 -0000      1.6
-+@@ -192,6 +192,11 @@
-+	gss_name_t princ, canon_princ;
-+	OM_uint32 maj_stat, min_stat;
++diff --git a/src/libipsec/Makefile.am b/src/libipsec/Makefile.am
++index 6a4e3b3..df1e106 100644
++--- a/src/libipsec/Makefile.am
+++++ b/src/libipsec/Makefile.am
++@@ -26,7 +26,6 @@ libipsec_la_SOURCES = \
++ # version is current:revision:age.
++ # See: http://www.gnu.org/manual/libtool-1.4.2/html_chapter/libtool_6.html#SEC32
++ libipsec_la_LDFLAGS = -version-info 0:1:0
++-libipsec_la_LIBADD = $(LEXLIB)
 + 
-++	if (iph1->rmconf == NULL) {
-++		plog(LLV_ERROR, LOCATION, NULL, "no remote config\n");
-++		return -1;
-++	}
++ noinst_HEADERS = ipsec_strerror.h
++ 
++diff --git a/src/racoon/Makefile.am b/src/racoon/Makefile.am
++index dbaded9..0662957 100644
++--- a/src/racoon/Makefile.am
+++++ b/src/racoon/Makefile.am
++@@ -38,7 +38,7 @@ racoon_SOURCES = \
++ 	cftoken.l cfparse.y prsa_tok.l prsa_par.y 
++ EXTRA_racoon_SOURCES = isakmp_xauth.c isakmp_cfg.c isakmp_unity.c throttle.c \
++ 	isakmp_frag.c nattraversal.c security.c $(MISSING_ALGOS)
++-racoon_LDADD = $(CRYPTOBJS) $(HYBRID_OBJS) $(NATT_OBJS) $(FRAG_OBJS) $(LEXLIB) \
+++racoon_LDADD = $(CRYPTOBJS) $(HYBRID_OBJS) $(NATT_OBJS) $(FRAG_OBJS) \
++ 	 $(SECCTX_OBJS) vmbuf.o sockmisc.o misc.o ../libipsec/libipsec.la
++ racoon_DEPENDENCIES = \
++ 	$(CRYPTOBJS) $(HYBRID_OBJS) $(NATT_OBJS) $(FRAG_OBJS) $(SECCTX_OBJS) \
++diff --git a/src/racoon/cftoken.l b/src/racoon/cftoken.l
++index 490242c..1701922 100644
++--- a/src/racoon/cftoken.l
+++++ b/src/racoon/cftoken.l
++@@ -106,6 +106,8 @@ static int incstackp = 0;
++ static int yy_first_time = 1;
++ %}
++ 
+++%option noyywrap
 ++
-+	gps = racoon_calloc(1, sizeof (struct gssapi_ph1_state));
-+	if (gps == NULL) {
-+		plog(LLV_ERROR, LOCATION, NULL, "racoon_calloc failed\n");
++ /* common seciton */
++ nl		\n
++ ws		[ \t]+
++diff --git a/src/setkey/Makefile.am b/src/setkey/Makefile.am
++index 746c1f1..389e6cf 100644
++--- a/src/setkey/Makefile.am
+++++ b/src/setkey/Makefile.am
++@@ -13,7 +13,6 @@ setkey_SOURCES = \
++ 
++ setkey_LDFLAGS = ../libipsec/libipsec.la
++ setkey_DEPENDENCIES = ../libipsec/libipsec.la
++-setkey_LDADD = $(LEXLIB)
++ 
++ noinst_HEADERS = vchar.h extern.h
++ man8_MANS = setkey.8
++diff --git a/src/setkey/token.l b/src/setkey/token.l
++index ad3d843..eb23b76 100644
++--- a/src/setkey/token.l
+++++ b/src/setkey/token.l
++@@ -88,6 +88,8 @@
++ #endif
++ %}
++ 
+++%option noyywrap
+++
++ /* common section */
++ nl		\n
++ ws		[ \t]+
++-- 
++1.9.0
++
 -- 
 2.11.0
