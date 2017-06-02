@@ -1,45 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jun 2017 08:38:58 +0200
-Subject: [Buildroot] [git commit] package/imagemagick: bump version to
-	7.0.5-9
-Message-ID: <20170602064220.2536482A53@busybox.osuosl.org>
+Date: Fri, 2 Jun 2017 08:40:39 +0200
+Subject: [Buildroot] [git commit] package/poppler: fix openjpeg support
+Message-ID: <20170602064220.318D67FAE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff26b550dec17ec84f0c4db03c70bd56c157d848
+commit: https://git.buildroot.net/buildroot/commit/?id=3294a594cfcd121832e1b7c0e71067607a453e63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since the last version bump --enable-libopenjpeg always needs a
+parameter:
+https://cgit.freedesktop.org/poppler/poppler/commit/configure.ac?id=65c5a5266462244130f110599ac5d1011a04216e
+
 Fixes
-http://autobuild.buildroot.net/results/8d9/8d94627ccce15ae1f348a7a9f54621b2b5a74321/
+http://autobuild.buildroot.net/results/557/557b9b386863b6c865bcca86a2b87c7028700ec4/
+http://autobuild.buildroot.net/results/f27/f27380e803be50e066be1659a8512fd74d1fa6de/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/poppler/poppler.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index ce7e6b8..c6f427e 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 007648793640b1d33f1285426df7c43fcf412eaef27b0b68fa7977bf29c4d30e  ImageMagick-7.0.5-8.tar.xz
-+sha256 b774c3a69fea4432a120a8c0c231bd011710166c71a7b7e0fbb89b108d29ac6c  ImageMagick-7.0.5-9.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index ae6122c..37faf54 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 5757100..9ccf2ea 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -100,7 +100,7 @@ endif
  
--IMAGEMAGICK_VERSION = 7.0.5-8
-+IMAGEMAGICK_VERSION = 7.0.5-9
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ ifeq ($(BR2_PACKAGE_OPENJPEG),y)
+ POPPLER_DEPENDENCIES += openjpeg
+-POPPLER_CONF_OPTS += --enable-libopenjpeg
++POPPLER_CONF_OPTS += --enable-libopenjpeg=openjpeg2
+ else
+ POPPLER_CONF_OPTS += --enable-libopenjpeg=none
+ endif
