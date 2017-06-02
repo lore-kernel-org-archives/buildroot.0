@@ -1,67 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jun 2017 13:30:17 +0200
-Subject: [Buildroot] [git commit] tinyalsa: fix musl build
-Message-ID: <20170602113407.D1A7C82A2F@busybox.osuosl.org>
+Date: Fri, 2 Jun 2017 13:30:49 +0200
+Subject: [Buildroot] [git commit] tmux: bump version to 2.5
+Message-ID: <20170602113407.DD52882A57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81d324783653e28f561911e267331c4713305584
+commit: https://git.buildroot.net/buildroot/commit/?id=bb019e4473c8ac02ea491d20f6073e665d4579f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch adding missing header to fix build with musl.
-
-Fixes:
-http://autobuild.buildroot.net/results/de9/de97fbd0b9c88bb5d9aa81ea6d73cdcaadb9c763/
-
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-interval.h-add-missing-header.patch       | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/tmux/tmux.hash | 2 +-
+ package/tmux/tmux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinyalsa/0002-interval.h-add-missing-header.patch b/package/tinyalsa/0002-interval.h-add-missing-header.patch
-new file mode 100644
-index 0000000..c043145
---- /dev/null
-+++ b/package/tinyalsa/0002-interval.h-add-missing-header.patch
-@@ -0,0 +1,36 @@
-+From 685e530d8a0063134642371eaacd01fee2f62d85 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 2 Jun 2017 12:19:03 +0300
-+Subject: [PATCH] interval.h: add missing header
-+
-+The ssize_t type requires the unistd.h header. This fixes build with musl
-+libc:
-+
-+In file included from ../include/tinyalsa/limits.h:32:0,
-+                 from limits.c:1:
-+../include/tinyalsa/interval.h:38:2: error: unknown type name 'ssize_t'
-+  ssize_t max;
-+  ^
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/tinyalsa/tinyalsa/pull/98
-+
-+ include/tinyalsa/interval.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/include/tinyalsa/interval.h b/include/tinyalsa/interval.h
-+index 3f6f3dce5d90..068571df5a63 100644
-+--- a/include/tinyalsa/interval.h
-++++ b/include/tinyalsa/interval.h
-+@@ -30,6 +30,7 @@
-+ #define TINYALSA_INTERVAL_H
-+ 
-+ #include <stdlib.h>
-++#include <unistd.h>
-+ 
-+ /** A closed range signed interval. */
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index ac42571..8d82b80 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 757d6b13231d0d9dd48404968fc114ac09e005d475705ad0cd4b7166f799b349 tmux-2.4.tar.gz
++sha256 ae135ec37c1bf6b7750a84e3a35e93d91033a806943e034521c8af51b12d95df  tmux-2.5.tar.gz
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 6636b9b..44ba613 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TMUX_VERSION = 2.4
++TMUX_VERSION = 2.5
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
