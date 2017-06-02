@@ -1,53 +1,113 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 2 Jun 2017 23:00:34 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/gettext: update wint_t.m4
- from gnulib
-In-Reply-To: <20170528161257.4840e1c9@free-electrons.com>
-References: <20170525215647.10315-1-bernd.kuhls@t-online.de>
- <20170528161257.4840e1c9@free-electrons.com>
-Message-ID: <c79c6866-3c43-6764-0725-7aaa32a48e91@gmail.com>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Fri,  2 Jun 2017 16:56:42 -0700
+Subject: [Buildroot] [PATCH v3 00/11] Update IPython's dependencies
+Message-ID: <20170602235653.4655-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd, Thomas,
+Hi everyone,
 
-Le 28/05/2017 ? 16:12, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Thu, 25 May 2017 23:56:46 +0200, Bernd Kuhls wrote:
->> Needed for coreutils bump to 8.27
->>
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->>  .../gettext/0002-Update-after-gnulib-changed.patch | 86 ++++++++++++++++++++++
->>  1 file changed, 86 insertions(+)
->>  create mode 100644 package/gettext/0002-Update-after-gnulib-changed.patch
-> 
-> I've applied both patches to next. However, what would be nice is to
-> submit upstream the coreutils patch. Once upstreamed, we will be able
-> to stop autoreconfiguring coreutils, which would be a better solution.
-> 
-> Of course, in the mean time, gettext will have probably released a new
-> version containing the win_t fix, but upstreaming our coreutils patch
-> would nonetheless be a good thing.
+It took me a while, but I was finally able to cut v3 of my IPython
+related patchset. I did my best to try to test basic "importability"
+of each new package for both Python 2 and Python 3 and I apologize if
+I missed something there.
 
-This patch modify gettext-runtime/m4/wint_t.m4 without using autoreconf:
+Change history can be found below.
 
-GETTEXT_AUTORECONF = YES
+Changes since [v2]:
 
-See
-http://autobuild.buildroot.net/results/bd1/bd186ed437fc23cd4fac92f61bde32f9d530c127/build-end.log
+	- Add fix for setup type for 'enum34'
 
-Best regards,
-Romain
+	- Add fix for 'simplegeneric' to avoid dependency on zlib
+          support in Python (missed that in my original patch)
 
-> 
-> Could you look into this?
-> 
-> Thanks!
-> 
-> Thomas
-> 
+	- Convert all of the URL to point to PyPI
+
+	- Add MD5 sums from PyPI to all new packages
+
+	- Add patch to bump IPython to 5.4.0
+
+	- Fix package run-time dependencies to match with what they
+          specify in thier JSON info on PyPI
+
+Changes since [v1]:
+
+	- Remove all <pkg>_DEPENDENCIES build-time dependencies from
+          package files
+
+	- Use SPDX license names
+
+	- Address warnings produced by check-package
+
+Let me know if I missed anything or if there any more issues that need
+to be addressed.
+
+Thanks,
+Andrey Smirnov
+
+[v2] http://lists.busybox.net/pipermail/buildroot/2017-April/190587.html
+[v1] http://lists.busybox.net/pipermail/buildroot/2017-April/190423.html
+
+Andrey Smirnov (11):
+  DEVELOPERS: Add missing closing angle bracket to my e-mail
+  package/python-enum34: Switch setup type to 'setuptools'
+  package/python-simplegeneric: Switch setup type to 'setuptools'
+  package/python-ipython-genutils: New package
+  package/python-traitlets: New package
+  package/python-scandir: New package
+  package/python-pathlib2: New package
+  package/python-pickleshare: New package
+  package/python-backports-shutil-get-terminal-size: New package
+  package/python-ipython: Add dependecy list
+  python-ipython: bump to version 5.4.0
+
+ DEVELOPERS                                              |  8 +++++++-
+ package/Config.in                                       |  6 ++++++
+ .../python-backports-shutil-get-terminal-size/Config.in |  9 +++++++++
+ .../python-backports-shutil-get-terminal-size.hash      |  3 +++
+ .../python-backports-shutil-get-terminal-size.mk        | 13 +++++++++++++
+ package/python-enum34/python-enum34.mk                  |  2 +-
+ package/python-ipython-genutils/Config.in               |  6 ++++++
+ .../python-ipython-genutils.hash                        |  3 +++
+ .../python-ipython-genutils/python-ipython-genutils.mk  | 13 +++++++++++++
+ package/python-ipython/Config.in                        |  9 +++++++++
+ package/python-ipython/python-ipython.hash              |  4 ++--
+ package/python-ipython/python-ipython.mk                |  4 ++--
+ package/python-pathlib2/Config.in                       | 14 ++++++++++++++
+ package/python-pathlib2/python-pathlib2.hash            |  3 +++
+ package/python-pathlib2/python-pathlib2.mk              | 13 +++++++++++++
+ package/python-pickleshare/Config.in                    |  7 +++++++
+ package/python-pickleshare/python-pickleshare.hash      |  3 +++
+ package/python-pickleshare/python-pickleshare.mk        | 15 +++++++++++++++
+ package/python-scandir/Config.in                        |  6 ++++++
+ package/python-scandir/python-scandir.hash              |  3 +++
+ package/python-scandir/python-scandir.mk                | 17 +++++++++++++++++
+ package/python-simplegeneric/python-simplegeneric.mk    |  8 +++++++-
+ package/python-traitlets/Config.in                      | 10 ++++++++++
+ package/python-traitlets/python-traitlets.hash          |  3 +++
+ package/python-traitlets/python-traitlets.mk            | 13 +++++++++++++
+ 25 files changed, 188 insertions(+), 7 deletions(-)
+ create mode 100644 package/python-backports-shutil-get-terminal-size/Config.in
+ create mode 100644 package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.hash
+ create mode 100644 package/python-backports-shutil-get-terminal-size/python-backports-shutil-get-terminal-size.mk
+ create mode 100644 package/python-ipython-genutils/Config.in
+ create mode 100644 package/python-ipython-genutils/python-ipython-genutils.hash
+ create mode 100644 package/python-ipython-genutils/python-ipython-genutils.mk
+ create mode 100644 package/python-pathlib2/Config.in
+ create mode 100644 package/python-pathlib2/python-pathlib2.hash
+ create mode 100644 package/python-pathlib2/python-pathlib2.mk
+ create mode 100644 package/python-pickleshare/Config.in
+ create mode 100644 package/python-pickleshare/python-pickleshare.hash
+ create mode 100644 package/python-pickleshare/python-pickleshare.mk
+ create mode 100644 package/python-scandir/Config.in
+ create mode 100644 package/python-scandir/python-scandir.hash
+ create mode 100644 package/python-scandir/python-scandir.mk
+ create mode 100644 package/python-traitlets/Config.in
+ create mode 100644 package/python-traitlets/python-traitlets.hash
+ create mode 100644 package/python-traitlets/python-traitlets.mk
+
+-- 
+2.9.4
