@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 2 Jun 2017 16:20:45 +0100
-Subject: [Buildroot] [PATCH] openldap: bump version to 2.4.45
-Message-ID: <20170602152045.47774-1-Vincent.Riera@imgtec.com>
+Date: Fri, 2 Jun 2017 16:30:29 +0100
+Subject: [Buildroot] [PATCH] alsa-lib: bump version to 1.1.4.1
+Message-ID: <20170602153029.35295-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/openldap/openldap.hash | 8 ++++----
- package/openldap/openldap.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index 785c4897f..aec4aaebf 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,4 +1,4 @@
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.md5
--md5	693ac26de86231f8dcae2b4e9d768e51	openldap-2.4.44.tgz
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.sha1
--sha1	016a738d050a68d388602a74b5e991035cdba149	openldap-2.4.44.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.md5
-+md5 00ff8301277cdfd0af728a6927042a13  openldap-2.4.45.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.sha1
-+sha1 c98437385d3eaee80c9e2c09f3f0d4b7c140233d  openldap-2.4.45.tgz
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 2f738e51d..90ff1123b 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index bcfadce20..cf2a705b3 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 82f50a09487079755d93e4c9384912196995bade6280bce9bfdcabf094bfb515  alsa-lib-1.1.4.tar.bz2
++sha256 91bb870c14d1c7c269213285eeed874fa3d28112077db061a3af8010d0885b76  alsa-lib-1.1.4.1.tar.bz2
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 049c28fc4..12fa408cf 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLDAP_VERSION = 2.4.44
-+OPENLDAP_VERSION = 2.4.45
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
+-ALSA_LIB_VERSION = 1.1.4
++ALSA_LIB_VERSION = 1.1.4.1
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 -- 
 2.13.0
