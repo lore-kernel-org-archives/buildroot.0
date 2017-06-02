@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 2 Jun 2017 11:32:20 +0100
-Subject: [Buildroot] [PATCH] squid: bump version to 3.5.26
-Message-ID: <20170602103220.64488-1-Vincent.Riera@imgtec.com>
+Date: Fri, 2 Jun 2017 12:01:07 +0100
+Subject: [Buildroot] [PATCH] mutt: bump version to 1.8.3
+Message-ID: <20170602110107.57633-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 95762bc8b..91ba9e6fc 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.25.tar.xz.asc
--md5 6b7dd7b42b1adacf08f3155640ea2782  squid-3.5.25.tar.xz
--sha1 63ea00cb918e3106fd91b286ec907f1681e0f0e8  squid-3.5.25.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.26.tar.xz.asc
-+md5 510e2c84773879c00d0e7ced997864d9  squid-3.5.26.tar.xz
-+sha1 51a664217957b35de8b7fae180b9f93a759a4204  squid-3.5.26.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index d71f72480..976ce6d85 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 6df2638fa..f6dc472d4 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 1d057bf1b565f2c38ee50c9a661654cbbe4165f98e25bfa361ebbd707d96f235  mutt-1.8.2.tar.gz
++sha256 9b81746d67ffeca5ea44f60893b70dc93c86d4bc10187d4dd360185e4d42ed42  mutt-1.8.3.tar.gz
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 8ff66492d..abd40e5dd 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).25
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).26
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPL-2.0+
+-MUTT_VERSION = 1.8.2
++MUTT_VERSION = 1.8.3
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 -- 
 2.13.0
