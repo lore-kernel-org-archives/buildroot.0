@@ -1,33 +1,42 @@
-From: skenton at ou.edu <skenton@ou.edu>
-Date: Thu, 01 Jun 2017 22:11:10 -0500
-Subject: [Buildroot] Grub2
-Message-ID: <4482AAE9-D293-4E36-9675-74D5BE618A63@ou.edu>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  2 Jun 2017 06:45:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump version to 7.0.5-9
+Message-ID: <20170602044535.29603-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A while back I tripped over a bug in Grub2 2.00 that sometimes made my 
-embedded system unbootable so I've been running with the code fragment 
-below in my build script. It still works with 2017.05 release FYI.
+Fixes
+http://autobuild.buildroot.net/results/8d9/8d94627ccce15ae1f348a7a9f54621b2b5a74321/
 
-It builds just fine for me on x86_64 glibc but is not a general drop in 
-because gfxterm_background and probably other commands which were built 
-into the grub2 core in 2.00 are modules in 2.02 and required adjustments 
-to my embedded modules list. What is the best way to upgrade versions in 
-this sort of situation?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Steve Kenton
-
-# To work around package bugs slip stream grub2
-sed --in-place 's/2.00/2.02/' $buildrootdir/boot/grub2/grub2.mk
-# Remove the hash file(s) to fool buildroot
-rm --force $buildrootdir/boot/grub2/grub2.hash 
-$buildrootdir/boot/grub2/*.patch
-
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index ce7e6b875..c6f427ea6 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 007648793640b1d33f1285426df7c43fcf412eaef27b0b68fa7977bf29c4d30e  ImageMagick-7.0.5-8.tar.xz
++sha256 b774c3a69fea4432a120a8c0c231bd011710166c71a7b7e0fbb89b108d29ac6c  ImageMagick-7.0.5-9.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index ae6122c96..37faf5484 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.5-8
++IMAGEMAGICK_VERSION = 7.0.5-9
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
-Sent from my Android device with K-9 Mail. Please excuse my brevity.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170601/5597f629/attachment.html>
+2.11.0
