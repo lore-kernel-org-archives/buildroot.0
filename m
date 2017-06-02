@@ -1,59 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  2 Jun 2017 20:04:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bdwgc: re-add fix for pthread
-	detection on uclinux platforms
-Message-ID: <20170602180434.991-1-bernd.kuhls@t-online.de>
+Date: Fri,  2 Jun 2017 20:16:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/doxygen: bump version to 1.8.13,
+	switch to cmake
+Message-ID: <20170602181610.29404-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Doxygen switched to cmake with release 1.8.10:
+http://www.stack.nl/~dimitri/doxygen/manual/changelog.html#log_1_8_10
+
+and added support for flex 2.6.0 with release 1.8.11:
+http://www.stack.nl/~dimitri/doxygen/manual/changelog.html#log_1_8_11
+
 Fixes
-http://autobuild.buildroot.net/results/d63/d63ee2d03421cc671455be553ab35ada7ff78267/
-http://autobuild.buildroot.net/results/d8f/d8f97fd92cd971a0d125f983765ef27c5ac87acb/
+http://autobuild.buildroot.net/results/ba1/ba1444709523c59393aaaa3710e9933bafacc6b5/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Apparently I misread the github changelog: our uclinux patch was not
-applied to the 7.6.0 release, we still need the backported patch, sorry.
+ package/doxygen/doxygen.hash |  2 +-
+ package/doxygen/doxygen.mk   | 19 ++-----------------
+ 2 files changed, 3 insertions(+), 18 deletions(-)
 
- .../0003-configure-match-uclinux-pattern.patch     | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/bdwgc/0003-configure-match-uclinux-pattern.patch
-
-diff --git a/package/bdwgc/0003-configure-match-uclinux-pattern.patch b/package/bdwgc/0003-configure-match-uclinux-pattern.patch
-new file mode 100644
-index 000000000..b2c61982a
---- /dev/null
-+++ b/package/bdwgc/0003-configure-match-uclinux-pattern.patch
-@@ -0,0 +1,27 @@
-+From a628c90bdbf397465ac2ab2b11f14eb2e853651c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 6 Aug 2016 23:24:35 +0200
-+Subject: [PATCH] configure: match uclinux pattern
-+
-+BDWGC does not recognize "uclinux" as a valid OS part of the target
-+tuple which is used by some arm cortex-M toolchains.
-+
-+* configure.ac [$THREADS=pthreads] (GC_LINUX_THREADS, _REENTRANT): Define
-+for hosts matching "*-*-*linux*" (instead of "*-*-linux*").
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 22353547..fa745b56 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -190,7 +190,7 @@ case "$THREADS" in
-+         AC_DEFINE(THREAD_LOCAL_ALLOC)
-+         AC_MSG_WARN("Explicit GC_INIT() calls may be required.");
-+         ;;
-+-     *-*-linux* | *-*-nacl*)
-++     *-*-*linux* | *-*-nacl*)
-+         AC_DEFINE(GC_LINUX_THREADS)
-+         AC_DEFINE(_REENTRANT)
-+         ;;
+diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
+index 40cfe16a1..4cf53e7ac 100644
+--- a/package/doxygen/doxygen.hash
++++ b/package/doxygen/doxygen.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256 d4ab6e28d4d45d8956cad17470aade3fbe2356e8f64b92167e738c1887feccec  doxygen-1.8.9.1.src.tar.gz
++sha256 af667887bd7a87dc0dbf9ac8d86c96b552dfb8ca9c790ed1cbffaa6131573f6b  doxygen-1.8.13.src.tar.gz
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index 428747b11..10cdcf97e 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -4,26 +4,11 @@
+ #
+ ################################################################################
+ 
+-DOXYGEN_VERSION = 1.8.9.1
++DOXYGEN_VERSION = 1.8.13
+ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+ DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri
+ DOXYGEN_LICENSE = GPL-2.0
+ DOXYGEN_LICENSE_FILES = LICENSE
+ HOST_DOXYGEN_DEPENDENCIES = host-flex host-bison
+ 
+-define HOST_DOXYGEN_CONFIGURE_CMDS
+-	(cd $(@D); $(HOST_MAKE_ENV) ./configure --shared --prefix=$(HOST_DIR)/usr)
+-endef
+-
+-define HOST_DOXYGEN_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define HOST_DOXYGEN_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+-endef
+-
+-# Doxygen's configure is a handwritten script, not an autotools-generated one.
+-# It doesn't accept host-autotools-package default arguments, so we have to
+-# call host-generic-package here.
+-$(eval $(host-generic-package))
++$(eval $(host-cmake-package))
 -- 
 2.11.0
