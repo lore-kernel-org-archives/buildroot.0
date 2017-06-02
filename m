@@ -1,71 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  2 Jun 2017 07:55:23 +0300
-Subject: [Buildroot] [PATCH] swupdate: fix build without json-c
-Message-ID: <3490aaf3fa9ecc82542a416fa6908dc1bc666b61.1496379323.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  2 Jun 2017 08:30:34 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-06-01
+Message-ID: <20170602063034.DC512208FD@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-swupdate enables SURICATTA_HAWKBIT by default, which unconditionally selects
-JSON. This breaks the build when the optional json-c dependency is not built.
-Add a patch fixing SURICATTA_HAWKBIT dependencies.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/e61/e6179f515589a42a9aee16b54b897ef9111e7f4b/
-http://autobuild.buildroot.net/results/dba/dba54b00c81f62d957a8c189dde39ba0db8864e6/
+Build statistics for 2017-06-01
+================================
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...1-suricata_hawkbit-depends-on-HAVE_JSON_C.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/swupdate/0001-suricata_hawkbit-depends-on-HAVE_JSON_C.patch
+      successes : 246
+       failures : 14 
+       timeouts : 2  
+          TOTAL : 262
 
-diff --git a/package/swupdate/0001-suricata_hawkbit-depends-on-HAVE_JSON_C.patch b/package/swupdate/0001-suricata_hawkbit-depends-on-HAVE_JSON_C.patch
-new file mode 100644
-index 000000000000..e8cd790bd457
---- /dev/null
-+++ b/package/swupdate/0001-suricata_hawkbit-depends-on-HAVE_JSON_C.patch
-@@ -0,0 +1,39 @@
-+From ae647879efad6ba2bb0b95ed7e70dee82c05b82a Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 2 Jun 2017 07:40:08 +0300
-+Subject: [PATCH] suricata_hawkbit: depends on HAVE_JSON_C
-+
-+Unconditionally selecting JSON when !HAVE_JSON_C leads to a warning:
-+
-+warning: (SURICATTA_HAWKBIT) selects JSON which has unmet direct dependencies (HAVE_JSON_C)
-+
-+and eventually a build failure:
-+
-+In file included from corelib/artifacts_versions.c:34:0:
-+include/parselib.h:61:25: fatal error: json-c/json.h: No such file or directory
-+
-+Make SURICATTA_HAWKBIT depend on HAVE_JSON_C.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status:
-+https://groups.google.com/forum/?hl=en#!topic/swupdate/WmwNN_Hni0c
-+
-+ suricatta/Config.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/suricatta/Config.in b/suricatta/Config.in
-+index 24bd5d1053f5..cfd96b83506a 100644
-+--- a/suricatta/Config.in
-++++ b/suricatta/Config.in
-+@@ -54,6 +54,7 @@ choice
-+ config SURICATTA_HAWKBIT
-+ 	bool "hawkBit support"
-+ 	depends on HAVE_LIBCURL
-++	depends on HAVE_JSON_C
-+ 	select JSON
-+ 	select SURICATTA
-+ 	help
-+-- 
-+2.11.0
-+
+Classification of failures by reason
+====================================
+
+              gettext-0.19.8.1 | 2 
+              pcsc-lite-1.8.21 | 2 
+                     php-7.1.5 | 2 
+               domoticz-3.5877 | 1 
+       host-erlang-rebar-2.6.4 | 1 
+         host-gettext-0.19.8.1 | 1 
+              host-swig-3.0.12 | 1 
+                 ibrdtnd-1.0.1 | 1 
+                 lcdproc-0.5.7 | 1 
+                 libiconv-1.14 | 1 
+                 mplayer-1.3.0 | 1 
+                tinyalsa-1.1.1 | 1 
+               trousers-0.3.13 | 1 
+
+
+Detail of failures
+===================
+
+      x86_64 |                domoticz-3.5877 | NOK | http://autobuild.buildroot.net/results/365843f89951dd18b369bce0a78fdefd93179fd5 |     
+         arm |               gettext-0.19.8.1 | NOK | http://autobuild.buildroot.net/results/6c295aff1986680bb6af16697920f9fbee04154a | ORPH
+        m68k |               gettext-0.19.8.1 | NOK | http://autobuild.buildroot.net/results/04b645c13cb4798107f7d0e90324099baeb6da92 | ORPH
+         arm |        host-erlang-rebar-2.6.4 | TIM | http://autobuild.buildroot.net/results/01077d66b0a6c8d1f94ad1ca5dde05512b9b531a |     
+        i686 |          host-gettext-0.19.8.1 | NOK | http://autobuild.buildroot.net/results/b08c3998a7b7e6b10b97ebef20a6259c3b4a2036 | ORPH
+         arm |               host-swig-3.0.12 | NOK | http://autobuild.buildroot.net/results/3fed071114f08a621053e8685e9f79a46fd20a59 |     
+        bfin |                  ibrdtnd-1.0.1 | NOK | http://autobuild.buildroot.net/results/7821a22d8b2ef180f0d9519305c52548aa34bf9b | ORPH
+         arm |                  lcdproc-0.5.7 | NOK | http://autobuild.buildroot.net/results/f62d18e1480dff78e3c2f8e536f276ae2f2311e6 | ORPH
+microblazeel |                  libiconv-1.14 | NOK | http://autobuild.buildroot.net/results/5ca0fb5766551fc8761f429c23a12b2f7c86c936 | ORPH
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/5f63a7d86cdf23dc26048ad34ab4c1453c30b674 |     
+        i586 |               pcsc-lite-1.8.21 | NOK | http://autobuild.buildroot.net/results/2f22625a2ce189d905e25c619e92429b1da3f887 | ORPH
+       nios2 |               pcsc-lite-1.8.21 | NOK | http://autobuild.buildroot.net/results/19f7247f81efabf92e2c017395a488a1167416eb | ORPH
+         arm |                      php-7.1.5 | NOK | http://autobuild.buildroot.net/results/df76e2eb8f70ec9b11fac864b94cbdb54370e3b2 | ORPH
+        m68k |                      php-7.1.5 | NOK | http://autobuild.buildroot.net/results/7f60cdfee031809e6371f9e9da13948d6cf78cd0 | ORPH
+        i586 |                 tinyalsa-1.1.1 | NOK | http://autobuild.buildroot.net/results/de97fbd0b9c88bb5d9aa81ea6d73cdcaadb9c763 |     
+        i686 |                trousers-0.3.13 | TIM | http://autobuild.buildroot.net/results/90ff8075087315db575f34dd9959b400d2ad9505 |     
+
 -- 
-2.11.0
+http://autobuild.buildroot.net
