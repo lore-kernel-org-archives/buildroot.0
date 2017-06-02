@@ -1,56 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jun 2017 15:15:07 +0200
-Subject: [Buildroot] [git commit] Update for 2017.02.3
-Message-ID: <20170602131925.EA79D827F2@busybox.osuosl.org>
+From: David Picard <davepiq@yahoo.fr>
+Date: Fri, 2 Jun 2017 15:27:06 +0200
+Subject: [Buildroot] Beaglebone Black : tweaking the device tree
+Message-ID: <d1331942-3474-94b7-8746-99c6f1b342a0@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ba865a5001757c7c0e63f460c159441e3faceb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cae46d7b8d010392a91a5b5a87b57b72542df154)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+I need to enable the CAN bus on the Beaglebone Black. To do so, I need 
+to play with the device tree.
 
-diff --git a/CHANGES b/CHANGES
-index 1b764a2..cf4b22b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -204,6 +204,30 @@
- 	#9846: musl libc not installed correctly in target folder
- 	#9856: build libubox failed on ubuntu 17.04 64bit
- 
-+2017.02.3, Released June 2nd, 2017
-+
-+	Important / security related fixes.
-+
-+	Download: <pkg>-source-check fixed for packages from git.
-+
-+	External toolchain: musl dynamic linker symlink for mips-sf
-+	corrected.
-+
-+	Updated/fixed packages: armadillo, audiofile, bash,
-+	bluez_utils, cppcms, dbus, dhcp, dropbear, efibootmgr, efl,
-+	elfutils, faketime, fbgrab, flashrom, ftop, gdb, git,
-+	google-breakpad, gpsd, hans, kvm-unit-tests, kyua, libev,
-+	libmicrohttpd, libminiupnpc, libtasn1, libubox, ltp-testsuite,
-+	lua, madplay, mariadb, mono, mosquitto, mxml, ntp,
-+	nvidia-driver, openblas, openvpn, oracle-mysql, picocom, popt,
-+	postgresql, pulseview, qt5base, qwt, rabbitmq-c, redis,
-+	rpcbind, rtmpdump, samba4, strongswan, sudo, vlc
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#9796: source-check broken for Git downloads
-+	#9871: fbgrab 1.3 won't build with BR2_REPRODUCIBLE set
-+
- 2017.02.2, Released May 1st, 2017
- 
- 	Important / security related fixes.
+Thanks to the example I found [1] and some other references, I can 
+picture roughly what to write in some dts file.
+
+But still, I wonder what is the proper way to modify a device tree in 
+Buildroot ?
+
+
+- Are device tree overlays supported in Buildroot ?
+- If not, should I patch or include 
+arch/arm/boot/dts/arm335x-boneblack.dts ?
+- What is the purpose of BR2_TARGET_UBOOT_CUSTOM_DTS_PATH ?
+- Where should I save my .dts (I'm building out of tree).
+
+
+David.
+
+
+[1] Example :
+-------------
+I successfully enabled the CAN bus on Debian installed by default on the 
+eMMC using this guide (uses device a tree overlay):
+http://www.embedded-things.com/bbb/enable-canbus-on-the-beaglebone-black/
+
+
+My config :
+-----------
+Buildroot 2017.05, beaglebone_qt5_defconfig, kernel v4.1, plus this patch :
+https://patchwork.ozlabs.org/patch/762346/
