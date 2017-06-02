@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Jun 2017 08:40:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump version to
-	7.0.5-9
-In-Reply-To: <20170602044535.29603-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 2 Jun 2017 06:45:35 +0200")
-References: <20170602044535.29603-1-bernd.kuhls@t-online.de>
-Message-ID: <877f0uhoz3.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Jun 2017 08:40:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/poppler: fix openjpeg support
+In-Reply-To: <20170602045451.2297-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 2 Jun 2017 06:54:51 +0200")
+References: <20170602045451.2297-1-bernd.kuhls@t-online.de>
+Message-ID: <8737bihoy2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes
- > http://autobuild.buildroot.net/results/8d9/8d94627ccce15ae1f348a7a9f54621b2b5a74321/
+ > Since the last version bump --enable-libopenjpeg always needs a
+ > parameter:
+ > https://cgit.freedesktop.org/poppler/poppler/commit/configure.ac?id=65c5a5266462244130f110599ac5d1011a04216e
 
-Because upstream removed the tarball?
+ > Fixes
+ > http://autobuild.buildroot.net/results/557/557b9b386863b6c865bcca86a2b87c7028700ec4/
+ > http://autobuild.buildroot.net/results/f27/f27380e803be50e066be1659a8512fd74d1fa6de/
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
