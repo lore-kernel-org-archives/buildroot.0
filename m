@@ -1,41 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jun 2017 09:49:44 +0200
-Subject: [Buildroot] make Error
-In-Reply-To: <CAN=nCKAPW+_Ns40xKCiDmFu+pit8k_nP_onGS9fNwNyxem5KeA@mail.gmail.com>
-References: <CAN=nCKAPW+_Ns40xKCiDmFu+pit8k_nP_onGS9fNwNyxem5KeA@mail.gmail.com>
-Message-ID: <20170602094944.4dd492eb@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 02 Jun 2017 08:47:57 +0000
+Subject: [Buildroot] [Bug 9926] systemd-resolved.service: Failed at step
+ NAMESPACE (systemd 233)
+In-Reply-To: <bug-9926-163@https.bugs.busybox.net/>
+References: <bug-9926-163@https.bugs.busybox.net/>
+Message-ID: <bug-9926-163-Rx75cSIilp@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9926
 
-First of all, thanks for your bug report.
+--- Comment #1 from Michael Heinemann <posted@heine.so> ---
+On the ML Mike points out that this might be Kernel related (for some reason
+his response is not showing up on bugzilla).
 
-On Thu, 1 Jun 2017 23:36:25 +0530, Saurabh Mishra wrote:
+I build my Kernel outside of buildroot. So I use an identical Kernel with both
+buildroot versions. Of course this doesn't mean a kernel configuration might
+not be the issue, but it wasn't an issue with BR 2017.02.2.
 
-> I'm trying to build (*build root-2015.05-rc2) *but when I'm running make
-> command its giving error in* /config/host-linux.c:215:43: error:
-> 'SSIZE_MAX' was not declared in this scope* , i tried to pass hardcoded
-> integer value instead of SSIZE_MAX but that is also not working , your help
-> would be appreciated.
+The cgroup configuration looks like this:
 
-The information provided in your e-mail is not sufficient to help you.
-We need to have:
+CONFIG_CGROUPS=y
+CONFIG_PAGE_COUNTER=y
+CONFIG_MEMCG=y
+CONFIG_MEMCG_SWAP=y
+CONFIG_MEMCG_SWAP_ENABLED=y
+CONFIG_BLK_CGROUP=y
+# CONFIG_DEBUG_BLK_CGROUP is not set
+CONFIG_CGROUP_WRITEBACK=y
+CONFIG_CGROUP_SCHED=y
+CONFIG_FAIR_GROUP_SCHED=y
+# CONFIG_CFS_BANDWIDTH is not set
+# CONFIG_RT_GROUP_SCHED is not set
+CONFIG_CGROUP_PIDS=y
+# CONFIG_CGROUP_FREEZER is not set
+CONFIG_CPUSETS=y
+CONFIG_PROC_PID_CPUSET=y
+CONFIG_CGROUP_DEVICE=y
+CONFIG_CGROUP_CPUACCT=y
+# CONFIG_CGROUP_PERF is not set
+# CONFIG_CGROUP_DEBUG is not set
+# CONFIG_CHECKPOINT_RESTORE is not set
 
- - The last ~100 lines of the build output
- - The full Buildroot .config file
-
-Also, make sure this error is reproducible after doing a full rebuild
-(i.e "make clean all"). Please read
-http://nightly.buildroot.org/manual.html#full-rebuild.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
