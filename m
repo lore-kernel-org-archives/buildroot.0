@@ -1,97 +1,96 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Fri,  2 Jun 2017 16:56:47 -0700
-Subject: [Buildroot] [PATCH v3 05/11] package/python-traitlets: New package
+Date: Fri,  2 Jun 2017 16:56:48 -0700
+Subject: [Buildroot] [PATCH v3 06/11] package/python-scandir: New package
 In-Reply-To: <20170602235653.4655-1-andrew.smirnov@gmail.com>
 References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
-Message-ID: <20170602235653.4655-6-andrew.smirnov@gmail.com>
+Message-ID: <20170602235653.4655-7-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 'traitlets'[1] package to Buildroot. Needed by IPython.
+Add 'scandir'[1] package to buildroot. Needed by 'pathlib2'.
 
-[1] https://pypi.python.org/pypi/traitlets
-
+[1] https://pypi.python.org/pypi/scandir
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-traitlets/Config.in             | 10 ++++++++++
- package/python-traitlets/python-traitlets.hash |  3 +++
- package/python-traitlets/python-traitlets.mk   | 13 +++++++++++++
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/python-scandir/Config.in           |  6 ++++++
+ package/python-scandir/python-scandir.hash |  3 +++
+ package/python-scandir/python-scandir.mk   | 17 +++++++++++++++++
  5 files changed, 28 insertions(+)
- create mode 100644 package/python-traitlets/Config.in
- create mode 100644 package/python-traitlets/python-traitlets.hash
- create mode 100644 package/python-traitlets/python-traitlets.mk
+ create mode 100644 package/python-scandir/Config.in
+ create mode 100644 package/python-scandir/python-scandir.hash
+ create mode 100644 package/python-scandir/python-scandir.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9450445..fdc5115 100644
+index fdc5115..9f73942 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -75,6 +75,7 @@ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
- F:	package/python-decorator/
+@@ -76,6 +76,7 @@ F:	package/python-decorator/
  F:	package/python-simplegeneric/
  F:	package/python-ipython-genutils/
-+F:	package/python-traitlets/
+ F:	package/python-traitlets/
++F:	package/python-scandir/
  
  N:	Andrew Ruder <andrew.ruder@elecsyscorp.com>
  F:	package/expect/
 diff --git a/package/Config.in b/package/Config.in
-index b59510e..4f69076 100644
+index 4f69076..806f0ae 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -846,6 +846,7 @@ menu "External python modules"
- 	source "package/python-tomako/Config.in"
- 	source "package/python-toml/Config.in"
- 	source "package/python-tornado/Config.in"
-+	source "package/python-traitlets/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-txaio/Config.in"
-diff --git a/package/python-traitlets/Config.in b/package/python-traitlets/Config.in
+@@ -824,6 +824,7 @@ menu "External python modules"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-scapy3k/Config.in"
++	source "package/python-scandir/Config.in"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-service-identity/Config.in"
+diff --git a/package/python-scandir/Config.in b/package/python-scandir/Config.in
 new file mode 100644
-index 0000000..e4ff0b7
+index 0000000..497f962
 --- /dev/null
-+++ b/package/python-traitlets/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_TRAITLETS
-+	bool "python-traitlets"
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SIX
-+	select BR2_PACKAGE_PYTHON_IPYTHON_GENUTILS
-+	select BR2_PACKAGE_PYTHON_DECORATOR
++++ b/package/python-scandir/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_SCANDIR
++	bool "python-scandir"
 +	help
-+	  A configuration system for Python applications.
++	  scandir, a better directory iterator and faster os.walk()
 +
-+	  https://pypi.python.org/pypi/traitlets
-diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
++	  https://pypi.python.org/pypi/scandir
+diff --git a/package/python-scandir/python-scandir.hash b/package/python-scandir/python-scandir.hash
 new file mode 100644
-index 0000000..8111340
+index 0000000..895f575
 --- /dev/null
-+++ b/package/python-traitlets/python-traitlets.hash
++++ b/package/python-scandir/python-scandir.hash
 @@ -0,0 +1,3 @@
-+# MD5 from PyPI, sha256 locally computed
-+md5 3068663f2f38fd939a9eb3a500ccc154 traitlets-4.3.2.tar.gz
-+sha256 9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835 traitlets-4.3.2.tar.gz
-diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
++# md5 from PyPI, sha256 locally computed
++md5 a2713043de681bba6b084be42e7a8a44 scandir-1.5.tar.gz
++sha256 c2612d1a487d80fb4701b4a91ca1b8f8a695b1ae820570815e85e8c8b23f1283 scandir-1.5.tar.gz
+diff --git a/package/python-scandir/python-scandir.mk b/package/python-scandir/python-scandir.mk
 new file mode 100644
-index 0000000..7cd6acd
+index 0000000..e933003
 --- /dev/null
-+++ b/package/python-traitlets/python-traitlets.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-scandir/python-scandir.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python-traitlets
++# python-scandir
 +#
 +################################################################################
 +
-+PYTHON_TRAITLETS_VERSION = 4.3.2
-+PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
-+PYTHON_TRAITLETS_SITE = https://pypi.python.org/packages/a5/98/7f5ef2fe9e9e071813aaf9cb91d1a732e0a68b6c44a32b38cb8e14c3f069
-+PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
-+PYTHON_TRAITLETS_SETUP_TYPE = distutils
++PYTHON_SCANDIR_VERSION = 1.5
++PYTHON_SCANDIR_SOURCE = scandir-$(PYTHON_SCANDIR_VERSION).tar.gz
++PYTHON_SCANDIR_SITE = https://pypi.python.org/packages/bd/f4/3143e0289faf0883228017dbc6387a66d0b468df646645e29e1eb89ea10e
++PYTHON_SCANDIR_LICENSE = BSD-3-Clause
++#
++# Avoid installing as zipped .egg, but choosing
++# setuptools/--single-version-externally-managed instead of distutils
++#
++PYTHON_SCANDIR_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
