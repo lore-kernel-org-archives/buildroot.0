@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Jun 2017 13:32:35 +0200
-Subject: [Buildroot] [PATCH] squid: bump version to 3.5.26
-In-Reply-To: <20170602103220.64488-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Fri, 2 Jun 2017 11:32:20 +0100")
-References: <20170602103220.64488-1-Vincent.Riera@imgtec.com>
-Message-ID: <874lvyfwvg.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Jun 2017 13:32:50 +0200
+Subject: [Buildroot] [PATCH] mutt: bump version to 1.8.3
+In-Reply-To: <20170602110107.57633-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Fri, 2 Jun 2017 12:01:07 +0100")
+References: <20170602110107.57633-1-Vincent.Riera@imgtec.com>
+Message-ID: <87zidqeial.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
