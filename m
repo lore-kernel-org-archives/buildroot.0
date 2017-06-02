@@ -1,46 +1,314 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jun 2017 13:33:05 +0200
-Subject: [Buildroot] [git commit] python-dataproperty: bump version to 0.23.0
-Message-ID: <20170602113408.38AB67FC31@busybox.osuosl.org>
+Date: Fri, 2 Jun 2017 13:31:05 +0200
+Subject: [Buildroot] [git commit] sudo: bump version to 1.8.20p2
+Message-ID: <20170602113407.ECDB482A2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c1558da8e00aebe94c84d3921332a6fa62044bb
+commit: https://git.buildroot.net/buildroot/commit/?id=c97359266cd355ed19d4f2ddbb06f766d128d4f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+0001-fix-CVE-2017-1000367.patch already included in this release.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sudo/0001-fix-CVE-2017-1000367.patch | 264 ---------------------------
+ package/sudo/sudo.hash                       |   2 +-
+ package/sudo/sudo.mk                         |   2 +-
+ 3 files changed, 2 insertions(+), 266 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 6ab0646..e9de5a4 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
--md5 7b41e6f9b250c4f04f07bbd2999c4259  DataProperty-0.22.0.tar.gz
--sha256 3ed49c923a996cbabc008fba7f2df8b2f303e961d64507348120faaacb6b5157  DataProperty-0.22.0.tar.gz
-+md5 cdc032e071164aaf31ab3e2b76cd4a1b  DataProperty-0.23.0.tar.gz
-+sha256 be42eba1febaab6e37f5e07d558d87bb79e46092dce7deb2934d788d48e80e82  DataProperty-0.23.0.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 7feeed5..65a8fca 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/sudo/0001-fix-CVE-2017-1000367.patch b/package/sudo/0001-fix-CVE-2017-1000367.patch
+deleted file mode 100644
+index 6e44399..0000000
+--- a/package/sudo/0001-fix-CVE-2017-1000367.patch
++++ /dev/null
+@@ -1,264 +0,0 @@
+-Downloaded from upstream: https://www.sudo.ws/repos/sudo/raw-rev/b5460cbbb11b
+-
+-# HG changeset patch
+-# User Todd C. Miller <Todd.Miller@courtesan.com>
+-# Date 1496089973 21600
+-# Node ID b5460cbbb11bbf9d92ffcc6798a686cf4125efd3
+-# Parent  c303e6eecc7841e2f891d70613e80fcf27fa6e86
+-Fix for CVE-2017-1000367, parsing of /proc/pid/stat on Linux when
+-the process name contains spaces.  Since the user has control over
+-the command name this could be used by a user with sudo access to
+-overwrite an arbitrary file.
+-Thanks to Qualys for investigating and reporting this bug.
+-
+-Also stop performing a breadth-first traversal of /dev when looking
+-for the device.  Only the directories specified in search_devs[]
+-are checked.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-diff -r c303e6eecc78 -r b5460cbbb11b src/ttyname.c
+---- a/src/ttyname.c	Tue May 23 13:26:54 2017 -0600
+-+++ b/src/ttyname.c	Mon May 29 14:32:53 2017 -0600
+-@@ -1,5 +1,5 @@
+- /*
+-- * Copyright (c) 2012-2016 Todd C. Miller <Todd.Miller@courtesan.com>
+-+ * Copyright (c) 2012-2017 Todd C. Miller <Todd.Miller@courtesan.com>
+-  *
+-  * Permission to use, copy, modify, and distribute this software for any
+-  * purpose with or without fee is hereby granted, provided that the above
+-@@ -145,20 +145,22 @@
+- }
+- #elif defined(HAVE_STRUCT_PSINFO_PR_TTYDEV) || defined(HAVE_PSTAT_GETPROC) || defined(__linux__)
+- /*
+-- * Devices to search before doing a breadth-first scan.
+-+ * Device nodes and directories to search before searching all of /dev
+-  */
+- static char *search_devs[] = {
+-     "/dev/console",
+--    "/dev/wscons",
+--    "/dev/pts/",
+--    "/dev/vt/",
+--    "/dev/term/",
+--    "/dev/zcons/",
+-+    "/dev/pts/",	/* POSIX pty */
+-+    "/dev/vt/",		/* Solaris virtual console */
+-+    "/dev/term/",	/* Solaris serial ports */
+-+    "/dev/zcons/",	/* Solaris zone console */
+-+    "/dev/pty/",	/* HP-UX old-style pty */
+-     NULL
+- };
+- 
+-+/*
+-+ * Device nodes to ignore when searching all of /dev
+-+ */
+- static char *ignore_devs[] = {
+--    "/dev/fd/",
+-     "/dev/stdin",
+-     "/dev/stdout",
+-     "/dev/stderr",
+-@@ -166,16 +168,18 @@
+- };
+- 
+- /*
+-- * Do a breadth-first scan of dir looking for the specified device.
+-+ * Do a scan of a directory looking for the specified device.
+-+ * Does not descend into subdirectories.
+-  * Returns name on success and NULL on failure, setting errno.
+-  */
+- static char *
+--sudo_ttyname_scan(const char *dir, dev_t rdev, bool builtin, char *name, size_t namelen)
+-+sudo_ttyname_scan(const char *dir, dev_t rdev, char *name, size_t namelen)
+- {
+--    size_t sdlen, num_subdirs = 0, max_subdirs = 0;
+--    char pathbuf[PATH_MAX], **subdirs = NULL;
+-+    size_t sdlen;
+-+    char pathbuf[PATH_MAX];
+-     char *ret = NULL;
+-     struct dirent *dp;
+-+    struct stat sb;
+-     unsigned int i;
+-     DIR *d = NULL;
+-     debug_decl(sudo_ttyname_scan, SUDO_DEBUG_UTIL)
+-@@ -187,6 +191,18 @@
+-     if ((d = opendir(dir)) == NULL)
+- 	goto done;
+- 
+-+    if (fstat(dirfd(d), &sb) == -1) {
+-+	sudo_debug_printf(SUDO_DEBUG_ERROR|SUDO_DEBUG_LINENO,
+-+	    "unable to fstat %s", dir);
+-+	goto done;
+-+    }
+-+    if ((sb.st_mode & S_IWOTH) != 0) {
+-+	sudo_debug_printf(SUDO_DEBUG_ERROR|SUDO_DEBUG_LINENO,
+-+	    "ignoring world-writable directory %s", dir);
+-+	errno = ENOENT;
+-+	goto done;
+-+    }
+-+
+-     sudo_debug_printf(SUDO_DEBUG_INFO|SUDO_DEBUG_LINENO,
+- 	"scanning for dev %u in %s", (unsigned int)rdev, dir);
+- 
+-@@ -224,18 +240,6 @@
+- 	}
+- 	if (ignore_devs[i] != NULL)
+- 	    continue;
+--	if (!builtin) {
+--	    /* Skip entries in search_devs; we already checked them. */
+--	    for (i = 0; search_devs[i] != NULL; i++) {
+--		len = strlen(search_devs[i]);
+--		if (search_devs[i][len - 1] == '/')
+--		    len--;
+--		if (d_len == len && strncmp(pathbuf, search_devs[i], len) == 0)
+--		    break;
+--	    }
+--	    if (search_devs[i] != NULL)
+--		continue;
+--	}
+- # if defined(HAVE_STRUCT_DIRENT_D_TYPE) && defined(DTTOIF)
+- 	/*
+- 	 * Avoid excessive stat() calls by checking dp->d_type.
+-@@ -248,39 +252,14 @@
+- 		if (stat(pathbuf, &sb) == -1)
+- 		    continue;
+- 		break;
+--	    case DT_DIR:
+--		/* Directory, no need to stat() it. */
+--		sb.st_mode = DTTOIF(dp->d_type);
+--		sb.st_rdev = 0;		/* quiet ccc-analyzer false positive */
+--		break;
+- 	    default:
+--		/* Not a character device, link or directory, skip it. */
+-+		/* Not a character device or link, skip it. */
+- 		continue;
+- 	}
+- # else
+- 	if (stat(pathbuf, &sb) == -1)
+- 	    continue;
+- # endif
+--	if (S_ISDIR(sb.st_mode)) {
+--	    if (!builtin) {
+--		/* Add to list of subdirs to search. */
+--		if (num_subdirs + 1 > max_subdirs) {
+--		    char **new_subdirs;
+--
+--		    new_subdirs = reallocarray(subdirs, max_subdirs + 64,
+--			sizeof(char *));
+--		    if (new_subdirs == NULL)
+--			goto done;
+--		    subdirs = new_subdirs;
+--		    max_subdirs += 64;
+--		}
+--		subdirs[num_subdirs] = strdup(pathbuf);
+--		if (subdirs[num_subdirs] == NULL)
+--		    goto done;
+--		num_subdirs++;
+--	    }
+--	    continue;
+--	}
+- 	if (S_ISCHR(sb.st_mode) && sb.st_rdev == rdev) {
+- 	    sudo_debug_printf(SUDO_DEBUG_INFO|SUDO_DEBUG_LINENO,
+- 		"resolved dev %u as %s", (unsigned int)rdev, pathbuf);
+-@@ -296,16 +275,9 @@
+- 	}
+-     }
+- 
+--    /* Search subdirs if we didn't find it in the root level. */
+--    for (i = 0; ret == NULL && i < num_subdirs; i++)
+--	ret = sudo_ttyname_scan(subdirs[i], rdev, false, name, namelen);
+--
+- done:
+-     if (d != NULL)
+- 	closedir(d);
+--    for (i = 0; i < num_subdirs; i++)
+--	free(subdirs[i]);
+--    free(subdirs);
+-     debug_return_str(ret);
+- }
+- 
+-@@ -324,7 +296,7 @@
+-     debug_decl(sudo_ttyname_dev, SUDO_DEBUG_UTIL)
+- 
+-     /*
+--     * First check search_devs for common tty devices.
+-+     * First check search_devs[] for common tty devices.
+-      */
+-     for (sd = search_devs; (devname = *sd) != NULL; sd++) {
+- 	len = strlen(devname);
+-@@ -349,7 +321,7 @@
+- 		    "comparing dev %u to %s: no", (unsigned int)rdev, buf);
+- 	    } else {
+- 		/* Traverse directory */
+--		ret = sudo_ttyname_scan(devname, rdev, true, name, namelen);
+-+		ret = sudo_ttyname_scan(devname, rdev, name, namelen);
+- 		if (ret != NULL || errno == ENOMEM)
+- 		    goto done;
+- 	    }
+-@@ -367,9 +339,9 @@
+-     }
+- 
+-     /*
+--     * Not found?  Do a breadth-first traversal of /dev/.
+-+     * Not found?  Check all device nodes in /dev.
+-      */
+--    ret = sudo_ttyname_scan(_PATH_DEV, rdev, false, name, namelen);
+-+    ret = sudo_ttyname_scan(_PATH_DEV, rdev, name, namelen);
+- 
+- done:
+-     debug_return_str(ret);
+-@@ -493,28 +465,35 @@
+- 	len = getline(&line, &linesize, fp);
+- 	fclose(fp);
+- 	if (len != -1) {
+--	    /* Field 7 is the tty dev (0 if no tty) */
+--	    char *cp = line;
+--	    char *ep = line;
+--	    const char *errstr;
+--	    int field = 0;
+--	    while (*++ep != '\0') {
+--		if (*ep == ' ') {
+--		    *ep = '\0';
+--		    if (++field == 7) {
+--			dev_t tdev = strtonum(cp, INT_MIN, INT_MAX, &errstr);
+--			if (errstr) {
+--			    sudo_debug_printf(SUDO_DEBUG_ERROR|SUDO_DEBUG_LINENO,
+--				"%s: tty device %s: %s", path, cp, errstr);
+-+	    /*
+-+	     * Field 7 is the tty dev (0 if no tty).
+-+	     * Since the process name at field 2 "(comm)" may include spaces,
+-+	     * start@the last ')' found.
+-+	     */
+-+	    char *cp = strrchr(line, ')');
+-+	    if (cp != NULL) {
+-+		char *ep = cp;
+-+		const char *errstr;
+-+		int field = 1;
+-+
+-+		while (*++ep != '\0') {
+-+		    if (*ep == ' ') {
+-+			*ep = '\0';
+-+			if (++field == 7) {
+-+			    dev_t tdev = strtonum(cp, INT_MIN, INT_MAX, &errstr);
+-+			    if (errstr) {
+-+				sudo_debug_printf(SUDO_DEBUG_ERROR|SUDO_DEBUG_LINENO,
+-+				    "%s: tty device %s: %s", path, cp, errstr);
+-+			    }
+-+			    if (tdev > 0) {
+-+				errno = serrno;
+-+				ret = sudo_ttyname_dev(tdev, name, namelen);
+-+				goto done;
+-+			    }
+-+			    break;
+- 			}
+--			if (tdev > 0) {
+--			    errno = serrno;
+--			    ret = sudo_ttyname_dev(tdev, name, namelen);
+--			    goto done;
+--			}
+--			break;
+-+			cp = ep + 1;
+- 		    }
+--		    cp = ep + 1;
+- 		}
+- 	    }
+- 	}
+-
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 63b1dd0..ea0764c 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,2 +1,2 @@
+ # From: http://www.sudo.ws/download.html
+-sha256 9e97b8da859c6cc1b5b8c31db93002b750eae16af1bbda9140f8dd85b970e0e0  sudo-1.8.20.tar.gz
++sha256 bd42ae1059e935f795c69ea97b3de09fe9410a58a74b5d5e6836eb5067a445d9  sudo-1.8.20p2.tar.gz
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a6ea9ac..9cca544 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.22.0
-+PYTHON_DATAPROPERTY_VERSION = 0.23.0
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/ed/00/091f46cc81869b925d4001300bef31ea2224436c494d1de7145d4bb56df1
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/6d/40/0e66a33d4f909bc3fff1cb760d1827281207ace7de8dc3f202b5be7d3e65
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-SUDO_VERSION = 1.8.20
++SUDO_VERSION = 1.8.20p2
+ SUDO_SITE = http://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
