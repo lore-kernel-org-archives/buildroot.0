@@ -1,44 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jun 2017 18:56:35 +0200
-Subject: [Buildroot] [PATCH] package/lcdproc: remove freetype
- installation prefixes
-In-Reply-To: <20170603163626.8552-1-romain.naour@gmail.com>
-References: <20170603163626.8552-1-romain.naour@gmail.com>
-Message-ID: <20170603185635.2ba2f7dc@free-electrons.com>
+Date: Sat, 3 Jun 2017 18:56:52 +0200
+Subject: [Buildroot] [git commit] package/bdwgc: backport an upstream patch
+	to fix musl build
+Message-ID: <20170603165659.B4E98828DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1d83abfdd25cc03710b3619de573a19931793e1a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Jun 2017 18:36:26 +0200, Romain Naour wrote:
-> Since [1] (freetype 2.8), freetype-config is now a wrapper of
-> pkg-config. So we don't need  to pass the freetype installation
-> prefixes on the configure command line anymore.
-> 
-> Setting freetype prefixes on the command line append the result
-> returned by pkg-config and the one provided on the command line.
-> 
-> FT2_CFLAGS='-I[...]/sysroot/usr/[...]/sysroot/usr/include/freetype2 -I[...]/usr/include'
-> 
-> This revert commit 3bdbe9abb90de0262832d5d545f239fa41fb0e91.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9c3/9c3f77e18ae244a2abb9ea70b6adebe215f143a6
-> 
-> [1] http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=1c513fbb8872bfac5631964963b6a751169a1ce6
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/lcdproc/lcdproc.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/c9e/c9ec16635fbdb2d6ddf11e317bc537c111ea7050
 
-Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-tv-is-unknown-error-in-brief_async_signa.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/bdwgc/0003-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch b/package/bdwgc/0003-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
+new file mode 100644
+index 0000000..e17ed84
+--- /dev/null
++++ b/package/bdwgc/0003-Fix-size-of-tv-is-unknown-error-in-brief_async_signa.patch
+@@ -0,0 +1,35 @@
++From 31eef02317d59b4d204624efbddaea641e861390 Mon Sep 17 00:00:00 2001
++From: Mikael Djurfeldt <mikael@djurfeldt.com>
++Date: Sun, 26 Feb 2017 20:09:56 +0100
++Subject: [PATCH] Fix 'size of tv is unknown' error in
++ brief_async_signal_safe_sleep (musl) (fix commits 62097c3, 9f48082)
++
++Include <sys/time.h> to get struct timeval defined and select() declared.
++
++* pthread_stop_world.c [GC_ENABLE_SUSPEND_THREAD]: Include sys/time.h
++before GC_brief_async_signal_safe_sleep definition.
++
++Upstream status: upstream
++commit ffad61d3bbe86c09ffe062dab393fcb0e4940580
++
++[Romain: backported to 7.6.0]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ pthread_stop_world.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/pthread_stop_world.c b/pthread_stop_world.c
++index dad1fdc..8c76944 100644
++--- a/pthread_stop_world.c
+++++ b/pthread_stop_world.c
++@@ -391,6 +391,7 @@ STATIC void GC_restart_handler(int sig)
++ #   ifndef GC_TIME_LIMIT
++ #     define GC_TIME_LIMIT 50
++ #   endif
+++#   include <sys/time.h>
++ 
++     STATIC void GC_brief_async_signal_safe_sleep(void)
++     {
++-- 
++2.9.4
++
