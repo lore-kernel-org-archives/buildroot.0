@@ -1,32 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 03 Jun 2017 08:02:43 +0000
-Subject: [Buildroot] [Bug 9936] Host QEMU does not build with SDL support
- because of pkg-config
-In-Reply-To: <bug-9936-163@https.bugs.busybox.net/>
-References: <bug-9936-163@https.bugs.busybox.net/>
-Message-ID: <bug-9936-163-RNNvq473Ds@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 3 Jun 2017 12:36:29 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/gettext: update wint_t.m4
+ from gnulib
+In-Reply-To: <vs0a0exspr.ln2@ID-313208.user.individual.net>
+References: <20170525215647.10315-1-bernd.kuhls@t-online.de>
+ <20170528161257.4840e1c9@free-electrons.com>
+ <c79c6866-3c43-6764-0725-7aaa32a48e91@gmail.com>
+ <vs0a0exspr.ln2@ID-313208.user.individual.net>
+Message-ID: <50e2348f-544b-bcfe-9f67-1aacf7f4e3b0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9936
+Hi Bernd,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Le 03/06/2017 ? 08:17, Bernd Kuhls a ?crit :
+> Am Fri, 02 Jun 2017 23:00:34 +0200 schrieb Romain Naour:
+> 
+>> This patch modify gettext-runtime/m4/wint_t.m4 without using autoreconf:
+>>
+>> GETTEXT_AUTORECONF = YES
+>>
+>> See
+>> http://autobuild.buildroot.net/results/bd1/
+> bd186ed437fc23cd4fac92f61bde32f9d530c127/build-end.log
+> 
+> Hi,
+> 
+> yes, I saw the build errors, but I can not reproduce them on my Debian 
+> stretch system.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
+Yes, because autoconf is installed on your system and it's called when gettext
+is build.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-We don't want to do this, because it would mean host-qemu would rely on your
-host installed SDL libraries, which is not what we want. In the current state
-of things, I don't think we are going to provide a host-qemu package that has
-SDL/graphics support as that would require to package too many host libraries
-in Buildroot.
+If you take a look at the build log, you should see that gettext is configured
+twice. At configure step as usual then at build step since GETTEXT_AUTORECONF is
+missing.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
