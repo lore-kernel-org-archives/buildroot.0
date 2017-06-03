@@ -1,37 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jun 2017 18:57:40 +0200
-Subject: [Buildroot] [PATCH] package/openpowerlink: bump to 2.6.0
-In-Reply-To: <20170603151935.6012-1-romain.naour@gmail.com>
-References: <20170603151935.6012-1-romain.naour@gmail.com>
-Message-ID: <20170603185740.15371ef2@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Jun 2017 19:01:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libev: bump version to 4.24
+Message-ID: <20170603170108.11591-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: rebased for master branch
 
-On Sat,  3 Jun 2017 17:19:35 +0200, Romain Naour wrote:
-> See https://sourceforge.net/p/openpowerlink/news/2017/05/openpowerlink-v260
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...all-the-stack-libraries-to-lib-subdirectory.patch | 16 ++++++++--------
->  .../0002-cmake-install-oplk-headers-files.patch      |  8 ++++----
->  .../0003-Add-top-level-CMakeLists.txt.patch          |  8 ++++----
->  ...=> 0004-use-contrib-getopt-only-on-Windows.patch} | 20 ++++++++++----------  
->  ...-config-to-fix-static-linking-with-libpcap.patch} |  8 ++++----
->  package/openpowerlink/openpowerlink.hash             |  8 ++++----
->  package/openpowerlink/openpowerlink.mk               |  2 +-
->  7 files changed, 35 insertions(+), 35 deletions(-)
->  rename package/openpowerlink/{0004-FIX-use-contrib-getopt-only-on-Windows.patch => 0004-use-contrib-getopt-only-on-Windows.patch} (89%)
->  rename package/openpowerlink/{0005-FIX-use-pcap-config-to-fix-static-linking-with-libpc.patch => 0005-use-pcap-config-to-fix-static-linking-with-libpcap.patch} (96%)
+ package/libev/libev.hash | 2 +-
+ package/libev/libev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libev/libev.hash b/package/libev/libev.hash
+index 7f029df7f..d3b7bb5ca 100644
+--- a/package/libev/libev.hash
++++ b/package/libev/libev.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	736079e8ac543c74d59af73f9c52737b3bfec9601f020bf25a87a4f4d0f01bd6	libev-4.22.tar.gz
++sha256 973593d3479abdf657674a55afe5f78624b0e440614e2b8cb3a07f16d4d7f821  libev-4.24.tar.gz
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index 87cdd6f61..5d9020cd5 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEV_VERSION = 4.22
++LIBEV_VERSION = 4.24
+ LIBEV_SITE = http://dist.schmorp.de/libev/Attic
+ LIBEV_INSTALL_STAGING = YES
+ LIBEV_LICENSE = BSD-2-Clause or GPL-2.0+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
