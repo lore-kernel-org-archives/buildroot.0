@@ -1,35 +1,36 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Fri,  2 Jun 2017 17:00:13 -0700
-Subject: [Buildroot] [PATCH 2/2] ncurses: Copy terminfo for
-	'screen-256color' terminal
-In-Reply-To: <20170603000013.5402-1-andrew.smirnov@gmail.com>
-References: <20170603000013.5402-1-andrew.smirnov@gmail.com>
-Message-ID: <20170603000013.5402-2-andrew.smirnov@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 2 Jun 2017 19:48:29 -0700
+Subject: [Buildroot] systemd: build failure against pam on arm
+In-Reply-To: <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
+References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
+ <87fufjgycd.fsf@dell.be.48ers.dk>
+ <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
+Message-ID: <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tmux uses 256 color version of 'screen' terminfo by deafult, so copy
-corresponding file to support that usecase.
+Hi all,
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- package/ncurses/ncurses.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, Jun 1, 2017 at 4:35 PM, Christian Stewart <christian@paral.in> wrote:
+> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+> error: /lib/libpam.so: incompatible target
+> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+> error: /lib/libpam_misc.so: incompatible target
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [Makefile:12503: systemd-analyze] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+> error: /lib/libpam.so: incompatible target
+> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+> error: /lib/libpam_misc.so: incompatible target
+> collect2: error: ld returned 1 exit status
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index d8ad9dd..94c8c9a 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -52,6 +52,7 @@ NCURSES_TERMINFO_FILES = \
- 	p/putty \
- 	p/putty-vt100 \
- 	s/screen \
-+	s/screen-256color \
- 	v/vt100 \
- 	v/vt100-putty \
- 	v/vt102 \
--- 
-2.9.4
+Reproduced on several Gentoo machines. The environment looks clean. It
+compiles just fine on any commit before
+400eaa3452e9380ec77ac62266530055506ea6e7.
+
+Thanks,
+Christian
