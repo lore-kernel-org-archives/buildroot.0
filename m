@@ -1,36 +1,81 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 2 Jun 2017 19:48:29 -0700
-Subject: [Buildroot] systemd: build failure against pam on arm
-In-Reply-To: <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
-References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
- <87fufjgycd.fsf@dell.be.48ers.dk>
- <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
-Message-ID: <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 03 Jun 2017 02:59:01 +0000
+Subject: [Buildroot] [Bug 9936] New: Host QEMU does not build with SDL
+ support because of pkg-config
+Message-ID: <bug-9936-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+https://bugs.busybox.net/show_bug.cgi?id=9936
 
-On Thu, Jun 1, 2017 at 4:35 PM, Christian Stewart <christian@paral.in> wrote:
-> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
-> error: /lib/libpam.so: incompatible target
-> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
-> error: /lib/libpam_misc.so: incompatible target
-> collect2: error: ld returned 1 exit status
-> make[3]: *** [Makefile:12503: systemd-analyze] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
-> error: /lib/libpam.so: incompatible target
-> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
-> error: /lib/libpam_misc.so: incompatible target
-> collect2: error: ld returned 1 exit status
+            Bug ID: 9936
+           Summary: Host QEMU does not build with SDL support because of
+                    pkg-config
+           Product: buildroot
+           Version: 2017.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ciro.santilli at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Reproduced on several Gentoo machines. The environment looks clean. It
-compiles just fine on any commit before
-400eaa3452e9380ec77ac62266530055506ea6e7.
+I enable:
 
-Thanks,
-Christian
+BR2_PACKAGE_HOST_QEMU=y
+BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE=y
+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+BR2_PACKAGE_HOST_QEMU_VDE2=y
+
+on the config.
+
+Host QEMU builds and works with VNC, but "-display sdl" is not available.
+
+The configuration logs say:
+
+SDL support       no
+
+However, if I do ./configure directly from host on the QEMU tree, SDL support
+is available, and builds with it, since I do have the libsdl2-dev package
+installed in Ubuntu 17.04.
+
+I think the problem is the:
+
+PKG_CONFIG="/home/ciro/bak/git/linux-kernel-module-cheat/buildroot/output/host/usr/bin/pkg-config"
+
+and:
+
+/home/ciro/bak/git/linux-kernel-module-cheat/buildroot/output/host/usr/bin/pkg-config
+sdl2
+
+is wrongly false, while on host:
+
+pkg-config sdl2
+
+is true.
+
+A dirty workaround is:
+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 66efcba..1e09ea4 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -74,6 +74,7 @@ HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
+
+ ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
+ HOST_QEMU_TARGETS += $(HOST_QEMU_SYS_ARCH)-softmmu
++HOST_QEMU_OPTS += --enable-sdl --with-sdlabi=2.0
+ HOST_QEMU_OPTS += --enable-system --enable-fdt
+ HOST_QEMU_DEPENDENCIES += host-dtc
+ else
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
