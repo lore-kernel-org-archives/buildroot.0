@@ -1,50 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 3 Jun 2017 12:36:29 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/gettext: update wint_t.m4
- from gnulib
-In-Reply-To: <vs0a0exspr.ln2@ID-313208.user.individual.net>
-References: <20170525215647.10315-1-bernd.kuhls@t-online.de>
- <20170528161257.4840e1c9@free-electrons.com>
- <c79c6866-3c43-6764-0725-7aaa32a48e91@gmail.com>
- <vs0a0exspr.ln2@ID-313208.user.individual.net>
-Message-ID: <50e2348f-544b-bcfe-9f67-1aacf7f4e3b0@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 3 Jun 2017 12:54:07 +0200
+Subject: [Buildroot] systemd: build failure against pam on arm
+In-Reply-To: <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
+References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
+ <87fufjgycd.fsf@dell.be.48ers.dk>
+ <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
+ <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
+Message-ID: <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hi,
 
-Le 03/06/2017 ? 08:17, Bernd Kuhls a ?crit :
-> Am Fri, 02 Jun 2017 23:00:34 +0200 schrieb Romain Naour:
-> 
->> This patch modify gettext-runtime/m4/wint_t.m4 without using autoreconf:
->>
->> GETTEXT_AUTORECONF = YES
->>
->> See
->> http://autobuild.buildroot.net/results/bd1/
-> bd186ed437fc23cd4fac92f61bde32f9d530c127/build-end.log
-> 
-> Hi,
-> 
-> yes, I saw the build errors, but I can not reproduce them on my Debian 
-> stretch system.
+can you make the last failing link command more verbose?
+CCLD should be expanded to the full command used.
 
-Yes, because autoconf is installed on your system and it's called when gettext
-is build.
+best regards
+ Waldemar 
 
-If you take a look at the build log, you should see that gettext is configured
-twice. At configure step as usual then at build step since GETTEXT_AUTORECONF is
-missing.
-
-Best regards,
-Romain
-
+> Am 03.06.2017 um 04:48 schrieb Christian Stewart <christian@paral.in>:
 > 
-> Regards, Bernd
+> Hi all,
 > 
+>> On Thu, Jun 1, 2017 at 4:35 PM, Christian Stewart <christian@paral.in> wrote:
+>> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+>> error: /lib/libpam.so: incompatible target
+>> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+>> error: /lib/libpam_misc.so: incompatible target
+>> collect2: error: ld returned 1 exit status
+>> make[3]: *** [Makefile:12503: systemd-analyze] Error 1
+>> make[3]: *** Waiting for unfinished jobs....
+>> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+>> error: /lib/libpam.so: incompatible target
+>> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
+>> error: /lib/libpam_misc.so: incompatible target
+>> collect2: error: ld returned 1 exit status
+> 
+> Reproduced on several Gentoo machines. The environment looks clean. It
+> compiles just fine on any commit before
+> 400eaa3452e9380ec77ac62266530055506ea6e7.
+> 
+> Thanks,
+> Christian
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
