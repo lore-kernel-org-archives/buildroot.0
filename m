@@ -1,52 +1,39 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 3 Jun 2017 12:54:07 +0200
-Subject: [Buildroot] systemd: build failure against pam on arm
-In-Reply-To: <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
-References: <CA+h8R2q1W9PZ8DbTDuxZQhg3+hauZqaDdwzFAGgmTJd7KqiQEg@mail.gmail.com>
- <87fufjgycd.fsf@dell.be.48ers.dk>
- <CA+h8R2qdYZkwynNoPKjiDynzs_gs=TfFZ7i-STGrednoG4O-ew@mail.gmail.com>
- <CA+h8R2o8=LmmcudEaiJSCenX7t4QmHB3SPwm-UowrGQEu2bMPw@mail.gmail.com>
-Message-ID: <29DD8155-F769-488E-8A9E-39D8B6D18B54@openadk.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Jun 2017 14:05:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libass: bump version to 0.13.6
+Message-ID: <20170603120515.2692-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-can you make the last failing link command more verbose?
-CCLD should be expanded to the full command used.
-
-best regards
- Waldemar 
-
-> Am 03.06.2017 um 04:48 schrieb Christian Stewart <christian@paral.in>:
-> 
-> Hi all,
-> 
->> On Thu, Jun 1, 2017 at 4:35 PM, Christian Stewart <christian@paral.in> wrote:
->> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
->> error: /lib/libpam.so: incompatible target
->> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
->> error: /lib/libpam_misc.so: incompatible target
->> collect2: error: ld returned 1 exit status
->> make[3]: *** [Makefile:12503: systemd-analyze] Error 1
->> make[3]: *** Waiting for unfinished jobs....
->> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
->> error: /lib/libpam.so: incompatible target
->> /home/hristian/jpl_skiff/skiff/buildroot-work/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/6.3.1/../../../../arm-linux-gnueabihf/bin/ld.gold:
->> error: /lib/libpam_misc.so: incompatible target
->> collect2: error: ld returned 1 exit status
-> 
-> Reproduced on several Gentoo machines. The environment looks clean. It
-> compiles just fine on any commit before
-> 400eaa3452e9380ec77ac62266530055506ea6e7.
-> 
-> Thanks,
-> Christian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index d1e9022c8..53fd79da4 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d84a2fc89011b99d87fc47af91906622707c165d1860e9f774825ebbbc9c9fb6  libass-0.13.4.tar.xz
++sha256 f8a874d104e3e72e2cc057e5a1710c650b10367486845a26e5ff28ed7a912c2d  libass-0.13.6.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index 9fe967fdc..aeae86a89 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASS_VERSION = 0.13.4
++LIBASS_VERSION = 0.13.6
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+-- 
+2.11.0
