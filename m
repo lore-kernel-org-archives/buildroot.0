@@ -1,29 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 03 Jun 2017 19:10:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump version
-	to	7.0.5-9
-References: <20170602044535.29603-1-bernd.kuhls@t-online.de>
- <877f0uhoz3.fsf@dell.be.48ers.dk>
-Message-ID: <k47b0exh1d.ln2@ID-313208.user.individual.net>
+Date: Sat,  3 Jun 2017 19:19:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
+	version to 2.21
+Message-ID: <20170603171925.30568-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 02 Jun 2017 08:40:16 +0200 schrieb Peter Korsgaard:
+Added all hashes provided by upstream.
 
->>>>>> "Bernd" == Bernd Kuhls
->>>>>> <bernd.kuhls@t-online.de> writes:
-> 
->  > Fixes
->  > http://autobuild.buildroot.net/
-results/8d9/8d94627ccce15ae1f348a7a9f54621b2b5a74321/
-> 
-> Because upstream removed the tarball?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 6 ++++--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-Hi Peter,
-
-yes.
-
-Regards, Bernd
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 104a5aba1..0f251b0fe 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,2 +1,4 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-February/002775.html
+-sha256 d1bfc72553c4e3ef1cd6f13eec0488cf940498b612ab8a0b362e7090c94bc134  xkeyboard-config-2.20.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-May/002800.html
++md5 af9498e8954907d0a47f0f7b3d21e1ef  xkeyboard-config-2.21.tar.bz2
++sha1 ccdc53ad0ff6bbabda19ef30a47c2cbe014d42ec  xkeyboard-config-2.21.tar.bz2
++sha256 30c17049fae129fc14875656da9aa3099e3031d6ce0ee1d77aae190fd9edcec5  xkeyboard-config-2.21.tar.bz2
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index bdaf0268d..e8c1d23f2 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XKEYBOARD_CONFIG_VERSION = 2.20
++XKEYBOARD_CONFIG_VERSION = 2.21
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
+-- 
+2.11.0
