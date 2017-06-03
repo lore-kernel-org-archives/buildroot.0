@@ -1,34 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jun 2017 17:07:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vdr: needs headers >= 3.9
-In-Reply-To: <20170603141540.25469-1-bernd.kuhls@t-online.de>
-References: <20170603141540.25469-1-bernd.kuhls@t-online.de>
-Message-ID: <20170603170759.27801028@free-electrons.com>
+Date: Sat, 3 Jun 2017 17:09:04 +0200
+Subject: [Buildroot] [git commit] package/libass: bump version to 0.13.6
+Message-ID: <20170603151115.9642482859@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf95051514d344dc29f0f2d9642e6af09d5b38ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Jun 2017 16:15:40 +0200, Bernd Kuhls wrote:
-> DVBv5 statistics properties were added in kernel 3.9:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/include/uapi/linux/dvb/frontend.h?h=v3.9
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/c6c/c6ce6ca1986f2b82ff03e55dc650484f858b7e32/
-> http://autobuild.buildroot.net/results/208/20887b7161d895c2348c29f91e3d4b3f1c6f25e0/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/vdr/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index d1e9022..53fd79d 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d84a2fc89011b99d87fc47af91906622707c165d1860e9f774825ebbbc9c9fb6  libass-0.13.4.tar.xz
++sha256 f8a874d104e3e72e2cc057e5a1710c650b10367486845a26e5ff28ed7a912c2d  libass-0.13.6.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index 9fe967f..aeae86a 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASS_VERSION = 0.13.4
++LIBASS_VERSION = 0.13.6
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
