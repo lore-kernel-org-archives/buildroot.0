@@ -1,28 +1,29 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 03 Jun 2017 19:09:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exiv2: fix thread detection
- with xmp support disabled
-References: <20170603164322.23694-1-bernd.kuhls@t-online.de>
- <0985fd72-7766-3d82-6029-1a0a7e64db99@gmail.com>
-Message-ID: <d37b0exh1d.ln2@ID-313208.user.individual.net>
+Date: Sat, 03 Jun 2017 19:10:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump version
+	to	7.0.5-9
+References: <20170602044535.29603-1-bernd.kuhls@t-online.de>
+ <877f0uhoz3.fsf@dell.be.48ers.dk>
+Message-ID: <k47b0exh1d.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 03 Jun 2017 18:48:38 +0200 schrieb Romain Naour:
+Am Fri, 02 Jun 2017 08:40:16 +0200 schrieb Peter Korsgaard:
 
-> Hi Bernd,
+>>>>>> "Bernd" == Bernd Kuhls
+>>>>>> <bernd.kuhls@t-online.de> writes:
 > 
-> Le 03/06/2017 ? 18:43, Bernd Kuhls a ?crit :
->> ++find_package(Threads REQUIRED)
->> ++
+>  > Fixes
+>  > http://autobuild.buildroot.net/
+results/8d9/8d94627ccce15ae1f348a7a9f54621b2b5a74321/
 > 
-> So it mean that exiv2 depends on BR2_TOOLCHAIN_HAS_THREADS ?
+> Because upstream removed the tarball?
 
-Hi Romain,
+Hi Peter,
 
-oops, yes, v2 sent.
+yes.
 
 Regards, Bernd
