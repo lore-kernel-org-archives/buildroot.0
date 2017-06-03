@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jun 2017 17:07:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gettext: needs autoreconf after
- 'update wint_t.m4 from gnulib' commit
-In-Reply-To: <20170603131818.12872-1-bernd.kuhls@t-online.de>
-References: <20170603131818.12872-1-bernd.kuhls@t-online.de>
-Message-ID: <20170603170755.5c9864b8@free-electrons.com>
+Date: Sat, 3 Jun 2017 17:07:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vdr: needs headers >= 3.9
+In-Reply-To: <20170603141540.25469-1-bernd.kuhls@t-online.de>
+References: <20170603141540.25469-1-bernd.kuhls@t-online.de>
+Message-ID: <20170603170759.27801028@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  3 Jun 2017 15:18:18 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/ae7/ae743aaf5933c2e4a0bf3ca75aa93c16540422f8/
+On Sat,  3 Jun 2017 16:15:40 +0200, Bernd Kuhls wrote:
+> DVBv5 statistics properties were added in kernel 3.9:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/include/uapi/linux/dvb/frontend.h?h=v3.9
 > 
-> Reported-by: Romain Naour <romain.naour@gmail.com>
+> Fixes
+> http://autobuild.buildroot.net/results/c6c/c6ce6ca1986f2b82ff03e55dc650484f858b7e32/
+> http://autobuild.buildroot.net/results/208/20887b7161d895c2348c29f91e3d4b3f1c6f25e0/
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/gettext/gettext.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/vdr/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
