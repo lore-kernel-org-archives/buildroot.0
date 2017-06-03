@@ -1,54 +1,101 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Jun 2017 19:01:24 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/armadillo: bump version to
-	7.900.1
-Message-ID: <20170603170124.11637-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 3 Jun 2017 19:00:39 +0200
+Subject: [Buildroot] [git commit] package/exiv2: fix gettext support
+Message-ID: <20170603170311.F2C1182958@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed upstream URL to https, use .xz instead of .gz tarball.
+commit: https://git.buildroot.net/buildroot/commit/?id=5f8c38d2e92620c6ca6028b20ff39d8ba9e719bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/defcdd3dd57b031c31bb16c0075f079a482bf52d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: rebased for master branch
+ package/exiv2/0001-cmake-fix-gettext-support.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
- package/armadillo/armadillo.hash | 6 +++---
- package/armadillo/armadillo.mk   | 7 +++----
- 2 files changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 4149a777d..7fd599f29 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,5 +1,5 @@
- # From http://sourceforge.net/projects/arma/files/?source=navbar
--md5	a39f27197d24b3d25437fab6bb1d118f		armadillo-6.500.4.tar.gz
--sha1	68166e67521a720c72917d196b0807bc6cab8b2e	armadillo-6.500.4.tar.gz
-+md5 5ef71763bd429a3d481499878351f3be  armadillo-7.900.1.tar.xz
-+sha1 8118faf1c6a7a39c55a1103a1f90e85e613cc377  armadillo-7.900.1.tar.xz
- # Locally computed:
--sha256	813de85fa61ba5077ed871d801ba7070d369e7e9742002e4c11474c75ff6d1c6	armadillo-6.500.4.tar.gz
-+sha256 33eec7013990b5477ccc5ad3abc68bc2326c7a7a2790014d625cfcf37c0e07d3  armadillo-7.900.1.tar.xz
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index beb60c8c6..b5fe403a7 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
- 
--ARMADILLO_VERSION = 6.500.4
--# upstream removed tarball from
--# http://downloads.sourceforge.net/project/arma
--ARMADILLO_SITE = https://ftp.fau.de/macports/distfiles/armadillo
-+ARMADILLO_VERSION = 7.900.1
-+ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
-+ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_DEPENDENCIES = clapack
- ARMADILLO_INSTALL_STAGING = YES
- ARMADILLO_LICENSE = MPL-2.0
--- 
-2.11.0
+diff --git a/package/exiv2/0001-cmake-fix-gettext-support.patch b/package/exiv2/0001-cmake-fix-gettext-support.patch
+new file mode 100644
+index 0000000..435e08a
+--- /dev/null
++++ b/package/exiv2/0001-cmake-fix-gettext-support.patch
+@@ -0,0 +1,72 @@
++From 3af0d1a6b2c12b7f62a293d19bdf235db75d6b07 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 3 Jun 2017 17:18:24 +0200
++Subject: [PATCH] cmake: fix gettext support
++
++Building exiv2 with uclibc and gettext fails currently as detected
++by the buildroot autobuilders:
++http://autobuild.buildroot.net/results/def/defcdd3dd57b031c31bb16c0075f079a482bf52d/build-end.log
++
++Patch sent upstream: https://github.com/Exiv2/exiv2/pull/6
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ config/CMakeChecks.txt | 12 ++++++++++--
++ src/CMakeLists.txt     |  6 +++---
++ 2 files changed, 13 insertions(+), 5 deletions(-)
++
++diff --git a/config/CMakeChecks.txt b/config/CMakeChecks.txt
++index b3a888f2..f7621a92 100644
++--- a/config/CMakeChecks.txt
+++++ b/config/CMakeChecks.txt
++@@ -95,8 +95,16 @@ ELSE( EXIV2_ENABLE_SHARED )
++ ENDIF( EXIV2_ENABLE_SHARED )
++ 
++ IF( EXIV2_ENABLE_NLS )
++-    #FIND_PACKAGE(Intl REQUIRED)
++-    #INCLUDE_DIRECTORIES(${Intl_INCLUDE_DIRS})
+++    FIND_PACKAGE(Intl)
+++    if(Intl_FOUND)
+++        INCLUDE_DIRECTORIES(${Intl_INCLUDE_DIRS})
+++        find_library(LIBINTL_LIBRARY NAMES intl libintl)
+++        if(libintl_FOUND)
+++            SET(LIBINTL_LIBRARIES ${LIBINTL_LIBRARY})
+++        else(libintl_FOUND)
+++            SET(LIBINTL_LIBRARIES)
+++        endif()
+++    endif()
++     IF( NOT LOCALEDIR )
++         SET( LOCALEDIR "${CMAKE_INSTALL_LOCALEDIR}" )
++         IF( WIN32 )
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index aecd6215..e2904c6f 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -316,13 +316,13 @@ msvc_runtime_configure(${EXIV2_ENABLE_SHARED} ${EXIV2_ENABLE_DYNAMIC_RUNTIME})
++ # ******************************************************************************
++ # exiv2 application
++ ADD_EXECUTABLE( exiv2 ${EXIV2_SRC}  ${EXIV2_HDR} )
++-TARGET_LINK_LIBRARIES( exiv2 exiv2lib )
+++TARGET_LINK_LIBRARIES( exiv2 exiv2lib ${LIBINTL_LIBRARIES} )
++ INSTALL( TARGETS exiv2 ${INSTALL_TARGET_STANDARD_ARGS} )
++ 
++ # ******************************************************************************
++ # connection test application
++ ADD_EXECUTABLE( conntest ${CONNTEST} )
++-TARGET_LINK_LIBRARIES( conntest ${PRIVATE_VAR}  exiv2lib ${CURL_LIBRARIES} ${SSH_LIBRARIES})
+++TARGET_LINK_LIBRARIES( conntest ${PRIVATE_VAR}  exiv2lib ${CURL_LIBRARIES} ${SSH_LIBRARIES} ${LIBINTL_LIBRARIES} )
++ 
++ # ******************************************************************************
++ # exifprint application
++@@ -332,7 +332,7 @@ TARGET_LINK_LIBRARIES( conntest ${PRIVATE_VAR}  exiv2lib ${CURL_LIBRARIES} ${SSH
++ # ******************************************************************************
++ # remotetest application
++ ADD_EXECUTABLE( remotetest ${REMOTETEST} )
++-TARGET_LINK_LIBRARIES( remotetest exiv2lib )
+++TARGET_LINK_LIBRARIES( remotetest exiv2lib ${LIBINTL_LIBRARIES} )
++ 
++ # ******************************************************************************
++ # Headers
++-- 
++2.11.0
++
