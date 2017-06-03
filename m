@@ -1,82 +1,52 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  3 Jun 2017 19:24:10 +0200
-Subject: [Buildroot] [PATCH] package/uboot-tools: revert the removal of
-	0001-drop-configh-from-tools.patch
-Message-ID: <20170603172410.17504-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Jun 2017 19:25:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gauche: bump version to 0.9.5
+Message-ID: <20170603172559.22437-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch 0001-drop-configh-from-tools.patch is not upstream, instead it
-must be rebased on top of 2017.05 release since the code was moved by
-[1].
+Removed patch applied upstream:
+https://github.com/shirok/Gauche/commit/13a196557848f22a1607a300643131345e9f32b3
 
-Fixes:
-http://autobuild.buildroot.net/results/949/94910513d1b14e3b02ec4aed34de89d1b1d7a12a
-
-[1] http://git.denx.de/?p=u-boot.git;a=commit;h=9d80b49a671c9922931adcd823aab0ed319a42d1
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc:  Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../uboot-tools/0001-drop-configh-from-tools.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/uboot-tools/0001-drop-configh-from-tools.patch
+ package/gauche/gauche.hash | 6 ++++--
+ package/gauche/gauche.mk   | 3 +--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/uboot-tools/0001-drop-configh-from-tools.patch b/package/uboot-tools/0001-drop-configh-from-tools.patch
-new file mode 100644
-index 0000000..f19cebe
---- /dev/null
-+++ b/package/uboot-tools/0001-drop-configh-from-tools.patch
-@@ -0,0 +1,47 @@
-+From 216832de3bc3e6ef093305c6d07f464f7606f2d6 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Tue, 4 Aug 2015 22:13:20 +0200
-+Subject: [PATCH] drop configh from tools
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+We need to build u-boot tools without a board configuration for the target.
-+fw_env just uses config.h to define the default environment of the created
-+image, so it really isn't mandatory.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[J?rg Krause: update for version 2015.07]
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+[Romain: update for version 2017.05
-+    after commit 9d80b49a671c9922931adcd823aab0ed319a42d1]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ tools/env/fw_env_private.h | 11 -----------
-+ 1 file changed, 11 deletions(-)
-+
-+diff --git a/tools/env/fw_env_private.h b/tools/env/fw_env_private.h
-+index 0c27da0..e550463 100644
-+--- a/tools/env/fw_env_private.h
-++++ b/tools/env/fw_env_private.h
-+@@ -5,17 +5,6 @@
-+  * SPDX-License-Identifier:	GPL-2.0+
-+  */
-+ 
-+-/* Pull in the current config to define the default environment */
-+-#include <linux/kconfig.h>
-+-
-+-#ifndef __ASSEMBLY__
-+-#define __ASSEMBLY__ /* get only #defines from config.h */
-+-#include <config.h>
-+-#undef	__ASSEMBLY__
-+-#else
-+-#include <config.h>
-+-#endif
-+-
-+ /*
-+  * To build the utility with the static configuration
-+  * comment out the next line.
-+-- 
-+2.9.4
-+
+diff --git a/package/gauche/gauche.hash b/package/gauche/gauche.hash
+index 975e958a0..8f45ef997 100644
+--- a/package/gauche/gauche.hash
++++ b/package/gauche/gauche.hash
+@@ -1,3 +1,5 @@
++# From https://sourceforge.net/projects/gauche/files/Gauche/
++sha1 c3e1ea21f3acc66fd26eced117caab3f86531db4  Gauche-0.9.5.tgz
++md5 8bac7cbd99a91f6f2c037ac6988db14d  Gauche-0.9.5.tgz
+ # Locally calculated
+-sha256 7b18bcd70beaced1e004594be46c8cff95795318f6f5830dd2a8a700410fc149  Gauche-0.9.4.tgz
+-sha256 0ff5986540d8ad89eee595de766810f09e489a6a3363b47a65ce7ad18701ee01  13a196557848f22a1607a300643131345e9f32b3.patch
++sha256 4c8a53213de112708bbda5fa9648c21497d43ebf809ed5b32b15f21266b4e73c  Gauche-0.9.5.tgz
+diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
+index 5a4fe9a1c..1e1ee390a 100644
+--- a/package/gauche/gauche.mk
++++ b/package/gauche/gauche.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
+ 
+-GAUCHE_VERSION = 0.9.4
++GAUCHE_VERSION = 0.9.5
+ GAUCHE_SOURCE = Gauche-$(GAUCHE_VERSION).tgz
+ GAUCHE_SITE = http://downloads.sourceforge.net/project/gauche/Gauche
+ GAUCHE_LICENSE = BSD-3-Clause, Boehm-gc, SRFI (srfi-11.scm), reload (reload.scm)
+ GAUCHE_LICENSE_FILES = COPYING
+ GAUCHE_DEPENDENCIES = host-gauche
+-GAUCHE_PATCH = https://github.com/shirok/Gauche/commit/13a196557848f22a1607a300643131345e9f32b3.patch
+ 
+ HOST_GAUCHE_CONF_OPTS = --without-zlib
+ GAUCHE_CONF_OPTS = --without-libatomic-ops
 -- 
-2.9.4
+2.11.0
