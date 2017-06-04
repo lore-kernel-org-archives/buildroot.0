@@ -1,21 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 04 Jun 2017 09:55:37 +0200
-Subject: [Buildroot] [PATCH v3] exiv2: new package
-References: <1415357294-22601-1-git-send-email-nicolas.serafini@sensefly.com>
-Message-ID: <p0rc0ex4pp.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Jun 2017 09:54:52 +0200
+Subject: [Buildroot] [git commit] ncurses: Copy terminfo for 'dumb' terminal
+Message-ID: <20170604075754.8EB7982948@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 07 Nov 2014 11:48:14 +0100 schrieb Nicolas Serafini:
+commit: https://git.buildroot.net/buildroot/commit/?id=f6d80896a795307270a0d9b0cca234134e93a845
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +EXIV2_INSTALL_STAGING = YES
+Definition of 'dumb' terminal is required to be able to call 'top -b'
+from 'procps-ng'.
 
-Hi,
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ncurses/ncurses.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-afaics no other buildroot package uses exiv2 so I would to remove the 
-staging install, any objections?
-
-Regards, Bernd
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 2b99d3f..d8ad9dd 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -47,6 +47,7 @@ endif
+ 
+ NCURSES_TERMINFO_FILES = \
+ 	a/ansi \
++	d/dumb \
+ 	l/linux \
+ 	p/putty \
+ 	p/putty-vt100 \
