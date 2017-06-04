@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jun 2017 09:47:16 +0200
-Subject: [Buildroot] [git commit] package/glog: bump version to v0.3.5
-Message-ID: <20170604075142.C6E038270B@busybox.osuosl.org>
+Date: Sun, 4 Jun 2017 09:49:30 +0200
+Subject: [Buildroot] [git commit] package/gesftpserver: security bump to
+	version 0.2.2
+Message-ID: <20170604075142.D786B82245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a676fc9fc388b867cbe1dd1a722503f2f8f675a5
+commit: https://git.buildroot.net/buildroot/commit/?id=6da0a996173306a31c263df2ccd1f6ead3d1a81e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For details refer to
+http://www.chiark.greenend.org.uk/pipermail/sgo-software-announce/2016/000035.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glog/glog.hash | 2 +-
- package/glog/glog.mk   | 2 +-
+ package/gesftpserver/gesftpserver.hash | 2 +-
+ package/gesftpserver/gesftpserver.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glog/glog.hash b/package/glog/glog.hash
-index 4548eba..6f1efdb 100644
---- a/package/glog/glog.hash
-+++ b/package/glog/glog.hash
+diff --git a/package/gesftpserver/gesftpserver.hash b/package/gesftpserver/gesftpserver.hash
+index b4c9fdf..1a8a5f3 100644
+--- a/package/gesftpserver/gesftpserver.hash
++++ b/package/gesftpserver/gesftpserver.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256	ce99d58dce74458f7656a68935d7a0c048fa7b4626566a71b7f4e545920ceb10	glog-v0.3.4.tar.gz
-+sha256 7580e408a2c0b5a89ca214739978ce6ff480b5e7d8d7698a2aa92fadc484d1e0  glog-v0.3.5.tar.gz
-diff --git a/package/glog/glog.mk b/package/glog/glog.mk
-index 8a5c36b..3f17529 100644
---- a/package/glog/glog.mk
-+++ b/package/glog/glog.mk
+ # Locally calculated
+-sha256	5f744c38df9bb82f5ab500858a0fb4767ac3ee2254301da03cbcf8e6c587cbf5	sftpserver-0.2.1.tar.gz
++sha256 8ac1938d0f62a05799b2aeab489d6ce098c3fe53280a9b66c0957b1fdcbcbab9  sftpserver-0.2.2.tar.gz
+diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+index 27a1ec3..58c6270 100644
+--- a/package/gesftpserver/gesftpserver.mk
++++ b/package/gesftpserver/gesftpserver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLOG_VERSION = v0.3.4
-+GLOG_VERSION = v0.3.5
- GLOG_SITE = $(call github,google,glog,$(GLOG_VERSION))
- GLOG_INSTALL_STAGING = YES
- GLOG_LICENSE = BSD-3-Clause
+-GESFTPSERVER_VERSION = 0.2.1
++GESFTPSERVER_VERSION = 0.2.2
+ GESFTPSERVER_SOURCE = sftpserver-$(GESFTPSERVER_VERSION).tar.gz
+ GESFTPSERVER_SITE = http://www.greenend.org.uk/rjk/sftpserver
+ GESFTPSERVER_LICENSE = GPL-2.0+
