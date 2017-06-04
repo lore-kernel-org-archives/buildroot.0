@@ -1,44 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  4 Jun 2017 21:24:34 +0300
-Subject: [Buildroot] [PATCH] systemd: add upstream security fix
-Message-ID: <d116b87e5aea0bf5820ba5af0e048f89fafa4ee8.1496600674.git.baruch@tkos.co.il>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun,  4 Jun 2017 20:53:55 +0100
+Subject: [Buildroot] [PATCH 1/2] package/connman: bump version to 1.34
+Message-ID: <1496606036-4331-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-9217: remote DoS (daemon crash) via a crafted DNS response with
-an empty question section.
-
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- package/systemd/systemd.hash | 1 +
- package/systemd/systemd.mk   | 3 +++
- 2 files changed, 4 insertions(+)
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 17f4c0f89063..b5cb1ca0c572 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,3 @@
- # sha256 locally computed
- sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
-+sha256 eed8fef0045876e9efa0ba6725ed9ea93654bf24d67bb5aad467a341ad375883  a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 5112d537e396..0b62cf043e9e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,6 +19,9 @@ SYSTEMD_DEPENDENCIES = \
- SYSTEMD_PROVIDES = udev
- SYSTEMD_AUTORECONF = YES
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index f27af3d..e6485b9 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256	bc8946036fa70124d663136f9f6b6238d897ca482782df907b07a428b09df5a0	connman-1.33.tar.xz
++sha256	a9a0808c729c1f348fc36d8cecb52d19b72bc34cb411c502608cb0e0190fc71e	connman-1.34.tar.xz
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 0a56568..4c19b4b 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+SYSTEMD_PATCH = \
-+	https://github.com/systemd/systemd/commit/a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
-+
- # Make sure that systemd will always be built after busybox so that we have
- # a consistent init setup between two builds
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-CONNMAN_VERSION = 1.33
++CONNMAN_VERSION = 1.34
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
 -- 
-2.11.0
+2.7.4
