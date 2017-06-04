@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Jun 2017 15:04:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gqrx: bump version to 2.6.1
-Message-ID: <20170604130422.29773-1-bernd.kuhls@t-online.de>
+Date: Sun,  4 Jun 2017 15:05:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/granite: bump version to 0.4.1
+Message-ID: <20170604130514.29851-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gqrx/gqrx.hash | 2 +-
- package/gqrx/gqrx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/granite/granite.hash | 6 +++---
+ package/granite/granite.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-index 2d126aa50..bb52a616d 100644
---- a/package/gqrx/gqrx.hash
-+++ b/package/gqrx/gqrx.hash
-@@ -1,2 +1,2 @@
- # Locally calculated:
--sha256 53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db  gqrx-v2.6.tar.gz
-+sha256 2736a963dac4051ca8ae91a440ee6643ef7d26c9de5b9c83a369d5fc9328d453  gqrx-v2.6.1.tar.gz
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-index 12e79edbc..2a7651c25 100644
---- a/package/gqrx/gqrx.mk
-+++ b/package/gqrx/gqrx.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/granite/granite.hash b/package/granite/granite.hash
+index e073307d1..b9ed2874c 100644
+--- a/package/granite/granite.hash
++++ b/package/granite/granite.hash
+@@ -1,4 +1,4 @@
+-# From https://launchpad.net/granite/0.4/0.4.0.1/+download/granite-0.4.0.1.tar.xz/+md5
+-md5	db41150ca6e77162392362686e848086	granite-0.4.0.1.tar.xz
++# From https://launchpad.net/granite/0.4/0.4.1/+download/granite-0.4.1.tar.xz/+md5
++md5 b1002c0488bb9ade0ef89730c4f84393 granite-0.4.1.tar.xz
+ # Calculated based on the hash above
+-sha256	95a142a8befeedc35a089d638e759b657905508dc3007036d6c1fa3efe94c4dd	granite-0.4.0.1.tar.xz
++sha256 8bb411523e6cd5685c928dbfe08893892189cedf9fad5f537aa76182032cf09c  granite-0.4.1.tar.xz
+diff --git a/package/granite/granite.mk b/package/granite/granite.mk
+index 4ad64c2e9..f824ba7fd 100644
+--- a/package/granite/granite.mk
++++ b/package/granite/granite.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GQRX_VERSION = v2.6
-+GQRX_VERSION = v2.6.1
- GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
- GQRX_LICENSE = GPL-3.0+, Apache-2.0
- GQRX_LICENSE_FILES = COPYING LICENSE-CTK
+ GRANITE_VERSION_MAJOR = 0.4
+-GRANITE_VERSION = $(GRANITE_VERSION_MAJOR).0.1
++GRANITE_VERSION = $(GRANITE_VERSION_MAJOR).1
+ GRANITE_SITE = https://launchpad.net/granite/$(GRANITE_VERSION_MAJOR)/$(GRANITE_VERSION)/+download
+ GRANITE_SOURCE = granite-$(GRANITE_VERSION).tar.xz
+ GRANITE_DEPENDENCIES = host-pkgconf host-vala libgee libglib2 libgtk3
 -- 
 2.11.0
