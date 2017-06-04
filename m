@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jun 2017 09:50:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gesftpserver: security bump to
- version 0.2.2
-In-Reply-To: <20170603174150.9409-1-bernd.kuhls@t-online.de>
-References: <20170603174150.9409-1-bernd.kuhls@t-online.de>
-Message-ID: <20170604095025.5cb249be@free-electrons.com>
+Date: Sun, 4 Jun 2017 09:50:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glm: bump version to 0.9.8.4
+In-Reply-To: <20170603174753.10433-1-bernd.kuhls@t-online.de>
+References: <20170603174753.10433-1-bernd.kuhls@t-online.de>
+Message-ID: <20170604095031.11912234@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  3 Jun 2017 19:41:50 +0200, Bernd Kuhls wrote:
-> For details refer to
-> http://www.chiark.greenend.org.uk/pipermail/sgo-software-announce/2016/000035.html
-> 
+On Sat,  3 Jun 2017 19:47:53 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/gesftpserver/gesftpserver.hash | 2 +-
->  package/gesftpserver/gesftpserver.mk   | 2 +-
+>  package/glm/glm.hash | 2 +-
+>  package/glm/glm.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks. Most likely a candidate for the LTS branch?
+Applied to master, thanks.
 
 Thomas
 -- 
