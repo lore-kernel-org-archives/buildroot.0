@@ -1,26 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 04 Jun 2017 10:16:34 +0200
-Subject: [Buildroot] [PATCH 2/2] package/exiv2: fix gettext detection,
-	part II
-References: <20170604080457.7593-1-bernd.kuhls@t-online.de>
- <20170604080457.7593-2-bernd.kuhls@t-online.de>
-Message-ID: <28sc0ex4pp.ln2@ID-313208.user.individual.net>
+Date: Sun,  4 Jun 2017 10:27:14 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/exiv2: fix pthread detection
+Message-ID: <20170604082714.26214-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 04 Jun 2017 10:04:57 +0200 schrieb Bernd Kuhls:
+This commit fixes an error during configure:
 
-> It seems getting the gettext stuff right on all platforms is not that
-> easy, this patch bumps exiv2 to include all gettext (and pthreads)
-> patches currently applied upstream and adds the latest try to hopefully
-> get things right.
+-- Check if compiler accepts -pthread
+CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the
+ following cache variables appropriately:
+   THREADS_PTHREAD_ARG (advanced)
 
-Hi,
+Patch ported from librtlsdr:
+https://git.busybox.net/buildroot/commit/?id=4c6eace6f756d15ae9639a503c9245d1e7fb12a9
 
-please wait with committing this patch, I am in discussion with upstream 
-about the best solution, marked as Defered in patchworks.
+Fixes
+http://autobuild.buildroot.net/results/0f9/0f985993a0c0076f027cfe25bb13d6b85c644c0d/
 
-Regards, Bernd
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: added more comments in commit message and exiv2.mk (Thomas)
+
+ package/exiv2/exiv2.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index f56e86122..bdd40f7f4 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -11,6 +11,10 @@ EXIV2_INSTALL_STAGING = YES
+ 
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
+ 
++# The following CMake variable disables a TRY_RUN call in the -pthread
++# test which is not allowed when cross-compiling.
++EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
++
+ ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),)
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
+ endif
+-- 
+2.11.0
