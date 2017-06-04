@@ -1,31 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jun 2017 09:51:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gauche: bump version to 0.9.5
-In-Reply-To: <20170603172559.22437-1-bernd.kuhls@t-online.de>
-References: <20170603172559.22437-1-bernd.kuhls@t-online.de>
-Message-ID: <20170604095114.24230f31@free-electrons.com>
+Date: Sun, 4 Jun 2017 09:47:16 +0200
+Subject: [Buildroot] [git commit] package/glog: bump version to v0.3.5
+Message-ID: <20170604075142.C6E038270B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a676fc9fc388b867cbe1dd1a722503f2f8f675a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Jun 2017 19:25:59 +0200, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> https://github.com/shirok/Gauche/commit/13a196557848f22a1607a300643131345e9f32b3
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/gauche/gauche.hash | 6 ++++--
->  package/gauche/gauche.mk   | 3 +--
->  2 files changed, 5 insertions(+), 4 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glog/glog.hash | 2 +-
+ package/glog/glog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glog/glog.hash b/package/glog/glog.hash
+index 4548eba..6f1efdb 100644
+--- a/package/glog/glog.hash
++++ b/package/glog/glog.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	ce99d58dce74458f7656a68935d7a0c048fa7b4626566a71b7f4e545920ceb10	glog-v0.3.4.tar.gz
++sha256 7580e408a2c0b5a89ca214739978ce6ff480b5e7d8d7698a2aa92fadc484d1e0  glog-v0.3.5.tar.gz
+diff --git a/package/glog/glog.mk b/package/glog/glog.mk
+index 8a5c36b..3f17529 100644
+--- a/package/glog/glog.mk
++++ b/package/glog/glog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GLOG_VERSION = v0.3.4
++GLOG_VERSION = v0.3.5
+ GLOG_SITE = $(call github,google,glog,$(GLOG_VERSION))
+ GLOG_INSTALL_STAGING = YES
+ GLOG_LICENSE = BSD-3-Clause
