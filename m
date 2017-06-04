@@ -1,43 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  4 Jun 2017 23:59:32 +0200
-Subject: [Buildroot] [PATCH] package/sdl2: disable OpenGL ES 1.1 with
-	sunxi-mali as libgles provider
-Message-ID: <20170604215932.3102-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 00:09:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdbm: fix build error
+Message-ID: <20170604220950.22746-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenGL ES 1.1 and OpenGL ES 2.0 can't be enabled at the same time
-with sunxi-mali as libgles provider due to conflicting types for
-'GLintptr' in GLES2/gl2.h and GLES/gl.h
+Fixes
+http://autobuild.buildroot.net/results/4eb/4ebb8c47a71043470ce3fc626ac10f02902c2a43/
 
-Fixes:
-http://autobuild.buildroot.net/results/258/25898b45cefde9661d8ac87dd84bc883bb5283d1
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sdl2/sdl2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+I am unsure whether this is the right fix so I am sending this patch for
+review first before I will contact upstream, Bernd.
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index a0a4489..2917475 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -111,6 +111,13 @@ else
- SDL2_CONF_OPTS += --disable-video-opengles
- endif
- 
-+# OpenGL ES 1.1 and OpenGL ES 2.0 can't be enabled at the same time
-+# with sunxi-mali as libgles provider due to conflicting types for
-+# 'GLintptr' in GLES2/gl2.h and GLES/gl.h
-+ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
-+SDL2_CONF_OPTS += --disable-video-opengles1
-+endif
+ package/gdbm/0001-gdbmopen.c-fix-build.patch | 30 ++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/gdbm/0001-gdbmopen.c-fix-build.patch
+
+diff --git a/package/gdbm/0001-gdbmopen.c-fix-build.patch b/package/gdbm/0001-gdbmopen.c-fix-build.patch
+new file mode 100644
+index 000000000..7dd2fd2af
+--- /dev/null
++++ b/package/gdbm/0001-gdbmopen.c-fix-build.patch
+@@ -0,0 +1,30 @@
++From 7b20e17f72ff8043696c9b024065e474f3ebca9b Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 5 Jun 2017 00:03:57 +0200
++Subject: [PATCH 1/1] gdbmopen.c: fix build
 +
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL2_DEPENDENCIES += tslib
- SDL2_CONF_OPTS += --enable-input-tslib
++This patch fixes build errors detected by Buildroot autobuilders on
++various platforms using uClibc:
++http://autobuild.buildroot.net/?reason=gdbm-1.13
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/gdbmopen.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/gdbmopen.c b/src/gdbmopen.c
++index 80474a6..a9bfb32 100644
++--- a/src/gdbmopen.c
+++++ b/src/gdbmopen.c
++@@ -32,7 +32,7 @@
++ #endif
++ 
++ static void
++-compute_directory_size (GDBM_FILE dbf, blksize_t block_size,
+++compute_directory_size (GDBM_FILE dbf, __blksize_t block_size,
++ 			int *ret_dir_size, int *ret_dir_bits)
++ {
++   /* Create the initial hash table directory.  */
++-- 
++2.11.0
++
 -- 
-2.9.4
+2.11.0
