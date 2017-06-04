@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Jun 2017 15:08:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gssdp: bump version to 1.0.2
-Message-ID: <20170604130853.30223-1-bernd.kuhls@t-online.de>
+Date: Sun,  4 Jun 2017 15:09:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/guile: bump version to 2.0.14
+Message-ID: <20170604130925.30318-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gssdp/gssdp.hash | 4 ++--
- package/gssdp/gssdp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/guile/guile.hash | 2 +-
+ package/guile/guile.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index b646d185b..aac5f74ec 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
+diff --git a/package/guile/guile.hash b/package/guile/guile.hash
+index 43f0dd776..63651cf74 100644
+--- a/package/guile/guile.hash
++++ b/package/guile/guile.hash
 @@ -1,2 +1,2 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.1.sha256sum:
--sha256	601d67f40bc28c067742b7c46f3018da96b364fd3e83f30ddac6e190e323d2e1	gssdp-1.0.1.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.2.sha256sum:
-+sha256 a1e17c09c7e1a185b0bd84fd6ff3794045a3cd729b707c23e422ff66471535dc  gssdp-1.0.2.tar.xz
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index e94c92448..2ce1f9b0b 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	3744f2addc282a0de627aaef048f062982b44564d54ac31ff5217972529ed88b	guile-2.0.13.tar.xz
++sha256 e8442566256e1be14e51fc18839cd799b966bc5b16c6a1d7a7c35155a8619d82  guile-2.0.14.tar.xz
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index 2ccd8e63b..da94d0568 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GSSDP_VERSION_MAJOR = 1.0
--GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).1
-+GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).2
- GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
- GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
- GSSDP_LICENSE = LGPL-2.0+
+-GUILE_VERSION = 2.0.13
++GUILE_VERSION = 2.0.14
+ GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
+ GUILE_SITE = $(BR2_GNU_MIRROR)/guile
+ GUILE_INSTALL_STAGING = YES
 -- 
 2.11.0
