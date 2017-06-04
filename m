@@ -1,66 +1,46 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 4 Jun 2017 12:09:41 +0200
-Subject: [Buildroot] Building gdbserver on m68k Coldfire
-In-Reply-To: <20170604093431.7a19a341@free-electrons.com>
-References: <20170604093431.7a19a341@free-electrons.com>
-Message-ID: <20170604100941.GJ26922@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Jun 2017 12:40:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnuplot: bump version to 5.0.6
+Message-ID: <20170604104024.2032-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Added sha256 hash.
 
-> Waldemar,
-> 
-> As you know, gdbserver currently fails to build on m68k Coldfire due to
-> the use of fork(). I've investigated this, and it's due to the fact
-> that gdbserver looks at uClibc __UCLIBC_HAS_MMU__ define (see
-> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gdb/nat/linux-ptrace.h;h=59549452c0990204ef48451dc2c902c85ee48215;hb=HEAD#l25)
-> to decide whether to define HAS_NOMMU. If HAS_NOMMU is defined, it uses
-> vfork().
-> 
-> So, I've fixed this with:
-> 
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index bbf389e..7bbbe3e 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -260,10 +260,12 @@ endif
->  ifeq ($(BR2_USE_MMU),y)
->  define UCLIBC_MMU_CONFIG
->         $(call KCONFIG_ENABLE_OPT,ARCH_USE_MMU,$(@D)/.config)
-> +       $(call KCONFIG_ENABLE_OPT,ARCH_HAS_MMU,$(@D)/.config)
->  endef
->  else
->  define UCLIBC_MMU_CONFIG
->         $(call KCONFIG_DISABLE_OPT,ARCH_USE_MMU,$(@D)/.config)
-> +       $(call KCONFIG_DISABLE_OPT,ARCH_HAS_MMU,$(@D)/.config)
->  endef
->  endif
->  
-> With this fix, the build goes a little bit further, but then fails with:
-> 
-> ../nat/linux-ptrace.c: In function 'linux_fork_to_function':
-> ../nat/linux-ptrace.c:282:19: warning: implicit declaration of function 'clone' [-Wimplicit-function-declaration]
->        child_pid = clone (function, child_stack + STACK_SIZE,
->                    ^
-> ../nat/linux-ptrace.c:283:5: error: 'CLONE_VM' undeclared (first use in this function)
->      CLONE_VM | SIGCHLD, child_stack + STACK_SIZE * 2);
->      ^
-> ../nat/linux-ptrace.c:283:5: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> It's weird, because this piece of code in linux-ptrace is specifically
-> written for uClibc/noMMU systems:
-> 
-> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gdb/nat/linux-ptrace.c;h=3265b160749b3b635676b423ec1298a26627d78f;hb=HEAD#l271
-> 
-> Is uClibc/noMMU supposed to support clone() and CLONE_VM ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/gnuplot/gnuplot.hash | 8 +++++---
+ package/gnuplot/gnuplot.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Yes, just add this patch:
-https://cgit.openadk.org/cgi/cgit/openadk.git/tree/package/gdbserver/patches/nommu.patch
-
-best regards
- Waldemar
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index a71d00659..1ea8c2852 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,3 +1,5 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.0.5/
+-md5 c5e96fca73afbee4f57cbc1bfce6b3b8  gnuplot-5.0.5.tar.gz
+-sha1 c35f55657fdc33217dd70bbf3148578563ecaad1  gnuplot-5.0.5.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.0.6/
++md5 8ec46520a86a61163a701b00404faf1a  gnuplot-5.0.6.tar.gz
++sha1 f7b8948166b22e5bd658d5cf7579716f4821dba0  gnuplot-5.0.6.tar.gz
++# Locally computed
++sha256 5bbe4713e555c2e103b7d4ffd45fca69551fff09cf5c3f9cb17428aaacc9b460  gnuplot-5.0.6.tar.gz
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index 3e00eefef..d59605c57 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPLOT_VERSION = 5.0.5
++GNUPLOT_VERSION = 5.0.6
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
+-- 
+2.11.0
