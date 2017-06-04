@@ -1,63 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jun 2017 09:34:31 +0200
-Subject: [Buildroot] Building gdbserver on m68k Coldfire
-Message-ID: <20170604093431.7a19a341@free-electrons.com>
+Date: Sun, 4 Jun 2017 09:38:01 +0200
+Subject: [Buildroot] [git commit] package/libiconv: bump to 1.15
+Message-ID: <20170604073807.748B9825D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: https://git.buildroot.net/buildroot/commit/?id=77c6d92c65c119eb0ff6fe1e89fec64f7c0ede0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As you know, gdbserver currently fails to build on m68k Coldfire due to
-the use of fork(). I've investigated this, and it's due to the fact
-that gdbserver looks at uClibc __UCLIBC_HAS_MMU__ define (see
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gdb/nat/linux-ptrace.h;h=59549452c0990204ef48451dc2c902c85ee48215;hb=HEAD#l25)
-to decide whether to define HAS_NOMMU. If HAS_NOMMU is defined, it uses
-vfork().
+libiconv doesn't build with gcc 6 due to a macro in stdio.h using gets()
+which has been removed with the C11 standard.
 
-So, I've fixed this with:
+_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index bbf389e..7bbbe3e 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -260,10 +260,12 @@ endif
- ifeq ($(BR2_USE_MMU),y)
- define UCLIBC_MMU_CONFIG
-        $(call KCONFIG_ENABLE_OPT,ARCH_USE_MMU,$(@D)/.config)
-+       $(call KCONFIG_ENABLE_OPT,ARCH_HAS_MMU,$(@D)/.config)
- endef
- else
- define UCLIBC_MMU_CONFIG
-        $(call KCONFIG_DISABLE_OPT,ARCH_USE_MMU,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,ARCH_HAS_MMU,$(@D)/.config)
- endef
- endif
+With libiconv 1.15, this macro is protected by
+
+ #if HAVE_RAW_DECL_GETS && !defined __cplusplus
+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+ #endif
+
+Fixes:
+http://autobuild.buildroot.net/results/61b/61bbfc839f99feb043d3456f107429d6e5319258
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libiconv/libiconv.hash | 2 +-
+ package/libiconv/libiconv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libiconv/libiconv.hash b/package/libiconv/libiconv.hash
+index 83de76f..440daee 100644
+--- a/package/libiconv/libiconv.hash
++++ b/package/libiconv/libiconv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	72b24ded17d687193c3366d0ebe7cde1e6b18f0df8c55438ac95be39e8a30613	libiconv-1.14.tar.gz
++sha256	ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178	libiconv-1.15.tar.gz
+diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
+index af8f345..9a81336 100644
+--- a/package/libiconv/libiconv.mk
++++ b/package/libiconv/libiconv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-With this fix, the build goes a little bit further, but then fails with:
-
-../nat/linux-ptrace.c: In function 'linux_fork_to_function':
-../nat/linux-ptrace.c:282:19: warning: implicit declaration of function 'clone' [-Wimplicit-function-declaration]
-       child_pid = clone (function, child_stack + STACK_SIZE,
-                   ^
-../nat/linux-ptrace.c:283:5: error: 'CLONE_VM' undeclared (first use in this function)
-     CLONE_VM | SIGCHLD, child_stack + STACK_SIZE * 2);
-     ^
-../nat/linux-ptrace.c:283:5: note: each undeclared identifier is reported only once for each function it appears in
-
-It's weird, because this piece of code in linux-ptrace is specifically
-written for uClibc/noMMU systems:
-
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=gdb/nat/linux-ptrace.c;h=3265b160749b3b635676b423ec1298a26627d78f;hb=HEAD#l271
-
-Is uClibc/noMMU supposed to support clone() and CLONE_VM ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+-LIBICONV_VERSION = 1.14
++LIBICONV_VERSION = 1.15
+ LIBICONV_SITE = $(BR2_GNU_MIRROR)/libiconv
+ LIBICONV_INSTALL_STAGING = YES
+ LIBICONV_LICENSE = GPL-3.0+ (iconv program), LGPL-2.0+ (library)
