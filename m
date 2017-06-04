@@ -1,31 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jun 2017 19:14:28 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove bouncing email
- address
-In-Reply-To: <20170604132644.3167-1-bernd.kuhls@t-online.de>
-References: <20170604132644.3167-1-bernd.kuhls@t-online.de>
-Message-ID: <20170604191428.4dd2071d@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  4 Jun 2017 21:24:34 +0300
+Subject: [Buildroot] [PATCH] systemd: add upstream security fix
+Message-ID: <d116b87e5aea0bf5820ba5af0e048f89fafa4ee8.1496600674.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes CVE-2017-9217: remote DoS (daemon crash) via a crafted DNS response with
+an empty question section.
 
-On Sun,  4 Jun 2017 15:26:44 +0200, Bernd Kuhls wrote:
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/systemd/systemd.hash | 1 +
+ package/systemd/systemd.mk   | 3 +++
+ 2 files changed, 4 insertions(+)
 
-> -N:	Sagaert Johan <sagaert.johan@skynet.be>
-
-Can you try to mail him at Sagaert Johan <sagaert.johan@proximus.be>
-instead?
-
-His last e-mail to the mailing list have been done from this address.
-
-Thanks,
-
-Thomas
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 17f4c0f89063..b5cb1ca0c572 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,2 +1,3 @@
+ # sha256 locally computed
+ sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
++sha256 eed8fef0045876e9efa0ba6725ed9ea93654bf24d67bb5aad467a341ad375883  a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 5112d537e396..0b62cf043e9e 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -19,6 +19,9 @@ SYSTEMD_DEPENDENCIES = \
+ SYSTEMD_PROVIDES = udev
+ SYSTEMD_AUTORECONF = YES
+ 
++SYSTEMD_PATCH = \
++	https://github.com/systemd/systemd/commit/a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
++
+ # Make sure that systemd will always be built after busybox so that we have
+ # a consistent init setup between two builds
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
