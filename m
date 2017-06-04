@@ -1,29 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jun 2017 09:54:23 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/armadillo: bump version to
- 7.900.1
-In-Reply-To: <20170603170124.11637-1-bernd.kuhls@t-online.de>
-References: <20170603170124.11637-1-bernd.kuhls@t-online.de>
-Message-ID: <20170604095423.17e06608@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 04 Jun 2017 09:55:37 +0200
+Subject: [Buildroot] [PATCH v3] exiv2: new package
+References: <1415357294-22601-1-git-send-email-nicolas.serafini@sensefly.com>
+Message-ID: <p0rc0ex4pp.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Fri, 07 Nov 2014 11:48:14 +0100 schrieb Nicolas Serafini:
 
-On Sat,  3 Jun 2017 19:01:24 +0200, Bernd Kuhls wrote:
-> Changed upstream URL to https, use .xz instead of .gz tarball.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: rebased for master branch
+> +EXIV2_INSTALL_STAGING = YES
 
-Applied to master, thanks.
+Hi,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+afaics no other buildroot package uses exiv2 so I would to remove the 
+staging install, any objections?
+
+Regards, Bernd
