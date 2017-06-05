@@ -1,40 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 14:40:30 +0200
-Subject: [Buildroot] [PATCH] vdr: bump version to 2.3.6
-In-Reply-To: <0fa02a35-fea3-b720-a139-b6f02d24ff13@imgtec.com>
-References: <20170605100525.44776-1-Vincent.Riera@imgtec.com>
- <c8of0exv9f.ln2@ID-313208.user.individual.net>
- <0fa02a35-fea3-b720-a139-b6f02d24ff13@imgtec.com>
-Message-ID: <20170605144030.27e14e14@free-electrons.com>
+Date: Mon, 5 Jun 2017 14:41:24 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: add optional support for
+	alsa-lib
+Message-ID: <20170605124130.A3FAB82980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ca06ba2d2a673cf750ac92a4e61e7cba037a339e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 5 Jun 2017 11:34:30 +0100, Vicente Olivert Riera wrote:
+ffmpeg has optional support for alsa as input and/or output device:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=23823e3b7012d847b614bd43316fb614676bedb2;hb=refs/heads/release/3.3#l2987
 
-> > did you build the release with uclibc? I got errors because of the new 
-> > debugging code which uses execinfo.h.  
-> 
-> nope, I didn't build it with uClibc.
+Problem was found while fixing
+http://autobuild.buildroot.net/results/7ba/7ba485532fcab74928246a8f95dba7e5eea9d4a5/
 
-For the record, uClibc is our default C library, so not testing package
-bumps with what is our default C library is a bit crazy.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-We have even introduced a tool, test-pkg, that helps testing that
-packages build fine. Please use it. Maybe not to test all toolchains,
-but at least make sure it builds reasonably. Submitting a package bump
-that isn't even build tested with uClibc is not acceptable.
-
-I'd prefer to see *less* package bump patches, but *better* ones.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index d69923b..86bf545 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -157,12 +157,18 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG_INDEVS),y)
+ FFMPEG_CONF_OPTS += --enable-indevs
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++FFMPEG_DEPENDENCIES += alsa-lib
++endif
+ else
+ FFMPEG_CONF_OPTS += --disable-indevs
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG_OUTDEVS),y)
+ FFMPEG_CONF_OPTS += --enable-outdevs
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++FFMPEG_DEPENDENCIES += alsa-lib
++endif
+ else
+ FFMPEG_CONF_OPTS += --disable-outdevs
+ endif
