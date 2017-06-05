@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:52:42 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/exiv2: fix gettext detection, part II
-In-Reply-To: <20170604084317.29214-1-bernd.kuhls@t-online.de>
-References: <20170604084317.29214-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605115242.4e095349@free-electrons.com>
+Date: Mon, 5 Jun 2017 11:54:09 +0200
+Subject: [Buildroot] [PATCH] linux: fix name of config variable
+In-Reply-To: <20170604094839.23541-1-yann.morin.1998@free.fr>
+References: <20170604094839.23541-1-yann.morin.1998@free.fr>
+Message-ID: <20170605115409.5e7c55d8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  4 Jun 2017 10:43:17 +0200, Bernd Kuhls wrote:
-> It seems getting the gettext stuff right on all platforms is not that
-> easy, this patch bumps exiv2 to include all gettext (and pthreads)
-> patches applied upstream.
+On Sun,  4 Jun 2017 11:48:39 +0200, Yann E. MORIN wrote:
+> In 4c10eedc1 (systemd: enable required kernel features), we added
+> setting a few required kernel features to ensure systemd works.
 > 
-> To reproduce the problem gettext has to be built before exiv2 so we
-> make gettext an optional dependency when NLS support is used.
+> However, there was a typo for one of the variables: CONFIG_TMPFS_XATTR
+> was written as CONFIG_TMPFS_POSIX_XATTR, which does not exist (and never
+> ever existed, at least not since 2.6.12)...
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/a56/a56c8a8a4c76b7c359ca7f5252be93fd70c6a4c1/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: bumped to latest git head
+> Fixes #9926.
 
-Applied to master, thanks.
+The patch looks good, but I'm not sure why you say it fixes #9926. It
+has been noticed as part of the #9926 discussion, but to me it doesn't
+fix this bug.
+
+Could you clarify?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
