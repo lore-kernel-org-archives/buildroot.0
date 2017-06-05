@@ -1,41 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  5 Jun 2017 19:13:06 +0200
-Subject: [Buildroot] [autobuild-run] autobuild-run: Add an exception for CS
-	nios2 2017.02 with flann
-Message-ID: <20170605171306.7941-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 19:14:42 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/icu: needs host gcc >= 4.8
+Message-ID: <20170605171442.10108-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This toolchain is affected by binutils PR19405 so use an autobuilder
-exception like for boost and qt5base (gui).
+Fixes
+http://autobuild.buildroot.net/results/2b3/2b3a9be1780857db8827ea70df9d8699116a5df7/
 
-https://sourceware.org/bugzilla/show_bug.cgi?id=19405
-
-Fixes:
-http://autobuild.buildroot.net/results/b13/b13377f03acccedc0441fb1e37e93f8e0b60da5e
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- scripts/autobuild-run | 4 ++++
- 1 file changed, 4 insertions(+)
+v2: updated Config.in comment (Baruch)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 24cdf58..c8921a5 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -494,6 +494,10 @@ def fixup_config(**kwargs):
-     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
-        'BR2_PACKAGE_QT_GUI_MODULE=y\n' in configlines:
-         return False
-+    # The cs nios2 2017.02 toolchain is affected by binutils PR19405
-+    if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
-+       'BR2_PACKAGE_FLANN=y\n' in configlines:
-+        return False
-     # or1k affected by binutils PR21464
-     if 'BR2_or1k=y\n' in configlines and \
-        'BR2_PACKAGE_QT_GUI_MODULE=y\n' in configlines:
+ package/icu/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/icu/Config.in b/package/icu/Config.in
+index 32f35b9d9..fde486b60 100644
+--- a/package/icu/Config.in
++++ b/package/icu/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ICU
+ 	bool "icu"
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -26,8 +27,9 @@ config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
+ 
+ endif
+ 
+-comment "icu needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
++comment "icu needs a toolchain w/ C++, wchar, threads, gcc >= 4.8, host gcc >= 4.8"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_HOST_GCC_AT_LEAST_4_8
 -- 
-2.9.4
+2.11.0
