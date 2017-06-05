@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 15:53:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/icu: bump version to 59.1
-In-Reply-To: <20170605101452.30313-1-bernd.kuhls@t-online.de>
-References: <20170605101452.30313-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605155327.2ac1f05e@free-electrons.com>
+Date: Mon, 5 Jun 2017 15:55:33 +0200
+Subject: [Buildroot] [git commit] package/igmpproxy: bump version
+Message-ID: <20170605135541.5703D82894@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1ed727bc41d58a96fa245cb0c0e9a54fe35a0e3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Jun 2017 12:14:52 +0200, Bernd Kuhls wrote:
-> According to the release notes "Compiler support for C++11 is now
-> required for building the ICU libraries.
-> GCC: version 4.8 and later has been tested."
-> 
-> Added corresponding dependencies and reverse dependencies.
-> Removed patch 0006 applied upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/beecrypt/Config.in                         |   5 +-
->  package/cppcms/Config.in                           |   5 +
->  ...-utext-problems-with-handling-of-bad-utf8.patch | 173 ---------------------
->  package/icu/Config.in                              |   6 +-
->  package/icu/icu.hash                               |   6 +-
->  package/icu/icu.mk                                 |   2 +-
->  package/python-mwscrape2slob/Config.in             |   6 +-
->  package/python-pyicu/Config.in                     |   6 +-
->  package/python-slob/Config.in                      |   6 +-
->  package/qt5/qt5base/Config.in                      |   5 +
->  package/qt5/qt5webkit/Config.in                    |   5 +-
->  11 files changed, 36 insertions(+), 189 deletions(-)
->  delete mode 100644 package/icu/0006-utext-problems-with-handling-of-bad-utf8.patch
+Last bump dates back to April 2016, time for current git HEAD.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/igmpproxy/igmpproxy.hash | 2 +-
+ package/igmpproxy/igmpproxy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/igmpproxy/igmpproxy.hash b/package/igmpproxy/igmpproxy.hash
+index 98dc242..2e3a374 100644
+--- a/package/igmpproxy/igmpproxy.hash
++++ b/package/igmpproxy/igmpproxy.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  2be2171cf273678810283937f7752dc9b8402456d0a03ee55f06ca52fadf075f  igmpproxy-a731683d1a65956fa05024b0597b105fe6a3a122.tar.gz
++sha256 e60331031f85d1fb834c5272a134f32d32e7834718da19ba3f787dff68389a31  igmpproxy-f47644d8fa7266a784f3ec7b251e7d318bc2f0a9.tar.gz
+diff --git a/package/igmpproxy/igmpproxy.mk b/package/igmpproxy/igmpproxy.mk
+index 545a17e..8989c74 100644
+--- a/package/igmpproxy/igmpproxy.mk
++++ b/package/igmpproxy/igmpproxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IGMPPROXY_VERSION = a731683d1a65956fa05024b0597b105fe6a3a122
++IGMPPROXY_VERSION = f47644d8fa7266a784f3ec7b251e7d318bc2f0a9
+ IGMPPROXY_SITE = $(call github,pali,igmpproxy,$(IGMPPROXY_VERSION))
+ IGMPPROXY_AUTORECONF = YES
+ IGMPPROXY_LICENSE = GPL-2.0+
