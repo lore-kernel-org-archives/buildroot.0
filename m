@@ -1,32 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 15:33:34 +0200
-Subject: [Buildroot] [PATCH next 1/2] lvm2: add host package
-In-Reply-To: <20170522134015.54040-1-Vincent.Riera@imgtec.com>
-References: <20170522134015.54040-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170605153334.3cbccffe@free-electrons.com>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Mon, 5 Jun 2017 06:37:43 -0700
+Subject: [Buildroot] [PATCH v3 02/11] package/python-enum34: Switch
+ setup type to 'setuptools'
+In-Reply-To: <20170605150805.0e30910a@free-electrons.com>
+References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
+ <20170602235653.4655-3-andrew.smirnov@gmail.com>
+ <CAGm1_kuJ-oeQFXsPv4b-wB5uf6p4AXoUjJ4_14iQBjHeLmuHeg@mail.gmail.com>
+ <CAHQ1cqF8vM6MMGXrPw0ZCkYu2EqhsA3Un+rDv-CVwqLpjjDeqQ@mail.gmail.com>
+ <20170605150805.0e30910a@free-electrons.com>
+Message-ID: <CAHQ1cqG_+RV0hKgEMgmQPmTUtR_o5fe79WsmvXZKPpuK2DfcWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Jun 5, 2017 at 6:08 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 5 Jun 2017 06:02:52 -0700, Andrey Smirnov wrote:
+>
+>> Sorry, my bad, didn't make sure my patches was rebased against latest
+>> master. I'll drop this patch and re-spin v4 shortly.
+>
+> Please don't respin a v4 just for this change. I'll mark this patch as
+> Not applicable.
 
-On Mon, 22 May 2017 14:40:14 +0100, Vicente Olivert Riera wrote:
-
-> +HOST_LVM2_INSTALL_OPTS = DESTDIR=$(HOST_DIR) install
-
-This is wrong. Host installation should basically *never* use DESTDIR,
-but prefix instead. Since our autotools-package infrastructure already
-passes --prefix=$(HOST_DIR)/usr, you shouldn't have to override to
-override the HOST_LVM2_INSTALL_OPTS.
-
-But, this patch is in fact not needed. I'll reply on PATCH 2/2 why.
+Sure, that's even easier for me :-)
 
 Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Andrey Smirnov
