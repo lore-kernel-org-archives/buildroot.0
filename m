@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 16:07:10 +0200
-Subject: [Buildroot] [git commit] package/intel-microcode: bump version to
-	20170511
-Message-ID: <20170605140716.A1CAA825DD@busybox.osuosl.org>
+Date: Mon, 5 Jun 2017 16:07:55 +0200
+Subject: [Buildroot] [git commit] package/libass: bump version to 0.13.7
+Message-ID: <20170605140803.323B9825D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db04cda0d97184b30fb70794a6b0bb892fc1701b
+commit: https://git.buildroot.net/buildroot/commit/?id=b305185495087c2c5c28fd01a9e48b535640791a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 7925209..8f0a3fc 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index 53fd79d..d98b163 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256	096e39489eef67666be652e81fa372a06b74f39ea3d565dc0287242c668717e7	microcode-20151106.tgz
-+sha256 2f77fd2d87403b754d01a66c78a36a8b8ffc16dc3c50fb7aa2c4cd4da7f681a3  microcode-20170511.tgz
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index aefa99a..831e6c0 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,9 +4,9 @@
+-sha256 f8a874d104e3e72e2cc057e5a1710c650b10367486845a26e5ff28ed7a912c2d  libass-0.13.6.tar.xz
++sha256 7065e5f5fb76e46f2042a62e7c68d81e5482dbeeda24644db1bd066e44da7e9d  libass-0.13.7.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index aeae86a..41f027d 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20151106
-+INTEL_MICROCODE_VERSION = 20170511
- INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
--INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/25512/eng
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26798/eng
- INTEL_MICROCODE_STRIP_COMPONENTS = 0
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license.txt
+-LIBASS_VERSION = 0.13.6
++LIBASS_VERSION = 0.13.7
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
