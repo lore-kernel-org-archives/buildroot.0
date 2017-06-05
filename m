@@ -1,46 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 14:36:52 +0200
-Subject: [Buildroot] [git commit] openldap: bump version to 2.4.45
-Message-ID: <20170605123657.46FF57FD89@busybox.osuosl.org>
+Date: Mon, 5 Jun 2017 14:37:47 +0200
+Subject: [Buildroot] [PATCH] libiio: bump version to 0.10
+In-Reply-To: <20170602163631.34265-1-Vincent.Riera@imgtec.com>
+References: <20170602163631.34265-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170605143747.54b16efd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f44918d49c656ca1db33ca2d0fca1d086d737be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openldap/openldap.hash | 8 ++++----
- package/openldap/openldap.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Fri, 2 Jun 2017 17:36:31 +0100, Vicente Olivert Riera wrote:
+> Patch 0001 already included in this release:
+>   https://github.com/analogdevicesinc/libiio/commit/913c2cc740d60450e91e066cf38f5654936a6015
+> 
+> Patch 0002 already included in this release:
+>   https://github.com/analogdevicesinc/libiio/commit/6e5a40566ee44694b186d4c2cbcf5f8690d8bba4
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  ...ties.c-Add-a-check-for-newlocale-function.patch | 55 ----------------------
+>  .../0002-CMake-Test-tools-require-threads.patch    | 32 -------------
+>  package/libiio/libiio.hash                         |  4 +-
+>  package/libiio/libiio.mk                           |  2 +-
+>  4 files changed, 3 insertions(+), 90 deletions(-)
+>  delete mode 100644 package/libiio/0001-utilities.c-Add-a-check-for-newlocale-function.patch
+>  delete mode 100644 package/libiio/0002-CMake-Test-tools-require-threads.patch
 
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index 785c489..aec4aae 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,4 +1,4 @@
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.md5
--md5	693ac26de86231f8dcae2b4e9d768e51	openldap-2.4.44.tgz
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.sha1
--sha1	016a738d050a68d388602a74b5e991035cdba149	openldap-2.4.44.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.md5
-+md5 00ff8301277cdfd0af728a6927042a13  openldap-2.4.45.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.sha1
-+sha1 c98437385d3eaee80c9e2c09f3f0d4b7c140233d  openldap-2.4.45.tgz
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 2f738e5..90ff112 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENLDAP_VERSION = 2.4.44
-+OPENLDAP_VERSION = 2.4.45
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
