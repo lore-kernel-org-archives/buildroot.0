@@ -1,39 +1,32 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  5 Jun 2017 18:16:58 +0200
-Subject: [Buildroot] [PATCH v2] package/lcdproc: add libpng optional
-	dependency
-Message-ID: <20170605161658.20988-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 18:22:38 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x264: bump version
+In-Reply-To: <20170605162238.8413-1-bernd.kuhls@t-online.de>
+References: <20170605162238.8413-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605162238.8413-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/b68/b68f54404a7d412d639ebb6d052412eea6ee3bf1
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: add missing space
----
- package/lcdproc/lcdproc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/x264/x264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-index d86eb33..c6476eb 100644
---- a/package/lcdproc/lcdproc.mk
-+++ b/package/lcdproc/lcdproc.mk
-@@ -18,4 +18,11 @@ endif
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index d1bc76701..69ec4ccea 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LCDPROC_DEPENDENCIES = freetype ncurses zlib
- 
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LCDPROC_DEPENDENCIES += libpng
-+LCDPROC_CONF_OPTS += --enable-libpng
-+else
-+LCDPROC_CONF_OPTS += --disable-libpng
-+endif
-+
- $(eval $(autotools-package))
+-X264_VERSION = 97eaef2ab82a46d13ea5e00270712d6475fbe42b
++X264_VERSION = df79067c0cf33da712d344b5f8869be7eaf326f3
+ X264_SITE = git://git.videolan.org/x264.git
+ X264_LICENSE = GPL-2.0+
+ X264_DEPENDENCIES = host-pkgconf
 -- 
-2.9.4
+2.11.0
