@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 12:08:12 +0200
-Subject: [Buildroot] [PATCH] gcc: add upstream patch to fix build of
- GCC6 with GCC7
-In-Reply-To: <20170601073758.9833-1-joerg.krause@embedded.rocks>
-References: <20170601073758.9833-1-joerg.krause@embedded.rocks>
-Message-ID: <20170605120812.46c4496f@free-electrons.com>
+Date: Mon, 5 Jun 2017 12:08:28 +0200
+Subject: [Buildroot] [PATCH] gcc: allow gcc 7.1 for microblaze
+ architecture
+In-Reply-To: <20170601090236.GA23718@waldemar-brodkorb.de>
+References: <20170601090236.GA23718@waldemar-brodkorb.de>
+Message-ID: <20170605120828.66008a28@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  1 Jun 2017 09:37:58 +0200, J?rg Krause wrote:
-> Building host-gcc-initial with GCC7 on the host fails due to the
-> comparison of a pointer to an integer in ubsan_use_new_style_p, which
-> is forbidden by ISO C++:
+On Thu, 1 Jun 2017 11:02:36 +0200, Waldemar Brodkorb wrote:
+> Add patch from gcc upstream master to fix an issue.
 > 
-> ubsan.c:1474:23: error: ISO C++ forbids comparison between pointer and
-> integer [-fpermissive]
->        || xloc.file == '\0' || xloc.file[0] == '\xff'
-> 
-> Backported from:
-> https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=239971
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  .../6.3.0/942-ubsan-fix-check-empty-string.patch   | 40 ++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/gcc/6.3.0/942-ubsan-fix-check-empty-string.patch
+>  package/gcc/7.1.0/0892-microblaze-Revert.patch | 40 ++++++++++++++++++++++++++
+>  package/gcc/Config.in.host                     |  1 -
+>  2 files changed, 40 insertions(+), 1 deletion(-)
+>  create mode 100644 package/gcc/7.1.0/0892-microblaze-Revert.patch
 
-Applied to master, thanks. Peter: do we want this patch in the LTS
-branch? We already had gcc 6.x available in the LTS branch, do we want
-to make sure it builds properly for people using gcc 7.x as their host
-compiler?
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
