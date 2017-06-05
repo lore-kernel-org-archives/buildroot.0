@@ -1,44 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 15:56:00 +0200
-Subject: [Buildroot] [git commit] package/imlib2: bump version to 1.4.10
-Message-ID: <20170605140109.BD19D82A15@busybox.osuosl.org>
+Date: Mon, 5 Jun 2017 15:56:51 +0200
+Subject: [Buildroot] [git commit] package/inadyn: bump version to 2.1
+Message-ID: <20170605140109.CCFC682A15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b95898c4977d72595fc9037cb0f1601943248f3
+commit: https://git.buildroot.net/buildroot/commit/?id=d9ea0b3f8a28be7a51dbac2e3ec516e59aa9565a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Switched to tarball provided by upstream, autoreconf is not needed
+anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imlib2/imlib2.hash | 6 +++---
- package/imlib2/imlib2.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/inadyn/inadyn.hash |  4 +++-
+ package/inadyn/inadyn.mk   | 12 +++---------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
-index 6e1faaf..0c234c8 100644
---- a/package/imlib2/imlib2.hash
-+++ b/package/imlib2/imlib2.hash
-@@ -1,3 +1,3 @@
--# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.4.9/
--md5	23ef8b49f2793bc63b16839a2062298b	imlib2-1.4.9.tar.bz2
--sha1	f389d67c337b604a365e620b0083b2d342dd724e	imlib2-1.4.9.tar.bz2
-+# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.4.10/
-+md5 a0de8524592bbd9f24fcc6cb8352137c  imlib2-1.4.10.tar.bz2
-+sha1 664df65c6265a2825d685d2f3a4f0d072eb626ac  imlib2-1.4.10.tar.bz2
-diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
-index 7da032f..b5012a6 100644
---- a/package/imlib2/imlib2.mk
-+++ b/package/imlib2/imlib2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
+index a4e60c9..f573be2 100644
+--- a/package/inadyn/inadyn.hash
++++ b/package/inadyn/inadyn.hash
+@@ -1,2 +1,4 @@
++# From https://github.com/troglobit/inadyn/releases/download/v2.1/inadyn-2.1.tar.xz.md5
++md5 b410684e38e628284a631ec763c2fdb8  inadyn-2.1.tar.xz
+ # Locally computed
+-sha256	763c53eb3856decfe8b921cab8a54b428b079a62264fbcf6c89690713d63529a  inadyn-v2.0.tar.gz
++sha256 87639a7c1ddc047074601ad60188279a2a0d9393367f046c153de0e24586b3ac  inadyn-2.1.tar.xz
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 5e26785..0ef8b5a 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,19 +4,13 @@
  #
  ################################################################################
  
--IMLIB2_VERSION = 1.4.9
-+IMLIB2_VERSION = 1.4.10
- IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
- IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
- IMLIB2_LICENSE = imlib2 license
+-INADYN_VERSION = v2.0
+-INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
++INADYN_VERSION = 2.1
++INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
++INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
+ INADYN_LICENSE = GPL-2.0+
+ INADYN_LICENSE_FILES = COPYING
+-INADYN_AUTORECONF = YES
+ INADYN_DEPENDENCIES = host-pkgconf libconfuse libite
+ 
+-# Needed for autoreconf to work properly, see ./autogen.sh
+-define INADYN_FIXUP_M4_DIR
+-	mkdir $(@D)/m4
+-endef
+-INADYN_POST_EXTRACT_HOOKS += INADYN_FIXUP_M4_DIR
+-
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ INADYN_CONF_OPTS += --enable-openssl
+ INADYN_DEPENDENCIES += openssl
