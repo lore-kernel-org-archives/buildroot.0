@@ -1,37 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:54:09 +0200
-Subject: [Buildroot] [PATCH] linux: fix name of config variable
-In-Reply-To: <20170604094839.23541-1-yann.morin.1998@free.fr>
-References: <20170604094839.23541-1-yann.morin.1998@free.fr>
-Message-ID: <20170605115409.5e7c55d8@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 11:54:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libass: bump version to 0.13.7
+Message-ID: <20170605095451.8541-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun,  4 Jun 2017 11:48:39 +0200, Yann E. MORIN wrote:
-> In 4c10eedc1 (systemd: enable required kernel features), we added
-> setting a few required kernel features to ensure systemd works.
-> 
-> However, there was a typo for one of the variables: CONFIG_TMPFS_XATTR
-> was written as CONFIG_TMPFS_POSIX_XATTR, which does not exist (and never
-> ever existed, at least not since 2.6.12)...
-> 
-> Fixes #9926.
-
-The patch looks good, but I'm not sure why you say it fixes #9926. It
-has been noticed as part of the #9926 discussion, but to me it doesn't
-fix this bug.
-
-Could you clarify?
-
-Thanks,
-
-Thomas
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index 53fd79da4..d98b163f3 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f8a874d104e3e72e2cc057e5a1710c650b10367486845a26e5ff28ed7a912c2d  libass-0.13.6.tar.xz
++sha256 7065e5f5fb76e46f2042a62e7c68d81e5482dbeeda24644db1bd066e44da7e9d  libass-0.13.7.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index aeae86a89..41f027d4c 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASS_VERSION = 0.13.6
++LIBASS_VERSION = 0.13.7
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
