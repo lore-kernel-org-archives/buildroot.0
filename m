@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:14:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/graphite2: bump version to
- 1.3.10
-In-Reply-To: <20170604130709.29964-1-bernd.kuhls@t-online.de>
-References: <20170604130709.29964-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605111429.529e7790@free-electrons.com>
+Date: Mon, 5 Jun 2017 11:14:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/granite: bump version to 0.4.1
+In-Reply-To: <20170604130514.29851-1-bernd.kuhls@t-online.de>
+References: <20170604130514.29851-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605111433.5e61887c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  4 Jun 2017 15:07:09 +0200, Bernd Kuhls wrote:
-> Added sha256 hash.
-> 
+On Sun,  4 Jun 2017 15:05:14 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/graphite2/0001-disable-double-promotion.patch | 8 +++++---
->  package/graphite2/graphite2.hash                      | 6 ++++--
->  package/graphite2/graphite2.mk                        | 2 +-
->  3 files changed, 10 insertions(+), 6 deletions(-)
+>  package/granite/granite.hash | 6 +++---
+>  package/granite/granite.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
