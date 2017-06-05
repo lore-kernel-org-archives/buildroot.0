@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 15:08:05 +0200
-Subject: [Buildroot] [PATCH v3 02/11] package/python-enum34: Switch
- setup type to 'setuptools'
-In-Reply-To: <CAHQ1cqF8vM6MMGXrPw0ZCkYu2EqhsA3Un+rDv-CVwqLpjjDeqQ@mail.gmail.com>
-References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
- <20170602235653.4655-3-andrew.smirnov@gmail.com>
- <CAGm1_kuJ-oeQFXsPv4b-wB5uf6p4AXoUjJ4_14iQBjHeLmuHeg@mail.gmail.com>
- <CAHQ1cqF8vM6MMGXrPw0ZCkYu2EqhsA3Un+rDv-CVwqLpjjDeqQ@mail.gmail.com>
-Message-ID: <20170605150805.0e30910a@free-electrons.com>
+Date: Mon, 5 Jun 2017 15:08:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iprutils: bump version to
+ 2.4.14.1
+In-Reply-To: <20170605110620.25326-1-bernd.kuhls@t-online.de>
+References: <20170605110620.25326-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605150822.10b58ebc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,18 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 5 Jun 2017 06:02:52 -0700, Andrey Smirnov wrote:
+On Mon,  5 Jun 2017 13:06:20 +0200, Bernd Kuhls wrote:
+> Removed patches applied upstream:
+> 
+> 0001-iprutils-Don-t-use-gettext.patch
+> https://sourceforge.net/p/iprdd/iprutils/ci/4512cfb915b492e9eed65f7b9f72fc1c1bd097c2/
+> 
+> 0002-configure.ac-use-pow-instead-of-matherr-for-libm-che.patch
+> https://sourceforge.net/p/iprdd/iprutils/ci/d7cfe35b9706da357814d4bdd21563396733753c/
+> 
+> 0003-iprlib-fixes-for-compatibility-with-musl.patch
+> https://sourceforge.net/p/iprdd/iprutils/ci/ed9da50d114ea5e97f3cf599fb7b305e0cec18d6/
+> 
+> Autoreconf is not needed anymore, added upstream hashes, switched _SITE
+> to https.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../iprutils/0001-iprutils-Don-t-use-gettext.patch | 48 ----------------------
+>  ...c-use-pow-instead-of-matherr-for-libm-che.patch | 36 ----------------
+>  ...-iprlib-fixes-for-compatibility-with-musl.patch | 34 ---------------
+>  package/iprutils/iprutils.hash                     |  5 ++-
+>  package/iprutils/iprutils.mk                       |  6 +--
+>  5 files changed, 6 insertions(+), 123 deletions(-)
+>  delete mode 100644 package/iprutils/0001-iprutils-Don-t-use-gettext.patch
+>  delete mode 100644 package/iprutils/0002-configure.ac-use-pow-instead-of-matherr-for-libm-che.patch
+>  delete mode 100644 package/iprutils/0003-iprlib-fixes-for-compatibility-with-musl.patch
 
-> Sorry, my bad, didn't make sure my patches was rebased against latest
-> master. I'll drop this patch and re-spin v4 shortly.
-
-Please don't respin a v4 just for this change. I'll mark this patch as
-Not applicable.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
