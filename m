@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:13:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gptfdisk: bump version to 1.0.1
-In-Reply-To: <20170604130343.29696-1-bernd.kuhls@t-online.de>
-References: <20170604130343.29696-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605111326.03456ec0@free-electrons.com>
+Date: Mon, 5 Jun 2017 11:13:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gqrx: bump version to 2.6.1
+In-Reply-To: <20170604130422.29773-1-bernd.kuhls@t-online.de>
+References: <20170604130422.29773-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605111334.2a7667ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  4 Jun 2017 15:03:43 +0200, Bernd Kuhls wrote:
-> Added sha256 hash.
-> 
+On Sun,  4 Jun 2017 15:04:22 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/gptfdisk/gptfdisk.hash | 8 +++++---
->  package/gptfdisk/gptfdisk.mk   | 2 +-
->  2 files changed, 6 insertions(+), 4 deletions(-)
+>  package/gqrx/gqrx.hash | 2 +-
+>  package/gqrx/gqrx.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
