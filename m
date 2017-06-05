@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:50:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/doxygen: bump version to 1.8.13,
- switch to cmake
-In-Reply-To: <20170602181610.29404-1-bernd.kuhls@t-online.de>
-References: <20170602181610.29404-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605115031.74020112@free-electrons.com>
+Date: Mon, 5 Jun 2017 11:51:01 +0200
+Subject: [Buildroot] [PATCH] package/doxygen: bump to 1.8.13
+In-Reply-To: <20170604201642.28799-1-romain.naour@gmail.com>
+References: <20170604201642.28799-1-romain.naour@gmail.com>
+Message-ID: <20170605115101.63e3c92a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  2 Jun 2017 20:16:10 +0200, Bernd Kuhls wrote:
-> Doxygen switched to cmake with release 1.8.10:
-> http://www.stack.nl/~dimitri/doxygen/manual/changelog.html#log_1_8_10
+On Sun,  4 Jun 2017 22:16:42 +0200, Romain Naour wrote:
+> The version 1.8.9.1 of Doxygen doesn't support flex >= 2.5.33, so bump
+> to 1.8.13 and switch to CMake build system.
 > 
-> and added support for flex 2.6.0 with release 1.8.11:
-> http://www.stack.nl/~dimitri/doxygen/manual/changelog.html#log_1_8_11
+> Also backport an upstream patch fixing a segfault in xmlgen [1].
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/ba1/ba1444709523c59393aaaa3710e9933bafacc6b5/
+> [1] https://github.com/doxygen/doxygen/pull/555
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Fixes:
+> http://autobuild.buildroot.net/results/43d/43de5eb7282ec8283ad2744309b91addf7cce0d3
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
 > ---
->  package/doxygen/doxygen.hash |  2 +-
->  package/doxygen/doxygen.mk   | 19 ++-----------------
->  2 files changed, 3 insertions(+), 18 deletions(-)
+>  ...1.8.13-Regression-Segfault-building-the-b.patch | 30 ++++++++++++++++++++++
+>  package/doxygen/doxygen.hash                       |  2 +-
+>  package/doxygen/doxygen.mk                         | 19 ++------------
+>  3 files changed, 33 insertions(+), 18 deletions(-)
+>  create mode 100644 package/doxygen/0001-Bug-776791-1.8.13-Regression-Segfault-building-the-b.patch
 
-Applied to master, thanks.
+Since I've applied Bernd's patch first, I have reworked your patch to
+only add the patch fixing the segfault, and dropped the other changes.
+
+Thanks!
 
 Thomas
 -- 
