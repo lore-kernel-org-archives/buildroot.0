@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:12:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hwloc: bump version to 1.11.7
-In-Reply-To: <20170604133622.15170-1-bernd.kuhls@t-online.de>
-References: <20170604133622.15170-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605111240.567795bb@free-electrons.com>
+Date: Mon, 5 Jun 2017 11:12:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnuplot: bump version to 5.0.6
+In-Reply-To: <20170604104024.2032-1-bernd.kuhls@t-online.de>
+References: <20170604104024.2032-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605111246.704e5ad1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  4 Jun 2017 15:36:22 +0200, Bernd Kuhls wrote:
-> Added md5 & sha256 hashes, removed patch applied upstream:
-> https://github.com/open-mpi/hwloc/commit/f08f4629f93e927e10143eaf6378d2619aa27954
+On Sun,  4 Jun 2017 12:40:24 +0200, Bernd Kuhls wrote:
+> Added sha256 hash.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...-Makefile.am-fix-install-man-race-conditi.patch | 35 ----------------------
->  package/hwloc/hwloc.hash                           |  7 +++--
->  package/hwloc/hwloc.mk                             |  6 ++--
->  3 files changed, 7 insertions(+), 41 deletions(-)
->  delete mode 100644 package/hwloc/0001-utils-hwloc-Makefile.am-fix-install-man-race-conditi.patch
+>  package/gnuplot/gnuplot.hash | 8 +++++---
+>  package/gnuplot/gnuplot.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
