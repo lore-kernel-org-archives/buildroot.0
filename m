@@ -1,58 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jun 2017 12:39:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/inadyn: bump version to 2.1
-Message-ID: <20170605103942.22179-1-bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 12:46:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: bump version to
+	20170511
+Message-ID: <20170605104609.23020-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched to tarball provided by upstream, autoreconf is not needed
-anymore.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/inadyn/inadyn.hash |  4 +++-
- package/inadyn/inadyn.mk   | 12 +++---------
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index a4e60c96c..f573be286 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,2 +1,4 @@
-+# From https://github.com/troglobit/inadyn/releases/download/v2.1/inadyn-2.1.tar.xz.md5
-+md5 b410684e38e628284a631ec763c2fdb8  inadyn-2.1.tar.xz
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 7925209b2..8f0a3fc84 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,2 +1,2 @@
  # Locally computed
--sha256	763c53eb3856decfe8b921cab8a54b428b079a62264fbcf6c89690713d63529a  inadyn-v2.0.tar.gz
-+sha256 87639a7c1ddc047074601ad60188279a2a0d9393367f046c153de0e24586b3ac  inadyn-2.1.tar.xz
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 5e26785b5..0ef8b5a52 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -4,19 +4,13 @@
+-sha256	096e39489eef67666be652e81fa372a06b74f39ea3d565dc0287242c668717e7	microcode-20151106.tgz
++sha256 2f77fd2d87403b754d01a66c78a36a8b8ffc16dc3c50fb7aa2c4cd4da7f681a3  microcode-20170511.tgz
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index aefa99a1c..831e6c094 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--INADYN_VERSION = v2.0
--INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
-+INADYN_VERSION = 2.1
-+INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
-+INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
- INADYN_LICENSE_FILES = COPYING
--INADYN_AUTORECONF = YES
- INADYN_DEPENDENCIES = host-pkgconf libconfuse libite
- 
--# Needed for autoreconf to work properly, see ./autogen.sh
--define INADYN_FIXUP_M4_DIR
--	mkdir $(@D)/m4
--endef
--INADYN_POST_EXTRACT_HOOKS += INADYN_FIXUP_M4_DIR
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- INADYN_CONF_OPTS += --enable-openssl
- INADYN_DEPENDENCIES += openssl
+-INTEL_MICROCODE_VERSION = 20151106
++INTEL_MICROCODE_VERSION = 20170511
+ INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+-INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/25512/eng
++INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/26798/eng
+ INTEL_MICROCODE_STRIP_COMPONENTS = 0
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license.txt
 -- 
 2.11.0
