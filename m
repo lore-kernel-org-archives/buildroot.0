@@ -1,51 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 5 Jun 2017 20:08:42 +0300
-Subject: [Buildroot] [PATCH 1/1] package/icu: needs host gcc >= 4.8
-In-Reply-To: <20170605160317.28701-1-bernd.kuhls@t-online.de>
-References: <20170605160317.28701-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605170842.cjhvqqbxyfxel7vh@tarshish>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  5 Jun 2017 19:13:06 +0200
+Subject: [Buildroot] [autobuild-run] autobuild-run: Add an exception for CS
+	nios2 2017.02 with flann
+Message-ID: <20170605171306.7941-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+This toolchain is affected by binutils PR19405 so use an autobuilder
+exception like for boost and qt5base (gui).
 
-On Mon, Jun 05, 2017 at 06:03:17PM +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/2b3/2b3a9be1780857db8827ea70df9d8699116a5df7/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/icu/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/icu/Config.in b/package/icu/Config.in
-> index 32f35b9d9..4eb0df5a2 100644
-> --- a/package/icu/Config.in
-> +++ b/package/icu/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_ICU
->  	bool "icu"
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> @@ -30,4 +31,5 @@ comment "icu needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
->  	depends on !BR2_BINFMT_FLAT
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->  		!BR2_TOOLCHAIN_HAS_THREADS || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-> +		!BR2_HOST_GCC_AT_LEAST_4_8
+https://sourceware.org/bugzilla/show_bug.cgi?id=19405
 
-Please update the comment text as well. The kodi dependencies comment, for 
-example, mentions both the gcc and the host gcc version requirements.
+Fixes:
+http://autobuild.buildroot.net/results/b13/b13377f03acccedc0441fb1e37e93f8e0b60da5e
 
-baruch
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ scripts/autobuild-run | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 24cdf58..c8921a5 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -494,6 +494,10 @@ def fixup_config(**kwargs):
+     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
+        'BR2_PACKAGE_QT_GUI_MODULE=y\n' in configlines:
+         return False
++    # The cs nios2 2017.02 toolchain is affected by binutils PR19405
++    if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
++       'BR2_PACKAGE_FLANN=y\n' in configlines:
++        return False
+     # or1k affected by binutils PR21464
+     if 'BR2_or1k=y\n' in configlines and \
+        'BR2_PACKAGE_QT_GUI_MODULE=y\n' in configlines:
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.4
