@@ -1,36 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jun 2017 17:48:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuradio: needs boost regex module
-Message-ID: <20170605154822.21596-1-bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 17:59:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: fix legal-info
+Message-ID: <20170605155956.28592-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since
-https://git.gnuradio.org/cgit/gnuradio.git/commit/cmake/Modules/GrBoost.cmake?id=27fbbf22e359e8ec4a04399f3dc139f8c25031cb
-gnuradio needs the boost regex module.
-
 Fixes
-http://autobuild.buildroot.net/results/d71/d71278032c083c2c4b1bf20b81629225f8965c6e/
+http://autobuild.buildroot.net/results/8ea/8eaa8c4027bca26d5a21da83f67358a43627f1b2/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gnuradio/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libhdhomerun/libhdhomerun.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 0291d7096..178bdc886 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_GNURADIO
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_REGEX
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	help
+diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
+index 4240ce163..b624400b5 100644
+--- a/package/libhdhomerun/libhdhomerun.mk
++++ b/package/libhdhomerun/libhdhomerun.mk
+@@ -8,7 +8,7 @@ LIBHDHOMERUN_VERSION = 20161117
+ LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
+ LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
+ LIBHDHOMERUN_LICENSE = LGPL-2.1+
+-LIBHDHOMERUN_LICENSE_FILES = lgpl.txt
++LIBHDHOMERUN_LICENSE_FILES = LICENSE
+ LIBHDHOMERUN_INSTALL_STAGING = YES
+ 
+ define LIBHDHOMERUN_BUILD_CMDS
 -- 
 2.11.0
