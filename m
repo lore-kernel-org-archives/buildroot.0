@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 15:47:12 +0200
-Subject: [Buildroot] [PATCH] memcached: bump version to 1.4.37
-In-Reply-To: <20170605100619.45450-1-Vincent.Riera@imgtec.com>
-References: <20170605100619.45450-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170605154712.3846476a@free-electrons.com>
+Date: Mon, 5 Jun 2017 15:10:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iputils: bump version to
+ s20161105
+In-Reply-To: <20170605114315.11747-1-bernd.kuhls@t-online.de>
+References: <20170605114315.11747-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605151003.6ea4f90c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 5 Jun 2017 11:06:19 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Mon,  5 Jun 2017 13:43:15 +0200, Bernd Kuhls wrote:
+> Bump package to latest tagged release, fix typo and check-package
+> errors.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/memcached/memcached.hash | 6 +++---
->  package/memcached/memcached.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/iputils/Config.in    | 5 +++--
+>  package/iputils/iputils.hash | 2 +-
+>  package/iputils/iputils.mk   | 4 ++--
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
