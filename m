@@ -1,40 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 5 Jun 2017 12:27:33 +0300
-Subject: [Buildroot] [PATCH] systemd: add upstream security fix
-In-Reply-To: <20170605111829.2c0942b4@free-electrons.com>
-References: <d116b87e5aea0bf5820ba5af0e048f89fafa4ee8.1496600674.git.baruch@tkos.co.il>
- <20170605111829.2c0942b4@free-electrons.com>
-Message-ID: <20170605092733.bpy3fvqazetakp4q@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jun 2017 11:35:45 +0200
+Subject: [Buildroot] [git commit] package/erlang-jiffy: set version in
+	jiffy.app.src
+Message-ID: <20170605093711.75D2482A12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=997b54aaad18f41a45db750f079703dd38647df1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Jun 05, 2017 at 11:18:29AM +0200, Thomas Petazzoni wrote:
-> On Sun,  4 Jun 2017 21:24:34 +0300, Baruch Siach wrote:
-> > Fixes CVE-2017-9217: remote DoS (daemon crash) via a crafted DNS response with
-> > an empty question section.
-> > 
-> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/systemd/systemd.hash | 1 +
-> >  package/systemd/systemd.mk   | 3 +++
-> >  2 files changed, 4 insertions(+)
-> 
-> Applied to master, thanks. Peter: I guess this should go to the LTS
-> branch. Baruch, can you confirm it applies to the systemd version we
-> have in the LTS branch?
+Fixes:
+http://autobuild.buildroot.net/results/5c0/5c045a517ccdc97244a4cfca54465dc8d5fcc717
 
-Cherry-pick of systemd commit a924f43f30f9c applies cleanly to systemd v232 
-that we have in the LTS branch. I didn't build/test though.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang-jiffy/erlang-jiffy.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
+index 674c80f..3139454 100644
+--- a/package/erlang-jiffy/erlang-jiffy.mk
++++ b/package/erlang-jiffy/erlang-jiffy.mk
+@@ -11,4 +11,10 @@ ERLANG_JIFFY_LICENSE = MIT (core), \
+ 	BSD-3-Clause (tests)
+ ERLANG_JIFFY_LICENSE_FILES = LICENSE
+ 
++# Set version manually in jiffy.app.src otherwise "git describe" is used.
++define ERLANG_JIFFY_SET_VERSION_HOOK
++	$(SED) 's/{vsn, git}/{vsn, "$(ERLANG_JIFFY_VERSION)"}/' $(@D)/src/jiffy.app.src
++endef
++ERLANG_JIFFY_POST_PATCH_HOOKS = ERLANG_JIFFY_SET_VERSION_HOOK
++
+ $(eval $(rebar-package))
