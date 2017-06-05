@@ -1,46 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jun 2017 18:22:37 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x264: disable optional ffmpeg
-	support
-Message-ID: <20170605162238.8413-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 5 Jun 2017 18:42:40 +0200
+Subject: [Buildroot] [PATCH] linux: fix name of config variable
+In-Reply-To: <20170605115409.5e7c55d8@free-electrons.com>
+References: <20170604094839.23541-1-yann.morin.1998@free.fr>
+ <20170605115409.5e7c55d8@free-electrons.com>
+Message-ID: <20170605164240.GC3944@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In buildroot ffmpeg uses x264 as optional dependency if
-BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
+Thomas, All,
 
-If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
-support before x264 itself is build, x264 picks up certain ffmpeg libs
-as optional dependency leading to build errors because x264 does not
-correctly link statically against ffmpeg.
+On 2017-06-05 11:54 +0200, Thomas Petazzoni spake thusly:
+> On Sun,  4 Jun 2017 11:48:39 +0200, Yann E. MORIN wrote:
+> > In 4c10eedc1 (systemd: enable required kernel features), we added
+> > setting a few required kernel features to ensure systemd works.
+> > 
+> > However, there was a typo for one of the variables: CONFIG_TMPFS_XATTR
+> > was written as CONFIG_TMPFS_POSIX_XATTR, which does not exist (and never
+> > ever existed, at least not since 2.6.12)...
+> > 
+> > Fixes #9926.
+> 
+> The patch looks good, but I'm not sure why you say it fixes #9926. It
+> has been noticed as part of the #9926 discussion, but to me it doesn't
+> fix this bug.
+> 
+> Could you clarify?
 
-To avoid a circular dependency and to avoid teaching x264 how to
-correctly link statically with ffmpeg we just disable all ffmpeg-
-related options.
+OK, I mis-read the comment in #9926. I does not fix it.
 
-Fixes
-http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
+Still, the patch is meaningful on its own. 
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x264/x264.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Can you just drop the "Fixes #9926" part before applying, please? ;-)
 
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 7214c967f..d1bc76701 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -10,7 +10,7 @@ X264_LICENSE = GPL-2.0+
- X264_DEPENDENCIES = host-pkgconf
- X264_LICENSE_FILES = COPYING
- X264_INSTALL_STAGING = YES
--X264_CONF_OPTS = --disable-avs
-+X264_CONF_OPTS = --disable-avs --disable-lavf --disable-swscale
- 
- ifeq ($(BR2_i386)$(BR2_x86_64),y)
- # yasm needed for assembly files
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
