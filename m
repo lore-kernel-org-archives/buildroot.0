@@ -1,43 +1,81 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 5 Jun 2017 11:06:19 +0100
-Subject: [Buildroot] [PATCH] memcached: bump version to 1.4.37
-Message-ID: <20170605100619.45450-1-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jun 2017 12:06:58 +0200
+Subject: [Buildroot] [git commit] gcc: allow gcc 7.1 for microblaze
+	architecture
+Message-ID: <20170605100709.65B977FBDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=64da4fa9f14ca2adf8d12c627b240187c7097072
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index f9f68d530..1a88cc728 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,4 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.36.tar.gz.sha1
--sha1 519b417515206b0b95ff9bf14106a891f6a2252e  memcached-1.4.36.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.37.tar.gz.sha1
-+sha1 6a6c2ab70e9470fef939afff1cb58b7602077611  memcached-1.4.37.tar.gz
- # Calculated based on the hash above
--sha256 773b6bb20bf80223ca6a15d75f570fbab346ad11ec98595e5af5e33f54bd82d8  memcached-1.4.36.tar.gz
-+sha256 2f335ab9110ce39036c5271ef39a582a852e424bc9659e421844073cfdf8606b  memcached-1.4.37.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 90ede7da1..087be570a 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.4.36
-+MEMCACHED_VERSION = 1.4.37
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--- 
-2.13.0
+Add patch from gcc upstream master to fix an issue.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/7.1.0/0892-microblaze-Revert.patch | 40 ++++++++++++++++++++++++++
+ package/gcc/Config.in.host                     |  1 -
+ 2 files changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/package/gcc/7.1.0/0892-microblaze-Revert.patch b/package/gcc/7.1.0/0892-microblaze-Revert.patch
+new file mode 100644
+index 0000000..7026d0e
+--- /dev/null
++++ b/package/gcc/7.1.0/0892-microblaze-Revert.patch
+@@ -0,0 +1,40 @@
++From 707a69dfb56a2976e2b5c010f0e5cb2ac9905a07 Mon Sep 17 00:00:00 2001
++From: eager <eager@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Sat, 27 May 2017 18:29:40 +0000
++Subject: [PATCH] 	Revert: 	2016-01-21  Ajit Agarwal 
++ <ajitkum@xilinx.com>
++
++	See https://gcc.gnu.org/ml/gcc/2017-05/msg00221.html.
++
++	* config/microblaze/microblaze.h
++	(FIXED_REGISTERS): Update in macro.
++	(CALL_USED_REGISTERS): Update in macro.
++
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 248540 138bc75d-0d04-0410-961f-82ee72b054a4
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
++index 66e4ef5..2c9ece1 100644
++--- a/gcc/config/microblaze/microblaze.h
+++++ b/gcc/config/microblaze/microblaze.h
++@@ -269,14 +269,14 @@ extern enum pipeline_type microblaze_pipe;
++ #define FIXED_REGISTERS							\
++ {									\
++   1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,			\
++-  1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
+++  1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
++   1, 1, 1, 1 								\
++ }
++ 
++ #define CALL_USED_REGISTERS						\
++ {									\
++   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,			\
++-  1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
+++  1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			\
++   1, 1, 1, 1								\
++ }
++ #define GP_REG_FIRST    0
++-- 
++2.1.4
++
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 2b78b29..5dcaa03 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -67,7 +67,6 @@ config BR2_GCC_VERSION_7_X
+ 	bool "gcc 7.x"
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_arc
+-	depends on !BR2_microblaze
+ 	depends on !BR2_or1k
+ 	# Unsupported MIPS cores
+ 	depends on !BR2_mips_m6250 && !BR2_mips_p6600
