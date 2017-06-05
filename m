@@ -1,62 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jun 2017 13:30:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hiawatha: fix build when c++
-	support is disabled
-Message-ID: <20170605113010.3119-1-bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 13:38:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exiv2: disable on musl
+Message-ID: <20170605113843.11215-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Musl build is broken:
+
+/home/buildroot/build/instance-0/output/build/exiv2-910f3507795e1930ae216c9febee0bf9a88e99c0/src/actions.cpp:2052:32:
+ error: 'PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP' was not declared in this scope
+
+According to http://www.openwall.com/lists/musl/2017/02/20/3
+the define is not available on musl.
+
 Fixes
-http://autobuild.buildroot.net/results/c04/c04ff29b83c020573add597c355c57a6d9c9761d/
+http://autobuild.buildroot.net/results/283/28334a8a0b23c7c8260023b9a3aa15e8dd7613d0/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-cmake-allow-build-without-c.patch         | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/hiawatha/0001-cmake-allow-build-without-c.patch
+ package/exiv2/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/hiawatha/0001-cmake-allow-build-without-c.patch b/package/hiawatha/0001-cmake-allow-build-without-c.patch
-new file mode 100644
-index 000000000..d264d621c
---- /dev/null
-+++ b/package/hiawatha/0001-cmake-allow-build-without-c.patch
-@@ -0,0 +1,34 @@
-+From 784e46afd7530f3010726ba73cc1a81059eae8bf Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 5 Jun 2017 13:26:18 +0200
-+Subject: [PATCH] cmake: allow build without c++
-+
-+By default cmake also searches for a c++ compiler:
-+https://cmake.org/cmake/help/v3.7/command/project.html
-+"By default C and CXX are enabled if no language options are given."
-+
-+This patch restricts the compiler to C to fix a build error detected
-+by the buildroot autobuilders:
-+http://autobuild.buildroot.net/results/c04/c04ff29b83c020573add597c355c57a6d9c9761d/build-end.log
-+
-+Patch sent upstream: https://github.com/hsleisink/hiawatha/pull/30
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 4f28d76..e8051fc 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required(VERSION 3.0)
-+-project(Hiawatha VERSION 10.6)
-++project(Hiawatha VERSION 10.6 LANGUAGES C)
-+ 
-+ # Compiler
-+ set(CMAKE_C_FLAGS "-O2 -Wall -Wextra ${CMAKE_C_FLAGS}")
-+-- 
-+2.11.0
-+
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+index 7358283a6..6490f146d 100644
+--- a/package/exiv2/Config.in
++++ b/package/exiv2/Config.in
+@@ -1,12 +1,14 @@
+-comment "exiv2 needs a toolchain w/ C++, wchar, dynamic library, threads"
++comment "exiv2 needs a uClibc or glibc toolchain w/ C++, wchar, dynamic library, threads"
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_EXIV2
+ 	bool "exiv2"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Exiv2 is a C++ library and a command line utility to manage
 -- 
 2.11.0
