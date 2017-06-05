@@ -1,54 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  5 Jun 2017 23:26:04 +0300
-Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.7
-Message-ID: <4623c3a5d42bad4ce5bac2cbe109a444f7189688.1496694364.git.baruch@tkos.co.il>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Mon,  5 Jun 2017 13:41:51 -0700
+Subject: [Buildroot] [PATCH] package/socat: Fix TABDLY,
+	CSIZE and CRDLY shifts for PowerPC
+Message-ID: <20170605204151.1563-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix possible timing attack on EdDSA session key.
+As can be seen in linux/arch/powerpc/include/uapi/asm/termbits.h those
+constants are defined as (note that those are octal numbers):
 
-https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
+\#define TABDLY	00006000
+\#define CSIZE	00001400
+\#define CRDLY	00030000
 
-Add upstream provided SHA1 hash.
+which gives shifts of 10, 8 and 12. Adjust socat.mk accordingly to
+reflect that difference.
 
-Switch to https download for better corporate firewall compatibility.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Mark Hinds <zoronic@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/libgcrypt/libgcrypt.hash | 4 +++-
- package/libgcrypt/libgcrypt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/socat/socat.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 48bbd6af549d..5a833d59e629 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,2 +1,4 @@
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
-+sha1  ea4ae1a4dba51f15095319419d7b42a0bf160384  libgcrypt-1.7.7.tar.bz2
- # Locally calculated
--sha256  626aafee84af9d2ce253d2c143dc1c0902dda045780cc241f39970fc60be05bc  libgcrypt-1.7.6.tar.bz2
-+sha256  b9b85eba0793ea3e6e66b896eb031fa05e1a4517277cc9ab10816b359254cd9a  libgcrypt-1.7.7.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 0ae4c6f7be27..4374032206d8 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index ba46263..a85c22d 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -9,11 +9,19 @@ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0
+ SOCAT_LICENSE_FILES = COPYING
++ifeq ($(ARCH),powerpc)
++SOCAT_CONF_ENV = \
++	sc_cv_termios_ispeed=no \
++	sc_cv_sys_crdly_shift=12 \
++	sc_cv_sys_tabdly_shift=10 \
++	sc_cv_sys_csize_shift=8
++else
+ SOCAT_CONF_ENV = \
+ 	sc_cv_termios_ispeed=no \
+ 	sc_cv_sys_crdly_shift=9 \
+ 	sc_cv_sys_tabdly_shift=11 \
+ 	sc_cv_sys_csize_shift=4
++endif
  
--LIBGCRYPT_VERSION = 1.7.6
-+LIBGCRYPT_VERSION = 1.7.7
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
--LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
-+LIBGCRYPT_SITE = https://gnupg.org/ftp/gcrypt/libgcrypt
- LIBGCRYPT_INSTALL_STAGING = YES
- LIBGCRYPT_DEPENDENCIES = libgpg-error
- LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
+ # We need to run autoconf to regenerate the configure script, in order
+ # to ensure that the test checking linux/ext2_fs.h works
 -- 
-2.11.0
+2.9.4
