@@ -1,61 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:48:46 +0200
-Subject: [Buildroot] [git commit] package/doxygen: add upstream patch fixing
-	segfault
-Message-ID: <20170605095008.098DC802EF@busybox.osuosl.org>
+Date: Mon, 5 Jun 2017 11:41:38 +0200
+Subject: [Buildroot] [git commit] package/doxygen: bump version to 1.8.13,
+	switch to cmake
+Message-ID: <20170605095007.E7A9582A3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fc3338e53a3caf8b1df1e93575a55f483eb76a0
+commit: https://git.buildroot.net/buildroot/commit/?id=e43e6bf1ef0081e77fa8b57e017bc502bd5eecd1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport an upstream patch fixing a segfault in xmlgen [1].
+Doxygen switched to cmake with release 1.8.10:
+http://www.stack.nl/~dimitri/doxygen/manual/changelog.html#log_1_8_10
 
-[1] https://github.com/doxygen/doxygen/pull/555
+and added support for flex 2.6.0 with release 1.8.11:
+http://www.stack.nl/~dimitri/doxygen/manual/changelog.html#log_1_8_11
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Fixes
+http://autobuild.buildroot.net/results/ba1/ba1444709523c59393aaaa3710e9933bafacc6b5/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...1.8.13-Regression-Segfault-building-the-b.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/doxygen/doxygen.hash |  2 +-
+ package/doxygen/doxygen.mk   | 19 ++-----------------
+ 2 files changed, 3 insertions(+), 18 deletions(-)
 
-diff --git a/package/doxygen/0001-Bug-776791-1.8.13-Regression-Segfault-building-the-b.patch b/package/doxygen/0001-Bug-776791-1.8.13-Regression-Segfault-building-the-b.patch
-new file mode 100644
-index 0000000..b64158c
---- /dev/null
-+++ b/package/doxygen/0001-Bug-776791-1.8.13-Regression-Segfault-building-the-b.patch
-@@ -0,0 +1,30 @@
-+From 0f02761a158a5e9ddbd5801682482af8986dbc35 Mon Sep 17 00:00:00 2001
-+From: albert-github <albert.tests@gmail.com>
-+Date: Wed, 4 Jan 2017 12:24:55 +0100
-+Subject: [PATCH] Bug 776791 - [1.8.13 Regression] Segfault building the
-+ breathe docs
-+
-+Protected against NULL pointer of variable al
-+
-+[Romain: backport from upstream]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/xmlgen.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/xmlgen.cpp b/src/xmlgen.cpp
-+index fe95c7a..70e198a 100644
-+--- a/src/xmlgen.cpp
-++++ b/src/xmlgen.cpp
-+@@ -620,7 +620,7 @@ static void generateXMLForMember(MemberDef *md,FTextStream &ti,FTextStream &t,De
-+     if (md->isInline()) t << "yes"; else t << "no";
-+     t << "\"";
-+ 
-+-    if (al->refQualifier!=RefQualifierNone)
-++    if (al!=0 && al->refQualifier!=RefQualifierNone)
-+     {
-+       t << " refqual=\"";
-+       if (al->refQualifier==RefQualifierLValue) t << "lvalue"; else t << "rvalue";
-+-- 
-+2.9.4
-+
+diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
+index 40cfe16..4cf53e7 100644
+--- a/package/doxygen/doxygen.hash
++++ b/package/doxygen/doxygen.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256 d4ab6e28d4d45d8956cad17470aade3fbe2356e8f64b92167e738c1887feccec  doxygen-1.8.9.1.src.tar.gz
++sha256 af667887bd7a87dc0dbf9ac8d86c96b552dfb8ca9c790ed1cbffaa6131573f6b  doxygen-1.8.13.src.tar.gz
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index 428747b..10cdcf9 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -4,26 +4,11 @@
+ #
+ ################################################################################
+ 
+-DOXYGEN_VERSION = 1.8.9.1
++DOXYGEN_VERSION = 1.8.13
+ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+ DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri
+ DOXYGEN_LICENSE = GPL-2.0
+ DOXYGEN_LICENSE_FILES = LICENSE
+ HOST_DOXYGEN_DEPENDENCIES = host-flex host-bison
+ 
+-define HOST_DOXYGEN_CONFIGURE_CMDS
+-	(cd $(@D); $(HOST_MAKE_ENV) ./configure --shared --prefix=$(HOST_DIR)/usr)
+-endef
+-
+-define HOST_DOXYGEN_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define HOST_DOXYGEN_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+-endef
+-
+-# Doxygen's configure is a handwritten script, not an autotools-generated one.
+-# It doesn't accept host-autotools-package default arguments, so we have to
+-# call host-generic-package here.
+-$(eval $(host-generic-package))
++$(eval $(host-cmake-package))
