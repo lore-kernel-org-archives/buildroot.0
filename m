@@ -1,33 +1,41 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Mon, 5 Jun 2017 06:37:43 -0700
-Subject: [Buildroot] [PATCH v3 02/11] package/python-enum34: Switch
- setup type to 'setuptools'
-In-Reply-To: <20170605150805.0e30910a@free-electrons.com>
-References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
- <20170602235653.4655-3-andrew.smirnov@gmail.com>
- <CAGm1_kuJ-oeQFXsPv4b-wB5uf6p4AXoUjJ4_14iQBjHeLmuHeg@mail.gmail.com>
- <CAHQ1cqF8vM6MMGXrPw0ZCkYu2EqhsA3Un+rDv-CVwqLpjjDeqQ@mail.gmail.com>
- <20170605150805.0e30910a@free-electrons.com>
-Message-ID: <CAHQ1cqG_+RV0hKgEMgmQPmTUtR_o5fe79WsmvXZKPpuK2DfcWQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jun 2017 15:44:24 +0200
+Subject: [Buildroot] [PATCH next 2/2] parted: bump version to 3.2
+In-Reply-To: <20170522134015.54040-2-Vincent.Riera@imgtec.com>
+References: <20170522134015.54040-1-Vincent.Riera@imgtec.com>
+ <20170522134015.54040-2-Vincent.Riera@imgtec.com>
+Message-ID: <20170605154424.68e39484@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 5, 2017 at 6:08 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 5 Jun 2017 06:02:52 -0700, Andrey Smirnov wrote:
->
->> Sorry, my bad, didn't make sure my patches was rebased against latest
->> master. I'll drop this patch and re-spin v4 shortly.
->
-> Please don't respin a v4 just for this change. I'll mark this patch as
-> Not applicable.
+Hello,
 
-Sure, that's even easier for me :-)
+On Mon, 22 May 2017 14:40:15 +0100, Vicente Olivert Riera wrote:
 
-Thanks,
-Andrey Smirnov
+> LVM2 dependency is necessary otherwise it will fail. See:
+>   https://lists.gnu.org/archive/html/bug-parted/2014-08/msg00001.html
+> 
+> Due to the LVM2 dependency, the --enable-device-mapper option is
+> automatically enabled so there is no need to add it explicitly to the
+> LVM2_CONF_OPTS.
+
+The --enable-device-mapper option still exists, and allows to disable
+the lvm2 dependency. The build failure can be fixed by backporting
+upstream commit 7e87ca3c531228d35e13e802d2622006138b104c.
+
+So no need for the forced lvm2 dependency, no need for host-lvm2.
+
+Please try to send *less* package updates, but *better* package
+updates. Seems like I've already made the same statement earlier
+today...
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
