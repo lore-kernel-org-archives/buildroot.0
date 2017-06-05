@@ -1,60 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 15:56:51 +0200
-Subject: [Buildroot] [git commit] package/inadyn: bump version to 2.1
-Message-ID: <20170605140109.CCFC682A15@busybox.osuosl.org>
+Date: Mon, 5 Jun 2017 15:55:49 +0200
+Subject: [Buildroot] [git commit] package/imagemagick: bump version to
+	7.0.5-10
+Message-ID: <20170605140109.AA40B807C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9ea0b3f8a28be7a51dbac2e3ec516e59aa9565a
+commit: https://git.buildroot.net/buildroot/commit/?id=44650969234a8f58552e36b3ee248c99661c8bf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Switched to tarball provided by upstream, autoreconf is not needed
-anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/inadyn/inadyn.hash |  4 +++-
- package/inadyn/inadyn.mk   | 12 +++---------
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index a4e60c9..f573be2 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,2 +1,4 @@
-+# From https://github.com/troglobit/inadyn/releases/download/v2.1/inadyn-2.1.tar.xz.md5
-+md5 b410684e38e628284a631ec763c2fdb8  inadyn-2.1.tar.xz
- # Locally computed
--sha256	763c53eb3856decfe8b921cab8a54b428b079a62264fbcf6c89690713d63529a  inadyn-v2.0.tar.gz
-+sha256 87639a7c1ddc047074601ad60188279a2a0d9393367f046c153de0e24586b3ac  inadyn-2.1.tar.xz
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 5e26785..0ef8b5a 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -4,19 +4,13 @@
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index c6f427e..173dd41 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 b774c3a69fea4432a120a8c0c231bd011710166c71a7b7e0fbb89b108d29ac6c  ImageMagick-7.0.5-9.tar.xz
++sha256 0058fcde533986334458a5c99600b1b9633182dd9562cbad4ba618c5ccf2a28f  ImageMagick-7.0.5-10.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 37faf54..7aade62 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INADYN_VERSION = v2.0
--INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
-+INADYN_VERSION = 2.1
-+INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
-+INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
- INADYN_LICENSE_FILES = COPYING
--INADYN_AUTORECONF = YES
- INADYN_DEPENDENCIES = host-pkgconf libconfuse libite
- 
--# Needed for autoreconf to work properly, see ./autogen.sh
--define INADYN_FIXUP_M4_DIR
--	mkdir $(@D)/m4
--endef
--INADYN_POST_EXTRACT_HOOKS += INADYN_FIXUP_M4_DIR
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- INADYN_CONF_OPTS += --enable-openssl
- INADYN_DEPENDENCIES += openssl
+-IMAGEMAGICK_VERSION = 7.0.5-9
++IMAGEMAGICK_VERSION = 7.0.5-10
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
