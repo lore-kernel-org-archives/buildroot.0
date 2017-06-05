@@ -1,34 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jun 2017 15:13:50 +0200
-Subject: [Buildroot] [PATCH/buildroot-test 1/1] autobuild-run: randomly add
-	BR2_PACKAGE_PYTHON_PY_ONLY
-Message-ID: <20170605131350.31383-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jun 2017 15:33:34 +0200
+Subject: [Buildroot] [PATCH next 1/2] lvm2: add host package
+In-Reply-To: <20170522134015.54040-1-Vincent.Riera@imgtec.com>
+References: <20170522134015.54040-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170605153334.3cbccffe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This should allow build-testing Kodi after
-https://git.buildroot.net/buildroot/commit/package/kodi?id=95bf21910899dd0bcd7df6ecdff13914f7aa99ef
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- scripts/autobuild-run | 2 ++
- 1 file changed, 2 insertions(+)
+On Mon, 22 May 2017 14:40:14 +0100, Vicente Olivert Riera wrote:
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 24cdf58..f0bb135 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -547,6 +547,8 @@ def gen_config(**kwargs):
-         configlines.append("BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y\n")
-     if randint(0, 20) == 0:
-         configlines.append("BR2_STATIC_LIBS=y\n")
-+    if randint(0, 20) == 0:
-+        configlines.append("BR2_PACKAGE_PYTHON_PY_ONLY=y\n")
- 
-     # Write out the configuration file
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
+> +HOST_LVM2_INSTALL_OPTS = DESTDIR=$(HOST_DIR) install
+
+This is wrong. Host installation should basically *never* use DESTDIR,
+but prefix instead. Since our autotools-package infrastructure already
+passes --prefix=$(HOST_DIR)/usr, you shouldn't have to override to
+override the HOST_LVM2_INSTALL_OPTS.
+
+But, this patch is in fact not needed. I'll reply on PATCH 2/2 why.
+
+Thanks,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
