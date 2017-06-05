@@ -1,49 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 15:08:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iprutils: bump version to
- 2.4.14.1
-In-Reply-To: <20170605110620.25326-1-bernd.kuhls@t-online.de>
-References: <20170605110620.25326-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605150822.10b58ebc@free-electrons.com>
+Date: Mon, 5 Jun 2017 15:06:14 +0200
+Subject: [Buildroot] [git commit] package/hiawatha: fix build when c++
+	support is disabled
+Message-ID: <20170605130940.2B4EA82151@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c5915135bedcbf342bf088a6cec2c93f4a99f033
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Jun 2017 13:06:20 +0200, Bernd Kuhls wrote:
-> Removed patches applied upstream:
-> 
-> 0001-iprutils-Don-t-use-gettext.patch
-> https://sourceforge.net/p/iprdd/iprutils/ci/4512cfb915b492e9eed65f7b9f72fc1c1bd097c2/
-> 
-> 0002-configure.ac-use-pow-instead-of-matherr-for-libm-che.patch
-> https://sourceforge.net/p/iprdd/iprutils/ci/d7cfe35b9706da357814d4bdd21563396733753c/
-> 
-> 0003-iprlib-fixes-for-compatibility-with-musl.patch
-> https://sourceforge.net/p/iprdd/iprutils/ci/ed9da50d114ea5e97f3cf599fb7b305e0cec18d6/
-> 
-> Autoreconf is not needed anymore, added upstream hashes, switched _SITE
-> to https.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../iprutils/0001-iprutils-Don-t-use-gettext.patch | 48 ----------------------
->  ...c-use-pow-instead-of-matherr-for-libm-che.patch | 36 ----------------
->  ...-iprlib-fixes-for-compatibility-with-musl.patch | 34 ---------------
->  package/iprutils/iprutils.hash                     |  5 ++-
->  package/iprutils/iprutils.mk                       |  6 +--
->  5 files changed, 6 insertions(+), 123 deletions(-)
->  delete mode 100644 package/iprutils/0001-iprutils-Don-t-use-gettext.patch
->  delete mode 100644 package/iprutils/0002-configure.ac-use-pow-instead-of-matherr-for-libm-che.patch
->  delete mode 100644 package/iprutils/0003-iprlib-fixes-for-compatibility-with-musl.patch
+Fixes
+http://autobuild.buildroot.net/results/c04/c04ff29b83c020573add597c355c57a6d9c9761d/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-cmake-allow-build-without-c.patch         | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/hiawatha/0001-cmake-allow-build-without-c.patch b/package/hiawatha/0001-cmake-allow-build-without-c.patch
+new file mode 100644
+index 0000000..d264d62
+--- /dev/null
++++ b/package/hiawatha/0001-cmake-allow-build-without-c.patch
+@@ -0,0 +1,34 @@
++From 784e46afd7530f3010726ba73cc1a81059eae8bf Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 5 Jun 2017 13:26:18 +0200
++Subject: [PATCH] cmake: allow build without c++
++
++By default cmake also searches for a c++ compiler:
++https://cmake.org/cmake/help/v3.7/command/project.html
++"By default C and CXX are enabled if no language options are given."
++
++This patch restricts the compiler to C to fix a build error detected
++by the buildroot autobuilders:
++http://autobuild.buildroot.net/results/c04/c04ff29b83c020573add597c355c57a6d9c9761d/build-end.log
++
++Patch sent upstream: https://github.com/hsleisink/hiawatha/pull/30
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 4f28d76..e8051fc 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 3.0)
++-project(Hiawatha VERSION 10.6)
+++project(Hiawatha VERSION 10.6 LANGUAGES C)
++ 
++ # Compiler
++ set(CMAKE_C_FLAGS "-O2 -Wall -Wextra ${CMAKE_C_FLAGS}")
++-- 
++2.11.0
++
