@@ -1,14 +1,28 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  5 Jun 2017 18:22:38 +0200
-Subject: [Buildroot] [PATCH 2/2] package/x264: bump version
-In-Reply-To: <20170605162238.8413-1-bernd.kuhls@t-online.de>
-References: <20170605162238.8413-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605162238.8413-2-bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 18:22:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/x264: disable optional ffmpeg
+	support
+Message-ID: <20170605162238.8413-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+In buildroot ffmpeg uses x264 as optional dependency if
+BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
+
+If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
+support before x264 itself is build, x264 picks up certain ffmpeg libs
+as optional dependency leading to build errors because x264 does not
+correctly link statically against ffmpeg.
+
+To avoid a circular dependency and to avoid teaching x264 how to
+correctly link statically with ffmpeg we just disable all ffmpeg-
+related options.
+
+Fixes
+http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
@@ -16,17 +30,17 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index d1bc76701..69ec4ccea 100644
+index 7214c967f..d1bc76701 100644
 --- a/package/x264/x264.mk
 +++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X264_VERSION = 97eaef2ab82a46d13ea5e00270712d6475fbe42b
-+X264_VERSION = df79067c0cf33da712d344b5f8869be7eaf326f3
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPL-2.0+
+@@ -10,7 +10,7 @@ X264_LICENSE = GPL-2.0+
  X264_DEPENDENCIES = host-pkgconf
+ X264_LICENSE_FILES = COPYING
+ X264_INSTALL_STAGING = YES
+-X264_CONF_OPTS = --disable-avs
++X264_CONF_OPTS = --disable-avs --disable-lavf --disable-swscale
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ # yasm needed for assembly files
 -- 
 2.11.0
