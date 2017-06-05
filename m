@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 11:52:37 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/exiv2: fix pthread detection
-In-Reply-To: <20170604082714.26214-1-bernd.kuhls@t-online.de>
-References: <20170604082714.26214-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605115237.158ead38@free-electrons.com>
+Date: Mon, 5 Jun 2017 11:52:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package/exiv2: needs threads
+In-Reply-To: <20170604080457.7593-1-bernd.kuhls@t-online.de>
+References: <20170604080457.7593-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605115234.1719d12f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  4 Jun 2017 10:27:14 +0200, Bernd Kuhls wrote:
-> This commit fixes an error during configure:
+On Sun,  4 Jun 2017 10:04:56 +0200, Bernd Kuhls wrote:
+> Exiv2 itself depends on threads, not only with xmp support.
 > 
-> -- Check if compiler accepts -pthread
-> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the
->  following cache variables appropriately:
->    THREADS_PTHREAD_ARG (advanced)
-> 
-> Patch ported from librtlsdr:
-> https://git.busybox.net/buildroot/commit/?id=4c6eace6f756d15ae9639a503c9245d1e7fb12a9
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/0f9/0f985993a0c0076f027cfe25bb13d6b85c644c0d/
+> Follow-up patch for http://patchwork.ozlabs.org/patch/770813/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> v2: added more comments in commit message and exiv2.mk (Thomas)
+>  package/exiv2/Config.in | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
