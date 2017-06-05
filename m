@@ -1,121 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 09:58:08 +0200
-Subject: [Buildroot] [git commit] package/ipsec-tools: fix build error with
-	newer flex versions
-Message-ID: <20170605080917.15857826FD@busybox.osuosl.org>
+Date: Mon, 5 Jun 2017 10:12:50 +0200
+Subject: [Buildroot] [PATCH 1/3] package/ipsec-tools: allow autoreconf
+In-Reply-To: <20170602185053.11029-1-bernd.kuhls@t-online.de>
+References: <20170602185053.11029-1-bernd.kuhls@t-online.de>
+Message-ID: <20170605101250.792913c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e835600cf72b3f2a17c740725634f594e192a6d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/5c1/5c1e80d4dd57dac73345e08702af4c3fbc55f8e0/
+On Fri,  2 Jun 2017 20:50:51 +0200, Bernd Kuhls wrote:
+> Upstream release is broken w.r.t autoreconf, patch 0002 fixes it.
+> Needed to prepare for upcoming patch to fix linking against newer
+> flex versions.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/ipsec-tools/0002-configure-automake.patch | 21 +++++++++++++++++++++
+>  package/ipsec-tools/ipsec-tools.mk                |  2 ++
+>  2 files changed, 23 insertions(+)
+>  create mode 100644 package/ipsec-tools/0002-configure-automake.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0003-Don-t-link-against-libfl.patch            | 92 ++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+All three patches applied to master. However, could you comment on
+whether PATCH 3/3, which is a security update, applies to the LTS
+branch 2017.02.x ?
 
-diff --git a/package/ipsec-tools/0003-Don-t-link-against-libfl.patch b/package/ipsec-tools/0003-Don-t-link-against-libfl.patch
-new file mode 100644
-index 0000000..4fa0a02
---- /dev/null
-+++ b/package/ipsec-tools/0003-Don-t-link-against-libfl.patch
-@@ -0,0 +1,92 @@
-+From e48b9097dce7bc2bfbb9e9c542124d3b5cebab39 Mon Sep 17 00:00:00 2001
-+From: Paul Barker <paul@paulbarker.me.uk>
-+Date: Wed, 5 Mar 2014 13:39:14 +0000
-+Subject: [PATCH] Don't link against libfl
-+
-+We can remove all references to yywrap by adding "%option noyywrap" statements
-+to each flex source file that doesn't override yywrap. After this, we no longer
-+need to link against libfl and so no longer get errors about undefined
-+references to yylex.
-+
-+Signed-off-by: Paul Barker <paul@paulbarker.me.uk>
-+Upstream-status: Submitted 2014-03-11
-+    see http://sourceforge.net/p/ipsec-tools/mailman/ipsec-tools-devel/thread/CANyK_8ewmxGA3vBVJW6s1APXPmxPR%2BDFWZ61EL8pCt288aKQ6w%40mail.gmail.com/#msg32088797
-+
-+Downloaded from
-+http://cgit.openembedded.org/meta-openembedded/tree/meta-networking/recipes-support/ipsec-tools/ipsec-tools/0002-Don-t-link-against-libfl.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/libipsec/Makefile.am | 1 -
-+ src/racoon/Makefile.am   | 2 +-
-+ src/racoon/cftoken.l     | 2 ++
-+ src/setkey/Makefile.am   | 1 -
-+ src/setkey/token.l       | 2 ++
-+ 5 files changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/libipsec/Makefile.am b/src/libipsec/Makefile.am
-+index 6a4e3b3..df1e106 100644
-+--- a/src/libipsec/Makefile.am
-++++ b/src/libipsec/Makefile.am
-+@@ -26,7 +26,6 @@ libipsec_la_SOURCES = \
-+ # version is current:revision:age.
-+ # See: http://www.gnu.org/manual/libtool-1.4.2/html_chapter/libtool_6.html#SEC32
-+ libipsec_la_LDFLAGS = -version-info 0:1:0
-+-libipsec_la_LIBADD = $(LEXLIB)
-+ 
-+ noinst_HEADERS = ipsec_strerror.h
-+ 
-+diff --git a/src/racoon/Makefile.am b/src/racoon/Makefile.am
-+index dbaded9..0662957 100644
-+--- a/src/racoon/Makefile.am
-++++ b/src/racoon/Makefile.am
-+@@ -38,7 +38,7 @@ racoon_SOURCES = \
-+ 	cftoken.l cfparse.y prsa_tok.l prsa_par.y 
-+ EXTRA_racoon_SOURCES = isakmp_xauth.c isakmp_cfg.c isakmp_unity.c throttle.c \
-+ 	isakmp_frag.c nattraversal.c security.c $(MISSING_ALGOS)
-+-racoon_LDADD = $(CRYPTOBJS) $(HYBRID_OBJS) $(NATT_OBJS) $(FRAG_OBJS) $(LEXLIB) \
-++racoon_LDADD = $(CRYPTOBJS) $(HYBRID_OBJS) $(NATT_OBJS) $(FRAG_OBJS) \
-+ 	 $(SECCTX_OBJS) vmbuf.o sockmisc.o misc.o ../libipsec/libipsec.la
-+ racoon_DEPENDENCIES = \
-+ 	$(CRYPTOBJS) $(HYBRID_OBJS) $(NATT_OBJS) $(FRAG_OBJS) $(SECCTX_OBJS) \
-+diff --git a/src/racoon/cftoken.l b/src/racoon/cftoken.l
-+index 490242c..1701922 100644
-+--- a/src/racoon/cftoken.l
-++++ b/src/racoon/cftoken.l
-+@@ -106,6 +106,8 @@ static int incstackp = 0;
-+ static int yy_first_time = 1;
-+ %}
-+ 
-++%option noyywrap
-++
-+ /* common seciton */
-+ nl		\n
-+ ws		[ \t]+
-+diff --git a/src/setkey/Makefile.am b/src/setkey/Makefile.am
-+index 746c1f1..389e6cf 100644
-+--- a/src/setkey/Makefile.am
-++++ b/src/setkey/Makefile.am
-+@@ -13,7 +13,6 @@ setkey_SOURCES = \
-+ 
-+ setkey_LDFLAGS = ../libipsec/libipsec.la
-+ setkey_DEPENDENCIES = ../libipsec/libipsec.la
-+-setkey_LDADD = $(LEXLIB)
-+ 
-+ noinst_HEADERS = vchar.h extern.h
-+ man8_MANS = setkey.8
-+diff --git a/src/setkey/token.l b/src/setkey/token.l
-+index ad3d843..eb23b76 100644
-+--- a/src/setkey/token.l
-++++ b/src/setkey/token.l
-+@@ -88,6 +88,8 @@
-+ #endif
-+ %}
-+ 
-++%option noyywrap
-++
-+ /* common section */
-+ nl		\n
-+ ws		[ \t]+
-+-- 
-+1.9.0
-+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
