@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 14:53:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: bump version to
- 20161117
-In-Reply-To: <20170605114856.13349-1-bernd.kuhls@t-online.de>
-References: <20170605114856.13349-1-bernd.kuhls@t-online.de>
-Message-ID: <20170605145349.736c1085@free-electrons.com>
+Date: Mon, 5 Jun 2017 14:54:49 +0200
+Subject: [Buildroot] [PATCH] package/sunxy-mali: fix conflicting types
+ for GLintptr and GLsizeiptr
+In-Reply-To: <20170605104837.15929-1-romain.naour@gmail.com>
+References: <20170605104837.15929-1-romain.naour@gmail.com>
+Message-ID: <20170605145449.0d323734@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  5 Jun 2017 13:48:56 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libhdhomerun/libhdhomerun.hash | 2 +-
->  package/libhdhomerun/libhdhomerun.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Typo in commit title: sunxy -> sunxi
 
-Applied to master, thanks.
+On Mon,  5 Jun 2017 12:48:37 +0200, Romain Naour wrote:
+
+> +-typedef int * GLintptr;
+> +-typedef int *  GLsizeiptr;
+> ++typedef khronos_intptr_t GLintptr;
+> ++typedef khronos_ssize_t  GLsizeiptr;
+
+You're only fixing those types, but there are a few other types that
+are different between gl.h and gl2.h.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
