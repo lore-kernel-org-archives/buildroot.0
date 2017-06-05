@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jun 2017 16:07:55 +0200
-Subject: [Buildroot] [git commit] package/libass: bump version to 0.13.7
-Message-ID: <20170605140803.323B9825D1@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  5 Jun 2017 17:27:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdbm: fix uclibc build error
+Message-ID: <20170605152724.12167-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b305185495087c2c5c28fd01a9e48b535640791a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patches fixes
+
+gdbmopen.c:35:40: error: unknown type name 'blksize_t'
+ compute_directory_size (GDBM_FILE dbf, blksize_t block_size,
+
+To get the missing define we need to pass -D_GNU_SOURCE.
+
+Fixes
+http://autobuild.buildroot.net/results/592/59278fb8681d474883e6551df5173edd806b16fa/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libass/libass.hash | 2 +-
- package/libass/libass.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gdbm/gdbm.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 53fd79d..d98b163 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 f8a874d104e3e72e2cc057e5a1710c650b10367486845a26e5ff28ed7a912c2d  libass-0.13.6.tar.xz
-+sha256 7065e5f5fb76e46f2042a62e7c68d81e5482dbeeda24644db1bd066e44da7e9d  libass-0.13.7.tar.xz
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index aeae86a..41f027d 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
+index 4e3ed76e8..5365f3c95 100644
+--- a/package/gdbm/gdbm.mk
++++ b/package/gdbm/gdbm.mk
+@@ -10,6 +10,8 @@ GDBM_LICENSE = GPL-3.0+
+ GDBM_LICENSE_FILES = COPYING
+ GDBM_INSTALL_STAGING = YES
  
--LIBASS_VERSION = 0.13.6
-+LIBASS_VERSION = 0.13.7
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
++GDBM_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++
+ ifeq ($(BR2_PACKAGE_GETTEXT),y)
+ GDBM_DEPENDENCIES += gettext
+ endif
+-- 
+2.11.0
