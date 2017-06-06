@@ -1,61 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  6 Jun 2017 22:17:43 +0200
-Subject: [Buildroot] [PATCH-2017.02.x 2/2] nodejs: bump 6.x version to 6.10.3
-In-Reply-To: <20170606201743.16358-1-peter@korsgaard.com>
-References: <20170606201743.16358-1-peter@korsgaard.com>
-Message-ID: <20170606201743.16358-2-peter@korsgaard.com>
+Date: Tue, 06 Jun 2017 22:20:31 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-06-05
+In-Reply-To: <1496776591.3962.3.camel@embedded.rocks> (=?utf-8?Q?=22J?=
+ =?utf-8?Q?=C3=B6rg?= Krause"'s message
+ of "Tue, 06 Jun 2017 21:16:31 +0200")
+References: <20170606063119.BBACB21D14@mail.free-electrons.com>
+ <1496776591.3962.3.camel@embedded.rocks>
+Message-ID: <87y3t4c1gw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-6.10.3 is the latest release in the LTS series, fixing a number of issues:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-https://nodejs.org/en/blog/release/v6.10.3/
+ > On Tue, 2017-06-06 at 08:31 +0200, Thomas Petazzoni wrote:
+ >> Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../{6.10.2 => 6.10.3}/0001-gyp-force-link-command-to-use-CXX.patch   | 0
- .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch     | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 4 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{6.10.2 => 6.10.3}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{6.10.2 => 6.10.3}/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
+ > Build statistics for 2017-06-05
+ > ================================
 
-diff --git a/package/nodejs/6.10.2/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.10.3/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.10.2/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.10.3/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/6.10.2/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.10.3/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-similarity index 100%
-rename from package/nodejs/6.10.2/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-rename to package/nodejs/6.10.3/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index ad5ca050b2..5fafa8f476 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.10.2"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.10.3"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.48"
- 
- config BR2_PACKAGE_NODEJS_NPM
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 4c63f58943..8cc6927ab2 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
- sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.10.2/SHASUMS256.txt
--sha256  80aa11333da99813973a99646e2113c6be5b63f665c0731ed14ecb94cbe846b6  node-v6.10.2.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.10.3/SHASUMS256.txt
-+sha256  82262a703e61164e09170a14d88b1726720651b0c7ee87a277654247b21b5388  node-v6.10.3.tar.xz
+ >      powerpc |                libupnpp-0.15.2 | NOK | http://autobuild.buildroot.net/results/0bf84f61a72a65a75c5fd0a787680f483cfead26 |     
+ >      powerpc |                libupnpp-0.15.2 | NOK | http://autobuild.buildroot.net/results/2569d7b5049d0bd1da8316d8ac5997d4e68c08ae |     
+ >      powerpc |                libupnpp-0.15.2 | NOK | http://autobuild.buildroot.net/results/ff512f5532011a513b5551428152e600b04a007d |     
+
+ > """
+ > error: 'yield' is not a member of 'std::this_thread'
+ > """
+
+ > Before version 0.15.2 libupnpp used sched_yield() which was replaced by
+ > std::this_thread::yield(). Looking at the thread header file for the
+ > PowerPC toolchain shows that yield() is only enabled if
+ > `_GLIBCXX_USE_SCHED_YIELD` is defined. This macro is only defined if
+ > GCC was built with `--enable-libstdcxx-time`. For GCC 4.7 and below
+ > this option defaults to no, which means sched_yield() is not enabled
+ > though it is available.
+
+ > """
+ > #ifdef _GLIBCXX_USE_SCHED_YIELD
+ >     /// yield
+ >     inline void
+ >     yield() noexcept
+ >     { __gthread_yield(); }
+ > #endif
+ > """
+
+ > """
+ > static inline int
+ > __gthread_yield (void)
+ > {
+ >   return __gthrw_(sched_yield) ();
+ > }
+ > """
+
+ > This issue was discussed on stackoverflow [1]. The issue is resolved in
+ > GCC 4.9 which automatically enables sched_yield() on platforms that are
+ > known to support them.
+
+ > Therefore, I would suggest to add a dependency on GCC 4.9 for this
+ > package.
+
+Thanks for investigating and sounds sensible to me. Will you send a
+patch?
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
