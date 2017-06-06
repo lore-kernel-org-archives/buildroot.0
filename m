@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Jun 2017 23:27:34 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] imx-uuc: fix
+Date: Tue, 6 Jun 2017 23:27:46 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] imx-uuc: fix
 	start-stop-daemon stop failure
-Message-ID: <20170606212740.387E781EA3@busybox.osuosl.org>
+Message-ID: <20170606212751.39B80827D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4159c69bc65c25059f36849bc9a2e19e2e9f79eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=097f9d17c1eb2fe4fbba5e94fad75f82a2f4bfcd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 The daemon service script associated with imx-uuc failed to stop the daemon
 since the PID of the process wasn't stored at start time.
