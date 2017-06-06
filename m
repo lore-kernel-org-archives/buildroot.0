@@ -1,41 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Jun 2017 17:58:01 +0200
-Subject: [Buildroot] [PATCH] package/tslib: bump version to 1.11
-In-Reply-To: <1e33fbf7-4a80-006b-4ec9-2dc11feb3b6b@ginzinger.com> (Martin
- Kepplinger's message of "Tue, 6 Jun 2017 17:47:55 +0200")
-References: <20170606125009.26537-1-martin.kepplinger@ginzinger.com>
- <87bmq1cfce.fsf@dell.be.48ers.dk>
- <1e33fbf7-4a80-006b-4ec9-2dc11feb3b6b@ginzinger.com>
-Message-ID: <8737bdcdme.fsf@dell.be.48ers.dk>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Tue, 6 Jun 2017 18:00:08 +0200
+Subject: [Buildroot] [PATCH] package/tslib: enable statically linked building
+Message-ID: <20170606160008.20503-1-martin.kepplinger@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Kepplinger <martin.kepplinger@ginzinger.com> writes:
+From: Martin Kepplinger <martink@posteo.de>
 
- > On 2017-06-06 17:20, Peter Korsgaard wrote:
- >>>>>>> "Martin" == Martin Kepplinger <martin.kepplinger@ginzinger.com> writes:
- >> 
- >> > Release notes for the curious:
- >> >    https://github.com/kergoth/tslib/blob/master/NEWS
- >> 
- >> Sorry, forgot to ask:
- >> 
- >> NEWS states:
- >> 
- >> This release includes the following bugfixes:
- >> * ff8c7d9 use dlfcn.h dynamic loading function only if libdl is available
- >> 
- >> 
- >> Does this mean that we can drop the dependency on !BR2_STATIC_LIBS?
- >> 
+tslib can be configured to be built statically linked. So let's add this option.
 
- > Yes. I planned to send this change when this is applied :)
+tslib is quite configurable and each module can be selected to be built into
+the static build. This configuration includes the hardware independent filter
+modules (obviously), and the Linux evdev input module.
 
-Ahh, ok. For future reference, it is fine to include such changes in the
-version bump change.
+This results in a configuration that fully supports multitouch in any
+combination.
 
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+---
+
+so strictly speaking this is a first idea of what static config to offer.
+It is an upgrade in any case, so almost any configuration should be safe to
+do now; but tslib includes old userspace driver modules that aren't really
+encouraged to use (evdev kernel drivers is the way to go) and they are not
+included in the build here.
+
+
+ package/tslib/Config.in |  4 ----
+ package/tslib/tslib.mk  | 12 ++++++++++++
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/package/tslib/Config.in b/package/tslib/Config.in
+index f1de56c12..a2e1e7ff7 100644
+--- a/package/tslib/Config.in
++++ b/package/tslib/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_TSLIB
+ 	bool "tslib"
+-	depends on !BR2_STATIC_LIBS # dlopen
+ 	help
+ 	  Tslib is a filtering layer for touchscreen panel events.
+ 
+ 	  http://tslib.org
+-
+-comment "tslib needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 87eb5b734..a4e045a32 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -17,4 +17,16 @@ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6),)
+ TSLIB_CONF_OPTS += --disable-tools
+ endif
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++TSLIB_CONF_OPTS += --disable-shared --enable-static \
++		   --enable-input=static \
++		   --enable-linear=static \
++		   --enable-median=static \
++		   --enable-pthres=static \
++		   --enable-iir=static \
++		   --enable-dejitter=static \
++		   --enable-debounce=static \
++		   --enable-skip=static
++endif
++
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.11.0
