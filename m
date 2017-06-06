@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 21:42:50 +0200
-Subject: [Buildroot] [PATCH] toolchain/toolchain-common.in: update
- definition of BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
-In-Reply-To: <1496777704.3962.5.camel@embedded.rocks>
-References: <20170606140850.5823-1-joerg.krause@embedded.rocks>
- <20170606173222.537500c6@free-electrons.com>
- <1496774645.3962.1.camel@embedded.rocks>
- <20170606212314.069892f2@free-electrons.com>
- <1496777704.3962.5.camel@embedded.rocks>
-Message-ID: <20170606214250.08a6e547@free-electrons.com>
+Date: Tue, 6 Jun 2017 21:44:20 +0200
+Subject: [Buildroot] [git commit] botan: disable AltiVec if the CPU does not
+	support it
+Message-ID: <20170606194426.B533982822@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e654839f9e2cc6d2780916d0288941cb3d4555dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 06 Jun 2017 21:35:04 +0200, J?rg Krause wrote:
+Botan compiles all PowerPC code with AltiVec support and only determines
+at runtime whether the CPU even supports it. If the target CPU uses the
+older SPE extensions, though, this is too late; since SPE and AltiVec
+are incompatible, gcc aborts the compilation. This patch explicitly
+disables AltiVec support unless BR2_POWERPC_CPU_HAS_ALTIVEC is defined
 
-> Sorry, I totally got you wrong. So, what you mean is:
-> 
-> 
-> """
-> config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> 	bool
-> 	default y if BR2_nios2
-> 	default y if BR2_ARM_CPU_ARMV4
-> 	default y if BR2_ARM_CPU_ARMV5
-> 	default y if BR2_sparc_v8
-> 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> """
-> 
-> Right?
+Signed-off-by: Tobias Blass <tobias.blass@rohde-schwarz.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/botan/botan.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Yes, exactly!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 2f24151..e42bb61 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -43,6 +43,12 @@ BOTAN_DEPENDENCIES += zlib
+ BOTAN_CONF_OPTS += --with-zlib
+ endif
+ 
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
++BOTAN_CONF_OPTS += --enable-altivec
++else
++BOTAN_CONF_OPTS += --disable-altivec
++endif
++
+ define BOTAN_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) ./configure.py $(BOTAN_CONF_OPTS))
+ endef
