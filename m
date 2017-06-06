@@ -1,36 +1,69 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  6 Jun 2017 21:52:07 +0200
-Subject: [Buildroot] [PATCH v2] toolchain/toolchain-common.in: update
-	definition of BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
-Message-ID: <20170606195207.6634-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Jun 2017 22:09:44 +0200
+Subject: [Buildroot] [PATCH] package/socat: Fix TABDLY,
+ CSIZE and CRDLY shifts for PowerPC
+In-Reply-To: <20170605204151.1563-1-andrew.smirnov@gmail.com>
+References: <20170605204151.1563-1-andrew.smirnov@gmail.com>
+Message-ID: <20170606220944.54cab0a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As GCC 7 is now available in Buildroot, update the definition for
-BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as the bug #64735 is fixed in GCC 7.
+Hello,
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-v2:
- - simplify logic (suggested by Thomas)
----
- toolchain/toolchain-common.in | 1 +
- 1 file changed, 1 insertion(+)
+On Mon,  5 Jun 2017 13:41:51 -0700, Andrey Smirnov wrote:
+> As can be seen in linux/arch/powerpc/include/uapi/asm/termbits.h those
+> constants are defined as (note that those are octal numbers):
+> 
+> \#define TABDLY	00006000
+> \#define CSIZE	00001400
+> \#define CRDLY	00030000
+> 
+> which gives shifts of 10, 8 and 12. Adjust socat.mk accordingly to
+> reflect that difference.
+> 
+> Signed-off-by: Mark Hinds <zoronic@gmail.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index d670f44747..ed993dd5f5 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -17,6 +17,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	default y if BR2_ARM_CPU_ARMV4
- 	default y if BR2_ARM_CPU_ARMV5
- 	default y if BR2_sparc_v8
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
+Thanks for this patch. I don't really understand why they are using an
+AC_TRY_RUN() test for this. I'm pretty we can call the preprocessor to
+get the value, and then use shell to determine the shift. This would
+make the test cross-compilation compliant. Demo:
+
+$ cat test.c 
+#include <termios.h>
+#include <unistd.h>
+TABDLY
+CRDLY
+CSIZE
+$ ./output/host/usr/bin/powerpc64le-linux-gcc -E -o - test.c | tail -3
+00006000
+00030000
+00001400
+
+So, no need to be on PowerPC64 to get those values.
+
+That being said, it's probably a bit a lot more work to do. So, some
+comments on the implementation.
+
+> +ifeq ($(ARCH),powerpc)
+
+This will only match PowerPC and not PowerPC64 and PowerPC64le, which I
+believe are in the same situation, so you should use:
+
+ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
+
+> +SOCAT_CONF_ENV = \
+> +	sc_cv_termios_ispeed=no \
+
+Please move this one outside the if, since it's the same in both cases.
+
+Thanks!
+
+Thomas
 -- 
-2.13.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
