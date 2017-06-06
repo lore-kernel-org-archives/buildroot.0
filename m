@@ -1,49 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Jun 2017 13:37:14 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] systemd: add upstream
-	security fix
-Message-ID: <20170606113734.D2CCC825DF@busybox.osuosl.org>
+Date: Tue, 6 Jun 2017 13:47:23 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/gesftpserver:
+	security bump to version 0.2.2
+Message-ID: <20170606114728.945DC8292A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11a3e7ce6efc8f1f59b981671b3b3feba17458b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=39a6137f46cef384507cabb4dd5e1d7386007348
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes CVE-2017-9217: remote DoS (daemon crash) via a crafted DNS response with
-an empty question section.
+For details refer to
+http://www.chiark.greenend.org.uk/pipermail/sgo-software-announce/2016/000035.html
 
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit dabd28a4be71e6d8f5a33d4fa34a3515e5fad177)
+(cherry picked from commit 6da0a996173306a31c263df2ccd1f6ead3d1a81e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.hash | 1 +
- package/systemd/systemd.mk   | 3 +++
- 2 files changed, 4 insertions(+)
+ package/gesftpserver/gesftpserver.hash | 2 +-
+ package/gesftpserver/gesftpserver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 0acaa3c..2b78207 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,3 @@
- # sha256 locally computed
- sha256 1172c7c7d5d72fbded53186e7599d5272231f04cc8b72f9a0fb2c5c20dfc4880  systemd-232.tar.gz
-+sha256 eed8fef0045876e9efa0ba6725ed9ea93654bf24d67bb5aad467a341ad375883  a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index fce5d84..f1ddfaf 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,6 +19,9 @@ SYSTEMD_DEPENDENCIES = \
- SYSTEMD_PROVIDES = udev
- SYSTEMD_AUTORECONF = YES
+diff --git a/package/gesftpserver/gesftpserver.hash b/package/gesftpserver/gesftpserver.hash
+index b4c9fdf..1a8a5f3 100644
+--- a/package/gesftpserver/gesftpserver.hash
++++ b/package/gesftpserver/gesftpserver.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	5f744c38df9bb82f5ab500858a0fb4767ac3ee2254301da03cbcf8e6c587cbf5	sftpserver-0.2.1.tar.gz
++sha256 8ac1938d0f62a05799b2aeab489d6ce098c3fe53280a9b66c0957b1fdcbcbab9  sftpserver-0.2.2.tar.gz
+diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
+index 27a1ec3..58c6270 100644
+--- a/package/gesftpserver/gesftpserver.mk
++++ b/package/gesftpserver/gesftpserver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+SYSTEMD_PATCH = \
-+	https://github.com/systemd/systemd/commit/a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
-+
- # Make sure that systemd will always be built after busybox so that we have
- # a consistent init setup between two builds
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-GESFTPSERVER_VERSION = 0.2.1
++GESFTPSERVER_VERSION = 0.2.2
+ GESFTPSERVER_SOURCE = sftpserver-$(GESFTPSERVER_VERSION).tar.gz
+ GESFTPSERVER_SITE = http://www.greenend.org.uk/rjk/sftpserver
+ GESFTPSERVER_LICENSE = GPL-2.0+
