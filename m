@@ -1,143 +1,118 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 21:35:47 +0200
-Subject: [Buildroot] [git commit] package/gnu-efi: bump version to 3.0.5
-Message-ID: <20170606193557.B54068082C@busybox.osuosl.org>
+Date: Tue, 6 Jun 2017 21:36:46 +0200
+Subject: [Buildroot] [git commit] package/gnu-efi: add arm/aarch64 support
+Message-ID: <20170606193650.D62CD82A51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0402a6e72c8ca5088d860bb788084147a049968
+commit: https://git.buildroot.net/buildroot/commit/?id=bd3355b0a2cdd13740e0689452f29d4e20681838
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We need BR2_ARM_CPU_HAS_ARM, otherwise build for cortex-m4 breaks with
+"target CPU does not support ARM mode".
+
+We only enable arm/aarch64 support for now, mips support is broken:
+test-pkg/br-mips64-n64-full/build/gnu-efi-3.0.5/lib/mips64el/setjmp.S:40:
+ Error: opcode not supported on this processor: mips64 (mips64) `ext $v0,$v0,29,1'
+
+Tested by test-pkg using this defconfig
+
+BR2_PACKAGE_GNU_EFI=y
+
+with the following results:
+
+                armv5-ctng-linux-gnueabi [ 1/49]: OK
+              armv7-ctng-linux-gnueabihf [ 2/49]: OK
+                        br-aarch64-glibc [ 3/49]: OK
+                           br-arcle-hs38 [ 4/49]: SKIPPED
+                            br-arm-basic [ 5/49]: OK
+                  br-arm-cortex-a9-glibc [ 6/49]: OK
+                   br-arm-cortex-a9-musl [ 7/49]: OK
+                   br-arm-cortex-m4-full [ 8/49]: SKIPPED
+                             br-arm-full [ 9/49]: OK
+                    br-arm-full-nothread [10/49]: OK
+                      br-arm-full-static [11/49]: OK
+                            br-bfin-full [12/49]: SKIPPED
+                   br-i386-pentium4-full [13/49]: OK
+                br-i386-pentium-mmx-musl [14/49]: OK
+                       br-m68k-5208-full [15/49]: SKIPPED
+                      br-m68k-68040-full [16/49]: SKIPPED
+                    br-microblazeel-full [17/49]: SKIPPED
+                 br-mips32r6-el-hf-glibc [18/49]: SKIPPED
+                      br-mips64-n64-full [19/49]: SKIPPED
+                 br-mips64r6-el-hf-glibc [20/49]: SKIPPED
+                      br-mipsel-o32-full [21/49]: SKIPPED
+                          br-nios2-glibc [22/49]: SKIPPED
+                      br-openrisc-uclibc [23/49]: SKIPPED
+               br-powerpc-603e-basic-cpp [24/49]: SKIPPED
+             br-powerpc64le-power8-glibc [25/49]: SKIPPED
+               br-powerpc64-power7-glibc [26/49]: SKIPPED
+                  br-powerpc-e500mc-full [27/49]: SKIPPED
+                             br-sh4-full [28/49]: SKIPPED
+                        br-sparc64-glibc [29/49]: SKIPPED
+                         br-sparc-uclibc [30/49]: SKIPPED
+                    br-x86-64-core2-full [31/49]: OK
+                          br-x86-64-musl [32/49]: OK
+                          br-xtensa-full [33/49]: SKIPPED
+                     i686-ctng-linux-gnu [34/49]: OK
+                          linaro-aarch64 [35/49]: OK
+                              linaro-arm [36/49]: OK
+             mips64el-ctng_n32-linux-gnu [37/49]: SKIPPED
+             mips64el-ctng_n64-linux-gnu [38/49]: SKIPPED
+        powerpc-ctng_e500v2-linux-gnuspe [39/49]: SKIPPED
+                     sourcery-arm-armv4t [40/49]: OK
+                            sourcery-arm [41/49]: OK
+                     sourcery-arm-thumb2 [42/49]: OK
+                         sourcery-mips64 [43/49]: SKIPPED
+                           sourcery-mips [44/49]: SKIPPED
+                          sourcery-nios2 [45/49]: SKIPPED
+                             sourcery-sh [46/49]: SKIPPED
+                         sourcery-x86-64 [47/49]: OK
+                            sourcery-x86 [48/49]: OK
+           x86_64-ctng_locales-linux-gnu [49/49]: OK
+49 builds, 27 skipped, 0 build failed, 0 legal-info failed
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...S-CPPFLAGS-to-be-completed-from-the-envir.patch | 50 ++++++++++++++--------
- package/gnu-efi/gnu-efi.hash                       |  6 ++-
- package/gnu-efi/gnu-efi.mk                         |  2 +-
- 3 files changed, 38 insertions(+), 20 deletions(-)
+ package/gnu-efi/Config.in  | 9 +++++----
+ package/gnu-efi/gnu-efi.mk | 4 ++++
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch b/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch
-index eee0a9a..9038228 100644
---- a/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch
-+++ b/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch
-@@ -11,18 +11,21 @@ flags passed by Buildroot.
+diff --git a/package/gnu-efi/Config.in b/package/gnu-efi/Config.in
+index 982102f..d8d92c2 100644
+--- a/package/gnu-efi/Config.in
++++ b/package/gnu-efi/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_GNU_EFI
+ 	bool "gnu-efi"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || \
++		BR2_aarch64_be || BR2_i386 || BR2_x86_64
+ 	help
+-	  Develop EFI applications for IA-64 (IPF), IA-32 (x86), and
+-	  x86_64 platforms using the GNU toolchain and the EFI
+-	  development environment.
++	  Develop EFI applications for ARM-64, ARM-32, x86_64, IA-64
++	  (IPF), IA-32 (x86), and MIPS platforms using the GNU toolchain
++	  and the EFI development environment.
  
- [Romain:
-  - rebase on top of 3.0.1 release]
-+[Bernd:
-+ - rebase on top of 3.0.5 release]
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-- Make.defaults | 16 ++++++++--------
-- 1 file changed, 8 insertions(+), 8 deletions(-)
-+ Make.defaults | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
- 
- diff --git a/Make.defaults b/Make.defaults
--index 169273d..b0ddea0 100644
-+index 51bd7d8..7d7e8e7 100755
- --- a/Make.defaults
- +++ b/Make.defaults
--@@ -80,14 +80,14 @@ endif
-+@@ -85,14 +85,14 @@ OBJDIR       := $(TOPDIR)/$(ARCH)
-  #
-  
-  # Arch-specific compilation flags
-@@ -40,7 +43,7 @@ index 169273d..b0ddea0 100644
-    ifeq ($(HOSTARCH),x86_64)
-      ARCH3264 = -m32
-    endif
--@@ -103,10 +103,10 @@ ifeq ($(ARCH),x86_64)
-+@@ -108,17 +108,17 @@ ifeq ($(ARCH),x86_64)
-                                   && [ $(GCCMINOR) -ge "7" ] ) ) \
-                            && echo 1)
-    ifeq ($(GCCNEWENOUGH),1)
-@@ -48,12 +51,20 @@ index 169273d..b0ddea0 100644
- +    override CPPFLAGS += -DGNU_EFI_USE_MS_ABI -maccumulate-outgoing-args --std=c11
-    endif
-  
---  CFLAGS += -mno-red-zone -mno-mmx -mno-sse
--+  override CFLAGS += -mno-red-zone -mno-mmx -mno-sse
-+-  CFLAGS += -mno-red-zone
-++  override CFLAGS += -mno-red-zone
-    ifeq ($(HOSTARCH),ia32)
-      ARCH3264 = -m64
-    endif
--@@ -127,7 +127,7 @@ export LIBGCC=$(shell $(CC) $(ARCH3264) -print-libgcc-file-name)
-+ endif
-+ 
-+ ifeq ($(ARCH),mips64el)
-+-  CFLAGS += -march=mips64r2
-++  override CFLAGS += -march=mips64r2
-+   ARCH3264 = -mabi=64
-+ endif
-+ 
-+@@ -139,7 +139,7 @@ export LIBGCC=$(shell $(CC) $(ARCH3264) -print-libgcc-file-name)
-  endif
-  
-  ifeq ($(ARCH),arm)
-@@ -62,19 +73,24 @@ index 169273d..b0ddea0 100644
-  endif
-  
-  # Generic compilation flags
--@@ -135,10 +135,10 @@ INCDIR  += -I$(SRCDIR) -I$(TOPDIR)/inc -I$(TOPDIR)/inc/$(ARCH) \
--            -I$(TOPDIR)/inc/protocol
-+@@ -149,7 +149,7 @@ INCDIR  += -I$(SRCDIR) -I$(TOPDIR)/inc -I$(TOPDIR)/inc/$(ARCH) \
-+ # Only enable -fpic for non MinGW compilers (unneeded on MinGW)
-+ GCCMACHINE := $(shell $(CC) -dumpmachine)
-+ ifneq (mingw32,$(findstring mingw32, $(GCCMACHINE)))
-+-  CFLAGS += -fpic
-++  override CFLAGS += -fpic
-+ endif
-  
-  ifeq (FreeBSD, $(findstring FreeBSD, $(OS)))
---CFLAGS  += $(ARCH3264) -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing \
--+override CFLAGS  += $(ARCH3264) -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing \
-+@@ -157,7 +157,7 @@ CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
-+            -fshort-wchar -fno-strict-aliasing \
-             -ffreestanding -fno-stack-protector
-  else
---CFLAGS  += $(ARCH3264) -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing \
--+override CFLAGS  += $(ARCH3264) -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing \
--            -fno-merge-constants -ffreestanding -fno-stack-protector       \
-+-CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
-++override CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
-+            -fshort-wchar -fno-strict-aliasing \
-+            -fno-merge-constants -ffreestanding -fno-stack-protector \
-             -fno-stack-check
-- endif
- -- 
--1.9.3
-+2.11.0
- 
-diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
-index 21033bd..78c9bd2 100644
---- a/package/gnu-efi/gnu-efi.hash
-+++ b/package/gnu-efi/gnu-efi.hash
-@@ -1,3 +1,5 @@
- # From http://sourceforge.net/projects/gnu-efi/files
--md5 c4099c443b6b0c2b04dedc33e7814ec0 gnu-efi-3.0.1.tar.bz2
--sha1 07eea4d72f7ecb7229aaa77ddd411de5673c67b6 gnu-efi-3.0.1.tar.bz2
-+md5 1f719c9c135778aa6b087b89a1cc2423 gnu-efi-3.0.5.tar.bz2
-+sha1 183dadda9de78a44bd2343ffbf7869458ff5372a gnu-efi-3.0.5.tar.bz2
-+# Locally computed
-+sha256 bd8fcd5914f18fc0e4ba948ab03b00013e528504f529c60739b748f6ef130b22 gnu-efi-3.0.5.tar.bz2
+ 	  http://gnu-efi.sourceforge.net/
 diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-index d427870..2222583 100644
+index 2222583..274160d 100644
 --- a/package/gnu-efi/gnu-efi.mk
 +++ b/package/gnu-efi/gnu-efi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -20,6 +20,10 @@ ifeq ($(BR2_i386),y)
+ GNU_EFI_PLATFORM = ia32
+ else ifeq ($(BR2_x86_64),y)
+ GNU_EFI_PLATFORM = x86_64
++else ifeq ($(BR2_arm)$(BR2_armeb),y)
++GNU_EFI_PLATFORM = arm
++else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
++GNU_EFI_PLATFORM = aarch64
+ endif
  
--GNU_EFI_VERSION = 3.0.1
-+GNU_EFI_VERSION = 3.0.5
- GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
- GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
- GNU_EFI_INSTALL_STAGING = YES
+ define GNU_EFI_BUILD_CMDS
