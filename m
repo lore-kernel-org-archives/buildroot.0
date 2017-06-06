@@ -1,37 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 23:10:08 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/stella: bump version to
- 4.7.3
-In-Reply-To: <20170529191429.11102-2-bernd.kuhls@t-online.de>
-References: <20170529191429.11102-1-bernd.kuhls@t-online.de>
- <20170529191429.11102-2-bernd.kuhls@t-online.de>
-Message-ID: <20170606231008.278b3892@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 6 Jun 2017 23:10:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdbm: fix build error
+In-Reply-To: <20170605101420.2c585336@free-electrons.com>
+References: <20170604220950.22746-1-bernd.kuhls@t-online.de>
+ <20170605101420.2c585336@free-electrons.com>
+Message-ID: <20170606211030.GQ26922@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-On Mon, 29 May 2017 21:14:29 +0200, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> https://github.com/stella-emu/stella/commit/be2f6f5b64266f4d68af6a2236bd4b59a7e6638d
+> Hello,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...gnu-11-standard-to-prevent-errors-on-PPC.patch} |  0
->  ...figure-Add-CXXFLAGS-for-test-compilations.patch | 44 ----------------------
->  package/stella/stella.hash                         |  2 +-
->  package/stella/stella.mk                           |  2 +-
->  4 files changed, 2 insertions(+), 46 deletions(-)
->  rename package/stella/{0004-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch => 0003-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch} (100%)
->  delete mode 100644 package/stella/0003-configure-Add-CXXFLAGS-for-test-compilations.patch
+> On Mon,  5 Jun 2017 00:09:50 +0200, Bernd Kuhls wrote:
+> 
+> > +-compute_directory_size (GDBM_FILE dbf, blksize_t block_size,
+> > ++compute_directory_size (GDBM_FILE dbf, __blksize_t block_size,
+> 
+> This doesn't feel like the right fix, because uClibc does define
+> blksize_t:
+> 
+> #if defined __USE_UNIX98 && !defined __blksize_t_defined
+> typedef __blksize_t blksize_t;
+> # define __blksize_t_defined
+> #endif
+> 
+> Missing header include? __USE_UNIX98 not defined?
+> 
+> Perhaps a good question for Waldemar (added in Cc).
 
-Applied to master, thanks.
+Fix sent to the list.
+Some problem with uClibc-ng not in sync with glibc.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
