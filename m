@@ -1,28 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Jun 2017 17:19:13 +0200
-Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.7
-In-Reply-To: <4623c3a5d42bad4ce5bac2cbe109a444f7189688.1496694364.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 5 Jun 2017 23:26:04 +0300")
-References: <4623c3a5d42bad4ce5bac2cbe109a444f7189688.1496694364.git.baruch@tkos.co.il>
-Message-ID: <87k24pcff2.fsf@dell.be.48ers.dk>
+Date: Tue, 6 Jun 2017 17:18:32 +0200
+Subject: [Buildroot] [git commit] libgcrypt: security bump to version 1.7.7
+Message-ID: <20170606151923.0C8407FDB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=869c8dfd7bd37bd11a903cadf065a1963fb8f887
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix possible timing attack on EdDSA session key.
- > https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
+Fix possible timing attack on EdDSA session key.
 
- > Add upstream provided SHA1 hash.
+https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
 
- > Switch to https download for better corporate firewall compatibility.
+Add upstream provided SHA1 hash.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Switch to https download for better corporate firewall compatibility.
 
-Committed, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgcrypt/libgcrypt.hash | 4 +++-
+ package/libgcrypt/libgcrypt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 48bbd6a..5a833d5 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,2 +1,4 @@
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
++sha1  ea4ae1a4dba51f15095319419d7b42a0bf160384  libgcrypt-1.7.7.tar.bz2
+ # Locally calculated
+-sha256  626aafee84af9d2ce253d2c143dc1c0902dda045780cc241f39970fc60be05bc  libgcrypt-1.7.6.tar.bz2
++sha256  b9b85eba0793ea3e6e66b896eb031fa05e1a4517277cc9ab10816b359254cd9a  libgcrypt-1.7.7.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 0ae4c6f..4374032 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBGCRYPT_VERSION = 1.7.6
++LIBGCRYPT_VERSION = 1.7.7
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
++LIBGCRYPT_SITE = https://gnupg.org/ftp/gcrypt/libgcrypt
+ LIBGCRYPT_INSTALL_STAGING = YES
+ LIBGCRYPT_DEPENDENCIES = libgpg-error
+ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
