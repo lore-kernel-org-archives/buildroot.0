@@ -1,66 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 22:14:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: use correct cxxflags for
- icu support
-In-Reply-To: <20170605200726.21261-1-bernd.kuhls@t-online.de>
-References: <20170605200726.21261-1-bernd.kuhls@t-online.de>
-Message-ID: <20170606221401.27d6cb4d@free-electrons.com>
+Date: Tue, 6 Jun 2017 22:14:28 +0200
+Subject: [Buildroot] [git commit] toolchain/toolchain-common.in: adjust
+	BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
+Message-ID: <20170606201447.18E1682A2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d49b47d165c1eafb326f7473b6e94032b1e08fd3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Jun 2017 22:07:26 +0200, Bernd Kuhls wrote:
-> Php lacks "-std=c++11", provided by icu-config, when compiling icu
-> support leading to a build failure:
-> 
-> /home/peko/autobuild/instance-1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/unicode/umachine.h:347:13:
->  error: 'char16_t' does not name a type
->      typedef char16_t UChar;
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/238/238d0e4bb205c0e7288903c6498e6c1787d86a1b/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/php/php.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index cfc678991..2e4b667f9 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -173,6 +173,7 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
->  PHP_CONF_OPTS += --enable-intl --with-icu-dir=$(STAGING_DIR)/usr
-> +PHP_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
+As GCC 7 is now available in Buildroot, update the definition for
+BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as the bug #64735 is fixed in GCC 7.
 
-Please use the same logic as the one used for PHP_CFLAGS, i.e:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-common.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-PHP_CXXFLAGS = $(TARGET_CXXFLAGS)
-
-...
-
-ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
-PHP_CXXFLAGS += `$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
-endif
-
-...
-
-PHP_CONF_ENV += CFLAGS="$(PHP_CFLAGS)" CXXFLAGS="$(TARGET_CXXFLAGS)"
-
-Also, you forgot to add the dependency on gcc >= 4.8 in the ICU patch,
-so it should be added here, because it clearly needs a C++11 compatible
-compiler.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index d670f44..ed993dd 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -17,6 +17,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	default y if BR2_ARM_CPU_ARMV4
+ 	default y if BR2_ARM_CPU_ARMV5
+ 	default y if BR2_sparc_v8
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	bool
