@@ -1,39 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Jun 2017 15:46:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: fix static linking with
-	alsa
-In-Reply-To: <20170606153559.6a0c6b35@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 6 Jun 2017 15:35:59 +0200")
-References: <20170601203930.1069-1-bernd.kuhls@t-online.de>
- <20170601203930.1069-2-bernd.kuhls@t-online.de>
- <20170605144812.36b6f0e3@free-electrons.com>
- <871sqxe1xb.fsf@dell.be.48ers.dk>
- <20170606145122.0b36d3cb@free-electrons.com>
- <87wp8pcknl.fsf@dell.be.48ers.dk>
- <20170606153559.6a0c6b35@free-electrons.com>
-Message-ID: <87shjdcjq6.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue,  6 Jun 2017 16:08:50 +0200
+Subject: [Buildroot] [PATCH] toolchain/toolchain-common.in: update
+	definition of BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
+Message-ID: <20170606140850.5823-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+As GCC7 is now available in Buildroot, update the definition for
+BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as the bug #64735 is fixed in GCC 7.
 
- > Hello,
- > On Tue, 06 Jun 2017 15:26:06 +0200, Peter Korsgaard wrote:
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ toolchain/toolchain-common.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
- >> > Because right now, the library produced by alsa-lib is broken, and this
- >> > is worked around in packages using alsa-lib rather than alsa-lib itself.  
- >> 
- >> True. Will you fix it or do you want me to send a patch?
-
- > Depends what fix we're talking about. Work around in
- > alsa-lib/Config.in, or proper fix in alsa-lib source code?
-
-Either ;) The source code change is imho more of a nice-to-have thing as
-nobody has brought it up in the ~two years we had the workaround, but if
-you feel up to it..
-
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index d670f44747..06986abdd2 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -13,10 +13,9 @@ comment "Toolchain Generic Options"
+ # ints before GCC 7
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	bool
+-	default y if BR2_nios2
+-	default y if BR2_ARM_CPU_ARMV4
+-	default y if BR2_ARM_CPU_ARMV5
+-	default y if BR2_sparc_v8
++	default y if (BR2_nios2 || BR2_ARM_CPU_ARMV4 || \
++		BR2_ARM_CPU_ARMV5 || BR2_sparc_v8) && \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	bool
 -- 
-Bye, Peter Korsgaard
+2.13.0
