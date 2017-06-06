@@ -1,39 +1,44 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  6 Jun 2017 16:08:50 +0200
-Subject: [Buildroot] [PATCH] toolchain/toolchain-common.in: update
-	definition of BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
-Message-ID: <20170606140850.5823-1-joerg.krause@embedded.rocks>
+From: Tobias.Blass at rohde-schwarz.com <Tobias.Blass@rohde-schwarz.com>
+Date: Tue, 6 Jun 2017 16:29:11 +0200
+Subject: [Buildroot] [PATCH 1/1] Botan: Disable AltiVec if the CPU does not
+	support it
+Message-ID: <OF7D9B9E03.15B7CCDF-ONC1258137.004F93F6-C1258137.004F9406@rohde-schwarz.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As GCC7 is now available in Buildroot, update the definition for
-BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as the bug #64735 is fixed in GCC 7.
+Botan compiles all PowerPC code with AltiVec support and only determines 
+at runtime
+whether the CPU even supports it. If the target CPU uses the older SPE 
+extensions, though,
+this is too late; since SPE and AltiVec are incompatible, gcc aborts the 
+compilation.
+This patch explicitly disables AltiVec support unless 
+BR2_POWERPC_CPU_HAS_ALTIVEC is defined
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Tobias Blass <tobias.blass@rohde-schwarz.com>
 ---
- toolchain/toolchain-common.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/botan/botan.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index d670f44747..06986abdd2 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -13,10 +13,9 @@ comment "Toolchain Generic Options"
- # ints before GCC 7
- config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	bool
--	default y if BR2_nios2
--	default y if BR2_ARM_CPU_ARMV4
--	default y if BR2_ARM_CPU_ARMV5
--	default y if BR2_sparc_v8
-+	default y if (BR2_nios2 || BR2_ARM_CPU_ARMV4 || \
-+		BR2_ARM_CPU_ARMV5 || BR2_sparc_v8) && \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
--- 
-2.13.0
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 2f24151..e42bb61 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -43,6 +43,12 @@ BOTAN_DEPENDENCIES += zlib
+ BOTAN_CONF_OPTS += --with-zlib
+ endif
+
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
++BOTAN_CONF_OPTS += --enable-altivec
++else
++BOTAN_CONF_OPTS += --disable-altivec
++endif
++
+ define BOTAN_CONFIGURE_CMDS
+    (cd $(@D); $(TARGET_MAKE_ENV) ./configure.py $(BOTAN_CONF_OPTS))
+ endef
+--
+1.8.3.1
