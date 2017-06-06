@@ -1,65 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 23:30:08 +0200
-Subject: [Buildroot] [git commit] refpolicy: add ability to specify policy
-	version
-Message-ID: <20170606213040.5E0E78293C@busybox.osuosl.org>
+Date: Tue, 6 Jun 2017 23:32:50 +0200
+Subject: [Buildroot] [PATCH v4 2/3] refpolicy add ability to specify
+ policy version
+In-Reply-To: <20170520204143.18154-2-Adamduskett@outlook.com>
+References: <20170520204143.18154-1-Adamduskett@outlook.com>
+ <20170520204143.18154-2-Adamduskett@outlook.com>
+Message-ID: <20170606233250.1d18dc9b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d54aa0e861850986d847338c9e6218bffde3d801
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Refpolicy by default will build the highest version supported. This may
-cause older kernels to not load the policy.
+On Sat, 20 May 2017 16:41:42 -0400, Adam Duskett wrote:
+> Refpolicy by default will build the highest version supported.
+> This may cause older kernels to not load the policy.
+> 
+> This patch adds a custom policy version string which is defaulted
+> to 30, which is the highest supported as of today.
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-This patch adds a custom policy version string which is defaulted to 30,
-which is the highest supported as of today.
+I've applied, after doing some minor changes. See below.
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Acked-by: Matt Weber  <matthew.weber@rockwellcollins.com>
-[Thomas:
- - rename option to BR2_PACKAGE_REFPOLICY_POLICY_VERSION
- - use qstrip to remove double quotes]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/refpolicy/Config.in    | 8 ++++++++
- package/refpolicy/refpolicy.mk | 6 +++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index bcc74d4..6978562 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -33,3 +33,11 @@ comment "refpolicy needs a glibc toolchain w/ threads, dynamic library"
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
-+
-+if BR2_PACKAGE_REFPOLICY
-+
-+config BR2_PACKAGE_REFPOLICY_POLICY_VERSION
-+	string "Policy version"
-+	default "30"
-+
-+endif
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 9a1d6da..4d85ee5 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -29,8 +29,12 @@ REFPOLICY_MAKE = \
- 	$(TARGET_MAKE_ENV) \
- 	$(MAKE1)
- 
+> +config BR2_PACKAGE_REFPOLICY_VERSION
+
+I've renamed this option to:
+
+   BR2_PACKAGE_REFPOLICY_POLICY_VERSION
+
+see below why.
+
+> +	string "Policy version"
+> +	default "30"
+> +
+> +endif
+> diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+> index 117e570..fa02b5a 100644
+> --- a/package/refpolicy/refpolicy.mk
+> +++ b/package/refpolicy/refpolicy.mk
+> @@ -32,7 +32,7 @@ REFPOLICY_MAKE = \
+>  	$(MAKE1)
+>  
+>  define REFPOLICY_CONFIGURE_CMDS
+> -	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = 30" $(@D)/build.conf
+> +	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(BR2_PACKAGE_REFPOLICY_VERSION)" $(@D)/build.conf
+
+This adds some double quotes which were not present before. And we
+normally qstrip string Config.in options in Buildroot.
+
+If I had kept your original Config.in option name, it would have given
+
+REFPOLICY_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_VERSION))
+
+except that REFPOLICY_VERSION would override the version of the package.
+
+So I've changed the code to:
+
 +REFPOLICY_POLICY_VERSION = \
-+	$(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_VERSION))
++       $(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_VERSION))
 +
  define REFPOLICY_CONFIGURE_CMDS
--	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = 30" $(@D)/build.conf
-+	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" \
-+		$(@D)/build.conf
- 	$(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
- 	$(SED) "/NAME/c\NAME = targeted" $(@D)/build.conf
+-       $(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = 30" $(@D)/build.conf
++       $(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" \
++               $(@D)/build.conf
+        $(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
+        $(SED) "/NAME/c\NAME = targeted" $(@D)/build.conf
  endef
+
+Please check that everything still works fine for you.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
