@@ -1,56 +1,81 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Tue,  6 Jun 2017 15:04:03 -0700
-Subject: [Buildroot] [PATCH v2] package/socat: Fix TABDLY,
-	CSIZE and CRDLY shifts for PowerPC
-Message-ID: <20170606220403.31732-1-andrew.smirnov@gmail.com>
+From: Mario Rugiero <mrugiero@gmail.com>
+Date: Tue, 6 Jun 2017 20:02:11 -0300
+Subject: [Buildroot] [PATCH v2] new package: ratpoison
+In-Reply-To: <20170606230136.7240eb7a@free-electrons.com>
+References: <20170512220246.18575-1-mrugiero@gmail.com>
+ <20170601143349.5406-1-mrugiero@gmail.com>
+ <20170606230136.7240eb7a@free-electrons.com>
+Message-ID: <CAKKQwLSi=CG40UMyg_2jrqL7tn5WJHJXprcveG1d3ai-2gWjGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As can be seen in linux/arch/powerpc/include/uapi/asm/termbits.h are
-defined as (note that those are octal numbers):
-
-\#define TABDLY	00006000
-\#define CSIZE	00001400
-\#define CRDLY	00030000
-
-which gives shifts of 10, 8 and 12. Adjust socat.mk accordingly to
-reflect that difference.
-
-Signed-off-by: Mark Hinds <zoronic@gmail.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- package/socat/socat.mk | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index ba46263..b923cef 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -9,11 +9,20 @@ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPL-2.0
- SOCAT_LICENSE_FILES = COPYING
--SOCAT_CONF_ENV = \
--	sc_cv_termios_ispeed=no \
-+
-+SOCAT_CONF_ENV = sc_cv_termios_ispeed=no
-+
-+ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
-+SOCAT_CONF_ENV += \
-+	sc_cv_sys_crdly_shift=12 \
-+	sc_cv_sys_tabdly_shift=10 \
-+	sc_cv_sys_csize_shift=8
-+else
-+SOCAT_CONF_ENV += \
- 	sc_cv_sys_crdly_shift=9 \
- 	sc_cv_sys_tabdly_shift=11 \
- 	sc_cv_sys_csize_shift=4
-+endif
- 
- # We need to run autoconf to regenerate the configure script, in order
- # to ensure that the test checking linux/ext2_fs.h works
--- 
-2.9.4
+2017-06-06 18:01 GMT-03:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+Hello.
+>
+> I've applied, after doing a number of fixes.
+>
+> First, the commit title should have been "ratpoison: new package".
+Noted.
+>
+> On Thu,  1 Jun 2017 11:33:49 -0300, Mario J. Rugiero wrote:
+>> diff --git a/package/ratpoison/ratpoison.mk b/package/ratpoison/ratpoison.mk
+>> new file mode 100644
+>> index 000000000..18222c217
+>> --- /dev/null
+>> +++ b/package/ratpoison/ratpoison.mk
+>> @@ -0,0 +1,25 @@
+>> +################################################################################
+>> +#
+>> +# ratpoison
+>> +#
+>> +################################################################################
+>> +
+>> +RATPOISON_VERSION = 1.4.9
+>> +RATPOISON_SOURCE = ratpoison-$(RATPOISON_VERSION).tar.xz
+>> +RATPOISON_SITE = http://download.savannah.nongnu.org/releases/ratpoison
+>> +RATPOISON_LICENSE = GPL-2.0
+>
+> The license really was GPL-2.0+, not GPL-2.0.
+It didn't seem like it was GPL-2.0+ in the COPYING file, but I may be wrong.
+>
+>> +RATPOISON_LICENSE_FILES = COPYING
+>> +
+>> +RATPOISON_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+>> +                   --x-libraries=$(STAGING_DIR)/usr/lib
+>
+> Indentation on the second line should be done with just one tab. And
+> also, explicitly disabling options not handled is a good practice. So
+> in the end, this looked like this:
+>
+> +RATPOISON_CONF_OPTS = \
+> +       --x-includes=$(STAGING_DIR)/usr/include/X11 \
+> +       --x-libraries=$(STAGING_DIR)/usr/lib \
+> +       --without-xkb \
+> +       --without-xft
+Noted.
+>
+> If you want to send another patch to optionally enable XKB and XFT
+> support, that would be welcome.
+I'll probably send a new patch during this week.
+>
+>> +ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
+>> +     RATPOISON_DEPENDENCIES += xlib_libXrandr
+>> +     RATPOISON_CONF_OPTS += --with-xrandr
+>
+> Do not indent such variable definitions.
+Noted
+>
+> Applied with those fixes. Thanks!
+>
+> Thomas
+Thanks for the feedback.
+Mario.
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
