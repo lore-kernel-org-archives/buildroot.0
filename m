@@ -1,114 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 23:40:04 +0200
-Subject: [Buildroot] [PATCH v4 3/3] refpolicy: add ability to set
- default state.
-In-Reply-To: <20170520204143.18154-3-Adamduskett@outlook.com>
-References: <20170520204143.18154-1-Adamduskett@outlook.com>
- <20170520204143.18154-3-Adamduskett@outlook.com>
-Message-ID: <20170606234004.0f3e612d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 6 Jun 2017 23:46:12 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] libgcrypt: security bump
+	to version 1.7.7
+Message-ID: <20170606214725.2AD0F82894@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1a0cd7af8d8af315b9aa7ce1d55a020f4c9d1497
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-On Sat, 20 May 2017 16:41:43 -0400, Adam Duskett wrote:
-> SELinux requires a config file in /etc/selinux which controls the state
-> of SELinux on the system.
-> 
-> This config file has two options set in it:
-> SELINUX which set's the state of selinux on boot.
-> SELINUXTYPE which should equal the name of the policy.  In this case, the
-> default name is targeted.
-> 
-> This patch adds:
-> - A choice menu on Config.in that allows the user to select a default
->   SELinux state.
-> 
-> - A basic config file that will be installed to
->   target/etc/selinux and will set SELINUX= to the selected state.
-> 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Fix possible timing attack on EdDSA session key.
 
-I've applied, after doing a few changes as well.
+https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
 
-> +choice
-> +	prompt "SELinux default state"
-> +	default BR2_PACKAGE_REFPOLICY_STATE_PERMISSIVE
-> +
-> +config BR2_PACKAGE_REFPOLICY_STATE_ENFORCING
-> +	bool "Enforcing"
-> +	help
-> +	  SELinux security policy is enforced
-> +
-> +config BR2_PACKAGE_REFPOLICY_STATE_PERMISSIVE
-> +	bool "Permissive"
-> +	help
-> +	  SELinux prints warnings instead of enforcing
-> +
-> +config BR2_PACKAGE_REFPOLICY_STATE_DISABLED
-> +	bool "Disabled"
-> +	help
-> +	  No SELinux policy is loaded
-> +endchoice
-> +
-> +config BR2_PACKAGE_REFPOLICY_STATE
-> +	string
-> +	default "permissive" if BR2_PACKAGE_REFPOLICY_STATE_PERMISSIVE
-> +	default "enforcing" if BR2_PACKAGE_REFPOLICY_STATE_ENFORCING
-> +	default "disabled" if BR2_PACKAGE_REFPOLICY_STATE_DISABLED
+Add upstream provided SHA1 hash.
 
-To be consistent with the other option, I've renamed all options to
-BR2_PACKAGE_REFPOLICY_POLICY_STATE_xyz.
+Switch to https download for better corporate firewall compatibility.
 
->  REFPOLICY_PYINC = -I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/site-packages
-> +REFPOLICY_NAME = "targeted"
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 869c8dfd7bd37bd11a903cadf065a1963fb8f887)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgcrypt/libgcrypt.hash | 4 +++-
+ package/libgcrypt/libgcrypt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-This variable is unused, so I dropped it.
-
->  define REFPOLICY_INSTALL_TARGET_CMDS
->  	$(REFPOLICY_MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-> +	$(INSTALL) -m 0755 -D package/refpolicy/config \
-> +		$(TARGET_DIR)/etc/selinux/config
-> +
-> +	$(SED) "/^SELINUX=/c\SELINUX=$(BR2_PACKAGE_REFPOLICY_STATE)" \
-> +		$(TARGET_DIR)/etc/selinux/config
-
-And I've added a qstripped version this variable. So the code looks
-like this:
-
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 4d85ee5..aab1877 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -31,6 +31,8 @@ REFPOLICY_MAKE = \
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 48bbd6a..5a833d5 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,2 +1,4 @@
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
++sha1  ea4ae1a4dba51f15095319419d7b42a0bf160384  libgcrypt-1.7.7.tar.bz2
+ # Locally calculated
+-sha256  626aafee84af9d2ce253d2c143dc1c0902dda045780cc241f39970fc60be05bc  libgcrypt-1.7.6.tar.bz2
++sha256  b9b85eba0793ea3e6e66b896eb031fa05e1a4517277cc9ab10816b359254cd9a  libgcrypt-1.7.7.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 0ae4c6f..4374032 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
- REFPOLICY_POLICY_VERSION = \
-        $(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_VERSION))
-+REFPOLICY_POLICY_STATE = \
-+       $(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_STATE))
- 
- define REFPOLICY_CONFIGURE_CMDS
-        $(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" \
-@@ -50,6 +52,10 @@ endef
- 
- define REFPOLICY_INSTALL_TARGET_CMDS
-        $(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+       $(INSTALL) -m 0755 -D package/refpolicy/config \
-+               $(TARGET_DIR)/etc/selinux/config
-+       $(SED) "/^SELINUX=/c\SELINUX=$(REFPOLICY_POLICY_STATE)" \
-+               $(TARGET_DIR)/etc/selinux/config
- endef
-
-Once again, please test that everything still works fine for you after
-my changes.
-
-Thanks a lot for this work on refpolicy.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+-LIBGCRYPT_VERSION = 1.7.6
++LIBGCRYPT_VERSION = 1.7.7
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
++LIBGCRYPT_SITE = https://gnupg.org/ftp/gcrypt/libgcrypt
+ LIBGCRYPT_INSTALL_STAGING = YES
+ LIBGCRYPT_DEPENDENCIES = libgpg-error
+ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
