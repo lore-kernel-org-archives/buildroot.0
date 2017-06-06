@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Jun 2017 22:28:16 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] botan: disable AltiVec if
+Date: Tue, 6 Jun 2017 22:29:00 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] botan: disable AltiVec if
 	the CPU does not support it
-Message-ID: <20170606202824.981AF81D4C@busybox.osuosl.org>
+Message-ID: <20170606202906.C336682A32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14f06ff260986ae4f878c517fa8f84efe9c9aaeb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=85f58389cdfc0a63ae43f6ca6976176ce5a422b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 Botan compiles all PowerPC code with AltiVec support and only determines
 at runtime whether the CPU even supports it. If the target CPU uses the
@@ -27,7 +27,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 7694b8d..c098b57 100644
+index 94f1edd..fc8fa69 100644
 --- a/package/botan/botan.mk
 +++ b/package/botan/botan.mk
 @@ -43,6 +43,12 @@ BOTAN_DEPENDENCIES += zlib
