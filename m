@@ -1,69 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Jun 2017 22:20:31 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-06-05
-In-Reply-To: <1496776591.3962.3.camel@embedded.rocks> (=?utf-8?Q?=22J?=
- =?utf-8?Q?=C3=B6rg?= Krause"'s message
- of "Tue, 06 Jun 2017 21:16:31 +0200")
-References: <20170606063119.BBACB21D14@mail.free-electrons.com>
- <1496776591.3962.3.camel@embedded.rocks>
-Message-ID: <87y3t4c1gw.fsf@dell.be.48ers.dk>
+Date: Tue, 6 Jun 2017 22:28:16 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] botan: disable AltiVec if
+	the CPU does not support it
+Message-ID: <20170606202824.981AF81D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=14f06ff260986ae4f878c517fa8f84efe9c9aaeb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
- > On Tue, 2017-06-06 at 08:31 +0200, Thomas Petazzoni wrote:
- >> Hello,
+Botan compiles all PowerPC code with AltiVec support and only determines
+at runtime whether the CPU even supports it. If the target CPU uses the
+older SPE extensions, though, this is too late; since SPE and AltiVec
+are incompatible, gcc aborts the compilation. This patch explicitly
+disables AltiVec support unless BR2_POWERPC_CPU_HAS_ALTIVEC is defined
 
- > Build statistics for 2017-06-05
- > ================================
+Signed-off-by: Tobias Blass <tobias.blass@rohde-schwarz.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit e654839f9e2cc6d2780916d0288941cb3d4555dd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/botan/botan.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- >      powerpc |                libupnpp-0.15.2 | NOK | http://autobuild.buildroot.net/results/0bf84f61a72a65a75c5fd0a787680f483cfead26 |     
- >      powerpc |                libupnpp-0.15.2 | NOK | http://autobuild.buildroot.net/results/2569d7b5049d0bd1da8316d8ac5997d4e68c08ae |     
- >      powerpc |                libupnpp-0.15.2 | NOK | http://autobuild.buildroot.net/results/ff512f5532011a513b5551428152e600b04a007d |     
-
- > """
- > error: 'yield' is not a member of 'std::this_thread'
- > """
-
- > Before version 0.15.2 libupnpp used sched_yield() which was replaced by
- > std::this_thread::yield(). Looking at the thread header file for the
- > PowerPC toolchain shows that yield() is only enabled if
- > `_GLIBCXX_USE_SCHED_YIELD` is defined. This macro is only defined if
- > GCC was built with `--enable-libstdcxx-time`. For GCC 4.7 and below
- > this option defaults to no, which means sched_yield() is not enabled
- > though it is available.
-
- > """
- > #ifdef _GLIBCXX_USE_SCHED_YIELD
- >     /// yield
- >     inline void
- >     yield() noexcept
- >     { __gthread_yield(); }
- > #endif
- > """
-
- > """
- > static inline int
- > __gthread_yield (void)
- > {
- >   return __gthrw_(sched_yield) ();
- > }
- > """
-
- > This issue was discussed on stackoverflow [1]. The issue is resolved in
- > GCC 4.9 which automatically enables sched_yield() on platforms that are
- > known to support them.
-
- > Therefore, I would suggest to add a dependency on GCC 4.9 for this
- > package.
-
-Thanks for investigating and sounds sensible to me. Will you send a
-patch?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 7694b8d..c098b57 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -43,6 +43,12 @@ BOTAN_DEPENDENCIES += zlib
+ BOTAN_CONF_OPTS += --with-zlib
+ endif
+ 
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
++BOTAN_CONF_OPTS += --enable-altivec
++else
++BOTAN_CONF_OPTS += --disable-altivec
++endif
++
+ define BOTAN_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) ./configure.py $(BOTAN_CONF_OPTS))
+ endef
