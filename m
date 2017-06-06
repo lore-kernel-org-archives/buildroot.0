@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Jun 2017 14:04:18 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/ipsec-tools: add
+Date: Tue, 6 Jun 2017 14:03:46 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/ipsec-tools: add
 	security patch to fix CVE-2015-4047
-Message-ID: <20170606120744.1987F81DB5@busybox.osuosl.org>
+Message-ID: <20170606120755.D7D1D82A0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=883e4c2ceb950b7d9eea8b63c25a7c6e9d4a91dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=42f2157f197f74921c21ee36eddc9b3d5550281d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
 Cherry-picked from master branch:
 https://git.buildroot.net/buildroot/commit/?id=ff97e66c56512644577e8e86019f92bf935ed29e
