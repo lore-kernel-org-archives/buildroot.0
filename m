@@ -1,43 +1,44 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  6 Jun 2017 17:31:05 +0200
-Subject: [Buildroot] [PATCH] perl-cross: bump to version 1.1.5
-Message-ID: <1496763065-17000-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Jun 2017 17:32:22 +0200
+Subject: [Buildroot] [PATCH] toolchain/toolchain-common.in: update
+ definition of BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
+In-Reply-To: <20170606140850.5823-1-joerg.krause@embedded.rocks>
+References: <20170606140850.5823-1-joerg.krause@embedded.rocks>
+Message-ID: <20170606173222.537500c6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.hash | 4 ++--
- package/perl/perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index b815295..eb88b9e 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -3,5 +3,5 @@ md5    af6a84c7c3e2b8b269c105a5db2f6d53                                 perl-5.2
- sha1   5bec25d8821b81a5939ee220997f4c8ab1c13e31                         perl-5.24.1.tar.xz
- sha256 03a77bac4505c270f1890ece75afc7d4b555090b41aa41ea478747e23b2afb3f perl-5.24.1.tar.xz
- 
--# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.4/perl-cross-1.1.4.hash
--sha256 c840a327d5464ca271cac40d52e2d199330875527bf1003c28a6e550fb7bcc57 perl-cross-1.1.4.tar.gz
-+# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.5/perl-cross-1.1.5.hash
-+sha256	0e719e75983b16c7726c2c9462f9498bb1fc4ad38c9f2513a65f3dd34e3decb3  perl-cross-1.1.5.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 130441f..ca23eb0 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.1.4
-+PERL_CROSS_VERSION = 1.1.5
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+On Tue,  6 Jun 2017 16:08:50 +0200, J?rg Krause wrote:
+
+> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+> index d670f44747..06986abdd2 100644
+> --- a/toolchain/toolchain-common.in
+> +++ b/toolchain/toolchain-common.in
+> @@ -13,10 +13,9 @@ comment "Toolchain Generic Options"
+>  # ints before GCC 7
+>  config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+>  	bool
+> -	default y if BR2_nios2
+> -	default y if BR2_ARM_CPU_ARMV4
+> -	default y if BR2_ARM_CPU_ARMV5
+> -	default y if BR2_sparc_v8
+> +	default y if (BR2_nios2 || BR2_ARM_CPU_ARMV4 || \
+> +		BR2_ARM_CPU_ARMV5 || BR2_sparc_v8) && \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+
+This feels very complicated. What about just:
+
+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
