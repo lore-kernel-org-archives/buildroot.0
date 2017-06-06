@@ -1,54 +1,86 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 06 Jun 2017 20:44:05 +0200
-Subject: [Buildroot] [PATCH] toolchain/toolchain-common.in: update
- definition of BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
-In-Reply-To: <20170606173222.537500c6@free-electrons.com>
-References: <20170606140850.5823-1-joerg.krause@embedded.rocks>
- <20170606173222.537500c6@free-electrons.com>
-Message-ID: <1496774645.3962.1.camel@embedded.rocks>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 6 Jun 2017 21:38:07 +0300
+Subject: [Buildroot] [PATCH] package/tslib: enable statically linked
+ building
+In-Reply-To: <20170606160008.20503-1-martin.kepplinger@ginzinger.com>
+References: <20170606160008.20503-1-martin.kepplinger@ginzinger.com>
+Message-ID: <20170606183807.iybbhjhcjqdu7vak@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Martin,
 
-On Tue, 2017-06-06 at 17:32 +0200, Thomas Petazzoni wrote:
-> Hello,
+On Tue, Jun 06, 2017 at 06:00:08PM +0200, Martin Kepplinger wrote:
+> From: Martin Kepplinger <martink@posteo.de>
 > 
-> On Tue,  6 Jun 2017 16:08:50 +0200, J?rg Krause wrote:
+> tslib can be configured to be built statically linked. So let's add this option.
+
+Packages that select BR2_PACKAGE_TSLIB might now support static build as well.
+
+baruch
+
+> tslib is quite configurable and each module can be selected to be built into
+> the static build. This configuration includes the hardware independent filter
+> modules (obviously), and the Linux evdev input module.
 > 
-> > diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> > index d670f44747..06986abdd2 100644
-> > --- a/toolchain/toolchain-common.in
-> > +++ b/toolchain/toolchain-common.in
-> > @@ -13,10 +13,9 @@ comment "Toolchain Generic Options"
-> >  # ints before GCC 7
-> >  config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> >  	bool
-> > -	default y if BR2_nios2
-> > -	default y if BR2_ARM_CPU_ARMV4
-> > -	default y if BR2_ARM_CPU_ARMV5
-> > -	default y if BR2_sparc_v8
-> > +	default y if (BR2_nios2 || BR2_ARM_CPU_ARMV4 || \
-> > +		BR2_ARM_CPU_ARMV5 || BR2_sparc_v8) && \
-> > +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+> This results in a configuration that fully supports multitouch in any
+> combination.
 > 
-> This feels very complicated. What about just:
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+> ---
 > 
-> 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+> so strictly speaking this is a first idea of what static config to offer.
+> It is an upgrade in any case, so almost any configuration should be safe to
+> do now; but tslib includes old userspace driver modules that aren't really
+> encouraged to use (evdev kernel drivers is the way to go) and they are not
+> included in the build here.
+> 
+> 
+>  package/tslib/Config.in |  4 ----
+>  package/tslib/tslib.mk  | 12 ++++++++++++
+>  2 files changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/tslib/Config.in b/package/tslib/Config.in
+> index f1de56c12..a2e1e7ff7 100644
+> --- a/package/tslib/Config.in
+> +++ b/package/tslib/Config.in
+> @@ -1,10 +1,6 @@
+>  config BR2_PACKAGE_TSLIB
+>  	bool "tslib"
+> -	depends on !BR2_STATIC_LIBS # dlopen
+>  	help
+>  	  Tslib is a filtering layer for touchscreen panel events.
+>  
+>  	  http://tslib.org
+> -
+> -comment "tslib needs a toolchain w/ dynamic library"
+> -	depends on BR2_STATIC_LIBS
+> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+> index 87eb5b734..a4e045a32 100644
+> --- a/package/tslib/tslib.mk
+> +++ b/package/tslib/tslib.mk
+> @@ -17,4 +17,16 @@ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6),)
+>  TSLIB_CONF_OPTS += --disable-tools
+>  endif
+>  
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +TSLIB_CONF_OPTS += --disable-shared --enable-static \
+> +		   --enable-input=static \
+> +		   --enable-linear=static \
+> +		   --enable-median=static \
+> +		   --enable-pthres=static \
+> +		   --enable-iir=static \
+> +		   --enable-dejitter=static \
+> +		   --enable-debounce=static \
+> +		   --enable-skip=static
+> +endif
+> +
+>  $(eval $(autotools-package))
 
-Wouldn't that be rather:
-
-"""
-config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-"""
-
-The package mpd chooses between version 0.19 and 0.20 depending on that
-bug. For now, if mpd is build with GCC6 (and below) and an architecture
-not affected by this bug, version 0.20 is selected. By not depending on
-the architecture anymore, mpd version 0.19 would be selected instead.
-
-J?rg
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
