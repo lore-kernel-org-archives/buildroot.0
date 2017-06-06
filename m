@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 21:33:43 +0200
-Subject: [Buildroot] [PATCH] package/tslib: enable statically linked
- building
-In-Reply-To: <20170606160008.20503-1-martin.kepplinger@ginzinger.com>
-References: <20170606160008.20503-1-martin.kepplinger@ginzinger.com>
-Message-ID: <20170606213343.198d1375@free-electrons.com>
+Date: Tue, 6 Jun 2017 21:35:00 +0200
+Subject: [Buildroot] [PATCH] glibc: remove version choice
+In-Reply-To: <20170606175659.GA2566@waldemar-brodkorb.de>
+References: <20170606175659.GA2566@waldemar-brodkorb.de>
+Message-ID: <20170606213500.0fe44a79@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 6 Jun 2017 18:00:08 +0200, Martin Kepplinger wrote:
+On Tue, 6 Jun 2017 19:56:59 +0200, Waldemar Brodkorb wrote:
+> We do not support uClibc-ng/musl C library version choice support,
+> do the same for GNU C Library.
+> Add me as Maintainer for the package.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +TSLIB_CONF_OPTS += --disable-shared --enable-static \
+On this one, I'd like to have the opinion of others. Arnout? Peter?
+Yann? What do you think about this?
 
-These are not needed, and in fact wrong, because they don't do the
-right thing for BR2_SHARED_STATIC_LIBS.
+I don't have a very clear-cut opinion about this one.
 
---{enable,disable}-{shared,static} is already automartically passed by
-the package infrastructure.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index cdd38e6..bfeb824 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1686,6 +1686,7 @@ F:	arch/Config.in.sparc
+>  F:	package/uclibc/
+>  F:	package/uclibc-ng-test/
+>  F:	package/mksh/
+> +F:	package/glibc/
 
-> +		   --enable-input=static \
-> +		   --enable-linear=static \
-> +		   --enable-median=static \
-> +		   --enable-pthres=static \
-> +		   --enable-iir=static \
-> +		   --enable-dejitter=static \
-> +		   --enable-debounce=static \
-> +		   --enable-skip=static
+Alphabetic ordering not correct here.
 
-OK, for these, but please use just one tab for the indentation.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
