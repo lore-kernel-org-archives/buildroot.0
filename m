@@ -1,44 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 17:32:22 +0200
-Subject: [Buildroot] [PATCH] toolchain/toolchain-common.in: update
- definition of BR2_TOOLCHAIN_HAS_GCC_BUG_64735 for GCC 7
-In-Reply-To: <20170606140850.5823-1-joerg.krause@embedded.rocks>
-References: <20170606140850.5823-1-joerg.krause@embedded.rocks>
-Message-ID: <20170606173222.537500c6@free-electrons.com>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Tue, 6 Jun 2017 17:47:55 +0200
+Subject: [Buildroot] [PATCH] package/tslib: bump version to 1.11
+In-Reply-To: <87bmq1cfce.fsf@dell.be.48ers.dk>
+References: <20170606125009.26537-1-martin.kepplinger@ginzinger.com>
+ <87bmq1cfce.fsf@dell.be.48ers.dk>
+Message-ID: <1e33fbf7-4a80-006b-4ec9-2dc11feb3b6b@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2017-06-06 17:20, Peter Korsgaard wrote:
+>>>>>> "Martin" == Martin Kepplinger <martin.kepplinger@ginzinger.com> writes:
+> 
+>  > Release notes for the curious:
+>  >    https://github.com/kergoth/tslib/blob/master/NEWS
+> 
+> Sorry, forgot to ask:
+> 
+> NEWS states:
+> 
+> This release includes the following bugfixes:
+> * ff8c7d9 use dlfcn.h dynamic loading function only if libdl is available
+> 
+> 
+> Does this mean that we can drop the dependency on !BR2_STATIC_LIBS?
+> 
 
-On Tue,  6 Jun 2017 16:08:50 +0200, J?rg Krause wrote:
-
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index d670f44747..06986abdd2 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -13,10 +13,9 @@ comment "Toolchain Generic Options"
->  # ints before GCC 7
->  config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
->  	bool
-> -	default y if BR2_nios2
-> -	default y if BR2_ARM_CPU_ARMV4
-> -	default y if BR2_ARM_CPU_ARMV5
-> -	default y if BR2_sparc_v8
-> +	default y if (BR2_nios2 || BR2_ARM_CPU_ARMV4 || \
-> +		BR2_ARM_CPU_ARMV5 || BR2_sparc_v8) && \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
-
-This feels very complicated. What about just:
-
-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Yes. I planned to send this change when this is applied :)
