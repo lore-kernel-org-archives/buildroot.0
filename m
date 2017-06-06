@@ -1,112 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 23:24:31 +0200
-Subject: [Buildroot] [PATCH v4 1/3] refpolicy: new package
-In-Reply-To: <20170520204143.18154-1-Adamduskett@outlook.com>
-References: <20170520204143.18154-1-Adamduskett@outlook.com>
-Message-ID: <20170606232431.40c139e9@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 6 Jun 2017 23:27:34 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] imx-uuc: fix
+	start-stop-daemon stop failure
+Message-ID: <20170606212740.387E781EA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=4159c69bc65c25059f36849bc9a2e19e2e9f79eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-On Sat, 20 May 2017 16:41:41 -0400, Adam Duskett wrote:
-> The patch is for adding selinux reference policy (refpolicy).
-> It is a complete SELinux policy that can be used as the system policy
-> for a variety of systems and used as the basis for creating other policies.
+The daemon service script associated with imx-uuc failed to stop the daemon
+since the PID of the process wasn't stored at start time.
 
-I've applied, after doing a few fixes. I also have one question. See below.
+Adding -m option allowed to create the uuc.pid file as expected.
 
->  package/Config.in                |  1 +
->  package/refpolicy/Config.in      | 37 ++++++++++++++++++++++++++++
->  package/refpolicy/refpolicy.hash |  2 ++
->  package/refpolicy/refpolicy.mk   | 53 ++++++++++++++++++++++++++++++++++++++++
+Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 41e86cd5cad853d7778231be8ce7c6fdb87e3da4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/freescale-imx/imx-uuc/S80imx-uuc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Entry to DEVELOPERS file missing.
-
-> +config BR2_PACKAGE_REFPOLICY
-> +	bool "refpolicy"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # policycoreutils
-> +	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # libsemanage
-> +	depends on !BR2_STATIC_LIBS #libsemanage
-
-Repeating dependencies is useless. Also having as a comment a package
-that isn't selected by refpolicy doesn't make sense. I've fixed this.
-
-> +	depends on !BR2_arc # libsemanage
-
-Ditto.
-
-> +# Do not use GitHub helper as git submodules are needed for refpolicy-contrib
-> +REFPOLICY_SITE = https://github.com/TresysTechnology/refpolicy.git
-> +REFPOLICY_SITE_METHOD = git
-> +REFPOLICY_GIT_SUBMODULES = y # Required for refpolicy-contrib
-> +REFPOLICY_LICENSE = GPLv2
-
-We use SPDX license tags now, so GPL-2.0.
-
-> +REFPOLICY_LICENSE_FILES = COPYING
-> +REFPOLICY_INSTALL_STAGING = YES
-> +REFPOLICY_DEPENDENCIES += \
-
-+= not needed here.
-
-> +	host-m4 \
-> +	host-checkpolicy \
-> +	host-policycoreutils \
-> +	host-setools \
-> +	host-gawk \
-> +	host-python \
-> +	policycoreutils
-> +
-> +REFPOLICY_PYINC = -I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/site-packages
-
-Variable unused, so dropped.
-
-> +# Cannot use multiple threads to build the reference policy
-> +REFPOLICY_MAKE = \
-> +	TEST_TOOLCHAIN=$(HOST_DIR) \
-> +	PYTHON="$(HOST_DIR)/usr/bin/python2" \
-> +	$(TARGET_MAKE_ENV) \
-> +	$(MAKE1)
-> +
-> +define REFPOLICY_CONFIGURE_CMDS
-> +	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = 30" $(@D)/build.conf
-> +	$(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
-> +	$(SED) "/NAME/c\NAME = targeted" $(@D)/build.conf
-> +endef
-> +
-> +define REFPOLICY_BUILD_CMDS
-> +	$(REFPOLICY_MAKE) -C $(@D) bare conf DESTDIR=$(STAGING_DIR)
-
-We usually put DESTDIR before the targets, so changed.
-
-> +endef
-> +
-> +define REFPOLICY_INSTALL_STAGING_CMDS
-> +	$(REFPOLICY_MAKE) -C $(@D) install-src install-headers \
-> +	DESTDIR=$(STAGING_DIR)
-
-Second line should be indented with two tabs.
-
-> +endef
-> +
-> +define REFPOLICY_INSTALL_TARGET_CMDS
-> +	$(REFPOLICY_MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-> +endef
-
-My question is: why "install-src install-headers" for staging and just
-"install" for target ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/freescale-imx/imx-uuc/S80imx-uuc b/package/freescale-imx/imx-uuc/S80imx-uuc
+index 8a02f88..9a92c98 100644
+--- a/package/freescale-imx/imx-uuc/S80imx-uuc
++++ b/package/freescale-imx/imx-uuc/S80imx-uuc
+@@ -6,7 +6,7 @@ DAEMON=/usr/bin/$NAME
+ case "$1" in
+     start)
+ 	printf "Starting $NAME: "
+-	start-stop-daemon -S -q -b -p /var/run/${NAME}.pid -x $DAEMON
++	start-stop-daemon -S -q -b -m -p /var/run/${NAME}.pid -x $DAEMON
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+     stop)
