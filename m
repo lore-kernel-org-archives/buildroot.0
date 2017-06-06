@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jun 2017 22:09:44 +0200
-Subject: [Buildroot] [PATCH] package/socat: Fix TABDLY,
- CSIZE and CRDLY shifts for PowerPC
-In-Reply-To: <20170605204151.1563-1-andrew.smirnov@gmail.com>
-References: <20170605204151.1563-1-andrew.smirnov@gmail.com>
-Message-ID: <20170606220944.54cab0a9@free-electrons.com>
+Date: Tue, 6 Jun 2017 22:14:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: use correct cxxflags for
+ icu support
+In-Reply-To: <20170605200726.21261-1-bernd.kuhls@t-online.de>
+References: <20170605200726.21261-1-bernd.kuhls@t-online.de>
+Message-ID: <20170606221401.27d6cb4d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  5 Jun 2017 13:41:51 -0700, Andrey Smirnov wrote:
-> As can be seen in linux/arch/powerpc/include/uapi/asm/termbits.h those
-> constants are defined as (note that those are octal numbers):
+On Mon,  5 Jun 2017 22:07:26 +0200, Bernd Kuhls wrote:
+> Php lacks "-std=c++11", provided by icu-config, when compiling icu
+> support leading to a build failure:
 > 
-> \#define TABDLY	00006000
-> \#define CSIZE	00001400
-> \#define CRDLY	00030000
+> /home/peko/autobuild/instance-1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/unicode/umachine.h:347:13:
+>  error: 'char16_t' does not name a type
+>      typedef char16_t UChar;
 > 
-> which gives shifts of 10, 8 and 12. Adjust socat.mk accordingly to
-> reflect that difference.
+> Fixes
+> http://autobuild.buildroot.net/results/238/238d0e4bb205c0e7288903c6498e6c1787d86a1b/
 > 
-> Signed-off-by: Mark Hinds <zoronic@gmail.com>
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/php/php.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index cfc678991..2e4b667f9 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -173,6 +173,7 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
+>  PHP_CONF_OPTS += --enable-intl --with-icu-dir=$(STAGING_DIR)/usr
+> +PHP_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
 
-Thanks for this patch. I don't really understand why they are using an
-AC_TRY_RUN() test for this. I'm pretty we can call the preprocessor to
-get the value, and then use shell to determine the shift. This would
-make the test cross-compilation compliant. Demo:
+Please use the same logic as the one used for PHP_CFLAGS, i.e:
 
-$ cat test.c 
-#include <termios.h>
-#include <unistd.h>
-TABDLY
-CRDLY
-CSIZE
-$ ./output/host/usr/bin/powerpc64le-linux-gcc -E -o - test.c | tail -3
-00006000
-00030000
-00001400
+PHP_CXXFLAGS = $(TARGET_CXXFLAGS)
 
-So, no need to be on PowerPC64 to get those values.
+...
 
-That being said, it's probably a bit a lot more work to do. So, some
-comments on the implementation.
+ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
+PHP_CXXFLAGS += `$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
+endif
 
-> +ifeq ($(ARCH),powerpc)
+...
 
-This will only match PowerPC and not PowerPC64 and PowerPC64le, which I
-believe are in the same situation, so you should use:
+PHP_CONF_ENV += CFLAGS="$(PHP_CFLAGS)" CXXFLAGS="$(TARGET_CXXFLAGS)"
 
-ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
-
-> +SOCAT_CONF_ENV = \
-> +	sc_cv_termios_ispeed=no \
-
-Please move this one outside the if, since it's the same in both cases.
+Also, you forgot to add the dependency on gcc >= 4.8 in the ICU patch,
+so it should be added here, because it clearly needs a C++11 compatible
+compiler.
 
 Thanks!
 
