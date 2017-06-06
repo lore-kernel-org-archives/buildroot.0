@@ -1,65 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Jun 2017 17:21:50 +0200
-Subject: [Buildroot] [git commit] package/python-pyicu: bump version to 1.9.7
-Message-ID: <20170606152303.4D2A882849@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  6 Jun 2017 17:31:05 +0200
+Subject: [Buildroot] [PATCH] perl-cross: bump to version 1.1.5
+Message-ID: <1496763065-17000-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b83d984131a376fa74db904effbbc3519b8f958
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes build with ICU 59.1, updated broken URL in Config.in.
-
-Fixes
-http://autobuild.buildroot.net/results/d32/d32b7c98323e2a25a378143795583716bd5b74a9/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/python-pyicu/Config.in         | 2 +-
- package/python-pyicu/python-pyicu.hash | 4 ++--
- package/python-pyicu/python-pyicu.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl/perl.hash | 4 ++--
+ package/perl/perl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pyicu/Config.in b/package/python-pyicu/Config.in
-index 48ade99..efab085 100644
---- a/package/python-pyicu/Config.in
-+++ b/package/python-pyicu/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_PYTHON_PYICU
- 	help
- 	  Python extension wrapping the ICU C++ API.
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index b815295..eb88b9e 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -3,5 +3,5 @@ md5    af6a84c7c3e2b8b269c105a5db2f6d53                                 perl-5.2
+ sha1   5bec25d8821b81a5939ee220997f4c8ab1c13e31                         perl-5.24.1.tar.xz
+ sha256 03a77bac4505c270f1890ece75afc7d4b555090b41aa41ea478747e23b2afb3f perl-5.24.1.tar.xz
  
--	  http://pyicu.osafoundation.org/
-+	  https://github.com/ovalhub/pyicu
+-# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.4/perl-cross-1.1.4.hash
+-sha256 c840a327d5464ca271cac40d52e2d199330875527bf1003c28a6e550fb7bcc57 perl-cross-1.1.4.tar.gz
++# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.5/perl-cross-1.1.5.hash
++sha256	0e719e75983b16c7726c2c9462f9498bb1fc4ad38c9f2513a65f3dd34e3decb3  perl-cross-1.1.5.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 130441f..ca23eb0 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
  
- comment "python-pyicu needs a toolchain w/ C++, gcc >= 4.8"
- 	depends on !BR2_BINFMT_FLAT
-diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
-index 69edba8..b0d75fd 100644
---- a/package/python-pyicu/python-pyicu.hash
-+++ b/package/python-pyicu/python-pyicu.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/PyICU/json, sha256 locally computed
--md5	30f85b7272f15b26c110c9f3e3a9e7a0  PyICU-1.9.5.tar.gz
--sha256	73b052b800861fae3281dbaf9c92d12a81cabf3d31912d94c51862e093ef359b  PyICU-1.9.5.tar.gz
-+md5 7656f5cc53a7c18b40e653d6eefdee14   PyICU-1.9.7.tar.gz
-+sha256 db27cd1cc150b879c5465872bec7fdaf340eca140aa922be03891d5b9f855b61  PyICU-1.9.7.tar.gz
-diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
-index 5c01421..c6587c3 100644
---- a/package/python-pyicu/python-pyicu.mk
-+++ b/package/python-pyicu/python-pyicu.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYICU_VERSION = 1.9.5
-+PYTHON_PYICU_VERSION = 1.9.7
- PYTHON_PYICU_SOURCE = PyICU-$(PYTHON_PYICU_VERSION).tar.gz
--PYTHON_PYICU_SITE = https://pypi.python.org/packages/a2/9f/1947f288143191b903e58633ee597cb98bc284de28dafb1231b6f8b67b99
-+PYTHON_PYICU_SITE = https://pypi.python.org/packages/6e/88/f42a1297909ca6d9113ba37b37067011ae29432fe592fdd98cf52ad23b77
- PYTHON_PYICU_LICENSE = MIT
- PYTHON_PYICU_LICENSE_FILES = LICENSE
- PYTHON_PYICU_DEPENDENCIES = icu
+-PERL_CROSS_VERSION = 1.1.4
++PERL_CROSS_VERSION = 1.1.5
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+-- 
+2.7.4
