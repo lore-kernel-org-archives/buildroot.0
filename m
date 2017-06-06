@@ -1,28 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Jun 2017 23:48:01 +0200
-Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.7
-In-Reply-To: <4623c3a5d42bad4ce5bac2cbe109a444f7189688.1496694364.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 5 Jun 2017 23:26:04 +0300")
-References: <4623c3a5d42bad4ce5bac2cbe109a444f7189688.1496694364.git.baruch@tkos.co.il>
-Message-ID: <87h8zsbxf2.fsf@dell.be.48ers.dk>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Tue,  6 Jun 2017 15:04:03 -0700
+Subject: [Buildroot] [PATCH v2] package/socat: Fix TABDLY,
+	CSIZE and CRDLY shifts for PowerPC
+Message-ID: <20170606220403.31732-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+As can be seen in linux/arch/powerpc/include/uapi/asm/termbits.h are
+defined as (note that those are octal numbers):
 
- > Fix possible timing attack on EdDSA session key.
- > https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
+\#define TABDLY	00006000
+\#define CSIZE	00001400
+\#define CRDLY	00030000
 
- > Add upstream provided SHA1 hash.
+which gives shifts of 10, 8 and 12. Adjust socat.mk accordingly to
+reflect that difference.
 
- > Switch to https download for better corporate firewall compatibility.
+Signed-off-by: Mark Hinds <zoronic@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+---
+ package/socat/socat.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2017.02.x and 2017.05.x, thanks.
-
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index ba46263..b923cef 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -9,11 +9,20 @@ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0
+ SOCAT_LICENSE_FILES = COPYING
+-SOCAT_CONF_ENV = \
+-	sc_cv_termios_ispeed=no \
++
++SOCAT_CONF_ENV = sc_cv_termios_ispeed=no
++
++ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
++SOCAT_CONF_ENV += \
++	sc_cv_sys_crdly_shift=12 \
++	sc_cv_sys_tabdly_shift=10 \
++	sc_cv_sys_csize_shift=8
++else
++SOCAT_CONF_ENV += \
+ 	sc_cv_sys_crdly_shift=9 \
+ 	sc_cv_sys_tabdly_shift=11 \
+ 	sc_cv_sys_csize_shift=4
++endif
+ 
+ # We need to run autoconf to regenerate the configure script, in order
+ # to ensure that the test checking linux/ext2_fs.h works
 -- 
-Bye, Peter Korsgaard
+2.9.4
