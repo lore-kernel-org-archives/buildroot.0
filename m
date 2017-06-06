@@ -1,31 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 5 Jun 2017 23:46:38 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-06-02
-In-Reply-To: <20170603063112.06C5220F36@mail.free-electrons.com>
-References: <20170603063112.06C5220F36@mail.free-electrons.com>
-Message-ID: <20170605214638.GD3944@scaer>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 5 Jun 2017 21:39:18 -0500
+Subject: [Buildroot] GIT download helper and submodules versioning
+Message-ID: <CANQCQpY7E8F3ZVnXRKSBy4-rnAL3eOQ+jWRcUzeZH9ivwthpww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+I believe the current submodule args needs an additional --remote arg.
+This allows you to set versioning/branches to pull in your .gitmodules
+file and the --remote forces it to fetch the latest tips of that
+branch.
 
-On 2017-06-03 08:31 +0200, Thomas Petazzoni spake thusly:
-> Build failures related to your packages:
->       x86_64 | freerdp-17834af7bb378f85a3b... | http://autobuild.buildroot.net/results/59077f8c4e06fd976b85a6da302fe9809753d536
+(from support/download/git)
+# There might be submodules, so fetch them.
+if [ ${recurse} -eq 1 ]; then
+    _git submodule update --init --recursive --remote
+fi
 
-I was not able to reproduce it, even with just runnint "make".
+A .gitmodules example file might be (example taken from
+repolicy-contrib submodule, part of the refpolicy package still in
+patchworks)
+[submodule "policy/modules/contrib"]
+        path = policy/modules/contrib
+        url = https://github.com/foobar/refpolicy-contrib.git
+        branch = RELEASE_2_20170204_MagicStuff
 
-Regards,
-Yann E. MORIN.
+Compared to what sunxi-mali currently uses and it doesn't version what
+it retrieves as a submodule.
+[submodule "lib/mali"]
+        path = lib/mali
+        url = https://github.com/linux-sunxi/sunxi-mali-proprietary.git
+
+
+Any thoughts on this one?  I tested sunxi-mali with the update and the
+same archives were created with/without the remote option.  I don't
+think we want to customize the gitmodules file on existing packages,
+but if a package does correctly describe a version to sync for the
+submodule, I'm assuming it should be respected.
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Matt
