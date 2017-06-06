@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Jun 2017 13:18:44 +0200
-Subject: [Buildroot] [PATCH 1/2] ncurses: Copy terminfo for 'dumb'
-	terminal
-In-Reply-To: <20170604095835.7a070762@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 4 Jun 2017 09:58:35 +0200")
-References: <20170603000013.5402-1-andrew.smirnov@gmail.com>
- <20170604095835.7a070762@free-electrons.com>
-Message-ID: <87ink9e54b.fsf@dell.be.48ers.dk>
+Date: Tue, 6 Jun 2017 13:18:41 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] ncurses: Copy terminfo
+	for 'screen-256color' terminal
+Message-ID: <20170606111918.EBD2B7F8B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=397bac28d7e2af2744908b0cca1c12a2e01395ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Hello,
- > On Fri,  2 Jun 2017 17:00:12 -0700, Andrey Smirnov wrote:
- >> Definition of 'dumb' terminal is required to be able to call 'top -b'
- >> from 'procps-ng'.
- >> 
- >> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- >> ---
- >> package/ncurses/ncurses.mk | 1 +
- >> 1 file changed, 1 insertion(+)
+Tmux uses 256 color version of 'screen' terminfo by default, so copy
+corresponding file to support that usecase.
 
- > Thanks both applied. Peter: since these patches are fixing runtime
- > issues, I would suggest to take them for the LTS branch as well.
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 6bd29da2b3cbf560a045334b27305486b0484a99)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ncurses/ncurses.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Agreed. Committed to 2017.02.x and (the newly created) 2017.05.x
-branches, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index f8ed4fc..b0f1724 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -51,6 +51,7 @@ NCURSES_TERMINFO_FILES = \
+ 	p/putty \
+ 	p/putty-vt100 \
+ 	s/screen \
++	s/screen-256color \
+ 	v/vt100 \
+ 	v/vt100-putty \
+ 	v/vt102 \
