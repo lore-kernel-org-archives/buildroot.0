@@ -1,38 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Jun 2017 09:23:47 +0200
-Subject: [Buildroot] [git commit] package/gnuradio: needs boost regex module
-Message-ID: <20170607073013.E07CD816A4@busybox.osuosl.org>
+Date: Wed, 7 Jun 2017 09:19:43 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 3.3.2
+Message-ID: <20170607073013.C4E2E816A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c9b77f380de07efecbf6e445793b1552d8a6006
+commit: https://git.buildroot.net/buildroot/commit/?id=61e4e787973860d5bc5d74a6fb5122bfb1e84090
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since
-https://git.gnuradio.org/cgit/gnuradio.git/commit/cmake/Modules/GrBoost.cmake?id=27fbbf22e359e8ec4a04399f3dc139f8c25031cb
-gnuradio needs the boost regex module.
-
-Fixes
-http://autobuild.buildroot.net/results/d71/d71278032c083c2c4b1bf20b81629225f8965c6e/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnuradio/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 0291d70..178bdc8 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_GNURADIO
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_REGEX
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	help
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index ab7ba5e..b0556fe 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 b702a7fc656ac23e276b8c823a2f646e4e6f6309bb2788435a708e69bea98f2f  ffmpeg-3.3.1.tar.xz
++sha256 1998de1ab32616cbf2ff86efc3f1f26e76805ec5dc51e24c041c79edd8262785  ffmpeg-3.3.2.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 86bf545..d41670d 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.3.1
++FFMPEG_VERSION = 3.3.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
