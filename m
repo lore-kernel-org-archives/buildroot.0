@@ -1,45 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 07 Jun 2017 08:58:32 +0000
-Subject: [Buildroot] [Bug 9941] New: nodejs option disappears for arm
-Message-ID: <bug-9941-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 7 Jun 2017 12:00:56 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] linux-headers: bump 3.2.x
+	series
+Message-ID: <20170607100155.C55918164D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9941
+commit: https://git.buildroot.net/buildroot/commit/?id=207eba7e5d45675db945df3741c746c162a3b6c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-            Bug ID: 9941
-           Summary: nodejs option disappears for arm
-           Product: buildroot
-           Version: 2017.02.1
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: tuzakli.refik at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit efda13af190d36086be4eb8f482838e27ecbdd0c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hello
-
-When I choose ARM architecture, nodejs option disappears in "Target packages"
-even I select all dependencies.
-
-When I select  alder version of nodejs in "Legacy config options", nodejs in
-"Target Packages" appears and automatically selected but this time I cannot
-compile the selections.
-
-for buildroot 2016.11, I could select nodejs for arm. so there was no problem.
-
-Is this an bug or are there another problem for newer version of builroot.
-
-Best regards.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c7a3710..b493234 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.88"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.89"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
