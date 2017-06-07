@@ -1,37 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Jun 2017 09:29:29 +0200
-Subject: [Buildroot] [PATCH] kmod: add patch to fix build failure with
-	old gcc versions
-In-Reply-To: <1496501970-9676-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Jun 2017 16:59:30 +0200")
-References: <1496501970-9676-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vao89rxi.fsf@dell.be.48ers.dk>
+Date: Wed, 7 Jun 2017 09:19:19 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
+Message-ID: <20170607073013.B28758082C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=efda13af190d36086be4eb8f482838e27ecbdd0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > When building with old gcc versions (such as gcc 4.3), the current
- > version of kmod fails with:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > shared/util.c:52: error: expected identifier or '(' before 'do'
- > shared/util.c:52: error: expected identifier or '(' before 'while'
-
- > This is due to a use of the internal assert_cc() macro outside of a
- > function, while this macro is defined for old gcc versions in a way that
- > cannot be used outside functions.
-
- > This wasn't noticed by the autobuilders because we don't have such old
- > target compilers. On the host side, we have some autobuilder instances
- > with such old gcc versions, but host-kmod is only used by the linux
- > package, which is never tested by the autobuilders.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed to master and 2017.05.x (2017.02.x doesn't look affected), thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c7a3710..b493234 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.88"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.89"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
