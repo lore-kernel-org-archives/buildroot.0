@@ -1,26 +1,45 @@
-From: Jeroen Roovers <jer@airfi.aero>
-Date: Wed, 7 Jun 2017 10:17:32 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] nodejs: bump 6.x
- version to 6.10.3
-In-Reply-To: <20170607073111.0EC6B82A32@busybox.osuosl.org>
-References: <20170607073111.0EC6B82A32@busybox.osuosl.org>
-Message-ID: <CANCHnQroV=fOcc0VRo_wLyMadtP7g2uOgePdjMWbvE6EHJ8vZw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 07 Jun 2017 08:58:32 +0000
+Subject: [Buildroot] [Bug 9941] New: nodejs option disappears for arm
+Message-ID: <bug-9941-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 7 June 2017 at 09:30, Peter Korsgaard <peter@korsgaard.com> wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=d995250f05561955e6afc6696e11be4b16f2812f
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
->
-> 6.10.3 is the latest release in the LTS series, fixing a number of issues:
->
-> https://nodejs.org/en/blog/release/v6.10.3/
+https://bugs.busybox.net/show_bug.cgi?id=9941
 
-https://nodejs.org/en/blog/release/v6.11.0/
+            Bug ID: 9941
+           Summary: nodejs option disappears for arm
+           Product: buildroot
+           Version: 2017.02.1
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: tuzakli.refik at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
+Hello
 
-Kind regards,
-     jer
+When I choose ARM architecture, nodejs option disappears in "Target packages"
+even I select all dependencies.
+
+When I select  alder version of nodejs in "Legacy config options", nodejs in
+"Target Packages" appears and automatically selected but this time I cannot
+compile the selections.
+
+for buildroot 2016.11, I could select nodejs for arm. so there was no problem.
+
+Is this an bug or are there another problem for newer version of builroot.
+
+Best regards.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
