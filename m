@@ -1,29 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Jun 2017 09:23:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuradio: needs boost regex
-	module
-In-Reply-To: <20170605154822.21596-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 5 Jun 2017 17:48:22 +0200")
-References: <20170605154822.21596-1-bernd.kuhls@t-online.de>
-Message-ID: <87zidk9s6x.fsf@dell.be.48ers.dk>
+Date: Wed, 07 Jun 2017 09:29:29 +0200
+Subject: [Buildroot] [PATCH] kmod: add patch to fix build failure with
+	old gcc versions
+In-Reply-To: <1496501970-9676-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Jun 2017 16:59:30 +0200")
+References: <1496501970-9676-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vao89rxi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Since
- > https://git.gnuradio.org/cgit/gnuradio.git/commit/cmake/Modules/GrBoost.cmake?id=27fbbf22e359e8ec4a04399f3dc139f8c25031cb
- > gnuradio needs the boost regex module.
+ > When building with old gcc versions (such as gcc 4.3), the current
+ > version of kmod fails with:
 
- > Fixes
- > http://autobuild.buildroot.net/results/d71/d71278032c083c2c4b1bf20b81629225f8965c6e/
+ > shared/util.c:52: error: expected identifier or '(' before 'do'
+ > shared/util.c:52: error: expected identifier or '(' before 'while'
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > This is due to a use of the internal assert_cc() macro outside of a
+ > function, while this macro is defined for old gcc versions in a way that
+ > cannot be used outside functions.
 
-Committed, thanks.
+ > This wasn't noticed by the autobuilders because we don't have such old
+ > target compilers. On the host side, we have some autobuilder instances
+ > with such old gcc versions, but host-kmod is only used by the linux
+ > package, which is never tested by the autobuilders.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed to master and 2017.05.x (2017.02.x doesn't look affected), thanks.
 
 -- 
 Bye, Peter Korsgaard
