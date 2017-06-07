@@ -1,58 +1,34 @@
-From: Guy Benyei <guybe@mellanox.com>
-Date: Wed, 7 Jun 2017 10:41:51 +0000
-Subject: [Buildroot] [PATCH]Libssp support
-Message-ID: <AM3PR05MB433972636565D3B639BB0BAC9C80@AM3PR05MB433.eurprd05.prod.outlook.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 07 Jun 2017 12:28:37 +0000
+Subject: [Buildroot] [Bug 9941] nodejs option disappears for arm
+In-Reply-To: <bug-9941-163@https.bugs.busybox.net/>
+References: <bug-9941-163@https.bugs.busybox.net/>
+Message-ID: <bug-9941-163-Nei9UumY1m@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I tried to activate gcc's -fstack-protector flag, but the compiler was looking for libssp:
+https://bugs.busybox.net/show_bug.cgi?id=9941
 
-.../toolchain/bin/arceb-linux-gcc  -O2 -o stack_overrun stack_overrun.c -fstack-protector
-.../arceb-ezchip-linux-uclibc/bin/ld: cannot find -lssp_nonshared
-.../arceb-ezchip-linux-uclibc/bin/ld: cannot find -lssp
-collect2: error: ld returned 1 exit status
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Building libssp seems to be disabled with no option to enable it in package/gcc.mk by using the --disable-libssp flag for configuring gcc. Applying the patch below enables the usage of libssp. Of course, it could be conditional with some configuration symbol, to save place when libssp is not needed.
-Any thoughts on it?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-It seems to be related to this bug:
-https://bugs.busybox.net/show_bug.cgi?id=4039
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
+With ARM I take it that you specifically mean one of the older ARM variants
+(arm926t or similar)? Modern versions of nodejs require instructions only
+available on ARMv6 + FPU or newer. In 2016.11 we still supported the legacy
+0.10.x version of nodejs for the older ARM variants, but this is no longer
+supported by nodejs upstream and got removed from Buildroot back in March.
 
-Thanks
-        Guy Benyei
+If your system really has such an old ARM variant then you cannot use nodejs,
+unless you re-add the (unsupported) 0.10.x version or stick with with our
+current LTS release (2017.02.x)
 
-
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index e8d2e18..d0f23c9 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -147,6 +147,15 @@ endef
- 
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
- 
-+define HOST_GCC_FINAL_INSTALL_LIBSSP
-+       -cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
-+               $(STAGING_DIR)/lib/
-+       -cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
-+               $(TARGET_DIR)/lib/
-+endef
-+
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBSSP
-+
- # Handle the installation of libraries in /usr/lib  HOST_GCC_FINAL_USR_LIBS =
- 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk index b52f945..cca3847 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -90,7 +90,6 @@ HOST_GCC_COMMON_CONF_OPTS = \
-        --with-sysroot=$(STAGING_DIR) \
-        --disable-__cxa_atexit \
-        --with-gnu-ld \
--       --disable-libssp \
-        --disable-multilib \
-        --with-gmp=$(HOST_DIR)/usr \
-        --with-mpc=$(HOST_DIR)/usr \
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
