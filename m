@@ -1,37 +1,69 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Wed, 7 Jun 2017 12:50:15 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 11}.x series
-In-Reply-To: <1496850615-21476-1-git-send-email-fabio.estevam@nxp.com>
-References: <1496850615-21476-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <1496850615-21476-2-git-send-email-fabio.estevam@nxp.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed,  7 Jun 2017 11:53:16 -0400
+Subject: [Buildroot] [PATCH v2] sngrep: fix wchar detection.
+Message-ID: <20170607155316.25646-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <festevam@gmail.com>
+Ncurses detection is currently broken in buildroot.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+This patch does the following:
+ - Add SNGREP_CHECK_SCRIPT to configure.ac which checks for a
+   libname, a function in that library, sets a define if found, and
+   if not found, moves on to the next part. This is taken from the
+   htop configure.ac.
+
+ - Adds SNGREP_CHECK_LIB to configure.ac which checks for a
+   library, a function within that library, sets a define if that function
+   is found, and if not found, moves on to the next part.
+   This is taken from the htop configure.ac
+
+ - Modifies scrollbar.h and ui_panel.h to include <wctypes.h> instead of
+   <ncursesw/ncurses.h> if unicode is supported.
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+  - Added # Locally computed header to sngrep.hash
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b493234..40ef88f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -227,8 +227,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.40"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.70"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.30"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.71"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.31"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.3"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.11.4"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+  - The original patch was committed upstream. Moved patch to a url
+    and added a sha256 sum for the patch.
+    
+ package/sngrep/sngrep.hash | 2 ++
+ package/sngrep/sngrep.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
+index bc28545..5966d63 100644
+--- a/package/sngrep/sngrep.hash
++++ b/package/sngrep/sngrep.hash
+@@ -1 +1,3 @@
++# Locally computed
+ sha256 7385ac202de6d6a1feffb2fd514600563133d9dfa7fb47be052de839abcc1d52 sngrep-v1.4.3.tar.gz
++sha256 a3376abe20cca95a13ee88188ba5ba50425c93afc927cca018c50b0309ad21f9  4740f3341a99eaec105dee202a6fa7828212cdf1.patch
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 560872f..9dda158 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -14,8 +14,15 @@ SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
+ SNGREP_CONF_ENV += \
+ 	$(if $(BR2_STATIC_LIBS),LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`")
+ 
+-# our ncurses wchar support is not properly detected
++# This patch fixes ncurses wchar detection
++SNGREP_PATCH = \
++	https://github.com/irontec/sngrep/pull/191/commits/4740f3341a99eaec105dee202a6fa7828212cdf1.patch
++
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++SNGREP_CONF_OPTS += --enable-unicode
++else
+ SNGREP_CONF_OPTS += --disable-unicode
++endif
+ 
+ # openssl and gnutls can't be enabled at the same time.
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
 -- 
-2.7.4
+2.9.4
