@@ -1,51 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Jun 2017 22:54:22 +0200
-Subject: [Buildroot] [git commit] x11r7: xf86-input-tslib: bump to version
-	1.0.0
-Message-ID: <20170607205559.7DF4E7F8DF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Jun 2017 23:27:20 +0200
+Subject: [Buildroot] [PATCH] glibc: remove version choice
+In-Reply-To: <20170606213500.0fe44a79@free-electrons.com>
+References: <20170606175659.GA2566@waldemar-brodkorb.de>
+ <20170606213500.0fe44a79@free-electrons.com>
+Message-ID: <20170607212720.GA23160@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0af5029453453286904431ef412d72c0bb877fce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Waldemar, Thomas, All,
 
-As the update from 0.0.X to 1.0.0 suggests, this is a major update. The driver
-uses X11's touch API now, instead of motion with button emulation. Furthermore
-it supports multitouch when a recent version of tslib is installed.
+On 2017-06-06 21:35 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 6 Jun 2017 19:56:59 +0200, Waldemar Brodkorb wrote:
+> > We do not support uClibc-ng/musl C library version choice support,
+> > do the same for GNU C Library.
+> > Add me as Maintainer for the package.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> 
+> On this one, I'd like to have the opinion of others. Arnout? Peter?
+> Yann? What do you think about this?
+> 
+> I don't have a very clear-cut opinion about this one.
 
-It is not backwards compatible for very old versions of the X server. See
-https://github.com/merge/xf86-input-tslib/releases for some details.
+Neither do I.
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On principle, I agree that we should drop versions. But glibc is part of
+the toolchain, and the toolchain has always been special.
 
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-index b8eb2b8..23d7a61 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-+++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.hash
-@@ -1,2 +1,2 @@
--# https://github.com/merge/xf86-input-tslib/releases/download/0.0.7/xf86-input-tslib-0.0.7.tar.bz2.sha256
--sha256 6f23cc9702b0ae16086d364b275335c094efbf6acde57f8a030e4db5b9aece03  xf86-input-tslib-0.0.7.tar.bz2
-+# https://github.com/merge/xf86-input-tslib/releases/download/1.0.0/xf86-input-tslib-1.0.0.tar.bz2.sha256
-+sha256 2e888893b766bb987ed4d788555dc221e3974068580ba782753a4a80532a42e7  xf86-input-tslib-1.0.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-index 2e78634..d2d9df4 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-+++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_INPUT_TSLIB_VERSION = 0.0.7
-+XDRIVER_XF86_INPUT_TSLIB_VERSION = 1.0.0
- XDRIVER_XF86_INPUT_TSLIB_SOURCE = xf86-input-tslib-$(XDRIVER_XF86_INPUT_TSLIB_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releases/download/$(XDRIVER_XF86_INPUT_TSLIB_VERSION)
- XDRIVER_XF86_INPUT_TSLIB_LICENSE = MIT
+True, we do not have a version for uClibc-ng, but we do have some
+traction on the maintainer! ;-) So we know things are gonna be fixed
+soonish, or that we can grab a temporary backport, both very easily.
+
+Not so much for glibc in my experience...
+
+musl is another kind of thing, because it is (was?) moving relatively
+fast, and I am under the impression that the maintainers are somewhat
+amenable to some fixes.
+
+Not so much for glibc in my experience...
+
+So, I won't oppose the patch, not will I push for it...
+
+Yep, that is a very clear-cut position... ;-]
+
+Regards,
+Yann E. MORIN.
+
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index cdd38e6..bfeb824 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -1686,6 +1686,7 @@ F:	arch/Config.in.sparc
+> >  F:	package/uclibc/
+> >  F:	package/uclibc-ng-test/
+> >  F:	package/mksh/
+> > +F:	package/glibc/
+> 
+> Alphabetic ordering not correct here.
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
