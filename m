@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Jun 2017 12:00:56 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux-headers: bump 3.2.x
+Date: Wed, 7 Jun 2017 12:02:07 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.2.x
 	series
-Message-ID: <20170607100155.C55918164D@busybox.osuosl.org>
+Message-ID: <20170607100217.65858817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=207eba7e5d45675db945df3741c746c162a3b6c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c66bb46dec515f716a6be7482bb36a9e57d5e5f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
@@ -21,10 +21,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c7a3710..b493234 100644
+index 3d77846..dd4dd7d 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ endchoice
+@@ -214,7 +214,7 @@ endchoice
  
  config BR2_DEFAULT_KERNEL_HEADERS
  	string
