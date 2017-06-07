@@ -1,44 +1,28 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Wed, 7 Jun 2017 16:07:38 +0200
-Subject: [Buildroot] [PATCH] package/xf86-input-tslib: enable static build
-In-Reply-To: <20170607070100.10344-1-martin.kepplinger@ginzinger.com>
-References: <20170607070100.10344-1-martin.kepplinger@ginzinger.com>
-Message-ID: <20170607140738.6147-1-martin.kepplinger@ginzinger.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 07 Jun 2017 14:18:55 +0000
+Subject: [Buildroot] [Bug 9941] nodejs option disappears for arm
+In-Reply-To: <bug-9941-163@https.bugs.busybox.net/>
+References: <bug-9941-163@https.bugs.busybox.net/>
+Message-ID: <bug-9941-163-NtwhrA043E@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-since tslib now supports static builds the dependency on !BR2_STATIC_LIBS
-can be removed from xf86-input-tslib too.
+https://bugs.busybox.net/show_bug.cgi?id=9941
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
----
+--- Comment #4 from Refik Tuzakli <tuzakli.refik@gmail.com> ---
+buildroot version 2017.08
+ARM coretex-a9
+fpu is enabled
 
-I'll look at the rest of the possible candidates later
+nodejs depends on:
+default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 &&
+BR2_ARM_CPU_HAS_VFPV2  satisfied
 
+.config file size more than uploading limit. I can not attache.
 
- package/x11r7/xdriver_xf86-input-tslib/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-index 08d790ca4..4e77abcb1 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
- 	bool "xf86-input-tslib"
--	depends on !BR2_STATIC_LIBS # tslib
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-@@ -9,6 +8,3 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
- 	  Touch screen library input driver
- 
- 	  https://github.com/merge/xf86-input-tslib
--
--comment "xf86-input-tslib needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
