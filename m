@@ -1,51 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Jun 2017 21:55:10 +0200
-Subject: [Buildroot] [git commit] support/scripts: fix shebang with python
-Message-ID: <20170607200904.8B1388010B@busybox.osuosl.org>
+Date: Wed, 7 Jun 2017 21:54:12 +0200
+Subject: [Buildroot] [git commit] package/xf86-input-tslib: enable static
+	build
+Message-ID: <20170607200904.7BBA78010B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed0ce4953773c1d803edef50f567889ce8825f88
+commit: https://git.buildroot.net/buildroot/commit/?id=8e1690a5290bfba7130edc1afe74cce7996454ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+since tslib now supports static builds the dependency on !BR2_STATIC_LIBS
+can be removed from xf86-input-tslib too.
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/graph-depends | 2 +-
- support/scripts/scanpypi      | 2 +-
- support/scripts/xorg-release  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xdriver_xf86-input-tslib/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index b258c56..db3041b 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -1,4 +1,4 @@
--#!/usr/bin/python
-+#!/usr/bin/env python
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+index 08d790c..4e77abc 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/Config.in
++++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
+ 	bool "xf86-input-tslib"
+-	depends on !BR2_STATIC_LIBS # tslib
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+@@ -9,6 +8,3 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
+ 	  Touch screen library input driver
  
- # Usage (the graphviz package must be installed in your distribution)
- #  ./support/scripts/graph-depends [-p package-name] > test.dot
-diff --git a/support/scripts/scanpypi b/support/scripts/scanpypi
-index e174ac6..44e5d20 100755
---- a/support/scripts/scanpypi
-+++ b/support/scripts/scanpypi
-@@ -1,4 +1,4 @@
--#!/usr/bin/python2
-+#!/usr/bin/env python2
- """
- 
- Utility for building Buildroot packages for existing PyPI packages
-diff --git a/support/scripts/xorg-release b/support/scripts/xorg-release
-index 66fc100..c512038 100755
---- a/support/scripts/xorg-release
-+++ b/support/scripts/xorg-release
-@@ -1,4 +1,4 @@
--#!/usr/bin/python
-+#!/usr/bin/env python
- 
- # This script generates a report on the packaging status of X.org
- # releases in Buildroot. It does so by downloading the list of
+ 	  https://github.com/merge/xf86-input-tslib
+-
+-comment "xf86-input-tslib needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
