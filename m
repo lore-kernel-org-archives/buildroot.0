@@ -1,41 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Jun 2017 09:19:43 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 3.3.2
-Message-ID: <20170607073013.C4E2E816A4@busybox.osuosl.org>
+Date: Wed, 7 Jun 2017 09:30:24 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] kmod: add patch to fix
+	build failure with old gcc versions
+Message-ID: <20170607073029.418DA802C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61e4e787973860d5bc5d74a6fb5122bfb1e84090
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=eff5239924894e29ddf9ce353b004b6861063137
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+When building with old gcc versions (such as gcc 4.3), the current
+version of kmod fails with:
+
+shared/util.c:52: error: expected identifier or '(' before 'do'
+shared/util.c:52: error: expected identifier or '(' before 'while'
+
+This is due to a use of the internal assert_cc() macro outside of a
+function, while this macro is defined for old gcc versions in a way that
+cannot be used outside functions.
+
+This wasn't noticed by the autobuilders because we don't have such old
+target compilers. On the host side, we have some autobuilder instances
+with such old gcc versions, but host-kmod is only used by the linux
+package, which is never tested by the autobuilders.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 72c77544bad2491c55db6268e464f2c0e63f0adc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ....c-assert_cc-can-only-be-used-inside-func.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index ab7ba5e..b0556fe 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 b702a7fc656ac23e276b8c823a2f646e4e6f6309bb2788435a708e69bea98f2f  ffmpeg-3.3.1.tar.xz
-+sha256 1998de1ab32616cbf2ff86efc3f1f26e76805ec5dc51e24c041c79edd8262785  ffmpeg-3.3.2.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 86bf545..d41670d 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.3.1
-+FFMPEG_VERSION = 3.3.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+diff --git a/package/kmod/0002-shared-util.c-assert_cc-can-only-be-used-inside-func.patch b/package/kmod/0002-shared-util.c-assert_cc-can-only-be-used-inside-func.patch
+new file mode 100644
+index 0000000..09fe252
+--- /dev/null
++++ b/package/kmod/0002-shared-util.c-assert_cc-can-only-be-used-inside-func.patch
+@@ -0,0 +1,56 @@
++From 7cd698eb31059012305d8bb7516577c8cd383e32 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 3 Jun 2017 16:52:37 +0200
++Subject: [PATCH] shared/util.c: assert_cc() can only be used inside functions
++
++shared/macro.h has two versions of assert_cc, one that uses gcc
++_Static_assert(), which requires recent enough gcc versions, and one
++that uses a fake array to trigger a build error. The latter can only
++work inside functions, so assert_cc() should only be used inside
++functions.
++
++Fixes the following build failure when building kmod with old gcc
++versions such as gcc 4.3.x:
++
++shared/util.c:52: error: expected identifier or '(' before 'do'
++shared/util.c:52: error: expected identifier or '(' before 'while'
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ shared/util.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/shared/util.c b/shared/util.c
++index 9de080a..fd2028d 100644
++--- a/shared/util.c
+++++ b/shared/util.c
++@@ -49,8 +49,6 @@ static const struct kmod_ext {
++ 	{ }
++ };
++ 
++-assert_cc(EAGAIN == EWOULDBLOCK);
++-
++ /* string handling functions and memory allocations                         */
++ /* ************************************************************************ */
++ 
++@@ -201,6 +199,8 @@ ssize_t read_str_safe(int fd, char *buf, size_t buflen)
++ 	size_t todo = buflen - 1;
++ 	size_t done = 0;
++ 
+++	assert_cc(EAGAIN == EWOULDBLOCK);
+++
++ 	do {
++ 		ssize_t r = read(fd, buf + done, todo);
++ 
++@@ -226,6 +226,8 @@ ssize_t write_str_safe(int fd, const char *buf, size_t buflen)
++ 	size_t todo = buflen;
++ 	size_t done = 0;
++ 
+++	assert_cc(EAGAIN == EWOULDBLOCK);
+++
++ 	do {
++ 		ssize_t r = write(fd, buf + done, todo);
++ 
++-- 
++2.7.4
++
