@@ -1,79 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Jun 2017 23:27:20 +0200
-Subject: [Buildroot] [PATCH] glibc: remove version choice
-In-Reply-To: <20170606213500.0fe44a79@free-electrons.com>
-References: <20170606175659.GA2566@waldemar-brodkorb.de>
- <20170606213500.0fe44a79@free-electrons.com>
-Message-ID: <20170607212720.GA23160@scaer>
+Date: Thu,  8 Jun 2017 00:08:37 +0200
+Subject: [Buildroot] [PATCH WIP] package/systemd: fix paths to runtime
+	utilities
+Message-ID: <20170607220837.2969-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar, Thomas, All,
+systemd's configure is looking in $PATH to find utilities that will be
+needed at runtime.
 
-On 2017-06-06 21:35 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 6 Jun 2017 19:56:59 +0200, Waldemar Brodkorb wrote:
-> > We do not support uClibc-ng/musl C library version choice support,
-> > do the same for GNU C Library.
-> > Add me as Maintainer for the package.
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> On this one, I'd like to have the opinion of others. Arnout? Peter?
-> Yann? What do you think about this?
-> 
-> I don't have a very clear-cut opinion about this one.
+Usually, those utilties, when installed on the host, will be found in
+the same path they would be present on the target. For example,
+/usr/bin/mount on the host would also be /usr/bin/mount on the target,
+and all is find.
 
-Neither do I.
+Except when we need to install a host variant of util-linux, which will
+install mount in $(HOST_DIR), in which case systemd's configure would
+find that one.
 
-On principle, I agree that we should drop versions. But glibc is part of
-the toolchain, and the toolchain has always been special.
+Of course, it is also very well possible that those utilities are not
+installed on the host in the same location they would be on the target,
+in case a user has manually installed some of those (e.g. in /usr/local/
+or in /opt/)
 
-True, we do not have a version for uClibc-ng, but we do have some
-traction on the maintainer! ;-) So we know things are gonna be fixed
-soonish, or that we can grab a temporary backport, both very easily.
+Forcibly set the path to those utilities, as they are expected to be on
+the target.
 
-Not so much for glibc in my experience...
+For kexec, we can set it even though we do not depend on it (yet).
+systemd will appropriately test it at runtime.
 
-musl is another kind of thing, because it is (was?) moving relatively
-fast, and I am under the impression that the maintainers are somewhat
-amenable to some fixes.
+For quota, we point to non-existing files, so as to catch errors at
+runtime. It is to be noted that quotacheck is optional, while quotaon
+does not seem to be (a service file is always installed, that uses it).
 
-Not so much for glibc in my experience...
+Note: utilties listed in the order they appear in configure.ac
 
-So, I won't oppose the patch, not will I push for it...
+Reported-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
 
-Yep, that is a very clear-cut position... ;-]
+This patch is a tentative for Adam to test. I haven't even build it so
+far, by lack of time those days...
 
-Regards,
-Yann E. MORIN.
+---
+ package/systemd/systemd.mk | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index cdd38e6..bfeb824 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -1686,6 +1686,7 @@ F:	arch/Config.in.sparc
-> >  F:	package/uclibc/
-> >  F:	package/uclibc-ng-test/
-> >  F:	package/mksh/
-> > +F:	package/glibc/
-> 
-> Alphabetic ordering not correct here.
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0b62cf043e..de155f8098 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -45,10 +45,16 @@ SYSTEMD_CONF_OPTS += \
+ 
+ SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
+ 
+-# Override path to kmod, used in kmod-static-nodes.service
++# Override paths to a few utilities needed at runtime, to
++# avoid finding those we would install in $(HOST_DIR).
+ SYSTEMD_CONF_ENV = \
+ 	CFLAGS="$(SYSTEMD_CFLAGS)" \
+-	ac_cv_path_KMOD=/usr/bin/kmod
++	ac_cv_path_KILL=/usr/bin/kill \
++	ac_cv_path_KMOD=/usr/bin/kmod \
++	ac_cv_path_KEXEC=/usr/sbin/kexec \
++	ac_cv_path_SULOGIN=/usr/sbin/sulogin \
++	ac_cv_path_MOUNT=/usr/sbin/mount \
++	ac_cv_path_UMOUNT=/usr/sbin/umount
+ 
+ define SYSTEMD_RUN_INTLTOOLIZE
+ 	cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
+@@ -182,8 +188,14 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
+ SYSTEMD_CONF_OPTS += --enable-quotacheck
++SYSTEMD_CONF_ENV += \
++	ac_cv_path_QUOTAON=/usr/sbin/quotaon \
++	ac_cv_path_QUOTACHECK=/usr/sbin/quotacheck
+ else
+ SYSTEMD_CONF_OPTS += --disable-quotacheck
++SYSTEMD_CONF_ENV += \
++	ac_cv_path_QUOTAON=/.missing \
++	ac_cv_path_QUOTACHECK=/.missing
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
