@@ -1,34 +1,41 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Wed, 7 Jun 2017 15:10:00 +0000
-Subject: [Buildroot] An interesting find.
-Message-ID: <F9C551623D2CBB4C9488801D14F864C60154BBD147@ex-mb1.corp.adtran.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Wed, 7 Jun 2017 12:50:14 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.11.4
+Message-ID: <1496850615-21476-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: Fabio Estevam <festevam@gmail.com>
 
-One of you bigger names should have a look at:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-<http://lists.opencompute.org/pipermail/opencompute-onie/2017-May/001409.html>
-
-Reading through this thread makes me think they are considering BuildRoot
-as their build system.  From my understanding of ONIE, and my
-understanding of BuildRoot, there would be very little that needed to
-change for BuildRoot to support ONIE.
-
-As I see it, the main contribution to BR from the ONIE community would
-need to be def_*config files. One slight change to BR might be to allow
-version specification for GCC, GlibC, Grub, Grub2, etc so that the user
-would be able to specify the exact versions like the Linux kernel
-selection already allows.  One other suggestion is that these options
-also allow for specifying a patch location for each to get additional
-patch files to use.  Having these options, I believe, would satisfy all
-of the needs from the ONIE community.  Doing this would expand the BR
-user base by quite a bit.
-
-Food for thought.
-
-Andy
+diff --git a/linux/Config.in b/linux/Config.in
+index 305929d..4d34ac2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.11.3)"
++	bool "Latest version (4.11.4)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.11.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.11.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.7.4
