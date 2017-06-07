@@ -1,65 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Jun 2017 22:10:00 +0200
-Subject: [Buildroot] [git commit] swupdate: fix build with older glibc
-Message-ID: <20170607201108.44272807D3@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 7 Jun 2017 23:13:16 +0300
+Subject: [Buildroot] [PATCH]Libssp support
+In-Reply-To: <AM3PR05MB433972636565D3B639BB0BAC9C80@AM3PR05MB433.eurprd05.prod.outlook.com>
+References: <AM3PR05MB433972636565D3B639BB0BAC9C80@AM3PR05MB433.eurprd05.prod.outlook.com>
+Message-ID: <20170607201316.jkzcuamoovnbkcla@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a1aa4e2daf0ecdcd2b454d162c8ade6c5bd5779
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Guy,
 
-Add -lrt that is needed for clock_gettime() with glibc before 2.17.
+On Wed, Jun 07, 2017 at 10:41:51AM +0000, Guy Benyei wrote:
+> I tried to activate gcc's -fstack-protector flag, but the compiler was 
+> looking for libssp:
+> 
+> .../toolchain/bin/arceb-linux-gcc  -O2 -o stack_overrun stack_overrun.c -fstack-protector
+> .../arceb-ezchip-linux-uclibc/bin/ld: cannot find -lssp_nonshared
+> .../arceb-ezchip-linux-uclibc/bin/ld: cannot find -lssp
+> collect2: error: ld returned 1 exit status
 
-Fixes:
-http://autobuild.buildroot.net/results/034/0345814c0b0023e124992974c0600bdda0824dbf/
+What code are you trying to build? Is this part of a Buildroot package?
 
-Cc: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ags-SURICATTA_HAWKBIT-needs-librt-under-o.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+A sane build system must check whether the compiler supports -fstack-protector 
+before attempting to use it.
 
-diff --git a/package/swupdate/0002-Makefile.flags-SURICATTA_HAWKBIT-needs-librt-under-o.patch b/package/swupdate/0002-Makefile.flags-SURICATTA_HAWKBIT-needs-librt-under-o.patch
-new file mode 100644
-index 0000000..1f8d8e7
---- /dev/null
-+++ b/package/swupdate/0002-Makefile.flags-SURICATTA_HAWKBIT-needs-librt-under-o.patch
-@@ -0,0 +1,34 @@
-+From 66ccd99c6299ebe70a5549da78063fd7b1e02ea2 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 7 Jun 2017 22:28:03 +0300
-+Subject: [PATCH] Makefile.flags: SURICATTA_HAWKBIT needs librt under older
-+ glibc
-+
-+glibc before 2.17 requires linking against librt for clock_gettime(). Fixes
-+the following build failure:
-+
-+ld: suricatta/lib.a(server_hawkbit.o): undefined reference to symbol 'clock_gettime@@GLIBC_2.2'
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status:
-+https://groups.google.com/forum/?hl=en#!topic/swupdate/77QWIka27es
-+
-+ Makefile.flags | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile.flags b/Makefile.flags
-+index 391fc7f82682..8db5dfeacc2f 100644
-+--- a/Makefile.flags
-++++ b/Makefile.flags
-+@@ -173,6 +173,7 @@ LDLIBS += crypto ssl
-+ endif
-+ endif
-+ ifneq ($(CONFIG_SURICATTA_HAWKBIT),)
-++LDLIBS += rt
-+ ifeq ($(strip $(findstring json-c,$(LDLIBS))),)
-+ LDLIBS += json-c
-+ endif
-+-- 
-+2.11.0
-+
+> Building libssp seems to be disabled with no option to enable it in 
+> package/gcc.mk by using the --disable-libssp flag for configuring gcc. 
+> Applying the patch below enables the usage of libssp. Of course, it could be 
+> conditional with some configuration symbol, to save place when libssp is not 
+> needed.
+> Any thoughts on it?
+
+The internal toolchain that package/gcc/gcc.mk builds relies on ssp support 
+from the C library. In your case this is seems to be uClibc. You need to 
+enable BR2_TOOLCHAIN_BUILDROOT_USE_SSP (under "uClibc Options") for stack 
+smashing protection support.
+
+> It seems to be related to this bug:
+> https://bugs.busybox.net/show_bug.cgi?id=4039
+
+This bug is about external toolchains. Unrelated to gcc.mk that only deals 
+with the internal toolchain.
+
+baruch
+
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index e8d2e18..d0f23c9 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -147,6 +147,15 @@ endef
+>  
+>  HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
+>  
+> +define HOST_GCC_FINAL_INSTALL_LIBSSP
+> +       -cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
+> +               $(STAGING_DIR)/lib/
+> +       -cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
+> +               $(TARGET_DIR)/lib/
+> +endef
+> +
+> +HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBSSP
+> +
+>  # Handle the installation of libraries in /usr/lib  HOST_GCC_FINAL_USR_LIBS =
+>  
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk index b52f945..cca3847 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -90,7 +90,6 @@ HOST_GCC_COMMON_CONF_OPTS = \
+>         --with-sysroot=$(STAGING_DIR) \
+>         --disable-__cxa_atexit \
+>         --with-gnu-ld \
+> -       --disable-libssp \
+>         --disable-multilib \
+>         --with-gmp=$(HOST_DIR)/usr \
+>         --with-mpc=$(HOST_DIR)/usr \
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
