@@ -1,37 +1,41 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Thu, 8 Jun 2017 09:46:42 +0200
-Subject: [Buildroot] [PATCH] package/directfb: enable static build for
-	BR2_PACKAGE_DIRECTFB_TSLIB
-Message-ID: <20170608074642.26516-1-martin.kepplinger@ginzinger.com>
+From: Jens Maus <mail@jens-maus.de>
+Date: Thu, 8 Jun 2017 09:34:30 +0200
+Subject: [Buildroot] How to generate initrd for booting rootfs with
+ root=LABEL= in kernel command line
+Message-ID: <A112705D-AEA2-495C-8717-A2FCC1142CBE@jens-maus.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dependency on !BR2_STATIC_LIBS was here because of tslib not supporing
-static builds. But since
+Hi,
 
-   commit 05fadfea1 ("package/tslib: enable statically linked building")
+I am currently working on a project that is using buildroot and generates system images (*.img) that a user should either be able to put on a SD card or on an external USB drive for booting. For convenience reasons I already modified my /etc/fstab and busybox setup within buildroot to mount the user partitions via ?LABEL=? statements so that a user doesn?t have to manually patch /etc/fstab himself in case he installs the *.img on a USB drive rather than on the SD card of, e.g. a RaspberryPi (/dev/sdaX vs. /dev/mmcblkpX). This already works flawlessly and quite smooth with my buildroot environment.
 
-it does and we can remove this dependecy.
+However, the only thing missing is to be able to actually boot the linux kernel with a command line where also ?root=LABEL=rootfs? is used rather than ?root=/dev/sdaX? or ?root=/dev/mmcblkpX? so that during boot up it identifies itself from where it should mount the root filesystem. This of course doesn?t work out-of-the-box since the linux kernel itself doesn?t seem to know anything about filesystem labels or how to query them. The only specifiers that can be directly used by the kernel (depending on the kernel version, of course) seems to be UUID= and PARTUUID= which both don?t seem to be solutions for my problem since these UUIDs are regenerated with every filesystem regeneration and PARTUUID is only available with a GUID partition table, which I don?t use. In addition, I even couldn?t get my test system with kernel 4.4.x properly booted with either UUID= or PARTUUID= specified.
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
----
- package/directfb/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+After some investigation I found out that an initrd (initramfs) setup would be required to actually boot the kernel, identify the filesystem labels and then remount the root filesystem from this partition and continue booting using something like pivot_root or similar mechanisms. Thus, this would be a minimal inird/initramfs just for identifying the root filesystem label and immediately continue booting from the identified rootfs.
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 554abe289..aed6a170a 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -116,7 +116,6 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
- config BR2_PACKAGE_DIRECTFB_TSLIB
- 	bool "enable touchscreen support"
- 	default y
--	depends on !BR2_STATIC_LIBS # tslib
- 	select BR2_PACKAGE_TSLIB
- 
- comment "touchscreen support needs a toolchain w/ dynamic library"
+Nevertheless, I couldn?t find a way in buildroot to either automatically generate such a minimal initramfs or even have a ?mkinitramfs? tool to actually generate my own initrd file for that particular purpose.  The only possibility that seem to be implemented in buildroot regarding initramfs seems to be to generate the whole rootfs as a complete initramfs file so that the complete system can be booted using a RAM disk. This is, however, not what I want to do since my application is mostly targeted for RaspberryPi systems where I need as much free RAM as possible and thus I don?t want to have a full-fledged initramfs but only a minimal one for ?just? identifying all filesystem labels and then continue booting the rootfs from the filesystem with the label specified in the kernel command-line.
+
+Thus, I wonder if and how it is possible to actually generate an own initrd/initramfs file from within a buildroot environment, which steps I would have to take or if there are other suggestions to solve my issue.
+
+Any help is of course highly appreciated. Please note that I have also raised a similar question on the raspberrypi forum, but there people couldn?t help due to the fact that this is more a buildroot question rather than a RaspberryPi-specific question.
+
+Best Regards,
+
+Jens
 -- 
-2.11.0
+Jens Maus, Dresden/Germany
+http://jens-maus.de/
+
+*** Content is authentic only with digital signature  ***
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 3745 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170608/bdf7d69f/attachment.p7s>
