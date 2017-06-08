@@ -1,130 +1,161 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed,  7 Jun 2017 15:56:27 -0700
-Subject: [Buildroot] [PATCH 1/2] docker-proxy: new package
-Message-ID: <20170607225628.31423-1-christian@paral.in>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed,  7 Jun 2017 22:28:55 -0300
+Subject: [Buildroot] [PATCH v2] imx6q-sabresd: Add a qt5 defconfig variant
+Message-ID: <1496885335-24704-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add docker-proxy package to Buildroot. Needed by docker-engine at
-runtime, and previously not included. This leads to the following error
-when attempting to port-map ports to a container:
+Introduce imx6q-sabresd_qt5_defconfig that supports the opensource
+Etnaviv graphical stack.
 
-  $ docker run -p 8080:8080 nginx
-  docker: Error response from daemon: driver failed programming external
-  connectivity on endpoint:
-  exec: "docker-proxy": executable file not found in $PATH.
+This defconfig provides a way to quickly test some graphical applications,
+such as kmscube, qt5, glmark2.
 
-Docker expects the docker-proxy binary to exist in the PATH.
+Currently kernel mainline exhibits issues when running cpufreq as ondemand
+governor on mx6, so add a linux fragment that disables such option for the
+time being.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/Config.in                      |  1 +
- package/docker-proxy/Config.in         | 18 +++++++++++++
- package/docker-proxy/docker-proxy.hash |  2 ++
- package/docker-proxy/docker-proxy.mk   | 46 ++++++++++++++++++++++++++++++++++
- 4 files changed, 67 insertions(+)
- create mode 100644 package/docker-proxy/Config.in
- create mode 100644 package/docker-proxy/docker-proxy.hash
- create mode 100644 package/docker-proxy/docker-proxy.mk
+Changes since v1:
+- Use latest U-Boot and kernel versions
 
-diff --git a/package/Config.in b/package/Config.in
-index e00b162..59d3bd7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1819,6 +1819,7 @@ menu "System tools"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
-+	source "package/docker-proxy/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
-diff --git a/package/docker-proxy/Config.in b/package/docker-proxy/Config.in
+ board/freescale/imx6q-sabresd/linux.fragment       |  1 +
+ board/freescale/imx6q-sabresd/readme.txt           | 23 +++++++++
+ .../imx6q-sabresd/rootfs_overlay/root/sabresd.json | 15 ++++++
+ configs/imx6q-sabresd_qt5_defconfig                | 59 ++++++++++++++++++++++
+ 4 files changed, 98 insertions(+)
+ create mode 100644 board/freescale/imx6q-sabresd/linux.fragment
+ create mode 100644 board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json
+ create mode 100644 configs/imx6q-sabresd_qt5_defconfig
+
+diff --git a/board/freescale/imx6q-sabresd/linux.fragment b/board/freescale/imx6q-sabresd/linux.fragment
 new file mode 100644
-index 0000000..4f414b2
+index 0000000..39bec58
 --- /dev/null
-+++ b/package/docker-proxy/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_DOCKER_PROXY
-+	bool "docker-proxy"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Libnetwork is a Container Network Model that provides a
-+	  consistent programming interface and the required network
-+	  abstractions for applications.
++++ b/board/freescale/imx6q-sabresd/linux.fragment
+@@ -0,0 +1 @@
++# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+diff --git a/board/freescale/imx6q-sabresd/readme.txt b/board/freescale/imx6q-sabresd/readme.txt
+index 10e973c..b57c4fb 100644
+--- a/board/freescale/imx6q-sabresd/readme.txt
++++ b/board/freescale/imx6q-sabresd/readme.txt
+@@ -54,4 +54,27 @@ To boot your newly created system:
+   emulator at 115200 bps, 8n1;
+ - power on the board.
+ 
++Testing graphics on the i.MX6Q Sabre SD board
++=============================================
 +
-+	  This package provides docker-proxy, a run-time dependency of Docker.
++The imx6q-sabresd_qt5_defconfig allows to quickly test the graphics
++capabilities of i.MX6 using the opensource Etnaviv graphics stack
++and kernel mainline.
 +
-+	  https://github.com/docker/libnetwork
++In order to build it:
 +
-+comment "docker-proxy needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
++make imx6q-sabresd_qt5_defconfig
++make
++
++Then flash the SD card as explained above.
++
++Running kmscube application:
++
++# kmscube -D /dev/dri/card1
++
++Running Qt5 Cinematic Demo:
++
++# export QT_QPA_EGLFS_KMS_CONFIG=/root/sabresd.json
++# /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
++
+ Enjoy!
+diff --git a/board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json b/board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json
 new file mode 100644
-index 0000000..9258348
+index 0000000..9469dc1
 --- /dev/null
-+++ b/package/docker-proxy/docker-proxy.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	49d31e8b386b88d45d9c417d8d775fa647ecdc66f8e2a93a35f401c7bc8c9c1c	docker-proxy-7b2b1feb1de4817d522cc372af149ff48d25028e.tar.gz
-diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
++++ b/board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json
+@@ -0,0 +1,15 @@
++{
++  "device": "/dev/dri/card1",
++  "hwcursor": false,
++  "pbuffers": true,
++  "outputs": [
++    {
++      "name": "HDMI-1",
++      "mode": "off"
++    },
++    {
++      "name": "LVDS-1",
++      "mode": "1024x768"
++    }
++  ]
++}
+diff --git a/configs/imx6q-sabresd_qt5_defconfig b/configs/imx6q-sabresd_qt5_defconfig
 new file mode 100644
-index 0000000..3bf6546
+index 0000000..f5e2686
 --- /dev/null
-+++ b/package/docker-proxy/docker-proxy.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# docker-proxy
-+#
-+################################################################################
-+
-+DOCKER_PROXY_VERSION = 7b2b1feb1de4817d522cc372af149ff48d25028e
-+DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
-+
-+DOCKER_PROXY_LICENSE = Apache-2.0
-+DOCKER_PROXY_LICENSE_FILES = LICENSE
-+
-+DOCKER_PROXY_DEPENDENCIES = host-go host-pkgconf
-+
-+DOCKER_PROXY_GOPATH = "$(@D)/gopath"
-+DOCKER_PROXY_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_PROXY_GOPATH)" \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	$(TARGET_MAKE_ENV)
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+DOCKER_PROXY_GLDFLAGS += -extldflags '-static'
-+endif
-+
-+define DOCKER_PROXY_CONFIGURE_CMDS
-+	mkdir -p $(DOCKER_PROXY_GOPATH)/src/github.com/docker
-+	ln -fs $(@D) $(DOCKER_PROXY_GOPATH)/src/github.com/docker/libnetwork
-+endef
-+
-+define DOCKER_PROXY_BUILD_CMDS
-+	cd $(@D)/gopath/src/github.com/docker/libnetwork; \
-+	$(DOCKER_PROXY_MAKE_ENV) \
-+	$(HOST_DIR)/usr/bin/go build -v \
-+		-o $(@D)/bin/docker-proxy \
-+		-ldflags "$(DOCKER_PROXY_GLDFLAGS)" \
-+		github.com/docker/libnetwork/cmd/proxy
-+endef
-+
-+define DOCKER_PROXY_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
-+endef
-+
-+$(eval $(generic-package))
++++ b/configs/imx6q-sabresd_qt5_defconfig
+@@ -0,0 +1,59 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_VFPV3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.4"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx6q-sabresd/linux.fragment"
++BR2_ROOTFS_OVERLAY="board/freescale/imx6q-sabresd/rootfs_overlay"
++BR2_PACKAGE_STRACE=y
++BR2_PACKAGE_BITSTREAM_VERA=y
++BR2_PACKAGE_CANTARELL=y
++BR2_PACKAGE_DEJAVU=y
++BR2_PACKAGE_FONT_AWESOME=y
++BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
++BR2_PACKAGE_INCONSOLATA=y
++BR2_PACKAGE_LIBERATION=y
++BR2_PACKAGE_GLMARK2=y
++BR2_PACKAGE_KMSCUBE=y
++BR2_PACKAGE_MESA3D_DEMOS=y
++BR2_PACKAGE_QT5CINEX=y
++BR2_PACKAGE_QT5CINEX_HD=y
++BR2_PACKAGE_MESA3D=y
++BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
++BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
++BR2_PACKAGE_MESA3D_OPENGL_ES=y
++BR2_PACKAGE_QT5=y
++BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
++BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
++BR2_PACKAGE_QT5BASE_LINUXFB=y
++BR2_PACKAGE_QT5BASE_FONTCONFIG=y
++BR2_PACKAGE_QT5BASE_GIF=y
++BR2_PACKAGE_QT5BASE_JPEG=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++BR2_PACKAGE_INPUT_TOOLS=y
++BR2_PACKAGE_LIBV4L=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=122880
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.10.2
+2.7.4
