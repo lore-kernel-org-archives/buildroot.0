@@ -1,36 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 23:16:35 +0200
-Subject: [Buildroot] [PATCH v4] configs/stm32f4xx: use kernel version
- 4.11
-In-Reply-To: <1496301611-12538-1-git-send-email-christophe.priouzeau@st.com>
-References: <1496059605-1998-1-git-send-email-christophe.priouzeau@st.com>
- <1496301611-12538-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <20170608231635.2da07df6@free-electrons.com>
+Date: Thu, 8 Jun 2017 23:16:46 +0200
+Subject: [Buildroot] [git commit] util-linux: wrap help text at column 72
+Message-ID: <20170608211650.C5C8D8189B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c59a2b69e2f11337b420f39df65a81bc5381826f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 1 Jun 2017 07:20:13 +0000, Christophe PRIOUZEAU wrote:
-> Use kernel 4.11 for stm32f4 discovery board
-> (stm32f429i-disco and stm32f469i-disco).
-> 
-> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
-> ---
-> Changes v1 -> v2:
->  - change the commit header (suggested by Thomas)
-> Changes v2 -> v3
->  - use LINUX_KERNEL_CUSTOM_VERSION_VALUE instead ofLINUX_KERNEL_LATEST_VERSION (suggested by Thomas)
-> Changes v3 -> v4
->  - use linux header of kernel 4.11 (suggested by Thomas)
+Respect the <tab><2 spaces><62 chars> rule.
 
-Applied to master, thanks a lot!
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index e957f84..86db372 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -99,7 +99,8 @@ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+ 	bool "cramfs utilities"
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+-	  Utilities for compressed ROM file system (fsck.cramfs, mkfs.cramfs)
++	  Utilities for compressed ROM file system (fsck.cramfs,
++	  mkfs.cramfs)
+ 
+ config BR2_PACKAGE_UTIL_LINUX_EJECT
+ 	bool "eject"
