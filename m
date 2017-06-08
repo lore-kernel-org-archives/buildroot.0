@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Jun 2017 16:50:29 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux: fix name of config
+Date: Thu, 8 Jun 2017 16:50:39 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux: fix name of config
 	variable
-Message-ID: <20170608145033.6D26780AE9@busybox.osuosl.org>
+Message-ID: <20170608145044.7106680359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=256f3f71484fc4bc15a4a7500384cfd2bd3a8c38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=14097c56d33a4964d7f77ef9fea22442381f0207
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
 In 4c10eedc1 (systemd: enable required kernel features), we added
 setting a few required kernel features to ensure systemd works.
@@ -32,10 +32,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index e387c7d..9da7e9b 100644
+index 7f4432e..131489a 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -278,7 +278,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+@@ -274,7 +274,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
  		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE,$(@D)/.config)
  		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
  		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
