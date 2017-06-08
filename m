@@ -1,46 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 21:35:24 +0200
-Subject: [Buildroot] [PATCH v2] sngrep: fix wchar detection.
-In-Reply-To: <20170607155316.25646-1-aduskett@codeblue.com>
-References: <20170607155316.25646-1-aduskett@codeblue.com>
-Message-ID: <20170608213524.21c05b9c@free-electrons.com>
+Date: Thu, 8 Jun 2017 21:40:32 +0200
+Subject: [Buildroot] [git commit] support/dependencies: check PATH does not
+	carry a \n
+Message-ID: <20170608194102.EBFD881945@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f00d6ec67bd6fed6ff8fd322d60d026ec87d8a6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  7 Jun 2017 11:53:16 -0400, Adam Duskett wrote:
-> Ncurses detection is currently broken in buildroot.
-> 
-> This patch does the following:
->  - Add SNGREP_CHECK_SCRIPT to configure.ac which checks for a
->    libname, a function in that library, sets a define if found, and
->    if not found, moves on to the next part. This is taken from the
->    htop configure.ac.
-> 
->  - Adds SNGREP_CHECK_LIB to configure.ac which checks for a
->    library, a function within that library, sets a define if that function
->    is found, and if not found, moves on to the next part.
->    This is taken from the htop configure.ac
-> 
->  - Modifies scrollbar.h and ui_panel.h to include <wctypes.h> instead of
->    <ncursesw/ncurses.h> if unicode is supported.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
-> Changes v1 -> v2:
->   - Added # Locally computed header to sngrep.hash
+... otherwise it fails spectacularly as soon as PATH is referenced in a
+package rule (i.e. very soon, fortunately):
 
-Applied to master, after fixing the commit log, which wasn't
-appropriate anymore.
+    >>> host-lzip 1.18 Downloading
+    /bin/bash: -c: line 0: unexpected EOF while looking for matching `"'
+    /bin/bash: -c: line 1: syntax error: unexpected end of file
 
-Thanks!
+Fixes # 9886.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ciro Santilli <ciro.santilli@gmail.com>
+[Thomas: fix typo in message, use tabs for indentation.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/dependencies/dependencies.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 168d196..a195c62 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -29,6 +29,18 @@ if test -n "$LD_LIBRARY_PATH" ; then
+ 	fi
+ fi;
+ 
++# PATH should not contain a newline, otherwise it fails in spectacular ways
++# as soon as PATH is referenced in a package rule
++case "${PATH}" in
++(*"
++"*)	printf "\n"
++	# Break the '\n' sequence, or a \n is printed (which is not what we want).
++	printf "Your PATH contains a newline (%sn) character.\n" "\\"
++	printf "This doesn't work. Fix you PATH.\n"
++	exit 1
++	;;
++esac
++
+ # sanity check for CWD in PATH. Having the current working directory
+ # in the PATH makes the toolchain build process break.
+ # try not to rely on egrep..
