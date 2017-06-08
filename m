@@ -1,23 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 08 Jun 2017 16:47:16 +0200
-Subject: [Buildroot] [PATCH] support/scripts: fix shebang with bash
-In-Reply-To: <20170605073740.855-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Mon, 5 Jun 2017 09:37:40 +0200")
-References: <20170605073740.855-1-francois.perrad@gadz.org>
-Message-ID: <87y3t2a64r.fsf@dell.be.48ers.dk>
+Date: Thu, 8 Jun 2017 16:48:53 +0200
+Subject: [Buildroot] [git commit] linux: fix name of config variable
+Message-ID: <20170608145016.E17D3818F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b0fc65a11b2ac11dc492146ec50168739810c2f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+In 4c10eedc1 (systemd: enable required kernel features), we added
+setting a few required kernel features to ensure systemd works.
 
-Out of interest, what distribution doesn't have bash in /bin?
-#!/bin/bash is a quite common shebang, and we use it in several places
-outside support/scripts.
+However, there was a typo for one of the variables: CONFIG_TMPFS_XATTR
+was written as CONFIG_TMPFS_POSIX_XATTR, which does not exist (and never
+ever existed, at least not since 2.6.12)...
 
--- 
-Bye, Peter Korsgaard
+Reported-by: Michael Heinemann <posted@heine.so>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Michael Heinemann <posted@heine.so>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e387c7d..9da7e9b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -278,7 +278,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_XATTR,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_SMACK),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
