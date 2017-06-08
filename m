@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 21:31:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bdwgc: re-add fix for pthread
- detection on uclinux platforms
-In-Reply-To: <20170602180434.991-1-bernd.kuhls@t-online.de>
-References: <20170602180434.991-1-bernd.kuhls@t-online.de>
-Message-ID: <20170608213109.24ba6e92@free-electrons.com>
+Date: Thu, 8 Jun 2017 21:32:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdbm: fix uclibc build error
+In-Reply-To: <20170605152724.12167-1-bernd.kuhls@t-online.de>
+References: <20170605152724.12167-1-bernd.kuhls@t-online.de>
+Message-ID: <20170608213209.0557b609@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  2 Jun 2017 20:04:34 +0200, Bernd Kuhls wrote:
+On Mon,  5 Jun 2017 17:27:24 +0200, Bernd Kuhls wrote:
+> This patches fixes
+> 
+> gdbmopen.c:35:40: error: unknown type name 'blksize_t'
+>  compute_directory_size (GDBM_FILE dbf, blksize_t block_size,
+> 
+> To get the missing define we need to pass -D_GNU_SOURCE.
+> 
 > Fixes
-> http://autobuild.buildroot.net/results/d63/d63ee2d03421cc671455be553ab35ada7ff78267/
-> http://autobuild.buildroot.net/results/d8f/d8f97fd92cd971a0d125f983765ef27c5ac87acb/
+> http://autobuild.buildroot.net/results/592/59278fb8681d474883e6551df5173edd806b16fa/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Apparently I misread the github changelog: our uclinux patch was not
-> applied to the 7.6.0 release, we still need the backported patch, sorry.
 
-Applied to master, thanks.
+The real bug is in uClibc, the proper fix is
+https://patchwork.ozlabs.org/patch/772049/.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
