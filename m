@@ -1,175 +1,113 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  8 Jun 2017 20:47:02 +0300
-Subject: [Buildroot] [PATCH] autofs: bump to version 5.1.3
-Message-ID: <df4b1565a74bc077220f13c0487cdcfed539465a.1496944022.git.baruch@tkos.co.il>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Thu,  8 Jun 2017 20:08:24 +0200
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: New package
+Message-ID: <1496945304-8582-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patches.
+From: Andr? Hentschel <andre.hentschel@zf.com>
 
-Cc: Jonathan Ben Avraham <yba@tkos.co.il>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- ...fs-build-check-for-clock_gettime-in-librt.patch | 62 ----------------------
- ...dd-cache-variable-for-Linux-proc-filesyst.patch | 47 ----------------
- package/autofs/autofs.hash                         |  2 +-
- package/autofs/autofs.mk                           |  5 +-
- 4 files changed, 2 insertions(+), 114 deletions(-)
- delete mode 100644 package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch
- delete mode 100644 package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch
+ package/Config.in                          |  1 +
+ package/azure-iot-sdk-c/Config.in          | 14 ++++++++
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 52 ++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 package/azure-iot-sdk-c/Config.in
+ create mode 100644 package/azure-iot-sdk-c/azure-iot-sdk-c.mk
 
-diff --git a/package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch b/package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch
-deleted file mode 100644
-index ade6d1cdb32b..000000000000
---- a/package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From a38ab6c0f2790e047fc64867865eb2a073135618 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Sun, 19 Jun 2016 00:17:41 -0300
--Subject: [PATCH] autofs: build: check for clock_gettime in librt
--
--Glibc versions older than 2.17 define clock_gettime() in librt, so add a
--check for this.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Patch status: sent to autofs@ mailing list
--
-- Makefile.conf.in | 3 +++
-- Makefile.rules   | 2 ++
-- configure.in     | 4 ++++
-- 3 files changed, 9 insertions(+)
--
--diff --git a/Makefile.conf.in b/Makefile.conf.in
--index cb53e66..2bc3202 100644
----- a/Makefile.conf.in
--+++ b/Makefile.conf.in
--@@ -11,6 +11,9 @@
-- DAEMON_CFLAGS  = @DAEMON_CFLAGS@
-- DAEMON_LDFLAGS = @DAEMON_LDFLAGS@
-- 
--+# Glibc < 2.17 requires librt for clock_gettime()
--+LIBCLOCK_GETTIME = @LIBCLOCK_GETTIME@
--+
-- # Special parameters for glibc (libc 6)
-- LIBNSL    = @LIBNSL@
-- LIBRESOLV = @LIBRESOLV@
--diff --git a/Makefile.rules b/Makefile.rules
--index 6fa3e02..7d1af2e 100644
----- a/Makefile.rules
--+++ b/Makefile.rules
--@@ -56,6 +56,8 @@ endif
-- 
-- LIBS += $(LIBNSL)
-- 
--+LIBS += $(LIBCLOCK_GETTIME)
--+
-- # Standard rules
-- 
-- .SUFFIXES: .c .o .s .so
--diff --git a/configure.in b/configure.in
--index 25d7c4e..a4318e8 100644
----- a/configure.in
--+++ b/configure.in
--@@ -177,6 +177,10 @@ if test "$ac_cv_search_versionsort" = "no"; then
-- 		[Define if your C library does not provide versionsort])
-- fi
-- 
--+# glibc < 2.17 needs librt for clock_gettime()
--+AC_CHECK_LIB(rt, clock_gettime, LIBCLOCK_GETTIME="-lrt")
--+AC_SUBST(LIBCLOCK_GETTIME)
--+
-- #
-- # glibc/libc 6 new libraries
-- #
---- 
--2.7.3
--
-diff --git a/package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch b/package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch
-deleted file mode 100644
-index 93f3f9cf2a86..000000000000
---- a/package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From bb5cc9cee1963362fe56b4fac65fed4912da4215 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 30 Jul 2016 22:30:01 +0200
--Subject: [PATCH] configure: add cache variable for Linux proc filesystem check
--
--When cross-compiling, whether the /proc filesystem is available in the
--build environment does not give any indication as to whether it will
--be available in the execution environment.
--
--This commit therefore adjust the AF_LINUX_PROCFS macro to use
--AC_CACHE_CHECK(), so that an ac_cv_linux_procfs variable can be
--preseeded in the environment to force the result of this check.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- aclocal.m4 | 15 +++++----------
-- 1 file changed, 5 insertions(+), 10 deletions(-)
--
--diff --git a/aclocal.m4 b/aclocal.m4
--index 2115204..333699c 100644
----- a/aclocal.m4
--+++ b/aclocal.m4
--@@ -80,16 +80,11 @@ dnl
-- dnl Check for the Linux /proc filesystem
-- dnl --------------------------------------------------------------------------
-- AC_DEFUN(AF_LINUX_PROCFS,
---[AC_MSG_CHECKING(for Linux proc filesystem)
---if test "x`cat /proc/sys/kernel/ostype 2>&-`" = "xLinux"
---then
---	linux_procfs=yes
---else
---	linux_procfs=no
---fi
---AC_MSG_RESULT($linux_procfs)
---if test $linux_procfs = yes
---then
--+[AC_CACHE_CHECK([for Linux proc filesystem], [ac_cv_linux_procfs],
--+	[ac_cv_linux_procfs=no
--+	 test "x`cat /proc/sys/kernel/ostype 2>&-`" = "xLinux" && ac_cv_linux_procfs=yes])
--+ if test $ac_cv_linux_procfs = yes
--+ then
-- 	AC_DEFINE(HAVE_LINUX_PROCFS, 1,
-- 		[Define if you have the Linux /proc filesystem.])
-- fi])
---- 
--2.7.4
--
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-index 72b13785952a..61e58825cc02 100644
---- a/package/autofs/autofs.hash
-+++ b/package/autofs/autofs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
--sha256 88b7de39088aead983e02072a7b753d5ee52ce419c8913f7a3d4ff5521313f0c  autofs-5.1.2.tar.xz
-+sha256 e96eebfe3ed5fb1a30f4510f538198affde223e370c6dc2bed9780309272b1bf  autofs-5.1.3.tar.xz
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index f20a19a69537..148ab1bd3d71 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -4,15 +4,12 @@
- #
- ################################################################################
- 
--AUTOFS_VERSION = 5.1.2
-+AUTOFS_VERSION = 5.1.3
- AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
- AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
- AUTOFS_DEPENDENCIES = host-flex host-bison
--# For 0002-autofs-configure-check-for-clock_gettime-in-librt.patch and
--# 0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch.
--AUTOFS_AUTORECONF = YES
- 
- # autofs looks on the build machine for the path of modprobe, so tell
- # it explicitly where it will be located on the target.
+diff --git a/package/Config.in b/package/Config.in
+index e00b162..a56520b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1247,6 +1247,7 @@ menu "Networking"
+ 	source "package/alljoyn-base/Config.in"
+ 	source "package/alljoyn-tcl/Config.in"
+ 	source "package/alljoyn-tcl-base/Config.in"
++	source "package/azure-iot-sdk-c/Config.in"
+ 	source "package/batman-adv/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/canfestival/Config.in"
+diff --git a/package/azure-iot-sdk-c/Config.in b/package/azure-iot-sdk-c/Config.in
+new file mode 100644
+index 0000000..a0fac8d
+--- /dev/null
++++ b/package/azure-iot-sdk-c/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_AZURE_IOT_SDK_C
++	bool "azure-iot-sdk-c"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Microsoft Azure IoT Hub device SDK for C is used
++	  to connect devices running C code to Azure IoT Hub.
++
++comment "azure-iot-sdk-c needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+new file mode 100644
+index 0000000..79d97c1
+--- /dev/null
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -0,0 +1,52 @@
++################################################################################
++#
++# azure-iot-sdk-c
++#
++################################################################################
++
++AZURE_IOT_SDK_C_VERSION = lts_03_2017
++AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
++AZURE_IOT_SDK_C_SITE_METHOD = git
++AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
++AZURE_IOT_SDK_C_LICENSE = MIT
++AZURE_IOT_SDK_C_LICENSE_FILES = LICENSE
++AZURE_IOT_SDK_C_INSTALL_STAGING = YES
++AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
++AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
++
++AZURE_IOT_SDK_C_LIBS =
++ifeq ($(BR2_STATIC_LIBS),y)
++AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
++	iothub_client/libiothub_client.a iothub_client/libiothub_client_mqtt_ws_transport.a \
++	iothub_client/libiothub_client_amqp_ws_transport.a \
++	iothub_client/libiothub_client_http_transport.a \
++	iothub_client/libiothub_client_amqp_transport.a \
++	iothub_client/libiothub_client_mqtt_transport.a \
++	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
++endif # Static enabled
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
++	iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
++	iothub_client/libiothub_client_amqp_ws_transport.so \
++	iothub_client/libiothub_client_http_transport.so \
++	iothub_client/libiothub_client_amqp_transport.so \
++	iothub_client/libiothub_client_mqtt_transport.so \
++	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
++endif # Shared enabled
++
++define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
++	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
++		$(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/
++	)
++	cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
++	cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
++endef
++
++define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
++	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
++		$(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/
++	)
++endef
++
++$(eval $(cmake-package))
 -- 
-2.11.0
+2.7.4
