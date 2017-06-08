@@ -1,161 +1,81 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed,  7 Jun 2017 22:28:55 -0300
-Subject: [Buildroot] [PATCH v2] imx6q-sabresd: Add a qt5 defconfig variant
-Message-ID: <1496885335-24704-1-git-send-email-festevam@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  8 Jun 2017 07:51:27 +0300
+Subject: [Buildroot] [PATCH] gauche: fix build with uClibc
+Message-ID: <d8e42091b4780d235d30a2cc4549278291300af3.1496897487.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce imx6q-sabresd_qt5_defconfig that supports the opensource
-Etnaviv graphical stack.
+As gauche bundles bdwgc, it hit the same uclibc build issue fixed in commit
+9b04ae71c5e4c (package/bdwgc: fix uclibc build after bump to 7.6.0). Apply the
+upstream bdwgc fix for that.
 
-This defconfig provides a way to quickly test some graphical applications,
-such as kmscube, qt5, glmark2.
+Fixes:
+http://autobuild.buildroot.net/results/ebc/ebc70579a94d260fecf05fe4150eebcc59d3b5fb/
+http://autobuild.buildroot.net/results/e1b/e1b2ad89787c345cf8817f6d8436ff52a151c5a6/
+http://autobuild.buildroot.net/results/f39/f396b996a59db79f7a0926aec49c488c3a2797a0/
 
-Currently kernel mainline exhibits issues when running cpufreq as ondemand
-governor on mx6, so add a linux fragment that disables such option for the
-time being.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes since v1:
-- Use latest U-Boot and kernel versions
+ ...-libc-version.h-build-error-uClibc-x86-_6.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/gauche/0003-Fix-missing-libc-version.h-build-error-uClibc-x86-_6.patch
 
- board/freescale/imx6q-sabresd/linux.fragment       |  1 +
- board/freescale/imx6q-sabresd/readme.txt           | 23 +++++++++
- .../imx6q-sabresd/rootfs_overlay/root/sabresd.json | 15 ++++++
- configs/imx6q-sabresd_qt5_defconfig                | 59 ++++++++++++++++++++++
- 4 files changed, 98 insertions(+)
- create mode 100644 board/freescale/imx6q-sabresd/linux.fragment
- create mode 100644 board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json
- create mode 100644 configs/imx6q-sabresd_qt5_defconfig
-
-diff --git a/board/freescale/imx6q-sabresd/linux.fragment b/board/freescale/imx6q-sabresd/linux.fragment
+diff --git a/package/gauche/0003-Fix-missing-libc-version.h-build-error-uClibc-x86-_6.patch b/package/gauche/0003-Fix-missing-libc-version.h-build-error-uClibc-x86-_6.patch
 new file mode 100644
-index 0000000..39bec58
+index 000000000000..61a3f1aadbc6
 --- /dev/null
-+++ b/board/freescale/imx6q-sabresd/linux.fragment
-@@ -0,0 +1 @@
-+# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
-diff --git a/board/freescale/imx6q-sabresd/readme.txt b/board/freescale/imx6q-sabresd/readme.txt
-index 10e973c..b57c4fb 100644
---- a/board/freescale/imx6q-sabresd/readme.txt
-+++ b/board/freescale/imx6q-sabresd/readme.txt
-@@ -54,4 +54,27 @@ To boot your newly created system:
-   emulator at 115200 bps, 8n1;
- - power on the board.
- 
-+Testing graphics on the i.MX6Q Sabre SD board
-+=============================================
++++ b/package/gauche/0003-Fix-missing-libc-version.h-build-error-uClibc-x86-_6.patch
+@@ -0,0 +1,46 @@
++From 4b9692c93d658015087f19016b2bd0c9dfbccee6 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 28 May 2017 20:21:09 +0200
++Subject: [PATCH] Fix 'missing libc-version.h' build error (uClibc/x86[_64])
++ (fix commit 3d34255)
 +
-+The imx6q-sabresd_qt5_defconfig allows to quickly test the graphics
-+capabilities of i.MX6 using the opensource Etnaviv graphics stack
-+and kernel mainline.
++uClibc defines __GLIBC__ but does not contain libc-version.h file.
 +
-+In order to build it:
++* include/private/gcconfig.h [(I386 || X86_64) && LINUX && __GLIBC__]
++(GLIBC_2_19_TSX_BUG): Do not define (and do not include
++gnu/libc-version.h) if __UCLIBC__.
 +
-+make imx6q-sabresd_qt5_defconfig
-+make
++[baruch: cherry pick from upstream bdwgc commit 047230b71d42140]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: patch applied to bdwgc; will propagate to gauche on the next
++synch of its bundled bdwgc
 +
-+Then flash the SD card as explained above.
++ gc/include/private/gcconfig.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+Running kmscube application:
++diff --git a/gc/include/private/gcconfig.h b/gc/include/private/gcconfig.h
++index 80920e5af570..f063664c3f52 100644
++--- a/gc/include/private/gcconfig.h
+++++ b/gc/include/private/gcconfig.h
++@@ -1420,7 +1420,7 @@
++ #         define GC_PREFETCH_FOR_WRITE(x) \
++             __asm__ __volatile__ ("prefetchw %0" : : "m"(*(char *)(x)))
++ #       endif
++-#       if defined(__GLIBC__)
+++#       if defined(__GLIBC__) && !defined(__UCLIBC__)
++           /* Workaround lock elision implementation for some glibc.     */
++ #         define GLIBC_2_19_TSX_BUG
++ #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
++@@ -2431,7 +2431,7 @@
++           /* FIXME: This seems to be fixed in GLibc v2.14.              */
++ #         define GETCONTEXT_FPU_EXCMASK_BUG
++ #       endif
++-#       if defined(__GLIBC__)
+++#       if defined(__GLIBC__) && !defined(__UCLIBC__)
++           /* Workaround lock elision implementation for some glibc.     */
++ #         define GLIBC_2_19_TSX_BUG
++ #         include <gnu/libc-version.h> /* for gnu_get_libc_version() */
++-- 
++2.11.0
 +
-+# kmscube -D /dev/dri/card1
-+
-+Running Qt5 Cinematic Demo:
-+
-+# export QT_QPA_EGLFS_KMS_CONFIG=/root/sabresd.json
-+# /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
-+
- Enjoy!
-diff --git a/board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json b/board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json
-new file mode 100644
-index 0000000..9469dc1
---- /dev/null
-+++ b/board/freescale/imx6q-sabresd/rootfs_overlay/root/sabresd.json
-@@ -0,0 +1,15 @@
-+{
-+  "device": "/dev/dri/card1",
-+  "hwcursor": false,
-+  "pbuffers": true,
-+  "outputs": [
-+    {
-+      "name": "HDMI-1",
-+      "mode": "off"
-+    },
-+    {
-+      "name": "LVDS-1",
-+      "mode": "1024x768"
-+    }
-+  ]
-+}
-diff --git a/configs/imx6q-sabresd_qt5_defconfig b/configs/imx6q-sabresd_qt5_defconfig
-new file mode 100644
-index 0000000..f5e2686
---- /dev/null
-+++ b/configs/imx6q-sabresd_qt5_defconfig
-@@ -0,0 +1,59 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx6q-sabresd/linux.fragment"
-+BR2_ROOTFS_OVERLAY="board/freescale/imx6q-sabresd/rootfs_overlay"
-+BR2_PACKAGE_STRACE=y
-+BR2_PACKAGE_BITSTREAM_VERA=y
-+BR2_PACKAGE_CANTARELL=y
-+BR2_PACKAGE_DEJAVU=y
-+BR2_PACKAGE_FONT_AWESOME=y
-+BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
-+BR2_PACKAGE_INCONSOLATA=y
-+BR2_PACKAGE_LIBERATION=y
-+BR2_PACKAGE_GLMARK2=y
-+BR2_PACKAGE_KMSCUBE=y
-+BR2_PACKAGE_MESA3D_DEMOS=y
-+BR2_PACKAGE_QT5CINEX=y
-+BR2_PACKAGE_QT5CINEX_HD=y
-+BR2_PACKAGE_MESA3D=y
-+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
-+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-+BR2_PACKAGE_MESA3D_OPENGL_ES=y
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-+BR2_PACKAGE_QT5BASE_LINUXFB=y
-+BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-+BR2_PACKAGE_QT5BASE_GIF=y
-+BR2_PACKAGE_QT5BASE_JPEG=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_PACKAGE_INPUT_TOOLS=y
-+BR2_PACKAGE_LIBV4L=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_BLOCKS=122880
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.7.4
+2.11.0
