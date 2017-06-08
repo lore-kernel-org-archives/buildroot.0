@@ -1,45 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 08 Jun 2017 21:59:47 +0200
-Subject: [Buildroot] [PATCH] swupdate: switch to local config librt
-	dependency
-In-Reply-To: <20170608214532.7b77d220@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 8 Jun 2017 21:45:32 +0200")
-References: <097cb7c8a9791944b484ec31f2cc5660331411c6.1496939346.git.baruch@tkos.co.il>
- <20170608214532.7b77d220@free-electrons.com>
-Message-ID: <87lgp29rnw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Jun 2017 22:03:01 +0200
+Subject: [Buildroot] [git commit] package/socat: Fix TABDLY,
+	CSIZE and CRDLY shifts for PowerPC
+Message-ID: <20170608200405.7CAD480109@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a52896f755a55d0fa30f6ba5092c69edaa73724d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+As can be seen in linux/arch/powerpc/include/uapi/asm/termbits.h are
+defined as (note that those are octal numbers):
 
- >> With glibc 2.17 being 4.5 years old, upstream maintainers start to push back
- >> on these librt patches. Is it time to stop support for external toolchains
- >> with older glibc? This means retiring CodeSourcery x86 and SH toolchains.
+\#define TABDLY	00006000
+\#define CSIZE	00001400
+\#define CRDLY	00030000
 
- > That's a good question. I think supporting relatively old
- > configurations is a strength of Buildroot, so I try to be careful when
- > removing support for old stuff. But maybe glibc 2.17 is now really too
- > old.
+which gives shifts of 10, 8 and 12. Adjust socat.mk accordingly to
+reflect that difference.
 
- > Thoughts of other developers?
+Signed-off-by: Mark Hinds <zoronic@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/socat/socat.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-As always, it is a tradeoff. We have already removed gcc 4.8 (released
-March 2013) even though older bootloader/kernels tend to break when
-built with "too new" gcc versions.
-
-I don't recall the same level of breakage when moving to newer glibc
-versions. Is there any reason to stay with 2.17 instead of newer
-version (incompatibility/bloat/..)? 2.17 presumably is also missing a
-number of security fixes and nice new features.
-
-I suggest we stop caring about these ancient <= 2.17 glibc versions when
-we introduce 2.26, especially if upstream doesn't want these fixes any
-more.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index ba46263..b923cef 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -9,11 +9,20 @@ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0
+ SOCAT_LICENSE_FILES = COPYING
+-SOCAT_CONF_ENV = \
+-	sc_cv_termios_ispeed=no \
++
++SOCAT_CONF_ENV = sc_cv_termios_ispeed=no
++
++ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
++SOCAT_CONF_ENV += \
++	sc_cv_sys_crdly_shift=12 \
++	sc_cv_sys_tabdly_shift=10 \
++	sc_cv_sys_csize_shift=8
++else
++SOCAT_CONF_ENV += \
+ 	sc_cv_sys_crdly_shift=9 \
+ 	sc_cv_sys_tabdly_shift=11 \
+ 	sc_cv_sys_csize_shift=4
++endif
+ 
+ # We need to run autoconf to regenerate the configure script, in order
+ # to ensure that the test checking linux/ext2_fs.h works
