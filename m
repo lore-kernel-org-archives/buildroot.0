@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 21:42:46 +0200
-Subject: [Buildroot] [PATCH] support/dependencies: check PATH does not
- carry a \n
-In-Reply-To: <20170520082005.11668-1-yann.morin.1998@free.fr>
-References: <20170520082005.11668-1-yann.morin.1998@free.fr>
-Message-ID: <20170608214246.5acc565c@free-electrons.com>
+Date: Thu, 8 Jun 2017 21:43:24 +0200
+Subject: [Buildroot] [PATCH] support/scripts: fix shebang with bash
+In-Reply-To: <20170605073740.855-1-francois.perrad@gadz.org>
+References: <20170605073740.855-1-francois.perrad@gadz.org>
+Message-ID: <20170608214324.7ef3bf05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 20 May 2017 10:20:05 +0200, Yann E. MORIN wrote:
+On Mon,  5 Jun 2017 09:37:40 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  support/scripts/br2-external               | 2 +-
+>  support/scripts/check-bin-arch             | 2 +-
+>  support/scripts/fix-configure-powerpc64.sh | 2 +-
+>  support/scripts/genimage.sh                | 2 +-
+>  support/scripts/hardlink-or-copy           | 2 +-
+>  support/scripts/test-pkg                   | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
 
-> +    # Break the '\n' sequence, or a \n is printed (which is not what we want).
-> +    printf "Your PATH contains a newline (%sn) charater.\n" "\\"
-
-Typo: character.
-
-> +    printf "This doesn't work. Fix you PATH.\n"
-> +    exit 1
-> +    ;;
-
-Also, we use one tab for indentation in this file, not 4 spaces, so
-I've fixed that.
-
-Applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
