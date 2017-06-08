@@ -1,55 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 23:35:26 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-stalker: fix build with
-	gcc 7.x
-Message-ID: <20170608213537.1CEC37FA96@busybox.osuosl.org>
+Date: Thu, 8 Jun 2017 23:24:23 +0200
+Subject: [Buildroot] [git commit] package/oracle-mysql: fix build with gcc
+	7.x
+Message-ID: <20170608213537.06481803DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cd9a3e5802f1abee706549ad9cf87bf018eb6fa
+commit: https://git.buildroot.net/buildroot/commit/?id=94bad4fbf5759302a9f8f33267989d543f3a1167
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-src-CWatchdog.h-Fix-gcc7-build.patch      | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/oracle-mysql/0008-gcc7.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
+diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0008-gcc7.patch
 new file mode 100644
-index 0000000..2d85f6b
+index 0000000..2cf6d26
 --- /dev/null
-+++ b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
-@@ -0,0 +1,29 @@
-+From bb16ccd14deb3a01049daec37b6d2e7711ef4738 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 13 May 2017 20:22:08 +0200
-+Subject: [PATCH] src/CWatchdog.h: Fix gcc7 build
++++ b/package/oracle-mysql/0008-gcc7.patch
+@@ -0,0 +1,24 @@
++Fix gcc7 compile
 +
-+Building with gcc7 is broken:
++mysql.cc: In function 'void build_completion_hash(bool, bool)':
++mysql.cc:2687:37: error: invalid conversion from 'char' to 'char*' [-fpermissive]
++       field_names[i][num_fields*2]= '\0';
++                                     ^~~~
 +
-+src/CWatchdog.h:31:58: error: 'std::function' has not been declared
-+    CWatchdog(unsigned int interval, SAPI *api, std::function<void(SError)> errorCallback);
-+                                                     ^~~~~~~~
++Patch was partly backported from upstream commit:
++https://github.com/mysql/mysql-server/commit/ae21683d980d5fe9e39bd0193827ea3604256eb9
 +
-+Submitted-upstream: https://github.com/kodi-pvr/pvr.stalker/pull/93
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/CWatchdog.h | 1 +
-+ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/CWatchdog.h b/src/CWatchdog.h
-+index c465e91..239d95d 100644
-+--- a/src/CWatchdog.h
-++++ b/src/CWatchdog.h
-+@@ -22,6 +22,7 @@
-+  */
-+ 
-+ #include <thread>
-++#include <functional>
-+ 
-+ #include "SAPI.h"
-+ 
++diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
++--- mysql-5.1.73.org/client/mysql.cc	2013-11-04 19:52:27.000000000 +0100
+++++ mysql-5.1.73/client/mysql.cc	2017-05-13 19:52:10.125101101 +0200
++@@ -2684,7 +2684,7 @@
++         mysql_free_result(fields);
++         break;
++       }
++-      field_names[i][num_fields*2]= '\0';
+++      field_names[i][num_fields*2]= NULL;
++       j=0;
++       while ((sql_field=mysql_fetch_field(fields)))
++       {
