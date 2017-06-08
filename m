@@ -1,29 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 23:16:55 +0200
-Subject: [Buildroot] [PATCH] util-linux: wrap help text at column 72
-In-Reply-To: <20170601010010.18346-1-casantos@datacom.ind.br>
-References: <20170601010010.18346-1-casantos@datacom.ind.br>
-Message-ID: <20170608231655.4ea21c38@free-electrons.com>
+Date: Thu, 8 Jun 2017 23:19:36 +0200
+Subject: [Buildroot] [git commit] package/qt5base: install arch-specific
+	configuration
+Message-ID: <20170608212043.BCAF3803E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a3fd13804fc801fc948d27f9fe932fce7201655a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 31 May 2017 22:00:10 -0300, Carlos Santos wrote:
-> Respect the <tab><2 spaces><62 chars> rule.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/util-linux/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+For some architectures, it is necessary to link with additional
+libraries, such as -latomic for sparc.
 
-Applied to master, thanks.
+Add a bit of support to make that easy; actual use will be introduced in
+the following patch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/qmake.conf | 3 +++
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+index 49cf898..8b6debe 100644
+--- a/package/qt5/qt5base/qmake.conf
++++ b/package/qt5/qt5base/qmake.conf
+@@ -21,5 +21,8 @@ CONFIG                 += nostrip
+ QMAKE_LIBS             += -lrt -lpthread -ldl
+ QMAKE_CFLAGS_ISYSTEM   =
+ 
++# Architecturespecific configuration
++include(arch.conf)
++
+ include(../common/linux_device_post.conf)
+ load(qt_config)
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 0c08835..81774b7 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -214,12 +214,15 @@ define QT5BASE_CONFIGURE_CONFIG_FILE
+ endef
+ endif
+ 
++QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
+ define QT5BASE_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
++	touch $(QT5BASE_ARCH_CONFIG_FILE)
++	$(QT5BASE_CONFIGURE_ARCH_CONFIG)
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
