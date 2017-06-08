@@ -1,32 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 21:43:24 +0200
-Subject: [Buildroot] [PATCH] support/scripts: fix shebang with bash
-In-Reply-To: <20170605073740.855-1-francois.perrad@gadz.org>
-References: <20170605073740.855-1-francois.perrad@gadz.org>
-Message-ID: <20170608214324.7ef3bf05@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 08 Jun 2017 19:43:56 +0000
+Subject: [Buildroot] [Bug 9886] Build fails with "unexpected EOF while
+ looking for matching `"'" if PATH contains a newline
+In-Reply-To: <bug-9886-163@https.bugs.busybox.net/>
+References: <bug-9886-163@https.bugs.busybox.net/>
+Message-ID: <bug-9886-163-rPiaXCNvuK@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9886
 
-On Mon,  5 Jun 2017 09:37:40 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  support/scripts/br2-external               | 2 +-
->  support/scripts/check-bin-arch             | 2 +-
->  support/scripts/fix-configure-powerpc64.sh | 2 +-
->  support/scripts/genimage.sh                | 2 +-
->  support/scripts/hardlink-or-copy           | 2 +-
->  support/scripts/test-pkg                   | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-Thomas
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+A patch has been applied in master to fix that:
+   
+https://git.buildroot.org/buildroot/commit/?id=f00d6ec67bd6fed6ff8fd322d60d026ec87d8a6e
+
+Thanks for the report.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
