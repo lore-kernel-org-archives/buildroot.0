@@ -1,50 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 23:24:23 +0200
-Subject: [Buildroot] [git commit] package/oracle-mysql: fix build with gcc
-	7.x
-Message-ID: <20170608213537.06481803DB@busybox.osuosl.org>
+Date: Thu, 8 Jun 2017 23:35:51 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/oracle-mysql: Fix gcc7
+ compile
+In-Reply-To: <20170513175826.11550-1-bernd.kuhls@t-online.de>
+References: <20170513175826.11550-1-bernd.kuhls@t-online.de>
+Message-ID: <20170608233551.0a857d42@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94bad4fbf5759302a9f8f33267989d543f3a1167
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/oracle-mysql/0008-gcc7.patch | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+On Sat, 13 May 2017 19:58:26 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/oracle-mysql/0008-gcc7.patch | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 package/oracle-mysql/0008-gcc7.patch
 
-diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0008-gcc7.patch
-new file mode 100644
-index 0000000..2cf6d26
---- /dev/null
-+++ b/package/oracle-mysql/0008-gcc7.patch
-@@ -0,0 +1,24 @@
-+Fix gcc7 compile
-+
-+mysql.cc: In function 'void build_completion_hash(bool, bool)':
-+mysql.cc:2687:37: error: invalid conversion from 'char' to 'char*' [-fpermissive]
-+       field_names[i][num_fields*2]= '\0';
-+                                     ^~~~
-+
-+Patch was partly backported from upstream commit:
-+https://github.com/mysql/mysql-server/commit/ae21683d980d5fe9e39bd0193827ea3604256eb9
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr mysql-5.1.73.org/client/mysql.cc mysql-5.1.73/client/mysql.cc
-+--- mysql-5.1.73.org/client/mysql.cc	2013-11-04 19:52:27.000000000 +0100
-++++ mysql-5.1.73/client/mysql.cc	2017-05-13 19:52:10.125101101 +0200
-+@@ -2684,7 +2684,7 @@
-+         mysql_free_result(fields);
-+         break;
-+       }
-+-      field_names[i][num_fields*2]= '\0';
-++      field_names[i][num_fields*2]= NULL;
-+       j=0;
-+       while ((sql_field=mysql_fetch_field(fields)))
-+       {
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
