@@ -1,51 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 08 Jun 2017 22:10:01 +0200
-Subject: [Buildroot] [PATCH] glibc: remove version choice
-In-Reply-To: <20170607212720.GA23160@scaer> (Yann E. MORIN's message of "Wed, 
- 7 Jun 2017 23:27:20 +0200")
-References: <20170606175659.GA2566@waldemar-brodkorb.de>
- <20170606213500.0fe44a79@free-electrons.com>
- <20170607212720.GA23160@scaer>
-Message-ID: <87h8zq9r6u.fsf@dell.be.48ers.dk>
+Date: Thu, 8 Jun 2017 22:41:15 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/socat: Fix TABDLY,
+	CSIZE and CRDLY shifts for PowerPC
+Message-ID: <20170608204121.4D98F80F6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7cce41bf9c73a3e8c06893715b4bc8a7795f2476
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
- > Waldemar, Thomas, All,
- > On 2017-06-06 21:35 +0200, Thomas Petazzoni spake thusly:
- >> On Tue, 6 Jun 2017 19:56:59 +0200, Waldemar Brodkorb wrote:
- >> > We do not support uClibc-ng/musl C library version choice support,
- >> > do the same for GNU C Library.
- >> > Add me as Maintainer for the package.
- >> > 
- >> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- >> 
- >> On this one, I'd like to have the opinion of others. Arnout? Peter?
- >> Yann? What do you think about this?
- >> 
- >> I don't have a very clear-cut opinion about this one.
+As can be seen in linux/arch/powerpc/include/uapi/asm/termbits.h are
+defined as (note that those are octal numbers):
 
- > Neither do I.
+\#define TABDLY	00006000
+\#define CSIZE	00001400
+\#define CRDLY	00030000
 
- > On principle, I agree that we should drop versions. But glibc is part of
- > the toolchain, and the toolchain has always been special.
+which gives shifts of 10, 8 and 12. Adjust socat.mk accordingly to
+reflect that difference.
 
- > True, we do not have a version for uClibc-ng, but we do have some
- > traction on the maintainer! ;-) So we know things are gonna be fixed
- > soonish, or that we can grab a temporary backport, both very easily.
+Signed-off-by: Mark Hinds <zoronic@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a52896f755a55d0fa30f6ba5092c69edaa73724d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/socat/socat.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
- > Not so much for glibc in my experience...
-
-True, but I also don't recall any package breakage because of issues in
-newer glibc versions (as glibc is "standard").
-
-I also don't feel strongly about it, but it is true that it would limit
-the number of combinations and be more in line with musl/uClibc-ng, so
-I'm OK with doing it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index ba46263..b923cef 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -9,11 +9,20 @@ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0
+ SOCAT_LICENSE_FILES = COPYING
+-SOCAT_CONF_ENV = \
+-	sc_cv_termios_ispeed=no \
++
++SOCAT_CONF_ENV = sc_cv_termios_ispeed=no
++
++ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
++SOCAT_CONF_ENV += \
++	sc_cv_sys_crdly_shift=12 \
++	sc_cv_sys_tabdly_shift=10 \
++	sc_cv_sys_csize_shift=8
++else
++SOCAT_CONF_ENV += \
+ 	sc_cv_sys_crdly_shift=9 \
+ 	sc_cv_sys_tabdly_shift=11 \
+ 	sc_cv_sys_csize_shift=4
++endif
+ 
+ # We need to run autoconf to regenerate the configure script, in order
+ # to ensure that the test checking linux/ext2_fs.h works
