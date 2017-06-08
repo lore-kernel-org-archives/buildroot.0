@@ -1,91 +1,175 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  8 Jun 2017 19:29:06 +0300
-Subject: [Buildroot] [PATCH] swupdate: switch to local config librt
-	dependency
-Message-ID: <097cb7c8a9791944b484ec31f2cc5660331411c6.1496939346.git.baruch@tkos.co.il>
+Date: Thu,  8 Jun 2017 20:47:02 +0300
+Subject: [Buildroot] [PATCH] autofs: bump to version 5.1.3
+Message-ID: <df4b1565a74bc077220f13c0487cdcfed539465a.1496944022.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream rejected[1] the patch added in commit 6a1aa4e2daf0 (swupdate: fix
-build with older glibc). Instead of carrying this patch going forward, make
-librt an extra library dependency in the Buildroot local swupdate .config.
+Drop upstream patches.
 
-This solution is somewhat less optimal than the patch, because it always adds
-librt regardless of whether SURICATTA_HAWKBIT is enabled. In theory we could
-add a test for (BR2_PACKAGE_JSON_C && BR2_PACKAGE_LIBCURL), which are the
-SURICATTA_HAWKBIT dependencies, and edit .config at build time. But this adds
-much complexity for little gain.
-
-[1] https://groups.google.com/forum/?hl=en#!topic/swupdate/77QWIka27es
-
-Cc: J?rg Krause <joerg.krause@embedded.rocks>
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+ ...fs-build-check-for-clock_gettime-in-librt.patch | 62 ----------------------
+ ...dd-cache-variable-for-Linux-proc-filesyst.patch | 47 ----------------
+ package/autofs/autofs.hash                         |  2 +-
+ package/autofs/autofs.mk                           |  5 +-
+ 4 files changed, 2 insertions(+), 114 deletions(-)
+ delete mode 100644 package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch
+ delete mode 100644 package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch
 
-With glibc 2.17 being 4.5 years old, upstream maintainers start to push back
-on these librt patches. Is it time to stop support for external toolchains
-with older glibc? This means retiring CodeSourcery x86 and SH toolchains.
----
- ...ags-SURICATTA_HAWKBIT-needs-librt-under-o.patch | 34 ----------------------
- package/swupdate/swupdate.config                   |  2 +-
- 2 files changed, 1 insertion(+), 35 deletions(-)
- delete mode 100644 package/swupdate/0002-Makefile.flags-SURICATTA_HAWKBIT-needs-librt-under-o.patch
-
-diff --git a/package/swupdate/0002-Makefile.flags-SURICATTA_HAWKBIT-needs-librt-under-o.patch b/package/swupdate/0002-Makefile.flags-SURICATTA_HAWKBIT-needs-librt-under-o.patch
+diff --git a/package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch b/package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch
 deleted file mode 100644
-index 1f8d8e72f268..000000000000
---- a/package/swupdate/0002-Makefile.flags-SURICATTA_HAWKBIT-needs-librt-under-o.patch
+index ade6d1cdb32b..000000000000
+--- a/package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 66ccd99c6299ebe70a5549da78063fd7b1e02ea2 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Wed, 7 Jun 2017 22:28:03 +0300
--Subject: [PATCH] Makefile.flags: SURICATTA_HAWKBIT needs librt under older
-- glibc
+@@ -1,62 +0,0 @@
+-From a38ab6c0f2790e047fc64867865eb2a073135618 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Sun, 19 Jun 2016 00:17:41 -0300
+-Subject: [PATCH] autofs: build: check for clock_gettime in librt
 -
--glibc before 2.17 requires linking against librt for clock_gettime(). Fixes
--the following build failure:
+-Glibc versions older than 2.17 define clock_gettime() in librt, so add a
+-check for this.
 -
--ld: suricatta/lib.a(server_hawkbit.o): undefined reference to symbol 'clock_gettime@@GLIBC_2.2'
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ----
--Upstream status:
--https://groups.google.com/forum/?hl=en#!topic/swupdate/77QWIka27es
+-Patch status: sent to autofs@ mailing list
 -
-- Makefile.flags | 1 +
-- 1 file changed, 1 insertion(+)
+- Makefile.conf.in | 3 +++
+- Makefile.rules   | 2 ++
+- configure.in     | 4 ++++
+- 3 files changed, 9 insertions(+)
 -
--diff --git a/Makefile.flags b/Makefile.flags
--index 391fc7f82682..8db5dfeacc2f 100644
----- a/Makefile.flags
--+++ b/Makefile.flags
--@@ -173,6 +173,7 @@ LDLIBS += crypto ssl
-- endif
-- endif
-- ifneq ($(CONFIG_SURICATTA_HAWKBIT),)
--+LDLIBS += rt
-- ifeq ($(strip $(findstring json-c,$(LDLIBS))),)
-- LDLIBS += json-c
-- endif
+-diff --git a/Makefile.conf.in b/Makefile.conf.in
+-index cb53e66..2bc3202 100644
+---- a/Makefile.conf.in
+-+++ b/Makefile.conf.in
+-@@ -11,6 +11,9 @@
+- DAEMON_CFLAGS  = @DAEMON_CFLAGS@
+- DAEMON_LDFLAGS = @DAEMON_LDFLAGS@
+- 
+-+# Glibc < 2.17 requires librt for clock_gettime()
+-+LIBCLOCK_GETTIME = @LIBCLOCK_GETTIME@
+-+
+- # Special parameters for glibc (libc 6)
+- LIBNSL    = @LIBNSL@
+- LIBRESOLV = @LIBRESOLV@
+-diff --git a/Makefile.rules b/Makefile.rules
+-index 6fa3e02..7d1af2e 100644
+---- a/Makefile.rules
+-+++ b/Makefile.rules
+-@@ -56,6 +56,8 @@ endif
+- 
+- LIBS += $(LIBNSL)
+- 
+-+LIBS += $(LIBCLOCK_GETTIME)
+-+
+- # Standard rules
+- 
+- .SUFFIXES: .c .o .s .so
+-diff --git a/configure.in b/configure.in
+-index 25d7c4e..a4318e8 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -177,6 +177,10 @@ if test "$ac_cv_search_versionsort" = "no"; then
+- 		[Define if your C library does not provide versionsort])
+- fi
+- 
+-+# glibc < 2.17 needs librt for clock_gettime()
+-+AC_CHECK_LIB(rt, clock_gettime, LIBCLOCK_GETTIME="-lrt")
+-+AC_SUBST(LIBCLOCK_GETTIME)
+-+
+- #
+- # glibc/libc 6 new libraries
+- #
 --- 
--2.11.0
+-2.7.3
 -
-diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
-index 51869bb9d931..643347013d6a 100644
---- a/package/swupdate/swupdate.config
-+++ b/package/swupdate/swupdate.config
-@@ -26,7 +26,7 @@ CONFIG_CROSS_COMPILE=""
- CONFIG_SYSROOT=""
- CONFIG_EXTRA_CFLAGS=""
- CONFIG_EXTRA_LDFLAGS=""
--CONFIG_EXTRA_LDLIBS=""
-+CONFIG_EXTRA_LDLIBS="rt"
- 
+diff --git a/package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch b/package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch
+deleted file mode 100644
+index 93f3f9cf2a86..000000000000
+--- a/package/autofs/0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From bb5cc9cee1963362fe56b4fac65fed4912da4215 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 30 Jul 2016 22:30:01 +0200
+-Subject: [PATCH] configure: add cache variable for Linux proc filesystem check
+-
+-When cross-compiling, whether the /proc filesystem is available in the
+-build environment does not give any indication as to whether it will
+-be available in the execution environment.
+-
+-This commit therefore adjust the AF_LINUX_PROCFS macro to use
+-AC_CACHE_CHECK(), so that an ac_cv_linux_procfs variable can be
+-preseeded in the environment to force the result of this check.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- aclocal.m4 | 15 +++++----------
+- 1 file changed, 5 insertions(+), 10 deletions(-)
+-
+-diff --git a/aclocal.m4 b/aclocal.m4
+-index 2115204..333699c 100644
+---- a/aclocal.m4
+-+++ b/aclocal.m4
+-@@ -80,16 +80,11 @@ dnl
+- dnl Check for the Linux /proc filesystem
+- dnl --------------------------------------------------------------------------
+- AC_DEFUN(AF_LINUX_PROCFS,
+--[AC_MSG_CHECKING(for Linux proc filesystem)
+--if test "x`cat /proc/sys/kernel/ostype 2>&-`" = "xLinux"
+--then
+--	linux_procfs=yes
+--else
+--	linux_procfs=no
+--fi
+--AC_MSG_RESULT($linux_procfs)
+--if test $linux_procfs = yes
+--then
+-+[AC_CACHE_CHECK([for Linux proc filesystem], [ac_cv_linux_procfs],
+-+	[ac_cv_linux_procfs=no
+-+	 test "x`cat /proc/sys/kernel/ostype 2>&-`" = "xLinux" && ac_cv_linux_procfs=yes])
+-+ if test $ac_cv_linux_procfs = yes
+-+ then
+- 	AC_DEFINE(HAVE_LINUX_PROCFS, 1,
+- 		[Define if you have the Linux /proc filesystem.])
+- fi])
+--- 
+-2.7.4
+-
+diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
+index 72b13785952a..61e58825cc02 100644
+--- a/package/autofs/autofs.hash
++++ b/package/autofs/autofs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
+-sha256 88b7de39088aead983e02072a7b753d5ee52ce419c8913f7a3d4ff5521313f0c  autofs-5.1.2.tar.xz
++sha256 e96eebfe3ed5fb1a30f4510f538198affde223e370c6dc2bed9780309272b1bf  autofs-5.1.3.tar.xz
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index f20a19a69537..148ab1bd3d71 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -4,15 +4,12 @@
  #
- # Debugging Options
+ ################################################################################
+ 
+-AUTOFS_VERSION = 5.1.2
++AUTOFS_VERSION = 5.1.3
+ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
+ AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
+ AUTOFS_DEPENDENCIES = host-flex host-bison
+-# For 0002-autofs-configure-check-for-clock_gettime-in-librt.patch and
+-# 0003-configure-add-cache-variable-for-Linux-proc-filesyst.patch.
+-AUTOFS_AUTORECONF = YES
+ 
+ # autofs looks on the build machine for the path of modprobe, so tell
+ # it explicitly where it will be located on the target.
 -- 
 2.11.0
