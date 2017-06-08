@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 23:10:02 +0200
-Subject: [Buildroot] [PATCH v3 1/1] configs/arcturus_ucls1012a: new
- defconfig
-In-Reply-To: <20170608204400.21287-1-oleks@arcturusnetworks.com>
-References: <20170608204400.21287-1-oleks@arcturusnetworks.com>
-Message-ID: <20170608231002.160f7742@free-electrons.com>
+Date: Thu, 8 Jun 2017 23:11:41 +0200
+Subject: [Buildroot] [PATCH 01/01] mtd: bump to version 2.0.0
+In-Reply-To: <20170523130714.25586-1-aduskett@codeblue.com>
+References: <20170523130714.25586-1-aduskett@codeblue.com>
+Message-ID: <20170608231141.667394ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,103 +12,55 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for this new version!
+On Tue, 23 May 2017 09:07:14 -0400, Adam Duskett wrote:
+> MTD Tools was bumped to version 2.0 after over a decade of being at 1.5.2.
+> This revision includes:
+>   - Moving from a handwritten makefile to autotools.
+>   - Restructuring and cleaning up the source tree.
+>   - Fixing the problems that the patches in the package/mtd directory fixed.
+> 
+> Changes:
+>   - Move from generic-package to autotools-package in mtd.mk.
+>   - Remove no longer necessary patches.
+>   - Update binary locations in mtd.mk
+>   - Update library/header locations in mtd.mk
+>   - Remove MTD_ADD_MISSING_LINTL definition from mtd.mk, as it's no longer
+>     needed.
+> 
+> Tested with toolchains compiled with MUSL, uclib, and glibc.
+> 
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 
-On Thu,  8 Jun 2017 16:44:00 -0400, Oleksandr Zhadan wrote:
+Thanks for doing this. However, there were still a number of problems
+in your submission. Since I wanted this topic to move forward, I did a
+new submission with my fixes:
 
-> Changes v2 -> v3:
->     - commit title is changed (from "Arcturus uCLS1012A-SOM support")
->     - new updates in readme.txt
->     - ls1012a network firmware moved into kernel
+  https://patchwork.ozlabs.org/patch/773504/
+  https://patchwork.ozlabs.org/patch/773503/
 
-What does this means?
+Here is the list of changes I made:
 
-> diff --git a/board/arcturus/aarch64-ucls1012a/post-build.sh b/board/arcturus/aarch64-ucls1012a/post-build.sh
-> new file mode 100755
-> index 000000000..e1bfd046c
-> --- /dev/null
-> +++ b/board/arcturus/aarch64-ucls1012a/post-build.sh
-> @@ -0,0 +1,5 @@
-> +#!/bin/sh
-> +
-> +# Network Driver Firmware
-> +mkdir -p ${TARGET_DIR}/lib/firmware
-> +cp -f ${BUILD_DIR}/linux-custom/firmware/ppfe/* ${TARGET_DIR}/lib/firmware/
+    [Thomas: additional improvements
+     - introduce hidden options BR2_PACKAGE_MTD_JFFS_UTILS,
+       BR2_PACKAGE_MTD_UBIFS_UTILS and BR2_PACKAGE_MTD_TESTS that match the
+       ./configure options of mtd. Those hidden options select the
+       appropriate dependencies checked by the configure script, and are
+       selected by the existing per-tool Config.in options.
+     - .mk file is changed to handle properly the new hidden options
+       BR2_PACKAGE_MTD_JFFS_UTILS, BR2_PACKAGE_MTD_UBIFS_UTILS and
+       BR2_PACKAGE_MTD_TESTS.
+     - .mk file is changed to properly handle BR2_PACKAGE_ACL, by passing
+       --with-xattr/--without-xattr.
+     - remove HOST_MTD_BUILD_CMDS and HOST_MTD_INSTALL_CMDS, those are no
+       longer needed since we have an autotools-package now.
+     - MTD_STAGING_y and MTD_INSTALL_STAGING_CMDS are removed, we use the
+       default staging installation commands, that install everything that
+       is needed.
+     - the MTD_TARGETS_UBI_y variable is merged into MTD_TARGETS_y, as we no
+       longer need to distinguish both.
+     - integck installation logic is moved into MTD_TARGETS_y.]
 
-OK, you moved the firmware inside the kernel sources. Not really nice,
-because it means those files in the target filesystem are not
-associated with any license.
-
-Why aren't those firmware files contributed to the linux-firmware
-project instead?
-
-> diff --git a/board/arcturus/aarch64-ucls1012a/post-image.sh b/board/arcturus/aarch64-ucls1012a/post-image.sh
-> new file mode 100755
-> index 000000000..d506724a3
-> --- /dev/null
-> +++ b/board/arcturus/aarch64-ucls1012a/post-image.sh
-> @@ -0,0 +1,9 @@
-> +#!/bin/sh
-> +
-> +echo ---------Making ITB partition image---------
-
-We normally don't have such debug messages in post-image scripts.
-
-> +cp -f board/arcturus/aarch64-ucls1012a/ucls1012a.its ${BINARIES_DIR}/
-> +MKIMAGE=${HOST_DIR}/usr/bin/mkimage
-> +MKIMAGE_IN=${BINARIES_DIR}/ucls1012a.its
-> +MKIMAGE_OUT=${BINARIES_DIR}/part0-000000.itb
-> +${MKIMAGE} -f $MKIMAGE_IN $MKIMAGE_OUT
-
-Why not use ${...} everywhere ?
-
-> diff --git a/configs/arcturus_ucls1012a_defconfig b/configs/arcturus_ucls1012a_defconfig
-> new file mode 100644
-> index 000000000..64557fde7
-> --- /dev/null
-> +++ b/configs/arcturus_ucls1012a_defconfig
-> @@ -0,0 +1,23 @@
-> +BR2_aarch64=y
-> +BR2_TOOLCHAIN_EXTERNAL=y
-
-Still need to change this to the internal toolchain, as per our
-previous discussion.
-
-> +BR2_TARGET_GENERIC_HOSTNAME="ucls1012a"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to uCLS1012A-SOM"
-> +BR2_SYSTEM_DHCP="eth0"
-> +BR2_ROOTFS_OVERLAY="board/arcturus/aarch64-ucls1012a/rootfs_overlay"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/arcturus/aarch64-ucls1012a/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/arcturus/aarch64-ucls1012a/post-image.sh"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://www.arcturusnetworks.com/OSS/kernel-ucls1012a.tar.gz"
-
-I didn't see this before: there is no version in the name of this
-tarball, and its name hasn't changed since you added the firmware files.
-Which means that you apparently intend to change this tarball later on.
-This is *really* bad, as it means the build is not reproducible: what
-people will build one day may be different the next day or week,
-because you changed this tarball.
-
-Could you add tarballs with a version in their name, and not change
-existing tarballs, but instead upload new ones with a different version?
-
-Or better, use a Git repository, like everyone else :)
-
-> +BR2_LINUX_KERNEL_DEFCONFIG="ucls1012a"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="arcturus/arc-ucls1012a"
-> +BR2_TARGET_ROOTFS_CPIO=y
-> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://www.arcturusnetworks.com/OSS/u-boot-ucls1012a.tar.gz"
-
-Same comment here.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
