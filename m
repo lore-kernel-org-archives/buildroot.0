@@ -1,61 +1,51 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 8 Jun 2017 21:44:52 +0200
-Subject: [Buildroot] [PATCH] glibc: remove version choice
-In-Reply-To: <20170607212720.GA23160@scaer>
-References: <20170606175659.GA2566@waldemar-brodkorb.de>
- <20170606213500.0fe44a79@free-electrons.com>
- <20170607212720.GA23160@scaer>
-Message-ID: <20170608194451.GT26922@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Jun 2017 21:45:32 +0200
+Subject: [Buildroot] [PATCH] swupdate: switch to local config librt
+ dependency
+In-Reply-To: <097cb7c8a9791944b484ec31f2cc5660331411c6.1496939346.git.baruch@tkos.co.il>
+References: <097cb7c8a9791944b484ec31f2cc5660331411c6.1496939346.git.baruch@tkos.co.il>
+Message-ID: <20170608214532.7b77d220@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-Yann E. MORIN wrote,
+Hello,
 
-> Waldemar, Thomas, All,
+On Thu,  8 Jun 2017 19:29:06 +0300, Baruch Siach wrote:
+> Upstream rejected[1] the patch added in commit 6a1aa4e2daf0 (swupdate: fix
+> build with older glibc). Instead of carrying this patch going forward, make
+> librt an extra library dependency in the Buildroot local swupdate .config.
 > 
-> On 2017-06-06 21:35 +0200, Thomas Petazzoni spake thusly:
-> > On Tue, 6 Jun 2017 19:56:59 +0200, Waldemar Brodkorb wrote:
-> > > We do not support uClibc-ng/musl C library version choice support,
-> > > do the same for GNU C Library.
-> > > Add me as Maintainer for the package.
-> > > 
-> > > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > 
-> > On this one, I'd like to have the opinion of others. Arnout? Peter?
-> > Yann? What do you think about this?
-> > 
-> > I don't have a very clear-cut opinion about this one.
+> This solution is somewhat less optimal than the patch, because it always adds
+> librt regardless of whether SURICATTA_HAWKBIT is enabled. In theory we could
+> add a test for (BR2_PACKAGE_JSON_C && BR2_PACKAGE_LIBCURL), which are the
+> SURICATTA_HAWKBIT dependencies, and edit .config at build time. But this adds
+> much complexity for little gain.
 > 
-> Neither do I.
+> [1] https://groups.google.com/forum/?hl=en#!topic/swupdate/77QWIka27es
 > 
-> On principle, I agree that we should drop versions. But glibc is part of
-> the toolchain, and the toolchain has always been special.
+> Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-It is special, but if we can reduce the whole sum of combinations,
-isn't that good? In case of C library, it seems to me that the
-lastest version is always the best one. There are fewer regressions
-then with changing binutils or gcc default.
- 
-> True, we do not have a version for uClibc-ng, but we do have some
-> traction on the maintainer! ;-) So we know things are gonna be fixed
-> soonish, or that we can grab a temporary backport, both very easily.
-> 
-> Not so much for glibc in my experience...
-> 
-> musl is another kind of thing, because it is (was?) moving relatively
-> fast, and I am under the impression that the maintainers are somewhat
-> amenable to some fixes.
-> 
-> Not so much for glibc in my experience...
+Applied. Thanks!
 
-I am reading both mailinglists so at least I sometimes fishing
-interesting bugfixes, as for the sh4 issue.
+> With glibc 2.17 being 4.5 years old, upstream maintainers start to push back
+> on these librt patches. Is it time to stop support for external toolchains
+> with older glibc? This means retiring CodeSourcery x86 and SH toolchains.
 
-If Thomas don't mind I would take musl also over. (DEVELOPERS file)
+That's a good question. I think supporting relatively old
+configurations is a strength of Buildroot, so I try to be careful when
+removing support for old stuff. But maybe glibc 2.17 is now really too
+old.
 
-best regards
- Waldemar
+Thoughts of other developers?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
