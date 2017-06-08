@@ -1,50 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 23:36:48 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-stalker: fix gcc7
- compile
-In-Reply-To: <20170513182944.29833-1-bernd.kuhls@t-online.de>
-References: <20170513182944.29833-1-bernd.kuhls@t-online.de>
-Message-ID: <20170608233648.5e0722fb@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 08 Jun 2017 23:58:27 +0200
+Subject: [Buildroot] [PATCH] support/scripts: fix shebang with bash
+In-Reply-To: <CAB0FRsv4WF1BE6LNagQZhLZ7DxGH_sovyJutrKrufNhvWcFrCg@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Thu, 8 Jun 2017
+ 23:07:23 +0200")
+References: <20170605073740.855-1-francois.perrad@gadz.org>
+ <87y3t2a64r.fsf@dell.be.48ers.dk>
+ <CAB0FRsv4WF1BE6LNagQZhLZ7DxGH_sovyJutrKrufNhvWcFrCg@mail.gmail.com>
+Message-ID: <878tl29m64.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
 
-On Sat, 13 May 2017 20:29:44 +0200, Bernd Kuhls wrote:
+ > 2017-06-08 16:47 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+ >> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+ >> 
+ >> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ >> 
+ >> Out of interest, what distribution doesn't have bash in /bin?
+ >> #!/bin/bash is a quite common shebang, and we use it in several places
+ >> outside support/scripts.
+ >> 
+ >> 
+ > I found this issue with NixOS (http://nixos.org/) where:
+ > $ ls /bin
+ > sh
+ > $ ls /usr/bin
+ > env
+ > $ which bash
+ > /run/current-system/sw/bin/bash
+ > $ which which
+ > /run/current-system/sw/bin/which
 
-> diff --git a/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
-> new file mode 100644
-> index 0000000000..54d18a996c
-> --- /dev/null
-> +++ b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
-> @@ -0,0 +1,33 @@
-> +From bb16ccd14deb3a01049daec37b6d2e7711ef4738 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sat, 13 May 2017 20:22:08 +0200
-> +Subject: [PATCH 1/1] src/CWatchdog.h: Fix gcc7 build
+ > so, #!/bin/sh is the only shebang which doesn't require to start with
+ > #!/usr/bin/env
 
-Please use [PATCH] instead of [PATCH 1/1], i.e use git format-patch -N.
+And /bin/sh is a symlink to /run/current-system/sw/bin/bash? Otherwise I
+don't understand how the logic in Makefile and
+support/dependencies/dependencies.sh could work?
 
-> +Building with gcc7 is broken:
-> +
-> +src/CWatchdog.h:31:58: error: 'std::function' has not been declared
-> +    CWatchdog(unsigned int interval, SAPI *api, std::function<void(SError)> errorCallback);
-> +                                                     ^~~~~~~~
-> +
-> +Patch sent upstream as PR 93.
+What about packages? Are there no package build systems that hardcodes
+/bin/bash?
 
-A link is better than "PR 93".
-
-I've fixed both, and applied, after also adjusting DOS line endings as
-you mentioned (I tested that the patch applies properly).
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
