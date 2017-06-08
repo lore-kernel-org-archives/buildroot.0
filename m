@@ -1,54 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 21:40:32 +0200
-Subject: [Buildroot] [git commit] support/dependencies: check PATH does not
-	carry a \n
-Message-ID: <20170608194102.EBFD881945@busybox.osuosl.org>
+Date: Thu, 8 Jun 2017 21:43:05 +0200
+Subject: [Buildroot] [git commit] support/scripts: fix shebang with bash
+Message-ID: <20170608194309.4998580DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f00d6ec67bd6fed6ff8fd322d60d026ec87d8a6e
+commit: https://git.buildroot.net/buildroot/commit/?id=9cbe364f578bba25d499a45c46c56ced35153ae3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... otherwise it fails spectacularly as soon as PATH is referenced in a
-package rule (i.e. very soon, fortunately):
-
-    >>> host-lzip 1.18 Downloading
-    /bin/bash: -c: line 0: unexpected EOF while looking for matching `"'
-    /bin/bash: -c: line 1: syntax error: unexpected end of file
-
-Fixes # 9886.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ciro Santilli <ciro.santilli@gmail.com>
-[Thomas: fix typo in message, use tabs for indentation.]
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/dependencies/dependencies.sh | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ support/scripts/br2-external               | 2 +-
+ support/scripts/check-bin-arch             | 2 +-
+ support/scripts/fix-configure-powerpc64.sh | 2 +-
+ support/scripts/genimage.sh                | 2 +-
+ support/scripts/hardlink-or-copy           | 2 +-
+ support/scripts/test-pkg                   | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 168d196..a195c62 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -29,6 +29,18 @@ if test -n "$LD_LIBRARY_PATH" ; then
- 	fi
- fi;
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 7e81608..00cb57d 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ set -e
  
-+# PATH should not contain a newline, otherwise it fails in spectacular ways
-+# as soon as PATH is referenced in a package rule
-+case "${PATH}" in
-+(*"
-+"*)	printf "\n"
-+	# Break the '\n' sequence, or a \n is printed (which is not what we want).
-+	printf "Your PATH contains a newline (%sn) character.\n" "\\"
-+	printf "This doesn't work. Fix you PATH.\n"
-+	exit 1
-+	;;
-+esac
-+
- # sanity check for CWD in PATH. Having the current working directory
- # in the PATH makes the toolchain build process break.
- # try not to rely on egrep..
+ # This script must be able to run with bash-3.1, so it can't use
+diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+index ff974a7..b822cdd 100755
+--- a/support/scripts/check-bin-arch
++++ b/support/scripts/check-bin-arch
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ while getopts p:l:r:a: OPT ; do
+ 	case "${OPT}" in
+diff --git a/support/scripts/fix-configure-powerpc64.sh b/support/scripts/fix-configure-powerpc64.sh
+index ad71042..ff2b283 100755
+--- a/support/scripts/fix-configure-powerpc64.sh
++++ b/support/scripts/fix-configure-powerpc64.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ # This is a script to find, and correct, a problem with old versions of
+ # configure that affect powerpc64 and powerpc64le.
+diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+index 6c8d9e5..625afc1 100755
+--- a/support/scripts/genimage.sh
++++ b/support/scripts/genimage.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ die() {
+   echo "Error: $@" >&2
+diff --git a/support/scripts/hardlink-or-copy b/support/scripts/hardlink-or-copy
+index b046bdf..a052318 100755
+--- a/support/scripts/hardlink-or-copy
++++ b/support/scripts/hardlink-or-copy
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ # Try to hardlink a file into a directory, fallback to copy on failure.
+ #
+diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
+index f08c608..7633a21 100755
+--- a/support/scripts/test-pkg
++++ b/support/scripts/test-pkg
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ set -e
+ 
+ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
