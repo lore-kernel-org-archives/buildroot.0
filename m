@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jun 2017 23:11:41 +0200
-Subject: [Buildroot] [PATCH 01/01] mtd: bump to version 2.0.0
-In-Reply-To: <20170523130714.25586-1-aduskett@codeblue.com>
-References: <20170523130714.25586-1-aduskett@codeblue.com>
-Message-ID: <20170608231141.667394ff@free-electrons.com>
+Date: Thu, 8 Jun 2017 23:15:05 +0200
+Subject: [Buildroot] [PATCH]Libssp support
+In-Reply-To: <AM3PR05MB4333F3A6ACA381824BCE787C9C90@AM3PR05MB433.eurprd05.prod.outlook.com>
+References: <AM3PR05MB433972636565D3B639BB0BAC9C80@AM3PR05MB433.eurprd05.prod.outlook.com>
+ <20170607201316.jkzcuamoovnbkcla@tarshish>
+ <AM3PR05MB433D9ACAA63A9ED51BBFF7EC9C90@AM3PR05MB433.eurprd05.prod.outlook.com>
+ <20170608121224.vrmjd5zxulhu57h7@tarshish>
+ <AM3PR05MB4333F3A6ACA381824BCE787C9C90@AM3PR05MB433.eurprd05.prod.outlook.com>
+Message-ID: <20170608231505.0ab8924c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +16,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 23 May 2017 09:07:14 -0400, Adam Duskett wrote:
-> MTD Tools was bumped to version 2.0 after over a decade of being at 1.5.2.
-> This revision includes:
->   - Moving from a handwritten makefile to autotools.
->   - Restructuring and cleaning up the source tree.
->   - Fixing the problems that the patches in the package/mtd directory fixed.
-> 
-> Changes:
->   - Move from generic-package to autotools-package in mtd.mk.
->   - Remove no longer necessary patches.
->   - Update binary locations in mtd.mk
->   - Update library/header locations in mtd.mk
->   - Remove MTD_ADD_MISSING_LINTL definition from mtd.mk, as it's no longer
->     needed.
-> 
-> Tested with toolchains compiled with MUSL, uclib, and glibc.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+On Thu, 8 Jun 2017 12:57:17 +0000, Guy Benyei wrote:
 
-Thanks for doing this. However, there were still a number of problems
-in your submission. Since I wanted this topic to move forward, I did a
-new submission with my fixes:
+> I don't change the gcc end - the ssp support is implemented in gcc
+> anyway, the compiler built with or without the "--disable-libssp" is
+> the same compiler. This change only adds the libssp library, so the
+> ssp feature can be activated. The reason I prefer this over building
+> uClibc with ssp support is that in this case I may choose whether to
+> add the libssp binaries to my image. Changing uClibc, or creating an
+> alternative uClibc with ssp support would require a bigger uClibc or
+> two different builds. I agree, that the patch should be enhanced in
+> order to take in account the buildroot configuration, probably by
+> adding a separate configuration item. Of course, I'am ready to do
+> this work, but as you said, I'll have to convince the maintainers
+> that this feature is worth to be added.
 
-  https://patchwork.ozlabs.org/patch/773504/
-  https://patchwork.ozlabs.org/patch/773503/
+On my side, as long as there is a proper patch to support SSP support
+at the compiler level, in addition to at the C library, I think I'd be
+fine with applying it.
 
-Here is the list of changes I made:
-
-    [Thomas: additional improvements
-     - introduce hidden options BR2_PACKAGE_MTD_JFFS_UTILS,
-       BR2_PACKAGE_MTD_UBIFS_UTILS and BR2_PACKAGE_MTD_TESTS that match the
-       ./configure options of mtd. Those hidden options select the
-       appropriate dependencies checked by the configure script, and are
-       selected by the existing per-tool Config.in options.
-     - .mk file is changed to handle properly the new hidden options
-       BR2_PACKAGE_MTD_JFFS_UTILS, BR2_PACKAGE_MTD_UBIFS_UTILS and
-       BR2_PACKAGE_MTD_TESTS.
-     - .mk file is changed to properly handle BR2_PACKAGE_ACL, by passing
-       --with-xattr/--without-xattr.
-     - remove HOST_MTD_BUILD_CMDS and HOST_MTD_INSTALL_CMDS, those are no
-       longer needed since we have an autotools-package now.
-     - MTD_STAGING_y and MTD_INSTALL_STAGING_CMDS are removed, we use the
-       default staging installation commands, that install everything that
-       is needed.
-     - the MTD_TARGETS_UBI_y variable is merged into MTD_TARGETS_y, as we no
-       longer need to distinguish both.
-     - integck installation logic is moved into MTD_TARGETS_y.]
+However, it has to be a proper patch, that makes sure SSP support can
+only be enabled either at the compiler level *or* at the C library
+level. For example, I'm not sure if you can disable SSP support in musl
+or glibc, and what happens if you have SSP support in both the C
+library and gcc's libssp. All those questions have to be answered in
+the commit log of such a patch.
 
 Best regards,
 
