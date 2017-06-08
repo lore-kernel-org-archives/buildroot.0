@@ -1,106 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 8 Jun 2017 21:32:54 +0200
-Subject: [Buildroot] [PATCH] support/scripts: fix shebang with bash
-In-Reply-To: <20170605073740.855-1-francois.perrad@gadz.org>
-References: <20170605073740.855-1-francois.perrad@gadz.org>
-Message-ID: <20170608193254.GC3058@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Jun 2017 21:33:10 +0200
+Subject: [Buildroot] [git commit] sngrep: fix ncurses wchar detection
+Message-ID: <20170608193502.DA61C80407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4cb4ab5cf99fe0b3a067fc89104f94c2d382da02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-06-05 09:37 +0200, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This commit adds an upstream patch to the sngrep package that fixes the
+detection of wchar capable ncurses.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sngrep/sngrep.hash | 2 ++
+ package/sngrep/sngrep.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/scripts/br2-external               | 2 +-
->  support/scripts/check-bin-arch             | 2 +-
->  support/scripts/fix-configure-powerpc64.sh | 2 +-
->  support/scripts/genimage.sh                | 2 +-
->  support/scripts/hardlink-or-copy           | 2 +-
->  support/scripts/test-pkg                   | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> index 7e816081..00cb57d1 100755
-> --- a/support/scripts/br2-external
-> +++ b/support/scripts/br2-external
-> @@ -1,4 +1,4 @@
-> -#!/bin/bash
-> +#!/usr/bin/env bash
->  set -e
->  
->  # This script must be able to run with bash-3.1, so it can't use
-> diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-> index ff974a71..b822cdd6 100755
-> --- a/support/scripts/check-bin-arch
-> +++ b/support/scripts/check-bin-arch
-> @@ -1,4 +1,4 @@
-> -#!/bin/bash
-> +#!/usr/bin/env bash
->  
->  while getopts p:l:r:a: OPT ; do
->  	case "${OPT}" in
-> diff --git a/support/scripts/fix-configure-powerpc64.sh b/support/scripts/fix-configure-powerpc64.sh
-> index ad710422..ff2b283c 100755
-> --- a/support/scripts/fix-configure-powerpc64.sh
-> +++ b/support/scripts/fix-configure-powerpc64.sh
-> @@ -1,4 +1,4 @@
-> -#!/bin/bash
-> +#!/usr/bin/env bash
->  
->  # This is a script to find, and correct, a problem with old versions of
->  # configure that affect powerpc64 and powerpc64le.
-> diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-> index 6c8d9e5a..625afc10 100755
-> --- a/support/scripts/genimage.sh
-> +++ b/support/scripts/genimage.sh
-> @@ -1,4 +1,4 @@
-> -#!/bin/bash
-> +#!/usr/bin/env bash
->  
->  die() {
->    echo "Error: $@" >&2
-> diff --git a/support/scripts/hardlink-or-copy b/support/scripts/hardlink-or-copy
-> index b046bdf0..a052318f 100755
-> --- a/support/scripts/hardlink-or-copy
-> +++ b/support/scripts/hardlink-or-copy
-> @@ -1,4 +1,4 @@
-> -#!/bin/bash
-> +#!/usr/bin/env bash
->  
->  # Try to hardlink a file into a directory, fallback to copy on failure.
->  #
-> diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-> index f08c6087..7633a21e 100755
-> --- a/support/scripts/test-pkg
-> +++ b/support/scripts/test-pkg
-> @@ -1,4 +1,4 @@
-> -#!/bin/bash
-> +#!/usr/bin/env bash
->  set -e
->  
->  TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
-> -- 
-> 2.12.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
+index bc28545..5966d63 100644
+--- a/package/sngrep/sngrep.hash
++++ b/package/sngrep/sngrep.hash
+@@ -1 +1,3 @@
++# Locally computed
+ sha256 7385ac202de6d6a1feffb2fd514600563133d9dfa7fb47be052de839abcc1d52 sngrep-v1.4.3.tar.gz
++sha256 a3376abe20cca95a13ee88188ba5ba50425c93afc927cca018c50b0309ad21f9  4740f3341a99eaec105dee202a6fa7828212cdf1.patch
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 560872f..9dda158 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -14,8 +14,15 @@ SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
+ SNGREP_CONF_ENV += \
+ 	$(if $(BR2_STATIC_LIBS),LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`")
+ 
+-# our ncurses wchar support is not properly detected
++# This patch fixes ncurses wchar detection
++SNGREP_PATCH = \
++	https://github.com/irontec/sngrep/pull/191/commits/4740f3341a99eaec105dee202a6fa7828212cdf1.patch
++
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++SNGREP_CONF_OPTS += --enable-unicode
++else
+ SNGREP_CONF_OPTS += --disable-unicode
++endif
+ 
+ # openssl and gnutls can't be enabled at the same time.
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
