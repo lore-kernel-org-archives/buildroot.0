@@ -1,10 +1,10 @@
 From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Thu, 8 Jun 2017 12:03:12 +0200
-Subject: [Buildroot] [PATCH v2] package/qt: enable static build for
-	BR2_PACKAGE_QT_MOUSE_TSLIB
-In-Reply-To: <20170608095112.f7z7hnyi4m7vmzta@tarshish>
-References: <20170608095112.f7z7hnyi4m7vmzta@tarshish>
-Message-ID: <20170608100312.31806-1-martin.kepplinger@ginzinger.com>
+Date: Thu, 8 Jun 2017 12:15:37 +0200
+Subject: [Buildroot] [PATCH v2] package/directfb: enable static build for
+	BR2_PACKAGE_DIRECTFB_TSLIB
+In-Reply-To: <20170608074642.26516-1-martin.kepplinger@ginzinger.com>
+References: <20170608074642.26516-1-martin.kepplinger@ginzinger.com>
+Message-ID: <20170608101537.32705-1-martin.kepplinger@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,29 +22,28 @@ Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
 ---
 
 v2:
-Thanks Baruch Siach for reviewing. I missed removing the dependecy on
-BR2_STATIC_LIBS
+I forgot to remove the comment and dependecy on BR2_STATIC_LIBS
 
 
- package/qt/Config.mouse.in | 4 ----
+ package/directfb/Config.in | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/package/qt/Config.mouse.in b/package/qt/Config.mouse.in
-index 07573ebb8..1062facb6 100644
---- a/package/qt/Config.mouse.in
-+++ b/package/qt/Config.mouse.in
-@@ -11,12 +11,8 @@ config BR2_PACKAGE_QT_MOUSE_LINUXINPUT
- 
- config BR2_PACKAGE_QT_MOUSE_TSLIB
- 	bool "tslib"
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 554abe289..20481f56d 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -116,12 +116,8 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
+ config BR2_PACKAGE_DIRECTFB_TSLIB
+ 	bool "enable touchscreen support"
+ 	default y
 -	depends on !BR2_STATIC_LIBS # tslib
  	select BR2_PACKAGE_TSLIB
  
--comment "tslib support needs a toolchain w/ dynamic library"
+-comment "touchscreen support needs a toolchain w/ dynamic library"
 -	depends on BR2_STATIC_LIBS
 -
- config BR2_PACKAGE_QT_MOUSE_QVFB
- 	bool "qvfb"
- 
+ config BR2_PACKAGE_DIRECTFB_GIF
+ 	bool "enable GIF support"
+ 	default y
 -- 
 2.11.0
