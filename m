@@ -1,78 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 8 Jun 2017 20:49:27 +0200
-Subject: [Buildroot] [PATCH WIP] package/systemd: fix paths to runtime
-	utilities
-In-Reply-To: <CAFSsvmqKd7zVrMTDAGRjv8z0-RmzHfmsLNVP1TQDJZpKVeivZg@mail.gmail.com>
-References: <20170607220837.2969-1-yann.morin.1998@free.fr>
- <CAFSsvmqKd7zVrMTDAGRjv8z0-RmzHfmsLNVP1TQDJZpKVeivZg@mail.gmail.com>
-Message-ID: <20170608184927.GA3058@scaer>
+Date: Thu, 8 Jun 2017 21:20:14 +0200
+Subject: [Buildroot] [PATCH 2/2] package/nut: specify --with-user/group
+ when building NUT
+In-Reply-To: <20170608153557.30726-1-mail@jens-maus.de>
+References: <20170608153557.30726-1-mail@jens-maus.de>
+Message-ID: <20170608192014.GB3058@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Jens, All,
 
-On 2017-06-08 10:34 -0400, Adam Duskett spake thusly:
-[--SNIP--]
-> > -# Override path to kmod, used in kmod-static-nodes.service
-> > +# Override paths to a few utilities needed at runtime, to
-> > +# avoid finding those we would install in $(HOST_DIR).
-> >  SYSTEMD_CONF_ENV = \
-> >         CFLAGS="$(SYSTEMD_CFLAGS)" \
-> > -       ac_cv_path_KMOD=/usr/bin/kmod
-> > +       ac_cv_path_KILL=/usr/bin/kill \
-> > +       ac_cv_path_KMOD=/usr/bin/kmod \
-> > +       ac_cv_path_KEXEC=/usr/sbin/kexec \
-> > +       ac_cv_path_SULOGIN=/usr/sbin/sulogin \
-> These work fine.
+On 2017-06-08 17:35 +0200, Jens Maus spake thusly:
+> This commit fixes a problem where the NUT package couldn't be
+> used as a NUT server due to the fact that the default group for
+> nobody is "nogroup" and not "nobody" like the internal default
+> of NUT. Thus, when starting a NUT server daemon the daemon starts
+> with incorrect group permissions and generated some error messages.
+> This commit fixes this shortcoming by specifying --with-user/group
+> when running configure.
 > 
-> > +       ac_cv_path_MOUNT=/usr/sbin/mount \
-> > +       ac_cv_path_UMOUNT=/usr/sbin/umount
-> This should be :
-> ac_cv_path_MOUNT_PATH=/usr/bin/mount \
-> ac_cv_path_UMOUNT_PATH=/usr/bin/umount
+> Signed-off-by: Jens Maus <mail@jens-maus.de>
+> ---
+>  package/nut/nut.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Why they decided that MOUNT and UMOUNT need to have _PATH
-> in the variable name is beyond me.
+> diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+> index 332ccf907..ab8a17868 100644
+> --- a/package/nut/nut.mk
+> +++ b/package/nut/nut.mk
+> @@ -18,7 +18,9 @@ NUT_AUTORECONF = YES
+>  # since the default location (/var/state/ups) maybe readonly.
+>  NUT_CONF_OPTS = \
+>  	--with-altpidpath=/var/run/upsd \
+> -	--without-hal
+> +	--without-hal \
+> +	--with-user=nobody \
 
-Damn, indeed, I did not see it when looking at configure.ac...
+'nobody' is the default for the user, so it does not seem to be needed
+to specify it, as we do have nobody. Being explicit is probably better.
 
-> Also /bin/ instead of /sbin.
+> +	--with-group=nogroup
 
-Yup, right.
+Yup.
 
-> >  define SYSTEMD_RUN_INTLTOOLIZE
-> >         cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
-> > @@ -182,8 +188,14 @@ endif
-> >
-> >  ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
-> >  SYSTEMD_CONF_OPTS += --enable-quotacheck
-> > +SYSTEMD_CONF_ENV += \
-> > +       ac_cv_path_QUOTAON=/usr/sbin/quotaon \
-> > +       ac_cv_path_QUOTACHECK=/usr/sbin/quotacheck
-> >  else
-> >  SYSTEMD_CONF_OPTS += --disable-quotacheck
-> > +SYSTEMD_CONF_ENV += \
-> > +       ac_cv_path_QUOTAON=/.missing \
-> > +       ac_cv_path_QUOTACHECK=/.missing
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
-> > --
-> > 2.11.0
-> >
-> 
-> After I made the small changes above, the system booted just fine again!
-> Thanks a ton for your help!
+Note however that nut does not recommend running as nobody/nogroup.
 
-Thanks for testting! :-)
+Instead, I would suggest we do add a user definition for nut, and
+use that for configure.
 
-I'll re-spin a v2 with those changes.
+    define NUT_USER
+        nut -1 nut -1 * - - - Nut user
+    endef
 
 Regards,
 Yann E. MORIN.
+
+>  # For uClibc-based toolchains, nut forgets to link with -lm
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> -- 
+> 2.11.0
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
