@@ -1,21 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 08 Jun 2017 21:23:50 +0000
-Subject: [Buildroot] [Bug 9891] parted 3.1 => 3.2?
-In-Reply-To: <bug-9891-163@https.bugs.busybox.net/>
-References: <bug-9891-163@https.bugs.busybox.net/>
-Message-ID: <bug-9891-163-aTjTwQe7u5@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Jun 2017 23:35:26 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-stalker: fix build with
+	gcc 7.x
+Message-ID: <20170608213537.1CEC37FA96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9891
+commit: https://git.buildroot.net/buildroot/commit/?id=7cd9a3e5802f1abee706549ad9cf87bf018eb6fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-A patch was submitted at https://patchwork.ozlabs.org/patch/765417/, but I made
-a number of comments to it. Hopefully Vicente will send a revised version.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-src-CWatchdog.h-Fix-gcc7-build.patch      | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
+new file mode 100644
+index 0000000..2d85f6b
+--- /dev/null
++++ b/package/kodi-pvr-stalker/0001-src-CWatchdog.h-Fix-gcc7-build.patch
+@@ -0,0 +1,29 @@
++From bb16ccd14deb3a01049daec37b6d2e7711ef4738 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 13 May 2017 20:22:08 +0200
++Subject: [PATCH] src/CWatchdog.h: Fix gcc7 build
++
++Building with gcc7 is broken:
++
++src/CWatchdog.h:31:58: error: 'std::function' has not been declared
++    CWatchdog(unsigned int interval, SAPI *api, std::function<void(SError)> errorCallback);
++                                                     ^~~~~~~~
++
++Submitted-upstream: https://github.com/kodi-pvr/pvr.stalker/pull/93
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/CWatchdog.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/CWatchdog.h b/src/CWatchdog.h
++index c465e91..239d95d 100644
++--- a/src/CWatchdog.h
+++++ b/src/CWatchdog.h
++@@ -22,6 +22,7 @@
++  */
++ 
++ #include <thread>
+++#include <functional>
++ 
++ #include "SAPI.h"
++ 
