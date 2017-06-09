@@ -1,42 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Jun 2017 09:27:02 +0200
-Subject: [Buildroot] [PATCH] swupdate: switch to local config librt
-	dependency
-In-Reply-To: <20170609061259.d65d6jcrkq35v2t4@tarshish> (Baruch Siach's
- message of "Fri, 9 Jun 2017 09:12:59 +0300")
-References: <097cb7c8a9791944b484ec31f2cc5660331411c6.1496939346.git.baruch@tkos.co.il>
- <20170608214532.7b77d220@free-electrons.com>
- <87lgp29rnw.fsf@dell.be.48ers.dk>
- <20170609061259.d65d6jcrkq35v2t4@tarshish>
-Message-ID: <874lvpaaex.fsf@dell.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri,  9 Jun 2017 09:31:22 +0200
+Subject: [Buildroot] [PATCH] python-chardet: bump to version 3.0.4
+Message-ID: <20170609073122.23984-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Hi,
+Add setuptools runtime dependency, that is needed for
+the chardetect script.
 
- >> I suggest we stop caring about these ancient <= 2.17 glibc versions when
- >> we introduce 2.26, especially if upstream doesn't want these fixes any
- >> more.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-chardet/Config.in           | 1 +
+ package/python-chardet/python-chardet.hash | 4 ++--
+ package/python-chardet/python-chardet.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
- > A small correction: only glibc versions < 2.17 are affected. glibc 2.17 is 
- > fine.
-
-Sorry, so then we're looking at 2.16 from mid-2012.
-
- > As far as I understand, the only change we need to do in Buildroot code itself 
- > if we are to stop support for glibc older than 2.17, is to drop CodeSourcery 
- > x86 and SH toolchains. That would leave us with no external toolchain for 
- > these architectures. Is that OK?
-
-It is not perfect, but only offering these ancient toolchains aren't
-really either. I don't think it is really bad as buildroot can build
-nice modern toolchains for those archs, but if we could find some newer
-external toolchains then that would certainly be a plus.
-
+diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
+index 8f1cd602a..869888cfe 100644
+--- a/package/python-chardet/Config.in
++++ b/package/python-chardet/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CHARDET
+ 	bool "python-chardet"
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	help
+ 	  Universal encoding detector for Python 2 and 3.
+ 
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
+index aa4efeb10..799713cf5 100644
+--- a/package/python-chardet/python-chardet.hash
++++ b/package/python-chardet/python-chardet.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/chardet/json, sha256 locally computed
+-md5	25274d664ccb5130adae08047416e1a8  chardet-2.3.0.tar.gz
+-sha256	e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa  chardet-2.3.0.tar.gz
++md5	7dd1ba7f9c77e32351b0a0cfacf4055c  chardet-3.0.4.tar.gz
++sha256	84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae  chardet-3.0.4.tar.gz
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+index 0a4788b57..516109894 100644
+--- a/package/python-chardet/python-chardet.mk
++++ b/package/python-chardet/python-chardet.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHARDET_VERSION = 2.3.0
++PYTHON_CHARDET_VERSION = 3.0.4
+ PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
+-PYTHON_CHARDET_SITE = https://pypi.python.org/packages/7d/87/4e3a3f38b2f5c578ce44f8dc2aa053217de9f0b6d737739b0ddac38ed237
++PYTHON_CHARDET_SITE = https://pypi.python.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d
+ PYTHON_CHARDET_SETUP_TYPE = setuptools
+ PYTHON_CHARDET_LICENSE = LGPL-2.1+
+ PYTHON_CHARDET_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+2.11.0
