@@ -1,29 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Jun 2017 09:06:28 +0200
-Subject: [Buildroot] Error when building Qt5 Webengine from buildroot
-In-Reply-To: <BN6PR03MB2914ED0870804EEF5408B906BFC90@BN6PR03MB2914.namprd03.prod.outlook.com>
-References: <BN6PR03MB29143BD3F821BA358530ADF4BFC80@BN6PR03MB2914.namprd03.prod.outlook.com>
- <BN6PR03MB2914ED0870804EEF5408B906BFC90@BN6PR03MB2914.namprd03.prod.outlook.com>
-Message-ID: <20170609090628.5f4d5af3@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 09 Jun 2017 09:27:02 +0200
+Subject: [Buildroot] [PATCH] swupdate: switch to local config librt
+	dependency
+In-Reply-To: <20170609061259.d65d6jcrkq35v2t4@tarshish> (Baruch Siach's
+ message of "Fri, 9 Jun 2017 09:12:59 +0300")
+References: <097cb7c8a9791944b484ec31f2cc5660331411c6.1496939346.git.baruch@tkos.co.il>
+ <20170608214532.7b77d220@free-electrons.com>
+ <87lgp29rnw.fsf@dell.be.48ers.dk>
+ <20170609061259.d65d6jcrkq35v2t4@tarshish>
+Message-ID: <874lvpaaex.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Thu, 8 Jun 2017 21:52:13 +0000, Brent Sink wrote:
+Hi,
 
-> I'm still struggling getting Qt5 WebEngine to build.  Any thoughts on
-> what may be wrong?  The output from the build is below...
+ >> I suggest we stop caring about these ancient <= 2.17 glibc versions when
+ >> we introduce 2.26, especially if upstream doesn't want these fixes any
+ >> more.
 
-Which version of gcc are you using? Does it support C++11 ?
+ > A small correction: only glibc versions < 2.17 are affected. glibc 2.17 is 
+ > fine.
 
-Best regards,
+Sorry, so then we're looking at 2.16 from mid-2012.
 
-Thomas
+ > As far as I understand, the only change we need to do in Buildroot code itself 
+ > if we are to stop support for glibc older than 2.17, is to drop CodeSourcery 
+ > x86 and SH toolchains. That would leave us with no external toolchain for 
+ > these architectures. Is that OK?
+
+It is not perfect, but only offering these ancient toolchains aren't
+really either. I don't think it is really bad as buildroot can build
+nice modern toolchains for those archs, but if we could find some newer
+external toolchains then that would certainly be a plus.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
