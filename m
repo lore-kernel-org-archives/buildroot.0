@@ -1,92 +1,117 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  9 Jun 2017 21:03:47 +0200
-Subject: [Buildroot] [PATCHv2] package/systemd: fix paths to runtime
-	utilities
-Message-ID: <20170609190347.23681-1-yann.morin.1998@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 9 Jun 2017 21:03:40 +0200
+Subject: [Buildroot] [PATCH v3 04/11] package/python-ipython-genutils:
+	New package
+In-Reply-To: <20170602235653.4655-5-andrew.smirnov@gmail.com>
+References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
+ <20170602235653.4655-5-andrew.smirnov@gmail.com>
+Message-ID: <CAGm1_ksYttP0j8VPYitGR5JB+AAVsmx2ovf_T1tNkuQgxnV2Ag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd's configure is looking in $PATH to find utilities that will be
-needed at runtime.
+On Sat, Jun 3, 2017 at 1:56 AM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+> Add 'ipython_genutils'[1] package to Buildroot. Needed by 'traitlets'.
+>
+> [1] https://pypi.python.org/pypi/ipython_genutils
+>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  DEVELOPERS                                                  |  1 +
+>  package/Config.in                                           |  1 +
+>  package/python-ipython-genutils/Config.in                   |  6 ++++++
+>  .../python-ipython-genutils/python-ipython-genutils.hash    |  3 +++
+>  package/python-ipython-genutils/python-ipython-genutils.mk  | 13 +++++++++++++
+>  5 files changed, 24 insertions(+)
+>  create mode 100644 package/python-ipython-genutils/Config.in
+>  create mode 100644 package/python-ipython-genutils/python-ipython-genutils.hash
+>  create mode 100644 package/python-ipython-genutils/python-ipython-genutils.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index fd63b2f..9450445 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -74,6 +74,7 @@ F:    package/wine/
+>  N:     Andrey Smirnov <andrew.smirnov@gmail.com>
+>  F:     package/python-decorator/
+>  F:     package/python-simplegeneric/
+> +F:     package/python-ipython-genutils/
 
-Usually, those utilties, when installed on the host, will be found in
-the same path they would be present on the target. For example,
-/usr/bin/mount on the host would also be /usr/bin/mount on the target,
-and all is find.
+Alphabetical order?
 
-Except when we need to install a host variant of util-linux, which will
-install mount in $(HOST_DIR), in which case systemd's configure would
-find that one.
+>
+>  N:     Andrew Ruder <andrew.ruder@elecsyscorp.com>
+>  F:     package/expect/
+> diff --git a/package/Config.in b/package/Config.in
+> index d338bf4..b59510e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -736,6 +736,7 @@ menu "External python modules"
+>         source "package/python-ipaddress/Config.in"
+>         source "package/python-ipy/Config.in"
+>         source "package/python-ipython/Config.in"
+> +       source "package/python-ipython-genutils/Config.in"
+>         source "package/python-itsdangerous/Config.in"
+>         source "package/python-jinja2/Config.in"
+>         source "package/python-jsonschema/Config.in"
+> diff --git a/package/python-ipython-genutils/Config.in b/package/python-ipython-genutils/Config.in
+> new file mode 100644
+> index 0000000..d49442e
+> --- /dev/null
+> +++ b/package/python-ipython-genutils/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_IPYTHON_GENUTILS
+> +       bool "python-ipython-genutils"
+> +       help
+> +         IPython vestigial utilities
+> +
+> +         https://pypi.python.org/pypi/ipython_genutils
+> diff --git a/package/python-ipython-genutils/python-ipython-genutils.hash b/package/python-ipython-genutils/python-ipython-genutils.hash
+> new file mode 100644
+> index 0000000..1efea2c
+> --- /dev/null
+> +++ b/package/python-ipython-genutils/python-ipython-genutils.hash
+> @@ -0,0 +1,3 @@
+> +# sha256 locally computed.
 
-Of course, it is also very well possible that those utilities are not
-installed on the host in the same location they would be on the target,
-in case a user has manually installed some of those (e.g. in /usr/local/
-or in /opt/)
+a comment should be like this:
 
-Forcibly set the path to those utilities, as they are expected to be on
-the target.
+# md5 from https://pypi.python.org/pypi/ipython_genutils/json, sha256
+locally computed
 
-For kexec, we can set it even though we do not depend on it (yet).
-systemd will appropriately test it at runtime.
+> +md5 5a4f9781f78466da0ea1a648f3e1f79f ipython_genutils-0.2.0.tar.gz
+> +sha256 eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8 ipython_genutils-0.2.0.tar.gz
+> diff --git a/package/python-ipython-genutils/python-ipython-genutils.mk b/package/python-ipython-genutils/python-ipython-genutils.mk
+> new file mode 100644
+> index 0000000..bd4944f
+> --- /dev/null
+> +++ b/package/python-ipython-genutils/python-ipython-genutils.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-ipython-genutils
+> +#
+> +################################################################################
+> +
+> +PYTHON_IPYTHON_GENUTILS_VERSION = 0.2.0
+> +PYTHON_IPYTHON_GENUTILS_SOURCE = ipython_genutils-$(PYTHON_IPYTHON_GENUTILS_VERSION).tar.gz
+> +PYTHON_IPYTHON_GENUTILS_SITE = https://pypi.python.org/packages/e8/69/fbeffffc05236398ebfcfb512b6d2511c622871dca1746361006da310399
+> +PYTHON_IPYTHON_GENUTILS_LICENSE = BSD-3-Clause
 
-For quota, we point to non-existing files, so as to catch errors at
-runtime. It is to be noted that quotacheck is optional, while quotaon
-does not seem to be (a service file is always installed, that uses it).
+Licence should be BSD-4-Clause and tarball contains COPYING.md, so
+PYTHON_IPYTHON_GENUTILS_LICENSE_FILES should be also added.
 
-Note: utilties listed in the order they appear in configure.ac
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Reported-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-
----
-Changes v1 -> v2:
-  - fix variables and paths for mount and umount  (Adam)
----
- package/systemd/systemd.mk | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 0b62cf043e..153d615340 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -45,10 +45,16 @@ SYSTEMD_CONF_OPTS += \
- 
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
- 
--# Override path to kmod, used in kmod-static-nodes.service
-+# Override paths to a few utilities needed at runtime, to
-+# avoid finding those we would install in $(HOST_DIR).
- SYSTEMD_CONF_ENV = \
- 	CFLAGS="$(SYSTEMD_CFLAGS)" \
--	ac_cv_path_KMOD=/usr/bin/kmod
-+	ac_cv_path_KILL=/usr/bin/kill \
-+	ac_cv_path_KMOD=/usr/bin/kmod \
-+	ac_cv_path_KEXEC=/usr/sbin/kexec \
-+	ac_cv_path_SULOGIN=/usr/sbin/sulogin \
-+	ac_cv_path_MOUNT_PATH=/usr/bin/mount \
-+	ac_cv_path_UMOUNT_PATH=/usr/bin/umount
- 
- define SYSTEMD_RUN_INTLTOOLIZE
- 	cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
-@@ -182,8 +188,14 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
- SYSTEMD_CONF_OPTS += --enable-quotacheck
-+SYSTEMD_CONF_ENV += \
-+	ac_cv_path_QUOTAON=/usr/sbin/quotaon \
-+	ac_cv_path_QUOTACHECK=/usr/sbin/quotacheck
- else
- SYSTEMD_CONF_OPTS += --disable-quotacheck
-+SYSTEMD_CONF_ENV += \
-+	ac_cv_path_QUOTAON=/.missing \
-+	ac_cv_path_QUOTACHECK=/.missing
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
--- 
-2.11.0
+> +PYTHON_IPYTHON_GENUTILS_SETUP_TYPE = distutils
+> +
+> +$(eval $(python-package))
+> --
+> 2.9.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
