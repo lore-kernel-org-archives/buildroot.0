@@ -1,59 +1,59 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 9 Jun 2017 21:40:56 +0200
-Subject: [Buildroot] [PATCH v3 11/11] python-ipython: bump to version
-	5.4.0
-In-Reply-To: <20170602235653.4655-12-andrew.smirnov@gmail.com>
-References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
- <20170602235653.4655-12-andrew.smirnov@gmail.com>
-Message-ID: <CAGm1_kt8nV+XcG_55STn0xyHG+vNFk=OkSUDXf3VYnXAPZmHDQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 9 Jun 2017 21:57:07 +0200
+Subject: [Buildroot] [PATCH v2] package/sunxi-mali: fix conflicting data
+ types between GLES2/gl2.h and GLES/gl.h
+In-Reply-To: <20170608220512.39795faa@free-electrons.com>
+References: <20170605154518.20805-1-romain.naour@gmail.com>
+ <20170608220512.39795faa@free-electrons.com>
+Message-ID: <1f27e87a-ce45-c265-c4a9-1604c4e4e5c4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 3, 2017 at 1:56 AM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Hi Thomas,
 
-you could squash this patch and the one with updated dependency list
+Le 08/06/2017 ? 22:05, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Mon,  5 Jun 2017 17:45:18 +0200, Romain Naour wrote:
+>> When OpenGL ES 1.1 and OpenGL ES 2.0 are used at the same time, the
+>> build fail since GLintptr and GLsizeiptr data type are not the same in
+>> GLES2/gl2.h and GLES/gl.h.
+>>
+>> Also sync the data type of GLbyte, GLubyte, GLfloat, GLclampf and
+>> GLfixed.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/258/25898b45cefde9661d8ac87dd84bc883bb5283d1
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Spenser Gilliland <spenser@gillilanding.com>
+>> ---
+>> v2: fix a typo in title
+>>     Also change all remaining data type (Thomas)
+>> ---
+>>  ...ting-data-types-between-GLES2-gl2.h-and-G.patch | 57 ++++++++++++++++++++++
+>>  1 file changed, 57 insertions(+)
+>>  create mode 100644 package/sunxi-mali/0003-fix-conflicting-data-types-between-GLES2-gl2.h-and-G.patch
+> 
+> Applied to master, thanks. Please submit upstream, it's easy, just open
+> a pull request on the github project.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Well, upstream github seems dead... see the pull request from Rahul Bedarkar
+from 2014 [1].
 
-> ---
->  package/python-ipython/python-ipython.hash | 4 ++--
->  package/python-ipython/python-ipython.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-> index a223408..af1ed94 100644
-> --- a/package/python-ipython/python-ipython.hash
-> +++ b/package/python-ipython/python-ipython.hash
-> @@ -1,3 +1,3 @@
->  # md5 from https://pypi.python.org/pypi/ipython/json, sha256 locally computed
-> -md5 19e4a46ec7d7a32d068de4c253c9b459 ipython-5.2.2.tar.gz
-> -sha256 6ee1c89f6031e0c86727820ad394c6eb4d3ac28de48e0df3b9367ccf92e212e2 ipython-5.2.2.tar.gz
-> +md5 d8cc938f46801060239184a35ec9c5a6 ipython-5.4.0.tar.gz
-> +sha256 6907826c427c917bf0cdab71ee728288b1f1975c4b94b3ed608b67db3183c974 ipython-5.4.0.tar.gz
-> diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-> index e57d69d..5d92546 100644
-> --- a/package/python-ipython/python-ipython.mk
-> +++ b/package/python-ipython/python-ipython.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->
-> -PYTHON_IPYTHON_VERSION = 5.2.2
-> +PYTHON_IPYTHON_VERSION = 5.4.0
->  PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
-> -PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/6e/cf/c2a3ca5942e2d8084574157a8f818efafb7218204cd9e41166c92c452e07
-> +PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/36/cd/765f53135bbbbcd691858aba3af124453a230fe0c752f009f69012fce5d5
->  PYTHON_IPYTHON_LICENSE = BSD-3-Clause
->  PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
->  PYTHON_IPYTHON_SETUP_TYPE = distutils
-> --
-> 2.9.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+But ok, done [2].
+
+Best regards,
+Romain
+
+[1] https://github.com/linux-sunxi/sunxi-mali/pull/8
+[2] https://github.com/linux-sunxi/sunxi-mali/pull/19
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
