@@ -1,45 +1,156 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Jun 2017 15:29:41 +0200
-Subject: [Buildroot] [PATCH v2 5/6] uclibc: properly set UCLIBC_HAS_MMU
-	option
+Date: Fri,  9 Jun 2017 15:29:42 +0200
+Subject: [Buildroot] [PATCH v2 6/6] gdb: fix build of gdbserver on
+	m68k/coldfire
 In-Reply-To: <1497014982-6730-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1497014982-6730-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1497014982-6730-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1497014982-6730-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gdbserver's code looks at both UCLIBC_USE_MMU *and* UCLIBC_HAS_MMU to
-decide whether to enable the no-MMU code. So far, on noMMU platforms,
-UCLIBC_HAS_MMU was still set to 'y'. This commit adjusts this, which is
-a step forward in getting gdbserver to build on m68k/coldfire.
+This commit adds a small patch to gdb that fixes the build of gdbserver
+on m68k/coldfire:
+
+../nat/linux-ptrace.c: In function 'linux_fork_to_function':
+../nat/linux-ptrace.c:282:19: warning: implicit declaration of function 'clone' [-Wimplicit-function-declaration]
+       child_pid = clone (function, child_stack + STACK_SIZE,
+                   ^
+../nat/linux-ptrace.c:283:5: error: 'CLONE_VM' undeclared (first use in this function)
+     CLONE_VM | SIGCHLD, child_stack + STACK_SIZE * 2);
+     ^
+../nat/linux-ptrace.c:283:5: note: each undeclared identifier is reported only once for each function it appears in
+
+Thanks to Waldemar for pointing out the patch fixing this issue.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
 Changes since v1:
  - New patch in the series
 ---
- package/uclibc/uclibc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ .../0010-Fix-gdbserver-build-on-uClibc-noMMU.patch | 32 ++++++++++++++++++++++
+ .../0005-Fix-gdbserver-build-on-uClibc-noMMU.patch | 32 ++++++++++++++++++++++
+ .../0004-Fix-gdbserver-build-on-uClibc-noMMU.patch | 32 ++++++++++++++++++++++
+ 3 files changed, 96 insertions(+)
+ create mode 100644 package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch
+ create mode 100644 package/gdb/7.11.1/0005-Fix-gdbserver-build-on-uClibc-noMMU.patch
+ create mode 100644 package/gdb/7.12.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index a5a20ea..fa970df 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -253,10 +253,12 @@ endif
- 
- ifeq ($(BR2_USE_MMU),y)
- define UCLIBC_MMU_CONFIG
-+	$(call KCONFIG_ENABLE_OPT,ARCH_HAS_MMU,$(@D)/.config)
- 	$(call KCONFIG_ENABLE_OPT,ARCH_USE_MMU,$(@D)/.config)
- endef
- else
- define UCLIBC_MMU_CONFIG
-+	$(call KCONFIG_DISABLE_OPT,ARCH_HAS_MMU,$(@D)/.config)
- 	$(call KCONFIG_DISABLE_OPT,ARCH_USE_MMU,$(@D)/.config)
- endef
- endif
+diff --git a/package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch
+new file mode 100644
+index 0000000..3f877b3
+--- /dev/null
++++ b/package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch
+@@ -0,0 +1,32 @@
++From 6de192acd4807d7fd57caf451567f09308bd8350 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 9 Jun 2017 10:19:32 +0200
++Subject: [PATCH] Fix gdbserver build on uClibc/noMMU
++
++The noMMU specific code requires including <sched.h>.
++
++Originally from
++https://cgit.openadk.org/cgi/cgit/openadk.git/plain/package/gdbserver/patches/nommu.patch.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ gdb/nat/linux-ptrace.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/gdb/nat/linux-ptrace.h b/gdb/nat/linux-ptrace.h
++index be6c395..c9f85aa 100644
++--- a/gdb/nat/linux-ptrace.h
+++++ b/gdb/nat/linux-ptrace.h
++@@ -23,7 +23,8 @@ struct buffer;
++ #include <sys/ptrace.h>
++ 
++ #ifdef __UCLIBC__
++-#if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_HAS_MMU__))
+++#include <sched.h>
+++#if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_USE_MMU__))
++ /* PTRACE_TEXT_ADDR and friends.  */
++ #include <asm/ptrace.h>
++ #define HAS_NOMMU
++-- 
++2.7.4
++
+diff --git a/package/gdb/7.11.1/0005-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.11.1/0005-Fix-gdbserver-build-on-uClibc-noMMU.patch
+new file mode 100644
+index 0000000..fc8b3ac
+--- /dev/null
++++ b/package/gdb/7.11.1/0005-Fix-gdbserver-build-on-uClibc-noMMU.patch
+@@ -0,0 +1,32 @@
++From d6bf0c57a6bf361ac53887653aa1878e60d56335 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 9 Jun 2017 10:19:32 +0200
++Subject: [PATCH] Fix gdbserver build on uClibc/noMMU
++
++The noMMU specific code requires including <sched.h>.
++
++Originally from
++https://cgit.openadk.org/cgi/cgit/openadk.git/plain/package/gdbserver/patches/nommu.patch.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ gdb/nat/linux-ptrace.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/gdb/nat/linux-ptrace.h b/gdb/nat/linux-ptrace.h
++index 0a23bcb..35b7cbb 100644
++--- a/gdb/nat/linux-ptrace.h
+++++ b/gdb/nat/linux-ptrace.h
++@@ -23,7 +23,8 @@ struct buffer;
++ #include "nat/gdb_ptrace.h"
++ 
++ #ifdef __UCLIBC__
++-#if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_HAS_MMU__))
+++#include <sched.h>
+++#if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_USE_MMU__))
++ /* PTRACE_TEXT_ADDR and friends.  */
++ #include <asm/ptrace.h>
++ #define HAS_NOMMU
++-- 
++2.7.4
++
+diff --git a/package/gdb/7.12.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.12.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch
+new file mode 100644
+index 0000000..cbdfc4d
+--- /dev/null
++++ b/package/gdb/7.12.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch
+@@ -0,0 +1,32 @@
++From 430ab62f356d9e45e2231b0483ee33eaf3af5df3 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 9 Jun 2017 10:19:32 +0200
++Subject: [PATCH] Fix gdbserver build on uClibc/noMMU
++
++The noMMU specific code requires including <sched.h>.
++
++Originally from
++https://cgit.openadk.org/cgi/cgit/openadk.git/plain/package/gdbserver/patches/nommu.patch.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ gdb/nat/linux-ptrace.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/gdb/nat/linux-ptrace.h b/gdb/nat/linux-ptrace.h
++index 5954945..80bb674 100644
++--- a/gdb/nat/linux-ptrace.h
+++++ b/gdb/nat/linux-ptrace.h
++@@ -23,7 +23,8 @@ struct buffer;
++ #include "nat/gdb_ptrace.h"
++ 
++ #ifdef __UCLIBC__
++-#if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_HAS_MMU__))
+++#include <sched.h>
+++#if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_USE_MMU__))
++ /* PTRACE_TEXT_ADDR and friends.  */
++ #include <asm/ptrace.h>
++ #define HAS_NOMMU
++-- 
++2.7.4
++
 -- 
 2.7.4
