@@ -1,34 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Jun 2017 13:21:13 +0200
-Subject: [Buildroot] [PATCH 0/2 v2] package/qt5base: fix sparc
-	compilation
-In-Reply-To: <20170608232128.2c5d553c@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 8 Jun 2017 23:21:28 +0200")
-References: <cover.1495055675.git.yann.morin.1998@free.fr>
- <20170608232128.2c5d553c@free-electrons.com>
-Message-ID: <87r2yt8l06.fsf@dell.be.48ers.dk>
+Date: Fri, 9 Jun 2017 13:09:46 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/qt5base: link
+	with -latomic when needed
+Message-ID: <20170609112132.A85EC7FF5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c9526f949da62ec658350ae6820e65ebb07ac13f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
- > Hello,
- > On Wed, 17 May 2017 23:15:23 +0200, Yann E. MORIN wrote:
+Qt 5.8 needs atomic operations, which are provided in libatomic when it
+exists, like on sparc with gcc >= 4.8.
 
- >> Yann E. MORIN (2):
- >> package/qt5base: install arch-specific configuration
- >> package/qt5base: link with -latomic for sparc
+Fixes:
+    http://autobuild.buildroot.org/results/49b/49bc9345b9849c9c3c53ace290c534ff7bb98683/
+    http://autobuild.buildroot.org/results/9f2/9f213406954be51dfcad76ebdce8b73850842180/
 
- > Both applied to master. Thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 7d286be4f96cfb731e184c3e8cfea27a031bde3c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qt5base.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > Peter: those are fixing a build issue, but only on Sparc, so I don't
- > know how much we want those patches in the LTS branch.
-
-They seem quite safe and a test build with them applied on the LTS
-branch succeeded, so committed to 2017.02.x and 2017.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 81774b7..5fe8bb8 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -215,6 +215,13 @@ endef
+ endif
+ 
+ QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
++# Qt 5.8 needs atomics, which on various architectures are in -latomic
++define QT5BASE_CONFIGURE_ARCH_CONFIG
++	printf 'LIBS += -latomic\n' >$(QT5BASE_ARCH_CONFIG_FILE)
++endef
++endif
++
+ define QT5BASE_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
