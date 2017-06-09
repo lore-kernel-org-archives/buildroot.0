@@ -1,61 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Jun 2017 11:42:17 +0200
-Subject: [Buildroot] [git commit] python-chardet: bump to version 3.0.4
-Message-ID: <20170609094501.7743E8163E@busybox.osuosl.org>
+From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
+Date: Fri, 9 Jun 2017 11:50:09 +0200
+Subject: [Buildroot] [git commit] package/gnu-efi: bump version to 3.0.5
+In-Reply-To: <20170608142819.4d3fc959@armant.office.greenbone.net>
+References: <20170608142819.4d3fc959@armant.office.greenbone.net>
+Message-ID: <20170609115009.5392d721@armant.office.greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c233d10cb481cc36f32ef08f097aac246792da4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 8 Jun 2017 14:28:19 +0200
+Beno?t Allard <benoit.allard@greenbone.net> wrote:
 
-Add setuptools runtime dependency, that is needed for
-the chardetect script.
+> [
+> Not a genuine reply, my mailbox had a downtime when the original mail
+> was sent.
+> 
+> Refering to commit: 
+> https://git.buildroot.net/buildroot/commit/?id=d0402a6e72c8ca5088d860bb788084147a049968
+> ]
+> 
+> Hi together,
+> 
+> It seems the version bump of gnu-efi (3.0.1 -> 3.0.5) is breaking at
+> least syslinux.
+> 
+> Our autobuilders don't exercise the bootloaders, so we missed it.
+> 
+> I've quickly tried to see how deep the differences are, first had
+> issues with conflicting function prototypes, then with structs which
+> changed name, and finally with conflicting definition of longjump
+> types. I gave up for now while investigating that last one.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-chardet/Config.in           | 1 +
- package/python-chardet/python-chardet.hash | 4 ++--
- package/python-chardet/python-chardet.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+I've got three patches that allow me to build syslinux with the newer
+version I'll post later today.
 
-diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
-index 8f1cd60..869888c 100644
---- a/package/python-chardet/Config.in
-+++ b/package/python-chardet/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_CHARDET
- 	bool "python-chardet"
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	help
- 	  Universal encoding detector for Python 2 and 3.
- 
-diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
-index aa4efeb..799713c 100644
---- a/package/python-chardet/python-chardet.hash
-+++ b/package/python-chardet/python-chardet.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/chardet/json, sha256 locally computed
--md5	25274d664ccb5130adae08047416e1a8  chardet-2.3.0.tar.gz
--sha256	e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa  chardet-2.3.0.tar.gz
-+md5	7dd1ba7f9c77e32351b0a0cfacf4055c  chardet-3.0.4.tar.gz
-+sha256	84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae  chardet-3.0.4.tar.gz
-diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
-index 0a4788b..5161098 100644
---- a/package/python-chardet/python-chardet.mk
-+++ b/package/python-chardet/python-chardet.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CHARDET_VERSION = 2.3.0
-+PYTHON_CHARDET_VERSION = 3.0.4
- PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
--PYTHON_CHARDET_SITE = https://pypi.python.org/packages/7d/87/4e3a3f38b2f5c578ce44f8dc2aa053217de9f0b6d737739b0ddac38ed237
-+PYTHON_CHARDET_SITE = https://pypi.python.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d
- PYTHON_CHARDET_SETUP_TYPE = setuptools
- PYTHON_CHARDET_LICENSE = LGPL-2.1+
- PYTHON_CHARDET_LICENSE_FILES = LICENSE
+> 
+> syslinux ships with an included own version of gnu-efi, so they might
+> not be interested in fixing that immediately (I've not raised the
+> issue over there yet).
+
+Because they ship with an integrated version of gnu-efi (from around
+Feb. 2014), there isn't much traction in integrating new patches there.
+I'll post my patches to their list as well anyway.
+
+Regards,
+Ben.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170609/b3c213cd/attachment.asc>
