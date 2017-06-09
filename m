@@ -1,56 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Jun 2017 10:50:33 +0200
-Subject: [Buildroot] [PATCH] support/scripts: fix shebang with bash
-In-Reply-To: <CAB0FRstAGwcUOowSvH9xmQLX=j5no7aPO6KiCLXVS7U3W_C=yg@mail.gmail.com>
- (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Fri, 9 Jun 2017
- 10:18:48 +0200")
-References: <20170605073740.855-1-francois.perrad@gadz.org>
- <87y3t2a64r.fsf@dell.be.48ers.dk>
- <CAB0FRsv4WF1BE6LNagQZhLZ7DxGH_sovyJutrKrufNhvWcFrCg@mail.gmail.com>
- <878tl29m64.fsf@dell.be.48ers.dk>
- <CAB0FRstAGwcUOowSvH9xmQLX=j5no7aPO6KiCLXVS7U3W_C=yg@mail.gmail.com>
-Message-ID: <87zidh8rza.fsf@dell.be.48ers.dk>
+From: Hugues FRUCHET <hugues.fruchet@st.com>
+Date: Fri, 9 Jun 2017 09:39:07 +0000
+Subject: [Buildroot] [PATCH v1 2/2] package/libv4l: build of v4l2
+ utilities on noMMU platform
+In-Reply-To: <20170608215726.7d44a6c6@free-electrons.com>
+References: <1496830327-5235-1-git-send-email-hugues.fruchet@st.com>
+ <1496830327-5235-3-git-send-email-hugues.fruchet@st.com>
+ <20170608215726.7d44a6c6@free-electrons.com>
+Message-ID: <9f921390-6cb1-b650-55d2-2099c7d7445e@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
 
-Hi,
+On 06/08/2017 09:57 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 7 Jun 2017 12:12:07 +0200, Hugues Fruchet wrote:
+>> Remove dependencies on MMU, dynamic libraries and locale
+>>
+>> Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+> 
+> The removal of the dependencies on MMU and dynamic library should be
+> part of the previous patch, as I said in the other review.
+> 
+> However, the removal of the locale dependency, I'm not sure. Is it
+> fixed by your previous patch? Is it already fixed in v4l ?
+On my environment (STM32F4), BR2_ENABLE_LOCALE is not set but this is 
+not preventing libv4l package build. It is not clear to me why this
+dependency is there.
 
- >> And /bin/sh is a symlink to /run/current-system/sw/bin/bash? Otherwise I
- >> don't understand how the logic in Makefile and
- >> support/dependencies/dependencies.sh could work?
- >> 
+> 
+> Also, you want to review all packages that "select BR2_PACKAGE_LIBV4L",
+> and investigate whether we can remove the MMU/dynamic library
+> dependencies on those packages.
+> 
+> You're lucky, there are only two such packages:
+> 
+> package/v4l2grab/Config.in:     select BR2_PACKAGE_LIBV4L
+> package/zbar/Config.in: select BR2_PACKAGE_LIBV4L
+> 
+> Adjusting those packages (if applicable) can however be done in
+> separate patches.
+Ok I will have a look to those packages.
 
- > /bin/sh is a symlink to
- > /nix/store/bxr5lwdhhgfh1p28mh3w7kyc0spk7niz-bash-4.4-p5/bin/sh
- > /run/current-system/sw/bin/bash is a symlink to
- > /nix/store/bxr5lwdhhgfh1p28mh3w7kyc0spk7niz-bash-4.4-p5/bin/bash
-
-Ok, and than ../bin/sh is presumably a symlink to ../bin/bash?
-
-
- >> What about packages? Are there no package build systems that hardcodes
- >> /bin/bash?
- >> 
-
- > No.
- > Packages needed by Buildroot could be declared like this :
- > https://github.com/fperrad/misc/blob/master/nix/buildroot.nix
-
-What I mean is that seeing scripts with the #!/bin/bash shebang is quite
-common, so I wouldn't be surprised if some of the upstream build systems
-used by some of the packages we have in buildroot use that.
-
-For one, some of our board specific scripts use it:
-
-board/stmicroelectronics/stm32f429-disco/flash.sh:#!/bin/bash
-board/stmicroelectronics/stm32f469-disco/flash.sh:#!/bin/bash
-board/technologic/ts4800/post-image.sh:#!/bin/bash
-board/technologic/ts4900/post-image.sh:#!/bin/bash
-
--- 
-Bye, Peter Korsgaard
+> 
+> Thanks!
+> 
+> Thomas
+> 
