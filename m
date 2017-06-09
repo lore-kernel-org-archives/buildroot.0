@@ -1,86 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Jun 2017 17:52:33 +0200
-Subject: [Buildroot] [PATCH v3 1/1] configs/arcturus_ucls1012a: new
- defconfig
-In-Reply-To: <ff9861e8-8774-1dbf-4626-a4b581a07a5b@arcturusnetworks.com>
-References: <20170608204400.21287-1-oleks@arcturusnetworks.com>
- <20170608231002.160f7742@free-electrons.com>
- <ff9861e8-8774-1dbf-4626-a4b581a07a5b@arcturusnetworks.com>
-Message-ID: <20170609175233.0795f77e@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  9 Jun 2017 21:03:47 +0200
+Subject: [Buildroot] [PATCHv2] package/systemd: fix paths to runtime
+	utilities
+Message-ID: <20170609190347.23681-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+systemd's configure is looking in $PATH to find utilities that will be
+needed at runtime.
 
-On Fri, 9 Jun 2017 11:37:11 -0400, Oleksandr G Zhadan wrote:
+Usually, those utilties, when installed on the host, will be found in
+the same path they would be present on the target. For example,
+/usr/bin/mount on the host would also be /usr/bin/mount on the target,
+and all is find.
 
-> > OK, you moved the firmware inside the kernel sources. Not really nice,
-> > because it means those files in the target filesystem are not
-> > associated with any license.  
-> The firmware is associated with Freescale-Binary-EULA licence and that 
-> license is included.
-> I agree it's not really nice to move it inside kernel, but you asked to 
-> remove it from rootfs-overlay and I could not found any better place for 
-> now. Any suggestions welcome.
+Except when we need to install a host variant of util-linux, which will
+install mount in $(HOST_DIR), in which case systemd's configure would
+find that one.
 
-Best option:
+Of course, it is also very well possible that those utilities are not
+installed on the host in the same location they would be on the target,
+in case a user has manually installed some of those (e.g. in /usr/local/
+or in /opt/)
 
- Contribute the firmware to the linux-firmware project.
+Forcibly set the path to those utilities, as they are expected to be on
+the target.
 
-Not as good, but still acceptable option:
+For kexec, we can set it even though we do not depend on it (yet).
+systemd will appropriately test it at runtime.
 
- Separate Git repository with this firmware and its license file + a
- Buildroot package that downloads and installs this firmware.
+For quota, we point to non-existing files, so as to catch errors at
+runtime. It is to be noted that quotacheck is optional, while quotaon
+does not seem to be (a service file is always installed, that uses it).
 
-> > Why aren't those firmware files contributed to the linux-firmware
-> > project instead?  
-> This firmware is came from  Linux? SDK for QorIQ? Processors. SDKLINUX 
-> publicly available on NXP website.
-> I really don't know when they going to publish it to any other places, 
-> but my personal preferences to use buildroot instead Yocto as build 
-> system on all our modules.
-> BTW the NXP's SDK is using Linaro toolchain, even older version.
+Note: utilties listed in the order they appear in configure.ac
 
-Can you point me to the Yocto recipe that installs this firmware ? Is
-their firmware bundled in their Yocto layer, or are they downloading it
-from some location ?
+Reported-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 
-> >> diff --git a/configs/arcturus_ucls1012a_defconfig b/configs/arcturus_ucls1012a_defconfig
-> >> new file mode 100644
-> >> index 000000000..64557fde7
-> >> --- /dev/null
-> >> +++ b/configs/arcturus_ucls1012a_defconfig
-> >> @@ -0,0 +1,23 @@
-> >> +BR2_aarch64=y
-> >> +BR2_TOOLCHAIN_EXTERNAL=y  
-> > Still need to change this to the internal toolchain, as per our
-> > previous discussion.  
-> Still requesting to keep external toolchain in this patch as 
-> "tested"&"trusted" on our module, plus suggested by NXP.
-> Or please explain the reason why you try to avoid some options, like 
-> BR2_TOOLCHAIN_EXTERNAL, if it allowed choice, and even after my 
-> explanations that we did have an issue with internal one. I believe you 
-> should know the difference between QEMU and real CPU.
+---
+Changes v1 -> v2:
+  - fix variables and paths for mount and umount  (Adam)
+---
+ package/systemd/systemd.mk | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-The reasons are pretty simple:
-
- - Consistency between all defconfigs. None of them are using external
-   toolchains, except csky_gx6605s_defconfig, because there is no
-   support for building a CSKY toolchain in Buildroot yet.
-
- - The Buildroot toolchain should work. If it doesn't, we want to know
-   and fix the problem.
-
-And yes, I know the difference between a real CPU and QEMU, but
-Buildroot toolchains should also work on real CPUs, not only in Qemu :-)
-
-Thanks,
-
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0b62cf043e..153d615340 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -45,10 +45,16 @@ SYSTEMD_CONF_OPTS += \
+ 
+ SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
+ 
+-# Override path to kmod, used in kmod-static-nodes.service
++# Override paths to a few utilities needed at runtime, to
++# avoid finding those we would install in $(HOST_DIR).
+ SYSTEMD_CONF_ENV = \
+ 	CFLAGS="$(SYSTEMD_CFLAGS)" \
+-	ac_cv_path_KMOD=/usr/bin/kmod
++	ac_cv_path_KILL=/usr/bin/kill \
++	ac_cv_path_KMOD=/usr/bin/kmod \
++	ac_cv_path_KEXEC=/usr/sbin/kexec \
++	ac_cv_path_SULOGIN=/usr/sbin/sulogin \
++	ac_cv_path_MOUNT_PATH=/usr/bin/mount \
++	ac_cv_path_UMOUNT_PATH=/usr/bin/umount
+ 
+ define SYSTEMD_RUN_INTLTOOLIZE
+ 	cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
+@@ -182,8 +188,14 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
+ SYSTEMD_CONF_OPTS += --enable-quotacheck
++SYSTEMD_CONF_ENV += \
++	ac_cv_path_QUOTAON=/usr/sbin/quotaon \
++	ac_cv_path_QUOTACHECK=/usr/sbin/quotacheck
+ else
+ SYSTEMD_CONF_OPTS += --disable-quotacheck
++SYSTEMD_CONF_ENV += \
++	ac_cv_path_QUOTAON=/.missing \
++	ac_cv_path_QUOTACHECK=/.missing
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
