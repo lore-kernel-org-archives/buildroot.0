@@ -1,51 +1,65 @@
-From: Hugues Fruchet <hugues.fruchet@st.com>
-Date: Fri, 9 Jun 2017 12:45:24 +0200
-Subject: [Buildroot] [PATCH v2] package/libv4l: toolchain w/ locale is not
-	mandatory
-In-Reply-To: <1497005128-20992-1-git-send-email-hugues.fruchet@st.com>
-References: <1496830327-5235-2-git-send-email-hugues.fruchet@st.com>
- <1497005128-20992-1-git-send-email-hugues.fruchet@st.com>
-Message-ID: <1497005128-20992-3-git-send-email-hugues.fruchet@st.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 9 Jun 2017 13:10:03 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/qt5base: install
+	arch-specific configuration
+Message-ID: <20170609112035.E4050802E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libv4l package builds fine even if locale is not enabled.
-This have been tested with stm32f469_disco_defconfig
-enabling build of libv4l package:
-+#v4l utilities
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_PACKAGE_LIBV4L=y
-+BR2_PACKAGE_LIBV4L_UTILS=y
+commit: https://git.buildroot.net/buildroot/commit/?id=3315e7b041d0eb0c6c8c42779ce8e661f8e67601
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+For some architectures, it is necessary to link with additional
+libraries, such as -latomic for sparc.
+
+Add a bit of support to make that easy; actual use will be introduced in
+the following patch.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a3fd13804fc801fc948d27f9fe932fce7201655a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libv4l/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/qt5/qt5base/qmake.conf | 3 +++
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index 8d1b931..638aeff 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -19,7 +19,6 @@ comment "libv4l JPEG support not enabled"
+diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf
+index 49cf898..8b6debe 100644
+--- a/package/qt5/qt5base/qmake.conf
++++ b/package/qt5/qt5base/qmake.conf
+@@ -21,5 +21,8 @@ CONFIG                 += nostrip
+ QMAKE_LIBS             += -lrt -lpthread -ldl
+ QMAKE_CFLAGS_ISYSTEM   =
  
- config BR2_PACKAGE_LIBV4L_UTILS
- 	bool "v4l-utils tools"
--	depends on BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  v4l-utils is a collection of various video4linux and DVB utilities.
-@@ -35,9 +34,6 @@ config BR2_PACKAGE_LIBV4L_UTILS
- 	  - rds-ctl
- 	  - qv4l2 (if Qt is enabled)
- 
--comment "libv4l-utils tools need a toolchain w/ locale"
--	depends on !BR2_ENABLE_LOCALE
--
++# Architecturespecific configuration
++include(arch.conf)
++
+ include(../common/linux_device_post.conf)
+ load(qt_config)
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 1020348..b37f3da 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -219,12 +219,15 @@ define QT5BASE_CONFIGURE_CONFIG_FILE
+ endef
  endif
  
- comment "libv4l needs a toolchain w/ threads, C++ and headers >= 3.0"
--- 
-1.9.1
++QT5BASE_ARCH_CONFIG_FILE = $(@D)/mkspecs/devices/linux-buildroot-g++/arch.conf
+ define QT5BASE_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
++	touch $(QT5BASE_ARCH_CONFIG_FILE)
++	$(QT5BASE_CONFIGURE_ARCH_CONFIG)
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
