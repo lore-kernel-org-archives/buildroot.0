@@ -1,47 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 10 Jun 2017 11:03:18 +0200
-Subject: [Buildroot] [PATCH v3 04/11] package/python-ipython-genutils:
- New package
-In-Reply-To: <CAGm1_ksYttP0j8VPYitGR5JB+AAVsmx2ovf_T1tNkuQgxnV2Ag@mail.gmail.com>
-References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
- <20170602235653.4655-5-andrew.smirnov@gmail.com>
- <CAGm1_ksYttP0j8VPYitGR5JB+AAVsmx2ovf_T1tNkuQgxnV2Ag@mail.gmail.com>
-Message-ID: <2b491e00-2db9-0663-f3f3-19f304301945@mind.be>
+Date: Sat, 10 Jun 2017 11:05:51 +0200
+Subject: [Buildroot] Error when building Qt5 Webengine from buildroot
+In-Reply-To: <BN6PR03MB29143BD3F821BA358530ADF4BFC80@BN6PR03MB2914.namprd03.prod.outlook.com>
+References: <BN6PR03MB29143BD3F821BA358530ADF4BFC80@BN6PR03MB2914.namprd03.prod.outlook.com>
+Message-ID: <4522e427-efbe-49e2-dd27-6c05e042d192@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yegor,
 
-On 09-06-17 21:03, Yegor Yefremov wrote:
->> +PYTHON_IPYTHON_GENUTILS_LICENSE = BSD-3-Clause
-> 
-> Licence should be BSD-4-Clause and tarball contains COPYING.md, so
-> PYTHON_IPYTHON_GENUTILS_LICENSE_FILES should be also added.
->
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
- This tag means: I reviewed the patch and it is according to me ready to be
-accepted. So if you have comments on the patch, you would typically *NOT* add
-your Reviewed-by tag. You may say something like:
+On 07-06-17 17:43, Brent Sink wrote:
+[snip]
+> In file included from
+> /home/cpa/buildroot/output/build/qt5webengine-5.6.2/src/3rdparty/chromium/ui/events/ozone/evdev/touch_evdev_debug_buffer.cc:5:0:
+> /home/cpa/buildroot/output/build/qt5webengine-5.6.2/src/3rdparty/chromium/ui/events/ozone/evdev/touch_evdev_debug_buffer.h:37:15:
+> error: field ?device_name_? has incomplete type ?std::__cxx11::string {aka
+> std::__cxx11::basic_string<char>}?
+>    std::string device_name_;
+>                ^
+> In file included from
+> /home/cpa/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/iosfwd:39:0,
+>                  from
+> /home/cpa/buildroot/output/build/qt5webengine-5.6.2/src/3rdparty/chromium/base/memory/scoped_ptr.h:88,
+>                  from
+> /home/cpa/buildroot/output/build/qt5webengine-5.6.2/src/3rdparty/chromium/ui/events/ozone/evdev/touch_evdev_debug_buffer.h:11,
+>                  from
+> /home/cpa/buildroot/output/build/qt5webengine-5.6.2/src/3rdparty/chromium/ui/events/ozone/evdev/touch_evdev_debug_buffer.cc:5:
+> /home/cpa/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/bits/stringfwd.h:71:11:
+> note: declaration of ?std::__cxx11::string {aka class
+> std::__cxx11::basic_string<char>}?
+>      class basic_string;
+>            ^
 
-With these issues fixed:
-  Reviewed-by: ...
-
-(with whitespace in front).
-
- The reason for this is that the Reviewed-by tag gets picked up by Patchwork,
-and Peter and Thomas look at the R tag in patchwork to decide to apply a series.
-They *should* see that in fact there were some comments and update the patch
-before committing, but it's a bit of a risk. Putting spaces in front stops
-Patchwork from picking up the tag.
-
- If the comments are minor (i.e. the patch is still correct, there is no harm in
-committing it as-is), it's just some spelling errors or bikeshedding) then you
-could still add the Rev-by tag. But in this case, since the license is wrong,
-it's NOT OK to commit as-is.
+ This sounds like a missing #include <string> in touch_evdev_debug_buffer.h.
 
  Regards,
  Arnout
