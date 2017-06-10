@@ -1,59 +1,77 @@
 From: Jens Maus <mail@jens-maus.de>
-Date: Sat, 10 Jun 2017 09:00:50 +0200
-Subject: [Buildroot] [PATCH 3/3] package/rpi-firmware: updated to 4.9.31
-	firmware (ca9116f)
-Message-ID: <20170610070050.20782-1-mail@jens-maus.de>
+Date: Sat, 10 Jun 2017 09:04:47 +0200
+Subject: [Buildroot] [PATCH 2/2] package/nut: specify --with-user/group
+ when building NUT
+In-Reply-To: <20170608192014.GB3058@scaer>
+References: <20170608153557.30726-1-mail@jens-maus.de>
+ <20170608192014.GB3058@scaer>
+Message-ID: <B2B80EDF-A4B3-4D1A-AE33-F52EF46D829C@jens-maus.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit updates the rpi-firmware package to the latest 4.9.31
-compatible commit (ca9116ffd0cea06fdeb876ac7d19790bf2631d8c) and
-uses a for() to install DTS files in case BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-is used.
+Hi Yann, All,
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
----
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 9 ++++-----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+> Am 08.06.2017 um 21:20 schrieb Yann E. MORIN <yann.morin.1998@free.fr>:
+> 
+> On 2017-06-08 17:35 +0200, Jens Maus spake thusly:
+>> This commit fixes a problem where the NUT package couldn't be
+>> used as a NUT server due to the fact that the default group for
+>> nobody is "nogroup" and not "nobody" like the internal default
+>> of NUT. Thus, when starting a NUT server daemon the daemon starts
+>> with incorrect group permissions and generated some error messages.
+>> This commit fixes this shortcoming by specifying --with-user/group
+>> when running configure.
+>> 
+>> Signed-off-by: Jens Maus <mail@jens-maus.de>
+>> ---
+>> package/nut/nut.mk | 4 +++-
+>> 1 file changed, 3 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+>> index 332ccf907..ab8a17868 100644
+>> --- a/package/nut/nut.mk
+>> +++ b/package/nut/nut.mk
+>> @@ -18,7 +18,9 @@ NUT_AUTORECONF = YES
+>> # since the default location (/var/state/ups) maybe readonly.
+>> NUT_CONF_OPTS = \
+>> 	--with-altpidpath=/var/run/upsd \
+>> -	--without-hal
+>> +	--without-hal \
+>> +	--with-user=nobody \
+> 
+> 'nobody' is the default for the user, so it does not seem to be needed
+> to specify it, as we do have nobody. Being explicit is probably better.
+> 
+>> +	--with-group=nogroup
+> 
+> Yup.
+> 
+> Note however that nut does not recommend running as nobody/nogroup.
+> 
+> Instead, I would suggest we do add a user definition for nut, and
+> use that for configure.
+> 
+>    define NUT_USER
+>        nut -1 nut -1 * - - - Nut user
+>    endef
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 11655eef3..80cbf7d3b 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 84f44265c7e9bfe3e54a326b95ea7067870cfe08a9aae12f00aec8d47f6fc353 rpi-firmware-4b24a81a2ce94afd4458d1af4ea1e73d58e69848.tar.gz
-+sha256 c88c6fbec9a38a12a51724cb65fbf176fc127a82ba9ad797fbd81868a0749fd3 rpi-firmware-ca9116ffd0cea06fdeb876ac7d19790bf2631d8c.tar.gz
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 134fcebb5..4c3d37375 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 4b24a81a2ce94afd4458d1af4ea1e73d58e69848
-+RPI_FIRMWARE_VERSION = ca9116ffd0cea06fdeb876ac7d19790bf2631d8c
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-@@ -12,10 +12,9 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
- 
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- define RPI_FIRMWARE_INSTALL_DTB
--	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
--	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
--	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
--	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2710-rpi-3-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2710-rpi-3-b.dtb
-+	for dtb in $(@D)/boot/*.dtb; do \
-+		$(INSTALL) -D -m 0644 $${dtb} $(BINARIES_DIR)/rpi-firmware/$${dtb##*/} || exit 1; \
-+	done
- endef
- endif
- 
+Thanks for your comments. Indeed I could remove ?with-user=nobody from my patchset. And of course it would be better to run NUT with a new user. But IMHO for the time being the patch I submitted should be sufficient and we can apply an additional patch later. Or is my patch rejected now and I need to rework it for being accepted? Sorry for asking, but I am fairly new to submitting patches to buildroot and I am not fully confident to the procedure. In addition, I cannot see my initial patch at patchwork anymore?!?!
+
+regards,
+jens
 -- 
-2.11.0
+Jens Maus, Dresden/Germany
+http://jens-maus.de/
+
+*** Content is authentic only with digital signature  ***
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 3745 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170610/0a08b2fb/attachment.p7s>
