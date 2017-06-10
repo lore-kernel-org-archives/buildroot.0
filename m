@@ -1,64 +1,81 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 10 Jun 2017 11:38:54 +0200
-Subject: [Buildroot] [PATCH v3 04/11] package/python-ipython-genutils:
-	New package
-In-Reply-To: <2b491e00-2db9-0663-f3f3-19f304301945@mind.be>
-References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
- <20170602235653.4655-5-andrew.smirnov@gmail.com>
- <CAGm1_ksYttP0j8VPYitGR5JB+AAVsmx2ovf_T1tNkuQgxnV2Ag@mail.gmail.com>
- <2b491e00-2db9-0663-f3f3-19f304301945@mind.be>
-Message-ID: <CAGm1_kvXRPMZGsz5J1GBbhZSGnS8P_oriFd2YGDCZW4ijZiw6A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 10 Jun 2017 11:45:43 +0200
+Subject: [Buildroot] [PATCH 3/3] package/rpi-firmware: updated to
+	4.9.31	firmware (ca9116f)
+In-Reply-To: <7729E3FB-13CA-4123-B840-4EAF2AB64673@jens-maus.de>
+References: <20170610070050.20782-1-mail@jens-maus.de>
+ <8E8EFCD7-3A29-410A-A992-9D62BE9C604F@free.fr>
+ <7729E3FB-13CA-4123-B840-4EAF2AB64673@jens-maus.de>
+Message-ID: <8F29C33F-DF80-4401-B36B-23E12D859201@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On June 10, 2017 10:37:55 AM GMT+02:00, Jens Maus <mail@jens-maus.de> wrote:
+>Hi,
+>
+>> Am 10.06.2017 um 09:26 schrieb Yann E. MORIN
+><yann.morin.1998@free.fr>:
+>> 
+>>> On June 10, 2017 9:00:50 AM GMT+02:00, Jens Maus <mail@jens-maus.de>
+>wrote:
+>>> This commit updates the rpi-firmware package to the latest 4.9.31
+>>> compatible commit (ca9116ffd0cea06fdeb876ac7d19790bf2631d8c) and
+>>> uses a for() to install DTS files in case
+>>> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+>>> is used.
+>> 
+>> Please separate the patch in two:
+>>  - one to bump version
+>>  - one to change install code (but see below)
+>
+>Will do so, thanks for your comments.
+>
+>>> Signed-off-by: Jens Maus <mail@jens-maus.de>
+>> [snip]
+>>> diff --git a/package/rpi-firmware/rpi-firmware.mk
+>>> b/package/rpi-firmware/rpi-firmware.mk
+>>> index 134fcebb5..4c3d37375 100644
+>>> --- a/package/rpi-firmware/rpi-firmware.mk
+>>> +++ b/package/rpi-firmware/rpi-firmware.mk
+>> [snip]
+>>> @@ -12,10 +12,9 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
+>>> 
+>>> ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
+>>> define RPI_FIRMWARE_INSTALL_DTB
+>>> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb
+>>> $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
+>>> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb
+>>> $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
+>>> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb
+>>> $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
+>>> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2710-rpi-3-b.dtb
+>>> $(BINARIES_DIR)/rpi-firmware/bcm2710-rpi-3-b.dtb
+>>> +    for dtb in $(@D)/boot/*.dtb; do \
+>>> +        $(INSTALL) -D -m 0644 $${dtb}
+>>> $(BINARIES_DIR)/rpi-firmware/$${dtb##*/} || exit 1; \
+>>> +    done
+>> 
+>> What is the reason you are doing so?
+>
+>Because latest rpi-firmware contains dtb files for pi zero w and
+>compute modules which the non-for statements didn't catch.
 
-On Sat, Jun 10, 2017 at 11:03 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Yegor,
->
-> On 09-06-17 21:03, Yegor Yefremov wrote:
->>> +PYTHON_IPYTHON_GENUTILS_LICENSE = BSD-3-Clause
->>
->> Licence should be BSD-4-Clause and tarball contains COPYING.md, so
->> PYTHON_IPYTHON_GENUTILS_LICENSE_FILES should be also added.
->>
->> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->
->  This tag means: I reviewed the patch and it is according to me ready to be
-> accepted. So if you have comments on the patch, you would typically *NOT* add
-> your Reviewed-by tag. You may say something like:
->
-> With these issues fixed:
->   Reviewed-by: ...
+Then say so in the commit log.
 
-You're right. It was my intent.
+Also, I would prefer you just add them to the existing list.
+It is better to be explicit rather than having a catch-all
+command.
 
-Yegor
+Regards,
+Yann E. MORIN.
 
->
-> (with whitespace in front).
->
->  The reason for this is that the Reviewed-by tag gets picked up by Patchwork,
-> and Peter and Thomas look at the R tag in patchwork to decide to apply a series.
-> They *should* see that in fact there were some comments and update the patch
-> before committing, but it's a bit of a risk. Putting spaces in front stops
-> Patchwork from picking up the tag.
->
->  If the comments are minor (i.e. the patch is still correct, there is no harm in
-> committing it as-is), it's just some spelling errors or bikeshedding) then you
-> could still add the Rev-by tag. But in this case, since the license is wrong,
-> it's NOT OK to commit as-is.
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+>Regards,
+>Jens
+
+Jens, All,
+-- 
+Sent from my phone. Please excuse my brevity.
