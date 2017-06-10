@@ -1,61 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Jun 2017 09:26:14 +0200
-Subject: [Buildroot] [PATCH 3/3] package/rpi-firmware: updated to
-	4.9.31	firmware (ca9116f)
-In-Reply-To: <20170610070050.20782-1-mail@jens-maus.de>
-References: <20170610070050.20782-1-mail@jens-maus.de>
-Message-ID: <8E8EFCD7-3A29-410A-A992-9D62BE9C604F@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 10 Jun 2017 10:24:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.1.6
+Message-ID: <20170610082453.13380-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On June 10, 2017 9:00:50 AM GMT+02:00, Jens Maus <mail@jens-maus.de> wrote:
->This commit updates the rpi-firmware package to the latest 4.9.31
->compatible commit (ca9116ffd0cea06fdeb876ac7d19790bf2631d8c) and
->uses a for() to install DTS files in case
->BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
->is used.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Please separate the patch in two:
-  - one to bump version
-  - one to change install code (but see below)
-
->Signed-off-by: Jens Maus <mail@jens-maus.de>
-[snip]
->diff --git a/package/rpi-firmware/rpi-firmware.mk
->b/package/rpi-firmware/rpi-firmware.mk
->index 134fcebb5..4c3d37375 100644
->--- a/package/rpi-firmware/rpi-firmware.mk
->+++ b/package/rpi-firmware/rpi-firmware.mk
-[snip]
->@@ -12,10 +12,9 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
-> 
-> ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
-> define RPI_FIRMWARE_INSTALL_DTB
->-	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb
->$(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
->-	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb
->$(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
->-	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb
->$(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
->-	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2710-rpi-3-b.dtb
->$(BINARIES_DIR)/rpi-firmware/bcm2710-rpi-3-b.dtb
->+	for dtb in $(@D)/boot/*.dtb; do \
->+		$(INSTALL) -D -m 0644 $${dtb}
->$(BINARIES_DIR)/rpi-firmware/$${dtb##*/} || exit 1; \
->+	done
-
-What is the reason you are doing so?
-
-Regards,
-Yann E. MORIN.
-
-> endef
-> endif
-> 
-
-Jens, All,
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d34242fea..0c8518b13 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256 d149a3c396c45611f5dc6bf14be190f464897145a76a8e5851cf18ff7094f6ac  php-7.1.5.tar.xz
++sha256 01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b  php-7.1.6.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 2e4b667f9..494f681c7 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.1.5
++PHP_VERSION = 7.1.6
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-Sent from my phone. Please excuse my brevity.
+2.11.0
