@@ -1,48 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Jun 2017 13:07:41 +0200
-Subject: [Buildroot] [PATCH 3/3] package/rpi-firmware: updated to 4.9.31
-	firmware (ca9116f)
-In-Reply-To: <d06f4897-e954-5473-5137-236cfa5f80d3@mind.be>
-References: <20170610070050.20782-1-mail@jens-maus.de>
- <8E8EFCD7-3A29-410A-A992-9D62BE9C604F@free.fr>
- <7729E3FB-13CA-4123-B840-4EAF2AB64673@jens-maus.de>
- <8F29C33F-DF80-4401-B36B-23E12D859201@free.fr>
- <d06f4897-e954-5473-5137-236cfa5f80d3@mind.be>
-Message-ID: <56E8F50E-0A95-4D44-8BFE-8F7BF5BB817B@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Jun 2017 13:33:53 +0200
+Subject: [Buildroot] [PATCH] glibc: remove version choice
+In-Reply-To: <d6af409f-8318-d97e-9193-cb07f94de67a@mind.be>
+References: <20170606175659.GA2566@waldemar-brodkorb.de>
+ <20170606213500.0fe44a79@free-electrons.com>
+ <20170607212720.GA23160@scaer> <87h8zq9r6u.fsf@dell.be.48ers.dk>
+ <d6af409f-8318-d97e-9193-cb07f94de67a@mind.be>
+Message-ID: <20170610133353.068831eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Jens, All,
+Hello,
 
-On June 10, 2017 12:40:47 PM GMT+02:00, Arnout Vandecappelle <arnout@mind.be> wrote:
->On 10-06-17 11:45, Yann E. MORIN wrote:
-[snip]
->> Also, I would prefer you just add them to the existing list.
->> It is better to be explicit rather than having a catch-all
->> command.
->
->But then, a loop that iterates over a list of variables is still nicer
->than
->repeating the command 7 times.
+On Sat, 10 Jun 2017 11:19:32 +0200, Arnout Vandecappelle wrote:
 
-Yup.
+>  I think there is in fact more reason to have multiple versions for uClibc-ng
+> than for glibc. Multiple versions are useful in any situation when there are ABI
+> changes in the newer version so that binaries linked with the older version no
+> longer work. glibc is very careful about ABI changes, uClibc-ng somewhat less so.
+> 
+>  So yes, I'm in favour of removing this version choice. Also for binutils, by
+> the way. Yes, there may be regressions, but then those should be fixed, not
+> swept under the carpet for some time until the new version becomes the default.
+> 
+>  GCC is different, because newer GCC versions do break compatibility with older
+> libraries, and they do break existing (badly written) source code. In that sense
+> I think it was a bad idea to remove GCC 4.9, because GCC 5 did break binary
+> compatibility for C++... But I wasn't here at the time and that ship has sailed now.
 
-RPI_FIRMWARE_DTBS = \
-    rpi-b.dtb \
-    rpi-b-plus.dtb etc....
+I haven't merged https://patchwork.ozlabs.org/patch/767087/, so gcc 4.9
+is still there:
 
-define RPI_FIRMWARE_INSTALL_DTBS
-    $(foreach dtb,$(RPI_FIRMWARE_DTBS),\
-        $(INSTALL) -D -m 0644 $(@D)/dtbs/$(dtb) $(BINARIES_DIR)/rpi-firmware/$(dtb))
-endef
+$ grep 4_9_X package/gcc/Config.in.host 
+config BR2_GCC_VERSION_4_9_X
+	default "4.9.4"     if BR2_GCC_VERSION_4_9_X
 
-(of course, fix my typoes, the dtb filenames, and the variable names)
+I was waiting for feedback (such as yours) before merging this patch.
 
-Regards,
-Yann E. MORIN.
+Best regards,
 
+Thomas
 -- 
-Sent from my phone. Please excuse my brevity.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
