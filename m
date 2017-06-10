@@ -1,49 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 10 Jun 2017 16:01:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iprutils: needs zlib
-Message-ID: <20170610140106.28730-1-bernd.kuhls@t-online.de>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Sat, 10 Jun 2017 16:28:27 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-06-08
+In-Reply-To: <20170609062926.BA8DA20E81@mail.free-electrons.com>
+References: <20170609062926.BA8DA20E81@mail.free-electrons.com>
+Message-ID: <CAMRc=MfRgo36k1wxZrR-Gy9oFhZEU4r_XE0uPdAVCEH6bebuBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dependency was introduced by
-https://sourceforge.net/p/iprdd/iprutils/ci/1f24b814e56939fd09a2319323e604594784fef3/
+2017-06-09 8:29 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2017-06-08, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Build failures related to your packages:
+>
+>          arm |            host-doxygen-1.8.13 | http://autobuild.buildroot.net/results/e131995a148835f1ad153e6077e4e483cda40387
+>     mips64el |            host-doxygen-1.8.13 | http://autobuild.buildroot.net/results/e6f16da98a5f379445cdcbb77b47554267e244dd
+>
+> --
+> http://autobuild.buildroot.net
 
-Fixes
-http://autobuild.buildroot.net/results/48e/48e1c7fb920cbc81eee1cf2f43d1551a0a9ce31e/
+These errors are strange. It seems like the script generating
+output/build/host-doxygen-1.8.13/generated_src/lang_cfg.h sends its
+stderr to the generated file so the compilation fails due to garbage
+in the header. Unfortunately I'm travelling until the end of next week
+so may not have time to look at it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/iprutils/Config.in   | 1 +
- package/iprutils/iprutils.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/iprutils/Config.in b/package/iprutils/Config.in
-index 8e2884a82..0143b53ae 100644
---- a/package/iprutils/Config.in
-+++ b/package/iprutils/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_IPRUTILS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LIBSYSFS
- 	select BR2_PACKAGE_PCIUTILS
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  System utilities for IBM Power RAID devices
- 
-diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-index 8bb80c885..0dc7b4006 100644
---- a/package/iprutils/iprutils.mk
-+++ b/package/iprutils/iprutils.mk
-@@ -7,7 +7,7 @@
- IPRUTILS_VERSION_MAJOR = 2.4.14
- IPRUTILS_VERSION = $(IPRUTILS_VERSION_MAJOR).1
- IPRUTILS_SITE = https://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION_MAJOR)
--IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils
-+IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils zlib
- IPRUTILS_LICENSE = Common Public License Version 1.0
- IPRUTILS_LICENSE_FILES = LICENSE
- 
--- 
-2.11.0
+Best regards,
+Bartosz Golaszewski
