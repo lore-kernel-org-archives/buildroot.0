@@ -1,62 +1,89 @@
-From: Jens Maus <mail@jens-maus.de>
-Date: Sat, 10 Jun 2017 10:37:55 +0200
-Subject: [Buildroot] [PATCH 3/3] package/rpi-firmware: updated to
-	4.9.31	firmware (ca9116f)
-In-Reply-To: <8E8EFCD7-3A29-410A-A992-9D62BE9C604F@free.fr>
-References: <20170610070050.20782-1-mail@jens-maus.de>
- <8E8EFCD7-3A29-410A-A992-9D62BE9C604F@free.fr>
-Message-ID: <7729E3FB-13CA-4123-B840-4EAF2AB64673@jens-maus.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 10 Jun 2017 10:43:33 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/php: fix icu support
+Message-ID: <20170610084333.27483-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Propagate icu reverse dependencies.
 
-> Am 10.06.2017 um 09:26 schrieb Yann E. MORIN <yann.morin.1998@free.fr>:
-> 
->> On June 10, 2017 9:00:50 AM GMT+02:00, Jens Maus <mail@jens-maus.de> wrote:
->> This commit updates the rpi-firmware package to the latest 4.9.31
->> compatible commit (ca9116ffd0cea06fdeb876ac7d19790bf2631d8c) and
->> uses a for() to install DTS files in case
->> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
->> is used.
-> 
-> Please separate the patch in two:
->  - one to bump version
->  - one to change install code (but see below)
+Php lacks "-std=c++11", provided by icu-config, when compiling icu
+support leading to a build failure:
 
-Will do so, thanks for your comments.
+/home/peko/autobuild/instance-1/output/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/include/unicode/umachine.h:347:13:
+ error: 'char16_t' does not name a type
+     typedef char16_t UChar;
 
->> Signed-off-by: Jens Maus <mail@jens-maus.de>
-> [snip]
->> diff --git a/package/rpi-firmware/rpi-firmware.mk
->> b/package/rpi-firmware/rpi-firmware.mk
->> index 134fcebb5..4c3d37375 100644
->> --- a/package/rpi-firmware/rpi-firmware.mk
->> +++ b/package/rpi-firmware/rpi-firmware.mk
-> [snip]
->> @@ -12,10 +12,9 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
->> 
->> ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
->> define RPI_FIRMWARE_INSTALL_DTB
->> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb
->> $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
->> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb
->> $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
->> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb
->> $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
->> -    $(INSTALL) -D -m 0644 $(@D)/boot/bcm2710-rpi-3-b.dtb
->> $(BINARIES_DIR)/rpi-firmware/bcm2710-rpi-3-b.dtb
->> +    for dtb in $(@D)/boot/*.dtb; do \
->> +        $(INSTALL) -D -m 0644 $${dtb}
->> $(BINARIES_DIR)/rpi-firmware/$${dtb##*/} || exit 1; \
->> +    done
-> 
-> What is the reason you are doing so?
+Fixes
+http://autobuild.buildroot.net/results/238/238d0e4bb205c0e7288903c6498e6c1787d86a1b/
 
-Because latest rpi-firmware contains dtb files for pi zero w and compute modules which the non-for statements didn't catch.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: added icu reverse dependencies, used PHP_CXXFLAGS (Thomas)
 
-Regards,
-Jens
+ package/php/Config.ext | 9 +++++++--
+ package/php/php.mk     | 4 +++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 43cc4b328..bb6ada6a9 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -180,17 +180,22 @@ config BR2_PACKAGE_PHP_EXT_ICONV
+ 
+ config BR2_PACKAGE_PHP_EXT_INTL
+ 	bool "intl"
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Internationalization support
+ 
+-comment "intl support needs a toolchain w/ C++, wchar, threads"
++comment "intl support needs a toolchain w/ C++, wchar, threads, gcc >= 4.8, host gcc >= 4.8"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_HOST_GCC_AT_LEAST_4_8
+ 
+ config BR2_PACKAGE_PHP_EXT_MBSTRING
+ 	bool "mbstring"
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ed12dd354..fe531a4ae 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -55,6 +55,7 @@ endif
+ PHP_CONFIG_SCRIPTS = php-config
+ 
+ PHP_CFLAGS = $(TARGET_CFLAGS)
++PHP_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+ # The OPcache extension isn't cross-compile friendly
+ # Throw some defines here to avoid patching heavily
+@@ -173,6 +174,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_INTL),y)
+ PHP_CONF_OPTS += --enable-intl --with-icu-dir=$(STAGING_DIR)/usr
++PHP_CXXFLAGS += "`$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
+ PHP_DEPENDENCIES += icu
+ # The intl module is implemented in C++, but PHP fails to use
+ # g++ as the compiler for the final link. As a workaround,
+@@ -343,6 +345,6 @@ endef
+ 
+ PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
+ 
+-PHP_CONF_ENV += CFLAGS="$(PHP_CFLAGS)"
++PHP_CONF_ENV += CFLAGS="$(PHP_CFLAGS)" CXXFLAGS="$(PHP_CXXFLAGS)"
+ 
+ $(eval $(autotools-package))
+-- 
+2.11.0
