@@ -1,67 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jun 2017 23:10:05 +0200
-Subject: [Buildroot] [PATCHv2] package/systemd: fix paths to runtime
- utilities
-In-Reply-To: <20170609190347.23681-1-yann.morin.1998@free.fr>
-References: <20170609190347.23681-1-yann.morin.1998@free.fr>
-Message-ID: <20170610231005.4d6871ec@windsurf.home>
+Date: Sat, 10 Jun 2017 23:10:17 +0200
+Subject: [Buildroot] [git commit] erlang-p1-xml: Add host dependencies
+Message-ID: <20170610211022.D8828816A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0ea16a9fcf1f0748bd30183d9f937a3ea2f2fb27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Jun 2017 21:03:47 +0200, Yann E. MORIN wrote:
-> systemd's configure is looking in $PATH to find utilities that will be
-> needed at runtime.
-> 
-> Usually, those utilties, when installed on the host, will be found in
-> the same path they would be present on the target. For example,
-> /usr/bin/mount on the host would also be /usr/bin/mount on the target,
-> and all is find.
-> 
-> Except when we need to install a host variant of util-linux, which will
-> install mount in $(HOST_DIR), in which case systemd's configure would
-> find that one.
-> 
-> Of course, it is also very well possible that those utilities are not
-> installed on the host in the same location they would be on the target,
-> in case a user has manually installed some of those (e.g. in /usr/local/
-> or in /opt/)
-> 
-> Forcibly set the path to those utilities, as they are expected to be on
-> the target.
-> 
-> For kexec, we can set it even though we do not depend on it (yet).
-> systemd will appropriately test it at runtime.
-> 
-> For quota, we point to non-existing files, so as to catch errors at
-> runtime. It is to be noted that quotacheck is optional, while quotaon
-> does not seem to be (a service file is always installed, that uses it).
-> 
-> Note: utilties listed in the order they appear in configure.ac
-> 
-> Reported-by: Adam Duskett <aduskett@gmail.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - fix variables and paths for mount and umount  (Adam)
-> ---
->  package/systemd/systemd.mk | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+This should fix the error reported by autobuild:
+http://autobuild.buildroot.net/results/3b4/3b474323cb50d0d5d09611fa068a9d1bd3bd4bb5/
 
-Applied to master, thanks. Peter: I believe this should go in the LTS
-branches.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang-p1-xml/erlang-p1-xml.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
+index 1e43400..0b0b1ca 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.mk
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+@@ -9,6 +9,7 @@ ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
+ ERLANG_P1_XML_LICENSE = Apache-2.0
+ ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_XML_DEPENDENCIES = expat erlang-p1-utils
++ERLANG_P1_XML_HOST_DEPENDENCIES = host-expat host-erlang-p1-utils
+ ERLANG_P1_XML_INSTALL_STAGING = YES
+ 
+ ERLANG_P1_XML_USE_AUTOCONF = YES
