@@ -1,42 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 18:42:25 +0200
-Subject: [Buildroot] [PATCH v2] lsscsi: add new package
-In-Reply-To: <20170512124101.3876-1-antonynpavlov@gmail.com>
-References: <20170512124101.3876-1-antonynpavlov@gmail.com>
-Message-ID: <20170611184225.3deb4bfb@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Jun 2017 18:54:19 +0200
+Subject: [Buildroot] [PATCH 02/14] package/irrlicht: new package
+References: <20170411222643.9770-1-romain.naour@gmail.com>
+ <20170411222643.9770-2-romain.naour@gmail.com>
+Message-ID: <r6901exniq.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Romain,
 
-On Fri, 12 May 2017 15:41:01 +0300, Antony Pavlov wrote:
-> Signed-off-by: Antony Pavlov <antonynpavlov@gmail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+afaics the irrlicht package only provides libirrlicht.so.
+What about naming the package libirrlicht and move it to
+"Target packages > Libraries > Graphics"?
 
-Thanks for this patch. I've applied to master after doing a few
-changes. See below.
+Am Wed, 12 Apr 2017 00:26:31 +0200 schrieb Romain Naour:
 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/Config.in          |  1 +
->  package/lsscsi/Config.in   |  6 ++++++
->  package/lsscsi/lsscsi.hash |  2 ++
->  package/lsscsi/lsscsi.mk   | 13 +++++++++++++
->  4 files changed, 22 insertions(+)
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  ...-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch | 44 +++++++++++++++++
+>  package/irrlicht/0002-remove-sys-sysctl.h.patch    | 38 +++++++++++++++
 
-You forgot to add an entry to the DEVELOPERS file, so I've done so.
+Did you send the patches upstream?
 
-> +LSSCSI_LICENSE = GPLv2
+@Whoever will commit the patches to buildroot: The irrlicht source code
+has DOS line endings, please adjust the patch files accordingly.
 
-We now use SPDX license codes everywhere, so GPL-2.0. And the license
-is in fact "GPL version 2 or later", so I've changed this to GPL-2.0+.
+> diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
+> new file mode 100644
+> index 0000000..ab6187c
+> --- /dev/null
+> +++ b/package/irrlicht/irrlicht.mk
+> @@ -0,0 +1,57 @@
+> +################################################################################
+> +#
+> +# irrlicht
+> +#
+> +################################################################################
+> +
+> +IRRLICHT_VERSION_MAJOR = 1.8
+> +IRRLICHT_VERSION = $(IRRLICHT_VERSION_MAJOR).4
+> +IRRLICHT_SOURCE = irrlicht-$(IRRLICHT_VERSION).zip
+> +IRRLICHT_SITE = https://downloads.sourceforge.net/project/irrlicht/Irrlicht%20SDK/$(IRRLICHT_VERSION_MAJOR)/$(IRRLICHT_VERSION)
+> +IRRLICHT_INSTALL_STAGING = YES
+> +
+> +# Bundled libraries: bzip2, libaesGladman, libpng, lzma, zlib,
+> +IRRLICHT_LICENSE = bzip2 license, jpeg-license (BSD-3-Clause-like), Libpng, Zlib
 
-Thanks for your contribution!
+Please mention the license of the irrlicht package itself.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards, Bernd
