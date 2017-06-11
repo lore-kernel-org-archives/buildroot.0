@@ -1,72 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Jun 2017 23:33:27 +0200
-Subject: [Buildroot] [PATCH 02/14] package/irrlicht: new package
-In-Reply-To: <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
-References: <20170411222643.9770-1-romain.naour@gmail.com>
- <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
- <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
-Message-ID: <cba4449d-096e-a698-c55e-6a2c52c9048d@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 11 Jun 2017 23:52:47 +0200
+Subject: [Buildroot] [PATCH v3 03/11] package/python-simplegeneric:
+	Switch setup type to 'setuptools'
+In-Reply-To: <20170611145009.5bb44890@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 11 Jun 2017 14:50:09 +0200")
+References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
+ <20170602235653.4655-4-andrew.smirnov@gmail.com>
+ <20170611145009.5bb44890@windsurf.home>
+Message-ID: <87fuf68a4w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > Hello,
+ > On Fri,  2 Jun 2017 16:56:45 -0700, Andrey Smirnov wrote:
 
-On 11-06-17 23:09, Romain Naour wrote:
-> Hi Bernd,
-> 
-> Thank for the review, it's very appreciated :)
-> 
-> Le 11/06/2017 ? 18:54, Bernd Kuhls a ?crit :
->> Hi Romain,
->>
->> afaics the irrlicht package only provides libirrlicht.so.
->> What about naming the package libirrlicht and move it to
->> "Target packages > Libraries > Graphics"?
-> 
-> Make sense even if irrlicht is the upstream name.
-> In the past, I hesitated to do so for efl package which can be named libefl.
+ >> +# Force setup-type to be 'setuptools' in order to force package to be
 
- No, in Buildroot, we always use the upstream name (except for python-* etc.).
+ > to force *the* package
 
-[snip]
->>> +# Bundled libraries: bzip2, libaesGladman, libpng, lzma, zlib,
->>> +IRRLICHT_LICENSE = bzip2 license, jpeg-license (BSD-3-Clause-like), Libpng, Zlib
->>
->> Please mention the license of the irrlicht package itself.
-> 
-> Irrlicht itself use Zlib license.
+ >> +# installed with --single-version-externally-managed. Otherwise we'll
 
- Then Zlib license should be first, and the license of the bundled libraries
-should mention which bit they apply to between brackets.
+ > we'll end up -> we end up
 
- By the way, could you mention in the commit message why unbundling is not possible?
+ >> +# end up wit a .egg file, which is a zip archive, and as such forces
+ >> +# use to have 'zlib' as a runtime dependency
 
- Regards,
- Arnout
+ > use -> us
 
-> 
-> http://pkgs.fedoraproject.org/cgit/rpms/irrlicht.git/tree/irrlicht.spec#n9
-> 
-> Best regards,
-> Romain
-> 
->>
->> Regards, Bernd
->>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+ > Applied after fixing those. Thanks!
+
+Committed to 2017.05.x, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
