@@ -1,57 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Jun 2017 23:17:36 +0200
-Subject: [Buildroot] [PATCH] package/gdb: add support for gdb 8.0
-In-Reply-To: <20170611181043.0de6329f@windsurf.home>
-References: <20170605204648.11780-1-romain.naour@gmail.com>
- <20170611181043.0de6329f@windsurf.home>
-Message-ID: <e2edd343-47ed-146f-be62-419a61b52242@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 11 Jun 2017 23:18:45 +0200
+Subject: [Buildroot] [PATCH 04/14] package/minetest: new package
+In-Reply-To: <1pb01exniq.ln2@ID-313208.user.individual.net>
+References: <20170411222643.9770-1-romain.naour@gmail.com>
+ <20170411222643.9770-4-romain.naour@gmail.com>
+ <1pb01exniq.ln2@ID-313208.user.individual.net>
+Message-ID: <556194f7-e699-7e68-75b2-8563f76b38ac@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Bernd,
 
-
-On 11-06-17 18:10, Thomas Petazzoni wrote:
-> Hello,
+Le 11/06/2017 ? 19:38, Bernd Kuhls a ?crit :
+> Hi Romain,
 > 
-> On Mon,  5 Jun 2017 22:46:48 +0200, Romain Naour wrote:
->> Add a dependency on gcc >= 4.8 since gdb needs a C++11 compiler.
->>
->> Remove included patch since 7.12.1:
->> 0001-Remove-const-in-xtensa-linux-nat.c-fetch_gregs.patch
->> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=d274ecf4ddf76768af57e27f654b9ce6784b391c
->>
->> Rebase remaining patches:
->> 0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
->> 0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
->>
->> See https://sourceware.org/ml/gdb-announce/2017/msg00003.html
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Am Wed, 12 Apr 2017 00:26:33 +0200 schrieb Romain Naour:
+> 
+>> Signed-off-by: Romain Naour <romain.naour-
+> Re5JQEeQqe8AvxtiuMwx3w at public.gmane.org>
 >> ---
->> This patch is rebased after [1], [2] and [3]
+>>  DEVELOPERS                   |  1 +
+>>  package/Config.in            |  1 +
+>>  package/minetest/Config.in   | 58 +++++++++++++++++++++++++++++++++++++
+> +++++++
+>>  package/minetest/minetest.mk | 44 +++++++++++++++++++++++++++++++++
 > 
-> Applied to master, thanks. Do you intend to send a patch that updates
-> the default gdb version to 7.12, and drop support for 7.10 ?
+> please add a hash file, support for tarballs created by the github helper 
+> was merged today.
 
- Since we've been discussing version dropping, perhaps it's time to consider gdb
-as well.
+Ok, I'll add it.
 
- Is there really any reason to support multiple versions of gdb?
+> 
+>> diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
+>> new file mode 100644
+>> index 0000000..f110f7c
+>> --- /dev/null
+>> +++ b/package/minetest/minetest.mk
+>> @@ -0,0 +1,44 @@
+>>
+> +################################################################################
+>> +#
+>> +# minetest
+>> +#
+>>
+> +################################################################################
+>> +
+>> +MINETEST_VERSION = 0.4.15
+> 
+> Version 0.4.16 was released meanwhile.
 
- If yes, is there a reason to not use the latest version as default?
+Yes, it's an very active project and this series has been in the patchwork
+during 2 months. I'll bump the version for the respin.
 
- And the same questions for binutils.
+> 
+> Building with this defconfig worked fine:
+> 
+> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+> BR2_BINUTILS_VERSION_2_28_X=y
+> BR2_GCC_VERSION_7_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_MINETEST=y
+> BR2_PACKAGE_MINETEST_CLIENT_SERVER=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_LUAJIT=y
 
- Regards,
- Arnout
+It means that I can add your Tested-by tag?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
