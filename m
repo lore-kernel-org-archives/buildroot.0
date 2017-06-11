@@ -1,28 +1,32 @@
-From: Brent Sink <brents_3@hotmail.com>
-Date: Sun, 11 Jun 2017 05:45:55 +0000
-Subject: [Buildroot] Error when building Qt5 Webengine from buildroot
-In-Reply-To: <BN6PR03MB29148981A29B24CED48107ADBFCE0@BN6PR03MB2914.namprd03.prod.outlook.com>
-References: <BN6PR03MB29143BD3F821BA358530ADF4BFC80@BN6PR03MB2914.namprd03.prod.outlook.com>
- <BN6PR03MB2914ED0870804EEF5408B906BFC90@BN6PR03MB2914.namprd03.prod.outlook.com>,
- <20170609090628.5f4d5af3@free-electrons.com>,
- <BN6PR03MB29148981A29B24CED48107ADBFCE0@BN6PR03MB2914.namprd03.prod.outlook.com>
-Message-ID: <BN6PR03MB2914652860FFB5C01F6CE128BFCC0@BN6PR03MB2914.namprd03.prod.outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Jun 2017 08:25:13 +0200
+Subject: [Buildroot] [PATCH 4/4] package/qt5/qt5webkit: needs host gcc
+ >= 4.8 for icu support
+References: <20170610091513.29031-1-bernd.kuhls@t-online.de>
+ <20170610091513.29031-2-bernd.kuhls@t-online.de>
+ <20170610230843.0ce76b59@windsurf.home>
+Message-ID: <9b4v0exged.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Am Sat, 10 Jun 2017 23:08:43 +0200 schrieb Thomas Petazzoni:
 
-> > Which version of gcc are you using? Does it support C++11 ?
+> it would be nice if you could at least test your Config.in changes by
+> running "make menuconfig" :)
 
-> The gcc version is 5.4.0, and when I pass the -std=c++11 it will build for c++11.
+Hi,
 
-Since you asked the question about gcc, should I be using something other than the cross compiler provided by buildroot?  Right now it's using this one: buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc
+I did but I missed the fact that
 
-Any thoughts on what I may be doing wrong?
+source "package/qt5/qt5webkit/Config.in"
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170611/aec98973/attachment.html>
+is guarded by 
+
+if BR2_PACKAGE_QT5
+
+Sorry for the hassle.
+
+Regards, Bernd
