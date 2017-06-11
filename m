@@ -1,46 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Jun 2017 23:03:22 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] tor: security bump to
-	version 0.2.9.11
-Message-ID: <20170611210330.5900B80567@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 11 Jun 2017 23:09:20 +0200
+Subject: [Buildroot] [PATCH 02/14] package/irrlicht: new package
+In-Reply-To: <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
+References: <20170411222643.9770-1-romain.naour@gmail.com>
+ <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
+Message-ID: <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42bf45423a107bee0face991f6e3d10a666c5fb2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Hi Bernd,
 
-Fixes CVE-2017-0376: Fix a remotely triggerable assertion failure caused by
-receiving a BEGIN_DIR cell on a hidden service rendezvous circuit.
+Thank for the review, it's very appreciated :)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9bf22d3e80bba37efbec5d2a0b020c0a9062e83c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le 11/06/2017 ? 18:54, Bernd Kuhls a ?crit :
+> Hi Romain,
+> 
+> afaics the irrlicht package only provides libirrlicht.so.
+> What about naming the package libirrlicht and move it to
+> "Target packages > Libraries > Graphics"?
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index d14db04..d42c534 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 d611283e1fb284b5f884f8c07e7d3151016851848304f56cfdf3be2a88bd1341  tor-0.2.9.10.tar.gz
-+sha256 c1959bebff9a546a54cbedb58c8289a42441991af417d2d16f7b336be8903221  tor-0.2.9.11.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 9ccde79..7bbd2f3 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.2.9.10
-+TOR_VERSION = 0.2.9.11
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3c
- TOR_LICENSE_FILES = LICENSE
+Make sense even if irrlicht is the upstream name.
+In the past, I hesitated to do so for efl package which can be named libefl.
+
+> 
+> Am Wed, 12 Apr 2017 00:26:31 +0200 schrieb Romain Naour:
+> 
+>> Signed-off-by: Romain Naour <romain.naour-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>> ---
+>>  DEVELOPERS                                         |  1 +
+>>  package/Config.in                                  |  1 +
+>>  ...-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch | 44 +++++++++++++++++
+>>  package/irrlicht/0002-remove-sys-sysctl.h.patch    | 38 +++++++++++++++
+> 
+> Did you send the patches upstream?
+
+Not yet. I'll do it.
+
+> 
+> @Whoever will commit the patches to buildroot: The irrlicht source code
+> has DOS line endings, please adjust the patch files accordingly.
+
+Indeed, thanks for the warning.
+
+> 
+>> diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
+>> new file mode 100644
+>> index 0000000..ab6187c
+>> --- /dev/null
+>> +++ b/package/irrlicht/irrlicht.mk
+>> @@ -0,0 +1,57 @@
+>> +################################################################################
+>> +#
+>> +# irrlicht
+>> +#
+>> +################################################################################
+>> +
+>> +IRRLICHT_VERSION_MAJOR = 1.8
+>> +IRRLICHT_VERSION = $(IRRLICHT_VERSION_MAJOR).4
+>> +IRRLICHT_SOURCE = irrlicht-$(IRRLICHT_VERSION).zip
+>> +IRRLICHT_SITE = https://downloads.sourceforge.net/project/irrlicht/Irrlicht%20SDK/$(IRRLICHT_VERSION_MAJOR)/$(IRRLICHT_VERSION)
+>> +IRRLICHT_INSTALL_STAGING = YES
+>> +
+>> +# Bundled libraries: bzip2, libaesGladman, libpng, lzma, zlib,
+>> +IRRLICHT_LICENSE = bzip2 license, jpeg-license (BSD-3-Clause-like), Libpng, Zlib
+> 
+> Please mention the license of the irrlicht package itself.
+
+Irrlicht itself use Zlib license.
+
+http://pkgs.fedoraproject.org/cgit/rpms/irrlicht.git/tree/irrlicht.spec#n9
+
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
