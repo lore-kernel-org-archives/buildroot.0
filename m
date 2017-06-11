@@ -1,79 +1,164 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 15:37:50 +0200
-Subject: [Buildroot] [PATCH] syslinux: Add patch to build with the
- latest gnu-efi release
-In-Reply-To: <1497003638-17662-1-git-send-email-benoit.allard@greenbone.net>
-References: <1497003638-17662-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <20170611153750.22323da6@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Jun 2017 15:47:01 +0200
+Subject: [Buildroot] [PATCH v2,1/1] boinc: new package
+References: <1490523107-130671-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <l7uv0exniq.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Fabrice,
 
-On Fri,  9 Jun 2017 12:20:38 +0200, Beno?t Allard wrote:
-> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
-> ---
->  ...definition-is-now-part-of-the-exports-of-.patch | 37 ++++++++++++++++++++++
->  ..._BASE_CODE-struct-has-been-renamed-to-EFI.patch | 30 ++++++++++++++++++
->  ...longjump-calls-to-fit-the-new-declaration.patch | 37 ++++++++++++++++++++++
->  3 files changed, 104 insertions(+)
->  create mode 100644 boot/syslinux/0007-The-VPrint-definition-is-now-part-of-the-exports-of-.patch
->  create mode 100644 boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch
->  create mode 100644 boot/syslinux/0009-Update-the-longjump-calls-to-fit-the-new-declaration.patch
+Am Sun, 26 Mar 2017 12:11:47 +0200 schrieb Fabrice Fontaine:
 
-I've applied your patch. It does fix some build issues with gnu-efi.
-However here the build of syslinux doesn't complete successfully. With
-the following defconfig:
+> diff --git a/package/boinc/Config.in b/package/boinc/Config.in
+> new file mode 100644
+> index 0000000..ca1b283
+> --- /dev/null
+> +++ b/package/boinc/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_BOINC
+> +	bool "boinc"
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_WCHAR
 
-BR2_x86_64=y
-BR2_x86_core2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2017.02-1096-g54a5333.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_SYSLINUX=y
-BR2_TARGET_SYSLINUX_ISOLINUX=y
-BR2_TARGET_SYSLINUX_EFI=y
+Why is wchar needed? The boinc client can be build with this defconfig:
 
-I get:
+BR2_x86_i486=y
+BR2_GCC_VERSION_7_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_BOINC=y
 
-/home/thomas/projets/buildroot/output/host/usr/bin/x86_64-linux-gcc /home/thomas/projets/buildroot/output/build/syslinux-6.03/efi/wrapper.c -o wrapper
-/home/thomas/projets/buildroot/output/build/syslinux-6.03/efi64/efi/wrapper syslinux.so syslinux.efi
-make[5]: /home/thomas/projets/buildroot/output/build/syslinux-6.03/efi64/efi/wrapper: Command not found
+$ grep _WCHAR .config
+# BR2_TOOLCHAIN_BUILDROOT_WCHAR is not set
 
-The problem is that it builds a tool called "wrapper" with the
-cross-compiler, and then tries to run it on the host. It might work if
-your host and target use the same architecture and libc. Here, I'm
-using the same architecture (x86-64) but not the same libc (glibc for
-the host, uclibc for the target).
+> diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+> new file mode 100644
+> index 0000000..f15be8c
+> --- /dev/null
+> +++ b/package/boinc/boinc.hash
+> @@ -0,0 +1,4 @@
+> +# Locally computed:
+> +sha256	
+c4b1c29b9655013e0ac61dddf47ad7f30f38c46159f02a9d9dc8ab854e99aa6d	
+boinc-7.6.33.tar.gz
+> +sha256	
+39dc32290378ab5ed258944b80140adc48613677e1792701d6fbeba1b0aa60e3	
+25c2f1839753a2695c62cc4d4edb7e88345af8cb.patch
+> +sha256	
+d141fba93a0081cd558a20209098b105c7e9dc1cd36d7913873db8bcec79ce66	
+bf807980c1b217c0f20668a664806d8727df3239.patch
 
-Do you think you could have a look?
+Please re-download the patches and update their hashes, the files you 
+download today differ from the time when you created the package.
 
-> +Subject: [PATCH 1/3] The VPrint definition is now part of the exports of
-> + gnu-efi
+> diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+> new file mode 100644
+> index 0000000..a01289c
+> --- /dev/null
+> +++ b/package/boinc/boinc.mk
+> @@ -0,0 +1,70 @@
+> 
++################################################################################
+> +#
+> +# boinc
+> +#
+> 
++################################################################################
+> +
+> +BOINC_VERSION_MAJOR = 7.6
+> +BOINC_VERSION = $(BOINC_VERSION_MAJOR).33
 
-Nit: please use 'git format-patch -N' to generate your patches. This
-will generate patches with [PATCH] as a prefix instead of [PATCH X/Y].
-Indeed, the 1/3, 2/3 and 3/3 in your patches don't make sense: your
-patches are patches 7, 8 and 9! To avoid this, in Buildroot, we have
-decided to not add numbering inside the patches themselves.
+Version 7.6.34 was released meanwhile.
 
-Thanks!
+> +# client_release can be used to build the Client and Manager but not 
+the Server
+> +# part. The Server currently has no versioning (see
+> +# https://github.com/BOINC/boinc/pull/1798).
+> +BOINC_SITE = \
+> +	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/
+$(BOINC_VERSION))
+> +BOINC_LICENSE = LGPLv3
+> +BOINC_LICENSE_FILES = COPYING COPYING.LESSER 
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+please remove the white-space at the end of the line as reported by 
+
+.git/rebase-apply/patch:150: trailing whitespace.
+BOINC_LICENSE_FILES = COPYING COPYING.LESSER 
+warning: 1 line adds whitespace errors.
+
+> +BOINC_DEPENDENCIES = host-pkgconf
+> +BOINC_INSTALL_STAGING = YES
+
+Are there other packages currently or in planning which use libboinc*.so?
+
+> +BOINC_AUTORECONF = YES
+> +BOINC_CONF_OPTS = \
+> +	--disable-apps \
+> +	--disable-boinczip \
+> +	--disable-manager \
+> +	--disable-server \
+> +	--enable-libraries \
+> +	--with-pkg-config=$(PKG_CONFIG_HOST_BINARY)
+> +
+> +# Fix execinfo.h detection and LDFLAGS
+> +BOINC_PATCH += \
+> +	https://github.com/BOINC/boinc/
+commit/25c2f1839753a2695c62cc4d4edb7e88345af8cb.patch \
+> +	https://github.com/BOINC/boinc/commit/
+bf807980c1b217c0f20668a664806d8727df3239.patch
+> +
+> +ifeq ($(BR2_PACKAGE_LIBFCGI),y)
+> +BOINC_DEPENDENCIES += libfcgi
+> +BOINC_CONF_OPTS += --enable-fcgi
+> +else
+> +BOINC_CONF_OPTS += --disable-fcgi
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBCURL)$(BR2_PACKAGE_OPENSSL),yy)
+> +BOINC_DEPENDENCIES += libcurl openssl
+> +BOINC_CONF_OPTS += \
+> +	--enable-client \
+> +	--with-libcurl=$(STAGING_DIR)/usr/lib \
+> +	$(if $(BR2_STATIC_LIBS),--disable-dynamic-client-linkage, \
+> +		--enable-dynamic-client-linkage)
+> +else
+> +BOINC_CONF_OPTS += --disable-client
+
+Does it make any sense to build boinc without the client, i.e. only the 
+libraries? Imho we should always select libcurl and openssl, both hard 
+dependencies for the boinc client, they do not bring new dependencies 
+with them.
+
+The rest of the patch is useful only when the client was built.
+
+> +endif
+> +
+> +# Remove boinc-client because it is incompatible with buildroot
+> +define BOINC_REMOVE_UNNEEDED_FILE
+> +	$(RM) $(TARGET_DIR)/etc/init.d/boinc-client
+> +endef
+> +
+> +BOINC_POST_INSTALL_TARGET_HOOKS += BOINC_REMOVE_UNNEEDED_FILE
+> +
+> +define BOINC_INSTALL_INIT_SYSV
+> +	 $(INSTALL) -D -m 0755 package/boinc/S99boinc-client \
+> +		$(TARGET_DIR)/etc/init.d/S99boinc-client
+> +endef
+> +
+> +define BOINC_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 644 package/boinc/boinc-client.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/boinc-client.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -sf ../../../../usr/lib/systemd/system/boinc-client.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+boinc-client.service
+> +endef
+> +
+> +$(eval $(autotools-package))
+
+Regards, Bernd
