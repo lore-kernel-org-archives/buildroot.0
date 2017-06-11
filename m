@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 18:13:26 +0200
-Subject: [Buildroot] [PATCH/buildroot-test 1/1] autobuild-run: randomly
- add BR2_PACKAGE_PYTHON_PY_ONLY
-In-Reply-To: <20170605131350.31383-1-bernd.kuhls@t-online.de>
-References: <20170605131350.31383-1-bernd.kuhls@t-online.de>
-Message-ID: <20170611181326.1ce13e59@windsurf.home>
+Date: Sun, 11 Jun 2017 18:27:06 +0200
+Subject: [Buildroot] [PATCH/next] package/minidlna: add optional avahi
+ support
+In-Reply-To: <20170522185031.13096-1-bernd.kuhls@t-online.de>
+References: <20170522185031.13096-1-bernd.kuhls@t-online.de>
+Message-ID: <20170611182706.27ea99f6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  5 Jun 2017 15:13:50 +0200, Bernd Kuhls wrote:
-> This should allow build-testing Kodi after
-> https://git.buildroot.net/buildroot/commit/package/kodi?id=95bf21910899dd0bcd7df6ecdff13914f7aa99ef
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  scripts/autobuild-run | 2 ++
->  1 file changed, 2 insertions(+)
+On Mon, 22 May 2017 20:50:31 +0200, Bernd Kuhls wrote:
 
-Applied to buildroot-test. Thanks!
+> +ifeq ($(BR2_PACKAGE_AVAHI),y)
+> +MINIDLNA_CONF_OPTS += --enable-tivo
+> +MINIDLNA_DEPENDENCIES += avahi
+> +endif
+> +
+
+While indeed, Avahi is currently only used by the Tivo code, this is
+not directly encoded in the project configure.ac. It is checking
+separately for the Tivo option and the availability of Avahi, and the
+Tivo support can apparently be built without Avahi support.
+
+So, I would prefer:
+
+ - A patch simply adding avahi as an optional dependency (i.e the same
+   patch as yours, without the --enable-tivo line.
+
+ - A patch that adds Config.in options to enable tivo, netgear, readynas
+   support.
+
+I believe this would be matching more closely with what minidlna's
+configure script is doing.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
