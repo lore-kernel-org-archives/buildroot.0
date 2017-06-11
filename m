@@ -1,38 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 15:07:09 +0200
-Subject: [Buildroot] [PATCH v3 11/11] python-ipython: bump to version
- 5.4.0
-In-Reply-To: <CAGm1_kt8nV+XcG_55STn0xyHG+vNFk=OkSUDXf3VYnXAPZmHDQ@mail.gmail.com>
+Date: Sun, 11 Jun 2017 15:08:13 +0200
+Subject: [Buildroot] [PATCH v3 00/11] Update IPython's dependencies
+In-Reply-To: <20170602235653.4655-1-andrew.smirnov@gmail.com>
 References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
- <20170602235653.4655-12-andrew.smirnov@gmail.com>
- <CAGm1_kt8nV+XcG_55STn0xyHG+vNFk=OkSUDXf3VYnXAPZmHDQ@mail.gmail.com>
-Message-ID: <20170611150709.170456dc@windsurf.home>
+Message-ID: <20170611150813.5be2e14b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Andrey,
 
-On Fri, 9 Jun 2017 21:40:56 +0200, Yegor Yefremov wrote:
-> On Sat, Jun 3, 2017 at 1:56 AM, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>  
-> 
-> you could squash this patch and the one with updated dependency list
+On Fri,  2 Jun 2017 16:56:42 -0700, Andrey Smirnov wrote:
 
-It depends. Is PATCH 10/11 (adding the dependencies) only needed for
-iPython 5.4.0, or also needed for the existing iPython 5.2.2. I think I
-remember having tested iPython 5.2.2, and those runtime dependencies
-were already necessary.
+> Andrey Smirnov (11):
+>   DEVELOPERS: Add missing closing angle bracket to my e-mail
 
-If the runtime dependencies are already needed for iPython 5.2.2, then
-the patches should be kept separated.
+Applied.
 
-If the runtime dependencies are only needed because of the bump to
-5.4.0, then patches should indeed been squashed together.
+>   package/python-enum34: Switch setup type to 'setuptools'
 
-Thanks!
+Was already applied.
+
+>   package/python-simplegeneric: Switch setup type to 'setuptools'
+>   package/python-ipython-genutils: New package
+
+Both applied.
+
+>   package/python-traitlets: New package
+>   package/python-scandir: New package
+>   package/python-pathlib2: New package
+>   package/python-pickleshare: New package
+>   package/python-backports-shutil-get-terminal-size: New package
+>   package/python-ipython: Add dependecy list
+>   python-ipython: bump to version 5.4.0
+
+For all those ones, Yegor Yefremov made a number of comments. Could you
+address them, and send a v4 ?
+
+Make sure to base your v4 on the latest master, and to not resend
+patches that have already been applied.
+
+Thanks a lot!
 
 Thomas
 -- 
