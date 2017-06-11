@@ -1,44 +1,44 @@
-From: Guy Benyei <guybe@mellanox.com>
-Date: Mon, 12 Jun 2017 08:07:23 +0000
-Subject: [Buildroot] [PATCH]Libssp support
-In-Reply-To: <1ce3b240-ec5f-4542-0186-adaa8ac95dd7@mind.be>
-References: <AM3PR05MB433972636565D3B639BB0BAC9C80@AM3PR05MB433.eurprd05.prod.outlook.com>
- <20170607201316.jkzcuamoovnbkcla@tarshish>
- <AM3PR05MB433D9ACAA63A9ED51BBFF7EC9C90@AM3PR05MB433.eurprd05.prod.outlook.com>
- <20170608121224.vrmjd5zxulhu57h7@tarshish>
- <AM3PR05MB4333F3A6ACA381824BCE787C9C90@AM3PR05MB433.eurprd05.prod.outlook.com>
- <20170608231505.0ab8924c@free-electrons.com>
- <AM3PR05MB433129DCBFFC30EBA0588EBC9CC0@AM3PR05MB433.eurprd05.prod.outlook.com>
- <1ce3b240-ec5f-4542-0186-adaa8ac95dd7@mind.be>
-Message-ID: <AM3PR05MB433B586F6B9C1364B2E57B6C9CD0@AM3PR05MB433.eurprd05.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Jun 2017 18:42:55 +0200
+Subject: [Buildroot] [git commit] docker-containerd: bump to version
+	9048e5e50717ea4497b757314bad98ea3763c145
+Message-ID: <20170612080950.A83F97FDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=d445d7d7b4027231f772b02bc0e4d86af545c356
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On June 11, 2017 11:48 PM Arnout Vandecappelle wrote:
->  Hi Guy,
-> 
->  [Please don't top-post, but reply in-line, like I do now.]
+This is a runtime dependency of docker-engine in version 17.05.0-ce
 
-Will do.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> 
->  It's a little more complicated than that - BR2_TOOLCHAIN_HAS_SSP should be
-> set when -fstack-protector works with this toolchain. In other words, if you make
-> a patch that uses gcc's libssp, then this symbol should be selected.
-> 
->  So you need to introduce a new symbol (e.g. BR2_LIBC_HAS_SSP) that is set by
-> the libc, and use gcc's libssp if it is not set. The internal toolchain should then
-> always set BR2_TOOLCHAIN_HAS_SSP.
-> 
->  All in all, a fairly complicated patch, I'm afraid. When you post something we'll
-> provice feedback on how it should be improved.
-
-Thanks for your feedback. Sending new patch right away.
-
-Thanks
-      Guy
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index a161f3b..992eb5b 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256	8223d934fa767fcabf45c734bdb616818a5eab8c95d525de6a69a350f4aeb826	docker-containerd-422e31ce907fd9c3833a38d7b8fdd023e5a76e73.tar.gz
++sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index c0b0012..bf3e32d 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CONTAINERD_VERSION = 422e31ce907fd9c3833a38d7b8fdd023e5a76e73
++DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
+ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
