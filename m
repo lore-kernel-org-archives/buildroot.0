@@ -1,48 +1,126 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Jun 2017 23:51:43 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x]
-	package/python-simplegeneric: Switch setup type to 'setuptools'
-Message-ID: <20170611215549.95A5C7FF24@busybox.osuosl.org>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sun, 11 Jun 2017 23:58:54 +0200
+Subject: [Buildroot] [PATCH] [PATCH v2] azure-iot-sdk-c: New package
+Message-ID: <1497218334-3943-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cd5c8aa72738755fe82df967da25035720a9352
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
-
-Specifying setup type to be 'distutils' results in this package being
-installed as .egg, a zipped file, which inadvertantly makes
-'simplegeneric' to be dependent on BR2_PACKAGE_PYTHON*_ZLIB. In order
-to avoid that specify setup type to be 'setuptools' which makes use of
---single-version-externally-managed and therefore installs the package
-as .pyc and a .egg-info folder.
-
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8d69d8033469228968043087fd31300af1e1453a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+v2: Rework the package with help from Arnouts comments
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/python-simplegeneric/python-simplegeneric.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/azure-iot-sdk-c/Config.in          | 16 ++++++++++
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 51 ++++++++++++++++++++++++++++++
+ 4 files changed, 69 insertions(+)
+ create mode 100644 package/azure-iot-sdk-c/Config.in
+ create mode 100644 package/azure-iot-sdk-c/azure-iot-sdk-c.mk
 
-diff --git a/package/python-simplegeneric/python-simplegeneric.mk b/package/python-simplegeneric/python-simplegeneric.mk
-index 556a478..cc84320 100644
---- a/package/python-simplegeneric/python-simplegeneric.mk
-+++ b/package/python-simplegeneric/python-simplegeneric.mk
-@@ -8,7 +8,12 @@ PYTHON_SIMPLEGENERIC_VERSION = 0.8.1
- PYTHON_SIMPLEGENERIC_SOURCE = simplegeneric-$(PYTHON_SIMPLEGENERIC_VERSION).zip
- PYTHON_SIMPLEGENERIC_SITE = https://pypi.python.org/packages/3d/57/4d9c9e3ae9a255cd4e1106bb57e24056d3d0709fc01b2e3e345898e49d5b
- PYTHON_SIMPLEGENERIC_LICENSE = ZPL-2.1
--PYTHON_SIMPLEGENERIC_SETUP_TYPE = distutils
-+
-+# Force setup-type to be 'setuptools' in order to force the package to
-+# be installed with --single-version-externally-managed. Otherwise we
-+# end up with a .egg file, which is a zip archive, and as such forces
-+# us to have 'zlib' as a runtime dependency
-+PYTHON_SIMPLEGENERIC_SETUP_TYPE = setuptools
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1e87d3a..edc23c9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -76,6 +76,7 @@ N:	Anders Darander <anders@chargestorm.se>
+ F:	package/ktap/
  
- define PYTHON_SIMPLEGENERIC_EXTRACT_CMDS
- 	unzip $(DL_DIR)/$(PYTHON_SIMPLEGENERIC_SOURCE) -d $(@D)
+ N:	Andr? Hentschel <nerv@dawncrow.de>
++F:	package/azure-iot-sdk-c/
+ F:	package/openal/
+ F:	package/p7zip/
+ F:	package/wine/
+diff --git a/package/Config.in b/package/Config.in
+index e00b162..a56520b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1247,6 +1247,7 @@ menu "Networking"
+ 	source "package/alljoyn-base/Config.in"
+ 	source "package/alljoyn-tcl/Config.in"
+ 	source "package/alljoyn-tcl-base/Config.in"
++	source "package/azure-iot-sdk-c/Config.in"
+ 	source "package/batman-adv/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/canfestival/Config.in"
+diff --git a/package/azure-iot-sdk-c/Config.in b/package/azure-iot-sdk-c/Config.in
+new file mode 100644
+index 0000000..9fb956a
+--- /dev/null
++++ b/package/azure-iot-sdk-c/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_AZURE_IOT_SDK_C
++	bool "azure-iot-sdk-c"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Microsoft Azure IoT Hub device SDK for C is used
++	  to connect devices running C code to Azure IoT Hub.
++
++	  https://docs.microsoft.com/nl-nl/azure/iot-hub/iot-hub-device-sdk-c-intro
++
++comment "azure-iot-sdk-c needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+new file mode 100644
+index 0000000..dbdef3e
+--- /dev/null
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -0,0 +1,51 @@
++################################################################################
++#
++# azure-iot-sdk-c
++#
++################################################################################
++
++AZURE_IOT_SDK_C_VERSION = 2017-05-05
++AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
++AZURE_IOT_SDK_C_SITE_METHOD = git
++AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
++AZURE_IOT_SDK_C_LICENSE = MIT
++AZURE_IOT_SDK_C_LICENSE_FILES = LICENSE
++AZURE_IOT_SDK_C_INSTALL_STAGING = YES
++AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
++AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
++
++# The project only supports building one kind of library.
++# Further the install target installs the wrong files, so we do it here:
++ifeq ($(BR2_STATIC_LIBS),y)
++AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
++	iothub_client/libiothub_client.a iothub_client/libiothub_client_mqtt_ws_transport.a \
++	iothub_client/libiothub_client_amqp_ws_transport.a \
++	iothub_client/libiothub_client_http_transport.a \
++	iothub_client/libiothub_client_amqp_transport.a \
++	iothub_client/libiothub_client_mqtt_transport.a \
++	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
++else
++AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
++	iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
++	iothub_client/libiothub_client_amqp_ws_transport.so \
++	iothub_client/libiothub_client_http_transport.so \
++	iothub_client/libiothub_client_amqp_transport.so \
++	iothub_client/libiothub_client_mqtt_transport.so \
++	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
++endif
++
++define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
++	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
++		$(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/
++	)
++	cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
++	cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
++endef
++
++define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
++	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
++		$(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/
++	)
++endef
++
++$(eval $(cmake-package))
+-- 
+2.7.4
