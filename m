@@ -1,81 +1,57 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Jun 2017 23:09:20 +0200
-Subject: [Buildroot] [PATCH 02/14] package/irrlicht: new package
-In-Reply-To: <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
-References: <20170411222643.9770-1-romain.naour@gmail.com>
- <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
-Message-ID: <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 11 Jun 2017 23:17:36 +0200
+Subject: [Buildroot] [PATCH] package/gdb: add support for gdb 8.0
+In-Reply-To: <20170611181043.0de6329f@windsurf.home>
+References: <20170605204648.11780-1-romain.naour@gmail.com>
+ <20170611181043.0de6329f@windsurf.home>
+Message-ID: <e2edd343-47ed-146f-be62-419a61b52242@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
 
-Thank for the review, it's very appreciated :)
 
-Le 11/06/2017 ? 18:54, Bernd Kuhls a ?crit :
-> Hi Romain,
+On 11-06-17 18:10, Thomas Petazzoni wrote:
+> Hello,
 > 
-> afaics the irrlicht package only provides libirrlicht.so.
-> What about naming the package libirrlicht and move it to
-> "Target packages > Libraries > Graphics"?
-
-Make sense even if irrlicht is the upstream name.
-In the past, I hesitated to do so for efl package which can be named libefl.
-
-> 
-> Am Wed, 12 Apr 2017 00:26:31 +0200 schrieb Romain Naour:
-> 
->> Signed-off-by: Romain Naour <romain.naour-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> On Mon,  5 Jun 2017 22:46:48 +0200, Romain Naour wrote:
+>> Add a dependency on gcc >= 4.8 since gdb needs a C++11 compiler.
+>>
+>> Remove included patch since 7.12.1:
+>> 0001-Remove-const-in-xtensa-linux-nat.c-fetch_gregs.patch
+>> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=d274ecf4ddf76768af57e27f654b9ce6784b391c
+>>
+>> Rebase remaining patches:
+>> 0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+>> 0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+>>
+>> See https://sourceware.org/ml/gdb-announce/2017/msg00003.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 >> ---
->>  DEVELOPERS                                         |  1 +
->>  package/Config.in                                  |  1 +
->>  ...-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch | 44 +++++++++++++++++
->>  package/irrlicht/0002-remove-sys-sysctl.h.patch    | 38 +++++++++++++++
+>> This patch is rebased after [1], [2] and [3]
 > 
-> Did you send the patches upstream?
+> Applied to master, thanks. Do you intend to send a patch that updates
+> the default gdb version to 7.12, and drop support for 7.10 ?
 
-Not yet. I'll do it.
+ Since we've been discussing version dropping, perhaps it's time to consider gdb
+as well.
 
-> 
-> @Whoever will commit the patches to buildroot: The irrlicht source code
-> has DOS line endings, please adjust the patch files accordingly.
+ Is there really any reason to support multiple versions of gdb?
 
-Indeed, thanks for the warning.
+ If yes, is there a reason to not use the latest version as default?
 
-> 
->> diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
->> new file mode 100644
->> index 0000000..ab6187c
->> --- /dev/null
->> +++ b/package/irrlicht/irrlicht.mk
->> @@ -0,0 +1,57 @@
->> +################################################################################
->> +#
->> +# irrlicht
->> +#
->> +################################################################################
->> +
->> +IRRLICHT_VERSION_MAJOR = 1.8
->> +IRRLICHT_VERSION = $(IRRLICHT_VERSION_MAJOR).4
->> +IRRLICHT_SOURCE = irrlicht-$(IRRLICHT_VERSION).zip
->> +IRRLICHT_SITE = https://downloads.sourceforge.net/project/irrlicht/Irrlicht%20SDK/$(IRRLICHT_VERSION_MAJOR)/$(IRRLICHT_VERSION)
->> +IRRLICHT_INSTALL_STAGING = YES
->> +
->> +# Bundled libraries: bzip2, libaesGladman, libpng, lzma, zlib,
->> +IRRLICHT_LICENSE = bzip2 license, jpeg-license (BSD-3-Clause-like), Libpng, Zlib
-> 
-> Please mention the license of the irrlicht package itself.
+ And the same questions for binutils.
 
-Irrlicht itself use Zlib license.
+ Regards,
+ Arnout
 
-http://pkgs.fedoraproject.org/cgit/rpms/irrlicht.git/tree/irrlicht.spec#n9
-
-Best regards,
-Romain
-
-> 
-> Regards, Bernd
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
