@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Jun 2017 10:18:25 +0200
-Subject: [Buildroot] [PATCH 16/28] package/mmc-utils: add hash
+Date: Sun, 11 Jun 2017 10:18:30 +0200
+Subject: [Buildroot] [PATCH 21/28] package/sunxi-mali: add hash
 In-Reply-To: <20170611081837.23863-1-bernd.kuhls@t-online.de>
 References: <20170611081837.23863-1-bernd.kuhls@t-online.de>
-Message-ID: <20170611081837.23863-16-bernd.kuhls@t-online.de>
+Message-ID: <20170611081837.23863-21-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mmc-utils/mmc-utils.hash | 2 ++
+ package/sunxi-mali/sunxi-mali.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/mmc-utils/mmc-utils.hash
+ create mode 100644 package/sunxi-mali/sunxi-mali.hash
 
-diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
+diff --git a/package/sunxi-mali/sunxi-mali.hash b/package/sunxi-mali/sunxi-mali.hash
 new file mode 100644
-index 000000000..a429079ba
+index 000000000..31b5990de
 --- /dev/null
-+++ b/package/mmc-utils/mmc-utils.hash
++++ b/package/sunxi-mali/sunxi-mali.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 4e5018e70f134b8c7ed05c84fca4b29fdce2ef2ca5abc0b9765939e6d8c3d912  mmc-utils-2cb6695e8dec00d887bdd5309d1b57d836fcd214.tar.gz
++sha256 c5f58b2c0533a74f491634ddbd80d888781f4ea29ecc5c24bd7300c02bef1145  sunxi-mali-d343311efc8db166d8371b28494f0f27b6a5872.tar.gz
 -- 
 2.11.0
