@@ -1,60 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Jun 2017 19:38:09 +0200
-Subject: [Buildroot] [PATCH 04/14] package/minetest: new package
-References: <20170411222643.9770-1-romain.naour@gmail.com>
- <20170411222643.9770-4-romain.naour@gmail.com>
-Message-ID: <1pb01exniq.ln2@ID-313208.user.individual.net>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sun, 11 Jun 2017 14:50:23 -0400
+Subject: [Buildroot] Error when building Qt5 Webengine from buildroot
+In-Reply-To: <BN6PR03MB2914652860FFB5C01F6CE128BFCC0@BN6PR03MB2914.namprd03.prod.outlook.com>
+References: <BN6PR03MB29143BD3F821BA358530ADF4BFC80@BN6PR03MB2914.namprd03.prod.outlook.com>
+ <BN6PR03MB2914ED0870804EEF5408B906BFC90@BN6PR03MB2914.namprd03.prod.outlook.com>
+ <20170609090628.5f4d5af3@free-electrons.com>
+ <BN6PR03MB29148981A29B24CED48107ADBFCE0@BN6PR03MB2914.namprd03.prod.outlook.com>
+ <BN6PR03MB2914652860FFB5C01F6CE128BFCC0@BN6PR03MB2914.namprd03.prod.outlook.com>
+Message-ID: <20170611185020.jjlo6za6ln7we4f5@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Hi Brent,
 
-Am Wed, 12 Apr 2017 00:26:33 +0200 schrieb Romain Naour:
-
-> Signed-off-by: Romain Naour <romain.naour-
-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/minetest/Config.in   | 58 +++++++++++++++++++++++++++++++++++++
-+++++++
->  package/minetest/minetest.mk | 44 +++++++++++++++++++++++++++++++++
-
-please add a hash file, support for tarballs created by the github helper 
-was merged today.
-
-> diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-> new file mode 100644
-> index 0000000..f110f7c
-> --- /dev/null
-> +++ b/package/minetest/minetest.mk
-> @@ -0,0 +1,44 @@
+On Sun, Jun 11, 2017 at 05:45:55AM +0000, Brent Sink wrote:
+> Thomas,
 > 
-+################################################################################
-> +#
-> +# minetest
-> +#
+> > > Which version of gcc are you using? Does it support C++11 ?
 > 
-+################################################################################
-> +
-> +MINETEST_VERSION = 0.4.15
+> > The gcc version is 5.4.0, and when I pass the -std=c++11 it will build for c++11.
+> 
+> Since you asked the question about gcc, should I be using something other than the cross compiler provided by buildroot?  Right now it's using this one: buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc
 
-Version 0.4.16 was released meanwhile.
+I built Qt WE 5.8 with GCC 6.x with glibc.
 
-Building with this defconfig worked fine:
+I am not sure, but I think I met the same issue with GCC 5.x.
 
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_BINUTILS_VERSION_2_28_X=y
-BR2_GCC_VERSION_7_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_MINETEST=y
-BR2_PACKAGE_MINETEST_CLIENT_SERVER=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_LUAJIT=y
+> 
+> Any thoughts on what I may be doing wrong?
+> 
 
-Regards, Bernd
+If you build for rpi 3, are you using the raspberrypi3_qt5_defconfig I sent from
+the patch 3/3 [1]? Normally, this defconfig works fine for rpi3.
+
+Regards,
+Gael
+
+[1]: https://patchwork.ozlabs.org/patch/742259/
