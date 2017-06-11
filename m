@@ -1,83 +1,80 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Jun 2017 09:34:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/trace-cmd: bump version to 2.6.1,
+Date: Sun, 11 Jun 2017 10:07:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mcelog: bump version to 152,
 	add hash
-Message-ID: <20170611073411.24549-1-bernd.kuhls@t-online.de>
+Message-ID: <20170611080717.17072-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...ix-trace-record.c-with-non-ptrace-compile.patch | 32 ----------------------
- package/trace-cmd/trace-cmd.hash                   |  2 ++
- package/trace-cmd/trace-cmd.mk                     |  2 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
- delete mode 100644 package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
- create mode 100644 package/trace-cmd/trace-cmd.hash
+ ...memutil.h-add-missing-include-for-va_list.patch | 31 ++++++++++++++++++++++
+ package/mcelog/mcelog.hash                         |  2 ++
+ package/mcelog/mcelog.mk                           |  2 +-
+ 3 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
+ create mode 100644 package/mcelog/mcelog.hash
 
-diff --git a/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch b/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
-deleted file mode 100644
-index 5f7d2bab7..000000000
---- a/package/trace-cmd/0001-trace-cmd-Fix-trace-record.c-with-non-ptrace-compile.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From bdfcddd4f135dc1d4fefb0373d9ebb93ef5110cb Mon Sep 17 00:00:00 2001
--From: "Steven Rostedt (Red Hat)" <rostedt@goodmis.org>
--Date: Mon, 7 Dec 2015 16:41:19 -0500
--Subject: [PATCH] trace-cmd: Fix trace-record.c with non ptrace compile
--
--Fix ptrace_wait() when NO_PTRACE=1 is defined.
--
--Status: upstream
--
--Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
--[Romain backport to 2.6]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- trace-record.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/trace-record.c b/trace-record.c
--index df82883..f83ec4b 100644
----- a/trace-record.c
--+++ b/trace-record.c
--@@ -1099,7 +1099,7 @@ static void ptrace_wait(enum trace_type type, int main_pid)
-- 		 (!WIFEXITED(status) || pid != main_pid));
-- }
-- #else
---static inline void ptrace_wait(int main_pid) { }
--+static inline void ptrace_wait(enum trace_type type, int main_pid) { }
-- static inline void enable_ptrace(void) { }
-- static inline void ptrace_attach(int pid) { }
-- 
---- 
--2.5.5
--
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+diff --git a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch b/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
 new file mode 100644
-index 000000000..5bf4154bd
+index 000000000..f9e08be18
 --- /dev/null
-+++ b/package/trace-cmd/trace-cmd.hash
++++ b/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
+@@ -0,0 +1,31 @@
++From 36aad32283eae5b47a05e3adfa3f5f6a7b1b55c0 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 11 Jun 2017 10:02:39 +0200
++Subject: [PATCH] memutil.h: add missing include for va_list
++
++Fixes compile error with uclibc-ng:
++
++In file included from mcelog.c:51:0:
++memutil.h:4:48: error: unknown type name 'va_list'
++ int xvasprintf(char **ret, const char *format, va_list ap);
++
++Patch sent upstream: https://github.com/andikleen/mcelog/pull/54
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ memutil.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/memutil.h b/memutil.h
++index 81028e9..dbed7fa 100644
++--- a/memutil.h
+++++ b/memutil.h
++@@ -1,4 +1,5 @@
++ #include <stdlib.h>
+++#include <stdarg.h>
++ 
++ int xasprintf(char **strp, const char *fmt, ...);
++ int xvasprintf(char **ret, const char *format, va_list ap);
++-- 
++2.11.0
++
+diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+new file mode 100644
+index 000000000..f1c0cd54c
+--- /dev/null
++++ b/package/mcelog/mcelog.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 f088534808274f6233fe15130791238fb14ce9bf6e7234f9b3fe6b5a42a1245d  trace-cmd-trace-cmd-v2.6.1.tar.gz
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 9d2154dfb..0dc145674 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
++sha256 825644a6cfd9b149e848d91d322724f2fb48f3a98441a25d9d38a5dbe02fe1ef  mcelog-v152.tar.gz
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index bea31b916..695261302 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRACE_CMD_VERSION = trace-cmd-v2.6
-+TRACE_CMD_VERSION = trace-cmd-v2.6.1
- TRACE_CMD_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/rostedt/trace-cmd.git
- TRACE_CMD_SITE_METHOD = git
- TRACE_CMD_INSTALL_STAGING = YES
+-MCELOG_VERSION = v111
++MCELOG_VERSION = v152
+ MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
+ MCELOG_SITE_METHOD = git
+ MCELOG_LICENSE = GPL-2.0
 -- 
 2.11.0
