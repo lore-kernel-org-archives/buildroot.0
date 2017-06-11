@@ -1,52 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 15:52:28 +0200
-Subject: [Buildroot] [PATCH] intltool: add patch to fix compatibility
- with Perl 5.26
-In-Reply-To: <20170608070344.30718-1-joerg.krause@embedded.rocks>
-References: <20170608070344.30718-1-joerg.krause@embedded.rocks>
-Message-ID: <20170611155228.6cda31e2@windsurf.home>
+Date: Sun, 11 Jun 2017 15:53:06 +0200
+Subject: [Buildroot] [git commit] package/qt5base: enable static build for
+	BR2_PACKAGE_QT5BASE_TSLIB
+Message-ID: <20170611135321.7D8B480641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=23e8630fd5ed2e755449f8dbef737983c2227e03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Jun 2017 09:03:44 +0200, J?rg Krause wrote:
-> When Perl 5.26 is installed on the host, building some packages like
-> avahi fail, because of intltool-update:
-> 
-> ```
-> Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/^(.*)\${ <-- HERE ?([A-Z_]+)}?(.*)$/@$BUILDROOT/host/usr/bin/intltool-update line 1065.
-> ```
-> 
-> Apparently, this has been a warning before Perl 5.26, but now it is an
-> error.
-> 
-> Fetch from:
-> https://github.com/Alexpux/MSYS2-packages/blob/master/intltool/perl-5.22-compatibility.patch
-> 
-> Reported upstream:
-> https://bugs.launchpad.net/intltool/+bug/1696658
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../intltool/0001-perl-5.26-compatibility.patch    | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 package/intltool/0001-perl-5.26-compatibility.patch
+The dependency on !BR2_STATIC_LIBS was here because of tslib not
+supporting static builds. But since
 
-Applied to master, thanks.
+   commit 05fadfea1 ("package/tslib: enable statically linked building")
 
-FWIW, the bug was already reported upstream at
-https://bugs.launchpad.net/intltool/+bug/1490906.
+it does and we can remove this dependecy.
 
-Peter: this is a build fix, we perhaps want it in the LTS branches?
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 2610f6b..63c7f8f 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -273,12 +273,8 @@ comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
+ 
+ config BR2_PACKAGE_QT5BASE_TSLIB
+ 	bool "Enable Tslib support"
+-	depends on !BR2_STATIC_LIBS # dlopen
+ 	select BR2_PACKAGE_TSLIB
+ 	help
+ 	  This options enables the Tslib plugin
+ 
+-comment "tslib support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+-
+ endif
