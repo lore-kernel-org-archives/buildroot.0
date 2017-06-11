@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Jun 2017 10:18:34 +0200
-Subject: [Buildroot] [PATCH 25/28] package/kvm-unit-tests: add hash
+Date: Sun, 11 Jun 2017 10:18:20 +0200
+Subject: [Buildroot] [PATCH 11/28] package/libsilk: add hash
 In-Reply-To: <20170611081837.23863-1-bernd.kuhls@t-online.de>
 References: <20170611081837.23863-1-bernd.kuhls@t-online.de>
-Message-ID: <20170611081837.23863-25-bernd.kuhls@t-online.de>
+Message-ID: <20170611081837.23863-11-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kvm-unit-tests/kvm-unit-tests.hash | 2 ++
+ package/libsilk/libsilk.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/kvm-unit-tests/kvm-unit-tests.hash
+ create mode 100644 package/libsilk/libsilk.hash
 
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.hash b/package/kvm-unit-tests/kvm-unit-tests.hash
+diff --git a/package/libsilk/libsilk.hash b/package/libsilk/libsilk.hash
 new file mode 100644
-index 000000000..b83e57de5
+index 000000000..2eab1c0db
 --- /dev/null
-+++ b/package/kvm-unit-tests/kvm-unit-tests.hash
++++ b/package/libsilk/libsilk.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 8cb85e5af51820dea8c250e1d4dac723de92c5cd8878354c6fa5c099975f3264  kvm-unit-tests-5731572b2ac23eb410732110b93425b5bb7f27dd.tar.gz
++sha256 01de52aa123f7bd20e500a076046f6b30d55f8e98c4029ab424bc51c46d7083d  libsilk-4268a02240c35c6055b0f237c46b09b2dcf79e45.tar.gz
 -- 
 2.11.0
