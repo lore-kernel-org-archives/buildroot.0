@@ -1,35 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 14:27:42 +0200
-Subject: [Buildroot] [git commit] at91bootstrap3: exclude from hash when
-	downloading from git
-Message-ID: <20170611123752.A71497FAEF@busybox.osuosl.org>
+Date: Sun, 11 Jun 2017 14:38:52 +0200
+Subject: [Buildroot] [git commit] package/mcelog: bump version to 152,
+	add hash
+Message-ID: <20170611123857.886F8818F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41b06126c92110f3ea736d3f43d66f57a2f58e1f
+commit: https://git.buildroot.net/buildroot/commit/?id=883f8d3b55947c0f1fe1eed554d21e239e1c7cb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since we will enable hash checks for git downloads soon, the hash check
-for the custom git download should be disabled.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap3/at91bootstrap3.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...memutil.h-add-missing-include-for-va_list.patch | 31 ++++++++++++++++++++++
+ package/mcelog/mcelog.hash                         |  2 ++
+ package/mcelog/mcelog.mk                           |  2 +-
+ 3 files changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index 32732f4..685be5b 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -9,6 +9,7 @@ AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
- AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
- AT91BOOTSTRAP3_SITE_METHOD = git
-+BR_NO_CHECK_HASH_FOR += $(AT91BOOTSTRAP3_SOURCE)
- else
- AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
- endif
+diff --git a/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch b/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
+new file mode 100644
+index 0000000..f9e08be
+--- /dev/null
++++ b/package/mcelog/0001-memutil.h-add-missing-include-for-va_list.patch
+@@ -0,0 +1,31 @@
++From 36aad32283eae5b47a05e3adfa3f5f6a7b1b55c0 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 11 Jun 2017 10:02:39 +0200
++Subject: [PATCH] memutil.h: add missing include for va_list
++
++Fixes compile error with uclibc-ng:
++
++In file included from mcelog.c:51:0:
++memutil.h:4:48: error: unknown type name 'va_list'
++ int xvasprintf(char **ret, const char *format, va_list ap);
++
++Patch sent upstream: https://github.com/andikleen/mcelog/pull/54
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ memutil.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/memutil.h b/memutil.h
++index 81028e9..dbed7fa 100644
++--- a/memutil.h
+++++ b/memutil.h
++@@ -1,4 +1,5 @@
++ #include <stdlib.h>
+++#include <stdarg.h>
++ 
++ int xasprintf(char **strp, const char *fmt, ...);
++ int xvasprintf(char **ret, const char *format, va_list ap);
++-- 
++2.11.0
++
+diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+new file mode 100644
+index 0000000..f1c0cd5
+--- /dev/null
++++ b/package/mcelog/mcelog.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 825644a6cfd9b149e848d91d322724f2fb48f3a98441a25d9d38a5dbe02fe1ef  mcelog-v152.tar.gz
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index bea31b9..6952613 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MCELOG_VERSION = v111
++MCELOG_VERSION = v152
+ MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
+ MCELOG_SITE_METHOD = git
+ MCELOG_LICENSE = GPL-2.0
