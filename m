@@ -1,59 +1,44 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Jun 2017 22:48:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lcdproc: override
- freetype-config path
-In-Reply-To: <20170611174955.28f5994e@windsurf.home>
-References: <20170611131317.16345-1-romain.naour@gmail.com>
- <20170611174955.28f5994e@windsurf.home>
-Message-ID: <a865efcb-70dc-2f2d-9b19-ee7569ff2d6f@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 11 Jun 2017 23:00:33 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] tor: security bump to
+	version 0.2.9.11
+Message-ID: <20170611210235.DB1AB7FE1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=9bf22d3e80bba37efbec5d2a0b020c0a9062e83c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Le 11/06/2017 ? 17:49, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Sun, 11 Jun 2017 15:13:16 +0200, Romain Naour wrote:
->> freetype-config from the host system may be used when installed.
->> Make sure that the one from HOST_DIR is used.
->>
->> checking if freetype support has been enabled... yes
->> checking for freetype-config... /usr/bin/freetype-config
->> checking for FreeType -- version >= 7.0.1... cross compiling; assuming OK... yes
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/c7c/c7c52cd56b985fd73434d5997e9a6ab3f7d7e71e
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/lcdproc/lcdproc.mk | 2 ++
->>  1 file changed, 2 insertions(+)
-> 
-> Applied to master, thanks. However, it's quite surprising to see this
-> change, only a week after you did commit
-> ce2e622dfe8a3f36bdf0c25b37a9f6ebbb23b6cc. What happened?
+Fixes CVE-2017-0376: Fix a remotely triggerable assertion failure caused by
+receiving a BEGIN_DIR cell on a hidden service rendezvous circuit.
 
-For some reason, freetype-config is miss-detected on some host machine and
-/usr/bin/freetype-config is used instead of
-${STAGING_DIR}/usr/bin/freetype-config. Weird... I have /usr/bin/freetype-config
-installed on my host but even without this patch,
-${STAGING_DIR}/usr/bin/freetype-config is used.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-The same happen for libpng-config...
-
-So, instead of relying on configure script, override freetype-config and
-libpng-config path.
-
-Best regards,
-Romain
-
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index d14db04..d42c534 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 d611283e1fb284b5f884f8c07e7d3151016851848304f56cfdf3be2a88bd1341  tor-0.2.9.10.tar.gz
++sha256 c1959bebff9a546a54cbedb58c8289a42441991af417d2d16f7b336be8903221  tor-0.2.9.11.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 389af66..17208c0 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.2.9.10
++TOR_VERSION = 0.2.9.11
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
