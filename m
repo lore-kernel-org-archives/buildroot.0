@@ -1,40 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 17:56:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cppcms: use correct cxxflags
- for icu support
-In-Reply-To: <20170605165346.1906-1-bernd.kuhls@t-online.de>
-References: <20170605165346.1906-1-bernd.kuhls@t-online.de>
-Message-ID: <20170611175619.49963625@windsurf.home>
+Date: Sun, 11 Jun 2017 18:00:48 +0200
+Subject: [Buildroot] [git commit] gdb: not available on ARM noMMU and
+	OpenRISC
+Message-ID: <20170611160106.B52077FB8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=61b502794eda3fdd100eea9e8f3d0b78f8fe4151
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Jun 2017 18:53:46 +0200, Bernd Kuhls wrote:
+Neither gdb nor gdbserver have support for ARM noMMU and OpenRISC, so
+let's disable gdb on those architectures.
 
->  ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
->  CPPCMS_CONF_OPTS += -DDISABLE_ICONV=ON -DDISABLE_ICU_LOCALE=OFF
-> +CPPCMS_CONF_OPTS += \
-> +	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
->  CPPCMS_DEPENDENCIES += icu
->  else
->  CPPCMS_CONF_OPTS += -DDISABLE_ICONV=OFF -DDISABLE_ICU_LOCALE=ON
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes since v2:
+ - Fixed BR2_openrisc to BR2_or1k in Config.in.host
+Changes since v1:
+ - Fixed BR2_openrisc to BR2_or1k
+---
+ package/gdb/Config.in      | 2 ++
+ package/gdb/Config.in.host | 2 ++
+ 2 files changed, 4 insertions(+)
 
-This patch doesn't apply. Git master doesn't have the
-DISABLE_ICU_LOCALE=OFF / DISABLE_ICU_LOCALE=ON.
-
-On which tree is this patch based? Is it based on other patches that
-you haven't submitted?
-
-Could you adjust this, and resubmit an updated version?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 3acc6ef..67ef010 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -1,8 +1,10 @@
+ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	bool
+ 	default y
++	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_bfin
+ 	depends on !BR2_nios2
++	depends on !BR2_or1k
+ 
+ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index cd763aa..464457e 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -6,7 +6,9 @@ config BR2_PACKAGE_HOST_GDB
+ 	# allow to build a cross-gdb, as the one of the external
+ 	# toolchain should be used.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
++	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_nios2
++	depends on !BR2_or1k
+ 	help
+ 	  Build a cross gdb that runs on the host machine and debugs
+ 	  programs running on the target. It requires 'gdbserver'
