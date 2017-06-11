@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 18:01:49 +0200
-Subject: [Buildroot] [PATCH v3 1/6] gdb: introduce
- BR2_PACKAGE_GDB_ARCH_SUPPORTS
-In-Reply-To: <1497015115-8740-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1497015115-8740-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170611180149.74119851@windsurf.home>
+Date: Sun, 11 Jun 2017 18:06:54 +0200
+Subject: [Buildroot] [autobuild-run] autobuild-run: Add an exception for
+ CS nios2 2017.02 with flann
+In-Reply-To: <20170605171306.7941-1-romain.naour@gmail.com>
+References: <20170605171306.7941-1-romain.naour@gmail.com>
+Message-ID: <20170611180654.3e490735@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  9 Jun 2017 15:31:50 +0200, Thomas Petazzoni wrote:
-> Before adding more architecture dependencies to gdb, let's introduce a
-> BR2_PACKAGE_GDB_ARCH_SUPPORTS, to avoid duplicating this list of
-> dependencies between the Config.in comment and the main Config.in
-> option.
+On Mon,  5 Jun 2017 19:13:06 +0200, Romain Naour wrote:
+> This toolchain is affected by binutils PR19405 so use an autobuilder
+> exception like for boost and qt5base (gui).
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> https://sourceware.org/bugzilla/show_bug.cgi?id=19405
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b13/b13377f03acccedc0441fb1e37e93f8e0b60da5e
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
-> Changes since v2:
->  - None
-> Changes since v1:
->  - None
-> ---
->  package/gdb/Config.in | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+>  scripts/autobuild-run | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Series applied to master.
+Applied to buildroot-test. Thanks!
 
 Thomas
 -- 
