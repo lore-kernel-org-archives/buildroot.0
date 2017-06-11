@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 13:58:38 +0200
-Subject: [Buildroot] [PATCH 4/4] package/qt5/qt5webkit: needs host gcc
- >= 4.8 for icu support
-In-Reply-To: <9b4v0exged.ln2@ID-313208.user.individual.net>
-References: <20170610091513.29031-1-bernd.kuhls@t-online.de>
- <20170610091513.29031-2-bernd.kuhls@t-online.de>
- <20170610230843.0ce76b59@windsurf.home>
- <9b4v0exged.ln2@ID-313208.user.individual.net>
-Message-ID: <20170611135838.1ef0f3a8@windsurf.home>
+Date: Sun, 11 Jun 2017 14:06:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix --with-egl-platforms
+In-Reply-To: <20170611115128.8662-1-bernd.kuhls@t-online.de>
+References: <20170611115128.8662-1-bernd.kuhls@t-online.de>
+Message-ID: <20170611140646.61e12638@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,25 +12,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 11 Jun 2017 08:25:13 +0200, Bernd Kuhls wrote:
+On Sun, 11 Jun 2017 13:51:28 +0200, Bernd Kuhls wrote:
 
-> > it would be nice if you could at least test your Config.in changes by
-> > running "make menuconfig" :)  
-> 
-> Hi,
-> 
-> I did but I missed the fact that
-> 
-> source "package/qt5/qt5webkit/Config.in"
-> 
-> is guarded by 
-> 
-> if BR2_PACKAGE_QT5
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index c720ce2f9..a41427619 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -161,13 +161,15 @@ MESA3D_EGL_PLATFORMS += x11
+>  endif
+>  MESA3D_CONF_OPTS += \
+>  	--enable-gbm \
+> -	--enable-egl \
+> -	--with-egl-platforms=$(subst $(space),$(comma),$(MESA3D_EGL_PLATFORMS))
+> +	--enable-egl
+>  else
+>  MESA3D_CONF_OPTS += \
+>  	--disable-egl
+>  endif
+>  
+> +MESA3D_CONF_OPTS += \
+> +	--with-platforms=$(subst $(space),$(comma),$(MESA3D_EGL_PLATFORMS))
 
-I didn't had qt5 enabled. All Config.in files are parsed when you run
-"make menuconfig", even if their inclusion is guarded by a if..endif.
+Then we should rename the variable to just MESA_PLATFORMS.
 
-Best regards,
+Also, this variable is going to be empty when
+BR2_PACKAGE_MESA3D_OPENGL_EGL is disabled, so we will be passing
+--with-platforms=
+
+Is this correct ?
+
+Thanks,
 
 Thomas
 -- 
