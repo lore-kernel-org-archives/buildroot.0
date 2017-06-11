@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 18:10:43 +0200
-Subject: [Buildroot] [PATCH] package/gdb: add support for gdb 8.0
-In-Reply-To: <20170605204648.11780-1-romain.naour@gmail.com>
-References: <20170605204648.11780-1-romain.naour@gmail.com>
-Message-ID: <20170611181043.0de6329f@windsurf.home>
+Date: Sun, 11 Jun 2017 18:13:26 +0200
+Subject: [Buildroot] [PATCH/buildroot-test 1/1] autobuild-run: randomly
+ add BR2_PACKAGE_PYTHON_PY_ONLY
+In-Reply-To: <20170605131350.31383-1-bernd.kuhls@t-online.de>
+References: <20170605131350.31383-1-bernd.kuhls@t-online.de>
+Message-ID: <20170611181326.1ce13e59@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  5 Jun 2017 22:46:48 +0200, Romain Naour wrote:
-> Add a dependency on gcc >= 4.8 since gdb needs a C++11 compiler.
+On Mon,  5 Jun 2017 15:13:50 +0200, Bernd Kuhls wrote:
+> This should allow build-testing Kodi after
+> https://git.buildroot.net/buildroot/commit/package/kodi?id=95bf21910899dd0bcd7df6ecdff13914f7aa99ef
 > 
-> Remove included patch since 7.12.1:
-> 0001-Remove-const-in-xtensa-linux-nat.c-fetch_gregs.patch
-> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=d274ecf4ddf76768af57e27f654b9ce6784b391c
-> 
-> Rebase remaining patches:
-> 0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-> 0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-> 
-> See https://sourceware.org/ml/gdb-announce/2017/msg00003.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> This patch is rebased after [1], [2] and [3]
+>  scripts/autobuild-run | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied to master, thanks. Do you intend to send a patch that updates
-the default gdb version to 7.12, and drop support for 7.10 ?
-
-Thanks!
+Applied to buildroot-test. Thanks!
 
 Thomas
 -- 
