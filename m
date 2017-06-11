@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Jun 2017 10:18:12 +0200
-Subject: [Buildroot] [PATCH 03/28] package/edid-decode: add hash
+Date: Sun, 11 Jun 2017 10:18:14 +0200
+Subject: [Buildroot] [PATCH 05/28] package/flashbench: add hash
 In-Reply-To: <20170611081837.23863-1-bernd.kuhls@t-online.de>
 References: <20170611081837.23863-1-bernd.kuhls@t-online.de>
-Message-ID: <20170611081837.23863-3-bernd.kuhls@t-online.de>
+Message-ID: <20170611081837.23863-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/edid-decode/edid-decode.hash | 2 ++
+ package/flashbench/flashbench.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/edid-decode/edid-decode.hash
+ create mode 100644 package/flashbench/flashbench.hash
 
-diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
+diff --git a/package/flashbench/flashbench.hash b/package/flashbench/flashbench.hash
 new file mode 100644
-index 000000000..0c2c6a2cf
+index 000000000..a5eb388c8
 --- /dev/null
-+++ b/package/edid-decode/edid-decode.hash
++++ b/package/flashbench/flashbench.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 ec85b62e863a1ad4636e1a216c122e459d7847c71ff6d57e4bf44406d9cbeb40  edid-decode-681153145d5e05ee15032ea792e967cda06e7622.tar.gz
++sha256 12e2dcb6f041ef1a303fc5bc84642ed637c24d77ed6c667a2187f21d54555731  flashbench-2e30b1968a66147412f21002ea844122a0d5e2f0.tar.gz
 -- 
 2.11.0
