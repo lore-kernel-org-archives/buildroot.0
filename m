@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Jun 2017 10:18:21 +0200
-Subject: [Buildroot] [PATCH 12/28] package/libsoundtouch: add hash
+Date: Sun, 11 Jun 2017 10:18:11 +0200
+Subject: [Buildroot] [PATCH 02/28] package/dtv-scan-tables: add hash
 In-Reply-To: <20170611081837.23863-1-bernd.kuhls@t-online.de>
 References: <20170611081837.23863-1-bernd.kuhls@t-online.de>
-Message-ID: <20170611081837.23863-12-bernd.kuhls@t-online.de>
+Message-ID: <20170611081837.23863-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libsoundtouch/libsoundtouch.hash | 2 ++
+ package/dtv-scan-tables/dtv-scan-tables.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/libsoundtouch/libsoundtouch.hash
+ create mode 100644 package/dtv-scan-tables/dtv-scan-tables.hash
 
-diff --git a/package/libsoundtouch/libsoundtouch.hash b/package/libsoundtouch/libsoundtouch.hash
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.hash b/package/dtv-scan-tables/dtv-scan-tables.hash
 new file mode 100644
-index 000000000..af0c36283
+index 000000000..02f086dc5
 --- /dev/null
-+++ b/package/libsoundtouch/libsoundtouch.hash
++++ b/package/dtv-scan-tables/dtv-scan-tables.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 c805e7a72b7758a8986b71e73d2f94a8c79c66c1246fa2af1743c4282702e096  libsoundtouch-010a91a59071c7fefd316fca62c0d980ec85b4b1.tar.gz
++sha256 ec64aa81a207372340a04d3e9e950ff2f8b4f404580f21480cdbf06019057a9f  dtv-scan-tables-ceb11833b35f05813b1f0397a60e0f3b99430aab.tar.gz
 -- 
 2.11.0
