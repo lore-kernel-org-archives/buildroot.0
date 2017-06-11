@@ -1,84 +1,72 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Jun 2017 23:18:45 +0200
-Subject: [Buildroot] [PATCH 04/14] package/minetest: new package
-In-Reply-To: <1pb01exniq.ln2@ID-313208.user.individual.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 11 Jun 2017 23:33:27 +0200
+Subject: [Buildroot] [PATCH 02/14] package/irrlicht: new package
+In-Reply-To: <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
 References: <20170411222643.9770-1-romain.naour@gmail.com>
- <20170411222643.9770-4-romain.naour@gmail.com>
- <1pb01exniq.ln2@ID-313208.user.individual.net>
-Message-ID: <556194f7-e699-7e68-75b2-8563f76b38ac@gmail.com>
+ <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
+ <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
+Message-ID: <cba4449d-096e-a698-c55e-6a2c52c9048d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
 
-Le 11/06/2017 ? 19:38, Bernd Kuhls a ?crit :
-> Hi Romain,
-> 
-> Am Wed, 12 Apr 2017 00:26:33 +0200 schrieb Romain Naour:
-> 
->> Signed-off-by: Romain Naour <romain.naour-
-> Re5JQEeQqe8AvxtiuMwx3w at public.gmane.org>
->> ---
->>  DEVELOPERS                   |  1 +
->>  package/Config.in            |  1 +
->>  package/minetest/Config.in   | 58 +++++++++++++++++++++++++++++++++++++
-> +++++++
->>  package/minetest/minetest.mk | 44 +++++++++++++++++++++++++++++++++
-> 
-> please add a hash file, support for tarballs created by the github helper 
-> was merged today.
 
-Ok, I'll add it.
-
+On 11-06-17 23:09, Romain Naour wrote:
+> Hi Bernd,
 > 
->> diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
->> new file mode 100644
->> index 0000000..f110f7c
->> --- /dev/null
->> +++ b/package/minetest/minetest.mk
->> @@ -0,0 +1,44 @@
+> Thank for the review, it's very appreciated :)
+> 
+> Le 11/06/2017 ? 18:54, Bernd Kuhls a ?crit :
+>> Hi Romain,
 >>
-> +################################################################################
->> +#
->> +# minetest
->> +#
+>> afaics the irrlicht package only provides libirrlicht.so.
+>> What about naming the package libirrlicht and move it to
+>> "Target packages > Libraries > Graphics"?
+> 
+> Make sense even if irrlicht is the upstream name.
+> In the past, I hesitated to do so for efl package which can be named libefl.
+
+ No, in Buildroot, we always use the upstream name (except for python-* etc.).
+
+[snip]
+>>> +# Bundled libraries: bzip2, libaesGladman, libpng, lzma, zlib,
+>>> +IRRLICHT_LICENSE = bzip2 license, jpeg-license (BSD-3-Clause-like), Libpng, Zlib
 >>
-> +################################################################################
->> +
->> +MINETEST_VERSION = 0.4.15
+>> Please mention the license of the irrlicht package itself.
 > 
-> Version 0.4.16 was released meanwhile.
+> Irrlicht itself use Zlib license.
 
-Yes, it's an very active project and this series has been in the patchwork
-during 2 months. I'll bump the version for the respin.
+ Then Zlib license should be first, and the license of the bundled libraries
+should mention which bit they apply to between brackets.
 
-> 
-> Building with this defconfig worked fine:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-> BR2_BINUTILS_VERSION_2_28_X=y
-> BR2_GCC_VERSION_7_X=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_MINETEST=y
-> BR2_PACKAGE_MINETEST_CLIENT_SERVER=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_LUAJIT=y
+ By the way, could you mention in the commit message why unbundling is not possible?
 
-It means that I can add your Tested-by tag?
-
-Best regards,
-Romain
+ Regards,
+ Arnout
 
 > 
-> Regards, Bernd
+> http://pkgs.fedoraproject.org/cgit/rpms/irrlicht.git/tree/irrlicht.spec#n9
+> 
+> Best regards,
+> Romain
+> 
+>>
+>> Regards, Bernd
+>>
 > 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 > 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
