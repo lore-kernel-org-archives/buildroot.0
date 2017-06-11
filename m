@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 17:52:46 +0200
-Subject: [Buildroot] [PATCH 2/2] package lcdproc: override libpng-config
- path
-In-Reply-To: <20170611131317.16345-2-romain.naour@gmail.com>
-References: <20170611131317.16345-1-romain.naour@gmail.com>
- <20170611131317.16345-2-romain.naour@gmail.com>
-Message-ID: <20170611175246.0956b98d@windsurf.home>
+Date: Sun, 11 Jun 2017 17:56:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cppcms: use correct cxxflags
+ for icu support
+In-Reply-To: <20170605165346.1906-1-bernd.kuhls@t-online.de>
+References: <20170605165346.1906-1-bernd.kuhls@t-online.de>
+Message-ID: <20170611175619.49963625@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 11 Jun 2017 15:13:17 +0200, Romain Naour wrote:
-> Like for freetype-config, override libpng-config path otherwise
-> the one from the host system may be used when installed.
-> Make sure that the one from HOST_DIR is used.
-> 
-> configure:7480: checking for libpng-config
-> configure:7498: found /usr/bin/libpng-config
-> configure:7510: result: /usr/bin/libpng-config
-> configure:7529: checking whether libpng is present and sane
-> [...]
-> nios2-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/libpng12'
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/b68/b68f54404a7d412d639ebb6d052412eea6ee3bf1/lcdproc-0.5.7/config.log
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/lcdproc/lcdproc.mk | 1 +
->  1 file changed, 1 insertion(+)
+On Mon,  5 Jun 2017 18:53:46 +0200, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+>  ifeq ($(BR2_PACKAGE_CPPCMS_ICU),y)
+>  CPPCMS_CONF_OPTS += -DDISABLE_ICONV=ON -DDISABLE_ICU_LOCALE=OFF
+> +CPPCMS_CONF_OPTS += \
+> +	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) `$(STAGING_DIR)/usr/bin/icu-config --cxxflags`"
+>  CPPCMS_DEPENDENCIES += icu
+>  else
+>  CPPCMS_CONF_OPTS += -DDISABLE_ICONV=OFF -DDISABLE_ICU_LOCALE=ON
+
+This patch doesn't apply. Git master doesn't have the
+DISABLE_ICU_LOCALE=OFF / DISABLE_ICU_LOCALE=ON.
+
+On which tree is this patch based? Is it based on other patches that
+you haven't submitted?
+
+Could you adjust this, and resubmit an updated version?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
