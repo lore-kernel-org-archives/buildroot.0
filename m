@@ -1,35 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jun 2017 23:48:11 +0200
-Subject: [Buildroot] [PATCH] python-bcrypt: new package
-In-Reply-To: <20170612143002.31178-1-yegorslists@googlemail.com>
-References: <20170612143002.31178-1-yegorslists@googlemail.com>
-Message-ID: <20170612234811.5ebb9467@windsurf.lan>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 12 Jun 2017 23:49:14 +0200
+Subject: [Buildroot] [PATCH v2 02/13] package/libspatialindex: new
+	package
+In-Reply-To: <20170612234540.7000c4a9@windsurf.lan>
+References: <20170612205410.20230-1-romain.naour@gmail.com>
+ <20170612205410.20230-2-romain.naour@gmail.com>
+ <20170612234540.7000c4a9@windsurf.lan>
+Message-ID: <0775a307-a8de-bd3e-1003-0b26612bc67a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 12 Jun 2017 16:30:02 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Le 12/06/2017 ? 23:45, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                        |  1 +
->  package/python-bcrypt/Config.in          |  8 ++++++++
->  package/python-bcrypt/python-bcrypt.hash |  3 +++
->  package/python-bcrypt/python-bcrypt.mk   | 15 +++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-bcrypt/Config.in
->  create mode 100644 package/python-bcrypt/python-bcrypt.hash
->  create mode 100644 package/python-bcrypt/python-bcrypt.mk
+> On Mon, 12 Jun 2017 22:53:59 +0200, Romain Naour wrote:
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> 
+> Applied, thanks!
+> 
+>> test-pkg reported an internal compiler error on microblaze (br-microblazeel-full)
+>> Index.cc: In member function 'void SpatialIndex::RTree::Index::adjustTree(SpatialIndex::RTree::Node*, std::stack<long long int>&)':
+>> Index.cc:327:1: internal compiler error: in gen_reg_rtx, at emit-rtl.c:1027
+> 
+> Does this bug still exists with gcc 7.x? If so, can we report the bug
+> to upstream gcc? Or is it a bug that has already been reported, because
+> it happens with other packages as well?
 
-Applied to master, thanks.
+I need to test again with the new br-microblazeel-full toolchain added today.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
