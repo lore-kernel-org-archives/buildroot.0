@@ -1,74 +1,35 @@
-From: Jens Maus <mail@jens-maus.de>
-Date: Mon, 12 Jun 2017 15:35:54 +0200
-Subject: [Buildroot] [PATCH v2] support/scripts: allow /etc/shadow to be
-	symlinked
-In-Reply-To: <20170608152622.30019-1-mail@jens-maus.de>
-References: <20170608152622.30019-1-mail@jens-maus.de>
-Message-ID: <20170612133554.24995-1-mail@jens-maus.de>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 12 Jun 2017 15:40:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/erlang-p1-xmpp: Add a missing
+	dependency from a selected package
+Message-ID: <20170612134039.26191-1-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit fixes a problem where it was not possible to replace
-/etc/shadow with a symlink to a e.g. a user partition where the
-shadow file is placed. This is required, e.g. for systems where the
-rootfs is mounted read-only but users should still be able to be
-added. Thus, if within an filesystem overlay setup a user tries
-to replace /etc/shadow with a symlink to the real file on a user
-partition a buildroot build stops with an error message because
-sed is called on the symlink instead of following the symlink.
-This commit fixes this shortcoming.
+This package selects erlang-p1-stringprep, which depends on
+BR2_INSTALL_LIBSTDCPP. Thus, it should also depend on this item.
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
-Changes v1 -> v2:
-  - extended follow-symlinks use (requested by Yann)
+ package/erlang-p1-xmpp/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
----
- support/scripts/mkusers | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index 2ac76f986..5bbec3e10 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -219,12 +219,12 @@ add_one_group() {
-     fi
- 
-     # Remove any previous instance of this group, and re-add the new one
--    sed -i -e '/^'"${group}"':.*/d;' "${GROUP}"
-+    sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GROUP}"
-     printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
- 
-     # Ditto for /etc/gshadow if it exists
-     if [ -f "${GSHADOW}" ]; then
--        sed -i -e '/^'"${group}"':.*/d;' "${GSHADOW}"
-+        sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GSHADOW}"
-         printf "%s:*::\n" "${group}" >>"${GSHADOW}"
-     fi
- }
-@@ -263,7 +263,8 @@ add_user_to_group() {
- 
-     for _f in "${GROUP}" "${GSHADOW}"; do
-         [ -f "${_f}" ] || continue
--        sed -r -i -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
-+        sed -r -i --follow-symlinks \
-+                  -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
-                   -e 's/^('"${group}"':.*)$/\1,'"${username}"'/;'                           \
-                   -e 's/,+/,/'                                                              \
-                   -e 's/:,/:/'                                                              \
-@@ -303,7 +304,7 @@ add_one_user() {
- 
-     # Remove any previous instance of this user
-     for _f in "${PASSWD}" "${SHADOW}"; do
--        sed -r -i -e '/^'"${username}"':.*/d;' "${_f}"
-+        sed -r -i --follow-symlinks -e '/^'"${username}"':.*/d;' "${_f}"
-     done
- 
-     _gid="$( get_gid "${group}" )"
+diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
+index 1d518e2023..c7a68bc800 100644
+--- a/package/erlang-p1-xmpp/Config.in
++++ b/package/erlang-p1-xmpp/Config.in
+@@ -1,5 +1,9 @@
++comment "erlang-p1-xmpp needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_ERLANG_P1_XMPP
+ 	bool "erlang-p1-xmpp"
++	depends on BR2_INSTALL_LIBSTDCPP # erlang-p1-stringprep
+ 	select BR2_PACKAGE_ERLANG_P1_XML
+ 	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
+ 	help
 -- 
 2.11.0
