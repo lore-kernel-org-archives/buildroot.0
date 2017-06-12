@@ -1,54 +1,60 @@
-From: MD I. Islam <tamim@csebuet.org>
-Date: Mon, 12 Jun 2017 12:43:24 -0400
-Subject: [Buildroot] scsi/scsi.h: No such file or directory
-In-Reply-To: <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
-References: <CAM7NYTg0TK9phO3EEszpmyY+v9F4nn6uCocZ=OuvvSfd6xCOJQ@mail.gmail.com>
- <20170612152332.wmyjhvatvid7ghgd@sapphire.tkos.co.il>
- <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
-Message-ID: <CAM7NYTjHa0waAPpauLhFL1j60pnmskGcZRUVR9G7iNYnWyCHQg@mail.gmail.com>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Mon, 12 Jun 2017 22:38:17 +0530
+Subject: [Buildroot] [PATCH 1/1] package/mcelog: fix legal-info
+In-Reply-To: <20170612041512.9374-1-bernd.kuhls@t-online.de>
+References: <20170612041512.9374-1-bernd.kuhls@t-online.de>
+Message-ID: <CA+NV+V=d7D+-zZKO4NYVpGrsY2Uz0pqhrLqYPwGA2rXJZSq11g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using the main source tree. I get the same error on other configs as
-well ( such as *beaglebone_defconfig)*. Does it mean that the problem is to
-do with my host machine?
+On Mon, Jun 12, 2017 at 9:45 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> README was renamed to README.md
+> https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/README.md?id=2fda0091a0628480a08cbf6ebe309fcb83aeae34
 
-Tamim
-PhD Student/Graduate Assistant
-CS Department, Kent State University
-Kent, OH 44240
-http://web.cs.kent.edu/~mislam4/ <https://web.cs.kent.edu/~mislam4/>
+make <pkg>-legal-info should have caught that after version bump as a
+part of testing. But it looks like we don't do that usually. In past,
+we have seen such failures after version bump.
 
-On Mon, Jun 12, 2017 at 11:48 AM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+To avoid such failures, we can add hash of license file in <pkg>.hash
+and checking that after source is downloaded. If license file changes,
+it will be noticed while build test after version bump.
 
-> Baruch, All,
+Potentially, it will also help in keeping license string of packages
+up-to-date if it gets changed. What do you think ?
+
+Regards,
+Rahul
+
 >
-> On 12 June 2017 17:23:32 CEST, Baruch Siach <baruch@tkos.co.il> wrote:
-> >Hi Tamim,
-> >
-> >On Mon, Jun 12, 2017 at 11:09:41AM -0400, MD I. Islam wrote:
-> >> I'm new to Buildroot. I'm using *arm_foundationv8_defconfig* as my
-> >config.
-> >> But I'm getting the error *scsi/scsi.h: No such file or directory*. I
-> >> cleaned and  rebuild the code, but getting the error every time.
-> >Could
-> >> anyone suggest what is wrong?
-> >
-> >There is no arm_foundationv8_defconfig in mainline Buildroot.
+> Fixes
+> http://autobuild.buildroot.net/results/02b/02b897a843b995bf5bf3f993f48689870a551dd5/
 >
-> Unless I missed something, yes there is...
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mcelog/mcelog.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Regards,
-> Yann E. MORIN.
+> diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+> index 695261302..d12fc44f7 100644
+> --- a/package/mcelog/mcelog.mk
+> +++ b/package/mcelog/mcelog.mk
+> @@ -8,7 +8,7 @@ MCELOG_VERSION = v152
+>  MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
+>  MCELOG_SITE_METHOD = git
+>  MCELOG_LICENSE = GPL-2.0
+> -MCELOG_LICENSE_FILES = README
+> +MCELOG_LICENSE_FILES = README.md
 >
->
+>  define MCELOG_BUILD_CMDS
+>         $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
 > --
-> Sent from my phone. Please excuse my brevity.
+> 2.11.0
 >
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170612/8be67d6b/attachment.html>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
