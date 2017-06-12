@@ -1,35 +1,31 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 12 Jun 2017 15:40:39 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Jun 2017 15:45:28 +0200
 Subject: [Buildroot] [PATCH 1/1] package/erlang-p1-xmpp: Add a missing
-	dependency from a selected package
-Message-ID: <20170612134039.26191-1-johan.oudinet@gmail.com>
+ dependency from a selected package
+In-Reply-To: <20170612134039.26191-1-johan.oudinet@gmail.com>
+References: <20170612134039.26191-1-johan.oudinet@gmail.com>
+Message-ID: <20170612154528.1d80a934@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package selects erlang-p1-stringprep, which depends on
-BR2_INSTALL_LIBSTDCPP. Thus, it should also depend on this item.
+Hello,
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
- package/erlang-p1-xmpp/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+On Mon, 12 Jun 2017 15:40:39 +0200, Johan Oudinet wrote:
+> This package selects erlang-p1-stringprep, which depends on
+> BR2_INSTALL_LIBSTDCPP. Thus, it should also depend on this item.
 
-diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
-index 1d518e2023..c7a68bc800 100644
---- a/package/erlang-p1-xmpp/Config.in
-+++ b/package/erlang-p1-xmpp/Config.in
-@@ -1,5 +1,9 @@
-+comment "erlang-p1-xmpp needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_ERLANG_P1_XMPP
- 	bool "erlang-p1-xmpp"
-+	depends on BR2_INSTALL_LIBSTDCPP # erlang-p1-stringprep
- 	select BR2_PACKAGE_ERLANG_P1_XML
- 	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
- 	help
+You should give here a reference to the autobuilder issue being fixed.
+
+> 
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
