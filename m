@@ -1,10 +1,10 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Tue, 13 Jun 2017 01:42:55 +0530
-Subject: [Buildroot] [PATCH v5 2/3] board: Add support for Engicam i.CoreM6
-	RQS SOM
+Date: Tue, 13 Jun 2017 01:42:56 +0530
+Subject: [Buildroot] [PATCH v5 3/3] board: Add support for Engicam GEAM6UL
+	SOM
 In-Reply-To: <1497298376-21516-1-git-send-email-jteki@openedev.com>
 References: <1497298376-21516-1-git-send-email-jteki@openedev.com>
-Message-ID: <1497298376-21516-3-git-send-email-jteki@openedev.com>
+Message-ID: <1497298376-21516-4-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,8 @@ To: buildroot@busybox.net
 
 From: Jagan Teki <jagan@amarulasolutions.com>
 
-Add initial support for Engicam i.CoreM6 Quad/Dual/DualLite/Solo RQS
-board with below features:
+Add initial support for Engicam GEAM6UL SOM board
+with below features:
 - U-Boot 2017.07-rc1
 - Linux 4.11
 - Default packages from buildroot
@@ -27,39 +27,38 @@ Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 Changes for v5:
 - Newly added patch
 
- DEVELOPERS                                      |  1 +
- board/engicam/icorem6_rqs/genimage.cfg          | 39 ++++++++++++++
- board/engicam/icorem6_rqs/readme.txt            | 68 +++++++++++++++++++++++++
- configs/engicam_imx6qdl_icore_rqs_mmc_defconfig | 38 ++++++++++++++
- 4 files changed, 146 insertions(+)
- create mode 100644 board/engicam/icorem6_rqs/genimage.cfg
- create mode 100644 board/engicam/icorem6_rqs/readme.txt
- create mode 100644 configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
+ DEVELOPERS                                |  1 +
+ board/engicam/geam6ul/genimage.cfg        | 38 ++++++++++++++++++
+ board/engicam/geam6ul/readme.txt          | 65 +++++++++++++++++++++++++++++++
+ configs/engicam_imx6ul_geam_mmc_defconfig | 38 ++++++++++++++++++
+ 4 files changed, 142 insertions(+)
+ create mode 100644 board/engicam/geam6ul/genimage.cfg
+ create mode 100644 board/engicam/geam6ul/readme.txt
+ create mode 100644 configs/engicam_imx6ul_geam_mmc_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6cb8d8e..58c0657 100644
+index 58c0657..38ae1f4 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -830,6 +830,7 @@ F:	package/keepalived/
- N:	Jagan Teki <jagan@amarulasolutions.com>
+@@ -831,6 +831,7 @@ N:	Jagan Teki <jagan@amarulasolutions.com>
  F:	board/engicam/
  F:	configs/engicam_imx6qdl_icore_mmc_defconfig
-+F:	configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
+ F:	configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
++F:	configs/engicam_imx6ul_geam_mmc_defconfig
  
  N:	James Knight <james.knight@rockwellcollins.com>
  F:	package/atkmm/
-diff --git a/board/engicam/icorem6_rqs/genimage.cfg b/board/engicam/icorem6_rqs/genimage.cfg
+diff --git a/board/engicam/geam6ul/genimage.cfg b/board/engicam/geam6ul/genimage.cfg
 new file mode 100644
-index 0000000..a2ee860
+index 0000000..3b5a31d
 --- /dev/null
-+++ b/board/engicam/icorem6_rqs/genimage.cfg
-@@ -0,0 +1,39 @@
++++ b/board/engicam/geam6ul/genimage.cfg
+@@ -0,0 +1,38 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"uImage",
-+			"imx6dl-icore-rqs.dtb",
-+			"imx6q-icore-rqs.dtb"
++			"imx6ul-geam-kit.dtb"
 +		}
 +	}
 +	size = 16M
@@ -93,42 +92,39 @@ index 0000000..a2ee860
 +		image = "rootfs.ext2"
 +	}
 +}
-diff --git a/board/engicam/icorem6_rqs/readme.txt b/board/engicam/icorem6_rqs/readme.txt
+diff --git a/board/engicam/geam6ul/readme.txt b/board/engicam/geam6ul/readme.txt
 new file mode 100644
-index 0000000..2a72347
+index 0000000..a0bccbd
 --- /dev/null
-+++ b/board/engicam/icorem6_rqs/readme.txt
-@@ -0,0 +1,68 @@
-+*************************************************
-+Buildroot for Engicam i.CoreM6 RQS SOM platforms:
-+*************************************************
++++ b/board/engicam/geam6ul/readme.txt
+@@ -0,0 +1,65 @@
++********************************************
++Buildroot for Engicam GEAM6UL SOM platforms:
++********************************************
 +
-+This file documents the Buildroot support for Engicam i.CoreM6 RQS
++This file documents the Buildroot support for all Engicam GEAM6UL
 +SOM platform boards.
 +
-+i.CoreM6 Quad/Dual/DualLite/Solo RQS SOM Starter kits:
-+https://www.engicam.com/vis-prod/101124
++i.CoreM6 GEAM6UL SOM Starter kits:
++https://www.engicam.com/vis-prod/101115
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +Build
 +=====
 +
-+First, configure Buildroot for the Engicam i.CoreM6 RQS:
++First, configure Buildroot for the Engicam GEAM6UL SOM:
 +
-+- for i.CoreM6 RQS Quad/Dual/DualLite/Solo:
++- for i.CoreM6 Quad/Dual:
 +
-+  make engicam_imx6qdl_icore_rqs_mmc_defconfig
++  make engicam_imx6ul_geam_mmc_defconfig
 +
 +Build all components:
 +
 +  make
 +
 +You will find the following files in output/images/:
-+- for i.CoreM6 Quad/Dual RQS:
-+  - imx6q-icore-rqs.dtb
-+- for i.CoreM6 DualLite/Solo RQS:
-+  - imx6dl-icore-rqs.dtb
++  - imx6ul-geam-kit.dtb
 +  - rootfs.ext4
 +  - rootfs.tar
 +  - sdcard.img
@@ -167,11 +163,11 @@ index 0000000..2a72347
 +- power on the board.
 +
 +Enjoy!
-diff --git a/configs/engicam_imx6qdl_icore_rqs_mmc_defconfig b/configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
+diff --git a/configs/engicam_imx6ul_geam_mmc_defconfig b/configs/engicam_imx6ul_geam_mmc_defconfig
 new file mode 100644
-index 0000000..a2b1b9d
+index 0000000..e17d675
 --- /dev/null
-+++ b/configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
++++ b/configs/engicam_imx6ul_geam_mmc_defconfig
 @@ -0,0 +1,38 @@
 +BR2_arm=y
 +BR2_cortex_a9=y
@@ -180,14 +176,14 @@ index 0000000..a2b1b9d
 +BR2_ARM_FPU_VFPV3=y
 +
 +# System
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
 +
 +# Bootloader
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_rqs_mmc"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_geam_mmc"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
@@ -200,16 +196,16 @@ index 0000000..a2b1b9d
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
 +BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
 +BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore-rqs imx6q-icore-rqs"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-geam-kit"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo RQS Starter Kit"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam GEAM6UL Starter Kit"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6_rqs/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/geam6ul/genimage.cfg"
 -- 
 2.7.4
