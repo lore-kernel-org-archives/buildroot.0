@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Jun 2017 18:42:55 +0200
-Subject: [Buildroot] [git commit] docker-containerd: bump to version
-	9048e5e50717ea4497b757314bad98ea3763c145
-Message-ID: <20170612080950.A83F97FDDD@busybox.osuosl.org>
+Date: Mon, 12 Jun 2017 10:09:38 +0200
+Subject: [Buildroot] [git commit] package/mcelog: fix legal-info
+Message-ID: <20170612080950.CB3AE7FA4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d445d7d7b4027231f772b02bc0e4d86af545c356
+commit: https://git.buildroot.net/buildroot/commit/?id=0482616f570b148040fc3399a4403dcbac603ced
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a runtime dependency of docker-engine in version 17.05.0-ce
+README was renamed to README.md
+https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/README.md?id=2fda0091a0628480a08cbf6ebe309fcb83aeae34
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Fixes
+http://autobuild.buildroot.net/results/02b/02b897a843b995bf5bf3f993f48689870a551dd5/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mcelog/mcelog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index a161f3b..992eb5b 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,2 +1,2 @@
- # Computed locally
--sha256	8223d934fa767fcabf45c734bdb616818a5eab8c95d525de6a69a350f4aeb826	docker-containerd-422e31ce907fd9c3833a38d7b8fdd023e5a76e73.tar.gz
-+sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index c0b0012..bf3e32d 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index 6952613..d12fc44 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
+@@ -8,7 +8,7 @@ MCELOG_VERSION = v152
+ MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
+ MCELOG_SITE_METHOD = git
+ MCELOG_LICENSE = GPL-2.0
+-MCELOG_LICENSE_FILES = README
++MCELOG_LICENSE_FILES = README.md
  
--DOCKER_CONTAINERD_VERSION = 422e31ce907fd9c3833a38d7b8fdd023e5a76e73
-+DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
- DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+ define MCELOG_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
