@@ -1,53 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jun 2017 15:32:42 +0200
-Subject: [Buildroot] [PATCH] syslinux: Add patch to build with the
- latest gnu-efi release
-In-Reply-To: <20170612152032.5c2c99ae@armant.office.greenbone.net>
-References: <1497003638-17662-1-git-send-email-benoit.allard@greenbone.net>
- <20170611153750.22323da6@windsurf.home>
- <20170612152032.5c2c99ae@armant.office.greenbone.net>
-Message-ID: <20170612153242.6f5ddb57@windsurf.lan>
+From: Jens Maus <mail@jens-maus.de>
+Date: Mon, 12 Jun 2017 15:35:54 +0200
+Subject: [Buildroot] [PATCH v2] support/scripts: allow /etc/shadow to be
+	symlinked
+In-Reply-To: <20170608152622.30019-1-mail@jens-maus.de>
+References: <20170608152622.30019-1-mail@jens-maus.de>
+Message-ID: <20170612133554.24995-1-mail@jens-maus.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit fixes a problem where it was not possible to replace
+/etc/shadow with a symlink to a e.g. a user partition where the
+shadow file is placed. This is required, e.g. for systems where the
+rootfs is mounted read-only but users should still be able to be
+added. Thus, if within an filesystem overlay setup a user tries
+to replace /etc/shadow with a symlink to the real file on a user
+partition a buildroot build stops with an error message because
+sed is called on the symlink instead of following the symlink.
+This commit fixes this shortcoming.
 
-On Mon, 12 Jun 2017 15:20:32 +0200, Beno?t Allard wrote:
+Signed-off-by: Jens Maus <mail@jens-maus.de>
 
-> > The problem is that it builds a tool called "wrapper" with the
-> > cross-compiler, and then tries to run it on the host. It might work if
-> > your host and target use the same architecture and libc. Here, I'm
-> > using the same architecture (x86-64) but not the same libc (glibc for
-> > the host, uclibc for the target).
-> > 
-> > Do you think you could have a look?  
-> 
-> I just sent a patch about that. Thanks for noticing, and reporting the
-> issue.
+---
+Changes v1 -> v2:
+  - extended follow-symlinks use (requested by Yann)
 
-Thanks, I'll have a look.
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+---
+ support/scripts/mkusers | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-> > Nit: please use 'git format-patch -N' to generate your patches. This
-> > will generate patches with [PATCH] as a prefix instead of [PATCH X/Y].
-> > Indeed, the 1/3, 2/3 and 3/3 in your patches don't make sense: your
-> > patches are patches 7, 8 and 9! To avoid this, in Buildroot, we have
-> > decided to not add numbering inside the patches themselves.
-> >   
-> 
-> Maybe it would make sense to add the '-N' to the example command-lines
-> in the manual ? ;) ( That would be section 21.5.2 and 21.5.4)
-
-No, because those sections are about formatting patches for Buildroot,
-not patches for packages.
-
-But it should indeed be explained somewhere in the manual, i.e in
-https://buildroot.org/downloads/manual/manual.html#patch-policy.
-
-Thomas
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 2ac76f986..5bbec3e10 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -219,12 +219,12 @@ add_one_group() {
+     fi
+ 
+     # Remove any previous instance of this group, and re-add the new one
+-    sed -i -e '/^'"${group}"':.*/d;' "${GROUP}"
++    sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GROUP}"
+     printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
+ 
+     # Ditto for /etc/gshadow if it exists
+     if [ -f "${GSHADOW}" ]; then
+-        sed -i -e '/^'"${group}"':.*/d;' "${GSHADOW}"
++        sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GSHADOW}"
+         printf "%s:*::\n" "${group}" >>"${GSHADOW}"
+     fi
+ }
+@@ -263,7 +263,8 @@ add_user_to_group() {
+ 
+     for _f in "${GROUP}" "${GSHADOW}"; do
+         [ -f "${_f}" ] || continue
+-        sed -r -i -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
++        sed -r -i --follow-symlinks \
++                  -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
+                   -e 's/^('"${group}"':.*)$/\1,'"${username}"'/;'                           \
+                   -e 's/,+/,/'                                                              \
+                   -e 's/:,/:/'                                                              \
+@@ -303,7 +304,7 @@ add_one_user() {
+ 
+     # Remove any previous instance of this user
+     for _f in "${PASSWD}" "${SHADOW}"; do
+-        sed -r -i -e '/^'"${username}"':.*/d;' "${_f}"
++        sed -r -i --follow-symlinks -e '/^'"${username}"':.*/d;' "${_f}"
+     done
+ 
+     _gid="$( get_gid "${group}" )"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
