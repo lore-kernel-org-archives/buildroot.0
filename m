@@ -1,31 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jun 2017 10:11:53 +0200
-Subject: [Buildroot] [PATCH 1/2] docker-containerd: bump to version
- 9048e5e50717ea4497b757314bad98ea3763c145
-In-Reply-To: <20170510040050.31744-1-christian@paral.in>
-References: <20170510040050.31744-1-christian@paral.in>
-Message-ID: <20170612101153.554fd613@windsurf.home>
+Date: Mon, 12 Jun 2017 10:12:22 +0200
+Subject: [Buildroot] [git commit] docker-engine: bump to version 17.05.0-ce
+Message-ID: <20170612081226.EA8E4805F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4014ed27c3bc4b86e37d66bd1c098f6ec759ccee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 May 2017 00:00:49 -0400, Christian Stewart wrote:
-> This is a runtime dependency of docker-engine in version 17.05.0-ce
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/docker-containerd/docker-containerd.hash | 2 +-
->  package/docker-containerd/docker-containerd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index aa7c3ac..6c0ed33 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	b6ee0aa93ecea44e956d3627907e10557b3ec37d13ddfb40e436656e5037c640	docker-engine-v17.04.0-ce.tar.gz
++sha256	4716df117d867b82ddab2e82395cd40aa3d0925a689eedcec8919729e4c9f121	docker-engine-v17.05.0-ce.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 0176f51..86193d2 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = v17.04.0-ce
+-DOCKER_ENGINE_COMMIT = 4845c567eb35d68f35b0b1713a09b0c8d47fe67e
++DOCKER_ENGINE_VERSION = v17.05.0-ce
++DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
