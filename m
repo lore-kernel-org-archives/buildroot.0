@@ -1,41 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jun 2017 23:21:28 +0200
-Subject: [Buildroot] [git commit] package/erlang-p1-xmpp: add missing
-	dependency on C++ from erlang-p1-stringprep
-Message-ID: <20170612212205.EB8B3816A2@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 12 Jun 2017 23:34:22 +0200
+Subject: [Buildroot] [PATCH 2/9] package/darktable: new package
+In-Reply-To: <tdlg0ex6ur.ln2@ID-313208.user.individual.net>
+References: <20170305151004.2815-1-romain.naour@gmail.com>
+ <20170305151004.2815-2-romain.naour@gmail.com>
+ <20170305164433.d4qztfsrop5agq3a@tarshish>
+ <tdlg0ex6ur.ln2@ID-313208.user.individual.net>
+Message-ID: <17322c21-fa4e-701b-80af-3fb99260fe2c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31ad7876d253bf9f53c3be97e51ee5562d84c56e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernd, Baruch,
 
-This package selects erlang-p1-stringprep, which depends on
-BR2_INSTALL_LIBSTDCPP. Thus, it should also depend on this item.
+Thank for the review!
 
-Fixes:
+Le 05/06/2017 ? 20:44, Bernd Kuhls a ?crit :
+> Am Sun, 05 Mar 2017 18:44:33 +0200 schrieb Baruch Siach:
+> 
+>>> +# Darktable is only available for x86_64 or aarch64 little endian 
+> system only.
+>>> +# Experimental support for i386 (not recommended).
+>>> +# Building without SSE2 on x86_64 is highly experimental.
+>>> +# See src/is_supported_platform.h
+>>> +config BR2_PACKAGE_DARKTABLE_ARCH_SUPPORTS
+>>> +	bool
+>>> +	default y if (BR2_x86_64 && BR2_X86_CPU_HAS_SSE && 
+> BR2_X86_CPU_HAS_SSE2) || \
+>>> +		BR2_aarch64
+>>
+>> BR2_X86_CPU_HAS_SSE2=y implies BR2_X86_CPU_HAS_SSE=y. So this is 
+> equivalent to 
+>> (BR2_x86_64 && BR2_X86_CPU_HAS_SSE2) || BR2_aarch64.
+> 
+> Hi,
+> 
+> maybe even simplier?
+> 
+> 	default y if BR2_aarch64 || BR2_x86_64
+> 
+> All x86_64 CPUs have sse2 support, it started with the Pentium4.
 
-  http://autobuild.buildroot.net/results/fe76971fead52acdd64612161e92a48a4ad36572/
+Ok
 
-Signed-off-by: Johan Oudinet <johan.oudinet@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/erlang-p1-xmpp/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+> 
+> Do we need the BR2_PACKAGE_DARKTABLE_ARCH_SUPPORTS option at all after 
+> this simplification?
+> 
+> 	depends on !BR2_TOOLCHAIN_USES_MUSL
+> 
+> needs to be added as well since
+> https://git.buildroot.net/buildroot/commit/?
+> id=d887fde42540bb6079c66f72e1462bfcda402006
 
-diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
-index 1d518e2..c7a68bc 100644
---- a/package/erlang-p1-xmpp/Config.in
-+++ b/package/erlang-p1-xmpp/Config.in
-@@ -1,5 +1,9 @@
-+comment "erlang-p1-xmpp needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_ERLANG_P1_XMPP
- 	bool "erlang-p1-xmpp"
-+	depends on BR2_INSTALL_LIBSTDCPP # erlang-p1-stringprep
- 	select BR2_PACKAGE_ERLANG_P1_XML
- 	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
- 	help
+Thank for the info, Glibc or uClibc-ng dependency added!
+
+Best regards,
+Romain
+
+> 
+> The patch also needs a rebase, it does not apply cleanly against
+> package/Config.in anymore.
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
