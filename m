@@ -1,155 +1,29 @@
-From: Guy Benyei <guybe@mellanox.com>
-Date: Mon, 12 Jun 2017 08:23:17 +0000
-Subject: [Buildroot] [PATCH] gcc: add option to build and install gcc's
-	libssp
-Message-ID: <AM3PR05MB433082E20B48215DFA88130C9CD0@AM3PR05MB433.eurprd05.prod.outlook.com>
+From: Hugues FRUCHET <hugues.fruchet@st.com>
+Date: Mon, 12 Jun 2017 09:03:53 +0000
+Subject: [Buildroot] [PATCH v2] v4l-utils build on noMMU platform
+In-Reply-To: <20170610233356.01fc6ba3@windsurf.home>
+References: <1496830327-5235-1-git-send-email-hugues.fruchet@st.com>
+ <1497010684-22829-1-git-send-email-hugues.fruchet@st.com>
+ <20170610233356.01fc6ba3@windsurf.home>
+Message-ID: <1f10312d-b652-40ce-7d86-5949be47bab3@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When stack smashing protection is not provided by the C library, libssp
-provides the functionality needed to support the -fstack-protector flag.
+Thanks Thomas !
 
-Signed-off-by: Guy Benyei <guybe@mellanox.com>
----
- package/gcc/Config.in.host         |   14 ++++++++++++++
- package/gcc/gcc-final/gcc-final.mk |   11 +++++++++++
- package/gcc/gcc.mk                 |    8 ++++++--
- package/glibc/Config.in            |    1 +
- package/musl/Config.in             |    3 ++-
- package/uclibc/Config.in           |    1 +
- toolchain/toolchain-common.in      |    3 +++
- 7 files changed, 38 insertions(+), 3 deletions(-)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 5dcaa03..a89af6a 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -159,3 +159,17 @@ config BR2_GCC_ENABLE_GRAPHITE
- 	help
- 	  This option enables the graphite optimizations in the
- 	  compiler.
-+
-+config BR2_TOOLCHAIN_INSTALL_LIBSSP
-+	bool "Enable stack protection support using libssp"
-+	depends on !BR2_LIBC_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	help
-+	  Enable stack smashing protection support using GCCs
-+	  -fstack-protector option by installing libssp. This
-+	  option should be used only when the C library doesn't
-+	  support stack smashing protection.
-+
-+	  See http://wiki.osdev.org/Stack_Smashing_Protector#libssp
-+	  for details.
-+
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index e8d2e18..67106ed 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -147,6 +147,17 @@ endef
- 
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
- 
-+define HOST_GCC_FINAL_INSTALL_LIBSSP
-+	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
-+		$(STAGING_DIR)/lib/
-+	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
-+		$(TARGET_DIR)/lib/
-+endef
-+
-+ifeq ($(BR2_TOOLCHAIN_INSTALL_LIBSSP),y)
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBSSP
-+endif
-+
- # Handle the installation of libraries in /usr/lib
- HOST_GCC_FINAL_USR_LIBS =
- 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b52f945..4691846 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -90,7 +90,6 @@ HOST_GCC_COMMON_CONF_OPTS = \
- 	--with-sysroot=$(STAGING_DIR) \
- 	--disable-__cxa_atexit \
- 	--with-gnu-ld \
--	--disable-libssp \
- 	--disable-multilib \
- 	--with-gmp=$(HOST_DIR)/usr \
- 	--with-mpc=$(HOST_DIR)/usr \
-@@ -110,6 +109,11 @@ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
- HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
- 
-+# don't build libssp if it's not explicitly required
-+ifneq ($(BR2_TOOLCHAIN_INSTALL_LIBSSP),y)
-+HOST_GCC_COMMON_CONF_OPTS += --disable-libssp
-+endif
-+
- # libitm needs sparc V9+
- ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
- HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
-@@ -286,7 +290,7 @@ endif # !BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS
- # available or not in the C library is not working properly for
- # uClibc, so let's be explicit as well.
- HOST_GCC_COMMON_MAKE_OPTS = \
--	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
-+	gcc_cv_libc_provides_ssp=$(if $(BR2_LIBC_HAS_SSP),yes,no)
- 
- ifeq ($(BR2_CCACHE),y)
- HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 115388e..d5494b7 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIBC
- 	bool
- 	default y
- 	select BR2_PACKAGE_LINUX_HEADERS
-+	select BR2_LIBC_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_SSP
- 
- choice
-diff --git a/package/musl/Config.in b/package/musl/Config.in
-index bedc50c..6b3d542 100644
---- a/package/musl/Config.in
-+++ b/package/musl/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_MUSL
- 	depends on BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LINUX_HEADERS
- 	# SSP broken on i386/ppc: http://www.openwall.com/lists/musl/2016/12/04/2
--	select BR2_TOOLCHAIN_HAS_SSP if !(BR2_i386 || BR2_powerpc)
-+	select BR2_LIBC_HAS_SSP if !(BR2_i386 || BR2_powerpc)
-+	select BR2_TOOLCHAIN_HAS_SSP if BR2_LIBC_HAS_SSP
- 	# Compatibility headers: cdefs.h, queue.h
- 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index b0b0b01..b87125c 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -71,6 +71,7 @@ config BR2_PTHREAD_DEBUG
- 
- config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
- 	bool "Enable stack protection support"
-+	select BR2_LIBC_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	help
- 	  Enable stack smashing protection support using GCCs
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index d670f44..3ffb5fb 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -45,6 +45,9 @@ config BR2_TOOLCHAIN_HAS_THREADS_NPTL
- config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	bool
- 
-+config BR2_LIBC_HAS_SSP
-+	bool
-+
- config BR2_TOOLCHAIN_HAS_SSP
- 	bool
- 
--- 
-1.7.1
+On 06/10/2017 11:33 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 9 Jun 2017 14:18:02 +0200, Hugues Fruchet wrote:
+> 
+>> Hugues Fruchet (2):
+>>    package/libv4l: build of v4l2 utilities on noMMU platform
+>>    package/libv4l: toolchain w/ locale is not mandatory
+> 
+> Thanks. Both patches applied!
+> 
+> Thomas
+> 
