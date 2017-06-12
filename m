@@ -1,116 +1,155 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 12 Jun 2017 10:21:44 +0200
-Subject: [Buildroot] [PATCH] lua-sdl2: refactor with cmake
-Message-ID: <20170612082144.25846-1-francois.perrad@gadz.org>
+From: Guy Benyei <guybe@mellanox.com>
+Date: Mon, 12 Jun 2017 08:23:17 +0000
+Subject: [Buildroot] [PATCH] gcc: add option to build and install gcc's
+	libssp
+Message-ID: <AM3PR05MB433082E20B48215DFA88130C9CD0@AM3PR05MB433.eurprd05.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-that allows optional dependencies
+When stack smashing protection is not provided by the C library, libssp
+provides the functionality needed to support the -fstack-protector flag.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Guy Benyei <guybe@mellanox.com>
 ---
- package/lua-sdl2/0001-avoid-host-includes.patch | 18 +++++++++++++
- package/lua-sdl2/Config.in                      |  4 ---
- package/lua-sdl2/lua-sdl2.hash                  |  2 +-
- package/lua-sdl2/lua-sdl2.mk                    | 36 +++++++++++++++++++++----
- 4 files changed, 50 insertions(+), 10 deletions(-)
- create mode 100644 package/lua-sdl2/0001-avoid-host-includes.patch
+ package/gcc/Config.in.host         |   14 ++++++++++++++
+ package/gcc/gcc-final/gcc-final.mk |   11 +++++++++++
+ package/gcc/gcc.mk                 |    8 ++++++--
+ package/glibc/Config.in            |    1 +
+ package/musl/Config.in             |    3 ++-
+ package/uclibc/Config.in           |    1 +
+ toolchain/toolchain-common.in      |    3 +++
+ 7 files changed, 38 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-sdl2/0001-avoid-host-includes.patch b/package/lua-sdl2/0001-avoid-host-includes.patch
-new file mode 100644
-index 00000000..3274eacb
---- /dev/null
-+++ b/package/lua-sdl2/0001-avoid-host-includes.patch
-@@ -0,0 +1,18 @@
-+avoid host includes
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+diff --git a/cmake/FindSDL2.cmake b/cmake/FindSDL2.cmake
-+index 5cf4115..d3f663a 100644
-+--- a/cmake/FindSDL2.cmake
-++++ b/cmake/FindSDL2.cmake
-+@@ -76,7 +76,7 @@
-+ # On FreeBSD SDL depends on libiconv and SDL_stdinc.h includes iconv.h, which is
-+ # located in ${LOCALBASE}/include. Append {LOCALBASE}/include to
-+ # the SDL_INCLUDE_DIR, thus allow to build SDL apps out of box.
-+-list(APPEND SDL2_INCLUDE_DIR /usr/local/include)
-++# list(APPEND SDL2_INCLUDE_DIR /usr/local/include)
-+ 
-+ find_library(SDL_LIBRARY_TEMP
-+   NAMES SDL2 SDL2-2.0
-+-- 
-diff --git a/package/lua-sdl2/Config.in b/package/lua-sdl2/Config.in
-index f716dba9..65f9e7ff 100644
---- a/package/lua-sdl2/Config.in
-+++ b/package/lua-sdl2/Config.in
-@@ -2,10 +2,6 @@ config BR2_PACKAGE_LUA_SDL2
- 	bool "lua-sdl2"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_SDL2
--	select BR2_PACKAGE_SDL2_IMAGE
--	select BR2_PACKAGE_SDL2_MIXER
--	select BR2_PACKAGE_SDL2_NET
--	select BR2_PACKAGE_SDL2_TTF
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 5dcaa03..a89af6a 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -159,3 +159,17 @@ config BR2_GCC_ENABLE_GRAPHITE
  	help
- 	  Lua-SDL2 is a pure C binding of SDL2 to Lua 5.1, Lua 5.2,
- 	  Lua 5.3, and LuaJIT.
-diff --git a/package/lua-sdl2/lua-sdl2.hash b/package/lua-sdl2/lua-sdl2.hash
-index 56a2eeda..80aa1ccc 100644
---- a/package/lua-sdl2/lua-sdl2.hash
-+++ b/package/lua-sdl2/lua-sdl2.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	36b626485529f318f284e0cc0c806d5a425fbde4e1e6329d4d5ee9f495ecff62  lua-sdl2-2.0.5.6.0-1.src.rock
-+sha256	cee7875106062fbc00cf8acb3b2738e336e2327df73ede011968cb060c094bfb  lua-sdl2-v2.0.5-6.0.tar.gz
-diff --git a/package/lua-sdl2/lua-sdl2.mk b/package/lua-sdl2/lua-sdl2.mk
-index adb3723c..489c9f65 100644
---- a/package/lua-sdl2/lua-sdl2.mk
-+++ b/package/lua-sdl2/lua-sdl2.mk
-@@ -4,10 +4,36 @@
- #
- ################################################################################
+ 	  This option enables the graphite optimizations in the
+ 	  compiler.
++
++config BR2_TOOLCHAIN_INSTALL_LIBSSP
++	bool "Enable stack protection support using libssp"
++	depends on !BR2_LIBC_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_SSP
++	help
++	  Enable stack smashing protection support using GCCs
++	  -fstack-protector option by installing libssp. This
++	  option should be used only when the C library doesn't
++	  support stack smashing protection.
++
++	  See http://wiki.osdev.org/Stack_Smashing_Protector#libssp
++	  for details.
++
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index e8d2e18..67106ed 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -147,6 +147,17 @@ endef
  
--LUA_SDL2_VERSION = 2.0.5.6.0-1
-+LUA_SDL2_VERSION = v2.0.5-6.0
-+LUA_SDL2_SITE = $(call github,Tangent128,luasdl2,$(LUA_SDL2_VERSION))
- LUA_SDL2_LICENSE = ISC
--LUA_SDL2_SUBDIR = luasdl2-2.0.5-6.0
--LUA_SDL2_LICENSE_FILES = $(LUA_SDL2_SUBDIR)/LICENSE
--LUA_SDL2_DEPENDENCIES = sdl2 sdl2_image sdl2_mixer sdl2_net sdl2_ttf
-+LUA_SDL2_LICENSE_FILES = LICENSE
-+LUA_SDL2_DEPENDENCIES = lua sdl2
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
  
--$(eval $(luarocks-package))
-+LUA_SDL2_CONF_OPTS += -DWITH_LUAVER=user -DLUA_INCLUDE_DIR=$(STAGING_DIR)/usr/include
++define HOST_GCC_FINAL_INSTALL_LIBSSP
++	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
++		$(STAGING_DIR)/lib/
++	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libssp* \
++		$(TARGET_DIR)/lib/
++endef
 +
-+ifeq ($(BR2_PACKAGE_SDL2_IMAGE),y)
-+LUA_SDL2_DEPENDENCIES += sdl2_image
-+else
-+LUA_SDL2_CONF_OPTS += -DWITH_IMAGE=Off
++ifeq ($(BR2_TOOLCHAIN_INSTALL_LIBSSP),y)
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBSSP
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SDL2_MIXER),y)
-+LUA_SDL2_DEPENDENCIES += sdl2_mixer
-+else
-+LUA_SDL2_CONF_OPTS += -DWITH_MIXER=Off
+ # Handle the installation of libraries in /usr/lib
+ HOST_GCC_FINAL_USR_LIBS =
+ 
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b52f945..4691846 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -90,7 +90,6 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--disable-__cxa_atexit \
+ 	--with-gnu-ld \
+-	--disable-libssp \
+ 	--disable-multilib \
+ 	--with-gmp=$(HOST_DIR)/usr \
+ 	--with-mpc=$(HOST_DIR)/usr \
+@@ -110,6 +109,11 @@ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+ 
++# don't build libssp if it's not explicitly required
++ifneq ($(BR2_TOOLCHAIN_INSTALL_LIBSSP),y)
++HOST_GCC_COMMON_CONF_OPTS += --disable-libssp
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SDL2_NET),y)
-+LUA_SDL2_DEPENDENCIES += sdl2_net
-+else
-+LUA_SDL2_CONF_OPTS += -DWITH_NET=Off
-+endif
+ # libitm needs sparc V9+
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
+@@ -286,7 +290,7 @@ endif # !BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS
+ # available or not in the C library is not working properly for
+ # uClibc, so let's be explicit as well.
+ HOST_GCC_COMMON_MAKE_OPTS = \
+-	gcc_cv_libc_provides_ssp=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
++	gcc_cv_libc_provides_ssp=$(if $(BR2_LIBC_HAS_SSP),yes,no)
+ 
+ ifeq ($(BR2_CCACHE),y)
+ HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 115388e..d5494b7 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIBC
+ 	bool
+ 	default y
+ 	select BR2_PACKAGE_LINUX_HEADERS
++	select BR2_LIBC_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 
+ choice
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index bedc50c..6b3d542 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_MUSL
+ 	depends on BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LINUX_HEADERS
+ 	# SSP broken on i386/ppc: http://www.openwall.com/lists/musl/2016/12/04/2
+-	select BR2_TOOLCHAIN_HAS_SSP if !(BR2_i386 || BR2_powerpc)
++	select BR2_LIBC_HAS_SSP if !(BR2_i386 || BR2_powerpc)
++	select BR2_TOOLCHAIN_HAS_SSP if BR2_LIBC_HAS_SSP
+ 	# Compatibility headers: cdefs.h, queue.h
+ 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index b0b0b01..b87125c 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -71,6 +71,7 @@ config BR2_PTHREAD_DEBUG
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+ 	bool "Enable stack protection support"
++	select BR2_LIBC_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	help
+ 	  Enable stack smashing protection support using GCCs
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index d670f44..3ffb5fb 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -45,6 +45,9 @@ config BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	bool
+ 
++config BR2_LIBC_HAS_SSP
++	bool
 +
-+ifeq ($(BR2_PACKAGE_SDL2_TTF),y)
-+LUA_SDL2_DEPENDENCIES += sdl2_ttf
-+else
-+LUA_SDL2_CONF_OPTS += -DWITH_TTF=Off
-+endif
-+
-+$(eval $(cmake-package))
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
+ 
 -- 
-2.11.0
+1.7.1
