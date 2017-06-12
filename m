@@ -1,60 +1,38 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Mon, 12 Jun 2017 22:38:17 +0530
-Subject: [Buildroot] [PATCH 1/1] package/mcelog: fix legal-info
-In-Reply-To: <20170612041512.9374-1-bernd.kuhls@t-online.de>
-References: <20170612041512.9374-1-bernd.kuhls@t-online.de>
-Message-ID: <CA+NV+V=d7D+-zZKO4NYVpGrsY2Uz0pqhrLqYPwGA2rXJZSq11g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 12 Jun 2017 20:27:43 +0300
+Subject: [Buildroot] scsi/scsi.h: No such file or directory
+In-Reply-To: <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
+References: <CAM7NYTg0TK9phO3EEszpmyY+v9F4nn6uCocZ=OuvvSfd6xCOJQ@mail.gmail.com>
+ <20170612152332.wmyjhvatvid7ghgd@sapphire.tkos.co.il>
+ <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
+Message-ID: <20170612172743.xjuawqu3a3oyvdfx@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 12, 2017 at 9:45 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->
-> README was renamed to README.md
-> https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/README.md?id=2fda0091a0628480a08cbf6ebe309fcb83aeae34
+Hi Yann,
 
-make <pkg>-legal-info should have caught that after version bump as a
-part of testing. But it looks like we don't do that usually. In past,
-we have seen such failures after version bump.
+On Mon, Jun 12, 2017 at 03:48:06PM +0000, Yann E. MORIN wrote:
+> On 12 June 2017 17:23:32 CEST, Baruch Siach <baruch@tkos.co.il> wrote:
+> >On Mon, Jun 12, 2017 at 11:09:41AM -0400, MD I. Islam wrote:
+> >> I'm new to Buildroot. I'm using *arm_foundationv8_defconfig* as my
+> >config.
+> >> But I'm getting the error *scsi/scsi.h: No such file or directory*. I
+> >> cleaned and  rebuild the code, but getting the error every time.
+> >Could
+> >> anyone suggest what is wrong?
+> >
+> >There is no arm_foundationv8_defconfig in mainline Buildroot.
+> 
+> Unless I missed something, yes there is...
 
-To avoid such failures, we can add hash of license file in <pkg>.hash
-and checking that after source is downloaded. If license file changes,
-it will be noticed while build test after version bump.
+Ah, of course. I somehow expected arm_ to precede armadeus_. Sorry.
 
-Potentially, it will also help in keeping license string of packages
-up-to-date if it gets changed. What do you think ?
+baruch
 
-Regards,
-Rahul
-
->
-> Fixes
-> http://autobuild.buildroot.net/results/02b/02b897a843b995bf5bf3f993f48689870a551dd5/
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mcelog/mcelog.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-> index 695261302..d12fc44f7 100644
-> --- a/package/mcelog/mcelog.mk
-> +++ b/package/mcelog/mcelog.mk
-> @@ -8,7 +8,7 @@ MCELOG_VERSION = v152
->  MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
->  MCELOG_SITE_METHOD = git
->  MCELOG_LICENSE = GPL-2.0
-> -MCELOG_LICENSE_FILES = README
-> +MCELOG_LICENSE_FILES = README.md
->
->  define MCELOG_BUILD_CMDS
->         $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-> --
-> 2.11.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
