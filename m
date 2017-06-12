@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jun 2017 23:20:56 +0200
-Subject: [Buildroot] [PATCH v4] board: Add support for Engicam i.CoreM6
- Quad/Dual boards
-In-Reply-To: <1497291701-17509-1-git-send-email-jteki@openedev.com>
-References: <1497291701-17509-1-git-send-email-jteki@openedev.com>
-Message-ID: <20170612232056.322e2dd7@windsurf.lan>
+Date: Mon, 12 Jun 2017 23:21:28 +0200
+Subject: [Buildroot] [git commit] package/erlang-p1-xmpp: add missing
+	dependency on C++ from erlang-p1-stringprep
+Message-ID: <20170612212205.EB8B3816A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=31ad7876d253bf9f53c3be97e51ee5562d84c56e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Jun 2017 23:51:41 +0530, Jagan Teki wrote:
+This package selects erlang-p1-stringprep, which depends on
+BR2_INSTALL_LIBSTDCPP. Thus, it should also depend on this item.
 
-> diff --git a/configs/engicam_imx6q_icore_defconfig b/configs/engicam_imx6q_icore_defconfig
-> new file mode 100644
-> index 0000000..2412f19
-> --- /dev/null
-> +++ b/configs/engicam_imx6q_icore_defconfig
-> @@ -0,0 +1,38 @@
-> +BR2_arm=y
-> +BR2_cortex_a9=y
-> +BR2_ARM_ENABLE_NEON=y
-> +BR2_ARM_ENABLE_VFP=y
-> +BR2_ARM_FPU_VFPV3=y
+Fixes:
 
-One thing was missing here:
+  http://autobuild.buildroot.net/results/fe76971fead52acdd64612161e92a48a4ad36572/
 
-# Linux headers same as kernel, a 4.11 series
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+Signed-off-by: Johan Oudinet <johan.oudinet@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang-p1-xmpp/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This is necessary, otherwise as soon as we add support for Linux 4.12,
-the toolchain would be built with Linux headers 4.12... but your
-defconfig would still be using Linux 4.11 as the running kernel.
-
-So in all defconfigs, we explicitly set the version of the kernel
-headers being used.
-
-Other than that: applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/erlang-p1-xmpp/Config.in b/package/erlang-p1-xmpp/Config.in
+index 1d518e2..c7a68bc 100644
+--- a/package/erlang-p1-xmpp/Config.in
++++ b/package/erlang-p1-xmpp/Config.in
+@@ -1,5 +1,9 @@
++comment "erlang-p1-xmpp needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_ERLANG_P1_XMPP
+ 	bool "erlang-p1-xmpp"
++	depends on BR2_INSTALL_LIBSTDCPP # erlang-p1-stringprep
+ 	select BR2_PACKAGE_ERLANG_P1_XML
+ 	select BR2_PACKAGE_ERLANG_P1_STRINGPREP
+ 	help
