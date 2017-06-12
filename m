@@ -1,36 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jun 2017 22:26:36 +0200
-Subject: [Buildroot] [PATCH v3 11/11] python-ipython: bump to version
- 5.4.0
-In-Reply-To: <CAHQ1cqEmNPnAtQzuS4zUFj-ZSdAx8ChQTXiEQUL9+oXiykeUXg@mail.gmail.com>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Mon, 12 Jun 2017 13:29:25 -0700
+Subject: [Buildroot] [PATCH v3 00/11] Update IPython's dependencies
+In-Reply-To: <20170611150813.5be2e14b@windsurf.home>
 References: <20170602235653.4655-1-andrew.smirnov@gmail.com>
- <20170602235653.4655-12-andrew.smirnov@gmail.com>
- <CAGm1_kt8nV+XcG_55STn0xyHG+vNFk=OkSUDXf3VYnXAPZmHDQ@mail.gmail.com>
- <20170611150709.170456dc@windsurf.home>
- <CAHQ1cqEmNPnAtQzuS4zUFj-ZSdAx8ChQTXiEQUL9+oXiykeUXg@mail.gmail.com>
-Message-ID: <20170612222636.39e4bc50@windsurf.lan>
+ <20170611150813.5be2e14b@windsurf.home>
+Message-ID: <CAHQ1cqE8hh+7Ja10owqOe=BYcW8uCa8=eC7Zd4aZLTpLk+sZ0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, Jun 11, 2017 at 6:08 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello Andrey,
+>
+> On Fri,  2 Jun 2017 16:56:42 -0700, Andrey Smirnov wrote:
+>
+>> Andrey Smirnov (11):
+>>   DEVELOPERS: Add missing closing angle bracket to my e-mail
+>
+> Applied.
+>
+>>   package/python-enum34: Switch setup type to 'setuptools'
+>
+> Was already applied.
+>
+>>   package/python-simplegeneric: Switch setup type to 'setuptools'
+>>   package/python-ipython-genutils: New package
+>
+> Both applied.
+>
+>>   package/python-traitlets: New package
+>>   package/python-scandir: New package
+>>   package/python-pathlib2: New package
+>>   package/python-pickleshare: New package
+>>   package/python-backports-shutil-get-terminal-size: New package
+>>   package/python-ipython: Add dependecy list
+>>   python-ipython: bump to version 5.4.0
+>
+> For all those ones, Yegor Yefremov made a number of comments. Could you
+> address them, and send a v4 ?
+>
 
-On Mon, 12 Jun 2017 13:22:54 -0700, Andrey Smirnov wrote:
+Yes, I will do that.
 
-> Those dependencies were needed for 5.2.2. I updated the package to
-> 5.4.0 in the latest iteration of the patchset just because I noticed
-> BR was using older version and it was a trivial thing to do, so I
-> thought I might as well do it. I'll keep the patches separate.
+Yegor:
 
-ACK, thanks. If you can make this explicit in the commit log, it would
-be nice.
+Just to avoid spamming the mailing list replying to all of your
+messages: thank you for your reviews and I'll address the issues you
+pointed out.
+
+
+> Make sure to base your v4 on the latest master, and to not resend
+> patches that have already been applied.
+>
+
+Will do.
 
 Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Andrey Smirnov
