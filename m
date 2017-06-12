@@ -1,151 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jun 2017 10:10:11 +0200
-Subject: [Buildroot] [git commit] uclibc: update to 1.0.25
-Message-ID: <20170612081020.8F9847FE8D@busybox.osuosl.org>
+Date: Mon, 12 Jun 2017 10:10:42 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: fix musl build error
+Message-ID: <20170612081105.C75A381D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a83d7f8c06ba0211bb6558e3308bc0000b25e18b
+commit: https://git.buildroot.net/buildroot/commit/?id=ce3f50532856ee1cd6f432f305da20be3317da23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Mostly bugfixing and cleanups. Both patches integrated.
+To reproduce the build error use this defconfig:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+BR2_x86_64=y
+BR2_x86_atom=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2017.02-744-g40962a0.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
+BR2_PACKAGE_MESA3D_OSMESA=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_MESA3D_OPENGL_TEXTURE_FLOAT=y
+BR2_PACKAGE_XORG7=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...es.h-with-GNU-C-library-fixes-gcc-7.1-too.patch | 64 ----------------------
- .../0002-sys-types.h-sync-with-GNU-C-library.patch | 30 ----------
- package/uclibc/uclibc.hash                         |  2 +-
- package/uclibc/uclibc.mk                           |  2 +-
- 4 files changed, 2 insertions(+), 96 deletions(-)
+ package/mesa3d/0007-musl.patch | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch b/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch
-deleted file mode 100644
-index eb1459b..0000000
---- a/package/uclibc/0001-sync-features.h-with-GNU-C-library-fixes-gcc-7.1-too.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From 5b0f49037e8ea8500b05c8f31ee88529ccac4cee Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Sun, 7 May 2017 16:28:14 +0200
--Subject: [PATCH] sync features.h with GNU C library, fixes gcc 7.1 toolchain
-- creation
--
--[Romain: backport to uClibc-ng 1.0.24]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- include/features.h | 17 ++++++++++++-----
-- 1 file changed, 12 insertions(+), 5 deletions(-)
--
--diff --git a/include/features.h b/include/features.h
--index e76bbba..f982079 100644
----- a/include/features.h
--+++ b/include/features.h
--@@ -55,6 +55,7 @@
--    These are defined by this file and are used by the
--    header files to decide what to declare or define:
-- 
--+   __USE_ISOC11		Define ISO C11 things.
--    __USE_ISOC99		Define ISO C99 things.
--    __USE_ISOC95		Define ISO C90 AMD1 (C95) things.
--    __USE_POSIX		Define IEEE Std 1003.1 things.
--@@ -91,6 +92,7 @@
-- 
-- 
-- /* Undefine everything, so we get a clean slate.  */
--+#undef	__USE_ISOC11
-- #undef	__USE_ISOC99
-- #undef	__USE_ISOC95
-- #undef	__USE_POSIX
--@@ -151,6 +153,8 @@
-- #ifdef _GNU_SOURCE
-- # undef  _ISOC99_SOURCE
-- # define _ISOC99_SOURCE	1
--+# undef  _ISOC11_SOURCE
--+# define _ISOC11_SOURCE	1
-- # undef  _POSIX_SOURCE
-- # define _POSIX_SOURCE	1
-- # undef  _POSIX_C_SOURCE
--@@ -223,11 +227,14 @@
-- # define _SVID_SOURCE	1
-- #endif
-- 
---/* This is to enable the ISO C99 extension.  Also recognize the old macro
---   which was used prior to the standard acceptance.  This macro will
---   eventually go away and the features enabled by default once the ISO C99
---   standard is widely adopted.  */
---#if (defined _ISOC99_SOURCE || defined _ISOC9X_SOURCE \
--+/* This is to enable the ISO C11 extension.  */
--+#if (defined _ISOC11_SOURCE \
--+     || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 201112L))
--+# define __USE_ISOC11	1
--+#endif
--+
--+/* This is to enable the ISO C99 extension.  */
--+#if (defined _ISOC99_SOURCE || defined _ISOC11_SOURCE \
--      || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L))
-- # define __USE_ISOC99	1
-- #endif
---- 
--2.9.3
--
-diff --git a/package/uclibc/0002-sys-types.h-sync-with-GNU-C-library.patch b/package/uclibc/0002-sys-types.h-sync-with-GNU-C-library.patch
-deleted file mode 100644
-index ea940f1..0000000
---- a/package/uclibc/0002-sys-types.h-sync-with-GNU-C-library.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 5244b9db8f17190413a4c6b10166cec7969178f5 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Tue, 6 Jun 2017 21:41:55 +0200
--Subject: [PATCH] sys/types.h: sync with GNU C library
--
--Fixed in glibc commit f9cfa295ae3f2556bd8808f0ff693cfe44f4ac25.
--Found via Buildroot autobuilder and gdbm package cross-compile.
--
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-----
-- include/sys/types.h | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/include/sys/types.h b/include/sys/types.h
--index 2b45d03..078a29c 100644
----- a/include/sys/types.h
--+++ b/include/sys/types.h
--@@ -223,7 +223,8 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
-- #endif /* Use BSD.  */
-- 
-- 
---#if defined __USE_UNIX98 && !defined __blksize_t_defined
--+#if (defined __USE_UNIX98 || defined __USE_XOPEN2K8) \
--+    && !defined __blksize_t_defined
-- typedef __blksize_t blksize_t;
-- # define __blksize_t_defined
-- #endif
---- 
--2.1.4
--
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 050a8eb..946d44c 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,2 +1,2 @@
- # From https://uclibc-ng.org/
--sha256  b5bf5bea5d836b0a0724d94f2211b279df3f5bda18a95e02c728cbf4bd33e939        uClibc-ng-1.0.24.tar.xz
-+sha256  a1208bd54fd8cbcc716140d985e228cf2f7e6265aa694c7f516fa6cb598808b2        uClibc-ng-1.0.25.tar.xz
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index fa970df..6049ac8 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.24
-+UCLIBC_VERSION = 1.0.25
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+diff --git a/package/mesa3d/0007-musl.patch b/package/mesa3d/0007-musl.patch
+new file mode 100644
+index 0000000..2dd08a1
+--- /dev/null
++++ b/package/mesa3d/0007-musl.patch
+@@ -0,0 +1,35 @@
++From adadadc151fa8232ecd78649a10496661b98e40d Mon Sep 17 00:00:00 2001
++From: Nicolas Dechesne <nicolas.dechesne@linaro.org>
++Date: Thu, 1 Jun 2017 12:13:18 +0200
++Subject: util/rand_xor: add missing include statements
++
++Fixes for:
++
++src/util/rand_xor.c:60:13: error: implicit declaration of function 'open' [-Werror=implicit-function-declaration]
++    int fd = open("/dev/urandom", O_RDONLY);
++             ^~~~
++src/util/rand_xor.c:60:34: error: 'O_RDONLY' undeclared (first use in this function)
++    int fd = open("/dev/urandom", O_RDONLY);
++                                  ^~~~~~~~
++
++Signed-off-by: Nicolas Dechesne <nicolas.dechesne@linaro.org>
++Reviewed-by: Eric Engestrom <eric.engestrom@imgtec.com>
++[backported from upstream master branch:
++ https://cgit.freedesktop.org/mesa/mesa/commit/?id=adadadc151fa8232ecd78649a10496661b98e40d ]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff --git a/src/util/rand_xor.c b/src/util/rand_xor.c
++index de05fa6..de04bbc 100644
++--- a/src/util/rand_xor.c
+++++ b/src/util/rand_xor.c
++@@ -25,6 +25,7 @@
++ #if defined(__linux__)
++ #include <sys/file.h>
++ #include <unistd.h>
+++#include <fcntl.h>
++ #else
++ #include <time.h>
++ #endif
++-- 
++cgit v0.10.2
++
