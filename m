@@ -1,36 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 12 Jun 2017 06:15:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mcelog: fix legal-info
-Message-ID: <20170612041512.9374-1-bernd.kuhls@t-online.de>
+Date: Mon, 12 Jun 2017 06:08:59 +0200
+Subject: [Buildroot] [PATCH 02/14] package/irrlicht: new package
+References: <20170411222643.9770-1-romain.naour@gmail.com>
+ <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
+ <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
+ <cba4449d-096e-a698-c55e-6a2c52c9048d@mind.be>
+Message-ID: <rng11exo2s.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-README was renamed to README.md
-https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/README.md?id=2fda0091a0628480a08cbf6ebe309fcb83aeae34
+Am Sun, 11 Jun 2017 23:33:27 +0200 schrieb Arnout Vandecappelle:
 
-Fixes
-http://autobuild.buildroot.net/results/02b/02b897a843b995bf5bf3f993f48689870a551dd5/
+> On 11-06-17 23:09, Romain Naour wrote:
+>> Hi Bernd,
+>> 
+>> Thank for the review, it's very appreciated :)
+>> 
+>> Le 11/06/2017 ? 18:54, Bernd Kuhls a ?crit :
+>>> Hi Romain,
+>>>
+>>> afaics the irrlicht package only provides libirrlicht.so.
+>>> What about naming the package libirrlicht and move it to
+>>> "Target packages > Libraries > Graphics"?
+>> 
+>> Make sense even if irrlicht is the upstream name.
+>> In the past, I hesitated to do so for efl package which can be named 
+libefl.
+> 
+>  No, in Buildroot, we always use the upstream name (except for python-* 
+etc.).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mcelog/mcelog.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Arnout,
 
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index 695261302..d12fc44f7 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -8,7 +8,7 @@ MCELOG_VERSION = v152
- MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
- MCELOG_SITE_METHOD = git
- MCELOG_LICENSE = GPL-2.0
--MCELOG_LICENSE_FILES = README
-+MCELOG_LICENSE_FILES = README.md
- 
- define MCELOG_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
--- 
-2.11.0
+this is not true for example for libcurl, libfribidi, libglew, libglfw 
+and libspandsp whose respective upstream project names also lack "lib".
+
+Regards, Bernd
