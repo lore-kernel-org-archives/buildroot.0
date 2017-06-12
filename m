@@ -1,7 +1,10 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Tue, 13 Jun 2017 01:42:53 +0530
-Subject: [Buildroot] [PATCH v5 0/3] Board: Add Engicam i.MX6 SOM
-Message-ID: <1497298376-21516-1-git-send-email-jteki@openedev.com>
+Date: Tue, 13 Jun 2017 01:42:54 +0530
+Subject: [Buildroot] [PATCH v5 1/3] board: Add support for Engicam i.CoreM6
+	SOM
+In-Reply-To: <1497298376-21516-1-git-send-email-jteki@openedev.com>
+References: <1497298376-21516-1-git-send-email-jteki@openedev.com>
+Message-ID: <1497298376-21516-2-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +13,234 @@ To: buildroot@busybox.net
 
 From: Jagan Teki <jagan@amarulasolutions.com>
 
-This series add buildroot support for Engicam i.MX6 SOM's
-- i.CoreM6
-- i.CoreM6 RQS
-- GEAM6UL
+Add initial support for Engicam i.CoreM6 Quad/Dual/DualLite/Solo
+board with below features:
+- U-Boot 2017.07-rc1
+- Linux 4.11
+- Default packages from buildroot
 
-Jagan Teki (3):
-  board: Add support for Engicam i.CoreM6 SOM
-  board: Add support for Engicam i.CoreM6 RQS SOM
-  board: Add support for Engicam GEAM6UL SOM
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Matteo Lisi <matteo.lisi@engicam.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+Changes for v5:
+- Add icorem6 under board/engicam
+- Rename defconfig to engicam_imx6qdl_icore_mmc_defconfig
+- Update U-boot version number as 2017.07-rc1
+- Fix typo with readme.txt
+Changes for v4:
+- Rebase master
+- Used support/scripts/genimage.sh
+- Dropped common and used board/engicam
+- Update http board link.
+- Update genimage.cfg
+- Update readme.txt
+- Add BR2_TARGET_GENERIC_ISSUE
+Changes for v3:
+- Rename icore with common, since creating a folder with the name of
+  SOM is not make sense, becuase the defconfig is the only change.
+- Update readme.txt, post-images.sh, engicam_imx6q_icore_defconfig as per
+  above change.
+- rebased on master
+Changes for v2:
+- Created icorem6 family board on engicam
+- Added Quad/Dual SOM boards support
+- Created well defined readme.tx with referance to board/freescale/imx6q-sabresd/
+- s/imx6q_icore_defconfig/engicam_/imx6q_icore_defconfig
+- Updated DEVELOPERS file
+- Created genimage.cfg with added SPL and u-boot-dtb.img partitions
+- Removed Latest source configs and updated with fixed version source for U-Boot, Linux
+- Add board link on readme.txt
+- Removed BR2_TARGET_ROOTFS_TAR_XZ=y
+- Created post-image.sh with referance to board/freescale/imx6q-sabresd/
 
- DEVELOPERS                                      |  6 +++
- board/engicam/geam6ul/genimage.cfg              | 38 ++++++++++++++
- board/engicam/geam6ul/readme.txt                | 65 +++++++++++++++++++++++
- board/engicam/icorem6/genimage.cfg              | 39 ++++++++++++++
- board/engicam/icorem6/readme.txt                | 68 +++++++++++++++++++++++++
- board/engicam/icorem6_rqs/genimage.cfg          | 39 ++++++++++++++
- board/engicam/icorem6_rqs/readme.txt            | 68 +++++++++++++++++++++++++
- configs/engicam_imx6qdl_icore_mmc_defconfig     | 38 ++++++++++++++
- configs/engicam_imx6qdl_icore_rqs_mmc_defconfig | 38 ++++++++++++++
- configs/engicam_imx6ul_geam_mmc_defconfig       | 38 ++++++++++++++
- 10 files changed, 437 insertions(+)
- create mode 100644 board/engicam/geam6ul/genimage.cfg
- create mode 100644 board/engicam/geam6ul/readme.txt
+ DEVELOPERS                                  |  4 ++
+ board/engicam/icorem6/genimage.cfg          | 39 +++++++++++++++++
+ board/engicam/icorem6/readme.txt            | 68 +++++++++++++++++++++++++++++
+ configs/engicam_imx6qdl_icore_mmc_defconfig | 38 ++++++++++++++++
+ 4 files changed, 149 insertions(+)
  create mode 100644 board/engicam/icorem6/genimage.cfg
  create mode 100644 board/engicam/icorem6/readme.txt
- create mode 100644 board/engicam/icorem6_rqs/genimage.cfg
- create mode 100644 board/engicam/icorem6_rqs/readme.txt
  create mode 100644 configs/engicam_imx6qdl_icore_mmc_defconfig
- create mode 100644 configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
- create mode 100644 configs/engicam_imx6ul_geam_mmc_defconfig
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7d8b410..6cb8d8e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -827,6 +827,10 @@ F:	package/angularjs/
+ N:	Ilias Apalodimas <apalos@gmail.com>
+ F:	package/keepalived/
+ 
++N:	Jagan Teki <jagan@amarulasolutions.com>
++F:	board/engicam/
++F:	configs/engicam_imx6qdl_icore_mmc_defconfig
++
+ N:	James Knight <james.knight@rockwellcollins.com>
+ F:	package/atkmm/
+ F:	package/cairomm/
+diff --git a/board/engicam/icorem6/genimage.cfg b/board/engicam/icorem6/genimage.cfg
+new file mode 100644
+index 0000000..cdccc90
+--- /dev/null
++++ b/board/engicam/icorem6/genimage.cfg
+@@ -0,0 +1,39 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"uImage",
++			"imx6dl-icore.dtb",
++			"imx6q-icore.dtb"
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition SPL {
++		in-partition-table = "no"
++		image = "SPL"
++		offset = 1024
++	}
++
++	partition u-boot-dtb {
++		in-partition-table = "no"
++		image = "u-boot-dtb.img"
++		offset = 69K
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 8M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++	}
++}
+diff --git a/board/engicam/icorem6/readme.txt b/board/engicam/icorem6/readme.txt
+new file mode 100644
+index 0000000..5a526a2
+--- /dev/null
++++ b/board/engicam/icorem6/readme.txt
+@@ -0,0 +1,68 @@
++*********************************************
++Buildroot for Engicam i.CoreM6 SOM platforms:
++*********************************************
++
++This file documents the Buildroot support for all Engicam i.CoreM6
++SOM platform boards.
++
++i.CoreM6 Quad/Dual/DualLite/Solo SOM Starter kits:
++https://www.engicam.com/vis-prod/101120
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++Build
++=====
++
++First, configure Buildroot for the Engicam i.CoreM6 SOM's:
++
++- for i.CoreM6 Quad/Dual:
++
++  make engicam_imx6qdl_icore_mmc_defconfig
++
++Build all components:
++
++  make
++
++You will find the following files in output/images/:
++- for i.CoreM6 Quad/Dual:
++  - imx6q-icore.dtb
++- for i.CoreM6 DualLite/Solo:
++  - imx6dl-icore.dtb
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - SPL
++  - u-boot-dtb.img
++  - uImage
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/engicam/genimage.cfg
++
++Boot the i.CoreM6 boards with SD boot:
++=====================================
++
++To boot your newly created system:
++- insert the SD card in the SD slot of the board;
++- connect 3-wire RS232 serial port J28 on board, and connect with other
++  serial end or USB cable(if serial-to-usb converter used) using
++  a terminal emulator at 115200 bps, 8n1;
++- close JM3 for sd boot.
++- power on the board.
++
++Enjoy!
+diff --git a/configs/engicam_imx6qdl_icore_mmc_defconfig b/configs/engicam_imx6qdl_icore_mmc_defconfig
+new file mode 100644
+index 0000000..1fd2b9e
+--- /dev/null
++++ b/configs/engicam_imx6qdl_icore_mmc_defconfig
+@@ -0,0 +1,38 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_VFPV3=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_mmc"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_UIMAGE=y
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore"
++
++# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo Starter Kit"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
 -- 
 2.7.4
