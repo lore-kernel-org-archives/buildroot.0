@@ -1,41 +1,37 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 12 Jun 2017 06:08:59 +0200
-Subject: [Buildroot] [PATCH 02/14] package/irrlicht: new package
+Date: Mon, 12 Jun 2017 05:59:43 +0200
+Subject: [Buildroot] [PATCH 04/14] package/minetest: new package
 References: <20170411222643.9770-1-romain.naour@gmail.com>
- <1108a7ef-12c0-8e55-1a6f-22f9b4bae251@t-online.de>
- <007c55a8-b229-7d5d-1a73-c81057d53ca7@gmail.com>
- <cba4449d-096e-a698-c55e-6a2c52c9048d@mind.be>
-Message-ID: <rng11exo2s.ln2@ID-313208.user.individual.net>
+ <20170411222643.9770-4-romain.naour@gmail.com>
+ <1pb01exniq.ln2@ID-313208.user.individual.net>
+ <556194f7-e699-7e68-75b2-8563f76b38ac@gmail.com>
+Message-ID: <f6g11exo2s.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 11 Jun 2017 23:33:27 +0200 schrieb Arnout Vandecappelle:
+Am Sun, 11 Jun 2017 23:18:45 +0200 schrieb Romain Naour:
 
-> On 11-06-17 23:09, Romain Naour wrote:
->> Hi Bernd,
 >> 
->> Thank for the review, it's very appreciated :)
+>> Building with this defconfig worked fine:
 >> 
->> Le 11/06/2017 ? 18:54, Bernd Kuhls a ?crit :
->>> Hi Romain,
->>>
->>> afaics the irrlicht package only provides libirrlicht.so.
->>> What about naming the package libirrlicht and move it to
->>> "Target packages > Libraries > Graphics"?
->> 
->> Make sense even if irrlicht is the upstream name.
->> In the past, I hesitated to do so for efl package which can be named 
-libefl.
+>> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+>> BR2_BINUTILS_VERSION_2_28_X=y
+>> BR2_GCC_VERSION_7_X=y
+>> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>> BR2_PACKAGE_MINETEST=y
+>> BR2_PACKAGE_MINETEST_CLIENT_SERVER=y
+>> BR2_PACKAGE_MESA3D=y
+>> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+>> BR2_PACKAGE_XORG7=y
+>> BR2_PACKAGE_LUAJIT=y
 > 
->  No, in Buildroot, we always use the upstream name (except for python-* 
-etc.).
+> It means that I can add your Tested-by tag?
 
-Hi Arnout,
+Hi Romain,
 
-this is not true for example for libcurl, libfribidi, libglew, libglfw 
-and libspandsp whose respective upstream project names also lack "lib".
+yes.
 
 Regards, Bernd
