@@ -1,47 +1,105 @@
 From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Mon, 12 Jun 2017 16:42:16 -0700
-Subject: [Buildroot] [PATCH v4 7/7] python-ipython: Bump to version 5.4.0
+Date: Mon, 12 Jun 2017 16:42:12 -0700
+Subject: [Buildroot] [PATCH v4 3/7] package/python-pathlib2: New package
 In-Reply-To: <20170612234216.902-1-andrew.smirnov@gmail.com>
 References: <20170612234216.902-1-andrew.smirnov@gmail.com>
-Message-ID: <20170612234216.902-8-andrew.smirnov@gmail.com>
+Message-ID: <20170612234216.902-4-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add 'pathlib2'[1] package to Buildroot. Needed by 'pickleshare'
+package, which is added in the next patch.
+
+[1] https://pypi.python.org/pypi/pathlib2
+
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/python-ipython/python-ipython.hash | 4 ++--
- package/python-ipython/python-ipython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-pathlib2/Config.in            | 14 ++++++++++++++
+ package/python-pathlib2/python-pathlib2.hash |  3 +++
+ package/python-pathlib2/python-pathlib2.mk   | 14 ++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/python-pathlib2/Config.in
+ create mode 100644 package/python-pathlib2/python-pathlib2.hash
+ create mode 100644 package/python-pathlib2/python-pathlib2.mk
 
-diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
-index a223408..af1ed94 100644
---- a/package/python-ipython/python-ipython.hash
-+++ b/package/python-ipython/python-ipython.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/ipython/json, sha256 locally computed
--md5 19e4a46ec7d7a32d068de4c253c9b459 ipython-5.2.2.tar.gz
--sha256 6ee1c89f6031e0c86727820ad394c6eb4d3ac28de48e0df3b9367ccf92e212e2 ipython-5.2.2.tar.gz
-+md5 d8cc938f46801060239184a35ec9c5a6 ipython-5.4.0.tar.gz
-+sha256 6907826c427c917bf0cdab71ee728288b1f1975c4b94b3ed608b67db3183c974 ipython-5.4.0.tar.gz
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index e57d69d..5d92546 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_IPYTHON_VERSION = 5.2.2
-+PYTHON_IPYTHON_VERSION = 5.4.0
- PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
--PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/6e/cf/c2a3ca5942e2d8084574157a8f818efafb7218204cd9e41166c92c452e07
-+PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/36/cd/765f53135bbbbcd691858aba3af124453a230fe0c752f009f69012fce5d5
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
- PYTHON_IPYTHON_SETUP_TYPE = distutils
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9d0b51d..5545e3f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -83,6 +83,7 @@ F:	package/wine/
+ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+ F:	package/python-decorator/
+ F:	package/python-ipython-genutils/
++F:	package/python-pathlib2/
+ F:	package/python-scandir/
+ F:	package/python-simplegeneric/
+ F:	package/python-traitlets/
+diff --git a/package/Config.in b/package/Config.in
+index 9bf2e1f..5b4e5ee 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -776,6 +776,7 @@ menu "External python modules"
+ 	source "package/python-paho-mqtt/Config.in"
+ 	source "package/python-pam/Config.in"
+ 	source "package/python-paramiko/Config.in"
++	source "package/python-pathlib2/Config.in"
+ 	source "package/python-pathpy/Config.in"
+ 	source "package/python-pathtools/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
+diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
+new file mode 100644
+index 0000000..7297f0a
+--- /dev/null
++++ b/package/python-pathlib2/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_PATHLIB2
++	bool "python-pathlib2"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_SCANDIR # runtime
++	help
++	  Object-oriented filesystem paths.
++
++	  The goal of pathlib2 is to provide a backport of standard
++	  pathlib module which tracks the standard library module, so
++	  all the newest features of the standard pathlib can be used
++	  also on older Python versions.
++
++	  https://pypi.python.org/pypi/pathlib2
+diff --git a/package/python-pathlib2/python-pathlib2.hash b/package/python-pathlib2/python-pathlib2.hash
+new file mode 100644
+index 0000000..a9c2949
+--- /dev/null
++++ b/package/python-pathlib2/python-pathlib2.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/pathlib2/json, sha256 locally computed
++md5 6c75bfde898b6c88627621a48ee8de14 pathlib2-2.2.1.tar.gz
++sha256 ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d pathlib2-2.2.1.tar.gz
+diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
+new file mode 100644
+index 0000000..db2df91
+--- /dev/null
++++ b/package/python-pathlib2/python-pathlib2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pathlib2
++#
++################################################################################
++
++PYTHON_PATHLIB2_VERSION = 2.2.1
++PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
++PYTHON_PATHLIB2_SITE = https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56
++PYTHON_PATHLIB2_LICENSE = MIT
++PYTHON_PATHLIB2_LICENSE_FILE = LICENSE.rst
++PYTHON_PATHLIB2_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
 2.9.4
