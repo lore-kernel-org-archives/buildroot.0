@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 12 Jun 2017 22:54:07 +0200
-Subject: [Buildroot] [PATCH v2 10/13] package/minetest: add hiredis optional
-	dependency
+Date: Mon, 12 Jun 2017 22:54:06 +0200
+Subject: [Buildroot] [PATCH v2 09/13] package/minetest: add postgresql
+	optional dependency
 In-Reply-To: <20170612205410.20230-1-romain.naour@gmail.com>
 References: <20170612205410.20230-1-romain.naour@gmail.com>
-Message-ID: <20170612205410.20230-10-romain.naour@gmail.com>
+Message-ID: <20170612205410.20230-9-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,28 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-index 742b2d1..40df470 100644
+index 42c8888..742b2d1 100644
 --- a/package/minetest/minetest.mk
 +++ b/package/minetest/minetest.mk
-@@ -16,7 +16,6 @@ MINETEST_CONF_OPTS = \
+@@ -15,7 +15,6 @@ MINETEST_CONF_OPTS = \
+ 	-DDEFAULT_RUN_IN_PLACE=OFF \
  	-DENABLE_LUAJIT=ON \
  	-DENABLE_CURSES=OFF \
+-	-DENABLE_POSTGRESQL=OFF \
  	-DENABLE_LEVELDB=OFF \
--	-DENABLE_REDIS=OFF \
+ 	-DENABLE_REDIS=OFF \
  	-DENABLE_SPATIAL=OFF \
- 	-DAPPLY_LOCALE_BLACKLIST=OFF \
- 	-DENABLE_SYSTEM_GMP=ON \
-@@ -49,6 +48,13 @@ else
- MINETEST_CONF_OPTS += -DENABLE_FREETYPE=OFF
+@@ -71,4 +70,11 @@ else
+ MINETEST_CONF_OPTS += -DENABLE_CURL=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_HIREDIS),y)
-+MINETEST_DEPENDENCIES += hiredis
-+MINETEST_CONF_OPTS += -DENABLE_REDIS=ON
++ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++MINETEST_DEPENDENCIES += postgresql
++MINETEST_CONF_OPTS += -DENABLE_POSTGRESQL=ON
 +else
-+MINETEST_CONF_OPTS += -DENABLE_REDIS=OFF
++MINETEST_CONF_OPTS += -DENABLE_POSTGRESQL=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_GETTEXT),y)
- MINETEST_DEPENDENCIES += gettext
- MINETEST_CONF_OPTS += -DENABLE_GETTEXT=ON
+ $(eval $(cmake-package))
 -- 
 2.9.4
