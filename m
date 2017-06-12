@@ -1,40 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Jun 2017 16:39:54 +0000
-Subject: [Buildroot] [Bug 9941] nodejs option disappears for arm
-In-Reply-To: <bug-9941-163@https.bugs.busybox.net/>
-References: <bug-9941-163@https.bugs.busybox.net/>
-Message-ID: <bug-9941-163-PbU3MjqYHc@https.bugs.busybox.net/>
+From: MD I. Islam <tamim@csebuet.org>
+Date: Mon, 12 Jun 2017 12:43:24 -0400
+Subject: [Buildroot] scsi/scsi.h: No such file or directory
+In-Reply-To: <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
+References: <CAM7NYTg0TK9phO3EEszpmyY+v9F4nn6uCocZ=OuvvSfd6xCOJQ@mail.gmail.com>
+ <20170612152332.wmyjhvatvid7ghgd@sapphire.tkos.co.il>
+ <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
+Message-ID: <CAM7NYTjHa0waAPpauLhFL1j60pnmskGcZRUVR9G7iNYnWyCHQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9941
+I'm using the main source tree. I get the same error on other configs as
+well ( such as *beaglebone_defconfig)*. Does it mean that the problem is to
+do with my host machine?
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Tamim
+PhD Student/Graduate Assistant
+CS Department, Kent State University
+Kent, OH 44240
+http://web.cs.kent.edu/~mislam4/ <https://web.cs.kent.edu/~mislam4/>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|---                         |INVALID
-                 CC|                            |yann.morin.1998 at free.fr
+On Mon, Jun 12, 2017 at 11:48 AM, Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
 
---- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Refik, All,
-
-nodejs requires an FPU (VFP), but it is not enabled
-in your Buildroot configuration.
-
-So, if your CPU indeed lacks a VFP, then you can not
-use nodejs on your target.
-
-If your CPU does have a VFP, then enable it in your
-Buildroot configuration.
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> Baruch, All,
+>
+> On 12 June 2017 17:23:32 CEST, Baruch Siach <baruch@tkos.co.il> wrote:
+> >Hi Tamim,
+> >
+> >On Mon, Jun 12, 2017 at 11:09:41AM -0400, MD I. Islam wrote:
+> >> I'm new to Buildroot. I'm using *arm_foundationv8_defconfig* as my
+> >config.
+> >> But I'm getting the error *scsi/scsi.h: No such file or directory*. I
+> >> cleaned and  rebuild the code, but getting the error every time.
+> >Could
+> >> anyone suggest what is wrong?
+> >
+> >There is no arm_foundationv8_defconfig in mainline Buildroot.
+>
+> Unless I missed something, yes there is...
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
+> --
+> Sent from my phone. Please excuse my brevity.
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170612/8be67d6b/attachment.html>
