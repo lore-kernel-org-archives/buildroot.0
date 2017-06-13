@@ -1,48 +1,47 @@
-From: Guy Benyei <guybe@mellanox.com>
-Date: Tue, 13 Jun 2017 07:40:58 +0000
-Subject: [Buildroot] [PATCH] gcc: add option to build and install gcc's
-	libssp
-In-Reply-To: <20170613090842.6b0b724e@windsurf.lan>
-References: <AM3PR05MB433082E20B48215DFA88130C9CD0@AM3PR05MB433.eurprd05.prod.outlook.com>
- <5c2a90b2-8989-fb5d-aed4-f06d3fd3ef43@mind.be>
- <20170613090842.6b0b724e@windsurf.lan>
-Message-ID: <AM3PR05MB433EDE15B086B8F000FF64AC9C20@AM3PR05MB433.eurprd05.prod.outlook.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Tue, 13 Jun 2017 13:18:19 +0530
+Subject: [Buildroot] [PATCH 0/5] Board: Add Engicam i.MX6 SOMs
+Message-ID: <1497340104-25108-1-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Jagan Teki <jagan@amarulasolutions.com>
 
-On Tuesday, June 13, 2017 10:09 AM, Thomas Petazzoni wrote:
+This series add buildroot support for Engicam i.MX6 SOM's
+- i.CoreM6 DualLite/Solo
+- i.CoreM6 RQS
+- GEAM6UL
 
+Jagan Teki (5):
+  board: Add support for Engicam i.CoreM6 DualLite/Solo boards
+  board: engicam: Rename defconfig engicam_imx6qdl_icore_mmc_defconfig
+  board: Add support for Engicam i.CoreM6 RQS SOM
+  board: engicam: Add icorem6 for i.CoreM6 support
+  board: Add support for Engicam GEAM6UL SOM
 
-> >  The new symbol will only appear in two cases:
-> >
-> > - with uClibc, if BR2_TOOLCHAIN_BUILDROOT_USE_SSP is not selected;
-> > - with musl, for i386 and powerpc (because it is broken on musl).
-> >
-> >  In the uClibc case, I really see no reason to prefer the gcc version
-> > instead of the uClibc version. So that basically leaves just the musl
-> > case. Is that the situation you are trying to fix? If that is it, I
-> > think it's better not to have a config options at all, but just enable the gcc thing
-> if musl && (i386 || powerpc).
-> >
-> >  Or is there another reason why you need this?
-> 
-> Yes, I'm also wondering about the use case here. Is there any benefit in using the
-> compiler-provided libssp, instead of the libc provided implementation? Or,
-> opposite question: is there any benefit in using the libc provided implementation
-> (as we do today) instead of the compiler-provided one?
-> 
-> Should we provide a choice for the user to select between the two? I must say
-> I'm not really thrilled by this idea because it's a very arcane/specific configuration
-> item, which may be difficult for regular users to understand.
+ DEVELOPERS                                         |  4 +-
+ board/engicam/geam6ul/genimage.cfg                 | 38 ++++++++++++
+ board/engicam/geam6ul/readme.txt                   | 65 +++++++++++++++++++++
+ board/engicam/{ => icorem6}/genimage.cfg           |  1 +
+ board/engicam/{ => icorem6}/readme.txt             | 18 +++---
+ board/engicam/icorem6_rqs/genimage.cfg             | 39 +++++++++++++
+ board/engicam/icorem6_rqs/readme.txt               | 68 ++++++++++++++++++++++
+ ...fconfig => engicam_imx6qdl_icore_mmc_defconfig} | 10 ++--
+ configs/engicam_imx6qdl_icore_rqs_mmc_defconfig    | 41 +++++++++++++
+ configs/engicam_imx6ul_geam_mmc_defconfig          | 41 +++++++++++++
+ 10 files changed, 311 insertions(+), 14 deletions(-)
+ create mode 100644 board/engicam/geam6ul/genimage.cfg
+ create mode 100644 board/engicam/geam6ul/readme.txt
+ rename board/engicam/{ => icorem6}/genimage.cfg (95%)
+ rename board/engicam/{ => icorem6}/readme.txt (74%)
+ create mode 100644 board/engicam/icorem6_rqs/genimage.cfg
+ create mode 100644 board/engicam/icorem6_rqs/readme.txt
+ rename configs/{engicam_imx6q_icore_defconfig => engicam_imx6qdl_icore_mmc_defconfig} (73%)
+ create mode 100644 configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
+ create mode 100644 configs/engicam_imx6ul_geam_mmc_defconfig
 
-I'm actually using uClibc on ARC big-endian architecture, so my target is not musl. We also don't want to enable SSP all the time, only as a tool when memory issues are being debugged. My goal was to provide SSP without any change to uClibc or GCC itself. LibSSP could be copied to the target only when SSP is actually needed.
-
-When double checking the result of compiling uClibc with BR2_TOOLCHAIN_BUILDROOT_USE_SSP, I've seen, that uClibc is actually binary-identical to the version built without BR2_TOOLCHAIN_BUILDROOT_USE_SSP. I find it strange, as actually there should be some additional functions and variables enabled in this case. Anyhow,  might be able to work with the uClibc support enabled by default.
-
-Thanks
-      Guy
+-- 
+2.7.4
