@@ -1,99 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Jun 2017 23:13:36 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] intltool: add patch to
-	fix compatibility with Perl 5.26
-Message-ID: <20170613211340.927218165E@busybox.osuosl.org>
+Date: Tue, 13 Jun 2017 23:37:23 +0200
+Subject: [Buildroot] [PATCH] package/gdb: add support for gdb 8.0
+In-Reply-To: <20170612093640.0b2da648@windsurf.home> (Thomas Petazzoni's
+ message of "Mon, 12 Jun 2017 09:36:40 +0200")
+References: <20170605204648.11780-1-romain.naour@gmail.com>
+ <20170611181043.0de6329f@windsurf.home>
+ <e2edd343-47ed-146f-be62-419a61b52242@mind.be>
+ <20170612093640.0b2da648@windsurf.home>
+Message-ID: <87d1a7bmcs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc5d56d55fb826cb46339e683fc30ee111fa69c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-When Perl 5.26 is installed on the host, building some packages like
-avahi fail, because of intltool-update:
+ > Hello,
+ > On Sun, 11 Jun 2017 23:17:36 +0200, Arnout Vandecappelle wrote:
 
-```
-Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/^(.*)\${ <-- HERE ?([A-Z_]+)}?(.*)$/ at $BUILDROOT/host/usr/bin/intltool-update line 1065.
-```
+ >> > Applied to master, thanks. Do you intend to send a patch that updates
+ >> > the default gdb version to 7.12, and drop support for 7.10 ?  
+ >> 
+ >> Since we've been discussing version dropping, perhaps it's time to consider gdb
+ >> as well.
+ >> 
+ >> Is there really any reason to support multiple versions of gdb?
+ >> 
+ >> If yes, is there a reason to not use the latest version as default?
+ >> 
+ >> And the same questions for binutils.
 
-Apparently, this has been a warning before Perl 5.26, but now it is an
-error.
+ > All this version selection stuff is very historical. I guess one reason
+ > for it is to allow people to upgrade Buildroot while keeping the same
+ > toolchain components, which are often quite sensitive to changes.
+ > That's the main reasoning.
 
-Fetch from:
-https://github.com/Alexpux/MSYS2-packages/blob/master/intltool/perl-5.22-compatibility.patch
+Indeed. People should normally not use the internal toolchain support
+(E.G. rebuilding the toolchain every time) for real projects, but
+yeah. You can still reuse a toolchain built with an older BR version,
+but you naturally don't get any of the new fixes.
 
-Reported upstream:
-https://bugs.launchpad.net/intltool/+bug/1696658
+With that said, our internal toolchain component version options do make
+it unrealistic for us to really test all combinations, so gradually
+limiting the number of supported versions going forward is probably the
+way to go.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 9426d7edf0702d6ce46db45943ae9023a60cc1be)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../intltool/0001-perl-5.26-compatibility.patch    | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
-
-diff --git a/package/intltool/0001-perl-5.26-compatibility.patch b/package/intltool/0001-perl-5.26-compatibility.patch
-new file mode 100644
-index 0000000..a2a7aef
---- /dev/null
-+++ b/package/intltool/0001-perl-5.26-compatibility.patch
-@@ -0,0 +1,55 @@
-+Fix regex errors thrown by Perl 5.26:
-+
-+Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/^(.*)\${ <-- HERE ?([A-Z_]+)}?(.*)$/ at $BUILDROOT/host/usr/bin/intltool-update line 1065.
-+
-+Fetched from:
-+https://github.com/Alexpux/MSYS2-packages/blob/master/intltool/perl-5.22-compatibility.patch
-+
-+Reported upstream:
-+https://bugs.launchpad.net/intltool/+bug/1696658
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+
-+--- intltool-0.51.0.orig/intltool-update.in	2015-03-09 02:39:54.000000000 +0100
-++++ intltool-0.51.0.orig/intltool-update.in	2015-06-19 01:52:07.171228154 +0200
-+@@ -1062,7 +1062,7 @@ 
-+ 	}
-+     }
-+ 
-+-    if ($str =~ /^(.*)\${?([A-Z_]+)}?(.*)$/)
-++    if ($str =~ /^(.*)\$\{?([A-Z_]+)}?(.*)$/)
-+     {
-+ 	my $rest = $3;
-+ 	my $untouched = $1;
-+@@ -1190,10 +1190,10 @@ 
-+ 	$name    =~ s/\(+$//g;
-+ 	$version =~ s/\(+$//g;
-+ 
-+-	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\${?AC_PACKAGE_NAME}?/);
-+-	$varhash{"PACKAGE"} = $name if (not $name =~ /\${?PACKAGE}?/);
-+-	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\${?AC_PACKAGE_VERSION}?/);
-+-	$varhash{"VERSION"} = $version if (not $name =~ /\${?VERSION}?/);
-++	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\$\{?AC_PACKAGE_NAME}?/);
-++	$varhash{"PACKAGE"} = $name if (not $name =~ /\$\{?PACKAGE}?/);
-++	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\$\{?AC_PACKAGE_VERSION}?/);
-++	$varhash{"VERSION"} = $version if (not $name =~ /\$\{?VERSION}?/);
-+     }
-+ 
-+     if ($conf_source =~ /^AC_INIT\(([^,\)]+),([^,\)]+)[,]?([^,\)]+)?/m)
-+@@ -1219,11 +1219,11 @@ 
-+ 	$version =~ s/\(+$//g;
-+         $bugurl  =~ s/\(+$//g if (defined $bugurl);
-+ 
-+-	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\${?AC_PACKAGE_NAME}?/);
-+-	$varhash{"PACKAGE"} = $name if (not $name =~ /\${?PACKAGE}?/);
-+-	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\${?AC_PACKAGE_VERSION}?/);
-+-	$varhash{"VERSION"} = $version if (not $name =~ /\${?VERSION}?/);
-+-        $varhash{"PACKAGE_BUGREPORT"} = $bugurl if (defined $bugurl and not $bugurl =~ /\${?\w+}?/);
-++	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\$\{?AC_PACKAGE_NAME}?/);
-++	$varhash{"PACKAGE"} = $name if (not $name =~ /\$\{?PACKAGE}?/);
-++	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\$\{?AC_PACKAGE_VERSION}?/);
-++	$varhash{"VERSION"} = $version if (not $name =~ /\$\{?VERSION}?/);
-++        $varhash{"PACKAGE_BUGREPORT"} = $bugurl if (defined $bugurl and not $bugurl =~ /\$\{?\w+}?/);
-+     }
-+ 
-+     # \s makes this not work, why?
+-- 
+Bye, Peter Korsgaard
