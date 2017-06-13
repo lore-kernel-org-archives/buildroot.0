@@ -1,65 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 00:04:52 +0200
-Subject: [Buildroot] [for-next 3/3] package/gcc: remove gcc 4.9
-In-Reply-To: <6c88ceb4-94f7-6018-6d3a-ae3e99c8d44e@mind.be> (Arnout
- Vandecappelle's message of "Sun, 11 Jun 2017 22:30:30 +0200")
-References: <20170525183457.12169-1-romain.naour@gmail.com>
- <20170525183457.12169-3-romain.naour@gmail.com>
- <20170526151414.11f2d47a@free-electrons.com>
- <6c88ceb4-94f7-6018-6d3a-ae3e99c8d44e@mind.be>
-Message-ID: <874lvjbl2z.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Jun 2017 00:06:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mcelog: fix legal-info
+In-Reply-To: <CA+NV+V=d7D+-zZKO4NYVpGrsY2Uz0pqhrLqYPwGA2rXJZSq11g@mail.gmail.com>
+ (Rahul Bedarkar's message of "Mon, 12 Jun 2017 22:38:17 +0530")
+References: <20170612041512.9374-1-bernd.kuhls@t-online.de>
+ <CA+NV+V=d7D+-zZKO4NYVpGrsY2Uz0pqhrLqYPwGA2rXJZSq11g@mail.gmail.com>
+Message-ID: <87zidba6ff.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Rahul" == Rahul Bedarkar <rahulbedarkar89@gmail.com> writes:
 
-Hi,
+ > On Mon, Jun 12, 2017 at 9:45 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+ >> 
+ >> README was renamed to README.md
+ >> https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/README.md?id=2fda0091a0628480a08cbf6ebe309fcb83aeae34
 
- >> I'll wait a little bit for additional feedback on this one. If nobody
- >> complains in the next few days, I'm going to apply it.
+ > make <pkg>-legal-info should have caught that after version bump as a
+ > part of testing. But it looks like we don't do that usually. In past,
+ > we have seen such failures after version bump.
 
- >  GCC 4.9 (or rather, GCC 5) is a bit a special case: libstdc++ had heavy
- > ABI-incompatible changes. E.g. at the time Debian switched to it, it was the
- > only time I had major breakage in sid. So, the switch from gcc 4.9 to gcc 5
- > means that any binary-only C++ program will no longer be usable.
+ > To avoid such failures, we can add hash of license file in <pkg>.hash
+ > and checking that after source is downloaded. If license file changes,
+ > it will be noticed while build test after version bump.
 
- That probably is a bigger issue for a binary distribution like Debian
- than for Buildroot though.
+ > Potentially, it will also help in keeping license string of packages
+ > up-to-date if it gets changed. What do you think ?
 
-
- >  On top of that, gcc 5 introduces many errors (for non-standard-compliant code)
- > that were accepted before in gcc 4.9, which makes existing codebases sometimes
- > difficult to get built. This, however, happens with each version bump so less of
- > an argument against removal.
-
-True. It also breaks older u-boot and Linux kernel versions that didn't
-handle > gcc4.x.
-
-
- >  You could say that users with such requirements should keep using their own
- > toolchain, but there are useful (security) fixes in libc as well. They could use
- > an external toolchain, but then how to build it? Crosstool-NG is a *lot* more
- > complicated to use than Buildroot.
-
-But we also don't keep old libc versions around. Would they be Ok with
-moving to a new libc version but not to newer gcc version?
-
-
- >  Bottom line: I'd tend to keep gcc 4.9 around for a while. If
- > breakage occurs we can disallow it for some architectures. There
- > shouldn't be much more maintenance effort than that, I think.
-
-I can follow you, and it is OK for me to keep 4.9 around for a little
-while longer. We always have this tradeoff between stability and adding
-new features / cleanups, and I do think people should be moving to the
-LTS version (and plan in time for a yearly migration to the new LTS) if
-they want stability and fixes for a longer period, just like they
-(hopefully) do for their Linux kernel.
-
-We should imho drop 4.9 before the next LTS though.
+Yes, this is something I have been thinking about as well (but not found
+time to implement yet). +1 from here!
 
 -- 
 Bye, Peter Korsgaard
