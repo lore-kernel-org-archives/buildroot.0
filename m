@@ -1,116 +1,99 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Tue, 13 Jun 2017 21:04:01 +0200
-Subject: [Buildroot] [PATCH 1/1] setlocalversion: fix detection of hg
- revision for untagged versions
-In-Reply-To: <CAAXf6LXJ-0s88_sFygm0A+wFOTeorqHvBx5xCvBM4vm-T_hNaA@mail.gmail.com>
-References: <20170426124311.11449-1-patrickdepinguin@gmail.com>
- <87r30fmhvp.fsf@dell.be.48ers.dk>
- <CAAXf6LXJ-0s88_sFygm0A+wFOTeorqHvBx5xCvBM4vm-T_hNaA@mail.gmail.com>
-Message-ID: <20170613190401.GV13116@argentina>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Jun 2017 23:12:55 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] intltool: add patch to
+	fix compatibility with Perl 5.26
+Message-ID: <20170613211300.EC15281D9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 26, 2017 at 03:56:09PM +0200, Thomas De Schampheleire wrote:
-> Hi Peter,
-> 
-> 2017-04-26 15:13 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
-> >>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
-> >
-> >  > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >  > By default, cut prints the entire line if the specified delimiter is not
-> >  > present at all:
-> >
-> >  >     $ printf "foo bar" | cut -d' ' -f2
-> >  >     bar
-> >  >     $ printf "foobar" | cut -d' ' -f2
-> >  >     foobar
-> >
-> >  > In setlocalversion, cut is presented with the output of 'hg id' which has
-> >  > the format:
-> >
-> >  >     "<revision> <tags-if-any>"
-> >
-> >  > If the current revision is not tagged, the output of 'hg id' does not
-> >  > contain the delimiter (space), cut prints the entire string, and
-> >  > setlocalversion thinks the version is the tag.
-> >  > As setlocalversion does not print anything for tagged versions, there is no
-> >  > output overall, and no correct indication of the mercurial revision.
-> >
-> >  > Fix by passing the extra cut option '--only-delimited', which suppresses
-> >  > output if no delimiter is found.
-> >
-> >  > This problem likely went unnoticed for so long, because the tag 'tip' (i.e.
-> >  > most recent revision of the branch) is treated specially: in this case the
-> >  > mercurial revision _is_ printed, i.e. the situation is treated as
-> >  > 'untagged'.
-> >  > The problem is only seen when you are _not_ at the most recent revision in
-> >  > your branch.
-> >
-> > setlocalversion comes from the kernel. Do you have the same problem
-> > there?
-> >
-> > I see this particular line changed back in 2010 in the kernel repo:
-> >
-> >
-> > commit 8558f59edf935cf5ee5ffc29a9e9458fd9a71be1
-> > Author: Michal Marek <mmarek@suse.cz>
-> > Date:   Mon Aug 16 17:09:52 2010 +0200
-> >
-> >     setlocalversion: Ignote SCMs above the linux source tree
-> >
-> >     Dan McGee <dpmcgee@gmail.com> writes:
-> >     > Note that when in git, you get the appended "+" sign. If
-> >     > LOCALVERSION_AUTO is set, you will get something like
-> >     > "eee-gb01b08c-dirty" (whereas the copy of the tree in /tmp still
-> >     > returns "eee"). It doesn't matter whether the working tree is dirty or
-> >     > clean.
-> >     >
-> >     > Is there a way to disable this? I'm building from a clean tarball that
-> >     > just happens to be unpacked inside a git repository. One would think
-> >     > setting LOCALVERSION_AUTO to false would do it, but no such luck...
-> >
-> >     Fix this by checking if the kernel source tree is the root of the git or
-> >     hg repository. No fix for svn: If the kernel source is not tracked in
-> >     the svn repository, it works as expected, otherwise determining the
-> >     'repository root' is not really a defined task.
-> >
-> >     Reported-and-tested-by: Dan McGee <dpmcgee@gmail.com>
-> >     Signed-off-by: Michal Marek <mmarek@suse.cz>
-> >
-> >
-> > Perhaps synching with the kernel would be a better way forward than
-> > adding local modifications?
-> 
-> 
-> I tried using the latest version from the kernel in Buildroot and
-> notice the following:
-> 
-> - the version from the kernel now expects to find
-> include/config/auto.conf and bails out otherwise. Commenting out this
-> test...
-> - the output of that script is now just a +   i.e. the actual output
-> of the scm version does not matter. This is due to following code:
->         scm=$(scm_version --short)
->         res="$res${scm:++}"
-> 
->    which means: if scm is empty, don't change res -- if scm is not
-> empty, then the literal '+' is appended to res.
-> - if I ignore that point and check the actual content of the 'scm'
-> variable, I notice that this script suffers from the same problem as
-> the buildroot one. My fix solves that aspect also in the kernel
-> script.
-> 
-> 
-> The kernel script has evolved a lot from the version that Buildroot
-> once took, I don't know if the changes have real value for us.
-> I also assume that the kernel developers will not really want to
-> customize their version of the script to add more configuration
-> switches to tweak the behavior.
-> https://github.com/torvalds/linux/blob/master/scripts/setlocalversion
-> 
-> Based on this feedback, how do you think we should proceed?
+commit: https://git.buildroot.net/buildroot/commit/?id=4b589a0e4067e01bf6f0ee408d7a9fd9fd7b7f75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-ping?
+When Perl 5.26 is installed on the host, building some packages like
+avahi fail, because of intltool-update:
+
+```
+Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/^(.*)\${ <-- HERE ?([A-Z_]+)}?(.*)$/ at $BUILDROOT/host/usr/bin/intltool-update line 1065.
+```
+
+Apparently, this has been a warning before Perl 5.26, but now it is an
+error.
+
+Fetch from:
+https://github.com/Alexpux/MSYS2-packages/blob/master/intltool/perl-5.22-compatibility.patch
+
+Reported upstream:
+https://bugs.launchpad.net/intltool/+bug/1696658
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 9426d7edf0702d6ce46db45943ae9023a60cc1be)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../intltool/0001-perl-5.26-compatibility.patch    | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/package/intltool/0001-perl-5.26-compatibility.patch b/package/intltool/0001-perl-5.26-compatibility.patch
+new file mode 100644
+index 0000000..a2a7aef
+--- /dev/null
++++ b/package/intltool/0001-perl-5.26-compatibility.patch
+@@ -0,0 +1,55 @@
++Fix regex errors thrown by Perl 5.26:
++
++Unescaped left brace in regex is illegal here in regex; marked by <-- HERE in m/^(.*)\${ <-- HERE ?([A-Z_]+)}?(.*)$/ at $BUILDROOT/host/usr/bin/intltool-update line 1065.
++
++Fetched from:
++https://github.com/Alexpux/MSYS2-packages/blob/master/intltool/perl-5.22-compatibility.patch
++
++Reported upstream:
++https://bugs.launchpad.net/intltool/+bug/1696658
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++
++--- intltool-0.51.0.orig/intltool-update.in	2015-03-09 02:39:54.000000000 +0100
+++++ intltool-0.51.0.orig/intltool-update.in	2015-06-19 01:52:07.171228154 +0200
++@@ -1062,7 +1062,7 @@ 
++ 	}
++     }
++ 
++-    if ($str =~ /^(.*)\${?([A-Z_]+)}?(.*)$/)
+++    if ($str =~ /^(.*)\$\{?([A-Z_]+)}?(.*)$/)
++     {
++ 	my $rest = $3;
++ 	my $untouched = $1;
++@@ -1190,10 +1190,10 @@ 
++ 	$name    =~ s/\(+$//g;
++ 	$version =~ s/\(+$//g;
++ 
++-	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\${?AC_PACKAGE_NAME}?/);
++-	$varhash{"PACKAGE"} = $name if (not $name =~ /\${?PACKAGE}?/);
++-	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\${?AC_PACKAGE_VERSION}?/);
++-	$varhash{"VERSION"} = $version if (not $name =~ /\${?VERSION}?/);
+++	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\$\{?AC_PACKAGE_NAME}?/);
+++	$varhash{"PACKAGE"} = $name if (not $name =~ /\$\{?PACKAGE}?/);
+++	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\$\{?AC_PACKAGE_VERSION}?/);
+++	$varhash{"VERSION"} = $version if (not $name =~ /\$\{?VERSION}?/);
++     }
++ 
++     if ($conf_source =~ /^AC_INIT\(([^,\)]+),([^,\)]+)[,]?([^,\)]+)?/m)
++@@ -1219,11 +1219,11 @@ 
++ 	$version =~ s/\(+$//g;
++         $bugurl  =~ s/\(+$//g if (defined $bugurl);
++ 
++-	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\${?AC_PACKAGE_NAME}?/);
++-	$varhash{"PACKAGE"} = $name if (not $name =~ /\${?PACKAGE}?/);
++-	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\${?AC_PACKAGE_VERSION}?/);
++-	$varhash{"VERSION"} = $version if (not $name =~ /\${?VERSION}?/);
++-        $varhash{"PACKAGE_BUGREPORT"} = $bugurl if (defined $bugurl and not $bugurl =~ /\${?\w+}?/);
+++	$varhash{"PACKAGE_NAME"} = $name if (not $name =~ /\$\{?AC_PACKAGE_NAME}?/);
+++	$varhash{"PACKAGE"} = $name if (not $name =~ /\$\{?PACKAGE}?/);
+++	$varhash{"PACKAGE_VERSION"} = $version if (not $name =~ /\$\{?AC_PACKAGE_VERSION}?/);
+++	$varhash{"VERSION"} = $version if (not $name =~ /\$\{?VERSION}?/);
+++        $varhash{"PACKAGE_BUGREPORT"} = $bugurl if (defined $bugurl and not $bugurl =~ /\$\{?\w+}?/);
++     }
++ 
++     # \s makes this not work, why?
