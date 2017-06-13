@@ -1,37 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 00:06:44 +0200
+Date: Wed, 14 Jun 2017 00:11:05 +0200
 Subject: [Buildroot] [PATCH 1/1] package/mcelog: fix legal-info
-In-Reply-To: <CA+NV+V=d7D+-zZKO4NYVpGrsY2Uz0pqhrLqYPwGA2rXJZSq11g@mail.gmail.com>
- (Rahul Bedarkar's message of "Mon, 12 Jun 2017 22:38:17 +0530")
+In-Reply-To: <20170612210449.1f5e4bf9@windsurf.lan> (Thomas Petazzoni's
+ message of "Mon, 12 Jun 2017 21:04:49 +0200")
 References: <20170612041512.9374-1-bernd.kuhls@t-online.de>
  <CA+NV+V=d7D+-zZKO4NYVpGrsY2Uz0pqhrLqYPwGA2rXJZSq11g@mail.gmail.com>
-Message-ID: <87zidba6ff.fsf@dell.be.48ers.dk>
+ <20170612210449.1f5e4bf9@windsurf.lan>
+Message-ID: <87vanza686.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rahul" == Rahul Bedarkar <rahulbedarkar89@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > On Mon, Jun 12, 2017 at 9:45 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
- >> 
- >> README was renamed to README.md
- >> https://git.kernel.org/pub/scm/utils/cpu/mce/mcelog.git/commit/README.md?id=2fda0091a0628480a08cbf6ebe309fcb83aeae34
+Hi,
 
- > make <pkg>-legal-info should have caught that after version bump as a
- > part of testing. But it looks like we don't do that usually. In past,
- > we have seen such failures after version bump.
+ >> Potentially, it will also help in keeping license string of packages
+ >> up-to-date if it gets changed. What do you think ?
 
- > To avoid such failures, we can add hash of license file in <pkg>.hash
- > and checking that after source is downloaded. If license file changes,
- > it will be noticed while build test after version bump.
+ > Yocto/OE also has a hash for license files, specifically to check if
+ > the license file is changed.
 
- > Potentially, it will also help in keeping license string of packages
- > up-to-date if it gets changed. What do you think ?
+Exactly. I think it makes sense to do so. We provide legal info, and
+besides validating that the license files still exist we don't have any
+checks in place to ensure we catch license changes.
 
-Yes, this is something I have been thinking about as well (but not found
-time to implement yet). +1 from here!
+ > However, I'm not sure if the .hash file is the appropriate location. In
+ > the .hash file, we have the hash of the downloaded files (in the ones
+ > in DL_DIR). Hashes for files inside the tarball is a quite different
+ > thing.
+
+I don't see it as a big issue. If we want hashes for license files then
+they need to be stored somewhere, so storing them together with the
+download hashes sounds OK to me.
+
+ > Also, I'm a bit worried about the additional complexity and maintenance
+ > burden.
+
+I don't think it will add any significant maintenance burden. The
+license files very rarely changes, so normally you don't need to update
+them (and when you do you want to get notified of it).
 
 -- 
 Bye, Peter Korsgaard
