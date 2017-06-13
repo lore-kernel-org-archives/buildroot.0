@@ -1,47 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 00:11:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mcelog: fix legal-info
-In-Reply-To: <20170612210449.1f5e4bf9@windsurf.lan> (Thomas Petazzoni's
- message of "Mon, 12 Jun 2017 21:04:49 +0200")
-References: <20170612041512.9374-1-bernd.kuhls@t-online.de>
- <CA+NV+V=d7D+-zZKO4NYVpGrsY2Uz0pqhrLqYPwGA2rXJZSq11g@mail.gmail.com>
- <20170612210449.1f5e4bf9@windsurf.lan>
-Message-ID: <87vanza686.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 13 Jun 2017 19:40:03 -0300
+Subject: [Buildroot] [PATCH] glmark2: Fix segmentation fault
+Message-ID: <1497393603-16151-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Running glmark2 on imx6 with kernel 4.11.4 and Mesa 17.1.2 leads to
+a segmentation fault.
 
-Hi,
+Apply Lucas Stach's patch to fix the problem while upstream glmark2
+doesn't get fixed.
 
- >> Potentially, it will also help in keeping license string of packages
- >> up-to-date if it gets changed. What do you think ?
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ ...eStateDRM-use-fixed-event-context-version.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
 
- > Yocto/OE also has a hash for license files, specifically to check if
- > the license file is changed.
-
-Exactly. I think it makes sense to do so. We provide legal info, and
-besides validating that the license files still exist we don't have any
-checks in place to ensure we catch license changes.
-
- > However, I'm not sure if the .hash file is the appropriate location. In
- > the .hash file, we have the hash of the downloaded files (in the ones
- > in DL_DIR). Hashes for files inside the tarball is a quite different
- > thing.
-
-I don't see it as a big issue. If we want hashes for license files then
-they need to be stored somewhere, so storing them together with the
-download hashes sounds OK to me.
-
- > Also, I'm a bit worried about the additional complexity and maintenance
- > burden.
-
-I don't think it will add any significant maintenance burden. The
-license files very rarely changes, so normally you don't need to update
-them (and when you do you want to get notified of it).
-
+diff --git a/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch b/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
+new file mode 100644
+index 0000000..c66f409
+--- /dev/null
++++ b/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
+@@ -0,0 +1,28 @@
++From: Lucas Stach <l.stach@pengutronix.de>
++Date: Wed, 31 May 2017 13:01:00 +0200
++Subject: [PATCH] NativeStateDRM: use fixed event context version
++
++Using the latest version is not a good idea, as the context content may
++change between versions.
++
++Fixes a segfault with new kernel and libdrm.
++
++Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
++Signed-off-by: Fabio Estevam <festevam@gmail.com>
++---
++ src/native-state-drm.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/native-state-drm.cpp b/src/native-state-drm.cpp
++index 454a24d898ff..b9af996667dc 100644
++--- a/src/native-state-drm.cpp
+++++ b/src/native-state-drm.cpp
++@@ -106,7 +106,7 @@ NativeStateDRM::flip()
++     FD_ZERO(&fds);
++     FD_SET(fd_, &fds);
++     drmEventContext evCtx;
++-    evCtx.version = DRM_EVENT_CONTEXT_VERSION;
+++    evCtx.version = 2;
++     evCtx.page_flip_handler = page_flip_handler;
++ 
++     while (waiting) {
 -- 
-Bye, Peter Korsgaard
+2.7.4
