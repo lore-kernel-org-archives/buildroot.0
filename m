@@ -1,92 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Jun 2017 23:41:08 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/systemd: fix
-	paths to runtime utilities
-Message-ID: <20170613214150.3272E7FEE2@busybox.osuosl.org>
+Date: Wed, 14 Jun 2017 00:04:52 +0200
+Subject: [Buildroot] [for-next 3/3] package/gcc: remove gcc 4.9
+In-Reply-To: <6c88ceb4-94f7-6018-6d3a-ae3e99c8d44e@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 11 Jun 2017 22:30:30 +0200")
+References: <20170525183457.12169-1-romain.naour@gmail.com>
+ <20170525183457.12169-3-romain.naour@gmail.com>
+ <20170526151414.11f2d47a@free-electrons.com>
+ <6c88ceb4-94f7-6018-6d3a-ae3e99c8d44e@mind.be>
+Message-ID: <874lvjbl2z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaa641f775831eb5b8c966ecd4016b08e40cc9ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-systemd's configure is looking in $PATH to find utilities that will be
-needed at runtime.
+Hi,
 
-Usually, those utilties, when installed on the host, will be found in
-the same path they would be present on the target. For example,
-/usr/bin/mount on the host would also be /usr/bin/mount on the target,
-and all is find.
+ >> I'll wait a little bit for additional feedback on this one. If nobody
+ >> complains in the next few days, I'm going to apply it.
 
-Except when we need to install a host variant of util-linux, which will
-install mount in $(HOST_DIR), in which case systemd's configure would
-find that one.
+ >  GCC 4.9 (or rather, GCC 5) is a bit a special case: libstdc++ had heavy
+ > ABI-incompatible changes. E.g. at the time Debian switched to it, it was the
+ > only time I had major breakage in sid. So, the switch from gcc 4.9 to gcc 5
+ > means that any binary-only C++ program will no longer be usable.
 
-Of course, it is also very well possible that those utilities are not
-installed on the host in the same location they would be on the target,
-in case a user has manually installed some of those (e.g. in /usr/local/
-or in /opt/)
+ That probably is a bigger issue for a binary distribution like Debian
+ than for Buildroot though.
 
-Forcibly set the path to those utilities, as they are expected to be on
-the target.
 
-For kexec, we can set it even though we do not depend on it (yet).
-systemd will appropriately test it at runtime.
+ >  On top of that, gcc 5 introduces many errors (for non-standard-compliant code)
+ > that were accepted before in gcc 4.9, which makes existing codebases sometimes
+ > difficult to get built. This, however, happens with each version bump so less of
+ > an argument against removal.
 
-For quota, we point to non-existing files, so as to catch errors at
-runtime. It is to be noted that quotacheck is optional, while quotaon
-does not seem to be (a service file is always installed, that uses it).
+True. It also breaks older u-boot and Linux kernel versions that didn't
+handle > gcc4.x.
 
-Note: utilties listed in the order they appear in configure.ac
 
-Reported-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 68986ea30146bb00660e802c438a73ee58072365)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/systemd/systemd.mk | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ >  You could say that users with such requirements should keep using their own
+ > toolchain, but there are useful (security) fixes in libc as well. They could use
+ > an external toolchain, but then how to build it? Crosstool-NG is a *lot* more
+ > complicated to use than Buildroot.
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index f1ddfaf..ce2e9ff 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -46,10 +46,16 @@ SYSTEMD_CONF_OPTS += \
- 
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
- 
--# Override path to kmod, used in kmod-static-nodes.service
-+# Override paths to a few utilities needed at runtime, to
-+# avoid finding those we would install in $(HOST_DIR).
- SYSTEMD_CONF_ENV = \
- 	CFLAGS="$(SYSTEMD_CFLAGS)" \
--	ac_cv_path_KMOD=/usr/bin/kmod
-+	ac_cv_path_KILL=/usr/bin/kill \
-+	ac_cv_path_KMOD=/usr/bin/kmod \
-+	ac_cv_path_KEXEC=/usr/sbin/kexec \
-+	ac_cv_path_SULOGIN=/usr/sbin/sulogin \
-+	ac_cv_path_MOUNT_PATH=/usr/bin/mount \
-+	ac_cv_path_UMOUNT_PATH=/usr/bin/umount
- 
- define SYSTEMD_RUN_INTLTOOLIZE
- 	cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
-@@ -182,8 +188,14 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
- SYSTEMD_CONF_OPTS += --enable-quotacheck
-+SYSTEMD_CONF_ENV += \
-+	ac_cv_path_QUOTAON=/usr/sbin/quotaon \
-+	ac_cv_path_QUOTACHECK=/usr/sbin/quotacheck
- else
- SYSTEMD_CONF_OPTS += --disable-quotacheck
-+SYSTEMD_CONF_ENV += \
-+	ac_cv_path_QUOTAON=/.missing \
-+	ac_cv_path_QUOTACHECK=/.missing
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
+But we also don't keep old libc versions around. Would they be Ok with
+moving to a new libc version but not to newer gcc version?
+
+
+ >  Bottom line: I'd tend to keep gcc 4.9 around for a while. If
+ > breakage occurs we can disallow it for some architectures. There
+ > shouldn't be much more maintenance effort than that, I think.
+
+I can follow you, and it is OK for me to keep 4.9 around for a little
+while longer. We always have this tradeoff between stability and adding
+new features / cleanups, and I do think people should be moving to the
+LTS version (and plan in time for a yearly migration to the new LTS) if
+they want stability and fixes for a longer period, just like they
+(hopefully) do for their Linux kernel.
+
+We should imho drop 4.9 before the next LTS though.
+
+-- 
+Bye, Peter Korsgaard
