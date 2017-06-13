@@ -1,50 +1,20 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Jun 2017 23:37:23 +0200
-Subject: [Buildroot] [PATCH] package/gdb: add support for gdb 8.0
-In-Reply-To: <20170612093640.0b2da648@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 12 Jun 2017 09:36:40 +0200")
-References: <20170605204648.11780-1-romain.naour@gmail.com>
- <20170611181043.0de6329f@windsurf.home>
- <e2edd343-47ed-146f-be62-419a61b52242@mind.be>
- <20170612093640.0b2da648@windsurf.home>
-Message-ID: <87d1a7bmcs.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Date: Tue, 13 Jun 2017 21:02:41 +0200
+Subject: [Buildroot] [PATCH] scancpan: update with MetaCPAN API v1
+In-Reply-To: <20170613153500.15078-1-francois.perrad@gadz.org>
+References: <20170613153500.15078-1-francois.perrad@gadz.org>
+Message-ID: <20170613190241.GU13116@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Tue, Jun 13, 2017 at 05:35:00PM +0200, Francois Perrad wrote:
+> The API v0 is shutdown.
+> see https://bugs.busybox.net/show_bug.cgi?id=9951
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- > Hello,
- > On Sun, 11 Jun 2017 23:17:36 +0200, Arnout Vandecappelle wrote:
-
- >> > Applied to master, thanks. Do you intend to send a patch that updates
- >> > the default gdb version to 7.12, and drop support for 7.10 ?  
- >> 
- >> Since we've been discussing version dropping, perhaps it's time to consider gdb
- >> as well.
- >> 
- >> Is there really any reason to support multiple versions of gdb?
- >> 
- >> If yes, is there a reason to not use the latest version as default?
- >> 
- >> And the same questions for binutils.
-
- > All this version selection stuff is very historical. I guess one reason
- > for it is to allow people to upgrade Buildroot while keeping the same
- > toolchain components, which are often quite sensitive to changes.
- > That's the main reasoning.
-
-Indeed. People should normally not use the internal toolchain support
-(E.G. rebuilding the toolchain every time) for real projects, but
-yeah. You can still reuse a toolchain built with an older BR version,
-but you naturally don't get any of the new fixes.
-
-With that said, our internal toolchain component version options do make
-it unrealistic for us to really test all combinations, so gradually
-limiting the number of supported versions going forward is probably the
-way to go.
-
--- 
-Bye, Peter Korsgaard
+Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[tested before and after this patch for package Net-Telnet]
