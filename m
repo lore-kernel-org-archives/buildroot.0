@@ -1,105 +1,76 @@
-From: Andrey Smirnov <andrew.smirnov@gmail.com>
-Date: Mon, 12 Jun 2017 16:42:12 -0700
-Subject: [Buildroot] [PATCH v4 3/7] package/python-pathlib2: New package
-In-Reply-To: <20170612234216.902-1-andrew.smirnov@gmail.com>
-References: <20170612234216.902-1-andrew.smirnov@gmail.com>
-Message-ID: <20170612234216.902-4-andrew.smirnov@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 13 Jun 2017 03:11:49 +0200
+Subject: [Buildroot] configurable IDN flags usage in getnameinfo()
+Message-ID: <20170613011149.GY26922@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 'pathlib2'[1] package to Buildroot. Needed by 'pickleshare'
-package, which is added in the next patch.
+Hi,
 
-[1] https://pypi.python.org/pypi/pathlib2
+I would like to resolve one last issue I am facing, when compiling
+systemd with uClibc-ng, in an upstreamable way.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
----
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-pathlib2/Config.in            | 14 ++++++++++++++
- package/python-pathlib2/python-pathlib2.hash |  3 +++
- package/python-pathlib2/python-pathlib2.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/python-pathlib2/Config.in
- create mode 100644 package/python-pathlib2/python-pathlib2.hash
- create mode 100644 package/python-pathlib2/python-pathlib2.mk
+I opened following pull request which was closed by Lennard:
+https://github.com/systemd/systemd/pull/6114
+That was fine, as combining it with LIBIDN was'nt correct.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9d0b51d..5545e3f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -83,6 +83,7 @@ F:	package/wine/
- N:	Andrey Smirnov <andrew.smirnov@gmail.com>
- F:	package/python-decorator/
- F:	package/python-ipython-genutils/
-+F:	package/python-pathlib2/
- F:	package/python-scandir/
- F:	package/python-simplegeneric/
- F:	package/python-traitlets/
-diff --git a/package/Config.in b/package/Config.in
-index 9bf2e1f..5b4e5ee 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -776,6 +776,7 @@ menu "External python modules"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-paramiko/Config.in"
-+	source "package/python-pathlib2/Config.in"
- 	source "package/python-pathpy/Config.in"
- 	source "package/python-pathtools/Config.in"
- 	source "package/python-pathvalidate/Config.in"
-diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
-new file mode 100644
-index 0000000..7297f0a
---- /dev/null
-+++ b/package/python-pathlib2/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_PATHLIB2
-+	bool "python-pathlib2"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_SCANDIR # runtime
-+	help
-+	  Object-oriented filesystem paths.
-+
-+	  The goal of pathlib2 is to provide a backport of standard
-+	  pathlib module which tracks the standard library module, so
-+	  all the newest features of the standard pathlib can be used
-+	  also on older Python versions.
-+
-+	  https://pypi.python.org/pypi/pathlib2
-diff --git a/package/python-pathlib2/python-pathlib2.hash b/package/python-pathlib2/python-pathlib2.hash
-new file mode 100644
-index 0000000..a9c2949
---- /dev/null
-+++ b/package/python-pathlib2/python-pathlib2.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/pathlib2/json, sha256 locally computed
-+md5 6c75bfde898b6c88627621a48ee8de14 pathlib2-2.2.1.tar.gz
-+sha256 ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d pathlib2-2.2.1.tar.gz
-diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
-new file mode 100644
-index 0000000..db2df91
---- /dev/null
-+++ b/package/python-pathlib2/python-pathlib2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pathlib2
-+#
-+################################################################################
-+
-+PYTHON_PATHLIB2_VERSION = 2.2.1
-+PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
-+PYTHON_PATHLIB2_SITE = https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56
-+PYTHON_PATHLIB2_LICENSE = MIT
-+PYTHON_PATHLIB2_LICENSE_FILE = LICENSE.rst
-+PYTHON_PATHLIB2_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
--- 
-2.9.4
+I hope we may find a solution to my problem, which would allow new
+users of buildroot to simple use systemd even in the default config
+for most architectures. Buildroot is an embedded Linux rootfs
+generation tool. The default C library selection for most
+architectures is uClibc-ng.
+
+Lennard suggested to add the missing definitions to uClibc-ng.
+Systemd uses NI_IDN and NI_IDN_USE_STD3_ASCII_RULES in 
+src/basic/socket-util.c.
+
+But we explicitely removed the AI_*/NI_* IDN related 
+definitions in commits 5e9a78c8a839381add6faa61e196e6dad9143163
+and 8a992d6715c8149f7efc0553eeaf31f3e27de60c, because uClibc-ng
+does not implement any IDN related functionality in
+getnameinfo()/getaddrinfo().
+
+Other software packages as for example vlc, defining a dummy
+value if the symbol (in this case AI_IDN) isn't defined:
+https://github.com/videolan/vlc/blob/master/include/vlc_network.h#L194
+
+Would this be an option in systemd source code to check
+for NI_IDN/NI_IDN_USE_STD3_ASCII_RULES and if not set define it to
+0?
+
+These IDN related flags are glibc specific extensions to the
+getnameinfo function according to:
+http://man7.org/linux/man-pages/man3/getnameinfo.3.html
+So not specified in POSIX.
+
+Another option might be to add a new configure option to
+control the IDN usage in systemd. You already have a lot of
+fine granular options to configure systemd, another would'nt harm.
+
+I am not asking to add any C library specific workaround, but for
+a little portability/configurability with nearly no costs.
+
+Sure I could add libidn to uClibc-ng like GNU C library to add
+the missing IDN functionality, but this would add nearly 1 megabyte
+of code, which isn't a nice option for embedded Linux people.
+du -chs libidn/
+956K    libidn/
+956K    total
+
+Even glibc maintainers discussed about the removal of their old copy of libidn:
+https://sourceware.org/ml/libc-alpha/2016-11/msg00269.html
+
+All other problems are resolved inside uClibc-ng, so that users of 
+the latest uClibc-ng release 1.0.25 can successfully compile and 
+use systemd.
+
+Do you have any other idea how we could solve this issue and
+let buildroot users benefit from systemd?
+
+Thanks for any help,
+
+best regards
+ Waldemar
