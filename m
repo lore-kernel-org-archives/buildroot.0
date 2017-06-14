@@ -1,21 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 21:16:33 +0200
-Subject: [Buildroot] [PATCH] support/misc/target-dir-warning.txt: fix
-	typo
-In-Reply-To: <1497459361-6420-1-git-send-email-rahulbedarkar89@gmail.com>
- (Rahul Bedarkar's message of "Wed, 14 Jun 2017 22:26:01 +0530")
-References: <1497459361-6420-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <87fuf2l6r2.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Jun 2017 21:16:39 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.11.5
+In-Reply-To: <1497461697-4075-1-git-send-email-fabio.estevam@nxp.com> (Fabio
+ Estevam's message of "Wed, 14 Jun 2017 14:34:56 -0300")
+References: <1497461697-4075-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <87bmpql6qw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Rahul" == Rahul Bedarkar <rahulbedarkar89@gmail.com> writes:
+>>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
 
- > s/owernship/ownership/
- > Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+ > From: Fabio Estevam <festevam@gmail.com>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
 
