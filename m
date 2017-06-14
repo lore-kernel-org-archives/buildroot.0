@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 21:25:45 +0200
-Subject: [Buildroot] [PATCH 1/2] gnutls: security bump to version 3.5.13
-In-Reply-To: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 14 Jun 2017 21:18:34 +0300")
+Date: Wed, 14 Jun 2017 21:26:35 +0200
+Subject: [Buildroot] [PATCH 2/2] gnutls: switch to https download
+	location
+In-Reply-To: <0cab1f3bbca8cab8680a9135cdbcd02acc580186.1497464315.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 14 Jun 2017 21:18:35 +0300")
 References: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
-Message-ID: <87y3sujrra.fsf@dell.be.48ers.dk>
+ <0cab1f3bbca8cab8680a9135cdbcd02acc580186.1497464315.git.baruch@tkos.co.il>
+Message-ID: <87tw3ijrpw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +15,11 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2017-7507: decoding a status request TLS extension that has a
- > non-empty responder IDs list could lead to a crash due to a null pointer
- > dereference.
+ > HTTPS works better behind a certain corporate firewalls.
 
- > https://lists.gnupg.org/pipermail/gnutls-devel/2017-June/008446.html
+s/behind a/behind/
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
