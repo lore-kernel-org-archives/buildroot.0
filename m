@@ -1,45 +1,45 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 14 Jun 2017 21:18:34 +0300
-Subject: [Buildroot] [PATCH 1/2] gnutls: security bump to version 3.5.13
-Message-ID: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
+Date: Wed, 14 Jun 2017 21:35:40 +0300
+Subject: [Buildroot] [PATCH] libnpth: bump to version 1.5
+Message-ID: <1bc9d1bfc0dee1f95d37ec761f7422778412b530.1497465340.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-7507: decoding a status request TLS extension that has a
-non-empty responder IDs list could lead to a crash due to a null pointer
-dereference.
-
-https://lists.gnupg.org/pipermail/gnutls-devel/2017-June/008446.html
+Switch to HTTPS for better corporate firewall compliance.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnpth/libnpth.hash | 4 ++--
+ package/libnpth/libnpth.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 8e2469a5bdfb..f699716801c9 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
+diff --git a/package/libnpth/libnpth.hash b/package/libnpth/libnpth.hash
+index d8d0fbd51d2d..f8cfefa44880 100644
+--- a/package/libnpth/libnpth.hash
++++ b/package/libnpth/libnpth.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	63cb39a5eaa029381df2e49a74cfb7be89fc4a592445191818ffe1e66bde57cb	gnutls-3.5.12.tar.xz
-+sha256	79f5480ad198dad5bc78e075f4a40c4a315a1b2072666919d2d05a08aec13096	gnutls-3.5.13.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index c192469f9ea4..3c76c30af888 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+-# Locally calculated
+-sha256 bca81940436aed0734eb8d0ff8b179e04cc8c087f5625204419f5f45d736a82a  npth-1.3.tar.bz2
++# Locally calculated after checking signature
++sha256 294a690c1f537b92ed829d867bee537e46be93fbd60b16c04630fbbfcd9db3c2  npth-1.5.tar.bz2
+diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
+index 35111ddf12ad..dcaf8685ae1a 100644
+--- a/package/libnpth/libnpth.mk
++++ b/package/libnpth/libnpth.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.5
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-LIBNPTH_VERSION = 1.3
++LIBNPTH_VERSION = 1.5
+ LIBNPTH_SOURCE = npth-$(LIBNPTH_VERSION).tar.bz2
+-LIBNPTH_SITE = ftp://ftp.gnupg.org/gcrypt/npth
++LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
+ LIBNPTH_LICENSE = LGPL-3.0+ or GPL-2.0+
+ LIBNPTH_LICENSE_FILES = COPYING COPYING.LESSER
+ LIBNPTH_INSTALL_STAGING = YES
 -- 
 2.11.0
