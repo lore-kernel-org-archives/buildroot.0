@@ -1,35 +1,31 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Jun 2017 00:11:28 +0200
-Subject: [Buildroot] [PATCH 1/8] Makefile: remove 'toolchain' from .PHONY
+Date: Thu, 15 Jun 2017 00:11:29 +0200
+Subject: [Buildroot] [PATCH 2/8] Makefile: document noconfig_targets variable
 In-Reply-To: <20170614221135.17470-1-arnout@mind.be>
 References: <20170614221135.17470-1-arnout@mind.be>
-Message-ID: <20170614221135.17470-2-arnout@mind.be>
+Message-ID: <20170614221135.17470-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-toolchain is a package, so it is already defined as .PHONY in the
-inner-generic-package macro.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Makefile b/Makefile
-index 499a39fe20..5f348b2513 100644
+index 5f348b2513..089989c624 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -548,7 +548,7 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+@@ -125,6 +125,7 @@ DATE := $(shell date +%Y%m%d)
+ # Need to export it, so it can be got from environment in children (eg. mconf)
+ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
  
- world: target-post-image
- 
--.PHONY: all world toolchain dirs clean distclean source outputmakefile \
-+.PHONY: all world dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars help \
- 	list-defconfigs target-finalize target-post-image source-check
- 
++# List of targets and target patterns for which .config doesn't need to be read in
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
 -- 
 2.11.0
