@@ -1,30 +1,47 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Wed, 14 Jun 2017 22:26:01 +0530
-Subject: [Buildroot] [PATCH] support/misc/target-dir-warning.txt: fix typo
-Message-ID: <1497459361-6420-1-git-send-email-rahulbedarkar89@gmail.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Wed, 14 Jun 2017 22:57:03 +0530
+Subject: [Buildroot] [PATCH v2 0/5] Board: Add Engicam i.MX6 SOMs
+Message-ID: <1497461228-25699-1-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-s/owernship/ownership/
+From: Jagan Teki <jagan@amarulasolutions.com>
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
----
- support/misc/target-dir-warning.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series add buildroot support for Engicam i.MX6 SOM's
+- i.CoreM6 DualLite/Solo
+- i.CoreM6 RQS
+- GEAM6UL
 
-diff --git a/support/misc/target-dir-warning.txt b/support/misc/target-dir-warning.txt
-index 90f8841..94d2e0c 100644
---- a/support/misc/target-dir-warning.txt
-+++ b/support/misc/target-dir-warning.txt
-@@ -25,5 +25,5 @@ can extract as root:
- 
- Those image files are created using the contents of the target/
- directory, but there is a post-processing step to create device files
--and set owernship/permissions properly even if Buildroot does not run
-+and set ownership/permissions properly even if Buildroot does not run
- as root.
+Jagan Teki (5):
+  board: Add support for Engicam i.CoreM6 DualLite/Solo boards
+  board: engicam: Rename defconfig engicam_imx6qdl_icore_mmc_defconfig
+  board: Add support for Engicam i.CoreM6 RQS SOM
+  board: engicam: Add icorem6 for i.CoreM6 support
+  board: Add support for Engicam GEAM6UL SOM
+
+ DEVELOPERS                                         |  4 +-
+ board/engicam/geam6ul/genimage.cfg                 | 38 ++++++++++++
+ board/engicam/geam6ul/readme.txt                   | 65 +++++++++++++++++++++
+ board/engicam/{ => icorem6}/genimage.cfg           |  1 +
+ board/engicam/{ => icorem6}/readme.txt             | 20 ++++---
+ board/engicam/icorem6_rqs/genimage.cfg             | 39 +++++++++++++
+ board/engicam/icorem6_rqs/readme.txt               | 68 ++++++++++++++++++++++
+ ...fconfig => engicam_imx6qdl_icore_mmc_defconfig} | 10 ++--
+ configs/engicam_imx6qdl_icore_rqs_mmc_defconfig    | 41 +++++++++++++
+ configs/engicam_imx6ul_geam_mmc_defconfig          | 41 +++++++++++++
+ 10 files changed, 312 insertions(+), 15 deletions(-)
+ create mode 100644 board/engicam/geam6ul/genimage.cfg
+ create mode 100644 board/engicam/geam6ul/readme.txt
+ rename board/engicam/{ => icorem6}/genimage.cfg (95%)
+ rename board/engicam/{ => icorem6}/readme.txt (72%)
+ create mode 100644 board/engicam/icorem6_rqs/genimage.cfg
+ create mode 100644 board/engicam/icorem6_rqs/readme.txt
+ rename configs/{engicam_imx6q_icore_defconfig => engicam_imx6qdl_icore_mmc_defconfig} (73%)
+ create mode 100644 configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
+ create mode 100644 configs/engicam_imx6ul_geam_mmc_defconfig
+
 -- 
 2.7.4
