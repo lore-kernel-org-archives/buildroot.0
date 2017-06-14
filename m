@@ -1,57 +1,46 @@
-From: denisebrise <cash.debrice@gmail.com>
-Date: Wed, 14 Jun 2017 05:11:04 -0700 (PDT)
-Subject: [Buildroot] XWindow Browser, anyone ?
-In-Reply-To: <20111219145326.226d43f1@skate>
-References: <CAOrUntZhzjati0cHKQp0s=ov-eoLaeGDjz987qjSZ=1ZMFYA-A@mail.gmail.com>
- <20111219145326.226d43f1@skate>
-Message-ID: <1497442264883-167534.post@n4.nabble.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 14 Jun 2017 14:31:06 +0200
+Subject: [Buildroot] [PATCH 1/2] python-cffi: bump to version 1.10.0
+Message-ID: <20170614123107.2970-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-I am currently working on Buildroot 2015.11.1 and using Midori as web
-browser on my target (IMX6). However, this web browser is not fully
-compatible with NoVNC : Midori can display remote screen, but not interact
-with mouse click.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-cffi/python-cffi.hash | 4 ++--
+ package/python-cffi/python-cffi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-My first idea was to add chromium package (from :
-https://gfiber.googlesource.com/buildroot/+/master/package/chromium/), but I
-am stucked as from the beginning :
-
-	make chromium
-	make[1]: *** No rule to make target `chromium'.  Stop.
-	make: *** [_all] Error 2
-
-same probleme with two of it's dependencies :
-
-	make bcm-commonm
-	make[1]: *** No rule to make target `bcm-common'.  Stop.
-	make: *** [_all] Error 2
-
-	make bcm-rockford
-	make[1]: *** No rule to make target `bcm-rockford'.  Stop.
-	make: *** [_all] Error 2
-
-When looking in chromium.mk, I found this line :
-
-	CHROMIUM_SITE=rrepo://chromium
-
-same thing for bcm_common and bcm_rockford :
-
-	BCM_COMMON_SITE=repo://vendor/broadcom/common
-	BCM_ROCKFORD_SITE=repo://vendor/broadcom/rockford
-
-I think it is related to my problem, but I have no idea on how to replace
-these lines ?
-
-I would enjoy any help or solution with another compatible browser
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/XWindow-Browser-anyone-tp16075p167534.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index f65c9e776..f6b139d3a 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/cffi/json, sha256 locally computed
+-md5 b8fa7ccb87790531db3316ab17aa8244 cffi-1.9.1.tar.gz
+-sha256 563e0bd53fda03c151573217b3a49b3abad8813de9dd0632e10090f6190fdaf8 cffi-1.9.1.tar.gz
++md5 2b5fa41182ed0edaf929a789e602a070 cffi-1.10.0.tar.gz
++sha256 b3b02911eb1f6ada203b0763ba924234629b51586f72a21faacc638269f4ced5 cffi-1.10.0.tar.gz
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 868366549..6f4ba3ba0 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CFFI_VERSION = 1.9.1
++PYTHON_CFFI_VERSION = 1.10.0
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+-PYTHON_CFFI_SITE = https://pypi.python.org/packages/a1/32/e3d6c3a8b5461b903651dd6ce958ed03c093d2e00128e3f33ea69f1d7965
++PYTHON_CFFI_SITE = https://pypi.python.org/packages/5b/b9/790f8eafcdab455bcd3bd908161f802c9ce5adbf702a83aa7712fcc345b7
+ PYTHON_CFFI_SETUP_TYPE = setuptools
+ PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+ PYTHON_CFFI_LICENSE = MIT
+-- 
+2.11.0
