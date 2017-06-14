@@ -1,24 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 21:23:33 +0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9,
-	11}.x series
-In-Reply-To: <1497461697-4075-2-git-send-email-fabio.estevam@nxp.com> (Fabio
- Estevam's message of "Wed, 14 Jun 2017 14:34:57 -0300")
-References: <1497461697-4075-1-git-send-email-fabio.estevam@nxp.com>
- <1497461697-4075-2-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <8737b2l6fe.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Jun 2017 21:25:45 +0200
+Subject: [Buildroot] [PATCH 1/2] gnutls: security bump to version 3.5.13
+In-Reply-To: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 14 Jun 2017 21:18:34 +0300")
+References: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
+Message-ID: <87y3sujrra.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > From: Fabio Estevam <festevam@gmail.com>
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Fixes CVE-2017-7507: decoding a status request TLS extension that has a
+ > non-empty responder IDs list could lead to a crash due to a null pointer
+ > dereference.
 
-Committed to 2017.02.x and 2017.05.x, thanks.
+ > https://lists.gnupg.org/pipermail/gnutls-devel/2017-June/008446.html
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
