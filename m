@@ -1,37 +1,34 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Wed, 14 Jun 2017 14:34:57 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 11}.x series
-In-Reply-To: <1497461697-4075-1-git-send-email-fabio.estevam@nxp.com>
-References: <1497461697-4075-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <1497461697-4075-2-git-send-email-fabio.estevam@nxp.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 14 Jun 2017 21:18:35 +0300
+Subject: [Buildroot] [PATCH 2/2] gnutls: switch to https download location
+In-Reply-To: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
+References: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
+Message-ID: <0cab1f3bbca8cab8680a9135cdbcd02acc580186.1497464315.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <festevam@gmail.com>
+HTTPS works better behind a certain corporate firewalls.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/gnutls/gnutls.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 40ef88f..70a90a9 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -227,8 +227,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.40"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.71"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.31"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.72"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.32"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.4"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.11.5"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 3c76c30af888..fa92a887f0c8 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -7,7 +7,7 @@
+ GNUTLS_VERSION_MAJOR = 3.5
+ GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+-GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
++GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+ GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
+ GNUTLS_DEPENDENCIES = host-pkgconf libunistring libtasn1 nettle pcre
 -- 
-2.7.4
+2.11.0
