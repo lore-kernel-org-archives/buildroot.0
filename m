@@ -1,49 +1,49 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 14 Jun 2017 13:22:27 +0200
-Subject: [Buildroot] [PATCH] arm-trusted-firmware: cleanup make target
-	handling
-Message-ID: <1497439347-10579-1-git-send-email-luca@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 14 Jun 2017 13:27:24 +0200
+Subject: [Buildroot] [PATCH] gcc: add option to build and install gcc's
+ libssp
+In-Reply-To: <AM3PR05MB433F8CD5087964A86E0CECCC9C30@AM3PR05MB433.eurprd05.prod.outlook.com>
+References: <AM3PR05MB433F8CD5087964A86E0CECCC9C30@AM3PR05MB433.eurprd05.prod.outlook.com>
+Message-ID: <8e502eb9-e14f-ae20-ec6a-4cc8c2b052c5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARM_TRUSTED_FIRMWARE_MAKE_TARGET is expanded, but it's never assigned
-so it is always empty. On the other hand the make targets are defined
-in ARM_TRUSTED_FIRMWARE_MAKE_OPTS, which should contain options, not
-targets.
 
-Clean it all up by moving the targets in the proper place, replacing
-the useless $(ARM_TRUSTED_FIRMWARE_MAKE_TARGET).
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On 14-06-17 09:48, Guy Benyei wrote:
+> Hello,
+> 
+>> When double checking the result of compiling uClibc with
+>> BR2_TOOLCHAIN_BUILDROOT_USE_SSP, I've seen, that uClibc is actually binary-
+>> identical to the version built without BR2_TOOLCHAIN_BUILDROOT_USE_SSP. I
+>> find it strange, as actually there should be some additional functions and
+>> variables enabled in this case. Anyhow,  might be able to work with the uClibc
+>> support enabled by default.
+> 
+> Triple checking shows 8K addition to the uClibc shared object - which is around 3% of its original size. Still not too much for us, so I'll stick with the uClibc SSP support.
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index b5ee516ec6d8..9bd3bfce6c7d 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -32,8 +32,7 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	BL33=$(BINARIES_DIR)/u-boot.bin \
- 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
--	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
--	all fip
-+	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM)
- 
- ifeq ($(BR2_TARGET_VEXPRESS_FIRMWARE),y)
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
-@@ -43,7 +42,7 @@ endif
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
- 		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
--			$(ARM_TRUSTED_FIRMWARE_MAKE_TARGET)
-+			all fip
- endef
- 
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+ So you withdraw this patch?
+
+ If so, please mark it as Rejected in patchwork [1]. If you create an account
+with the same e-mail address with which you submitted the original patch, you
+can modify its state.
+
+ Or if you can't be bothered creating a patchwork account, I can do it as well.
+I just want to be sure you indeed intend to withdraw the patch.
+
+ Regards,
+ Arnout
+
+
+[1] http://patchwork.ozlabs.org/patch/774461/
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
