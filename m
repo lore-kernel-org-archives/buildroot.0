@@ -1,73 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 23:36:04 +0200
-Subject: [Buildroot] [PATCH] configs/pc_x86_64_{bios,
-	efi}_defconfig: unbreak after qemu bump to linux-4.11
-Message-ID: <20170614213604.10067-1-peter@korsgaard.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 15 Jun 2017 00:11:27 +0200
+Subject: [Buildroot] [PATCH 0/8] Top-level Makefile fixes
+Message-ID: <20170614221135.17470-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pc_x86_64 defconfigs reuse the linux configuration from qemu_x86_64, but
-they weren't adjusted when this was updated to use linux-4.11 in 28d97609b25
-(configs/qemu: bump to the latest kernel version), breaking the build.
+ I saw this StackOverflow question [1], to which Luca gave a satisfactory
+answer, and noticed that this really shouldn't happen: when Buildroot
+isn't configured and you type 'make toolchain', you should get an error
+instead of "Nothing to be done.".
 
-Fix it by also moving them to linux-4.11.x.
+ So I set out to fix that, one thing led to another, and here are 8
+patches :-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/pc_x86_64_bios_defconfig | 8 ++++----
- configs/pc_x86_64_efi_defconfig  | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ As described in the last patch, there are in fact two different ways
+to fix it. I already have a patch for the alternative so I can post it
+if necessary.
 
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index 65b0016031..b8515d12b6 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -21,15 +21,15 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
- 
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.11 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.9.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.11.config"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pc/linux-extras.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index 57b3ec2fec..212d72f7f4 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -24,15 +24,15 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
- 
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.11 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.9.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.11.5.config"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pc/linux-extras.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
+ Regards,
+ Arnout
+
+
+Arnout Vandecappelle (8):
+  Makefile: remove 'toolchain' from .PHONY
+  Makefile: document noconfig_targets variable
+  Makefile: use pattern for manual-% in noconfig_targets
+  Makefile: declare targets PHONY where they are defined
+  Makefile: add missing PHONY targets
+  doc-asciidoc: add missing .PHONY declarations
+  printvars: remove "Nothing to be done for 'printvars'."
+  Makefile: unconfigured "make toolchain" should report error
+
+ Makefile                | 50 +++++++++++++++++++++++++++++++++++++++++--------
+ package/doc-asciidoc.mk |  8 +++++++-
+ 2 files changed, 49 insertions(+), 9 deletions(-)
+
 -- 
 2.11.0
