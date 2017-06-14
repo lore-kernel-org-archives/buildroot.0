@@ -1,65 +1,73 @@
-From: MD I. Islam <tamim@csebuet.org>
-Date: Wed, 14 Jun 2017 17:35:39 -0400
-Subject: [Buildroot] scsi/scsi.h: No such file or directory
-In-Reply-To: <20170614211321.GA4600@scaer>
-References: <CAM7NYTg0TK9phO3EEszpmyY+v9F4nn6uCocZ=OuvvSfd6xCOJQ@mail.gmail.com>
- <20170612152332.wmyjhvatvid7ghgd@sapphire.tkos.co.il>
- <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
- <CAM7NYTjHa0waAPpauLhFL1j60pnmskGcZRUVR9G7iNYnWyCHQg@mail.gmail.com>
- <20170612173345.kqjxqzsoznsgjhkh@tarshish>
- <CAM7NYThRL6ouhnxzg5rEosu4q54qkefdZke+Kz9qvvGg6jYEJA@mail.gmail.com>
- <20170614211321.GA4600@scaer>
-Message-ID: <CAM7NYThb2KbGtTZ909yBcpLAAzA8=8wsWvUr=5W5isTaZtJkGQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Jun 2017 23:36:04 +0200
+Subject: [Buildroot] [PATCH] configs/pc_x86_64_{bios,
+	efi}_defconfig: unbreak after qemu bump to linux-4.11
+Message-ID: <20170614213604.10067-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann
+The pc_x86_64 defconfigs reuse the linux configuration from qemu_x86_64, but
+they weren't adjusted when this was updated to use linux-4.11 in 28d97609b25
+(configs/qemu: bump to the latest kernel version), breaking the build.
 
-Thanks for letting me know about the plain-text email! I have
-build-essential, libc6-dev, cpio and open-iscsi installed. Am I
-missing anything?
+Fix it by also moving them to linux-4.11.x.
 
-Thanks
-Tamim
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/pc_x86_64_bios_defconfig | 8 ++++----
+ configs/pc_x86_64_efi_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-On Wed, Jun 14, 2017 at 5:13 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Tamim, All,
->
-> Please, do not post HTML mail, and do not top-post; this is considered
-> bad practice. Send mails as plain tesxt, and reply below the mail you
-> are replying to.
->
-> On 2017-06-14 16:42 -0400, MD I. Islam spake thusly:
->> I'm using *arm_foundationv8_defconfig. *I didn't make any change in config.
->> The last 100 lines of build output is as following:
-> [--SNIP--]
->> >>> host-util-linux 2.29.2 Building
->> PATH="/home/tamim/buildroot/output/host/bin:/home/tamim/buildroot/output/host/sbin:/home/tamim/buildroot/output/host/usr/bin:/home/tamim/buildroot/output/host/usr/sbin:/home/tamim/bin:/home/tamim/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
->>   CC       sys-utils/eject-eject.o
->> sys-utils/eject.c:41:23: fatal error: scsi/scsi.h: No such file or
->> directory
->
-> So, this fails while building the host variant of util-linux. So your
-> build machine is missing some critical system headers.
->
-> It looks like you are using a Ubuntu machine, and this header is
-> normally installed by libc6-dev, which you would have installed if you
-> install the meta-package build-essential.
->
-> Please, check the requirements in the manual:
->
->     https://buildroot.org/downloads/manual/manual.html#requirement
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index 65b0016031..b8515d12b6 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -21,15 +21,15 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.9.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.11.config"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pc/linux-extras.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index 57b3ec2fec..212d72f7f4 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -24,15 +24,15 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.9.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.11.5.config"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pc/linux-extras.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+-- 
+2.11.0
