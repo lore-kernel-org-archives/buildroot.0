@@ -1,37 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Jun 2017 21:40:08 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] gnutls: switch to https
-	download location
-Message-ID: <20170614194702.47ED57FDC5@busybox.osuosl.org>
+Date: Wed, 14 Jun 2017 21:51:12 +0200
+Subject: [Buildroot] [PATCH 1/2] gnutls: security bump to version 3.5.13
+In-Reply-To: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 14 Jun 2017 21:18:34 +0300")
+References: <629c7b2bda5194692d4508ec53cb3502cffd285b.1497464315.git.baruch@tkos.co.il>
+Message-ID: <87poe6jqkv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b468a0c5d015f2cb8f498b809f51c1965e41b14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-HTTPS works better behind certain corporate firewalls.
+ > Fixes CVE-2017-7507: decoding a status request TLS extension that has a
+ > non-empty responder IDs list could lead to a crash due to a null pointer
+ > dereference.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9289b2427585279d706a6a75219108d3cd0fdaba)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnutls/gnutls.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > https://lists.gnupg.org/pipermail/gnutls-devel/2017-June/008446.html
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 11232d9..4d8981a 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -7,7 +7,7 @@
- GNUTLS_VERSION_MAJOR = 3.5
- GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
--GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
-+GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
- GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
- GNUTLS_DEPENDENCIES = host-pkgconf libunistring libtasn1 nettle pcre
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed both to 2017.02.x and 2017.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
