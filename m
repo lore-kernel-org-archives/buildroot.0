@@ -1,36 +1,87 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Jun 2017 00:11:30 +0200
-Subject: [Buildroot] [PATCH 3/8] Makefile: use pattern for manual-% in
-	noconfig_targets
+Date: Thu, 15 Jun 2017 00:11:32 +0200
+Subject: [Buildroot] [PATCH 5/8] Makefile: add missing PHONY targets
 In-Reply-To: <20170614221135.17470-1-arnout@mind.be>
 References: <20170614221135.17470-1-arnout@mind.be>
-Message-ID: <20170614221135.17470-4-arnout@mind.be>
+Message-ID: <20170614221135.17470-6-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This simplifies the variable a little
+Quite a few targets in the top-level Makefile were missing the .PHONY
+marking. Now that the .PHONY declarations are next to the definition
+of the targets, they are much easier to find.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ Makefile | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 089989c624..1e22858082 100644
+index fca528ca19..320f74a30d 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -129,8 +129,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	print-version olddefconfig distclean manual manual-html manual-split-html \
--	manual-pdf manual-text manual-epub
-+	print-version olddefconfig distclean manual manual-%
+@@ -546,6 +546,7 @@ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
  
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
++.PHONY: prepare
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ .PHONY: world
+@@ -723,6 +724,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ .PHONY: source
+ source: $(foreach p,$(PACKAGES),$(p)-all-source)
+ 
++.PHONY: _external-deps external-deps
+ _external-deps: $(foreach p,$(PACKAGES),$(p)-all-external-deps)
+ external-deps:
+ 	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+@@ -760,11 +762,14 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+ 		mv .legal-info.sha256 legal-info.sha256)
+ 	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+ 
++.PHONY: show-targets
+ show-targets:
+ 	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+ 
++.PHONY: show-build-order
+ show-build-order: $(patsubst %,%-show-build-order,$(PACKAGES))
+ 
++.PHONY: graph-build
+ graph-build: $(O)/build/build-time.log
+ 	@install -d $(GRAPHS_DIR)
+ 	$(foreach o,name build duration,./support/scripts/graph-build-time \
+@@ -776,10 +781,12 @@ graph-build: $(O)/build/build-time.log
+ 				   --output=$(GRAPHS_DIR)/build.pie-$(t).$(BR_GRAPH_OUT) \
+ 				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
+ 
++.PHONY: graph-depends-requirements
+ graph-depends-requirements:
+ 	@dot -? >/dev/null 2>&1 || \
+ 		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
+ 
++.PHONY: graph-depends
+ graph-depends: graph-depends-requirements
+ 	@$(INSTALL) -d $(GRAPHS_DIR)
+ 	@cd "$(CONFIG_DIR)"; \
+@@ -789,6 +796,7 @@ graph-depends: graph-depends-requirements
+ 		-o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT) \
+ 		$(GRAPHS_DIR)/$(@).dot
+ 
++.PHONY: graph-size
+ graph-size:
+ 	$(Q)mkdir -p $(GRAPHS_DIR)
+ 	$(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
+@@ -796,6 +804,7 @@ graph-size:
+ 		--file-size-csv $(GRAPHS_DIR)/file-size-stats.csv \
+ 		--package-size-csv $(GRAPHS_DIR)/package-size-stats.csv
+ 
++.PHONY: check-dependencies
+ check-dependencies:
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends -C
 -- 
 2.11.0
