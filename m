@@ -1,42 +1,35 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Jun 2017 00:11:27 +0200
-Subject: [Buildroot] [PATCH 0/8] Top-level Makefile fixes
-Message-ID: <20170614221135.17470-1-arnout@mind.be>
+Date: Thu, 15 Jun 2017 00:11:28 +0200
+Subject: [Buildroot] [PATCH 1/8] Makefile: remove 'toolchain' from .PHONY
+In-Reply-To: <20170614221135.17470-1-arnout@mind.be>
+References: <20170614221135.17470-1-arnout@mind.be>
+Message-ID: <20170614221135.17470-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- I saw this StackOverflow question [1], to which Luca gave a satisfactory
-answer, and noticed that this really shouldn't happen: when Buildroot
-isn't configured and you type 'make toolchain', you should get an error
-instead of "Nothing to be done.".
+toolchain is a package, so it is already defined as .PHONY in the
+inner-generic-package macro.
 
- So I set out to fix that, one thing led to another, and here are 8
-patches :-)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- As described in the last patch, there are in fact two different ways
-to fix it. I already have a patch for the alternative so I can post it
-if necessary.
-
- Regards,
- Arnout
-
-
-Arnout Vandecappelle (8):
-  Makefile: remove 'toolchain' from .PHONY
-  Makefile: document noconfig_targets variable
-  Makefile: use pattern for manual-% in noconfig_targets
-  Makefile: declare targets PHONY where they are defined
-  Makefile: add missing PHONY targets
-  doc-asciidoc: add missing .PHONY declarations
-  printvars: remove "Nothing to be done for 'printvars'."
-  Makefile: unconfigured "make toolchain" should report error
-
- Makefile                | 50 +++++++++++++++++++++++++++++++++++++++++--------
- package/doc-asciidoc.mk |  8 +++++++-
- 2 files changed, 49 insertions(+), 9 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index 499a39fe20..5f348b2513 100644
+--- a/Makefile
++++ b/Makefile
+@@ -548,7 +548,7 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ world: target-post-image
+ 
+-.PHONY: all world toolchain dirs clean distclean source outputmakefile \
++.PHONY: all world dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars help \
+ 	list-defconfigs target-finalize target-post-image source-check
+ 
 -- 
 2.11.0
