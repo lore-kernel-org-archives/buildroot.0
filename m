@@ -1,10 +1,10 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Wed, 14 Jun 2017 22:57:05 +0530
-Subject: [Buildroot] [PATCH v2 2/5] board: engicam: Rename defconfig
-	engicam_imx6qdl_icore_mmc_defconfig
+Date: Wed, 14 Jun 2017 22:57:07 +0530
+Subject: [Buildroot] [PATCH v2 4/5] board: engicam: Add icorem6 for i.CoreM6
+	support
 In-Reply-To: <1497461228-25699-1-git-send-email-jteki@openedev.com>
 References: <1497461228-25699-1-git-send-email-jteki@openedev.com>
-Message-ID: <1497461228-25699-3-git-send-email-jteki@openedev.com>
+Message-ID: <1497461228-25699-5-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,76 @@ To: buildroot@busybox.net
 
 From: Jagan Teki <jagan@amarulasolutions.com>
 
-Since the board have support for nand, better to explicitly
-name it with mmc.
-
-engicam_imx6qdl_icore_defconfig => engicam_imx6qdl_icore_mmc_defconfig
+Create board/engicam/icorem6 for i.CoreM6 supported files.
+and update the readme.txt so-that it can list i.CoreM6 board
+details.
 
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
 Changes for v2:
 - Fix genimage.cfg path in readme.txt
 
- DEVELOPERS                                                              | 2 +-
- board/engicam/readme.txt                                                | 2 +-
- ...icam_imx6qdl_icore_defconfig => engicam_imx6qdl_icore_mmc_defconfig} | 0
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename configs/{engicam_imx6qdl_icore_defconfig => engicam_imx6qdl_icore_mmc_defconfig} (100%)
+ board/engicam/{ => icorem6}/genimage.cfg    |  0
+ board/engicam/{ => icorem6}/readme.txt      | 14 +++++++-------
+ configs/engicam_imx6qdl_icore_mmc_defconfig |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+ rename board/engicam/{ => icorem6}/genimage.cfg (100%)
+ rename board/engicam/{ => icorem6}/readme.txt (81%)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cb498ee..1a8720b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -829,7 +829,7 @@ F:	package/keepalived/
- 
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/engicam/
--F:	configs/engicam_imx6qdl_icore_defconfig
-+F:	configs/engicam_imx6qdl_icore_mmc_defconfig
- 
- N:	James Knight <james.knight@rockwellcollins.com>
- F:	package/atkmm/
-diff --git a/board/engicam/readme.txt b/board/engicam/readme.txt
-index d02c3af..0ef108d 100644
---- a/board/engicam/readme.txt
-+++ b/board/engicam/readme.txt
-@@ -17,7 +17,7 @@ First, configure Buildroot for the Engicam i.MX SOM's:
- 
- - for i.CoreM6 Quad/Dual:
- 
--  make engicam_imx6qdl_icore_defconfig
-+  make engicam_imx6qdl_icore_mmc_defconfig
- 
- Build all components:
- 
-diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_mmc_defconfig
+diff --git a/board/engicam/genimage.cfg b/board/engicam/icorem6/genimage.cfg
 similarity index 100%
-rename from configs/engicam_imx6qdl_icore_defconfig
-rename to configs/engicam_imx6qdl_icore_mmc_defconfig
+rename from board/engicam/genimage.cfg
+rename to board/engicam/icorem6/genimage.cfg
+diff --git a/board/engicam/readme.txt b/board/engicam/icorem6/readme.txt
+similarity index 81%
+rename from board/engicam/readme.txt
+rename to board/engicam/icorem6/readme.txt
+index 0ef108d..a86360b 100644
+--- a/board/engicam/readme.txt
++++ b/board/engicam/icorem6/readme.txt
+@@ -1,8 +1,8 @@
+-*****************************************
+-Buildroot for Engicam i.MX6 SOM platforms:
+-*****************************************
++*********************************************
++Buildroot for Engicam i.CoreM6 SOM platforms:
++*********************************************
+ 
+-This file documents the Buildroot support for all Engicam i.MX6 SOM
++This file documents the Buildroot support for Engicam i.CoreM6
+ platform boards.
+ 
+ i.CoreM6 Quad/Dual/DualLite/Solo SOM Starter kits:
+@@ -13,9 +13,9 @@ This configuration uses U-Boot mainline and kernel mainline.
+ Build
+ =====
+ 
+-First, configure Buildroot for the Engicam i.MX SOM's:
++First, configure Buildroot for the Engicam i.CoreM6:
+ 
+-- for i.CoreM6 Quad/Dual:
++- for i.CoreM6 Quad/Dual/DualLite/Solo:
+ 
+   make engicam_imx6qdl_icore_mmc_defconfig
+ 
+@@ -52,7 +52,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
+ 
+ For details about the medium image layout, see the definition in
+-board/engicam/genimage.cfg
++board/engicam/icorem6/genimage.cfg
+ 
+ Boot the i.CoreM6 boards with SD boot:
+ =====================================
+diff --git a/configs/engicam_imx6qdl_icore_mmc_defconfig b/configs/engicam_imx6qdl_icore_mmc_defconfig
+index 30a4173..947d8aa 100644
+--- a/configs/engicam_imx6qdl_icore_mmc_defconfig
++++ b/configs/engicam_imx6qdl_icore_mmc_defconfig
+@@ -38,4 +38,4 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
 -- 
 2.7.4
