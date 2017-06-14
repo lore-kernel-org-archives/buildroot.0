@@ -1,24 +1,49 @@
-From: Guy Benyei <guybe@mellanox.com>
-Date: Wed, 14 Jun 2017 07:48:21 +0000
-Subject: [Buildroot] [PATCH] gcc: add option to build and install
-	gcc's	libssp
-Message-ID: <AM3PR05MB433F8CD5087964A86E0CECCC9C30@AM3PR05MB433.eurprd05.prod.outlook.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 14 Jun 2017 13:22:27 +0200
+Subject: [Buildroot] [PATCH] arm-trusted-firmware: cleanup make target
+	handling
+Message-ID: <1497439347-10579-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ARM_TRUSTED_FIRMWARE_MAKE_TARGET is expanded, but it's never assigned
+so it is always empty. On the other hand the make targets are defined
+in ARM_TRUSTED_FIRMWARE_MAKE_OPTS, which should contain options, not
+targets.
 
-> When double checking the result of compiling uClibc with
-> BR2_TOOLCHAIN_BUILDROOT_USE_SSP, I've seen, that uClibc is actually binary-
-> identical to the version built without BR2_TOOLCHAIN_BUILDROOT_USE_SSP. I
-> find it strange, as actually there should be some additional functions and
-> variables enabled in this case. Anyhow,  might be able to work with the uClibc
-> support enabled by default.
+Clean it all up by moving the targets in the proper place, replacing
+the useless $(ARM_TRUSTED_FIRMWARE_MAKE_TARGET).
 
-Triple checking shows 8K addition to the uClibc shared object - which is around 3% of its original size. Still not too much for us, so I'll stick with the uClibc SSP support.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thanks
-       Guy
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index b5ee516ec6d8..9bd3bfce6c7d 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -32,8 +32,7 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	BL33=$(BINARIES_DIR)/u-boot.bin \
+ 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
+-	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
+-	all fip
++	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM)
+ 
+ ifeq ($(BR2_TARGET_VEXPRESS_FIRMWARE),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
+@@ -43,7 +42,7 @@ endif
+ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
+-			$(ARM_TRUSTED_FIRMWARE_MAKE_TARGET)
++			all fip
+ endef
+ 
+ define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+-- 
+2.7.4
