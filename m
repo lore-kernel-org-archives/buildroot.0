@@ -1,7 +1,8 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Wed, 14 Jun 2017 09:14:46 +0200
-Subject: [Buildroot] libasan.so missing
-Message-ID: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
+From: Guy Benyei <guybe@mellanox.com>
+Date: Wed, 14 Jun 2017 07:48:21 +0000
+Subject: [Buildroot] [PATCH] gcc: add option to build and install
+	gcc's	libssp
+Message-ID: <AM3PR05MB433F8CD5087964A86E0CECCC9C30@AM3PR05MB433.eurprd05.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,9 +11,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-I'm using the x86_64 buildroot toolchain with gcc 5.4. I wonder why the 
-address sanitizer library "libasan.so*" is not available in the rootfs 
-of the target. Is it intentional? And what is the best way to get it 
-added to the rootfs?
+> When double checking the result of compiling uClibc with
+> BR2_TOOLCHAIN_BUILDROOT_USE_SSP, I've seen, that uClibc is actually binary-
+> identical to the version built without BR2_TOOLCHAIN_BUILDROOT_USE_SSP. I
+> find it strange, as actually there should be some additional functions and
+> variables enabled in this case. Anyhow,  might be able to work with the uClibc
+> support enabled by default.
 
-Wolfgang.
+Triple checking shows 8K addition to the uClibc shared object - which is around 3% of its original size. Still not too much for us, so I'll stick with the uClibc SSP support.
+
+Thanks
+       Guy
