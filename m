@@ -1,67 +1,42 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 14 Jun 2017 14:31:07 +0200
-Subject: [Buildroot] [PATCH 2/2] python-setuptools: bump to version 36.0.1
-In-Reply-To: <20170614123107.2970-1-yegorslists@googlemail.com>
-References: <20170614123107.2970-1-yegorslists@googlemail.com>
-Message-ID: <20170614123107.2970-2-yegorslists@googlemail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 14 Jun 2017 16:15:29 +0200
+Subject: [Buildroot] [v2 1/3] scancpan: update with MetaCPAN API v1
+Message-ID: <20170614141531.18497-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+The API v0 is shutdown.
+see https://bugs.busybox.net/show_bug.cgi?id=9951
 
-Recent setuptools versions require bootstrap.py to be invoked
-before the standard setup process. So create such pre configure
-hooks for both host and target versions.
-
-Change download location to GitHub because setuptools doesn't
-provide *.tar.gz any longer.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/python-setuptools/python-setuptools.hash |  4 +---
- package/python-setuptools/python-setuptools.mk   | 14 +++++++++++---
- 2 files changed, 12 insertions(+), 6 deletions(-)
+ support/scripts/scancpan | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 88113fa1f..de6ad56d4 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,2 @@
--# From https://pypi.python.org/pypi/setuptools/18.7.1
--md5 a0984da9cd8d7b582e1fd7de67dfdbcc setuptools-18.7.1.tar.gz
- # Locally calculated
--sha256  aff36c95035e0b311eacb1434e3f7e85f5ccaad477773847e582978f8f45bd74  setuptools-18.7.1.tar.gz
-+sha256  99339ac1b4c9bc0a74745d6ff196a207ddfb5f7ca75df76f3d8d081a7f70cecc  python-setuptools-v36.0.1.tar.gz
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 15edc6fd0..e0c0441ef 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,12 +4,20 @@
- #
- ################################################################################
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 8d44ed90..f87cdce7 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -521,7 +521,7 @@ my %deps_runtime;       # name -> list of target dependencies
+ my %deps_optional;      # name -> list of optional target dependencies
+ my %license_files;      # name -> list of license files
+ my %checksum;           # author -> list of checksum
+-my $mcpan = MetaCPAN::API::Tiny->new();
++my $mcpan = MetaCPAN::API::Tiny->new(base_url => 'http://fastapi.metacpan.org/v1');
+ my $ua = HTTP::Tiny->new();
  
--PYTHON_SETUPTOOLS_VERSION = 18.7.1
--PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = http://pypi.python.org/packages/source/s/setuptools
-+PYTHON_SETUPTOOLS_VERSION = v36.0.1
-+PYTHON_SETUPTOOLS_SITE = $(call github,pypa,setuptools,$(PYTHON_SETUPTOOLS_VERSION))
- PYTHON_SETUPTOOLS_LICENSE = Python Software Foundation or Zope Public License
- PYTHON_SETUPTOOLS_LICENSE_FILES = PKG-INFO
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+ sub get_checksum {
+@@ -538,7 +538,7 @@ sub get_checksum {
  
-+# recent setuptools versions require bootstrap.py to be invoked
-+# before the standard setup process.
-+define PYTHON_SETUPTOOLS_RUN_BOOSTRAP
-+	cd  $(@D) && $(HOST_DIR)/usr/bin/python ./bootstrap.py
-+endef
-+
-+PYTHON_SETUPTOOLS_PRE_CONFIGURE_HOOKS = PYTHON_SETUPTOOLS_RUN_BOOSTRAP
-+HOST_PYTHON_SETUPTOOLS_PRE_CONFIGURE_HOOKS = PYTHON_SETUPTOOLS_RUN_BOOSTRAP
-+
- $(eval $(python-package))
- $(eval $(host-python-package))
+ sub get_manifest {
+     my ($author, $distname, $version) = @_;
+-    my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
++    my $url = qq{http://fastapi.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
+     my $response = $ua->get($url);
+     return $response->{content};
+ }
 -- 
 2.11.0
