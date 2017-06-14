@@ -1,50 +1,50 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 14 Jun 2017 16:15:30 +0200
-Subject: [Buildroot] [v2 2/3] scancpan: refactor with MetaCPAN::API source()
+Date: Wed, 14 Jun 2017 16:15:31 +0200
+Subject: [Buildroot] [v2 3/3] scancpan: refactor with $mirror
 In-Reply-To: <20170614141531.18497-1-francois.perrad@gadz.org>
 References: <20170614141531.18497-1-francois.perrad@gadz.org>
-Message-ID: <20170614141531.18497-2-francois.perrad@gadz.org>
+Message-ID: <20170614141531.18497-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-instead of get_manifest()
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- support/scripts/scancpan | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ support/scripts/scancpan | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index f87cdce7..82c77a85 100755
+index 82c77a85..62df2253 100755
 --- a/support/scripts/scancpan
 +++ b/support/scripts/scancpan
-@@ -536,13 +536,6 @@ sub get_checksum {
-     return $chksum->{$basename}, $basename;
- }
+@@ -521,6 +521,7 @@ my %deps_runtime;       # name -> list of target dependencies
+ my %deps_optional;      # name -> list of optional target dependencies
+ my %license_files;      # name -> list of license files
+ my %checksum;           # author -> list of checksum
++my $mirror = 'http://cpan.metacpan.org';        # a CPAN mirror
+ my $mcpan = MetaCPAN::API::Tiny->new(base_url => 'http://fastapi.metacpan.org/v1');
+ my $ua = HTTP::Tiny->new();
  
--sub get_manifest {
--    my ($author, $distname, $version) = @_;
--    my $url = qq{http://fastapi.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
--    my $response = $ua->get($url);
--    return $response->{content};
--}
--
- sub is_xs {
-     my ($manifest) = @_;
-     # This heuristic determines if a module is a native extension, by searching
-@@ -572,7 +565,9 @@ sub fetch {
-         say qq{fetch ${name}} unless $quiet;
-         my $result = $mcpan->release( distribution => $name );
-         $dist{$name} = $result;
--        my $manifest = get_manifest( $result->{author}, $name, $result->{version} );
-+        my $manifest = $mcpan->source( author => $result->{author},
-+                                       release => $name . q{-} . $result->{version},
-+                                       path => 'MANIFEST' );
-         $need_dlopen{$name} = is_xs( $manifest );
-         $license_files{$name} = find_license_files( $manifest );
-         my %build = ();
+@@ -529,7 +530,8 @@ sub get_checksum {
+     my($path) = $url =~ m|^[^:/?#]+://[^/?#]*([^?#]*)|;
+     my($basename, $dirname) = fileparse( $path );
+     unless ($checksum{$dirname}) {
+-        my $response = $ua->get(qq{http://cpan.metacpan.org${dirname}CHECKSUMS});
++        my $url = $mirror . $dirname . q{CHECKSUMS};
++        my $response = $ua->get($url);
+         $checksum{$dirname} = $response->{content};
+     }
+     my $chksum = Safe->new->reval($checksum{$dirname});
+@@ -720,7 +722,7 @@ while (my ($distname, $dist) = each %dist) {
+         my $sha256 = $checksum->{sha256};
+         say qq{write ${hashname}} unless $quiet;
+         open my $fh, q{>}, $hashname;
+-        say {$fh} qq{# retrieved by scancpan from http://cpan.metacpan.org/};
++        say {$fh} qq{# retrieved by scancpan from ${mirror}/};
+         say {$fh} qq{md5    ${md5} ${filename}};
+         say {$fh} qq{sha256 ${sha256} ${filename}};
+         close $fh;
 -- 
 2.11.0
