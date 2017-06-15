@@ -1,51 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 23:19:20 +0200
-Subject: [Buildroot] [PATCH] libtirpc: Fix build error due to missing
- stdint.h inclusion
-In-Reply-To: <20170615180517.17185-1-dmitrii@synopsys.com>
-References: <20170615180517.17185-1-dmitrii@synopsys.com>
-Message-ID: <20170615231920.5816dc03@windsurf.lan>
+Date: Thu, 15 Jun 2017 23:25:23 +0200
+Subject: [Buildroot] [PATCH 1/5] libressl: new package
+In-Reply-To: <20170615142928.31927-1-aduskett@codeblue.com>
+References: <20170615142928.31927-1-aduskett@codeblue.com>
+Message-ID: <20170615232523.6adeb951@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Adam,
 
-On Thu, 15 Jun 2017 21:05:17 +0300, Dmitrii Kolesnichenko wrote:
-> Add patch to fix following error:
-> | ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-> |   if (len < (uintptr_t)xdrs->x_base) {
-> |              ^~~~~~~~~
+Thanks for working on the libressl topic, definitely a useful change.
+See some comments below.
+
+On Thu, 15 Jun 2017 10:29:24 -0400, Adam Duskett wrote:
+>     Libressl is a fork of openssl from OpenSSL in 2014.  It's goal is to
+>     modernize the OpenSSL codebase, improve security, and apply best practice
+>     development processes.
 > 
-> It includes stdint.h to provide uintptr_t.
+>     Right now, libressl is API compatible with OpenSSL 1.0.1, but does not yet
+>     include all new APIs from OpenSSL 1.0.2 and later.
 > 
-> This patch has been submitted upstream:
-> https://sourceforge.net/p/libtirpc/mailman/libtirpc-devel/
+>     The main source is libressl-portable, which "Includes the build scaffold
+>     and compatibility layer that builds portable LibreSSL from the OpenBSD
+>     source code."
 > 
-> Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
+>     Before the build process can begin, autogen.sh must be ran manually,
+>     as it pulls from the upstream OpenBSD source which adds several
+>     directories to the source, along with several other steps necessary
+>     before building can begin. Setting LIBRESSL_AUTORECONF = YES fails
+>     with several "No such file or directory" errors as well.
+> 
+>     This package has been tested with the following architectures and c libraries:
+>     - armv4
+>     - aarch64
+>     - ppc
+>     - ppc64
+>     - ppc64le
+>     - x86_64
+>     - uClibc-ng
+>     - glibc 2.24
+>     - musl
 
-Thanks for the contribution. However, could you be more specific about
-which Buildroot configuration triggers this build failure?
+Why is this entire commit log indented with 4 spaces? Could you just
+start the lines, well, at the beginning of the lines?
 
-I don't see build failures on libtirpc in our autobuilders
-(http://autobuild.buildroot.net/).
 
-> diff --git a/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-> new file mode 100644
-> index 0000000..ccb0dff
-> --- /dev/null
-> +++ b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-> @@ -0,0 +1,26 @@
-> +Fixes
-> +| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-> +|   if (len < (uintptr_t)xdrs->x_base) {
-> +|              ^~~~~~~~~
+> +LIBRESSL_VERSION = v2.5.4
+> +LIBRESSL_SITE = https://github.com/libressl-portable/portable.git
+> +LIBRESSL_SITE_METHOD = git
+
+Please use the "github" helper function instead.
+
+Or even better, use release tarballs from
+http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/. This way, you don't need
+to call autogen.sh.
+
+> +LIBRESSL_LICENSE = ISC, BSD-3-Clause, OpenSSL or SSLeay
+
+Where do this license list comes from?
+
+> +LIBRESSL_LICENSE_FILES = COPYING
+
+I don't see any file named "COPYING" in the repository at
+https://github.com/libressl-portable/portable/tree/v2.5.4.
+
+> +LIBRESSL_INSTALL_STAGING = YES
 > +
-> +Signed-off-by: Khem Raj <raj.khem@...>
+> +# autogen.sh needs to be ran manually as it pulls from the upstream
+> +# OpenBSD source which adds several directories to the source.
+> +# Setting LIBRESSL_AUTORECONF = YES fails with several
+> +# "No such file or directory" errors.
+> +define LIBRESSL_RUN_AUTOGEN
+> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> +endef
+> +LIBRESSL_POST_PATCH_HOOKS += LIBRESSL_RUN_AUTOGEN
 
-Please add your Signed-off-by here as well. Thanks a lot!
+Not needed if you use the release tarballs, as suggested above.
+
+> +
+> +ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
+> +define LIBRESSL_REMOVE_BIN
+> +	$(RM) -f $(TARGET_DIR)/usr/bin/openssl
+> +endef
+> +LIBRESSL_POST_INSTALL_TARGET_HOOKS += LIBRESSL_REMOVE_BIN
+> +endif
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+Thanks!
 
 Thomas
 -- 
