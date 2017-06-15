@@ -1,34 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Jun 2017 11:59:56 +0200
-Subject: [Buildroot] [PATCH 0/8] Top-level Makefile fixes
-In-Reply-To: <20170614221135.17470-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Thu, 15 Jun 2017 00:11:27 +0200")
-References: <20170614221135.17470-1-arnout@mind.be>
-Message-ID: <874lvhk1ur.fsf@dell.be.48ers.dk>
+Date: Thu, 15 Jun 2017 11:41:12 +0200
+Subject: [Buildroot] [git commit] Makefile: remove 'toolchain' from .PHONY
+Message-ID: <20170615100005.34CA08165E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7f7b6a688025fb41f326124724ccc1e06ea6fe62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >  I saw this StackOverflow question [1], to which Luca gave a satisfactory
- > answer, and noticed that this really shouldn't happen: when Buildroot
- > isn't configured and you type 'make toolchain', you should get an error
- > instead of "Nothing to be done.".
+toolchain is a package, so it is already defined as .PHONY in the
+inner-generic-package macro.
 
-ENOURL?
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >  So I set out to fix that, one thing led to another, and here are 8
- > patches :-)
-
- >  As described in the last patch, there are in fact two different ways
- > to fix it. I already have a patch for the alternative so I can post it
- > if necessary.
-
-Committed patch 1-7. I would like to think a bit more about patch 8 and
-perhaps get feedback from others.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 499a39f..5f348b2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -548,7 +548,7 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ world: target-post-image
+ 
+-.PHONY: all world toolchain dirs clean distclean source outputmakefile \
++.PHONY: all world dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars help \
+ 	list-defconfigs target-finalize target-post-image source-check
+ 
