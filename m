@@ -1,63 +1,49 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 15 Jun 2017 08:13:09 -0400
-Subject: [Buildroot] [PATCH 2/7] janus-gateway: add transports section to
-	config.
+Date: Thu, 15 Jun 2017 08:13:10 -0400
+Subject: [Buildroot] [PATCH 3/7] janus-gatway: add websockets to transport
+	section.
 In-Reply-To: <20170615121314.1485-1-aduskett@codeblue.com>
 References: <20170615121314.1485-1-aduskett@codeblue.com>
-Message-ID: <20170615121314.1485-2-aduskett@codeblue.com>
+Message-ID: <20170615121314.1485-3-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-janus-gateway supports many different transports, and currently
-there is no implicit way to turn them off or on.  Instead, if the
-dependency happens to be built, then the transport is enabled.
-
-Create a transports section in the config file and add
-BR2_PACKAGE_JANUS_REST as the first transport.
-
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/janus-gateway/Config.in        | 6 ++++++
- package/janus-gateway/janus-gateway.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+ package/janus-gateway/Config.in        | 4 ++++
+ package/janus-gateway/janus-gateway.mk | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index e07b4ad..7fc213f 100644
+index 7fc213f..eaec8a1 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -54,6 +54,12 @@ config BR2_PACKAGE_JANUS_VOICE_MAIL
- 	bool "voice mail"
- 	select BR2_PACKAGE_LIBOGG
+@@ -60,6 +60,10 @@ config BR2_PACKAGE_JANUS_REST
+ 	bool "REST (HTTP/HTTPS)"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
  
-+comment "transports"
-+
-+config BR2_PACKAGE_JANUS_REST
-+	bool "REST (HTTP/HTTPS)"
-+	select BR2_PACKAGE_LIBMICROHTTPD
++config BR2_PACKAGE_JANUS_WEBSOCKETS
++	bool "WebSockets"
++	select BR2_PACKAGE_LIBWEBSOCKETS
 +
  endif
  
  comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index b79e340..01021f8 100644
+index 01021f8..4a13199 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -91,6 +91,13 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-websockets
+@@ -84,7 +84,7 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-plugin-voicemail
  endif
  
-+ifeq ($(BR2_PACKAGE_JANUS_REST),y)
-+JANUS_GATEWAY_DEPENDENCIES += libmicrohttpd
-+JANUS_GATEWAY_CONF_OPTS += --enable-rest
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-rest
-+endif
-+
- # Parallel build broken
- JANUS_GATEWAY_MAKE = $(MAKE1)
- 
+-ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
++ifeq ($(BR2_PACKAGE_JANUS_WEBSOCKETS),y)
+ JANUS_GATEWAY_DEPENDENCIES += libwebsockets
+ JANUS_GATEWAY_CONF_OPTS += --enable-websockets
+ else
 -- 
 2.9.4
