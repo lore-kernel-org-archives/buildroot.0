@@ -1,23 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Jun 2017 22:04:57 +0200
-Subject: [Buildroot] [PATCH 1/4] zynq_zc706: remove duplicated line in
-	defconfig
-In-Reply-To: <1497543497-17938-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Thu, 15 Jun 2017 18:18:14 +0200")
-References: <1497543497-17938-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87mv99hv9y.fsf@dell.be.48ers.dk>
+Date: Thu, 15 Jun 2017 22:05:35 +0200
+Subject: [Buildroot] [git commit] libnspr: bump to version 4.15
+Message-ID: <20170615200538.5C87C817B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f234748a48d5640c8d1f4a84fcb1b5b9ac5bd77d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed all 4, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 9111a32..13cee6e 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.14/src/SHA256SUMS
+-sha256	64fc18826257403a9132240aa3c45193d577a84b08e96f7e7770a97c074d17d5	nspr-4.14.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.15/src/SHA256SUMS
++sha256	27dde06bc3d0c88903a20d6ad807361a912cfb624ca0ab4efb10fc50b19e2d80	nspr-4.15.tar.gz
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index c74b14a..7659baf 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.14
++LIBNSPR_VERSION = 4.15
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
