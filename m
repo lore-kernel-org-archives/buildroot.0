@@ -1,114 +1,39 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Jun 2017 00:11:35 +0200
-Subject: [Buildroot] [PATCH 8/8] Makefile: unconfigured "make toolchain"
-	should report error
-In-Reply-To: <20170614221135.17470-1-arnout@mind.be>
-References: <20170614221135.17470-1-arnout@mind.be>
-Message-ID: <20170614221135.17470-9-arnout@mind.be>
+From: Brent Sink <brents_3@hotmail.com>
+Date: Thu, 15 Jun 2017 01:18:00 +0000
+Subject: [Buildroot] Error when building Qt5 Webengine from buildroot
+In-Reply-To: <20170611185020.jjlo6za6ln7we4f5@gportay>
+References: <BN6PR03MB29143BD3F821BA358530ADF4BFC80@BN6PR03MB2914.namprd03.prod.outlook.com>
+ <BN6PR03MB2914ED0870804EEF5408B906BFC90@BN6PR03MB2914.namprd03.prod.outlook.com>
+ <20170609090628.5f4d5af3@free-electrons.com>
+ <BN6PR03MB29148981A29B24CED48107ADBFCE0@BN6PR03MB2914.namprd03.prod.outlook.com>
+ <BN6PR03MB2914652860FFB5C01F6CE128BFCC0@BN6PR03MB2914.namprd03.prod.outlook.com>,
+ <20170611185020.jjlo6za6ln7we4f5@gportay>
+Message-ID: <BN6PR03MB29141517CD6964AC705F195CBFC30@BN6PR03MB2914.namprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Alessandro Power on StackOverflow [1], the behaviour
-of "make toolchain" in an unconfigured tree is misleading.
+Hi Gael,
 
-When .config doesn't exist, we don't read in the package .mk files, so
-"make <package>" doesn't work:
 
-    $ make busybox
-    make: *** No rule to make target 'busybox'.  Stop.
+> I built Qt WE 5.8 with GCC 6.x with glibc.
 
-However, for "linux" and "toolchain", the corresponding file (or
-actually directory) already exists. So instead, we get:
+>
+> I am not sure, but I think I met the same issue with GCC 5.x.
 
-    $ make linux
-    make: Nothing to be done for 'linux'.
+Thanks for the tip!  Looking at your patch a little closer I realized that you are using Qt 5.8, and I'm on Qt 5.6.  I had changed GCC to version 6.2 but the problem did not go away.  I noticed that <string> was not included, so I added it to the offending file (touch_evdev_debug_buffer.h) and that ended up solving that problem.  After a little digging, I found that the chromium source already has this fix, so it seems that the Qt5 Webengine 5.6.2 is a little behind.  Here is the commit where it was fixed: https://chromium.googlesource.com/chromium/src/+/34fc1adb8866eae31d330c2983de17896bc1c1e2%5E%21/#F0
 
-This is confusing, because it looks as if the build succeeded.
+I guess that explains why it worked with Qt 5.8. I modified your patch slightly so that it would download Qt WE 5.6.2 instead of 5.8 like your patch does.  I had to also add NEON support like you did in the third patch, and then I enabled -bz2 support for host-python.  Once I did those things, I was able to run the QtWebEngine demos and it worked!  Thanks so much!  I did get some weird errors when navigating to the http://www.qt.io site, but other websites worked without any problems.
 
-The obvious solution would be to make linux and toolchain PHONY targets
-when .config doesn't exist. However, that actually does the reverse,
-because then a rule _does_ exist for them and since they don't have
-dependencies, make will consider them to be ready.
+> If you build for rpi 3, are you using the raspberrypi3_qt5_defconfig I sent from
+> the patch 3/3 [1]? Normally, this defconfig works fine for rpi3.
 
-Instead, we could define linux and toolchain as targets and make them
-depend on menuconfig. But then their behaviour is different from other
-packages.
+I only applied the first patch - I'm using an iMX6 instead of a rpi, but the same concept applies to the iMX6.  Thanks for the patch and the help!
 
-So instead, we add a catch-all rule when .config doesn't exist. This
-rule will be triggered whenever the user requests a target that is not
-explicitly defined and prints a more user-friendly error message. To
-make this work correctly, we have to make sure that any valid target
-has commands so it avoids the catch-all rule.
 
-[1] https://stackoverflow.com/questions/44521150
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-This solution is admittedly a bit fragile... I also have a patch for
-the alternative "define linux and toolchain as targets that depend
-on menuconfig".
----
- Makefile                | 15 ++++++++++++++-
- package/doc-asciidoc.mk |  4 +++-
- 2 files changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 88d98e0405..6eab289c00 100644
---- a/Makefile
-+++ b/Makefile
-@@ -813,6 +813,19 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
- 
-+%:
-+	@echo 'Please configure Buildroot first (e.g. "make menuconfig")' 1>&2
-+	@exit 1
-+
-+# Since linux and toolchain already exist as directories, we must force them to
-+# fall under the catch-all rule defined above
-+linux toolchain: FORCE
-+FORCE: ;
-+
-+# .config doesn't exist yet but is -include'd above, so make will try to rebuild
-+# it with the catch-all rule. Add an explicit rule to avoid that.
-+$(BR2_CONFIG): ;
-+
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- # configuration
-@@ -937,7 +950,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- # separate output directory. This allows convenient use of make in the
- # output directory.
- .PHONY: outputmakefile
--outputmakefile:
-+outputmakefile: ;
- ifeq ($(NEED_WRAPPER),y)
- 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
- endif
-diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-index be92496c2e..89317910a6 100644
---- a/package/doc-asciidoc.mk
-+++ b/package/doc-asciidoc.mk
-@@ -18,6 +18,9 @@ asciidoc-check-dependencies-pdf:
- 		exit 1; \
- 	fi
- 
-+# catch-all pattern rule for when there are no dependencies
-+asciidoc-check-dependencies-%: ;
-+
- # PDF generation is broken because of a bug in xsltproc program provided
- # by libxslt <=1.1.28, which does not honor an option we need to set.
- # Fortunately, this bug is already fixed upstream:
-@@ -59,7 +62,6 @@ $(1): $(1)-$(5)
- .PHONY: $(1)-$(5)
- $(1)-$(5): $$(O)/docs/$(1)/$(1).$(6)
- 
--asciidoc-check-dependencies-$(5):
- .PHONY: $(1)-check-dependencies-$(5)
- # Single line, because splitting a foreach is not easy...
- $(1)-check-dependencies-$(5): asciidoc-check-dependencies-$(5)
--- 
-2.11.0
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170615/79d7c08d/attachment.html>
