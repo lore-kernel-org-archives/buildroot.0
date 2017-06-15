@@ -1,28 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Jun 2017 11:31:59 +0200
-Subject: [Buildroot] [PATCH] configs/pc_x86_64_{bios,
-	efi}_defconfig: unbreak after qemu bump to linux-4.11
-In-Reply-To: <20170614213604.10067-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 14 Jun 2017 23:36:04 +0200")
-References: <20170614213604.10067-1-peter@korsgaard.com>
-Message-ID: <878tktk35c.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 15 Jun 2017 11:40:00 +0200
+Subject: [Buildroot] [PATCH] boost: module context affected by GCC bug 64735
+Message-ID: <20170615094000.28246-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Building boosts module context is affected by GCC bug 64735 [1]:
 
- > The pc_x86_64 defconfigs reuse the linux configuration from qemu_x86_64, but
- > they weren't adjusted when this was updated to use linux-4.11 in 28d97609b25
- > (configs/qemu: bump to the latest kernel version), breaking the build.
+```
+./boost/context/execution_context_v2.hpp:298:31: error: 'exception_ptr' is not a member of 'std'
+     auto p = std::make_tuple( std::exception_ptr{}, std::move( data) );
+```
 
- > Fix it by also moving them to linux-4.11.x.
+This is because `exception_ptr` from libstdc++ is not available for
+architectures not supporting always lock-free atomic ints.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Note, that this bug is fixed in GCC 7.
 
-Committed, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/f4e/f4e8a3727f19f7df4a1c45efe3603422fafd4af5/
 
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index f0a2385706..50d0ff8e01 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -67,6 +67,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on ((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+ 		BR2_i386 || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
 -- 
-Bye, Peter Korsgaard
+2.13.1
