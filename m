@@ -1,51 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:38:32 +0200
-Subject: [Buildroot] [git commit] arm-trusted-firmware: cleanup make target
-	handling
-Message-ID: <20170615203755.907858028E@busybox.osuosl.org>
+Date: Thu, 15 Jun 2017 22:38:46 +0200
+Subject: [Buildroot] [PATCH] glmark2: Fix segmentation fault
+In-Reply-To: <1497393603-16151-1-git-send-email-festevam@gmail.com>
+References: <1497393603-16151-1-git-send-email-festevam@gmail.com>
+Message-ID: <20170615223846.580c2b4d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b683515bc4d1e223ed2d0e723cf8344ec669a99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-ARM_TRUSTED_FIRMWARE_MAKE_TARGET is expanded, but it's never assigned
-so it is always empty. On the other hand the make targets are defined
-in ARM_TRUSTED_FIRMWARE_MAKE_OPTS, which should contain options, not
-targets.
+On Tue, 13 Jun 2017 19:40:03 -0300, Fabio Estevam wrote:
+> Running glmark2 on imx6 with kernel 4.11.4 and Mesa 17.1.2 leads to
+> a segmentation fault.
+> 
+> Apply Lucas Stach's patch to fix the problem while upstream glmark2
+> doesn't get fixed.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  ...eStateDRM-use-fixed-event-context-version.patch | 28 ++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
 
-Clean it all up by moving the targets in the proper place, replacing
-the useless $(ARM_TRUSTED_FIRMWARE_MAKE_TARGET).
+Applied to master, thanks.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index b5ee516..9bd3bfc 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -32,8 +32,7 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	BL33=$(BINARIES_DIR)/u-boot.bin \
- 	$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES)) \
--	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
--	all fip
-+	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM)
- 
- ifeq ($(BR2_TARGET_VEXPRESS_FIRMWARE),y)
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
-@@ -43,7 +42,7 @@ endif
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
- 		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
--			$(ARM_TRUSTED_FIRMWARE_MAKE_TARGET)
-+			all fip
- endef
- 
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
