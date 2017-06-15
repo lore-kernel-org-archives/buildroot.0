@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:28:29 +0200
-Subject: [Buildroot] [PATCH] boost: module context affected by GCC bug
- 64735
-In-Reply-To: <20170615094000.28246-1-joerg.krause@embedded.rocks>
-References: <20170615094000.28246-1-joerg.krause@embedded.rocks>
-Message-ID: <20170615222829.7eee4a5d@windsurf.lan>
+Date: Thu, 15 Jun 2017 22:28:48 +0200
+Subject: [Buildroot] [git commit] python-cffi: bump to version 1.10.0
+Message-ID: <20170615202845.A8EBC81E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc89353ac24ab8ac032d87bab7f00146348d6d96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Jun 2017 11:40:00 +0200, J?rg Krause wrote:
-> Building boosts module context is affected by GCC bug 64735 [1]:
-> 
-> ```
-> ./boost/context/execution_context_v2.hpp:298:31: error: 'exception_ptr' is not a member of 'std'
->      auto p = std::make_tuple( std::exception_ptr{}, std::move( data) );
-> ```
-> 
-> This is because `exception_ptr` from libstdc++ is not available for
-> architectures not supporting always lock-free atomic ints.
-> 
-> Note, that this bug is fixed in GCC 7.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f4e/f4e8a3727f19f7df4a1c45efe3603422fafd4af5/
-> 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/boost/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-cffi/python-cffi.hash | 4 ++--
+ package/python-cffi/python-cffi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index f65c9e7..f6b139d 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/cffi/json, sha256 locally computed
+-md5 b8fa7ccb87790531db3316ab17aa8244 cffi-1.9.1.tar.gz
+-sha256 563e0bd53fda03c151573217b3a49b3abad8813de9dd0632e10090f6190fdaf8 cffi-1.9.1.tar.gz
++md5 2b5fa41182ed0edaf929a789e602a070 cffi-1.10.0.tar.gz
++sha256 b3b02911eb1f6ada203b0763ba924234629b51586f72a21faacc638269f4ced5 cffi-1.10.0.tar.gz
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 8683665..6f4ba3b 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CFFI_VERSION = 1.9.1
++PYTHON_CFFI_VERSION = 1.10.0
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+-PYTHON_CFFI_SITE = https://pypi.python.org/packages/a1/32/e3d6c3a8b5461b903651dd6ce958ed03c093d2e00128e3f33ea69f1d7965
++PYTHON_CFFI_SITE = https://pypi.python.org/packages/5b/b9/790f8eafcdab455bcd3bd908161f802c9ce5adbf702a83aa7712fcc345b7
+ PYTHON_CFFI_SETUP_TYPE = setuptools
+ PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+ PYTHON_CFFI_LICENSE = MIT
