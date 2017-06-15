@@ -1,30 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:37:15 +0200
-Subject: [Buildroot] [PATCH] python-paramiko: sort runtime dependencies
- in alphabetical order
-In-Reply-To: <20170613085950.7578-1-yegorslists@googlemail.com>
-References: <20170613085950.7578-1-yegorslists@googlemail.com>
-Message-ID: <20170615223715.070f0e9d@windsurf.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 15 Jun 2017 20:38:15 +0000
+Subject: [Buildroot] [Bug 9951] SCANCPAN failure
+In-Reply-To: <bug-9951-163@https.bugs.busybox.net/>
+References: <bug-9951-163@https.bugs.busybox.net/>
+Message-ID: <bug-9951-163-HkL8erIewB@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9951
 
-On Tue, 13 Jun 2017 10:59:50 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-paramiko/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Thomas
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=8710996bb7d69bd4fbbf59cd3c186a428334c187.
+Thanks for having reported the bug, and thanks to Fran?ois Perrad for providing
+the fix!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
