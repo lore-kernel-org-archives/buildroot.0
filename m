@@ -1,52 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Jun 2017 22:18:52 +0200
-Subject: [Buildroot] [PATCH 0/8] Top-level Makefile fixes
-In-Reply-To: <874lvhk1ur.fsf@dell.be.48ers.dk>
-References: <20170614221135.17470-1-arnout@mind.be>
- <874lvhk1ur.fsf@dell.be.48ers.dk>
-Message-ID: <7ef9622f-7355-c639-b704-ed7dace1e273@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Jun 2017 22:27:00 +0200
+Subject: [Buildroot] [git commit] boost: module context affected by GCC bug
+	64735
+Message-ID: <20170615202622.71EC48047F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=b139cb5dbef065e8769c35607245b5a795d808ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Building boosts module context is affected by GCC bug 64735 [1]:
 
-On 15-06-17 11:59, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
-> 
->  >  I saw this StackOverflow question [1], to which Luca gave a satisfactory
->  > answer, and noticed that this really shouldn't happen: when Buildroot
->  > isn't configured and you type 'make toolchain', you should get an error
->  > instead of "Nothing to be done.".
-> 
-> ENOURL?
+```
+./boost/context/execution_context_v2.hpp:298:31: error: 'exception_ptr' is not a member of 'std'
+     auto p = std::make_tuple( std::exception_ptr{}, std::move( data) );
+```
 
- It was in the last patch as well :-)
+This is because `exception_ptr` from libstdc++ is not available for
+architectures not supporting always lock-free atomic ints.
 
-[1] https://stackoverflow.com/questions/44521150
+Note, that this bug is fixed in GCC 7.
 
+Fixes:
+http://autobuild.buildroot.net/results/f4e/f4e8a3727f19f7df4a1c45efe3603422fafd4af5/
 
->  >  So I set out to fix that, one thing led to another, and here are 8
->  > patches :-)
-> 
->  >  As described in the last patch, there are in fact two different ways
->  > to fix it. I already have a patch for the alternative so I can post it
->  > if necessary.
-> 
-> Committed patch 1-7. I would like to think a bit more about patch 8 and
-> perhaps get feedback from others.
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
 
- I'll send the simpler alternative as well.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index f0a2385..50d0ff8 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -67,6 +67,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on ((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
+ 		BR2_i386 || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
