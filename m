@@ -1,65 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:15:08 +0200
-Subject: [Buildroot] [PATCH] board: Add nanopi-m1 Support
-In-Reply-To: <1497547465-15445-1-git-send-email-chakra@openedev.com>
-References: <1497547465-15445-1-git-send-email-chakra@openedev.com>
-Message-ID: <20170615221508.27a297ab@windsurf.lan>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 15 Jun 2017 22:19:17 +0200
+Subject: [Buildroot] [PATCH] Makefile: unconfigured "make toolchain" should
+	run menuconfig
+In-Reply-To: <7ef9622f-7355-c639-b704-ed7dace1e273@mind.be>
+References: <7ef9622f-7355-c639-b704-ed7dace1e273@mind.be>
+Message-ID: <20170615201917.16464-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As reported by Alessandro Power on StackOverflow [1], the behaviour
+of "make toolchain" in an unconfigured tree is misleading.
 
-On Thu, 15 Jun 2017 22:54:25 +0530, Chakra Divi wrote:
-> Add initial support for nanopi-m1 board
-> with below features
-> - U-Boot 2017.07-rc1
+When .config doesn't exist, we don't read in the package .mk files, so
+"make <package>" doesn't work:
 
-Are you using this -rc1 because it's the first U-Boot version with
-support for this board?
+    $ make busybox
+    make: *** No rule to make target 'busybox'.  Stop.
 
-> - Linux 4.11
-> - Default packages from buildroot
-> 
-> Created a new folder nanopi under buildroot
-> board; any new board for nanopi can be added
-> here
+However, for "linux" and "toolchain", the corresponding file (or
+actually directory) already exists. So instead, we get:
 
-We already have the support for another nanopi board
-in board/nanopi-neo/. Perhaps some refactoring is needed?
+    $ make linux
+    make: Nothing to be done for 'linux'.
 
-Also is "nanopi" really the vendor name? We normally like to have
-board/<vendor>/<boardname>/.
+This is confusing, because it looks as if the build succeeded.
 
-> diff --git a/board/nanopi/post-image.sh b/board/nanopi/post-image.sh
-> new file mode 100755
-> index 0000000..359b4c9
-> --- /dev/null
-> +++ b/board/nanopi/post-image.sh
-> @@ -0,0 +1,14 @@
-> +#!/bin/sh
-> +
-> +BOARD_DIR="$(dirname $0)"
-> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> +
-> +rm -rf "${GENIMAGE_TMP}"
-> +
-> +genimage                               \
-> +	--rootpath "${TARGET_DIR}"     \
-> +	--tmppath "${GENIMAGE_TMP}"    \
-> +	--inputpath "${BINARIES_DIR}"  \
-> +	--outputpath "${BINARIES_DIR}" \
-> +	--config "${GENIMAGE_CFG}"
+The obvious solution would be to make linux and toolchain PHONY targets
+when .config doesn't exist. However, that actually does the reverse,
+because then a rule _does_ exist for them and since they don't have
+dependencies, make will consider them to be ready.
 
-Could you use support/scripts/genimage.sh instead ?
+Instead, we define linux and toolchain as targets and make them depend
+on menuconfig. The behaviour is still different from other packages,
+but at least it is less confusing.
 
-Thanks!
+[1] https://stackoverflow.com/questions/44521150
 
-Thomas
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 88d98e0405..f1ae9b0c17 100644
+--- a/Makefile
++++ b/Makefile
+@@ -813,6 +813,11 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ all: menuconfig
+ 
++# Some subdirectories are also package names. To avoid that "make linux"
++# on an unconfigured tree produces "Nothing to be done", add an explicit
++# rule for it.
++linux toolchain: menuconfig
++
+ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ # configuration
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
