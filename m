@@ -1,29 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:31:28 +0200
-Subject: [Buildroot] [PATCH v2 1/2] python-cffi: bump to version 1.10.0
-In-Reply-To: <20170615080319.9059-1-yegorslists@googlemail.com>
-References: <20170615080319.9059-1-yegorslists@googlemail.com>
-Message-ID: <20170615223128.0f9a8d35@windsurf.lan>
+Date: Thu, 15 Jun 2017 22:31:44 +0200
+Subject: [Buildroot] [git commit] scancpan: update with MetaCPAN API v1
+Message-ID: <20170615203439.A7F7881E48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8710996bb7d69bd4fbbf59cd3c186a428334c187
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Jun 2017 10:03:18 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1 -> v2:
->   - no changes
+The API v0 is shutdown.
+see https://bugs.busybox.net/show_bug.cgi?id=9951
 
-Both applied. Thanks!
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/scancpan | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 8d44ed9..f87cdce 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -521,7 +521,7 @@ my %deps_runtime;       # name -> list of target dependencies
+ my %deps_optional;      # name -> list of optional target dependencies
+ my %license_files;      # name -> list of license files
+ my %checksum;           # author -> list of checksum
+-my $mcpan = MetaCPAN::API::Tiny->new();
++my $mcpan = MetaCPAN::API::Tiny->new(base_url => 'http://fastapi.metacpan.org/v1');
+ my $ua = HTTP::Tiny->new();
+ 
+ sub get_checksum {
+@@ -538,7 +538,7 @@ sub get_checksum {
+ 
+ sub get_manifest {
+     my ($author, $distname, $version) = @_;
+-    my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
++    my $url = qq{http://fastapi.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
+     my $response = $ua->get($url);
+     return $response->{content};
+ }
