@@ -1,46 +1,34 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 15 Jun 2017 11:40:00 +0200
-Subject: [Buildroot] [PATCH] boost: module context affected by GCC bug 64735
-Message-ID: <20170615094000.28246-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Jun 2017 11:59:56 +0200
+Subject: [Buildroot] [PATCH 0/8] Top-level Makefile fixes
+In-Reply-To: <20170614221135.17470-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Thu, 15 Jun 2017 00:11:27 +0200")
+References: <20170614221135.17470-1-arnout@mind.be>
+Message-ID: <874lvhk1ur.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building boosts module context is affected by GCC bug 64735 [1]:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-```
-./boost/context/execution_context_v2.hpp:298:31: error: 'exception_ptr' is not a member of 'std'
-     auto p = std::make_tuple( std::exception_ptr{}, std::move( data) );
-```
+ >  I saw this StackOverflow question [1], to which Luca gave a satisfactory
+ > answer, and noticed that this really shouldn't happen: when Buildroot
+ > isn't configured and you type 'make toolchain', you should get an error
+ > instead of "Nothing to be done.".
 
-This is because `exception_ptr` from libstdc++ is not available for
-architectures not supporting always lock-free atomic ints.
+ENOURL?
 
-Note, that this bug is fixed in GCC 7.
+ >  So I set out to fix that, one thing led to another, and here are 8
+ > patches :-)
 
-Fixes:
-http://autobuild.buildroot.net/results/f4e/f4e8a3727f19f7df4a1c45efe3603422fafd4af5/
+ >  As described in the last patch, there are in fact two different ways
+ > to fix it. I already have a patch for the alternative so I can post it
+ > if necessary.
 
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
+Committed patch 1-7. I would like to think a bit more about patch 8 and
+perhaps get feedback from others.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/boost/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index f0a2385706..50d0ff8e01 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -67,6 +67,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
- 	bool "boost-context"
- 	depends on ((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
- 		BR2_i386 || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
 -- 
-2.13.1
+Bye, Peter Korsgaard
