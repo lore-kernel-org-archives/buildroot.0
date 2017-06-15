@@ -1,31 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 23:28:36 +0200
-Subject: [Buildroot] [PATCH 5/5] DEVELOPERS: Add Adam Duskett for
- libressl
-In-Reply-To: <20170615142928.31927-5-aduskett@codeblue.com>
-References: <20170615142928.31927-1-aduskett@codeblue.com>
- <20170615142928.31927-5-aduskett@codeblue.com>
-Message-ID: <20170615232836.7124b188@windsurf.lan>
+Date: Thu, 15 Jun 2017 23:08:32 +0200
+Subject: [Buildroot] [git commit] python-ipython: Bump to version 5.4.0
+Message-ID: <20170615213325.EA32380497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d0f96e667fda611aad27f3f7e51b4cde8eeb6631
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Jun 2017 10:29:28 -0400, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-ipython/python-ipython.hash | 4 ++--
+ package/python-ipython/python-ipython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Should be part of the patch adding the package.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index a223408..af1ed94 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/ipython/json, sha256 locally computed
+-md5 19e4a46ec7d7a32d068de4c253c9b459 ipython-5.2.2.tar.gz
+-sha256 6ee1c89f6031e0c86727820ad394c6eb4d3ac28de48e0df3b9367ccf92e212e2 ipython-5.2.2.tar.gz
++md5 d8cc938f46801060239184a35ec9c5a6 ipython-5.4.0.tar.gz
++sha256 6907826c427c917bf0cdab71ee728288b1f1975c4b94b3ed608b67db3183c974 ipython-5.4.0.tar.gz
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index e57d69d..5d92546 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IPYTHON_VERSION = 5.2.2
++PYTHON_IPYTHON_VERSION = 5.4.0
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/6e/cf/c2a3ca5942e2d8084574157a8f818efafb7218204cd9e41166c92c452e07
++PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/36/cd/765f53135bbbbcd691858aba3af124453a230fe0c752f009f69012fce5d5
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
+ PYTHON_IPYTHON_SETUP_TYPE = distutils
