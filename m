@@ -1,72 +1,35 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 15 Jun 2017 06:06:00 +0300
-Subject: [Buildroot] scsi/scsi.h: No such file or directory
-In-Reply-To: <CAM7NYThb2KbGtTZ909yBcpLAAzA8=8wsWvUr=5W5isTaZtJkGQ@mail.gmail.com>
-References: <CAM7NYTg0TK9phO3EEszpmyY+v9F4nn6uCocZ=OuvvSfd6xCOJQ@mail.gmail.com>
- <20170612152332.wmyjhvatvid7ghgd@sapphire.tkos.co.il>
- <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
- <CAM7NYTjHa0waAPpauLhFL1j60pnmskGcZRUVR9G7iNYnWyCHQg@mail.gmail.com>
- <20170612173345.kqjxqzsoznsgjhkh@tarshish>
- <CAM7NYThRL6ouhnxzg5rEosu4q54qkefdZke+Kz9qvvGg6jYEJA@mail.gmail.com>
- <20170614211321.GA4600@scaer>
- <CAM7NYThb2KbGtTZ909yBcpLAAzA8=8wsWvUr=5W5isTaZtJkGQ@mail.gmail.com>
-Message-ID: <20170615030600.tmpwlvcj5almsgyx@tarshish>
+Date: Thu, 15 Jun 2017 08:35:55 +0300
+Subject: [Buildroot] [PATCH] libpth: fix license file
+Message-ID: <ca5a0f1123afc72871307ceb53c0f55806afc8be.1497504955.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tamim,
+Fixes:
+http://autobuild.buildroot.net/results/bef/bef969ede5fc792b0a03f5669071600a0f746a7a/
+http://autobuild.buildroot.net/results/2d5/2d59b8e6d69b70c621ff2031a9c4fd9e67ef13cf/
+http://autobuild.buildroot.net/results/631/6318505c8e293e6c00b20eec39d851d0d15f6fec/
 
-On Wed, Jun 14, 2017 at 05:35:39PM -0400, MD I. Islam wrote:
-> Thanks for letting me know about the plain-text email!
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libnpth/libnpth.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But you are still top posting[1]. Please use reply to emails inline[2], like 
-Yann and I did.
-
-> I have build-essential, libc6-dev, cpio and open-iscsi installed. Am I
-> missing anything?
-
-Do you have the file /usr/include/scsi/scsi.h on your host? It should be part 
-of libc6-dev.
-
-baruch
-
-[1] https://en.wikipedia.org/wiki/Posting_style#Top-posting
-
-[2] https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
-
-> On Wed, Jun 14, 2017 at 5:13 PM, Yann E. MORIN <yann.morin.1998@free.fr> 
->   wrote:
-> > Tamim, All,
-> >
-> > Please, do not post HTML mail, and do not top-post; this is considered
-> > bad practice. Send mails as plain tesxt, and reply below the mail you
-> > are replying to.
-> >
-> > On 2017-06-14 16:42 -0400, MD I. Islam spake thusly:
-> >> I'm using *arm_foundationv8_defconfig. *I didn't make any change in config.
-> >> The last 100 lines of build output is as following:
-> > [--SNIP--]
-> >> >>> host-util-linux 2.29.2 Building
-> >> PATH="/home/tamim/buildroot/output/host/bin:/home/tamim/buildroot/output/host/sbin:/home/tamim/buildroot/output/host/usr/bin:/home/tamim/buildroot/output/host/usr/sbin:/home/tamim/bin:/home/tamim/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-> >>   CC       sys-utils/eject-eject.o
-> >> sys-utils/eject.c:41:23: fatal error: scsi/scsi.h: No such file or
-> >> directory
-> >
-> > So, this fails while building the host variant of util-linux. So your
-> > build machine is missing some critical system headers.
-> >
-> > It looks like you are using a Ubuntu machine, and this header is
-> > normally installed by libc6-dev, which you would have installed if you
-> > install the meta-package build-essential.
-> >
-> > Please, check the requirements in the manual:
-> >
-> >     https://buildroot.org/downloads/manual/manual.html#requirement
-
+diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
+index dcaf8685ae1a..b1ccbf2cdb0e 100644
+--- a/package/libnpth/libnpth.mk
++++ b/package/libnpth/libnpth.mk
+@@ -8,7 +8,7 @@ LIBNPTH_VERSION = 1.5
+ LIBNPTH_SOURCE = npth-$(LIBNPTH_VERSION).tar.bz2
+ LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
+ LIBNPTH_LICENSE = LGPL-3.0+ or GPL-2.0+
+-LIBNPTH_LICENSE_FILES = COPYING COPYING.LESSER
++LIBNPTH_LICENSE_FILES = COPYING.LIB
+ LIBNPTH_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
