@@ -1,102 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:49:58 +0200
-Subject: [Buildroot] [git commit] package/python-pathlib2: New package
-Message-ID: <20170615205916.B449780224@busybox.osuosl.org>
+Date: Thu, 15 Jun 2017 23:00:09 +0200
+Subject: [Buildroot] [git commit] package/python-pickleshare: New package
+Message-ID: <20170615210006.2AB0A81D44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e231e8ae39fa2641d052512cb88bc2a8a21916
+commit: https://git.buildroot.net/buildroot/commit/?id=1039f4bbbb673cacf8ef7e6d38da25d52bf422ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add 'pathlib2'[1] package to Buildroot. Needed by 'pickleshare'
-package, which is added in the next patch.
+Add 'pickleshare'[1] package to buildroot. Needed by IPython.
 
-[1] https://pypi.python.org/pypi/pathlib2
+[1] https://pypi.python.org/pypi/pickleshare
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-pathlib2/Config.in            | 14 ++++++++++++++
- package/python-pathlib2/python-pathlib2.hash |  3 +++
- package/python-pathlib2/python-pathlib2.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-pickleshare/Config.in               |  7 +++++++
+ package/python-pickleshare/python-pickleshare.hash |  3 +++
+ package/python-pickleshare/python-pickleshare.mk   | 14 ++++++++++++++
+ 5 files changed, 26 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9d5f51b..3a73917 100644
+index 3a73917..8edfd5c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -83,6 +83,7 @@ F:	package/wine/
- N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+@@ -84,6 +84,7 @@ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
  F:	package/python-decorator/
  F:	package/python-ipython-genutils/
-+F:	package/python-pathlib2/
+ F:	package/python-pathlib2/
++F:	package/python-pickleshare/
  F:	package/python-scandir/
  F:	package/python-simplegeneric/
  F:	package/python-traitlets/
 diff --git a/package/Config.in b/package/Config.in
-index 14315d5..cf41b37 100644
+index cf41b37..adea839 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -773,6 +773,7 @@ menu "External python modules"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-paramiko/Config.in"
-+	source "package/python-pathlib2/Config.in"
- 	source "package/python-pathpy/Config.in"
+@@ -778,6 +778,7 @@ menu "External python modules"
  	source "package/python-pathtools/Config.in"
  	source "package/python-pathvalidate/Config.in"
-diff --git a/package/python-pathlib2/Config.in b/package/python-pathlib2/Config.in
+ 	source "package/python-pexpect/Config.in"
++	source "package/python-pickleshare/Config.in"
+ 	source "package/python-pillow/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-prompt-toolkit/Config.in"
+diff --git a/package/python-pickleshare/Config.in b/package/python-pickleshare/Config.in
 new file mode 100644
-index 0000000..7297f0a
+index 0000000..35a2663
 --- /dev/null
-+++ b/package/python-pathlib2/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_PATHLIB2
-+	bool "python-pathlib2"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_SCANDIR # runtime
++++ b/package/python-pickleshare/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PICKLESHARE
++	bool "python-pickleshare"
++	select BR2_PACKAGE_PYTHON_PATHLIB2 if BR2_PACKAGE_PYTHON # runtime
 +	help
-+	  Object-oriented filesystem paths.
++	  Tiny 'shelve'-like database with concurrency support
 +
-+	  The goal of pathlib2 is to provide a backport of standard
-+	  pathlib module which tracks the standard library module, so
-+	  all the newest features of the standard pathlib can be used
-+	  also on older Python versions.
-+
-+	  https://pypi.python.org/pypi/pathlib2
-diff --git a/package/python-pathlib2/python-pathlib2.hash b/package/python-pathlib2/python-pathlib2.hash
++	  https://pypi.python.org/pypi/pickleshare
+diff --git a/package/python-pickleshare/python-pickleshare.hash b/package/python-pickleshare/python-pickleshare.hash
 new file mode 100644
-index 0000000..a9c2949
+index 0000000..6e3d408
 --- /dev/null
-+++ b/package/python-pathlib2/python-pathlib2.hash
++++ b/package/python-pickleshare/python-pickleshare.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/pathlib2/json, sha256 locally computed
-+md5 6c75bfde898b6c88627621a48ee8de14 pathlib2-2.2.1.tar.gz
-+sha256 ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d pathlib2-2.2.1.tar.gz
-diff --git a/package/python-pathlib2/python-pathlib2.mk b/package/python-pathlib2/python-pathlib2.mk
++# md5 from https://pypi.python.org/pypi/pickleshare/json, sha256 locally computed
++md5 6a9e5dd8dfc023031f6b7b3f824cab12 pickleshare-0.7.4.tar.gz
++sha256 84a9257227dfdd6fe1b4be1319096c20eb85ff1e82c7932f36efccfe1b09737b pickleshare-0.7.4.tar.gz
+diff --git a/package/python-pickleshare/python-pickleshare.mk b/package/python-pickleshare/python-pickleshare.mk
 new file mode 100644
-index 0000000..db2df91
+index 0000000..b2a5e88
 --- /dev/null
-+++ b/package/python-pathlib2/python-pathlib2.mk
++++ b/package/python-pickleshare/python-pickleshare.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pathlib2
++# python-pickleshare
 +#
 +################################################################################
 +
-+PYTHON_PATHLIB2_VERSION = 2.2.1
-+PYTHON_PATHLIB2_SOURCE = pathlib2-$(PYTHON_PATHLIB2_VERSION).tar.gz
-+PYTHON_PATHLIB2_SITE = https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56
-+PYTHON_PATHLIB2_LICENSE = MIT
-+PYTHON_PATHLIB2_LICENSE_FILE = LICENSE.rst
-+PYTHON_PATHLIB2_SETUP_TYPE = setuptools
++PYTHON_PICKLESHARE_VERSION = 0.7.4
++PYTHON_PICKLESHARE_SOURCE = pickleshare-$(PYTHON_PICKLESHARE_VERSION).tar.gz
++PYTHON_PICKLESHARE_SITE = https://pypi.python.org/packages/69/fe/dd137d84daa0fd13a709e448138e310d9ea93070620c9db5454e234af525
++PYTHON_PICKLESHARE_LICENSE = MIT
++PYTHON_PICKLESHARE_LICENSE_FILE = LICENSE
++PYTHON_PICKLESHARE_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
