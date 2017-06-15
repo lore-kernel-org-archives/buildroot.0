@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:38:46 +0200
-Subject: [Buildroot] [PATCH] glmark2: Fix segmentation fault
-In-Reply-To: <1497393603-16151-1-git-send-email-festevam@gmail.com>
-References: <1497393603-16151-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170615223846.580c2b4d@windsurf.lan>
+Date: Thu, 15 Jun 2017 22:38:56 +0200
+Subject: [Buildroot] [PATCH] arm-trusted-firmware: cleanup make target
+ handling
+In-Reply-To: <1497439347-10579-1-git-send-email-luca@lucaceresoli.net>
+References: <1497439347-10579-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20170615223856.3bdee993@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 13 Jun 2017 19:40:03 -0300, Fabio Estevam wrote:
-> Running glmark2 on imx6 with kernel 4.11.4 and Mesa 17.1.2 leads to
-> a segmentation fault.
+On Wed, 14 Jun 2017 13:22:27 +0200, Luca Ceresoli wrote:
+> ARM_TRUSTED_FIRMWARE_MAKE_TARGET is expanded, but it's never assigned
+> so it is always empty. On the other hand the make targets are defined
+> in ARM_TRUSTED_FIRMWARE_MAKE_OPTS, which should contain options, not
+> targets.
 > 
-> Apply Lucas Stach's patch to fix the problem while upstream glmark2
-> doesn't get fixed.
+> Clean it all up by moving the targets in the proper place, replacing
+> the useless $(ARM_TRUSTED_FIRMWARE_MAKE_TARGET).
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  ...eStateDRM-use-fixed-event-context-version.patch | 28 ++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
