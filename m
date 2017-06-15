@@ -1,75 +1,45 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 15 Jun 2017 10:03:19 +0200
-Subject: [Buildroot] [PATCH v2 2/2] python-setuptools: bump to version 36.0.1
-In-Reply-To: <20170615080319.9059-1-yegorslists@googlemail.com>
-References: <20170615080319.9059-1-yegorslists@googlemail.com>
-Message-ID: <20170615080319.9059-2-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Jun 2017 10:32:59 +0200
+Subject: [Buildroot] [PATCH] libpth: fix license file
+In-Reply-To: <ca5a0f1123afc72871307ceb53c0f55806afc8be.1497504955.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 15 Jun 2017 08:35:55 +0300")
+References: <ca5a0f1123afc72871307ceb53c0f55806afc8be.1497504955.git.baruch@tkos.co.il>
+Message-ID: <87h8zhk5vo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Recent setuptools versions require bootstrap.py to be invoked
-before the standard setup process. So create such pre configure
-hooks for both host and target versions.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/bef/bef969ede5fc792b0a03f5669071600a0f746a7a/
+ > http://autobuild.buildroot.net/results/2d5/2d59b8e6d69b70c621ff2031a9c4fd9e67ef13cf/
+ > http://autobuild.buildroot.net/results/631/6318505c8e293e6c00b20eec39d851d0d15f6fec/
 
-Change download location to GitHub because setuptools doesn't
-provide *.tar.gz any longer.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ >  package/libnpth/libnpth.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fix legal info. setuptools is now licensed under MIT licence.
+ > diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
+ > index dcaf8685ae1a..b1ccbf2cdb0e 100644
+ > --- a/package/libnpth/libnpth.mk
+ > +++ b/package/libnpth/libnpth.mk
+ > @@ -8,7 +8,7 @@ LIBNPTH_VERSION = 1.5
+ >  LIBNPTH_SOURCE = npth-$(LIBNPTH_VERSION).tar.bz2
+ >  LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
+ >  LIBNPTH_LICENSE = LGPL-3.0+ or GPL-2.0+
+ > -LIBNPTH_LICENSE_FILES = COPYING COPYING.LESSER
+ > +LIBNPTH_LICENSE_FILES = COPYING.LIB
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v1 -> v2:
-  - fix typo
-  - fix legal info
+Please also have a look to why COPYING is no longer there. Looking at
+NEWS I see:
 
- package/python-setuptools/python-setuptools.hash |  4 +---
- package/python-setuptools/python-setuptools.mk   | 18 +++++++++++++-----
- 2 files changed, 14 insertions(+), 8 deletions(-)
+Change license from LGPLv3+/GPLv2+ to LGPLv2+
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 88113fa1f..de6ad56d4 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,2 @@
--# From https://pypi.python.org/pypi/setuptools/18.7.1
--md5 a0984da9cd8d7b582e1fd7de67dfdbcc setuptools-18.7.1.tar.gz
- # Locally calculated
--sha256  aff36c95035e0b311eacb1434e3f7e85f5ccaad477773847e582978f8f45bd74  setuptools-18.7.1.tar.gz
-+sha256  99339ac1b4c9bc0a74745d6ff196a207ddfb5f7ca75df76f3d8d081a7f70cecc  python-setuptools-v36.0.1.tar.gz
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 15edc6fd0..1bdb78889 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,12 +4,20 @@
- #
- ################################################################################
- 
--PYTHON_SETUPTOOLS_VERSION = 18.7.1
--PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = http://pypi.python.org/packages/source/s/setuptools
--PYTHON_SETUPTOOLS_LICENSE = Python Software Foundation or Zope Public License
--PYTHON_SETUPTOOLS_LICENSE_FILES = PKG-INFO
-+PYTHON_SETUPTOOLS_VERSION = v36.0.1
-+PYTHON_SETUPTOOLS_SITE = $(call github,pypa,setuptools,$(PYTHON_SETUPTOOLS_VERSION))
-+PYTHON_SETUPTOOLS_LICENSE = MIT
-+PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
- 
-+# recent setuptools versions require bootstrap.py to be invoked
-+# before the standard setup process.
-+define PYTHON_SETUPTOOLS_RUN_BOOTSTRAP
-+	cd  $(@D) && $(HOST_DIR)/usr/bin/python ./bootstrap.py
-+endef
-+
-+PYTHON_SETUPTOOLS_PRE_CONFIGURE_HOOKS = PYTHON_SETUPTOOLS_RUN_BOOTSTRAP
-+HOST_PYTHON_SETUPTOOLS_PRE_CONFIGURE_HOOKS = PYTHON_SETUPTOOLS_RUN_BOOTSTRAP
-+
- $(eval $(python-package))
- $(eval $(host-python-package))
+So I've adjusted LIBNPTH_LICENSE and committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
