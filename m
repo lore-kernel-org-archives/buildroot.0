@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 16 Jun 2017 00:44:22 +0200
-Subject: [Buildroot] [PATCH 4/5] openssl: add libssl virtual package
- support.
-In-Reply-To: <20170615142928.31927-4-aduskett@codeblue.com>
+Date: Fri, 16 Jun 2017 00:54:37 +0200
+Subject: [Buildroot] [PATCH 2/5] libssl: new virtual package.
+In-Reply-To: <20170615232816.121a18b9@windsurf.lan>
 References: <20170615142928.31927-1-aduskett@codeblue.com>
- <20170615142928.31927-4-aduskett@codeblue.com>
-Message-ID: <ef7ca487-6e0a-a4dd-12bd-c7404b4a9f91@mind.be>
+ <20170615142928.31927-2-aduskett@codeblue.com>
+ <20170615232816.121a18b9@windsurf.lan>
+Message-ID: <bf80e20f-0e71-258b-a60f-2b01f6f46909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,56 +14,62 @@ To: buildroot@busybox.net
 
 
 
-On 15-06-17 16:29, Adam Duskett wrote:
-> openssl can provide libssl.
+On 15-06-17 23:28, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+> Nit: don't use a final "." in the commit titles.
+> 
+> On Thu, 15 Jun 2017 10:29:25 -0400, Adam Duskett wrote:
+>>     libressl is API compatible with OpenSSL 1.0.1 and is almost API compatible
+>>     with OpenSSL 1.0.2.  As such, a new virtual package is needed to handle
+>>     having both libressl and openssl.
+> 
+> No indentation of 4 spaces for the commit log.
+> 
+>> diff --git a/package/libssl/Config.in b/package/libssl/Config.in
+>> new file mode 100644
+>> index 0000000..71347de
+>> --- /dev/null
+>> +++ b/package/libssl/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_HAS_LIBSSL
+>> +	bool
+>> +
+>> +config BR2_PACKAGE_PROVIDES_LIBSSL
+>> +	string
+>> +	depends on BR2_PACKAGE_HAS_LIBSSL
+> 
+> Should it be named "libssl" or "ssl". I think Arnout suggested just
+> "ssl" on IRC, didn't he?
+> 
+> Also, I believe for this package we should use the jpeg/jpeg-turbo
+> model instead of the conventional virtual package model, because we
+> want to be able to "select BR2_PACKAGE_LIBSSL". As your package is done
+> today, we would *have* to use only a "depends on BR2_PACKAGE_LIBRESSL",
+> which is a bit annoying.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Hm, I'm not sure I agree. The problem with that is that existing configs won't
+work anymore, i.e. if you have openssl selected and run menuconfig, it will
+disappear because it now depends on libssl and libssl isn't selected...
 
- Will you also convert some packages?
+ And any package that can have either can just do
+
+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+
+
+ If we really want to make it a choice like libjpeg, then I think openssl should
+be renamed so existing configs still work. And that solves the naming issue too
+:-) Well, except that we have to find a name for the original openssl package :-P
 
  Regards,
  Arnout
 
-> ---
->  package/openssl/Config.in  | 3 +++
->  package/openssl/openssl.mk | 1 +
->  2 files changed, 4 insertions(+)
 > 
-> diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-> index e08b648..4871f43 100644
-> --- a/package/openssl/Config.in
-> +++ b/package/openssl/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_OPENSSL
->  	bool "openssl"
->  	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_HAS_LIBSSL
->  	help
->  	  A collaborative effort to develop a robust, commercial-grade, fully
->  	  featured, and Open Source toolkit implementing the Secure Sockets
-> @@ -13,6 +14,8 @@ config BR2_PACKAGE_OPENSSL
->  
->  if BR2_PACKAGE_OPENSSL
->  
-> +config BR2_PACKAGE_PROVIDES_LIBSSL
-> +	default "openssl"
->  config BR2_PACKAGE_OPENSSL_BIN
->  	bool "openssl binary"
->  	help
-> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-> index 5f56b44..c028290 100644
-> --- a/package/openssl/openssl.mk
-> +++ b/package/openssl/openssl.mk
-> @@ -10,6 +10,7 @@ OPENSSL_LICENSE = OpenSSL or SSLeay
->  OPENSSL_LICENSE_FILES = LICENSE
->  OPENSSL_INSTALL_STAGING = YES
->  OPENSSL_DEPENDENCIES = zlib
-> +OPENSSL_PROVIDES = libssl
->  HOST_OPENSSL_DEPENDENCIES = host-zlib
->  OPENSSL_TARGET_ARCH = generic32
->  OPENSSL_CFLAGS = $(TARGET_CFLAGS)
+> Again, see the libjpeg virtual package.
+> 
+> Best regards,
+> 
+> Thomas
 > 
 
 -- 
