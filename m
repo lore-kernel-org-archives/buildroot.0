@@ -1,43 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Jun 2017 10:31:40 +0200
-Subject: [Buildroot] [git commit] libpth: fix license info
-Message-ID: <20170615083304.2A59381DEE@busybox.osuosl.org>
+Date: Thu, 15 Jun 2017 10:37:42 +0200
+Subject: [Buildroot] [git commit] configs/pc_x86_64_{bios,
+	efi}_defconfig: unbreak after qemu bump to linux-4.11
+Message-ID: <20170615093124.8A6B18050C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2fcf148d233ff2c98bb4f404e1913c9da3ee0a2
+commit: https://git.buildroot.net/buildroot/commit/?id=08325e5c2bbc10e00771d92530b00698995f0695
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NEWS states:
-* Change license from LGPLv3+/GPLv2+ to LGPLv2+.
+The pc_x86_64 defconfigs reuse the linux configuration from qemu_x86_64, but
+they weren't adjusted when this was updated to use linux-4.11 in 28d97609b25
+(configs/qemu: bump to the latest kernel version), breaking the build.
 
-Fixes:
-http://autobuild.buildroot.net/results/bef/bef969ede5fc792b0a03f5669071600a0f746a7a/
-http://autobuild.buildroot.net/results/2d5/2d59b8e6d69b70c621ff2031a9c4fd9e67ef13cf/
-http://autobuild.buildroot.net/results/631/6318505c8e293e6c00b20eec39d851d0d15f6fec/
+Fix it by also moving them to linux-4.11.x.
 
-[Peter: also adjust _LICENSE, extend commit message]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnpth/libnpth.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ configs/pc_x86_64_bios_defconfig | 8 ++++----
+ configs/pc_x86_64_efi_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
-index dcaf868..7b2eb2a 100644
---- a/package/libnpth/libnpth.mk
-+++ b/package/libnpth/libnpth.mk
-@@ -7,8 +7,8 @@
- LIBNPTH_VERSION = 1.5
- LIBNPTH_SOURCE = npth-$(LIBNPTH_VERSION).tar.bz2
- LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
--LIBNPTH_LICENSE = LGPL-3.0+ or GPL-2.0+
--LIBNPTH_LICENSE_FILES = COPYING COPYING.LESSER
-+LIBNPTH_LICENSE = LGPL-2.0+
-+LIBNPTH_LICENSE_FILES = COPYING.LIB
- LIBNPTH_INSTALL_STAGING = YES
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index 65b0016..b8515d1 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -21,15 +21,15 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
  
- $(eval $(autotools-package))
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.9.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.11.config"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pc/linux-extras.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index 57b3ec2..212d72f 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -24,15 +24,15 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=120000
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image.sh"
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.9.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.11.5.config"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/pc/linux-extras.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
