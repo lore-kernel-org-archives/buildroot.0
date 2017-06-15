@@ -1,64 +1,52 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Jun 2017 22:19:17 +0200
-Subject: [Buildroot] [PATCH] Makefile: unconfigured "make toolchain" should
-	run menuconfig
-In-Reply-To: <7ef9622f-7355-c639-b704-ed7dace1e273@mind.be>
-References: <7ef9622f-7355-c639-b704-ed7dace1e273@mind.be>
-Message-ID: <20170615201917.16464-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Jun 2017 22:18:52 +0200
+Subject: [Buildroot] [PATCH 0/8] Top-level Makefile fixes
+In-Reply-To: <874lvhk1ur.fsf@dell.be.48ers.dk>
+References: <20170614221135.17470-1-arnout@mind.be>
+ <874lvhk1ur.fsf@dell.be.48ers.dk>
+Message-ID: <7ef9622f-7355-c639-b704-ed7dace1e273@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Alessandro Power on StackOverflow [1], the behaviour
-of "make toolchain" in an unconfigured tree is misleading.
 
-When .config doesn't exist, we don't read in the package .mk files, so
-"make <package>" doesn't work:
 
-    $ make busybox
-    make: *** No rule to make target 'busybox'.  Stop.
+On 15-06-17 11:59, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+> 
+>  >  I saw this StackOverflow question [1], to which Luca gave a satisfactory
+>  > answer, and noticed that this really shouldn't happen: when Buildroot
+>  > isn't configured and you type 'make toolchain', you should get an error
+>  > instead of "Nothing to be done.".
+> 
+> ENOURL?
 
-However, for "linux" and "toolchain", the corresponding file (or
-actually directory) already exists. So instead, we get:
-
-    $ make linux
-    make: Nothing to be done for 'linux'.
-
-This is confusing, because it looks as if the build succeeded.
-
-The obvious solution would be to make linux and toolchain PHONY targets
-when .config doesn't exist. However, that actually does the reverse,
-because then a rule _does_ exist for them and since they don't have
-dependencies, make will consider them to be ready.
-
-Instead, we define linux and toolchain as targets and make them depend
-on menuconfig. The behaviour is still different from other packages,
-but at least it is less confusing.
+ It was in the last patch as well :-)
 
 [1] https://stackoverflow.com/questions/44521150
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 88d98e0405..f1ae9b0c17 100644
---- a/Makefile
-+++ b/Makefile
-@@ -813,6 +813,11 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
- 
-+# Some subdirectories are also package names. To avoid that "make linux"
-+# on an unconfigured tree produces "Nothing to be done", add an explicit
-+# rule for it.
-+linux toolchain: menuconfig
-+
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- # configuration
+>  >  So I set out to fix that, one thing led to another, and here are 8
+>  > patches :-)
+> 
+>  >  As described in the last patch, there are in fact two different ways
+>  > to fix it. I already have a patch for the alternative so I can post it
+>  > if necessary.
+> 
+> Committed patch 1-7. I would like to think a bit more about patch 8 and
+> perhaps get feedback from others.
+
+ I'll send the simpler alternative as well.
+
+ Regards,
+ Arnout
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
