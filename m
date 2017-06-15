@@ -1,39 +1,72 @@
-From: Brent Sink <brents_3@hotmail.com>
-Date: Thu, 15 Jun 2017 01:18:00 +0000
-Subject: [Buildroot] Error when building Qt5 Webengine from buildroot
-In-Reply-To: <20170611185020.jjlo6za6ln7we4f5@gportay>
-References: <BN6PR03MB29143BD3F821BA358530ADF4BFC80@BN6PR03MB2914.namprd03.prod.outlook.com>
- <BN6PR03MB2914ED0870804EEF5408B906BFC90@BN6PR03MB2914.namprd03.prod.outlook.com>
- <20170609090628.5f4d5af3@free-electrons.com>
- <BN6PR03MB29148981A29B24CED48107ADBFCE0@BN6PR03MB2914.namprd03.prod.outlook.com>
- <BN6PR03MB2914652860FFB5C01F6CE128BFCC0@BN6PR03MB2914.namprd03.prod.outlook.com>,
- <20170611185020.jjlo6za6ln7we4f5@gportay>
-Message-ID: <BN6PR03MB29141517CD6964AC705F195CBFC30@BN6PR03MB2914.namprd03.prod.outlook.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 15 Jun 2017 06:06:00 +0300
+Subject: [Buildroot] scsi/scsi.h: No such file or directory
+In-Reply-To: <CAM7NYThb2KbGtTZ909yBcpLAAzA8=8wsWvUr=5W5isTaZtJkGQ@mail.gmail.com>
+References: <CAM7NYTg0TK9phO3EEszpmyY+v9F4nn6uCocZ=OuvvSfd6xCOJQ@mail.gmail.com>
+ <20170612152332.wmyjhvatvid7ghgd@sapphire.tkos.co.il>
+ <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
+ <CAM7NYTjHa0waAPpauLhFL1j60pnmskGcZRUVR9G7iNYnWyCHQg@mail.gmail.com>
+ <20170612173345.kqjxqzsoznsgjhkh@tarshish>
+ <CAM7NYThRL6ouhnxzg5rEosu4q54qkefdZke+Kz9qvvGg6jYEJA@mail.gmail.com>
+ <20170614211321.GA4600@scaer>
+ <CAM7NYThb2KbGtTZ909yBcpLAAzA8=8wsWvUr=5W5isTaZtJkGQ@mail.gmail.com>
+Message-ID: <20170615030600.tmpwlvcj5almsgyx@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gael,
+Hi Tamim,
 
+On Wed, Jun 14, 2017 at 05:35:39PM -0400, MD I. Islam wrote:
+> Thanks for letting me know about the plain-text email!
 
-> I built Qt WE 5.8 with GCC 6.x with glibc.
+But you are still top posting[1]. Please use reply to emails inline[2], like 
+Yann and I did.
 
->
-> I am not sure, but I think I met the same issue with GCC 5.x.
+> I have build-essential, libc6-dev, cpio and open-iscsi installed. Am I
+> missing anything?
 
-Thanks for the tip!  Looking at your patch a little closer I realized that you are using Qt 5.8, and I'm on Qt 5.6.  I had changed GCC to version 6.2 but the problem did not go away.  I noticed that <string> was not included, so I added it to the offending file (touch_evdev_debug_buffer.h) and that ended up solving that problem.  After a little digging, I found that the chromium source already has this fix, so it seems that the Qt5 Webengine 5.6.2 is a little behind.  Here is the commit where it was fixed: https://chromium.googlesource.com/chromium/src/+/34fc1adb8866eae31d330c2983de17896bc1c1e2%5E%21/#F0
+Do you have the file /usr/include/scsi/scsi.h on your host? It should be part 
+of libc6-dev.
 
-I guess that explains why it worked with Qt 5.8. I modified your patch slightly so that it would download Qt WE 5.6.2 instead of 5.8 like your patch does.  I had to also add NEON support like you did in the third patch, and then I enabled -bz2 support for host-python.  Once I did those things, I was able to run the QtWebEngine demos and it worked!  Thanks so much!  I did get some weird errors when navigating to the http://www.qt.io site, but other websites worked without any problems.
+baruch
 
-> If you build for rpi 3, are you using the raspberrypi3_qt5_defconfig I sent from
-> the patch 3/3 [1]? Normally, this defconfig works fine for rpi3.
+[1] https://en.wikipedia.org/wiki/Posting_style#Top-posting
 
-I only applied the first patch - I'm using an iMX6 instead of a rpi, but the same concept applies to the iMX6.  Thanks for the patch and the help!
+[2] https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
 
+> On Wed, Jun 14, 2017 at 5:13 PM, Yann E. MORIN <yann.morin.1998@free.fr> 
+>   wrote:
+> > Tamim, All,
+> >
+> > Please, do not post HTML mail, and do not top-post; this is considered
+> > bad practice. Send mails as plain tesxt, and reply below the mail you
+> > are replying to.
+> >
+> > On 2017-06-14 16:42 -0400, MD I. Islam spake thusly:
+> >> I'm using *arm_foundationv8_defconfig. *I didn't make any change in config.
+> >> The last 100 lines of build output is as following:
+> > [--SNIP--]
+> >> >>> host-util-linux 2.29.2 Building
+> >> PATH="/home/tamim/buildroot/output/host/bin:/home/tamim/buildroot/output/host/sbin:/home/tamim/buildroot/output/host/usr/bin:/home/tamim/buildroot/output/host/usr/sbin:/home/tamim/bin:/home/tamim/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+> >>   CC       sys-utils/eject-eject.o
+> >> sys-utils/eject.c:41:23: fatal error: scsi/scsi.h: No such file or
+> >> directory
+> >
+> > So, this fails while building the host variant of util-linux. So your
+> > build machine is missing some critical system headers.
+> >
+> > It looks like you are using a Ubuntu machine, and this header is
+> > normally installed by libc6-dev, which you would have installed if you
+> > install the meta-package build-essential.
+> >
+> > Please, check the requirements in the manual:
+> >
+> >     https://buildroot.org/downloads/manual/manual.html#requirement
 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170615/79d7c08d/attachment.html>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
