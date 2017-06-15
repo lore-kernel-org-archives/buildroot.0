@@ -1,10 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 15 Jun 2017 08:13:11 -0400
-Subject: [Buildroot] [PATCH 4/7] janus-gatway: add rabbitmq to transports
-	section
+Date: Thu, 15 Jun 2017 08:13:12 -0400
+Subject: [Buildroot] [PATCH 5/7] janus-gatway: add mqtt to transport section
 In-Reply-To: <20170615121314.1485-1-aduskett@codeblue.com>
 References: <20170615121314.1485-1-aduskett@codeblue.com>
-Message-ID: <20170615121314.1485-4-aduskett@codeblue.com>
+Message-ID: <20170615121314.1485-5-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +13,37 @@ To: buildroot@busybox.net
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
  package/janus-gateway/Config.in        | 4 ++++
- package/janus-gateway/janus-gateway.mk | 8 +++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/janus-gateway/janus-gateway.mk | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index eaec8a1..3b3d148 100644
+index 3b3d148..4122708 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -64,6 +64,10 @@ config BR2_PACKAGE_JANUS_WEBSOCKETS
- 	bool "WebSockets"
- 	select BR2_PACKAGE_LIBWEBSOCKETS
+@@ -68,6 +68,10 @@ config BR2_PACKAGE_JANUS_RABBITMQ
+ 	bool "RabbitMQ"
+ 	select BR2_PACKAGE_RABBITMQ_C
  
-+config BR2_PACKAGE_JANUS_RABBITMQ
-+	bool "RabbitMQ"
-+	select BR2_PACKAGE_RABBITMQ_C
++config BR2_PACKAGE_JANUS_MQTT
++	bool "MQTT"
++	select BR2_PACKAGE_PAHO_MQTT_C
 +
  endif
  
  comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 4a13199..6aa824e 100644
+index 6aa824e..915f812 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -24,7 +24,6 @@ JANUS_GATEWAY_POST_PATCH_HOOKS += JANUS_GATEWAY_M4
- 
- JANUS_GATEWAY_CONF_OPTS = \
- 	--disable-data-channels \
--	--disable-rabbitmq \
- 	--disable-sample-event-handler
- 
- ifeq ($(BR2_PACKAGE_JANUS_AUDIO_BRIDGE),y)
-@@ -98,6 +97,13 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-rest
+@@ -104,6 +104,13 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-rabbitmq
  endif
  
-+ifeq ($(BR2_PACKAGE_JANUS_RABBITMQ),y)
-+JANUS_GATEWAY_DEPENDENCIES += rabbitmq-c
-+JANUS_GATEWAY_CONF_OPTS += --enable-rabbitmq
++ifeq ($(BR2_PACKAGE_JANUS_MQTT),y)
++JANUS_GATEWAY_DEPENDENCIES += paho-mqtt-c
++JANUS_GATEWAY_CONF_OPTS += --enable-mqtt
 +else
-+JANUS_GATEWAY_CONF_OPTS += --disable-rabbitmq
++JANUS_GATEWAY_CONF_OPTS += --disable-mqtt
 +endif
 +
  # Parallel build broken
