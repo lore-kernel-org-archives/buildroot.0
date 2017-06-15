@@ -1,30 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:03:46 +0200
-Subject: [Buildroot] [PATCH 1/1] libwebsockets: bump to version 2.2.1
-In-Reply-To: <20170615121654.1967-1-aduskett@codeblue.com>
-References: <20170615121654.1967-1-aduskett@codeblue.com>
-Message-ID: <20170615220346.26c581d4@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Jun 2017 22:04:57 +0200
+Subject: [Buildroot] [PATCH 1/4] zynq_zc706: remove duplicated line in
+	defconfig
+In-Reply-To: <1497543497-17938-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Thu, 15 Jun 2017 18:18:14 +0200")
+References: <1497543497-17938-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87mv99hv9y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-On Thu, 15 Jun 2017 08:16:54 -0400, Adam Duskett wrote:
-> Also remove patch, as it was committed upstream.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
->  package/libwebsockets/libwebsockets.hash | 3 +--
->  package/libwebsockets/libwebsockets.mk   | 4 +---
->  2 files changed, 2 insertions(+), 5 deletions(-)
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
 
-Applied to master, thanks.
+Committed all 4, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
