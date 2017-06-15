@@ -1,36 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jun 2017 22:38:56 +0200
-Subject: [Buildroot] [PATCH] arm-trusted-firmware: cleanup make target
- handling
-In-Reply-To: <1497439347-10579-1-git-send-email-luca@lucaceresoli.net>
-References: <1497439347-10579-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20170615223856.3bdee993@windsurf.lan>
+Date: Thu, 15 Jun 2017 22:47:31 +0200
+Subject: [Buildroot] [git commit] package/python-traitlets: New package
+Message-ID: <20170615204740.535CD7FF2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9915fb7e8f87399c0c7dcca04a28ca6d293ae965
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Jun 2017 13:22:27 +0200, Luca Ceresoli wrote:
-> ARM_TRUSTED_FIRMWARE_MAKE_TARGET is expanded, but it's never assigned
-> so it is always empty. On the other hand the make targets are defined
-> in ARM_TRUSTED_FIRMWARE_MAKE_OPTS, which should contain options, not
-> targets.
-> 
-> Clean it all up by moving the targets in the proper place, replacing
-> the useless $(ARM_TRUSTED_FIRMWARE_MAKE_TARGET).
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+Add 'traitlets'[1] package to Buildroot. Needed by IPython.
 
-Applied to master, thanks.
+[1] https://pypi.python.org/pypi/traitlets
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-traitlets/Config.in             | 10 ++++++++++
+ package/python-traitlets/python-traitlets.hash |  3 +++
+ package/python-traitlets/python-traitlets.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9a11f8b..282952b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -84,6 +84,7 @@ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+ F:	package/python-decorator/
+ F:	package/python-ipython-genutils/
+ F:	package/python-simplegeneric/
++F:	package/python-traitlets/
+ 
+ N:	Andy Kennedy <andy.kennedy@adtran.com>
+ F:	package/libunwind/
+diff --git a/package/Config.in b/package/Config.in
+index 529bd96..0967de1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -852,6 +852,7 @@ menu "External python modules"
+ 	source "package/python-tomako/Config.in"
+ 	source "package/python-toml/Config.in"
+ 	source "package/python-tornado/Config.in"
++	source "package/python-traitlets/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+diff --git a/package/python-traitlets/Config.in b/package/python-traitlets/Config.in
+new file mode 100644
+index 0000000..f1804e5
+--- /dev/null
++++ b/package/python-traitlets/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_TRAITLETS
++	bool "python-traitlets"
++	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_SIX  # runtime
++	select BR2_PACKAGE_PYTHON_IPYTHON_GENUTILS  # runtime
++	select BR2_PACKAGE_PYTHON_DECORATOR  # runtime
++	help
++	  A configuration system for Python applications.
++
++	  https://pypi.python.org/pypi/traitlets
+diff --git a/package/python-traitlets/python-traitlets.hash b/package/python-traitlets/python-traitlets.hash
+new file mode 100644
+index 0000000..23aa159
+--- /dev/null
++++ b/package/python-traitlets/python-traitlets.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/traitlets/json, sha256 locally computed
++md5 3068663f2f38fd939a9eb3a500ccc154 traitlets-4.3.2.tar.gz
++sha256 9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835 traitlets-4.3.2.tar.gz
+diff --git a/package/python-traitlets/python-traitlets.mk b/package/python-traitlets/python-traitlets.mk
+new file mode 100644
+index 0000000..c711bde
+--- /dev/null
++++ b/package/python-traitlets/python-traitlets.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-traitlets
++#
++################################################################################
++
++PYTHON_TRAITLETS_VERSION = 4.3.2
++PYTHON_TRAITLETS_SOURCE = traitlets-$(PYTHON_TRAITLETS_VERSION).tar.gz
++PYTHON_TRAITLETS_SITE = https://pypi.python.org/packages/a5/98/7f5ef2fe9e9e071813aaf9cb91d1a732e0a68b6c44a32b38cb8e14c3f069
++PYTHON_TRAITLETS_LICENSE = BSD-3-Clause
++PYTHON_TRAITLETS_LICENSE_FILE = COPYING.md
++PYTHON_TRAITLETS_SETUP_TYPE = distutils
++
++$(eval $(python-package))
