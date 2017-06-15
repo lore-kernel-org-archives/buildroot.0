@@ -1,50 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Jun 2017 22:05:35 +0200
-Subject: [Buildroot] [git commit] libnss: bump to version 3.31
-Message-ID: <20170615200538.A1E177FF29@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Jun 2017 22:15:08 +0200
+Subject: [Buildroot] [PATCH] board: Add nanopi-m1 Support
+In-Reply-To: <1497547465-15445-1-git-send-email-chakra@openedev.com>
+References: <1497547465-15445-1-git-send-email-chakra@openedev.com>
+Message-ID: <20170615221508.27a297ab@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b39e6dbed1536cb5dbd91724cc25df050d8dd54d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes build with gcc 7.
+On Thu, 15 Jun 2017 22:54:25 +0530, Chakra Divi wrote:
+> Add initial support for nanopi-m1 board
+> with below features
+> - U-Boot 2017.07-rc1
 
-https://hg.mozilla.org/projects/nss/rev/0dca14409fef
+Are you using this -rc1 because it's the first U-Boot version with
+support for this board?
 
-Fixes:
-http://autobuild.buildroot.net/results/b71/b71e4e003ec5753708a07cfd04e3025c93f80e67/
-http://autobuild.buildroot.net/results/66d/66d31923824d34df3b20a363a1346df1c00ae222/
+> - Linux 4.11
+> - Default packages from buildroot
+> 
+> Created a new folder nanopi under buildroot
+> board; any new board for nanopi can be added
+> here
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+We already have the support for another nanopi board
+in board/nanopi-neo/. Perhaps some refactoring is needed?
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 7be7e48..e4e2428 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_30_2_RTM/src/SHA256SUMS
--sha256	0d4a77ff26bcee79fa8afe0125e0df6ae9e798b6b36782fa29e28febf7cfce24	nss-3.30.2.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_31_RTM/src/SHA256SUMS
-+sha256	e90561256a3271486162c1fbe8d614d118c333d36a4455be2af8688bd420a65d	nss-3.31.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 1e157df..5155929 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.30.2
-+LIBNSS_VERSION = 3.31
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+Also is "nanopi" really the vendor name? We normally like to have
+board/<vendor>/<boardname>/.
+
+> diff --git a/board/nanopi/post-image.sh b/board/nanopi/post-image.sh
+> new file mode 100755
+> index 0000000..359b4c9
+> --- /dev/null
+> +++ b/board/nanopi/post-image.sh
+> @@ -0,0 +1,14 @@
+> +#!/bin/sh
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +genimage                               \
+> +	--rootpath "${TARGET_DIR}"     \
+> +	--tmppath "${GENIMAGE_TMP}"    \
+> +	--inputpath "${BINARIES_DIR}"  \
+> +	--outputpath "${BINARIES_DIR}" \
+> +	--config "${GENIMAGE_CFG}"
+
+Could you use support/scripts/genimage.sh instead ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
