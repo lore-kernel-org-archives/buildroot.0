@@ -1,10 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Jun 2017 06:32:58 +0300
-Subject: [Buildroot] [PATCH 13/14] lirc-tools: no need to check for
+Date: Fri, 16 Jun 2017 06:32:56 +0300
+Subject: [Buildroot] [PATCH 11/14] liboping: no need to check for
 	clock_gettime
 In-Reply-To: <cover.1497583686.git.baruch@tkos.co.il>
 References: <cover.1497583686.git.baruch@tkos.co.il>
-Message-ID: <ee7b7264b3c77939b9d92287e262adc539412e1d.1497583686.git.baruch@tkos.co.il>
+Message-ID: <6900d7e2542b4f689b7a6ee94eaa9987995c186b.1497583686.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,92 +14,69 @@ To: buildroot@busybox.net
 Buildroot no longer supports toolchains with glibc older than 2.17, so there
 is no need to check whether librt is required for clock_* system calls.
 
-Cc: Rhys Williams <github@wilberforce.co.nz>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...onfigure-check-for-clock_gettime-in-librt.patch | 54 ----------------------
- ...-use-of-functions-killed-in-kernel-4.8.0.patch} |  0
- package/lirc-tools/lirc-tools.mk                   |  2 -
- 3 files changed, 56 deletions(-)
- delete mode 100644 package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
- rename package/lirc-tools/{0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch => 0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch} (100%)
+ ...001-configure-also-check-for-clockgettime.patch | 39 ----------------------
+ package/liboping/liboping.mk                       |  2 --
+ 2 files changed, 41 deletions(-)
+ delete mode 100644 package/liboping/0001-configure-also-check-for-clockgettime.patch
 
-diff --git a/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch b/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
+diff --git a/package/liboping/0001-configure-also-check-for-clockgettime.patch b/package/liboping/0001-configure-also-check-for-clockgettime.patch
 deleted file mode 100644
-index 710dfd3b05e2..000000000000
---- a/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
+index b2c585559a99..000000000000
+--- a/package/liboping/0001-configure-also-check-for-clockgettime.patch
 +++ /dev/null
-@@ -1,54 +0,0 @@
--From e654ae139cec42a6f1b5684261787d0c241cfd3b Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 19 Aug 2016 15:25:48 +0200
--Subject: [PATCH] configure: check for clock_gettime in librt
+@@ -1,39 +0,0 @@
+-From a45f3610beba1f7e6e1a038e3a1fe4150057c262 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Tue, 5 Jul 2016 15:31:28 +0200
+-Subject: [PATCH] configure: also check for clockgettime()
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-clock_gettime() is also in -lrt so we also need to check for it.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ----
-- configure.ac        | 3 +++
-- daemons/Makefile.am | 2 +-
-- plugins/Makefile.am | 1 +
-- 3 files changed, 5 insertions(+), 1 deletion(-)
+- configure.ac | 10 +++++++---
+- 1 file changed, 7 insertions(+), 3 deletions(-)
 -
 -diff --git a/configure.ac b/configure.ac
--index 73340c7..466e638 100644
+-index f83f5ab..3b6ae09 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -67,6 +67,9 @@ AC_CHECK_FUNCS(gethostname gettimeofday mkfifo select socket strdup \
-- AC_SEARCH_LIBS([dlopen], [dl dld], [], [
--   AC_MSG_ERROR([unable to find the dlopen() function])
-- ])
--+# glibc < 2.17 needs librt for clock_gettime()
--+AC_CHECK_LIB(rt, clock_gettime, LIBCLOCK_GETTIME="-lrt")
--+AC_SUBST(LIBCLOCK_GETTIME)
-- AC_CHECK_FUNCS(daemon)
-- if test "$ac_cv_func_daemon" != yes; then
--   daemon=""
--diff --git a/daemons/Makefile.am b/daemons/Makefile.am
--index 5625627..85a28f3 100644
----- a/daemons/Makefile.am
--+++ b/daemons/Makefile.am
--@@ -21,7 +21,7 @@ sbin_PROGRAMS           += lircd-uinput
-- endif
+-@@ -199,12 +199,16 @@ fi
 - 
-- lircd_SOURCES           = lircd.cpp
---lircd_LDADD             = ../lib/liblirc.la
--+lircd_LDADD             = ../lib/liblirc.la @LIBCLOCK_GETTIME@
+- AC_SUBST(LIBOPING_PC_LIBS_PRIVATE)
 - 
-- lircd_uinput_SOURCES    = lircd-uinput.cpp
-- lircd_uinput_LDADD     = ../lib/liblirc.la
--diff --git a/plugins/Makefile.am b/plugins/Makefile.am
--index ddff01d..45c012a 100644
----- a/plugins/Makefile.am
--+++ b/plugins/Makefile.am
--@@ -127,6 +127,7 @@ zotac_la_SOURCES            = zotac.c
+--nanosleep_needs_rt="no"
+-+needs_rt="no"
+- AC_CHECK_FUNCS(nanosleep, [],
+- 	AC_CHECK_LIB(rt, nanosleep,
+--		[nanosleep_needs_rt="yes"],
+-+		[needs_rt="yes"],
+- 		AC_MSG_ERROR(cannot find nanosleep)))
+--AM_CONDITIONAL(BUILD_WITH_LIBRT, test "x$nanosleep_needs_rt" = "xyes")
+-+AC_CHECK_FUNCS(clock_gettime, [],
+-+	AC_CHECK_LIB(rt, clock_gettime,
+-+		[needs_rt="yes"],
+-+		AC_MSG_ERROR(cannot find clock_gettime)))
+-+AM_CONDITIONAL(BUILD_WITH_LIBRT, test "x$needs_rt" = "xyes")
 - 
-- plugin_LTLIBRARIES          += mplay.la
-- mplay_la_SOURCES            = mplay.c
--+mplay_la_LIBADD             = @LIBCLOCK_GETTIME@
-- endif
-- 
-- $(srcdir)/pluginlist.am:
+- with_ncurses="no"
+- AC_CHECK_HEADERS(ncursesw/ncurses.h ncurses.h, [with_ncurses="yes"], [])
 --- 
 -2.7.4
 -
-diff --git a/package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch b/package/lirc-tools/0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-similarity index 100%
-rename from package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-rename to package/lirc-tools/0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index 6fd6434ef822..f0eff91f5f4f 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -11,8 +11,6 @@ LIRC_TOOLS_LICENSE = GPL-2.0+
- LIRC_TOOLS_LICENSE_FILES = COPYING
- LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
- LIRC_TOOLS_INSTALL_STAGING = YES
--# 0002-configure-check-for-clock_gettime-in-librt.patch
--LIRC_TOOLS_AUTORECONF = YES
+diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
+index 895d530e64b0..114e0c27e578 100644
+--- a/package/liboping/liboping.mk
++++ b/package/liboping/liboping.mk
+@@ -13,6 +13,4 @@ LIBOPING_CONF_OPTS = --without-perl-bindings
+ LIBOPING_LICENSE = LGPL-2.1+, GPL-2.0
+ LIBOPING_LICENSE_FILES = COPYING
  
- LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
- LIRC_TOOLS_CONF_OPTS = --without-x
+-LIBOPING_AUTORECONF = YES
+-
+ $(eval $(autotools-package))
 -- 
 2.11.0
