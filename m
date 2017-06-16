@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 16 Jun 2017 09:27:57 +0200
-Subject: [Buildroot] [PATCH 3/4] python-cheroot: new package
+Date: Fri, 16 Jun 2017 09:27:58 +0200
+Subject: [Buildroot] [PATCH 4/4] python-cherrypy: bump to version 10.2.2
 In-Reply-To: <20170616072758.13871-1-yegorslists@googlemail.com>
 References: <20170616072758.13871-1-yegorslists@googlemail.com>
-Message-ID: <20170616072758.13871-3-yegorslists@googlemail.com>
+Message-ID: <20170616072758.13871-4-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,65 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Fix license info, add new dependencies and change setup type.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                          |  1 +
- package/python-cheroot/Config.in           |  8 ++++++++
- package/python-cheroot/python-cheroot.hash |  3 +++
- package/python-cheroot/python-cheroot.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-cheroot/Config.in
- create mode 100644 package/python-cheroot/python-cheroot.hash
- create mode 100644 package/python-cheroot/python-cheroot.mk
+ package/python-cherrypy/Config.in            | 7 +++++--
+ package/python-cherrypy/python-cherrypy.hash | 6 +++---
+ package/python-cherrypy/python-cherrypy.mk   | 9 +++++----
+ 3 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a1b572335..0ada98139 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -694,6 +694,7 @@ menu "External python modules"
- 	source "package/python-characteristic/Config.in"
- 	source "package/python-chardet/Config.in"
- 	source "package/python-cheetah/Config.in"
-+	source "package/python-cheroot/Config.in"
- 	source "package/python-cherrypy/Config.in"
- 	source "package/python-click/Config.in"
- 	source "package/python-coherence/Config.in"
-diff --git a/package/python-cheroot/Config.in b/package/python-cheroot/Config.in
-new file mode 100644
-index 000000000..bb85f7bdc
---- /dev/null
-+++ b/package/python-cheroot/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CHEROOT
-+	bool "python-cheroot"
+diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
+index 6e32ec2a1..c04997269 100644
+--- a/package/python-cherrypy/Config.in
++++ b/package/python-cherrypy/Config.in
+@@ -1,9 +1,12 @@
+ config BR2_PACKAGE_PYTHON_CHERRYPY
+ 	bool "python-cherrypy"
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
++	select BR2_PACKAGE_PYTHON_PORTEND # runtime
+ 	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
 +	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Cheroot is the high-performance, pure-Python
-+	  HTTP server used by CherryPy.
-+
-+	  https://github.com/cherrypy/cheroot
-diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
-new file mode 100644
-index 000000000..348b82d1c
---- /dev/null
-+++ b/package/python-cheroot/python-cheroot.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/cheroot/json, sha256 locally computed
-+md5	e5503b0e67bdba29c6585965e7f42099  cheroot-5.5.0.tar.gz
-+sha256	59e349f91b9230930f7078646bb92b3a5b0f9cf19a6ff949777409fd289a1eba  cheroot-5.5.0.tar.gz
-diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
-new file mode 100644
-index 000000000..3f4b6893d
---- /dev/null
-+++ b/package/python-cheroot/python-cheroot.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-cheroot
-+#
-+################################################################################
-+
-+PYTHON_CHEROOT_VERSION = 5.5.0
-+PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
-+PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/a5/43/f8a461762dc62e9f273d4944fb8c140757c11a29c91c91d3fbd5fafb1570
-+PYTHON_CHEROOT_LICENSE = BSD-3-Clause
-+PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
-+PYTHON_CHEROOT_SETUP_TYPE = setuptools
-+PYTHON_CHEROOT_DEPENDENCIES = host-python-setuptools-scm
-+
-+$(eval $(python-package))
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+ 	  A minimalist web framework
+ 
+diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
+index 6befa457d..ac3b982ba 100644
+--- a/package/python-cherrypy/python-cherrypy.hash
++++ b/package/python-cherrypy/python-cherrypy.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=4b765329b0b4b65ec25811e3febb6c93, sha256 locally computed
+-md5	4b765329b0b4b65ec25811e3febb6c93  CherryPy-4.0.0.tar.gz
+-sha256	73ad4f8870b5a3e9988a7778b5d3003a390d440527ec3458a0c7e58865d2611a  CherryPy-4.0.0.tar.gz
++# md5 from https://pypi.python.org/pypi/CherryPy/json, sha256 locally computed
++md5	105cbcd4f7cd139ab4107f1b0e39afe3  CherryPy-10.2.2.tar.gz
++sha256	32d93334df765c7fd5d22815ab643333e850f0cc4f6d51fee62a68f23eea8ff8  CherryPy-10.2.2.tar.gz
+diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+index 54742b971..2820b6982 100644
+--- a/package/python-cherrypy/python-cherrypy.mk
++++ b/package/python-cherrypy/python-cherrypy.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHERRYPY_VERSION = 4.0.0
++PYTHON_CHERRYPY_VERSION = 10.2.2
+ PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+-PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
++PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/a2/de/dddea0c4d4be436724bfc2d1486c99368541d93c269bfa2a7fa3d132021e
+ PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
+-PYTHON_CHERRYPY_LICENSE_FILES = cherrypy/LICENSE.txt
+-PYTHON_CHERRYPY_SETUP_TYPE = distutils
++PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
++PYTHON_CHERRYPY_SETUP_TYPE = setuptools
++PYTHON_CHERRYPY_DEPENDENCIES = host-python-setuptools-scm
+ 
+ $(eval $(python-package))
 -- 
 2.11.0
