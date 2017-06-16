@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 16 Jun 2017 09:27:55 +0200
-Subject: [Buildroot] [PATCH 1/4] python-tempora: new package
-Message-ID: <20170616072758.13871-1-yegorslists@googlemail.com>
+Date: Fri, 16 Jun 2017 09:27:56 +0200
+Subject: [Buildroot] [PATCH 2/4] python-portend: new package
+In-Reply-To: <20170616072758.13871-1-yegorslists@googlemail.com>
+References: <20170616072758.13871-1-yegorslists@googlemail.com>
+Message-ID: <20170616072758.13871-2-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +15,66 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
  package/Config.in                          |  1 +
- package/python-tempora/Config.in           |  8 ++++++++
- package/python-tempora/python-tempora.hash |  3 +++
- package/python-tempora/python-tempora.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-tempora/Config.in
- create mode 100644 package/python-tempora/python-tempora.hash
- create mode 100644 package/python-tempora/python-tempora.mk
+ package/python-portend/Config.in           |  7 +++++++
+ package/python-portend/python-portend.hash |  3 +++
+ package/python-portend/python-portend.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-portend/Config.in
+ create mode 100644 package/python-portend/python-portend.hash
+ create mode 100644 package/python-portend/python-portend.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c997e2a30..ac62a1a05 100644
+index ac62a1a05..a1b572335 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -852,6 +852,7 @@ menu "External python modules"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-sortedcontainers//Config.in"
- 	source "package/python-spidev/Config.in"
-+	source "package/python-tempora/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tomako/Config.in"
- 	source "package/python-toml/Config.in"
-diff --git a/package/python-tempora/Config.in b/package/python-tempora/Config.in
+@@ -781,6 +781,7 @@ menu "External python modules"
+ 	source "package/python-pexpect/Config.in"
+ 	source "package/python-pickleshare/Config.in"
+ 	source "package/python-pillow/Config.in"
++	source "package/python-portend/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-prompt-toolkit/Config.in"
+ 	source "package/python-protobuf/Config.in"
+diff --git a/package/python-portend/Config.in b/package/python-portend/Config.in
 new file mode 100644
-index 000000000..ab5c57f6c
+index 000000000..6b21078ca
 --- /dev/null
-+++ b/package/python-tempora/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_TEMPORA
-+	bool "python-tempora"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
++++ b/package/python-portend/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PORTEND
++	bool "python-portend"
++	select BR2_PACKAGE_PYTHON_TEMPORA # runtime
 +	help
-+	  Objects and routines pertaining to date and time.
++	  TCP port monitoring utilities.
 +
-+	  https://github.com/jaraco/tempora
-diff --git a/package/python-tempora/python-tempora.hash b/package/python-tempora/python-tempora.hash
++	  https://github.com/jaraco/portend
+diff --git a/package/python-portend/python-portend.hash b/package/python-portend/python-portend.hash
 new file mode 100644
-index 000000000..a8367b942
+index 000000000..ce4d5f6f6
 --- /dev/null
-+++ b/package/python-tempora/python-tempora.hash
++++ b/package/python-portend/python-portend.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/tempora/json, sha256 locally computed
-+md5	cd0dd5c51c9645285ff505ec531cbcc8  tempora-1.7.tar.gz
-+sha256	a264672b7f39198eb90b531490ade4e873f6e13839253636c3bd6a5549be1984  tempora-1.7.tar.gz
-diff --git a/package/python-tempora/python-tempora.mk b/package/python-tempora/python-tempora.mk
++# md5 from https://pypi.python.org/pypi/portend/json, sha256 locally computed
++md5	a45e001d40227c4529b1a7186f4442f5  portend-1.8.tar.gz
++sha256	7de919b82c4ac60d4768fe80a2557290661aa665b7c427de6249d8cb2fde5561  portend-1.8.tar.gz
+diff --git a/package/python-portend/python-portend.mk b/package/python-portend/python-portend.mk
 new file mode 100644
-index 000000000..0bae36a2c
+index 000000000..b0e89b130
 --- /dev/null
-+++ b/package/python-tempora/python-tempora.mk
++++ b/package/python-portend/python-portend.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-tempora
++# python-portend
 +#
 +################################################################################
 +
-+PYTHON_TEMPORA_VERSION = 1.7
-+PYTHON_TEMPORA_SOURCE = tempora-$(PYTHON_TEMPORA_VERSION).tar.gz
-+PYTHON_TEMPORA_SITE = https://pypi.python.org/packages/db/2d/c838e9e553d774962a71b832b2c6390194904bfe49fd0d9d792ce8091e8a
-+PYTHON_TEMPORA_LICENSE = MIT
-+PYTHON_TEMPORA_SETUP_TYPE = setuptools
-+PYTHON_TEMPORA_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_PORTEND_VERSION = 1.8
++PYTHON_PORTEND_SOURCE = portend-$(PYTHON_PORTEND_VERSION).tar.gz
++PYTHON_PORTEND_SITE = https://pypi.python.org/packages/3f/37/f3ab6c4a00632d53d7dfb74ba4a695e86605b92b0a94bd41fa443b60ccb6
++PYTHON_PORTEND_LICENSE = MIT
++PYTHON_PORTEND_SETUP_TYPE = setuptools
++PYTHON_PORTEND_DEPENDENCIES = host-python-setuptools-scm
 +
 +$(eval $(python-package))
 -- 
