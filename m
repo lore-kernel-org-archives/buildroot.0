@@ -1,54 +1,53 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Jun 2017 06:32:53 +0300
-Subject: [Buildroot] [PATCH 08/14] aiccu: don't link with librt
+Date: Fri, 16 Jun 2017 06:32:51 +0300
+Subject: [Buildroot] [PATCH 06/14] docs/manual: drop mention of removed
+	external toolchains
 In-Reply-To: <cover.1497583686.git.baruch@tkos.co.il>
 References: <cover.1497583686.git.baruch@tkos.co.il>
-Message-ID: <947c2a62e5d2f4da7e74cb0f332fe73be5c36df1.1497583686.git.baruch@tkos.co.il>
+Message-ID: <68b14ddaf554338963c1802d9de1506e85848aee.1497583686.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot no longer supports toolchains with glibc older than 2.17, so there
-is no need to link with librt for clock_* system calls.
+The CodeSourcery x86 and sh, the ADI Blackfin, and the Xilinx Mircoblaze
+external toolchain profiles have all been removed. Update the manual.
 
-Cc: Michael Rommel <rommel@layer-7.net>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/aiccu/0003-clock-suite-functions-fix.patch     | 18 ------------------
- ...f-ether-header.patch => 0003-if-ether-header.patch} |  0
- 2 files changed, 18 deletions(-)
- delete mode 100644 package/aiccu/0003-clock-suite-functions-fix.patch
- rename package/aiccu/{0004-if-ether-header.patch => 0003-if-ether-header.patch} (100%)
+ docs/manual/configure.txt | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/aiccu/0003-clock-suite-functions-fix.patch b/package/aiccu/0003-clock-suite-functions-fix.patch
-deleted file mode 100644
-index 365e72a2271a..000000000000
---- a/package/aiccu/0003-clock-suite-functions-fix.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--aiccu: fix undefined reference to clock_* functions
--
--Since glibc 2.17 the clock_* suite functions are available directly in 
--the main C library. For previous versions we still need -lrt to link.
--
--Signed-off-by: Vicente Olivert Riera <vincent.riera@imgtec.com>
--
----- aiccu/unix-console/Makefile.orig	2014-01-14 10:17:20.204602513 +0000
--+++ aiccu/unix-console/Makefile	2014-01-14 10:17:31.435777359 +0000
--@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
-- # Currently defaultly builds only on Linux, but other platforms might easily also support it
-- ifeq ($(shell uname | grep -c "Linux"),1)
-- CFLAGS	+= -D AICCU_GNUTLS
---LDFLAGS += -lgnutls
--+LDFLAGS += -lgnutls -lrt
-- endif
-- 
-- # Linux
-diff --git a/package/aiccu/0004-if-ether-header.patch b/package/aiccu/0003-if-ether-header.patch
-similarity index 100%
-rename from package/aiccu/0004-if-ether-header.patch
-rename to package/aiccu/0003-if-ether-header.patch
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 945f5b11b730..008813c9b4df 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -146,19 +146,17 @@ cross-compilation toolchains. Buildroot knows about a number of
+ well-known cross-compilation toolchains (from
+ http://www.linaro.org[Linaro] for ARM,
+ http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/[Sourcery
+-CodeBench] for ARM, x86, x86-64, PowerPC, MIPS and SuperH,
+-https://blackfin.uclinux.org/gf/project/toolchain[Blackfin toolchains
+-from Analog Devices], etc.) and is capable of downloading them
+-automatically, or it can be pointed to a custom toolchain, either
+-available for download or installed locally.
++CodeBench] for ARM, x86-64, PowerPC, and MIPS, and is capable of
++downloading them automatically, or it can be pointed to a custom
++toolchain, either available for download or installed locally.
+ 
+ Then, you have three solutions to use an external toolchain:
+ 
+ * Use a predefined external toolchain profile, and let Buildroot
+   download, extract and install the toolchain. Buildroot already knows
+-  about a few CodeSourcery, Linaro, Blackfin and Xilinx toolchains.
+-  Just select the toolchain profile in +Toolchain+ from the
+-  available ones. This is definitely the easiest solution.
++  about a few CodeSourcery and Linaro toolchains. Just select the
++  toolchain profile in +Toolchain+ from the available ones. This is
++  definitely the easiest solution.
+ 
+ * Use a predefined external toolchain profile, but instead of having
+   Buildroot download and extract the toolchain, you can tell Buildroot
 -- 
 2.11.0
