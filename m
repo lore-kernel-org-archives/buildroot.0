@@ -1,96 +1,82 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Jun 2017 06:32:45 +0300
-Subject: [Buildroot] [PATCH 00/14] toolchain-external: remove support for
-	glibc before 2.17
-Message-ID: <cover.1497583686.git.baruch@tkos.co.il>
+Date: Fri, 16 Jun 2017 06:32:54 +0300
+Subject: [Buildroot] [PATCH 09/14] libv4l: don't link with librt
+In-Reply-To: <cover.1497583686.git.baruch@tkos.co.il>
+References: <cover.1497583686.git.baruch@tkos.co.il>
+Message-ID: <dac5de98b1d8ad387fa3cfa63dc3c8e3e6c32d31.1497583686.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed[1] recently on the list it is time to remove support for glibc 
-older than 2.17. This does not mean that toolchains with old glibc will stop 
-working. It only means that we stop fixing older glibc build issues. In 
-particular, the need to link with librt for clock_* system calls.
+Buildroot no longer supports toolchains with glibc older than 2.17, so there
+is no need to link with librt for clock_* system calls.
 
-The only significant user visible change in this series is the removal of 
-CodeSourcery toolchains for x86 and sh.
+The following patches are not renumbered. The noise is too high.
 
-Two patches update a comment section and the manual to take into account the 
-removal of toolchain in this series and in previous commits. A few more 
-per-package patches remove local patches for the glibc librt issue.
-
-The first patch is an unrelated fix to the external toolchain section in the 
-manual.
-
-[1] http://patchwork.ozlabs.org/patch/773384/
-
-Baruch Siach (14):
-  docs/manual: update external toolchain advantages list
-  toolchain: remove CodeSourcery x86 toolchain
-  toolchain: remove CodeSourcery sh toolchain
-  package: remove CodeSourcery sh dependencies
-  toolchain-external: update list of toolchains
-  docs/manual: drop mention of removed external toolchains
-  swupdate: don't link with librt
-  aiccu: don't link with librt
-  libv4l: don't link with librt
-  e2fsprogs: don't link with librt
-  liboping: no need to check for clock_gettime
-  openipmi: no need to check for clock_gettime
-  lirc-tools: no need to check for clock_gettime
-  softether: no need to check for clock_gettime
-
- Config.in.legacy                                   | 18 +++++++
- docs/manual/configure.txt                          | 16 +++---
- package/aiccu/0003-clock-suite-functions-fix.patch | 18 -------
- ...her-header.patch => 0003-if-ether-header.patch} |  0
- package/domoticz/Config.in                         |  3 --
- .../0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch | 35 -------------
- ...001-configure-also-check-for-clockgettime.patch | 39 ---------------
- package/liboping/liboping.mk                       |  2 -
- ...3-utils-qv4l2-Makefile.am-link-with-librt.patch | 29 -----------
- package/libv4l/libv4l.mk                           |  3 +-
- package/liquid-dsp/Config.in                       |  1 -
- ...onfigure-check-for-clock_gettime-in-librt.patch | 54 --------------------
- ...-use-of-functions-killed-in-kernel-4.8.0.patch} |  0
- package/lirc-tools/lirc-tools.mk                   |  2 -
- ...c-detect-lrt-requirement-for-clock_gettim.patch | 57 ----------------------
- package/prboom/Config.in                           |  2 -
- package/qt/Config.in                               |  7 +--
- package/softether/0006-librt.patch                 | 33 -------------
- ...onfig.patch => 0006-uclibc-ai-addrconfig.patch} |  0
- package/swupdate/swupdate.config                   |  2 +-
- toolchain/toolchain-external/Config.in             | 12 +----
- .../toolchain-external/pkg-toolchain-external.mk   |  3 +-
- .../toolchain-external-codesourcery-sh/Config.in   | 25 ----------
- .../Config.in.options                              |  9 ----
- .../toolchain-external-codesourcery-sh.hash        |  3 --
- .../toolchain-external-codesourcery-sh.mk          | 13 -----
- .../toolchain-external-codesourcery-x86/Config.in  | 29 -----------
- .../Config.in.options                              |  9 ----
- .../toolchain-external-codesourcery-x86.hash       |  3 --
- .../toolchain-external-codesourcery-x86.mk         | 12 -----
- 30 files changed, 31 insertions(+), 408 deletions(-)
- delete mode 100644 package/aiccu/0003-clock-suite-functions-fix.patch
- rename package/aiccu/{0004-if-ether-header.patch => 0003-if-ether-header.patch} (100%)
- delete mode 100644 package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
- delete mode 100644 package/liboping/0001-configure-also-check-for-clockgettime.patch
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...3-utils-qv4l2-Makefile.am-link-with-librt.patch | 29 ----------------------
+ package/libv4l/libv4l.mk                           |  3 +--
+ 2 files changed, 1 insertion(+), 31 deletions(-)
  delete mode 100644 package/libv4l/0003-utils-qv4l2-Makefile.am-link-with-librt.patch
- delete mode 100644 package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
- rename package/lirc-tools/{0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch => 0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch} (100%)
- delete mode 100644 package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
- delete mode 100644 package/softether/0006-librt.patch
- rename package/softether/{0007-uclibc-ai-addrconfig.patch => 0006-uclibc-ai-addrconfig.patch} (100%)
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
- delete mode 100644 toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
 
+diff --git a/package/libv4l/0003-utils-qv4l2-Makefile.am-link-with-librt.patch b/package/libv4l/0003-utils-qv4l2-Makefile.am-link-with-librt.patch
+deleted file mode 100644
+index 4bac577d98b2..000000000000
+--- a/package/libv4l/0003-utils-qv4l2-Makefile.am-link-with-librt.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 66d1d752976f4b45a5faff2bc68fc2fa9d435c71 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 14 May 2017 22:04:55 +0200
+-Subject: [PATCH] utils/qv4l2/Makefile.am: link with librt
+-
+-qv4l2 uses clock_gettime(), so it should link with librt to be
+-compatible with old versions of glibc.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- utils/qv4l2/Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/utils/qv4l2/Makefile.am b/utils/qv4l2/Makefile.am
+-index fd58486..a991d66 100644
+---- a/utils/qv4l2/Makefile.am
+-+++ b/utils/qv4l2/Makefile.am
+-@@ -7,7 +7,7 @@ qv4l2_SOURCES = qv4l2.cpp general-tab.cpp ctrl-tab.cpp vbi-tab.cpp capture-win.c
+-   v4l2-tpg-core.c v4l2-tpg-colors.c
+- nodist_qv4l2_SOURCES = moc_qv4l2.cpp moc_general-tab.cpp moc_capture-win.cpp moc_vbi-tab.cpp qrc_qv4l2.cpp
+- qv4l2_LDADD = ../../lib/libv4l2/libv4l2.la ../../lib/libv4lconvert/libv4lconvert.la \
+--  ../libv4l2util/libv4l2util.la ../libmedia_dev/libmedia_dev.la
+-+  ../libv4l2util/libv4l2util.la ../libmedia_dev/libmedia_dev.la -lrt
+- qv4l2_CPPFLAGS = -I../common
+- 
+- if WITH_QTGL
+--- 
+-2.7.4
+-
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 4e7aa422228f..b74271728a0b 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -11,8 +11,6 @@ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_DEPENDENCIES = host-pkgconf
+ LIBV4L_CONF_OPTS = --disable-doxygen-doc
+ 
+-# 0003-utils-qv4l2-Makefile.am-link-with-librt.patch, host-gettext
+-# needed for autoreconf to work
+ # below patches requires autoreconf:
+ # 0004-configure.ac-clarify-configure-summary.patch
+ # 0005-configure.ac-revisit-v4l2-ctl-compliance-using-libv4.patch
+@@ -21,6 +19,7 @@ LIBV4L_CONF_OPTS = --disable-doxygen-doc
+ # 0008-configure.ac-fix-build-of-v4l-utils-on-uclinux.patch
+ # 0009-configure.ac-add-USE_LIBV4L-to-summary.patch
+ LIBV4L_AUTORECONF = YES
++# host-gettext needed for autoreconf to work
+ LIBV4L_DEPENDENCIES += host-gettext
+ 
+ # fix uclibc-ng configure/compile
 -- 
 2.11.0
