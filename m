@@ -1,10 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Jun 2017 06:32:57 +0300
-Subject: [Buildroot] [PATCH 12/14] openipmi: no need to check for
+Date: Fri, 16 Jun 2017 06:32:59 +0300
+Subject: [Buildroot] [PATCH 14/14] softether: no need to check for
 	clock_gettime
 In-Reply-To: <cover.1497583686.git.baruch@tkos.co.il>
 References: <cover.1497583686.git.baruch@tkos.co.il>
-Message-ID: <90a050c99718b5448c574ffc491aac7c76130c87.1497583686.git.baruch@tkos.co.il>
+Message-ID: <6f55ac227383749d0affcd5113dcb21db5461d47.1497583686.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,74 +14,57 @@ To: buildroot@busybox.net
 Buildroot no longer supports toolchains with glibc older than 2.17, so there
 is no need to check whether librt is required for clock_* system calls.
 
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...c-detect-lrt-requirement-for-clock_gettim.patch | 57 ----------------------
- 1 file changed, 57 deletions(-)
- delete mode 100644 package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+ package/softether/0006-librt.patch                 | 33 ----------------------
+ ...onfig.patch => 0006-uclibc-ai-addrconfig.patch} |  0
+ 2 files changed, 33 deletions(-)
+ delete mode 100644 package/softether/0006-librt.patch
+ rename package/softether/{0007-uclibc-ai-addrconfig.patch => 0006-uclibc-ai-addrconfig.patch} (100%)
 
-diff --git a/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+diff --git a/package/softether/0006-librt.patch b/package/softether/0006-librt.patch
 deleted file mode 100644
-index d58ffd7caf26..000000000000
---- a/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+index 661c960a95d6..000000000000
+--- a/package/softether/0006-librt.patch
 +++ /dev/null
-@@ -1,57 +0,0 @@
--From d3be03464be7fa3844dfe0837a7e2c920c107836 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 23 Jul 2015 13:35:35 +0300
--Subject: [PATCH] configure.ac: detect -lrt requirement for clock_gettime
+@@ -1,33 +0,0 @@
+-Downloaded from
+-https://github.com/dajhorn/SoftEtherVPN/commit/9a8538a6f2287fe8bebd0a7185de408e31e5a7df
 -
--glibc versions before 2.17 require link with -lrt.
+-Fixes
+-http://autobuild.buildroot.net/results/48f/48f778a891e0bf6a60ed2e4bec057c338ec25ec9/
+-and many others
 -
--Upstream status: sent, stuck in moderator's queue
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-
+-From 9a8538a6f2287fe8bebd0a7185de408e31e5a7df Mon Sep 17 00:00:00 2001
+-From: Darik Horn <dajhorn@vanadac.com>
+-Date: Thu, 5 Jun 2014 21:02:02 -0400
+-Subject: [PATCH] Add an explicit autoconf check for librt.
+-
+-The realtime extensions library is not automatically linked on Debian ARM
+-platforms, so do an AC_CHECK_LIB for it in the configuration macro.
 ----
-- configure.ac     | 8 ++++++++
-- unix/Makefile.am | 4 ++--
-- 2 files changed, 10 insertions(+), 2 deletions(-)
+- configure.ac | 1 +
+- 1 file changed, 1 insertion(+)
 -
 -diff --git a/configure.ac b/configure.ac
--index 18401f161d45..6b350a41a916 100644
+-index 165623a..6f85393 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -854,6 +854,14 @@ OPENIPMI_SWIG_SO="${PYTHON_POSIX_SO}:\$(top_builddir)/lib/.libs/libOpenIPMI.so:\
-- AC_SUBST(OPENIPMI_SWIG_LIBS)
-- AC_SUBST(OPENIPMI_SWIG_SO)
+-@@ -60,6 +60,7 @@ CC="$PTHREAD_CC"
+- CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+- LIBS="$PTHREAD_LIBS $LIBS"
 - 
--+LIB_CLOCK_GETTIME=
--+clk_saved_libs=$LIBS
--+AC_SEARCH_LIBS([clock_gettime], [rt],
--+	       [test "$ac_cv_search_clock_gettime" = "none required" ||
--+		LIB_CLOCK_GETTIME=$ac_cv_search_clock_gettime])
--+AC_SUBST([LIB_CLOCK_GETTIME])
--+LIBS=$clk_saved_libs
--+
-- # Everything from here to AC_OUTPUT is for libedit
+-+AC_CHECK_LIB([rt],[clock_gettime])
 - 
-- # AC_PROG_LIBTOOL runs AC_CANONICAL_HOST
--diff --git a/unix/Makefile.am b/unix/Makefile.am
--index a108bc679c9a..fb60242d5d3b 100644
----- a/unix/Makefile.am
--+++ b/unix/Makefile.am
--@@ -9,13 +9,13 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
-- 
-- libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
-- libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
---	$(top_builddir)/utils/libOpenIPMIutils.la
--+	$(top_builddir)/utils/libOpenIPMIutils.la $(LIB_CLOCK_GETTIME)
-- libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-- 	-Wl,-Map -Wl,libOpenIPMIpthread.map
-- 
-- libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
-- libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
---	$(GDBM_LIB)
--+	$(GDBM_LIB) $(LIB_CLOCK_GETTIME)
-- libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-- 	-Wl,-Map -Wl,libOpenIPMIposix.map
-- 
---- 
--2.1.4
--
+- AX_CHECK_OPENSSL([
+- 	AC_SUBST(OPENSSL_LIBS)
+diff --git a/package/softether/0007-uclibc-ai-addrconfig.patch b/package/softether/0006-uclibc-ai-addrconfig.patch
+similarity index 100%
+rename from package/softether/0007-uclibc-ai-addrconfig.patch
+rename to package/softether/0006-uclibc-ai-addrconfig.patch
 -- 
 2.11.0
