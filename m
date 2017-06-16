@@ -1,9 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Jun 2017 06:32:55 +0300
-Subject: [Buildroot] [PATCH 10/14] e2fsprogs: don't link with librt
+Date: Fri, 16 Jun 2017 06:32:58 +0300
+Subject: [Buildroot] [PATCH 13/14] lirc-tools: no need to check for
+	clock_gettime
 In-Reply-To: <cover.1497583686.git.baruch@tkos.co.il>
 References: <cover.1497583686.git.baruch@tkos.co.il>
-Message-ID: <87422f222dc219a098bf8189c9214eac0f59074b.1497583686.git.baruch@tkos.co.il>
+Message-ID: <ee7b7264b3c77939b9d92287e262adc539412e1d.1497583686.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,54 +12,94 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Buildroot no longer supports toolchains with glibc older than 2.17, so there
-is no need to link with librt for clock_* system calls.
+is no need to check whether librt is required for clock_* system calls.
 
+Cc: Rhys Williams <github@wilberforce.co.nz>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .../0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch | 35 ----------------------
- 1 file changed, 35 deletions(-)
- delete mode 100644 package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+ ...onfigure-check-for-clock_gettime-in-librt.patch | 54 ----------------------
+ ...-use-of-functions-killed-in-kernel-4.8.0.patch} |  0
+ package/lirc-tools/lirc-tools.mk                   |  2 -
+ 3 files changed, 56 deletions(-)
+ delete mode 100644 package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
+ rename package/lirc-tools/{0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch => 0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch} (100%)
 
-diff --git a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch b/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+diff --git a/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch b/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
 deleted file mode 100644
-index bd86c4e21a3d..000000000000
---- a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+index 710dfd3b05e2..000000000000
+--- a/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From b5baf15b36107925186d89af9097b4b8e2d7cad6 Mon Sep 17 00:00:00 2001
+@@ -1,54 +0,0 @@
+-From e654ae139cec42a6f1b5684261787d0c241cfd3b Mon Sep 17 00:00:00 2001
 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 21 Sep 2016 08:38:21 +0200
--Subject: [PATCH] MCONFIG.in: handle CLOCK_GETTIME_LIB
--
--Commit 62bc243f1bfe623312a350e4cd0d2e17a69aac45 ("fuse2fs: might need
--librt") added a check for the clock_gettime() to verify whether linking
--with the librt library is needed or not to use this function.
--
--However, this commit forgot the change in MCONFIG.in that allows to
--define the make variable CLOCK_GETTIME_LIB from the CLOCK_GETTIME_LIB
--variable substituted by the configure script. Due to this, from a make
--perspective $(CLOCK_GETTIME_LIB) is always empty, and we get link
--failure on platforms where clock_gettime() is available in librt.
+-Date: Fri, 19 Aug 2016 15:25:48 +0200
+-Subject: [PATCH] configure: check for clock_gettime in librt
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- MCONFIG.in | 1 +
-- 1 file changed, 1 insertion(+)
+- configure.ac        | 3 +++
+- daemons/Makefile.am | 2 +-
+- plugins/Makefile.am | 1 +
+- 3 files changed, 5 insertions(+), 1 deletion(-)
 -
--diff --git a/MCONFIG.in b/MCONFIG.in
--index e82963d..9ba9ce2 100644
----- a/MCONFIG.in
--+++ b/MCONFIG.in
--@@ -125,6 +125,7 @@ LIBSUPPORT = $(LIBINTL) $(LIB)/libsupport at STATIC_LIB_EXT@
-- LIBBLKID = @LIBBLKID@ @PRIVATE_LIBS_CMT@ $(LIBUUID)
-- LIBINTL = @LIBINTL@
-- SYSLIBS = @LIBS@
--+CLOCK_GETTIME_LIB = @CLOCK_GETTIME_LIB@
-- DEPLIBSS = $(LIB)/libss at LIB_EXT@
-- DEPLIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@
-- DEPLIBUUID = @DEPLIBUUID@
+-diff --git a/configure.ac b/configure.ac
+-index 73340c7..466e638 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -67,6 +67,9 @@ AC_CHECK_FUNCS(gethostname gettimeofday mkfifo select socket strdup \
+- AC_SEARCH_LIBS([dlopen], [dl dld], [], [
+-   AC_MSG_ERROR([unable to find the dlopen() function])
+- ])
+-+# glibc < 2.17 needs librt for clock_gettime()
+-+AC_CHECK_LIB(rt, clock_gettime, LIBCLOCK_GETTIME="-lrt")
+-+AC_SUBST(LIBCLOCK_GETTIME)
+- AC_CHECK_FUNCS(daemon)
+- if test "$ac_cv_func_daemon" != yes; then
+-   daemon=""
+-diff --git a/daemons/Makefile.am b/daemons/Makefile.am
+-index 5625627..85a28f3 100644
+---- a/daemons/Makefile.am
+-+++ b/daemons/Makefile.am
+-@@ -21,7 +21,7 @@ sbin_PROGRAMS           += lircd-uinput
+- endif
+- 
+- lircd_SOURCES           = lircd.cpp
+--lircd_LDADD             = ../lib/liblirc.la
+-+lircd_LDADD             = ../lib/liblirc.la @LIBCLOCK_GETTIME@
+- 
+- lircd_uinput_SOURCES    = lircd-uinput.cpp
+- lircd_uinput_LDADD     = ../lib/liblirc.la
+-diff --git a/plugins/Makefile.am b/plugins/Makefile.am
+-index ddff01d..45c012a 100644
+---- a/plugins/Makefile.am
+-+++ b/plugins/Makefile.am
+-@@ -127,6 +127,7 @@ zotac_la_SOURCES            = zotac.c
+- 
+- plugin_LTLIBRARIES          += mplay.la
+- mplay_la_SOURCES            = mplay.c
+-+mplay_la_LIBADD             = @LIBCLOCK_GETTIME@
+- endif
+- 
+- $(srcdir)/pluginlist.am:
 --- 
 -2.7.4
 -
+diff --git a/package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch b/package/lirc-tools/0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
+similarity index 100%
+rename from package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
+rename to package/lirc-tools/0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index 6fd6434ef822..f0eff91f5f4f 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -11,8 +11,6 @@ LIRC_TOOLS_LICENSE = GPL-2.0+
+ LIRC_TOOLS_LICENSE_FILES = COPYING
+ LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
+ LIRC_TOOLS_INSTALL_STAGING = YES
+-# 0002-configure-check-for-clock_gettime-in-librt.patch
+-LIRC_TOOLS_AUTORECONF = YES
+ 
+ LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
+ LIRC_TOOLS_CONF_OPTS = --without-x
 -- 
 2.11.0
