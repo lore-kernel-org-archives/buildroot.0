@@ -1,69 +1,41 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 16 Jun 2017 23:41:43 +0300
-Subject: [Buildroot] [PATCH 2/2] mesa3d: Allow optionally using LLVM in
-	drivers
-In-Reply-To: <20170616204143.29198-1-aperez@igalia.com>
-References: <20170616204143.29198-1-aperez@igalia.com>
-Message-ID: <20170616204143.29198-3-aperez@igalia.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 16 Jun 2017 17:52:31 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-firmware: Bump to the latest version
+Message-ID: <1497646352-3328-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/mesa3d/Config.in | 11 +++++++++++
- package/mesa3d/mesa3d.mk |  9 ++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+Update to commit ec58d9aaf3.
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 36a0304e27..03a0668a01 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -44,6 +44,17 @@ config BR2_PACKAGE_MESA3D_DRIVER
- config BR2_PACKAGE_MESA3D_NEEDS_XA
- 	bool
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 1646039..9b8dfed 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 1cd14477a392fe8c7c44e62623b85466df90ed72a55ae213b637e1c4335739fd linux-firmware-6d3bc8886517d171068fd1263176b8b5c51df204.tar.gz
++sha256 ec58d9aaf3cf80f768c32ba22d925c0542436ef3ee4588acd3e49b12ca2ed9d9 linux-firmware-a3a26af24e29c818ef9b5661856018e21a5c49fb.tar.gz
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 2611941..65b9a73 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_MESA3D_USE_LLVM
-+	bool "Enable LLVM usage"
-+	default y
-+	depends on BR2_PACKAGE_LLVM
-+	select BR2_PACKAGE_LLVM_ENABLE_RTTI
-+	help
-+		Build optimized driver code which makes use of LLVM (e.g. llvmpipe).
-+
-+comment "optional llvm support depends on llvm"
-+	depends on !BR2_PACKAGE_LLVM
-+
- comment "Gallium drivers"
+-LINUX_FIRMWARE_VERSION = 6d3bc8886517d171068fd1263176b8b5c51df204
++LINUX_FIRMWARE_VERSION = a3a26af24e29c818ef9b5661856018e21a5c49fb
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
  
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 2884063526..2e402e53aa 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -57,6 +57,13 @@ MESA3D_CONF_OPTS += \
- 	--disable-xa
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_USE_LLVM),y)
-+MESA3D_DEPENDENCIES += llvm
-+MESA3D_CONF_OPTS += --enable-llvm
-+else
-+MESA3D_CONF_OPTS += --disable-llvm
-+endif
-+
- # Drivers
- 
- #Gallium Drivers
-@@ -211,6 +218,6 @@ MESA3D_CONF_OPTS += --disable-lmsensors
- endif
- 
- # Avoid automatic search of llvm-config
--MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
-+MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr
- 
- $(eval $(autotools-package))
 -- 
-2.13.1
+2.7.4
