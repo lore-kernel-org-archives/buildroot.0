@@ -1,27 +1,252 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Jun 2017 16:17:33 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.11.6
-In-Reply-To: <1497707264-9358-1-git-send-email-festevam@gmail.com>
-References: <1497707264-9358-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170617161733.741a19fc@windsurf.lan>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Sat, 17 Jun 2017 16:20:58 +0200
+Subject: [Buildroot] [PATCH 1/1] linuxconsoletools: new package
+In-Reply-To: <20170617152353.1d52df66@windsurf.lan>
+References: <201706170839.v5H8dn7C021102@mx1.sonologic.net>
+ <20170617152353.1d52df66@windsurf.lan>
+Message-ID: <24A30F23-8C0C-43EC-8D24-75A7EE9DC9A1@sonologic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Sat, 17 Jun 2017 10:47:43 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  linux/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks for your comments. I will try and find some time to address them. One reason i made the options to select groups of utils is that personally i am only interested in inputattach and not in any of the joystick stuff. The inputattach utility is quite distinct and used for older touchscreen devices. In that use case, the joystick stuff is not needed.
 
-Both applied. Thanks!
+But worse, i don't want a dependency on libsdl just because i need inputattach. How should the package deal with that?
 
-Thomas
+Thanks,
+
+Koen
+
+On 17 June 2017 15:23:53 CEST, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>Hello,
+>
+>On Sat, 17 Jun 2017 09:04:52 +0200, Koen Martens wrote:
+>> Linuxconsoletools (http://sf.net/projects/linuxconsole/)
+>> contains the inputattach utility to attach legacy serial
+>> devices to the Linux kernel input layer and joystick
+>> utilities to calibrate and test joysticks and joypads.
+>> 
+>> The buildroot package adds options to build only certain
+>> tools and makes installation of man pages optional.
+>> 
+>> Signed-off-by: Koen Martens <gmc@sonologic.nl>
+>
+>Thanks for this first contribution! See below some comments about your
+>patch.
+>
+>> diff --git a/package/linuxconsoletools/0001-conditional-build.patch
+>b/package/linuxconsoletools/0001-conditional-build.patch
+>> new file mode 100644
+>> index 0000000..7e98963
+>> --- /dev/null
+>> +++ b/package/linuxconsoletools/0001-conditional-build.patch
+>> @@ -0,0 +1,107 @@
+>> +Selectively build groups of tools (inputattach,
+>> +joystick tools and/or force-feedback tools).
+>> +
+>> +Make installation of documentation (man pages)
+>> +optional.
+>> +
+>> +Signed-off-by: Koen Martens <gmc@sonologic.nl>
+>
+>Do we really need to make all of this configurable? What is the
+>installed size of the different tools?
+>
+>In any case, making the documentation installation optional is useless:
+>Buildroot unconditionally removes the documentation at the end of the
+>build. So just let the package Makefile install the documentation, it
+>will be removed anyway.
+>
+>> diff --git a/package/linuxconsoletools/Config.in
+>b/package/linuxconsoletools/Config.in
+>> new file mode 100644
+>> index 0000000..557edae
+>> --- /dev/null
+>> +++ b/package/linuxconsoletools/Config.in
+>> @@ -0,0 +1,43 @@
+>> +config BR2_PACKAGE_LINUXCONSOLETOOLS
+>> +	bool "linuxconsoletools"
+>> +	default n
+>
+>Not needed, this is the default.
+>
+>> +	help
+>> +	  Linuxconsoletools (http://sf.net/projects/linuxconsole/)
+>> +	  contains the inputattach utility to attach legacy serial
+>> +	  devices to the Linux kernel input layer and joystick
+>> +	  utilities to calibrate and test joysticks and joypads.
+>
+>Please add a blank line here, and then the upstream URL of the project
+>(rather than between parenthesis as you did).
+>
+>> +if BR2_PACKAGE_LINUXCONSOLETOOLS
+>> +
+>> +config BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH
+>> +	bool "build inputattach"
+>
+>Again I'm not sure we need sub-options. But if you keep them remove the
+>"build", i.e just use "inputattach" as the prompt.
+>
+>> +	default y
+>> +	help
+>> +	  The inputattach utility attaches legacy serial devices
+>> +	  to the Linux kernel input layer.
+>> +
+>> +config BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
+>> +	bool "build joystick utilities"
+>
+>Ditto.
+>
+>> +	default n
+>
+>Not needed, please remove.
+>
+>> +	help
+>> +	  Build joystick utilities (jstest, jscal, jscal-store,
+>> +	  jscal-restore, evdev-joystick).
+>> +
+>> +config BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK
+>> +	bool "build force-feedback utilities"
+>
+>Remove "build".
+>
+>> +	default n
+>
+>Ditto.
+>
+>> +	depends on BR2_PACKAGE_SDL
+>
+>If you keep this option, please use a "select" instead.
+>
+>> +	help
+>> +	  Build force-feedback driver utilities (fftest,
+>> +	  ffmvforce, ffset, ffcfstress).
+>> +
+>> +comment "build force-feedback utilities depends on SDL"
+>> +	depends on !BR2_PACKAGE_SDL
+>
+>... and drop this comment.
+>
+>> +
+>> +config BR2_PACKAGE_LINUXCONSOLETOOLS_DOCS
+>> +	bool "install man pages"
+>
+>Remove this option, we never install documentation in the target
+>filesystem in Buildroot.
+>
+>> +LINUXCONSOLETOOLS_VERSION = 1.6.0
+>> +LINUXCONSOLETOOLS_SOURCE =
+>linuxconsoletools-${LINUXCONSOLETOOLS_VERSION}.tar.bz2
+>
+>Please use $(...) to reference variables, not ${...}.
+>
+>> +LINUXCONSOLETOOLS_SITE =
+>https://downloads.sourceforge.net/project/linuxconsole
+>> +LINUXCONSOLETOOLS_LICENSE = GPLv2+
+>
+>We use SPDX license codes now, so please use GPL-2.0+.
+>
+>> +LINUXCONSOLETOOLS_LICENSE_FILES = COPYING
+>> +LINUXCONSOLETOOLS_DEPENDENCIES =
+>> +LINUXCONSOLETOOLS_ENV = 
+>
+>Remove those two lines, they are not needed.
+>
+>> +SDL_CONFIG =
+>
+>Remove this line, it's not needed, and potentially harmful.
+>
+>> +
+>> +ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH),y)
+>> +	LINUXCONSOLETOOLS_ENV +=  ENABLE_INPUTATTACH=1 
+>
+>Please avoid trailing whitespaces. And also, don't indent such lines.
+>Only one space after += sign.
+>
+>> +endif
+>
+>One blank line here please.
+>
+>Please fix globally.
+>
+>
+>> +ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK),y)
+>> +	LINUXCONSOLETOOLS_ENV +=  ENABLE_JOYSTICK=1 
+>> +endif
+>> +ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
+>> +	LINUXCONSOLETOOLS_ENV +=  ENABLE_FORCEFEEDBACK=1 
+>> +	LINUXCONSOLETOOLS_DEPENDENCIES += sdl
+>> +	SDL_CONFIG = $(STAGING_DIR)/usr/bin/sdl-config
+>
+>Very wrong. The namespace of variables in Buildroot is global, so when
+>you set a variable named SDL_<something> you are messing with the SDL
+>package. What you want here is create a LINUXCONSOLETOOLS_MAKE_OPTS
+>variable, that will be passed to the build commands, and here you do:
+>
+>LINUXCONSOLETOOLS_MAKE_OPTS +=
+>SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
+>
+>> +endif
+>> +ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_DOCS),y)
+>> +	LINUXCONSOLETOOLS_ENV +=  ENABLE_DOCS=1 
+>> +endif
+>
+>Not needed, we don't want documentation.
+>
+>> +
+>> +define LINUXCONSOLETOOLS_BUILD_CMDS
+>> +	$(LINUXCONSOLETOOLS_ENV) \
+>> +	$(TARGET_MAKE_ENV) \
+>> +    CC="$(TARGET_CC)" \
+>> +    CFLAGS="$(TARGET_CFLAGS)" \
+>> +	SDL_CONFIG="$(SDL_CONFIG)" \
+>> +	$(MAKE) -C $(@D)
+>
+>This should be:
+>
+>	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+>		$(LINUXCONSOLETOOLS_MAKE_OPTS)
+>
+>> +endef
+>> +
+>> +define LINUXCONSOLETOOLS_INSTALL_TARGET_CMDS
+>> +	$(LINUXCONSOLETOOLS_ENV) \
+>> +	$(TARGET_MAKE_ENV) \
+>> +    CC="$(TARGET_CC)" \
+>> +    CFLAGS="$(TARGET_CFLAGS)" \
+>> +	SDL_CONFIG="$(SDL_CONFIG)" \
+>> +	DESTDIR="$(TARGET_DIR)" \
+>> +    PREFIX=/usr \
+>> +	make -C $(@D) install
+>
+>and this should be:
+>
+>	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+>		$(LINUXCONSOLETOOLS_MAKE_OPTS) \
+>		DESTDIR="$(TARGET_DIR)" \
+>		PREFIX=/usr \
+>		install
+>
+>Could you fix the above issues, and send an updated version?
+>
+>Best regards,
+>
+>Thomas
+>-- 
+>Thomas Petazzoni, CTO, Free Electrons
+>Embedded Linux and Kernel engineering
+>http://free-electrons.com
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170617/fdc0a8dd/attachment.html>
