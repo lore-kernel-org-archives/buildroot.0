@@ -1,7 +1,7 @@
 From: Chakra Divi <2chakrass@gmail.com>
-Date: Sun, 18 Jun 2017 00:28:36 +0530
-Subject: [Buildroot] [PATCH] board: Add a13_olinuxino Support
-Message-ID: <1497725916-1495-1-git-send-email-chakra@openedev.com>
+Date: Sun, 18 Jun 2017 00:45:08 +0530
+Subject: [Buildroot] [PATCH v2] board: Add a13_olinuxino Support
+Message-ID: <1497726908-1702-1-git-send-email-chakra@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,15 +16,20 @@ with below features
 
 Signed-off-by: Chakra Divi <chakra@openedev.com>
 ---
+Changes for v2:
+- Add missing readme.txt
+
  .gitlab-ci.yml                           |    1 +
  board/olimex/a13_olinuxino/boot.cmd      |    7 +++++
  board/olimex/a13_olinuxino/genimage.cfg  |   34 +++++++++++++++++++++++
  board/olimex/a13_olinuxino/post-build.sh |    9 ++++++
+ board/olimex/a13_olinuxino/readme.txt    |   43 +++++++++++++++++++++++++++++
  configs/olimex_a13_olinuxino_defconfig   |   44 ++++++++++++++++++++++++++++++
- 5 files changed, 95 insertions(+)
+ 6 files changed, 138 insertions(+)
  create mode 100644 board/olimex/a13_olinuxino/boot.cmd
  create mode 100644 board/olimex/a13_olinuxino/genimage.cfg
  create mode 100755 board/olimex/a13_olinuxino/post-build.sh
+ create mode 100644 board/olimex/a13_olinuxino/readme.txt
  create mode 100644 configs/olimex_a13_olinuxino_defconfig
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
@@ -107,6 +112,55 @@ index 0000000..a8bf8ec
 +BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
 +
 +$MKIMAGE -A arm -O linux -T script -C none -d "${BOOT_CMD}" "${BOOT_CMD_H}"
+diff --git a/board/olimex/a13_olinuxino/readme.txt b/board/olimex/a13_olinuxino/readme.txt
+new file mode 100644
+index 0000000..382f1d7
+--- /dev/null
++++ b/board/olimex/a13_olinuxino/readme.txt
+@@ -0,0 +1,43 @@
++A13-OLinuXino
++
++Intro
++=====
++This default configuration will allow you to start experimenting with the
++buildroot environment for the A13-OLinuXino. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++A13-OLinuXino Link:
++https://www.olimex.com/Products/OLinuXino/A13/A13-OLinuXino/open-source-hardware
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make olimex_a13_olinuxino_defconfig 
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++Result of the build
++-------------------
++Image ready to be written to your micro SDcard
++
++How to write the SD card
++========================
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to a micro 
++SD card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Notes:
++  - replace 'sdX' with the actual device with your micro SDcard,
++  - you may need to be root to do that (use 'sudo').
++
++Eject the SD card, insert it in the A13-OLinuXino board, and power it up.
 diff --git a/configs/olimex_a13_olinuxino_defconfig b/configs/olimex_a13_olinuxino_defconfig
 new file mode 100644
 index 0000000..f1397e8
