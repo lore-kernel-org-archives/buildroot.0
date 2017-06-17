@@ -1,29 +1,142 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Jun 2017 10:50:00 +0200
-Subject: [Buildroot] [PATCH] pandaboard_defconfig: bump u-boot to
-	2017.05 to fix build with gcc 6
-In-Reply-To: <20170616212404.18424-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 16 Jun 2017 23:24:04 +0200")
-References: <20170616212404.18424-1-peter@korsgaard.com>
-Message-ID: <87fuezgfrb.fsf@dell.be.48ers.dk>
+Date: Sat, 17 Jun 2017 10:48:05 +0200
+Subject: [Buildroot] [git commit] openblocks_a6_defconfig: improve/fix
+	configuration
+Message-ID: <20170617084928.53C4D7FB0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4b6599146165aae70b388fd589b3353859d82914
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The recent change to default to gcc 6 for the internal toolchain broke this
- > defconfig as the u-boot doesn't contain commit 9b2c282b34 (compiler*.h: sync
- > include/linux/compiler*.h with Linux 4.5-rc6) which was added during the
- > 2016.03 cycle.
+The board has an ethernet interface, so enable DHCP for it.
 
- > Fix the build by bumping u-boot to 2017.05.
+The used flash chip uses 16K erase blocks, so use that for JFFS2:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+mtdinfo -a
+..
+mtd5
+Name:                           user
+Type:                           nand
+Eraseblock size:                16384 bytes, 16.0 KiB
+Amount of eraseblocks:          1915 (31375360 bytes, 29.9 MiB)
+Minimum input/output unit size: 512 bytes
+Sub-page size:                  256 bytes
+OOB size:                       16 bytes
+Character device major/minor:   90:10
+Bad blocks are allowed:         true
+Device is writable:             true
 
-Committed, thanks.
+While we're at it, add a readme explaining how to build and upload the build
+to the board.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/openblocks/a6/readme.txt  | 78 +++++++++++++++++++++++++++++++++++++++++
+ configs/openblocks_a6_defconfig |  3 +-
+ 2 files changed, 80 insertions(+), 1 deletion(-)
+
+diff --git a/board/openblocks/a6/readme.txt b/board/openblocks/a6/readme.txt
+new file mode 100644
+index 0000000..10a78bb
+--- /dev/null
++++ b/board/openblocks/a6/readme.txt
+@@ -0,0 +1,78 @@
++Openblocks A6
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Openblocks A6. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make openblocks_a6_defconfig
++
++Compile everything:
++
++    $ make
++
++Updating board over TFTP
++========================
++
++Copy the content of output/images to the root of your TFTP server.
++
++Connect serial and ethernet, power up board and stop it in U-Boot:
++
++DRAM (DDR2) CAS Latency = 5 tRP = 5 tRAS = 14 tRCD=5
++DRAM CS[0] base 0x00000000   size 512MB
++DRAM Total size 512MB  16bit width
++Addresses 8M - 0M are saved for the U-Boot usage.
++Mem malloc Initialization (8M - 7M): Done
++NAND:64 MB
++POST:  mac verify Eth0 PASSED
++
++CPU : Marvell Feroceon (Rev 1)
++
++Streaming disabled
++Write allocate disabled
++
++
++USB 0: host mode
++Net:   egiga0
++Hit any key to stop autoboot:  0
++openblocks>>
++
++
++Load kernel from tftp:
++
++setenv serverip <tftp-server-ip>
++setenv bootfile uImage.kirkwood-openblocks_a6
++bootp && tftp
++
++
++Write it to nand:
++
++nand erase 0x590000 0x1c5c000
++nand write.e $loadaddr 0x590000 0x1c5c000
++
++
++Load rootfs from tftp:
++
++setenv serverip <tftp-server-ip>
++setenv bootfile rootfs.jffs2
++bootp && tftp
++
++
++Write it to nand:
++
++nand erase 0x2214000 0x1dc4000
++nand write.jffs2 $loadaddr 0x2214000 0x1dc4000
++
++
++Configure kernel to use rootfs:
++
++setenv root /dev/mtdblock5 rootfstype=jffs2
++saveenv
++boot
+diff --git a/configs/openblocks_a6_defconfig b/configs/openblocks_a6_defconfig
+index fff7363..4889fb3 100644
+--- a/configs/openblocks_a6_defconfig
++++ b/configs/openblocks_a6_defconfig
+@@ -5,10 +5,11 @@ BR2_arm926t=y
+ # system
+ BR2_TARGET_GENERIC_HOSTNAME="openblocks-a6"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
+ 
+ # filesystem
+ BR2_TARGET_ROOTFS_JFFS2=y
+-BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
++BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_16K=y
+ 
+ # Linux headers same as kernel, a 4.11 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
