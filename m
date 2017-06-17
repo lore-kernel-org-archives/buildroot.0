@@ -1,39 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Jun 2017 10:49:39 +0200
-Subject: [Buildroot] [git commit] pandaboard_defconfig: bump u-boot to
-	2017.05 to fix build with gcc 6
-Message-ID: <20170617084928.C950981D65@busybox.osuosl.org>
+Date: Sat, 17 Jun 2017 10:47:48 +0200
+Subject: [Buildroot] [git commit] openblocks_a6_defconfig: bump to
+	linux-4.11.5 to fix build with gcc 6
+Message-ID: <20170617084928.2E8E780F5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c2708cbcb3f82e919b79043953e1e11f8baf71e
+commit: https://git.buildroot.net/buildroot/commit/?id=9f5808580024dd5c3b148757f439c0e69887e80d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The recent change to default to gcc 6 for the internal toolchain broke this
-defconfig as the u-boot doesn't contain commit 9b2c282b34 (compiler*.h: sync
-include/linux/compiler*.h with Linux 4.5-rc6) which was added during the
-2016.03 cycle.
+defconfig, as the kernel doesn't contain commit cb984d101b (compiler-gcc:
+integrate the various compiler-gcc[345].h files) which was added during the
+4.2 cycle.
 
-Fix the build by bumping u-boot to 2017.05.
+Fix the build by bumping the kernel to 4.11.5.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/pandaboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/openblocks_a6_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 49747e0..9b7c962 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="omap4_panda"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+diff --git a/configs/openblocks_a6_defconfig b/configs/openblocks_a6_defconfig
+index c0522da..fff7363 100644
+--- a/configs/openblocks_a6_defconfig
++++ b/configs/openblocks_a6_defconfig
+@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_ROOTFS_JFFS2=y
+ BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
+ 
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
+ BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
