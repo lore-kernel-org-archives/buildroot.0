@@ -1,96 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Jun 2017 21:27:17 +0200
-Subject: [Buildroot] [PATCH v2] support/scripts: allow /etc/shadow to be
- symlinked
-In-Reply-To: <20170612133554.24995-1-mail@jens-maus.de>
-References: <20170608152622.30019-1-mail@jens-maus.de>
- <20170612133554.24995-1-mail@jens-maus.de>
-Message-ID: <20170617192717.GA17548@scaer>
+From: Alexander Dahl <post@lespocky.de>
+Date: Sat, 17 Jun 2017 22:45:50 +0200
+Subject: [Buildroot] [PATCH] dropwatch: bump to master and fix site
+In-Reply-To: <20170617153810.06022ad8@windsurf.lan>
+References: <1497684446-18637-1-git-send-email-post@lespocky.de>
+ <20170617153810.06022ad8@windsurf.lan>
+Message-ID: <20170617204547.GW31396@falbala.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jens, All,
+Hello Thomas,
 
-On 2017-06-12 15:35 +0200, Jens Maus spake thusly:
-> This commit fixes a problem where it was not possible to replace
-> /etc/shadow with a symlink to a e.g. a user partition where the
-> shadow file is placed. This is required, e.g. for systems where the
-> rootfs is mounted read-only but users should still be able to be
-> added. Thus, if within an filesystem overlay setup a user tries
-> to replace /etc/shadow with a symlink to the real file on a user
-> partition a buildroot build stops with an error message because
-> sed is called on the symlink instead of following the symlink.
-> This commit fixes this shortcoming.
-> 
-> Signed-off-by: Jens Maus <mail@jens-maus.de>
+On Sat, Jun 17, 2017 at 03:38:10PM +0200, Thomas Petazzoni wrote:
+> I've applied, after doing a few minor fixes (see below). Also, do you
+> think that Neil Horman would be willing to accept our two patches in
+> upstream dropwatch?
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+He said he still maintains and would accept patches. However this is
+my first encounter with dropwatch, I just needed it for something and
+thought I could send a patch after fixing it anyway, so I can't say
+much more about upstream than from only this one mail.
 
-Regards,
-Yann E. MORIN.
+> Patches inside packages should be generated with "git format-patch -N"
+> to avoid the 1/2, 2/2 numbering, which quickly becomes out of sync when
+> patches are added/removed. Also, I've improved the patch title, which
+> was not very informative.
 
-> ---
-> Changes v1 -> v2:
->   - extended follow-symlinks use (requested by Yann)
-> 
-> Signed-off-by: Jens Maus <mail@jens-maus.de>
-> ---
->  support/scripts/mkusers | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-> index 2ac76f986..5bbec3e10 100755
-> --- a/support/scripts/mkusers
-> +++ b/support/scripts/mkusers
-> @@ -219,12 +219,12 @@ add_one_group() {
->      fi
->  
->      # Remove any previous instance of this group, and re-add the new one
-> -    sed -i -e '/^'"${group}"':.*/d;' "${GROUP}"
-> +    sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GROUP}"
->      printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
->  
->      # Ditto for /etc/gshadow if it exists
->      if [ -f "${GSHADOW}" ]; then
-> -        sed -i -e '/^'"${group}"':.*/d;' "${GSHADOW}"
-> +        sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GSHADOW}"
->          printf "%s:*::\n" "${group}" >>"${GSHADOW}"
->      fi
->  }
-> @@ -263,7 +263,8 @@ add_user_to_group() {
->  
->      for _f in "${GROUP}" "${GSHADOW}"; do
->          [ -f "${_f}" ] || continue
-> -        sed -r -i -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
-> +        sed -r -i --follow-symlinks \
-> +                  -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
->                    -e 's/^('"${group}"':.*)$/\1,'"${username}"'/;'                           \
->                    -e 's/,+/,/'                                                              \
->                    -e 's/:,/:/'                                                              \
-> @@ -303,7 +304,7 @@ add_one_user() {
->  
->      # Remove any previous instance of this user
->      for _f in "${PASSWD}" "${SHADOW}"; do
-> -        sed -r -i -e '/^'"${username}"':.*/d;' "${_f}"
-> +        sed -r -i --follow-symlinks -e '/^'"${username}"':.*/d;' "${_f}"
->      done
->  
->      _gid="$( get_gid "${group}" )"
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I just took the titles from the old patches filenames. Will try to
+remember the -N next time. Thanks for the hint.
+
+> Thanks again!
+
+You're welcome.
+Alex
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+?With the first link, the chain is forged. The first speech censured, 
+the first thought forbidden, the first freedom denied, chains us all 
+irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
+*** GnuPG-FP: C28E E6B9 0263 95CF 8FAF  08FA 34AD CD00 7221 5CC6 ***
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170617/b3ae09e0/attachment.asc>
