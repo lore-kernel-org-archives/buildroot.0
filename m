@@ -1,37 +1,43 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 17 Jun 2017 10:47:44 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{1, 4, 9, 11}.x series
-In-Reply-To: <1497707264-9358-1-git-send-email-festevam@gmail.com>
-References: <1497707264-9358-1-git-send-email-festevam@gmail.com>
-Message-ID: <1497707264-9358-2-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Jun 2017 15:46:12 +0200
+Subject: [Buildroot] [git commit] linux-firmware: Bump to the latest version
+Message-ID: <20170617141055.AF135807E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=1c9846ecc9845223242fbd67e8f3ac5fbb615498
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 70a90a9..6704305 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -226,9 +226,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
--	default "4.1.40"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.72"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.32"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.1.41"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.73"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.33"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.5"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.11.6"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-2.7.4
+Update to commit ec58d9aaf3.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 1646039..9b8dfed 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 1cd14477a392fe8c7c44e62623b85466df90ed72a55ae213b637e1c4335739fd linux-firmware-6d3bc8886517d171068fd1263176b8b5c51df204.tar.gz
++sha256 ec58d9aaf3cf80f768c32ba22d925c0542436ef3ee4588acd3e49b12ca2ed9d9 linux-firmware-a3a26af24e29c818ef9b5661856018e21a5c49fb.tar.gz
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 2611941..65b9a73 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 6d3bc8886517d171068fd1263176b8b5c51df204
++LINUX_FIRMWARE_VERSION = a3a26af24e29c818ef9b5661856018e21a5c49fb
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
