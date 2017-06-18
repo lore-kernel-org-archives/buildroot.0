@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jun 2017 15:53:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbluray: fix build when host
- has no java support
-In-Reply-To: <20170618072737.13591-1-bernd.kuhls@t-online.de>
-References: <20170618072737.13591-1-bernd.kuhls@t-online.de>
-Message-ID: <20170618155346.5418fa2d@windsurf>
+Date: Sun, 18 Jun 2017 15:55:12 +0200
+Subject: [Buildroot] Updates on http://autobuild.buildroot.net/ broken?
+In-Reply-To: <jc2g1exqk8.ln2@ID-313208.user.individual.net>
+References: <jc2g1exqk8.ln2@ID-313208.user.individual.net>
+Message-ID: <20170618155512.026451aa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 18 Jun 2017 09:27:37 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/630/630cfe62798d0f35fdfaed8547038ba7673cc149/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libbluray/libbluray.mk | 2 ++
->  1 file changed, 2 insertions(+)
+On Sat, 17 Jun 2017 18:36:03 +0200, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+> the last reported build dates back to 0:54 am today, is there something 
+> broken w.r.t. updating the results?
+
+Thanks for reporting the issue. The problem was that the root
+filesystem was full, in terms of number of inodes, due to lighttpd
+mod_compress cache having filled in the entire filesystem with a large
+number of small files. This was preventing the upload of new results.
+
+I've fixed that up, and results have started accumulating again. Build
+results for Sunday (posted on Monday morning European time) should be
+back to normal.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
