@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 18 Jun 2017 09:42:58 +0200
-Subject: [Buildroot] [PATCH/2017.05.x 1/1] package/imagemagick: change
+Date: Sun, 18 Jun 2017 09:43:14 +0200
+Subject: [Buildroot] [PATCH/2017.02.x 1/1] package/imagemagick: change
 	download url to github
-Message-ID: <20170618074258.15344-1-bernd.kuhls@t-online.de>
+Message-ID: <20170618074314.15411-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
