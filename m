@@ -1,400 +1,151 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 23:20:33 +0200
-Subject: [Buildroot] [PATCH] board: Moved nanopi-neo under friendlyarm
-In-Reply-To: <1497810189-22010-1-git-send-email-chakra@openedev.com>
-References: <1497810189-22010-1-git-send-email-chakra@openedev.com>
-Message-ID: <20170618212033.GA24924@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Jun 2017 23:35:02 +0200
+Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.3
+Message-ID: <20170618213502.16233-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chakra, All,
+Fixes:
 
-On 2017-06-18 23:53 +0530, Chakra Divi spake thusly:
-> As the vendor folder friendlyarm is created,
-> moved board nanopi-neo also under vendor
-> folder.
-> 
-> Signed-off-by: Chakra Divi <chakra@openedev.com>
+CVE-2017-9468 - Joseph Bisch discovered that Irssi does not properly handle
+DCC messages without source nick/host.  A malicious IRC server can take
+advantage of this flaw to cause Irssi to crash, resulting in a  denial of
+service.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+CVE-2017-9469 - Joseph Bisch discovered that Irssi does not properly handle
+receiving incorrectly quoted DCC files.  A remote attacker can take
+advantage of this flaw to cause Irssi to crash, resulting in a denial of
+service.
 
-> ---
-> - Moved nanopi-neo under friendly arm
-> - Yann E. MORIN, can you please help test these Changes
+See https://irssi.org/security/irssi_sa_2017_06.txt for more details.
 
-Next time, please use the -M option when formating your patches, so
-that renames (moves) are detected and a smaller diff is used:
+Remove 0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch as it
+applied upstream and drop autoreconf as configure.ac is no longer patched.
 
-    diff --git a/board/nanopi-neo/boot.cmd b/board/friendlyarm/nanopi-neo/boot.cmd
-    similarity index 100%
-    rename from board/nanopi-neo/boot.cmd
-    rename to board/friendlyarm/nanopi-neo/boot.cmd
-    diff --git a/board/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
-    similarity index 100%
-    rename from board/nanopi-neo/genimage.cfg
-    rename to board/friendlyarm/nanopi-neo/genimage.cfg
-    diff --git a/board/nanopi-neo/post-build.sh b/board/friendlyarm/nanopi-neo/post-build.sh
-    similarity index 100%
-    rename from board/nanopi-neo/post-build.sh
-    rename to board/friendlyarm/nanopi-neo/post-build.sh
-    diff --git a/board/nanopi-neo/post-image.sh b/board/friendlyarm/nanopi-neo/post-image.sh
-    similarity index 100%
-    rename from board/nanopi-neo/post-image.sh
-    rename to board/friendlyarm/nanopi-neo/post-image.sh
-    diff --git a/board/nanopi-neo/readme.txt b/board/friendlyarm/nanopi-neo/readme.txt
-    similarity index 100%
-    rename from board/nanopi-neo/readme.txt
-    rename to board/friendlyarm/nanopi-neo/readme.txt
-    diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
-    index fbc0902e52..a22705269d 100644
-    --- a/configs/nanopi_neo_defconfig
-    +++ b/configs/nanopi_neo_defconfig
-    @@ -4,8 +4,8 @@ BR2_ARM_FPU_VFPV4=y
-     
-     BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
-     BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
-    -BR2_ROOTFS_POST_BUILD_SCRIPT="board/nanopi-neo/post-build.sh"
-    -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nanopi-neo/post-image.sh"
-    +BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo/post-build.sh"
-    +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/friendlyarm/nanopi-neo/post-image.sh"
-     
-     # Linux headers same as kernel, a 4.10 series
-     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-to-using-pkg-config-to-check-for-OpenSSL.patch | 77 ----------------------
+ package/irssi/irssi.hash                           |  2 +-
+ package/irssi/irssi.mk                             |  5 +-
+ 3 files changed, 2 insertions(+), 82 deletions(-)
+ delete mode 100644 package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
 
-Regards,
-Yann E. MORIN.
-
->  board/friendlyarm/nanopi-neo/boot.cmd      |    8 ++++++
->  board/friendlyarm/nanopi-neo/genimage.cfg  |   34 ++++++++++++++++++++++
->  board/friendlyarm/nanopi-neo/post-build.sh |   12 ++++++++
->  board/friendlyarm/nanopi-neo/post-image.sh |   15 ++++++++++
->  board/friendlyarm/nanopi-neo/readme.txt    |   42 ++++++++++++++++++++++++++++
->  board/nanopi-neo/boot.cmd                  |    8 ------
->  board/nanopi-neo/genimage.cfg              |   34 ----------------------
->  board/nanopi-neo/post-build.sh             |   12 --------
->  board/nanopi-neo/post-image.sh             |   15 ----------
->  board/nanopi-neo/readme.txt                |   42 ----------------------------
->  configs/nanopi_neo_defconfig               |    4 +--
->  11 files changed, 113 insertions(+), 113 deletions(-)
->  create mode 100644 board/friendlyarm/nanopi-neo/boot.cmd
->  create mode 100644 board/friendlyarm/nanopi-neo/genimage.cfg
->  create mode 100755 board/friendlyarm/nanopi-neo/post-build.sh
->  create mode 100755 board/friendlyarm/nanopi-neo/post-image.sh
->  create mode 100644 board/friendlyarm/nanopi-neo/readme.txt
->  delete mode 100644 board/nanopi-neo/boot.cmd
->  delete mode 100644 board/nanopi-neo/genimage.cfg
->  delete mode 100755 board/nanopi-neo/post-build.sh
->  delete mode 100755 board/nanopi-neo/post-image.sh
->  delete mode 100644 board/nanopi-neo/readme.txt
-> 
-> diff --git a/board/friendlyarm/nanopi-neo/boot.cmd b/board/friendlyarm/nanopi-neo/boot.cmd
-> new file mode 100644
-> index 0000000..7874057
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/boot.cmd
-> @@ -0,0 +1,8 @@
-> +setenv fdt_high ffffffff
-> +
-> +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-> +
-> +fatload mmc 0 $kernel_addr_r zImage
-> +fatload mmc 0 $fdt_addr_r sun8i-h3-nanopi-neo.dtb
-> +
-> +bootz $kernel_addr_r - $fdt_addr_r
-> diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
-> new file mode 100644
-> index 0000000..ad43d31
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/genimage.cfg
-> @@ -0,0 +1,34 @@
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +			"sun8i-h3-nanopi-neo.dtb",
-> +			"boot.scr"
-> +		}
-> +	}
-> +	size = 10M
-> +}
-> +
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		in-partition-table = "no"
-> +		image = "u-boot-sunxi-with-spl.bin"
-> +		offset = 8192
-> +		size = 1040384 # 1MB - 8192
-> +	}
-> +
-> +	partition boot {
-> +		partition-type = 0xC
-> +		bootable = "true"
-> +		image = "boot.vfat"
-> +	}
-> +
-> +	partition rootfs {
-> +		partition-type = 0x83
-> +		image = "rootfs.ext4"
-> +		size = 32M
-> +	}
-> +}
-> diff --git a/board/friendlyarm/nanopi-neo/post-build.sh b/board/friendlyarm/nanopi-neo/post-build.sh
-> new file mode 100755
-> index 0000000..e6791e7
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/post-build.sh
-> @@ -0,0 +1,12 @@
-> +#!/bin/sh
-> +# post-build.sh for Nanopi NEO, based on the Orange Pi PC
-> +# 2013, Carlo Caione <carlo.caione@gmail.com>
-> +# 2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +
-> +BOARD_DIR="$( dirname "${0}" )"
-> +MKIMAGE="${HOST_DIR}/usr/bin/mkimage"
-> +BOOT_CMD="${BOARD_DIR}/boot.cmd"
-> +BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
-> +
-> +# U-Boot script
-> +"${MKIMAGE}" -C none -A arm -T script -d "${BOOT_CMD}" "${BOOT_CMD_H}"
-> diff --git a/board/friendlyarm/nanopi-neo/post-image.sh b/board/friendlyarm/nanopi-neo/post-image.sh
-> new file mode 100755
-> index 0000000..740386e
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/post-image.sh
-> @@ -0,0 +1,15 @@
-> +#!/bin/sh
-> +# post-image.sh for Nanopi NEO, based on the Orange Pi PC
-> +
-> +BOARD_DIR="$( dirname "${0}" )"
-> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> +
-> +rm -rf "${GENIMAGE_TMP}"
-> +
-> +genimage                               \
-> +	--rootpath "${TARGET_DIR}"     \
-> +	--tmppath "${GENIMAGE_TMP}"    \
-> +	--inputpath "${BINARIES_DIR}"  \
-> +	--outputpath "${BINARIES_DIR}" \
-> +	--config "${GENIMAGE_CFG}"
-> diff --git a/board/friendlyarm/nanopi-neo/readme.txt b/board/friendlyarm/nanopi-neo/readme.txt
-> new file mode 100644
-> index 0000000..539df54
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/readme.txt
-> @@ -0,0 +1,42 @@
-> +Intro
-> +=====
-> +
-> +The instructions herein are valid for the FriendlyARM NanoPi NEO,
-> +both the 256MiB and 512MiB versions. They should also work for the
-> +NanoPi NEO Air, but this is untested so far.
-> +
-> +The FriendlyARM Nanopi NEO is a 4x4cm? board with an Allwiner H3 SoC:
-> +  - quad-core Cortex-A7 @1.2GHz
-> +  - 256 or 512MiB of DDR
-> +  - uSDCard as only storage option
-> +  - 3x USB 2.0 host (one socket, two on expansion pin-holes)
-> +  - 1x USB 2.0 OTG (also used as power source)
-> +  - 10/100 ethernet MAC
-> +  - GPIOs, SPI, I2c...
-> +
-> +Support for the Nanopi NEO in U-Boot and Linux is very recent, so only
-> +core, basic features are available.
-> +
-> +Unfortunately, support for the ethernet MAC and the USB OTG are not
-> +yet upstream, but are being actively worked on.
-> +
-> +
-> +How to build
-> +============
-> +
-> +    $ make nanopi_neo_defconfig
-> +    $ make
-> +
-> +Note: you will need access to the internet to download the required
-> +sources.
-> +
-> +You will then obtain an image ready to be written to your micro SDcard:
-> +
-> +    $ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
-> +
-> +Notes:
-> +  - replace 'sdX' with the actual device with your micro SDcard,
-> +  - you may need to be root to do that (use 'sudo').
-> +
-> +Insert the micro SDcard in your NanoPi NEO and power it up. The console
-> +is on the serial line, 115200 8N1.
-> diff --git a/board/nanopi-neo/boot.cmd b/board/nanopi-neo/boot.cmd
-> deleted file mode 100644
-> index 7874057..0000000
-> --- a/board/nanopi-neo/boot.cmd
-> +++ /dev/null
-> @@ -1,8 +0,0 @@
-> -setenv fdt_high ffffffff
-> -
-> -setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-> -
-> -fatload mmc 0 $kernel_addr_r zImage
-> -fatload mmc 0 $fdt_addr_r sun8i-h3-nanopi-neo.dtb
-> -
-> -bootz $kernel_addr_r - $fdt_addr_r
-> diff --git a/board/nanopi-neo/genimage.cfg b/board/nanopi-neo/genimage.cfg
-> deleted file mode 100644
-> index ad43d31..0000000
-> --- a/board/nanopi-neo/genimage.cfg
-> +++ /dev/null
-> @@ -1,34 +0,0 @@
-> -image boot.vfat {
-> -	vfat {
-> -		files = {
-> -			"zImage",
-> -			"sun8i-h3-nanopi-neo.dtb",
-> -			"boot.scr"
-> -		}
-> -	}
-> -	size = 10M
-> -}
-> -
-> -image sdcard.img {
-> -	hdimage {
-> -	}
-> -
-> -	partition u-boot {
-> -		in-partition-table = "no"
-> -		image = "u-boot-sunxi-with-spl.bin"
-> -		offset = 8192
-> -		size = 1040384 # 1MB - 8192
-> -	}
-> -
-> -	partition boot {
-> -		partition-type = 0xC
-> -		bootable = "true"
-> -		image = "boot.vfat"
-> -	}
-> -
-> -	partition rootfs {
-> -		partition-type = 0x83
-> -		image = "rootfs.ext4"
-> -		size = 32M
-> -	}
-> -}
-> diff --git a/board/nanopi-neo/post-build.sh b/board/nanopi-neo/post-build.sh
-> deleted file mode 100755
-> index e6791e7..0000000
-> --- a/board/nanopi-neo/post-build.sh
-> +++ /dev/null
-> @@ -1,12 +0,0 @@
-> -#!/bin/sh
-> -# post-build.sh for Nanopi NEO, based on the Orange Pi PC
-> -# 2013, Carlo Caione <carlo.caione@gmail.com>
-> -# 2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
-> -
-> -BOARD_DIR="$( dirname "${0}" )"
-> -MKIMAGE="${HOST_DIR}/usr/bin/mkimage"
-> -BOOT_CMD="${BOARD_DIR}/boot.cmd"
-> -BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
-> -
-> -# U-Boot script
-> -"${MKIMAGE}" -C none -A arm -T script -d "${BOOT_CMD}" "${BOOT_CMD_H}"
-> diff --git a/board/nanopi-neo/post-image.sh b/board/nanopi-neo/post-image.sh
-> deleted file mode 100755
-> index 740386e..0000000
-> --- a/board/nanopi-neo/post-image.sh
-> +++ /dev/null
-> @@ -1,15 +0,0 @@
-> -#!/bin/sh
-> -# post-image.sh for Nanopi NEO, based on the Orange Pi PC
-> -
-> -BOARD_DIR="$( dirname "${0}" )"
-> -GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> -GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> -
-> -rm -rf "${GENIMAGE_TMP}"
-> -
-> -genimage                               \
-> -	--rootpath "${TARGET_DIR}"     \
-> -	--tmppath "${GENIMAGE_TMP}"    \
-> -	--inputpath "${BINARIES_DIR}"  \
-> -	--outputpath "${BINARIES_DIR}" \
-> -	--config "${GENIMAGE_CFG}"
-> diff --git a/board/nanopi-neo/readme.txt b/board/nanopi-neo/readme.txt
-> deleted file mode 100644
-> index 539df54..0000000
-> --- a/board/nanopi-neo/readme.txt
-> +++ /dev/null
-> @@ -1,42 +0,0 @@
-> -Intro
-> -=====
-> -
-> -The instructions herein are valid for the FriendlyARM NanoPi NEO,
-> -both the 256MiB and 512MiB versions. They should also work for the
-> -NanoPi NEO Air, but this is untested so far.
-> -
-> -The FriendlyARM Nanopi NEO is a 4x4cm? board with an Allwiner H3 SoC:
-> -  - quad-core Cortex-A7 @1.2GHz
-> -  - 256 or 512MiB of DDR
-> -  - uSDCard as only storage option
-> -  - 3x USB 2.0 host (one socket, two on expansion pin-holes)
-> -  - 1x USB 2.0 OTG (also used as power source)
-> -  - 10/100 ethernet MAC
-> -  - GPIOs, SPI, I2c...
-> -
-> -Support for the Nanopi NEO in U-Boot and Linux is very recent, so only
-> -core, basic features are available.
-> -
-> -Unfortunately, support for the ethernet MAC and the USB OTG are not
-> -yet upstream, but are being actively worked on.
-> -
-> -
-> -How to build
-> -============
-> -
-> -    $ make nanopi_neo_defconfig
-> -    $ make
-> -
-> -Note: you will need access to the internet to download the required
-> -sources.
-> -
-> -You will then obtain an image ready to be written to your micro SDcard:
-> -
-> -    $ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
-> -
-> -Notes:
-> -  - replace 'sdX' with the actual device with your micro SDcard,
-> -  - you may need to be root to do that (use 'sudo').
-> -
-> -Insert the micro SDcard in your NanoPi NEO and power it up. The console
-> -is on the serial line, 115200 8N1.
-> diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
-> index fbc0902..a227052 100644
-> --- a/configs/nanopi_neo_defconfig
-> +++ b/configs/nanopi_neo_defconfig
-> @@ -4,8 +4,8 @@ BR2_ARM_FPU_VFPV4=y
->  
->  BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
->  BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
-> -BR2_ROOTFS_POST_BUILD_SCRIPT="board/nanopi-neo/post-build.sh"
-> -BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nanopi-neo/post-image.sh"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/friendlyarm/nanopi-neo/post-image.sh"
->  
->  # Linux headers same as kernel, a 4.10 series
->  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
-> -- 
-> 1.7.9.5
-> 
-
+diff --git a/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch b/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
+deleted file mode 100644
+index 0ce44f9354..0000000000
+--- a/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
++++ /dev/null
+@@ -1,77 +0,0 @@
+-From ed0c2c1b9504a99a6dcc3c0f5de3b3a1c0232758 Mon Sep 17 00:00:00 2001
+-From: Rodrigo Rebello <rprebello@gmail.com>
+-Date: Mon, 20 Mar 2017 13:17:42 -0300
+-Subject: [PATCH] Get back to using pkg-config to check for OpenSSL
+-
+-Commit 6300dfec7 removed the option to disable SSL support from the
+-configure script since it became a requirement, but it also removed the
+-use of pkg-config for finding the OpenSSL library and its dependencies.
+-
+-This had the unfortunate consequence of breaking the correct detection
+-of library flags in many static linking scenarios. In some cases, for
+-example, OpenSSL might have been built with zlib, which requires `-lz`
+-to be passed to the linker when doing a static link of the irssi
+-executable. Thus, pkg-config becomes an invaluable tool in such
+-situations, since no guessing work is needed as the OpenSSL .pc file
+-provides all the necessary flags.
+-
+-So, this patch re-inserts the PKG_CHECK_MODULES macro in the configure
+-script when looking for OpenSSL. The test using AC_CHECK_LIB remains,
+-but only as a last resort in case the one using pkg-config fails.
+-
+-Also, because the macro AM_PATH_GLIB_2_0 contains an unconditional call
+-to PKG_PROG_PKG_CONFIG, the OpenSSL checks are moved so that they come
+-after the Glib ones in order to avoid doubly checking for the pkg-config
+-binary (PKG_CHECK_MODULES skips that check if it has been performed
+-before, but PKG_PROG_PKG_CONFIG does not).
+-
+-Upstream status: submitted
+-https://github.com/irssi/irssi/pull/677
+-
+-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+----
+- configure.ac | 21 +++++++++++++++------
+- 1 file changed, 15 insertions(+), 6 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 02b33497..9f191d3f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -231,11 +231,6 @@ if test "x$want_socks" = "xyes"; then
+- fi
+- 
+- dnl **
+--dnl ** OpenSSL checks
+--dnl **
+--AC_CHECK_LIB([ssl], [SSL_library_init])
+--
+--dnl **
+- dnl ** fe-text checks
+- dnl **
+- 
+-@@ -276,7 +271,21 @@ if test -z "$GLIB_LIBS"; then
+-   AC_ERROR([GLIB is required to build irssi.])
+- fi
+- 
+--LIBS="$LIBS $GLIB_LIBS -lssl -lcrypto"
+-+LIBS="$LIBS $GLIB_LIBS"
+-+
+-+dnl **
+-+dnl ** OpenSSL checks
+-+dnl **
+-+PKG_CHECK_MODULES([OPENSSL], [openssl], [
+-+	CFLAGS="$CFLAGS $OPENSSL_CFLAGS"
+-+	LIBS="$LIBS $OPENSSL_LIBS"
+-+], [
+-+	AC_CHECK_LIB([ssl], [SSL_library_init], [
+-+		LIBS="$LIBS -lssl -lcrypto"
+-+	], [
+-+		AC_MSG_ERROR([The OpenSSL library was not found])
+-+	])
+-+])
+- 
+- dnl **
+- dnl ** curses checks
+--- 
+-2.11.0
+-
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index f1472e04bf..abb421998c 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	5c1c3cc2caf103aad073fadeb000e0f8cb3b416833a7f43ceb8bd9fcf275fbe9	irssi-1.0.2.tar.xz
++sha256	838220297dcbe7c8c42d01005059779a82f5b7b7e7043db37ad13f5966aff581	irssi-1.0.3.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 1fe4de83cd..ae7986ce98 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 1.0.2
++IRSSI_VERSION = 1.0.3
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+@@ -13,9 +13,6 @@ IRSSI_LICENSE = GPL-2.0+
+ IRSSI_LICENSE_FILES = COPYING
+ IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses openssl
+ 
+-# We're patching configure.ac, so we need to autoreconf
+-IRSSI_AUTORECONF = YES
+-
+ IRSSI_CONF_OPTS = \
+ 	--disable-glibtest \
+ 	--with-ncurses=$(STAGING_DIR)/usr \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
