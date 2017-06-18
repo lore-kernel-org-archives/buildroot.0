@@ -1,112 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 11:12:17 +0200
-Subject: [Buildroot] [PATCH 04/14] package: remove CodeSourcery sh
- dependencies
-In-Reply-To: <b09ce2c6f232b9b936e11d581c9e04071b59d371.1497583686.git.baruch@tkos.co.il>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 18 Jun 2017 12:14:24 +0300
+Subject: [Buildroot] [PATCH 02/14] toolchain: remove CodeSourcery x86
+ toolchain
+In-Reply-To: <20170618090833.GB2918@scaer>
 References: <cover.1497583686.git.baruch@tkos.co.il>
- <b09ce2c6f232b9b936e11d581c9e04071b59d371.1497583686.git.baruch@tkos.co.il>
-Message-ID: <20170618091217.GD2918@scaer>
+ <f9dda54d8c748b269aac1f9071986503ef5cb1b8.1497583686.git.baruch@tkos.co.il>
+ <20170618090833.GB2918@scaer>
+Message-ID: <20170618091424.tefhny6rq57ytdc2@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hi Yann,
 
-On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
-> The CodeSourcery sh toolchain has been removed. Drop negative dependencies on
-> that toolchain.
+On Sun, Jun 18, 2017 at 11:08:33AM +0200, Yann E. MORIN wrote:
+> Baruch, All,
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/domoticz/Config.in   | 3 ---
->  package/liquid-dsp/Config.in | 1 -
->  package/prboom/Config.in     | 2 --
->  package/qt/Config.in         | 7 ++-----
->  4 files changed, 2 insertions(+), 11 deletions(-)
+> On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
+> > Since glibc 2.17, executable link command need not include the -lrt option for
+> > clock_* system calls. As a result, over time less and less software packages
+> > bother to check whether to toolchain needs -lrt. We are now at a point where
+> > maintainers refuse to add this complexity into their build system. This
+> > requires Buildroot to carry patches fixing this issue indefinitely.
 > 
-> diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-> index c6550d2ad07c..c03f84ae44bc 100644
-> --- a/package/domoticz/Config.in
-> +++ b/package/domoticz/Config.in
-> @@ -7,8 +7,6 @@ config BR2_PACKAGE_DOMOTICZ
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-> -	# These result in internal compiler error
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_BOOST_DATE_TIME
->  	select BR2_PACKAGE_BOOST_SYSTEM
-> @@ -30,7 +28,6 @@ config BR2_PACKAGE_DOMOTICZ
->  comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
->  	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
->  		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
->  		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
-> diff --git a/package/liquid-dsp/Config.in b/package/liquid-dsp/Config.in
-> index dca39153bb07..59ee7edb523f 100644
-> --- a/package/liquid-dsp/Config.in
-> +++ b/package/liquid-dsp/Config.in
-> @@ -18,7 +18,6 @@ if BR2_PACKAGE_LIQUID_DSP
->  
->  config BR2_PACKAGE_LIQUID_DSP_FAST
->  	bool "optimize for speed over accuracy"
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
->  	help
->  	  Optimize for speed over accuracy.
->  
-> diff --git a/package/prboom/Config.in b/package/prboom/Config.in
-> index 6884f31e4635..8e445e98b85f 100644
-> --- a/package/prboom/Config.in
-> +++ b/package/prboom/Config.in
-> @@ -1,7 +1,5 @@
->  config BR2_PACKAGE_PRBOOM
->  	bool "prboom"
-> -	# These result in internal compiler error
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
->  	select BR2_PACKAGE_SDL
->  	select BR2_PACKAGE_SDL_MIXER
->  	select BR2_PACKAGE_SDL_NET
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index fe0b0e978780..7710b09d29e1 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -444,11 +444,8 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
->  	default y if BR2_arc || BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
->  		BR2_microblazebe || BR2_mips || BR2_mipsel || \
->  		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
-> -		BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64
-> -	# The CodeSourcery SuperH toolchain fails to build Webkit,
-> -	# with an assertion failure in binutils.
-> -	default y if (BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb) && \
-> -		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
-> +		BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64 || \
-> +		BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  
->  config BR2_PACKAGE_QT_WEBKIT
-> -- 
-> 2.11.0
+> What upstreams are refusing to fix that? Do you have references to
+> share?
+
+See http://patchwork.ozlabs.org/patch/773384/ (swupdate).
+
+I put the link in the series cover. Should add it here as well?
+
+baruch
+
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> > glibc 2.17 is now 4.5 years old. There is no reason to use an older version
+> > with current software.
+> 
+> So we can now consider the cut-off at what we consider legacy is 4.5
+> years old. Fine with me.
+> 
+> > This commit removes the predefined profile for CodeSourcery x86 toolchain that
+> > is based on glibc 2.16. One may still use the custom external toolchain
+> > support in Buildroot to get this toolchain back, and deal with any build
+> > issues that this toolchain causes.
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
