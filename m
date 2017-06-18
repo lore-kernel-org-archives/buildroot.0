@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 16:01:44 +0200
-Subject: [Buildroot] [PATCH 3/4 v2] tools: move get-developers out of
+Date: Sun, 18 Jun 2017 16:01:45 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] tools: move check-package out of
 	support/scripts/
 In-Reply-To: <cover.1497794488.git.yann.morin.1998@free.fr>
 References: <cover.1497794488.git.yann.morin.1998@free.fr>
-Message-ID: <ad1405d2402560b803eea2a577e17f206e42be94.1497794488.git.yann.morin.1998@free.fr>
+Message-ID: <eb8cb9682d84d1f110044a1448f18ef95ad79e84.1497794488.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,234 +21,425 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- docs/manual/contribute.txt                    |  2 +-
- support/scripts/get-developers                | 84 +--------------------------
- tools/00-README.txt                           |  5 ++
- tools/get-developers                          | 83 ++++++++++++++++++++++++++
- {support/scripts => tools}/getdeveloperlib.py |  0
- 5 files changed, 90 insertions(+), 84 deletions(-)
- mode change 100755 => 120000 support/scripts/get-developers
- create mode 100755 tools/get-developers
- rename {support/scripts => tools}/getdeveloperlib.py (100%)
+ support/scripts/check-package                      | 145 +--------------------
+ support/scripts/pkg-stats                          |   2 +-
+ tools/00-README.txt                                |   4 +
+ tools/check-package                                | 144 ++++++++++++++++++++
+ .../scripts => tools}/checkpackagelib/__init__.py  |   0
+ {support/scripts => tools}/checkpackagelib/base.py |   0
+ {support/scripts => tools}/checkpackagelib/lib.py  |   0
+ .../checkpackagelib/lib_config.py                  |   0
+ .../scripts => tools}/checkpackagelib/lib_hash.py  |   0
+ .../scripts => tools}/checkpackagelib/lib_mk.py    |   0
+ .../scripts => tools}/checkpackagelib/lib_patch.py |   0
+ .../scripts => tools}/checkpackagelib/readme.txt   |  10 +-
+ 12 files changed, 155 insertions(+), 150 deletions(-)
+ mode change 100755 => 120000 support/scripts/check-package
+ create mode 100755 tools/check-package
+ rename {support/scripts => tools}/checkpackagelib/__init__.py (100%)
+ rename {support/scripts => tools}/checkpackagelib/base.py (100%)
+ rename {support/scripts => tools}/checkpackagelib/lib.py (100%)
+ rename {support/scripts => tools}/checkpackagelib/lib_config.py (100%)
+ rename {support/scripts => tools}/checkpackagelib/lib_hash.py (100%)
+ rename {support/scripts => tools}/checkpackagelib/lib_mk.py (100%)
+ rename {support/scripts => tools}/checkpackagelib/lib_patch.py (100%)
+ rename {support/scripts => tools}/checkpackagelib/readme.txt (91%)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 719032bcc4..c10587726c 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -295,7 +295,7 @@ information). This tool reads your patches and outputs the appropriate
- +git send-email+ command to use:
- 
- ---------------------
--$ ./support/scripts/get-developers outgoing/*
-+$ ./tools/get-developers outgoing/*
- ---------------------
- 
- Use the output of +get-developers+ to send your patches:
-diff --git a/support/scripts/get-developers b/support/scripts/get-developers
+diff --git a/support/scripts/check-package b/support/scripts/check-package
 deleted file mode 100755
-index 40ed08ffe1..0000000000
---- a/support/scripts/get-developers
+index 74ea46f819..0000000000
+--- a/support/scripts/check-package
 +++ /dev/null
-@@ -1,83 +0,0 @@
+@@ -1,144 +0,0 @@
 -#!/usr/bin/env python
+-# See support/scripts/checkpackagelib/readme.txt before editing this file.
 -
+-from __future__ import print_function
 -import argparse
--import getdeveloperlib
+-import inspect
+-import re
+-import sys
+-
+-import checkpackagelib.lib_config
+-import checkpackagelib.lib_hash
+-import checkpackagelib.lib_mk
+-import checkpackagelib.lib_patch
+-
+-VERBOSE_LEVEL_TO_SHOW_IGNORED_FILES = 3
+-flags = None  # Command line arguments.
+-
 -
 -def parse_args():
 -    parser = argparse.ArgumentParser()
--    parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
--                        help='list of patches (use - to read patches from stdin)')
--    parser.add_argument('-a', dest='architecture', action='store',
--                        help='find developers in charge of this architecture')
--    parser.add_argument('-p', dest='package', action='store',
--                        help='find developers in charge of this package')
--    parser.add_argument('-c', dest='check', action='store_const',
--                        const=True, help='list files not handled by any developer')
+-
+-    # Do not use argparse.FileType("r") here because only files with known
+-    # format will be open based on the filename.
+-    parser.add_argument("files", metavar="F", type=str, nargs="*",
+-                        help="list of files")
+-
+-    parser.add_argument("--manual-url", action="store",
+-                        default="http://nightly.buildroot.org/",
+-                        help="default: %(default)s")
+-    parser.add_argument("--verbose", "-v", action="count", default=0)
+-
+-    # Now the debug options in the order they are processed.
+-    parser.add_argument("--include-only", dest="include_list", action="append",
+-                        help="run only the specified functions (debug)")
+-    parser.add_argument("--exclude", dest="exclude_list", action="append",
+-                        help="do not run the specified functions (debug)")
+-    parser.add_argument("--dry-run", action="store_true", help="print the "
+-                        "functions that would be called for each file (debug)")
+-
 -    return parser.parse_args()
 -
+-
+-CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
+-FILE_IS_FROM_A_PACKAGE = re.compile("package/[^/]*/")
+-
+-
+-def get_lib_from_filename(fname):
+-    if FILE_IS_FROM_A_PACKAGE.search(fname) is None:
+-        return None
+-    if CONFIG_IN_FILENAME.search(fname):
+-        return checkpackagelib.lib_config
+-    if fname.endswith(".hash"):
+-        return checkpackagelib.lib_hash
+-    if fname.endswith(".mk"):
+-        return checkpackagelib.lib_mk
+-    if fname.endswith(".patch"):
+-        return checkpackagelib.lib_patch
+-    return None
+-
+-
+-def is_a_check_function(m):
+-    if not inspect.isclass(m):
+-        return False
+-    # do not call the base class
+-    if m.__name__.startswith("_"):
+-        return False
+-    if flags.include_list and m.__name__ not in flags.include_list:
+-        return False
+-    if flags.exclude_list and m.__name__ in flags.exclude_list:
+-        return False
+-    return True
+-
+-
+-def print_warnings(warnings):
+-    # Avoid the need to use 'return []' at the end of every check function.
+-    if warnings is None:
+-        return 0  # No warning generated.
+-
+-    for level, message in enumerate(warnings):
+-        if flags.verbose >= level:
+-            print(message.replace("\t", "< tab  >").rstrip())
+-    return 1  # One more warning to count.
+-
+-
+-def check_file_using_lib(fname):
+-    # Count number of warnings generated and lines processed.
+-    nwarnings = 0
+-    nlines = 0
+-
+-    lib = get_lib_from_filename(fname)
+-    if not lib:
+-        if flags.verbose >= VERBOSE_LEVEL_TO_SHOW_IGNORED_FILES:
+-            print("{}: ignored".format(fname))
+-        return nwarnings, nlines
+-    classes = inspect.getmembers(lib, is_a_check_function)
+-
+-    if flags.dry_run:
+-        functions_to_run = [c[0] for c in classes]
+-        print("{}: would run: {}".format(fname, functions_to_run))
+-        return nwarnings, nlines
+-
+-    objects = [c[1](fname, flags.manual_url) for c in classes]
+-
+-    for cf in objects:
+-        nwarnings += print_warnings(cf.before())
+-    for lineno, text in enumerate(open(fname, "r").readlines()):
+-        nlines += 1
+-        for cf in objects:
+-            nwarnings += print_warnings(cf.check_line(lineno + 1, text))
+-    for cf in objects:
+-        nwarnings += print_warnings(cf.after())
+-
+-    return nwarnings, nlines
+-
+-
 -def __main__():
--    devs = getdeveloperlib.parse_developers()
--    if devs is None:
+-    global flags
+-    flags = parse_args()
+-
+-    if len(flags.files) == 0:
+-        print("No files to check style")
 -        sys.exit(1)
--    args = parse_args()
 -
--    # Check that only one action is given
--    action = 0
--    if args.architecture is not None:
--        action += 1
--    if args.package is not None:
--        action += 1
--    if args.check:
--        action += 1
--    if len(args.patches) != 0:
--        action += 1
--    if action > 1:
--        print("Cannot do more than one action")
--        return
--    if action == 0:
--        print("No action specified")
--        return
+-    # Accumulate number of warnings generated and lines processed.
+-    total_warnings = 0
+-    total_lines = 0
 -
--    # Handle the check action
--    if args.check:
--        files = getdeveloperlib.check_developers(devs)
--        for f in files:
--            print(f)
+-    for fname in flags.files:
+-        nwarnings, nlines = check_file_using_lib(fname)
+-        total_warnings += nwarnings
+-        total_lines += nlines
 -
--    # Handle the architecture action
--    if args.architecture is not None:
--        for dev in devs:
--            if args.architecture in dev.architectures:
--                print(dev.name)
--        return
+-    # The warning messages are printed to stdout and can be post-processed
+-    # (e.g. counted by 'wc'), so for stats use stderr. Wait all warnings are
+-    # printed, for the case there are many of them, before printing stats.
+-    sys.stdout.flush()
+-    print("{} lines processed".format(total_lines), file=sys.stderr)
+-    print("{} warnings generated".format(total_warnings), file=sys.stderr)
 -
--    # Handle the package action
--    if args.package is not None:
--        for dev in devs:
--            if args.package in dev.packages:
--                print(dev.name)
--        return
+-    if total_warnings > 0:
+-        sys.exit(1)
 -
--    # Handle the patches action
--    if len(args.patches) != 0:
--        (files, infras) = getdeveloperlib.analyze_patches(args.patches)
--        matching_devs = set()
--        for dev in devs:
--            # See if we have developers matching by package name
--            for f in files:
--                if dev.hasfile(f):
--                    matching_devs.add(dev.name)
--            # See if we have developers matching by package infra
--            for i in infras:
--                if i in dev.infras:
--                    matching_devs.add(dev.name)
--
--        result = "--to buildroot at buildroot.org"
--        for dev in matching_devs:
--            result += " --cc \"%s\"" % dev
--
--        if result != "":
--            print("git send-email %s" % result)
 -
 -__main__()
--
-diff --git a/support/scripts/get-developers b/support/scripts/get-developers
+diff --git a/support/scripts/check-package b/support/scripts/check-package
 new file mode 120000
-index 0000000000..7209567e15
+index 0000000000..16a6051e3a
 --- /dev/null
-+++ b/support/scripts/get-developers
++++ b/support/scripts/check-package
 @@ -0,0 +1 @@
-+../../tools/get-developers
++../../tools/check-package
 \ No newline at end of file
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 4cf1f82518..f827877052 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -337,7 +337,7 @@ for i in $(find boot/ linux/ package/ toolchain/ -name '*.mk' | sort) ; do
+     fi
+ 
+     file_list=$(find ${package_dir} -name '*.mk' -o -name '*.in*' -o -name '*.hash')
+-    nwarnings=$(./support/scripts/check-package ${file_list} 2>&1 | sed '/\([0-9]*\) warnings generated/!d; s//\1/')
++    nwarnings=$(./tools/check-package ${file_list} 2>&1 | sed '/\([0-9]*\) warnings generated/!d; s//\1/')
+     if [ ${nwarnings} -eq 0 ] ; then
+ 	echo "<td class=\"centered correct\">${nwarnings}</td>"
+     else
 diff --git a/tools/00-README.txt b/tools/00-README.txt
-index 092e0eac8e..2740b97e5b 100644
+index 2740b97e5b..5e563cc59a 100644
 --- a/tools/00-README.txt
 +++ b/tools/00-README.txt
-@@ -8,6 +8,11 @@ brmake
+@@ -8,6 +8,10 @@ brmake
      ("'br.log' in the current directory), and just ouputs the Buildroot
      messages (those lines starting with >>>) on stdout.
  
-+get-developpers
-+    a script to return the list of people interested in a specific part
-+    of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
-+    input, a package name or and architecture name.
++check-package
++    a script that checks the coding style of a package's Config.in and
++    .mk files, and also tests them for various types of typoes.
 +
- test-pkg
-     a script that tests a specific package against a set of various
-     toolchains, with the goal to detect toolchain-related dependencies
-diff --git a/tools/get-developers b/tools/get-developers
+ get-developpers
+     a script to return the list of people interested in a specific part
+     of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
+diff --git a/tools/check-package b/tools/check-package
 new file mode 100755
-index 0000000000..40ed08ffe1
+index 0000000000..cdbac94929
 --- /dev/null
-+++ b/tools/get-developers
-@@ -0,0 +1,83 @@
++++ b/tools/check-package
+@@ -0,0 +1,144 @@
 +#!/usr/bin/env python
++# See tools/checkpackagelib/readme.txt before editing this file.
 +
++from __future__ import print_function
 +import argparse
-+import getdeveloperlib
++import inspect
++import re
++import sys
++
++import checkpackagelib.lib_config
++import checkpackagelib.lib_hash
++import checkpackagelib.lib_mk
++import checkpackagelib.lib_patch
++
++VERBOSE_LEVEL_TO_SHOW_IGNORED_FILES = 3
++flags = None  # Command line arguments.
++
 +
 +def parse_args():
 +    parser = argparse.ArgumentParser()
-+    parser.add_argument('patches', metavar='P', type=argparse.FileType('r'), nargs='*',
-+                        help='list of patches (use - to read patches from stdin)')
-+    parser.add_argument('-a', dest='architecture', action='store',
-+                        help='find developers in charge of this architecture')
-+    parser.add_argument('-p', dest='package', action='store',
-+                        help='find developers in charge of this package')
-+    parser.add_argument('-c', dest='check', action='store_const',
-+                        const=True, help='list files not handled by any developer')
++
++    # Do not use argparse.FileType("r") here because only files with known
++    # format will be open based on the filename.
++    parser.add_argument("files", metavar="F", type=str, nargs="*",
++                        help="list of files")
++
++    parser.add_argument("--manual-url", action="store",
++                        default="http://nightly.buildroot.org/",
++                        help="default: %(default)s")
++    parser.add_argument("--verbose", "-v", action="count", default=0)
++
++    # Now the debug options in the order they are processed.
++    parser.add_argument("--include-only", dest="include_list", action="append",
++                        help="run only the specified functions (debug)")
++    parser.add_argument("--exclude", dest="exclude_list", action="append",
++                        help="do not run the specified functions (debug)")
++    parser.add_argument("--dry-run", action="store_true", help="print the "
++                        "functions that would be called for each file (debug)")
++
 +    return parser.parse_args()
 +
++
++CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
++FILE_IS_FROM_A_PACKAGE = re.compile("package/[^/]*/")
++
++
++def get_lib_from_filename(fname):
++    if FILE_IS_FROM_A_PACKAGE.search(fname) is None:
++        return None
++    if CONFIG_IN_FILENAME.search(fname):
++        return checkpackagelib.lib_config
++    if fname.endswith(".hash"):
++        return checkpackagelib.lib_hash
++    if fname.endswith(".mk"):
++        return checkpackagelib.lib_mk
++    if fname.endswith(".patch"):
++        return checkpackagelib.lib_patch
++    return None
++
++
++def is_a_check_function(m):
++    if not inspect.isclass(m):
++        return False
++    # do not call the base class
++    if m.__name__.startswith("_"):
++        return False
++    if flags.include_list and m.__name__ not in flags.include_list:
++        return False
++    if flags.exclude_list and m.__name__ in flags.exclude_list:
++        return False
++    return True
++
++
++def print_warnings(warnings):
++    # Avoid the need to use 'return []' at the end of every check function.
++    if warnings is None:
++        return 0  # No warning generated.
++
++    for level, message in enumerate(warnings):
++        if flags.verbose >= level:
++            print(message.replace("\t", "< tab  >").rstrip())
++    return 1  # One more warning to count.
++
++
++def check_file_using_lib(fname):
++    # Count number of warnings generated and lines processed.
++    nwarnings = 0
++    nlines = 0
++
++    lib = get_lib_from_filename(fname)
++    if not lib:
++        if flags.verbose >= VERBOSE_LEVEL_TO_SHOW_IGNORED_FILES:
++            print("{}: ignored".format(fname))
++        return nwarnings, nlines
++    classes = inspect.getmembers(lib, is_a_check_function)
++
++    if flags.dry_run:
++        functions_to_run = [c[0] for c in classes]
++        print("{}: would run: {}".format(fname, functions_to_run))
++        return nwarnings, nlines
++
++    objects = [c[1](fname, flags.manual_url) for c in classes]
++
++    for cf in objects:
++        nwarnings += print_warnings(cf.before())
++    for lineno, text in enumerate(open(fname, "r").readlines()):
++        nlines += 1
++        for cf in objects:
++            nwarnings += print_warnings(cf.check_line(lineno + 1, text))
++    for cf in objects:
++        nwarnings += print_warnings(cf.after())
++
++    return nwarnings, nlines
++
++
 +def __main__():
-+    devs = getdeveloperlib.parse_developers()
-+    if devs is None:
++    global flags
++    flags = parse_args()
++
++    if len(flags.files) == 0:
++        print("No files to check style")
 +        sys.exit(1)
-+    args = parse_args()
 +
-+    # Check that only one action is given
-+    action = 0
-+    if args.architecture is not None:
-+        action += 1
-+    if args.package is not None:
-+        action += 1
-+    if args.check:
-+        action += 1
-+    if len(args.patches) != 0:
-+        action += 1
-+    if action > 1:
-+        print("Cannot do more than one action")
-+        return
-+    if action == 0:
-+        print("No action specified")
-+        return
++    # Accumulate number of warnings generated and lines processed.
++    total_warnings = 0
++    total_lines = 0
 +
-+    # Handle the check action
-+    if args.check:
-+        files = getdeveloperlib.check_developers(devs)
-+        for f in files:
-+            print(f)
++    for fname in flags.files:
++        nwarnings, nlines = check_file_using_lib(fname)
++        total_warnings += nwarnings
++        total_lines += nlines
 +
-+    # Handle the architecture action
-+    if args.architecture is not None:
-+        for dev in devs:
-+            if args.architecture in dev.architectures:
-+                print(dev.name)
-+        return
++    # The warning messages are printed to stdout and can be post-processed
++    # (e.g. counted by 'wc'), so for stats use stderr. Wait all warnings are
++    # printed, for the case there are many of them, before printing stats.
++    sys.stdout.flush()
++    print("{} lines processed".format(total_lines), file=sys.stderr)
++    print("{} warnings generated".format(total_warnings), file=sys.stderr)
 +
-+    # Handle the package action
-+    if args.package is not None:
-+        for dev in devs:
-+            if args.package in dev.packages:
-+                print(dev.name)
-+        return
++    if total_warnings > 0:
++        sys.exit(1)
 +
-+    # Handle the patches action
-+    if len(args.patches) != 0:
-+        (files, infras) = getdeveloperlib.analyze_patches(args.patches)
-+        matching_devs = set()
-+        for dev in devs:
-+            # See if we have developers matching by package name
-+            for f in files:
-+                if dev.hasfile(f):
-+                    matching_devs.add(dev.name)
-+            # See if we have developers matching by package infra
-+            for i in infras:
-+                if i in dev.infras:
-+                    matching_devs.add(dev.name)
-+
-+        result = "--to buildroot at buildroot.org"
-+        for dev in matching_devs:
-+            result += " --cc \"%s\"" % dev
-+
-+        if result != "":
-+            print("git send-email %s" % result)
 +
 +__main__()
-+
-diff --git a/support/scripts/getdeveloperlib.py b/tools/getdeveloperlib.py
+diff --git a/support/scripts/checkpackagelib/__init__.py b/tools/checkpackagelib/__init__.py
 similarity index 100%
-rename from support/scripts/getdeveloperlib.py
-rename to tools/getdeveloperlib.py
+rename from support/scripts/checkpackagelib/__init__.py
+rename to tools/checkpackagelib/__init__.py
+diff --git a/support/scripts/checkpackagelib/base.py b/tools/checkpackagelib/base.py
+similarity index 100%
+rename from support/scripts/checkpackagelib/base.py
+rename to tools/checkpackagelib/base.py
+diff --git a/support/scripts/checkpackagelib/lib.py b/tools/checkpackagelib/lib.py
+similarity index 100%
+rename from support/scripts/checkpackagelib/lib.py
+rename to tools/checkpackagelib/lib.py
+diff --git a/support/scripts/checkpackagelib/lib_config.py b/tools/checkpackagelib/lib_config.py
+similarity index 100%
+rename from support/scripts/checkpackagelib/lib_config.py
+rename to tools/checkpackagelib/lib_config.py
+diff --git a/support/scripts/checkpackagelib/lib_hash.py b/tools/checkpackagelib/lib_hash.py
+similarity index 100%
+rename from support/scripts/checkpackagelib/lib_hash.py
+rename to tools/checkpackagelib/lib_hash.py
+diff --git a/support/scripts/checkpackagelib/lib_mk.py b/tools/checkpackagelib/lib_mk.py
+similarity index 100%
+rename from support/scripts/checkpackagelib/lib_mk.py
+rename to tools/checkpackagelib/lib_mk.py
+diff --git a/support/scripts/checkpackagelib/lib_patch.py b/tools/checkpackagelib/lib_patch.py
+similarity index 100%
+rename from support/scripts/checkpackagelib/lib_patch.py
+rename to tools/checkpackagelib/lib_patch.py
+diff --git a/support/scripts/checkpackagelib/readme.txt b/tools/checkpackagelib/readme.txt
+similarity index 91%
+rename from support/scripts/checkpackagelib/readme.txt
+rename to tools/checkpackagelib/readme.txt
+index 0444d17992..8012c72e39 100644
+--- a/support/scripts/checkpackagelib/readme.txt
++++ b/tools/checkpackagelib/readme.txt
+@@ -57,19 +57,19 @@ Some hints when changing this code:
+ Usage examples:
+ - to get a list of check functions that would be called without actually
+   calling them you can use the --dry-run option:
+-$ support/scripts/check-package --dry-run package/yourfavorite/*
++$ tools/check-package --dry-run package/yourfavorite/*
+ 
+ - when you just added a new check function, e.g. Something, check how it behaves
+   for all current packages:
+-$ support/scripts/check-package --include-only Something $(find package -type f)
++$ tools/check-package --include-only Something $(find package -type f)
+ 
+ - the effective processing time (when the .pyc were already generated and all
+   files to be processed are cached in the RAM) should stay in the order of few
+   seconds:
+-$ support/scripts/check-package $(find package -type f) >/dev/null ; \
+-  time support/scripts/check-package $(find package -type f) >/dev/null
++$ tools/check-package $(find package -type f) >/dev/null ; \
++  time tools/check-package $(find package -type f) >/dev/null
+ 
+ - vim users can navigate the warnings (most editors probably have similar
+   function) since warnings are generated in the form 'path/file:line: warning':
+ $ find package/ -name 'Config.*' > filelist && vim -c \
+-  'set makeprg=support/scripts/check-package\ $(cat\ filelist)' -c make -c copen
++  'set makeprg=tools/check-package\ $(cat\ filelist)' -c make -c copen
 -- 
 2.11.0
