@@ -1,80 +1,100 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 18 Jun 2017 13:13:01 +0300
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Jun 2017 13:55:29 +0200
 Subject: [Buildroot] [PATCH 10/14] e2fsprogs: don't link with librt
-In-Reply-To: <20170618093309.GK2918@scaer>
+In-Reply-To: <20170618101301.hxhzvmcd4vntmdmf@tarshish>
 References: <cover.1497583686.git.baruch@tkos.co.il>
  <87422f222dc219a098bf8189c9214eac0f59074b.1497583686.git.baruch@tkos.co.il>
  <20170618093309.GK2918@scaer>
-Message-ID: <20170618101301.hxhzvmcd4vntmdmf@tarshish>
+ <20170618101301.hxhzvmcd4vntmdmf@tarshish>
+Message-ID: <20170618115529.GQ2918@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Baruch, All,
 
-On Sun, Jun 18, 2017 at 11:33:09AM +0200, Yann E. MORIN wrote:
-> On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
-> > Buildroot no longer supports toolchains with glibc older than 2.17, so there
-> > is no need to link with librt for clock_* system calls.
+On 2017-06-18 13:13 +0300, Baruch Siach spake thusly:
+> On Sun, Jun 18, 2017 at 11:33:09AM +0200, Yann E. MORIN wrote:
+> > On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
+> > > Buildroot no longer supports toolchains with glibc older than 2.17, so there
+> > > is no need to link with librt for clock_* system calls.
+> > > 
+> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Thanks.
+> 
+> On a second thought, e2fsprogs is also a host package. We don't want to 
+> abandon pre glibc 2.17 hosts just yet, do we?
 
-Thanks.
+Indeed no.
 
-On a second thought, e2fsprogs is also a host package. We don't want to 
-abandon pre glibc 2.17 hosts just yet, do we?
+But the patch was made to fix a build failure for fuse2fs, which we
+explicitly disable for the host variant.
 
-baruch
+So, we really can drop this patch.
 
-> > ---
-> >  .../0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch | 35 ----------------------
-> >  1 file changed, 35 deletions(-)
-> >  delete mode 100644 package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
-> > 
-> > diff --git a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch b/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
-> > deleted file mode 100644
-> > index bd86c4e21a3d..000000000000
-> > --- a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
-> > +++ /dev/null
-> > @@ -1,35 +0,0 @@
-> > -From b5baf15b36107925186d89af9097b4b8e2d7cad6 Mon Sep 17 00:00:00 2001
-> > -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > -Date: Wed, 21 Sep 2016 08:38:21 +0200
-> > -Subject: [PATCH] MCONFIG.in: handle CLOCK_GETTIME_LIB
-> > -
-> > -Commit 62bc243f1bfe623312a350e4cd0d2e17a69aac45 ("fuse2fs: might need
-> > -librt") added a check for the clock_gettime() to verify whether linking
-> > -with the librt library is needed or not to use this function.
-> > -
-> > -However, this commit forgot the change in MCONFIG.in that allows to
-> > -define the make variable CLOCK_GETTIME_LIB from the CLOCK_GETTIME_LIB
-> > -variable substituted by the configure script. Due to this, from a make
-> > -perspective $(CLOCK_GETTIME_LIB) is always empty, and we get link
-> > -failure on platforms where clock_gettime() is available in librt.
-> > -
-> > -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ----
-> > - MCONFIG.in | 1 +
-> > - 1 file changed, 1 insertion(+)
-> > -
-> > -diff --git a/MCONFIG.in b/MCONFIG.in
-> > -index e82963d..9ba9ce2 100644
-> > ---- a/MCONFIG.in
-> > -+++ b/MCONFIG.in
-> > -@@ -125,6 +125,7 @@ LIBSUPPORT = $(LIBINTL) $(LIB)/libsupport at STATIC_LIB_EXT@
-> > - LIBBLKID = @LIBBLKID@ @PRIVATE_LIBS_CMT@ $(LIBUUID)
-> > - LIBINTL = @LIBINTL@
-> > - SYSLIBS = @LIBS@
-> > -+CLOCK_GETTIME_LIB = @CLOCK_GETTIME_LIB@
-> > - DEPLIBSS = $(LIB)/libss at LIB_EXT@
-> > - DEPLIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@
-> > - DEPLIBUUID = @DEPLIBUUID@
+Regards,
+Yann E. MORIN.
+
+> baruch
+> 
+> > > ---
+> > >  .../0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch | 35 ----------------------
+> > >  1 file changed, 35 deletions(-)
+> > >  delete mode 100644 package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+> > > 
+> > > diff --git a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch b/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+> > > deleted file mode 100644
+> > > index bd86c4e21a3d..000000000000
+> > > --- a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+> > > +++ /dev/null
+> > > @@ -1,35 +0,0 @@
+> > > -From b5baf15b36107925186d89af9097b4b8e2d7cad6 Mon Sep 17 00:00:00 2001
+> > > -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > > -Date: Wed, 21 Sep 2016 08:38:21 +0200
+> > > -Subject: [PATCH] MCONFIG.in: handle CLOCK_GETTIME_LIB
+> > > -
+> > > -Commit 62bc243f1bfe623312a350e4cd0d2e17a69aac45 ("fuse2fs: might need
+> > > -librt") added a check for the clock_gettime() to verify whether linking
+> > > -with the librt library is needed or not to use this function.
+> > > -
+> > > -However, this commit forgot the change in MCONFIG.in that allows to
+> > > -define the make variable CLOCK_GETTIME_LIB from the CLOCK_GETTIME_LIB
+> > > -variable substituted by the configure script. Due to this, from a make
+> > > -perspective $(CLOCK_GETTIME_LIB) is always empty, and we get link
+> > > -failure on platforms where clock_gettime() is available in librt.
+> > > -
+> > > -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > > ----
+> > > - MCONFIG.in | 1 +
+> > > - 1 file changed, 1 insertion(+)
+> > > -
+> > > -diff --git a/MCONFIG.in b/MCONFIG.in
+> > > -index e82963d..9ba9ce2 100644
+> > > ---- a/MCONFIG.in
+> > > -+++ b/MCONFIG.in
+> > > -@@ -125,6 +125,7 @@ LIBSUPPORT = $(LIBINTL) $(LIB)/libsupport at STATIC_LIB_EXT@
+> > > - LIBBLKID = @LIBBLKID@ @PRIVATE_LIBS_CMT@ $(LIBUUID)
+> > > - LIBINTL = @LIBINTL@
+> > > - SYSLIBS = @LIBS@
+> > > -+CLOCK_GETTIME_LIB = @CLOCK_GETTIME_LIB@
+> > > - DEPLIBSS = $(LIB)/libss at LIB_EXT@
+> > > - DEPLIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@
+> > > - DEPLIBUUID = @DEPLIBUUID@
+> 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
