@@ -1,13 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 11:19:23 +0200
-Subject: [Buildroot] [PATCH 02/14] toolchain: remove CodeSourcery x86
- toolchain
-In-Reply-To: <20170618091424.tefhny6rq57ytdc2@tarshish>
+Date: Sun, 18 Jun 2017 11:21:22 +0200
+Subject: [Buildroot] [PATCH 05/14] toolchain-external: update list of
+ toolchains
+In-Reply-To: <f22f8dbf5593b80a4076db586b4496f6745a1490.1497583686.git.baruch@tkos.co.il>
 References: <cover.1497583686.git.baruch@tkos.co.il>
- <f9dda54d8c748b269aac1f9071986503ef5cb1b8.1497583686.git.baruch@tkos.co.il>
- <20170618090833.GB2918@scaer>
- <20170618091424.tefhny6rq57ytdc2@tarshish>
-Message-ID: <20170618091923.GE2918@scaer>
+ <f22f8dbf5593b80a4076db586b4496f6745a1490.1497583686.git.baruch@tkos.co.il>
+Message-ID: <20170618092122.GF2918@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,51 +14,43 @@ To: buildroot@busybox.net
 
 Baruch, All,
 
-On 2017-06-18 12:14 +0300, Baruch Siach spake thusly:
-> On Sun, Jun 18, 2017 at 11:08:33AM +0200, Yann E. MORIN wrote:
-> > Baruch, All,
-> > 
-> > On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
-> > > Since glibc 2.17, executable link command need not include the -lrt option for
-> > > clock_* system calls. As a result, over time less and less software packages
-> > > bother to check whether to toolchain needs -lrt. We are now at a point where
-> > > maintainers refuse to add this complexity into their build system. This
-> > > requires Buildroot to carry patches fixing this issue indefinitely.
-> > 
-> > What upstreams are refusing to fix that? Do you have references to
-> > share?
+On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
+> Remove mention of toolchains the we don't have.
 > 
-> See http://patchwork.ozlabs.org/patch/773384/ (swupdate).
-> I put the link in the series cover. Should add it here as well?
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Ah, I missed it in the cover letter. Thanks.
-I don't think it is important that you repeat it here.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> baruch
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> > 
-> > > glibc 2.17 is now 4.5 years old. There is no reason to use an older version
-> > > with current software.
-> > 
-> > So we can now consider the cut-off at what we consider legacy is 4.5
-> > years old. Fine with me.
-> > 
-> > > This commit removes the predefined profile for CodeSourcery x86 toolchain that
-> > > is based on glibc 2.16. One may still use the custom external toolchain
-> > > support in Buildroot to get this toolchain back, and deal with any build
-> > > issues that this toolchain causes.
-> > > 
-> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > 
-> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 856be65669dd..826934505e20 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -13,10 +13,9 @@
+>  #  * Toolchains provided by Linaro for the ARM and AArch64
+>  #    architectures
+>  #  * Sourcery CodeBench toolchains (from Mentor Graphics) for the ARM,
+> -#    MIPS, PowerPC, x86, x86_64 and NIOS 2 architectures. For the MIPS
+> +#    MIPS, PowerPC, x86_64 and NIOS 2 architectures. For the MIPS
+>  #    toolchain, the -muclibc variant isn't supported yet, only the
+>  #    default glibc-based variant is.
+> -#  * Xilinx toolchains for the Microblaze architecture
+>  #  * Synopsys DesignWare toolchains for ARC cores
+>  #
+>  # The basic principle is the following
 > -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
