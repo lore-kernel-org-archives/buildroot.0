@@ -1,233 +1,214 @@
-From: Chakra Divi <2chakrass@gmail.com>
-Date: Sun, 18 Jun 2017 21:58:09 +0530
-Subject: [Buildroot] [PATCH v3] board: Add a13_olinuxino Support
-Message-ID: <1497803289-14530-1-git-send-email-chakra@openedev.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Sun, 18 Jun 2017 22:18:01 +0530
+Subject: [Buildroot] [PATCH v2 1/3] Board: Add Bananapi M64 support
+Message-ID: <1497804482-3511-1-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for a13_olinuxino board
-with below features
-- U-Boot 2017.05
+From: Jagan Teki <jagan@amarulasolutions.com>
+
+Add initial support for bananapi M64 board with below features:
+- U-Boot 2017.07-rc1
 - Linux 4.11.5
 - Default packages from buildroot
 
-Signed-off-by: Chakra Divi <chakra@openedev.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
 Changes for v2:
-- Add missing readme.txt
-Changes for v3:
-- Updating missed DEVELOPERS file changes
+- none
 
- .gitlab-ci.yml                           |    1 +
- DEVELOPERS                               |    4 +++
- board/olimex/a13_olinuxino/boot.cmd      |    7 +++++
- board/olimex/a13_olinuxino/genimage.cfg  |   34 +++++++++++++++++++++++
- board/olimex/a13_olinuxino/post-build.sh |    9 ++++++
- board/olimex/a13_olinuxino/readme.txt    |   43 +++++++++++++++++++++++++++++
- configs/olimex_a13_olinuxino_defconfig   |   44 ++++++++++++++++++++++++++++++
- 7 files changed, 142 insertions(+)
- create mode 100644 board/olimex/a13_olinuxino/boot.cmd
- create mode 100644 board/olimex/a13_olinuxino/genimage.cfg
- create mode 100755 board/olimex/a13_olinuxino/post-build.sh
- create mode 100644 board/olimex/a13_olinuxino/readme.txt
- create mode 100644 configs/olimex_a13_olinuxino_defconfig
+ DEVELOPERS                               |  2 ++
+ board/bananapi/bananapi-m64/boot.cmd     |  6 +++++
+ board/bananapi/bananapi-m64/genimage.cfg | 38 +++++++++++++++++++++++++++
+ board/bananapi/bananapi-m64/readme.txt   | 34 ++++++++++++++++++++++++
+ board/bananapi/post-build.sh             | 10 +++++++
+ configs/bananapi_m64_defconfig           | 45 ++++++++++++++++++++++++++++++++
+ 6 files changed, 135 insertions(+)
+ create mode 100644 board/bananapi/bananapi-m64/boot.cmd
+ create mode 100644 board/bananapi/bananapi-m64/genimage.cfg
+ create mode 100644 board/bananapi/bananapi-m64/readme.txt
+ create mode 100755 board/bananapi/post-build.sh
+ create mode 100644 configs/bananapi_m64_defconfig
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 45c9b87..fe2c7fe 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -127,6 +127,7 @@ nitrogen6sx_defconfig: *defconfig
- nitrogen6x_defconfig: *defconfig
- nitrogen7_defconfig: *defconfig
- odroidc2_defconfig: *defconfig
-+olimex_a13_olinuxino_defconfig: *defconfig
- olimex_a20_olinuxino_lime2_defconfig: *defconfig
- olimex_a20_olinuxino_lime_defconfig: *defconfig
- olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9a11f8b..61a53e7 100644
+index b4ffb6f..341933f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -328,6 +328,10 @@ F:	package/libdvbsi/
- F:	package/libsvg/
- F:	package/libsvg-cairo/
+@@ -828,7 +828,9 @@ N:	Ilias Apalodimas <apalos@gmail.com>
+ F:	package/keepalived/
  
-+N:	Chakra <chakra@openedev.com>
-+F:	board/olimex/a13_olinuxino
-+F:	configs/olimex_a13_olinuxino_defconfig
-+
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/eventlog/
- F:	package/micropython/
-diff --git a/board/olimex/a13_olinuxino/boot.cmd b/board/olimex/a13_olinuxino/boot.cmd
+ N:	Jagan Teki <jagan@amarulasolutions.com>
++F:	board/bananapi/
+ F:	board/engicam/
++F:	configs/bananapi_m64_defconfig
+ F:	configs/engicam_imx6qdl_icore_mmc_defconfig
+ F:	configs/engicam_imx6qdl_icore_rqs_mmc_defconfig
+ F:	configs/engicam_imx6ul_geam_mmc_defconfig
+diff --git a/board/bananapi/bananapi-m64/boot.cmd b/board/bananapi/bananapi-m64/boot.cmd
 new file mode 100644
-index 0000000..4dd1c7b
+index 0000000..d35c9b0
 --- /dev/null
-+++ b/board/olimex/a13_olinuxino/boot.cmd
-@@ -0,0 +1,7 @@
++++ b/board/bananapi/bananapi-m64/boot.cmd
+@@ -0,0 +1,6 @@
 +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
-+mmc dev 0
-+fatload mmc 0 $kernel_addr_r zImage
-+fatload mmc 0 $fdt_addr_r sun5i-a13-olinuxino.dtb
++fatload mmc 0 $kernel_addr_r Image
++fatload mmc 0 $fdt_addr_r sun50i-a64-bananapi-m64.dtb
 +
-+bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/olimex/a13_olinuxino/genimage.cfg b/board/olimex/a13_olinuxino/genimage.cfg
++booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/bananapi/bananapi-m64/genimage.cfg b/board/bananapi/bananapi-m64/genimage.cfg
 new file mode 100644
-index 0000000..6f6b0b0
+index 0000000..891217c
 --- /dev/null
-+++ b/board/olimex/a13_olinuxino/genimage.cfg
-@@ -0,0 +1,34 @@
++++ b/board/bananapi/bananapi-m64/genimage.cfg
+@@ -0,0 +1,38 @@
 +image boot.vfat {
-+        vfat {
-+                files = {
-+                        "zImage",
-+                        "sun5i-a13-olinuxino.dtb",
-+                        "boot.scr"
-+                }
-+        }
-+        size = 64M
++	vfat {
++		files = {
++			"Image",
++			"sun50i-a64-bananapi-m64.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
 +}
 +
 +image sdcard.img {
 +	hdimage {
 +	}
 +
-+	partition u-boot {
++	partition spl {
 +		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
++		image = "sunxi-spl.bin"
 +		offset = 8192
-+		size = 1040384 # 1MB - 8192
 +	}
 +
-+        partition boot {
-+                partition-type = 0xC
-+                bootable = "true"
-+                image = "boot.vfat"
-+        }
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 40K
++	}
 +
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
 +
 +	partition rootfs {
 +		partition-type = 0x83
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/olimex/a13_olinuxino/post-build.sh b/board/olimex/a13_olinuxino/post-build.sh
-new file mode 100755
-index 0000000..a8bf8ec
---- /dev/null
-+++ b/board/olimex/a13_olinuxino/post-build.sh
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+# args from BR2_ROOTFS_POST_SCRIPT_ARGS
-+# $4    path of boot.cmd
-+
-+MKIMAGE=$HOST_DIR/usr/bin/mkimage
-+BOOT_CMD="${4}"
-+BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
-+
-+$MKIMAGE -A arm -O linux -T script -C none -d "${BOOT_CMD}" "${BOOT_CMD_H}"
-diff --git a/board/olimex/a13_olinuxino/readme.txt b/board/olimex/a13_olinuxino/readme.txt
+diff --git a/board/bananapi/bananapi-m64/readme.txt b/board/bananapi/bananapi-m64/readme.txt
 new file mode 100644
-index 0000000..382f1d7
+index 0000000..389ffbe
 --- /dev/null
-+++ b/board/olimex/a13_olinuxino/readme.txt
-@@ -0,0 +1,43 @@
-+A13-OLinuXino
-+
++++ b/board/bananapi/bananapi-m64/readme.txt
+@@ -0,0 +1,34 @@
 +Intro
 +=====
++
 +This default configuration will allow you to start experimenting with the
-+buildroot environment for the A13-OLinuXino. With the current configuration
++buildroot environment for the Bananapi M64. With the current configuration
 +it will bring-up the board, and allow access through the serial console.
 +
-+A13-OLinuXino Link:
-+https://www.olimex.com/Products/OLinuXino/A13/A13-OLinuXino/open-source-hardware
++Bananapi M64 link:
++http://www.banana-pi.org/m64.html
 +
-+How to build it
-+===============
++This configuration uses U-Boot mainline and kernel mainline.
 +
-+Configure Buildroot:
++How to build
++============
 +
-+    $ make olimex_a13_olinuxino_defconfig 
-+
-+Compile everything and build the rootfs image:
-+
++    $ make bananapi_m64_defconfig
 +    $ make
 +
 +Note: you will need access to the internet to download the required
 +sources.
 +
-+Result of the build
-+-------------------
-+Image ready to be written to your micro SDcard
-+
 +How to write the SD card
 +========================
 +
-+The sdcard.img file is a complete bootable image ready to be written
-+on the boot medium. To install it, simply copy the image to a micro 
-+SD card:
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
 +
-+    # dd if=output/images/sdcard.img of=/dev/sdX
++Copy the bootable "sdcard.img" onto an SD card with "dd":
 +
-+Notes:
-+  - replace 'sdX' with the actual device with your micro SDcard,
-+  - you may need to be root to do that (use 'sudo').
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M
++  $ sudo sync
 +
-+Eject the SD card, insert it in the A13-OLinuXino board, and power it up.
-diff --git a/configs/olimex_a13_olinuxino_defconfig b/configs/olimex_a13_olinuxino_defconfig
-new file mode 100644
-index 0000000..f1397e8
++Insert the micro SDcard in your Bananapi M64 and power it up. The console
++is on the serial line, 115200 8N1.
+diff --git a/board/bananapi/post-build.sh b/board/bananapi/post-build.sh
+new file mode 100755
+index 0000000..d22bc3d
 --- /dev/null
-+++ b/configs/olimex_a13_olinuxino_defconfig
-@@ -0,0 +1,44 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
++++ b/board/bananapi/post-build.sh
+@@ -0,0 +1,10 @@
++#!/bin/sh
++# args from BR2_ROOTFS_POST_SCRIPT_ARGS
++# $4 path of boot.cmd
++
++MKIMAGE=${HOST_DIR}/usr/bin/mkimage
++BOOT_CMD="${4}"
++BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
++
++# U-Boot script
++"${MKIMAGE}" -C none -A arm -T script -d "${BOOT_CMD}" "${BOOT_CMD_H}"
+diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
+new file mode 100644
+index 0000000..c1e876e
+--- /dev/null
++++ b/configs/bananapi_m64_defconfig
+@@ -0,0 +1,45 @@
++BR2_aarch64=y
++BR2_cortex_a53=y
++BR2_ARM_FPU_VFPV4=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
 +
 +# Linux headers same as kernel, a 4.11 series
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
 +
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="a13-olinuxino"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="allwinner"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="bl31"
 +
-+# Bootloaders
++# Bootloader
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A13-OLinuXino"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m64"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
 +BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun5i-a13-olinuxino"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-bananapi-m64"
 +
 +# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M64"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a13_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a13_olinuxino/genimage.cfg board/olimex/a13_olinuxino/boot.cmd"
-+
-+# Additional tools
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/bananapi/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m64/genimage.cfg board/bananapi/bananapi-m64/boot.cmd"
 -- 
-1.7.9.5
+2.7.4
