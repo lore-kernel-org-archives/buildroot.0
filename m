@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 11:45:09 +0200
-Subject: [Buildroot] [PATCH 13/14] lirc-tools: no need to check for
+Date: Sun, 18 Jun 2017 11:47:31 +0200
+Subject: [Buildroot] [PATCH 14/14] softether: no need to check for
  clock_gettime
-In-Reply-To: <ee7b7264b3c77939b9d92287e262adc539412e1d.1497583686.git.baruch@tkos.co.il>
+In-Reply-To: <6f55ac227383749d0affcd5113dcb21db5461d47.1497583686.git.baruch@tkos.co.il>
 References: <cover.1497583686.git.baruch@tkos.co.il>
- <ee7b7264b3c77939b9d92287e262adc539412e1d.1497583686.git.baruch@tkos.co.il>
-Message-ID: <20170618094509.GO2918@scaer>
+ <6f55ac227383749d0affcd5113dcb21db5461d47.1497583686.git.baruch@tkos.co.il>
+Message-ID: <20170618094731.GP2918@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,7 +18,7 @@ On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
 > Buildroot no longer supports toolchains with glibc older than 2.17, so there
 > is no need to check whether librt is required for clock_* system calls.
 > 
-> Cc: Rhys Williams <github@wilberforce.co.nz>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -27,90 +27,55 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...onfigure-check-for-clock_gettime-in-librt.patch | 54 ----------------------
->  ...-use-of-functions-killed-in-kernel-4.8.0.patch} |  0
->  package/lirc-tools/lirc-tools.mk                   |  2 -
->  3 files changed, 56 deletions(-)
->  delete mode 100644 package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
->  rename package/lirc-tools/{0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch => 0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch} (100%)
+>  package/softether/0006-librt.patch                 | 33 ----------------------
+>  ...onfig.patch => 0006-uclibc-ai-addrconfig.patch} |  0
+>  2 files changed, 33 deletions(-)
+>  delete mode 100644 package/softether/0006-librt.patch
+>  rename package/softether/{0007-uclibc-ai-addrconfig.patch => 0006-uclibc-ai-addrconfig.patch} (100%)
 > 
-> diff --git a/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch b/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
+> diff --git a/package/softether/0006-librt.patch b/package/softether/0006-librt.patch
 > deleted file mode 100644
-> index 710dfd3b05e2..000000000000
-> --- a/package/lirc-tools/0002-configure-check-for-clock_gettime-in-librt.patch
+> index 661c960a95d6..000000000000
+> --- a/package/softether/0006-librt.patch
 > +++ /dev/null
-> @@ -1,54 +0,0 @@
-> -From e654ae139cec42a6f1b5684261787d0c241cfd3b Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Fri, 19 Aug 2016 15:25:48 +0200
-> -Subject: [PATCH] configure: check for clock_gettime in librt
+> @@ -1,33 +0,0 @@
+> -Downloaded from
+> -https://github.com/dajhorn/SoftEtherVPN/commit/9a8538a6f2287fe8bebd0a7185de408e31e5a7df
 > -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -Fixes
+> -http://autobuild.buildroot.net/results/48f/48f778a891e0bf6a60ed2e4bec057c338ec25ec9/
+> -and many others
+> -
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> -
+> -
+> -From 9a8538a6f2287fe8bebd0a7185de408e31e5a7df Mon Sep 17 00:00:00 2001
+> -From: Darik Horn <dajhorn@vanadac.com>
+> -Date: Thu, 5 Jun 2014 21:02:02 -0400
+> -Subject: [PATCH] Add an explicit autoconf check for librt.
+> -
+> -The realtime extensions library is not automatically linked on Debian ARM
+> -platforms, so do an AC_CHECK_LIB for it in the configuration macro.
 > ----
-> - configure.ac        | 3 +++
-> - daemons/Makefile.am | 2 +-
-> - plugins/Makefile.am | 1 +
-> - 3 files changed, 5 insertions(+), 1 deletion(-)
+> - configure.ac | 1 +
+> - 1 file changed, 1 insertion(+)
 > -
 > -diff --git a/configure.ac b/configure.ac
-> -index 73340c7..466e638 100644
+> -index 165623a..6f85393 100644
 > ---- a/configure.ac
 > -+++ b/configure.ac
-> -@@ -67,6 +67,9 @@ AC_CHECK_FUNCS(gethostname gettimeofday mkfifo select socket strdup \
-> - AC_SEARCH_LIBS([dlopen], [dl dld], [], [
-> -   AC_MSG_ERROR([unable to find the dlopen() function])
-> - ])
-> -+# glibc < 2.17 needs librt for clock_gettime()
-> -+AC_CHECK_LIB(rt, clock_gettime, LIBCLOCK_GETTIME="-lrt")
-> -+AC_SUBST(LIBCLOCK_GETTIME)
-> - AC_CHECK_FUNCS(daemon)
-> - if test "$ac_cv_func_daemon" != yes; then
-> -   daemon=""
-> -diff --git a/daemons/Makefile.am b/daemons/Makefile.am
-> -index 5625627..85a28f3 100644
-> ---- a/daemons/Makefile.am
-> -+++ b/daemons/Makefile.am
-> -@@ -21,7 +21,7 @@ sbin_PROGRAMS           += lircd-uinput
-> - endif
+> -@@ -60,6 +60,7 @@ CC="$PTHREAD_CC"
+> - CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+> - LIBS="$PTHREAD_LIBS $LIBS"
 > - 
-> - lircd_SOURCES           = lircd.cpp
-> --lircd_LDADD             = ../lib/liblirc.la
-> -+lircd_LDADD             = ../lib/liblirc.la @LIBCLOCK_GETTIME@
+> -+AC_CHECK_LIB([rt],[clock_gettime])
 > - 
-> - lircd_uinput_SOURCES    = lircd-uinput.cpp
-> - lircd_uinput_LDADD     = ../lib/liblirc.la
-> -diff --git a/plugins/Makefile.am b/plugins/Makefile.am
-> -index ddff01d..45c012a 100644
-> ---- a/plugins/Makefile.am
-> -+++ b/plugins/Makefile.am
-> -@@ -127,6 +127,7 @@ zotac_la_SOURCES            = zotac.c
-> - 
-> - plugin_LTLIBRARIES          += mplay.la
-> - mplay_la_SOURCES            = mplay.c
-> -+mplay_la_LIBADD             = @LIBCLOCK_GETTIME@
-> - endif
-> - 
-> - $(srcdir)/pluginlist.am:
-> --- 
-> -2.7.4
-> -
-> diff --git a/package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch b/package/lirc-tools/0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
+> - AX_CHECK_OPENSSL([
+> - 	AC_SUBST(OPENSSL_LIBS)
+> diff --git a/package/softether/0007-uclibc-ai-addrconfig.patch b/package/softether/0006-uclibc-ai-addrconfig.patch
 > similarity index 100%
-> rename from package/lirc-tools/0003-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-> rename to package/lirc-tools/0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
-> diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-> index 6fd6434ef822..f0eff91f5f4f 100644
-> --- a/package/lirc-tools/lirc-tools.mk
-> +++ b/package/lirc-tools/lirc-tools.mk
-> @@ -11,8 +11,6 @@ LIRC_TOOLS_LICENSE = GPL-2.0+
->  LIRC_TOOLS_LICENSE_FILES = COPYING
->  LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
->  LIRC_TOOLS_INSTALL_STAGING = YES
-> -# 0002-configure-check-for-clock_gettime-in-librt.patch
-> -LIRC_TOOLS_AUTORECONF = YES
->  
->  LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
->  LIRC_TOOLS_CONF_OPTS = --without-x
+> rename from package/softether/0007-uclibc-ai-addrconfig.patch
+> rename to package/softether/0006-uclibc-ai-addrconfig.patch
 > -- 
 > 2.11.0
 > 
