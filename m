@@ -1,83 +1,143 @@
-From: Alexandre Esse <alexandre.esse.dev@gmail.com>
-Date: Sun, 18 Jun 2017 23:56:08 +0200
-Subject: [Buildroot] [PATCH 1/1] kvazaar: new package
-In-Reply-To: <20170618220554.14c6e59f@windsurf>
-References: <1497655767-752-1-git-send-email-alexandre.esse.dev@gmail.com>
- <20170618220554.14c6e59f@windsurf>
-Message-ID: <CALNP3k95oR1JL9qmgAMSV=c8y+6Y9O-nYARs9SLqTno_Fuk9tA@mail.gmail.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Sun, 18 Jun 2017 20:09:03 -0300
+Subject: [Buildroot] [PATCH] irssi: bump to version 1.0.3
+Message-ID: <20170618230903.13371-1-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for you feedback.
+Also:
 
-I am still novice into Buildroot. Even if I read the documentation, I
-didn't know about support/scripts/check-package. Maybe, It should appear in
-the new package submission part of the documentation?
+  - Drop no longer needed patch (merged upstream).
+  - Drop obsolete configure option --with-ncurses (removed upstream
+    since version 1.0.0).
 
-About the cryptopp part, I have already the option --with-cryptopp working
-on my PC with a custom cryptopp recipe I now need to patch the already
-existing cryptopp package for it ;)
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ ...-to-using-pkg-config-to-check-for-OpenSSL.patch | 77 ----------------------
+ package/irssi/irssi.hash                           |  2 +-
+ package/irssi/irssi.mk                             |  6 +-
+ 3 files changed, 2 insertions(+), 83 deletions(-)
+ delete mode 100644 package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
 
-Alexandre
-
-On 18 June 2017 at 22:05, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
->
-> On Sat, 17 Jun 2017 01:29:27 +0200, Alexandre Esse wrote:
-> > Kvazaar is an open-source HEVC encoder licensed under LGPLv2.1.
-> > This provides tools to encode raw video into HEVC stream.
-> >
-> > website: http://ultravideo.cs.tut.fi/
-> >
-> > Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
->
-> I've applied, after doing a few changes. See below.
->
-> > diff --git a/package/kvazaar/Config.in b/package/kvazaar/Config.in
-> > new file mode 100644
-> > index 0000000..a720f17
-> > --- /dev/null
-> > +++ b/package/kvazaar/Config.in
-> > @@ -0,0 +1,4 @@
-> > +config BR2_PACKAGE_KVAZAAR
-> > +     bool "kvazaar"
-> > +     help
-> > +                An open-source HEVC encoder licensed under LGPLv2.1
->
-> Indentation for the help text is one tab + two spaces. Also, the
-> Config.in help text should have an URL of the upstream project.
->
-> Please run your package submissions through
-> support/scripts/check-package, it detects this kind of mistakes.
->
-> > +KVAZAAR_VERSION = v1.1.0
-> > +KVAZAAR_SITE = $(call github,ultravideo,kvazaar,$(KVAZAAR_VERSION))
-> > +KVAZAAR_LICENSE = LGPLv2.1
->
-> It's in fact LGPLv2.1+, and we use SPDX license codes in Buildroot, so
-> LGPL-2.1+.
->
-> > +KVAZAAR_LICENSE_FILES = COPYING
-> > +KVAZAAR_AUTORECONF = YES
-> > +KVAZAAR_INSTALL_STAGING = YES
->
-> I've added KVAZAAR_CONF_OPTS = --without-cryptopp to make sure it
-> doesn't pick up this optional dependency, as it's not explicitly
-> handled by kvazaar.mk.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170618/1c7f7b82/attachment.html>
+diff --git a/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch b/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
+deleted file mode 100644
+index 0ce44f935..000000000
+--- a/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
++++ /dev/null
+@@ -1,77 +0,0 @@
+-From ed0c2c1b9504a99a6dcc3c0f5de3b3a1c0232758 Mon Sep 17 00:00:00 2001
+-From: Rodrigo Rebello <rprebello@gmail.com>
+-Date: Mon, 20 Mar 2017 13:17:42 -0300
+-Subject: [PATCH] Get back to using pkg-config to check for OpenSSL
+-
+-Commit 6300dfec7 removed the option to disable SSL support from the
+-configure script since it became a requirement, but it also removed the
+-use of pkg-config for finding the OpenSSL library and its dependencies.
+-
+-This had the unfortunate consequence of breaking the correct detection
+-of library flags in many static linking scenarios. In some cases, for
+-example, OpenSSL might have been built with zlib, which requires `-lz`
+-to be passed to the linker when doing a static link of the irssi
+-executable. Thus, pkg-config becomes an invaluable tool in such
+-situations, since no guessing work is needed as the OpenSSL .pc file
+-provides all the necessary flags.
+-
+-So, this patch re-inserts the PKG_CHECK_MODULES macro in the configure
+-script when looking for OpenSSL. The test using AC_CHECK_LIB remains,
+-but only as a last resort in case the one using pkg-config fails.
+-
+-Also, because the macro AM_PATH_GLIB_2_0 contains an unconditional call
+-to PKG_PROG_PKG_CONFIG, the OpenSSL checks are moved so that they come
+-after the Glib ones in order to avoid doubly checking for the pkg-config
+-binary (PKG_CHECK_MODULES skips that check if it has been performed
+-before, but PKG_PROG_PKG_CONFIG does not).
+-
+-Upstream status: submitted
+-https://github.com/irssi/irssi/pull/677
+-
+-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+----
+- configure.ac | 21 +++++++++++++++------
+- 1 file changed, 15 insertions(+), 6 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 02b33497..9f191d3f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -231,11 +231,6 @@ if test "x$want_socks" = "xyes"; then
+- fi
+- 
+- dnl **
+--dnl ** OpenSSL checks
+--dnl **
+--AC_CHECK_LIB([ssl], [SSL_library_init])
+--
+--dnl **
+- dnl ** fe-text checks
+- dnl **
+- 
+-@@ -276,7 +271,21 @@ if test -z "$GLIB_LIBS"; then
+-   AC_ERROR([GLIB is required to build irssi.])
+- fi
+- 
+--LIBS="$LIBS $GLIB_LIBS -lssl -lcrypto"
+-+LIBS="$LIBS $GLIB_LIBS"
+-+
+-+dnl **
+-+dnl ** OpenSSL checks
+-+dnl **
+-+PKG_CHECK_MODULES([OPENSSL], [openssl], [
+-+	CFLAGS="$CFLAGS $OPENSSL_CFLAGS"
+-+	LIBS="$LIBS $OPENSSL_LIBS"
+-+], [
+-+	AC_CHECK_LIB([ssl], [SSL_library_init], [
+-+		LIBS="$LIBS -lssl -lcrypto"
+-+	], [
+-+		AC_MSG_ERROR([The OpenSSL library was not found])
+-+	])
+-+])
+- 
+- dnl **
+- dnl ** curses checks
+--- 
+-2.11.0
+-
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index f1472e04b..abb421998 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	5c1c3cc2caf103aad073fadeb000e0f8cb3b416833a7f43ceb8bd9fcf275fbe9	irssi-1.0.2.tar.xz
++sha256	838220297dcbe7c8c42d01005059779a82f5b7b7e7043db37ad13f5966aff581	irssi-1.0.3.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 1fe4de83c..ef9d0aafb 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 1.0.2
++IRSSI_VERSION = 1.0.3
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+@@ -13,12 +13,8 @@ IRSSI_LICENSE = GPL-2.0+
+ IRSSI_LICENSE_FILES = COPYING
+ IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses openssl
+ 
+-# We're patching configure.ac, so we need to autoreconf
+-IRSSI_AUTORECONF = YES
+-
+ IRSSI_CONF_OPTS = \
+ 	--disable-glibtest \
+-	--with-ncurses=$(STAGING_DIR)/usr \
+ 	--without-perl
+ 
+ ifeq ($(BR2_PACKAGE_IRSSI_PROXY),y)
+-- 
+2.11.0
