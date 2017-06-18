@@ -1,84 +1,56 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun, 18 Jun 2017 21:41:59 +0300
-Subject: [Buildroot]  [PATCH 1/2] xr819-xradio: new package
-In-Reply-To: <20170618184200.31167-1-geomatsi@gmail.com>
-References: <20170618184200.31167-1-geomatsi@gmail.com>
-Message-ID: <20170618184200.31167-2-geomatsi@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Jun 2017 21:13:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/imagemagick: change download
+	url to github
+In-Reply-To: <20170618074538.1237-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 18 Jun 2017 09:45:37 +0200")
+References: <20170618074538.1237-1-bernd.kuhls@t-online.de>
+Message-ID: <877f09glcd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds xradio wireless driver for SDIO WiFi chip XR819.
-The out-of-tree driver is sourced from fifteenhex's work
-on github https://github.com/fifteenhex/xradio
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- package/Config.in                      |  1 +
- package/xr819-xradio/Config.in         | 10 ++++++++++
- package/xr819-xradio/xr819-xradio.hash |  2 ++
- package/xr819-xradio/xr819-xradio.mk   | 13 +++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/xr819-xradio/Config.in
- create mode 100644 package/xr819-xradio/xr819-xradio.hash
- create mode 100644 package/xr819-xradio/xr819-xradio.mk
+ > Upstream quickly removes old versions from
+ > http://www.imagemagick.org/download/releases
 
-diff --git a/package/Config.in b/package/Config.in
-index c997e2a30..1fb84cf3d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -504,6 +504,7 @@ endmenu
- 	source "package/wf111/Config.in"
- 	source "package/wipe/Config.in"
- 	source "package/xorriso/Config.in"
-+	source "package/xr819-xradio/Config.in"
- endmenu
+ > For our LTS versions we should switch to a stable upstream repo which
+ > provides all released versions.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/imagemagick/imagemagick.hash | 4 ++--
+ >  package/imagemagick/imagemagick.mk   | 4 ++--
+ >  2 files changed, 4 insertions(+), 4 deletions(-)
+
+ > diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+ > index 173dd415c..3e2749dd4 100644
+ > --- a/package/imagemagick/imagemagick.hash
+ > +++ b/package/imagemagick/imagemagick.hash
+ > @@ -1,2 +1,2 @@
+ > -# From http://www.imagemagick.org/download/releases/digest.rdf
+ > -sha256 0058fcde533986334458a5c99600b1b9633182dd9562cbad4ba618c5ccf2a28f  ImageMagick-7.0.5-10.tar.xz
+ > +# Locally computed
+ > +sha256 bd965d36a65cbcd420ec79a509a5ce0ecdfef036770cdc87fcd5374b9ed15ea7  7.0.5-10.tar.gz
+ > diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+ > index 7aade62da..23552d708 100644
+ > --- a/package/imagemagick/imagemagick.mk
+ > +++ b/package/imagemagick/imagemagick.mk
+ > @@ -5,8 +5,8 @@
+ >  ################################################################################
  
- menu "Interpreter languages and scripting"
-diff --git a/package/xr819-xradio/Config.in b/package/xr819-xradio/Config.in
-new file mode 100644
-index 000000000..5539004be
---- /dev/null
-+++ b/package/xr819-xradio/Config.in
-@@ -0,0 +1,10 @@
-+comment "xradio wireless driver needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_XR819_XRADIO
-+	bool "xr819-xradio"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Wireless driver for SDIO WiFi chip XR819
-+
-+	  https://github.com/fifteenhex/xradio
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-new file mode 100644
-index 000000000..bdb0f96cd
---- /dev/null
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 5e9f59942b3880768b4812ab6db395bd1fa6d423cae9c09504baa416f064a10d xr819-xradio-014dfdd203102c5fd2370a73ec4ae3e6dd4e9ded.tar.gz
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-new file mode 100644
-index 000000000..dfe2ee6ed
---- /dev/null
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# xr819-xradio
-+#
-+################################################################################
-+
-+XR819_XRADIO_VERSION = 014dfdd203102c5fd2370a73ec4ae3e6dd4e9ded
-+XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
-+XR819_XRADIO_LICENSE = GPL-2.0
-+XR819_XRADIO_LICENSE_FILES = LICENSE
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+ >  IMAGEMAGICK_VERSION = 7.0.5-10
+ > -IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ > -IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ > +IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ > +IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+
+That SOURCE name is a bit annoying. Is it a big issue that upstream
+(re)moves the downloads after some time when we transparently fall back
+to getting it from sources.buildroot.org?
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
