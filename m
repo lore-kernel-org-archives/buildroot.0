@@ -1,100 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 13:55:29 +0200
-Subject: [Buildroot] [PATCH 10/14] e2fsprogs: don't link with librt
-In-Reply-To: <20170618101301.hxhzvmcd4vntmdmf@tarshish>
-References: <cover.1497583686.git.baruch@tkos.co.il>
- <87422f222dc219a098bf8189c9214eac0f59074b.1497583686.git.baruch@tkos.co.il>
- <20170618093309.GK2918@scaer>
- <20170618101301.hxhzvmcd4vntmdmf@tarshish>
-Message-ID: <20170618115529.GQ2918@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Jun 2017 15:52:46 +0200
+Subject: [Buildroot] [git commit] package/imagemagick: bump version to
+	7.0.6-0
+Message-ID: <20170618135208.BB61D802F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=dfde97dce57cee38febb1b5687876c34df1f9bbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-06-18 13:13 +0300, Baruch Siach spake thusly:
-> On Sun, Jun 18, 2017 at 11:33:09AM +0200, Yann E. MORIN wrote:
-> > On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
-> > > Buildroot no longer supports toolchains with glibc older than 2.17, so there
-> > > is no need to link with librt for clock_* system calls.
-> > > 
-> > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > 
-> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Thanks.
-> 
-> On a second thought, e2fsprogs is also a host package. We don't want to 
-> abandon pre glibc 2.17 hosts just yet, do we?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Indeed no.
-
-But the patch was made to fix a build failure for fuse2fs, which we
-explicitly disable for the host variant.
-
-So, we really can drop this patch.
-
-Regards,
-Yann E. MORIN.
-
-> baruch
-> 
-> > > ---
-> > >  .../0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch | 35 ----------------------
-> > >  1 file changed, 35 deletions(-)
-> > >  delete mode 100644 package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
-> > > 
-> > > diff --git a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch b/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
-> > > deleted file mode 100644
-> > > index bd86c4e21a3d..000000000000
-> > > --- a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
-> > > +++ /dev/null
-> > > @@ -1,35 +0,0 @@
-> > > -From b5baf15b36107925186d89af9097b4b8e2d7cad6 Mon Sep 17 00:00:00 2001
-> > > -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > -Date: Wed, 21 Sep 2016 08:38:21 +0200
-> > > -Subject: [PATCH] MCONFIG.in: handle CLOCK_GETTIME_LIB
-> > > -
-> > > -Commit 62bc243f1bfe623312a350e4cd0d2e17a69aac45 ("fuse2fs: might need
-> > > -librt") added a check for the clock_gettime() to verify whether linking
-> > > -with the librt library is needed or not to use this function.
-> > > -
-> > > -However, this commit forgot the change in MCONFIG.in that allows to
-> > > -define the make variable CLOCK_GETTIME_LIB from the CLOCK_GETTIME_LIB
-> > > -variable substituted by the configure script. Due to this, from a make
-> > > -perspective $(CLOCK_GETTIME_LIB) is always empty, and we get link
-> > > -failure on platforms where clock_gettime() is available in librt.
-> > > -
-> > > -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > ----
-> > > - MCONFIG.in | 1 +
-> > > - 1 file changed, 1 insertion(+)
-> > > -
-> > > -diff --git a/MCONFIG.in b/MCONFIG.in
-> > > -index e82963d..9ba9ce2 100644
-> > > ---- a/MCONFIG.in
-> > > -+++ b/MCONFIG.in
-> > > -@@ -125,6 +125,7 @@ LIBSUPPORT = $(LIBINTL) $(LIB)/libsupport at STATIC_LIB_EXT@
-> > > - LIBBLKID = @LIBBLKID@ @PRIVATE_LIBS_CMT@ $(LIBUUID)
-> > > - LIBINTL = @LIBINTL@
-> > > - SYSLIBS = @LIBS@
-> > > -+CLOCK_GETTIME_LIB = @CLOCK_GETTIME_LIB@
-> > > - DEPLIBSS = $(LIB)/libss at LIB_EXT@
-> > > - DEPLIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@
-> > > - DEPLIBUUID = @DEPLIBUUID@
-> 
-> -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 3e2749d..d3097f5 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 bd965d36a65cbcd420ec79a509a5ce0ecdfef036770cdc87fcd5374b9ed15ea7  7.0.5-10.tar.gz
++sha256 3a6b21352ed0eb984bdbd0943471df8605b978b527125921e97e5b404f2bee3a  7.0.6-0.tar.gz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 23552d7..22c29d3 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.5-10
++IMAGEMAGICK_VERSION = 7.0.6-0
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
