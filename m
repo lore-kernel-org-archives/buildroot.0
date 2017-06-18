@@ -1,91 +1,159 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jun 2017 16:34:42 +0200
-Subject: [Buildroot] [PATCH v3,1/1] boinc: new package
-In-Reply-To: <1497771592-119110-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1497771592-119110-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <20170618163442.59260235@windsurf>
+Date: Sun, 18 Jun 2017 16:35:36 +0200
+Subject: [Buildroot] [git commit] util-linux: bump to version 2.30
+Message-ID: <20170618143737.4BE8981DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=088292cfc16359b966882f66b6e94dbc2c9813cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 18 Jun 2017 09:39:52 +0200, Fabrice Fontaine wrote:
+- Update the "basic set" description to include fincore, which is built
+  by default, and remove tailf, which was removed in this version.
+- Add configuration options for the new utilities "chmem" and "lsmem".
+- Remove patch already applied upstream.
+- Drop autoreconf, since the patch on term-utils/Makemodule.am is gone.
 
->  package/Config.in                  |  1 +
->  package/boinc/Config.in            | 22 ++++++++++++++
->  package/boinc/S99boinc-client      | 37 +++++++++++++++++++++++
->  package/boinc/boinc-client.service | 10 +++++++
->  package/boinc/boinc.hash           |  4 +++
->  package/boinc/boinc.mk             | 60 ++++++++++++++++++++++++++++++++++++++
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-sys-use-lm-for-scriptreplay-if-necessary.patch | 30 ----------------------
+ package/util-linux/Config.in                       | 24 ++++++++++++-----
+ package/util-linux/util-linux.hash                 |  4 +--
+ package/util-linux/util-linux.mk                   |  9 +++----
+ 4 files changed, 24 insertions(+), 43 deletions(-)
 
-Entry in the DEVELOPERS file missing.
-
-> +BOINC_VERSION_MAJOR = 7.6
-> +BOINC_VERSION = $(BOINC_VERSION_MAJOR).34
-> +# client_release can be used to build the Client and Manager but not the Server
-> +# part. The Server currently has no versioning (see
-> +# https://github.com/BOINC/boinc/pull/1798).
-> +BOINC_SITE = \
-> +	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
-> +BOINC_LICENSE = LGPLv3
-
-We use SPDX license codes now. In addition, all source files have the
-"or later" statement. So: LGPL-3.0+.
-
-I would have fixed those issues myself, but unfortunately, boinc does
-not build properly for me in what is our default ARM uClibc
-configuration:
-
-  CXX      switcher.o
-  CXXLD    switcher
-libtool: warning: library '/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libstdc++.la' was moved.
-  CXXLD    boinccmd
-libtool: warning: library '/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libstdc++.la' was moved.
-  CXXLD    boinc_client
-libtool: warning: library '/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libstdc++.la' was moved.
-libtool: warning: library '/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libstdc++.la' was moved.
-/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: attempted static link of dynamic object `/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcurl.so'
-collect2: error: ld returned 1 exit status
-Makefile:709: recipe for target 'boinccmd' failed
-make[4]: *** [boinccmd] Error 1
-make[4]: *** Waiting for unfinished jobs....
-libtool: warning: library '/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libstdc++.la' was moved.
-libtool: warning: library '/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libstdc++.la' was moved.
-/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: attempted static link of dynamic object `/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcurl.so'
-collect2: error: ld returned 1 exit status
-Makefile:705: recipe for target 'boinc_client' failed
-
-And indeed, it's trying to build static binaries, even if it's a
-BR2_SHARED_LIBS build. To reproduce this, you can test with:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-444-g6c704ba.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_BOINC=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-A test of the package with support/scripts/test-pkg would have pointed
-out this build issue :-)
-
-Could you have a look and submit an updated version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch b/package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
+deleted file mode 100644
+index cbf1a81..0000000
+--- a/package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 02283be90292b2f57183aa930c4d69375f1d905d Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Wed, 18 Jan 2017 13:17:21 +0100
+-Subject: [PATCH] build-sys: use -lm for scriptreplay if necessary
+-
+-Reported-by: Bert van Hall <bert.vanhall@avionic-design.de>
+-Addresses: https://github.com/karelzak/util-linux/pull/397
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-(cherry picked from commit feda4342df1ced25df3d200ed23469e740196c86)
+-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+----
+- term-utils/Makemodule.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/term-utils/Makemodule.am b/term-utils/Makemodule.am
+-index 1b7c5fc..ad1bb1f 100644
+---- a/term-utils/Makemodule.am
+-+++ b/term-utils/Makemodule.am
+-@@ -21,7 +21,7 @@ if BUILD_SCRIPTREPLAY
+- usrbin_exec_PROGRAMS += scriptreplay
+- dist_man_MANS += term-utils/scriptreplay.1
+- scriptreplay_SOURCES = term-utils/scriptreplay.c
+--scriptreplay_LDADD = $(LDADD) libcommon.la
+-+scriptreplay_LDADD = $(LDADD) libcommon.la $(MATH_LIBS)
+- endif # BUILD_SCRIPTREPLAY
+- 
+- 
+--- 
+-2.7.4
+-
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 86db372..6ba239e 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -55,12 +55,12 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	  Install the basic set of util-linux binaries.
+ 
+ 	  blkdiscard, blkid, blockdev, chcpu, col, colcrt, colrm,
+-	  column, ctrlaltdel, dmesg, fdisk, findfs, findmnt, flock,
+-	  fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize, ldattach,
+-	  look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie, mkfs,
+-	  mkswap, namei, prlimit, readprofile, renice, rev, rtcwake,
+-	  script, scriptreplay, setarch, setsid, sfdisk, swaplabel,
+-	  swapoff, swapon, tailf, uuidgen, whereis, wipefs
++	  column, ctrlaltdel, dmesg, fdisk, fincore, findfs, findmnt,
++	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
++	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
++	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
++	  rtcwake, script, scriptreplay, setarch, setsid, sfdisk,
++	  swaplabel, swapoff, swapon, uuidgen, whereis, wipefs
+ 
+ 	  The setarch utility also installs architecture-specific
+ 	  symlinks like linux32, linux64, uname26, i386 and x86_64.
+@@ -95,6 +95,11 @@ comment "chfn/chsh needs a uClibc or glibc toolchain w/ wchar, locale, dynamic l
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+ 		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
++config BR2_PACKAGE_UTIL_LINUX_CHMEM
++	bool "chmem"
++	help
++	  Sets a particular size or range of memory online or offline
++
+ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+ 	bool "cramfs utilities"
+ 	select BR2_PACKAGE_ZLIB
+@@ -194,6 +199,13 @@ config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
+ 	help
+ 	  Display information about known users in the system
+ 
++config BR2_PACKAGE_UTIL_LINUX_LSMEM
++	bool "lsmem"
++	depends on BR2_USE_MMU # libsmartcols
++	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
++	help
++	  List the ranges of available memory with their online status
++
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 	bool "mesg"
+ 	help
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index 71b4982..02b82f6 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/utils/util-linux/v2.29/sha256sums.asc
+-sha256 accea4d678209f97f634f40a93b7e9fcad5915d1f4749f6c47bee6bf110fe8e3  util-linux-2.29.2.tar.xz
++# From https://www.kernel.org/pub/linux/utils/util-linux/v2.30/sha256sums.asc
++sha256 c208a4ff6906cb7f57940aa5bc3a6eed146e50a7cc0a092f52ef2ab65057a08d  util-linux-2.30.tar.xz
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 325d0fe..e78a406 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -4,14 +4,11 @@
+ #
+ ################################################################################
+ 
+-UTIL_LINUX_VERSION_MAJOR = 2.29
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
++UTIL_LINUX_VERSION_MAJOR = 2.30
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
+-# 0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
+-UTIL_LINUX_AUTORECONF = YES
+-
+ # README.licensing claims that some files are GPL-2.0 only, but this is not true.
+ # Some files are GPL-3.0+ but only in tests.
+ UTIL_LINUX_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
+@@ -104,6 +101,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_CHMEM),--enable-chmem,--disable-chmem) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
+@@ -124,6 +122,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LSMEM),--enable-lsmem,--disable-lsmem) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
