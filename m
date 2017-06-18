@@ -1,91 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 22:30:02 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: adjust logic for musl
- dynamic linker symlink
-In-Reply-To: <20170618201157.1930-1-thomas.petazzoni@free-electrons.com>
-References: <20170618201157.1930-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170618203002.GT2918@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Jun 2017 23:20:04 +0200
+Subject: [Buildroot] [PATCH] expat: security bump to version 2.2.1
+Message-ID: <20170618212004.32001-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fixes:
 
-On 2017-06-18 22:11 +0200, Thomas Petazzoni spake thusly:
-> This commit changes the strategy to know what symlink should be
-> created for the musl dynamic linker. For now, we have in Buildroot the
-> logic to decide what the symlink name should be. However, despite
-> numerous fixes, there are still some cases that are missing, such as
-> mips64el-n32, where the symlink is ld-musl-mipsn32el.so.1.
-> 
-> So, instead of trying to make Buildroot aware of all the possible
-> names, simply get it from the external toolchain.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 17 +++--------------
->  1 file changed, 3 insertions(+), 14 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index 856be65..83bfc13 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -477,21 +477,10 @@ endef
->  # of the dynamic library loader. We just need to create a symbolic
->  # link to libc.so with the appropriate name.
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-> -ifeq ($(BR2_i386),y)
-> -MUSL_ARCH = i386
-> -else ifeq ($(BR2_ARM_EABIHF),y)
-> -MUSL_ARCH = armhf
-> -else ifeq ($(BR2_mips):$(BR2_SOFT_FLOAT),y:y)
-> -MUSL_ARCH = mips-sf
-> -else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
-> -MUSL_ARCH = mipsel-sf
-> -else ifeq ($(BR2_sh),y)
-> -MUSL_ARCH = sh
-> -else
-> -MUSL_ARCH = $(ARCH)
-> -endif
->  define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-> -	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
-> +	SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-> +	LD_MUSL_SYMLINK="`basename $${SYSROOT_DIR}/lib/ld-musl*.so*`" ; \
-> +	ln -sf libc.so $(TARGET_DIR)/lib/$${LD_MUSL_SYMLINK}
+- CVE-2017-9233 - External entity infinite loop DoS. See:
+  https://libexpat.github.io/doc/cve-2017-9233/
 
-I am not too fond of wildcard-matching. Instead, we could probalby build
-a simple file and extract the interpreter from the generated bunary;
+- CVE-2016-9063 -- Detect integer overflow
 
-    $(CROSS)-gcc -o foo -xc - <<<'int main() { return 0; }'
-    LD_MUSL_SYMLINK=$$(\
-        LC_ALL=C $(CROSS)-readelf -a foo \
-        |sed -r -e '/.*Requesting program interpreter: (.+)\]$/!d; s//\1/'
-    )
-    rm foo
+And further more:
 
-or something along those lines (unfortunately, readelf can't read from
-stdin, and wants a real file (not a pipe) as input)...
+- Fix regression from fix to CVE-2016-0718 cutting off longer tag names.
 
-Regards,
-Yann E. MORIN.
+- Extend fix for CVE-2016-5300 (use getrandom() if available).
 
->  endef
->  endif
->  
-> -- 
-> 2.9.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+- Extend fix for CVE-2012-0876 (Change hash algorithm to William Ahern's
+  version of SipHash).
 
+Also add an upstream patch to fix detection of getrandom().
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ++++++++++++++++++++++
+ package/expat/expat.hash                           |  8 +++---
+ package/expat/expat.mk                             |  4 ++-
+ 3 files changed, 36 insertions(+), 5 deletions(-)
+ create mode 100644 package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+
+diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+new file mode 100644
+index 0000000000..a3025531e5
+--- /dev/null
++++ b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+@@ -0,0 +1,29 @@
++From 602e6c78ca750c082b72f8cdf4a38839b312959f Mon Sep 17 00:00:00 2001
++From: Sebastian Pipping <sebastian@pipping.org>
++Date: Sun, 18 Jun 2017 18:55:10 +0200
++Subject: [PATCH] configure.ac: Fix mis-detection of getrandom on Debian
++ GNU/kFreeBSD (#50)
++
++There is no such thing but we need to link (not just compile) to realize.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ expat/configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/expat/configure.ac b/expat/configure.ac
++index 1357c9a..444c002 100644
++--- a/expat/configure.ac
+++++ b/expat/configure.ac
++@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
++ 
++ 
++ AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
++-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+++AC_LINK_IFELSE([AC_LANG_SOURCE([
++   #include <stdlib.h>  /* for NULL */
++   #include <sys/random.h>
++   int main() {
++-- 
++2.11.0
++
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 371abdec91..595597b6fd 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.0/
+-md5	2f47841c829facb346eb6e3fab5212e2	expat-2.2.0.tar.bz2
+-sha1	8453bc52324be4c796fd38742ec48470eef358b3	expat-2.2.0.tar.bz2
++# From https://sourceforge.net/projects/expat/files/expat/2.2.1/
++md5	d9c3baeab58774cefc2f04faf29f2cf8	expat-2.2.1.tar.bz2
++sha1	f45eb724f182776a9cacec9ed70d549e87198987	expat-2.2.1.tar.bz2
+ # Calculated based on the hashes above
+-sha256	d9e50ff2d19b3538bd2127902a89987474e1a4db8e43a66a4d1a712ab9a504ff	expat-2.2.0.tar.bz2
++sha256	1868cadae4c82a018e361e2b2091de103cd820aaacb0d6cfa49bd2cd83978885	expat-2.2.1.tar.bz2
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index e7bb74a966..bb6e627e5b 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPAT_VERSION = 2.2.0
++EXPAT_VERSION = 2.2.1
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
+ EXPAT_INSTALL_STAGING = YES
+@@ -14,6 +14,8 @@ EXPAT_DEPENDENCIES = host-pkgconf
+ HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
++# for 0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
++EXPAT_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
