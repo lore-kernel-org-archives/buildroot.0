@@ -1,43 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jun 2017 08:27:16 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-06-17
-Message-ID: <20170618062716.44D5D21D68@mail.free-electrons.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 18 Jun 2017 08:27:28 +0200
+Subject: [Buildroot] [v2 1/3] scancpan: update with MetaCPAN API v1
+In-Reply-To: <20170615223627.1a13fea9@windsurf.lan>
+References: <20170614141531.18497-1-francois.perrad@gadz.org>
+ <20170615223627.1a13fea9@windsurf.lan>
+Message-ID: <CAB0FRsv2kHj0OowQ9CknKc-aB=5Y=jf9bUASabbhr7jg72vK7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2017-06-15 22:36 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Build statistics for 2017-06-17
-================================
-
-      successes : 9  
-       failures : 7  
-       timeouts : 0  
-          TOTAL : 16 
-
-Classification of failures by reason
-====================================
-
-               libbluray-1.0.1 | 2 
-     python-cryptography-1.7.2 | 2 
-                  dbus-1.10.18 | 1 
-linuxptp-97c351cafd7327fd28... | 1 
-                 mesa3d-17.1.2 | 1 
+> Hello,
+>
+> On Wed, 14 Jun 2017 16:15:29 +0200, Francois Perrad wrote:
+> > The API v0 is shutdown.
+> > see https://bugs.busybox.net/show_bug.cgi?id=9951
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  support/scripts/scancpan | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> Series applied. Thanks!
+>
 
 
-Detail of failures
-===================
+must be committed also in maintenance branches.
 
-         arc |                   dbus-1.10.18 | NOK | http://autobuild.buildroot.net/results/50b9ffc823d259561ecbea90f8204754dd90c3a9 | ORPH
-        sh4a |                libbluray-1.0.1 | NOK | http://autobuild.buildroot.net/results/54cb35193a971de3160e6efa4a5cc4adbb291c2b |     
-        i686 |                libbluray-1.0.1 | NOK | http://autobuild.buildroot.net/results/ce94b16d4e58ce84cad3380435b8752badae4647 |     
- powerpc64le | linuxptp-97c351cafd7327fd28... | NOK | http://autobuild.buildroot.net/results/044d6bf67c3258f5971539ce5fcf8aee3a1b7cd2 |     
-       nios2 |                  mesa3d-17.1.2 | NOK | http://autobuild.buildroot.net/results/d16b39d16b5bee5c09b1e996941a275a4337c3c1 |     
-    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/40d94b1ab0c4486337119b1e1751ac6eb2f19008 |     
-         arm |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/f1534b24d8f71cf3c4f5c162eedf6d8110ced16a |     
+Fran?ois
 
--- 
-http://autobuild.buildroot.net
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170618/81569a47/attachment-0001.html>
