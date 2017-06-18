@@ -1,63 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jun 2017 22:05:54 +0200
-Subject: [Buildroot] [PATCH 1/1] kvazaar: new package
-In-Reply-To: <1497655767-752-1-git-send-email-alexandre.esse.dev@gmail.com>
-References: <1497655767-752-1-git-send-email-alexandre.esse.dev@gmail.com>
-Message-ID: <20170618220554.14c6e59f@windsurf>
+Date: Sun, 18 Jun 2017 22:11:57 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: adjust logic for musl
+	dynamic linker symlink
+Message-ID: <20170618201157.1930-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit changes the strategy to know what symlink should be
+created for the musl dynamic linker. For now, we have in Buildroot the
+logic to decide what the symlink name should be. However, despite
+numerous fixes, there are still some cases that are missing, such as
+mips64el-n32, where the symlink is ld-musl-mipsn32el.so.1.
 
-On Sat, 17 Jun 2017 01:29:27 +0200, Alexandre Esse wrote:
-> Kvazaar is an open-source HEVC encoder licensed under LGPLv2.1.
-> This provides tools to encode raw video into HEVC stream.
-> 
-> website: http://ultravideo.cs.tut.fi/
-> 
-> Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
+So, instead of trying to make Buildroot aware of all the possible
+names, simply get it from the external toolchain.
 
-I've applied, after doing a few changes. See below.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
-> diff --git a/package/kvazaar/Config.in b/package/kvazaar/Config.in
-> new file mode 100644
-> index 0000000..a720f17
-> --- /dev/null
-> +++ b/package/kvazaar/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_KVAZAAR
-> +	bool "kvazaar"
-> +	help
-> +                An open-source HEVC encoder licensed under LGPLv2.1
-
-Indentation for the help text is one tab + two spaces. Also, the
-Config.in help text should have an URL of the upstream project.
-
-Please run your package submissions through
-support/scripts/check-package, it detects this kind of mistakes.
-
-> +KVAZAAR_VERSION = v1.1.0
-> +KVAZAAR_SITE = $(call github,ultravideo,kvazaar,$(KVAZAAR_VERSION))
-> +KVAZAAR_LICENSE = LGPLv2.1
-
-It's in fact LGPLv2.1+, and we use SPDX license codes in Buildroot, so
-LGPL-2.1+.
-
-> +KVAZAAR_LICENSE_FILES = COPYING
-> +KVAZAAR_AUTORECONF = YES
-> +KVAZAAR_INSTALL_STAGING = YES
-
-I've added KVAZAAR_CONF_OPTS = --without-cryptopp to make sure it
-doesn't pick up this optional dependency, as it's not explicitly
-handled by kvazaar.mk.
-
-Thanks!
-
-Thomas
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 856be65..83bfc13 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -477,21 +477,10 @@ endef
+ # of the dynamic library loader. We just need to create a symbolic
+ # link to libc.so with the appropriate name.
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+-ifeq ($(BR2_i386),y)
+-MUSL_ARCH = i386
+-else ifeq ($(BR2_ARM_EABIHF),y)
+-MUSL_ARCH = armhf
+-else ifeq ($(BR2_mips):$(BR2_SOFT_FLOAT),y:y)
+-MUSL_ARCH = mips-sf
+-else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
+-MUSL_ARCH = mipsel-sf
+-else ifeq ($(BR2_sh),y)
+-MUSL_ARCH = sh
+-else
+-MUSL_ARCH = $(ARCH)
+-endif
+ define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+-	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
++	SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
++	LD_MUSL_SYMLINK="`basename $${SYSROOT_DIR}/lib/ld-musl*.so*`" ; \
++	ln -sf libc.so $(TARGET_DIR)/lib/$${LD_MUSL_SYMLINK}
+ endef
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.4
