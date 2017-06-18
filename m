@@ -1,379 +1,233 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jun 2017 16:39:58 +0200
-Subject: [Buildroot] [git commit] package/libunwind: bump version to 1.2.1
-Message-ID: <20170618144701.5FDDD817B0@busybox.osuosl.org>
+From: Chakra Divi <2chakrass@gmail.com>
+Date: Sun, 18 Jun 2017 21:58:09 +0530
+Subject: [Buildroot] [PATCH v3] board: Add a13_olinuxino Support
+Message-ID: <1497803289-14530-1-git-send-email-chakra@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dee0cf4181447d53938ee99bee0c143c7093149d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add initial support for a13_olinuxino board
+with below features
+- U-Boot 2017.05
+- Linux 4.11.5
+- Default packages from buildroot
 
-Backported patch from master branch which implements --disable-tests
-configure option, removed original patch 0001, added _CONF_OPTS.
-
-Removed patch 0003, applied upstream:
-https://github.com/libunwind/libunwind/commit/f1684379dfaf8018d5d4c1945e292a56d0fab245
-
-Added upstream patch to fix musl build.
-
-Tested using this defconfig
-
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_LTRACE=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_WESTON=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_LIBJPEG=y
-BR2_PACKAGE_LIBUNWIND=y
-
-with test-pkg
-
-                armv5-ctng-linux-gnueabi [ 1/49]: OK
-              armv7-ctng-linux-gnueabihf [ 2/49]: OK
-                        br-aarch64-glibc [ 3/49]: SKIPPED
-                           br-arcle-hs38 [ 4/49]: SKIPPED
-                            br-arm-basic [ 5/49]: SKIPPED
-                  br-arm-cortex-a9-glibc [ 6/49]: OK
-                   br-arm-cortex-a9-musl [ 7/49]: SKIPPED
-                   br-arm-cortex-m4-full [ 8/49]: SKIPPED
-                             br-arm-full [ 9/49]: OK
-                    br-arm-full-nothread [10/49]: SKIPPED
-                      br-arm-full-static [11/49]: SKIPPED
-                            br-bfin-full [12/49]: SKIPPED
-                   br-i386-pentium4-full [13/49]: SKIPPED
-                br-i386-pentium-mmx-musl [14/49]: SKIPPED
-                       br-m68k-5208-full [15/49]: SKIPPED
-                      br-m68k-68040-full [16/49]: SKIPPED
-                    br-microblazeel-full [17/49]: SKIPPED
-                 br-mips32r6-el-hf-glibc [18/49]: OK
-                      br-mips64-n64-full [19/49]: SKIPPED
-                 br-mips64r6-el-hf-glibc [20/49]: SKIPPED
-                      br-mipsel-o32-full [21/49]: OK
-                          br-nios2-glibc [22/49]: SKIPPED
-                      br-openrisc-uclibc [23/49]: SKIPPED
-               br-powerpc-603e-basic-cpp [24/49]: SKIPPED
-             br-powerpc64le-power8-glibc [25/49]: SKIPPED
-               br-powerpc64-power7-glibc [26/49]: SKIPPED
-                  br-powerpc-e500mc-full [27/49]: SKIPPED
-                             br-sh4-full [28/49]: SKIPPED
-                        br-sparc64-glibc [29/49]: SKIPPED
-                         br-sparc-uclibc [30/49]: SKIPPED
-                    br-x86-64-core2-full [31/49]: OK
-                          br-x86-64-musl [32/49]: SKIPPED
-                          br-xtensa-full [33/49]: SKIPPED
-                     i686-ctng-linux-gnu [34/49]: OK
-                          linaro-aarch64 [35/49]: SKIPPED
-                              linaro-arm [36/49]: OK
-             mips64el-ctng_n32-linux-gnu [37/49]: SKIPPED
-             mips64el-ctng_n64-linux-gnu [38/49]: SKIPPED
-        powerpc-ctng_e500v2-linux-gnuspe [39/49]: OK
-                     sourcery-arm-armv4t [40/49]: OK
-                            sourcery-arm [41/49]: OK
-                     sourcery-arm-thumb2 [42/49]: OK
-                         sourcery-mips64 [43/49]: SKIPPED
-                           sourcery-mips [44/49]: OK
-                          sourcery-nios2 [45/49]: SKIPPED
-                             sourcery-sh [46/49]: SKIPPED
-                         sourcery-x86-64 [47/49]: OK
-                            sourcery-x86 [48/49]: OK
-           x86_64-ctng_locales-linux-gnu [49/49]: OK
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Chakra Divi <chakra@openedev.com>
 ---
- .../libunwind/0001-add-disable-tests-option.patch  | 68 +++++++++++++++++
- package/libunwind/0001-disable-tests.patch         | 32 --------
- ...lation-of-tests-on-alpine-linux-musl-libc.patch | 88 ++++++++++++++++++++++
- ...-libunwind-to-libgcc_s-rather-than-libgcc.patch | 41 ----------
- package/libunwind/libunwind.hash                   |  2 +-
- package/libunwind/libunwind.mk                     |  4 +-
- 6 files changed, 160 insertions(+), 75 deletions(-)
+Changes for v2:
+- Add missing readme.txt
+Changes for v3:
+- Updating missed DEVELOPERS file changes
 
-diff --git a/package/libunwind/0001-add-disable-tests-option.patch b/package/libunwind/0001-add-disable-tests-option.patch
-new file mode 100644
-index 0000000..72a1686
---- /dev/null
-+++ b/package/libunwind/0001-add-disable-tests-option.patch
-@@ -0,0 +1,68 @@
-+From 208a430bcbab7d63a4c04242f13c4740e0246a56 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?=D0=9A=D0=BE=D1=80=D0=BE=D0=BB=D0=B5=D0=B2=20=D0=A1=D0=B5?=
-+ =?UTF-8?q?=D1=80=D0=B3=D0=B5=D0=B9?= <korolev.sergey@gmail.com>
-+Date: Wed, 11 May 2016 22:48:55 +0300
-+Subject: [PATCH] add --disable-tests option
-+
-+Allows to skip tests build.
-+
-+Backported from upstream master branch:
-+https://github.com/libunwind/libunwind/commit/208a430bcbab7d63a4c04242f13c4740e0246a56
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Makefile.am  |  6 +++++-
-+ configure.ac | 13 +++++++++++--
-+ 2 files changed, 16 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 6a3ed9e..0c29b3e 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -42,7 +42,11 @@ endif
-+ 
-+ nodist_include_HEADERS = include/libunwind-common.h
-+ 
-+-SUBDIRS = src tests
-++SUBDIRS = src
-++
-++if CONFIG_TESTS
-++SUBDIRS += tests
-++endif
-+ 
-+ if CONFIG_DOCS
-+ SUBDIRS += doc
-+diff --git a/configure.ac b/configure.ac
-+index 863fb8f..6c46cf3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -129,6 +129,10 @@ AC_ARG_ENABLE(documentation,
-+ 	AS_HELP_STRING([--disable-documentation],[Disable generating the man pages]),,
-+ 	[enable_documentation=yes])
-+ 
-++AC_ARG_ENABLE(tests,
-++ AS_HELP_STRING([--disable-tests],[Disable tests build]),,
-++ [enable_tests=yes])
-++
-+ AC_MSG_CHECKING([if we should build libunwind-setjmp])
-+ AC_MSG_RESULT([$enable_setjmp])
-+ 
-+@@ -396,8 +400,13 @@ if test "x$enable_documentation" = "xyes"; then
-+   AC_CONFIG_FILES(doc/Makefile doc/common.tex)
-+ fi
-+ 
-+-AC_CONFIG_FILES(Makefile src/Makefile tests/Makefile tests/check-namespace.sh
-+-		include/libunwind-common.h
-++AM_CONDITIONAL([CONFIG_TESTS], [test x$enable_tests = xyes])
-++if test "x$enable_tests" = "xyes"; then
-++  AC_CONFIG_FILES(tests/Makefile tests/check-namespace.sh)
-++fi
-++
-++AC_CONFIG_FILES(Makefile src/Makefile
-++                include/libunwind-common.h
-+                 include/libunwind.h include/tdep/libunwind_i.h)
-+ AC_CONFIG_FILES(src/unwind/libunwind.pc src/coredump/libunwind-coredump.pc
-+                 src/ptrace/libunwind-ptrace.pc src/setjmp/libunwind-setjmp.pc
-+-- 
-+2.11.0
-+
-diff --git a/package/libunwind/0001-disable-tests.patch b/package/libunwind/0001-disable-tests.patch
-deleted file mode 100644
-index 05475a5..0000000
---- a/package/libunwind/0001-disable-tests.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Disable building of tests
--
--libunwind tests do not build with uClibc, so we disable them.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/Makefile.am
--===================================================================
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -36,7 +36,7 @@
-- 
-- nodist_include_HEADERS = include/libunwind-common.h
-- 
---SUBDIRS = src tests doc
--+SUBDIRS = src doc
-- 
-- noinst_HEADERS = include/dwarf.h include/dwarf_i.h include/dwarf-eh.h	\
-- 	include/compiler.h include/libunwind_i.h include/mempool.h	\
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -313,7 +313,7 @@
-- 	$(am__append_7) $(am__append_8) $(am__append_9) \
-- 	$(am__append_10)
-- nodist_include_HEADERS = include/libunwind-common.h
---SUBDIRS = src tests doc
--+SUBDIRS = src doc
-- noinst_HEADERS = include/dwarf.h include/dwarf_i.h include/dwarf-eh.h	\
-- 	include/compiler.h include/libunwind_i.h include/mempool.h	\
-- 	include/remote.h						\
-diff --git a/package/libunwind/0003-Fix-compilation-of-tests-on-alpine-linux-musl-libc.patch b/package/libunwind/0003-Fix-compilation-of-tests-on-alpine-linux-musl-libc.patch
-new file mode 100644
-index 0000000..411b40d
---- /dev/null
-+++ b/package/libunwind/0003-Fix-compilation-of-tests-on-alpine-linux-musl-libc.patch
-@@ -0,0 +1,88 @@
-+From 5dcb7cd3cb63bf8a3a5f7531d10f937053930a25 Mon Sep 17 00:00:00 2001
-+From: Tony Kelman <tony@kelman.net>
-+Date: Sun, 31 Jan 2016 08:31:04 +0000
-+Subject: [PATCH] Fix compilation of tests on alpine linux (musl libc)
-+
-+If we don't link to libexecinfo, as detected by the
-+AC_SEARCH_LIBS(backtrace, execinfo) configure probe, we get
-+
-+```
-+test-coredump-unwind.o: In function `handle_sigsegv':
-+/home/libunwind/tests/test-coredump-unwind.c:246: undefined reference to
-+`backtrace_symbols_fd'
-+collect2: error: ld returned 1 exit status
-+Makefile:1187: recipe for target 'test-coredump-unwind' failed
-+```
-+
-+and
-+
-+```
-+Gtest-init.o: In function `do_backtrace()':
-+Gtest-init.cxx:(.text+0x2f): undefined reference to `_Ux86_64_getcontext'
-+Gtest-init.cxx:(.text+0x48): undefined reference to `_Ux86_64_init_local'
-+Gtest-init.cxx:(.text+0x63): undefined reference to `_Ux86_64_get_reg'
-+Gtest-init.cxx:(.text+0x96): undefined reference to `_Ux86_64_get_proc_name'
-+Gtest-init.cxx:(.text+0x171): undefined reference to `_Ux86_64_step'
-+collect2: error: ld returned 1 exit status
-+Makefile:1063: recipe for target 'Gtest-init' failed
-+```
-+
-+There are 2 XFAIL and 6 FAIL tests, but it's a start
-+
-+Backported from upstream master branch:
-+https://github.com/libunwind/libunwind/commit/5dcb7cd3cb63bf8a3a5f7531d10f937053930a25
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac      | 5 +++++
-+ tests/Makefile.am | 4 ++--
-+ 2 files changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 6c46cf3..21bae90 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -373,6 +373,10 @@ old_LIBS="$LIBS"
-+ LIBS=""
-+ AC_SEARCH_LIBS(backtrace, execinfo)
-+ LIBS="$old_LIBS"
-++case "$ac_cv_search_backtrace" in
-++  -l*) BACKTRACELIB=$ac_cv_search_backtrace;;
-++  *) BACKTRACELIB="";;
-++esac
-+ 
-+ AC_SUBST(build_arch)
-+ AC_SUBST(target_os)
-+@@ -388,6 +392,7 @@ AC_SUBST(PKG_MAINTAINER)
-+ AC_SUBST(enable_cxx_exceptions)
-+ AC_SUBST(enable_debug_frame)
-+ AC_SUBST(DLLIB)
-++AC_SUBST(BACKTRACELIB)
-+ 
-+ AC_PATH_PROG([LATEX2MAN],[latex2man])
-+ if test "x$LATEX2MAN" = "x"; then
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index 0a74881..cd3e589 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -179,7 +179,7 @@ Gtest_bt_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-+ Gtest_concurrent_LDADD = $(LIBUNWIND) $(LIBUNWIND_local) -lpthread
-+ Gtest_dyn1_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-+ Gtest_exc_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-+-Gtest_init_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-++Gtest_init_LDADD = $(LIBUNWIND) $(LIBUNWIND_local) @BACKTRACELIB@
-+ Gtest_resume_sig_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-+ Gtest_resume_sig_rt_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-+ Gperf_simple_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-+@@ -203,7 +203,7 @@ test_setjmp_LDADD = $(LIBUNWIND_setjmp)
-+ ia64_test_setjmp_LDADD = $(LIBUNWIND_setjmp)
-+ 
-+ if BUILD_COREDUMP
-+-test_coredump_unwind_LDADD = $(LIBUNWIND_coredump) $(LIBUNWIND)
-++test_coredump_unwind_LDADD = $(LIBUNWIND_coredump) $(LIBUNWIND) @BACKTRACELIB@
-+ endif
-+ 
-+ Gia64_test_nat_LDADD = $(LIBUNWIND) $(LIBUNWIND_local)
-+-- 
-+2.11.0
-+
-diff --git a/package/libunwind/0003-Link-libunwind-to-libgcc_s-rather-than-libgcc.patch b/package/libunwind/0003-Link-libunwind-to-libgcc_s-rather-than-libgcc.patch
-deleted file mode 100644
-index 7ea2512..0000000
---- a/package/libunwind/0003-Link-libunwind-to-libgcc_s-rather-than-libgcc.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From f1684379dfaf8018d5d4c1945e292a56d0fab245 Mon Sep 17 00:00:00 2001
--From: Thierry Reding <treding@nvidia.com>
--Date: Fri, 27 Jun 2014 08:40:33 +0200
--Subject: [PATCH] Link libunwind to libgcc_s rather than libgcc
--
--For some architectures, -lgcc and -lgcc_s are not equivalent. On ARM for
--example, libgcc_s.so.1 contains some symbols needed by libunwind which
--are not present in libgcc.
--
--This causes the following link error when building the X.Org X server
--with libunwind support:
--
--	  CCLD     Xorg
--	/usr/lib/libunwind.so: undefined reference to `__aeabi_unwind_cpp_pr0'
--	/usr/lib/libunwind.so: undefined reference to `__aeabi_unwind_cpp_pr1'
--
--Linking against libgcc_s explicitly solves this problem.
--
--Signed-off-by: Thierry Reding <treding@nvidia.com>
--[yann.morin.1998 at free.fr: backport to libunwind 1.1]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 4e2fd23..a77cf01 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -258,7 +258,7 @@ else
-- 
-- if test x$GCC = xyes -a x$intel_compiler != xyes; then
--   CFLAGS="${CFLAGS} -fexceptions -Wall -Wsign-compare"
---  LIBCRTS="-lgcc"
--+  LIBCRTS="-lgcc_s"
-- fi
-- AC_MSG_RESULT([$intel_compiler])
-- 
---- 
--1.9.1
--
-diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash
-index 7ec47fa..2f6c8ec 100644
---- a/package/libunwind/libunwind.hash
-+++ b/package/libunwind/libunwind.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	9dfe0fcae2a866de9d3942c66995e4b460230446887dbdab302d41a8aee8d09a  libunwind-1.1.tar.gz
-+sha256 3f3ecb90e28cbe53fba7a4a27ccce7aad188d3210bb1964a923a731a27a75acb  libunwind-1.2.1.tar.gz
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index a75a888..7adf318 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
+ .gitlab-ci.yml                           |    1 +
+ DEVELOPERS                               |    4 +++
+ board/olimex/a13_olinuxino/boot.cmd      |    7 +++++
+ board/olimex/a13_olinuxino/genimage.cfg  |   34 +++++++++++++++++++++++
+ board/olimex/a13_olinuxino/post-build.sh |    9 ++++++
+ board/olimex/a13_olinuxino/readme.txt    |   43 +++++++++++++++++++++++++++++
+ configs/olimex_a13_olinuxino_defconfig   |   44 ++++++++++++++++++++++++++++++
+ 7 files changed, 142 insertions(+)
+ create mode 100644 board/olimex/a13_olinuxino/boot.cmd
+ create mode 100644 board/olimex/a13_olinuxino/genimage.cfg
+ create mode 100755 board/olimex/a13_olinuxino/post-build.sh
+ create mode 100644 board/olimex/a13_olinuxino/readme.txt
+ create mode 100644 configs/olimex_a13_olinuxino_defconfig
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 45c9b87..fe2c7fe 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -127,6 +127,7 @@ nitrogen6sx_defconfig: *defconfig
+ nitrogen6x_defconfig: *defconfig
+ nitrogen7_defconfig: *defconfig
+ odroidc2_defconfig: *defconfig
++olimex_a13_olinuxino_defconfig: *defconfig
+ olimex_a20_olinuxino_lime2_defconfig: *defconfig
+ olimex_a20_olinuxino_lime_defconfig: *defconfig
+ olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9a11f8b..61a53e7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -328,6 +328,10 @@ F:	package/libdvbsi/
+ F:	package/libsvg/
+ F:	package/libsvg-cairo/
  
--LIBUNWIND_VERSION = 1.1
-+LIBUNWIND_VERSION = 1.2.1
- LIBUNWIND_SITE = http://download.savannah.gnu.org/releases/libunwind
- LIBUNWIND_INSTALL_STAGING = YES
- LIBUNWIND_LICENSE_FILES = COPYING
- LIBUNWIND_LICENSE = MIT
- LIBUNWIND_AUTORECONF = YES
- 
-+LIBUNWIND_CONF_OPTS = --disable-tests
++N:	Chakra <chakra@openedev.com>
++F:	board/olimex/a13_olinuxino
++F:	configs/olimex_a13_olinuxino_defconfig
 +
- ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
- LIBUNWIND_DEPENDENCIES = libatomic_ops
- endif
+ N:	Chris Packham <judge.packham@gmail.com>
+ F:	package/eventlog/
+ F:	package/micropython/
+diff --git a/board/olimex/a13_olinuxino/boot.cmd b/board/olimex/a13_olinuxino/boot.cmd
+new file mode 100644
+index 0000000..4dd1c7b
+--- /dev/null
++++ b/board/olimex/a13_olinuxino/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun5i-a13-olinuxino.dtb
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/olimex/a13_olinuxino/genimage.cfg b/board/olimex/a13_olinuxino/genimage.cfg
+new file mode 100644
+index 0000000..6f6b0b0
+--- /dev/null
++++ b/board/olimex/a13_olinuxino/genimage.cfg
+@@ -0,0 +1,34 @@
++image boot.vfat {
++        vfat {
++                files = {
++                        "zImage",
++                        "sun5i-a13-olinuxino.dtb",
++                        "boot.scr"
++                }
++        }
++        size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++        partition boot {
++                partition-type = 0xC
++                bootable = "true"
++                image = "boot.vfat"
++        }
++
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/olimex/a13_olinuxino/post-build.sh b/board/olimex/a13_olinuxino/post-build.sh
+new file mode 100755
+index 0000000..a8bf8ec
+--- /dev/null
++++ b/board/olimex/a13_olinuxino/post-build.sh
+@@ -0,0 +1,9 @@
++#!/bin/sh
++# args from BR2_ROOTFS_POST_SCRIPT_ARGS
++# $4    path of boot.cmd
++
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
++BOOT_CMD="${4}"
++BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
++
++$MKIMAGE -A arm -O linux -T script -C none -d "${BOOT_CMD}" "${BOOT_CMD_H}"
+diff --git a/board/olimex/a13_olinuxino/readme.txt b/board/olimex/a13_olinuxino/readme.txt
+new file mode 100644
+index 0000000..382f1d7
+--- /dev/null
++++ b/board/olimex/a13_olinuxino/readme.txt
+@@ -0,0 +1,43 @@
++A13-OLinuXino
++
++Intro
++=====
++This default configuration will allow you to start experimenting with the
++buildroot environment for the A13-OLinuXino. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++A13-OLinuXino Link:
++https://www.olimex.com/Products/OLinuXino/A13/A13-OLinuXino/open-source-hardware
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make olimex_a13_olinuxino_defconfig 
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++Result of the build
++-------------------
++Image ready to be written to your micro SDcard
++
++How to write the SD card
++========================
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to a micro 
++SD card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Notes:
++  - replace 'sdX' with the actual device with your micro SDcard,
++  - you may need to be root to do that (use 'sudo').
++
++Eject the SD card, insert it in the A13-OLinuXino board, and power it up.
+diff --git a/configs/olimex_a13_olinuxino_defconfig b/configs/olimex_a13_olinuxino_defconfig
+new file mode 100644
+index 0000000..f1397e8
+--- /dev/null
++++ b/configs/olimex_a13_olinuxino_defconfig
+@@ -0,0 +1,44 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a8=y
++
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="a13-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A13-OLinuXino"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun5i-a13-olinuxino"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a13_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a13_olinuxino/genimage.cfg board/olimex/a13_olinuxino/boot.cmd"
++
++# Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-- 
+1.7.9.5
