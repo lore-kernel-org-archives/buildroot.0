@@ -1,50 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jun 2017 16:15:31 +0200
-Subject: [Buildroot] [PATCH 0/4 v2] tools: add a directory to contain
- usefull user-facing tools
-In-Reply-To: <cover.1497794488.git.yann.morin.1998@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Jun 2017 16:16:19 +0200
+Subject: [Buildroot] [PATCH 2/4 v2] tools: move test-pkg out of
+	support/scripts
+In-Reply-To: <20170618161243.04768757@windsurf>
 References: <cover.1497794488.git.yann.morin.1998@free.fr>
-Message-ID: <20170618161531.762b0929@windsurf>
+ <937e234aa28d4d11f676ce0c1437d2883cdd0f10.1497794488.git.yann.morin.1998@free.fr>
+ <20170618161243.04768757@windsurf>
+Message-ID: <20170618141619.GR2918@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Sun, 18 Jun 2017 16:01:40 +0200, Yann E. MORIN wrote:
-
-> Currently, we provide a few user-facing utilities, like get-developers,
-> in support/scripts/ . But this directory also contains internal scripts
-> that a user should not be directly concerned with. Besides, it is
-> two-level deep in the hierarchy, which is not really nice.
+On 2017-06-18 16:12 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 18 Jun 2017 16:01:43 +0200, Yann E. MORIN wrote:
+> >  docs/manual/adding-packages-tips.txt |  12 +--
+> >  support/scripts/test-pkg             | 198 +----------------------------------
+> >  tools/00-README.txt                  |   5 +
+> >  tools/test-pkg                       | 197 ++++++++++++++++++++++++++++++++++
+> >  4 files changed, 209 insertions(+), 203 deletions(-)
+> >  mode change 100755 => 120000 support/scripts/test-pkg
+> >  create mode 100755 tools/test-pkg
 > 
-> So, we introduce tools/ as a top-level directory, with the goal to store
-> and expose all user-facing utilities, while keeping our internal scripts
-> in support/scripts/ .
-> 
-> The first patch in the series introduces a new utility, brmake, a
-> wrapper around make that stores all the output to a log file and
-> displays only the >>> lines.
-> 
-> The second and subsequent patches each move a few user-facing utilities
-> out of support/scripts/ and into tools/ .
+> No strong opinion on whether such a move is desirable,
 
-I am wondering if there is a very clear cut boundary between
-user-facing tools and non-user facing tools.
+That was a proposal by Arnout:
+    http://lists.busybox.net/pipermail/buildroot/2016-October/174290.html
 
-For example, graph-build-time or graph-depends are internally used by
-the Buildroot Makefile, but may also be used directly. The size-stats
-tool is also used internally by the Buildroot Makefile, but
-size-stats-compare is meant to be used directly.
+> but at the very
+> list I believe we should not add this 00-README.txt file. Nowhere else
+> in the tree we have files named like this, and I don't think we should
+> start adding these.
 
-What about support/scripts/genimage.sh ?
+I'm OK for dropping it.
 
-Best regards,
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
