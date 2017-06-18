@@ -1,93 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jun 2017 11:47:31 +0200
-Subject: [Buildroot] [PATCH 14/14] softether: no need to check for
- clock_gettime
-In-Reply-To: <6f55ac227383749d0affcd5113dcb21db5461d47.1497583686.git.baruch@tkos.co.il>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 18 Jun 2017 13:13:01 +0300
+Subject: [Buildroot] [PATCH 10/14] e2fsprogs: don't link with librt
+In-Reply-To: <20170618093309.GK2918@scaer>
 References: <cover.1497583686.git.baruch@tkos.co.il>
- <6f55ac227383749d0affcd5113dcb21db5461d47.1497583686.git.baruch@tkos.co.il>
-Message-ID: <20170618094731.GP2918@scaer>
+ <87422f222dc219a098bf8189c9214eac0f59074b.1497583686.git.baruch@tkos.co.il>
+ <20170618093309.GK2918@scaer>
+Message-ID: <20170618101301.hxhzvmcd4vntmdmf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hi Yann,
 
-On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
-> Buildroot no longer supports toolchains with glibc older than 2.17, so there
-> is no need to check whether librt is required for clock_* system calls.
+On Sun, Jun 18, 2017 at 11:33:09AM +0200, Yann E. MORIN wrote:
+> On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
+> > Buildroot no longer supports toolchains with glibc older than 2.17, so there
+> > is no need to link with librt for clock_* system calls.
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > 
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thanks.
 
-Regards,
-Yann E. MORIN.
+On a second thought, e2fsprogs is also a host package. We don't want to 
+abandon pre glibc 2.17 hosts just yet, do we?
 
-> ---
->  package/softether/0006-librt.patch                 | 33 ----------------------
->  ...onfig.patch => 0006-uclibc-ai-addrconfig.patch} |  0
->  2 files changed, 33 deletions(-)
->  delete mode 100644 package/softether/0006-librt.patch
->  rename package/softether/{0007-uclibc-ai-addrconfig.patch => 0006-uclibc-ai-addrconfig.patch} (100%)
-> 
-> diff --git a/package/softether/0006-librt.patch b/package/softether/0006-librt.patch
-> deleted file mode 100644
-> index 661c960a95d6..000000000000
-> --- a/package/softether/0006-librt.patch
-> +++ /dev/null
-> @@ -1,33 +0,0 @@
-> -Downloaded from
-> -https://github.com/dajhorn/SoftEtherVPN/commit/9a8538a6f2287fe8bebd0a7185de408e31e5a7df
-> -
-> -Fixes
-> -http://autobuild.buildroot.net/results/48f/48f778a891e0bf6a60ed2e4bec057c338ec25ec9/
-> -and many others
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> -
-> -
-> -From 9a8538a6f2287fe8bebd0a7185de408e31e5a7df Mon Sep 17 00:00:00 2001
-> -From: Darik Horn <dajhorn@vanadac.com>
-> -Date: Thu, 5 Jun 2014 21:02:02 -0400
-> -Subject: [PATCH] Add an explicit autoconf check for librt.
-> -
-> -The realtime extensions library is not automatically linked on Debian ARM
-> -platforms, so do an AC_CHECK_LIB for it in the configuration macro.
-> ----
-> - configure.ac | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 165623a..6f85393 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -60,6 +60,7 @@ CC="$PTHREAD_CC"
-> - CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
-> - LIBS="$PTHREAD_LIBS $LIBS"
-> - 
-> -+AC_CHECK_LIB([rt],[clock_gettime])
-> - 
-> - AX_CHECK_OPENSSL([
-> - 	AC_SUBST(OPENSSL_LIBS)
-> diff --git a/package/softether/0007-uclibc-ai-addrconfig.patch b/package/softether/0006-uclibc-ai-addrconfig.patch
-> similarity index 100%
-> rename from package/softether/0007-uclibc-ai-addrconfig.patch
-> rename to package/softether/0006-uclibc-ai-addrconfig.patch
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+baruch
+
+> > ---
+> >  .../0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch | 35 ----------------------
+> >  1 file changed, 35 deletions(-)
+> >  delete mode 100644 package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+> > 
+> > diff --git a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch b/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+> > deleted file mode 100644
+> > index bd86c4e21a3d..000000000000
+> > --- a/package/e2fsprogs/0002-MCONFIG.in-handle-CLOCK_GETTIME_LIB.patch
+> > +++ /dev/null
+> > @@ -1,35 +0,0 @@
+> > -From b5baf15b36107925186d89af9097b4b8e2d7cad6 Mon Sep 17 00:00:00 2001
+> > -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > -Date: Wed, 21 Sep 2016 08:38:21 +0200
+> > -Subject: [PATCH] MCONFIG.in: handle CLOCK_GETTIME_LIB
+> > -
+> > -Commit 62bc243f1bfe623312a350e4cd0d2e17a69aac45 ("fuse2fs: might need
+> > -librt") added a check for the clock_gettime() to verify whether linking
+> > -with the librt library is needed or not to use this function.
+> > -
+> > -However, this commit forgot the change in MCONFIG.in that allows to
+> > -define the make variable CLOCK_GETTIME_LIB from the CLOCK_GETTIME_LIB
+> > -variable substituted by the configure script. Due to this, from a make
+> > -perspective $(CLOCK_GETTIME_LIB) is always empty, and we get link
+> > -failure on platforms where clock_gettime() is available in librt.
+> > -
+> > -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ----
+> > - MCONFIG.in | 1 +
+> > - 1 file changed, 1 insertion(+)
+> > -
+> > -diff --git a/MCONFIG.in b/MCONFIG.in
+> > -index e82963d..9ba9ce2 100644
+> > ---- a/MCONFIG.in
+> > -+++ b/MCONFIG.in
+> > -@@ -125,6 +125,7 @@ LIBSUPPORT = $(LIBINTL) $(LIB)/libsupport at STATIC_LIB_EXT@
+> > - LIBBLKID = @LIBBLKID@ @PRIVATE_LIBS_CMT@ $(LIBUUID)
+> > - LIBINTL = @LIBINTL@
+> > - SYSLIBS = @LIBS@
+> > -+CLOCK_GETTIME_LIB = @CLOCK_GETTIME_LIB@
+> > - DEPLIBSS = $(LIB)/libss at LIB_EXT@
+> > - DEPLIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@
+> > - DEPLIBUUID = @DEPLIBUUID@
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
