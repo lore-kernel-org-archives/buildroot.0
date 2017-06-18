@@ -1,104 +1,43 @@
-From: MD I. Islam <tamim@csebuet.org>
-Date: Sat, 17 Jun 2017 20:08:31 -0400
-Subject: [Buildroot] scsi/scsi.h: No such file or directory
-In-Reply-To: <20170617212729.4t32zrxby4qlfjdr@tarshish>
-References: <CAM7NYTg0TK9phO3EEszpmyY+v9F4nn6uCocZ=OuvvSfd6xCOJQ@mail.gmail.com>
- <20170612152332.wmyjhvatvid7ghgd@sapphire.tkos.co.il>
- <5DD81335-B484-44C4-89F6-A8018E31FE3B@free.fr>
- <CAM7NYTjHa0waAPpauLhFL1j60pnmskGcZRUVR9G7iNYnWyCHQg@mail.gmail.com>
- <20170612173345.kqjxqzsoznsgjhkh@tarshish>
- <CAM7NYThRL6ouhnxzg5rEosu4q54qkefdZke+Kz9qvvGg6jYEJA@mail.gmail.com>
- <20170614211321.GA4600@scaer>
- <CAM7NYThb2KbGtTZ909yBcpLAAzA8=8wsWvUr=5W5isTaZtJkGQ@mail.gmail.com>
- <20170615030600.tmpwlvcj5almsgyx@tarshish>
- <CAM7NYTh3_H6aUTHF+qAyYFQhGWh=vxqGpZ8-thYMMKzXep7n_g@mail.gmail.com>
- <20170617212729.4t32zrxby4qlfjdr@tarshish>
-Message-ID: <CAM7NYTg3hyTW7U2PLx5cfH0HdbHUs3CtS4AvOiot3b8=2dEbXw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Jun 2017 08:27:16 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-06-17
+Message-ID: <20170618062716.44D5D21D68@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch
+Hello,
 
-On Sat, Jun 17, 2017 at 5:27 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Tamim,
->
-> On Fri, Jun 16, 2017 at 03:24:15PM -0400, MD I. Islam wrote:
->> Yeah, /usr/include/scsi/scsi.h was missing. I I updated the kernel of
->> my host machine with defconfig in the main kernel source tree. After
->> going back to the original ubuntu kernel, I got it working. Any idea
->> what kernel config is responsible for this?
->
-> I have no idea how a custom kernel install would influence libc provided
-> headers, let alone delete them.
+Build statistics for 2017-06-17
+================================
 
-My bad, I used INSTALL_HDR_PATH=/usr/ in header_install which screwed
-things up. After pointing it to /usr/include, it works as expected.
+      successes : 9  
+       failures : 7  
+       timeouts : 0  
+          TOTAL : 16 
 
->
->> I prefer top-posting over interleaving. Is there a reason I would need
->> to use interleaving?
->
-> Because this is the convention in this list, as well as in most related
-> mailing lists. That advantage of this style is that it makes it easier for the
-> reader to see the context of your response.
+Classification of failures by reason
+====================================
 
-Thanks for your helps and suggestions!
+               libbluray-1.0.1 | 2 
+     python-cryptography-1.7.2 | 2 
+                  dbus-1.10.18 | 1 
+linuxptp-97c351cafd7327fd28... | 1 
+                 mesa3d-17.1.2 | 1 
 
->
-> baruch
->
->> On Wed, Jun 14, 2017 at 11:06 PM, Baruch Siach <baruch@tkos.co.il> wrote:
->> > On Wed, Jun 14, 2017 at 05:35:39PM -0400, MD I. Islam wrote:
->> >> Thanks for letting me know about the plain-text email!
->> >
->> > But you are still top posting[1]. Please use reply to emails inline[2], like
->> > Yann and I did.
->> >
->> >> I have build-essential, libc6-dev, cpio and open-iscsi installed. Am I
->> >> missing anything?
->> >
->> > Do you have the file /usr/include/scsi/scsi.h on your host? It should be part
->> > of libc6-dev.
->> >
->> > baruch
->> >
->> > [1] https://en.wikipedia.org/wiki/Posting_style#Top-posting
->> >
->> > [2] https://en.wikipedia.org/wiki/Posting_style#Interleaved_style
->> >
->> >> On Wed, Jun 14, 2017 at 5:13 PM, Yann E. MORIN <yann.morin.1998@free.fr>
->> >>   wrote:
->> >> > Tamim, All,
->> >> >
->> >> > Please, do not post HTML mail, and do not top-post; this is considered
->> >> > bad practice. Send mails as plain tesxt, and reply below the mail you
->> >> > are replying to.
->> >> >
->> >> > On 2017-06-14 16:42 -0400, MD I. Islam spake thusly:
->> >> >> I'm using *arm_foundationv8_defconfig. *I didn't make any change in config.
->> >> >> The last 100 lines of build output is as following:
->> >> > [--SNIP--]
->> >> >> >>> host-util-linux 2.29.2 Building
->> >> >> PATH="/home/tamim/buildroot/output/host/bin:/home/tamim/buildroot/output/host/sbin:/home/tamim/buildroot/output/host/usr/bin:/home/tamim/buildroot/output/host/usr/sbin:/home/tamim/bin:/home/tamim/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
->> >> >>   CC       sys-utils/eject-eject.o
->> >> >> sys-utils/eject.c:41:23: fatal error: scsi/scsi.h: No such file or
->> >> >> directory
->> >> >
->> >> > So, this fails while building the host variant of util-linux. So your
->> >> > build machine is missing some critical system headers.
->> >> >
->> >> > It looks like you are using a Ubuntu machine, and this header is
->> >> > normally installed by libc6-dev, which you would have installed if you
->> >> > install the meta-package build-essential.
->> >> >
->> >> > Please, check the requirements in the manual:
->> >> >
->> >> >     https://buildroot.org/downloads/manual/manual.html#requirement
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+
+Detail of failures
+===================
+
+         arc |                   dbus-1.10.18 | NOK | http://autobuild.buildroot.net/results/50b9ffc823d259561ecbea90f8204754dd90c3a9 | ORPH
+        sh4a |                libbluray-1.0.1 | NOK | http://autobuild.buildroot.net/results/54cb35193a971de3160e6efa4a5cc4adbb291c2b |     
+        i686 |                libbluray-1.0.1 | NOK | http://autobuild.buildroot.net/results/ce94b16d4e58ce84cad3380435b8752badae4647 |     
+ powerpc64le | linuxptp-97c351cafd7327fd28... | NOK | http://autobuild.buildroot.net/results/044d6bf67c3258f5971539ce5fcf8aee3a1b7cd2 |     
+       nios2 |                  mesa3d-17.1.2 | NOK | http://autobuild.buildroot.net/results/d16b39d16b5bee5c09b1e996941a275a4337c3c1 |     
+    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/40d94b1ab0c4486337119b1e1751ac6eb2f19008 |     
+         arm |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/f1534b24d8f71cf3c4f5c162eedf6d8110ced16a |     
+
+-- 
+http://autobuild.buildroot.net
