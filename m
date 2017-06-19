@@ -1,79 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jun 2017 20:48:04 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] tools: move check-package out of
- support/scripts/
-In-Reply-To: <5947435fc2125_3a623fad069a6b206136c@ultri3.mail>
-References: <eb8cb9682d84d1f110044a1448f18ef95ad79e84.1497794488.git.yann.morin.1998@free.fr>
- <5947435fc2125_3a623fad069a6b206136c@ultri3.mail>
-Message-ID: <20170619184804.GD3045@scaer>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 19 Jun 2017 22:03:15 +0300
+Subject: [Buildroot] [PATCH v2 2/2] mesa3d: Allow optionally using LLVM in
+	drivers
+In-Reply-To: <20170619190315.14288-1-aperez@igalia.com>
+References: <20170616204143.29198-2-aperez@igalia.com>
+ <20170619190315.14288-1-aperez@igalia.com>
+Message-ID: <20170619190315.14288-2-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/mesa3d/Config.in | 11 +++++++++++
+ package/mesa3d/mesa3d.mk |  9 ++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-On 2017-06-19 00:22 -0300, Ricardo Martincoski spake thusly:
-> On Sun, Jun 18, 2017 at 11:01 AM, Yann E. MORIN wrote:
-> 
-> > ---
-> >  support/scripts/check-package                      | 145 +--------------------
-> >  support/scripts/pkg-stats                          |   2 +-
-> >  tools/00-README.txt                                |   4 +
-> >  tools/check-package                                | 144 ++++++++++++++++++++
-> >  .../scripts => tools}/checkpackagelib/__init__.py  |   0
-> >  {support/scripts => tools}/checkpackagelib/base.py |   0
-> >  {support/scripts => tools}/checkpackagelib/lib.py  |   0
-> >  .../checkpackagelib/lib_config.py                  |   0
-> >  .../scripts => tools}/checkpackagelib/lib_hash.py  |   0
-> >  .../scripts => tools}/checkpackagelib/lib_mk.py    |   0
-> >  .../scripts => tools}/checkpackagelib/lib_patch.py |   0
-> >  .../scripts => tools}/checkpackagelib/readme.txt   |  10 +-
-> >  12 files changed, 155 insertions(+), 150 deletions(-)
-> >  mode change 100755 => 120000 support/scripts/check-package
-> >  create mode 100755 tools/check-package
-> >  rename {support/scripts => tools}/checkpackagelib/__init__.py (100%)
-> >  rename {support/scripts => tools}/checkpackagelib/base.py (100%)
-> >  rename {support/scripts => tools}/checkpackagelib/lib.py (100%)
-> >  rename {support/scripts => tools}/checkpackagelib/lib_config.py (100%)
-> >  rename {support/scripts => tools}/checkpackagelib/lib_hash.py (100%)
-> >  rename {support/scripts => tools}/checkpackagelib/lib_mk.py (100%)
-> >  rename {support/scripts => tools}/checkpackagelib/lib_patch.py (100%)
-> >  rename {support/scripts => tools}/checkpackagelib/readme.txt (91%)
-> 
-> I forgot earlier...
-> 
-> Also the entry in the DEVELOPERS file must be updated
-> F:	support/scripts/check*package*
-> 
-> Probably if I didn't used '*' it would be easier to find.
-> I didn't tested but I assume we could use
-> F:	tools/check-package
-> F:	tools/checkpackagelib/
-
-I'll fix as you suggest, to drop the midle wildcard.
-
-Also, you happen to have two entries in the DEVELOPPERS file, with two
-different emails:
-
-  1368 N:? Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-  1369 F:? package/atop/
-
-and
-
-  1374 N:? Ricardo Martincoski <ricardo.martincoski@gmail.com>
-  1375 F:? support/scripts/check*package*
-
-Is that expected?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 36a0304e27..03a0668a01 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -44,6 +44,17 @@ config BR2_PACKAGE_MESA3D_DRIVER
+ config BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	bool
+ 
++config BR2_PACKAGE_MESA3D_USE_LLVM
++	bool "Enable LLVM usage"
++	default y
++	depends on BR2_PACKAGE_LLVM
++	select BR2_PACKAGE_LLVM_ENABLE_RTTI
++	help
++		Build optimized driver code which makes use of LLVM (e.g. llvmpipe).
++
++comment "optional llvm support depends on llvm"
++	depends on !BR2_PACKAGE_LLVM
++
+ comment "Gallium drivers"
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 04a7d13b97..5076a9b930 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -57,6 +57,13 @@ MESA3D_CONF_OPTS += \
+ 	--disable-xa
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_USE_LLVM),y)
++MESA3D_DEPENDENCIES += llvm
++MESA3D_CONF_OPTS += --enable-llvm
++else
++MESA3D_CONF_OPTS += --disable-llvm
++endif
++
+ # Drivers
+ 
+ #Gallium Drivers
+@@ -214,6 +221,6 @@ MESA3D_CONF_OPTS += --disable-lmsensors
+ endif
+ 
+ # Avoid automatic search of llvm-config
+-MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
++MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr
+ 
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.1
