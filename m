@@ -1,30 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 22:09:27 +0200
-Subject: [Buildroot] [PATCH] irssi: drop obsolete configure option
-In-Reply-To: <20170619060243.4696-1-rprebello@gmail.com>
-References: <20170619060243.4696-1-rprebello@gmail.com>
-Message-ID: <20170619220927.4b2dd51a@windsurf.home>
+Date: Mon, 19 Jun 2017 22:11:10 +0200
+Subject: [Buildroot] [git commit] ntp: enable/disable sntp support depending
+	on BR2_PACKAGE_NTP_SNTP
+Message-ID: <20170619201414.C9C4A80F69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=79ee9b7e692824886bc19b21f55ac25e36e238f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Jun 2017 03:02:43 -0300, Rodrigo Rebello wrote:
-> The configure option --with-ncurses has been removed in version 1.0.0
-> and thus is no longer needed.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
->  package/irssi/irssi.mk | 1 -
->  1 file changed, 1 deletion(-)
+We already have an option for selecting sntp support in ntp that can be
+chosen from the menuconfig, and ntp's configure script has a --with-sntp
+option (with its --without counterpart) which can be used for disabling
+sntp support in ntp. However, we are not using it. This patch will make
+use of it.
 
-Applied to master, thanks.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ntp/ntp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 26f5862..c70d6e6 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -65,6 +65,12 @@ else
+ NTP_CONF_OPTS += --disable-SHM
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
++NTP_CONF_OPTS += --with-sntp
++else
++NTP_CONF_OPTS += --without-sntp
++endif
++
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
