@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 21:30:37 +0200
-Subject: [Buildroot] [PATCH v3 1/1] fcgiwrap: Disable -Werror in CFLAGS
- set by configure.
-In-Reply-To: <20170619162605.30831-2-thomas.claveirole@green-communications.fr>
-References: <20170619162605.30831-1-thomas.claveirole@green-communications.fr>
- <20170619162605.30831-2-thomas.claveirole@green-communications.fr>
-Message-ID: <20170619213037.2b4818c8@windsurf.home>
+Date: Mon, 19 Jun 2017 21:31:40 +0200
+Subject: [Buildroot] [PATCH] libtirpc: Fix build error due to missing
+ stdint.h inclusion
+In-Reply-To: <20170619150626.31273-1-dmitrii@synopsys.com>
+References: <20170616142541.51df47c6@windsurf.lan>
+ <20170619150626.31273-1-dmitrii@synopsys.com>
+Message-ID: <20170619213140.731daabb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 19 Jun 2017 18:26:05 +0200, Thomas Claveirole wrote:
-> Thus, fix
-> http://autobuild.buildroot.net/results/8e0/8e04bf5a85ecd7f120bc9dedeedc891def6c46c1/
+On Mon, 19 Jun 2017 18:06:26 +0300, Dmitrii Kolesnichenko wrote:
+> Add patch to fix following error:
+> | ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
+> |   if (len < (uintptr_t)xdrs->x_base) {
+> |              ^~~~~~~~~
 > 
-> fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
-> to build the package.  This is an issue when Buildroot supports a new
-> compiler version and this version makes some warnings appear.
-> Luckily, one can provide CFLAGS=-Wno-error to the configure script so
-> it appends -Wno-error to AM_CFLAGS.
+> It includes stdint.h to provide uintptr_t.
 > 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/fcgiwrap/fcgiwrap.mk | 1 +
->  1 file changed, 1 insertion(+)
+> This patch has been submitted upstream:
+> https://sourceforge.net/p/libtirpc/mailman/libtirpc-devel/
+> 
+> Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
 
-Applied to master, thanks.
+Thanks, but this commit log and patch description still don't explain
+with which version of glibc you're seeing the problem. Indeed, this
+error has not been caught by our autobuilders, so one may wonder why
+this additional patch is needed.
+
+Can you add such an explanation in the commit description?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
