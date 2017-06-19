@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 22:09:21 +0200
-Subject: [Buildroot] [PATCH] expat: security bump to version 2.2.1
-In-Reply-To: <20170618212004.32001-1-peter@korsgaard.com>
-References: <20170618212004.32001-1-peter@korsgaard.com>
-Message-ID: <20170619220921.49a88bd9@windsurf.home>
+Date: Mon, 19 Jun 2017 22:09:24 +0200
+Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.3
+In-Reply-To: <20170618213502.16233-1-peter@korsgaard.com>
+References: <20170618213502.16233-1-peter@korsgaard.com>
+Message-ID: <20170619220924.4e13526b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 18 Jun 2017 23:20:04 +0200, Peter Korsgaard wrote:
+On Sun, 18 Jun 2017 23:35:02 +0200, Peter Korsgaard wrote:
 > Fixes:
 > 
-> - CVE-2017-9233 - External entity infinite loop DoS. See:
->   https://libexpat.github.io/doc/cve-2017-9233/
+> CVE-2017-9468 - Joseph Bisch discovered that Irssi does not properly handle
+> DCC messages without source nick/host.  A malicious IRC server can take
+> advantage of this flaw to cause Irssi to crash, resulting in a  denial of
+> service.
 > 
-> - CVE-2016-9063 -- Detect integer overflow
+> CVE-2017-9469 - Joseph Bisch discovered that Irssi does not properly handle
+> receiving incorrectly quoted DCC files.  A remote attacker can take
+> advantage of this flaw to cause Irssi to crash, resulting in a denial of
+> service.
 > 
-> And further more:
+> See https://irssi.org/security/irssi_sa_2017_06.txt for more details.
 > 
-> - Fix regression from fix to CVE-2016-0718 cutting off longer tag names.
-> 
-> - Extend fix for CVE-2016-5300 (use getrandom() if available).
-> 
-> - Extend fix for CVE-2012-0876 (Change hash algorithm to William Ahern's
->   version of SipHash).
-> 
-> Also add an upstream patch to fix detection of getrandom().
+> Remove 0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch as it
+> applied upstream and drop autoreconf as configure.ac is no longer patched.
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ++++++++++++++++++++++
->  package/expat/expat.hash                           |  8 +++---
->  package/expat/expat.mk                             |  4 ++-
->  3 files changed, 36 insertions(+), 5 deletions(-)
->  create mode 100644 package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+>  ...-to-using-pkg-config-to-check-for-OpenSSL.patch | 77 ----------------------
+>  package/irssi/irssi.hash                           |  2 +-
+>  package/irssi/irssi.mk                             |  5 +-
+>  3 files changed, 2 insertions(+), 82 deletions(-)
+>  delete mode 100644 package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
 
 Applied to master, thanks.
 
