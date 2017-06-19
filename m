@@ -1,63 +1,40 @@
-From: Dmitrii Kolesnichenko <Dmitrii.Kolesnichenko@synopsys.com>
-Date: Mon, 19 Jun 2017 18:06:26 +0300
-Subject: [Buildroot] [PATCH] libtirpc: Fix build error due to missing
-	stdint.h inclusion
-In-Reply-To: <20170616142541.51df47c6@windsurf.lan>
-Message-ID: <20170619150626.31273-1-dmitrii@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Jun 2017 17:40:32 +0200
+Subject: [Buildroot] [PATCH v2 1/1] fcgiwrap: Disable -Werror in CFLAGS
+ set by configure.
+In-Reply-To: <20170619135953.16205-2-thomas.claveirole@green-communications.fr>
+References: <20170619135953.16205-1-thomas.claveirole@green-communications.fr>
+ <20170619135953.16205-2-thomas.claveirole@green-communications.fr>
+Message-ID: <20170619174032.4f597cb2@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix following error:
-| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-|   if (len < (uintptr_t)xdrs->x_base) {
-|              ^~~~~~~~~
+Hello,
 
-It includes stdint.h to provide uintptr_t.
+On Mon, 19 Jun 2017 15:59:53 +0200, Thomas Claveirole wrote:
 
-This patch has been submitted upstream:
-https://sourceforge.net/p/libtirpc/mailman/libtirpc-devel/
+> +FCGIWRAP_CONF_OPTS += CFLAGS='-Wno-error $(TARGET_CFLAGS)'
 
-Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
----
- ...ild-error-due-to-missing-stdint.h-include.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
+Should be:
 
-diff --git a/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-new file mode 100644
-index 0000000..ccb0dff
---- /dev/null
-+++ b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-@@ -0,0 +1,27 @@
-+Fixes
-+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-+|   if (len < (uintptr_t)xdrs->x_base) {
-+|              ^~~~~~~~~
-+
-+Signed-off-by: Khem Raj <raj.khem@...>
-+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
-+---
-+Upstream-Status: Pending
-+
-+ src/xdr_sizeof.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
-+index d23fbd1..79d6707 100644
-+--- a/src/xdr_sizeof.c
-++++ b/src/xdr_sizeof.c
-+@@ -39,6 +39,7 @@
-+ #include <rpc/xdr.h>
-+ #include <sys/types.h>
-+ #include <stdlib.h>
-++#include <stdint.h>
-+ #include "un-namespace.h"
-+ 
-+ /* ARGSUSED */
-+-- 
-+2.13.0
+FCGIWRAP_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
+
+I.e:
+
+ - Use CONF_ENV, not CONF_OPTS, since we pass the original CFLAGS in
+   CONV_ENV
+
+ - Use double quotes instead of simple quotes
+
+ - Pass your option *after* TARGET_CFLAGS.
+
+Thanks,
+
+Thomas
 -- 
-1.8.3.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
