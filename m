@@ -1,41 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 21:48:58 +0200
-Subject: [Buildroot] [git commit] audit: bump to version 2.7.7
-Message-ID: <20170619194812.73F6E81D82@busybox.osuosl.org>
+Date: Mon, 19 Jun 2017 21:49:06 +0200
+Subject: [Buildroot] [PATCH 1/1] audit: bump to version 2.7.7
+In-Reply-To: <20170619150247.25187-1-aduskett@codeblue.com>
+References: <20170619150247.25187-1-aduskett@codeblue.com>
+Message-ID: <20170619214906.12154e7b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e013cfcdbf12b89787e8cf6a067c9922dc71e94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 19 Jun 2017 11:02:47 -0400, Adam Duskett wrote:
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+> ---
+>  package/audit/audit.hash | 2 +-
+>  package/audit/audit.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 7dd3e55..189c982 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,2 +1,2 @@
- #Locally computed
--sha256 fa65289cffdc95a25bfbdba541f43ee1b12c707090a38fd027dcf9354b9014e7 audit-2.7.6.tar.gz
-+sha256 98e22549444c313187dc98c2e137f36a9882efa0874b559b0457e5f87ae178ef audit-2.7.7.tar.gz
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 95b6078..1398d9d 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUDIT_VERSION = 2.7.6
-+AUDIT_VERSION = 2.7.7
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), unclear (libraries)
- AUDIT_LICENSE_FILES = COPYING
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
