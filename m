@@ -1,26 +1,35 @@
 From: Koen Martens <gmc@sonologic.nl>
 Date: Mon, 19 Jun 2017 18:55:06 +0200
-Subject: [Buildroot] [PATCH v2 0/1] linuxconsoletools: new package
-Message-ID: <201706191656.v5JGuHYh093348@mx1.sonologic.net>
+Subject: [Buildroot] [PATCH v2 1/1] linuxconsoletools: new package
+Message-ID: <201706191656.v5JGuLc9093352@mx1.sonologic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have added the linuxconsoletools package. When running
-test-pkg on it, toolchain config br-arcle-hs38 failed
-because SDL was unable to build with this toolchain. I 
-have no reason to believe that the linuxconsoletools
-package will not build on that toolchain, but fixing
-the sdl package seemed beyond the scope of this
-package.
+Linuxconsoletools contains the inputattach utility
+to attach legacy serial devices to the Linux kernel
+input layer and joystick utilities to calibrate and
+test joysticks and joypads.
 
+The buildroot package adds options to build only certain
+tools.
+
+website: http://sf.net/projects/linuxconsole/
+
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
+
+---
 Changes v1 -> v2:
-    Processed review comments by Thomas Petazzoni
-
-Koen Martens (1):
-  linuxconsoletools: new package
+  - Remove 'default n' everywhere
+  - Change forward dependency BR2_PACKAGE_SDL to backward dependency
+  - Change license code to use SPDX convention
+  - Remove option to install man pages
+  - Remove superfluous lines from .mk file
+  - Refactor SDL_CONFIG make option
+  - Refactor make options
+  - Add blank lines after endif
 
  DEVELOPERS                                         |  3 ++
  package/Config.in                                  |  1 +
@@ -36,5 +45,218 @@ Koen Martens (1):
  create mode 100644 package/linuxconsoletools/linuxconsoletools.hash
  create mode 100644 package/linuxconsoletools/linuxconsoletools.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f86a5dc..afc4596 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -997,6 +997,9 @@ F:	package/ramsmp/
+ N:	Kevin Joly <kevin.joly@sensefly.com>
+ F:	package/libgphoto2/
+ 
++N:	Koen Martens <gmc@sonologic.nl>
++F:	package/linuxconsoletools/
++
+ N:	Laurent Cans <laurent.cans@gmail.com>
+ F:	package/aircrack-ng/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index aeb7430..9df0b42 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -422,6 +422,7 @@ endmenu
+ 	source "package/lcdproc/Config.in"
+ 	source "package/libuio/Config.in"
+ 	source "package/libump/Config.in"
++	source "package/linuxconsoletools/Config.in"
+ 	source "package/linux-backports/Config.in"
+ 	source "package/lirc-tools/Config.in"
+ 	source "package/lm-sensors/Config.in"
+diff --git a/package/linuxconsoletools/0001-conditional-build.patch b/package/linuxconsoletools/0001-conditional-build.patch
+new file mode 100644
+index 0000000..9f462a6
+--- /dev/null
++++ b/package/linuxconsoletools/0001-conditional-build.patch
+@@ -0,0 +1,58 @@
++Selectively build groups of tools (inputattach,
++joystick tools and/or force-feedback tools).
++
++Signed-off-by: Koen Martens <gmc@sonologic.nl>
++
++diff -Naur a/utils/Makefile b/utils/Makefile
++--- a/utils/Makefile	2016-04-19 23:28:36.000000000 +0200
+++++ b/utils/Makefile	2017-06-19 08:54:20.152184000 +0200
++@@ -27,8 +27,26 @@
++ 
++ CFLAGS		?= -g -O2 -Wall
++ 
++-PROGRAMS	= inputattach jstest jscal fftest ffmvforce ffset \
++-		  ffcfstress jscal-restore jscal-store evdev-joystick
+++PROGRAMS    =
+++
+++ifdef ENABLE_INPUTATTACH
+++PROGRAMS	+= inputattach
+++endif
+++
+++ifdef ENABLE_JOYSTICK
+++PROGRAMS    += jstest
+++PROGRAMS    += jscal
+++PROGRAMS    += jscal-restore
+++PROGRAMS    += jscal-store
+++PROGRAMS    += evdev-joystick
+++endif
+++
+++ifdef ENABLE_FORCEFEEDBACK
+++PROGRAMS    += fftest
+++PROGRAMS    += ffmvforce
+++PROGRAMS    += ffset
+++PROGRAMS    += ffcfstress
+++endif
++ 
++ PREFIX          ?= /usr/local
++ 
++@@ -79,13 +97,20 @@
++ 80-stelladaptor-joystick.rules: 80-stelladaptor-joystick.rules.in
++ 	sed "s^@@PREFIX@@^$(PREFIX)^g" < $^ > $@
++ 
+++INSTALL_DEP = compile
+++ifdef ENABLE_JOYSTICK
+++INSTALL_DEP +=  80-stelladaptor-joystick.rules
+++endif
+++
++ install: compile 80-stelladaptor-joystick.rules
++ 	install -d $(DESTDIR)$(PREFIX)/bin
++ 	install $(PROGRAMS) $(DESTDIR)$(PREFIX)/bin
+++ifdef ENABLE_JOYSTICK
++ 	install -d $(DESTDIR)$(PREFIX)/share/joystick
++ 	install extract filter ident $(DESTDIR)$(PREFIX)/share/joystick
++ 	install -d $(DESTDIR)/lib/udev/rules.d
++ 	install js-set-enum-leds $(DESTDIR)/lib/udev
++ 	install -m 644 80-stelladaptor-joystick.rules $(DESTDIR)/lib/udev/rules.d
+++endif
++ 
++ .PHONY: compile clean distclean install
+diff --git a/package/linuxconsoletools/0002-sdl-config.patch b/package/linuxconsoletools/0002-sdl-config.patch
+new file mode 100644
+index 0000000..c19c274
+--- /dev/null
++++ b/package/linuxconsoletools/0002-sdl-config.patch
+@@ -0,0 +1,20 @@
++Specify sdl-config to use instead of using host sdl-config.
++
++Signed-off-by: Koen Martens <gmc@sonologic.nl>
++
++diff -Naur a/utils/Makefile b/utils/Makefile
++--- a/utils/Makefile	2017-06-16 18:48:28.402824790 +0200
+++++ b/utils/Makefile	2017-06-16 18:48:53.898696647 +0200
++@@ -69,10 +69,10 @@
++ 	$(CC) $(CFLAGS) $(CPPFLAGS) -funsigned-char $^ $(LDFLAGS) -lm -o $@
++ 
++ ffmvforce.o: ffmvforce.c
++-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `sdl-config --cflags`
+++	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^ -o $@ `${SDL_CONFIG} --cflags`
++ 
++ ffmvforce: ffmvforce.o
++-	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `sdl-config --libs`
+++	$(CC) $^ -o $@ $(LDFLAGS) -g -lm `${SDL_CONFIG} --libs`
++ 
++ axbtnmap.o: axbtnmap.c axbtnmap.h
++ 
+diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
+new file mode 100644
+index 0000000..08a4af3
+--- /dev/null
++++ b/package/linuxconsoletools/Config.in
+@@ -0,0 +1,34 @@
++config BR2_PACKAGE_LINUXCONSOLETOOLS
++	bool "linuxconsoletools"
++	default n
++	help
++	  Linuxconsoletools contains the inputattach utility
++	  to attach legacy serial devices to the Linux kernel
++	  input layer and joystick utilities to calibrate and
++	  test joysticks and joypads.
++	  
++	  http://sf.net/projects/linuxconsole/
++
++if BR2_PACKAGE_LINUXCONSOLETOOLS
++
++config BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH
++	bool "inputattach"
++	default y
++	help
++	  The inputattach utility attaches legacy serial devices
++	  to the Linux kernel input layer.
++
++config BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
++	bool "joystick utilities"
++	help
++	  Joystick utilities (jstest, jscal, jscal-store,
++	  jscal-restore, evdev-joystick).
++
++config BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK
++	bool "force-feedback utilities"
++	select BR2_PACKAGE_SDL
++	help
++	  Build force-feedback driver utilities (fftest,
++	  ffmvforce, ffset, ffcfstress).
++
++endif
+diff --git a/package/linuxconsoletools/linuxconsoletools.hash b/package/linuxconsoletools/linuxconsoletools.hash
+new file mode 100644
+index 0000000..756c9f4
+--- /dev/null
++++ b/package/linuxconsoletools/linuxconsoletools.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	ced2efed00b67b45f82eddc69be07385835d558f658016315ac621fe2eaa8146	linuxconsoletools-1.6.0.tar.bz2
+diff --git a/package/linuxconsoletools/linuxconsoletools.mk b/package/linuxconsoletools/linuxconsoletools.mk
+new file mode 100644
+index 0000000..e8c7cd7
+--- /dev/null
++++ b/package/linuxconsoletools/linuxconsoletools.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# linuxconsoletools
++#
++################################################################################
++
++LINUXCONSOLETOOLS_VERSION = 1.6.0
++LINUXCONSOLETOOLS_SOURCE = linuxconsoletools-$(LINUXCONSOLETOOLS_VERSION).tar.bz2
++LINUXCONSOLETOOLS_SITE = https://downloads.sourceforge.net/project/linuxconsole
++LINUXCONSOLETOOLS_LICENSE = GPL-2.0+
++LINUXCONSOLETOOLS_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH),y)
++LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_INPUTATTACH=1
++endif
++
++ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK),y)
++LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_JOYSTICK=1
++endif
++
++ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
++LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_FORCEFEEDBACK=1
++LINUXCONSOLETOOLS_MAKE_OPTS += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
++LINUXCONSOLETOOLS_DEPENDENCIES += sdl
++endif
++
++LINUXCONSOLETOOLS_MAKE_OPTS += CC=$(TARGET_CC)
++LINUXCONSOLETOOLS_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS)"
++
++define LINUXCONSOLETOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(LINUXCONSOLETOOLS_MAKE_OPTS)
++endef
++
++define LINUXCONSOLETOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(LINUXCONSOLETOOLS_MAKE_OPTS) \
++		DESTDIR="$(TARGET_DIR)" \
++		PREFIX=/usr \
++		install
++endef
++
++$(eval $(generic-package))
 -- 
 2.7.4
