@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jun 2017 20:46:08 +0200
+Date: Mon, 19 Jun 2017 20:48:04 +0200
 Subject: [Buildroot] [PATCH 4/4 v2] tools: move check-package out of
  support/scripts/
-In-Reply-To: <594725387e9d9_57503f9d8c005fc8489c9@ultri3.mail>
+In-Reply-To: <5947435fc2125_3a623fad069a6b206136c@ultri3.mail>
 References: <eb8cb9682d84d1f110044a1448f18ef95ad79e84.1497794488.git.yann.morin.1998@free.fr>
- <594725387e9d9_57503f9d8c005fc8489c9@ultri3.mail>
-Message-ID: <20170619184608.GC3045@scaer>
+ <5947435fc2125_3a623fad069a6b206136c@ultri3.mail>
+Message-ID: <20170619184804.GD3045@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +14,26 @@ To: buildroot@busybox.net
 
 Ricardo, All,
 
-On 2017-06-18 22:13 -0300, Ricardo Martincoski spake thusly:
+On 2017-06-19 00:22 -0300, Ricardo Martincoski spake thusly:
 > On Sun, Jun 18, 2017 at 11:01 AM, Yann E. MORIN wrote:
-> [snip]
+> 
+> > ---
+> >  support/scripts/check-package                      | 145 +--------------------
+> >  support/scripts/pkg-stats                          |   2 +-
+> >  tools/00-README.txt                                |   4 +
+> >  tools/check-package                                | 144 ++++++++++++++++++++
+> >  .../scripts => tools}/checkpackagelib/__init__.py  |   0
+> >  {support/scripts => tools}/checkpackagelib/base.py |   0
+> >  {support/scripts => tools}/checkpackagelib/lib.py  |   0
+> >  .../checkpackagelib/lib_config.py                  |   0
+> >  .../scripts => tools}/checkpackagelib/lib_hash.py  |   0
+> >  .../scripts => tools}/checkpackagelib/lib_mk.py    |   0
+> >  .../scripts => tools}/checkpackagelib/lib_patch.py |   0
+> >  .../scripts => tools}/checkpackagelib/readme.txt   |  10 +-
+> >  12 files changed, 155 insertions(+), 150 deletions(-)
+> >  mode change 100755 => 120000 support/scripts/check-package
+> >  create mode 100755 tools/check-package
+> >  rename {support/scripts => tools}/checkpackagelib/__init__.py (100%)
 > >  rename {support/scripts => tools}/checkpackagelib/base.py (100%)
 > >  rename {support/scripts => tools}/checkpackagelib/lib.py (100%)
 > >  rename {support/scripts => tools}/checkpackagelib/lib_config.py (100%)
@@ -25,21 +42,30 @@ On 2017-06-18 22:13 -0300, Ricardo Martincoski spake thusly:
 > >  rename {support/scripts => tools}/checkpackagelib/lib_patch.py (100%)
 > >  rename {support/scripts => tools}/checkpackagelib/readme.txt (91%)
 > 
-> nit: there are 6 more comments using the old path.
-
-Damn, right.
-
-> -# See support/scripts/checkpackagelib/readme.txt before editing this file.
-> +# See tools/checkpackagelib/readme.txt before editing this file.
+> I forgot earlier...
 > 
-> It could be fixed when applying using this sed:
-> sed -e 's,support/scripts/,tools/,g' -i tools/checkpackagelib/*.py
+> Also the entry in the DEVELOPERS file must be updated
+> F:	support/scripts/check*package*
 > 
-> Another option is to remove the 6 comments if you think they are too repetitive.
+> Probably if I didn't used '*' it would be easier to find.
+> I didn't tested but I assume we could use
+> F:	tools/check-package
+> F:	tools/checkpackagelib/
 
-Fixed.
+I'll fix as you suggest, to drop the midle wildcard.
 
-Thanks for the review! :-)
+Also, you happen to have two entries in the DEVELOPPERS file, with two
+different emails:
+
+  1368 N:? Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+  1369 F:? package/atop/
+
+and
+
+  1374 N:? Ricardo Martincoski <ricardo.martincoski@gmail.com>
+  1375 F:? support/scripts/check*package*
+
+Is that expected?
 
 Regards,
 Yann E. MORIN.
