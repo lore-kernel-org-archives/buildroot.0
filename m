@@ -1,39 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Jun 2017 09:41:21 +0200
-Subject: [Buildroot] [git commit] configs/qemu_sh4*: rename back the
-	linux config file to linux-4.9.config
-In-Reply-To: <20170619073237.2240481D81@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Mon, 19 Jun 2017 09:26:12 +0200")
-References: <20170619073237.2240481D81@busybox.osuosl.org>
-Message-ID: <87y3sofmqm.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Jun 2017 09:41:37 +0200
+Subject: [Buildroot] [PATCH v4 0/6] Board: Add Engicam i.MX6 SOMs
+In-Reply-To: <1497857252-8308-1-git-send-email-jteki@openedev.com>
+References: <1497857252-8308-1-git-send-email-jteki@openedev.com>
+Message-ID: <20170619094137.64636ea9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=0f575dd1e3be98ae66a35d527b922b3dc7f1a099
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 19 Jun 2017 12:57:26 +0530, Jagan Teki wrote:
 
- > In commit 28d97609b25cb534a55b6cf6b1945428e817c54a ("configs/qemu:
- > bump to the latest kernel version") updated most qemu defconfigs to
- > use Linux 4.11. However, for the SH4 configurations, Linux 4.9 was
- > kept, because 4.11 apparently has an issue.
+> Jagan Teki (6):
+>   board: Add support for Engicam i.CoreM6 DualLite/Solo boards
+>   board: engicam: Rename defconfig engicam_imx6qdl_icore_mmc_defconfig
+>   board: Add support for Engicam i.CoreM6 RQS SOM
+>   board: engicam: Add icorem6 for i.CoreM6 support
+>   board: Add support for Engicam GEAM6UL SOM
+>   board: Add support for Engicam Is.IoT MX6UL SOM
 
- > Unfortunately, while the defconfigs for SH4 were unchanged, the Linux
- > kernel configuration file was renamed from linux-4.9.config to
- > linux-4.11.config.
+Thanks for this new iteration and those contributions. Since you're
+regularly posting new iterations of this patch series, it would be nice
+if you could create an account on patchwork, and mark yourself the
+previous iterations of your patch series as "Superseded". This way, it
+is easier for the maintainers to keep track of what is the latest
+version of your patch series that should be considered for
+review/merging.
 
- > This commit renames the Linux configuration files back to their
- > previous name, linux-4.9.config, matching what the Qemu SH4 defconfigs
- > specify.
+See https://patchwork.ozlabs.org/project/buildroot/list/. You just need
+to create an account with the same e-mail address as the one used to
+send the patches.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Thanks!
 
-Thanks. Longer term I think it is nicer to drop the version number from
-the config file name.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
