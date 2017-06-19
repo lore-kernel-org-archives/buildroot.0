@@ -1,39 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 15:29:21 +0200
-Subject: [Buildroot] [PATCH 1/2] package/imagemagick: change download
- url to github
-In-Reply-To: <877f09glcd.fsf@dell.be.48ers.dk>
-References: <20170618074538.1237-1-bernd.kuhls@t-online.de>
- <877f09glcd.fsf@dell.be.48ers.dk>
-Message-ID: <20170619152921.6a37a345@windsurf.lan>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon, 19 Jun 2017 15:25:13 +0200
+Subject: [Buildroot] [PATCH 1/1] fcgiwrap: Disable -Werror in CFLAGS set by
+	configure.
+Message-ID: <20170619132513.11518-1-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
+to build the package.  This is an issue when Buildroot supports a new
+compiler version and this version makes some warnings appear.
+Luckily, one can provide CFLAGS=-Wno-error to the configure script so
+it appends -Wno-error to AM_CFLAGS.
 
-On Sun, 18 Jun 2017 21:13:54 +0200, Peter Korsgaard wrote:
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/fcgiwrap/fcgiwrap.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
->  >  IMAGEMAGICK_VERSION = 7.0.5-10
->  > -IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
->  > -IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
->  > +IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
->  > +IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive  
-> 
-> That SOURCE name is a bit annoying. Is it a big issue that upstream
-> (re)moves the downloads after some time when we transparently fall back
-> to getting it from sources.buildroot.org?
-
-I indeed hadn't seen the stupid name for the tarball. On my side, I
-find it a bit annoying that we have to rely on sources.b.o to make
-things work, so having upstream location that are working on the long
-run is much better when possible. But I agree that the tarball name is
-really silly here, and the risk of conflict with other packages is real.
-
-Thomas
+diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
+index dd74c1ef72..c080a1ae49 100644
+--- a/package/fcgiwrap/fcgiwrap.mk
++++ b/package/fcgiwrap/fcgiwrap.mk
+@@ -10,6 +10,7 @@ FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
+ FCGIWRAP_LICENSE = MIT
+ FCGIWRAP_LICENSE_FILES = COPYING
+ FCGIWRAP_AUTORECONF = YES
++FCGIWRAP_CONF_OPTS += CFLAGS=-Wno-error
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ FCGIWRAP_DEPENDENCIES += systemd
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
