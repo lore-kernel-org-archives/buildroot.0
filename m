@@ -1,53 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 19 Jun 2017 22:14:25 +0300
-Subject: [Buildroot] [PATCH 10/14] e2fsprogs: don't link with librt
-In-Reply-To: <20170618115529.GQ2918@scaer>
-References: <cover.1497583686.git.baruch@tkos.co.il>
- <87422f222dc219a098bf8189c9214eac0f59074b.1497583686.git.baruch@tkos.co.il>
- <20170618093309.GK2918@scaer>
- <20170618101301.hxhzvmcd4vntmdmf@tarshish>
- <20170618115529.GQ2918@scaer>
-Message-ID: <20170619191425.a6zjkcvn2qcuppnk@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Jun 2017 21:21:18 +0200
+Subject: [Buildroot] [git commit] fcgiwrap: disable -Werror in CFLAGS
+Message-ID: <20170619192112.6E26F801D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=6a20a98f4b5e576b7c3dc844951b0153963b739a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jun 18, 2017 at 01:55:29PM +0200, Yann E. MORIN wrote:
-> On 2017-06-18 13:13 +0300, Baruch Siach spake thusly:
-> > On Sun, Jun 18, 2017 at 11:33:09AM +0200, Yann E. MORIN wrote:
-> > > On 2017-06-16 06:32 +0300, Baruch Siach spake thusly:
-> > > > Buildroot no longer supports toolchains with glibc older than 2.17, so there
-> > > > is no need to link with librt for clock_* system calls.
-> > > > 
-> > > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > > 
-> > > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > Thanks.
-> > 
-> > On a second thought, e2fsprogs is also a host package. We don't want to 
-> > abandon pre glibc 2.17 hosts just yet, do we?
-> 
-> Indeed no.
-> 
-> But the patch was made to fix a build failure for fuse2fs, which we
-> explicitly disable for the host variant.
-> 
-> So, we really can drop this patch.
+fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
+to build the package.  This is an issue when Buildroot supports a new
+compiler version and this version makes some warnings appear.
+Luckily, one can provide CFLAGS=-Wno-error to the configure script so
+it appends -Wno-error to AM_CFLAGS.
 
-Right. However the softether librt patch is applicable[1] to the host version. 
-I have marked that one (no. 14 in this series) as Rejected.
+Fixes:
 
-Thanks,
-baruch
+  http://autobuild.buildroot.net/results/8e04bf5a85ecd7f120bc9dedeedc891def6c46c1/
 
-[1] http://autobuild.buildroot.net/results/48f/48f778a891e0bf6a60ed2e4bec057c338ec25ec9/
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fcgiwrap/fcgiwrap.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
+index dd74c1e..62c4c13 100644
+--- a/package/fcgiwrap/fcgiwrap.mk
++++ b/package/fcgiwrap/fcgiwrap.mk
+@@ -10,6 +10,7 @@ FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
+ FCGIWRAP_LICENSE = MIT
+ FCGIWRAP_LICENSE_FILES = COPYING
+ FCGIWRAP_AUTORECONF = YES
++FCGIWRAP_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ FCGIWRAP_DEPENDENCIES += systemd
