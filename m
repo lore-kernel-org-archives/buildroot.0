@@ -1,82 +1,218 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 21:44:58 +0200
-Subject: [Buildroot] [PATCH v2 1/1] linuxconsoletools: new package
-In-Reply-To: <201706191656.v5JGuLc9093352@mx1.sonologic.net>
-References: <201706191656.v5JGuLc9093352@mx1.sonologic.net>
-Message-ID: <20170619214458.7fe41175@windsurf.home>
+Date: Mon, 19 Jun 2017 21:47:05 +0200
+Subject: [Buildroot] [git commit] gdb: fix full gdb build for MIPS musl
+Message-ID: <20170619194638.B6FDF81843@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1874fe15224007308a7bf4e9765506a3b4bc1b27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Jun 2017 18:55:06 +0200, Koen Martens wrote:
-> Linuxconsoletools contains the inputattach utility
-> to attach legacy serial devices to the Linux kernel
-> input layer and joystick utilities to calibrate and
-> test joysticks and joypads.
-> 
-> The buildroot package adds options to build only certain
-> tools.
-> 
-> website: http://sf.net/projects/linuxconsole/
-> 
-> Signed-off-by: Koen Martens <gmc@sonologic.nl>
+Currently building full gdb for MIPS musl fails because it's trying to
+include <sgidefs.h> which is provided by glibc and uClibc, but not by
+musl.
 
-Thanks, I've applied, after doing a few minor tweaks. See below.
+However, the kernel headers provide <asm/sgidefs.h> which has the same
+definitions, so we can use that one instead.
 
-> diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
-> new file mode 100644
-> index 0000000..08a4af3
-> --- /dev/null
-> +++ b/package/linuxconsoletools/Config.in
-> @@ -0,0 +1,34 @@
-> +config BR2_PACKAGE_LINUXCONSOLETOOLS
-> +	bool "linuxconsoletools"
-> +	default n
+Backporting a patch that has been sent upstream. Taken from here:
 
-There was still a useless "default n" here, so I've dropped.
+https://sourceware.org/bugzilla/show_bug.cgi?id=21070
 
-> +	help
-> +	  Linuxconsoletools contains the inputattach utility
-> +	  to attach legacy serial devices to the Linux kernel
-> +	  input layer and joystick utilities to calibrate and
-> +	  test joysticks and joypads.
-> +	  
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch | 41 +++++++++++++++++++++++++
+ package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch | 40 ++++++++++++++++++++++++
+ package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch | 40 ++++++++++++++++++++++++
+ package/gdb/8.0/0003-use-asm-sgidefs.h.patch    | 40 ++++++++++++++++++++++++
+ 4 files changed, 161 insertions(+)
 
-There was a trailing tab character on this line, which I dropped.
-
-> +	  http://sf.net/projects/linuxconsole/
-> +ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
-> +LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_FORCEFEEDBACK=1
-> +LINUXCONSOLETOOLS_MAKE_OPTS += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
-
-I've put these in a single assignment:
-
-+LINUXCONSOLETOOLS_MAKE_OPTS += \
-+       ENABLE_FORCEFEEDBACK=1 \
-+       SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
-
-
-> +LINUXCONSOLETOOLS_DEPENDENCIES += sdl
-> +endif
-> +
-> +LINUXCONSOLETOOLS_MAKE_OPTS += CC=$(TARGET_CC)
-> +LINUXCONSOLETOOLS_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS)"
-
-Both of those lines are not needed: CC and CFLAGS are already part of
-$(TARGET_CONFIGURE_OPTS), which you pass in the build and install
-commands.
-
-Committed with those minor issues fixed. Thanks a lot for this
-contribution!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch b/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+new file mode 100644
+index 0000000..fdc5679
+--- /dev/null
++++ b/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+@@ -0,0 +1,41 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from https://sourceware.org/bugzilla/show_bug.cgi?id=21070
++Patch has been adapted to apply on 7.10.1.]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index 9f6d697..8f57bb2 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include <sys/ptrace.h>
++ #include <asm/ptrace.h>
++
++-- 
++2.13.1
++ 
+diff --git a/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch b/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
+new file mode 100644
+index 0000000..d303369
+--- /dev/null
++++ b/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
+@@ -0,0 +1,40 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index f2df1b9907..d24664cb56 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include "nat/gdb_ptrace.h"
++ #include <asm/ptrace.h>
++ #include "inf-ptrace.h"
++-- 
++2.13.1
++
+diff --git a/package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch b/package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch
+new file mode 100644
+index 0000000..d303369
+--- /dev/null
++++ b/package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch
+@@ -0,0 +1,40 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index f2df1b9907..d24664cb56 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include "nat/gdb_ptrace.h"
++ #include <asm/ptrace.h>
++ #include "inf-ptrace.h"
++-- 
++2.13.1
++
+diff --git a/package/gdb/8.0/0003-use-asm-sgidefs.h.patch b/package/gdb/8.0/0003-use-asm-sgidefs.h.patch
+new file mode 100644
+index 0000000..d303369
+--- /dev/null
++++ b/package/gdb/8.0/0003-use-asm-sgidefs.h.patch
+@@ -0,0 +1,40 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index f2df1b9907..d24664cb56 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include "nat/gdb_ptrace.h"
++ #include <asm/ptrace.h>
++ #include "inf-ptrace.h"
++-- 
++2.13.1
++
