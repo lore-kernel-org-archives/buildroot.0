@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 15:24:27 +0200
-Subject: [Buildroot] [PATCH v4 0/6] Board: Add Engicam i.MX6 SOMs
-In-Reply-To: <CAD6G_RSzf7+A+WTyVaUApSPoayTJObE+1Br0=8YPu3LZS3yOtg@mail.gmail.com>
-References: <1497857252-8308-1-git-send-email-jteki@openedev.com>
- <20170619094137.64636ea9@windsurf>
- <CAMty3ZBj53AcYx9dz-YjnjcW5S-O8fELPSvbmHz3fCmDSa3anQ@mail.gmail.com>
- <20170619141834.56aedeb1@windsurf.lan>
- <CAD6G_RSzf7+A+WTyVaUApSPoayTJObE+1Br0=8YPu3LZS3yOtg@mail.gmail.com>
-Message-ID: <20170619152427.5c85bad0@windsurf.lan>
+Date: Mon, 19 Jun 2017 15:29:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/imagemagick: change download
+ url to github
+In-Reply-To: <877f09glcd.fsf@dell.be.48ers.dk>
+References: <20170618074538.1237-1-bernd.kuhls@t-online.de>
+ <877f09glcd.fsf@dell.be.48ers.dk>
+Message-ID: <20170619152921.6a37a345@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 19 Jun 2017 18:30:34 +0530, Jagan Teki wrote:
+On Sun, 18 Jun 2017 21:13:54 +0200, Peter Korsgaard wrote:
 
-> > It won't work: patchwork will only allow you to modify the patches for
-> > which you are the author, by matching the email of the patchwork
-> > account with the email of the patch author.  
+>  >  IMAGEMAGICK_VERSION = 7.0.5-10
+>  > -IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+>  > -IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+>  > +IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+>  > +IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive  
 > 
-> Created, but I can't mark "Superseded" due to permissions issue if I
-> select 'Delegate to'  as you or 'no change'
+> That SOURCE name is a bit annoying. Is it a big issue that upstream
+> (re)moves the downloads after some time when we transparently fall back
+> to getting it from sources.buildroot.org?
 
-If you can't change the state of your patches, it's because your
-patchwork account e-mail doesn't match the one of the patches.
+I indeed hadn't seen the stupid name for the tarball. On my side, I
+find it a bit annoying that we have to rely on sources.b.o to make
+things work, so having upstream location that are working on the long
+run is much better when possible. But I agree that the tarball name is
+really silly here, and the risk of conflict with other packages is real.
 
 Thomas
 -- 
