@@ -1,111 +1,224 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jun 2017 17:42:27 +0200
-Subject: [Buildroot] [PATCH 1/4 v2] tools: add a directory to store some
- useful user-facing tools
-In-Reply-To: <594724d64eae6_575014c74204877b@ultri3.mail>
-References: <388a8da9b48e30391dd6f2cd35be53c2dafc4af0.1497794488.git.yann.morin.1998@free.fr>
- <594724d64eae6_575014c74204877b@ultri3.mail>
-Message-ID: <20170619154227.GA3045@scaer>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 19 Jun 2017 17:00:08 +0100
+Subject: [Buildroot] [PATCH v2] gdb: fix full gdb build for MIPS musl
+Message-ID: <20170619160008.61280-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Currently building full gdb for MIPS musl fails because it's trying to
+include <sgidefs.h> which is provided by glibc and uClibc, but not by
+musl.
 
-On 2017-06-18 22:11 -0300, Ricardo Martincoski spake thusly:
-> On Sun, Jun 18, 2017 at 11:01 AM, Yann E. MORIN wrote:
-> > Add a tools directory to store useful little scripts, tools, etc...
-> > Users may add that directory in their PATH if they want to, but this
-> > is not mandatory.
-> > 
-> > Add the first tool: brmake, a small script that redirects the build
-> > output log to a file, keeping just Buildroot's own messages, with the
-> > date+time added at the start of the line.
-> > 
-> > We need to unbuffer the output of make so that, when the script is
-> > interrupted (SIGINT, ^C), there is no lingering output not yet digested
-> > by the logger loop.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> I tested the script and it works very well in general.
-> 
-> - I successfully built the qemu_arm_versatile_defconfig using the script,
-> pressing CTRL+C a few times and resuming by calling it again.
-> - Also, by inserting an error to a package I got the expected behaviour: the
-> error message is in the log file and the script returned the error code.
-> - Tested using 'GNU bash, version 4.3.48(1)-release (x86_64-pc-linux-gnu)'
-> 
-> BUT if it is called without a .config file, it hangs forever waiting for input,
-> and the menuconfig is sent to the log file.
+However, the kernel headers provide <asm/sgidefs.h> which has the same
+definitions, so we can use that one instead.
 
-Indeed, my use-case is to only use it in an already-configured tree.
+Backporting a patch that has been sent upstream. Taken from here:
 
-> Maybe we can bailout if no .config is present.
+https://sourceware.org/bugzilla/show_bug.cgi?id=21070
 
-Hmmm... It's not trivial do detect, because the .config file is not
-necessarily in the current directory, for example:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - state the fix is actually for full gdb
+ - properly add comments and SoB so the patches apply with git --am
+---
+ package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch | 41 +++++++++++++++++++++++++
+ package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch | 40 ++++++++++++++++++++++++
+ package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch | 40 ++++++++++++++++++++++++
+ package/gdb/8.0/0003-use-asm-sgidefs.h.patch    | 40 ++++++++++++++++++++++++
+ 4 files changed, 161 insertions(+)
+ create mode 100644 package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+ create mode 100644 package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
+ create mode 100644 package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch
+ create mode 100644 package/gdb/8.0/0003-use-asm-sgidefs.h.patch
 
-    brmake -C /pat/to/buil-dir
-
-and I don't want to write a make option interpeter either...
-
-But I'll see what I can do.
-
-> Also, 2 small nits below.
-> 
-> > +++ b/tools/00-README.txt
-> > @@ -0,0 +1,9 @@
-> > +This directory contains various useful scripts and tools for working
-> > +with Buildroot. You need not add this directory in your PATH to use
-> > +any of those tools, but you may do so if you want.
-> > +
-> > +brmake
-> > +    a script that can be run instead of make, that prepends the date in
-> > +    front of each line, redirects all of the build output to a file
-> > +    ("'br.log' in the current directory), and just ouputs the Buildroot
-> 
-> Maybe this file will be dropped as discussed in
-> http://patchwork.ozlabs.org/patch/777446/
-> If not, there is a typo
-> 
-> ouputs -> outputs
-
-Yup, I already dropped the file locally.
-
-> > +    messages (those lines starting with >>>) on stdout.
-> > diff --git a/tools/brmake b/tools/brmake
-> > new file mode 100755
-> > index 0000000000..9f7b4bc65f
-> > --- /dev/null
-> > +++ b/tools/brmake
-> > @@ -0,0 +1,37 @@
-> > +#!/bin/bash
-> > +# (C) 2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +# License: WTFPL, https://spdx.org/licenses/WTFPL.html
-> > +
-> > +main() {
-> > +    local ret start d h m mf fs
-> 
-> fs is unused.
-
-OK. Thanks for the review and tests! :-)
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Ricardo
-
-
+diff --git a/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch b/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+new file mode 100644
+index 000000000..69e538f60
+--- /dev/null
++++ b/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+@@ -0,0 +1,41 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH 07/10] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from https://sourceware.org/bugzilla/show_bug.cgi?id=21070
++Patch has been adapted to apply on 7.10.1.]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index 9f6d697..8f57bb2 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include <sys/ptrace.h>
++ #include <asm/ptrace.h>
++
++-- 
++2.13.1
++ 
+diff --git a/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch b/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
+new file mode 100644
+index 000000000..f0597531f
+--- /dev/null
++++ b/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
+@@ -0,0 +1,40 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH 07/10] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index f2df1b9907..d24664cb56 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include "nat/gdb_ptrace.h"
++ #include <asm/ptrace.h>
++ #include "inf-ptrace.h"
++-- 
++2.13.1
++
+diff --git a/package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch b/package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch
+new file mode 100644
+index 000000000..f0597531f
+--- /dev/null
++++ b/package/gdb/7.12.1/0005-use-asm-sgidefs.h.patch
+@@ -0,0 +1,40 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH 07/10] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index f2df1b9907..d24664cb56 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include "nat/gdb_ptrace.h"
++ #include <asm/ptrace.h>
++ #include "inf-ptrace.h"
++-- 
++2.13.1
++
+diff --git a/package/gdb/8.0/0003-use-asm-sgidefs.h.patch b/package/gdb/8.0/0003-use-asm-sgidefs.h.patch
+new file mode 100644
+index 000000000..f0597531f
+--- /dev/null
++++ b/package/gdb/8.0/0003-use-asm-sgidefs.h.patch
+@@ -0,0 +1,40 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH 07/10] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index f2df1b9907..d24664cb56 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include "nat/gdb_ptrace.h"
++ #include <asm/ptrace.h>
++ #include "inf-ptrace.h"
++-- 
++2.13.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.0
