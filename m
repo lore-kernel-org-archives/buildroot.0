@@ -1,48 +1,56 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 19 Jun 2017 13:38:35 +0530
-Subject: [Buildroot] [PATCH v4 0/6] Board: Add Engicam i.MX6 SOMs
-In-Reply-To: <20170619094137.64636ea9@windsurf>
-References: <1497857252-8308-1-git-send-email-jteki@openedev.com>
- <20170619094137.64636ea9@windsurf>
-Message-ID: <CAMty3ZBj53AcYx9dz-YjnjcW5S-O8fELPSvbmHz3fCmDSa3anQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 19 Jun 2017 11:11:57 +0000
+Subject: [Buildroot] [Bug 9966] New: util-linux-2.30/.stamp_built' failed
+Message-ID: <bug-9966-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 19, 2017 at 1:11 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 19 Jun 2017 12:57:26 +0530, Jagan Teki wrote:
->
->> Jagan Teki (6):
->>   board: Add support for Engicam i.CoreM6 DualLite/Solo boards
->>   board: engicam: Rename defconfig engicam_imx6qdl_icore_mmc_defconfig
->>   board: Add support for Engicam i.CoreM6 RQS SOM
->>   board: engicam: Add icorem6 for i.CoreM6 support
->>   board: Add support for Engicam GEAM6UL SOM
->>   board: Add support for Engicam Is.IoT MX6UL SOM
->
-> Thanks for this new iteration and those contributions. Since you're
-> regularly posting new iterations of this patch series, it would be nice
-> if you could create an account on patchwork, and mark yourself the
-> previous iterations of your patch series as "Superseded". This way, it
-> is easier for the maintainers to keep track of what is the latest
-> version of your patch series that should be considered for
-> review/merging.
->
-> See https://patchwork.ozlabs.org/project/buildroot/list/. You just need
-> to create an account with the same e-mail address as the one used to
-> send the patches.
+https://bugs.busybox.net/show_bug.cgi?id=9966
 
-I've a patchwork.ozlabs account with different mail id, I guess it is
-ok to reuse the same. What do you think?
+            Bug ID: 9966
+           Summary: util-linux-2.30/.stamp_built' failed
+           Product: buildroot
+           Version: unspecified
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: tuzakli.refik at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-thanks!
+/home/osboxes/Desktop/boards/arm/karo/tx6u_8033/fs/buildroot/output/host/usr/lib/libncurses.so:
+file not recognized: File format not recognized
+collect2: error: ld returned 1 exit status
+Makefile:5997: recipe for target 'dmesg' failed
+make[3]: *** [dmesg] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[3]: Leaving directory
+'/home/osboxes/Desktop/boards/arm/karo/tx6u_8033/fs/buildroot/output/build/util-linux-2.30'
+Makefile:11718: recipe for target 'all-recursive' failed
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+'/home/osboxes/Desktop/boards/arm/karo/tx6u_8033/fs/buildroot/output/build/util-linux-2.30'
+Makefile:4913: recipe for target 'all' failed
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+'/home/osboxes/Desktop/boards/arm/karo/tx6u_8033/fs/buildroot/output/build/util-linux-2.30'
+package/pkg-generic.mk:227: recipe for target
+'/home/osboxes/Desktop/boards/arm/karo/tx6u_8033/fs/buildroot/output/build/util-linux-2.30/.stamp_built'
+failed
+make: ***
+[/home/osboxes/Desktop/boards/arm/karo/tx6u_8033/fs/buildroot/output/build/util-linux-2.30/.stamp_built]
+Error 2
+
+
+armv7 a9
+
 -- 
-Jagan Teki
-Senior Linux Kernel Engineer | Amarula Solutions
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+You are receiving this mail because:
+You are on the CC list for the bug.
