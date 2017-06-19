@@ -1,41 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 19 Jun 2017 15:33:25 +0100
-Subject: [Buildroot] [PATCH] ntp: enable/disable sntp support depending on
-	BR2_PACKAGE_NTP_SNTP
-Message-ID: <20170619143325.19089-1-Vincent.Riera@imgtec.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 19 Jun 2017 11:02:47 -0400
+Subject: [Buildroot] [PATCH 1/1] audit: bump to version 2.7.7
+Message-ID: <20170619150247.25187-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We already have an option for selecting sntp support in ntp that can be
-chosen from the menuconfig, and ntp's configure script has a --with-sntp
-option (with its --without counterpart) which can be used for disabling
-sntp support in ntp. However, we are not using it. This patch will make
-use of it.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/ntp/ntp.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 26f58628a..c70d6e635 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -65,6 +65,12 @@ else
- NTP_CONF_OPTS += --disable-SHM
- endif
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 7dd3e55..189c982 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,2 +1,2 @@
+ #Locally computed
+-sha256 fa65289cffdc95a25bfbdba541f43ee1b12c707090a38fd027dcf9354b9014e7 audit-2.7.6.tar.gz
++sha256 98e22549444c313187dc98c2e137f36a9882efa0874b559b0457e5f87ae178ef audit-2.7.7.tar.gz
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 95b6078..1398d9d 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
-+NTP_CONF_OPTS += --with-sntp
-+else
-+NTP_CONF_OPTS += --without-sntp
-+endif
-+
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+-AUDIT_VERSION = 2.7.6
++AUDIT_VERSION = 2.7.7
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), unclear (libraries)
+ AUDIT_LICENSE_FILES = COPYING
 -- 
-2.13.0
+2.9.4
