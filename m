@@ -1,39 +1,63 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 19 Jun 2017 11:02:47 -0400
-Subject: [Buildroot] [PATCH 1/1] audit: bump to version 2.7.7
-Message-ID: <20170619150247.25187-1-aduskett@codeblue.com>
+From: Dmitrii Kolesnichenko <Dmitrii.Kolesnichenko@synopsys.com>
+Date: Mon, 19 Jun 2017 18:06:26 +0300
+Subject: [Buildroot] [PATCH] libtirpc: Fix build error due to missing
+	stdint.h inclusion
+In-Reply-To: <20170616142541.51df47c6@windsurf.lan>
+Message-ID: <20170619150626.31273-1-dmitrii@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Add patch to fix following error:
+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
+|   if (len < (uintptr_t)xdrs->x_base) {
+|              ^~~~~~~~~
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 7dd3e55..189c982 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,2 +1,2 @@
- #Locally computed
--sha256 fa65289cffdc95a25bfbdba541f43ee1b12c707090a38fd027dcf9354b9014e7 audit-2.7.6.tar.gz
-+sha256 98e22549444c313187dc98c2e137f36a9882efa0874b559b0457e5f87ae178ef audit-2.7.7.tar.gz
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 95b6078..1398d9d 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUDIT_VERSION = 2.7.6
-+AUDIT_VERSION = 2.7.7
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), unclear (libraries)
- AUDIT_LICENSE_FILES = COPYING
+It includes stdint.h to provide uintptr_t.
+
+This patch has been submitted upstream:
+https://sourceforge.net/p/libtirpc/mailman/libtirpc-devel/
+
+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
+---
+ ...ild-error-due-to-missing-stdint.h-include.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
+
+diff --git a/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
+new file mode 100644
+index 0000000..ccb0dff
+--- /dev/null
++++ b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
+@@ -0,0 +1,27 @@
++Fixes
++| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
++|   if (len < (uintptr_t)xdrs->x_base) {
++|              ^~~~~~~~~
++
++Signed-off-by: Khem Raj <raj.khem@...>
++Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
++---
++Upstream-Status: Pending
++
++ src/xdr_sizeof.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
++index d23fbd1..79d6707 100644
++--- a/src/xdr_sizeof.c
+++++ b/src/xdr_sizeof.c
++@@ -39,6 +39,7 @@
++ #include <rpc/xdr.h>
++ #include <sys/types.h>
++ #include <stdlib.h>
+++#include <stdint.h>
++ #include "un-namespace.h"
++ 
++ /* ARGSUSED */
++-- 
++2.13.0
 -- 
-2.9.4
+1.8.3.1
