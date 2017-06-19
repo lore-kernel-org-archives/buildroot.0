@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 22:19:27 +0200
-Subject: [Buildroot] [PATCH v4 2/6] board: engicam: Rename defconfig
- engicam_imx6qdl_icore_mmc_defconfig
-In-Reply-To: <1497857252-8308-3-git-send-email-jteki@openedev.com>
-References: <1497857252-8308-1-git-send-email-jteki@openedev.com>
- <1497857252-8308-3-git-send-email-jteki@openedev.com>
-Message-ID: <20170619221927.0986c336@windsurf.home>
+Date: Mon, 19 Jun 2017 22:27:53 +0200
+Subject: [Buildroot] [PATCH 1/1] rpi0w: added support for Raspberry Pi
+ Zero W
+In-Reply-To: <1497815044-11215-1-git-send-email-yves.deweerdt.linux@gmail.com>
+References: <1497815044-11215-1-git-send-email-yves.deweerdt.linux@gmail.com>
+Message-ID: <20170619222753.7655732a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 19 Jun 2017 12:57:28 +0530, Jagan Teki wrote:
-> From: Jagan Teki <jagan@amarulasolutions.com>
+On Sun, 18 Jun 2017 21:44:04 +0200, Yves Deweerdt wrote:
+> added a new config file for the Raspberry Pi Zero W
+> - added new folder for raspberrypi0w
+> - included the overlays in the genimage config
+> - add pi3-miniuart-bt overlay to the config
+> - add enable_uart to the config
 > 
-> Since the board have support for nand, better to explicitly
-> name it with mmc.
-> 
-> engicam_imx6qdl_icore_defconfig => engicam_imx6qdl_icore_mmc_defconfig
-> 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> Signed-off-by: Yves Deweerdt <yves.deweerdt.linux@gmail.com>
 
-Unless we are going to introduce other configurations for the same
-board (to support NAND booting), then I would prefer to keep the name
-without the "mmc". The readme.txt can explain that the configuration
-supports MMC booting.
+I am a bit confused: what do you need in this defconfig, that the
+existing raspberrypi0_defconfig doesn't provide?
 
-Also, in the follow-up patches, please avoid the _mmc_ part in the
-defconfig name.
+Your proposed defconfig is using the exact same kernel version and list
+of Device Trees. The only differences are:
 
-Thanks,
++BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+
+and:
+
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
+
+Is this the motivation for this separate defconfig? Could the existing
+raspberrypi0_defconfig be extended to also work for your use case,
+while keeping compatibility for the RPi Zero ?
+
+If not, we should remove the RPi Zero W support from
+raspberrypi0_defconfig, because otherwise things are pretty confusing.
+
+Thanks!
 
 Thomas
 -- 
