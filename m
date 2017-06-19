@@ -1,62 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 21:49:44 +0200
-Subject: [Buildroot] [PATCH v2] Revert "util-linux: bump to version 2.30"
-In-Reply-To: <1497876158-32695-1-git-send-email-casantos@datacom.ind.br>
-References: <1497875630-32310-1-git-send-email-casantos@datacom.ind.br>
- <1497876158-32695-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170619214944.00a220ec@windsurf.home>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Mon, 19 Jun 2017 21:51:18 +0200
+Subject: [Buildroot] [PATCH v2 1/1] linuxconsoletools: new package
+In-Reply-To: <20170619214458.7fe41175@windsurf.home>
+References: <201706191656.v5JGuLc9093352@mx1.sonologic.net>
+ <20170619214458.7fe41175@windsurf.home>
+Message-ID: <20170619195117.GA31831@sunra>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 19 Jun 2017 09:42:38 -0300, Carlos Santos wrote:
-> This reverts commit 088292cfc16359b966882f66b6e94dbc2c9813cb to prevent
-> breaking the build while we search for the root cause of the problem.
+Thanks, also for the small corrections. I must've missed a few things.
+This was my first attempt at contributing, from which I've learned quite
+a lot. So hopefully, I'll be able to contribute some more things in the
+near future and get it right the first time. It'll mostly be in the
+category 'old and ancient', given the kind of ancient hardware I'm
+currently working on :)
+
+- Koen
+
+On Mon, Jun 19, 2017 at 09:44:58PM +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Fixes:
->   http://autobuild.buildroot.net/results/7b0b1d8ba0015308724a9677f890e6e63f77e0ad
->   http://autobuild.buildroot.net/results/11476388b8b774dc5ca7c9ceb34ea9ad1a4314b9
->   http://autobuild.buildroot.net/results/9730d0c4a4001314351a0a116164ba854272db4d
->   http://autobuild.buildroot.net/results/4d1440360bddfd0ddbbdddf6077bca0e796f2949
->   http://autobuild.buildroot.net/results/f3089d8b8727a526eeb553964711e0066287422e
->   http://autobuild.buildroot.net/results/ace6aaad6bee0f4bed44126fea57a090ff2541f9
->   http://autobuild.buildroot.net/results/ff460fff5da05d38776eb04e8ada947290248f42
->   http://autobuild.buildroot.net/results/a4979169d78938e0cc06e6a69eaac0ab13dc3084
->   http://autobuild.buildroot.net/results/84e8c23ecb77a99f9bb70fca9de4a5062414037d
->   http://autobuild.buildroot.net/results/d3433ef125b5cfbf8a4b8824c256dbd0ea34b6bb
->   http://autobuild.buildroot.net/results/92bc3ae63709dae8cdb8860bd997f72c92ede442
->   http://autobuild.buildroot.net/results/d9122512b0d0802c19184eccb5056bf985f74e5b
->   http://autobuild.buildroot.net/results/dad980abe5dc72df436b21270797b32435b55392
->   http://autobuild.buildroot.net/results/7def156b29011b90a20579b4bad436a7acde498c
->   http://autobuild.buildroot.net/results/0bb97b8edc5cea657992cdb083ce9ae79c969f03
->   http://autobuild.buildroot.net/results/8f76af2caf7dd08919a20cc1fd848c920512e988
->   http://autobuild.buildroot.net/results/3a8ecda0ce63dd67a73d66fbd238072ddb079900
->   http://autobuild.buildroot.net/results/8d43e6f00be41fde7163868c5fbc3235097629ed
->   http://autobuild.buildroot.net/results/5049aab863707aae09bde540d98ea8063c017e7e
->   http://autobuild.buildroot.net/results/e227393a29590b298112dfd8efa4aebe2ffa9294
->   http://autobuild.buildroot.net/results/8ad4455dcdfcd991dff728910bdbcfa57f5774a4
->   http://autobuild.buildroot.net/results/27947db73e4875df1dbeee35a6ea8ad6a31af0b5
->   http://autobuild.buildroot.net/results/5a9cc647e648a61e3c24f929987df356abcdc104
->   http://autobuild.buildroot.net/results/eb01bb21f6c942cf8cf067450f016fd3893cc7cd
->   http://autobuild.buildroot.net/results/6f7e3f6b4acc93ce695c07199cf6bf643db4386e
+> On Mon, 19 Jun 2017 18:55:06 +0200, Koen Martens wrote:
+> > Linuxconsoletools contains the inputattach utility
+> > to attach legacy serial devices to the Linux kernel
+> > input layer and joystick utilities to calibrate and
+> > test joysticks and joypads.
+> > 
+> > The buildroot package adds options to build only certain
+> > tools.
+> > 
+> > website: http://sf.net/projects/linuxconsole/
+> > 
+> > Signed-off-by: Koen Martens <gmc@sonologic.nl>
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  ...-sys-use-lm-for-scriptreplay-if-necessary.patch | 30 ++++++++++++++++++++++
->  package/util-linux/Config.in                       | 24 +++++------------
->  package/util-linux/util-linux.hash                 |  4 +--
->  package/util-linux/util-linux.mk                   |  9 ++++---
->  4 files changed, 43 insertions(+), 24 deletions(-)
->  create mode 100644 package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thanks, I've applied, after doing a few minor tweaks. See below.
+> 
+> > diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
+> > new file mode 100644
+> > index 0000000..08a4af3
+> > --- /dev/null
+> > +++ b/package/linuxconsoletools/Config.in
+> > @@ -0,0 +1,34 @@
+> > +config BR2_PACKAGE_LINUXCONSOLETOOLS
+> > +	bool "linuxconsoletools"
+> > +	default n
+> 
+> There was still a useless "default n" here, so I've dropped.
+> 
+> > +	help
+> > +	  Linuxconsoletools contains the inputattach utility
+> > +	  to attach legacy serial devices to the Linux kernel
+> > +	  input layer and joystick utilities to calibrate and
+> > +	  test joysticks and joypads.
+> > +	  
+> 
+> There was a trailing tab character on this line, which I dropped.
+> 
+> > +	  http://sf.net/projects/linuxconsole/
+> > +ifeq ($(BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK),y)
+> > +LINUXCONSOLETOOLS_MAKE_OPTS += ENABLE_FORCEFEEDBACK=1
+> > +LINUXCONSOLETOOLS_MAKE_OPTS += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
+> 
+> I've put these in a single assignment:
+> 
+> +LINUXCONSOLETOOLS_MAKE_OPTS += \
+> +       ENABLE_FORCEFEEDBACK=1 \
+> +       SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
+> 
+> 
+> > +LINUXCONSOLETOOLS_DEPENDENCIES += sdl
+> > +endif
+> > +
+> > +LINUXCONSOLETOOLS_MAKE_OPTS += CC=$(TARGET_CC)
+> > +LINUXCONSOLETOOLS_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS)"
+> 
+> Both of those lines are not needed: CC and CFLAGS are already part of
+> $(TARGET_CONFIGURE_OPTS), which you pass in the build and install
+> commands.
+> 
+> Committed with those minor issues fixed. Thanks a lot for this
+> contribution!
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> 
