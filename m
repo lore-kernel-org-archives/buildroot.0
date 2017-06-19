@@ -1,10 +1,12 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 22:27:53 +0200
-Subject: [Buildroot] [PATCH 1/1] rpi0w: added support for Raspberry Pi
- Zero W
-In-Reply-To: <1497815044-11215-1-git-send-email-yves.deweerdt.linux@gmail.com>
-References: <1497815044-11215-1-git-send-email-yves.deweerdt.linux@gmail.com>
-Message-ID: <20170619222753.7655732a@windsurf.home>
+From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Date: Mon, 19 Jun 2017 17:27:48 -0300 (BRT)
+Subject: [Buildroot] [PATCH 4/4 v2] tools: move check-package out of
+ support/scripts/
+In-Reply-To: <20170619184804.GD3045@scaer>
+References: <eb8cb9682d84d1f110044a1448f18ef95ad79e84.1497794488.git.yann.morin.1998@free.fr>
+ <5947435fc2125_3a623fad069a6b206136c@ultri3.mail>
+ <20170619184804.GD3045@scaer>
+Message-ID: <2080323257.1158941.1497904068495.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +15,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 18 Jun 2017 21:44:04 +0200, Yves Deweerdt wrote:
-> added a new config file for the Raspberry Pi Zero W
-> - added new folder for raspberrypi0w
-> - included the overlays in the genimage config
-> - add pi3-miniuart-bt overlay to the config
-> - add enable_uart to the config
+>> On Sun, Jun 18, 2017 at 11:01 AM, Yann E. MORIN wrote:
+> Also, you happen to have two entries in the DEVELOPPERS file, with two
+> different emails:
 > 
-> Signed-off-by: Yves Deweerdt <yves.deweerdt.linux@gmail.com>
+>  1368 N:? Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+>  1369 F:? package/atop/
+> 
+> and
+> 
+>  1374 N:? Ricardo Martincoski <ricardo.martincoski@gmail.com>
+>  1375 F:? support/scripts/check*package*
+> 
+> Is that expected?
 
-I am a bit confused: what do you need in this defconfig, that the
-existing raspberrypi0_defconfig doesn't provide?
+Yes, professional and personal entries.
 
-Your proposed defconfig is using the exact same kernel version and list
-of Device Trees. The only differences are:
-
-+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
-
-and:
-
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-
-Is this the motivation for this separate defconfig? Could the existing
-raspberrypi0_defconfig be extended to also work for your use case,
-while keeping compatibility for the RPi Zero ?
-
-If not, we should remove the RPi Zero W support from
-raspberrypi0_defconfig, because otherwise things are pretty confusing.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards,
+Ricardo
