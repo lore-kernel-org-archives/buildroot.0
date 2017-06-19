@@ -1,40 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jun 2017 17:40:32 +0200
-Subject: [Buildroot] [PATCH v2 1/1] fcgiwrap: Disable -Werror in CFLAGS
- set by configure.
-In-Reply-To: <20170619135953.16205-2-thomas.claveirole@green-communications.fr>
-References: <20170619135953.16205-1-thomas.claveirole@green-communications.fr>
- <20170619135953.16205-2-thomas.claveirole@green-communications.fr>
-Message-ID: <20170619174032.4f597cb2@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Jun 2017 17:42:27 +0200
+Subject: [Buildroot] [PATCH 1/4 v2] tools: add a directory to store some
+ useful user-facing tools
+In-Reply-To: <594724d64eae6_575014c74204877b@ultri3.mail>
+References: <388a8da9b48e30391dd6f2cd35be53c2dafc4af0.1497794488.git.yann.morin.1998@free.fr>
+ <594724d64eae6_575014c74204877b@ultri3.mail>
+Message-ID: <20170619154227.GA3045@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Ricardo, All,
 
-On Mon, 19 Jun 2017 15:59:53 +0200, Thomas Claveirole wrote:
+On 2017-06-18 22:11 -0300, Ricardo Martincoski spake thusly:
+> On Sun, Jun 18, 2017 at 11:01 AM, Yann E. MORIN wrote:
+> > Add a tools directory to store useful little scripts, tools, etc...
+> > Users may add that directory in their PATH if they want to, but this
+> > is not mandatory.
+> > 
+> > Add the first tool: brmake, a small script that redirects the build
+> > output log to a file, keeping just Buildroot's own messages, with the
+> > date+time added at the start of the line.
+> > 
+> > We need to unbuffer the output of make so that, when the script is
+> > interrupted (SIGINT, ^C), there is no lingering output not yet digested
+> > by the logger loop.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+> I tested the script and it works very well in general.
+> 
+> - I successfully built the qemu_arm_versatile_defconfig using the script,
+> pressing CTRL+C a few times and resuming by calling it again.
+> - Also, by inserting an error to a package I got the expected behaviour: the
+> error message is in the log file and the script returned the error code.
+> - Tested using 'GNU bash, version 4.3.48(1)-release (x86_64-pc-linux-gnu)'
+> 
+> BUT if it is called without a .config file, it hangs forever waiting for input,
+> and the menuconfig is sent to the log file.
 
-> +FCGIWRAP_CONF_OPTS += CFLAGS='-Wno-error $(TARGET_CFLAGS)'
+Indeed, my use-case is to only use it in an already-configured tree.
 
-Should be:
+> Maybe we can bailout if no .config is present.
 
-FCGIWRAP_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
+Hmmm... It's not trivial do detect, because the .config file is not
+necessarily in the current directory, for example:
 
-I.e:
+    brmake -C /pat/to/buil-dir
 
- - Use CONF_ENV, not CONF_OPTS, since we pass the original CFLAGS in
-   CONV_ENV
+and I don't want to write a make option interpeter either...
 
- - Use double quotes instead of simple quotes
+But I'll see what I can do.
 
- - Pass your option *after* TARGET_CFLAGS.
+> Also, 2 small nits below.
+> 
+> > +++ b/tools/00-README.txt
+> > @@ -0,0 +1,9 @@
+> > +This directory contains various useful scripts and tools for working
+> > +with Buildroot. You need not add this directory in your PATH to use
+> > +any of those tools, but you may do so if you want.
+> > +
+> > +brmake
+> > +    a script that can be run instead of make, that prepends the date in
+> > +    front of each line, redirects all of the build output to a file
+> > +    ("'br.log' in the current directory), and just ouputs the Buildroot
+> 
+> Maybe this file will be dropped as discussed in
+> http://patchwork.ozlabs.org/patch/777446/
+> If not, there is a typo
+> 
+> ouputs -> outputs
 
-Thanks,
+Yup, I already dropped the file locally.
 
-Thomas
+> > +    messages (those lines starting with >>>) on stdout.
+> > diff --git a/tools/brmake b/tools/brmake
+> > new file mode 100755
+> > index 0000000000..9f7b4bc65f
+> > --- /dev/null
+> > +++ b/tools/brmake
+> > @@ -0,0 +1,37 @@
+> > +#!/bin/bash
+> > +# (C) 2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > +# License: WTFPL, https://spdx.org/licenses/WTFPL.html
+> > +
+> > +main() {
+> > +    local ret start d h m mf fs
+> 
+> fs is unused.
+
+OK. Thanks for the review and tests! :-)
+
+Regards,
+Yann E. MORIN.
+
+> Regards,
+> Ricardo
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
