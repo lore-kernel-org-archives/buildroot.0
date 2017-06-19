@@ -1,41 +1,40 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Mon, 19 Jun 2017 18:26:05 +0200
-Subject: [Buildroot] [PATCH v3 1/1] fcgiwrap: Disable -Werror in CFLAGS set
-	by configure.
-In-Reply-To: <20170619162605.30831-1-thomas.claveirole@green-communications.fr>
-References: <20170619162605.30831-1-thomas.claveirole@green-communications.fr>
-Message-ID: <20170619162605.30831-2-thomas.claveirole@green-communications.fr>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Mon, 19 Jun 2017 18:55:06 +0200
+Subject: [Buildroot] [PATCH v2 0/1] linuxconsoletools: new package
+Message-ID: <201706191656.v5JGuHYh093348@mx1.sonologic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thus, fix
-http://autobuild.buildroot.net/results/8e0/8e04bf5a85ecd7f120bc9dedeedc891def6c46c1/
+I have added the linuxconsoletools package. When running
+test-pkg on it, toolchain config br-arcle-hs38 failed
+because SDL was unable to build with this toolchain. I 
+have no reason to believe that the linuxconsoletools
+package will not build on that toolchain, but fixing
+the sdl package seemed beyond the scope of this
+package.
 
-fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
-to build the package.  This is an issue when Buildroot supports a new
-compiler version and this version makes some warnings appear.
-Luckily, one can provide CFLAGS=-Wno-error to the configure script so
-it appends -Wno-error to AM_CFLAGS.
+Changes v1 -> v2:
+    Processed review comments by Thomas Petazzoni
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/fcgiwrap/fcgiwrap.mk | 1 +
- 1 file changed, 1 insertion(+)
+Koen Martens (1):
+  linuxconsoletools: new package
 
-diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
-index dd74c1ef72..62c4c1369d 100644
---- a/package/fcgiwrap/fcgiwrap.mk
-+++ b/package/fcgiwrap/fcgiwrap.mk
-@@ -10,6 +10,7 @@ FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
- FCGIWRAP_LICENSE = MIT
- FCGIWRAP_LICENSE_FILES = COPYING
- FCGIWRAP_AUTORECONF = YES
-+FCGIWRAP_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- FCGIWRAP_DEPENDENCIES += systemd
+ DEVELOPERS                                         |  3 ++
+ package/Config.in                                  |  1 +
+ .../linuxconsoletools/0001-conditional-build.patch | 58 ++++++++++++++++++++++
+ package/linuxconsoletools/0002-sdl-config.patch    | 20 ++++++++
+ package/linuxconsoletools/Config.in                | 34 +++++++++++++
+ package/linuxconsoletools/linuxconsoletools.hash   |  2 +
+ package/linuxconsoletools/linuxconsoletools.mk     | 43 ++++++++++++++++
+ 7 files changed, 161 insertions(+)
+ create mode 100644 package/linuxconsoletools/0001-conditional-build.patch
+ create mode 100644 package/linuxconsoletools/0002-sdl-config.patch
+ create mode 100644 package/linuxconsoletools/Config.in
+ create mode 100644 package/linuxconsoletools/linuxconsoletools.hash
+ create mode 100644 package/linuxconsoletools/linuxconsoletools.mk
+
 -- 
-2.11.0
+2.7.4
