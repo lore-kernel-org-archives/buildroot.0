@@ -1,31 +1,107 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Tue, 20 Jun 2017 10:54:06 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-06-19
-In-Reply-To: <20170620062720.1639020978@mail.free-electrons.com>
-References: <20170620062720.1639020978@mail.free-electrons.com>
-Message-ID: <8b3d9ad26dec90224cf356b564a512d5@localhost>
+From: Yves Deweerdt <yves.deweerdt.linux@gmail.com>
+Date: Tue, 20 Jun 2017 09:39:11 +0000
+Subject: [Buildroot] [PATCH 1/1] rpi0w: added support for Raspberry Pi
+ Zero W
+In-Reply-To: <20170619225436.58ce3391@gmx.net>
+References: <1497815044-11215-1-git-send-email-yves.deweerdt.linux@gmail.com>
+ <20170619222753.7655732a@windsurf.home> <20170619225436.58ce3391@gmx.net>
+Message-ID: <CANv+TVOBnCqF6wdPxuiCVoRx85U3HTuzbT3h1qJKgVY2s52=xA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Peter, Thomas,
 
-Hello,
 
-On Tue, 20 Jun 2017 08:27:20 +0200 (CEST)
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Mon, Jun 19, 2017 at 10:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Hello,
->   
-[...]
-> | arm |               librtlsdr-v0.5.3 | NOK |
-http://autobuild.buildroot.net/results/040c5270f9315e83c723687eefad764aa0d6d500
- 
+> Hello Thomas, Yves,
+>
+> On Mon, 19 Jun 2017 22:27:53 +0200, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+>
+> > Hello,
+> >
+> > On Sun, 18 Jun 2017 21:44:04 +0200, Yves Deweerdt wrote:
+> > > added a new config file for the Raspberry Pi Zero W
+> > > - added new folder for raspberrypi0w
+> > > - included the overlays in the genimage config
+> > > - add pi3-miniuart-bt overlay to the config
+> > > - add enable_uart to the config
+> > >
+> > > Signed-off-by: Yves Deweerdt <yves.deweerdt.linux@gmail.com>
+> >
+> > I am a bit confused: what do you need in this defconfig, that the
+> > existing raspberrypi0_defconfig doesn't provide?
+> >
+>
+The raspberrypi0_defconfig was not working for me because:
+- it does not install the overlay files on the vfat partition
+- it does not add the pi3-miniuart-bt overlay in the configuration
+- it does not put enable_uart=1 in the configuration
 
-This build issue is due to the "inline" keyword. I'm dont know if I
-must provide a patch to suppress these keywords or if it's an other
-problem.
+> Your proposed defconfig is using the exact same kernel version and list
+> > of Device Trees. The only differences are:
+> >
+> > +BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+> >
+> > and:
+> >
+> > +BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
+> >
+>
+> And the additional genimage line:
+>
+> +      "rpi-firmware/overlays",
+>
+> And the 'enable_uart=1' in the config.txt (Is this really needed? For the
+> Pi3 the
+> overlay solution is enough).
+>
 
-Gwen
+I've tried running rpi0w without the enable_uart=1 and then I don't have
+serial, with the enable_uart=1 the console is working fine.
+ I didn't try running on rpi3 though.
+For rpi3, is it correct that it seems that when running in 64bit mode you
+should add enable_uart=1 and for 32 bit mode you don't need to add it?
+
+See [1], [2] and [3] for the old suggestion/discussion...
+>
+> > Is this the motivation for this separate defconfig? Could the existing
+> > raspberrypi0_defconfig be extended to also work for your use case,
+> > while keeping compatibility for the RPi Zero ?
+>
+
+We could also add the device tree overlays in the raspberrypi0 config by
+default, then there is only one difference left between rpi0 and rpi0w:
+that is that for rpi0w you need this:enable_uart=1,
+dtoverlay=pi3-miniuart-bt in the configuration.
+
+>
+> > If not, we should remove the RPi Zero W support from
+> > raspberrypi0_defconfig, because otherwise things are pretty confusing.
+> >
+>
+right, if we choose to make a seperate rpi0w defconfig, reference to 0w
+needs to be removed from rpi0 defconfig.
+
+
+> Regards,
+> Peter
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2017-March/187206.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2017-March/187377.html
+> [3] http://lists.busybox.net/pipermail/buildroot/2017-March/187403.html
+>
+> > Thanks!
+> >
+> > Thomas
+>
+> Kind regards,
+
+Yves
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170620/1ed35380/attachment.html>
