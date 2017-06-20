@@ -1,38 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 22:33:36 +0200
-Subject: [Buildroot] [PATCH v2 1/2] mtd: bump to version 2.0.0
-In-Reply-To: <20170609030051.uwqwdl5hajatd2wv@tarshish>
-References: <1496955910-32315-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170609030051.uwqwdl5hajatd2wv@tarshish>
-Message-ID: <20170620223336.15b0b09a@windsurf.lan>
+From: Alexandre Esse <alexandre.esse.dev@gmail.com>
+Date: Tue, 20 Jun 2017 22:39:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kvazaar: needs threads
+Message-ID: <1497991145-10593-1-git-send-email-alexandre.esse.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixing http://autobuild.buildroot.net/results/6e1/6e1eabd691b8674f61898bc0fe734208d226f965/build-end.log
 
-On Fri, 9 Jun 2017 06:00:51 +0300, Baruch Siach wrote:
+Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
+---
+ package/kvazaar/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> > MTD Tools was bumped to version 2.0 after over a decade of being at
-> > 1.5.2.  
-> 
-> A little correction, mtd-utils 1.5.2 is not that old:
-> 
-> commit aea36417067dade75192bafa03af70b6eb2677b1
-> Author: Brian Norris <computersforpeace@gmail.com>
-> Date:   Fri Jul 24 18:18:53 2015 -0700
-> 
->     Release mtd-utils-1.5.2
-
-Indeed, thanks for spotting. I've dropped this sentence from the commit
-log before applying.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/kvazaar/Config.in b/package/kvazaar/Config.in
+index 3377145..06ab9ac 100644
+--- a/package/kvazaar/Config.in
++++ b/package/kvazaar/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_KVAZAAR
+ 	bool "kvazaar"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  An open-source HEVC encoder licensed under LGPLv2.1
+ 
+ 	  https://github.com/ultravideo/kvazaar
++
++comment "kvazaar needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
