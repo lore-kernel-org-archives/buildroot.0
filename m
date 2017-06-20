@@ -1,14 +1,15 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 20 Jun 2017 09:39:01 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: don't build cctest target
-In-Reply-To: <1497947941-11463-1-git-send-email-martin@barkynet.com>
-References: <1497947941-11463-1-git-send-email-martin@barkynet.com>
-Message-ID: <1497947941-11463-2-git-send-email-martin@barkynet.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Jun 2017 10:43:20 +0200
+Subject: [Buildroot] [git commit] package/nodejs: don't build cctest target
+Message-ID: <20170620084242.CD2F37F8DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5f3768e3e258237de55c693003f0df7a1ce13d7d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 cctest is a test package that is built by default.  We don't use of it
 and recently it has been failing to build in the host-nodejs builds
@@ -21,6 +22,7 @@ http://autobuild.buildroot.net/results/6d52bc9fef4c9f12f0091e93c020ab2cd4c4c5a1
 http://autobuild.buildroot.net/results/a8b8a781bdea668b657311c68b6f0ca0f74169c7
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/nodejs/nodejs.mk | 4 ++++
  1 file changed, 4 insertions(+)
@@ -61,5 +63,3 @@ index c757b25..b5d73be 100644
  		PATH=$(@D)/bin:$(BR_PATH) \
  		LD="$(TARGET_CXX)"
  	$(NODEJS_INSTALL_MODULES)
--- 
-2.7.4
