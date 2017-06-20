@@ -1,48 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 22:31:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x264: disable optional ffmpeg
- support
-In-Reply-To: <20170605162238.8413-1-bernd.kuhls@t-online.de>
-References: <20170605162238.8413-1-bernd.kuhls@t-online.de>
-Message-ID: <20170620223141.255a2c41@windsurf.lan>
+Date: Tue, 20 Jun 2017 22:32:36 +0200
+Subject: [Buildroot] [git commit] mtd: switch to a foreach loop for
+	installation
+Message-ID: <20170620203153.4B541800E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=590c4104c12e3968d4bdfe85002fb4cd75c4e942
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Jun 2017 18:22:37 +0200, Bernd Kuhls wrote:
-> In buildroot ffmpeg uses x264 as optional dependency if
-> BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
-> 
-> If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
-> support before x264 itself is build, x264 picks up certain ffmpeg libs
-> as optional dependency leading to build errors because x264 does not
-> correctly link statically against ffmpeg.
-> 
-> To avoid a circular dependency and to avoid teaching x264 how to
-> correctly link statically with ffmpeg we just disable all ffmpeg-
-> related options.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x264/x264.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Such a construct allows to bail out if the installation of one of the
+program fails, which the current shell-based for loop doesn't do.
 
-Both patches applied, thanks. On the second patch, you forgot to update
-the hash, so I've done so. You probably forgot because back then, we
-were not checking the hashes of git-downloaded packages. But now we
-are, so hashes should be correct.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mtd/mtd.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 52ad96c..3df641e 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -92,9 +92,9 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSUBIFS)	+= mkfs.ubifs
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_INTEGCK)		+= integck
+ 
+ define MTD_INSTALL_TARGET_CMDS
+-	for f in $(MTD_TARGETS_y) ; do \
+-		$(INSTALL) -D -m 0755 $(@D)/$$f $(TARGET_DIR)/usr/sbin/$${f##*/} ; \
+-	done
++	$(foreach f,$(MTD_TARGETS_y), \
++		$(INSTALL) -D -m 0755 $(@D)/$(f) $(TARGET_DIR)/usr/sbin/$(notdir $(f))
++	)
+ endef
+ 
+ $(eval $(autotools-package))
