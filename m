@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 22:19:06 +0200
-Subject: [Buildroot] [PATCH] roseapplepi: backport upstream patches to
- fix build with gcc 6
-In-Reply-To: <87shiue87y.fsf@dell.be.48ers.dk>
-References: <20170620114952.16292-1-peter@korsgaard.com>
- <20170620213008.652bc050@windsurf.lan>
- <87shiue87y.fsf@dell.be.48ers.dk>
-Message-ID: <20170620221906.702e8c96@windsurf.lan>
+Date: Tue, 20 Jun 2017 22:23:53 +0200
+Subject: [Buildroot] [PATCH 00/14] toolchain-external: remove support
+ for glibc before 2.17
+In-Reply-To: <cover.1497583686.git.baruch@tkos.co.il>
+References: <cover.1497583686.git.baruch@tkos.co.il>
+Message-ID: <20170620222353.0030c78d@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 20 Jun 2017 22:04:49 +0200, Peter Korsgaard wrote:
+On Fri, 16 Jun 2017 06:32:45 +0300, Baruch Siach wrote:
 
->  > What do you think?  
-> 
-> Yeah, it isn't really nice. I was also hessitating between sticking to
-> gcc5 or add the patches, but as mainline support seems to be finally
-> moving forward for this SoC (and we already carried patches for building
-> with gcc 5.x), I went for the patches.
+> Baruch Siach (14):
+>   docs/manual: update external toolchain advantages list
+>   toolchain: remove CodeSourcery x86 toolchain
+>   toolchain: remove CodeSourcery sh toolchain
+>   package: remove CodeSourcery sh dependencies
+>   toolchain-external: update list of toolchains
+>   docs/manual: drop mention of removed external toolchains
+>   swupdate: don't link with librt
+>   aiccu: don't link with librt
+>   libv4l: don't link with librt
+>   e2fsprogs: don't link with librt
+>   liboping: no need to check for clock_gettime
+>   openipmi: no need to check for clock_gettime
+>   lirc-tools: no need to check for clock_gettime
+>   softether: no need to check for clock_gettime
 
-Regarding mainline support, I have no idea how far it is today. But
-from experience, it takes a very long time to move from the
-serial+MMC+Ethernet supported to a state where display+audio+GPU is
-supported. So mainline may not necessarily be a drop-in replacement
-before a long time.
+Series applied, except the last patch, which is needed since softether
+is also built on the host.
+
+Thanks a lot!
 
 Thomas
 -- 
