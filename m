@@ -1,72 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 20 Jun 2017 17:15:19 +0100
-Subject: [Buildroot] [PATCH] openssh: fix sshd for MIPS64 n32
-Message-ID: <20170620161519.44028-1-Vincent.Riera@imgtec.com>
+From: Dmitrii Kolesnichenko <Dmitrii.Kolesnichenko@synopsys.com>
+Date: Tue, 20 Jun 2017 19:55:31 +0300
+Subject: [Buildroot] [PATCH v4] libtirpc: Fix build error due to missing
+	stdint.h inclusion
+In-Reply-To: <1497955663.5974.31.camel@synopsys.com>
+Message-ID: <20170620165531.24067-1-dmitrii@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch backports two patches that have been sent upstream as a pull
-request in order to fix sshd for MIPS64 n32.
+Add patch to fix following error:
+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
+|   if (len < (uintptr_t)xdrs->x_base) {
+|              ^~~~~~~~~
 
-The first patch adds support for detecting the MIPS ABI during the
-configure phase.
+This error occurs with the latest glibc master version (during the testing I had
+glibc commit 92bd70fb85bce57ac47ba5d8af008736832c955a), but doesn't occur with
+version 2.25.
 
-The second patch sets the right value to seccomp_audit_arch taking into
-account the MIPS64 ABI.
+Patch includes stdint.h to provide uintptr_t.
 
-Currently seccomp_audit_arch is set to AUDIT_ARCH_MIPS64 or
-AUDIT_ARCH_MIPSEL64 (depending on the endinness) when openssh is built
-for MIPS64. However, that's only valid for n64 ABI. The right macros for
-n32 ABI defined in seccomp.h are AUDIT_ARCH_MIPS64N32 and
-AUDIT_ARCH_MIPSEL64N32, for big and little endian respectively.
+It has been submitted upstream:
+https://sourceforge.net/p/libtirpc/mailman/message/35850276/
 
-Because of that an sshd built for MIPS64 n32 rejects connection attempts
-and the output of strace reveals that the problem is related to seccomp
-audit:
-
-[pid   194] prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, {len=57,
-filter=0x555d5da0}) = 0
-[pid   194] write(7, "\0\0\0]\0\0\0\5\0\0\0Ulist_hostkey_types: "..., 97) = ?
-[pid   193] <... poll resumed> )        = 2 ([{fd=5, revents=POLLIN|POLLHUP},
-{fd=6, revents=POLLHUP}])
-[pid   194] +++ killed by SIGSYS +++
-
-Pull request: https://github.com/openssh/openssh-portable/pull/71
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
 ---
- package/openssh/openssh.hash | 2 ++
- package/openssh/openssh.mk   | 6 ++++++
- 2 files changed, 8 insertions(+)
+ ...ild-error-due-to-missing-stdint.h-include.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 3685bc0db..ed628fa98 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,2 +1,4 @@
- # From http://www.openssh.com/txt/release-7.5 (base64 encoded)
- sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
-+sha256 310860606c4175cdfd095e724f624df27340c89a916f7a09300bcb7988d5cfbf  afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
-+sha256 395aa1006967713b599555440e09f898781a5559e496223587401768ece10904  f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 7e197b018..24d34e8d1 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -8,6 +8,12 @@ OPENSSH_VERSION = 7.5p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
-+# Autoreconf needed due to the following patches modifying configure.ac:
-+# f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
-+# afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
-+OPENSSH_AUTORECONF = YES
-+OPENSSH_PATCH = https://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835.patch \
-+	https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
- OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
- OPENSSH_CONF_OPTS = \
- 	--sysconfdir=/etc/ssh \
+diff --git a/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
+new file mode 100644
+index 0000000..ccb0dff
+--- /dev/null
++++ b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
+@@ -0,0 +1,27 @@
++Fixes
++| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
++|   if (len < (uintptr_t)xdrs->x_base) {
++|              ^~~~~~~~~
++
++Signed-off-by: Khem Raj <raj.khem@...>
++Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
++---
++Upstream-Status: Pending
++
++ src/xdr_sizeof.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
++index d23fbd1..79d6707 100644
++--- a/src/xdr_sizeof.c
+++++ b/src/xdr_sizeof.c
++@@ -39,6 +39,7 @@
++ #include <rpc/xdr.h>
++ #include <sys/types.h>
++ #include <stdlib.h>
+++#include <stdint.h>
++ #include "un-namespace.h"
++ 
++ /* ARGSUSED */
++-- 
++2.13.0
 -- 
-2.13.0
+1.8.3.1
