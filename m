@@ -1,44 +1,90 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue, 20 Jun 2017 08:00:04 +0530
-Subject: [Buildroot] [PATCH v4 2/6] board: engicam: Rename defconfig
-	engicam_imx6qdl_icore_mmc_defconfig
-In-Reply-To: <20170619221927.0986c336@windsurf.home>
-References: <1497857252-8308-1-git-send-email-jteki@openedev.com>
- <1497857252-8308-3-git-send-email-jteki@openedev.com>
- <20170619221927.0986c336@windsurf.home>
-Message-ID: <CAMty3ZC-u57FFXdjWwrbp6Hrw-rHTD9NLUQHp+igGmF4EGDfOA@mail.gmail.com>
+From: xlcwu <xlcwu.taiwan@gmail.com>
+Date: Tue, 20 Jun 2017 13:12:23 +0800
+Subject: [Buildroot] [PATCH] expat: security bump to version 2.2.1
+In-Reply-To: <20170619220921.49a88bd9@windsurf.home>
+References: <20170618212004.32001-1-peter@korsgaard.com>
+ <20170619220921.49a88bd9@windsurf.home>
+Message-ID: <CAGtPAdVCrcJuGdEuTquYpoJpO5qUmi8QRQWVzrGWTUb1MPumSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 20, 2017 at 1:49 AM, Thomas Petazzoni
+Hi Thomas and Peter,
+
+patch failed need a little cosmetic:
+
+a/expat/configure.ac -> a/configure.ac
+b/expat/configure.ac -> b/configure.ac
+
+$ git diff package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+b/package/expat/000
+index a302553..e4fd7e8 100644
+--- a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
++++ b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+@@ -8,13 +8,13 @@ There is no such thing but we need to link (not just
+compile) to realize.
+
+ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ ---
+- expat/configure.ac | 2 +-
++ configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+-diff --git a/expat/configure.ac b/expat/configure.ac
++diff --git a/configure.ac b/configure.ac
+ index 1357c9a..444c002 100644
+---- a/expat/configure.ac
+-+++ b/expat/configure.ac
++--- a/configure.ac
+++++ b/configure.ac
+ @@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
+
+
+xlcwu
+
+
+On Tue, Jun 20, 2017 at 4:09 AM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Mon, 19 Jun 2017 12:57:28 +0530, Jagan Teki wrote:
->> From: Jagan Teki <jagan@amarulasolutions.com>
+> On Sun, 18 Jun 2017 23:20:04 +0200, Peter Korsgaard wrote:
+>> Fixes:
 >>
->> Since the board have support for nand, better to explicitly
->> name it with mmc.
+>> - CVE-2017-9233 - External entity infinite loop DoS. See:
+>>   https://libexpat.github.io/doc/cve-2017-9233/
 >>
->> engicam_imx6qdl_icore_defconfig => engicam_imx6qdl_icore_mmc_defconfig
+>> - CVE-2016-9063 -- Detect integer overflow
 >>
->> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+>> And further more:
+>>
+>> - Fix regression from fix to CVE-2016-0718 cutting off longer tag names.
+>>
+>> - Extend fix for CVE-2016-5300 (use getrandom() if available).
+>>
+>> - Extend fix for CVE-2012-0876 (Change hash algorithm to William Ahern's
+>>   version of SipHash).
+>>
+>> Also add an upstream patch to fix detection of getrandom().
+>>
+>> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>> ---
+>>  ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ++++++++++++++++++++++
+>>  package/expat/expat.hash                           |  8 +++---
+>>  package/expat/expat.mk                             |  4 ++-
+>>  3 files changed, 36 insertions(+), 5 deletions(-)
+>>  create mode 100644 package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
 >
-> Unless we are going to introduce other configurations for the same
-> board (to support NAND booting), then I would prefer to keep the name
-> without the "mmc". The readme.txt can explain that the configuration
-> supports MMC booting.
-
-I see a point where these defconfig names is in-line with U-Boot
-defconfig - since like U-Boot have defconfig based on boot-modes
-buildroot have similar approach.
-
-thanks!
--- 
-Jagan Teki
-Senior Linux Kernel Engineer | Amarula Solutions
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+> Applied to master, thanks.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
