@@ -1,44 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 10:43:13 +0200
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 8.1.2
-Message-ID: <20170620084242.B5A7480789@busybox.osuosl.org>
+Date: Tue, 20 Jun 2017 10:43:51 +0200
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 8.1.2
+In-Reply-To: <1497947941-11463-1-git-send-email-martin@barkynet.com>
+References: <1497947941-11463-1-git-send-email-martin@barkynet.com>
+Message-ID: <20170620104351.43f5bea8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de2c85cec6b78b9bd32e6799f9c4c399ceb3dc50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-See https://nodejs.org/en/blog/release/v8.1.2/
+On Tue, 20 Jun 2017 09:39:00 +0100, Martin Bark wrote:
+> See https://nodejs.org/en/blog/release/v8.1.2/
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/nodejs/nodejs.hash | 4 ++--
+>  package/nodejs/nodejs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Both patches applied. Thanks.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 0246ce0..989616c 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From upstream URL: http://nodejs.org/dist/v8.0.0/SHASUMS256.txt
--sha256  258d3aa3632bbbf2a447c5d524bd7074e23aa26e2b698774ff452954f6174f1c  node-v8.0.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v8.1.2/SHASUMS256.txt
-+sha256  ac190c1964ee0c28d4c163c0ccbb47435b2e4bd9b4c065b74a93373105c574b3  node-v8.1.2.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 90ca722..c757b25 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.0.0
-+NODEJS_VERSION = 8.1.2
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
