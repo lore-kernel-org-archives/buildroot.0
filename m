@@ -1,14 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 22:11:47 +0200
-Subject: [Buildroot] [git commit] toolchain: remove CodeSourcery sh toolchain
-Message-ID: <20170620201444.CA7C381E5A@busybox.osuosl.org>
+Date: Tue, 20 Jun 2017 22:11:29 +0200
+Subject: [Buildroot] [git commit] toolchain: remove CodeSourcery x86
+	toolchain
+Message-ID: <20170620201444.AA8BE81DDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6510a826e178d674c1007126480170f0e5b1d77f
+commit: https://git.buildroot.net/buildroot/commit/?id=06cac6460f8214e8e87ab2946d5440595fce7f15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Since glibc 2.17, executable link command need not include the -lrt option for
@@ -20,7 +21,7 @@ requires Buildroot to carry patches fixing this issue indefinitely.
 glibc 2.17 is now 4.5 years old. There is no reason to use an older version
 with current software.
 
-This commit removes the predefined profile for CodeSourcery sh toolchain that
+This commit removes the predefined profile for CodeSourcery x86 toolchain that
 is based on glibc 2.16. One may still use the custom external toolchain
 support in Buildroot to get this toolchain back, and deal with any build
 issues that this toolchain causes.
@@ -29,69 +30,73 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |  9 ++++++++
- toolchain/toolchain-external/Config.in             |  6 ------
- .../toolchain-external-codesourcery-sh/Config.in   | 25 ----------------------
- .../Config.in.options                              |  9 --------
- .../toolchain-external-codesourcery-sh.hash        |  3 ---
- .../toolchain-external-codesourcery-sh.mk          | 13 -----------
- 6 files changed, 9 insertions(+), 56 deletions(-)
+ Config.in.legacy                                   |  9 +++++++
+ toolchain/toolchain-external/Config.in             |  6 ++---
+ .../toolchain-external-codesourcery-x86/Config.in  | 29 ----------------------
+ .../Config.in.options                              |  9 -------
+ .../toolchain-external-codesourcery-x86.hash       |  3 ---
+ .../toolchain-external-codesourcery-x86.mk         | 12 ---------
+ 6 files changed, 11 insertions(+), 57 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index b851af2..9af0e15 100644
+index a5f7288..b851af2 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,15 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2017.08"
  
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
-+	bool "SH Sourcery toolchain has been removed"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
++	bool "x86 Sourcery toolchain has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The Sourcery CodeBench toolchain for the sh architecture has
++	  The Sourcery CodeBench toolchain for the x86 architecture has
 +	  been removed, since it uses glibc older than 2.17 that requires
 +	  -lrt to link executables using clock_* system calls. This makes
 +	  this toolchain difficult to maintain over time.
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	bool "x86 Sourcery toolchain has been removed"
+ config BR2_GCC_VERSION_4_8_X
+ 	bool "gcc 4.8.x support removed"
  	select BR2_LEGACY
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 75229bb..4cd9ee4 100644
+index 35db582..75229bb 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -33,9 +33,6 @@ source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Confi
- # NIOSII
- source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in"
+@@ -36,9 +36,8 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Conf
+ # SH4a
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in"
  
--# SH4a
--source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in"
--
- # x86_64
+-# x86/x86_64 (use amd64 toolchain by default for AMD64)
++# x86_64
  source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
+-source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in"
  
-@@ -126,9 +123,6 @@ source "toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Confi
- # NIOSII
- source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in.options"
+ # Kept last, so it remains the non-default choice, unless there isn't
+ # any available toolchain profile for the currently selected
+@@ -130,9 +129,8 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Conf
+ # SH4a
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options"
  
--# SH4a
--source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options"
--
- # x86_64
+-# x86/x86_64
++# x86_64
  source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options"
+-source "toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options"
  
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
+ # Custom toolchains
+ source "toolchain/toolchain-external/toolchain-external-custom/Config.in.options"
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
 deleted file mode 100644
-index a47dab7..0000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in
+index bcbdd26..0000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in
 +++ /dev/null
-@@ -1,25 +0,0 @@
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
--	bool "Sourcery CodeBench SH 2012.09"
--	depends on BR2_sh4a || BR2_sh4aeb
+@@ -1,29 +0,0 @@
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+-	bool "Sourcery CodeBench x86/x86_64 2012.09"
+-	depends on BR2_i386 || BR2_x86_64
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 -	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_x86_jaguar
+-	depends on !BR2_x86_steamroller
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -	select BR2_TOOLCHAIN_HAS_SSP
 -	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
@@ -100,58 +105,59 @@ index a47dab7..0000000
 -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
 -	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 -	help
--	  Sourcery CodeBench toolchain for the SuperH architecture,
--	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
--	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
+-	  Sourcery CodeBench toolchain for the x86/x86_64
+-	  architectures, from Mentor Graphics. It uses gcc 4.7.2,
+-	  binutils 2.23.51, glibc 2.16, gdb 7.4.50 and kernel headers
 -	  3.5.4. It has support for the following variants:
--	    - SH4A, glibc, little endian
--	      Default.
--	    - SH4A, glibc, big endian
--	      Add -mb to BR2_TARGET_OPTIMIZATION
--	    - SH4A, uClibc, little endian
--	      Not usable in Buildroot yet.
--	    - SH4A, uClibc, big endian
--	      Not usable in Buildroot yet.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
+-	    - Intel Pentium 4, glibc, 32 bits
+-	      Default for x86, nothing special to do.
+-	    - Intel Atom, glibc, 32 bits
+-	      Select an Atom core
+-	    - Intel Xeon, glibc, 64 bits
+-	      Default for x86_64, nothing special to do.
+-	    - Intel Core 2, glibc, 64 bits
+-	      Select a Core 2 core
+-	  Other architecture variants (beyond Pentium-4/Xeon) are
+-	  supported as well, but glibc is not optimised for it.
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
 deleted file mode 100644
-index 90061ce..0000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options
+index 65b62f3..0000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/Config.in.options
 +++ /dev/null
 @@ -1,9 +0,0 @@
--if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+-if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
 -
 -config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "sh-linux-gnu"
+-	default "i686-pc-linux-gnu"
 -
 -config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--	default "toolchain-external-codesourcery-sh"
+-	default "toolchain-external-codesourcery-x86"
 -
 -endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
 deleted file mode 100644
-index ff2ba5f..0000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.hash
+index a003f7a..0000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally calculated
--sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
+-sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+-sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
 deleted file mode 100644
-index 5370bb2..0000000
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-sh/toolchain-external-codesourcery-sh.mk
+index 5ee6991..0000000
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-x86/toolchain-external-codesourcery-x86.mk
 +++ /dev/null
-@@ -1,13 +0,0 @@
+@@ -1,12 +0,0 @@
 -################################################################################
 -#
--# toolchain-external-sourcery-sh
+-# toolchain-external-codesourcery-x86
 -#
 -################################################################################
 -
--TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION = 2012.09-61
--
--TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
--TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_SOURCE = renesas-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
--TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_ACTUAL_SOURCE_TARBALL = renesas-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_SH_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION = 2012.09-62
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_SOURCE = ia32-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i386-linux.tar.bz2
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_ACTUAL_SOURCE_TARBALL = ia32-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
 -
 -$(eval $(toolchain-external-package))
