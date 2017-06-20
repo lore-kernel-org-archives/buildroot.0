@@ -1,34 +1,209 @@
 From: Koen Martens <gmc@sonologic.nl>
-Date: Tue, 20 Jun 2017 20:35:15 +0200
-Subject: [Buildroot] [PATCH v2 1/1] linuxconsoletools: new package
-In-Reply-To: <20170620153544.05bb6470@windsurf.lan>
-References: <201706191656.v5JGuLc9093352@mx1.sonologic.net>
- <20170619214458.7fe41175@windsurf.home>
- <87a852g8v0.fsf@dell.be.48ers.dk>
- <20170620150550.7cbbae30@windsurf.lan>
- <87wp86eqzb.fsf@dell.be.48ers.dk>
- <20170620153544.05bb6470@windsurf.lan>
-Message-ID: <20170620183514.GA2636@sunra>
+Date: Tue, 20 Jun 2017 20:54:49 +0200
+Subject: [Buildroot] [PATCH] package/input-tools: remove input-tools
+Message-ID: <201706201900.v5KJ0K33080969@mx1.sonologic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 20, 2017 at 03:35:44PM +0200, Thomas Petazzoni wrote:
-> On Tue, 20 Jun 2017 15:19:36 +0200, Peter Korsgaard wrote:
-> >  > Since linuxconsoletools provides the three utilities provided by
-> >  > input-tools, has a name matching the upstream project, and uses a more
-> >  > recent version, I would suggest to drop input-tools indeed, and add a
-> >  > Config.in.legacy option that automatically enables linuxconsoletools.  
-> > 
-> > Yes, I agree - The input-tools package is very old and hasn't been
-> > updated in close to 10 years.
-> > 
-> > Will you send a patch to add the legacy handling or should I?
-> 
-> I wasn't planning on sending such a patch, so feel free to do it :)
+remove input-tools, has been obsoleted by linuxconsoletools
 
-If no-one beats me to it, i can create it tomorrow.
+linuxconsoletools uses the same name as upstream and carries
+the latest version of the tools installed by input-tools
 
-- Koen
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
+---
+ Config.in.legacy                     | 38 +++++++++++++++++++++++++++++++
+ package/Config.in                    |  1 -
+ package/input-tools/0001-rint.patch  | 18 ---------------
+ package/input-tools/Config.in        | 27 ----------------------
+ package/input-tools/input-tools.hash |  4 ----
+ package/input-tools/input-tools.mk   | 44 ------------------------------------
+ 6 files changed, 38 insertions(+), 94 deletions(-)
+ delete mode 100644 package/input-tools/0001-rint.patch
+ delete mode 100644 package/input-tools/Config.in
+ delete mode 100644 package/input-tools/input-tools.hash
+ delete mode 100644 package/input-tools/input-tools.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a5f7288..52250a5 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,44 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.08"
+ 
++config BR2_PACKAGE_INPUT_TOOLS
++	bool "input-tools removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LINUXCONSOLETOOLS
++	help
++	  input-tools has been removed, it's replaced by
++	  linuxconsoletools, which has automatically been enabled.
++
++config BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
++	bool "inputattach moved to linuxconsoletools"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LINUXCONSOLETOOLS
++	select BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH
++	help
++	  input-tools has been removed, inputattach is now part
++	  of linuxconsoletools, which has automatically been
++	  enabled.
++
++config BR2_PACKAGE_INPUT_TOOLS_JSCAL
++	bool "jscal moved to linuxconsoletools"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LINUXCONSOLETOOLS
++	select BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
++	help
++	  input-tools has been removed, jscal is now part
++	  of linuxconsoletools, which has automatically been
++	  enabled.
++
++config BR2_PACKAGE_INPUT_TOOLS_JSTEST
++	bool "jstest moved to linuxconsoletools"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LINUXCONSOLETOOLS
++	select BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
++	help
++	  input-tools has been removed, jstest is now part
++	  of linuxconsoletools, which has automatically been
++	  enabled.
++
+ config BR2_GCC_VERSION_4_8_X
+ 	bool "gcc 4.8.x support removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 9df0b42..aa124e7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -410,7 +410,6 @@ endmenu
+ 	source "package/i2c-tools/Config.in"
+ 	source "package/i7z/Config.in"
+ 	source "package/input-event-daemon/Config.in"
+-	source "package/input-tools/Config.in"
+ 	source "package/intel-microcode/Config.in"
+ 	source "package/iostat/Config.in"
+ 	source "package/ipmitool/Config.in"
+diff --git a/package/input-tools/0001-rint.patch b/package/input-tools/0001-rint.patch
+deleted file mode 100644
+index b2aa13f..0000000
+--- a/package/input-tools/0001-rint.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-diff -urN joystick-20051019.orig/utils/jscal.c joystick-20051019/utils/jscal.c
+---- joystick-20051019.orig/utils/jscal.c	2004-10-19 09:51:52.000000000 +0200
+-+++ joystick-20051019/utils/jscal.c	2009-01-18 10:48:50.000000000 +0100
+-@@ -141,10 +141,10 @@
+- 	c = 32767.0 / (inputs.cmin[1] - inputs.cmax[0]);
+- 	d = 32767.0 / (inputs.cmin[2] - inputs.cmax[1]);
+- 
+--	results[0] = rint(a);
+--	results[1] = rint(b);
+--	results[2] = rint(c*16384.0);
+--	results[3] = rint(d*16384.0);
+-+	results[0] = (int) (a + 0.5);
+-+	results[1] = (int) (b + 0.5);
+-+	results[2] = (int) (c*16384.0 + 0.5);
+-+	results[3] = (int) (d*16384.0 + 0.5);
+- 
+- 	return 1;
+- }
+diff --git a/package/input-tools/Config.in b/package/input-tools/Config.in
+deleted file mode 100644
+index 85b4fd0..0000000
+--- a/package/input-tools/Config.in
++++ /dev/null
+@@ -1,27 +0,0 @@
+-config BR2_PACKAGE_INPUT_TOOLS
+-	bool "input-tools"
+-	help
+-	  Tools for the Linux kernel input layer.
+-	  http://linuxconsole.sourceforge.net/
+-
+-if BR2_PACKAGE_INPUT_TOOLS
+-
+-config BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
+-	bool "inputattach"
+-	default y
+-	help
+-	  Inputattach is used for attaching a serial line to the input layer.
+-
+-config BR2_PACKAGE_INPUT_TOOLS_JSCAL
+-	bool "jscal"
+-	default y
+-	help
+-	  Joystick calibration program.
+-
+-config BR2_PACKAGE_INPUT_TOOLS_JSTEST
+-	bool "jstest"
+-	default y
+-	help
+-	  Joystick test program.
+-
+-endif
+diff --git a/package/input-tools/input-tools.hash b/package/input-tools/input-tools.hash
+deleted file mode 100644
+index 53b0f92..0000000
+--- a/package/input-tools/input-tools.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/j/joystick/joystick_20051019-12.dsc
+-sha256	cb60cb62093f1889a91fcef1cc36546aba406f451941e8d057f095639e6afb89	joystick_20051019.orig.tar.gz
+-# From http://snapshot.debian.org/archive/debian/20090630T220234Z/pool/main/j/joystick/joystick_20051019-5.dsc
+-sha256	01e9d14a656d594a3e261751233200f740a09c2a538ac71447c104ffe89ec10c	joystick_20051019-5.diff.gz
+diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
+deleted file mode 100644
+index 6189b3e..0000000
+--- a/package/input-tools/input-tools.mk
++++ /dev/null
+@@ -1,44 +0,0 @@
+-################################################################################
+-#
+-# input-tools
+-#
+-################################################################################
+-
+-INPUT_TOOLS_VERSION = 20051019
+-INPUT_TOOLS_SOURCE = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
+-INPUT_TOOLS_PATCH = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
+-INPUT_TOOLS_SITE = http://snapshot.debian.org/archive/debian/20101023T043132Z/pool/main/j/joystick
+-INPUT_TOOLS_LICENSE = GPL-2.0+
+-INPUT_TOOLS_LICENSE_FILES = utils/Makefile
+-
+-INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
+-INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSCAL)       += jscal
+-INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSTEST)      += jstest
+-
+-define INPUT_TOOLS_DEBIAN_PATCHES
+-	if [ -d $(@D)/debian/patches ]; then \
+-		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
+-	fi
+-endef
+-
+-INPUT_TOOLS_POST_PATCH_HOOKS = INPUT_TOOLS_DEBIAN_PATCHES
+-
+-# jscal needs -lm
+-define INPUT_TOOLS_BUILD_CMDS
+-	for i in $(filter-out jscal,$(INPUT_TOOLS_TARGETS_y)); do \
+-		$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$$i $(@D)/utils/$$i.c \
+-			$(TARGET_LDFLAGS); \
+-	done
+-	for i in $(filter jscal,$(INPUT_TOOLS_TARGETS_y)); do \
+-		$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$$i $(@D)/utils/$$i.c \
+-			$(TARGET_LDFLAGS) -lm; \
+-	done
+-endef
+-
+-define INPUT_TOOLS_INSTALL_TARGET_CMDS
+-	for i in $(INPUT_TOOLS_TARGETS_y); do \
+-		$(INSTALL) -m 755 -D $(@D)/$$i $(TARGET_DIR)/usr/bin/$$i; \
+-	done
+-endef
+-
+-$(eval $(generic-package))
+-- 
+2.7.4
