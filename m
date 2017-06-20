@@ -1,53 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 23:13:10 +0200
-Subject: [Buildroot] [PATCH 2/7] janus-gateway: add transports section
- to config.
-In-Reply-To: <20170615121314.1485-2-aduskett@codeblue.com>
-References: <20170615121314.1485-1-aduskett@codeblue.com>
- <20170615121314.1485-2-aduskett@codeblue.com>
-Message-ID: <20170620231310.570b2ba4@windsurf.lan>
+Date: Tue, 20 Jun 2017 23:13:25 +0200
+Subject: [Buildroot] [git commit] package/kvazaar: needs threads
+Message-ID: <20170620211259.363B381E53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=79c7873b64aff13a924dc61ff021eefa835d5be9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Jun 2017 08:13:09 -0400, Adam Duskett wrote:
-> janus-gateway supports many different transports, and currently
-> there is no implicit way to turn them off or on.  Instead, if the
-> dependency happens to be built, then the transport is enabled.
-> 
-> Create a transports section in the config file and add
-> BR2_PACKAGE_JANUS_REST as the first transport.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
->  package/janus-gateway/Config.in        | 6 ++++++
->  package/janus-gateway/janus-gateway.mk | 7 +++++++
->  2 files changed, 13 insertions(+)
+Fixes:
 
-I've applied patches 2 to 7. However, it would be nice to be a little
-bit more careful in the patches. I had to fix a few things:
+  http://autobuild.buildroot.net/results/6e1eabd691b8674f61898bc0fe734208d226f965/
 
- * The title had a typo in most of the commits: gatway -> gateway
+Signed-off-by: Alexandre Esse <alexandre.esse.dev@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kvazaar/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- * Inconsistent ending of the titles: some ending with a final dot,
-   some not. The latter being the preferred choice.
-
- * You forgot to propagate the dependencies of the packages being
-   selected, and adding the corresponding Config.in comment.
-
- * You forgot to use alphabetic ordering where appropriate.
-
-All those are minor nits, but they add up, and need to be fixed before
-applying the patches.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kvazaar/Config.in b/package/kvazaar/Config.in
+index 3377145..06ab9ac 100644
+--- a/package/kvazaar/Config.in
++++ b/package/kvazaar/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_KVAZAAR
+ 	bool "kvazaar"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  An open-source HEVC encoder licensed under LGPLv2.1
+ 
+ 	  https://github.com/ultravideo/kvazaar
++
++comment "kvazaar needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
