@@ -1,66 +1,51 @@
-From: Dmitrii Kolesnichenko <Dmitrii.Kolesnichenko@synopsys.com>
-Date: Tue, 20 Jun 2017 11:51:46 +0300
-Subject: [Buildroot] [PATCH v3] libtirpc: Fix build error due to missing
-	stdint.h inclusion
-In-Reply-To: <20170619213140.731daabb@windsurf.home>
-Message-ID: <20170620085146.8558-1-dmitrii@synopsys.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Tue, 20 Jun 2017 14:26:42 +0530
+Subject: [Buildroot] [PATCH v4 1/6] board: Add support for Engicam
+ i.CoreM6 DualLite/Solo boards
+In-Reply-To: <20170620074635.6c036cfc@windsurf.home>
+References: <1497857252-8308-1-git-send-email-jteki@openedev.com>
+ <1497857252-8308-2-git-send-email-jteki@openedev.com>
+ <20170619221759.63450810@windsurf.home>
+ <CAMty3ZDRMu13a1tZfah8m39CxBNrNnwEYEcEQeDRMqt=6N74Rg@mail.gmail.com>
+ <20170620074635.6c036cfc@windsurf.home>
+Message-ID: <CAMty3ZCkw9z8qYgoZM7oO_0KydFpdn51KzA9zY5-hViPQ9JYSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix following error:
-| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-|   if (len < (uintptr_t)xdrs->x_base) {
-|              ^~~~~~~~~
+On Tue, Jun 20, 2017 at 11:16 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 20 Jun 2017 07:55:26 +0530, Jagan Teki wrote:
+>
+>> >> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
+>> >> -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6q_icore_mmc"
+>> >> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05-rc1"
+>> >
+>> > This doesn't make sense. Why are you rolling back from 2017.05 to
+>> > 2017.05-rc1 ?
+>> >
+>> > I assume a feature present in the -rc1 is also present in the final
+>> > release. Otherwise, it means the feature has been reverted, which is a
+>> > bad sign.
+>> >
+>> > Maybe you wanted to use 2017.07-rc1 instead?
+>>
+>> Yes I need to use -rc1 because this feature is present in it. I was
+>> trying for explicitly applying patches, but those are more.
+>
+> Did you read what I wrote? Your patch is using 2017.05-rc1, which is
+> most likely not what you intended, because 2017.05 final is available.
+> Wasn't your intention to use 2017.07-rc1.
 
-This error occurs with the latest glibc master version, but doesn't occur with
-version 2.25.
+Sorry, my intention here is to use 2017.07-rc1, I think I sent wrong patch.
 
-Patch includes stdint.h to provide uintptr_t.
-
-It has been submitted upstream:
-https://sourceforge.net/p/libtirpc/mailman/libtirpc-devel/
-
-Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
----
- ...ild-error-due-to-missing-stdint.h-include.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-
-diff --git a/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-new file mode 100644
-index 0000000..ccb0dff
---- /dev/null
-+++ b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-@@ -0,0 +1,27 @@
-+Fixes
-+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-+|   if (len < (uintptr_t)xdrs->x_base) {
-+|              ^~~~~~~~~
-+
-+Signed-off-by: Khem Raj <raj.khem@...>
-+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
-+---
-+Upstream-Status: Pending
-+
-+ src/xdr_sizeof.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
-+index d23fbd1..79d6707 100644
-+--- a/src/xdr_sizeof.c
-++++ b/src/xdr_sizeof.c
-+@@ -39,6 +39,7 @@
-+ #include <rpc/xdr.h>
-+ #include <sys/types.h>
-+ #include <stdlib.h>
-++#include <stdint.h>
-+ #include "un-namespace.h"
-+ 
-+ /* ARGSUSED */
-+-- 
-+2.13.0
+thanks!
 -- 
-1.8.3.1
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
