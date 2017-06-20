@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 22:10:42 +0200
-Subject: [Buildroot] [git commit] docs/manual: update external toolchain
-	advantages list
-Message-ID: <20170620201444.8771881E5A@busybox.osuosl.org>
+Date: Tue, 20 Jun 2017 22:12:28 +0200
+Subject: [Buildroot] [git commit] toolchain-external: update list of
+	toolchains
+Message-ID: <20170620201445.034CF81DDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e251bdbe8d3efac1c6397d8896d415b5e59e394b
+commit: https://git.buildroot.net/buildroot/commit/?id=598486cdf70eaee2c25c1bae0da15710732ef54c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot can build non-uClibc toolchains internally for quite some time now.
-Update the manual text.
+Remove mention of toolchains the we don't have.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/configure.txt | 2 --
- 1 file changed, 2 deletions(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 0739bc7..945f5b1 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -221,8 +221,6 @@ Advantages of this backend:
-   often very significant in the overall build time of an embedded
-   Linux system.
- 
--* Not limited to uClibc: glibc and eglibc toolchains are supported.
--
- Drawbacks of this backend:
- 
- * If your pre-built external toolchain has a bug, may be hard to get a
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 856be65..8269345 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -13,10 +13,9 @@
+ #  * Toolchains provided by Linaro for the ARM and AArch64
+ #    architectures
+ #  * Sourcery CodeBench toolchains (from Mentor Graphics) for the ARM,
+-#    MIPS, PowerPC, x86, x86_64 and NIOS 2 architectures. For the MIPS
++#    MIPS, PowerPC, x86_64 and NIOS 2 architectures. For the MIPS
+ #    toolchain, the -muclibc variant isn't supported yet, only the
+ #    default glibc-based variant is.
+-#  * Xilinx toolchains for the Microblaze architecture
+ #  * Synopsys DesignWare toolchains for ARC cores
+ #
+ # The basic principle is the following
