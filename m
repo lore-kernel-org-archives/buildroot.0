@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 07:40:25 +0200
-Subject: [Buildroot] [git commit] expat: fix patch that doesn't apply
-	properly
-Message-ID: <20170620054007.E8FC97FDDA@busybox.osuosl.org>
+Date: Tue, 20 Jun 2017 07:45:34 +0200
+Subject: [Buildroot] [PATCH] expat: security bump to version 2.2.1
+In-Reply-To: <CAGtPAdVCrcJuGdEuTquYpoJpO5qUmi8QRQWVzrGWTUb1MPumSg@mail.gmail.com>
+References: <20170618212004.32001-1-peter@korsgaard.com>
+ <20170619220921.49a88bd9@windsurf.home>
+ <CAGtPAdVCrcJuGdEuTquYpoJpO5qUmi8QRQWVzrGWTUb1MPumSg@mail.gmail.com>
+Message-ID: <20170620074534.3734712e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1940a66114bb6962dfdcee928e5c5fa5f29c0be7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Tue, 20 Jun 2017 13:12:23 +0800, xlcwu wrote:
 
-  http://autobuild.buildroot.net/results/23f799009ae10c5de2b06a7747a28804818204c2/
+> patch failed need a little cosmetic:
+> 
+> a/expat/configure.ac -> a/configure.ac
+> b/expat/configure.ac -> b/configure.ac
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thanks, I've fixed that:
 
-diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-index a302553..44f43e1 100644
---- a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-+++ b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-@@ -11,10 +11,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-  expat/configure.ac | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
--diff --git a/expat/configure.ac b/expat/configure.ac
-+diff --git a/configure.ac b/configure.ac
- index 1357c9a..444c002 100644
----- a/expat/configure.ac
--+++ b/expat/configure.ac
-+--- a/configure.ac
-++++ b/configure.ac
- @@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
-  
-  
+  https://git.buildroot.org/buildroot/commit/?id=1940a66114bb6962dfdcee928e5c5fa5f29c0be7
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
