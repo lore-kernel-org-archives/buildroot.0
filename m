@@ -1,37 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Jun 2017 14:09:03 +0200
-Subject: [Buildroot] [PATCH] expat: security bump to version 2.2.1
-In-Reply-To: <20170620074534.3734712e@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 20 Jun 2017 07:45:34 +0200")
-References: <20170618212004.32001-1-peter@korsgaard.com>
- <20170619220921.49a88bd9@windsurf.home>
- <CAGtPAdVCrcJuGdEuTquYpoJpO5qUmi8QRQWVzrGWTUb1MPumSg@mail.gmail.com>
- <20170620074534.3734712e@windsurf.home>
-Message-ID: <8760fqg8tc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Jun 2017 14:10:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/imagemagick: change download
+	url to github
+In-Reply-To: <87efueg91o.fsf@dell.be.48ers.dk>
+References: <20170618074538.1237-1-bernd.kuhls@t-online.de>
+ <877f09glcd.fsf@dell.be.48ers.dk>
+ <20170619152921.6a37a345@windsurf.lan>
+ <87efueg91o.fsf@dell.be.48ers.dk>
+Message-ID: <20170620141021.5ecdcd3e@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > Hello,
- > On Tue, 20 Jun 2017 13:12:23 +0800, xlcwu wrote:
+On Tue, 20 Jun 2017 14:04:03 +0200, Peter Korsgaard wrote:
 
- >> patch failed need a little cosmetic:
- >> 
- >> a/expat/configure.ac -> a/configure.ac
- >> b/expat/configure.ac -> b/configure.ac
+>  >> >  IMAGEMAGICK_VERSION = 7.0.5-10
+>  >> > -IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+>  >> > -IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+>  >> > +IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+>  >> > +IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive    
+>  >> 
+>  >> That SOURCE name is a bit annoying. Is it a big issue that upstream
+>  >> (re)moves the downloads after some time when we transparently fall back
+>  >> to getting it from sources.buildroot.org?  
+> 
+>  > I indeed hadn't seen the stupid name for the tarball. On my side, I
+>  > find it a bit annoying that we have to rely on sources.b.o to make
+>  > things work, so having upstream location that are working on the long
+>  > run is much better when possible. But I agree that the tarball name is
+>  > really silly here, and the risk of conflict with other packages is real.  
+> 
+> That is exactly my concern. So what do we do? Leave it like this so
+> s.b.o isn't needed or revert to get back a sane tarball name?
+> 
+> There's pro/cons to both, but I think I would prefer to revert.
 
- > Thanks, I've fixed that:
+Perhaps we could revert *and* talk to the upstream developers and ask
+them to keep the tarballs at the same place, instead of (re)moving
+them ?
 
- >   https://git.buildroot.org/buildroot/commit/?id=1940a66114bb6962dfdcee928e5c5fa5f29c0be7
+Thanks,
 
- > Best regards,
-
-Sorry about that, it seems like I made a mistake when I moved from a
-custom patch to picking the upstream one.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
