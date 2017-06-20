@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 22:30:57 +0200
-Subject: [Buildroot] [git commit] package/x264: bump version
-Message-ID: <20170620203019.415EA7F8B5@busybox.osuosl.org>
+Date: Tue, 20 Jun 2017 22:31:41 +0200
+Subject: [Buildroot] [PATCH 1/2] package/x264: disable optional ffmpeg
+ support
+In-Reply-To: <20170605162238.8413-1-bernd.kuhls@t-online.de>
+References: <20170605162238.8413-1-bernd.kuhls@t-online.de>
+Message-ID: <20170620223141.255a2c41@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf57c6aa76729bb0e22d94839db0c69f2402c979
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: update hash file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon,  5 Jun 2017 18:22:37 +0200, Bernd Kuhls wrote:
+> In buildroot ffmpeg uses x264 as optional dependency if
+> BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
+> 
+> If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
+> support before x264 itself is build, x264 picks up certain ffmpeg libs
+> as optional dependency leading to build errors because x264 does not
+> correctly link statically against ffmpeg.
+> 
+> To avoid a circular dependency and to avoid teaching x264 how to
+> correctly link statically with ffmpeg we just disable all ffmpeg-
+> related options.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x264/x264.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index 9551093..ebc1585 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 9fc4651981453d0428a2ad16889b6b63d1f2e7347ea321f20347fc3a021ee912  x264-97eaef2ab82a46d13ea5e00270712d6475fbe42b.tar.gz
-+sha256 aefebcf4fa547c6a26e1311b5701e6b94030bae23eb9d14df1211dd5bcb7d4d5  x264-df79067c0cf33da712d344b5f8869be7eaf326f3.tar.gz
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index d1bc767..69ec4cc 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X264_VERSION = 97eaef2ab82a46d13ea5e00270712d6475fbe42b
-+X264_VERSION = df79067c0cf33da712d344b5f8869be7eaf326f3
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPL-2.0+
- X264_DEPENDENCIES = host-pkgconf
+Both patches applied, thanks. On the second patch, you forgot to update
+the hash, so I've done so. You probably forgot because back then, we
+were not checking the hashes of git-downloaded packages. But now we
+are, so hashes should be correct.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
