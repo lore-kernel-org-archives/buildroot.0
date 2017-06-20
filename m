@@ -1,43 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Jun 2017 14:40:14 +0200
-Subject: [Buildroot] [PATCH 1/2] package/imagemagick: change download
-	url to github
-In-Reply-To: <20170620141021.5ecdcd3e@windsurf.lan> (Thomas Petazzoni's
- message of "Tue, 20 Jun 2017 14:10:21 +0200")
-References: <20170618074538.1237-1-bernd.kuhls@t-online.de>
- <877f09glcd.fsf@dell.be.48ers.dk>
- <20170619152921.6a37a345@windsurf.lan>
- <87efueg91o.fsf@dell.be.48ers.dk>
- <20170620141021.5ecdcd3e@windsurf.lan>
-Message-ID: <871sqeg7dd.fsf@dell.be.48ers.dk>
+From: Koen Martens <gmc@sonologic.nl>
+Date: Tue, 20 Jun 2017 14:48:00 +0200
+Subject: [Buildroot] [PATCH v2 1/1] linuxconsoletools: new package
+In-Reply-To: <87a852g8v0.fsf@dell.be.48ers.dk>
+References: <201706191656.v5JGuLc9093352@mx1.sonologic.net>
+ <20170619214458.7fe41175@windsurf.home> <87a852g8v0.fsf@dell.be.48ers.dk>
+Message-ID: <26C8BECF-7913-44B8-89D6-40D3451685FE@sonologic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
 
->> > I indeed hadn't seen the stupid name for the tarball. On my side, I
- >> > find it a bit annoying that we have to rely on sources.b.o to make
- >> > things work, so having upstream location that are working on the long
- >> > run is much better when possible. But I agree that the tarball name is
- >> > really silly here, and the risk of conflict with other packages is real.  
- >> 
- >> That is exactly my concern. So what do we do? Leave it like this so
- >> s.b.o isn't needed or revert to get back a sane tarball name?
- >> 
- >> There's pro/cons to both, but I think I would prefer to revert.
+On 20 June 2017 14:08:03 CEST, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni
+><thomas.petazzoni@free-electrons.com> writes:
+>
+> > Hello,
+> > On Mon, 19 Jun 2017 18:55:06 +0200, Koen Martens wrote:
+> >> Linuxconsoletools contains the inputattach utility
+> >> to attach legacy serial devices to the Linux kernel
+> >> input layer and joystick utilities to calibrate and
+> >> test joysticks and joypads.
+> >> 
+> >> The buildroot package adds options to build only certain
+> >> tools.
+> >> 
+> >> website: http://sf.net/projects/linuxconsole/
+> >> 
+> >> Signed-off-by: Koen Martens <gmc@sonologic.nl>
+>
+> > Thanks, I've applied, after doing a few minor tweaks. See below.
+>
+>Sorry for the slow response, I only noticed the patch now.
+>
+>We already have (an old version of) this code in the input-tools
+>package, so the binaries here will conflict with those.
+>
+>What is the way forward? Drop the old package and add Config.in.legacy
+>handling for the old symbols?
 
- > Perhaps we could revert *and* talk to the upstream developers and ask
- > them to keep the tarballs at the same place, instead of (re)moving
- > them ?
+Oops, had i known I would have updated the existing package. That still is an option of course. Revert my patch and bring the input-tools package into 2017. Of course, my patch can install all tools from the upstream archive, whereas the input-tools only installs 3 of them. Also, with the old pkg we would end up with toggles for each individual tool if we want to stay in style.
 
-That is certainly worth a try. It is imagemagick though, so you never
-know. They seem to really remove all <version>-<minor> except the latest
-<minor> in each series.
+Is there a specific reason the input-tools package uses the (renamed) debian tarball btw instead of the original upstream?
+
+- Koen
 
 -- 
-Bye, Peter Korsgaard
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
