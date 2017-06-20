@@ -1,67 +1,56 @@
-From: Dmitrii Kolesnichenko <Dmitrii.Kolesnichenko@synopsys.com>
-Date: Tue, 20 Jun 2017 19:55:31 +0300
-Subject: [Buildroot] [PATCH v4] libtirpc: Fix build error due to missing
-	stdint.h inclusion
-In-Reply-To: <1497955663.5974.31.camel@synopsys.com>
-Message-ID: <20170620165531.24067-1-dmitrii@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Jun 2017 18:58:45 +0200
+Subject: [Buildroot] [PATCH] barebox: support multiple image files
+In-Reply-To: <20170620153000.18263-1-m.niestroj@grinn-global.com>
+References: <20170620153000.18263-1-m.niestroj@grinn-global.com>
+Message-ID: <20170620185845.41140a53@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix following error:
-| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-|   if (len < (uintptr_t)xdrs->x_base) {
-|              ^~~~~~~~~
+Hello,
 
-This error occurs with the latest glibc master version (during the testing I had
-glibc commit 92bd70fb85bce57ac47ba5d8af008736832c955a), but doesn't occur with
-version 2.25.
+On Tue, 20 Jun 2017 17:30:00 +0200, Marcin Niestroj wrote:
 
-Patch includes stdint.h to provide uintptr_t.
+> diff --git a/boot/barebox/barebox-aux/Config.in b/boot/barebox/barebox-aux/Config.in
+> index ec3b97cb8..8f21a0c45 100644
+> --- a/boot/barebox/barebox-aux/Config.in
+> +++ b/boot/barebox/barebox-aux/Config.in
+> @@ -32,7 +32,7 @@ config BR2_TARGET_BAREBOX_AUX_CONFIG_FRAGMENT_FILES
+>  config BR2_TARGET_BAREBOX_AUX_IMAGE_FILE
+>  	string "Image filename"
 
-It has been submitted upstream:
-https://sourceforge.net/p/libtirpc/mailman/message/35850276/
+Maybe change to:
 
-Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
----
- ...ild-error-due-to-missing-stdint.h-include.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
+	string "Image file names"
 
-diff --git a/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-new file mode 100644
-index 0000000..ccb0dff
---- /dev/null
-+++ b/package/libtirpc/0008-Fix-build-error-due-to-missing-stdint.h-include.patch
-@@ -0,0 +1,27 @@
-+Fixes
-+| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
-+|   if (len < (uintptr_t)xdrs->x_base) {
-+|              ^~~~~~~~~
-+
-+Signed-off-by: Khem Raj <raj.khem@...>
-+Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
-+---
-+Upstream-Status: Pending
-+
-+ src/xdr_sizeof.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
-+index d23fbd1..79d6707 100644
-+--- a/src/xdr_sizeof.c
-++++ b/src/xdr_sizeof.c
-+@@ -39,6 +39,7 @@
-+ #include <rpc/xdr.h>
-+ #include <sys/types.h>
-+ #include <stdlib.h>
-++#include <stdint.h>
-+ #include "un-namespace.h"
-+ 
-+ /* ARGSUSED */
-+-- 
-+2.13.0
+>  	help
+> -	  Name of the generated barebox image, which will be copied to
+> +	  Name of the generated barebox images, which will be copied to
+
+And this to:
+
+	  Space-separated list of barebox images which will be copied to
+	  the images directory.
+
+> diff --git a/boot/barebox/barebox/Config.in b/boot/barebox/barebox/Config.in
+> index 3d8d01456..d29e742d6 100644
+> --- a/boot/barebox/barebox/Config.in
+> +++ b/boot/barebox/barebox/Config.in
+> @@ -33,7 +33,7 @@ config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
+>  config BR2_TARGET_BAREBOX_IMAGE_FILE
+>  	string "Image filename"
+>  	help
+> -	  Name of the generated barebox image, which will be copied to
+> +	  Name of the generated barebox images, which will be copied to
+>  	  the images directory.
+
+And of course same here.
+
+Thomas
 -- 
-1.8.3.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
