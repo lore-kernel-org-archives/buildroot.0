@@ -1,82 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Jun 2017 17:28:13 +0200
-Subject: [Buildroot] [PATCH 0/3] core: check hashes of license files
-In-Reply-To: <CAAXf6LVAgOoLDEc-HUJJOOm9Oq8k5cG5q2VkK+ZNVJyGhtM4Cw@mail.gmail.com>
-References: <cover.1497772831.git.yann.morin.1998@free.fr>
- <CA+NV+Vmd+uwWztf4Po71Kh3WHPVzPR++HSUdmBoF1oddsS14ew@mail.gmail.com>
- <20170619174707.GB3045@scaer>
- <CAAXf6LVAgOoLDEc-HUJJOOm9Oq8k5cG5q2VkK+ZNVJyGhtM4Cw@mail.gmail.com>
-Message-ID: <20170620152813.GA2892@scaer>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue, 20 Jun 2017 17:30:00 +0200
+Subject: [Buildroot] [PATCH] barebox: support multiple image files
+Message-ID: <20170620153000.18263-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Add support for specifying multiple image files in
+BR2_TARGET_BAREBOX_IMAGE_FILE config option.
 
-On 2017-06-19 21:32 +0200, Thomas De Schampheleire spake thusly:
-> 2017-06-19 19:47 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> > On 2017-06-19 22:47 +0530, Rahul Bedarkar spake thusly:
-> >> On Sun, Jun 18, 2017 at 1:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >> >
-> >> > Hello All!
-> >> >
-> >> > This small series is a proposal to check the hashes of the license files
-> >> > during legal-info, to catch the packages whose license changes but where
-> >> > the text of the new license is in the same file.
-> >>
-> >> Thanks for this series. Checking hashes of the license files during
-> >> legal-info stage looks logical but we discussed about doing that after
-> >> downloading sources so that change in license file is noticed early
-> >> (as a part of build test after version bump).
-> >
-> > It is not possible to do at download time. It can only be done after
-> > the package has been extracted and patched.
-> >
-> > That is why, when you run legal-info on a non-built (but configured)
-> > tree, you'll notice that Buildroot extracts and patches the packages
-> > before saving their legal-info.
-> >
-> > Besides, if one uses the support/scripts/test-pkg script to test the
-> > version bump, then legal-info is run by the script.
-> >
-> > So, I still believe it is better done during legal-info.
-> >
-> 
-> Yann, I think Rahul means that the checking of the hashing should be
-> checked as part of the standard 'make pkg' target, whichever subtarget
-> it is, be it -build, -install or what not.
+This is usefull for boards with several RAM size variants.
 
-OK, I see.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ boot/barebox/barebox-aux/Config.in | 2 +-
+ boot/barebox/barebox.mk            | 2 +-
+ boot/barebox/barebox/Config.in     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Still, I believe it is better suited to keep that for during the
-legal-info step.
-
-Regards,
-Yann E. MORIN.
-
-> But, I don't think we should mix such topics: legal info topics should
-> stay in the -legal-info target.
-> One solution could be to make '-legal-info' part of the standard build
-> process, although it will slow down the build and some/many people
-> will not like that.
-> An alternative is to split '-legal-info' in two parts:
-> -legal-info-checks and actual -legal-info. The first part would verify
-> some important things, i.e. presence of valid LICENSE, presence of all
-> files specified in LICENSE_FILES, hash checking on these files. It
-> could be added to the standard 'make pkg' group. The second part would
-> do the actual creation of the manifest, copying the sources, etc. and
-> remains on-demand only.
-> 
-> I don't know what you think of that approach, I'm thinking out loud.
-> 
-> /Thomas
-
+diff --git a/boot/barebox/barebox-aux/Config.in b/boot/barebox/barebox-aux/Config.in
+index ec3b97cb8..8f21a0c45 100644
+--- a/boot/barebox/barebox-aux/Config.in
++++ b/boot/barebox/barebox-aux/Config.in
+@@ -32,7 +32,7 @@ config BR2_TARGET_BAREBOX_AUX_CONFIG_FRAGMENT_FILES
+ config BR2_TARGET_BAREBOX_AUX_IMAGE_FILE
+ 	string "Image filename"
+ 	help
+-	  Name of the generated barebox image, which will be copied to
++	  Name of the generated barebox images, which will be copied to
+ 	  the images directory.
+ 
+ 	  If left empty, defaults to:
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 1690e8fa5..8bc9594ff 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -113,7 +113,7 @@ $(1)_IMAGE_FILE = $$(call qstrip,$$(BR2_TARGET_$(1)_IMAGE_FILE))
+ 
+ define $(1)_INSTALL_IMAGES_CMDS
+ 	if test -n "$$($(1)_IMAGE_FILE)"; then \
+-		cp -L $$(@D)/$$($(1)_IMAGE_FILE) $$(BINARIES_DIR) ; \
++		cp -L $$(foreach image,$$($(1)_IMAGE_FILE),$$(@D)/$$(image)) $$(BINARIES_DIR) ; \
+ 	elif test -h $$(@D)/barebox-flash-image ; then \
+ 		cp -L $$(@D)/barebox-flash-image $$(BINARIES_DIR)/barebox.bin ; \
+ 	else \
+diff --git a/boot/barebox/barebox/Config.in b/boot/barebox/barebox/Config.in
+index 3d8d01456..d29e742d6 100644
+--- a/boot/barebox/barebox/Config.in
++++ b/boot/barebox/barebox/Config.in
+@@ -33,7 +33,7 @@ config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
+ config BR2_TARGET_BAREBOX_IMAGE_FILE
+ 	string "Image filename"
+ 	help
+-	  Name of the generated barebox image, which will be copied to
++	  Name of the generated barebox images, which will be copied to
+ 	  the images directory.
+ 
+ 	  If left empty, defaults to:
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.1
