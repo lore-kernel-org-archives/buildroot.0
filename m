@@ -1,68 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 22:58:54 +0200
-Subject: [Buildroot] [git commit] janus-gateway: add HTTP/REST to a new
-	transport config section
-Message-ID: <20170620211022.E932481762@busybox.osuosl.org>
+Date: Tue, 20 Jun 2017 23:09:49 +0200
+Subject: [Buildroot] [git commit] janus-gateway: add unix-sockets to
+	transport section
+Message-ID: <20170620211023.389CB7FBE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2083c40b548ed791eeb804d4f9a23fc3e399bba8
+commit: https://git.buildroot.net/buildroot/commit/?id=6842b6774a2c7661af23ea681fcd3ae088160f34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-janus-gateway supports many different transports, and currently there
-is no implicit way to turn them off or on. Instead, if the dependency
-happens to be built, then the transport is enabled.
-
-Create a transports section in the config file and add
-BR2_PACKAGE_JANUS_REST as the first transport.
-
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-[Thomas: propagate thread dependency.]
+[Thomas: alphabetic ordering.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/janus-gateway/Config.in        | 10 ++++++++++
- package/janus-gateway/janus-gateway.mk |  7 +++++++
- 2 files changed, 17 insertions(+)
+ package/janus-gateway/Config.in        | 4 ++++
+ package/janus-gateway/janus-gateway.mk | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index e07b4ad..7e170fd 100644
+index b0e4ae9..5bd4e95 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -54,6 +54,16 @@ config BR2_PACKAGE_JANUS_VOICE_MAIL
- 	bool "voice mail"
- 	select BR2_PACKAGE_LIBOGG
+@@ -81,6 +81,10 @@ config BR2_PACKAGE_JANUS_REST
+ comment "REST transport needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
-+comment "transports"
++config BR2_PACKAGE_JANUS_UNIX_SOCKETS
++	bool "Unix Sockets"
++	default y
 +
-+config BR2_PACKAGE_JANUS_REST
-+	bool "REST (HTTP/HTTPS)"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBMICROHTTPD
-+
-+comment "REST transport needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- endif
- 
- comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+ config BR2_PACKAGE_JANUS_WEBSOCKETS
+ 	bool "WebSockets"
+ 	depends on BR2_USE_MMU
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index b79e340..01021f8 100644
+index b19ed54..b32fc9a 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -91,6 +91,13 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-websockets
+@@ -104,6 +104,12 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-rest
  endif
  
-+ifeq ($(BR2_PACKAGE_JANUS_REST),y)
-+JANUS_GATEWAY_DEPENDENCIES += libmicrohttpd
-+JANUS_GATEWAY_CONF_OPTS += --enable-rest
++ifeq ($(BR2_PACKAGE_JANUS_UNIX_SOCKETS),y)
++JANUS_GATEWAY_CONF_OPTS += --enable-unix-sockets
 +else
-+JANUS_GATEWAY_CONF_OPTS += --disable-rest
++JANUS_GATEWAY_CONF_OPTS += --disable-unix-sockets
 +endif
 +
- # Parallel build broken
- JANUS_GATEWAY_MAKE = $(MAKE1)
- 
+ ifeq ($(BR2_PACKAGE_JANUS_WEBSOCKETS),y)
+ JANUS_GATEWAY_DEPENDENCIES += libwebsockets
+ JANUS_GATEWAY_CONF_OPTS += --enable-websockets
