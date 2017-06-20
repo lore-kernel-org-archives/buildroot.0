@@ -1,45 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 23:24:05 +0200
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.11-P1
-In-Reply-To: <20170620205534.3570-1-peter@korsgaard.com>
-References: <20170620205534.3570-1-peter@korsgaard.com>
-Message-ID: <20170620232405.3021c096@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Jun 2017 23:24:21 +0200
+Subject: [Buildroot] [PATCH] c-ares: security bump to version 1.13.0
+Message-ID: <20170620212421.17455-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes the following security issues:
 
-On Tue, 20 Jun 2017 22:55:34 +0200, Peter Korsgaard wrote:
-> Fixes the following security issues:
-> 
-> CVE-2017-3140 is a denial-of-service vulnerability affecting 9.9.10,
-> 9.10.5, 9.11.0->9.11.1, 9.9.10-S1, and 9.10.5-S1 when configured with
-> Response Policy Zones (RPZ) utilizing NSIP or NSDNAME rules.
-> 
-> https://kb.isc.org/article/AA-01495/74/CVE-2017-3140
-> 
-> CVE-2017-3141 is a Windows privilege escalation vector affecting
-> 9.2.6-P2+, 9.3.2-P1+, 9.4.x, 9.5.x, 9.6.x, 9.7.x, 9.8.x, 9.9.0->9.9.10,
-> 9.10.0->9.10.5, 9.11.0->9.11.1, 9.9.3-S1->9.9.10-S1, and 9.10.5-S1.  The
-> BIND Windows installer failed to properly quote the service paths,
-> possibly allowing a local user to achieve privilege escalation, if
-> allowed by file system permissions.
-> 
-> https://kb.isc.org/article/AA-01496/74/CVE-2017-3141
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/bind/bind.hash | 4 ++--
->  package/bind/bind.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+CVE-2017-1000381: The c-ares function `ares_parse_naptr_reply()`, which is
+used for parsing NAPTR responses, could be triggered to read memory outside
+of the given input buffer if the passed in DNS response packet was crafted
+in a particular way.
 
-Applied to master, thanks.
+https://c-ares.haxx.se/adv_20170620.html
 
-Thomas
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index f46ef02aba..79928ae843 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 8692f9403cdcdf936130e045c84021665118ee9bfea905d1a76f04d4e6f365fb c-ares-1.12.0.tar.gz
++sha256 03f708f1b14a26ab26c38abd51137640cb444d3ec72380b21b20f1a8d2861da7 c-ares-1.13.0.tar.gz
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index e817d4add5..72019a0425 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ARES_VERSION = 1.12.0
++C_ARES_VERSION = 1.13.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
