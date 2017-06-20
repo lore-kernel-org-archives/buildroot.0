@@ -1,76 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 21:53:53 +0200
-Subject: [Buildroot] [git commit] python-portend: new package
-Message-ID: <20170620200317.2C3D57FDF9@busybox.osuosl.org>
+Date: Tue, 20 Jun 2017 21:54:27 +0200
+Subject: [Buildroot] [git commit] python-cheroot: new package
+Message-ID: <20170620200317.7578B81E4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e677a54f55fd440a835b7da5f2e2430151dc22d9
+commit: https://git.buildroot.net/buildroot/commit/?id=c63404c6bea2c85b8aa7f2c2cbcf561fe29a50d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/Config.in                          |  1 +
- package/python-portend/Config.in           |  7 +++++++
- package/python-portend/python-portend.hash |  3 +++
- package/python-portend/python-portend.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ package/python-cheroot/Config.in           |  8 ++++++++
+ package/python-cheroot/python-cheroot.hash |  3 +++
+ package/python-cheroot/python-cheroot.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 3d225ff..b852dd6 100644
+index b852dd6..6bad95d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -783,6 +783,7 @@ menu "External python modules"
- 	source "package/python-pexpect/Config.in"
- 	source "package/python-pickleshare/Config.in"
- 	source "package/python-pillow/Config.in"
-+	source "package/python-portend/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-prompt-toolkit/Config.in"
- 	source "package/python-protobuf/Config.in"
-diff --git a/package/python-portend/Config.in b/package/python-portend/Config.in
+@@ -696,6 +696,7 @@ menu "External python modules"
+ 	source "package/python-characteristic/Config.in"
+ 	source "package/python-chardet/Config.in"
+ 	source "package/python-cheetah/Config.in"
++	source "package/python-cheroot/Config.in"
+ 	source "package/python-cherrypy/Config.in"
+ 	source "package/python-click/Config.in"
+ 	source "package/python-coherence/Config.in"
+diff --git a/package/python-cheroot/Config.in b/package/python-cheroot/Config.in
 new file mode 100644
-index 0000000..6b21078
+index 0000000..bb85f7b
 --- /dev/null
-+++ b/package/python-portend/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PORTEND
-+	bool "python-portend"
-+	select BR2_PACKAGE_PYTHON_TEMPORA # runtime
++++ b/package/python-cheroot/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_CHEROOT
++	bool "python-cheroot"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
 +	help
-+	  TCP port monitoring utilities.
++	  Cheroot is the high-performance, pure-Python
++	  HTTP server used by CherryPy.
 +
-+	  https://github.com/jaraco/portend
-diff --git a/package/python-portend/python-portend.hash b/package/python-portend/python-portend.hash
++	  https://github.com/cherrypy/cheroot
+diff --git a/package/python-cheroot/python-cheroot.hash b/package/python-cheroot/python-cheroot.hash
 new file mode 100644
-index 0000000..ce4d5f6
+index 0000000..348b82d
 --- /dev/null
-+++ b/package/python-portend/python-portend.hash
++++ b/package/python-cheroot/python-cheroot.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/portend/json, sha256 locally computed
-+md5	a45e001d40227c4529b1a7186f4442f5  portend-1.8.tar.gz
-+sha256	7de919b82c4ac60d4768fe80a2557290661aa665b7c427de6249d8cb2fde5561  portend-1.8.tar.gz
-diff --git a/package/python-portend/python-portend.mk b/package/python-portend/python-portend.mk
++# md5 from https://pypi.python.org/pypi/cheroot/json, sha256 locally computed
++md5	e5503b0e67bdba29c6585965e7f42099  cheroot-5.5.0.tar.gz
++sha256	59e349f91b9230930f7078646bb92b3a5b0f9cf19a6ff949777409fd289a1eba  cheroot-5.5.0.tar.gz
+diff --git a/package/python-cheroot/python-cheroot.mk b/package/python-cheroot/python-cheroot.mk
 new file mode 100644
-index 0000000..b0e89b1
+index 0000000..3f4b689
 --- /dev/null
-+++ b/package/python-portend/python-portend.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-cheroot/python-cheroot.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-portend
++# python-cheroot
 +#
 +################################################################################
 +
-+PYTHON_PORTEND_VERSION = 1.8
-+PYTHON_PORTEND_SOURCE = portend-$(PYTHON_PORTEND_VERSION).tar.gz
-+PYTHON_PORTEND_SITE = https://pypi.python.org/packages/3f/37/f3ab6c4a00632d53d7dfb74ba4a695e86605b92b0a94bd41fa443b60ccb6
-+PYTHON_PORTEND_LICENSE = MIT
-+PYTHON_PORTEND_SETUP_TYPE = setuptools
-+PYTHON_PORTEND_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_CHEROOT_VERSION = 5.5.0
++PYTHON_CHEROOT_SOURCE = cheroot-$(PYTHON_CHEROOT_VERSION).tar.gz
++PYTHON_CHEROOT_SITE = https://pypi.python.org/packages/a5/43/f8a461762dc62e9f273d4944fb8c140757c11a29c91c91d3fbd5fafb1570
++PYTHON_CHEROOT_LICENSE = BSD-3-Clause
++PYTHON_CHEROOT_LICENSE_FILES = LICENSE.md
++PYTHON_CHEROOT_SETUP_TYPE = setuptools
++PYTHON_CHEROOT_DEPENDENCIES = host-python-setuptools-scm
 +
 +$(eval $(python-package))
