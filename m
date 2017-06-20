@@ -1,56 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jun 2017 18:58:45 +0200
-Subject: [Buildroot] [PATCH] barebox: support multiple image files
-In-Reply-To: <20170620153000.18263-1-m.niestroj@grinn-global.com>
-References: <20170620153000.18263-1-m.niestroj@grinn-global.com>
-Message-ID: <20170620185845.41140a53@windsurf.lan>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 20 Jun 2017 20:21:59 +0300
+Subject: [Buildroot] CCACHE accross multiple buildroot projects
+In-Reply-To: <20170620160412.GC2892@scaer>
+References: <CAEyMn7arQ1cEb6Yy2Gkc+FCMPJYbnpKdANQzXWQaCrKzePSfgw@mail.gmail.com>
+ <20170620160412.GC2892@scaer>
+Message-ID: <20170620202159.GB27508@momiji.helsinki.igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 20 Jun 2017 18:04:12 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> Heiko, All,
+> 
+> On 2017-06-19 15:57 +0200, Heiko Thiery spake thusly:
+> > is it allowed to use CCACHE accross several projects (all the same
+> > architecture)?
+> 
+> Normally, ccache hashes a few things to ensure that it does not re-use
+> incompatible obkects. It should be safe.
 
-On Tue, 20 Jun 2017 17:30:00 +0200, Marcin Niestroj wrote:
+It is, I routinely find myself having 3-4 different Buildroot work trees, all
+pointing ccache to the same directory in the file system. If you target the
+same architecture in more than one work tree, builds can sometimes be faster
+when the same versions of the same files are used by different work trees.
 
-> diff --git a/boot/barebox/barebox-aux/Config.in b/boot/barebox/barebox-aux/Config.in
-> index ec3b97cb8..8f21a0c45 100644
-> --- a/boot/barebox/barebox-aux/Config.in
-> +++ b/boot/barebox/barebox-aux/Config.in
-> @@ -32,7 +32,7 @@ config BR2_TARGET_BAREBOX_AUX_CONFIG_FRAGMENT_FILES
->  config BR2_TARGET_BAREBOX_AUX_IMAGE_FILE
->  	string "Image filename"
+Cheers,
 
-Maybe change to:
-
-	string "Image file names"
-
->  	help
-> -	  Name of the generated barebox image, which will be copied to
-> +	  Name of the generated barebox images, which will be copied to
-
-And this to:
-
-	  Space-separated list of barebox images which will be copied to
-	  the images directory.
-
-> diff --git a/boot/barebox/barebox/Config.in b/boot/barebox/barebox/Config.in
-> index 3d8d01456..d29e742d6 100644
-> --- a/boot/barebox/barebox/Config.in
-> +++ b/boot/barebox/barebox/Config.in
-> @@ -33,7 +33,7 @@ config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
->  config BR2_TARGET_BAREBOX_IMAGE_FILE
->  	string "Image filename"
->  	help
-> -	  Name of the generated barebox image, which will be copied to
-> +	  Name of the generated barebox images, which will be copied to
->  	  the images directory.
-
-And of course same here.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170620/dd3f0a18/attachment.asc>
