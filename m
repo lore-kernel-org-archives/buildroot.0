@@ -1,40 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Jun 2017 22:31:01 +0200
-Subject: [Buildroot] [PATCH] roseapplepi: backport upstream patches to
-	fix build with gcc 6
-In-Reply-To: <20170620221906.702e8c96@windsurf.lan> (Thomas Petazzoni's
- message of "Tue, 20 Jun 2017 22:19:06 +0200")
-References: <20170620114952.16292-1-peter@korsgaard.com>
- <20170620213008.652bc050@windsurf.lan>
- <87shiue87y.fsf@dell.be.48ers.dk>
- <20170620221906.702e8c96@windsurf.lan>
-Message-ID: <87o9tie70a.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Jun 2017 22:27:05 +0200
+Subject: [Buildroot] [git commit] package/x264: disable optional ffmpeg
+	support
+Message-ID: <20170620203018.EBD4A81911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=310e4f07f8cdb3e3272aaed236142d58cfaa44e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On Tue, 20 Jun 2017 22:04:49 +0200, Peter Korsgaard wrote:
+In buildroot ffmpeg uses x264 as optional dependency if
+BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
 
- >> > What do you think?  
- >> 
- >> Yeah, it isn't really nice. I was also hessitating between sticking to
- >> gcc5 or add the patches, but as mainline support seems to be finally
- >> moving forward for this SoC (and we already carried patches for building
- >> with gcc 5.x), I went for the patches.
+If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
+support before x264 itself is build, x264 picks up certain ffmpeg libs
+as optional dependency leading to build errors because x264 does not
+correctly link statically against ffmpeg.
 
- > Regarding mainline support, I have no idea how far it is today. But
- > from experience, it takes a very long time to move from the
- > serial+MMC+Ethernet supported to a state where display+audio+GPU is
- > supported. So mainline may not necessarily be a drop-in replacement
- > before a long time.
+To avoid a circular dependency and to avoid teaching x264 how to
+correctly link statically with ffmpeg we just disable all ffmpeg-
+related options.
 
-Yes, I know - But for a buildroot defconfig, serial+MMC+ethernet is
-fine. We also don't have support the GPU or VPU in Buildroot today.
+Fixes
+http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x264/x264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index 7214c96..d1bc767 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -10,7 +10,7 @@ X264_LICENSE = GPL-2.0+
+ X264_DEPENDENCIES = host-pkgconf
+ X264_LICENSE_FILES = COPYING
+ X264_INSTALL_STAGING = YES
+-X264_CONF_OPTS = --disable-avs
++X264_CONF_OPTS = --disable-avs --disable-lavf --disable-swscale
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ # yasm needed for assembly files
