@@ -1,36 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 21:43:05 +0200
-Subject: [Buildroot] [PATCH v2] barebox: support multiple image files
-In-Reply-To: <20170621070353.16521-1-m.niestroj@grinn-global.com>
-References: <20170621070353.16521-1-m.niestroj@grinn-global.com>
-Message-ID: <20170621214305.6ae863f9@windsurf>
+Date: Wed, 21 Jun 2017 21:41:06 +0200
+Subject: [Buildroot] [git commit] openssh: fix sshd for MIPS64 n32
+Message-ID: <20170621194259.E8CE681E88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6da373798426e0080e2f910132a8e281b892d435
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 21 Jun 2017 09:03:53 +0200, Marcin Niestroj wrote:
+This patch backports two patches that have been sent upstream as a pull
+request in order to fix sshd for MIPS64 n32.
 
->  define $(1)_INSTALL_IMAGES_CMDS
->  	if test -n "$$($(1)_IMAGE_FILE)"; then \
+The first patch adds support for detecting the MIPS ABI during the
+configure phase.
 
-I've renamed this variable to $(1)_IMAGE_FILES, because it now contains
-potentially multiple files.
+The second patch sets the right value to seccomp_audit_arch taking into
+account the MIPS64 ABI.
 
-Applied with this fixed.
+Currently seccomp_audit_arch is set to AUDIT_ARCH_MIPS64 or
+AUDIT_ARCH_MIPSEL64 (depending on the endinness) when openssh is built
+for MIPS64. However, that's only valid for n64 ABI. The right macros for
+n32 ABI defined in seccomp.h are AUDIT_ARCH_MIPS64N32 and
+AUDIT_ARCH_MIPSEL64N32, for big and little endian respectively.
 
-BTW, it would be nice to provide a test case for this feature in our
-testing infrastructure, see support/testing/. I think in the long run
-we should require the addition of test cases when such features are
-added.
+Because of that an sshd built for MIPS64 n32 rejects connection attempts
+and the output of strace reveals that the problem is related to seccomp
+audit:
 
-Thanks,
+[pid   194] prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, {len=57,
+filter=0x555d5da0}) = 0
+[pid   194] write(7, "\0\0\0]\0\0\0\5\0\0\0Ulist_hostkey_types: "..., 97) = ?
+[pid   193] <... poll resumed> )        = 2 ([{fd=5, revents=POLLIN|POLLHUP},
+{fd=6, revents=POLLHUP}])
+[pid   194] +++ killed by SIGSYS +++
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Pull request: https://github.com/openssh/openssh-portable/pull/71
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openssh/openssh.hash | 2 ++
+ package/openssh/openssh.mk   | 6 ++++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 3685bc0..ed628fa 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,2 +1,4 @@
+ # From http://www.openssh.com/txt/release-7.5 (base64 encoded)
+ sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
++sha256 310860606c4175cdfd095e724f624df27340c89a916f7a09300bcb7988d5cfbf  afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
++sha256 395aa1006967713b599555440e09f898781a5559e496223587401768ece10904  f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 7e197b0..24d34e8 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -8,6 +8,12 @@ OPENSSH_VERSION = 7.5p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
++# Autoreconf needed due to the following patches modifying configure.ac:
++# f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
++# afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
++OPENSSH_AUTORECONF = YES
++OPENSSH_PATCH = https://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835.patch \
++	https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPTS = \
+ 	--sysconfdir=/etc/ssh \
