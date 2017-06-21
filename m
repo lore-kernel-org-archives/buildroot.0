@@ -1,91 +1,149 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 22 Jun 2017 00:42:19 +0200
-Subject: [Buildroot] [PATCH 4/4] package/solarus-zsdx: new package
+Date: Thu, 22 Jun 2017 00:42:18 +0200
+Subject: [Buildroot] [PATCH 3/4] package/solarus: new package
 In-Reply-To: <20170621224219.22770-1-romain.naour@gmail.com>
 References: <20170621224219.22770-1-romain.naour@gmail.com>
-Message-ID: <20170621224219.22770-4-romain.naour@gmail.com>
+Message-ID: <20170621224219.22770-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Sample quest and testing quest are not included in SOLARUS_LICENSE
+since it's notinstalled by default.
+
+Remove Werror when building with debugging symbols.
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/Config.in                      |  1 +
- package/solarus-zsdx/Config.in         | 16 ++++++++++++++++
- package/solarus-zsdx/solarus-zsdx.hash |  2 ++
- package/solarus-zsdx/solarus-zsdx.mk   | 19 +++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/solarus-zsdx/Config.in
- create mode 100644 package/solarus-zsdx/solarus-zsdx.hash
- create mode 100644 package/solarus-zsdx/solarus-zsdx.mk
+ package/Config.in                              |  1 +
+ package/solarus/0001-cmake-remove-Werror.patch | 27 +++++++++++++++++++++++
+ package/solarus/Config.in                      | 30 ++++++++++++++++++++++++++
+ package/solarus/solarus.hash                   |  2 ++
+ package/solarus/solarus.mk                     | 23 ++++++++++++++++++++
+ 5 files changed, 83 insertions(+)
+ create mode 100644 package/solarus/0001-cmake-remove-Werror.patch
+ create mode 100644 package/solarus/Config.in
+ create mode 100644 package/solarus/solarus.hash
+ create mode 100644 package/solarus/solarus.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1564f96..d7f2f5f 100644
+index 95068fd..1564f96 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -233,6 +233,7 @@ menu "Games"
+@@ -232,6 +232,7 @@ menu "Games"
+ 	source "package/prboom/Config.in"
  	source "package/rubix/Config.in"
  	source "package/sl/Config.in"
- 	source "package/solarus/Config.in"
-+	source "package/solarus-zsdx/Config.in"
++	source "package/solarus/Config.in"
  	source "package/stella/Config.in"
  	source "package/supertux/Config.in"
  	source "package/supertuxkart/Config.in"
-diff --git a/package/solarus-zsdx/Config.in b/package/solarus-zsdx/Config.in
+diff --git a/package/solarus/0001-cmake-remove-Werror.patch b/package/solarus/0001-cmake-remove-Werror.patch
 new file mode 100644
-index 0000000..64b386f
+index 0000000..b27908c
 --- /dev/null
-+++ b/package/solarus-zsdx/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_SOLARUS_ZSDX
-+	bool "solarus-zsdx"
-+	depends on BR2_PACKAGE_SOLARUS
++++ b/package/solarus/0001-cmake-remove-Werror.patch
+@@ -0,0 +1,27 @@
++From 4d315359d15e1221f3463b77a960a60093aac893 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Thu, 22 Jun 2017 00:19:56 +0200
++Subject: [PATCH] cmake: remove Werror
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ cmake/AddCompilationFlags.cmake | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/cmake/AddCompilationFlags.cmake b/cmake/AddCompilationFlags.cmake
++index 5159ff9..a506033 100644
++--- a/cmake/AddCompilationFlags.cmake
+++++ b/cmake/AddCompilationFlags.cmake
++@@ -24,9 +24,6 @@ endif()
++ # Be less pedantic in release builds for users.
++ set(CMAKE_CXX_FLAGS_RELEASE "-Wno-error -Wall -Wextra -Wno-unknown-pragmas -Wno-fatal-errors ${CMAKE_CXX_FLAGS_RELEASE}")
++ 
++-# Be more pedantic in debug mode for developers.
++-set(CMAKE_CXX_FLAGS_DEBUG "-Werror -Wall -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEBUG}")
++-
++ # Platform-specific flags.
++ if(WIN32)
++   # MinGW: disable the console by default.
++-- 
++2.9.4
++
+diff --git a/package/solarus/Config.in b/package/solarus/Config.in
+new file mode 100644
+index 0000000..24472f1
+--- /dev/null
++++ b/package/solarus/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_SOLARUS
++	bool "solarus"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
++	depends on !BR2_STATIC_LIBS # SDL2
++	select BR2_PACKAGE_LIBMODPLUG
++	select BR2_PACKAGE_LIBOGG
++	select BR2_PACKAGE_LIBVORBIS
++	select BR2_PACKAGE_LUAJIT
++	select BR2_PACKAGE_OPENAL
++	select BR2_PACKAGE_PHYSFS
++	select BR2_PACKAGE_SDL2
++	select BR2_PACKAGE_SDL2_IMAGE
++	select BR2_PACKAGE_SDL2_TTF
 +	help
-+	This package contains the data files of the game Zelda:
-+	Mystery of Solarus DX. This quest is a free, open-source game
-+	that works with Solarus, an open-source Zelda-like 2D game
-+	engine. To play this game, you need Solarus. We assume in this
-+	readme that Solarus is already installed.
++	  Solarus is an open-source Zelda-like 2D game engine written
++	  in C++. It can run games scripted in Lua. This engine is used
++	  by our Zelda fangames. Solarus is licensed under GPL v3.
 +
-+	Note: solarus-zsdx contains some Zelda sprites, characters and
-+	musics that are copyrighted by Nitendo.
-+	http://www.solarus-games.org/engine/faq
++	  http://www.solarus-games.org
++	  https://github.com/solarus-games/solarus
 +
-+	http://www.solarus-games.org
-+	https://github.com/solarus-games/zsdx
-diff --git a/package/solarus-zsdx/solarus-zsdx.hash b/package/solarus-zsdx/solarus-zsdx.hash
++comment "solarus needs a toolchain w/ C++, gcc >= 4.8, NPTL, dynamic library"
++	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
 new file mode 100644
-index 0000000..dcd8d2b
+index 0000000..fd895f7
 --- /dev/null
-+++ b/package/solarus-zsdx/solarus-zsdx.hash
++++ b/package/solarus/solarus.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 05a5d220bbf2439c9da2e71cd9d104240878123fff5bc702e2405d6d0712f0dc  solarus-zsdx-1.11.0.tar.gz
-diff --git a/package/solarus-zsdx/solarus-zsdx.mk b/package/solarus-zsdx/solarus-zsdx.mk
++sha256 5930584e7c333089a2c1bf372ccc25ad3fb5c1d973189d2bf67f2308189af94d  solarus-v1.5.3.tar.gz
+diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
 new file mode 100644
-index 0000000..802ecd1
+index 0000000..af37f81
 --- /dev/null
-+++ b/package/solarus-zsdx/solarus-zsdx.mk
-@@ -0,0 +1,19 @@
++++ b/package/solarus/solarus.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# solarus-zsdx
++# solarus
 +#
 +################################################################################
 +
-+SOLARUS_ZSDX_VERSION = 1.11.0
-+SOLARUS_ZSDX_SITE = $(call github,solarus-games,zsdx,zsdx-$(SOLARUS_ZSDX_VERSION))
++SOLARUS_VERSION = v1.5.3
++SOLARUS_SITE = $(call github,solarus-games,solarus,$(SOLARUS_VERSION))
 +
-+# Upstream say: "Our games contain Nintendo?s proprietary content, but we believe
-+# this is fair use."
-+# http://www.solarus-games.org/engine/faq/#are_you_affiliated_with_nintendo
-+SOLARUS_ZSDX_LICENSE = GPL-3.0 (Lua scripts), CC-BY-SA-4.0 (Most data files), \
-+	GPL-2.0 (fonts/wqy-zenhei.ttc), CC-BY-SA-3.0 \
-+	(sprites/enemies/agahnim.png, sprites/enemies/agahnim_fake.png) \
-+	PROPRIETARY (graphics, sounds and names that belong to Nintendo)
-+SOLARUS_ZSDX_LICENSE_FILES = license.txt
++SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
++	CC-BY-SA-3.0 (GUI icons)
++SOLARUS_LICENSE_FILES = license.txt license_gpl.txt
++
++# Install libsolarus.so
++SOLARUS_INSTALL_STAGING = YES
++
++SOLARUS_DEPENDENCIES = libmodplug libogg libvorbis luajit openal physfs sdl2 \
++	sdl2_image sdl2_ttf
++
++# Disable launcher GUI (requires Qt5)
++SOLARUS_CONF_OPTS = -DSOLARUS_GUI=OFF
 +
 +$(eval $(cmake-package))
 -- 
