@@ -1,77 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 22:24:11 +0200
-Subject: [Buildroot] [PATCH] package/dt-utils: new package
-In-Reply-To: <20170621222326.3c64e6bf@windsurf>
-References: <20170620152443.17014-1-m.niestroj@grinn-global.com>
- <20170621222326.3c64e6bf@windsurf>
-Message-ID: <20170621222411.747a5020@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Jun 2017 22:28:09 +0200
+Subject: [Buildroot] [PATCH] iperf: fix tarball hashes changed upstream
+In-Reply-To: <87h8z9jt2g.fsf@dell.be.48ers.dk>
+References: <1498018018-22680-1-git-send-email-post@lespocky.de>
+ <87h8z9jt2g.fsf@dell.be.48ers.dk>
+Message-ID: <2ff88708-7de6-7838-aaf7-9b3196eed376@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 21 Jun 2017 22:23:26 +0200, Thomas Petazzoni wrote:
-> Hello,
+
+On 21-06-17 16:47, Peter Korsgaard wrote:
+>>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 > 
-> On Tue, 20 Jun 2017 17:24:43 +0200, Marcin Niestroj wrote:
-> > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> > ---
-> >  DEVELOPERS                   |  1 +
-> >  package/Config.in            |  1 +
-> >  package/dt-utils/Config.in   |  8 ++++++++
-> >  package/dt-utils/dt-utils.mk | 15 +++++++++++++++
-> >  4 files changed, 25 insertions(+)
-> >  create mode 100644 package/dt-utils/Config.in
-> >  create mode 100644 package/dt-utils/dt-utils.mk  
+>  > Upstream uploaded a new tarball with the same version number 2016-09-08,
+>  > some time after the update to v2.0.9 in buildroot. Someone noticed, but
+>  > upstream set the ticket to wontfix, and promised to do better in the
+>  > future: https://sourceforge.net/p/iperf2/tickets/20/
 > 
-> This package doesn't build with the following defconfig:
+>  > Signed-off-by: Alexander Dahl <post@lespocky.de>
+>  > ---
+>  > According to y_morin on IRC you may want to change or remove the tarball
+>  > on source.buildroot.org then.
 > 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-444-g6c704ba.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_DT_UTILS=y
-> # BR2_TARGET_ROOTFS_TAR is not set
+> FYI, I've updated the tarball on s.b.o.
 
-Sorry, forgot to give the error message:
+ ... which means that anyone using Buildroot 2.0.9 cannot use iperf... I think
+you should restore the old tarball until 2017.05.1 is released.
 
-  CC       src/fdtdump-fdtdump.o
-  GEN      src/libdt-utils.pc
-In file included from ./src/dt/list.h:4:0,
-                 from ./src/dt/dt.h:5,
-                 from src/dtblint-imx-pinmux.c:13:
-./src/dt/common.h:181:22: error: static declaration of ?strlcpy? follows non-static declaration
- static inline size_t strlcpy(char *dest, const char *src, size_t size)
-                      ^
-In file included from ./src/dt/common.h:11:0,
-                 from ./src/dt/list.h:4,
-                 from ./src/dt/dt.h:5,
-                 from src/dtblint-imx-pinmux.c:13:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/string.h:424:15: note: previous declaration of ?strlcpy? was here
- extern size_t strlcpy(char *__restrict dst, const char *__restrict src,
-               ^
+ Regards,
+ Arnout
 
-(several times)
-
-Could you fix those issues, and send an updated version?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
