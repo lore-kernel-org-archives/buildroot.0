@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 07:44:30 +0200
-Subject: [Buildroot] [PATCH] iperf: fix tarball hashes changed upstream
-In-Reply-To: <1498018018-22680-1-git-send-email-post@lespocky.de>
-References: <1498018018-22680-1-git-send-email-post@lespocky.de>
-Message-ID: <20170621074430.6f471882@windsurf.lan>
+Date: Wed, 21 Jun 2017 07:46:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glm: fix musl build
+In-Reply-To: <20170612182936.8517-1-bernd.kuhls@t-online.de>
+References: <20170612182936.8517-1-bernd.kuhls@t-online.de>
+Message-ID: <20170621074626.2646fe85@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Jun 2017 06:06:58 +0200, Alexander Dahl wrote:
-> Upstream uploaded a new tarball with the same version number 2016-09-08,
-> some time after the update to v2.0.9 in buildroot. Someone noticed, but
-> upstream set the ticket to wontfix, and promised to do better in the
-> future: https://sourceforge.net/p/iperf2/tickets/20/
+On Mon, 12 Jun 2017 20:29:36 +0200, Bernd Kuhls wrote:
+> The musl-related build error occurs because -pedantic is used for gcc
+> which is broken with musl, for details refer to
+> https://git.buildroot.net/buildroot/commit/package/jsoncpp?id=6b462ac8bd4021dda4f84198a127f1be7b46087d
 > 
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
-> ---
-> According to y_morin on IRC you may want to change or remove the tarball
-> on source.buildroot.org then.
-> ---
->  package/iperf/iperf.hash | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Glm uses this option only if GLM_TEST_ENABLE_LANG_EXTENSIONS=OFF, to
+> solve the problem we set it to ON in order to use another code path
+> in CMakeLists.txt which causes no other changes to compiler options
+> because GLM_TEST_ENABLE_FAST_MATH defaults to OFF.
+> 
+> To sum up, this patch only prevents -pedantic being added to gcc
+> options which fixes
+> http://autobuild.buildroot.net/results/890/8900d0c45c859edd95bb3610b224b9f222ef7493/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Applied to master, thanks.
+The problem fixed by this patch no longer exists with the latest
+rebuild of the musl toolchains, which use gcc 6.x over gcc 5.x.
+However, I haven't been able to identify which commit in gcc is fixing
+this. Could you investigate this a little bit?
+
+Also, I would prefer a patch to the package that removes -pedantic
+rather than the fragile solution you proposed.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
