@@ -1,199 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 00:07:42 +0200
-Subject: [Buildroot] [PATCH 2/4] spice: security bump to version 0.12.6
-In-Reply-To: <20170621220744.18908-1-peter@korsgaard.com>
-References: <20170621220744.18908-1-peter@korsgaard.com>
-Message-ID: <20170621220744.18908-3-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 22 Jun 2017 00:42:16 +0200
+Subject: [Buildroot] [PATCH 1/4] package/supertux: use the bundled version
+	of physfs
+Message-ID: <20170621224219.22770-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+In order to add supertux package, a physfs package was introduced
+using the same version (2.1.x) than the one bundled in supertux
+sources. However this version is not released yet and it's still under
+development.
 
-CVE-2015-3247: Race condition in the worker_update_monitors_config function
-in SPICE 0.12.4 allows a remote authenticated guest user to cause a denial
-of service (heap-based memory corruption and QEMU-KVM crash) or possibly
-execute arbitrary code on the host via unspecified vectors.
+The 2.1.x version introduce API changes that may break other packages
+using the latest stable version of physfs (2.0.x).
 
-CVE-2015-5260: Heap-based buffer overflow in SPICE before 0.12.6 allows
-guest OS users to cause a denial of service (heap-based memory corruption
-and QEMU-KVM crash) or possibly execute arbitrary code on the host via QXL
-commands related to the surface_id parameter.
+Also, there is an issue (segfault) with physfs 2.1.x while extracting
+a zip archive. This issue is fixed in 2.0.x branch but not in 2.1.x
+branch since physfs 2.1.x now use minizip which doesn't provide
+inflateCopy() used by the bugfix [1].
 
-CVE-2015-5261: Heap-based buffer overflow in SPICE before 0.12.6 allows
-guest OS users to read and write to arbitrary memory locations on the host
-via guest QXL commands related to surface creation.
+This doesn't affect supertux itself, so we can safely
+use the bundled version.
 
-Client/gui support is gone upstream (moved to spice-gtk / virt-viewer), so
-add Config.in.legacy handling for them.
+[1] https://hg.icculus.org/icculus/physfs/rev/090cb9c74b87
 
-Lz4 is a new optional dependency, so handle it.
-
-The spice protocol definition is no longer included and instead used from
-spice-protocol.  The build system uses pkg-config --variable=codegendir to
-find the build time path of this, which doesn't take our STAGING_DIR prefix
-into consideration, so it needs some help.  The installed protocol
-definition will likewise be newer than the generated files, so we need to
-workaround that to ensure they are not regenerated (which needs host python
-/ pyparsing).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- Config.in.legacy         | 16 ++++++++++++++++
- package/spice/Config.in  | 35 -----------------------------------
- package/spice/spice.hash |  2 +-
- package/spice/spice.mk   | 40 +++++++++++++++++++---------------------
- 4 files changed, 36 insertions(+), 57 deletions(-)
+ package/supertux/Config.in   |  1 -
+ package/supertux/supertux.mk | 12 +++++++-----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index dc99b7c2eb..361d331dc9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
+diff --git a/package/supertux/Config.in b/package/supertux/Config.in
+index 684c2cc..38e4a98 100644
+--- a/package/supertux/Config.in
++++ b/package/supertux/Config.in
+@@ -19,7 +19,6 @@ config BR2_PACKAGE_SUPERTUX
+ 	select BR2_PACKAGE_LIBOGG
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	select BR2_PACKAGE_OPENAL
+-	select BR2_PACKAGE_PHYSFS
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_SDL2_IMAGE
+ 	select BR2_PACKAGE_SDL2_OPENGL
+diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+index e397441..0caceb1 100644
+--- a/package/supertux/supertux.mk
++++ b/package/supertux/supertux.mk
+@@ -10,13 +10,14 @@ SUPERTUX_SOURCE = SuperTux-v$(SUPERTUX_VERSION)-Source.tar.gz
  
-+config BR2_PACKAGE_SPICE_CLIENT
-+	bool "spice client support removed"
-+	select BR2_LEGACY
-+	help
-+	  Spice client support has been removed upstream. The
-+	  functionality now lives in the spice-gtk widget and
-+	  virt-viewer.
-+
-+config BR2_PACKAGE_SPICE_GUI
-+	bool "spice gui support removed"
-+	select BR2_LEGACY
-+	help
-+	  Spice gui support has been removed upstream. The
-+	  functionality now lives in the spice-gtk widget and
-+	  virt-viewer.
-+
- config BR2_PACKAGE_SPICE_TUNNEL
- 	bool "spice network redirection removed"
- 	select BR2_LEGACY
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 220f9994da..2241b55b3d 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -22,38 +22,3 @@ config BR2_PACKAGE_SPICE
- 	  This package implements the server-part of Spice.
+ # Supertux itself is GPL-3.0+, but it bundles a few libraries with different
+ # licenses (sexp-cpp, squirrel, tinygettext) which are linked statically.
+-SUPERTUX_LICENSE = GPL-3.0+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, GPL-2.0+ (images music sounds)
++SUPERTUX_LICENSE = GPL-3.0+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, GPL-2.0+ (images music sounds) \
++	Zlib (physfs)
+ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
  
- 	  http://www.spice-space.org/
--
--if BR2_PACKAGE_SPICE
--
--comment "client depends on X.org"
--	depends on !BR2_PACKAGE_XORG7
--
--config BR2_PACKAGE_SPICE_CLIENT
--	bool "Enable client"
--	depends on BR2_PACKAGE_XORG7
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_XLIB_LIBXFIXES
--	select BR2_PACKAGE_XLIB_LIBXRANDR
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXRENDER
--	select BR2_PACKAGE_ALSA_LIB
--
--comment "client needs a toolchain w/ threads, C++"
--	depends on BR2_PACKAGE_XORG7
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--
--config BR2_PACKAGE_SPICE_GUI
--	bool "Enable GUI"
--	depends on BR2_PACKAGE_SPICE_CLIENT
--	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_CEGUI06
--	help
--	  Say 'y' here to enable the Graphical User Interface (GUI)
--	  start dialog.
--
--comment "gui needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
--endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.hash b/package/spice/spice.hash
-index 0a943f0332..04bd516689 100644
---- a/package/spice/spice.hash
-+++ b/package/spice/spice.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	4209a20d8f67cb99a8a6ac499cfe79a18d4ca226360457954a223d6795c2f581	spice-0.12.5.tar.bz2
-+sha256	f148ea30135bf80a4f465ce723a1cd6d4ccb34c098b6298a020b378ace8569b6	spice-0.12.6.tar.bz2
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index ba76a14d61..f1fb46d29c 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
+ # the CMake build system.
+ SUPERTUX_DEPENDENCIES = host-pkgconf boost libcurl libgl libglew libglu \
+-	libogg libvorbis openal physfs sdl2 sdl2_image
++	libogg libvorbis openal sdl2 sdl2_image
  
--SPICE_VERSION = 0.12.5
-+SPICE_VERSION = 0.12.6
- SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
- SPICE_SITE = http://www.spice-space.org/download/releases
- SPICE_LICENSE = LGPL-2.1+
-@@ -35,38 +35,36 @@ else
- SPICE_CONF_OPTS += --disable-celt051
- endif
+ # ENABLE_BOOST_STATIC_LIBS=OFF: use boost shared libraries since supertux
+ # depends on !BR2_STATIC_LIBS and boost provide only shared libraries with
+@@ -24,8 +25,9 @@ SUPERTUX_DEPENDENCIES = host-pkgconf boost libcurl libgl libglew libglu \
+ # ENABLE_OPENGL=ON: Can be disabled but will make SuperTux unplayable slow.
+ # GLBINDING_ENABLED=OFF: use GLEW (default) instead of glbinding.
+ # Install the game directly in /usr/bin and game data in /usr/share/supertux2.
+-# Force using physfs.so from staging since the check on PHYSFS_getPrefDir symbol
+-# in physfs.h (CHECK_SYMBOL_EXISTS) doesn't work.
++# Force using the bundled version of physfs since it use a non released version
++# of physfs (2.1.x) which is incompatible with the latest released version (2.0.x)
++# due to API changes.
+ SUPERTUX_CONF_OPTS += \
+ 	-DENABLE_BOOST_STATIC_LIBS=OFF \
+ 	-DBUILD_DOCUMENTATION=OFF \
+@@ -33,7 +35,7 @@ SUPERTUX_CONF_OPTS += \
+ 	-DGLBINDING_ENABLED=OFF \
+ 	-DINSTALL_SUBDIR_BIN="bin" \
+ 	-DINSTALL_SUBDIR_SHARE="share/supertux2" \
+-	-DUSE_SYSTEM_PHYSFS=ON
++	-DUSE_SYSTEM_PHYSFS=OFF
  
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+SPICE_CONF_OPTS += --enable-lz4
-+SPICE_DEPENDENCIES += lz4
-+else
-+SPICE_CONF_OPTS += --disable-lz4
-+endif
-+
- # no enable/disable, detected using pkg-config
- ifeq ($(BR2_PACKAGE_OPUS),y)
- SPICE_DEPENDENCIES += opus
- endif
- 
--ifeq ($(BR2_PACKAGE_SPICE_CLIENT),y)
--SPICE_CONF_OPTS += --enable-client
--SPICE_DEPENDENCIES += \
--	xlib_libXfixes \
--	xlib_libXrandr \
--	xlib_libX11 \
--	xlib_libXext \
--	xlib_libXrender \
--	alsa-lib
--else
--SPICE_CONF_OPTS += --disable-client
--endif
--
--ifeq ($(BR2_PACKAGE_SPICE_GUI),y)
--SPICE_CONF_OPTS += --enable-gui
--SPICE_DEPENDENCIES += cegui06
--else
--SPICE_CONF_OPTS += --disable-gui
--endif
-+# build system uses pkg-config --variable=codegendir spice-protocol which
-+# returns the runtime path rather than build time, so it needs some help
-+SPICE_MAKE_OPTS = CODE_GENERATOR_BASEDIR=$(STAGING_DIR)/usr/lib/spice-protocol
-+SPICE_INSTALL_STAGING_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+SPICE_INSTALL_TARGET_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- 
- # spice uses a number of source files that are generated with python / pyparsing.
- # The generated files are part of the tarball, so python / pyparsing isn't needed
- # when building from the tarball, but the configure script gets confused and looks
- # for the wrong file name to know if it needs to check for python / pyparsing,
--# so convince it they aren't needed
-+# so convince it they aren't needed.
-+# It will also regenerate these files if the spice-protocol protocol definition
-+# is newer than the generated files (which it will be when spice-protocol
-+# installs it to staging), so ensure their timestamp is updated to skip this.
- define SPICE_NO_PYTHON_PYPARSING
-+	mkdir -p $(@D)/client
- 	touch $(@D)/client/generated_marshallers.cpp
-+	touch $(@D)/spice-common/common/generated_*
- endef
- 
- SPICE_PRE_CONFIGURE_HOOKS += SPICE_NO_PYTHON_PYPARSING
+ # Avoid incompatible posix_memalign declaration on x86 and x86_64 with
+ # musl.
 -- 
-2.11.0
+2.9.4
