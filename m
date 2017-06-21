@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 22:42:55 +0200
-Subject: [Buildroot] [git commit] mmc-utils: bump version to
-	37c86e60c0442fef570b75cd81aeb1db4d0cbafd
-Message-ID: <20170621205509.A8EDD7F93A@busybox.osuosl.org>
+Date: Wed, 21 Jun 2017 22:42:54 +0200
+Subject: [Buildroot] [git commit] libcurl: bump version to 7.54.1
+Message-ID: <20170621205509.969DE7F93A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caae03473879cc3e90f214ce749cd561b461603e
+commit: https://git.buildroot.net/buildroot/commit/?id=c52d50336eb6c51eb9d590cebdee72623d76dd51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mmc-utils/mmc-utils.hash | 2 +-
- package/mmc-utils/mmc-utils.mk   | 2 +-
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
-index a429079..35cd580 100644
---- a/package/mmc-utils/mmc-utils.hash
-+++ b/package/mmc-utils/mmc-utils.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index f8885e0..1b8d80f 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 4e5018e70f134b8c7ed05c84fca4b29fdce2ef2ca5abc0b9765939e6d8c3d912  mmc-utils-2cb6695e8dec00d887bdd5309d1b57d836fcd214.tar.gz
-+sha256 92ba148648688fca6e0e0e30248ebc6b432bea55584760f20a013583f20a109d  mmc-utils-37c86e60c0442fef570b75cd81aeb1db4d0cbafd.tar.gz
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 5eb9a9a..0b9a6d1 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
+ # Locally calculated after checking pgp signature
+-sha256 f50ebaf43c507fa7cc32be4b8108fa8bbd0f5022e90794388f3c7694a302ff06  curl-7.54.0.tar.bz2
++sha256 fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0  curl-7.54.1.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 6f4803e..45bd080 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MMC_UTILS_VERSION = 2cb6695e8dec00d887bdd5309d1b57d836fcd214
-+MMC_UTILS_VERSION = 37c86e60c0442fef570b75cd81aeb1db4d0cbafd
- MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
- MMC_UTILS_LICENSE = GPL-2.0
- 
+-LIBCURL_VERSION = 7.54.0
++LIBCURL_VERSION = 7.54.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
