@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 22:42:54 +0200
-Subject: [Buildroot] [git commit] libcurl: bump version to 7.54.1
-Message-ID: <20170621205509.969DE7F93A@busybox.osuosl.org>
+Date: Wed, 21 Jun 2017 22:42:58 +0200
+Subject: [Buildroot] [git commit] apr: bump version to 1.6.2
+Message-ID: <20170621205509.EC1518189B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c52d50336eb6c51eb9d590cebdee72623d76dd51
+commit: https://git.buildroot.net/buildroot/commit/?id=d56868011b521df802cd171b4f39e56120585396
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apr/apr.hash | 4 ++--
+ package/apr/apr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index f8885e0..1b8d80f 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/apr/apr.hash b/package/apr/apr.hash
+index 917ce56..7a5969e 100644
+--- a/package/apr/apr.hash
++++ b/package/apr/apr.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 f50ebaf43c507fa7cc32be4b8108fa8bbd0f5022e90794388f3c7694a302ff06  curl-7.54.0.tar.bz2
-+sha256 fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0  curl-7.54.1.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 6f4803e..45bd080 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+-# From http://archive.apache.org/dist/apr/apr-1.5.2.tar.bz2.sha1
+-sha1 6d757fcf7c687fc300c1066076f2e8380ff8cbc0  apr-1.5.2.tar.bz2
++# From http://archive.apache.org/dist/apr/apr-1.6.2.tar.bz2.sha1
++sha1 01b0d4faa0194825e8e525b9ac7ccfb832471d50  apr-1.6.2.tar.bz2
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 4a97f7e..ffb3099 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.54.0
-+LIBCURL_VERSION = 7.54.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-APR_VERSION = 1.5.2
++APR_VERSION = 1.6.2
+ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
+ APR_SITE = http://archive.apache.org/dist/apr
+ APR_LICENSE = Apache-2.0
