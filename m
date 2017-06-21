@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 21 Jun 2017 16:30:52 -0400
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3190300
+Date: Wed, 21 Jun 2017 16:30:53 -0400
+Subject: [Buildroot] [PATCH] libcurl: bump version to 7.54.1
 In-Reply-To: <20170621203057.4346-1-aduskett@codeblue.com>
 References: <20170621203057.4346-1-aduskett@codeblue.com>
-Message-ID: <20170621203057.4346-3-aduskett@codeblue.com>
+Message-ID: <20170621203057.4346-4-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 093ec6d..d04abf3 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 597735a7039ebb105ea36366783ff0a3177f9131  sqlite-autoconf-3190200.tar.gz
-+sha1 58f2cabffb3ff4761a3ac7f834d9db7b46307c1f  sqlite-autoconf-3190300.tar.gz
- # Calculated based on the hash above
--sha256 ca5361fb01cc3ad63d6fd4eb2cb0b6398e629595896d3558f7e121d37dac2ffc  sqlite-autoconf-3190200.tar.gz
-+sha256 06129c03dced9f87733a8cba408871bd60673b8f93b920ba8d815efab0a06301  sqlite-autoconf-3190300.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 17b4d2d..7b9c897 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index f8885e0..1b8d80f 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 f50ebaf43c507fa7cc32be4b8108fa8bbd0f5022e90794388f3c7694a302ff06  curl-7.54.0.tar.bz2
++sha256 fdfc4df2d001ee0c44ec071186e770046249263c491fcae48df0e1a3ca8f25a0  curl-7.54.1.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 6f4803e..45bd080 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3190200
-+SQLITE_VERSION = 3190300
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
+-LIBCURL_VERSION = 7.54.0
++LIBCURL_VERSION = 7.54.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.9.4
