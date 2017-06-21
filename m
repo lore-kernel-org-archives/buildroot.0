@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 07:44:26 +0200
-Subject: [Buildroot] [PATCH] c-ares: security bump to version 1.13.0
-In-Reply-To: <20170620212421.17455-1-peter@korsgaard.com>
-References: <20170620212421.17455-1-peter@korsgaard.com>
-Message-ID: <20170621074426.6db80181@windsurf.lan>
+Date: Wed, 21 Jun 2017 07:44:30 +0200
+Subject: [Buildroot] [PATCH] iperf: fix tarball hashes changed upstream
+In-Reply-To: <1498018018-22680-1-git-send-email-post@lespocky.de>
+References: <1498018018-22680-1-git-send-email-post@lespocky.de>
+Message-ID: <20170621074430.6f471882@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 20 Jun 2017 23:24:21 +0200, Peter Korsgaard wrote:
-> Fixes the following security issues:
+On Wed, 21 Jun 2017 06:06:58 +0200, Alexander Dahl wrote:
+> Upstream uploaded a new tarball with the same version number 2016-09-08,
+> some time after the update to v2.0.9 in buildroot. Someone noticed, but
+> upstream set the ticket to wontfix, and promised to do better in the
+> future: https://sourceforge.net/p/iperf2/tickets/20/
 > 
-> CVE-2017-1000381: The c-ares function `ares_parse_naptr_reply()`, which is
-> used for parsing NAPTR responses, could be triggered to read memory outside
-> of the given input buffer if the passed in DNS response packet was crafted
-> in a particular way.
-> 
-> https://c-ares.haxx.se/adv_20170620.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Alexander Dahl <post@lespocky.de>
 > ---
->  package/c-ares/c-ares.hash | 2 +-
->  package/c-ares/c-ares.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> According to y_morin on IRC you may want to change or remove the tarball
+> on source.buildroot.org then.
+> ---
+>  package/iperf/iperf.hash | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
