@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 22:42:12 +0200
-Subject: [Buildroot] [git commit] strace: bump version to 4.17
-Message-ID: <20170621205509.6931A81672@busybox.osuosl.org>
+Date: Wed, 21 Jun 2017 22:42:55 +0200
+Subject: [Buildroot] [git commit] mmc-utils: bump version to
+	37c86e60c0442fef570b75cd81aeb1db4d0cbafd
+Message-ID: <20170621205509.A8EDD7F93A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=731b248cc89141ee2ee37bc538068f7e956adc20
+commit: https://git.buildroot.net/buildroot/commit/?id=caae03473879cc3e90f214ce749cd561b461603e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/strace/strace.hash | 6 +++---
- package/strace/strace.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mmc-utils/mmc-utils.hash | 2 +-
+ package/mmc-utils/mmc-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index a0d4d2b..fbd9320 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,3 +1,3 @@
--# From https://sourceforge.net/projects/strace/files/strace/4.16/
--md5	2873366cac98770efcbed6e748d5ef23	strace-4.16.tar.xz
--sha1	b780a8cd2e60ea836cfd3468e0f81623a346d180	strace-4.16.tar.xz
-+# From https://sourceforge.net/projects/strace/files/strace/4.17/
-+md5	8d7eb10eba68bad83a269197e634b626	strace-4.17.tar.xz
-+sha1	a60558a10757e41a39ee9e357d1d03d91d5d94d8	strace-4.17.tar.xz
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 008dc9f..119c9f5 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
+index a429079..35cd580 100644
+--- a/package/mmc-utils/mmc-utils.hash
++++ b/package/mmc-utils/mmc-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 4e5018e70f134b8c7ed05c84fca4b29fdce2ef2ca5abc0b9765939e6d8c3d912  mmc-utils-2cb6695e8dec00d887bdd5309d1b57d836fcd214.tar.gz
++sha256 92ba148648688fca6e0e0e30248ebc6b432bea55584760f20a013583f20a109d  mmc-utils-37c86e60c0442fef570b75cd81aeb1db4d0cbafd.tar.gz
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 5eb9a9a..0b9a6d1 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 4.16
-+STRACE_VERSION = 4.17
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
- STRACE_LICENSE = BSD-3-Clause
+-MMC_UTILS_VERSION = 2cb6695e8dec00d887bdd5309d1b57d836fcd214
++MMC_UTILS_VERSION = 37c86e60c0442fef570b75cd81aeb1db4d0cbafd
+ MMC_UTILS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git
+ MMC_UTILS_LICENSE = GPL-2.0
+ 
