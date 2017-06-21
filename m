@@ -1,105 +1,29 @@
-From: Venkateswara Rao Mandela <venkat.mandela@ti.com>
-Date: Wed, 21 Jun 2017 20:03:45 +0530
-Subject: [Buildroot] [PATCH 1/1] kmsxx: update version
-Message-ID: <20170621143345.12966-1-venkat.mandela@ti.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Jun 2017 16:47:51 +0200
+Subject: [Buildroot] [PATCH] iperf: fix tarball hashes changed upstream
+In-Reply-To: <1498018018-22680-1-git-send-email-post@lespocky.de> (Alexander
+ Dahl's message of "Wed, 21 Jun 2017 06:06:58 +0200")
+References: <1498018018-22680-1-git-send-email-post@lespocky.de>
+Message-ID: <87h8z9jt2g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updating version to latest as on 26 June 2017 to include kmstest utility
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
-Signed-off-by: Venkateswara Rao Mandela <venkat.mandela@ti.com>
----
- ...001-Fix-LTO-support-for-cross-compilation.patch | 45 ----------------------
- package/kmsxx/kmsxx.hash                           |  2 +-
- package/kmsxx/kmsxx.mk                             |  6 +--
- 3 files changed, 4 insertions(+), 49 deletions(-)
- delete mode 100644 package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
+ > Upstream uploaded a new tarball with the same version number 2016-09-08,
+ > some time after the update to v2.0.9 in buildroot. Someone noticed, but
+ > upstream set the ticket to wontfix, and promised to do better in the
+ > future: https://sourceforge.net/p/iperf2/tickets/20/
 
-diff --git a/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch b/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
-deleted file mode 100644
-index 280583af1..000000000
---- a/package/kmsxx/0001-Fix-LTO-support-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 5da1f631bc753655ac94b08a6233eecd0d451327 Mon Sep 17 00:00:00 2001
--From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
--Date: Fri, 26 Aug 2016 21:55:06 +0200
--Subject: [PATCH] Fix LTO support for cross-compilation.
--
--When cross-compiling, the ar and ranlib to be used for LTO are prefixed
--by the cross-tuple. gcc-ar and gcc-ranlib may not exist. Cfr.
--http://autobuild.buildroot.net/results/f3c/f3c48da3a9706cd366c0e0a96c3cd0ff959f2a78/
--
--Therefore, search for an appropriate lto-ar and lto-ranlib before
--enabling LTO.
--
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
--Submitted upstream: https://github.com/tomba/kmsxx/pull/14
-----
-- CMakeLists.txt | 12 +++++++++---
-- 1 file changed, 9 insertions(+), 3 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index e5b5ea5..c61c81d 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -39,9 +39,15 @@ if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
--     CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
-- 
--     if (HAS_LTO_FLAG)
---        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
---        set(CMAKE_AR gcc-ar)
---        set(CMAKE_RANLIB gcc-ranlib)
--+        find_program(LTO_AR NAMES "${CMAKE_C_COMPILER}-ar" gcc-ar)
--+        find_program(LTO_RANLIB NAMES "${CMAKE_C_COMPILER}-ranlib" gcc-ranlib)
--+        if (LTO_AR AND LTO_RANLIB)
--+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
--+            set(CMAKE_AR "${LTO_AR}")
--+            set(CMAKE_RANLIB "${LTO_RANLIB}")
--+        else()
--+            message(STATUS "gcc-ar or gcc-ranlib not found, disabling LTO")
--+        endif()
--     endif()
-- endif()
-- 
---- 
--2.9.3
--
-diff --git a/package/kmsxx/kmsxx.hash b/package/kmsxx/kmsxx.hash
-index 9e75bb9e0..94a9ea1ea 100644
---- a/package/kmsxx/kmsxx.hash
-+++ b/package/kmsxx/kmsxx.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  ff8bdb84a738477a8740c835e23c5bb59aac750e9e72a4afcad4ec8820ec7da2  kmsxx-bd5f6471e619a6ba2987bc7f66ef78a531f94d6c.tar.gz
-+sha256  28892e50c1d1c83fddff9ec683e3bdbd465f5032d0014ceeab43563b813807e1  kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9.tar.gz
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index fd7b1a0a1..5c4a0c1c9 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KMSXX_VERSION = bd5f6471e619a6ba2987bc7f66ef78a531f94d6c
-+KMSXX_VERSION = cb0786049f960f2bd383617151b01318e02e9ff9
- KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
- KMSXX_LICENSE = MPL-2.0
- KMSXX_LICENSE_FILES = LICENSE
-@@ -20,8 +20,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
- KMSXX_TESTS = \
--	fbtestpat kmsblank kmscapture \
--	kmsprint kmsview testpat wbcap \
-+	fbtest kmsblank kmscapture \
-+	kmsprint kmstest kmsview wbcap \
- 	wbm2m
- 
- define KMSXX_INSTALL_TARGET_TESTS
+ > Signed-off-by: Alexander Dahl <post@lespocky.de>
+ > ---
+ > According to y_morin on IRC you may want to change or remove the tarball
+ > on source.buildroot.org then.
+
+FYI, I've updated the tarball on s.b.o.
+
 -- 
-2.13.1
+Bye, Peter Korsgaard
