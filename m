@@ -1,108 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 23:41:42 +0200
-Subject: [Buildroot] [PATCH 1/2] uboot: add support for generating U-Boot
-	boot scripts
-Message-ID: <20170621214143.7184-1-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Jun 2017 23:44:27 +0200
+Subject: [Buildroot] [PATCH 1/4 v2] tools: add a directory to store some
+ useful user-facing tools
+In-Reply-To: <20170621052152.GA23076@scaer>
+References: <20170619154227.GA3045@scaer>
+ <5949d4c290853_3c4af6e910447ac@ultri3.mail> <20170621052152.GA23076@scaer>
+Message-ID: <46aa3c8c-7085-b024-ea77-d610b8971780@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-More and more of our defconfigs need to generate a U-Boot boot
-script. It's a simple call to mkimage, but we already have 12
-instances of this logic in board/, and there are patch series waiting
-in patchwork adding 3 more boards that need this.
 
-So let's add an option in the U-Boot package to generate such a boot
-script image easily.
 
-Note that we assume a single script needs to be generated, and the
-output file name is boot.scr. The only platform for which it seems to
-not be the case are the Boundary Devices platforms: they generate two
-boot scripts, 6x_bootscript and 6x_upgrade, but they are anyway
-installed inside TARGET_DIR, not BINARIES_DIR.
+On 21-06-17 07:21, Yann E. MORIN wrote:
+> Ricardo, All,
+> 
+> On 2017-06-20 23:06 -0300, Ricardo Martincoski spake thusly:
+>> On Mon, Jun 19, 2017 at 12:42 PM, Yann E. MORIN wrote:
+>>> On 2017-06-18 22:11 -0300, Ricardo Martincoski spake thusly:
+>> [snip]
+>>>> BUT if it is called without a .config file, it hangs forever waiting for input,
+>>>> and the menuconfig is sent to the log file.
+>>>
+>>> Indeed, my use-case is to only use it in an already-configured tree.
+>>>
+>>>> Maybe we can bailout if no .config is present.
+>>>
+>>> Hmmm... It's not trivial do detect, because the .config file is not
+>>> necessarily in the current directory, for example:
+>>>
+>>>     brmake -C /pat/to/buil-dir
+>>>
+>>> and I don't want to write a make option interpeter either...
+>>
+>> Oh, I see now it is not trivial.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-We could have chosen to create a helper script that can be used as a
-post-build or post-image script, ala
-support/scripts/genimage.sh. However, I find rather messy how we are
-passing arguments to such scripts: we have a single
-BR2_ROOTFS_POST_SCRIPT_ARGS, passed to all scripts. Proposals such as
-https://patchwork.ozlabs.org/patch/777463/ with:
+ How about instead make the script do
 
-  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m64/genimage.cfg board/bananapi/bananapi-m64/boot.cmd"
+make -C ${0%/*}/.. O=${PWD} "${@}"
 
-where support/scripts/genimage.sh parses the first two arguments, and
-the post-build script generating the U-Boot boot script parses the
-last argument, look really really ugly to me.
+if $PWD is not the Buildroot dir. This still allows overriding either option on
+the command line.
 
-Retrospectively, I believe the choice of adding such a helper script
-for genimage was wrong. Having a proper option would be much
-cleaner/nicer IMO.
----
- boot/uboot/Config.in | 16 ++++++++++++++++
- boot/uboot/uboot.mk  | 13 +++++++++++++
- 2 files changed, 29 insertions(+)
+ Not that this solves the issue...
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 547822d..52f3a32 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -407,6 +407,22 @@ config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
- 
- endif # BR2_TARGET_UBOOT_ENVIMAGE
- 
-+config BR2_TARGET_UBOOT_BOOT_SCRIPT
-+	bool "Generate a U-Boot boot script"
-+	help
-+	  Generate a U-Boot boot script, given a file listing U-Boot
-+	  commands to be executed at boot time. The generated boot
-+	  script will be called 'boot.scr'.
-+
-+if BR2_TARGET_UBOOT_BOOT_SCRIPT
-+
-+config BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE
-+	string "U-Boot boot script source"
-+	help
-+	  Source file to generate the U-Boot boot script.
-+
-+endif
-+
- if BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
- 
- config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 904d45a..0f423a8 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -235,6 +235,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
- 			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
- 			-o $(BINARIES_DIR)/uboot-env.bin -)
-+	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
-+		$(HOST_DIR)/usr/bin/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
-+			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
-+			$(BINARIES_DIR)/boot.scr)
- endef
- 
- define UBOOT_INSTALL_OMAP_IFT_IMAGE
-@@ -298,6 +302,15 @@ endif
- UBOOT_DEPENDENCIES += host-uboot-tools
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_BOOT_SCRIPT),y)
-+ifeq ($(BR_BUILDING),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)),)
-+$(error Please define a source file for Uboot boot script (BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE setting))
-+endif
-+endif
-+UBOOT_DEPENDENCIES += host-uboot-tools
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
- 
- #
+
+> Yet I think I was able to do it in a minimalist way that should cover
+> 99.999999% of the cases (or so I hope, famous last words):
+>     https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/contrib&id=221c72431bb12e0dde4051d9317d9fee2bee6eb2
+
+ I haven't tried, but doesn't it do the wrong thing with
+
+make O=... -C ...
+
+?
+
+
+ But it still doesn't completely solve the issue, because "brmake menuconfig"
+still does the wrong thing... Unfortunately I don't know how to solve that
+(other than detecting menuconfig as an argument, obviously).
+
+ On a related note, perhaps it's better to redirect stdin in case there is
+something interactive during the build (e.g. Qt license approval).
+
+
+ Regards,
+ Arnout
+
+> I'll resubmit soon (after a bit more testing...)
+> 
+>> Only on the first use the user can get confused.
+>> I think adding a usage example in the file header is enough, saying the script
+>> must be run inside or pointing to (-C from make) an output directory already
+>> configured, or something like that.
+>>
+>> [snip]
+>>>>> +    a script that can be run instead of make, that prepends the date in
+>>>>> +    front of each line, redirects all of the build output to a file
+>>>>> +    ("'br.log' in the current directory), and just ouputs the Buildroot
+>>>>
+>>>> Maybe this file will be dropped as discussed in
+>>>> http://patchwork.ozlabs.org/patch/777446/
+>>>> If not, there is a typo
+>>>>
+>>>> ouputs -> outputs
+>>>
+>>> Yup, I already dropped the file locally.
+>> [snip]
+>>
+>> The purpose of the script (initially in 00-README.txt, with the typo fixed)
+>> could be placed in the script header as well.
+> 
+> Yep, good idea. I'll do that.
+> 
+> Thanks!
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 -- 
-2.9.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
