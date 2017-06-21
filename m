@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Jun 2017 23:44:27 +0200
-Subject: [Buildroot] [PATCH 1/4 v2] tools: add a directory to store some
- useful user-facing tools
-In-Reply-To: <20170621052152.GA23076@scaer>
-References: <20170619154227.GA3045@scaer>
- <5949d4c290853_3c4af6e910447ac@ultri3.mail> <20170621052152.GA23076@scaer>
-Message-ID: <46aa3c8c-7085-b024-ea77-d610b8971780@mind.be>
+Date: Thu, 22 Jun 2017 00:04:57 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] tools: add a directory to contain
+ usefull user-facing tools
+In-Reply-To: <20170618142324.GS2918@scaer>
+References: <cover.1497794488.git.yann.morin.1998@free.fr>
+ <20170618161531.762b0929@windsurf> <20170618142324.GS2918@scaer>
+Message-ID: <26389f44-0602-bcbf-eeed-b70b5cd01033@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,91 +14,85 @@ To: buildroot@busybox.net
 
 
 
-On 21-06-17 07:21, Yann E. MORIN wrote:
-> Ricardo, All,
+On 18-06-17 16:23, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> On 2017-06-20 23:06 -0300, Ricardo Martincoski spake thusly:
->> On Mon, Jun 19, 2017 at 12:42 PM, Yann E. MORIN wrote:
->>> On 2017-06-18 22:11 -0300, Ricardo Martincoski spake thusly:
->> [snip]
->>>> BUT if it is called without a .config file, it hangs forever waiting for input,
->>>> and the menuconfig is sent to the log file.
+> On 2017-06-18 16:15 +0200, Thomas Petazzoni spake thusly:
+>> On Sun, 18 Jun 2017 16:01:40 +0200, Yann E. MORIN wrote:
+>>> Currently, we provide a few user-facing utilities, like get-developers,
+>>> in support/scripts/ . But this directory also contains internal scripts
+>>> that a user should not be directly concerned with. Besides, it is
+>>> two-level deep in the hierarchy, which is not really nice.
 >>>
->>> Indeed, my use-case is to only use it in an already-configured tree.
+>>> So, we introduce tools/ as a top-level directory, with the goal to store
+>>> and expose all user-facing utilities, while keeping our internal scripts
+>>> in support/scripts/ .
 >>>
->>>> Maybe we can bailout if no .config is present.
+>>> The first patch in the series introduces a new utility, brmake, a
+>>> wrapper around make that stores all the output to a log file and
+>>> displays only the >>> lines.
 >>>
->>> Hmmm... It's not trivial do detect, because the .config file is not
->>> necessarily in the current directory, for example:
->>>
->>>     brmake -C /pat/to/buil-dir
->>>
->>> and I don't want to write a make option interpeter either...
+>>> The second and subsequent patches each move a few user-facing utilities
+>>> out of support/scripts/ and into tools/ .
 >>
->> Oh, I see now it is not trivial.
+>> I am wondering if there is a very clear cut boundary between
+>> user-facing tools and non-user facing tools.
+> 
+> Yes, the frontier is not trivial.
+> 
+> I'd say that if a tool is meant to be called by the user, then it
+> belongs to tools/. If it is not meant to be alled by a user (even if it
+> could be so) then it belongs to support/scripts/.
 
- How about instead make the script do
+ Sounds good to me!
 
-make -C ${0%/*}/.. O=${PWD} "${@}"
+ Just to be clear: the main reason why I liked the idea of this directory is
+because it makes it easier for users to discover these scripts.
 
-if $PWD is not the Buildroot dir. This still allows overriding either option on
-the command line.
+>> For example, graph-build-time or graph-depends are internally used by
+>> the Buildroot Makefile, but may also be used directly.
+> 
+> The primary use for those scripts is still an internal use. They are
+> supposed to be called from our infra.
+> 
+>> The size-stats
+>> tool is also used internally by the Buildroot Makefile, but
+>> size-stats-compare is meant to be used directly.
+> 
+> Then the former stays in support/scripts/ while the latter should move
+> to tools/.
+> 
+>> What about support/scripts/genimage.sh ?
+> 
+> I would leave it to support/scripts/. It is an internal helper./
+> Besides, it needs a few of our variables (TARGET_DIR and BINARIES_DIR),
+> so I see it as internal.
 
- Not that this solves the issue...
-
-
-> Yet I think I was able to do it in a minimalist way that should cover
-> 99.999999% of the cases (or so I hope, famous last words):
->     https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/contrib&id=221c72431bb12e0dde4051d9317d9fee2bee6eb2
-
- I haven't tried, but doesn't it do the wrong thing with
-
-make O=... -C ...
-
-?
-
-
- But it still doesn't completely solve the issue, because "brmake menuconfig"
-still does the wrong thing... Unfortunately I don't know how to solve that
-(other than detecting menuconfig as an argument, obviously).
-
- On a related note, perhaps it's better to redirect stdin in case there is
-something interactive during the build (e.g. Qt license approval).
+ For me, that is a definite indication that it should stay in support/scripts.
 
 
  Regards,
  Arnout
 
-> I'll resubmit soon (after a bit more testing...)
 > 
->> Only on the first use the user can get confused.
->> I think adding a usage example in the file header is enough, saying the script
->> must be run inside or pointing to (-C from make) an output directory already
->> configured, or something like that.
->>
->> [snip]
->>>>> +    a script that can be run instead of make, that prepends the date in
->>>>> +    front of each line, redirects all of the build output to a file
->>>>> +    ("'br.log' in the current directory), and just ouputs the Buildroot
->>>>
->>>> Maybe this file will be dropped as discussed in
->>>> http://patchwork.ozlabs.org/patch/777446/
->>>> If not, there is a typo
->>>>
->>>> ouputs -> outputs
->>>
->>> Yup, I already dropped the file locally.
->> [snip]
->>
->> The purpose of the script (initially in 00-README.txt, with the typo fixed)
->> could be placed in the script header as well.
+> Of course, I might not have moved all that can/should be moved. This
+> series serves as a base for further discussion.
 > 
-> Yep, good idea. I'll do that.
+> See the initial submission:
 > 
-> Thanks!
+>     [PATCH] contrib: add a directory to store "contrib" stuff
+>     http://lists.busybox.net/pipermail/buildroot/2016-October/174238.html
 > 
 > Regards,
 > Yann E. MORIN.
+> 
+>> Best regards,
+>>
+>> Thomas
+>> -- 
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
 > 
 
 -- 
