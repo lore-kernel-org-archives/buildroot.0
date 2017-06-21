@@ -1,150 +1,91 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 22 Jun 2017 00:42:18 +0200
-Subject: [Buildroot] [PATCH 3/4] package/solarus: new package
-In-Reply-To: <20170621224219.22770-1-romain.naour@gmail.com>
-References: <20170621224219.22770-1-romain.naour@gmail.com>
-Message-ID: <20170621224219.22770-3-romain.naour@gmail.com>
+Date: Thu, 22 Jun 2017 00:47:01 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/supertux: use the bundled
+	version of physfs
+Message-ID: <20170621224704.23279-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sample quest and testing quest are not included in SOLARUS_LICENSE
-since it's notinstalled by default.
+In order to add supertux package, a physfs package was introduced
+using the same version (2.1.x) than the one bundled in supertux
+sources. However this version is not released yet and it's still under
+development.
 
-Remove Werror when building with debugging symbols.
+The 2.1.x version introduce API changes that may break other packages
+using the latest stable version of physfs (2.0.x).
+
+Also, there is an issue (segfault) with physfs 2.1.x while extracting
+a zip archive. This issue is fixed in 2.0.x branch but not in 2.1.x
+branch since physfs 2.1.x now use minizip which doesn't provide
+inflateCopy() used by the bugfix [1].
+
+This doesn't affect supertux itself, so we can safely
+use the bundled version.
+
+[1] https://hg.icculus.org/icculus/physfs/rev/090cb9c74b87
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/Config.in                              |  1 +
- package/solarus/0001-cmake-remove-Werror.patch | 27 +++++++++++++++++++++++
- package/solarus/Config.in                      | 30 ++++++++++++++++++++++++++
- package/solarus/solarus.hash                   |  2 ++
- package/solarus/solarus.mk                     | 23 ++++++++++++++++++++
- 5 files changed, 83 insertions(+)
- create mode 100644 package/solarus/0001-cmake-remove-Werror.patch
- create mode 100644 package/solarus/Config.in
- create mode 100644 package/solarus/solarus.hash
- create mode 100644 package/solarus/solarus.mk
+ package/supertux/Config.in   |  1 -
+ package/supertux/supertux.mk | 12 +++++++-----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 95068fd..1564f96 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -232,6 +232,7 @@ menu "Games"
- 	source "package/prboom/Config.in"
- 	source "package/rubix/Config.in"
- 	source "package/sl/Config.in"
-+	source "package/solarus/Config.in"
- 	source "package/stella/Config.in"
- 	source "package/supertux/Config.in"
- 	source "package/supertuxkart/Config.in"
-diff --git a/package/solarus/0001-cmake-remove-Werror.patch b/package/solarus/0001-cmake-remove-Werror.patch
-new file mode 100644
-index 0000000..b27908c
---- /dev/null
-+++ b/package/solarus/0001-cmake-remove-Werror.patch
-@@ -0,0 +1,27 @@
-+From 4d315359d15e1221f3463b77a960a60093aac893 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 22 Jun 2017 00:19:56 +0200
-+Subject: [PATCH] cmake: remove Werror
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ cmake/AddCompilationFlags.cmake | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/cmake/AddCompilationFlags.cmake b/cmake/AddCompilationFlags.cmake
-+index 5159ff9..a506033 100644
-+--- a/cmake/AddCompilationFlags.cmake
-++++ b/cmake/AddCompilationFlags.cmake
-+@@ -24,9 +24,6 @@ endif()
-+ # Be less pedantic in release builds for users.
-+ set(CMAKE_CXX_FLAGS_RELEASE "-Wno-error -Wall -Wextra -Wno-unknown-pragmas -Wno-fatal-errors ${CMAKE_CXX_FLAGS_RELEASE}")
-+ 
-+-# Be more pedantic in debug mode for developers.
-+-set(CMAKE_CXX_FLAGS_DEBUG "-Werror -Wall -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEBUG}")
-+-
-+ # Platform-specific flags.
-+ if(WIN32)
-+   # MinGW: disable the console by default.
-+-- 
-+2.9.4
-+
-diff --git a/package/solarus/Config.in b/package/solarus/Config.in
-new file mode 100644
-index 0000000..24472f1
---- /dev/null
-+++ b/package/solarus/Config.in
-@@ -0,0 +1,30 @@
-+config BR2_PACKAGE_SOLARUS
-+	bool "solarus"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
-+	depends on !BR2_STATIC_LIBS # SDL2
-+	select BR2_PACKAGE_LIBMODPLUG
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBVORBIS
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_OPENAL
-+	select BR2_PACKAGE_PHYSFS
-+	select BR2_PACKAGE_SDL2
-+	select BR2_PACKAGE_SDL2_IMAGE
-+	select BR2_PACKAGE_SDL2_TTF
-+	help
-+	  Solarus is an open-source Zelda-like 2D game engine written
-+	  in C++. It can run games scripted in Lua. This engine is used
-+	  by our Zelda fangames. Solarus is licensed under GPL v3.
-+
-+	  http://www.solarus-games.org
-+	  https://github.com/solarus-games/solarus
-+
-+comment "solarus needs a toolchain w/ C++, gcc >= 4.8, NPTL, dynamic library"
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
-new file mode 100644
-index 0000000..fd895f7
---- /dev/null
-+++ b/package/solarus/solarus.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 5930584e7c333089a2c1bf372ccc25ad3fb5c1d973189d2bf67f2308189af94d  solarus-v1.5.3.tar.gz
-diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
-new file mode 100644
-index 0000000..af37f81
---- /dev/null
-+++ b/package/solarus/solarus.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# solarus
-+#
-+################################################################################
-+
-+SOLARUS_VERSION = v1.5.3
-+SOLARUS_SITE = $(call github,solarus-games,solarus,$(SOLARUS_VERSION))
-+
-+SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
-+	CC-BY-SA-3.0 (GUI icons)
-+SOLARUS_LICENSE_FILES = license.txt license_gpl.txt
-+
-+# Install libsolarus.so
-+SOLARUS_INSTALL_STAGING = YES
-+
-+SOLARUS_DEPENDENCIES = libmodplug libogg libvorbis luajit openal physfs sdl2 \
-+	sdl2_image sdl2_ttf
-+
-+# Disable launcher GUI (requires Qt5)
-+SOLARUS_CONF_OPTS = -DSOLARUS_GUI=OFF
-+
-+$(eval $(cmake-package))
+diff --git a/package/supertux/Config.in b/package/supertux/Config.in
+index 684c2cc..38e4a98 100644
+--- a/package/supertux/Config.in
++++ b/package/supertux/Config.in
+@@ -19,7 +19,6 @@ config BR2_PACKAGE_SUPERTUX
+ 	select BR2_PACKAGE_LIBOGG
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	select BR2_PACKAGE_OPENAL
+-	select BR2_PACKAGE_PHYSFS
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_SDL2_IMAGE
+ 	select BR2_PACKAGE_SDL2_OPENGL
+diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+index e397441..0caceb1 100644
+--- a/package/supertux/supertux.mk
++++ b/package/supertux/supertux.mk
+@@ -10,13 +10,14 @@ SUPERTUX_SOURCE = SuperTux-v$(SUPERTUX_VERSION)-Source.tar.gz
+ 
+ # Supertux itself is GPL-3.0+, but it bundles a few libraries with different
+ # licenses (sexp-cpp, squirrel, tinygettext) which are linked statically.
+-SUPERTUX_LICENSE = GPL-3.0+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, GPL-2.0+ (images music sounds)
++SUPERTUX_LICENSE = GPL-3.0+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, GPL-2.0+ (images music sounds) \
++	Zlib (physfs)
+ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
+ 
+ # Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
+ # the CMake build system.
+ SUPERTUX_DEPENDENCIES = host-pkgconf boost libcurl libgl libglew libglu \
+-	libogg libvorbis openal physfs sdl2 sdl2_image
++	libogg libvorbis openal sdl2 sdl2_image
+ 
+ # ENABLE_BOOST_STATIC_LIBS=OFF: use boost shared libraries since supertux
+ # depends on !BR2_STATIC_LIBS and boost provide only shared libraries with
+@@ -24,8 +25,9 @@ SUPERTUX_DEPENDENCIES = host-pkgconf boost libcurl libgl libglew libglu \
+ # ENABLE_OPENGL=ON: Can be disabled but will make SuperTux unplayable slow.
+ # GLBINDING_ENABLED=OFF: use GLEW (default) instead of glbinding.
+ # Install the game directly in /usr/bin and game data in /usr/share/supertux2.
+-# Force using physfs.so from staging since the check on PHYSFS_getPrefDir symbol
+-# in physfs.h (CHECK_SYMBOL_EXISTS) doesn't work.
++# Force using the bundled version of physfs since it use a non released version
++# of physfs (2.1.x) which is incompatible with the latest released version (2.0.x)
++# due to API changes.
+ SUPERTUX_CONF_OPTS += \
+ 	-DENABLE_BOOST_STATIC_LIBS=OFF \
+ 	-DBUILD_DOCUMENTATION=OFF \
+@@ -33,7 +35,7 @@ SUPERTUX_CONF_OPTS += \
+ 	-DGLBINDING_ENABLED=OFF \
+ 	-DINSTALL_SUBDIR_BIN="bin" \
+ 	-DINSTALL_SUBDIR_SHARE="share/supertux2" \
+-	-DUSE_SYSTEM_PHYSFS=ON
++	-DUSE_SYSTEM_PHYSFS=OFF
+ 
+ # Avoid incompatible posix_memalign declaration on x86 and x86_64 with
+ # musl.
 -- 
 2.9.4
