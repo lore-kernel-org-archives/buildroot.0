@@ -1,148 +1,150 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 22 Jun 2017 00:47:02 +0200
-Subject: [Buildroot] [PATCH v2 2/4] package/physfs: use the 2.0.x stable
-	branch
+Date: Thu, 22 Jun 2017 00:47:03 +0200
+Subject: [Buildroot] [PATCH v2 3/4] package/solarus: new package
 In-Reply-To: <20170621224704.23279-1-romain.naour@gmail.com>
 References: <20170621224704.23279-1-romain.naour@gmail.com>
-Message-ID: <20170621224704.23279-2-romain.naour@gmail.com>
+Message-ID: <20170621224704.23279-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 2.1.x version is not released yet and it's still under development
-and introduce API changes that may break other packages using the
-latest stable version of physfs (2.0.x).
+Sample quest and testing quest are not included in SOLARUS_LICENSE
+since it's notinstalled by default.
 
-Also, there is an issue (segfault) with physfs 2.1.x while extracting
-a zip archive. This issue is fixed in 2.0.x branch but not in 2.1.x
-branch since physfs 2.1.x now use minizip which doesn't provide
-inflateCopy() used by the bugfix [1].
-
-[1] https://hg.icculus.org/icculus/physfs/rev/090cb9c74b87
+Remove Werror when building with debugging symbols.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../physfs/0001-Fix-builds-with-modern-GCC.patch   | 38 ----------------------
- package/physfs/0001-Remove-Werror.patch            | 28 ++++++++++++++++
- package/physfs/Config.in                           |  1 +
- package/physfs/physfs.mk                           |  5 ++-
- 4 files changed, 33 insertions(+), 39 deletions(-)
- delete mode 100644 package/physfs/0001-Fix-builds-with-modern-GCC.patch
- create mode 100644 package/physfs/0001-Remove-Werror.patch
+ package/Config.in                              |  1 +
+ package/solarus/0001-cmake-remove-Werror.patch | 27 +++++++++++++++++++++++
+ package/solarus/Config.in                      | 30 ++++++++++++++++++++++++++
+ package/solarus/solarus.hash                   |  2 ++
+ package/solarus/solarus.mk                     | 23 ++++++++++++++++++++
+ 5 files changed, 83 insertions(+)
+ create mode 100644 package/solarus/0001-cmake-remove-Werror.patch
+ create mode 100644 package/solarus/Config.in
+ create mode 100644 package/solarus/solarus.hash
+ create mode 100644 package/solarus/solarus.mk
 
-diff --git a/package/physfs/0001-Fix-builds-with-modern-GCC.patch b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
-deleted file mode 100644
-index 710b4ff..0000000
---- a/package/physfs/0001-Fix-builds-with-modern-GCC.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8 Mon Sep 17 00:00:00 2001
--From: Jacob Burroughs <jburroughs@trustwave.com>
--Date: Thu, 23 Jun 2016 13:03:47 -0500
--Subject: [PATCH] Fix builds with modern GCC
--
--From SuperTux project:
--https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- CMakeLists.txt | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 2a371af..94c4844 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -50,7 +50,7 @@ endif()
-- # Add some gcc-specific command lines.
-- if(CMAKE_COMPILER_IS_GNUCC)
--     # Always build with debug symbols...you can strip it later.
---    add_definitions(-g -pipe -Werror -fsigned-char)
--+    add_definitions(-g -pipe -fsigned-char)
-- 
--     # Stupid BeOS generates warnings in the system headers.
--     if(NOT BEOS)
--@@ -304,7 +304,7 @@ if(PHYSFS_BUILD_TEST)
--         if(READLINE_LIBRARY)
--             set(HAVE_SYSTEM_READLINE TRUE)
--             set(TEST_PHYSFS_LIBS ${TEST_PHYSFS_LIBS} ${READLINE_LIBRARY} ${CURSES_LIBRARY})
---            include_directories(${READLINE_H} ${HISTORY_H})
--+            include_directories(SYSTEM ${READLINE_H} ${HISTORY_H})
--             add_definitions(-DPHYSFS_HAVE_READLINE=1)
--         endif()
--     endif()
---- 
--2.9.3
--
-diff --git a/package/physfs/0001-Remove-Werror.patch b/package/physfs/0001-Remove-Werror.patch
+diff --git a/package/Config.in b/package/Config.in
+index 95068fd..1564f96 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -232,6 +232,7 @@ menu "Games"
+ 	source "package/prboom/Config.in"
+ 	source "package/rubix/Config.in"
+ 	source "package/sl/Config.in"
++	source "package/solarus/Config.in"
+ 	source "package/stella/Config.in"
+ 	source "package/supertux/Config.in"
+ 	source "package/supertuxkart/Config.in"
+diff --git a/package/solarus/0001-cmake-remove-Werror.patch b/package/solarus/0001-cmake-remove-Werror.patch
 new file mode 100644
-index 0000000..5f6e879
+index 0000000..b27908c
 --- /dev/null
-+++ b/package/physfs/0001-Remove-Werror.patch
-@@ -0,0 +1,28 @@
-+From 2d75791a88e18225f4cbadaed30d25e0de00fef0 Mon Sep 17 00:00:00 2001
++++ b/package/solarus/0001-cmake-remove-Werror.patch
+@@ -0,0 +1,27 @@
++From 4d315359d15e1221f3463b77a960a60093aac893 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 22 Jun 2017 00:25:55 +0200
-+Subject: [PATCH] Remove Werror
-+
-+This may break the build with new compiler version (gcc 7.x)
++Date: Thu, 22 Jun 2017 00:19:56 +0200
++Subject: [PATCH] cmake: remove Werror
 +
 +Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ cmake/AddCompilationFlags.cmake | 3 ---
++ 1 file changed, 3 deletions(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 2a371af..6fef770 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -50,7 +50,7 @@ endif()
-+ # Add some gcc-specific command lines.
-+ if(CMAKE_COMPILER_IS_GNUCC)
-+     # Always build with debug symbols...you can strip it later.
-+-    add_definitions(-g -pipe -Werror -fsigned-char)
-++    add_definitions(-g -pipe -fsigned-char)
++diff --git a/cmake/AddCompilationFlags.cmake b/cmake/AddCompilationFlags.cmake
++index 5159ff9..a506033 100644
++--- a/cmake/AddCompilationFlags.cmake
+++++ b/cmake/AddCompilationFlags.cmake
++@@ -24,9 +24,6 @@ endif()
++ # Be less pedantic in release builds for users.
++ set(CMAKE_CXX_FLAGS_RELEASE "-Wno-error -Wall -Wextra -Wno-unknown-pragmas -Wno-fatal-errors ${CMAKE_CXX_FLAGS_RELEASE}")
 + 
-+     # Stupid BeOS generates warnings in the system headers.
-+     if(NOT BEOS)
++-# Be more pedantic in debug mode for developers.
++-set(CMAKE_CXX_FLAGS_DEBUG "-Werror -Wall -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEBUG}")
++-
++ # Platform-specific flags.
++ if(WIN32)
++   # MinGW: disable the console by default.
 +-- 
 +2.9.4
 +
-diff --git a/package/physfs/Config.in b/package/physfs/Config.in
-index dad3ab4..8b26295 100644
---- a/package/physfs/Config.in
-+++ b/package/physfs/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PHYSFS
- 	bool "physfs"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  PhysicsFS; a portable, flexible file i/o abstraction.
- 
-diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
-index 9193ad5..9221723 100644
---- a/package/physfs/physfs.mk
-+++ b/package/physfs/physfs.mk
-@@ -4,13 +4,16 @@
- #
- ################################################################################
- 
--PHYSFS_VERSION = be27dfd07d97336145e7f49d3fd200a6e902f85e
-+# stable-2.0 branch
-+PHYSFS_VERSION = 090cb9c74b87198e6d520afca9d649ca0d84669f
- PHYSFS_SITE = https://hg.icculus.org/icculus/physfs
- PHYSFS_SITE_METHOD = hg
- 
- PHYSFS_LICENSE = Zlib (physfs), LGPL with exceptions (lzma)
- PHYSFS_LICENSE_FILES = LICENSE.txt src/lzma/LGPL.txt
- 
-+PHYSFS_DEPENDENCIES = zlib
+diff --git a/package/solarus/Config.in b/package/solarus/Config.in
+new file mode 100644
+index 0000000..24472f1
+--- /dev/null
++++ b/package/solarus/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_SOLARUS
++	bool "solarus"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
++	depends on !BR2_STATIC_LIBS # SDL2
++	select BR2_PACKAGE_LIBMODPLUG
++	select BR2_PACKAGE_LIBOGG
++	select BR2_PACKAGE_LIBVORBIS
++	select BR2_PACKAGE_LUAJIT
++	select BR2_PACKAGE_OPENAL
++	select BR2_PACKAGE_PHYSFS
++	select BR2_PACKAGE_SDL2
++	select BR2_PACKAGE_SDL2_IMAGE
++	select BR2_PACKAGE_SDL2_TTF
++	help
++	  Solarus is an open-source Zelda-like 2D game engine written
++	  in C++. It can run games scripted in Lua. This engine is used
++	  by our Zelda fangames. Solarus is licensed under GPL v3.
 +
- PHYSFS_INSTALL_STAGING = YES
- 
- PHYSFS_CONF_OPTS = -DPHYSFS_BUILD_TEST=OFF
++	  http://www.solarus-games.org
++	  https://github.com/solarus-games/solarus
++
++comment "solarus needs a toolchain w/ C++, gcc >= 4.8, NPTL, dynamic library"
++	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
+new file mode 100644
+index 0000000..fd895f7
+--- /dev/null
++++ b/package/solarus/solarus.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 5930584e7c333089a2c1bf372ccc25ad3fb5c1d973189d2bf67f2308189af94d  solarus-v1.5.3.tar.gz
+diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+new file mode 100644
+index 0000000..af37f81
+--- /dev/null
++++ b/package/solarus/solarus.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# solarus
++#
++################################################################################
++
++SOLARUS_VERSION = v1.5.3
++SOLARUS_SITE = $(call github,solarus-games,solarus,$(SOLARUS_VERSION))
++
++SOLARUS_LICENSE = GPL-3.0 (code), CC-BY-SA-4.0 (Solarus logos and icons), \
++	CC-BY-SA-3.0 (GUI icons)
++SOLARUS_LICENSE_FILES = license.txt license_gpl.txt
++
++# Install libsolarus.so
++SOLARUS_INSTALL_STAGING = YES
++
++SOLARUS_DEPENDENCIES = libmodplug libogg libvorbis luajit openal physfs sdl2 \
++	sdl2_image sdl2_ttf
++
++# Disable launcher GUI (requires Qt5)
++SOLARUS_CONF_OPTS = -DSOLARUS_GUI=OFF
++
++$(eval $(cmake-package))
 -- 
 2.9.4
