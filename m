@@ -1,49 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 23:07:37 +0200
-Subject: [Buildroot] [PATCH v3] board: Add a13_olinuxino Support
-In-Reply-To: <1497803289-14530-1-git-send-email-chakra@openedev.com>
-References: <1497803289-14530-1-git-send-email-chakra@openedev.com>
-Message-ID: <20170621230737.754cb25e@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Jun 2017 23:09:56 +0200
+Subject: [Buildroot] [PATCH v2] board: added support for Raspberry Pi
+ Zero W
+In-Reply-To: <20170621224648.44373a00@windsurf>
+References: <1498077584-19344-1-git-send-email-yves.deweerdt.linux@gmail.com>
+ <20170621224648.44373a00@windsurf>
+Message-ID: <c667312c-f92e-8eb1-31d8-9bb8cdb7dfc9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sun, 18 Jun 2017 21:58:09 +0530, Chakra Divi wrote:
-> Add initial support for a13_olinuxino board
-> with below features
-> - U-Boot 2017.05
-> - Linux 4.11.5
-> - Default packages from buildroot
+
+On 21-06-17 22:46, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Chakra Divi <chakra@openedev.com>
-> ---
-> Changes for v2:
-> - Add missing readme.txt
-> Changes for v3:
-> - Updating missed DEVELOPERS file changes
+> On Wed, 21 Jun 2017 22:39:44 +0200, Yves Deweerdt wrote:
+>> added a new config file for the Raspberry Pi Zero W (rpi0w)
+>> - added new folder for raspberrypi0w
+>> - included the overlays in the genimage config
+>> - add pi3-miniuart-bt overlay to the config
+>> - remove rpi0w device tree from the raspberrypi0_defconfig and genimage
+>>
+>> Signed-off-by: Yves Deweerdt <yves.deweerdt.linux@gmail.com>
+> 
+> I'd like a review/ack from Peter Seiderer, or other RPi folks of the
+> Buildroot community. I think the commit log should summarize why the
+> Zero W support is removed from raspberrypi0_defconfig, and why a
+> separate defconfig is needed.
 
-Applied to master, with the following changes:
+ I also feel uncomfortable with splitting the defconfig for the two. Perhaps the
+version you submitted here can also be used for Rpi0?
 
-    [Thomas:
-     - use full name in DEVELOPERS file
-     - remove parametrization of the post-build.sh script, just hardcode
-       the boot.cmd file used as input
-     - add missing dosfstools and mtools host packages in defconfig,
-       needed because a vfat partition is defined in the genimage.cfg
-       file
-     - minor tweaks to readme.txt file.]
+>> ---
+>>  board/raspberrypi/genimage-raspberrypi0.cfg  |  1 -
+>>  board/raspberrypi/genimage-raspberrypi0w.cfg | 31 +++++++++++++++++++++++++
+>>  board/raspberrypi0w                          |  1 +
+>>  configs/raspberrypi0_defconfig               |  2 +-
+>>  configs/raspberrypi0w_defconfig              | 34 ++++++++++++++++++++++++++++
 
-Could you please check that what I have committed continues to work fine
-for you? Thanks a lot!
+ To highlight the differences with the existing files, you can use 'git
+format-patch -C' (and possibly also --find-copies-harder). Then the differences
+with the existing files stand out.
 
-Best regards,
+ Regards,
+ Arnout
 
-Thomas
+>>  5 files changed, 67 insertions(+), 2 deletions(-)
+>>  create mode 100644 board/raspberrypi/genimage-raspberrypi0w.cfg
+>>  create mode 120000 board/raspberrypi0w
+>>  create mode 100644 configs/raspberrypi0w_defconfig
+> 
+> An update to board/raspberrypi/readme.txt would be needed.
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
