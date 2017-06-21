@@ -1,9 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 00:07:43 +0200
-Subject: [Buildroot] [PATCH 3/4] spice: security bump to version 0.12.8
+Date: Thu, 22 Jun 2017 00:07:44 +0200
+Subject: [Buildroot] [PATCH 4/4] spice: add post-0.12.8 upstream security
+	fixes
 In-Reply-To: <20170621220744.18908-1-peter@korsgaard.com>
 References: <20170621220744.18908-1-peter@korsgaard.com>
-Message-ID: <20170621220744.18908-4-peter@korsgaard.com>
+Message-ID: <20170621220744.18908-5-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +13,184 @@ To: buildroot@busybox.net
 
 Fixes the following security issues:
 
-CVE-2016-0749: The smartcard interaction in SPICE allows remote attackers to
-cause a denial of service (QEMU-KVM process crash) or possibly execute
-arbitrary code via vectors related to connecting to a guest VM, which
-triggers a heap-based buffer overflow.
+CVE-2016-9577
 
-CVE-2016-2150: SPICE allows local guest OS users to read from or write to
-arbitrary host memory locations via crafted primary surface parameters, a
-similar issue to CVE-2015-5261.
+    Frediano Ziglio of Red Hat discovered a buffer overflow
+    vulnerability in the main_channel_alloc_msg_rcv_buf function. An
+    authenticated attacker can take advantage of this flaw to cause a
+    denial of service (spice server crash), or possibly, execute
+    arbitrary code.
 
-The pyparsing check has been dropped from configure, and the spice protocol
-definition is again included, so the workarounds can be removed.
+CVE-2016-9578
+
+    Frediano Ziglio of Red Hat discovered that spice does not properly
+    validate incoming messages. An attacker able to connect to the
+    spice server could send crafted messages which would cause the
+    process to crash.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/spice/spice.hash |  2 +-
- package/spice/spice.mk   | 24 +-----------------------
- 2 files changed, 2 insertions(+), 24 deletions(-)
+ ...sible-DoS-attempts-during-protocol-handsh.patch | 60 ++++++++++++++++++++++
+ ...nt-integer-overflows-in-capability-checks.patch | 43 ++++++++++++++++
+ ...l-Prevent-overflow-reading-messages-from-.patch | 33 ++++++++++++
+ 3 files changed, 136 insertions(+)
+ create mode 100644 package/spice/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch
+ create mode 100644 package/spice/0002-Prevent-integer-overflows-in-capability-checks.patch
+ create mode 100644 package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch
 
-diff --git a/package/spice/spice.hash b/package/spice/spice.hash
-index 04bd516689..c9b591f41d 100644
---- a/package/spice/spice.hash
-+++ b/package/spice/spice.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	f148ea30135bf80a4f465ce723a1cd6d4ccb34c098b6298a020b378ace8569b6	spice-0.12.6.tar.bz2
-+sha256	f901a5c5873d61acac84642f9eea5c4d6386fc3e525c2b68792322794e1c407d	spice-0.12.8.tar.bz2
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index f1fb46d29c..7b09f39fe7 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPICE_VERSION = 0.12.6
-+SPICE_VERSION = 0.12.8
- SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
- SPICE_SITE = http://www.spice-space.org/download/releases
- SPICE_LICENSE = LGPL-2.1+
-@@ -47,28 +47,6 @@ ifeq ($(BR2_PACKAGE_OPUS),y)
- SPICE_DEPENDENCIES += opus
- endif
- 
--# build system uses pkg-config --variable=codegendir spice-protocol which
--# returns the runtime path rather than build time, so it needs some help
--SPICE_MAKE_OPTS = CODE_GENERATOR_BASEDIR=$(STAGING_DIR)/usr/lib/spice-protocol
--SPICE_INSTALL_STAGING_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
--SPICE_INSTALL_TARGET_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
--
--# spice uses a number of source files that are generated with python / pyparsing.
--# The generated files are part of the tarball, so python / pyparsing isn't needed
--# when building from the tarball, but the configure script gets confused and looks
--# for the wrong file name to know if it needs to check for python / pyparsing,
--# so convince it they aren't needed.
--# It will also regenerate these files if the spice-protocol protocol definition
--# is newer than the generated files (which it will be when spice-protocol
--# installs it to staging), so ensure their timestamp is updated to skip this.
--define SPICE_NO_PYTHON_PYPARSING
--	mkdir -p $(@D)/client
--	touch $(@D)/client/generated_marshallers.cpp
--	touch $(@D)/spice-common/common/generated_*
--endef
--
--SPICE_PRE_CONFIGURE_HOOKS += SPICE_NO_PYTHON_PYPARSING
--
- # We need to tweak spice.pc because it /forgets/ (for static linking) that
- # it should link against libz and libjpeg. libz is pkg-config-aware, while
- # libjpeg isn't, hence the two-line tweak
+diff --git a/package/spice/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch b/package/spice/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch
+new file mode 100644
+index 0000000000..57a64d96b7
+--- /dev/null
++++ b/package/spice/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch
+@@ -0,0 +1,60 @@
++From 1c6517973095a67c8cb57f3550fc1298404ab556 Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Tue, 13 Dec 2016 14:39:48 +0000
++Subject: [PATCH] Prevent possible DoS attempts during protocol handshake
++
++The limit for link message is specified using a 32 bit unsigned integer.
++This could cause possible DoS due to excessive memory allocations and
++some possible crashes.
++For instance a value >= 2^31 causes a spice_assert to be triggered in
++async_read_handler (reds-stream.c) due to an integer overflow at this
++line:
++
++   int n = async->end - async->now;
++
++This could be easily triggered with a program like
++
++  #!/usr/bin/env python
++
++  import socket
++  import time
++  from struct import pack
++
++  server = '127.0.0.1'
++  port = 5900
++
++  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
++  s.connect((server, port))
++  data = pack('<4sIII', 'REDQ', 2, 2, 0xaaaaaaaa)
++  s.send(data)
++
++  time.sleep(1)
++
++without requiring any authentication (the same can be done
++with TLS).
++
++[Peter: fixes CVE-2016-9578]
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Acked-by: Christophe Fergeau <cfergeau@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/reds.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/server/reds.c b/server/reds.c
++index f40b65c1..86a33d53 100644
++--- a/server/reds.c
+++++ b/server/reds.c
++@@ -2202,7 +2202,8 @@ static void reds_handle_read_header_done(void *opaque)
++ 
++     reds->peer_minor_version = header->minor_version;
++ 
++-    if (header->size < sizeof(SpiceLinkMess)) {
+++    /* the check for 4096 is to avoid clients to cause arbitrary big memory allocations */
+++    if (header->size < sizeof(SpiceLinkMess) || header->size > 4096) {
++         reds_send_link_error(link, SPICE_LINK_ERR_INVALID_DATA);
++         spice_warning("bad size %u", header->size);
++         reds_link_free(link);
++-- 
++2.11.0
++
+diff --git a/package/spice/0002-Prevent-integer-overflows-in-capability-checks.patch b/package/spice/0002-Prevent-integer-overflows-in-capability-checks.patch
+new file mode 100644
+index 0000000000..5bf9b89d17
+--- /dev/null
++++ b/package/spice/0002-Prevent-integer-overflows-in-capability-checks.patch
+@@ -0,0 +1,43 @@
++From f66dc643635518e53dfbe5262f814a64eec54e4a Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Tue, 13 Dec 2016 14:40:10 +0000
++Subject: [PATCH] Prevent integer overflows in capability checks
++
++The limits for capabilities are specified using 32 bit unsigned integers.
++This could cause possible integer overflows causing buffer overflows.
++For instance the sum of num_common_caps and num_caps can be 0 avoiding
++additional checks.
++As the link message is now capped to 4096 and the capabilities are
++contained in the link message limit the capabilities to 1024
++(capabilities are expressed in number of uint32_t items).
++
++[Peter: fixes CVE-2016-9578]
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Acked-by: Christophe Fergeau <cfergeau@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/reds.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/server/reds.c b/server/reds.c
++index 86a33d53..91504544 100644
++--- a/server/reds.c
+++++ b/server/reds.c
++@@ -2110,6 +2110,14 @@ static void reds_handle_read_link_done(void *opaque)
++     link_mess->num_channel_caps = GUINT32_FROM_LE(link_mess->num_channel_caps);
++     link_mess->num_common_caps = GUINT32_FROM_LE(link_mess->num_common_caps);
++ 
+++    /* Prevent DoS. Currently we defined only 13 capabilities,
+++     * I expect 1024 to be valid for quite a lot time */
+++    if (link_mess->num_channel_caps > 1024 || link_mess->num_common_caps > 1024) {
+++        reds_send_link_error(link, SPICE_LINK_ERR_INVALID_DATA);
+++        reds_link_free(link);
+++        return;
+++    }
+++
++     num_caps = link_mess->num_common_caps + link_mess->num_channel_caps;
++     caps = (uint32_t *)((uint8_t *)link_mess + link_mess->caps_offset);
++ 
++-- 
++2.11.0
++
+diff --git a/package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch b/package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch
+new file mode 100644
+index 0000000000..f602d5f3b1
+--- /dev/null
++++ b/package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch
+@@ -0,0 +1,33 @@
++From 5f96b596353d73bdf4bb3cd2de61e48a7fd5b4c3 Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Tue, 29 Nov 2016 16:46:56 +0000
++Subject: [PATCH] main-channel: Prevent overflow reading messages from client
++
++Caller is supposed the function return a buffer able to store
++size bytes.
++
++[Peter: fixes CVE-2016-9577]
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Acked-by: Christophe Fergeau <cfergeau@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/main_channel.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/server/main_channel.c b/server/main_channel.c
++index 0ecc9df8..1fc39155 100644
++--- a/server/main_channel.c
+++++ b/server/main_channel.c
++@@ -1026,6 +1026,9 @@ static uint8_t *main_channel_alloc_msg_rcv_buf(RedChannelClient *rcc,
++ 
++     if (type == SPICE_MSGC_MAIN_AGENT_DATA) {
++         return reds_get_agent_data_buffer(mcc, size);
+++    } else if (size > sizeof(main_chan->recv_buf)) {
+++        /* message too large, caller will log a message and close the connection */
+++        return NULL;
++     } else {
++         return main_chan->recv_buf;
++     }
++-- 
++2.11.0
++
 -- 
 2.11.0
