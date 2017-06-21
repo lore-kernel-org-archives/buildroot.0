@@ -1,215 +1,142 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 21 Jun 2017 17:01:03 -0400
-Subject: [Buildroot] [PATCH v2 1/1] libglib2: bump version to 2.52.2
-In-Reply-To: <20170621210103.21058-1-aduskett@codeblue.com>
-References: <20170621210103.21058-1-aduskett@codeblue.com>
-Message-ID: <20170621210103.21058-2-aduskett@codeblue.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Jun 2017 23:03:08 +0200
+Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
+In-Reply-To: <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
+References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
+ <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
+ <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
+ <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
+Message-ID: <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patches were changed to git format, because libglib is a git project.
-0003-gio-2.0.pc-include-libmount-in-Libs.private.patch was added to upstream
-as of commit:
-https://git.gnome.org/browse/glib/commit/?id=ecdd3c29fc4bd28f01fe53d0528bfee888c9c62c.
+ Hi Wolfgang,
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
-Changes v1 -> v2:
-  - Updated commit message to include the url of the commit for patch 003.
-  - Added the correct authors to the remaining patches.
+On 21-06-17 09:59, Wolfgang Grandegger wrote:
+> Hello,
+> 
+> this topic is still pending... some more input below...
+> 
+> Am 27.04.2017 um 11:37 schrieb Wolfgang Grandegger:
+>> Hello Arnout,
+>>
+>> Am 12.04.2017 um 15:59 schrieb Arnout Vandecappelle:
+>>>
+>>>
+>>> On 23-03-17 08:54, Wolfgang Grandegger wrote:
+>>>> Hello,
+>>>>
+>>>> this is v3 of my RFC patch series to make the buildroot SDK (HOST_DIR)
+>>>> relocatable. It sanitizes the RPATH of all ELF files in the "target"
+>>>> and "host" tree using "patchelf --make-rpath-relative". I have started
+>>>> the mainlining process implementing "--make-rpath-relative" using
+>>>> GitHub pull request [1]... till now, no answer!
+>>>>
+>>>> Furthermore this patch creates the script "relocate-sdk.sh" in the top
+>>>> directory of the "host" tree allowing to relocate the SDK after it has
+>>>> been moved to a new location. It replaces the old path with the new
+>>>> one in all text files identified by "file --mime-type". The location
+>>>> is stored in "usr/share/buildroot/sdk-location".
+>>>>
+>>>> Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
+>>>> libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
+>>>>
+>>>> Other Questions:
+>>>>
+>>>> - Why do we want relative RPATHs starting with "$ORIGIN" also for ELF
+>>>>   files in the target tree. "/lib" and "/usr/lib" have been removed
+>>>>   already.
+>>>
+>>>  Good point, I don't think we want that... Neither for the ones in staging, I
+>>> suppose. The RPATHs there should all be absolute paths which should be
+>>> interpreted relative to $(TARGET_DIR) resp. $(STAGING_DIR).
+>>
+>> Could be done, no problem. Just requires some further modifications to 
+> 
+> I just learned that using relative path for the target breaks "sudo", at least.
 
- .../0001-fix-compile-time-atomic-detection.patch   | 12 +++--
- package/libglib2/0002-disable-tests.patch          | 57 ++++++++++++++--------
- ...o-2.0.pc-include-libmount-in-Libs.private.patch | 32 ------------
- package/libglib2/libglib2.hash                     |  4 +-
- package/libglib2/libglib2.mk                       |  4 +-
- 5 files changed, 49 insertions(+), 60 deletions(-)
- delete mode 100644 package/libglib2/0003-gio-2.0.pc-include-libmount-in-Libs.private.patch
+ So if you change sudo's RPATH to $ORIGIN/../libexec/sudo it doesn't find
+libsudo_util.so.0 at runtime? Or how does it break?
 
-diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-index f6d0c5d..708188b 100644
---- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-+++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-@@ -1,4 +1,7 @@
--[PATCH] Fix compilation issues on architectures with limited atomic support
-+From d5c628a6179b99705fa05ab87437321b132c81bc Mon Sep 17 00:00:00 2001
-+From: Brendan Heading <brendanheading@gmail.com>
-+Date: Wed, 21 Jun 2017 16:36:15 -0400
-+Subject: [PATCH] Fix compile time atomic detection
- 
- Improved compile-time detection of atomic support in the compiler.
- 
-@@ -6,15 +9,16 @@ Upstream-Status: submitted
- See : https://bugzilla.gnome.org/show_bug.cgi?id=752731
- 
- Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
- ---
-  glib/gthread-posix.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/glib/gthread-posix.c b/glib/gthread-posix.c
--index ae5d805..8db8557 100644
-+index 71a6b7b..d09d029 100644
- --- a/glib/gthread-posix.c
- +++ b/glib/gthread-posix.c
--@@ -67,7 +67,7 @@
-+@@ -65,7 +65,7 @@
-  #endif
-  
-  /* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
-@@ -24,5 +28,5 @@ index ae5d805..8db8557 100644
-  #endif
-  
- -- 
--2.4.3
-+2.9.4
- 
-diff --git a/package/libglib2/0002-disable-tests.patch b/package/libglib2/0002-disable-tests.patch
-index 1b0c535..523ebb3 100644
---- a/package/libglib2/0002-disable-tests.patch
-+++ b/package/libglib2/0002-disable-tests.patch
-@@ -1,12 +1,37 @@
-+From ee2d6609bce808ac72afdbf86db1a6e27c78171e Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-+Date: Wed, 21 Jun 2017 16:37:54 -0400
-+Subject: [PATCH] disable tests
-+
- Disable tests, some of them need python and sometimes host-python
- gets mixed with distro python leading to build failures.
- 
- Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-+---
-+ Makefile.am      | 2 +-
-+ gio/Makefile.am  | 2 +-
-+ glib/Makefile.am | 4 ++--
-+ 3 files changed, 4 insertions(+), 4 deletions(-)
- 
--diff -Nura glib-2.46.1.orig/gio/Makefile.am glib-2.46.1/gio/Makefile.am
----- glib-2.46.1.orig/gio/Makefile.am	2015-10-20 16:59:03.042212468 -0300
--+++ glib-2.46.1/gio/Makefile.am	2015-10-20 17:32:26.763146133 -0300
--@@ -233,7 +233,7 @@
-+diff --git a/Makefile.am b/Makefile.am
-+index 008ad58..007332d 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -6,7 +6,7 @@ include $(top_srcdir)/glib.mk
-+ 
-+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
-+ 
-+-SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
-++SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
-+ DIST_SUBDIRS = $(SUBDIRS) build win32
-+ 
-+ bin_SCRIPTS = glib-gettextize
-+diff --git a/gio/Makefile.am b/gio/Makefile.am
-+index 67db1b7..78309b5 100644
-+--- a/gio/Makefile.am
-++++ b/gio/Makefile.am
-+@@ -244,7 +244,7 @@ platform_libadd += win32/libgiowin32.la
-  platform_deps += win32/libgiowin32.la
-  endif
-  
-@@ -15,10 +40,11 @@ diff -Nura glib-2.46.1.orig/gio/Makefile.am glib-2.46.1/gio/Makefile.am
-  
-  if HAVE_FAM
-  SUBDIRS += fam
--diff -Nura glib-2.46.1.orig/glib/Makefile.am glib-2.46.1/glib/Makefile.am
----- glib-2.46.1.orig/glib/Makefile.am	2015-10-20 16:59:03.066213318 -0300
--+++ glib-2.46.1/glib/Makefile.am	2015-10-20 17:33:23.537155988 -0300
--@@ -33,8 +33,8 @@
-+diff --git a/glib/Makefile.am b/glib/Makefile.am
-+index d755853..61166e5 100644
-+--- a/glib/Makefile.am
-++++ b/glib/Makefile.am
-+@@ -33,8 +33,8 @@ else
-  MAYBE_PCRE = pcre 
-  endif
-  
-@@ -29,15 +55,6 @@ diff -Nura glib-2.46.1.orig/glib/Makefile.am glib-2.46.1/glib/Makefile.am
-  
-  AM_CPPFLAGS = 				\
-  	$(glib_INCLUDES) 		\
--diff -Nura glib-2.46.1.orig/Makefile.am glib-2.46.1/Makefile.am
----- glib-2.46.1.orig/Makefile.am	2015-10-20 16:59:03.003211087 -0300
--+++ glib-2.46.1/Makefile.am	2015-10-20 17:32:20.923939420 -0300
--@@ -6,7 +6,7 @@
-- 
-- ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
-- 
---SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs tests
--+SUBDIRS = . m4macros glib gmodule gthread gobject gio po docs
-- DIST_SUBDIRS = $(SUBDIRS) build
-- 
-- bin_SCRIPTS = glib-gettextize
-+-- 
-+2.9.4
-+
-diff --git a/package/libglib2/0003-gio-2.0.pc-include-libmount-in-Libs.private.patch b/package/libglib2/0003-gio-2.0.pc-include-libmount-in-Libs.private.patch
-deleted file mode 100644
-index 364e179..0000000
---- a/package/libglib2/0003-gio-2.0.pc-include-libmount-in-Libs.private.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From ee32416dec8462ee27c3c254100cf980b0889ce0 Mon Sep 17 00:00:00 2001
--From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
--Date: Tue, 18 Oct 2016 23:04:50 +0530
--Subject: [PATCH] gio-2.0.pc: include libmount in Libs.private
--
--This helps with static linking. When application statically links with
--libgio, it needs to link against libmount explicitly. When it is
--mentioned in Libs.private, build system can figure out with which extra
--libs to link against with help of pkg-config.
--
--This build failure is detected by Buildroot autobuilder:
--http://autobuild.buildroot.net/results/fdf/fdf26abbed0014606a7788ce5d60828a0e871186
--
--Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-----
-- gio-2.0.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
--index 899af0c..7574eb7 100644
----- a/gio-2.0.pc.in
--+++ b/gio-2.0.pc.in
--@@ -14,5 +14,5 @@ Version: @VERSION@
-- Requires: glib-2.0 gobject-2.0
-- Requires.private: gmodule-no-export-2.0
-- Libs: -L${libdir} -lgio-2.0
---Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@
--+Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@ @LIBMOUNT_LIBS@
-- Cflags:
---- 
--2.6.2
--
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index b31c212..083b95d 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.50/glib-2.50.3.sha256sum
--sha256  82ee94bf4c01459b6b00cb9db0545c2237921e3060c0b74cff13fbc020cfd999  glib-2.50.3.tar.xz
-+# https://download.gnome.org/sources/glib/2.50/glib-2.52.2.sha256sum
-+sha256  f00e5d9e2a2948b1da25fcba734a6b7a40f556de8bc9f528a53f6569969ac5d0  glib-2.52.2.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 47d9f63..d6b18dd 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBGLIB2_VERSION_MAJOR = 2.50
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
-+LIBGLIB2_VERSION_MAJOR = 2.52
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.0+
+> I'm going to rework patchelf...
+> 
+>> patchelf. BTW, so far I have not received any response to my related Github
+>> pull request... like many others:
+>>
+>>    https://github.com/NixOS/patchelf/pulls
+>>
+>> The project seems not really to be maintained... or I use the wrong channel.
+>> In principle we could maintain your own version.
+> 
+> I have little hope that we can get this patch accepted. Nobody seems to care :(.
+> What about maintaining our own version?
+
+ Since we need just a single patch for the time being, I think maintaining it as
+a patch is sufficient.
+
+
+>>>  I'm not entirely sure about staging, whether ld will use RPATH as an
+>>> alternative to -L and in that case whether it is done relative to sysroot or
+>>> not.
+>>
+>> So far, the patch series works for me very well. Just my usecase, of course.
+
+ IIRC I checked a while ago and it looked like ld would use RPATH as a link path
+(i.e. as if it's given with -L), and I think it was NOT relative to sysroot.
+Which means that we shouldn't make the RPATHs in staging relative to
+STAGING_DIR, otherwise it may pick up the library from the host. This really
+shouldn't happen because the link normally should get the appropriate -L flag to
+find the target lib and the -L has precedence over RPATH, but better be safe.
+
+ Again, I don't remember exactly so the previous paragraph could be entirely
+wrong :-)
+
+
+>>>> Things not yet addressed:
+>>>>
+>>>> - "make toolchain" creates a toolchain tree which still has references
+>>>>   to the build system (in ELF and text files).
+>>>
+>>>  A solution to this (and other problems) is to use the same approach as
+>>> check-bin-arch: do it as an instrumentation hook for each package, and only look
+>>> at the files added by that package. That way, the overhead is spread out over
+>>> the entire build process, and doing rebuilds doesn't run patchelf on all files
+>>> anymore in the finalize step.
+>>
+>> This is just to solve the issue mentioned above or a general approach (instead
+>> of doning rtpath sanitation at the end)?
+> 
+> Any opinions here?
+
+ Preferably as an instrumentation hook, because:
+- it speeds things up dramatically if you do 'make foo-rebuild';
+- things are still correct if you interrupt the build in the middle;
+- it makes no difference if you do a rebuild (if patchelf is done at the end,
+and then you rebuild a package, the RPATH in the libs you link with is different
+than the first time you built it).
+
+
+>> How should I go ahead to get this patch series accepted sooner than later? We
+>> could make the option configurable, for example, to reduce the risk of
+>> breaking something.
+> 
+> Is a relocatable SDK still on the wish list? How should/could I proceed to get
+> the feature accepted sooner than later?
+
+ You should pray that someone takes the time to continue the review :-)
+
+ Occasionally drawing attention to the series like you do know definitely helps.
+
+ Regards,
+ Arnout
+
 -- 
-2.9.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
