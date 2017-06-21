@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 21 Jun 2017 16:30:51 -0400
-Subject: [Buildroot] [PATCH] strace: bump version to 4.17
+Date: Wed, 21 Jun 2017 16:30:52 -0400
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3190300
 In-Reply-To: <20170621203057.4346-1-aduskett@codeblue.com>
 References: <20170621203057.4346-1-aduskett@codeblue.com>
-Message-ID: <20170621203057.4346-2-aduskett@codeblue.com>
+Message-ID: <20170621203057.4346-3-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +12,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/strace/strace.hash | 6 +++---
- package/strace/strace.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index a0d4d2b..fbd9320 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,3 +1,3 @@
--# From https://sourceforge.net/projects/strace/files/strace/4.16/
--md5	2873366cac98770efcbed6e748d5ef23	strace-4.16.tar.xz
--sha1	b780a8cd2e60ea836cfd3468e0f81623a346d180	strace-4.16.tar.xz
-+# From https://sourceforge.net/projects/strace/files/strace/4.17/
-+md5	8d7eb10eba68bad83a269197e634b626	strace-4.17.tar.xz
-+sha1	a60558a10757e41a39ee9e357d1d03d91d5d94d8	strace-4.17.tar.xz
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 008dc9f..119c9f5 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 093ec6d..d04abf3 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 597735a7039ebb105ea36366783ff0a3177f9131  sqlite-autoconf-3190200.tar.gz
++sha1 58f2cabffb3ff4761a3ac7f834d9db7b46307c1f  sqlite-autoconf-3190300.tar.gz
+ # Calculated based on the hash above
+-sha256 ca5361fb01cc3ad63d6fd4eb2cb0b6398e629595896d3558f7e121d37dac2ffc  sqlite-autoconf-3190200.tar.gz
++sha256 06129c03dced9f87733a8cba408871bd60673b8f93b920ba8d815efab0a06301  sqlite-autoconf-3190300.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 17b4d2d..7b9c897 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 4.16
-+STRACE_VERSION = 4.17
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
- STRACE_LICENSE = BSD-3-Clause
+-SQLITE_VERSION = 3190200
++SQLITE_VERSION = 3190300
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2017
+ SQLITE_LICENSE = Public domain
 -- 
 2.9.4
