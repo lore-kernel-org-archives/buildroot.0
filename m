@@ -1,61 +1,36 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 20 Jun 2017 23:06:58 -0300
-Subject: [Buildroot] [PATCH 1/4 v2] tools: add a directory to store some
- useful user-facing tools
-References: <20170619154227.GA3045@scaer>
-Message-ID: <5949d4c290853_3c4af6e910447ac@ultri3.mail>
+From: Alexander Dahl <post@lespocky.de>
+Date: Wed, 21 Jun 2017 06:06:58 +0200
+Subject: [Buildroot] [PATCH] iperf: fix tarball hashes changed upstream
+Message-ID: <1498018018-22680-1-git-send-email-post@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Upstream uploaded a new tarball with the same version number 2016-09-08,
+some time after the update to v2.0.9 in buildroot. Someone noticed, but
+upstream set the ticket to wontfix, and promised to do better in the
+future: https://sourceforge.net/p/iperf2/tickets/20/
 
-On Mon, Jun 19, 2017 at 12:42 PM, Yann E. MORIN wrote:
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+---
+According to y_morin on IRC you may want to change or remove the tarball
+on source.buildroot.org then.
+---
+ package/iperf/iperf.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> On 2017-06-18 22:11 -0300, Ricardo Martincoski spake thusly:
-[snip]
->> BUT if it is called without a .config file, it hangs forever waiting for input,
->> and the menuconfig is sent to the log file.
-> 
-> Indeed, my use-case is to only use it in an already-configured tree.
-> 
->> Maybe we can bailout if no .config is present.
-> 
-> Hmmm... It's not trivial do detect, because the .config file is not
-> necessarily in the current directory, for example:
-> 
->     brmake -C /pat/to/buil-dir
-> 
-> and I don't want to write a make option interpeter either...
-
-Oh, I see now it is not trivial.
-
-> 
-> But I'll see what I can do.
-
-Only on the first use the user can get confused.
-I think adding a usage example in the file header is enough, saying the script
-must be run inside or pointing to (-C from make) an output directory already
-configured, or something like that.
-
-[snip]
->> > +    a script that can be run instead of make, that prepends the date in
->> > +    front of each line, redirects all of the build output to a file
->> > +    ("'br.log' in the current directory), and just ouputs the Buildroot
->> 
->> Maybe this file will be dropped as discussed in
->> http://patchwork.ozlabs.org/patch/777446/
->> If not, there is a typo
->> 
->> ouputs -> outputs
-> 
-> Yup, I already dropped the file locally.
-[snip]
-
-The purpose of the script (initially in 00-README.txt, with the typo fixed)
-could be placed in the script header as well.
-
-Regards,
-Ricardo
+diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+index 3dd491a..3e96143 100644
+--- a/package/iperf/iperf.hash
++++ b/package/iperf/iperf.hash
+@@ -1,4 +1,4 @@
+ # From https://sourceforge.net/projects/iperf2/files/
+-sha1	9e215f6af8edd97f947f2b0207ff5487845d83d4	iperf-2.0.9.tar.gz
++sha1	59820895df9106ba189ccfdc5677077535ad50e7	iperf-2.0.9.tar.gz
+ # Locally computed:
+-sha256  a5350777b191e910334d3a107b5e5219b72ffa393da4186da1e0a4552aeeded6  iperf-2.0.9.tar.gz
++sha256  db02911f35686e808ed247160dfa766e08ae3f59d1e7dcedef0ffb2a6643f0bf  iperf-2.0.9.tar.gz
+-- 
+2.1.4
