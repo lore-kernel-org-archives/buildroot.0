@@ -1,35 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jun 2017 21:23:48 +0200
-Subject: [Buildroot] [git commit] board/atmel: at91sam9x5ek_mmc: add 1M
-	offset for FAT partition
-Message-ID: <20170621192418.4A50D81DC4@busybox.osuosl.org>
+Date: Wed, 21 Jun 2017 21:23:55 +0200
+Subject: [Buildroot] [git commit] board/atmel: provide u-boot env for
+	at91sam9x5ek_mmc
+Message-ID: <20170621192418.5DB2181719@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bd24df2e92fc7bf9a8d6d76c572ab5ae14d49be
+commit: https://git.buildroot.net/buildroot/commit/?id=8c28677ea1bdb603f6162253b092da7ea5a47676
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-at91sam9x5ek_mmc board was missing in the previous patch adding 1M
-offset for FAT partition to solve some boot issues with the ROM code.
+Default bootargs have changed in U-Boot for this board. Build U-Boot
+environment and add it to the SD card image to update bootargs.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/atmel/at91sam9x5ek_mmc/genimage.cfg | 1 +
- 1 file changed, 1 insertion(+)
+ board/atmel/at91sam9x5ek_mmc/genimage.cfg  | 4 ++++
+ board/atmel/at91sam9x5ek_mmc/uboot-env.txt | 7 +++++++
+ configs/at91sam9x5ek_mmc_defconfig         | 3 +++
+ configs/at91sam9x5ek_mmc_dev_defconfig     | 3 +++
+ 4 files changed, 17 insertions(+)
 
 diff --git a/board/atmel/at91sam9x5ek_mmc/genimage.cfg b/board/atmel/at91sam9x5ek_mmc/genimage.cfg
-index 46c2dc9..b2be647 100644
+index b2be647..7a55266 100644
 --- a/board/atmel/at91sam9x5ek_mmc/genimage.cfg
 +++ b/board/atmel/at91sam9x5ek_mmc/genimage.cfg
-@@ -24,6 +24,7 @@ image sdcard.img {
- 		partition-type = 0xC
- 		bootable = "true"
- 		image = "boot.vfat"
-+		offset = 1M
+@@ -12,6 +12,10 @@ image boot.vfat {
+ 			"boot.bin",
+ 			"u-boot.bin"
+ 		}
++
++		file uboot.env {
++			image = "uboot-env.bin"
++		}
  	}
+ 	size = 16M
+ }
+diff --git a/board/atmel/at91sam9x5ek_mmc/uboot-env.txt b/board/atmel/at91sam9x5ek_mmc/uboot-env.txt
+new file mode 100644
+index 0000000..568e4bc
+--- /dev/null
++++ b/board/atmel/at91sam9x5ek_mmc/uboot-env.txt
+@@ -0,0 +1,7 @@
++bootargs=console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait video=Unknown-1:800x480-16
++bootcmd=fatload mmc 0:1 0x21000000 at91sam9g35ek.dtb; fatload mmc 0:1 0x22000000 zImage; bootz 0x22000000 - 0x21000000
++bootdelay=1
++ethact=gmac0
++stderr=serial
++stdin=serial
++stdout=serial
+diff --git a/configs/at91sam9x5ek_mmc_defconfig b/configs/at91sam9x5ek_mmc_defconfig
+index c1c4d67..ed44943 100644
+--- a/configs/at91sam9x5ek_mmc_defconfig
++++ b/configs/at91sam9x5ek_mmc_defconfig
+@@ -33,6 +33,9 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9x5ek_mmc"
++BR2_TARGET_UBOOT_ENVIMAGE=y
++BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/atmel/at91sam9x5ek_mmc/uboot-env.txt"
++BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x4000"
  
- 	partition rootfs {
+ # Host packages
+ # Needed to generate the SD card image
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index 09482d2..cd266d2 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -95,6 +95,9 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.5"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9x5ek_mmc"
++BR2_TARGET_UBOOT_ENVIMAGE=y
++BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/atmel/at91sam9x5ek_mmc/uboot-env.txt"
++BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x4000"
+ 
+ # Host packages
+ # Needed to generate the SD card image
