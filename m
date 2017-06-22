@@ -1,61 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 23:26:57 +0200
-Subject: [Buildroot] [git commit] openvpn: security bump to version 2.4.3
-Message-ID: <20170622212738.3A0D9807E1@busybox.osuosl.org>
+Date: Thu, 22 Jun 2017 23:25:30 +0200
+Subject: [Buildroot] [git commit] spice: security bump to version 0.12.8
+Message-ID: <20170622212738.184EE807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24f2eb1e157e2c0b08579939c293aa7c1d3d0c28
+commit: https://git.buildroot.net/buildroot/commit/?id=75057fe76742188455a5218b47cdf4116d84c268
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Fixes the following security issues:
 
-CVE-2017-7508 - Remotely-triggerable ASSERT() on malformed IPv6 packet
+CVE-2016-0749: The smartcard interaction in SPICE allows remote attackers to
+cause a denial of service (QEMU-KVM process crash) or possibly execute
+arbitrary code via vectors related to connecting to a guest VM, which
+triggers a heap-based buffer overflow.
 
-CVE-2017-7520 - Pre-authentication remote crash/information disclosure for
-clients
+CVE-2016-2150: SPICE allows local guest OS users to read from or write to
+arbitrary host memory locations via crafted primary surface parameters, a
+similar issue to CVE-2015-5261.
 
-CVE-2017-7521 - Potential double-free in --x509-alt-username
+The pyparsing check has been dropped from configure, and the spice protocol
+definition is again included, so the workarounds can be removed.
 
-CVE-2017-7521 - Remote-triggerable memory leaks
-
-CVE-2017-7522 - Post-authentication remote DoS when using the --x509-track
-option
-
-Details at
-
-  https://community.openvpn.net/openvpn/wiki/VulnerabilitiesFixedInOpenVPN243
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/openvpn.hash | 4 ++--
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/spice/spice.hash |  2 +-
+ package/spice/spice.mk   | 24 +-----------------------
+ 2 files changed, 2 insertions(+), 24 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index fe054e9..1db3a31 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
+diff --git a/package/spice/spice.hash b/package/spice/spice.hash
+index 04bd516..c9b591f 100644
+--- a/package/spice/spice.hash
++++ b/package/spice/spice.hash
 @@ -1,2 +1,2 @@
--# Locally calculated
--sha256 df5c4f384b7df6b08a2f6fa8a84b9fd382baf59c2cef1836f82e2a7f62f1bff9  openvpn-2.4.2.tar.xz
-+# Locally calculated after checking signature
-+sha256 15e15fc97f189b52aee7c90ec8355aa77469c773125110b4c2f089abecde36fb  openvpn-2.4.3.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index ff6bcdc..7cc572e 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+ # Locally calculated
+-sha256	f148ea30135bf80a4f465ce723a1cd6d4ccb34c098b6298a020b378ace8569b6	spice-0.12.6.tar.bz2
++sha256	f901a5c5873d61acac84642f9eea5c4d6386fc3e525c2b68792322794e1c407d	spice-0.12.8.tar.bz2
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index f1fb46d..7b09f39 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.4.2
-+OPENVPN_VERSION = 2.4.3
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
+-SPICE_VERSION = 0.12.6
++SPICE_VERSION = 0.12.8
+ SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
+ SPICE_SITE = http://www.spice-space.org/download/releases
+ SPICE_LICENSE = LGPL-2.1+
+@@ -47,28 +47,6 @@ ifeq ($(BR2_PACKAGE_OPUS),y)
+ SPICE_DEPENDENCIES += opus
+ endif
+ 
+-# build system uses pkg-config --variable=codegendir spice-protocol which
+-# returns the runtime path rather than build time, so it needs some help
+-SPICE_MAKE_OPTS = CODE_GENERATOR_BASEDIR=$(STAGING_DIR)/usr/lib/spice-protocol
+-SPICE_INSTALL_STAGING_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+-SPICE_INSTALL_TARGET_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+-
+-# spice uses a number of source files that are generated with python / pyparsing.
+-# The generated files are part of the tarball, so python / pyparsing isn't needed
+-# when building from the tarball, but the configure script gets confused and looks
+-# for the wrong file name to know if it needs to check for python / pyparsing,
+-# so convince it they aren't needed.
+-# It will also regenerate these files if the spice-protocol protocol definition
+-# is newer than the generated files (which it will be when spice-protocol
+-# installs it to staging), so ensure their timestamp is updated to skip this.
+-define SPICE_NO_PYTHON_PYPARSING
+-	mkdir -p $(@D)/client
+-	touch $(@D)/client/generated_marshallers.cpp
+-	touch $(@D)/spice-common/common/generated_*
+-endef
+-
+-SPICE_PRE_CONFIGURE_HOOKS += SPICE_NO_PYTHON_PYPARSING
+-
+ # We need to tweak spice.pc because it /forgets/ (for static linking) that
+ # it should link against libz and libjpeg. libz is pkg-config-aware, while
+ # libjpeg isn't, hence the two-line tweak
