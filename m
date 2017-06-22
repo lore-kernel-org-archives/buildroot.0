@@ -1,200 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 23:25:24 +0200
-Subject: [Buildroot] [git commit] spice: security bump to version 0.12.6
-Message-ID: <20170622212738.03899807B5@busybox.osuosl.org>
+From: Mason <slash.tmp@free.fr>
+Date: Thu, 22 Jun 2017 23:57:03 +0200
+Subject: [Buildroot] Policy for upgrading toolchains in LTS version
+In-Reply-To: <20170622192701.GC3054@scaer>
+References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
+ <20170622192701.GC3054@scaer>
+Message-ID: <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=622ff3d6ea63ca7c7aab7e5609cfb1e4190eff8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/06/2017 21:27, Yann E. MORIN wrote:
 
-Fixes the following security issues:
+> Mason, All,
+> 
+> On 2017-06-22 11:23 +0200, Mason spake thusly:
+>
+>> Providing an LTS version is an interesting idea.
+>>
+>> I was wondering about the policy for upgrading toolchains
+>> in LTS versions (I use Linaro).
+>>
+>> Case in point: 2017.02.x branch is set up to use gcc-linaro-6.2.1-2016.11
+>>
+>> Since then, Linaro has released two bug-fix versions:
+>>
+>> https://releases.linaro.org/components/toolchain/binaries/6.1-2016.08/
+>> https://releases.linaro.org/components/toolchain/binaries/6.2-2016.11/
+>> https://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/
+>> https://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/
+>>
+>> AFAIU, these releases are all on the same branch, i.e. they
+>> keep the packages (mostly) stable:
+>> gcc 6, glibc 2.23, newlib 2.4, binutils 2.27, gdb 7.12
+>> NB: Apparently gdb got bumped from 7.11 to 7.12 in 2016.11
+>> (IIUC, this is a cross-debugger, when using remote gdb.)
+>>
+>> For example, this bug seems likely to affect current BR LTS:
+>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78253
+>> (It was fixed in Linaro 2017.02)
+>>
+>> I think there is a case for upgrading the toolchain in the LTS
+>> branch (while staying on the same Linaro branch of course.)
+>>
+>> What do you think?
+> 
+> I think that it all depends. ;-)
+> 
+> First, Peter is in charge of the LTS branch, so it's all about what he
+> believes it is too intrusive or not...
+> 
+> Then, I have basically no knowledge of the Linaro toochains and their
+> release criterions.
 
-CVE-2015-3247: Race condition in the worker_update_monitors_config function
-in SPICE 0.12.4 allows a remote authenticated guest user to cause a denial
-of service (heap-based memory corruption and QEMU-KVM crash) or possibly
-execute arbitrary code on the host via unspecified vectors.
+On freenode #linaro-tcwg, Ryan explained the Linaro toolchain
+release process to me, which appears to be BR-LTS-compatible.
 
-CVE-2015-5260: Heap-based buffer overflow in SPICE before 0.12.6 allows
-guest OS users to cause a denial of service (heap-based memory corruption
-and QEMU-KVM crash) or possibly execute arbitrary code on the host via QXL
-commands related to the surface_id parameter.
+Toolchain releases are supported for 2 years.
 
-CVE-2015-5261: Heap-based buffer overflow in SPICE before 0.12.6 allows
-guest OS users to read and write to arbitrary memory locations on the host
-via guest QXL commands related to surface creation.
+First year in "stable" mode:
+Bug fixes, and backports of non-invasive performance fixes for gcc.
+One update per quarter.
 
-Client/gui support is gone upstream (moved to spice-gtk / virt-viewer), so
-add Config.in.legacy handling for them.
+Second year in "maintenance" mode:
+Only bug fixes.
+Updates when required (e.g. getaddrinfo vuln, or stack clash)
 
-Lz4 is a new optional dependency, so handle it.
+Individual components (gcc, glibc, newlib, binutils, gdb)
+are updated within their respective stable branches, i.e.
+kept at the same release (gdb is an exception).
 
-The spice protocol definition is no longer included and instead used from
-spice-protocol.  The build system uses pkg-config --variable=codegendir to
-find the build time path of this, which doesn't take our STAGING_DIR prefix
-into consideration, so it needs some help.  The installed protocol
-definition will likewise be newer than the generated files, so we need to
-workaround that to ensure they are not regenerated (which needs host python
-/ pyparsing).
+So, for example, the 6.x release is in stable mode until
+2017.08, and in maintenance mode until 2018.08
+(Ryan pointed out that an OOB release would be done to
+address stack clash.)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy         | 16 ++++++++++++++++
- package/spice/Config.in  | 35 -----------------------------------
- package/spice/spice.hash |  2 +-
- package/spice/spice.mk   | 40 +++++++++++++++++++---------------------
- 4 files changed, 36 insertions(+), 57 deletions(-)
+See also
+https://wiki.linaro.org/WorkingGroups/ToolChain/FAQ#What_were.2Fare_the_versions_of_toolchain_released.3F
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index dc99b7c..361d331 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
- 
-+config BR2_PACKAGE_SPICE_CLIENT
-+	bool "spice client support removed"
-+	select BR2_LEGACY
-+	help
-+	  Spice client support has been removed upstream. The
-+	  functionality now lives in the spice-gtk widget and
-+	  virt-viewer.
-+
-+config BR2_PACKAGE_SPICE_GUI
-+	bool "spice gui support removed"
-+	select BR2_LEGACY
-+	help
-+	  Spice gui support has been removed upstream. The
-+	  functionality now lives in the spice-gtk widget and
-+	  virt-viewer.
-+
- config BR2_PACKAGE_SPICE_TUNNEL
- 	bool "spice network redirection removed"
- 	select BR2_LEGACY
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 220f999..2241b55 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -22,38 +22,3 @@ config BR2_PACKAGE_SPICE
- 	  This package implements the server-part of Spice.
- 
- 	  http://www.spice-space.org/
--
--if BR2_PACKAGE_SPICE
--
--comment "client depends on X.org"
--	depends on !BR2_PACKAGE_XORG7
--
--config BR2_PACKAGE_SPICE_CLIENT
--	bool "Enable client"
--	depends on BR2_PACKAGE_XORG7
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_XLIB_LIBXFIXES
--	select BR2_PACKAGE_XLIB_LIBXRANDR
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXRENDER
--	select BR2_PACKAGE_ALSA_LIB
--
--comment "client needs a toolchain w/ threads, C++"
--	depends on BR2_PACKAGE_XORG7
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--
--config BR2_PACKAGE_SPICE_GUI
--	bool "Enable GUI"
--	depends on BR2_PACKAGE_SPICE_CLIENT
--	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_CEGUI06
--	help
--	  Say 'y' here to enable the Graphical User Interface (GUI)
--	  start dialog.
--
--comment "gui needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
--endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.hash b/package/spice/spice.hash
-index 0a943f0..04bd516 100644
---- a/package/spice/spice.hash
-+++ b/package/spice/spice.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	4209a20d8f67cb99a8a6ac499cfe79a18d4ca226360457954a223d6795c2f581	spice-0.12.5.tar.bz2
-+sha256	f148ea30135bf80a4f465ce723a1cd6d4ccb34c098b6298a020b378ace8569b6	spice-0.12.6.tar.bz2
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index ba76a14..f1fb46d 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPICE_VERSION = 0.12.5
-+SPICE_VERSION = 0.12.6
- SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
- SPICE_SITE = http://www.spice-space.org/download/releases
- SPICE_LICENSE = LGPL-2.1+
-@@ -35,38 +35,36 @@ else
- SPICE_CONF_OPTS += --disable-celt051
- endif
- 
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+SPICE_CONF_OPTS += --enable-lz4
-+SPICE_DEPENDENCIES += lz4
-+else
-+SPICE_CONF_OPTS += --disable-lz4
-+endif
-+
- # no enable/disable, detected using pkg-config
- ifeq ($(BR2_PACKAGE_OPUS),y)
- SPICE_DEPENDENCIES += opus
- endif
- 
--ifeq ($(BR2_PACKAGE_SPICE_CLIENT),y)
--SPICE_CONF_OPTS += --enable-client
--SPICE_DEPENDENCIES += \
--	xlib_libXfixes \
--	xlib_libXrandr \
--	xlib_libX11 \
--	xlib_libXext \
--	xlib_libXrender \
--	alsa-lib
--else
--SPICE_CONF_OPTS += --disable-client
--endif
--
--ifeq ($(BR2_PACKAGE_SPICE_GUI),y)
--SPICE_CONF_OPTS += --enable-gui
--SPICE_DEPENDENCIES += cegui06
--else
--SPICE_CONF_OPTS += --disable-gui
--endif
-+# build system uses pkg-config --variable=codegendir spice-protocol which
-+# returns the runtime path rather than build time, so it needs some help
-+SPICE_MAKE_OPTS = CODE_GENERATOR_BASEDIR=$(STAGING_DIR)/usr/lib/spice-protocol
-+SPICE_INSTALL_STAGING_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+SPICE_INSTALL_TARGET_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- 
- # spice uses a number of source files that are generated with python / pyparsing.
- # The generated files are part of the tarball, so python / pyparsing isn't needed
- # when building from the tarball, but the configure script gets confused and looks
- # for the wrong file name to know if it needs to check for python / pyparsing,
--# so convince it they aren't needed
-+# so convince it they aren't needed.
-+# It will also regenerate these files if the spice-protocol protocol definition
-+# is newer than the generated files (which it will be when spice-protocol
-+# installs it to staging), so ensure their timestamp is updated to skip this.
- define SPICE_NO_PYTHON_PYPARSING
-+	mkdir -p $(@D)/client
- 	touch $(@D)/client/generated_marshallers.cpp
-+	touch $(@D)/spice-common/common/generated_*
- endef
- 
- SPICE_PRE_CONFIGURE_HOOKS += SPICE_NO_PYTHON_PYPARSING
+> If as you state they are only bug-fix releases, then we could indeed
+> bump those toolchains, yes. It imho complies with the goal of an LTS.
+
+I believe it does. I don't know exactly how gcc/glibc
+plan to address "stack clash" but I think it's important
+for BR-LTS to include these fixes.
+
+> Note however that we so far never bumped the gcc version in the LTS
+> branch, but we already had 6.3 at the time we cut the LTS. So it's
+> difficult to say if we would bump it. Probably, I'd say...
+
+Isn't this the first time BR did an LTS release?
+
+Regards.
