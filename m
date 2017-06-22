@@ -1,26 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 12:03:15 +0200
-Subject: [Buildroot] [PATCH] upmpdcli: needs gcc >= 4.9
-In-Reply-To: <20170622060138.6449-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 22 Jun 2017 08:01:38 +0200")
-References: <20170622060138.6449-1-joerg.krause@embedded.rocks>
-Message-ID: <87tw38ibks.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Jun 2017 12:03:24 +0200
+Subject: [Buildroot] [PATCH] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.1.3
+In-Reply-To: <1498090130-10654-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Wed, 21 Jun 2017 21:08:50 -0300")
+References: <1498090130-10654-1-git-send-email-festevam@gmail.com>
+Message-ID: <87podwibkj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Commit 5d043799cd changed the dependency for libupnpp on GCC to 4.9, but
- > did not propagate the dependency to upmpdcli.
+ > Patch 0006 is no longer needed as the fix is already upstream. 
+ > Confirmed that the colors are displayed correctly whe running the
+ > Qt5CinematicDemo application on i.mx6.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/df2/df23cd5e77f61caf3f30cf43c91bc161a88def3a/
+ > Patch 0007 is already applied upstream.
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
 
