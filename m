@@ -1,33 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 23:26:12 +0200
-Subject: [Buildroot] [PATCH 0/4] spice: version bump / security bump
-In-Reply-To: <20170621220744.18908-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 22 Jun 2017 00:07:40 +0200")
-References: <20170621220744.18908-1-peter@korsgaard.com>
-Message-ID: <87injnlnnv.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Jun 2017 23:28:02 +0200
+Subject: [Buildroot] [PATCH] openvpn: security bump to version 2.4.3
+In-Reply-To: <f7fbcb2f29c958e7755a400ecc26d5d92e172790.1498154097.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 22 Jun 2017 20:54:57 +0300")
+References: <f7fbcb2f29c958e7755a400ecc26d5d92e172790.1498154097.git.baruch@tkos.co.il>
+Message-ID: <87efublnkt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Our spice version is quite old (2013) and is affected by a number of
- > security issues, so bump to the latest release in the 0.12.x series +
- > upstream post-0.12.8 security fixes.
+ > Fixes:
+ > CVE-2017-7508 - Remotely-triggerable ASSERT() on malformed IPv6 packet
 
- > As the configuration options and dependencies have changed quite a bit since
- > 2013, don't just do the entire bump in a single patch, but instead move
- > forward release by release for easier review.
+ > CVE-2017-7520 - Pre-authentication remote crash/information disclosure for
+ > clients
 
- > Peter Korsgaard (4):
- >   spice: bump to version 0.12.5
- >   spice: security bump to version 0.12.6
- >   spice: security bump to version 0.12.8
- >   spice: add post-0.12.8 upstream security fixes
+ > CVE-2017-7521 - Potential double-free in --x509-alt-username
 
-Committed series, thanks.
+ > CVE-2017-7521 - Remote-triggerable memory leaks
+
+ > CVE-2017-7522 - Post-authentication remote DoS when using the --x509-track
+ > option
+
+ > Details at
+
+ >   https://community.openvpn.net/openvpn/wiki/VulnerabilitiesFixedInOpenVPN243
+
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks!
 
 -- 
 Bye, Peter Korsgaard
