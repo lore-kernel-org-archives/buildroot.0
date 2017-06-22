@@ -1,71 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Jun 2017 21:27:01 +0200
-Subject: [Buildroot] Policy for upgrading toolchains in LTS version
-In-Reply-To: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
-References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
-Message-ID: <20170622192701.GC3054@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 Jun 2017 22:04:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/linuxconsoletools: always
+	select a sub-option
+In-Reply-To: <201706221304.v5MD4b8J004249@mx1.sonologic.net> (Koen Martens's
+ message of "Thu, 22 Jun 2017 15:03:00 +0200")
+References: <201706221304.v5MD4b8J004249@mx1.sonologic.net>
+Message-ID: <87vannlrfl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mason, All,
+>>>>> "Koen" == Koen Martens <koen.martens@transport.alstom.com> writes:
 
-On 2017-06-22 11:23 +0200, Mason spake thusly:
-> Providing an LTS version is an interesting idea.
-> 
-> I was wondering about the policy for upgrading toolchains
-> in LTS versions (I use Linaro).
-> 
-> Case in point: 2017.02.x branch is set up to use gcc-linaro-6.2.1-2016.11
-> 
-> Since then, Linaro has released two bug-fix versions:
-> 
-> https://releases.linaro.org/components/toolchain/binaries/6.1-2016.08/
-> https://releases.linaro.org/components/toolchain/binaries/6.2-2016.11/
-> https://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/
-> https://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/
-> 
-> AFAIU, these releases are all on the same branch, i.e. they
-> keep the packages (mostly) stable:
-> gcc 6, glibc 2.23, newlib 2.4, binutils 2.27, gdb 7.12
-> NB: Apparently gdb got bumped from 7.11 to 7.12 in 2016.11
-> (IIUC, this is a cross-debugger, when using remote gdb.)
-> 
-> For example, this bug seems likely to affect current BR LTS:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78253
-> (It was fixed in Linaro 2017.02)
-> 
-> I think there is a case for upgrading the toolchain in the LTS
-> branch (while staying on the same Linaro branch of course.)
-> 
-> What do you think?
+ > This patch forces BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH
+ > to be selected if none of the other sub-options are
+ > selected. This fixes build failures when using
+ > 'make randpackageconfig', where selecting
+ > BR2_PACKAGE_LINUXCONSOLETOOLS without selecting any sub-option
+ > would break in the 'install to target' phase.
 
-I think that it all depends. ;-)
+Please remember to add a reference to the specific autobuilder issues
+this fixes for the future.
 
-First, Peter is in charge of the LTS branch, so it's all about what he
-believes it is too intrusive or not...
+ > Signed-off-by: Koen Martens <koen.martens@transport.alstom.com>
+ > ---
+ >  package/linuxconsoletools/Config.in | 1 +
+ >  1 file changed, 1 insertion(+)
 
-Then, I have basically no knowledge of the Linaro toochains and their
-release criterions.
+ > diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
+ > index d2b0117..bc20abe 100644
+ > --- a/package/linuxconsoletools/Config.in
+ > +++ b/package/linuxconsoletools/Config.in
+ > @@ -1,5 +1,6 @@
+ >  config BR2_PACKAGE_LINUXCONSOLETOOLS
+ >  	bool "linuxconsoletools"
+ > +	select BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH if !BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK && !BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK
 
-If as you state they are only bug-fix releases, then we could indeed
-bump those toolchains, yes. It imho complies with the goal of an LTS.
-
-Note however that we so far never bumped the gcc version in the LTS
-branch, but we already had 6.3 at the time we cut the LTS. So it;s
-difficult to say if we would bump it. Probably, I'd say...
-
-My 2 euro-cents...
-
-Regards,
-Yann E. MORIN.
+I've rewrapped this line and added autobuilder references and committed,
+thanks!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
