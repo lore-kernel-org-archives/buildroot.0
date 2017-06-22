@@ -1,47 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 22:04:57 +0200
-Subject: [Buildroot] [git commit] package/linuxconsoletools: always select a
-	sub-option
-Message-ID: <20170622200555.028C980AC7@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 22 Jun 2017 22:19:17 +0200
+Subject: [Buildroot] [PATCH 1/1] rpi0w: added support for Raspberry Pi
+ Zero W
+In-Reply-To: <CANv+TVP=7QF6+FRv8jfEtPDVG6jsbWO7cfGu+umEetErAEZHmQ@mail.gmail.com>
+References: <1497815044-11215-1-git-send-email-yves.deweerdt.linux@gmail.com>
+ <20170619222753.7655732a@windsurf.home>
+ <20170619225436.58ce3391@gmx.net>
+ <CANv+TVOBnCqF6wdPxuiCVoRx85U3HTuzbT3h1qJKgVY2s52=xA@mail.gmail.com>
+ <20170620211945.1033a656@gmx.net>
+ <CANv+TVP=7QF6+FRv8jfEtPDVG6jsbWO7cfGu+umEetErAEZHmQ@mail.gmail.com>
+Message-ID: <20170622221917.14194409@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9b47764839ca6120af673d1df34f5fbe89e6e09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yves, Thomas,
 
-This patch forces BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH
-to be selected if none of the other sub-options are
-selected. This fixes build failures when using
-'make randpackageconfig', where selecting
-BR2_PACKAGE_LINUXCONSOLETOOLS without selecting any sub-option
-would break in the 'install to target' phase.
+On Wed, 21 Jun 2017 20:35:21 +0000, Yves Deweerdt <yves.deweerdt.linux@gmail.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/94b/94bc050f291cc42a4fdcf02157320576feb03654/
-http://autobuild.buildroot.net/results/f62/f62c5e8bd63d21211eb0e658c4e84135bd59b8cb/
+> Hello Peter, Thomas,
+> 
+> 
+> > > For rpi3, is it correct that it seems that when running in 64bit mode you
+> > > should add enable_uart=1 and for 32 bit mode you don't need to add it?
+> >
+> > Never tried the 64bit mode (yet), any reference for this?
+> >
+> >
+> > Hello Peter, Thomas,
+> 
+> I just had a closer look to the raspberrypi3 and raspberrypi3_64 story.
+> It seems that on the 32 bit version the overlay is being used, which means
+> that the console is being put on /dev/ttyS0 in stead of /dev/ttyAMA0, which
+> means that /dev/ttyAMA0 is available already if you plan to use bluetooth.
+> On the 64 bit version, the console is put on /dev/ttyAMA0, so that means
+> that if you want to enable bluetooth, you need to do the same modifications
+> again to move console over to /dev/ttyS0 and free up /dev/ttyAMA0 for
+> bluetooth.
+> 
+> I don't know if there are any drawbacks in using the /dev/ttyS0 on the 64
+> bit version. If not, I would recommend making the 32 bit version and the 64
+> bit version do the same thing, and at that moment the --aarch64 option in
+> the post-image.sh script could be completely removed.
 
-And many more.
+The --aarch64 options sets the important 'arm_control=0x200' to enable to
+boot the 64bit kernel, this needs to be kept (maybe change the post-image.sh
+script to support multiple cmdl options and separate overlay and aarch64)...
 
-[Peter: add autobuilder references and wrap Config.in line]
-Signed-off-by: Koen Martens <koen.martens@transport.alstom.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linuxconsoletools/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+But I had no success to enable the serial console for raspberrypi3_64 using
+only the overlay, only 'enable_uart=1' worked for me...
 
-diff --git a/package/linuxconsoletools/Config.in b/package/linuxconsoletools/Config.in
-index d2b0117..7615027 100644
---- a/package/linuxconsoletools/Config.in
-+++ b/package/linuxconsoletools/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_LINUXCONSOLETOOLS
- 	bool "linuxconsoletools"
-+	select BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH if \
-+	       !BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK && \
-+	       !BR2_PACKAGE_LINUXCONSOLETOOLS_FORCEFEEDBACK
- 	help
- 	  Linuxconsoletools contains the inputattach utility
- 	  to attach legacy serial devices to the Linux kernel
+Regards,
+Peter
+
+
+> 
+> Kind regards,
+> 
+> Yves
+> 
+> >
+> >
