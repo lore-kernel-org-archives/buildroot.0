@@ -1,105 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Jun 2017 22:28:23 +0200
-Subject: [Buildroot] [PATCH 3/4] spice: security bump to version 0.12.8
-In-Reply-To: <20170621220744.18908-4-peter@korsgaard.com>
-References: <20170621220744.18908-1-peter@korsgaard.com>
- <20170621220744.18908-4-peter@korsgaard.com>
-Message-ID: <20170622202823.GF3054@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 22 Jun 2017 22:29:00 +0200
+Subject: [Buildroot] [PATCH v2] board: added support for Raspberry Pi
+ Zero W
+In-Reply-To: <20170621224648.44373a00@windsurf>
+References: <1498077584-19344-1-git-send-email-yves.deweerdt.linux@gmail.com>
+ <20170621224648.44373a00@windsurf>
+Message-ID: <20170622222900.6ec535ed@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello Thomas, Yves,
 
-On 2017-06-22 00:07 +0200, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
+On Wed, 21 Jun 2017 22:46:48 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
 > 
-> CVE-2016-0749: The smartcard interaction in SPICE allows remote attackers to
-> cause a denial of service (QEMU-KVM process crash) or possibly execute
-> arbitrary code via vectors related to connecting to a guest VM, which
-> triggers a heap-based buffer overflow.
+> On Wed, 21 Jun 2017 22:39:44 +0200, Yves Deweerdt wrote:
+> > added a new config file for the Raspberry Pi Zero W (rpi0w)
+> > - added new folder for raspberrypi0w
+> > - included the overlays in the genimage config
+> > - add pi3-miniuart-bt overlay to the config
+> > - remove rpi0w device tree from the raspberrypi0_defconfig and genimage
+> > 
+> > Signed-off-by: Yves Deweerdt <yves.deweerdt.linux@gmail.com>
 > 
-> CVE-2016-2150: SPICE allows local guest OS users to read from or write to
-> arbitrary host memory locations via crafted primary surface parameters, a
-> similar issue to CVE-2015-5261.
+> I'd like a review/ack from Peter Seiderer, or other RPi folks of the
+> Buildroot community. I think the commit log should summarize why the
+> Zero W support is removed from raspberrypi0_defconfig, and why a
+> separate defconfig is needed.
 > 
-> The pyparsing check has been dropped from configure, and the spice protocol
-> definition is again included, so the workarounds can be removed.
 
-All that work for that... :-/
-
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The remaining difference between raspberrypi0_defconfig raspberrypi0w_defconfig
+wil be the usage of the pi3-miniuart-bt overlay. As there is no possibility to
+enable/disable this on demand I think this is enough to justify a second
+configuration (and keep the 'better' ttyAMA0 usage for serial console for
+the basic raspberrypi0)...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> ---
->  package/spice/spice.hash |  2 +-
->  package/spice/spice.mk   | 24 +-----------------------
->  2 files changed, 2 insertions(+), 24 deletions(-)
+> > ---
+> >  board/raspberrypi/genimage-raspberrypi0.cfg  |  1 -
+> >  board/raspberrypi/genimage-raspberrypi0w.cfg | 31 +++++++++++++++++++++++++
+> >  board/raspberrypi0w                          |  1 +
+> >  configs/raspberrypi0_defconfig               |  2 +-
+> >  configs/raspberrypi0w_defconfig              | 34 ++++++++++++++++++++++++++++
+> >  5 files changed, 67 insertions(+), 2 deletions(-)
+> >  create mode 100644 board/raspberrypi/genimage-raspberrypi0w.cfg
+> >  create mode 120000 board/raspberrypi0w
+> >  create mode 100644 configs/raspberrypi0w_defconfig
 > 
-> diff --git a/package/spice/spice.hash b/package/spice/spice.hash
-> index 04bd516689..c9b591f41d 100644
-> --- a/package/spice/spice.hash
-> +++ b/package/spice/spice.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256	f148ea30135bf80a4f465ce723a1cd6d4ccb34c098b6298a020b378ace8569b6	spice-0.12.6.tar.bz2
-> +sha256	f901a5c5873d61acac84642f9eea5c4d6386fc3e525c2b68792322794e1c407d	spice-0.12.8.tar.bz2
-> diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-> index f1fb46d29c..7b09f39fe7 100644
-> --- a/package/spice/spice.mk
-> +++ b/package/spice/spice.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SPICE_VERSION = 0.12.6
-> +SPICE_VERSION = 0.12.8
->  SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
->  SPICE_SITE = http://www.spice-space.org/download/releases
->  SPICE_LICENSE = LGPL-2.1+
-> @@ -47,28 +47,6 @@ ifeq ($(BR2_PACKAGE_OPUS),y)
->  SPICE_DEPENDENCIES += opus
->  endif
->  
-> -# build system uses pkg-config --variable=codegendir spice-protocol which
-> -# returns the runtime path rather than build time, so it needs some help
-> -SPICE_MAKE_OPTS = CODE_GENERATOR_BASEDIR=$(STAGING_DIR)/usr/lib/spice-protocol
-> -SPICE_INSTALL_STAGING_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-> -SPICE_INSTALL_TARGET_OPTS = $(SPICE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-> -
-> -# spice uses a number of source files that are generated with python / pyparsing.
-> -# The generated files are part of the tarball, so python / pyparsing isn't needed
-> -# when building from the tarball, but the configure script gets confused and looks
-> -# for the wrong file name to know if it needs to check for python / pyparsing,
-> -# so convince it they aren't needed.
-> -# It will also regenerate these files if the spice-protocol protocol definition
-> -# is newer than the generated files (which it will be when spice-protocol
-> -# installs it to staging), so ensure their timestamp is updated to skip this.
-> -define SPICE_NO_PYTHON_PYPARSING
-> -	mkdir -p $(@D)/client
-> -	touch $(@D)/client/generated_marshallers.cpp
-> -	touch $(@D)/spice-common/common/generated_*
-> -endef
-> -
-> -SPICE_PRE_CONFIGURE_HOOKS += SPICE_NO_PYTHON_PYPARSING
-> -
->  # We need to tweak spice.pc because it /forgets/ (for static linking) that
->  # it should link against libz and libjpeg. libz is pkg-config-aware, while
->  # libjpeg isn't, hence the two-line tweak
-> -- 
-> 2.11.0
+> An update to board/raspberrypi/readme.txt would be needed.
 > 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Thanks,
+> 
+> Thomas
