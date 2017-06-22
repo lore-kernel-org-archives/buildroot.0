@@ -1,131 +1,162 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Jun 2017 08:31:15 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-06-21
-Message-ID: <20170622063115.90CF020A1F@mail.free-electrons.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Thu, 22 Jun 2017 08:37:07 +0200
+Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
+In-Reply-To: <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
+References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
+ <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
+ <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
+ <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
+ <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
+Message-ID: <6a236664-6cd5-c2e6-e4bc-ee5f7b6b21a1@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Arnout,
 
-Build statistics for 2017-06-21
-================================
+Am 21.06.2017 um 23:03 schrieb Arnout Vandecappelle:
+>   Hi Wolfgang,
+> 
+> On 21-06-17 09:59, Wolfgang Grandegger wrote:
+>> Hello,
+>>
+>> this topic is still pending... some more input below...
+>>
+>> Am 27.04.2017 um 11:37 schrieb Wolfgang Grandegger:
+>>> Hello Arnout,
+>>>
+>>> Am 12.04.2017 um 15:59 schrieb Arnout Vandecappelle:
+>>>>
+>>>>
+>>>> On 23-03-17 08:54, Wolfgang Grandegger wrote:
+>>>>> Hello,
+>>>>>
+>>>>> this is v3 of my RFC patch series to make the buildroot SDK (HOST_DIR)
+>>>>> relocatable. It sanitizes the RPATH of all ELF files in the "target"
+>>>>> and "host" tree using "patchelf --make-rpath-relative". I have started
+>>>>> the mainlining process implementing "--make-rpath-relative" using
+>>>>> GitHub pull request [1]... till now, no answer!
+>>>>>
+>>>>> Furthermore this patch creates the script "relocate-sdk.sh" in the top
+>>>>> directory of the "host" tree allowing to relocate the SDK after it has
+>>>>> been moved to a new location. It replaces the old path with the new
+>>>>> one in all text files identified by "file --mime-type". The location
+>>>>> is stored in "usr/share/buildroot/sdk-location".
+>>>>>
+>>>>> Unfortunately, "qmake" uses hard-coded pathes compiled into the QT5
+>>>>> libraries. To overcome this problem, "qt5pase" now creates "qt.conf".
+>>>>>
+>>>>> Other Questions:
+>>>>>
+>>>>> - Why do we want relative RPATHs starting with "$ORIGIN" also for ELF
+>>>>>    files in the target tree. "/lib" and "/usr/lib" have been removed
+>>>>>    already.
+>>>>
+>>>>   Good point, I don't think we want that... Neither for the ones in staging, I
+>>>> suppose. The RPATHs there should all be absolute paths which should be
+>>>> interpreted relative to $(TARGET_DIR) resp. $(STAGING_DIR).
+>>>
+>>> Could be done, no problem. Just requires some further modifications to
+>>
+>> I just learned that using relative path for the target breaks "sudo", at least.
+> 
+>   So if you change sudo's RPATH to $ORIGIN/../libexec/sudo it doesn't find
+> libsudo_util.so.0 at runtime? Or how does it break?
 
-      successes : 149
-       failures : 74 
-       timeouts : 0  
-          TOTAL : 223
+Yep, that's the problem. I think it's because of "For security, the
+dynamic linker does not allow use of $ORIGIN substitution sequences for
+set-user and set-group ID programs..." from
 
-Classification of failures by reason
-====================================
-
-     python-cryptography-1.7.2 | 18
-       linuxconsoletools-1.6.0 | 14
-knock-258a27e5a47809f97c2b9... | 7 
-                  cppcms-1.0.5 | 4 
-linuxptp-97c351cafd7327fd28... | 4 
-              alsa-lib-1.1.4.1 | 3 
-           host-doxygen-1.8.13 | 2 
-                    mpd-0.20.7 | 2 
-           python-pynacl-1.0.1 | 2 
-                      x265-2.4 | 2 
-                   attr-2.4.47 | 1 
-                beecrypt-4.2.1 | 1 
-                  check-0.11.0 | 1 
-dropwatch-7c33d8a8ed105b07a... | 1 
-                  ffmpeg-3.3.2 | 1 
-              gettext-0.19.8.1 | 1 
-                kvazaar-v1.1.0 | 1 
-            libpwquality-1.3.0 | 1 
-              librtlsdr-v0.5.3 | 1 
-                 libv4l-1.12.5 | 1 
-                 mplayer-1.3.0 | 1 
-                     mtd-2.0.0 | 1 
-              pcsc-lite-1.8.21 | 1 
-                 sngrep-v1.4.3 | 1 
-    trace-cmd-trace-cmd-v2.6.1 | 1 
-               upmpdcli-1.2.14 | 1 
+  http://seclists.org/fulldisclosure/2010/Oct/257
 
 
-Detail of failures
-===================
+>> I'm going to rework patchelf...
 
-         arc |               alsa-lib-1.1.4.1 | NOK | http://autobuild.buildroot.net/results/0ccafc216a5da8d3faedafd31091c4610a7cac79 |     
-         arc |               alsa-lib-1.1.4.1 | NOK | http://autobuild.buildroot.net/results/19c412bd1fb606262ffb7ca89692ae2e26a88565 |     
-         arc |               alsa-lib-1.1.4.1 | NOK | http://autobuild.buildroot.net/results/263a343b1ec7293ffc6cd85cd58690465638f4f1 |     
-         arc |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/733605c696baf8d9d607970b6c030d71b0128685 |     
-    mips64el |                 beecrypt-4.2.1 | NOK | http://autobuild.buildroot.net/results/2627573763a723093c0798d283f7da9f88e1ab9f | ORPH
-         arc |                   check-0.11.0 | NOK | http://autobuild.buildroot.net/results/26b50fb031e9f885b0b59bd4390dd7220bde2e56 |     
-         arm |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/cc2e2cd16778e3a2a09e3c893a5c601293a390cb | ORPH
-         arm |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/5b93f05364ac5e924204e2dd59b4669af70321d0 | ORPH
-    mips64el |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/63a98510ea440a11e45e07ee5b368d6d99ee36bf | ORPH
-         arm |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/4e849f39f3af1aa499bbd61f54d12595b074a860 | ORPH
-         arm | dropwatch-7c33d8a8ed105b07a... | NOK | http://autobuild.buildroot.net/results/b44e4f3bd9a8aa193ff10693fb9f41c566bdba2f |     
-         arm |                   ffmpeg-3.3.2 | NOK | http://autobuild.buildroot.net/results/fbd16f507fb21e5dc0b83a1c57c42f9883577606 |     
-         arc |               gettext-0.19.8.1 | NOK | http://autobuild.buildroot.net/results/f3cdeb0259fed0feecb0d6c7896e75b425d8d51a | ORPH
-       sparc |            host-doxygen-1.8.13 | NOK | http://autobuild.buildroot.net/results/689306dc424abe43d367e62bb351ee3ec68669c6 |     
-    mips64el |            host-doxygen-1.8.13 | NOK | http://autobuild.buildroot.net/results/34900460503cf0ec2b547c1c34cfe3d0bd0bb7e0 |     
-         sh4 | knock-258a27e5a47809f97c2b9... | NOK | http://autobuild.buildroot.net/results/519bfaa3ee49369ba5c655fd2859cb2bfe2c03f8 |     
-         arc | knock-258a27e5a47809f97c2b9... | NOK | http://autobuild.buildroot.net/results/aee898728f34b72f44687e83cfb0eeb007cd385e |     
-      xtensa | knock-258a27e5a47809f97c2b9... | NOK | http://autobuild.buildroot.net/results/90863b5adb769a346acd3dc4bbe8d5fa497a0581 |     
-         arc | knock-258a27e5a47809f97c2b9... | NOK | http://autobuild.buildroot.net/results/e453f16639875e0d2704187242044833c5ca2237 |     
-      mipsel | knock-258a27e5a47809f97c2b9... | NOK | http://autobuild.buildroot.net/results/d45567425bb8e85972065efa0acc4fcc67aca7a8 |     
-      xtensa | knock-258a27e5a47809f97c2b9... | NOK | http://autobuild.buildroot.net/results/eb7908c17ca8a0ba81a2b7a293bf47132a808844 |     
-       sparc | knock-258a27e5a47809f97c2b9... | NOK | http://autobuild.buildroot.net/results/39d8c501799581ff1cbbeed489dea7c7d3982df2 |     
-     powerpc |                 kvazaar-v1.1.0 | NOK | http://autobuild.buildroot.net/results/48d9c24ef23b7a9596e197b9af1b6f359e5dcbef |     
-         arm |             libpwquality-1.3.0 | NOK | http://autobuild.buildroot.net/results/88bce0113af16244269b530f8af319d5e018e6b8 |     
-         arm |               librtlsdr-v0.5.3 | NOK | http://autobuild.buildroot.net/results/54b1e376432aea8272187582da0d9cc8d96a5cc8 |     
-        bfin |                  libv4l-1.12.5 | NOK | http://autobuild.buildroot.net/results/dcc028d775ca641db4b0adf200c80308627d039a | ORPH
-        m68k |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/c3cbb7baad66a7ab1f081be52630c1548faf32e4 |     
-         arm |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/44f94eb4322bccc7c5c030d95482edd0679b1ee8 |     
-      mipsel |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/e8d49970557bc6740700b63760270177114de4a7 |     
-microblazeel |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/c2f61a392d2033e9007c4c0b8bd9a5c1f48d361c |     
-         arm |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/f0de5c93d3f18e57ad256c2412c7be2beefa70e0 |     
-      mipsel |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/308e2ca1f39c86cf8523c0362abf2b60dbdb90c1 |     
-        bfin |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/6552c7621228ac6ea9b30a7dd7158194aa3a3538 |     
-        or1k |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/7c8bd0da7b2d6299e235436c90ec7edbb8398bb4 |     
-        i586 |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/a90e2c285d2137c65f8627e5f25eb2dd739cd983 |     
-       nios2 |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/3a737472959ce23fc105f231c1563a2dd2320cf1 |     
-    mips64el |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/1ed1e232f76f12fb37f3411d69546b42282bb409 |     
-      mipsel |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/409d069beedc1b241005f9e5088f1c9a66ce743b |     
-       nios2 |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/bb37f92d6238d0627626dbaf67740d00a746ac56 |     
-      x86_64 |        linuxconsoletools-1.6.0 | NOK | http://autobuild.buildroot.net/results/529b875a08ca16e27acf406b8d7f3643674325f3 |     
-      x86_64 | linuxptp-97c351cafd7327fd28... | NOK | http://autobuild.buildroot.net/results/caadb329fe4428cc5000f9cfbc37d319659af4a9 |     
-         arm | linuxptp-97c351cafd7327fd28... | NOK | http://autobuild.buildroot.net/results/42a0c645eb6d771851c79b826ce666dea32b1db8 |     
-      xtensa | linuxptp-97c351cafd7327fd28... | NOK | http://autobuild.buildroot.net/results/240bd93be6ea2a28faeb185f8d22a592523dc477 |     
-      x86_64 | linuxptp-97c351cafd7327fd28... | NOK | http://autobuild.buildroot.net/results/08943f607e5c897aeed4c11a42b9ffc2c746ca70 |     
-    mips64el |                     mpd-0.20.7 | NOK | http://autobuild.buildroot.net/results/2005f2a7f2857e59ad1a896db0421bb0328b1766 |     
-    mips64el |                     mpd-0.20.7 | NOK | http://autobuild.buildroot.net/results/80410b62d4ca292df8ecbaf7b0e2a020767111b6 |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/6104302fdfb52ae525be09cd56d752d04790b492 |     
-         arm |                      mtd-2.0.0 | NOK | http://autobuild.buildroot.net/results/01e478f582d3f8f22d5290de011590ed5c8bbd26 | ORPH
-         arc |               pcsc-lite-1.8.21 | NOK | http://autobuild.buildroot.net/results/d82691429f52026a15784532c8c5a196643429db | ORPH
-    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/9466e0950c2ab4ca6bebc7c0b12b6037d382087e |     
-   powerpc64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/5c0c7e73ff76dabf260cb127e9975939d390faf0 |     
-         arm |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/30be03c9faec46f5caccd3a8c04e5bc4c224b6ba |     
-   powerpc64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/0c2f0f0149487278c6b1de3aac78378648a875e3 |     
-         arm |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/653e57e41cbeeeec32fd063044ce57521c3fcacb |     
-    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/50efd345af8fd26fe631647c2b5e84d0e788d1f2 |     
-       nios2 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/59d52a77edc952a37f1f8dd51af6b357228d868e |     
-      x86_64 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/c66062b4f5c0e05a3c36eabec8c80a0ea1ef713d |     
-    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/dc9fda97f79fccc836743f1ef24c123735a58900 |     
-    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/f098a68f24804ee68c3f7a5c68c9eb8d526e62f8 |     
-    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/d33983a141a25f056ad4adc08495eae19a8da556 |     
-    mips64el |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/f410eb226ed4900cabd00b83ea019499da959cc7 |     
-         arm |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/5b8ec2c7473b8462bad951906bd78afcac63f585 |     
-      mipsel |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/730acfd0ca4e07edf0c0c12f3faaead8148f31d1 |     
-      xtensa |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/2806e811629639fd6d3c78226a51fa8bdff6ae78 |     
-         arc |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/4584198c659f61927085dea8e166b3858906b61e |     
-         arm |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/be45e7bd62b9f27ed6abaf890b79f1f18f258a12 |     
-         sh4 |      python-cryptography-1.7.2 | NOK | http://autobuild.buildroot.net/results/3a6bcb4c83d359e34017a9e71b316bd5e724dba5 |     
-       nios2 |            python-pynacl-1.0.1 | NOK | http://autobuild.buildroot.net/results/199cc56660e0e46c5b527009f152c2297cf6d0c7 |     
-    mips64el |            python-pynacl-1.0.1 | NOK | http://autobuild.buildroot.net/results/e6415429a20d83f127b168b989f7a4a4dbf83a7a |     
-        or1k |                  sngrep-v1.4.3 | NOK | http://autobuild.buildroot.net/results/84c901409f3dfe1f61c8da151ee77d05d1f52539 |     
-        i586 |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/b2ff380d8bc62c3c0365f179e38a39d234bb4337 |     
-         arm |                upmpdcli-1.2.14 | NOK | http://autobuild.buildroot.net/results/ce3bf66ab52c7a1abaa3d8895c239add94805426 |     
-   powerpc64 |                       x265-2.4 | NOK | http://autobuild.buildroot.net/results/a2a4dfc23be0209f7485aec0a524ee0f46aa596f |     
- powerpc64le |                       x265-2.4 | NOK | http://autobuild.buildroot.net/results/f9d5f3b43be5bd3056fc725c4e63d27db09052e3 |     
+I now implemented the patchelf flags "--relative-to-file" for using $ORIGIN.
 
--- 
-http://autobuild.buildroot.net
+>>
+>>> patchelf. BTW, so far I have not received any response to my related Github
+>>> pull request... like many others:
+>>>
+>>>     https://github.com/NixOS/patchelf/pulls
+>>>
+>>> The project seems not really to be maintained... or I use the wrong channel.
+>>> In principle we could maintain your own version.
+>>
+>> I have little hope that we can get this patch accepted. Nobody seems to care :(.
+>> What about maintaining our own version?
+> 
+>   Since we need just a single patch for the time being, I think maintaining it as
+> a patch is sufficient.
+> 
+> 
+>>>>   I'm not entirely sure about staging, whether ld will use RPATH as an
+>>>> alternative to -L and in that case whether it is done relative to sysroot or
+>>>> not.
+>>>
+>>> So far, the patch series works for me very well. Just my usecase, of course.
+> 
+>   IIRC I checked a while ago and it looked like ld would use RPATH as a link path
+> (i.e. as if it's given with -L), and I think it was NOT relative to sysroot.
+> Which means that we shouldn't make the RPATHs in staging relative to
+> STAGING_DIR, otherwise it may pick up the library from the host. This really
+> shouldn't happen because the link normally should get the appropriate -L flag to
+> find the target lib and the -L has precedence over RPATH, but better be safe.
+
+The man page of "ld" says:
+
+"The linker uses the following search paths to locate required shared libraries:
+ ...
+ 6.  For a native ELF linker, the directories in "DT_RUNPATH" or "DT_RPATH" of a shared library are
+     searched for shared libraries needed by it. The "DT_RPATH" entries are ignored if "DT_RUNPATH" entries
+     exist."
+
+Then we should use $ORIGIN relative to the ELF file for the staging tree
+(like for the host tree) to make it relocatable.
+
+>   Again, I don't remember exactly so the previous paragraph could be entirely
+> wrong :-)
+> 
+> 
+>>>>> Things not yet addressed:
+>>>>>
+>>>>> - "make toolchain" creates a toolchain tree which still has references
+>>>>>    to the build system (in ELF and text files).
+>>>>
+>>>>   A solution to this (and other problems) is to use the same approach as
+>>>> check-bin-arch: do it as an instrumentation hook for each package, and only look
+>>>> at the files added by that package. That way, the overhead is spread out over
+>>>> the entire build process, and doing rebuilds doesn't run patchelf on all files
+>>>> anymore in the finalize step.
+>>>
+>>> This is just to solve the issue mentioned above or a general approach (instead
+>>> of doning rtpath sanitation at the end)?
+>>
+>> Any opinions here?
+> 
+>   Preferably as an instrumentation hook, because:
+> - it speeds things up dramatically if you do 'make foo-rebuild';
+> - things are still correct if you interrupt the build in the middle;
+> - it makes no difference if you do a rebuild (if patchelf is done at the end,
+> and then you rebuild a package, the RPATH in the libs you link with is different
+> than the first time you built it).
+
+OK, as I see it, check-bin-arch is only for the files in the target tree. Having a
+closer look now.
+
+>>> How should I go ahead to get this patch series accepted sooner than later? We
+>>> could make the option configurable, for example, to reduce the risk of
+>>> breaking something.
+>>
+>> Is a relocatable SDK still on the wish list? How should/could I proceed to get
+>> the feature accepted sooner than later?
+> 
+>   You should pray that someone takes the time to continue the review :-)
+> 
+>   Occasionally drawing attention to the series like you do know definitely helps.
+
+OK, more soon...
+
+Wolfgang.
