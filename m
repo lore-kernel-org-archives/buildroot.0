@@ -1,76 +1,121 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Jun 2017 13:31:20 +0200
-Subject: [Buildroot] [PATCH 1/2] uboot: add support for generating
- U-Boot boot scripts
-In-Reply-To: <87h8z8i8o5.fsf@dell.be.48ers.dk>
-References: <20170621214143.7184-1-thomas.petazzoni@free-electrons.com>
- <87h8z8i8o5.fsf@dell.be.48ers.dk>
-Message-ID: <20170622133120.735b26c2@windsurf>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 22 Jun 2017 07:32:45 -0400
+Subject: [Buildroot] [PATCH 2/5] libssl: new virtual package.
+In-Reply-To: <CAFSsvmoo3ceMdMonxoB453M3=w+NMRTw9EZ5i=nR1x5d1+a7cA@mail.gmail.com>
+References: <20170615142928.31927-1-aduskett@codeblue.com>
+ <20170615142928.31927-2-aduskett@codeblue.com>
+ <20170615232816.121a18b9@windsurf.lan>
+ <bf80e20f-0e71-258b-a60f-2b01f6f46909@mind.be>
+ <CAFSsvmrQLDmptGh8PoUgG0rO2VkVQYNOXJw4QzxKYox5M0LLTQ@mail.gmail.com>
+ <CAFSsvmoo3ceMdMonxoB453M3=w+NMRTw9EZ5i=nR1x5d1+a7cA@mail.gmail.com>
+Message-ID: <CAFSsvmpY_6C-AzvJDMG6b-kDs0MQCHQivtx0U49NFSM0rwN-Pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+So after thinking about this for a bit, I would like to also bring up
+the topic of BoringSSL.
+BoringSSL is gaining some traction, and I would like to also import it
+into Buildroot pretty soon.
+That would leave Buildroot with three possible SSL libraries.  Unlike
+LibreSSL, BoringSSL does not
+try to maintain backwards compatibility with OpenSSL.  However many
+programs such as Janus-Gateway
+now offer support for BoringSSL.
 
-On Thu, 22 Jun 2017 13:06:02 +0200, Peter Korsgaard wrote:
+Thoughts?
 
->  > More and more of our defconfigs need to generate a U-Boot boot
->  > script. It's a simple call to mkimage, but we already have 12
->  > instances of this logic in board/, and there are patch series waiting
->  > in patchwork adding 3 more boards that need this.  
-> 
->  > So let's add an option in the U-Boot package to generate such a boot
->  > script image easily.  
-> 
->  > Note that we assume a single script needs to be generated, and the
->  > output file name is boot.scr. The only platform for which it seems to
->  > not be the case are the Boundary Devices platforms: they generate two
->  > boot scripts, 6x_bootscript and 6x_upgrade, but they are anyway
->  > installed inside TARGET_DIR, not BINARIES_DIR.  
-> 
->  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-> 
-> Makes sense to me. Committed, thanks.
+Adam
 
-Wow, that was fast. I was wondering if we should extend it to multiple
-boot scripts, but then the syntax would be a bit horrible:
-
-BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="script1src:script1dest script2src:script2dest"
-
-We could still keep the compatibility by having:
-
-BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="script1src"
-
-just generate script1src and install it as boot.scr.
-
-Or maybe it's something we can take care of later?
-
->  > Retrospectively, I believe the choice of adding such a helper script
->  > for genimage was wrong. Having a proper option would be much
->  > cleaner/nicer IMO.  
-> 
-> Yes, agreed. My idea was also to add a kconfig option for it. This could
-> also have sub options like "support creating fat partitions" that would
-> pull in the needed host packages.
-
-Also my thinking.
-
-> The reason we went with the script solution was afaik that some projects
-> might want to extra processing before or after creating the image, so it
-> wasn't clear if it should run before or after the post-image scripts.
-> 
-> You can argue though that for such "special" situations you should just
-> manually call genimage from the post-image script instead though.
-
-Absolutely. I don't think we should try in those options to cover *all*
-cases, only the most common ones. As long as the more special cases can
-be covered by custom logic in post-build/post-image scripts, we're good
-IMO.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+On Tue, Jun 20, 2017 at 9:11 AM, Adam Duskett <aduskett@gmail.com> wrote:
+> Hey guys;
+>
+> Any update on what direction you want to go?
+>
+> Thanks!
+>
+> On Fri, Jun 16, 2017 at 8:43 AM, Adam Duskett <aduskett@gmail.com> wrote:
+>> Hey guys;
+>>
+>> On Thu, Jun 15, 2017 at 6:54 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>
+>>>
+>>> On 15-06-17 23:28, Thomas Petazzoni wrote:
+>>>> Hello,
+>>>>
+>>>> Nit: don't use a final "." in the commit titles.
+>>>>
+>>>> On Thu, 15 Jun 2017 10:29:25 -0400, Adam Duskett wrote:
+>>>>>     libressl is API compatible with OpenSSL 1.0.1 and is almost API compatible
+>>>>>     with OpenSSL 1.0.2.  As such, a new virtual package is needed to handle
+>>>>>     having both libressl and openssl.
+>>>>
+>>>> No indentation of 4 spaces for the commit log.
+>>>>
+>> Sorry about that, copy and paste issues. :)
+>>
+>>
+>>>>> diff --git a/package/libssl/Config.in b/package/libssl/Config.in
+>>>>> new file mode 100644
+>>>>> index 0000000..71347de
+>>>>> --- /dev/null
+>>>>> +++ b/package/libssl/Config.in
+>>>>> @@ -0,0 +1,6 @@
+>>>>> +config BR2_PACKAGE_HAS_LIBSSL
+>>>>> +    bool
+>>>>> +
+>>>>> +config BR2_PACKAGE_PROVIDES_LIBSSL
+>>>>> +    string
+>>>>> +    depends on BR2_PACKAGE_HAS_LIBSSL
+>>>>
+>>>> Should it be named "libssl" or "ssl". I think Arnout suggested just
+>>>> "ssl" on IRC, didn't he?
+>>>>
+>> The reason I went with libssl instead of ssl is because openssl is in
+>> the library/crypto config.
+>> Same with libressl.  As such I figured this should be named libssl.
+>>
+>>>> Also, I believe for this package we should use the jpeg/jpeg-turbo
+>>>> model instead of the conventional virtual package model, because we
+>>>> want to be able to "select BR2_PACKAGE_LIBSSL". As your package is done
+>>>> today, we would *have* to use only a "depends on BR2_PACKAGE_LIBRESSL",
+>>>> which is a bit annoying.
+>>>
+>>>  Hm, I'm not sure I agree. The problem with that is that existing configs won't
+>>> work anymore, i.e. if you have openssl selected and run menuconfig, it will
+>>> disappear because it now depends on libssl and libssl isn't selected...
+>>>
+>>>  And any package that can have either can just do
+>>>
+>>>         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+>>>
+>> This is what I would prefer because as discussed in IRC, there are many packages
+>> that are yet compatible with libressl.  Any objections?
+>>
+>>>
+>>>  If we really want to make it a choice like libjpeg, then I think openssl should
+>>> be renamed so existing configs still work. And that solves the naming issue too
+>>> :-) Well, except that we have to find a name for the original openssl package :-P
+>>>
+>> libopenssl Kind of sounds funny. :)?
+>>
+>>>  Regards,
+>>>  Arnout
+>>>
+>>>>
+>>>> Again, see the libjpeg virtual package.
+>>>>
+>>>> Best regards,
+>>>>
+>>>> Thomas
+>>>>
+>>>
+>>> --
+>>> Arnout Vandecappelle                          arnout at mind be
+>>> Senior Embedded Software Architect            +32-16-286500
+>>> Essensium/Mind                                http://www.mind.be
+>>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
