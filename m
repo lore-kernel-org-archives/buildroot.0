@@ -1,41 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Jun 2017 14:17:29 +0200
-Subject: [Buildroot] [PATCH 2/5] libssl: new virtual package.
-In-Reply-To: <CAFSsvmpY_6C-AzvJDMG6b-kDs0MQCHQivtx0U49NFSM0rwN-Pw@mail.gmail.com>
-References: <20170615142928.31927-1-aduskett@codeblue.com>
- <20170615142928.31927-2-aduskett@codeblue.com>
- <20170615232816.121a18b9@windsurf.lan>
- <bf80e20f-0e71-258b-a60f-2b01f6f46909@mind.be>
- <CAFSsvmrQLDmptGh8PoUgG0rO2VkVQYNOXJw4QzxKYox5M0LLTQ@mail.gmail.com>
- <CAFSsvmoo3ceMdMonxoB453M3=w+NMRTw9EZ5i=nR1x5d1+a7cA@mail.gmail.com>
- <CAFSsvmpY_6C-AzvJDMG6b-kDs0MQCHQivtx0U49NFSM0rwN-Pw@mail.gmail.com>
-Message-ID: <20170622141729.74baae24@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 22 Jun 2017 15:39:30 +0300
+Subject: [Buildroot] [PATCH 2/2] psmisc: update homepage link
+In-Reply-To: <f47611d9867fd591625d0d90a9134c0221c3ce38.1498135170.git.baruch@tkos.co.il>
+References: <f47611d9867fd591625d0d90a9134c0221c3ce38.1498135170.git.baruch@tkos.co.il>
+Message-ID: <3474e14690f9a8f4a7bbd0e852257e797a3511f4.1498135170.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The gitlab repo is much more informative and updated.
 
-On Thu, 22 Jun 2017 07:32:45 -0400, Adam Duskett wrote:
-> So after thinking about this for a bit, I would like to also bring up
-> the topic of BoringSSL.
-> BoringSSL is gaining some traction, and I would like to also import it
-> into Buildroot pretty soon.
-> That would leave Buildroot with three possible SSL libraries.  Unlike
-> LibreSSL, BoringSSL does not
-> try to maintain backwards compatibility with OpenSSL.  However many
-> programs such as Janus-Gateway
-> now offer support for BoringSSL.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/psmisc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If there's no compatibility between BoringSSL and OpenSSL/LibreSSL,
-then I guess BoringSSL shouldn't be a provider of the "ssl/libssl"
-virtual package. Instead, each package that can use should be able to
-use it as an alternative to the ssl/libressl virtual package.
-
-Thomas
+diff --git a/package/psmisc/Config.in b/package/psmisc/Config.in
+index 734542cc8a05..2b66bcfa9471 100644
+--- a/package/psmisc/Config.in
++++ b/package/psmisc/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_PSMISC
+ 	help
+ 	  Helpful /proc related utilities such as pstree, fuser, and killall
+ 
+-	  http://psmisc.sourceforge.net/
++	  https://gitlab.com/psmisc/psmisc
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
