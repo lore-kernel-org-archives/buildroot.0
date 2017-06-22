@@ -1,59 +1,67 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 22 Jun 2017 20:54:57 +0300
-Subject: [Buildroot] [PATCH] openvpn: security bump to version 2.4.3
-Message-ID: <f7fbcb2f29c958e7755a400ecc26d5d92e172790.1498154097.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 22 Jun 2017 21:18:24 +0200
+Subject: [Buildroot] [PATCH 1/4 v2] tools: add a directory to store some
+ useful user-facing tools
+In-Reply-To: <46aa3c8c-7085-b024-ea77-d610b8971780@mind.be>
+References: <20170619154227.GA3045@scaer>
+ <5949d4c290853_3c4af6e910447ac@ultri3.mail>
+ <20170621052152.GA23076@scaer>
+ <46aa3c8c-7085-b024-ea77-d610b8971780@mind.be>
+Message-ID: <20170622191824.GA3054@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Arnout, All,
 
-CVE-2017-7508 - Remotely-triggerable ASSERT() on malformed IPv6 packet
+On 2017-06-21 23:44 +0200, Arnout Vandecappelle spake thusly:
+> On 21-06-17 07:21, Yann E. MORIN wrote:
+> > Ricardo, All,
+> > 
+> > On 2017-06-20 23:06 -0300, Ricardo Martincoski spake thusly:
+> >> On Mon, Jun 19, 2017 at 12:42 PM, Yann E. MORIN wrote:
+> >>> On 2017-06-18 22:11 -0300, Ricardo Martincoski spake thusly:
+> >> [snip]
+> >>>> BUT if it is called without a .config file, it hangs forever waiting for input,
+> >>>> and the menuconfig is sent to the log file.
+> >>>
+> >>> Indeed, my use-case is to only use it in an already-configured tree.
+> >>>
+> >>>> Maybe we can bailout if no .config is present.
+> >>>
+> >>> Hmmm... It's not trivial do detect, because the .config file is not
+> >>> necessarily in the current directory, for example:
+> >>>
+> >>>     brmake -C /pat/to/buil-dir
+> >>>
+> >>> and I don't want to write a make option interpeter either...
+> >>
+> >> Oh, I see now it is not trivial.
+> 
+>  How about instead make the script do
+> 
+> make -C ${0%/*}/.. O=${PWD} "${@}"
 
-CVE-2017-7520 - Pre-authentication remote crash/information disclosure for
-clients
+What if one calls it with:  brmake -C /path/to/my/O-dir
 
-CVE-2017-7521 - Potential double-free in --x509-alt-username
+But as much as we try to 'fix' it, we always uncover corner cases,
+becausze the above would consider ${PWD} to be the output dir if
+/path/to/my/O-dir is not already configured... :-/
 
-CVE-2017-7521 - Remote-triggerable memory leaks
+Corner cases after corner cases, I think I'd just try to catch the
+obvious and trivial, and leave out the weird cases.
 
-CVE-2017-7522 - Post-authentication remote DoS when using the --x509-track
-option
+So, either there is a .config in the CWD, or we abort. Deal? ;-)
 
-Details at
+Regards,
+Yann E. MORIN.
 
-  https://community.openvpn.net/openvpn/wiki/VulnerabilitiesFixedInOpenVPN243
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/openvpn/openvpn.hash | 4 ++--
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index fe054e96180f..1db3a31e1dfa 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256 df5c4f384b7df6b08a2f6fa8a84b9fd382baf59c2cef1836f82e2a7f62f1bff9  openvpn-2.4.2.tar.xz
-+# Locally calculated after checking signature
-+sha256 15e15fc97f189b52aee7c90ec8355aa77469c773125110b4c2f089abecde36fb  openvpn-2.4.3.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index ff6bcdcee624..7cc572e4e771 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.4.2
-+OPENVPN_VERSION = 2.4.3
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
