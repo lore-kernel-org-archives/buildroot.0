@@ -1,36 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Jun 2017 23:23:46 +0200
-Subject: [Buildroot] [PATCH 4/4] spice: add post-0.12.8 upstream
-	security fixes
-In-Reply-To: <20170622203700.GG3054@scaer> (Yann E. MORIN's message of "Thu,
- 22 Jun 2017 22:37:00 +0200")
+Date: Thu, 22 Jun 2017 23:26:12 +0200
+Subject: [Buildroot] [PATCH 0/4] spice: version bump / security bump
+In-Reply-To: <20170621220744.18908-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 22 Jun 2017 00:07:40 +0200")
 References: <20170621220744.18908-1-peter@korsgaard.com>
- <20170621220744.18908-5-peter@korsgaard.com>
- <20170622203700.GG3054@scaer>
-Message-ID: <87mv8zlnrx.fsf@dell.be.48ers.dk>
+Message-ID: <87injnlnnv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Hi,
- >> create mode 100644 package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch
+ > Our spice version is quite old (2013) and is affected by a number of
+ > security issues, so bump to the latest release in the 0.12.x series +
+ > upstream post-0.12.8 security fixes.
 
- > Although this is not strictly speaking a security fix, I woner if we
- > should not backport 1d597f4b1 (Call migrate_end_complete() after falling
- > back to switch-host) as it fixes a migration issue with qemu 2.6.
+ > As the configuration options and dependencies have changed quite a bit since
+ > 2013, don't just do the entire bump in a single patch, but instead move
+ > forward release by release for easier review.
 
-Yes, that might be a good idea as a followup patch as it is such a
-simple patch and fixes real issue.
+ > Peter Korsgaard (4):
+ >   spice: bump to version 0.12.5
+ >   spice: security bump to version 0.12.6
+ >   spice: security bump to version 0.12.8
+ >   spice: add post-0.12.8 upstream security fixes
 
- > Anyway:
-
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Thanks for the reviews!
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
