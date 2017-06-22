@@ -1,45 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Jun 2017 11:50:09 +0200
-Subject: [Buildroot] [PATCH 1/2] xr819-xradio: new package
-In-Reply-To: <87y3skicbu.fsf@dell.be.48ers.dk>
-References: <20170618184200.31167-1-geomatsi@gmail.com>
- <20170618184200.31167-2-geomatsi@gmail.com>
- <20170621224139.720d19cc@windsurf>
- <20170622075519.qp2nbrgekpbhc72i@bars>
- <20170622101041.3d01e783@windsurf>
- <87y3skicbu.fsf@dell.be.48ers.dk>
-Message-ID: <20170622115009.64bb438b@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 Jun 2017 12:03:15 +0200
+Subject: [Buildroot] [PATCH] upmpdcli: needs gcc >= 4.9
+In-Reply-To: <20170622060138.6449-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Thu, 22 Jun 2017 08:01:38 +0200")
+References: <20170622060138.6449-1-joerg.krause@embedded.rocks>
+Message-ID: <87tw38ibks.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-On Thu, 22 Jun 2017 11:47:01 +0200, Peter Korsgaard wrote:
+ > Commit 5d043799cd changed the dependency for libupnpp on GCC to 4.9, but
+ > did not propagate the dependency to upmpdcli.
 
->  > Yes, it's fine to point to the Armbian github. The only gotcha is how
->  > to do this without downloading the entire Github repository. I guess
->  > you will have to do something like this:  
-> 
->  > XR819_FIRMWARE_VERSION = 8b4a4ed16f7f9d12e59ff2f9ceba3cc335374dbe
->  > XR819_FIRMWARE_SITE =
->  > https://github.com/armbian/build/tree/$(XR819_FIRMWARE_VERSION)/bin/firmware-overlay/xr819
->  > XR819_FIRMWARE_SOURCE = fw_xr819.bin
->  > XR819_FIRMWARE_EXTRA_DOWNLOADS = boot_xr819.bin sdd_xr819.bin  
-> 
-> The only problem is that these file names are not versioned, so it is
-> difficult to ever change them in the future.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/df2/df23cd5e77f61caf3f30cf43c91bc161a88def3a/
 
-If the files are changed, we will change the hashes. Our download infra
-will notice that the files in the dl folder have a hash that doesn't
-match the one in the .hash file, and we re-download them.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-So it seems to work alright, no?
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
