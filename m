@@ -1,42 +1,28 @@
-From: Mason <slash.tmp@free.fr>
-Date: Thu, 22 Jun 2017 11:23:02 +0200
-Subject: [Buildroot] Policy for upgrading toolchains in LTS version
-Message-ID: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 Jun 2017 11:27:51 +0200
+Subject: [Buildroot] [PATCH] libcurl: bump version to 7.54.1
+In-Reply-To: <20170621203057.4346-4-aduskett@codeblue.com> (Adam Duskett's
+ message of "Wed, 21 Jun 2017 16:30:53 -0400")
+References: <20170621203057.4346-1-aduskett@codeblue.com>
+ <20170621203057.4346-4-aduskett@codeblue.com>
+Message-ID: <87a850jrs8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-Providing an LTS version is an interesting idea.
+ > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 
-I was wondering about the policy for upgrading toolchains
-in LTS versions (I use Linaro).
+It would have been good to have a more detailed commit
+message. E.G. this fixes a security issue:
 
-Case in point: 2017.02.x branch is set up to use gcc-linaro-6.2.1-2016.11
+https://curl.haxx.se/docs/adv_20170614.html
 
-Since then, Linaro has released two bug-fix versions:
+But as this issue only applies to Windows builds it doesn't need to be
+backported to 2017.02.x / 2017.05.x.
 
-https://releases.linaro.org/components/toolchain/binaries/6.1-2016.08/
-https://releases.linaro.org/components/toolchain/binaries/6.2-2016.11/
-https://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/
-https://releases.linaro.org/components/toolchain/binaries/6.3-2017.05/
-
-AFAIU, these releases are all on the same branch, i.e. they
-keep the packages (mostly) stable:
-gcc 6, glibc 2.23, newlib 2.4, binutils 2.27, gdb 7.12
-NB: Apparently gdb got bumped from 7.11 to 7.12 in 2016.11
-(IIUC, this is a cross-debugger, when using remote gdb.)
-
-For example, this bug seems likely to affect current BR LTS:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78253
-(It was fixed in Linaro 2017.02)
-
-I think there is a case for upgrading the toolchain in the LTS
-branch (while staying on the same Linaro branch of course.)
-
-What do you think?
-
-Regards.
+-- 
+Bye, Peter Korsgaard
