@@ -1,73 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jun 2017 09:18:12 +0200
-Subject: [Buildroot] Policy for upgrading toolchains in LTS version
-In-Reply-To: <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr> (Mason's message
- of "Thu, 22 Jun 2017 23:57:03 +0200")
-References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
- <20170622192701.GC3054@scaer>
- <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr>
-Message-ID: <87a84zkw97.fsf@dell.be.48ers.dk>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri, 23 Jun 2017 12:37:48 +0200
+Subject: [Buildroot] [PATCH] package/dt-utils: new package
+In-Reply-To: <20170621222326.3c64e6bf@windsurf>
+References: <20170620152443.17014-1-m.niestroj@grinn-global.com>
+ <20170621222326.3c64e6bf@windsurf>
+Message-ID: <3eb8b231-1709-dd73-24e7-c361c83413b5@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mason" == Mason  <slash.tmp@free.fr> writes:
-
 Hi,
 
- > On freenode #linaro-tcwg, Ryan explained the Linaro toolchain
- > release process to me, which appears to be BR-LTS-compatible.
+On 21.06.2017 22:23, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 20 Jun 2017 17:24:43 +0200, Marcin Niestroj wrote:
+>> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+>> ---
+>>   DEVELOPERS                   |  1 +
+>>   package/Config.in            |  1 +
+>>   package/dt-utils/Config.in   |  8 ++++++++
+>>   package/dt-utils/dt-utils.mk | 15 +++++++++++++++
+>>   4 files changed, 25 insertions(+)
+>>   create mode 100644 package/dt-utils/Config.in
+>>   create mode 100644 package/dt-utils/dt-utils.mk
+> 
+> This package doesn't build with the following defconfig:
 
- > Toolchain releases are supported for 2 years.
+Thanks for spotting that. I've only tested this package with glibc
+library. Looks like this package also didn't build with musl.
 
- > First year in "stable" mode:
- > Bug fixes, and backports of non-invasive performance fixes for gcc.
- > One update per quarter.
+> 
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-444-g6c704ba.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_DT_UTILS=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
 
- > Second year in "maintenance" mode:
- > Only bug fixes.
- > Updates when required (e.g. getaddrinfo vuln, or stack clash)
-
- > Individual components (gcc, glibc, newlib, binutils, gdb)
- > are updated within their respective stable branches, i.e.
- > kept at the same release (gdb is an exception).
-
- > So, for example, the 6.x release is in stable mode until
- > 2017.08, and in maintenance mode until 2018.08
- > (Ryan pointed out that an OOB release would be done to
- > address stack clash.)
-
- > See also
- > https://wiki.linaro.org/WorkingGroups/ToolChain/FAQ#What_were.2Fare_the_versions_of_toolchain_released.3F
-
-Ok, looks good. I take it that you are asking for this update because
-you have run into some of the issues fixed by later versions?
-
-Can you please send a patch (relative to the 2017.02.x branch) bumping
-the toolchains and include the above + any details of the issues you
-have encountered?
-
-
- >> If as you state they are only bug-fix releases, then we could indeed
- >> bump those toolchains, yes. It imho complies with the goal of an LTS.
-
- > I believe it does. I don't know exactly how gcc/glibc
- > plan to address "stack clash" but I think it's important
- > for BR-LTS to include these fixes.
-
-Agreed.
-
-
- >> Note however that we so far never bumped the gcc version in the LTS
- >> branch, but we already had 6.3 at the time we cut the LTS. So it's
- >> difficult to say if we would bump it. Probably, I'd say...
-
- > Isn't this the first time BR did an LTS release?
-
-Indeed ;) I guess Yann meant that we so far haven't bumped the gcc
-version in 2017.02.x (or in any other point releases).
 
 -- 
-Bye, Peter Korsgaard
+Marcin Niestroj
