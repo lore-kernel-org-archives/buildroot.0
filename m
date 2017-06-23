@@ -1,71 +1,113 @@
-From: Mason <slash.tmp@free.fr>
-Date: Fri, 23 Jun 2017 16:15:39 +0200
-Subject: [Buildroot] Policy for upgrading toolchains in LTS version
-In-Reply-To: <87a84zkw97.fsf@dell.be.48ers.dk>
-References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
- <20170622192701.GC3054@scaer> <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr>
- <87a84zkw97.fsf@dell.be.48ers.dk>
-Message-ID: <3fa81af3-4372-6a67-5fb9-3717549b0350@free.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 23 Jun 2017 10:28:10 -0300
+Subject: [Buildroot] [PATCH] glmark2: Bump to the latest version
+Message-ID: <1498224490-13161-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/06/2017 09:18, Peter Korsgaard wrote:
+The two patches are no longer needed with the latest upstream version,
+so bump to the latest one.
 
-> Mason wrote:
-> 
->> On freenode #linaro-tcwg, Ryan explained the Linaro toolchain
->> release process to me, which appears to be BR-LTS-compatible.
->> 
->> Toolchain releases are supported for 2 years.
->> 
->> First year in "stable" mode:
->> Bug fixes, and backports of non-invasive performance fixes for gcc.
->> One update per quarter.
->> 
->> Second year in "maintenance" mode:
->> Only bug fixes.
->> Updates when required (e.g. getaddrinfo vuln, or stack clash)
->> 
->> Individual components (gcc, glibc, newlib, binutils, gdb)
->> are updated within their respective stable branches, i.e.
->> kept at the same release (gdb is an exception).
->> 
->> So, for example, the 6.x release is in stable mode until
->> 2017.08, and in maintenance mode until 2018.08
->> (Ryan pointed out that an OOB release would be done to
->> address stack clash.)
-> 
-> Ok, looks good. I take it that you are asking for this update because
-> you have run into some of the issues fixed by later versions?
+Tested on imx6.
 
-Switching from gcc 5.3 to 6.2 triggered an issue which
-*appeared* to go away when using 6.3.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ ...NativeStateDRM-add-imx-drm-driver-support.patch | 25 -------------------
+ ...eStateDRM-use-fixed-event-context-version.patch | 28 ----------------------
+ package/glmark2/glmark2.hash                       |  2 +-
+ package/glmark2/glmark2.mk                         |  2 +-
+ 4 files changed, 2 insertions(+), 55 deletions(-)
+ delete mode 100644 package/glmark2/0001-NativeStateDRM-add-imx-drm-driver-support.patch
+ delete mode 100644 package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
 
-But when the dust settled, the bug turned out to be in
-our code (as is the case most of the time).
-
-https://www.spinics.net/lists/gcchelp/msg46864.html
-
-> Can you please send a patch (relative to the 2017.02.x branch) bumping
-> the toolchains and include the above + any details of the issues you
-> have encountered?
-
-Romain bumped the version from 6.2-2016.11 to 6.3-2017.02
-on master. IIUC, you don't want to update master, and then
-cherry-pick into the LTS branch?
-
-Is the plan to jump straight to 7.1 for master?
-
-I suppose you want to update all 3 toolchains,
-toolchain-external-linaro-{aarch64,arm,armeb}
-Can this be done in a single patch, or should it
-be split across 3 patches?
-
-As previously mentioned, IIUC, Linaro is preparing an
-OOB release addressing "stack clash". I plan to wait
-for that release, and then send a patch, is that OK?
-
-Regards.
+diff --git a/package/glmark2/0001-NativeStateDRM-add-imx-drm-driver-support.patch b/package/glmark2/0001-NativeStateDRM-add-imx-drm-driver-support.patch
+deleted file mode 100644
+index 8eff81e..0000000
+--- a/package/glmark2/0001-NativeStateDRM-add-imx-drm-driver-support.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From 05ec5e4411fe3188f72305050b11513cb153c5ff Mon Sep 17 00:00:00 2001
+-From: Gary Bisson <gary.bisson@boundarydevices.com>
+-Date: Tue, 14 Feb 2017 09:39:02 +0100
+-Subject: [PATCH] NativeStateDRM: add imx-drm driver support
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+----
+- src/native-state-drm.cpp | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/native-state-drm.cpp b/src/native-state-drm.cpp
+-index 4df75ec..454a24d 100644
+---- a/src/native-state-drm.cpp
+-+++ b/src/native-state-drm.cpp
+-@@ -201,6 +201,7 @@ NativeStateDRM::init()
+-     // driver (udev?).
+-     static const char* drm_modules[] = {
+-         "i915",
+-+        "imx-drm",
+-         "nouveau",
+-         "radeon",
+-         "vmgfx",
+--- 
+-2.11.0
+-
+diff --git a/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch b/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
+deleted file mode 100644
+index c66f409..0000000
+--- a/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From: Lucas Stach <l.stach@pengutronix.de>
+-Date: Wed, 31 May 2017 13:01:00 +0200
+-Subject: [PATCH] NativeStateDRM: use fixed event context version
+-
+-Using the latest version is not a good idea, as the context content may
+-change between versions.
+-
+-Fixes a segfault with new kernel and libdrm.
+-
+-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+----
+- src/native-state-drm.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/native-state-drm.cpp b/src/native-state-drm.cpp
+-index 454a24d898ff..b9af996667dc 100644
+---- a/src/native-state-drm.cpp
+-+++ b/src/native-state-drm.cpp
+-@@ -106,7 +106,7 @@ NativeStateDRM::flip()
+-     FD_ZERO(&fds);
+-     FD_SET(fd_, &fds);
+-     drmEventContext evCtx;
+--    evCtx.version = DRM_EVENT_CONTEXT_VERSION;
+-+    evCtx.version = 2;
+-     evCtx.page_flip_handler = page_flip_handler;
+- 
+-     while (waiting) {
+diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
+index 92c53e5..aeb8a78 100644
+--- a/package/glmark2/glmark2.hash
++++ b/package/glmark2/glmark2.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 ea59bd267a88e2c773423eec43f7cb90b0ca1c369762e836dec575ebdcdcc012 glmark2-7215c0f337dae0b232535549c37fca441747a891.tar.gz
++sha256 8800f3cab0575df217adc166b181930e1f881efb6f764f35872993ee78dea5f0 glmark2-9b1070fe9c5cf908f323909d3c8cbed08022abe8.tar.gz
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index 4edc713..4eeaec7 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GLMARK2_VERSION = 7215c0f337dae0b232535549c37fca441747a891
++GLMARK2_VERSION = 9b1070fe9c5cf908f323909d3c8cbed08022abe8
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPL-3.0+, SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
+-- 
+2.7.4
