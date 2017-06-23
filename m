@@ -1,10 +1,10 @@
 From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 23 Jun 2017 17:56:08 +0530
-Subject: [Buildroot] [PATCH v5 4/5] board: Add support for Engicam GEAM6UL
-	SOM
+Date: Fri, 23 Jun 2017 17:56:09 +0530
+Subject: [Buildroot] [PATCH v5 5/5] board: Add support for Engicam Is.IoT
+	MX6UL SOM
 In-Reply-To: <1498220769-22961-1-git-send-email-jteki@openedev.com>
 References: <1498220769-22961-1-git-send-email-jteki@openedev.com>
-Message-ID: <1498220769-22961-5-git-send-email-jteki@openedev.com>
+Message-ID: <1498220769-22961-6-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 From: Jagan Teki <jagan@amarulasolutions.com>
 
-Add initial support for Engicam GEAM6UL SOM board
+Add initial support for Engicam Is.IoT MX6UL SOM board
 with below features:
 - U-Boot 2017.07-rc1
 - Linux 4.11.5
@@ -29,56 +29,53 @@ Changes for v5:
 Changes for v4:
 - Update .gitlab-ci.yml
 Changes for v3:
-- Use kernel version 4.11.5
-- Fix readme.txt file
-Changes for v2:
-- Fix genimage.cfg path in readme.txt
+- Newly added patch
 
- .gitlab-ci.yml                        |  1 +
- DEVELOPERS                            |  1 +
- board/engicam/geam6ul/genimage.cfg    | 38 ++++++++++++++++++++
- board/engicam/geam6ul/readme.txt      | 66 +++++++++++++++++++++++++++++++++++
- configs/engicam_imx6ul_geam_defconfig | 41 ++++++++++++++++++++++
+ .gitlab-ci.yml                             |  1 +
+ DEVELOPERS                                 |  1 +
+ board/engicam/isiot/genimage.cfg           | 38 +++++++++++++++++
+ board/engicam/isiot/readme.txt             | 66 ++++++++++++++++++++++++++++++
+ configs/engicam_imx6ul_isiot_mmc_defconfig | 41 +++++++++++++++++++
  5 files changed, 147 insertions(+)
- create mode 100644 board/engicam/geam6ul/genimage.cfg
- create mode 100644 board/engicam/geam6ul/readme.txt
- create mode 100644 configs/engicam_imx6ul_geam_defconfig
+ create mode 100644 board/engicam/isiot/genimage.cfg
+ create mode 100644 board/engicam/isiot/readme.txt
+ create mode 100644 configs/engicam_imx6ul_isiot_mmc_defconfig
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index f1261d5..41abfd0 100644
+index 41abfd0..33c0fab 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -91,6 +91,7 @@ csky_gx6605s_defconfig: *defconfig
- cubieboard2_defconfig: *defconfig
+@@ -92,6 +92,7 @@ cubieboard2_defconfig: *defconfig
  engicam_imx6qdl_icore_defconfig: *defconfig
  engicam_imx6qdl_icore_rqs_defconfig: *defconfig
-+engicam_imx6ul_geam_defconfig: *defconfig
+ engicam_imx6ul_geam_defconfig: *defconfig
++engicam_imx6ul_isiot_defconfig: *defconfig
  firefly_rk3288_defconfig: *defconfig
  firefly_rk3288_demo_defconfig: *defconfig
  freescale_imx28evk_defconfig: *defconfig
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ccf6f67..00ec245 100644
+index 00ec245..7699354 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -839,6 +839,7 @@ N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/engicam/
+@@ -840,6 +840,7 @@ F:	board/engicam/
  F:	configs/engicam_imx6qdl_icore_defconfig
  F:	configs/engicam_imx6qdl_icore_rqs_defconfig
-+F:	configs/engicam_imx6ul_geam_defconfig
+ F:	configs/engicam_imx6ul_geam_defconfig
++F:	configs/engicam_imx6ul_isiot_defconfig
  
  N:	James Knight <james.knight@rockwellcollins.com>
  F:	package/atkmm/
-diff --git a/board/engicam/geam6ul/genimage.cfg b/board/engicam/geam6ul/genimage.cfg
+diff --git a/board/engicam/isiot/genimage.cfg b/board/engicam/isiot/genimage.cfg
 new file mode 100644
-index 0000000..fcca6e1
+index 0000000..dc8c20d
 --- /dev/null
-+++ b/board/engicam/geam6ul/genimage.cfg
++++ b/board/engicam/isiot/genimage.cfg
 @@ -0,0 +1,38 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"uImage",
-+			"imx6ul-geam-kit.dtb"
++			"imx6ul-isiot-emmc.dtb"
 +		}
 +	}
 +	size = 64M
@@ -112,39 +109,39 @@ index 0000000..fcca6e1
 +		image = "rootfs.ext2"
 +	}
 +}
-diff --git a/board/engicam/geam6ul/readme.txt b/board/engicam/geam6ul/readme.txt
+diff --git a/board/engicam/isiot/readme.txt b/board/engicam/isiot/readme.txt
 new file mode 100644
-index 0000000..ace993a
+index 0000000..5394007
 --- /dev/null
-+++ b/board/engicam/geam6ul/readme.txt
++++ b/board/engicam/isiot/readme.txt
 @@ -0,0 +1,66 @@
 +********************************************
-+Buildroot for Engicam GEAM6UL SOM platforms:
++Buildroot for Engicam Is.IoT SOM platforms:
 +********************************************
 +
-+This file documents the Buildroot support for all Engicam GEAM6UL
++This file documents the Buildroot support for all Engicam Is.IoT MX6UL
 +SOM platform boards.
 +
-+GEAM6UL SOM Starter kits:
-+https://www.engicam.com/vis-prod/101115
++Is.IoT MX6UL SOM Starter kits:
++https://www.engicam.com/vis-prod/101122
 +
 +This configuration uses U-Boot mainline and kernel mainline.
 +
 +Build
 +=====
 +
-+First, configure Buildroot for the Engicam GEAM6UL SOM:
++First, configure Buildroot for the Engicam Is.IoT MX6UL SOM:
 +
-+- for GEAM6UL SOM:
++- for Is.IoT MX6UL SOM:
 +
-+  make engicam_imx6ul_geam_defconfig
++  make engicam_imx6ul_isiot_defconfig
 +
 +Build all components:
 +
 +  make
 +
 +You will find the following files in output/images/:
-+  - imx6ul-geam-kit.dtb
++  - imx6ul-isiot-emmc.dtb
 +  - rootfs.ext4
 +  - rootfs.tar
 +  - sdcard.img
@@ -170,10 +167,10 @@ index 0000000..ace993a
 +*** WARNING! This will destroy all the card content. Use with care! ***
 +
 +For details about the medium image layout, see the definition in
-+board/engicam/geam6ul/genimage.cfg
++board/engicam/isiot/genimage.cfg
 +
-+Boot the GEAM6UL boards with SD boot:
-+====================================
++Boot the Is.IoT MX6UL boards with SD boot:
++=========================================
 +
 +To boot your newly created system:
 +- insert the SD card in the SD slot of the board;
@@ -184,11 +181,11 @@ index 0000000..ace993a
 +- power on the board.
 +
 +Enjoy!
-diff --git a/configs/engicam_imx6ul_geam_defconfig b/configs/engicam_imx6ul_geam_defconfig
+diff --git a/configs/engicam_imx6ul_isiot_mmc_defconfig b/configs/engicam_imx6ul_isiot_mmc_defconfig
 new file mode 100644
-index 0000000..ef50138
+index 0000000..7ad7c94
 --- /dev/null
-+++ b/configs/engicam_imx6ul_geam_defconfig
++++ b/configs/engicam_imx6ul_isiot_mmc_defconfig
 @@ -0,0 +1,41 @@
 +BR2_arm=y
 +BR2_cortex_a9=y
@@ -207,7 +204,7 @@ index 0000000..ef50138
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_geam_mmc"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_isiot_mmc"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
@@ -222,14 +219,14 @@ index 0000000..ef50138
 +BR2_LINUX_KERNEL_UIMAGE=y
 +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-geam-kit"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-isiot-emmc"
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam GEAM6UL Starter Kit"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam Is.IoT eMMC Starter Kit"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/geam6ul/genimage.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/isiot/genimage.cfg"
 -- 
 2.7.4
