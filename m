@@ -1,205 +1,121 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri, 23 Jun 2017 12:37:57 +0200
-Subject: [Buildroot] [PATCH v2] package/dt-utils: new package
-Message-ID: <20170623103757.26747-1-m.niestroj@grinn-global.com>
+From: Mehdi.Trabelsi.Ajili-EXT at continental-corporation.com <Mehdi.Trabelsi.Ajili-EXT@continental-corporation.com>
+Date: Fri, 23 Jun 2017 13:46:07 +0200
+Subject: [Buildroot] Wrong ELF class when installing python-h5py module
+Message-ID: <OFEF6204A4.C76464CA-ONC1258148.003F3263-C1258148.0040A617@continental-corporation.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add two upstreamable patches for this package to fix uClibc
-and musl builds.
+Hello,
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
-Changes v1 -> v2:
- * Added Config.in comment about udev dependency (suggested by Thomas)
- * Use SPDX licence code (sugggested by Thomas)
- * Add patch for uClibc build (fail noticed by Thomas)
- * Add patch for musl build
+I added the HDF5 package to buildroot using the patch  
+https://patchwork.ozlabs.org/patch/425217/ and it worked. HDF5 was 
+configured and installed correctly.
+For my project I am using python to manipulate HDF files and I wanted to 
+install the python h5py module. I added the following makefile:
 
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-common-Rename-strlcpy-to-DT_strlcpy.patch | 58 ++++++++++++++++++++++
- .../0002-common-Include-sys-types.h-header.patch   | 38 ++++++++++++++
- package/dt-utils/Config.in                         | 11 ++++
- package/dt-utils/dt-utils.mk                       | 15 ++++++
- 6 files changed, 124 insertions(+)
- create mode 100644 package/dt-utils/0001-common-Rename-strlcpy-to-DT_strlcpy.patch
- create mode 100644 package/dt-utils/0002-common-Include-sys-types.h-header.patch
- create mode 100644 package/dt-utils/Config.in
- create mode 100644 package/dt-utils/dt-utils.mk
+################################################################################
+#
+# python-h5py
+#
+################################################################################
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index afc45962c..84f06be13 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1063,6 +1063,7 @@ N:	Marcin Niestroj <m.niestroj@grinn-global.com>
- F:	board/grinn/
- F:	configs/grinn_*
- F:	package/argparse/
-+F:	package/dt-utils/
- F:	package/easydbus/
- F:	package/luaossl/
- F:	package/rs485conf/
-diff --git a/package/Config.in b/package/Config.in
-index 9df0b4247..4c04aa80d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -382,6 +382,7 @@ endmenu
- 	source "package/devmem2/Config.in"
- 	source "package/dmidecode/Config.in"
- 	source "package/dmraid/Config.in"
-+	source "package/dt-utils/Config.in"
- 	source "package/dtv-scan-tables/Config.in"
- 	source "package/dvb-apps/Config.in"
- 	source "package/dvbsnoop/Config.in"
-diff --git a/package/dt-utils/0001-common-Rename-strlcpy-to-DT_strlcpy.patch b/package/dt-utils/0001-common-Rename-strlcpy-to-DT_strlcpy.patch
-new file mode 100644
-index 000000000..79c43d6a5
---- /dev/null
-+++ b/package/dt-utils/0001-common-Rename-strlcpy-to-DT_strlcpy.patch
-@@ -0,0 +1,58 @@
-+From 3d229cc0f8dc81335c53b1f7471ef82ef2f6e570 Mon Sep 17 00:00:00 2001
-+From: Marcin Niestroj <m.niestroj@grinn-global.com>
-+Date: Fri, 23 Jun 2017 11:11:04 +0200
-+Subject: [PATCH] common: Rename strlcpy to DT_strlcpy
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+strlcpy function is defined in uClibc library, causing "static
-+declaration of ?strlcpy? follows non-static declaration" build
-+errors.
-+
-+Rename internal strlcpy function to DT_strlcpy to avoid conflicts.
-+
-+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-+---
-+ src/dt/common.h | 4 ++--
-+ src/libdt.c     | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/dt/common.h b/src/dt/common.h
-+index f6bad44..992e28f 100644
-+--- a/src/dt/common.h
-++++ b/src/dt/common.h
-+@@ -168,7 +168,7 @@ static inline char *barebox_asprintf(const char *fmt, ...)
-+ #define basprintf(fmt, arg...) barebox_asprintf(fmt, ##arg)
-+ 
-+ /**
-+- * strlcpy - Copy a %NUL terminated string into a sized buffer
-++ * DT_strlcpy - Copy a %NUL terminated string into a sized buffer
-+  * @dest: Where to copy the string to
-+  * @src: Where to copy the string from
-+  * @size: size of destination buffer
-+@@ -178,7 +178,7 @@ static inline char *barebox_asprintf(const char *fmt, ...)
-+  * of course, the buffer size is zero). It does not pad
-+  * out the result like strncpy() does.
-+  */
-+-static inline size_t strlcpy(char *dest, const char *src, size_t size)
-++static inline size_t DT_strlcpy(char *dest, const char *src, size_t size)
-+ {
-+ 	size_t ret = strlen(src);
-+ 
-+diff --git a/src/libdt.c b/src/libdt.c
-+index 4db5160..3adeed2 100644
-+--- a/src/libdt.c
-++++ b/src/libdt.c
-+@@ -1503,7 +1503,7 @@ int of_modalias_node(struct device_node *node, char *modalias, int len)
-+ 	if (!compatible || strlen(compatible) > cplen)
-+ 		return -ENODEV;
-+ 	p = strchr(compatible, ',');
-+-	strlcpy(modalias, p ? p + 1 : compatible, len);
-++	DT_strlcpy(modalias, p ? p + 1 : compatible, len);
-+ 	return 0;
-+ }
-+ 
-+-- 
-+2.13.1
-+
-diff --git a/package/dt-utils/0002-common-Include-sys-types.h-header.patch b/package/dt-utils/0002-common-Include-sys-types.h-header.patch
-new file mode 100644
-index 000000000..a49d46867
---- /dev/null
-+++ b/package/dt-utils/0002-common-Include-sys-types.h-header.patch
-@@ -0,0 +1,38 @@
-+From b8bc4e83bf447b6330ece54e94a1684d12ecdd0b Mon Sep 17 00:00:00 2001
-+From: Marcin Niestroj <m.niestroj@grinn-global.com>
-+Date: Fri, 23 Jun 2017 12:00:30 +0200
-+Subject: [PATCH] common: Include sys/types.h header
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Build with musl library fails with following error:
-+
-+In file included from src/crypto/sha1.c:21:0:
-+./src/digest.h:95:10: error: unknown type name ?ulong?
-+          ulong start, ulong size);
-+...
-+
-+Fix that by including sys/types.h header in common.h, so ulong type
-+is defined with musl library.
-+
-+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-+---
-+ src/dt/common.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/dt/common.h b/src/dt/common.h
-+index 992e28f..1425c53 100644
-+--- a/src/dt/common.h
-++++ b/src/dt/common.h
-+@@ -13,6 +13,7 @@
-+ 
-+ #include <sys/ioctl.h>
-+ #include <sys/stat.h>
-++#include <sys/types.h>
-+ 
-+ #include <mtd/mtd-abi.h>
-+ 
-+-- 
-+2.13.1
-+
-diff --git a/package/dt-utils/Config.in b/package/dt-utils/Config.in
-new file mode 100644
-index 000000000..7c9a1deea
---- /dev/null
-+++ b/package/dt-utils/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_DT_UTILS
-+	bool "dt-utils"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	help
-+	  Tools for flattened device-tree dumping and barebox state
-+	  manipulation.
-+
-+	  https://git.pengutronix.de/cgit/tools/dt-utils/
-+
-+comment "dt-utils needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
-new file mode 100644
-index 000000000..5b1375051
---- /dev/null
-+++ b/package/dt-utils/dt-utils.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# dt-utils
-+#
-+################################################################################
-+
-+DT_UTILS_VERSION = v2017.03.0
-+DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
-+DT_UTILS_SITE_METHOD = git
-+DT_UTILS_LICENSE = GPL-2.0
-+DT_UTILS_LICENSE_FILES = COPYING
-+DT_UTILS_DEPENDENCIES = udev
-+DT_UTILS_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
--- 
-2.13.1
+PYTHON_H5PY_VERSION = 2.7.0
+PYTHON_H5PY_SOURCE = h5py-$(PYTHON_H5PY_VERSION).tar.gz
+PYTHON_H5PY_SITE = 
+https://pypi.python.org/packages/11/6b/32cee6f59e7a03ab7c60bb250caff63e2d20c33ebca47cf8c28f6a2d085c
+PYTHON_H5PY_LICENSE = BSD
+PYTHON_H5PY_LICENSE_FILES = LICENSE.txt COPYING.txt
+PYTHON_H5PY_SETUP_TYPE = setuptools
+PYTHON_H5PY_DEPENDENCIES = hdf5 python-six python-numpy python-pkgconfig 
+python-cython 
+
+$(eval $(python-package))
+
+
+
+All dependencies were configured and installed, when h5py starts building 
+the following error appears:
+ImportError: 
+/home/user/build/buildroot-2016.05/output/target/usr/lib/python3.4/site-packages/Cython/Compiler/Scanning.cpython-34m.so: 
+wrong ELF class: ELFCLASS32
+
+This is the whole message:
+
+>>> python-h5py 2.7.0 Building
+(cd /home/user/build/buildroot-2016.05/output/build/python-h5py-2.7.0//; 
+PATH="/home/user/build/buildroot-2016.05/output/host/bin:/home/user/build/buildroot-2016.05/output/host/sbin:/home/user/build/buildroot-2016.05/output/host/usr/bin:/home/user/build/buildroot-2016.05/output/host/usr/sbin:/home/user/bin:/home/user/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/arm/fs-toolchain-5.2.0-armv7ahf/bin" 
+PYTHONPATH="/home/user/build/buildroot-2016.05/output/target/usr/lib/python3.4/sysconfigdata/:/home/user/build/buildroot-2016.05/output/target/usr/lib/python3.4/site-packages/" 
+_python_sysroot=/home/user/build/buildroot-2016.05/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot 
+_python_prefix=/usr _python_exec_prefix=/usr 
+/home/user/build/buildroot-2016.05/output/host/usr/bin/python setup.py 
+build  )
+running build
+running build_py
+running build_ext
+Traceback (most recent call last):
+  File "setup.py", line 165, in <module>
+    cmdclass = CMDCLASS,
+  File 
+"/home/user/build/buildroot-2016.05/output/host/usr/lib/python3.4/distutils/core.py", 
+line 148, in setup
+    dist.run_commands()
+  File 
+"/home/user/build/buildroot-2016.05/output/host/usr/lib/python3.4/distutils/dist.py", 
+line 955, in run_commands
+    self.run_command(cmd)
+  File 
+"/home/user/build/buildroot-2016.05/output/host/usr/lib/python3.4/distutils/dist.py", 
+line 974, in run_command
+    cmd_obj.run()
+  File 
+"/home/user/build/buildroot-2016.05/output/host/usr/lib/python3.4/distutils/command/build.py", 
+line 126, in run
+    self.run_command(cmd_name)
+  File 
+"/home/user/build/buildroot-2016.05/output/host/usr/lib/python3.4/distutils/cmd.py", 
+line 313, in run_command
+    self.distribution.run_command(command)
+  File 
+"/home/user/build/buildroot-2016.05/output/host/usr/lib/python3.4/distutils/dist.py", 
+line 974, in run_command
+    cmd_obj.run()
+  File 
+"/home/user/build/buildroot-2016.05/output/build/python-h5py-2.7.0/setup_build.py", 
+line 149, in run
+    from Cython.Build import cythonize
+  File 
+"/home/user/build/buildroot-2016.05/output/target/usr/lib/python3.4/site-packages/Cython/Build/__init__.py", 
+line 1, in <module>
+    from .Dependencies import cythonize
+  File 
+"/home/user/build/buildroot-2016.05/output/target/usr/lib/python3.4/site-packages/Cython/Build/Dependencies.py", 
+line 51, in <module>
+    from ..Compiler.Main import Context, CompilationOptions, 
+default_options
+  File 
+"/home/user/build/buildroot-2016.05/output/target/usr/lib/python3.4/site-packages/Cython/Compiler/Main.py", 
+line 28, in <module>
+    from .Scanning import PyrexScanner, FileSourceDescriptor
+ImportError: 
+/home/user/build/buildroot-2016.05/output/target/usr/lib/python3.4/site-packages/Cython/Compiler/Scanning.cpython-34m.so: 
+wrong ELF class: ELFCLASS32
+package/pkg-generic.mk:195: recipe for target 
+'/home/user/build/buildroot-2016.05/output/build/python-h5py-2.7.0/.stamp_built' 
+failed
+make[1]: *** 
+[/home/user/build/buildroot-2016.05/output/build/python-h5py-2.7.0/.stamp_built] 
+Error 1
+Makefile:36: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+Did anyone worked on this library and encountred a similar problem?
+
+Thanks,
+
+Mehdi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170623/a3d090f2/attachment.html>
