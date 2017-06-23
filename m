@@ -1,44 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Jun 2017 21:13:27 +0200
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.30
-In-Reply-To: <20170623025231.26094-1-casantos@datacom.ind.br>
-References: <20170623025231.26094-1-casantos@datacom.ind.br>
-Message-ID: <20170623211327.4c14d567@windsurf.home>
+Date: Fri, 23 Jun 2017 21:13:44 +0200
+Subject: [Buildroot] [git commit] glmark2: Bump to the latest version
+Message-ID: <20170623191300.B29D480008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e4768669a753876a9ae7b6ea8952421db19e7f12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 22 Jun 2017 23:52:31 -0300, Carlos Santos wrote:
-> - Update the "basic set" description to include fincore, which is built
->   by default, and remove tailf, which was removed in this version.
-> - Add configuration options for the new utilities "chmem" and "lsmem".
-> - Add a patch to revert the assumption that ncursesw headers are under
->   /usr/include/ncursesw/ only. That's necessary to have both versions
->   for ABI/API compatibility but does not make sense on embedded systems.
-> - Drop autoreconf, since the patch on term-utils/Makemodule.am is gone.
-> 
-> The patch is a bit drastic but it solves the problem of using ncursews
-> while we discuss a better solution in the util-linux mailing list.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  ...-Revert-build-sys-ncurses-headers-cleanup.patch | 191 +++++++++++++++++++++
->  ...-sys-use-lm-for-scriptreplay-if-necessary.patch |  30 ----
->  package/util-linux/Config.in                       |  24 ++-
->  package/util-linux/util-linux.hash                 |   4 +-
->  package/util-linux/util-linux.mk                   |  12 +-
->  5 files changed, 218 insertions(+), 43 deletions(-)
->  create mode 100644 package/util-linux/0001-Revert-build-sys-ncurses-headers-cleanup.patch
->  delete mode 100644 package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
+The two patches are no longer needed with the latest upstream version,
+so bump to the latest one.
 
-Applied to master, thanks.
+Tested on imx6.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...NativeStateDRM-add-imx-drm-driver-support.patch | 25 -------------------
+ ...eStateDRM-use-fixed-event-context-version.patch | 28 ----------------------
+ package/glmark2/glmark2.hash                       |  2 +-
+ package/glmark2/glmark2.mk                         |  2 +-
+ 4 files changed, 2 insertions(+), 55 deletions(-)
+
+diff --git a/package/glmark2/0001-NativeStateDRM-add-imx-drm-driver-support.patch b/package/glmark2/0001-NativeStateDRM-add-imx-drm-driver-support.patch
+deleted file mode 100644
+index 8eff81e..0000000
+--- a/package/glmark2/0001-NativeStateDRM-add-imx-drm-driver-support.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From 05ec5e4411fe3188f72305050b11513cb153c5ff Mon Sep 17 00:00:00 2001
+-From: Gary Bisson <gary.bisson@boundarydevices.com>
+-Date: Tue, 14 Feb 2017 09:39:02 +0100
+-Subject: [PATCH] NativeStateDRM: add imx-drm driver support
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+----
+- src/native-state-drm.cpp | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/native-state-drm.cpp b/src/native-state-drm.cpp
+-index 4df75ec..454a24d 100644
+---- a/src/native-state-drm.cpp
+-+++ b/src/native-state-drm.cpp
+-@@ -201,6 +201,7 @@ NativeStateDRM::init()
+-     // driver (udev?).
+-     static const char* drm_modules[] = {
+-         "i915",
+-+        "imx-drm",
+-         "nouveau",
+-         "radeon",
+-         "vmgfx",
+--- 
+-2.11.0
+-
+diff --git a/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch b/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
+deleted file mode 100644
+index c66f409..0000000
+--- a/package/glmark2/0002-NativeStateDRM-use-fixed-event-context-version.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From: Lucas Stach <l.stach@pengutronix.de>
+-Date: Wed, 31 May 2017 13:01:00 +0200
+-Subject: [PATCH] NativeStateDRM: use fixed event context version
+-
+-Using the latest version is not a good idea, as the context content may
+-change between versions.
+-
+-Fixes a segfault with new kernel and libdrm.
+-
+-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+----
+- src/native-state-drm.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/native-state-drm.cpp b/src/native-state-drm.cpp
+-index 454a24d898ff..b9af996667dc 100644
+---- a/src/native-state-drm.cpp
+-+++ b/src/native-state-drm.cpp
+-@@ -106,7 +106,7 @@ NativeStateDRM::flip()
+-     FD_ZERO(&fds);
+-     FD_SET(fd_, &fds);
+-     drmEventContext evCtx;
+--    evCtx.version = DRM_EVENT_CONTEXT_VERSION;
+-+    evCtx.version = 2;
+-     evCtx.page_flip_handler = page_flip_handler;
+- 
+-     while (waiting) {
+diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
+index 92c53e5..aeb8a78 100644
+--- a/package/glmark2/glmark2.hash
++++ b/package/glmark2/glmark2.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 ea59bd267a88e2c773423eec43f7cb90b0ca1c369762e836dec575ebdcdcc012 glmark2-7215c0f337dae0b232535549c37fca441747a891.tar.gz
++sha256 8800f3cab0575df217adc166b181930e1f881efb6f764f35872993ee78dea5f0 glmark2-9b1070fe9c5cf908f323909d3c8cbed08022abe8.tar.gz
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index 4edc713..4eeaec7 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GLMARK2_VERSION = 7215c0f337dae0b232535549c37fca441747a891
++GLMARK2_VERSION = 9b1070fe9c5cf908f323909d3c8cbed08022abe8
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPL-3.0+, SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
