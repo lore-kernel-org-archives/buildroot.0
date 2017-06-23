@@ -1,36 +1,57 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 23 Jun 2017 15:19:27 +0300
-Subject: [Buildroot] [PATCH] lirc-tools: bump to version 0.9.4d
-In-Reply-To: <190922362f7ee894f85b971407a1012b0661294f.1498192162.git.baruch@tkos.co.il>
-References: <190922362f7ee894f85b971407a1012b0661294f.1498192162.git.baruch@tkos.co.il>
-Message-ID: <20170623121927.4j27refc2rxg7tvr@tarshish>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Fri, 23 Jun 2017 17:56:04 +0530
+Subject: [Buildroot] [PATCH v5 0/5] Board: Add Engicam i.MX6 SOMs
+Message-ID: <1498220769-22961-1-git-send-email-jteki@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi list,
+From: Jagan Teki <jagan@amarulasolutions.com>
 
-On Fri, Jun 23, 2017 at 07:29:22AM +0300, Baruch Siach wrote:
-> Drop 0001-tools-make_rel_symlink.py-can-also-use-python2.patch. Build requires
-> host-python3 since the previous version bump.
-> 
-> Drop upstream 0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch.
-> 
-> Set HAVE_WORKING_POLL to skip poll(2) run test that is not compatible with
-> cross compilation.
-> 
-> Add optional dependency on libftdi1.
+This version of series support all Engicam SOMs with fixes.
 
-Unfortunately, this breaks with musl because of a local _POLL_H header guard 
-macro definition. Marked as Rejected for now. Will send an updated patch.
+This series add buildroot support for Engicam i.MX6 SOM's
+- i.CoreM6 DualLite/Solo
+- i.CoreM6 RQS
+- GEAM6UL
+- Is.IoT MX6UL
 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Jagan Teki (5):
+  board: Add support for Engicam i.CoreM6 DualLite/Solo boards
+  board: Add support for Engicam i.CoreM6 RQS SOM
+  board: engicam: Add icorem6 for i.CoreM6 support
+  board: Add support for Engicam GEAM6UL SOM
+  board: Add support for Engicam Is.IoT MX6UL SOM
 
-baruch
+ .gitlab-ci.yml                                     |  5 +-
+ DEVELOPERS                                         |  5 +-
+ board/engicam/geam6ul/genimage.cfg                 | 38 ++++++++++++
+ board/engicam/geam6ul/readme.txt                   | 66 +++++++++++++++++++++
+ board/engicam/{ => icorem6}/genimage.cfg           |  3 +-
+ board/engicam/{ => icorem6}/readme.txt             | 21 ++++---
+ board/engicam/icorem6_rqs/genimage.cfg             | 39 ++++++++++++
+ board/engicam/icorem6_rqs/readme.txt               | 69 ++++++++++++++++++++++
+ board/engicam/isiot/genimage.cfg                   | 38 ++++++++++++
+ board/engicam/isiot/readme.txt                     | 66 +++++++++++++++++++++
+ ...e_defconfig => engicam_imx6qdl_icore_defconfig} | 12 ++--
+ configs/engicam_imx6qdl_icore_rqs_defconfig        | 41 +++++++++++++
+ configs/engicam_imx6ul_geam_defconfig              | 41 +++++++++++++
+ configs/engicam_imx6ul_isiot_mmc_defconfig         | 41 +++++++++++++
+ 14 files changed, 467 insertions(+), 18 deletions(-)
+ create mode 100644 board/engicam/geam6ul/genimage.cfg
+ create mode 100644 board/engicam/geam6ul/readme.txt
+ rename board/engicam/{ => icorem6}/genimage.cfg (93%)
+ rename board/engicam/{ => icorem6}/readme.txt (72%)
+ create mode 100644 board/engicam/icorem6_rqs/genimage.cfg
+ create mode 100644 board/engicam/icorem6_rqs/readme.txt
+ create mode 100644 board/engicam/isiot/genimage.cfg
+ create mode 100644 board/engicam/isiot/readme.txt
+ rename configs/{engicam_imx6q_icore_defconfig => engicam_imx6qdl_icore_defconfig} (69%)
+ create mode 100644 configs/engicam_imx6qdl_icore_rqs_defconfig
+ create mode 100644 configs/engicam_imx6ul_geam_defconfig
+ create mode 100644 configs/engicam_imx6ul_isiot_mmc_defconfig
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
