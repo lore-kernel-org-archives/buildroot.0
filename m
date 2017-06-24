@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 17:21:56 +0200
-Subject: [Buildroot] [PATCH v2 08/13] package/minetest: enable sound
- support
-In-Reply-To: <20170612205410.20230-8-romain.naour@gmail.com>
+Date: Sat, 24 Jun 2017 17:29:32 +0200
+Subject: [Buildroot] [PATCH v2 13/13] package/minetest_game: new package
+In-Reply-To: <20170612205410.20230-13-romain.naour@gmail.com>
 References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-8-romain.naour@gmail.com>
-Message-ID: <20170624172156.36a1820f@windsurf.home>
+ <20170612205410.20230-13-romain.naour@gmail.com>
+Message-ID: <20170624172932.04b4b03d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 12 Jun 2017 22:54:05 +0200, Romain Naour wrote:
+On Mon, 12 Jun 2017 22:54:10 +0200, Romain Naour wrote:
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> v2: update to 0.4.16
+>     update license file
+>     Add a hash file
+>     backport an upstream patch due to regression.
 
-> diff --git a/package/minetest/Config.in b/package/minetest/Config.in
-> index d0613a2..a15a8f7 100644
-> --- a/package/minetest/Config.in
-> +++ b/package/minetest/Config.in
-> @@ -55,6 +55,14 @@ config BR2_PACKAGE_MINETEST_CLIENT_SERVER
->  
->  endchoice
->  
-> +config BR2_PACKAGE_MINETEST_SOUND
-> +	bool "enable sound"
-> +	depends on BR2_PACKAGE_MINETEST_CLIENT
-> +	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+I'm not a big fan of underscores in the name of packages, but I agree
+it's the upstream name... and we already have a few packages with
+underscores in their name, so I guess it's more a personal taste than a
+real rule here.
 
- -> Config.in comment for this dependency?
+> +define MINETEST_GAME_INSTALL_TARGET_CMDS
+> +	mkdir -p $(TARGET_DIR)/usr/share/minetest/games/minetest_game
+> +	rsync -av $(@D)/* --exclude=".*" $(TARGET_DIR)/usr/share/minetest/games/minetest_game
 
-> +	select BR2_PACKAGE_LIBVORBIS
-> +	select BR2_PACKAGE_OPENAL
-> +
->  endif
+What about using "cp -dpfr", which we use more commonly in packages to
+copy entire file/directory hierarchies?
 
 Thanks,
 
