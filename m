@@ -1,30 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 12:08:26 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nasm: bump version to 2.13.01
-In-Reply-To: <20170624073514.20975-1-bernd.kuhls@t-online.de>
-References: <20170624073514.20975-1-bernd.kuhls@t-online.de>
-Message-ID: <20170624120826.1fd0c70a@windsurf.home>
+Date: Sat, 24 Jun 2017 12:09:58 +0200
+Subject: [Buildroot] [git commit] psmisc: update homepage link
+Message-ID: <20170624100911.2B15480579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=568cc42f688957d8517ccd85812f2c841cc5101f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 24 Jun 2017 09:35:13 +0200, Bernd Kuhls wrote:
-> Needed to fix x264 build error.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/nasm/nasm.hash | 2 +-
->  package/nasm/nasm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The gitlab repo is much more informative and updated.
 
-Both applied, thanks!
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/psmisc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/psmisc/Config.in b/package/psmisc/Config.in
+index 734542c..2b66bcf 100644
+--- a/package/psmisc/Config.in
++++ b/package/psmisc/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_PSMISC
+ 	help
+ 	  Helpful /proc related utilities such as pstree, fuser, and killall
+ 
+-	  http://psmisc.sourceforge.net/
++	  https://gitlab.com/psmisc/psmisc
