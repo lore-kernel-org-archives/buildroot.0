@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 23:25:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libxshmfence: needs
- sync_4
-In-Reply-To: <20170521113056.15378-1-bernd.kuhls@t-online.de>
-References: <20170521113056.15378-1-bernd.kuhls@t-online.de>
-Message-ID: <20170624232505.585742bd@windsurf.home>
+Date: Sat, 24 Jun 2017 23:27:12 +0200
+Subject: [Buildroot] [git commit] package/dhcp: dhcp server: select systemd
+	tmpfile support when systemd is used
+Message-ID: <20170624212642.374D581938@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=51a24f8d71afef70ef42ab3e062277f2d602a278
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 May 2017 13:30:56 +0200, Bernd Kuhls wrote:
-> Also propagate reverse dependency to mesa3d and xserver_xorg-server.
-> 
-> Fixes xserver_xorg-server build
-> http://autobuild.buildroot.net/results/7da/7da8b46cda8786422e8293f26b79582b35a433d6/
-> 
-> For patch discussion refer to http://patchwork.ozlabs.org/patch/674595/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d/Config.in                                 | 3 ++-
->  package/mesa3d/mesa3d.mk                                 | 2 +-
->  package/x11r7/xlib_libxshmfence/Config.in                | 1 +
->  package/x11r7/xserver_xorg-server/Config.in              | 3 ++-
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
->  5 files changed, 7 insertions(+), 4 deletions(-)
+tmpfile support is optional in systemd but the dhcp server install it's
+config file in $(TARGET_DIR)/usr/lib/tmpfiles.d directory when systemd
+is used as init system.
 
-Applied to master, after adjusting the select of
-BR2_PACKAGE_XPROTO_PRESENTPROTO in mesa3d, as noticed by Romain Naour.
+So it seems that dhcp server require tmpfile support for systemd based
+system.
 
-Thanks!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dhcp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+index d09256a..5340830 100644
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -12,6 +12,7 @@ if BR2_PACKAGE_DHCP
+ 
+ config BR2_PACKAGE_DHCP_SERVER
+ 	bool "dhcp server"
++	select BR2_PACKAGE_SYSTEMD_TMPFILES if BR2_PACKAGE_SYSTEMD
+ 	help
+ 	  DHCP server from the ISC DHCP distribution.
+ 
