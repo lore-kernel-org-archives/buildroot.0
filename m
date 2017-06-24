@@ -1,40 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Jun 2017 10:51:45 +0200
-Subject: [Buildroot] [PATCH v3 1/4] infra: add support for MIPS NaN
-In-Reply-To: <1c0912da-f972-8b80-1ee0-ea48b52d688f@mind.be>
-References: <20170623172825.5778-1-Vincent.Riera@imgtec.com>
- <1c0912da-f972-8b80-1ee0-ea48b52d688f@mind.be>
-Message-ID: <0860643a-6a85-64c8-b8ae-d4db42f647dd@mind.be>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Sat, 24 Jun 2017 11:30:25 +0200
+Subject: [Buildroot] [PATCH] libgpiod: bump version to v0.3
+Message-ID: <1498296625-5577-1-git-send-email-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add host-pkgconf to dependencies as we now use PKG_CHECK_MODULES in
+configure.ac.
 
+Changelog for v0.3:
 
-On 23-06-17 23:56, Arnout Vandecappelle wrote:
->> +config BR2_MIPS_NAN_LEGACY
->> +	bool
->> +	default y		if BR2_MIPS_CPU_MIPS32 || BR2_MIPS_CPU_MIPS32R2 || BR2_MIPS_CPU_MIPS64 || BR2_MIPS_CPU_MIPS64R2
->  Don't put spaces between y and if, and do only one per line.
-> 
->  However, mixing these default y with select from BR2_mips_m5150 etc. is not
-> good. Either you have a list of default y here, or you do select from
-> BR2_MIPS_CPU_MIPS32 etc. I have a slight preference for the latter.
+New features:
+- gpiomon can now watch multiple lines at the same time and supports custom
+  output formats which can be specified using the --format argument
+- testing framework can now test external programs: test cases for gpio-tools
+  have been added
 
- Just to be clear: this is the only thing that needs to be changed in this
-patch, then it's OK for me.
+Improvements:
+- improve error messages
+- improve README examples
+- configure script improvements
 
- Oh, and also what happens with external toolchains configured for the wrong NaN.
+Bug fixes:
+- use correct UAPI flags when requesting line events
 
- Regards,
- Arnout
+Also includes bug fixes from v0.2.1:
 
+Bug fixes:
+- capitalize 'GPIO' in error messages in gpioset, gpioget & gpiomon
+- tweak the error message on invalid arguments in gpiofind
+- don't ignore superfluous arguments and fix the displayed name for falling
+  edge events in gpiomon
+
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index fcf212e..aeeabf6 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 de1947f3cb2cc4174364af430309fe6238976658575655bdbd76c60cffa7df92 libgpiod-v0.2.tar.gz
++sha256 24794006c14194e269b944f2cca0e85e481f1538be3c143479c4c6691bf25add libgpiod-v0.3.tar.gz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index c95ea44..76648bd 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = v0.2
++LIBGPIOD_VERSION = v0.3
+ LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
+ LIBGPIOD_LICENSE = LGPL-2.1+
+ LIBGPIOD_LICENSE_FILES = COPYING
+ 
++LIBGPIOD_DEPENDENCIES = host-pkgconf
++
+ # Needed for autoreconf to work properly
+ define LIBGPIOD_FIXUP_M4_DIR
+         mkdir $(@D)/m4
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
