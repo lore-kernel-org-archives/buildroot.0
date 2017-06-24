@@ -1,185 +1,242 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 16:50:16 +0200
-Subject: [Buildroot] [git commit] package/beecrypt: remove c++ support
-Message-ID: <20170624145209.87EF58072B@busybox.osuosl.org>
+Date: Sat, 24 Jun 2017 17:12:24 +0200
+Subject: [Buildroot] [git commit] package/irrlicht: new package
+Message-ID: <20170624151206.B09D080460@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd4d3c18d6753e1224fbe59d91a4b44f39bc38c0
+commit: https://git.buildroot.net/buildroot/commit/?id=5f79e692026debce095d986945598ddd26842ad7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Optional C++ support depends on icu, the icu version bump to 59.1
-brought ABI-breaking changes
-http://site.icu-project.org/download/59#TOC-char16_t-in-C-
-
-which are incompatible with beecrypt. Since beecrypt did not get any
-updates upstream since 2009 and no package uses beecrypt's C++ support
-we disable this broken option.
-
-With C++ support removed patches 0002 & 0004 are not needed anymore.
-
-Fixes
-http://autobuild.buildroot.net/results/a1a/a1ad507371192ddecacab0df91f7b2a84c7c288d/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: adjust LICENSE variable.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |  7 +++++
- ...-build-system.patch => 0002-build-system.patch} |  0
- .../beecrypt/0002-icu-check-cross-compile.patch    | 31 ----------------------
- package/beecrypt/0004-gcc-4.7.patch                | 19 -------------
- package/beecrypt/Config.in                         | 22 ---------------
- package/beecrypt/beecrypt.mk                       | 11 ++------
- 6 files changed, 9 insertions(+), 81 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch | 44 ++++++++++++++++
+ package/irrlicht/0002-remove-sys-sysctl.h.patch    | 38 ++++++++++++++
+ package/irrlicht/Config.in                         | 17 +++++++
+ package/irrlicht/irrlicht.hash                     |  5 ++
+ package/irrlicht/irrlicht.mk                       | 58 ++++++++++++++++++++++
+ 7 files changed, 164 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 361d331..ec28da3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
- 
-+config BR2_PACKAGE_BEECRYPT_CPP
-+	bool "C++ support removed in beecrypt"
-+	select BR2_LEGACY
-+	help
-+	  Support for C++ depends on icu. The beecrypt package is
-+	  incompatible with icu 59+.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8b3c900..30e0a2b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1408,6 +1408,7 @@ F:	package/efl/
+ F:	package/enlightenment/
+ F:	package/expedite/
+ F:	package/iqvlinux/
++F:	package/irrlicht/
+ F:	package/liblinear/
+ F:	package/lensfun/
+ F:	package/libspatialindex/
+diff --git a/package/Config.in b/package/Config.in
+index b0b829c..f69f67f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1042,6 +1042,7 @@ menu "Graphics"
+ 	source "package/gtksourceview/Config.in"
+ 	source "package/harfbuzz/Config.in"
+ 	source "package/ijs/Config.in"
++	source "package/irrlicht/Config.in"
+ 	source "package/imlib2/Config.in"
+ 	source "package/jasper/Config.in"
+ 	source "package/jpeg/Config.in"
+diff --git a/package/irrlicht/0001-override-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch b/package/irrlicht/0001-override-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch
+new file mode 100644
+index 0000000..0bb8fcc
+--- /dev/null
++++ b/package/irrlicht/0001-override-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch
+@@ -0,0 +1,44 @@
++From 5c5e6d0f469c8b4384bbe5d6c8f78069c182daf0 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 9 Apr 2017 19:56:55 +0200
++Subject: [PATCH] override CPPFLAGS, CXXFLAGS and CFLAGS in Makefile
 +
- config BR2_PACKAGE_SPICE_CLIENT
- 	bool "spice client support removed"
- 	select BR2_LEGACY
-diff --git a/package/beecrypt/0003-build-system.patch b/package/beecrypt/0002-build-system.patch
-similarity index 100%
-rename from package/beecrypt/0003-build-system.patch
-rename to package/beecrypt/0002-build-system.patch
-diff --git a/package/beecrypt/0002-icu-check-cross-compile.patch b/package/beecrypt/0002-icu-check-cross-compile.patch
-deleted file mode 100644
-index cc02116..0000000
---- a/package/beecrypt/0002-icu-check-cross-compile.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--configure: Use AC_COMPILE_IFELSE for ICU check for cross compilation compat
--
--AC_RUN_IFELSE doesn't work when cross compiling, but we can do the
--check in the preprocessor instead, so use AC_COMPILE_IFELSE instead.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- configure.ac |    6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--Index: beecrypt-4.2.1/configure.ac
--===================================================================
----- beecrypt-4.2.1.orig/configure.ac
--+++ beecrypt-4.2.1/configure.ac
--@@ -295,13 +295,13 @@
-- if test "$ac_with_cplusplus" = yes; then
--   AC_MSG_CHECKING([for IBM's ICU library version >= 2.8])
--   AC_LANG_PUSH(C)
---  AC_RUN_IFELSE([
--+  AC_COMPILE_IFELSE([
--     AC_LANG_PROGRAM([[#include <unicode/uversion.h>]],[[
--       #if U_ICU_VERSION_MAJOR_NUM < 2
---      exit(1);
--+      #error too old
--       #elif U_ICU_VERSION_MAJOR_NUM == 2
--       # if U_ICU_VERSION_MINOR_NUM < 8
---      exit(1);
--+      #error too old
--       # else
--       exit(0);
--       # endif
-diff --git a/package/beecrypt/0004-gcc-4.7.patch b/package/beecrypt/0004-gcc-4.7.patch
-deleted file mode 100644
-index 767f789..0000000
---- a/package/beecrypt/0004-gcc-4.7.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Really fixes gcc-4.7 related compile error:
--../../include/beecrypt/c++/util/AbstractSet.h:59:27: error: 'containsAll' was not declared in this scope, and no declarations were found by argument-dependent lookup at the point of instantiation [-fpermissive]
--
--Downloaded from upstream bugtracker:
--http://sourceforge.net/p/beecrypt/patches/10/
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- a/include/beecrypt/c++/util/AbstractSet.h
--+++ b/include/beecrypt/c++/util/AbstractSet.h
--@@ -56,7 +56,7 @@
-- 					if (c->size() != size())
-- 						return false;
-- 
---					return containsAll(*c);
--+					return this->containsAll(*c);
-- 				}
-- 				return false;
-- 			}
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-index 8854515..9aec85a 100644
---- a/package/beecrypt/Config.in
-+++ b/package/beecrypt/Config.in
-@@ -8,25 +8,3 @@ config BR2_PACKAGE_BEECRYPT
- 	  Beecrypt is a general-purpose cryptography library.
- 
- 	  http://beecrypt.sf.net
--
--if BR2_PACKAGE_BEECRYPT
--
--config BR2_PACKAGE_BEECRYPT_CPP
--	bool "C++ support"
--	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
--	depends on BR2_USE_WCHAR # icu
--	depends on !BR2_BINFMT_FLAT # icu
--	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_ICU
--	help
--	  Enable C++ support. This pulls in the (large) icu package.
--
--comment "C++ support needs a toolchain w/ C++, wchar, dynamic libraries, gcc >= 4.8, host gcc >= 4.8"
--	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
--		|| !BR2_HOST_GCC_AT_LEAST_4_8
--
--endif # BR2_PACKAGE_BEECRYPT
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index 10dd97c..f13f72c 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -15,7 +15,8 @@ BEECRYPT_CONF_OPTS = \
- 	--disable-expert-mode \
- 	--without-java \
- 	--without-python \
--	--disable-openmp
-+	--disable-openmp \
-+	--without-cplusplus
- 
- # disable optimized m68k assembly as it doesn't compile for coldfire
- ifeq ($(BR2_m68k_cf),y)
-@@ -27,19 +28,11 @@ ifeq ($(BR2_arm):$(BR2_ARM_CPU_HAS_ARM),y:)
- BEECRYPT_CONF_OPTS += --enable-debug
- endif
- 
--ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
--BEECRYPT_DEPENDENCIES += icu
--BEECRYPT_CONF_OPTS += --with-cplusplus
--else
--BEECRYPT_CONF_OPTS += --without-cplusplus
--
- # automake/libtool uses the C++ compiler to link libbeecrypt because of
- # (the optional) cppglue.cxx. Force it to use the C compiler instead.
- define BEECRYPT_LINK_WITH_CC
- 	$(SED) 's/--tag=CXX/--tag=CC/g' $(@D)/Makefile
- endef
--
- BEECRYPT_POST_CONFIGURE_HOOKS += BEECRYPT_LINK_WITH_CC
--endif
- 
- $(eval $(autotools-package))
++When CPPFLAGS is passed on the command line, include paths for the
++bundled libraries are lost. Since the hand written Makefile want
++to use them unconditionally, we need to use the key word "override"
++before CPPFLAGS.
++
++Do the same for CXXFLAGS and CFLAGS otherwise -fPIC is lost.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ source/Irrlicht/Makefile | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
++index 0712b07..b334e9c 100644
++--- a/source/Irrlicht/Makefile
+++++ b/source/Irrlicht/Makefile
++@@ -62,7 +62,7 @@ LINKOBJ = $(IRRMESHOBJ) $(IRROBJ) $(IRRPARTICLEOBJ) $(IRRANIMOBJ) \
++ ###############
++ #Compiler flags
++ CXXINCS = -I../../include -Izlib -Ijpeglib -Ilibpng
++-CPPFLAGS += $(CXXINCS) -DIRRLICHT_EXPORTS=1
+++override CPPFLAGS += $(CXXINCS) -DIRRLICHT_EXPORTS=1
++ CXXFLAGS += -Wall -pipe -fno-exceptions -fno-rtti -fstrict-aliasing
++ ifndef NDEBUG
++ CXXFLAGS += -g -D_DEBUG
++@@ -74,8 +74,8 @@ CXXFLAGS += -pg
++ endif
++ CFLAGS := -O3 -fexpensive-optimizations -DPNG_THREAD_UNSAFE_OK -DPNG_NO_MMX_CODE -DPNG_NO_MNG_FEATURES
++ 
++-sharedlib sharedlib_osx: CXXFLAGS += -fPIC
++-sharedlib sharedlib_osx: CFLAGS += -fPIC
+++sharedlib sharedlib_osx: override CXXFLAGS += -fPIC
+++sharedlib sharedlib_osx: override CFLAGS += -fPIC
++ 
++ #multilib handling
++ ifeq ($(HOSTTYPE), x86_64)
++-- 
++2.9.3
++
+diff --git a/package/irrlicht/0002-remove-sys-sysctl.h.patch b/package/irrlicht/0002-remove-sys-sysctl.h.patch
+new file mode 100644
+index 0000000..2e5fc63
+--- /dev/null
++++ b/package/irrlicht/0002-remove-sys-sysctl.h.patch
+@@ -0,0 +1,38 @@
++From 5382142d37730f6758753b758c91e257ffd5892c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 9 Apr 2017 22:20:19 +0200
++Subject: [PATCH] remove sys/sysctl.h
++
++With musl irrlicht doesn't build due to missing sys/sysctl.h
++
++fatal error: sys/sysctl.h: No such file or directory
++
++From [1]
++"sysctl does not work, and NEVER worked. using it is bogus.
++it was a bogus experimental syscall that was deprecated before
++it was ever used (basically, a broken binary version of
++/proc/sys, without any stability between kernel versions for
++what the binary constants meant)."
++
++[1] https://devsonacid.wordpress.com/tag/musl/
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ source/Irrlicht/COSOperator.cpp | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/source/Irrlicht/COSOperator.cpp b/source/Irrlicht/COSOperator.cpp
++index 0899d1d..ccf5ef5 100644
++--- a/source/Irrlicht/COSOperator.cpp
+++++ b/source/Irrlicht/COSOperator.cpp
++@@ -13,7 +13,6 @@
++ #include <unistd.h>
++ #ifndef _IRR_SOLARIS_PLATFORM_
++ #include <sys/types.h>
++-#include <sys/sysctl.h>
++ #endif
++ #endif
++ 
++-- 
++2.9.3
++
+diff --git a/package/irrlicht/Config.in b/package/irrlicht/Config.in
+new file mode 100644
+index 0000000..edd182b
+--- /dev/null
++++ b/package/irrlicht/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_IRRLICHT
++	bool "irrlicht"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_HAS_LIBGL # use GLX
++	select BR2_PACKAGE_XLIB_LIBXXF86VM # libXxf86vm
++	help
++	  An open source high performance realtime 3D graphics engine.
++
++	  http://irrlicht.sourceforge.net/
++
++comment "irrlicht needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++comment "irrlicht needs X11 and an OpenGL provider"
++	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
++	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/irrlicht/irrlicht.hash b/package/irrlicht/irrlicht.hash
+new file mode 100644
+index 0000000..489790e
+--- /dev/null
++++ b/package/irrlicht/irrlicht.hash
+@@ -0,0 +1,5 @@
++# From https://sourceforge.net/projects/irrlicht/files/Irrlicht%20SDK/1.8/1.8.4
++md5 9401cfff801395010b0912211f3cbb4f irrlicht-1.8.4.zip
++sha1 38bf0223fe868d243d6a39d0dc191c8df6e03b3b irrlicht-1.8.4.zip
++# locally calculated
++sha256 f42b280bc608e545b820206fe2a999c55f290de5c7509a02bdbeeccc1bf9e433  irrlicht-1.8.4.zip
+diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
+new file mode 100644
+index 0000000..ccd1045
+--- /dev/null
++++ b/package/irrlicht/irrlicht.mk
+@@ -0,0 +1,58 @@
++################################################################################
++#
++# irrlicht
++#
++################################################################################
++
++IRRLICHT_VERSION_MAJOR = 1.8
++IRRLICHT_VERSION = $(IRRLICHT_VERSION_MAJOR).4
++IRRLICHT_SOURCE = irrlicht-$(IRRLICHT_VERSION).zip
++IRRLICHT_SITE = https://downloads.sourceforge.net/project/irrlicht/Irrlicht%20SDK/$(IRRLICHT_VERSION_MAJOR)/$(IRRLICHT_VERSION)
++IRRLICHT_INSTALL_STAGING = YES
++
++# Bundled libraries: bzip2, libaesGladman, libpng, lzma, zlib,
++# The handcrafted Makefile can only use bundled libraries.
++IRRLICHT_LICENSE = Zlib (irrlicht), BSD-3-Clause (libaesGladman), bzip2-1.0.5 (bzip2), IJG (libjpeg), Libpng (libpng)
++IRRLICHT_LICENSE_FILES = \
++	doc/aesGladman.txt \
++	doc/bzip2-license.txt \
++	doc/irrlicht-license.txt \
++	doc/jpglib-license.txt \
++	doc/libpng-license.txt
++
++IRRLICHT_SUBDIR = source/Irrlicht
++
++IRRLICHT_DEPENDENCIES = libgl xlib_libXxf86vm
++
++define IRRLICHT_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(DL_DIR)/$(IRRLICHT_SOURCE)
++	mv $(@D)/irrlicht-$(IRRLICHT_VERSION)/* $(@D)
++	$(RM) -r $(@D)/irrlicht-$(IRRLICHT_VERSION)
++endef
++
++IRRLICHT_CONF_OPTS = $(TARGET_CONFIGURE_OPTS)
++
++# Build a static library OR a shared library, otherwise we need to compile with -fPIC
++# "relocation R_X86_64_32S can not be used when making a shared object; recompile with -fPIC"
++ifeq ($(BR2_STATIC_LIBS),)
++IRRLICHT_CONF_OPTS += sharedlib
++endif
++
++define IRRLICHT_BUILD_CMDS
++	$(TARGET_MAKE_ENV)
++		$(MAKE) -C $(@D)/$(IRRLICHT_SUBDIR) $(IRRLICHT_CONF_OPTS)
++endef
++
++define IRRLICHT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) \
++		INSTALL_DIR=$(STAGING_DIR)/usr/lib \
++		-C $(@D)/$(IRRLICHT_SUBDIR) install
++endef
++
++define IRRLICHT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) \
++		INSTALL_DIR=$(TARGET_DIR)/usr/lib \
++		-C $(@D)/$(IRRLICHT_SUBDIR) install
++endef
++
++$(eval $(generic-package))
