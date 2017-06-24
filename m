@@ -1,52 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 21:23:53 +0200
-Subject: [Buildroot] [git commit] core: reverse the argument order in
-	check-host-cmake
-Message-ID: <20170624193647.8C383818D2@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 24 Jun 2017 16:39:51 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.11.7
+Message-ID: <1498333192-12289-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77a7a15e4c14d2b39e661dca9b7c94e773b00e93
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Pass the minimal version before the program name. In a later change the
-script will become able to test a list of candidates.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- support/dependencies/check-host-cmake.mk | 2 +-
- support/dependencies/check-host-cmake.sh | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 8002278..914327f 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -12,7 +12,7 @@ BR2_CMAKE_VERSION_MIN = 3.1
+diff --git a/linux/Config.in b/linux/Config.in
+index 4add3e0..423f27e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
- BR2_CMAKE ?= cmake
- ifeq ($(call suitable-host-package,cmake,\
--	$(BR2_CMAKE) $(BR2_CMAKE_VERSION_MIN)),)
-+	$(BR2_CMAKE_VERSION_MIN) $(BR2_CMAKE)),)
- BR2_CMAKE = $(HOST_DIR)/usr/bin/cmake
- BR2_CMAKE_HOST_DEPENDENCY = host-cmake
- endif
-diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
-index 9b63b06..73bd4ed 100755
---- a/support/dependencies/check-host-cmake.sh
-+++ b/support/dependencies/check-host-cmake.sh
-@@ -1,7 +1,7 @@
- #!/bin/sh
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.11.6)"
++	bool "Latest version (4.11.7)"
  
--candidate="${1}"
--version_min="${2}"
-+version_min="${1}"
-+candidate="${2}"
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
+@@ -116,7 +116,7 @@ endif
  
- major_min="${version_min%.*}"
- minor_min="${version_min#*.}"
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.11.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.11.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.7.4
