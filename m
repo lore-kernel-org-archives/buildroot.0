@@ -1,74 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 17:49:24 +0200
-Subject: [Buildroot] [PATCH v2] glibc: remove version choice
-In-Reply-To: <20170610205337.GA15034@waldemar-brodkorb.de>
-References: <20170610205337.GA15034@waldemar-brodkorb.de>
-Message-ID: <20170624174924.19b6549c@windsurf.home>
+Date: Sat, 24 Jun 2017 17:49:48 +0200
+Subject: [Buildroot] [git commit] support/scripts: allow /etc/shadow to be
+	symlinked
+Message-ID: <20170624154856.AEA7381D3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=82f64203a8f017d50b754323194694374f92add5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 10 Jun 2017 22:53:37 +0200, Waldemar Brodkorb wrote:
-> We do not support uClibc-ng/musl C library version choice support,
-> do the same for GNU C Library.
-> Add me as Maintainer for the package.
-> No legacy handling required as only version choice is removed.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This commit fixes a problem where it was not possible to replace
+/etc/shadow with a symlink to a e.g. a user partition where the
+shadow file is placed. This is required, e.g. for systems where the
+rootfs is mounted read-only but users should still be able to be
+added. Thus, if within an filesystem overlay setup a user tries
+to replace /etc/shadow with a symlink to the real file on a user
+partition a buildroot build stops with an error message because
+sed is called on the symlink instead of following the symlink.
+This commit fixes this shortcoming.
 
-I've applied, but after doing a few changes, see below.
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/mkusers | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1e87d3a..1af8d75 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1688,9 +1688,10 @@ F:	arch/Config.in.bfin
->  F:	arch/Config.in.m68k
->  F:	arch/Config.in.or1k
->  F:	arch/Config.in.sparc
-> +F:	package/glibc/
-> +F:	package/mksh/
->  F:	package/uclibc/
->  F:	package/uclibc-ng-test/
-> -F:	package/mksh/
-
-This is mixing two changes (alphabetic ordering and adding you as a
-developer for the glibc package) in a patch that is otherwise
-relatively unrelated. So I've moved these changes to separate patches.
-
-> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-> index 115388e..e5d0d5c 100644
-> --- a/package/glibc/Config.in
-> +++ b/package/glibc/Config.in
-> @@ -3,35 +3,8 @@ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  config BR2_PACKAGE_GLIBC
->  	bool
->  	default y
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-
-A "depends on" on a prompt-less option is quite useless, because it
-doesn't prevent anyone from select-ing this option, unless you
-propagate this depends on of course (which you don't do).
-
-> -comment "glibc-2.24+ needs kernel headers >= 3.2"
-> -	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-
-And we're loosing the comment about glibc now requiring headers >= 3.2.
-
-So, instead, I've moved the dependency to
-toolchain/toolchain-buildroot/Config.in, option
-BR2_TOOLCHAIN_BUILDROOT_GLIBC, where we already had
-the !BR2_STATIC_LIBS dependency. And I've updated the existing
-Config.in comment to mention the need for headers >= 3.2.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 2ac76f9..5bbec3e 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -219,12 +219,12 @@ add_one_group() {
+     fi
+ 
+     # Remove any previous instance of this group, and re-add the new one
+-    sed -i -e '/^'"${group}"':.*/d;' "${GROUP}"
++    sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GROUP}"
+     printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
+ 
+     # Ditto for /etc/gshadow if it exists
+     if [ -f "${GSHADOW}" ]; then
+-        sed -i -e '/^'"${group}"':.*/d;' "${GSHADOW}"
++        sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GSHADOW}"
+         printf "%s:*::\n" "${group}" >>"${GSHADOW}"
+     fi
+ }
+@@ -263,7 +263,8 @@ add_user_to_group() {
+ 
+     for _f in "${GROUP}" "${GSHADOW}"; do
+         [ -f "${_f}" ] || continue
+-        sed -r -i -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
++        sed -r -i --follow-symlinks \
++                  -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
+                   -e 's/^('"${group}"':.*)$/\1,'"${username}"'/;'                           \
+                   -e 's/,+/,/'                                                              \
+                   -e 's/:,/:/'                                                              \
+@@ -303,7 +304,7 @@ add_one_user() {
+ 
+     # Remove any previous instance of this user
+     for _f in "${PASSWD}" "${SHADOW}"; do
+-        sed -r -i -e '/^'"${username}"':.*/d;' "${_f}"
++        sed -r -i --follow-symlinks -e '/^'"${username}"':.*/d;' "${_f}"
+     done
+ 
+     _gid="$( get_gid "${group}" )"
