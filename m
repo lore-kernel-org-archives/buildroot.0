@@ -1,96 +1,177 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 24 Jun 2017 11:55:37 -0400
-Subject: [Buildroot] [PATCH 2/5] libssl: new virtual package.
-In-Reply-To: <bf80e20f-0e71-258b-a60f-2b01f6f46909@mind.be>
-References: <20170615142928.31927-1-aduskett@codeblue.com>
- <20170615142928.31927-2-aduskett@codeblue.com>
- <20170615232816.121a18b9@windsurf.lan>
- <bf80e20f-0e71-258b-a60f-2b01f6f46909@mind.be>
-Message-ID: <CAFSsvmqw8Fsd8sZBFHmxi-i_PBKgL-z1pV9j6kxKWS24vNVLzw@mail.gmail.com>
+Date: Sat, 24 Jun 2017 13:28:57 -0400
+Subject: [Buildroot] [PATCH v2 1/4] libressl: new package
+Message-ID: <20170624172900.3610-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Libressl is a fork of openssl from OpenSSL in 2014.  Its goal is to
+modernize the OpenSSL codebase, improve security, and apply best
+practice development processes.
 
-I am going to go back to this email.
+Right now, libressl is API compatible with OpenSSL 1.0.1, but does not
+yet include all new APIs from OpenSSL 1.0.2 and later.
 
-On Thu, Jun 15, 2017 at 6:54 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 15-06-17 23:28, Thomas Petazzoni wrote:
->> Hello,
->>
->> Nit: don't use a final "." in the commit titles.
->>
->> On Thu, 15 Jun 2017 10:29:25 -0400, Adam Duskett wrote:
->>>     libressl is API compatible with OpenSSL 1.0.1 and is almost API compatible
->>>     with OpenSSL 1.0.2.  As such, a new virtual package is needed to handle
->>>     having both libressl and openssl.
->>
->> No indentation of 4 spaces for the commit log.
->>
->>> diff --git a/package/libssl/Config.in b/package/libssl/Config.in
->>> new file mode 100644
->>> index 0000000..71347de
->>> --- /dev/null
->>> +++ b/package/libssl/Config.in
->>> @@ -0,0 +1,6 @@
->>> +config BR2_PACKAGE_HAS_LIBSSL
->>> +    bool
->>> +
->>> +config BR2_PACKAGE_PROVIDES_LIBSSL
->>> +    string
->>> +    depends on BR2_PACKAGE_HAS_LIBSSL
->>
->> Should it be named "libssl" or "ssl". I think Arnout suggested just
->> "ssl" on IRC, didn't he?
->>
->> Also, I believe for this package we should use the jpeg/jpeg-turbo
->> model instead of the conventional virtual package model, because we
->> want to be able to "select BR2_PACKAGE_LIBSSL". As your package is done
->> today, we would *have* to use only a "depends on BR2_PACKAGE_LIBRESSL",
->> which is a bit annoying.
->
->  Hm, I'm not sure I agree. The problem with that is that existing configs won't
-> work anymore, i.e. if you have openssl selected and run menuconfig, it will
-> disappear because it now depends on libssl and libssl isn't selected...
->
->  And any package that can have either can just do
->
->         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
->
-I would agree with this precisely because libressl may not work with
-every package quite yet.
+This package has been tested with the following architectures and c
+libraries:
 
->
->  If we really want to make it a choice like libjpeg, then I think OpenSSL should
-> be renamed so existing configs still work. And that solves the naming issue too
-> :-) Well, except that we have to find a name for the original OpenSSL package :-P
->
->  Regards,
->  Arnout
->
->>
->> Again, see the libjpeg virtual package.
->>
->> Best regards,
->>
->> Thomas
->>
-My question about this is: What if the program that is selected
-doesn't work with OpenSSL
-but LibreSSL is selected?
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-Thanks!
+- armv4
+- aarch64
+- ppc
+- ppc64
+- ppc64le
+- x86_64
+- uClibc-ng
+- glibc 2.24
+- musl
 
-Adam
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+Changes v1 -> v2:
+  - Changed from github to openbsd ftp. This is a all-in-one tarball
+    that negates having to use the POST_PATCH_HOOKS. (Thomas)
+  - Added 0001-remove-test-z-DESTDIR-from-ltmain.patch, this allows
+    ltmain.sh to be patched with buildroot-libtool-v2.4.patch, which
+    removes the need for a call to autogen.sh.
+  - Changed sha256sum to reflect new tarball.
+  - Changed Locally computed to openbsd ftp hash list in hash file. (Arnout)
+  - Added DEVELOPERS changes to this patch. (Thomas)
+  - Fixed formatting in commit message. (Thomas)
+  - Removed "and scripts" from Config.in (Arnout)
+
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-remove-test-z-DESTDIR-from-ltmain.patch   | 28 ++++++++++++++++++++++
+ package/libressl/Config.in                         | 20 ++++++++++++++++
+ package/libressl/libressl.hash                     |  2 ++
+ package/libressl/libressl.mk                       | 22 +++++++++++++++++
+ 6 files changed, 74 insertions(+)
+ create mode 100644 package/libressl/0001-remove-test-z-DESTDIR-from-ltmain.patch
+ create mode 100644 package/libressl/Config.in
+ create mode 100644 package/libressl/libressl.hash
+ create mode 100644 package/libressl/libressl.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9e421f4..b9f9d9d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -34,6 +34,7 @@ F:	package/audit/
+ F:	package/checkpolicy/
+ F:	package/gstreamer1/gst1-vaapi/
+ F:	package/janus-gateway/
++F:	package/libressl/
+ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
+diff --git a/package/Config.in b/package/Config.in
+index f69f67f..89b1ee4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -975,6 +975,7 @@ menu "Crypto"
+ 	source "package/libmcrypt/Config.in"
+ 	source "package/libmhash/Config.in"
+ 	source "package/libnss/Config.in"
++	source "package/libressl/Config.in"
+ 	source "package/libscrypt/Config.in"
+ 	source "package/libsecret/Config.in"
+ 	source "package/libsha1/Config.in"
+diff --git a/package/libressl/0001-remove-test-z-DESTDIR-from-ltmain.patch b/package/libressl/0001-remove-test-z-DESTDIR-from-ltmain.patch
+new file mode 100644
+index 0000000..901a48c
+--- /dev/null
++++ b/package/libressl/0001-remove-test-z-DESTDIR-from-ltmain.patch
+@@ -0,0 +1,28 @@
++From 4317d43d74996ad7ec3270b1e786e91a19312309 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Adamduskett@outlook.com>
++Date: Sat, 24 Jun 2017 13:08:57 -0400
++Subject: [PATCH] remove test -z "$DESTDIR" from ltmain.sh.
++
++Without this patch, buildroot-libtool-v2.4.patch will fail to apply.
++
++Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
++---
++ ltmain.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ltmain.sh b/ltmain.sh
++index 5d29bd6..6c90601 100644
++--- a/ltmain.sh
+++++ b/ltmain.sh
++@@ -6658,7 +6658,7 @@ func_mode_link ()
++ 	  *)
++ 	    if test "$installed" = no; then
++ 	      func_append notinst_deplibs " $lib"
++-	      test -z "$DESTDIR" && need_relink=yes
+++	      need_relink=yes
++ 	    fi
++ 	    ;;
++ 	  esac
++-- 
++2.9.4
++
+diff --git a/package/libressl/Config.in b/package/libressl/Config.in
+new file mode 100644
+index 0000000..035176a
+--- /dev/null
++++ b/package/libressl/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBRESSL
++	bool "libressl"
++	help
++	  LibreSSL is a version of the TLS/crypto stack forked from
++	  OpenSSL in 2014, with goals of modernizing the codebase,
++	  improving security, and applying best practice development
++	  processes.
++
++	  http://www.libressl.org/
++
++if BR2_PACKAGE_LIBRESSL
++
++config BR2_PACKAGE_LIBRESSL_BIN
++	bool "openssl binary"
++	help
++	  Install the openssl binary to the target file system. This is a
++	  command line tool for doing various cryptographic stuff.
++
++endif
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+new file mode 100644
+index 0000000..9ffe964
+--- /dev/null
++++ b/package/libressl/libressl.hash
+@@ -0,0 +1,2 @@
++# From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
++sha256	107a5b522fbb8318d4c3be668075e5e607296f0a9255d71674caa94571336efa	libressl-2.5.4.tar.gz
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+new file mode 100644
+index 0000000..f315165
+--- /dev/null
++++ b/package/libressl/libressl.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# libressl
++#
++################################################################################
++
++LIBRESSL_VERSION = 2.5.4
++LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
++LIBRESSL_SOURCE = libressl-$(LIBRESSL_VERSION).tar.gz
++LIBRESSL_LICENSE = ISC (New additions), OpenSSL or SSLeay (Original OpenSSL code)
++LIBRESSL_LICENSE_FILES = COPYING
++LIBRESSL_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
++define LIBRESSL_REMOVE_BIN
++	$(RM) -f $(TARGET_DIR)/usr/bin/openssl
++endef
++LIBRESSL_POST_INSTALL_TARGET_HOOKS += LIBRESSL_REMOVE_BIN
++endif
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.9.4
