@@ -1,64 +1,47 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 24 Jun 2017 13:31:27 -0400
-Subject: [Buildroot] [PATCH v2 3/4] libressl: add libssl virtual package
-	support.
-In-Reply-To: <20170624172900.3610-3-Adamduskett@outlook.com>
-References: <20170624172900.3610-1-Adamduskett@outlook.com>
- <20170624172900.3610-3-Adamduskett@outlook.com>
-Message-ID: <CAFSsvmqBBsf5AFmi4YiQ8NWKupsk9hWLo5t-2=SzgfsaxBCchw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 24 Jun 2017 21:26:15 +0200
+Subject: [Buildroot] [git commit] core: allow having a list of "cmake"
+	candidates
+Message-ID: <20170624193647.A7E57817B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry about the final period.  Hard habit to break!
+commit: https://git.buildroot.net/buildroot/commit/?id=914f75f156ad54cbccd41fb25ee1ce656e2b7cde
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Jun 24, 2017 at 1:28 PM, Adam Duskett <aduskett@gmail.com> wrote:
-> libressl can provide libssl.
->
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
-> Changes v1 -> v2:
->   - None.
->
->  package/libressl/Config.in   | 4 ++++
->  package/libressl/libressl.mk | 1 +
->  2 files changed, 5 insertions(+)
->
-> diff --git a/package/libressl/Config.in b/package/libressl/Config.in
-> index 035176a..2cc87d0 100644
-> --- a/package/libressl/Config.in
-> +++ b/package/libressl/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBRESSL
->         bool "libressl"
-> +       select BR2_PACKAGE_HAS_LIBSSL
->         help
->           LibreSSL is a version of the TLS/crypto stack forked from
->           OpenSSL in 2014, with goals of modernizing the codebase,
-> @@ -10,6 +11,9 @@ config BR2_PACKAGE_LIBRESSL
->
->  if BR2_PACKAGE_LIBRESSL
->
-> +config BR2_PACKAGE_PROVIDES_LIBSSL
-> +       default "libressl"
-> +
->  config BR2_PACKAGE_LIBRESSL_BIN
->         bool "openssl binary"
->         help
-> diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-> index f315165..e8145c0 100644
-> --- a/package/libressl/libressl.mk
-> +++ b/package/libressl/libressl.mk
-> @@ -10,6 +10,7 @@ LIBRESSL_SOURCE = libressl-$(LIBRESSL_VERSION).tar.gz
->  LIBRESSL_LICENSE = ISC (New additions), OpenSSL or SSLeay (Original OpenSSL code)
->  LIBRESSL_LICENSE_FILES = COPYING
->  LIBRESSL_INSTALL_STAGING = YES
-> +LIBRESSL_PROVIDES = libssl
->
->  ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
->  define LIBRESSL_REMOVE_BIN
-> --
-> 2.9.4
->
+Add the BR2_CMAKE_CANDIDATES variable, containing a list of candidates
+to check and use as BR2_CMAKE, if possible.
+
+This allows using "cmake3" on CentOS 7, whose default cmake corresponds
+to version 2.8.12. Example:
+
+    $ make BR2_CMAKE_CANDIDATES="cmake cmake3"
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/dependencies/check-host-cmake.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index 914327f..ef080ff 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -10,9 +10,10 @@
+ #
+ BR2_CMAKE_VERSION_MIN = 3.1
+ 
+-BR2_CMAKE ?= cmake
+-ifeq ($(call suitable-host-package,cmake,\
+-	$(BR2_CMAKE_VERSION_MIN) $(BR2_CMAKE)),)
++BR2_CMAKE_CANDIDATES ?= cmake
++BR2_CMAKE ?= $(call suitable-host-package,cmake,\
++	$(BR2_CMAKE_VERSION_MIN) $(BR2_CMAKE_CANDIDATES))
++ifeq ($(BR2_CMAKE),)
+ BR2_CMAKE = $(HOST_DIR)/usr/bin/cmake
+ BR2_CMAKE_HOST_DEPENDENCY = host-cmake
+ endif
