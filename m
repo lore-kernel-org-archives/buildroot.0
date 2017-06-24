@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 25 Jun 2017 00:16:16 +0200
-Subject: [Buildroot] [PATCH v2 1/4] libressl: new package
-In-Reply-To: <20170624214202.06d5a308@windsurf.home>
+Date: Sun, 25 Jun 2017 00:38:11 +0200
+Subject: [Buildroot] [PATCH v2 2/4] libssl: new virtual package
+In-Reply-To: <20170624214528.15f8cc18@windsurf.home>
 References: <20170624172900.3610-1-Adamduskett@outlook.com>
- <20170624214202.06d5a308@windsurf.home>
-Message-ID: <fd65adb9-e721-8412-3521-463b8846b1cc@mind.be>
+ <20170624172900.3610-2-Adamduskett@outlook.com>
+ <20170624214528.15f8cc18@windsurf.home>
+Message-ID: <fbd63a92-1900-639b-7653-ebb1f70cc137@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +14,71 @@ To: buildroot@busybox.net
 
 
 
-On 24-06-17 21:42, Thomas Petazzoni wrote:
+On 24-06-17 21:45, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Sat, 24 Jun 2017 13:28:57 -0400, Adam Duskett wrote:
-[snip]
->> +$(eval $(autotools-package))
->> +$(eval $(host-autotools-package))
+> On Sat, 24 Jun 2017 13:28:58 -0400, Adam Duskett wrote:
+>> libressl is API compatible with OpenSSL 1.0.1 and is almost API
+>> compatible with OpenSSL 1.0.2.  As such, a new virtual package is needed
+>> to handle having both libressl and openssl.
+>>
+>> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+>> ---
+>> Changes v1 -> v2:
+>>   - Removed final "." in commit title. (Thomas)
+>>   - Fixed indentation issues in commit message.
 > 
-> Another question is how do we handle the host package. Right now, all
-> packages that need openssl on the host depend on host-openssl. So as it
-> is, this host-libressl package is never used.
+> I still don't get what is the plan for this virtual package. We have
+> two options:
+> 
+>  - Make it a regular virtual package, like package/opengl/libgles/.
+>    However in this case, we must change all packages that need
+>    OpenSSL/LibreSSL to use a "depends on BR2_PACKAGE_LIBSSL", which is
+>    a bit annoying.
 
- Au contraire: the host-virtual-package infra will use the one selected for the
-target, so if target libressl is selected, host-libssl will depend on
-host-libressl. So the host-libressl package is required.
+ It can also be
+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBRESSL
+but then the advantage of a virtual package is almost gone...
 
- Except that Adam didn't add host-libssl :-)
+> 
+>  - Make it a virtual package like package/jpeg/, where it has a choice
+>    to define which jpeg implementation should be used. This nicely
+>    allows packages to "select BR2_PACKAGE_LIBSSL".
 
- Actually, I guess it's OK if packages always use host-openssl. Shouldn't make a
-difference for the target, right?
+ Yeah, I like the second option more and more. One big problem though: it's
+difficult to migrate, because *all* the 'select BR2_PACKAGE_OPENSSL" have to be
+converted into "select BR2_PACKAGE_LIBSSL"... So starting like this and
+introducing the choice later seems to be the most viable approach.
 
+
+> Also, how are we going to handle the fact that some packages support
+> only OpenSSL, while some support both OpenSSL and LibreSSL.
+
+ With the regular virtual package you can just do
+	select BR2_PACKAGE_OPENSSL
+and then you get an error as soon as you try to build if libressl is selected. I
+think adding a depends on !libressl leads to a circular dependency then.
+
+ With the choice, you need
+	select BR2_PACKAGE_LIBSSL
+	depends on !BR2_PACKAGE_LIBRESSL	
+which hopefully isn't considered a circular dependency.
+
+
+ Regarding BoringSSL, putting it as the third libssl provider looks like the way
+to go to me.
 
  Regards,
  Arnout
+
+
+> Even if all of this doesn't get implemented in the first series, I
+> still would like to understand what the plan is.
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
