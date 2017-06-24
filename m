@@ -1,51 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 14:14:01 +0200
-Subject: [Buildroot] [PATCH v5 1/5] board: Add support for Engicam
- i.CoreM6 DualLite/Solo boards
-In-Reply-To: <1498220769-22961-2-git-send-email-jteki@openedev.com>
-References: <1498220769-22961-1-git-send-email-jteki@openedev.com>
- <1498220769-22961-2-git-send-email-jteki@openedev.com>
-Message-ID: <20170624141401.12cff7fe@windsurf.home>
+Date: Sat, 24 Jun 2017 14:25:44 +0200
+Subject: [Buildroot] [git commit] configs/engicam_imx6qdl_icore_defconfig:
+	add missing tools
+Message-ID: <20170624122500.14D7781DD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a608dab6c61b6b3554977064dd4f700617ca05c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 23 Jun 2017 17:56:05 +0530, Jagan Teki wrote:
-> From: Jagan Teki <jagan@amarulasolutions.com>
-> 
-> Add initial support for Engicam i.CoreM6 DualLite/Solo board
-> with below features:
-> - U-Boot 2017.07-rc1
-> - Linux 4.11.5
-> - Default packages from buildroot
-> 
-> U-Boot 2017.07-rc1 has common u-boot defconfig for All i.CoreM6
-> variant boards, so this patch update the same along with
-> buildroot defconfig that reflect the common name.
-> 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
-> Changes for v5:
-> - Drop _mmc in defconfig
-> - Update size of vfat partition
-> - Add sync command after writing mmc 
-> - Update .gitlab-ci.yml
-> Changes for v4:
-> - Update .gitlab-ci.yml
-> Changes for v3:
-> - Use kernel version 4.11.5
-> Changes for v2:
-> - Fix genimage.cfg path in readme.txt
-> - Remove exctra " in BR2_LINUX_KERNEL_INTREE_DTS_NAME
+A VFAT filesystem is described in the genimage configuration file, so
+we need host-dosfstools and host-mtools enabled in the defconfig.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/engicam_imx6qdl_icore_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_defconfig
+index e0d89fa..17acdf5 100644
+--- a/configs/engicam_imx6qdl_icore_defconfig
++++ b/configs/engicam_imx6qdl_icore_defconfig
+@@ -36,6 +36,8 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo Starter Kit"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/genimage.cfg"
