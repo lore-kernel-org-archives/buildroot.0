@@ -1,42 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 17:29:32 +0200
-Subject: [Buildroot] [PATCH v2 13/13] package/minetest_game: new package
-In-Reply-To: <20170612205410.20230-13-romain.naour@gmail.com>
-References: <20170612205410.20230-1-romain.naour@gmail.com>
- <20170612205410.20230-13-romain.naour@gmail.com>
-Message-ID: <20170624172932.04b4b03d@windsurf.home>
+Date: Sat, 24 Jun 2017 17:44:04 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Waldemar as a developer
+	for the glibc package
+Message-ID: <20170624154557.2608081DAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cb3945103837259863b1863b57f9a8c9ed74e89d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Jun 2017 22:54:10 +0200, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> v2: update to 0.4.16
->     update license file
->     Add a hash file
->     backport an upstream patch due to regression.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'm not a big fan of underscores in the name of packages, but I agree
-it's the upstream name... and we already have a few packages with
-underscores in their name, so I guess it's more a personal taste than a
-real rule here.
-
-> +define MINETEST_GAME_INSTALL_TARGET_CMDS
-> +	mkdir -p $(TARGET_DIR)/usr/share/minetest/games/minetest_game
-> +	rsync -av $(@D)/* --exclude=".*" $(TARGET_DIR)/usr/share/minetest/games/minetest_game
-
-What about using "cp -dpfr", which we use more commonly in packages to
-copy entire file/directory hierarchies?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c4bc148..9e421f4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1726,6 +1726,7 @@ F:	arch/Config.in.bfin
+ F:	arch/Config.in.m68k
+ F:	arch/Config.in.or1k
+ F:	arch/Config.in.sparc
++F:	package/glibc/
+ F:	package/mksh/
+ F:	package/uclibc/
+ F:	package/uclibc-ng-test/
