@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 21:45:28 +0200
-Subject: [Buildroot] [PATCH v2 2/4] libssl: new virtual package
-In-Reply-To: <20170624172900.3610-2-Adamduskett@outlook.com>
-References: <20170624172900.3610-1-Adamduskett@outlook.com>
- <20170624172900.3610-2-Adamduskett@outlook.com>
-Message-ID: <20170624214528.15f8cc18@windsurf.home>
+Date: Sat, 24 Jun 2017 21:46:00 +0200
+Subject: [Buildroot] [PATCH v2 1/4] core: reverse the argument order in
+ check-host-cmake
+In-Reply-To: <1494131541-2960-1-git-send-email-casantos@datacom.ind.br>
+References: <1494131541-2960-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20170624214600.1111506c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 24 Jun 2017 13:28:58 -0400, Adam Duskett wrote:
-> libressl is API compatible with OpenSSL 1.0.1 and is almost API
-> compatible with OpenSSL 1.0.2.  As such, a new virtual package is needed
-> to handle having both libressl and openssl.
+On Sun,  7 May 2017 01:32:18 -0300, Carlos Santos wrote:
+> Pass the minimal version before the program name. In a later change the
+> script will become able to test a list of candidates.
 > 
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > ---
-> Changes v1 -> v2:
->   - Removed final "." in commit title. (Thomas)
->   - Fixed indentation issues in commit message.
+>  support/dependencies/check-host-cmake.mk | 2 +-
+>  support/dependencies/check-host-cmake.sh | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-I still don't get what is the plan for this virtual package. We have
-two options:
-
- - Make it a regular virtual package, like package/opengl/libgles/.
-   However in this case, we must change all packages that need
-   OpenSSL/LibreSSL to use a "depends on BR2_PACKAGE_LIBSSL", which is
-   a bit annoying.
-
- - Make it a virtual package like package/jpeg/, where it has a choice
-   to define which jpeg implementation should be used. This nicely
-   allows packages to "select BR2_PACKAGE_LIBSSL".
-
-Also, how are we going to handle the fact that some packages support
-only OpenSSL, while some support both OpenSSL and LibreSSL.
-
-Even if all of this doesn't get implemented in the first series, I
-still would like to understand what the plan is.
-
-Best regards,
+Thanks, series applied to master! And thanks to Yann for reviewing
+those patches.
 
 Thomas
 -- 
