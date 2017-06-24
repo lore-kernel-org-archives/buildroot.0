@@ -1,55 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jun 2017 23:17:24 +0200
-Subject: [Buildroot] [PATCH] Makefile: unconfigured "make toolchain"
- should run menuconfig
-In-Reply-To: <0bccbcd6-5201-88e5-5044-66c2f5acc93b@lucaceresoli.net>
-References: <7ef9622f-7355-c639-b704-ed7dace1e273@mind.be>
- <20170615201917.16464-1-arnout@mind.be>
- <0bccbcd6-5201-88e5-5044-66c2f5acc93b@lucaceresoli.net>
-Message-ID: <20170624231724.4e1c5d7e@windsurf.home>
+Date: Sat, 24 Jun 2017 23:23:08 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libxshmfence: needs
+	sync_4
+Message-ID: <20170624212340.E176680E53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3b7af7fca9fb600b2e86834c2b48cb97725fcb27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 16 Jun 2017 13:19:27 +0200, Luca Ceresoli wrote:
+Also propagate reverse dependency to mesa3d and xserver_xorg-server.
 
-> > +# Some subdirectories are also package names. To avoid that "make linux"
-> > +# on an unconfigured tree produces "Nothing to be done", add an explicit
-> > +# rule for it.
-> > +linux toolchain: menuconfig
-> > +  
-> 
-> This is very localized and documented w.r.t. the other solution, so I
-> prefer this one.
+Fixes xserver_xorg-server build
+http://autobuild.buildroot.net/results/7da/7da8b46cda8786422e8293f26b79582b35a433d6/
 
-Agreed.
+For patch discussion refer to http://patchwork.ozlabs.org/patch/674595/
 
-> 
-> However I prefer how the other solution behaves, i.e. print an
-> explicit error message, not call menuconfig.
-> 
-> How about the following solution?
-> 
-> .PHONY: linux toolchain
-> linux toolchain:
->   @echo 'Please configure Buildroot first (e.g. "make menuconfig")' 1>&2
->   @exit 1
-> 
-> I'm not sure it's correct, but seems like it works:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: only select BR2_PACKAGE_XPROTO_PRESENTPROTO if
+BR2_TOOLCHAIN_HAS_SYNC_4 is available, add comment explaining why.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d/Config.in                                 | 11 +++++++++--
+ package/mesa3d/mesa3d.mk                                 |  2 +-
+ package/x11r7/xlib_libxshmfence/Config.in                |  1 +
+ package/x11r7/xserver_xorg-server/Config.in              |  3 ++-
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |  2 +-
+ 5 files changed, 14 insertions(+), 5 deletions(-)
 
-+1 with Luca here. Running menuconfig is confusing, I very much prefer
-an error message.
-
-Arnout, what do you think? Can you respin with this idea?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 36a0304..ad41b1c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -31,8 +31,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	bool
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
+-	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
++	# xlib-libxshmfence needs sync_4, so we cannot select it if
++	# BR2_TOOLCHAIN_HAS_SYNC_4 is false. xproto-presentproto
++	# doesn't need sync_4, but it is only needed in conjunction
++	# with xlib-libxshmfence and dri3proto to provide dri3
++	# support, so we also only select it if sync_4 is available.
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
++		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
++	select BR2_PACKAGE_XPROTO_PRESENTPROTO if \
++		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	bool
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index a5ab84b..9f190ba 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -91,7 +91,7 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-dri-drivers --disable-dri3
+ else
+-ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+ MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
+ MESA3D_CONF_OPTS += --enable-dri3
+ else
+diff --git a/package/x11r7/xlib_libxshmfence/Config.in b/package/x11r7/xlib_libxshmfence/Config.in
+index d0595f6..d4e87b3 100644
+--- a/package/x11r7/xlib_libxshmfence/Config.in
++++ b/package/x11r7/xlib_libxshmfence/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXSHMFENCE
+ 	bool "libxshmfence"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	help
+ 	  X.Org shmfence library
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index b04ccf4..5971e13 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -114,7 +114,8 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	select BR2_PACKAGE_LIBDRM if (BR2_PACKAGE_XPROTO_XF86DRIPROTO || \
+ 		BR2_PACKAGE_XPROTO_DRI2PROTO)
+ 	select BR2_PACKAGE_LIBPCIACCESS
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
++		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 	help
+ 	  This variant of the X.org server is the full-blown variant,
+ 	  as used by desktop GNU/Linux distributions. The drivers (for
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 306e9d0..12c3ed0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -220,7 +220,7 @@ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri2
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2
+ endif
+-ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
