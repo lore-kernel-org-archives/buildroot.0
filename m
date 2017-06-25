@@ -1,61 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Jun 2017 00:03:37 +0200
-Subject: [Buildroot] [PATCH 1/5] support/check-package: don't check
-	filenames of hashes
+Date: Mon, 26 Jun 2017 00:03:40 +0200
+Subject: [Buildroot] [PATCH 4/5] core/pkg-utils: check hashes of license
+	files
 In-Reply-To: <cover.1498428166.git.yann.morin.1998@free.fr>
 References: <cover.1498428166.git.yann.morin.1998@free.fr>
-Message-ID: <eafeec501266452fc7973871c7853bf6d016dfce.1498428166.git.yann.morin.1998@free.fr>
+Message-ID: <b4adb01dc51cc7e3300265e0b97e0366f7fbb786.1498428166.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we check that the filenames in hash lists do not contain
-a slash '/' character, because all we are checking so far are the
-downloaded archives, and we explicitly need the filename to not contain
-a directory component at all.
+This will help catch a change of license even if the filename does
+not change.
 
-However, we're soon to also check the hashes of the license files in
-packages sources, and those license files may be at any arbitrary
-directory-depth in the packages source tree, and thus two or more
-license files may have the same basename.
+For now, a missing hash for the license files is not a fatal error, to
+let people catch up and add them. When we switch to make it mandatory,
+we can simplify the code by just removing the case statement.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- support/scripts/checkpackagelib/lib_hash.py | 16 ----------------
- 1 file changed, 16 deletions(-)
+ package/pkg-utils.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/support/scripts/checkpackagelib/lib_hash.py b/support/scripts/checkpackagelib/lib_hash.py
-index c76abb43f1..e4beb0404f 100644
---- a/support/scripts/checkpackagelib/lib_hash.py
-+++ b/support/scripts/checkpackagelib/lib_hash.py
-@@ -17,22 +17,6 @@ def _empty_line_or_comment(text):
-     return text.strip() == "" or text.startswith("#")
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index e9ac56276f..accf48c464 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -85,5 +85,10 @@ endef
  
- 
--class HashFilename(_CheckFunction):
--    def check_line(self, lineno, text):
--        if _empty_line_or_comment(text):
--            return
--
--        fields = text.split()
--        if len(fields) < 3:
--            return
--
--        if '/' in fields[2]:
--            return ["{}:{}: use filename without directory component"
--                    " ({}#adding-packages-hash)"
--                    .format(self.filename, lineno, self.url_to_manual),
--                    text]
--
--
- class HashNumberOfFields(_CheckFunction):
-     def check_line(self, lineno, text):
-         if _empty_line_or_comment(text):
+ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
+ 	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
++	{ \
++		support/download/check-hash $(3)/$(1).hash $(5) $(4); \
++		ret=$${?}; \
++		case $${ret} in (0|3) ;; (*) exit 1;; esac; \
++	} && \
+ 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+ endef
 -- 
 2.11.0
