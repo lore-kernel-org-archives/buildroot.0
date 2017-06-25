@@ -1,204 +1,105 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 25 Jun 2017 22:56:14 +0200
-Subject: [Buildroot] [Patch v6 7/7] rust: new package
-In-Reply-To: <20170625205614.6723-1-eric.le.bihan.dev@free.fr>
-References: <20170625205614.6723-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170625205614.6723-8-eric.le.bihan.dev@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Jun 2017 23:27:18 +0200
+Subject: [Buildroot] [PATCH 0/3] core: check hashes of license files
+In-Reply-To: <5b73844f-e827-7d81-8a0e-56ded5de62de@lucaceresoli.net>
+References: <cover.1497772831.git.yann.morin.1998@free.fr>
+ <CA+NV+Vmd+uwWztf4Po71Kh3WHPVzPR++HSUdmBoF1oddsS14ew@mail.gmail.com>
+ <20170619174707.GB3045@scaer>
+ <CAAXf6LVAgOoLDEc-HUJJOOm9Oq8k5cG5q2VkK+ZNVJyGhtM4Cw@mail.gmail.com>
+ <20170620152813.GA2892@scaer>
+ <5b73844f-e827-7d81-8a0e-56ded5de62de@lucaceresoli.net>
+Message-ID: <20170625212718.GH3673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides rustc, the compiler for the Rust programming
-language, built from source.
+Luca, All,
 
-Currently, only the host variant is built.
+On 2017-06-23 23:50 +0200, Luca Ceresoli spake thusly:
+> On 20/06/2017 17:28, Yann E. MORIN wrote:
+> > Thomas, All,
+> > 
+> > On 2017-06-19 21:32 +0200, Thomas De Schampheleire spake thusly:
+> >> 2017-06-19 19:47 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> >>> On 2017-06-19 22:47 +0530, Rahul Bedarkar spake thusly:
+> >>>> On Sun, Jun 18, 2017 at 1:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >>>>>
+> >>>>> Hello All!
+> >>>>>
+> >>>>> This small series is a proposal to check the hashes of the license files
+> >>>>> during legal-info, to catch the packages whose license changes but where
+> >>>>> the text of the new license is in the same file.
+> >>>>
+> >>>> Thanks for this series. Checking hashes of the license files during
+> >>>> legal-info stage looks logical but we discussed about doing that after
+> >>>> downloading sources so that change in license file is noticed early
+> >>>> (as a part of build test after version bump).
+> >>>
+> >>> It is not possible to do at download time. It can only be done after
+> >>> the package has been extracted and patched.
+> >>>
+> >>> That is why, when you run legal-info on a non-built (but configured)
+> >>> tree, you'll notice that Buildroot extracts and patches the packages
+> >>> before saving their legal-info.
+> >>>
+> >>> Besides, if one uses the support/scripts/test-pkg script to test the
+> >>> version bump, then legal-info is run by the script.
+> >>>
+> >>> So, I still believe it is better done during legal-info.
+> >>>
+> >>
+> >> Yann, I think Rahul means that the checking of the hashing should be
+> >> checked as part of the standard 'make pkg' target, whichever subtarget
+> >> it is, be it -build, -install or what not.
+> > 
+> > OK, I see.
+> > 
+> > Still, I believe it is better suited to keep that for during the
+> > legal-info step.
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> >> But, I don't think we should mix such topics: legal info topics should
+> >> stay in the -legal-info target.
+> >> One solution could be to make '-legal-info' part of the standard build
+> >> process, although it will slow down the build and some/many people
+> >> will not like that.
+> >> An alternative is to split '-legal-info' in two parts:
+> >> -legal-info-checks and actual -legal-info. The first part would verify
+> >> some important things, i.e. presence of valid LICENSE, presence of all
+> >> files specified in LICENSE_FILES, hash checking on these files. It
+> >> could be added to the standard 'make pkg' group. The second part would
+> >> do the actual creation of the manifest, copying the sources, etc. and
+> >> remains on-demand only.
+> 
+> Thomas' analysis is technically correct, but implementing what he
+> describes it is a bit complex for the benefits it grants IMO.
 
-The Rust compiler uses LLVM as its backend: a copy of LLVM source code
-is provided and CMake is used to build it. It is possible to use a
-pre-built external copy. When LLVM/clang will be available in Buildroot,
-it would be possible to benefit from this feature and thus decrease
-build time.
+Well, I don't think if is very complex either.
 
-LLVM is configured to generate code for x86, ARM, PowerPC and MIPS
-architectures.
+My position is about keeping sheeps together: checking the license files
+is part of legal-info.
 
-The Rust compiler uses Cargo as its build system and is written in Rust.
-Therefore this package depends on cargo-bootstrap and rust-bootstrap.
+And especially since what we really want is to check them at the very
+moment we want to aggregate the legal-info structure: only then do we
+have to ensure their correctness.
 
-The internal build process is as follows:
+Regards,
+Yann E. MORIN.
 
- 1. rustc-stage0, provided by rust-bootstrap, is used to build
-    rustc-stage1.
- 2. rust-stage1 builds the final Rust compiler (rust-stage2)
-    and the standard library for the host architecture.
- 3. the standard library for the target architecture is built.
+> So I agree
+> with Yann to keep it simple and require patch submitters to use test-pkg
+> before submitting patches. And of course we can change this choice in
+> the future.
 
-The target architecture to support is given by the GNU/LLVM target
-triple. Rust supports some predefined targets [1]. As the build system
-expects the triple to be in the form of <arch>-unknown-<system> and
-Buildroot toolchain wrapper uses <arch>-buildroot-<system>, the package
-Makefile uses $(RUST_TARGET_NAME) defined in the rustc package and uses
-it instead of $(GNU_TARGET_NAME).
 
-When compiling Rust code with this compiler, the generated program only
-depends on the target C library, as it is statically linked to the Rust
-standard library and any other code from Rust packages (a.k.a.
-"crates").
-
-If the jemalloc package is selected, support for this memory allocator
-will be enabled in the target standard library.
-
-The menuconfig entry for rustc is also updated to expose this provider.
-
-[1] https://forge.rust-lang.org/platform-support.html
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- DEVELOPERS                   |  1 +
- package/rust/rust.hash       |  2 ++
- package/rust/rust.mk         | 77 ++++++++++++++++++++++++++++++++++++++++++++
- package/rustc/Config.in.host | 15 +++++++++
- 4 files changed, 95 insertions(+)
- create mode 100644 package/rust/rust.hash
- create mode 100644 package/rust/rust.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1ba7ff0..038493b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -486,6 +486,7 @@ F:	package/jemalloc/
- F:	package/ninja/
- F:	package/rust-bin/
- F:	package/rust-bootstrap/
-+F:	package/rust/
- F:	package/s6/
- F:	package/s6-dns/
- F:	package/s6-linux-init/
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-new file mode 100644
-index 0000000..18467f5
---- /dev/null
-+++ b/package/rust/rust.hash
-@@ -0,0 +1,2 @@
-+# Locally generated
-+sha256 d2dc36e99b9e2269488b2bcddde43c234e6bde03edf70cba82a027ff49c36111  rustc-1.18.0-src.tar.gz
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-new file mode 100644
-index 0000000..207919c
---- /dev/null
-+++ b/package/rust/rust.mk
-@@ -0,0 +1,77 @@
-+################################################################################
-+#
-+# rust
-+#
-+################################################################################
-+
-+RUST_VERSION = 1.18.0
-+RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.gz
-+RUST_SITE = https://static.rust-lang.org/dist
-+RUST_LICENSE = Apache-2.0 or MIT
-+RUST_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-+
-+HOST_RUST_PROVIDES = host-rustc
-+
-+HOST_RUST_DEPENDENCIES = \
-+	toolchain \
-+	host-rust-bootstrap \
-+	host-cargo-bootstrap \
-+	host-python \
-+	host-cmake
-+
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+HOST_RUST_DEPENDENCIES += jemalloc
-+HOST_RUST_JEMALLOC_ENABLED = true
-+HOST_RUST_JEMALLOC_CONF = 'jemalloc = "$(STAGING_DIR)/usr/lib/libjemalloc_pic.a"'
-+else
-+HOST_RUST_JEMALLOC_ENABLED = false
-+endif
-+
-+HOST_RUST_BUILD_OPTS = $(if $(VERBOSE),--verbose)
-+
-+define HOST_RUST_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		echo '[build]' > config.toml; \
-+		echo 'target = ["$(RUST_TARGET_NAME)"]' >> config.toml; \
-+		echo 'cargo = "$(HOST_CARGO_BOOTSTRAP_DIR)/cargo/bin/cargo"' >> config.toml; \
-+		echo 'rustc = "$(HOST_RUST_BOOTSTRAP_DIR)/rustc/bin/rustc"' >> config.toml; \
-+		echo 'python = "$(HOST_DIR)/usr/bin/python2"' >> config.toml; \
-+		echo 'submodules = false' >> config.toml; \
-+		echo 'vendor = true' >> config.toml; \
-+		echo 'compiler-docs = false' >> config.toml; \
-+		echo 'docs = false' >> config.toml; \
-+		echo '[install]' >> config.toml; \
-+		echo 'prefix = "$(HOST_DIR)/usr"' >> config.toml; \
-+		echo '[rust]' >> config.toml; \
-+		echo 'use-jemalloc = $(HOST_RUST_JEMALLOC_ENABLED)' >> config.toml; \
-+		echo '[target.$(RUST_TARGET_NAME)]' >> config.toml; \
-+		echo 'cc = "$(TARGET_CROSS)gcc"' >> config.toml; \
-+		echo 'cxx = "$(TARGET_CROSS)g++"' >> config.toml; \
-+		echo $(HOST_RUST_JEMALLOC_CONF) >> config.toml; \
-+	)
-+endef
-+
-+define HOST_RUST_BUILD_CMDS
-+	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_RUST_MAKE_ENV) python2 x.py \
-+		build $(HOST_RUST_BUILD_OPTS))
-+endef
-+
-+define HOST_RUST_INSTALL_LIBSTD_TARGET
-+	(cd $(@D)/build/tmp/dist/rust-std-$(RUST_VERSION)-dev-$(RUST_TARGET_NAME); \
-+		./install.sh \
-+			--prefix=$(HOST_DIR)/usr \
-+			--docdir=$(HOST_DIR)/usr/share/doc/rust \
-+			--libdir=$(HOST_DIR)/usr/lib \
-+			--mandir=$(HOST_DIR)/usr/share/man \
-+			--disable-ldconfig)
-+endef
-+
-+define HOST_RUST_INSTALL_CMDS
-+	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_RUST_MAKE_ENV) python2 x.py \
-+		dist $(HOST_RUST_BUILD_OPTS))
-+	(cd $(@D); $(HOST_MAKE_ENV) $(HOST_RUST_MAKE_ENV) python2 x.py \
-+		dist --install $(HOST_RUST_BUILD_OPTS))
-+	$(HOST_RUST_INSTALL_LIBSTD_TARGET)
-+endef
-+
-+$(eval $(host-generic-package))
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index 7f2c276..30bab8f 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -26,6 +26,20 @@ choice
- 	help
- 	  Choose a provider for the Rust compiler.
- 
-+config BR2_PACKAGE_HOST_RUST
-+	bool "host rust"
-+	depends on BR2_HOST_GCC_AT_LEAST_4_7 # required by LLVM
-+	# triggers ICE on trunc_int_for_mode, at explow.c:56
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_aarch64
-+	select BR2_PACKAGE_HAS_HOST_RUSTC
-+	help
-+	  This package will build the compiler for the host as well as
-+	  a cross-compiled version of the Rust standard library for the
-+	  target.
-+
-+comment "host-rust needs a toolchain w/ gcc >= 5"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5 && BR2_aarch64
-+
- config BR2_PACKAGE_HOST_RUST_BIN
- 	bool "host rust (pre-built)"
- 	select BR2_PACKAGE_HAS_HOST_RUSTC
-@@ -40,6 +54,7 @@ config BR2_PACKAGE_HAS_HOST_RUSTC
- 
- config BR2_PACKAGE_PROVIDES_HOST_RUSTC
- 	string
-+	default "host-rust" if BR2_PACKAGE_HOST_RUST
- 	default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
- 
- endif
 -- 
-2.9.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
