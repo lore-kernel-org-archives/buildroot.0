@@ -1,48 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Jun 2017 00:03:38 +0200
-Subject: [Buildroot] [PATCH 2/5] core/pkg-generic: call MESSAGE when saving
-	package legal-info
+Date: Mon, 26 Jun 2017 00:03:37 +0200
+Subject: [Buildroot] [PATCH 1/5] support/check-package: don't check
+	filenames of hashes
 In-Reply-To: <cover.1498428166.git.yann.morin.1998@free.fr>
 References: <cover.1498428166.git.yann.morin.1998@free.fr>
-Message-ID: <606d7f78d9c7e1af1c1fd1b72ab489853d230f70.1498428166.git.yann.morin.1998@free.fr>
+Message-ID: <eafeec501266452fc7973871c7853bf6d016dfce.1498428166.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the per-package legal-info is mostly silent, but we're soon
-to add a check for the hashes of the license files.
+Currently, we check that the filenames in hash lists do not contain
+a slash '/' character, because all we are checking so far are the
+downloaded archives, and we explicitly need the filename to not contain
+a directory component at all.
 
-In that case, and when there is a hash mis-match, we want a user to know
-what package had a changed license file.
-
-So, we add a call to MESSAGE to display the package we're currently
-saving the legal-info of, like so:
-
-    >>> busybox 1.26.2 Collecting legal info
+However, we're soon to also check the hashes of the license files in
+packages sources, and those license files may be at any arbitrary
+directory-depth in the packages source tree, and thus two or more
+license files may have the same basename.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- package/pkg-generic.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ support/scripts/checkpackagelib/lib_hash.py | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f474704980..22330edc5b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -835,7 +835,9 @@ endif
- endif
+diff --git a/support/scripts/checkpackagelib/lib_hash.py b/support/scripts/checkpackagelib/lib_hash.py
+index c76abb43f1..e4beb0404f 100644
+--- a/support/scripts/checkpackagelib/lib_hash.py
++++ b/support/scripts/checkpackagelib/lib_hash.py
+@@ -17,22 +17,6 @@ def _empty_line_or_comment(text):
+     return text.strip() == "" or text.startswith("#")
  
- # legal-info: produce legally relevant info.
-+$(1)-legal-info: PKG=$(2)
- $(1)-legal-info:
-+	@$$(call MESSAGE,"Collecting legal info")
- # Packages without a source are assumed to be part of Buildroot, skip them.
- 	$$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
- ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 
+-class HashFilename(_CheckFunction):
+-    def check_line(self, lineno, text):
+-        if _empty_line_or_comment(text):
+-            return
+-
+-        fields = text.split()
+-        if len(fields) < 3:
+-            return
+-
+-        if '/' in fields[2]:
+-            return ["{}:{}: use filename without directory component"
+-                    " ({}#adding-packages-hash)"
+-                    .format(self.filename, lineno, self.url_to_manual),
+-                    text]
+-
+-
+ class HashNumberOfFields(_CheckFunction):
+     def check_line(self, lineno, text):
+         if _empty_line_or_comment(text):
 -- 
 2.11.0
