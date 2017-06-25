@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 00:34:20 +0200
+Date: Mon, 26 Jun 2017 00:35:32 +0200
 Subject: [Buildroot] [PATCH] gdb: fix build for MIPS musl
 In-Reply-To: <20170619141807.16084-1-Vincent.Riera@imgtec.com> (Vicente
  Olivert Riera's message of "Mon, 19 Jun 2017 15:18:07 +0100")
 References: <20170619141807.16084-1-Vincent.Riera@imgtec.com>
-Message-ID: <878tkfk87n.fsf@dell.be.48ers.dk>
+Message-ID: <874lv3k85n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Committed to 2017.05.x, thanks.
+Committed to 2017.02.x after dropping the 7.12.1 / 8.0 patches, thanks.
 
 -- 
 Bye, Peter Korsgaard
