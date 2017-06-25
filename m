@@ -1,42 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 00:20:49 +0200
-Subject: [Buildroot] [v2 1/3] scancpan: update with MetaCPAN API v1
-In-Reply-To: <CAB0FRsv2kHj0OowQ9CknKc-aB=5Y=jf9bUASabbhr7jg72vK7Q@mail.gmail.com>
- (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Sun, 18 Jun 2017
- 08:27:28 +0200")
-References: <20170614141531.18497-1-francois.perrad@gadz.org>
- <20170615223627.1a13fea9@windsurf.lan>
- <CAB0FRsv2kHj0OowQ9CknKc-aB=5Y=jf9bUASabbhr7jg72vK7Q@mail.gmail.com>
-Message-ID: <87y3sfk8u6.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 00:22:51 +0200
+Subject: [Buildroot] [PATCH] glmark2: Fix segmentation fault
+In-Reply-To: <1497393603-16151-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Tue, 13 Jun 2017 19:40:03 -0300")
+References: <1497393603-16151-1-git-send-email-festevam@gmail.com>
+Message-ID: <87tw33k8qs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > 2017-06-15 22:36 GMT+02:00 Thomas Petazzoni <
- > thomas.petazzoni at free-electrons.com>:
+ > Running glmark2 on imx6 with kernel 4.11.4 and Mesa 17.1.2 leads to
+ > a segmentation fault.
 
- >> Hello,
- >> 
- >> On Wed, 14 Jun 2017 16:15:29 +0200, Francois Perrad wrote:
- >> > The API v0 is shutdown.
- >> > see https://bugs.busybox.net/show_bug.cgi?id=9951
- >> >
- >> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- >> > ---
- >> >  support/scripts/scancpan | 4 ++--
- >> >  1 file changed, 2 insertions(+), 2 deletions(-)
- >> 
- >> Series applied. Thanks!
- >> 
+ > Apply Lucas Stach's patch to fix the problem while upstream glmark2
+ > doesn't get fixed.
 
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
- > must be committed also in maintenance branches.
-
-Committed to 2017.02.x and 2017.05.x, thanks.
+Committed to 2017.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
