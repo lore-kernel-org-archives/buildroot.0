@@ -1,124 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Jun 2017 19:15:58 +0200
-Subject: [Buildroot] [PATCH v2] toolchain-external: adjust logic for
- musl dynamic linker symlink
-In-Reply-To: <54333c1e-cebc-8d11-cdc5-d87b5fd8a268@mind.be>
-References: <20170624211435.19786-1-thomas.petazzoni@free-electrons.com>
- <54333c1e-cebc-8d11-cdc5-d87b5fd8a268@mind.be>
-Message-ID: <20170625171558.GE3673@scaer>
+Date: Sun, 25 Jun 2017 19:51:20 +0200
+Subject: [Buildroot] [PATCH 3/3] docs/manual: document hashes for
+ license files
+In-Reply-To: <53055153-3e6a-c7ae-0e39-3fcea6476669@lucaceresoli.net>
+References: <cover.1497772831.git.yann.morin.1998@free.fr>
+ <41013c99543173da1ec547219c7f67e52d323a40.1497772831.git.yann.morin.1998@free.fr>
+ <53055153-3e6a-c7ae-0e39-3fcea6476669@lucaceresoli.net>
+Message-ID: <20170625175120.GF3673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Luca, All,
 
-On 2017-06-24 23:49 +0200, Arnout Vandecappelle spake thusly:
-> On 24-06-17 23:14, Thomas Petazzoni wrote:
-> > This commit changes the strategy to know what symlink should be
-> > created for the musl dynamic linker. For now, we have in Buildroot the
-> > logic to decide what the symlink name should be. However, despite
-> > numerous fixes, there are still some cases that are missing, such as
-> > mips64el-n32, where the symlink is ld-musl-mipsn32el.so.1.
-> > 
-> > So, instead of trying to make Buildroot aware of all the possible
-> > names, simply get it from the external toolchain.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 2017-06-23 23:57 +0200, Luca Ceresoli spake thusly:
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Not from me, see below (the worst offender being the missing LC_ALL).
-
->  With some nits.
-> 
+> On 18/06/2017 10:01, Yann E. MORIN wrote:
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> > Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+> > Cc: Peter Korsgaard <peter@korsgaard.com>
 > > ---
-> > Changes since v1:
-> >  - As suggested by Yann E. Morin, build a sample program, and get its
-> >    program interpreter with readelf, in order to find the program
-> >    interpreter.
+> >  docs/manual/adding-packages-directory.txt | 16 ++++++++++++++--
+> >  1 file changed, 14 insertions(+), 2 deletions(-)
 > > 
-> > Note: I have tried to refactor this with the check_musl function in
-> > toolchain/helpers.mk, with the idea of introducing a function
-> > get_program_interpreter that would, given CC/READELF would return the
-> > program interpreter path. However, for the life of me, I couldn't get
-> > a make function invoking multiple shell commands to return a string.
+> > diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> > index 08f5d42f91..5007d5368d 100644
+> > --- a/docs/manual/adding-packages-directory.txt
+> > +++ b/docs/manual/adding-packages-directory.txt
+[--SNIP--]
+> > @@ -476,6 +479,11 @@ strong hash yourself (preferably +sha256+, but not +md5+), and mention
+> >  this in a comment line above the hashes.
+> >  
+> >  .Note
+> > +The hashes for license files are used to detect a license change when a
+> > +package version is bumped, so a (relatively) weak hash like +sha1+ is
+> > +enough for license files.
 > 
->  Huh?
+> I wouldn't spend words to say people can use a weak hash in this case.
+> What's the advantage if they use weak hashes? Not computational time,
+> hash files are usually small. Not ease of use: typing 'sha256sum' is not
+> more difficult than 'md5sum'.
 > 
-> get_program_interpreter = $(shell \
->  	echo 'void main(void) {}' | $(TOOLCHAIN_EXTERNAL_CC) -x c -o
-> $(BUILD_DIR)/.br-toolchain-test.tmp - >/dev/null 2>&1; \
->  	$(TOOLCHAIN_EXTERNAL_READELF) -l $(BUILD_DIR)/.br-toolchain-test.tmp 2>
-> /dev/null | sed -r -e '/.*Requesting program interpreter: (.+)\]$$/!d; s//\1/')
-> 
-> $(warning $(get_program_interpreter))
-> 
-> toolchain/helpers.mk:496: /lib/ld-musl-i386.so.1
+> So I'd just drop that note.
 
-Yup, works for me too...
-
-Although I prefer such long macros be defined rather than assigned.
-
-> > ---
-> >  toolchain/toolchain-external/pkg-toolchain-external.mk | 17 +++--------------
-> >  1 file changed, 3 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > index 8269345..938f73d 100644
-> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > @@ -476,21 +476,10 @@ endef
-> >  # of the dynamic library loader. We just need to create a symbolic
-> >  # link to libc.so with the appropriate name.
-> >  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-> > -ifeq ($(BR2_i386),y)
-> > -MUSL_ARCH = i386
-> > -else ifeq ($(BR2_ARM_EABIHF),y)
-> > -MUSL_ARCH = armhf
-> > -else ifeq ($(BR2_mips):$(BR2_SOFT_FLOAT),y:y)
-> > -MUSL_ARCH = mips-sf
-> > -else ifeq ($(BR2_mipsel):$(BR2_SOFT_FLOAT),y:y)
-> > -MUSL_ARCH = mipsel-sf
-> > -else ifeq ($(BR2_sh),y)
-> > -MUSL_ARCH = sh
-> > -else
-> > -MUSL_ARCH = $(ARCH)
-> > -endif
-> >  define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-> > -	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
-> > +	$(Q)echo 'void main(void) {}' | $(TOOLCHAIN_EXTERNAL_CC) -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - >/dev/null 2>&1; \
-> > +	PROGRAM_INTERPRETER=`$(TOOLCHAIN_EXTERNAL_READELF) -l $(BUILD_DIR)/.br-toolchain-test.tmp 2> /dev/null | sed -r -e '/.*Requesting program interpreter: (.+)\]$$/!d; s//\1/'` ; \
-> 
->  Perhaps split this ridiculously long line after the | ? Perhaps also split the
-> two sed expressions with two -e.
-> 
->  I personally prefer sed -n -e '/.../s//\1/p' but I don't care much.
-
-Also:
-  - force LC_ALL=C when calling readelf, to avoid any translation,
-  - remove the generated file.
+OK, done. Thanks! :-)
 
 Regards,
 Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> > +	ln -sf libc.so $(TARGET_DIR)/$${PROGRAM_INTERPRETER}
-> >  endef
-> >  endif
-> >  
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
