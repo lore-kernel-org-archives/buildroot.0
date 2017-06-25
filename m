@@ -1,40 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jun 2017 15:54:09 +0200
-Subject: [Buildroot] [git commit] uboot-tools: drop unreferenced empty
-	variable
-Message-ID: <20170625135319.E1F9681DFF@busybox.osuosl.org>
+Date: Sun, 25 Jun 2017 15:54:18 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: drop unreferenced empty
+ variable
+In-Reply-To: <b0f05bfb286331e3658cd6088159a5e8cf9b8a9d.1498395855.git.baruch@tkos.co.il>
+References: <b0f05bfb286331e3658cd6088159a5e8cf9b8a9d.1498395855.git.baruch@tkos.co.il>
+Message-ID: <20170625155418.29402b70@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0672f3f2133294b6248af0740bb7bb78f97bccf6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit log 0e0ea8cf5e2c57 (uboot-tools: install libubootenv to staging)
-mentions that installation is done in <pkg>_INSTALL_STAGING_CMDS directly, but
-forgot to remove the now empty UBOOT_TOOLS_INSTALL_LIBUBOOTENV.
+On Sun, 25 Jun 2017 16:04:15 +0300, Baruch Siach wrote:
+> Commit log 0e0ea8cf5e2c57 (uboot-tools: install libubootenv to staging)
+> mentions that installation is done in <pkg>_INSTALL_STAGING_CMDS directly, but
+> forgot to remove the now empty UBOOT_TOOLS_INSTALL_LIBUBOOTENV.
+> 
+> Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/uboot-tools/uboot-tools.mk | 3 ---
+>  1 file changed, 3 deletions(-)
 
-Cc: J??rg Krause <joerg.krause@embedded.rocks>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uboot-tools/uboot-tools.mk | 3 ---
- 1 file changed, 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f6b1fc3..831d444 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -68,9 +68,6 @@ define UBOOT_TOOLS_INSTALL_DUMPIMAGE
- endef
- endif
- 
--define UBOOT_TOOLS_INSTALL_LIBUBOOTENV
--endef
--
- define UBOOT_TOOLS_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/tools/env/lib.a $(STAGING_DIR)/usr/lib/libubootenv.a
- 	$(INSTALL) -D -m 0644 $(@D)/tools/env/fw_env.h $(STAGING_DIR)/usr/include/fw_env.h
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
