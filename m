@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 25 Jun 2017 21:26:15 +0200
-Subject: [Buildroot] [PATCH 3/9] s6-dns: bump version to 2.2.0.0
+Date: Sun, 25 Jun 2017 21:26:17 +0200
+Subject: [Buildroot] [PATCH 5/9] s6: bump version to 2.6.0.0
 In-Reply-To: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
 References: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170625192621.24188-4-eric.le.bihan.dev@free.fr>
+Message-ID: <20170625192621.24188-6-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/s6-dns/s6-dns.hash | 2 +-
- package/s6-dns/s6-dns.mk   | 2 +-
+ package/s6/s6.hash | 2 +-
+ package/s6/s6.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-dns/s6-dns.hash b/package/s6-dns/s6-dns.hash
-index 7cfb9c3..dd033be 100644
---- a/package/s6-dns/s6-dns.hash
-+++ b/package/s6-dns/s6-dns.hash
+diff --git a/package/s6/s6.hash b/package/s6/s6.hash
+index 36526de..1d35c4e 100644
+--- a/package/s6/s6.hash
++++ b/package/s6/s6.hash
 @@ -1,2 +1,2 @@
  # Locally generated
--sha256 8455f3b1edad8f01a1340cb1242c141755729bfd5d71059739eced5c006539ad s6-dns-2.1.0.0.tar.gz
-+sha256 06856745aa034a1655b7d8226a4b235579b098c58b6009d92151dedd41b15fc2 s6-dns-2.2.0.0.tar.gz
-diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
-index d77956f..b2d5dbc 100644
---- a/package/s6-dns/s6-dns.mk
-+++ b/package/s6-dns/s6-dns.mk
+-sha256 5e788d5935dbcce76ac9a99cfcf6ee46a2ffb84220c84225df7589e9a3585560 s6-2.4.0.0.tar.gz
++sha256 146dd54086063c6ffb6f554c3e92b8b12a24165fdfab24839de811f79dcf9a40  s6-2.6.0.0.tar.gz
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index de08f67..f0235da 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_DNS_VERSION = 2.1.0.0
-+S6_DNS_VERSION = 2.2.0.0
- S6_DNS_SITE = http://skarnet.org/software/s6-dns
- S6_DNS_LICENSE = ISC
- S6_DNS_LICENSE_FILES = COPYING
+-S6_VERSION = 2.4.0.0
++S6_VERSION = 2.6.0.0
+ S6_SITE = http://skarnet.org/software/s6
+ S6_LICENSE = ISC
+ S6_LICENSE_FILES = COPYING
 -- 
 2.9.4
