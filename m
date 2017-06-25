@@ -1,40 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Jun 2017 23:58:03 +0200
-Subject: [Buildroot] [PATCH 3/3] docs/manual: document hashes for
- license files
-In-Reply-To: <594c7ce55f5d1_3d94f10284367f8@ultri3.mail>
-References: <41013c99543173da1ec547219c7f67e52d323a40.1497772831.git.yann.morin.1998@free.fr>
- <594c7ce55f5d1_3d94f10284367f8@ultri3.mail>
-Message-ID: <20170625215803.GI3673@scaer>
+Date: Mon, 26 Jun 2017 00:03:35 +0200
+Subject: [Buildroot] [PATCH 0/5] core: check hashes of license files
+Message-ID: <cover.1498428166.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Hello All!
 
-On 2017-06-22 23:28 -0300, Ricardo Martincoski spake thusly:
-> On Sun, Jun 18, 2017 at 05:01 AM, Yann E. MORIN wrote:
-> > +# Hash for license files:
-> > +sha1  c47a888f2be626e1197b6f651dee966ef882077d  COPYING
-> > +sha1  e101765734390d664b59325b2d644d80d9a6bd9a  doc/COPYING.LGPL
-> 
-> This will need a small change in check-package to not generate false warnings
-> like this: "use filename without directory component".
-> See HashFilename in checkpackagelib/lib_hash.py
-> 
-> 'make package-dirclean package-source' already generates 'ERROR: No hash found'
-> if someone mistakenly adds a directory, for example dl/, to the name of the
-> tarball in the hash file, so we are safe to just remove the entire HashFilename
-> class.
+This small series is a proposal to check the hashes of the license files
+during legal-info, to catch the packages whose license changes but where
+the text of the new license is in the same file.
 
-Indeed, good catch!
+This was suggested by Rahul recently:
+    http://lists.busybox.net/pipermail/buildroot/2017-June/194425.html
 
-Will fix for the next iteration.
+Changes v1 -> v2:
+  - call MESSAGE to display current package name  (Luca)
+  - don't mention weak hashes  (Luca)
+  - fix support script check-package  (Ricardo)
+
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 0672f3f2133294b6248af0740bb7bb78f97bccf6
+
+  uboot-tools: drop unreferenced empty variable (2017-06-25 15:54:09 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 48ad498d1bf7e08c8120090942e711a1d2320c32
+
+  docs/manual: document hashes for license files (2017-06-25 23:56:31 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      support/check-package: don't check filenames of hashes
+      core/pkg-generic: call MESSAGE when saving package legal-info
+      core/pkg-util: pass package directory and name when saving license files
+      core/pkg-utils: check hashes of license files
+      docs/manual: document hashes for license files
+
+ Makefile                                    |  2 +-
+ docs/manual/adding-packages-directory.txt   | 15 +++++++++++++--
+ package/pkg-generic.mk                      |  4 +++-
+ package/pkg-utils.mk                        | 11 ++++++++---
+ support/scripts/checkpackagelib/lib_hash.py | 16 ----------------
+ 5 files changed, 25 insertions(+), 23 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
