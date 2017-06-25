@@ -1,47 +1,128 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 00:20:16 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] scancpan: update with
-	MetaCPAN API v1
-Message-ID: <20170625223454.C7B418189F@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 00:34:58 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] gdb: fix full gdb build
+	for MIPS musl
+Message-ID: <20170625223455.2BA058020E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2882d39a312eb92e0d851c414c432a66b49238f3
+commit: https://git.buildroot.net/buildroot/commit/?id=29e46157f70678f0a5b5c545e029beb54b4ef9ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The API v0 is shutdown.
-see https://bugs.busybox.net/show_bug.cgi?id=9951
+Currently building full gdb for MIPS musl fails because it's trying to
+include <sgidefs.h> which is provided by glibc and uClibc, but not by
+musl.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+However, the kernel headers provide <asm/sgidefs.h> which has the same
+definitions, so we can use that one instead.
+
+Backporting a patch that has been sent upstream. Taken from here:
+
+https://sourceware.org/bugzilla/show_bug.cgi?id=21070
+
+[Peter: drop 7.12.1 / 8.0 patches]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 8710996bb7d69bd4fbbf59cd3c186a428334c187)
+(cherry picked from commit 1874fe15224007308a7bf4e9765506a3b4bc1b27)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/scancpan | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch | 41 +++++++++++++++++++++++++
+ package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch | 40 ++++++++++++++++++++++++
+ 2 files changed, 81 insertions(+)
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index b6123de..32908f3 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -521,7 +521,7 @@ my %deps_runtime;       # name -> list of target dependencies
- my %deps_optional;      # name -> list of optional target dependencies
- my %license_files;      # name -> list of license files
- my %checksum;           # author -> list of checksum
--my $mcpan = MetaCPAN::API::Tiny->new();
-+my $mcpan = MetaCPAN::API::Tiny->new(base_url => 'http://fastapi.metacpan.org/v1');
- my $ua = HTTP::Tiny->new();
- 
- sub get_checksum {
-@@ -538,7 +538,7 @@ sub get_checksum {
- 
- sub get_manifest {
-     my ($author, $distname, $version) = @_;
--    my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
-+    my $url = qq{http://fastapi.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
-     my $response = $ua->get($url);
-     return $response->{content};
- }
+diff --git a/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch b/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+new file mode 100644
+index 0000000..fdc5679
+--- /dev/null
++++ b/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+@@ -0,0 +1,41 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from https://sourceware.org/bugzilla/show_bug.cgi?id=21070
++Patch has been adapted to apply on 7.10.1.]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index 9f6d697..8f57bb2 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include <sys/ptrace.h>
++ #include <asm/ptrace.h>
++
++-- 
++2.13.1
++ 
+diff --git a/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch b/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
+new file mode 100644
+index 0000000..d303369
+--- /dev/null
++++ b/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
+@@ -0,0 +1,40 @@
++From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
++From: Andre McCurdy <amccurdy@gmail.com>
++Date: Sat, 30 Apr 2016 15:29:06 -0700
++Subject: [PATCH] use <asm/sgidefs.h>
++
++Build fix for MIPS with musl libc
++
++The MIPS specific header <sgidefs.h> is provided by glibc and uclibc
++but not by musl. Regardless of the libc, the kernel headers provide
++<asm/sgidefs.h> which provides the same definitions, so use that
++instead.
++
++Upstream-Status: Pending
++
++[Vincent:
++Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
++
++Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ gdb/mips-linux-nat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
++index f2df1b9907..d24664cb56 100644
++--- a/gdb/mips-linux-nat.c
+++++ b/gdb/mips-linux-nat.c
++@@ -31,7 +31,7 @@
++ #include "gdb_proc_service.h"
++ #include "gregset.h"
++ 
++-#include <sgidefs.h>
+++#include <asm/sgidefs.h>
++ #include "nat/gdb_ptrace.h"
++ #include <asm/ptrace.h>
++ #include "inf-ptrace.h"
++-- 
++2.13.1
++
