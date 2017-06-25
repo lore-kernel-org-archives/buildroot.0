@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 00:30:01 +0200
-Subject: [Buildroot] [PATCH v3 1/1] fcgiwrap: Disable -Werror in CFLAGS
-	set by configure.
-In-Reply-To: <20170619162605.30831-2-thomas.claveirole@green-communications.fr>
- (Thomas Claveirole's message of "Mon, 19 Jun 2017 18:26:05 +0200")
-References: <20170619162605.30831-1-thomas.claveirole@green-communications.fr>
- <20170619174032.4f597cb2@windsurf.lan>
- <20170619162605.30831-2-thomas.claveirole@green-communications.fr>
-Message-ID: <87d19rk8eu.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 00:34:20 +0200
+Subject: [Buildroot] [PATCH] gdb: fix build for MIPS musl
+In-Reply-To: <20170619141807.16084-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 19 Jun 2017 15:18:07 +0100")
+References: <20170619141807.16084-1-Vincent.Riera@imgtec.com>
+Message-ID: <878tkfk87n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Claveirole <thomas.claveirole@green-communications.fr> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Thus, fix
- > http://autobuild.buildroot.net/results/8e0/8e04bf5a85ecd7f120bc9dedeedc891def6c46c1/
+ > Currently building gdb for MIPS musl fails because it's trying to
+ > include <sgidefs.h> which is provided by glibc and uClibc, but not by
+ > musl.
 
- > fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
- > to build the package.  This is an issue when Buildroot supports a new
- > compiler version and this version makes some warnings appear.
- > Luckily, one can provide CFLAGS=-Wno-error to the configure script so
- > it appends -Wno-error to AM_CFLAGS.
+ > However, the kernel headers provide <asm/sgidefs.h> which has the same
+ > definitions, so we can use that one instead.
 
- > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ > Backporting a patch that has been sent upstream. Taken from here:
 
-Committed to 2017.02.x and 2017.05.x, thanks.
+ > https://sourceware.org/bugzilla/show_bug.cgi?id=21070
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed to 2017.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
