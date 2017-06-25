@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 00:29:35 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] fcgiwrap: disable -Werror
-	in CFLAGS
-Message-ID: <20170625223455.0E6E68189F@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 00:20:16 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] scancpan: update with
+	MetaCPAN API v1
+Message-ID: <20170625223454.C7B418189F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac1bb15f779fb3e797c646282a3f7c53d5ac7e1b
+commit: https://git.buildroot.net/buildroot/commit/?id=2882d39a312eb92e0d851c414c432a66b49238f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
-to build the package.  This is an issue when Buildroot supports a new
-compiler version and this version makes some warnings appear.
-Luckily, one can provide CFLAGS=-Wno-error to the configure script so
-it appends -Wno-error to AM_CFLAGS.
+The API v0 is shutdown.
+see https://bugs.busybox.net/show_bug.cgi?id=9951
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/8e04bf5a85ecd7f120bc9dedeedc891def6c46c1/
-
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6a20a98f4b5e576b7c3dc844951b0153963b739a)
+(cherry picked from commit 8710996bb7d69bd4fbbf59cd3c186a428334c187)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fcgiwrap/fcgiwrap.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/scancpan | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
-index dd74c1e..62c4c13 100644
---- a/package/fcgiwrap/fcgiwrap.mk
-+++ b/package/fcgiwrap/fcgiwrap.mk
-@@ -10,6 +10,7 @@ FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
- FCGIWRAP_LICENSE = MIT
- FCGIWRAP_LICENSE_FILES = COPYING
- FCGIWRAP_AUTORECONF = YES
-+FCGIWRAP_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index b6123de..32908f3 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -521,7 +521,7 @@ my %deps_runtime;       # name -> list of target dependencies
+ my %deps_optional;      # name -> list of optional target dependencies
+ my %license_files;      # name -> list of license files
+ my %checksum;           # author -> list of checksum
+-my $mcpan = MetaCPAN::API::Tiny->new();
++my $mcpan = MetaCPAN::API::Tiny->new(base_url => 'http://fastapi.metacpan.org/v1');
+ my $ua = HTTP::Tiny->new();
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- FCGIWRAP_DEPENDENCIES += systemd
+ sub get_checksum {
+@@ -538,7 +538,7 @@ sub get_checksum {
+ 
+ sub get_manifest {
+     my ($author, $distname, $version) = @_;
+-    my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
++    my $url = qq{http://fastapi.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
+     my $response = $ua->get($url);
+     return $response->{content};
+ }
