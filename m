@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 25 Jun 2017 21:26:18 +0200
-Subject: [Buildroot] [PATCH 6/9] s6-rc: bump version to 0.2.0.1
+Date: Sun, 25 Jun 2017 21:26:19 +0200
+Subject: [Buildroot] [PATCH 7/9] s6-linux-utils: bump version to 2.4.0.0
 In-Reply-To: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
 References: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170625192621.24188-7-eric.le.bihan.dev@free.fr>
+Message-ID: <20170625192621.24188-8-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/s6-rc/s6-rc.hash | 2 +-
- package/s6-rc/s6-rc.mk   | 2 +-
+ package/s6-linux-utils/s6-linux-utils.hash | 2 +-
+ package/s6-linux-utils/s6-linux-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index 3d5186c..c2def67 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
+diff --git a/package/s6-linux-utils/s6-linux-utils.hash b/package/s6-linux-utils/s6-linux-utils.hash
+index 600c5fc..66feb9d 100644
+--- a/package/s6-linux-utils/s6-linux-utils.hash
++++ b/package/s6-linux-utils/s6-linux-utils.hash
 @@ -1,2 +1,2 @@
  # Locally generated
--sha256 d04a8a765740ed55e38a33da3639197f51f83b3e498bdef5bc1d1d322b1acff3 s6-rc-0.1.0.0.tar.gz
-+sha256 8b01d5b4c2380c6b30d320118b9a9b9ca174a25ed3c75afe8f59a4e840847a76  s6-rc-0.2.0.1.tar.gz
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 1c28dcb..16089dc 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
+-sha256 587745abfbf2cc631bb54dd2b3fd29f39b723e3c50e28165138a85c98fda35f9 s6-linux-utils-2.2.0.0.tar.gz
++sha256 3afb7b972a9d54042ac0aabde5489be90039374b6a90ef45f7f32ce2e83d1e63  s6-linux-utils-2.4.0.0.tar.gz
+diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
+index 04ce688..7d346d6 100644
+--- a/package/s6-linux-utils/s6-linux-utils.mk
++++ b/package/s6-linux-utils/s6-linux-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_RC_VERSION = 0.1.0.0
-+S6_RC_VERSION = 0.2.0.1
- S6_RC_SITE = http://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+-S6_LINUX_UTILS_VERSION = 2.2.0.0
++S6_LINUX_UTILS_VERSION = 2.4.0.0
+ S6_LINUX_UTILS_SITE = http://skarnet.org/software/s6-linux-utils
+ S6_LINUX_UTILS_LICENSE = ISC
+ S6_LINUX_UTILS_LICENSE_FILES = COPYING
 -- 
 2.9.4
