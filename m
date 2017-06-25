@@ -1,136 +1,45 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 25 Jun 2017 23:49:16 +0200
-Subject: [Buildroot] [PATCH 2/3] core/pkg-utils: check hashes of license
- files
-In-Reply-To: <20170625180951.GG3673@scaer>
-References: <cover.1497772831.git.yann.morin.1998@free.fr>
- <83d3e74a28e9d619d19dd2201dd4fbf9bebed743.1497772831.git.yann.morin.1998@free.fr>
- <9cd75b50-7c0e-3adf-7573-d215ae5799e1@lucaceresoli.net>
- <20170625180951.GG3673@scaer>
-Message-ID: <5a2903b9-d61a-46df-7511-578ad5d1f772@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Jun 2017 23:58:03 +0200
+Subject: [Buildroot] [PATCH 3/3] docs/manual: document hashes for
+ license files
+In-Reply-To: <594c7ce55f5d1_3d94f10284367f8@ultri3.mail>
+References: <41013c99543173da1ec547219c7f67e52d323a40.1497772831.git.yann.morin.1998@free.fr>
+ <594c7ce55f5d1_3d94f10284367f8@ultri3.mail>
+Message-ID: <20170625215803.GI3673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Ricardo, All,
 
-On 25/06/2017 20:09, Yann E. MORIN wrote:
-> Luca, All,
+On 2017-06-22 23:28 -0300, Ricardo Martincoski spake thusly:
+> On Sun, Jun 18, 2017 at 05:01 AM, Yann E. MORIN wrote:
+> > +# Hash for license files:
+> > +sha1  c47a888f2be626e1197b6f651dee966ef882077d  COPYING
+> > +sha1  e101765734390d664b59325b2d644d80d9a6bd9a  doc/COPYING.LGPL
 > 
-> On 2017-06-23 23:49 +0200, Luca Ceresoli spake thusly:
->> On 18/06/2017 10:01, Yann E. MORIN wrote:
->>> This will help catch a change of license even if the filename does
->>> not change.
->>>
->>> For now, a missing hash for the license files is not a fatal error, to
->>> let people catch up and add them. When we switch to make it mandatory,
->>> we can simplify the code by just removing the case statement.
->>>
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->>> Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
->>> Cc: Peter Korsgaard <peter@korsgaard.com>
->>> ---
->>>  package/pkg-utils.mk | 5 +++++
->>>  1 file changed, 5 insertions(+)
->>>
->>> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->>> index e9ac56276f..accf48c464 100644
->>> --- a/package/pkg-utils.mk
->>> +++ b/package/pkg-utils.mk
->>> @@ -85,5 +85,10 @@ endef
->>>  
->>>  define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
->>>  	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
->>> +	{ \
->>> +		support/download/check-hash $(3)/$(1).hash $(5) $(4); \
->>> +		ret=$${?}; \
->>> +		case $${ret} in (0|3) ;; (*) exit 1;; esac; \
->>> +	} && \
->>
->> I generally agree with the idea, even more since the implementation is
->> really a few-liner. But I have a few remarks.
->>
->> The first is one of personal coding style taste. I don't like very much
->> the weird check for values 0 and 3. It does not make any sense unless
->> one opens check-hash and read the possible return values, which look a
->> bit like a randomly-ordered enum.
+> This will need a small change in check-package to not generate false warnings
+> like this: "use filename without directory component".
+> See HashFilename in checkpackagelib/lib_hash.py
 > 
-> Meh... It was not randomly ordered. At least, I tried to copme up with a
-> meaningful ordering, where the higher the error code, the more critical
-> the error...
+> 'make package-dirclean package-source' already generates 'ERROR: No hash found'
+> if someone mistakenly adds a directory, for example dl/, to the name of the
+> tarball in the hash file, so we are safe to just remove the entire HashFilename
+> class.
 
-Apologies, I hadn't read the error codes very carefully to get the logic
-behind their order. I did it now, and I think giving them a meaningful
-order is non trivial anyway.
+Indeed, good catch!
 
->> I'd rather prefer if we could call check-hash with a command line flag
->> to ask that missing hashes generate a warning and return 0 instead of
->> the default behavior. This would mean check-hash always returns 0 for
->> "go" and non-zero for "abort".
+Will fix for the next iteration.
 
-Still my main point is unchanged: I prefer that we use the return value
-as a go/nogo boolean, and add flags to change what is considered a nogo
-condition. Take as an example the '-i' flag to grep: it changes the
-matching logic to also accept matches of different case; it does not
-return a special return value for matches-with-different-case, that
-would be annoying for users to check.
-
-But as an afterthought, if the plan is to consider return value 3 as an
-error at some point in the foreseeable future, then this line is
-temporary as you stated in the patch comment and I think I can tolerate
-it. :)
-
->> The second remark is about the output of 'make legal-info'. With this
->> patch the output is:
->>
->> $ make legal-info
->>>>>   Collecting legal info
->> WARNING: no hash file for COPYING
->> WARNING: no hash file for COPYING
->> WARNING: no hash file for COPYING3
->> WARNING: no hash file for COPYING.LIB
->> WARNING: no hash file for COPYING.LESSERv3
->> WARNING: no hash file for COPYINGv2
->> ...
->>
->> There's no mention of the package involved, which doesn't help
->> in fixing it. It should print the package name, e.g.:
->>
->> $ make legal-info
->>>>>   Collecting legal info
->> WARNING: binutils: no hash file for COPYING
->> WARNING: mpc:      no hash file for COPYING
->> ...
->>
->> To achieve this I guess we'll need to pass the package name to
->> check-hash. It doesn't hurt if we add the package name unconditionally,
->> even to currently existing messages where it is not needed.
-> 
-> Or just change legal-info to call MESSAGE, like so:
-> 
->    838 $(1)-legal-info: PKG=$(2)
->    839 $(1)-legal-info:
->    840 ?   @$$(call MESSAGE,"Collecting legal info")
-> 
-> Which provides an output like:
-> 
->     >>> busybox 1.26.2 Collecting legal info
->     ERROR: No hash found for LICENSE
-> 
-> Would that be OK for you?
-
-Sure, good idea.
-
-> Note however that running legal-info from within a clean (configured but
-> not built) tree yields a lot of output, because the packages are
-> extrated and patched, and the warnings during legal-info are lost across
-> the whole mess and difficult to catch.
-
-I don't think we can do much about this. They won't be lost anymore when
-these warnings will become errors.
+Regards,
+Yann E. MORIN.
 
 -- 
-Luca
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
