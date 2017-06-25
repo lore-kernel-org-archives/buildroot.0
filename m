@@ -1,21 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 00:28:16 +0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{1, 4, 9,
-	11}.x series
-In-Reply-To: <1497707264-9358-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Sat, 17 Jun 2017 10:47:44 -0300")
-References: <1497707264-9358-1-git-send-email-festevam@gmail.com>
- <1497707264-9358-2-git-send-email-festevam@gmail.com>
-Message-ID: <87h8z3k8hr.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 00:30:01 +0200
+Subject: [Buildroot] [PATCH v3 1/1] fcgiwrap: Disable -Werror in CFLAGS
+	set by configure.
+In-Reply-To: <20170619162605.30831-2-thomas.claveirole@green-communications.fr>
+ (Thomas Claveirole's message of "Mon, 19 Jun 2017 18:26:05 +0200")
+References: <20170619162605.30831-1-thomas.claveirole@green-communications.fr>
+ <20170619174032.4f597cb2@windsurf.lan>
+ <20170619162605.30831-2-thomas.claveirole@green-communications.fr>
+Message-ID: <87d19rk8eu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Thomas" == Thomas Claveirole <thomas.claveirole@green-communications.fr> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Thus, fix
+ > http://autobuild.buildroot.net/results/8e0/8e04bf5a85ecd7f120bc9dedeedc891def6c46c1/
+
+ > fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
+ > to build the package.  This is an issue when Buildroot supports a new
+ > compiler version and this version makes some warnings appear.
+ > Luckily, one can provide CFLAGS=-Wno-error to the configure script so
+ > it appends -Wno-error to AM_CFLAGS.
+
+ > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
