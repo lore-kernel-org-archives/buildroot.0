@@ -1,68 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Jun 2017 00:03:39 +0200
-Subject: [Buildroot] [PATCH 3/5] core/pkg-util: pass package directory and
-	name when saving license files
+Date: Mon, 26 Jun 2017 00:03:41 +0200
+Subject: [Buildroot] [PATCH 5/5] docs/manual: document hashes for license
+	files
 In-Reply-To: <cover.1498428166.git.yann.morin.1998@free.fr>
 References: <cover.1498428166.git.yann.morin.1998@free.fr>
-Message-ID: <bb071b1f0de2d95a115d4027b61c085f2d4257d9.1498428166.git.yann.morin.1998@free.fr>
+Message-ID: <48ad498d1bf7e08c8120090942e711a1d2320c32.1498428166.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will be usefull when checking the hashes of the license files.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
----
- Makefile               | 2 +-
- package/pkg-generic.mk | 2 +-
- package/pkg-utils.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-diff --git a/Makefile b/Makefile
-index 88d98e0405..1c272d009c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -740,7 +740,7 @@ legal-info-clean:
- .PHONY: legal-info-prepare
- legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call MESSAGE,"Collecting legal info")
--	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
-+	@$(call legal-license-file,buildroot,buildroot,,COPYING,COPYING,HOST)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
- 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 22330edc5b..2916a7bbad 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -851,7 +851,7 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAW_BASE_NAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_NAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
+---
+Changes v1 -> v2:
+  - don't mention that a weak hash is OK  (Luca)
+---
+ docs/manual/adding-packages-directory.txt | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 08f5d42f91..b75b91a28c 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -443,7 +443,7 @@ Optionally, you can add a third file, named +libfoo.hash+, that contains
+ the hashes of the downloaded files for the +libfoo+ package.
  
- ifeq ($$($(2)_SITE_METHOD),local)
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index c95e77953b..e9ac56276f 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -83,7 +83,7 @@ define legal-manifest # pkg, version, license, license-files, source, url, {HOST
- 	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
- endef
+ The hashes stored in that file are used to validate the integrity of the
+-downloaded files.
++downloaded files and of the license files.
  
--define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
--	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
--	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
-+define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
-+	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
-+	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
- endef
+ The format of this file is one line for each file for which to check the
+ hash, each line being space-separated, with these three fields:
+@@ -458,7 +458,10 @@ hash, each line being space-separated, with these three fields:
+ ** for +sha256+, 64 hexadecimal characters
+ ** for +sha384+, 96 hexadecimal characters
+ ** for +sha512+, 128 hexadecimal characters
+-* the name of the file, without any directory component
++* the name of the file:
++** for a source archive: the basename of the file, without any directory
++   component,
++** for a license file: the path as it appears in +FOO_LICENSE_FILES+.
+ 
+ Lines starting with a +#+ sign are considered comments, and ignored. Empty
+ lines are ignored.
+@@ -476,6 +479,10 @@ strong hash yourself (preferably +sha256+, but not +md5+), and mention
+ this in a comment line above the hashes.
+ 
+ .Note
++The hashes for license files are used to detect a license change when a
++package version is bumped.
++
++.Note
+ The number of spaces does not matter, so one can use spaces (or tabs) to
+ properly align the different fields.
+ 
+@@ -501,6 +508,10 @@ sha256 ff52101fb90bbfc3fe9475e425688c660f46216d7e751c4bbdb1dc85cdccacb9 libfoo-f
+ 
+ # No hash for 1234:
+ none   xxx                                                              libfoo-1234.tar.gz
++
++# Hash for license files:
++sha1  c47a888f2be626e1197b6f651dee966ef882077d  COPYING
++sha1  e101765734390d664b59325b2d644d80d9a6bd9a  doc/COPYING.LGPL
+ ----
+ 
+ If the +.hash+ file is present, and it contains one or more hashes for a
 -- 
 2.11.0
