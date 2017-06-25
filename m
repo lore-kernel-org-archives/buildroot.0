@@ -1,131 +1,105 @@
-From: Vincent Stehle <vincent.stehle@laposte.net>
-Date: Sun, 25 Jun 2017 21:37:43 +0200
-Subject: [Buildroot] [PATCH] uftrace: new package
-Message-ID: <20170625193743.8424-1-vincent.stehle@laposte.net>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 25 Jun 2017 22:56:07 +0200
+Subject: [Buildroot] [Patch v6 0/7] Add support for the Rust programming
+	language
+Message-ID: <20170625205614.6723-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vincent Stehl? <vincent.stehle@laposte.net>
+This series adds support for the Rust programming language by adding the
+following packages:
 
-Add a package for uftrace, a simple function call tracer for user programs.
+ - rustc: a virtual package for the Rust compiler.
+ - rust-bin: provides a pre-built version of rustc.
+ - rust: builds rustc from source.
 
-The x86_64 and arm/aarch64 architectures are supported.
+Both providers are able to cross-compile code for ARM, MIPS, PowerPC and
+x86_64 architectures. Only the host variants are provided.
 
-Tracing necessitates that the executable you want to trace be compiled with
--pg or -finstrument-functions option.
+The rustc virtual package is inspired by the mysql one.
 
-See https://github.com/namhyung/uftrace
+As the Rust compiler is written in Rust and uses Cargo, the Rust package
+manager, as build system, two additional packages are provided: rust-bootstrap
+and cargo-bootstrap.
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
----
- DEVELOPERS                   |  3 ++-
- package/Config.in            |  1 +
- package/uftrace/Config.in    | 20 ++++++++++++++++++++
- package/uftrace/uftrace.hash |  2 ++
- package/uftrace/uftrace.mk   | 28 ++++++++++++++++++++++++++++
- 5 files changed, 53 insertions(+), 1 deletion(-)
- create mode 100644 package/uftrace/Config.in
- create mode 100644 package/uftrace/uftrace.hash
- create mode 100644 package/uftrace/uftrace.mk
+v5 -> v6:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e421f4b4..5f2a6b0db 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1706,9 +1706,10 @@ F:	package/openmpi/
- F:	package/pinentry/
- F:	package/trinity/
- 
--N:	Vincent Stehl? <vincent.stehle@intel.com>
-+N:	Vincent Stehl? <vincent.stehle@laposte.net>
- F:	package/i7z/
- F:	package/msr-tools/
-+F:	package/uftrace/
- 
- N:	Vinicius Tinti <viniciustinti@gmail.com>
- F:	package/python-thrift/
-diff --git a/package/Config.in b/package/Config.in
-index f69f67f3e..d9639b040 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -121,6 +121,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/trace-cmd/Config.in"
- 	source "package/trinity/Config.in"
- 	source "package/uclibc-ng-test/Config.in"
-+	source "package/uftrace/Config.in"
- 	source "package/valgrind/Config.in"
- 	source "package/whetstone/Config.in"
- endmenu
-diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-new file mode 100644
-index 000000000..bb766238c
---- /dev/null
-+++ b/package/uftrace/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_UFTRACE
-+	bool "uftrace"
-+	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
-+	depends on !(BR2_arm &&?BR2_ARM_SOFT_FLOAT)
-+	depends on BR2_PACKAGE_ELFUTILS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  A simple function call tracer for user programs.
-+
-+	  Note that the executable you want to trace should be compiled
-+	  with -pg or -finstrument-functions option.
-+
-+	  https://github.com/namhyung/uftrace
-+
-+comment "uftrace needs a glibc toolchain and elfutils"
-+	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
-+	depends on !BR2_PACKAGE_ELFUTILS || !BR2_TOOLCHAIN_USES_GLIBC
-+
-+comment "uftrace needs a toolchain with hardware floats on ARM"
-+	depends on BR2_arm &&?BR2_ARM_SOFT_FLOAT
-diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
-new file mode 100644
-index 000000000..8509197cc
---- /dev/null
-+++ b/package/uftrace/uftrace.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 afa698053ef10582c2ed3973ea134c0775d7ff4dcece3034905026185c52b272 uftrace-v0.7.tar.gz
-diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
-new file mode 100644
-index 000000000..e23f01816
---- /dev/null
-+++ b/package/uftrace/uftrace.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# uftrace
-+#
-+################################################################################
-+
-+UFTRACE_VERSION = v0.7
-+UFTRACE_SITE = $(call github,namhyung,uftrace,$(UFTRACE_VERSION))
-+UFTRACE_DEPENDENCIES = elfutils
-+UFTRACE_LICENSE = GPL-2.0
-+UFTRACE_LICENSE_FILES = COPYING
-+
-+define UFTRACE_CONFIGURE_CMDS
-+	cd $(@D) && \
-+	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LD="$(TARGET_LD)" ARCH="$(ARCH)" \
-+	./configure --prefix=/usr
-+endef
-+
-+define UFTRACE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define UFTRACE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)"
-+endef
-+
-+$(eval $(generic-package))
+ - bump rust to 1.18.0
+ - bump rust-bootstrap to 1.17.0
+ - bump rust-bin to 1.18.0
+
+v4 -> v5:
+
+ - add rustc virtual package
+ - add rust-bin, provider for rustc
+ - rework rust to be a provider for rustc
+ - rework some commit messages
+
+v3 -> v4:
+
+ - bump rust to 1.16.0
+ - bump rust-bootstrap to 1.15.1
+ - add cargo-bootstrap
+ - use built-in target specifications
+ - drop external Python script to generate target specifications
+ - enable support for PowerPC
+ - expose host variant in menuconfig
+
+v2 -> v3:
+
+ - bump rust to 1.10.0
+ - rework and bump rust-bootstrap to 1.9.0
+ - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
+ - rust requires a glibc-based cross-compiler
+ - rust requires GCC 5.x or above for Aarch64
+
+v1 -> v2:
+
+ - bump rust to version 1.9.0.
+ - drop patch for bzip2 support in host-python.
+ - add package for jemalloc.
+ - add dependency on host being a x86 machine.
+ - add dependency on toolchain.
+ - use dedicated package to provide bootstrapping binary: rust-bootstrap.
+ - let ./configure find out host/build on its own.
+ - remove entry from configuration menu.
+ - clarify some comments.
+Eric Le Bihan (7):
+  pkg-virtual: fix host dependencies handling
+  rustc: new virtual package
+  rust-bin: new package
+  rustc: expose host variant in menuconfig
+  rust-bootstrap: new package
+  cargo-bootstrap: new package
+  rust: new package
+
+ DEVELOPERS                                   |  4 ++
+ package/Config.in.host                       |  1 +
+ package/cargo-bootstrap/cargo-bootstrap.hash |  3 ++
+ package/cargo-bootstrap/cargo-bootstrap.mk   | 14 +++++
+ package/pkg-virtual.mk                       |  4 ++
+ package/rust-bin/rust-bin.hash               | 30 +++++++++++
+ package/rust-bin/rust-bin.mk                 | 41 +++++++++++++++
+ package/rust-bootstrap/rust-bootstrap.hash   |  8 +++
+ package/rust-bootstrap/rust-bootstrap.mk     | 27 ++++++++++
+ package/rust/rust.hash                       |  2 +
+ package/rust/rust.mk                         | 77 ++++++++++++++++++++++++++++
+ package/rustc/Config.in.host                 | 61 ++++++++++++++++++++++
+ package/rustc/rustc.mk                       | 21 ++++++++
+ 13 files changed, 293 insertions(+)
+ create mode 100644 package/cargo-bootstrap/cargo-bootstrap.hash
+ create mode 100644 package/cargo-bootstrap/cargo-bootstrap.mk
+ create mode 100644 package/rust-bin/rust-bin.hash
+ create mode 100644 package/rust-bin/rust-bin.mk
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.hash
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.mk
+ create mode 100644 package/rust/rust.hash
+ create mode 100644 package/rust/rust.mk
+ create mode 100644 package/rustc/Config.in.host
+ create mode 100644 package/rustc/rustc.mk
+
 -- 
-2.11.0
+2.9.4
