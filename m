@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 00:25:36 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux: bump default
-	version to 4.11.6
-Message-ID: <20170625223515.8470A81E98@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 00:29:41 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] fcgiwrap: disable -Werror
+	in CFLAGS
+Message-ID: <20170625223515.B82B481842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4c7b61a7a62f4402c0e0d10a30d96e1c0cd9429
+commit: https://git.buildroot.net/buildroot/commit/?id=9024e559b82cbdfefc6984a2313b14cce8fa1989
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+fcgiwrap's configure script appends -Werror to AM_CFLAGS, then use it
+to build the package.  This is an issue when Buildroot supports a new
+compiler version and this version makes some warnings appear.
+Luckily, one can provide CFLAGS=-Wno-error to the configure script so
+it appends -Wno-error to AM_CFLAGS.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/8e04bf5a85ecd7f120bc9dedeedc891def6c46c1/
+
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit bc725289f0bbdadedc4ac7cd3e7d594ba56f842b)
+(cherry picked from commit 6a20a98f4b5e576b7c3dc844951b0153963b739a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/fcgiwrap/fcgiwrap.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f770d85..4add3e0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
+index dd74c1e..62c4c13 100644
+--- a/package/fcgiwrap/fcgiwrap.mk
++++ b/package/fcgiwrap/fcgiwrap.mk
+@@ -10,6 +10,7 @@ FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
+ FCGIWRAP_LICENSE = MIT
+ FCGIWRAP_LICENSE_FILES = COPYING
+ FCGIWRAP_AUTORECONF = YES
++FCGIWRAP_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.11.5)"
-+	bool "Latest version (4.11.6)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.55-cip3)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.11.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.11.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.55-cip3" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ FCGIWRAP_DEPENDENCIES += systemd
