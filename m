@@ -1,40 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 22:24:15 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dhcp: dhcp server: select
-	systemd tmpfile support when systemd is used
-In-Reply-To: <20170624232810.2728f3ab@windsurf.home> (Thomas Petazzoni's
- message of "Sat, 24 Jun 2017 23:28:10 +0200")
-References: <20170526221348.19078-1-romain.naour@gmail.com>
- <20170526221348.19078-2-romain.naour@gmail.com>
- <20170624232810.2728f3ab@windsurf.home>
-Message-ID: <87tw32fqfk.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 22:19:11 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump
+	3.18.x version to 3.18.58
+Message-ID: <20170626202409.6F26F7F93B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7619166e755c71fec9f48a212db9d4be51a920ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Hello,
- > On Sat, 27 May 2017 00:13:48 +0200, Romain Naour wrote:
- >> tmpfile support is optional in systemd but the dhcp server install it's
- >> config file in $(TARGET_DIR)/usr/lib/tmpfiles.d directory when systemd
- >> is used as init system.
- >> 
- >> So it seems that dhcp server require tmpfile support for systemd based
- >> system.
- >> 
- >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
- >> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- >> ---
- >> package/dhcp/Config.in | 1 +
- >> 1 file changed, 1 insertion(+)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > I'm not a big expert in systemd stuff, but nobody else complained for
- > almost a month, so I've applied your patch. Thanks!
-
-Committed to 2017.02.x and 2017.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 40e8587..11100a8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -218,7 +218,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.18.57"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.58"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.41"	if BR2_KERNEL_HEADERS_4_1
