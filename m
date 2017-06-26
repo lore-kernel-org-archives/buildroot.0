@@ -1,102 +1,41 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 26 Jun 2017 09:15:22 -0400
-Subject: [Buildroot] [PATCH v2 1/4] libressl: new package
-In-Reply-To: <05c9f4ef-b164-94f5-7f64-dc58a8a07497@mind.be>
-References: <20170624172900.3610-1-Adamduskett@outlook.com>
- <05c9f4ef-b164-94f5-7f64-dc58a8a07497@mind.be>
-Message-ID: <CAFSsvmpbSrDYjRBxboYqQD9p0LLVAPiHw-YpV782KLZqMY8q3Q@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 26 Jun 2017 15:21:41 +0200
+Subject: [Buildroot] [PATCH 0/4] sigrok: version bumps
+Message-ID: <1498483305-17826-1-git-send-email-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 25, 2017 at 6:46 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Since patches 1 and 2 need to be swapped anyway I'll give a few minor comments
-> as well.
->
-> On 24-06-17 19:28, Adam Duskett wrote:
->> Libressl is a fork of openssl from OpenSSL in 2014.  Its goal is to
->> modernize the OpenSSL codebase, improve security, and apply best
->> practice development processes.
->>
->> Right now, libressl is API compatible with OpenSSL 1.0.1, but does not
->> yet include all new APIs from OpenSSL 1.0.2 and later.
->>
->> This package has been tested with the following architectures and c
->> libraries:
->>
->> - armv4
->> - aarch64
->> - ppc
->> - ppc64
->> - ppc64le
->> - x86_64
->> - uClibc-ng
->> - glibc 2.24
->> - musl
->
->  It's good to report this, but I don't think it makes much sense in the history
-> since it will be outdated very quickly. So for me it should be put below the ---
-> line.
->
-Can do.
->>
->> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> [snip]
->> diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
->> new file mode 100644
->> index 0000000..9ffe964
->> --- /dev/null
->> +++ b/package/libressl/libressl.hash
->> @@ -0,0 +1,2 @@
->> +# From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
->> +sha256       107a5b522fbb8318d4c3be668075e5e607296f0a9255d71674caa94571336efa        libressl-2.5.4.tar.gz
->> diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
->> new file mode 100644
->> index 0000000..f315165
->> --- /dev/null
->> +++ b/package/libressl/libressl.mk
->> @@ -0,0 +1,22 @@
->> +################################################################################
->> +#
->> +# libressl
->> +#
->> +################################################################################
->> +
->> +LIBRESSL_VERSION = 2.5.4
->> +LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
->> +LIBRESSL_SOURCE = libressl-$(LIBRESSL_VERSION).tar.gz
->
->  This is the default so can be removed.
->
-Good to know! Will do this as well.
->> +LIBRESSL_LICENSE = ISC (New additions), OpenSSL or SSLeay (Original OpenSSL code)
->> +LIBRESSL_LICENSE_FILES = COPYING
->> +LIBRESSL_INSTALL_STAGING = YES
->> +
->> +ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
->> +define LIBRESSL_REMOVE_BIN
->> +     $(RM) -f $(TARGET_DIR)/usr/bin/openssl
->> +endef
->> +LIBRESSL_POST_INSTALL_TARGET_HOOKS += LIBRESSL_REMOVE_BIN
->> +endif
->> +
->> +$(eval $(autotools-package))
->> +$(eval $(host-autotools-package))
->
->  Since the host package isn't used, it shouldn't be added here. Or if you do
-> have a reason to provide the host package, please mention in the commit log.
->
-I will provide host-virtual-package.  It was a oversight on my part.
->  Regards,
->  Arnout
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+This series contains version bumps for the sigrok suite. The API of
+libsigrok has been changed in this release and all frontends must be
+upgraded too.
+
+Bartosz Golaszewski (4):
+  libsigrok: bump version to 0.5.0
+  libsigrokdecode: bump version to 0.5.0
+  sigrok-cli: bump version to 0.7.0
+  pulseview: bump version to 0.4.0
+
+ ...01-beaglelogic.h-fix-build-with-musl-libc.patch |  36 -------
+ package/libsigrok/libsigrok.hash                   |   2 +-
+ package/libsigrok/libsigrok.mk                     |   2 +-
+ package/libsigrokdecode/libsigrokdecode.hash       |   2 +-
+ package/libsigrokdecode/libsigrokdecode.mk         |   2 +-
+ package/pulseview/0001-musl.patch                  |  54 ----------
+ ...heck-for-explicit-linking-against-libatom.patch | 117 ---------------------
+ ...txt-Avoid-fext-numeric-literals-not-suppo.patch |  28 -----
+ package/pulseview/Config.in                        |   1 +
+ package/pulseview/pulseview.hash                   |   3 +-
+ package/pulseview/pulseview.mk                     |   4 +-
+ package/sigrok-cli/sigrok-cli.hash                 |   2 +-
+ package/sigrok-cli/sigrok-cli.mk                   |   2 +-
+ 13 files changed, 9 insertions(+), 246 deletions(-)
+ delete mode 100644 package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
+ delete mode 100644 package/pulseview/0001-musl.patch
+ delete mode 100644 package/pulseview/0002-cmake-add-check-for-explicit-linking-against-libatom.patch
+ delete mode 100644 package/pulseview/0003-CMakeLists.txt-Avoid-fext-numeric-literals-not-suppo.patch
+
+-- 
+2.9.3
