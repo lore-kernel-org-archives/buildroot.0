@@ -1,71 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 22:13:47 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] support/scripts: allow
-	/etc/shadow to be symlinked
-Message-ID: <20170626202428.5782581E06@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 22:20:26 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x]
+	package/x11r7/xlib_libxshmfence: needs sync_4
+Message-ID: <20170626202428.A5B1F7FEB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=501c9946a8b51e32259bcd993edcc5cd6abdfcda
+commit: https://git.buildroot.net/buildroot/commit/?id=83eeee7f4e9f77a04d3e7ef522250c3f5966f118
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-This commit fixes a problem where it was not possible to replace
-/etc/shadow with a symlink to a e.g. a user partition where the
-shadow file is placed. This is required, e.g. for systems where the
-rootfs is mounted read-only but users should still be able to be
-added. Thus, if within an filesystem overlay setup a user tries
-to replace /etc/shadow with a symlink to the real file on a user
-partition a buildroot build stops with an error message because
-sed is called on the symlink instead of following the symlink.
-This commit fixes this shortcoming.
+Also propagate reverse dependency to mesa3d and xserver_xorg-server.
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes xserver_xorg-server build
+http://autobuild.buildroot.net/results/7da/7da8b46cda8786422e8293f26b79582b35a433d6/
+
+For patch discussion refer to http://patchwork.ozlabs.org/patch/674595/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: only select BR2_PACKAGE_XPROTO_PRESENTPROTO if
+BR2_TOOLCHAIN_HAS_SYNC_4 is available, add comment explaining why.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 82f64203a8f017d50b754323194694374f92add5)
+
+(cherry picked from commit 3b7af7fca9fb600b2e86834c2b48cb97725fcb27)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/mkusers | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/mesa3d/Config.in                                 | 11 +++++++++--
+ package/mesa3d/mesa3d.mk                                 |  2 +-
+ package/x11r7/xlib_libxshmfence/Config.in                |  1 +
+ package/x11r7/xserver_xorg-server/Config.in              |  3 ++-
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |  2 +-
+ 5 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index 2ac76f9..5bbec3e 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -219,12 +219,12 @@ add_one_group() {
-     fi
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index e5ff7d7..a032590 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -30,8 +30,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	bool
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
+-	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
++	# xlib-libxshmfence needs sync_4, so we cannot select it if
++	# BR2_TOOLCHAIN_HAS_SYNC_4 is false. xproto-presentproto
++	# doesn't need sync_4, but it is only needed in conjunction
++	# with xlib-libxshmfence and dri3proto to provide dri3
++	# support, so we also only select it if sync_4 is available.
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
++		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
++	select BR2_PACKAGE_XPROTO_PRESENTPROTO if \
++		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
  
-     # Remove any previous instance of this group, and re-add the new one
--    sed -i -e '/^'"${group}"':.*/d;' "${GROUP}"
-+    sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GROUP}"
-     printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
- 
-     # Ditto for /etc/gshadow if it exists
-     if [ -f "${GSHADOW}" ]; then
--        sed -i -e '/^'"${group}"':.*/d;' "${GSHADOW}"
-+        sed -i --follow-symlinks -e '/^'"${group}"':.*/d;' "${GSHADOW}"
-         printf "%s:*::\n" "${group}" >>"${GSHADOW}"
-     fi
- }
-@@ -263,7 +263,8 @@ add_user_to_group() {
- 
-     for _f in "${GROUP}" "${GSHADOW}"; do
-         [ -f "${_f}" ] || continue
--        sed -r -i -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
-+        sed -r -i --follow-symlinks \
-+                  -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
-                   -e 's/^('"${group}"':.*)$/\1,'"${username}"'/;'                           \
-                   -e 's/,+/,/'                                                              \
-                   -e 's/:,/:/'                                                              \
-@@ -303,7 +304,7 @@ add_one_user() {
- 
-     # Remove any previous instance of this user
-     for _f in "${PASSWD}" "${SHADOW}"; do
--        sed -r -i -e '/^'"${username}"':.*/d;' "${_f}"
-+        sed -r -i --follow-symlinks -e '/^'"${username}"':.*/d;' "${_f}"
-     done
- 
-     _gid="$( get_gid "${group}" )"
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	bool
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b26d677..5173e68 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -90,7 +90,7 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-dri-drivers --disable-dri3
+ else
+-ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+ MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
+ MESA3D_CONF_OPTS += --enable-dri3
+ else
+diff --git a/package/x11r7/xlib_libxshmfence/Config.in b/package/x11r7/xlib_libxshmfence/Config.in
+index d0595f6..d4e87b3 100644
+--- a/package/x11r7/xlib_libxshmfence/Config.in
++++ b/package/x11r7/xlib_libxshmfence/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXSHMFENCE
+ 	bool "libxshmfence"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	help
+ 	  X.Org shmfence library
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index b04ccf4..5971e13 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -114,7 +114,8 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	select BR2_PACKAGE_LIBDRM if (BR2_PACKAGE_XPROTO_XF86DRIPROTO || \
+ 		BR2_PACKAGE_XPROTO_DRI2PROTO)
+ 	select BR2_PACKAGE_LIBPCIACCESS
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
++		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 	help
+ 	  This variant of the X.org server is the full-blown variant,
+ 	  as used by desktop GNU/Linux distributions. The drivers (for
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 306e9d0..12c3ed0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -220,7 +220,7 @@ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri2
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2
+ endif
+-ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
