@@ -1,51 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Jun 2017 17:43:20 +0200
-Subject: [Buildroot] [PATCH v2 1/4] libressl: new package
-In-Reply-To: <CAFSsvmpbSrDYjRBxboYqQD9p0LLVAPiHw-YpV782KLZqMY8q3Q@mail.gmail.com>
-References: <20170624172900.3610-1-Adamduskett@outlook.com>
- <05c9f4ef-b164-94f5-7f64-dc58a8a07497@mind.be>
- <CAFSsvmpbSrDYjRBxboYqQD9p0LLVAPiHw-YpV782KLZqMY8q3Q@mail.gmail.com>
-Message-ID: <93dbe81e-6150-ba6f-d728-793ecf79ca95@mind.be>
+From: bradford barr <bradford.barr@gmail.com>
+Date: Mon, 26 Jun 2017 09:17:44 -0700
+Subject: [Buildroot] [PATCH 1/1] sqlite: add json1 support
+Message-ID: <20170626161744.11355-1-bradford.barr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: bradford barr <bradford@density.io>
 
+Add support for the JSON1 SQLite extensions. This extension allows SQLite to
+store and query JSON objects in a database.
 
-On 26-06-17 15:15, Adam Duskett wrote:
-[snip]
->>> +$(eval $(autotools-package))
->>> +$(eval $(host-autotools-package))
->>  Since the host package isn't used, it shouldn't be added here. Or if you do
->> have a reason to provide the host package, please mention in the commit log.
->>
-> I will provide host-virtual-package.  It was a oversight on my part.
+Signed-off-by: bradford barr <bradford.barr@gmail.com>
+Signed-off-by: bradford barr <bradford@density.io>
+---
+ package/sqlite/Config.in | 6 ++++++
+ package/sqlite/sqlite.mk | 4 ++++
+ 2 files changed, 10 insertions(+)
 
- Hang on though: I'm not so sure we want host-libssl.
-
- There are some packages that currently depend on host-openssl while the target
-package doesn't select openssl. For example, host-erlang (needed for host-rebar,
-needed to build and install erlang/rebar packages) unconditionally depends on
-host-openssl, but for the target erlang it's configurable. If such a package
-really requires openssl and not libressl, it means that the host package can no
-longer be built when libressl is selected. Worse yet, it can fail in weird ways,
-because it is possible that both host-openssl and host-libressl are built and
-then depending on the build order either one of them actually gets installed...
-
- Therefore, I think it's more appropriate to drop host-libssl (and
-host-libressl), and always use openssl for the host packages. The only
-disadvantage to this as far as I can see is that openssl takes a little longer
-to build than libressl.
-
- Regards,
- Arnout
-
+diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
+index c9fde53..cc8f328 100644
+--- a/package/sqlite/Config.in
++++ b/package/sqlite/Config.in
+@@ -22,6 +22,12 @@ config BR2_PACKAGE_SQLITE_ENABLE_FTS3
+ 	  (see http://www.sqlite.org/amalgamation.html), version 3 of
+ 	  the full-text search engine is added to the build automatically.
+ 
++config BR2_PACKAGE_SQLITE_ENABLE_JSON1
++	bool "Enable the JSON extensions for SQLite"
++	help
++	  When this option is defined in the amalgamation, the JSON extensions
++	  are added to the build automatically.
++
+ config BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY
+ 	bool "Enable sqlite3_unlock_notify() interface"
+ 	help
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 7b9c897..f6b249d 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -19,6 +19,10 @@ ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
+ SQLITE_CFLAGS += -DSQLITE_ENABLE_FTS3
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_JSON1),y)
++SQLITE_CFLAGS += -DSQLITE_ENABLE_JSON1
++endif
++
+ ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY),y)
+ SQLITE_CFLAGS += -DSQLITE_ENABLE_UNLOCK_NOTIFY
+ endif
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
