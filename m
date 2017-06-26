@@ -1,38 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 10:01:01 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] iperf: fix tarball hashes
-	changed upstream
-Message-ID: <20170626081140.8149D7FB5D@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 10:00:23 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] c-ares: security bump to
+	version 1.13.0
+Message-ID: <20170626081140.5762A81775@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d886a939ccece0e6cc5a21277b35b74d892d58b
+commit: https://git.buildroot.net/buildroot/commit/?id=9c7c8c75dc1b36c19d2cfb46e2f65d20740d9766
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Upstream uploaded a new tarball with the same version number 2016-09-08,
-some time after the update to v2.0.9 in buildroot. Someone noticed, but
-upstream set the ticket to wontfix, and promised to do better in the
-future: https://sourceforge.net/p/iperf2/tickets/20/
+Fixes the following security issues:
 
-Signed-off-by: Alexander Dahl <post@lespocky.de>
+CVE-2017-1000381: The c-ares function `ares_parse_naptr_reply()`, which is
+used for parsing NAPTR responses, could be triggered to read memory outside
+of the given input buffer if the passed in DNS response packet was crafted
+in a particular way.
+
+https://c-ares.haxx.se/adv_20170620.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 62cf881a768c50e4c10c3dfce5b88f48beb6a26f)
+(cherry picked from commit d1481fe47493546171ff8f9949e95299c5359d8e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iperf/iperf.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 3dd491a..3e96143 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,4 +1,4 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1	9e215f6af8edd97f947f2b0207ff5487845d83d4	iperf-2.0.9.tar.gz
-+sha1	59820895df9106ba189ccfdc5677077535ad50e7	iperf-2.0.9.tar.gz
- # Locally computed:
--sha256  a5350777b191e910334d3a107b5e5219b72ffa393da4186da1e0a4552aeeded6  iperf-2.0.9.tar.gz
-+sha256  db02911f35686e808ed247160dfa766e08ae3f59d1e7dcedef0ffb2a6643f0bf  iperf-2.0.9.tar.gz
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index f46ef02..79928ae 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 8692f9403cdcdf936130e045c84021665118ee9bfea905d1a76f04d4e6f365fb c-ares-1.12.0.tar.gz
++sha256 03f708f1b14a26ab26c38abd51137640cb444d3ec72380b21b20f1a8d2861da7 c-ares-1.13.0.tar.gz
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index e817d4a..72019a0 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ARES_VERSION = 1.12.0
++C_ARES_VERSION = 1.13.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
