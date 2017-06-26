@@ -1,35 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 09:49:50 +0200
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.3
-In-Reply-To: <20170618213502.16233-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 18 Jun 2017 23:35:02 +0200")
-References: <20170618213502.16233-1-peter@korsgaard.com>
-Message-ID: <87vanji3xd.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 09:50:51 +0200
+Subject: [Buildroot] [PATCH] ntp: enable/disable sntp support depending
+	on BR2_PACKAGE_NTP_SNTP
+In-Reply-To: <20170619143325.19089-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 19 Jun 2017 15:33:25 +0100")
+References: <20170619143325.19089-1-Vincent.Riera@imgtec.com>
+Message-ID: <87r2y7i3vo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Fixes:
- > CVE-2017-9468 - Joseph Bisch discovered that Irssi does not properly handle
- > DCC messages without source nick/host.  A malicious IRC server can take
- > advantage of this flaw to cause Irssi to crash, resulting in a  denial of
- > service.
+ > We already have an option for selecting sntp support in ntp that can be
+ > chosen from the menuconfig, and ntp's configure script has a --with-sntp
+ > option (with its --without counterpart) which can be used for disabling
+ > sntp support in ntp. However, we are not using it. This patch will make
+ > use of it.
 
- > CVE-2017-9469 - Joseph Bisch discovered that Irssi does not properly handle
- > receiving incorrectly quoted DCC files.  A remote attacker can take
- > advantage of this flaw to cause Irssi to crash, resulting in a denial of
- > service.
-
- > See https://irssi.org/security/irssi_sa_2017_06.txt for more details.
-
- > Remove 0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch as it
- > applied upstream and drop autoreconf as configure.ac is no longer patched.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
