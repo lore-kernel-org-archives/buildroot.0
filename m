@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 14:32:57 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] spice: security bump to
+Date: Mon, 26 Jun 2017 14:24:55 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] spice: security bump to
 	version 0.12.8
-Message-ID: <20170626123812.CFA4C7FFDD@busybox.osuosl.org>
+Message-ID: <20170626123836.D73EB80E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d47edc29c2d0ec73fcd46f1787ee65c3d8da53e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e5c169219cf49f059ee4724e52ad3d9424cc791b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
 Fixes the following security issues:
 
@@ -45,7 +45,7 @@ index 04bd516..c9b591f 100644
 -sha256	f148ea30135bf80a4f465ce723a1cd6d4ccb34c098b6298a020b378ace8569b6	spice-0.12.6.tar.bz2
 +sha256	f901a5c5873d61acac84642f9eea5c4d6386fc3e525c2b68792322794e1c407d	spice-0.12.8.tar.bz2
 diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 45f4030..6ac209e 100644
+index f1fb46d..7b09f39 100644
 --- a/package/spice/spice.mk
 +++ b/package/spice/spice.mk
 @@ -4,7 +4,7 @@
@@ -56,7 +56,7 @@ index 45f4030..6ac209e 100644
 +SPICE_VERSION = 0.12.8
  SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
  SPICE_SITE = http://www.spice-space.org/download/releases
- SPICE_LICENSE = LGPLv2.1+
+ SPICE_LICENSE = LGPL-2.1+
 @@ -47,28 +47,6 @@ ifeq ($(BR2_PACKAGE_OPUS),y)
  SPICE_DEPENDENCIES += opus
  endif
