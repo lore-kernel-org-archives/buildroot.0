@@ -1,64 +1,196 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 14:37:59 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] openvpn: security bump to
-	version 2.4.3
-Message-ID: <20170626123813.01A927FFDD@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 14:33:07 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] spice: add post-0.12.8
+	upstream security fixes
+Message-ID: <20170626123812.DF1A780790@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdd420350ab77bb576476f5526d523cfc5d47816
+commit: https://git.buildroot.net/buildroot/commit/?id=070fbefd4711fcd2b30695f1f67890134fbef4ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
+Fixes the following security issues:
 
-CVE-2017-7508 - Remotely-triggerable ASSERT() on malformed IPv6 packet
+CVE-2016-9577
 
-CVE-2017-7520 - Pre-authentication remote crash/information disclosure for
-clients
+    Frediano Ziglio of Red Hat discovered a buffer overflow
+    vulnerability in the main_channel_alloc_msg_rcv_buf function. An
+    authenticated attacker can take advantage of this flaw to cause a
+    denial of service (spice server crash), or possibly, execute
+    arbitrary code.
 
-CVE-2017-7521 - Potential double-free in --x509-alt-username
+CVE-2016-9578
 
-CVE-2017-7521 - Remote-triggerable memory leaks
+    Frediano Ziglio of Red Hat discovered that spice does not properly
+    validate incoming messages. An attacker able to connect to the
+    spice server could send crafted messages which would cause the
+    process to crash.
 
-CVE-2017-7522 - Post-authentication remote DoS when using the --x509-track
-option
-
-Details at
-
-  https://community.openvpn.net/openvpn/wiki/VulnerabilitiesFixedInOpenVPN243
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 24f2eb1e157e2c0b08579939c293aa7c1d3d0c28)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 087e70498ab25c76cd8542100361f79af7580eb7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/openvpn.hash | 4 ++--
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...sible-DoS-attempts-during-protocol-handsh.patch | 60 ++++++++++++++++++++++
+ ...nt-integer-overflows-in-capability-checks.patch | 43 ++++++++++++++++
+ ...l-Prevent-overflow-reading-messages-from-.patch | 33 ++++++++++++
+ 3 files changed, 136 insertions(+)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index fe054e9..1db3a31 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256 df5c4f384b7df6b08a2f6fa8a84b9fd382baf59c2cef1836f82e2a7f62f1bff9  openvpn-2.4.2.tar.xz
-+# Locally calculated after checking signature
-+sha256 15e15fc97f189b52aee7c90ec8355aa77469c773125110b4c2f089abecde36fb  openvpn-2.4.3.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 34b0e4b..31b6e00 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.4.2
-+OPENVPN_VERSION = 2.4.3
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
+diff --git a/package/spice/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch b/package/spice/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch
+new file mode 100644
+index 0000000..57a64d9
+--- /dev/null
++++ b/package/spice/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch
+@@ -0,0 +1,60 @@
++From 1c6517973095a67c8cb57f3550fc1298404ab556 Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Tue, 13 Dec 2016 14:39:48 +0000
++Subject: [PATCH] Prevent possible DoS attempts during protocol handshake
++
++The limit for link message is specified using a 32 bit unsigned integer.
++This could cause possible DoS due to excessive memory allocations and
++some possible crashes.
++For instance a value >= 2^31 causes a spice_assert to be triggered in
++async_read_handler (reds-stream.c) due to an integer overflow at this
++line:
++
++   int n = async->end - async->now;
++
++This could be easily triggered with a program like
++
++  #!/usr/bin/env python
++
++  import socket
++  import time
++  from struct import pack
++
++  server = '127.0.0.1'
++  port = 5900
++
++  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
++  s.connect((server, port))
++  data = pack('<4sIII', 'REDQ', 2, 2, 0xaaaaaaaa)
++  s.send(data)
++
++  time.sleep(1)
++
++without requiring any authentication (the same can be done
++with TLS).
++
++[Peter: fixes CVE-2016-9578]
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Acked-by: Christophe Fergeau <cfergeau@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/reds.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/server/reds.c b/server/reds.c
++index f40b65c1..86a33d53 100644
++--- a/server/reds.c
+++++ b/server/reds.c
++@@ -2202,7 +2202,8 @@ static void reds_handle_read_header_done(void *opaque)
++ 
++     reds->peer_minor_version = header->minor_version;
++ 
++-    if (header->size < sizeof(SpiceLinkMess)) {
+++    /* the check for 4096 is to avoid clients to cause arbitrary big memory allocations */
+++    if (header->size < sizeof(SpiceLinkMess) || header->size > 4096) {
++         reds_send_link_error(link, SPICE_LINK_ERR_INVALID_DATA);
++         spice_warning("bad size %u", header->size);
++         reds_link_free(link);
++-- 
++2.11.0
++
+diff --git a/package/spice/0002-Prevent-integer-overflows-in-capability-checks.patch b/package/spice/0002-Prevent-integer-overflows-in-capability-checks.patch
+new file mode 100644
+index 0000000..5bf9b89
+--- /dev/null
++++ b/package/spice/0002-Prevent-integer-overflows-in-capability-checks.patch
+@@ -0,0 +1,43 @@
++From f66dc643635518e53dfbe5262f814a64eec54e4a Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Tue, 13 Dec 2016 14:40:10 +0000
++Subject: [PATCH] Prevent integer overflows in capability checks
++
++The limits for capabilities are specified using 32 bit unsigned integers.
++This could cause possible integer overflows causing buffer overflows.
++For instance the sum of num_common_caps and num_caps can be 0 avoiding
++additional checks.
++As the link message is now capped to 4096 and the capabilities are
++contained in the link message limit the capabilities to 1024
++(capabilities are expressed in number of uint32_t items).
++
++[Peter: fixes CVE-2016-9578]
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Acked-by: Christophe Fergeau <cfergeau@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/reds.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/server/reds.c b/server/reds.c
++index 86a33d53..91504544 100644
++--- a/server/reds.c
+++++ b/server/reds.c
++@@ -2110,6 +2110,14 @@ static void reds_handle_read_link_done(void *opaque)
++     link_mess->num_channel_caps = GUINT32_FROM_LE(link_mess->num_channel_caps);
++     link_mess->num_common_caps = GUINT32_FROM_LE(link_mess->num_common_caps);
++ 
+++    /* Prevent DoS. Currently we defined only 13 capabilities,
+++     * I expect 1024 to be valid for quite a lot time */
+++    if (link_mess->num_channel_caps > 1024 || link_mess->num_common_caps > 1024) {
+++        reds_send_link_error(link, SPICE_LINK_ERR_INVALID_DATA);
+++        reds_link_free(link);
+++        return;
+++    }
+++
++     num_caps = link_mess->num_common_caps + link_mess->num_channel_caps;
++     caps = (uint32_t *)((uint8_t *)link_mess + link_mess->caps_offset);
++ 
++-- 
++2.11.0
++
+diff --git a/package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch b/package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch
+new file mode 100644
+index 0000000..f602d5f
+--- /dev/null
++++ b/package/spice/0003-main-channel-Prevent-overflow-reading-messages-from-.patch
+@@ -0,0 +1,33 @@
++From 5f96b596353d73bdf4bb3cd2de61e48a7fd5b4c3 Mon Sep 17 00:00:00 2001
++From: Frediano Ziglio <fziglio@redhat.com>
++Date: Tue, 29 Nov 2016 16:46:56 +0000
++Subject: [PATCH] main-channel: Prevent overflow reading messages from client
++
++Caller is supposed the function return a buffer able to store
++size bytes.
++
++[Peter: fixes CVE-2016-9577]
++Signed-off-by: Frediano Ziglio <fziglio@redhat.com>
++Acked-by: Christophe Fergeau <cfergeau@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ server/main_channel.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/server/main_channel.c b/server/main_channel.c
++index 0ecc9df8..1fc39155 100644
++--- a/server/main_channel.c
+++++ b/server/main_channel.c
++@@ -1026,6 +1026,9 @@ static uint8_t *main_channel_alloc_msg_rcv_buf(RedChannelClient *rcc,
++ 
++     if (type == SPICE_MSGC_MAIN_AGENT_DATA) {
++         return reds_get_agent_data_buffer(mcc, size);
+++    } else if (size > sizeof(main_chan->recv_buf)) {
+++        /* message too large, caller will log a message and close the connection */
+++        return NULL;
++     } else {
++         return main_chan->recv_buf;
++     }
++-- 
++2.11.0
++
