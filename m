@@ -1,139 +1,113 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 09:48:35 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] irssi: add patch to fix
-	static linking
-Message-ID: <20170626081043.374FE8019E@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 09:43:28 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] expat: security bump to
+	version 2.2.1
+Message-ID: <20170626081042.5F9CE8019E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b188e6baf8b578196a5de0fc4365f45745a6782
+commit: https://git.buildroot.net/buildroot/commit/?id=ab5db57cc3449a38623c4e0797dcf2515443fbdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
-
-An upstream change which removed the option to build Irssi without SSL
-support (v1.0.0 and later) also eliminated the use of PKG_CHECK_MODULES
-to find the OpenSSL library, relying only on a test with AC_CHECK_LIB
-for that purpose.
-
-This unfortunately broke static linking since the flag to link with
-zlib, used by OpenSSL, is missed completely.
-
-The newly added patch therefore adds PKG_CHECK_MODULES back into the
-configure script.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/e8b51f65525246d1205a26859d418393aaebf48c/
-  http://autobuild.buildroot.net/results/35d952b3b36e295723bf8ed1badb4c9439201822/
-  http://autobuild.buildroot.net/results/ea8af1458edf3ce0e2b1c444d2ae29ac1e5d2fbf/
-  [...]
+- CVE-2017-9233 - External entity infinite loop DoS. See:
+  https://libexpat.github.io/doc/cve-2017-9233/
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+- CVE-2016-9063 -- Detect integer overflow
+
+And further more:
+
+- Fix regression from fix to CVE-2016-0718 cutting off longer tag names.
+
+- Extend fix for CVE-2016-5300 (use getrandom() if available).
+
+- Extend fix for CVE-2012-0876 (Change hash algorithm to William Ahern's
+  version of SipHash).
+
+Also add an upstream patch to fix detection of getrandom().
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit fc741ba9b3c8b5cd602a01f53798ca577a4975dd)
+(cherry picked from commit c0ad6ded018ffbc33f7f52a4bbcc6f08a14bfbd6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-to-using-pkg-config-to-check-for-OpenSSL.patch | 77 ++++++++++++++++++++++
- package/irssi/irssi.mk                             |  3 +
- 2 files changed, 80 insertions(+)
+ ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ++++++++++++++++++++++
+ package/expat/expat.hash                           |  8 +++---
+ package/expat/expat.mk                             |  4 ++-
+ 3 files changed, 36 insertions(+), 5 deletions(-)
 
-diff --git a/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch b/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
+diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
 new file mode 100644
-index 0000000..0ce44f9
+index 0000000..a302553
 --- /dev/null
-+++ b/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
-@@ -0,0 +1,77 @@
-+From ed0c2c1b9504a99a6dcc3c0f5de3b3a1c0232758 Mon Sep 17 00:00:00 2001
-+From: Rodrigo Rebello <rprebello@gmail.com>
-+Date: Mon, 20 Mar 2017 13:17:42 -0300
-+Subject: [PATCH] Get back to using pkg-config to check for OpenSSL
++++ b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
+@@ -0,0 +1,29 @@
++From 602e6c78ca750c082b72f8cdf4a38839b312959f Mon Sep 17 00:00:00 2001
++From: Sebastian Pipping <sebastian@pipping.org>
++Date: Sun, 18 Jun 2017 18:55:10 +0200
++Subject: [PATCH] configure.ac: Fix mis-detection of getrandom on Debian
++ GNU/kFreeBSD (#50)
 +
-+Commit 6300dfec7 removed the option to disable SSL support from the
-+configure script since it became a requirement, but it also removed the
-+use of pkg-config for finding the OpenSSL library and its dependencies.
++There is no such thing but we need to link (not just compile) to realize.
 +
-+This had the unfortunate consequence of breaking the correct detection
-+of library flags in many static linking scenarios. In some cases, for
-+example, OpenSSL might have been built with zlib, which requires `-lz`
-+to be passed to the linker when doing a static link of the irssi
-+executable. Thus, pkg-config becomes an invaluable tool in such
-+situations, since no guessing work is needed as the OpenSSL .pc file
-+provides all the necessary flags.
-+
-+So, this patch re-inserts the PKG_CHECK_MODULES macro in the configure
-+script when looking for OpenSSL. The test using AC_CHECK_LIB remains,
-+but only as a last resort in case the one using pkg-config fails.
-+
-+Also, because the macro AM_PATH_GLIB_2_0 contains an unconditional call
-+to PKG_PROG_PKG_CONFIG, the OpenSSL checks are moved so that they come
-+after the Glib ones in order to avoid doubly checking for the pkg-config
-+binary (PKG_CHECK_MODULES skips that check if it has been performed
-+before, but PKG_PROG_PKG_CONFIG does not).
-+
-+Upstream status: submitted
-+https://github.com/irssi/irssi/pull/677
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ configure.ac | 21 +++++++++++++++------
-+ 1 file changed, 15 insertions(+), 6 deletions(-)
++ expat/configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 02b33497..9f191d3f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -231,11 +231,6 @@ if test "x$want_socks" = "xyes"; then
-+ fi
++diff --git a/expat/configure.ac b/expat/configure.ac
++index 1357c9a..444c002 100644
++--- a/expat/configure.ac
+++++ b/expat/configure.ac
++@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
 + 
-+ dnl **
-+-dnl ** OpenSSL checks
-+-dnl **
-+-AC_CHECK_LIB([ssl], [SSL_library_init])
-+-
-+-dnl **
-+ dnl ** fe-text checks
-+ dnl **
 + 
-+@@ -276,7 +271,21 @@ if test -z "$GLIB_LIBS"; then
-+   AC_ERROR([GLIB is required to build irssi.])
-+ fi
-+ 
-+-LIBS="$LIBS $GLIB_LIBS -lssl -lcrypto"
-++LIBS="$LIBS $GLIB_LIBS"
-++
-++dnl **
-++dnl ** OpenSSL checks
-++dnl **
-++PKG_CHECK_MODULES([OPENSSL], [openssl], [
-++	CFLAGS="$CFLAGS $OPENSSL_CFLAGS"
-++	LIBS="$LIBS $OPENSSL_LIBS"
-++], [
-++	AC_CHECK_LIB([ssl], [SSL_library_init], [
-++		LIBS="$LIBS -lssl -lcrypto"
-++	], [
-++		AC_MSG_ERROR([The OpenSSL library was not found])
-++	])
-++])
-+ 
-+ dnl **
-+ dnl ** curses checks
++ AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
++-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+++AC_LINK_IFELSE([AC_LANG_SOURCE([
++   #include <stdlib.h>  /* for NULL */
++   #include <sys/random.h>
++   int main() {
 +-- 
 +2.11.0
 +
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index 7df7bbc..dfb1e28 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -13,6 +13,9 @@ IRSSI_LICENSE = GPLv2+
- IRSSI_LICENSE_FILES = COPYING
- IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses openssl
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 371abde..595597b 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.0/
+-md5	2f47841c829facb346eb6e3fab5212e2	expat-2.2.0.tar.bz2
+-sha1	8453bc52324be4c796fd38742ec48470eef358b3	expat-2.2.0.tar.bz2
++# From https://sourceforge.net/projects/expat/files/expat/2.2.1/
++md5	d9c3baeab58774cefc2f04faf29f2cf8	expat-2.2.1.tar.bz2
++sha1	f45eb724f182776a9cacec9ed70d549e87198987	expat-2.2.1.tar.bz2
+ # Calculated based on the hashes above
+-sha256	d9e50ff2d19b3538bd2127902a89987474e1a4db8e43a66a4d1a712ab9a504ff	expat-2.2.0.tar.bz2
++sha256	1868cadae4c82a018e361e2b2091de103cd820aaacb0d6cfa49bd2cd83978885	expat-2.2.1.tar.bz2
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index e7bb74a..bb6e627 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# We're patching configure.ac, so we need to autoreconf
-+IRSSI_AUTORECONF = YES
-+
- IRSSI_CONF_OPTS = \
- 	--disable-glibtest \
- 	--with-ncurses=$(STAGING_DIR)/usr \
+-EXPAT_VERSION = 2.2.0
++EXPAT_VERSION = 2.2.1
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
+ EXPAT_INSTALL_STAGING = YES
+@@ -14,6 +14,8 @@ EXPAT_DEPENDENCIES = host-pkgconf
+ HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
++# for 0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
++EXPAT_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
