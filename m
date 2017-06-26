@@ -1,37 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 10:05:31 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] board/atmel:
-	at91sam9x5ek_mmc: add 1M offset for FAT partition
-Message-ID: <20170626081140.9D96D81E16@busybox.osuosl.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 26 Jun 2017 11:20:13 +0200
+Subject: [Buildroot] [PATCH] doxygen: fix a build issue
+Message-ID: <1498468814-2179-1-git-send-email-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52bb334faf30f2499c0ac34ae461045937c5f6bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+I have submitted this fix for upstream inclusion, but I don't know how
+long it will take for the maintainers to respond. In the meantime I'm
+still getting these build reports everyday on my e-mail.
 
-at91sam9x5ek_mmc board was missing in the previous patch adding 1M
-offset for FAT partition to solve some boot issues with the ROM code.
+This patch fixes the doxygen build issues by fixing a script generating
+a C header file. The script redirects its stderr to the generated file
+so any warning emitted by it or its child processes ends up in this
+very file. This is obviously broken and needs to be changed.
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 7bd24df2e92fc7bf9a8d6d76c572ab5ae14d49be)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/atmel/at91sam9x5ek_mmc/genimage.cfg | 1 +
- 1 file changed, 1 insertion(+)
+Bartosz Golaszewski (1):
+  doxygen: fix a build issue
 
-diff --git a/board/atmel/at91sam9x5ek_mmc/genimage.cfg b/board/atmel/at91sam9x5ek_mmc/genimage.cfg
-index 46c2dc9..b2be647 100644
---- a/board/atmel/at91sam9x5ek_mmc/genimage.cfg
-+++ b/board/atmel/at91sam9x5ek_mmc/genimage.cfg
-@@ -24,6 +24,7 @@ image sdcard.img {
- 		partition-type = 0xC
- 		bootable = "true"
- 		image = "boot.vfat"
-+		offset = 1M
- 	}
- 
- 	partition rootfs {
+ ...build-fix-the-way-lang_cfg.h-is-generated.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/doxygen/0002-build-fix-the-way-lang_cfg.h-is-generated.patch
+
+-- 
+2.9.3
