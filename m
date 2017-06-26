@@ -1,33 +1,38 @@
-From: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-Date: Mon, 26 Jun 2017 10:34:23 +0900
-Subject: [Buildroot] [PATCH 1/1] libcurl: LICENSE value changes to SPDX
-Message-ID: <2574e255-bee6-092b-986a-7faab9a94234@melcoinc.co.jp>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 26 Jun 2017 00:34:42 -0300
+Subject: [Buildroot] [PATCH 1/5] support/check-package: don't check
+ filenames of hashes
+References: <eafeec501266452fc7973871c7853bf6d016dfce.1498428166.git.yann.morin.1998@free.fr>
+Message-ID: <595080d26a59c_8bc1c339488471@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Curl license is MIT/X derivative license.
-It's totally distinction in SPDX.
+Hello,
 
-Signed-off-by: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
----
-  package/libcurl/libcurl.mk | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Jun 25, 2017 at 07:03 PM, Yann E. MORIN wrote:
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 45bd080..6848449 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -11,7 +11,7 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
-  	$(if $(BR2_PACKAGE_ZLIB),zlib) \
-  	$(if $(BR2_PACKAGE_LIBIDN),libidn) \
-  	$(if $(BR2_PACKAGE_RTMPDUMP),rtmpdump)
--LIBCURL_LICENSE = ISC
-+LIBCURL_LICENSE = curl
-  LIBCURL_LICENSE_FILES = COPYING
-  LIBCURL_INSTALL_STAGING = YES
+> Currently, we check that the filenames in hash lists do not contain
+> a slash '/' character, because all we are checking so far are the
+> downloaded archives, and we explicitly need the filename to not contain
+> a directory component at all.
+> 
+> However, we're soon to also check the hashes of the license files in
+> packages sources, and those license files may be at any arbitrary
+> directory-depth in the packages source tree, and thus two or more
 
--- 
-2.7.4
+Small nit: the explanation could end at "source tree". The removed code was
+testing only for the presence of a slash, so having 2 entries with the same
+basename shouldn't matter.
+
+> license files may have the same basename.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Either with the nit fixed or not,
+Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+Regards,
+Ricardo
