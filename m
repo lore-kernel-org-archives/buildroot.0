@@ -1,43 +1,33 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 26 Jun 2017 12:50:22 +0200
-Subject: [Buildroot] [PATCH] libzip: bump version to 1.2.0
-Message-ID: <1498474222-16735-1-git-send-email-brgl@bgdev.pl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 26 Jun 2017 11:07:37 +0000
+Subject: [Buildroot] [Bug 9966] util-linux-2.30/.stamp_built' failed
+In-Reply-To: <bug-9966-163@https.bugs.busybox.net/>
+References: <bug-9966-163@https.bugs.busybox.net/>
+Message-ID: <bug-9966-163-2tGguRjbNw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's a major release, but the API seems to be mostly
-backwards-compatible. The only package depending on this library in
-buildroot is libsigrok and it builds fine.
+https://bugs.busybox.net/show_bug.cgi?id=9966
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- package/libzip/libzip.hash | 2 +-
- package/libzip/libzip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Carlos Santos <casantos@datacom.ind.br> changed:
 
-diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
-index ccd0e6a..103c761 100644
---- a/package/libzip/libzip.hash
-+++ b/package/libzip/libzip.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	7cfbbc2c540e154b933b6e9ec781e2671086bd8114eb744ae1a1ade34d2bb6bb	libzip-0.11.2.tar.xz
-+sha256	ffc0764395fba3d45dc5a6e32282788854618b9e9838337f8218b596007f1376	libzip-1.2.0.tar.xz
-diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-index b873746..a4012dd 100644
---- a/package/libzip/libzip.mk
-+++ b/package/libzip/libzip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBZIP_VERSION = 0.11.2
-+LIBZIP_VERSION = 1.2.0
- LIBZIP_SITE = http://www.nih.at/libzip
- LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
- LIBZIP_LICENSE = BSD-3-Clause
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+--- Comment #1 from Carlos Santos <casantos@datacom.ind.br> ---
+Please check if the problem persists on a recent master snapshot (as of commit
+74235a6854d6e469f2dbc141fe08ce9ae94e7d3c).
+
+Please provide a copy of your defconfig. Run
+
+    $ make savedefconfig BR2_DEFCONFIG=/tmp/bug_9966_defconfig
+
+Then attach /tmp/bug_9966_defconfig to this bug report.
+
 -- 
-2.9.3
+You are receiving this mail because:
+You are on the CC list for the bug.
