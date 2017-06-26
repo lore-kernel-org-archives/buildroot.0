@@ -1,50 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 09:56:14 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/x264: disable
-	optional ffmpeg support
-Message-ID: <20170626081043.6EF5381945@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 09:48:13 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] irssi: bump version to
+	version 1.0.2
+Message-ID: <20170626081042.E156E80145@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0d637c5a957947969d5f7755d69db3d4299b9b2
+commit: https://git.buildroot.net/buildroot/commit/?id=5702de427f2e42bd06961e5c399d2ddbf979efcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-In buildroot ffmpeg uses x264 as optional dependency if
-BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
+Notice that this fixes a security issue:
 
-If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
-support before x264 itself is build, x264 picks up certain ffmpeg libs
-as optional dependency leading to build errors because x264 does not
-correctly link statically against ffmpeg.
+CWE-416 (use after free condition during netjoin processing). No CVE
+assigned yet:
 
-To avoid a circular dependency and to avoid teaching x264 how to
-correctly link statically with ffmpeg we just disable all ffmpeg-
-related options.
+https://irssi.org/security/irssi_sa_2017_03.txt
 
-Fixes
-http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
+But the 0.8.x series is not believed to be vulnerable to this specific
+issue.  From the advisory:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 310e4f07f8cdb3e3272aaed236142d58cfaa44e6)
+Affected versions
+-----------------
+
+Irssi up to and including 1.0.1
+
+We believe Irssi 0.8.21 and prior are not affected since a different
+code path causes the netjoins to be flushed prior to reaching the use
+after free condition.
+
+Openssl is no longer optional, so select it and drop the enable/disable
+handling.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d1e2d290d9fd4cc8b12bcae72725ebad1cac8edc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x264/x264.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/irssi/Config.in  |  1 +
+ package/irssi/irssi.hash |  2 +-
+ package/irssi/irssi.mk   | 11 ++---------
+ 3 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 80437c4..307bf6c 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -10,7 +10,7 @@ X264_LICENSE = GPLv2+
- X264_DEPENDENCIES = host-pkgconf
- X264_LICENSE_FILES = COPYING
- X264_INSTALL_STAGING = YES
--X264_CONF_OPTS = --disable-avs
-+X264_CONF_OPTS = --disable-avs --disable-lavf --disable-swscale
+diff --git a/package/irssi/Config.in b/package/irssi/Config.in
+index 7d29201..2cdd06c 100644
+--- a/package/irssi/Config.in
++++ b/package/irssi/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_IRSSI
+ 	bool "irssi"
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_OPENSSL
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # fork()
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index b1048bf..f1472e0 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e433063b8714dcf17438126902c9a9d5c97944b3185ecd0fc5ae25c4959bf35a	irssi-0.8.21.tar.xz
++sha256	5c1c3cc2caf103aad073fadeb000e0f8cb3b416833a7f43ceb8bd9fcf275fbe9	irssi-1.0.2.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index e467f89..7df7bbc 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,27 +4,20 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_i386)$(BR2_x86_64),y)
- # yasm needed for assembly files
+-IRSSI_VERSION = 0.8.21
++IRSSI_VERSION = 1.0.2
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+ IRSSI_SITE = https://github.com/irssi/irssi/releases/download/$(IRSSI_VERSION)
+ IRSSI_LICENSE = GPLv2+
+ IRSSI_LICENSE_FILES = COPYING
+-IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses
++IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses openssl
+ 
+ IRSSI_CONF_OPTS = \
+ 	--disable-glibtest \
+ 	--with-ncurses=$(STAGING_DIR)/usr \
+ 	--without-perl
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-IRSSI_CONF_OPTS += --enable-ssl
+-IRSSI_DEPENDENCIES += openssl
+-else
+-IRSSI_CONF_OPTS += --disable-ssl
+-endif
+-
+ ifeq ($(BR2_PACKAGE_IRSSI_PROXY),y)
+ IRSSI_CONF_OPTS += --with-proxy
+ # If shared libs are disabled, 'proxy' has to go in the list of built-in
