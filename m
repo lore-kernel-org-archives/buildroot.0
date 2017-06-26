@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 09:59:51 +0200
-Subject: [Buildroot] [PATCH] apache: security bump to version 2.4.26
-In-Reply-To: <20170620211345.18677-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 20 Jun 2017 23:13:45 +0200")
-References: <20170620211345.18677-1-peter@korsgaard.com>
-Message-ID: <87efu7i3go.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 10:00:34 +0200
+Subject: [Buildroot] [PATCH] c-ares: security bump to version 1.13.0
+In-Reply-To: <20170620212421.17455-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Jun 2017 23:24:21 +0200")
+References: <20170620212421.17455-1-peter@korsgaard.com>
+Message-ID: <87a84vi3fh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +14,12 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes the following security issues:
- > CVE-2017-3167: In Apache httpd 2.2.x before 2.2.33 and 2.4.x before 2.4.26,
- > use of the ap_get_basic_auth_pw() by third-party modules outside of the
- > authentication phase may lead to authentication requirements being bypassed.
+ > CVE-2017-1000381: The c-ares function `ares_parse_naptr_reply()`, which is
+ > used for parsing NAPTR responses, could be triggered to read memory outside
+ > of the given input buffer if the passed in DNS response packet was crafted
+ > in a particular way.
 
- > CVE-2017-3169: In Apache httpd 2.2.x before 2.2.33 and 2.4.x before 2.4.26,
- > mod_ssl may dereference a NULL pointer when third-party modules call
- > ap_hook_process_connection() during an HTTP request to an HTTPS port.
-
- > CVE-2017-7659: A maliciously constructed HTTP/2 request could cause
- > mod_http2 to dereference a NULL pointer and crash the server process.
-
- > CVE-2017-7668: The HTTP strict parsing changes added in Apache httpd 2.2.32
- > and 2.4.24 introduced a bug in token list parsing, which allows
- > ap_find_token() to search past the end of its input string.  By maliciously
- > crafting a sequence of request headers, an attacker may be able to cause a
- > segmentation fault, or to force ap_find_token() to return an incorrect
- > value.
-
- > CVE-2017-7679: In Apache httpd 2.2.x before 2.2.33 and 2.4.x before 2.4.26,
- > mod_mime can read one byte past the end of a buffer when sending a malicious
- > Content-Type response header.
-
- > While we're at it, use the upstream sha256 checksum instead of sha1.
+ > https://c-ares.haxx.se/adv_20170620.html
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
