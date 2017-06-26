@@ -1,91 +1,51 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 26 Jun 2017 17:19:41 +0200
-Subject: [Buildroot] [PATCH] package/lua-stdlib: new package
-Message-ID: <20170626151941.2637-1-m.niestroj@grinn-global.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Jun 2017 17:43:20 +0200
+Subject: [Buildroot] [PATCH v2 1/4] libressl: new package
+In-Reply-To: <CAFSsvmpbSrDYjRBxboYqQD9p0LLVAPiHw-YpV782KLZqMY8q3Q@mail.gmail.com>
+References: <20170624172900.3610-1-Adamduskett@outlook.com>
+ <05c9f4ef-b164-94f5-7f64-dc58a8a07497@mind.be>
+ <CAFSsvmpbSrDYjRBxboYqQD9p0LLVAPiHw-YpV782KLZqMY8q3Q@mail.gmail.com>
+Message-ID: <93dbe81e-6150-ba6f-d728-793ecf79ca95@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/lua-stdlib/Config.in       |  9 +++++++++
- package/lua-stdlib/lua-stdlib.hash |  2 ++
- package/lua-stdlib/lua-stdlib.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/lua-stdlib/Config.in
- create mode 100644 package/lua-stdlib/lua-stdlib.hash
- create mode 100644 package/lua-stdlib/lua-stdlib.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e421f4b41..9ec51261f0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1075,6 +1075,7 @@ F:	package/argparse/
- F:	package/dt-utils/
- F:	package/easydbus/
- F:	package/lua-flu/
-+F:	package/lua-stdlib/
- F:	package/luaossl/
- F:	package/rs485conf/
- F:	package/turbolua/
-diff --git a/package/Config.in b/package/Config.in
-index f69f67f3e4..259b871b1c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -574,6 +574,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-msgpack-native/Config.in"
- 	source "package/lua-periphery/Config.in"
- 	source "package/lua-sdl2/Config.in"
-+	source "package/lua-stdlib/Config.in"
- 	source "package/lua-testmore/Config.in"
- 	source "package/luabitop/Config.in"
- 	source "package/luacrypto/Config.in"
-diff --git a/package/lua-stdlib/Config.in b/package/lua-stdlib/Config.in
-new file mode 100644
-index 0000000000..1843826c24
---- /dev/null
-+++ b/package/lua-stdlib/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LUA_STDLIB
-+	bool "lua-stdlib"
-+	help
-+	  lua-stdlib is a library of modules for common programming
-+	  tasks, including list, table and functional operations,
-+	  objects, pickling, pretty-printing and command-line option
-+	  parsing.
-+
-+	  https://github.com/lua-stdlib/lua-stdlib/
-diff --git a/package/lua-stdlib/lua-stdlib.hash b/package/lua-stdlib/lua-stdlib.hash
-new file mode 100644
-index 0000000000..56f585db72
---- /dev/null
-+++ b/package/lua-stdlib/lua-stdlib.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	5eff1af3a16470297fa5a92c9525ae593644ae9dc0e6215158298711f5d829ee  stdlib-41.2.0-1.src.rock
-diff --git a/package/lua-stdlib/lua-stdlib.mk b/package/lua-stdlib/lua-stdlib.mk
-new file mode 100644
-index 0000000000..f7fb0ff9c5
---- /dev/null
-+++ b/package/lua-stdlib/lua-stdlib.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lua-stdlib
-+#
-+################################################################################
-+
-+LUA_STDLIB_VERSION_UPSTREAM = 41.2.0
-+LUA_STDLIB_VERSION = $(LUA_STDLIB_VERSION_UPSTREAM)-1
-+LUA_STDLIB_NAME_UPSTREAM = stdlib
-+LUA_STDLIB_SUBDIR = lua-stdlib-release-v$(LUA_STDLIB_VERSION_UPSTREAM)
-+LUA_STDLIB_LICENSE = MIT
-+LUA_STDLIB_LICENSE_FILES = $(LUA_STDLIB_SUBDIR)/COPYING
-+
-+$(eval $(luarocks-package))
+
+On 26-06-17 15:15, Adam Duskett wrote:
+[snip]
+>>> +$(eval $(autotools-package))
+>>> +$(eval $(host-autotools-package))
+>>  Since the host package isn't used, it shouldn't be added here. Or if you do
+>> have a reason to provide the host package, please mention in the commit log.
+>>
+> I will provide host-virtual-package.  It was a oversight on my part.
+
+ Hang on though: I'm not so sure we want host-libssl.
+
+ There are some packages that currently depend on host-openssl while the target
+package doesn't select openssl. For example, host-erlang (needed for host-rebar,
+needed to build and install erlang/rebar packages) unconditionally depends on
+host-openssl, but for the target erlang it's configurable. If such a package
+really requires openssl and not libressl, it means that the host package can no
+longer be built when libressl is selected. Worse yet, it can fail in weird ways,
+because it is possible that both host-openssl and host-libressl are built and
+then depending on the build order either one of them actually gets installed...
+
+ Therefore, I think it's more appropriate to drop host-libssl (and
+host-libressl), and always use openssl for the host packages. The only
+disadvantage to this as far as I can see is that openssl takes a little longer
+to build than libressl.
+
+ Regards,
+ Arnout
+
 -- 
-2.13.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
