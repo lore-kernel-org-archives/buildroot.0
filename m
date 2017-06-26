@@ -1,63 +1,70 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 26 Jun 2017 23:53:21 +0200
-Subject: [Buildroot] [PATCH] qt5multimedia: conditionally add pulseaudio
- to dependencies
-In-Reply-To: <1498486306-29649-1-git-send-email-brgl@bgdev.pl>
-References: <1498486306-29649-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <20170626235321.7a3521fb@gmx.net>
+Date: Tue, 27 Jun 2017 00:08:39 +0200
+Subject: [Buildroot] [PATCH v1] pulseaudio: bump version to 10.0
+Message-ID: <20170626220839.17248-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bartosz,
+- remove 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
+ (committed upstream, see [1])
 
-On Mon, 26 Jun 2017 16:11:46 +0200, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+[1] https://cgit.freedesktop.org/pulseaudio/pulseaudio/commit/configure.ac?id=a7231692e907ca5d4c7c30beb8629b5c49e95c09
 
-> Qt5Multimedia includes support for pulseaudio if it detects libpulse
-> and libpulse-mainloop-glib in the system at build-time. We need to
-> depend on pulseaudio if it is selected.
-> 
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> ---
->  package/qt5/qt5multimedia/qt5multimedia.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-> index 133536e..8ebddeb 100644
-> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
-> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-> @@ -26,6 +26,10 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
->  QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-> +QT5MULTIMEDIA_DEPENDENCIES += pulseaudio
-> +endif
-> +
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...-C-11-is-only-required-for-WebRTC-support.patch | 41 ----------------------
+ 1 file changed, 41 deletions(-)
+ delete mode 100644 package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
 
-Thanks for catching this one.
-
-Ony one nit: the test qtmultimedia-opensource-src-5.8.0/config.tests/pulseaudio/pulseaudio.cpp
-checks for:
-
-  #include <pulse/pulseaudio.h>
-  #include <pulse/glib-mainloop.h>
-
-and pulse/glib-mainloop.h is only installed by the pulseaudio package in case
-BR2_PACKAGE_LIBGLIB2 is selected. The Dependency should therefore be (not sure
-about the libglib2 one):
-
- +ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
- +QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
- +endif
-
-By the way, the dependency on alsa is missing too...
-
-Regards,
-Peter
-
->  define QT5MULTIMEDIA_CONFIGURE_CMDS
->  	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
->  endef
+diff --git a/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch b/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
+deleted file mode 100644
+index b2c065196b..0000000000
+--- a/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 7af6cbe74d48a9853b60b029d4ce38a963386138 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sun, 3 Jul 2016 20:19:48 +0200
+-Subject: [PATCH] webrtc: C++11 is only required for WebRTC support
+-
+-Make C++11 support optional and explicitely check for gnu++11.
+-
+-Stop the build only if no C++11 support has been found and WebRTC
+-support has been resquested.
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- configure.ac | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 4edc8e0..fea93a9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -84,7 +84,7 @@ AM_PROG_CC_C_O
+- # Only required if you want the WebRTC canceller -- no runtime dep on
+- # libstdc++ otherwise
+- AC_PROG_CXX
+--AX_CXX_COMPILE_STDCXX_11
+-+AX_CXX_COMPILE_STDCXX_11([ext],[optional])
+- AC_PROG_GCC_TRADITIONAL
+- AC_USE_SYSTEM_EXTENSIONS
+- 
+-@@ -1414,6 +1414,9 @@ fi
+- AC_ARG_ENABLE([webrtc-aec],
+-     AS_HELP_STRING([--enable-webrtc-aec], [Enable the optional WebRTC-based echo canceller]))
+- 
+-+AS_IF([test "x$enable_webrtc_aec" = "xyes" && test "$HAVE_CXX11" = "0"],
+-+    [AC_MSG_ERROR([*** webrtc-audio-processing needs C++11 support])])
+-+
+- AS_IF([test "x$enable_webrtc_aec" != "xno"],
+-     [PKG_CHECK_MODULES(WEBRTC, [ webrtc-audio-processing >= 0.2 ], [HAVE_WEBRTC=1], [HAVE_WEBRTC=0])],
+-     [HAVE_WEBRTC=0])
+--- 
+-2.5.5
+-
+-- 
+2.11.0
