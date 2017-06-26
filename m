@@ -1,49 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 10:10:10 +0200
-Subject: [Buildroot] [PATCH] openssh: fix sshd for MIPS64 n32
-In-Reply-To: <20170620161519.44028-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Tue, 20 Jun 2017 17:15:19 +0100")
-References: <20170620161519.44028-1-Vincent.Riera@imgtec.com>
-Message-ID: <87wp7zgof1.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 09:56:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/x264: disable
+	optional ffmpeg support
+Message-ID: <20170626081043.6EF5381945@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e0d637c5a957947969d5f7755d69db3d4299b9b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > This patch backports two patches that have been sent upstream as a pull
- > request in order to fix sshd for MIPS64 n32.
+In buildroot ffmpeg uses x264 as optional dependency if
+BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
 
- > The first patch adds support for detecting the MIPS ABI during the
- > configure phase.
+If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
+support before x264 itself is build, x264 picks up certain ffmpeg libs
+as optional dependency leading to build errors because x264 does not
+correctly link statically against ffmpeg.
 
- > The second patch sets the right value to seccomp_audit_arch taking into
- > account the MIPS64 ABI.
+To avoid a circular dependency and to avoid teaching x264 how to
+correctly link statically with ffmpeg we just disable all ffmpeg-
+related options.
 
- > Currently seccomp_audit_arch is set to AUDIT_ARCH_MIPS64 or
- > AUDIT_ARCH_MIPSEL64 (depending on the endinness) when openssh is built
- > for MIPS64. However, that's only valid for n64 ABI. The right macros for
- > n32 ABI defined in seccomp.h are AUDIT_ARCH_MIPS64N32 and
- > AUDIT_ARCH_MIPSEL64N32, for big and little endian respectively.
+Fixes
+http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
 
- > Because of that an sshd built for MIPS64 n32 rejects connection attempts
- > and the output of strace reveals that the problem is related to seccomp
- > audit:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 310e4f07f8cdb3e3272aaed236142d58cfaa44e6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x264/x264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > [pid   194] prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, {len=57,
- > filter=0x555d5da0}) = 0
- > [pid   194] write(7, "\0\0\0]\0\0\0\5\0\0\0Ulist_hostkey_types: "..., 97) = ?
- > [pid   193] <... poll resumed> )        = 2 ([{fd=5, revents=POLLIN|POLLHUP},
- > {fd=6, revents=POLLHUP}])
- > [pid   194] +++ killed by SIGSYS +++
-
- > Pull request: https://github.com/openssh/openssh-portable/pull/71
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed to 2017.02.x and 2017.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index 80437c4..307bf6c 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -10,7 +10,7 @@ X264_LICENSE = GPLv2+
+ X264_DEPENDENCIES = host-pkgconf
+ X264_LICENSE_FILES = COPYING
+ X264_INSTALL_STAGING = YES
+-X264_CONF_OPTS = --disable-avs
++X264_CONF_OPTS = --disable-avs --disable-lavf --disable-swscale
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ # yasm needed for assembly files
