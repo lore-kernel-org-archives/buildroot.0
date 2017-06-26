@@ -1,113 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 07:18:26 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] expat: security bump to
-	version 2.2.1
-Message-ID: <20170626081138.EFA0581775@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 07:18:48 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] expat: fix patch that
+	doesn't apply properly
+Message-ID: <20170626081139.0C0F581775@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f157dce9219d32b41488a23050cf73fe81dd40f6
+commit: https://git.buildroot.net/buildroot/commit/?id=5ccccbd494e1c147183ad90e52d50926b077f2a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
 Fixes:
 
-- CVE-2017-9233 - External entity infinite loop DoS. See:
-  https://libexpat.github.io/doc/cve-2017-9233/
+  http://autobuild.buildroot.net/results/23f799009ae10c5de2b06a7747a28804818204c2/
 
-- CVE-2016-9063 -- Detect integer overflow
-
-And further more:
-
-- Fix regression from fix to CVE-2016-0718 cutting off longer tag names.
-
-- Extend fix for CVE-2016-5300 (use getrandom() if available).
-
-- Extend fix for CVE-2012-0876 (Change hash algorithm to William Ahern's
-  version of SipHash).
-
-Also add an upstream patch to fix detection of getrandom().
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c0ad6ded018ffbc33f7f52a4bbcc6f08a14bfbd6)
+(cherry picked from commit 1940a66114bb6962dfdcee928e5c5fa5f29c0be7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...c-Fix-mis-detection-of-getrandom-on-Debia.patch | 29 ++++++++++++++++++++++
- package/expat/expat.hash                           |  8 +++---
- package/expat/expat.mk                             |  4 ++-
- 3 files changed, 36 insertions(+), 5 deletions(-)
+ .../0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-new file mode 100644
-index 0000000..a302553
---- /dev/null
+index a302553..44f43e1 100644
+--- a/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
 +++ b/package/expat/0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-@@ -0,0 +1,29 @@
-+From 602e6c78ca750c082b72f8cdf4a38839b312959f Mon Sep 17 00:00:00 2001
-+From: Sebastian Pipping <sebastian@pipping.org>
-+Date: Sun, 18 Jun 2017 18:55:10 +0200
-+Subject: [PATCH] configure.ac: Fix mis-detection of getrandom on Debian
-+ GNU/kFreeBSD (#50)
-+
-+There is no such thing but we need to link (not just compile) to realize.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ expat/configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/expat/configure.ac b/expat/configure.ac
-+index 1357c9a..444c002 100644
-+--- a/expat/configure.ac
-++++ b/expat/configure.ac
-+@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
-+ 
-+ 
-+ AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
-+-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-++AC_LINK_IFELSE([AC_LANG_SOURCE([
-+   #include <stdlib.h>  /* for NULL */
-+   #include <sys/random.h>
-+   int main() {
-+-- 
-+2.11.0
-+
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 371abde..595597b 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.0/
--md5	2f47841c829facb346eb6e3fab5212e2	expat-2.2.0.tar.bz2
--sha1	8453bc52324be4c796fd38742ec48470eef358b3	expat-2.2.0.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.1/
-+md5	d9c3baeab58774cefc2f04faf29f2cf8	expat-2.2.1.tar.bz2
-+sha1	f45eb724f182776a9cacec9ed70d549e87198987	expat-2.2.1.tar.bz2
- # Calculated based on the hashes above
--sha256	d9e50ff2d19b3538bd2127902a89987474e1a4db8e43a66a4d1a712ab9a504ff	expat-2.2.0.tar.bz2
-+sha256	1868cadae4c82a018e361e2b2091de103cd820aaacb0d6cfa49bd2cd83978885	expat-2.2.1.tar.bz2
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index e7bb74a..bb6e627 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -11,10 +11,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  expat/configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
--EXPAT_VERSION = 2.2.0
-+EXPAT_VERSION = 2.2.1
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
-@@ -14,6 +14,8 @@ EXPAT_DEPENDENCIES = host-pkgconf
- HOST_EXPAT_DEPENDENCIES = host-pkgconf
- EXPAT_LICENSE = MIT
- EXPAT_LICENSE_FILES = COPYING
-+# for 0001-configure.ac-Fix-mis-detection-of-getrandom-on-Debia.patch
-+EXPAT_AUTORECONF = YES
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-diff --git a/expat/configure.ac b/expat/configure.ac
++diff --git a/configure.ac b/configure.ac
+ index 1357c9a..444c002 100644
+---- a/expat/configure.ac
+-+++ b/expat/configure.ac
++--- a/configure.ac
+++++ b/configure.ac
+ @@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
+  
+  
