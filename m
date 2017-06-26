@@ -1,9 +1,9 @@
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 26 Jun 2017 15:21:44 +0200
-Subject: [Buildroot] [PATCH 3/4] sigrok-cli: bump version to 0.7.0
+Date: Mon, 26 Jun 2017 15:21:43 +0200
+Subject: [Buildroot] [PATCH 2/4] libsigrokdecode: bump version to 0.5.0
 In-Reply-To: <1498483305-17826-1-git-send-email-brgl@bgdev.pl>
 References: <1498483305-17826-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <1498483305-17826-4-git-send-email-brgl@bgdev.pl>
+Message-ID: <1498483305-17826-3-git-send-email-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 ---
- package/sigrok-cli/sigrok-cli.hash | 2 +-
- package/sigrok-cli/sigrok-cli.mk   | 2 +-
+ package/libsigrokdecode/libsigrokdecode.hash | 2 +-
+ package/libsigrokdecode/libsigrokdecode.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sigrok-cli/sigrok-cli.hash b/package/sigrok-cli/sigrok-cli.hash
-index b60b57e..42bbdc1 100644
---- a/package/sigrok-cli/sigrok-cli.hash
-+++ b/package/sigrok-cli/sigrok-cli.hash
+diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
+index ccb2016..a4914b2 100644
+--- a/package/libsigrokdecode/libsigrokdecode.hash
++++ b/package/libsigrokdecode/libsigrokdecode.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256	ab2ede4e245f3987e19a89a530bd204e0d792c07474d9fed3345d4af4e84723c	sigrok-cli-0.6.0.tar.gz
-+sha256	5669d968c2de3dfc6adfda76e83789b6ba76368407c832438cef5e7099a65e1c	sigrok-cli-0.7.0.tar.gz
-diff --git a/package/sigrok-cli/sigrok-cli.mk b/package/sigrok-cli/sigrok-cli.mk
-index 3e2d1bf..1e017d6 100644
---- a/package/sigrok-cli/sigrok-cli.mk
-+++ b/package/sigrok-cli/sigrok-cli.mk
+-sha256	065f70c10971173d86e03a8cf5534e600c7a622775113997d8061572135d4a95	libsigrokdecode-0.4.1.tar.gz
++sha256	4aa8579ecea9b421b8ac048a9b18c27e63206839f269374398d89c14a47bd1c1	libsigrokdecode-0.5.0.tar.gz
+diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
+index ac53e7e..95e6e69 100644
+--- a/package/libsigrokdecode/libsigrokdecode.mk
++++ b/package/libsigrokdecode/libsigrokdecode.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SIGROK_CLI_VERSION = 0.6.0
-+SIGROK_CLI_VERSION = 0.7.0
- SIGROK_CLI_SITE = http://sigrok.org/download/source/sigrok-cli
- SIGROK_CLI_LICENSE = GPL-3.0+
- SIGROK_CLI_LICENSE_FILES = COPYING
+-LIBSIGROKDECODE_VERSION = 0.4.1
++LIBSIGROKDECODE_VERSION = 0.5.0
+ LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
+ LIBSIGROKDECODE_LICENSE = GPL-3.0+
+ LIBSIGROKDECODE_LICENSE_FILES = COPYING
 -- 
 2.9.3
