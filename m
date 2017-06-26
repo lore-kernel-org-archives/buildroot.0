@@ -1,45 +1,155 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 09:42:39 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] ntp: enable/disable sntp
-	support depending on BR2_PACKAGE_NTP_SNTP
-Message-ID: <20170626081139.33DED7FB5D@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 07:19:36 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] irssi: security bump to
+	version 1.0.3
+Message-ID: <20170626081139.1A89F81775@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce392505cf5ae7229eec5ab0f3c4d3c2579458ca
+commit: https://git.buildroot.net/buildroot/commit/?id=19232c3edf39770f7b17097df10212aabeb6b217
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-We already have an option for selecting sntp support in ntp that can be
-chosen from the menuconfig, and ntp's configure script has a --with-sntp
-option (with its --without counterpart) which can be used for disabling
-sntp support in ntp. However, we are not using it. This patch will make
-use of it.
+Fixes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+CVE-2017-9468 - Joseph Bisch discovered that Irssi does not properly handle
+DCC messages without source nick/host.  A malicious IRC server can take
+advantage of this flaw to cause Irssi to crash, resulting in a  denial of
+service.
+
+CVE-2017-9469 - Joseph Bisch discovered that Irssi does not properly handle
+receiving incorrectly quoted DCC files.  A remote attacker can take
+advantage of this flaw to cause Irssi to crash, resulting in a denial of
+service.
+
+See https://irssi.org/security/irssi_sa_2017_06.txt for more details.
+
+Remove 0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch as it
+applied upstream and drop autoreconf as configure.ac is no longer patched.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 79ee9b7e692824886bc19b21f55ac25e36e238f1)
+(cherry picked from commit 2e19525f2f4904424caee7bc13be24163fd54216)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/ntp.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ ...-to-using-pkg-config-to-check-for-OpenSSL.patch | 77 ----------------------
+ package/irssi/irssi.hash                           |  2 +-
+ package/irssi/irssi.mk                             |  5 +-
+ 3 files changed, 2 insertions(+), 82 deletions(-)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 26f5862..c70d6e6 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -65,6 +65,12 @@ else
- NTP_CONF_OPTS += --disable-SHM
- endif
+diff --git a/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch b/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
+deleted file mode 100644
+index 0ce44f9..0000000
+--- a/package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
++++ /dev/null
+@@ -1,77 +0,0 @@
+-From ed0c2c1b9504a99a6dcc3c0f5de3b3a1c0232758 Mon Sep 17 00:00:00 2001
+-From: Rodrigo Rebello <rprebello@gmail.com>
+-Date: Mon, 20 Mar 2017 13:17:42 -0300
+-Subject: [PATCH] Get back to using pkg-config to check for OpenSSL
+-
+-Commit 6300dfec7 removed the option to disable SSL support from the
+-configure script since it became a requirement, but it also removed the
+-use of pkg-config for finding the OpenSSL library and its dependencies.
+-
+-This had the unfortunate consequence of breaking the correct detection
+-of library flags in many static linking scenarios. In some cases, for
+-example, OpenSSL might have been built with zlib, which requires `-lz`
+-to be passed to the linker when doing a static link of the irssi
+-executable. Thus, pkg-config becomes an invaluable tool in such
+-situations, since no guessing work is needed as the OpenSSL .pc file
+-provides all the necessary flags.
+-
+-So, this patch re-inserts the PKG_CHECK_MODULES macro in the configure
+-script when looking for OpenSSL. The test using AC_CHECK_LIB remains,
+-but only as a last resort in case the one using pkg-config fails.
+-
+-Also, because the macro AM_PATH_GLIB_2_0 contains an unconditional call
+-to PKG_PROG_PKG_CONFIG, the OpenSSL checks are moved so that they come
+-after the Glib ones in order to avoid doubly checking for the pkg-config
+-binary (PKG_CHECK_MODULES skips that check if it has been performed
+-before, but PKG_PROG_PKG_CONFIG does not).
+-
+-Upstream status: submitted
+-https://github.com/irssi/irssi/pull/677
+-
+-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+----
+- configure.ac | 21 +++++++++++++++------
+- 1 file changed, 15 insertions(+), 6 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 02b33497..9f191d3f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -231,11 +231,6 @@ if test "x$want_socks" = "xyes"; then
+- fi
+- 
+- dnl **
+--dnl ** OpenSSL checks
+--dnl **
+--AC_CHECK_LIB([ssl], [SSL_library_init])
+--
+--dnl **
+- dnl ** fe-text checks
+- dnl **
+- 
+-@@ -276,7 +271,21 @@ if test -z "$GLIB_LIBS"; then
+-   AC_ERROR([GLIB is required to build irssi.])
+- fi
+- 
+--LIBS="$LIBS $GLIB_LIBS -lssl -lcrypto"
+-+LIBS="$LIBS $GLIB_LIBS"
+-+
+-+dnl **
+-+dnl ** OpenSSL checks
+-+dnl **
+-+PKG_CHECK_MODULES([OPENSSL], [openssl], [
+-+	CFLAGS="$CFLAGS $OPENSSL_CFLAGS"
+-+	LIBS="$LIBS $OPENSSL_LIBS"
+-+], [
+-+	AC_CHECK_LIB([ssl], [SSL_library_init], [
+-+		LIBS="$LIBS -lssl -lcrypto"
+-+	], [
+-+		AC_MSG_ERROR([The OpenSSL library was not found])
+-+	])
+-+])
+- 
+- dnl **
+- dnl ** curses checks
+--- 
+-2.11.0
+-
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index f1472e0..abb4219 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	5c1c3cc2caf103aad073fadeb000e0f8cb3b416833a7f43ceb8bd9fcf275fbe9	irssi-1.0.2.tar.xz
++sha256	838220297dcbe7c8c42d01005059779a82f5b7b7e7043db37ad13f5966aff581	irssi-1.0.3.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 1fe4de8..ae7986c 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
-+NTP_CONF_OPTS += --with-sntp
-+else
-+NTP_CONF_OPTS += --without-sntp
-+endif
-+
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+-IRSSI_VERSION = 1.0.2
++IRSSI_VERSION = 1.0.3
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+@@ -13,9 +13,6 @@ IRSSI_LICENSE = GPL-2.0+
+ IRSSI_LICENSE_FILES = COPYING
+ IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses openssl
+ 
+-# We're patching configure.ac, so we need to autoreconf
+-IRSSI_AUTORECONF = YES
+-
+ IRSSI_CONF_OPTS = \
+ 	--disable-glibtest \
+ 	--with-ncurses=$(STAGING_DIR)/usr \
