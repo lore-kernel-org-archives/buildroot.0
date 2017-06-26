@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 22:14:41 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] linux-headers: bump
-	3.10.x and 4.{9, 11}.x series
-Message-ID: <20170626202428.8FB7781E06@busybox.osuosl.org>
+Date: Mon, 26 Jun 2017 22:23:30 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/dhcp: dhcp
+	server: select systemd tmpfile support when systemd is used
+Message-ID: <20170626202428.B5D507FEBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b26e13709c0fbe6afa104c4606717b72a9cd9f7
+commit: https://git.buildroot.net/buildroot/commit/?id=1af75f592b117d904224662ac8ba9a3739b759fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+tmpfile support is optional in systemd but the dhcp server install it's
+config file in $(TARGET_DIR)/usr/lib/tmpfiles.d directory when systemd
+is used as init system.
+
+So it seems that dhcp server require tmpfile support for systemd based
+system.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 2ad8f6643d9cc0a5d39656e119237e31adaf2c69)
+(cherry picked from commit 51a24f8d71afef70ef42ab3e062277f2d602a278)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/dhcp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6704305..a29cd30 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -224,11 +224,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.89"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.106"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "4.1.41"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.73"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.33"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.34"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.6"	if BR2_KERNEL_HEADERS_4_11
-+	default "4.11.7"	if BR2_KERNEL_HEADERS_4_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+index d09256a..5340830 100644
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -12,6 +12,7 @@ if BR2_PACKAGE_DHCP
+ 
+ config BR2_PACKAGE_DHCP_SERVER
+ 	bool "dhcp server"
++	select BR2_PACKAGE_SYSTEMD_TMPFILES if BR2_PACKAGE_SYSTEMD
+ 	help
+ 	  DHCP server from the ISC DHCP distribution.
+ 
