@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 09:49:35 +0200
-Subject: [Buildroot] [PATCH] expat: security bump to version 2.2.1
-In-Reply-To: <20170618212004.32001-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 18 Jun 2017 23:20:04 +0200")
-References: <20170618212004.32001-1-peter@korsgaard.com>
-Message-ID: <87zicvi3xs.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 09:49:50 +0200
+Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.3
+In-Reply-To: <20170618213502.16233-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 18 Jun 2017 23:35:02 +0200")
+References: <20170618213502.16233-1-peter@korsgaard.com>
+Message-ID: <87vanji3xd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,24 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes:
- > - CVE-2017-9233 - External entity infinite loop DoS. See:
- >   https://libexpat.github.io/doc/cve-2017-9233/
+ > CVE-2017-9468 - Joseph Bisch discovered that Irssi does not properly handle
+ > DCC messages without source nick/host.  A malicious IRC server can take
+ > advantage of this flaw to cause Irssi to crash, resulting in a  denial of
+ > service.
 
- > - CVE-2016-9063 -- Detect integer overflow
+ > CVE-2017-9469 - Joseph Bisch discovered that Irssi does not properly handle
+ > receiving incorrectly quoted DCC files.  A remote attacker can take
+ > advantage of this flaw to cause Irssi to crash, resulting in a denial of
+ > service.
 
- > And further more:
+ > See https://irssi.org/security/irssi_sa_2017_06.txt for more details.
 
- > - Fix regression from fix to CVE-2016-0718 cutting off longer tag names.
-
- > - Extend fix for CVE-2016-5300 (use getrandom() if available).
-
- > - Extend fix for CVE-2012-0876 (Change hash algorithm to William Ahern's
- >   version of SipHash).
-
- > Also add an upstream patch to fix detection of getrandom().
+ > Remove 0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch as it
+ > applied upstream and drop autoreconf as configure.ac is no longer patched.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed this + fixup patch to 2017.02.x and 2017.05.x, thanks.
+Committed to 2017.02.x and 2017.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
