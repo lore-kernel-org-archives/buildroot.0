@@ -1,38 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jun 2017 09:56:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x264: disable optional ffmpeg
-	support
-In-Reply-To: <20170620223141.255a2c41@windsurf.lan> (Thomas Petazzoni's
- message of "Tue, 20 Jun 2017 22:31:41 +0200")
-References: <20170605162238.8413-1-bernd.kuhls@t-online.de>
- <20170620223141.255a2c41@windsurf.lan>
-Message-ID: <87mv8vi3m1.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jun 2017 09:58:29 +0200
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.11-P1
+In-Reply-To: <20170620205534.3570-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Jun 2017 22:55:34 +0200")
+References: <20170620205534.3570-1-peter@korsgaard.com>
+Message-ID: <87injji3iy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Hello,
- > On Mon,  5 Jun 2017 18:22:37 +0200, Bernd Kuhls wrote:
- >> In buildroot ffmpeg uses x264 as optional dependency if
- >> BR2_PACKAGE_FFMPEG_GPL is enabled at the same time.
- >> 
- >> If BR2_PACKAGE_FFMPEG_GPL is disabled and ffmpeg is built without x264
- >> support before x264 itself is build, x264 picks up certain ffmpeg libs
- >> as optional dependency leading to build errors because x264 does not
- >> correctly link statically against ffmpeg.
- >> 
- >> To avoid a circular dependency and to avoid teaching x264 how to
- >> correctly link statically with ffmpeg we just disable all ffmpeg-
- >> related options.
- >> 
- >> Fixes
- >> http://autobuild.buildroot.net/results/36a/36abb5b8f3aab57fb7b63056b216b4a58143ee3e/
- >> 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes the following security issues:
+ > CVE-2017-3140 is a denial-of-service vulnerability affecting 9.9.10,
+ > 9.10.5, 9.11.0->9.11.1, 9.9.10-S1, and 9.10.5-S1 when configured with
+ > Response Policy Zones (RPZ) utilizing NSIP or NSDNAME rules.
+
+ > https://kb.isc.org/article/AA-01495/74/CVE-2017-3140
+
+ > CVE-2017-3141 is a Windows privilege escalation vector affecting
+ > 9.2.6-P2+, 9.3.2-P1+, 9.4.x, 9.5.x, 9.6.x, 9.7.x, 9.8.x, 9.9.0->9.9.10,
+ 9.10.0-> 9.10.5, 9.11.0->9.11.1, 9.9.3-S1->9.9.10-S1, and 9.10.5-S1.  The
+ > BIND Windows installer failed to properly quote the service paths,
+ > possibly allowing a local user to achieve privilege escalation, if
+ > allowed by file system permissions.
+
+ > https://kb.isc.org/article/AA-01496/74/CVE-2017-3141
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x and 2017.05.x, thanks.
 
