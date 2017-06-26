@@ -1,38 +1,33 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 26 Jun 2017 08:18:58 -0300 (BRT)
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-06-25
-In-Reply-To: <20170626063115.F267C20897@mail.free-electrons.com>
-References: <20170626063115.F267C20897@mail.free-electrons.com>
-Message-ID: <1474395192.2007678.1498475938464.JavaMail.zimbra@datacom.ind.br>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Jun 2017 14:38:47 +0200
+Subject: [Buildroot] [PATCH 0/4] spice: version bump / security bump
+In-Reply-To: <20170621220744.18908-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 22 Jun 2017 00:07:40 +0200")
+References: <20170621220744.18908-1-peter@korsgaard.com>
+Message-ID: <87o9tahqjs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Sent: Monday, June 26, 2017 3:31:15 AM
-> Subject: [autobuild.buildroot.net] Your build results for 2017-06-25
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-> Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2017-06-25, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Build failures related to your packages:
-> 
->         arm |                util-linux-2.30 |
->         http://autobuild.buildroot.net/results/04411b7280dc51ecd51236967981a42352bbeb3e
+ > Our spice version is quite old (2013) and is affected by a number of
+ > security issues, so bump to the latest release in the 0.12.x series +
+ > upstream post-0.12.8 security fixes.
 
-I'm taking care of this one too.
+ > As the configuration options and dependencies have changed quite a bit since
+ > 2013, don't just do the entire bump in a single patch, but instead move
+ > forward release by release for easier review.
+
+ > Peter Korsgaard (4):
+ >   spice: bump to version 0.12.5
+ >   spice: security bump to version 0.12.6
+ >   spice: security bump to version 0.12.8
+ >   spice: add post-0.12.8 upstream security fixes
+
+Committed series to 2017.02.x and 2017.05.x, thanks.
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+Bye, Peter Korsgaard
