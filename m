@@ -1,58 +1,52 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 27 Jun 2017 11:37:30 +0200
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.9
-Message-ID: <20170627093730.17503-1-joerg.krause@embedded.rocks>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Tue, 27 Jun 2017 12:26:37 +0200
+Subject: [Buildroot] [PATCH v4 01/11] package/patchelf: use most recent
+	version as a base for rpath sanitation
+In-Reply-To: <1498559207-8050-1-git-send-email-wg@grandegger.com>
+References: <1498559207-8050-1-git-send-email-wg@grandegger.com>
+Message-ID: <1498559207-8050-2-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building version 0.20.7 fails with a GCC 4.9 toolchain:
+We would like to use "patchelf" to do rpath sanitation of all ELF files
+in the "host", "staging" and "target" directory, mainly because a script
+based solutions is too complex and slow.
 
-```
-src/Main.cxx:125:23: error: call to non-constexpr function 'const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = long unsigned int]'
-          64 * KILOBYTE);
-                       ^
-make[3]: *** [src/Main.o] Error 1
-```
-
-The issue was reported upstream [1] and already fixed in version 0.20.8.
-
-Fixes:
-http://autobuild.buildroot.net/results/fb6/fb67f453683078023e9d801176ef6871bc720c67/
-http://autobuild.buildroot.net/results/200/2005f2a7f2857e59ad1a896db0421bb0328b1766/
-http://autobuild.buildroot.net/results/804/80410b62d4ca292df8ecbaf7b0e2a020767111b6/
-
-[1] https://github.com/MusicPlayerDaemon/MPD/issues/45
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/patchelf/patchelf.hash | 2 +-
+ package/patchelf/patchelf.mk   | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index cea79e2643..2531abee01 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  005ac663b39a76701ba043cce4caef82ac6b0c2f16aae12fdc28e1b3b5b6c780  mpd-0.20.7.tar.xz
-+sha256  cd77a2869e32354b004cc6b34fcb0bee56114caa2d9ed862aaa8071441e34eb7  mpd-0.20.9.tar.xz
- sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index fce2472997..6169e95762 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/patchelf/patchelf.hash b/package/patchelf/patchelf.hash
+index 653eb46..95b067b 100644
+--- a/package/patchelf/patchelf.hash
++++ b/package/patchelf/patchelf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	a0f65c1ba148890e9f2f7823f4bedf7ecad5417772f64f994004f59a39014f83	patchelf-0.9.tar.bz2
++sha256  c8f1e4d2d41d5b390931e9876ccab39050182dc0003e865d3edd06684dbf9d8d  patchelf-29c085fd9d3fc972f75b3961905d6b4ecce7eb2b.tar.gz
+diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
+index 74e6ccc..9750351 100644
+--- a/package/patchelf/patchelf.mk
++++ b/package/patchelf/patchelf.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
- ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
--MPD_VERSION = $(MPD_VERSION_MAJOR).7
-+MPD_VERSION = $(MPD_VERSION_MAJOR).9
- else
- MPD_VERSION = $(MPD_VERSION_MAJOR).21
- endif
+-PATCHELF_VERSION = 0.9
+-PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-$(PATCHELF_VERSION)
+-PATCHELF_SOURCE = patchelf-$(PATCHELF_VERSION).tar.bz2
+-PATCHELF_LICENSE = GPL-3.0+
++PATCHELF_VERSION = 29c085fd9d3fc972f75b3961905d6b4ecce7eb2b
++PATCHELF_SITE = $(call github,NixOS,patchelf,$(PATCHELF_VERSION))
++PATCHELF_AUTORECONF = YES
++PATCHELF_LICENSE = GPLv3+
+ PATCHELF_LICENSE_FILES = COPYING
+ 
+ $(eval $(host-autotools-package))
 -- 
-2.13.1
+2.7.4
