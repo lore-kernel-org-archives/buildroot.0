@@ -1,79 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Jun 2017 23:33:38 +0200
-Subject: [Buildroot] [PATCH] squid: uClibc workaround no longer required
-In-Reply-To: <7636aa0c-a897-ea70-5dd2-6f7ec435a2b4@mind.be>
-References: <20170627190629.GA1589@waldemar-brodkorb.de>
- <7636aa0c-a897-ea70-5dd2-6f7ec435a2b4@mind.be>
-Message-ID: <5e19be51-71fe-e295-42b9-db27ccb04bec@mind.be>
+Date: Tue, 27 Jun 2017 23:41:44 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: skip ld-musl
+ symlink on static build
+In-Reply-To: <3d0e4832c2a187a5bd63ac094c11e2b237661cd5.1498586236.git.baruch@tkos.co.il>
+References: <3d0e4832c2a187a5bd63ac094c11e2b237661cd5.1498586236.git.baruch@tkos.co.il>
+Message-ID: <da672995-8d97-3657-627d-65b30e71a828@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Baruch,
 
-
-On 27-06-17 22:24, Arnout Vandecappelle wrote:
+On 27-06-17 19:57, Baruch Siach wrote:
+> Static build with external musl toolchain leaves a dangling symlink to
+> libc.so. Don't create that symlink on static build.
 > 
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> On 27-06-17 21:06, Waldemar Brodkorb wrote:
->> As all librt and libpthread functions are integrated into
->> libc for a while, workaround no longer required.
->>
->> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
->> ---
->>  package/squid/squid.mk | 5 -----
->>  1 file changed, 5 deletions(-)
->>
->> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
->> index 976ce6d..bcb3744 100644
->> --- a/package/squid/squid.mk
->> +++ b/package/squid/squid.mk
->> @@ -50,11 +50,6 @@ else
->>  SQUID_CONF_ENV += squid_cv_gnu_atomics=no
->>  endif
->>  
->> -# On uClibc librt needs libpthread
->> -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
->> -SQUID_CONF_ENV += ac_cv_search_shm_open="-lrt -lpthread"
->> -endif
-> 
->  In [1], Baruch wrote:
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 826934505e20..8460e37d095f 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -475,7 +475,7 @@ endef
+>  # With the musl C library, the libc.so library directly plays the role
+>  # of the dynamic library loader. We just need to create a symbolic
+>  # link to libc.so with the appropriate name.
+> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL):$(BR2_STATIC_LIBS),y:)
 
- Forgot:
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-June/195212.html
-
+ This patch conflicts with [1]. Could you combine them in a single series?
+Otherwise looks good to me, but it really should be viewed combined with [1].
 
  Regards,
  Arnout
 
+>  ifeq ($(BR2_i386),y)
+>  MUSL_ARCH = i386
+>  else ifeq ($(BR2_ARM_EABIHF),y)
 > 
-> B> package/squid/squid.mk
-> B>
-> B>   Needed for shm_open().
-> 
->  But indeed, the -lrt is added by the configure script, this workaround was only
-> needed for uClibc which used pthread functions from librt so needed to be linked
-> with libpthread as well.
-> 
->  Adding Baruch in Cc to double-check. Baruch, can you confirm that this can
-> indeed be removed?
-> 
->  For me:
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> 
->  Regards,
->  Arnout
-> 
-> 
->> -
->>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->>  SQUID_CONF_OPTS += --with-openssl
->>  SQUID_DEPENDENCIES += openssl
->>
-> 
+
+[1] http://patchwork.ozlabs.org/patch/780411/
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
