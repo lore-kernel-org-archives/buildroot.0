@@ -1,45 +1,42 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 27 Jun 2017 21:15:57 +0200
-Subject: [Buildroot] [PATCH v2] pulseaudio: bump version to 10.0
-In-Reply-To: <ku292ex3r1.ln2@ID-313208.user.individual.net>
-References: <20170626222558.20574-1-ps.report@gmx.net>
- <ku292ex3r1.ln2@ID-313208.user.individual.net>
-Message-ID: <20170627211557.76aa88e6@gmx.net>
+Date: Tue, 27 Jun 2017 21:18:20 +0200
+Subject: [Buildroot] [PATCH v2 1/2] qt5multimedia: conditionally add
+ pulseaudio & libglib2 to dependencies
+In-Reply-To: <1498549990-3548-2-git-send-email-brgl@bgdev.pl>
+References: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
+ <1498549990-3548-2-git-send-email-brgl@bgdev.pl>
+Message-ID: <20170627211820.65b42a83@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+On Tue, 27 Jun 2017 09:53:08 +0200, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-
-On Tue, 27 Jun 2017 06:19:00 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-
-> Am Tue, 27 Jun 2017 00:25:58 +0200 schrieb Peter Seiderer:
+> Qt5Multimedia includes support for pulseaudio if it detects libpulse
+> and libpulse-mainloop-glib in the system at build-time. We need to
+> depend on pulseaudio and libglib2 if it is selected.
 > 
-> > ToDo/FollowUp: pulseaudio uses now a built-in json parser (see [2]),
-> > drop the json-c (and maybe the BR2_TOOLCHAIN_HAS_SYNC_4) dependency.
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> ---
+>  package/qt5/qt5multimedia/qt5multimedia.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Hi Peter,
-> 
-> in http://patchwork.ozlabs.org/patch/718184/ I tried that but the 
+> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+> index 133536e..19312ff 100644
+> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
+> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+> @@ -26,6 +26,10 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+>  QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
+> +QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
+> +endif
+> +
+>  define QT5MULTIMEDIA_CONFIGURE_CMDS
+>  	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+>  endef
 
-Ups, missed your patch, sorry for the noise...
-
-> configure logic of pulseaudio seems not to be an easy one. Can you help 
-> here?
-
-Did take a quick look today at it...yes seems tricky, no quick solution
-from my side...
-
-Regards,
-Peter
-
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
