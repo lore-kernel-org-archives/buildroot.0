@@ -1,39 +1,27 @@
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 27 Jun 2017 09:53:09 +0200
-Subject: [Buildroot] [PATCH v2 2/2] qt5multimedia: conditionally add
-	alsa-lib to dependencies
-In-Reply-To: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
-References: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <1498549990-3548-3-git-send-email-brgl@bgdev.pl>
+Date: Tue, 27 Jun 2017 09:53:07 +0200
+Subject: [Buildroot] [PATCH v2 0/2] qt5multimedia: add missing dependencies
+Message-ID: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt5Multimedia builds the alsa plugin if it detects libasound in the
-system. Add alsa-lib to dependencies if BR2_PACKAGE_ALSA_LIB is
-selected.
+Qt5Multimedia conditionally builds support for pulseaudio and alsa if
+it detects corresponding libraries in the system but we need to
+explicitly depend on these packages.
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- package/qt5/qt5multimedia/qt5multimedia.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+v1 -> v2:
+- also added libglib2 as dependency for pulseaudio support
+- new patch: add alsa to dependencies
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 19312ff..062d980 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -30,6 +30,10 @@ ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
- QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+QT5MULTIMEDIA_DEPENDENCIES += alsa-lib
-+endif
-+
- define QT5MULTIMEDIA_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
+Bartosz Golaszewski (2):
+  qt5multimedia: conditionally add pulseaudio & libglib2 to dependencies
+  qt5multimedia: conditionally add alsa-lib to dependencies
+
+ package/qt5/qt5multimedia/qt5multimedia.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
 -- 
 2.9.3
