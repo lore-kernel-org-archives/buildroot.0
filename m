@@ -1,19 +1,19 @@
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 27 Jun 2017 09:53:08 +0200
-Subject: [Buildroot] [PATCH v2 1/2] qt5multimedia: conditionally add
-	pulseaudio & libglib2 to dependencies
+Date: Tue, 27 Jun 2017 09:53:09 +0200
+Subject: [Buildroot] [PATCH v2 2/2] qt5multimedia: conditionally add
+	alsa-lib to dependencies
 In-Reply-To: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
 References: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <1498549990-3548-2-git-send-email-brgl@bgdev.pl>
+Message-ID: <1498549990-3548-3-git-send-email-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt5Multimedia includes support for pulseaudio if it detects libpulse
-and libpulse-mainloop-glib in the system at build-time. We need to
-depend on pulseaudio and libglib2 if it is selected.
+Qt5Multimedia builds the alsa plugin if it detects libasound in the
+system. Add alsa-lib to dependencies if BR2_PACKAGE_ALSA_LIB is
+selected.
 
 Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 ---
@@ -21,15 +21,15 @@ Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
  1 file changed, 4 insertions(+)
 
 diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 133536e..19312ff 100644
+index 19312ff..062d980 100644
 --- a/package/qt5/qt5multimedia/qt5multimedia.mk
 +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -26,6 +26,10 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
- QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
+@@ -30,6 +30,10 @@ ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
+ QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
-+QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++QT5MULTIMEDIA_DEPENDENCIES += alsa-lib
 +endif
 +
  define QT5MULTIMEDIA_CONFIGURE_CMDS
