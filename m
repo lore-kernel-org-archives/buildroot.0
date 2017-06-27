@@ -1,392 +1,225 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Tue, 27 Jun 2017 21:48:40 +0530
-Subject: [Buildroot] [PATCH] board: icorem6: Add Qt5 configs for 800x480
-	LVDS display
-Message-ID: <1498580320-12765-1-git-send-email-jteki@openedev.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 27 Jun 2017 18:50:51 +0200
+Subject: [Buildroot] [PATCH v4] autofs: allow to use libtirpc instead of
+ internal C implementation
+Message-ID: <20170627165051.GA15934@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jagan Teki <jagan@amarulasolutions.com>
+uClibc-ng removed internal RPC implementation as it
+is ipv4 only and can not be used for most important RPC software
+rpcbind and nfs-utils.
+musl does not implement RPC and GNU C library deprecated the
+internal implementation a while ago.
+It is still possible to use the C library implementation.
 
-i.CoreM6 Starter Kit has 800x480 LVDS display, this patch adds
-relevant qt5 configs with supports opensource Etnaviv graphical stack.
-
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- ...6qdl-icore-Add-backlight-support-for-lvds.patch | 65 ++++++++++++++++++++++
- ...0002-arm-dts-imx6q-icore-Add-LVDS-support.patch | 53 ++++++++++++++++++
- ...-arm-dts-imx6q-icore-Add-touchscreen-node.patch | 40 +++++++++++++
- ...v7_defconfig-Select-max11801_ts-touchscre.patch | 32 +++++++++++
- ...x6qdl_icore-Add-video-details-on-bootargs.patch | 32 +++++++++++
- board/engicam/icorem6/readme.txt                   | 13 +++++
- .../icorem6/rootfs_overlay/root/icorem6.json       | 11 ++++
- configs/engicam_imx6qdl_icore_defconfig            | 40 +++++++++++++
- 8 files changed, 286 insertions(+)
- create mode 100644 board/engicam/icorem6/patches/linux-0001-arm-dts-imx6qdl-icore-Add-backlight-support-for-lvds.patch
- create mode 100644 board/engicam/icorem6/patches/linux-0002-arm-dts-imx6q-icore-Add-LVDS-support.patch
- create mode 100644 board/engicam/icorem6/patches/linux-0003-arm-dts-imx6q-icore-Add-touchscreen-node.patch
- create mode 100644 board/engicam/icorem6/patches/linux-0004-arm-imx_v6_v7_defconfig-Select-max11801_ts-touchscre.patch
- create mode 100644 board/engicam/icorem6/patches/u-boot-0001-configs-imx6qdl_icore-Add-video-details-on-bootargs.patch
- create mode 100644 board/engicam/icorem6/rootfs_overlay/root/icorem6.json
+v1 -> v2:                                                                                     
+  - Thomas Petazzoni wants to keep legacy C library provided RPC
+    support                      
+v2 -> v3:                                                                                     
+  - combine with BR2_PACKAGE_LIBTIRPC conditionally, suggested by
+    Baruch Siach
+v3 -> v4:
+  - add patch to use pkg-config to search libtirpc
+  - automatically use it when BR2_TOOLCHAIN_HAS_NATIVE_RPC isn't
+    available
+  - tested with glibc/uclibc-ng toolchains
+---
+ ...fig-to-search-for-libtirpc-to-fix-cross-c.patch | 129 +++++++++++++++++++++
+ package/autofs/Config.in                           |   7 +-
+ package/autofs/autofs.mk                           |  10 +-
+ 3 files changed, 141 insertions(+), 5 deletions(-)
+ create mode 100644 package/autofs/0002-use-pkg-config-to-search-for-libtirpc-to-fix-cross-c.patch
 
-diff --git a/board/engicam/icorem6/patches/linux-0001-arm-dts-imx6qdl-icore-Add-backlight-support-for-lvds.patch b/board/engicam/icorem6/patches/linux-0001-arm-dts-imx6qdl-icore-Add-backlight-support-for-lvds.patch
+diff --git a/package/autofs/0002-use-pkg-config-to-search-for-libtirpc-to-fix-cross-c.patch b/package/autofs/0002-use-pkg-config-to-search-for-libtirpc-to-fix-cross-c.patch
 new file mode 100644
-index 0000000..d322f9f
+index 0000000..29c3075
 --- /dev/null
-+++ b/board/engicam/icorem6/patches/linux-0001-arm-dts-imx6qdl-icore-Add-backlight-support-for-lvds.patch
-@@ -0,0 +1,65 @@
-+From 78d35e6729ae55ef17b134ab9135ef9a5f6d219d Mon Sep 17 00:00:00 2001
-+From: Jagan Teki <jagan@amarulasolutions.com>
-+Date: Fri, 17 Feb 2017 10:34:24 +0530
-+Subject: [PATCH] arm: dts: imx6qdl-icore: Add backlight support for lvds
++++ b/package/autofs/0002-use-pkg-config-to-search-for-libtirpc-to-fix-cross-c.patch
+@@ -0,0 +1,129 @@
++From 7582cb88121d1ca4431def9175469e1590e9c29f Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Tue, 27 Jun 2017 18:11:56 +0200
++Subject: [PATCH] use pkg-config to search for libtirpc to fix
++ cross-compilation
 +
-+This patch add support for lvds backlight on i.CoreM6 QDL
-+variant boards.
-+
-+Cc: Domenico Acri <domenico.acri@engicam.com>
-+Cc: Matteo Lisi <matteo.lisi@engicam.com>
-+Cc: Michael Trimarchi <michael@amarulasolutions.com>
-+Cc: Shawn Guo <shawnguo@kernel.org>
-+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +---
-+ arch/arm/boot/dts/imx6qdl-icore.dtsi | 20 ++++++++++++++++++++
-+ 1 file changed, 20 insertions(+)
++ Makefile.conf.in |  3 ++-
++ Makefile.rules   |  2 +-
++ aclocal.m4       | 48 ------------------------------------------------
++ configure.in     | 11 +++++++++--
++ 4 files changed, 12 insertions(+), 52 deletions(-)
 +
-+diff --git a/arch/arm/boot/dts/imx6qdl-icore.dtsi b/arch/arm/boot/dts/imx6qdl-icore.dtsi
-+index 55bebfc..7dda608 100644
-+--- a/arch/arm/boot/dts/imx6qdl-icore.dtsi
-++++ b/arch/arm/boot/dts/imx6qdl-icore.dtsi
-+@@ -48,6 +48,14 @@
-+ 		reg = <0x10000000 0x80000000>;
-+ 	};
++diff --git a/Makefile.conf.in b/Makefile.conf.in
++index 2bc3202..f879e26 100644
++--- a/Makefile.conf.in
+++++ b/Makefile.conf.in
++@@ -64,7 +64,8 @@ RPCGEN = @PATH_RPCGEN@
++ RANLIB = @PATH_RANLIB@
 + 
-++	backlight {
-++		compatible = "pwm-backlight";
-++		pwms = <&pwm3 0 100000>;
-++		brightness-levels = <0 4 8 16 32 64 128 255>;
-++		default-brightness-level = <7>;
-++		status = "okay";
-++	};
-++
-+ 	reg_3p3v: regulator-3p3v {
-+ 		compatible = "regulator-fixed";
-+ 		regulator-name = "3P3V";
-+@@ -136,6 +144,12 @@
-+ 	status = "okay";
-+ };
++ # Use libtirpc if requested and available
++-TIRPCLIB = @TIRPCLIB@
+++TIRPCLIB = @TIRPC_LIBS@
+++TIRPCCFLAGS = @TIRPC_CFLAGS@
 + 
-++&pwm3 {
-++	pinctrl-names = "default";
-++	pinctrl-0 = <&pinctrl_pwm3>;
-++	status = "okay";
-++};
-++
-+ &uart4 {
-+ 	pinctrl-names = "default";
-+ 	pinctrl-0 = <&pinctrl_uart4>;
-+@@ -246,6 +260,12 @@
-+ 		>;
-+ 	};
++ # Use dmalloc for memory debuging
++ DMALLOCLIB = @DMALLOCLIB@
++diff --git a/Makefile.rules b/Makefile.rules
++index 7d1af2e..0edf9bf 100644
++--- a/Makefile.rules
+++++ b/Makefile.rules
++@@ -46,7 +46,7 @@ CFLAGS += -D_REENTRANT -D_FILE_OFFSET_BITS=64
++ LIBS += -lpthread
 + 
-++	pinctrl_pwm3: pwm3grp-1 {
-++		fsl,pins = <
-++			MX6QDL_PAD_SD4_DAT1__PWM3_OUT 0x1b0b1
-++		>;
-++	};
-++
-+ 	pinctrl_usbotg: usbotggrp {
-+ 		fsl,pins = <
-+ 			MX6QDL_PAD_GPIO_1__USB_OTG_ID 0x17059
-+-- 
-+1.9.1
-+
-diff --git a/board/engicam/icorem6/patches/linux-0002-arm-dts-imx6q-icore-Add-LVDS-support.patch b/board/engicam/icorem6/patches/linux-0002-arm-dts-imx6q-icore-Add-LVDS-support.patch
-new file mode 100644
-index 0000000..f3a0a0f
---- /dev/null
-+++ b/board/engicam/icorem6/patches/linux-0002-arm-dts-imx6q-icore-Add-LVDS-support.patch
-@@ -0,0 +1,53 @@
-+From 834e40467e3840f8363566ae070f71965881e341 Mon Sep 17 00:00:00 2001
-+From: Jagan Teki <jagan@amarulasolutions.com>
-+Date: Mon, 20 Feb 2017 19:55:39 +0000
-+Subject: [PATCH] arm: dts: imx6q-icore: Add LVDS support
-+
-+Add LVDS display support for OpenFrame Capacitive touch 7 inc
-+display which is supported by Engicam i.CoreM6 QDL Starter Kit.
-+
-+Cc: Domenico Acri <domenico.acri@engicam.com>
-+Cc: Matteo Lisi <matteo.lisi@engicam.com>
-+Cc: Michael Trimarchi <michael@amarulasolutions.com>
-+Cc: Shawn Guo <shawnguo@kernel.org>
-+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-+---
-+ arch/arm/boot/dts/imx6q-icore.dts | 25 +++++++++++++++++++++++++
-+ 1 file changed, 25 insertions(+)
-+
-+diff --git a/arch/arm/boot/dts/imx6q-icore.dts b/arch/arm/boot/dts/imx6q-icore.dts
-+index 59eb7ad..41d5a31 100644
-+--- a/arch/arm/boot/dts/imx6q-icore.dts
-++++ b/arch/arm/boot/dts/imx6q-icore.dts
-+@@ -57,3 +57,28 @@
-+ &can2 {
-+ 	status = "okay";
-+ };
-++
-++&ldb {
-++	status = "okay";
-++
-++	lvds-channel at 0 {
-++		fsl,data-mapping = "spwg";
-++		fsl,data-width = <18>;
-++		status = "okay";
-++
-++		display-timings {
-++                        native-mode = <&timing0>;
-++                        timing0: timing0 {
-++                                clock-frequency = <60000000>;
-++                                hactive = <800>;
-++                                vactive = <480>;
-++                                hback-porch = <30>;
-++                                hfront-porch = <30>;
-++                                vback-porch = <5>;
-++                                vfront-porch = <5>;
-++                                hsync-len = <64>;
-++                                vsync-len = <20>;
-++                        };
-++                };
-++	};
-++};
-+-- 
-+1.9.1
-+
-diff --git a/board/engicam/icorem6/patches/linux-0003-arm-dts-imx6q-icore-Add-touchscreen-node.patch b/board/engicam/icorem6/patches/linux-0003-arm-dts-imx6q-icore-Add-touchscreen-node.patch
-new file mode 100644
-index 0000000..7cbb34d
---- /dev/null
-+++ b/board/engicam/icorem6/patches/linux-0003-arm-dts-imx6q-icore-Add-touchscreen-node.patch
-@@ -0,0 +1,40 @@
-+From e692662c789581295c1e7c7e92a2ceb1e212e6d2 Mon Sep 17 00:00:00 2001
-+From: Jagan Teki <jagan@amarulasolutions.com>
-+Date: Tue, 7 Mar 2017 07:08:57 +0000
-+Subject: [PATCH] arm: dts: imx6q-icore: Add touchscreen node
-+
-+max11801 touchscreen on Engicam iCoreM6 Quad module is
-+connected via i2c1, so add tc: max11801 at 48 on i2c1.
-+
-+Cc: Domenico Acri <domenico.acri@engicam.com>
-+Cc: Matteo Lisi <matteo.lisi@engicam.com>
-+Cc: Michael Trimarchi <michael@amarulasolutions.com>
-+Cc: Shawn Guo <shawnguo@kernel.org>
-+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-+---
-+ arch/arm/boot/dts/imx6q-icore.dts | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
-+
-+diff --git a/arch/arm/boot/dts/imx6q-icore.dts b/arch/arm/boot/dts/imx6q-icore.dts
-+index 41d5a31..c190e5c 100644
-+--- a/arch/arm/boot/dts/imx6q-icore.dts
-++++ b/arch/arm/boot/dts/imx6q-icore.dts
-+@@ -58,6 +58,15 @@
-+ 	status = "okay";
-+ };
++ ifdef TIRPCLIB
++-CFLAGS += -I/usr/include/tirpc
+++CFLAGS += $(TIRPCCFLAGS)
++ LIBS += $(TIRPCLIB)
++ endif
 + 
-++&i2c1 {
-++	ts: max11801 at 48 {
-++		compatible = "max11801";
-++		reg = <0x48>;
-++		interrupt-parent = <&gpio3>;
-++		interrupts = <31 2>;
-++	};
-++};
-++
-+ &ldb {
-+ 	status = "okay";
++diff --git a/aclocal.m4 b/aclocal.m4
++index 00811e0..31ca602 100644
++--- a/aclocal.m4
+++++ b/aclocal.m4
++@@ -399,51 +399,3 @@ fi
++ LIBS="$af_check_ldap_parse_page_control_save_libs"
++ ])
 + 
++-dnl --------------------------------------------------------------------------
++-dnl AF_CHECK_LIBTIRPC
++-dnl
++-dnl Use libtirpc for rpc transport
++-dnl --------------------------------------------------------------------------
++-AC_DEFUN([AF_CHECK_LIBTIRPC],
++-[
++-# save current flags
++-af_check_libtirpc_save_cflags="$CFLAGS"
++-af_check_libtirpc_save_libs="$LIBS"
++-CFLAGS="$CFLAGS -I/usr/include/tirpc"
++-LIBS="$LIBS -ltirpc"
++-
++-AC_TRY_LINK(
++-    [ #include <rpc/rpc.h> ],
++-    [ CLIENT *cl;
++-      struct sockaddr_in addr;
++-      int fd;
++-      unsigned long ul; struct timeval t; unsigned int ui;
++-      cl = clntudp_bufcreate(&addr,ul,ul,t,&fd,ui,ui); ],
++-    [ af_have_libtirpc=yes
++-      AC_MSG_RESULT(yes) ],
++-    [ AC_MSG_RESULT(no) ])
++-
++-if test "$af_have_libtirpc" = "yes"; then
++-    AC_DEFINE(WITH_LIBTIRPC,1, [Define to 1 if you have the libtirpc library installed])
++-    AC_DEFINE(TIRPC_WORKAROUND,1, [Define to 1 to use the libtirpc tsd usage workaround])
++-    TIRPCLIB="-ltirpc"
++-fi
++-
++-AC_CHECK_FUNCS([getrpcbyname getservbyname])
++-
++-# restore flags
++-CFLAGS="$af_check_libtirpc_save_cflags"
++-LIBS="$af_check_libtirpc_save_libs"
++-])
++-
++-AC_DEFUN([AF_WITH_LIBTIRPC],
++-[AC_MSG_CHECKING([if libtirpc is requested and available])
++-AC_ARG_WITH(libtirpc,
++-[  --with-libtirpc         use libtirpc if available],
++-[if test "$withval" = yes; then
++-  AF_CHECK_LIBTIRPC()
++-else
++-  AC_MSG_RESULT(no)
++-fi], [AC_MSG_RESULT(no)])
++-])
++-
++diff --git a/configure.in b/configure.in
++index 0521252..43a2776 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -11,6 +11,9 @@ define([AC_CACHE_LOAD], )dnl
++ define([AC_CACHE_SAVE], )dnl
++ AC_INIT(.autofs-5.1.3)
++ 
+++# for pkg-config/pkconf
+++m4_include([pkg.m4])
+++
++ #
++ # autofs installs by default in /usr
++ #
++@@ -124,8 +127,12 @@ AC_SUBST(flagdir)
++ #
++ # Use libtirpc
++ #
++-AF_WITH_LIBTIRPC()
++-AC_SUBST(TIRPCLIB)
+++PKG_PROG_PKG_CONFIG()
+++
+++AC_ARG_WITH([libtirpc], AS_HELP_STRING([--with-libtirpc], [Build with the TIRPC library]))
+++if test "x$with_libtirpc" = "xyes"; then
+++  PKG_CHECK_MODULES([TIRPC],[libtirpc])
+++fi
++ 
++ #
++ # Optional include dmalloc
 +-- 
-+1.9.1
++2.1.4
 +
-diff --git a/board/engicam/icorem6/patches/linux-0004-arm-imx_v6_v7_defconfig-Select-max11801_ts-touchscre.patch b/board/engicam/icorem6/patches/linux-0004-arm-imx_v6_v7_defconfig-Select-max11801_ts-touchscre.patch
-new file mode 100644
-index 0000000..ffe5df5
---- /dev/null
-+++ b/board/engicam/icorem6/patches/linux-0004-arm-imx_v6_v7_defconfig-Select-max11801_ts-touchscre.patch
-@@ -0,0 +1,32 @@
-+From 30de58cac4b8305d6eefd15f07a534ab36bd072f Mon Sep 17 00:00:00 2001
-+From: Jagan Teki <jagan@amarulasolutions.com>
-+Date: Tue, 7 Mar 2017 08:17:35 +0000
-+Subject: [PATCH] arm: imx_v6_v7_defconfig: Select max11801_ts touchscreen
-+ driver
-+
-+Select CONFIG_TOUCHSCREEN_MAX11801 so that we can have touchscreen
-+funtionality by default on Engicam i.CoreM6 Quad boards.
-+
-+Cc: Matteo Lisi <matteo.lisi@engicam.com>
-+Cc: Michael Trimarchi <michael@amarulasolutions.com>
-+Cc: Shawn Guo <shawnguo@kernel.org>
-+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-+---
-+ arch/arm/configs/imx_v6_v7_defconfig | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-+index eaba3b1..842168f 100644
-+--- a/arch/arm/configs/imx_v6_v7_defconfig
-++++ b/arch/arm/configs/imx_v6_v7_defconfig
-+@@ -165,6 +165,7 @@ CONFIG_TOUCHSCREEN_ADS7846=y
-+ CONFIG_TOUCHSCREEN_EGALAX=y
-+ CONFIG_TOUCHSCREEN_IMX6UL_TSC=y
-+ CONFIG_TOUCHSCREEN_EDT_FT5X06=y
-++CONFIG_TOUCHSCREEN_MAX11801=y
-+ CONFIG_TOUCHSCREEN_MC13783=y
-+ CONFIG_TOUCHSCREEN_TSC2004=y
-+ CONFIG_TOUCHSCREEN_TSC2007=y
-+-- 
-+1.9.1
-+
-diff --git a/board/engicam/icorem6/patches/u-boot-0001-configs-imx6qdl_icore-Add-video-details-on-bootargs.patch b/board/engicam/icorem6/patches/u-boot-0001-configs-imx6qdl_icore-Add-video-details-on-bootargs.patch
-new file mode 100644
-index 0000000..7ca9538
---- /dev/null
-+++ b/board/engicam/icorem6/patches/u-boot-0001-configs-imx6qdl_icore-Add-video-details-on-bootargs.patch
-@@ -0,0 +1,32 @@
-+From 873ac676c5125173b8a32fb8814e6b9b09bf21d8 Mon Sep 17 00:00:00 2001
-+From: Jagan Teki <jagan@amarulasolutions.com>
-+Date: Tue, 27 Jun 2017 15:29:01 +0530
-+Subject: [PATCH] configs: imx6qdl_icore: Add video details on bootargs
-+
-+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-+---
-+ include/configs/imx6qdl_icore.h | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/configs/imx6qdl_icore.h b/include/configs/imx6qdl_icore.h
-+index 13fc48f..f0fe666 100644
-+--- a/include/configs/imx6qdl_icore.h
-++++ b/include/configs/imx6qdl_icore.h
-+@@ -45,10 +45,13 @@
-+ 	"fdt_addr=0x18000000\0" \
-+ 	"boot_fdt=try\0" \
-+ 	"mmcpart=1\0" \
-++	"panel_type=LVDS-1\0" \
-++	"resolution=800x480\0" \
-++	"sync=60\0" \
-+ 	"nandroot=ubi0:rootfs rootfstype=ubifs\0" \
-+ 	"mmcautodetect=yes\0" \
-+ 	"mmcargs=setenv bootargs console=${console},${baudrate} " \
-+-		"root=${mmcroot}\0" \
-++		"root=${mmcroot} video=${panel_type}:${resolution}@${sync}\0" \
-+ 	"ubiargs=setenv bootargs console=${console},${baudrate} " \
-+ 		"ubi.mtd=5 root=${nandroot} ${mtdparts}\0" \
-+ 	"loadbootscript=" \
-+-- 
-+2.7.4
-+
-diff --git a/board/engicam/icorem6/readme.txt b/board/engicam/icorem6/readme.txt
-index 0ad60bf..f63330a 100644
---- a/board/engicam/icorem6/readme.txt
-+++ b/board/engicam/icorem6/readme.txt
-@@ -66,4 +66,17 @@ To boot your newly created system:
- - close JM3 for sd boot.
- - power on the board.
+diff --git a/package/autofs/Config.in b/package/autofs/Config.in
+index 8e08357..efb0ec2 100644
+--- a/package/autofs/Config.in
++++ b/package/autofs/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
+ 	bool "autofs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on !BR2_STATIC_LIBS # dlfcn
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Autofs controls the operation of the automount daemons. The
+ 	  automount daemons automatically mount filesystems when they
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_AUTOFS
  
-+Testing graphics on i.CoreM6 Starter Kit:
-+========================================
-+
-+Running kmscube
-+# kmscube -D /dev/dri/card1
-+
-+Running glmark2-es2-drm
-+# glmark2-es2-drm
-+
-+Running Qt5 Cinematic Demo:
-+# export QT_QPA_EGLFS_KMS_CONFIG=/root/icorem6.json
-+# CinematicExperience-demo
-+
- Enjoy!
-diff --git a/board/engicam/icorem6/rootfs_overlay/root/icorem6.json b/board/engicam/icorem6/rootfs_overlay/root/icorem6.json
-new file mode 100644
-index 0000000..ac139a3
---- /dev/null
-+++ b/board/engicam/icorem6/rootfs_overlay/root/icorem6.json
-@@ -0,0 +1,11 @@
-+{
-+  "device": "/dev/dri/card1",
-+  "hwcursor": false,
-+  "pbuffers": true,
-+  "outputs": [
-+    {
-+      "name": "LVDS-1",
-+      "mode": "800x480"
-+    }
-+  ]
-+}
-diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_defconfig
-index 466d60c..4a875b9 100644
---- a/configs/engicam_imx6qdl_icore_defconfig
-+++ b/configs/engicam_imx6qdl_icore_defconfig
-@@ -21,11 +21,13 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_TARGET_UBOOT_PATCH="board/engicam/icorem6/patches/u-boot-*.patch"
+ 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
-+BR2_LINUX_KERNEL_PATCH="board/engicam/icorem6/patches/linux-*.patch"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-@@ -36,8 +38,46 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo Starter Kit"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_BLOCKS=122880
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
-+BR2_ROOTFS_OVERLAY="board/engicam/icorem6/rootfs_overlay"
+-comment "autofs needs a toolchain w/ NPTL, RPC, dynamic library"
++comment "autofs needs a toolchain w/ NPTL and dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 148ab1b..eb28306 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -9,7 +9,8 @@ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
+ AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
+-AUTOFS_DEPENDENCIES = host-flex host-bison
++AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf
++AUTOFS_AUTORECONF = YES
+ 
+ # autofs looks on the build machine for the path of modprobe, so tell
+ # it explicitly where it will be located on the target.
+@@ -31,4 +32,11 @@ AUTOFS_CONF_OPTS = \
+ 
+ AUTOFS_MAKE_ENV = DONTSTRIP=1
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
++AUTOFS_CONF_OPTS += --with-libtirpc
++AUTOFS_DEPENDENCIES += libtirpc
++else
++AUTOFS_CONF_OPTS += --without-libtirpc
++endif
 +
-+# qt5 dependencies
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_TOOLCHAIN_USES_GLIBC=y
-+
-+# qt5
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_OPENGL=y
-+BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-+BR2_PACKAGE_QT5BASE_GIF=y
-+BR2_PACKAGE_QT5BASE_JPEG=y
-+
-+# mesa3d
-+BR2_PACKAGE_MESA3D=y
-+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
-+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-+BR2_PACKAGE_MESA3D_OPENGL_ES=y
-+
-+# qt5 demo packages
-+BR2_PACKAGE_GLMARK2=y
-+BR2_PACKAGE_MESA3D_DEMOS=y
-+BR2_PACKAGE_KMSCUBE=y
-+BR2_PACKAGE_QT5CINEX=y
-+BR2_PACKAGE_QT5CINEX_HD=y
-+
-+# fonts
-+BR2_PACKAGE_BITSTREAM_VERA=y
-+BR2_PACKAGE_CANTARELL=y
-+BR2_PACKAGE_DEJAVU=y
-+BR2_PACKAGE_FONT_AWESOME=y
-+BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
-+BR2_PACKAGE_INCONSOLATA=y
-+BR2_PACKAGE_LIBERATION=y
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.1.4
