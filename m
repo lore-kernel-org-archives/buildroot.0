@@ -1,36 +1,43 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 27 Jun 2017 21:06:30 +0200
-Subject: [Buildroot] [PATCH] squid: uClibc workaround no longer required
-Message-ID: <20170627190629.GA1589@waldemar-brodkorb.de>
+Date: Tue, 27 Jun 2017 21:07:43 +0200
+Subject: [Buildroot] [PATCH] nodm: uClibc wordexp support is enabled by
+	default
+Message-ID: <20170627190743.GA3908@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As all librt and libpthread functions are integrated into
-libc for a while, workaround no longer required.
+Build tested with Qemu X86 sample.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/squid/squid.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/nodm/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 976ce6d..bcb3744 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -50,11 +50,6 @@ else
- SQUID_CONF_ENV += squid_cv_gnu_atomics=no
- endif
+diff --git a/package/nodm/Config.in b/package/nodm/Config.in
+index 97ce8c3..38171e8 100644
+--- a/package/nodm/Config.in
++++ b/package/nodm/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_NODM
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS # linux-pam
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs wordexp.h
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LINUX_PAM
+@@ -19,8 +18,7 @@ config BR2_PACKAGE_NODM
  
--# On uClibc librt needs libpthread
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
--SQUID_CONF_ENV += ac_cv_search_shm_open="-lrt -lpthread"
--endif
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SQUID_CONF_OPTS += --with-openssl
- SQUID_DEPENDENCIES += openssl
+ 	  https://github.com/spanezz/nodm/
+ 
+-comment "nodm needs a glibc toolchain w/ wchar, locale, dynamic library"
++comment "nodm needs a glibc or uClibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL \
+-		|| BR2_TOOLCHAIN_USES_UCLIBC
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
 -- 
 2.1.4
