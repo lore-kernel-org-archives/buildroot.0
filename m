@@ -1,52 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Jun 2017 23:41:44 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: skip ld-musl
- symlink on static build
-In-Reply-To: <3d0e4832c2a187a5bd63ac094c11e2b237661cd5.1498586236.git.baruch@tkos.co.il>
+Date: Tue, 27 Jun 2017 23:56:46 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain-external: remove redundant
+ condition
+In-Reply-To: <c6c63dde7bd2a853d5ef41869f6bc3266db0c05a.1498586236.git.baruch@tkos.co.il>
 References: <3d0e4832c2a187a5bd63ac094c11e2b237661cd5.1498586236.git.baruch@tkos.co.il>
-Message-ID: <da672995-8d97-3657-627d-65b30e71a828@mind.be>
+ <c6c63dde7bd2a853d5ef41869f6bc3266db0c05a.1498586236.git.baruch@tkos.co.il>
+Message-ID: <8c2ac64a-eb85-e868-36cc-a139aa10f6e1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Baruch,
+
 
 On 27-06-17 19:57, Baruch Siach wrote:
-> Static build with external musl toolchain leaves a dangling symlink to
-> libc.so. Don't create that symlink on static build.
+> TOOLCHAIN_EXTERNAL_MUSL_LD_LINK is empty when BR2_TOOLCHAIN_EXTERNAL_MUSL is
+> not set. No need to add another condition.
 > 
 > Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 --
+>  1 file changed, 2 deletions(-)
 > 
 > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index 826934505e20..8460e37d095f 100644
+> index 8460e37d095f..2c87a367e67b 100644
 > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -475,7 +475,7 @@ endef
->  # With the musl C library, the libc.so library directly plays the role
->  # of the dynamic library loader. We just need to create a symbolic
->  # link to libc.so with the appropriate name.
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL):$(BR2_STATIC_LIBS),y:)
+> @@ -587,9 +587,7 @@ define $(2)_INSTALL_STAGING_CMDS
+>  	$$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+>  endef
+>  
+> -ifeq ($$(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+>  $(2)_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
+> -endif
 
- This patch conflicts with [1]. Could you combine them in a single series?
-Otherwise looks good to me, but it really should be viewed combined with [1].
+ Actually, we (almost) always put both the definition of the hook and the
+assignment to the _HOOKS variable under the relevant condition. So instead of
+this, I'd just move the assignment to the definition of the hook and keep it
+under the same condition. But of course, that's not possible, because the
+assignment is in the inner-toolchain-external-package macro and we don't want to
+define the hook inside that macro. Therefore, I would make the definition of
+TOOLCHAIN_EXTERNAL_MUSL_LD_LINK unconditional, and add the conditions only here.
 
  Regards,
  Arnout
 
->  ifeq ($(BR2_i386),y)
->  MUSL_ARCH = i386
->  else ifeq ($(BR2_ARM_EABIHF),y)
+>  
+>  # Even though we're installing things in both the staging, the host
+>  # and the target directory, we do everything within the
 > 
-
-[1] http://patchwork.ozlabs.org/patch/780411/
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
