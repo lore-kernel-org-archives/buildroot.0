@@ -1,42 +1,119 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 27 Jun 2017 20:32:16 +0200
-Subject: [Buildroot] [PATCH 2/2] Makefile: regenerat .gitlab-ci.yml when
-	configs/ directory changes
-In-Reply-To: <20170627183216.31749-1-arnout@mind.be>
-References: <20170627183216.31749-1-arnout@mind.be>
-Message-ID: <20170627183216.31749-2-arnout@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Jun 2017 20:58:48 +0200
+Subject: [Buildroot] [PATCH-2017.02.x] nodejs: bump 6.x version to 6.11.0
+Message-ID: <20170627185848.32207-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dependencies were not correct. For example, if a defconfig is
-removed, the .gitlab-ci.yml file has to be regenerated but the
-dependency doesn't reflect this. Therefore, it should depend on the
-configs directory instead of on the individual defconfig files.
+6.11.0 is the latest release in the LTS series, fixing a number of issues:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-I have an intuition that using a directory as a dependency is less
-reliable, but I did some testing (renaming defconfigs, adding, removing)
-and it seems to work fine.
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://nodejs.org/en/blog/release/v6.11.0/
 
-diff --git a/Makefile b/Makefile
-index 88d98e0405..e4d9e60fae 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1098,7 +1098,7 @@ release:
- print-version:
- 	@echo $(BR2_VERSION_FULL)
+Building without openssl is broken in 6.11.0, so add an upstream patch to
+fix that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-gyp-force-link-command-to-use-CXX.patch   |  0
+ ...-don-t-build-when-ssl-support-is-disabled.patch |  0
+ ...-HAVE_OPENSSL-directive-to-openssl_config.patch | 49 ++++++++++++++++++++++
+ package/nodejs/Config.in                           |  2 +-
+ package/nodejs/nodejs.hash                         |  4 +-
+ 5 files changed, 52 insertions(+), 3 deletions(-)
+ rename package/nodejs/{6.10.3 => 6.11.0}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
+ rename package/nodejs/{6.10.3 => 6.11.0}/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
+ create mode 100644 package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+
+diff --git a/package/nodejs/6.10.3/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/6.10.3/0001-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/6.11.0/0001-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/6.10.3/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+similarity index 100%
+rename from package/nodejs/6.10.3/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+rename to package/nodejs/6.11.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+diff --git a/package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch b/package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+new file mode 100644
+index 0000000000..f07fdc2455
+--- /dev/null
++++ b/package/nodejs/6.11.0/0003-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+@@ -0,0 +1,49 @@
++From e1d8899c28997613505d288d22bfb95470d606a1 Mon Sep 17 00:00:00 2001
++From: Daniel Bevenius <daniel.bevenius@gmail.com>
++Date: Tue, 28 Feb 2017 20:04:12 +0100
++Subject: [PATCH] src: add HAVE_OPENSSL directive to openssl_config
++
++Currently when building with the following configuration options:
++$ ./configure --without-ssl && make
++
++The following link error is reported:
++
++Undefined symbols for architecture x86_64:
++  "node::openssl_config", referenced from:
++      node::Init(int*, char const**, int*, char const***) in node.o
++ld: symbol(s) not found for architecture x86_64
++clang: error: linker command failed with exit code 1 (use -v to see
++invocation)
++
++Adding an HAVE_OPENSSL directive around this code allows the build to
++pass.
++
++PR-URL: https://github.com/nodejs/node/pull/11618
++Reviewed-By: Anna Henningsen <anna@addaleax.net>
++Reviewed-By: James M Snell <jasnell@gmail.com>
++Reviewed-By: Colin Ihrig <cjihrig@gmail.com>
++Reviewed-By: Ben Noordhuis <info@bnoordhuis.nl>
++Reviewed-By: Sam Roberts <vieuxtech@gmail.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/node.cc | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/node.cc b/src/node.cc
++index 57415bba41..ec78339d89 100644
++--- a/src/node.cc
+++++ b/src/node.cc
++@@ -4233,8 +4233,10 @@ void Init(int* argc,
++   if (config_warning_file.empty())
++     SafeGetenv("NODE_REDIRECT_WARNINGS", &config_warning_file);
++ 
+++#if HAVE_OPENSSL
++   if (openssl_config.empty())
++     SafeGetenv("OPENSSL_CONF", &openssl_config);
+++#endif
++ 
++   // Parse a few arguments which are specific to Node.
++   int v8_argc;
++-- 
++2.11.0
++
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 5fafa8f476..be20af56d6 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
  
--.gitlab-ci.yml: .gitlab-ci.yml.in configs/*_defconfig
-+.gitlab-ci.yml: .gitlab-ci.yml.in configs
- 	(cd configs; LC_ALL=C ls -1 *_defconfig) | sed 's/$$/: *defconfig/' | cat $< - > $@
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "6.10.3"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "6.11.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.48"
  
- include docs/manual/manual.mk
+ config BR2_PACKAGE_NODEJS_NPM
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 8cc6927ab2..ac010ab6d6 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
+ sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v6.10.3/SHASUMS256.txt
+-sha256  82262a703e61164e09170a14d88b1726720651b0c7ee87a277654247b21b5388  node-v6.10.3.tar.xz
++# From upstream URL: http://nodejs.org/dist/v6.11.0/SHASUMS256.txt
++sha256  02ba35391edea2b294c736489af01954ce6e6c39d318f4423ae6617c69ef0a51  node-v6.11.0.tar.xz
 -- 
-2.13.1
+2.11.0
