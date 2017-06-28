@@ -1,33 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 Jun 2017 17:17:56 +0200
-Subject: [Buildroot] [PATCH] package/rtl8821au: fix license file name
-Message-ID: <20170628151756.763-1-yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 28 Jun 2017 15:32:39 +0000
+Subject: [Buildroot] [Bug 9976] License file for package 'rtl8821au'
+	incorrect
+In-Reply-To: <bug-9976-163@https.bugs.busybox.net/>
+References: <bug-9976-163@https.bugs.busybox.net/>
+Message-ID: <bug-9976-163-nvSzKZB7VC@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes #9976.
+https://bugs.busybox.net/show_bug.cgi?id=9976
 
-Reported-by: Nick Wright <nwright98@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/rtl8821au/rtl8821au.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-index 32b7bfd089..b6ad431b8b 100644
---- a/package/rtl8821au/rtl8821au.mk
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -7,7 +7,7 @@
- RTL8821AU_VERSION = b018b446fb0729fa659e7eead475d6c13f192642
- RTL8821AU_SITE = $(call github,abperiasamy,rtl8812AU_8821AU_linux,$(RTL8821AU_VERSION))
- RTL8821AU_LICENSE = GPL-2.0
--RTL8821AU_LICENSE_FILES = COPYING
-+RTL8821AU_LICENSE_FILES = LICENSE
- 
- RTL8821AU_MODULE_MAKE_OPTS = \
- 	CONFIG_RTL8812AU_8821AU=m \
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Nick, All,
+
+> there is no 'COPYING' file in the package.  There is a file named 'LICENSE'.
+
+Indeed. Patch sent to the list:
+    http://lists.busybox.net/pipermail/buildroot/2017-June/195610.html
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
