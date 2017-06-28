@@ -1,52 +1,69 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Wed, 28 Jun 2017 14:36:11 +0200
-Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
-In-Reply-To: <790e33dd-2285-dd7e-7203-692f2cd3686f@mind.be>
-References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
- <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
- <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
- <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
- <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
- <6a236664-6cd5-c2e6-e4bc-ee5f7b6b21a1@grandegger.com>
- <311f5c7c-ad46-e1f1-4570-dfffb5605292@mind.be>
- <4243e8e2-baaf-37f5-4149-d085388f3b13@grandegger.com>
- <319491ac-9a65-f82f-892c-1e54b8df70da@mind.be>
- <b3e97095-7453-5516-0f23-e68e56932930@grandegger.com>
- <790e33dd-2285-dd7e-7203-692f2cd3686f@mind.be>
-Message-ID: <c9adbe27-c7b1-b28d-5c38-7c79a5da9c18@grandegger.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 28 Jun 2017 15:10:00 +0200
+Subject: [Buildroot] [PATCH] lttng-tools: update to 2.9.5
+Message-ID: <20170628131000.GA26783@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Latest release fixed dlmopen detection, so that
+musl/uClibc-ng toolchains can be used.
 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/lttng-tools/Config.in        | 7 ++-----
+ package/lttng-tools/lttng-tools.hash | 6 +++---
+ package/lttng-tools/lttng-tools.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-Am 28.06.2017 um 13:16 schrieb Arnout Vandecappelle:
-> 
-> 
-> On 28-06-17 12:57, Wolfgang Grandegger wrote:
-> [snip]
->> The list is built with "comm -13 ...". While implementing that way, I realized
->> that I need patchelf for the host as very first package. Any idea how that could
->> achieved?
-> 
->   host-patchelf should be added to DEPENDENCIES_HOST_PREREQ so it gets built
-> before all the rest. In the instrumentation hook, you should also skip the
-> sanitization when the package is not in DEPENDENCIES_HOST_PREREQ.
-
-I thought all host binaries must have an rpath to <path>/usr/lib, which 
-should be replaced with "$ORIGIN/../../../usr/lib"
-
->   That means that those packages will not get sanitized - which shouldn't be
-> necessary since they anyway don't have an rpath. But perhaps it's a good idea
-> then to add a readelf-based check for them that verifies they don't have
-> DT_RUNPATH or DT_RPATH. The latter is just a nice-to-have, though, so don't
-> worry about it at first.
-
-See above.
-
-Even with setting DEPENDENCIES_HOST_PREREQ to patchelf at the first 
-place, some packages are required in advance to build patchelf :(.
-
-Wolfgang.
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index 8888ef7..187e424 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -4,8 +4,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn
+-	# uclibc/musl don't implement dlmopen()/LM_ID_BASE
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_POPT
+@@ -29,7 +27,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 
+ 	  http://lttng.org
+ 
+-comment "lttng-tools needs a glibc toolchain w/ threads, dynamic library"
++comment "lttng-tools needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index 114bd0c..8a4c2eb 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,3 +1,3 @@
+-# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.4.tar.bz2.{md5,sha1}
+-md5 10f47abfa214b167580358388428770d  lttng-tools-2.9.4.tar.bz2
+-sha1 ab1945fd36b30f445eb5c83f199b011d42525612  lttng-tools-2.9.4.tar.bz2
++# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.5.tar.bz2.{md5,sha1}
++md5 051224eb991aee07f8721ff1877d0b96  lttng-tools-2.9.5.tar.bz2
++sha1 b988b237f34baa3916242dc9141aa61470e99dfd  lttng-tools-2.9.5.tar.bz2
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 1714a42..776750c 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTTNG_TOOLS_VERSION = 2.9.4
++LTTNG_TOOLS_VERSION = 2.9.5
+ LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPL-2.0+, LGPL-2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
+-- 
+2.1.4
