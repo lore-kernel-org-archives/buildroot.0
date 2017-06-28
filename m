@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Jun 2017 23:25:07 +0200
-Subject: [Buildroot] [PATCH] mosquitto: add upstream security fix
-In-Reply-To: <20170628104420.28572-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 28 Jun 2017 12:44:20 +0200")
-References: <20170628104420.28572-1-peter@korsgaard.com>
-Message-ID: <87lgoberf0.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Jun 2017 23:26:52 +0200
+Subject: [Buildroot] [PATCH] util-linux: fix compilation when libc lacks
+	wide-character support
+In-Reply-To: <1498582983-19532-1-git-send-email-casantos@datacom.ind.br>
+ (Carlos Santos's message of "Tue, 27 Jun 2017 14:03:03 -0300")
+References: <1498582983-19532-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <87h8yzerc3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
- > Fixes CVE-2017-9868: In Mosquitto through 1.4.12, mosquitto.db (aka the
- > persistence file) is world readable, which allows local users to obtain
- > sensitive MQTT topic information.
+ > A recent change in util-linux left calls to wcstok and wcspbrk not
+ > guarded by "#ifdef HAVE_WIDECHAR". This causes build failures when
+ > libc does not have the wide-character functions, like some uClibc
+ > builds.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Solve the broblem by means of a patch already sent upstream.
 
-Committed, thanks.
+s/broblem/problem/ (here and in the patch).
+
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
