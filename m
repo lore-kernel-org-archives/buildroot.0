@@ -1,68 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 28 Jun 2017 06:16:56 +0300
-Subject: [Buildroot] [PATCH] squid: uClibc workaround no longer required
-In-Reply-To: <7636aa0c-a897-ea70-5dd2-6f7ec435a2b4@mind.be>
-References: <20170627190629.GA1589@waldemar-brodkorb.de>
- <7636aa0c-a897-ea70-5dd2-6f7ec435a2b4@mind.be>
-Message-ID: <20170628031656.5sm73m5wtw66vgef@tarshish>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Tue, 27 Jun 2017 20:56:10 -0700
+Subject: [Buildroot] [PATCH] mtd: restore installation of libmtd to staging
+Message-ID: <20170628035610.9945-1-yurovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Commit 67117adc891e06154d23a01b8c8ee348c63e78eb backed out the
+deployment of libmtd headers (libmtd.h, libubi.h, ubi-media.h) to
+staging and these may be needed by packages that work directly with MTD,
+for example swupdate. mtd also produces libmtd.a and libubi.a which are
+needed by those packages.
 
-On Tue, Jun 27, 2017 at 10:24:40PM +0200, Arnout Vandecappelle wrote:
-> On 27-06-17 21:06, Waldemar Brodkorb wrote:
-> > As all librt and libpthread functions are integrated into
-> > libc for a while, workaround no longer required.
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > ---
-> >  package/squid/squid.mk | 5 -----
-> >  1 file changed, 5 deletions(-)
-> > 
-> > diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> > index 976ce6d..bcb3744 100644
-> > --- a/package/squid/squid.mk
-> > +++ b/package/squid/squid.mk
-> > @@ -50,11 +50,6 @@ else
-> >  SQUID_CONF_ENV += squid_cv_gnu_atomics=no
-> >  endif
-> >  
-> > -# On uClibc librt needs libpthread
-> > -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
-> > -SQUID_CONF_ENV += ac_cv_search_shm_open="-lrt -lpthread"
-> > -endif
-> 
->  In [1], Baruch wrote:
-> 
-> B> package/squid/squid.mk
-> B>
-> B>   Needed for shm_open().
-> 
->  But indeed, the -lrt is added by the configure script, this workaround was only
-> needed for uClibc which used pthread functions from librt so needed to be linked
-> with libpthread as well.
-> 
->  Adding Baruch in Cc to double-check. Baruch, can you confirm that this can
-> indeed be removed?
+Tested by configuring swupdate to use MTD and verifying that swupdate
+now compiles and links.
 
-Yes. I missed the uClibc condition when I wrote that. I have now checked with 
-a current uClibc-ng toolchain, and indeed all former librt symbols are in the 
-main libc. librt.a is empty.
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+---
+ package/mtd/mtd.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thanks Waldemar and Arnout for double checking.
-
->  For me:
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Acked-by: Baruch Siach <baruch@tkos.co.il>
-
-baruch
-
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 3df641e..bcd2363 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -97,5 +97,13 @@ define MTD_INSTALL_TARGET_CMDS
+ 	)
+ endef
+ 
++define MTD_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/mtd/libmtd.h
++	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/mtd/libubi.h
++	$(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h $(STAGING_DIR)/usr/include/mtd/ubi-media.h
++	$(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
++	$(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
++endef
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.3
