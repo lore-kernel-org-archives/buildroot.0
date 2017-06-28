@@ -1,154 +1,86 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Wed, 28 Jun 2017 08:45:10 +0200
+Date: Wed, 28 Jun 2017 08:51:34 +0200
 Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
-In-Reply-To: <311f5c7c-ad46-e1f1-4570-dfffb5605292@mind.be>
+In-Reply-To: <c66dd2a5-831d-bee4-17cf-1ce38f0a3b6f@mind.be>
 References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
  <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
  <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
  <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
  <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
- <6a236664-6cd5-c2e6-e4bc-ee5f7b6b21a1@grandegger.com>
- <311f5c7c-ad46-e1f1-4570-dfffb5605292@mind.be>
-Message-ID: <4243e8e2-baaf-37f5-4149-d085388f3b13@grandegger.com>
+ <d447e85c-6c32-d73f-377c-cf109c425511@mind.be>
+ <822e2bea-84d3-30a6-3c88-1aa2813cee4e@grandegger.com>
+ <c66dd2a5-831d-bee4-17cf-1ce38f0a3b6f@mind.be>
+Message-ID: <85b0e9c2-b78e-66f7-7cd2-7cb081f79799@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 28.06.2017 um 00:47 schrieb Arnout Vandecappelle:
+Am 28.06.2017 um 00:41 schrieb Arnout Vandecappelle:
 > 
 > 
-> On 22-06-17 08:37, Wolfgang Grandegger wrote:
->> Hello Arnout,
+> On 27-06-17 12:54, Wolfgang Grandegger wrote:
+>> Hello,
 >>
->> Am 21.06.2017 um 23:03 schrieb Arnout Vandecappelle:
->>>    Hi Wolfgang,
+>> Am 21.06.2017 um 23:06 schrieb Arnout Vandecappelle:
 >>>
->>> On 21-06-17 09:59, Wolfgang Grandegger wrote:
->>>> Hello,
->>>>
->>>> this topic is still pending... some more input below...
->>>>
->>>> Am 27.04.2017 um 11:37 schrieb Wolfgang Grandegger:
->>>>> Hello Arnout,
->>>>>
->>>>> Am 12.04.2017 um 15:59 schrieb Arnout Vandecappelle:
->>>>>>
->>>>>>
->>>>>> On 23-03-17 08:54, Wolfgang Grandegger wrote:
-> [snip]
->>>>>>> - Why do we want relative RPATHs starting with "$ORIGIN" also for ELF
->>>>>>>     files in the target tree. "/lib" and "/usr/lib" have been removed
->>>>>>>     already.
->>>>>>
->>>>>>    Good point, I don't think we want that... Neither for the ones in staging, I
->>>>>> suppose. The RPATHs there should all be absolute paths which should be
->>>>>> interpreted relative to $(TARGET_DIR) resp. $(STAGING_DIR).
->>>>>
->>>>> Could be done, no problem. Just requires some further modifications to
->>>>
->>>> I just learned that using relative path for the target breaks "sudo", at least.
 >>>
->>>    So if you change sudo's RPATH to $ORIGIN/../libexec/sudo it doesn't find
->>> libsudo_util.so.0 at runtime? Or how does it break?
->>
->> Yep, that's the problem. I think it's because of "For security, the
->> dynamic linker does not allow use of $ORIGIN substitution sequences for
->> set-user and set-group ID programs..." from
->>
->>    http://seclists.org/fulldisclosure/2010/Oct/257
-> 
->   Ah I see. So in target we should always use absolute paths. Makes sense.
-> 
-> [snip]
->>>>>>    I'm not entirely sure about staging, whether ld will use RPATH as an
->>>>>> alternative to -L and in that case whether it is done relative to sysroot or
->>>>>> not.
->>>>>
->>>>> So far, the patch series works for me very well. Just my usecase, of course.
+>>> On 21-06-17 23:03, Arnout Vandecappelle wrote:
+>>>>    Preferably as an instrumentation hook, because:
+>>>> - it speeds things up dramatically if you do 'make foo-rebuild';
+>>>> - things are still correct if you interrupt the build in the middle;
+>>>> - it makes no difference if you do a rebuild (if patchelf is done at the end,
+>>>> and then you rebuild a package, the RPATH in the libs you link with is different
+>>>> than the first time you built it).
 >>>
->>>    IIRC I checked a while ago and it looked like ld would use RPATH as a link path
->>> (i.e. as if it's given with -L), and I think it was NOT relative to sysroot.
->>> Which means that we shouldn't make the RPATHs in staging relative to
->>> STAGING_DIR, otherwise it may pick up the library from the host. This really
->>> shouldn't happen because the link normally should get the appropriate -L flag to
->>> find the target lib and the -L has precedence over RPATH, but better be safe.
+>>>    Note, however, that doing it as an instrumentation hook could be a pretty
+>>> dramatic rewrite of your series, so if you don't feel up to it, I'm ok with
+>>> committing the current approach to begin with.
 >>
->> The man page of "ld" says:
+>> I just sent out v4 of my patch series doing the sanitation at the end of the
+>> build. Yes, using GLOBAL_INSTRUMENTATION_HOOKS would requires further
+>> modification to the framework. But also "check-bin-arch" and "check-host-rpath"
+>> does a lot of useless scanning for ELF files.
+>> Therefore it would make sense to use this mechanism to create a list of ELF
+>> files similar to the hook "step_pkg_size" (creating packages-file-list.txt),
+>> either per installation step or even better per package:
 >>
->> "The linker uses the following search paths to locate required shared libraries:
->>   ...
->>   6.  For a native ELF linker, the directories in "DT_RUNPATH" or "DT_RPATH" of a shared library are
->>       searched for shared libraries needed by it. The "DT_RPATH" entries are ignored if "DT_RUNPATH" entries
->>       exist."
+>>    build/target-packages-elf-files.txt
+>>    build/staging-packages-elf-files.txt
+>>    build/host-packages-elf-files.txt
+>>
+>> or (per package)
+>>
+>>    build/elf-file-list/<host|staging|target>-<package>-elf-files.txt
 > 
->   But this doesn't clarify if these paths are interpreted relative to --sysroot
-> or not.
-
-I'm going to check what is in the orogilan rpath. I guess that the 
-pathes are absolute to the host.
-
->>
->> Then we should use $ORIGIN relative to the ELF file for the staging tree
->> (like for the host tree) to make it relocatable.
+>   I definitely like the per-package file list, because it smoothly scales to
+> per-package-staging. Ideally then the packages-file-list.txt should also be
+> split into a separate list per package. From there it's a small step to have an
+> elf-file list as well.
 > 
->   That is for sure the safest option.
+>   Since it's anyway per-package, I'd put it directly in the package build
+> directory, e.g. $(@D)/.<host|staging|target>-files.txt and
+> $(@D)/.<host|staging|target>-elf-files.txt.
 
-BTW, like for the target, /lib and /usr/lib is removed from the rpath. 
-Don't know if the linker looks into sysrot/lib or sysroot/usr/lib by 
-default.
+OK, into $($(PKG)_DIR).
 
-> [snip]
->>>>>>> Things not yet addressed:
->>>>>>>
->>>>>>> - "make toolchain" creates a toolchain tree which still has references
->>>>>>>     to the build system (in ELF and text files).
->>>>>>
->>>>>>    A solution to this (and other problems) is to use the same approach as
->>>>>> check-bin-arch: do it as an instrumentation hook for each package, and only look
->>>>>> at the files added by that package. That way, the overhead is spread out over
->>>>>> the entire build process, and doing rebuilds doesn't run patchelf on all files
->>>>>> anymore in the finalize step.
->>>>>
->>>>> This is just to solve the issue mentioned above or a general approach (instead
->>>>> of doning rtpath sanitation at the end)?
->>>>
->>>> Any opinions here?
->>>
->>>    Preferably as an instrumentation hook, because:
->>> - it speeds things up dramatically if you do 'make foo-rebuild';
->>> - things are still correct if you interrupt the build in the middle;
->>> - it makes no difference if you do a rebuild (if patchelf is done at the end,
->>> and then you rebuild a package, the RPATH in the libs you link with is different
->>> than the first time you built it).
->>
->> OK, as I see it, check-bin-arch is only for the files in the target tree. Having a
->> closer look now.
+>   But as I understand it, your proposal is to commit your series as is, with the
+> scanning done only in the finalize step, and refactor it with elf files lists later?
+
+That would be a good starting point. The per package sanitation requires 
+quiet some changes to the build infrastructure.
+
+>> If we do not need the per package list lateron, we could create it
+>> temporarily, call "fix-rpath" to do the sanitation and delete it afterwards. Or,
+>> even simpler, fix-rpath could work on ".br_filelist_before" and
+>> ".br_filelist_after" directly... that seems not too difficult to implement. What
+>> do you think?
 > 
->   Yes, for this approach to work the packages-file-list has to be extended to
-> cover host and staging as well. And since host includes staging, the find
-> command for host is a little complicated.
+>   The latter was actually what I had in mind: refactor the step_pkg_size_end to
+> save the output of comm in a temporary file, and use that file to call the
+> fix-rpath script. That temporary file is basically $(@D)/.target-files.txt.
 
-With that approach we do not need "find" any longer. There will by a 
-list of installed files per package.
-
->>>>> How should I go ahead to get this patch series accepted sooner than later? We
->>>>> could make the option configurable, for example, to reduce the risk of
->>>>> breaking something.
->>>>
->>>> Is a relocatable SDK still on the wish list? How should/could I proceed to get
->>>> the feature accepted sooner than later?
->>>
->>>    You should pray that someone takes the time to continue the review :-)
->>>
->>>    Occasionally drawing attention to the series like you do know definitely helps.
->>
->> OK, more soon...
-> 
->   Next week in the Buildroot Summer Camp I'm going to spend time on this series,
-> so there should be progress...
-
-OK, thanks.
+I already started to implement that approach... more soon.
 
 Wolfgang.
