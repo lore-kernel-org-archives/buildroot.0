@@ -1,46 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Jun 2017 08:40:58 +0200
-Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
-In-Reply-To: <311f5c7c-ad46-e1f1-4570-dfffb5605292@mind.be> (Arnout
- Vandecappelle's message of "Wed, 28 Jun 2017 00:47:33 +0200")
-References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
- <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
- <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
- <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
- <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
- <6a236664-6cd5-c2e6-e4bc-ee5f7b6b21a1@grandegger.com>
- <311f5c7c-ad46-e1f1-4570-dfffb5605292@mind.be>
-Message-ID: <87y3scehs5.fsf@dell.be.48ers.dk>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 28 Jun 2017 08:44:41 +0200
+Subject: [Buildroot] [PATCH] rauc: new package
+In-Reply-To: <20170628060724.12026-1-yurovsky@gmail.com>
+References: <20170628060724.12026-1-yurovsky@gmail.com>
+Message-ID: <CAGm1_ku6JnQPcWnOUjFno98Lp51A_FEE-HWLFwO5su9vgLzbvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hi Andrey,
 
-Hi,
+thanks for your contribution.
 
- >>> So if you change sudo's RPATH to $ORIGIN/../libexec/sudo it doesn't find
- >>> libsudo_util.so.0 at runtime? Or how does it break?
- >> 
- >> Yep, that's the problem. I think it's because of "For security, the
- >> dynamic linker does not allow use of $ORIGIN substitution sequences for
- >> set-user and set-group ID programs..." from
- >> 
- >> http://seclists.org/fulldisclosure/2010/Oct/257
+On Wed, Jun 28, 2017 at 8:07 AM, Andrey Yurovsky <yurovsky@gmail.com> wrote:
+> RAUC is the Robust Auto-Update Controller developed by the folks at
+> Penguintronix. It supports updating embedded systems from the network
+> (ex: HawkBit) or from a disk and provides a d-bus interface.
+>
+> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+> ---
+>  package/rauc/Config.in | 18 ++++++++++++++++++
+>  package/rauc/rauc.hash |  2 ++
+>  package/rauc/rauc.mk   | 19 +++++++++++++++++++
 
-Makes sense, you don't want your setuid binaries to load random
-libraries.
+An entry to the DEVELOPERS and package/Config.in files is missing.
 
- >  Ah I see. So in target we should always use absolute paths. Makes sense.
+>  3 files changed, 39 insertions(+)
+>  create mode 100644 package/rauc/Config.in
+>  create mode 100644 package/rauc/rauc.hash
+>  create mode 100644 package/rauc/rauc.mk
+>
+> diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+> new file mode 100644
+> index 0000000..8a210a4
+> --- /dev/null
+> +++ b/package/rauc/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_RAUC
+> +       bool "rauc"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
+> +       depends on BR2_USE_WCHAR # glib2
+> +       depends on BR2_USE_MMU # glib2
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       select BR2_PACKAGE_DBUS
+> +       select BR2_PACKAGE_DBUS_GLIB
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_LIBCURL
+> +       select BR2_PACKAGE_JSON_GLIB
+> +       select BR2_PACKAGE_UTIL_LINUX
+> +       select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> +       help
+> +         RAUC controls the update process on embedded Linux systems.
+> +         See the documentation at
+> +         https://rauc.readthedocs.io/en/latest/ for more
+> +         information.
 
-Indeed.
+Though you have depends statements you don't provide a corresponding
+message for the case where these dependencies are not met. See
+package/modem-manager/Config.in for example.
 
- >  Next week in the Buildroot Summer Camp I'm going to spend time on this series,
- > so there should be progress...
+> diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+> new file mode 100644
+> index 0000000..7ee9798
+> --- /dev/null
+> +++ b/package/rauc/rauc.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256  d867a81b9e414c8db9268851011fb2d404a3ee60ae297c007a2f140abfa607d1 rauc-v0.1.1.tar.gz
+> diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+> new file mode 100644
+> index 0000000..e036387
+> --- /dev/null
+> +++ b/package/rauc/rauc.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# rauc
+> +#
+> +################################################################################
+> +
+> +RAUC_VERSION = v0.1.1
+> +RAUC_SITE = $(call github,rauc,rauc,$(RAUC_VERSION))
+> +RAUC_LICENSE = GPL-2.1
+> +RAUC_LICENSE_FILES = COPYING
+> +RAUC_AUTORECONF = YES
+> +RAUC_DEPENDENCIES = libcurl openssl libglib2 json-glib dbus-glib host-pkgconf \
+> +                                       dbus util-linux
+> +
+> +HOST_RAUC_DEPENDENCIES = host-pkgconf
+> +HOST_RAUC_CONF_OPTS = --disable-network --disable-json
 
-Indeed. I was also planning on spending some time on it.
+Could you elaborate more on why rauc requires a host variant?
 
--- 
-Bye, Peter Korsgaard
+Yegor
+
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> --
+> 2.9.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
