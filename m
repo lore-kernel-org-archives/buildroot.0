@@ -1,70 +1,153 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Jun 2017 21:33:30 +0200
-Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
-In-Reply-To: <c9adbe27-c7b1-b28d-5c38-7c79a5da9c18@grandegger.com>
-References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
- <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
- <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
- <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
- <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
- <6a236664-6cd5-c2e6-e4bc-ee5f7b6b21a1@grandegger.com>
- <311f5c7c-ad46-e1f1-4570-dfffb5605292@mind.be>
- <4243e8e2-baaf-37f5-4149-d085388f3b13@grandegger.com>
- <319491ac-9a65-f82f-892c-1e54b8df70da@mind.be>
- <b3e97095-7453-5516-0f23-e68e56932930@grandegger.com>
- <790e33dd-2285-dd7e-7203-692f2cd3686f@mind.be>
- <c9adbe27-c7b1-b28d-5c38-7c79a5da9c18@grandegger.com>
-Message-ID: <84234ca1-b75f-84da-80cc-83a7234d0927@mind.be>
+Date: Wed, 28 Jun 2017 21:59:12 +0200
+Subject: [Buildroot] [PATCH] rauc: new package
+In-Reply-To: <20170628060724.12026-1-yurovsky@gmail.com>
+References: <20170628060724.12026-1-yurovsky@gmail.com>
+Message-ID: <1227a3fa-c73c-8f13-58aa-1d0658a13b6f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Andrey,
 
+On 28-06-17 08:07, Andrey Yurovsky wrote:
+> RAUC is the Robust Auto-Update Controller developed by the folks at
+> Penguintronix. It supports updating embedded systems from the network
+  ^^^^^^^^^^^^^Pengutronix
 
-On 28-06-17 14:36, Wolfgang Grandegger wrote:
+> (ex: HawkBit) or from a disk and provides a d-bus interface.
+
+ So this is Pengutronix' competitor to swupdate?
+
 > 
+> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+> ---
+>  package/rauc/Config.in | 18 ++++++++++++++++++
+>  package/rauc/rauc.hash |  2 ++
+>  package/rauc/rauc.mk   | 19 +++++++++++++++++++
+
+ You don't add it to package/Config.in, so it is not possible to select this
+package.
+
+ Have you checked the package with support/scripts/check-package ?
+ Have you validated it with support/scripts/test-pkg ?
+
+>  3 files changed, 39 insertions(+)
+>  create mode 100644 package/rauc/Config.in
+>  create mode 100644 package/rauc/rauc.hash
+>  create mode 100644 package/rauc/rauc.mk
 > 
-> Am 28.06.2017 um 13:16 schrieb Arnout Vandecappelle:
->>
->>
->> On 28-06-17 12:57, Wolfgang Grandegger wrote:
->> [snip]
->>> The list is built with "comm -13 ...". While implementing that way, I realized
->>> that I need patchelf for the host as very first package. Any idea how that could
->>> achieved?
->>
->>   host-patchelf should be added to DEPENDENCIES_HOST_PREREQ so it gets built
->> before all the rest. In the instrumentation hook, you should also skip the
->> sanitization when the package is not in DEPENDENCIES_HOST_PREREQ.
-> 
-> I thought all host binaries must have an rpath to <path>/usr/lib, which should
-> be replaced with "$ORIGIN/../../../usr/lib"
+> diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+> new file mode 100644
+> index 0000000..8a210a4
+> --- /dev/null
+> +++ b/package/rauc/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_RAUC
+> +	bool "rauc"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
+> +	depends on BR2_USE_WCHAR # glib2
+> +	depends on BR2_USE_MMU # glib2
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_DBUS_GLIB
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_LIBCURL
+> +	select BR2_PACKAGE_JSON_GLIB
+> +	select BR2_PACKAGE_UTIL_LINUX
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> +	help
+> +	  RAUC controls the update process on embedded Linux systems.
+> +	  See the documentation at
+> +	  https://rauc.readthedocs.io/en/latest/ for more
+> +	  information.
 
- Only if they use a library in $HOST_DIR/usr/lib - otherwise sanitize-rpath will
-remove the rpatch completely, no?
+ You can include the full text that you have in the commit log. Also, we need an
+upstream URL. And with that added, the reference to the documentation is not
+really needed (it's one click away from the upstream URL). So:
 
- DEPENDENCIES_HOST_PREREQ contains only a few packages, none of which are linked
-with any library in $HOST_DIR/usr/lib. At least I think so.
+	  RAUC is the Robust Auto-Update Controller developed by Pengutronix.
+	  It controls the update process on embedded Linux systems. It supports
+	  updating from the network or from a disk. It provides a D-Bus
+	  interface.
 
+	  http://rauc.io/
 
->>   That means that those packages will not get sanitized - which shouldn't be
->> necessary since they anyway don't have an rpath. But perhaps it's a good idea
->> then to add a readelf-based check for them that verifies they don't have
->> DT_RUNPATH or DT_RPATH. The latter is just a nice-to-have, though, so don't
->> worry about it at first.
-> 
-> See above.
-> 
-> Even with setting DEPENDENCIES_HOST_PREREQ to patchelf at the first place, some
-> packages are required in advance to build patchelf :(.
+> diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+> new file mode 100644
+> index 0000000..7ee9798
+> --- /dev/null
+> +++ b/package/rauc/rauc.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
 
- Really? Which ones? patchelf has no dependencies.
+ Please verify the tarball against the upstream signature, and write:
+
+# Locally calculated, after verifying against
+# https://github.com/rauc/rauc/releases/download/v0.1.1/rauc-0.1.1.tar.xz.asc
+
+> +sha256  d867a81b9e414c8db9268851011fb2d404a3ee60ae297c007a2f140abfa607d1 rauc-v0.1.1.tar.gz
+> diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+> new file mode 100644
+> index 0000000..e036387
+> --- /dev/null
+> +++ b/package/rauc/rauc.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# rauc
+> +#
+> +################################################################################
+> +
+> +RAUC_VERSION = v0.1.1
+> +RAUC_SITE = $(call github,rauc,rauc,$(RAUC_VERSION))
+
+ There is an upstream tarball, so you should use that:
+
+RAUC_VERSION = 0.1.1
+RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+
+> +RAUC_LICENSE = GPL-2.1
+
+ GPL-2.1 doesn't exist, it's LGPL-2.1.
+
+> +RAUC_LICENSE_FILES = COPYING
+> +RAUC_AUTORECONF = YES
+
+ With the uploaded tarball this shouldn't be needed anymore.
+
+> +RAUC_DEPENDENCIES = libcurl openssl libglib2 json-glib dbus-glib host-pkgconf \
+> +					dbus util-linux
+
+ It seems that most of these are optional:
+
+libcurl is only needed if --enable-network
+json-glib is only needed if --enable-json
+
+ And configure.ac has no dependency at all on dbus-glib, dbus or libmount.
+
+ On the other hand, configure uses pkg-config to determine the systemd install
+directories, so you should have a conditional dependency on this package:
+
+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+# configure uses pkg-config --variable=systemdsystemunitdir systemd
+RAUC_DEPENDENCIES += systemd
+endif
+
 
  Regards,
  Arnout
 
+> +
+> +HOST_RAUC_DEPENDENCIES = host-pkgconf
+> +HOST_RAUC_CONF_OPTS = --disable-network --disable-json
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
