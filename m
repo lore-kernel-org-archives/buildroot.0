@@ -1,53 +1,83 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 28 Jun 2017 06:32:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 1.8.3
-Message-ID: <20170628043239.17217-1-bernd.kuhls@t-online.de>
+From: Andrey Yurovsky <yurovsky@gmail.com>
+Date: Tue, 27 Jun 2017 23:07:24 -0700
+Subject: [Buildroot] [PATCH] rauc: new package
+Message-ID: <20170628060724.12026-1-yurovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Configure option dummy-driver was removed:
-https://github.com/01org/libva/commit/8cd60bb59ffac21560d1c424d456cc25e917371f
+RAUC is the Robust Auto-Update Controller developed by the folks at
+Penguintronix. It supports updating embedded systems from the network
+(ex: HawkBit) or from a disk and provides a d-bus interface.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
 ---
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/rauc/Config.in | 18 ++++++++++++++++++
+ package/rauc/rauc.hash |  2 ++
+ package/rauc/rauc.mk   | 19 +++++++++++++++++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 package/rauc/Config.in
+ create mode 100644 package/rauc/rauc.hash
+ create mode 100644 package/rauc/rauc.mk
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 875a4d1961..232adeeeeb 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/01org/libva/releases
--sha1 7c4253c97f5e1e76500ff75321287131941494bc  libva-1.8.2.tar.bz2
-+sha1 8eee9e28b0ae3bfbe8cd44a91396207714967204  libva-1.8.3.tar.bz2
- # Locally computed
--sha256 9ed3e3ddc8f47a715d4c6ec366beb21c83fc4e8a3d4d39a811baff76f0a0cede  libva-1.8.2.tar.bz2
-+sha256 56ee129deba99b06eb4a8d4f746b117c5d1dc2ec5b7a0bfc06971fca1598ab9b  libva-1.8.3.tar.bz2
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index b89d5fa27c..61e31801be 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_VERSION = 1.8.2
-+LIBVA_VERSION = 1.8.3
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/01org/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
-@@ -15,7 +15,6 @@ LIBVA_DEPENDENCIES = host-pkgconf libdrm
- # libdrm is a hard-dependency
- LIBVA_CONF_OPTS = \
- 	--enable-drm \
--	--disable-dummy-driver \
- 	--with-drivers-path="/usr/lib/va"
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+new file mode 100644
+index 0000000..8a210a4
+--- /dev/null
++++ b/package/rauc/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_RAUC
++	bool "rauc"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_USE_MMU # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_DBUS_GLIB
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_JSON_GLIB
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	help
++	  RAUC controls the update process on embedded Linux systems.
++	  See the documentation at
++	  https://rauc.readthedocs.io/en/latest/ for more
++	  information.
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+new file mode 100644
+index 0000000..7ee9798
+--- /dev/null
++++ b/package/rauc/rauc.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  d867a81b9e414c8db9268851011fb2d404a3ee60ae297c007a2f140abfa607d1 rauc-v0.1.1.tar.gz
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+new file mode 100644
+index 0000000..e036387
+--- /dev/null
++++ b/package/rauc/rauc.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# rauc
++#
++################################################################################
++
++RAUC_VERSION = v0.1.1
++RAUC_SITE = $(call github,rauc,rauc,$(RAUC_VERSION))
++RAUC_LICENSE = GPL-2.1
++RAUC_LICENSE_FILES = COPYING
++RAUC_AUTORECONF = YES
++RAUC_DEPENDENCIES = libcurl openssl libglib2 json-glib dbus-glib host-pkgconf \
++					dbus util-linux
++
++HOST_RAUC_DEPENDENCIES = host-pkgconf
++HOST_RAUC_CONF_OPTS = --disable-network --disable-json
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.11.0
+2.9.4
