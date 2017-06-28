@@ -1,7 +1,7 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Jun 2017 13:16:06 +0200
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Wed, 28 Jun 2017 14:36:11 +0200
 Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
-In-Reply-To: <b3e97095-7453-5516-0f23-e68e56932930@grandegger.com>
+In-Reply-To: <790e33dd-2285-dd7e-7203-692f2cd3686f@mind.be>
 References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
  <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
  <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
@@ -12,7 +12,8 @@ References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
  <4243e8e2-baaf-37f5-4149-d085388f3b13@grandegger.com>
  <319491ac-9a65-f82f-892c-1e54b8df70da@mind.be>
  <b3e97095-7453-5516-0f23-e68e56932930@grandegger.com>
-Message-ID: <790e33dd-2285-dd7e-7203-692f2cd3686f@mind.be>
+ <790e33dd-2285-dd7e-7203-692f2cd3686f@mind.be>
+Message-ID: <c9adbe27-c7b1-b28d-5c38-7c79a5da9c18@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,29 +22,31 @@ To: buildroot@busybox.net
 
 
 
-On 28-06-17 12:57, Wolfgang Grandegger wrote:
-[snip]
-> The list is built with "comm -13 ...". While implementing that way, I realized
-> that I need patchelf for the host as very first package. Any idea how that could
-> achieved?
+Am 28.06.2017 um 13:16 schrieb Arnout Vandecappelle:
+> 
+> 
+> On 28-06-17 12:57, Wolfgang Grandegger wrote:
+> [snip]
+>> The list is built with "comm -13 ...". While implementing that way, I realized
+>> that I need patchelf for the host as very first package. Any idea how that could
+>> achieved?
+> 
+>   host-patchelf should be added to DEPENDENCIES_HOST_PREREQ so it gets built
+> before all the rest. In the instrumentation hook, you should also skip the
+> sanitization when the package is not in DEPENDENCIES_HOST_PREREQ.
 
- host-patchelf should be added to DEPENDENCIES_HOST_PREREQ so it gets built
-before all the rest. In the instrumentation hook, you should also skip the
-sanitization when the package is not in DEPENDENCIES_HOST_PREREQ.
+I thought all host binaries must have an rpath to <path>/usr/lib, which 
+should be replaced with "$ORIGIN/../../../usr/lib"
 
- That means that those packages will not get sanitized - which shouldn't be
-necessary since they anyway don't have an rpath. But perhaps it's a good idea
-then to add a readelf-based check for them that verifies they don't have
-DT_RUNPATH or DT_RPATH. The latter is just a nice-to-have, though, so don't
-worry about it at first.
+>   That means that those packages will not get sanitized - which shouldn't be
+> necessary since they anyway don't have an rpath. But perhaps it's a good idea
+> then to add a readelf-based check for them that verifies they don't have
+> DT_RUNPATH or DT_RPATH. The latter is just a nice-to-have, though, so don't
+> worry about it at first.
 
- Regards,
- Arnout
+See above.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Even with setting DEPENDENCIES_HOST_PREREQ to patchelf at the first 
+place, some packages are required in advance to build patchelf :(.
+
+Wolfgang.
