@@ -1,35 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Jun 2017 23:19:32 +0200
-Subject: [Buildroot] [git commit] package/rtl8821au: fix license file name
-Message-ID: <20170628212845.62A307FD82@busybox.osuosl.org>
+Date: Wed, 28 Jun 2017 23:27:40 +0200
+Subject: [Buildroot] [git commit] mpd: bump to version 0.20.9
+Message-ID: <20170628212845.A20737FD82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54778b7d7e84863c4bc3036e69f959ed52b7953b
+commit: https://git.buildroot.net/buildroot/commit/?id=bba3aaf2285e1e554dee81ee2ab4f3bc7ba59169
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes #9976.
+Building version 0.20.7 fails with a GCC 4.9 toolchain:
 
-Reported-by: Nick Wright <nwright98@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+```
+src/Main.cxx:125:23: error: call to non-constexpr function 'const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = long unsigned int]'
+          64 * KILOBYTE);
+                       ^
+make[3]: *** [src/Main.o] Error 1
+```
+
+The issue was reported upstream [1] and already fixed in version 0.20.8.
+
+Fixes:
+http://autobuild.buildroot.net/results/fb6/fb67f453683078023e9d801176ef6871bc720c67/
+http://autobuild.buildroot.net/results/200/2005f2a7f2857e59ad1a896db0421bb0328b1766/
+http://autobuild.buildroot.net/results/804/80410b62d4ca292df8ecbaf7b0e2a020767111b6/
+
+[1] https://github.com/MusicPlayerDaemon/MPD/issues/45
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8821au/rtl8821au.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-index 32b7bfd..b6ad431 100644
---- a/package/rtl8821au/rtl8821au.mk
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -7,7 +7,7 @@
- RTL8821AU_VERSION = b018b446fb0729fa659e7eead475d6c13f192642
- RTL8821AU_SITE = $(call github,abperiasamy,rtl8812AU_8821AU_linux,$(RTL8821AU_VERSION))
- RTL8821AU_LICENSE = GPL-2.0
--RTL8821AU_LICENSE_FILES = COPYING
-+RTL8821AU_LICENSE_FILES = LICENSE
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index cea79e2..2531abe 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  005ac663b39a76701ba043cce4caef82ac6b0c2f16aae12fdc28e1b3b5b6c780  mpd-0.20.7.tar.xz
++sha256  cd77a2869e32354b004cc6b34fcb0bee56114caa2d9ed862aaa8071441e34eb7  mpd-0.20.9.tar.xz
+ sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index fce2472..6169e95 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -6,7 +6,7 @@
  
- RTL8821AU_MODULE_MAKE_OPTS = \
- 	CONFIG_RTL8812AU_8821AU=m \
+ MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
+ ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
+-MPD_VERSION = $(MPD_VERSION_MAJOR).7
++MPD_VERSION = $(MPD_VERSION_MAJOR).9
+ else
+ MPD_VERSION = $(MPD_VERSION_MAJOR).21
+ endif
