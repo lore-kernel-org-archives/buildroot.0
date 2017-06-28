@@ -1,99 +1,97 @@
 From: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-Date: Wed, 28 Jun 2017 16:40:36 +0900
-Subject: [Buildroot] [FYI 1/2] WIP:pcre2: new package
+Date: Wed, 28 Jun 2017 16:42:42 +0900
+Subject: [Buildroot] [FYI 2/2] WIP:qt5: Bump up to 5.9
 In-Reply-To: <104a0453-7ac4-f6d9-3e66-2671b313d757@melcoinc.co.jp>
 References: <104a0453-7ac4-f6d9-3e66-2671b313d757@melcoinc.co.jp>
-Message-ID: <b8596705-462f-3228-1b53-e65eb0bc2565@melcoinc.co.jp>
+Message-ID: <1cc8737a-4ecd-5aa7-2a2e-628cea1e6652@melcoinc.co.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Qt5.9 is LTS.
+Dependences: pcre2
+
 Signed-off-by: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
 ---
-  package/Config.in        |  1 +
-  package/pcre2/Config.in  | 22 ++++++++++++++++++++++
-  package/pcre2/pcre2.hash |  2 ++
-  package/pcre2/pcre2.mk   | 20 ++++++++++++++++++++
-  4 files changed, 45 insertions(+)
-  create mode 100644 package/pcre2/Config.in
-  create mode 100644 package/pcre2/pcre2.hash
-  create mode 100644 package/pcre2/pcre2.mk
+ package/qt5/Config.in            | 11 +++++++++++
+ package/qt5/qt5.mk               |  6 ++++++
+ package/qt5/qt5base/qt5base.hash |  3 +++
+ package/qt5/qt5base/qt5base.mk   |  7 +++++++
+ 4 files changed, 27 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index f69f67f..bf75594 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1488,6 +1488,7 @@ menu "Text and terminal handling"
-  	source "package/ncurses/Config.in"
-  	source "package/newt/Config.in"
-  	source "package/pcre/Config.in"
-+	source "package/pcre2/Config.in"
-  	source "package/popt/Config.in"
-  	source "package/readline/Config.in"
-  	source "package/slang/Config.in"
-diff --git a/package/pcre2/Config.in b/package/pcre2/Config.in
-new file mode 100644
-index 0000000..b49d306
---- /dev/null
-+++ b/package/pcre2/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_PCRE2
-+	bool "pcre2"
-+	help
-+	  Perl Compatible Regular Expressions. By default, only the
-+	  8-bits libpcre2 is built. To get the 16-bits and/or 32-bits
-+	  variants libpcre2-16/libpcre2-32, use the package sub-options.
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 04dccea..a6fc307 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -50,6 +50,17 @@ comment "Latest Qt version needs host/toolchain w/ gcc >= 4.8"
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+ 
++config BR2_PACKAGE_QT5_VERSION_5_9
++        bool "LTS (5.9)"
++        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++        depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
++        depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
++        # no built-in double-conversion support
++        depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
++        help
++          This option builds Qt 5.9, which is licensed under
++          (L)GPL-3.0+.
 +
-+	  http://www.pcre.org/
+ config BR2_PACKAGE_QT5_VERSION_5_6
+ 	bool "LTS (5.6)"
+ 	help
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 5c7af39..11d0e95 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -5,10 +5,16 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++#TODO:Delete version
+ QT5_VERSION_MAJOR = 5.8
+ QT5_VERSION = $(QT5_VERSION_MAJOR).0
+ QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
++else ifeq ($(BR2_PACKAGE_QT5_VERSION_5_9),y)
++QT5_VERSION_MAJOR = 5.9
++QT5_VERSION = $(QT5_VERSION_MAJOR).0
++QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
++QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
+ else
+ QT5_VERSION_MAJOR = 5.6
+ QT5_VERSION = $(QT5_VERSION_MAJOR).2
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index 3f6af8a..5169513 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
+@@ -3,3 +3,6 @@ sha256 2f6eae93c5d982fe0a387a01aeb3435571433e23e9d9d9246741faf51f1ee787 qtbase-o
+ 
+ # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtbase-opensource-src-5.8.0.tar.xz
+ sha256 c17111ae02a44dc7be1ec2cf979a47ee9e58edf4904041a525c21f4fa53fc005  qtbase-opensource-src-5.8.0.tar.xz
 +
-+if BR2_PACKAGE_PCRE2
-+
-+config BR2_PACKAGE_PCRE2_16
-+	bool "16-bit pcre2"
-+	help
-+	  This option builds the 16-bits pcre2 library, i.e 'libpcre2-16'
-+
-+config BR2_PACKAGE_PCRE2_32
-+	bool "32-bit pcre2"
-+	help
-+	  This option builds the 32-bits pcre2 library, i.e 'libpcre2-32'
-+
++# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.0/submodules/qtbase-opensource-src-5.9.0.tar.xz
++sha256 267eb2af1a203c087f2113f43b08014d0e2d2cb269295b8602d869a2fad5296c  qtbase-opensource-src-5.9.0.tar.xz
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 5fe8bb8..97db864 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -9,6 +9,13 @@ QT5BASE_SITE = $(QT5_SITE)
+ QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
+ 
+ QT5BASE_DEPENDENCIES = host-pkgconf zlib pcre
++#TODO:More better syntax? likely BR2_PACKAGE_QT5_VERSION < 5.9
++ifeq ($(BR2_PACKAGE_QT5_VERSION_5_9),y)
++QT5BASE_DEPENDENCIES += pcre2
++else
++QT5BASE_DEPENDENCIES += pcre
 +endif
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-new file mode 100644
-index 0000000..1232cf9
---- /dev/null
-+++ b/package/pcre2/pcre2.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	dfc79b918771f02d33968bd34a749ad7487fa1014aeb787fad29dd392b78c56e	pcre2-10.23.tar.bz2
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-new file mode 100644
-index 0000000..5b7a163
---- /dev/null
-+++ b/package/pcre2/pcre2.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# pcre2
-+#
-+################################################################################
 +
-+PCRE2_VERSION = 10.23
-+PCRE2_SITE = https://ftp.pcre.org/pub/pcre
-+PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
-+PCRE2_LICENSE = BSD-3-Clause
-+PCRE2_LICENSE_FILES = LICENCE
-+PCRE2_INSTALL_STAGING = YES
-+PCRE2_CONFIG_SCRIPTS = pcre2-config
-+
-+PCRE2_CONF_OPTS += --enable-pcre2-8
-+PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
-+PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_32),--enable-pcre2-32,--disable-pcre2-32)
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ QT5BASE_INSTALL_STAGING = YES
+ 
+ # A few comments:
 -- 
 2.7.4
