@@ -1,44 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 28 Jun 2017 06:32:39 +0200
-Subject: [Buildroot] [PATCH 2/2] libva-intel-driver: bump version to 1.8.3
-In-Reply-To: <20170628043239.17217-1-bernd.kuhls@t-online.de>
-References: <20170628043239.17217-1-bernd.kuhls@t-online.de>
-Message-ID: <20170628043239.17217-2-bernd.kuhls@t-online.de>
+Date: Wed, 28 Jun 2017 06:32:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 1.8.3
+Message-ID: <20170628043239.17217-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Configure option dummy-driver was removed:
+https://github.com/01org/libva/commit/8cd60bb59ffac21560d1c424d456cc25e917371f
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
- package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libva/libva.hash | 4 ++--
+ package/libva/libva.mk   | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index d20ecd1e45..75c1e95712 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 875a4d1961..232adeeeeb 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
 @@ -1,4 +1,4 @@
- # From https://github.com/01org/intel-vaapi-driver/releases
--sha1 1564e41f36b1ec646250418eeb344a916eb28407 intel-vaapi-driver-1.8.2.tar.bz2
-+sha1 b0cfc0807993aafe78e209dd28cdceb4dfa57e78 intel-vaapi-driver-1.8.3.tar.bz2
+ # From https://github.com/01org/libva/releases
+-sha1 7c4253c97f5e1e76500ff75321287131941494bc  libva-1.8.2.tar.bz2
++sha1 8eee9e28b0ae3bfbe8cd44a91396207714967204  libva-1.8.3.tar.bz2
  # Locally computed
--sha256 866cdf9974911e58b0d3a2cade29dbe7b5b68836e142cf092b99db68e366b702  intel-vaapi-driver-1.8.2.tar.bz2
-+sha256 54411d9e579300ed63f8b9b06152a1a9ec95b7699507d7ffa014cd7b2aeaff6f  intel-vaapi-driver-1.8.3.tar.bz2
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index c8d28e24fe..7a064659de 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
+-sha256 9ed3e3ddc8f47a715d4c6ec366beb21c83fc4e8a3d4d39a811baff76f0a0cede  libva-1.8.2.tar.bz2
++sha256 56ee129deba99b06eb4a8d4f746b117c5d1dc2ec5b7a0bfc06971fca1598ab9b  libva-1.8.3.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index b89d5fa27c..61e31801be 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_INTEL_DRIVER_VERSION = 1.8.2
-+LIBVA_INTEL_DRIVER_VERSION = 1.8.3
- LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = \
- 	https://github.com/01org/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
+-LIBVA_VERSION = 1.8.2
++LIBVA_VERSION = 1.8.3
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/01org/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
+@@ -15,7 +15,6 @@ LIBVA_DEPENDENCIES = host-pkgconf libdrm
+ # libdrm is a hard-dependency
+ LIBVA_CONF_OPTS = \
+ 	--enable-drm \
+-	--disable-dummy-driver \
+ 	--with-drivers-path="/usr/lib/va"
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
 -- 
 2.11.0
