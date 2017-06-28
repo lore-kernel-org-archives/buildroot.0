@@ -1,66 +1,71 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 28 Jun 2017 10:15:14 +0200
-Subject: [Buildroot] [PATCH 3/3] package/python-web2py: remove admin panel
-In-Reply-To: <1498637714-18933-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1498637714-18933-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1498637714-18933-4-git-send-email-angelo.compagnucci@gmail.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Wed, 28 Jun 2017 10:37:31 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/gnuradio: link with
+ libatomic when needed
+In-Reply-To: <20170625084806.27166-1-bernd.kuhls@t-online.de>
+References: <20170625084806.27166-1-bernd.kuhls@t-online.de>
+Message-ID: <20170628103731.7da8859a@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commmit adds an option to remove admin panel to save
-speace if not needed.
+On Sun, 25 Jun 2017 10:48:06 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/python-web2py/Config.in        | 11 +++++++++++
- package/python-web2py/python-web2py.mk |  6 +++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+> Fixes
+> http://autobuild.buildroot.net/results/528/52825918bf65b23241cd68d99513350703469294/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
-index b10d3a4..3b55153 100644
---- a/package/python-web2py/Config.in
-+++ b/package/python-web2py/Config.in
-@@ -14,6 +14,15 @@ config BR2_PACKAGE_PYTHON_WEB2PY
- 
- if BR2_PACKAGE_PYTHON_WEB2PY
- 
-+config BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
-+	bool "install admin panel application"
-+	default y
-+	help
-+	  This option install web2py admin panel application.
-+	  It can be removed to save space on embedded systems.
-+
-+if BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
-+
- config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
- 	string "admin panel password"
- 	default web2py
-@@ -21,3 +30,5 @@ config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
- 	  Set the admin panel password.
- 
- endif
-+
-+endif
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index e0117fc..3dd4bee 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -36,7 +36,11 @@ define PYTHON_WEB2PY_GENERATE_PASSWORD
- 		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
- endef
- 
--PYTHON_WEB2PY_POST_BUILD_HOOKS += PYTHON_WEB2PY_GENERATE_PASSWORD
-+ifeq ($(BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN),y)
-+	PYTHON_WEB2PY_POST_BUILD_HOOKS += PYTHON_WEB2PY_GENERATE_PASSWORD
-+else
-+	PYTHON_WEB2PY_EXCLUSIONS += applications/admin
-+endif
- 
- define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/var/www/web2py
--- 
-2.7.4
+Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+Regards,
+
+Gwen
+
+> ---
+> v2: fix typo CMAKE_CXX_FLAGS -> CMAKE_C_FLAGS (Thomas)
+> 
+>  package/gnuradio/gnuradio.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gnuradio/gnuradio.mk
+> b/package/gnuradio/gnuradio.mk index 6407dd4f8..60b0ce3d9 100644
+> --- a/package/gnuradio/gnuradio.mk
+> +++ b/package/gnuradio/gnuradio.mk
+> @@ -22,6 +22,7 @@ GNURADIO_DEPENDENCIES += orc
+>  endif
+>  
+>  GNURADIO_CONF_OPTS = \
+> +	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(GNURADIO_CFLAGS)" \
+>  	-DENABLE_DEFAULT=OFF \
+>  	-DENABLE_VOLK=ON \
+>  	-DENABLE_GNURADIO_RUNTIME=ON
+> @@ -30,13 +31,17 @@ GNURADIO_CONF_OPTS = \
+>  # compile time.
+>  GNURADIO_INSTALL_STAGING = YES
+>  
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +GNURADIO_CFLAGS += -latomic
+> +endif
+> +
+>  # Yes, this is silly, because -march is already known by the compiler
+>  # with the internal toolchain, and passed by the external wrapper for
+>  # external toolchains. Nonetheless, gnuradio does some matching on
+> the # CFLAGS to decide whether to build the NEON functions or not, and
+>  # wants to see the string 'armv7' in the CFLAGS.
+>  ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_ARM_CPU_HAS_NEON),yy)
+> -GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS)
+> -march=armv7-a" +GNURADIO_CFLAGS += -march=armv7-a
+>  endif
+>  
+>  # As soon as -mfpu=neon is supported by the compiler, gnuradio will
+> try -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
