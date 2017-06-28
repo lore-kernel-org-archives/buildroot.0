@@ -1,91 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Jun 2017 23:26:27 +0200
-Subject: [Buildroot] [git commit] util-linux: fix compilation when libc
-	lacks wide-character support
-Message-ID: <20170628212845.9447E800A3@busybox.osuosl.org>
+Date: Wed, 28 Jun 2017 23:21:44 +0200
+Subject: [Buildroot] [git commit] systemd: add security fix
+Message-ID: <20170628212845.71107800A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bfa6826b4ca89e03f0007225ab59b6938d36c92
+commit: https://git.buildroot.net/buildroot/commit/?id=6da327adb21d1cb0f1962b2cadae256ba217972a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A recent change in util-linux left calls to wcstok and wcspbrk not
-guarded by "#ifdef HAVE_WIDECHAR". This causes build failures when
-libc does not have the wide-character functions, like some uClibc
-builds.
+Add a fix for CVE-2017-9445: In systemd through 233, certain sizes passed to
+dns_packet_new in systemd-resolved can cause it to allocate a buffer that's
+too small.  A malicious DNS server can exploit this via a response with a
+specially crafted TCP payload to trick systemd-resolved into allocating a
+buffer that's too small, and subsequently write arbitrary data beyond the
+end of it.
 
-Solve the problem by means of a patch already sent upstream.
+The other patch fixes an issue with the security fix.
 
-Fixes:
-  http://autobuild.buildroot.net/results/fd8a1a8e0cef3aeed9588540e8e663664f6b43aa
-  http://autobuild.buildroot.net/results/5ad73ea8b471321988c50d80a5e50d4504151dd6
-  http://autobuild.buildroot.net/results/04411b7280dc51ecd51236967981a42352bbeb3e
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+[Peter: use CVE description from MITRE]
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...compilation-when-libc-lacks-wide-characte.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/systemd/systemd.hash | 2 ++
+ package/systemd/systemd.mk   | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/util-linux/0002-column-fix-compilation-when-libc-lacks-wide-characte.patch b/package/util-linux/0002-column-fix-compilation-when-libc-lacks-wide-characte.patch
-new file mode 100644
-index 0000000..5c11db9
---- /dev/null
-+++ b/package/util-linux/0002-column-fix-compilation-when-libc-lacks-wide-characte.patch
-@@ -0,0 +1,53 @@
-+From 46a37cd25db592db878d5beccdf75d1accbbacb6 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.ind.br>
-+Date: Tue, 27 Jun 2017 13:18:48 -0300
-+Subject: [PATCH] column: fix compilation when libc lacks wide-character
-+ support
-+
-+Commit 4762ae9d removed mtsafe_strtok() but left behind calls to wcstok
-+and wcspbrk. This leads to build failures when libc does not have the
-+wide-character functions, like some uClibc builds.
-+
-+Solve the problem by using strtok_r and strpbrk when HAVE_WIDECHAR is
-+not defined.
-+
-+Fixes:
-+  http://autobuild.buildroot.net/results/fd8a1a8e0cef3aeed9588540e8e663664f6b43aa
-+  http://autobuild.buildroot.net/results/5ad73ea8b471321988c50d80a5e50d4504151dd6
-+  http://autobuild.buildroot.net/results/04411b7280dc51ecd51236967981a42352bbeb3e
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+---
-+ text-utils/column.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/text-utils/column.c b/text-utils/column.c
-+index be99f94..fb57b47 100644
-+--- a/text-utils/column.c
-++++ b/text-utils/column.c
-+@@ -160,14 +160,22 @@ static wchar_t *local_wcstok(wchar_t *p, const wchar_t *separator, int greedy, w
-+ 	wchar_t *result = NULL;
-+ 
-+ 	if (greedy)
-++#ifdef HAVE_WIDECHAR
-+ 		return wcstok(p, separator, state);
-++#else
-++		return strtok_r(p, separator, state);
-++#endif
-+ 	if (!p) {
-+ 		if (!*state || !**state)
-+ 			return NULL;
-+ 		p = *state;
-+ 	}
-+ 	result = p;
-++#ifdef HAVE_WIDECHAR
-+ 	p = wcspbrk(result, separator);
-++#else
-++	p = strpbrk(result, separator);
-++#endif
-+ 	if (!p)
-+ 		*state = NULL;
-+ 	else {
-+-- 
-+2.7.5
-+
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index b5cb1ca..77a680d 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,3 +1,5 @@
+ # sha256 locally computed
+ sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
+ sha256 eed8fef0045876e9efa0ba6725ed9ea93654bf24d67bb5aad467a341ad375883  a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
++sha256 43c75bd161a8ef0de5db607aaceed77220f2ba4903cf44e7e9db544980420a5e  db848813bae4d28c524b3b6a7dad135e426659ce.patch
++sha256 451f7c09332479ebe4ac01612f5f034df4524e16b5bc5d1c8ddcda14e9f3cd69  88795538726a5bbfd9efc13d441cb05e1d7fc139.patch
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 153d615..a853434 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -20,7 +20,9 @@ SYSTEMD_PROVIDES = udev
+ SYSTEMD_AUTORECONF = YES
+ 
+ SYSTEMD_PATCH = \
+-	https://github.com/systemd/systemd/commit/a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
++	https://github.com/systemd/systemd/commit/a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch \
++	https://github.com/systemd/systemd/commit/db848813bae4d28c524b3b6a7dad135e426659ce.patch \
++	https://github.com/systemd/systemd/commit/88795538726a5bbfd9efc13d441cb05e1d7fc139.patch
+ 
+ # Make sure that systemd will always be built after busybox so that we have
+ # a consistent init setup between two builds
