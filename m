@@ -1,24 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Jun 2017 23:23:58 +0200
-Subject: [Buildroot] [PATCH] systemd: add security fix
-In-Reply-To: <fece5e5b122b3b81b63d6394163c462d4790b8b7.1498675471.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 28 Jun 2017 21:44:31 +0300")
-References: <fece5e5b122b3b81b63d6394163c462d4790b8b7.1498675471.git.baruch@tkos.co.il>
-Message-ID: <87podnergx.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Jun 2017 23:25:07 +0200
+Subject: [Buildroot] [PATCH] mosquitto: add upstream security fix
+In-Reply-To: <20170628104420.28572-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 28 Jun 2017 12:44:20 +0200")
+References: <20170628104420.28572-1-peter@korsgaard.com>
+Message-ID: <87lgoberf0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Add a fix for CVE-2017-9445: a specially crafted TCP payload might cause
- > memory corruption.
+ > Fixes CVE-2017-9868: In Mosquitto through 1.4.12, mosquitto.db (aka the
+ > persistence file) is world readable, which allows local users to obtain
+ > sensitive MQTT topic information.
 
-Great, it was still on my TODO list. I've extended the commit message
-with the CVE description from MITRE to make it clear that this is an
-issue in systemd-resolved and committed, thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
