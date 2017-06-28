@@ -1,44 +1,44 @@
-From: Andrey Yurovsky <yurovsky@gmail.com>
-Date: Tue, 27 Jun 2017 20:56:10 -0700
-Subject: [Buildroot] [PATCH] mtd: restore installation of libmtd to staging
-Message-ID: <20170628035610.9945-1-yurovsky@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 28 Jun 2017 06:32:39 +0200
+Subject: [Buildroot] [PATCH 2/2] libva-intel-driver: bump version to 1.8.3
+In-Reply-To: <20170628043239.17217-1-bernd.kuhls@t-online.de>
+References: <20170628043239.17217-1-bernd.kuhls@t-online.de>
+Message-ID: <20170628043239.17217-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 67117adc891e06154d23a01b8c8ee348c63e78eb backed out the
-deployment of libmtd headers (libmtd.h, libubi.h, ubi-media.h) to
-staging and these may be needed by packages that work directly with MTD,
-for example swupdate. mtd also produces libmtd.a and libubi.a which are
-needed by those packages.
-
-Tested by configuring swupdate to use MTD and verifying that swupdate
-now compiles and links.
-
-Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mtd/mtd.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
+ package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 3df641e..bcd2363 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -97,5 +97,13 @@ define MTD_INSTALL_TARGET_CMDS
- 	)
- endef
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index d20ecd1e45..75c1e95712 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/01org/intel-vaapi-driver/releases
+-sha1 1564e41f36b1ec646250418eeb344a916eb28407 intel-vaapi-driver-1.8.2.tar.bz2
++sha1 b0cfc0807993aafe78e209dd28cdceb4dfa57e78 intel-vaapi-driver-1.8.3.tar.bz2
+ # Locally computed
+-sha256 866cdf9974911e58b0d3a2cade29dbe7b5b68836e142cf092b99db68e366b702  intel-vaapi-driver-1.8.2.tar.bz2
++sha256 54411d9e579300ed63f8b9b06152a1a9ec95b7699507d7ffa014cd7b2aeaff6f  intel-vaapi-driver-1.8.3.tar.bz2
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index c8d28e24fe..7a064659de 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define MTD_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/mtd/libmtd.h
-+	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/mtd/libubi.h
-+	$(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h $(STAGING_DIR)/usr/include/mtd/ubi-media.h
-+	$(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
-+	$(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
-+endef
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-LIBVA_INTEL_DRIVER_VERSION = 1.8.2
++LIBVA_INTEL_DRIVER_VERSION = 1.8.3
+ LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+ LIBVA_INTEL_DRIVER_SITE = \
+ 	https://github.com/01org/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
 -- 
-2.9.3
+2.11.0
