@@ -1,61 +1,51 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 29 Jun 2017 22:47:30 +0200
-Subject: [Buildroot] [PATCH] docs: known issues no longer valid
-Message-ID: <20170629204730.GA27700@waldemar-brodkorb.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 29 Jun 2017 22:06:39 +0000
+Subject: [Buildroot] [Bug 9996] New: lz4 option does not install lz4
+	binaries in ramdisk
+Message-ID: <bug-9996-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- docs/manual/known-issues.txt | 20 --------------------
- package/mrouted/Config.in    |  3 ---
- 2 files changed, 23 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9996
 
-diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-index acfe4ff..ae29a48 100644
---- a/docs/manual/known-issues.txt
-+++ b/docs/manual/known-issues.txt
-@@ -7,26 +7,6 @@
-   if such options contain a +$+ sign. For example, the following is known
-   to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
- 
--* The +ltp-testsuite+ package does not build with the default uClibc
--  configuration used by the Buildroot toolchain backend. The LTP
--  testsuite uses several functions that are considered obsolete, such
--  as sigset() and others. uClibc configuration options such as
--  DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
--  UCLIBC_SV4_DEPRECATED are needed if one wants to build the
--  +ltp-testsuite+ package with uClibc. You need to either use a glibc
--  based toolchain, or enable the appropriate options in the uClibc
--  configuration.
--
--* The +xfsprogs+ package does not build with the default uClibc
--  configuration used by the Buildroot toolchain backend. You need to
--  either use a glibc based toolchain, or enable the appropriate
--  options in the uClibc configuration.
--
--* The +mrouted+ package does not build with the default uClibc
--  configuration used by the Buildroot toolchain backend. You need to
--  either use a glibc based toolchain, or enable the appropriate
--  options in the uClibc configuration.
--
- * The +libffi+ package is not supported on the SuperH 2 and ARC
-   architectures.
- 
-diff --git a/package/mrouted/Config.in b/package/mrouted/Config.in
-index bf4614d..e5d9348 100644
---- a/package/mrouted/Config.in
-+++ b/package/mrouted/Config.in
-@@ -4,7 +4,4 @@ config BR2_PACKAGE_MROUTED
- 	help
- 	  An implementation of the DVMRP multicast routing protocol.
- 
--	  If built with uClibc, then UCLIBC_SUPPORT_AI_ADDRCONFIG is
--	  needed in uClibc configuration.
--
- 	  http://github.com/troglobit/mrouted
+            Bug ID: 9996
+           Summary: lz4 option does not install lz4 binaries in ramdisk
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jamin.collins at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+Selecting the lz4 option in the menuconfig does not result in the lz4 binaries
+being installed into the ramdisk, only the libraries.  This appears to be due
+to a problem in the package's makefile.  The following change corrects this:
+
+$ git diff
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index d350d4c09..4a7129998 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -37,7 +37,7 @@ endef
+
+ define LZ4_INSTALL_TARGET_CMDS
+        $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE)
+DESTDIR=$(TARGET_DIR) \
+-               PREFIX=/usr install -C $(@D)/lib
++               PREFIX=/usr install -C $(@D)
+ endef
+
+ $(eval $(generic-package))
+
 -- 
-2.1.4
+You are receiving this mail because:
+You are on the CC list for the bug.
