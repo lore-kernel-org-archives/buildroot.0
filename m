@@ -1,42 +1,74 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 28 Jun 2017 23:45:46 -0300
-Subject: [Buildroot] [PATCH 6/9] support/testing: fix code style in emulator
+Date: Wed, 28 Jun 2017 23:45:47 -0300
+Subject: [Buildroot] [PATCH 7/9] support/testing: allow to set BR2_JLEVEL
 In-Reply-To: <20170629024549.30484-1-ricardo.martincoski@gmail.com>
 References: <20170629024549.30484-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170629024549.30484-7-ricardo.martincoski@gmail.com>
+Message-ID: <20170629024549.30484-8-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove unused import.
-Use 2 empty lines before a class.
+Let the user to override the default BR2_JLEVEL used for each testcase.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-This patch depends on previous ones because some code with style issues
-were replaced by equivalent code.
+ support/testing/infra/basetest.py |  6 +++++-
+ support/testing/run-tests         | 10 ++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-After this patch
-$ flake8 support/testing/infra/emulator.py
-shows no error or warning.
----
- support/testing/infra/emulator.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 7407309a29..0f925fc9fb 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -1,7 +1,7 @@
- import pexpect
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 557baa215c..d75458a02c 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -34,6 +34,7 @@ class BRTest(unittest.TestCase):
+     outputdir = None
+     logtofile = True
+     keepbuilds = False
++    jlevel = None
  
- import infra
--import infra.basetest
+     def show_msg(self, msg):
+         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
+@@ -43,7 +44,10 @@ class BRTest(unittest.TestCase):
+         self.builddir = os.path.join(self.__class__.outputdir, self.testname)
+         self.emulator = None
+         self.show_msg("Starting")
+-        self.b = Builder(self.__class__.config, self.builddir, self.logtofile)
++        config = self.__class__.config
++        if self.jlevel:
++            config += "BR2_JLEVEL={}\n".format(self.jlevel)
++        self.b = Builder(config, self.builddir, self.logtofile)
+ 
+         if not self.keepbuilds:
+             self.b.delete()
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 07dad0d8b9..e560ec7720 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -23,6 +23,8 @@ def main():
+     parser.add_argument('-k', '--keep',
+                         help='keep build directories',
+                         action='store_true')
++    parser.add_argument('-j', '--jlevel', type=int,
++                        help='BR2_JLEVEL to use for each testcase')
+ 
+     args = parser.parse_args()
+ 
+@@ -70,6 +72,14 @@ def main():
+ 
+     BRTest.keepbuilds = args.keep
+ 
++    if args.jlevel:
++        if args.jlevel < 0:
++            print "Invalid BR2_JLEVEL to use for each testcase"
++            print ""
++            parser.print_help()
++            return 1
++        BRTest.jlevel = args.jlevel
 +
- 
- class Emulator(object):
- 
+     nose2_args = ["-v",
+                   "-s", "support/testing",
+                   "-c", "support/testing/conf/unittest.cfg"]
 -- 
 2.11.0
