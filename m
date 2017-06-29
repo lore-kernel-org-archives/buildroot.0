@@ -1,37 +1,59 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Thu, 29 Jun 2017 18:54:56 +0530
-Subject: [Buildroot] [PATCH 1/2] .gitlab-ci.yml: regenerate
-In-Reply-To: <20170627183216.31749-1-arnout@mind.be>
-References: <20170627183216.31749-1-arnout@mind.be>
-Message-ID: <CAMty3ZD82PWjycxAKJqj-XjSY9rcrNRuS+izuKc_KL72Xj8ghA@mail.gmail.com>
+Date: Thu, 29 Jun 2017 20:42:31 +0530
+Subject: [Buildroot] : gstreamer-imx issue with missing VP8 decoder
+Message-ID: <CAMty3ZBK15PiFMmxp3D6vB9wukXzVgds4z4zoNSg=6cOTT-0PA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 28, 2017 at 12:02 AM, Arnout Vandecappelle
-(Essensium/Mind) <arnout@mind.be> wrote:
-> engicam_imx6ul_isiot_defconfig was added in commit 0235bc6176, but it
-> should have been engicam_imx6ul_isiot_mmc_defconfig.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  .gitlab-ci.yml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index 1f2410e862..38eaf89d19 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -92,7 +92,7 @@ cubieboard2_defconfig: *defconfig
->  engicam_imx6qdl_icore_defconfig: *defconfig
->  engicam_imx6qdl_icore_rqs_defconfig: *defconfig
->  engicam_imx6ul_geam_defconfig: *defconfig
-> -engicam_imx6ul_isiot_defconfig: *defconfig
-> +engicam_imx6ul_isiot_mmc_defconfig: *defconfig
+Hi,
 
-This shouldn't be _mmc, will fix and send the patch.
+Anyone tried gstreamer-imx on latest, I'm observing issues on decoder
+setups. Please do let me know if I missing any config items.
+
+Log:
+-----
+# gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+Setting pipeline to PAUSED ...
+Pipeline is PREROLLING ...
+Missing element: VP8 decoder
+WARNING: from element
+/GstPlayBin:playbin0/GstURIDecodeBin:uridecodebin0: No decoder
+available for type 'video/x-vp8, width=(int)1920, height=(int)800,
+pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)24/1'.
+Additional debug info:
+gsturidecodebin.c(938): unknown_type_cb ():
+/GstPlayBin:playbin0/GstURIDecodeBin:uridecodebin0
+Missing element: Vorbis decoder
+WARNING: from element
+/GstPlayBin:playbin0/GstURIDecodeBin:uridecodebin0: No decoder
+available for type 'audio/x-vorbis, channels=(int)2, rate=(int)48000,
+streamheader=(buffer)< 01766f72626973000000000280bb00000.
+Additional debug info:
+gsturidecodebin.c(938): unknown_type_cb ():
+/GstPlayBin:playbin0/GstURIDecodeBin:uridecodebin0
+ERROR: from element
+/GstPlayBin:playbin0/GstURIDecodeBin:uridecodebin0: Your GStreamer
+installation is missing a plug-in.
+Additional debug info:
+gsturidecodebin.c(1005): no_more_pads_full ():
+/GstPlayBin:playbin0/GstURIDecodeBin:uridecodebin0:
+no suitable plugins found:
+gstdecodebin2.c(4592): gst_decode_bin_expose ():
+/GstPlayBin:playbin0/GstURIDecodeBin:uridecodebin0/GstDecodeBin:decodebin0:
+no suitable plugins found:
+Missing decoder: Vorbis (audio/x-vorbis, channels=(int)2,
+rate=(int)48000, streamheader=(buffer)<
+01766f72626973000000000280bb000000000000006b030000000000b801,
+03766f726269732d000000586970682e4f7267206c6962566f7)
+Missing decoder: VP8 (video/x-vp8, width=(int)1920, height=(int)800,
+pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)24/1)
+
+ERROR: pipeline doesn't want to preroll.
+Setting pipeline to NULL ...
+Freeing pipeline ...
 
 thanks!
 -- 
