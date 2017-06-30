@@ -1,100 +1,124 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Thu, 29 Jun 2017 15:09:22 -0700
-Subject: [Buildroot] [PATCH] package/xen: Fix builds with GCC 7
-Message-ID: <20170629220922.7615-1-alistair.francis@xilinx.com>
+From: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+Date: Fri, 30 Jun 2017 11:24:10 +0900
+Subject: [Buildroot] [FYI 2/2] WIP:qt5: Bump up to 5.9
+In-Reply-To: <20170629213647.020e3fb0@gmx.net>
+References: <104a0453-7ac4-f6d9-3e66-2671b313d757@melcoinc.co.jp>
+ <1cc8737a-4ecd-5aa7-2a2e-628cea1e6652@melcoinc.co.jp>
+ <20170629213647.020e3fb0@gmx.net>
+Message-ID: <09654530-e03b-bcfd-0e52-1be644792111@melcoinc.co.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix a "duplicate 'const' declaration specifier" error that occurs when
-building Xen. As the issue has already been fixed in upstream Xen let's
-just backport the fix to apply here.
+Hello Peter
 
-Fixes:
-    http://autobuild.buildroot.net/results/3a0/3a03c328bc6a6c30cc4f619925608d735632211f/
+Thank you for comments.
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
----
- package/xen/0008-arm-fix-build-with-gcc-7.patch | 69 +++++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 package/xen/0008-arm-fix-build-with-gcc-7.patch
+On 2017/06/30 4:36, Peter Seiderer wrote:
+> Hello Naoki,
+> 
+> On Wed, 28 Jun 2017 16:42:42 +0900, Naoki Matsumoto <n-matsumoto@melcoinc.co.jp> wrote:
+> 
+>> Qt5.9 is LTS.
+>> Dependences: pcre2
+>>
+>> Signed-off-by: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
+>> ---
+>>   package/qt5/Config.in            | 11 +++++++++++
+>>   package/qt5/qt5.mk               |  6 ++++++
+>>   package/qt5/qt5base/qt5base.hash |  3 +++
+>>   package/qt5/qt5base/qt5base.mk   |  7 +++++++
+>>   4 files changed, 27 insertions(+)
+>>
+>> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+>> index 04dccea..a6fc307 100644
+>> --- a/package/qt5/Config.in
+>> +++ b/package/qt5/Config.in
+>> @@ -50,6 +50,17 @@ comment "Latest Qt version needs host/toolchain w/ gcc >= 4.8"
+>>   	depends on !BR2_ARM_CPU_ARMV4
+>>   	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+>>   
+>> +config BR2_PACKAGE_QT5_VERSION_5_9
+>> +        bool "LTS (5.9)"
+>> +        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>> +        depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
+>> +        depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+>> +        # no built-in double-conversion support
+>> +        depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+>> +        help
+>> +          This option builds Qt 5.9, which is licensed under
+>> +          (L)GPL-3.0+.
+>> +
+> 
+> No need to keep 5.8, just replace _LATEST...
 
-diff --git a/package/xen/0008-arm-fix-build-with-gcc-7.patch b/package/xen/0008-arm-fix-build-with-gcc-7.patch
-new file mode 100644
-index 000000000..e709f5c4e
---- /dev/null
-+++ b/package/xen/0008-arm-fix-build-with-gcc-7.patch
-@@ -0,0 +1,69 @@
-+From 9d3011bd1cd29f8f3841bf1b64d5ead9ed1434e8 Mon Sep 17 00:00:00 2001
-+From: Jan Beulich <jbeulich@suse.com>
-+Date: Fri, 19 May 2017 10:12:08 +0200
-+Subject: [PATCH] arm: fix build with gcc 7
-+
-+The compiler dislikes duplicate "const", and the ones it complains
-+about look like they we in fact meant to be placed differently.
-+
-+Also fix array_access_okay() (just like on x86), despite the construct
-+being unused on ARM: -Wint-in-bool-context, enabled by default in
-+gcc 7, doesn't like multiplication in conditional operators. "Hide" it,
-+at the risk of the next compiler version becoming smarter and
-+recognizing even that. (The hope is that added smartness then would
-+also better deal with legitimate cases like the one here.) The change
-+could have been done in access_ok(), but I think we better keep it at
-+the place the compiler is actually unhappy about.
-+
-+Signed-off-by: Jan Beulich <jbeulich@suse.com>
-+Reviewed-by: Julien Grall <julien.grall@arm.com>
-+Release-acked-by: Julien Grall <julien.grall@arm.com>
-+---
-+ xen/arch/arm/platforms/brcm.c      | 2 +-
-+ xen/arch/arm/platforms/rcar2.c     | 2 +-
-+ xen/include/asm-arm/guest_access.h | 3 ++-
-+ 3 files changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/xen/arch/arm/platforms/brcm.c b/xen/arch/arm/platforms/brcm.c
-+index 6d8b5b9175..d481b2c60f 100644
-+--- a/xen/arch/arm/platforms/brcm.c
-++++ b/xen/arch/arm/platforms/brcm.c
-+@@ -271,7 +271,7 @@ static __init int brcm_init(void)
-+     return brcm_populate_plat_regs();
-+ }
-+ 
-+-static const char const *brcm_dt_compat[] __initconst =
-++static const char *const brcm_dt_compat[] __initconst =
-+ {
-+     "brcm,bcm7445d0",
-+     NULL
-+diff --git a/xen/arch/arm/platforms/rcar2.c b/xen/arch/arm/platforms/rcar2.c
-+index bb25751109..df0ac84709 100644
-+--- a/xen/arch/arm/platforms/rcar2.c
-++++ b/xen/arch/arm/platforms/rcar2.c
-+@@ -46,7 +46,7 @@ static int __init rcar2_smp_init(void)
-+     return 0;
-+ }
-+ 
-+-static const char const *rcar2_dt_compat[] __initdata =
-++static const char *const rcar2_dt_compat[] __initconst =
-+ {
-+     "renesas,lager",
-+     NULL
-+diff --git a/xen/include/asm-arm/guest_access.h b/xen/include/asm-arm/guest_access.h
-+index 5876988b23..421bca5f36 100644
-+--- a/xen/include/asm-arm/guest_access.h
-++++ b/xen/include/asm-arm/guest_access.h
-+@@ -8,7 +8,8 @@
-+ #define access_ok(addr,size) (1)
-+ 
-+ #define array_access_ok(addr,count,size) \
-+-    (likely(count < (~0UL/size)) && access_ok(addr,count*size))
-++    (likely((count) < (~0UL / (size))) && \
-++     access_ok(addr, 0 + (count) * (size)))
-+ 
-+ unsigned long raw_copy_to_guest(void *to, const void *from, unsigned len);
-+ unsigned long raw_copy_to_guest_flush_dcache(void *to, const void *from,
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+I think so too.
+If qt5.10 release, we add BR2_PACKAGE_QT5_VERSION_5_9.
+
+> Missing 'select BR2_PACKAGE_PCRE2'...
+I don't need 'select BR2_PACKAGE_PCRE2'
+because,
+1. It is not wrote `select BR2_PACKAGE_PCRE` now.
+2. qt5base.mk is wrote `QT5BASE_DEPENDENCIES += pcre2`
+
+I think better that we write it to qt5base/Config.in If add `select BR2_PACKAGE_PCRE2`.
+
+>>   config BR2_PACKAGE_QT5_VERSION_5_6
+>>   	bool "LTS (5.6)"
+>>   	help
+>> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+>> index 5c7af39..11d0e95 100644
+>> --- a/package/qt5/qt5.mk
+>> +++ b/package/qt5/qt5.mk
+>> @@ -5,10 +5,16 @@
+>>   ################################################################################
+>>   
+>>   ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+>> +#TODO:Delete version
+>>   QT5_VERSION_MAJOR = 5.8
+>>   QT5_VERSION = $(QT5_VERSION_MAJOR).0
+>>   QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+>>   QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
+>> +else ifeq ($(BR2_PACKAGE_QT5_VERSION_5_9),y)
+>> +QT5_VERSION_MAJOR = 5.9
+>> +QT5_VERSION = $(QT5_VERSION_MAJOR).0
+>> +QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+>> +QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
+>>   else
+>>   QT5_VERSION_MAJOR = 5.6
+>>   QT5_VERSION = $(QT5_VERSION_MAJOR).2
+>> diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+>> index 3f6af8a..5169513 100644
+>> --- a/package/qt5/qt5base/qt5base.hash
+>> +++ b/package/qt5/qt5base/qt5base.hash
+>> @@ -3,3 +3,6 @@ sha256 2f6eae93c5d982fe0a387a01aeb3435571433e23e9d9d9246741faf51f1ee787 qtbase-o
+>>   
+>>   # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtbase-opensource-src-5.8.0.tar.xz
+>>   sha256 c17111ae02a44dc7be1ec2cf979a47ee9e58edf4904041a525c21f4fa53fc005  qtbase-opensource-src-5.8.0.tar.xz
+>> +
+>> +# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.0/submodules/qtbase-opensource-src-5.9.0.tar.xz
+>> +sha256 267eb2af1a203c087f2113f43b08014d0e2d2cb269295b8602d869a2fad5296c  qtbase-opensource-src-5.9.0.tar.xz
+>> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+>> index 5fe8bb8..97db864 100644
+>> --- a/package/qt5/qt5base/qt5base.mk
+>> +++ b/package/qt5/qt5base/qt5base.mk
+>> @@ -9,6 +9,13 @@ QT5BASE_SITE = $(QT5_SITE)
+>>   QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
+>>   
+>>   QT5BASE_DEPENDENCIES = host-pkgconf zlib pcre
+>> +#TODO:More better syntax? likely BR2_PACKAGE_QT5_VERSION < 5.9
+>> +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_9),y)
+>> +QT5BASE_DEPENDENCIES += pcre2
+>> +else
+>> +QT5BASE_DEPENDENCIES += pcre
+>> +endif
+>> +
+>>   QT5BASE_INSTALL_STAGING = YES
+>>   
+>>   # A few comments:
+> 
+> Next step would be to bump all remaining 22 sub modules...
+> Thanks for your effort...
+Oh... That's right. we want to change *.hash and some *.mk.
