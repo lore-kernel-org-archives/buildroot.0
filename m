@@ -1,124 +1,76 @@
-From: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
-Date: Fri, 30 Jun 2017 11:24:10 +0900
-Subject: [Buildroot] [FYI 2/2] WIP:qt5: Bump up to 5.9
-In-Reply-To: <20170629213647.020e3fb0@gmx.net>
-References: <104a0453-7ac4-f6d9-3e66-2671b313d757@melcoinc.co.jp>
- <1cc8737a-4ecd-5aa7-2a2e-628cea1e6652@melcoinc.co.jp>
- <20170629213647.020e3fb0@gmx.net>
-Message-ID: <09654530-e03b-bcfd-0e52-1be644792111@melcoinc.co.jp>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 30 Jun 2017 06:21:40 +0300
+Subject: [Buildroot] [PATCH] docs: known issues no longer valid
+In-Reply-To: <20170629204730.GA27700@waldemar-brodkorb.de>
+References: <20170629204730.GA27700@waldemar-brodkorb.de>
+Message-ID: <20170630032140.3u3bwbec7tr25zdt@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter
+Hi Waldemar,
 
-Thank you for comments.
-
-On 2017/06/30 4:36, Peter Seiderer wrote:
-> Hello Naoki,
+On Thu, Jun 29, 2017 at 10:47:30PM +0200, Waldemar Brodkorb wrote:
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  docs/manual/known-issues.txt | 20 --------------------
+>  package/mrouted/Config.in    |  3 ---
+>  2 files changed, 23 deletions(-)
 > 
-> On Wed, 28 Jun 2017 16:42:42 +0900, Naoki Matsumoto <n-matsumoto@melcoinc.co.jp> wrote:
-> 
->> Qt5.9 is LTS.
->> Dependences: pcre2
->>
->> Signed-off-by: Naoki Matsumoto <n-matsumoto@melcoinc.co.jp>
->> ---
->>   package/qt5/Config.in            | 11 +++++++++++
->>   package/qt5/qt5.mk               |  6 ++++++
->>   package/qt5/qt5base/qt5base.hash |  3 +++
->>   package/qt5/qt5base/qt5base.mk   |  7 +++++++
->>   4 files changed, 27 insertions(+)
->>
->> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
->> index 04dccea..a6fc307 100644
->> --- a/package/qt5/Config.in
->> +++ b/package/qt5/Config.in
->> @@ -50,6 +50,17 @@ comment "Latest Qt version needs host/toolchain w/ gcc >= 4.8"
->>   	depends on !BR2_ARM_CPU_ARMV4
->>   	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
->>   
->> +config BR2_PACKAGE_QT5_VERSION_5_9
->> +        bool "LTS (5.9)"
->> +        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
->> +        depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
->> +        depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
->> +        # no built-in double-conversion support
->> +        depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
->> +        help
->> +          This option builds Qt 5.9, which is licensed under
->> +          (L)GPL-3.0+.
->> +
-> 
-> No need to keep 5.8, just replace _LATEST...
+> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+> index acfe4ff..ae29a48 100644
+> --- a/docs/manual/known-issues.txt
+> +++ b/docs/manual/known-issues.txt
+> @@ -7,26 +7,6 @@
+>    if such options contain a +$+ sign. For example, the following is known
+>    to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
+>  
+> -* The +ltp-testsuite+ package does not build with the default uClibc
+> -  configuration used by the Buildroot toolchain backend. The LTP
+> -  testsuite uses several functions that are considered obsolete, such
+> -  as sigset() and others. uClibc configuration options such as
+> -  DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
+> -  UCLIBC_SV4_DEPRECATED are needed if one wants to build the
+> -  +ltp-testsuite+ package with uClibc. You need to either use a glibc
+> -  based toolchain, or enable the appropriate options in the uClibc
+> -  configuration.
+> -
+> -* The +xfsprogs+ package does not build with the default uClibc
+> -  configuration used by the Buildroot toolchain backend. You need to
+> -  either use a glibc based toolchain, or enable the appropriate
+> -  options in the uClibc configuration.
+> -
+> -* The +mrouted+ package does not build with the default uClibc
+> -  configuration used by the Buildroot toolchain backend. You need to
+> -  either use a glibc based toolchain, or enable the appropriate
+> -  options in the uClibc configuration.
+> -
+>  * The +libffi+ package is not supported on the SuperH 2 and ARC
+>    architectures.
 
-I think so too.
-If qt5.10 release, we add BR2_PACKAGE_QT5_VERSION_5_9.
+This paragraph and the following one (about prboom) are also outdated. libffi 
+supports all Buildroot target architectures for quite some time now. Support 
+for the Sourcery CodeBench toolchain has been removed recently, so there is no 
+need to mention the prboot ICE issue anymore.
 
-> Missing 'select BR2_PACKAGE_PCRE2'...
-I don't need 'select BR2_PACKAGE_PCRE2'
-because,
-1. It is not wrote `select BR2_PACKAGE_PCRE` now.
-2. qt5base.mk is wrote `QT5BASE_DEPENDENCIES += pcre2`
+baruch
 
-I think better that we write it to qt5base/Config.in If add `select BR2_PACKAGE_PCRE2`.
+> diff --git a/package/mrouted/Config.in b/package/mrouted/Config.in
+> index bf4614d..e5d9348 100644
+> --- a/package/mrouted/Config.in
+> +++ b/package/mrouted/Config.in
+> @@ -4,7 +4,4 @@ config BR2_PACKAGE_MROUTED
+>  	help
+>  	  An implementation of the DVMRP multicast routing protocol.
+>  
+> -	  If built with uClibc, then UCLIBC_SUPPORT_AI_ADDRCONFIG is
+> -	  needed in uClibc configuration.
+> -
+>  	  http://github.com/troglobit/mrouted
 
->>   config BR2_PACKAGE_QT5_VERSION_5_6
->>   	bool "LTS (5.6)"
->>   	help
->> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
->> index 5c7af39..11d0e95 100644
->> --- a/package/qt5/qt5.mk
->> +++ b/package/qt5/qt5.mk
->> @@ -5,10 +5,16 @@
->>   ################################################################################
->>   
->>   ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->> +#TODO:Delete version
->>   QT5_VERSION_MAJOR = 5.8
->>   QT5_VERSION = $(QT5_VERSION_MAJOR).0
->>   QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
->>   QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
->> +else ifeq ($(BR2_PACKAGE_QT5_VERSION_5_9),y)
->> +QT5_VERSION_MAJOR = 5.9
->> +QT5_VERSION = $(QT5_VERSION_MAJOR).0
->> +QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
->> +QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
->>   else
->>   QT5_VERSION_MAJOR = 5.6
->>   QT5_VERSION = $(QT5_VERSION_MAJOR).2
->> diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
->> index 3f6af8a..5169513 100644
->> --- a/package/qt5/qt5base/qt5base.hash
->> +++ b/package/qt5/qt5base/qt5base.hash
->> @@ -3,3 +3,6 @@ sha256 2f6eae93c5d982fe0a387a01aeb3435571433e23e9d9d9246741faf51f1ee787 qtbase-o
->>   
->>   # Hash from: http://download.qt.io/official_releases/qt/5.8/5.8.0/submodules/qtbase-opensource-src-5.8.0.tar.xz
->>   sha256 c17111ae02a44dc7be1ec2cf979a47ee9e58edf4904041a525c21f4fa53fc005  qtbase-opensource-src-5.8.0.tar.xz
->> +
->> +# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.0/submodules/qtbase-opensource-src-5.9.0.tar.xz
->> +sha256 267eb2af1a203c087f2113f43b08014d0e2d2cb269295b8602d869a2fad5296c  qtbase-opensource-src-5.9.0.tar.xz
->> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
->> index 5fe8bb8..97db864 100644
->> --- a/package/qt5/qt5base/qt5base.mk
->> +++ b/package/qt5/qt5base/qt5base.mk
->> @@ -9,6 +9,13 @@ QT5BASE_SITE = $(QT5_SITE)
->>   QT5BASE_SOURCE = qtbase-opensource-src-$(QT5BASE_VERSION).tar.xz
->>   
->>   QT5BASE_DEPENDENCIES = host-pkgconf zlib pcre
->> +#TODO:More better syntax? likely BR2_PACKAGE_QT5_VERSION < 5.9
->> +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_9),y)
->> +QT5BASE_DEPENDENCIES += pcre2
->> +else
->> +QT5BASE_DEPENDENCIES += pcre
->> +endif
->> +
->>   QT5BASE_INSTALL_STAGING = YES
->>   
->>   # A few comments:
-> 
-> Next step would be to bump all remaining 22 sub modules...
-> Thanks for your effort...
-Oh... That's right. we want to change *.hash and some *.mk.
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
