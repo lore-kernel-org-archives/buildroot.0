@@ -1,154 +1,504 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Jun 2017 23:50:05 +0200
-Subject: [Buildroot] [PATCH 1/8 v3] tools: add a directory to store some
-	useful user-facing tools
+Date: Fri, 30 Jun 2017 23:50:06 +0200
+Subject: [Buildroot] [PATCH 2/8 v3] tools: move test-pkg out of
+	support/scripts
 In-Reply-To: <cover.1498859395.git.yann.morin.1998@free.fr>
 References: <cover.1498859395.git.yann.morin.1998@free.fr>
-Message-ID: <318abf359fe6708061165ffe829ac1d5c5e2d2c4.1498859395.git.yann.morin.1998@free.fr>
+Message-ID: <d6a52f2aa00efc0cbd7a46894bc8c0cfcda27cce.1498859395.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a tools directory to store useful little scripts, tools, etc...
-Users may add that directory in their PATH if they want to, but this
-is not mandatory.
+Move it to the top-level tools/ directory, so that it is easier to
+find for users.
 
-Add the first tool: brmake, a small script that redirects the build
-output log to a file, keeping just Buildroot's own messages, with the
-date+time added at the start of the line.
-
-We need to unbuffer the output of make so that, when the script is
-interrupted (SIGINT, ^C), there is no lingering output not yet digested
-by the logger loop.
+Add a legacy symlink for those users who already used them, so as
+not to break their habits.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
 ---
-Changes v2 -> v3:
-  - detect unconfigured build tree  (Ricardo)
-  - rename 00-README -> readme.txt  (Thomas, Arnout)
+ docs/manual/adding-packages-tips.txt |  12 +--
+ support/scripts/test-pkg             | 198 +----------------------------------
+ tools/readme.txt                     |   5 +
+ tools/test-pkg                       | 197 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 209 insertions(+), 203 deletions(-)
+ mode change 100755 => 120000 support/scripts/test-pkg
+ create mode 100755 tools/test-pkg
 
-Changes v1 -> v2:
-  - rename contrib -> tools  (Arnout)
-  - detect missing unbuffer  (Arnout)
-
-Notes:
-  - Arnout suggested using 'stdbuf' instead of 'unbuffer', but that has
-    some shortcomings in weird corner-cases because it uses LD_PRELOAD
-    to call a constructor that forces settings on stdout/stderr/stdin
-    (it cost me three days to investigate a build failure because of
-    that). So, I stuck with 'unbuffer'...
-  - I also tried to use bash' coproc, but it seems there was a
-    regression in later bash versions that causes an incorrect
-    redirect. So, I stuck with 'unbuffer'...
----
- docs/manual/writing-rules.txt |  5 ++--
- tools/brmake                  | 62 +++++++++++++++++++++++++++++++++++++++++++
- tools/readme.txt              |  9 +++++++
- 3 files changed, 74 insertions(+), 2 deletions(-)
- create mode 100755 tools/brmake
- create mode 100644 tools/readme.txt
-
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index 3a2c8dcb37..c144874a0d 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -146,5 +146,6 @@ syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index d1eab2b440..0047dfd14f 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -45,9 +45,9 @@ continuously test random configurations. However, these only build the
+ `master` branch of the git tree, and your new fancy package is not yet
+ there.
  
- === Support scripts
+-Buildroot provides a script in +support/scripts/test-pkg+ that uses the
+-same base configurations as used by the autobuilders so you can test
+-your package in the same conditions.
++Buildroot provides a script in +tools/test-pkg+ that uses the same base
++configurations as used by the autobuilders so you can test your package
++in the same conditions.
  
--Some scripts in the +support/+ directory are written in Python and should follow
--the https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
-+Some scripts in the +support/+ and +tools/+ directories are written in
-+Python and should follow the
-+https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
-diff --git a/tools/brmake b/tools/brmake
-new file mode 100755
-index 0000000000..36e2374207
+ First, create a config snippet that contains all the necessary options
+ needed to enable your package, but without any architecture or toolchain
+@@ -74,7 +74,7 @@ Then run the +test-pkg+ script, by telling it what config snippet to use
+ and what package to test:
+ 
+ ----
+-$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++$ ./tools/test-pkg -c libcurl.config -p libcurl
+ ----
+ 
+ This will try to build your package against all the toolchains used
+@@ -83,7 +83,7 @@ too long to do so). The output lists all toolchains and the corresponding
+ result (excerpt, results are fake):
+ 
+ ----
+-$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++$ ./tools/test-pkg -c libcurl.config -p libcurl
+                 armv5-ctng-linux-gnueabi [ 1/11]: OK
+               armv7-ctng-linux-gnueabihf [ 2/11]: OK
+                         br-aarch64-glibc [ 3/11]: SKIPPED
+@@ -124,7 +124,7 @@ The +test-pkg+ script accepts a few options, for which you can get some
+ help by running:
+ 
+ ----
+-$ ./support/scripts/test-pkg -h
++$ ./tools/test-pkg -h
+ ----
+ 
+ [[github-download-url]]
+diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
+deleted file mode 100755
+index 7633a21e53..0000000000
+--- a/support/scripts/test-pkg
++++ /dev/null
+@@ -1,197 +0,0 @@
+-#!/usr/bin/env bash
+-set -e
+-
+-TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
+-
+-main() {
+-    local o O opts
+-    local cfg dir pkg random toolchain
+-    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+-    local -a toolchains
+-
+-    o='hc:d:p:r:'
+-    O='help,config-snippet:build-dir:package:,random:'
+-    opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+-    eval set -- "${opts}"
+-
+-    random=0
+-    while [ ${#} -gt 0 ]; do
+-        case "${1}" in
+-        (-h|--help)
+-            help; exit 0
+-            ;;
+-        (-c|--config-snippet)
+-            cfg="${2}"; shift 2
+-            ;;
+-        (-d|--build-dir)
+-            dir="${2}"; shift 2
+-            ;;
+-        (-p|--package)
+-            pkg="${2}"; shift 2
+-            ;;
+-        (-r|--random)
+-            random="${2}"; shift 2
+-            ;;
+-        (--)
+-            shift; break
+-            ;;
+-        esac
+-    done
+-    if [ -z "${cfg}" ]; then
+-        printf "error: no config snippet specified\n" >&2; exit 1
+-    fi
+-    if [ ! -e "${cfg}" ]; then
+-        printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
+-    fi
+-    if [ -z "${dir}" ]; then
+-        dir="${HOME}/br-test-pkg"
+-    fi
+-
+-    # Extract the URLs of the toolchains; drop internal toolchains
+-    # E.g.: http://server/path/to/name.config,arch,libc
+-    #  -->  http://server/path/to/name.config
+-    toolchains=($(curl -s "${TOOLCHAINS_URL}" \
+-                  |sed -r -e 's/,.*//; /internal/d;' \
+-                  |if [ ${random} -gt 0 ]; then \
+-                      sort -R |head -n ${random}
+-                   else
+-                      cat
+-                   fi |sort
+-                 )
+-               )
+-
+-    nb_tc="${#toolchains[@]}"
+-    if [ ${nb_tc} -eq 0 ]; then
+-        printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
+-    fi
+-
+-    nb=0
+-    nb_skip=0
+-    nb_fail=0
+-    nb_legal=0
+-    for toolchainconfig in "${toolchains[@]}"; do
+-        : $((nb++))
+-        # Using basename(1) on a URL works nicely
+-        toolchain="$(basename "${toolchainconfig}" .config)"
+-        build_dir="${dir}/${toolchain}"
+-        printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
+-        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
+-        case ${ret} in
+-        (0) printf "OK\n";;
+-        (1) : $((nb_skip++)); printf "SKIPPED\n";;
+-        (2) : $((nb_fail++)); printf "FAILED\n";;
+-        (3) : $((nb_legal++)); printf "FAILED\n";;
+-        esac
+-    done
+-
+-    printf "%d builds, %d skipped, %d build failed, %d legal-info failed\n" \
+-        ${nb} ${nb_skip} ${nb_fail} ${nb_legal}
+-}
+-
+-build_one() {
+-    local dir="${1}"
+-    local url="${2}"
+-    local cfg="${3}"
+-    local pkg="${4}"
+-
+-    mkdir -p "${dir}"
+-
+-    if ! curl -s "${url}" >"${dir}/.config"; then
+-        return 2
+-    fi
+-
+-    cat >>"${dir}/.config" <<-_EOF_
+-	BR2_INIT_NONE=y
+-	BR2_SYSTEM_BIN_SH_NONE=y
+-	# BR2_PACKAGE_BUSYBOX is not set
+-	# BR2_TARGET_ROOTFS_TAR is not set
+-	_EOF_
+-    cat "${cfg}" >>"${dir}/.config"
+-
+-    if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
+-        return 2
+-    fi
+-    # We want all the options from the snippet to be present as-is (set
+-    # or not set) in the actual .config; if one of them is not, it means
+-    # some dependency from the toolchain or arch is not available, in
+-    # which case this config is untestable and we skip it.
+-    # We don't care about the locale to sort in, as long as both sort are
+-    # done in the same locale.
+-    comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
+-    if [ -s "${dir}/missing.config" ]; then
+-        return 1
+-    fi
+-    # Remove file, it's empty anyway.
+-    rm -f "${dir}/missing.config"
+-
+-    if [ -n "${pkg}" ]; then
+-        if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
+-            return 2
+-        fi
+-    fi
+-
+-    # shellcheck disable=SC2086
+-    if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
+-        return 2
+-    fi
+-
+-    # legal-info done systematically, because some packages have different
+-    # sources depending on the configuration (e.g. lua-5.2 vs. lua-5.3)
+-    if [ -n "${pkg}" ]; then
+-        if ! make O="${dir}" "${pkg}-legal-info" >> "${dir}/logfile" 2>&1; then
+-            return 3
+-        fi
+-    fi
+-}
+-
+-help() {
+-    cat <<_EOF_
+-test-pkg: test-build a package against various toolchains and architectures
+-
+-The supplied config snippet is appended to each toolchain config, the
+-resulting configuration is checked to ensure it still contains all options
+-specified in the snippet; if any is missing, the build is skipped, on the
+-assumption that the package under test requires a toolchain or architecture
+-feature that is missing.
+-
+-In case failures are noticed, you can fix the package and just re-run the
+-same command again; it will re-run the test where it failed. If you did
+-specify a package (with -p), the package build dir will be removed first.
+-
+-The list of toolchains is retrieved from the Buildroot autobuilders, available
+-at ${TOOLCHAINS_URL}.
+-
+-Options:
+-
+-    -h, --help
+-        Print this help.
+-
+-    -c CFG, --config-snippet CFG
+-        Use the CFG file as the source for the config snippet. This file
+-        should contain all the config options required to build a package.
+-
+-    -d DIR, --build-dir DIR
+-        Do the builds in directory DIR, one sub-dir per toolchain.
+-
+-    -p PKG, --package PKG
+-        Test-build the package PKG, by running 'make PKG'; if not specified,
+-        just runs 'make'.
+-
+-    -r N, --random N
+-        Limit the tests to the N randomly selected toolchains, instead of
+-        building with all toolchains.
+-
+-Example:
+-
+-    Testing libcec would require a config snippet that contains:
+-        BR2_PACKAGE_LIBCEC=y
+-
+-    Testing libcurl with openSSL support would require a snippet such as:
+-        BR2_PACKAGE_OPENSSL=y
+-        BR2_PACKAGE_LIBCURL=y
+-
+-_EOF_
+-}
+-
+-my_name="${0##*/}"
+-main "${@}"
+diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
+new file mode 120000
+index 0000000000..2acaa87478
 --- /dev/null
-+++ b/tools/brmake
-@@ -0,0 +1,62 @@
-+#!/bin/bash
-+# (C) 2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
-+# License: WTFPL, https://spdx.org/licenses/WTFPL.html
++++ b/support/scripts/test-pkg
+@@ -0,0 +1 @@
++../../tools/test-pkg
+\ No newline@end of file
+diff --git a/tools/readme.txt b/tools/readme.txt
+index 49e08d4f31..3a5ca9fb33 100644
+--- a/tools/readme.txt
++++ b/tools/readme.txt
+@@ -7,3 +7,8 @@ brmake
+     front of each line, redirects all of the build output to a file
+     ("'br.log' in the current directory), and just outputs the Buildroot
+     messages (those lines starting with >>>) on stdout.
++
++test-pkg
++    a script that tests a specific package against a set of various
++    toolchains, with the goal to detect toolchain-related dependencies
++    (wchar, threads...)
+diff --git a/tools/test-pkg b/tools/test-pkg
+new file mode 100755
+index 0000000000..7633a21e53
+--- /dev/null
++++ b/tools/test-pkg
+@@ -0,0 +1,197 @@
++#!/usr/bin/env bash
++set -e
++
++TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
 +
 +main() {
-+    local found ret start d h m mf cdir odir
++    local o O opts
++    local cfg dir pkg random toolchain
++    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
++    local -a toolchains
 +
-+    if ! which unbuffer >/dev/null 2>&1; then
-+        printf "you need to install 'unbuffer' (from package expect or expect-dev)\n" >&2
-+        exit 1
-+    fi
++    o='hc:d:p:r:'
++    O='help,config-snippet:build-dir:package:,random:'
++    opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
++    eval set -- "${opts}"
 +
-+    # Crude parsing to find the directory with the .config
-+    # and catch any configurator
-+    found=false
-+    for i in "${@}"; do
-+        ${found} && { cdir="${i}"; found=false; continue; }
-+        case "${i}" in
-+        (-C|--directory)    found=true;;
-+        (-C*)               cdir="${i#-C}";;
-+        (--directory=*)     cdir="${i#--directory}";;
-+        (O=*)               odir="${i#O=}";;
-+        # Other configurators are either non-interactive, or graphical
-+        # apps, so their stdout can safely be redirected.
-+        (config|menuconfig|nconfig|oldconfig)
-+            printf "you can't use brmake for '%s'\n" "${i}" >&2
-+            exit 1
++    random=0
++    while [ ${#} -gt 0 ]; do
++        case "${1}" in
++        (-h|--help)
++            help; exit 0
++            ;;
++        (-c|--config-snippet)
++            cfg="${2}"; shift 2
++            ;;
++        (-d|--build-dir)
++            dir="${2}"; shift 2
++            ;;
++        (-p|--package)
++            pkg="${2}"; shift 2
++            ;;
++        (-r|--random)
++            random="${2}"; shift 2
++            ;;
++        (--)
++            shift; break
 +            ;;
 +        esac
 +    done
-+    # We favour O= if specified, then -C, and fallback to cwd.
-+    dir="${odir:-${cdir:-$(pwd)}}"
-+    if [ ! -e "${dir}/.config" ]; then
-+        # No .config, don't log as we need a terminal for menuconfig
-+        exec make "${@}"
++    if [ -z "${cfg}" ]; then
++        printf "error: no config snippet specified\n" >&2; exit 1
++    fi
++    if [ ! -e "${cfg}" ]; then
++        printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
++    fi
++    if [ -z "${dir}" ]; then
++        dir="${HOME}/br-test-pkg"
 +    fi
 +
-+    start=${SECONDS}
++    # Extract the URLs of the toolchains; drop internal toolchains
++    # E.g.: http://server/path/to/name.config,arch,libc
++    #  -->  http://server/path/to/name.config
++    toolchains=($(curl -s "${TOOLCHAINS_URL}" \
++                  |sed -r -e 's/,.*//; /internal/d;' \
++                  |if [ ${random} -gt 0 ]; then \
++                      sort -R |head -n ${random}
++                   else
++                      cat
++                   fi |sort
++                 )
++               )
 +
-+    ( exec 2>&1; unbuffer make "${@}"; ) \
-+    > >( while read line; do
-+             printf "%(%Y-%m-%dT%H:%M:%S)T %s\n" -1 "${line}"
-+         done \
-+         |tee -a br.log \
-+         |grep --colour=never -E '>>>'
-+       )
-+    ret=${?}
++    nb_tc="${#toolchains[@]}"
++    if [ ${nb_tc} -eq 0 ]; then
++        printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
++    fi
 +
-+    d=$((SECONDS-start))
-+    printf "Done in "
-+    h=$((d/3600))
-+    d=$((d%3600))
-+    [ ${h} -eq 0 ] || { printf "%dh " ${h}; mf="02"; }
-+    m=$((d/60))
-+    d=$((d%60))
-+    [ ${m} -eq 0 ] || { printf "%${mf}dmin " ${m}; sf="02"; }
-+    printf "%${sf}ds\n" ${d}
++    nb=0
++    nb_skip=0
++    nb_fail=0
++    nb_legal=0
++    for toolchainconfig in "${toolchains[@]}"; do
++        : $((nb++))
++        # Using basename(1) on a URL works nicely
++        toolchain="$(basename "${toolchainconfig}" .config)"
++        build_dir="${dir}/${toolchain}"
++        printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
++        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
++        case ${ret} in
++        (0) printf "OK\n";;
++        (1) : $((nb_skip++)); printf "SKIPPED\n";;
++        (2) : $((nb_fail++)); printf "FAILED\n";;
++        (3) : $((nb_legal++)); printf "FAILED\n";;
++        esac
++    done
 +
-+    return ${ret}
++    printf "%d builds, %d skipped, %d build failed, %d legal-info failed\n" \
++        ${nb} ${nb_skip} ${nb_fail} ${nb_legal}
 +}
 +
-+main "${@}"
-diff --git a/tools/readme.txt b/tools/readme.txt
-new file mode 100644
-index 0000000000..49e08d4f31
---- /dev/null
-+++ b/tools/readme.txt
-@@ -0,0 +1,9 @@
-+This directory contains various useful scripts and tools for working
-+with Buildroot. You need not add this directory in your PATH to use
-+any of those tools, but you may do so if you want.
++build_one() {
++    local dir="${1}"
++    local url="${2}"
++    local cfg="${3}"
++    local pkg="${4}"
 +
-+brmake
-+    a script that can be run instead of make, that prepends the date in
-+    front of each line, redirects all of the build output to a file
-+    ("'br.log' in the current directory), and just outputs the Buildroot
-+    messages (those lines starting with >>>) on stdout.
++    mkdir -p "${dir}"
++
++    if ! curl -s "${url}" >"${dir}/.config"; then
++        return 2
++    fi
++
++    cat >>"${dir}/.config" <<-_EOF_
++	BR2_INIT_NONE=y
++	BR2_SYSTEM_BIN_SH_NONE=y
++	# BR2_PACKAGE_BUSYBOX is not set
++	# BR2_TARGET_ROOTFS_TAR is not set
++	_EOF_
++    cat "${cfg}" >>"${dir}/.config"
++
++    if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
++        return 2
++    fi
++    # We want all the options from the snippet to be present as-is (set
++    # or not set) in the actual .config; if one of them is not, it means
++    # some dependency from the toolchain or arch is not available, in
++    # which case this config is untestable and we skip it.
++    # We don't care about the locale to sort in, as long as both sort are
++    # done in the same locale.
++    comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
++    if [ -s "${dir}/missing.config" ]; then
++        return 1
++    fi
++    # Remove file, it's empty anyway.
++    rm -f "${dir}/missing.config"
++
++    if [ -n "${pkg}" ]; then
++        if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
++            return 2
++        fi
++    fi
++
++    # shellcheck disable=SC2086
++    if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
++        return 2
++    fi
++
++    # legal-info done systematically, because some packages have different
++    # sources depending on the configuration (e.g. lua-5.2 vs. lua-5.3)
++    if [ -n "${pkg}" ]; then
++        if ! make O="${dir}" "${pkg}-legal-info" >> "${dir}/logfile" 2>&1; then
++            return 3
++        fi
++    fi
++}
++
++help() {
++    cat <<_EOF_
++test-pkg: test-build a package against various toolchains and architectures
++
++The supplied config snippet is appended to each toolchain config, the
++resulting configuration is checked to ensure it still contains all options
++specified in the snippet; if any is missing, the build is skipped, on the
++assumption that the package under test requires a toolchain or architecture
++feature that is missing.
++
++In case failures are noticed, you can fix the package and just re-run the
++same command again; it will re-run the test where it failed. If you did
++specify a package (with -p), the package build dir will be removed first.
++
++The list of toolchains is retrieved from the Buildroot autobuilders, available
++at ${TOOLCHAINS_URL}.
++
++Options:
++
++    -h, --help
++        Print this help.
++
++    -c CFG, --config-snippet CFG
++        Use the CFG file as the source for the config snippet. This file
++        should contain all the config options required to build a package.
++
++    -d DIR, --build-dir DIR
++        Do the builds in directory DIR, one sub-dir per toolchain.
++
++    -p PKG, --package PKG
++        Test-build the package PKG, by running 'make PKG'; if not specified,
++        just runs 'make'.
++
++    -r N, --random N
++        Limit the tests to the N randomly selected toolchains, instead of
++        building with all toolchains.
++
++Example:
++
++    Testing libcec would require a config snippet that contains:
++        BR2_PACKAGE_LIBCEC=y
++
++    Testing libcurl with openSSL support would require a snippet such as:
++        BR2_PACKAGE_OPENSSL=y
++        BR2_PACKAGE_LIBCURL=y
++
++_EOF_
++}
++
++my_name="${0##*/}"
++main "${@}"
 -- 
 2.11.0
