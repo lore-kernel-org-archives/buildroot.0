@@ -1,33 +1,51 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 30 Jun 2017 20:02:54 +0530
-Subject: [Buildroot] [PATCH] configs: Rename engicam_isiot_mmc_defconfig
-Message-ID: <1498833174-16889-1-git-send-email-jteki@openedev.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 30 Jun 2017 18:04:54 +0300
+Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.8
+Message-ID: <21e15290feb7138acb60802800e8fbb4c12d4a62.1498835094.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jagan Teki <jagan@amarulasolutions.com>
+From the NEWS file:
 
-_mmc on defconfig files in engicam need to drop and
-same follow on other engicam defconfig files.
+- Mitigate a flush+reload side-channel attack on RSA secret keys
+  dubbed "Sliding right into disaster".  For details see
+  <https://eprint.iacr.org/2017/627>.  [CVE-2017-7526]
 
-So, this patch rename engicam_imx6ul_isiot_mmc_defconfig
-to engicam_imx6ul_isiot_defconfig which is missing in
-below commit
-"board: Add support for Engicam Is.IoT MX6UL SOM"
-(sha1: 0235bc61766bd0d4fecfbd686cd807992ba5f37d)
-
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...{engicam_imx6ul_isiot_mmc_defconfig => engicam_imx6ul_isiot_defconfig} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename configs/{engicam_imx6ul_isiot_mmc_defconfig => engicam_imx6ul_isiot_defconfig} (100%)
+ package/libgcrypt/libgcrypt.hash | 9 +++++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/configs/engicam_imx6ul_isiot_mmc_defconfig b/configs/engicam_imx6ul_isiot_defconfig
-similarity index 100%
-rename from configs/engicam_imx6ul_isiot_mmc_defconfig
-rename to configs/engicam_imx6ul_isiot_defconfig
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 5a833d59e629..8ac9f0a92bbc 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,4 +1,5 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
+-sha1  ea4ae1a4dba51f15095319419d7b42a0bf160384  libgcrypt-1.7.7.tar.bz2
+-# Locally calculated
+-sha256  b9b85eba0793ea3e6e66b896eb031fa05e1a4517277cc9ab10816b359254cd9a  libgcrypt-1.7.7.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000408.html
++sha1  65a4a495aa858483e66868199eaa8238572ca6cd  libgcrypt-1.7.8.tar.bz2
++# Locally calculated after checking signature
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.7.8.tar.bz2.sig
++sha256  948276ea47e6ba0244f36a17b51dcdd52cfd1e664b0a1ac3bc82134fb6cec199  libgcrypt-1.7.8.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 4374032206d8..bc194addb384 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGCRYPT_VERSION = 1.7.7
++LIBGCRYPT_VERSION = 1.7.8
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
-2.7.4
+2.11.0
