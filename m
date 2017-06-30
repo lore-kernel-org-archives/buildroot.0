@@ -1,57 +1,32 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
-Date: Fri, 30 Jun 2017 12:58:36 +0200
-Subject: [Buildroot] [PATCH 2/2] boot/syslinux: Drop patch 0008,
-	integrated in the dependency upstream
-In-Reply-To: <1498820316-2715-1-git-send-email-benoit.allard@greenbone.net>
-References: <1498820316-2715-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <1498820316-2715-2-git-send-email-benoit.allard@greenbone.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 30 Jun 2017 14:18:23 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-06-29
+In-Reply-To: <20170630063058.3F17621D36@mail.free-electrons.com>
+References: <20170630063058.3F17621D36@mail.free-electrons.com>
+Message-ID: <20170630111823.qnevm75qccjidppl@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
----
- ..._BASE_CODE-struct-has-been-renamed-to-EFI.patch | 30 ----------------------
- 1 file changed, 30 deletions(-)
- delete mode 100644 boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch
+Hi Peter,
 
-diff --git a/boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch b/boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch
-deleted file mode 100644
-index c5ed38a..0000000
---- a/boot/syslinux/0008-The-EFI_PXE_BASE_CODE-struct-has-been-renamed-to-EFI.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 6e25d11a062ef49c8add24476cf1bb74aa67e906 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
--Date: Fri, 9 Jun 2017 11:56:27 +0200
--Subject: [PATCH] The EFI_PXE_BASE_CODE struct has been renamed to
-- EFI_PXE_BASE_CODE_PROTOCOL
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
-----
-- efi/pxe.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/efi/pxe.c b/efi/pxe.c
--index 6e59109..8060dff 100644
----- a/efi/pxe.c
--+++ b/efi/pxe.c
--@@ -90,7 +90,7 @@ struct embedded_dhcp_options embedded_dhcp_options =
-- void net_parse_dhcp(void)
-- {
--     EFI_PXE_BASE_CODE_MODE *mode;
---    EFI_PXE_BASE_CODE *bc;
--+    EFI_PXE_BASE_CODE_PROTOCOL *bc;
--     unsigned int pkt_len = sizeof(EFI_PXE_BASE_CODE_PACKET);
--     EFI_STATUS status;
--     uint8_t hardlen;
---- 
--2.1.4
--
+On Fri, Jun 30, 2017 at 08:30:58AM +0200, Thomas Petazzoni wrote:
+>          arm | dropwatch-7c33d8a8ed105b07a... | NOK | http://autobuild.buildroot.net/results/691d61d13849150c3616b1c74c964f50118ff1d9 |     
+>          arm | dropwatch-7c33d8a8ed105b07a... | NOK | http://autobuild.buildroot.net/results/2918c75e473c5a2434e72f2e409becc5b4d07908 |     
+>          arm | dropwatch-7c33d8a8ed105b07a... | NOK | http://autobuild.buildroot.net/results/9be9c30f9859bd896de358a5cb900355257990b0 |     
+
+It only fails on your gcc20 machine. Can't reproduce this one here. Looks like 
+the incdefs.sh script fails to detect clock_adjtime(), even though it detects 
+posix_spawn() correctly.
+
+Can you take a look?
+
+baruch
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
