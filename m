@@ -1,85 +1,28 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 30 Jun 2017 23:57:07 +0200
-Subject: [Buildroot] [PATCH] package/lugaru: backport upstream fix
-Message-ID: <20170630215707.11418-1-romain.naour@smile.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 30 Jun 2017 23:59:54 +0200
+Subject: [Buildroot] [PATCH v2] Makefile: unconfigured "make toolchain"
+ should run report error
+In-Reply-To: <e9641d01-780a-ac1c-4948-23b1bf615953@lucaceresoli.net>
+References: <20170630170033.25708-1-arnout@mind.be>
+ <e9641d01-780a-ac1c-4948-23b1bf615953@lucaceresoli.net>
+Message-ID: <ef7d4c28-748c-ac3f-572a-43f263e4bfa3@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/389/38917f8420695a9dbb24830fef04159252fceea0
+Hi,
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...x-mismatched-usage-length-build-fail-on-g.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch
+On 30/06/2017 23:17, Luca Ceresoli wrote:
+[...]> With the above fixed:
+> Tested by: Luca Ceresoli <luca@lucaceresoli.net>
+> Acked by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch b/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch
-new file mode 100644
-index 0000000..9c362a9
---- /dev/null
-+++ b/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch
-@@ -0,0 +1,58 @@
-+From 5a0c9f6358169b447840acdb721250ce932cb180 Mon Sep 17 00:00:00 2001
-+From: Martin Erik Werner <martinerikwerner@gmail.com>
-+Date: Wed, 8 Mar 2017 22:51:16 +0100
-+Subject: [PATCH] Fix mismatched usage length, build fail on g++
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The length of const option::Descriptor usage[] is intended to be
-+inferred based on the initialisation in Source/main.cpp, however, the
-+extern declaration in Source/Game.hpp hard-codes it to 13.
-+
-+Remove the hard-coded 13 in the extern declaration, in favour of the
-+inferred length.
-+
-+This also fixes the follwoing build failure with g++ (Debian 4.9.2-10)
-+4.9.2:
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ?option::Descriptor::index?
-+     };
-+     ^
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ?option::Descriptor::index? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ?option::Descriptor::type?
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ?option::Descriptor::type? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ?option::Descriptor::shortopt?
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ?option::Descriptor::shortopt? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ?option::Descriptor::longopt?
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ?option::Descriptor::longopt? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ?option::Descriptor::check_arg?
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ?option::Descriptor::check_arg? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ?option::Descriptor::help? [-Wmissing-field-initializers]
-+CMakeFiles/lugaru.dir/build.make:54: recipe for target 'CMakeFiles/lugaru.dir/Source/main.cpp.o' failed
-+
-+Signed-off-by: Martin Erik Werner <martinerikwerner@gmail.com>
-+
-+[Romain: backport to v1.2]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+
-+(cherry picked from commit dd685fe9080c2853422d8272792691358ea07dfc)
-+---
-+ Source/Game.hpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Source/Game.hpp b/Source/Game.hpp
-+index 51232cc..9bb6adb 100644
-+--- a/Source/Game.hpp
-++++ b/Source/Game.hpp
-+@@ -234,7 +234,7 @@ enum optionIndex
-+ /* Number of options + 1 */
-+ const int commandLineOptionsNumber = 10;
-+ 
-+-extern const option::Descriptor usage[13];
-++extern const option::Descriptor usage[];
-+ 
-+ extern option::Option commandLineOptions[commandLineOptionsNumber];
-+ extern option::Option* commandLineOptionsBuffer;
-+-- 
-+2.9.4
-+
+Oops, wrong tag syntax, so patchwork doesn't catch them.
+
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+
 -- 
-2.9.4
+Luca
