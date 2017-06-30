@@ -1,51 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 30 Jun 2017 18:04:54 +0300
-Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.8
-Message-ID: <21e15290feb7138acb60802800e8fbb4c12d4a62.1498835094.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 30 Jun 2017 17:45:59 +0200
+Subject: [Buildroot] question on setting file ownership after boot
+In-Reply-To: <CABWt4evLAk_=Nr3ktrPj-NEArjBaicmNkMxAoDk7HNmHe9LSug@mail.gmail.com>
+References: <CABWt4evLAk_=Nr3ktrPj-NEArjBaicmNkMxAoDk7HNmHe9LSug@mail.gmail.com>
+Message-ID: <46798e49-c7f0-ac8e-5906-6ff898a6b261@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the NEWS file:
 
-- Mitigate a flush+reload side-channel attack on RSA secret keys
-  dubbed "Sliding right into disaster".  For details see
-  <https://eprint.iacr.org/2017/627>.  [CVE-2017-7526]
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libgcrypt/libgcrypt.hash | 9 +++++----
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+On 30-06-17 14:55, Robert Smigielski wrote:
+> Hi everyone
+> 
+> I am making customization on my Buildroot created board support package. I know
+> there is some method that configures specific ownership of files in the various
+> file system directories on boot up. On this embedded board I want root to own
+> all the dbus files so I want to specifically set file and directory ownership
+> and group membership to root system wide. I cannot recall what file configures
+> that. I know that the file system/device_table.txt performs a similar function
+> for /dev/* files but what does so for files over in /etc and /usr and so on?
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 5a833d59e629..8ac9f0a92bbc 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,4 +1,5 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
--sha1  ea4ae1a4dba51f15095319419d7b42a0bf160384  libgcrypt-1.7.7.tar.bz2
--# Locally calculated
--sha256  b9b85eba0793ea3e6e66b896eb031fa05e1a4517277cc9ab10816b359254cd9a  libgcrypt-1.7.7.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000408.html
-+sha1  65a4a495aa858483e66868199eaa8238572ca6cd  libgcrypt-1.7.8.tar.bz2
-+# Locally calculated after checking signature
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.7.8.tar.bz2.sig
-+sha256  948276ea47e6ba0244f36a17b51dcdd52cfd1e664b0a1ac3bc82134fb6cec199  libgcrypt-1.7.8.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 4374032206d8..bc194addb384 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.7.7
-+LIBGCRYPT_VERSION = 1.7.8
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ Indeed, system/device_table.txt performs that function for files and
+directories, while system/device_table_dev.txt does it for /dev/* device nodes.
+It is called "device_table.txt" for historical reasons, it is currently only
+used for permissions, not devices.
+
+ You can configure the file to use with the BR2_ROOTFS_DEVICE_TABLE option
+("Path to the permission tables"). You probably want to add a second file to
+that (space-separated) with the things you want to change.
+
+ See [1] and [2] for details.
+
+ Regards,
+ Arnout
+
+[1] https://buildroot.org/manual.html#customize-device-permission
+[2] https://buildroot.org/manual.html#makedev-syntax
+
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
