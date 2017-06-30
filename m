@@ -1,60 +1,155 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 30 Jun 2017 09:30:38 +0000
-Subject: [Buildroot] [arc-buildroot] Re: [FYI 1/2] WIP:pcre2: new package
-In-Reply-To: <5cba5356-ff94-7e8b-8158-44937264dd9d@mind.be>
-References: <104a0453-7ac4-f6d9-3e66-2671b313d757@melcoinc.co.jp>
- <b8596705-462f-3228-1b53-e65eb0bc2565@melcoinc.co.jp>
- <20170629221749.68b106c8@gmx.net>
- <5cba5356-ff94-7e8b-8158-44937264dd9d@mind.be>
-Message-ID: <1498815037.8837.10.camel@synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 30 Jun 2017 12:15:41 +0200
+Subject: [Buildroot] [PATCH v3] rauc: new package
+In-Reply-To: <20170629190811.16930-1-yurovsky@gmail.com>
+References: <20170629205827.086b687a@gmx.net>
+ <20170629190811.16930-1-yurovsky@gmail.com>
+Message-ID: <9133c20b-8b4d-bf72-6225-ac3f23519971@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+ Hi Andrey,
 
-On Fri, 2017-06-30 at 11:25 +0200, Arnout Vandecappelle wrote:
+ Thank you for the quick turnaround on this patch!
+
+On 29-06-17 21:08, Andrey Yurovsky wrote:
+> RAUC is the Robust Auto-Update Controller developed by the folks at
+> Pengutronix. It supports updating embedded systems from the network
+> (ex: HawkBit) or from a disk and provides a d-bus interface.
 > 
-> On 29-06-17 22:17, Peter Seiderer wrote:
-> [snip]
-> > 
-> > Did try the (relative new) support/scripts/test-pkg script with your patch/packet, two
-> > failures until now:
-> > 
-> > - br-arcle-hs38 [ 4/47]: FAILED
-> > 
-> > ? checking for arc-buildroot-linux-uclibc-ar... .../test_pcre2_001/br-arcle-hs38/host/usr/bin/arc-linux-ar
-> > ? checking the archiver (.../test_pcre2_001/br-arcle-hs38/host/usr/bin/arc-linux-ar) interface... unknown
-> > ? configure: error: could not determine .../test_pcre2_001/br-arcle-hs38/host/usr/bin/arc-linux-ar interface
-> > ? package/pkg-generic.mk:217: recipe for target '.../test_pcre2_001/br-arcle-hs38/build/pcre2-10.23/.stamp_configured' failed
-> > 
-> > And from 'build/pcre2-10.23/config.log':
-> > 
-> > ? configure:4792: .../test_pcre2_001/br-arcle-hs38/host/usr/bin/arc-linux-ar cru libconftest.a conftest.o >&5
-> > ? .../test_pcre2_001/br-arcle-hs38/host/usr/bin/arc-linux-ar: error while loading shared libraries: libfl.so.2: cannot open shared object file: No
-> > such file or directory
-> > ? configure:4795: $? = 127
-> > 
-> > 	$ ./host/usr/bin/arc-linux-ar -V
-> > ? ./host/usr/bin/arc-linux-ar: error while loading shared libraries: libfl.so.2: cannot open shared object file: No such file or directory
-> > 
-> > 	$??LD_LIBRARY_PATH=host/opt/ext-toolchain/lib ./host/usr/bin/arc-linux-ar -V
-> > ? GNU ar (GNU Binutils) 2.28.51.20170313
-> > ? Copyright (C) 2017 Free Software Foundation, Inc.
-> > ? This program is free software; you may redistribute it under the terms of
-> > ? the GNU General Public License version 3 or (at your option) any later version.
-> > ? This program has absolutely no warranty.
-> > 
-> > Looks more like a toolchain support problem...I think nothing pcre2 specific...
+> Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
 
-Yeah this is an issue with Tomas' prebuilt toolchain where libfl is not in RPATH.
-We discussed that with Thomas recently and the plan was for him to check
-how that toolchain gets built.
+ For future submissions: it is convenient to put a patch history in the commit
+log. Put it below a --- line, which causes git-am to remove it when it is
+committed to the repository. So you could put here:
 
-Note with Buildroot-built toolchain such a problem doesn't exist.
+---
+v2 -> v3:
+ - Correct spelling of Pengutronix (Peter)
 
-Let's see what Thomas says.
+v1 -> v2:
+ - Add myself to DEVELOPERS (Yegor)
+ - Add Config.in.host option (Yegor)
+ - Add inclusion in package/Config.in and package/Config.in.host (Arnout)
+ - Use uploaded tarball instead of automatic one (Arnout)
+ - Verified signature of tarball (Arnout)
+ - Fix license (LGPL-2.1 instead of GPL-2.1) (Arnout)
+ - Convert libcurl and json-glib to automatic dependencies (Arnout)
+ - Remove dbus-glib and util-linux(libmount) dependencies (Arnout)
+ - Mark dbus as a runtime dependency
 
--Alexey
+[I reconstructed this history because I need it to be able to review the patch.]
+
+
+ Also, it's convenient to add the people who commented on the patch in Cc, to
+motivate them to look at your new version.
+
+ Obviously, no need to spin a v4 for the above. I have a few small fixes still
+below, but they can probably be done while applying, so:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+>  DEVELOPERS                  |  3 +++
+>  package/Config.in           |  1 +
+>  package/Config.in.host      |  1 +
+>  package/rauc/Config.in      | 37 +++++++++++++++++++++++++++++++++++++
+>  package/rauc/Config.in.host |  9 +++++++++
+>  package/rauc/rauc.hash      |  3 +++
+>  package/rauc/rauc.mk        | 36 ++++++++++++++++++++++++++++++++++++
+>  7 files changed, 90 insertions(+)
+>  create mode 100644 package/rauc/Config.in
+>  create mode 100644 package/rauc/Config.in.host
+>  create mode 100644 package/rauc/rauc.hash
+>  create mode 100644 package/rauc/rauc.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9e421f4..7600cb5 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -95,6 +95,9 @@ F:	package/python-scandir/
+>  F:	package/python-simplegeneric/
+>  F:	package/python-traitlets/
+>  
+> +N:  Andrey Yurovsky <yurovsky@gmail.com>
+> +F:  package/rauc
+
+ Although the DEVELOPERS syntax doesn't strictly require it, we normally put a /
+at the end to make it clear it's a directory.
+
+> +
+>  N:	Andy Kennedy <andy.kennedy@adtran.com>
+>  F:	package/libunwind/
+>  
+
+[snip]
+> diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+> new file mode 100644
+> index 0000000..6433b82
+> --- /dev/null
+> +++ b/package/rauc/Config.in
+> @@ -0,0 +1,37 @@
+> +config BR2_PACKAGE_RAUC
+> +	bool "rauc"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+> +	depends on BR2_USE_MMU # glib2
+> +	depends on BR2_USE_WCHAR # glib2
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_DBUS # run-time dependency
+> +	help
+> +	  RAUC is the Robust Auto-Update Controller developed by
+> +	  Pengutronix. It supports updating embedded Linux
+> +	  systems over the network or from disks and provides a
+> +	  d-bus interface.
+
+ Proper spelling is D-Bus or DBus.
+
+> +
+> +	  http://rauc.io/
+> +
+> +if BR2_PACKAGE_RAUC
+> +
+> +config BR2_PACKAGE_RAUC_NETWORK
+> +	bool "network support"
+> +	select BR2_PACKAGE_LIBCURL
+> +	help
+> +	  This option enables support for updating firmware over
+> +	  the network using libcurl.
+> +
+> +config BR2_PACKAGE_RAUC_JSON
+> +	bool "JSON output support"
+> +	select BR2_PACKAGE_JSON_GLIB
+> +	help
+> +	  This option enables support for providing output in
+> +	  JSON format.
+
+ We don't usually add sub-options for the different package configuration
+options. However, in this case it does indeed make sense:
+- they are not really easy to discover for the user;
+- it's unlikely that these options will change much in future versions.
+
+
+ Regards,
+ Arnout
+
+> +
+> +endif
+> +
+> +comment "rauc needs a toolchain w/ wchar, threads"
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_USE_MMU
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
