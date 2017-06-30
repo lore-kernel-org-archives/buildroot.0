@@ -1,59 +1,189 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 30 Jun 2017 12:25:39 +0200
-Subject: [Buildroot] [RFC PATCH v3 00/10] Make the SDK relocatable
-In-Reply-To: <b883eedb-61e7-a49a-7ec1-39e17f05327b@grandegger.com>
-References: <1490255693-9134-1-git-send-email-wg@grandegger.com>
- <6799ad7b-a16e-d89e-eb73-d7d91880d341@mind.be>
- <d993626e-11b0-ab21-f022-d64f6a7340b6@grandegger.com>
- <8b074253-3002-1db9-d902-a73bb47e734b@grandegger.com>
- <dec2b16c-50f5-15d2-2082-c31ca82170ec@mind.be>
- <6a236664-6cd5-c2e6-e4bc-ee5f7b6b21a1@grandegger.com>
- <311f5c7c-ad46-e1f1-4570-dfffb5605292@mind.be>
- <4243e8e2-baaf-37f5-4149-d085388f3b13@grandegger.com>
- <319491ac-9a65-f82f-892c-1e54b8df70da@mind.be>
- <b3e97095-7453-5516-0f23-e68e56932930@grandegger.com>
- <790e33dd-2285-dd7e-7203-692f2cd3686f@mind.be>
- <c9adbe27-c7b1-b28d-5c38-7c79a5da9c18@grandegger.com>
- <84234ca1-b75f-84da-80cc-83a7234d0927@mind.be>
- <d0246c22-0486-a095-0bf4-77cc14784997@grandegger.com>
- <681841f3-9d91-a2fe-d2ea-1282de1844e7@grandegger.com>
- <1cc2e254-a03b-f8e1-9e6f-bd250c1e2496@grandegger.com>
- <b883eedb-61e7-a49a-7ec1-39e17f05327b@grandegger.com>
-Message-ID: <bda55ea2-7f4f-f176-9b44-6fd2660de5c9@mind.be>
+From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
+Date: Fri, 30 Jun 2017 12:58:35 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gnu-efi: bump version to 3.0.6
+Message-ID: <1498820316-2715-1-git-send-email-benoit.allard@greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Refreshed patch 0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch.
+Dropped patch 0002-Fix-parallel-make-failure-for-archives.patch applied upstream.
 
+Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+---
+ ...S-CPPFLAGS-to-be-completed-from-the-envir.patch | 21 +++++---
+ ...02-Fix-parallel-make-failure-for-archives.patch | 57 ----------------------
+ package/gnu-efi/gnu-efi.hash                       |  6 +--
+ package/gnu-efi/gnu-efi.mk                         |  2 +-
+ 4 files changed, 18 insertions(+), 68 deletions(-)
+ delete mode 100644 package/gnu-efi/0002-Fix-parallel-make-failure-for-archives.patch
 
-On 30-06-17 11:14, Wolfgang Grandegger wrote:
-> Hello, just another observation...
-> 
-> 
-> $ find . -name '.br_host_filelist'|xargs grep sysroot
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/lib/libgcc_s.so.1
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libstdc++.a
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/lib/libatomic.so.1.2.0
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/lib/libatomic.a
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libstdc++.so.6.0.22
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/lib/libatomic.la
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libstdc++.so.6.0.22-gdb.py
-> ./build/host-gcc-final-6.3.0/.br_host_filelist:usr/arm-buildroot-linux-gnueabihf/sysroot/lib/libgcc_s.so
-> 
-> GCC seems to install into "sysroot" in the "install-host" step. Not
-> sure if this is a problem (needs special treatment).
-
- Good observation! I'll have to think about that one...
-
- Regards,
- Arnout
-
+diff --git a/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch b/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch
+index 9038228..1150738 100644
+--- a/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch
++++ b/package/gnu-efi/0001-Allow-CFLAGS-CPPFLAGS-to-be-completed-from-the-envir.patch
+@@ -13,13 +13,16 @@ flags passed by Buildroot.
+  - rebase on top of 3.0.1 release]
+ [Bernd:
+  - rebase on top of 3.0.5 release]
++[Beno?t:
++ - rebase on top of 3.0.6 release]
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+ ---
+- Make.defaults | 18 +++++++++---------
+- 1 file changed, 9 insertions(+), 9 deletions(-)
++ Make.defaults |   22 +++++++++++-----------
++ 1 file changed, 11 insertions(+), 11 deletions(-)
+ 
+ diff --git a/Make.defaults b/Make.defaults
+ index 51bd7d8..7d7e8e7 100755
+@@ -43,12 +46,15 @@ index 51bd7d8..7d7e8e7 100755
+    ifeq ($(HOSTARCH),x86_64)
+      ARCH3264 = -m32
+    endif
+-@@ -108,17 +108,17 @@ ifeq ($(ARCH),x86_64)
++@@ -109,19 +109,19 @@ ifeq ($(ARCH),x86_64)
+                                   && [ $(GCCMINOR) -ge "7" ] ) ) \
+                            && echo 1)
+    ifeq ($(GCCNEWENOUGH),1)
+ -    CPPFLAGS += -DGNU_EFI_USE_MS_ABI -maccumulate-outgoing-args --std=c11
+ +    override CPPFLAGS += -DGNU_EFI_USE_MS_ABI -maccumulate-outgoing-args --std=c11
++   else ifeq ($(USING_CLANG),clang)
++-    CPPFLAGS += -DGNU_EFI_USE_MS_ABI --std=c11
+++    override CPPFLAGS += -DGNU_EFI_USE_MS_ABI --std=c11
+    endif
+  
+ -  CFLAGS += -mno-red-zone
+@@ -64,7 +70,7 @@ index 51bd7d8..7d7e8e7 100755
+    ARCH3264 = -mabi=64
+  endif
+  
+-@@ -139,7 +139,7 @@ export LIBGCC=$(shell $(CC) $(ARCH3264) -print-libgcc-file-name)
++@@ -142,7 +142,7 @@ export LIBGCC=$(shell $(CC) $(ARCH3264)
+  endif
+  
+  ifeq ($(ARCH),arm)
+@@ -73,7 +79,7 @@ index 51bd7d8..7d7e8e7 100755
+  endif
+  
+  # Generic compilation flags
+-@@ -149,7 +149,7 @@ INCDIR  += -I$(SRCDIR) -I$(TOPDIR)/inc -I$(TOPDIR)/inc/$(ARCH) \
++@@ -152,15 +152,15 @@ INCDIR  += -I$(SRCDIR) -I$(TOPDIR)/inc -
+  # Only enable -fpic for non MinGW compilers (unneeded on MinGW)
+  GCCMACHINE := $(shell $(CC) -dumpmachine)
+  ifneq (mingw32,$(findstring mingw32, $(GCCMACHINE)))
+@@ -82,14 +88,15 @@ index 51bd7d8..7d7e8e7 100755
+  endif
+  
+  ifeq (FreeBSD, $(findstring FreeBSD, $(OS)))
+-@@ -157,7 +157,7 @@ CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
++-CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
+++override CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
+             -fshort-wchar -fno-strict-aliasing \
+             -ffreestanding -fno-stack-protector
+  else
+ -CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
+ +override CFLAGS  += $(ARCH3264) -g -O2 -Wall -Wextra -Werror \
+             -fshort-wchar -fno-strict-aliasing \
+-            -fno-merge-constants -ffreestanding -fno-stack-protector \
++            -fno-merge-all-constants -ffreestanding -fno-stack-protector \
+             -fno-stack-check
+ -- 
+ 2.11.0
+diff --git a/package/gnu-efi/0002-Fix-parallel-make-failure-for-archives.patch b/package/gnu-efi/0002-Fix-parallel-make-failure-for-archives.patch
+deleted file mode 100644
+index 6e12388..0000000
+--- a/package/gnu-efi/0002-Fix-parallel-make-failure-for-archives.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From 7e9a26b0fc0bd8ed64a5eced5ea78bcea8ae3bbc Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sat, 17 Jan 2015 18:44:04 +0100
+-Subject: [PATCH 2/2] Fix parallel make failure for archives
+-
+-Upstream-Status: Pending
+-
+-The lib and gnuefi makefiles were using the lib.a() form which compiles
+-and ar's as a pair instead of compiling all and then ar'ing which can
+-parallelize better. This was resulting in build failures on larger values
+-of -j.
+-
+-See http://www.chemie.fu-berlin.de/chemnet/use/info/make/make_toc.html#TOC105
+-for details.
+-
+-[Romain:
+- - rebase on top of 3.0.1 release]
+-
+-Signed-off-by: Saul Wold <sgw@linux.intel.com>
+-Signed-off-by: Darren Hart <dvhart@linux.intel.com>
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- gnuefi/Makefile | 3 ++-
+- lib/Makefile    | 3 ++-
+- 2 files changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/gnuefi/Makefile b/gnuefi/Makefile
+-index d234ac0..d29575d 100644
+---- a/gnuefi/Makefile
+-+++ b/gnuefi/Makefile
+-@@ -54,7 +54,8 @@ TARGETS	= crt0-efi-$(ARCH).o libgnuefi.a
+- 
+- all:	$(TARGETS)
+- 
+--libgnuefi.a: $(patsubst %,libgnuefi.a(%),$(OBJS))
+-+libgnuefi.a: $(OBJS)
+-+	$(AR) rv $@ $(OBJS)
+- 
+- clean:
+- 	rm -f $(TARGETS) *~ *.o $(OBJS)
+-diff --git a/lib/Makefile b/lib/Makefile
+-index 019ad57..c6abcae 100644
+---- a/lib/Makefile
+-+++ b/lib/Makefile
+-@@ -73,7 +73,8 @@ all: libsubdirs libefi.a
+- libsubdirs:
+- 	for sdir in $(SUBDIRS); do mkdir -p $$sdir; done
+- 
+--libefi.a: $(patsubst %,libefi.a(%),$(OBJS))
+-+libefi.a: $(OBJS)
+-+	$(AR) rv $@ $(OBJS)
+- 
+- clean:
+- 	rm -f libefi.a *~ $(OBJS) */*.o
+--- 
+-1.9.3
+-
+diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
+index 78c9bd2..1bd0f8c 100644
+--- a/package/gnu-efi/gnu-efi.hash
++++ b/package/gnu-efi/gnu-efi.hash
+@@ -1,5 +1,5 @@
+ # From http://sourceforge.net/projects/gnu-efi/files
+-md5 1f719c9c135778aa6b087b89a1cc2423 gnu-efi-3.0.5.tar.bz2
+-sha1 183dadda9de78a44bd2343ffbf7869458ff5372a gnu-efi-3.0.5.tar.bz2
++md5 46f633758a8a37db9fd6909fe270c26b gnu-efi-3.0.6.tar.bz2
++sha1 9f0f75b64c84423f3386da6f3200f5ed7471d9cb gnu-efi-3.0.6.tar.bz2
+ # Locally computed
+-sha256 bd8fcd5914f18fc0e4ba948ab03b00013e528504f529c60739b748f6ef130b22 gnu-efi-3.0.5.tar.bz2
++sha256 21515902d80fbea23328a61d70d3d51a47204abd1507ebfa27550a7b9bf22c91 gnu-efi-3.0.6.tar.bz2
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index 274160d..d55e027 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNU_EFI_VERSION = 3.0.5
++GNU_EFI_VERSION = 3.0.6
+ GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
+ GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
+ GNU_EFI_INSTALL_STAGING = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
