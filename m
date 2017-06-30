@@ -1,45 +1,40 @@
-From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Date: Fri, 30 Jun 2017 08:11:59 +0200
-Subject: [Buildroot] [PATCH] trinity: fix MIPS support
-Message-ID: <1498803119-28740-1-git-send-email-marcin.nowakowski@imgtec.com>
+From: gomsis <tuzaklirefik@gmail.com>
+Date: Thu, 29 Jun 2017 23:12:50 -0700 (PDT)
+Subject: [Buildroot] the problem with Xorg, QT5 and imx vivant dirver
+In-Reply-To: <CAAMH-ysPacctbWpfsCLBbNm4EsJ4zOd2swtRmRbLRa-o4Hkg2Q@mail.gmail.com>
+References: <CAMWiJUu_C8sJ+gaQdxQjAUS5wk_HEwzOdtEp4komzqOeB5XCBA@mail.gmail.com>
+ <20160802213044.264e63f8@free-electrons.com>
+ <CAMWiJUs2371W5JZGnDuAozTCKUHKQtoU+V1hrb1rHKsh=nG6DA@mail.gmail.com>
+ <20160803115341.21a3018b@free-electrons.com>
+ <CAAMH-yvnsS7vq=XS_E0iLaRV-XZi2aQkHSKujn5FuZ5kK5=dug@mail.gmail.com>
+ <CAMWiJUtJa4ppP3gdneeCYwtuxx4ba2w02MTjjWC7cmiUZgdGMw@mail.gmail.com>
+ <CAAMH-ysPacctbWpfsCLBbNm4EsJ4zOd2swtRmRbLRa-o4Hkg2Q@mail.gmail.com>
+Message-ID: <1498803170303-168690.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an upstream patch that fixes segfaults when executed on MIPS due to
-incorrect handling of system call numbers on MIPS platforms.
+I have applied configuration below in buildroot 2017.08
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/trinity/trinity.hash | 1 +
- package/trinity/trinity.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+I applied patch  https://patchwork.ozlabs.org/patch/742261/ to enable
+webengine
 
-diff --git a/package/trinity/trinity.hash b/package/trinity/trinity.hash
-index 4998f5a..b896158 100644
---- a/package/trinity/trinity.hash
-+++ b/package/trinity/trinity.hash
-@@ -3,3 +3,4 @@ sha256 4cb2bd4049ce523fdf47490c4c18b8eb713c720d4b3b13d6ec2ae246aac908ad  trinity
- sha256 5601474b10973b99f6f4ecc67c8ac54000754d7110553cc81c7648bd7e73c810  b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch
- sha256 1974e473113b4e79fb2ff820e2b03f475a538e43343c24ca077a04214b9e0418  f447db18b389050ecc5e66dbf549d5953633e23e.patch
- sha256 9f9846a9c257b7df7e944c8b3ea956a8e8166bba67b3ea6c231382f095753312  87427256640f806710dd97fc807a9a896147c617.patch
-+sha256 e6e47e813424f6b92b5a2e8f56bbd3bae63db47b76ece81a934a9390e194cbfc  1d9af9d07ae111c253c92112fb50000adac47a0c.patch
-diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-index ee695fb..7396570 100644
---- a/package/trinity/trinity.mk
-+++ b/package/trinity/trinity.mk
-@@ -12,7 +12,8 @@ TRINITY_LICENSE_FILES = COPYING
- 
- TRINITY_PATCH = https://github.com/kernelslacker/trinity/commit/b0e66a2d084ffc210bc1fc247efb4d177e9f7e3d.patch \
- 		https://github.com/kernelslacker/trinity/commit/f447db18b389050ecc5e66dbf549d5953633e23e.patch \
--		https://github.com/kernelslacker/trinity/commit/87427256640f806710dd97fc807a9a896147c617.patch
-+		https://github.com/kernelslacker/trinity/commit/87427256640f806710dd97fc807a9a896147c617.patch \
-+		https://github.com/kernelslacker/trinity/commit/1d9af9d07ae111c253c92112fb50000adac47a0c.patch
- 
- ifeq ($(BR2_PACKAGE_BTRFS_PROGS),y)
- TRINITY_DEPENDENCIES += btrfs-progs
--- 
-2.7.4
+Target packages->Hardware handling->Freescale imx libraries->imx-gpu-vi
+Target packages->Graphic libraries-> QT5->opengl support and eglfs support
+
+I disable x11 and mesa3d.
+there is problem while compiling with this configuration
+
+ when I run demobrowser from qt with eglfs it crash and says "Could not open
+egl display"
+ when I run it with directfb, it accupies half of the CPU so GPU does not
+start.
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/the-problem-with-Xorg-QT5-and-imx-vivant-dirver-tp142006p168690.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
