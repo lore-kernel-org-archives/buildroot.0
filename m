@@ -1,40 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 19:04:28 +0200
-Subject: [Buildroot] [git commit] qt5multimedia: conditionally add alsa-lib
-	to dependencies
-Message-ID: <20170701173607.9693B800A3@busybox.osuosl.org>
+Date: Sat, 1 Jul 2017 19:39:38 +0200
+Subject: [Buildroot] [PATCH v2 0/2] qt5multimedia: add missing
+ dependencies
+In-Reply-To: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
+References: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
+Message-ID: <20170701193938.7a4f483a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d7dd837e5e2fcc7b785472e7215ffa74b546d9c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Qt5Multimedia builds the alsa plugin if it detects libasound in the
-system. Add alsa-lib to dependencies if BR2_PACKAGE_ALSA_LIB is
-selected.
+On Tue, 27 Jun 2017 09:53:07 +0200, Bartosz Golaszewski wrote:
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/qt5multimedia/qt5multimedia.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> Bartosz Golaszewski (2):
+>   qt5multimedia: conditionally add pulseaudio & libglib2 to dependencies
+>   qt5multimedia: conditionally add alsa-lib to dependencies
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 19312ff..062d980 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -30,6 +30,10 @@ ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
- QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+QT5MULTIMEDIA_DEPENDENCIES += alsa-lib
-+endif
-+
- define QT5MULTIMEDIA_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
+Both applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
