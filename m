@@ -1,68 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 19:43:45 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: fix after moving scripts to
-	utils/ directory
-Message-ID: <20170701174125.98CEB81911@busybox.osuosl.org>
+Date: Sat, 1 Jul 2017 19:43:49 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: simplify (and fix)
+	check-DEVELOPERS
+Message-ID: <20170701174125.DFF5C8195B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27304521766dadae159a84b5121d4f714b9b7908
+commit: https://git.buildroot.net/buildroot/commit/?id=91a5ec960b4c5374aaee040daaf0ff301167cf53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There were still references to support/scripts/ for scripts that have
-moved to the utils directory. There were also references that were
-updated, but not re-updated when the tools moves to utils.
+The check-DEVELOPERS test would always fail, because && will return
+the exit code of the left-hand side if not 0, so it *always* returns
+1.
+
+But in fact, the test can be simplified quite a lot: we can run
+getdeveloper directly, without arguments. That should just print
+'No action specified', but it will also print any syntax errors it
+encountered. So we can just 'grep -v' the expected output away; if
+there is anything more, grep will return 0, but if there is nothing
+more, it will return 1. So we just need to invert the result.
+
+Incidentally, this also fixes the incorrect remaining reference to
+support/scripts.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ .gitlab-ci.yml    | 4 +---
+ .gitlab-ci.yml.in | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cd726f5..c0e0d40 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -605,7 +605,7 @@ F:	package/qemu/
- F:	package/sdl2_mixer/
- F:	package/sdl2_net/
- F:	package/tekui/
--F:	support/scripts/scancpan
-+F:	utils/scancpan
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index cc048a0..6bd9837 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -36,9 +36,7 @@ check-gitlab-ci.yml:
  
- N:	Frank Hunleth <fhunleth@troodon-software.com>
- F:	package/am335x-pru-package/
-@@ -1391,8 +1391,8 @@ N:	Rhys Williams <github@wilberforce.co.nz>
- F:	package/lirc-tools/
+ check-DEVELOPERS:
+     script:
+-        - PYTHONPATH=$PWD/support/scripts
+-                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
+-                grep . && exit 1
++        - ! utils/get-developers | grep -v 'No action specified'
  
- N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
--F:	tools/check-package
--F:	tools/checkpackagelib/
-+F:	utils/check-package
-+F:	utils/checkpackagelib/
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 0b6e634..0855bff 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -36,9 +36,7 @@ check-gitlab-ci.yml:
  
- N:	Richard Braun <rbraun@sceen.net>
- F:	package/curlftpfs/
-@@ -1631,7 +1631,7 @@ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- F:	docs/manual/
- F:	package/opkg-utils/
- F:	support/scripts/size-stats
--F:	support/scripts/size-stats-compare
-+F:	utils/size-stats-compare
- F:	toolchain/
+ check-DEVELOPERS:
+     script:
+-        - PYTHONPATH=$PWD/support/scripts
+-                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
+-                grep . && exit 1
++        - ! utils/get-developers | grep -v 'No action specified'
  
- N:	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-@@ -1835,7 +1835,7 @@ F:	package/ti-utils/
- F:	package/x11r7/xapp_xconsole/
- F:	package/x11r7/xapp_xinput-calibrator/
- F:	package/zlog/
--F:	support/scripts/scanpypi
-+F:	utils/scanpypi
- 
- N:	Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
- F:	package/crudini/
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
