@@ -1,39 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 10:29:23 +0200
-Subject: [Buildroot] [PATCH] configs: Rename engicam_isiot_mmc_defconfig
-In-Reply-To: <1498833174-16889-1-git-send-email-jteki@openedev.com>
-References: <1498833174-16889-1-git-send-email-jteki@openedev.com>
-Message-ID: <20170701102923.4ba45eb6@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 1 Jul 2017 10:40:11 +0200
+Subject: [Buildroot] [for-next 3/3] package/gcc: remove gcc 4.9
+In-Reply-To: <87mv9b9hgi.fsf@dell.be.48ers.dk>
+References: <20170525183457.12169-1-romain.naour@gmail.com>
+ <20170525183457.12169-3-romain.naour@gmail.com>
+ <20170526151414.11f2d47a@free-electrons.com>
+ <6c88ceb4-94f7-6018-6d3a-ae3e99c8d44e@mind.be>
+ <874lvjbl2z.fsf@dell.be.48ers.dk>
+ <65c27ecf-621e-d145-59cd-eef840c20c46@mind.be>
+ <20170614085657.0d9ab51f@windsurf.lan> <87mv9b9hgi.fsf@dell.be.48ers.dk>
+Message-ID: <2a06f892-54e3-0873-6961-55889eb003a7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi All,
 
-On Fri, 30 Jun 2017 20:02:54 +0530, Jagan Teki wrote:
-> From: Jagan Teki <jagan@amarulasolutions.com>
+Le 14/06/2017 ? 09:06, Peter Korsgaard a ?crit :
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
-> _mmc on defconfig files in engicam need to drop and
-> same follow on other engicam defconfig files.
+>  > Hello,
+>  > On Wed, 14 Jun 2017 07:30:26 +0200, Arnout Vandecappelle wrote:
 > 
-> So, this patch rename engicam_imx6ul_isiot_mmc_defconfig
-> to engicam_imx6ul_isiot_defconfig which is missing in
-> below commit
-> "board: Add support for Engicam Is.IoT MX6UL SOM"
-> (sha1: 0235bc61766bd0d4fecfbd686cd807992ba5f37d)
+>  >> Yeah, that's another reason: if we remove 4.9 from master, than we will not get
+>  >> any fixes for it that could be applied to the LTS branch. But, well, I don't
+>  >> think we're testing with 4.9 at all in the autobuilders so the point is kind of
+>  >> moot.
 > 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
->  ...{engicam_imx6ul_isiot_mmc_defconfig => engicam_imx6ul_isiot_defconfig} | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename configs/{engicam_imx6ul_isiot_mmc_defconfig => engicam_imx6ul_isiot_defconfig} (100%)
+>  > We are testing 4.9 in the autobuilders. I rebuilt the pre-built
+>  > toolchains a few days ago. We had two gcc 4.8 toolchains, which I moved
+>  > to 4.9 toolchains. I always try to make sure we have a few "old"
+>  > toolchains, and at least one "bleeding edge" one, just to test more
+>  > configurations.
+> 
+> Sorry, yes indeed - I forgot about your recent mail. We still don't (and
+> can't) test all binutils/gcc/gdb/linux headers/libc combinations.
+> 
+>  > Also, we still have much older external toolchains: remember the recent
+>  > ICU breakage caused by ICU requiring gcc 4.8 ? If such breakage
+>  > occurred, it's because we do have toolchains with gcc's older than 4.8.
+> 
+> Yes, but this discussion was explicitly about support in the internal
+> toolchain handling for old gcc versions.
+> 
 
-Applied to master, thanks.
+I've removed this patch from patchwork.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
