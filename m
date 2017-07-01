@@ -1,27 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 13:19:55 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default version to 4.11.8
-In-Reply-To: <1498739886-31072-1-git-send-email-festevam@gmail.com>
-References: <1498739886-31072-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170701131955.0f76bee0@windsurf.home>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sat, 1 Jul 2017 13:28:55 +0200
+Subject: [Buildroot] [Patch v6 0/7] Add support for the Rust programming
+ language
+In-Reply-To: <20170628122035.GB4971@momiji>
+References: <20170625205614.6723-1-eric.le.bihan.dev@free.fr>
+ <20170628122035.GB4971@momiji>
+Message-ID: <20170701112855.GA22905@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi!
 
-On Thu, 29 Jun 2017 09:38:05 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  linux/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On 17-06-28 12:20:35, Adrian Perez de Castro wrote:
+> Hello Eric (and everybody else :D),
+>
+> I think it's great that there is work being done to bring Rust support to
+> Buildroot, because the languge has been gaining a lot of traction, and people
+> are now writing very interesting programs in it (I am a fan of RipGrep myself!
+> If you don't know it, take a look at: https://github.com/BurntSushi/ripgrep)
+>
+> Recently I submitted v2 of a patch to add a LLVM package, and it would be
+> interesting to coordinate to make your Rust patchset use it, instead of the
+> Rust packaging providing its own copy of LLVM. You can see the patch in
+> Patchwork:
+>
+>   https://patchwork.ozlabs.org/patch/777949/
+>
+> I am addin some comments inline below, please keep reading...
+>
+> On Sun, 25 Jun 2017 22:56:07 +0200, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
+> > This series adds support for the Rust programming language by adding the
+> > following packages:
+> >
+> >  - rustc: a virtual package for the Rust compiler.
+> >  - rust-bin: provides a pre-built version of rustc.
+> >  - rust: builds rustc from source.
+> >
+> > Both providers are able to cross-compile code for ARM, MIPS, PowerPC and
+> > x86_64 architectures. Only the host variants are provided.
+>
+> This means that the ?llvm? package should also provide a host variant of the
+> package. I did a quick try adding ?$(eval $(host-cmake-package))? plus a few
+> minor changs locally and LLVM built just fine.
 
-Both applied. Thanks!
+Yes. To build host-rust, the libraries from host-llvm would be required.
+If you could provide a patch adding host-llvm, I'll happily test it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Regarding the architecture backends to enable, I imagine we would want host
+> variant to have enabled *both* the host-native backend, and the target
+> backend. Example: When building for ARM in x86_64, we would enable the ?ARM?
+> and ?X86? LLVM backends for ?host-llvm?, and only ?ARM? for ?llvm? (the target
+> package). Would this be correct? Do you foresee any situation in which other
+> backends should be enabled for either the host or target variants? Should we
+> allow selecting from menuconfig which backends are compiled for the target
+> ?llvm? package?
+
+IMHO, it is best to keep it simple with only the host and the target archs.
+
+> Last but not least: Right now my patch for adding LLVM only builds the main
+> libraries and binaries. Is this enough for Rust?
+
+Yes.
+
+BR,
+
+--
+ELB
