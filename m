@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 10:27:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fmt: bump version to 4.0.0
-In-Reply-To: <20170630172714.31294-1-bernd.kuhls@t-online.de>
-References: <20170630172714.31294-1-bernd.kuhls@t-online.de>
-Message-ID: <20170701102740.0eb02784@windsurf.home>
+Date: Sat, 1 Jul 2017 10:28:31 +0200
+Subject: [Buildroot] [git commit] configs: drop "mmc" in
+	engicam_imx6ul_isiot_mmc_defconfig name
+Message-ID: <20170701082619.DD94D8163D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=87de2485ac2e6c89f82979ae572402d20e482c03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 30 Jun 2017 19:27:14 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/fmt/fmt.hash | 2 +-
->  package/fmt/fmt.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+_mmc on defconfig files in engicam need to drop and same follow on
+other engicam defconfig files.
 
-Applied to master, thanks.
+So, this patch rename engicam_imx6ul_isiot_mmc_defconfig to
+engicam_imx6ul_isiot_defconfig which is missing in commit "board: Add
+support for Engicam Is.IoT MX6UL SOM" (sha1:
+0235bc61766bd0d4fecfbd686cd807992ba5f37d)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...{engicam_imx6ul_isiot_mmc_defconfig => engicam_imx6ul_isiot_defconfig} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+diff --git a/configs/engicam_imx6ul_isiot_mmc_defconfig b/configs/engicam_imx6ul_isiot_defconfig
+similarity index 100%
+rename from configs/engicam_imx6ul_isiot_mmc_defconfig
+rename to configs/engicam_imx6ul_isiot_defconfig
