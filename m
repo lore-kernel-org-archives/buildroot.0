@@ -1,49 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:33:32 +0200
-Subject: [Buildroot] [PATCH v1] qt5multimedia: fix plugins videonode egl
- x11 header related compile failure
-In-Reply-To: <20170626211311.10890-1-ps.report@gmx.net>
-References: <20170626211311.10890-1-ps.report@gmx.net>
-Message-ID: <20170702003332.771dd45c@windsurf>
+Date: Sun, 2 Jul 2017 00:34:40 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: fix it again
+Message-ID: <20170701223139.936B77F89F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=29ba13e57cefdf01a8598e409d4efb884fcfde1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 26 Jun 2017 23:13:11 +0200, Peter Seiderer wrote:
+It seems the ! is removed by the yaml parser, so it needs to be quoted.
+While we're at it, add some explanatory comment.
 
-> +diff --git a/src/plugins/videonode/egl/egl.pro b/src/plugins/videonode/egl/egl.pro
-> +index 7151123..08ec149 100644
-> +--- a/src/plugins/videonode/egl/egl.pro
-> ++++ b/src/plugins/videonode/egl/egl.pro
-> +@@ -3,6 +3,9 @@ TARGET = eglvideonode
-> + QT += multimedia-private qtmultimediaquicktools-private
-> + CONFIG += egl
-> + 
-> ++# Avoid X11 header collision, use generic EGL native types
-> ++DEFINES += MESA_EGL_NO_X11_HEADERS
-> ++
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .gitlab-ci.yml    | 5 ++++-
+ .gitlab-ci.yml.in | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-I am not really convinced by this patch. Indeed, I believe it should be
-the OpenGL providers that define this constant when needed. If you look
-at the config that generated the build failure you're trying to fix
-(http://autobuild.buildroot.net/results/364/364a76bbf90251f9cae2abd3ef2e382758eae538),
-you'll see that the OpenGL provider used is mali-t76x. However,
-package/mali-t76x/glesv2.pc contains:
-
-Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-
-So, I would expect that Qt5 should not need to redefine it again.
-Obviously, what worries me is that fixing Qt5 will fix just Qt5, and
-not any other package using the same OpenGL provider.
-
-What do you think?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 6bd9837..eda8af4 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -35,8 +35,11 @@ check-gitlab-ci.yml:
+         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+ 
+ check-DEVELOPERS:
++    # get-developers should print just "No action specified"; if it prints
++    # anything else, it's a parse error.
++    # The initial ! is removed by YAML so we need to quote it.
+     script:
+-        - ! utils/get-developers | grep -v 'No action specified'
++        - "! utils/get-developers | grep -v 'No action specified'"
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 0855bff..24a1888 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -35,8 +35,11 @@ check-gitlab-ci.yml:
+         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+ 
+ check-DEVELOPERS:
++    # get-developers should print just "No action specified"; if it prints
++    # anything else, it's a parse error.
++    # The initial ! is removed by YAML so we need to quote it.
+     script:
+-        - ! utils/get-developers | grep -v 'No action specified'
++        - "! utils/get-developers | grep -v 'No action specified'"
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
