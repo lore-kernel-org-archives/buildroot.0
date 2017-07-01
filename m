@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  1 Jul 2017 21:37:03 +0200
-Subject: [Buildroot] [PATCH 1/2] olimex_a20: refactor with U-Boot boot script
-Message-ID: <20170701193704.12792-1-francois.perrad@gadz.org>
+Date: Sat,  1 Jul 2017 21:37:04 +0200
+Subject: [Buildroot] [PATCH 2/2] olimex_a20: refactor with genimage.sh
+In-Reply-To: <20170701193704.12792-1-francois.perrad@gadz.org>
+References: <20170701193704.12792-1-francois.perrad@gadz.org>
+Message-ID: <20170701193704.12792-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,86 +12,95 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/olimex/a20_olinuxino/post-build.sh         | 10 +++-------
- configs/olimex_a20_olinuxino_lime2_defconfig     |  3 ++-
- configs/olimex_a20_olinuxino_lime_defconfig      |  3 ++-
- configs/olimex_a20_olinuxino_lime_mali_defconfig |  3 ++-
- configs/olimex_a20_olinuxino_micro_defconfig     |  3 ++-
- 5 files changed, 11 insertions(+), 11 deletions(-)
+ board/olimex/a20_olinuxino/post-image.sh         | 16 ----------------
+ configs/olimex_a20_olinuxino_lime2_defconfig     |  4 ++--
+ configs/olimex_a20_olinuxino_lime_defconfig      |  4 ++--
+ configs/olimex_a20_olinuxino_lime_mali_defconfig |  4 ++--
+ configs/olimex_a20_olinuxino_micro_defconfig     |  4 ++--
+ 5 files changed, 8 insertions(+), 24 deletions(-)
+ delete mode 100755 board/olimex/a20_olinuxino/post-image.sh
 
-diff --git a/board/olimex/a20_olinuxino/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
-index ac8d4df184..7a8a427466 100755
---- a/board/olimex/a20_olinuxino/post-build.sh
-+++ b/board/olimex/a20_olinuxino/post-build.sh
-@@ -1,12 +1,8 @@
- #!/bin/sh
--# args from BR2_ROOTFS_POST_SCRIPT_ARGS
--# $2    path of boot.cmd
--# $3    output directory for boot.scr
- 
--MKIMAGE=$HOST_DIR/usr/bin/mkimage
+diff --git a/board/olimex/a20_olinuxino/post-image.sh b/board/olimex/a20_olinuxino/post-image.sh
+deleted file mode 100755
+index 9cca1b1789..0000000000
+--- a/board/olimex/a20_olinuxino/post-image.sh
++++ /dev/null
+@@ -1,16 +0,0 @@
+-#!/bin/sh
 -
--$MKIMAGE -A arm -O linux -T script -C none -d $2 $3/boot.scr
-+cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
- 
- if [ -e $BINARIES_DIR/script.bin ]; then
--	cp $BINARIES_DIR/script.bin $3/script.bin
-+	# mali requires a legacy kernel
-+	cp $BINARIES_DIR/script.bin $TARGET_DIR/boot/script.bin
- fi
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage                           \
+-	--rootpath "${TARGET_DIR}"     \
+-	--tmppath "${GENIMAGE_TMP}"    \
+-	--inputpath "${BINARIES_DIR}"  \
+-	--outputpath "${BINARIES_DIR}" \
+-	--config "${GENIMAGE_CFG}"
+-
+-exit $?
 diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 807f41c5ce..c7526fe817 100644
+index c7526fe817..611c082742 100644
 --- a/configs/olimex_a20_olinuxino_lime2_defconfig
 +++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -30,5 +30,6 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot.cmd"
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+@@ -7,8 +7,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
 diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index c92b016f68..275b9b7687 100644
+index 275b9b7687..1c9f261d82 100644
 --- a/configs/olimex_a20_olinuxino_lime_defconfig
 +++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -40,7 +40,8 @@ BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot.cmd"
+@@ -12,8 +12,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
  
- # Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
 diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index 6345635e0e..2aaf708962 100644
+index 2aaf708962..8042dfec4a 100644
 --- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
 +++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -47,7 +47,8 @@ BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot-mali.cmd"
+@@ -12,8 +12,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
  
- # Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
 diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index 17fe6cf388..6472af480a 100644
+index 6472af480a..6690df6a88 100644
 --- a/configs/olimex_a20_olinuxino_micro_defconfig
 +++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -37,7 +37,8 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a20_olinuxino/boot.cmd"
+@@ -12,8 +12,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
  
- # Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
 -- 
 2.11.0
