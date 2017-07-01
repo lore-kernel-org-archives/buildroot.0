@@ -1,42 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 09:39:21 +0200
-Subject: [Buildroot] [PATCH] .gitlab-ci.yml: add check-DEVELOPERS test
-In-Reply-To: <ce22c0a4-37b9-a065-aaac-8ee34801cf97@mind.be>
-References: <20170630164253.19859-1-arnout@mind.be>
- <20170630200237.1378f5dd@windsurf.home>
- <ce22c0a4-37b9-a065-aaac-8ee34801cf97@mind.be>
-Message-ID: <20170701093921.2654efaf@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  1 Jul 2017 09:42:05 +0200
+Subject: [Buildroot] [PATCH] core: always pass full path to strip command
+Message-ID: <20170701074205.21287-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In some cases, passing STRIP=true is not sufficient to disable striping
+altogether, as some (incorrectly generated?) configure scripts will
+ignore a ${STRIP} that is not a full path.
 
-On Sat, 1 Jul 2017 09:36:02 +0200, Arnout Vandecappelle wrote:
+This is the case, for example, for nmap, which ends up using the host
+strip command when we pass STRIP=true:
 
-> >> +check-DEVELOPERS:
-> >> +    script:
-> >> +        - PYTHONPATH=$PWD/support/scripts
-> >> +                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
-> >> +                grep . && exit 1  
-> > 
-> > Isn't "./support/scripts/get-developer -c" doing the right thing?  
-> 
->  The problem with that is that it produces a lot of output, and the warnings are
-> at the top. So I would have to grep for WARNING. But some of the possible errors
-> don't have a WARNING in front of them. So I started out changing the script to
-> add WARNING for those as well. But then I thought: keep things simple, just call
-> parse_developers directly.
-> 
->  Perhaps it would be a little more transparent to add a __main__ to
-> getdeveloperlib and then call it with "python support/scripts/getdeveloperlib.py".
+    checking for arm-buildroot-linux-gnueabihf-strip... no
+    checking for strip... /usr/bin/strip
+    configure: WARNING: using cross tools not prefixed with host triplet
+    [--SNIP--]
+    /usr/bin/install -c -c -m 755 nping /home/ymorin/dev/buildroot/O/target/usr/bin/nping
+    /usr/bin/strip -x /home/ymorin/dev/buildroot/O/target/usr/bin/nping
+    /usr/bin/strip: Unable to recognise the format of the input file `/home/ymorin/dev/buildroot/O/target/usr/bin/nping'
 
-Or a proper option to get-developers that does whatever check you want?
+We fix that by forcing a full path to the strip sommand when it is
+disabled: STRIP=/bin/true
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4a3eb26963..c1dc714331 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -207,7 +207,7 @@ TARGET_STRIP = $(TARGET_CROSS)strip
+ STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+ endif
+ ifeq ($(BR2_STRIP_none),y)
+-TARGET_STRIP = true
++TARGET_STRIP = /bin/true
+ STRIPCMD = $(TARGET_STRIP)
+ endif
+ INSTALL := $(shell which install || type -p install)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
