@@ -1,63 +1,178 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 12:56:21 +0200
-Subject: [Buildroot] [git commit] docs: known issues no longer valid
-Message-ID: <20170701105328.77C87816D1@busybox.osuosl.org>
+Date: Sat, 1 Jul 2017 13:15:21 +0200
+Subject: [Buildroot] [git commit] rauc: new package
+Message-ID: <20170701111339.CFD3C7F941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85b36daa94530dcb89e54092bf760d750a24f2d3
+commit: https://git.buildroot.net/buildroot/commit/?id=3372b316e7125a50cb6c4287a502415d8c4a0fd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+RAUC is the Robust Auto-Update Controller developed by the folks at
+Pengutronix. It supports updating embedded systems from the network
+(ex: HawkBit) or from a disk and provides a d-bus interface.
+
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/known-issues.txt | 20 --------------------
- package/mrouted/Config.in    |  3 ---
- 2 files changed, 23 deletions(-)
+ DEVELOPERS                  |  3 +++
+ package/Config.in           |  1 +
+ package/Config.in.host      |  1 +
+ package/rauc/Config.in      | 37 +++++++++++++++++++++++++++++++++++++
+ package/rauc/Config.in.host |  9 +++++++++
+ package/rauc/rauc.hash      |  3 +++
+ package/rauc/rauc.mk        | 36 ++++++++++++++++++++++++++++++++++++
+ 7 files changed, 90 insertions(+)
 
-diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-index acfe4ff..ae29a48 100644
---- a/docs/manual/known-issues.txt
-+++ b/docs/manual/known-issues.txt
-@@ -7,26 +7,6 @@
-   if such options contain a +$+ sign. For example, the following is known
-   to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9e421f4..df974f9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -95,6 +95,9 @@ F:	package/python-scandir/
+ F:	package/python-simplegeneric/
+ F:	package/python-traitlets/
  
--* The +ltp-testsuite+ package does not build with the default uClibc
--  configuration used by the Buildroot toolchain backend. The LTP
--  testsuite uses several functions that are considered obsolete, such
--  as sigset() and others. uClibc configuration options such as
--  DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
--  UCLIBC_SV4_DEPRECATED are needed if one wants to build the
--  +ltp-testsuite+ package with uClibc. You need to either use a glibc
--  based toolchain, or enable the appropriate options in the uClibc
--  configuration.
--
--* The +xfsprogs+ package does not build with the default uClibc
--  configuration used by the Buildroot toolchain backend. You need to
--  either use a glibc based toolchain, or enable the appropriate
--  options in the uClibc configuration.
--
--* The +mrouted+ package does not build with the default uClibc
--  configuration used by the Buildroot toolchain backend. You need to
--  either use a glibc based toolchain, or enable the appropriate
--  options in the uClibc configuration.
--
- * The +libffi+ package is not supported on the SuperH 2 and ARC
-   architectures.
++N:	Andrey Yurovsky <yurovsky@gmail.com>
++F:	package/rauc/
++
+ N:	Andy Kennedy <andy.kennedy@adtran.com>
+ F:	package/libunwind/
  
-diff --git a/package/mrouted/Config.in b/package/mrouted/Config.in
-index bf4614d..e5d9348 100644
---- a/package/mrouted/Config.in
-+++ b/package/mrouted/Config.in
-@@ -4,7 +4,4 @@ config BR2_PACKAGE_MROUTED
- 	help
- 	  An implementation of the DVMRP multicast routing protocol.
- 
--	  If built with uClibc, then UCLIBC_SUPPORT_AI_ADDRCONFIG is
--	  needed in uClibc configuration.
--
- 	  http://github.com/troglobit/mrouted
+diff --git a/package/Config.in b/package/Config.in
+index f69f67f..fdfcd02 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1865,6 +1865,7 @@ menu "System tools"
+ 	source "package/psmisc/Config.in"
+ 	source "package/pwgen/Config.in"
+ 	source "package/quota/Config.in"
++	source "package/rauc/Config.in"
+ 	source "package/rsyslog/Config.in"
+ 	source "package/runc/Config.in"
+ 	source "package/s6/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 38f919a..0932b9f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -39,6 +39,7 @@ menu "Host utilities"
+ 	source "package/python-lxml/Config.in.host"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
++	source "package/rauc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+new file mode 100644
+index 0000000..6433b82
+--- /dev/null
++++ b/package/rauc/Config.in
+@@ -0,0 +1,37 @@
++config BR2_PACKAGE_RAUC
++	bool "rauc"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	depends on BR2_USE_WCHAR # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_DBUS # run-time dependency
++	help
++	  RAUC is the Robust Auto-Update Controller developed by
++	  Pengutronix. It supports updating embedded Linux
++	  systems over the network or from disks and provides a
++	  d-bus interface.
++
++	  http://rauc.io/
++
++if BR2_PACKAGE_RAUC
++
++config BR2_PACKAGE_RAUC_NETWORK
++	bool "network support"
++	select BR2_PACKAGE_LIBCURL
++	help
++	  This option enables support for updating firmware over
++	  the network using libcurl.
++
++config BR2_PACKAGE_RAUC_JSON
++	bool "JSON output support"
++	select BR2_PACKAGE_JSON_GLIB
++	help
++	  This option enables support for providing output in
++	  JSON format.
++
++endif
++
++comment "rauc needs a toolchain w/ wchar, threads"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+diff --git a/package/rauc/Config.in.host b/package/rauc/Config.in.host
+new file mode 100644
+index 0000000..a58685a
+--- /dev/null
++++ b/package/rauc/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_RAUC
++	bool "host rauc"
++	help
++	  RAUC is the Robust Auto-Update Controller developed by
++	  Pengutronix. Enable this option to build the rauc
++	  host tool which may be used to generate firmware
++	  bundles that are handled by the target rauc service.
++
++	  http://rauc.io/
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+new file mode 100644
+index 0000000..78c3e27
+--- /dev/null
++++ b/package/rauc/rauc.hash
+@@ -0,0 +1,3 @@
++# Locally calculated, after verifying against
++# https://github.com/rauc/rauc/releases/download/v0.1.1/rauc-0.1.1.tar.xz.asc
++sha256 d2901d493f1d3210aef6411e83b02edac3a678d6d825d71a1c61b5b6afc7e478 rauc-0.1.1.tar.xz
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+new file mode 100644
+index 0000000..12819d9
+--- /dev/null
++++ b/package/rauc/rauc.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# rauc
++#
++################################################################################
++
++RAUC_VERSION = 0.1.1
++RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
++RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
++RAUC_LICENSE = LGPL-2.1
++RAUC_DEPENDENCIES = host-pkgconf openssl libglib2
++
++ifeq ($(BR2_PACKAGE_RAUC_NETWORK),y)
++RAUC_CONF_OPTS += --enable-network
++RAUC_DEPENDENCIES += libcurl
++else
++RAUC_CONF_OPTS += --disable-network
++endif
++
++ifeq ($(BR2_PACKAGE_RAUC_JSON),y)
++RAUC_CONF_OPTS += --enable-json
++RAUC_DEPENDENCIES += json-glib
++else
++RAUC_CONF_OPTS += --disable-json
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++# configure uses pkg-config --variable=systemdsystemunitdir systemd
++RAUC_DEPENDENCIES += systemd
++endif
++
++HOST_RAUC_DEPENDENCIES = host-pkgconf
++HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
