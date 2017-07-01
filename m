@@ -1,42 +1,40 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat,  1 Jul 2017 19:36:44 +0200
-Subject: [Buildroot] [PATCH 2/2] upmpdcli: bump to version 1.2.15
-In-Reply-To: <20170701173644.789-1-joerg.krause@embedded.rocks>
-References: <20170701173644.789-1-joerg.krause@embedded.rocks>
-Message-ID: <20170701173644.789-2-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 19:02:16 +0200
+Subject: [Buildroot] [git commit] qt5multimedia: conditionally add
+	pulseaudio & libglib2 to dependencies
+Message-ID: <20170701173607.790EC817B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=ac8044fc32bcca612a6105c9f0ca9aef11ebc061
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index b192d0e18d..364fa914e9 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,2 +1,2 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.14.tar.gz.sha256:
--sha256  fbfb392deec0b353704f8067d9863535dc2512f719d3305dbd73452ca59ec2fe  upmpdcli-1.2.14.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.15.tar.gz.sha256:
-+sha256  93d2b9cfd6cb8643c5a23d4115b44622d76c71abe15db9bb8d5b4d83f4d9b49c  upmpdcli-1.2.15.tar.gz
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index cc9f6528fe..ad41f85c8d 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Qt5Multimedia includes support for pulseaudio if it detects libpulse
+and libpulse-mainloop-glib in the system at build-time. We need to
+depend on pulseaudio and libglib2 if it is selected.
+
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 133536e..19312ff 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -26,6 +26,10 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
+ endif
  
--UPMPDCLI_VERSION = 1.2.14
-+UPMPDCLI_VERSION = 1.2.15
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPL-2.0+
- UPMPDCLI_LICENSE_FILES = COPYING
--- 
-2.13.2
++ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
++QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
++endif
++
+ define QT5MULTIMEDIA_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+ endef
