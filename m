@@ -1,30 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
 Date: Sat, 1 Jul 2017 10:11:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tor: security bump to
- version 0.3.0.9
-In-Reply-To: <20170701074824.29640-1-bernd.kuhls@t-online.de>
-References: <20170701074824.29640-1-bernd.kuhls@t-online.de>
-Message-ID: <20170701101149.660b5c27@windsurf.home>
+Subject: [Buildroot] [PATCH] ndisc6: patch no longer required
+In-Reply-To: <20170701100938.6d27d93d@windsurf.home>
+References: <20170627190833.GA5404@waldemar-brodkorb.de>
+ <20170701100938.6d27d93d@windsurf.home>
+Message-ID: <E47B0232-AE1A-41E0-B2E0-0AA977B60CBB@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat,  1 Jul 2017 09:48:24 +0200, Bernd Kuhls wrote:
-> Release notes:
-> https://blog.torproject.org/blog/tor-0309-released-security-update-clients
+> Am 01.07.2017 um 10:09 schrieb Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: updated subject to reflect that this is a security update
+> Hello,
+> 
+>> On Tue, 27 Jun 2017 21:08:33 +0200, Waldemar Brodkorb wrote:
+>> In uClibc-ng 1.0.25 the issue was fixed and FAVOR_BSD is gone.
+> 
+> This is not true I believe: the problem was fixed in uClibc commit
+> 58a5ba12bffad5916d9897c2870fc483f1db8282, which is *not* in 1.0.25. So
+> the problem is fixed only with uClibc-ng 1.0.25 + the patch currently
+> in package/uclibc/.
+> 
+> So I need to hold off on this until I rebuild all the toolchains with
+> the latest uClibc-ng 1.0.25 + patch
 
-Applied to master, thanks.
+Good catch. You are right.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar 
