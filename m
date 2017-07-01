@@ -1,35 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 16:05:14 +0200
-Subject: [Buildroot] [git commit] support/testing: fix code style in emulator
-Message-ID: <20170701140852.0F40A8079F@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 Jul 2017 16:25:45 +0200
+Subject: [Buildroot] [RFC PATCH v5 08/11] core: install relocation
+ script and location at the end of the build
+In-Reply-To: <CAHXCMMKowyzQ091YNu9ewOTcgTXkTohXEfQUBNp=3z+GT1TBjQ@mail.gmail.com>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-9-git-send-email-wg@grandegger.com>
+ <CAHXCMMKowyzQ091YNu9ewOTcgTXkTohXEfQUBNp=3z+GT1TBjQ@mail.gmail.com>
+Message-ID: <fc6de538-50ae-98f7-660b-26156c3bedd3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abe64676d58c6099f363cd6b2199d7804a9bf953
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove unused import.
-Use 2 empty lines before a class.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/testing/infra/emulator.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 01-07-17 16:11, Samuel Martin wrote:
+> Hi Wolfgang,
+> 
+> On Fri, Jun 30, 2017 at 10:37 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
+>> The script "relocate-sdk.sh" is installed into the top directory of
+>> the SDK (HOST_DIR) and the SDK location path is stored in the file
+>> "HOST_DIR/usr/share/buildroot/sdk-location"-
+>>
+>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+>> ---
+>>  Makefile | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index f5ea6a8..a5dfdfd 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -553,6 +553,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>>
+>>  .PHONY: world
+>>  world: target-post-image
+>> +       @$(call MESSAGE,"Rendering the SDK relocatable")
+>> +       install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR) && \
+> 
+> I don't think "&& \" is really needed here
+> 
+>> +       echo $(HOST_DIR) > $(HOST_DIR)/usr/share/buildroot/sdk-location
+> 
+> I'm not sure these few commands belong to the world target, maybe a
+> host-finalize target could be added...
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 7407309..0f925fc 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -1,7 +1,7 @@
- import pexpect
- 
- import infra
--import infra.basetest
-+
- 
- class Emulator(object):
- 
+ +1 to that. So
+
+world: target-post-image host-finalize
+
+.PHONY: host-finalize
+host-finalize:
+	...
+
+ Regards,
+ Arnout
+
+> 
+>>
+>>  # Populating the staging with the base directories is handled by the skeleton package
+>>  $(STAGING_DIR):
+>> --
+>> 2.7.4
+>>
+> 
+> Regards,
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
