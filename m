@@ -1,117 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Jul 2017 16:31:03 +0200
-Subject: [Buildroot] [PATCH 0/7 v4] tools: add a directory to contain
-	usefull user-facing tools
-Message-ID: <cover.1498919458.git.yann.morin.1998@free.fr>
+Date: Sat,  1 Jul 2017 16:31:01 +0200
+Subject: [Buildroot] [PATCH 1/7 v4] tools: move test-pkg out of
+	support/scripts
+In-Reply-To: <cover.1498919458.git.yann.morin.1998@free.fr>
+References: <cover.1498919458.git.yann.morin.1998@free.fr>
+Message-ID: <4553707d461f300d46e8410e2d2a61381e3f83b6.1498919458.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Move it to the top-level tools/ directory, so that it is easier to
+find for users.
 
-Currently, we provide a few user-facing utilities, like get-developers,
-in support/scripts/ . But this directory also contains internal scripts
-that a user should not be directly concerned with. Besides, it is
-two-level deep in the hierarchy, which is not really nice.
+Add a legacy symlink for those users who already used them, so as
+not to break their habits.
 
-So, we introduce tools/ as a top-level directory, with the goal to store
-and expose all user-facing utilities, while keeping our internal scripts
-in support/scripts/ .
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-The last patch in the series introduces a new utility, brmake, a wrapper
-around make that stores all the output to a log file and displays only
-the >>> lines.
-
+---
 Changes v3 -> v4:
-  - drop legacy symlinks  (Thomas)
-  - reorder series  (Thomas, Arnout)
-  - drop options parsing in brmake  (Arnout, Samuel)
-  - drop moving xorg-release  (Thomas)
-
-Changes v2 -> v3:
-  - rename readme file  (Arnout, Thomas)
-  - fix DEVELOPPERS  (Ricardo)
-
-Changes v1 -> v2:
-  - rename contrib -> tools  (Arnout)
-  - move more scripts
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 9bb306bd6411071cd07529923b825627502c794d
-
-  support/testing: large timeout for login prompt (2017-07-01 16:05:14 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 99c3ef336521def728a1e5d80da5d7de7fd3fac1
-
-  tools: new tool to filter the output of make (2017-07-01 16:26:12 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (7):
-      tools: move test-pkg out of support/scripts
-      tools: move get-developers out of support/scripts/
-      tools: move check-package out of support/scripts/
-      tools: move size-stat-compare out of support/scripts/
-      tools: move scancpan out of support/scripts/
-      tools: move scanpypi out of support/scripts/
-      tools: new tool to filter the output of make
-
- DEVELOPERS                                         |  3 +-
- docs/manual/adding-packages-tips.txt               | 12 +++----
- docs/manual/contribute.txt                         |  2 +-
- docs/manual/writing-rules.txt                      |  5 +--
- support/scripts/pkg-stats                          |  2 +-
- tools/brmake                                       | 37 ++++++++++++++++++++
- {support/scripts => tools}/check-package           |  2 +-
- .../scripts => tools}/checkpackagelib/__init__.py  |  0
- {support/scripts => tools}/checkpackagelib/base.py |  2 +-
- {support/scripts => tools}/checkpackagelib/lib.py  |  2 +-
- .../checkpackagelib/lib_config.py                  |  2 +-
- .../scripts => tools}/checkpackagelib/lib_hash.py  |  2 +-
- .../scripts => tools}/checkpackagelib/lib_mk.py    |  2 +-
- .../scripts => tools}/checkpackagelib/lib_patch.py |  2 +-
- .../scripts => tools}/checkpackagelib/readme.txt   | 10 +++---
- {support/scripts => tools}/get-developers          |  0
- {support/scripts => tools}/getdeveloperlib.py      |  0
- tools/readme.txt                                   | 40 ++++++++++++++++++++++
- {support/scripts => tools}/scancpan                |  0
- {support/scripts => tools}/scanpypi                |  0
- {support/scripts => tools}/size-stats-compare      |  0
- {support/scripts => tools}/test-pkg                |  0
- 22 files changed, 102 insertions(+), 23 deletions(-)
- create mode 100755 tools/brmake
- rename {support/scripts => tools}/check-package (98%)
- rename {support/scripts => tools}/checkpackagelib/__init__.py (100%)
- rename {support/scripts => tools}/checkpackagelib/base.py (78%)
- rename {support/scripts => tools}/checkpackagelib/lib.py (95%)
- rename {support/scripts => tools}/checkpackagelib/lib_config.py (98%)
- rename {support/scripts => tools}/checkpackagelib/lib_hash.py (96%)
- rename {support/scripts => tools}/checkpackagelib/lib_mk.py (99%)
- rename {support/scripts => tools}/checkpackagelib/lib_patch.py (96%)
- rename {support/scripts => tools}/checkpackagelib/readme.txt (91%)
- rename {support/scripts => tools}/get-developers (100%)
- rename {support/scripts => tools}/getdeveloperlib.py (100%)
+  - drop legacy symlink  (Arnout, Thomas)
+---
+ docs/manual/adding-packages-tips.txt | 12 ++++++------
+ tools/readme.txt                     |  8 ++++++++
+ {support/scripts => tools}/test-pkg  |  0
+ 3 files changed, 14 insertions(+), 6 deletions(-)
  create mode 100644 tools/readme.txt
- rename {support/scripts => tools}/scancpan (100%)
- rename {support/scripts => tools}/scanpypi (100%)
- rename {support/scripts => tools}/size-stats-compare (100%)
  rename {support/scripts => tools}/test-pkg (100%)
 
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index d1eab2b440..0047dfd14f 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -45,9 +45,9 @@ continuously test random configurations. However, these only build the
+ `master` branch of the git tree, and your new fancy package is not yet
+ there.
+ 
+-Buildroot provides a script in +support/scripts/test-pkg+ that uses the
+-same base configurations as used by the autobuilders so you can test
+-your package in the same conditions.
++Buildroot provides a script in +tools/test-pkg+ that uses the same base
++configurations as used by the autobuilders so you can test your package
++in the same conditions.
+ 
+ First, create a config snippet that contains all the necessary options
+ needed to enable your package, but without any architecture or toolchain
+@@ -74,7 +74,7 @@ Then run the +test-pkg+ script, by telling it what config snippet to use
+ and what package to test:
+ 
+ ----
+-$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++$ ./tools/test-pkg -c libcurl.config -p libcurl
+ ----
+ 
+ This will try to build your package against all the toolchains used
+@@ -83,7 +83,7 @@ too long to do so). The output lists all toolchains and the corresponding
+ result (excerpt, results are fake):
+ 
+ ----
+-$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++$ ./tools/test-pkg -c libcurl.config -p libcurl
+                 armv5-ctng-linux-gnueabi [ 1/11]: OK
+               armv7-ctng-linux-gnueabihf [ 2/11]: OK
+                         br-aarch64-glibc [ 3/11]: SKIPPED
+@@ -124,7 +124,7 @@ The +test-pkg+ script accepts a few options, for which you can get some
+ help by running:
+ 
+ ----
+-$ ./support/scripts/test-pkg -h
++$ ./tools/test-pkg -h
+ ----
+ 
+ [[github-download-url]]
+diff --git a/tools/readme.txt b/tools/readme.txt
+new file mode 100644
+index 0000000000..5b418dd41f
+--- /dev/null
++++ b/tools/readme.txt
+@@ -0,0 +1,8 @@
++This directory contains various useful scripts and tools for working
++with Buildroot. You need not add this directory in your PATH to use
++any of those tools, but you may do so if you want.
++
++test-pkg
++    a script that tests a specific package against a set of various
++    toolchains, with the goal to detect toolchain-related dependencies
++    (wchar, threads...)
+diff --git a/support/scripts/test-pkg b/tools/test-pkg
+similarity index 100%
+rename from support/scripts/test-pkg
+rename to tools/test-pkg
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
