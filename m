@@ -1,58 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Jul 2017 18:51:34 +0200
-Subject: [Buildroot] [PATCH 3/3] scancpan: update old reference to
-	support/scripts
-In-Reply-To: <20170701164041.5515-3-arnout@mind.be>
-References: <20170701164041.5515-1-arnout@mind.be>
- <20170701164041.5515-3-arnout@mind.be>
-Message-ID: <20170701165134.GD3593@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 18:54:28 +0200
+Subject: [Buildroot] [PATCH] mtd: restore installation of libmtd to
+ staging
+In-Reply-To: <20170628035610.9945-1-yurovsky@gmail.com>
+References: <20170628035610.9945-1-yurovsky@gmail.com>
+Message-ID: <20170701185428.15f8a491@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
 
-On 2017-07-01 18:40 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> scancpan's help text refers to its location, so update it after the
-> move to utils/.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Tue, 27 Jun 2017 20:56:10 -0700, Andrey Yurovsky wrote:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +define MTD_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/mtd/libmtd.h
+> +	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/mtd/libubi.h
+> +	$(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h $(STAGING_DIR)/usr/include/mtd/ubi-media.h
+> +	$(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
+> +	$(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
+> +endef
 
-Thanks for fixing my mess! :-)
+I've applied, but I've changed this to be a post install staging hook.
+This way, the normal "make install" is done for staging, and then those
+additional libraries are installed as well. I've also added a comment
+in the code explaining why we're doing this.
 
-Regards,
-Yann E. MORIN.
+It would still be good to let upstream know that those libraries are
+used by other programs, and see if they would accept to adjust the
+Makefile.am logic to install such libraries.
 
-> ---
->  utils/scancpan | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/utils/scancpan b/utils/scancpan
-> index 62df225361..9ccbac5a41 100755
-> --- a/utils/scancpan
-> +++ b/utils/scancpan
-> @@ -752,7 +752,7 @@ __END__
->  
->  =head1 NAME
->  
-> -support/scripts/scancpan Try-Tiny Moo
-> +utils/scancpan Try-Tiny Moo
->  
->  =head1 SYNOPSIS
->  
-> -- 
-> 2.13.1
-> 
+Thanks!
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
