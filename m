@@ -1,37 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 15:15:44 +0200
-Subject: [Buildroot] [PATCH 0/3] core: remove lkegacy BR2_STRIP_none
-In-Reply-To: <cover.1498913468.git.yann.morin.1998@free.fr>
-References: <cover.1498913468.git.yann.morin.1998@free.fr>
-Message-ID: <20170701151544.6b731e8c@windsurf.home>
+Date: Sat, 1 Jul 2017 15:22:37 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: add check-DEVELOPERS test
+Message-ID: <20170701131935.CC8F581E75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d498aa4a344a2b6433826d956ce5e89a2a71c395
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  1 Jul 2017 14:51:16 +0200, Yann E. MORIN wrote:
+This verifies that the DEVELOPERS file doesn't contain errors. It
+just runs parse_developers from getdeveloperlib and errors out if
+that produces any output.
 
-> This is a legacy option that dates back to when we had support for three
-> different kond of stripping: none, strip and sstrip.
-> 
-> We now have only strip or none, which is semantically just a boolean,
-> rather than a choice.
-> 
-> But choices are not randomised, so having the stripping option a real
-> boolean rather than a choice will allow us to test it in the
-> autobuilders.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .gitlab-ci.yml    | 6 ++++++
+ .gitlab-ci.yml.in | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-As discussed IRL, autobuilders use randpackageconfig, so such options
-will not be randomized. But anyway, I think your changes make sense, so
-I've applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 1f2410e..43e963c 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -34,6 +34,12 @@ check-gitlab-ci.yml:
+         - make .gitlab-ci.yml
+         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+ 
++check-DEVELOPERS:
++    script:
++        - PYTHONPATH=$PWD/support/scripts
++                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
++                grep . && exit 1
++
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+     # explicit triggers through the API.
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 0f9cbcb..0b6e634 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -34,6 +34,12 @@ check-gitlab-ci.yml:
+         - make .gitlab-ci.yml
+         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+ 
++check-DEVELOPERS:
++    script:
++        - PYTHONPATH=$PWD/support/scripts
++                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
++                grep . && exit 1
++
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+     # explicit triggers through the API.
