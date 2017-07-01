@@ -1,76 +1,21 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 10:15:51 +0200
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 1 Jul 2017 10:19:20 +0200
 Subject: [Buildroot] [PATCH 1/8 v3] tools: add a directory to store some
  useful user-facing tools
 In-Reply-To: <318abf359fe6708061165ffe829ac1d5c5e2d2c4.1498859395.git.yann.morin.1998@free.fr>
 References: <cover.1498859395.git.yann.morin.1998@free.fr>
  <318abf359fe6708061165ffe829ac1d5c5e2d2c4.1498859395.git.yann.morin.1998@free.fr>
-Message-ID: <bbb8fd62-f38b-3621-5b14-a9c5d3800fa9@mind.be>
+Message-ID: <CAHXCMMJ0ybuTRh+i2nkCppfeFipsHMxyOiD1y8=b+jXWxbW6Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Yann,
 
-
-On 30-06-17 23:50, Yann E. MORIN wrote:
-> Add a tools directory to store useful little scripts, tools, etc...
-> Users may add that directory in their PATH if they want to, but this
-> is not mandatory.
-> 
-> Add the first tool: brmake, a small script that redirects the build
-> output log to a file, keeping just Buildroot's own messages, with the
-> date+time added at the start of the line.
-> 
-> We need to unbuffer the output of make so that, when the script is
-> interrupted (SIGINT, ^C), there is no lingering output not yet digested
-> by the logger loop.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> 
-> ---
-> Changes v2 -> v3:
->   - detect unconfigured build tree  (Ricardo)
->   - rename 00-README -> readme.txt  (Thomas, Arnout)
-> 
-> Changes v1 -> v2:
->   - rename contrib -> tools  (Arnout)
->   - detect missing unbuffer  (Arnout)
-> 
-> Notes:
->   - Arnout suggested using 'stdbuf' instead of 'unbuffer', but that has
->     some shortcomings in weird corner-cases because it uses LD_PRELOAD
->     to call a constructor that forces settings on stdout/stderr/stdin
->     (it cost me three days to investigate a build failure because of
->     that). So, I stuck with 'unbuffer'...
->   - I also tried to use bash' coproc, but it seems there was a
->     regression in later bash versions that causes an incorrect
->     redirect. So, I stuck with 'unbuffer'...
-> ---
->  docs/manual/writing-rules.txt |  5 ++--
->  tools/brmake                  | 62 +++++++++++++++++++++++++++++++++++++++++++
->  tools/readme.txt              |  9 +++++++
->  3 files changed, 74 insertions(+), 2 deletions(-)
->  create mode 100755 tools/brmake
->  create mode 100644 tools/readme.txt
-> 
-> diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-> index 3a2c8dcb37..c144874a0d 100644
-> --- a/docs/manual/writing-rules.txt
-> +++ b/docs/manual/writing-rules.txt
-> @@ -146,5 +146,6 @@ syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
->  
->  === Support scripts
->  
-> -Some scripts in the +support/+ directory are written in Python and should follow
-> -the https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
-> +Some scripts in the +support/+ and +tools/+ directories are written in
-> +Python and should follow the
-> +https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
+On Fri, Jun 30, 2017 at 11:50 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[...]
 > diff --git a/tools/brmake b/tools/brmake
 > new file mode 100755
 > index 0000000000..36e2374207
@@ -91,11 +36,6 @@ On 30-06-17 23:50, Yann E. MORIN wrote:
 > +
 > +    # Crude parsing to find the directory with the .config
 > +    # and catch any configurator
-
- I don't like it. It's making the script a lot more complicated, and we're not
-even sure that there aren't some corner cases that we're missing here. So I
-would just remove from here...
-
 > +    found=false
 > +    for i in "${@}"; do
 > +        ${found} && { cdir="${i}"; found=false; continue; }
@@ -103,6 +43,9 @@ would just remove from here...
 > +        (-C|--directory)    found=true;;
 > +        (-C*)               cdir="${i#-C}";;
 > +        (--directory=*)     cdir="${i#--directory}";;
+
+You also need to strip the '='.
+
 > +        (O=*)               odir="${i#O=}";;
 > +        # Other configurators are either non-interactive, or graphical
 > +        # apps, so their stdout can safely be redirected.
@@ -118,9 +61,6 @@ would just remove from here...
 > +        # No .config, don't log as we need a terminal for menuconfig
 > +        exec make "${@}"
 > +    fi
-
- ... to here, and instead...
-
 > +
 > +    start=${SECONDS}
 > +
@@ -162,25 +102,15 @@ would just remove from here...
 > +    front of each line, redirects all of the build output to a file
 > +    ("'br.log' in the current directory), and just outputs the Buildroot
 > +    messages (those lines starting with >>>) on stdout.
+> --
+> 2.11.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
- ...add some text here:
-
-    Do not run this script for interactive configuration (e.g. menuconfig)
-    or on an unconfigured directory. The output is redirected so you will see
-    nothing.
-
-
- Perhaps we should also remove the "feature" that menuconfig is the default
-target on an unconfigured tree. I'll create a patch for that.
-
- Regards,
- Arnout
-
+Regards,
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Samuel
