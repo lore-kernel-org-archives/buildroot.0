@@ -1,32 +1,40 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 1 Jul 2017 19:29:50 +0200
-Subject: [Buildroot] [PATCH] get-developers: fix handling of syntax error
-Message-ID: <20170701172950.6869-1-arnout@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat,  1 Jul 2017 19:36:43 +0200
+Subject: [Buildroot] [PATCH 1/2] libupnpp: bump to version 0.15.3
+Message-ID: <20170701173644.789-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When getdeveloperlib.parse_developers doesn't find anything, the script
-tries sys.exit(1) but sys is not imported.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- utils/get-developers | 1 +
- 1 file changed, 1 insertion(+)
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/get-developers b/utils/get-developers
-index 40ed08ffe1..fa6fc2fc68 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -2,6 +2,7 @@
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index 4e759bd47f..c8507409a6 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.15.2.tar.gz.sha256
+-sha256  3abcc0c951ac37b92b9b1f6d10255a5b54353a1cb43a58d48324c08c6e41a6ab  libupnpp-0.15.2.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.15.3.tar.gz.sha256
++sha256  c9c5af25bff3d99f0e76296a13e544cc04e70c85623e4c9869a25418caa9e7b7  libupnpp-0.15.3.tar.gz
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 961051c7b2..2e1d72fce1 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- import argparse
- import getdeveloperlib
-+import sys
- 
- def parse_args():
-     parser = argparse.ArgumentParser()
+-LIBUPNPP_VERSION = 0.15.2
++LIBUPNPP_VERSION = 0.15.3
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = GPL-2.0+
+ LIBUPNPP_LICENSE_FILES = COPYING
 -- 
-2.13.1
+2.13.2
