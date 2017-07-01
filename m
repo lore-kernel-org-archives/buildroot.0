@@ -1,12 +1,16 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 1 Jul 2017 10:24:46 +0200
-Subject: [Buildroot] [PATCH] Makefile: don't run "menuconfig" automatically
-Message-ID: <20170701082446.24664-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 10:26:06 +0200
+Subject: [Buildroot] [git commit] Makefile: don't run "menuconfig"
+	automatically
+Message-ID: <20170701082313.B938781E7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c3493069f28368739a7ccf670bd2eecbb2524d96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Since forever, we run 'menuconfig' automatically on an unconfigured
 tree. However, this does not help users that much:
@@ -24,15 +28,16 @@ So, instead of trying to guess what the user needs, print an error and
 let the user decide what to do next.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  Makefile | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 387ae248c2..d5f5596795 100644
+index 470aa83..8111582 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -816,13 +816,12 @@ check-dependencies:
+@@ -811,13 +811,12 @@ check-dependencies:
  
  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
  
@@ -48,5 +53,3 @@ index 387ae248c2..d5f5596795 100644
  	$(error Please configure Buildroot first (e.g. "make menuconfig"))
  	@exit 1
  
--- 
-2.13.1
