@@ -1,71 +1,177 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 1 Jul 2017 13:28:55 +0200
-Subject: [Buildroot] [Patch v6 0/7] Add support for the Rust programming
- language
-In-Reply-To: <20170628122035.GB4971@momiji>
-References: <20170625205614.6723-1-eric.le.bihan.dev@free.fr>
- <20170628122035.GB4971@momiji>
-Message-ID: <20170701112855.GA22905@itchy>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Sat, 1 Jul 2017 14:15:38 +0200
+Subject: [Buildroot] [RFC PATCH v5 03/11] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <e2a39afc-2f57-ce78-2a1c-9bf97fa679ae@mind.be>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-4-git-send-email-wg@grandegger.com>
+ <e2a39afc-2f57-ce78-2a1c-9bf97fa679ae@mind.be>
+Message-ID: <39f7fecc-16e9-9670-4e04-5010bc902fa9@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hello Arnout,
 
-On 17-06-28 12:20:35, Adrian Perez de Castro wrote:
-> Hello Eric (and everybody else :D),
->
-> I think it's great that there is work being done to bring Rust support to
-> Buildroot, because the languge has been gaining a lot of traction, and people
-> are now writing very interesting programs in it (I am a fan of RipGrep myself!
-> If you don't know it, take a look at: https://github.com/BurntSushi/ripgrep)
->
-> Recently I submitted v2 of a patch to add a LLVM package, and it would be
-> interesting to coordinate to make your Rust patchset use it, instead of the
-> Rust packaging providing its own copy of LLVM. You can see the patch in
-> Patchwork:
->
->   https://patchwork.ozlabs.org/patch/777949/
->
-> I am addin some comments inline below, please keep reading...
->
-> On Sun, 25 Jun 2017 22:56:07 +0200, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
-> > This series adds support for the Rust programming language by adding the
-> > following packages:
-> >
-> >  - rustc: a virtual package for the Rust compiler.
-> >  - rust-bin: provides a pre-built version of rustc.
-> >  - rust: builds rustc from source.
-> >
-> > Both providers are able to cross-compile code for ARM, MIPS, PowerPC and
-> > x86_64 architectures. Only the host variants are provided.
->
-> This means that the ?llvm? package should also provide a host variant of the
-> package. I did a quick try adding ?$(eval $(host-cmake-package))? plus a few
-> minor changs locally and LLVM built just fine.
+the latest patch was a rather quick hack to demonstrate the per package 
+and installation step approach...
 
-Yes. To build host-rust, the libraries from host-llvm would be required.
-If you could provide a patch adding host-llvm, I'll happily test it.
+Am 01.07.2017 um 12:36 schrieb Arnout Vandecappelle:
+>   Hi Wolfgang,
+> 
+>   First of all, let me commend you on the large number of comments and the
+> general clarity of this script.
+> 
+> On 30-06-17 10:37, Wolfgang Grandegger wrote:
+>> From: Samuel Martin <s.martin49@gmail.com>
+>>
+>> The script "fix-rpath" can scan a list of files provided via
+>> command line argument, identify ELF files, check their RPATH and
+>> fix it in a proper way. The RPATH fixup is done by the patchelf
+>> utility using the option "--make-rpath-relative <root-directory>".
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+>> ---
+>>   support/scripts/fix-rpath | 100 ++++++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 100 insertions(+)
+>>   create mode 100755 support/scripts/fix-rpath
+>>
+>> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+>> new file mode 100755
+>> index 0000000..405108d
+>> --- /dev/null
+>> +++ b/support/scripts/fix-rpath
+>> @@ -0,0 +1,100 @@
+>> +#!/usr/bin/env bash
+>> +
+>> +# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
+> 
+>   Almost nothing is left of the original version by Samuel, so I think you can
+> safely add your own name to the Copyright statement :-)
 
-> Regarding the architecture backends to enable, I imagine we would want host
-> variant to have enabled *both* the host-native backend, and the target
-> backend. Example: When building for ARM in x86_64, we would enable the ?ARM?
-> and ?X86? LLVM backends for ?host-llvm?, and only ?ARM? for ?llvm? (the target
-> package). Would this be correct? Do you foresee any situation in which other
-> backends should be enabled for either the host or target variants? Should we
-> allow selecting from menuconfig which backends are compiled for the target
-> ?llvm? package?
+Well, fine for me and nobody else complains.
 
-IMHO, it is best to keep it simple with only the host and the target archs.
+>> +#
+>> +# This program is free software; you can redistribute it and/or modify
+>> +# it under the terms of the GNU General Public License as published by
+>> +# the Free Software Foundation; either version 2 of the License, or
+>> +# (at your option) any later version.
+>> +#
+>> +# This program is distributed in the hope that it will be useful,
+>> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+>> +# General Public License for more details.
+>> +#
+>> +# You should have received a copy of the GNU General Public License
+>> +# along with this program; if not, write to the Free Software
+>> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+>> +
+>> +usage() {
+>> +  cat <<EOF >&2
+>> +Usage:	${0} TREE_KIND FILES_LIST_BEFORE FILELIST_AFTER_AFTER
+> 
+>   There is only one file list now.
 
-> Last but not least: Right now my patch for adding LLVM only builds the main
-> libraries and binaries. Is this enough for Rust?
+OK. Leftover from my first try.
 
-Yes.
+>> +
+>> +Description:
+>> +
+>> +    This script scans a tree and sanitize ELF files' RPATH found in there.
+> 
+>   It doesn't scan the tree anymore.
+> 
+>> +
+>> +    Sanitization behaves the same whatever the kind of the processed tree,
+>> +    but the resulting RPATH differs. The rpath sanitization is done using
+>> +    "patchelf --make-rpath-relazive".
+> 
+>   relazive? :-)
 
-BR,
+Will fix the two issues above.
 
---
-ELB
+> 
+>> +
+>> +Arguments:
+>> +
+>> +    TREE_KIND	Kind of tree to be processed.
+>> +		Allowed values: host, target, staging
+>> +
+>> +    FILELIST    File with the list of files installed by the package
+>> +
+>> +
+>> +Environment:
+>> +
+>> +    PATCHELF	patchelf program to use
+>> +		(default: HOST_DIR/usr/bin/patchelf)
+>> +EOF
+>> +}
+>> +
+>> +: ${PATCHELF:=${HOST_DIR}/usr/bin/patchelf}
+>> +
+>> +main() {
+>> +    local rootdir
+>> +    local tree="${1}"
+>> +    local filelist="${2}"
+>> +    local sanitize_extra_args=( )
+>> +
+>> +    case "${tree}" in
+>> +	host)
+>> +	    rootdir="${HOST_DIR}"
+>> +	    sanitize_extra_args+=( "--relative-to-file" )
+>> +	    ;;
+>> +
+>> +	staging)
+>> +	    rootdir="${STAGING_DIR}"
+>> +	    sanitize_extra_args+=( "--no-standard-lib-dirs" "--relative-to-file" )
+> 
+>   I don't think this is the right thing to do. As I wrote before, the files in
+> staging_dir should never ever be executed, and they are not copied to the
+> target. So instead, we should just --remove-rpath.
+
+OK, in the end we could do for this tree and others what is really 
+needed. I already tried with deleting the rpath and it did not trigger 
+any build issues (with my single usecase).
+
+> 
+>> +	    ;;
+>> +
+>> +	target)
+>> +	    rootdir="${TARGET_DIR}"
+>> +	    sanitize_extra_args+=( "--no-standard-lib-dirs" )
+> 
+>   Since this is the only variation between the three, I think it would be easier
+> to handle that from the caller. So
+> 
+> ${0} ROOT_DIR FILES_LIST PATCHELF_ARGS...
+
+Could be done but we need to pass then almost all args, including 
+"--remove-rpath", "--make-rpath-rleative"... Maybe that's not that nice 
+in "pkg-generic.mk". But we could drop $tree and  use the $ROOT_DIR instead.
+
+> 
+>> +	    ;;
+>> +
+>> +	*)
+>> +	    usage
+>> +	    exit 1
+>> +	    ;;
+>> +    esac
+>> +
+>> +    while read -r file ; do
+>> +	# check if it's an ELF file
+>> +	path=${rootdir}/${file}
+>> +	if ${PATCHELF} --print-rpath "${path}" > /dev/null 2>&1; then
+>> +	    # Work around file busy issue with patchelf binary
+>> +	    if [ "${PATCHELF}" == "${path}" ]; then
+>> +		cp "${PATCHELF}" "${PATCHELF}.__patched__"
+>> +		${PATCHELF} --debug --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${PATCHELF}.__patched__"
+> 
+>   Do we want to keep the --debug?
+
+No, in the end. But I left it for the first tries.
+
+Wolfgang.
