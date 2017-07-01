@@ -1,45 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Jul 2017 09:48:24 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tor: security bump to version
-	0.3.0.9
-Message-ID: <20170701074824.29640-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 10:01:59 +0200
+Subject: [Buildroot] [git commit] squid: uClibc workaround no longer required
+Message-ID: <20170701075908.64B2F80408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://blog.torproject.org/blog/tor-0309-released-security-update-clients
+commit: https://git.buildroot.net/buildroot/commit/?id=c7f878d2ae31230a013c2e2b10ce26338d240c5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+As all librt and libpthread functions are integrated into
+libc for a while, workaround no longer required.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: updated subject to reflect that this is a security update
+ package/squid/squid.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 71868fd1b..618acdc24 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 663a3ba7b8a124c0f8a7351eaa2dda6fd518de3f3c4ee28fff869bfb03860d48  tor-0.3.0.8.tar.gz
-+sha256 48d4880bf6ccb19ce9af2abde6946d7cf0635cc807548badbf4a221a79581e42  tor-0.3.0.9.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index dc2823d46..0fa17e664 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 976ce6d..bcb3744 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -50,11 +50,6 @@ else
+ SQUID_CONF_ENV += squid_cv_gnu_atomics=no
+ endif
  
--TOR_VERSION = 0.3.0.8
-+TOR_VERSION = 0.3.0.9
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
--- 
-2.11.0
+-# On uClibc librt needs libpthread
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+-SQUID_CONF_ENV += ac_cv_search_shm_open="-lrt -lpthread"
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SQUID_CONF_OPTS += --with-openssl
+ SQUID_DEPENDENCIES += openssl
