@@ -1,47 +1,37 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  2 Jul 2017 00:09:35 +0300
-Subject: [Buildroot] [PATCH] linuxptp: don't check host headers for target
-	features
-Message-ID: <70c812411b4b8408a4cfac95ef66d13fea893102.1498943375.git.baruch@tkos.co.il>
+Date: Sun, 2 Jul 2017 00:18:14 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-06-29
+In-Reply-To: <20170630111823.qnevm75qccjidppl@tarshish>
+References: <20170630063058.3F17621D36@mail.free-electrons.com>
+ <20170630111823.qnevm75qccjidppl@tarshish>
+Message-ID: <20170701211814.gapeyrs3zb7unzcn@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The incdefs.sh script runs ${CROSS_COMPILE}cpp to get a list of default
-headers directories. Make sure CROSS_COMPILE is set correctly to avoid check
-of host headers.
+Hi Peter,
 
-Also, drop the CC command line override. Upstream makefile sets CC to
-$(CROSS_COMPILE)gcc.
+On Fri, Jun 30, 2017 at 02:18:23PM +0300, Baruch Siach wrote:
+> On Fri, Jun 30, 2017 at 08:30:58AM +0200, Thomas Petazzoni wrote:
+> >          arm | dropwatch-7c33d8a8ed105b07a... | NOK | http://autobuild.buildroot.net/results/691d61d13849150c3616b1c74c964f50118ff1d9 |     
+> >          arm | dropwatch-7c33d8a8ed105b07a... | NOK | http://autobuild.buildroot.net/results/2918c75e473c5a2434e72f2e409becc5b4d07908 |     
+> >          arm | dropwatch-7c33d8a8ed105b07a... | NOK | http://autobuild.buildroot.net/results/9be9c30f9859bd896de358a5cb900355257990b0 |     
+> 
+> It only fails on your gcc20 machine. Can't reproduce this one here. Looks like 
+> the incdefs.sh script fails to detect clock_adjtime(), even though it detects 
+> posix_spawn() correctly.
+> 
+> Can you take a look?
 
-Should fix:
-http://autobuild.buildroot.net/results/394/394414df25b0b7261b27ca5d4901fde0f639e73c/
-http://autobuild.buildroot.net/results/6ad/6adbc8c77c2ca70246b31600ab66b37c56c1e89e/
-http://autobuild.buildroot.net/results/70d/70dfd05acc9d951169267f2820ecedb37f0711fe/
+I think I figured this one out. Turns out that incdefs.sh looks into host 
+headers. Can you test http://patchwork.ozlabs.org/patch/783129/ on gcc20?
 
-Cc: Petr Kulhavy <brain@jikos.cz>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/linuxptp/linuxptp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+baruch
 
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 5c2257c9d781..beb2591c3224 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -11,9 +11,9 @@ LINUXPTP_LICENSE = GPL-2.0+
- LINUXPTP_LICENSE_FILES = COPYING
- 
- define LINUXPTP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
-+	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
-+		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
- 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
--		CC="$(TARGET_CC)" \
- 		-C $(@D) all
- endef
- 
 -- 
-2.11.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
