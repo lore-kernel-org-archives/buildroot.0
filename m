@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:36:28 +0200
-Subject: [Buildroot] [git commit] manual: fix test-pkg missing.config file
-	name
-Message-ID: <20170701223328.860F07FA0E@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 00:35:37 +0200
+Subject: [Buildroot] [git commit] utils/readme.txt: fix typos for
+	size-stats-compare
+Message-ID: <20170701223328.46C3E81D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=487e9382f6b79ddd3223f91283f435b16a9a6092
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff0b344af6679518694bd88db09fa2078ae4ea0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+A few typos sneaked into the new utils readme...
+
+Additionally, I formulated the list of use cases a bit differently.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-tips.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/readme.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 8b2361d..19577fa 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -105,7 +105,7 @@ The results mean:
-   snippet were not present in the final configuration. This is due to
-   options having dependencies not satisfied by the toolchain, such as
-   for example a package that +depends on BR2_USE_MMU+ with a noMMU
--  toolchain. The missing options are reported in +config.missing+ in
-+  toolchain. The missing options are reported in +missing.config+ in
-   the output build directory (+~/br-test-pkg/TOOLCHAIN_NAME/+ by
-   default).
- * `FAILED`: the build failed. Inspect the +logfile+ file in the output
+diff --git a/utils/readme.txt b/utils/readme.txt
+index a90805f..fd20e8e 100644
+--- a/utils/readme.txt
++++ b/utils/readme.txt
+@@ -28,10 +28,10 @@ scanpypi
+     a script to create a Buildroot package by scanning a PyPI package
+     description.
+ 
+-size-stat-compare
+-    a script to compare the rootfs size between two differnt Buildroot
++size-stats-compare
++    a script to compare the rootfs size between two different Buildroot
+     configurations. This can be used to identify the size impact of
+-    a specific option, or of a set of specific options, or an update
++    a specific option, of a set of specific options, or of an update
+     to a newer Buildroot version...
+ 
+ test-pkg
