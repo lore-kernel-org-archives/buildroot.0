@@ -1,59 +1,48 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 1 Jul 2017 09:14:50 +0200
-Subject: [Buildroot] [PATCH 5/8 v3] tools: move size-stat-compare out of
-	support/scripts/
-In-Reply-To: <468a9d289f6ec103da257c160ef3f2b85558c108.1498859395.git.yann.morin.1998@free.fr>
-References: <cover.1498859395.git.yann.morin.1998@free.fr>
- <468a9d289f6ec103da257c160ef3f2b85558c108.1498859395.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LU65t493q-X2crx-R5omYiX5nzbf9o1+Ndgp4ndzC6nOg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 Jul 2017 09:36:02 +0200
+Subject: [Buildroot] [PATCH] .gitlab-ci.yml: add check-DEVELOPERS test
+In-Reply-To: <20170630200237.1378f5dd@windsurf.home>
+References: <20170630164253.19859-1-arnout@mind.be>
+ <20170630200237.1378f5dd@windsurf.home>
+Message-ID: <ce22c0a4-37b9-a065-aaac-8ee34801cf97@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-
-2017-06-30 23:50 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Move it to the top-level tools/ directory, so that it is easier to
-> find for users.
->
-> Add a legacy symlink for those users who already used them, so as
-> not to break their habits.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  support/scripts/size-stats-compare | 128 +------------------------------------
->  tools/readme.txt                   |   5 ++
->  tools/size-stats-compare           | 127 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 133 insertions(+), 127 deletions(-)
->  mode change 100755 => 120000 support/scripts/size-stats-compare
->  create mode 100755 tools/size-stats-compare
->
-[..]
-> diff --git a/tools/readme.txt b/tools/readme.txt
-> index ba7a2058a4..4d6d5fb62c 100644
-> --- a/tools/readme.txt
-> +++ b/tools/readme.txt
-> @@ -17,6 +17,11 @@ get-developpers
->      of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
->      input, a package name or and architecture name.
->
-> +size-stat-compare
-> +    a script to compare the rootfs size between two differnt Buildroot
-
-different
-
-> +    configurations. This can be used to identify the size impact of
-> +    a specific option, or of a set of specific options.
-
-I would also add that it is useful when upgrading Buildroot release,
-as is done in the description inside the script.
-This is in fact the use case I originally wrote it for.
 
 
-Best regards,
-Thomas
+On 30-06-17 20:02, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 30 Jun 2017 18:42:53 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+> 
+>> +check-DEVELOPERS:
+>> +    script:
+>> +        - PYTHONPATH=$PWD/support/scripts
+>> +                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
+>> +                grep . && exit 1
+> 
+> Isn't "./support/scripts/get-developer -c" doing the right thing?
+
+ The problem with that is that it produces a lot of output, and the warnings are
+at the top. So I would have to grep for WARNING. But some of the possible errors
+don't have a WARNING in front of them. So I started out changing the script to
+add WARNING for those as well. But then I thought: keep things simple, just call
+parse_developers directly.
+
+ Perhaps it would be a little more transparent to add a __main__ to
+getdeveloperlib and then call it with "python support/scripts/getdeveloperlib.py".
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
