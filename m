@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 19:48:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/p7zip: bump version to 16.02
-In-Reply-To: <20170627171518.24497-1-bernd.kuhls@t-online.de>
-References: <20170627171518.24497-1-bernd.kuhls@t-online.de>
-Message-ID: <20170701194800.548e1fe5@windsurf.home>
+Date: Sat, 1 Jul 2017 19:58:39 +0200
+Subject: [Buildroot] [PATCH 1/1] dieharder: fix link issue with inline
+ function not declared static
+In-Reply-To: <1498521231-21206-1-git-send-email-julien@vdg.name>
+References: <1498521231-21206-1-git-send-email-julien@vdg.name>
+Message-ID: <20170701195839.25bfc345@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 27 Jun 2017 19:15:18 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Tue, 27 Jun 2017 01:53:51 +0200, Julien Viard de Galbert wrote:
+> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
 > ---
-> Tested with test-pkg using this defconfig
+>  .../0004-Add-static-to-inline-functions.patch      | 61 ++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 package/dieharder/0004-Add-static-to-inline-functions.patch
 
-Applied to master, thanks.
+Under which conditions do the build failures happen? Do you have
+references to autobuilder failures?
+
+Thanks,
 
 Thomas
 -- 
