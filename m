@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:34:53 +0200
-Subject: [Buildroot] [PATCH] .gitlab-ci.yml: fix it again
-In-Reply-To: <20170701182227.11778-1-arnout@mind.be>
-References: <20170701182227.11778-1-arnout@mind.be>
-Message-ID: <20170702003453.6c82c923@windsurf>
+Date: Sun, 2 Jul 2017 00:35:50 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/readme.txt: fix typos for
+ size-stats-compare
+In-Reply-To: <20170701180027.GY29444@argentina>
+References: <20170701180027.GY29444@argentina>
+Message-ID: <20170702003550.3890d667@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 1 Jul 2017 20:22:27 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> It seems the ! is removed by the yaml parser, so it needs to be quoted.
-> While we're at it, add some explanatory comment.
+On Sat, 1 Jul 2017 20:00:27 +0200, Thomas De Schampheleire wrote:
+> A few typos sneaked into the new utils readme...
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Additionally, I formulated the list of use cases a bit differently.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  .gitlab-ci.yml    | 5 ++++-
->  .gitlab-ci.yml.in | 5 ++++-
->  2 files changed, 8 insertions(+), 2 deletions(-)
+>  utils/readme.txt | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
