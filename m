@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:35:37 +0200
-Subject: [Buildroot] [git commit] utils/readme.txt: fix typos for
-	size-stats-compare
-Message-ID: <20170701223328.46C3E81D3F@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 00:36:37 +0200
+Subject: [Buildroot] [PATCH v2] manual: fix test-pkg missing.config file
+ name
+In-Reply-To: <20170701213635.18610-1-ps.report@gmx.net>
+References: <20170701213635.18610-1-ps.report@gmx.net>
+Message-ID: <20170702003637.4451b931@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ff0b344af6679518694bd88db09fa2078ae4ea0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-A few typos sneaked into the new utils readme...
+On Sat,  1 Jul 2017 23:36:35 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  docs/manual/adding-packages-tips.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Additionally, I formulated the list of use cases a bit differently.
+Applied to master, thanks.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- utils/readme.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/utils/readme.txt b/utils/readme.txt
-index a90805f..fd20e8e 100644
---- a/utils/readme.txt
-+++ b/utils/readme.txt
-@@ -28,10 +28,10 @@ scanpypi
-     a script to create a Buildroot package by scanning a PyPI package
-     description.
- 
--size-stat-compare
--    a script to compare the rootfs size between two differnt Buildroot
-+size-stats-compare
-+    a script to compare the rootfs size between two different Buildroot
-     configurations. This can be used to identify the size impact of
--    a specific option, or of a set of specific options, or an update
-+    a specific option, of a set of specific options, or of an update
-     to a newer Buildroot version...
- 
- test-pkg
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
