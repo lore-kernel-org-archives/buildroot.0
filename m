@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 09:36:02 +0200
-Subject: [Buildroot] [PATCH] .gitlab-ci.yml: add check-DEVELOPERS test
-In-Reply-To: <20170630200237.1378f5dd@windsurf.home>
-References: <20170630164253.19859-1-arnout@mind.be>
- <20170630200237.1378f5dd@windsurf.home>
-Message-ID: <ce22c0a4-37b9-a065-aaac-8ee34801cf97@mind.be>
+Date: Sat, 1 Jul 2017 09:38:11 +0200
+Subject: [Buildroot] question on setting file ownership after boot
+In-Reply-To: <CABWt4ev4w1MpUOJtkVxOPG3Ry8M9JqnGEAD92ygyQdxap3k5ow@mail.gmail.com>
+References: <CABWt4evLAk_=Nr3ktrPj-NEArjBaicmNkMxAoDk7HNmHe9LSug@mail.gmail.com>
+ <46798e49-c7f0-ac8e-5906-6ff898a6b261@mind.be>
+ <CABWt4ev4w1MpUOJtkVxOPG3Ry8M9JqnGEAD92ygyQdxap3k5ow@mail.gmail.com>
+Message-ID: <6aec27d6-22ea-9ce7-014b-443736d98fda@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +14,19 @@ To: buildroot@busybox.net
 
 
 
-On 30-06-17 20:02, Thomas Petazzoni wrote:
-> Hello,
+On 30-06-17 22:27, Robert Smigielski wrote:
+> Thank you for the clarification. 
 > 
-> On Fri, 30 Jun 2017 18:42:53 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
-> 
->> +check-DEVELOPERS:
->> +    script:
->> +        - PYTHONPATH=$PWD/support/scripts
->> +                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
->> +                grep . && exit 1
-> 
-> Isn't "./support/scripts/get-developer -c" doing the right thing?
+> Now that I thought about it some more my question really is why are a bunch of
+> directories and files owned by user dbus up on boot up? I'm trying to find what
+> causes that to happen so that I can change that to be user root. 
 
- The problem with that is that it produces a lot of output, and the warnings are
-at the top. So I would have to grep for WARNING. But some of the possible errors
-don't have a WARNING in front of them. So I started out changing the script to
-add WARNING for those as well. But then I thought: keep things simple, just call
-parse_developers directly.
-
- Perhaps it would be a little more transparent to add a __main__ to
-getdeveloperlib and then call it with "python support/scripts/getdeveloperlib.py".
+ Those are probably files created at runtime by either systemd or dbus.
 
  Regards,
  Arnout
 
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
