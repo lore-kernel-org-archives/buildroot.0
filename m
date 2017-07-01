@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Jul 2017 16:31:02 +0200
-Subject: [Buildroot] [PATCH 2/7 v4] tools: move get-developers out of
+Date: Sat,  1 Jul 2017 16:31:04 +0200
+Subject: [Buildroot] [PATCH 4/7 v4] tools: move size-stat-compare out of
 	support/scripts/
 In-Reply-To: <cover.1498919458.git.yann.morin.1998@free.fr>
 References: <cover.1498919458.git.yann.morin.1998@free.fr>
-Message-ID: <a2dfcf2f0603067fdb9feb28f7b240e10f49a933.1498919458.git.yann.morin.1998@free.fr>
+Message-ID: <1f7606d932bd480bca466181658e656f93c4fe9e.1498919458.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,6 +18,7 @@ Add a legacy symlink for those users who already used them, so as
 not to break their habits.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 
@@ -25,50 +26,31 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Changes v3 -> v4:
   - drop legacy symlink  (Arnout, Thomas)
 ---
- docs/manual/contribute.txt                    | 2 +-
- {support/scripts => tools}/get-developers     | 0
- {support/scripts => tools}/getdeveloperlib.py | 0
- tools/readme.txt                              | 5 +++++
- 4 files changed, 6 insertions(+), 1 deletion(-)
- rename {support/scripts => tools}/get-developers (100%)
- rename {support/scripts => tools}/getdeveloperlib.py (100%)
+ tools/readme.txt                              | 6 ++++++
+ {support/scripts => tools}/size-stats-compare | 0
+ 2 files changed, 6 insertions(+)
+ rename {support/scripts => tools}/size-stats-compare (100%)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 719032bcc4..c10587726c 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -295,7 +295,7 @@ information). This tool reads your patches and outputs the appropriate
- +git send-email+ command to use:
- 
- ---------------------
--$ ./support/scripts/get-developers outgoing/*
-+$ ./tools/get-developers outgoing/*
- ---------------------
- 
- Use the output of +get-developers+ to send your patches:
-diff --git a/support/scripts/get-developers b/tools/get-developers
-similarity index 100%
-rename from support/scripts/get-developers
-rename to tools/get-developers
-diff --git a/support/scripts/getdeveloperlib.py b/tools/getdeveloperlib.py
-similarity index 100%
-rename from support/scripts/getdeveloperlib.py
-rename to tools/getdeveloperlib.py
 diff --git a/tools/readme.txt b/tools/readme.txt
-index 5b418dd41f..1439a0a99f 100644
+index fc1108fded..dd8a1d4494 100644
 --- a/tools/readme.txt
 +++ b/tools/readme.txt
-@@ -2,6 +2,11 @@ This directory contains various useful scripts and tools for working
- with Buildroot. You need not add this directory in your PATH to use
- any of those tools, but you may do so if you want.
+@@ -11,6 +11,12 @@ get-developpers
+     of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
+     input, a package name or and architecture name.
  
-+get-developpers
-+    a script to return the list of people interested in a specific part
-+    of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
-+    input, a package name or and architecture name.
++size-stat-compare
++    a script to compare the rootfs size between two differnt Buildroot
++    configurations. This can be used to identify the size impact of
++    a specific option, or of a set of specific options, or an update
++    to a newer Buildroot version...
 +
  test-pkg
      a script that tests a specific package against a set of various
      toolchains, with the goal to detect toolchain-related dependencies
+diff --git a/support/scripts/size-stats-compare b/tools/size-stats-compare
+similarity index 100%
+rename from support/scripts/size-stats-compare
+rename to tools/size-stats-compare
 -- 
 2.11.0
