@@ -1,120 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Jul 2017 14:51:21 +0200
-Subject: [Buildroot] [PATCH 3/3] core: change the stipr command from a
-	choice to a boolean
-In-Reply-To: <cover.1498913468.git.yann.morin.1998@free.fr>
-References: <cover.1498913468.git.yann.morin.1998@free.fr>
-Message-ID: <02528111029d67c8e42a098a1f836806e05c4a49.1498913468.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 1 Jul 2017 14:52:55 +0200
+Subject: [Buildroot] [PATCH 0/2] Adding LLVM + support for it in Mesa3D
+In-Reply-To: <20170616204143.29198-1-aperez@igalia.com>
+References: <20170616204143.29198-1-aperez@igalia.com>
+Message-ID: <8fd3c501-3f34-c079-d080-15e8b71df359@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Curently, we have a choice to select between stripping and not
-stripping. This is legacy code from back when we had a third option,
-sstrip (super-strip).
+Hi Adrian,
 
-Since we removed sstrip, stripping or not stripping is now just a
-boolean rather than a choice.
+Le 16/06/2017 ? 22:41, Adrian Perez de Castro a ?crit :
+> Hello everybody,
+> 
+> This set of patches adds an LLVM package. For now my main motivation is to
+> enable support for llvmpipe in Mesa3D'd swrast Gallium driver, which we I am
+> using in am embedded ARM device which does not provide a GPU, and software
+> rendering is enough for a small 320x240 LCD framebuffer -- so that is tested
+> and working.
+> 
+> So far the built LLVM enables only the code generation backend for the CPU of
+> the target device, which fits the Mesa3D use-case. Having a llvm package in
+> Buildroot is interesting for many reasons, and I see this as a first step, on
+> top of which to build on later: target packages for new programming languages
+> using Clang+LLVM as cross-toolchain, or enabling building programs written in
+> Rust are just a few examples.
+> 
+> I'll be happy to iterate on these patches with your feedback (keep me CC'd,
+> please), and have them upstream.
 
-Make it so.
+Thanks for this work!
 
-We make BR2_STRIP_Strip default to 'y' to keep the current behaviour of
-defaulting to stripping.
+I also tried to add llvm and clang in Buildroot but it's not finished yet.
+See [1].
+I successfully tested llvmpipe with a HD6310 graphic card and I also try to
+enable libclc support (openCL).
 
-Move BR2_STIP_none to legacy, and instruct the user to review the new
-setting.
+I'll take a look at your patches and try to improve the llvm packaging.
+First, I'll rebase the work on the latest llvm release 4.0.1.
 
-Drop any reference to BR2_STRIP_none in comments.
+Best regards,
+Romain
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in              | 13 ++-----------
- Config.in.legacy       |  8 ++++++++
- boot/grub2/grub2.mk    |  2 +-
- package/kexec/kexec.mk |  2 +-
- 4 files changed, 12 insertions(+), 13 deletions(-)
+[1] https://github.com/RomainNaour/buildroot/tree/clang-llvm-v4.0.0
 
-diff --git a/Config.in b/Config.in
-index 86e10bbe15..72ceadfde6 100644
---- a/Config.in
-+++ b/Config.in
-@@ -414,13 +414,10 @@ config BR2_DEBUG_3
- endchoice
- endif
- 
--choice
--	prompt "strip command for binaries on target"
--	default BR2_STRIP_strip
--
- config BR2_STRIP_strip
--	bool "strip"
-+	bool "strip target binaries"
- 	depends on !BR2_PACKAGE_HOST_ELF2FLT
-+	default y
- 	help
- 	  Binaries and libraries in the target filesystem will be
- 	  stripped using the normal 'strip' command. This allows to save
-@@ -428,12 +425,6 @@ config BR2_STRIP_strip
- 	  on the target are needed for native debugging, but not when
- 	  remote debugging is used.
- 
--config BR2_STRIP_none
--	bool "none"
--	help
--	  Do not strip binaries and libraries in the target filesystem.
--endchoice
--
- config BR2_STRIP_EXCLUDE_FILES
- 	string "executables that should not be stripped"
- 	depends on BR2_STRIP_strip
-diff --git a/Config.in.legacy b/Config.in.legacy
-index ec28da3a2a..453c5eb8b8 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,14 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.08"
- 
-+config BR2_STRIP_none
-+	bool "Strip command 'none' has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The strip command choice has been changed into a single
-+	  boolean option. Please check that the new setting is
-+	  correct (in the "Build options" sub-menu)
-+
- config BR2_PACKAGE_BEECRYPT_CPP
- 	bool "C++ support removed in beecrypt"
- 	select BR2_LEGACY
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index dc019835ab..aa3f4dd8cb 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -46,7 +46,7 @@ endif
- # bootloader itself; none of these are used to build the native
- # tools.
- #
--# NOTE: TARGET_STRIP is overridden by BR2_STRIP_none, so always
-+# NOTE: TARGET_STRIP is overridden by !BR2_STRIP_strip, so always
- # use the cross compile variant to ensure grub2 builds
- 
- GRUB2_CONF_ENV = \
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 7564103bfc..dd67eab0ca 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -10,7 +10,7 @@ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
- KEXEC_LICENSE_FILES = COPYING
- 
--# Makefile expects $STRIP -o to work, so needed for BR2_STRIP_none
-+# Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
- KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
- 
- ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
--- 
-2.11.0
+> 
+> Best regards,
+> 
+> --
+>  Adri?n ?
+> 
+> Adrian Perez de Castro (2):
+>   llvm: new package
+>   mesa3d: Allow optionally using LLVM in drivers
+> 
+>  package/Config.in                                  |   1 +
+>  ...-Clean-up-exported-values-update-for-shar.patch |  57 ++++++++
+>  package/llvm/Config.in                             |  48 +++++++
+>  package/llvm/llvm.hash                             |   2 +
+>  package/llvm/llvm.mk                               | 145 +++++++++++++++++++++
+>  package/mesa3d/Config.in                           |  11 ++
+>  package/mesa3d/mesa3d.mk                           |   9 +-
+>  7 files changed, 272 insertions(+), 1 deletion(-)
+>  create mode 100644 package/llvm/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch
+>  create mode 100644 package/llvm/Config.in
+>  create mode 100644 package/llvm/llvm.hash
+>  create mode 100644 package/llvm/llvm.mk
+> 
