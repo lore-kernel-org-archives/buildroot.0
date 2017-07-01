@@ -1,58 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 18:06:29 +0200
-Subject: [Buildroot] [RFC PATCH v5 05/11] core: we need host-patchelf as
- the very first package for RPATH sanitation
-In-Reply-To: <1498811828-6893-6-git-send-email-wg@grandegger.com>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-6-git-send-email-wg@grandegger.com>
-Message-ID: <f8d60e22-3c8f-2b3f-e84a-a77c68229687@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 17:50:52 +0200
+Subject: [Buildroot] [git commit] tools: move test-pkg out of support/scripts
+Message-ID: <20170701160502.B3D2B81EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Subject line is a bit long, how about
+commit: https://git.buildroot.net/buildroot/commit/?id=afff1ce5b0f01a681eeb2a74d26738954c0ca6fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-core: add host-patchelf to DEPENDENCIES_HOST_PREREQ
+Move it to the top-level tools/ directory, so that it is easier to
+find for users.
 
-(in general, the subject line says what is done, the rest of the commit message
-explains why and sometimes how).
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-tips.txt | 12 ++++++------
+ tools/readme.txt                     |  8 ++++++++
+ {support/scripts => tools}/test-pkg  |  0
+ 3 files changed, 14 insertions(+), 6 deletions(-)
 
-On 30-06-17 10:37, Wolfgang Grandegger wrote:
-> For this purpose we set DEPENDENCIES_HOST_PREREQ to host-patchelf early
-> in the Makefile.
-> 
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> ---
->  Makefile | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 88d98e0..f5ea6a8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -483,6 +483,8 @@ include package/Makefile.in
->  # arch/arch.mk.* must be after package/Makefile.in because it may need to
->  # complement variables defined therein, like BR_NO_CHECK_HASH_FOR.
->  -include $(wildcard arch/arch.mk.*)
-> +# We need patchelf early for RPATH sanitation
-
- It's sanitization, not sanitation.
-
- Regards,
- Arnout
-
-> +DEPENDENCIES_HOST_PREREQ += host-patchelf
->  include support/dependencies/dependencies.mk
->  
->  include toolchain/*.mk
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index d1eab2b..0047dfd 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -45,9 +45,9 @@ continuously test random configurations. However, these only build the
+ `master` branch of the git tree, and your new fancy package is not yet
+ there.
+ 
+-Buildroot provides a script in +support/scripts/test-pkg+ that uses the
+-same base configurations as used by the autobuilders so you can test
+-your package in the same conditions.
++Buildroot provides a script in +tools/test-pkg+ that uses the same base
++configurations as used by the autobuilders so you can test your package
++in the same conditions.
+ 
+ First, create a config snippet that contains all the necessary options
+ needed to enable your package, but without any architecture or toolchain
+@@ -74,7 +74,7 @@ Then run the +test-pkg+ script, by telling it what config snippet to use
+ and what package to test:
+ 
+ ----
+-$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++$ ./tools/test-pkg -c libcurl.config -p libcurl
+ ----
+ 
+ This will try to build your package against all the toolchains used
+@@ -83,7 +83,7 @@ too long to do so). The output lists all toolchains and the corresponding
+ result (excerpt, results are fake):
+ 
+ ----
+-$ ./support/scripts/test-pkg -c libcurl.config -p libcurl
++$ ./tools/test-pkg -c libcurl.config -p libcurl
+                 armv5-ctng-linux-gnueabi [ 1/11]: OK
+               armv7-ctng-linux-gnueabihf [ 2/11]: OK
+                         br-aarch64-glibc [ 3/11]: SKIPPED
+@@ -124,7 +124,7 @@ The +test-pkg+ script accepts a few options, for which you can get some
+ help by running:
+ 
+ ----
+-$ ./support/scripts/test-pkg -h
++$ ./tools/test-pkg -h
+ ----
+ 
+ [[github-download-url]]
+diff --git a/tools/readme.txt b/tools/readme.txt
+new file mode 100644
+index 0000000..5b418dd
+--- /dev/null
++++ b/tools/readme.txt
+@@ -0,0 +1,8 @@
++This directory contains various useful scripts and tools for working
++with Buildroot. You need not add this directory in your PATH to use
++any of those tools, but you may do so if you want.
++
++test-pkg
++    a script that tests a specific package against a set of various
++    toolchains, with the goal to detect toolchain-related dependencies
++    (wchar, threads...)
+diff --git a/support/scripts/test-pkg b/tools/test-pkg
+similarity index 100%
+rename from support/scripts/test-pkg
+rename to tools/test-pkg
