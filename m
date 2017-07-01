@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 19:41:58 +0200
-Subject: [Buildroot] [PATCH 0/9] support/testing: run tests in parallel
-In-Reply-To: <20170629024549.30484-1-ricardo.martincoski@gmail.com>
-References: <20170629024549.30484-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170701194158.6089735d@windsurf.home>
+Date: Sat, 1 Jul 2017 19:43:48 +0200
+Subject: [Buildroot] [git commit] scancpan: update old reference to
+	support/scripts
+Message-ID: <20170701174125.CE0158195B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9c2428616eaa265ab5af3f4fde7cd9dbe6d98876
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 28 Jun 2017 23:45:40 -0300, Ricardo Martincoski wrote:
+scancpan's help text refers to its location, so update it after the
+move to utils/.
 
-> Ricardo Martincoski (9):
->   support/testing: use pexpect in emulator
->   support/testing: use qemu stdio in emulator
->   support/testing: let pexpect write stdout to log
->   support/testing: use pexpect.sendline directly
->   support/testing: use pexpect.expect directly
->   support/testing: fix code style in emulator
->   support/testing: allow to set BR2_JLEVEL
->   support/testing: run testcases in parallel
->   support/testing: large timeout for login prompt
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ utils/scancpan | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All applied to master. Many thanks for this work, definitely very
-useful!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/utils/scancpan b/utils/scancpan
+index 62df225..9ccbac5 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -752,7 +752,7 @@ __END__
+ 
+ =head1 NAME
+ 
+-support/scripts/scancpan Try-Tiny Moo
++utils/scancpan Try-Tiny Moo
+ 
+ =head1 SYNOPSIS
+ 
