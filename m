@@ -1,182 +1,102 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 12:36:19 +0200
-Subject: [Buildroot] [RFC PATCH v5 03/11] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <1498811828-6893-4-git-send-email-wg@grandegger.com>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-4-git-send-email-wg@grandegger.com>
-Message-ID: <e2a39afc-2f57-ce78-2a1c-9bf97fa679ae@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 10:43:49 +0200
+Subject: [Buildroot] [git commit] package/xen: Fix builds with GCC 7
+Message-ID: <20170701103836.67DE07FA97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Wolfgang,
+commit: https://git.buildroot.net/buildroot/commit/?id=7289d2729db82ed413012b3b1a0f7f13c4530c4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- First of all, let me commend you on the large number of comments and the
-general clarity of this script.
+Fix a "duplicate 'const' declaration specifier" error that occurs when
+building Xen. As the issue has already been fixed in upstream Xen let's
+just backport the fix to apply here.
 
-On 30-06-17 10:37, Wolfgang Grandegger wrote:
-> From: Samuel Martin <s.martin49@gmail.com>
-> 
-> The script "fix-rpath" can scan a list of files provided via
-> command line argument, identify ELF files, check their RPATH and
-> fix it in a proper way. The RPATH fixup is done by the patchelf
-> utility using the option "--make-rpath-relative <root-directory>".
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> ---
->  support/scripts/fix-rpath | 100 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100755 support/scripts/fix-rpath
-> 
-> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-> new file mode 100755
-> index 0000000..405108d
-> --- /dev/null
-> +++ b/support/scripts/fix-rpath
-> @@ -0,0 +1,100 @@
-> +#!/usr/bin/env bash
-> +
-> +# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
+Fixes:
+    http://autobuild.buildroot.net/results/3a0/3a03c328bc6a6c30cc4f619925608d735632211f/
 
- Almost nothing is left of the original version by Samuel, so I think you can
-safely add your own name to the Copyright statement :-)
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xen/0008-arm-fix-build-with-gcc-7.patch | 70 +++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-> +#
-> +# This program is free software; you can redistribute it and/or modify
-> +# it under the terms of the GNU General Public License as published by
-> +# the Free Software Foundation; either version 2 of the License, or
-> +# (at your option) any later version.
-> +#
-> +# This program is distributed in the hope that it will be useful,
-> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> +# General Public License for more details.
-> +#
-> +# You should have received a copy of the GNU General Public License
-> +# along with this program; if not, write to the Free Software
-> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-> +
-> +usage() {
-> +  cat <<EOF >&2
-> +Usage:	${0} TREE_KIND FILES_LIST_BEFORE FILELIST_AFTER_AFTER
-
- There is only one file list now.
-
-> +
-> +Description:
-> +
-> +    This script scans a tree and sanitize ELF files' RPATH found in there.
-
- It doesn't scan the tree anymore.
-
-> +
-> +    Sanitization behaves the same whatever the kind of the processed tree,
-> +    but the resulting RPATH differs. The rpath sanitization is done using
-> +    "patchelf --make-rpath-relazive".
-
- relazive? :-)
-
-> +
-> +Arguments:
-> +
-> +    TREE_KIND	Kind of tree to be processed.
-> +		Allowed values: host, target, staging
-> +
-> +    FILELIST    File with the list of files installed by the package
-> +
-> +
-> +Environment:
-> +
-> +    PATCHELF	patchelf program to use
-> +		(default: HOST_DIR/usr/bin/patchelf)
-> +EOF
-> +}
-> +
-> +: ${PATCHELF:=${HOST_DIR}/usr/bin/patchelf}
-> +
-> +main() {
-> +    local rootdir
-> +    local tree="${1}"
-> +    local filelist="${2}"
-> +    local sanitize_extra_args=( )
-> +
-> +    case "${tree}" in
-> +	host)
-> +	    rootdir="${HOST_DIR}"
-> +	    sanitize_extra_args+=( "--relative-to-file" )
-> +	    ;;
-> +
-> +	staging)
-> +	    rootdir="${STAGING_DIR}"
-> +	    sanitize_extra_args+=( "--no-standard-lib-dirs" "--relative-to-file" )
-
- I don't think this is the right thing to do. As I wrote before, the files in
-staging_dir should never ever be executed, and they are not copied to the
-target. So instead, we should just --remove-rpath.
-
-> +	    ;;
-> +
-> +	target)
-> +	    rootdir="${TARGET_DIR}"
-> +	    sanitize_extra_args+=( "--no-standard-lib-dirs" )
-
- Since this is the only variation between the three, I think it would be easier
-to handle that from the caller. So
-
-${0} ROOT_DIR FILES_LIST PATCHELF_ARGS...
-
-> +	    ;;
-> +
-> +	*)
-> +	    usage
-> +	    exit 1
-> +	    ;;
-> +    esac
-> +
-> +    while read -r file ; do
-> +	# check if it's an ELF file
-> +	path=${rootdir}/${file}
-> +	if ${PATCHELF} --print-rpath "${path}" > /dev/null 2>&1; then
-> +	    # Work around file busy issue with patchelf binary
-> +	    if [ "${PATCHELF}" == "${path}" ]; then
-> +		cp "${PATCHELF}" "${PATCHELF}.__patched__"
-> +		${PATCHELF} --debug --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${PATCHELF}.__patched__"
-
- Do we want to keep the --debug?
-
-> +		mv "${PATCHELF}.__patched__" "${PATCHELF}"
-> +	    else
-> +		# make files writable if necessary
-> +		changed=$(chmod -c u+w "${path}")
-
- Good call on that one!
-
- Regards,
- Arnout
-
-> +		# call patchelf to sanitize the rpath
-> +		${PATCHELF} --debug --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${path}"
-> +		# restore the original permission
-> +		test "${changed}" != "" && chmod u-w "${path}"
-> +	    fi
-> +	fi
-> +    done < ${filelist}
-> +
-> +    # ignore errors
-> +    return 0
-> +}
-> +
-> +main ${@}
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/xen/0008-arm-fix-build-with-gcc-7.patch b/package/xen/0008-arm-fix-build-with-gcc-7.patch
+new file mode 100644
+index 0000000..7bd12a3
+--- /dev/null
++++ b/package/xen/0008-arm-fix-build-with-gcc-7.patch
+@@ -0,0 +1,70 @@
++From 9d3011bd1cd29f8f3841bf1b64d5ead9ed1434e8 Mon Sep 17 00:00:00 2001
++From: Jan Beulich <jbeulich@suse.com>
++Date: Fri, 19 May 2017 10:12:08 +0200
++Subject: [PATCH] arm: fix build with gcc 7
++
++The compiler dislikes duplicate "const", and the ones it complains
++about look like they we in fact meant to be placed differently.
++
++Also fix array_access_okay() (just like on x86), despite the construct
++being unused on ARM: -Wint-in-bool-context, enabled by default in
++gcc 7, doesn't like multiplication in conditional operators. "Hide" it,
++at the risk of the next compiler version becoming smarter and
++recognizing even that. (The hope is that added smartness then would
++also better deal with legitimate cases like the one here.) The change
++could have been done in access_ok(), but I think we better keep it at
++the place the compiler is actually unhappy about.
++
++Signed-off-by: Jan Beulich <jbeulich@suse.com>
++Reviewed-by: Julien Grall <julien.grall@arm.com>
++Release-acked-by: Julien Grall <julien.grall@arm.com>
++Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
++---
++ xen/arch/arm/platforms/brcm.c      | 2 +-
++ xen/arch/arm/platforms/rcar2.c     | 2 +-
++ xen/include/asm-arm/guest_access.h | 3 ++-
++ 3 files changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/xen/arch/arm/platforms/brcm.c b/xen/arch/arm/platforms/brcm.c
++index 6d8b5b9175..d481b2c60f 100644
++--- a/xen/arch/arm/platforms/brcm.c
+++++ b/xen/arch/arm/platforms/brcm.c
++@@ -271,7 +271,7 @@ static __init int brcm_init(void)
++     return brcm_populate_plat_regs();
++ }
++ 
++-static const char const *brcm_dt_compat[] __initconst =
+++static const char *const brcm_dt_compat[] __initconst =
++ {
++     "brcm,bcm7445d0",
++     NULL
++diff --git a/xen/arch/arm/platforms/rcar2.c b/xen/arch/arm/platforms/rcar2.c
++index bb25751109..df0ac84709 100644
++--- a/xen/arch/arm/platforms/rcar2.c
+++++ b/xen/arch/arm/platforms/rcar2.c
++@@ -46,7 +46,7 @@ static int __init rcar2_smp_init(void)
++     return 0;
++ }
++ 
++-static const char const *rcar2_dt_compat[] __initdata =
+++static const char *const rcar2_dt_compat[] __initconst =
++ {
++     "renesas,lager",
++     NULL
++diff --git a/xen/include/asm-arm/guest_access.h b/xen/include/asm-arm/guest_access.h
++index 5876988b23..421bca5f36 100644
++--- a/xen/include/asm-arm/guest_access.h
+++++ b/xen/include/asm-arm/guest_access.h
++@@ -8,7 +8,8 @@
++ #define access_ok(addr,size) (1)
++ 
++ #define array_access_ok(addr,count,size) \
++-    (likely(count < (~0UL/size)) && access_ok(addr,count*size))
+++    (likely((count) < (~0UL / (size))) && \
+++     access_ok(addr, 0 + (count) * (size)))
++ 
++ unsigned long raw_copy_to_guest(void *to, const void *from, unsigned len);
++ unsigned long raw_copy_to_guest_flush_dcache(void *to, const void *from,
++-- 
++2.11.0
++
