@@ -1,15 +1,21 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Jul 2017 09:46:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.3.0.9
-Message-ID: <20170701074620.25403-1-bernd.kuhls@t-online.de>
+Date: Sat,  1 Jul 2017 09:48:24 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tor: security bump to version
+	0.3.0.9
+Message-ID: <20170701074824.29640-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Release notes:
+https://blog.torproject.org/blog/tor-0309-released-security-update-clients
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: updated subject to reflect that this is a security update
+
  package/tor/tor.hash | 2 +-
  package/tor/tor.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
