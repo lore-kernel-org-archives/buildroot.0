@@ -1,13 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 22:55:53 +0200
-Subject: [Buildroot] [RFC PATCH v5 02/11] package/patchelf: add patch
- for rpath sanitation under a root directory
-In-Reply-To: <76510517-2a82-ab5d-1f5a-792831c18342@grandegger.com>
+Date: Sat, 1 Jul 2017 23:00:31 +0200
+Subject: [Buildroot] [RFC PATCH v5 08/11] core: install relocation
+ script and location at the end of the build
+In-Reply-To: <7b3f4d28-f024-5dba-6911-dda0aec7db72@grandegger.com>
 References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-3-git-send-email-wg@grandegger.com>
- <e0092045-3a44-4b99-9220-5e8e05fef090@mind.be>
- <76510517-2a82-ab5d-1f5a-792831c18342@grandegger.com>
-Message-ID: <cfa563e9-1546-c811-bbe2-0f91ece7a5c8@mind.be>
+ <1498811828-6893-9-git-send-email-wg@grandegger.com>
+ <CAHXCMMKowyzQ091YNu9ewOTcgTXkTohXEfQUBNp=3z+GT1TBjQ@mail.gmail.com>
+ <7b3f4d28-f024-5dba-6911-dda0aec7db72@grandegger.com>
+Message-ID: <49dbb70b-20d1-a429-6808-2c8a78aad0f3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,84 +16,63 @@ To: buildroot@busybox.net
 
 
 
-On 01-07-17 22:30, Wolfgang Grandegger wrote:
+On 01-07-17 21:51, Wolfgang Grandegger wrote:
 > 
 > 
-> Am 01.07.2017 um 00:13 schrieb Arnout Vandecappelle:
->>   Hi Wolfgang,
+> Am 01.07.2017 um 16:11 schrieb Samuel Martin:
+>> Hi Wolfgang,
 >>
->> On 30-06-17 10:36, Wolfgang Grandegger wrote:
->>> The patch allows to use patchelf to sanitize the rpath of the buildroot
->>> libraries and binaries using the option "--make-rpath-relative <rootdir>".
+>> On Fri, Jun 30, 2017 at 10:37 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
+>>> The script "relocate-sdk.sh" is installed into the top directory of
+>>> the SDK (HOST_DIR) and the SDK location path is stored in the file
+>>> "HOST_DIR/usr/share/buildroot/sdk-location"-
 >>>
 >>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+>>> ---
+>>>   Makefile | 3 +++
+>>>   1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index f5ea6a8..a5dfdfd 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -553,6 +553,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>>>
+>>>   .PHONY: world
+>>>   world: target-post-image
+>>> +       @$(call MESSAGE,"Rendering the SDK relocatable")
+>>> +       install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR) && \
 >>
->>   I still have quite a few remarks, one of which is important: when the same
->> libfoo.so is present in two directories of the rpath, the second directory
->> should be removed but it isn't. See below for details.
+>> I don't think "&& \" is really needed here
 > 
-> Not sure if I understand you correctly. The rpath is for example
-> "/usr/lib/dir1:/usr/lib/dir2" and libfoo.so is in both directories!?
+> It's important. The "relocate-sdk.sh" will use it do do the relocation (please
+> have a look to the script).
 
- Yes. If that happens then dir2 should be removed from rpath (unless of course
-there is still another needed lib in there).
+ The line below is indeed needed, but the && \ is not. Make will abort as soon
+as one command fails. And anyway, the install shouldn't fail.
 
- I admit it's unlikely that such a situation will arise in Buildroot, but let's
-do the right thing :-)
+ By the way, while I'm commenting on this line:
 
-[snip]
->>> ++static std::string makePathRelative(const std::string & path,
->>> ++    const std::string & refPath, const std::string & rootDir)
->>> ++{
->>> ++    std::string relPath = "$ORIGIN";
->>> ++
->>> ++    /* Strip root path first */
->>> ++    std::string p = path.substr(rootDir.length());
->>> ++    std::string refP = refPath.substr(rootDir.length());
->>> ++
->>> ++    std::size_t pos = refP.find_first_of('/');
->>> ++    while (pos != std::string::npos) {
->>> ++        pos =refP.find_first_of('/', pos + 1);
->>                   ^ missing space
->>
->>> ++        relPath.append("/..");
->>> ++    }
->>> ++    relPath.append(p);
->>
->>   I probably asked this before already, but why do we need to pass rootDir
->> instead of just eliminating the common part of path and refPath? Something like:
->>
->>      while (true) {
->>          pos = path.find_first_of('/');
->>          refPos = refPath.find_first_of('/');
->>          std::string chunk = path.substr(0, pos);
->>          std::string refChunk = refPath.substr(0, refPos);
->>          if (chunk != refChunk)
->>              break;
->>          path = path.substr(pos);
->>          refPath = refPath.substr(refPos);
->>      }
->> ...followed by the loop you already had.
+	$(INSTALL) -D -m 0755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)
+
 > 
-> Could be done. In that case the path ($ORIGIN) is not relative to rootdir. But
-> that's not required. The path must just be within rootdir.
+>>
+>>> +       echo $(HOST_DIR) > $(HOST_DIR)/usr/share/buildroot/sdk-location
+>>
+>> I'm not sure these few commands belong to the world target, maybe a
+>> host-finalize target could be added...
+>>
+>>>
+>>>   # Populating the staging with the base directories is handled by the
+>>> skeleton package
+>>>   $(STAGING_DIR):
+> 
+> Other opinions?
 
- Exactly.
-
- Well, actually, for HOST_DIR, it doesn't need to be in rootdir. For example,
-it's possible that some host tool optionally links to libusb but our
-host-package doesn't depend on libusb and doesn't pass --without-libusb. If you
-have libusb installed on your build system in a non-standard path, it will be
-discovered through pkg-config and the package will link with it, but then the
-rpath is needed to make sure the executable still runs.
-
- So in fact, for host tools, we shouldn't eliminate RPATHs just because they are
-outside of rootDir.
+ Not sure what you're asking here.
 
  Regards,
  Arnout
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
