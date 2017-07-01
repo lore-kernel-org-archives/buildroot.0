@@ -1,44 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 10:26:22 +0200
-Subject: [Buildroot] [PATCH] Makefile: don't run "menuconfig"
- automatically
-In-Reply-To: <20170701082446.24664-1-arnout@mind.be>
-References: <20170701082446.24664-1-arnout@mind.be>
-Message-ID: <20170701102622.01fefe49@windsurf.home>
+Date: Sat, 1 Jul 2017 10:26:51 +0200
+Subject: [Buildroot] [git commit] package/lugaru: backport upstream fix
+Message-ID: <20170701082403.14BBE81E5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0cad656a9ec5a7903f3d9c0c80963f5d561b0f02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 1 Jul 2017 10:24:46 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Since forever, we run 'menuconfig' automatically on an unconfigured
-> tree. However, this does not help users that much:
-> - If they read the documentation, they should already know to run
->   make menuconfig first.
-> - If they haven't read the documentation, dropping them in menuconfig
->   isn't very helpful.
-> - It's a likely that the user didn't intend to be in an unconfigured
->   tree (e.g. wrong O= specified), so starting menuconfig (and polluting
->   this wrong O= directory) is not very helpful.
-> - It's possible that the user really doesn't want menuconfig, but
->   instead needs xconfig, or some defconfig, or ...
-> 
-> So, instead of trying to guess what the user needs, print an error and
-> let the user decide what to do next.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  Makefile | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/389/38917f8420695a9dbb24830fef04159252fceea0
 
-Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...x-mismatched-usage-length-build-fail-on-g.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch b/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch
+new file mode 100644
+index 0000000..9c362a9
+--- /dev/null
++++ b/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch
+@@ -0,0 +1,58 @@
++From 5a0c9f6358169b447840acdb721250ce932cb180 Mon Sep 17 00:00:00 2001
++From: Martin Erik Werner <martinerikwerner@gmail.com>
++Date: Wed, 8 Mar 2017 22:51:16 +0100
++Subject: [PATCH] Fix mismatched usage length, build fail on g++
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The length of const option::Descriptor usage[] is intended to be
++inferred based on the initialisation in Source/main.cpp, however, the
++extern declaration in Source/Game.hpp hard-codes it to 13.
++
++Remove the hard-coded 13 in the extern declaration, in favour of the
++inferred length.
++
++This also fixes the follwoing build failure with g++ (Debian 4.9.2-10)
++4.9.2:
++(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::index???
++     };
++     ^
++(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::index??? [-Wmissing-field-initializers]
++(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::type???
++(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::type??? [-Wmissing-field-initializers]
++(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::shortopt???
++(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::shortopt??? [-Wmissing-field-initializers]
++(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::longopt???
++(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::longopt??? [-Wmissing-field-initializers]
++(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::check_arg???
++(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::check_arg??? [-Wmissing-field-initializers]
++(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::help??? [-Wmissing-field-initializers]
++CMakeFiles/lugaru.dir/build.make:54: recipe for target 'CMakeFiles/lugaru.dir/Source/main.cpp.o' failed
++
++Signed-off-by: Martin Erik Werner <martinerikwerner@gmail.com>
++
++[Romain: backport to v1.2]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++
++(cherry picked from commit dd685fe9080c2853422d8272792691358ea07dfc)
++---
++ Source/Game.hpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Source/Game.hpp b/Source/Game.hpp
++index 51232cc..9bb6adb 100644
++--- a/Source/Game.hpp
+++++ b/Source/Game.hpp
++@@ -234,7 +234,7 @@ enum optionIndex
++ /* Number of options + 1 */
++ const int commandLineOptionsNumber = 10;
++ 
++-extern const option::Descriptor usage[13];
+++extern const option::Descriptor usage[];
++ 
++ extern option::Option commandLineOptions[commandLineOptionsNumber];
++ extern option::Option* commandLineOptionsBuffer;
++-- 
++2.9.4
++
