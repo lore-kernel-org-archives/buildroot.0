@@ -1,83 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 23:00:31 +0200
-Subject: [Buildroot] [RFC PATCH v5 08/11] core: install relocation
- script and location at the end of the build
-In-Reply-To: <7b3f4d28-f024-5dba-6911-dda0aec7db72@grandegger.com>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-9-git-send-email-wg@grandegger.com>
- <CAHXCMMKowyzQ091YNu9ewOTcgTXkTohXEfQUBNp=3z+GT1TBjQ@mail.gmail.com>
- <7b3f4d28-f024-5dba-6911-dda0aec7db72@grandegger.com>
-Message-ID: <49dbb70b-20d1-a429-6808-2c8a78aad0f3@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  2 Jul 2017 00:09:35 +0300
+Subject: [Buildroot] [PATCH] linuxptp: don't check host headers for target
+	features
+Message-ID: <70c812411b4b8408a4cfac95ef66d13fea893102.1498943375.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The incdefs.sh script runs ${CROSS_COMPILE}cpp to get a list of default
+headers directories. Make sure CROSS_COMPILE is set correctly to avoid check
+of host headers.
 
+Also, drop the CC command line override. Upstream makefile sets CC to
+$(CROSS_COMPILE)gcc.
 
-On 01-07-17 21:51, Wolfgang Grandegger wrote:
-> 
-> 
-> Am 01.07.2017 um 16:11 schrieb Samuel Martin:
->> Hi Wolfgang,
->>
->> On Fri, Jun 30, 2017 at 10:37 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
->>> The script "relocate-sdk.sh" is installed into the top directory of
->>> the SDK (HOST_DIR) and the SDK location path is stored in the file
->>> "HOST_DIR/usr/share/buildroot/sdk-location"-
->>>
->>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->>> ---
->>>   Makefile | 3 +++
->>>   1 file changed, 3 insertions(+)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index f5ea6a8..a5dfdfd 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -553,6 +553,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->>>
->>>   .PHONY: world
->>>   world: target-post-image
->>> +       @$(call MESSAGE,"Rendering the SDK relocatable")
->>> +       install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR) && \
->>
->> I don't think "&& \" is really needed here
-> 
-> It's important. The "relocate-sdk.sh" will use it do do the relocation (please
-> have a look to the script).
+Should fix:
+http://autobuild.buildroot.net/results/394/394414df25b0b7261b27ca5d4901fde0f639e73c/
+http://autobuild.buildroot.net/results/6ad/6adbc8c77c2ca70246b31600ab66b37c56c1e89e/
+http://autobuild.buildroot.net/results/70d/70dfd05acc9d951169267f2820ecedb37f0711fe/
 
- The line below is indeed needed, but the && \ is not. Make will abort as soon
-as one command fails. And anyway, the install shouldn't fail.
+Cc: Petr Kulhavy <brain@jikos.cz>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/linuxptp/linuxptp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- By the way, while I'm commenting on this line:
-
-	$(INSTALL) -D -m 0755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)
-
-> 
->>
->>> +       echo $(HOST_DIR) > $(HOST_DIR)/usr/share/buildroot/sdk-location
->>
->> I'm not sure these few commands belong to the world target, maybe a
->> host-finalize target could be added...
->>
->>>
->>>   # Populating the staging with the base directories is handled by the
->>> skeleton package
->>>   $(STAGING_DIR):
-> 
-> Other opinions?
-
- Not sure what you're asking here.
-
- Regards,
- Arnout
-
+diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+index 5c2257c9d781..beb2591c3224 100644
+--- a/package/linuxptp/linuxptp.mk
++++ b/package/linuxptp/linuxptp.mk
+@@ -11,9 +11,9 @@ LINUXPTP_LICENSE = GPL-2.0+
+ LINUXPTP_LICENSE_FILES = COPYING
+ 
+ define LINUXPTP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
++	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
++		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
+ 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CC="$(TARGET_CC)" \
+ 		-C $(@D) all
+ endef
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
