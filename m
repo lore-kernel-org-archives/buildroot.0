@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 12:54:29 +0200
-Subject: [Buildroot] [PATCH 1/2] parted: bump to version 3.2
-In-Reply-To: <20170630124524.5831-1-yegorslists@googlemail.com>
-References: <20170630124524.5831-1-yegorslists@googlemail.com>
-Message-ID: <20170701125429.680d1350@windsurf.home>
+Date: Sat, 1 Jul 2017 12:56:15 +0200
+Subject: [Buildroot] [PATCH] docs: known issues no longer valid
+In-Reply-To: <20170630032140.3u3bwbec7tr25zdt@tarshish>
+References: <20170629204730.GA27700@waldemar-brodkorb.de>
+ <20170630032140.3u3bwbec7tr25zdt@tarshish>
+Message-ID: <20170701125615.277cd704@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 30 Jun 2017 14:45:23 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Remove upstreamed readline related patch.
-> 
-> Add a patch, that enables parted to be compiled without lvm2.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  ...rch-linux.c-Compile-without-ENABLE_DEVICE.patch | 79 ++++++++++++++++++++++
->  package/parted/0001-readline-deprecated.patch      | 19 ------
->  package/parted/parted.hash                         |  2 +-
->  package/parted/parted.mk                           |  2 +-
->  4 files changed, 81 insertions(+), 21 deletions(-)
->  create mode 100644 package/parted/0001-libparted-arch-linux.c-Compile-without-ENABLE_DEVICE.patch
->  delete mode 100644 package/parted/0001-readline-deprecated.patch
+On Fri, 30 Jun 2017 06:21:40 +0300, Baruch Siach wrote:
 
-Both applied. Thanks!
+> >  * The +libffi+ package is not supported on the SuperH 2 and ARC
+> >    architectures.  
+> 
+> This paragraph and the following one (about prboom) are also outdated. libffi 
+> supports all Buildroot target architectures for quite some time now.
+
+This is not quite true. We still have in the autobuild-run script:
+
+    # libffi not available on sh2a and ARMv7-M, but propagating libffi
+    # arch dependencies in Buildroot is really too much work, so we
+    # handle this here.
+    if 'BR2_sh2a=y\n' in configlines and  'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+        return False
+    if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and  'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+        return False
+
+I'll apply Waldemar's patch as-is, because it isn't wrong by itself.
+Additional patches are of course welcome.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
