@@ -1,154 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 10:01:52 +0200
-Subject: [Buildroot] [RFC PATCH v2] pkg-stats: allow to sort by column
-In-Reply-To: <20170701043555.25851-1-ricardo.martincoski@gmail.com>
-References: <20170630212442.9565-1-ricardo.martincoski@gmail.com>
- <20170701043555.25851-1-ricardo.martincoski@gmail.com>
-Message-ID: <740effdf-e2a8-c5da-9593-1891f20d29f7@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 10:02:49 +0200
+Subject: [Buildroot] [git commit] nodm: uClibc wordexp support is enabled by
+	default
+Message-ID: <20170701075958.E10B081E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=659ec7d64d39efac49f5fda4cfa78cd8164cd22a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Build tested with Qemu X86 sample.
 
-On 01-07-17 06:35, Ricardo Martincoski wrote:
-> With 2000+ packages it's not trivial to identify i.e.:
-> - all packages that don't have a hash file;
-> - all packages that have patches;
-> - all packages that have code style warnings;
-> 
-> User experience can be improved by dynamically sorting the resulting
-> table.
-> 
-> There is an open-source solution that does that in the client-side and
-> requires minimal changes to our script: sorttable.js.
-> The script is MIT licensed as stated in its website.
-> 
-> Include instructions to download the third-party script and adapt our
-> script accordingly.
-> 
-> Usage (static table):
-> ./support/scripts/pkg-stats > /tmp/pkg.html
-> 
-> Usage (sortable table):
-> ./support/scripts/pkg-stats > /tmp/pkg.html
-> wget -O - https://www.kryogenix.org/code/browser/sorttable/sorttable.js\
->   > /tmp/sorttable.js
-> Open /tmp/pkg.html using a JavaScript-enabled web browser and click on
-> the headers of the table to sort it.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodm/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
- I think this is very useful!
-
- However, I wonder: why not just use the upstream URL in the script tag? Or is
-that too much of a security risk?
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - point to the file to download instead of adding it to the git tree;
->   - minor improvements to the commit message;
-> 
-> Lots of doubts:
-> 
-> USEFULNESS
-> Do anyone else think this is useful? If not, please feel free to mark it
-> as Rejected.
-> 
-> LICENSE
-> I trusted both the header that uses the alternate name X11 for the MIT
-> license (the source file is 10 years old) and links to the website, and
-> the website that says MIT.
-> I don't know the author.
-> I didn't contact the author directly. Should I?
-> 
-> The license text seems equivalent to me:
-> https://kryogenix.org/code/browser/licence.html
-> https://spdx.org/licenses/MIT.html
-> but it does not include this sentence:
-> "The above copyright notice and this permission notice shall be included
-> in all copies or substantial portions of the Software."
-> 
-> HOW TO HOST IT
-> Also I am not sure if the JavaScript file should be placed in the git
-> tree or not. It just needs to be present in the same directory as the
-> *output* of the script in order to turn the table sortable.
-> We would need to host a copy in the same server as [1].
-> [1] http://autobuild.buildroot.net/stats/
-
- That's easy to do obviously.
-
-> 
-> TESTS
-> The downloaded .js file I tested has this md5:
-> 3809d26cbae145842e56f374192e56d9
-> I tested the output html with and without the .js file using:
-> Mozilla Firefox 54.0
-> Chromium 58.0.3029.110
-> Microsoft Edge 25.10586.672.0
-> 
-> PATCH
-> The JavaScript file has some special characters in line 172.
-> While using git-send-email 2.11.0 to send v1 I got this warning:
->> The following files are 8bit, but do not declare a Content-Transfer-Encoding.
->>    outgoing/0001-pkg-stats-allow-to-sort-by-column.patch
->> Which 8bit encoding should I declare [UTF-8]?
-> and I accepted the default value. Patchwork seems to refuse the patch.
-> ---
->  support/scripts/pkg-stats | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 4cf1f82518..e2162d2381 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -24,8 +24,13 @@
->  #
->  #  ./support/scripts/pkg-stats > /tmp/pkg.html
->  #
-> +# If you want the table to be sortable also install this 3rd-party JavaScript:
-> +#
-> +#  wget -O - https://www.kryogenix.org/code/browser/sorttable/sorttable.js \
-> +#    > /tmp/sorttable.js
-
- Small nit: -O specifies the output file, so the redirect bit silly.
-
-wget https://www.kryogenix.org/code/browser/sorttable/sorttable.js \
-  -O /tmp/sorttable.js
-
->  
->  echo "<head>
-> +<script src=\"sorttable.js\"></script>
->  <style type=\"text/css\">
->  table {
->    width: 100%;
-> @@ -59,7 +64,7 @@ td.lotsofpatches {
->  
->  <a href=\"#results\">Results</a><br/>
->  
-
- It would be nice to add some text here to say that you can click on the title
-to sort it, since it's not that obvious.
-
- Regards,
- Arnout
-
-> -<table>
-> +<table class=\"sortable\">
->  <tr>
->  <td>Id</td>
->  <td>Package</td>
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/nodm/Config.in b/package/nodm/Config.in
+index 97ce8c3..38171e8 100644
+--- a/package/nodm/Config.in
++++ b/package/nodm/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_NODM
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS # linux-pam
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs wordexp.h
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LINUX_PAM
+@@ -19,8 +18,7 @@ config BR2_PACKAGE_NODM
+ 
+ 	  https://github.com/spanezz/nodm/
+ 
+-comment "nodm needs a glibc toolchain w/ wchar, locale, dynamic library"
++comment "nodm needs a glibc or uClibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL \
+-		|| BR2_TOOLCHAIN_USES_UCLIBC
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
