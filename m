@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 19:44:39 +0200
-Subject: [Buildroot] [PATCH 1/3] DEVELOPERS: fix after moving scripts to
- utils/ directory
-In-Reply-To: <20170701164041.5515-1-arnout@mind.be>
-References: <20170701164041.5515-1-arnout@mind.be>
-Message-ID: <20170701194439.555fbf0c@windsurf.home>
+Date: Sat, 1 Jul 2017 19:44:47 +0200
+Subject: [Buildroot] [PATCH v2] .gitlab-ci.yml: simplify (and fix)
+ check-DEVELOPERS
+In-Reply-To: <20170701172817.6533-1-arnout@mind.be>
+References: <20170701172817.6533-1-arnout@mind.be>
+Message-ID: <20170701194447.0f7c1859@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 1 Jul 2017 18:40:39 +0200, Arnout Vandecappelle
+On Sat, 1 Jul 2017 19:28:17 +0200, Arnout Vandecappelle
 (Essensium/Mind) wrote:
-> There were still references to support/scripts/ for scripts that have
-> moved to the utils directory. There were also references that were
-> updated, but not re-updated when the tools moves to utils.
+> The check-DEVELOPERS test would always fail, because && will return
+> the exit code of the left-hand side if not 0, so it *always* returns
+> 1.
+> 
+> But in fact, the test can be simplified quite a lot: we can run
+> getdeveloper directly, without arguments. That should just print
+> 'No action specified', but it will also print any syntax errors it
+> encountered. So we can just 'grep -v' the expected output away; if
+> there is anything more, grep will return 0, but if there is nothing
+> more, it will return 1. So we just need to invert the result.
+> 
+> Incidentally, this also fixes the incorrect remaining reference to
+> support/scripts.
 > 
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  DEVELOPERS | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  .gitlab-ci.yml    | 4 +---
+>  .gitlab-ci.yml.in | 4 +---
+>  2 files changed, 2 insertions(+), 6 deletions(-)
 
-All three patches applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
