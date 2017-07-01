@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 15:01:01 +0200
-Subject: [Buildroot] [Patch v6 0/7] Add support for the Rust programming
- language
-In-Reply-To: <20170701112855.GA22905@itchy>
+Date: Sat, 1 Jul 2017 15:07:23 +0200
+Subject: [Buildroot] [Patch v6 1/7] pkg-virtual: fix host dependencies
+ handling
+In-Reply-To: <20170625205614.6723-2-eric.le.bihan.dev@free.fr>
 References: <20170625205614.6723-1-eric.le.bihan.dev@free.fr>
- <20170628122035.GB4971@momiji> <20170701112855.GA22905@itchy>
-Message-ID: <0a5ac772-bf5a-c9e7-3125-6e151f8992db@mind.be>
+ <20170625205614.6723-2-eric.le.bihan.dev@free.fr>
+Message-ID: <d0995c42-f7d2-faec-31b9-9ae1184e915c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,53 @@ To: buildroot@busybox.net
 
 
 
-On 01-07-17 13:28, Eric Le Bihan wrote:
->> Regarding the architecture backends to enable, I imagine we would want host
->> variant to have enabled *both* the host-native backend, and the target
->> backend. Example: When building for ARM in x86_64, we would enable the ?ARM?
->> and ?X86? LLVM backends for ?host-llvm?, and only ?ARM? for ?llvm? (the target
->> package). Would this be correct? Do you foresee any situation in which other
->> backends should be enabled for either the host or target variants? Should we
->> allow selecting from menuconfig which backends are compiled for the target
->> ?llvm? package?
-> IMHO, it is best to keep it simple with only the host and the target archs.
+On 25-06-17 22:56, Eric Le Bihan wrote:
+> If $(BR2_PACKAGE_HAS_HOST_FOO) is defined, then the pkg-virtual
+> infrastructure will check if $(BR2_PACKAGE_PROVIDES_HOST_FOO) is not
+> empty.
+> 
+> But later, $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES) will be set from
+> $(BR2_PACKAGE_PROVIDES_FOO), ignoring $(BR2_PACKAGE_PROVIDES_HOST_FOO).
+> 
+> So fix this discrepancy by setting $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES)
+> from $(BR2_PACKAGE_PROVIDES_FOO) only if $(BR2_PACKAGE_PROVIDES_HOST_FOO)
+> is empty.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
- +1 to that.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  package/pkg-virtual.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+> index 2e83e07..b8878ad 100644
+> --- a/package/pkg-virtual.mk
+> +++ b/package/pkg-virtual.mk
+> @@ -49,7 +49,11 @@ $(2)_IS_VIRTUAL = YES
+>  ifeq ($(4),target)
+>  $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+>  else
+> +ifeq ($$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2))),)
+
+ This is a bit difficult to grok, so perhaps add
+
+# Inherit from target package BR2_PACKAGE_PROVIDES_FOO
+>  $(2)_DEPENDENCIES += host-$$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(3)))
+> +else
+# BR2_PACKAGE_PROVIDES_HOST_FOO is explicitly defined
+
 
  Regards,
  Arnout
+
+> +$(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+> +endif
+>  endif
+>  
+>  # Call the generic package infrastructure to generate the necessary
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
