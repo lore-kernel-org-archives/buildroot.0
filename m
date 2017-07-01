@@ -1,11 +1,11 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 1 Jul 2017 16:00:29 +0200
-Subject: [Buildroot] [RFC PATCH v5 04/11] pkg-generic: create a list af
- installed files per step and package
-In-Reply-To: <1498811828-6893-5-git-send-email-wg@grandegger.com>
+Date: Sat, 1 Jul 2017 16:11:05 +0200
+Subject: [Buildroot] [RFC PATCH v5 08/11] core: install relocation
+ script and location at the end of the build
+In-Reply-To: <1498811828-6893-9-git-send-email-wg@grandegger.com>
 References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-5-git-send-email-wg@grandegger.com>
-Message-ID: <CAHXCMM+p=V+4J3ZBZwo7D6cB=x8juWOR2yGQnP=kJc=t39QhnA@mail.gmail.com>
+ <1498811828-6893-9-git-send-email-wg@grandegger.com>
+Message-ID: <CAHXCMMKowyzQ091YNu9ewOTcgTXkTohXEfQUBNp=3z+GT1TBjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,40 @@ To: buildroot@busybox.net
 
 Hi Wolfgang,
 
-In the commit title: s/af/of/
-
 On Fri, Jun 30, 2017 at 10:37 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
-> The GLOBAL_INSTRUMENTATION_HOOKS "step_pkg_size*" are extended to create
-> a file with the list of all installed files per step and package. The
-> file name is "<package-build-dir>/.br_<host|staging|target>_filelist".
-> This file could be used by other hooks to scan the installed files,
-> e.g. to check the bin arch, the host rpath or for rpath sanitation.
+> The script "relocate-sdk.sh" is installed into the top directory of
+> the SDK (HOST_DIR) and the SDK location path is stored in the file
+> "HOST_DIR/usr/share/buildroot/sdk-location"-
 >
-> For a quick hack, the "packages-file-list.txt" is created as before.
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/Makefile b/Makefile
+> index f5ea6a8..a5dfdfd 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -553,6 +553,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>
+>  .PHONY: world
+>  world: target-post-image
+> +       @$(call MESSAGE,"Rendering the SDK relocatable")
+> +       install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR) && \
 
-Nit: you could add few words why you needed this here, but I figured
-out while reviewing the rest of the series ;-)
+I don't think "&& \" is really needed here
+
+> +       echo $(HOST_DIR) > $(HOST_DIR)/usr/share/buildroot/sdk-location
+
+I'm not sure these few commands belong to the world target, maybe a
+host-finalize target could be added...
+
+>
+>  # Populating the staging with the base directories is handled by the skeleton package
+>  $(STAGING_DIR):
+> --
+> 2.7.4
+>
 
 Regards,
 
