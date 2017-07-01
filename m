@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 18:54:28 +0200
-Subject: [Buildroot] [PATCH] mtd: restore installation of libmtd to
- staging
-In-Reply-To: <20170628035610.9945-1-yurovsky@gmail.com>
-References: <20170628035610.9945-1-yurovsky@gmail.com>
-Message-ID: <20170701185428.15f8a491@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 1 Jul 2017 18:55:19 +0200
+Subject: [Buildroot] [PATCH] .gitlab-ci.yml: update reference to
+	support/scripts
+Message-ID: <20170701165519.12438-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+getdeveloperlib has moved to utils/ so update .gitlab-ci.yml
+accordingly.
 
-On Tue, 27 Jun 2017 20:56:10 -0700, Andrey Yurovsky wrote:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .gitlab-ci.yml    | 2 +-
+ .gitlab-ci.yml.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +define MTD_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/mtd/libmtd.h
-> +	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/mtd/libubi.h
-> +	$(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h $(STAGING_DIR)/usr/include/mtd/ubi-media.h
-> +	$(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
-> +	$(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
-> +endef
-
-I've applied, but I've changed this to be a post install staging hook.
-This way, the normal "make install" is done for staging, and then those
-additional libraries are installed as well. I've also added a comment
-in the code explaining why we're doing this.
-
-It would still be good to let upstream know that those libraries are
-used by other programs, and see if they would accept to adjust the
-Makefile.am logic to install such libraries.
-
-Thanks!
-
-Thomas
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index cc048a0df6..7190b88126 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -36,7 +36,7 @@ check-gitlab-ci.yml:
+ 
+ check-DEVELOPERS:
+     script:
+-        - PYTHONPATH=$PWD/support/scripts
++        - PYTHONPATH=$PWD/utils
+                 python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
+                 grep . && exit 1
+ 
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 0b6e634a4b..8f50f84582 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -36,7 +36,7 @@ check-gitlab-ci.yml:
+ 
+ check-DEVELOPERS:
+     script:
+-        - PYTHONPATH=$PWD/support/scripts
++        - PYTHONPATH=$PWD/utils
+                 python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
+                 grep . && exit 1
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.13.1
