@@ -1,1440 +1,1659 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 00:21:53 +0200
-Subject: [Buildroot] [PATCH 3/3] grub: drop unneeded
-	grub.100-autoreconf.patch
+Date: Sun,  2 Jul 2017 00:21:52 +0200
+Subject: [Buildroot] [PATCH 2/3] grub: drop useless parts of
+	grub.400-nic_update2.patch
 In-Reply-To: <20170701222153.31568-1-thomas.petazzoni@free-electrons.com>
 References: <20170701222153.31568-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170701222153.31568-3-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170701222153.31568-2-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is no longer needed, grub autoreconfs properly.
+Now that we autoreconf grub, changes to the configure script or
+Makefile.in in the monstruous grub.400-nic_update2.patch are no longer
+needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/grub/grub.100-autoreconf.patch | 1407 -----------------------------------
- 1 file changed, 1407 deletions(-)
- delete mode 100644 boot/grub/grub.100-autoreconf.patch
+ boot/grub/grub.400-nic_update2.patch | 1617 ----------------------------------
+ 1 file changed, 1617 deletions(-)
 
-diff --git a/boot/grub/grub.100-autoreconf.patch b/boot/grub/grub.100-autoreconf.patch
-deleted file mode 100644
-index e5dd834..0000000
---- a/boot/grub/grub.100-autoreconf.patch
-+++ /dev/null
-@@ -1,1407 +0,0 @@
--diff -rup grub-0.97.oorig/aclocal.m4 grub-0.97/aclocal.m4
----- grub-0.97.oorig/aclocal.m4	2005-05-08 04:41:18.000000000 +0200
--+++ grub-0.97/aclocal.m4	2006-03-12 14:00:35.000000000 +0100
--@@ -1,7 +1,7 @@
---# generated automatically by aclocal 1.9.4 -*- Autoconf -*-
--+# generated automatically by aclocal 1.9.6 -*- Autoconf -*-
-- 
---# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004
---# Free Software Foundation, Inc.
--+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
--+# 2005  Free Software Foundation, Inc.
-- # This file is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -11,23 +11,11 @@
-- # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-- # PARTICULAR PURPOSE.
-- 
---#                                                        -*- Autoconf -*-
---# Copyright (C) 2002, 2003  Free Software Foundation, Inc.
---# Generated from amversion.in; do not edit by hand.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
--+# Copyright (C) 2002, 2003, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
-- # AM_AUTOMAKE_VERSION(VERSION)
-- # ----------------------------
--@@ -40,26 +28,15 @@ AC_DEFUN([AM_AUTOMAKE_VERSION], [am__api
-- # Call AM_AUTOMAKE_VERSION so it can be traced.
-- # This function is AC_REQUIREd by AC_INIT_AUTOMAKE.
-- AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
---	 [AM_AUTOMAKE_VERSION([1.9.4])])
---
---# AM_AUX_DIR_EXPAND
---
---# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
--+	 [AM_AUTOMAKE_VERSION([1.9.6])])
-- 
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
--+# AM_AUX_DIR_EXPAND                                         -*- Autoconf -*-
-- 
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 2001, 2003, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
-- # For projects using AC_CONFIG_AUX_DIR([foo]), Autoconf sets
-- # $ac_aux_dir to `$srcdir/foo'.  In other projects, it is set to
--@@ -106,26 +83,16 @@ AC_PREREQ([2.50])dnl
-- am_aux_dir=`cd $ac_aux_dir && pwd`
-- ])
-- 
---# AM_CONDITIONAL                                              -*- Autoconf -*-
--+# AM_CONDITIONAL                                            -*- Autoconf -*-
-- 
---# Copyright (C) 1997, 2000, 2001, 2003, 2004 Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 1997, 2000, 2001, 2003, 2004, 2005
--+# Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# serial 6
--+# serial 7
-- 
-- # AM_CONDITIONAL(NAME, SHELL-CONDITION)
-- # -------------------------------------
--@@ -149,26 +116,15 @@ AC_CONFIG_COMMANDS_PRE(
-- Usually this means the macro was only invoked conditionally.]])
-- fi])])
-- 
---# serial 7						-*- Autoconf -*-
-- 
---# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004
--+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005
-- # Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
---
--+# serial 8
-- 
-- # There are a few dirty hacks below to avoid letting `AC_PROG_CC' be
-- # written in clear, in which case automake, when reading aclocal.m4,
--@@ -177,7 +133,6 @@ fi])])
-- # CC etc. in the Makefile, will ask for an AC_PROG_CC use...
-- 
-- 
---
-- # _AM_DEPENDENCIES(NAME)
-- # ----------------------
-- # See how the compiler implements dependency checking.
--@@ -317,27 +272,16 @@ AM_CONDITIONAL([AMDEP], [test "x$enable_
-- AC_SUBST([AMDEPBACKSLASH])
-- ])
-- 
---# Generate code to set up dependency tracking.   -*- Autoconf -*-
---
---# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004
---#   Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
--+# Generate code to set up dependency tracking.              -*- Autoconf -*-
-- 
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005
--+# Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---#serial 2
--+#serial 3
-- 
-- # _AM_OUTPUT_DEPENDENCY_COMMANDS
-- # ------------------------------
--@@ -396,30 +340,19 @@ AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS]
--      [AMDEP_TRUE="$AMDEP_TRUE" ac_aux_dir="$ac_aux_dir"])
-- ])
-- 
---# Do all the work for Automake.                            -*- Autoconf -*-
--+# Do all the work for Automake.                             -*- Autoconf -*-
-- 
---# This macro actually does too much some checks are only needed if
---# your package does certain things.  But this isn't really a big deal.
---
---# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004
--+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005
-- # Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# serial 12
-- 
---# serial 11
--+# This macro actually does too much.  Some checks are only needed if
--+# your package does certain things.  But this isn't really a big deal.
-- 
-- # AM_INIT_AUTOMAKE(PACKAGE, VERSION, [NO-DEFINE])
-- # AM_INIT_AUTOMAKE([OPTIONS])
--@@ -521,51 +454,27 @@ for _am_header in $config_headers :; do
-- done
-- echo "timestamp for $1" >`AS_DIRNAME([$1])`/stamp-h[]$_am_stamp_count])
-- 
--+# Copyright (C) 2001, 2003, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
--+
-- # AM_PROG_INSTALL_SH
-- # ------------------
-- # Define $install_sh.
---
---# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
---
-- AC_DEFUN([AM_PROG_INSTALL_SH],
-- [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
-- install_sh=${install_sh-"$am_aux_dir/install-sh"}
-- AC_SUBST(install_sh)])
-- 
---#                                                          -*- Autoconf -*-
---# Copyright (C) 2003  Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 2003, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# serial 1
--+# serial 2
-- 
-- # Check whether the underlying file-system supports filenames
-- # with a leading dot.  For instance MS-DOS doesn't.
--@@ -580,28 +489,17 @@ fi
-- rmdir .tst 2>/dev/null
-- AC_SUBST([am__leading_dot])])
-- 
---# Add --enable-maintainer-mode option to configure.
--+# Add --enable-maintainer-mode option to configure.         -*- Autoconf -*-
-- # From Jim Meyering
-- 
---# Copyright (C) 1996, 1998, 2000, 2001, 2002, 2003, 2004
--+# Copyright (C) 1996, 1998, 2000, 2001, 2002, 2003, 2004, 2005
-- # Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
---
---# serial 3
--+# serial 4
-- 
-- AC_DEFUN([AM_MAINTAINER_MODE],
-- [AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
--@@ -620,26 +518,15 @@ AC_DEFUN([AM_MAINTAINER_MODE],
-- 
-- AU_DEFUN([jm_MAINTAINER_MODE], [AM_MAINTAINER_MODE])
-- 
---# Check to see how 'make' treats includes.	-*- Autoconf -*-
---
---# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
--+# Check to see how 'make' treats includes.	            -*- Autoconf -*-
-- 
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 2001, 2002, 2003, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# serial 2
--+# serial 3
-- 
-- # AM_MAKE_INCLUDE()
-- # -----------------
--@@ -683,27 +570,16 @@ AC_MSG_RESULT([$_am_result])
-- rm -f confinc confmf
-- ])
-- 
---#  -*- Autoconf -*-
---
---
---# Copyright (C) 1997, 1999, 2000, 2001, 2003 Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
--+# Fake the existence of programs that GNU maintainers use.  -*- Autoconf -*-
-- 
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 1997, 1999, 2000, 2001, 2003, 2005
--+# Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# serial 3
--+# serial 4
-- 
-- # AM_MISSING_PROG(NAME, PROGRAM)
-- # ------------------------------
--@@ -729,27 +605,16 @@ else
-- fi
-- ])
-- 
--+# Copyright (C) 2003, 2004, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
--+
-- # AM_PROG_MKDIR_P
-- # ---------------
-- # Check whether `mkdir -p' is supported, fallback to mkinstalldirs otherwise.
---
---# Copyright (C) 2003, 2004 Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
---
--+#
-- # Automake 1.8 used `mkdir -m 0755 -p --' to ensure that directories
-- # created by `make install' are always world readable, even if the
-- # installer happens to have an overly restrictive umask (e.g. 077).
--@@ -803,26 +668,15 @@ else
-- fi
-- AC_SUBST([mkdir_p])])
-- 
---# Helper functions for option handling.                    -*- Autoconf -*-
--+# Helper functions for option handling.                     -*- Autoconf -*-
-- 
---# Copyright (C) 2001, 2002, 2003  Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 2001, 2002, 2003, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# serial 2
--+# serial 3
-- 
-- # _AM_MANGLE_OPTION(NAME)
-- # -----------------------
--@@ -847,28 +701,16 @@ AC_DEFUN([_AM_SET_OPTIONS],
-- AC_DEFUN([_AM_IF_OPTION],
-- [m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])])
-- 
---#
---# Check to make sure that the build environment is sane.
---#
---
---# Copyright (C) 1996, 1997, 2000, 2001, 2003 Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
--+# Check to make sure that the build environment is sane.    -*- Autoconf -*-
-- 
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 1996, 1997, 2000, 2001, 2003, 2005
--+# Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
---# serial 3
--+# serial 4
-- 
-- # AM_SANITY_CHECK
-- # ---------------
--@@ -911,25 +753,14 @@ Check your system clock])
-- fi
-- AC_MSG_RESULT(yes)])
-- 
---# AM_PROG_INSTALL_STRIP
---
---# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
--+# Copyright (C) 2001, 2003, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
--+# AM_PROG_INSTALL_STRIP
--+# ---------------------
-- # One issue with vendor `install' (even GNU) is that you can't
-- # specify the program used to strip binaries.  This is especially
-- # annoying in cross-compiling environments, where the build's strip
--@@ -952,25 +783,13 @@ AC_SUBST([INSTALL_STRIP_PROGRAM])])
-- 
-- # Check how to create a tarball.                            -*- Autoconf -*-
-- 
---# Copyright (C) 2004  Free Software Foundation, Inc.
---
---# This program is free software; you can redistribute it and/or modify
---# it under the terms of the GNU General Public License as published by
---# the Free Software Foundation; either version 2, or (at your option)
---# any later version.
---
---# This program is distributed in the hope that it will be useful,
---# but WITHOUT ANY WARRANTY; without even the implied warranty of
---# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
---# GNU General Public License for more details.
---
---# You should have received a copy of the GNU General Public License
---# along with this program; if not, write to the Free Software
---# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
---# 02111-1307, USA.
---
---# serial 1
--+# Copyright (C) 2004, 2005  Free Software Foundation, Inc.
--+#
--+# This file is free software; the Free Software Foundation
--+# gives unlimited permission to copy and/or distribute it,
--+# with or without modifications, as long as this notice is preserved.
-- 
--+# serial 2
-- 
-- # _AM_PROG_TAR(FORMAT)
-- # --------------------
--Only in grub-0.97/: autom4te.cache
--diff -rup grub-0.97.oorig/configure grub-0.97/configure
----- grub-0.97.oorig/configure	2005-05-08 04:48:12.000000000 +0200
--+++ grub-0.97/configure	2006-03-12 14:00:38.000000000 +0100
--@@ -311,7 +311,7 @@ ac_includes_default="\
-- # include <unistd.h>
-- #endif"
-- 
---ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar build build_cpu build_vendor build_os host host_cpu host_vendor host_os MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT PERL CC ac_ct_CC CFLAGS LDFLAGS CPPFLAGS EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CCAS RANLIB ac_ct_RANLIB STAGE1_CFLAGS STAGE2_CFLAGS GRUB_CFLAGS OBJCOPY ac_ct_OBJCOPY GRUB_LIBS CPP EGREP NETBOOT_SUPPORT_T
- RUE NETB
- OOT_SUPPORT_FALSE DISKLESS_SUPPORT_TRUE DISKLESS_SUPPORT_FALSE HERCULES_SUPPORT_TRUE HERCULES_SUPPORT_FALSE SERIAL_SUPPORT_TRUE SERIAL_SUPPORT_FALSE SERIAL_SPEED_SIMULATION_TRUE SERIAL_SPEED_SIMULATION_FALSE BUILD_EXAMPLE_KERNEL_TRUE BUILD_EXAMPLE_KERNEL_FALSE FSYS_CFLAGS NET_CFLAGS NET_EXTRAFLAGS NETBOOT_DRIVERS CCASFLAGS LIBOBJS LTLIBOBJS'
--+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar build build_cpu build_vendor build_os host host_cpu host_vendor host_os MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT PERL CC ac_ct_CC CFLAGS LDFLAGS CPPFLAGS EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CCAS RANLIB ac_ct_RANLIB STAGE1_CFLAGS STAGE2_CFLAGS GRUB_CFLAGS OBJCOPY ac_ct_OBJCOPY GRUB_LIBS CPP EGREP NETBOOT_SUPPORT_T
- RUE NETB
- OOT_SUPPORT_FALSE DISKLESS_SUPPORT_TRUE DISKLESS_SUPPORT_FALSE GRAPHICS_SUPPORT_TRUE GRAPHICS_SUPPORT_FALSE HERCULES_SUPPORT_TRUE HERCULES_SUPPORT_FALSE SERIAL_SUPPORT_TRUE SERIAL_SUPPORT_FALSE SERIAL_SPEED_SIMULATION_TRUE SERIAL_SPEED_SIMULATION_FALSE BUILD_EXAMPLE_KERNEL_TRUE BUILD_EXAMPLE_KERNEL_FALSE FSYS_CFLAGS NET_CFLAGS NET_EXTRAFLAGS NETBOOT_DRIVERS CCASFLAGS LIBOBJS LTLIBOBJS'
-- ac_subst_files=''
-- 
-- # Initialize some variables set by options.
--@@ -914,6 +914,7 @@ Optional Features:
+diff --git a/boot/grub/grub.400-nic_update2.patch b/boot/grub/grub.400-nic_update2.patch
+index 5e3c16d..412ba41 100644
+--- a/boot/grub/grub.400-nic_update2.patch
++++ b/boot/grub/grub.400-nic_update2.patch
+@@ -7,427 +7,6 @@ Description: Adds support for Forcedeth and other NIC's
+ 	     Fixes for GCC 4.x
+ 	     Removal of bad network drivers
+  
+-Index: b/configure
+-===================================================================
+---- a/configure
+-+++ b/configure
+-@@ -872,47 +872,32 @@
+-   --disable-packet-retransmission
+-                           turn off packet retransmission
+-   --enable-pci-direct     access PCI directly instead of using BIOS
+--  --enable-3c509          enable 3Com509 driver
+--  --enable-3c529          enable 3Com529 driver
+-   --enable-3c595          enable 3Com595 driver
+-   --enable-3c90x          enable 3Com90x driver
+--  --enable-cs89x0         enable CS89x0 driver
+-   --enable-davicom        enable Davicom driver
+--  --enable-depca          enable DEPCA and EtherWORKS driver
+--  --enable-eepro          enable Etherexpress Pro/10 driver
+-+  --enable-e1000          enable Etherexpress Pro/1000 driver
+-   --enable-eepro100       enable Etherexpress Pro/100 driver
+-   --enable-epic100        enable SMC 83c170 EPIC/100 driver
+--  --enable-3c507          enable 3Com507 driver
+--  --enable-exos205        enable EXOS205 driver
+--  --enable-ni5210         enable Racal-Interlan NI5210 driver
+--  --enable-lance          enable Lance PCI PCNet/32 driver
+--  --enable-ne2100         enable Novell NE2100 driver
+--  --enable-ni6510         enable Racal-Interlan NI6510 driver
+-+  --enable-forcedeth      enable Nvidia Geforce driver
+-   --enable-natsemi        enable NatSemi DP8381x driver
+--  --enable-ni5010         enable Racal-Interlan NI5010 driver
+--  --enable-3c503          enable 3Com503 driver
+--  --enable-ne             enable NE1000/2000 ISA driver
+-+  --enable-ns83820        enable NS83820 driver
+-   --enable-ns8390         enable NE2000 PCI driver
+--  --enable-wd             enable WD8003/8013, SMC8216/8416 driver
+--  --enable-otulip         enable old Tulip driver
+-+  --enable-pcnet32        enable AMD Lance/PCI PCNet/32 driver
+-+  --enable-pnic           enable Bochs Pseudo Nic driver
+-   --enable-rtl8139        enable Realtek 8139 driver
+-+  --enable-r8169          enable Realtek 8169 driver
+-   --enable-sis900         enable SIS 900 and SIS 7016 driver
+--  --enable-sk-g16         enable Schneider and Koch G16 driver
+--  --enable-smc9000        enable SMC9000 driver
+--  --enable-tiara          enable Tiara driver
+-+  --enable-tg3            enable Broadcom Tigon3 driver
+-   --enable-tulip          enable Tulip driver
+-+  --enable-tlan           enable TI ThunderLAN driver
+-+  --enable-undi           enable PXE UNDI driver
+-   --enable-via-rhine      enable Rhine-I/II driver
+--  --enable-w89c840        enable Winbond W89c840, Compex RL100-ATX driver
+--  --enable-3c503-shmem    use 3c503 shared memory mode
+--  --enable-3c503-aui      use AUI by default on 3c503 cards
+-+  --enable-w89c840        enable Winbond W89c840 driver
+-   --enable-compex-rl2000-fix
+-                           specify this if you have a Compex RL2000 PCI
+--  --enable-smc9000-scan=LIST
+--                          probe for SMC9000 I/O addresses using LIST
+-   --enable-ne-scan=LIST   probe for NE base address using LIST
+-   --enable-wd-default-mem=MEM
 -                           set the default memory location for WD/SMC
--   --enable-cs-scan=LIST   probe for CS89x0 base address using LIST
+--  --enable-cs-scan=LIST   probe for CS89x0 base address using LIST
 -   --enable-diskless       enable diskless support
--+  --disable-graphics      disable graphics terminal support
+-   --disable-graphics      disable graphics terminal support
 -   --disable-hercules      disable hercules terminal support
--   --disable-serial        disable serial terminal support
--   --enable-serial-speed-simulation
--@@ -1032,7 +1033,7 @@ esac
--     else
--       echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2
--     fi
---    cd $ac_popdir
--+    cd "$ac_popdir"
--   done
+-@@ -5537,7 +5522,7 @@
+- 
+- fi;
+- if test "x$enable_packet_retransmission" != xno; then
+--  NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DCONGESTED=1"
+-+  NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DCONGESTED=1 -DCONFIG_PCI"
 - fi
 - 
--@@ -2631,8 +2632,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -2690,8 +2690,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -2807,8 +2806,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -2862,8 +2860,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -2908,8 +2905,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -2953,8 +2949,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -3458,8 +3453,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -3523,8 +3517,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -3595,8 +3588,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -3656,8 +3648,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4095,8 +4086,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4161,8 +4151,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4234,8 +4223,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4300,8 +4288,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4366,8 +4353,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4440,8 +4426,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4506,8 +4491,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4597,8 +4581,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4673,8 +4656,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -4745,8 +4727,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -5070,8 +5051,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -5241,8 +5221,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -5313,8 +5292,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_c
--   cat conftest.err >&5
--   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); } &&
---	 { ac_try='test -z "$ac_c_werror_flag"
---			 || test ! -s conftest.err'
--+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
--   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--   (eval $ac_try) 2>&5
--   ac_status=$?
--@@ -5966,6 +5944,22 @@ else
+- # Check whether --enable-pci-direct or --disable-pci-direct was given.
+-@@ -5549,26 +5534,6 @@
+-   NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DCONFIG_PCI_DIRECT=1"
 - fi
 - 
+--# Check whether --enable-3c509 or --disable-3c509 was given.
+--if test "${enable_3c509+set}" = set; then
+--  enableval="$enable_3c509"
+--
+--fi;
+--if test "x$enable_3c509" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_3C509"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS 3c509.o"
+--fi
+--
+--# Check whether --enable-3c529 or --disable-3c529 was given.
+--if test "${enable_3c529+set}" = set; then
+--  enableval="$enable_3c529"
+--
+--fi;
+--if test "x$enable_3c529" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_3C529=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS 3c529.o"
+--fi
+--
+- # Check whether --enable-3c595 or --disable-3c595 was given.
+- if test "${enable_3c595+set}" = set; then
+-   enableval="$enable_3c595"
+-@@ -5589,16 +5554,6 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS 3c90x.o"
+- fi
 - 
--+# Check whether --enable-graphics or --disable-graphics was given.
--+if test "${enable_graphics+set}" = set; then
--+  enableval="$enable_graphics"
+--# Check whether --enable-cs89x0 or --disable-cs89x0 was given.
+--if test "${enable_cs89x0+set}" = set; then
+--  enableval="$enable_cs89x0"
+--
+--fi;
+--if test "x$enable_cs89x0" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_CS89X0=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS cs89x0.o"
+--fi
+--
+- # Check whether --enable-davicom or --disable-davicom was given.
+- if test "${enable_davicom+set}" = set; then
+-   enableval="$enable_davicom"
+-@@ -5609,24 +5564,14 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS davicom.o"
+- fi
+- 
+--# Check whether --enable-depca or --disable-depca was given.
+--if test "${enable_depca+set}" = set; then
+--  enableval="$enable_depca"
+-+# Check whether --enable-e1000 or --disable-e1000 was given.
+-+if test "${enable_e1000+set}" = set; then
+-+  enableval="$enable_e1000"
+- 
+- fi;
+--if test "x$enable_depca" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_DEPCA=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS depca.o"
+--fi
+--
+--# Check whether --enable-eepro or --disable-eepro was given.
+--if test "${enable_eepro+set}" = set; then
+--  enableval="$enable_eepro"
+--
+--fi;
+--if test "x$enable_eepro" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_EEPRO=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS eepro.o"
+-+if test "x$enable_e1000" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_E1000=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS e1000.o"
+- fi
+- 
+- # Check whether --enable-eepro100 or --disable-eepro100 was given.
+-@@ -5649,64 +5594,14 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS epic100.o"
+- fi
+- 
+--# Check whether --enable-3c507 or --disable-3c507 was given.
+--if test "${enable_3c507+set}" = set; then
+--  enableval="$enable_3c507"
+--
+--fi;
+--if test "x$enable_3c507" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_3C507=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS 3c507.o"
+--fi
+--
+--# Check whether --enable-exos205 or --disable-exos205 was given.
+--if test "${enable_exos205+set}" = set; then
+--  enableval="$enable_exos205"
+--
+--fi;
+--if test "x$enable_exos205" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_EXOS205=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS exos205.o"
+--fi
+--
+--# Check whether --enable-ni5210 or --disable-ni5210 was given.
+--if test "${enable_ni5210+set}" = set; then
+--  enableval="$enable_ni5210"
+--
+--fi;
+--if test "x$enable_ni5210" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_NI5210=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS ni5210.o"
+--fi
+--
+--# Check whether --enable-lance or --disable-lance was given.
+--if test "${enable_lance+set}" = set; then
+--  enableval="$enable_lance"
+--
+--fi;
+--if test "x$enable_lance" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_LANCE=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS lance.o"
+--fi
+--
+--# Check whether --enable-ne2100 or --disable-ne2100 was given.
+--if test "${enable_ne2100+set}" = set; then
+--  enableval="$enable_ne2100"
+--
+--fi;
+--if test "x$enable_ne2100" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_NE2100=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS ne2100.o"
+--fi
+--
+--# Check whether --enable-ni6510 or --disable-ni6510 was given.
+--if test "${enable_ni6510+set}" = set; then
+--  enableval="$enable_ni6510"
+-+# Check whether --enable-forcedeth or --disable-forcedeth was given.
+-+if test "${enable_forcedeth+set}" = set; then
+-+  enableval="$enable_forcedeth"
+- 
+- fi;
+--if test "x$enable_ni6510" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_NI6510=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS ni6510.o"
+-+if test "x$enable_forcedeth" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_FORCEDETH=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS forcedeth.o"
+- fi
+- 
+- # Check whether --enable-natsemi or --disable-natsemi was given.
+-@@ -5719,34 +5614,14 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS natsemi.o"
+- fi
+- 
+--# Check whether --enable-ni5010 or --disable-ni5010 was given.
+--if test "${enable_ni5010+set}" = set; then
+--  enableval="$enable_ni5010"
+-+# Check whether --enable-ns83820 or --disable-ns83820 was given.
+-+if test "${enable_ns83820+set}" = set; then
+-+  enableval="$enable_ns83820"
+- 
+- fi;
+--if test "x$enable_ni5010" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_NI5010=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS ni5010.o"
+--fi
+--
+--# Check whether --enable-3c503 or --disable-3c503 was given.
+--if test "${enable_3c503+set}" = set; then
+--  enableval="$enable_3c503"
+--
+--fi;
+--if test "x$enable_3c503" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_3C503=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS 3c503.o"
+--fi
+--
+--# Check whether --enable-ne or --disable-ne was given.
+--if test "${enable_ne+set}" = set; then
+--  enableval="$enable_ne"
+--
+--fi;
+--if test "x$enable_ne" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_NE=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS ne.o"
+-+if test "x$enable_ns83820" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_NS83820=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS ns83820.o"
+- fi
+- 
+- # Check whether --enable-ns8390 or --disable-ns8390 was given.
+-@@ -5759,24 +5634,24 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS ns8390.o"
+- fi
+- 
+--# Check whether --enable-wd or --disable-wd was given.
+--if test "${enable_wd+set}" = set; then
+--  enableval="$enable_wd"
+-+# Check whether --enable-pcnet32 or --disable-pcnet32 was given.
+-+if test "${enable_pcnet32+set}" = set; then
+-+  enableval="$enable_pcnet32"
+- 
+- fi;
+--if test "x$enable_wd" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_WD=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS wd.o"
+-+if test "x$enable_pcnet32" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_PCNET32=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS pcnet32.o"
+- fi
+- 
+--# Check whether --enable-otulip or --disable-otulip was given.
+--if test "${enable_otulip+set}" = set; then
+--  enableval="$enable_otulip"
+-+# Check whether --enable-pnic or --disable-pnic was given.
+-+if test "${enable_pnic+set}" = set; then
+-+  enableval="$enable_pnic"
+- 
+- fi;
+--if test "x$enable_otulip" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_OTULIP=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS otulip.o"
+-+if test "x$enable_pnic" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_PNIC=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS pnic.o"
+- fi
+- 
+- # Check whether --enable-rtl8139 or --disable-rtl8139 was given.
+-@@ -5789,6 +5664,16 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS rtl8139.o"
+- fi
+- 
+-+# Check whether --enable-r8169 or --disable-r8169 was given.
+-+if test "${enable_r8169+set}" = set; then
+-+  enableval="$enable_r8169"
 -+
 -+fi;
--+
--+
--+if test "x$enable_graphics" != xno; then
--+  GRAPHICS_SUPPORT_TRUE=
--+  GRAPHICS_SUPPORT_FALSE='#'
--+else
--+  GRAPHICS_SUPPORT_TRUE='#'
--+  GRAPHICS_SUPPORT_FALSE=
+-+if test "x$enable_r8169" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_R8169=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS r8169.o"
 -+fi
 -+
--+
-- # Check whether --enable-hercules or --disable-hercules was given.
-- if test "${enable_hercules+set}" = set; then
--   enableval="$enable_hercules"
--@@ -6270,6 +6264,13 @@ echo "$as_me: error: conditional \"DISKL
-- Usually this means the macro was only invoked conditionally." >&2;}
--    { (exit 1); exit 1; }; }
+- # Check whether --enable-sis900 or --disable-sis900 was given.
+- if test "${enable_sis900+set}" = set; then
+-   enableval="$enable_sis900"
+-@@ -5799,34 +5684,14 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS sis900.o"
 - fi
--+if test -z "${GRAPHICS_SUPPORT_TRUE}" && test -z "${GRAPHICS_SUPPORT_FALSE}"; then
--+  { { echo "$as_me:$LINENO: error: conditional \"GRAPHICS_SUPPORT\" was never defined.
--+Usually this means the macro was only invoked conditionally." >&5
--+echo "$as_me: error: conditional \"GRAPHICS_SUPPORT\" was never defined.
--+Usually this means the macro was only invoked conditionally." >&2;}
--+   { (exit 1); exit 1; }; }
+- 
+--# Check whether --enable-sk-g16 or --disable-sk-g16 was given.
+--if test "${enable_sk_g16+set}" = set; then
+--  enableval="$enable_sk_g16"
+--
+--fi;
+--if test "x$enable_sk_g16" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_SK_G16=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS sk_g16.o"
+--fi
+--
+--# Check whether --enable-smc9000 or --disable-smc9000 was given.
+--if test "${enable_smc9000+set}" = set; then
+--  enableval="$enable_smc9000"
+--
+--fi;
+--if test "x$enable_smc9000" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_SMC9000=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS smc9000.o"
+--fi
+--
+--# Check whether --enable-tiara or --disable-tiara was given.
+--if test "${enable_tiara+set}" = set; then
+--  enableval="$enable_tiara"
+-+# Check whether --enable-tg3 or --disable-tg3 was given.
+-+if test "${enable_tg3+set}" = set; then
+-+  enableval="$enable_tg3"
+- 
+- fi;
+--if test "x$enable_tiara" = xyes; then
+--  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_TIARA=1"
+--  NETBOOT_DRIVERS="$NETBOOT_DRIVERS tiara.o"
+-+if test "x$enable_tg3" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_TG3=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS tg3.o"
+- fi
+- 
+- # Check whether --enable-tulip or --disable-tulip was given.
+-@@ -5839,6 +5704,16 @@
+-   NETBOOT_DRIVERS="$NETBOOT_DRIVERS tulip.o"
+- fi
+- 
+-+# Check whether --enable-tlan or --disable-tlan was given.
+-+if test "${enable_tlan+set}" = set; then
+-+  enableval="$enable_tlan"
+-+
+-+fi;
+-+if test "x$enable_tlan" = xyes; then
+-+  NET_CFLAGS="$NET_CFLAGS -DINCLUDE_TLAN=1"
+-+  NETBOOT_DRIVERS="$NETBOOT_DRIVERS tlan.o"
 -+fi
-- if test -z "${HERCULES_SUPPORT_TRUE}" && test -z "${HERCULES_SUPPORT_FALSE}"; then
--   { { echo "$as_me:$LINENO: error: conditional \"HERCULES_SUPPORT\" was never defined.
-- Usually this means the macro was only invoked conditionally." >&5
--@@ -6907,6 +6908,8 @@ s, at NETBOOT_SUPPORT_TRUE@,$NETBOOT_SUPPOR
-- s, at NETBOOT_SUPPORT_FALSE@,$NETBOOT_SUPPORT_FALSE,;t t
-- s, at DISKLESS_SUPPORT_TRUE@,$DISKLESS_SUPPORT_TRUE,;t t
-- s, at DISKLESS_SUPPORT_FALSE@,$DISKLESS_SUPPORT_FALSE,;t t
--+s, at GRAPHICS_SUPPORT_TRUE@,$GRAPHICS_SUPPORT_TRUE,;t t
--+s, at GRAPHICS_SUPPORT_FALSE@,$GRAPHICS_SUPPORT_FALSE,;t t
-- s, at HERCULES_SUPPORT_TRUE@,$HERCULES_SUPPORT_TRUE,;t t
-- s, at HERCULES_SUPPORT_FALSE@,$HERCULES_SUPPORT_FALSE,;t t
-- s, at SERIAL_SUPPORT_TRUE@,$SERIAL_SUPPORT_TRUE,;t t
--@@ -7088,11 +7091,6 @@ esac
--   *) ac_INSTALL=$ac_top_builddir$INSTALL ;;
--   esac
-- 
---  if test x"$ac_file" != x-; then
---    { echo "$as_me:$LINENO: creating $ac_file" >&5
---echo "$as_me: creating $ac_file" >&6;}
---    rm -f "$ac_file"
---  fi
--   # Let's still pretend it is `configure' which instantiates (i.e., don't
--   # use $as_me), people would be surprised to read:
--   #    /* config.h.  Generated by config.status.  */
--@@ -7131,6 +7129,12 @@ echo "$as_me: error: cannot find input f
-- 	 fi;;
--       esac
--     done` || { (exit 1); exit 1; }
 -+
--+  if test x"$ac_file" != x-; then
--+    { echo "$as_me:$LINENO: creating $ac_file" >&5
--+echo "$as_me: creating $ac_file" >&6;}
--+    rm -f "$ac_file"
--+  fi
-- _ACEOF
-- cat >>$CONFIG_STATUS <<_ACEOF
--   sed "$ac_vpsub
--diff -rup grub-0.97.oorig/docs/Makefile.in grub-0.97/docs/Makefile.in
----- grub-0.97.oorig/docs/Makefile.in	2005-05-08 04:42:34.000000000 +0200
--+++ grub-0.97/docs/Makefile.in	2006-03-12 14:00:43.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
+- # Check whether --enable-via-rhine or --disable-via-rhine was given.
+- if test "${enable_via_rhine+set}" = set; then
+-   enableval="$enable_via_rhine"
+-@@ -5873,24 +5748,6 @@
+-   FSYS_CFLAGS="$FSYS_CFLAGS -DFSYS_TFTP=1"
+- fi
 - 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -15,8 +15,6 @@
-- @SET_MAKE@
-- 
-- 
---SOURCES = $(kernel_SOURCES)
+--# Check whether --enable-3c503-shmem or --disable-3c503-shmem was given.
+--if test "${enable_3c503_shmem+set}" = set; then
+--  enableval="$enable_3c503_shmem"
 --
-- srcdir = @srcdir@
-- top_srcdir = @top_srcdir@
-- VPATH = @srcdir@
--@@ -120,6 +118,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
--@@ -304,9 +304,11 @@ kernel-kernel.obj: kernel.c
-- 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
-- 	am__cwd=`pwd` && cd $(srcdir) && \
-- 	rm -rf $$backupdir && mkdir $$backupdir && \
---	for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
---	  if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
---	done; \
--+	if ($(MAKEINFO) --version) >/dev/null 2>&1; then \
--+	  for f in $@ $@-[0-9] $@-[0-9][0-9] $(@:.info=).i[0-9] $(@:.info=).i[0-9][0-9]; do \
--+	    if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
--+	  done; \
--+	else :; fi && \
-- 	cd "$$am__cwd"; \
-- 	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
-- 	 -o $@ $<; \
--@@ -371,10 +373,11 @@ multiboot.dvi: multiboot.texi $(multiboo
-- multiboot.pdf: multiboot.texi $(multiboot_TEXINFOS)
-- multiboot.html: multiboot.texi $(multiboot_TEXINFOS)
-- .dvi.ps:
--+	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
-- 	$(DVIPS) -o $@ $<
-- 
-- uninstall-info-am:
---	$(PRE_UNINSTALL)
--+	@$(PRE_UNINSTALL)
-- 	@if (install-info --version && \
-- 	     install-info --version 2>&1 | sed 1q | grep -i -v debian) >/dev/null 2>&1; then \
-- 	  list='$(INFO_DEPS)'; \
--@@ -390,7 +393,7 @@ uninstall-info-am:
-- 	  relfile=`echo "$$file" | sed 's|^.*/||'`; \
-- 	  relfile_i=`echo "$$relfile" | sed 's|\.info$$||;s|$$|.i|'`; \
-- 	  (if cd "$(DESTDIR)$(infodir)"; then \
---	     echo " rm -f $$relfile $$relfile-[0-9] $$relfile-[0-9][0-9] $$relfile_i[0-9] $$relfile_i[0-9][0-9])"; \
--+	     echo " cd '$(DESTDIR)$(infodir)' && rm -f $$relfile $$relfile-[0-9] $$relfile-[0-9][0-9] $$relfile_i[0-9] $$relfile_i[0-9][0-9]"; \
-- 	     rm -f $$relfile $$relfile-[0-9] $$relfile-[0-9][0-9] $$relfile_i[0-9] $$relfile_i[0-9][0-9]; \
-- 	   else :; fi); \
-- 	done
--@@ -403,10 +406,13 @@ dist-info: $(INFO_DEPS)
-- 	    $(srcdir)/*) base=`echo "$$base" | sed "s|^$$srcdirstrip/||"`;; \
-- 	  esac; \
-- 	  if test -f $$base; then d=.; else d=$(srcdir); fi; \
---	  for file in $$d/$$base*; do \
---	    relfile=`expr "$$file" : "$$d/\(.*\)"`; \
---	    test -f $(distdir)/$$relfile || \
---	      cp -p $$file $(distdir)/$$relfile; \
--+	  base_i=`echo "$$base" | sed 's|\.info$$||;s|$$|.i|'`; \
--+	  for file in $$d/$$base $$d/$$base-[0-9] $$d/$$base-[0-9][0-9] $$d/$$base_i[0-9] $$d/$$base_i[0-9][0-9]; do \
--+	    if test -f $$file; then \
--+	      relfile=`expr "$$file" : "$$d/\(.*\)"`; \
--+	      test -f $(distdir)/$$relfile || \
--+		cp -p $$file $(distdir)/$$relfile; \
--+	    else :; fi; \
-- 	  done; \
-- 	done
-- 
--diff -rup grub-0.97.oorig/grub/Makefile.in grub-0.97/grub/Makefile.in
----- grub-0.97.oorig/grub/Makefile.in	2005-05-08 04:42:34.000000000 +0200
--+++ grub-0.97/grub/Makefile.in	2006-03-12 14:00:43.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
-- 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -14,8 +14,6 @@
-- 
-- @SET_MAKE@
-- 
---SOURCES = $(grub_SOURCES)
+--fi;
+--if test "x$enable_3c503_shmem" = xyes; then
+--  NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DT503_SHMEM=1"
+--fi
 --
-- srcdir = @srcdir@
-- top_srcdir = @top_srcdir@
-- VPATH = @srcdir@
--@@ -97,6 +95,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
--diff -rup grub-0.97.oorig/lib/Makefile.in grub-0.97/lib/Makefile.in
----- grub-0.97.oorig/lib/Makefile.in	2005-05-08 04:42:35.000000000 +0200
--+++ grub-0.97/lib/Makefile.in	2006-03-12 14:00:44.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
-- 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -14,8 +14,6 @@
-- 
-- @SET_MAKE@
-- 
---SOURCES = $(libcommon_a_SOURCES)
+--# Check whether --enable-3c503-aui or --disable-3c503-aui was given.
+--if test "${enable_3c503_aui+set}" = set; then
+--  enableval="$enable_3c503_aui"
 --
-- srcdir = @srcdir@
-- top_srcdir = @top_srcdir@
-- VPATH = @srcdir@
--@@ -96,6 +94,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
--diff -rup grub-0.97.oorig/Makefile.in grub-0.97/Makefile.in
----- grub-0.97.oorig/Makefile.in	2005-05-08 04:42:40.000000000 +0200
--+++ grub-0.97/Makefile.in	2006-03-12 14:00:49.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
-- 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -101,6 +101,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
--@@ -250,7 +252,13 @@ uninstall-info-am:
-- #     (which will cause the Makefiles to be regenerated when you run `make');
-- # (2) otherwise, pass the desired values on the `make' command line.
-- $(RECURSIVE_TARGETS):
---	@set fnord $$MAKEFLAGS; amf=$$2; \
--+	@failcom='exit 1'; \
--+	for f in x $$MAKEFLAGS; do \
--+	  case $$f in \
--+	    *=* | --[!k]*);; \
--+	    *k*) failcom='fail=yes';; \
--+	  esac; \
--+	done; \
-- 	dot_seen=no; \
-- 	target=`echo $@ | sed s/-recursive//`; \
-- 	list='$(SUBDIRS)'; for subdir in $$list; do \
--@@ -262,7 +270,7 @@ $(RECURSIVE_TARGETS):
-- 	    local_target="$$target"; \
-- 	  fi; \
-- 	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
---	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
--+	  || eval $$failcom; \
-- 	done; \
-- 	if test "$$dot_seen" = "no"; then \
-- 	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
--@@ -270,7 +278,13 @@ $(RECURSIVE_TARGETS):
-- 
-- mostlyclean-recursive clean-recursive distclean-recursive \
-- maintainer-clean-recursive:
---	@set fnord $$MAKEFLAGS; amf=$$2; \
--+	@failcom='exit 1'; \
--+	for f in x $$MAKEFLAGS; do \
--+	  case $$f in \
--+	    *=* | --[!k]*);; \
--+	    *k*) failcom='fail=yes';; \
--+	  esac; \
--+	done; \
-- 	dot_seen=no; \
-- 	case "$@" in \
-- 	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
--@@ -291,7 +305,7 @@ maintainer-clean-recursive:
-- 	    local_target="$$target"; \
-- 	  fi; \
-- 	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
---	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
--+	  || eval $$failcom; \
-- 	done && test -z "$$fail"
-- tags-recursive:
-- 	list='$(SUBDIRS)'; for subdir in $$list; do \
--diff -rup grub-0.97.oorig/netboot/Makefile.in grub-0.97/netboot/Makefile.in
----- grub-0.97.oorig/netboot/Makefile.in	2005-05-08 04:42:35.000000000 +0200
--+++ grub-0.97/netboot/Makefile.in	2006-03-12 14:00:44.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
-- 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -14,8 +14,6 @@
-- 
-- @SET_MAKE@
-- 
---SOURCES = $(libdrivers_a_SOURCES) $(EXTRA_libdrivers_a_SOURCES)
+--fi;
+--if test "x$enable_3c503_aui" = xyes; then
+--  NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DT503_AUI=1"
+--fi
 --
-- srcdir = @srcdir@
-- top_srcdir = @top_srcdir@
-- VPATH = @srcdir@
--@@ -97,6 +95,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
--diff -rup grub-0.97.oorig/stage1/Makefile.in grub-0.97/stage1/Makefile.in
----- grub-0.97.oorig/stage1/Makefile.in	2005-05-08 04:42:36.000000000 +0200
--+++ grub-0.97/stage1/Makefile.in	2006-03-12 14:00:45.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
+- # Check whether --enable-compex-rl2000-fix or --disable-compex-rl2000-fix was given.
+- if test "${enable_compex_rl2000_fix+set}" = set; then
+-   enableval="$enable_compex_rl2000_fix"
+-@@ -5900,12 +5757,6 @@
+-   NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DCOMPEX_RL2000_FIX=1"
+- fi
 - 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -15,8 +15,6 @@
-- @SET_MAKE@
-- 
-- 
---SOURCES = $(stage1_exec_SOURCES)
+--# Check whether --enable-smc9000-scan or --disable-smc9000-scan was given.
+--if test "${enable_smc9000_scan+set}" = set; then
+--  enableval="$enable_smc9000_scan"
+--  NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DSMC9000_SCAN=$enable_smc9000_scan"
+--fi;
 --
-- srcdir = @srcdir@
-- top_srcdir = @top_srcdir@
-- VPATH = @srcdir@
--@@ -102,6 +100,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
--diff -rup grub-0.97.oorig/stage2/Makefile.in grub-0.97/stage2/Makefile.in
----- grub-0.97.oorig/stage2/Makefile.in	2005-05-08 04:42:39.000000000 +0200
--+++ grub-0.97/stage2/Makefile.in	2006-03-12 14:00:48.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
+- # Check whether --enable-ne-scan or --disable-ne-scan was given.
+- if test "${enable_ne_scan+set}" = set; then
+-   enableval="$enable_ne_scan"
+-@@ -5922,12 +5773,6 @@
+-   NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DWD_DEFAULT_MEM=0xCC000"
+- fi;
 - 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -18,8 +18,6 @@
-- 
-- 
-- 
---SOURCES = $(libgrub_a_SOURCES) $(diskless_exec_SOURCES) $(e2fs_stage1_5_exec_SOURCES) $(fat_stage1_5_exec_SOURCES) $(ffs_stage1_5_exec_SOURCES) $(iso9660_stage1_5_exec_SOURCES) $(jfs_stage1_5_exec_SOURCES) $(minix_stage1_5_exec_SOURCES) $(nbloader_exec_SOURCES) $(pre_stage2_exec_SOURCES) $(pxeloader_exec_SOURCES) $(reiserfs_stage1_5_exec_SOURCES) $(start_exec_SOURCES) $(start_eltorito_exec_SOURCES) $(ufs2_stage1_5_exec_SOURCES) $(vstafs_stage1_5_exec_SOURCES) $(xfs_stage1_5_exec_SOURCES)
+--# Check whether --enable-cs-scan or --disable-cs-scan was given.
+--if test "${enable_cs_scan+set}" = set; then
+--  enableval="$enable_cs_scan"
+--  NET_EXTRAFLAGS="$NET_EXTRAFLAGS -DCS_SCAN=$enable_cs_scan"
+--fi;
 --
-- srcdir = @srcdir@
-- top_srcdir = @top_srcdir@
-- VPATH = @srcdir@
--@@ -100,7 +98,7 @@ am_libgrub_a_OBJECTS = libgrub_a-boot.$(
-- 	libgrub_a-fsys_xfs.$(OBJEXT) libgrub_a-gunzip.$(OBJEXT) \
-- 	libgrub_a-md5.$(OBJEXT) libgrub_a-serial.$(OBJEXT) \
-- 	libgrub_a-stage2.$(OBJEXT) libgrub_a-terminfo.$(OBJEXT) \
---	libgrub_a-tparm.$(OBJEXT)
--+	libgrub_a-tparm.$(OBJEXT) libgrub_a-graphics.$(OBJEXT)
-- libgrub_a_OBJECTS = $(am_libgrub_a_OBJECTS)
-- PROGRAMS = $(noinst_PROGRAMS)
-- am__objects_1 = diskless_exec-asm.$(OBJEXT) \
--@@ -125,7 +123,8 @@ am__objects_1 = diskless_exec-asm.$(OBJE
-- 	diskless_exec-serial.$(OBJEXT) \
-- 	diskless_exec-smp-imps.$(OBJEXT) \
-- 	diskless_exec-stage2.$(OBJEXT) \
---	diskless_exec-terminfo.$(OBJEXT) diskless_exec-tparm.$(OBJEXT)
--+	diskless_exec-terminfo.$(OBJEXT) diskless_exec-tparm.$(OBJEXT) \
--+	diskless_exec-graphics.$(OBJEXT)
-- am_diskless_exec_OBJECTS = $(am__objects_1)
-- diskless_exec_OBJECTS = $(am_diskless_exec_OBJECTS)
-- diskless_exec_DEPENDENCIES = ../netboot/libdrivers.a
--@@ -217,7 +216,8 @@ am_pre_stage2_exec_OBJECTS = pre_stage2_
-- 	pre_stage2_exec-smp-imps.$(OBJEXT) \
-- 	pre_stage2_exec-stage2.$(OBJEXT) \
-- 	pre_stage2_exec-terminfo.$(OBJEXT) \
---	pre_stage2_exec-tparm.$(OBJEXT)
--+	pre_stage2_exec-tparm.$(OBJEXT) \
--+	pre_stage2_exec-graphics.$(OBJEXT)
-- pre_stage2_exec_OBJECTS = $(am_pre_stage2_exec_OBJECTS)
-- @NETBOOT_SUPPORT_TRUE at pre_stage2_exec_DEPENDENCIES =  \
-- @NETBOOT_SUPPORT_TRUE@	../netboot/libdrivers.a
--@@ -344,6 +344,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
--@@ -435,7 +437,7 @@ noinst_HEADERS = apic.h defs.h dir.h dis
--         fat.h filesys.h freebsd.h fs.h hercules.h i386-elf.h \
-- 	imgact_aout.h iso9660.h jfs.h mb_header.h mb_info.h md5.h \
-- 	nbi.h pc_slice.h serial.h shared.h smp-imps.h term.h \
---	terminfo.h tparm.h nbi.h ufs2.h vstafs.h xfs.h
--+	terminfo.h tparm.h nbi.h ufs2.h vstafs.h xfs.h graphics.h
-- 
-- EXTRA_DIST = setjmp.S apm.S $(noinst_SCRIPTS)
-- 
--@@ -448,7 +450,7 @@ libgrub_a_SOURCES = boot.c builtins.c ch
-- 	disk_io.c fsys_ext2fs.c fsys_fat.c fsys_ffs.c fsys_iso9660.c \
-- 	fsys_jfs.c fsys_minix.c fsys_reiserfs.c fsys_ufs2.c \
-- 	fsys_vstafs.c fsys_xfs.c gunzip.c md5.c serial.c stage2.c \
---	terminfo.c tparm.c
--+	terminfo.c tparm.c graphics.c
-- 
-- libgrub_a_CFLAGS = $(GRUB_CFLAGS) -I$(top_srcdir)/lib \
-- 	-DGRUB_UTIL=1 -DFSYS_EXT2FS=1 -DFSYS_FAT=1 -DFSYS_FFS=1 \
--@@ -479,8 +481,10 @@ START_ELTORITO_LINK = -nostdlib -Wl,-N -
-- @SERIAL_SUPPORT_TRUE at SERIAL_FLAGS = -DSUPPORT_SERIAL=1
-- @HERCULES_SUPPORT_FALSE at HERCULES_FLAGS = 
-- @HERCULES_SUPPORT_TRUE at HERCULES_FLAGS = -DSUPPORT_HERCULES=1
--+ at GRAPHICS_SUPPORT_FALSE@GRAPHICS_FLAGS = 
--+ at GRAPHICS_SUPPORT_TRUE@GRAPHICS_FLAGS = -DSUPPORT_GRAPHICS=1
-- STAGE2_COMPILE = $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
---	$(NETBOOT_FLAGS) $(SERIAL_FLAGS) $(HERCULES_FLAGS)
--+	$(NETBOOT_FLAGS) $(SERIAL_FLAGS) $(HERCULES_FLAGS) $(GRAPHICS_FLAGS)
-- 
-- STAGE1_5_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,2000
-- STAGE1_5_COMPILE = $(STAGE2_COMPILE) -DNO_DECOMPRESSION=1 -DSTAGE1_5=1
--@@ -490,7 +494,8 @@ pre_stage2_exec_SOURCES = asm.S bios.c b
-- 	cmdline.c common.c console.c disk_io.c fsys_ext2fs.c \
-- 	fsys_fat.c fsys_ffs.c fsys_iso9660.c fsys_jfs.c fsys_minix.c \
-- 	fsys_reiserfs.c fsys_ufs2.c fsys_vstafs.c fsys_xfs.c gunzip.c \
---	hercules.c md5.c serial.c smp-imps.c stage2.c terminfo.c tparm.c
--+	hercules.c md5.c serial.c smp-imps.c stage2.c terminfo.c tparm.c \
--+	graphics.c
-- 
-- pre_stage2_exec_CFLAGS = $(STAGE2_COMPILE) $(FSYS_CFLAGS)
-- pre_stage2_exec_CCASFLAGS = $(STAGE2_COMPILE) $(FSYS_CFLAGS)
--@@ -766,6 +771,7 @@ distclean-compile:
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/diskless_exec-fsys_ufs2.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/diskless_exec-fsys_vstafs.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/diskless_exec-fsys_xfs.Po at am__quote@
--+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/diskless_exec-graphics.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/diskless_exec-gunzip.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/diskless_exec-hercules.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/diskless_exec-md5.Po at am__quote@
--@@ -820,6 +826,7 @@ distclean-compile:
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libgrub_a-fsys_ufs2.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libgrub_a-fsys_vstafs.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libgrub_a-fsys_xfs.Po at am__quote@
--+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libgrub_a-graphics.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libgrub_a-gunzip.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libgrub_a-md5.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libgrub_a-serial.Po at am__quote@
--@@ -850,6 +857,7 @@ distclean-compile:
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/pre_stage2_exec-fsys_ufs2.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/pre_stage2_exec-fsys_vstafs.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/pre_stage2_exec-fsys_xfs.Po at am__quote@
--+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/pre_stage2_exec-graphics.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/pre_stage2_exec-gunzip.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/pre_stage2_exec-hercules.Po at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/pre_stage2_exec-md5.Po at am__quote@
--@@ -1367,6 +1375,20 @@ libgrub_a-tparm.obj: tparm.c
-- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgrub_a_CFLAGS) $(CFLAGS) -c -o libgrub_a-tparm.obj `if test -f 'tparm.c'; then $(CYGPATH_W) 'tparm.c'; else $(CYGPATH_W) '$(srcdir)/tparm.c'; fi`
-- 
--+libgrub_a-graphics.o: graphics.c
--+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgrub_a_CFLAGS) $(CFLAGS) -MT libgrub_a-graphics.o -MD -MP -MF "$(DEPDIR)/libgrub_a-graphics.Tpo" -c -o libgrub_a-graphics.o `test -f 'graphics.c' || echo '$(srcdir)/'`graphics.c; \
--+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libgrub_a-graphics.Tpo" "$(DEPDIR)/libgrub_a-graphics.Po"; else rm -f "$(DEPDIR)/libgrub_a-graphics.Tpo"; exit 1; fi
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics.c' object='libgrub_a-graphics.o' libtool=no @AMDEPBACKSLASH@
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
--+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgrub_a_CFLAGS) $(CFLAGS) -c -o libgrub_a-graphics.o `test -f 'graphics.c' || echo '$(srcdir)/'`graphics.c
+- # Check whether --enable-diskless or --disable-diskless was given.
+- if test "${enable_diskless+set}" = set; then
+-   enableval="$enable_diskless"
+ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+@@ -2317,1202 +1896,6 @@ Index: b/netboot/Makefile.am
+ +undi_o_CFLAGS = -DINCLUDE_UNDI=1
+  via_rhine_o_CFLAGS = -DINCLUDE_VIA_RHINE=1
+  w89c840_o_CFLAGS = -DINCLUDE_W89C840=1
+-Index: b/netboot/Makefile.in
+-===================================================================
+---- a/netboot/Makefile.in
+-+++ b/netboot/Makefile.in
+-@@ -46,18 +46,51 @@
+- mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+- CONFIG_HEADER = $(top_builddir)/config.h
+- CONFIG_CLEAN_FILES =
+--LIBRARIES = $(noinst_LIBRARIES)
+- AR = ar
+- ARFLAGS = cru
+-+LIBRARIES = $(noinst_LIBRARIES)
+- libdrivers_a_AR = $(AR) $(ARFLAGS)
+- am_libdrivers_a_OBJECTS = libdrivers_a-config.$(OBJEXT) \
+--	libdrivers_a-fsys_tftp.$(OBJEXT) libdrivers_a-main.$(OBJEXT) \
+--	libdrivers_a-misc.$(OBJEXT) libdrivers_a-pci.$(OBJEXT) \
+--	libdrivers_a-timer.$(OBJEXT)
+-+	libdrivers_a-fsys_tftp.$(OBJEXT) \
+-+	libdrivers_a-i386_timer.$(OBJEXT) libdrivers_a-misc.$(OBJEXT) \
+-+	libdrivers_a-nic.$(OBJEXT) libdrivers_a-pci.$(OBJEXT) \
+-+	libdrivers_a-pci_io.$(OBJEXT) libdrivers_a-timer.$(OBJEXT) \
+-+	libdrivers_a-pic8259.$(OBJEXT) libdrivers_a-basemem.$(OBJEXT)
+- libdrivers_a_OBJECTS = $(am_libdrivers_a_OBJECTS)
+- DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+- depcomp = $(SHELL) $(top_srcdir)/depcomp
+- am__depfiles_maybe = depfiles
+-+ at AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/libdrivers_a-3c595.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-3c90x.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-basemem.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-config.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-davicom.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-e1000.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-eepro100.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-epic100.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-forcedeth.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-fsys_tftp.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-i386_timer.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-misc.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-natsemi.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-nic.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-ns83820.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-ns8390.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-pci.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-pci_io.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-pcnet32.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-pic8259.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-pnic.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-pnic_api.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-r8169.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-rtl8139.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-sis900.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-tg3.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-timer.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-tlan.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-tulip.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-via-rhine.Po \
+-+ at AMDEP_TRUE@	./$(DEPDIR)/libdrivers_a-w89c840.Po
+- COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+- 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+- CCLD = $(CC)
+-@@ -148,8 +181,6 @@
+- am__include = @am__include@
+- am__leading_dot = @am__leading_dot@
+- am__quote = @am__quote@
+--am__tar = @am__tar@
+--am__untar = @am__untar@
+- bindir = @bindir@
+- build = @build@
+- build_alias = @build_alias@
+-@@ -186,16 +217,19 @@
+- # Don't build the netboot support by default.
+- @NETBOOT_SUPPORT_TRUE at LIBDRIVERS = libdrivers.a
+- noinst_LIBRARIES = $(LIBDRIVERS)
+--libdrivers_a_SOURCES = cards.h config.c etherboot.h \
+--	fsys_tftp.c linux-asm-io.h linux-asm-string.h \
+--	main.c misc.c nic.h osdep.h pci.c pci.h timer.c timer.h
+--
+--EXTRA_libdrivers_a_SOURCES = 3c509.c 3c509.h 3c595.c 3c595.h 3c90x.c \
+--	cs89x0.c cs89x0.h davicom.c depca.c eepro.c eepro100.c \
+--	epic100.c epic100.h fa311.c i82586.c lance.c natsemi.c \
+--	ni5010.c ns8390.c ns8390.h otulip.c otulip.h rtl8139.c \
+--	sis900.c sis900.h sk_g16.c sk_g16.h smc9000.c smc9000.h \
+--	tiara.c tlan.c tulip.c via-rhine.c w89c840.c
+-+libdrivers_a_SOURCES = big_bswap.h bootp.h byteswap.h config.c cpu.h \
+-+	dev.h elf.h endian.h etherboot.h fsys_tftp.c grub.h \
+-+	i386_byteswap.h i386_elf.h i386_endian.h i386_timer.c \
+-+	if_arp.h if_ether.h igmp.h in.h io.h ip.h isa.h latch.h \
+-+	little_bswap.h misc.c nic.c nic.h osdep.h pci.c pci.h \
+-+	pci_ids.h pci_io.c stdint.h tftp.h timer.c timer.h \
+-+	types.h udp.h mii.h pic8259.c pic8259.h pxe.h basemem.c segoff.h
 -+
--+libgrub_a-graphics.obj: graphics.c
--+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgrub_a_CFLAGS) $(CFLAGS) -MT libgrub_a-graphics.obj -MD -MP -MF "$(DEPDIR)/libgrub_a-graphics.Tpo" -c -o libgrub_a-graphics.obj `if test -f 'graphics.c'; then $(CYGPATH_W) 'graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics.c'; fi`; \
--+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libgrub_a-graphics.Tpo" "$(DEPDIR)/libgrub_a-graphics.Po"; else rm -f "$(DEPDIR)/libgrub_a-graphics.Tpo"; exit 1; fi
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics.c' object='libgrub_a-graphics.obj' libtool=no @AMDEPBACKSLASH@
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
--+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgrub_a_CFLAGS) $(CFLAGS) -c -o libgrub_a-graphics.obj `if test -f 'graphics.c'; then $(CYGPATH_W) 'graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics.c'; fi`
--+
-- diskless_exec-bios.o: bios.c
-- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(diskless_exec_CFLAGS) $(CFLAGS) -MT diskless_exec-bios.o -MD -MP -MF "$(DEPDIR)/diskless_exec-bios.Tpo" -c -o diskless_exec-bios.o `test -f 'bios.c' || echo '$(srcdir)/'`bios.c; \
-- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/diskless_exec-bios.Tpo" "$(DEPDIR)/diskless_exec-bios.Po"; else rm -f "$(DEPDIR)/diskless_exec-bios.Tpo"; exit 1; fi
--@@ -1731,6 +1753,20 @@ diskless_exec-tparm.obj: tparm.c
-- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(diskless_exec_CFLAGS) $(CFLAGS) -c -o diskless_exec-tparm.obj `if test -f 'tparm.c'; then $(CYGPATH_W) 'tparm.c'; else $(CYGPATH_W) '$(srcdir)/tparm.c'; fi`
+-+EXTRA_libdrivers_a_SOURCES = 3c595.c 3c595.h 3c90x.c davicom.c \
+-+	e1000.c e1000_hw.h eepro100.c epic100.c epic100.h natsemi.c \
+-+	ns8390.c ns8390.h pcnet32.c rtl8139.c sis900.c sis900.h \
+-+	tg3.c tg3.h tlan.c tlan.h tulip.c via-rhine.c \
+-+	w89c840.c r8169.c forcedeth.c ns83820.c pnic.c pnic_api.c 
 - 
--+diskless_exec-graphics.o: graphics.c
--+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(diskless_exec_CFLAGS) $(CFLAGS) -MT diskless_exec-graphics.o -MD -MP -MF "$(DEPDIR)/diskless_exec-graphics.Tpo" -c -o diskless_exec-graphics.o `test -f 'graphics.c' || echo '$(srcdir)/'`graphics.c; \
--+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/diskless_exec-graphics.Tpo" "$(DEPDIR)/diskless_exec-graphics.Po"; else rm -f "$(DEPDIR)/diskless_exec-graphics.Tpo"; exit 1; fi
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics.c' object='diskless_exec-graphics.o' libtool=no @AMDEPBACKSLASH@
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
--+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(diskless_exec_CFLAGS) $(CFLAGS) -c -o diskless_exec-graphics.o `test -f 'graphics.c' || echo '$(srcdir)/'`graphics.c
--+
--+diskless_exec-graphics.obj: graphics.c
--+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(diskless_exec_CFLAGS) $(CFLAGS) -MT diskless_exec-graphics.obj -MD -MP -MF "$(DEPDIR)/diskless_exec-graphics.Tpo" -c -o diskless_exec-graphics.obj `if test -f 'graphics.c'; then $(CYGPATH_W) 'graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics.c'; fi`; \
--+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/diskless_exec-graphics.Tpo" "$(DEPDIR)/diskless_exec-graphics.Po"; else rm -f "$(DEPDIR)/diskless_exec-graphics.Tpo"; exit 1; fi
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics.c' object='diskless_exec-graphics.obj' libtool=no @AMDEPBACKSLASH@
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
--+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(diskless_exec_CFLAGS) $(CFLAGS) -c -o diskless_exec-graphics.obj `if test -f 'graphics.c'; then $(CYGPATH_W) 'graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics.c'; fi`
--+
-- e2fs_stage1_5_exec-common.o: common.c
-- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(e2fs_stage1_5_exec_CFLAGS) $(CFLAGS) -MT e2fs_stage1_5_exec-common.o -MD -MP -MF "$(DEPDIR)/e2fs_stage1_5_exec-common.Tpo" -c -o e2fs_stage1_5_exec-common.o `test -f 'common.c' || echo '$(srcdir)/'`common.c; \
-- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/e2fs_stage1_5_exec-common.Tpo" "$(DEPDIR)/e2fs_stage1_5_exec-common.Po"; else rm -f "$(DEPDIR)/e2fs_stage1_5_exec-common.Tpo"; exit 1; fi
--@@ -2599,6 +2635,20 @@ pre_stage2_exec-tparm.obj: tparm.c
-- @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pre_stage2_exec_CFLAGS) $(CFLAGS) -c -o pre_stage2_exec-tparm.obj `if test -f 'tparm.c'; then $(CYGPATH_W) 'tparm.c'; else $(CYGPATH_W) '$(srcdir)/tparm.c'; fi`
+- libdrivers_a_CFLAGS = $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	-DFSYS_TFTP=1 $(NET_CFLAGS) $(NET_EXTRAFLAGS)
+-@@ -203,69 +237,83 @@
+- # Filled by configure.
+- libdrivers_a_LIBADD = @NETBOOT_DRIVERS@
+- libdrivers_a_DEPENDENCIES = $(libdrivers_a_LIBADD)
+--EXTRA_DIST = README.netboot 3c90x.txt cs89x0.txt sis900.txt tulip.txt
+-+EXTRA_DIST = README.netboot
 - 
--+pre_stage2_exec-graphics.o: graphics.c
--+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pre_stage2_exec_CFLAGS) $(CFLAGS) -MT pre_stage2_exec-graphics.o -MD -MP -MF "$(DEPDIR)/pre_stage2_exec-graphics.Tpo" -c -o pre_stage2_exec-graphics.o `test -f 'graphics.c' || echo '$(srcdir)/'`graphics.c; \
--+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/pre_stage2_exec-graphics.Tpo" "$(DEPDIR)/pre_stage2_exec-graphics.Po"; else rm -f "$(DEPDIR)/pre_stage2_exec-graphics.Tpo"; exit 1; fi
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics.c' object='pre_stage2_exec-graphics.o' libtool=no @AMDEPBACKSLASH@
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
--+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pre_stage2_exec_CFLAGS) $(CFLAGS) -c -o pre_stage2_exec-graphics.o `test -f 'graphics.c' || echo '$(srcdir)/'`graphics.c
--+
--+pre_stage2_exec-graphics.obj: graphics.c
--+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pre_stage2_exec_CFLAGS) $(CFLAGS) -MT pre_stage2_exec-graphics.obj -MD -MP -MF "$(DEPDIR)/pre_stage2_exec-graphics.Tpo" -c -o pre_stage2_exec-graphics.obj `if test -f 'graphics.c'; then $(CYGPATH_W) 'graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics.c'; fi`; \
--+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/pre_stage2_exec-graphics.Tpo" "$(DEPDIR)/pre_stage2_exec-graphics.Po"; else rm -f "$(DEPDIR)/pre_stage2_exec-graphics.Tpo"; exit 1; fi
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='graphics.c' object='pre_stage2_exec-graphics.obj' libtool=no @AMDEPBACKSLASH@
--+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
--+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pre_stage2_exec_CFLAGS) $(CFLAGS) -c -o pre_stage2_exec-graphics.obj `if test -f 'graphics.c'; then $(CYGPATH_W) 'graphics.c'; else $(CYGPATH_W) '$(srcdir)/graphics.c'; fi`
--+
-- reiserfs_stage1_5_exec-common.o: common.c
-- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(reiserfs_stage1_5_exec_CFLAGS) $(CFLAGS) -MT reiserfs_stage1_5_exec-common.o -MD -MP -MF "$(DEPDIR)/reiserfs_stage1_5_exec-common.Tpo" -c -o reiserfs_stage1_5_exec-common.o `test -f 'common.c' || echo '$(srcdir)/'`common.c; \
-- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/reiserfs_stage1_5_exec-common.Tpo" "$(DEPDIR)/reiserfs_stage1_5_exec-common.Po"; else rm -f "$(DEPDIR)/reiserfs_stage1_5_exec-common.Tpo"; exit 1; fi
--diff -rup grub-0.97.oorig/util/Makefile.in grub-0.97/util/Makefile.in
----- grub-0.97.oorig/util/Makefile.in	2005-05-08 04:42:39.000000000 +0200
--+++ grub-0.97/util/Makefile.in	2006-03-12 14:00:48.000000000 +0100
--@@ -1,8 +1,8 @@
---# Makefile.in generated by automake 1.9.4 from Makefile.am.
--+# Makefile.in generated by automake 1.9.6 from Makefile.am.
-- # @configure_input@
+- # These below are several special rules for the device drivers.
+- # We cannot use a simple rule for them...
 - 
-- # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
---# 2003, 2004  Free Software Foundation, Inc.
--+# 2003, 2004, 2005  Free Software Foundation, Inc.
-- # This Makefile.in is free software; the Free Software Foundation
-- # gives unlimited permission to copy and/or distribute it,
-- # with or without modifications, as long as this notice is preserved.
--@@ -15,8 +15,6 @@
-- @SET_MAKE@
+- # What objects are derived from a driver?
+--3c509_drivers = 3c509.o 3c529.o
+-+#3c509_drivers = 3c509.o 3c529.o
+- 3c595_drivers = 3c595.o
+- 3c90x_drivers = 3c90x.o
+--cs89x0_drivers = cs89x0.o
+-+#cs89x0_drivers = cs89x0.o
+- davicom_drivers = davicom.o
+--depca_drivers = depca.o
+--eepro_drivers = eepro.o
+-+#depca_drivers = depca.o
+-+#eepro_drivers = eepro.o
+-+e1000_drivers = e1000.o
+- eepro100_drivers = eepro100.o
+- epic100_drivers = epic100.o
+- #fa311_drivers = fa311.o
+--i82586_drivers = 3c507.o exos205.o ni5210.o
+--lance_drivers = lance.o ne2100.o ni6510.o
+-+forcedeth_drivers = forcedeth.o
+-+#i82586_drivers = 3c507.o exos205.o ni5210.o
+-+#lance_drivers = lance.o ne2100.o ni6510.o
+- natsemi_drivers = natsemi.o
+--ni5010_drivers = ni5010.o
+-+#ni5010_drivers = ni5010.o
+-+ns83820_drivers = ns83820.o
+- ns8390_drivers = 3c503.o ne.o ns8390.o wd.o
+--otulip_drivers = otulip.o
+-+#otulip_drivers = otulip.o
+-+pcnet32_drivers = pcnet32.o
+-+pnic_drivers = pnic.o
+-+r8169_drivers = r8169.o
+- rtl8139_drivers = rtl8139.o
+- sis900_drivers = sis900.o
+--sk_g16_drivers = sk_g16.o
+--smc9000_drivers = smc9000.o
+--tiara_drivers = tiara.o
+--#tlan_drivers = tlan.o
+-+#sk_g16_drivers = sk_g16.o
+-+#smc9000_drivers = smc9000.o
+-+tg3_drivers = tg3.o
+-+#tiara_drivers = tiara.o
+-+tlan_drivers = tlan.o
+- tulip_drivers = tulip.o
+- via_rhine_drivers = via_rhine.o
+- w89c840_drivers = w89c840.o
 - 
+- # Per-object flags.
+--3c509_o_CFLAGS = -DINCLUDE_3C509=1
+--3c529_o_CFLAGS = -DINCLUDE_3C529=1
+-+#3c509_o_CFLAGS = -DINCLUDE_3C509=1
+-+#3c529_o_CFLAGS = -DINCLUDE_3C529=1
+- 3c595_o_CFLAGS = -DINCLUDE_3C595=1
+- 3c90x_o_CFLAGS = -DINCLUDE_3C90X=1
+--cs89x0_o_CFLAGS = -DINCLUDE_CS89X0=1
+-+#cs89x0_o_CFLAGS = -DINCLUDE_CS89X0=1
+- davicom_o_CFLAGS = -DINCLUDE_DAVICOM=1
+--depca_o_CFLAGS = -DINCLUDE_DEPCA=1
+--eepro_o_CFLAGS = -DINCLUDE_EEPRO=1
+-+#depca_o_CFLAGS = -DINCLUDE_DEPCA=1
+-+#eepro_o_CFLAGS = -DINCLUDE_EEPRO=1
+-+e1000_o_CFLAGS = -DINCLUDE_E1000=1
+- eepro100_o_CFLAGS = -DINCLUDE_EEPRO100=1
+- epic100_o_CFLAGS = -DINCLUDE_EPIC100=1
+- #fa311_o_CFLAGS = -DINCLUDE_FA311=1
+--3c507_o_CFLAGS = -DINCLUDE_3C507=1
+--exos205_o_CFLAGS = -DINCLUDE_EXOS205=1
+--ni5210_o_CFLAGS = -DINCLUDE_NI5210=1
+--lance_o_CFLAGS = -DINCLUDE_LANCE=1
+--ne2100_o_CFLAGS = -DINCLUDE_NE2100=1
+--ni6510_o_CFLAGS = -DINCLUDE_NI6510=1
+-+forcedeth_o_CFLAGS = -DINCLUDE_FORCEDETH=1
+-+#3c507_o_CFLAGS = -DINCLUDE_3C507=1
+-+#exos205_o_CFLAGS = -DINCLUDE_EXOS205=1
+-+#ni5210_o_CFLAGS = -DINCLUDE_NI5210=1
+-+#lance_o_CFLAGS = -DINCLUDE_LANCE=1
+-+#ne2100_o_CFLAGS = -DINCLUDE_NE2100=1
+-+#ni6510_o_CFLAGS = -DINCLUDE_NI6510=1
+- natsemi_o_CFLAGS = -DINCLUDE_NATSEMI=1
+--ni5010_o_CFLAGS = -DINCLUDE_NI5010=1
+--3c503_o_CFLAGS = -DINCLUDE_3C503=1
+--ne_o_CFLAGS = -DINCLUDE_NE=1
+-+#ni5010_o_CFLAGS = -DINCLUDE_NI5010=1
+-+#3c503_o_CFLAGS = -DINCLUDE_3C503=1
+-+#ne_o_CFLAGS = -DINCLUDE_NE=1
+-+ns83820_o_CFLAGS = -DINCLUDE_NS83820=1
+- ns8390_o_CFLAGS = -DINCLUDE_NS8390=1
+--wd_o_CFLAGS = -DINCLUDE_WD=1
+--otulip_o_CFLAGS = -DINCLUDE_OTULIP=1
+-+#wd_o_CFLAGS = -DINCLUDE_WD=1
+-+#otulip_o_CFLAGS = -DINCLUDE_OTULIP=1
+-+pcnet32_o_CFLAGS = -DINCLUDE_PCNET32=1
+-+pnic_o_CFLAGS = -DINCLUDE_PNIC=1
+-+r8169_o_CFLAGS = -DINCLUDE_R8169=1
+- rtl8139_o_CFLAGS = -DINCLUDE_RTL8139=1
+- sis900_o_CFLAGS = -DINCLUDE_SIS900=1
+--sk_g16_o_CFLAGS = -DINCLUDE_SK_G16=1
+--smc9000_o_CFLAGS = -DINCLUDE_SMC9000=1
+--tiara_o_CFLAGS = -DINCLUDE_TIARA=1
+--#tlan_o_CFLAGS = -DINCLUDE_TLAN=1
+-+#sk_g16_o_CFLAGS = -DINCLUDE_SK_G16=1
+-+#smc9000_o_CFLAGS = -DINCLUDE_SMC9000=1
+-+#tiara_o_CFLAGS = -DINCLUDE_TIARA=1
+-+tg3_o_CFLAGS = -DINCLUDE_TG3=1
+-+tlan_o_CFLAGS = -DINCLUDE_TLAN=1
+- tulip_o_CFLAGS = -DINCLUDE_TULIP=1
+- via_rhine_o_CFLAGS = -DINCLUDE_VIA_RHINE=1
+- w89c840_o_CFLAGS = -DINCLUDE_W89C840=1
+-@@ -316,32 +364,32 @@
+- distclean-compile:
+- 	-rm -f *.tab.c
 - 
---SOURCES = $(mbchk_SOURCES)
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-3c509.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-3c595.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-3c90x.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-basemem.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-config.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-cs89x0.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-davicom.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-depca.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-eepro.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-e1000.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-eepro100.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-epic100.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-fa311.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-forcedeth.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-fsys_tftp.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-i82586.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-lance.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-main.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-i386_timer.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-misc.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-natsemi.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-ni5010.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-nic.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-ns83820.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-ns8390.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-otulip.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-pci.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-pci_io.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-pcnet32.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-pic8259.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-pnic.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-pnic_api.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-r8169.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-rtl8139.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-sis900.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-sk_g16.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-smc9000.Po at am__quote@
+-- at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-tiara.Po at am__quote@
+-+ at AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-tg3.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-timer.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-tlan.Po at am__quote@
+- @AMDEP_TRUE@@am__include@ @am__quote at ./$(DEPDIR)/libdrivers_a-tulip.Po at am__quote@
+-@@ -352,450 +400,513 @@
+- @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(COMPILE) -c $<
+- 
+- .c.obj:
+- @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+- 
+- libdrivers_a-config.o: config.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-config.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-config.Tpo" -c -o libdrivers_a-config.o `test -f 'config.c' || echo '$(srcdir)/'`config.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-config.Tpo" "$(DEPDIR)/libdrivers_a-config.Po"; else rm -f "$(DEPDIR)/libdrivers_a-config.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='config.c' object='libdrivers_a-config.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-config.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-config.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-config.o `test -f 'config.c' || echo '$(srcdir)/'`config.c
+- 
+- libdrivers_a-config.obj: config.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-config.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-config.Tpo" -c -o libdrivers_a-config.obj `if test -f 'config.c'; then $(CYGPATH_W) 'config.c'; else $(CYGPATH_W) '$(srcdir)/config.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-config.Tpo" "$(DEPDIR)/libdrivers_a-config.Po"; else rm -f "$(DEPDIR)/libdrivers_a-config.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='config.c' object='libdrivers_a-config.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-config.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-config.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-config.obj `if test -f 'config.c'; then $(CYGPATH_W) 'config.c'; else $(CYGPATH_W) '$(srcdir)/config.c'; fi`
+- 
+- libdrivers_a-fsys_tftp.o: fsys_tftp.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-fsys_tftp.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-fsys_tftp.Tpo" -c -o libdrivers_a-fsys_tftp.o `test -f 'fsys_tftp.c' || echo '$(srcdir)/'`fsys_tftp.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-fsys_tftp.Tpo" "$(DEPDIR)/libdrivers_a-fsys_tftp.Po"; else rm -f "$(DEPDIR)/libdrivers_a-fsys_tftp.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fsys_tftp.c' object='libdrivers_a-fsys_tftp.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-fsys_tftp.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-fsys_tftp.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-fsys_tftp.o `test -f 'fsys_tftp.c' || echo '$(srcdir)/'`fsys_tftp.c
+- 
+- libdrivers_a-fsys_tftp.obj: fsys_tftp.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-fsys_tftp.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-fsys_tftp.Tpo" -c -o libdrivers_a-fsys_tftp.obj `if test -f 'fsys_tftp.c'; then $(CYGPATH_W) 'fsys_tftp.c'; else $(CYGPATH_W) '$(srcdir)/fsys_tftp.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-fsys_tftp.Tpo" "$(DEPDIR)/libdrivers_a-fsys_tftp.Po"; else rm -f "$(DEPDIR)/libdrivers_a-fsys_tftp.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fsys_tftp.c' object='libdrivers_a-fsys_tftp.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-fsys_tftp.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-fsys_tftp.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-fsys_tftp.obj `if test -f 'fsys_tftp.c'; then $(CYGPATH_W) 'fsys_tftp.c'; else $(CYGPATH_W) '$(srcdir)/fsys_tftp.c'; fi`
+- 
+--libdrivers_a-main.o: main.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-main.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-main.Tpo" -c -o libdrivers_a-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-main.Tpo" "$(DEPDIR)/libdrivers_a-main.Po"; else rm -f "$(DEPDIR)/libdrivers_a-main.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='main.c' object='libdrivers_a-main.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
 --
-- srcdir = @srcdir@
-- top_srcdir = @top_srcdir@
-- VPATH = @srcdir@
--@@ -102,6 +100,8 @@ ECHO_T = @ECHO_T@
-- EGREP = @EGREP@
-- EXEEXT = @EXEEXT@
-- FSYS_CFLAGS = @FSYS_CFLAGS@
--+GRAPHICS_SUPPORT_FALSE = @GRAPHICS_SUPPORT_FALSE@
--+GRAPHICS_SUPPORT_TRUE = @GRAPHICS_SUPPORT_TRUE@
-- GRUB_CFLAGS = @GRUB_CFLAGS@
-- GRUB_LIBS = @GRUB_LIBS@
-- HERCULES_SUPPORT_FALSE = @HERCULES_SUPPORT_FALSE@
+--libdrivers_a-main.obj: main.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-main.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-main.Tpo" -c -o libdrivers_a-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-main.Tpo" "$(DEPDIR)/libdrivers_a-main.Po"; else rm -f "$(DEPDIR)/libdrivers_a-main.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='main.c' object='libdrivers_a-main.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+-+libdrivers_a-i386_timer.o: i386_timer.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-i386_timer.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-i386_timer.Tpo" -c -o libdrivers_a-i386_timer.o `test -f 'i386_timer.c' || echo '$(srcdir)/'`i386_timer.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-i386_timer.Tpo" "$(DEPDIR)/libdrivers_a-i386_timer.Po"; else rm -f "$(DEPDIR)/libdrivers_a-i386_timer.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='i386_timer.c' object='libdrivers_a-i386_timer.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-i386_timer.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-i386_timer.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-i386_timer.o `test -f 'i386_timer.c' || echo '$(srcdir)/'`i386_timer.c
+-+
+-+libdrivers_a-i386_timer.obj: i386_timer.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-i386_timer.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-i386_timer.Tpo" -c -o libdrivers_a-i386_timer.obj `if test -f 'i386_timer.c'; then $(CYGPATH_W) 'i386_timer.c'; else $(CYGPATH_W) '$(srcdir)/i386_timer.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-i386_timer.Tpo" "$(DEPDIR)/libdrivers_a-i386_timer.Po"; else rm -f "$(DEPDIR)/libdrivers_a-i386_timer.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='i386_timer.c' object='libdrivers_a-i386_timer.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-i386_timer.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-i386_timer.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-i386_timer.obj `if test -f 'i386_timer.c'; then $(CYGPATH_W) 'i386_timer.c'; else $(CYGPATH_W) '$(srcdir)/i386_timer.c'; fi`
+- 
+- libdrivers_a-misc.o: misc.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-misc.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-misc.Tpo" -c -o libdrivers_a-misc.o `test -f 'misc.c' || echo '$(srcdir)/'`misc.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-misc.Tpo" "$(DEPDIR)/libdrivers_a-misc.Po"; else rm -f "$(DEPDIR)/libdrivers_a-misc.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='misc.c' object='libdrivers_a-misc.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-misc.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-misc.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-misc.o `test -f 'misc.c' || echo '$(srcdir)/'`misc.c
+- 
+- libdrivers_a-misc.obj: misc.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-misc.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-misc.Tpo" -c -o libdrivers_a-misc.obj `if test -f 'misc.c'; then $(CYGPATH_W) 'misc.c'; else $(CYGPATH_W) '$(srcdir)/misc.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-misc.Tpo" "$(DEPDIR)/libdrivers_a-misc.Po"; else rm -f "$(DEPDIR)/libdrivers_a-misc.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='misc.c' object='libdrivers_a-misc.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-misc.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-misc.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-misc.obj `if test -f 'misc.c'; then $(CYGPATH_W) 'misc.c'; else $(CYGPATH_W) '$(srcdir)/misc.c'; fi`
+- 
+-+libdrivers_a-nic.o: nic.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-nic.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-nic.Tpo" -c -o libdrivers_a-nic.o `test -f 'nic.c' || echo '$(srcdir)/'`nic.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-nic.Tpo" "$(DEPDIR)/libdrivers_a-nic.Po"; else rm -f "$(DEPDIR)/libdrivers_a-nic.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='nic.c' object='libdrivers_a-nic.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-nic.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-nic.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-nic.o `test -f 'nic.c' || echo '$(srcdir)/'`nic.c
+-+
+-+libdrivers_a-nic.obj: nic.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-nic.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-nic.Tpo" -c -o libdrivers_a-nic.obj `if test -f 'nic.c'; then $(CYGPATH_W) 'nic.c'; else $(CYGPATH_W) '$(srcdir)/nic.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-nic.Tpo" "$(DEPDIR)/libdrivers_a-nic.Po"; else rm -f "$(DEPDIR)/libdrivers_a-nic.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='nic.c' object='libdrivers_a-nic.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-nic.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-nic.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-nic.obj `if test -f 'nic.c'; then $(CYGPATH_W) 'nic.c'; else $(CYGPATH_W) '$(srcdir)/nic.c'; fi`
+-+
+- libdrivers_a-pci.o: pci.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pci.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-pci.Tpo" -c -o libdrivers_a-pci.o `test -f 'pci.c' || echo '$(srcdir)/'`pci.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pci.Tpo" "$(DEPDIR)/libdrivers_a-pci.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pci.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pci.c' object='libdrivers_a-pci.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pci.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pci.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pci.o `test -f 'pci.c' || echo '$(srcdir)/'`pci.c
+- 
+- libdrivers_a-pci.obj: pci.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pci.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-pci.Tpo" -c -o libdrivers_a-pci.obj `if test -f 'pci.c'; then $(CYGPATH_W) 'pci.c'; else $(CYGPATH_W) '$(srcdir)/pci.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pci.Tpo" "$(DEPDIR)/libdrivers_a-pci.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pci.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pci.c' object='libdrivers_a-pci.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pci.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pci.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pci.obj `if test -f 'pci.c'; then $(CYGPATH_W) 'pci.c'; else $(CYGPATH_W) '$(srcdir)/pci.c'; fi`
+- 
+-+libdrivers_a-pci_io.o: pci_io.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pci_io.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-pci_io.Tpo" -c -o libdrivers_a-pci_io.o `test -f 'pci_io.c' || echo '$(srcdir)/'`pci_io.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pci_io.Tpo" "$(DEPDIR)/libdrivers_a-pci_io.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pci_io.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pci_io.c' object='libdrivers_a-pci_io.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pci_io.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pci_io.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pci_io.o `test -f 'pci_io.c' || echo '$(srcdir)/'`pci_io.c
+-+
+-+libdrivers_a-pci_io.obj: pci_io.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pci_io.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-pci_io.Tpo" -c -o libdrivers_a-pci_io.obj `if test -f 'pci_io.c'; then $(CYGPATH_W) 'pci_io.c'; else $(CYGPATH_W) '$(srcdir)/pci_io.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pci_io.Tpo" "$(DEPDIR)/libdrivers_a-pci_io.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pci_io.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pci_io.c' object='libdrivers_a-pci_io.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pci_io.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pci_io.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pci_io.obj `if test -f 'pci_io.c'; then $(CYGPATH_W) 'pci_io.c'; else $(CYGPATH_W) '$(srcdir)/pci_io.c'; fi`
+-+
+- libdrivers_a-timer.o: timer.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-timer.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-timer.Tpo" -c -o libdrivers_a-timer.o `test -f 'timer.c' || echo '$(srcdir)/'`timer.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-timer.Tpo" "$(DEPDIR)/libdrivers_a-timer.Po"; else rm -f "$(DEPDIR)/libdrivers_a-timer.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='timer.c' object='libdrivers_a-timer.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-timer.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-timer.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-timer.o `test -f 'timer.c' || echo '$(srcdir)/'`timer.c
+- 
+- libdrivers_a-timer.obj: timer.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-timer.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-timer.Tpo" -c -o libdrivers_a-timer.obj `if test -f 'timer.c'; then $(CYGPATH_W) 'timer.c'; else $(CYGPATH_W) '$(srcdir)/timer.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-timer.Tpo" "$(DEPDIR)/libdrivers_a-timer.Po"; else rm -f "$(DEPDIR)/libdrivers_a-timer.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='timer.c' object='libdrivers_a-timer.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-timer.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-timer.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-timer.obj `if test -f 'timer.c'; then $(CYGPATH_W) 'timer.c'; else $(CYGPATH_W) '$(srcdir)/timer.c'; fi`
+- 
+--libdrivers_a-3c509.o: 3c509.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-3c509.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-3c509.Tpo" -c -o libdrivers_a-3c509.o `test -f '3c509.c' || echo '$(srcdir)/'`3c509.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-3c509.Tpo" "$(DEPDIR)/libdrivers_a-3c509.Po"; else rm -f "$(DEPDIR)/libdrivers_a-3c509.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='3c509.c' object='libdrivers_a-3c509.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-3c509.o `test -f '3c509.c' || echo '$(srcdir)/'`3c509.c
+--
+--libdrivers_a-3c509.obj: 3c509.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-3c509.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-3c509.Tpo" -c -o libdrivers_a-3c509.obj `if test -f '3c509.c'; then $(CYGPATH_W) '3c509.c'; else $(CYGPATH_W) '$(srcdir)/3c509.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-3c509.Tpo" "$(DEPDIR)/libdrivers_a-3c509.Po"; else rm -f "$(DEPDIR)/libdrivers_a-3c509.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='3c509.c' object='libdrivers_a-3c509.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-3c509.obj `if test -f '3c509.c'; then $(CYGPATH_W) '3c509.c'; else $(CYGPATH_W) '$(srcdir)/3c509.c'; fi`
+-+libdrivers_a-pic8259.o: pic8259.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pic8259.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-pic8259.Tpo" -c -o libdrivers_a-pic8259.o `test -f 'pic8259.c' || echo '$(srcdir)/'`pic8259.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pic8259.Tpo" "$(DEPDIR)/libdrivers_a-pic8259.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pic8259.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pic8259.c' object='libdrivers_a-pic8259.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pic8259.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pic8259.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pic8259.o `test -f 'pic8259.c' || echo '$(srcdir)/'`pic8259.c
+-+
+-+libdrivers_a-pic8259.obj: pic8259.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pic8259.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-pic8259.Tpo" -c -o libdrivers_a-pic8259.obj `if test -f 'pic8259.c'; then $(CYGPATH_W) 'pic8259.c'; else $(CYGPATH_W) '$(srcdir)/pic8259.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pic8259.Tpo" "$(DEPDIR)/libdrivers_a-pic8259.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pic8259.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pic8259.c' object='libdrivers_a-pic8259.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pic8259.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pic8259.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pic8259.obj `if test -f 'pic8259.c'; then $(CYGPATH_W) 'pic8259.c'; else $(CYGPATH_W) '$(srcdir)/pic8259.c'; fi`
+-+
+-+libdrivers_a-basemem.o: basemem.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-basemem.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-basemem.Tpo" -c -o libdrivers_a-basemem.o `test -f 'basemem.c' || echo '$(srcdir)/'`basemem.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-basemem.Tpo" "$(DEPDIR)/libdrivers_a-basemem.Po"; else rm -f "$(DEPDIR)/libdrivers_a-basemem.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='basemem.c' object='libdrivers_a-basemem.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-basemem.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-basemem.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-basemem.o `test -f 'basemem.c' || echo '$(srcdir)/'`basemem.c
+-+
+-+libdrivers_a-basemem.obj: basemem.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-basemem.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-basemem.Tpo" -c -o libdrivers_a-basemem.obj `if test -f 'basemem.c'; then $(CYGPATH_W) 'basemem.c'; else $(CYGPATH_W) '$(srcdir)/basemem.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-basemem.Tpo" "$(DEPDIR)/libdrivers_a-basemem.Po"; else rm -f "$(DEPDIR)/libdrivers_a-basemem.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='basemem.c' object='libdrivers_a-basemem.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-basemem.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-basemem.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-basemem.obj `if test -f 'basemem.c'; then $(CYGPATH_W) 'basemem.c'; else $(CYGPATH_W) '$(srcdir)/basemem.c'; fi`
+- 
+- libdrivers_a-3c595.o: 3c595.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-3c595.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-3c595.Tpo" -c -o libdrivers_a-3c595.o `test -f '3c595.c' || echo '$(srcdir)/'`3c595.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-3c595.Tpo" "$(DEPDIR)/libdrivers_a-3c595.Po"; else rm -f "$(DEPDIR)/libdrivers_a-3c595.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='3c595.c' object='libdrivers_a-3c595.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-3c595.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-3c595.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-3c595.o `test -f '3c595.c' || echo '$(srcdir)/'`3c595.c
+- 
+- libdrivers_a-3c595.obj: 3c595.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-3c595.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-3c595.Tpo" -c -o libdrivers_a-3c595.obj `if test -f '3c595.c'; then $(CYGPATH_W) '3c595.c'; else $(CYGPATH_W) '$(srcdir)/3c595.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-3c595.Tpo" "$(DEPDIR)/libdrivers_a-3c595.Po"; else rm -f "$(DEPDIR)/libdrivers_a-3c595.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='3c595.c' object='libdrivers_a-3c595.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-3c595.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-3c595.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-3c595.obj `if test -f '3c595.c'; then $(CYGPATH_W) '3c595.c'; else $(CYGPATH_W) '$(srcdir)/3c595.c'; fi`
+- 
+- libdrivers_a-3c90x.o: 3c90x.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-3c90x.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-3c90x.Tpo" -c -o libdrivers_a-3c90x.o `test -f '3c90x.c' || echo '$(srcdir)/'`3c90x.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-3c90x.Tpo" "$(DEPDIR)/libdrivers_a-3c90x.Po"; else rm -f "$(DEPDIR)/libdrivers_a-3c90x.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='3c90x.c' object='libdrivers_a-3c90x.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-3c90x.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-3c90x.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-3c90x.o `test -f '3c90x.c' || echo '$(srcdir)/'`3c90x.c
+- 
+- libdrivers_a-3c90x.obj: 3c90x.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-3c90x.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-3c90x.Tpo" -c -o libdrivers_a-3c90x.obj `if test -f '3c90x.c'; then $(CYGPATH_W) '3c90x.c'; else $(CYGPATH_W) '$(srcdir)/3c90x.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-3c90x.Tpo" "$(DEPDIR)/libdrivers_a-3c90x.Po"; else rm -f "$(DEPDIR)/libdrivers_a-3c90x.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='3c90x.c' object='libdrivers_a-3c90x.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-3c90x.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-3c90x.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-3c90x.obj `if test -f '3c90x.c'; then $(CYGPATH_W) '3c90x.c'; else $(CYGPATH_W) '$(srcdir)/3c90x.c'; fi`
+- 
+--libdrivers_a-cs89x0.o: cs89x0.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-cs89x0.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-cs89x0.Tpo" -c -o libdrivers_a-cs89x0.o `test -f 'cs89x0.c' || echo '$(srcdir)/'`cs89x0.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-cs89x0.Tpo" "$(DEPDIR)/libdrivers_a-cs89x0.Po"; else rm -f "$(DEPDIR)/libdrivers_a-cs89x0.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='cs89x0.c' object='libdrivers_a-cs89x0.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-cs89x0.o `test -f 'cs89x0.c' || echo '$(srcdir)/'`cs89x0.c
+--
+--libdrivers_a-cs89x0.obj: cs89x0.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-cs89x0.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-cs89x0.Tpo" -c -o libdrivers_a-cs89x0.obj `if test -f 'cs89x0.c'; then $(CYGPATH_W) 'cs89x0.c'; else $(CYGPATH_W) '$(srcdir)/cs89x0.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-cs89x0.Tpo" "$(DEPDIR)/libdrivers_a-cs89x0.Po"; else rm -f "$(DEPDIR)/libdrivers_a-cs89x0.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='cs89x0.c' object='libdrivers_a-cs89x0.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-cs89x0.obj `if test -f 'cs89x0.c'; then $(CYGPATH_W) 'cs89x0.c'; else $(CYGPATH_W) '$(srcdir)/cs89x0.c'; fi`
+--
+- libdrivers_a-davicom.o: davicom.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-davicom.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-davicom.Tpo" -c -o libdrivers_a-davicom.o `test -f 'davicom.c' || echo '$(srcdir)/'`davicom.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-davicom.Tpo" "$(DEPDIR)/libdrivers_a-davicom.Po"; else rm -f "$(DEPDIR)/libdrivers_a-davicom.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='davicom.c' object='libdrivers_a-davicom.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-davicom.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-davicom.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-davicom.o `test -f 'davicom.c' || echo '$(srcdir)/'`davicom.c
+- 
+- libdrivers_a-davicom.obj: davicom.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-davicom.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-davicom.Tpo" -c -o libdrivers_a-davicom.obj `if test -f 'davicom.c'; then $(CYGPATH_W) 'davicom.c'; else $(CYGPATH_W) '$(srcdir)/davicom.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-davicom.Tpo" "$(DEPDIR)/libdrivers_a-davicom.Po"; else rm -f "$(DEPDIR)/libdrivers_a-davicom.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='davicom.c' object='libdrivers_a-davicom.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-davicom.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-davicom.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-davicom.obj `if test -f 'davicom.c'; then $(CYGPATH_W) 'davicom.c'; else $(CYGPATH_W) '$(srcdir)/davicom.c'; fi`
+- 
+--libdrivers_a-depca.o: depca.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-depca.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-depca.Tpo" -c -o libdrivers_a-depca.o `test -f 'depca.c' || echo '$(srcdir)/'`depca.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-depca.Tpo" "$(DEPDIR)/libdrivers_a-depca.Po"; else rm -f "$(DEPDIR)/libdrivers_a-depca.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='depca.c' object='libdrivers_a-depca.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-depca.o `test -f 'depca.c' || echo '$(srcdir)/'`depca.c
+--
+--libdrivers_a-depca.obj: depca.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-depca.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-depca.Tpo" -c -o libdrivers_a-depca.obj `if test -f 'depca.c'; then $(CYGPATH_W) 'depca.c'; else $(CYGPATH_W) '$(srcdir)/depca.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-depca.Tpo" "$(DEPDIR)/libdrivers_a-depca.Po"; else rm -f "$(DEPDIR)/libdrivers_a-depca.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='depca.c' object='libdrivers_a-depca.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-depca.obj `if test -f 'depca.c'; then $(CYGPATH_W) 'depca.c'; else $(CYGPATH_W) '$(srcdir)/depca.c'; fi`
+--
+--libdrivers_a-eepro.o: eepro.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-eepro.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-eepro.Tpo" -c -o libdrivers_a-eepro.o `test -f 'eepro.c' || echo '$(srcdir)/'`eepro.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-eepro.Tpo" "$(DEPDIR)/libdrivers_a-eepro.Po"; else rm -f "$(DEPDIR)/libdrivers_a-eepro.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='eepro.c' object='libdrivers_a-eepro.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-eepro.o `test -f 'eepro.c' || echo '$(srcdir)/'`eepro.c
+--
+--libdrivers_a-eepro.obj: eepro.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-eepro.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-eepro.Tpo" -c -o libdrivers_a-eepro.obj `if test -f 'eepro.c'; then $(CYGPATH_W) 'eepro.c'; else $(CYGPATH_W) '$(srcdir)/eepro.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-eepro.Tpo" "$(DEPDIR)/libdrivers_a-eepro.Po"; else rm -f "$(DEPDIR)/libdrivers_a-eepro.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='eepro.c' object='libdrivers_a-eepro.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-eepro.obj `if test -f 'eepro.c'; then $(CYGPATH_W) 'eepro.c'; else $(CYGPATH_W) '$(srcdir)/eepro.c'; fi`
+-+libdrivers_a-e1000.o: e1000.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-e1000.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-e1000.Tpo" -c -o libdrivers_a-e1000.o `test -f 'e1000.c' || echo '$(srcdir)/'`e1000.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-e1000.Tpo" "$(DEPDIR)/libdrivers_a-e1000.Po"; else rm -f "$(DEPDIR)/libdrivers_a-e1000.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='e1000.c' object='libdrivers_a-e1000.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-e1000.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-e1000.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-e1000.o `test -f 'e1000.c' || echo '$(srcdir)/'`e1000.c
+-+
+-+libdrivers_a-e1000.obj: e1000.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-e1000.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-e1000.Tpo" -c -o libdrivers_a-e1000.obj `if test -f 'e1000.c'; then $(CYGPATH_W) 'e1000.c'; else $(CYGPATH_W) '$(srcdir)/e1000.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-e1000.Tpo" "$(DEPDIR)/libdrivers_a-e1000.Po"; else rm -f "$(DEPDIR)/libdrivers_a-e1000.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='e1000.c' object='libdrivers_a-e1000.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-e1000.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-e1000.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-e1000.obj `if test -f 'e1000.c'; then $(CYGPATH_W) 'e1000.c'; else $(CYGPATH_W) '$(srcdir)/e1000.c'; fi`
+- 
+- libdrivers_a-eepro100.o: eepro100.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-eepro100.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-eepro100.Tpo" -c -o libdrivers_a-eepro100.o `test -f 'eepro100.c' || echo '$(srcdir)/'`eepro100.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-eepro100.Tpo" "$(DEPDIR)/libdrivers_a-eepro100.Po"; else rm -f "$(DEPDIR)/libdrivers_a-eepro100.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='eepro100.c' object='libdrivers_a-eepro100.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-eepro100.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-eepro100.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-eepro100.o `test -f 'eepro100.c' || echo '$(srcdir)/'`eepro100.c
+- 
+- libdrivers_a-eepro100.obj: eepro100.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-eepro100.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-eepro100.Tpo" -c -o libdrivers_a-eepro100.obj `if test -f 'eepro100.c'; then $(CYGPATH_W) 'eepro100.c'; else $(CYGPATH_W) '$(srcdir)/eepro100.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-eepro100.Tpo" "$(DEPDIR)/libdrivers_a-eepro100.Po"; else rm -f "$(DEPDIR)/libdrivers_a-eepro100.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='eepro100.c' object='libdrivers_a-eepro100.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-eepro100.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-eepro100.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-eepro100.obj `if test -f 'eepro100.c'; then $(CYGPATH_W) 'eepro100.c'; else $(CYGPATH_W) '$(srcdir)/eepro100.c'; fi`
+- 
+- libdrivers_a-epic100.o: epic100.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-epic100.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-epic100.Tpo" -c -o libdrivers_a-epic100.o `test -f 'epic100.c' || echo '$(srcdir)/'`epic100.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-epic100.Tpo" "$(DEPDIR)/libdrivers_a-epic100.Po"; else rm -f "$(DEPDIR)/libdrivers_a-epic100.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='epic100.c' object='libdrivers_a-epic100.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-epic100.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-epic100.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-epic100.o `test -f 'epic100.c' || echo '$(srcdir)/'`epic100.c
+- 
+- libdrivers_a-epic100.obj: epic100.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-epic100.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-epic100.Tpo" -c -o libdrivers_a-epic100.obj `if test -f 'epic100.c'; then $(CYGPATH_W) 'epic100.c'; else $(CYGPATH_W) '$(srcdir)/epic100.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-epic100.Tpo" "$(DEPDIR)/libdrivers_a-epic100.Po"; else rm -f "$(DEPDIR)/libdrivers_a-epic100.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='epic100.c' object='libdrivers_a-epic100.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-epic100.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-epic100.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-epic100.obj `if test -f 'epic100.c'; then $(CYGPATH_W) 'epic100.c'; else $(CYGPATH_W) '$(srcdir)/epic100.c'; fi`
+- 
+--libdrivers_a-fa311.o: fa311.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-fa311.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-fa311.Tpo" -c -o libdrivers_a-fa311.o `test -f 'fa311.c' || echo '$(srcdir)/'`fa311.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-fa311.Tpo" "$(DEPDIR)/libdrivers_a-fa311.Po"; else rm -f "$(DEPDIR)/libdrivers_a-fa311.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fa311.c' object='libdrivers_a-fa311.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-fa311.o `test -f 'fa311.c' || echo '$(srcdir)/'`fa311.c
+--
+--libdrivers_a-fa311.obj: fa311.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-fa311.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-fa311.Tpo" -c -o libdrivers_a-fa311.obj `if test -f 'fa311.c'; then $(CYGPATH_W) 'fa311.c'; else $(CYGPATH_W) '$(srcdir)/fa311.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-fa311.Tpo" "$(DEPDIR)/libdrivers_a-fa311.Po"; else rm -f "$(DEPDIR)/libdrivers_a-fa311.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fa311.c' object='libdrivers_a-fa311.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-fa311.obj `if test -f 'fa311.c'; then $(CYGPATH_W) 'fa311.c'; else $(CYGPATH_W) '$(srcdir)/fa311.c'; fi`
+--
+--libdrivers_a-i82586.o: i82586.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-i82586.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-i82586.Tpo" -c -o libdrivers_a-i82586.o `test -f 'i82586.c' || echo '$(srcdir)/'`i82586.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-i82586.Tpo" "$(DEPDIR)/libdrivers_a-i82586.Po"; else rm -f "$(DEPDIR)/libdrivers_a-i82586.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='i82586.c' object='libdrivers_a-i82586.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-i82586.o `test -f 'i82586.c' || echo '$(srcdir)/'`i82586.c
+--
+--libdrivers_a-i82586.obj: i82586.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-i82586.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-i82586.Tpo" -c -o libdrivers_a-i82586.obj `if test -f 'i82586.c'; then $(CYGPATH_W) 'i82586.c'; else $(CYGPATH_W) '$(srcdir)/i82586.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-i82586.Tpo" "$(DEPDIR)/libdrivers_a-i82586.Po"; else rm -f "$(DEPDIR)/libdrivers_a-i82586.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='i82586.c' object='libdrivers_a-i82586.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-i82586.obj `if test -f 'i82586.c'; then $(CYGPATH_W) 'i82586.c'; else $(CYGPATH_W) '$(srcdir)/i82586.c'; fi`
+--
+--libdrivers_a-lance.o: lance.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-lance.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-lance.Tpo" -c -o libdrivers_a-lance.o `test -f 'lance.c' || echo '$(srcdir)/'`lance.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-lance.Tpo" "$(DEPDIR)/libdrivers_a-lance.Po"; else rm -f "$(DEPDIR)/libdrivers_a-lance.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lance.c' object='libdrivers_a-lance.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-lance.o `test -f 'lance.c' || echo '$(srcdir)/'`lance.c
+--
+--libdrivers_a-lance.obj: lance.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-lance.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-lance.Tpo" -c -o libdrivers_a-lance.obj `if test -f 'lance.c'; then $(CYGPATH_W) 'lance.c'; else $(CYGPATH_W) '$(srcdir)/lance.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-lance.Tpo" "$(DEPDIR)/libdrivers_a-lance.Po"; else rm -f "$(DEPDIR)/libdrivers_a-lance.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='lance.c' object='libdrivers_a-lance.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-lance.obj `if test -f 'lance.c'; then $(CYGPATH_W) 'lance.c'; else $(CYGPATH_W) '$(srcdir)/lance.c'; fi`
+--
+- libdrivers_a-natsemi.o: natsemi.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-natsemi.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-natsemi.Tpo" -c -o libdrivers_a-natsemi.o `test -f 'natsemi.c' || echo '$(srcdir)/'`natsemi.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-natsemi.Tpo" "$(DEPDIR)/libdrivers_a-natsemi.Po"; else rm -f "$(DEPDIR)/libdrivers_a-natsemi.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='natsemi.c' object='libdrivers_a-natsemi.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-natsemi.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-natsemi.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-natsemi.o `test -f 'natsemi.c' || echo '$(srcdir)/'`natsemi.c
+- 
+- libdrivers_a-natsemi.obj: natsemi.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-natsemi.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-natsemi.Tpo" -c -o libdrivers_a-natsemi.obj `if test -f 'natsemi.c'; then $(CYGPATH_W) 'natsemi.c'; else $(CYGPATH_W) '$(srcdir)/natsemi.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-natsemi.Tpo" "$(DEPDIR)/libdrivers_a-natsemi.Po"; else rm -f "$(DEPDIR)/libdrivers_a-natsemi.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='natsemi.c' object='libdrivers_a-natsemi.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-natsemi.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-natsemi.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-natsemi.obj `if test -f 'natsemi.c'; then $(CYGPATH_W) 'natsemi.c'; else $(CYGPATH_W) '$(srcdir)/natsemi.c'; fi`
+- 
+--libdrivers_a-ni5010.o: ni5010.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-ni5010.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-ni5010.Tpo" -c -o libdrivers_a-ni5010.o `test -f 'ni5010.c' || echo '$(srcdir)/'`ni5010.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-ni5010.Tpo" "$(DEPDIR)/libdrivers_a-ni5010.Po"; else rm -f "$(DEPDIR)/libdrivers_a-ni5010.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ni5010.c' object='libdrivers_a-ni5010.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-ni5010.o `test -f 'ni5010.c' || echo '$(srcdir)/'`ni5010.c
+--
+--libdrivers_a-ni5010.obj: ni5010.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-ni5010.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-ni5010.Tpo" -c -o libdrivers_a-ni5010.obj `if test -f 'ni5010.c'; then $(CYGPATH_W) 'ni5010.c'; else $(CYGPATH_W) '$(srcdir)/ni5010.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-ni5010.Tpo" "$(DEPDIR)/libdrivers_a-ni5010.Po"; else rm -f "$(DEPDIR)/libdrivers_a-ni5010.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ni5010.c' object='libdrivers_a-ni5010.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-ni5010.obj `if test -f 'ni5010.c'; then $(CYGPATH_W) 'ni5010.c'; else $(CYGPATH_W) '$(srcdir)/ni5010.c'; fi`
+--
+- libdrivers_a-ns8390.o: ns8390.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-ns8390.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-ns8390.Tpo" -c -o libdrivers_a-ns8390.o `test -f 'ns8390.c' || echo '$(srcdir)/'`ns8390.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-ns8390.Tpo" "$(DEPDIR)/libdrivers_a-ns8390.Po"; else rm -f "$(DEPDIR)/libdrivers_a-ns8390.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ns8390.c' object='libdrivers_a-ns8390.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-ns8390.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-ns8390.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-ns8390.o `test -f 'ns8390.c' || echo '$(srcdir)/'`ns8390.c
+- 
+- libdrivers_a-ns8390.obj: ns8390.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-ns8390.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-ns8390.Tpo" -c -o libdrivers_a-ns8390.obj `if test -f 'ns8390.c'; then $(CYGPATH_W) 'ns8390.c'; else $(CYGPATH_W) '$(srcdir)/ns8390.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-ns8390.Tpo" "$(DEPDIR)/libdrivers_a-ns8390.Po"; else rm -f "$(DEPDIR)/libdrivers_a-ns8390.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ns8390.c' object='libdrivers_a-ns8390.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-ns8390.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-ns8390.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-ns8390.obj `if test -f 'ns8390.c'; then $(CYGPATH_W) 'ns8390.c'; else $(CYGPATH_W) '$(srcdir)/ns8390.c'; fi`
+- 
+--libdrivers_a-otulip.o: otulip.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-otulip.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-otulip.Tpo" -c -o libdrivers_a-otulip.o `test -f 'otulip.c' || echo '$(srcdir)/'`otulip.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-otulip.Tpo" "$(DEPDIR)/libdrivers_a-otulip.Po"; else rm -f "$(DEPDIR)/libdrivers_a-otulip.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='otulip.c' object='libdrivers_a-otulip.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-otulip.o `test -f 'otulip.c' || echo '$(srcdir)/'`otulip.c
+--
+--libdrivers_a-otulip.obj: otulip.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-otulip.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-otulip.Tpo" -c -o libdrivers_a-otulip.obj `if test -f 'otulip.c'; then $(CYGPATH_W) 'otulip.c'; else $(CYGPATH_W) '$(srcdir)/otulip.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-otulip.Tpo" "$(DEPDIR)/libdrivers_a-otulip.Po"; else rm -f "$(DEPDIR)/libdrivers_a-otulip.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='otulip.c' object='libdrivers_a-otulip.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-otulip.obj `if test -f 'otulip.c'; then $(CYGPATH_W) 'otulip.c'; else $(CYGPATH_W) '$(srcdir)/otulip.c'; fi`
+-+libdrivers_a-pcnet32.o: pcnet32.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pcnet32.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-pcnet32.Tpo" -c -o libdrivers_a-pcnet32.o `test -f 'pcnet32.c' || echo '$(srcdir)/'`pcnet32.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pcnet32.Tpo" "$(DEPDIR)/libdrivers_a-pcnet32.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pcnet32.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcnet32.c' object='libdrivers_a-pcnet32.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pcnet32.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pcnet32.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pcnet32.o `test -f 'pcnet32.c' || echo '$(srcdir)/'`pcnet32.c
+-+
+-+libdrivers_a-pcnet32.obj: pcnet32.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pcnet32.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-pcnet32.Tpo" -c -o libdrivers_a-pcnet32.obj `if test -f 'pcnet32.c'; then $(CYGPATH_W) 'pcnet32.c'; else $(CYGPATH_W) '$(srcdir)/pcnet32.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pcnet32.Tpo" "$(DEPDIR)/libdrivers_a-pcnet32.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pcnet32.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pcnet32.c' object='libdrivers_a-pcnet32.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pcnet32.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pcnet32.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pcnet32.obj `if test -f 'pcnet32.c'; then $(CYGPATH_W) 'pcnet32.c'; else $(CYGPATH_W) '$(srcdir)/pcnet32.c'; fi`
+- 
+- libdrivers_a-rtl8139.o: rtl8139.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-rtl8139.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-rtl8139.Tpo" -c -o libdrivers_a-rtl8139.o `test -f 'rtl8139.c' || echo '$(srcdir)/'`rtl8139.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-rtl8139.Tpo" "$(DEPDIR)/libdrivers_a-rtl8139.Po"; else rm -f "$(DEPDIR)/libdrivers_a-rtl8139.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='rtl8139.c' object='libdrivers_a-rtl8139.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-rtl8139.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-rtl8139.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-rtl8139.o `test -f 'rtl8139.c' || echo '$(srcdir)/'`rtl8139.c
+- 
+- libdrivers_a-rtl8139.obj: rtl8139.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-rtl8139.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-rtl8139.Tpo" -c -o libdrivers_a-rtl8139.obj `if test -f 'rtl8139.c'; then $(CYGPATH_W) 'rtl8139.c'; else $(CYGPATH_W) '$(srcdir)/rtl8139.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-rtl8139.Tpo" "$(DEPDIR)/libdrivers_a-rtl8139.Po"; else rm -f "$(DEPDIR)/libdrivers_a-rtl8139.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='rtl8139.c' object='libdrivers_a-rtl8139.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-rtl8139.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-rtl8139.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-rtl8139.obj `if test -f 'rtl8139.c'; then $(CYGPATH_W) 'rtl8139.c'; else $(CYGPATH_W) '$(srcdir)/rtl8139.c'; fi`
+- 
+- libdrivers_a-sis900.o: sis900.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-sis900.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-sis900.Tpo" -c -o libdrivers_a-sis900.o `test -f 'sis900.c' || echo '$(srcdir)/'`sis900.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-sis900.Tpo" "$(DEPDIR)/libdrivers_a-sis900.Po"; else rm -f "$(DEPDIR)/libdrivers_a-sis900.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='sis900.c' object='libdrivers_a-sis900.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-sis900.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-sis900.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-sis900.o `test -f 'sis900.c' || echo '$(srcdir)/'`sis900.c
+- 
+- libdrivers_a-sis900.obj: sis900.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-sis900.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-sis900.Tpo" -c -o libdrivers_a-sis900.obj `if test -f 'sis900.c'; then $(CYGPATH_W) 'sis900.c'; else $(CYGPATH_W) '$(srcdir)/sis900.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-sis900.Tpo" "$(DEPDIR)/libdrivers_a-sis900.Po"; else rm -f "$(DEPDIR)/libdrivers_a-sis900.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='sis900.c' object='libdrivers_a-sis900.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-sis900.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-sis900.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-sis900.obj `if test -f 'sis900.c'; then $(CYGPATH_W) 'sis900.c'; else $(CYGPATH_W) '$(srcdir)/sis900.c'; fi`
+- 
+--libdrivers_a-sk_g16.o: sk_g16.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-sk_g16.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-sk_g16.Tpo" -c -o libdrivers_a-sk_g16.o `test -f 'sk_g16.c' || echo '$(srcdir)/'`sk_g16.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-sk_g16.Tpo" "$(DEPDIR)/libdrivers_a-sk_g16.Po"; else rm -f "$(DEPDIR)/libdrivers_a-sk_g16.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='sk_g16.c' object='libdrivers_a-sk_g16.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-sk_g16.o `test -f 'sk_g16.c' || echo '$(srcdir)/'`sk_g16.c
+--
+--libdrivers_a-sk_g16.obj: sk_g16.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-sk_g16.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-sk_g16.Tpo" -c -o libdrivers_a-sk_g16.obj `if test -f 'sk_g16.c'; then $(CYGPATH_W) 'sk_g16.c'; else $(CYGPATH_W) '$(srcdir)/sk_g16.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-sk_g16.Tpo" "$(DEPDIR)/libdrivers_a-sk_g16.Po"; else rm -f "$(DEPDIR)/libdrivers_a-sk_g16.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='sk_g16.c' object='libdrivers_a-sk_g16.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-sk_g16.obj `if test -f 'sk_g16.c'; then $(CYGPATH_W) 'sk_g16.c'; else $(CYGPATH_W) '$(srcdir)/sk_g16.c'; fi`
+--
+--libdrivers_a-smc9000.o: smc9000.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-smc9000.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-smc9000.Tpo" -c -o libdrivers_a-smc9000.o `test -f 'smc9000.c' || echo '$(srcdir)/'`smc9000.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-smc9000.Tpo" "$(DEPDIR)/libdrivers_a-smc9000.Po"; else rm -f "$(DEPDIR)/libdrivers_a-smc9000.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='smc9000.c' object='libdrivers_a-smc9000.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-smc9000.o `test -f 'smc9000.c' || echo '$(srcdir)/'`smc9000.c
+--
+--libdrivers_a-smc9000.obj: smc9000.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-smc9000.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-smc9000.Tpo" -c -o libdrivers_a-smc9000.obj `if test -f 'smc9000.c'; then $(CYGPATH_W) 'smc9000.c'; else $(CYGPATH_W) '$(srcdir)/smc9000.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-smc9000.Tpo" "$(DEPDIR)/libdrivers_a-smc9000.Po"; else rm -f "$(DEPDIR)/libdrivers_a-smc9000.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='smc9000.c' object='libdrivers_a-smc9000.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-smc9000.obj `if test -f 'smc9000.c'; then $(CYGPATH_W) 'smc9000.c'; else $(CYGPATH_W) '$(srcdir)/smc9000.c'; fi`
+--
+--libdrivers_a-tiara.o: tiara.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tiara.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-tiara.Tpo" -c -o libdrivers_a-tiara.o `test -f 'tiara.c' || echo '$(srcdir)/'`tiara.c; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tiara.Tpo" "$(DEPDIR)/libdrivers_a-tiara.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tiara.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tiara.c' object='libdrivers_a-tiara.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tiara.o `test -f 'tiara.c' || echo '$(srcdir)/'`tiara.c
+--
+--libdrivers_a-tiara.obj: tiara.c
+-- at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tiara.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-tiara.Tpo" -c -o libdrivers_a-tiara.obj `if test -f 'tiara.c'; then $(CYGPATH_W) 'tiara.c'; else $(CYGPATH_W) '$(srcdir)/tiara.c'; fi`; \
+-- at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tiara.Tpo" "$(DEPDIR)/libdrivers_a-tiara.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tiara.Tpo"; exit 1; fi
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tiara.c' object='libdrivers_a-tiara.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-- at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tiara.obj `if test -f 'tiara.c'; then $(CYGPATH_W) 'tiara.c'; else $(CYGPATH_W) '$(srcdir)/tiara.c'; fi`
+-+libdrivers_a-tg3.o: tg3.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tg3.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-tg3.Tpo" -c -o libdrivers_a-tg3.o `test -f 'tg3.c' || echo '$(srcdir)/'`tg3.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tg3.Tpo" "$(DEPDIR)/libdrivers_a-tg3.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tg3.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tg3.c' object='libdrivers_a-tg3.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-tg3.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-tg3.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tg3.o `test -f 'tg3.c' || echo '$(srcdir)/'`tg3.c
+-+
+-+libdrivers_a-tg3.obj: tg3.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tg3.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-tg3.Tpo" -c -o libdrivers_a-tg3.obj `if test -f 'tg3.c'; then $(CYGPATH_W) 'tg3.c'; else $(CYGPATH_W) '$(srcdir)/tg3.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tg3.Tpo" "$(DEPDIR)/libdrivers_a-tg3.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tg3.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tg3.c' object='libdrivers_a-tg3.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-tg3.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-tg3.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tg3.obj `if test -f 'tg3.c'; then $(CYGPATH_W) 'tg3.c'; else $(CYGPATH_W) '$(srcdir)/tg3.c'; fi`
+- 
+- libdrivers_a-tlan.o: tlan.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tlan.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-tlan.Tpo" -c -o libdrivers_a-tlan.o `test -f 'tlan.c' || echo '$(srcdir)/'`tlan.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tlan.Tpo" "$(DEPDIR)/libdrivers_a-tlan.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tlan.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tlan.c' object='libdrivers_a-tlan.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-tlan.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-tlan.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tlan.o `test -f 'tlan.c' || echo '$(srcdir)/'`tlan.c
+- 
+- libdrivers_a-tlan.obj: tlan.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tlan.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-tlan.Tpo" -c -o libdrivers_a-tlan.obj `if test -f 'tlan.c'; then $(CYGPATH_W) 'tlan.c'; else $(CYGPATH_W) '$(srcdir)/tlan.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tlan.Tpo" "$(DEPDIR)/libdrivers_a-tlan.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tlan.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tlan.c' object='libdrivers_a-tlan.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-tlan.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-tlan.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tlan.obj `if test -f 'tlan.c'; then $(CYGPATH_W) 'tlan.c'; else $(CYGPATH_W) '$(srcdir)/tlan.c'; fi`
+- 
+- libdrivers_a-tulip.o: tulip.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tulip.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-tulip.Tpo" -c -o libdrivers_a-tulip.o `test -f 'tulip.c' || echo '$(srcdir)/'`tulip.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tulip.Tpo" "$(DEPDIR)/libdrivers_a-tulip.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tulip.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tulip.c' object='libdrivers_a-tulip.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-tulip.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-tulip.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tulip.o `test -f 'tulip.c' || echo '$(srcdir)/'`tulip.c
+- 
+- libdrivers_a-tulip.obj: tulip.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-tulip.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-tulip.Tpo" -c -o libdrivers_a-tulip.obj `if test -f 'tulip.c'; then $(CYGPATH_W) 'tulip.c'; else $(CYGPATH_W) '$(srcdir)/tulip.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-tulip.Tpo" "$(DEPDIR)/libdrivers_a-tulip.Po"; else rm -f "$(DEPDIR)/libdrivers_a-tulip.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tulip.c' object='libdrivers_a-tulip.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-tulip.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-tulip.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-tulip.obj `if test -f 'tulip.c'; then $(CYGPATH_W) 'tulip.c'; else $(CYGPATH_W) '$(srcdir)/tulip.c'; fi`
+- 
+- libdrivers_a-via-rhine.o: via-rhine.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-via-rhine.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-via-rhine.Tpo" -c -o libdrivers_a-via-rhine.o `test -f 'via-rhine.c' || echo '$(srcdir)/'`via-rhine.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-via-rhine.Tpo" "$(DEPDIR)/libdrivers_a-via-rhine.Po"; else rm -f "$(DEPDIR)/libdrivers_a-via-rhine.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='via-rhine.c' object='libdrivers_a-via-rhine.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-via-rhine.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-via-rhine.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-via-rhine.o `test -f 'via-rhine.c' || echo '$(srcdir)/'`via-rhine.c
+- 
+- libdrivers_a-via-rhine.obj: via-rhine.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-via-rhine.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-via-rhine.Tpo" -c -o libdrivers_a-via-rhine.obj `if test -f 'via-rhine.c'; then $(CYGPATH_W) 'via-rhine.c'; else $(CYGPATH_W) '$(srcdir)/via-rhine.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-via-rhine.Tpo" "$(DEPDIR)/libdrivers_a-via-rhine.Po"; else rm -f "$(DEPDIR)/libdrivers_a-via-rhine.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='via-rhine.c' object='libdrivers_a-via-rhine.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-via-rhine.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-via-rhine.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-via-rhine.obj `if test -f 'via-rhine.c'; then $(CYGPATH_W) 'via-rhine.c'; else $(CYGPATH_W) '$(srcdir)/via-rhine.c'; fi`
+- 
+- libdrivers_a-w89c840.o: w89c840.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-w89c840.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-w89c840.Tpo" -c -o libdrivers_a-w89c840.o `test -f 'w89c840.c' || echo '$(srcdir)/'`w89c840.c; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-w89c840.Tpo" "$(DEPDIR)/libdrivers_a-w89c840.Po"; else rm -f "$(DEPDIR)/libdrivers_a-w89c840.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='w89c840.c' object='libdrivers_a-w89c840.o' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-w89c840.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-w89c840.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-w89c840.o `test -f 'w89c840.c' || echo '$(srcdir)/'`w89c840.c
+- 
+- libdrivers_a-w89c840.obj: w89c840.c
+- @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-w89c840.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-w89c840.Tpo" -c -o libdrivers_a-w89c840.obj `if test -f 'w89c840.c'; then $(CYGPATH_W) 'w89c840.c'; else $(CYGPATH_W) '$(srcdir)/w89c840.c'; fi`; \
+- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-w89c840.Tpo" "$(DEPDIR)/libdrivers_a-w89c840.Po"; else rm -f "$(DEPDIR)/libdrivers_a-w89c840.Tpo"; exit 1; fi
+- @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='w89c840.c' object='libdrivers_a-w89c840.obj' libtool=no @AMDEPBACKSLASH@
+-- at AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-w89c840.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-w89c840.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+- @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-w89c840.obj `if test -f 'w89c840.c'; then $(CYGPATH_W) 'w89c840.c'; else $(CYGPATH_W) '$(srcdir)/w89c840.c'; fi`
+--uninstall-info-am:
+-+
+-+libdrivers_a-r8169.o: r8169.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-r8169.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-r8169.Tpo" -c -o libdrivers_a-r8169.o `test -f 'r8169.c' || echo '$(srcdir)/'`r8169.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-r8169.Tpo" "$(DEPDIR)/libdrivers_a-r8169.Po"; else rm -f "$(DEPDIR)/libdrivers_a-r8169.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='r8169.c' object='libdrivers_a-r8169.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-r8169.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-r8169.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-r8169.o `test -f 'r8169.c' || echo '$(srcdir)/'`r8169.c
+-+
+-+libdrivers_a-r8169.obj: r8169.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-r8169.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-r8169.Tpo" -c -o libdrivers_a-r8169.obj `if test -f 'r8169.c'; then $(CYGPATH_W) 'r8169.c'; else $(CYGPATH_W) '$(srcdir)/r8169.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-r8169.Tpo" "$(DEPDIR)/libdrivers_a-r8169.Po"; else rm -f "$(DEPDIR)/libdrivers_a-r8169.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='r8169.c' object='libdrivers_a-r8169.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-r8169.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-r8169.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-r8169.obj `if test -f 'r8169.c'; then $(CYGPATH_W) 'r8169.c'; else $(CYGPATH_W) '$(srcdir)/r8169.c'; fi`
+-+
+-+libdrivers_a-forcedeth.o: forcedeth.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-forcedeth.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-forcedeth.Tpo" -c -o libdrivers_a-forcedeth.o `test -f 'forcedeth.c' || echo '$(srcdir)/'`forcedeth.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-forcedeth.Tpo" "$(DEPDIR)/libdrivers_a-forcedeth.Po"; else rm -f "$(DEPDIR)/libdrivers_a-forcedeth.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='forcedeth.c' object='libdrivers_a-forcedeth.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-forcedeth.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-forcedeth.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-forcedeth.o `test -f 'forcedeth.c' || echo '$(srcdir)/'`forcedeth.c
+-+
+-+libdrivers_a-forcedeth.obj: forcedeth.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-forcedeth.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-forcedeth.Tpo" -c -o libdrivers_a-forcedeth.obj `if test -f 'forcedeth.c'; then $(CYGPATH_W) 'forcedeth.c'; else $(CYGPATH_W) '$(srcdir)/forcedeth.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-forcedeth.Tpo" "$(DEPDIR)/libdrivers_a-forcedeth.Po"; else rm -f "$(DEPDIR)/libdrivers_a-forcedeth.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='forcedeth.c' object='libdrivers_a-forcedeth.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-forcedeth.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-forcedeth.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-forcedeth.obj `if test -f 'forcedeth.c'; then $(CYGPATH_W) 'forcedeth.c'; else $(CYGPATH_W) '$(srcdir)/forcedeth.c'; fi`
+-+
+-+libdrivers_a-ns83820.o: ns83820.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-ns83820.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-ns83820.Tpo" -c -o libdrivers_a-ns83820.o `test -f 'ns83820.c' || echo '$(srcdir)/'`ns83820.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-ns83820.Tpo" "$(DEPDIR)/libdrivers_a-ns83820.Po"; else rm -f "$(DEPDIR)/libdrivers_a-ns83820.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ns83820.c' object='libdrivers_a-ns83820.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-ns83820.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-ns83820.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-ns83820.o `test -f 'ns83820.c' || echo '$(srcdir)/'`ns83820.c
+-+
+-+libdrivers_a-ns83820.obj: ns83820.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-ns83820.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-ns83820.Tpo" -c -o libdrivers_a-ns83820.obj `if test -f 'ns83820.c'; then $(CYGPATH_W) 'ns83820.c'; else $(CYGPATH_W) '$(srcdir)/ns83820.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-ns83820.Tpo" "$(DEPDIR)/libdrivers_a-ns83820.Po"; else rm -f "$(DEPDIR)/libdrivers_a-ns83820.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ns83820.c' object='libdrivers_a-ns83820.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-ns83820.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-ns83820.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-ns83820.obj `if test -f 'ns83820.c'; then $(CYGPATH_W) 'ns83820.c'; else $(CYGPATH_W) '$(srcdir)/ns83820.c'; fi`
+-+
+-+libdrivers_a-pnic.o: pnic.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pnic.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-pnic.Tpo" -c -o libdrivers_a-pnic.o `test -f 'pnic.c' || echo '$(srcdir)/'`pnic.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pnic.Tpo" "$(DEPDIR)/libdrivers_a-pnic.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pnic.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pnic.c' object='libdrivers_a-pnic.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pnic.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pnic.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pnic.o `test -f 'pnic.c' || echo '$(srcdir)/'`pnic.c
+-+
+-+libdrivers_a-pnic.obj: pnic.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pnic.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-pnic.Tpo" -c -o libdrivers_a-pnic.obj `if test -f 'pnic.c'; then $(CYGPATH_W) 'pnic.c'; else $(CYGPATH_W) '$(srcdir)/pnic.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pnic.Tpo" "$(DEPDIR)/libdrivers_a-pnic.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pnic.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pnic.c' object='libdrivers_a-pnic.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pnic.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pnic.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pnic.obj `if test -f 'pnic.c'; then $(CYGPATH_W) 'pnic.c'; else $(CYGPATH_W) '$(srcdir)/pnic.c'; fi`
+-+
+-+libdrivers_a-pnic_api.o: pnic_api.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pnic_api.o -MD -MP -MF "$(DEPDIR)/libdrivers_a-pnic_api.Tpo" -c -o libdrivers_a-pnic_api.o `test -f 'pnic_api.c' || echo '$(srcdir)/'`pnic_api.c; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pnic_api.Tpo" "$(DEPDIR)/libdrivers_a-pnic_api.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pnic_api.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pnic_api.c' object='libdrivers_a-pnic_api.o' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pnic_api.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pnic_api.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+ at am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pnic_api.o `test -f 'pnic_api.c' || echo '$(srcdir)/'`pnic_api.c
+-+
+-+libdrivers_a-pnic_api.obj: pnic_api.c
+-+ at am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -MT libdrivers_a-pnic_api.obj -MD -MP -MF "$(DEPDIR)/libdrivers_a-pnic_api.Tpo" -c -o libdrivers_a-pnic_api.obj `if test -f 'pnic_api.c'; then $(CYGPATH_W) 'pnic_api.c'; else $(CYGPATH_W) '$(srcdir)/pnic_api.c'; fi`; \
+-+ at am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libdrivers_a-pnic_api.Tpo" "$(DEPDIR)/libdrivers_a-pnic_api.Po"; else rm -f "$(DEPDIR)/libdrivers_a-pnic_api.Tpo"; exit 1; fi
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	source='pnic_api.c' object='libdrivers_a-pnic_api.obj' libtool=no @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/libdrivers_a-pnic_api.Po' tmpdepfile='$(DEPDIR)/libdrivers_a-pnic_api.TPo' @AMDEPBACKSLASH@
+-+ at AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdrivers_a_CFLAGS) $(CFLAGS) -c -o libdrivers_a-pnic_api.obj `if test -f 'pnic_api.c'; then $(CYGPATH_W) 'pnic_api.c'; else $(CYGPATH_W) '$(srcdir)/pnic_api.c'; fi`
+- 
+- ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+- 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
+-@@ -817,11 +928,9 @@
+- 	  done | \
+- 	  $(AWK) '    { files[$$0] = 1; } \
+- 	       END { for (i in files) print i; }'`; \
+--	if test -z "$(ETAGS_ARGS)$$tags$$unique"; then :; else \
+--	  test -n "$$unique" || unique=$$empty_fix; \
+--	  $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+--	    $$tags $$unique; \
+--	fi
+-+	test -z "$(ETAGS_ARGS)$$tags$$unique" \
+-+	  || $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+-+	     $$tags $$unique
+- ctags: CTAGS
+- CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+- 		$(TAGS_FILES) $(LISP)
+-@@ -895,7 +1004,7 @@
+- clean-generic:
+- 
+- distclean-generic:
+--	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+-+	-rm -f $(CONFIG_CLEAN_FILES)
+- 
+- maintainer-clean-generic:
+- 	@echo "This command is intended for maintainers to use"
+-@@ -962,10 +1071,10 @@
+- 
+- 
+- # Is it really necessary to specify dependecies explicitly?
+--$(3c509_drivers): 3c509.c 3c509.h
+--$(3c509_drivers): %.o: 3c509.c
+--	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+--	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+#$(3c509_drivers): 3c509.c 3c509.h
+-+#$(3c509_drivers): %.o: 3c509.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+- $(3c595_drivers): 3c595.c 3c595.h
+- $(3c595_drivers): %.o: 3c595.c
+-@@ -977,23 +1086,28 @@
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(cs89x0_drivers): cs89x0.c cs89x0.h
+--$(cs89x0_drivers): %.o: cs89x0.c
+--	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+--	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+#$(cs89x0_drivers): cs89x0.c cs89x0.h
+-+#$(cs89x0_drivers): %.o: cs89x0.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+- $(davicom_drivers): davicom.c
+- $(davicom_drivers): %.o: davicom.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(depca_drivers): depca.c
+--$(depca_drivers): %.o: depca.c
+--	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+--	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+#$(depca_drivers): depca.c
+-+#$(depca_drivers): %.o: depca.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(eepro_drivers): eepro.c
+--$(eepro_drivers): %.o: eepro.c
+-+#$(eepro_drivers): eepro.c
+-+#$(eepro_drivers): %.o: eepro.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+
+-+$(e1000_drivers): e1000.c e1000_hw.h
+-+$(e1000_drivers): %.o: e1000.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+-@@ -1007,28 +1121,38 @@
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+-+$(forcedeth_drivers): forcedeth.c
+-+$(forcedeth_drivers): %.o: forcedeth.c
+-+	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+
+- #$(fa311_drivers): fa311.c
+- #$(fa311_drivers): %.o: fa311.c
+- #	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- #	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(i82586_drivers): i82586.c
+--$(i82586_drivers): %.o: i82586.c
+--	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+--	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+#$(i82586_drivers): i82586.c
+-+#$(i82586_drivers): %.o: i82586.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(lance_drivers): lance.c
+--$(lance_drivers): %.o: lance.c
+--	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+--	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+#$(lance_drivers): lance.c
+-+#$(lance_drivers): %.o: lance.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+- $(natsemi_drivers): natsemi.c
+- $(natsemi_drivers): %.o: natsemi.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(ni5010_drivers): ni5010.c
+--$(ni5010_drivers): %.o: ni5010.c
+-+#$(ni5010_drivers): ni5010.c
+-+#$(ni5010_drivers): %.o: ni5010.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+
+-+$(ns83820_drivers): ns83820.c
+-+$(ns83820_drivers): %.o: ns83820.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+-@@ -1037,41 +1161,62 @@
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(otulip_drivers): otulip.c otulip.h
+--$(otulip_drivers): %.o: otulip.c
+-+#$(otulip_drivers): otulip.c otulip.h
+-+#$(otulip_drivers): %.o: otulip.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+
+-+$(pcnet32_drivers): pcnet32.c
+-+$(pcnet32_drivers): %.o: pcnet32.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(rtl8139_drivers): rtl8139.c
+--$(rtl8139_drivers): %.o: rtl8139.c
+-+$(pnic_drivers): pnic.c
+-+$(pnic_drivers): %.o: pnic.c pnic_api.h
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(sis900_drivers): sis900.c
+--$(sis900_drivers): %.o: sis900.c sis900.h
+-+$(rtl8139_drivers): rtl8139.c
+-+$(rtl8139_drivers): %.o: rtl8139.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(sk_g16_drivers): sk_g16.c sk_g16.h
+--$(sk_g16_drivers): %.o: sk_g16.c
+-+$(r8169_drivers): r8169.c
+-+$(r8169_drivers): %.o: r8169.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(smc9000_drivers): smc9000.c smc9000.h
+--$(smc9000_drivers): %.o: smc9000.c
+-+$(sis900_drivers): sis900.c sis900.h
+-+$(sis900_drivers): %.o: sis900.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--$(tiara_drivers): tiara.c
+--$(tiara_drivers): %.o: tiara.c
+-+#$(sk_g16_drivers): sk_g16.c sk_g16.h
+-+#$(sk_g16_drivers): %.o: sk_g16.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+
+-+#$(smc9000_drivers): smc9000.c smc9000.h
+-+#$(smc9000_drivers): %.o: smc9000.c
+-+#	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+#	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+
+-+
+-+$(tg3_drivers): tg3.c tg3.h
+-+$(tg3_drivers): %.o: tg3.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- 	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+--#$(tlan_drivers): tlan.c
+--#$(tlan_drivers): %.o: tlan.c
+-+#$(tiara_drivers): tiara.c
+-+#$(tiara_drivers): %.o: tiara.c
+- #	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+- #	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+- 
+-+$(tlan_drivers): tlan.c tlan.h
+-+$(tlan_drivers): %.o: tlan.c
+-+	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+-+	  $(NET_EXTRAFLAGS) $($(basename $@)_o_CFLAGS) -o $@ -c $<
+-+
+- $(tulip_drivers): tulip.c
+- $(tulip_drivers): %.o: tulip.c
+- 	$(COMPILE) $(STAGE2_CFLAGS) -fno-builtin -nostdinc \
+ Index: b/netboot/basemem.c
+ ===================================================================
+ --- /dev/null
 -- 
 2.9.4
