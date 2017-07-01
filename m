@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:40:47 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: skip ld-musl
- symlink on static build
-In-Reply-To: <da672995-8d97-3657-627d-65b30e71a828@mind.be>
-References: <3d0e4832c2a187a5bd63ac094c11e2b237661cd5.1498586236.git.baruch@tkos.co.il>
- <da672995-8d97-3657-627d-65b30e71a828@mind.be>
-Message-ID: <20170702004047.41f2d626@windsurf>
+Date: Sun, 2 Jul 2017 00:41:43 +0200
+Subject: [Buildroot] [git commit] sigrok-cli: bump version to 0.7.0
+Message-ID: <20170701223913.D87687FFDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=77c3881ba0003cfc303aaaa419e385bc53fcb8c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 27 Jun 2017 23:41:44 +0200, Arnout Vandecappelle wrote:
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sigrok-cli/sigrok-cli.hash | 2 +-
+ package/sigrok-cli/sigrok-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > index 826934505e20..8460e37d095f 100644
-> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > @@ -475,7 +475,7 @@ endef
-> >  # With the musl C library, the libc.so library directly plays the role
-> >  # of the dynamic library loader. We just need to create a symbolic
-> >  # link to libc.so with the appropriate name.
-> > -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-> > +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL):$(BR2_STATIC_LIBS),y:)  
-> 
->  This patch conflicts with [1]. Could you combine them in a single series?
-> Otherwise looks good to me, but it really should be viewed combined with [1].
-
-I've applied Baruch patch, and I'll rebased mine on top.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/sigrok-cli/sigrok-cli.hash b/package/sigrok-cli/sigrok-cli.hash
+index b60b57e..42bbdc1 100644
+--- a/package/sigrok-cli/sigrok-cli.hash
++++ b/package/sigrok-cli/sigrok-cli.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	ab2ede4e245f3987e19a89a530bd204e0d792c07474d9fed3345d4af4e84723c	sigrok-cli-0.6.0.tar.gz
++sha256	5669d968c2de3dfc6adfda76e83789b6ba76368407c832438cef5e7099a65e1c	sigrok-cli-0.7.0.tar.gz
+diff --git a/package/sigrok-cli/sigrok-cli.mk b/package/sigrok-cli/sigrok-cli.mk
+index 3e2d1bf..1e017d6 100644
+--- a/package/sigrok-cli/sigrok-cli.mk
++++ b/package/sigrok-cli/sigrok-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SIGROK_CLI_VERSION = 0.6.0
++SIGROK_CLI_VERSION = 0.7.0
+ SIGROK_CLI_SITE = http://sigrok.org/download/source/sigrok-cli
+ SIGROK_CLI_LICENSE = GPL-3.0+
+ SIGROK_CLI_LICENSE_FILES = COPYING
