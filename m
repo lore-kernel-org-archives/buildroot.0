@@ -1,80 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Jul 2017 18:33:51 +0200
-Subject: [Buildroot] [PATCH 4/7 v4] tools: move size-stat-compare out of
- support/scripts/
-In-Reply-To: <CAAXf6LVF7gAph5SJqCAPjGgagckQOyO0Ud_Xqbdj=+kTGqzY5g@mail.gmail.com>
-References: <cover.1498919458.git.yann.morin.1998@free.fr>
- <1f7606d932bd480bca466181658e656f93c4fe9e.1498919458.git.yann.morin.1998@free.fr>
- <CAAXf6LVF7gAph5SJqCAPjGgagckQOyO0Ud_Xqbdj=+kTGqzY5g@mail.gmail.com>
-Message-ID: <20170701163351.GA3593@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 18:34:07 +0200
+Subject: [Buildroot] [git commit] mtd: restore installation of libmtd to
+	staging
+Message-ID: <20170701163122.6E70181971@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=065a57eb2e8aab34b49e9c23378f8b0e2bb886ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-07-01 18:02 +0200, Thomas De Schampheleire spake thusly:
-> 2017-07-01 16:31 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> > Move it to the top-level tools/ directory, so that it is easier to
-> > find for users.
-> >
-> > Add a legacy symlink for those users who already used them, so as
-> > not to break their habits.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> >
-> > ---
-> > Changes v3 -> v4:
-> >   - drop legacy symlink  (Arnout, Thomas)
-> > ---
-> >  tools/readme.txt                              | 6 ++++++
-> >  {support/scripts => tools}/size-stats-compare | 0
-> >  2 files changed, 6 insertions(+)
-> >  rename {support/scripts => tools}/size-stats-compare (100%)
-> >
-> > diff --git a/tools/readme.txt b/tools/readme.txt
-> > index fc1108fded..dd8a1d4494 100644
-> > --- a/tools/readme.txt
-> > +++ b/tools/readme.txt
-> > @@ -11,6 +11,12 @@ get-developpers
-> >      of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
-> >      input, a package name or and architecture name.
-> >
-> > +size-stat-compare
-> > +    a script to compare the rootfs size between two differnt Buildroot
-> 
-> You must have missed my comment about 'differnt' -> 'different'
+Commit 67117adc891e06154d23a01b8c8ee348c63e78eb backed out the
+deployment of libmtd headers (libmtd.h, libubi.h, ubi-media.h) to
+staging and these may be needed by packages that work directly with MTD,
+for example swupdate. mtd also produces libmtd.a and libubi.a which are
+needed by those packages.
 
-Damn, I forgot it. And Thomas already applied it...
+Tested by configuring swupdate to use MTD and verifying that swupdate
+now compiles and links.
 
-Sorry..
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+[Thomas: change to a post-install staging hook, and add comment.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mtd/mtd.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-> > +    configurations. This can be used to identify the size impact of
-> > +    a specific option, or of a set of specific options, or an update
-> > +    to a newer Buildroot version...
-> 
-> While you're at it, the last clause would either also need 'of': 'or
-> of an update...',
-> or otherwise it would need to be removed on the second clause, but now
-> it is inconsistent.
-
-I'm not sure I follow you...
-
-Regards,
-Yann E. MORIN.
-
-> Thanks,
-> Thomas
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 3df641e..df2e5a3 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -97,5 +97,17 @@ define MTD_INSTALL_TARGET_CMDS
+ 	)
+ endef
+ 
++# Those libraries are not installed by "make install", but are needed
++# by other packages, such as swupdate.
++define MTD_INSTALL_LIBS
++	$(INSTALL) -D -m 0755 $(@D)/include/libmtd.h $(STAGING_DIR)/usr/include/mtd/libmtd.h
++	$(INSTALL) -D -m 0755 $(@D)/include/libubi.h $(STAGING_DIR)/usr/include/mtd/libubi.h
++	$(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h $(STAGING_DIR)/usr/include/mtd/ubi-media.h
++	$(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
++	$(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
++endef
++
++MTD_POST_INSTALL_STAGING_HOOKS += MTD_INSTALL_LIBS
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
