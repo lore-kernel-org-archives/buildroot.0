@@ -1,73 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 1 Jul 2017 20:21:29 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/readme.txt: fix typos for
-	size-stats-compare
-In-Reply-To: <20170701180027.GY29444@argentina>
-References: <20170701180027.GY29444@argentina>
-Message-ID: <20170701182129.GE3593@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 1 Jul 2017 20:22:27 +0200
+Subject: [Buildroot] [PATCH] .gitlab-ci.yml: fix it again
+Message-ID: <20170701182227.11778-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+It seems the ! is removed by the yaml parser, so it needs to be quoted.
+While we're at it, add some explanatory comment.
 
-On 2017-07-01 20:00 +0200, Thomas De Schampheleire spake thusly:
-> A few typos sneaked into the new utils readme...
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .gitlab-ci.yml    | 5 ++++-
+ .gitlab-ci.yml.in | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-Yup, sorry...
-
-> Additionally, I formulated the list of use cases a bit differently.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  utils/readme.txt | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/utils/readme.txt b/utils/readme.txt
-> index a90805fb0..fd20e8ee6 100644
-> --- a/utils/readme.txt
-> +++ b/utils/readme.txt
-> @@ -28,10 +28,10 @@ scanpypi
->      a script to create a Buildroot package by scanning a PyPI package
->      description.
->  
-> -size-stat-compare
-> -    a script to compare the rootfs size between two differnt Buildroot
-> +size-stats-compare
-> +    a script to compare the rootfs size between two different Buildroot
->      configurations. This can be used to identify the size impact of
-> -    a specific option, or of a set of specific options, or an update
-> +    a specific option, of a set of specific options, or of an update
-
-I still believe the current situation is prefereable, because it is :
-
-the impact of
-    - a specific option, or of a set of options,
-  or
-    - a new buildroot version
-
-(use of the Oxford comma is very important, here! ;-] )
-
-But yours is not completely incorrect either. ;-)
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
->      to a newer Buildroot version...
->  
->  test-pkg
-> -- 
-> 2.13.0
-> 
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 6bd983750d..eda8af4997 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -35,8 +35,11 @@ check-gitlab-ci.yml:
+         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+ 
+ check-DEVELOPERS:
++    # get-developers should print just "No action specified"; if it prints
++    # anything else, it's a parse error.
++    # The initial ! is removed by YAML so we need to quote it.
+     script:
+-        - ! utils/get-developers | grep -v 'No action specified'
++        - "! utils/get-developers | grep -v 'No action specified'"
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 0855bffb79..24a1888c1e 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -35,8 +35,11 @@ check-gitlab-ci.yml:
+         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+ 
+ check-DEVELOPERS:
++    # get-developers should print just "No action specified"; if it prints
++    # anything else, it's a parse error.
++    # The initial ! is removed by YAML so we need to quote it.
+     script:
+-        - ! utils/get-developers | grep -v 'No action specified'
++        - "! utils/get-developers | grep -v 'No action specified'"
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.13.1
