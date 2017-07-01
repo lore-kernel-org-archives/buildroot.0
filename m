@@ -1,283 +1,158 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 18:07:00 +0200
-Subject: [Buildroot] [git commit] tools: rename to 'utils'
-Message-ID: <20170701160503.EB7957FAEE@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 1 Jul 2017 18:15:16 +0200
+Subject: [Buildroot] [RFC PATCH v5 04/11] pkg-generic: create a list af
+ installed files per step and package
+In-Reply-To: <1498811828-6893-5-git-send-email-wg@grandegger.com>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-5-git-send-email-wg@grandegger.com>
+Message-ID: <0a8ba202-8a3f-944c-f546-b0d399423e18@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ca9fc3170de1a41fbcbc5dfdc2838c75bff72a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After some discussion, we found out that "tools" has the four first
-letters identical to the "toolchain" subfolder, which makes it a bit
-unpractical with tab-completion. So, this commit renames "tools" to
-"utils", which is more tab-completion-friendly.
 
-This has been discussed with Arnout and Yann.
+On 30-06-17 10:37, Wolfgang Grandegger wrote:
+> The GLOBAL_INSTRUMENTATION_HOOKS "step_pkg_size*" are extended to create
+> a file with the list of all installed files per step and package. The
+> file name is "<package-build-dir>/.br_<host|staging|target>_filelist".
+> This file could be used by other hooks to scan the installed files,
+> e.g. to check the bin arch, the host rpath or for rpath sanitation.
+> 
+> For a quick hack, the "packages-file-list.txt" is created as before.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-tips.txt           |  8 ++++----
- docs/manual/contribute.txt                     |  2 +-
- docs/manual/writing-rules.txt                  |  2 +-
- support/scripts/pkg-stats                      |  2 +-
- {tools => utils}/brmake                        |  0
- {tools => utils}/check-package                 |  2 +-
- {tools => utils}/checkpackagelib/__init__.py   |  0
- {tools => utils}/checkpackagelib/base.py       |  2 +-
- {tools => utils}/checkpackagelib/lib.py        |  2 +-
- {tools => utils}/checkpackagelib/lib_config.py |  2 +-
- {tools => utils}/checkpackagelib/lib_hash.py   |  2 +-
- {tools => utils}/checkpackagelib/lib_mk.py     |  2 +-
- {tools => utils}/checkpackagelib/lib_patch.py  |  2 +-
- {tools => utils}/checkpackagelib/readme.txt    | 10 +++++-----
- {tools => utils}/get-developers                |  0
- {tools => utils}/getdeveloperlib.py            |  0
- {tools => utils}/readme.txt                    |  0
- {tools => utils}/scancpan                      |  0
- {tools => utils}/scanpypi                      |  0
- {tools => utils}/size-stats-compare            |  0
- {tools => utils}/test-pkg                      |  0
- 21 files changed, 19 insertions(+), 19 deletions(-)
+ And the intention would be to move the generation of packages-file-list.txt to
+the finalize step, right?
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 0047dfd..8b2361d 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -45,7 +45,7 @@ continuously test random configurations. However, these only build the
- `master` branch of the git tree, and your new fancy package is not yet
- there.
- 
--Buildroot provides a script in +tools/test-pkg+ that uses the same base
-+Buildroot provides a script in +utils/test-pkg+ that uses the same base
- configurations as used by the autobuilders so you can test your package
- in the same conditions.
- 
-@@ -74,7 +74,7 @@ Then run the +test-pkg+ script, by telling it what config snippet to use
- and what package to test:
- 
- ----
--$ ./tools/test-pkg -c libcurl.config -p libcurl
-+$ ./utils/test-pkg -c libcurl.config -p libcurl
- ----
- 
- This will try to build your package against all the toolchains used
-@@ -83,7 +83,7 @@ too long to do so). The output lists all toolchains and the corresponding
- result (excerpt, results are fake):
- 
- ----
--$ ./tools/test-pkg -c libcurl.config -p libcurl
-+$ ./utils/test-pkg -c libcurl.config -p libcurl
-                 armv5-ctng-linux-gnueabi [ 1/11]: OK
-               armv7-ctng-linux-gnueabihf [ 2/11]: OK
-                         br-aarch64-glibc [ 3/11]: SKIPPED
-@@ -124,7 +124,7 @@ The +test-pkg+ script accepts a few options, for which you can get some
- help by running:
- 
- ----
--$ ./tools/test-pkg -h
-+$ ./utils/test-pkg -h
- ----
- 
- [[github-download-url]]
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index c105877..a58945f 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -295,7 +295,7 @@ information). This tool reads your patches and outputs the appropriate
- +git send-email+ command to use:
- 
- ---------------------
--$ ./tools/get-developers outgoing/*
-+$ ./utils/get-developers outgoing/*
- ---------------------
- 
- Use the output of +get-developers+ to send your patches:
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index c144874..ca43272 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -146,6 +146,6 @@ syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
- 
- === Support scripts
- 
--Some scripts in the +support/+ and +tools/+ directories are written in
-+Some scripts in the +support/+ and +utils/+ directories are written in
- Python and should follow the
- https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index f827877..1956941 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -337,7 +337,7 @@ for i in $(find boot/ linux/ package/ toolchain/ -name '*.mk' | sort) ; do
-     fi
- 
-     file_list=$(find ${package_dir} -name '*.mk' -o -name '*.in*' -o -name '*.hash')
--    nwarnings=$(./tools/check-package ${file_list} 2>&1 | sed '/\([0-9]*\) warnings generated/!d; s//\1/')
-+    nwarnings=$(./utils/check-package ${file_list} 2>&1 | sed '/\([0-9]*\) warnings generated/!d; s//\1/')
-     if [ ${nwarnings} -eq 0 ] ; then
- 	echo "<td class=\"centered correct\">${nwarnings}</td>"
-     else
-diff --git a/tools/brmake b/utils/brmake
-similarity index 100%
-rename from tools/brmake
-rename to utils/brmake
-diff --git a/tools/check-package b/utils/check-package
-similarity index 98%
-rename from tools/check-package
-rename to utils/check-package
-index cdbac94..a87a74d 100755
---- a/tools/check-package
-+++ b/utils/check-package
-@@ -1,5 +1,5 @@
- #!/usr/bin/env python
--# See tools/checkpackagelib/readme.txt before editing this file.
-+# See utils/checkpackagelib/readme.txt before editing this file.
- 
- from __future__ import print_function
- import argparse
-diff --git a/tools/checkpackagelib/__init__.py b/utils/checkpackagelib/__init__.py
-similarity index 100%
-rename from tools/checkpackagelib/__init__.py
-rename to utils/checkpackagelib/__init__.py
-diff --git a/tools/checkpackagelib/base.py b/utils/checkpackagelib/base.py
-similarity index 81%
-rename from tools/checkpackagelib/base.py
-rename to utils/checkpackagelib/base.py
-index 4b376f0..fc09bec 100644
---- a/tools/checkpackagelib/base.py
-+++ b/utils/checkpackagelib/base.py
-@@ -1,4 +1,4 @@
--# See tools/checkpackagelib/readme.txt before editing this file.
-+# See utils/checkpackagelib/readme.txt before editing this file.
- 
- 
- class _CheckFunction(object):
-diff --git a/tools/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-similarity index 95%
-rename from tools/checkpackagelib/lib.py
-rename to utils/checkpackagelib/lib.py
-index 1a7db44..91f4ad4 100644
---- a/tools/checkpackagelib/lib.py
-+++ b/utils/checkpackagelib/lib.py
-@@ -1,4 +1,4 @@
--# See tools/checkpackagelib/readme.txt before editing this file.
-+# See utils/checkpackagelib/readme.txt before editing this file.
- 
- from base import _CheckFunction
- 
-diff --git a/tools/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-similarity index 98%
-rename from tools/checkpackagelib/lib_config.py
-rename to utils/checkpackagelib/lib_config.py
-index 9e93c05..26ebb39 100644
---- a/tools/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -1,4 +1,4 @@
--# See tools/checkpackagelib/readme.txt before editing this file.
-+# See utils/checkpackagelib/readme.txt before editing this file.
- # Kconfig generates errors if someone introduces a typo like "boool" instead of
- # "bool", so below check functions don't need to check for things already
- # checked by running "make menuconfig".
-diff --git a/tools/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
-similarity index 97%
-rename from tools/checkpackagelib/lib_hash.py
-rename to utils/checkpackagelib/lib_hash.py
-index cc1a5e4..10b2748 100644
---- a/tools/checkpackagelib/lib_hash.py
-+++ b/utils/checkpackagelib/lib_hash.py
-@@ -1,4 +1,4 @@
--# See tools/checkpackagelib/readme.txt before editing this file.
-+# See utils/checkpackagelib/readme.txt before editing this file.
- # The validity of the hashes itself is checked when building, so below check
- # functions don't need to check for things already checked by running
- # "make package-dirclean package-source".
-diff --git a/tools/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-similarity index 99%
-rename from tools/checkpackagelib/lib_mk.py
-rename to utils/checkpackagelib/lib_mk.py
-index 8cbb358..6ed6011 100644
---- a/tools/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -1,4 +1,4 @@
--# See tools/checkpackagelib/readme.txt before editing this file.
-+# See utils/checkpackagelib/readme.txt before editing this file.
- # There are already dependency checks during the build, so below check
- # functions don't need to check for things already checked by exploring the
- # menu options using "make menuconfig" and by running "make" with appropriate
-diff --git a/tools/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
-similarity index 96%
-rename from tools/checkpackagelib/lib_patch.py
-rename to utils/checkpackagelib/lib_patch.py
-index 3e1dae5..591f13c 100644
---- a/tools/checkpackagelib/lib_patch.py
-+++ b/utils/checkpackagelib/lib_patch.py
-@@ -1,4 +1,4 @@
--# See tools/checkpackagelib/readme.txt before editing this file.
-+# See utils/checkpackagelib/readme.txt before editing this file.
- # The format of the patch files is tested during the build, so below check
- # functions don't need to check for things already checked by running
- # "make package-dirclean package-patch".
-diff --git a/tools/checkpackagelib/readme.txt b/utils/checkpackagelib/readme.txt
-similarity index 93%
-rename from tools/checkpackagelib/readme.txt
-rename to utils/checkpackagelib/readme.txt
-index 8012c72..85e10fe 100644
---- a/tools/checkpackagelib/readme.txt
-+++ b/utils/checkpackagelib/readme.txt
-@@ -57,19 +57,19 @@ Some hints when changing this code:
- Usage examples:
- - to get a list of check functions that would be called without actually
-   calling them you can use the --dry-run option:
--$ tools/check-package --dry-run package/yourfavorite/*
-+$ utils/check-package --dry-run package/yourfavorite/*
- 
- - when you just added a new check function, e.g. Something, check how it behaves
-   for all current packages:
--$ tools/check-package --include-only Something $(find package -type f)
-+$ utils/check-package --include-only Something $(find package -type f)
- 
- - the effective processing time (when the .pyc were already generated and all
-   files to be processed are cached in the RAM) should stay in the order of few
-   seconds:
--$ tools/check-package $(find package -type f) >/dev/null ; \
--  time tools/check-package $(find package -type f) >/dev/null
-+$ utils/check-package $(find package -type f) >/dev/null ; \
-+  time utils/check-package $(find package -type f) >/dev/null
- 
- - vim users can navigate the warnings (most editors probably have similar
-   function) since warnings are generated in the form 'path/file:line: warning':
- $ find package/ -name 'Config.*' > filelist && vim -c \
--  'set makeprg=tools/check-package\ $(cat\ filelist)' -c make -c copen
-+  'set makeprg=utils/check-package\ $(cat\ filelist)' -c make -c copen
-diff --git a/tools/get-developers b/utils/get-developers
-similarity index 100%
-rename from tools/get-developers
-rename to utils/get-developers
-diff --git a/tools/getdeveloperlib.py b/utils/getdeveloperlib.py
-similarity index 100%
-rename from tools/getdeveloperlib.py
-rename to utils/getdeveloperlib.py
-diff --git a/tools/readme.txt b/utils/readme.txt
-similarity index 100%
-rename from tools/readme.txt
-rename to utils/readme.txt
-diff --git a/tools/scancpan b/utils/scancpan
-similarity index 100%
-rename from tools/scancpan
-rename to utils/scancpan
-diff --git a/tools/scanpypi b/utils/scanpypi
-similarity index 100%
-rename from tools/scanpypi
-rename to utils/scanpypi
-diff --git a/tools/size-stats-compare b/utils/size-stats-compare
-similarity index 100%
-rename from tools/size-stats-compare
-rename to utils/size-stats-compare
-diff --git a/tools/test-pkg b/utils/test-pkg
-similarity index 100%
-rename from tools/test-pkg
-rename to utils/test-pkg
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  package/pkg-generic.mk | 46 ++++++++++++++++++++++++++++++++--------------
+>  1 file changed, 32 insertions(+), 14 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index f474704..825ab0c 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -57,33 +57,51 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>  
+>  # Hooks to collect statistics about installed files
+>  
+> -# This hook will be called before the target installation of a
+> -# package. We store in a file named .br_filelist_before the list of
+> -# files currently installed in the target. Note that the MD5 is also
+> -# stored, in order to identify if the files are overwritten.
+> +# This hook will be called before the installation of a host,
+> +# staging or target package.
+
+ Just "package" - all packages are one of the three.
+
+> +# We store in a file named .br_filelist_before the list of files
+> +# currently installed in the root directory. Note that the MD5 is
+> +# also stored, in order to identify if the files are overwritten.
+> +# Arguments:
+> +# $1: path to the root directory of host, staging or target tree
+
+ Could you include http://patchwork.ozlabs.org/patch/724235/ in your series? It
+cleans it up a little bit.
+
+>  define step_pkg_size_start
+> -	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
+> +	(cd $(1) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
+>  		$($(PKG)_DIR)/.br_filelist_before
+>  endef
+>  
+> -# This hook will be called after the target installation of a
+> -# package. We store in a file named .br_filelist_after the list of
+> -# files (and their MD5) currently installed in the target. We then do
+> -# a diff with the .br_filelist_before to compute the list of files
+> -# installed by this package.
+> +# This hook will be called before the installation of a host,
+                              after                        package.
+
+> +# staging or target package.
+> +# We store in a file named .br_filelist_after the list of files
+> +# (and their MD5) currently installed in the root directory. We
+> +# then do a diff with the .br_filelist_before to compute the list
+> +# of files installed by this package.
+> +# Arguments:
+> +# $1: path to the root directory of host, staging or target tree
+> +# $2: name of the installation tree ("host"|"staging"|"target")
+> +# $3: name of the package
+>  define step_pkg_size_end
+> -	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
+> +	(cd $(1); find . -type f -print0 | xargs -0 md5sum) | sort > \
+>  		$($(PKG)_DIR)/.br_filelist_after
+> +	: > $($(PKG)_DIR)/.br_$(2)_filelist; \
+                                           ^^^Not needed
+
+ But instead of doing this, I have a slight preference for doing the redirect
+outside of the while loop instead of appending to the file inside the loop. It's
+more efficient and also easier to read IMO.
+
+>  	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
+>  		while read hash file ; do \
+> -			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+> +			echo "$${file}" | sed -e 's/^\.\///' >> $($(PKG)_DIR)/.br_$(2)_filelist ; \
+                                              So remove
+this:^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +			if [ $(2) = "target" ]; then \
+> +				echo "$(3),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+> +			fi ; \
+>  		done
+   And insert here:  > $($(PKG)_DIR)/.br_$(2)_filelist
+
+>  endef
+>  
+>  define step_pkg_size
+> +	$(if $(filter install-host,$(2)),\
+> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(HOST_DIR))) \
+> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(HOST_DIR),"host",$(3))))
+> +	$(if $(filter install-staging,$(2)),\
+> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(STAGING_DIR))) \
+> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(STAGING_DIR),"staging",$(3))))
+>  	$(if $(filter install-target,$(2)),\
+> -		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
+> -		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
+> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(TARGET_DIR))) \
+> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(TARGET_DIR),"target",$(3))))
+>  endef
+
+ This is getting quite complicated... I'm thinking the following:
+
+define step_pkg_size_install-host
+	$(call step_pkg_size_$(1),$(HOST_DIR),$(2),$(3))
+endef
+
+define step_pkg_size_install-staging
+	$(call step_pkg_size_$(1),$(STAGING_DIR),$(2),$(3))
+endef
+
+define step_pkg_size_install-target
+	$(call step_pkg_size_$(1),$(TARGET_DIR),$(2),$(3))
+endef
+
+define step_pkg_size
+	$(call step_pkg_size_$(2),$(1),$(2),$(3))
+endef
+
+(untested, as usual) but I'm not entirely sure that it's better. Obviously, this
+should be done in a separate patch.
+
+ Regards,
+ Arnout
+
+
+>  GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+>  
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
