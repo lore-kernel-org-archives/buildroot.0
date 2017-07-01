@@ -1,59 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Jul 2017 19:12:34 +0200
-Subject: [Buildroot] [RFC PATCH v5 10/11] support/scripts:
- check-host-rpath now handles $ORIGIN as well
-In-Reply-To: <1498811828-6893-11-git-send-email-wg@grandegger.com>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-11-git-send-email-wg@grandegger.com>
-Message-ID: <2f2217a7-dd4b-6ad4-0e03-8942380db4b4@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 1 Jul 2017 19:28:17 +0200
+Subject: [Buildroot] [PATCH v2] .gitlab-ci.yml: simplify (and fix)
+	check-DEVELOPERS
+Message-ID: <20170701172817.6533-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The check-DEVELOPERS test would always fail, because && will return
+the exit code of the left-hand side if not 0, so it *always* returns
+1.
 
-On 30-06-17 10:37, Wolfgang Grandegger wrote:
-> "$ORIGIN/../../usr/lib" is also a valid RPATH for binaries in
-> "$hostdir/usr/bin". After RPATH sanitation, all RPATH
-> directories start with "$ORIGIN".
-> 
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+But in fact, the test can be simplified quite a lot: we can run
+getdeveloper directly, without arguments. That should just print
+'No action specified', but it will also print any syntax errors it
+encountered. So we can just 'grep -v' the expected output away; if
+there is anything more, grep will return 0, but if there is nothing
+more, it will return 1. So we just need to invert the result.
 
- This patch should come way earlier in the series, because things break if you
-don't have this and the sanitization is done.
+Incidentally, this also fixes the incorrect remaining reference to
+support/scripts.
 
- In fact, it can be applied right away:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .gitlab-ci.yml    | 4 +---
+ .gitlab-ci.yml.in | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-> ---
->  support/scripts/check-host-rpath | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-> index 6ce547c..020c123 100755
-> --- a/support/scripts/check-host-rpath
-> +++ b/support/scripts/check-host-rpath
-> @@ -58,7 +58,7 @@ check_elf_has_rpath() {
->          for dir in ${rpath//:/ }; do
->              # Remove duplicate and trailing '/' for proper match
->              dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
-> -            [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
-> +            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
->          done
->      done < <( readelf -d "${file}"                                              \
->                |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
-> 
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index cc048a0df6..6bd983750d 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -36,9 +36,7 @@ check-gitlab-ci.yml:
+ 
+ check-DEVELOPERS:
+     script:
+-        - PYTHONPATH=$PWD/support/scripts
+-                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
+-                grep . && exit 1
++        - ! utils/get-developers | grep -v 'No action specified'
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 0b6e634a4b..0855bffb79 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -36,9 +36,7 @@ check-gitlab-ci.yml:
+ 
+ check-DEVELOPERS:
+     script:
+-        - PYTHONPATH=$PWD/support/scripts
+-                python -c 'from getdeveloperlib import parse_developers; parse_developers()' |
+-                grep . && exit 1
++        - ! utils/get-developers | grep -v 'No action specified'
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.1
