@@ -1,39 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 15:01:01 +0200
-Subject: [Buildroot] [git commit] core: simplify the condition to set the
-	strip command
-Message-ID: <20170701130455.5C1E381D32@busybox.osuosl.org>
+Date: Sat, 1 Jul 2017 15:07:25 +0200
+Subject: [Buildroot] [git commit] core: change the strip command from a
+	choice to a boolean
+Message-ID: <20170701130455.707DB81823@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4480d40cc9a0d63da0bdf8ddf5dfc257c673de34
+commit: https://git.buildroot.net/buildroot/commit/?id=0d643fd3e8d2e3deb5de936f176286ca2c4f0b62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since BR2_STRIP_strip and BR2_STRIP_noine are mutually exclusive (being
-part of a choice), we can simplify the logic.
+Curently, we have a choice to select between stripping and not
+stripping. This is legacy code from back when we had a third option,
+sstrip (super-strip).
+
+Since we removed sstrip, stripping or not stripping is now just a
+boolean rather than a choice.
+
+Make it so.
+
+We make BR2_STRIP_strip default to 'y' to keep the current behaviour of
+defaulting to stripping.
+
+Move BR2_STIP_none to legacy, and instruct the user to review the new
+setting.
+
+Drop any reference to BR2_STRIP_none in comments.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ Config.in              | 13 ++-----------
+ Config.in.legacy       |  8 ++++++++
+ boot/grub2/grub2.mk    |  2 +-
+ package/kexec/kexec.mk |  2 +-
+ 4 files changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c1dc714..8087bde 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -205,8 +205,7 @@ ifeq ($(BR2_STRIP_strip),y)
- STRIP_STRIP_DEBUG := --strip-debug
- TARGET_STRIP = $(TARGET_CROSS)strip
- STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
--endif
--ifeq ($(BR2_STRIP_none),y)
-+else
- TARGET_STRIP = /bin/true
- STRIPCMD = $(TARGET_STRIP)
+diff --git a/Config.in b/Config.in
+index 86e10bb..72ceadf 100644
+--- a/Config.in
++++ b/Config.in
+@@ -414,13 +414,10 @@ config BR2_DEBUG_3
+ endchoice
  endif
+ 
+-choice
+-	prompt "strip command for binaries on target"
+-	default BR2_STRIP_strip
+-
+ config BR2_STRIP_strip
+-	bool "strip"
++	bool "strip target binaries"
+ 	depends on !BR2_PACKAGE_HOST_ELF2FLT
++	default y
+ 	help
+ 	  Binaries and libraries in the target filesystem will be
+ 	  stripped using the normal 'strip' command. This allows to save
+@@ -428,12 +425,6 @@ config BR2_STRIP_strip
+ 	  on the target are needed for native debugging, but not when
+ 	  remote debugging is used.
+ 
+-config BR2_STRIP_none
+-	bool "none"
+-	help
+-	  Do not strip binaries and libraries in the target filesystem.
+-endchoice
+-
+ config BR2_STRIP_EXCLUDE_FILES
+ 	string "executables that should not be stripped"
+ 	depends on BR2_STRIP_strip
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ec28da3..453c5eb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.08"
+ 
++config BR2_STRIP_none
++	bool "Strip command 'none' has been removed"
++	select BR2_LEGACY
++	help
++	  The strip command choice has been changed into a single
++	  boolean option. Please check that the new setting is
++	  correct (in the "Build options" sub-menu)
++
+ config BR2_PACKAGE_BEECRYPT_CPP
+ 	bool "C++ support removed in beecrypt"
+ 	select BR2_LEGACY
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index dc01983..aa3f4dd 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -46,7 +46,7 @@ endif
+ # bootloader itself; none of these are used to build the native
+ # tools.
+ #
+-# NOTE: TARGET_STRIP is overridden by BR2_STRIP_none, so always
++# NOTE: TARGET_STRIP is overridden by !BR2_STRIP_strip, so always
+ # use the cross compile variant to ensure grub2 builds
+ 
+ GRUB2_CONF_ENV = \
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 7564103..dd67eab 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -10,7 +10,7 @@ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
+ KEXEC_LICENSE_FILES = COPYING
+ 
+-# Makefile expects $STRIP -o to work, so needed for BR2_STRIP_none
++# Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
+ KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
+ 
+ ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
