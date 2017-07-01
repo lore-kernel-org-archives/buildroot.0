@@ -1,55 +1,74 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 1 Jul 2017 16:11:05 +0200
-Subject: [Buildroot] [RFC PATCH v5 08/11] core: install relocation
- script and location at the end of the build
-In-Reply-To: <1498811828-6893-9-git-send-email-wg@grandegger.com>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-9-git-send-email-wg@grandegger.com>
-Message-ID: <CAHXCMMKowyzQ091YNu9ewOTcgTXkTohXEfQUBNp=3z+GT1TBjQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 16:05:14 +0200
+Subject: [Buildroot] [git commit] support/testing: allow to set BR2_JLEVEL
+Message-ID: <20170701140852.1D2268079F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Wolfgang,
+commit: https://git.buildroot.net/buildroot/commit/?id=1df8042eadb818e2f7ed3ecac7d8e804efa8b542
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Jun 30, 2017 at 10:37 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
-> The script "relocate-sdk.sh" is installed into the top directory of
-> the SDK (HOST_DIR) and the SDK location path is stored in the file
-> "HOST_DIR/usr/share/buildroot/sdk-location"-
->
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> ---
->  Makefile | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index f5ea6a8..a5dfdfd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -553,6 +553,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->
->  .PHONY: world
->  world: target-post-image
-> +       @$(call MESSAGE,"Rendering the SDK relocatable")
-> +       install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR) && \
+Let the user to override the default BR2_JLEVEL used for each testcase.
 
-I don't think "&& \" is really needed here
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/testing/infra/basetest.py |  6 +++++-
+ support/testing/run-tests         | 10 ++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-> +       echo $(HOST_DIR) > $(HOST_DIR)/usr/share/buildroot/sdk-location
-
-I'm not sure these few commands belong to the world target, maybe a
-host-finalize target could be added...
-
->
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
-> --
-> 2.7.4
->
-
-Regards,
-
--- 
-Samuel
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 557baa2..d75458a 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -34,6 +34,7 @@ class BRTest(unittest.TestCase):
+     outputdir = None
+     logtofile = True
+     keepbuilds = False
++    jlevel = None
+ 
+     def show_msg(self, msg):
+         print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
+@@ -43,7 +44,10 @@ class BRTest(unittest.TestCase):
+         self.builddir = os.path.join(self.__class__.outputdir, self.testname)
+         self.emulator = None
+         self.show_msg("Starting")
+-        self.b = Builder(self.__class__.config, self.builddir, self.logtofile)
++        config = self.__class__.config
++        if self.jlevel:
++            config += "BR2_JLEVEL={}\n".format(self.jlevel)
++        self.b = Builder(config, self.builddir, self.logtofile)
+ 
+         if not self.keepbuilds:
+             self.b.delete()
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 07dad0d..e560ec7 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -23,6 +23,8 @@ def main():
+     parser.add_argument('-k', '--keep',
+                         help='keep build directories',
+                         action='store_true')
++    parser.add_argument('-j', '--jlevel', type=int,
++                        help='BR2_JLEVEL to use for each testcase')
+ 
+     args = parser.parse_args()
+ 
+@@ -70,6 +72,14 @@ def main():
+ 
+     BRTest.keepbuilds = args.keep
+ 
++    if args.jlevel:
++        if args.jlevel < 0:
++            print "Invalid BR2_JLEVEL to use for each testcase"
++            print ""
++            parser.print_help()
++            return 1
++        BRTest.jlevel = args.jlevel
++
+     nose2_args = ["-v",
+                   "-s", "support/testing",
+                   "-c", "support/testing/conf/unittest.cfg"]
