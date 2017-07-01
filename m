@@ -1,49 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:36:25 +0200
-Subject: [Buildroot] [git commit] linuxptp: don't check host headers for
-	target features
-Message-ID: <20170701223328.5AE7D7FA0E@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 00:36:28 +0200
+Subject: [Buildroot] [git commit] manual: fix test-pkg missing.config file
+	name
+Message-ID: <20170701223328.860F07FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85bf5750fe6415949cdd4e6ab27ed02f88f47d1e
+commit: https://git.buildroot.net/buildroot/commit/?id=487e9382f6b79ddd3223f91283f435b16a9a6092
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The incdefs.sh script runs ${CROSS_COMPILE}cpp to get a list of default
-headers directories. Make sure CROSS_COMPILE is set correctly to avoid check
-of host headers.
-
-Also, drop the CC command line override. Upstream makefile sets CC to
-$(CROSS_COMPILE)gcc.
-
-Should fix:
-http://autobuild.buildroot.net/results/394/394414df25b0b7261b27ca5d4901fde0f639e73c/
-http://autobuild.buildroot.net/results/6ad/6adbc8c77c2ca70246b31600ab66b37c56c1e89e/
-http://autobuild.buildroot.net/results/70d/70dfd05acc9d951169267f2820ecedb37f0711fe/
-
-Cc: Petr Kulhavy <brain@jikos.cz>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linuxptp/linuxptp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-tips.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 5c2257c..beb2591 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -11,9 +11,9 @@ LINUXPTP_LICENSE = GPL-2.0+
- LINUXPTP_LICENSE_FILES = COPYING
- 
- define LINUXPTP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
-+	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
-+		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
- 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
--		CC="$(TARGET_CC)" \
- 		-C $(@D) all
- endef
- 
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 8b2361d..19577fa 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -105,7 +105,7 @@ The results mean:
+   snippet were not present in the final configuration. This is due to
+   options having dependencies not satisfied by the toolchain, such as
+   for example a package that +depends on BR2_USE_MMU+ with a noMMU
+-  toolchain. The missing options are reported in +config.missing+ in
++  toolchain. The missing options are reported in +missing.config+ in
+   the output build directory (+~/br-test-pkg/TOOLCHAIN_NAME/+ by
+   default).
+ * `FAILED`: the build failed. Inspect the +logfile+ file in the output
