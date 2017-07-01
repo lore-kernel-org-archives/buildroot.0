@@ -1,106 +1,39 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  1 Jul 2017 21:37:04 +0200
-Subject: [Buildroot] [PATCH 2/2] olimex_a20: refactor with genimage.sh
-In-Reply-To: <20170701193704.12792-1-francois.perrad@gadz.org>
-References: <20170701193704.12792-1-francois.perrad@gadz.org>
-Message-ID: <20170701193704.12792-2-francois.perrad@gadz.org>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Sat, 1 Jul 2017 21:43:27 +0200
+Subject: [Buildroot] [RFC PATCH v5 04/11] pkg-generic: create a list af
+ installed files per step and package
+In-Reply-To: <CAHXCMM+p=V+4J3ZBZwo7D6cB=x8juWOR2yGQnP=kJc=t39QhnA@mail.gmail.com>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-5-git-send-email-wg@grandegger.com>
+ <CAHXCMM+p=V+4J3ZBZwo7D6cB=x8juWOR2yGQnP=kJc=t39QhnA@mail.gmail.com>
+Message-ID: <535b8f6b-e2c5-a90a-6373-a5dfc31a8699@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- board/olimex/a20_olinuxino/post-image.sh         | 16 ----------------
- configs/olimex_a20_olinuxino_lime2_defconfig     |  4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig      |  4 ++--
- configs/olimex_a20_olinuxino_lime_mali_defconfig |  4 ++--
- configs/olimex_a20_olinuxino_micro_defconfig     |  4 ++--
- 5 files changed, 8 insertions(+), 24 deletions(-)
- delete mode 100755 board/olimex/a20_olinuxino/post-image.sh
 
-diff --git a/board/olimex/a20_olinuxino/post-image.sh b/board/olimex/a20_olinuxino/post-image.sh
-deleted file mode 100755
-index 9cca1b1789..0000000000
---- a/board/olimex/a20_olinuxino/post-image.sh
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                           \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index c7526fe817..611c082742 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -7,8 +7,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 275b9b7687..1c9f261d82 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -12,8 +12,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index 2aaf708962..8042dfec4a 100644
---- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -12,8 +12,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index 6472af480a..6690df6a88 100644
---- a/configs/olimex_a20_olinuxino_micro_defconfig
-+++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -12,8 +12,8 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--- 
-2.11.0
+
+Am 01.07.2017 um 16:00 schrieb Samuel Martin:
+> Hi Wolfgang,
+> 
+> In the commit title: s/af/of/
+> 
+> On Fri, Jun 30, 2017 at 10:37 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
+>> The GLOBAL_INSTRUMENTATION_HOOKS "step_pkg_size*" are extended to create
+>> a file with the list of all installed files per step and package. The
+>> file name is "<package-build-dir>/.br_<host|staging|target>_filelist".
+>> This file could be used by other hooks to scan the installed files,
+>> e.g. to check the bin arch, the host rpath or for rpath sanitation.
+>>
+>> For a quick hack, the "packages-file-list.txt" is created as before.
+> 
+> Nit: you could add few words why you needed this here, but I figured
+> out while reviewing the rest of the series ;-)
+
+For the moment it's just a quick hack. Maybe the file with the list of 
+the installed packages could be used by other hooks as well 
+(check-bin-arch, check-host-rpath, etc.
+
+Wolfgang.
