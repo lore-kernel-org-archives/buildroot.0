@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:38:17 +0200
-Subject: [Buildroot] [PATCH 1/2] olimex_a20: refactor with U-Boot boot
- script
-In-Reply-To: <20170701193704.12792-1-francois.perrad@gadz.org>
-References: <20170701193704.12792-1-francois.perrad@gadz.org>
-Message-ID: <20170702003817.10e9f7da@windsurf>
+Date: Sun, 2 Jul 2017 00:40:02 +0200
+Subject: [Buildroot] [git commit] toolchain-external: skip ld-musl symlink
+	on static build
+Message-ID: <20170701223701.B2FBE8014A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7cfd40f2d90b7bbea1d6309145542f16ead58986
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  1 Jul 2017 21:37:03 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  board/olimex/a20_olinuxino/post-build.sh         | 10 +++-------
->  configs/olimex_a20_olinuxino_lime2_defconfig     |  3 ++-
->  configs/olimex_a20_olinuxino_lime_defconfig      |  3 ++-
->  configs/olimex_a20_olinuxino_lime_mali_defconfig |  3 ++-
->  configs/olimex_a20_olinuxino_micro_defconfig     |  3 ++-
->  5 files changed, 11 insertions(+), 11 deletions(-)
+Static build with external musl toolchain leaves a dangling symlink to
+libc.so. Don't create that symlink on static build.
 
-Both applied. Thanks!
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 8269345..8460e37 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -475,7 +475,7 @@ endef
+ # With the musl C library, the libc.so library directly plays the role
+ # of the dynamic library loader. We just need to create a symbolic
+ # link to libc.so with the appropriate name.
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL):$(BR2_STATIC_LIBS),y:)
+ ifeq ($(BR2_i386),y)
+ MUSL_ARCH = i386
+ else ifeq ($(BR2_ARM_EABIHF),y)
