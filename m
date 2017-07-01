@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 00:43:40 +0200
-Subject: [Buildroot] [PATCH] libzip: bump version to 1.2.0
-In-Reply-To: <1498474222-16735-1-git-send-email-brgl@bgdev.pl>
-References: <1498474222-16735-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <20170702004340.5ad811ce@windsurf>
+Date: Sun, 2 Jul 2017 00:47:04 +0200
+Subject: [Buildroot] [PATCH 1/1] protobuf: version bump to 3.3.0
+In-Reply-To: <20170626141035.28299-1-aduskett@codeblue.com>
+References: <20170626141035.28299-1-aduskett@codeblue.com>
+Message-ID: <20170702004704.11139c35@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 26 Jun 2017 12:50:22 +0200, Bartosz Golaszewski wrote:
-> It's a major release, but the API seems to be mostly
-> backwards-compatible. The only package depending on this library in
-> buildroot is libsigrok and it builds fine.
+On Mon, 26 Jun 2017 10:10:35 -0400, Adam Duskett wrote:
+> Also remove 416f90939d4de58fe1a4e2489120010313183291.patch as it is
+> part of 3.3.0.
 > 
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 > ---
->  package/libzip/libzip.hash | 2 +-
->  package/libzip/libzip.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/protobuf/protobuf.hash | 3 +--
+>  package/protobuf/protobuf.mk   | 4 +---
+>  2 files changed, 2 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
+This patch is wrong because it forgets to update the hash in
+package/python-protobuf/python-protobuf.hash. In addition, there is
+already a patch upgrading protobuf (correctly) in
+https://patchwork.ozlabs.org/patch/761466/.
+
+Best regards,
 
 Thomas
 -- 
