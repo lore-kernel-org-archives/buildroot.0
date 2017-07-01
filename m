@@ -1,28 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 17:45:54 +0200
-Subject: [Buildroot] [PATCH] mosquitto: specify that hash is taken from
- upstream
-In-Reply-To: <20170628105553.32339-1-Vincent.Riera@imgtec.com>
-References: <20170628105553.32339-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170701174554.1315e5a6@windsurf.home>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 1 Jul 2017 18:02:57 +0200
+Subject: [Buildroot] [PATCH 4/7 v4] tools: move size-stat-compare out of
+	support/scripts/
+In-Reply-To: <1f7606d932bd480bca466181658e656f93c4fe9e.1498919458.git.yann.morin.1998@free.fr>
+References: <cover.1498919458.git.yann.morin.1998@free.fr>
+ <1f7606d932bd480bca466181658e656f93c4fe9e.1498919458.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LVF7gAph5SJqCAPjGgagckQOyO0Ud_Xqbdj=+kTGqzY5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-On Wed, 28 Jun 2017 11:55:53 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+2017-07-01 16:31 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Move it to the top-level tools/ directory, so that it is easier to
+> find for users.
+>
+> Add a legacy symlink for those users who already used them, so as
+> not to break their habits.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+>
 > ---
->  package/mosquitto/mosquitto.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes v3 -> v4:
+>   - drop legacy symlink  (Arnout, Thomas)
+> ---
+>  tools/readme.txt                              | 6 ++++++
+>  {support/scripts => tools}/size-stats-compare | 0
+>  2 files changed, 6 insertions(+)
+>  rename {support/scripts => tools}/size-stats-compare (100%)
+>
+> diff --git a/tools/readme.txt b/tools/readme.txt
+> index fc1108fded..dd8a1d4494 100644
+> --- a/tools/readme.txt
+> +++ b/tools/readme.txt
+> @@ -11,6 +11,12 @@ get-developpers
+>      of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
+>      input, a package name or and architecture name.
+>
+> +size-stat-compare
+> +    a script to compare the rootfs size between two differnt Buildroot
 
-Applied to master, thanks.
+You must have missed my comment about 'differnt' -> 'different'
 
+> +    configurations. This can be used to identify the size impact of
+> +    a specific option, or of a set of specific options, or an update
+> +    to a newer Buildroot version...
+
+While you're at it, the last clause would either also need 'of': 'or
+of an update...',
+or otherwise it would need to be removed on the second clause, but now
+it is inconsistent.
+
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
