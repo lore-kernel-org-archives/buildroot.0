@@ -1,134 +1,190 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Jul 2017 16:31:07 +0200
-Subject: [Buildroot] [PATCH 7/7 v4] tools: new tool to filter the output of
-	make
-In-Reply-To: <cover.1498919458.git.yann.morin.1998@free.fr>
-References: <cover.1498919458.git.yann.morin.1998@free.fr>
-Message-ID: <99c3ef336521def728a1e5d80da5d7de7fd3fac1.1498919458.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Jul 2017 16:52:40 +0200
+Subject: [Buildroot] [git commit] board: add orangepi-plus support
+Message-ID: <20170701151810.4134581E06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add brmake, a small script that redirects the build output log to a
-file, keeping just Buildroot's own messages, with the date+time added
-at the start of the line.
+commit: https://git.buildroot.net/buildroot/commit/?id=bd22ae58fac1c86ac47c84b642e6c5a8e7829846
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We need to unbuffer the output of make so that, when the script is
-interrupted (SIGINT, ^C), there is no lingering output not yet digested
-by the logger loop.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-
+Signed-off-by: Chakra Divi <chakra@openedev.com>
+[Thomas: remove host-uboot-tools from defconfig, already pulled by
+BR2_TARGET_UBOOT_BOOT_SCRIPT, remove trailing whitespace.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v3 -> v4:
-  - drop options parsing, expand readme  (Arnout, Samuel, Thomas)
-  - nove to the end of the series  (Thomas, Arnout)
+ .gitlab-ci.yml                            |  1 +
+ DEVELOPERS                                |  2 ++
+ board/orangepi/orangepi-plus/boot.cmd     |  8 ++++++
+ board/orangepi/orangepi-plus/genimage.cfg | 35 ++++++++++++++++++++++++++
+ board/orangepi/orangepi-plus/readme.txt   | 29 +++++++++++++++++++++
+ configs/orangepi_plus_defconfig           | 42 +++++++++++++++++++++++++++++++
+ 6 files changed, 117 insertions(+)
 
-Changes v2 -> v3:
-  - detect unconfigured build tree  (Ricardo)
-  - rename 00-README -> readme.txt  (Thomas, Arnout)
-
-Changes v1 -> v2:
-  - rename contrib -> tools  (Arnout)
-  - detect missing unbuffer  (Arnout)
-
-Notes:
-  - Arnout suggested using 'stdbuf' instead of 'unbuffer', but that has
-    some shortcomings in weird corner-cases because it uses LD_PRELOAD
-    to call a constructor that forces settings on stdout/stderr/stdin
-    (it cost me three days to investigate a build failure because of
-    that). So, I stuck with 'unbuffer'...
-  - I also tried to use bash' coproc, but it seems there was a
-    regression in later bash versions that causes an incorrect
-    redirect. So, I stuck with 'unbuffer'...
----
- docs/manual/writing-rules.txt |  5 +++--
- tools/brmake                  | 37 +++++++++++++++++++++++++++++++++++++
- tools/readme.txt              |  9 +++++++++
- 3 files changed, 49 insertions(+), 2 deletions(-)
- create mode 100755 tools/brmake
-
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index 3a2c8dcb37..c144874a0d 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -146,5 +146,6 @@ syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 43e963c..cc048a0 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -145,6 +145,7 @@ olimex_imx233_olinuxino_defconfig: *defconfig
+ openblocks_a6_defconfig: *defconfig
+ orangepi_one_defconfig: *defconfig
+ orangepi_pc_defconfig: *defconfig
++orangepi_plus_defconfig: *defconfig
+ orangepi_zero_defconfig: *defconfig
+ pandaboard_defconfig: *defconfig
+ pc_x86_64_bios_defconfig: *defconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index df974f9..47637fe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -343,7 +343,9 @@ F:	package/libsvg-cairo/
  
- === Support scripts
+ N:	Chakra Divi <chakra@openedev.com>
+ F:	board/olimex/a13_olinuxino
++F:	board/orangepi/orangepi-plus
+ F:	configs/olimex_a13_olinuxino_defconfig
++F:	configs/orangepi_plus_defconfig
  
--Some scripts in the +support/+ directory are written in Python and should follow
--the https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
-+Some scripts in the +support/+ and +tools/+ directories are written in
-+Python and should follow the
-+https://www.python.org/dev/peps/pep-0008/[PEP8 Style Guide for Python Code].
-diff --git a/tools/brmake b/tools/brmake
-new file mode 100755
-index 0000000000..3c6f8485ab
+ N:	Chris Packham <judge.packham@gmail.com>
+ F:	package/eventlog/
+diff --git a/board/orangepi/orangepi-plus/boot.cmd b/board/orangepi/orangepi-plus/boot.cmd
+new file mode 100644
+index 0000000..1a378cb
 --- /dev/null
-+++ b/tools/brmake
-@@ -0,0 +1,37 @@
-+#!/bin/bash
-+# (C) 2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
-+# License: WTFPL, https://spdx.org/licenses/WTFPL.html
++++ b/board/orangepi/orangepi-plus/boot.cmd
+@@ -0,0 +1,8 @@
++setenv fdt_high ffffffff
 +
-+main() {
-+    local found ret start d h m mf
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
-+    if ! which unbuffer >/dev/null 2>&1; then
-+        printf "you need to install 'unbuffer' (from package expect or expect-dev)\n" >&2
-+        exit 1
-+    fi
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-plus.dtb
 +
-+    start=${SECONDS}
-+
-+    ( exec 2>&1; unbuffer make "${@}"; ) \
-+    > >( while read line; do
-+             printf "%(%Y-%m-%dT%H:%M:%S)T %s\n" -1 "${line}"
-+         done \
-+         |tee -a br.log \
-+         |grep --colour=never -E '>>>'
-+       )
-+    ret=${?}
-+
-+    d=$((SECONDS-start))
-+    printf "Done in "
-+    h=$((d/3600))
-+    d=$((d%3600))
-+    [ ${h} -eq 0 ] || { printf "%dh " ${h}; mf="02"; }
-+    m=$((d/60))
-+    d=$((d%60))
-+    [ ${m} -eq 0 ] || { printf "%${mf}dmin " ${m}; sf="02"; }
-+    printf "%${sf}ds\n" ${d}
-+
-+    return ${ret}
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-plus/genimage.cfg b/board/orangepi/orangepi-plus/genimage.cfg
+new file mode 100644
+index 0000000..391678b
+--- /dev/null
++++ b/board/orangepi/orangepi-plus/genimage.cfg
+@@ -0,0 +1,35 @@
++# Minimal SD card image for the OrangePi Plus\Plus2
++#
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-h3-orangepi-plus.dtb",
++			"boot.scr"
++		}
++	}
++	size = 10M
 +}
 +
-+main "${@}"
-diff --git a/tools/readme.txt b/tools/readme.txt
-index 94843332c9..a90805fb00 100644
---- a/tools/readme.txt
-+++ b/tools/readme.txt
-@@ -2,6 +2,15 @@ This directory contains various useful scripts and tools for working
- with Buildroot. You need not add this directory in your PATH to use
- any of those tools, but you may do so if you want.
- 
-+brmake
-+    a script that can be run instead of make, that prepends the date in
-+    front of each line, redirects all of the build output to a file
-+    ("'br.log' in the current directory), and just outputs the Buildroot
-+    messages (those lines starting with >>>) on stdout.
-+    Do not run this script for interactive configuration (e.g. menuconfig)
-+    or on an unconfigured directory. The output is redirected so you will see
-+    nothing.
++image sdcard.img {
++	hdimage {
++	}
 +
- check-package
-     a script that checks the coding style of a package's Config.in and
-     .mk files, and also tests them for various types of typoes.
--- 
-2.11.0
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/orangepi/orangepi-plus/readme.txt b/board/orangepi/orangepi-plus/readme.txt
+new file mode 100644
+index 0000000..7f871bc
+--- /dev/null
++++ b/board/orangepi/orangepi-plus/readme.txt
+@@ -0,0 +1,29 @@
++OrangePi Plus/Plus2
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the OrangePi Plus/Plus2. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make orangepi_plus_defconfig
++
++Compile everything and build the SD card image:
++
++    $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/configs/orangepi_plus_defconfig b/configs/orangepi_plus_defconfig
+new file mode 100644
+index 0000000..cf725ef
+--- /dev/null
++++ b/configs/orangepi_plus_defconfig
+@@ -0,0 +1,42 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++
++# Linux headers same as kernel, a 4.11 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Plus"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Plus"
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.05"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_plus"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-plus/boot.cmd"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-plus/genimage.cfg"
++
++# Additional tools
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
