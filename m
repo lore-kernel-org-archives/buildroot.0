@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Jul 2017 19:39:38 +0200
-Subject: [Buildroot] [PATCH v2 0/2] qt5multimedia: add missing
- dependencies
-In-Reply-To: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
-References: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <20170701193938.7a4f483a@windsurf.home>
+Date: Sat, 1 Jul 2017 19:41:58 +0200
+Subject: [Buildroot] [PATCH 0/9] support/testing: run tests in parallel
+In-Reply-To: <20170629024549.30484-1-ricardo.martincoski@gmail.com>
+References: <20170629024549.30484-1-ricardo.martincoski@gmail.com>
+Message-ID: <20170701194158.6089735d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 27 Jun 2017 09:53:07 +0200, Bartosz Golaszewski wrote:
+On Wed, 28 Jun 2017 23:45:40 -0300, Ricardo Martincoski wrote:
 
-> Bartosz Golaszewski (2):
->   qt5multimedia: conditionally add pulseaudio & libglib2 to dependencies
->   qt5multimedia: conditionally add alsa-lib to dependencies
+> Ricardo Martincoski (9):
+>   support/testing: use pexpect in emulator
+>   support/testing: use qemu stdio in emulator
+>   support/testing: let pexpect write stdout to log
+>   support/testing: use pexpect.sendline directly
+>   support/testing: use pexpect.expect directly
+>   support/testing: fix code style in emulator
+>   support/testing: allow to set BR2_JLEVEL
+>   support/testing: run testcases in parallel
+>   support/testing: large timeout for login prompt
 
-Both applied. Thanks!
+All applied to master. Many thanks for this work, definitely very
+useful!
+
+Best regards,
 
 Thomas
 -- 
