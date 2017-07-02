@@ -1,48 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 00:06:25 +0200
-Subject: [Buildroot] [PATCH 00/20] Do not download auto-generated patches
-In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 2 Jul 2017 18:53:22 +0200")
-References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y3s68pem.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Jul 2017 00:10:06 +0200
+Subject: [Buildroot] [PATCH v2] lirc-tools: bump to version 0.9.4d
+In-Reply-To: <a9cb55ec93d8815c85e81b591b8b4b23112fe649.1498337761.git.baruch@tkos.co.il>
+References: <a9cb55ec93d8815c85e81b591b8b4b23112fe649.1498337761.git.baruch@tkos.co.il>
+Message-ID: <20170703001006.2b81d8ad@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > Hello,
- > Patch https://patchwork.ozlabs.org/patch/782927/ sent by Julien
- > Boibessot made us realize that auto-generated patches such as the ones
- > provided by Github are not guaranteed to be stable over time. Indeed,
- > the "index" line of the patches contains short git hashes, and when
- > new commits are made to the Git repository, additional commits are
- > made, which can have short hashes conflicting with older ones, in
- > which case git increase the length of the "short hashes" to avoid the
- > conflict. This means the patch contents change, therefore its sha256
- > hash changes, and it breaks the download in Buildroot.
+On Sat, 24 Jun 2017 23:56:01 +0300, Baruch Siach wrote:
+> Drop 0001-tools-make_rel_symlink.py-can-also-use-python2.patch. Build requires
+> host-python3 since the previous version bump.
+> 
+> Drop upstream 0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch.
+> 
+> Add a patch fixing header guard macro collision with musl libc.
+> 
+> Set HAVE_WORKING_POLL to skip poll(2) run test that is not compatible with
+> cross compilation.
+> 
+> Add optional dependency on libftdi1.
+> 
+> Cc: Rhys Williams <github@wilberforce.co.nz>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2: add a patch fixing build with musl
+> ---
+>  ...ll.h-fix-header-guard-collision-with-musl.patch |  62 ++++++++++++
+>  ...-make_rel_symlink.py-can-also-use-python2.patch |  28 ------
+>  ...e-use-of-functions-killed-in-kernel-4.8.0.patch | 105 ---------------------
+>  package/lirc-tools/lirc-tools.hash                 |   8 +-
+>  package/lirc-tools/lirc-tools.mk                   |   8 +-
+>  5 files changed, 73 insertions(+), 138 deletions(-)
+>  create mode 100644 package/lirc-tools/0001-lib-curl_poll.h-fix-header-guard-collision-with-musl.patch
+>  delete mode 100644 package/lirc-tools/0001-tools-make_rel_symlink.py-can-also-use-python2.patch
+>  delete mode 100644 package/lirc-tools/0002-lircd-Remove-use-of-functions-killed-in-kernel-4.8.0.patch
 
- > Since there is no solution to this problem, we simply decided that
- > auto-generated patches should not be downloaded by Buildroot using
- > <pkg>_PATCH, and should instead be stored in the tree.
+Applied to master, thanks.
 
- > This series:
-
- >  1. Updates the documentation about the hash file.
-
- >  2. Changes all packages that download Github.com patches. All
- >     packages that have a non-empty <pkg>_PATCH variable have been
- >     inspected, and only the ones downloading patches from Github are
- >     problematic.
-
-Committed series, thanks.
-
- >   scrub: don't download patch from Github
-
-Notice: Something (patchwork?) wrapped the very long line in this patch, so I
-had to fix it up manually.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
