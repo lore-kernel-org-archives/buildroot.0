@@ -1,37 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jul 2017 18:16:17 +0200
-Subject: [Buildroot] [git commit] package/syslog-ng: fix libnet detection
-Message-ID: <20170702161954.637798188C@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 2 Jul 2017 18:24:59 +0200
+Subject: [Buildroot] [PATCH v2] .gitlab-ci.yml: use the Buildroot CI image
+	published on Docker Hub
+In-Reply-To: <20170702161324.485-1-arnout@mind.be>
+References: <20170702161324.485-1-arnout@mind.be>
+Message-ID: <20170702162459.2065-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee99e9ea8cc31d22f72e66cdc63ae2cdc0e6a51d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes
-http://autobuild.buildroot.net/results/e71/e718aab76d41c9c1aa5f9e3e74fb48b63038f254/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/syslog-ng/syslog-ng.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+v2: Forgot to update .gitlab-ci.yml after the final changes
+---
+ .gitlab-ci.yml    | 14 +-------------
+ .gitlab-ci.yml.in | 14 +-------------
+ 2 files changed, 2 insertions(+), 26 deletions(-)
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index bc49fad..325fac5 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -71,7 +71,9 @@ endif
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 7acf4b620e..3ae7e5db64 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -4,19 +4,7 @@
+ # It needs to be regenerated every time a defconfig is added, using
+ # "make .gitlab-ci.yml".
  
- ifeq ($(BR2_PACKAGE_LIBNET),y)
- SYSLOG_NG_DEPENDENCIES += libnet
--SYSLOG_NG_CONF_OPTS += --enable-spoof-source
-+SYSLOG_NG_CONF_OPTS += \
-+	--with-libnet=$(STAGING_DIR)/usr/bin \
-+	--enable-spoof-source
- else
- SYSLOG_NG_CONF_OPTS += --disable-spoof-source
- endif
+-image: debian:stable
+-
+-before_script:
+-    - dpkg --add-architecture i386
+-    # The container has no package lists, so need to update first
+-    - apt-get update -qq
+-    - apt-get install -y -qq --no-install-recommends
+-        build-essential locales bc ca-certificates file rsync gcc-multilib
+-        git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
+-        python-nose2 python-pexpect qemu-system-arm qemu-system-x86
+-    # To be able to generate a toolchain with locales, enable one UTF-8 locale
+-    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
+-    - /usr/sbin/locale-gen
++image: buildroot/base
+ 
+ .defconfig_script: &defconfig_script
+     - echo 'Configure Buildroot'
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index c69f9de99c..3088677e67 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -4,19 +4,7 @@
+ # It needs to be regenerated every time a defconfig is added, using
+ # "make .gitlab-ci.yml".
+ 
+-image: debian:stable
+-
+-before_script:
+-    - dpkg --add-architecture i386
+-    # The container has no package lists, so need to update first
+-    - apt-get update -qq
+-    - apt-get install -y -qq --no-install-recommends
+-        build-essential locales bc ca-certificates file rsync gcc-multilib
+-        git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
+-        python-nose2 python-pexpect qemu-system-arm qemu-system-x86
+-    # To be able to generate a toolchain with locales, enable one UTF-8 locale
+-    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
+-    - /usr/sbin/locale-gen
++image: buildroot/base
+ 
+ .defconfig_script: &defconfig_script
+     - echo 'Configure Buildroot'
+-- 
+2.13.2
