@@ -1,39 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 15:49:25 +0200
-Subject: [Buildroot] [git commit] support/scripts: check-host-rpath now
-	handles $ORIGIN as well
-Message-ID: <20170702134624.61797807BB@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 15:51:13 +0200
+Subject: [Buildroot] [RFC PATCH v5 10/11] support/scripts:
+ check-host-rpath now handles $ORIGIN as well
+In-Reply-To: <1498811828-6893-11-git-send-email-wg@grandegger.com>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-11-git-send-email-wg@grandegger.com>
+Message-ID: <20170702155113.1570e5f1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=824f3d9bebee5008ed4f21ab9857778b7d200802
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-"$ORIGIN/../../usr/lib" is also a valid RPATH for binaries in
-"$hostdir/usr/bin". After RPATH sanitation, all RPATH
-directories start with "$ORIGIN".
+On Fri, 30 Jun 2017 10:37:07 +0200, Wolfgang Grandegger wrote:
+> "$ORIGIN/../../usr/lib" is also a valid RPATH for binaries in
+> "$hostdir/usr/bin". After RPATH sanitation, all RPATH
+> directories start with "$ORIGIN".
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  support/scripts/check-host-rpath | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/check-host-rpath | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 6ce547c..020c123 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -58,7 +58,7 @@ check_elf_has_rpath() {
-         for dir in ${rpath//:/ }; do
-             # Remove duplicate and trailing '/' for proper match
-             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
--            [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
-+            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
-         done
-     done < <( readelf -d "${file}"                                              \
-               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
