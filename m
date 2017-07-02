@@ -1,32 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 00:32:26 +0200
-Subject: [Buildroot] [PATCH] 2017.02.x: update hash file for libnl
-	3.2.27 patch
-In-Reply-To: <20170702235512.723ed0da@windsurf> (Thomas Petazzoni's message of
- "Sun, 2 Jul 2017 23:55:12 +0200")
-References: <1498841436-24941-1-git-send-email-julien.boibessot@free.fr>
- <20170702235512.723ed0da@windsurf>
-Message-ID: <87r2xy8o79.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Jul 2017 00:38:23 +0200
+Subject: [Buildroot] [PATCH 0/9] Bump skarnet.org packages to spring
+ release
+In-Reply-To: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
+References: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20170703003823.30965c8e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
-Hi,
+On Sun, 25 Jun 2017 21:26:12 +0200, Eric Le Bihan wrote:
 
- > So, like we are about to do in the master branch for all packages, what
- > we are going to do here is that we will bring the libnl patch inside
- > package/libnl/ instead of downloading it from Github.
+> Eric Le Bihan (9):
+>   skalibs: bump version to 2.5.1.1
+>   execline: bump version to 2.3.0.1
+>   s6-dns: bump version to 2.2.0.0
+>   s6-networking: bump version to 2.3.0.1
+>   s6: bump version to 2.6.0.0
+>   s6-rc: bump version to 0.2.0.1
+>   s6-linux-utils: bump version to 2.4.0.0
+>   s6-portable-utils: bump version to 2.2.1.0
+>   s6-linux-init: bump version to 0.3.0.0
 
- > Peter Korsgaard will work on this soon. In the mean time, I'll mark
- > your patch as Rejected in patchwork.
+Series applied. Thanks!
 
-FYI, I've pushed a patch doing this:
-
-https://git.buildroot.net/buildroot/commit/?h=2017.02.x&id=6826e2ee8a2bc09104185c777a4ff57bc6a78872
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
