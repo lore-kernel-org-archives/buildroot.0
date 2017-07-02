@@ -1,26 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Jul 2017 17:04:31 +0200
-Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.7.8
-In-Reply-To: <21e15290feb7138acb60802800e8fbb4c12d4a62.1498835094.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 30 Jun 2017 18:04:54 +0300")
-References: <21e15290feb7138acb60802800e8fbb4c12d4a62.1498835094.git.baruch@tkos.co.il>
-Message-ID: <87mv8mc22o.fsf@dell.be.48ers.dk>
+Date: Sun, 2 Jul 2017 17:04:01 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] libgcrypt: security bump
+	to version 1.7.8
+Message-ID: <20170702150244.8C85E80E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b5659e721c3c5b645673c789246d1b607f1e4b9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > From the NEWS file:
- > - Mitigate a flush+reload side-channel attack on RSA secret keys
- >   dubbed "Sliding right into disaster".  For details see
- >   <https://eprint.iacr.org/2017/627>.  [CVE-2017-7526]
+From the NEWS file:
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+- Mitigate a flush+reload side-channel attack on RSA secret keys
+  dubbed "Sliding right into disaster".  For details see
+  <https://eprint.iacr.org/2017/627>.  [CVE-2017-7526]
 
-Committed to 2017.02.x and 2017.05.x, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 10ce9c6f8d3567c2e423907d3c5b008a97c9cdfa)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgcrypt/libgcrypt.hash | 9 +++++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 5a833d5..8ac9f0a 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,4 +1,5 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000406.html
+-sha1  ea4ae1a4dba51f15095319419d7b42a0bf160384  libgcrypt-1.7.7.tar.bz2
+-# Locally calculated
+-sha256  b9b85eba0793ea3e6e66b896eb031fa05e1a4517277cc9ab10816b359254cd9a  libgcrypt-1.7.7.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q2/000408.html
++sha1  65a4a495aa858483e66868199eaa8238572ca6cd  libgcrypt-1.7.8.tar.bz2
++# Locally calculated after checking signature
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.7.8.tar.bz2.sig
++sha256  948276ea47e6ba0244f36a17b51dcdd52cfd1e664b0a1ac3bc82134fb6cec199  libgcrypt-1.7.8.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index c92ac77..c18456e 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGCRYPT_VERSION = 1.7.7
++LIBGCRYPT_VERSION = 1.7.8
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
