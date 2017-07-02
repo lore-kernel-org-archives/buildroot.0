@@ -1,32 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Jul 2017 17:53:38 +0200
-Subject: [Buildroot] [PATCH v2 0/2] qt5multimedia: add missing
-	dependencies
-In-Reply-To: <1498549990-3548-1-git-send-email-brgl@bgdev.pl> (Bartosz
- Golaszewski's message of "Tue, 27 Jun 2017 09:53:07 +0200")
-References: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
-Message-ID: <87o9t2al8d.fsf@dell.be.48ers.dk>
+Date: Sun, 2 Jul 2017 17:52:45 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] qt5multimedia:
+	conditionally add alsa-lib to dependencies
+Message-ID: <20170702155041.261B581DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bartosz" == Bartosz Golaszewski <brgl@bgdev.pl> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f1450e9084b3c43f82497ae8254c7dca2fecc049
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Qt5Multimedia conditionally builds support for pulseaudio and alsa if
- > it detects corresponding libraries in the system but we need to
- > explicitly depend on these packages.
+Qt5Multimedia builds the alsa plugin if it detects libasound in the
+system. Add alsa-lib to dependencies if BR2_PACKAGE_ALSA_LIB is
+selected.
 
- > v1 -> v2:
- > - also added libglib2 as dependency for pulseaudio support
- > - new patch: add alsa to dependencies
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 8d7dd837e5e2fcc7b785472e7215ffa74b546d9c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Bartosz Golaszewski (2):
- >   qt5multimedia: conditionally add pulseaudio & libglib2 to dependencies
- >   qt5multimedia: conditionally add alsa-lib to dependencies
-
-Committed both to 2017.02.x and 2017.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index c1a27cb..4ce98d2 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -35,6 +35,10 @@ ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
+ QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++QT5MULTIMEDIA_DEPENDENCIES += alsa-lib
++endif
++
+ define QT5MULTIMEDIA_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+ endef
