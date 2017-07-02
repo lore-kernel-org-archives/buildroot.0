@@ -1,71 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 23:45:27 +0200
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: use the Buildroot CI image
-	published on Docker Hub
-Message-ID: <20170702214233.41F6580641@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 23:45:43 +0200
+Subject: [Buildroot] [PATCH 1/3] .gitlab-ci.yml: run our runtime tests
+In-Reply-To: <20170702161324.485-1-arnout@mind.be>
+References: <20170702161324.485-1-arnout@mind.be>
+Message-ID: <20170702234543.2ad96550@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2a151cea0a9066015b9e6c1fb714a84faffec0f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .gitlab-ci.yml    | 14 +-------------
- .gitlab-ci.yml.in | 14 +-------------
- 2 files changed, 2 insertions(+), 26 deletions(-)
+On Sun, 2 Jul 2017 18:13:22 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> This commit improves our .gitlab-ci.yml logic to execute our runtime
+> tests located in support/testing/. To do so, this commit:
+> 
+>  - Adds more Debian packages to be installed, namely the nose2 and
+>    pexpect packages needed by the runtime testing infrastructure, as
+>    well as the necessary Qemu emulators
+> 
+>  - The description of how to run the runtime tests. Each test is
+>    executed as a separate Gitlab CI job, so that the status of each
+>    test is easily visible in the Gitlab CI web interface.
+> 
+>  - The Makefile is improved to auto-generate .gitlab-ci.yml from
+>    .gitlab-ci.yml.in, like we're doing for defconfigs. Since the
+>    dependencies of .gitlab-ci.yml are no longer correct, we abandon
+>    them and instead make it a PHONY target.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [Arnout: simplify .gitlab-ci.in a little, removing redundant stuff;
+>          make .gitlab-ci.yml a PHONY target]
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  .gitlab-ci.yml    | 33 +++++++++++++++++++++++++++++++++
+>  .gitlab-ci.yml.in |  8 ++++++++
+>  Makefile          |  7 +++++--
+>  3 files changed, 46 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 7acf4b6..3ae7e5d 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -4,19 +4,7 @@
- # It needs to be regenerated every time a defconfig is added, using
- # "make .gitlab-ci.yml".
- 
--image: debian:stable
--
--before_script:
--    - dpkg --add-architecture i386
--    # The container has no package lists, so need to update first
--    - apt-get update -qq
--    - apt-get install -y -qq --no-install-recommends
--        build-essential locales bc ca-certificates file rsync gcc-multilib
--        git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
--        python-nose2 python-pexpect qemu-system-arm qemu-system-x86
--    # To be able to generate a toolchain with locales, enable one UTF-8 locale
--    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
--    - /usr/sbin/locale-gen
-+image: buildroot/base
- 
- .defconfig_script: &defconfig_script
-     - echo 'Configure Buildroot'
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index c69f9de..3088677 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -4,19 +4,7 @@
- # It needs to be regenerated every time a defconfig is added, using
- # "make .gitlab-ci.yml".
- 
--image: debian:stable
--
--before_script:
--    - dpkg --add-architecture i386
--    # The container has no package lists, so need to update first
--    - apt-get update -qq
--    - apt-get install -y -qq --no-install-recommends
--        build-essential locales bc ca-certificates file rsync gcc-multilib
--        git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
--        python-nose2 python-pexpect qemu-system-arm qemu-system-x86
--    # To be able to generate a toolchain with locales, enable one UTF-8 locale
--    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
--    - /usr/sbin/locale-gen
-+image: buildroot/base
- 
- .defconfig_script: &defconfig_script
-     - echo 'Configure Buildroot'
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
