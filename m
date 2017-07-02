@@ -1,57 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 2 Jul 2017 18:08:20 +0200
-Subject: [Buildroot] [PATCH 3/3 v3] package/ifupdown-scripts: allow use
- with a custom skeleton
-In-Reply-To: <7af4e1b5c5c358fd2a41e609ea250138a5565c18.1499006091.git.yann.morin.1998@free.fr>
-References: <cover.1499006091.git.yann.morin.1998@free.fr>
- <7af4e1b5c5c358fd2a41e609ea250138a5565c18.1499006091.git.yann.morin.1998@free.fr>
-Message-ID: <238a54c3-4de7-35bf-bf51-a09061fb88b6@mind.be>
+From: GitLab <gitlab@mg.gitlab.com>
+Date: Sun, 02 Jul 2017 11:39:43 +0000
+Subject: [Buildroot] buildroot | Pipeline #9511589 has failed for master |
+	1c73e81b
+Message-ID: <5958db7f9305e_4d43fed6722934c2354a@sidekiq04.mail>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Your pipeline has failed.
+
+Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
+Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
+
+Commit: 1c73e81b ( https://gitlab.com/buildroot.org/buildroot/commit/1c73e81b3263ee5ce782a77afa2899c2a60da7d5 )
+Commit Message: protobuf, python-protobuf: bump to v3.3.0
+
+Sign...
+Commit Author: Mario Rugiero
+Committed by: Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
+
+Pipeline #9511589 ( https://gitlab.com/buildroot.org/buildroot/pipelines/9511589 ) triggered by arnout ( https://gitlab.com/arnout )
+had 1 failed build.
+
+Job #20825234 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/20825234 )
+
+Stage: test
+Name: check-gitlab-ci.yml
+Trace: E: Failed to fetch http://deb.debian.org/debian/pool/main/e/explorercanvas/libjs-excanvas_0.r3-4_all.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/s/serf/libserf-1-1_1.3.9-3_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/libsvn1_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial-common_4.0-1_all.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial_4.0-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/subversion_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-21_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+[31;1mERROR: Job failed: exit code 1
+[0;m
 
 
-On 02-07-17 16:35, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- You'll also send a patch adding a select to package/ifupdown/Config.in?
-
- Regards,
- Arnout
-
-> ---
->  package/ifupdown-scripts/Config.in | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/ifupdown-scripts/Config.in b/package/ifupdown-scripts/Config.in
-> index 7086253a03..7064d58fec 100644
-> --- a/package/ifupdown-scripts/Config.in
-> +++ b/package/ifupdown-scripts/Config.in
-> @@ -1,8 +1,7 @@
->  config BR2_PACKAGE_IFUPDOWN_SCRIPTS
-> -	bool
-> -	depends on BR2_ROOTFS_SKELETON_DEFAULT
-> +	bool "ifupdown scripts"
->  	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
-> -	default y
-> +	default y if BR2_ROOTFS_SKELETON_DEFAULT
->  	help
->  	  Set of scripts used by ifupdown (either the standalone one, or the
->  	  busybox one) to bring network up, or tear it down.
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+---
+You're receiving this email because of your account on gitlab.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170702/d9c48275/attachment-0001.html>
