@@ -1,33 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Jul 2017 17:12:28 +0200
-Subject: [Buildroot] [PATCH] package/xen: Fix builds with GCC 7
-In-Reply-To: <20170701124321.341c3c13@windsurf.home> (Thomas Petazzoni's
- message of "Sat, 1 Jul 2017 12:43:21 +0200")
-References: <20170629220922.7615-1-alistair.francis@xilinx.com>
- <20170701124321.341c3c13@windsurf.home>
-Message-ID: <87a84mc1pf.fsf@dell.be.48ers.dk>
+Date: Sun, 02 Jul 2017 17:14:07 +0200
+Subject: [Buildroot] [PATCH] trinity: fix MIPS support
+In-Reply-To: <1498803119-28740-1-git-send-email-marcin.nowakowski@imgtec.com>
+ (Marcin Nowakowski's message of "Fri, 30 Jun 2017 08:11:59 +0200")
+References: <1498803119-28740-1-git-send-email-marcin.nowakowski@imgtec.com>
+Message-ID: <8760fac1mo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Marcin" == Marcin Nowakowski <marcin.nowakowski@imgtec.com> writes:
 
- > Hello,
- > On Thu, 29 Jun 2017 15:09:22 -0700, Alistair Francis wrote:
- >> Fix a "duplicate 'const' declaration specifier" error that occurs when
- >> building Xen. As the issue has already been fixed in upstream Xen let's
- >> just backport the fix to apply here.
- >> 
- >> Fixes:
- >> http://autobuild.buildroot.net/results/3a0/3a03c328bc6a6c30cc4f619925608d735632211f/
- >> 
- >> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
- >> ---
- >> package/xen/0008-arm-fix-build-with-gcc-7.patch | 69 +++++++++++++++++++++++++
- >> 1 file changed, 69 insertions(+)
- >> create mode 100644 package/xen/0008-arm-fix-build-with-gcc-7.patch
+ > Add an upstream patch that fixes segfaults when executed on MIPS due to
+ > incorrect handling of system call numbers on MIPS platforms.
+
+ > Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+ > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed to 2017.05.x, thanks.
 
