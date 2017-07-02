@@ -1,38 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Jul 2017 16:35:52 +0200
-Subject: [Buildroot] [PATCH 3/3 v3] package/ifupdown-scripts: allow use with
-	a custom skeleton
-In-Reply-To: <cover.1499006091.git.yann.morin.1998@free.fr>
-References: <cover.1499006091.git.yann.morin.1998@free.fr>
-Message-ID: <7af4e1b5c5c358fd2a41e609ea250138a5565c18.1499006091.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Jul 2017 16:45:24 +0200
+Subject: [Buildroot] [PATCH] glibc: add upstream security patches fixing
+	CVE-2017-1000366 (stack clash)
+In-Reply-To: <20170627064209.29481-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 27 Jun 2017 08:42:09 +0200")
+References: <20170627064209.29481-1-peter@korsgaard.com>
+Message-ID: <87r2xyc2yj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/ifupdown-scripts/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/ifupdown-scripts/Config.in b/package/ifupdown-scripts/Config.in
-index 7086253a03..7064d58fec 100644
---- a/package/ifupdown-scripts/Config.in
-+++ b/package/ifupdown-scripts/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_IFUPDOWN_SCRIPTS
--	bool
--	depends on BR2_ROOTFS_SKELETON_DEFAULT
-+	bool "ifupdown scripts"
- 	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
--	default y
-+	default y if BR2_ROOTFS_SKELETON_DEFAULT
- 	help
- 	  Set of scripts used by ifupdown (either the standalone one, or the
- 	  busybox one) to bring network up, or tear it down.
+ > glibc contains a vulnerability that allows specially crafted LD_LIBRARY_PATH
+ > values to manipulate the heap/stack, causing them to alias, potentially
+ > resulting in arbitrary code execution.  Please note that additional
+ > hardening changes have been made to glibc to prevent manipulation of stack
+ > and heap memory but these issues are not directly exploitable, as such they
+ > have not been given a CVE.
+
+ > https://www.qualys.com/2017/06/19/stack-clash/stack-clash.txt
+
+ > Patches are identical to upstream, except that the ChangeLog modifications
+ > have been stripped.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2017.02.x and 2017.05.x after backporting to 2.22/23/24, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
