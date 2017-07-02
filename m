@@ -1,14 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] openzwave: don't download patch from Github
-Message-ID: <20170702220304.9B0BF81EDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] efibootmgr: don't download patch from
+	Github
+Message-ID: <20170702220304.11C847FF0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80f08a4b281eecdf13eb7fa994d5bab21007e75f
+commit: https://git.buildroot.net/buildroot/commit/?id=57180155ca8c1381946508130fe2292325e3dffe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -17,86 +18,69 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../openzwave/0001-Fix-compilation-of-MinOZW.patch | 37 ++++++++++++++++++++++
- ...x-warning-on-wcsdup-implicit-declaration.patch} |  0
- ... 0003-Ensure-correct-git-repository-path.patch} |  0
- package/openzwave/openzwave.hash                   |  1 -
- package/openzwave/openzwave.mk                     |  6 ----
- 5 files changed, 37 insertions(+), 7 deletions(-)
+ .../0001-dont-use-fshort-wchar-when-building.patch | 28 ++++++++++++++++++++++
+ ...bc.patch => 0002-Allow-build-with-uClibc.patch} |  0
+ package/efibootmgr/efibootmgr.hash                 |  1 -
+ package/efibootmgr/efibootmgr.mk                   |  3 ---
+ 4 files changed, 28 insertions(+), 4 deletions(-)
 
-diff --git a/package/openzwave/0001-Fix-compilation-of-MinOZW.patch b/package/openzwave/0001-Fix-compilation-of-MinOZW.patch
+diff --git a/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch b/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch
 new file mode 100644
-index 0000000..773672e
+index 0000000..abafcec
 --- /dev/null
-+++ b/package/openzwave/0001-Fix-compilation-of-MinOZW.patch
-@@ -0,0 +1,37 @@
-+From 599e2a11c6f48dde744012ec45686c08e15f3059 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Mon, 3 Oct 2016 10:35:52 +0200
-+Subject: [PATCH] Fix compilation of MinOZW (#991)
++++ b/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch
+@@ -0,0 +1,28 @@
++From 3466fd05c8c6f1052e0426d64eed40f8a88fd78f Mon Sep 17 00:00:00 2001
++From: steve-mcintyre <steve-github@einval.com>
++Date: Fri, 6 Jan 2017 18:18:47 +0000
++Subject: [PATCH] Don't use -fshort-wchar when building (#63)
 +
-+LIBDIR was used in cpp/examples/MinOZW/Makefile to add dynamic
-+libraries. However, as it was unset by default, the cross-compilation
-+could fail if the host had a library such as libnss3.so in /.
-+To fix this issue, this patch sets LIBDIR to top_buildir if it is unset
++It's not needed and is causing build failures with gcc 6. Closes
++Debian bug #849651
 +
-+Fixes:
-+  http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
-+
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+[Upstream commit: https://github.com/OpenZWave/open-zwave/commit/599e2a11c6f48dde744012ec45686c08e15f3059]
++Signed-off-by: Steve McIntyre <steve@einval.com>
++[Upstream commit: https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ cpp/examples/MinOZW/Makefile | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ Make.defaults | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/cpp/examples/MinOZW/Makefile b/cpp/examples/MinOZW/Makefile
-+index e575632a3..95d684b77 100644
-+--- a/cpp/examples/MinOZW/Makefile
-++++ b/cpp/examples/MinOZW/Makefile
-+@@ -17,9 +17,11 @@ DEBUG_LDFLAGS	:= -g
-+ 
-+ top_srcdir := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../../../)
-+ 
-++#where is put the temporary library
-++LIBDIR  	?= $(top_builddir)
-+ 
-+ INCLUDES	:= -I $(top_srcdir)/cpp/src -I $(top_srcdir)/cpp/tinyxml/ -I $(top_srcdir)/cpp/hidapi/hidapi/
-+-LIBS =  $(wildcard $(LIBDIR)/*.so $(LIBDIR)/*.dylib $(top_builddir)/*.so $(top_builddir)/*.dylib $(top_builddir)/cpp/build/*.so $(top_builddir)/cpp/build/*.dylib )
-++LIBS =  $(wildcard $(LIBDIR)/*.so $(LIBDIR)/*.dylib $(top_builddir)/cpp/build/*.so $(top_builddir)/cpp/build/*.dylib )
-+ LIBSDIR = $(abspath $(dir $(firstword $(LIBS))))
-+ minozwsrc := $(notdir $(wildcard $(top_srcdir)/cpp/examples/MinOZW/*.cpp))
-+ VPATH := $(top_srcdir)/cpp/examples/MinOZW
-diff --git a/package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch b/package/openzwave/0002-Fix-warning-on-wcsdup-implicit-declaration.patch
++diff --git a/Make.defaults b/Make.defaults
++index 50f1f4d..0ac50ef 100644
++--- a/Make.defaults
+++++ b/Make.defaults
++@@ -26,7 +26,7 @@ clang_cflags =
++ gcc_cflags =
++ cflags	= $(CFLAGS) $(SUBDIR_CFLAGS) \
++ 	-Werror -Wall -Wextra -Wsign-compare -Wstrict-aliasing \
++-	-std=gnu11 -fshort-wchar -fPIC \
+++	-std=gnu11 -fPIC \
++ 	-D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DLOCALEDIR=\"$(localedir)\" \
++ 	-DEFIBOOTMGR_VERSION="\"$(VERSION)\"" \
++ 	$(if $(findstring clang,$(CC)),$(clang_cflags),) \
+diff --git a/package/efibootmgr/0001-Allow-build-with-uClibc.patch b/package/efibootmgr/0002-Allow-build-with-uClibc.patch
 similarity index 100%
-rename from package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch
-rename to package/openzwave/0002-Fix-warning-on-wcsdup-implicit-declaration.patch
-diff --git a/package/openzwave/0002-Ensure-correct-git-repository-path.patch b/package/openzwave/0003-Ensure-correct-git-repository-path.patch
-similarity index 100%
-rename from package/openzwave/0002-Ensure-correct-git-repository-path.patch
-rename to package/openzwave/0003-Ensure-correct-git-repository-path.patch
-diff --git a/package/openzwave/openzwave.hash b/package/openzwave/openzwave.hash
-index d07961e..cd1231f 100644
---- a/package/openzwave/openzwave.hash
-+++ b/package/openzwave/openzwave.hash
+rename from package/efibootmgr/0001-Allow-build-with-uClibc.patch
+rename to package/efibootmgr/0002-Allow-build-with-uClibc.patch
+diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
+index 3f934ba..f71dced 100644
+--- a/package/efibootmgr/efibootmgr.hash
++++ b/package/efibootmgr/efibootmgr.hash
 @@ -1,3 +1,2 @@
- # Locally computed:
- sha256	abfb4c7e7728e86ba374c2e0ef7de912594eb24a8c44935457352df844530238	openzwave-V1.5.tar.gz
--sha256	98851964fd8de3dd40f00d0032b47c61c17a4cf789ad5792e14149da5ab8755e	599e2a11c6f48dde744012ec45686c08e15f3059.patch
-diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
-index a632468..38515e3 100644
---- a/package/openzwave/openzwave.mk
-+++ b/package/openzwave/openzwave.mk
-@@ -13,12 +13,6 @@ OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
- OPENZWAVE_DEPENDENCIES = host-pkgconf udev
- OPENZWAVE_INSTALL_STAGING = YES
+ # locally computed hash
+ sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
+-sha256 8e91f16927d296ffebd4f7fafda2f84c0f6201aba089a35e8090abd5aacdc58e	3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
+diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
+index a946d5f..094dd28 100644
+--- a/package/efibootmgr/efibootmgr.mk
++++ b/package/efibootmgr/efibootmgr.mk
+@@ -6,9 +6,6 @@
  
--# This patch fixes incorrect default value of LIBDIR:
--# http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
--# This patch is currently in dev branch and will be a part of v1.6
--OPENZWAVE_PATCH = \
--	https://github.com/OpenZWave/open-zwave/commit/599e2a11c6f48dde744012ec45686c08e15f3059.patch
--
- # Set instlibdir to install libopenzwave.so* in the correct directory
- # otherwise openzwave will check that /lib64 exists (on the host) to
- # know if the library should be installed in $(PREFIX)/lib or $(PREFIX)/lib64.
+ EFIBOOTMGR_VERSION = 14
+ EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
+-# Patch fixes the build with gcc 6.x.
+-EFIBOOTMGR_PATCH = \
+-	https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
+ EFIBOOTMGR_LICENSE = GPL-2.0+
+ EFIBOOTMGR_LICENSE_FILES = COPYING
+ EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
