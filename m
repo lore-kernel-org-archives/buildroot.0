@@ -1,14 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] scrub: don't download patch from Github
-Message-ID: <20170702220304.D6F8581EDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] mediastreamer: don't download patch from
+	Github
+Message-ID: <20170702220304.5F6B781F64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4eb7f76ed187cdb79cafb8efa52f00b085274a44
+commit: https://git.buildroot.net/buildroot/commit/?id=c0369e05ead0443375f25968b8d48f0b9e279828
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -17,81 +18,75 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-sure-m4-macros-are-included-in-the-build.patch | 45 ++++++++++++++++++++++
- package/scrub/scrub.hash                           |  1 -
- package/scrub/scrub.mk                             |  1 -
- 3 files changed, 45 insertions(+), 2 deletions(-)
+ ...ix-compilation-issue-with-latest-bctoobox.patch | 38 ++++++++++++++++++++++
+ package/mediastreamer/mediastreamer.hash           |  1 -
+ package/mediastreamer/mediastreamer.mk             |  4 ---
+ 3 files changed, 38 insertions(+), 5 deletions(-)
 
-diff --git a/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch b/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
+diff --git a/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch b/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
 new file mode 100644
-index 0000000..d8729b4
+index 0000000..7bc9733
 --- /dev/null
-+++ b/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
-@@ -0,0 +1,45 @@
-+From 11d30916dd9c11a26c7c8a0f6db9e6ebca301594 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Mon, 18 Jan 2016 21:45:23 +0100
-+Subject: [PATCH] configure.ac: make sure m4 macros are included in the build
++++ b/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
+@@ -0,0 +1,38 @@
++From 26f884bf977977041fe6f98a0af186be1580bf22 Mon Sep 17 00:00:00 2001
++From: Simon Morlat <simon.morlat@linphone.org>
++Date: Thu, 29 Sep 2016 15:26:18 +0200
++Subject: [PATCH] fix compilation issue with latest bctoobox
 +
-+This change prevents the following error to occur when calling
-+autoreconf:
-+
-+  >>> scrub 2.6.1 Autoreconfiguring
-+  cd /work/build/scrub/build/scrub-2.6.1/ &&  PATH="/work/build/scrub/host/bin:/work/build/scrub/host/sbin:/work/build/scrub/host/usr/bin:/work/build/scrub/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/sbin:/usr/sbin" AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm" CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" CPP="/usr/bin/cpp" OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib" CPPFLAGS="-I/work/build/scrub/host/usr/include" CFLAGS="-O2 -I/work/build/scrub/host/usr/include" CXXFLAGS="-O2 -I/work/build/scrub/host/usr/include" LDFLAGS="-L/work/build/scrub/host/lib -L/work/build/scrub/host/usr/lib -Wl,-rpath,/work/build/scrub/host/usr/lib" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG="/work/build/scrub/host/usr/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_LIBDIR="/work/build/scrub/host/usr/lib/pkgconfig:/work/build/s
- crub/hos
- t/usr/share/pkgconfig" INTLTOOL_PERL=/usr/bin/perl ACLOCAL="/work/build/scrub/host/usr/bin/aclocal -I /work/build/scrub/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal" AUTOCONF="/work/build/scrub/host/usr/bin/autoconf" AUTOHEADER="/work/build/scrub/host/usr/bin/autoheader" AUTOMAKE="/work/build/scrub/host/usr/bin/automake" AUTOPOINT=/bin/true /work/build/scrub/host/usr/bin/autoreconf -f -i -I "/work/build/scrub/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal" -I "/work/build/scrub/host/usr/share/aclocal"
-+  libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'config'.
-+  libtoolize: copying file 'config/ltmain.sh'
-+  libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([m4])' to configure.ac,
-+  libtoolize: and rerunning libtoolize and aclocal.
-+  libtoolize: Consider adding '-I m4' to ACLOCAL_AMFLAGS in Makefile.am.
-+  configure.ac:10: error possibly undefined macro: X_AC_META
-+        If this token and others are legitimate, please use m4_pattern_allow.
-+        See the Autoconf documentation.
-+  configure.ac:11: error possibly undefined macro: X_AC_EXPAND_INSTALL_DIRS
-+  configure.ac:51: error possibly undefined macro: AC_PKGCONFIG
-+  configure.ac:70: error possibly undefined macro: X_AC_CHECK_PTHREADS
-+  autoreconf: /work/build/scrub/host/usr/bin/autoconf failed with exit status: 1
-+  package/pkg-generic.mk:185: recipe for target '/work/build/scrub/build/scrub-2.6.1/.stamp_configured' failed
-+  make: *** [/work/build/scrub/build/scrub-2.6.1/.stamp_configured] Error 1
-+  make: Leaving directory '/work/repos/buildroot'
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+[Upstream commit: https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594]
++[Upstream commit https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
++ configure.ac           | 2 +-
++ src/crypto/dtls_srtp.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 3d71289..07eaf33 100644
++index 7ab20a08f..244d87275 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -7,6 +7,7 @@ AC_INIT(m4_esyscmd([awk '/Name:/ {printf "%s",$2; exit}' META]),
-+ AC_CONFIG_AUX_DIR([config])
-+ AC_CONFIG_SRCDIR([NEWS])
-+ AC_CANONICAL_SYSTEM
-++AC_CONFIG_MACRO_DIR([config])
-+ X_AC_META
-+ X_AC_EXPAND_INSTALL_DIRS
++@@ -1116,7 +1116,7 @@ fi
 + 
-diff --git a/package/scrub/scrub.hash b/package/scrub/scrub.hash
-index 0041fd0..42f7b2f 100644
---- a/package/scrub/scrub.hash
-+++ b/package/scrub/scrub.hash
++ 
++ dnl check bctoolbox library
++-PKG_CHECK_MODULES(BCTOOLBOX, bctoolbox >= 0.0.0, found_bctoolbox=true, found_bctoolbox=false)
+++PKG_CHECK_MODULES(BCTOOLBOX, bctoolbox >= 0.4.0, found_bctoolbox=true, found_bctoolbox=false)
++ if test "$found_bctoolbox" = "true" ; then
++ 	LIBS="$LIBS $BCTOOLBOX_LIBS"
++ 	CFLAGS="$CFLAGS $BCTOOLBOX_CFLAGS"
++diff --git a/src/crypto/dtls_srtp.c b/src/crypto/dtls_srtp.c
++index e2c8e1c44..fd37eb5cb 100644
++--- a/src/crypto/dtls_srtp.c
+++++ b/src/crypto/dtls_srtp.c
++@@ -705,7 +705,7 @@ static int ms_dtls_srtp_initialise_bctbx_dtls_context(DtlsBcToolBoxContext *dtls
++ 	bctbx_ssl_config_set_authmode(dtlsContext->ssl_config, BCTBX_SSL_VERIFY_OPTIONAL);
++ 	bctbx_ssl_config_set_own_cert( dtlsContext->ssl_config, dtlsContext->crt, dtlsContext->pkey );
++ 	/* This is useless as peer would certainly be a self signed certificate and we won't verify it but avoid runtime warnings */
++-	bctbx_ssl_config_set_ca_chain(dtlsContext->ssl_config, dtlsContext->crt, NULL);
+++	bctbx_ssl_config_set_ca_chain(dtlsContext->ssl_config, dtlsContext->crt);
++ 
++ 	/* we are not ready yet to actually start the ssl context, this will be done by calling bctbx_ssl_setup when stream starts */
++ 	return 0;
+diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
+index 0f1ac77..5f26b54 100644
+--- a/package/mediastreamer/mediastreamer.hash
++++ b/package/mediastreamer/mediastreamer.hash
 @@ -1,3 +1,2 @@
- # Locally computed
- sha256  838b061b2e1932b342fb9695c5579cdff5d2d72506cb41d6d8032eba18aed969  scrub-2.6.1.tar.gz
--sha256  6a129b4e0df6ebe02d449fa481db7b75be5eff08ce518aa77edd74c6b17c5ae4  11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
-diff --git a/package/scrub/scrub.mk b/package/scrub/scrub.mk
-index 0207a4c..ace19d5 100644
---- a/package/scrub/scrub.mk
-+++ b/package/scrub/scrub.mk
-@@ -8,7 +8,6 @@ SCRUB_VERSION = 2.6.1
- SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
- SCRUB_LICENSE = GPL-2.0+
- SCRUB_LICENSE_FILES = COPYING DISCLAIMER
--SCRUB_PATCH = https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
+ # Locally calculated
+ sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
+-sha256  90091ab0aa7a77381ab1ca5d88cdfa4e7f62505fb452a2bea0f70054d9d1aece  26f884bf977977041fe6f98a0af186be1580bf22.patch
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index a9e0bf7..44d9e97 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -13,10 +13,6 @@ MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
+ MEDIASTREAMER_LICENSE = GPL-2.0+
+ MEDIASTREAMER_LICENSE_FILES = COPYING
  
- # Fetching from the git repo, no configure/Makefile generated, and patching
- # configure.ac
+-# fix compilation issue with latest bctoolbox (touches configure.ac)
+-MEDIASTREAMER_PATCH = \
+-	https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22.patch
+-
+ # patching configure.ac
+ MEDIASTREAMER_AUTORECONF = YES
+ 
