@@ -1,47 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jul 2017 15:36:02 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] mosquitto: add upstream
-	security fix
-Message-ID: <20170702133301.E570781D71@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  2 Jul 2017 15:41:03 +0200
+Subject: [Buildroot] [PATCH 0/4] Solving the musl dynamic linker issues
+Message-ID: <20170702134107.11488-1-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6a1afda18d4b336dcd9baac6b94253cadd51aea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
+Hello,
 
-Fixes CVE-2017-9868: In Mosquitto through 1.4.12, mosquitto.db (aka the
-persistence file) is world readable, which allows local users to obtain
-sensitive MQTT topic information.
+We currently have two outstanding musl dynamic linker issues:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e51d69a3b11ae971d2aa65d6d0a6f0bb7730e0ab)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash | 1 +
- package/mosquitto/mosquitto.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ 1. We don't handle all musl dynamic linker names for all
+    architectures. I proposed a patch solving this at
+    https://patchwork.ozlabs.org/patch/780411/, where the approach was
+    to build a dummy program and use readelf to find the dynamic
+    linker name, and therefore the symlink to libc.so that we need to
+    create.
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 6c102eb..82bf5c6 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha512  75e6105498869ab13265df7a0bea6052c014d59d0c0efb61162d8257d34c0153fce32130e84c28e99fd494f374949aac5e01c19f7439c2eea575b52ef1179c3c  mosquitto-1.4.12.tar.gz
-+sha256  06abd1206e548ac2378dd96f5434cb3e40ed77cecb6a9c37fbabab0b0f1360e5  mosquitto-1.4.x_cve-2017-9868.patch
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index a9eb5b0..8299848 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -9,6 +9,8 @@ MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
- MOSQUITTO_INSTALL_STAGING = YES
-+MOSQUITTO_PATCH = \
-+	https://mosquitto.org/files/cve/2017-9868/mosquitto-1.4.x_cve-2017-9868.patch
- 
- MOSQUITTO_MAKE_OPTS = \
- 	UNAME=Linux \
+ 2. We don't support Crosstool-NG musl toolchains, because they put
+    libc.so in /usr/lib and not /lib, and therefore our current
+    creation logic that makes the dynamic linker point to /lib/libc.so
+    incorrect. Ilya Kuzmich <ilya.kuzmich@gmail.com> proposed patches
+    (https://patchwork.ozlabs.org/patch/763977/
+    https://patchwork.ozlabs.org/patch/748974/) to solve this.
+
+After discussion with Arnout, we realized that all our messy logic for
+creating the musl dynamic linker symbolic link is useless. The correct
+symbolic link already exists in the original toolchain sysroot, so we
+should just copy it from the sysroot, just like we do for glibc/uClibc.
+
+This series of patches implements just that, with the main patch being
+PATCH 3/4.
+
+The first patch just adds more external toolchain tests to our runtime
+tests infrastructure, to validate that the changes in this series
+don't break things.
+
+The second patch prepares the copy_toolchain_lib_root for copying a
+symlink in /lib that potentially points to a file in /usr/lib (which
+it currently doesn't handle).
+
+The third patch is the core of the solution, basically putting ld*.so*
+unconditionally in TOOLCHAIN_EXTERNAL_LIBS.
+
+The fourth patch is a minor refactoring.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (4):
+  support/testing: add tests for musl and uclibc toolchains
+  toolchain/helpers.mk: re-evaluate DESTDIR in copy_toolchain_lib_root
+  toolchain-external: copy ld*.so* for all C libraries
+  toolchain-external: also put libgcc_s.so unconditionally in
+    TOOLCHAIN_EXTERNAL_LIBS
+
+ support/testing/tests/toolchain/test_external.py   | 75 ++++++++++++++++++++++
+ toolchain/helpers.mk                               |  2 +-
+ .../toolchain-external/pkg-toolchain-external.mk   | 36 ++---------
+ 3 files changed, 81 insertions(+), 32 deletions(-)
+
+-- 
+2.9.4
