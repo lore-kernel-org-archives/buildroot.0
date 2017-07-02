@@ -1,15 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] libstrophe: don't download patch from
-	Github
-Message-ID: <20170702220304.3415281EDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] poco: don't download patch from Github
+Message-ID: <20170702220304.A911281EDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32a20319c178fb929d1b360e7df9ec497ba8efe8
+commit: https://git.buildroot.net/buildroot/commit/?id=e9b614ad3ad6bdeb48179dfa622dc7e3134806e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -18,228 +17,77 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libstrophe/0001-Namespace-SHA-functions.patch  | 189 +++++++++++++++++++++
- ...nfable.patch => 0002-make-autoreconfable.patch} |   0
- package/libstrophe/libstrophe.hash                 |   1 -
- package/libstrophe/libstrophe.mk                   |   1 -
- 4 files changed, 189 insertions(+), 2 deletions(-)
+ ...rsion-of-strerror_r-not-available-on-musl.patch | 33 ++++++++++++++++++++++
+ ...poco-add-the-staging-path-to-search-path.patch} |  0
+ ...atch => 0003-fix-m68k-double-conv-detect.patch} |  0
+ package/poco/poco.hash                             |  1 -
+ package/poco/poco.mk                               |  1 -
+ 5 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/package/libstrophe/0001-Namespace-SHA-functions.patch b/package/libstrophe/0001-Namespace-SHA-functions.patch
+diff --git a/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch b/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch
 new file mode 100644
-index 0000000..8c3451b
+index 0000000..c2f297f
 --- /dev/null
-+++ b/package/libstrophe/0001-Namespace-SHA-functions.patch
-@@ -0,0 +1,189 @@
-+From b08766c8e46956daba010044b00c97f78b598780 Mon Sep 17 00:00:00 2001
-+From: Michael Santos <michael.santos@gmail.com>
-+Date: Sun, 24 May 2015 10:55:02 -0400
-+Subject: [PATCH] Namespace SHA functions
++++ b/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch
+@@ -0,0 +1,33 @@
++From 30159aea4b3f6421da9d74a8bf22aad6d3bf26b4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 4 Apr 2016 20:48:43 +0200
++Subject: [PATCH] GNU version of strerror_r not available on musl
 +
-+Fix statically linking against libstrophe by renaming the internal SHA
-+functions:
++The GNU version of glibc' `strerror_r` is non-portable.
 +
-+https://github.com/strophe/libstrophe/issues/40
++When the POSIX and GNU API collides musl always provides the POSIX API. That
++being the case for `strerror_r` musl does only support the POSIX version,
++despite of `_GNU_SOURCE`.
 +
-+Although the same function names are used by libstrophe and OpenSSL,
-+the signatures and contexts of the SHA functions differ, resulting in
-+a segfault if the OpenSSL versions are substituted.
-+
-+[Upstream commit: https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780]
++[Upstream commit: https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/auth.c  |  8 ++++----
-+ src/scram.c | 22 +++++++++++-----------
-+ src/sha1.c  | 30 +++++++++++++++---------------
-+ src/sha1.h  |  6 +++---
-+ 4 files changed, 33 insertions(+), 33 deletions(-)
++ Foundation/src/Error.cpp | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/auth.c b/src/auth.c
-+index b06f18c..3506977 100644
-+--- a/src/auth.c
-++++ b/src/auth.c
-+@@ -1187,10 +1187,10 @@ int _handle_component_auth(xmpp_conn_t * const conn)
-+     /*??Feed the session id and passphrase to the algorithm.
-+      * We need to compute SHA1(session_id + passphrase)
-+      */
-+-    SHA1_Init(&mdctx);
-+-    SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
-+-    SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
-+-    SHA1_Final(&mdctx, md_value);
-++    xmpp_SHA1_Init(&mdctx);
-++    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
-++    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
-++    xmpp_SHA1_Final(&mdctx, md_value);
-+ 
-+     digest = xmpp_alloc(conn->ctx, 2*sizeof(md_value)+1);
-+     if (digest) {
-+diff --git a/src/scram.c b/src/scram.c
-+index 5cce168..6e420e1 100644
-+--- a/src/scram.c
-++++ b/src/scram.c
-+@@ -37,9 +37,9 @@ static void SHA1(const uint8_t* data, size_t len,
-+                  uint8_t digest[SHA1_DIGEST_SIZE])
-+ {
-+     SHA1_CTX ctx;
-+-    SHA1_Init(&ctx);
-+-    SHA1_Update(&ctx, data, len);
-+-    SHA1_Final(&ctx, digest);
-++    xmpp_SHA1_Init(&ctx);
-++    xmpp_SHA1_Update(&ctx, data, len);
-++    xmpp_SHA1_Final(&ctx, digest);
-+ }
-+ 
-+ static void HMAC_SHA1(const uint8_t *key, size_t key_len,
-+@@ -66,15 +66,15 @@ static void HMAC_SHA1(const uint8_t *key, size_t key_len,
-+         key_opad[i] = key_pad[i] ^ opad;
-+     }
-+ 
-+-    SHA1_Init(&ctx);
-+-    SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
-+-    SHA1_Update(&ctx, text, len);
-+-    SHA1_Final(&ctx, sha_digest);
-++    xmpp_SHA1_Init(&ctx);
-++    xmpp_SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
-++    xmpp_SHA1_Update(&ctx, text, len);
-++    xmpp_SHA1_Final(&ctx, sha_digest);
-+ 
-+-    SHA1_Init(&ctx);
-+-    SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
-+-    SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
-+-    SHA1_Final(&ctx, digest);
-++    xmpp_SHA1_Init(&ctx);
-++    xmpp_SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
-++    xmpp_SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
-++    xmpp_SHA1_Final(&ctx, digest);
-+ }
-+ 
-+ static void SCRAM_SHA1_Hi(const uint8_t *text, size_t len,
-+diff --git a/src/sha1.c b/src/sha1.c
-+index 9af4f04..b60b325 100644
-+--- a/src/sha1.c
-++++ b/src/sha1.c
-+@@ -202,7 +202,7 @@ static void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64])
-+ 
-+ 
-+ /* SHA1Init - Initialize new context */
-+-void SHA1_Init(SHA1_CTX* context)
-++void xmpp_SHA1_Init(SHA1_CTX* context)
-+ {
-+     /* SHA1 initialization constants */
-+     context->state[0] = 0x67452301;
-+@@ -215,7 +215,7 @@ void SHA1_Init(SHA1_CTX* context)
-+ 
-+ 
-+ /* Run your data through this. */
-+-void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
-++void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
-+ {
-+     size_t i, j;
-+ 
-+@@ -244,7 +244,7 @@ void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
-+ 
-+ 
-+ /* Add padding and return the message digest. */
-+-void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
-++void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
-+ {
-+     uint32_t i;
-+     uint8_t  finalcount[8];
-+@@ -253,11 +253,11 @@ void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
-+         finalcount[i] = (unsigned char)((context->count[(i >= 4 ? 0 : 1)]
-+          >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
-+     }
-+-    SHA1_Update(context, (uint8_t *)"\200", 1);
-++    xmpp_SHA1_Update(context, (uint8_t *)"\200", 1);
-+     while ((context->count[0] & 504) != 448) {
-+-        SHA1_Update(context, (uint8_t *)"\0", 1);
-++        xmpp_SHA1_Update(context, (uint8_t *)"\0", 1);
-+     }
-+-    SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
-++    xmpp_SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
-+     for (i = 0; i < SHA1_DIGEST_SIZE; i++) {
-+         digest[i] = (uint8_t)
-+          ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
-+@@ -300,12 +300,12 @@ FILE* file;
-+             return(-1);
-+         }
-+     } 
-+-    SHA1_Init(&context);
-++    xmpp_SHA1_Init(&context);
-+     while (!feof(file)) {  /* note: what if ferror(file) */
-+         i = fread(buffer, 1, 16384, file);
-+-        SHA1_Update(&context, buffer, i);
-++        xmpp_SHA1_Update(&context, buffer, i);
-+     }
-+-    SHA1_Final(&context, digest);
-++    xmpp_SHA1_Final(&context, digest);
-+     fclose(file);
-+     for (i = 0; i < SHA1_DIGEST_SIZE/4; i++) {
-+         for (j = 0; j < 4; j++) {
-+@@ -358,9 +358,9 @@ int main(int argc, char** argv)
-+     fprintf(stdout, "verifying SHA-1 implementation... ");
-+     
-+     for (k = 0; k < 2; k++){ 
-+-        SHA1_Init(&context);
-+-        SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
-+-        SHA1_Final(&context, digest);
-++        xmpp_SHA1_Init(&context);
-++        xmpp_SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
-++        xmpp_SHA1_Final(&context, digest);
-+ 	digest_to_hex(digest, output);
-+ 
-+         if (strcmp(output, test_results[k])) {
-+@@ -372,10 +372,10 @@ int main(int argc, char** argv)
-+         }    
-+     }
-+     /* million 'a' vector we feed separately */
-+-    SHA1_Init(&context);
-++    xmpp_SHA1_Init(&context);
-+     for (k = 0; k < 1000000; k++)
-+-        SHA1_Update(&context, (uint8_t*)"a", 1);
-+-    SHA1_Final(&context, digest);
-++        xmpp_SHA1_Update(&context, (uint8_t*)"a", 1);
-++    xmpp_SHA1_Final(&context, digest);
-+     digest_to_hex(digest, output);
-+     if (strcmp(output, test_results[2])) {
-+         fprintf(stdout, "FAIL\n");
-+diff --git a/src/sha1.h b/src/sha1.h
-+index 10266cb..7ff48d7 100644
-+--- a/src/sha1.h
-++++ b/src/sha1.h
-+@@ -23,9 +23,9 @@ typedef struct {
-+ 
-+ #define SHA1_DIGEST_SIZE 20
-+ 
-+-void SHA1_Init(SHA1_CTX* context);
-+-void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
-+-void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
-++void xmpp_SHA1_Init(SHA1_CTX* context);
-++void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
-++void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
-+ 
-+ #ifdef __cplusplus
-+ }
-diff --git a/package/libstrophe/0001-make-autoreconfable.patch b/package/libstrophe/0002-make-autoreconfable.patch
++diff --git a/Foundation/src/Error.cpp b/Foundation/src/Error.cpp
++index 6a8afb705f..00991fc0be 100644
++--- a/Foundation/src/Error.cpp
+++++ b/Foundation/src/Error.cpp
++@@ -69,7 +69,10 @@ namespace Poco {
++ 		   without -D_GNU_SOURCE is needed, otherwise the GNU version is
++ 		   preferred.
++ 		*/
++-#if defined _GNU_SOURCE && !POCO_ANDROID
+++		/* The GNU version of strerror_r is non-portable and not
+++		   available on the musl C library.
+++		 */
+++#if (defined __GLIBC__ || defined __UCLIBC__) && defined _GNU_SOURCE && !POCO_ANDROID
++ 		char errmsg[256] = "";
++ 		return std::string(strerror_r(errorCode, errmsg, 256));
++ #elif (_XOPEN_SOURCE >= 600) || POCO_ANDROID
+diff --git a/package/poco/0001-poco-add-the-staging-path-to-search-path.patch b/package/poco/0002-poco-add-the-staging-path-to-search-path.patch
 similarity index 100%
-rename from package/libstrophe/0001-make-autoreconfable.patch
-rename to package/libstrophe/0002-make-autoreconfable.patch
-diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
-index d840303..6a2d997 100644
---- a/package/libstrophe/libstrophe.hash
-+++ b/package/libstrophe/libstrophe.hash
+rename from package/poco/0001-poco-add-the-staging-path-to-search-path.patch
+rename to package/poco/0002-poco-add-the-staging-path-to-search-path.patch
+diff --git a/package/poco/0002-fix-m68k-double-conv-detect.patch b/package/poco/0003-fix-m68k-double-conv-detect.patch
+similarity index 100%
+rename from package/poco/0002-fix-m68k-double-conv-detect.patch
+rename to package/poco/0003-fix-m68k-double-conv-detect.patch
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index 1730f1c..c3b490e 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
 @@ -1,3 +1,2 @@
- # Locally calculated
- sha256 08f4a85ef419a8bdf08b6afa8f7b2a0e5e180fdc9c16cede81af672ec10e21e7  libstrophe-0.8.8.tar.gz
--sha256 00936397cbb75ef168992868ae559b141b505d3a06f08163012b240390efa553  b08766c8e46956daba010044b00c97f78b598780.patch
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-index 0dd7c89..4b5a10a 100644
---- a/package/libstrophe/libstrophe.mk
-+++ b/package/libstrophe/libstrophe.mk
-@@ -12,7 +12,6 @@ LIBSTROPHE_AUTORECONF = YES
- LIBSTROPHE_LICENSE = MIT or GPL-3.0
- LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
- LIBSTROPHE_INSTALL_STAGING = YES
--LIBSTROPHE_PATCH = https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780.patch
+ # Locally computed
+ sha256  cfd311ecbc9e58accf1c4ea70170af88f92f88e73dd14944e528e7f6229e6cab  poco-poco-1.7.2-release.tar.gz
+-sha256  32182791e7eac00ba367d2f22dd1dd5bfce0b6d6f76fd52f853364f98402dda3  30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 3b27ddb..c9ddeae 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -9,7 +9,6 @@ POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION))
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
+ POCO_INSTALL_STAGING = YES
+-POCO_PATCH = https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
  
- ifeq ($(BR2_PACKAGE_EXPAT),y)
- # Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
+ POCO_DEPENDENCIES = zlib pcre \
+ 	$(if $(BR2_PACKAGE_POCO_XML),expat) \
