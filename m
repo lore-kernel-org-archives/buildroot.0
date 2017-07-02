@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] efibootmgr: don't download patch from
+Subject: [Buildroot] [git commit] libstrophe: don't download patch from
 	Github
-Message-ID: <20170702220304.11C847FF0C@busybox.osuosl.org>
+Message-ID: <20170702220304.3415281EDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57180155ca8c1381946508130fe2292325e3dffe
+commit: https://git.buildroot.net/buildroot/commit/?id=32a20319c178fb929d1b360e7df9ec497ba8efe8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -18,69 +18,228 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-dont-use-fshort-wchar-when-building.patch | 28 ++++++++++++++++++++++
- ...bc.patch => 0002-Allow-build-with-uClibc.patch} |  0
- package/efibootmgr/efibootmgr.hash                 |  1 -
- package/efibootmgr/efibootmgr.mk                   |  3 ---
- 4 files changed, 28 insertions(+), 4 deletions(-)
+ .../libstrophe/0001-Namespace-SHA-functions.patch  | 189 +++++++++++++++++++++
+ ...nfable.patch => 0002-make-autoreconfable.patch} |   0
+ package/libstrophe/libstrophe.hash                 |   1 -
+ package/libstrophe/libstrophe.mk                   |   1 -
+ 4 files changed, 189 insertions(+), 2 deletions(-)
 
-diff --git a/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch b/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch
+diff --git a/package/libstrophe/0001-Namespace-SHA-functions.patch b/package/libstrophe/0001-Namespace-SHA-functions.patch
 new file mode 100644
-index 0000000..abafcec
+index 0000000..8c3451b
 --- /dev/null
-+++ b/package/efibootmgr/0001-dont-use-fshort-wchar-when-building.patch
-@@ -0,0 +1,28 @@
-+From 3466fd05c8c6f1052e0426d64eed40f8a88fd78f Mon Sep 17 00:00:00 2001
-+From: steve-mcintyre <steve-github@einval.com>
-+Date: Fri, 6 Jan 2017 18:18:47 +0000
-+Subject: [PATCH] Don't use -fshort-wchar when building (#63)
++++ b/package/libstrophe/0001-Namespace-SHA-functions.patch
+@@ -0,0 +1,189 @@
++From b08766c8e46956daba010044b00c97f78b598780 Mon Sep 17 00:00:00 2001
++From: Michael Santos <michael.santos@gmail.com>
++Date: Sun, 24 May 2015 10:55:02 -0400
++Subject: [PATCH] Namespace SHA functions
 +
-+It's not needed and is causing build failures with gcc 6. Closes
-+Debian bug #849651
++Fix statically linking against libstrophe by renaming the internal SHA
++functions:
 +
-+Signed-off-by: Steve McIntyre <steve@einval.com>
-+[Upstream commit: https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f]
++https://github.com/strophe/libstrophe/issues/40
++
++Although the same function names are used by libstrophe and OpenSSL,
++the signatures and contexts of the SHA functions differ, resulting in
++a segfault if the OpenSSL versions are substituted.
++
++[Upstream commit: https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ Make.defaults | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/auth.c  |  8 ++++----
++ src/scram.c | 22 +++++++++++-----------
++ src/sha1.c  | 30 +++++++++++++++---------------
++ src/sha1.h  |  6 +++---
++ 4 files changed, 33 insertions(+), 33 deletions(-)
 +
-+diff --git a/Make.defaults b/Make.defaults
-+index 50f1f4d..0ac50ef 100644
-+--- a/Make.defaults
-++++ b/Make.defaults
-+@@ -26,7 +26,7 @@ clang_cflags =
-+ gcc_cflags =
-+ cflags	= $(CFLAGS) $(SUBDIR_CFLAGS) \
-+ 	-Werror -Wall -Wextra -Wsign-compare -Wstrict-aliasing \
-+-	-std=gnu11 -fshort-wchar -fPIC \
-++	-std=gnu11 -fPIC \
-+ 	-D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DLOCALEDIR=\"$(localedir)\" \
-+ 	-DEFIBOOTMGR_VERSION="\"$(VERSION)\"" \
-+ 	$(if $(findstring clang,$(CC)),$(clang_cflags),) \
-diff --git a/package/efibootmgr/0001-Allow-build-with-uClibc.patch b/package/efibootmgr/0002-Allow-build-with-uClibc.patch
++diff --git a/src/auth.c b/src/auth.c
++index b06f18c..3506977 100644
++--- a/src/auth.c
+++++ b/src/auth.c
++@@ -1187,10 +1187,10 @@ int _handle_component_auth(xmpp_conn_t * const conn)
++     /*??Feed the session id and passphrase to the algorithm.
++      * We need to compute SHA1(session_id + passphrase)
++      */
++-    SHA1_Init(&mdctx);
++-    SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
++-    SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
++-    SHA1_Final(&mdctx, md_value);
+++    xmpp_SHA1_Init(&mdctx);
+++    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
+++    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
+++    xmpp_SHA1_Final(&mdctx, md_value);
++ 
++     digest = xmpp_alloc(conn->ctx, 2*sizeof(md_value)+1);
++     if (digest) {
++diff --git a/src/scram.c b/src/scram.c
++index 5cce168..6e420e1 100644
++--- a/src/scram.c
+++++ b/src/scram.c
++@@ -37,9 +37,9 @@ static void SHA1(const uint8_t* data, size_t len,
++                  uint8_t digest[SHA1_DIGEST_SIZE])
++ {
++     SHA1_CTX ctx;
++-    SHA1_Init(&ctx);
++-    SHA1_Update(&ctx, data, len);
++-    SHA1_Final(&ctx, digest);
+++    xmpp_SHA1_Init(&ctx);
+++    xmpp_SHA1_Update(&ctx, data, len);
+++    xmpp_SHA1_Final(&ctx, digest);
++ }
++ 
++ static void HMAC_SHA1(const uint8_t *key, size_t key_len,
++@@ -66,15 +66,15 @@ static void HMAC_SHA1(const uint8_t *key, size_t key_len,
++         key_opad[i] = key_pad[i] ^ opad;
++     }
++ 
++-    SHA1_Init(&ctx);
++-    SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
++-    SHA1_Update(&ctx, text, len);
++-    SHA1_Final(&ctx, sha_digest);
+++    xmpp_SHA1_Init(&ctx);
+++    xmpp_SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
+++    xmpp_SHA1_Update(&ctx, text, len);
+++    xmpp_SHA1_Final(&ctx, sha_digest);
++ 
++-    SHA1_Init(&ctx);
++-    SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
++-    SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
++-    SHA1_Final(&ctx, digest);
+++    xmpp_SHA1_Init(&ctx);
+++    xmpp_SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
+++    xmpp_SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
+++    xmpp_SHA1_Final(&ctx, digest);
++ }
++ 
++ static void SCRAM_SHA1_Hi(const uint8_t *text, size_t len,
++diff --git a/src/sha1.c b/src/sha1.c
++index 9af4f04..b60b325 100644
++--- a/src/sha1.c
+++++ b/src/sha1.c
++@@ -202,7 +202,7 @@ static void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64])
++ 
++ 
++ /* SHA1Init - Initialize new context */
++-void SHA1_Init(SHA1_CTX* context)
+++void xmpp_SHA1_Init(SHA1_CTX* context)
++ {
++     /* SHA1 initialization constants */
++     context->state[0] = 0x67452301;
++@@ -215,7 +215,7 @@ void SHA1_Init(SHA1_CTX* context)
++ 
++ 
++ /* Run your data through this. */
++-void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
+++void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
++ {
++     size_t i, j;
++ 
++@@ -244,7 +244,7 @@ void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
++ 
++ 
++ /* Add padding and return the message digest. */
++-void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
+++void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
++ {
++     uint32_t i;
++     uint8_t  finalcount[8];
++@@ -253,11 +253,11 @@ void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
++         finalcount[i] = (unsigned char)((context->count[(i >= 4 ? 0 : 1)]
++          >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
++     }
++-    SHA1_Update(context, (uint8_t *)"\200", 1);
+++    xmpp_SHA1_Update(context, (uint8_t *)"\200", 1);
++     while ((context->count[0] & 504) != 448) {
++-        SHA1_Update(context, (uint8_t *)"\0", 1);
+++        xmpp_SHA1_Update(context, (uint8_t *)"\0", 1);
++     }
++-    SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
+++    xmpp_SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
++     for (i = 0; i < SHA1_DIGEST_SIZE; i++) {
++         digest[i] = (uint8_t)
++          ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
++@@ -300,12 +300,12 @@ FILE* file;
++             return(-1);
++         }
++     } 
++-    SHA1_Init(&context);
+++    xmpp_SHA1_Init(&context);
++     while (!feof(file)) {  /* note: what if ferror(file) */
++         i = fread(buffer, 1, 16384, file);
++-        SHA1_Update(&context, buffer, i);
+++        xmpp_SHA1_Update(&context, buffer, i);
++     }
++-    SHA1_Final(&context, digest);
+++    xmpp_SHA1_Final(&context, digest);
++     fclose(file);
++     for (i = 0; i < SHA1_DIGEST_SIZE/4; i++) {
++         for (j = 0; j < 4; j++) {
++@@ -358,9 +358,9 @@ int main(int argc, char** argv)
++     fprintf(stdout, "verifying SHA-1 implementation... ");
++     
++     for (k = 0; k < 2; k++){ 
++-        SHA1_Init(&context);
++-        SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
++-        SHA1_Final(&context, digest);
+++        xmpp_SHA1_Init(&context);
+++        xmpp_SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
+++        xmpp_SHA1_Final(&context, digest);
++ 	digest_to_hex(digest, output);
++ 
++         if (strcmp(output, test_results[k])) {
++@@ -372,10 +372,10 @@ int main(int argc, char** argv)
++         }    
++     }
++     /* million 'a' vector we feed separately */
++-    SHA1_Init(&context);
+++    xmpp_SHA1_Init(&context);
++     for (k = 0; k < 1000000; k++)
++-        SHA1_Update(&context, (uint8_t*)"a", 1);
++-    SHA1_Final(&context, digest);
+++        xmpp_SHA1_Update(&context, (uint8_t*)"a", 1);
+++    xmpp_SHA1_Final(&context, digest);
++     digest_to_hex(digest, output);
++     if (strcmp(output, test_results[2])) {
++         fprintf(stdout, "FAIL\n");
++diff --git a/src/sha1.h b/src/sha1.h
++index 10266cb..7ff48d7 100644
++--- a/src/sha1.h
+++++ b/src/sha1.h
++@@ -23,9 +23,9 @@ typedef struct {
++ 
++ #define SHA1_DIGEST_SIZE 20
++ 
++-void SHA1_Init(SHA1_CTX* context);
++-void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
++-void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
+++void xmpp_SHA1_Init(SHA1_CTX* context);
+++void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
+++void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
++ 
++ #ifdef __cplusplus
++ }
+diff --git a/package/libstrophe/0001-make-autoreconfable.patch b/package/libstrophe/0002-make-autoreconfable.patch
 similarity index 100%
-rename from package/efibootmgr/0001-Allow-build-with-uClibc.patch
-rename to package/efibootmgr/0002-Allow-build-with-uClibc.patch
-diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
-index 3f934ba..f71dced 100644
---- a/package/efibootmgr/efibootmgr.hash
-+++ b/package/efibootmgr/efibootmgr.hash
+rename from package/libstrophe/0001-make-autoreconfable.patch
+rename to package/libstrophe/0002-make-autoreconfable.patch
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index d840303..6a2d997 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
 @@ -1,3 +1,2 @@
- # locally computed hash
- sha256 3f260491e2c62e93cb6347ea6f21aaa5f93152e9e7f0269d314623769d82e473 efibootmgr-14.tar.gz
--sha256 8e91f16927d296ffebd4f7fafda2f84c0f6201aba089a35e8090abd5aacdc58e	3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index a946d5f..094dd28 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -6,9 +6,6 @@
+ # Locally calculated
+ sha256 08f4a85ef419a8bdf08b6afa8f7b2a0e5e180fdc9c16cede81af672ec10e21e7  libstrophe-0.8.8.tar.gz
+-sha256 00936397cbb75ef168992868ae559b141b505d3a06f08163012b240390efa553  b08766c8e46956daba010044b00c97f78b598780.patch
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 0dd7c89..4b5a10a 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -12,7 +12,6 @@ LIBSTROPHE_AUTORECONF = YES
+ LIBSTROPHE_LICENSE = MIT or GPL-3.0
+ LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
+ LIBSTROPHE_INSTALL_STAGING = YES
+-LIBSTROPHE_PATCH = https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780.patch
  
- EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
--# Patch fixes the build with gcc 6.x.
--EFIBOOTMGR_PATCH = \
--	https://github.com/rhinstaller/efibootmgr/commit/3466fd05c8c6f1052e0426d64eed40f8a88fd78f.patch
- EFIBOOTMGR_LICENSE = GPL-2.0+
- EFIBOOTMGR_LICENSE_FILES = COPYING
- EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+ # Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
