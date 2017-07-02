@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:36 +0200
-Subject: [Buildroot] [PATCH 14/20] scrub: don't download patch from Github
+Date: Sun,  2 Jul 2017 18:53:35 +0200
+Subject: [Buildroot] [PATCH 13/20] rpm: don't download patches from Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-15-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-14-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,84 +15,144 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-sure-m4-macros-are-included-in-the-build.patch | 45 ++++++++++++++++++++++
- package/scrub/scrub.hash                           |  1 -
- package/scrub/scrub.mk                             |  1 -
- 3 files changed, 45 insertions(+), 2 deletions(-)
- create mode 100644 package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
+ ...ink-instead-of-compile-for-gcc-flags-test.patch | 33 ++++++++++++++++
+ ...onfigure-ac-correct-stack-protector-check.patch | 45 ++++++++++++++++++++++
+ ...-to-enable-disable-sepdebugcrcfix-buildi.patch} |  0
+ ...ugcrcfix.c-fix-build-with-recent-binutil.patch} |  0
+ package/rpm/rpm.hash                               |  3 --
+ package/rpm/rpm.mk                                 |  7 +---
+ 6 files changed, 80 insertions(+), 8 deletions(-)
+ create mode 100644 package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
+ create mode 100644 package/rpm/0002-configure-ac-correct-stack-protector-check.patch
+ rename package/rpm/{0001-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch => 0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch} (100%)
+ rename package/rpm/{0002-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch => 0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch} (100%)
 
-diff --git a/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch b/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
+diff --git a/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch b/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
 new file mode 100644
-index 0000000..d8729b4
+index 0000000..6f6a2ab
 --- /dev/null
-+++ b/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
-@@ -0,0 +1,45 @@
-+From 11d30916dd9c11a26c7c8a0f6db9e6ebca301594 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Mon, 18 Jan 2016 21:45:23 +0100
-+Subject: [PATCH] configure.ac: make sure m4 macros are included in the build
++++ b/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
+@@ -0,0 +1,33 @@
++From b5f1895aae096836d6e8e155ee289e1b10fcabcb Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 10 Oct 2015 23:17:44 +0200
++Subject: [PATCH] configure.ac: use link instead of compile for gcc flags test
 +
-+This change prevents the following error to occur when calling
-+autoreconf:
++The logic that tests whether gcc supports or not certain flags uses
++AC_COMPILE_IFELSE(). However, when checking for stack smashing
++protection support, an AC_LINK_IFELSE() test is needed, since the
++build might work but not the link stage if certain libraries are
++missing for proper stack smashing protection support.
 +
-+  >>> scrub 2.6.1 Autoreconfiguring
-+  cd /work/build/scrub/build/scrub-2.6.1/ &&  PATH="/work/build/scrub/host/bin:/work/build/scrub/host/sbin:/work/build/scrub/host/usr/bin:/work/build/scrub/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/sbin:/usr/sbin" AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm" CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" CPP="/usr/bin/cpp" OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib" CPPFLAGS="-I/work/build/scrub/host/usr/include" CFLAGS="-O2 -I/work/build/scrub/host/usr/include" CXXFLAGS="-O2 -I/work/build/scrub/host/usr/include" LDFLAGS="-L/work/build/scrub/host/lib -L/work/build/scrub/host/usr/lib -Wl,-rpath,/work/build/scrub/host/usr/lib" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG="/work/build/scrub/host/usr/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_LIBDIR="/work/build/scrub/host/usr/lib/pkgconfig:/work/build/s
- crub/hos
- t/usr/share/pkgconfig" INTLTOOL_PERL=/usr/bin/perl ACLOCAL="/work/build/scrub/host/usr/bin/aclocal -I /work/build/scrub/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal" AUTOCONF="/work/build/scrub/host/usr/bin/autoconf" AUTOHEADER="/work/build/scrub/host/usr/bin/autoheader" AUTOMAKE="/work/build/scrub/host/usr/bin/automake" AUTOPOINT=/bin/true /work/build/scrub/host/usr/bin/autoreconf -f -i -I "/work/build/scrub/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal" -I "/work/build/scrub/host/usr/share/aclocal"
-+  libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'config'.
-+  libtoolize: copying file 'config/ltmain.sh'
-+  libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([m4])' to configure.ac,
-+  libtoolize: and rerunning libtoolize and aclocal.
-+  libtoolize: Consider adding '-I m4' to ACLOCAL_AMFLAGS in Makefile.am.
-+  configure.ac:10: error possibly undefined macro: X_AC_META
-+        If this token and others are legitimate, please use m4_pattern_allow.
-+        See the Autoconf documentation.
-+  configure.ac:11: error possibly undefined macro: X_AC_EXPAND_INSTALL_DIRS
-+  configure.ac:51: error possibly undefined macro: AC_PKGCONFIG
-+  configure.ac:70: error possibly undefined macro: X_AC_CHECK_PTHREADS
-+  autoreconf: /work/build/scrub/host/usr/bin/autoconf failed with exit status: 1
-+  package/pkg-generic.mk:185: recipe for target '/work/build/scrub/build/scrub-2.6.1/.stamp_configured' failed
-+  make: *** [/work/build/scrub/build/scrub-2.6.1/.stamp_configured] Error 1
-+  make: Leaving directory '/work/repos/buildroot'
++Therefore, this commit switches to use AC_LINK_IFELSE().
 +
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+[Upstream commit: https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594]
++[Upstream commit: https://github.com/rpm-software-management/rpm/commit/b5f1895aae096836d6e8e155ee289e1b10fcabcb]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: James Knight <james.d.knight@live.com>
 +---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 3d71289..07eaf33 100644
++index 6ece8c9fd..822294c3f 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -7,6 +7,7 @@ AC_INIT(m4_esyscmd([awk '/Name:/ {printf "%s",$2; exit}' META]),
-+ AC_CONFIG_AUX_DIR([config])
-+ AC_CONFIG_SRCDIR([NEWS])
-+ AC_CANONICAL_SYSTEM
-++AC_CONFIG_MACRO_DIR([config])
-+ X_AC_META
-+ X_AC_EXPAND_INSTALL_DIRS
-+ 
-diff --git a/package/scrub/scrub.hash b/package/scrub/scrub.hash
-index 0041fd0..42f7b2f 100644
---- a/package/scrub/scrub.hash
-+++ b/package/scrub/scrub.hash
-@@ -1,3 +1,2 @@
- # Locally computed
- sha256  838b061b2e1932b342fb9695c5579cdff5d2d72506cb41d6d8032eba18aed969  scrub-2.6.1.tar.gz
--sha256  6a129b4e0df6ebe02d449fa481db7b75be5eff08ce518aa77edd74c6b17c5ae4  11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
-diff --git a/package/scrub/scrub.mk b/package/scrub/scrub.mk
-index 0207a4c..ace19d5 100644
---- a/package/scrub/scrub.mk
-+++ b/package/scrub/scrub.mk
-@@ -8,7 +8,6 @@ SCRUB_VERSION = 2.6.1
- SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
- SCRUB_LICENSE = GPL-2.0+
- SCRUB_LICENSE_FILES = COPYING DISCLAIMER
--SCRUB_PATCH = https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
++@@ -43,7 +43,7 @@ if test "$GCC" = yes; then
++     echo
++     for flag in $cflags_to_try; do
++         CFLAGS="$CFLAGS $flag -Werror"
++-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
+++        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
++                 echo "   $flag"
++                 RPMCFLAGS="$RPMCFLAGS $flag"
++         ],[])
+diff --git a/package/rpm/0002-configure-ac-correct-stack-protector-check.patch b/package/rpm/0002-configure-ac-correct-stack-protector-check.patch
+new file mode 100644
+index 0000000..9d2942b
+--- /dev/null
++++ b/package/rpm/0002-configure-ac-correct-stack-protector-check.patch
+@@ -0,0 +1,45 @@
++From c810a0aca3f1148d2072d44b91b8cc9caeb4cf19 Mon Sep 17 00:00:00 2001
++From: James Knight <james.knight@rockwellcollins.com>
++Date: Wed, 16 Nov 2016 15:54:46 -0500
++Subject: [PATCH] configure.ac: correct stack protector check
++
++If a used toolchain accepts the `-fstack-protector` option but does not
++provide a stack smashing protector implementation (ex. libssp), linking
++will fail:
++
++ .libs/rpmio.o: In function `Fdescr':
++ rpmio.c:(.text+0x672): undefined reference to `__stack_chk_fail_local'
++ .libs/rpmio.o: In function `Fdopen':
++ rpmio.c:(.text+0xce9): undefined reference to `__stack_chk_fail_local'
++ .libs/rpmio.o: In function `ufdCopy':
++ rpmio.c:(.text+0x10f7): undefined reference to `__stack_chk_fail_local'
++ ...
++
++This is a result of testing for `-fstack-protector` support using a main
++that GCC does not inject guards. GCC's manual notes that stack protector
++code is only added when "[functions] that call alloca, and functions
++with buffers larger than 8 bytes" [1]. This commit adjusts the stack
++protector check to allocate memory on the stack (via `alloca`).
++
++[1]: https://gcc.gnu.org/onlinedocs/gcc-4.4.2/gcc/Optimize-Options.html
++
++Signed-off-by: James Knight <james.knight@rockwellcollins.com>
++[Upstream commit: https://github.com/rpm-software-management/rpm/commit/c810a0aca3f1148d2072d44b91b8cc9caeb4cf19]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index a9730d3bc..b4b3fe8fb 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -43,7 +43,7 @@ if test "$GCC" = yes; then
++     echo
++     for flag in $cflags_to_try; do
++         CFLAGS="$CFLAGS $flag -Werror"
++-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
+++        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[alloca(100);]])],[
++                 echo "   $flag"
++                 RPMCFLAGS="$RPMCFLAGS $flag"
++         ],[])
+diff --git a/package/rpm/0001-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch b/package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
+similarity index 100%
+rename from package/rpm/0001-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
+rename to package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
+diff --git a/package/rpm/0002-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch b/package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
+similarity index 100%
+rename from package/rpm/0002-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
+rename to package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
+diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
+index fd77d33..7ae9ec7 100644
+--- a/package/rpm/rpm.hash
++++ b/package/rpm/rpm.hash
+@@ -1,5 +1,2 @@
+ # From http://rpm.org/wiki/Releases/4.13.0.1
+ sha1 9566f95f38fcb214e439c552f378c2f64ba0aff9  rpm-4.13.0.1.tar.bz2
+-# Locally computed
+-sha256	a3e5568d721737a24141737e6036bb39ba9dfbeaa03fa4a51cc7881a243e0c5d b5f1895aae096836d6e8e155ee289e1b10fcabcb.patch
+-sha256	7ab0e08e143bb2d43d5b0553ee22ea34da15a611c597860a6110745467d20fa8 c810a0aca3f1148d2072d44b91b8cc9caeb4cf19.patch
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index fdaf27c..317ec14 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -11,12 +11,9 @@ RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
+ RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
+-RPM_PATCH = \
+-	https://github.com/rpm-software-management/rpm/commit/b5f1895aae096836d6e8e155ee289e1b10fcabcb.patch \
+-	https://github.com/rpm-software-management/rpm/commit/c810a0aca3f1148d2072d44b91b8cc9caeb4cf19.patch
  
- # Fetching from the git repo, no configure/Makefile generated, and patching
- # configure.ac
+-# b5f1895aae096836d6e8e155ee289e1b10fcabcb.patch
+-# c810a0aca3f1148d2072d44b91b8cc9caeb4cf19.patch
++# 0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
++# 0002-configure-ac-correct-stack-protector-check.patch
+ RPM_AUTORECONF = YES
+ 
+ RPM_CONF_OPTS = \
 -- 
 2.9.4
