@@ -1,89 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jul 2017 17:09:45 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] package/lugaru: backport
-	upstream fix
-Message-ID: <20170702150705.71D9C807E6@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 17:10:40 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/xen: Fix builds
+	with GCC 7
+Message-ID: <20170702150814.CE9E081D7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c4e2d468bd1efb383d9347b0b91527ee27fde7f
+commit: https://git.buildroot.net/buildroot/commit/?id=c1df3532b39bc5883c3a059d49e4deba0bc200f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Fixes:
-http://autobuild.buildroot.net/results/389/38917f8420695a9dbb24830fef04159252fceea0
+Fix a "duplicate 'const' declaration specifier" error that occurs when
+building Xen. As the issue has already been fixed in upstream Xen let's
+just backport the fix to apply here.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Fixes:
+    http://autobuild.buildroot.net/results/3a0/3a03c328bc6a6c30cc4f619925608d735632211f/
+
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0cad656a9ec5a7903f3d9c0c80963f5d561b0f02)
+(cherry picked from commit 7289d2729db82ed413012b3b1a0f7f13c4530c4f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-mismatched-usage-length-build-fail-on-g.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ package/xen/0008-arm-fix-build-with-gcc-7.patch | 70 +++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch b/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch
+diff --git a/package/xen/0008-arm-fix-build-with-gcc-7.patch b/package/xen/0008-arm-fix-build-with-gcc-7.patch
 new file mode 100644
-index 0000000..9c362a9
+index 0000000..7bd12a3
 --- /dev/null
-+++ b/package/lugaru/0002-Fix-mismatched-usage-length-build-fail-on-g.patch
-@@ -0,0 +1,58 @@
-+From 5a0c9f6358169b447840acdb721250ce932cb180 Mon Sep 17 00:00:00 2001
-+From: Martin Erik Werner <martinerikwerner@gmail.com>
-+Date: Wed, 8 Mar 2017 22:51:16 +0100
-+Subject: [PATCH] Fix mismatched usage length, build fail on g++
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/xen/0008-arm-fix-build-with-gcc-7.patch
+@@ -0,0 +1,70 @@
++From 9d3011bd1cd29f8f3841bf1b64d5ead9ed1434e8 Mon Sep 17 00:00:00 2001
++From: Jan Beulich <jbeulich@suse.com>
++Date: Fri, 19 May 2017 10:12:08 +0200
++Subject: [PATCH] arm: fix build with gcc 7
 +
-+The length of const option::Descriptor usage[] is intended to be
-+inferred based on the initialisation in Source/main.cpp, however, the
-+extern declaration in Source/Game.hpp hard-codes it to 13.
++The compiler dislikes duplicate "const", and the ones it complains
++about look like they we in fact meant to be placed differently.
 +
-+Remove the hard-coded 13 in the extern declaration, in favour of the
-+inferred length.
++Also fix array_access_okay() (just like on x86), despite the construct
++being unused on ARM: -Wint-in-bool-context, enabled by default in
++gcc 7, doesn't like multiplication in conditional operators. "Hide" it,
++at the risk of the next compiler version becoming smarter and
++recognizing even that. (The hope is that added smartness then would
++also better deal with legitimate cases like the one here.) The change
++could have been done in access_ok(), but I think we better keep it at
++the place the compiler is actually unhappy about.
 +
-+This also fixes the follwoing build failure with g++ (Debian 4.9.2-10)
-+4.9.2:
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::index???
-+     };
-+     ^
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::index??? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::type???
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::type??? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::shortopt???
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::shortopt??? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::longopt???
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::longopt??? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: error: uninitialized const member ???option::Descriptor::check_arg???
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::check_arg??? [-Wmissing-field-initializers]
-+(...)/Source/main.cpp:602:5: warning: missing initializer for member ???option::Descriptor::help??? [-Wmissing-field-initializers]
-+CMakeFiles/lugaru.dir/build.make:54: recipe for target 'CMakeFiles/lugaru.dir/Source/main.cpp.o' failed
-+
-+Signed-off-by: Martin Erik Werner <martinerikwerner@gmail.com>
-+
-+[Romain: backport to v1.2]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+
-+(cherry picked from commit dd685fe9080c2853422d8272792691358ea07dfc)
++Signed-off-by: Jan Beulich <jbeulich@suse.com>
++Reviewed-by: Julien Grall <julien.grall@arm.com>
++Release-acked-by: Julien Grall <julien.grall@arm.com>
++Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 +---
-+ Source/Game.hpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ xen/arch/arm/platforms/brcm.c      | 2 +-
++ xen/arch/arm/platforms/rcar2.c     | 2 +-
++ xen/include/asm-arm/guest_access.h | 3 ++-
++ 3 files changed, 4 insertions(+), 3 deletions(-)
 +
-+diff --git a/Source/Game.hpp b/Source/Game.hpp
-+index 51232cc..9bb6adb 100644
-+--- a/Source/Game.hpp
-++++ b/Source/Game.hpp
-+@@ -234,7 +234,7 @@ enum optionIndex
-+ /* Number of options + 1 */
-+ const int commandLineOptionsNumber = 10;
++diff --git a/xen/arch/arm/platforms/brcm.c b/xen/arch/arm/platforms/brcm.c
++index 6d8b5b9175..d481b2c60f 100644
++--- a/xen/arch/arm/platforms/brcm.c
+++++ b/xen/arch/arm/platforms/brcm.c
++@@ -271,7 +271,7 @@ static __init int brcm_init(void)
++     return brcm_populate_plat_regs();
++ }
 + 
-+-extern const option::Descriptor usage[13];
-++extern const option::Descriptor usage[];
++-static const char const *brcm_dt_compat[] __initconst =
+++static const char *const brcm_dt_compat[] __initconst =
++ {
++     "brcm,bcm7445d0",
++     NULL
++diff --git a/xen/arch/arm/platforms/rcar2.c b/xen/arch/arm/platforms/rcar2.c
++index bb25751109..df0ac84709 100644
++--- a/xen/arch/arm/platforms/rcar2.c
+++++ b/xen/arch/arm/platforms/rcar2.c
++@@ -46,7 +46,7 @@ static int __init rcar2_smp_init(void)
++     return 0;
++ }
 + 
-+ extern option::Option commandLineOptions[commandLineOptionsNumber];
-+ extern option::Option* commandLineOptionsBuffer;
++-static const char const *rcar2_dt_compat[] __initdata =
+++static const char *const rcar2_dt_compat[] __initconst =
++ {
++     "renesas,lager",
++     NULL
++diff --git a/xen/include/asm-arm/guest_access.h b/xen/include/asm-arm/guest_access.h
++index 5876988b23..421bca5f36 100644
++--- a/xen/include/asm-arm/guest_access.h
+++++ b/xen/include/asm-arm/guest_access.h
++@@ -8,7 +8,8 @@
++ #define access_ok(addr,size) (1)
++ 
++ #define array_access_ok(addr,count,size) \
++-    (likely(count < (~0UL/size)) && access_ok(addr,count*size))
+++    (likely((count) < (~0UL / (size))) && \
+++     access_ok(addr, 0 + (count) * (size)))
++ 
++ unsigned long raw_copy_to_guest(void *to, const void *from, unsigned len);
++ unsigned long raw_copy_to_guest_flush_dcache(void *to, const void *from,
 +-- 
-+2.9.4
++2.11.0
 +
