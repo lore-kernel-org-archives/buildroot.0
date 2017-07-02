@@ -1,53 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jul 2017 17:46:21 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] core: always pass full
-	path to strip command
-Message-ID: <20170702154355.55AEC81F67@busybox.osuosl.org>
+Date: Sun, 02 Jul 2017 17:53:38 +0200
+Subject: [Buildroot] [PATCH v2 0/2] qt5multimedia: add missing
+	dependencies
+In-Reply-To: <1498549990-3548-1-git-send-email-brgl@bgdev.pl> (Bartosz
+ Golaszewski's message of "Tue, 27 Jun 2017 09:53:07 +0200")
+References: <1498549990-3548-1-git-send-email-brgl@bgdev.pl>
+Message-ID: <87o9t2al8d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc5af298046683ebc1cbd4502b9ecc23431093cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Bartosz" == Bartosz Golaszewski <brgl@bgdev.pl> writes:
 
-In some cases, passing STRIP=true is not sufficient to disable striping
-altogether, as some (incorrectly generated?) configure scripts will
-ignore a ${STRIP} that is not a full path.
+ > Qt5Multimedia conditionally builds support for pulseaudio and alsa if
+ > it detects corresponding libraries in the system but we need to
+ > explicitly depend on these packages.
 
-This is the case, for example, for nmap, which ends up using the host
-strip command when we pass STRIP=true:
+ > v1 -> v2:
+ > - also added libglib2 as dependency for pulseaudio support
+ > - new patch: add alsa to dependencies
 
-    checking for arm-buildroot-linux-gnueabihf-strip... no
-    checking for strip... /usr/bin/strip
-    configure: WARNING: using cross tools not prefixed with host triplet
-    [--SNIP--]
-    /usr/bin/install -c -c -m 755 nping /home/ymorin/dev/buildroot/O/target/usr/bin/nping
-    /usr/bin/strip -x /home/ymorin/dev/buildroot/O/target/usr/bin/nping
-    /usr/bin/strip: Unable to recognise the format of the input file `/home/ymorin/dev/buildroot/O/target/usr/bin/nping'
+ > Bartosz Golaszewski (2):
+ >   qt5multimedia: conditionally add pulseaudio & libglib2 to dependencies
+ >   qt5multimedia: conditionally add alsa-lib to dependencies
 
-We fix that by forcing a full path to the strip sommand when it is
-disabled: STRIP=/bin/true
+Committed both to 2017.02.x and 2017.05.x, thanks.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d5dcc76d9e5f9d22e881517ccc805dfd54499a74)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4a3eb26..c1dc714 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -207,7 +207,7 @@ TARGET_STRIP = $(TARGET_CROSS)strip
- STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
- endif
- ifeq ($(BR2_STRIP_none),y)
--TARGET_STRIP = true
-+TARGET_STRIP = /bin/true
- STRIPCMD = $(TARGET_STRIP)
- endif
- INSTALL := $(shell which install || type -p install)
+-- 
+Bye, Peter Korsgaard
