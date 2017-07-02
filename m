@@ -1,51 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 23:51:27 +0200
-Subject: [Buildroot] [PATCH 3/4] toolchain-external: copy ld*.so* for
- all C libraries
-In-Reply-To: <CAAXf6LW0KBCQnS-oVUzPLtY9S1CpNou9e+0JmZudu+vy0DjrNg@mail.gmail.com>
-References: <20170702134107.11488-1-thomas.petazzoni@free-electrons.com>
- <20170702134107.11488-4-thomas.petazzoni@free-electrons.com>
- <CAAXf6LW0KBCQnS-oVUzPLtY9S1CpNou9e+0JmZudu+vy0DjrNg@mail.gmail.com>
-Message-ID: <20170702235127.14b7ca48@windsurf>
+Date: Sun, 2 Jul 2017 23:48:41 +0200
+Subject: [Buildroot] [git commit] bind: security bump to version 9.11.1-P2
+Message-ID: <20170702214836.907EF80641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a0c53973f87928ae51ca58926951c386c74fc023
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 2 Jul 2017 21:21:46 +0200, Thomas De Schampheleire wrote:
+Fixes the following security issues:
 
-> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > index 8460e37..c1c3900 100644
-> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > @@ -107,13 +107,11 @@ endif
-> >  #
-> >  # Definitions of the list of libraries that should be copied to the target.
-> >  #
-> > +
-> > +TOOLCHAIN_EXTERNAL_LIBS += ld*.so*  
-> 
-> In copy_toolchain_sysroot, the patterns ld*.so and ld*.so.* are
-> treated separately. I think the only reason must be to avoid matching
-> ld*.something (I can't think of another reason at this moment).
-> Perhaps that is too far-fetched, and copy_toolchain_sysroot should be
-> updated, but in any case it makes sense to line up.
+CVE-2017-3142: An error in TSIG authentication can permit unauthorized zone
+transfers
 
-I think it's a separate issue, because we're already using ld*.so*
-today in pkg-toolchain-external.mk for TOOLCHAIN_EXTERNAL_LIBS, I'm
-just moving it around.
+An attacker who is able to send and receive messages to an authoritative DNS
+server and who has knowledge of a valid TSIG key name may be able to
+circumvent TSIG authentication of AXFR requests via a carefully constructed
+request packet. A server that relies solely on TSIG keys for protection with
+no other ACL protection could be manipulated into:
 
-However, I agree we should probably line up things. In which direction
-do you think we should line up? I guess using ld*.so* in
-copy_toolchain_sysroot should be fine.
+* providing an AXFR of a zone to an unauthorized recipient
+* accepting bogus NOTIFY packets
 
-Best regards,
+https://kb.isc.org/article/AA-01504/74/CVE-2017-3142
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+CVE-2017-3041: An error in TSIG authentication can permit unauthorized dynamic
+updates
+
+An attacker who is able to send and receive messages to an authoritative DNS
+server and who has knowledge of a valid TSIG key name for the zone and service
+being targeted may be able to manipulate BIND into accepting an unauthorized
+dynamic update.
+
+https://kb.isc.org/article/AA-01503/74/CVE-2017-3143
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 3f0dda5..5dd15cb 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P1.tar.gz.sha256.asc
+-sha256 6b1b3e88d51b8471bd6aee24a8cea70817e850a5901315dc506f9dde275ca638 bind-9.11.1-P1.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.1-P1/bind-9.11.1-P2.tar.gz.sha256.asc
++sha256 bf53c6431575ae1612ddef66d18ef9baf2a22d842fa5b0cadc971919fd81fea5 bind-9.11.1-P2.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b588eb5..fd5369a 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.1-P1
++BIND_VERSION = 9.11.1-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
