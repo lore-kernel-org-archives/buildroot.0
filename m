@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] tinycbor: on't download patch from Github
-Message-ID: <20170702220305.208AE81EDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] wavpack: don't download patch from Github
+Message-ID: <20170702220305.3E9E481EDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18813dd9229b03cc2f0d79fef1da0d96a3ae9e0f
+commit: https://git.buildroot.net/buildroot/commit/?id=0a2576d37ebb4175aea1daf3c14c947df39cdcaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -17,65 +17,106 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-static-compilation-of-json2cbor.patch | 28 ++++++++++++++++++++++
- package/tinycbor/tinycbor.hash                     |  1 -
- package/tinycbor/tinycbor.mk                       |  4 ----
- 3 files changed, 28 insertions(+), 5 deletions(-)
+ ...-19-new-dependency-on-wchar-t-by-removing.patch | 70 ++++++++++++++++++++++
+ package/wavpack/wavpack.hash                       |  1 -
+ package/wavpack/wavpack.mk                         |  3 -
+ 3 files changed, 70 insertions(+), 4 deletions(-)
 
-diff --git a/package/tinycbor/0001-Fix-static-compilation-of-json2cbor.patch b/package/tinycbor/0001-Fix-static-compilation-of-json2cbor.patch
+diff --git a/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
 new file mode 100644
-index 0000000..8d265d8
+index 0000000..e5faf91
 --- /dev/null
-+++ b/package/tinycbor/0001-Fix-static-compilation-of-json2cbor.patch
-@@ -0,0 +1,28 @@
-+From ae608ea2735bd331ec7dcf9d89928c38f0e0c981 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 6 Mar 2017 18:59:22 +0100
-+Subject: [PATCH] Fix static compilation of json2cbor
++++ b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
+@@ -0,0 +1,70 @@
++From 876fc3f3907e871d0938ac6c8c5252f5f31abd1f Mon Sep 17 00:00:00 2001
++From: David Bryant <david@wavpack.com>
++Date: Thu, 16 Feb 2017 17:11:12 -0800
++Subject: [PATCH] fix GitHub issue #19 (new dependency on wchar_t) by removing
++ dependency
 +
-+json2cbor depends on cjson so tools/json2cbor/json2cbor.o must be
-+before -lcjson
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream commit: https://github.com/01org/tinycbor/commit/ae608ea2735bd331ec7dcf9d89928c38f0e0c981]
++[Upstream commit: https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ cli/import_id3.c | 10 +++++-----
++ cli/wvtag.c      |  2 ++
++ 2 files changed, 7 insertions(+), 5 deletions(-)
 +
-+diff --git a/Makefile b/Makefile
-+index 97b292c..a8cb57c 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -115,7 +115,7 @@ bin/cbordump: $(CBORDUMP_SOURCES:.c=.o) lib/libtinycbor.a
++diff --git a/cli/import_id3.c b/cli/import_id3.c
++index 51e54ee..fc30aeb 100644
++--- a/cli/import_id3.c
+++++ b/cli/import_id3.c
++@@ -34,7 +34,7 @@ static struct {
 + 
-+ bin/json2cbor: $(JSON2CBOR_SOURCES:.c=.o) lib/libtinycbor.a
-+ 	@$(MKDIR) -p bin
-+-	$(CC) -o $@ $(LDFLAGS) $(LDFLAGS_CJSON) $^ $(LDLIBS) -lm
-++	$(CC) -o $@ $(LDFLAGS) $^ $(LDFLAGS_CJSON) $(LDLIBS) -lm
++ #define NUM_TEXT_TAG_ITEMS (sizeof (text_tag_table) / sizeof (text_tag_table [0]))
 + 
-+ tinycbor.pc: tinycbor.pc.in
-+ 	$(SED) > $@ < $< \
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index 416dce6..6cb0a6e 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
++-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len);
+++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len);
++ static void Latin1ToUTF8 (void *string, int len);
++ 
++ // Import specified ID3v2.3 tag. The WavPack context accepts the tag items, and can be
++@@ -163,7 +163,7 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
++             }
++             else if (frame_body [0] == 1 && frame_size > 2 && frame_body [1] == 0xFF && frame_body [2] == 0xFE) {
++                 int nchars = (frame_size - 3) / 2;
++-                wchar_t *wide_string = malloc ((nchars + 1) * sizeof (wchar_t));
+++                uint16_t *wide_string = malloc ((nchars + 1) * sizeof (uint16_t));
++                 unsigned char *fp = frame_body + 3;
++ 
++                 utf8_string = malloc ((nchars + 1) * 3);
++@@ -297,9 +297,9 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
++ // may be less than the number of characters in the wide string if the buffer
++ // length is exceeded.
++ 
++-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
+++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len)
++ {
++-    const wchar_t *pWide = Wide;
+++    const uint16_t *pWide = Wide;
++     int outndx = 0;
++ 
++     while (*pWide) {
++@@ -335,7 +335,7 @@ static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
++ static void Latin1ToUTF8 (void *string, int len)
++ {
++     int max_chars = (int) strlen (string);
++-    wchar_t *temp = (wchar_t *) malloc ((max_chars + 1) * 2);
+++    uint16_t *temp = (uint16_t *) malloc ((max_chars + 1) * sizeof (uint16_t));
++ 
++     MultiByteToWideChar (28591, 0, string, -1, temp, max_chars + 1);
++     WideCharToUTF8 (temp, (unsigned char *) string, len);
++diff --git a/cli/wvtag.c b/cli/wvtag.c
++index 6e6512a..45e621e 100644
++--- a/cli/wvtag.c
+++++ b/cli/wvtag.c
++@@ -1344,7 +1344,9 @@ static void dump_UTF8_string (char *string, FILE *dst)
++ // resulting string will not fit in the specified buffer size then it is
++ // truncated.
++ 
+++#if defined (_WIN32)
++ static int UTF8ToWideChar (const unsigned char *pUTF8, wchar_t *pWide);
+++#endif
++ 
++ static void UTF8ToAnsi (char *string, int len)
++ {
+diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
+index 16ff08c..56ba7d8 100644
+--- a/package/wavpack/wavpack.hash
++++ b/package/wavpack/wavpack.hash
 @@ -1,3 +1,2 @@
- # Locally computed:
- sha256	8e42984015d62e8323b7f2a439bde157d707e0d7ae57a6d8d5a2665247af6638	tinycbor-v0.4.1.tar.gz
--sha256	1298b80ab23ae24e85515d9f06398236d087bc76dccd0a48757fcb7e54557175	ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index 1f13e7d..9c3d2eb 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
-@@ -12,10 +12,6 @@ TINYCBOR_LICENSE_FILES = LICENSE
- TINYCBOR_DEPENDENCIES = host-pkgconf
- TINYCBOR_INSTALL_STAGING = YES
+ # locally computed hash
+ sha256  1939627d5358d1da62bc6158d63f7ed12905552f3a799c799ee90296a7612944  wavpack-5.1.0.tar.bz2
+-sha256  3890ab081dc6f8ee02161ace180381327031cc24cc6c3d71668367b7e5f6e4be  876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
+diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+index 485213a..c23b127 100644
+--- a/package/wavpack/wavpack.mk
++++ b/package/wavpack/wavpack.mk
+@@ -12,9 +12,6 @@ WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ WAVPACK_LICENSE = BSD-3-Clause
+ WAVPACK_LICENSE_FILES = COPYING
  
--# This patch fixes static build of json2cbor
--TINYCBOR_PATCH = \
--	https://github.com/01org/tinycbor/commit/ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
+-# Fetch patch from upstream to remove wchar dependency
+-WAVPACK_PATCH = https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
 -
- ifeq ($(BR2_PACKAGE_CJSON),y)
- TINYCBOR_DEPENDENCIES += cjson
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ WAVPACK_CONF_OPTS += LIBS=-liconv
  endif
