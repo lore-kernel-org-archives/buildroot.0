@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:34 +0200
-Subject: [Buildroot] [PATCH 12/20] qt: don't download patch from Github
+Date: Sun,  2 Jul 2017 18:53:27 +0200
+Subject: [Buildroot] [PATCH 05/20] lxc: don't download patch from Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-13-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-6-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,141 +15,71 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...e-check-to-treat-alsalib-1.1.x-as-correct.patch | 29 ++++++++++++++++++++++
- .../{0001-configure.patch => 0002-configure.patch} |  0
- ...system.patch => 0003-eglwsegl-use-system.patch} |  0
- ...-atomics.patch => 0004-fix-const-atomics.patch} |  0
- ...attr_np.patch => 0005-pthread_getattr_np.patch} |  0
- ...o-gui.patch => 0006-script-qtdbus-no-gui.patch} |  0
- ...-Add-initial-support-of-ARC-architecture.patch} |  0
- ... => 0008-Prevent-unaligned-access-on-ARC.patch} |  0
- ...on-constructor-error-for-legacy-c-compil.patch} |  0
- ...inclusion-order-when-building-statically.patch} |  0
- ...form-socklen_t-on-other-C-libraries-than.patch} |  0
- ...ith-ldl-option-only-when-it-is-supported.patch} |  0
- ...13-OpenGL-EGL-Avoid-X11-header-collision.patch} |  0
- package/qt/qt.hash                                 |  1 -
- package/qt/qt.mk                                   |  3 ---
- 15 files changed, 29 insertions(+), 4 deletions(-)
- create mode 100644 package/qt/0001-alsatest-fix-the-check-to-treat-alsalib-1.1.x-as-correct.patch
- rename package/qt/{0001-configure.patch => 0002-configure.patch} (100%)
- rename package/qt/{0002-eglwsegl-use-system.patch => 0003-eglwsegl-use-system.patch} (100%)
- rename package/qt/{0003-fix-const-atomics.patch => 0004-fix-const-atomics.patch} (100%)
- rename package/qt/{0004-pthread_getattr_np.patch => 0005-pthread_getattr_np.patch} (100%)
- rename package/qt/{0005-script-qtdbus-no-gui.patch => 0006-script-qtdbus-no-gui.patch} (100%)
- rename package/qt/{0006-Add-initial-support-of-ARC-architecture.patch => 0007-Add-initial-support-of-ARC-architecture.patch} (100%)
- rename package/qt/{0007-Prevent-unaligned-access-on-ARC.patch => 0008-Prevent-unaligned-access-on-ARC.patch} (100%)
- rename package/qt/{0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch => 0009-Fix-conversion-constructor-error-for-legacy-c-compil.patch} (100%)
- rename package/qt/{0009-Fix-library-inclusion-order-when-building-statically.patch => 0010-Fix-library-inclusion-order-when-building-statically.patch} (100%)
- rename package/qt/{0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch => 0011-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch} (100%)
- rename package/qt/{0011-Link-with-ldl-option-only-when-it-is-supported.patch => 0012-Link-with-ldl-option-only-when-it-is-supported.patch} (100%)
- rename package/qt/{0012-OpenGL-EGL-Avoid-X11-header-collision.patch => 0013-OpenGL-EGL-Avoid-X11-header-collision.patch} (100%)
+ .../lxc/0001-conf-fix-build-without-libcap.patch   | 31 ++++++++++++++++++++++
+ package/lxc/lxc.hash                               |  1 -
+ package/lxc/lxc.mk                                 |  4 ---
+ 3 files changed, 31 insertions(+), 5 deletions(-)
+ create mode 100644 package/lxc/0001-conf-fix-build-without-libcap.patch
 
-diff --git a/package/qt/0001-alsatest-fix-the-check-to-treat-alsalib-1.1.x-as-correct.patch b/package/qt/0001-alsatest-fix-the-check-to-treat-alsalib-1.1.x-as-correct.patch
+diff --git a/package/lxc/0001-conf-fix-build-without-libcap.patch b/package/lxc/0001-conf-fix-build-without-libcap.patch
 new file mode 100644
-index 0000000..4cec4bd
+index 0000000..7e7c010
 --- /dev/null
-+++ b/package/qt/0001-alsatest-fix-the-check-to-treat-alsalib-1.1.x-as-correct.patch
-@@ -0,0 +1,29 @@
-+From b8f98d956501dfa4ce03a137f15d404930a56066 Mon Sep 17 00:00:00 2001
-+From: Dmitry Shachnev <mitya57@gmail.com>
-+Date: Sat, 5 Mar 2016 10:25:33 +0300
-+Subject: [PATCH] alsatest: Fix the check to treat alsalib 1.1.x as correct
-+ version
++++ b/package/lxc/0001-conf-fix-build-without-libcap.patch
+@@ -0,0 +1,31 @@
++From bc5b27d6f6d166d2a6df47982cbe36041ce6b735 Mon Sep 17 00:00:00 2001
++From: Dima Krasner <dima@securingsam.com>
++Date: Sun, 14 May 2017 12:24:59 +0300
++Subject: [PATCH] conf: fix build without libcap
 +
-+Task-number: QTBUG-51681
-+Change-Id: I63266c33342f02f4d1a5ea5786f5fbc5a1b421b3
-+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
-+[Upstream commit: https://github.com/qtproject/qtbase/commit/b8f98d956501dfa4ce03a137f15d404930a56066]
-+[Patch fixing ALSA detection. Taken from Qt5, but applies fine to Qt4.]
++Signed-off-by: Dima Krasner <samdima@securingsam.com>
++[Upstream commit: https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ config.tests/unix/alsa/alsatest.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/lxc/conf.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
 +
-+diff --git a/config.tests/unix/alsa/alsatest.cpp b/config.tests/unix/alsa/alsatest.cpp
-+index cab6533977..0b45819b61 100644
-+--- a/config.tests/unix/alsa/alsatest.cpp
-++++ b/config.tests/unix/alsa/alsatest.cpp
-+@@ -32,7 +32,7 @@
-+ ****************************************************************************/
-+ 
-+ #include <alsa/asoundlib.h>
-+-#if(!(SND_LIB_MAJOR == 1 && SND_LIB_MINOR == 0 && SND_LIB_SUBMINOR >= 10))
-++#if SND_LIB_VERSION < 0x1000a  // 1.0.10
-+ #error "Alsa version found too old, require >= 1.0.10"
++diff --git a/src/lxc/conf.c b/src/lxc/conf.c
++index 35bdb249b..76a190120 100644
++--- a/src/lxc/conf.c
+++++ b/src/lxc/conf.c
++@@ -130,6 +130,14 @@ lxc_log_define(lxc_conf, lxc);
++ #define LO_FLAGS_AUTOCLEAR 4
 + #endif
 + 
-diff --git a/package/qt/0001-configure.patch b/package/qt/0002-configure.patch
-similarity index 100%
-rename from package/qt/0001-configure.patch
-rename to package/qt/0002-configure.patch
-diff --git a/package/qt/0002-eglwsegl-use-system.patch b/package/qt/0003-eglwsegl-use-system.patch
-similarity index 100%
-rename from package/qt/0002-eglwsegl-use-system.patch
-rename to package/qt/0003-eglwsegl-use-system.patch
-diff --git a/package/qt/0003-fix-const-atomics.patch b/package/qt/0004-fix-const-atomics.patch
-similarity index 100%
-rename from package/qt/0003-fix-const-atomics.patch
-rename to package/qt/0004-fix-const-atomics.patch
-diff --git a/package/qt/0004-pthread_getattr_np.patch b/package/qt/0005-pthread_getattr_np.patch
-similarity index 100%
-rename from package/qt/0004-pthread_getattr_np.patch
-rename to package/qt/0005-pthread_getattr_np.patch
-diff --git a/package/qt/0005-script-qtdbus-no-gui.patch b/package/qt/0006-script-qtdbus-no-gui.patch
-similarity index 100%
-rename from package/qt/0005-script-qtdbus-no-gui.patch
-rename to package/qt/0006-script-qtdbus-no-gui.patch
-diff --git a/package/qt/0006-Add-initial-support-of-ARC-architecture.patch b/package/qt/0007-Add-initial-support-of-ARC-architecture.patch
-similarity index 100%
-rename from package/qt/0006-Add-initial-support-of-ARC-architecture.patch
-rename to package/qt/0007-Add-initial-support-of-ARC-architecture.patch
-diff --git a/package/qt/0007-Prevent-unaligned-access-on-ARC.patch b/package/qt/0008-Prevent-unaligned-access-on-ARC.patch
-similarity index 100%
-rename from package/qt/0007-Prevent-unaligned-access-on-ARC.patch
-rename to package/qt/0008-Prevent-unaligned-access-on-ARC.patch
-diff --git a/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch b/package/qt/0009-Fix-conversion-constructor-error-for-legacy-c-compil.patch
-similarity index 100%
-rename from package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
-rename to package/qt/0009-Fix-conversion-constructor-error-for-legacy-c-compil.patch
-diff --git a/package/qt/0009-Fix-library-inclusion-order-when-building-statically.patch b/package/qt/0010-Fix-library-inclusion-order-when-building-statically.patch
-similarity index 100%
-rename from package/qt/0009-Fix-library-inclusion-order-when-building-statically.patch
-rename to package/qt/0010-Fix-library-inclusion-order-when-building-statically.patch
-diff --git a/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch b/package/qt/0011-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
-similarity index 100%
-rename from package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
-rename to package/qt/0011-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
-diff --git a/package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch b/package/qt/0012-Link-with-ldl-option-only-when-it-is-supported.patch
-similarity index 100%
-rename from package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch
-rename to package/qt/0012-Link-with-ldl-option-only-when-it-is-supported.patch
-diff --git a/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch b/package/qt/0013-OpenGL-EGL-Avoid-X11-header-collision.patch
-similarity index 100%
-rename from package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
-rename to package/qt/0013-OpenGL-EGL-Avoid-X11-header-collision.patch
-diff --git a/package/qt/qt.hash b/package/qt/qt.hash
-index de81368..301010c 100644
---- a/package/qt/qt.hash
-+++ b/package/qt/qt.hash
-@@ -1,4 +1,3 @@
- # md5 http://download.qt.io/official_releases/qt/4.8/4.8.7/md5sums-4.8.7, sha256 locally computed:
- md5    d990ee66bf7ab0c785589776f35ba6ad                                 qt-everywhere-opensource-src-4.8.7.tar.gz
- sha256 e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0 qt-everywhere-opensource-src-4.8.7.tar.gz
--sha256 e03740e20b8dbf52d163d8a4a37125e7c55b59a9a5e7cf7e89a08e07286b6135 b8f98d956501dfa4ce03a137f15d404930a56066.patch
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 8b52208..e9af8f4 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -8,9 +8,6 @@ QT_VERSION_MAJOR = 4.8
- QT_VERSION = $(QT_VERSION_MAJOR).7
- QT_SOURCE = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
- QT_SITE = http://download.qt-project.org/official_releases/qt/$(QT_VERSION_MAJOR)/$(QT_VERSION)
--# Patch fixing ALSA detection. Taken from Qt5, but applies fine to
--# Qt4.
--QT_PATCH = https://github.com/qtproject/qtbase/commit/b8f98d956501dfa4ce03a137f15d404930a56066.patch
- QT_DEPENDENCIES = host-pkgconf
- QT_INSTALL_STAGING = YES
+++#ifndef CAP_SETUID
+++#define CAP_SETUID 7
+++#endif
+++
+++#ifndef CAP_SETGID
+++#define CAP_SETGID 6
+++#endif
+++
++ /* needed for cgroup automount checks, regardless of whether we
++  * have included linux/capability.h or not */
++ #ifndef CAP_SYS_ADMIN
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 501f869..086b139 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+ sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
+-sha256	16cf466db42a45bd579bdb66efbeb63764cd93d049f05a6d8a659846cab9b47f	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 8a200e7..03e9431 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -11,10 +11,6 @@ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
  
+-# This patch fixes compilation without capabilities
+-LXC_PATCH = \
+-	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
+-
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
 -- 
 2.9.4
