@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:42 +0200
-Subject: [Buildroot] [PATCH 20/20] wavpack: don't download patch from Github
+Date: Sun,  2 Jul 2017 18:53:36 +0200
+Subject: [Buildroot] [PATCH 14/20] scrub: don't download patch from Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-21-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-15-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,109 +15,84 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-19-new-dependency-on-wchar-t-by-removing.patch | 70 ++++++++++++++++++++++
- package/wavpack/wavpack.hash                       |  1 -
- package/wavpack/wavpack.mk                         |  3 -
- 3 files changed, 70 insertions(+), 4 deletions(-)
- create mode 100644 package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
+ ...-sure-m4-macros-are-included-in-the-build.patch | 45 ++++++++++++++++++++++
+ package/scrub/scrub.hash                           |  1 -
+ package/scrub/scrub.mk                             |  1 -
+ 3 files changed, 45 insertions(+), 2 deletions(-)
+ create mode 100644 package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
 
-diff --git a/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
+diff --git a/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch b/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
 new file mode 100644
-index 0000000..e5faf91
+index 0000000..d8729b4
 --- /dev/null
-+++ b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
-@@ -0,0 +1,70 @@
-+From 876fc3f3907e871d0938ac6c8c5252f5f31abd1f Mon Sep 17 00:00:00 2001
-+From: David Bryant <david@wavpack.com>
-+Date: Thu, 16 Feb 2017 17:11:12 -0800
-+Subject: [PATCH] fix GitHub issue #19 (new dependency on wchar_t) by removing
-+ dependency
++++ b/package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch
+@@ -0,0 +1,45 @@
++From 11d30916dd9c11a26c7c8a0f6db9e6ebca301594 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Mon, 18 Jan 2016 21:45:23 +0100
++Subject: [PATCH] configure.ac: make sure m4 macros are included in the build
 +
-+[Upstream commit: https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f]
++This change prevents the following error to occur when calling
++autoreconf:
++
++  >>> scrub 2.6.1 Autoreconfiguring
++  cd /work/build/scrub/build/scrub-2.6.1/ &&  PATH="/work/build/scrub/host/bin:/work/build/scrub/host/sbin:/work/build/scrub/host/usr/bin:/work/build/scrub/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/sbin:/usr/sbin" AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm" CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" CPP="/usr/bin/cpp" OBJCOPY="/usr/bin/objcopy" RANLIB="/usr/bin/ranlib" CPPFLAGS="-I/work/build/scrub/host/usr/include" CFLAGS="-O2 -I/work/build/scrub/host/usr/include" CXXFLAGS="-O2 -I/work/build/scrub/host/usr/include" LDFLAGS="-L/work/build/scrub/host/lib -L/work/build/scrub/host/usr/lib -Wl,-rpath,/work/build/scrub/host/usr/lib" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG="/work/build/scrub/host/usr/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_LIBDIR="/work/build/scrub/host/usr/lib/pkgconfig:/work/build/s
+ crub/hos
+ t/usr/share/pkgconfig" INTLTOOL_PERL=/usr/bin/perl ACLOCAL="/work/build/scrub/host/usr/bin/aclocal -I /work/build/scrub/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal" AUTOCONF="/work/build/scrub/host/usr/bin/autoconf" AUTOHEADER="/work/build/scrub/host/usr/bin/autoheader" AUTOMAKE="/work/build/scrub/host/usr/bin/automake" AUTOPOINT=/bin/true /work/build/scrub/host/usr/bin/autoreconf -f -i -I "/work/build/scrub/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/aclocal" -I "/work/build/scrub/host/usr/share/aclocal"
++  libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'config'.
++  libtoolize: copying file 'config/ltmain.sh'
++  libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([m4])' to configure.ac,
++  libtoolize: and rerunning libtoolize and aclocal.
++  libtoolize: Consider adding '-I m4' to ACLOCAL_AMFLAGS in Makefile.am.
++  configure.ac:10: error possibly undefined macro: X_AC_META
++        If this token and others are legitimate, please use m4_pattern_allow.
++        See the Autoconf documentation.
++  configure.ac:11: error possibly undefined macro: X_AC_EXPAND_INSTALL_DIRS
++  configure.ac:51: error possibly undefined macro: AC_PKGCONFIG
++  configure.ac:70: error possibly undefined macro: X_AC_CHECK_PTHREADS
++  autoreconf: /work/build/scrub/host/usr/bin/autoconf failed with exit status: 1
++  package/pkg-generic.mk:185: recipe for target '/work/build/scrub/build/scrub-2.6.1/.stamp_configured' failed
++  make: *** [/work/build/scrub/build/scrub-2.6.1/.stamp_configured] Error 1
++  make: Leaving directory '/work/repos/buildroot'
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++[Upstream commit: https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ cli/import_id3.c | 10 +++++-----
-+ cli/wvtag.c      |  2 ++
-+ 2 files changed, 7 insertions(+), 5 deletions(-)
++ configure.ac | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/cli/import_id3.c b/cli/import_id3.c
-+index 51e54ee..fc30aeb 100644
-+--- a/cli/import_id3.c
-++++ b/cli/import_id3.c
-+@@ -34,7 +34,7 @@ static struct {
++diff --git a/configure.ac b/configure.ac
++index 3d71289..07eaf33 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -7,6 +7,7 @@ AC_INIT(m4_esyscmd([awk '/Name:/ {printf "%s",$2; exit}' META]),
++ AC_CONFIG_AUX_DIR([config])
++ AC_CONFIG_SRCDIR([NEWS])
++ AC_CANONICAL_SYSTEM
+++AC_CONFIG_MACRO_DIR([config])
++ X_AC_META
++ X_AC_EXPAND_INSTALL_DIRS
 + 
-+ #define NUM_TEXT_TAG_ITEMS (sizeof (text_tag_table) / sizeof (text_tag_table [0]))
-+ 
-+-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len);
-++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len);
-+ static void Latin1ToUTF8 (void *string, int len);
-+ 
-+ // Import specified ID3v2.3 tag. The WavPack context accepts the tag items, and can be
-+@@ -163,7 +163,7 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
-+             }
-+             else if (frame_body [0] == 1 && frame_size > 2 && frame_body [1] == 0xFF && frame_body [2] == 0xFE) {
-+                 int nchars = (frame_size - 3) / 2;
-+-                wchar_t *wide_string = malloc ((nchars + 1) * sizeof (wchar_t));
-++                uint16_t *wide_string = malloc ((nchars + 1) * sizeof (uint16_t));
-+                 unsigned char *fp = frame_body + 3;
-+ 
-+                 utf8_string = malloc ((nchars + 1) * 3);
-+@@ -297,9 +297,9 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
-+ // may be less than the number of characters in the wide string if the buffer
-+ // length is exceeded.
-+ 
-+-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
-++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len)
-+ {
-+-    const wchar_t *pWide = Wide;
-++    const uint16_t *pWide = Wide;
-+     int outndx = 0;
-+ 
-+     while (*pWide) {
-+@@ -335,7 +335,7 @@ static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
-+ static void Latin1ToUTF8 (void *string, int len)
-+ {
-+     int max_chars = (int) strlen (string);
-+-    wchar_t *temp = (wchar_t *) malloc ((max_chars + 1) * 2);
-++    uint16_t *temp = (uint16_t *) malloc ((max_chars + 1) * sizeof (uint16_t));
-+ 
-+     MultiByteToWideChar (28591, 0, string, -1, temp, max_chars + 1);
-+     WideCharToUTF8 (temp, (unsigned char *) string, len);
-+diff --git a/cli/wvtag.c b/cli/wvtag.c
-+index 6e6512a..45e621e 100644
-+--- a/cli/wvtag.c
-++++ b/cli/wvtag.c
-+@@ -1344,7 +1344,9 @@ static void dump_UTF8_string (char *string, FILE *dst)
-+ // resulting string will not fit in the specified buffer size then it is
-+ // truncated.
-+ 
-++#if defined (_WIN32)
-+ static int UTF8ToWideChar (const unsigned char *pUTF8, wchar_t *pWide);
-++#endif
-+ 
-+ static void UTF8ToAnsi (char *string, int len)
-+ {
-diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
-index 16ff08c..56ba7d8 100644
---- a/package/wavpack/wavpack.hash
-+++ b/package/wavpack/wavpack.hash
+diff --git a/package/scrub/scrub.hash b/package/scrub/scrub.hash
+index 0041fd0..42f7b2f 100644
+--- a/package/scrub/scrub.hash
++++ b/package/scrub/scrub.hash
 @@ -1,3 +1,2 @@
- # locally computed hash
- sha256  1939627d5358d1da62bc6158d63f7ed12905552f3a799c799ee90296a7612944  wavpack-5.1.0.tar.bz2
--sha256  3890ab081dc6f8ee02161ace180381327031cc24cc6c3d71668367b7e5f6e4be  876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
-diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-index 485213a..c23b127 100644
---- a/package/wavpack/wavpack.mk
-+++ b/package/wavpack/wavpack.mk
-@@ -12,9 +12,6 @@ WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
- WAVPACK_LICENSE = BSD-3-Clause
- WAVPACK_LICENSE_FILES = COPYING
+ # Locally computed
+ sha256  838b061b2e1932b342fb9695c5579cdff5d2d72506cb41d6d8032eba18aed969  scrub-2.6.1.tar.gz
+-sha256  6a129b4e0df6ebe02d449fa481db7b75be5eff08ce518aa77edd74c6b17c5ae4  11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
+diff --git a/package/scrub/scrub.mk b/package/scrub/scrub.mk
+index 0207a4c..ace19d5 100644
+--- a/package/scrub/scrub.mk
++++ b/package/scrub/scrub.mk
+@@ -8,7 +8,6 @@ SCRUB_VERSION = 2.6.1
+ SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
+ SCRUB_LICENSE = GPL-2.0+
+ SCRUB_LICENSE_FILES = COPYING DISCLAIMER
+-SCRUB_PATCH = https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
  
--# Fetch patch from upstream to remove wchar dependency
--WAVPACK_PATCH = https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
--
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- WAVPACK_CONF_OPTS += LIBS=-liconv
- endif
+ # Fetching from the git repo, no configure/Makefile generated, and patching
+ # configure.ac
 -- 
 2.9.4
