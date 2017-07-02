@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:31 +0200
-Subject: [Buildroot] [PATCH 09/20] openssh: don't download patch from Github
+Date: Sun,  2 Jul 2017 18:53:40 +0200
+Subject: [Buildroot] [PATCH 18/20] tinycbor: on't download patch from Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-10-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-19-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,171 +15,68 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-configure-ac-detect-mips-abi.patch        | 44 +++++++++++++++
- ...roperly-set-seccomp-audit-arch-for-mips64.patch | 63 ++++++++++++++++++++++
- ...ch => 0003-fix-pam-uclibc-pthreads-clash.patch} |  0
- ...nclude.patch => 0004-fix-howmany-include.patch} |  0
- package/openssh/openssh.hash                       |  2 -
- package/openssh/openssh.mk                         |  6 +--
- 6 files changed, 109 insertions(+), 6 deletions(-)
- create mode 100644 package/openssh/0001-configure-ac-detect-mips-abi.patch
- create mode 100644 package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
- rename package/openssh/{0001-fix-pam-uclibc-pthreads-clash.patch => 0003-fix-pam-uclibc-pthreads-clash.patch} (100%)
- rename package/openssh/{0002-fix-howmany-include.patch => 0004-fix-howmany-include.patch} (100%)
+ .../0001-Fix-static-compilation-of-json2cbor.patch | 28 ++++++++++++++++++++++
+ package/tinycbor/tinycbor.hash                     |  1 -
+ package/tinycbor/tinycbor.mk                       |  4 ----
+ 3 files changed, 28 insertions(+), 5 deletions(-)
+ create mode 100644 package/tinycbor/0001-Fix-static-compilation-of-json2cbor.patch
 
-diff --git a/package/openssh/0001-configure-ac-detect-mips-abi.patch b/package/openssh/0001-configure-ac-detect-mips-abi.patch
+diff --git a/package/tinycbor/0001-Fix-static-compilation-of-json2cbor.patch b/package/tinycbor/0001-Fix-static-compilation-of-json2cbor.patch
 new file mode 100644
-index 0000000..0d43e6b
+index 0000000..8d265d8
 --- /dev/null
-+++ b/package/openssh/0001-configure-ac-detect-mips-abi.patch
-@@ -0,0 +1,44 @@
-+From f4fcd8c788a4854d4ebae400cf55e3957f906835 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Tue, 20 Jun 2017 16:42:11 +0100
-+Subject: [PATCH] configure.ac: detect MIPS ABI
++++ b/package/tinycbor/0001-Fix-static-compilation-of-json2cbor.patch
+@@ -0,0 +1,28 @@
++From ae608ea2735bd331ec7dcf9d89928c38f0e0c981 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 6 Mar 2017 18:59:22 +0100
++Subject: [PATCH] Fix static compilation of json2cbor
 +
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+[Upstream commit: ttps://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835]
++json2cbor depends on cjson so tools/json2cbor/json2cbor.o must be
++before -lcjson
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream commit: https://github.com/01org/tinycbor/commit/ae608ea2735bd331ec7dcf9d89928c38f0e0c981]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ configure.ac | 21 +++++++++++++++++++++
-+ 1 file changed, 21 insertions(+)
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 18079acba..f990cfe08 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -746,6 +746,27 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
-+ 	fi
-+ 	AC_CHECK_HEADERS([linux/seccomp.h linux/filter.h linux/audit.h], [],
-+ 	    [], [#include <linux/types.h>])
-++	# Obtain MIPS ABI
-++	case "$host" in
-++	mips*)
-++		AC_COMPILE_IFELSE([
-++#if _MIPS_SIM != _ABIO32
-++#error
-++#endif
-++			],[mips_abi="o32"],[AC_COMPILE_IFELSE([
-++#if _MIPS_SIM != _ABIN32
-++#error
-++#endif
-++				],[mips_abi="n32"],[AC_COMPILE_IFELSE([
-++#if _MIPS_SIM != _ABI64
-++#error
-++#endif
-++					],[mips_abi="n64"],[AC_MSG_ERROR([unknown MIPS ABI])
-++				])
-++			])
-++		])
-++		;;
-++	esac
-+ 	AC_MSG_CHECKING([for seccomp architecture])
-+ 	seccomp_audit_arch=
-+ 	case "$host" in
-diff --git a/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch b/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
-new file mode 100644
-index 0000000..879af5e
---- /dev/null
-+++ b/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
-@@ -0,0 +1,63 @@
-+From afc3e31b637db9dae106d4fad78f7b481c8c24e3 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Tue, 20 Jun 2017 16:42:28 +0100
-+Subject: [PATCH] configure.ac: properly set seccomp_audit_arch for MIPS64
-+
-+Currently seccomp_audit_arch is set to AUDIT_ARCH_MIPS64 or
-+AUDIT_ARCH_MIPSEL64 (depending on the endinness) when openssh is built
-+for MIPS64. However, that's only valid for n64 ABI. The right macros for
-+n32 ABI defined in seccomp.h are AUDIT_ARCH_MIPS64N32 and
-+AUDIT_ARCH_MIPSEL64N32, for big and little endian respectively.
-+
-+Because of that an sshd built for MIPS64 n32 rejects connection attempts
-+and the output of strace reveals that the problem is related to seccomp
-+audit:
-+
-+[pid   194] prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, {len=57,
-+filter=0x555d5da0}) = 0
-+[pid   194] write(7, "\0\0\0]\0\0\0\5\0\0\0Ulist_hostkey_types: "..., 97) = ?
-+[pid   193] <... poll resumed> )        = 2 ([{fd=5, revents=POLLIN|POLLHUP},
-+{fd=6, revents=POLLHUP}])
-+[pid   194] +++ killed by SIGSYS +++
-+
-+This patch fixes that problem by setting the right value to
-+seccomp_audit_arch taking into account the MIPS64 ABI.
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+[Upstream commit: https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac | 18 ++++++++++++++++--
-+ 1 file changed, 16 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f990cfe08..5d640f679 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -801,10 +801,24 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
-+ 		seccomp_audit_arch=AUDIT_ARCH_MIPSEL
-+ 		;;
-+ 	mips64-*)
-+-		seccomp_audit_arch=AUDIT_ARCH_MIPS64
-++		case "$mips_abi" in
-++		"n32")
-++			seccomp_audit_arch=AUDIT_ARCH_MIPS64N32
-++			;;
-++		"n64")
-++			seccomp_audit_arch=AUDIT_ARCH_MIPS64
-++			;;
-++		esac
-+ 		;;
-+ 	mips64el-*)
-+-		seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
-++		case "$mips_abi" in
-++		"n32")
-++			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64N32
-++			;;
-++		"n64")
-++			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
-++			;;
-++		esac
-+ 		;;
-+ 	esac
-+ 	if test "x$seccomp_audit_arch" != "x" ; then
-diff --git a/package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch b/package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch
-similarity index 100%
-rename from package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
-rename to package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch
-diff --git a/package/openssh/0002-fix-howmany-include.patch b/package/openssh/0004-fix-howmany-include.patch
-similarity index 100%
-rename from package/openssh/0002-fix-howmany-include.patch
-rename to package/openssh/0004-fix-howmany-include.patch
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index ed628fa..3685bc0 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,2 @@
- # From http://www.openssh.com/txt/release-7.5 (base64 encoded)
- sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
--sha256 310860606c4175cdfd095e724f624df27340c89a916f7a09300bcb7988d5cfbf  afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
--sha256 395aa1006967713b599555440e09f898781a5559e496223587401768ece10904  f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 24d34e8..38a32bf 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -9,11 +9,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
- # Autoreconf needed due to the following patches modifying configure.ac:
--# f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
--# afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
-+# 0001-configure-ac-detect-mips-abi.patch
-+# 0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
- OPENSSH_AUTORECONF = YES
--OPENSSH_PATCH = https://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835.patch \
--	https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
- OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
- OPENSSH_CONF_OPTS = \
- 	--sysconfdir=/etc/ssh \
++diff --git a/Makefile b/Makefile
++index 97b292c..a8cb57c 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -115,7 +115,7 @@ bin/cbordump: $(CBORDUMP_SOURCES:.c=.o) lib/libtinycbor.a
++ 
++ bin/json2cbor: $(JSON2CBOR_SOURCES:.c=.o) lib/libtinycbor.a
++ 	@$(MKDIR) -p bin
++-	$(CC) -o $@ $(LDFLAGS) $(LDFLAGS_CJSON) $^ $(LDLIBS) -lm
+++	$(CC) -o $@ $(LDFLAGS) $^ $(LDFLAGS_CJSON) $(LDLIBS) -lm
++ 
++ tinycbor.pc: tinycbor.pc.in
++ 	$(SED) > $@ < $< \
+diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
+index 416dce6..6cb0a6e 100644
+--- a/package/tinycbor/tinycbor.hash
++++ b/package/tinycbor/tinycbor.hash
+@@ -1,3 +1,2 @@
+ # Locally computed:
+ sha256	8e42984015d62e8323b7f2a439bde157d707e0d7ae57a6d8d5a2665247af6638	tinycbor-v0.4.1.tar.gz
+-sha256	1298b80ab23ae24e85515d9f06398236d087bc76dccd0a48757fcb7e54557175	ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
+diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
+index 1f13e7d..9c3d2eb 100644
+--- a/package/tinycbor/tinycbor.mk
++++ b/package/tinycbor/tinycbor.mk
+@@ -12,10 +12,6 @@ TINYCBOR_LICENSE_FILES = LICENSE
+ TINYCBOR_DEPENDENCIES = host-pkgconf
+ TINYCBOR_INSTALL_STAGING = YES
+ 
+-# This patch fixes static build of json2cbor
+-TINYCBOR_PATCH = \
+-	https://github.com/01org/tinycbor/commit/ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
+-
+ ifeq ($(BR2_PACKAGE_CJSON),y)
+ TINYCBOR_DEPENDENCIES += cjson
+ endif
 -- 
 2.9.4
