@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] rpm: don't download patches from Github
-Message-ID: <20170702220304.C80307FF0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] openssh: don't download patch from Github
+Message-ID: <20170702220304.8D19381EDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4df30ff97eb21b8b3ab1c0b454389d846fc9bdd
+commit: https://git.buildroot.net/buildroot/commit/?id=4e7522aacd4e76c0ab5e602ade9a60f5a4473939
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -17,138 +17,165 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ink-instead-of-compile-for-gcc-flags-test.patch | 33 ++++++++++++++++
- ...onfigure-ac-correct-stack-protector-check.patch | 45 ++++++++++++++++++++++
- ...-to-enable-disable-sepdebugcrcfix-buildi.patch} |  0
- ...ugcrcfix.c-fix-build-with-recent-binutil.patch} |  0
- package/rpm/rpm.hash                               |  3 --
- package/rpm/rpm.mk                                 |  7 +---
- 6 files changed, 80 insertions(+), 8 deletions(-)
+ .../0001-configure-ac-detect-mips-abi.patch        | 44 +++++++++++++++
+ ...roperly-set-seccomp-audit-arch-for-mips64.patch | 63 ++++++++++++++++++++++
+ ...ch => 0003-fix-pam-uclibc-pthreads-clash.patch} |  0
+ ...nclude.patch => 0004-fix-howmany-include.patch} |  0
+ package/openssh/openssh.hash                       |  2 -
+ package/openssh/openssh.mk                         |  6 +--
+ 6 files changed, 109 insertions(+), 6 deletions(-)
 
-diff --git a/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch b/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
+diff --git a/package/openssh/0001-configure-ac-detect-mips-abi.patch b/package/openssh/0001-configure-ac-detect-mips-abi.patch
 new file mode 100644
-index 0000000..6f6a2ab
+index 0000000..0d43e6b
 --- /dev/null
-+++ b/package/rpm/0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
-@@ -0,0 +1,33 @@
-+From b5f1895aae096836d6e8e155ee289e1b10fcabcb Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 10 Oct 2015 23:17:44 +0200
-+Subject: [PATCH] configure.ac: use link instead of compile for gcc flags test
++++ b/package/openssh/0001-configure-ac-detect-mips-abi.patch
+@@ -0,0 +1,44 @@
++From f4fcd8c788a4854d4ebae400cf55e3957f906835 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Tue, 20 Jun 2017 16:42:11 +0100
++Subject: [PATCH] configure.ac: detect MIPS ABI
 +
-+The logic that tests whether gcc supports or not certain flags uses
-+AC_COMPILE_IFELSE(). However, when checking for stack smashing
-+protection support, an AC_LINK_IFELSE() test is needed, since the
-+build might work but not the link stage if certain libraries are
-+missing for proper stack smashing protection support.
-+
-+Therefore, this commit switches to use AC_LINK_IFELSE().
-+
-+[Upstream commit: https://github.com/rpm-software-management/rpm/commit/b5f1895aae096836d6e8e155ee289e1b10fcabcb]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: James Knight <james.d.knight@live.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 6ece8c9fd..822294c3f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -43,7 +43,7 @@ if test "$GCC" = yes; then
-+     echo
-+     for flag in $cflags_to_try; do
-+         CFLAGS="$CFLAGS $flag -Werror"
-+-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
-++        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
-+                 echo "   $flag"
-+                 RPMCFLAGS="$RPMCFLAGS $flag"
-+         ],[])
-diff --git a/package/rpm/0002-configure-ac-correct-stack-protector-check.patch b/package/rpm/0002-configure-ac-correct-stack-protector-check.patch
-new file mode 100644
-index 0000000..9d2942b
---- /dev/null
-+++ b/package/rpm/0002-configure-ac-correct-stack-protector-check.patch
-@@ -0,0 +1,45 @@
-+From c810a0aca3f1148d2072d44b91b8cc9caeb4cf19 Mon Sep 17 00:00:00 2001
-+From: James Knight <james.knight@rockwellcollins.com>
-+Date: Wed, 16 Nov 2016 15:54:46 -0500
-+Subject: [PATCH] configure.ac: correct stack protector check
-+
-+If a used toolchain accepts the `-fstack-protector` option but does not
-+provide a stack smashing protector implementation (ex. libssp), linking
-+will fail:
-+
-+ .libs/rpmio.o: In function `Fdescr':
-+ rpmio.c:(.text+0x672): undefined reference to `__stack_chk_fail_local'
-+ .libs/rpmio.o: In function `Fdopen':
-+ rpmio.c:(.text+0xce9): undefined reference to `__stack_chk_fail_local'
-+ .libs/rpmio.o: In function `ufdCopy':
-+ rpmio.c:(.text+0x10f7): undefined reference to `__stack_chk_fail_local'
-+ ...
-+
-+This is a result of testing for `-fstack-protector` support using a main
-+that GCC does not inject guards. GCC's manual notes that stack protector
-+code is only added when "[functions] that call alloca, and functions
-+with buffers larger than 8 bytes" [1]. This commit adjusts the stack
-+protector check to allocate memory on the stack (via `alloca`).
-+
-+[1]: https://gcc.gnu.org/onlinedocs/gcc-4.4.2/gcc/Optimize-Options.html
-+
-+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-+[Upstream commit: https://github.com/rpm-software-management/rpm/commit/c810a0aca3f1148d2072d44b91b8cc9caeb4cf19]
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Upstream commit: ttps://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ configure.ac | 21 +++++++++++++++++++++
++ 1 file changed, 21 insertions(+)
 +
 +diff --git a/configure.ac b/configure.ac
-+index a9730d3bc..b4b3fe8fb 100644
++index 18079acba..f990cfe08 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -43,7 +43,7 @@ if test "$GCC" = yes; then
-+     echo
-+     for flag in $cflags_to_try; do
-+         CFLAGS="$CFLAGS $flag -Werror"
-+-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[return 0;]])],[
-++        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[alloca(100);]])],[
-+                 echo "   $flag"
-+                 RPMCFLAGS="$RPMCFLAGS $flag"
-+         ],[])
-diff --git a/package/rpm/0001-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch b/package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
++@@ -746,6 +746,27 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
++ 	fi
++ 	AC_CHECK_HEADERS([linux/seccomp.h linux/filter.h linux/audit.h], [],
++ 	    [], [#include <linux/types.h>])
+++	# Obtain MIPS ABI
+++	case "$host" in
+++	mips*)
+++		AC_COMPILE_IFELSE([
+++#if _MIPS_SIM != _ABIO32
+++#error
+++#endif
+++			],[mips_abi="o32"],[AC_COMPILE_IFELSE([
+++#if _MIPS_SIM != _ABIN32
+++#error
+++#endif
+++				],[mips_abi="n32"],[AC_COMPILE_IFELSE([
+++#if _MIPS_SIM != _ABI64
+++#error
+++#endif
+++					],[mips_abi="n64"],[AC_MSG_ERROR([unknown MIPS ABI])
+++				])
+++			])
+++		])
+++		;;
+++	esac
++ 	AC_MSG_CHECKING([for seccomp architecture])
++ 	seccomp_audit_arch=
++ 	case "$host" in
+diff --git a/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch b/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
+new file mode 100644
+index 0000000..879af5e
+--- /dev/null
++++ b/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
+@@ -0,0 +1,63 @@
++From afc3e31b637db9dae106d4fad78f7b481c8c24e3 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Tue, 20 Jun 2017 16:42:28 +0100
++Subject: [PATCH] configure.ac: properly set seccomp_audit_arch for MIPS64
++
++Currently seccomp_audit_arch is set to AUDIT_ARCH_MIPS64 or
++AUDIT_ARCH_MIPSEL64 (depending on the endinness) when openssh is built
++for MIPS64. However, that's only valid for n64 ABI. The right macros for
++n32 ABI defined in seccomp.h are AUDIT_ARCH_MIPS64N32 and
++AUDIT_ARCH_MIPSEL64N32, for big and little endian respectively.
++
++Because of that an sshd built for MIPS64 n32 rejects connection attempts
++and the output of strace reveals that the problem is related to seccomp
++audit:
++
++[pid   194] prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, {len=57,
++filter=0x555d5da0}) = 0
++[pid   194] write(7, "\0\0\0]\0\0\0\5\0\0\0Ulist_hostkey_types: "..., 97) = ?
++[pid   193] <... poll resumed> )        = 2 ([{fd=5, revents=POLLIN|POLLHUP},
++{fd=6, revents=POLLHUP}])
++[pid   194] +++ killed by SIGSYS +++
++
++This patch fixes that problem by setting the right value to
++seccomp_audit_arch taking into account the MIPS64 ABI.
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Upstream commit: https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 18 ++++++++++++++++--
++ 1 file changed, 16 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index f990cfe08..5d640f679 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -801,10 +801,24 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
++ 		seccomp_audit_arch=AUDIT_ARCH_MIPSEL
++ 		;;
++ 	mips64-*)
++-		seccomp_audit_arch=AUDIT_ARCH_MIPS64
+++		case "$mips_abi" in
+++		"n32")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPS64N32
+++			;;
+++		"n64")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPS64
+++			;;
+++		esac
++ 		;;
++ 	mips64el-*)
++-		seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
+++		case "$mips_abi" in
+++		"n32")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64N32
+++			;;
+++		"n64")
+++			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
+++			;;
+++		esac
++ 		;;
++ 	esac
++ 	if test "x$seccomp_audit_arch" != "x" ; then
+diff --git a/package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch b/package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch
 similarity index 100%
-rename from package/rpm/0001-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
-rename to package/rpm/0003-Detect-bfd.h-to-enable-disable-sepdebugcrcfix-buildi.patch
-diff --git a/package/rpm/0002-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch b/package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
+rename from package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
+rename to package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch
+diff --git a/package/openssh/0002-fix-howmany-include.patch b/package/openssh/0004-fix-howmany-include.patch
 similarity index 100%
-rename from package/rpm/0002-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
-rename to package/rpm/0004-tools-sepdebugcrcfix.c-fix-build-with-recent-binutil.patch
-diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
-index fd77d33..7ae9ec7 100644
---- a/package/rpm/rpm.hash
-+++ b/package/rpm/rpm.hash
-@@ -1,5 +1,2 @@
- # From http://rpm.org/wiki/Releases/4.13.0.1
- sha1 9566f95f38fcb214e439c552f378c2f64ba0aff9  rpm-4.13.0.1.tar.bz2
--# Locally computed
--sha256	a3e5568d721737a24141737e6036bb39ba9dfbeaa03fa4a51cc7881a243e0c5d b5f1895aae096836d6e8e155ee289e1b10fcabcb.patch
--sha256	7ab0e08e143bb2d43d5b0553ee22ea34da15a611c597860a6110745467d20fa8 c810a0aca3f1148d2072d44b91b8cc9caeb4cf19.patch
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index fdaf27c..317ec14 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -11,12 +11,9 @@ RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
- RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
--RPM_PATCH = \
--	https://github.com/rpm-software-management/rpm/commit/b5f1895aae096836d6e8e155ee289e1b10fcabcb.patch \
--	https://github.com/rpm-software-management/rpm/commit/c810a0aca3f1148d2072d44b91b8cc9caeb4cf19.patch
- 
--# b5f1895aae096836d6e8e155ee289e1b10fcabcb.patch
--# c810a0aca3f1148d2072d44b91b8cc9caeb4cf19.patch
-+# 0001-configure-ac-use-link-instead-of-compile-for-gcc-flags-test.patch
-+# 0002-configure-ac-correct-stack-protector-check.patch
- RPM_AUTORECONF = YES
- 
- RPM_CONF_OPTS = \
+rename from package/openssh/0002-fix-howmany-include.patch
+rename to package/openssh/0004-fix-howmany-include.patch
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index ed628fa..3685bc0 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,2 @@
+ # From http://www.openssh.com/txt/release-7.5 (base64 encoded)
+ sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
+-sha256 310860606c4175cdfd095e724f624df27340c89a916f7a09300bcb7988d5cfbf  afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
+-sha256 395aa1006967713b599555440e09f898781a5559e496223587401768ece10904  f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 24d34e8..38a32bf 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -9,11 +9,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ # Autoreconf needed due to the following patches modifying configure.ac:
+-# f4fcd8c788a4854d4ebae400cf55e3957f906835.patch
+-# afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
++# 0001-configure-ac-detect-mips-abi.patch
++# 0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
+ OPENSSH_AUTORECONF = YES
+-OPENSSH_PATCH = https://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835.patch \
+-	https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3.patch
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPTS = \
+ 	--sysconfdir=/etc/ssh \
