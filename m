@@ -1,50 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 23:42:31 +0200
-Subject: [Buildroot] [git commit] pkg-virtual: fix host dependencies handling
-Message-ID: <20170702213930.AC5B580641@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 23:45:24 +0200
+Subject: [Buildroot] [git commit] support: add Dockerfile for CI
+Message-ID: <20170702214233.1C4CB7FAB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=346e926c1506ec8bc99ce3dd653d01ebb605fc70
+commit: https://git.buildroot.net/buildroot/commit/?id=2564268f996dfb94ea2f0d1f776208bec63f6312
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If $(BR2_PACKAGE_HAS_HOST_FOO) is defined, then the pkg-virtual
-infrastructure will check if $(BR2_PACKAGE_PROVIDES_HOST_FOO) is not
-empty.
+For Gitlab-CI, we want to avoid re-generating the minimal install to
+be able to run tests all the time. So let's create a docker image that
+we can post on Docker Hub and then pull.
 
-But later, $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES) will be set from
-$(BR2_PACKAGE_PROVIDES_FOO), ignoring $(BR2_PACKAGE_PROVIDES_HOST_FOO).
+For the time being, this is just what we need for running our CI. Later
+we can produce something that is also useful for users.
 
-So fix this discrepancy by setting $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES)
-from $(BR2_PACKAGE_PROVIDES_FOO) only if $(BR2_PACKAGE_PROVIDES_HOST_FOO)
-is empty.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: add comments suggested by Arnout.]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-virtual.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ support/docker/Dockerfile | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 2e83e07..0de79d4 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -49,7 +49,13 @@ $(2)_IS_VIRTUAL = YES
- ifeq ($(4),target)
- $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
- else
-+ifeq ($$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2))),)
-+# Inherit from target package BR2_PACKAGE_PROVIDES_FOO
- $(2)_DEPENDENCIES += host-$$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(3)))
-+else
-+# BR2_PACKAGE_PROVIDES_HOST_<pkg> is explicitly defined
-+$(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
-+endif
- endif
- 
- # Call the generic package infrastructure to generate the necessary
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+new file mode 100644
+index 0000000..d45b23d
+--- /dev/null
++++ b/support/docker/Dockerfile
+@@ -0,0 +1,30 @@
++# This Dockerfile generates the docker image that gets used by Gitlab CI
++# To build it:
++#   sudo docker build -t buildroot/base support/docker
++#   sudo docker push buildroot/base
++
++FROM debian:stable
++LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
++      vendor="Buildroot" \
++description="Container with everything needed to run Buildroot"
++
++# Setup environment
++ENV DEBIAN_FRONTEND noninteractive
++
++RUN dpkg --add-architecture i386
++# The container has no package lists, so need to update first
++RUN apt-get update -y -qq
++RUN apt-get install -y -qq --no-install-recommends \
++    build-essential cmake libc6:i386 gcc-multilib \
++    bc ca-certificates file locales rsync \
++    cvs bzr git mercurial subversion wget \
++    cpio unzip \
++    libncurses5-dev \
++    python-nose2 python-pexpect qemu-system-arm qemu-system-x86
++RUN apt-get -q -y autoremove
++RUN apt-get -q -y clean
++
++# To be able to generate a toolchain with locales, enable one UTF-8 locale
++RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
++RUN /usr/sbin/locale-gen
++
