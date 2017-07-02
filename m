@@ -1,29 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 02 Jul 2017 13:32:29 +0000
-Subject: [Buildroot] [Bug 9976] License file for package 'rtl8821au'
-	incorrect
-In-Reply-To: <bug-9976-163@https.bugs.busybox.net/>
-References: <bug-9976-163@https.bugs.busybox.net/>
-Message-ID: <bug-9976-163-bUHBRh6lDX@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 2 Jul 2017 15:26:30 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/rtl8821au: fix
+	license file name
+Message-ID: <20170702133106.D6D5981F61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9976
+commit: https://git.buildroot.net/buildroot/commit/?id=713302d5c42bd3b03f720a59b15b290a9a367557
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Fixes #9976.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+Reported-by: Nick Wright <nwright98@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 54778b7d7e84863c4bc3036e69f959ed52b7953b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtl8821au/rtl8821au.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-Thanks, this has now been committed:
-https://git.buildroot.org/buildroot/commit/?id=54778b7d7e84863c4bc3036e69f959ed52b7953b
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+index 32b7bfd..b6ad431 100644
+--- a/package/rtl8821au/rtl8821au.mk
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -7,7 +7,7 @@
+ RTL8821AU_VERSION = b018b446fb0729fa659e7eead475d6c13f192642
+ RTL8821AU_SITE = $(call github,abperiasamy,rtl8812AU_8821AU_linux,$(RTL8821AU_VERSION))
+ RTL8821AU_LICENSE = GPL-2.0
+-RTL8821AU_LICENSE_FILES = COPYING
++RTL8821AU_LICENSE_FILES = LICENSE
+ 
+ RTL8821AU_MODULE_MAKE_OPTS = \
+ 	CONFIG_RTL8812AU_8821AU=m \
