@@ -1,30 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 2 Jul 2017 16:49:05 +0300
-Subject: [Buildroot] [PATCH 3/4] toolchain-external: copy ld*.so* for
- all C libraries
-In-Reply-To: <20170702134107.11488-4-thomas.petazzoni@free-electrons.com>
-References: <20170702134107.11488-1-thomas.petazzoni@free-electrons.com>
- <20170702134107.11488-4-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702134905.yjonqh3etsbwjhik@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Jul 2017 15:49:25 +0200
+Subject: [Buildroot] [git commit] support/scripts: check-host-rpath now
+	handles $ORIGIN as well
+Message-ID: <20170702134624.61797807BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=824f3d9bebee5008ed4f21ab9857778b7d200802
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jul 02, 2017 at 03:41:06PM +0200, Thomas Petazzoni wrote:
-> -define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
-> -	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(MUSL_ARCH).so.1
-> -endef
-> -endif
+"$ORIGIN/../../usr/lib" is also a valid RPATH for binaries in
+"$hostdir/usr/bin". After RPATH sanitation, all RPATH
+directories start with "$ORIGIN".
 
-You should also remove the reference to TOOLCHAIN_EXTERNAL_MUSL_LD_LINK below.
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/check-host-rpath | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index 6ce547c..020c123 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -58,7 +58,7 @@ check_elf_has_rpath() {
+         for dir in ${rpath//:/ }; do
+             # Remove duplicate and trailing '/' for proper match
+             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
+-            [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
++            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
+         done
+     done < <( readelf -d "${file}"                                              \
+               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
