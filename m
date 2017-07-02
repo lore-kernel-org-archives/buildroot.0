@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] jack2: don't download patch from Github
-Message-ID: <20170702220304.222ED81EDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lxc: don't download patch from Github
+Message-ID: <20170702220304.4F0E97FF0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8e0a2d4ae30e19b80d71777e2e844e966c337e6
+commit: https://git.buildroot.net/buildroot/commit/?id=8c7c81d1d747b934367df259fa20d9afbc42b6e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -17,114 +17,68 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-initialization-in-test-iodelay.patch  | 65 ++++++++++++++++++++++
- ...patch => 0002-Improve-check-for-ucontext.patch} |  0
- ...ce-support-depends-on-execinfo.h-existen.patch} |  0
- ...=> 0004-tests-define-__STDC_LIMIT_MACROS.patch} |  0
- package/jack2/jack2.hash                           |  1 -
- package/jack2/jack2.mk                             |  1 -
- 6 files changed, 65 insertions(+), 2 deletions(-)
+ .../lxc/0001-conf-fix-build-without-libcap.patch   | 31 ++++++++++++++++++++++
+ package/lxc/lxc.hash                               |  1 -
+ package/lxc/lxc.mk                                 |  4 ---
+ 3 files changed, 31 insertions(+), 5 deletions(-)
 
-diff --git a/package/jack2/0001-Fix-initialization-in-test-iodelay.patch b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
+diff --git a/package/lxc/0001-conf-fix-build-without-libcap.patch b/package/lxc/0001-conf-fix-build-without-libcap.patch
 new file mode 100644
-index 0000000..ee24938
+index 0000000..7e7c010
 --- /dev/null
-+++ b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
-@@ -0,0 +1,65 @@
-+From ff1ed2c4524095055140370c1008a2d9cccc5645 Mon Sep 17 00:00:00 2001
-+From: Adrian Knoth <adi@drcomp.erfurt.thur.de>
-+Date: Sat, 11 Jun 2016 05:35:07 +0200
-+Subject: [PATCH] Fix initialization in test/iodelay.cpp
++++ b/package/lxc/0001-conf-fix-build-without-libcap.patch
+@@ -0,0 +1,31 @@
++From bc5b27d6f6d166d2a6df47982cbe36041ce6b735 Mon Sep 17 00:00:00 2001
++From: Dima Krasner <dima@securingsam.com>
++Date: Sun, 14 May 2017 12:24:59 +0300
++Subject: [PATCH] conf: fix build without libcap
 +
-+jack_latency_range_t is
-+
-+struct _jack_latency_range {
-+    jack_nframes_t min;
-+    jack_nframes_t max;
-+};
-+
-+and jack_nframes_t is
-+
-+typedef uint32_t        jack_nframes_t;
-+
-+so it's unsigned. Initialising it with -1 is invalid (at least in C++14). We cannot use {0, 0}, because latency_cb has
-+
-+   jack_latency_range_t range;
-+   range.min = range.max = 0;
-+   if ((range.min != capture_latency.min) || (range.max !=
-+       capture_latency.max)) {
-+       capture_latency = range;
-+   }
-+
-+so we must not have {0, 0}, otherwise the condition would never be true.
-+
-+Using UINT32_MAX should be equivalent to the previous -1.
-+
-+[Upstream commit https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645]
++Signed-off-by: Dima Krasner <samdima@securingsam.com>
++[Upstream commit: https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ tests/iodelay.cpp | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
++ src/lxc/conf.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
 +
-+diff --git a/tests/iodelay.cpp b/tests/iodelay.cpp
-+index e1ba63fa..1ef470fd 100644
-+--- a/tests/iodelay.cpp
-++++ b/tests/iodelay.cpp
-+@@ -20,6 +20,7 @@
++diff --git a/src/lxc/conf.c b/src/lxc/conf.c
++index 35bdb249b..76a190120 100644
++--- a/src/lxc/conf.c
+++++ b/src/lxc/conf.c
++@@ -130,6 +130,14 @@ lxc_log_define(lxc_conf, lxc);
++ #define LO_FLAGS_AUTOCLEAR 4
++ #endif
 + 
-+ #include <stdlib.h>
-+ #include <stdio.h>
-++#include <stdint.h>
-+ #include <math.h>
-+ #include <unistd.h>
-+ #include <jack/jack.h>
-+@@ -167,8 +168,8 @@ static jack_client_t  *jack_handle;
-+ static jack_port_t    *jack_capt;
-+ static jack_port_t    *jack_play;
-+ 
-+-jack_latency_range_t   capture_latency = {-1, -1};
-+-jack_latency_range_t   playback_latency = {-1, -1};
-++jack_latency_range_t   capture_latency = {UINT32_MAX, UINT32_MAX};
-++jack_latency_range_t   playback_latency = {UINT32_MAX, UINT32_MAX};
-+ 
-+ void
-+ latency_cb (jack_latency_callback_mode_t mode, void *arg)
-+@@ -266,4 +267,4 @@ int main (int ac, char *av [])
-+     return 0;
-+ }
-+ 
-+-// --------------------------------------------------------------------------------
-+\ No newline at end of file
-++// --------------------------------------------------------------------------------
-diff --git a/package/jack2/0001-Improve-check-for-ucontext.patch b/package/jack2/0002-Improve-check-for-ucontext.patch
-similarity index 100%
-rename from package/jack2/0001-Improve-check-for-ucontext.patch
-rename to package/jack2/0002-Improve-check-for-ucontext.patch
-diff --git a/package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch b/package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-similarity index 100%
-rename from package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-rename to package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-diff --git a/package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch b/package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
-similarity index 100%
-rename from package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch
-rename to package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
-diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
-index 1b981a4..ab031b9 100644
---- a/package/jack2/jack2.hash
-+++ b/package/jack2/jack2.hash
+++#ifndef CAP_SETUID
+++#define CAP_SETUID 7
+++#endif
+++
+++#ifndef CAP_SETGID
+++#define CAP_SETGID 6
+++#endif
+++
++ /* needed for cgroup automount checks, regardless of whether we
++  * have included linux/capability.h or not */
++ #ifndef CAP_SYS_ADMIN
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 501f869..086b139 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
 @@ -1,3 +1,2 @@
  # Locally calculated
- sha256 88f1b6601b7c8950e6a2d5940b423a33ee628ae5583da40bdce3d9317d8c600d  jack2-v1.9.10.tar.gz
--sha256 f372c4300e3fb2c1ce053e47829df44f3f8b933feb820759392187723ae8e640  ff1ed2c4524095055140370c1008a2d9cccc5645.patch
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index c57ad0e..b61c5d7 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -9,7 +9,6 @@ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
- JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
- JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
- JACK2_INSTALL_STAGING = YES
--JACK2_PATCH = https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch
+ sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
+-sha256	16cf466db42a45bd579bdb66efbeb63764cd93d049f05a6d8a659846cab9b47f	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 8a200e7..03e9431 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -11,10 +11,6 @@ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
  
- JACK2_CONF_OPTS = --alsa
- 
+-# This patch fixes compilation without capabilities
+-LXC_PATCH = \
+-	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
+-
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
