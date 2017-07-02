@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:33 +0200
-Subject: [Buildroot] [PATCH 11/20] poco: don't download patch from Github
+Date: Sun,  2 Jul 2017 18:53:32 +0200
+Subject: [Buildroot] [PATCH 10/20] openzwave: don't download patch from
+	Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-12-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-11-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,82 +16,91 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...rsion-of-strerror_r-not-available-on-musl.patch | 33 ++++++++++++++++++++++
- ...poco-add-the-staging-path-to-search-path.patch} |  0
- ...atch => 0003-fix-m68k-double-conv-detect.patch} |  0
- package/poco/poco.hash                             |  1 -
- package/poco/poco.mk                               |  1 -
- 5 files changed, 33 insertions(+), 2 deletions(-)
- create mode 100644 package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch
- rename package/poco/{0001-poco-add-the-staging-path-to-search-path.patch => 0002-poco-add-the-staging-path-to-search-path.patch} (100%)
- rename package/poco/{0002-fix-m68k-double-conv-detect.patch => 0003-fix-m68k-double-conv-detect.patch} (100%)
+ .../openzwave/0001-Fix-compilation-of-MinOZW.patch | 37 ++++++++++++++++++++++
+ ...x-warning-on-wcsdup-implicit-declaration.patch} |  0
+ ... 0003-Ensure-correct-git-repository-path.patch} |  0
+ package/openzwave/openzwave.hash                   |  1 -
+ package/openzwave/openzwave.mk                     |  6 ----
+ 5 files changed, 37 insertions(+), 7 deletions(-)
+ create mode 100644 package/openzwave/0001-Fix-compilation-of-MinOZW.patch
+ rename package/openzwave/{0001-Fix-warning-on-wcsdup-implicit-declaration.patch => 0002-Fix-warning-on-wcsdup-implicit-declaration.patch} (100%)
+ rename package/openzwave/{0002-Ensure-correct-git-repository-path.patch => 0003-Ensure-correct-git-repository-path.patch} (100%)
 
-diff --git a/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch b/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch
+diff --git a/package/openzwave/0001-Fix-compilation-of-MinOZW.patch b/package/openzwave/0001-Fix-compilation-of-MinOZW.patch
 new file mode 100644
-index 0000000..c2f297f
+index 0000000..773672e
 --- /dev/null
-+++ b/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch
-@@ -0,0 +1,33 @@
-+From 30159aea4b3f6421da9d74a8bf22aad6d3bf26b4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Mon, 4 Apr 2016 20:48:43 +0200
-+Subject: [PATCH] GNU version of strerror_r not available on musl
++++ b/package/openzwave/0001-Fix-compilation-of-MinOZW.patch
+@@ -0,0 +1,37 @@
++From 599e2a11c6f48dde744012ec45686c08e15f3059 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fabrice.fontaine@orange.com>
++Date: Mon, 3 Oct 2016 10:35:52 +0200
++Subject: [PATCH] Fix compilation of MinOZW (#991)
 +
-+The GNU version of glibc' `strerror_r` is non-portable.
++LIBDIR was used in cpp/examples/MinOZW/Makefile to add dynamic
++libraries. However, as it was unset by default, the cross-compilation
++could fail if the host had a library such as libnss3.so in /.
++To fix this issue, this patch sets LIBDIR to top_buildir if it is unset
 +
-+When the POSIX and GNU API collides musl always provides the POSIX API. That
-+being the case for `strerror_r` musl does only support the POSIX version,
-+despite of `_GNU_SOURCE`.
++Fixes:
++  http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
 +
-+[Upstream commit: https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4]
++Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
++[Upstream commit: https://github.com/OpenZWave/open-zwave/commit/599e2a11c6f48dde744012ec45686c08e15f3059]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ Foundation/src/Error.cpp | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
++ cpp/examples/MinOZW/Makefile | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/Foundation/src/Error.cpp b/Foundation/src/Error.cpp
-+index 6a8afb705f..00991fc0be 100644
-+--- a/Foundation/src/Error.cpp
-++++ b/Foundation/src/Error.cpp
-+@@ -69,7 +69,10 @@ namespace Poco {
-+ 		   without -D_GNU_SOURCE is needed, otherwise the GNU version is
-+ 		   preferred.
-+ 		*/
-+-#if defined _GNU_SOURCE && !POCO_ANDROID
-++		/* The GNU version of strerror_r is non-portable and not
-++		   available on the musl C library.
-++		 */
-++#if (defined __GLIBC__ || defined __UCLIBC__) && defined _GNU_SOURCE && !POCO_ANDROID
-+ 		char errmsg[256] = "";
-+ 		return std::string(strerror_r(errorCode, errmsg, 256));
-+ #elif (_XOPEN_SOURCE >= 600) || POCO_ANDROID
-diff --git a/package/poco/0001-poco-add-the-staging-path-to-search-path.patch b/package/poco/0002-poco-add-the-staging-path-to-search-path.patch
++diff --git a/cpp/examples/MinOZW/Makefile b/cpp/examples/MinOZW/Makefile
++index e575632a3..95d684b77 100644
++--- a/cpp/examples/MinOZW/Makefile
+++++ b/cpp/examples/MinOZW/Makefile
++@@ -17,9 +17,11 @@ DEBUG_LDFLAGS	:= -g
++ 
++ top_srcdir := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../../../)
++ 
+++#where is put the temporary library
+++LIBDIR  	?= $(top_builddir)
++ 
++ INCLUDES	:= -I $(top_srcdir)/cpp/src -I $(top_srcdir)/cpp/tinyxml/ -I $(top_srcdir)/cpp/hidapi/hidapi/
++-LIBS =  $(wildcard $(LIBDIR)/*.so $(LIBDIR)/*.dylib $(top_builddir)/*.so $(top_builddir)/*.dylib $(top_builddir)/cpp/build/*.so $(top_builddir)/cpp/build/*.dylib )
+++LIBS =  $(wildcard $(LIBDIR)/*.so $(LIBDIR)/*.dylib $(top_builddir)/cpp/build/*.so $(top_builddir)/cpp/build/*.dylib )
++ LIBSDIR = $(abspath $(dir $(firstword $(LIBS))))
++ minozwsrc := $(notdir $(wildcard $(top_srcdir)/cpp/examples/MinOZW/*.cpp))
++ VPATH := $(top_srcdir)/cpp/examples/MinOZW
+diff --git a/package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch b/package/openzwave/0002-Fix-warning-on-wcsdup-implicit-declaration.patch
 similarity index 100%
-rename from package/poco/0001-poco-add-the-staging-path-to-search-path.patch
-rename to package/poco/0002-poco-add-the-staging-path-to-search-path.patch
-diff --git a/package/poco/0002-fix-m68k-double-conv-detect.patch b/package/poco/0003-fix-m68k-double-conv-detect.patch
+rename from package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch
+rename to package/openzwave/0002-Fix-warning-on-wcsdup-implicit-declaration.patch
+diff --git a/package/openzwave/0002-Ensure-correct-git-repository-path.patch b/package/openzwave/0003-Ensure-correct-git-repository-path.patch
 similarity index 100%
-rename from package/poco/0002-fix-m68k-double-conv-detect.patch
-rename to package/poco/0003-fix-m68k-double-conv-detect.patch
-diff --git a/package/poco/poco.hash b/package/poco/poco.hash
-index 1730f1c..c3b490e 100644
---- a/package/poco/poco.hash
-+++ b/package/poco/poco.hash
+rename from package/openzwave/0002-Ensure-correct-git-repository-path.patch
+rename to package/openzwave/0003-Ensure-correct-git-repository-path.patch
+diff --git a/package/openzwave/openzwave.hash b/package/openzwave/openzwave.hash
+index d07961e..cd1231f 100644
+--- a/package/openzwave/openzwave.hash
++++ b/package/openzwave/openzwave.hash
 @@ -1,3 +1,2 @@
- # Locally computed
- sha256  cfd311ecbc9e58accf1c4ea70170af88f92f88e73dd14944e528e7f6229e6cab  poco-poco-1.7.2-release.tar.gz
--sha256  32182791e7eac00ba367d2f22dd1dd5bfce0b6d6f76fd52f853364f98402dda3  30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 3b27ddb..c9ddeae 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -9,7 +9,6 @@ POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION))
- POCO_LICENSE = BSL-1.0
- POCO_LICENSE_FILES = LICENSE
- POCO_INSTALL_STAGING = YES
--POCO_PATCH = https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
+ # Locally computed:
+ sha256	abfb4c7e7728e86ba374c2e0ef7de912594eb24a8c44935457352df844530238	openzwave-V1.5.tar.gz
+-sha256	98851964fd8de3dd40f00d0032b47c61c17a4cf789ad5792e14149da5ab8755e	599e2a11c6f48dde744012ec45686c08e15f3059.patch
+diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
+index a632468..38515e3 100644
+--- a/package/openzwave/openzwave.mk
++++ b/package/openzwave/openzwave.mk
+@@ -13,12 +13,6 @@ OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
+ OPENZWAVE_DEPENDENCIES = host-pkgconf udev
+ OPENZWAVE_INSTALL_STAGING = YES
  
- POCO_DEPENDENCIES = zlib pcre \
- 	$(if $(BR2_PACKAGE_POCO_XML),expat) \
+-# This patch fixes incorrect default value of LIBDIR:
+-# http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
+-# This patch is currently in dev branch and will be a part of v1.6
+-OPENZWAVE_PATCH = \
+-	https://github.com/OpenZWave/open-zwave/commit/599e2a11c6f48dde744012ec45686c08e15f3059.patch
+-
+ # Set instlibdir to install libopenzwave.so* in the correct directory
+ # otherwise openzwave will check that /lib64 exists (on the host) to
+ # know if the library should be installed in $(PREFIX)/lib or $(PREFIX)/lib64.
 -- 
 2.9.4
