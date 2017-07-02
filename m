@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] lxc: don't download patch from Github
-Message-ID: <20170702220304.4F0E97FF0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] numactl: don't download patches from Github
+Message-ID: <20170702220304.6F6327FF0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c7c81d1d747b934367df259fa20d9afbc42b6e1
+commit: https://git.buildroot.net/buildroot/commit/?id=9ef0e9afbabc78adb7f6df282ea4b0e31d7fb504
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -17,68 +17,118 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../lxc/0001-conf-fix-build-without-libcap.patch   | 31 ++++++++++++++++++++++
- package/lxc/lxc.hash                               |  1 -
- package/lxc/lxc.mk                                 |  4 ---
- 3 files changed, 31 insertions(+), 5 deletions(-)
+ ...-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch | 35 +++++++++++++++++++
+ ...-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch | 39 ++++++++++++++++++++++
+ package/numactl/numactl.hash                       |  2 --
+ package/numactl/numactl.mk                         |  3 --
+ 4 files changed, 74 insertions(+), 5 deletions(-)
 
-diff --git a/package/lxc/0001-conf-fix-build-without-libcap.patch b/package/lxc/0001-conf-fix-build-without-libcap.patch
+diff --git a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
 new file mode 100644
-index 0000000..7e7c010
+index 0000000..ebb934f
 --- /dev/null
-+++ b/package/lxc/0001-conf-fix-build-without-libcap.patch
-@@ -0,0 +1,31 @@
-+From bc5b27d6f6d166d2a6df47982cbe36041ce6b735 Mon Sep 17 00:00:00 2001
-+From: Dima Krasner <dima@securingsam.com>
-+Date: Sun, 14 May 2017 12:24:59 +0300
-+Subject: [PATCH] conf: fix build without libcap
++++ b/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
+@@ -0,0 +1,35 @@
++From 3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 12 Feb 2016 19:25:02 +0100
++Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
 +
-+Signed-off-by: Dima Krasner <samdima@securingsam.com>
-+[Upstream commit: https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735]
++The way __GLIBC_PREREQ() is currently used means that it's evaluated
++even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
++not exist if __GLIBC__ is not defined, causing build failures on C
++libraries not defining __GLIBC__ such as the musl C library.
++
++Patch originally taken from:
++https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: Reworked to fix uClibc]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Thomas: improve patch description.]
++[Upstream commit: https://github.com/numactl/numactl/commit/3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456.]
 +---
-+ src/lxc/conf.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
++ syscall.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/lxc/conf.c b/src/lxc/conf.c
-+index 35bdb249b..76a190120 100644
-+--- a/src/lxc/conf.c
-++++ b/src/lxc/conf.c
-+@@ -130,6 +130,14 @@ lxc_log_define(lxc_conf, lxc);
-+ #define LO_FLAGS_AUTOCLEAR 4
++diff --git a/syscall.c b/syscall.c
++index 4589b85..37782d9 100644
++--- a/syscall.c
+++++ b/syscall.c
++@@ -115,7 +115,7 @@
++ 
 + #endif
 + 
-++#ifndef CAP_SETUID
-++#define CAP_SETUID 7
++-#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
+++#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
++ 
++ /* glibc 2.11 seems to have working 6 argument sycall. Use the
++    glibc supplied syscall in this case.
+diff --git a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
+new file mode 100644
+index 0000000..a98fd72
+--- /dev/null
++++ b/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
+@@ -0,0 +1,39 @@
++From 31dc2951c758698bff060aeae8ffd8854616183b Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 12 Feb 2016 19:25:02 +0100
++Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
++
++The way __GLIBC_PREREQ() is currently used means that it's evaluated
++even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
++not exist if __GLIBC__ is not defined, causing build failures on C
++libraries not defining __GLIBC__ such as the musl C library.
++
++Patch originally taken from:
++https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: Reworked to fix uClibc]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Thomas: improve patch description.]
++[Upstream commit: https://github.com/numactl/numactl/commit/31dc2951c758698bff060aeae8ffd8854616183b]
++---
++ syscall.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/syscall.c b/syscall.c
++index 37782d9..255853d 100644
++--- a/syscall.c
+++++ b/syscall.c
++@@ -115,7 +115,11 @@
++ 
++ #endif
++ 
++-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
+++#ifndef __GLIBC_PREREQ
+++# define __GLIBC_PREREQ(x,y) 0
 ++#endif
 ++
-++#ifndef CAP_SETGID
-++#define CAP_SETGID 6
-++#endif
-++
-+ /* needed for cgroup automount checks, regardless of whether we
-+  * have included linux/capability.h or not */
-+ #ifndef CAP_SYS_ADMIN
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 501f869..086b139 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,3 +1,2 @@
+++#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
++ 
++ /* glibc 2.11 seems to have working 6 argument sycall. Use the
++    glibc supplied syscall in this case.
+diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
+index 77ccfae..c36e24d 100644
+--- a/package/numactl/numactl.hash
++++ b/package/numactl/numactl.hash
+@@ -1,4 +1,2 @@
  # Locally calculated
- sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
--sha256	16cf466db42a45bd579bdb66efbeb63764cd93d049f05a6d8a659846cab9b47f	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 8a200e7..03e9431 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -11,10 +11,6 @@ LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
+ sha256	450c091235f891ee874a8651b179c30f57a1391ca5c4673354740ba65e527861	numactl-2.0.11.tar.gz
+-sha256	1f4c813cc8c81fa4dfd0be959457a5c3de8fc3316bbc80de3aa1d9ef9992b2b6	3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456.patch
+-sha256	0c4cb6550b46976f2a21087490420b218e62ead7d9b178120ad782d53a7ad3a6	31dc2951c758698bff060aeae8ffd8854616183b.patch
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index b43bc89..d37ee9e 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -6,9 +6,6 @@
  
--# This patch fixes compilation without capabilities
--LXC_PATCH = \
--	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
--
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-python --disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ NUMACTL_VERSION = 2.0.11
+ NUMACTL_SITE = ftp://oss.sgi.com/www/projects/libnuma/download
+-NUMACTL_PATCH = \
+-	https://github.com/numactl/numactl/commit/3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456.patch \
+-	https://github.com/numactl/numactl/commit/31dc2951c758698bff060aeae8ffd8854616183b.patch
+ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
+ NUMACTL_LICENSE_FILES = README
+ NUMACTL_INSTALL_STAGING = YES
