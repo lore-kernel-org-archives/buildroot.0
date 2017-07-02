@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 23:38:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-07-01
-In-Reply-To: <CAAkeqgV9VY0CEZAxPuQJ_vSBFudcWWwRHzra62tn=98B8HhMhA@mail.gmail.com>
-References: <20170702063107.D1E2621E01@mail.free-electrons.com>
- <CAAkeqgV9VY0CEZAxPuQJ_vSBFudcWWwRHzra62tn=98B8HhMhA@mail.gmail.com>
-Message-ID: <20170702233811.226f8789@windsurf>
+Date: Sun, 2 Jul 2017 23:40:31 +0200
+Subject: [Buildroot] [Patch v6 1/7] pkg-virtual: fix host dependencies
+ handling
+In-Reply-To: <20170625205614.6723-2-eric.le.bihan.dev@free.fr>
+References: <20170625205614.6723-1-eric.le.bihan.dev@free.fr>
+ <20170625205614.6723-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20170702234031.09d58336@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +14,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 2 Jul 2017 12:57:14 -0700, Andrey Yurovsky wrote:
-> On Sat, Jul 1, 2017 at 11:31 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Hello,
-> >
-> > This is the list of Buildroot build failures that occured on
-> > 2017-07-01, and for which you are a registered architecture developer
-> > or package developer. Please help us improving the quality of
-> > Buildroot by investigating those build failures and sending patches to
-> > fix them. Thanks!
-> >
-> > Build failures related to your packages:
-> >
-> >          sh4 |                host-rauc-0.1.1 | http://autobuild.buildroot.net/results/2695202ee3b0734430abc2db03828a45cd5e5ef5
-> >         m68k |                host-rauc-0.1.1 | http://autobuild.buildroot.net/results/77a5db1120bf90ccaac00cfc0a8db358cacd894c  
+On Sun, 25 Jun 2017 22:56:08 +0200, Eric Le Bihan wrote:
+> If $(BR2_PACKAGE_HAS_HOST_FOO) is defined, then the pkg-virtual
+> infrastructure will check if $(BR2_PACKAGE_PROVIDES_HOST_FOO) is not
+> empty.
 > 
-> These are failing because openssl and libglib2 aren't available (for
-> the host). I'm not sure why the others didn't fail, perhaps the
-> environment for them does provide these. We don't have host recipes
-> for either one so perhaps buildroot shouldn't provide host-rauc after
-> all? Or is there a way to indicate that these are external
-> dependencies for this host tool? Or otherwise should buildroot try to
-> provide host builds of openssl and glib2?
+> But later, $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES) will be set from
+> $(BR2_PACKAGE_PROVIDES_FOO), ignoring $(BR2_PACKAGE_PROVIDES_HOST_FOO).
+> 
+> So fix this discrepancy by setting $(BR2_PACKAGE_HOST_FOO_DEPENDENCIES)
+> from $(BR2_PACKAGE_PROVIDES_FOO) only if $(BR2_PACKAGE_PROVIDES_HOST_FOO)
+> is empty.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/pkg-virtual.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-In such cases, we obviously add dependencies on host-openssl and
-host-libglib2, both of which already exist. I've therefore pushed a
-commit that fixes those build issues:
-
-  https://github.com/buildroot/buildroot/commit/8c7966d22e53ac83f2d8fe41b1a04c3f598502f4
-  (our gitweb is down, so pointing to our github.com repo)
-
-Thanks for investigating this issue in the first place!
+Applied to master, after adding the comments suggested by Arnout.
 
 Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
