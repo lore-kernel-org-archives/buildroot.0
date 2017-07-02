@@ -1,132 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jul 2017 23:14:29 +0200
-Subject: [Buildroot] [git commit] azure-iot-sdk-c: New package
-Message-ID: <20170702211220.8B90181D8D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Jul 2017 23:16:42 +0200
+Subject: [Buildroot] [git commit] rauc: add missing dependencies for host
+	variant
+Message-ID: <20170702212420.2AF4A81D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d837933e55216dc31a2206b063689cfd04a4c01
+commit: https://git.buildroot.net/buildroot/commit/?id=8c7966d22e53ac83f2d8fe41b1a04c3f598502f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Despite newer versions being available, this patch creates a package
-for version 2017-05-05, because newer version have issues that need to
-be addressed.
+rauc unconditionally needs OpenSSL and libglib2. Those dependencies
+were properly accounted for the target variant, but not the host
+variant, causing build failures. This commit adds the missing
+dependencies.
 
-Still, the projects install target installs the wrong files, so custom
-commands are needed for staging_install and target_install.
+Fixes:
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  http://autobuild.buildroot.net/results/2695202ee3b0734430abc2db03828a45cd5e5ef5
+  (host-openssl missing)
+
+  http://autobuild.buildroot.net/results/77a5db1120bf90ccaac00cfc0a8db358cacd894c
+  (host-libglib2 missing)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/azure-iot-sdk-c/Config.in          | 16 ++++++++++
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 51 ++++++++++++++++++++++++++++++
- 4 files changed, 69 insertions(+)
+ package/rauc/rauc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c0e0d40..9539d3e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -81,6 +81,7 @@ N:	Anders Darander <anders@chargestorm.se>
- F:	package/ktap/
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 12819d9..479a583 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -29,7 +29,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ RAUC_DEPENDENCIES += systemd
+ endif
  
- N:	Andr?? Hentschel <nerv@dawncrow.de>
-+F:	package/azure-iot-sdk-c/
- F:	package/openal/
- F:	package/p7zip/
- F:	package/wine/
-diff --git a/package/Config.in b/package/Config.in
-index fdfcd02..355aa52 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1264,6 +1264,7 @@ menu "Networking"
- 	source "package/alljoyn-base/Config.in"
- 	source "package/alljoyn-tcl/Config.in"
- 	source "package/alljoyn-tcl-base/Config.in"
-+	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
-diff --git a/package/azure-iot-sdk-c/Config.in b/package/azure-iot-sdk-c/Config.in
-new file mode 100644
-index 0000000..9fb956a
---- /dev/null
-+++ b/package/azure-iot-sdk-c/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_AZURE_IOT_SDK_C
-+	bool "azure-iot-sdk-c"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Microsoft Azure IoT Hub device SDK for C is used
-+	  to connect devices running C code to Azure IoT Hub.
-+
-+	  https://docs.microsoft.com/nl-nl/azure/iot-hub/iot-hub-device-sdk-c-intro
-+
-+comment "azure-iot-sdk-c needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-new file mode 100644
-index 0000000..dbdef3e
---- /dev/null
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# azure-iot-sdk-c
-+#
-+################################################################################
-+
-+AZURE_IOT_SDK_C_VERSION = 2017-05-05
-+AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
-+AZURE_IOT_SDK_C_SITE_METHOD = git
-+AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
-+AZURE_IOT_SDK_C_LICENSE = MIT
-+AZURE_IOT_SDK_C_LICENSE_FILES = LICENSE
-+AZURE_IOT_SDK_C_INSTALL_STAGING = YES
-+AZURE_IOT_SDK_C_DEPENDENCIES = libxml2 openssl libcurl util-linux
-+AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
-+
-+# The project only supports building one kind of library.
-+# Further the install target installs the wrong files, so we do it here:
-+ifeq ($(BR2_STATIC_LIBS),y)
-+AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
-+	iothub_client/libiothub_client.a iothub_client/libiothub_client_mqtt_ws_transport.a \
-+	iothub_client/libiothub_client_amqp_ws_transport.a \
-+	iothub_client/libiothub_client_http_transport.a \
-+	iothub_client/libiothub_client_amqp_transport.a \
-+	iothub_client/libiothub_client_mqtt_transport.a \
-+	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
-+else
-+AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
-+	iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
-+	iothub_client/libiothub_client_amqp_ws_transport.so \
-+	iothub_client/libiothub_client_http_transport.so \
-+	iothub_client/libiothub_client_amqp_transport.so \
-+	iothub_client/libiothub_client_mqtt_transport.so \
-+	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
-+endif
-+
-+define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
-+	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
-+		$(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/
-+	)
-+	cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
-+	cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
-+endef
-+
-+define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
-+	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
-+		$(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/
-+	)
-+endef
-+
-+$(eval $(cmake-package))
+-HOST_RAUC_DEPENDENCIES = host-pkgconf
++HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2
+ HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
+ 
+ $(eval $(autotools-package))
