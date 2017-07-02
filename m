@@ -1,94 +1,377 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Jul 2017 12:30:30 +0200
-Subject: [Buildroot] [PATCH] core: postpone evaluation on decompressor
-	dependencies
-Message-ID: <20170702103030.2210-1-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 2 Jul 2017 12:32:35 +0200
+Subject: [Buildroot] [PATCH v2 1/2] llvm: new package
+In-Reply-To: <20170619190315.14288-1-aperez@igalia.com>
+References: <20170616204143.29198-2-aperez@igalia.com>
+ <20170619190315.14288-1-aperez@igalia.com>
+Message-ID: <581020e4-fd06-b17d-5d15-889ea0715cd4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we build any extractor dependency as soone as the host
-utility is missing, even when such utility is not needed.
+Hi Adrian,
 
-That is expecially the case for host-lzip, which is lacking except in
-the most recent distributions, and thus is always built, which is a bit
-of a shame since only very few packages need it.
+Le 19/06/2017 ? 21:03, Adrian Perez de Castro a ?crit :
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+> ---
+> Changes v1 -> v2:
+>     - Added missing Signed-off-by in patch.
+>     - Renamed BR2_PACKAGE_HOST_LLVM_ARCH_SUPPORT to BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+>       and made its dependencies more readable.
+>     - Fixed indentation of help texts in Config.in.
+>     - Changed comment in Config.in to use the standard Buildroot wording.
+>     - Handle converting Buildroot's target architecture to LLVM's in
+>       Config.in instead of in llvm.mk.
+>     - Change LLVM_LICENSE to use the SPDX license string.
+>     - Use hooks in llvm.mk instead of appending commands to LLVM_*_CMDS.
+>     - Fixed all the code style issues pointed out by
+>       support/scripts/check-package.
+> ---
+>  package/Config.in                                  |   1 +
+>  ...-Clean-up-exported-values-update-for-shar.patch |  58 +++++++++++
+>  package/llvm/Config.in                             |  54 ++++++++++
+>  package/llvm/llvm.hash                             |   2 +
+>  package/llvm/llvm.mk                               | 116 +++++++++++++++++++++
+>  5 files changed, 231 insertions(+)
+>  create mode 100644 package/llvm/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch
+>  create mode 100644 package/llvm/Config.in
+>  create mode 100644 package/llvm/llvm.hash
+>  create mode 100644 package/llvm/llvm.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index aeb7430c89..f8a9dcc307 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -146,6 +146,7 @@ menu "Development tools"
+>  	source "package/jo/Config.in"
+>  	source "package/jq/Config.in"
+>  	source "package/libtool/Config.in"
+> +	source "package/llvm/Config.in"
+>  	source "package/make/Config.in"
+>  	source "package/patch/Config.in"
+>  	source "package/pkgconf/Config.in"
+> diff --git a/package/llvm/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch b/package/llvm/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch
+> new file mode 100644
+> index 0000000000..a687e60af7
+> --- /dev/null
+> +++ b/package/llvm/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch
 
-To fix that, we change the host dependecies check to set a variable
-named after the extension they support, to the name of the host package
-that provides the necessary decompressor, if not installed on the host.
+The patch should be named
+0001-llvm-config-Clean-up-exported-values-update-for-shar.patch
 
-Then, we introduce a new variable, UNCOMP_TOOLS_DEPENDENCIES, to which
-packages, when they are enabled, append their decompressors dependencies,
-which they get from the variable set above, to form the list of host
-packages that provides a decompressor.
+> @@ -0,0 +1,58 @@
+> +From 628b899be14a6bab4b32dbd53aabd447dcc16cb7 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
+> +Date: Sat, 20 Aug 2016 23:47:41 +0200
+> +Subject: [PATCH] llvm-config: Clean up exported values, update for shared
+> + linking
+> +
+> +Gentoo-specific fixup for llvm-config, including:
+> +- wiping build-specific CFLAGS, CXXFLAGS,
+> +- making --src-root return invalid path (/dev/null).
+> +
+> +Thanks to Steven Newbury for the initial patch.
+> +
+> +Bug: https://bugs.gentoo.org/565358
+> +Bug: https://bugs.gentoo.org/501684
+> +
+> +Fetch from: https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/llvm/files/9999/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch
+> +
+> +Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> +
+> +diff --git a/tools/llvm-config/CMakeLists.txt b/tools/llvm-config/CMakeLists.txt
+> +index 744fa4e44d1..593788aaef3 100644
+> +--- a/tools/llvm-config/CMakeLists.txt
+> ++++ b/tools/llvm-config/CMakeLists.txt
+> +@@ -32,8 +32,12 @@ get_property(COMPILE_FLAGS TARGET llvm-config PROPERTY COMPILE_FLAGS)
+> + set(LLVM_SRC_ROOT ${LLVM_MAIN_SRC_DIR})
+> + set(LLVM_OBJ_ROOT ${LLVM_BINARY_DIR})
+> + set(LLVM_CPPFLAGS "${CMAKE_CPP_FLAGS} ${CMAKE_CPP_FLAGS_${uppercase_CMAKE_BUILD_TYPE}} ${LLVM_DEFINITIONS}")
 
-Finally, we add this list of host packages as a (Makefile) dependency
-of our 'dependencies' rule, but very late in the Makefile, after all
-packages (even from a br2-external tree) have been parsed.
+> +-set(LLVM_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_${uppercase_CMAKE_BUILD_TYPE}} ${LLVM_DEFINITIONS}")
+> +-set(LLVM_CXXFLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}} ${COMPILE_FLAGS} ${LLVM_DEFINITIONS}")
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile                                 | 4 ++++
- package/pkg-generic.mk                   | 1 +
- support/dependencies/check-host-lzip.mk  | 2 +-
- support/dependencies/check-host-xzcat.mk | 3 ++-
- 4 files changed, 8 insertions(+), 2 deletions(-)
+> ++# Just use CMAKE_CPP_FLAGS for CFLAGS and CXXFLAGS, otherwise compiler
+> ++# specific flags will be set when we don't know what compiler will be used
+> ++# with external project utilising llvm-config.  C++ Standard is required.
+> ++# TODO: figure out if we can remove -std=c++11 and move it to revdeps.
 
-diff --git a/Makefile b/Makefile
-index 811158295a..6894696ef1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -511,6 +511,10 @@ include $(BR2_EXTERNAL_FILE)
- # Nothing to include if no BR2_EXTERNAL tree in use
- include $(BR2_EXTERNAL_MKS)
- 
-+# Apply final core dependencies on uncompressor tools.
-+# This must be done after we have parsed all the packages.
-+dependencies: $(UNCOMP_TOOLS_DEPENDENCIES)
-+
- # Now we are sure we have all the packages scanned and defined. We now
- # check for each package in the list of enabled packages, that all its
- # dependencies are indeed enabled.
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f474704980..5745a9cfcf 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -942,6 +942,7 @@ DL_TOOLS_DEPENDENCIES += cvs
- endif # SITE_METHOD
- 
- DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
-+UNCOMP_TOOLS_DEPENDENCIES += $$(UNCOMP_TOOL_DEPENDENCY$$(suffix $$($(2)_SOURCE)))
- 
- # Ensure all virtual targets are PHONY. Listed alphabetically.
- .PHONY:	$(1) \
-diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
-index 6acfdc6dfa..fc0ec07cec 100644
---- a/support/dependencies/check-host-lzip.mk
-+++ b/support/dependencies/check-host-lzip.mk
-@@ -1,5 +1,5 @@
- ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
--DEPENDENCIES_HOST_PREREQ += host-lzip
-+UNCOMP_TOOL_DEPENDENCY.lz = host-lzip
- EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
- LZCAT = $(HOST_DIR)/usr/bin/lzip -d -c
- endif
-diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
-index c6d9eebe4d..544d2c7aa5 100644
---- a/support/dependencies/check-host-xzcat.mk
-+++ b/support/dependencies/check-host-xzcat.mk
-@@ -2,7 +2,8 @@
- # If it is not present, build our own host-xzcat
- 
- ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
--DEPENDENCIES_HOST_PREREQ += host-xz
-+UNCOMP_TOOL_DEPENDENCY.xz = host-xz
-+UNCOMP_TOOL_DEPENDENCY.lzma = host-xz
- EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
- XZCAT = $(HOST_DIR)/usr/bin/xzcat
- endif
--- 
-2.11.0
+> ++set(LLVM_CFLAGS "${CMAKE_CPP_FLAGS} ${CMAKE_C_FLAGS_${uppercase_CMAKE_BUILD_TYPE}} ${LLVM_DEFINITIONS}")
+> ++set(LLVM_CXXFLAGS "${CMAKE_CPP_FLAGS} -std=c++11 ${CMAKE_CXX_FLAGS_${uppercase_CMAKE_BUILD_TYPE}} ${LLVM_DEFINITIONS}")
+
+The Gentoo bug is quite old now (2015) can you check if this part is still needed ?
+
+With llvm-config build without this patch, -std=c++1y is present in cxxflags.
+
+./test/llvm/host/usr/bin/llvm-config --cxxflags
+-I/home/naourr/buildroot-test/test/llvm/host/usr/include -O2
+-I/home/naourr/buildroot-test/test/llvm/host/usr/include -fPIC
+-fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings
+-Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-long-long
+-Wno-maybe-uninitialized -Wdelete-non-virtual-dtor -Wno-comment
+-Werror=date-time -std=c++1y -ffunction-sections -fdata-sections -O2 -DNDEBUG
+-fno-exceptions -fno-rtti -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS
+-D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
+
+> + set(LLVM_BUILD_SYSTEM cmake)
+> + set(LLVM_HAS_RTTI ${LLVM_CONFIG_HAS_RTTI})
+> + set(LLVM_DYLIB_VERSION "${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}${LLVM_VERSION_SUFFIX}")
+> +diff --git a/tools/llvm-config/llvm-config.cpp b/tools/llvm-config/llvm-config.cpp
+> +index d780094861c..c61c72ff48c 100644
+> +--- a/tools/llvm-config/llvm-config.cpp
+> ++++ b/tools/llvm-config/llvm-config.cpp
+> +@@ -549,7 +550,11 @@ int main(int argc, char **argv) {
+> +       } else if (Arg == "--obj-root") {
+> +         OS << ActivePrefix << '\n';
+> +       } else if (Arg == "--src-root") {
+> +-        OS << LLVM_SRC_ROOT << '\n';
+> ++        if (IsInDevelopmentTree) {
+> ++          OS << LLVM_SRC_ROOT << '\n';
+> ++        } else {
+> ++          OS << "/dev/null\n";
+> ++        }
+
+Indeed:
+./test/llvm/host/usr/bin/llvm-config --src-root
+/home/naourr/buildroot-test/test/llvm/build/host-llvm-4.0.1
+
+Do you know which package using llvm use --src-root option ?
+
+> +       } else if (Arg == "--ignore-libllvm") {
+> +         LinkDyLib = false;
+> +         LinkMode = BuiltSharedLibs ? LinkModeShared : LinkModeAuto;
+> +-- 
+> +2.11.0
+> +
+> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+> new file mode 100644
+> index 0000000000..f6145fd7f6
+> --- /dev/null
+> +++ b/package/llvm/Config.in
+> @@ -0,0 +1,54 @@
+> +config BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_arm || BR2_armeb
+> +	default y if BR2_aarch64
+> +	default y if BR2_i386 || BR2_x86_64
+> +	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+> +	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+> +	default y if BR2_sparc
+> +
+> +config BR2_PACKAGE_LLVM_TARGET_ARCH
+> +	string
+> +	default "ARM" if BR2_arm || BR2_armeb
+> +	default "AArch64" if BR2_aarch64
+> +	default "X86" if BR2_i386 || BR2_x86_64
+> +	default "Mips" if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+> +	default "PowerPC" if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+> +	default "Sparc" if BR2_sparc
+> +
+> +config BR2_PACKAGE_LLVM
+> +	bool "llvm"
+
+llvm needs at least gcc 4.8:
+http://releases.llvm.org/4.0.1/docs/ReleaseNotes.html
+
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_BUILDROOT_WCHAR
+> +	select BR2_PACKAGE_LIBXML2
+
+I don't see why libxml2 is selected here. llvm doesn't check for this library.
+
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  The LLVM Project is a collection of modular and reusable
+> +	  compiler and toolchain technologies.
+> +
+> +	  http://llvm.org
+> +
+> +comment "llvm needs a toolchain w/ C++, wchar"
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +
+> +if BR2_PACKAGE_LLVM
+> +
+> +config BR2_PACKAGE_LLVM_ENABLE_FFI
+> +	bool "Support libffi"
+> +	select BR2_PACKAGE_LIBFFI
+> +	help
+> +	  Use libffi in the LLVM Interpreter in order to enable calling
+> +	  external functions.
+> +
+> +config BR2_PACKAGE_LLVM_ENABLE_RTTI
+> +	bool "C++: Support RTTI"
+> +	help
+> +	  Enable support for C++ Run-Time Type Information (RTTI)
+> +
+> +config BR2_PACKAGE_LLVM_ENABLE_EH
+> +	bool "C++: Support exception handling"
+> +	help
+> +	  Enable support for C++ exception handling (try/catch)
+> +
+> +endif
+> diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+> new file mode 100644
+> index 0000000000..b11cd14bf4
+> --- /dev/null
+> +++ b/package/llvm/llvm.hash
+> @@ -0,0 +1,2 @@
+> +# Computed locally after checking the GPG signature:
+> +sha256 8d10511df96e73b8ff9e7abbfb4d4d432edbdbe965f1f4f07afaf370b8a533be  llvm-4.0.0.src.tar.xz
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> new file mode 100644
+> index 0000000000..9d10f3a5c6
+> --- /dev/null
+> +++ b/package/llvm/llvm.mk
+> @@ -0,0 +1,116 @@
+> +################################################################################
+> +#
+> +# llvm
+> +#
+> +################################################################################
+> +
+> +LLVM_VERSION = 4.0.0
+> +LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+> +LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+> +LLVM_LICENSE = NCSA
+> +LLVM_LICENSE_FILES = LICENSE.TXT
+> +LLVM_INSTALL_STAGING = YES
+> +LLVM_DEPENDENCIES = libxml2 zlib host-python
+> +
+> +LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+> +
+> +# List of build options at:
+> +#    http://llvm.org/docs/CMake.html
+> +#
+> +LLVM_CONF_OPTS = \
+> +	-DLLVM_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
+> +	-DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME) \
+> +	-DLLVM_TARGETS_TO_BUILD=$(LLVM_TARGET_ARCH) \
+
+I believe we should take into account other target like AMDGPU.
+I've tested mesa3d with llvm shaders enabled for an HD6310 graphic card on a
+x86_64 target.
+
+> +	-DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH) \
+> +	-DLLVM_OPTIMIZED_TABLEGEN=YES \
+> +	-DLLVM_ENABLE_ZLIB=YES \
+> +	-DLLVM_INCLUDE_TOOLS=YES \
+> +	-DLLVM_INCLUDE_UTILS=NO \
+> +	-DLLVM_INCLUDE_EXAMPLES=NO \
+> +	-DLLVM_INCLUDE_TESTS=NO \
+> +	-DLLVM_BUILD_TESTS=NO \
+> +	-DLLVM_BUILD_RUNTIME=NO \
+> +	-DLLVM_ENABLE_PROJECTS=''
+> +
+> +# The Go bindings have no CMake rules at the moment, but better remove the
+> +# check preventively. Building the Go and OCaml bindings is yet unsupported.
+> +#
+> +LLVM_CONF_OPTS += \
+> +	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
+> +	-DOCAMLFIND=OCAMLFIND-NOTFOUND
+> +
+> +# Building per-component shared libraries is NOT recommended by upstream.
+> +# The all-in-one libLLVM-<version>.so is enabled with a different setting.
+
+Indeed, there is a NOTE about this in docs/CMake.rst.
+
+  .. note:: BUILD_SHARED_LIBS is only recommended for use by LLVM developers.
+            If you want to build LLVM as a shared library, you should use the
+            ``LLVM_BUILD_LLVM_DYLIB`` option.
+
+> +LLVM_CONF_OPTS += \
+> +	-DBUILD_SHARED_LIBS=NO \
+> +	-DLLVM_BUILD_LLVM_DYLIB=$(if $(BR2_STATIC_LIBS),NO,YES)
+
+I'm not sure we really want to support llvm for static build only.
+
+> +
+> +ifeq ($(BR2_PACKAGE_LLVM_ENABLE_FFI),y)
+> +LLVM_DEPENDENCIES += libffi
+> +LLVM_CONF_OPTS += -DLLVM_ENABLE_FFI=YES
+> +else
+> +LLVM_CONF_OPTS += -DLLVM_ENABLE_FFI=NO
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLVM_ENABLE_RTTI),y)
+> +LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=YES
+> +else
+> +LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=NO
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LLVM_ENABLE_EH),y)
+> +LLVM_CONF_OPTS += -DLLVM_ENABLE_EH=YES
+> +else
+> +LLVM_CONF_OPTS += -DLLVM_ENABLE_EH=NO
+> +endif
+> +
+> +# LLVM expects to always be built in a separate directory.
+> +LLVM_SUPPORTS_IN_SOURCE_BUILD = NO
+> +
+> +# XXX: LLVM does include some support for building native tools. This is used
+> +#      to build e.g. llvm-config, and a host-native llvm-tblgen if needed.
+> +#      Unfortunately, Buildroot is overzealous about passing the parameters
+> +#      needed for cross-building, and the CMake configuration for the native
+> +#      tools ends up using the cross-toolchain. Once "cmake-package" has
+> +#      defined LLVM_*_CMDS, this adds:
+> +#
+> +#        - A call to CMake which resets CMAKE_{C,CXX,ASM}_COMPILER with the
+> +#          paths to the host-native ones. Note that using the *_NOCCACHE
+> +#          variables is needed, otherwise CMake will choke.
+> +#
+> +#        - The file "BuildVariables.inc" is copied over from the cross-build
+> +#          directory to the native one. This way a new "llvm-config" which
+> +#          can run on the build host returns information about the target
+> +#          build which gets installed in the sysroot. This is done as an
+> +#          appended build command. Note that Make has to be re-invoked to
+> +#          rebuild after copying the file over.
+> +#
+> +#        - Last but not least, "llvm-config" is copied into the sysroot with
+> +#          the target triple prefix, because packages using sane build systems
+> +#          will first try that.
+> +#
+> +
+> +define LLVM_CONFIGURE_NATIVE_TOOLS_CMDS
+> +	cd $(LLVM_BUILDDIR)/NATIVE && \
+> +	PATH=$(BR_PATH) $(LLVM_CONF_ENV) $(BR2_CMAKE) $(LLVM_SRCDIR) \
+> +		-DCMAKE_C_COMPILER='$(HOSTCC_NOCCACHE)' \
+> +		-DCMAKE_ASM_COMPILER='$(HOSTCC_NOCCACHE)' \
+> +		-DCMAKE_CXX_COMPILER='$(HOSTCXX_NOCCACHE)'
+> +endef
+
+I believe we should add a host-llvm package to provide llvm-tblgen and
+llvm-config binaries, so we can use -DLLVM_TABLEGEN instead of theses hooks.
+
+# Use native llvm-tblgen from host-llvm.
+LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/usr/bin/llvm-tblgen
+
+> +
+> +LLVM_POST_CONFIGURE_HOOKS += LLVM_CONFIGURE_NATIVE_TOOLS_CMDS
+> +
+> +define LLVM_REBUILD_NATIVE_LLVM_CONFIG_CMDS
+> +	cp $(LLVM_BUILDDIR)/tools/llvm-config/BuildVariables.inc $(LLVM_BUILDDIR)/NATIVE/tools/llvm-config/BuildVariables.inc
+> +	$(HOST_MAKE_ENV) $(LLVM_MAKE_ENV) $(LLVM_MAKE) $(LLVM_MAKE_OPTS) -C $(LLVM_BUILDDIR)/NATIVE llvm-config
+> +endef
+> +
+> +LLVM_POST_BUILD_HOOKS += LLVM_REBUILD_NATIVE_LLVM_CONFIG_CMDS
+> +
+> +define LLVM_INSTALL_STAGING_NATIVE_LLVM_CONFIG_CMDS
+> +	install -Dm755 $(LLVM_BUILDDIR)/NATIVE/bin/llvm-config $(STAGING_DIR)/usr/bin/llvm-config
+
+You should use "$(INSTALL) -D -m 0755" here.
+
+> +endef
+> +
+> +LLVM_POST_INSTALL_STAGING_HOOKS += LLVM_INSTALL_STAGING_NATIVE_LLVM_CONFIG_CMDS
+> +
+> +$(eval $(cmake-package))
+> 
+
+I'm working on a new patch series using llvm 4.0.1 including your changes, also
+I'll speak with Thomas about it during the Summer Camp.
+
+Best regards,
+Romain
