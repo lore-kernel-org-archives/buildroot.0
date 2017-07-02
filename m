@@ -1,59 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 2 Jul 2017 13:18:09 +0200
-Subject: [Buildroot] [PATCH] core: postpone evaluation on decompressor
- dependencies
-In-Reply-To: <20170702123621.67df4ae7@windsurf>
-References: <20170702103030.2210-1-yann.morin.1998@free.fr>
- <20170702123621.67df4ae7@windsurf>
-Message-ID: <f75e93d0-ef5d-9d71-fca8-1a96329886d3@mind.be>
+From: GitLab <gitlab@mg.gitlab.com>
+Date: Sun, 02 Jul 2017 10:48:08 +0000
+Subject: [Buildroot] buildroot | Pipeline #9511589 has failed for master |
+	1c73e81b
+Message-ID: <5958cf687a416_2d343fe4a50106c0533a2@sidekiq04.mail>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Your pipeline has failed.
+
+Project: buildroot ( https://gitlab.com/buildroot.org/buildroot )
+Branch: master ( https://gitlab.com/buildroot.org/buildroot/commits/master )
+
+Commit: 1c73e81b ( https://gitlab.com/buildroot.org/buildroot/commit/1c73e81b3263ee5ce782a77afa2899c2a60da7d5 )
+Commit Message: protobuf, python-protobuf: bump to v3.3.0
+
+Sign...
+Commit Author: Mario Rugiero
+Committed by: Thomas Petazzoni ( https://gitlab.com/tpetazzoni )
+
+Pipeline #9511589 ( https://gitlab.com/buildroot.org/buildroot/pipelines/9511589 ) triggered by arnout ( https://gitlab.com/arnout )
+had 1 failed build.
+
+Job #20825234 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/20825234 )
+
+Stage: test
+Name: check-gitlab-ci.yml
+Trace: E: Failed to fetch http://deb.debian.org/debian/pool/main/e/explorercanvas/libjs-excanvas_0.r3-4_all.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/s/serf/libserf-1-1_1.3.9-3_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/libsvn1_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial-common_4.0-1_all.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/m/mercurial/mercurial_4.0-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/s/subversion/subversion_1.9.5-1_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Failed to fetch http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0-21_amd64.deb  503  Service Temporarily Unavailable [IP: 52.85.90.190 80]
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+[31;1mERROR: Job failed: exit code 1
+[0;m
 
 
-On 02-07-17 12:36, Thomas Petazzoni wrote:
->>  DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
->> +UNCOMP_TOOLS_DEPENDENCIES += $$(UNCOMP_TOOL_DEPENDENCY$$(suffix $$($(2)_SOURCE)))
-> I know we looked at it yesterday, but I again don't remember what
-> extractor-dependency is for. When looking at this code, it seems a bit
-> weird that extractor dependencies are added to DL_TOOLS_DEPENDENCIES
-> and "uncompressor dependencies" are added to UNCOMP_TOOLS_DEPENDENCIES.
-> 
-> Can we clarify this ? Should the output of extractor-dependency be added
-> to UNCOMP_TOOLS_DEPENDENCIES ? Do we need both extractor-dependency and
-> UNCOMP_TOOL_DEPENDENCY ?
-
- It also took me a bit of browsing to find out what this was about. IIUC,
-DL_TOOLS_DEPENDENCIES is not actually a list of dependencies, but rather a list
-of tools that should be checked by dependencies.mk. In addition, this list mixes
-download tools (e.g. git) with extractor/uncompressor tools - and it could in
-fact contain anything else. So it would be better to call it something like
-DEPENDENCIES_TO_CHECK.
-
- Also, this patch only looks at the uncompressor tools, but the same approach
-could be applied to the download tools. In fact, I'd like those two to be
-refactored a little.
-
- Ideally, we'd even have a distinct name for dependencies.mk "things" (i.e.
-tools that may or may not be available on the host and, for some of them, that
-we build on demand) and FOO_DEPENDENCIES "things" (i.e. packages that we need to
-build before package foo).
-
- So perhaps:
-DL_TOOLS_DEPENDENCIES -> TOOLS_TO_CHECK
-UNCOMP_TOOLS_DEPENDENCIES -> TOOLS_DEPENDENCIES
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+---
+You're receiving this email because of your account on gitlab.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170702/4171d6e3/attachment.html>
