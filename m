@@ -1,75 +1,32 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Sun, 2 Jul 2017 14:26:25 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/readme.txt: fix typos for
-	size-stats-compare
-In-Reply-To: <20170701182129.GE3593@scaer>
-References: <20170701180027.GY29444@argentina>
- <20170701182129.GE3593@scaer>
-Message-ID: <20170702122625.GZ29444@argentina>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 2 Jul 2017 15:19:55 +0200
+Subject: [Buildroot] [git commit] mosquitto: clarify that patch hash is
+	locally calculated
+Message-ID: <20170702131907.53FB77FA85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 01, 2017 at 08:21:29PM +0200, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2017-07-01 20:00 +0200, Thomas De Schampheleire spake thusly:
-> > A few typos sneaked into the new utils readme...
-> 
-> Yup, sorry...
-> 
-> > Additionally, I formulated the list of use cases a bit differently.
-> > 
-> > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> > ---
-> >  utils/readme.txt | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/utils/readme.txt b/utils/readme.txt
-> > index a90805fb0..fd20e8ee6 100644
-> > --- a/utils/readme.txt
-> > +++ b/utils/readme.txt
-> > @@ -28,10 +28,10 @@ scanpypi
-> >      a script to create a Buildroot package by scanning a PyPI package
-> >      description.
-> >  
-> > -size-stat-compare
-> > -    a script to compare the rootfs size between two differnt Buildroot
-> > +size-stats-compare
-> > +    a script to compare the rootfs size between two different Buildroot
-> >      configurations. This can be used to identify the size impact of
-> > -    a specific option, or of a set of specific options, or an update
-> > +    a specific option, of a set of specific options, or of an update
-> 
-> I still believe the current situation is prefereable, because it is :
-> 
-> the impact of
->     - a specific option, or of a set of options,
->   or
->     - a new buildroot version
-> 
-> (use of the Oxford comma is very important, here! ;-] )
+commit: https://git.buildroot.net/buildroot/commit/?id=1ef8c2239339f52e35572e485db306df9012d500
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Just to make sure we settle this ;-)
-The way I see it, the expanded version would be:
+Commit e51d69a3b (mosquitto: specify that hash is taken from upstream)
+changed the .hash description header, but the upstream hash only applies
+to the tarball, not the patch.
 
-... the impact of a specific option, the impact of a set of options, or the
-impact of a new buildroot version.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/mosquitto.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-which I would shorten to either of:
-
-... the impact of a specific option, a set of options, or a new buildroot
-version.
-
-... the impact of a specific option or set of options, or of a new buildroot
-version.
-
-and perhaps other variants, but I feel that _if_ you repeat 'of' in the 'of a
-set of options' part, then you must also repeat it in the 'new buildroot
-version' part.
-
-Anyway, who reads these readme's anyway? ;-)
-
-/Thomas
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 60538f4..4ef1743 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,3 +1,4 @@
+ # From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.12.tar.gz
+ sha512  75e6105498869ab13265df7a0bea6052c014d59d0c0efb61162d8257d34c0153fce32130e84c28e99fd494f374949aac5e01c19f7439c2eea575b52ef1179c3c  mosquitto-1.4.12.tar.gz
++# Locally computed:
+ sha256  06abd1206e548ac2378dd96f5434cb3e40ed77cecb6a9c37fbabab0b0f1360e5  mosquitto-1.4.x_cve-2017-9868.patch
