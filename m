@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:25 +0200
-Subject: [Buildroot] [PATCH 03/20] jack2: don't download patch from Github
+Date: Sun,  2 Jul 2017 18:53:26 +0200
+Subject: [Buildroot] [PATCH 04/20] libstrophe: don't download patch from
+	Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-4-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-5-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,120 +16,232 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Fix-initialization-in-test-iodelay.patch  | 65 ++++++++++++++++++++++
- ...patch => 0002-Improve-check-for-ucontext.patch} |  0
- ...ce-support-depends-on-execinfo.h-existen.patch} |  0
- ...=> 0004-tests-define-__STDC_LIMIT_MACROS.patch} |  0
- package/jack2/jack2.hash                           |  1 -
- package/jack2/jack2.mk                             |  1 -
- 6 files changed, 65 insertions(+), 2 deletions(-)
- create mode 100644 package/jack2/0001-Fix-initialization-in-test-iodelay.patch
- rename package/jack2/{0001-Improve-check-for-ucontext.patch => 0002-Improve-check-for-ucontext.patch} (100%)
- rename package/jack2/{0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch => 0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch} (100%)
- rename package/jack2/{0003-tests-define-__STDC_LIMIT_MACROS.patch => 0004-tests-define-__STDC_LIMIT_MACROS.patch} (100%)
+ .../libstrophe/0001-Namespace-SHA-functions.patch  | 189 +++++++++++++++++++++
+ ...nfable.patch => 0002-make-autoreconfable.patch} |   0
+ package/libstrophe/libstrophe.hash                 |   1 -
+ package/libstrophe/libstrophe.mk                   |   1 -
+ 4 files changed, 189 insertions(+), 2 deletions(-)
+ create mode 100644 package/libstrophe/0001-Namespace-SHA-functions.patch
+ rename package/libstrophe/{0001-make-autoreconfable.patch => 0002-make-autoreconfable.patch} (100%)
 
-diff --git a/package/jack2/0001-Fix-initialization-in-test-iodelay.patch b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
+diff --git a/package/libstrophe/0001-Namespace-SHA-functions.patch b/package/libstrophe/0001-Namespace-SHA-functions.patch
 new file mode 100644
-index 0000000..ee24938
+index 0000000..8c3451b
 --- /dev/null
-+++ b/package/jack2/0001-Fix-initialization-in-test-iodelay.patch
-@@ -0,0 +1,65 @@
-+From ff1ed2c4524095055140370c1008a2d9cccc5645 Mon Sep 17 00:00:00 2001
-+From: Adrian Knoth <adi@drcomp.erfurt.thur.de>
-+Date: Sat, 11 Jun 2016 05:35:07 +0200
-+Subject: [PATCH] Fix initialization in test/iodelay.cpp
++++ b/package/libstrophe/0001-Namespace-SHA-functions.patch
+@@ -0,0 +1,189 @@
++From b08766c8e46956daba010044b00c97f78b598780 Mon Sep 17 00:00:00 2001
++From: Michael Santos <michael.santos@gmail.com>
++Date: Sun, 24 May 2015 10:55:02 -0400
++Subject: [PATCH] Namespace SHA functions
 +
-+jack_latency_range_t is
++Fix statically linking against libstrophe by renaming the internal SHA
++functions:
 +
-+struct _jack_latency_range {
-+    jack_nframes_t min;
-+    jack_nframes_t max;
-+};
++https://github.com/strophe/libstrophe/issues/40
 +
-+and jack_nframes_t is
++Although the same function names are used by libstrophe and OpenSSL,
++the signatures and contexts of the SHA functions differ, resulting in
++a segfault if the OpenSSL versions are substituted.
 +
-+typedef uint32_t        jack_nframes_t;
-+
-+so it's unsigned. Initialising it with -1 is invalid (at least in C++14). We cannot use {0, 0}, because latency_cb has
-+
-+   jack_latency_range_t range;
-+   range.min = range.max = 0;
-+   if ((range.min != capture_latency.min) || (range.max !=
-+       capture_latency.max)) {
-+       capture_latency = range;
-+   }
-+
-+so we must not have {0, 0}, otherwise the condition would never be true.
-+
-+Using UINT32_MAX should be equivalent to the previous -1.
-+
-+[Upstream commit https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645]
++[Upstream commit: https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ tests/iodelay.cpp | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
++ src/auth.c  |  8 ++++----
++ src/scram.c | 22 +++++++++++-----------
++ src/sha1.c  | 30 +++++++++++++++---------------
++ src/sha1.h  |  6 +++---
++ 4 files changed, 33 insertions(+), 33 deletions(-)
 +
-+diff --git a/tests/iodelay.cpp b/tests/iodelay.cpp
-+index e1ba63fa..1ef470fd 100644
-+--- a/tests/iodelay.cpp
-++++ b/tests/iodelay.cpp
-+@@ -20,6 +20,7 @@
++diff --git a/src/auth.c b/src/auth.c
++index b06f18c..3506977 100644
++--- a/src/auth.c
+++++ b/src/auth.c
++@@ -1187,10 +1187,10 @@ int _handle_component_auth(xmpp_conn_t * const conn)
++     /*?Feed the session id and passphrase to the algorithm.
++      * We need to compute SHA1(session_id + passphrase)
++      */
++-    SHA1_Init(&mdctx);
++-    SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
++-    SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
++-    SHA1_Final(&mdctx, md_value);
+++    xmpp_SHA1_Init(&mdctx);
+++    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
+++    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
+++    xmpp_SHA1_Final(&mdctx, md_value);
 + 
-+ #include <stdlib.h>
-+ #include <stdio.h>
-++#include <stdint.h>
-+ #include <math.h>
-+ #include <unistd.h>
-+ #include <jack/jack.h>
-+@@ -167,8 +168,8 @@ static jack_client_t  *jack_handle;
-+ static jack_port_t    *jack_capt;
-+ static jack_port_t    *jack_play;
-+ 
-+-jack_latency_range_t   capture_latency = {-1, -1};
-+-jack_latency_range_t   playback_latency = {-1, -1};
-++jack_latency_range_t   capture_latency = {UINT32_MAX, UINT32_MAX};
-++jack_latency_range_t   playback_latency = {UINT32_MAX, UINT32_MAX};
-+ 
-+ void
-+ latency_cb (jack_latency_callback_mode_t mode, void *arg)
-+@@ -266,4 +267,4 @@ int main (int ac, char *av [])
-+     return 0;
++     digest = xmpp_alloc(conn->ctx, 2*sizeof(md_value)+1);
++     if (digest) {
++diff --git a/src/scram.c b/src/scram.c
++index 5cce168..6e420e1 100644
++--- a/src/scram.c
+++++ b/src/scram.c
++@@ -37,9 +37,9 @@ static void SHA1(const uint8_t* data, size_t len,
++                  uint8_t digest[SHA1_DIGEST_SIZE])
++ {
++     SHA1_CTX ctx;
++-    SHA1_Init(&ctx);
++-    SHA1_Update(&ctx, data, len);
++-    SHA1_Final(&ctx, digest);
+++    xmpp_SHA1_Init(&ctx);
+++    xmpp_SHA1_Update(&ctx, data, len);
+++    xmpp_SHA1_Final(&ctx, digest);
 + }
 + 
-+-// --------------------------------------------------------------------------------
-+\ No newline at end of file
-++// --------------------------------------------------------------------------------
-diff --git a/package/jack2/0001-Improve-check-for-ucontext.patch b/package/jack2/0002-Improve-check-for-ucontext.patch
++ static void HMAC_SHA1(const uint8_t *key, size_t key_len,
++@@ -66,15 +66,15 @@ static void HMAC_SHA1(const uint8_t *key, size_t key_len,
++         key_opad[i] = key_pad[i] ^ opad;
++     }
++ 
++-    SHA1_Init(&ctx);
++-    SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
++-    SHA1_Update(&ctx, text, len);
++-    SHA1_Final(&ctx, sha_digest);
+++    xmpp_SHA1_Init(&ctx);
+++    xmpp_SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
+++    xmpp_SHA1_Update(&ctx, text, len);
+++    xmpp_SHA1_Final(&ctx, sha_digest);
++ 
++-    SHA1_Init(&ctx);
++-    SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
++-    SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
++-    SHA1_Final(&ctx, digest);
+++    xmpp_SHA1_Init(&ctx);
+++    xmpp_SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
+++    xmpp_SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
+++    xmpp_SHA1_Final(&ctx, digest);
++ }
++ 
++ static void SCRAM_SHA1_Hi(const uint8_t *text, size_t len,
++diff --git a/src/sha1.c b/src/sha1.c
++index 9af4f04..b60b325 100644
++--- a/src/sha1.c
+++++ b/src/sha1.c
++@@ -202,7 +202,7 @@ static void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64])
++ 
++ 
++ /* SHA1Init - Initialize new context */
++-void SHA1_Init(SHA1_CTX* context)
+++void xmpp_SHA1_Init(SHA1_CTX* context)
++ {
++     /* SHA1 initialization constants */
++     context->state[0] = 0x67452301;
++@@ -215,7 +215,7 @@ void SHA1_Init(SHA1_CTX* context)
++ 
++ 
++ /* Run your data through this. */
++-void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
+++void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
++ {
++     size_t i, j;
++ 
++@@ -244,7 +244,7 @@ void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
++ 
++ 
++ /* Add padding and return the message digest. */
++-void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
+++void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
++ {
++     uint32_t i;
++     uint8_t  finalcount[8];
++@@ -253,11 +253,11 @@ void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
++         finalcount[i] = (unsigned char)((context->count[(i >= 4 ? 0 : 1)]
++          >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
++     }
++-    SHA1_Update(context, (uint8_t *)"\200", 1);
+++    xmpp_SHA1_Update(context, (uint8_t *)"\200", 1);
++     while ((context->count[0] & 504) != 448) {
++-        SHA1_Update(context, (uint8_t *)"\0", 1);
+++        xmpp_SHA1_Update(context, (uint8_t *)"\0", 1);
++     }
++-    SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
+++    xmpp_SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
++     for (i = 0; i < SHA1_DIGEST_SIZE; i++) {
++         digest[i] = (uint8_t)
++          ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
++@@ -300,12 +300,12 @@ FILE* file;
++             return(-1);
++         }
++     } 
++-    SHA1_Init(&context);
+++    xmpp_SHA1_Init(&context);
++     while (!feof(file)) {  /* note: what if ferror(file) */
++         i = fread(buffer, 1, 16384, file);
++-        SHA1_Update(&context, buffer, i);
+++        xmpp_SHA1_Update(&context, buffer, i);
++     }
++-    SHA1_Final(&context, digest);
+++    xmpp_SHA1_Final(&context, digest);
++     fclose(file);
++     for (i = 0; i < SHA1_DIGEST_SIZE/4; i++) {
++         for (j = 0; j < 4; j++) {
++@@ -358,9 +358,9 @@ int main(int argc, char** argv)
++     fprintf(stdout, "verifying SHA-1 implementation... ");
++     
++     for (k = 0; k < 2; k++){ 
++-        SHA1_Init(&context);
++-        SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
++-        SHA1_Final(&context, digest);
+++        xmpp_SHA1_Init(&context);
+++        xmpp_SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
+++        xmpp_SHA1_Final(&context, digest);
++ 	digest_to_hex(digest, output);
++ 
++         if (strcmp(output, test_results[k])) {
++@@ -372,10 +372,10 @@ int main(int argc, char** argv)
++         }    
++     }
++     /* million 'a' vector we feed separately */
++-    SHA1_Init(&context);
+++    xmpp_SHA1_Init(&context);
++     for (k = 0; k < 1000000; k++)
++-        SHA1_Update(&context, (uint8_t*)"a", 1);
++-    SHA1_Final(&context, digest);
+++        xmpp_SHA1_Update(&context, (uint8_t*)"a", 1);
+++    xmpp_SHA1_Final(&context, digest);
++     digest_to_hex(digest, output);
++     if (strcmp(output, test_results[2])) {
++         fprintf(stdout, "FAIL\n");
++diff --git a/src/sha1.h b/src/sha1.h
++index 10266cb..7ff48d7 100644
++--- a/src/sha1.h
+++++ b/src/sha1.h
++@@ -23,9 +23,9 @@ typedef struct {
++ 
++ #define SHA1_DIGEST_SIZE 20
++ 
++-void SHA1_Init(SHA1_CTX* context);
++-void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
++-void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
+++void xmpp_SHA1_Init(SHA1_CTX* context);
+++void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
+++void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
++ 
++ #ifdef __cplusplus
++ }
+diff --git a/package/libstrophe/0001-make-autoreconfable.patch b/package/libstrophe/0002-make-autoreconfable.patch
 similarity index 100%
-rename from package/jack2/0001-Improve-check-for-ucontext.patch
-rename to package/jack2/0002-Improve-check-for-ucontext.patch
-diff --git a/package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch b/package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-similarity index 100%
-rename from package/jack2/0002-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-rename to package/jack2/0003-Make-backtrace-support-depends-on-execinfo.h-existen.patch
-diff --git a/package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch b/package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
-similarity index 100%
-rename from package/jack2/0003-tests-define-__STDC_LIMIT_MACROS.patch
-rename to package/jack2/0004-tests-define-__STDC_LIMIT_MACROS.patch
-diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
-index 1b981a4..ab031b9 100644
---- a/package/jack2/jack2.hash
-+++ b/package/jack2/jack2.hash
+rename from package/libstrophe/0001-make-autoreconfable.patch
+rename to package/libstrophe/0002-make-autoreconfable.patch
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index d840303..6a2d997 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
 @@ -1,3 +1,2 @@
  # Locally calculated
- sha256 88f1b6601b7c8950e6a2d5940b423a33ee628ae5583da40bdce3d9317d8c600d  jack2-v1.9.10.tar.gz
--sha256 f372c4300e3fb2c1ce053e47829df44f3f8b933feb820759392187723ae8e640  ff1ed2c4524095055140370c1008a2d9cccc5645.patch
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index c57ad0e..b61c5d7 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -9,7 +9,6 @@ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
- JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
- JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
- JACK2_INSTALL_STAGING = YES
--JACK2_PATCH = https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch
+ sha256 08f4a85ef419a8bdf08b6afa8f7b2a0e5e180fdc9c16cede81af672ec10e21e7  libstrophe-0.8.8.tar.gz
+-sha256 00936397cbb75ef168992868ae559b141b505d3a06f08163012b240390efa553  b08766c8e46956daba010044b00c97f78b598780.patch
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 0dd7c89..4b5a10a 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -12,7 +12,6 @@ LIBSTROPHE_AUTORECONF = YES
+ LIBSTROPHE_LICENSE = MIT or GPL-3.0
+ LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
+ LIBSTROPHE_INSTALL_STAGING = YES
+-LIBSTROPHE_PATCH = https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780.patch
  
- JACK2_CONF_OPTS = --alsa
- 
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+ # Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
 -- 
 2.9.4
