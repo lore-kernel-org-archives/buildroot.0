@@ -1,33 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Jul 2017 23:14:25 +0200
-Subject: [Buildroot] [PATCH] [PATCH v4] azure-iot-sdk-c: New package
-In-Reply-To: <1498144290-13940-1-git-send-email-nerv@dawncrow.de>
- (=?utf-8?Q?=22Andr=C3=A9?=
- Hentschel"'s message of "Thu, 22 Jun 2017 17:11:30 +0200")
-References: <1498144290-13940-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <877ezqa6dq.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Jul 2017 23:14:49 +0200
+Subject: [Buildroot] [PATCH v1] qt5multimedia: fix plugins videonode egl
+ x11 header related compile failure
+In-Reply-To: <20170702210127.7090df5b@gmx.net>
+References: <20170626211311.10890-1-ps.report@gmx.net>
+ <20170702003332.771dd45c@windsurf>
+ <20170702210127.7090df5b@gmx.net>
+Message-ID: <20170702231449.4a4d1832@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
+Hello,
 
- > Despite newer versions being available, this patch creates a package
- > for version 2017-05-05, because newer version have issues that need to
- > be addressed.
- > Still, the projects install target installs the wrong files, that's
- > why commands are needed for staging_install and target_install.
+On Sun, 2 Jul 2017 21:01:27 +0200, Peter Seiderer wrote:
 
- > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
- > ---
+> Same fixing pattern as for qt5base (and for qtbase accepted upstream, see e.g. [1]),
 
- > v2: Rework the package with help from Arnouts comments
- > v3: Explain some things in the commit message
- > v4: Fix commit message as suggested by Thomas
+Well, [1] is about adding QT_EGL_NO_X11, which is a QT definition. It
+is very different from MESA_EGL_NO_X11_HEADERS, which is an
+OpenGL-level definition.
 
-Committed, thanks.
+> but in general your are right, honor the given provider provided flags would be
+> the better solution...maybe something as suggested on the yocto meta-freescale
+> mailing list will work, see [2], [3]: 'egl.prf: Fix build error when egl headers
+> need platform definition'?
 
+I'm not sure I fully understand those patches, but apparently they use
+more pkg-config flags from OpenGL, which is exactly the approach I
+suggest to investigate indeed.
+
+BTW, the same thing should be done for Qt instead of
+package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
