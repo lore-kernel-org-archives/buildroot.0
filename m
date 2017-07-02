@@ -1,67 +1,85 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 2 Jul 2017 21:01:27 +0200
-Subject: [Buildroot] [PATCH v1] qt5multimedia: fix plugins videonode egl
- x11 header related compile failure
-In-Reply-To: <20170702003332.771dd45c@windsurf>
-References: <20170626211311.10890-1-ps.report@gmx.net>
- <20170702003332.771dd45c@windsurf>
-Message-ID: <20170702210127.7090df5b@gmx.net>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 2 Jul 2017 21:21:46 +0200
+Subject: [Buildroot] [PATCH 3/4] toolchain-external: copy ld*.so* for
+	all C libraries
+In-Reply-To: <20170702134107.11488-4-thomas.petazzoni@free-electrons.com>
+References: <20170702134107.11488-1-thomas.petazzoni@free-electrons.com>
+ <20170702134107.11488-4-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LW0KBCQnS-oVUzPLtY9S1CpNou9e+0JmZudu+vy0DjrNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+2017-07-02 15:41 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Currently, for the dynamic loader, we're copying ld*.so* for glibc and
+> uClibc, except for glibc/EABIhf where we are explicitly copying
+> ld-linux-armhf.so.*. For musl, we're not copying the dynamic linker
+> because it's simply a symbolic link to libc.so. However, the name of
+> the musl dynamic linker changes from one architecture to the other,
+> and we don't handle all cases.
+>
+> Since handling the musl dynamic linker symlink creation is becoming
+> more and more annoying to maintain, this commit makes musl use the
+> same mechanism as glibc/uClibc: put the dynamic linker in
+> TOOLCHAIN_EXTERNAL_LIBS.
+>
+> In addition, the special condition on glibc/EABIhf was added in
+> 11ec38b6950cf3337b52fb97f27c2fd7c776c5c2 ("toolchain-external: fix
+> Linaro ARM toolchain support") because an old Linaro toolchain had two
+> dynamic loaders, and we wanted to copy only one. But 1/ this is old
+> and 2/ having the two dynamic linkers doesn't really matter.
+>
+> So this commit simply unconditionally adds "ld*.so*" to
+> TOOLCHAIN_EXTERNAL_LIBS, regardless of the C library being chosen. It
+> re-uses the musl dynamic linker symlink from the sysroot, which makes
+> it always correct, and allows us to remove the
+> TOOLCHAIN_EXTERNAL_MUSL_LD_LINK hook, and all the related logic.
+>
+> This commit therefore solves two problems with the musl dynamic linker
+> symbolic link creation logic:
+>
+>  1 We support all architectures, without having to hardcode in
+>    Buildroot the mapping between the CPU architecture and the
+>    corresponding dynamic linker name. For example, our current logic
+>    was not handling the mips64+n32 ABI case, where the dynamic linker
+>    is named ld-musl-mipsn32el.so.1.
+>
+>  2 We support Crosstool-NG musl toolchains, where the dynamic linker
+>    is in /lib, but libc.so is in /usr/lib.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> This commit therefore replaces:
+>
+>  - https://patchwork.ozlabs.org/patch/780411/ (was another solution
+>    for solving problem 1 above)
+>
+>  - https://patchwork.ozlabs.org/patch/763977/ and
+>    https://patchwork.ozlabs.org/patch/748974/ (was another solution
+>    for solving problem 2 above)
+> ---
+>  .../toolchain-external/pkg-toolchain-external.mk   | 32 ++--------------------
+>  1 file changed, 3 insertions(+), 29 deletions(-)
+>
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 8460e37..c1c3900 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -107,13 +107,11 @@ endif
+>  #
+>  # Definitions of the list of libraries that should be copied to the target.
+>  #
+> +
+> +TOOLCHAIN_EXTERNAL_LIBS += ld*.so*
 
-On Sun, 2 Jul 2017 00:33:32 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+In copy_toolchain_sysroot, the patterns ld*.so and ld*.so.* are
+treated separately. I think the only reason must be to avoid matching
+ld*.something (I can't think of another reason at this moment).
+Perhaps that is too far-fetched, and copy_toolchain_sysroot should be
+updated, but in any case it makes sense to line up.
 
-> Hello,
-> 
-> On Mon, 26 Jun 2017 23:13:11 +0200, Peter Seiderer wrote:
-> 
-> > +diff --git a/src/plugins/videonode/egl/egl.pro b/src/plugins/videonode/egl/egl.pro
-> > +index 7151123..08ec149 100644
-> > +--- a/src/plugins/videonode/egl/egl.pro
-> > ++++ b/src/plugins/videonode/egl/egl.pro
-> > +@@ -3,6 +3,9 @@ TARGET = eglvideonode
-> > + QT += multimedia-private qtmultimediaquicktools-private
-> > + CONFIG += egl
-> > + 
-> > ++# Avoid X11 header collision, use generic EGL native types
-> > ++DEFINES += MESA_EGL_NO_X11_HEADERS
-> > ++
-> 
-> I am not really convinced by this patch. Indeed, I believe it should be
-> the OpenGL providers that define this constant when needed. If you look
-> at the config that generated the build failure you're trying to fix
-> (http://autobuild.buildroot.net/results/364/364a76bbf90251f9cae2abd3ef2e382758eae538),
-> you'll see that the OpenGL provider used is mali-t76x. However,
-> package/mali-t76x/glesv2.pc contains:
-> 
-> Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-> 
-> So, I would expect that Qt5 should not need to redefine it again.
-> Obviously, what worries me is that fixing Qt5 will fix just Qt5, and
-> not any other package using the same OpenGL provider.
-> 
-> What do you think?
-
-Same fixing pattern as for qt5base (and for qtbase accepted upstream, see e.g. [1]),
-but in general your are right, honor the given provider provided flags would be
-the better solution...maybe something as suggested on the yocto meta-freescale
-mailing list will work, see [2], [3]: 'egl.prf: Fix build error when egl headers
-need platform definition'?
-
-Did not yet had time to try the suggested patch (the first references says
-'Upstream-Status: Pending' but without reference)...
-
-Regards,
-Peter
-
-[1] https://codereview.qt-project.org/#/c/188158/
-[2] https://lists.yoctoproject.org/pipermail/meta-freescale/2017-June/020654.html
-[3] https://lists.yoctoproject.org/pipermail/meta-freescale/2017-June/020653.html
-
-> 
-> Thomas
+Best regards,
+Thomas
