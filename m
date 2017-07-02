@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 23:45:43 +0200
-Subject: [Buildroot] [PATCH 1/3] .gitlab-ci.yml: run our runtime tests
-In-Reply-To: <20170702161324.485-1-arnout@mind.be>
+Date: Sun, 2 Jul 2017 23:46:04 +0200
+Subject: [Buildroot] [PATCH 2/3] Add Dockerfile for CI
+In-Reply-To: <20170702161324.485-2-arnout@mind.be>
 References: <20170702161324.485-1-arnout@mind.be>
-Message-ID: <20170702234543.2ad96550@windsurf>
+ <20170702161324.485-2-arnout@mind.be>
+Message-ID: <20170702234604.77dc320e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 2 Jul 2017 18:13:22 +0200, Arnout Vandecappelle
+On Sun, 2 Jul 2017 18:13:23 +0200, Arnout Vandecappelle
 (Essensium/Mind) wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> For Gitlab-CI, we want to avoid re-generating the minimal install to
+> be able to run tests all the time. So let's create a docker image that
+> we can post on Docker Hub and then pull.
 > 
-> This commit improves our .gitlab-ci.yml logic to execute our runtime
-> tests located in support/testing/. To do so, this commit:
+> For the time being, this is just what we need for running our CI. Later
+> we can produce something that is also useful for users.
 > 
->  - Adds more Debian packages to be installed, namely the nose2 and
->    pexpect packages needed by the runtime testing infrastructure, as
->    well as the necessary Qemu emulators
-> 
->  - The description of how to run the runtime tests. Each test is
->    executed as a separate Gitlab CI job, so that the status of each
->    test is easily visible in the Gitlab CI web interface.
-> 
->  - The Makefile is improved to auto-generate .gitlab-ci.yml from
->    .gitlab-ci.yml.in, like we're doing for defconfigs. Since the
->    dependencies of .gitlab-ci.yml are no longer correct, we abandon
->    them and instead make it a PHONY target.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> [Arnout: simplify .gitlab-ci.in a little, removing redundant stuff;
->          make .gitlab-ci.yml a PHONY target]
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  .gitlab-ci.yml    | 33 +++++++++++++++++++++++++++++++++
->  .gitlab-ci.yml.in |  8 ++++++++
->  Makefile          |  7 +++++--
->  3 files changed, 46 insertions(+), 2 deletions(-)
+>  support/docker/Dockerfile | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 support/docker/Dockerfile
 
-Applied to master, thanks.
+Applied to master, thanks. Will you provide an update to the Buildroot
+manual, documenting this next to the Vagrant stuff?
 
 Thomas
 -- 
