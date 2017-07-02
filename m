@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Jul 2017 23:51:51 +0200
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.11.1-P2
-In-Reply-To: <20170702150148.22879-1-peter@korsgaard.com>
-References: <20170702150148.22879-1-peter@korsgaard.com>
-Message-ID: <20170702235151.45147ef2@windsurf>
+Date: Sun, 2 Jul 2017 23:55:12 +0200
+Subject: [Buildroot] [PATCH] 2017.02.x: update hash file for libnl
+ 3.2.27 patch
+In-Reply-To: <1498841436-24941-1-git-send-email-julien.boibessot@free.fr>
+References: <1498841436-24941-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20170702235512.723ed0da@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +13,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  2 Jul 2017 17:01:48 +0200, Peter Korsgaard wrote:
-> Fixes the following security issues:
+On Fri, 30 Jun 2017 18:50:36 +0200, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 > 
-> CVE-2017-3142: An error in TSIG authentication can permit unauthorized zone
-> transfers
+> Corresponding patch is generated on the fly by github. It seems like
+> generation method has changed, resulting to slightly different patch,
+> so update BR hash file accordingly.
 > 
-> An attacker who is able to send and receive messages to an authoritative DNS
-> server and who has knowledge of a valid TSIG key name may be able to
-> circumvent TSIG authentication of AXFR requests via a carefully constructed
-> request packet. A server that relies solely on TSIG keys for protection with
-> no other ACL protection could be manipulated into:
-> 
-> * providing an AXFR of a zone to an unauthorized recipient
-> * accepting bogus NOTIFY packets
-> 
-> https://kb.isc.org/article/AA-01504/74/CVE-2017-3142
-> 
-> CVE-2017-3041: An error in TSIG authentication can permit unauthorized dynamic
-> updates
-> 
-> An attacker who is able to send and receive messages to an authoritative DNS
-> server and who has knowledge of a valid TSIG key name for the zone and service
-> being targeted may be able to manipulate BIND into accepting an unauthorized
-> dynamic update.
-> 
-> https://kb.isc.org/article/AA-01503/74/CVE-2017-3143
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 > ---
->  package/bind/bind.hash | 4 ++--
->  package/bind/bind.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libnl/libnl.hash | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
+We had some lengthy discussion about it. The problem with your patch is
+that it will break things for users of non-updated Buildroot versions.
+
+Currently (without your patch), what happens is that Buildroot tries to
+download the patch from Github, fails because the hash is wrong, and
+then falls back to sources.buildroot.net which has the patch matching
+the hash.
+
+Once we apply your patch, users of the updated version of Buildroot
+(with your patch) will be able to get the correct patch from Github.
+However, sources.buildroot.net will also automatically fetch the new
+patch.
+
+Therefore, users of non-updated Buildroot will try to:
+
+ 1. Fetch from Github, which fails because the hash doesn't match
+
+ 2. Fetch from sources.buildroot.net, which fails because the hash
+    doesn't match either
+
+I.e, with your patch, we break the build for existing Buildroot users.
+
+So, like we are about to do in the master branch for all packages, what
+we are going to do here is that we will bring the libnl patch inside
+package/libnl/ instead of downloading it from Github.
+
+Peter Korsgaard will work on this soon. In the mean time, I'll mark
+your patch as Rejected in patchwork.
+
+Thanks for having reported the issue in the first place!
 
 Thomas
 -- 
