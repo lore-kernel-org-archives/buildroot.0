@@ -1,142 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 2 Jul 2017 19:08:06 +0200
-Subject: [Buildroot] [PATCH] pixz: new package
-In-Reply-To: <20170702161150.10160-1-vincent.stehle@laposte.net>
-References: <20170702161150.10160-1-vincent.stehle@laposte.net>
-Message-ID: <08fd09b4-f3e6-52d0-3138-3ea251edc2ac@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 2 Jul 2017 21:26:57 +0300
+Subject: [Buildroot] [PATCH] linuxptp: don't check host headers for
+ target features
+In-Reply-To: <863b72f5-1771-f9c1-4480-91e509e01adf@jikos.cz>
+References: <70c812411b4b8408a4cfac95ef66d13fea893102.1498943375.git.baruch@tkos.co.il>
+ <863b72f5-1771-f9c1-4480-91e509e01adf@jikos.cz>
+Message-ID: <20170702182657.ggqvesguegyff3eq@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Vincent,
+Hi Petr,
 
-On 02-07-17 18:11, Vincent Stehle wrote:
-> From: Vincent Stehl? <vincent.stehle@laposte.net>
+On Sun, Jul 02, 2017 at 03:41:30PM +0200, Petr Kulhavy wrote:
+> I'm concerned about the fact that this package doesn't use the CC
+> environment variable but forces the compiler to be $(COMPILER_PREFIX)gcc and
+> $(COMPILER_PREFIX)cpp.
 > 
-> Add a package for pixz (pronounced pixie), a parallel, indexing version of
-> xz.
-
- Would this package be able to replace host-xz on systems that need to build
-host-xz?
-
+> Reading the BR Makefile the generic toolchain filename consists of:
+> TOOLCHAIN_EXTERNAL_CC =
+> $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
 > 
-> See https://github.com/vasi/pixz
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-> ---
->  DEVELOPERS             |  1 +
->  package/Config.in      |  1 +
->  package/pixz/Config.in | 12 ++++++++++++
->  package/pixz/pixz.hash |  2 ++
->  package/pixz/pixz.mk   | 18 ++++++++++++++++++
->  5 files changed, 34 insertions(+)
->  create mode 100644 package/pixz/Config.in
->  create mode 100644 package/pixz/pixz.hash
->  create mode 100644 package/pixz/pixz.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f9e617ba3..3aaf29bfb 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1715,6 +1715,7 @@ F:	package/trinity/
->  N:	Vincent Stehl? <vincent.stehle@laposte.net>
->  F:	package/i7z/
->  F:	package/msr-tools/
-> +F:	package/pixz/
->  F:	package/uftrace/
->  
->  N:	Vinicius Tinti <viniciustinti@gmail.com>
-> diff --git a/package/Config.in b/package/Config.in
-> index 84e23ea63..3c7719278 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -64,6 +64,7 @@ menu "Compressors and decompressors"
->  	source "package/lzip/Config.in"
->  	source "package/lzop/Config.in"
->  	source "package/p7zip/Config.in"
-> +	source "package/pixz/Config.in"
->  	source "package/unrar/Config.in"
->  	source "package/unzip/Config.in"
->  	source "package/xz/Config.in"
-> diff --git a/package/pixz/Config.in b/package/pixz/Config.in
-> new file mode 100644
-> index 000000000..e5b1b095e
-> --- /dev/null
-> +++ b/package/pixz/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_PIXZ
-> +	bool "pixz"
-> +	depends on BR2_PACKAGE_LIBARCHIVE
+> In other words the TOOLCHAIN_EXTERNAL_SUFFIX will be lost and the build will
+> fail with toolchains that set it non-empty.
+> Are there any BR toolchains what use the TOOLCHAIN_EXTERNAL_SUFFIX?
 
- Why depends on and not select?
+As far as I understand this TOOLCHAIN_EXTERNAL_SUFFIX is only applicable to 
+Buildroot toolchains that are used as external toolchains. Only the toolchain 
+wrapper sees TOOLCHAIN_EXTERNAL_CC. Target packages never use it, but the 
+toolchain wrapper at $(TARGET_CROSS)gcc.
 
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-	depends on BR2_USE_WCHAR # libarchive
-	select BR2_PACKAGE_LIBARCHIVE
+Maybe one of the toolchain expert here can confirm that.
 
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_XZ
-> +	help
-> +	  Pixz (pronounced pixie) is a parallel, indexing version of xz.
-> +
-> +	  https://github.com/vasi/pixz
-> +
-> +comment "pixz needs a toolchain w/ threads, and libarchive"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_LIBARCHIVE
-> diff --git a/package/pixz/pixz.hash b/package/pixz/pixz.hash
-> new file mode 100644
-> index 000000000..3089bcd90
-> --- /dev/null
-> +++ b/package/pixz/pixz.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256 02c50746b134fa1b1aae41fcc314d7c6f1919b3d48bcdea01bf11769f83f72e8 pixz-1.0.6.tar.xz
-> diff --git a/package/pixz/pixz.mk b/package/pixz/pixz.mk
-> new file mode 100644
-> index 000000000..04dba2985
-> --- /dev/null
-> +++ b/package/pixz/pixz.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# pixz
-> +#
-> +################################################################################
-> +
-> +PIXZ_VERSION = 1.0.6
-> +PIXZ_SITE = https://github.com/vasi/pixz/releases/download/v$(PIXZ_VERSION)
-> +PIXZ_SOURCE = pixz-$(PIXZ_VERSION).tar.xz
-> +PIXZ_DEPENDENCIES = host-pkgconf libarchive xz
+baruch
 
- Does it really depend on xz? Ah yes, for liblzma. Then you should also select it.
-
-> +PIXZ_LICENSE = BSD-2-Clause
-> +PIXZ_LICENSE_FILES = LICENSE
-> +
-> +# The configure script does not know how to test for the manpage presence when
-> +# cross-compiling; help it a bit.
-> +PIXZ_CONF_ENV = ac_cv_file_src_pixz_1=yes
-
- The comment sounds like putting this to "yes" would actually build the manpage,
-but the reverse is true... How about:
-
-# pixz.1 is actually present, but AC_CHECK_FILE doesn't detect it when
-# cross-compiling, which causes configure to try to regenerate it. So
-# give it a hint to say that it actually is present.
-
- Regards,
- Arnout
-
-> +
-> +$(eval $(autotools-package))
+> On 01/07/17 23:09, Baruch Siach wrote:
+> > The incdefs.sh script runs ${CROSS_COMPILE}cpp to get a list of default
+> > headers directories. Make sure CROSS_COMPILE is set correctly to avoid check
+> > of host headers.
+> > 
+> > Also, drop the CC command line override. Upstream makefile sets CC to
+> > $(CROSS_COMPILE)gcc.
+> > 
+> > Should fix:
+> > http://autobuild.buildroot.net/results/394/394414df25b0b7261b27ca5d4901fde0f639e73c/
+> > http://autobuild.buildroot.net/results/6ad/6adbc8c77c2ca70246b31600ab66b37c56c1e89e/
+> > http://autobuild.buildroot.net/results/70d/70dfd05acc9d951169267f2820ecedb37f0711fe/
+> > 
+> > Cc: Petr Kulhavy <brain@jikos.cz>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >   package/linuxptp/linuxptp.mk | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+> > index 5c2257c9d781..beb2591c3224 100644
+> > --- a/package/linuxptp/linuxptp.mk
+> > +++ b/package/linuxptp/linuxptp.mk
+> > @@ -11,9 +11,9 @@ LINUXPTP_LICENSE = GPL-2.0+
+> >   LINUXPTP_LICENSE_FILES = COPYING
+> >   define LINUXPTP_BUILD_CMDS
+> > -	$(TARGET_MAKE_ENV) $(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
+> > +	$(TARGET_MAKE_ENV) CROSS_COMPILE="$(TARGET_CROSS)" \
+> > +		$(MAKE) KBUILD_OUTPUT=$(TARGET_DIR) \
+> >   		EXTRA_CFLAGS="$(TARGET_CFLAGS)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+> > -		CC="$(TARGET_CC)" \
+> >   		-C $(@D) all
+> >   endef
 > 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
