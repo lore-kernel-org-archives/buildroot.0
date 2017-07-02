@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 3 Jul 2017 00:05:18 +0200
-Subject: [Buildroot] [git commit] poco: don't download patch from Github
-Message-ID: <20170702220304.A911281EDC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt: don't download patch from Github
+Message-ID: <20170702220304.B7BCD81EDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9b614ad3ad6bdeb48179dfa622dc7e3134806e2
+commit: https://git.buildroot.net/buildroot/commit/?id=35bc55eaaae8d9d463d3fddcf0b200685014865a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Patches downloaded from Github are not stable, so bring them in the
@@ -17,77 +17,126 @@ tree.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rsion-of-strerror_r-not-available-on-musl.patch | 33 ++++++++++++++++++++++
- ...poco-add-the-staging-path-to-search-path.patch} |  0
- ...atch => 0003-fix-m68k-double-conv-detect.patch} |  0
- package/poco/poco.hash                             |  1 -
- package/poco/poco.mk                               |  1 -
- 5 files changed, 33 insertions(+), 2 deletions(-)
+ ...e-check-to-treat-alsalib-1.1.x-as-correct.patch | 29 ++++++++++++++++++++++
+ .../{0001-configure.patch => 0002-configure.patch} |  0
+ ...system.patch => 0003-eglwsegl-use-system.patch} |  0
+ ...-atomics.patch => 0004-fix-const-atomics.patch} |  0
+ ...attr_np.patch => 0005-pthread_getattr_np.patch} |  0
+ ...o-gui.patch => 0006-script-qtdbus-no-gui.patch} |  0
+ ...-Add-initial-support-of-ARC-architecture.patch} |  0
+ ... => 0008-Prevent-unaligned-access-on-ARC.patch} |  0
+ ...on-constructor-error-for-legacy-c-compil.patch} |  0
+ ...inclusion-order-when-building-statically.patch} |  0
+ ...form-socklen_t-on-other-C-libraries-than.patch} |  0
+ ...ith-ldl-option-only-when-it-is-supported.patch} |  0
+ ...13-OpenGL-EGL-Avoid-X11-header-collision.patch} |  0
+ package/qt/qt.hash                                 |  1 -
+ package/qt/qt.mk                                   |  3 ---
+ 15 files changed, 29 insertions(+), 4 deletions(-)
 
-diff --git a/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch b/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch
+diff --git a/package/qt/0001-alsatest-fix-the-check-to-treat-alsalib-1.1.x-as-correct.patch b/package/qt/0001-alsatest-fix-the-check-to-treat-alsalib-1.1.x-as-correct.patch
 new file mode 100644
-index 0000000..c2f297f
+index 0000000..4cec4bd
 --- /dev/null
-+++ b/package/poco/0001-GNU-version-of-strerror_r-not-available-on-musl.patch
-@@ -0,0 +1,33 @@
-+From 30159aea4b3f6421da9d74a8bf22aad6d3bf26b4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Mon, 4 Apr 2016 20:48:43 +0200
-+Subject: [PATCH] GNU version of strerror_r not available on musl
++++ b/package/qt/0001-alsatest-fix-the-check-to-treat-alsalib-1.1.x-as-correct.patch
+@@ -0,0 +1,29 @@
++From b8f98d956501dfa4ce03a137f15d404930a56066 Mon Sep 17 00:00:00 2001
++From: Dmitry Shachnev <mitya57@gmail.com>
++Date: Sat, 5 Mar 2016 10:25:33 +0300
++Subject: [PATCH] alsatest: Fix the check to treat alsalib 1.1.x as correct
++ version
 +
-+The GNU version of glibc' `strerror_r` is non-portable.
-+
-+When the POSIX and GNU API collides musl always provides the POSIX API. That
-+being the case for `strerror_r` musl does only support the POSIX version,
-+despite of `_GNU_SOURCE`.
-+
-+[Upstream commit: https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4]
++Task-number: QTBUG-51681
++Change-Id: I63266c33342f02f4d1a5ea5786f5fbc5a1b421b3
++Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
++[Upstream commit: https://github.com/qtproject/qtbase/commit/b8f98d956501dfa4ce03a137f15d404930a56066]
++[Patch fixing ALSA detection. Taken from Qt5, but applies fine to Qt4.]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ Foundation/src/Error.cpp | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
++ config.tests/unix/alsa/alsatest.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Foundation/src/Error.cpp b/Foundation/src/Error.cpp
-+index 6a8afb705f..00991fc0be 100644
-+--- a/Foundation/src/Error.cpp
-++++ b/Foundation/src/Error.cpp
-+@@ -69,7 +69,10 @@ namespace Poco {
-+ 		   without -D_GNU_SOURCE is needed, otherwise the GNU version is
-+ 		   preferred.
-+ 		*/
-+-#if defined _GNU_SOURCE && !POCO_ANDROID
-++		/* The GNU version of strerror_r is non-portable and not
-++		   available on the musl C library.
-++		 */
-++#if (defined __GLIBC__ || defined __UCLIBC__) && defined _GNU_SOURCE && !POCO_ANDROID
-+ 		char errmsg[256] = "";
-+ 		return std::string(strerror_r(errorCode, errmsg, 256));
-+ #elif (_XOPEN_SOURCE >= 600) || POCO_ANDROID
-diff --git a/package/poco/0001-poco-add-the-staging-path-to-search-path.patch b/package/poco/0002-poco-add-the-staging-path-to-search-path.patch
++diff --git a/config.tests/unix/alsa/alsatest.cpp b/config.tests/unix/alsa/alsatest.cpp
++index cab6533977..0b45819b61 100644
++--- a/config.tests/unix/alsa/alsatest.cpp
+++++ b/config.tests/unix/alsa/alsatest.cpp
++@@ -32,7 +32,7 @@
++ ****************************************************************************/
++ 
++ #include <alsa/asoundlib.h>
++-#if(!(SND_LIB_MAJOR == 1 && SND_LIB_MINOR == 0 && SND_LIB_SUBMINOR >= 10))
+++#if SND_LIB_VERSION < 0x1000a  // 1.0.10
++ #error "Alsa version found too old, require >= 1.0.10"
++ #endif
++ 
+diff --git a/package/qt/0001-configure.patch b/package/qt/0002-configure.patch
 similarity index 100%
-rename from package/poco/0001-poco-add-the-staging-path-to-search-path.patch
-rename to package/poco/0002-poco-add-the-staging-path-to-search-path.patch
-diff --git a/package/poco/0002-fix-m68k-double-conv-detect.patch b/package/poco/0003-fix-m68k-double-conv-detect.patch
+rename from package/qt/0001-configure.patch
+rename to package/qt/0002-configure.patch
+diff --git a/package/qt/0002-eglwsegl-use-system.patch b/package/qt/0003-eglwsegl-use-system.patch
 similarity index 100%
-rename from package/poco/0002-fix-m68k-double-conv-detect.patch
-rename to package/poco/0003-fix-m68k-double-conv-detect.patch
-diff --git a/package/poco/poco.hash b/package/poco/poco.hash
-index 1730f1c..c3b490e 100644
---- a/package/poco/poco.hash
-+++ b/package/poco/poco.hash
-@@ -1,3 +1,2 @@
- # Locally computed
- sha256  cfd311ecbc9e58accf1c4ea70170af88f92f88e73dd14944e528e7f6229e6cab  poco-poco-1.7.2-release.tar.gz
--sha256  32182791e7eac00ba367d2f22dd1dd5bfce0b6d6f76fd52f853364f98402dda3  30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 3b27ddb..c9ddeae 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -9,7 +9,6 @@ POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION))
- POCO_LICENSE = BSL-1.0
- POCO_LICENSE_FILES = LICENSE
- POCO_INSTALL_STAGING = YES
--POCO_PATCH = https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
+rename from package/qt/0002-eglwsegl-use-system.patch
+rename to package/qt/0003-eglwsegl-use-system.patch
+diff --git a/package/qt/0003-fix-const-atomics.patch b/package/qt/0004-fix-const-atomics.patch
+similarity index 100%
+rename from package/qt/0003-fix-const-atomics.patch
+rename to package/qt/0004-fix-const-atomics.patch
+diff --git a/package/qt/0004-pthread_getattr_np.patch b/package/qt/0005-pthread_getattr_np.patch
+similarity index 100%
+rename from package/qt/0004-pthread_getattr_np.patch
+rename to package/qt/0005-pthread_getattr_np.patch
+diff --git a/package/qt/0005-script-qtdbus-no-gui.patch b/package/qt/0006-script-qtdbus-no-gui.patch
+similarity index 100%
+rename from package/qt/0005-script-qtdbus-no-gui.patch
+rename to package/qt/0006-script-qtdbus-no-gui.patch
+diff --git a/package/qt/0006-Add-initial-support-of-ARC-architecture.patch b/package/qt/0007-Add-initial-support-of-ARC-architecture.patch
+similarity index 100%
+rename from package/qt/0006-Add-initial-support-of-ARC-architecture.patch
+rename to package/qt/0007-Add-initial-support-of-ARC-architecture.patch
+diff --git a/package/qt/0007-Prevent-unaligned-access-on-ARC.patch b/package/qt/0008-Prevent-unaligned-access-on-ARC.patch
+similarity index 100%
+rename from package/qt/0007-Prevent-unaligned-access-on-ARC.patch
+rename to package/qt/0008-Prevent-unaligned-access-on-ARC.patch
+diff --git a/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch b/package/qt/0009-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+similarity index 100%
+rename from package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+rename to package/qt/0009-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+diff --git a/package/qt/0009-Fix-library-inclusion-order-when-building-statically.patch b/package/qt/0010-Fix-library-inclusion-order-when-building-statically.patch
+similarity index 100%
+rename from package/qt/0009-Fix-library-inclusion-order-when-building-statically.patch
+rename to package/qt/0010-Fix-library-inclusion-order-when-building-statically.patch
+diff --git a/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch b/package/qt/0011-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+similarity index 100%
+rename from package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+rename to package/qt/0011-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+diff --git a/package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch b/package/qt/0012-Link-with-ldl-option-only-when-it-is-supported.patch
+similarity index 100%
+rename from package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch
+rename to package/qt/0012-Link-with-ldl-option-only-when-it-is-supported.patch
+diff --git a/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch b/package/qt/0013-OpenGL-EGL-Avoid-X11-header-collision.patch
+similarity index 100%
+rename from package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
+rename to package/qt/0013-OpenGL-EGL-Avoid-X11-header-collision.patch
+diff --git a/package/qt/qt.hash b/package/qt/qt.hash
+index de81368..301010c 100644
+--- a/package/qt/qt.hash
++++ b/package/qt/qt.hash
+@@ -1,4 +1,3 @@
+ # md5 http://download.qt.io/official_releases/qt/4.8/4.8.7/md5sums-4.8.7, sha256 locally computed:
+ md5    d990ee66bf7ab0c785589776f35ba6ad                                 qt-everywhere-opensource-src-4.8.7.tar.gz
+ sha256 e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0 qt-everywhere-opensource-src-4.8.7.tar.gz
+-sha256 e03740e20b8dbf52d163d8a4a37125e7c55b59a9a5e7cf7e89a08e07286b6135 b8f98d956501dfa4ce03a137f15d404930a56066.patch
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 8b52208..e9af8f4 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -8,9 +8,6 @@ QT_VERSION_MAJOR = 4.8
+ QT_VERSION = $(QT_VERSION_MAJOR).7
+ QT_SOURCE = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
+ QT_SITE = http://download.qt-project.org/official_releases/qt/$(QT_VERSION_MAJOR)/$(QT_VERSION)
+-# Patch fixing ALSA detection. Taken from Qt5, but applies fine to
+-# Qt4.
+-QT_PATCH = https://github.com/qtproject/qtbase/commit/b8f98d956501dfa4ce03a137f15d404930a56066.patch
+ QT_DEPENDENCIES = host-pkgconf
+ QT_INSTALL_STAGING = YES
  
- POCO_DEPENDENCIES = zlib pcre \
- 	$(if $(BR2_PACKAGE_POCO_XML),expat) \
