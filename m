@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:39 +0200
-Subject: [Buildroot] [PATCH 17/20] systemd: don't download patches from
-	Github
+Date: Sun,  2 Jul 2017 18:53:42 +0200
+Subject: [Buildroot] [PATCH 20/20] wavpack: don't download patch from Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-18-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-21-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,204 +15,109 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-of-null-pointer-p-question-dereferencing.patch | 28 ++++++++++++
- ...-resolved-simplify-alloc-size-calculation.patch | 51 ++++++++++++++++++++++
- ...do-not-allocate-packets-with-minimum-size.patch | 48 ++++++++++++++++++++
- ...-getty-unit.patch => 0004-fix-getty-unit.patch} |  0
- ...atch => 0005-build-check-for-ln-relative.patch} |  0
- ...h => 0006-fix-am-path-libgcrypt-no-found.patch} |  0
- package/systemd/systemd.hash                       |  3 --
- package/systemd/systemd.mk                         |  5 ---
- 8 files changed, 127 insertions(+), 8 deletions(-)
- create mode 100644 package/systemd/0001-resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
- create mode 100644 package/systemd/0002-resolved-simplify-alloc-size-calculation.patch
- create mode 100644 package/systemd/0003-resolved-do-not-allocate-packets-with-minimum-size.patch
- rename package/systemd/{0001-fix-getty-unit.patch => 0004-fix-getty-unit.patch} (100%)
- rename package/systemd/{0002-build-check-for-ln-relative.patch => 0005-build-check-for-ln-relative.patch} (100%)
- rename package/systemd/{0003-fix-am-path-libgcrypt-no-found.patch => 0006-fix-am-path-libgcrypt-no-found.patch} (100%)
+ ...-19-new-dependency-on-wchar-t-by-removing.patch | 70 ++++++++++++++++++++++
+ package/wavpack/wavpack.hash                       |  1 -
+ package/wavpack/wavpack.mk                         |  3 -
+ 3 files changed, 70 insertions(+), 4 deletions(-)
+ create mode 100644 package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
 
-diff --git a/package/systemd/0001-resolved-bugfix-of-null-pointer-p-question-dereferencing.patch b/package/systemd/0001-resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
+diff --git a/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
 new file mode 100644
-index 0000000..81cecef
+index 0000000..e5faf91
 --- /dev/null
-+++ b/package/systemd/0001-resolved-bugfix-of-null-pointer-p-question-dereferencing.patch
-@@ -0,0 +1,28 @@
-+From a924f43f30f9c4acaf70618dd2a055f8b0f166be Mon Sep 17 00:00:00 2001
-+From: Evgeny Vereshchagin <evvers@ya.ru>
-+Date: Wed, 24 May 2017 08:56:48 +0300
-+Subject: [PATCH] resolved: bugfix of null pointer p->question dereferencing
-+ (#6020)
++++ b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
+@@ -0,0 +1,70 @@
++From 876fc3f3907e871d0938ac6c8c5252f5f31abd1f Mon Sep 17 00:00:00 2001
++From: David Bryant <david@wavpack.com>
++Date: Thu, 16 Feb 2017 17:11:12 -0800
++Subject: [PATCH] fix GitHub issue #19 (new dependency on wchar_t) by removing
++ dependency
 +
-+See https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1621396
-+
-+[Upstream commit: https://github.com/systemd/systemd/commit/a924f43f30f9c4acaf70618dd2a055f8b0f166be]
++[Upstream commit: https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/resolve/resolved-dns-packet.c | 3 +++
-+ 1 file changed, 3 insertions(+)
++ cli/import_id3.c | 10 +++++-----
++ cli/wvtag.c      |  2 ++
++ 2 files changed, 7 insertions(+), 5 deletions(-)
 +
-+diff --git a/src/resolve/resolved-dns-packet.c b/src/resolve/resolved-dns-packet.c
-+index 652970284e..240ee448f4 100644
-+--- a/src/resolve/resolved-dns-packet.c
-++++ b/src/resolve/resolved-dns-packet.c
-+@@ -2269,6 +2269,9 @@ int dns_packet_is_reply_for(DnsPacket *p, const DnsResourceKey *key) {
-+         if (r < 0)
-+                 return r;
++diff --git a/cli/import_id3.c b/cli/import_id3.c
++index 51e54ee..fc30aeb 100644
++--- a/cli/import_id3.c
+++++ b/cli/import_id3.c
++@@ -34,7 +34,7 @@ static struct {
 + 
-++        if (!p->question)
-++                return 0;
-++
-+         if (p->question->n_keys != 1)
-+                 return 0;
++ #define NUM_TEXT_TAG_ITEMS (sizeof (text_tag_table) / sizeof (text_tag_table [0]))
 + 
-diff --git a/package/systemd/0002-resolved-simplify-alloc-size-calculation.patch b/package/systemd/0002-resolved-simplify-alloc-size-calculation.patch
-new file mode 100644
-index 0000000..5fab905
---- /dev/null
-+++ b/package/systemd/0002-resolved-simplify-alloc-size-calculation.patch
-@@ -0,0 +1,51 @@
-+From db848813bae4d28c524b3b6a7dad135e426659ce Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-+Date: Sun, 18 Jun 2017 16:07:57 -0400
-+Subject: [PATCH] resolved: simplify alloc size calculation
-+
-+The allocation size was calculated in a complicated way, and for values
-+close to the page size we would actually allocate less than requested.
-+
-+Reported by Chris Coulson <chris.coulson@canonical.com>.
-+
-+CVE-2017-9445
-+
-+[Upstream commit: https://github.com/systemd/systemd/commit/db848813bae4d28c524b3b6a7dad135e426659ce]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/resolve/resolved-dns-packet.c | 8 +-------
-+ src/resolve/resolved-dns-packet.h | 2 --
-+ 2 files changed, 1 insertion(+), 9 deletions(-)
-+
-+diff --git a/src/resolve/resolved-dns-packet.c b/src/resolve/resolved-dns-packet.c
-+index 240ee448f4..821b66e266 100644
-+--- a/src/resolve/resolved-dns-packet.c
-++++ b/src/resolve/resolved-dns-packet.c
-+@@ -47,13 +47,7 @@ int dns_packet_new(DnsPacket **ret, DnsProtocol protocol, size_t mtu) {
++-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len);
+++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len);
++ static void Latin1ToUTF8 (void *string, int len);
 + 
-+         assert(ret);
++ // Import specified ID3v2.3 tag. The WavPack context accepts the tag items, and can be
++@@ -163,7 +163,7 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
++             }
++             else if (frame_body [0] == 1 && frame_size > 2 && frame_body [1] == 0xFF && frame_body [2] == 0xFE) {
++                 int nchars = (frame_size - 3) / 2;
++-                wchar_t *wide_string = malloc ((nchars + 1) * sizeof (wchar_t));
+++                uint16_t *wide_string = malloc ((nchars + 1) * sizeof (uint16_t));
++                 unsigned char *fp = frame_body + 3;
 + 
-+-        if (mtu <= UDP_PACKET_HEADER_SIZE)
-+-                a = DNS_PACKET_SIZE_START;
-+-        else
-+-                a = mtu - UDP_PACKET_HEADER_SIZE;
-+-
-+-        if (a < DNS_PACKET_HEADER_SIZE)
-+-                a = DNS_PACKET_HEADER_SIZE;
-++        a = MAX(mtu, DNS_PACKET_HEADER_SIZE);
++                 utf8_string = malloc ((nchars + 1) * 3);
++@@ -297,9 +297,9 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
++ // may be less than the number of characters in the wide string if the buffer
++ // length is exceeded.
 + 
-+         /* round up to next page size */
-+         a = PAGE_ALIGN(ALIGN(sizeof(DnsPacket)) + a) - ALIGN(sizeof(DnsPacket));
-+diff --git a/src/resolve/resolved-dns-packet.h b/src/resolve/resolved-dns-packet.h
-+index 2c92392e4d..3abcaf8cf3 100644
-+--- a/src/resolve/resolved-dns-packet.h
-++++ b/src/resolve/resolved-dns-packet.h
-+@@ -66,8 +66,6 @@ struct DnsPacketHeader {
-+ /* With EDNS0 we can use larger packets, default to 4096, which is what is commonly used */
-+ #define DNS_PACKET_UNICAST_SIZE_LARGE_MAX 4096
++-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
+++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len)
++ {
++-    const wchar_t *pWide = Wide;
+++    const uint16_t *pWide = Wide;
++     int outndx = 0;
 + 
-+-#define DNS_PACKET_SIZE_START 512
-+-
-+ struct DnsPacket {
-+         int n_ref;
-+         DnsProtocol protocol;
-diff --git a/package/systemd/0003-resolved-do-not-allocate-packets-with-minimum-size.patch b/package/systemd/0003-resolved-do-not-allocate-packets-with-minimum-size.patch
-new file mode 100644
-index 0000000..7509113
---- /dev/null
-+++ b/package/systemd/0003-resolved-do-not-allocate-packets-with-minimum-size.patch
-@@ -0,0 +1,48 @@
-+From 88795538726a5bbfd9efc13d441cb05e1d7fc139 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-+Date: Tue, 27 Jun 2017 14:20:00 -0400
-+Subject: [PATCH] resolved: do not allocate packets with minimum size
-+
-+dns_packet_new() is sometimes called with mtu == 0, and in that case we should
-+allocate more than the absolute minimum (which is the dns packet header size),
-+otherwise we have to resize immediately again after appending the first data to
-+the packet.
-+
-+This partially reverts the previous commit.
-+
-+[Upstream commit: https://github.com/systemd/systemd/commit/88795538726a5bbfd9efc13d441cb05e1d7fc139]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/resolve/resolved-dns-packet.c | 12 +++++++++++-
-+ 1 file changed, 11 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/resolve/resolved-dns-packet.c b/src/resolve/resolved-dns-packet.c
-+index 821b66e266..d1f0f760a4 100644
-+--- a/src/resolve/resolved-dns-packet.c
-++++ b/src/resolve/resolved-dns-packet.c
-+@@ -28,6 +28,9 @@
++     while (*pWide) {
++@@ -335,7 +335,7 @@ static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
++ static void Latin1ToUTF8 (void *string, int len)
++ {
++     int max_chars = (int) strlen (string);
++-    wchar_t *temp = (wchar_t *) malloc ((max_chars + 1) * 2);
+++    uint16_t *temp = (uint16_t *) malloc ((max_chars + 1) * sizeof (uint16_t));
 + 
-+ #define EDNS0_OPT_DO (1<<15)
++     MultiByteToWideChar (28591, 0, string, -1, temp, max_chars + 1);
++     WideCharToUTF8 (temp, (unsigned char *) string, len);
++diff --git a/cli/wvtag.c b/cli/wvtag.c
++index 6e6512a..45e621e 100644
++--- a/cli/wvtag.c
+++++ b/cli/wvtag.c
++@@ -1344,7 +1344,9 @@ static void dump_UTF8_string (char *string, FILE *dst)
++ // resulting string will not fit in the specified buffer size then it is
++ // truncated.
 + 
-++#define DNS_PACKET_SIZE_START 512
-++assert_cc(DNS_PACKET_SIZE_START > UDP_PACKET_HEADER_SIZE)
-++
-+ typedef struct DnsPacketRewinder {
-+         DnsPacket *packet;
-+         size_t saved_rindex;
-+@@ -47,7 +50,14 @@ int dns_packet_new(DnsPacket **ret, DnsProtocol protocol, size_t mtu) {
+++#if defined (_WIN32)
++ static int UTF8ToWideChar (const unsigned char *pUTF8, wchar_t *pWide);
+++#endif
 + 
-+         assert(ret);
-+ 
-+-        a = MAX(mtu, DNS_PACKET_HEADER_SIZE);
-++        /* When dns_packet_new() is called with mtu == 0, allocate more than the
-++         * absolute minimum (which is the dns packet header size), to avoid
-++         * resizing immediately again after appending the first data to the packet.
-++         */
-++        if (mtu < UDP_PACKET_HEADER_SIZE)
-++                a = DNS_PACKET_SIZE_START;
-++        else
-++                a = MAX(mtu, DNS_PACKET_HEADER_SIZE);
-+ 
-+         /* round up to next page size */
-+         a = PAGE_ALIGN(ALIGN(sizeof(DnsPacket)) + a) - ALIGN(sizeof(DnsPacket));
-diff --git a/package/systemd/0001-fix-getty-unit.patch b/package/systemd/0004-fix-getty-unit.patch
-similarity index 100%
-rename from package/systemd/0001-fix-getty-unit.patch
-rename to package/systemd/0004-fix-getty-unit.patch
-diff --git a/package/systemd/0002-build-check-for-ln-relative.patch b/package/systemd/0005-build-check-for-ln-relative.patch
-similarity index 100%
-rename from package/systemd/0002-build-check-for-ln-relative.patch
-rename to package/systemd/0005-build-check-for-ln-relative.patch
-diff --git a/package/systemd/0003-fix-am-path-libgcrypt-no-found.patch b/package/systemd/0006-fix-am-path-libgcrypt-no-found.patch
-similarity index 100%
-rename from package/systemd/0003-fix-am-path-libgcrypt-no-found.patch
-rename to package/systemd/0006-fix-am-path-libgcrypt-no-found.patch
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 77a680d..17f4c0f 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,2 @@
- # sha256 locally computed
- sha256 8b3e99da3d4164b66581830a7f2436c0c8fe697b5fbdc3927bdb960646be0083  systemd-233.tar.gz
--sha256 eed8fef0045876e9efa0ba6725ed9ea93654bf24d67bb5aad467a341ad375883  a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch
--sha256 43c75bd161a8ef0de5db607aaceed77220f2ba4903cf44e7e9db544980420a5e  db848813bae4d28c524b3b6a7dad135e426659ce.patch
--sha256 451f7c09332479ebe4ac01612f5f034df4524e16b5bc5d1c8ddcda14e9f3cd69  88795538726a5bbfd9efc13d441cb05e1d7fc139.patch
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index a853434..f7894b2 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,11 +19,6 @@ SYSTEMD_DEPENDENCIES = \
- SYSTEMD_PROVIDES = udev
- SYSTEMD_AUTORECONF = YES
++ static void UTF8ToAnsi (char *string, int len)
++ {
+diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
+index 16ff08c..56ba7d8 100644
+--- a/package/wavpack/wavpack.hash
++++ b/package/wavpack/wavpack.hash
+@@ -1,3 +1,2 @@
+ # locally computed hash
+ sha256  1939627d5358d1da62bc6158d63f7ed12905552f3a799c799ee90296a7612944  wavpack-5.1.0.tar.bz2
+-sha256  3890ab081dc6f8ee02161ace180381327031cc24cc6c3d71668367b7e5f6e4be  876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
+diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+index 485213a..c23b127 100644
+--- a/package/wavpack/wavpack.mk
++++ b/package/wavpack/wavpack.mk
+@@ -12,9 +12,6 @@ WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ WAVPACK_LICENSE = BSD-3-Clause
+ WAVPACK_LICENSE_FILES = COPYING
  
--SYSTEMD_PATCH = \
--	https://github.com/systemd/systemd/commit/a924f43f30f9c4acaf70618dd2a055f8b0f166be.patch \
--	https://github.com/systemd/systemd/commit/db848813bae4d28c524b3b6a7dad135e426659ce.patch \
--	https://github.com/systemd/systemd/commit/88795538726a5bbfd9efc13d441cb05e1d7fc139.patch
+-# Fetch patch from upstream to remove wchar dependency
+-WAVPACK_PATCH = https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
 -
- # Make sure that systemd will always be built after busybox so that we have
- # a consistent init setup between two builds
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ WAVPACK_CONF_OPTS += LIBS=-liconv
+ endif
 -- 
 2.9.4
