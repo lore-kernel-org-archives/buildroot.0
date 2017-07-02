@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Jul 2017 18:53:27 +0200
-Subject: [Buildroot] [PATCH 05/20] lxc: don't download patch from Github
+Date: Sun,  2 Jul 2017 18:53:28 +0200
+Subject: [Buildroot] [PATCH 06/20] mediastreamer: don't download patch from
+	Github
 In-Reply-To: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
 References: <20170702165342.29522-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170702165342.29522-6-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170702165342.29522-7-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,71 +16,78 @@ tree.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../lxc/0001-conf-fix-build-without-libcap.patch   | 31 ++++++++++++++++++++++
- package/lxc/lxc.hash                               |  1 -
- package/lxc/lxc.mk                                 |  4 ---
- 3 files changed, 31 insertions(+), 5 deletions(-)
- create mode 100644 package/lxc/0001-conf-fix-build-without-libcap.patch
+ ...ix-compilation-issue-with-latest-bctoobox.patch | 38 ++++++++++++++++++++++
+ package/mediastreamer/mediastreamer.hash           |  1 -
+ package/mediastreamer/mediastreamer.mk             |  4 ---
+ 3 files changed, 38 insertions(+), 5 deletions(-)
+ create mode 100644 package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
 
-diff --git a/package/lxc/0001-conf-fix-build-without-libcap.patch b/package/lxc/0001-conf-fix-build-without-libcap.patch
+diff --git a/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch b/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
 new file mode 100644
-index 0000000..7e7c010
+index 0000000..7bc9733
 --- /dev/null
-+++ b/package/lxc/0001-conf-fix-build-without-libcap.patch
-@@ -0,0 +1,31 @@
-+From bc5b27d6f6d166d2a6df47982cbe36041ce6b735 Mon Sep 17 00:00:00 2001
-+From: Dima Krasner <dima@securingsam.com>
-+Date: Sun, 14 May 2017 12:24:59 +0300
-+Subject: [PATCH] conf: fix build without libcap
++++ b/package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
+@@ -0,0 +1,38 @@
++From 26f884bf977977041fe6f98a0af186be1580bf22 Mon Sep 17 00:00:00 2001
++From: Simon Morlat <simon.morlat@linphone.org>
++Date: Thu, 29 Sep 2016 15:26:18 +0200
++Subject: [PATCH] fix compilation issue with latest bctoobox
 +
-+Signed-off-by: Dima Krasner <samdima@securingsam.com>
-+[Upstream commit: https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735]
++[Upstream commit https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/lxc/conf.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
++ configure.ac           | 2 +-
++ src/crypto/dtls_srtp.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/lxc/conf.c b/src/lxc/conf.c
-+index 35bdb249b..76a190120 100644
-+--- a/src/lxc/conf.c
-++++ b/src/lxc/conf.c
-+@@ -130,6 +130,14 @@ lxc_log_define(lxc_conf, lxc);
-+ #define LO_FLAGS_AUTOCLEAR 4
-+ #endif
++diff --git a/configure.ac b/configure.ac
++index 7ab20a08f..244d87275 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1116,7 +1116,7 @@ fi
 + 
-++#ifndef CAP_SETUID
-++#define CAP_SETUID 7
-++#endif
-++
-++#ifndef CAP_SETGID
-++#define CAP_SETGID 6
-++#endif
-++
-+ /* needed for cgroup automount checks, regardless of whether we
-+  * have included linux/capability.h or not */
-+ #ifndef CAP_SYS_ADMIN
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 501f869..086b139 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
++ 
++ dnl check bctoolbox library
++-PKG_CHECK_MODULES(BCTOOLBOX, bctoolbox >= 0.0.0, found_bctoolbox=true, found_bctoolbox=false)
+++PKG_CHECK_MODULES(BCTOOLBOX, bctoolbox >= 0.4.0, found_bctoolbox=true, found_bctoolbox=false)
++ if test "$found_bctoolbox" = "true" ; then
++ 	LIBS="$LIBS $BCTOOLBOX_LIBS"
++ 	CFLAGS="$CFLAGS $BCTOOLBOX_CFLAGS"
++diff --git a/src/crypto/dtls_srtp.c b/src/crypto/dtls_srtp.c
++index e2c8e1c44..fd37eb5cb 100644
++--- a/src/crypto/dtls_srtp.c
+++++ b/src/crypto/dtls_srtp.c
++@@ -705,7 +705,7 @@ static int ms_dtls_srtp_initialise_bctbx_dtls_context(DtlsBcToolBoxContext *dtls
++ 	bctbx_ssl_config_set_authmode(dtlsContext->ssl_config, BCTBX_SSL_VERIFY_OPTIONAL);
++ 	bctbx_ssl_config_set_own_cert( dtlsContext->ssl_config, dtlsContext->crt, dtlsContext->pkey );
++ 	/* This is useless as peer would certainly be a self signed certificate and we won't verify it but avoid runtime warnings */
++-	bctbx_ssl_config_set_ca_chain(dtlsContext->ssl_config, dtlsContext->crt, NULL);
+++	bctbx_ssl_config_set_ca_chain(dtlsContext->ssl_config, dtlsContext->crt);
++ 
++ 	/* we are not ready yet to actually start the ssl context, this will be done by calling bctbx_ssl_setup when stream starts */
++ 	return 0;
+diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
+index 0f1ac77..5f26b54 100644
+--- a/package/mediastreamer/mediastreamer.hash
++++ b/package/mediastreamer/mediastreamer.hash
 @@ -1,3 +1,2 @@
  # Locally calculated
- sha256	0d8e34b302cfe4c40c6c9ae5097096aa5cc2c1dfceea3f0f22e3e16c4a4e8494	lxc-2.0.8.tar.gz
--sha256	16cf466db42a45bd579bdb66efbeb63764cd93d049f05a6d8a659846cab9b47f	bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 8a200e7..03e9431 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -11,10 +11,6 @@ LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
+ sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
+-sha256  90091ab0aa7a77381ab1ca5d88cdfa4e7f62505fb452a2bea0f70054d9d1aece  26f884bf977977041fe6f98a0af186be1580bf22.patch
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index a9e0bf7..44d9e97 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -13,10 +13,6 @@ MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
+ MEDIASTREAMER_LICENSE = GPL-2.0+
+ MEDIASTREAMER_LICENSE_FILES = COPYING
  
--# This patch fixes compilation without capabilities
--LXC_PATCH = \
--	https://github.com/lxc/lxc/commit/bc5b27d6f6d166d2a6df47982cbe36041ce6b735.patch
+-# fix compilation issue with latest bctoolbox (touches configure.ac)
+-MEDIASTREAMER_PATCH = \
+-	https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22.patch
 -
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-python --disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ # patching configure.ac
+ MEDIASTREAMER_AUTORECONF = YES
+ 
 -- 
 2.9.4
