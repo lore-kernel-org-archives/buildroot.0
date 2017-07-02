@@ -1,53 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jul 2017 17:46:14 +0200
-Subject: [Buildroot] [git commit branch/2017.05.x] core: always pass full
-	path to strip command
-Message-ID: <20170702155100.A3A9681E88@busybox.osuosl.org>
+Date: Sun, 2 Jul 2017 17:51:25 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] qt5multimedia:
+	conditionally add pulseaudio & libglib2 to dependencies
+Message-ID: <20170702155100.B91247FDB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7753672a5a70001b4fd216bea39cf54cbc1b9c51
+commit: https://git.buildroot.net/buildroot/commit/?id=dcc1c37baaa265248cb094dbf3ad41476c3536f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
-In some cases, passing STRIP=true is not sufficient to disable striping
-altogether, as some (incorrectly generated?) configure scripts will
-ignore a ${STRIP} that is not a full path.
+Qt5Multimedia includes support for pulseaudio if it detects libpulse
+and libpulse-mainloop-glib in the system at build-time. We need to
+depend on pulseaudio and libglib2 if it is selected.
 
-This is the case, for example, for nmap, which ends up using the host
-strip command when we pass STRIP=true:
-
-    checking for arm-buildroot-linux-gnueabihf-strip... no
-    checking for strip... /usr/bin/strip
-    configure: WARNING: using cross tools not prefixed with host triplet
-    [--SNIP--]
-    /usr/bin/install -c -c -m 755 nping /home/ymorin/dev/buildroot/O/target/usr/bin/nping
-    /usr/bin/strip -x /home/ymorin/dev/buildroot/O/target/usr/bin/nping
-    /usr/bin/strip: Unable to recognise the format of the input file `/home/ymorin/dev/buildroot/O/target/usr/bin/nping'
-
-We fix that by forcing a full path to the strip sommand when it is
-disabled: STRIP=/bin/true
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d5dcc76d9e5f9d22e881517ccc805dfd54499a74)
+(cherry picked from commit ac8044fc32bcca612a6105c9f0ca9aef11ebc061)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qt5/qt5multimedia/qt5multimedia.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4a3eb26..c1dc714 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -207,7 +207,7 @@ TARGET_STRIP = $(TARGET_CROSS)strip
- STRIPCMD = $(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 133536e..19312ff 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -26,6 +26,10 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
  endif
- ifeq ($(BR2_STRIP_none),y)
--TARGET_STRIP = true
-+TARGET_STRIP = /bin/true
- STRIPCMD = $(TARGET_STRIP)
- endif
- INSTALL := $(shell which install || type -p install)
+ 
++ifeq ($(BR2_PACKAGE_LIBGLIB2)$(BR2_PACKAGE_PULSEAUDIO),yy)
++QT5MULTIMEDIA_DEPENDENCIES += libglib2 pulseaudio
++endif
++
+ define QT5MULTIMEDIA_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+ endef
