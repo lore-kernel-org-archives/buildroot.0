@@ -1,63 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Jul 2017 23:30:01 +0200
-Subject: [Buildroot] [PATCH] package/cache-calibrator: fix legal-info
-Message-ID: <20170703213001.5404-1-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 3 Jul 2017 23:43:55 +0200
+Subject: [Buildroot] [PATCH] pngquant: doesn't support building with ccache
+Message-ID: <20170703214355.30076-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cache-calibrator is a single C file that is downloaded as-is, and we
-patch it. We also use that file as the license file.
+pngquant's homegrown configure script doesn't understand CC with a
+space, so we can't use ccache with it. Only the host variant is
+affected: for the target, we call ccache from the toolchain-wrapper so
+it's transparent to the configure script.
 
-Thus, the file when it is downloaded has a specific hash, but when
-saved by legal-info, it has a different hash.
+This wasn't seen in the autobuilders since they never enable
+BR2_CCACHE.
 
-However, we can't store two different hashes for the same _filename_
-with different content.
+To test, use any configuration and do
+make BR2_CCACHE=y host-pngquant
 
-So, we extract the license file as a pre-patch hook, and store it in a
-separate file, for which we can now add a hash.
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Stephan Hoffmann <sho@relinux.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/cache-calibrator/cache-calibrator.hash | 1 +
- package/cache-calibrator/cache-calibrator.mk   | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/pngquant/pngquant.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cache-calibrator/cache-calibrator.hash b/package/cache-calibrator/cache-calibrator.hash
-index df61d17e10..a4b4b70cf7 100644
---- a/package/cache-calibrator/cache-calibrator.hash
-+++ b/package/cache-calibrator/cache-calibrator.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 2018ed8fa733155d44ceb1c0066c5cf8df7771cdf7cfca0a07b8dd9bebd9c221 calibrator.c
-+sha256 a853663f5b4fb3ad77bf2790ab53146f456b8d9b9ddf83b99fe28c0bdec42514 calibrator.c.license
-diff --git a/package/cache-calibrator/cache-calibrator.mk b/package/cache-calibrator/cache-calibrator.mk
-index d0620655c7..6f12d119ef 100644
---- a/package/cache-calibrator/cache-calibrator.mk
-+++ b/package/cache-calibrator/cache-calibrator.mk
-@@ -7,12 +7,17 @@
- CACHE_CALIBRATOR_SOURCE = calibrator.c
- CACHE_CALIBRATOR_SITE = http://homepages.cwi.nl/~manegold/Calibrator/src
- CACHE_CALIBRATOR_LICENSE = Cache calibrator license
--CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c
-+CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c.license
- 
- define CACHE_CALIBRATOR_EXTRACT_CMDS
- 	cp $(DL_DIR)/$(CACHE_CALIBRATOR_SOURCE) $(@D)
- endef
- 
-+define CACHE_CALIBRATOR_EXTRACT_LICENSE
-+	head -n 38 $(@D)/calibrator.c >$(@D)/calibrator.c.license
-+endef
-+CACHE_CALIBRATOR_PRE_PATCH_HOOKS += CACHE_CALIBRATOR_EXTRACT_LICENSE
-+
- define CACHE_CALIBRATOR_BUILD_CMDS
- 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/calibrator.c -o $(@D)/cache_calibrator -lm
- endef
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 4a6f32fdca..938603a21d 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -36,6 +36,7 @@ endef
+ define HOST_PNGQUANT_CONFIGURE_CMDS
+ 	(cd $(@D) && \
+ 		$(HOST_CONFIGURE_OPTS) \
++		CC=$(HOSTCC_NOCCACHE) \
+ 		./configure --prefix=$(HOST_DIR)/usr \
+ 		--without-lcms2 \
+ 	)
 -- 
-2.11.0
+2.13.2
