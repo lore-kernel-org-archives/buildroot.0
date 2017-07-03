@@ -1,10 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  3 Jul 2017 17:51:51 +0200
-Subject: [Buildroot] [PATCH v2 3/6] fs/ext2: use mkfs to generate rootfs
-	image
+Date: Mon,  3 Jul 2017 17:51:54 +0200
+Subject: [Buildroot] [PATCH v2 6/6] package/mke2img: remove package
 In-Reply-To: <20170703155154.24104-1-s.martin49@gmail.com>
 References: <20170703155154.24104-1-s.martin49@gmail.com>
-Message-ID: <20170703155154.24104-4-s.martin49@gmail.com>
+Message-ID: <20170703155154.24104-7-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +12,8 @@ To: buildroot@busybox.net
 
 From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-mkfs is now capable of generating rootfs images. Use mkfs intead of
-genext2fs. As we let mkfs calculate the block size and the number of
-inodes needed we can drop BR2_TARGET_ROOTFS_EXT2_INODES and
-BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES and rename
-BR2_TARGET_ROOTFS_EXT2_BLOCKS to BR2_TARGET_ROOTFS_EXT2_SIZE
+Now that we use mkfs to generate ext2/3/4 filesystem image by calling
+mkfs directly from fs/ext2/ext2.mk, we can remove this package.
 
 Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
@@ -25,146 +21,299 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
 changes v1->v2:
 - rebase
-- add default size value
 ---
- Config.in.legacy  | 34 ++++++++++++++++++++++++++++++++++
- fs/ext2/Config.in | 27 +++++++++------------------
- fs/ext2/ext2.mk   | 22 +++++++++++-----------
- 3 files changed, 54 insertions(+), 29 deletions(-)
+ Config.in.legacy               |   6 ++
+ DEVELOPERS                     |   1 -
+ package/Config.in.host         |   1 -
+ package/mke2img/Config.in.host |  11 ---
+ package/mke2img/mke2img        | 199 -----------------------------------------
+ package/mke2img/mke2img.mk     |  13 ---
+ 6 files changed, 6 insertions(+), 225 deletions(-)
+ delete mode 100644 package/mke2img/Config.in.host
+ delete mode 100755 package/mke2img/mke2img
+ delete mode 100644 package/mke2img/mke2img.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 453c5eb8b8..c086d30ee5 100644
+index c086d30ee5..c63c2f5bd5 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -145,6 +145,40 @@ endif
+@@ -145,6 +145,12 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2017.08"
  
-+config BR2_TARGET_ROOTFS_EXT2_INODES
-+	int "exact number of inodes has been removed"
-+	default 0
-+	help
-+	  Buildroot uses mkfs.ext2/3/4 to generate ext2/3/4 images. So let mkfs
-+	  automatically selects the number of inodes needed. Set this option to
-+	  0.
-+
-+config BR2_TARGET_ROOTFS_EXT2_INODES_WRAP
-+	bool
-+	default y if BR2_TARGET_ROOTFS_EXT2_INODES != 0
++config BR2_PACKAGE_HOST_MKE2IMG
++	bool "host mke2img has been removed"
 +	select BR2_LEGACY
-+
-+config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
-+	int "extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
-+	default 0
 +	help
-+	  Buildroot uses mkfs.ext2/3/4 to generate ext2/3/4 images. So let mkfs
-+	  automatically selects the number of inodes needed. Set this option to
-+	  0.
++	  We now call mkfs directly to generate ext2/3/4 filesystem image.
 +
-+config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES_WRAP
-+	bool
-+	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES != 0
-+	select BR2_LEGACY
-+
-+config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-+	int "exact size in blocks has been removed"
-+	default 0
-+	help
-+	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
-+
-+# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS still reference in fs/ext2/Config.in
-+
- config BR2_STRIP_none
- 	bool "Strip command 'none' has been removed"
- 	select BR2_LEGACY
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 33891601f4..d3e9d16a44 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -1,6 +1,6 @@
- config BR2_TARGET_ROOTFS_EXT2
- 	bool "ext2/3/4 root filesystem"
--	select BR2_PACKAGE_HOST_MKE2IMG
-+	select BR2_PACKAGE_HOST_E2FSPROGS
- 	help
- 	  Build an ext2/3/4 root filesystem
- 
-@@ -44,24 +44,15 @@ config BR2_TARGET_ROOTFS_EXT2_REV
- config BR2_TARGET_ROOTFS_EXT2_LABEL
- 	string "filesystem label"
- 
--# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
--config BR2_TARGET_ROOTFS_EXT2_BLOCKS
--	int "exact size in blocks"
--	default 61440
-+config BR2_TARGET_ROOTFS_EXT2_SIZE
-+	string "exact size"
-+	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 # legacy 2017.08
-+	default "60M" # default size
- 	help
--	  Specify the file system size as a number of 1024-byte blocks.
--
--config BR2_TARGET_ROOTFS_EXT2_INODES
--	int "exact number of inodes (leave at 0 for auto calculation)"
--	default 0
--
--config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
--	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
--	default 0
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes has been removed"
+ 	default 0
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d121bd8163..62172abcd0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1779,7 +1779,6 @@ F:	package/libiscsi/
+ F:	package/libseccomp/
+ F:	package/linux-tools/
+ F:	package/mesa3d-headers/
+-F:	package/mke2img/
+ F:	package/nbd/
+ F:	package/nut/
+ F:	package/nvidia-driver/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 0932b9f1f9..c5a852b858 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -24,7 +24,6 @@ menu "Host utilities"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/lttng-babeltrace/Config.in.host"
+ 	source "package/mfgtools/Config.in.host"
+-	source "package/mke2img/Config.in.host"
+ 	source "package/mkpasswd/Config.in.host"
+ 	source "package/mtd/Config.in.host"
+ 	source "package/mtools/Config.in.host"
+diff --git a/package/mke2img/Config.in.host b/package/mke2img/Config.in.host
+deleted file mode 100644
+index b5bcb8455f..0000000000
+--- a/package/mke2img/Config.in.host
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_HOST_MKE2IMG
+-	bool "host mke2img"
+-	select BR2_PACKAGE_HOST_E2FSPROGS
+-	select BR2_PACKAGE_HOST_GENEXT2FS
 -	help
--	  Enter here the number of extra free inodes you want on
--	  your filesystem. By default, Buildroot will not leave
--	  many free inodes.
-+	  The size of the filesystem image. If it does not have a suffix, it is
-+	  interpreted as power-of-two kilobytes. If it is suffixed by 'k', 'm',
-+	  'g', 't' (either upper-case or lower-case), then it is interpreted in
-+	  power-of-two kilobytes, megabytes, gigabytes, terabytes, etc.
- 
- config BR2_TARGET_ROOTFS_EXT2_RESBLKS
- 	int "reserved blocks percentage"
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index ce567de34c..5269e99a29 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -4,28 +4,28 @@
- #
- ################################################################################
- 
--EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
+-	  Easily create filesystems of the extend familly: ext2/3/4.
 -
--EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
+-	  This tool is bundled by, and specific to Buildroot. However, it can
+-	  be used from post-images scripts is needed.
 -
--ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
--EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
-+EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
-+ifeq ($(EXT2_SIZE),)
-+$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
- endif
--EXT2_OPTS += -I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES)
- 
--EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
-+EXT2_OPTS = -d $(TARGET_DIR)
-+EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_REV)
-+
-+EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
- 
- # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
- EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
- #" Syntax highlighting... :-/ )
- 
--EXT2_OPTS += -l "$(EXT2_LABEL)"
-+EXT2_OPTS += -L "$(EXT2_LABEL)"
- 
--ROOTFS_EXT2_DEPENDENCIES = host-mke2img
-+ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
- 
- define ROOTFS_EXT2_CMD
--	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
-+	rm -f $@
-+	PATH=$(BR_PATH) mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ $(EXT2_SIZE)
- endef
- 
- rootfs-ext2-symlink:
+-	  https://code.google.com/p/mke2img/
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+deleted file mode 100755
+index 758b6dee68..0000000000
+--- a/package/mke2img/mke2img
++++ /dev/null
+@@ -1,199 +0,0 @@
+-#!/usr/bin/env bash
+-
+-# Buildroot wrapper to the collection of ext2/3/4 filesystem tools:
+-# - genext2fs, to generate ext2 filesystem images
+-# - tune2fs, to modify an ext2/3/4 filesystem (possibly in an image file)
+-# - e2fsck, to check and fix an ext2/3/4 filesystem (possibly in an image file)
+-
+-set -e
+-
+-main() {
+-    local OPT OPTARG
+-    local nb_blocks nb_inodes nb_res_blocks root_dir image gen rev label uuid
+-    local -a genext2fs_opts
+-    local -a tune2fs_opts
+-    local tune2fs_O_opts
+-
+-    # Default values
+-    gen=2
+-    rev=1
+-    nb_extra_inodes=0
+-
+-    while getopts :hb:i:I:r:d:o:G:R:l:u: OPT; do
+-        case "${OPT}" in
+-        h)  help; exit 0;;
+-        b)  nb_blocks=${OPTARG};;
+-        i)  nb_inodes=${OPTARG};;
+-        I)  nb_extra_inodes=${OPTARG};;
+-        r)  nb_res_blocks=${OPTARG};;
+-        d)  root_dir="${OPTARG}";;
+-        o)  image="${OPTARG}";;
+-        G)  gen=${OPTARG};;
+-        R)  rev=${OPTARG};;
+-        l)  label="${OPTARG}";;
+-        u)  uuid="${OPTARG}";;
+-        :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+-        \?) error "unknown option '%s'\n" "${OPTARG}";;
+-        esac
+-    done
+-
+-    # Sanity checks
+-    if [ -z "${root_dir}" ]; then
+-        error "you must specify a root directory with '-d'\n"
+-    fi
+-    if [ -z "${image}" ]; then
+-        error "you must specify an output image file with '-o'\n"
+-    fi
+-    if [ -z "${nb_blocks}" ]; then
+-        error "you must specify the size of the output image with '-b'\n"
+-    fi
+-    case "${gen}:${rev}" in
+-    2:0|2:1|3:1|4:1)
+-        ;;
+-    3:0|4:0)
+-        error "revision 0 is invalid for ext3 and ext4\n"
+-        ;;
+-    *)  error "unknown ext generation '%s' and/or revision '%s'\n" \
+-               "${gen}" "${rev}"
+-        ;;
+-    esac
+-
+-    # calculate needed inodes
+-    if [ -z "${nb_inodes}" ]; then
+-        nb_inodes=$(find "${root_dir}" | wc -l)
+-        nb_inodes=$((nb_inodes+400))
+-    fi
+-    nb_inodes=$((nb_inodes+nb_extra_inodes))
+-
+-    # Upgrade to rev1 if needed
+-    if [ ${rev} -ge 1 ]; then
+-        tune2fs_O_opts+=",filetype,sparse_super"
+-    fi
+-
+-    # Add a journal for ext3 and above
+-    if [ ${gen} -ge 3 ]; then
+-        tune2fs_opts+=( -j -J size=1 )
+-    fi
+-
+-    # Add ext4 specific features
+-    if [ ${gen} -ge 4 ]; then
+-        tune2fs_O_opts+=",extents,uninit_bg,dir_index"
+-    fi
+-
+-    # Add our -O options (there will be at most one leading comma, remove it)
+-    if [ -n "${tune2fs_O_opts}" ]; then
+-        tune2fs_opts+=( -O "${tune2fs_O_opts#,}" )
+-    fi
+-
+-    # Add the label if specified
+-    if [ -n "${label}" ]; then
+-        tune2fs_opts+=( -L "${label}" )
+-    fi
+-
+-    # Generate the filesystem
+-    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
+-    if [ -n "${nb_res_blocks}" ]; then
+-        genext2fs_opts+=( -m ${nb_res_blocks} )
+-    fi
+-    genext2fs "${genext2fs_opts[@]}" "${image}"
+-
+-    # genext2fs does not generate a UUID, but fsck will whine if one
+-    # is missing, so we need to add a UUID.
+-    # Of course, this has to happen _before_ we run fsck.
+-    # Also, some ext4 metadata are based on the UUID, so we must
+-    # set it before we can convert the filesystem to ext4.
+-    # If the user did not specify a UUID, we generate a random one.
+-    # Although a random UUID may seem bad for reproducibility, there
+-    # already are so many things that are not reproducible in a
+-    # filesystem: file dates, file ordering, content of the files...
+-    tune2fs -U "${uuid:-random}" "${image}"
+-
+-    # Upgrade the filesystem
+-    if [ ${#tune2fs_opts[@]} -ne 0 ]; then
+-        tune2fs "${tune2fs_opts[@]}" "${image}"
+-    fi
+-
+-    # After changing filesystem options, running fsck is required
+-    # (see: man tune2fs). Running e2fsck in other cases will ensure
+-    # coherency of the filesystem, although it is not required.
+-    # 'e2fsck -pDf' means:
+-    #  - automatically repair
+-    #  - optimise and check for duplicate entries
+-    #  - force checking
+-    # Sending output to oblivion, as e2fsck can be *very* verbose,
+-    # especially with filesystems generated by genext2fs.
+-    # Exit codes 1 & 2 are OK, it means fs errors were successfully
+-    # corrected, hence our little trick with $ret.
+-    ret=0
+-    e2fsck -pDf "${image}" >/dev/null || ret=$?
+-    case ${ret} in
+-       0|1|2) ;;
+-       *)   errorN ${ret} "failed to run e2fsck on '%s' (ext%d)\n" \
+-                   "${image}" ${gen}
+-    esac
+-    printf "\n"
+-    trace "e2fsck was successfully run on '%s' (ext%d)\n" "${image}" ${gen}
+-    printf "\n"
+-
+-    # Remove count- and time-based checks, they are not welcome
+-    # on embedded devices, where they can cause serious boot-time
+-    # issues by tremendously slowing down the boot.
+-    tune2fs -c 0 -i 0 "${image}"
+-}
+-
+-help() {
+-    cat <<_EOF_
+-NAME
+-    ${my_name} - Create an ext2/3/4 filesystem image
+-
+-SYNOPSIS
+-    ${my_name} [OPTION]...
+-
+-DESCRIPTION
+-    Create ext2/3/4 filesystem image from the content of a directory.
+-
+-    -b BLOCKS
+-        Create a filesystem of BLOCKS 1024-byte blocs. The default is to
+-        compute the required number of blocks.
+-
+-    -i INODES
+-        Create a filesystem with INODES inodes. The default is to compute
+-        the required number of inodes.
+-
+-    -r RES_BLOCKS
+-        Create a filesystem with RES_BLOCKS reserved blocks. The default
+-        is to reserve 0 block.
+-
+-    -d ROOT_DIR
+-        Create a filesystem, using the content of ROOT_DIR as the content
+-        of the root of the filesystem. Mandatory.
+-
+-    -o FILE
+-        Create the filesystem in FILE. Madatory.
+-
+-    -G GEN -R REV
+-        Create a filesystem of generation GEN (2, 3 or 4), and revision
+-        REV (0 or 1). The default is to generate an ext2 revision 1
+-        filesystem; revision 0 is invalid for ext3 and ext4.
+-
+-    -l LABEL
+-        Create a filesystem with label LABEL. The default is to not set
+-        a label.
+-
+-    -u UUID
+-        Create filesystem with uuid UUID. The default is to set a random
+-        UUID.
+-
+-  Exit status:
+-    0   if OK
+-    !0  in case of error
+-_EOF_
+-}
+-
+-trace()  { local msg="${1}"; shift; printf "%s: ${msg}" "${my_name}" "${@}"; }
+-warn()   { trace "${@}" >&2; }
+-errorN() { local ret="${1}"; shift; warn "${@}"; exit ${ret}; }
+-error()  { errorN 1 "${@}"; }
+-
+-my_name="${0##*/}"
+-main "$@"
+diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
+deleted file mode 100644
+index 9de387a3a3..0000000000
+--- a/package/mke2img/mke2img.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# mke2img
+-#
+-################################################################################
+-
+-HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
+-
+-define HOST_MKE2IMG_INSTALL_CMDS
+-	$(INSTALL) -D -m 0755 package/mke2img/mke2img $(HOST_DIR)/usr/bin/mke2img
+-endef
+-
+-$(eval $(host-generic-package))
 -- 
 2.13.2
