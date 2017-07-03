@@ -1,34 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Jul 2017 14:55:43 +0200
-Subject: [Buildroot] [git commit] tslib: use SPDX identifiers for licenses
-	in use
-Message-ID: <20170703125436.4D6207FA44@busybox.osuosl.org>
+Date: Mon, 03 Jul 2017 14:59:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] automake: fix unescaped left brace
+	warning patch.
+In-Reply-To: <1499072958.1626.5.camel@embedded.rocks> (=?utf-8?Q?=22J?=
+ =?utf-8?Q?=C3=B6rg?= Krause"'s message
+ of "Mon, 03 Jul 2017 11:09:18 +0200")
+References: <20170306132359.21768-1-aduskett@codeblue.com>
+ <20170320214543.02c3461c@free-electrons.com>
+ <1499072958.1626.5.camel@embedded.rocks>
+Message-ID: <87a84l8ymo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56ed4a1ef20aea9bbf46c8c17cb275e3173d5acf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-[Peter: License is GPL-2.0+ / LGPL-2.1+]
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tslib/tslib.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 91ba9db..5190465 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -7,7 +7,7 @@
- TSLIB_VERSION = 1.11
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
--TSLIB_LICENSE = GPL, LGPL
-+TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- TSLIB_LICENSE_FILES = COPYING
- 
- TSLIB_INSTALL_STAGING = YES
+ >> I've applied. However, you should format the patches of projects
+ >> managed with Git using "git format-patch". So the automake patch
+ >> should
+ >> have been Git formatted. I've fixed that before applying.
+
+ > We should apply the patch to the 2017.02.x branch, too. Perl 5.26 is
+ > treating the warning as an error. This patch fixes building alsa-lib
+ > for me on the 2017.02.x branch.
+
+Ok - Committed to 2017.02.x, thanks!
+
+-- 
+Bye, Peter Korsgaard
