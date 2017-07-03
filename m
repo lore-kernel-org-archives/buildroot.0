@@ -1,103 +1,144 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  3 Jul 2017 12:18:39 +0200
-Subject: [Buildroot] [RFC 2/9] package/clang: new host package
+Date: Mon,  3 Jul 2017 12:18:45 +0200
+Subject: [Buildroot] [RFC 8/9] package/libclc: new package
 In-Reply-To: <20170703101846.1158-1-romain.naour@gmail.com>
 References: <20170703101846.1158-1-romain.naour@gmail.com>
-Message-ID: <20170703101846.1158-3-romain.naour@gmail.com>
+Message-ID: <20170703101846.1158-9-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install clang-tblgen to HOST_DIR.
+Use the latest commit in master branch.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/Config.in.host       |  1 +
- package/clang/Config.in.host |  8 ++++++++
- package/clang/clang.hash     |  2 ++
- package/clang/clang.mk       | 36 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/clang/Config.in.host
- create mode 100644 package/clang/clang.hash
- create mode 100644 package/clang/clang.mk
+ package/Config.in                                  |  1 +
+ ...y-allow-to-define-llvm-bindir-for-cross-c.patch | 37 ++++++++++++++++++++
+ package/libclc/Config.in                           | 10 ++++++
+ package/libclc/libclc.mk                           | 40 ++++++++++++++++++++++
+ 4 files changed, 88 insertions(+)
+ create mode 100644 package/libclc/0001-configure.py-allow-to-define-llvm-bindir-for-cross-c.patch
+ create mode 100644 package/libclc/Config.in
+ create mode 100644 package/libclc/libclc.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index cf49950..ecbbea0 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -4,6 +4,7 @@ menu "Host utilities"
- 	source "package/android-tools/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
-+	source "package/clang/Config.in.host"
- 	source "package/cramfs/Config.in.host"
- 	source "package/dfu-util/Config.in.host"
- 	source "package/dos2unix/Config.in.host"
-diff --git a/package/clang/Config.in.host b/package/clang/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index c34325f..711c6f3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -266,6 +266,7 @@ comment "Graphic libraries"
+ 	source "package/fbv/Config.in"
+ 	source "package/freerdp/Config.in"
+ 	source "package/imagemagick/Config.in"
++	source "package/libclc/Config.in"
+ 	source "package/linux-fusion/Config.in"
+ 	source "package/lite/Config.in"
+ 	source "package/mesa3d/Config.in"
+diff --git a/package/libclc/0001-configure.py-allow-to-define-llvm-bindir-for-cross-c.patch b/package/libclc/0001-configure.py-allow-to-define-llvm-bindir-for-cross-c.patch
 new file mode 100644
-index 0000000..8d6c99a
+index 0000000..27f46cf
 --- /dev/null
-+++ b/package/clang/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_CLANG
-+	bool "host clang"
++++ b/package/libclc/0001-configure.py-allow-to-define-llvm-bindir-for-cross-c.patch
+@@ -0,0 +1,37 @@
++From d46e38da621a64637970a071b9aa08dc17f0638b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Mon, 3 Jul 2017 10:37:11 +0200
++Subject: [PATCH] configure.py: allow to define llvm-bindir for cross-compiling
++
++TODO
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.py | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/configure.py b/configure.py
++index f26f535..fe4cbc0 100755
++--- a/configure.py
+++++ b/configure.py
++@@ -22,6 +22,8 @@ import metabuild
++ p = OptionParser()
++ p.add_option('--with-llvm-config', metavar='PATH',
++              help='use given llvm-config script')
+++p.add_option('--llvm-bindir', metavar='PATH',
+++             help='use given llvm-bindir')
++ p.add_option('--with-cxx-compiler', metavar='PATH',
++              help='use given C++ compiler')
++ p.add_option('--prefix', metavar='PATH',
++@@ -74,7 +76,7 @@ if llvm_int_version < 400:
++     sys.exit(1)
++ 
++ llvm_system_libs = llvm_config(['--system-libs'])
++-llvm_bindir = llvm_config(['--bindir'])
+++llvm_bindir = options.llvm_bindir or llvm_config(['--bindir'])
++ llvm_core_libs = llvm_config(['--libs', 'core', 'bitreader', 'bitwriter']) + ' ' + \
++                  llvm_system_libs + ' ' + \
++                  llvm_config(['--ldflags'])
++-- 
++2.9.4
++
+diff --git a/package/libclc/Config.in b/package/libclc/Config.in
+new file mode 100644
+index 0000000..44d4d96
+--- /dev/null
++++ b/package/libclc/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBCLC
++	bool "libclc"
 +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
 +	help
-+	  Clang is a C++, Objective C and Objective C++ front-end for
-+	  the LLVM compiler.
++	  libclc is an open source, BSD/MIT dual licensed
++	  implementation of the library requirements of the OpenCL C
++	  programming language, as specified by the OpenCL 1.1
++	  Specification.
 +
-+	  http://llvm.org
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
++	  http://libclc.llvm.org/
+diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
 new file mode 100644
-index 0000000..c2a9d23
+index 0000000..a176a59
 --- /dev/null
-+++ b/package/clang/clang.hash
-@@ -0,0 +1,2 @@
-+# locally calculated
-+sha256	61738a735852c23c3bdbe52d035488cdb2083013f384d67c1ba36fabebd8769b	cfe-4.0.1.src.tar.xz
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-new file mode 100644
-index 0000000..e70afa4
---- /dev/null
-+++ b/package/clang/clang.mk
-@@ -0,0 +1,36 @@
++++ b/package/libclc/libclc.mk
+@@ -0,0 +1,40 @@
 +################################################################################
 +#
-+# clang
++# libclc
 +#
 +################################################################################
 +
-+CLANG_VERSION = 4.0.1
-+CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
-+CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
-+CLANG_LICENSE = NCSA
-+CLANG_LICENSE_FILES = LICENSE.TXT
++LIBCLC_VERSION = 1cb3fbf504e25d86d972e8b2af3e24571767046b
++LIBCLC_SITE = http://llvm.org/git/libclc.git
++LIBCLC_SITE_METHOD = git
 +
-+HOST_CLANG_DEPENDENCIES = host-llvm host-libxml2
++LIBCLC_DEPENDENCIES = host-clang host-llvm
 +
-+CLANG_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBCLC_INSTALL_STAGING = YES
 +
-+HOST_CLANG_CONF_OPTS += -DLLVM_INCLUDE_TESTS=OFF \
-+	-DCLANG_INCLUDE_TESTS=OFF \
-+	-DCLANG_BUILD_EXAMPLES=OFF \
-+	-DCLANG_BUILD_TOOLS=ON \
-+	-DCLANG_VENDOR=$(TARGET_VENDOR) \
-+	-DCLANG_VENDOR_UTI="http://bugs.buildroot.net/"
++# C++ compiler is used to build a small tool (prepare-builtins) for the host.
++# It must be build with the C++ compiler from the host, simply use
++# HOSTCXX_NOCCACHE.
++LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
++	--prefix="/usr" \
++	--pkgconfigdir="/usr/lib/pkgconfig" \
++	--llvm-bindir=$(HOST_DIR)/usr/bin \
++	--with-cxx-compiler='$(HOSTCXX_NOCCACHE)'
 +
-+# For some reason clang-tblgen is not installed in HOST_DIR.
-+define HOST_CLANG_COPY_CLANG_TBLGEN_TO_HOST_DIR
-+	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/bin/clang-tblgen \
-+		$(HOST_DIR)/usr/bin/clang-tblgen
++define LIBCLC_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
 +endef
-+HOST_CLANG_POST_INSTALL_HOOKS = HOST_CLANG_COPY_CLANG_TBLGEN_TO_HOST_DIR
 +
-+# We need to set a proper RPATH otherwise the build stop on the RPATH check:
-+# *** ERROR: package host-clang installs executables without proper RPATH
-+HOST_CLANG_CONF_ENV += \
-+	LDFLAGS="$(HOST_LDFLAGS) -L${HOST_DIR}/usr/lib -Wl,-rpath,${HOST_DIR}/usr/lib"
++define LIBCLC_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
 +
-+$(eval $(host-cmake-package))
++define LIBCLC_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define LIBCLC_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
 2.9.4
