@@ -1,34 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 22:58:30 +0200
-Subject: [Buildroot] [PATCH] uftrace: new package
-In-Reply-To: <0d61249c-aa82-f9c7-8b38-7d012d20a9b8@bergerie>
-References: <20170625193743.8424-1-vincent.stehle@laposte.net>
- <a744ab11-02b0-6ed6-c975-b3816ca3bf50@smile.fr>
- <0d61249c-aa82-f9c7-8b38-7d012d20a9b8@bergerie>
-Message-ID: <25b193a3-e21b-a416-8309-154a7935e254@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 3 Jul 2017 23:00:48 +0200
+Subject: [Buildroot] [PATCH v14 1/4] makedevs: support optional files
+Message-ID: <20170703210051.3457-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add the 'F' file type to makedevs, that allows a file to be optional.
+With this option, the line is just silently skipped if the file doesn't
+exist (or is not a regular file).
 
+This is useful for _PERMISSIONS where the file can be configured out
+by package-specific configuration that is not directly handled by
+Buildroot, like busybox.
 
-On 03-07-17 22:47, Vincent Stehl? wrote:
-> Well some of the environment settings and configure options are
-> "sampled" by this configure script of theirs (which resembles autoconf
-> and is not). This ends up being stored in a file, which is reused
-> afterwards.
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+Cc: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v14:
+ - Split off the makedevs change in a separate patch.
+ - Fix it - AFAICS, the original patch would just skip all F lines.
+---
+ package/makedevs/makedevs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- Please keep this explanation either in the commit log or in a comment in the
-.mk file itself, otherwise people will ask the same question again.
-
- Regards,
- Arnout
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index 7092b1475e..1ba5936342 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -570,9 +570,12 @@ int main(int argc, char **argv)
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
+ 			}
+-		} else if (type == 'f') {
++		} else if (type == 'f' || type == 'F') {
+ 			struct stat st;
+ 			if ((stat(full_name, &st) < 0 || !S_ISREG(st.st_mode))) {
++				if (type == 'F') {
++					continue; /*Ignore optional files*/
++				}
+ 				bb_perror_msg("line %d: regular file '%s' does not exist", linenum, full_name);
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.13.2
