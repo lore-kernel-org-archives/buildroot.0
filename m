@@ -1,36 +1,66 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Mon, 3 Jul 2017 16:14:22 +0100
-Subject: [Buildroot] Unable to compile current master
-Message-ID: <d7a64db4-2f26-6f27-98e1-6017ca8a95a5@newflow.co.uk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 17:48:38 +0200
+Subject: [Buildroot] [PATCH] libusb-compat: fix a build issue with
+ undefined PATH_MAX
+In-Reply-To: <8b198702-d118-0dc0-fe5b-7f56d5145c47@mind.be>
+References: <1499091412-26839-1-git-send-email-brgl@bgdev.pl>
+ <8b198702-d118-0dc0-fe5b-7f56d5145c47@mind.be>
+Message-ID: <2c1faeab-92de-d158-442e-8ee89965d4cc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to bring an old 2012 buildroot project up-to-date, so to test my current setup I've branched the git master and tried:-
 
-$ git checkout origin/master -b master
-$ git reset --hard origin/master
-$ make clean
-$ make beaglebone_defconfig
-$ make
 
-But this fails when compiling gcc with the following:-
+On 03-07-17 17:11, Arnout Vandecappelle wrote:
+>  Hi Bartosz,
+> 
+> On 03-07-17 16:16, Bartosz Golaszewski wrote:
+>> libsigrok build failed because of PATH_MAX not being defined in usb.h.
+>> On linux it is defined in linux/limits.h, but usb.h only includes
+>> limit.h. Add a patch fixing the header in libusb-compat.
+> 
+>  This doesn't sound right: according to POSIX [1], limits.h should define
+> PATH_MAX. And indeed, if you do
+> 
+> echo '#include <usb.h>' | host/usr/bin/x86_64-amd-linux-gnu-gcc -x c -E -
+> 
+> you'll see that PATH_MAX gets properly expanded to 4096. So something else is
+> going on.
 
-...
-/usr/bin/g++ -fno-PIE -c   -O2 -I/home/mpfj/buildroot/output/host/usr/include -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include -I../../gcc/../libcpp/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include  -I../../gcc/../libdecnumber -I../../gcc/../libdecnumber/dpd -I../libdecnumber -I../../gcc/../libbacktrace   -o insn-extract.o -MT insn-extract.o -MMD -MP -MF ./.deps/insn-extract.TPo insn-extract.c
-Makefile:2201: recipe for target 's-attrtab' failed
-make[3]: *** [s-attrtab] Killed
-make[3]: *** Waiting for unfinished jobs....
-rm gcc.pod
-Makefile:4113: recipe for target 'all-gcc' failed
-make[2]: *** [all-gcc] Error 2
-package/pkg-generic.mk:227: recipe for target '/home/mpfj/buildroot/output/build/host-gcc-initial-6.3.0/.stamp_built' failed
-make[1]: *** [/home/mpfj/buildroot/output/build/host-gcc-initial-6.3.0/.stamp_built] Error 2
-Makefile:79: recipe for target '_all' failed
-make: *** [_all] Error 2
+ OK so I investigated a little more, and it turns out that -std=c99 is the
+culprit. And apparently people on the 'net are advising to use linux/limits.h to
+get at PATH_MAX. So perhaps this is the right approach after all.
 
-Can anyone help out ?
+ What's the upstream status of this patch?
 
-If it's any help, the "gcc" portion of the build log is here (https://pastebin.com/PRaPh5n1)
+ Regards,
+ Arnout
+
+> 
+> 
+>>
+>> While we're at it: remove the patch numbering from previous patch.
+> 
+>  Good idea, but no need to add your SoB just for that.
+> 
+>  Regards,
+>  Arnout
+> 
+>> Fixes: http://autobuild.buildroot.net/results/535/5353c2418c0c3311ef9ecb1f1ddc3ce769369b96/
+>> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> 
+> [1] http://pubs.opengroup.org/onlinepubs/009695399/basedefs/limits.h.html
+> 
+> [snip]
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
