@@ -1,66 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 17:48:38 +0200
-Subject: [Buildroot] [PATCH] libusb-compat: fix a build issue with
- undefined PATH_MAX
-In-Reply-To: <8b198702-d118-0dc0-fe5b-7f56d5145c47@mind.be>
-References: <1499091412-26839-1-git-send-email-brgl@bgdev.pl>
- <8b198702-d118-0dc0-fe5b-7f56d5145c47@mind.be>
-Message-ID: <2c1faeab-92de-d158-442e-8ee89965d4cc@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon,  3 Jul 2017 17:51:48 +0200
+Subject: [Buildroot] [PATCH v2 0/6] fs/ext2: cleanup and improvement
+Message-ID: <20170703155154.24104-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
+
+Here is a short series based on 2 series initially sent early last May
+by S?bastien Szymanski and Yann E. Morin, refactoring and improvement
+the ext* image support.
+
+This series is mostly about merging and updating these 2 series into
+a single one.
+
+Regards,
 
 
-On 03-07-17 17:11, Arnout Vandecappelle wrote:
->  Hi Bartosz,
-> 
-> On 03-07-17 16:16, Bartosz Golaszewski wrote:
->> libsigrok build failed because of PATH_MAX not being defined in usb.h.
->> On linux it is defined in linux/limits.h, but usb.h only includes
->> limit.h. Add a patch fixing the header in libusb-compat.
-> 
->  This doesn't sound right: according to POSIX [1], limits.h should define
-> PATH_MAX. And indeed, if you do
-> 
-> echo '#include <usb.h>' | host/usr/bin/x86_64-amd-linux-gnu-gcc -x c -E -
-> 
-> you'll see that PATH_MAX gets properly expanded to 4096. So something else is
-> going on.
+Samuel Martin (1):
+  fs/ext2: simplify code
 
- OK so I investigated a little more, and it turns out that -std=c99 is the
-culprit. And apparently people on the 'net are advising to use linux/limits.h to
-get at PATH_MAX. So perhaps this is the right approach after all.
+S?bastien Szymanski (3):
+  fs/ext2: use mkfs to generate rootfs image
+  fs/ext2: Add BR2_TARGET_ROOTFS_EXT2_FEATURES option
+  package/mke2img: remove package
 
- What's the upstream status of this patch?
+Yann E. MORIN (2):
+  fs/ext2: always pass the label option
+  fs/ext2: allow reserving zero block for root
 
- Regards,
- Arnout
+ Config.in.legacy               |  40 +++++++++
+ DEVELOPERS                     |   1 -
+ fs/ext2/Config.in              |  44 +++++----
+ fs/ext2/ext2.mk                |  30 +++----
+ package/Config.in.host         |   1 -
+ package/mke2img/Config.in.host |  11 ---
+ package/mke2img/mke2img        | 199 -----------------------------------------
+ package/mke2img/mke2img.mk     |  13 ---
+ 8 files changed, 80 insertions(+), 259 deletions(-)
+ delete mode 100644 package/mke2img/Config.in.host
+ delete mode 100755 package/mke2img/mke2img
+ delete mode 100644 package/mke2img/mke2img.mk
 
-> 
-> 
->>
->> While we're at it: remove the patch numbering from previous patch.
-> 
->  Good idea, but no need to add your SoB just for that.
-> 
->  Regards,
->  Arnout
-> 
->> Fixes: http://autobuild.buildroot.net/results/535/5353c2418c0c3311ef9ecb1f1ddc3ce769369b96/
->> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> 
-> [1] http://pubs.opengroup.org/onlinepubs/009695399/basedefs/limits.h.html
-> 
-> [snip]
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+--
+2.13.2
