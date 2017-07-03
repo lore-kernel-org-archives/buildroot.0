@@ -1,35 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 18:07:32 +0200
-Subject: [Buildroot] [PATCH 5/5] docs/manual: document hashes for
-	license files
-In-Reply-To: <48ad498d1bf7e08c8120090942e711a1d2320c32.1498428166.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 26 Jun 2017 00:03:41 +0200")
-References: <cover.1498428166.git.yann.morin.1998@free.fr>
- <48ad498d1bf7e08c8120090942e711a1d2320c32.1498428166.git.yann.morin.1998@free.fr>
-Message-ID: <87bmp17bcr.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 18:11:46 +0200
+Subject: [Buildroot] [PATCH 2/4] core: allow packages to declare a
+ permission file
+In-Reply-To: <19ba0b45-b260-ea6c-a6eb-7e6d578b9a35@mind.be>
+References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56824752-a1bd-730a-b9f6-465eec832da7@mind.be>
+ <0ae8c865-9540-2c3c-d2b4-e6a195179b59@mind.be>
+ <19ba0b45-b260-ea6c-a6eb-7e6d578b9a35@mind.be>
+Message-ID: <38635a59-ceaf-2df8-04e9-3fd158d85927@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
- > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
- >  # No hash for 1234:
- >  none   xxx                                                              libfoo-1234.tar.gz
- > +
- > +# Hash for license files:
- > +sha1  c47a888f2be626e1197b6f651dee966ef882077d  COPYING
- > +sha1  e101765734390d664b59325b2d644d80d9a6bd9a  doc/COPYING.LGPL
+On 03-07-17 18:03, Arnout Vandecappelle wrote:
+>  Hi all,
+> 
+> On 29-03-17 08:43, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 29-03-17 00:12, Arnout Vandecappelle wrote:
+>> [snip]
+>>> define BUSYBOX_PERMISSIONS
+>>> 	$(foreach app,$(shell \
+>>> 		for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE"
+>>> $(BUSYBOX_DIR)/include/applets.h \
+>>> 			| sed -e 's/,.*//' -e 's/.*(//'`; \
+>>> 		do \
+>>> 			grep -w $${app} $(BUSYBOX_DIR)/busybox.links; \
+>>> 		done #) ),$(app) f 4755 0  0 - - - - -$(sep))
+>>> endef
+>>>
+>>>  For that to work, the condition around PACKAGES_PERMISSIONS_TABLES += must be
+>>> removed, but that's fine IMO (just adds a lot of empty lines to the device
+>>> table, but that doesn't hurt). The #) is a bit ugly but I'm sure a better
+>>> solution can be found.
+>>>
+>>>  With that solution, patches 2 and 3 wouldn't be needed.
+>>
+>>  And an even simpler approach would be to always run the installation commands
+>> under fakeroot (with the -i -s options of course) That would simplify a lot of
+>> things. But there are probably problems with that approach as well - e.g.
+>> nothing should install/remove anything in target outside of the install-target step.
+> 
+>  We finally got around to discussing this at the Summer Camp. The conclusion is
+> that the simplest option is in fact to go back to your earlier solution, where
+> makedevs would be extended with a file type that ignores files that don't exist,
+> and the BUSYBOX_PERMISSIONS are set statically for all potential busybox
+> applets. Yann doesn't like it but he's a minority :-).
+> 
+>  Bryce, Adam, do you think you could reconstruct such a series?
 
-I think it makes more sense to recommend sha256 like for tarballs, so
-I've changed this to sha256 and committed, thanks.
+ Thomas gently suggested that I should do this instead, so don't bother :-)
+
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
