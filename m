@@ -1,43 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Jul 2017 15:02:10 +0200
-Subject: [Buildroot] [git commit] Makefile: generate wrapper makefile when
-	running make without a .config
-Message-ID: <20170703125916.180038042B@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 15:06:20 +0200
+Subject: [Buildroot] [PATCH v2] pixz: new package
+In-Reply-To: <20170702212757.639-1-vincent.stehle@laposte.net>
+References: <08fd09b4-f3e6-52d0-3138-3ea251edc2ac@mind.be>
+ <20170702212757.639-1-vincent.stehle@laposte.net>
+Message-ID: <25d817cb-a478-40fc-e6b8-8ce92c1086a5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51825df3a184cad0f5bccb6a18b9d6197855cab6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Vincent,
 
-The recent change to error out instead of running menuconfig when no .config
-is available broke an existing use case:
+On 02-07-17 23:27, Vincent Stehle wrote:
+> From: Vincent Stehl? <vincent.stehle@laposte.net>
+> 
+> Add a package for pixz (pronounced pixie), a parallel, indexing version of
+> xz.
+> 
+> See https://github.com/vasi/pixz
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+> 
+> 
+> Changes since v1:
+> -----------------
+> - Select libarchive and depend on wchar, as suggested by Arnout
+> - Rework comment on conf_env, as suggested by Arnout
+> - Make pixz a host package, too. This to prepare making it a selectable
+>   alternative to host-xz, as suggested by Arnout
 
-make O=output-foo; cd output-foo; br-init-conf (or similar to get a sensible .config); make
+ Since pixz in fact uses xz, it seems like a bad idea to use it as a replacement
+for host-xz. It's not as if the xz tarball extraction is such an important part
+of build time... So the host package can be removed I guess.
 
-As there is no wrapper makefile in output-foo.
+ Sorry for changing my mind.
 
-Fix it by ensuring the wrapper gets created if needed.
+ Otherwise the patch looks good, so after removing the two lines referring to
+the host package you can add my
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/Makefile b/Makefile
-index 36231fa..bfe6fa3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -816,7 +816,7 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- # rule for it.
- # Also for 'all' we error out and ask the user to configure first.
- .PHONY: linux toolchain
--linux toolchain all:
-+linux toolchain all: outputmakefile
- 	$(error Please configure Buildroot first (e.g. "make menuconfig"))
- 	@exit 1
- 
+ Regards,
+ Arnout
+
+
+> - Change my e-mail address in DEVELOPERS
+> 
+> 
+>  DEVELOPERS             |  3 ++-
+>  package/Config.in      |  1 +
+>  package/pixz/Config.in | 13 +++++++++++++
+>  package/pixz/pixz.hash |  2 ++
+>  package/pixz/pixz.mk   | 21 +++++++++++++++++++++
+>  5 files changed, 39 insertions(+), 1 deletion(-)
+>  create mode 100644 package/pixz/Config.in
+>  create mode 100644 package/pixz/pixz.hash
+>  create mode 100644 package/pixz/pixz.mk
+> 
+
+[snip]
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
