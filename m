@@ -1,36 +1,133 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 19:19:49 +0200
-Subject: [Buildroot] libasan.so missing
-In-Reply-To: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com> (Wolfgang
- Grandegger's message of "Wed, 14 Jun 2017 09:14:46 +0200")
-References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
-Message-ID: <877ezp780a.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 3 Jul 2017 19:24:45 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/libva-utils: new package
+In-Reply-To: <20170420223534.23285-1-bernd.kuhls@t-online.de>
+References: <20170420223534.23285-1-bernd.kuhls@t-online.de>
+Message-ID: <d2ed6d6e-e7ae-a6ab-de49-2006225eff45@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+Hi Bernd,
 
- > Hello,
- > I'm using the x86_64 buildroot toolchain with gcc 5.4. I wonder why
- > the address sanitizer library "libasan.so*" is not available in the
- > rootfs of the target. Is it intentional? And what is the best way to
- > get it added to the rootfs?
+Le 21/04/2017 ? 00:35, Bernd Kuhls a ?crit :
+> The utils provided by this package were formerly packaged with libva.
+> 
+> Libva contained a patch not to compile mpeg2vldemo to reduce
+> dependencies by avoiding C++, this patch is not moved to this package.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Is this with uClibc-ng, musl or Glibc?
+libva-utils 1.8.3 is out, do you want to send an updated version of this patch
+to keep libva and libva-utils version in sync ?
 
-We have the following in package/gcc/gcc.mk:
+You can keep my Reviewed-by tag since the diff between libva-utils 1.8.1 and
+1.8.3 is small.
 
-# libsanitizer requires wordexp, not in default uClibc config. Also
-# doesn't build properly with musl.
-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
-HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
-endif
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
-We recently enabled wordexp support in uClibc-ng, so this can most likely
-we enabled there. I'll do a test build now.
+Best regards,
+Romain
 
--- 
-Bye, Peter Korsgaard
+> ---
+> v3: - bumped version to 1.8.1
+>     - used "select BR2_PACKAGE_LIBVA" instead of "depends on" (Arnout)
+>       Imho it makes sense to need only one Kconfig option for libva-
+>       utils. @Arnout:
+>       I kept the package in "Graphic libraries and applications" because
+>       it is not a library and also kept the package name so it stays in
+>       sync with the upstream name.
+>     - added comment about c++ dependency (Thomas)
+> v2: addressed review by Thomas:
+>     - added entry in DEVELOPERS
+>     - moved package to Graphic libraries and applications
+>     - package depends on libva
+> 
+>  DEVELOPERS                           |  1 +
+>  package/Config.in                    |  1 +
+>  package/libva-utils/Config.in        | 15 +++++++++++++++
+>  package/libva-utils/libva-utils.hash |  4 ++++
+>  package/libva-utils/libva-utils.mk   | 14 ++++++++++++++
+>  5 files changed, 35 insertions(+)
+>  create mode 100644 package/libva-utils/Config.in
+>  create mode 100644 package/libva-utils/libva-utils.hash
+>  create mode 100644 package/libva-utils/libva-utils.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 123a8f928..329a9db28 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -217,6 +217,7 @@ F:	package/libsquish/
+>  F:	package/liburiparser/
+>  F:	package/libva/
+>  F:	package/libva-intel-driver/
+> +F:	package/libva-utils/
+>  F:	package/libvorbis/
+>  F:	package/libvpx/
+>  F:	package/libyuv/
+> diff --git a/package/Config.in b/package/Config.in
+> index 4eaa95b1d..031faab85 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -246,6 +246,7 @@ comment "Graphic applications"
+>  	source "package/gnuplot/Config.in"
+>  	source "package/jhead/Config.in"
+>  	source "package/kmscube/Config.in"
+> +	source "package/libva-utils/Config.in"
+>  	source "package/mesa3d-demos/Config.in"
+>  	source "package/pngquant/Config.in"
+>  	source "package/qt5cinex/Config.in"
+> diff --git a/package/libva-utils/Config.in b/package/libva-utils/Config.in
+> new file mode 100644
+> index 000000000..ad299234c
+> --- /dev/null
+> +++ b/package/libva-utils/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_LIBVA_UTILS
+> +	bool "libva-utils"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on !BR2_STATIC_LIBS # libva
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
+> +	select BR2_PACKAGE_LIBVA
+> +	help
+> +	  Libva-utils is a collection of tests for VA-API (Video
+> +	  Acceleration API)
+> +
+> +	  https://01.org/linuxmedia/vaapi
+> +
+> +comment "libva-utils needs a toolchain w/ C++, threads, dynamic library"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || \
+> +		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+> new file mode 100644
+> index 000000000..e1562a8c8
+> --- /dev/null
+> +++ b/package/libva-utils/libva-utils.hash
+> @@ -0,0 +1,4 @@
+> +# From https://github.com/01org/libva-utils/releases
+> +sha1 ae5f8da4638c1ddadc4b9bcdc2d42dd54554fcc8  libva-utils-1.8.1.tar.bz2
+> +# Locally computed
+> +sha256 fff17327739b801d9d91dbc79ae385026ae7ddc564d489fa1d12d8d6f9f1e2c9  libva-utils-1.8.1.tar.bz2
+> diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+> new file mode 100644
+> index 000000000..a5bdab882
+> --- /dev/null
+> +++ b/package/libva-utils/libva-utils.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# libva-utils
+> +#
+> +################################################################################
+> +
+> +LIBVA_UTILS_VERSION = 1.8.1
+> +LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
+> +LIBVA_UTILS_SITE = https://github.com/01org/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
+> +LIBVA_UTILS_LICENSE = MIT
+> +LIBVA_UTILS_LICENSE_FILES = COPYING
+> +LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
+> +
+> +$(eval $(autotools-package))
+> 
