@@ -1,38 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  3 Jul 2017 18:58:27 +0200
-Subject: [Buildroot] [PATCH] libpwquality: select cracklib
-Message-ID: <20170703165827.19052-1-peter@korsgaard.com>
+Date: Mon, 03 Jul 2017 19:19:49 +0200
+Subject: [Buildroot] libasan.so missing
+In-Reply-To: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com> (Wolfgang
+ Grandegger's message of "Wed, 14 Jun 2017 09:14:46 +0200")
+References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
+Message-ID: <877ezp780a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpwquality adds cracklib to its _DEPENDENCIES, but forgot to select it in
-Config.in, leading to build failures if cracklib isn't explicitly enabled:
+>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
 
-Makefile:536: *** cracklib is in the dependency chain of libpwquality that
-has added it to its _DEPENDENCIES variable without selecting it or depending
-on it from Config.in.  Stop.
+ > Hello,
+ > I'm using the x86_64 buildroot toolchain with gcc 5.4. I wonder why
+ > the address sanitizer library "libasan.so*" is not available in the
+ > rootfs of the target. Is it intentional? And what is the best way to
+ > get it added to the rootfs?
 
-No autobuilder references as this error happens before build-time.log is
-written, causing the autobuilder to ignore the build result.
+Is this with uClibc-ng, musl or Glibc?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libpwquality/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+We have the following in package/gcc/gcc.mk:
 
-diff --git a/package/libpwquality/Config.in b/package/libpwquality/Config.in
-index 4e855254a6..23e15157d1 100644
---- a/package/libpwquality/Config.in
-+++ b/package/libpwquality/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBPWQUALITY
- 	bool "libpwquality"
-+	select BR2_PACKAGE_CRACKLIB
- 	help
- 	  This is a library for password quality checks and generation
- 	  of random passwords that pass the checks.  This library uses
+# libsanitizer requires wordexp, not in default uClibc config. Also
+# doesn't build properly with musl.
+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
+HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
+endif
+
+We recently enabled wordexp support in uClibc-ng, so this can most likely
+we enabled there. I'll do a test build now.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
