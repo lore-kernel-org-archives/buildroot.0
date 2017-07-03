@@ -1,57 +1,69 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 3 Jul 2017 14:44:55 +0200
-Subject: [Buildroot] [PATCH 1/8] pkg-rebar: remove redundant / in front of
-	$($(PKG)_ERLANG_LIBDIR)
+Date: Mon, 3 Jul 2017 14:44:56 +0200
+Subject: [Buildroot] [PATCH 2/8] libsepol: rework host installation
 In-Reply-To: <20170703124502.26113-1-arnout@mind.be>
 References: <20170703124502.26113-1-arnout@mind.be>
-Message-ID: <20170703124502.26113-2-arnout@mind.be>
+Message-ID: <20170703124502.26113-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes $(1)/$($(PKG)_ERLANG_LIBDIR) is used, sometimes
-$(1)$($(PKG)_ERLANG_LIBDIR). Make this consistent, with /. Therefore,
-remove the leading / from $($(PKG)_ERLANG_LIBDIR).
+libsepol has a pretty peculiar interpretation of DESTDIR and PREFIX.
+PREFIX is not consistently used: some installation paths are forced to
+$(DESTDIR)/usr/... . Also, the shared lib symlink is forced to ../../lib
+(i.e. assumes it's installed under /usr). For these reasons, the host
+build and install commands are a bit unusual: they use DESTDIR instead
+of PREFIX, DESTDIR points to $(HOST_DIR) without /usr, and some
+additional fixup is needed to correct the installation directory of
+libsepol.so.1 and the symlink to it.
+
+This can be simplified quite a lot by passing both DESTDIR and PREFIX,
+and including the /usr part in both. The symlink still has to be fixed,
+but that's much simpler.
+
+Note that a side effect is that the man pages are now installed under
+$(HOST_DIR)/usr/usr/man. While not very nice, we don't really care
+about man pages. In addition, this will resolve itself when we later
+move $(HOST_DIR)/usr to $(HOST_DIR).
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-v2: keep the /, remove it from $($(PKG)_ERLANG_LIBDIR)
+It's a bit counter-intuitive to have a patch that adds /usr in a series
+that is meant to remove it, but this is the simplest way to have a
+bisectable series...
 ---
- package/pkg-rebar.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libsepol/libsepol.mk | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
-index 7605a64ade..cc6b775ae5 100644
---- a/package/pkg-rebar.mk
-+++ b/package/pkg-rebar.mk
-@@ -44,7 +44,7 @@ REBAR_TARGET_DEPS_ENV = \
- # Install an Erlang application from $(@D).
- #
- # i.e., define a recipe that installs the "bin ebin priv $(2)" directories
--# from $(@D) to $(1)$($(PKG)_ERLANG_LIBDIR).
-+# from $(@D) to $(1)/$($(PKG)_ERLANG_LIBDIR).
- #
- #  argument 1 should typically be $(HOST_DIR), $(TARGET_DIR),
- #	      or $(STAGING_DIR).
-@@ -59,7 +59,7 @@ define install-erlang-directories
- 	$(INSTALL) -d $(1)/$($(PKG)_ERLANG_LIBDIR)
- 	for dir in bin ebin priv $(2); do                               \
- 		if test -d $(@D)/$$dir; then                            \
--			cp -r $(@D)/$$dir $(1)$($(PKG)_ERLANG_LIBDIR);  \
-+			cp -r $(@D)/$$dir $(1)/$($(PKG)_ERLANG_LIBDIR); \
- 		fi;                                                     \
- 	done
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 9bdac1e0da..d360bfbcb1 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -33,15 +33,18 @@ define LIBSEPOL_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_FLAGS) DESTDIR=$(TARGET_DIR)
  endef
-@@ -122,7 +122,7 @@ $(2)_ERLANG_APP = $(subst -,_,$(patsubst erlang-%,%,$(patsubst host-%,%,$(1))))
- # for host packages, or $(STAGING_DIR) for target packages.
- #
- $(2)_ERLANG_LIBDIR = \
--	/usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
-+	usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
  
- # If a host package, inherit <pkg>_USE_BUNDLED_REBAR from the target
- # package, if not explicitly defined. Otherwise, default to NO.
++HOST_LIBSEPOL_MAKE_ENV = \
++	$(HOST_MAKE_ENV) \
++	DESTDIR=$(HOST_DIR)/usr \
++	PREFIX=$(HOST_DIR)/usr
++
+ define HOST_LIBSEPOL_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
++	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
+ endef
+ 
+ define HOST_LIBSEPOL_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
+-	mv $(HOST_DIR)/lib/libsepol.so.1 $(HOST_DIR)/usr/lib
+-	(cd $(HOST_DIR)/usr/lib; rm -f libsepol.so; ln -s libsepol.so.1 libsepol.so)
+-	-rmdir $(HOST_DIR)/lib
++	$(HOST_LIBSEPOL_MAKE_ENV) $(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS)
++	ln -sf libsepol.so.1 $(HOST_DIR)/usr/lib/libsepol.so
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.13.2
