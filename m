@@ -1,125 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 18:42:02 +0200
-Subject: [Buildroot] [PATCH 1/9] skalibs: bump version to 2.5.1.1
-In-Reply-To: <20170625192621.24188-2-eric.le.bihan.dev@free.fr>
-References: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
- <20170625192621.24188-2-eric.le.bihan.dev@free.fr>
-Message-ID: <93a8a941-632d-6f2e-3f1d-770188d114ac@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 3 Jul 2017 18:47:01 +0200
+Subject: [Buildroot] [PATCH next 3/3] bc: bump version to 1.07.1
+In-Reply-To: <20170512142848.13956-3-Vincent.Riera@imgtec.com>
+References: <20170512142848.13956-1-Vincent.Riera@imgtec.com>
+ <20170512142848.13956-3-Vincent.Riera@imgtec.com>
+Message-ID: <95d88e6f-25d4-d92f-4836-a17a5ab7e70c@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Eric,
+Hi Vincente,
 
-On 25-06-17 21:26, Eric Le Bihan wrote:
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-[snip]
-> + trytypes () {
-> +   echo "Checking size and signedness of standard types..."
-> +-  $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o output-types src/sysdeps/output-types.c
-> +-  ./output-types >> $sysdeps/sysdeps
-> +-  ./output-types | grep -F sizeof | while read key value ; do
-> +-    caps=$(echo $key | sed s/:\$// | tr a-z A-Z)
-> +-    echo "#define ${package_macro_name}_${caps} $value" >> $sysdeps/sysdeps.h
-> ++  for t in "unsigned short" "unsigned int" "unsigned long"; do
-> ++    findtypesize "$t" "${t/nsigned /}"
+Le 12/05/2017 ? 16:28, Vicente Olivert Riera a ?crit :
+> - Remove 01 and 02 patches as they are not needed anymore.
 
- This fails in the autobuilders because it is a bashism, and on some machines
-/bin/sh is dash. Care to fix?
+Patch 01 is upstream but not patch 02.
+Why it's not needed anymore ?
+Maybe add a previous patch to remove it before bumping bc ?
 
- Regards,
- Arnout
+> - Tweak 03 patch for the new version and rename it to 0001.
+> - host-flex dependency is not needed anymore.
+> - Added host-bc dependency: needed to bootstrap libmath.h at build time.
+> - Added host-ed dependency: used by fix-libmath_h script at build time.
 
-> +   done
-> +-  ./output-types | grep -F signed | while read key value ; do
-> +-    caps=$(echo $key | sed s/:\$// | tr a-z A-Z)
-> +-    if test $value = yes ; then
-> +-      echo "#define ${package_macro_name}_HASSIGNED${caps}"
-> +-      echo "#undef ${package_macro_name}_HASUNSIGNED${caps}"
-> +-    else
-> +-      echo "#undef ${package_macro_name}_HASSIGNED${caps}"
-> +-      echo "#define ${package_macro_name}_HASUNSIGNED${caps}"
-> +-    fi >> $sysdeps/sysdeps.h
-> ++  for t in size uid gid pid time dev ino; do
-> ++    findtypesize "${t}_t" "$t"
-> ++    findtypesign "${t}_t" "$t"
-> +   done
-> +-  rm -f output-types
-> +   echo "  ... done"
-> + }
-> + 
->  -- 
-> -2.5.5
-> +2.9.3
->  
-> diff --git a/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch b/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
-> index ef0e173..55cc96a 100644
-> --- a/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
-> +++ b/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
-> @@ -1,4 +1,4 @@
-> -From da293110f429e1206728c1551cf0f6b462b3d8c0 Mon Sep 17 00:00:00 2001
-> +From 4d9aca413b42191223d8dc2ba9b4f943ee90c94b Mon Sep 17 00:00:00 2001
->  From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->  Date: Thu, 29 Dec 2016 19:36:24 +0100
->  Subject: [PATCH] Make linker use dummy file when testing libs
-> @@ -18,10 +18,10 @@ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->   1 file changed, 2 insertions(+), 2 deletions(-)
->  
->  diff --git a/configure b/configure
-> -index 1579025..12980fb 100755
-> +index 115fea3..7d38447 100755
->  --- a/configure
->  +++ b/configure
-> -@@ -173,7 +173,7 @@ trylibs () {
-> +@@ -226,7 +226,7 @@ trylibs () {
->     echo "Checking whether system has $2..." >&3
->     shift 2
->     if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -c -o try$name.o src/sysdeps/try$name.c 2>/dev/null ; then
-> @@ -30,7 +30,7 @@ index 1579025..12980fb 100755
->         if test -z "$*" ; then
->           rm -f try$name.o
->           echo
-> -@@ -189,7 +189,7 @@ trylibs () {
-> +@@ -242,7 +242,7 @@ trylibs () {
->       else
->         echo "  ... yes, with$args" >&3
->       fi
-> @@ -40,5 +40,5 @@ index 1579025..12980fb 100755
->     else
->       echo
->  -- 
-> -2.4.11
-> +2.9.3
->  
-> diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
-> index 195ac47..8ab7234 100644
-> --- a/package/skalibs/skalibs.hash
-> +++ b/package/skalibs/skalibs.hash
-> @@ -1,2 +1,2 @@
->  # Locally generated
-> -sha256 0708172bc2ec9825f8a4f312d35f8dcd94da5f291425a598c33c873b3de77df8 skalibs-2.4.0.2.tar.gz
-> +sha256 aa387f11a01751b37fd32603fdf9328a979f74f97f0172def1b0ad73b7e8d51d  skalibs-2.5.1.1.tar.gz
-> diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
-> index 55b8a29..c6f97ee 100644
-> --- a/package/skalibs/skalibs.mk
-> +++ b/package/skalibs/skalibs.mk
-> @@ -4,7 +4,7 @@
+bc is in Buildroot mandatory dependency, so why not using bc from the host ?
+Have you tried that ?
+With that you can remove the dependency on host-ed and host-bc.
+
+> - Swith site to GNU mirror.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  ...fo.patch => 0001-use_appropiate_makeinfo.patch} |  13 +-
+>  package/bc/01_array_initialize.patch               |  20 -
+>  package/bc/02_notice_read_write_errors.patch       | 708 ---------------------
+>  package/bc/bc.hash                                 |   2 +-
+>  package/bc/bc.mk                                   |  25 +-
+>  5 files changed, 30 insertions(+), 738 deletions(-)
+>  rename package/bc/{03_use_appropiate_makeinfo.patch => 0001-use_appropiate_makeinfo.patch} (53%)
+>  delete mode 100644 package/bc/01_array_initialize.patch
+>  delete mode 100644 package/bc/02_notice_read_write_errors.patch
+> 
+
+[...]
+
+> diff --git a/package/bc/bc.mk b/package/bc/bc.mk
+> index 4596192..b5853b1 100644
+> --- a/package/bc/bc.mk
+> +++ b/package/bc/bc.mk
+> @@ -4,17 +4,34 @@
 >  #
 >  ################################################################################
 >  
-> -SKALIBS_VERSION = 2.4.0.2
-> +SKALIBS_VERSION = 2.5.1.1
->  SKALIBS_SITE = http://skarnet.org/software/skalibs
->  SKALIBS_LICENSE = ISC
->  SKALIBS_LICENSE_FILES = COPYING
-> 
+> -BC_VERSION = 1.06.95
+> -BC_SOURCE = bc-$(BC_VERSION).tar.bz2
+> -BC_SITE = http://alpha.gnu.org/gnu/bc
+> -BC_DEPENDENCIES = host-flex
+> +BC_VERSION = 1.07.1
+> +BC_SITE = $(BR2_GNU_MIRROR)/bc
+> +# host-bc needed to bootstrap libmath.h at build time
+> +# host-ed needed by the fix-libmath_h script at build time
+> +BC_DEPENDENCIES = host-bc host-ed
+>  BC_LICENSE = GPL-2.0+, LGPL-2.1+
+>  BC_LICENSE_FILES = COPYING COPYING.LIB
+> +# host-ed needed by the fix-libmath_h script at build time
+> +HOST_BC_DEPENDENCIES = host-ed
+>  
+>  # Build after busybox so target ends up with bc's "dc" version
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  BC_DEPENDENCIES += busybox
+>  endif
+>  
+> +# A stripped-down version of bc (fbc) is built for bootstrapping purposes. Then
+> +# the bc build system tries to run it in order to generate some header files,
+> +# but that breaks cross-compilation because we cannot run in the host machine an
+> +# fbc that has been built for the target architecture. We tweak the Makefiles in
+> +# order to run the bc that was built for the host. As long as the host bc and
+> +# the target one have the same version the result should be fine.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Is there any output format changes between bc version ?
+
+Best regards,
+Romain
+
+ And also, note
+> +# we don't need to run the host fbc (which doesn't exist by the way, because
+> +# it was deleted after its use by the host-bc Makefile) and we can just run the
+> +# full bc program (remember the fbc was just a tripped-down version of bc).
+> +define BC_USE_HOST_FBC
+> +	$(SED) "s:\./fbc -c:$(HOST_DIR)/usr/bin/bc -c:" $(@D)/bc/Makefile.in
+> +endef
+> +BC_POST_PATCH_HOOKS += BC_USE_HOST_FBC
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> 
