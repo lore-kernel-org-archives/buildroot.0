@@ -1,63 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 11:40:36 +0200
-Subject: [Buildroot] [PATCH 1/1] setlocalversion: fix detection of hg
+Date: Mon, 3 Jul 2017 11:40:49 +0200
+Subject: [Buildroot] [git commit] setlocalversion: fix detection of hg
 	revision for untagged versions
-In-Reply-To: <20170613190401.GV13116@argentina> (Thomas De Schampheleire's
- message of "Tue, 13 Jun 2017 21:04:01 +0200")
-References: <20170426124311.11449-1-patrickdepinguin@gmail.com>
- <87r30fmhvp.fsf@dell.be.48ers.dk>
- <CAAXf6LXJ-0s88_sFygm0A+wFOTeorqHvBx5xCvBM4vm-T_hNaA@mail.gmail.com>
- <20170613190401.GV13116@argentina>
-Message-ID: <87inj997u3.fsf@dell.be.48ers.dk>
+Message-ID: <20170703093751.83FC981F12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <thomas.de_schampheleire@nokia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ec019bcf643de83d502f30d85d56dd4547b0c11b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+By default, cut prints the entire line if the specified delimiter is not
+present at all:
 
- >> > Perhaps synching with the kernel would be a better way forward than
- >> > adding local modifications?
+    $ printf "foo bar" | cut -d' ' -f2
+    bar
+    $ printf "foobar" | cut -d' ' -f2
+    foobar
 
- >> I tried using the latest version from the kernel in Buildroot and
- >> notice the following:
- >> 
- >> - the version from the kernel now expects to find
- >> include/config/auto.conf and bails out otherwise. Commenting out this
- >> test...
- >> - the output of that script is now just a +   i.e. the actual output
- >> of the scm version does not matter. This is due to following code:
- >> scm=$(scm_version --short)
- >> res="$res${scm:++}"
- >> 
- >> which means: if scm is empty, don't change res -- if scm is not
- >> empty, then the literal '+' is appended to res.
- >> - if I ignore that point and check the actual content of the 'scm'
- >> variable, I notice that this script suffers from the same problem as
- >> the buildroot one. My fix solves that aspect also in the kernel
- >> script.
- >> 
- >> 
- >> The kernel script has evolved a lot from the version that Buildroot
- >> once took, I don't know if the changes have real value for us.
- >> I also assume that the kernel developers will not really want to
- >> customize their version of the script to add more configuration
- >> switches to tweak the behavior.
- >> https://github.com/torvalds/linux/blob/master/scripts/setlocalversion
- >> 
- >> Based on this feedback, how do you think we should proceed?
+In setlocalversion, cut is presented with the output of 'hg id' which has
+the format:
 
-Sorry for the slow response. I was afraid that the cut option wouldn't
-be supported by older versions, but it was apparently added ~20 years
-go.
+    "<revision> <tags-if-any>"
 
-Committed, thanks.
+If the current revision is not tagged, the output of 'hg id' does not
+contain the delimiter (space), cut prints the entire string, and
+setlocalversion thinks the version is the tag.
+As setlocalversion does not print anything for tagged versions, there is no
+output overall, and no correct indication of the mercurial revision.
 
-It might still be interesting to submit a similar patch to the Linux
-kernel (as you presumably have the same issue there).
+Fix by passing the extra cut option '--only-delimited', which suppresses
+output if no delimiter is found.
 
--- 
-Bye, Peter Korsgaard
+This problem likely went unnoticed for so long, because the tag 'tip' (i.e.
+most recent revision of the branch) is treated specially: in this case the
+mercurial revision _is_ printed, i.e. the situation is treated as
+'untagged'.
+The problem is only seen when you are _not_ at the most recent revision in
+your branch.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/setlocalversion | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
+index adeeb78..33cd605 100755
+--- a/support/scripts/setlocalversion
++++ b/support/scripts/setlocalversion
+@@ -54,7 +54,7 @@ fi
+ 
+ # Check for mercurial and a mercurial repo.
+ if hgid=`hg id 2>/dev/null`; then
+-	tag=`printf '%s' "$hgid" | cut -d' ' -f2`
++	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
+ 
+ 	# Do we have an untagged version?
+ 	if [ -z "$tag" -o "$tag" = tip ]; then
