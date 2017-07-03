@@ -1,67 +1,32 @@
-From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
-Date: Mon, 3 Jul 2017 10:56:42 +0200
-Subject: [Buildroot] Syslinux change breaks the build with old binutils
-In-Reply-To: <20170701235530.00720756@windsurf>
-References: <20170701235530.00720756@windsurf>
-Message-ID: <20170703105642.02631f13@armant.office.greenbone.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Jul 2017 11:02:30 +0200
+Subject: [Buildroot] Policy for upgrading toolchains in LTS version
+In-Reply-To: <17ba4c4d-4fce-66a6-d5c4-d66720a02de2@gmail.com> (Romain Naour's
+ message of "Fri, 23 Jun 2017 22:11:31 +0200")
+References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
+ <20170622192701.GC3054@scaer>
+ <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr>
+ <87a84zkw97.fsf@dell.be.48ers.dk>
+ <3fa81af3-4372-6a67-5fb9-3717549b0350@free.fr>
+ <17ba4c4d-4fce-66a6-d5c4-d66720a02de2@gmail.com>
+Message-ID: <87mv8l99ll.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 1 Jul 2017 23:55:30 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-> Hello Beno?t,
-> 
-> In commit 6e432d5ecb46959f3c27dbbca48e41512bb40a70 ("syslinux: build
-> with the target toolchain"), you added one patch that adds the
-> --no-dynamic-linker option to the ld options. Unfortunately, it turns
-> out such an option doesn't exist in older toolchains, such as
-> toolchains based on binutils 2.24:
-> 
-> /home/thomas/projets/buildroot/output/host/usr/bin/i686-linux-ld:
-> unrecognized option
-> '--no-dynamic-linker' /home/thomas/projets/buildroot/output/host/usr/bin/i686-linux-ld:
-> use the --help option for usage
-> information /home/thomas/projets/buildroot/output/build/syslinux-6.03/core/Makefile:167:
-> recipe for target 'ldlinux.elf' failed
-> 
-> You can reproduce the problem using this defconfig:
-> 
-> BR2_x86_pentium4=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-> BR2_TARGET_SYSLINUX=y
-> BR2_TARGET_SYSLINUX_ISOLINUX=y
-> BR2_TARGET_SYSLINUX_EFI=y
-> 
-> This --no-dynamic-linker option is added by
-> boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch,
-> which you added in commit 6e432d5ecb46959f3c27dbbca48e41512bb40a70.
-> 
-> However, interestingly, I am no longer able to reproduce the "Not
-> enough room for program headers", even with a modern toolchain. Is it
-> possible that the gnu-efi update has fixed the problem?
+Hi,
 
-I cannot reproduce the issue anymore as well, so I will drop the patch.
+ >> As previously mentioned, IIUC, Linaro is preparing an
+ >> OOB release addressing "stack clash". I plan to wait
+ >> for that release, and then send a patch, is that OK?
 
-Thanks for reporting.
-Ben.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170703/eff2ac83/attachment.asc>
+ > Ok for me.
+
+Me as well.
+
+-- 
+Bye, Peter Korsgaard
