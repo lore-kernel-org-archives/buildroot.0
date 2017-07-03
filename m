@@ -1,32 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 17:53:12 +0200
-Subject: [Buildroot] [PATCH 1/5] support/check-package: don't check
-	filenames of hashes
-In-Reply-To: <eafeec501266452fc7973871c7853bf6d016dfce.1498428166.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 26 Jun 2017 00:03:37 +0200")
-References: <cover.1498428166.git.yann.morin.1998@free.fr>
- <eafeec501266452fc7973871c7853bf6d016dfce.1498428166.git.yann.morin.1998@free.fr>
-Message-ID: <87shid7c0n.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 17:57:10 +0200
+Subject: [Buildroot] Unable to compile current master
+In-Reply-To: <d7a64db4-2f26-6f27-98e1-6017ca8a95a5@newflow.co.uk>
+References: <d7a64db4-2f26-6f27-98e1-6017ca8a95a5@newflow.co.uk>
+Message-ID: <14b6e3d2-0c80-ec16-8be1-abd52121b0be@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Currently, we check that the filenames in hash lists do not contain
- > a slash '/' character, because all we are checking so far are the
- > downloaded archives, and we explicitly need the filename to not contain
- > a directory component at all.
 
- > However, we're soon to also check the hashes of the license files in
- > packages sources, and those license files may be at any arbitrary
- > directory-depth in the packages source tree, and thus two or more
- > license files may have the same basename.
+On 03-07-17 17:14, Mark Jackson wrote:
+> I'm trying to bring an old 2012 buildroot project up-to-date, so to test my current setup I've branched the git master and tried:-
+> 
+> $ git checkout origin/master -b master
+> $ git reset --hard origin/master
+> $ make clean
+> $ make beaglebone_defconfig
+> $ make
+> 
+> But this fails when compiling gcc with the following:-
+> 
+> ...
+> /usr/bin/g++ -fno-PIE -c   -O2 -I/home/mpfj/buildroot/output/host/usr/include -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include -I../../gcc/../libcpp/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include  -I../../gcc/../libdecnumber -I../../gcc/../libdecnumber/dpd -I../libdecnumber -I../../gcc/../libbacktrace   -o insn-extract.o -MT insn-extract.o -MMD -MP -MF ./.deps/insn-extract.TPo insn-extract.c
+> Makefile:2201: recipe for target 's-attrtab' failed
 
-Committed after adjusting the commit message as suggested by Richardo,
-thanks.
+ Apparently genattrtab failed but I can't find any output.
+
+ Can you continue the build with BR2_JLEVEL=1 ? That should make any error
+message easier to locate.
+
+ You are sure that you're not out of disk space or anything like that?
+
+ Regards,
+ Arnout
+
+> make[3]: *** [s-attrtab] Killed
+> make[3]: *** Waiting for unfinished jobs....
+> rm gcc.pod
+> Makefile:4113: recipe for target 'all-gcc' failed
+> make[2]: *** [all-gcc] Error 2
+> package/pkg-generic.mk:227: recipe for target '/home/mpfj/buildroot/output/build/host-gcc-initial-6.3.0/.stamp_built' failed
+> make[1]: *** [/home/mpfj/buildroot/output/build/host-gcc-initial-6.3.0/.stamp_built] Error 2
+> Makefile:79: recipe for target '_all' failed
+> make: *** [_all] Error 2
+> 
+> Can anyone help out ?
+> 
+> If it's any help, the "gcc" portion of the build log is here (https://pastebin.com/PRaPh5n1)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
