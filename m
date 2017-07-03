@@ -1,47 +1,38 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 3 Jul 2017 18:50:35 +0200
-Subject: [Buildroot] [PATCH] libusb-compat: fix a build issue with
- undefined PATH_MAX
-In-Reply-To: <2c1faeab-92de-d158-442e-8ee89965d4cc@mind.be>
-References: <1499091412-26839-1-git-send-email-brgl@bgdev.pl>
- <8b198702-d118-0dc0-fe5b-7f56d5145c47@mind.be>
- <2c1faeab-92de-d158-442e-8ee89965d4cc@mind.be>
-Message-ID: <CAMRc=Me7p+5rw2tUWK1vkgrm0YPL-=swtSE87c60t3dOSvUOyQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  3 Jul 2017 18:58:27 +0200
+Subject: [Buildroot] [PATCH] libpwquality: select cracklib
+Message-ID: <20170703165827.19052-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-07-03 17:48 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->
->
-> On 03-07-17 17:11, Arnout Vandecappelle wrote:
->>  Hi Bartosz,
->>
->> On 03-07-17 16:16, Bartosz Golaszewski wrote:
->>> libsigrok build failed because of PATH_MAX not being defined in usb.h.
->>> On linux it is defined in linux/limits.h, but usb.h only includes
->>> limit.h. Add a patch fixing the header in libusb-compat.
->>
->>  This doesn't sound right: according to POSIX [1], limits.h should define
->> PATH_MAX. And indeed, if you do
->>
->> echo '#include <usb.h>' | host/usr/bin/x86_64-amd-linux-gnu-gcc -x c -E -
->>
->> you'll see that PATH_MAX gets properly expanded to 4096. So something else is
->> going on.
->
->  OK so I investigated a little more, and it turns out that -std=c99 is the
-> culprit. And apparently people on the 'net are advising to use linux/limits.h to
-> get at PATH_MAX. So perhaps this is the right approach after all.
->
->  What's the upstream status of this patch?
->
->  Regards,
->  Arnout
+libpwquality adds cracklib to its _DEPENDENCIES, but forgot to select it in
+Config.in, leading to build failures if cracklib isn't explicitly enabled:
 
-Submitted, no answer yet.
+Makefile:536: *** cracklib is in the dependency chain of libpwquality that
+has added it to its _DEPENDENCIES variable without selecting it or depending
+on it from Config.in.  Stop.
 
-Thanks,
-Bartosz
+No autobuilder references as this error happens before build-time.log is
+written, causing the autobuilder to ignore the build result.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libpwquality/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libpwquality/Config.in b/package/libpwquality/Config.in
+index 4e855254a6..23e15157d1 100644
+--- a/package/libpwquality/Config.in
++++ b/package/libpwquality/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBPWQUALITY
+ 	bool "libpwquality"
++	select BR2_PACKAGE_CRACKLIB
+ 	help
+ 	  This is a library for password quality checks and generation
+ 	  of random passwords that pass the checks.  This library uses
+-- 
+2.11.0
