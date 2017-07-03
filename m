@@ -1,56 +1,53 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 3 Jul 2017 10:41:07 +0200
-Subject: [Buildroot] [PATCH 2/2] package/aespipe: fix host compile
-In-Reply-To: <20170703084107.5620-1-arnout@mind.be>
-References: <20170703084107.5620-1-arnout@mind.be>
-Message-ID: <20170703084107.5620-2-arnout@mind.be>
+Date: Mon, 3 Jul 2017 10:41:06 +0200
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: add host-cc-option
+	macro
+Message-ID: <20170703084107.5620-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+This macro allows to test if HOSTCC supports a specific option. It is
+needed to pass '-no-pie' on recent Debian, Ubuntu and Gentoo hosts.
 
-Building host-aespipe fails on Debian stretch at linking stage:
-
-/usr/bin/gcc -L/home/buildroot/br6/output/host/lib -L/home/buildroot/br6/output/host/usr/lib -Wl,-rpath,/home/buildroot/br6/output/host/usr/lib -o aespipe aespipe.o aes-amd64.o md5-amd64.o md5-2x-amd64.o aes-intel64.o sha512.o rmd160.o
-/usr/bin/ld: aes-amd64.o: relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
-
-The same problem apparently exists on recent Ubuntu and Gentoo.
-
-Fix is also used in Debian:
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
-
-[Peter: add comment explaining why]
-[Arnout: use host-cc-option to discover if -no-pie is available;
- cfr. 57b628a932b9b4a3c4bf80f4c82a81da5adcb173]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/aespipe/aespipe.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/Makefile.in | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
-index 6a38556ef1..5ef95d5206 100644
---- a/package/aespipe/aespipe.mk
-+++ b/package/aespipe/aespipe.mk
-@@ -9,5 +9,15 @@ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
- AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
- AESPIPE_LICENSE = GPL
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 8087bde999..2dabfd69b2 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -222,6 +222,27 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
  
-+# Recent Debian, Gentoo and Ubuntu enable -fPIE by default, breaking the build:
-+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
-+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835148
-+# Older gcc versions however don't support the -no-pie flag, so we have to
-+# check its availability.
-+HOST_AESPIPE_NO_PIE_FLAG = $(call host-cc-option,-no-pie)
-+HOST_AESPIPE_CONF_ENV = \
-+	CFLAGS="$(HOST_CFLAGS) $(HOST_AESPIPE_NO_PIE_FLAG)" \
-+	LDFLAGS="$(HOST_LDFLAGS) $(HOST_AESPIPE_NO_PIE_FLAG)"
++# The macros below are taken from linux 4.11 and adapted slightly.
++# Copy more when needed.
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++# try-run
++# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
++# Exit code chooses option. "$$TMP" is can be used as temporary file and
++# is automatically cleaned up.
++try-run = $(shell set -e;               \
++	TMP="$$(tempfile)";             \
++	if ($(1)) >/dev/null 2>&1;      \
++	then echo "$(2)";               \
++	else echo "$(3)";               \
++	fi;                             \
++	rm -f "$$TMP")
++
++# host-cc-option
++# Usage: HOST_FOO_CFLAGS += $(call host-cc-option,-no-pie,)
++host-cc-option = $(call try-run,\
++        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
++
++
+ # host-intltool should be executed with the system perl, so we save
+ # the path to the system perl, before a host-perl built by Buildroot
+ # might get installed into $(HOST_DIR)/usr/bin and therefore appears
 -- 
 2.13.2
