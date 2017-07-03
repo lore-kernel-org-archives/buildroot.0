@@ -1,221 +1,125 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Jul 2017 18:38:47 +0200
-Subject: [Buildroot] [PATCH v2 3/6] fs/ext2: use mkfs to generate rootfs
- image
-In-Reply-To: <20170703155154.24104-4-s.martin49@gmail.com>
-References: <20170703155154.24104-1-s.martin49@gmail.com>
- <20170703155154.24104-4-s.martin49@gmail.com>
-Message-ID: <20170703163847.GA20618@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 18:42:02 +0200
+Subject: [Buildroot] [PATCH 1/9] skalibs: bump version to 2.5.1.1
+In-Reply-To: <20170625192621.24188-2-eric.le.bihan.dev@free.fr>
+References: <20170625192621.24188-1-eric.le.bihan.dev@free.fr>
+ <20170625192621.24188-2-eric.le.bihan.dev@free.fr>
+Message-ID: <93a8a941-632d-6f2e-3f1d-770188d114ac@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, S?bastien, All,
+ Hi Eric,
 
-On 2017-07-03 17:51 +0200, Samuel Martin spake thusly:
-> From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> 
-> mkfs is now capable of generating rootfs images. Use mkfs intead of
-> genext2fs. As we let mkfs calculate the block size and the number of
-> inodes needed we can drop BR2_TARGET_ROOTFS_EXT2_INODES and
-> BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES and rename
-> BR2_TARGET_ROOTFS_EXT2_BLOCKS to BR2_TARGET_ROOTFS_EXT2_SIZE
+On 25-06-17 21:26, Eric Le Bihan wrote:
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[snip]
+> + trytypes () {
+> +   echo "Checking size and signedness of standard types..."
+> +-  $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o output-types src/sysdeps/output-types.c
+> +-  ./output-types >> $sysdeps/sysdeps
+> +-  ./output-types | grep -F sizeof | while read key value ; do
+> +-    caps=$(echo $key | sed s/:\$// | tr a-z A-Z)
+> +-    echo "#define ${package_macro_name}_${caps} $value" >> $sysdeps/sysdeps.h
+> ++  for t in "unsigned short" "unsigned int" "unsigned long"; do
+> ++    findtypesize "$t" "${t/nsigned /}"
 
-This is incorrect, because we now loose two features:
+ This fails in the autobuilders because it is a bashism, and on some machines
+/bin/sh is dash. Care to fix?
 
-  1. the possibility to force the number of inodes;
+ Regards,
+ Arnout
 
-  2. the possibility to auto-calculate the number of inodes, but add a
-     bit of extra ones.
-
-While I agree that mkfs.ext2 can now autocalculate the number of inodes
-and so we need not do it ourselves anymore. However, we so far had the
-option to force the exact number of inodes, and this is lost with this
-patch.
-
-So, I would like that:
-
-  1. we keep BR2_TARGET_ROOTFS_EXT2_INODES and handle adequately:
-    - if it is set to zero, we let mkfs auto-calcualte
-    - if it is non-zero, we pass -N $(BR2_TARGET_ROOTFS_EXT2_INODES)
-
-  2. we indeed drop the option to set the extra number of inodes, as
-    there is no way to pass this information to mkfs.ext2
-
-So, can you rework this patch as thus:
-
-  - split it in two, with the first one that drops (and adds legacy for)
-    BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
-
-  - the seond patch is the actual switch to using mkfs.ext2, but keeps
-    using BR2_TARGET_ROOTFS_EXT2_INODES
-
-Thank you! :-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v1->v2:
-> - rebase
-> - add default size value
-> ---
->  Config.in.legacy  | 34 ++++++++++++++++++++++++++++++++++
->  fs/ext2/Config.in | 27 +++++++++------------------
->  fs/ext2/ext2.mk   | 22 +++++++++++-----------
->  3 files changed, 54 insertions(+), 29 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 453c5eb8b8..c086d30ee5 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,40 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2017.08"
+> +   done
+> +-  ./output-types | grep -F signed | while read key value ; do
+> +-    caps=$(echo $key | sed s/:\$// | tr a-z A-Z)
+> +-    if test $value = yes ; then
+> +-      echo "#define ${package_macro_name}_HASSIGNED${caps}"
+> +-      echo "#undef ${package_macro_name}_HASUNSIGNED${caps}"
+> +-    else
+> +-      echo "#undef ${package_macro_name}_HASSIGNED${caps}"
+> +-      echo "#define ${package_macro_name}_HASUNSIGNED${caps}"
+> +-    fi >> $sysdeps/sysdeps.h
+> ++  for t in size uid gid pid time dev ino; do
+> ++    findtypesize "${t}_t" "$t"
+> ++    findtypesign "${t}_t" "$t"
+> +   done
+> +-  rm -f output-types
+> +   echo "  ... done"
+> + }
+> + 
+>  -- 
+> -2.5.5
+> +2.9.3
 >  
-> +config BR2_TARGET_ROOTFS_EXT2_INODES
-> +	int "exact number of inodes has been removed"
-> +	default 0
-> +	help
-> +	  Buildroot uses mkfs.ext2/3/4 to generate ext2/3/4 images. So let mkfs
-> +	  automatically selects the number of inodes needed. Set this option to
-> +	  0.
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_INODES_WRAP
-> +	bool
-> +	default y if BR2_TARGET_ROOTFS_EXT2_INODES != 0
-> +	select BR2_LEGACY
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
-> +	int "extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
-> +	default 0
-> +	help
-> +	  Buildroot uses mkfs.ext2/3/4 to generate ext2/3/4 images. So let mkfs
-> +	  automatically selects the number of inodes needed. Set this option to
-> +	  0.
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES_WRAP
-> +	bool
-> +	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES != 0
-> +	select BR2_LEGACY
-> +
-> +config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> +	int "exact size in blocks has been removed"
-> +	default 0
-> +	help
-> +	  This option has been removed in favor of BR2_TARGET_ROOTFS_EXT2_SIZE.
-> +
-> +# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS still reference in fs/ext2/Config.in
-> +
->  config BR2_STRIP_none
->  	bool "Strip command 'none' has been removed"
->  	select BR2_LEGACY
-> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-> index 33891601f4..d3e9d16a44 100644
-> --- a/fs/ext2/Config.in
-> +++ b/fs/ext2/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_TARGET_ROOTFS_EXT2
->  	bool "ext2/3/4 root filesystem"
-> -	select BR2_PACKAGE_HOST_MKE2IMG
-> +	select BR2_PACKAGE_HOST_E2FSPROGS
->  	help
->  	  Build an ext2/3/4 root filesystem
+> diff --git a/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch b/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
+> index ef0e173..55cc96a 100644
+> --- a/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
+> +++ b/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
+> @@ -1,4 +1,4 @@
+> -From da293110f429e1206728c1551cf0f6b462b3d8c0 Mon Sep 17 00:00:00 2001
+> +From 4d9aca413b42191223d8dc2ba9b4f943ee90c94b Mon Sep 17 00:00:00 2001
+>  From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>  Date: Thu, 29 Dec 2016 19:36:24 +0100
+>  Subject: [PATCH] Make linker use dummy file when testing libs
+> @@ -18,10 +18,10 @@ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >  
-> @@ -44,24 +44,15 @@ config BR2_TARGET_ROOTFS_EXT2_REV
->  config BR2_TARGET_ROOTFS_EXT2_LABEL
->  	string "filesystem label"
+>  diff --git a/configure b/configure
+> -index 1579025..12980fb 100755
+> +index 115fea3..7d38447 100755
+>  --- a/configure
+>  +++ b/configure
+> -@@ -173,7 +173,7 @@ trylibs () {
+> +@@ -226,7 +226,7 @@ trylibs () {
+>     echo "Checking whether system has $2..." >&3
+>     shift 2
+>     if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -c -o try$name.o src/sysdeps/try$name.c 2>/dev/null ; then
+> @@ -30,7 +30,7 @@ index 1579025..12980fb 100755
+>         if test -z "$*" ; then
+>           rm -f try$name.o
+>           echo
+> -@@ -189,7 +189,7 @@ trylibs () {
+> +@@ -242,7 +242,7 @@ trylibs () {
+>       else
+>         echo "  ... yes, with$args" >&3
+>       fi
+> @@ -40,5 +40,5 @@ index 1579025..12980fb 100755
+>     else
+>       echo
+>  -- 
+> -2.4.11
+> +2.9.3
 >  
-> -# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
-> -config BR2_TARGET_ROOTFS_EXT2_BLOCKS
-> -	int "exact size in blocks"
-> -	default 61440
-> +config BR2_TARGET_ROOTFS_EXT2_SIZE
-> +	string "exact size"
-> +	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 # legacy 2017.08
-> +	default "60M" # default size
->  	help
-> -	  Specify the file system size as a number of 1024-byte blocks.
-> -
-> -config BR2_TARGET_ROOTFS_EXT2_INODES
-> -	int "exact number of inodes (leave at 0 for auto calculation)"
-> -	default 0
-> -
-> -config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
-> -	int "extra inodes" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
-> -	default 0
-> -	help
-> -	  Enter here the number of extra free inodes you want on
-> -	  your filesystem. By default, Buildroot will not leave
-> -	  many free inodes.
-> +	  The size of the filesystem image. If it does not have a suffix, it is
-> +	  interpreted as power-of-two kilobytes. If it is suffixed by 'k', 'm',
-> +	  'g', 't' (either upper-case or lower-case), then it is interpreted in
-> +	  power-of-two kilobytes, megabytes, gigabytes, terabytes, etc.
->  
->  config BR2_TARGET_ROOTFS_EXT2_RESBLKS
->  	int "reserved blocks percentage"
-> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index ce567de34c..5269e99a29 100644
-> --- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -4,28 +4,28 @@
+> diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+> index 195ac47..8ab7234 100644
+> --- a/package/skalibs/skalibs.hash
+> +++ b/package/skalibs/skalibs.hash
+> @@ -1,2 +1,2 @@
+>  # Locally generated
+> -sha256 0708172bc2ec9825f8a4f312d35f8dcd94da5f291425a598c33c873b3de77df8 skalibs-2.4.0.2.tar.gz
+> +sha256 aa387f11a01751b37fd32603fdf9328a979f74f97f0172def1b0ad73b7e8d51d  skalibs-2.5.1.1.tar.gz
+> diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+> index 55b8a29..c6f97ee 100644
+> --- a/package/skalibs/skalibs.mk
+> +++ b/package/skalibs/skalibs.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
-> -
-> -EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
-> -
-> -ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
-> -EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
-> +EXT2_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_SIZE))
-> +ifeq ($(EXT2_SIZE),)
-> +$(error BR2_TARGET_ROOTFS_EXT2_SIZE cannot be empty)
->  endif
-> -EXT2_OPTS += -I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES)
->  
-> -EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
-> +EXT2_OPTS = -d $(TARGET_DIR)
-> +EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_REV)
-> +
-> +EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
->  
->  # qstrip results in stripping consecutive spaces into a single one. So the
->  # variable is not qstrip-ed to preserve the integrity of the string value.
->  EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
->  #" Syntax highlighting... :-/ )
->  
-> -EXT2_OPTS += -l "$(EXT2_LABEL)"
-> +EXT2_OPTS += -L "$(EXT2_LABEL)"
->  
-> -ROOTFS_EXT2_DEPENDENCIES = host-mke2img
-> +ROOTFS_EXT2_DEPENDENCIES = host-e2fsprogs
->  
->  define ROOTFS_EXT2_CMD
-> -	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
-> +	rm -f $@
-> +	PATH=$(BR_PATH) mkfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN) $(EXT2_OPTS) $@ $(EXT2_SIZE)
->  endef
->  
->  rootfs-ext2-symlink:
-> -- 
-> 2.13.2
+> -SKALIBS_VERSION = 2.4.0.2
+> +SKALIBS_VERSION = 2.5.1.1
+>  SKALIBS_SITE = http://skarnet.org/software/skalibs
+>  SKALIBS_LICENSE = ISC
+>  SKALIBS_LICENSE_FILES = COPYING
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
