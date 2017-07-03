@@ -1,150 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 00:54:56 +0200
-Subject: [Buildroot] [git commit] busybox: applets as individual binaries
-Message-ID: <20170703225435.5490A7FE21@busybox.osuosl.org>
+Date: Tue, 4 Jul 2017 00:58:04 +0200
+Subject: [Buildroot] [PATCH v14 1/4] makedevs: support optional files
+In-Reply-To: <20170703210051.3457-1-arnout@mind.be>
+References: <20170703210051.3457-1-arnout@mind.be>
+Message-ID: <20170704005804.672295a0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1e07d6d796e67a980d4a05d04c64f00162245ff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The individual binaries option of busybox allows for the applets
-that would usually be symlinks to be built as individual applications
-that link against a shared library.
+On Mon, 3 Jul 2017 23:00:48 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Add the 'F' file type to makedevs, that allows a file to be optional.
+> With this option, the line is just silently skipped if the file doesn't
+> exist (or is not a regular file).
+> 
+> This is useful for _PERMISSIONS where the file can be configured out
+> by package-specific configuration that is not directly handled by
+> Buildroot, like busybox.
+> 
+> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Cc: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+> Cc: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> v14:
+>  - Split off the makedevs change in a separate patch.
+>  - Fix it - AFAICS, the original patch would just skip all F lines.
+> ---
+>  package/makedevs/makedevs.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-This feature is needed for SELinux to allow the applications to run
-under the correct SELinux context.
+Applied to master, thanks.
 
-The patch being added allows the individual applications to be
-installed and will be upstreamed to the busybox developers.
-
-The initial work for this change was done by Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>.
-
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-[Thomas:
- - add help text in Config.in option.
- - rename BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES to
-   BUSYBOX_SET_INDIVIDUAL_BINARIES to be consistent with other
-   variables.
- - call BUSYBOX_INSTALL_INDIVIDUAL_BINARIES in
-   BUSYBOX_INSTALL_TARGET_CMDS, not in BUSYBOX_INSTALL_INIT_SYSV.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[Arnout:
- - revert to the "optional file" approach in makedevs;
- - reword Config.in comment text to match our usual pattern;
- - abbreviate comment about how suid applets are found a little;
- - all applets are optional (each one may have been unselected from the
-   busybox config).]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: remove /usr/share/udhcpc/default.script from BUSYBOX_PERMISSIONS.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/Config.in  | 16 ++++++++++++++++
- package/busybox/busybox.mk | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
-
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 116a72e..ca8fe68 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -56,6 +56,22 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
- 	  crond, then individual binaries have to be enabled for the
- 	  SELinux type transitions to occur properly.
- 
-+config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
-+	bool "Individual binaries"
-+	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_bfin # libbusybox.so link issue
-+	help
-+	  By default (i.e with this option disabled), Busybox is
-+	  installed as a single binary in /bin/busybox and all applets
-+	  are a symbolic link to /bin/busybox.
-+
-+	  With this option enabled, each applet is a separate binary,
-+	  which is needed for proper operation with SELinux.
-+
-+comment "Busybox individual binaries need a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+	depends on !BR2_bfin
-+
- config BR2_PACKAGE_BUSYBOX_WATCHDOG
- 	bool "Install the watchdog daemon startup script"
- 	help
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index a536ed2..2231730 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -60,9 +60,32 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
- BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_PERMISSIONS
-+# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE.
-+# 12 Applets are pulled from applets.h using grep command :
-+#  grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" \
-+#  $(@D)/include/applets.h 
-+# These applets are added to the device table and the makedev file
-+# ignores the files with type 'F' ( optional files).
-+	/usr/bin/wall 			 F 4755 0  0 - - - - -
-+	/bin/ping 			 F 4755 0  0 - - - - -
-+	/bin/ping6 			 F 4755 0  0 - - - - -
-+	/usr/bin/crontab 		 F 4755 0  0 - - - - -
-+	/sbin/findfs 			 F 4755 0  0 - - - - -
-+	/bin/login 			 F 4755 0  0 - - - - -
-+	/bin/mount 			 F 4755 0  0 - - - - -
-+	/usr/bin/passwd 		 F 4755 0  0 - - - - -
-+	/bin/su 			 F 4755 0  0 - - - - -
-+	/usr/bin/traceroute 		 F 4755 0  0 - - - - -
-+	/usr/bin/traceroute6 		 F 4755 0  0 - - - - -
-+	/usr/bin/vlock 			 F 4755 0  0 - - - - -
-+endef
-+else
- define BUSYBOX_PERMISSIONS
- 	/bin/busybox                     f 4755 0  0 - - - - -
- endef
-+endif
- 
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
-@@ -171,6 +194,17 @@ define BUSYBOX_SET_SELINUX
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_SET_INDIVIDUAL_BINARIES
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+
-+define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
-+	rm -f $(TARGET_DIR)/bin/busybox
-+endef
-+endif
-+
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-@@ -228,6 +262,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
-+	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
- 	$(BUSYBOX_MUSL_TWEAKS)
- endef
- 
-@@ -251,6 +286,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
-+	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
- endef
- 
- # Checks to give errors that the user can understand
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
