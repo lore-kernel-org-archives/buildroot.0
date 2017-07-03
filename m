@@ -1,56 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  3 Jul 2017 23:58:02 +0200
-Subject: [Buildroot] [PATCH 1/2] gcc: gcc-final: install libsanitizer if
-	available
-Message-ID: <20170703215803.6233-1-peter@korsgaard.com>
+Date: Mon, 03 Jul 2017 23:59:12 +0200
+Subject: [Buildroot] libasan.so missing
+In-Reply-To: <3af3ceda-f9fb-ff4c-c203-2248fade16d2@grandegger.com> (Wolfgang
+ Grandegger's message of "Mon, 3 Jul 2017 19:47:20 +0200")
+References: <05992a34-6e01-9d75-926f-ab5a2e0e10a1@grandegger.com>
+ <877ezp780a.fsf@dell.be.48ers.dk>
+ <3af3ceda-f9fb-ff4c-c203-2248fade16d2@grandegger.com>
+Message-ID: <87podh5gi7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gcc builds libsanitizer (lib{a,l,t,u}san) for
--fsanitize={address,thread,leak,undefined} if the needed dependencies are
-available:
+>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
 
-- Glibc
-- C++ support
-- A supported architecture (see libsanitizer/configure.tgt)
+ > Hello Peter,
+ > Am 03.07.2017 um 19:19 schrieb Peter Korsgaard:
+ >>>>>>> "Wolfgang" == Wolfgang Grandegger <wg@grandegger.com> writes:
+ >> 
+ >> > Hello,
+ >> > I'm using the x86_64 buildroot toolchain with gcc 5.4. I wonder why
+ >> > the address sanitizer library "libasan.so*" is not available in the
+ >> > rootfs of the target. Is it intentional? And what is the best way to
+ >> > get it added to the rootfs?
+ >> 
+ >> Is this with uClibc-ng, musl or Glibc?
 
-So install these into target + staging if available to support -fsanitize.
+ > It's with Glibc. I think the libsanitizer libs are built but not moved
+ > to the target.
 
-Notice that this grows the target fs with close to 2MB on architectures
-where all variants are supported. From a x86-64 build:
+Correct. I've sent a patch fixing this for the internal and external
+toolchain. Could you give it a try?
 
-ls -lahS target/lib/lib?san.so.?.0.0
--rwxr-xr-x 1 peko peko 950K Jul  3 23:51 target/lib/libasan.so.3.0.0
--rwxr-xr-x 1 peko peko 719K Jul  3 23:51 target/lib/libtsan.so.0.0.0
--rwxr-xr-x 1 peko peko 229K Jul  3 23:51 target/lib/liblsan.so.0.0.0
+https://patchwork.ozlabs.org/patch/783661/
+https://patchwork.ozlabs.org/patch/783660/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/gcc-final/gcc-final.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index e8d2e18fe5..b9ea628ae9 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -147,6 +147,15 @@ endef
- 
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBATOMIC
- 
-+define HOST_GCC_FINAL_INSTALL_LIBSANITIZER
-+	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/lib?san* \
-+		$(STAGING_DIR)/lib/
-+	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/lib?san* \
-+		$(TARGET_DIR)/lib/
-+endef
-+
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBSANITIZER
-+
- # Handle the installation of libraries in /usr/lib
- HOST_GCC_FINAL_USR_LIBS =
- 
 -- 
-2.11.0
+Bye, Peter Korsgaard
