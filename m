@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 00:25:28 +0200
-Subject: [Buildroot] [RFC PATCH v5 11/11] package/qt5base: provide
- "qt.conf" to make "qmake" relocatable
-In-Reply-To: <1498811828-6893-12-git-send-email-wg@grandegger.com>
+Date: Tue, 4 Jul 2017 00:30:51 +0200
+Subject: [Buildroot] [RFC PATCH v5 06/11] pkg-generic: add
+ GLOBAL_INSTRUMENTATION_HOOKS for rpath sanitation
+In-Reply-To: <4e40ba89-7c3b-f25d-4182-76388c1b0243@mind.be>
 References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-12-git-send-email-wg@grandegger.com>
-Message-ID: <ab1e66f6-dfaf-1b98-be03-420e2c2e898f@mind.be>
+ <1498811828-6893-7-git-send-email-wg@grandegger.com>
+ <4e40ba89-7c3b-f25d-4182-76388c1b0243@mind.be>
+Message-ID: <00d2dee8-fe63-bc07-b3bd-93b7df740b8f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,70 +15,69 @@ To: buildroot@busybox.net
 
 
 
-On 30-06-17 10:37, Wolfgang Grandegger wrote:
-> The file "qt.conf" can be used to override the hard-coded paths that are
-> compiled into the Qt library. We need it to make "qmake" relocatable.
-
- Looks good to me, except...
-
+On 03-07-17 23:47, Arnout Vandecappelle wrote:
 > 
-> CC: Julien Corjon <corjon.j@ecagroup.com>
-> CC: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-> ---
->  package/qt5/qt5base/qt.conf.in | 6 ++++++
->  package/qt5/qt5base/qt5base.mk | 8 ++++++++
->  2 files changed, 14 insertions(+)
->  create mode 100644 package/qt5/qt5base/qt.conf.in
 > 
-> diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
-> new file mode 100644
-> index 0000000..48e4b92
-> --- /dev/null
-> +++ b/package/qt5/qt5base/qt.conf.in
-> @@ -0,0 +1,6 @@
-> +[Paths]
-> +Prefix=@@HOST_DIR@@/usr
-> +Sysroot=@@STAGING_DIR@@
-> +Headers=/usr/include/qt5
-> +Plugins=/usr/lib/qt/plugins
-> +Examples=/usr/lib/qt/examples
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 5fe8bb8..71dbd5d 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -258,9 +258,17 @@ define QT5BASE_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->  endef
->  
-> +# The file "qt.conf" can be used to override the hard-coded paths that are
-> +# compiled into the Qt library. We need it to make "qmake" relocatable.
-> +define QT5BASE_INSTALL_QT_CONF
-> +	sed -e "s\\@@HOST_DIR@@\\$(HOST_DIR)\\" -e "s\\@@STAGING_DIR@@\\$(STAGING_DIR)\\" \
+> On 30-06-17 10:37, Wolfgang Grandegger wrote:
+>> The hook calls the script "fix-rpath" at the end of the installation
+>> step.
+>>
+>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> 
+>  Looks good to me. I'm not adding my reviewed-by yet because it will still
+> change when the fix-rpath arguments change.
+> 
+>  Regards,
+>  Arnout
+> 
+>> ---
+>>  package/pkg-generic.mk | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 825ab0c..8812193 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -139,6 +139,16 @@ define step_check_build_dir
+>>  endef
+>>  GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
+>>  
+>> +define step_sanitize_rpath
+>> +	$(if $(filter install-host-end,$(2)-$(1)),\
+>> +		support/scripts/fix-rpath "host" $($(PKG)_DIR)/.br_host_filelist)
+>> +	$(if $(filter install-staging-end,$(2)-$(1)),\
+>> +		support/scripts/fix-rpath "staging" $($(PKG)_DIR)/.br_staging_filelist)
+>> +	$(if $(filter install-target-end,$(2)-$(1)),\
+>> +		support/scripts/fix-rpath "target" $($(PKG)_DIR)/.br_target_filelist)
 
- \\ -> %
+ After reviewing the qt.conf thing, I realized that this is in fact not enough.
+Indeed, staging-install may install things into host dir as well...
 
-> +	$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/usr/bin/qt.conf
+ So I think that both for generating the lists and for doing fix-rpath, we
+should not just look at the directory corresponding to the step, but to all three.
 
- Give it one more indent to make it clear it's a continuation line.
+ Since that means that the same directory may be iterated over three times, I
+think it's best to also make a total of 9 files:
 
-> +endef
-> +
->  define QT5BASE_INSTALL_STAGING_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->  	$(QT5_LA_PRL_FILES_FIXUP)
-> +	$(QT5BASE_INSTALL_QT_CONF)
+.br_host_install_host_filelist   -> things installed to host during host-install
+.br_host_install_target_filelist -> things installed to target during host-install
+.br_target_install_host_filelist -> things installed to target during target-install
 
- It's pretty hacky to do stuff in host dir while installing to staging, but
-that's how it is...
+ Ideally .br_host_install_target_filelist etc. should be empty, so we can also
+warn or error if that is not the case.
 
+ What do you think?
 
  Regards,
  Arnout
 
->  endef
->  
->  define QT5BASE_INSTALL_TARGET_LIBS
+>> +endef
+>> +GLOBAL_INSTRUMENTATION_HOOKS += step_sanitize_rpath
+>> +
+>>  # User-supplied script
+>>  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+>>  define step_user
+>>
 > 
 
 -- 
