@@ -1,149 +1,30 @@
-From: Fromm Kay <Kay.Fromm@escad.de>
-Date: Mon, 3 Jul 2017 07:06:30 +0000
-Subject: [Buildroot] BBGW can0
-Message-ID: <56bbab1f28fc49f4b990a2ce90443565@SPF020.engineering.escad-group.com>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Mon,  3 Jul 2017 09:50:08 +0200
+Subject: [Buildroot] [PATCH] tslib: use SPDX identifiers for licenses in use
+Message-ID: <20170703075008.18255-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sirs,
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/tslib/tslib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I found the solution:
-As far as I understand all capes with a CAN-Bus-Trans-receiver have the DCAN1 pins connected to the UART2 pins to realize some kind of terminal resistor.
-This is done within the device tree overlay.
-
-&am33xx_pinmux {
-               bb_dcan1_pins: pinmux_dcan1_pins {
-                              pinctrl-single,pins = <
-                                                           0x184 (PIN_INPUT_PULLUP | MUX_MODE2) /* uart1_txd.d_can1_rx */
-                                                           0x180 (PIN_OUTPUT_PULLUP | MUX_MODE2) /* uart1_rxd.d_can1_tx */
-                              >;
-               };
-
-               uart2_pins: uart2_pins {
-                              pinctrl-single,pins = <
-                                            0x150 (PIN_INPUT_PULLUP | MUX_MODE2)        /* needs to  be set.uart2_rxd*/
-                                            0x154 (PIN_INPUT_PULLUP | MUX_MODE2)        /* needs to  be set.uart2_txd */
-                              >;
-               };
-};
-
-&dcan1 {
-               pinctrl-names = "default";
-               pinctrl-0 = <&bb_dcan1_pins>;
-               status = "okay";
-};
-
-&uart2 {
-               pinctrl-names = "default";
-               pinctrl-0 = <&uart2_pins>;
-               status = "okay";
-};
-
-Mit freundlichen Gr??en
-
-Kay Fromm
-Teamleiter Softwareentwicklung
-________________________________
-ESCAD DESIGN GmbH
-Edewechter Landstr.146
-D-26131 Oldenburg
-http://www.escad-group.com
-Telefon:
-Mobil:
-E-Mail:
-
-+49 441 960 1253 20
-+49 172 7452 379
-Kay.Fromm at escad.de
-
-________________________________
-
-Sitz der Gesellschaft:
-Pfullendorf
-Gerichtsstand:
-Amtsgericht Ulm / HRB 723523
-Bankverbindung:
-Sparkasse Bodensee - IBAN: DE32690500010024378564 BIC: SOLADES1KNZ
-Gesch?ftsf?hrer:
-Reiner Hafen, Rudolf Rauch
-Von: Fromm Kay
-Gesendet: Donnerstag, 22. Juni 2017 11:31
-An: 'buildroot at busybox.net'
-Betreff: BBGW can0
-
-Dear Sirs,
-
-I'm a software developer and I'm about to create an initramfs for the beaglebone green wireless.
-I have got a custom am335x-bonegreen-wireless.dts for the wireless running by patching /board/ti/am335x/board.c and /include/configs/am335x_emv.h
-Due to the lag of knowledge how to integrate the capemgr I added all needed additions oF BB-CAN1, BB-ADC, BB-PWM1 directly into the custom am335x-bonegreen-wireless.dts e.g. am33xx.dtsi.
-I loaded the modules c_can_platform, can, can_dev, can_raw and put the can0 device up by adding ip link set can0 type can bitrate 250000 triple-sampling on
-
-Ifconfig:
-can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
-          UP RUNNING NOARP  MTU:16  Metric:1
-          RX packets:2 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:10
-          RX bytes:16 (16.0 B)  TX bytes:0 (0.0 B)
-          Interrupt:167
-
-ip -d -s link show can0:
-3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 10
-    link/can  promiscuity 0
-    can <TRIPLE-SAMPLING> state ERROR-PASSIVE (berr-counter tx 0 rx 127) restart-ms 0
-                 bitrate 250000 sample-point 0.875
-                 tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
-                 c_can: tseg1 2..16 tseg2 1..8 sjw 1..4 brp 1..1024 brp-inc 1
-                 clock 24000000
-                 re-started bus-errors arbit-lost error-warn error-pass bus-off
-                 0          0          0          1          1          0         numtxqueues 1 numrxqueues 1
-    RX: bytes  packets  errors  dropped overrun mcast
-    16         2        0       0       0       0
-    TX: bytes  packets  errors  dropped carrier collsns
-    0          0        0       0       0       0
-
-cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pinmux-pins | grep can:
-pin 96 (44e10980.0): 481d0000.can (GPIO UNCLAIMED) function pinmux_dcan1_pins group pinmux_dcan1_pins
-pin 97 (44e10984.0): 481d0000.can (GPIO UNCLAIMED) function pinmux_dcan1_pins group pinmux_dcan1_pins
-
-I have can-utils installed and when I fetch can-packets with the similar configured BBGW-blank-debian-8.5-seeed-iot-armhf-2016-06-19 OS I get my desired output via candump can0.
-
-What I'm struggling with is the fact that with the same HW-setup (cape attached to a can-emitter) but running on my initramfs I don't get any messages via candump can0.
-
-TLDR:
-Buildroot-initramfs vs. BBGW-blank-debian-8.5-seeed-iot-armhf -> same can-kernel-config, same pinmux, same module, same tools, same hardware -> seeed-iot = candump can0 OK; initramfs = candump can0 NOTHING.
-
-I would really appreciate some help from you.... plase
-With best regards,
-
-Kay Fromm
-Teamleiter Softwareentwicklung
-________________________________
-ESCAD DESIGN GmbH
-Edewechter Landstr.146
-D-26131 Oldenburg
-http://www.escad-group.com
-Telefon:
-Mobil:
-E-Mail:
-
-+49 441 960 1253 20
-+49 172 7452 379
-Kay.Fromm at escad.de<mailto:Kay.Fromm@escad.de>
-
-________________________________
-
-Sitz der Gesellschaft:
-Pfullendorf
-Gerichtsstand:
-Amtsgericht Ulm / HRB 723523
-Bankverbindung:
-Sparkasse Bodensee - IBAN: DE32690500010024378564 BIC: SOLADES1KNZ
-Gesch?ftsf?hrer:
-Reiner Hafen, Rudolf Rauch
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170703/77fda2c9/attachment.html>
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 91ba9db39..936243154 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -7,7 +7,7 @@
+ TSLIB_VERSION = 1.11
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+-TSLIB_LICENSE = GPL, LGPL
++TSLIB_LICENSE = GPL-2.0 (programs), LGPL-2.1 (libraries)
+ TSLIB_LICENSE_FILES = COPYING
+ 
+ TSLIB_INSTALL_STAGING = YES
+-- 
+2.11.0
