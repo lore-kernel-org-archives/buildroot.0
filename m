@@ -1,38 +1,76 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 3 Jul 2017 14:45:02 +0200
-Subject: [Buildroot] [PATCH 8/8] package/Makefile.in: remove $(HOST_DIR)/usr
-	part from HOST_LDFLAGS
-In-Reply-To: <20170703124502.26113-1-arnout@mind.be>
-References: <20170703124502.26113-1-arnout@mind.be>
-Message-ID: <20170703124502.26113-9-arnout@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon,  3 Jul 2017 14:50:38 +0200
+Subject: [Buildroot] [PATCH] package/libunwind: fix build failure due to
+	asm()
+Message-ID: <20170703125038.4097-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now $(HOST_DIR)/lib and $(HOST_DIR)/usr/lib are the same directory, it
-doesn't make sense to pass both to LDFLAGS.
+The gcc documentation [1] suggest to use __asm__ instead of asm.
 
-Also use $(HOST_DIR)/lib instead of $(HOST_DIR)/usr/lib for the RPATH.
+Fixes:
+http://autobuild.buildroot.net/results/3ef/3efe156b6494e4392b6c31de447ee2c72acc1a53
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[1] https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html#Alternate-Keywords
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...ibunwind-arm-fix-build-failure-due-to-asm.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/libunwind/0004-libunwind-arm-fix-build-failure-due-to-asm.patch
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 6b88ac4feb..25f1997fe6 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -220,7 +220,7 @@ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
- HOST_CFLAGS   ?= -O2
- HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
--HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
-+HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
- 
- # host-intltool should be executed with the system perl, so we save
- # the path to the system perl, before a host-perl built by Buildroot
+diff --git a/package/libunwind/0004-libunwind-arm-fix-build-failure-due-to-asm.patch b/package/libunwind/0004-libunwind-arm-fix-build-failure-due-to-asm.patch
+new file mode 100644
+index 0000000..cfd0c55
+--- /dev/null
++++ b/package/libunwind/0004-libunwind-arm-fix-build-failure-due-to-asm.patch
+@@ -0,0 +1,43 @@
++From c7ab998ec52b09d61ec3c0ea62aa07cd26077ea3 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Mon, 3 Jul 2017 14:43:02 +0200
++Subject: [PATCH] libunwind-arm: fix build failure due to asm()
++
++The gcc documentation [1] suggest to use __asm__ instead of asm.
++
++Fixes:
++http://autobuild.buildroot.net/results/3ef/3efe156b6494e4392b6c31de447ee2c72acc1a53
++
++[1] https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html#Alternate-Keywords
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ include/libunwind-arm.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/libunwind-arm.h b/include/libunwind-arm.h
++index f208487..1c856fa 100644
++--- a/include/libunwind-arm.h
+++++ b/include/libunwind-arm.h
++@@ -265,7 +265,7 @@ unw_tdep_context_t;
++ #ifndef __thumb__
++ #define unw_tdep_getcontext(uc) (({                                     \
++   unw_tdep_context_t *unw_ctx = (uc);                                   \
++-  register unsigned long *unw_base asm ("r0") = unw_ctx->regs;          \
+++  register unsigned long *unw_base __asm__ ("r0") = unw_ctx->regs;      \
++   __asm__ __volatile__ (                                                \
++     "stmia %[base], {r0-r15}"                                           \
++     : : [base] "r" (unw_base) : "memory");                              \
++@@ -273,7 +273,7 @@ unw_tdep_context_t;
++ #else /* __thumb__ */
++ #define unw_tdep_getcontext(uc) (({                                     \
++   unw_tdep_context_t *unw_ctx = (uc);                                   \
++-  register unsigned long *unw_base asm ("r0") = unw_ctx->regs;          \
+++  register unsigned long *unw_base __asm__ ("r0") = unw_ctx->regs;      \
++   __asm__ __volatile__ (                                                \
++     ".align 2\nbx pc\nnop\n.code 32\n"                                  \
++     "stmia %[base], {r0-r15}\n"                                         \
++-- 
++2.9.4
++
 -- 
-2.13.2
+2.9.4
