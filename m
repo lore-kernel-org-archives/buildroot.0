@@ -1,188 +1,108 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 3 Jul 2017 16:45:36 +0200
-Subject: [Buildroot] [PATCH] uftrace: new package
-In-Reply-To: <20170625193743.8424-1-vincent.stehle@laposte.net>
-References: <20170625193743.8424-1-vincent.stehle@laposte.net>
-Message-ID: <a744ab11-02b0-6ed6-c975-b3816ca3bf50@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 16:47:42 +0200
+Subject: [Buildroot] [PATCHv2 2/2] instrumentation: extend
+ packages-file-list.txt with symlinks and directories
+In-Reply-To: <20170205134507.15328-3-patrickdepinguin@gmail.com>
+References: <20170205134507.15328-1-patrickdepinguin@gmail.com>
+ <20170205134507.15328-3-patrickdepinguin@gmail.com>
+Message-ID: <51252cb1-29de-deb1-f21f-6aa8ac243afa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
 
-Le 25/06/2017 ? 21:37, Vincent Stehle a ?crit :
-> From: Vincent Stehl? <vincent.stehle@laposte.net>
+
+On 05-02-17 14:45, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> Add a package for uftrace, a simple function call tracer for user programs.
+> Using the package instrumentation hooks, a file packages-file-list.txt is
+> created containing the list of files installed by a package with their size.
 > 
-> The x86_64 and arm/aarch64 architectures are supported.
+> Due to the use of 'find -type f', symbolic links to files are not included
+> in this file list. Since the original purpose of this file was to calculate
+> the total size of a package and symbolic links have file size 0, this was
+> not a problem.
 > 
-> Tracing necessitates that the executable you want to trace be compiled with
-> -pg or -finstrument-functions option.
+> However, if packages-file-list.txt is reused for other purposes, for example
+> to get a complete list of files installed by a package regardless of size,
+> symbolic links to files are important too.
+
+ I'm absolutely +1 with the purpose of this patch. In fact, we should be
+collecting file lists for host and staging as well. Cfr. [1].
+
+> Likewise, to get a complete view of what a package installs, directories
+> should be included too.
 > 
-> See https://github.com/namhyung/uftrace
+> Update the instrumentation hook accordingly.
+> Although for files an md5sum is taken, we cannot do this for directories.
+> Instead, mimic the output of md5sum with a fake hash string.
+
+ The logic would be that for symlinks, you'd include the file pointed to rather
+than a hash.
+
 > 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> Note: for directories that are used by several packages, e.g. /etc/init.d/,
+> the package that created the directory will be treated as the 'owner' of
+> that directory.  This gives a somewhat distorted view of ownership.
+
+ This seems reasonable to me.
+
+> Similarly, the package size reported by 'make graph-size' (based on
+> packages-file-list.txt) will include the 'size' of a directory for that
+> owner, which is reported as e.g. 4096 bytes.
+
+ I think 'make graph-size' should filter out the directories. Currently not
+possible since the package file list contains just package + filename, but with
+a per-package file list as introduced in [1] it becomes feasible.
+
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  DEVELOPERS                   |  3 ++-
->  package/Config.in            |  1 +
->  package/uftrace/Config.in    | 20 ++++++++++++++++++++
->  package/uftrace/uftrace.hash |  2 ++
->  package/uftrace/uftrace.mk   | 28 ++++++++++++++++++++++++++++
->  5 files changed, 53 insertions(+), 1 deletion(-)
->  create mode 100644 package/uftrace/Config.in
->  create mode 100644 package/uftrace/uftrace.hash
->  create mode 100644 package/uftrace/uftrace.mk
+> v2: add directory information
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9e421f4b4..5f2a6b0db 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1706,9 +1706,10 @@ F:	package/openmpi/
->  F:	package/pinentry/
->  F:	package/trinity/
->  
-> -N:	Vincent Stehl? <vincent.stehle@intel.com>
-> +N:	Vincent Stehl? <vincent.stehle@laposte.net>
-
-This should be part of another commit since it's not related to uftrace.
-
->  F:	package/i7z/
->  F:	package/msr-tools/
-> +F:	package/uftrace/
->  
->  N:	Vinicius Tinti <viniciustinti@gmail.com>
->  F:	package/python-thrift/
-> diff --git a/package/Config.in b/package/Config.in
-> index f69f67f3e..d9639b040 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -121,6 +121,7 @@ menu "Debugging, profiling and benchmark"
->  	source "package/trace-cmd/Config.in"
->  	source "package/trinity/Config.in"
->  	source "package/uclibc-ng-test/Config.in"
-> +	source "package/uftrace/Config.in"
->  	source "package/valgrind/Config.in"
->  	source "package/whetstone/Config.in"
->  endmenu
-> diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-> new file mode 100644
-> index 000000000..bb766238c
-> --- /dev/null
-> +++ b/package/uftrace/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_UFTRACE
-> +	bool "uftrace"
-> +	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
-> +	depends on !(BR2_arm && BR2_ARM_SOFT_FLOAT)
-
-This could be:
-	depends on BR2_aarch64 || (BR2_arm && !BR2_ARM_SOFT_FLOAT) || BR2_x86_64
-
-Btw, can you explain why only armhf is supported ?
-
-> +	depends on BR2_PACKAGE_ELFUTILS
-
-Can you select BR2_PACKAGE_ELFUTILS and add reverse decencies
-
-	depends on BR2_USE_WCHAR # elfutils
-	depends on !BR2_STATIC_LIBS # elfutils
-
-Also add thread dependency:
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-
-Why it's restricted to glibc based toolchain ?
-At least you can keep the elfutils reverse dependencies:
-
-	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-
-It should be fine with uClibc-ng toolchains.
-
-> +	help
-> +	  A simple function call tracer for user programs.
-> +
-> +	  Note that the executable you want to trace should be compiled
-> +	  with -pg or -finstrument-functions option.
-> +
-> +	  https://github.com/namhyung/uftrace
-> +
-> +comment "uftrace needs a glibc toolchain and elfutils"
-> +	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
-> +	depends on !BR2_PACKAGE_ELFUTILS || !BR2_TOOLCHAIN_USES_GLIBC
-
-update the comment dependencies accordingly:
-comment "uftrace needs a glibc or uClibc toolchain w/ dynamic library, threads,
-wchar"
-	depends on BR2_aarch64 || (BR2_arm && !BR2_ARM_SOFT_FLOAT) || BR2_x86_64
-	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-
-> +
-> +comment "uftrace needs a toolchain with hardware floats on ARM"
-> +	depends on BR2_arm && BR2_ARM_SOFT_FLOAT
-> diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
-> new file mode 100644
-> index 000000000..8509197cc
-> --- /dev/null
-> +++ b/package/uftrace/uftrace.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256 afa698053ef10582c2ed3973ea134c0775d7ff4dcece3034905026185c52b272 uftrace-v0.7.tar.gz
-> diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
-> new file mode 100644
-> index 000000000..e23f01816
-> --- /dev/null
-> +++ b/package/uftrace/uftrace.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# uftrace
-> +#
-> +################################################################################
-> +
-> +UFTRACE_VERSION = v0.7
-> +UFTRACE_SITE = $(call github,namhyung,uftrace,$(UFTRACE_VERSION))
-> +UFTRACE_DEPENDENCIES = elfutils
-> +UFTRACE_LICENSE = GPL-2.0
-> +UFTRACE_LICENSE_FILES = COPYING
-> +
-> +define UFTRACE_CONFIGURE_CMDS
-> +	cd $(@D) && \
-> +	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> +	LD="$(TARGET_LD)" ARCH="$(ARCH)" \
-> +	./configure --prefix=/usr
-> +endef
-
-Use $(TARGET_CONFIGURE_OPTS) instead of defining CC, CFLAGS etc on the command
-line. Also add parenthesis
-Something like:
-
-	(cd $(@D) && \
-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-	ARCH="$(ARCH)" \
-	./configure --prefix=/usr)
-
-> +
-> +define UFTRACE_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-
-Keep $(TARGET_CONFIGURE_OPTS) and ARCH="$(ARCH)"
-
-> +endef
-> +
-> +define UFTRACE_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)"
-
-Same here.
-
-Best regards,
-Romain
-
-> +endef
-> +
-> +$(eval $(generic-package))
+>  package/pkg-generic.mk | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 077b02b..1beea32 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -58,8 +58,12 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>  # Hooks to collect statistics about installed files
+>  
+>  define _step_pkg_size_get_file_list
+> -	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
+> -		$1
+> +	(cd $(TARGET_DIR) ; \
+> +		( \
+> +			find . -xtype f -print0 | xargs -0 md5sum ; \
+> +			find . -xtype d -print0 | xargs -0 -I{} printf 'directory  {}\n'; \
+
+ I don't see symlinks being handled here, or am I missing something?
+
+ Would it be too crazy to do things in a single find command?
+
+	find . \( -xtype f -exec md5sum '{}' \; \) -o \
+		\( -xtype d -exec printf 'directory %s' '{}' \;
+
+
+ Regards,
+ Arnout
+
+[1] http://patchwork.ozlabs.org/patch/782702/
+
+> +		) \
+> +	) | sort > $1
+>  endef
+>  
+>  # This hook will be called before the target installation of a
+> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
