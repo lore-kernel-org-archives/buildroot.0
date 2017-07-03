@@ -1,52 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 17:59:07 +0200
-Subject: [Buildroot] [PATCH 2/5] core/pkg-generic: call MESSAGE when
-	saving package legal-info
-In-Reply-To: <606d7f78d9c7e1af1c1fd1b72ab489853d230f70.1498428166.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 26 Jun 2017 00:03:38 +0200")
-References: <cover.1498428166.git.yann.morin.1998@free.fr>
- <606d7f78d9c7e1af1c1fd1b72ab489853d230f70.1498428166.git.yann.morin.1998@free.fr>
-Message-ID: <87o9t17bqs.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 17:59:07 +0200
+Subject: [Buildroot] Forcing build of custom kernel headers
+In-Reply-To: <87eftxefa6.fsf@sx4173-linuxdev.solectrix.de>
+References: <87eftxefa6.fsf@sx4173-linuxdev.solectrix.de>
+Message-ID: <6ec78676-b577-9294-e064-3ad7c3231f01@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Currently, the per-package legal-info is mostly silent, but we're soon
- > to add a check for the hashes of the license files.
 
- > In that case, and when there is a hash mis-match, we want a user to know
- > what package had a changed license file.
+On 03-07-17 17:00, Christian Kellermann wrote:
+> Hi List,
+> 
+> I have a rather peculiar system setup: A 64 bit PPC kernel running a 32
+> bit buildroot. ATM I solve this by using two default configs ? one for
+> the kernel and one for the rootfs. A simple shell script copies the
+> kernel artifacts back and forth so the kernel can be included in the
+> rootfs image.
+> 
+> The kernel in question is a custom kernel tree in a git repository.
+> Now some userland application needs kernel headers from that kernel. As
+> I understand buildroot would install the uapi-headers into staging/
+> automatically. But with my setup no kernel gets build for the 32bit
+> rootfs.
+> 
+> I have tried to set BR2_KERNEL_HEADERS_AS_KERNEL and the respective
+> CUSTOM kernel variables in my defconfig. However the build system will
+> always fall back to the BR2_DEFAULT_KERNEL_HEADERS version.
+> 
+> So tl;dr: I want to make the linux-headers package use my custom kernel
+> headers from a git repo but don?t know how to do this without building a
+> kernel.
 
- > So, we add a call to MESSAGE to display the package we're currently
- > saving the legal-info of, like so:
+ The easiest is to check out the linux tree separately and make
+LINUX_HEADERS_OVERRIDE_SRCDIR point to it.
 
- >>>> busybox 1.26.2 Collecting legal info
+ Regards,
+ Arnout
 
-I wonder if we still need the general "Collecting legal info" message,
-as it now looks something like:
-
->>>   Collecting legal info
->>> toolchain-buildroot  Collecting legal info
->>> host-gcc-final 6.3.0 Collecting legal info
->>> host-binutils 2.27 Collecting legal info
->>> host-gmp 6.1.2 Collecting legal info
-
-Though, with the entire patch series applied it might be handy to match
-the warnings, E.G.:
-
->>>   Collecting legal info
-WARNING: no hash file for COPYING
->>> toolchain-buildroot  Collecting legal info
-
-Presumably this warning is from legal-info-prepare. I'm not sure exactly
-how we should get rid of this warning? A buildroot.hash with an entry
-for our COPYING?
-
-That can be fixed later though - Committed, thanks.
+> 
+> Any thoughts?
+> 
+> Thanks,
+> 
+> Christian
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
