@@ -1,43 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 11:37:40 +0200
-Subject: [Buildroot] [RFC PATCH v5 01/11] package/patchelf: use most
- recent version as a base for rpath sanitation
-In-Reply-To: <6c844720-dd3d-cd87-b544-152f62afcba7@grandegger.com>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-2-git-send-email-wg@grandegger.com>
- <80a1cf57-34bb-dc8f-e2b9-dd4001f7df6b@mind.be>
- <5b16af39-81af-9a19-dd28-9aebfde9e817@grandegger.com>
- <a30436db-052e-bc75-d727-1147a75da98f@mind.be>
- <401fdb29-ce3a-f5a2-67d7-a03e2f785e87@mind.be>
- <ae53a8d6-9104-b693-bc11-850cdd5cf7bf@mind.be>
- <6c844720-dd3d-cd87-b544-152f62afcba7@grandegger.com>
-Message-ID: <af581fbf-241a-261b-3d58-c64efa621814@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Jul 2017 11:38:43 +0200
+Subject: [Buildroot] [PATCH 1/3 v3] package/ifupdown-scripts: new package
+In-Reply-To: <a9d13cba3762cec2139259304cb4a809c6147375.1499006091.git.yann.morin.1998@free.fr>
+References: <cover.1499006091.git.yann.morin.1998@free.fr>
+ <a9d13cba3762cec2139259304cb4a809c6147375.1499006091.git.yann.morin.1998@free.fr>
+Message-ID: <20170703093843.GB3838@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arnout, Thomas, All,
 
-
-On 03-07-17 09:04, Wolfgang Grandegger wrote:
-[snip]
-> OK, I will use v0.9 plus a few patches (relevant for rpath sanitization). I see
-> at least:
+On 2017-07-02 16:35 +0200, Yann E. MORIN spake thusly:
+> The ifupdown scripts can be used independently of the init system, be it
+> sysv, busybox or systemd; they could even be used when there is no init
+> system (i.e. the user is providing his own).
 > 
->   a365bcb Remove apparently incorrect usage of "static"
+> Currently, those ifupdown scripts are bundled in the skeleton.
+> 
+> But we soon will have a skeleton specific to systemd, so we would be
+> missing those scripts (when systemd-networks is not enabled).
+> 
+> So, move those scripts to their own package.
+> 
+> To keep the current behaviour (before it is changed in future commits),
+> we make that package default to y, but depend on the default skeleton.
+> 
+> Instead of being a target-finalize hook, the scripts are installed as
+> any other package are, with a package install-target command.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[--SNIP--]
+> diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+> new file mode 100644
+> index 0000000000..fc58e0bc0a
+> --- /dev/null
+> +++ b/package/ifupdown-scripts/ifupdown-scripts.mk
+> @@ -0,0 +1,57 @@
+> +################################################################################
+> +#
+> +# ifupdown-scripts
+> +#
+> +################################################################################
+> +
+> +IFUPDOWN_SCRIPTS_SOURCE =
 
- Well, actually, if you keep it static, that resolves the issue that you have
-with libs occurring twice. But it's certainly OK for me if you keep this patch
-and then resolve it by adding neededLibFound as an argument.
+As seen IRL, this line is not needed.
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
