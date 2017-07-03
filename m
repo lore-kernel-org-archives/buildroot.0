@@ -1,105 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Jul 2017 21:59:41 +0200
-Subject: [Buildroot] [git commit] vlc: add upstream security patches fixing
-	CVE-2017-10699
-Message-ID: <20170703195842.C0EDC7FD1B@busybox.osuosl.org>
+Date: Mon, 3 Jul 2017 21:59:51 +0200
+Subject: [Buildroot] [git commit] mpg123: security bump to version 1.25.1
+Message-ID: <20170703195843.04D23817B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9153ed9546ab00eb78c30899a62d3e868a7a778
+commit: https://git.buildroot.net/buildroot/commit/?id=b3a0afd47f278ab5dea4f5cbe01da79a2e05ec8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-avcodec 2.2.x, as used in VideoLAN VLC media player 2.2.7-x before
-2017-06-29, allows out-of-bounds heap memory write due to calling memcpy()
-with a wrong size, leading to a denial of service (application crash) or
-possibly code execution.
+From the release notes:
 
-https://trac.videolan.org/vlc/ticket/18467
+- Avoid memset(NULL, 0, 0) to calm down the paranoid.
+
+- Fix bug 252, invalid read of size 1 in ID3v2 parser due to forgotten
+  offset from the frame flag bytes (unnoticed in practice for a long time).
+  Fuzzers are in the house again.  This one got CVE-2017-10683.
+
+  https://sourceforge.net/p/mpg123/bugs/252/
+
+- Avoid a mostly harmless conditional jump depending on uninitialised
+  fr->lay in compute_bpf() (mpg123_position()) when track is not ready yet.
+
+- Fix undefined shifts on signed long mask in layer3.c (worked in practice,
+  never right in theory).  Code might be a bit faster now, even.  Thanks to
+  Agostino Sarubbo for reporting.
+
+dlopen() is now directly used to load output modules (and the
+--with-modules-suffix option has been removed), so adjust the modules logic
+to match.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...codec-avcodec-check-avcodec-visible-sizes.patch | 33 ++++++++++++++++++++++
- ...r-check-visible-size-when-creating-buffer.patch | 33 ++++++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ package/mpg123/mpg123.hash |  2 +-
+ package/mpg123/mpg123.mk   | 11 ++++++-----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
-new file mode 100644
-index 0000000..41a5e25
---- /dev/null
-+++ b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
-@@ -0,0 +1,33 @@
-+From 6cc73bcad19da2cd2e95671173f2e0d203a57e9b Mon Sep 17 00:00:00 2001
-+From: Francois Cartegnie <fcvlcdev@free.fr>
-+Date: Thu, 29 Jun 2017 09:45:20 +0200
-+Subject: [PATCH] codec: avcodec: check avcodec visible sizes
-+
-+refs #18467
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ modules/codec/avcodec/video.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/modules/codec/avcodec/video.c b/modules/codec/avcodec/video.c
-+index 1bcad21..ce52544 100644
-+--- a/modules/codec/avcodec/video.c
-++++ b/modules/codec/avcodec/video.c
-+@@ -137,9 +137,11 @@ static inline picture_t *ffmpeg_NewPictBuf( decoder_t *p_dec,
-+     }
-+ 
-+ 
-+-    if( width == 0 || height == 0 || width > 8192 || height > 8192 )
-++    if( width == 0 || height == 0 || width > 8192 || height > 8192 ||
-++        width < p_context->width || height < p_context->height )
-+     {
-+-        msg_Err( p_dec, "Invalid frame size %dx%d.", width, height );
-++        msg_Err( p_dec, "Invalid frame size %dx%d. vsz %dx%d",
-++                 width, height, p_context->width, p_context->height );
-+         return NULL; /* invalid display size */
-+     }
-+     p_dec->fmt_out.video.i_width = width;
-+-- 
-+2.1.4
-+
-diff --git a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
-new file mode 100644
-index 0000000..a16dcf0
---- /dev/null
-+++ b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
-@@ -0,0 +1,33 @@
-+From a38a85db58c569cc592d9380cc07096757ef3d49 Mon Sep 17 00:00:00 2001
-+From: Francois Cartegnie <fcvlcdev@free.fr>
-+Date: Thu, 29 Jun 2017 11:09:02 +0200
-+Subject: [PATCH] decoder: check visible size when creating buffer
-+
-+early reject invalid visible size
-+mishandled by filters.
-+
-+refs #18467
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/input/decoder.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/input/decoder.c b/src/input/decoder.c
-+index 2c0823f..a216165 100644
-+--- a/src/input/decoder.c
-++++ b/src/input/decoder.c
-+@@ -2060,7 +2060,9 @@ static picture_t *vout_new_buffer( decoder_t *p_dec )
-+         vout_thread_t *p_vout;
-+ 
-+         if( !p_dec->fmt_out.video.i_width ||
-+-            !p_dec->fmt_out.video.i_height )
-++            !p_dec->fmt_out.video.i_height ||
-++            p_dec->fmt_out.video.i_width < p_dec->fmt_out.video.i_visible_width ||
-++            p_dec->fmt_out.video.i_height < p_dec->fmt_out.video.i_visible_height )
-+         {
-+             /* Can't create a new vout without display size */
-+             return NULL;
-+-- 
-+2.1.4
-+
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index fa55809..69fbef3 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	de2303c8ecb65593e39815c0a2f2f2d91f708c43b85a55fdd1934c82e677cf8e	mpg123-1.23.8.tar.bz2
++sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 2431df1..7fc6d7a 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.23.8
++MPG123_VERSION = 1.25.1
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
+@@ -74,10 +74,11 @@ endif
+ 
+ MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
+ 
+-ifeq ($(BR2_PACKAGE_LIBTOOL),y)
+-MPG123_DEPENDENCIES += libtool
+-# .la files gets stripped , so directly load .so files rather than .la
+-MPG123_CONF_OPTS += --with-modules --with-module-suffix=.so
++# output modules are loaded with dlopen()
++ifeq ($(BR2_STATIC_LIBS),y)
++MPG123_CONF_OPTS += --disable-modules
++else
++MPG123_CONF_OPTS += --enable-modules
+ endif
+ 
+ $(eval $(autotools-package))
