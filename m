@@ -1,42 +1,62 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Mon,  3 Jul 2017 23:45:32 +0200
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Package depends on NPTL
-Message-ID: <1499118332-27665-1-git-send-email-nerv@dawncrow.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 23:47:58 +0200
+Subject: [Buildroot] [RFC PATCH v5 06/11] pkg-generic: add
+ GLOBAL_INSTRUMENTATION_HOOKS for rpath sanitation
+In-Reply-To: <1498811828-6893-7-git-send-email-wg@grandegger.com>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-7-git-send-email-wg@grandegger.com>
+Message-ID: <4e40ba89-7c3b-f25d-4182-76388c1b0243@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.org/results/1ad/1ad1c02eb866dd9a1b586308b11b4242f4321355/
-http://autobuild.buildroot.org/results/fd0/fd0a1f71fec062a530bcffe95e501095657c0d50/
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
 
- package/azure-iot-sdk-c/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On 30-06-17 10:37, Wolfgang Grandegger wrote:
+> The hook calls the script "fix-rpath" at the end of the installation
+> step.
+> 
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 
-diff --git a/package/azure-iot-sdk-c/Config.in b/package/azure-iot-sdk-c/Config.in
-index 9fb956a..366dc91 100644
---- a/package/azure-iot-sdk-c/Config.in
-+++ b/package/azure-iot-sdk-c/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_AZURE_IOT_SDK_C
- 	bool "azure-iot-sdk-c"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_OPENSSL
-@@ -12,5 +13,5 @@ config BR2_PACKAGE_AZURE_IOT_SDK_C
- 
- 	  https://docs.microsoft.com/nl-nl/azure/iot-hub/iot-hub-device-sdk-c-intro
- 
--comment "azure-iot-sdk-c needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "azure-iot-sdk-c needs a toolchain w/ C++ and NPTL"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ Looks good to me. I'm not adding my reviewed-by yet because it will still
+change when the fix-rpath arguments change.
+
+ Regards,
+ Arnout
+
+> ---
+>  package/pkg-generic.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 825ab0c..8812193 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -139,6 +139,16 @@ define step_check_build_dir
+>  endef
+>  GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
+>  
+> +define step_sanitize_rpath
+> +	$(if $(filter install-host-end,$(2)-$(1)),\
+> +		support/scripts/fix-rpath "host" $($(PKG)_DIR)/.br_host_filelist)
+> +	$(if $(filter install-staging-end,$(2)-$(1)),\
+> +		support/scripts/fix-rpath "staging" $($(PKG)_DIR)/.br_staging_filelist)
+> +	$(if $(filter install-target-end,$(2)-$(1)),\
+> +		support/scripts/fix-rpath "target" $($(PKG)_DIR)/.br_target_filelist)
+> +endef
+> +GLOBAL_INSTRUMENTATION_HOOKS += step_sanitize_rpath
+> +
+>  # User-supplied script
+>  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+>  define step_user
+> 
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
