@@ -1,151 +1,121 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 23:09:13 +0200
-Subject: [Buildroot] [PATCH 2/2] system: use Etc/UTC as default timezone
-In-Reply-To: <8704f2d3078e10fe9df1c73b02bca452f8aab5b2.1499109719.git.yann.morin.1998@free.fr>
-References: <cover.1499109719.git.yann.morin.1998@free.fr>
- <8704f2d3078e10fe9df1c73b02bca452f8aab5b2.1499109719.git.yann.morin.1998@free.fr>
-Message-ID: <fcc2e802-13e9-2648-5363-0792feb0d7d3@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  3 Jul 2017 23:09:53 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/libva-utils: new package
+Message-ID: <20170703210953.9667-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The utils provided by this package were formerly packaged with libva.
 
+Libva contained a patch not to compile mpeg2vldemo to reduce
+dependencies by avoiding C++, this patch is not moved to this package.
 
-On 03-07-17 21:22, Yann E. MORIN wrote:
-> Even though no timezone implicitly means UTC, systemd is not all that
-> happy when it does not have a timezone set. This is all fine on a RW
-> filesystem because systemd will create a symlink on its own (to
-> Etc/UTC), but not so much on a RO filesystem, causing all kind of
-> issues at boot time (up to the point that the system is unusable).
-> 
-> We fix that by defaulting to using Etc/UTC when no timezone is set.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+---
+v4: - bumped version to 1.8.3
+v3: - bumped version to 1.8.1
+    - used "select BR2_PACKAGE_LIBVA" instead of "depends on" (Arnout)
+      Imho it makes sense to have only one Kconfig option for libva-
+      utils. @Arnout:
+      I kept the package in "Graphic libraries and applications" because
+      it is not a library and also kept the package name so it stays in
+      sync with the upstream name.
+    - added comment about c++ dependency (Thomas)
+v2: addressed review by Thomas:
+    - added entry in DEVELOPERS
+    - moved package to Graphic libraries and applications
+    - package depends on libva
 
- And you also sneaked in the removal of a cd :-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/libva-utils/Config.in        | 15 +++++++++++++++
+ package/libva-utils/libva-utils.hash |  4 ++++
+ package/libva-utils/libva-utils.mk   | 14 ++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/libva-utils/Config.in
+ create mode 100644 package/libva-utils/libva-utils.hash
+ create mode 100644 package/libva-utils/libva-utils.mk
 
- I really don't like that the same logic is repeated for tz and tzdata (and it
-already existed for php), but OK.
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Richard Braun <rbraun@sceen.net>
-> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> Cc: Martin Bark <martin@barkynet.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> 
-> ---
-> Note: our packaging of systemd currently does not support running on a
-> RO filesystem. This patch is part of the on-going effort to make it so.
-> ---
->  package/tz/tz.mk         | 17 +++++++++--------
->  package/tzdata/tzdata.mk | 19 ++++++++++---------
->  system/Config.in         |  3 +--
->  3 files changed, 20 insertions(+), 19 deletions(-)
-> 
-> diff --git a/package/tz/tz.mk b/package/tz/tz.mk
-> index 6b1f9f4d24..8043406979 100644
-> --- a/package/tz/tz.mk
-> +++ b/package/tz/tz.mk
-> @@ -7,7 +7,11 @@
->  TZ_DEPENDENCIES = host-tzdata host-tzdump
->  TZ_LICENSE = Public domain
->  
-> +# If local time is not set, use Etc/UTC as a default.
->  TZ_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
-> +ifeq ($(TZ_LOCALTIME),)
-> +TZ_LOCALTIME = Etc/UTC
-> +endif
->  
->  define TZ_BUILD_CMDS
->  	(cd $(HOST_DIR)/usr/share/zoneinfo/posix/; \
-> @@ -25,15 +29,12 @@ define TZ_INSTALL_TARGET_CMDS
->  		$(TARGET_DIR)/usr/share/zoneinfo/iso3166.tab
->  	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo/uclibc
->  	cp -a $(@D)/output/* $(TARGET_DIR)/usr/share/zoneinfo/uclibc
-> -	if [ -n "$(TZ_LOCALTIME)" ]; then \
-> -		if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) ]; then \
-> -			printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
-> -				"$(TZ_LOCALTIME)"; \
-> -			exit 1; \
-> -		fi; \
-> -		cd $(TARGET_DIR)/etc; \
-> -		ln -sf ../usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) TZ; \
-> +	if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) ]; then \
-> +		printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
-> +			"$(TZ_LOCALTIME)"; \
-> +		exit 1; \
->  	fi
-> +	ln -sf ../usr/share/zoneinfo/uclibc/$(TZ_LOCALTIME) $(TARGET_DIR)/etc/TZ
->  endef
->  
->  $(eval $(generic-package))
-> diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-> index 802d8479a3..84ac564410 100644
-> --- a/package/tzdata/tzdata.mk
-> +++ b/package/tzdata/tzdata.mk
-> @@ -24,7 +24,11 @@ else
->  TZDATA_ZONELIST = $(call qstrip,$(BR2_TARGET_TZ_ZONELIST))
->  endif
->  
-> +# If local time is not set, use Etc/UTC as a default.
->  TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
-> +ifeq ($(TZDATA_LOCALTIME),)
-> +TZDATA_LOCALTIME = Etc/UTC
-> +endif
->  
->  # No need to extract for target, we're using the host-installed files
->  TZDATA_EXTRACT_CMDS =
-> @@ -36,16 +40,13 @@ define TZDATA_INSTALL_TARGET_CMDS
->  	for zone in posix/*; do \
->  	    ln -sfn "$${zone}" "$${zone##*/}"; \
->  	done
-> -	if [ -n "$(TZDATA_LOCALTIME)" ]; then \
-> -	    if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/$(TZDATA_LOCALTIME) ]; then \
-> -	        printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
-> -	               "$(TZDATA_LOCALTIME)"; \
-> -	        exit 1; \
-> -	    fi; \
-> -	    cd $(TARGET_DIR)/etc; \
-> -	    ln -sf ../usr/share/zoneinfo/$(TZDATA_LOCALTIME) localtime; \
-> -	    echo "$(TZDATA_LOCALTIME)" >timezone; \
-> +	if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/$(TZDATA_LOCALTIME) ]; then \
-> +		printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
-> +			"$(TZDATA_LOCALTIME)"; \
-> +		exit 1; \
->  	fi
-> +	ln -sf ../usr/share/zoneinfo/$(TZDATA_LOCALTIME) $(TARGET_DIR)/etc/localtime
-> +	echo "$(TZDATA_LOCALTIME)" >$(TARGET_DIR)/etc/timezone
->  endef
->  
->  define HOST_TZDATA_BUILD_CMDS
-> diff --git a/system/Config.in b/system/Config.in
-> index b47ae43844..643c6f37f1 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -454,8 +454,7 @@ config BR2_TARGET_LOCALTIME
->  	    Pacific/Wallis
->  	    ...
->  
-> -	  If empty, no local time will be set, and the dates will be
-> -	  expressed in UTC.
-> +	  If empty, the default is to use Etc/UTC as a localtime.
->  
->  endif # BR2_TARGET_TZ_INFO
->  
-> 
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d121bd816..55d2c7a1d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -249,6 +249,7 @@ F:	package/libsquish/
+ F:	package/liburiparser/
+ F:	package/libva/
+ F:	package/libva-intel-driver/
++F:	package/libva-utils/
+ F:	package/libvorbis/
+ F:	package/libvpx/
+ F:	package/libyuv/
+diff --git a/package/Config.in b/package/Config.in
+index 355aa5201..9b5e94576 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -247,6 +247,7 @@ comment "Graphic applications"
+ 	source "package/gnuplot/Config.in"
+ 	source "package/jhead/Config.in"
+ 	source "package/kmscube/Config.in"
++	source "package/libva-utils/Config.in"
+ 	source "package/mesa3d-demos/Config.in"
+ 	source "package/pngquant/Config.in"
+ 	source "package/qt5cinex/Config.in"
+diff --git a/package/libva-utils/Config.in b/package/libva-utils/Config.in
+new file mode 100644
+index 000000000..ad299234c
+--- /dev/null
++++ b/package/libva-utils/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBVA_UTILS
++	bool "libva-utils"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # libva
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
++	select BR2_PACKAGE_LIBVA
++	help
++	  Libva-utils is a collection of tests for VA-API (Video
++	  Acceleration API)
++
++	  https://01.org/linuxmedia/vaapi
++
++comment "libva-utils needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+new file mode 100644
+index 000000000..737b246a0
+--- /dev/null
++++ b/package/libva-utils/libva-utils.hash
+@@ -0,0 +1,4 @@
++# From https://github.com/01org/libva-utils/releases
++sha1 8684aa2b28fc08bf62b1fa5acf95d23fab5faf9a libva-utils-1.8.3.tar.bz2
++# Locally computed
++sha256 c59de4fb6f1021c435b3f49e2410760692324ee5bb464c716d674fcb626a7e03  libva-utils-1.8.3.tar.bz2
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+new file mode 100644
+index 000000000..80ab529fb
+--- /dev/null
++++ b/package/libva-utils/libva-utils.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libva-utils
++#
++################################################################################
++
++LIBVA_UTILS_VERSION = 1.8.3
++LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
++LIBVA_UTILS_SITE = https://github.com/01org/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
++LIBVA_UTILS_LICENSE = MIT
++LIBVA_UTILS_LICENSE_FILES = COPYING
++LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
