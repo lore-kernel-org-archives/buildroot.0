@@ -1,67 +1,67 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  3 Jul 2017 17:51:50 +0200
-Subject: [Buildroot] [PATCH v2 2/6] fs/ext2: allow reserving zero block for
-	root
+Date: Mon,  3 Jul 2017 17:51:52 +0200
+Subject: [Buildroot] [PATCH v2 4/6] fs/ext2: Add
+	BR2_TARGET_ROOTFS_EXT2_FEATURES option
 In-Reply-To: <20170703155154.24104-1-s.martin49@gmail.com>
 References: <20170703155154.24104-1-s.martin49@gmail.com>
-Message-ID: <20170703155154.24104-3-s.martin49@gmail.com>
+Message-ID: <20170703155154.24104-5-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-The previous default, zero, just meant "use the default value of the
-filesystem generator", which happened to be 5% (the traditional value
-for all ext-creating tools we've ever seen).
+This option lets the user specify ext2/3/4 features.
 
-So, change the new default accordingly to 5%.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v1->v2:
 - rebase
-- fix typos
 ---
- fs/ext2/Config.in | 7 ++++++-
- fs/ext2/ext2.mk   | 2 --
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ fs/ext2/Config.in | 10 ++++++++++
+ fs/ext2/ext2.mk   |  5 +++++
+ 2 files changed, 15 insertions(+)
 
 diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index a1e3647a14..33891601f4 100644
+index d3e9d16a44..1b0ccf1395 100644
 --- a/fs/ext2/Config.in
 +++ b/fs/ext2/Config.in
-@@ -65,7 +65,12 @@ config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+@@ -63,6 +63,16 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	  Traditionally, this has been 5%, and all ext-related tools still
+ 	  default to reserving 5% when creating a new ext filesystem.
  
- config BR2_TARGET_ROOTFS_EXT2_RESBLKS
- 	int "reserved blocks percentage"
--	default 0
-+	default 5
++config BR2_TARGET_ROOTFS_EXT2_FEATURES
++	string "Filesystem features"
++	default "^64bit"
 +	help
-+	  The number of blocks on the filesystem (as a percentage of the
-+	  total number of blocks), that are reserved for use by root.
-+	  Traditionally, this has been 5%, and all ext-related tools still
-+	  default to reserving 5% when creating a new ext filesystem.
- 
++	  Specify a comma-separated list of ext2/3/4 features.
++	  For more information about this option, see the mkefs' -O option in
++	  the manual page mke2fs(8).
++	  For more information about the features which can be set, see then
++	  manual page ext4(5).
++
  choice
  	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
 diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 277e696290..ce567de34c 100644
+index 5269e99a29..7ab2b5cf8f 100644
 --- a/fs/ext2/ext2.mk
 +++ b/fs/ext2/ext2.mk
-@@ -13,9 +13,7 @@ EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
- endif
- EXT2_OPTS += -I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES)
+@@ -12,6 +12,11 @@ endif
+ EXT2_OPTS = -d $(TARGET_DIR)
+ EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_REV)
  
--ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
- EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
--endif
++EXT2_FEATURES = $(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_FEATURES))
++ifneq ($(EXT2_FEATURES),)
++EXT2_OPTS += -O "$(EXT2_FEATURES)"
++endif
++
+ EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
  
  # qstrip results in stripping consecutive spaces into a single one. So the
- # variable is not qstrip-ed to preserve the integrity of the string value.
 -- 
 2.13.2
