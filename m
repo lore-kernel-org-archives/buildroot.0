@@ -1,33 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 15:14:58 +0200
-Subject: [Buildroot] [PATCH] fakedate: simplify logic
-In-Reply-To: <93650cbe-f408-0bb7-f926-642d413d60a4@mind.be> (Arnout
- Vandecappelle's message of "Mon, 27 Mar 2017 23:46:43 +0200")
-References: <20170207220817.5781-1-peter@korsgaard.com>
- <3055501.XEoAAfpss1@sagittea>
- <93650cbe-f408-0bb7-f926-642d413d60a4@mind.be>
-Message-ID: <871spx8xwt.fsf@dell.be.48ers.dk>
+Date: Mon, 3 Jul 2017 15:10:58 +0200
+Subject: [Buildroot] [git commit] fakedate: simplify logic
+Message-ID: <20170703131207.4F10581F88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e7548edb5f930362e361b14eb67cda2b16c8846c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Using -ef to check for the same file is nicer than relying on a magic
+symlink-to-fakedate.
 
- >> Hmm... In order to not confuse user, I prefer to keep fakedate as 
- >> original name and adding a symlink beside.
+Notice that -ef isn't stricly posix (but supported by bash/dash/zsh), so
+I've changed the shebang to /bin/bash.
 
- >  I don't, I think it's clearer as a script than as a symlink.
+While we are at it, restructure the logic to do a single exec at the end
+instead of handling the epoch/!epoch cases differently for simplicity.
 
- >  I don't mind much about the IFS part (it really should have been a separate
- > patch, though), and the tab-space mixup can be fixed up while committing, so
+With that out of the way we can directly install it as $HOST/usr/bin/date
+instead of the fakedate / date symlink.
 
- > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Peter: drop IFS=: change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fakedate/fakedate    | 14 ++++----------
+ package/fakedate/fakedate.mk |  3 +--
+ 2 files changed, 5 insertions(+), 12 deletions(-)
 
-Thanks, committed after dropping the IFS part.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
+index 4a9b9b5..a64d9b9 100755
+--- a/package/fakedate/fakedate
++++ b/package/fakedate/fakedate
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ # vim: set sw=4 expandtab:
+ #
+ # This program is free software; you can redistribute it and/or modify
+@@ -18,18 +18,12 @@
+ # Copyright (C) 2016 J??r??me Pouiller <jezz@sysmic.org>
+ #
+ 
+-# Sanity check
+-if ! readlink -f "$0" | grep -q fakedate; then
+-    echo "fakedate: Please name this script \`fakedate'"
+-    exit 1
+-fi
+-
+ DATE_BIN=false
+ # Do not call `date' directly since it will produce an infinite recursion.
+ # Instead, find path of true `date' binary.
+ for P in `echo $PATH | tr ':' ' '`; do
+     if [ -x "$P/date" ]; then
+-        if readlink -f "$P/date" | grep -qv fakedate; then
++        if ! [ "$P/date" -ef "$0" ]; then
+             DATE_BIN="$P/date"
+             break;
+         fi
+@@ -50,8 +44,8 @@ if [ -n "$SOURCE_DATE_EPOCH" ]; then
+     done
+     if [ $FORCE_EPOCH -eq 1 ]; then
+         echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
+-        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
++        ARGS="-d @$SOURCE_DATE_EPOCH"
+     fi
+ fi
+ 
+-exec $DATE_BIN "$@"
++exec $DATE_BIN $ARGS "$@"
+diff --git a/package/fakedate/fakedate.mk b/package/fakedate/fakedate.mk
+index f47a5ee..5d90f71 100644
+--- a/package/fakedate/fakedate.mk
++++ b/package/fakedate/fakedate.mk
+@@ -8,8 +8,7 @@
+ HOST_FAKEDATE_LICENSE = GPL-2.0+
+ 
+ define HOST_FAKEDATE_INSTALL_CMDS
+-	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/fakedate
+-	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
++	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/date
+ endef
+ 
+ $(eval $(host-generic-package))
