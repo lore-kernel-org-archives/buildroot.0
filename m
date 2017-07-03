@@ -1,65 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 17:57:10 +0200
-Subject: [Buildroot] Unable to compile current master
-In-Reply-To: <d7a64db4-2f26-6f27-98e1-6017ca8a95a5@newflow.co.uk>
-References: <d7a64db4-2f26-6f27-98e1-6017ca8a95a5@newflow.co.uk>
-Message-ID: <14b6e3d2-0c80-ec16-8be1-abd52121b0be@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Jul 2017 17:59:07 +0200
+Subject: [Buildroot] [PATCH 2/5] core/pkg-generic: call MESSAGE when
+	saving package legal-info
+In-Reply-To: <606d7f78d9c7e1af1c1fd1b72ab489853d230f70.1498428166.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 26 Jun 2017 00:03:38 +0200")
+References: <cover.1498428166.git.yann.morin.1998@free.fr>
+ <606d7f78d9c7e1af1c1fd1b72ab489853d230f70.1498428166.git.yann.morin.1998@free.fr>
+Message-ID: <87o9t17bqs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
+ > Currently, the per-package legal-info is mostly silent, but we're soon
+ > to add a check for the hashes of the license files.
 
-On 03-07-17 17:14, Mark Jackson wrote:
-> I'm trying to bring an old 2012 buildroot project up-to-date, so to test my current setup I've branched the git master and tried:-
-> 
-> $ git checkout origin/master -b master
-> $ git reset --hard origin/master
-> $ make clean
-> $ make beaglebone_defconfig
-> $ make
-> 
-> But this fails when compiling gcc with the following:-
-> 
-> ...
-> /usr/bin/g++ -fno-PIE -c   -O2 -I/home/mpfj/buildroot/output/host/usr/include -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include -I../../gcc/../libcpp/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include  -I../../gcc/../libdecnumber -I../../gcc/../libdecnumber/dpd -I../libdecnumber -I../../gcc/../libbacktrace   -o insn-extract.o -MT insn-extract.o -MMD -MP -MF ./.deps/insn-extract.TPo insn-extract.c
-> Makefile:2201: recipe for target 's-attrtab' failed
+ > In that case, and when there is a hash mis-match, we want a user to know
+ > what package had a changed license file.
 
- Apparently genattrtab failed but I can't find any output.
+ > So, we add a call to MESSAGE to display the package we're currently
+ > saving the legal-info of, like so:
 
- Can you continue the build with BR2_JLEVEL=1 ? That should make any error
-message easier to locate.
+ >>>> busybox 1.26.2 Collecting legal info
 
- You are sure that you're not out of disk space or anything like that?
+I wonder if we still need the general "Collecting legal info" message,
+as it now looks something like:
 
- Regards,
- Arnout
+>>>   Collecting legal info
+>>> toolchain-buildroot  Collecting legal info
+>>> host-gcc-final 6.3.0 Collecting legal info
+>>> host-binutils 2.27 Collecting legal info
+>>> host-gmp 6.1.2 Collecting legal info
 
-> make[3]: *** [s-attrtab] Killed
-> make[3]: *** Waiting for unfinished jobs....
-> rm gcc.pod
-> Makefile:4113: recipe for target 'all-gcc' failed
-> make[2]: *** [all-gcc] Error 2
-> package/pkg-generic.mk:227: recipe for target '/home/mpfj/buildroot/output/build/host-gcc-initial-6.3.0/.stamp_built' failed
-> make[1]: *** [/home/mpfj/buildroot/output/build/host-gcc-initial-6.3.0/.stamp_built] Error 2
-> Makefile:79: recipe for target '_all' failed
-> make: *** [_all] Error 2
-> 
-> Can anyone help out ?
-> 
-> If it's any help, the "gcc" portion of the build log is here (https://pastebin.com/PRaPh5n1)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Though, with the entire patch series applied it might be handy to match
+the warnings, E.G.:
+
+>>>   Collecting legal info
+WARNING: no hash file for COPYING
+>>> toolchain-buildroot  Collecting legal info
+
+Presumably this warning is from legal-info-prepare. I'm not sure exactly
+how we should get rid of this warning? A buildroot.hash with an entry
+for our COPYING?
+
+That can be fixed later though - Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
