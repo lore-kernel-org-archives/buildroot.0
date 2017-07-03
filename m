@@ -1,39 +1,106 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 16:59:48 +0200
-Subject: [Buildroot] [PATCH] uftrace: new package
-In-Reply-To: <a744ab11-02b0-6ed6-c975-b3816ca3bf50@smile.fr>
-References: <20170625193743.8424-1-vincent.stehle@laposte.net>
- <a744ab11-02b0-6ed6-c975-b3816ca3bf50@smile.fr>
-Message-ID: <7d0c8056-d6cf-cff7-0a4b-7a11c7a033c0@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  3 Jul 2017 17:01:40 +0200
+Subject: [Buildroot] [PATCH] vlc: add upstream security patches fixing
+	CVE-2017-10699
+Message-ID: <20170703150140.20387-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+avcodec 2.2.x, as used in VideoLAN VLC media player 2.2.7-x before
+2017-06-29, allows out-of-bounds heap memory write due to calling memcpy()
+with a wrong size, leading to a denial of service (application crash) or
+possibly code execution.
 
+https://trac.videolan.org/vlc/ticket/18467
 
-On 03-07-17 16:45, Romain Naour wrote:
-> Use $(TARGET_CONFIGURE_OPTS) instead of defining CC, CFLAGS etc on the command
-> line. Also add parenthesis
-> Something like:
-> 
-> 	(cd $(@D) && \
-> 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-> 	ARCH="$(ARCH)" \
-> 	./configure --prefix=/usr)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...codec-avcodec-check-avcodec-visible-sizes.patch | 33 ++++++++++++++++++++++
+ ...r-check-visible-size-when-creating-buffer.patch | 33 ++++++++++++++++++++++
+ 2 files changed, 66 insertions(+)
+ create mode 100644 package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+ create mode 100644 package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
 
- No, don't add parenthesis. Somebody a long time ago started doing that but
-there is absolutely no reason for it, it just creates an additional shell level
-that serves no purpose whatsoever.
-
- Regards,
- Arnout
-
+diff --git a/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+new file mode 100644
+index 0000000000..41a5e25d38
+--- /dev/null
++++ b/package/vlc/0013-codec-avcodec-check-avcodec-visible-sizes.patch
+@@ -0,0 +1,33 @@
++From 6cc73bcad19da2cd2e95671173f2e0d203a57e9b Mon Sep 17 00:00:00 2001
++From: Francois Cartegnie <fcvlcdev@free.fr>
++Date: Thu, 29 Jun 2017 09:45:20 +0200
++Subject: [PATCH] codec: avcodec: check avcodec visible sizes
++
++refs #18467
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ modules/codec/avcodec/video.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/modules/codec/avcodec/video.c b/modules/codec/avcodec/video.c
++index 1bcad21..ce52544 100644
++--- a/modules/codec/avcodec/video.c
+++++ b/modules/codec/avcodec/video.c
++@@ -137,9 +137,11 @@ static inline picture_t *ffmpeg_NewPictBuf( decoder_t *p_dec,
++     }
++ 
++ 
++-    if( width == 0 || height == 0 || width > 8192 || height > 8192 )
+++    if( width == 0 || height == 0 || width > 8192 || height > 8192 ||
+++        width < p_context->width || height < p_context->height )
++     {
++-        msg_Err( p_dec, "Invalid frame size %dx%d.", width, height );
+++        msg_Err( p_dec, "Invalid frame size %dx%d. vsz %dx%d",
+++                 width, height, p_context->width, p_context->height );
++         return NULL; /* invalid display size */
++     }
++     p_dec->fmt_out.video.i_width = width;
++-- 
++2.1.4
++
+diff --git a/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
+new file mode 100644
+index 0000000000..a16dcf0e97
+--- /dev/null
++++ b/package/vlc/0014-decoder-check-visible-size-when-creating-buffer.patch
+@@ -0,0 +1,33 @@
++From a38a85db58c569cc592d9380cc07096757ef3d49 Mon Sep 17 00:00:00 2001
++From: Francois Cartegnie <fcvlcdev@free.fr>
++Date: Thu, 29 Jun 2017 11:09:02 +0200
++Subject: [PATCH] decoder: check visible size when creating buffer
++
++early reject invalid visible size
++mishandled by filters.
++
++refs #18467
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/input/decoder.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/input/decoder.c b/src/input/decoder.c
++index 2c0823f..a216165 100644
++--- a/src/input/decoder.c
+++++ b/src/input/decoder.c
++@@ -2060,7 +2060,9 @@ static picture_t *vout_new_buffer( decoder_t *p_dec )
++         vout_thread_t *p_vout;
++ 
++         if( !p_dec->fmt_out.video.i_width ||
++-            !p_dec->fmt_out.video.i_height )
+++            !p_dec->fmt_out.video.i_height ||
+++            p_dec->fmt_out.video.i_width < p_dec->fmt_out.video.i_visible_width ||
+++            p_dec->fmt_out.video.i_height < p_dec->fmt_out.video.i_visible_height )
++         {
++             /* Can't create a new vout without display size */
++             return NULL;
++-- 
++2.1.4
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
