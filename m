@@ -1,69 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jul 2017 00:03:39 +0200
-Subject: [Buildroot] [git commit] package/cache-calibrator: fix legal-info
-Message-ID: <20170703220337.0526F817A0@busybox.osuosl.org>
+Date: Tue, 04 Jul 2017 00:08:01 +0200
+Subject: [Buildroot] ninja/python-meson packages
+In-Reply-To: <6cbd72f3-e32d-6b85-0c64-47b9c2664f59@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 3 Jul 2017 16:17:45 +0100")
+References: <98b7a6164112ee321e9220d5b8c47a33@openmailbox.org>
+ <d309c350-d2df-4eb0-8114-bea29d3a05dd@gmail.com>
+ <6cbd72f3-e32d-6b85-0c64-47b9c2664f59@imgtec.com>
+Message-ID: <87h8yt5g3i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ba0ec576e7e4ad712f45ece1fec4b35f11b9774
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/e1b/e1b3dee917f5ab3961f3dea006720431444d0ef5/
+ > libinput is another package that will migrate to meson, and it will stop
+ > supporting autotools. From
+ > https://lists.freedesktop.org/archives/wayland-devel/2017-June/034286.html :
 
-cache-calibrator is a single C file that is downloaded as-is, and we
-patch it. We also use that file as the license file.
+ > "The first RC for libinput 1.8 is now available.
 
-Thus, the file when it is downloaded has a specific hash, but when
-saved by legal-info, it has a different hash.
+ > The biggest change in this release is that libinput has switched to
+ > meson as primary build system, the 1.8.x releases are the last ones to
+ > support (and be released with) autotools so you're encouraged to start
+ > switching your build processes over to meson."
 
-However, we can't store two different hashes for the same _filename_
-with different content.
+Yes, I noticed that as well. We'll have to work on meson support
+infrastructure relatively soon.
 
-So, we extract the license file as a pre-patch hook, and store it in a
-separate file, for which we can now add a hash.
-
-[Peter: add autobuilder reference]
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Stephan Hoffmann <sho@relinux.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cache-calibrator/cache-calibrator.hash | 1 +
- package/cache-calibrator/cache-calibrator.mk   | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/package/cache-calibrator/cache-calibrator.hash b/package/cache-calibrator/cache-calibrator.hash
-index df61d17..a4b4b70 100644
---- a/package/cache-calibrator/cache-calibrator.hash
-+++ b/package/cache-calibrator/cache-calibrator.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 2018ed8fa733155d44ceb1c0066c5cf8df7771cdf7cfca0a07b8dd9bebd9c221 calibrator.c
-+sha256 a853663f5b4fb3ad77bf2790ab53146f456b8d9b9ddf83b99fe28c0bdec42514 calibrator.c.license
-diff --git a/package/cache-calibrator/cache-calibrator.mk b/package/cache-calibrator/cache-calibrator.mk
-index d062065..6f12d11 100644
---- a/package/cache-calibrator/cache-calibrator.mk
-+++ b/package/cache-calibrator/cache-calibrator.mk
-@@ -7,12 +7,17 @@
- CACHE_CALIBRATOR_SOURCE = calibrator.c
- CACHE_CALIBRATOR_SITE = http://homepages.cwi.nl/~manegold/Calibrator/src
- CACHE_CALIBRATOR_LICENSE = Cache calibrator license
--CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c
-+CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c.license
- 
- define CACHE_CALIBRATOR_EXTRACT_CMDS
- 	cp $(DL_DIR)/$(CACHE_CALIBRATOR_SOURCE) $(@D)
- endef
- 
-+define CACHE_CALIBRATOR_EXTRACT_LICENSE
-+	head -n 38 $(@D)/calibrator.c >$(@D)/calibrator.c.license
-+endef
-+CACHE_CALIBRATOR_PRE_PATCH_HOOKS += CACHE_CALIBRATOR_EXTRACT_LICENSE
-+
- define CACHE_CALIBRATOR_BUILD_CMDS
- 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/calibrator.c -o $(@D)/cache_calibrator -lm
- endef
+-- 
+Bye, Peter Korsgaard
