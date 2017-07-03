@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Jul 2017 16:41:28 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/vlc: security
+Date: Mon, 3 Jul 2017 16:37:02 +0200
+Subject: [Buildroot] [git commit branch/2017.05.x] package/vlc: security
 	bump version to 2.2.6
-Message-ID: <20170703144016.4AC20820F1@busybox.osuosl.org>
+Message-ID: <20170703144026.07DDA7FFE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=911ed451f3aa4da4cb9b1fc66ee60815edd21c8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7b27be82f1d39bef875eb12a660fb190b703b0f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.05.x
 
 Fixes CVE-2017-8312: Heap out-of-bound read in ParseJSS in VideoLAN VLC due
 to missing check of string length allows attackers to read heap
@@ -40,7 +40,7 @@ index 0f1b6dc..628dad7 100644
 +# From http://download.videolan.org/pub/videolan/vlc/2.2.6/vlc-2.2.6.tar.xz.sha256
 +sha256 c403d3accd9a400eb2181c958f3e7bc5524fe5738425f4253d42883b425a42a8  vlc-2.2.6.tar.xz
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 7f0c4f5..47fb3e8 100644
+index 3799aca..49390a2 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
@@ -51,4 +51,4 @@ index 7f0c4f5..47fb3e8 100644
 +VLC_VERSION = 2.2.6
  VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
  VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPLv2+, LGPLv2.1+
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
