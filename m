@@ -1,119 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 00:01:00 +0200
-Subject: [Buildroot] [RFC PATCH v5 07/11] support/scripts: add
- reloacte-sdk.sh script for SDK relocation
-In-Reply-To: <1498811828-6893-8-git-send-email-wg@grandegger.com>
+Date: Tue, 4 Jul 2017 00:02:59 +0200
+Subject: [Buildroot] [RFC PATCH v5 08/11] core: install relocation
+ script and location at the end of the build
+In-Reply-To: <1498811828-6893-9-git-send-email-wg@grandegger.com>
 References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-8-git-send-email-wg@grandegger.com>
-Message-ID: <778420e1-443a-355e-e2ac-edc3f91aa2d3@mind.be>
+ <1498811828-6893-9-git-send-email-wg@grandegger.com>
+Message-ID: <8019070e-3b5a-d65a-f04b-b087d4b0ee17@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Type in the subject: reloacte -> relocate
+
 
 On 30-06-17 10:37, Wolfgang Grandegger wrote:
-> It will install the script "relocate-sdk.sh" in the HOST_DIR
-> allowing to adjust the path to the SDK directory in all text
-> files after it has been moved to a new location.
+> The script "relocate-sdk.sh" is installed into the top directory of
+> the SDK (HOST_DIR) and the SDK location path is stored in the file
+> "HOST_DIR/usr/share/buildroot/sdk-location"-
 > 
 > Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 > ---
->  support/misc/relocate-sdk.sh | 47 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100755 support/misc/relocate-sdk.sh
+>  Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
-> new file mode 100755
-> index 0000000..1b0be33
-> --- /dev/null
-> +++ b/support/misc/relocate-sdk.sh
-> @@ -0,0 +1,47 @@
-> +#!/bin/bash
+> diff --git a/Makefile b/Makefile
+> index f5ea6a8..a5dfdfd 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -553,6 +553,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>  
+>  .PHONY: world
+>  world: target-post-image
+> +	@$(call MESSAGE,"Rendering the SDK relocatable")
 
- Minor nit: you're not using any bashism in this script so you could just as
-well use /bin/sh as shebang.
-
-> +#
-> +if [ "$#" -ne 0 ]; then
-> +    echo "Run this script to relocate the buildroot SDK at that location"
-> +    exit 1
-> +fi
-> +
-> +LOCFILE="./usr/share/buildroot/sdk-location"
-
- Minor nit: the ./ in front is redundant.
-
-> +FILEPATH="$(readlink -f "$0")"
-> +NEWPATH="$(dirname "${FILEPATH}")"
-> +
-> +cd "${NEWPATH}"
-> +if [ ! -r "${LOCFILE}" ]; then
-> +    echo "Previous location of the buildroot SDK not found!"
-> +    exit 1
-> +fi
-> +OLDPATH="$(cat "${LOCFILE}")"
-> +
-> +if [ "${NEWPATH}" = "${OLDPATH}" ]; then
-> +    echo "This buildroot SDK has already been relocated!"
-> +    exit 0
-> +fi
-> +
-> +# Check if the path substitution does work properly, e.g.
-> +# a tree "/a/b/c" copied into "/a/b/c/" would not be allowed.
-                                  ^^^^^^^ You mean /a/b/c/a/b/c ?
-> +newpath="$(sed -e "s\\${OLDPATH}\\${NEWPATH}\\g" "${LOCFILE}")"
-
- \\ is a bit a weird sed separator... We use % mostly, sometimes @ or ,. But I'd
-advise %.
-
-> +if [ "${NEWPATH}" != "${newpath}" ]; then
-> +    echo "Something went wrong with substituting the path!"
-> +    echo "Please choose another location for your SDK!"
-> +    exit 1
-> +fi
-> +
-> +echo "Relocating the buildroot SDK from ${OLDPATH} to ${NEWPATH} ..."
-> +
-> +# Make sure file uses the right language
-> +export LC_ALL=C
-> +# Replace the old path with the new one in all text files
-> +while read -r FILE ; do
-> +    if file -b --mime-type "${FILE}" | grep -q '^text/' && [ "${FILE}" != "${LOCFILE}" ]
-> +    then
-> +	sed -i "s\\${OLDPATH}\\${NEWPATH}\\g" "${FILE}"
-
- Same remark about \ -> % here.
-
- Please use consistent indentation: either 4 spaces or a tab.
-
-> +    fi;
-
- ; is redundant.
-
- Perhaps we should print a warning for non-text files that have the SDK path
-encoded in them? Like
-
-    else
-        printf 'Warning: %s not relocated\n' "${FILE}"
-    fi
-
-> +done < <(grep -lr "${OLDPATH}" .)
-> +
-> +# At the very end, we update the location file to not break the
-> +# SDK if this script gets interruted.
-                                    ^p
-
-> +sed -i "s\\${OLDPATH}\\${NEWPATH}\\g" ${LOCFILE}
-
- \\ -> %
-
+ In addition to all the comments that went before: this doesn't actually render
+the SDK relocatable. So perhaps simple "Finalizing SDK" is better.
 
  Regards,
  Arnout
 
+> +	install $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR) && \
+> +	echo $(HOST_DIR) > $(HOST_DIR)/usr/share/buildroot/sdk-location
+>  
+>  # Populating the staging with the base directories is handled by the skeleton package
+>  $(STAGING_DIR):
 > 
 
 -- 
