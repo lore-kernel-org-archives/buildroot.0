@@ -1,278 +1,63 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 3 Jul 2017 23:19:10 +0200
-Subject: [Buildroot] [PATCH] uftrace: new package
-In-Reply-To: <0d61249c-aa82-f9c7-8b38-7d012d20a9b8@bergerie>
-References: <20170625193743.8424-1-vincent.stehle@laposte.net>
- <a744ab11-02b0-6ed6-c975-b3816ca3bf50@smile.fr>
- <0d61249c-aa82-f9c7-8b38-7d012d20a9b8@bergerie>
-Message-ID: <1305154f-a190-382d-91b3-40a671fde782@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  3 Jul 2017 23:30:01 +0200
+Subject: [Buildroot] [PATCH] package/cache-calibrator: fix legal-info
+Message-ID: <20170703213001.5404-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+cache-calibrator is a single C file that is downloaded as-is, and we
+patch it. We also use that file as the license file.
 
-Le 03/07/2017 ? 22:47, Vincent Stehl? a ?crit :
-> On 07/03/2017 04:45 PM, Romain Naour wrote:
->> Hi Vincent,
->>
-> 
-> Hi Romain,
-> 
-> Thank you for reviewing!
-> 
->> Le 25/06/2017 ? 21:37, Vincent Stehle a ?crit :
->>> From: Vincent Stehl? <vincent.stehle@laposte.net>
->>>
->>> Add a package for uftrace, a simple function call tracer for user programs.
->>>
->>> The x86_64 and arm/aarch64 architectures are supported.
->>>
->>> Tracing necessitates that the executable you want to trace be compiled with
->>> -pg or -finstrument-functions option.
->>>
->>> See https://github.com/namhyung/uftrace
->>>
->>> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
->>> ---
->>>  DEVELOPERS                   |  3 ++-
->>>  package/Config.in            |  1 +
->>>  package/uftrace/Config.in    | 20 ++++++++++++++++++++
->>>  package/uftrace/uftrace.hash |  2 ++
->>>  package/uftrace/uftrace.mk   | 28 ++++++++++++++++++++++++++++
->>>  5 files changed, 53 insertions(+), 1 deletion(-)
->>>  create mode 100644 package/uftrace/Config.in
->>>  create mode 100644 package/uftrace/uftrace.hash
->>>  create mode 100644 package/uftrace/uftrace.mk
->>>
->>> diff --git a/DEVELOPERS b/DEVELOPERS
->>> index 9e421f4b4..5f2a6b0db 100644
->>> --- a/DEVELOPERS
->>> +++ b/DEVELOPERS
->>> @@ -1706,9 +1706,10 @@ F:	package/openmpi/
->>>  F:	package/pinentry/
->>>  F:	package/trinity/
->>>  
->>> -N:	Vincent Stehl? <vincent.stehle@intel.com>
->>> +N:	Vincent Stehl? <vincent.stehle@laposte.net>
->>
->> This should be part of another commit since it's not related to uftrace.
-> 
-> If you insist I can separate this update from the patch, sure.
+Thus, the file when it is downloaded has a specific hash, but when
+saved by legal-info, it has a different hash.
 
-It seems you're doing the same change in pixz package so it will conflict while
-applying. It's just an advice to avoid this :)
+However, we can't store two different hashes for the same _filename_
+with different content.
 
-> 
-> Note that half the commits in the tree touching the DEVELOPERS file do
-> in fact modify something else in the mean time so I guess we are still
-> somewhat in the "tradition" :)
+So, we extract the license file as a pre-patch hook, and store it in a
+separate file, for which we can now add a hash.
 
-Touching the DEVEOPERS file should be done only when adding a new package.
-(I forgot to do so earlier today with my llvm series :-/)
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Stephan Hoffmann <sho@relinux.de>
+---
+ package/cache-calibrator/cache-calibrator.hash | 1 +
+ package/cache-calibrator/cache-calibrator.mk   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-> 
->>
->>>  F:	package/i7z/
->>>  F:	package/msr-tools/
->>> +F:	package/uftrace/
->>>  
->>>  N:	Vinicius Tinti <viniciustinti@gmail.com>
->>>  F:	package/python-thrift/
->>> diff --git a/package/Config.in b/package/Config.in
->>> index f69f67f3e..d9639b040 100644
->>> --- a/package/Config.in
->>> +++ b/package/Config.in
->>> @@ -121,6 +121,7 @@ menu "Debugging, profiling and benchmark"
->>>  	source "package/trace-cmd/Config.in"
->>>  	source "package/trinity/Config.in"
->>>  	source "package/uclibc-ng-test/Config.in"
->>> +	source "package/uftrace/Config.in"
->>>  	source "package/valgrind/Config.in"
->>>  	source "package/whetstone/Config.in"
->>>  endmenu
->>> diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
->>> new file mode 100644
->>> index 000000000..bb766238c
->>> --- /dev/null
->>> +++ b/package/uftrace/Config.in
->>> @@ -0,0 +1,20 @@
->>> +config BR2_PACKAGE_UFTRACE
->>> +	bool "uftrace"
->>> +	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
->>> +	depends on !(BR2_arm && BR2_ARM_SOFT_FLOAT)
->>
->> This could be:
->> 	depends on BR2_aarch64 || (BR2_arm && !BR2_ARM_SOFT_FLOAT) || BR2_x86_64
-> 
-> This is clearer, thanks.
-> 
->>
->> Btw, can you explain why only armhf is supported ?
-> 
-> Certainly: the inline assembly fragments used to retrieve the registers
-> access the NEON/float registers without any #ifdef:
-> 
-> https://github.com/namhyung/uftrace/blob/master/arch/arm/mcount-support.c#L353
-> 
-> I guess it should be possible to "port" uftrace to arm soft float as well.
-
-Maybe you can add this info in the commit log, it's not obvious.
-
-> 
->>
->>> +	depends on BR2_PACKAGE_ELFUTILS
->>
->> Can you select BR2_PACKAGE_ELFUTILS and add reverse decencies
->>
->> 	depends on BR2_USE_WCHAR # elfutils
->> 	depends on !BR2_STATIC_LIBS # elfutils
->>
->> Also add thread dependency:
->> 	depends on BR2_TOOLCHAIN_HAS_THREADS
-> 
-> Ok I'll go for select + "propagating" the dependencies, thanks.
-> 
->>
->>> +	depends on BR2_TOOLCHAIN_USES_GLIBC
->>
->> Why it's restricted to glibc based toolchain ?
->> At least you can keep the elfutils reverse dependencies:
->>
->> 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
->>
->> It should be fine with uClibc-ng toolchains.
-> 
-> When I tested with test-pkg I found no way of making it build properly
-> on uClibc/musl based toolchains. Let me retry with the select/depends
-> reworked as you proposed and I'll let you know how it goes.
-
-I did some testing with test-pkg script today and it uftrace build fine with
-uClibc-ng toolchains. musl toolchains can't be enabled due to elfutils dependencies.
-
-> 
->>
->>> +	help
->>> +	  A simple function call tracer for user programs.
->>> +
->>> +	  Note that the executable you want to trace should be compiled
->>> +	  with -pg or -finstrument-functions option.
->>> +
->>> +	  https://github.com/namhyung/uftrace
->>> +
->>> +comment "uftrace needs a glibc toolchain and elfutils"
->>> +	depends on BR2_aarch64 || BR2_arm || BR2_x86_64
->>> +	depends on !BR2_PACKAGE_ELFUTILS || !BR2_TOOLCHAIN_USES_GLIBC
->>
->> update the comment dependencies accordingly:
->> comment "uftrace needs a glibc or uClibc toolchain w/ dynamic library, threads,
->> wchar"
->> 	depends on BR2_aarch64 || (BR2_arm && !BR2_ARM_SOFT_FLOAT) || BR2_x86_64
->> 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
->> 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-> 
-> Ok, I'll update the comments, thanks.
-> 
->>
->>> +
->>> +comment "uftrace needs a toolchain with hardware floats on ARM"
->>> +	depends on BR2_arm && BR2_ARM_SOFT_FLOAT
->>> diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
->>> new file mode 100644
->>> index 000000000..8509197cc
->>> --- /dev/null
->>> +++ b/package/uftrace/uftrace.hash
->>> @@ -0,0 +1,2 @@
->>> +# Locally computed:
->>> +sha256 afa698053ef10582c2ed3973ea134c0775d7ff4dcece3034905026185c52b272 uftrace-v0.7.tar.gz
->>> diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
->>> new file mode 100644
->>> index 000000000..e23f01816
->>> --- /dev/null
->>> +++ b/package/uftrace/uftrace.mk
->>> @@ -0,0 +1,28 @@
->>> +################################################################################
->>> +#
->>> +# uftrace
->>> +#
->>> +################################################################################
->>> +
->>> +UFTRACE_VERSION = v0.7
->>> +UFTRACE_SITE = $(call github,namhyung,uftrace,$(UFTRACE_VERSION))
->>> +UFTRACE_DEPENDENCIES = elfutils
->>> +UFTRACE_LICENSE = GPL-2.0
->>> +UFTRACE_LICENSE_FILES = COPYING
->>> +
->>> +define UFTRACE_CONFIGURE_CMDS
->>> +	cd $(@D) && \
->>> +	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
->>> +	LD="$(TARGET_LD)" ARCH="$(ARCH)" \
->>> +	./configure --prefix=/usr
->>> +endef
->>
->> Use $(TARGET_CONFIGURE_OPTS) instead of defining CC, CFLAGS etc on the command
->> line. Also add parenthesis
->> Something like:
->>
->> 	(cd $(@D) && \
->> 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
->> 	ARCH="$(ARCH)" \
->> 	./configure --prefix=/usr)
-> 
-> This one I'll drop if you don't mind.
-> 
->>
->>> +
->>> +define UFTRACE_BUILD_CMDS
->>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->>
->> Keep $(TARGET_CONFIGURE_OPTS) and ARCH="$(ARCH)"
->>
->>> +endef
->>> +
->>> +define UFTRACE_INSTALL_TARGET_CMDS
->>> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)"
->>
->> Same here.
-> 
-> Well some of the environment settings and configure options are
-> "sampled" by this configure script of theirs (which resembles autoconf
-> and is not). This ends up being stored in a file, which is reused
-> afterwards.
-> 
-> I did not want to add the conf opts and arch to the following steps and
-> give the impression that they were taken into account while this is the
-> local configuration file in fact, which has the priority.
-
-Indeed, I just see this file using the "override" keyword on each Make variable...
-> 
-> Can I please keep it as is?
-
-Sure, no problem it was a suggestion.
-
-> 
-> Meanwhile I'll work on a v2. Thank you for spending time reviewing this
-> patch!
-
-Thanks for you contribution.
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Vincent.
-> 
->>
->> Best regards,
->> Romain
->>
->>> +endef
->>> +
->>> +$(eval $(generic-package))
->>>
->>
-> 
+diff --git a/package/cache-calibrator/cache-calibrator.hash b/package/cache-calibrator/cache-calibrator.hash
+index df61d17e10..a4b4b70cf7 100644
+--- a/package/cache-calibrator/cache-calibrator.hash
++++ b/package/cache-calibrator/cache-calibrator.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 2018ed8fa733155d44ceb1c0066c5cf8df7771cdf7cfca0a07b8dd9bebd9c221 calibrator.c
++sha256 a853663f5b4fb3ad77bf2790ab53146f456b8d9b9ddf83b99fe28c0bdec42514 calibrator.c.license
+diff --git a/package/cache-calibrator/cache-calibrator.mk b/package/cache-calibrator/cache-calibrator.mk
+index d0620655c7..6f12d119ef 100644
+--- a/package/cache-calibrator/cache-calibrator.mk
++++ b/package/cache-calibrator/cache-calibrator.mk
+@@ -7,12 +7,17 @@
+ CACHE_CALIBRATOR_SOURCE = calibrator.c
+ CACHE_CALIBRATOR_SITE = http://homepages.cwi.nl/~manegold/Calibrator/src
+ CACHE_CALIBRATOR_LICENSE = Cache calibrator license
+-CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c
++CACHE_CALIBRATOR_LICENSE_FILES = calibrator.c.license
+ 
+ define CACHE_CALIBRATOR_EXTRACT_CMDS
+ 	cp $(DL_DIR)/$(CACHE_CALIBRATOR_SOURCE) $(@D)
+ endef
+ 
++define CACHE_CALIBRATOR_EXTRACT_LICENSE
++	head -n 38 $(@D)/calibrator.c >$(@D)/calibrator.c.license
++endef
++CACHE_CALIBRATOR_PRE_PATCH_HOOKS += CACHE_CALIBRATOR_EXTRACT_LICENSE
++
+ define CACHE_CALIBRATOR_BUILD_CMDS
+ 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/calibrator.c -o $(@D)/cache_calibrator -lm
+ endef
+-- 
+2.11.0
