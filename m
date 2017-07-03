@@ -1,57 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 21:21:53 +0200
-Subject: [Buildroot] [PATCH] libpwquality: select cracklib
-In-Reply-To: <20170703165827.19052-1-peter@korsgaard.com>
-References: <20170703165827.19052-1-peter@korsgaard.com>
-Message-ID: <ae035089-c464-784f-0a82-7ecbb62b9126@mind.be>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Mon, 3 Jul 2017 21:38:01 +0200
+Subject: [Buildroot] [RFC PATCH v5 02/11] package/patchelf: add patch
+ for rpath sanitation under a root directory
+In-Reply-To: <e0092045-3a44-4b99-9220-5e8e05fef090@mind.be>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-3-git-send-email-wg@grandegger.com>
+ <e0092045-3a44-4b99-9220-5e8e05fef090@mind.be>
+Message-ID: <404844b9-a62b-c931-422b-31d08b474dcd@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+browsing your comments...
 
-On 03-07-17 18:58, Peter Korsgaard wrote:
-> libpwquality adds cracklib to its _DEPENDENCIES, but forgot to select it in
-> Config.in, leading to build failures if cracklib isn't explicitly enabled:
+Am 01.07.2017 um 00:13 schrieb Arnout Vandecappelle:
+>   Hi Wolfgang,
 > 
-> Makefile:536: *** cracklib is in the dependency chain of libpwquality that
-> has added it to its _DEPENDENCIES variable without selecting it or depending
-> on it from Config.in.  Stop.
+> On 30-06-17 10:36, Wolfgang Grandegger wrote:
+[... snip ...]
+>> +-            if (!libFound)
+>> ++            if (!libFoundInRPath(dirName, neededLibs))
+>> +                 debug("removing directory '%s' from RPATH\n", dirName.c_str());
 > 
-> No autobuilder references as this error happens before build-time.log is
-> written, causing the autobuilder to ignore the build result.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> ---
->  package/libpwquality/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libpwquality/Config.in b/package/libpwquality/Config.in
-> index 4e855254a6..23e15157d1 100644
-> --- a/package/libpwquality/Config.in
-> +++ b/package/libpwquality/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBPWQUALITY
->  	bool "libpwquality"
-> +	select BR2_PACKAGE_CRACKLIB
->  	help
->  	  This is a library for password quality checks and generation
->  	  of random passwords that pass the checks.  This library uses
+>   For consistency, we should probably honour --no-standard-lib-dirs here as well.
 > 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+For "--shrink-rpath" it's difficult to decide what is a non standard 
+library directory. A path ending with "/lib" or "/usr/lib"?
+
+Wolfgang.
