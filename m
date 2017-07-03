@@ -1,121 +1,145 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  3 Jul 2017 23:09:53 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/libva-utils: new package
-Message-ID: <20170703210953.9667-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  3 Jul 2017 23:18:59 +0200
+Subject: [Buildroot] [PATCH] icu: propagate host gcc dependency to reverse
+	dependencies
+Message-ID: <20170703211859.6696-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The utils provided by this package were formerly packaged with libva.
+Fixes:
+http://autobuild.buildroot.net/results/821/821eae7add252e3711ed069a2d292a04427fa43b/
 
-Libva contained a patch not to compile mpeg2vldemo to reduce
-dependencies by avoiding C++, this patch is not moved to this package.
+Commit 87f43c3403 (package/icu: needs host gcc >= 4.8) added a new toolchain
+dependency to icu, but didn't propagate it to the reverse dependencies of
+icu.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Some of these have been fixed in later commits, but not all.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v4: - bumped version to 1.8.3
-v3: - bumped version to 1.8.1
-    - used "select BR2_PACKAGE_LIBVA" instead of "depends on" (Arnout)
-      Imho it makes sense to have only one Kconfig option for libva-
-      utils. @Arnout:
-      I kept the package in "Graphic libraries and applications" because
-      it is not a library and also kept the package name so it stays in
-      sync with the upstream name.
-    - added comment about c++ dependency (Thomas)
-v2: addressed review by Thomas:
-    - added entry in DEVELOPERS
-    - moved package to Graphic libraries and applications
-    - package depends on libva
+ package/cppcms/Config.in               | 5 +++--
+ package/midori/Config.in               | 8 +++++---
+ package/python-mwscrape2slob/Config.in | 4 +++-
+ package/python-slob/Config.in          | 4 +++-
+ package/webkitgtk/Config.in            | 4 +++-
+ 5 files changed, 17 insertions(+), 8 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/libva-utils/Config.in        | 15 +++++++++++++++
- package/libva-utils/libva-utils.hash |  4 ++++
- package/libva-utils/libva-utils.mk   | 14 ++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/libva-utils/Config.in
- create mode 100644 package/libva-utils/libva-utils.hash
- create mode 100644 package/libva-utils/libva-utils.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d121bd816..55d2c7a1d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -249,6 +249,7 @@ F:	package/libsquish/
- F:	package/liburiparser/
- F:	package/libva/
- F:	package/libva-intel-driver/
-+F:	package/libva-utils/
- F:	package/libvorbis/
- F:	package/libvpx/
- F:	package/libyuv/
-diff --git a/package/Config.in b/package/Config.in
-index 355aa5201..9b5e94576 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -247,6 +247,7 @@ comment "Graphic applications"
- 	source "package/gnuplot/Config.in"
- 	source "package/jhead/Config.in"
- 	source "package/kmscube/Config.in"
-+	source "package/libva-utils/Config.in"
- 	source "package/mesa3d-demos/Config.in"
- 	source "package/pngquant/Config.in"
- 	source "package/qt5cinex/Config.in"
-diff --git a/package/libva-utils/Config.in b/package/libva-utils/Config.in
-new file mode 100644
-index 000000000..ad299234c
---- /dev/null
-+++ b/package/libva-utils/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBVA_UTILS
-+	bool "libva-utils"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # libva
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libva
-+	select BR2_PACKAGE_LIBVA
-+	help
-+	  Libva-utils is a collection of tests for VA-API (Video
-+	  Acceleration API)
-+
-+	  https://01.org/linuxmedia/vaapi
-+
-+comment "libva-utils needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-new file mode 100644
-index 000000000..737b246a0
---- /dev/null
-+++ b/package/libva-utils/libva-utils.hash
-@@ -0,0 +1,4 @@
-+# From https://github.com/01org/libva-utils/releases
-+sha1 8684aa2b28fc08bf62b1fa5acf95d23fab5faf9a libva-utils-1.8.3.tar.bz2
-+# Locally computed
-+sha256 c59de4fb6f1021c435b3f49e2410760692324ee5bb464c716d674fcb626a7e03  libva-utils-1.8.3.tar.bz2
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-new file mode 100644
-index 000000000..80ab529fb
---- /dev/null
-+++ b/package/libva-utils/libva-utils.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# libva-utils
-+#
-+################################################################################
-+
-+LIBVA_UTILS_VERSION = 1.8.3
-+LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
-+LIBVA_UTILS_SITE = https://github.com/01org/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
-+LIBVA_UTILS_LICENSE = MIT
-+LIBVA_UTILS_LICENSE_FILES = COPYING
-+LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
-+
-+$(eval $(autotools-package))
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index f02b283482..d7b7fa8933 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -27,15 +27,16 @@ if BR2_PACKAGE_CPPCMS
+ config BR2_PACKAGE_CPPCMS_ICU
+ 	bool "enable icu support"
+ 	depends on !BR2_BINFMT_FLAT # icu
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Using ICU allows advanced localization features into CppCMS,
+ 	  in another hand ICU is heavier than iconv.
+ 
+-comment "icu support needs a toolchain w/ gcc >= 4.8"
++comment "icu support needs a toolchain w/ gcc >= 4.8, host gcc >= 4.8"
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on !BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ endif
+ 
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index 840d689f77..4d30c83066 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -1,13 +1,15 @@
+-comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
++comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
++		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_USES_GLIBC
+ 
+ config BR2_PACKAGE_MIDORI
+ 	bool "midori"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, gcr, gnupg2
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # webkitgtk -> icu
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # webkitgtk
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+diff --git a/package/python-mwscrape2slob/Config.in b/package/python-mwscrape2slob/Config.in
+index dc2b2ae3bd..7856a2c009 100644
+--- a/package/python-mwscrape2slob/Config.in
++++ b/package/python-mwscrape2slob/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
+ 	bool "python-mwscrape2slob"
+ 	depends on !BR2_BINFMT_FLAT # python-slob -> python-pyicu -> icu
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-slob -> python-pyicu -> icu
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # python-slob -> python-pyicu -> icu
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # python-slob -> python-pyicu -> icu
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
+@@ -15,7 +16,8 @@ config BR2_PACKAGE_PYTHON_MWSCRAPE2SLOB
+ 
+ 	  https://github.com/itkach/mwscrape2slob
+ 
+-comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 4.8"
++comment "python-mwscrape2slob needs a toolchain w/ C++, gcc >= 4.8, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_HOST_GCC_AT_LEAST_4_8 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/python-slob/Config.in b/package/python-slob/Config.in
+index a8b6e45da4..6f83808abf 100644
+--- a/package/python-slob/Config.in
++++ b/package/python-slob/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_SLOB
+ 	bool "python-slob"
+ 	depends on !BR2_BINFMT_FLAT # python-pyicu -> icu
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-pyicu -> icu
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # python-pyicu -> icu
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # python-pyicu -> icu
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_PYICU # runtime
+@@ -13,7 +14,8 @@ config BR2_PACKAGE_PYTHON_SLOB
+ 
+ 	  https://github.com/itkach/slob
+ 
+-comment "python-slob needs a toolchain w/ C++, gcc >= 4.8"
++comment "python-slob needs a toolchain w/ C++, gcc >= 4.8, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_PYTHON3 && !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_HOST_GCC_AT_LEAST_4_8 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 0e53d06379..0754fe5123 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -10,16 +10,18 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+-comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9"
++comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 4.9, host gcc >= 4.8"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_HOST_GCC_AT_LEAST_4_8 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_WEBKITGTK
+ 	bool "webkitgtk"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_LIBGTK3
 -- 
 2.11.0
