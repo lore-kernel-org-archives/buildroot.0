@@ -1,53 +1,67 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 3 Jul 2017 10:41:06 +0200
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: add host-cc-option
-	macro
-Message-ID: <20170703084107.5620-1-arnout@mind.be>
+From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
+Date: Mon, 3 Jul 2017 10:56:42 +0200
+Subject: [Buildroot] Syslinux change breaks the build with old binutils
+In-Reply-To: <20170701235530.00720756@windsurf>
+References: <20170701235530.00720756@windsurf>
+Message-ID: <20170703105642.02631f13@armant.office.greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This macro allows to test if HOSTCC supports a specific option. It is
-needed to pass '-no-pie' on recent Debian, Ubuntu and Gentoo hosts.
+On Sat, 1 Jul 2017 23:55:30 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/Makefile.in | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+> Hello Beno?t,
+> 
+> In commit 6e432d5ecb46959f3c27dbbca48e41512bb40a70 ("syslinux: build
+> with the target toolchain"), you added one patch that adds the
+> --no-dynamic-linker option to the ld options. Unfortunately, it turns
+> out such an option doesn't exist in older toolchains, such as
+> toolchains based on binutils 2.24:
+> 
+> /home/thomas/projets/buildroot/output/host/usr/bin/i686-linux-ld:
+> unrecognized option
+> '--no-dynamic-linker' /home/thomas/projets/buildroot/output/host/usr/bin/i686-linux-ld:
+> use the --help option for usage
+> information /home/thomas/projets/buildroot/output/build/syslinux-6.03/core/Makefile:167:
+> recipe for target 'ldlinux.elf' failed
+> 
+> You can reproduce the problem using this defconfig:
+> 
+> BR2_x86_pentium4=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+> BR2_TARGET_SYSLINUX=y
+> BR2_TARGET_SYSLINUX_ISOLINUX=y
+> BR2_TARGET_SYSLINUX_EFI=y
+> 
+> This --no-dynamic-linker option is added by
+> boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch,
+> which you added in commit 6e432d5ecb46959f3c27dbbca48e41512bb40a70.
+> 
+> However, interestingly, I am no longer able to reproduce the "Not
+> enough room for program headers", even with a modern toolchain. Is it
+> possible that the gnu-efi update has fixed the problem?
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 8087bde999..2dabfd69b2 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -222,6 +222,27 @@ HOST_CFLAGS   += $(HOST_CPPFLAGS)
- HOST_CXXFLAGS += $(HOST_CFLAGS)
- HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
- 
-+# The macros below are taken from linux 4.11 and adapted slightly.
-+# Copy more when needed.
-+
-+# try-run
-+# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
-+# Exit code chooses option. "$$TMP" is can be used as temporary file and
-+# is automatically cleaned up.
-+try-run = $(shell set -e;               \
-+	TMP="$$(tempfile)";             \
-+	if ($(1)) >/dev/null 2>&1;      \
-+	then echo "$(2)";               \
-+	else echo "$(3)";               \
-+	fi;                             \
-+	rm -f "$$TMP")
-+
-+# host-cc-option
-+# Usage: HOST_FOO_CFLAGS += $(call host-cc-option,-no-pie,)
-+host-cc-option = $(call try-run,\
-+        $(HOSTCC) $(HOST_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-+
-+
- # host-intltool should be executed with the system perl, so we save
- # the path to the system perl, before a host-perl built by Buildroot
- # might get installed into $(HOST_DIR)/usr/bin and therefore appears
--- 
-2.13.2
+I cannot reproduce the issue anymore as well, so I will drop the patch.
+
+Thanks for reporting.
+Ben.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170703/eff2ac83/attachment.asc>
