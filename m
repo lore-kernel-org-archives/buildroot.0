@@ -1,36 +1,38 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 3 Jul 2017 14:45:01 +0200
-Subject: [Buildroot] [PATCH 7/8] Makefile: remove $(HOST_DIR)/usr from
-	BR_PATH
+Date: Mon, 3 Jul 2017 14:45:02 +0200
+Subject: [Buildroot] [PATCH 8/8] package/Makefile.in: remove $(HOST_DIR)/usr
+	part from HOST_LDFLAGS
 In-Reply-To: <20170703124502.26113-1-arnout@mind.be>
 References: <20170703124502.26113-1-arnout@mind.be>
-Message-ID: <20170703124502.26113-8-arnout@mind.be>
+Message-ID: <20170703124502.26113-9-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now $(HOST_DIR)/usr is a symlink to $(HOST_DIR), it makes no sense to
-still have it in BR_PATH.
+Now $(HOST_DIR)/lib and $(HOST_DIR)/usr/lib are the same directory, it
+doesn't make sense to pass both to LDFLAGS.
+
+Also use $(HOST_DIR)/lib instead of $(HOST_DIR)/usr/lib for the RPATH.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 2 +-
+ package/Makefile.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index c728364ab6..257caca21b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -440,7 +440,7 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
- HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 6b88ac4feb..25f1997fe6 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -220,7 +220,7 @@ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+ HOST_CFLAGS   ?= -O2
+ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
+-HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/usr/lib
++HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
  
- # Quotes are needed for spaces and all in the original PATH content.
--BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin:$(PATH)"
-+BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
- 
- # Location of a file giving a big fat warning that output/target
- # should not be used as the root filesystem.
+ # host-intltool should be executed with the system perl, so we save
+ # the path to the system perl, before a host-perl built by Buildroot
 -- 
 2.13.2
