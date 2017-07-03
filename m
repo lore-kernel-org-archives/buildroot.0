@@ -1,76 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  3 Jul 2017 14:43:37 +0200
-Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.25.1
-Message-ID: <20170703124337.6291-1-peter@korsgaard.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 3 Jul 2017 14:44:55 +0200
+Subject: [Buildroot] [PATCH 1/8] pkg-rebar: remove redundant / in front of
+	$($(PKG)_ERLANG_LIBDIR)
+In-Reply-To: <20170703124502.26113-1-arnout@mind.be>
+References: <20170703124502.26113-1-arnout@mind.be>
+Message-ID: <20170703124502.26113-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes:
+Sometimes $(1)/$($(PKG)_ERLANG_LIBDIR) is used, sometimes
+$(1)$($(PKG)_ERLANG_LIBDIR). Make this consistent, with /. Therefore,
+remove the leading / from $($(PKG)_ERLANG_LIBDIR).
 
-- Avoid memset(NULL, 0, 0) to calm down the paranoid.
-
-- Fix bug 252, invalid read of size 1 in ID3v2 parser due to forgotten
-  offset from the frame flag bytes (unnoticed in practice for a long time).
-  Fuzzers are in the house again.  This one got CVE-2017-10683.
-
-  https://sourceforge.net/p/mpg123/bugs/252/
-
-- Avoid a mostly harmless conditional jump depending on uninitialised
-  fr->lay in compute_bpf() (mpg123_position()) when track is not ready yet.
-
-- Fix undefined shifts on signed long mask in layer3.c (worked in practice,
-  never right in theory).  Code might be a bit faster now, even.  Thanks to
-  Agostino Sarubbo for reporting.
-
-dlopen() is now directly used to load output modules (and the
---with-modules-suffix option has been removed), so adjust the modules logic
-to match.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/mpg123/mpg123.hash |  2 +-
- package/mpg123/mpg123.mk   | 11 ++++++-----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+v2: keep the /, remove it from $($(PKG)_ERLANG_LIBDIR)
+---
+ package/pkg-rebar.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index fa5580948c..69fbef36c2 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	de2303c8ecb65593e39815c0a2f2f2d91f708c43b85a55fdd1934c82e677cf8e	mpg123-1.23.8.tar.bz2
-+sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 2431df1a09..7fc6d7ab00 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+index 7605a64ade..cc6b775ae5 100644
+--- a/package/pkg-rebar.mk
++++ b/package/pkg-rebar.mk
+@@ -44,7 +44,7 @@ REBAR_TARGET_DEPS_ENV = \
+ # Install an Erlang application from $(@D).
  #
- ################################################################################
+ # i.e., define a recipe that installs the "bin ebin priv $(2)" directories
+-# from $(@D) to $(1)$($(PKG)_ERLANG_LIBDIR).
++# from $(@D) to $(1)/$($(PKG)_ERLANG_LIBDIR).
+ #
+ #  argument 1 should typically be $(HOST_DIR), $(TARGET_DIR),
+ #	      or $(STAGING_DIR).
+@@ -59,7 +59,7 @@ define install-erlang-directories
+ 	$(INSTALL) -d $(1)/$($(PKG)_ERLANG_LIBDIR)
+ 	for dir in bin ebin priv $(2); do                               \
+ 		if test -d $(@D)/$$dir; then                            \
+-			cp -r $(@D)/$$dir $(1)$($(PKG)_ERLANG_LIBDIR);  \
++			cp -r $(@D)/$$dir $(1)/$($(PKG)_ERLANG_LIBDIR); \
+ 		fi;                                                     \
+ 	done
+ endef
+@@ -122,7 +122,7 @@ $(2)_ERLANG_APP = $(subst -,_,$(patsubst erlang-%,%,$(patsubst host-%,%,$(1))))
+ # for host packages, or $(STAGING_DIR) for target packages.
+ #
+ $(2)_ERLANG_LIBDIR = \
+-	/usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
++	usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
  
--MPG123_VERSION = 1.23.8
-+MPG123_VERSION = 1.25.1
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
-@@ -74,10 +74,11 @@ endif
- 
- MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
- 
--ifeq ($(BR2_PACKAGE_LIBTOOL),y)
--MPG123_DEPENDENCIES += libtool
--# .la files gets stripped , so directly load .so files rather than .la
--MPG123_CONF_OPTS += --with-modules --with-module-suffix=.so
-+# output modules are loaded with dlopen()
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MPG123_CONF_OPTS += --disable-modules
-+else
-+MPG123_CONF_OPTS += --enable-modules
- endif
- 
- $(eval $(autotools-package))
+ # If a host package, inherit <pkg>_USE_BUNDLED_REBAR from the target
+ # package, if not explicitly defined. Otherwise, default to NO.
 -- 
-2.11.0
+2.13.2
