@@ -1,110 +1,122 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 3 Jul 2017 14:44:58 +0200
-Subject: [Buildroot] [PATCH 4/8] Move $(HOST_DIR)/usr/lib to $(HOST_DIR)/lib
+Date: Mon, 3 Jul 2017 14:44:59 +0200
+Subject: [Buildroot] [PATCH 5/8] Eliminate $(HOST_DIR)/usr
 In-Reply-To: <20170703124502.26113-1-arnout@mind.be>
 References: <20170703124502.26113-1-arnout@mind.be>
-Message-ID: <20170703124502.26113-5-arnout@mind.be>
+Message-ID: <20170703124502.26113-6-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a step towards eliminating $(HOST_DIR)/usr. It allows us to
-convert all packages installing things into $(HOST_DIR)/usr/lib without
-affecting the rest.
+We currently use $(HOST_DIR)/usr as the prefix for host packages. That
+has a few disadvantages:
 
-To allow compatibility with packages that still use $(HOST_DIR)/usr as
-the prefix, create a symlink from usr/lib to ../lib.
+- There are some things installed in $(HOST_DIR)/etc and
+  $(HOST_DIR)/sbin, which is inconsistent.
 
-Note that the symlink creation will break when $(HOST_DIR)/usr/lib
+- To pack a buildroot-built toolchain into a tarball for use as an
+  external toolchain, you have to pack output/host/usr instead of the
+  more obvious output/host.
+
+- Because of the above, the internal toolchain wrapper breaks which
+  forces us to work around it (call the actual toolchain executable
+  directly). This is OK for us, but when used in another build system,
+  that's a problem.
+
+- Paths are four characters longer.
+
+To allow us to gradually eliminate $(HOST_DIR)/usr while building
+packages, replace it with a symlink to .
+
+The symlinks from $(HOST_DIR)/usr/$(GNU_TARGET_NAME) and
+$(HOST_DIR)/usr/lib that were added previously are removed again.
+
+Note that the symlink creation will break when $(HOST_DIR)/usr
 already exists as a directory, i.e. when rebuilding in an existing
 output directory. This is necessary: if we don't break it now, the
 following commits (which remove the usr part from various variables)
 _will_ break it.
 
-At the same time as creating this symlink, we also have to update the
-check-host-rpath to accept both $(HOST_DIR)/usr/lib and $(HOST_DIR)/lib,
-because depending on how the package derives the path, it may be
-different.
-
-Since there are some dependency chains that involve $(STAGING_DIR),
-$(STAGING_DIR) may in fact be created before $(HOST_DIR). Since
-$(STAGING_DIR) is a subdirectory of $(HOST_DIR), it is possible that the
-newly added rule for $(HOST_DIR) never triggers. To make sure that the
-rule does trigger, add an order-only dependency from $(STAGING_DIR) to
-$(HOST_DIR).
+At the same time as creating this symlink, we have to update the
+external toolchain wrapper and the external toolchain symlinks to go
+one directory less up. Indeed, $(HOST_DIR) is one level less up than
+it was before.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-v2: rebase on modifications of check-host-rpath with $ORIGIN.
+I intended to also move $(HOST_DIR)/usr/bin in a separate patch, but
+that turns out to break the internal toolchain: host-gcc-initial uses
+relative paths to find cc1 etc. and these will be broken.
 ---
- Makefile                         | 10 +++++++---
- support/scripts/check-host-rpath |  8 +++++---
- 2 files changed, 12 insertions(+), 6 deletions(-)
+ Makefile                                               | 7 +++----
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 6 +++---
+ toolchain/toolchain-wrapper.c                          | 2 +-
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index fb252f2eb1..dee90b531c 100644
+index dee90b531c..c728364ab6 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -237,7 +237,7 @@ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
- # dependencies anywhere else
- #
- ################################################################################
--$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-+$(BUILD_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
- 	@mkdir -p $@
- 
- BR2_CONFIG = $(CONFIG_DIR)/.config
-@@ -552,11 +552,15 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+@@ -552,16 +552,15 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
  .PHONY: world
  world: target-post-image
  
-+# When creating HOST_DIR, also symlink usr/lib -> ../lib
-+$(HOST_DIR):
-+	@mkdir -p $@/usr $@/lib
-+	@ln -snf ../lib $@/usr/lib
-+
+-# When creating HOST_DIR, also symlink usr/lib -> ../lib
++# When creating HOST_DIR, also symlink usr -> .
+ $(HOST_DIR):
+-	@mkdir -p $@/usr $@/lib
+-	@ln -snf ../lib $@/usr/lib
++	@mkdir -p $@
++	@ln -snf . $@/usr
+ 
  # Populating the staging with the base directories is handled by the skeleton package
--$(STAGING_DIR):
-+$(STAGING_DIR): | $(HOST_DIR)
+ $(STAGING_DIR): | $(HOST_DIR)
  	@mkdir -p $(STAGING_DIR)
  	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
--	@mkdir -p $(HOST_DIR)/usr
- 	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
+-	@ln -snf ../$(GNU_TARGET_NAME) $(HOST_DIR)/usr/$(GNU_TARGET_NAME)
  
  RSYNC_VCS_EXCLUSIONS = \
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 020c12379f..adabfdf53f 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -1,7 +1,7 @@
- #!/usr/bin/env bash
- 
--# This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
--# they have an RPATH to $(HOST_DIR)/usr/lib if they need libraries from
-+# This script scans $(HOST_DIR)/{,usr/}{bin,sbin} for all ELF files, and checks
-+# they have an RPATH to $(HOST_DIR)/{,usr/}lib if they need libraries from
- # there.
- 
- # Override the user's locale so we are sure we can parse the output of
-@@ -40,7 +40,7 @@ elf_needs_rpath() {
-     local lib
- 
-     while read lib; do
--        [ -e "${hostdir}/usr/lib/${lib}" ] && return 0
-+        [ -e "${hostdir}/lib/${lib}" ] && return 0
-     done < <( readelf -d "${file}"                                         \
-               |sed -r -e '/^.* \(NEEDED\) .*Shared library: \[(.+)\]$/!d;' \
-                      -e 's//\1/;'                                          \
-@@ -58,6 +58,8 @@ check_elf_has_rpath() {
-         for dir in ${rpath//:/ }; do
-             # Remove duplicate and trailing '/' for proper match
-             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
-+            [ "${dir}" = "${hostdir}/lib" -o "${dir}" = "\$ORIGIN/../lib" ] && return 0
-+            # For the time being, the rpath is allowed with both usr/lib and lib
-             [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
-         done
-     done < <( readelf -d "${file}"                                              \
+ 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 8460e37d09..adbd3fe67e 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -250,18 +250,18 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 		base=$${i##*/}; \
+ 		case "$$base" in \
+ 		*-ar|*-ranlib|*-nm) \
+-			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
++			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+ 			;; \
+ 		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
+ 			ln -sf toolchain-wrapper $$base; \
+ 			;; \
+ 		*gdb|*gdbtui) \
+ 			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
+-				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
++				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+ 			fi \
+ 			;; \
+ 		*) \
+-			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
++			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+ 			;; \
+ 		esac; \
+ 	done
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 100aa181c6..3a4455ff82 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -178,7 +178,7 @@ int main(int argc, char **argv)
+ 			perror(__FILE__ ": malloc");
+ 			return 2;
+ 		}
+-		sprintf(relbasedir, "%s/../..", argv[0]);
++		sprintf(relbasedir, "%s/..", argv[0]);
+ 		absbasedir = realpath(relbasedir, NULL);
+ 	} else {
+ 		basename = progpath;
 -- 
 2.13.2
