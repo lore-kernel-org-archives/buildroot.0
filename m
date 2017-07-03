@@ -1,61 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 14:25:11 +0200
-Subject: [Buildroot] [PATCH] Makefile: generate wrapper makefile when
- running make without a .config
-In-Reply-To: <20170703102405.25977-1-peter@korsgaard.com>
-References: <20170703102405.25977-1-peter@korsgaard.com>
-Message-ID: <3fbe1d36-1909-634c-5f72-ea432d19f15a@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  3 Jul 2017 14:43:37 +0200
+Subject: [Buildroot] [PATCH] mpg123: security bump to version 1.25.1
+Message-ID: <20170703124337.6291-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From the release notes:
 
+- Avoid memset(NULL, 0, 0) to calm down the paranoid.
 
-On 03-07-17 12:24, Peter Korsgaard wrote:
-> The recent change to error out instead of running menuconfig when no .config
-> is available broke an existing use case:
-> 
-> make O=output-foo; cd output-foo; br-init-conf (or similar to get a sensible .config); make
-> 
-> As there is no wrapper makefile in output-foo.
-> 
-> Fix it by ensuring the wrapper gets created if needed.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- Fix bug 252, invalid read of size 1 in ID3v2 parser due to forgotten
+  offset from the frame flag bytes (unnoticed in practice for a long time).
+  Fuzzers are in the house again.  This one got CVE-2017-10683.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  https://sourceforge.net/p/mpg123/bugs/252/
 
- However, the br-init-conf script doesn't exist in utils/. Perhaps someone
-should add it? :-P
+- Avoid a mostly harmless conditional jump depending on uninitialised
+  fr->lay in compute_bpf() (mpg123_position()) when track is not ready yet.
 
- Regards,
- Arnout
+- Fix undefined shifts on signed long mask in layer3.c (worked in practice,
+  never right in theory).  Code might be a bit faster now, even.  Thanks to
+  Agostino Sarubbo for reporting.
 
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 36231fa9d6..bfe6fa3e07 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -816,7 +816,7 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
->  # rule for it.
->  # Also for 'all' we error out and ask the user to configure first.
->  .PHONY: linux toolchain
-> -linux toolchain all:
-> +linux toolchain all: outputmakefile
->  	$(error Please configure Buildroot first (e.g. "make menuconfig"))
->  	@exit 1
->  
-> 
+dlopen() is now directly used to load output modules (and the
+--with-modules-suffix option has been removed), so adjust the modules logic
+to match.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpg123/mpg123.hash |  2 +-
+ package/mpg123/mpg123.mk   | 11 ++++++-----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index fa5580948c..69fbef36c2 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	de2303c8ecb65593e39815c0a2f2f2d91f708c43b85a55fdd1934c82e677cf8e	mpg123-1.23.8.tar.bz2
++sha256	0fe7270a4071367f97a7c1fb45fb2ef3cfef73509c205124e080ea569217b05f	mpg123-1.25.1.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 2431df1a09..7fc6d7ab00 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.23.8
++MPG123_VERSION = 1.25.1
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
+@@ -74,10 +74,11 @@ endif
+ 
+ MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
+ 
+-ifeq ($(BR2_PACKAGE_LIBTOOL),y)
+-MPG123_DEPENDENCIES += libtool
+-# .la files gets stripped , so directly load .so files rather than .la
+-MPG123_CONF_OPTS += --with-modules --with-module-suffix=.so
++# output modules are loaded with dlopen()
++ifeq ($(BR2_STATIC_LIBS),y)
++MPG123_CONF_OPTS += --disable-modules
++else
++MPG123_CONF_OPTS += --enable-modules
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
