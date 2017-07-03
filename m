@@ -1,62 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 23:47:58 +0200
-Subject: [Buildroot] [RFC PATCH v5 06/11] pkg-generic: add
- GLOBAL_INSTRUMENTATION_HOOKS for rpath sanitation
-In-Reply-To: <1498811828-6893-7-git-send-email-wg@grandegger.com>
-References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
- <1498811828-6893-7-git-send-email-wg@grandegger.com>
-Message-ID: <4e40ba89-7c3b-f25d-4182-76388c1b0243@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  3 Jul 2017 23:58:03 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain-external: install libsanitizer
+	libraries if available
+In-Reply-To: <20170703215803.6233-1-peter@korsgaard.com>
+References: <20170703215803.6233-1-peter@korsgaard.com>
+Message-ID: <20170703215803.6233-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Gcc builds libsanitizer (lib{a,l,t,u}san) for
+-fsanitize={address,thread,leak,undefined} if the needed dependencies are
+available, so ensure these also gets copied to the target fs to support
+-fsanitize.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 30-06-17 10:37, Wolfgang Grandegger wrote:
-> The hook calls the script "fix-rpath" at the end of the installation
-> step.
-> 
-> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-
- Looks good to me. I'm not adding my reviewed-by yet because it will still
-change when the fix-rpath arguments change.
-
- Regards,
- Arnout
-
-> ---
->  package/pkg-generic.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 825ab0c..8812193 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -139,6 +139,16 @@ define step_check_build_dir
->  endef
->  GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
->  
-> +define step_sanitize_rpath
-> +	$(if $(filter install-host-end,$(2)-$(1)),\
-> +		support/scripts/fix-rpath "host" $($(PKG)_DIR)/.br_host_filelist)
-> +	$(if $(filter install-staging-end,$(2)-$(1)),\
-> +		support/scripts/fix-rpath "staging" $($(PKG)_DIR)/.br_staging_filelist)
-> +	$(if $(filter install-target-end,$(2)-$(1)),\
-> +		support/scripts/fix-rpath "target" $($(PKG)_DIR)/.br_target_filelist)
-> +endef
-> +GLOBAL_INSTRUMENTATION_HOOKS += step_sanitize_rpath
-> +
->  # User-supplied script
->  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
->  define step_user
-> 
-
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 8460e37d09..0764b379b5 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -108,7 +108,7 @@ endif
+ # Definitions of the list of libraries that should be copied to the target.
+ #
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
++TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.* lib?san.so.*
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
+ TOOLCHAIN_EXTERNAL_LIBS += ld-linux-armhf.so.*
+ else
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
