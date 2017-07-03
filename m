@@ -1,32 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 03 Jul 2017 11:02:30 +0200
-Subject: [Buildroot] Policy for upgrading toolchains in LTS version
-In-Reply-To: <17ba4c4d-4fce-66a6-d5c4-d66720a02de2@gmail.com> (Romain Naour's
- message of "Fri, 23 Jun 2017 22:11:31 +0200")
-References: <232c0fde-c837-ccfd-949c-eeec82a24fdb@free.fr>
- <20170622192701.GC3054@scaer>
- <443c0c3b-683b-935d-1b4e-c020a406bcc3@free.fr>
- <87a84zkw97.fsf@dell.be.48ers.dk>
- <3fa81af3-4372-6a67-5fb9-3717549b0350@free.fr>
- <17ba4c4d-4fce-66a6-d5c4-d66720a02de2@gmail.com>
-Message-ID: <87mv8l99ll.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 03 Jul 2017 11:09:18 +0200
+Subject: [Buildroot] [PATCH v2 1/1] automake: fix unescaped left brace
+ warning patch.
+In-Reply-To: <20170320214543.02c3461c@free-electrons.com>
+References: <20170306132359.21768-1-aduskett@codeblue.com>
+ <20170320214543.02c3461c@free-electrons.com>
+Message-ID: <1499072958.1626.5.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+Hello,
 
-Hi,
+On Mon, 2017-03-20 at 21:45 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon,  6 Mar 2017 08:23:59 -0500, Adam Duskett wrote:
+> > Automake currently has a unescaped left brace in it's automake.in
+> > folder
+> > that generates the warning:
+> > "Unescaped left brace in regex is deprecated, passed through in
+> > regex;"
+> > This patch, which is backported from upstream fixes this warning.
+> > 
+> > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+> 
+> I've applied. However, you should format the patches of projects
+> managed with Git using "git format-patch". So the automake patch
+> should
+> have been Git formatted. I've fixed that before applying.
 
- >> As previously mentioned, IIUC, Linaro is preparing an
- >> OOB release addressing "stack clash". I plan to wait
- >> for that release, and then send a patch, is that OK?
+We should apply the patch to the 2017.02.x branch, too. Perl 5.26 is
+treating the warning as an error. This patch fixes building alsa-lib
+for me on the 2017.02.x branch.
 
- > Ok for me.
-
-Me as well.
-
--- 
-Bye, Peter Korsgaard
+J?rg
