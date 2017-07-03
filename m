@@ -1,59 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Jul 2017 21:02:40 +0200
-Subject: [Buildroot] [PATCH v1] qt5multimedia: fix plugins videonode egl
- x11 header related compile failure
-In-Reply-To: <20170703204654.751617d1@gmx.net>
-References: <20170626211311.10890-1-ps.report@gmx.net>
- <20170702003332.771dd45c@windsurf>
- <20170702210127.7090df5b@gmx.net>
- <20170702231449.4a4d1832@windsurf>
- <20170703204654.751617d1@gmx.net>
-Message-ID: <20170703210240.6a3f21bb@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  3 Jul 2017 21:22:04 +0200
+Subject: [Buildroot] [PATCH 0/2] system: default to using Etc/UTC as a
+	timezone
+Message-ID: <cover.1499109719.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-On Mon, 3 Jul 2017 20:46:54 +0200, Peter Seiderer wrote:
+A tiemzone is required by systemd, so we must have one defined.
+See the second commit log for more details.
 
-> On Sun, 2 Jul 2017 23:14:49 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> > Hello,
-> > 
-> > On Sun, 2 Jul 2017 21:01:27 +0200, Peter Seiderer wrote:
-> >   
-> > > Same fixing pattern as for qt5base (and for qtbase accepted upstream, see e.g. [1]),  
-> > 
-> > Well, [1] is about adding QT_EGL_NO_X11, which is a QT definition. It
-> > is very different from MESA_EGL_NO_X11_HEADERS, which is an
-> > OpenGL-level definition.  
-> 
-> The missing link is in file src/platformsupport/eglconvenience/qt_egl_p.h line 54ff:
-> 
->  54 #ifdef QT_EGL_NO_X11
->  55 # define MESA_EGL_NO_X11_HEADERS // MESA
->  56 # define WIN_INTERFACE_CUSTOM    // NV
->  57 #endif // QT_EGL_NO_X11
->  58 
->  59 #ifdef QT_EGL_WAYLAND
->  60 # define WAYLAND // NV
->  61 #endif // QT_EGL_WAYLAND
->  62 
->  63 #include <EGL/egl.h>
->  64 #include <EGL/eglext.h>
-> 
-> QT_EGL_NO_X11 forces MESA_EGL_NO_X11_HEADERS before the egl headers are included...
 
-Ah, okay, indeed. But still, I really think it should be the
-responsibility of the OpenGL provider to define MESA_EGL_NO_X11_HEADERS
-in its .pc files, rather than having this logic duplicated in all
-packages "consuming" the OpenGL API.
+Regards,
+Yann E. MORIN.
 
-Thomas
+
+The following changes since commit 3529ee59d1954da17b6b74b51d400317c774225a
+
+  qt5virtualkeyboard: new package (2017-07-03 00:36:01 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 8704f2d3078e10fe9df1c73b02bca452f8aab5b2
+
+  system: use Etc/UTC as default timezone (2017-07-03 21:21:12 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/tz: fix variable name
+      system: use Etc/UTC as default timezone
+
+ package/tz/tz.mk         | 17 +++++++++--------
+ package/tzdata/tzdata.mk | 19 ++++++++++---------
+ system/Config.in         |  3 +--
+ 3 files changed, 20 insertions(+), 19 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
