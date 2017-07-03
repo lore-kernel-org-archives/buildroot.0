@@ -1,57 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 17:59:07 +0200
-Subject: [Buildroot] Forcing build of custom kernel headers
-In-Reply-To: <87eftxefa6.fsf@sx4173-linuxdev.solectrix.de>
-References: <87eftxefa6.fsf@sx4173-linuxdev.solectrix.de>
-Message-ID: <6ec78676-b577-9294-e064-3ad7c3231f01@mind.be>
+Date: Mon, 3 Jul 2017 18:03:21 +0200
+Subject: [Buildroot] [PATCH 2/4] core: allow packages to declare a
+ permission file
+In-Reply-To: <0ae8c865-9540-2c3c-d2b4-e6a195179b59@mind.be>
+References: <1490564623-26806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1490564623-26806-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56824752-a1bd-730a-b9f6-465eec832da7@mind.be>
+ <0ae8c865-9540-2c3c-d2b4-e6a195179b59@mind.be>
+Message-ID: <19ba0b45-b260-ea6c-a6eb-7e6d578b9a35@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi all,
 
+On 29-03-17 08:43, Arnout Vandecappelle wrote:
+> 
+> 
+> On 29-03-17 00:12, Arnout Vandecappelle wrote:
+> [snip]
+>> define BUSYBOX_PERMISSIONS
+>> 	$(foreach app,$(shell \
+>> 		for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE"
+>> $(BUSYBOX_DIR)/include/applets.h \
+>> 			| sed -e 's/,.*//' -e 's/.*(//'`; \
+>> 		do \
+>> 			grep -w $${app} $(BUSYBOX_DIR)/busybox.links; \
+>> 		done #) ),$(app) f 4755 0  0 - - - - -$(sep))
+>> endef
+>>
+>>  For that to work, the condition around PACKAGES_PERMISSIONS_TABLES += must be
+>> removed, but that's fine IMO (just adds a lot of empty lines to the device
+>> table, but that doesn't hurt). The #) is a bit ugly but I'm sure a better
+>> solution can be found.
+>>
+>>  With that solution, patches 2 and 3 wouldn't be needed.
+> 
+>  And an even simpler approach would be to always run the installation commands
+> under fakeroot (with the -i -s options of course) That would simplify a lot of
+> things. But there are probably problems with that approach as well - e.g.
+> nothing should install/remove anything in target outside of the install-target step.
 
-On 03-07-17 17:00, Christian Kellermann wrote:
-> Hi List,
-> 
-> I have a rather peculiar system setup: A 64 bit PPC kernel running a 32
-> bit buildroot. ATM I solve this by using two default configs ? one for
-> the kernel and one for the rootfs. A simple shell script copies the
-> kernel artifacts back and forth so the kernel can be included in the
-> rootfs image.
-> 
-> The kernel in question is a custom kernel tree in a git repository.
-> Now some userland application needs kernel headers from that kernel. As
-> I understand buildroot would install the uapi-headers into staging/
-> automatically. But with my setup no kernel gets build for the 32bit
-> rootfs.
-> 
-> I have tried to set BR2_KERNEL_HEADERS_AS_KERNEL and the respective
-> CUSTOM kernel variables in my defconfig. However the build system will
-> always fall back to the BR2_DEFAULT_KERNEL_HEADERS version.
-> 
-> So tl;dr: I want to make the linux-headers package use my custom kernel
-> headers from a git repo but don?t know how to do this without building a
-> kernel.
+ We finally got around to discussing this at the Summer Camp. The conclusion is
+that the simplest option is in fact to go back to your earlier solution, where
+makedevs would be extended with a file type that ignores files that don't exist,
+and the BUSYBOX_PERMISSIONS are set statically for all potential busybox
+applets. Yann doesn't like it but he's a minority :-).
 
- The easiest is to check out the linux tree separately and make
-LINUX_HEADERS_OVERRIDE_SRCDIR point to it.
+ Bryce, Adam, do you think you could reconstruct such a series?
+
+ For now, I've marked these three patches as Rejected in patchwork.
 
  Regards,
  Arnout
-
-> 
-> Any thoughts?
-> 
-> Thanks,
-> 
-> Christian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
