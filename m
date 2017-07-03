@@ -1,69 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Jul 2017 14:58:51 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] automake: fix unescaped
-	left brace warning patch
-Message-ID: <20170703125644.4087280577@busybox.osuosl.org>
+Date: Mon, 03 Jul 2017 15:01:46 +0200
+Subject: [Buildroot] [PATCH] Makefile: generate wrapper makefile when
+	running make without a .config
+In-Reply-To: <3fbe1d36-1909-634c-5f72-ea432d19f15a@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 3 Jul 2017 14:25:11 +0200")
+References: <20170703102405.25977-1-peter@korsgaard.com>
+ <3fbe1d36-1909-634c-5f72-ea432d19f15a@mind.be>
+Message-ID: <8760f98yit.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=053496c6b366d199f70cff81105a83d3ed9886e3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Automake currently has a unescaped left brace in it's automake.in folder
-that generates the warning:
-"Unescaped left brace in regex is deprecated, passed through in regex;"
-This patch, which is backported from upstream fixes this warning.
+ > On 03-07-17 12:24, Peter Korsgaard wrote:
+ >> The recent change to error out instead of running menuconfig when no .config
+ >> is available broke an existing use case:
+ >> 
+ >> make O=output-foo; cd output-foo; br-init-conf (or similar to get a sensible .config); make
+ >> 
+ >> As there is no wrapper makefile in output-foo.
+ >> 
+ >> Fix it by ensuring the wrapper gets created if needed.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-[Thomas: format patch using "git format-patch".]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-(cherry picked from commit 22dbe0035f309c2ea141344ed6a4e0e79881a1fa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-port-to-perl-5.22-and-later.patch         | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Committed, thanks.
 
-diff --git a/package/automake/0002-port-to-perl-5.22-and-later.patch b/package/automake/0002-port-to-perl-5.22-and-later.patch
-new file mode 100644
-index 0000000..207039b
---- /dev/null
-+++ b/package/automake/0002-port-to-perl-5.22-and-later.patch
-@@ -0,0 +1,34 @@
-+From 13f00eb4493c217269b76614759e452d8302955e Mon Sep 17 00:00:00 2001
-+From: Paul Eggert <eggert@cs.ucla.edu>
-+Date: Thu, 31 Mar 2016 16:35:29 -0700
-+Subject: [PATCH] automake: port to Perl 5.22 and later
-+
-+Without this change, Perl 5.22 complains "Unescaped left brace in
-+regex is deprecated" and this is planned to become a hard error in
-+Perl 5.26.  See:
-+http://search.cpan.org/dist/perl-5.22.0/pod/perldelta.pod#A_literal_%22{%22_should_now_be_escaped_in_a_pattern
-+* bin/automake.in (substitute_ac_subst_variables): Escape left brace.
-+
-+[Backported from:
-+ http://git.savannah.gnu.org/cgit/automake.git/commit/?id=13f00eb4493c217269b76614759e452d8302955e]
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ bin/automake.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bin/automake.in b/bin/automake.in
-+index a3a0aa3..2c8f31e 100644
-+--- a/bin/automake.in
-++++ b/bin/automake.in
-+@@ -3878,7 +3878,7 @@ sub substitute_ac_subst_variables_worker
-+ sub substitute_ac_subst_variables
-+ {
-+   my ($text) = @_;
-+-  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
-++  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
-+   return $text;
-+ }
-+ 
-+-- 
-+2.7.4
-+
+ >  However, the br-init-conf script doesn't exist in utils/. Perhaps someone
+ > should add it? :-P
+
+True. Thomas wrote the script, but it very much depends on the
+autobuilder toolchains, so probably it needs to be updated with the
+changes we're doing now.
+
+-- 
+Bye, Peter Korsgaard
