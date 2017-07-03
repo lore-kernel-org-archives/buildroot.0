@@ -1,7 +1,9 @@
 From: Matthew Shyu <matthew.shyu.amlogic@gmail.com>
-Date: Mon,  3 Jul 2017 17:09:32 +0800
-Subject: [Buildroot] [PATCH 1/1] linux-fusion: fix a build issue
-Message-ID: <20170703090933.32566-1-matthew.shyu.amlogic@gmail.com>
+Date: Mon,  3 Jul 2017 17:09:33 +0800
+Subject: [Buildroot] [PATCH 1/1] linux-fusion: fix build issues
+In-Reply-To: <20170703090933.32566-1-matthew.shyu.amlogic@gmail.com>
+References: <20170703090933.32566-1-matthew.shyu.amlogic@gmail.com>
+Message-ID: <20170703090933.32566-2-matthew.shyu.amlogic@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
