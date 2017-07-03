@@ -1,60 +1,43 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
-Date: Mon,  3 Jul 2017 11:11:03 +0200
-Subject: [Buildroot] [PATCH] syslinux: Drop patch 0003,
-	not needed after gnu-efi update
-Message-ID: <1499073063-15005-1-git-send-email-benoit.allard@greenbone.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 3 Jul 2017 11:37:40 +0200
+Subject: [Buildroot] [RFC PATCH v5 01/11] package/patchelf: use most
+ recent version as a base for rpath sanitation
+In-Reply-To: <6c844720-dd3d-cd87-b544-152f62afcba7@grandegger.com>
+References: <1498811828-6893-1-git-send-email-wg@grandegger.com>
+ <1498811828-6893-2-git-send-email-wg@grandegger.com>
+ <80a1cf57-34bb-dc8f-e2b9-dd4001f7df6b@mind.be>
+ <5b16af39-81af-9a19-dd28-9aebfde9e817@grandegger.com>
+ <a30436db-052e-bc75-d727-1147a75da98f@mind.be>
+ <401fdb29-ce3a-f5a2-67d7-a03e2f785e87@mind.be>
+ <ae53a8d6-9104-b693-bc11-850cdd5cf7bf@mind.be>
+ <6c844720-dd3d-cd87-b544-152f62afcba7@grandegger.com>
+Message-ID: <af581fbf-241a-261b-3d58-c64efa621814@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
----
- ....elf-Not-enough-room-for-program-headers-.patch | 35 ----------------------
- 1 file changed, 35 deletions(-)
- delete mode 100644 boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
 
-diff --git a/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch b/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
-deleted file mode 100644
-index 83a87ee..0000000
---- a/boot/syslinux/0003-Fix-ldlinux.elf-Not-enough-room-for-program-headers-.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 61de7762389d460da7ffdd644f50c60175cce23b Mon Sep 17 00:00:00 2001
--From: Steve McIntyre <93sam@debian.org>
--Date: Wed, 5 Apr 2017 22:09:37 +0200
--Subject: [PATCH] Fix 'ldlinux.elf: Not enough room for program headers, try
-- linking with -N'
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fix for https://bugs.debian.org/846679: syslinux: FTBFS: ld:
--ldlinux.elf: Not enough room for program headers, try linking with -N
--
--https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=846679;filename=syslinux_6.03%2Bdfsg-14.1.debdiff;msg=10
--
--Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
-----
-- core/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/core/Makefile b/core/Makefile
--index ad0acb5..58a3545 100644
----- a/core/Makefile
--+++ b/core/Makefile
--@@ -165,7 +165,7 @@ LDSCRIPT = $(SRC)/$(ARCH)/syslinux.ld
-- 
-- %.elf: %.o $(LIBDEP) $(LDSCRIPT) $(AUXLIBS)
-- 	$(LD) $(LDFLAGS) -Bsymbolic $(LD_PIE) -E --hash-style=gnu -T $(LDSCRIPT) -M -o $@ $< \
---		--start-group $(LIBS) $(subst $(*F).elf,lib$(*F).a,$@) --end-group \
--+		--start-group $(LIBS) $(subst $(*F).elf,lib$(*F).a,$@) --end-group --no-dynamic-linker \
-- 		> $(@:.elf=.map)
-- 	$(OBJDUMP) -h $@ > $(@:.elf=.sec)
-- 	$(PERL) $(SRC)/lstadjust.pl $(@:.elf=.lsr) $(@:.elf=.sec) $(@:.elf=.lst)
---- 
--2.7.4
--
+
+On 03-07-17 09:04, Wolfgang Grandegger wrote:
+[snip]
+> OK, I will use v0.9 plus a few patches (relevant for rpath sanitization). I see
+> at least:
+> 
+>   a365bcb Remove apparently incorrect usage of "static"
+
+ Well, actually, if you keep it static, that resolves the issue that you have
+with libs occurring twice. But it's certainly OK for me if you keep this patch
+and then resolve it by adding neededLibFound as an argument.
+
+ Regards,
+ Arnout
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
