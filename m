@@ -1,86 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 3 Jul 2017 16:39:04 +0200
-Subject: [Buildroot] [PATCHv2 1/2] instrumentation: extract duplication
- to get list of installed files
-In-Reply-To: <20170205134507.15328-2-patrickdepinguin@gmail.com>
-References: <20170205134507.15328-1-patrickdepinguin@gmail.com>
- <20170205134507.15328-2-patrickdepinguin@gmail.com>
-Message-ID: <a7a1083e-ebd6-3f8d-d7c7-e5f07198d197@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Jul 2017 16:43:18 +0200
+Subject: [Buildroot] [PATCH/next] package/vlc: bump version to 2.2.6
+In-Reply-To: <20170531224229.79773118@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 31 May 2017 22:42:29 +0200")
+References: <20170524211317.3831-1-bernd.kuhls@t-online.de>
+ <20170531224229.79773118@free-electrons.com>
+Message-ID: <87wp7p7f95.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ > Hello,
+ > On Wed, 24 May 2017 23:13:17 +0200, Bernd Kuhls wrote:
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> package/vlc/vlc.hash | 4 ++--
+ >> package/vlc/vlc.mk   | 2 +-
+ >> 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 05-02-17 14:45, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> Before and after the building of each package, the instrumentation hooks are
-> run. One of these hooks obtains the list of files installed by a package.
-> 
-> The code to obtain this list is currently duplicated in the start and end
-> part of the hook. While the amount of duplication is currently small, a
-> subsequent patch will make more changes to this code, increasing the
-> duplication.
-> 
-> Therefore, split off into a helper function.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Applied to next, thanks.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> ---
-> v2: new patch
-> 
->  package/pkg-generic.mk | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 3ca71b0..077b02b 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -57,13 +57,17 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  
->  # Hooks to collect statistics about installed files
->  
-> +define _step_pkg_size_get_file_list
-> +	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
-> +		$1
-> +endef
-> +
->  # This hook will be called before the target installation of a
->  # package. We store in a file named .br_filelist_before the list of
->  # files currently installed in the target. Note that the MD5 is also
->  # stored, in order to identify if the files are overwritten.
->  define step_pkg_size_start
-> -	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
-> -		$($(PKG)_DIR)/.br_filelist_before
-> +	$(call _step_pkg_size_get_file_list,$($(PKG)_DIR)/.br_filelist_before)
->  endef
->  
->  # This hook will be called after the target installation of a
-> @@ -72,8 +76,7 @@ endef
->  # a diff with the .br_filelist_before to compute the list of files
->  # installed by this package.
->  define step_pkg_size_end
-> -	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
-> -		$($(PKG)_DIR)/.br_filelist_after
-> +	$(call _step_pkg_size_get_file_list,$($(PKG)_DIR)/.br_filelist_after)
->  	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
->  		while read hash file ; do \
->  			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
-> 
+Committed to 2017.02.x and 2017.05.x, after updating the commit message
+to clarify that this is in fact a security bump as it fixes
+CVE-2017-8312, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
