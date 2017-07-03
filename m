@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Jul 2017 18:03:51 +0200
-Subject: [Buildroot] [git commit] core/pkg-utils: check hashes of license
-	files
-Message-ID: <20170703161020.A23177FAF4@busybox.osuosl.org>
+Date: Mon, 3 Jul 2017 17:34:34 +0200
+Subject: [Buildroot] [git commit] core/pkg-generic: call MESSAGE when saving
+	package legal-info
+Message-ID: <20170703161020.2E3D97F8BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=518b797b2b6627a5dfa178ca60e5420becf64e96
+commit: https://git.buildroot.net/buildroot/commit/?id=f49392349f7cf202d13941f7f3b56622a34453a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will help catch a change of license even if the filename does
-not change.
+Currently, the per-package legal-info is mostly silent, but we're soon
+to add a check for the hashes of the license files.
 
-For now, a missing hash for the license files is not a fatal error, to
-let people catch up and add them. When we switch to make it mandatory,
-we can simplify the code by just removing the case statement.
+In that case, and when there is a hash mis-match, we want a user to know
+what package had a changed license file.
+
+So, we add a call to MESSAGE to display the package we're currently
+saving the legal-info of, like so:
+
+    >>> busybox 1.26.2 Collecting legal info
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
@@ -25,21 +29,20 @@ Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-utils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index e9ac562..accf48c 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -85,5 +85,10 @@ endef
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f474704..22330ed 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -835,7 +835,9 @@ endif
+ endif
  
- define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
- 	mkdir -p $(LICENSE_FILES_DIR_$(6))/$(2)/$(dir $(4)) && \
-+	{ \
-+		support/download/check-hash $(3)/$(1).hash $(5) $(4); \
-+		ret=$${?}; \
-+		case $${ret} in (0|3) ;; (*) exit 1;; esac; \
-+	} && \
- 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
- endef
+ # legal-info: produce legally relevant info.
++$(1)-legal-info: PKG=$(2)
+ $(1)-legal-info:
++	@$$(call MESSAGE,"Collecting legal info")
+ # Packages without a source are assumed to be part of Buildroot, skip them.
+ 	$$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
