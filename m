@@ -1,109 +1,105 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 3 Jul 2017 17:28:57 +0200
-Subject: [Buildroot] [PATCH] core: postpone evaluation on decompressor
-	dependencies
-In-Reply-To: <f75e93d0-ef5d-9d71-fca8-1a96329886d3@mind.be>
-References: <20170702103030.2210-1-yann.morin.1998@free.fr>
- <20170702123621.67df4ae7@windsurf>
- <f75e93d0-ef5d-9d71-fca8-1a96329886d3@mind.be>
-Message-ID: <CAAXf6LUDuRMfrcb=MuZ6O8fofzKKDHEf-zAjArw0mdch-zxiZA@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 3 Jul 2017 17:34:48 +0200
+Subject: [Buildroot] [PATCH] package/lua-stdlib: new package
+In-Reply-To: <20170626151941.2637-1-m.niestroj@grinn-global.com>
+References: <20170626151941.2637-1-m.niestroj@grinn-global.com>
+Message-ID: <930afc4d-3463-9ec6-d23e-840d1b9741df@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-07-02 13:18 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->
->
-> On 02-07-17 12:36, Thomas Petazzoni wrote:
->>>  DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
->>> +UNCOMP_TOOLS_DEPENDENCIES += $$(UNCOMP_TOOL_DEPENDENCY$$(suffix $$($(2)_SOURCE)))
->> I know we looked at it yesterday, but I again don't remember what
->> extractor-dependency is for. When looking at this code, it seems a bit
->> weird that extractor dependencies are added to DL_TOOLS_DEPENDENCIES
->> and "uncompressor dependencies" are added to UNCOMP_TOOLS_DEPENDENCIES.
->>
->> Can we clarify this ? Should the output of extractor-dependency be added
->> to UNCOMP_TOOLS_DEPENDENCIES ? Do we need both extractor-dependency and
->> UNCOMP_TOOL_DEPENDENCY ?
->
->  It also took me a bit of browsing to find out what this was about. IIUC,
-> DL_TOOLS_DEPENDENCIES is not actually a list of dependencies, but rather a list
-> of tools that should be checked by dependencies.mk. In addition, this list mixes
-> download tools (e.g. git) with extractor/uncompressor tools - and it could in
-> fact contain anything else. So it would be better to call it something like
-> DEPENDENCIES_TO_CHECK.
->
->  Also, this patch only looks at the uncompressor tools, but the same approach
-> could be applied to the download tools. In fact, I'd like those two to be
-> refactored a little.
->
->  Ideally, we'd even have a distinct name for dependencies.mk "things" (i.e.
-> tools that may or may not be available on the host and, for some of them, that
-> we build on demand) and FOO_DEPENDENCIES "things" (i.e. packages that we need to
-> build before package foo).
->
->  So perhaps:
-> DL_TOOLS_DEPENDENCIES -> TOOLS_TO_CHECK
-> UNCOMP_TOOLS_DEPENDENCIES -> TOOLS_DEPENDENCIES
->
->
+Hi Marcin,
 
-I have been looking at this in the past too. Here is some input from my side:
+Adding Fran?ois in Cc since it's related to lua.
 
-- host-lzip requires tar to extract. If the tar on the host is not
-good enough (RHEL4/5), then host-tar is built, but host-lzip does not
-express a dependency on it. As a quick fix we have currently following
-patch:
+Le 26/06/2017 ? 17:19, Marcin Niestroj a ?crit :
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
-diff --git a/support/dependencies/check-host-lzip.mk
-b/support/dependencies/check-host-lzip.mk
---- a/support/dependencies/check-host-lzip.mk
-+++ b/support/dependencies/check-host-lzip.mk
-@@ -1,4 +1,7 @@
- ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
-+ifeq (,$(call suitable-host-package,tar,tar))
-+HOST_LZIP_DEPENDENCIES = host-tar
-+endif
- DEPENDENCIES_HOST_PREREQ += host-lzip
- EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
- LZCAT = $(HOST_DIR)/usr/bin/lzip -d -c
+Otherwise, looks good for me.
 
-- when ccache is enabled, we need to make sure that ccache is not used
-for any of the dependencies, also for those in
-DEPENDENCIES_HOST_PREREQ, as ccache is not yet necessarily built.
-Today, this is happening based on the 'dependencies' target, but if
-any of them are built via another path, this is not working. One such
-case had to do with the above lzip/tar problem, but I don't recall all
-details. Another case is that 'make clean host-ccache' does not work.
-Following patch fixes that: (we didn't get around to sending that properly yet)
-
-diff --git a/support/dependencies/dependencies.mk
-b/support/dependencies/dependencies.mk
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -25,8 +25,8 @@ core-dependencies:
-         DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
-         $(TOPDIR)/support/dependencies/dependencies.sh
-
--dependencies: HOSTCC=$(HOSTCC_NOCCACHE)
--dependencies: HOSTCXX=$(HOSTCXX_NOCCACHE)
-+core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
-+core-dependencies $(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
- dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
-
- ################################################################################
-
-- regarding the naming: I agree with Thomas that EXTRACT_TOOLS is
-better than UNCOMP_TOOLS;
-
-- but further, like Arnout, I also think that a better split may be
-needed. In my rough ideas I had written down:
-  TOOLS_DEPENDENCIES_EXPECTED_ON_HOST versus
-TOOLS_DEPENDENCIES_BUILT_IF_NEEDED, because that is actually the split
-we need, regardless of whether it is a tool used for downloading,
-extracting or something else.
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
 Best regards,
-Thomas
+Romain
+
+> ---
+>  DEVELOPERS                         |  1 +
+>  package/Config.in                  |  1 +
+>  package/lua-stdlib/Config.in       |  9 +++++++++
+>  package/lua-stdlib/lua-stdlib.hash |  2 ++
+>  package/lua-stdlib/lua-stdlib.mk   | 14 ++++++++++++++
+>  5 files changed, 27 insertions(+)
+>  create mode 100644 package/lua-stdlib/Config.in
+>  create mode 100644 package/lua-stdlib/lua-stdlib.hash
+>  create mode 100644 package/lua-stdlib/lua-stdlib.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9e421f4b41..9ec51261f0 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1075,6 +1075,7 @@ F:	package/argparse/
+>  F:	package/dt-utils/
+>  F:	package/easydbus/
+>  F:	package/lua-flu/
+> +F:	package/lua-stdlib/
+>  F:	package/luaossl/
+>  F:	package/rs485conf/
+>  F:	package/turbolua/
+> diff --git a/package/Config.in b/package/Config.in
+> index f69f67f3e4..259b871b1c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -574,6 +574,7 @@ menu "Lua libraries/modules"
+>  	source "package/lua-msgpack-native/Config.in"
+>  	source "package/lua-periphery/Config.in"
+>  	source "package/lua-sdl2/Config.in"
+> +	source "package/lua-stdlib/Config.in"
+>  	source "package/lua-testmore/Config.in"
+>  	source "package/luabitop/Config.in"
+>  	source "package/luacrypto/Config.in"
+> diff --git a/package/lua-stdlib/Config.in b/package/lua-stdlib/Config.in
+> new file mode 100644
+> index 0000000000..1843826c24
+> --- /dev/null
+> +++ b/package/lua-stdlib/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_LUA_STDLIB
+> +	bool "lua-stdlib"
+> +	help
+> +	  lua-stdlib is a library of modules for common programming
+> +	  tasks, including list, table and functional operations,
+> +	  objects, pickling, pretty-printing and command-line option
+> +	  parsing.
+> +
+> +	  https://github.com/lua-stdlib/lua-stdlib/
+> diff --git a/package/lua-stdlib/lua-stdlib.hash b/package/lua-stdlib/lua-stdlib.hash
+> new file mode 100644
+> index 0000000000..56f585db72
+> --- /dev/null
+> +++ b/package/lua-stdlib/lua-stdlib.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256	5eff1af3a16470297fa5a92c9525ae593644ae9dc0e6215158298711f5d829ee  stdlib-41.2.0-1.src.rock
+> diff --git a/package/lua-stdlib/lua-stdlib.mk b/package/lua-stdlib/lua-stdlib.mk
+> new file mode 100644
+> index 0000000000..f7fb0ff9c5
+> --- /dev/null
+> +++ b/package/lua-stdlib/lua-stdlib.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# lua-stdlib
+> +#
+> +################################################################################
+> +
+> +LUA_STDLIB_VERSION_UPSTREAM = 41.2.0
+> +LUA_STDLIB_VERSION = $(LUA_STDLIB_VERSION_UPSTREAM)-1
+> +LUA_STDLIB_NAME_UPSTREAM = stdlib
+> +LUA_STDLIB_SUBDIR = lua-stdlib-release-v$(LUA_STDLIB_VERSION_UPSTREAM)
+> +LUA_STDLIB_LICENSE = MIT
+> +LUA_STDLIB_LICENSE_FILES = $(LUA_STDLIB_SUBDIR)/COPYING
+> +
+> +$(eval $(luarocks-package))
+> 
