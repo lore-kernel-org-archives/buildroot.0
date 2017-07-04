@@ -1,79 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 17:44:06 +0200
-Subject: [Buildroot] [PATCH 042/100] libglib2: use the new gettext logic
-In-Reply-To: <20170704144920.12318-43-thomas.petazzoni@free-electrons.com>
-References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
- <20170704144920.12318-43-thomas.petazzoni@free-electrons.com>
-Message-ID: <db2fe4d5-cefc-fc9e-6910-ffd3f3b7047c@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Jul 2017 17:48:40 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-bad: fix webrtc option
+In-Reply-To: <20170704113141.2D5C67FCBD@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Tue, 4 Jul 2017 11:50:54 +0200")
+References: <20170704113141.2D5C67FCBD@busybox.osuosl.org>
+Message-ID: <87lgo419uv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ > commit: https://git.buildroot.net/buildroot/commit/?id=4c06d2490a07f0b88f42c56c7409899fd2f5608a
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 04-07-17 16:48, Thomas Petazzoni wrote:
-> This commit switches to use the new gettext logic, which involves:
-> 
->  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
->    on gettext/host-gettext
-> 
->  - dropping BR2_PACKAGE_GETTEXT selection
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/libglib2/Config.in   | 1 -
->  package/libglib2/libglib2.mk | 4 ++--
->  2 files changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
-> index 62e29ef..ea946ba 100644
-> --- a/package/libglib2/Config.in
-> +++ b/package/libglib2/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBGLIB2
->  	depends on BR2_USE_WCHAR # gettext
+ > When the WebRTC plugin option was introduced in commit
+ > ee267886bc090335dd94c97dca1c294addccc090 ("gst1-plugins-bad: enable
+ > webrtc plugin"), it was incorrect added as "webrtc", while the actual
+ > name of the plugin and corresponding configure option is "webrtcdsp".
 
- As mentioned IRL: to be checked if this dependency on WCHAR is still needed.
+ > This commit therefore fixes the .mk file to use the correct name. And
+ > also, since we want to keep Buildroot option consistent with the name
+ > of the GStreamer plugins, it renames the Config.in option as well, and
+ > introduces the necessary Config.in.legacy handling.
 
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork()
-> -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
->  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
->  	select BR2_PACKAGE_LIBFFI
->  	select BR2_PACKAGE_PCRE
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index 577dcec..eeceeee 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -101,8 +101,8 @@ HOST_LIBGLIB2_CONF_OPTS = \
->  	--with-pcre=system
->  
->  LIBGLIB2_DEPENDENCIES = \
-> -	host-pkgconf host-libglib2 host-gettext \
-> -	libffi pcre util-linux zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
-> +	host-pkgconf host-libglib2 \
-> +	libffi pcre util-linux zlib $(TARGET_NLS_DEPENDENCIES)
->  
->  HOST_LIBGLIB2_DEPENDENCIES = \
->  	host-gettext \
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- If the target libglib2 doesn't depend on gettext, why does the host one need it?
-
- Both of them independent of this patch, so
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> 
+Committed to 2017.02.x and 2017.05.x, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
