@@ -1,55 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:47:50 +0200
-Subject: [Buildroot] [PATCH 010/100] package/Makefile.in: introduce
-	TARGET_NLS_{DEPENDENCIES, LIBS}
+Date: Tue,  4 Jul 2017 16:47:52 +0200
+Subject: [Buildroot] [PATCH 012/100] alsa-utils: use new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-11-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-13-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All packages that can use NLS support will have to depend on
-host-gettext, as it provides the tools for generating .mo files from
-.po files.
+This commit switches to use the new gettext logic, which involves:
 
-In addition, all packages may need to depend on gettext (and link with
--lintl) if the full-blown gettext implementation is provided by
-libintl and not by the C library.
+ - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
+   on gettext/host-gettext
 
-In order to avoid repeating such conditions everywhere, this commit
-introduces two variables:
+ - using TARGET_NLS_LIBS to force linking against libintl
 
- - TARGET_NLS_DEPENDENCIES, which packages that may use NLS support
-   should unconditionally add to their <pkg>_DEPENDENCIES variable.
-
- - TARGET_NLS_LIBS, which packages can use to pass through LIBS or
-   LDFLAGS when the package build system needs help to realize that it
-   should link against libintl.
+ - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/alsa-utils/Config.in     |  1 -
+ package/alsa-utils/alsa-utils.mk | 13 +++++--------
+ 2 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 462b7ca..d30da3f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -361,6 +361,11 @@ TARGET_CONFIGURE_ARGS = \
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index 1d42f2e..d3fd18d 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -8,7 +8,6 @@ menuconfig BR2_PACKAGE_ALSA_UTILS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
+ 	select BR2_PACKAGE_ALSA_LIB
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  This package contains the command line utilities for the ALSA
+ 	  project.
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index f0b964a..e9fd942 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -10,27 +10,24 @@ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
+ ALSA_UTILS_LICENSE_FILES = COPYING
+ ALSA_UTILS_INSTALL_STAGING = YES
+-ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
++ALSA_UTILS_DEPENDENCIES = host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
+-	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate)
++	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
++	$(TARGET_NLS_DEPENDENCIES)
+ # Regenerate aclocal.m4 to pick the patched
+ # version of alsa.m4 from alsa-lib
+ ALSA_UTILS_AUTORECONF = YES
+ ALSA_UTILS_GETTEXTIZE = YES
  
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- NLS_OPTS = --enable-nls
-+TARGET_NLS_DEPENDENCIES = host-gettext
-+ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
-+TARGET_NLS_DEPENDENCIES += gettext
-+TARGET_NLS_LIBS += -lintl
-+endif
+ ALSA_UTILS_CONF_ENV = \
+-	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
++	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS) \
++	LIBS=$(TARGET_NLS_LIBS)
+ 
+ ALSA_UTILS_CONF_OPTS = \
+ 	--disable-xmlto \
+ 	--disable-rst2man \
+ 	--with-curses=$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncursesw,ncurses)
+ 
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-ALSA_UTILS_DEPENDENCIES += gettext
+-ALSA_UTILS_CONF_ENV += LIBS=-lintl
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSALOOP),y)
+ ALSA_UTILS_CONF_OPTS += --enable-alsaloop
  else
- NLS_OPTS = --disable-nls
- endif
 -- 
 2.9.4
