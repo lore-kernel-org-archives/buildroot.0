@@ -1,37 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:49:03 +0200
-Subject: [Buildroot] [PATCH 083/100] xlib_libXpm: use the new gettext logic
+Date: Tue,  4 Jul 2017 16:49:06 +0200
+Subject: [Buildroot] [PATCH 086/100] gnuchess: remove libintl static linking
+	handling
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-84-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-87-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches to use the new gettext logic, which involves
-using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-on gettext/host-gettext.
+We no longer support building the full-blown libintl in static linking
+scenarios, as it causes too many problems. Therefore, remove the patch
+that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../0001-fix-static-build-with-uClibc.patch        | 47 ----------------------
+ 1 file changed, 47 deletions(-)
+ delete mode 100644 package/gnuchess/0001-fix-static-build-with-uClibc.patch
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index c8c5496..e781a8b 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -13,8 +13,7 @@ XLIB_LIBXPM_INSTALL_STAGING = YES
- # we patch configure.ac
- XLIB_LIBXPM_AUTORECONF = YES
- XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
--	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
--	host-gettext
-+	$(TARGET_NLS_DEPENDENCIES)
- 
- $(eval $(autotools-package))
+diff --git a/package/gnuchess/0001-fix-static-build-with-uClibc.patch b/package/gnuchess/0001-fix-static-build-with-uClibc.patch
+deleted file mode 100644
+index 20a0835..0000000
+--- a/package/gnuchess/0001-fix-static-build-with-uClibc.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 5bb2bc6384024c2344ef5cc6785131b382c38170 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sun, 10 May 2015 22:19:03 +0200
+-Subject: [PATCH] fix static build with uClibc
+-
+-uClibc doesn't provide lintl which should be provided
+-by gettext. If gnuchess is linked statically, -lintl should
+-be placed after libfrontend.a libadapter.a libengine.a.
+-
+-Fixes:
+-http://autobuild.buildroot.net/results/dcb/dcb1c0eb7212bd8d1e0d8b51fd517b73b7569cea/
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- src/Makefile.am | 2 +-
+- src/Makefile.in | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/Makefile.am b/src/Makefile.am
+-index ba90bce..fc02543 100644
+---- a/src/Makefile.am
+-+++ b/src/Makefile.am
+-@@ -34,7 +34,7 @@ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
+- DISTCLEANFILES = *~
+- 
+- SUBDIRS = frontend adapter engine
+--gnuchess_LDADD = $(LIBINTL) frontend/libfrontend.a adapter/libadapter.a engine/libengine.a
+-+gnuchess_LDADD = frontend/libfrontend.a adapter/libadapter.a engine/libengine.a $(LIBINTL)
+- 
+- configmake.h: Makefile
+- 	rm -f $@-t $@
+-diff --git a/src/Makefile.in b/src/Makefile.in
+-index 9460bfd..424da52 100644
+---- a/src/Makefile.in
+-+++ b/src/Makefile.in
+-@@ -395,7 +395,7 @@ AM_LDFLAGS = $(PTHREAD_LDFLAGS) $(PTHREAD_LIBS)
+- AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib
+- DISTCLEANFILES = *~
+- SUBDIRS = frontend adapter engine
+--gnuchess_LDADD = $(LIBINTL) frontend/libfrontend.a adapter/libadapter.a engine/libengine.a
+-+gnuchess_LDADD = frontend/libfrontend.a adapter/libadapter.a engine/libengine.a $(LIBINTL)
+- BUILT_SOURCES = configmake.h
+- CLEANFILES = configmake.h configmake.h-t
+- all: $(BUILT_SOURCES) config.h
+--- 
+-1.9.3
+-
 -- 
 2.9.4
