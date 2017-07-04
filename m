@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:47:58 +0200
-Subject: [Buildroot] [PATCH 018/100] cryptsetup: use new gettext logic
+Date: Tue,  4 Jul 2017 16:48:02 +0200
+Subject: [Buildroot] [PATCH 022/100] dnsmasq: use new gettext logic
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-19-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-23-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,40 @@ This commit switches to use the new gettext logic, which involves:
  - using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
    on gettext/host-gettext
 
- - using TARGET_NLS_LIBS to force linking against libintl
-
  - dropping BR2_PACKAGE_GETTEXT selection
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cryptsetup/Config.in     | 1 -
- package/cryptsetup/cryptsetup.mk | 7 ++-----
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ package/dnsmasq/Config.in  | 1 -
+ package/dnsmasq/dnsmasq.mk | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 3ca23ba..5cd4676 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+index 936b1de..8921fc6 100644
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -31,7 +31,6 @@ config BR2_PACKAGE_DNSMASQ_IDN
+ 	bool "IDN support"
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBIDN
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  This tool helps manipulate dm-crypt and luks partitions for
- 	  on-disk encryption.
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 787331c..5496583 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -9,14 +9,11 @@ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).5
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
--	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+	$(TARGET_NLS_DEPENDENCIES)
- CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
- CRYPTSETUP_INSTALL_STAGING = YES
--
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
--endif
-+CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+ 	  Enable IDN support in dnsmasq.
+ 	  This option is a big space taker since it pulls in many
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index c6f15e2..00a59da 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -32,8 +32,8 @@ endif
  
- # cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
- # or kernel crypto modules instead
+ # NLS requires IDN so only enable it (i18n) when IDN is true
+ ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
+-DNSMASQ_DEPENDENCIES += libidn $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext
+-DNSMASQ_MAKE_OPTS += LIBS+="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
++DNSMASQ_DEPENDENCIES += libidn $(TARGET_NLS_DEPENDENCIES)
++DNSMASQ_MAKE_OPTS += LIBS+=$(TARGET_NLS_LIBS)
+ DNSMASQ_COPTS += -DHAVE_IDN
+ DNSMASQ_I18N = $(if $(BR2_ENABLE_LOCALE),-i18n)
+ endif
 -- 
 2.9.4
