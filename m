@@ -1,40 +1,52 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Tue, 4 Jul 2017 11:37:42 +0100
-Subject: [Buildroot] Unable to compile current master
-In-Reply-To: <14b6e3d2-0c80-ec16-8be1-abd52121b0be@mind.be>
-References: <d7a64db4-2f26-6f27-98e1-6017ca8a95a5@newflow.co.uk>
- <14b6e3d2-0c80-ec16-8be1-abd52121b0be@mind.be>
-Message-ID: <8cf117e9-a3f6-7707-5f1d-41e22fb0ce09@newflow.co.uk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 4 Jul 2017 13:48:30 +0300
+Subject: [Buildroot] [PATCH] libzip: depend on !BR2_STATIC_LIBS
+In-Reply-To: <1499163849-9884-1-git-send-email-brgl@bgdev.pl>
+References: <1499163849-9884-1-git-send-email-brgl@bgdev.pl>
+Message-ID: <20170704104830.oqdw4edgxppm4op2@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/07/17 16:57, Arnout Vandecappelle wrote:
-> 
-> 
-> On 03-07-17 17:14, Mark Jackson wrote:
->> I'm trying to bring an old 2012 buildroot project up-to-date, so to test my current setup I've branched the git master and tried:-
->>
->> $ git checkout origin/master -b master
->> $ git reset --hard origin/master
->> $ make clean
->> $ make beaglebone_defconfig
->> $ make
->>
->> But this fails when compiling gcc with the following:-
->>
->> ...
->> /usr/bin/g++ -fno-PIE -c   -O2 -I/home/mpfj/buildroot/output/host/usr/include -DIN_GCC  -DCROSS_DIRECTORY_STRUCTURE   -fno-exceptions -fno-rtti -fasynchronous-unwind-tables -W -Wall -Wno-narrowing -Wwrite-strings -Wcast-qual -Wmissing-format-attribute -Woverloaded-virtual -pedantic -Wno-long-long -Wno-variadic-macros -Wno-overlength-strings   -DHAVE_CONFIG_H -I. -I. -I../../gcc -I../../gcc/. -I../../gcc/../include -I../../gcc/../libcpp/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include -I/home/mpfj/buildroot/output/host/usr/include  -I../../gcc/../libdecnumber -I../../gcc/../libdecnumber/dpd -I../libdecnumber -I../../gcc/../libbacktrace   -o insn-extract.o -MT insn-extract.o -MMD -MP -MF ./.deps/insn-extract.TPo insn-extract.c
->> Makefile:2201: recipe for target 's-attrtab' failed
-> 
->   Apparently genattrtab failed but I can't find any output.
-> 
->   Can you continue the build with BR2_JLEVEL=1 ? That should make any error
-> message easier to locate.
-> 
+Hi Bartosz,
 
-Okay ... with JLEVEL=1 (rather than 0 (auto)), it compiles !!
+On Tue, Jul 04, 2017 at 12:24:09PM +0200, Bartosz Golaszewski wrote:
+> Since version 1.2.0 libzip requires dynamic library capabilities.
+> 
+> Fixes: http://autobuild.buildroot.net/results/c50/c50ffa5bf565e75333192edc89e2d39044d07f26/
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> ---
+>  package/libzip/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/libzip/Config.in b/package/libzip/Config.in
+> index 54de9e5..0414186 100644
+> --- a/package/libzip/Config.in
+> +++ b/package/libzip/Config.in
+> @@ -1,8 +1,12 @@
+>  config BR2_PACKAGE_LIBZIP
+>  	bool "libzip"
+> +	depends on !BR2_STATIC_LIBS
 
-So it must be some strange parallel compilation bug ...
+You need to propagate dependencies to packages that select BR2_PACKAGE_LIBZIP, 
+and their reverse dependencies, recursively. In this case libsigrok, 
+sigrok-cli, and pulseview are affected.
+
+baruch
+
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+>  	  C library for reading, creating, and modifying zip archives. This
+>  	  package also contains zipcmp, ziptorrent and zipmerge utilities.
+>  
+>  	  http://www.nih.at/libzip/
+> +
+> +comment "libzip needs a toolchain w/ dynamic library"
+> +	depends on BR2_STATIC_LIBS
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
