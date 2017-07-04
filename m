@@ -1,64 +1,106 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Jul 2017 13:32:16 +0200
-Subject: [Buildroot] [PATCH v2 next 05/11] gst1-plugins-bad: bump
-	version to 1.12.0
-In-Reply-To: <20170512101807.42378-5-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Fri, 12 May 2017 11:18:01 +0100")
-References: <20170512101807.42378-1-Vincent.Riera@imgtec.com>
- <20170512101807.42378-5-Vincent.Riera@imgtec.com>
-Message-ID: <87a84k4ev3.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Jul 2017 13:32:39 +0200
+Subject: [Buildroot] [PATCH v3 07/11] fs/ext2: add option to specify
+ block size
+In-Reply-To: <20170703225106.1492-8-s.martin49@gmail.com>
+References: <20170703225106.1492-1-s.martin49@gmail.com>
+ <20170703225106.1492-8-s.martin49@gmail.com>
+Message-ID: <3e743cf1-4460-f0ba-facc-057d04fc24c1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+ Revisiting this...
 
- > Remove non-existant configure options:
- >   --disable-mimic:
- >     https://github.com/GStreamer/gst-plugins-bad/commit/ad661999ad2c79a5d7721f0eb1e7f1f83a304224
+On 04-07-17 00:51, Samuel Martin wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> 
+> ---
+> changes v2->v3:
+> - reintroduce change from Yann' series
+> ---
+>  fs/ext2/Config.in | 28 ++++++++++++++++++++++++++--
+>  fs/ext2/ext2.mk   |  2 +-
+>  2 files changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+> index 09ec87786f..627294e17f 100644
+> --- a/fs/ext2/Config.in
+> +++ b/fs/ext2/Config.in
+> @@ -44,12 +44,36 @@ config BR2_TARGET_ROOTFS_EXT2_REV
+>  config BR2_TARGET_ROOTFS_EXT2_LABEL
+>  	string "filesystem label"
+>  
+> -# 61440 = 60MB, i.e usually small enough to fit on a 64MB media
+> +choice
+> +	bool "block size"
+> +	help
+> +	  The size, in bytes, of a block.
 
- >   --enable-dataurisrc:
- >     https://github.com/GStreamer/gst-plugins-bad/commit/de4bb6e1d4793637fd72d7316d06ebba4148583e
+ I don't think this option makes a whole lot of sense. Yes, you may want to tune
+your generated ext2fs to death. But if it's for tuning purposes, it's better to
+add an "additional mke2fs options" string.
 
- >   --enable-videomeasure:
- >     https://github.com/GStreamer/gst-plugins-bad/commit/ca3020cf46d49d8e3fd54ec323b3a17cd389d780
+ So in fact I'd drop this patch.
 
- >   --enable-apexsink, --disable-nas, --disable-linsys, --enable-sdl,
- >   --disable-sdltest, --disable-libvisual, --disable-timidity,
- >   --disable-sndio, --disable-wininet, --disable-xvid,
- >   --enable-cdxaparse, --enable-dccp, --enable-hdvparse, --enable-mve,
- >   --enable-nuvdemux, --enable-patchdetect, --enable-sdi, --enable-tta,
- >   --disable-pvr:
- >     https://github.com/GStreamer/gst-plugins-bad/commit/9b5de053995488d5ddc78c1bf4df651101271d70
 
- > Fix wrong configure options:
+ Regards,
+ Arnout
 
- >   --disable-webrtc doesn't exist. The right option is called
- >   --disable-webrtcdsp, and the gstreamer plugin is also called
- >   webrtcdsp, so make the appropriate changes to Config.in and
- >   gst1-plugins-bad.mk.
-
-This is not related to the version bump, so I've split this out to a
-separate commit.
-
- 
- >  ###############################################################################
- > +comment "Legacy options removed in 2017.08"
- > +
- > +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDXAPARSE
- > +	bool "cdxaparse removed"
- > +	select BR2_LEGACY
- > +
- > +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DATAURISRC
- > +	bool "dataurisrc removed"
- > +	select BR2_LEGACY
-
-dataurisrc has in fact moved to gstreamer1 and it is always built, so
-I've tweaked the prompt added help text.
-
-Committed with these fixes, thanks.
+> +
+> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
+> +	bool "1024"
+> +
+> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
+> +	bool "2048"
+> +
+> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
+> +	bool "4096"
+> +
+> +endchoice
+> +
+> +config BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE
+> +	int
+> +	default 1024 if BR2_TARGET_ROOTFS_EXT2_BLOCK_1024
+> +	default 2048 if BR2_TARGET_ROOTFS_EXT2_BLOCK_2048
+> +	default 4096 if BR2_TARGET_ROOTFS_EXT2_BLOCK_4096
+> +
+> +# 61440 block od 1024 bytes = 60MB, i.e usually small enough to fit
+> +# on a 64MB media
+>  config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+>  	int "exact size in blocks"
+>  	default 61440
+>  	help
+> -	  Specify the file system size as a number of 1024-byte blocks.
+> +	  Specify the file system size as a number of blocks, which
+> +	  size is specified above.
+>  
+>  config BR2_TARGET_ROOTFS_EXT2_INODES
+>  	int "exact number of inodes (leave at 0 for auto calculation)"
+> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+> index 0d5fc7f118..ec49caa3a5 100644
+> --- a/fs/ext2/ext2.mk
+> +++ b/fs/ext2/ext2.mk
+> @@ -12,7 +12,7 @@ EXT2_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_EXT2_LABEL))
+>  EXT2_OPTS = \
+>  	-G $(BR2_TARGET_ROOTFS_EXT2_GEN) \
+>  	-R $(BR2_TARGET_ROOTFS_EXT2_REV) \
+> -	-B 1024 \
+> +	-B $(BR2_TARGET_ROOTFS_EXT2_BLOCK_SIZE) \
+>  	-b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS) \
+>  	-i $(BR2_TARGET_ROOTFS_EXT2_INODES) \
+>  	-I $(BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES) \
+> 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
