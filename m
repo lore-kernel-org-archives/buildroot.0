@@ -1,35 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jul 2017 17:19:24 +0200
-Subject: [Buildroot] [git commit] spidev-test: s/BR2_DL_DIR/DL_DIR/
-Message-ID: <20170704151621.EB40F81D56@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 4 Jul 2017 17:19:42 +0200
+Subject: [Buildroot] [PATCH v3 14/14] pkg-rebar: use $(HOST_DIR) instead
+ of $(HOST_DIR)/usr as prefix
+In-Reply-To: <20170704140404.4098-15-arnout@mind.be>
+References: <20170704140404.4098-1-arnout@mind.be>
+ <20170704140404.4098-15-arnout@mind.be>
+Message-ID: <b7735e8d-1701-08c9-92ee-99af3d2f38eb@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c18b5c378947cb61206ddc841546e1309884bba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Arnout,
 
-BR2_DL_DIR is not to be used by the package's Makefile.
+Le 04/07/2017 ? 16:04, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> Remove the redundant usr/ component of the HOST_DIR paths. Since a
+> previous commit added a symlink from $(HOST_DIR)/usr to $(HOST_DIR),
+> everything keeps on working.
+> 
+> $(PKG)_ERLANG_LIBDIR is problematic because it is used both for host
+> and staging/target. Therefore, the usr/ part is removed from it, and
+> added the the callers instead.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Frank Hunleth <fhunleth@troodon-software.com>
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/spidev_test/spidev_test.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
-diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
-index 1f34c6a..1d65780 100644
---- a/package/spidev_test/spidev_test.mk
-+++ b/package/spidev_test/spidev_test.mk
-@@ -32,7 +32,7 @@ endef
- SPIDEV_TEST_POST_PATCH_HOOKS += SPIDEV_ADD_LINUX_IOCTL
- 
- define SPIDEV_TEST_EXTRACT_CMDS
--	cp $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE) $(@D)/spidev_test.c
-+	cp $(DL_DIR)/$(SPIDEV_TEST_SOURCE) $(@D)/spidev_test.c
- endef
- 
- define SPIDEV_TEST_BUILD_CMDS
+Best regards,
+Romain
+
+> ---
+> v2: ERLANG_LIBDIR no longer starts with a /
+> ---
+>  package/pkg-rebar.mk | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+> index cc6b775ae5..e2b4a58681 100644
+> --- a/package/pkg-rebar.mk
+> +++ b/package/pkg-rebar.mk
+> @@ -25,14 +25,14 @@
+>  # infrastructure tells rebar to NOT download dependencies during
+>  # the build stage.
+>  #
+> -REBAR_HOST_DEPS_DIR = $(HOST_DIR)/usr/share/rebar/deps
+> +REBAR_HOST_DEPS_DIR = $(HOST_DIR)/share/rebar/deps
+>  REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
+>  
+>  # Tell rebar where to find the dependencies
+>  #
+>  REBAR_HOST_DEPS_ENV = \
+>  	ERL_COMPILER_OPTIONS='{i, "$(REBAR_HOST_DEPS_DIR)"}' \
+> -	ERL_EI_LIBDIR=$(HOST_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
+> +	ERL_EI_LIBDIR=$(HOST_DIR)/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
+>  REBAR_TARGET_DEPS_ENV = \
+>  	ERL_COMPILER_OPTIONS='{i, "$(REBAR_TARGET_DEPS_DIR)"}' \
+>  	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
+> @@ -119,10 +119,10 @@ define inner-rebar-package
+>  $(2)_ERLANG_APP = $(subst -,_,$(patsubst erlang-%,%,$(patsubst host-%,%,$(1))))
+>  
+>  # Path where to store the package's libs, relative to either $(HOST_DIR)
+> -# for host packages, or $(STAGING_DIR) for target packages.
+> +# for host packages, or $(STAGING_DIR)/usr for target packages.
+>  #
+>  $(2)_ERLANG_LIBDIR = \
+> -	usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
+> +	lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
+>  
+>  # If a host package, inherit <pkg>_USE_BUNDLED_REBAR from the target
+>  # package, if not explicitly defined. Otherwise, default to NO.
+> @@ -173,8 +173,8 @@ endif
+>  # package-related variables
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+> -	$$(call install-erlang-directories,$$(STAGING_DIR),include)
+> -	$$(call install-rebar-deps,$$(STAGING_DIR),TARGET)
+> +	$$(call install-erlang-directories,$$(STAGING_DIR)/usr,include)
+> +	$$(call install-rebar-deps,$$(STAGING_DIR)/usr,TARGET)
+>  endef
+>  endif
+>  
+> @@ -182,7 +182,7 @@ endif
+>  # package-related variables
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+> -	$$(call install-erlang-directories,$$(TARGET_DIR))
+> +	$$(call install-erlang-directories,$$(TARGET_DIR)/usr)
+>  endef
+>  endif
+>  
+> 
