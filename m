@@ -1,57 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jul 2017 23:59:27 +0200
-Subject: [Buildroot] [PATCH 031/100] git: use the new gettext logic
-In-Reply-To: <20170704144920.12318-32-thomas.petazzoni@free-electrons.com>
-References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
- <20170704144920.12318-32-thomas.petazzoni@free-electrons.com>
-Message-ID: <89181a7b-28f3-13e2-d715-70e54eb59f4a@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Jul 2017 00:13:24 +0200
+Subject: [Buildroot] [git commit] gettext: build libintl unconditionally for
+	uClibc/musl
+Message-ID: <20170704221053.500B6802E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=431d00abc1ffd0db287f0392e45229a53db7a187
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Only the initial patches of the gettext series have been applied, and
+a bisectability problem has arised: when BR2_SYSTEM_ENABLE_NLS is
+disabled, which is the default, gettext no longer builds libintl.
 
-On 04-07-17 16:48, Thomas Petazzoni wrote:
-> This commit switches to use the new gettext logic, which involves
-> using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-> on gettext/host-gettext.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/git/git.mk | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/package/git/git.mk b/package/git/git.mk
-> index 9cc88dd..23ace0f 100644
-> --- a/package/git/git.mk
-> +++ b/package/git/git.mk
-> @@ -9,11 +9,7 @@ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
->  GIT_SITE = https://www.kernel.org/pub/software/scm/git
->  GIT_LICENSE = GPL-2.0, LGPL-2.1+
->  GIT_LICENSE_FILES = COPYING LGPL-2.1
-> -GIT_DEPENDENCIES = zlib host-gettext
+However, since packages have not yet been updated to the new gettext
+logic, they still try to link against libintl, because they rely on
+BR2_NEEDS_GETTEXT/BR2_NEEDS_GETTEXT_IF_LOCALE, which are true.
 
- You dropped the host-gettext dependency, was that intentional?
+So, as a temporary measure, we adjust the gettext package so that it
+unconditionally builds libintl for uClibc/musl, even when NLS is
+disabled. This commit will be reverted once all packages have been
+fixed.
 
- Regards,
- Arnout
+Fixes:
 
-> -
-> -ifeq ($(BR2_PACKAGE_GETTEXT),y)
-> -GIT_DEPENDENCIES += gettext
-> -endif
-> +GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  GIT_DEPENDENCIES += openssl
-> 
+  http://autobuild.buildroot.net/results/a4cf71c34dcc5c750ea87a16014c2cb2d28cdebd/
+  (elfutils)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+  http://autobuild.buildroot.net/results/cb9ae18295b21b3f9399be6edd82273add375656/
+  (linux-pam)
+
+  http://autobuild.buildroot.net/results/4225e5dfb6bcf590d9c1068112472ee82bc87d6b/
+  (alsa-utils)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gettext/Config.in  | 2 +-
+ package/gettext/gettext.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index 0dea03d..bf16c34 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -17,7 +17,7 @@ if BR2_PACKAGE_GETTEXT
+ config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
+ 	bool
+ 	depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
+-	default y if BR2_SYSTEM_ENABLE_NLS
++	default y
+ 
+ endif
+ 
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 454ad29..f3325dc 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -42,7 +42,7 @@ HOST_GETTEXT_CONF_OPTS = \
+ # Force the build of libintl, even if the C library provides a stub
+ # gettext implementation
+ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+-GETTEXT_CONF_OPTS += --with-included-gettext
++GETTEXT_CONF_OPTS += --with-included-gettext --enable-nls
+ else
+ GETTEXT_CONF_OPTS += --without-included-gettext
+ endif
