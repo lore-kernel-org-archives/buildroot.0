@@ -1,36 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Jul 2017 01:36:54 +0200
-Subject: [Buildroot] [git commit] xlib_libXpm: use the new gettext logic
-Message-ID: <20170704233519.CAE6B7FCEB@busybox.osuosl.org>
+Date: Wed, 5 Jul 2017 01:37:15 +0200
+Subject: [Buildroot] [git commit] xfsprogs: remove libintl static linking
+	handling
+Message-ID: <20170704233520.9D2CD7FDE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e398ec92e9ad04e5bbae32f03cd18a53b5761517
+commit: https://git.buildroot.net/buildroot/commit/?id=39a1d529b34a5fd0f506bcc72758d12013786660
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit switches to use the new gettext logic, which involves
-using TARGET_NLS_DEPENDENCIES instead of hand-encoded dependencies
-on gettext/host-gettext.
+We no longer support building the full-blown libintl in static linking
+scenarios, as it causes too many problems. Therefore, remove the
+patch and special code that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../0004-build-add-EXTRALIBS-to-link-with.patch    | 53 ----------------------
+ package/xfsprogs/xfsprogs.mk                       | 17 -------
+ 2 files changed, 70 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index c8c5496..e781a8b 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -13,8 +13,7 @@ XLIB_LIBXPM_INSTALL_STAGING = YES
- # we patch configure.ac
- XLIB_LIBXPM_AUTORECONF = YES
- XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
--	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
--	host-gettext
-+	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch b/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
+deleted file mode 100644
+index 8ff0580..0000000
+--- a/package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 1e9bb2fba94bc508659f1667bf95501324849bb9 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 26 Feb 2017 12:04:54 +0100
+-Subject: [PATCH] build: add EXTRALIBS to link with
+-
+-When doing a uClibc static build, the build fails to link:
+-    http://autobuild.buildroot.org/results/503/50314716a9f72e8bb238e52e9dc342c68f7e0b8b/build-end.log
+-
+-The cause is due to:
+-  - xfsprogs links dome programs with util-linux' libblkid
+-  - util-linux' libblkid is linked to util-linux' libuuid
+-  - util-linux' libuuid uses i18n functions when locales are enabled
+-  - uClibc does not provide i18n functions
+-  - i18n functions are provided by libintl from libintl from gettext
+-
+-util-linux installs pkg-config files for thos two libs. However,
+-xfsprogs does not use pkg-config to find libblkid or libuuid, thus it
+-misses the Libs.private field from libuid.
+-
+-In this case, it is necessary to pass LIBS=-lintl at configure time, so
+-that configure correctly finds libblkid.
+-
+-Still, this is not enough, because the build will not use LIBS during
+-the link phase.
+-
+-We fix that last bit by adding EXTRALIBS to the libraries to link with,
+-so that it is possible to pass EXTRALIBS=-lintl at build time:
+-
+-    $ ./configure [...] LIBS=-lintl
+-    $ make EXTRALIBS=-lintl
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Cc: Waldemar Brodkorb <wbx@openadk.org>
+----
+- include/buildmacros | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/buildmacros b/include/buildmacros
+-index a7c5d8a..dd62d80 100644
+---- a/include/buildmacros
+-+++ b/include/buildmacros
+-@@ -11,7 +11,7 @@ BUILDRULES = $(TOPDIR)/include/buildrules
+- 
+- LDFLAGS += $(LOADERFLAGS) $(LLDFLAGS)
+- LTLDFLAGS += $(LOADERFLAGS)
+--LDLIBS = $(LLDLIBS) $(PLDLIBS) $(MALLOCLIB)
+-+LDLIBS = $(LLDLIBS) $(PLDLIBS) $(MALLOCLIB) $(EXTRALIBS)
+- 
+- MAKEOPTS = --no-print-directory Q=$(Q)
+- SRCFILES = Makefile $(HFILES) $(CFILES) $(LSRCFILES) $(LFILES) $(YFILES)
+--- 
+-2.7.4
+-
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index ed56d34..2f708f1 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -18,23 +18,6 @@ XFSPROGS_CONF_OPTS = \
+ 	INSTALL_GROUP=root \
+ 	--enable-static
+ 
+-# xfsprogs links some of its programs to libs from util-linux, which use
+-# i18n functions. For shared-only builds, that's automatically pulled in.
+-# Static builds need some help, though...
+-#
+-# No need to depend on gettext in this case: xfsprogs does not use it for
+-# itself; util-linux does need it and has it in its own dependencies.
+-#
+-# xfsprogs' buildsystem uses hand-made Makefiles, not automake, and they
+-# do not use the LIBS variable set by configure. So we use EXTRALIBS that
+-# is added by our patch.
+-#
+-# It is not needed to propagate the EXTRALIBS to the install step.
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS)$(BR2_NEEDS_GETTEXT_IF_LOCALE),yy)
+-XFSPROGS_CONF_OPTS += LIBS=-lintl
+-XFSPROGS_MAKE_OPTS = EXTRALIBS=-lintl
+-endif
+-
+ XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
  
  $(eval $(autotools-package))
