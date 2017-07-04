@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Jul 2017 16:49:10 +0200
-Subject: [Buildroot] [PATCH 090/100] oprofile: remove libintl static linking
-	handling
+Date: Tue,  4 Jul 2017 16:49:05 +0200
+Subject: [Buildroot] [PATCH 085/100] e2fsprogs: remove libintl static
+	linking handling
 In-Reply-To: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
 References: <20170704144920.12318-1-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170704144920.12318-91-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170704144920.12318-86-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,29 @@ To: buildroot@busybox.net
 
 We no longer support building the full-blown libintl in static linking
 scenarios, as it causes too many problems. Therefore, remove the
-special code that was handling this.
+special code in e2fsprogs that was handling this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/oprofile/oprofile.mk | 6 ------
+ package/e2fsprogs/e2fsprogs.mk | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index d86b8c5..4e0278e 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -41,12 +41,6 @@ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
- OPROFILE_DEPENDENCIES += libpfm4
- endif
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 84af7ab..75e9213 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -77,12 +77,6 @@ HOST_E2FSPROGS_CONF_ENV += \
+ 	ac_cv_header_magic_h=no \
+ 	ac_cv_lib_magic_magic_file=no
  
--# When gettext is enabled, popt links with -lintl, specifies it in its
--# popt.pc and has done so for the past 6+ years. But oprofile does not
--# use pkconfig to find popt, so misses -lintl, which is important for
--# a static build. We have to do the call to pkgconfig manually...
--OPROFILE_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
+-ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_STATIC_LIBS),yy)
+-# util-linux libuuid pulls in libintl if needed, so ensure we also
+-# link against it, otherwise static linking fails
+-E2FSPROGS_CONF_ENV += LIBS=-lintl
+-endif
 -
- ifeq ($(BR2_STATIC_LIBS),)
- define OPROFILE_INSTALL_SHARED_LIBRARY
- 	$(INSTALL) -m 755 $(@D)/libopagent/.libs/*.so* $(TARGET_DIR)/usr/lib/oprofile
+ E2FSPROGS_MAKE_OPTS = LDCONFIG=true
+ 
+ E2FSPROGS_INSTALL_STAGING_OPTS = \
 -- 
 2.9.4
